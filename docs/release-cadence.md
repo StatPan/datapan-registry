@@ -28,6 +28,16 @@ datapan catalog release verify --manifest manifest.json --output reports/latest-
 datapan catalog release readiness --manifest manifest.json --output reports/latest-release-readiness.json --json
 ```
 
+The repository also runs `.github/workflows/verify-release.yml` on pushes, pull
+requests, manual dispatches, and `v*` tags. That workflow:
+
+- checks out `datapan-registry` with Git LFS enabled;
+- checks that `data/data-go-kr.registry.json` is the full materialized file,
+  not an LFS pointer;
+- checks out `StatPan/datapan-cli`;
+- runs `catalog release verify`;
+- runs `catalog release readiness`.
+
 Recommended evidence before tagging:
 
 ```bash
@@ -51,6 +61,7 @@ datapan catalog verify --registry data/data-go-kr.registry.json --provider epost
 4. Create a GitHub Release.
 5. Attach a zip archive of the release snapshot so users can consume it without
    relying on Git LFS.
+6. Confirm the `Verify registry release` workflow passes on the tag.
 
 ## Cadence
 

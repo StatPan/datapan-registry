@@ -1,0 +1,59 @@
+name: Verify registry release
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout registry
+        uses: actions/checkout@v4
+        with:
+          path: datapan-registry
+          lfs: true
+
+      - name: Checkout CLI
+        uses: actions/checkout@v4
+        with:
+          repository: StatPan/datapan-cli
+          path: datapan-cli
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: datapan-cli/go.mod
+          check-latest: true
+          cache-dependency-path: datapan-cli/go.sum
+
+      - name: Confirm registry LFS file is materialized
+        run: |
+          bytes="$(wc -c < datapan-registry/data/data-go-kr.registry.json)"
+          echo "data-go-kr.registry.json bytes=${bytes}"
+          test "${bytes}" -gt 100000000
+
+      - name: Verify release manifest
+        working-directory: datapan-cli
+        run: |
+          mkdir -p ../datapan-registry/.datapan/ci
+          go run ./cmd/datapan catalog release verify \
+            --manifest ../datapan-registry/manifest.json \
+            --output ../datapan-registry/.datapan/ci/latest-release-verification.json \
+            --json
+
+      - name: Check release readiness
+        working-directory: datapan-cli
+        run: |
+          go run ./cmd/datapan catalog release readiness \
+            --manifest ../datapan-registry/manifest.json \
+            --output ../datapan-registry/.datapan/ci/latest-release-readiness.json \
+            --json

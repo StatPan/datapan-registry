@@ -29,6 +29,11 @@ datapan catalog release verify --manifest manifest.json --output reports/latest-
 datapan catalog release readiness --manifest manifest.json --output reports/latest-release-readiness.json --json
 ```
 
+The same checks run in GitHub Actions on pushes, pull requests, and version
+tags. The workflow checks out this repository with Git LFS enabled, verifies
+that `data/data-go-kr.registry.json` is materialized as the full registry file,
+then runs release verification and readiness through `datapan-cli`.
+
 The current snapshot was generated from `datapan-cli` and includes:
 
 - normalized data.go.kr registry;
@@ -75,5 +80,6 @@ A release is publishable when:
 - registry size and LFS handling are explicit;
 - verification evidence is attached or documented;
 - generated artifacts do not contain credentials.
+- the `Verify registry release` workflow passes for the commit or tag.
 
 See `docs/release-cadence.md` for the repeatable release loop.
