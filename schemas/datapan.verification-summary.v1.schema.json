@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.verification-summary.v1.schema.json",
+  "title": "Datapan Verification Summary v1",
+  "description": "Rollup summary for a Datapan verification report.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["generated_at", "provider", "limit", "truncated", "summary", "groups"],
+  "properties": {
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source": {
+      "type": "string"
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "registry": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "truncated": {
+      "type": "boolean"
+    },
+    "summary": {
+      "$ref": "datapan.verification.v1.schema.json#/$defs/summary"
+    },
+    "groups": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["by_status"],
+      "properties": {
+        "by_status": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/group"
+          }
+        },
+        "by_reason": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/group"
+          }
+        },
+        "by_provider": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/group"
+          }
+        },
+        "by_endpoint_host": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/group"
+          }
+        },
+        "by_kind": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/group"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "count"],
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "status": {
+          "enum": ["verified", "failed", "skipped", "unknown"]
+        },
+        "reason": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "data_go_kr_gateway",
+            "external_endpoint",
+            "service_root",
+            "no_endpoint",
+            "malformed_endpoint",
+            "soap",
+            "wms"
+          ]
+        }
+      }
+    }
+  }
+}

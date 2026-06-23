@@ -1,0 +1,558 @@
+{
+  "generated_at": "2026-06-23T23:17:24Z",
+  "provider": "data.go.kr",
+  "registry": ".datapan\\release-epost-smoke\\data\\data-go-kr.registry.json",
+  "sample_limit": 5,
+  "audit": {
+    "specs_total": 12060,
+    "operations_total": 12205,
+    "callable_operations": 12063,
+    "specs_without_operations": 4875,
+    "specs_without_callable_operation": 4950,
+    "operations_without_endpoint": 142,
+    "operations_without_request_params": 47,
+    "operations_without_response_params": 1269,
+    "specs_missing_organization": 0,
+    "specs_missing_source_url": 0,
+    "specs_missing_updated_at": 0,
+    "dependency": {
+      "data_go_kr_gateway_operations": 11426,
+      "gateway_with_external_guide_specs": 902,
+      "external_endpoint_specs": 313,
+      "external_endpoint_operations": 594,
+      "service_root_only_operations": 19,
+      "soap_operations": 35,
+      "wms_operations": 7,
+      "dev_approval_required_operations": 207,
+      "prod_approval_required_operations": 4036,
+      "malformed_endpoint_url_count": 43,
+      "malformed_guide_url_count": 585,
+      "top_endpoint_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "count": 11423
+        },
+        {
+          "host": "openapi.q-net.or.kr",
+          "count": 104
+        },
+        {
+          "host": "openapi.jeonju.go.kr",
+          "count": 80
+        },
+        {
+          "host": "data.ekape.or.kr",
+          "count": 49
+        },
+        {
+          "host": "c.q-net.or.kr",
+          "count": 42
+        },
+        {
+          "host": "data.geoje.go.kr",
+          "count": 41
+        },
+        {
+          "host": "data.uiryeong.go.kr",
+          "count": 40
+        },
+        {
+          "host": "oneclick.law.go.kr:80",
+          "count": 27
+        },
+        {
+          "host": "openapi.epost.go.kr:80",
+          "count": 22
+        },
+        {
+          "host": "data.sisul.or.kr",
+          "count": 20
+        },
+        {
+          "host": "openapi.its.ulsan.kr",
+          "count": 20
+        },
+        {
+          "host": "www.andong.go.kr",
+          "count": 15
+        },
+        {
+          "host": "www.korad.or.kr",
+          "count": 15
+        },
+        {
+          "host": "open.itfind.or.kr",
+          "count": 13
+        },
+        {
+          "host": "data.naqs.go.kr",
+          "count": 9
+        },
+        {
+          "host": "data.humetro.busan.kr",
+          "count": 8
+        },
+        {
+          "host": "openapi.tour.go.kr",
+          "count": 7
+        },
+        {
+          "host": "openapi.airport.co.kr",
+          "count": 6
+        },
+        {
+          "host": "openapi.coast.kr",
+          "count": 6
+        },
+        {
+          "host": "openapi.ebid.lh.or.kr",
+          "count": 6
+        }
+      ],
+      "top_external_endpoint_hosts": [
+        {
+          "host": "openapi.q-net.or.kr",
+          "count": 104
+        },
+        {
+          "host": "openapi.jeonju.go.kr",
+          "count": 80
+        },
+        {
+          "host": "data.ekape.or.kr",
+          "count": 49
+        },
+        {
+          "host": "c.q-net.or.kr",
+          "count": 42
+        },
+        {
+          "host": "data.geoje.go.kr",
+          "count": 41
+        },
+        {
+          "host": "data.uiryeong.go.kr",
+          "count": 40
+        },
+        {
+          "host": "oneclick.law.go.kr:80",
+          "count": 27
+        },
+        {
+          "host": "openapi.epost.go.kr:80",
+          "count": 22
+        },
+        {
+          "host": "data.sisul.or.kr",
+          "count": 20
+        },
+        {
+          "host": "openapi.its.ulsan.kr",
+          "count": 20
+        },
+        {
+          "host": "www.andong.go.kr",
+          "count": 15
+        },
+        {
+          "host": "www.korad.or.kr",
+          "count": 15
+        },
+        {
+          "host": "open.itfind.or.kr",
+          "count": 13
+        },
+        {
+          "host": "data.naqs.go.kr",
+          "count": 9
+        },
+        {
+          "host": "data.humetro.busan.kr",
+          "count": 8
+        },
+        {
+          "host": "openapi.tour.go.kr",
+          "count": 7
+        },
+        {
+          "host": "openapi.airport.co.kr",
+          "count": 6
+        },
+        {
+          "host": "openapi.coast.kr",
+          "count": 6
+        },
+        {
+          "host": "openapi.ebid.lh.or.kr",
+          "count": 6
+        },
+        {
+          "host": "openapi.epost.go.kr",
+          "count": 6
+        }
+      ],
+      "top_external_guide_hosts": [
+        {
+          "host": "data.mfds.go.kr",
+          "count": 235
+        },
+        {
+          "host": "api.visitkorea.or.kr",
+          "count": 165
+        },
+        {
+          "host": "www.bigdata-cancer.kr",
+          "count": 125
+        },
+        {
+          "host": "www.cancerdata.re.kr",
+          "count": 102
+        },
+        {
+          "host": "www.academyinfo.go.kr",
+          "count": 94
+        },
+        {
+          "host": "www.k-apt.go.kr",
+          "count": 77
+        },
+        {
+          "host": "jbdc.co.kr",
+          "count": 68
+        },
+        {
+          "host": "openapi.jeonju.go.kr",
+          "count": 61
+        },
+        {
+          "host": "coast.mof.go.kr",
+          "count": 54
+        },
+        {
+          "host": "phdata.pohang.go.kr",
+          "count": 52
+        },
+        {
+          "host": "bigdata-cancer.kr",
+          "count": 47
+        },
+        {
+          "host": "soil.rda.go.kr",
+          "count": 47
+        },
+        {
+          "host": "www.d2b.go.kr",
+          "count": 42
+        },
+        {
+          "host": "data.sisul.or.kr",
+          "count": 40
+        },
+        {
+          "host": "openapi.epost.go.kr",
+          "count": 37
+        },
+        {
+          "host": "weather.rda.go.kr",
+          "count": 35
+        },
+        {
+          "host": "data.geoje.go.kr",
+          "count": 34
+        },
+        {
+          "host": "http:",
+          "count": 33
+        },
+        {
+          "host": "kipo-api.koreantk.com",
+          "count": 31
+        },
+        {
+          "host": "www.easylaw.go.kr",
+          "count": 30
+        }
+      ]
+    },
+    "samples": {
+      "without_operations": [
+        {
+          "id": "15001668",
+          "title": "해양수산부 국립수산물품질관리원_수산물재고동향",
+          "organization": "해양수산부 국립수산물품질관리원",
+          "source_category": "농축수산",
+          "operations_count": 0,
+          "callable_operations": 0
+        },
+        {
+          "id": "15001702",
+          "title": "해양수산부 국립수산물품질관리원_검역시행장정보",
+          "organization": "해양수산부 국립수산물품질관리원",
+          "source_category": "농축수산",
+          "operations_count": 0,
+          "callable_operations": 0
+        },
+        {
+          "id": "15002034",
+          "title": "농촌진흥청_국가농작물병해충도감정보",
+          "organization": "농촌진흥청",
+          "source_category": "농축수산",
+          "operations_count": 0,
+          "callable_operations": 0
+        },
+        {
+          "id": "15002220",
+          "title": "농림축산식품부_유기농업자재 현황",
+          "organization": "농림축산식품부",
+          "source_category": "농축수산",
+          "operations_count": 0,
+          "callable_operations": 0
+        },
+        {
+          "id": "15003164",
+          "title": "서울교통공사_역사 건축 현황",
+          "organization": "서울교통공사",
+          "source_category": "교통물류",
+          "operations_count": 0,
+          "callable_operations": 0
+        }
+      ],
+      "without_callable_operation": [
+        {
+          "id": "15000017",
+          "title": "한국문화관광연구원_관광실태조사서비스",
+          "organization": "한국문화관광연구원",
+          "source_category": "공공행정",
+          "operations_count": 11,
+          "callable_operations": 0
+        },
+        {
+          "id": "15000063",
+          "title": "한국문화관광연구원_관광산업통계서비스",
+          "organization": "한국문화관광연구원",
+          "source_category": "공공행정",
+          "operations_count": 2,
+          "callable_operations": 0
+        },
+        {
+          "id": "15000096",
+          "title": "경상남도 창원시_기반정보조회서비스(신청불가, 27.1.1.중단)",
+          "organization": "경상남도 창원시",
+          "source_category": "교통물류",
+          "operations_count": 4,
+          "callable_operations": 0
+        },
+        {
+          "id": "15000193",
+          "title": "서울특별시_노선정보조회 서비스",
+          "organization": "서울특별시",
+          "source_category": "교통물류",
+          "operations_count": 4,
+          "callable_operations": 0
+        },
+        {
+          "id": "15000241",
+          "title": "과학기술정보통신부 우정사업본부_EMS행방조회 서비스",
+          "organization": "과학기술정보통신부 우정사업본부",
+          "source_category": "교통물류",
+          "operations_count": 1,
+          "callable_operations": 0
+        }
+      ],
+      "external_endpoint": [
+        {
+          "id": "15000021",
+          "title": "법제처_영문생활법령정보 조회 서비스",
+          "organization": "법제처",
+          "source_category": "법률",
+          "operations_count": 3,
+          "callable_operations": 3
+        },
+        {
+          "id": "15000032",
+          "title": "과학기술정보통신부 우정사업본부_EMS신청 저장 서비스",
+          "organization": "과학기술정보통신부 우정사업본부",
+          "source_category": "교통물류",
+          "operations_count": 2,
+          "callable_operations": 2
+        },
+        {
+          "id": "15000122",
+          "title": "법제처_생활법령검색조회 서비스",
+          "organization": "법제처",
+          "source_category": "법률",
+          "operations_count": 12,
+          "callable_operations": 12
+        },
+        {
+          "id": "15000124",
+          "title": "과학기술정보통신부 우정사업본부_도로명주소조회서비스",
+          "organization": "과학기술정보통신부 우정사업본부",
+          "source_category": "교통물류",
+          "operations_count": 1,
+          "callable_operations": 1
+        },
+        {
+          "id": "15000215",
+          "title": "법제처_생활법령정보 조회 서비스",
+          "organization": "법제처",
+          "source_category": "법률",
+          "operations_count": 12,
+          "callable_operations": 12
+        }
+      ],
+      "gateway_with_external_guide": [
+        {
+          "id": "15000442",
+          "title": "경찰청_핸드폰 찾기 정보 조회 서비스",
+          "organization": "경찰청",
+          "source_category": "재난안전",
+          "operations_count": 2,
+          "callable_operations": 2
+        },
+        {
+          "id": "15000467",
+          "title": "대전광역시 공연행사정보",
+          "organization": "대전광역시",
+          "source_category": "공공행정",
+          "operations_count": 2,
+          "callable_operations": 2
+        },
+        {
+          "id": "15000651",
+          "title": "경찰청_공통코드조회 서비스",
+          "organization": "경찰청",
+          "source_category": "재난안전",
+          "operations_count": 2,
+          "callable_operations": 2
+        },
+        {
+          "id": "15000799",
+          "title": "경찰청_분실물정보 조회 서비스",
+          "organization": "경찰청",
+          "source_category": "재난안전",
+          "operations_count": 3,
+          "callable_operations": 3
+        },
+        {
+          "id": "15000870",
+          "title": "대전광역시 당직의료기관",
+          "organization": "대전광역시",
+          "source_category": "보건의료",
+          "operations_count": 4,
+          "callable_operations": 4
+        }
+      ],
+      "service_root_only": [
+        {
+          "id": "15000017",
+          "title": "한국문화관광연구원_관광실태조사서비스",
+          "organization": "한국문화관광연구원",
+          "source_category": "공공행정",
+          "operations_count": 11,
+          "callable_operations": 0
+        },
+        {
+          "id": "15000063",
+          "title": "한국문화관광연구원_관광산업통계서비스",
+          "organization": "한국문화관광연구원",
+          "source_category": "공공행정",
+          "operations_count": 2,
+          "callable_operations": 0
+        },
+        {
+          "id": "15000297",
+          "title": "한국문화관광연구원_출입국관광통계서비스",
+          "organization": "한국문화관광연구원",
+          "source_category": "공공행정",
+          "operations_count": 5,
+          "callable_operations": 0
+        },
+        {
+          "id": "15000366",
+          "title": "한국문화관광연구원_관광자원통계서비스",
+          "organization": "한국문화관광연구원",
+          "source_category": "공공행정",
+          "operations_count": 1,
+          "callable_operations": 0
+        }
+      ],
+      "soap": [
+        {
+          "id": "15000021",
+          "title": "법제처_영문생활법령정보 조회 서비스",
+          "organization": "법제처",
+          "source_category": "법률",
+          "operations_count": 3,
+          "callable_operations": 3
+        },
+        {
+          "id": "15000032",
+          "title": "과학기술정보통신부 우정사업본부_EMS신청 저장 서비스",
+          "organization": "과학기술정보통신부 우정사업본부",
+          "source_category": "교통물류",
+          "operations_count": 2,
+          "callable_operations": 2
+        },
+        {
+          "id": "15000122",
+          "title": "법제처_생활법령검색조회 서비스",
+          "organization": "법제처",
+          "source_category": "법률",
+          "operations_count": 12,
+          "callable_operations": 12
+        },
+        {
+          "id": "15000215",
+          "title": "법제처_생활법령정보 조회 서비스",
+          "organization": "법제처",
+          "source_category": "법률",
+          "operations_count": 12,
+          "callable_operations": 12
+        },
+        {
+          "id": "15000335",
+          "title": "법제처_생활법령 백문백답 서비스",
+          "organization": "법제처",
+          "source_category": "법률",
+          "operations_count": 3,
+          "callable_operations": 3
+        }
+      ],
+      "wms": [
+        {
+          "id": "15112353",
+          "title": "해양수산부_해양용도구역_에너지개발구역 서비스",
+          "organization": "해양수산부",
+          "source_category": "농축수산",
+          "operations_count": 2,
+          "callable_operations": 2
+        },
+        {
+          "id": "15114234",
+          "title": "해양수산부_수상레저금지구역",
+          "organization": "해양수산부",
+          "source_category": "농축수산",
+          "operations_count": 2,
+          "callable_operations": 2
+        },
+        {
+          "id": "15114236",
+          "title": "해양수산부_시운전금지해역",
+          "organization": "해양수산부",
+          "source_category": "농축수산",
+          "operations_count": 2,
+          "callable_operations": 2
+        },
+        {
+          "id": "15127853",
+          "title": "해양수산부_수치모델을 이용한 과거해황 지도 서비스",
+          "organization": "해양수산부",
+          "source_category": "농축수산",
+          "operations_count": 1,
+          "callable_operations": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.release-manifest.v1.schema.json",
+  "title": "Datapan Release Manifest v1",
+  "description": "Manifest for a Datapan registry release draft.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "datapan_version",
+    "provider",
+    "source_registry",
+    "output_dir",
+    "artifact_count",
+    "artifacts"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.release-manifest.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "datapan_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_registry": {
+      "type": "string",
+      "minLength": 1
+    },
+    "output_dir": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifact_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifact"
+      }
+    }
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "kind", "bytes", "sha256"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[^\\\\]+$"
+        },
+        "kind": {
+          "enum": [
+            "schema",
+            "schema_index",
+            "registry",
+            "provider_index",
+            "catalog_diff",
+            "catalog_audit",
+            "error_catalog",
+            "dependencies",
+            "adapter_targets",
+            "provider_backlog",
+            "verification",
+            "verification_summary",
+            "provenance"
+          ]
+        },
+        "schema": {
+          "type": "string",
+          "format": "uri"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  }
+}

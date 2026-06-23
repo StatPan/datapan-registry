@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.catalog-audit.v1.schema.json",
+  "title": "Datapan Catalog Audit v1",
+  "description": "Registry coverage and dependency gap audit for a Datapan catalog.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["generated_at", "provider", "sample_limit", "audit"],
+  "properties": {
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "registry": {
+      "type": "string"
+    },
+    "sample_limit": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "audit": {
+      "$ref": "#/$defs/audit"
+    }
+  },
+  "$defs": {
+    "audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "specs_total",
+        "operations_total",
+        "callable_operations",
+        "specs_without_operations",
+        "specs_without_callable_operation",
+        "operations_without_endpoint",
+        "operations_without_request_params",
+        "operations_without_response_params",
+        "specs_missing_organization",
+        "specs_missing_source_url",
+        "specs_missing_updated_at",
+        "dependency",
+        "samples"
+      ],
+      "properties": {
+        "specs_total": { "$ref": "#/$defs/count" },
+        "operations_total": { "$ref": "#/$defs/count" },
+        "callable_operations": { "$ref": "#/$defs/count" },
+        "specs_without_operations": { "$ref": "#/$defs/count" },
+        "specs_without_callable_operation": { "$ref": "#/$defs/count" },
+        "operations_without_endpoint": { "$ref": "#/$defs/count" },
+        "operations_without_request_params": { "$ref": "#/$defs/count" },
+        "operations_without_response_params": { "$ref": "#/$defs/count" },
+        "specs_missing_organization": { "$ref": "#/$defs/count" },
+        "specs_missing_source_url": { "$ref": "#/$defs/count" },
+        "specs_missing_updated_at": { "$ref": "#/$defs/count" },
+        "dependency": { "$ref": "#/$defs/dependency" },
+        "samples": { "$ref": "#/$defs/samples" }
+      }
+    },
+    "dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "data_go_kr_gateway_operations",
+        "gateway_with_external_guide_specs",
+        "external_endpoint_specs",
+        "external_endpoint_operations",
+        "service_root_only_operations",
+        "soap_operations",
+        "wms_operations",
+        "dev_approval_required_operations",
+        "prod_approval_required_operations",
+        "malformed_endpoint_url_count",
+        "malformed_guide_url_count"
+      ],
+      "properties": {
+        "data_go_kr_gateway_operations": { "$ref": "#/$defs/count" },
+        "gateway_with_external_guide_specs": { "$ref": "#/$defs/count" },
+        "external_endpoint_specs": { "$ref": "#/$defs/count" },
+        "external_endpoint_operations": { "$ref": "#/$defs/count" },
+        "service_root_only_operations": { "$ref": "#/$defs/count" },
+        "soap_operations": { "$ref": "#/$defs/count" },
+        "wms_operations": { "$ref": "#/$defs/count" },
+        "dev_approval_required_operations": { "$ref": "#/$defs/count" },
+        "prod_approval_required_operations": { "$ref": "#/$defs/count" },
+        "malformed_endpoint_url_count": { "$ref": "#/$defs/count" },
+        "malformed_guide_url_count": { "$ref": "#/$defs/count" },
+        "top_endpoint_hosts": { "$ref": "#/$defs/host_counts" },
+        "top_external_endpoint_hosts": { "$ref": "#/$defs/host_counts" },
+        "top_external_guide_hosts": { "$ref": "#/$defs/host_counts" }
+      }
+    },
+    "samples": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "without_operations": { "$ref": "#/$defs/audit_samples" },
+        "without_callable_operation": { "$ref": "#/$defs/audit_samples" },
+        "missing_organization": { "$ref": "#/$defs/audit_samples" },
+        "missing_updated_at": { "$ref": "#/$defs/audit_samples" },
+        "external_endpoint": { "$ref": "#/$defs/audit_samples" },
+        "gateway_with_external_guide": { "$ref": "#/$defs/audit_samples" },
+        "service_root_only": { "$ref": "#/$defs/audit_samples" },
+        "soap": { "$ref": "#/$defs/audit_samples" },
+        "wms": { "$ref": "#/$defs/audit_samples" }
+      }
+    },
+    "audit_samples": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/audit_sample"
+      }
+    },
+    "audit_sample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "operations_count", "callable_operations"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "organization": {
+          "type": "string"
+        },
+        "source_category": {
+          "type": "string"
+        },
+        "operations_count": { "$ref": "#/$defs/count" },
+        "callable_operations": { "$ref": "#/$defs/count" }
+      }
+    },
+    "host_counts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/host_count"
+      }
+    },
+    "host_count": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host", "count"],
+      "properties": {
+        "host": {
+          "type": "string",
+          "minLength": 1
+        },
+        "count": { "$ref": "#/$defs/count" }
+      }
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

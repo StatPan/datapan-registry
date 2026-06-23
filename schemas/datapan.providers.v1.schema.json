@@ -1,0 +1,207 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.providers.v1.schema.json",
+  "title": "Datapan Provider Backlog v1",
+  "description": "Host/provider backlog derived from a normalized Datapan registry.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["generated_at", "provider", "limit", "truncated", "filtered_count", "summary", "providers"],
+  "properties": {
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "registry": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "truncated": {
+      "type": "boolean"
+    },
+    "filters": {
+      "$ref": "#/$defs/filters"
+    },
+    "filtered_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "providers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/provider"
+      }
+    }
+  },
+  "$defs": {
+    "filters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": ["builtin", "missing", "adapter", "guide_only"]
+        },
+        "kind": {
+          "enum": [
+            "data_go_kr_gateway",
+            "external_endpoint",
+            "external_guide",
+            "service_root"
+          ]
+        },
+        "provider": {
+          "type": "string"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hosts",
+        "data_go_kr_gateway_hosts",
+        "external_endpoint_hosts",
+        "external_guide_hosts",
+        "registered_adapter_hosts",
+        "operation_hosts",
+        "guide_only_hosts",
+        "missing_adapter_hosts",
+        "needs_adapter_operations",
+        "service_root_operations",
+        "unsupported_protocol_operations",
+        "approval_required_operations",
+        "malformed_source_url_count"
+      ],
+      "properties": {
+        "hosts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "data_go_kr_gateway_hosts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "external_endpoint_hosts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "external_guide_hosts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "registered_adapter_hosts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "operation_hosts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "guide_only_hosts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "missing_adapter_hosts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "needs_adapter_operations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "service_root_operations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unsupported_protocol_operations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "approval_required_operations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "malformed_source_url_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host", "kinds", "adapter_status", "specs", "operations"],
+      "properties": {
+        "host": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provider": {
+          "type": "string"
+        },
+        "kinds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "data_go_kr_gateway",
+              "external_endpoint",
+              "external_guide",
+              "service_root"
+            ]
+          },
+          "minItems": 1
+        },
+        "adapter_status": {
+          "enum": ["builtin", "missing", "adapter", "guide_only"]
+        },
+        "specs": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "operations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "external_endpoint_operations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "external_guide_specs": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "service_root_operations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "soap_operations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "wms_operations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "approval_required_operations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sample_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

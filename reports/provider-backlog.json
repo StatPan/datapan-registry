@@ -1,0 +1,2589 @@
+{
+  "generated_at": "2026-06-23T23:17:24Z",
+  "provider": "data.go.kr",
+  "registry": ".datapan\\release-epost-smoke\\data\\data-go-kr.registry.json",
+  "limit": 0,
+  "truncated": false,
+  "filtered_count": 179,
+  "summary": {
+    "hosts": 179,
+    "data_go_kr_gateway_hosts": 2,
+    "external_endpoint_hosts": 40,
+    "external_guide_hosts": 150,
+    "registered_adapter_hosts": 5,
+    "operation_hosts": 42,
+    "guide_only_hosts": 137,
+    "missing_adapter_hosts": 35,
+    "needs_adapter_operations": 419,
+    "service_root_operations": 19,
+    "unsupported_protocol_operations": 42,
+    "approval_required_operations": 4142,
+    "malformed_source_url_count": 628
+  },
+  "providers": [
+    {
+      "host": "openapi.jeonju.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "missing",
+      "specs": 49,
+      "operations": 80,
+      "external_endpoint_operations": 80,
+      "external_guide_specs": 32,
+      "sample_ids": [
+        "15000354",
+        "15004414",
+        "15004788"
+      ]
+    },
+    {
+      "host": "data.ekape.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 8,
+      "operations": 49,
+      "external_endpoint_operations": 49,
+      "sample_ids": [
+        "15000577",
+        "15056733",
+        "15057101"
+      ]
+    },
+    {
+      "host": "data.geoje.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "missing",
+      "specs": 12,
+      "operations": 41,
+      "external_endpoint_operations": 41,
+      "external_guide_specs": 11,
+      "sample_ids": [
+        "15005128",
+        "15005172",
+        "15014125"
+      ]
+    },
+    {
+      "host": "data.uiryeong.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 32,
+      "operations": 40,
+      "external_endpoint_operations": 40,
+      "sample_ids": [
+        "15008883",
+        "15008884",
+        "15008887"
+      ]
+    },
+    {
+      "host": "oneclick.law.go.kr:80",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 3,
+      "operations": 27,
+      "external_endpoint_operations": 27,
+      "soap_operations": 27,
+      "approval_required_operations": 15,
+      "sample_ids": [
+        "15000021",
+        "15000122",
+        "15000215"
+      ]
+    },
+    {
+      "host": "data.sisul.or.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "missing",
+      "specs": 40,
+      "operations": 20,
+      "external_endpoint_operations": 20,
+      "external_guide_specs": 40,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15002793",
+        "15002794",
+        "15002797"
+      ]
+    },
+    {
+      "host": "openapi.its.ulsan.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 3,
+      "operations": 20,
+      "external_endpoint_operations": 20,
+      "sample_ids": [
+        "15052669",
+        "3057770",
+        "3057773"
+      ]
+    },
+    {
+      "host": "www.korad.or.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "missing",
+      "specs": 21,
+      "operations": 15,
+      "external_endpoint_operations": 15,
+      "external_guide_specs": 20,
+      "approval_required_operations": 10,
+      "sample_ids": [
+        "15004087",
+        "15004088",
+        "15004206"
+      ]
+    },
+    {
+      "host": "www.andong.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 10,
+      "operations": 15,
+      "external_endpoint_operations": 15,
+      "sample_ids": [
+        "15003047",
+        "15005609",
+        "15005628"
+      ]
+    },
+    {
+      "host": "open.itfind.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 5,
+      "operations": 13,
+      "external_endpoint_operations": 13,
+      "sample_ids": [
+        "15036874",
+        "15036875",
+        "15036876"
+      ]
+    },
+    {
+      "host": "data.naqs.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 2,
+      "operations": 9,
+      "external_endpoint_operations": 9,
+      "approval_required_operations": 8,
+      "sample_ids": [
+        "15000834",
+        "15000935"
+      ]
+    },
+    {
+      "host": "data.humetro.busan.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "missing",
+      "specs": 8,
+      "operations": 8,
+      "external_endpoint_operations": 8,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15001011",
+        "15001018",
+        "15001019"
+      ]
+    },
+    {
+      "host": "openapi.tour.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "service_root"
+      ],
+      "adapter_status": "missing",
+      "specs": 7,
+      "operations": 7,
+      "external_endpoint_operations": 7,
+      "service_root_operations": 19,
+      "sample_ids": [
+        "15000017",
+        "15000063",
+        "15000297"
+      ]
+    },
+    {
+      "host": "openapi.airport.co.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "missing",
+      "specs": 5,
+      "operations": 6,
+      "external_endpoint_operations": 6,
+      "external_guide_specs": 4,
+      "sample_ids": [
+        "15019937",
+        "15038409",
+        "15158628"
+      ]
+    },
+    {
+      "host": "openapi.coast.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 6,
+      "external_endpoint_operations": 6,
+      "sample_ids": [
+        "15059302"
+      ]
+    },
+    {
+      "host": "openapi.ebid.lh.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 6,
+      "operations": 6,
+      "external_endpoint_operations": 6,
+      "sample_ids": [
+        "15021183",
+        "15021184",
+        "15042795"
+      ]
+    },
+    {
+      "host": "openapi.kpx.or.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "missing",
+      "specs": 6,
+      "operations": 5,
+      "external_endpoint_operations": 5,
+      "external_guide_specs": 6,
+      "approval_required_operations": 5,
+      "sample_ids": [
+        "15051436",
+        "15056640",
+        "15056879"
+      ]
+    },
+    {
+      "host": "ws.bus.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 5,
+      "external_endpoint_operations": 5,
+      "sample_ids": [
+        "15000332"
+      ]
+    },
+    {
+      "host": "openapi.pqis.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 4,
+      "external_endpoint_operations": 4,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "3055528"
+      ]
+    },
+    {
+      "host": "api.forest.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 2,
+      "operations": 4,
+      "external_endpoint_operations": 4,
+      "sample_ids": [
+        "3044607",
+        "3071170"
+      ]
+    },
+    {
+      "host": "car.daegu.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 4,
+      "external_endpoint_operations": 4,
+      "sample_ids": [
+        "15097855"
+      ]
+    },
+    {
+      "host": "data.jeju.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 2,
+      "operations": 4,
+      "external_endpoint_operations": 4,
+      "sample_ids": [
+        "15001189",
+        "15043696"
+      ]
+    },
+    {
+      "host": "openapi.price.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 4,
+      "external_endpoint_operations": 4,
+      "sample_ids": [
+        "3043385"
+      ]
+    },
+    {
+      "host": "www.rda.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 2,
+      "operations": 4,
+      "external_endpoint_operations": 4,
+      "sample_ids": [
+        "15002002",
+        "15002055"
+      ]
+    },
+    {
+      "host": "openapi.gblib.or.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "missing",
+      "specs": 3,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "external_guide_specs": 3,
+      "sample_ids": [
+        "15003489",
+        "3075291",
+        "3075292"
+      ]
+    },
+    {
+      "host": "folkency.nfm.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "sample_ids": [
+        "15126343"
+      ]
+    },
+    {
+      "host": "its.gyeongju.go.kr:81",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "sample_ids": [
+        "15021579"
+      ]
+    },
+    {
+      "host": "oneclick.law.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "soap_operations": 3,
+      "approval_required_operations": 3,
+      "sample_ids": [
+        "15000335"
+      ]
+    },
+    {
+      "host": "www.emuseum.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "sample_ids": [
+        "3036708"
+      ]
+    },
+    {
+      "host": "data.wanju.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 2,
+      "operations": 2,
+      "external_endpoint_operations": 2,
+      "sample_ids": [
+        "15010208",
+        "15058097"
+      ]
+    },
+    {
+      "host": "www.cid.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 2,
+      "external_endpoint_operations": 2,
+      "sample_ids": [
+        "15012192"
+      ]
+    },
+    {
+      "host": "www.dgeic.or.kr:8080",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15001184"
+      ]
+    },
+    {
+      "host": "data.myhome.go.kr:443",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "15058476"
+      ]
+    },
+    {
+      "host": "openapi-lib.sen.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "15001051"
+      ]
+    },
+    {
+      "host": "www.simpan.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "3084452"
+      ]
+    },
+    {
+      "host": "openapi.q-net.or.kr",
+      "provider": "q-net",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 65,
+      "operations": 104,
+      "external_endpoint_operations": 104,
+      "external_guide_specs": 22,
+      "approval_required_operations": 19,
+      "sample_ids": [
+        "15003003",
+        "15003024",
+        "15003027"
+      ]
+    },
+    {
+      "host": "c.q-net.or.kr",
+      "provider": "q-net",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 26,
+      "operations": 42,
+      "external_endpoint_operations": 42,
+      "external_guide_specs": 14,
+      "approval_required_operations": 14,
+      "sample_ids": [
+        "15037518",
+        "15037520",
+        "15056876"
+      ]
+    },
+    {
+      "host": "openapi.epost.go.kr:80",
+      "provider": "epost",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 7,
+      "operations": 22,
+      "external_endpoint_operations": 22,
+      "soap_operations": 5,
+      "sample_ids": [
+        "15000032",
+        "15000124",
+        "15000268"
+      ]
+    },
+    {
+      "host": "openapi.epost.go.kr",
+      "provider": "epost",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 17,
+      "operations": 6,
+      "external_endpoint_operations": 6,
+      "external_guide_specs": 13,
+      "sample_ids": [
+        "15000032",
+        "15000124",
+        "15000241"
+      ]
+    },
+    {
+      "host": "open.api.q-net.or.kr",
+      "provider": "q-net",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "15134269"
+      ]
+    },
+    {
+      "host": "data.mfds.go.kr",
+      "provider": "mfds",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 157,
+      "operations": 0,
+      "external_guide_specs": 157,
+      "sample_ids": [
+        "15020628",
+        "15042667",
+        "15056516"
+      ]
+    },
+    {
+      "host": "www.bigdata-cancer.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 125,
+      "operations": 0,
+      "external_guide_specs": 125,
+      "sample_ids": [
+        "15076701",
+        "15076709",
+        "15076715"
+      ]
+    },
+    {
+      "host": "phdata.pohang.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 52,
+      "operations": 0,
+      "external_guide_specs": 52,
+      "sample_ids": [
+        "15139496",
+        "15139501",
+        "15139502"
+      ]
+    },
+    {
+      "host": "bigdata-cancer.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 47,
+      "operations": 0,
+      "external_guide_specs": 47,
+      "sample_ids": [
+        "15076700",
+        "15076703",
+        "15076710"
+      ]
+    },
+    {
+      "host": "www.gwangyang.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 25,
+      "operations": 0,
+      "external_guide_specs": 25,
+      "sample_ids": [
+        "15076276",
+        "15076278",
+        "15076279"
+      ]
+    },
+    {
+      "host": "ext.fips.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 23,
+      "operations": 0,
+      "external_guide_specs": 23,
+      "sample_ids": [
+        "15043939",
+        "15056511",
+        "15056556"
+      ]
+    },
+    {
+      "host": "odp.airport.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 16,
+      "operations": 0,
+      "external_guide_specs": 16,
+      "sample_ids": [
+        "15095049",
+        "15095066",
+        "15098224"
+      ]
+    },
+    {
+      "host": "api.visitkorea.or.kr",
+      "provider": "visitkorea",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 15,
+      "operations": 0,
+      "external_guide_specs": 15,
+      "sample_ids": [
+        "15101578",
+        "15101753",
+        "15101760"
+      ]
+    },
+    {
+      "host": "www.djtc.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 15,
+      "operations": 0,
+      "external_guide_specs": 15,
+      "sample_ids": [
+        "15158629",
+        "15158631",
+        "15158632"
+      ]
+    },
+    {
+      "host": "www.egroup.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 15,
+      "operations": 0,
+      "external_guide_specs": 15,
+      "sample_ids": [
+        "15091886",
+        "15091890",
+        "15091891"
+      ]
+    },
+    {
+      "host": "kotra.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 14,
+      "operations": 0,
+      "external_guide_specs": 14,
+      "sample_ids": [
+        "15034754",
+        "15034755",
+        "15034830"
+      ]
+    },
+    {
+      "host": "www.globalict.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 14,
+      "operations": 0,
+      "external_guide_specs": 14,
+      "sample_ids": [
+        "15132921",
+        "15132931",
+        "15132939"
+      ]
+    },
+    {
+      "host": "www.cancerdata.re.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 13,
+      "operations": 0,
+      "external_guide_specs": 13,
+      "sample_ids": [
+        "15126601",
+        "15126618",
+        "15126619"
+      ]
+    },
+    {
+      "host": "gwangyang.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 12,
+      "operations": 0,
+      "external_guide_specs": 12,
+      "sample_ids": [
+        "15076597",
+        "15076929",
+        "15076930"
+      ]
+    },
+    {
+      "host": "www.k-apt.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 12,
+      "operations": 0,
+      "external_guide_specs": 12,
+      "sample_ids": [
+        "15012964",
+        "15012966",
+        "15057231"
+      ]
+    },
+    {
+      "host": "coast.mof.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 11,
+      "operations": 0,
+      "external_guide_specs": 11,
+      "sample_ids": [
+        "15002265",
+        "15058121",
+        "15127645"
+      ]
+    },
+    {
+      "host": "jbdc.co.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 11,
+      "operations": 0,
+      "external_guide_specs": 11,
+      "sample_ids": [
+        "15056567",
+        "15056756",
+        "15057292"
+      ]
+    },
+    {
+      "host": "kipo-api.koreantk.com",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 10,
+      "operations": 0,
+      "external_guide_specs": 10,
+      "sample_ids": [
+        "15002133",
+        "15002135",
+        "15002136"
+      ]
+    },
+    {
+      "host": "www.daejeon.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 10,
+      "operations": 0,
+      "external_guide_specs": 10,
+      "sample_ids": [
+        "15000467",
+        "15000870",
+        "15001034"
+      ]
+    },
+    {
+      "host": "www.koat.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 10,
+      "operations": 0,
+      "external_guide_specs": 10,
+      "sample_ids": [
+        "15158640",
+        "15158641",
+        "15158642"
+      ]
+    },
+    {
+      "host": "www.nihhs.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 10,
+      "operations": 0,
+      "external_guide_specs": 10,
+      "sample_ids": [
+        "15040630",
+        "15040631",
+        "15063096"
+      ]
+    },
+    {
+      "host": "www.uiryeong.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 10,
+      "operations": 0,
+      "external_guide_specs": 10,
+      "sample_ids": [
+        "15008887",
+        "15017664",
+        "15017665"
+      ]
+    },
+    {
+      "host": "soil.rda.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 9,
+      "operations": 0,
+      "external_guide_specs": 9,
+      "sample_ids": [
+        "15075883",
+        "15075887",
+        "15075889"
+      ]
+    },
+    {
+      "host": "open.mma.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 8,
+      "operations": 0,
+      "external_guide_specs": 8,
+      "sample_ids": [
+        "15017227",
+        "15017531",
+        "3064321"
+      ]
+    },
+    {
+      "host": "openapi.0404.go.kr:9090",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 8,
+      "operations": 0,
+      "external_guide_specs": 8,
+      "sample_ids": [
+        "15056903",
+        "15057115",
+        "15057437"
+      ]
+    },
+    {
+      "host": "weather.rda.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 8,
+      "operations": 0,
+      "external_guide_specs": 8,
+      "sample_ids": [
+        "15073274",
+        "15078057",
+        "15078194"
+      ]
+    },
+    {
+      "host": "kccrsurvey.cancer.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 7,
+      "operations": 0,
+      "external_guide_specs": 7,
+      "sample_ids": [
+        "15056654",
+        "15056812",
+        "15057063"
+      ]
+    },
+    {
+      "host": "openapi.hrdkorea.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 7,
+      "operations": 0,
+      "external_guide_specs": 7,
+      "sample_ids": [
+        "15074404",
+        "15074408",
+        "15074415"
+      ]
+    },
+    {
+      "host": "27.101.58.22",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 6,
+      "operations": 0,
+      "external_guide_specs": 6,
+      "sample_ids": [
+        "15098385",
+        "15098435",
+        "15098436"
+      ]
+    },
+    {
+      "host": "busan.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 6,
+      "operations": 0,
+      "external_guide_specs": 6,
+      "sample_ids": [
+        "15077588",
+        "15077589",
+        "15077591"
+      ]
+    },
+    {
+      "host": "its.busan.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 6,
+      "operations": 0,
+      "external_guide_specs": 6,
+      "sample_ids": [
+        "15120847",
+        "15120867",
+        "15120896"
+      ]
+    },
+    {
+      "host": "service.kosha.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 6,
+      "operations": 0,
+      "external_guide_specs": 6,
+      "sample_ids": [
+        "15073263",
+        "15096645",
+        "15096663"
+      ]
+    },
+    {
+      "host": "www.academyinfo.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 6,
+      "operations": 0,
+      "external_guide_specs": 6,
+      "sample_ids": [
+        "15158678",
+        "15158679",
+        "15158680"
+      ]
+    },
+    {
+      "host": "www.mma.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 6,
+      "operations": 0,
+      "external_guide_specs": 6,
+      "sample_ids": [
+        "15130342",
+        "3066488",
+        "3066489"
+      ]
+    },
+    {
+      "host": "api.bus.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 5,
+      "operations": 0,
+      "external_guide_specs": 5,
+      "sample_ids": [
+        "15000193",
+        "15000303",
+        "15000314"
+      ]
+    },
+    {
+      "host": "fruit.nihhs.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 5,
+      "operations": 0,
+      "external_guide_specs": 5,
+      "sample_ids": [
+        "15034525",
+        "15041539",
+        "15122337"
+      ]
+    },
+    {
+      "host": "openapi.utradehub.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 5,
+      "operations": 0,
+      "external_guide_specs": 5,
+      "sample_ids": [
+        "15001806",
+        "15001808",
+        "15001809"
+      ]
+    },
+    {
+      "host": "www.d2b.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 5,
+      "operations": 0,
+      "external_guide_specs": 5,
+      "sample_ids": [
+        "15158416",
+        "15158417",
+        "15158418"
+      ]
+    },
+    {
+      "host": "www.gbis.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 5,
+      "operations": 0,
+      "external_guide_specs": 5,
+      "sample_ids": [
+        "15080346",
+        "15080648",
+        "15080658"
+      ]
+    },
+    {
+      "host": "www.kordi.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 5,
+      "operations": 0,
+      "external_guide_specs": 5,
+      "sample_ids": [
+        "15056961",
+        "15057200",
+        "15058307"
+      ]
+    },
+    {
+      "host": "www.naqs.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 5,
+      "operations": 0,
+      "external_guide_specs": 5,
+      "sample_ids": [
+        "15141771",
+        "15141804",
+        "15141806"
+      ]
+    },
+    {
+      "host": "www.q-net.or.kr",
+      "provider": "q-net",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 5,
+      "operations": 0,
+      "external_guide_specs": 5,
+      "sample_ids": [
+        "15134269",
+        "15134271",
+        "15134290"
+      ]
+    },
+    {
+      "host": "211.188.64.69",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 4,
+      "operations": 0,
+      "external_guide_specs": 4,
+      "sample_ids": [
+        "15158929",
+        "15158944",
+        "15158994"
+      ]
+    },
+    {
+      "host": "bigdata.epeople.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 4,
+      "operations": 0,
+      "external_guide_specs": 4,
+      "sample_ids": [
+        "15101903",
+        "15114773",
+        "15128648"
+      ]
+    },
+    {
+      "host": "bus.changwon.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 4,
+      "operations": 0,
+      "external_guide_specs": 4,
+      "sample_ids": [
+        "15000096",
+        "15000254",
+        "15000386"
+      ]
+    },
+    {
+      "host": "farmer.rda.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 4,
+      "operations": 0,
+      "external_guide_specs": 4,
+      "sample_ids": [
+        "15129372",
+        "15143456",
+        "15151027"
+      ]
+    },
+    {
+      "host": "kosis.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 4,
+      "operations": 0,
+      "external_guide_specs": 4,
+      "sample_ids": [
+        "15127752",
+        "15127755",
+        "15127760"
+      ]
+    },
+    {
+      "host": "taas.koroad.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 4,
+      "operations": 0,
+      "external_guide_specs": 4,
+      "sample_ids": [
+        "15056681",
+        "15057666",
+        "15058311"
+      ]
+    },
+    {
+      "host": "www.easylaw.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 4,
+      "operations": 0,
+      "external_guide_specs": 4,
+      "sample_ids": [
+        "15000021",
+        "15000122",
+        "15000215"
+      ]
+    },
+    {
+      "host": "www.h2nbiz.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 4,
+      "operations": 0,
+      "external_guide_specs": 4,
+      "sample_ids": [
+        "15133016",
+        "15133332",
+        "15133338"
+      ]
+    },
+    {
+      "host": "www.i-se.co.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 4,
+      "operations": 0,
+      "external_guide_specs": 4,
+      "sample_ids": [
+        "15059990",
+        "15059991",
+        "15059996"
+      ]
+    },
+    {
+      "host": "www.kra.co.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 4,
+      "operations": 0,
+      "external_guide_specs": 4,
+      "sample_ids": [
+        "15150012",
+        "15150022",
+        "15150028"
+      ]
+    },
+    {
+      "host": "www.lost112.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 4,
+      "operations": 0,
+      "external_guide_specs": 4,
+      "sample_ids": [
+        "15000442",
+        "15000651",
+        "15000799"
+      ]
+    },
+    {
+      "host": "www.oda.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 4,
+      "operations": 0,
+      "external_guide_specs": 4,
+      "sample_ids": [
+        "15158380",
+        "15158394",
+        "15158399"
+      ]
+    },
+    {
+      "host": "www.smpp.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 4,
+      "operations": 0,
+      "external_guide_specs": 4,
+      "sample_ids": [
+        "15062581",
+        "15099792",
+        "15099836"
+      ]
+    },
+    {
+      "host": "api.socialservice.or.kr:444",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 3,
+      "operations": 0,
+      "external_guide_specs": 3,
+      "sample_ids": [
+        "15057683",
+        "15059061",
+        "3075061"
+      ]
+    },
+    {
+      "host": "api.w4c.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 3,
+      "operations": 0,
+      "external_guide_specs": 3,
+      "sample_ids": [
+        "15001838",
+        "15001839",
+        "15001848"
+      ]
+    },
+    {
+      "host": "data.myhome.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 3,
+      "operations": 0,
+      "external_guide_specs": 3,
+      "sample_ids": [
+        "15108378",
+        "15108420",
+        "15110581"
+      ]
+    },
+    {
+      "host": "genebank.rda.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 3,
+      "operations": 0,
+      "external_guide_specs": 3,
+      "sample_ids": [
+        "15095486",
+        "15158383",
+        "15158866"
+      ]
+    },
+    {
+      "host": "openapi.nanet.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 3,
+      "operations": 0,
+      "external_guide_specs": 3,
+      "sample_ids": [
+        "15098163",
+        "15098174",
+        "15098175"
+      ]
+    },
+    {
+      "host": "opendata.kwater.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 3,
+      "operations": 0,
+      "external_guide_specs": 3,
+      "sample_ids": [
+        "15056653",
+        "15057371",
+        "15058037"
+      ]
+    },
+    {
+      "host": "www.busan.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 3,
+      "operations": 0,
+      "external_guide_specs": 3,
+      "sample_ids": [
+        "15004512",
+        "15058739",
+        "3076459"
+      ]
+    },
+    {
+      "host": "www.comwel.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 3,
+      "operations": 0,
+      "external_guide_specs": 3,
+      "sample_ids": [
+        "15058716",
+        "15059231",
+        "15059256"
+      ]
+    },
+    {
+      "host": "adp.rda.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 2,
+      "operations": 0,
+      "external_guide_specs": 2,
+      "sample_ids": [
+        "15042594",
+        "15155785"
+      ]
+    },
+    {
+      "host": "kipo-api.ipmarket.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 2,
+      "operations": 0,
+      "external_guide_specs": 2,
+      "sample_ids": [
+        "15158849",
+        "15158850"
+      ]
+    },
+    {
+      "host": "lh.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 2,
+      "operations": 0,
+      "external_guide_specs": 2,
+      "sample_ids": [
+        "15057479",
+        "15058530"
+      ]
+    },
+    {
+      "host": "meister.hrdkorea.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 2,
+      "operations": 0,
+      "external_guide_specs": 2,
+      "sample_ids": [
+        "15157913",
+        "15157914"
+      ]
+    },
+    {
+      "host": "nip.kdca.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 2,
+      "operations": 0,
+      "external_guide_specs": 2,
+      "sample_ids": [
+        "15084296",
+        "15084303"
+      ]
+    },
+    {
+      "host": "opendata.hira.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 2,
+      "operations": 0,
+      "external_guide_specs": 2,
+      "sample_ids": [
+        "15001698",
+        "15001699"
+      ]
+    },
+    {
+      "host": "www.code.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 2,
+      "operations": 0,
+      "external_guide_specs": 2,
+      "sample_ids": [
+        "15077870",
+        "15077871"
+      ]
+    },
+    {
+      "host": "www.kasi.re.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 2,
+      "operations": 0,
+      "external_guide_specs": 2,
+      "sample_ids": [
+        "15012679",
+        "15012692"
+      ]
+    },
+    {
+      "host": "www.kordi.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 2,
+      "operations": 0,
+      "external_guide_specs": 2,
+      "sample_ids": [
+        "15057083",
+        "15058688"
+      ]
+    },
+    {
+      "host": "www.longtermcare.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 2,
+      "operations": 0,
+      "external_guide_specs": 2,
+      "sample_ids": [
+        "15059011",
+        "15059029"
+      ]
+    },
+    {
+      "host": "www.mtrace.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 2,
+      "operations": 0,
+      "external_guide_specs": 2,
+      "sample_ids": [
+        "15056733",
+        "15058923"
+      ]
+    },
+    {
+      "host": "www.naas.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 2,
+      "operations": 0,
+      "external_guide_specs": 2,
+      "sample_ids": [
+        "15002002",
+        "15120104"
+      ]
+    },
+    {
+      "host": "www.nps.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 2,
+      "operations": 0,
+      "external_guide_specs": 2,
+      "sample_ids": [
+        "15005710",
+        "15010381"
+      ]
+    },
+    {
+      "host": "www.raise.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 2,
+      "operations": 0,
+      "external_guide_specs": 2,
+      "sample_ids": [
+        "15097428",
+        "15151312"
+      ]
+    },
+    {
+      "host": "www.shsi.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 2,
+      "operations": 0,
+      "external_guide_specs": 2,
+      "sample_ids": [
+        "15099591",
+        "15099595"
+      ]
+    },
+    {
+      "host": "172.29.13.54",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15057290"
+      ]
+    },
+    {
+      "host": "211.114.21.27",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15126738"
+      ]
+    },
+    {
+      "host": "27.101.60.221",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15108124"
+      ]
+    },
+    {
+      "host": "27.96.148.124:12020",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15143367"
+      ]
+    },
+    {
+      "host": "archive.chungbuk.re.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15094080"
+      ]
+    },
+    {
+      "host": "bti.kict.re.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15092289"
+      ]
+    },
+    {
+      "host": "busandabom.net",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15080837"
+      ]
+    },
+    {
+      "host": "culture.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15125097"
+      ]
+    },
+    {
+      "host": "cw.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15012192"
+      ]
+    },
+    {
+      "host": "data.buk.daegu.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15095948"
+      ]
+    },
+    {
+      "host": "data.forest.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "3070842"
+      ]
+    },
+    {
+      "host": "data.sbiz.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15012005"
+      ]
+    },
+    {
+      "host": "dportal.kdca.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15139178"
+      ]
+    },
+    {
+      "host": "dynamice.busan.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "3069406"
+      ]
+    },
+    {
+      "host": "exhibit-api.mmca.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15139018"
+      ]
+    },
+    {
+      "host": "http:",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15059649"
+      ]
+    },
+    {
+      "host": "info.korail.com",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15099981"
+      ]
+    },
+    {
+      "host": "its.icheon.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15125210"
+      ]
+    },
+    {
+      "host": "its.ulsan.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15099676"
+      ]
+    },
+    {
+      "host": "koreanfood.rda.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15141892"
+      ]
+    },
+    {
+      "host": "longtermcare.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15058856"
+      ]
+    },
+    {
+      "host": "map.anyang.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15152770"
+      ]
+    },
+    {
+      "host": "mbris.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15094620"
+      ]
+    },
+    {
+      "host": "nia.farmmap.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15108392"
+      ]
+    },
+    {
+      "host": "openapi.grtc.co.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15109254"
+      ]
+    },
+    {
+      "host": "portal.komsa.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15144520"
+      ]
+    },
+    {
+      "host": "rawris.ekr.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15099919"
+      ]
+    },
+    {
+      "host": "rda.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15112316"
+      ]
+    },
+    {
+      "host": "tradifood.net",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15047798"
+      ]
+    },
+    {
+      "host": "uii.mof.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15157215"
+      ]
+    },
+    {
+      "host": "whois.kisa.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15094277"
+      ]
+    },
+    {
+      "host": "work.mma.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "3066759"
+      ]
+    },
+    {
+      "host": "ww.ksif.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15059871"
+      ]
+    },
+    {
+      "host": "www.archives.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15158780"
+      ]
+    },
+    {
+      "host": "www.bizinfo.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15157820"
+      ]
+    },
+    {
+      "host": "www.burtis.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15040871"
+      ]
+    },
+    {
+      "host": "www.cbinfo.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15034004"
+      ]
+    },
+    {
+      "host": "www.coast.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15059302"
+      ]
+    },
+    {
+      "host": "www.cpc.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15159381"
+      ]
+    },
+    {
+      "host": "www.d4b.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15158420"
+      ]
+    },
+    {
+      "host": "www.durunubi.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15101974"
+      ]
+    },
+    {
+      "host": "www.gccity.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15159541"
+      ]
+    },
+    {
+      "host": "www.gyeongnam.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15062539"
+      ]
+    },
+    {
+      "host": "www.inair.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15038044"
+      ]
+    },
+    {
+      "host": "www.kcomwel.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15058644"
+      ]
+    },
+    {
+      "host": "www.kinu.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15096639"
+      ]
+    },
+    {
+      "host": "www.kmooc.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15042355"
+      ]
+    },
+    {
+      "host": "www.koiha.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15134308"
+      ]
+    },
+    {
+      "host": "www.medicalkorea.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15040616"
+      ]
+    },
+    {
+      "host": "www.meis.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15127778"
+      ]
+    },
+    {
+      "host": "www.metrology.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15082011"
+      ]
+    },
+    {
+      "host": "www.nias.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15147274"
+      ]
+    },
+    {
+      "host": "www.nics.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15136077"
+      ]
+    },
+    {
+      "host": "www.sejong.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15062115"
+      ]
+    },
+    {
+      "host": "www.ssbn.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15040872"
+      ]
+    },
+    {
+      "host": "www.yangju.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15097225"
+      ]
+    },
+    {
+      "host": "www2.nics.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15041818"
+      ]
+    },
+    {
+      "host": "xn--now-po7lf48dlsm0ya109f.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15139251"
+      ]
+    },
+    {
+      "host": "xn--oy2b29bd3a601b.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15156866"
+      ]
+    },
+    {
+      "host": "apis.data.go.kr",
+      "provider": "data.go.kr",
+      "kinds": [
+        "data_go_kr_gateway"
+      ],
+      "adapter_status": "builtin",
+      "specs": 6778,
+      "operations": 11423,
+      "wms_operations": 7,
+      "approval_required_operations": 4018,
+      "sample_ids": [
+        "15000115",
+        "15000415",
+        "15000420"
+      ]
+    },
+    {
+      "host": "api.odcloud.kr",
+      "provider": "data.go.kr",
+      "kinds": [
+        "data_go_kr_gateway"
+      ],
+      "adapter_status": "builtin",
+      "specs": 1,
+      "operations": 3,
+      "sample_ids": [
+        "15077093"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,198 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.dependencies.v1.schema.json",
+  "title": "Datapan Dependency Inventory v1",
+  "description": "Operation-level dependency classification derived from a normalized Datapan registry.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["generated_at", "provider", "limit", "truncated", "filtered_count", "summary", "dependencies"],
+  "properties": {
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "registry": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "truncated": {
+      "type": "boolean"
+    },
+    "filters": {
+      "$ref": "#/$defs/filters"
+    },
+    "filtered_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/dependency"
+      }
+    }
+  },
+  "$defs": {
+    "filters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "provider": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/dependency_class"
+        },
+        "status": {
+          "$ref": "#/$defs/adapter_status"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operations_total",
+        "data_go_kr_gateway_operations",
+        "external_endpoint_operations",
+        "service_root_operations",
+        "no_endpoint_operations",
+        "malformed_endpoint_operations",
+        "soap_operations",
+        "wms_operations",
+        "approval_required_operations",
+        "registered_adapter_operations",
+        "missing_adapter_operations"
+      ],
+      "properties": {
+        "operations_total": { "$ref": "#/$defs/count" },
+        "data_go_kr_gateway_operations": { "$ref": "#/$defs/count" },
+        "external_endpoint_operations": { "$ref": "#/$defs/count" },
+        "service_root_operations": { "$ref": "#/$defs/count" },
+        "no_endpoint_operations": { "$ref": "#/$defs/count" },
+        "malformed_endpoint_operations": { "$ref": "#/$defs/count" },
+        "soap_operations": { "$ref": "#/$defs/count" },
+        "wms_operations": { "$ref": "#/$defs/count" },
+        "approval_required_operations": { "$ref": "#/$defs/count" },
+        "registered_adapter_operations": { "$ref": "#/$defs/count" },
+        "missing_adapter_operations": { "$ref": "#/$defs/count" }
+      }
+    },
+    "dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dataset_id",
+        "title",
+        "operation",
+        "provider",
+        "dependency_class",
+        "adapter_status",
+        "approval_required",
+        "request_params_count",
+        "response_params_count"
+      ],
+      "properties": {
+        "dataset_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "organization": {
+          "type": "string"
+        },
+        "source_category": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "endpoint": {
+          "type": "string"
+        },
+        "endpoint_host": {
+          "type": "string"
+        },
+        "source_host": {
+          "type": "string"
+        },
+        "guide_host": {
+          "type": "string"
+        },
+        "dependency_class": {
+          "$ref": "#/$defs/dependency_class"
+        },
+        "adapter_status": {
+          "$ref": "#/$defs/adapter_status"
+        },
+        "provider_family": {
+          "type": "string"
+        },
+        "api_type": {
+          "type": "string"
+        },
+        "data_format": {
+          "type": "string"
+        },
+        "dev_approval": {
+          "type": "string"
+        },
+        "prod_approval": {
+          "type": "string"
+        },
+        "approval_required": {
+          "type": "boolean"
+        },
+        "skip_reason": {
+          "type": "string"
+        },
+        "request_params_count": { "$ref": "#/$defs/count" },
+        "response_params_count": { "$ref": "#/$defs/count" },
+        "missing_params": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "dependency_class": {
+      "enum": [
+        "data_go_kr_gateway",
+        "external_endpoint",
+        "service_root",
+        "no_endpoint",
+        "malformed_endpoint",
+        "soap",
+        "wms"
+      ]
+    },
+    "adapter_status": {
+      "enum": ["builtin", "missing", "adapter", "not_applicable"]
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

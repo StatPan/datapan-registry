@@ -1,0 +1,14 @@
+# Local working inputs
+.env
+.env.*
+previous/
+.datapan/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Temporary archives
+*.tmp

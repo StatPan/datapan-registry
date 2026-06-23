@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.catalog-diff.v1.schema.json",
+  "title": "Datapan Catalog Diff v1",
+  "description": "Bounded change report between two normalized Datapan registries.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "generated_at",
+    "provider",
+    "old",
+    "new",
+    "limit",
+    "truncated",
+    "counts",
+    "summary",
+    "added",
+    "removed",
+    "changed"
+  ],
+  "properties": {
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "old": {
+      "type": "string",
+      "minLength": 1
+    },
+    "new": {
+      "type": "string",
+      "minLength": 1
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "truncated": {
+      "type": "boolean"
+    },
+    "counts": {
+      "$ref": "#/$defs/counts"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "added": {
+      "$ref": "#/$defs/spec_summaries"
+    },
+    "removed": {
+      "$ref": "#/$defs/spec_summaries"
+    },
+    "changed": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/change"
+      }
+    }
+  },
+  "$defs": {
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["old", "new"],
+      "properties": {
+        "old": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "new": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["added", "removed", "changed", "stable"],
+      "properties": {
+        "added": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "removed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "changed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "stable": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "spec_summaries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/spec_summary"
+      }
+    },
+    "spec_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "provider", "operations_count"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "organization": {
+          "type": "string"
+        },
+        "source_category": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "string"
+        },
+        "operations_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source_keywords": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "search_terms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "fields", "old_digest", "new_digest"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "old_title": {
+          "type": "string"
+        },
+        "new_title": {
+          "type": "string"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "title",
+              "provider",
+              "organization",
+              "source_category",
+              "priority",
+              "source_keywords",
+              "search_terms",
+              "operations",
+              "smoke",
+              "source",
+              "description"
+            ]
+          },
+          "minItems": 1
+        },
+        "old_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "new_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  }
+}

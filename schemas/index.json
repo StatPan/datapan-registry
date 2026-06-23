@@ -1,0 +1,134 @@
+{
+  "schema_version": "datapan.schema-index.v1",
+  "generated_at": "2026-06-23T23:17:24Z",
+  "datapan_version": "0.1.0-dev",
+  "count": 14,
+  "schemas": [
+    {
+      "path": "schemas/datapan.specs.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.specs.v1.schema.json",
+      "title": "Datapan Specs Registry v1",
+      "contract": "specs",
+      "version": "v1",
+      "bytes": 3371,
+      "sha256": "ca5b95521fe4772b73dbff3bac915d475098270691cd408fb5e615a16d9c0cd9"
+    },
+    {
+      "path": "schemas/datapan.dependencies.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.dependencies.v1.schema.json",
+      "title": "Datapan Dependency Inventory v1",
+      "contract": "dependencies",
+      "version": "v1",
+      "bytes": 5061,
+      "sha256": "48cab4c3abd0bd53f317cf291f7dcb2c9a4f8608e4d863ba7601b031135d9a91"
+    },
+    {
+      "path": "schemas/datapan.adapter-targets.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.adapter-targets.v1.schema.json",
+      "title": "Datapan Adapter Targets v1",
+      "contract": "adapter-targets",
+      "version": "v1",
+      "bytes": 4629,
+      "sha256": "74b557abc58a2721935f6b149a4fcbc824cb1c45dcfef2d768e0b76fffcd2e5e"
+    },
+    {
+      "path": "schemas/datapan.providers.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.providers.v1.schema.json",
+      "title": "Datapan Provider Backlog v1",
+      "contract": "providers",
+      "version": "v1",
+      "bytes": 4997,
+      "sha256": "9e3fbdfe632a9ebb6f3a5e9d0aa9bb43e77f01a654ee305724fa918bd5860483"
+    },
+    {
+      "path": "schemas/datapan.verification.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.verification.v1.schema.json",
+      "title": "Datapan Verification Report v1",
+      "contract": "verification",
+      "version": "v1",
+      "bytes": 4674,
+      "sha256": "431eab3f4ce0f38ee53471f40067bc2288540e00c24f773738133a560ce41259"
+    },
+    {
+      "path": "schemas/datapan.verification-summary.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.verification-summary.v1.schema.json",
+      "title": "Datapan Verification Summary v1",
+      "contract": "verification-summary",
+      "version": "v1",
+      "bytes": 2532,
+      "sha256": "99f85d8e10d20c759df43ac42a15346f78dde3e199c61f6488a6086f49a4b936"
+    },
+    {
+      "path": "schemas/datapan.release-manifest.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.release-manifest.v1.schema.json",
+      "title": "Datapan Release Manifest v1",
+      "contract": "release-manifest",
+      "version": "v1",
+      "bytes": 2145,
+      "sha256": "d8080bbc0d8679a4056e5e1880d1e50ba44f5f102ce27a5b5b5da35c7a5b737a"
+    },
+    {
+      "path": "schemas/datapan.release-verification.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.release-verification.v1.schema.json",
+      "title": "Datapan Release Verification v1",
+      "contract": "release-verification",
+      "version": "v1",
+      "bytes": 2742,
+      "sha256": "13373fe9838fb0062fc7a9d6c8a2ff9f88940efac6e5f01c0452159c0b50a751"
+    },
+    {
+      "path": "schemas/datapan.release-readiness.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.release-readiness.v1.schema.json",
+      "title": "Datapan Release Readiness v1",
+      "contract": "release-readiness",
+      "version": "v1",
+      "bytes": 2958,
+      "sha256": "b12f9700ace249d4bd8c7b0d8871680dffb3d5c47013101a9f84a06ab2957298"
+    },
+    {
+      "path": "schemas/datapan.schema-index.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
+      "title": "Datapan Schema Index v1",
+      "contract": "schema-index",
+      "version": "v1",
+      "bytes": 1718,
+      "sha256": "e8a71965e6d43512c3b4387270e45728286b08305b55b9c43dfcf00e66d7ab53"
+    },
+    {
+      "path": "schemas/datapan.catalog-diff.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.catalog-diff.v1.schema.json",
+      "title": "Datapan Catalog Diff v1",
+      "contract": "catalog-diff",
+      "version": "v1",
+      "bytes": 4278,
+      "sha256": "2cc4dd60b4455276a34f9751b6ee92457d4a8734e070578e608550222499959f"
+    },
+    {
+      "path": "schemas/datapan.error-catalog.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.error-catalog.v1.schema.json",
+      "title": "Datapan Error Catalog v1",
+      "contract": "error-catalog",
+      "version": "v1",
+      "bytes": 4269,
+      "sha256": "3fc8d86ea97f1462184c409b288af90b58d0cc4fa2ab4da3616b5145455130aa"
+    },
+    {
+      "path": "schemas/datapan.catalog-audit.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.catalog-audit.v1.schema.json",
+      "title": "Datapan Catalog Audit v1",
+      "contract": "catalog-audit",
+      "version": "v1",
+      "bytes": 5566,
+      "sha256": "6a413d4cd053d38295236f7f432c2fc7dc8f033055390e5f8e44c95b9bdcd3a4"
+    },
+    {
+      "path": "schemas/datapan.provider-index.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.provider-index.v1.schema.json",
+      "title": "Datapan Provider Index v1",
+      "contract": "provider-index",
+      "version": "v1",
+      "bytes": 1521,
+      "sha256": "9256d61d76187c3ae83985636766a385cdd0b74f9bfb5bbfdd7fd4803cbd729b"
+    }
+  ]
+}

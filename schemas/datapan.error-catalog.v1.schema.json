@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.error-catalog.v1.schema.json",
+  "title": "Datapan Error Catalog v1",
+  "description": "Provider status and error field inventory derived from normalized registry response parameters.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "generated_at",
+    "provider",
+    "limit",
+    "truncated",
+    "summary",
+    "status_fields",
+    "operations"
+  ],
+  "properties": {
+    "generated_at": { "type": "string", "format": "date-time" },
+    "provider": { "type": "string", "minLength": 1 },
+    "registry": { "type": "string" },
+    "limit": { "type": "integer", "minimum": 0 },
+    "truncated": { "type": "boolean" },
+    "summary": { "$ref": "#/$defs/summary" },
+    "status_fields": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/status_field_stat" }
+    },
+    "operations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/operation" }
+    }
+  },
+  "$defs": {
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "specs_total",
+        "operations_total",
+        "operations_with_status_fields",
+        "operations_with_result_code",
+        "operations_with_result_message",
+        "operations_with_reason_code",
+        "operations_with_auth_message",
+        "operations_with_error_message",
+        "distinct_status_field_names",
+        "distinct_status_field_name_roles"
+      ],
+      "properties": {
+        "specs_total": { "$ref": "#/$defs/count" },
+        "operations_total": { "$ref": "#/$defs/count" },
+        "operations_with_status_fields": { "$ref": "#/$defs/count" },
+        "operations_with_result_code": { "$ref": "#/$defs/count" },
+        "operations_with_result_message": { "$ref": "#/$defs/count" },
+        "operations_with_reason_code": { "$ref": "#/$defs/count" },
+        "operations_with_auth_message": { "$ref": "#/$defs/count" },
+        "operations_with_error_message": { "$ref": "#/$defs/count" },
+        "distinct_status_field_names": { "$ref": "#/$defs/count" },
+        "distinct_status_field_name_roles": { "$ref": "#/$defs/count" }
+      }
+    },
+    "status_field_stat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "role", "source", "specs", "operations"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "label": { "type": "string" },
+        "role": { "$ref": "#/$defs/role" },
+        "source": { "const": "response_params" },
+        "specs": { "$ref": "#/$defs/count" },
+        "operations": { "$ref": "#/$defs/count" },
+        "sample_ids": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataset_id", "title", "operation", "provider", "dependency_class", "fields"],
+      "properties": {
+        "dataset_id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "operation": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "minLength": 1 },
+        "endpoint_host": { "type": "string" },
+        "dependency_class": {
+          "enum": [
+            "data_go_kr_gateway",
+            "external_endpoint",
+            "service_root",
+            "no_endpoint",
+            "malformed_endpoint",
+            "soap",
+            "wms"
+          ]
+        },
+        "fields": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/status_field" },
+          "minItems": 1
+        }
+      }
+    },
+    "status_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "role", "source"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "label": { "type": "string" },
+        "role": { "$ref": "#/$defs/role" },
+        "source": { "const": "response_params" }
+      }
+    },
+    "role": {
+      "enum": [
+        "result_code",
+        "result_message",
+        "reason_code",
+        "auth_message",
+        "error_message"
+      ]
+    },
+    "count": { "type": "integer", "minimum": 0 }
+  }
+}

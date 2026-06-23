@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.release-verification.v1.schema.json",
+  "title": "Datapan Release Verification v1",
+  "description": "Verification report for a Datapan release manifest.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "manifest",
+    "root",
+    "schema_version",
+    "artifact_count",
+    "checked",
+    "failed",
+    "ok",
+    "results"
+  ],
+  "properties": {
+    "manifest": {
+      "type": "string",
+      "minLength": 1
+    },
+    "root": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schema_version": {
+      "const": "datapan.release-verification.v1"
+    },
+    "manifest_schema_version": {
+      "type": "string"
+    },
+    "artifact_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "checked": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "failed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "ok": {
+      "type": "boolean"
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/result"
+      }
+    }
+  },
+  "$defs": {
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "status"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "schema",
+            "schema_index",
+            "registry",
+            "provider_index",
+            "catalog_diff",
+            "catalog_audit",
+            "error_catalog",
+            "dependencies",
+            "adapter_targets",
+            "provider_backlog",
+            "verification",
+            "verification_summary",
+            "provenance",
+            "manifest"
+          ]
+        },
+        "status": {
+          "enum": ["verified", "failed"]
+        },
+        "reason": {
+          "enum": [
+            "artifact_count_mismatch",
+            "unsupported_schema_version",
+            "duplicate_artifact_path",
+            "manifest_self_reference",
+            "invalid_path",
+            "invalid_size",
+            "invalid_checksum",
+            "missing_artifact",
+            "size_mismatch",
+            "checksum_mismatch",
+            "schema_compile_failed",
+            "schema_unavailable",
+            "schema_validation_failed"
+          ]
+        },
+        "expected_bytes": {
+          "type": "integer"
+        },
+        "actual_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "expected_sha256": {
+          "type": "string"
+        },
+        "actual_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  }
+}

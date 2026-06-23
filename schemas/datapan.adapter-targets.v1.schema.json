@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.adapter-targets.v1.schema.json",
+  "title": "Datapan Adapter Targets v1",
+  "description": "Prioritized external-provider adapter targets derived from operation-level dependency inventory.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["generated_at", "provider", "limit", "truncated", "filtered_count", "summary", "targets"],
+  "properties": {
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "registry": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "truncated": {
+      "type": "boolean"
+    },
+    "filters": {
+      "$ref": "#/$defs/filters"
+    },
+    "filtered_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "targets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/target"
+      }
+    }
+  },
+  "$defs": {
+    "filters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "provider": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": ["external_endpoint", "service_root"]
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_hosts",
+        "target_operations",
+        "external_endpoint_operations",
+        "service_root_operations",
+        "approval_required_operations",
+        "missing_param_operations",
+        "unsupported_protocol_operations"
+      ],
+      "properties": {
+        "target_hosts": { "$ref": "#/$defs/count" },
+        "target_operations": { "$ref": "#/$defs/count" },
+        "external_endpoint_operations": { "$ref": "#/$defs/count" },
+        "service_root_operations": { "$ref": "#/$defs/count" },
+        "approval_required_operations": { "$ref": "#/$defs/count" },
+        "missing_param_operations": { "$ref": "#/$defs/count" },
+        "unsupported_protocol_operations": { "$ref": "#/$defs/count" }
+      }
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rank", "host", "kinds", "operations", "specs"],
+      "properties": {
+        "rank": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "host": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provider_family": {
+          "type": "string"
+        },
+        "kinds": {
+          "type": "array",
+          "items": {
+            "enum": ["external_endpoint", "service_root"]
+          },
+          "minItems": 1
+        },
+        "operations": { "$ref": "#/$defs/count" },
+        "specs": { "$ref": "#/$defs/count" },
+        "organizations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "source_categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "api_types": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "data_formats": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "approval_required_operations": { "$ref": "#/$defs/count" },
+        "missing_param_operations": { "$ref": "#/$defs/count" },
+        "unsupported_protocol_operations": { "$ref": "#/$defs/count" },
+        "sample_operations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sample"
+          }
+        }
+      }
+    },
+    "sample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataset_id", "title", "operation", "dependency_class"],
+      "properties": {
+        "dataset_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "organization": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        },
+        "dependency_class": {
+          "enum": ["external_endpoint", "service_root"]
+        },
+        "endpoint": {
+          "type": "string"
+        },
+        "missing_params": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

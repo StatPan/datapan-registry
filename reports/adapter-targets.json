@@ -1,0 +1,2050 @@
+{
+  "generated_at": "2026-06-23T23:17:24Z",
+  "provider": "data.go.kr",
+  "registry": ".datapan\\release-epost-smoke\\data\\data-go-kr.registry.json",
+  "limit": 0,
+  "truncated": false,
+  "filtered_count": 35,
+  "summary": {
+    "target_hosts": 35,
+    "target_operations": 438,
+    "external_endpoint_operations": 419,
+    "service_root_operations": 19,
+    "approval_required_operations": 42,
+    "missing_param_operations": 404,
+    "unsupported_protocol_operations": 30
+  },
+  "targets": [
+    {
+      "rank": 1,
+      "host": "openapi.jeonju.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 80,
+      "specs": 49,
+      "organizations": [
+        "전북특별자치도 전주시"
+      ],
+      "source_categories": [
+        "공공행정",
+        "과학기술",
+        "교육",
+        "교통물류",
+        "국토관리",
+        "농축수산",
+        "문화관광",
+        "보건의료",
+        "사회복지",
+        "산업고용",
+        "재난안전",
+        "환경기상"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "JSON+XML",
+        "XML"
+      ],
+      "missing_param_operations": 78,
+      "sample_operations": [
+        {
+          "dataset_id": "15000354",
+          "title": "전북특별자치도 전주시_소통정보서비스",
+          "organization": "전북특별자치도 전주시",
+          "operation": "CCTV 목록 및 사진",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.jeonju.go.kr/jeonjubus/openApi/traffic"
+        },
+        {
+          "dataset_id": "15000354",
+          "title": "전북특별자치도 전주시_소통정보서비스",
+          "organization": "전북특별자치도 전주시",
+          "operation": "도로명 목록 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.jeonju.go.kr/jeonjubus/openApi/traffic"
+        },
+        {
+          "dataset_id": "15000354",
+          "title": "전북특별자치도 전주시_소통정보서비스",
+          "organization": "전북특별자치도 전주시",
+          "operation": "도로별 현황 상세 정보",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.jeonju.go.kr/jeonjubus/openApi/traffic",
+          "missing_params": [
+            "loadResult"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "host": "data.ekape.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 49,
+      "specs": 8,
+      "organizations": [
+        "축산물품질평가원"
+      ],
+      "source_categories": [
+        "농축수산"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "missing_param_operations": 49,
+      "sample_operations": [
+        {
+          "dataset_id": "15000577",
+          "title": "축산물품질평가원_축산물유통정보",
+          "organization": "축산물품질평가원",
+          "operation": "계란 검수(소비)확인정보",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.ekape.or.kr/openapi-data/service/user/confirm/eggCoustomer",
+          "missing_params": [
+            "issueDate",
+            "issueNo"
+          ]
+        },
+        {
+          "dataset_id": "15000577",
+          "title": "축산물품질평가원_축산물유통정보",
+          "organization": "축산물품질평가원",
+          "operation": "닭 검수(소비)확인정보",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.ekape.or.kr/openapi-data/service/user/confirm/fowlCoustomer",
+          "missing_params": [
+            "issueDate",
+            "issueNo"
+          ]
+        },
+        {
+          "dataset_id": "15000577",
+          "title": "축산물품질평가원_축산물유통정보",
+          "organization": "축산물품질평가원",
+          "operation": "돼지 검수(소비)확인정보",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.ekape.or.kr/openapi-data/service/user/confirm/pigCoustomer",
+          "missing_params": [
+            "issueDate",
+            "issueNo"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "host": "data.geoje.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 41,
+      "specs": 12,
+      "organizations": [
+        "경상남도 거제시"
+      ],
+      "source_categories": [
+        "교육",
+        "교통물류",
+        "문화관광",
+        "보건의료"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "JSON+XML",
+        "XML"
+      ],
+      "missing_param_operations": 41,
+      "sample_operations": [
+        {
+          "dataset_id": "15005128",
+          "title": "경상남도 거제시 의료기관 현황",
+          "organization": "경상남도 거제시",
+          "operation": "거제시 의료기관 목록정보",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.geoje.go.kr/rfcapi/rest/geojemedical/getGeojemedicalList",
+          "missing_params": [
+            "geojemedicalNm",
+            "geojemedicalCd",
+            "startPage"
+          ]
+        },
+        {
+          "dataset_id": "15005128",
+          "title": "경상남도 거제시 의료기관 현황",
+          "organization": "경상남도 거제시",
+          "operation": "거제시 의료기관 상세정보",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.geoje.go.kr/rfcapi/rest/geojemedical/getGeojemedicalList",
+          "missing_params": [
+            "geojemedicalId"
+          ]
+        },
+        {
+          "dataset_id": "15005128",
+          "title": "경상남도 거제시 의료기관 현황",
+          "organization": "경상남도 거제시",
+          "operation": "거제시 의료기관 이미지정보",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.geoje.go.kr/rfcapi/rest/geojemedical/getGeojemedicalList",
+          "missing_params": [
+            "geojemedicalId"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 4,
+      "host": "data.uiryeong.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 40,
+      "specs": 32,
+      "organizations": [
+        "경상남도 의령군"
+      ],
+      "source_categories": [
+        "공공행정",
+        "과학기술",
+        "교통물류",
+        "문화관광",
+        "보건의료",
+        "사회복지",
+        "산업고용",
+        "재난안전"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "missing_param_operations": 40,
+      "sample_operations": [
+        {
+          "dataset_id": "15008883",
+          "title": "경상남도 의령군_도시공원정보",
+          "organization": "경상남도 의령군",
+          "operation": "도시공원정보 목록",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.uiryeong.go.kr/rest/uiryeongpark/getUiryeongparkList",
+          "missing_params": [
+            "uiryeongparkEntId",
+            "uiryeongparkType",
+            "uiryeongparkTitle",
+            "uiryeongparkNewAddr",
+            "uiryeongparkAddr"
+          ]
+        },
+        {
+          "dataset_id": "15008884",
+          "title": "경상남도 의령군_어린이보호구역",
+          "organization": "경상남도 의령군",
+          "operation": "어린이보호구역 목록",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.uiryeong.go.kr/rest/uiryeongkidssafe/getUiryeongkidssafe",
+          "missing_params": [
+            "uiryeongkidssafeEntId",
+            "uiryeongkidssafeKind",
+            "uiryeongkidssafeTitle",
+            "uiryeongkidssafeNewAddr",
+            "uiryeongkidssafeAddr"
+          ]
+        },
+        {
+          "dataset_id": "15008887",
+          "title": "경상남도 의령군_주차장정보",
+          "organization": "경상남도 의령군",
+          "operation": "주차장정보 현황 목록",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.uiryeong.go.kr/rest/uiryeongparking/getUiryeongparkingList",
+          "missing_params": [
+            "uiryeongparkingEntId",
+            "uiryeongparkingTitle",
+            "uiryeongparkingNum",
+            "uiryeongparkingRank",
+            "uiryeongparkingNewAddr",
+            "uiryeongparkingClassify",
+            "uiryeongparkingType"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 5,
+      "host": "oneclick.law.go.kr:80",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 27,
+      "specs": 3,
+      "organizations": [
+        "법제처"
+      ],
+      "source_categories": [
+        "법률"
+      ],
+      "api_types": [
+        "SOAP"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "approval_required_operations": 15,
+      "missing_param_operations": 25,
+      "unsupported_protocol_operations": 27,
+      "sample_operations": [
+        {
+          "dataset_id": "15000021",
+          "title": "법제처_영문생활법령정보 조회 서비스",
+          "organization": "법제처",
+          "operation": "영문생활분야관심규정분류목록조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://oneclick.law.go.kr:80/OPENAPI/soap/EnglishLifeLawInfoService/getEngAreaInterrestRuleClassList",
+          "missing_params": [
+            "CsmSeq"
+          ]
+        },
+        {
+          "dataset_id": "15000021",
+          "title": "법제처_영문생활법령정보 조회 서비스",
+          "organization": "법제처",
+          "operation": "영문생활분야목록조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://oneclick.law.go.kr:80/OPENAPI/soap/EnglishLifeLawInfoService/getEngAreaList"
+        },
+        {
+          "dataset_id": "15000021",
+          "title": "법제처_영문생활법령정보 조회 서비스",
+          "organization": "법제처",
+          "operation": "영문생활분야본문항목조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://oneclick.law.go.kr:80/OPENAPI/soap/EnglishLifeLawInfoService/getEngAreaContentItem",
+          "missing_params": [
+            "csmSeq",
+            "ccfNo",
+            "cciNo",
+            "cnpClsNo"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 6,
+      "host": "openapi.tour.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "service_root"
+      ],
+      "operations": 26,
+      "specs": 7,
+      "organizations": [
+        "한국문화관광연구원"
+      ],
+      "source_categories": [
+        "공공행정"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "missing_param_operations": 26,
+      "sample_operations": [
+        {
+          "dataset_id": "15111604",
+          "title": "한국문화관광연구원_관광실태조사_외래관광객",
+          "organization": "한국문화관광연구원",
+          "operation": "외래관광객방한활동비율조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.tour.go.kr/openapi/service/TourismAccdtOutService/getForeignTuristWtrsnRateList",
+          "missing_params": [
+            "YY",
+            "ACTIVITY_CD"
+          ]
+        },
+        {
+          "dataset_id": "15111604",
+          "title": "한국문화관광연구원_관광실태조사_외래관광객",
+          "organization": "한국문화관광연구원",
+          "operation": "외래관광객지역비율조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.tour.go.kr/openapi/service/TourismAccdtOutService/getForeignTuristAreaRateList",
+          "missing_params": [
+            "YY",
+            "SIDO_CD"
+          ]
+        },
+        {
+          "dataset_id": "15111604",
+          "title": "한국문화관광연구원_관광실태조사_외래관광객",
+          "organization": "한국문화관광연구원",
+          "operation": "외래관광객지출조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.tour.go.kr/openapi/service/TourismAccdtOutService/getForeignTuristExpndtrList",
+          "missing_params": [
+            "YY",
+            "TOURTYPE_CD"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 7,
+      "host": "data.sisul.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 20,
+      "specs": 20,
+      "organizations": [
+        "서울시설공단"
+      ],
+      "source_categories": [
+        "공공행정",
+        "교통물류",
+        "국토관리",
+        "문화관광",
+        "사회복지"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "approval_required_operations": 1,
+      "missing_param_operations": 13,
+      "sample_operations": [
+        {
+          "dataset_id": "15002793",
+          "title": "서울시설공단_도시고속도로 옹벽 설치 현황",
+          "organization": "서울시설공단",
+          "operation": "옹벽정보 조회 서비스",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.sisul.or.kr/AutoAPI/service/OpenDB/RetainingWalls?_wadl\u0026type=xml",
+          "missing_params": [
+            "proadlinename"
+          ]
+        },
+        {
+          "dataset_id": "15002794",
+          "title": "서울시설공단_도시고속도로 방음벽 정보",
+          "organization": "서울시설공단",
+          "operation": "방음벽정보 조회 서비스",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.sisul.or.kr/AutoAPI/service/OpenDB/NoiseBarrier?_wadl\u0026type=xml",
+          "missing_params": [
+            "roadlinename"
+          ]
+        },
+        {
+          "dataset_id": "15002797",
+          "title": "서울시설공단_서울어린이대공원 행사 정보",
+          "organization": "서울시설공단",
+          "operation": "어린이대공원행사정보 조회 서비스",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.sisul.or.kr/AutoAPI/service/OpenDB/ChildParkEventInfo?_wadl\u0026type=xml",
+          "missing_params": [
+            "pymd"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 8,
+      "host": "openapi.its.ulsan.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 20,
+      "specs": 3,
+      "organizations": [
+        "울산광역시"
+      ],
+      "source_categories": [
+        "교통물류"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "missing_param_operations": 16,
+      "sample_operations": [
+        {
+          "dataset_id": "15052669",
+          "title": "울산광역시 BIS 정보",
+          "organization": "울산광역시",
+          "operation": "교통카드충전소정보 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.its.ulsan.kr/UlsanAPI/TCardStoreInfo.xo"
+        },
+        {
+          "dataset_id": "15052669",
+          "title": "울산광역시 BIS 정보",
+          "organization": "울산광역시",
+          "operation": "노선별정류장정보 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.its.ulsan.kr/UlsanAPI/AllRouteDetailInfo.xo",
+          "missing_params": [
+            "Routeid"
+          ]
+        },
+        {
+          "dataset_id": "15052669",
+          "title": "울산광역시 BIS 정보",
+          "organization": "울산광역시",
+          "operation": "노선정보 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.its.ulsan.kr/UlsanAPI/RouteInfo.xo"
+        }
+      ]
+    },
+    {
+      "rank": 9,
+      "host": "www.korad.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 15,
+      "specs": 13,
+      "organizations": [
+        "한국원자력환경공단"
+      ],
+      "source_categories": [
+        "공공행정",
+        "산업고용"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "JSON+XML",
+        "XML"
+      ],
+      "approval_required_operations": 10,
+      "missing_param_operations": 14,
+      "sample_operations": [
+        {
+          "dataset_id": "15004087",
+          "title": "한국원자력환경공단_개봉선원폐기물 관리 현황_현황",
+          "organization": "한국원자력환경공단",
+          "operation": "RI폐기물중 개봉선원 폐기물의 누적 현황 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://www.korad.or.kr/openapi/service/radiRiWasteOpenStatsSvc?_wadl\u0026type=xml",
+          "missing_params": [
+            "N/A"
+          ]
+        },
+        {
+          "dataset_id": "15004088",
+          "title": "한국원자력환경공단_밀봉선원폐기물 관리 현황데이터_현황",
+          "organization": "한국원자력환경공단",
+          "operation": "RI폐기물중 밀봉선원 폐기물의 누적 현황 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://www.korad.or.kr/openapi/service/radiRiWasteSealStatsSvc?_wadl\u0026type=xml",
+          "missing_params": [
+            "N/A"
+          ]
+        },
+        {
+          "dataset_id": "15004206",
+          "title": "한국원자력환경공단_방사성폐기물처분장 기상데이터_정보",
+          "organization": "한국원자력환경공단",
+          "operation": "주변지역 기상정보 실시간 데이터 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://www.korad.or.kr/openapi/service/weatherMoniterSvc?_wadl\u0026type=xml"
+        }
+      ]
+    },
+    {
+      "rank": 10,
+      "host": "www.andong.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 15,
+      "specs": 10,
+      "organizations": [
+        "경상북도 안동시"
+      ],
+      "source_categories": [
+        "공공행정",
+        "국토관리",
+        "사회복지",
+        "산업고용",
+        "식품건강",
+        "환경기상"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "missing_param_operations": 13,
+      "sample_operations": [
+        {
+          "dataset_id": "15003047",
+          "title": "경상북도 안동시_개별공시지가자료",
+          "organization": "경상북도 안동시",
+          "operation": "개별공시지가 동코드 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://www.andong.go.kr/openapi/service/arDevJigaService/getCode"
+        },
+        {
+          "dataset_id": "15003047",
+          "title": "경상북도 안동시_개별공시지가자료",
+          "organization": "경상북도 안동시",
+          "operation": "개별공시지가 목록 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://www.andong.go.kr/openapi/service/arDevJigaService/getList",
+          "missing_params": [
+            "dongCode",
+            "langKind",
+            "bonbun",
+            "bubun"
+          ]
+        },
+        {
+          "dataset_id": "15005609",
+          "title": "경상북도 안동시_의료기관 현황",
+          "organization": "경상북도 안동시",
+          "operation": "의무관리현황 목록 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://www.andong.go.kr/openapi/service/mediHsptService/getList",
+          "missing_params": [
+            "numOfRowns"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 11,
+      "host": "open.itfind.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 13,
+      "specs": 5,
+      "organizations": [
+        "한국연구재단"
+      ],
+      "source_categories": [
+        "과학기술"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "missing_param_operations": 13,
+      "sample_operations": [
+        {
+          "dataset_id": "15036874",
+          "title": "한국연구재단 _ICT 정기간행물 정보",
+          "organization": "한국연구재단",
+          "operation": "ICT정기간행물 목록별 목차 정보 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://open.itfind.or.kr/openapi/service/ITPeriodicalsService/getITPdicalListCntntInfo",
+          "missing_params": [
+            "identifier"
+          ]
+        },
+        {
+          "dataset_id": "15036874",
+          "title": "한국연구재단 _ICT 정기간행물 정보",
+          "organization": "한국연구재단",
+          "operation": "ICT정기간행물 목록별 상세 정보 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://open.itfind.or.kr/openapi/service/ITPeriodicalsService/getITPdicalListCntntDetailInfo",
+          "missing_params": [
+            "identifier"
+          ]
+        },
+        {
+          "dataset_id": "15036874",
+          "title": "한국연구재단 _ICT 정기간행물 정보",
+          "organization": "한국연구재단",
+          "operation": "SW Insight 리포트 정보 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://open.itfind.or.kr/openapi/service/ITPeriodicalsService/getSWInsightReportInfo",
+          "missing_params": [
+            "issuedStart",
+            "issuedEnd",
+            "searchType",
+            "searchWord"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 12,
+      "host": "data.naqs.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 9,
+      "specs": 2,
+      "organizations": [
+        "농림축산식품부 국립농산물품질관리원"
+      ],
+      "source_categories": [
+        "교통물류",
+        "농축수산"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "approval_required_operations": 8,
+      "missing_param_operations": 9,
+      "sample_operations": [
+        {
+          "dataset_id": "15000834",
+          "title": "농림축산식품부 국립농산물품질관리원_농산물이력관리정보연계서비스",
+          "organization": "농림축산식품부 국립농산물품질관리원",
+          "operation": "상품속성정보연계",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.naqs.go.kr/pubc",
+          "missing_params": [
+            "proc",
+            "tra_reg_no",
+            "gds_seq",
+            "gds_nm",
+            "unit_qty",
+            "unit_cd",
+            "gds_prpt",
+            "cert_kd_cd",
+            "cert_no",
+            "pur_mthd_cd",
+            "pur_mthd_nm",
+            "sale_loc",
+            "tel_no",
+            "reg_nm"
+          ]
+        },
+        {
+          "dataset_id": "15000834",
+          "title": "농림축산식품부 국립농산물품질관리원_농산물이력관리정보연계서비스",
+          "organization": "농림축산식품부 국립농산물품질관리원",
+          "operation": "생산출하정보연계",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.naqs.go.kr/pubc",
+          "missing_params": [
+            "std_qty",
+            "qty_cd",
+            "qty_cd_nm",
+            "qty",
+            "prdn_tra_mng_no",
+            "shpm_tra_reg_no",
+            "dl_ofc_nm",
+            "gds_seq",
+            "proc",
+            "tra_reg_no",
+            "prdn_shpm_no",
+            "prdn_shpm_seq",
+            "shpm_tm",
+            "itm_cd",
+            "std_cd"
+          ]
+        },
+        {
+          "dataset_id": "15000834",
+          "title": "농림축산식품부 국립농산물품질관리원_농산물이력관리정보연계서비스",
+          "organization": "농림축산식품부 국립농산물품질관리원",
+          "operation": "수확 후 관리정보연계",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.naqs.go.kr/pubc",
+          "missing_params": [
+            "std_qty",
+            "qty",
+            "qty_cd",
+            "qty_cd_nm",
+            "circ_tra_mng_no",
+            "proc",
+            "tra_reg_no",
+            "havt_mng_seq",
+            "wrk_flow_nm",
+            "itm_cd",
+            "wrk_tm",
+            "std_cd"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 13,
+      "host": "data.humetro.busan.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 8,
+      "specs": 8,
+      "organizations": [
+        "부산교통공사"
+      ],
+      "source_categories": [
+        "공공행정",
+        "교통물류",
+        "환경기상"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "missing_param_operations": 8,
+      "sample_operations": [
+        {
+          "dataset_id": "15001011",
+          "title": "부산교통공사_부산도시철도 공공 시설물 정보",
+          "organization": "부산교통공사",
+          "operation": "부산 도시철도 공공 시설물 정보",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.humetro.busan.kr/voc/api/open_api_public.tnn",
+          "missing_params": [
+            "act",
+            "scode"
+          ]
+        },
+        {
+          "dataset_id": "15001018",
+          "title": "부산교통공사_부산도시철도 문화행사 정보",
+          "organization": "부산교통공사",
+          "operation": "부산 도시철도 문화행사 정보",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.humetro.busan.kr/voc/api/open_api_eventinfo.tnn",
+          "missing_params": [
+            "act",
+            "scode",
+            "kind",
+            "sdate",
+            "edate"
+          ]
+        },
+        {
+          "dataset_id": "15001019",
+          "title": "부산교통공사_부산도시철도 운행 정보",
+          "organization": "부산교통공사",
+          "operation": "부산 도시철도 운행 정보",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.humetro.busan.kr/voc/api/open_api_distance.tnn",
+          "missing_params": [
+            "act",
+            "scode"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 14,
+      "host": "openapi.ebid.lh.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 6,
+      "specs": 6,
+      "organizations": [
+        "한국토지주택공사"
+      ],
+      "source_categories": [
+        "국토관리"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "missing_param_operations": 6,
+      "sample_operations": [
+        {
+          "dataset_id": "15021183",
+          "title": "한국토지주택공사 입찰공고정보",
+          "organization": "한국토지주택공사",
+          "operation": "입찰정보 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.ebid.lh.or.kr/ebid.com.openapi.service.OpenBidInfoList.dev",
+          "missing_params": [
+            "tndrbidRegDtStart",
+            "tndrbidRegDtEnd"
+          ]
+        },
+        {
+          "dataset_id": "15021184",
+          "title": "한국토지주택공사 계약현황정보",
+          "organization": "한국토지주택공사",
+          "operation": "계약현황 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.ebid.lh.or.kr/ebid.com.openapi.service.OpenContractInfoList.dev",
+          "missing_params": [
+            "contractDtStart",
+            "contractDtEnd",
+            "bidNum"
+          ]
+        },
+        {
+          "dataset_id": "15042795",
+          "title": "한국토지주택공사 전자조달-발주계획정보",
+          "organization": "한국토지주택공사",
+          "operation": "발주계획정보 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.ebid.lh.or.kr/ebid.com.openapi.service.OpenOrdergPlanList.dev",
+          "missing_params": [
+            "orderExpectYmStart",
+            "orderExpectYmEnd"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 15,
+      "host": "openapi.airport.co.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 6,
+      "specs": 4,
+      "organizations": [
+        "한국공항공사"
+      ],
+      "source_categories": [
+        "교통물류"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "missing_param_operations": 2,
+      "sample_operations": [
+        {
+          "dataset_id": "15019937",
+          "title": "한국공항공사_김포공항 저시정경보 정보",
+          "organization": "한국공항공사",
+          "operation": "김포공항 저시정 최신 정보조회 서비스",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.airport.co.kr/service/rest/airportLowVisibility/getAirportLowVisibilityLast"
+        },
+        {
+          "dataset_id": "15019937",
+          "title": "한국공항공사_김포공항 저시정경보 정보",
+          "organization": "한국공항공사",
+          "operation": "김포공항 저시정 특정 인덱스상세 정보조회 서비스",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.airport.co.kr/service/rest/airportLowVisibility/getAirportLowVisibilityIdx"
+        },
+        {
+          "dataset_id": "15019937",
+          "title": "한국공항공사_김포공항 저시정경보 정보",
+          "organization": "한국공항공사",
+          "operation": "김포공항 저시정목록 정보조회 서비스",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.airport.co.kr/service/rest/airportLowVisibility/getAirportLowVisibility"
+        }
+      ]
+    },
+    {
+      "rank": 16,
+      "host": "openapi.coast.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 6,
+      "specs": 1,
+      "organizations": [
+        "해양수산부"
+      ],
+      "source_categories": [
+        "농축수산"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "sample_operations": [
+        {
+          "dataset_id": "15059302",
+          "title": "해양수산부_연안정보도 도엽제공 서비스",
+          "organization": "해양수산부",
+          "operation": "연안정보도 1:25000 축척 도엽 다운로드 정보 현황",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.coast.kr/openapi/service/coastSpatialDataService"
+        },
+        {
+          "dataset_id": "15059302",
+          "title": "해양수산부_연안정보도 도엽제공 서비스",
+          "organization": "해양수산부",
+          "operation": "연안정보도 1:25000 축척 도엽 상세정보 현황",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.coast.kr/openapi/service/coastSpatialDataService"
+        },
+        {
+          "dataset_id": "15059302",
+          "title": "해양수산부_연안정보도 도엽제공 서비스",
+          "organization": "해양수산부",
+          "operation": "연안정보도 1:25000 축척 도엽정보 리스트 정보 현황",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.coast.kr/openapi/service/coastSpatialDataService"
+        }
+      ]
+    },
+    {
+      "rank": 17,
+      "host": "openapi.kpx.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 5,
+      "specs": 5,
+      "organizations": [
+        "한국전력거래소"
+      ],
+      "source_categories": [
+        "산업고용"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "approval_required_operations": 5,
+      "missing_param_operations": 1,
+      "sample_operations": [
+        {
+          "dataset_id": "15051436",
+          "title": "한국전력거래소_전력수급예보조회",
+          "organization": "한국전력거래소",
+          "operation": "전력수급예보조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://openapi.kpx.or.kr/openapi/forecast1dMaxBaseDate/getForecast1dMaxBaseDate"
+        },
+        {
+          "dataset_id": "15056879",
+          "title": "한국전력거래소_오늘전력수급현황조회",
+          "organization": "한국전력거래소",
+          "operation": "오늘전력수급현황조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://openapi.kpx.or.kr/openapi/sukub5mToday/getSukub5mToday"
+        },
+        {
+          "dataset_id": "15058920",
+          "title": "한국전력거래소_오늘제주계통운영정보",
+          "organization": "한국전력거래소",
+          "operation": "오늘제주계통운영정보",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://openapi.kpx.or.kr/openapi/chejusukub5mToday/getChejuSukub5mToday"
+        }
+      ]
+    },
+    {
+      "rank": 18,
+      "host": "ws.bus.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 5,
+      "specs": 1,
+      "organizations": [
+        "서울특별시"
+      ],
+      "source_categories": [
+        "교통물류"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "JSON+XML"
+      ],
+      "missing_param_operations": 5,
+      "sample_operations": [
+        {
+          "dataset_id": "15000332",
+          "title": "서울특별시_버스위치정보조회 서비스",
+          "organization": "서울특별시",
+          "operation": "getBusPosByRouteStList",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://ws.bus.go.kr/api/rest/buspos/getBusPosByRouteSt",
+          "missing_params": [
+            "busRouteId",
+            "startOrd",
+            "endOrd"
+          ]
+        },
+        {
+          "dataset_id": "15000332",
+          "title": "서울특별시_버스위치정보조회 서비스",
+          "organization": "서울특별시",
+          "operation": "getBusPosByRtidList",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://ws.bus.go.kr/api/rest/buspos/getBusPosByRtid",
+          "missing_params": [
+            "busRouteId"
+          ]
+        },
+        {
+          "dataset_id": "15000332",
+          "title": "서울특별시_버스위치정보조회 서비스",
+          "organization": "서울특별시",
+          "operation": "getBusPosByVehIdItem",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://ws.bus.go.kr/api/rest/buspos/getBusPosByVehId",
+          "missing_params": [
+            "vehId"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 19,
+      "host": "api.forest.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 4,
+      "specs": 2,
+      "organizations": [
+        "산림청"
+      ],
+      "source_categories": [
+        "농축수산"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "missing_param_operations": 4,
+      "sample_operations": [
+        {
+          "dataset_id": "3044607",
+          "title": "산림청_숲에 사는 식물 정보(산림문화·휴양정보)",
+          "organization": "산림청",
+          "operation": "숲에서 만날 수 있는 식물 이야기 목록 정보 검색",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://api.forest.go.kr/openapi/service/cultureInfoService/fStoryOpenAPI",
+          "missing_params": [
+            "searchWrd"
+          ]
+        },
+        {
+          "dataset_id": "3044607",
+          "title": "산림청_숲에 사는 식물 정보(산림문화·휴양정보)",
+          "organization": "산림청",
+          "operation": "숲에서 만날 수 있는 식물 이야기 이미지 정보 검색",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://api.forest.go.kr/openapi/service/cultureInfoService/fStoryImgOpenAPI",
+          "missing_params": [
+            "searchWrd"
+          ]
+        },
+        {
+          "dataset_id": "3071170",
+          "title": "산림청_명산등산로",
+          "organization": "산림청",
+          "operation": "명산등산로 검색",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://api.forest.go.kr/openapi/service/cultureInfoService/gdTrailInfoOpenAPI",
+          "missing_params": [
+            "searchMtNm",
+            "searchArNm"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 20,
+      "host": "data.jeju.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 4,
+      "specs": 2,
+      "organizations": [
+        "제주특별자치도"
+      ],
+      "source_categories": [
+        "문화관광",
+        "산업고용"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "JSON+XML",
+        "XML"
+      ],
+      "missing_param_operations": 4,
+      "sample_operations": [
+        {
+          "dataset_id": "15001189",
+          "title": "제주특별자치도_제주교래자연휴양림 실시간 예약확인 서비스",
+          "organization": "제주특별자치도",
+          "operation": "예약된 방 목록 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.jeju.go.kr/rest/ jejurest",
+          "missing_params": [
+            "checkIndate"
+          ]
+        },
+        {
+          "dataset_id": "15043696",
+          "title": "제주특별자치도_심야약국정보 조회 목록 서비스",
+          "organization": "제주특별자치도",
+          "operation": "심야약국 리스트 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.jeju.go.kr/rest/nightpharmacy",
+          "missing_params": [
+            "dataTitle",
+            "startPage"
+          ]
+        },
+        {
+          "dataset_id": "15043696",
+          "title": "제주특별자치도_심야약국정보 조회 목록 서비스",
+          "organization": "제주특별자치도",
+          "operation": "심야약국 상세 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.jeju.go.kr/rest/nightpharmacy",
+          "missing_params": [
+            "dataSid"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 21,
+      "host": "www.rda.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 4,
+      "specs": 2,
+      "organizations": [
+        "농촌진흥청"
+      ],
+      "source_categories": [
+        "농축수산"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "missing_param_operations": 4,
+      "sample_operations": [
+        {
+          "dataset_id": "15002002",
+          "title": "농촌진흥청_농업기계 안전정보",
+          "organization": "농촌진흥청",
+          "operation": "농기계안전정보 목록 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://www.rda.go.kr/openapidata/service/rdamachinesafe_api",
+          "missing_params": [
+            "searchtype",
+            "searchword"
+          ]
+        },
+        {
+          "dataset_id": "15002055",
+          "title": "농촌진흥청_농업농촌종합정보(인테러뱅)",
+          "organization": "농촌진흥청",
+          "operation": "농업농촌종합정보(인테러뱅) 댓글보기 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://www.rda.go.kr/openapidata/service/interrobang_api",
+          "missing_params": [
+            "seq"
+          ]
+        },
+        {
+          "dataset_id": "15002055",
+          "title": "농촌진흥청_농업농촌종합정보(인테러뱅)",
+          "organization": "농촌진흥청",
+          "operation": "농업농촌종합정보(인테러뱅) 목록 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://www.rda.go.kr/openapidata/service/interrobang_api",
+          "missing_params": [
+            "searchtype",
+            "searchword"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 22,
+      "host": "car.daegu.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 4,
+      "specs": 1,
+      "organizations": [
+        "대구광역시"
+      ],
+      "source_categories": [
+        "교통물류"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "JSON"
+      ],
+      "missing_param_operations": 4,
+      "sample_operations": [
+        {
+          "dataset_id": "15097855",
+          "title": "대구광역시_어린이 보호구역 위험요소 조회 서비스",
+          "organization": "대구광역시",
+          "operation": "어린이 보호구역 내 고정체 위험요소 조회 서비스",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getFixTotal",
+          "missing_params": [
+            "zoneNm",
+            "gubun"
+          ]
+        },
+        {
+          "dataset_id": "15097855",
+          "title": "대구광역시_어린이 보호구역 위험요소 조회 서비스",
+          "organization": "대구광역시",
+          "operation": "어린이 보호구역 내 시간별/구간별 고정체 위험요소 조회 서비스",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getFix",
+          "missing_params": [
+            "zoneNm",
+            "sectionClassifyNm"
+          ]
+        },
+        {
+          "dataset_id": "15097855",
+          "title": "대구광역시_어린이 보호구역 위험요소 조회 서비스",
+          "organization": "대구광역시",
+          "operation": "어린이 보호구역 내 시간별/구간별 이동체 위험요소 조회 서비스",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getMove",
+          "missing_params": [
+            "zoneNm",
+            "sectionClassifyNm"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 23,
+      "host": "openapi.pqis.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 4,
+      "specs": 1,
+      "organizations": [
+        "농림축산식품부 농림축산검역본부"
+      ],
+      "source_categories": [
+        "농축수산"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "JSON+XML"
+      ],
+      "missing_param_operations": 4,
+      "sample_operations": [
+        {
+          "dataset_id": "3055528",
+          "title": "농림축산식품부 농림축산검역본부_식물검역정보",
+          "organization": "농림축산식품부 농림축산검역본부",
+          "operation": "국가코드",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.pqis.go.kr/openapi/service/plntQrantStats?_wadl\u0026type=xml",
+          "missing_params": [
+            "nationName"
+          ]
+        },
+        {
+          "dataset_id": "3055528",
+          "title": "농림축산식품부 농림축산검역본부_식물검역정보",
+          "organization": "농림축산식품부 농림축산검역본부",
+          "operation": "수입식물검역통계",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.pqis.go.kr/openapi/service/plntQrantStats?_wadl\u0026type=xml",
+          "missing_params": [
+            "fromYYYYMM",
+            "toYYYYMM",
+            "nationCode",
+            "plantCode"
+          ]
+        },
+        {
+          "dataset_id": "3055528",
+          "title": "농림축산식품부 농림축산검역본부_식물검역정보",
+          "organization": "농림축산식품부 농림축산검역본부",
+          "operation": "수출식물검역통계",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.pqis.go.kr/openapi/service/plntQrantStats?_wadl\u0026type=xml",
+          "missing_params": [
+            "fromYYYYMM",
+            "toYYYYMM",
+            "nationCode",
+            "plantCode"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 24,
+      "host": "openapi.price.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 4,
+      "specs": 1,
+      "organizations": [
+        "한국소비자원"
+      ],
+      "source_categories": [
+        "공공행정"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "missing_param_operations": 4,
+      "sample_operations": [
+        {
+          "dataset_id": "3043385",
+          "title": "한국소비자원_생필품 가격 정보",
+          "organization": "한국소비자원",
+          "operation": "상품정보 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.price.go.kr/openApiImpl/ProductPriceInfoService",
+          "missing_params": [
+            "goodId"
+          ]
+        },
+        {
+          "dataset_id": "3043385",
+          "title": "한국소비자원_생필품 가격 정보",
+          "organization": "한국소비자원",
+          "operation": "생필품 가격 정보 기준 데이터 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.price.go.kr/openApiImpl/ProductPriceInfoService",
+          "missing_params": [
+            "classCode"
+          ]
+        },
+        {
+          "dataset_id": "3043385",
+          "title": "한국소비자원_생필품 가격 정보",
+          "organization": "한국소비자원",
+          "operation": "생필품 가격 정보 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.price.go.kr/openApiImpl/ProductPriceInfoService",
+          "missing_params": [
+            "goodInspectDay",
+            "entpId",
+            "goodId"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 25,
+      "host": "openapi.gblib.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 3,
+      "specs": 3,
+      "organizations": [
+        "강북구도시관리공단"
+      ],
+      "source_categories": [
+        "교육",
+        "문화관광"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "missing_param_operations": 2,
+      "sample_operations": [
+        {
+          "dataset_id": "15003489",
+          "title": "강북구도시관리공단 스포츠시설 현황",
+          "organization": "강북구도시관리공단",
+          "operation": "이용현황검색",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.gblib.or.kr/OpenAPI/service/SportsCenterNow/getNow",
+          "missing_params": [
+            "org",
+            "date"
+          ]
+        },
+        {
+          "dataset_id": "3075291",
+          "title": "강북구도시관리공단_강북문화정보도서관 소장자료정보",
+          "organization": "강북구도시관리공단",
+          "operation": "도서자료검색",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.gblib.or.kr/OpenAPI/service/SearchBook/getSearchBook",
+          "missing_params": [
+            "keyword",
+            "pub",
+            "lib"
+          ]
+        },
+        {
+          "dataset_id": "3075292",
+          "title": "강북구도시관리공단 일반열람실 현황조회",
+          "organization": "강북구도시관리공단",
+          "operation": "일반열람실 목록 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi.gblib.or.kr/OpenAPI/service/ReadingRoomInfoService"
+        }
+      ]
+    },
+    {
+      "rank": 26,
+      "host": "oneclick.law.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 3,
+      "specs": 1,
+      "organizations": [
+        "법제처"
+      ],
+      "source_categories": [
+        "법률"
+      ],
+      "api_types": [
+        "SOAP"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "approval_required_operations": 3,
+      "missing_param_operations": 3,
+      "unsupported_protocol_operations": 3,
+      "sample_operations": [
+        {
+          "dataset_id": "15000335",
+          "title": "법제처_생활법령 백문백답 서비스",
+          "organization": "법제처",
+          "operation": "백문백답항목조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://oneclick.law.go.kr/OPENAPI/soap/ManyAskManyAnswerService/getMaskMAnswerClassList",
+          "missing_params": [
+            "RequestMsgID",
+            "RequestTime",
+            "CallBackURI"
+          ]
+        },
+        {
+          "dataset_id": "15000335",
+          "title": "법제처_생활법령 백문백답 서비스",
+          "organization": "법제처",
+          "operation": "분류목록조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://oneclick.law.go.kr/OPENAPI/soap/ManyAskManyAnswerService/getMaskMAnswerAreaItem",
+          "missing_params": [
+            "RequestMsgID",
+            "RequestTime",
+            "CallBackURI",
+            "onhunqnaAstSeq",
+            "onhunqueSeq"
+          ]
+        },
+        {
+          "dataset_id": "15000335",
+          "title": "법제처_생활법령 백문백답 서비스",
+          "organization": "법제처",
+          "operation": "분류별백문백답목록조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://oneclick.law.go.kr/OPENAPI/soap/ManyAskManyAnswerService/getMaskMAnswerAreaList",
+          "missing_params": [
+            "RequestMsgID",
+            "RequestTime",
+            "CallBackURI",
+            "onhunqnaAstSeq",
+            "onhunqueAstSeq"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 27,
+      "host": "folkency.nfm.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 3,
+      "specs": 1,
+      "organizations": [
+        "문화체육관광부 국립민속박물관"
+      ],
+      "source_categories": [
+        "교육"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "JSON"
+      ],
+      "missing_param_operations": 3,
+      "sample_operations": [
+        {
+          "dataset_id": "15126343",
+          "title": "문화체육관광부 국립민속박물관_한국민속대백과사전멀티미디어서비스JSON",
+          "organization": "문화체육관광부 국립민속박물관",
+          "operation": "한국민속대백과사전사진목록조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://folkency.nfm.go.kr/api/FolkTradClturMltmd/getPhotoList",
+          "missing_params": [
+            "dictionary",
+            "tit_idx",
+            "korname",
+            "summary",
+            "size"
+          ]
+        },
+        {
+          "dataset_id": "15126343",
+          "title": "문화체육관광부 국립민속박물관_한국민속대백과사전멀티미디어서비스JSON",
+          "organization": "문화체육관광부 국립민속박물관",
+          "operation": "한국민속대백과사전사진상세조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://folkency.nfm.go.kr/api/FolkTradClturMltmd/getPhotoItemList",
+          "missing_params": [
+            "tit_idx",
+            "group_name",
+            "md_idx",
+            "size"
+          ]
+        },
+        {
+          "dataset_id": "15126343",
+          "title": "문화체육관광부 국립민속박물관_한국민속대백과사전멀티미디어서비스JSON",
+          "organization": "문화체육관광부 국립민속박물관",
+          "operation": "한국민속대백과사전음원목록조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://folkency.nfm.go.kr/api/FolkTradClturMltmd/getSoundList",
+          "missing_params": [
+            "dictionary",
+            "tit_idx",
+            "korname",
+            "summary",
+            "size"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 28,
+      "host": "its.gyeongju.go.kr:81",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 3,
+      "specs": 1,
+      "organizations": [
+        "경상북도 경주시"
+      ],
+      "source_categories": [
+        "교통물류"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "missing_param_operations": 3,
+      "sample_operations": [
+        {
+          "dataset_id": "15021579",
+          "title": "경상북도 경주시_버스 관련 정보",
+          "organization": "경상북도 경주시",
+          "operation": "노선정보 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://its.gyeongju.go.kr:81/bis/openapi/getRouteNoList.do",
+          "missing_params": [
+            "routeNo"
+          ]
+        },
+        {
+          "dataset_id": "15021579",
+          "title": "경상북도 경주시_버스 관련 정보",
+          "organization": "경상북도 경주시",
+          "operation": "실시간 버스정보 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://its.gyeongju.go.kr:81/bis/openapi/getRouteAcctoBusLcList.do",
+          "missing_params": [
+            "routeId"
+          ]
+        },
+        {
+          "dataset_id": "15021579",
+          "title": "경상북도 경주시_버스 관련 정보",
+          "organization": "경상북도 경주시",
+          "operation": "정류장정보 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://its.gyeongju.go.kr:81/bis/openapi/getSttnNoList.do",
+          "missing_params": [
+            "nodeNm"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 29,
+      "host": "www.emuseum.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 3,
+      "specs": 1,
+      "organizations": [
+        "문화체육관광부 국립중앙박물관"
+      ],
+      "source_categories": [
+        "문화관광"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "JSON+XML"
+      ],
+      "missing_param_operations": 3,
+      "sample_operations": [
+        {
+          "dataset_id": "3036708",
+          "title": "문화체육관광부 국립중앙박물관_전국 박물관 유물정보",
+          "organization": "문화체육관광부 국립중앙박물관",
+          "operation": "소장품 목록 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://www.emuseum.go.kr/openapi/relic/list",
+          "missing_params": [
+            "id",
+            "museumCode",
+            "name",
+            "nameKr",
+            "nameEn",
+            "nameCn",
+            "author",
+            "nationalityCode",
+            "materialCode",
+            "purposeCode",
+            "sizeRangeCode",
+            "placeLandCode",
+            "designationCode",
+            "indexWord"
+          ]
+        },
+        {
+          "dataset_id": "3036708",
+          "title": "문화체육관광부 국립중앙박물관_전국 박물관 유물정보",
+          "organization": "문화체육관광부 국립중앙박물관",
+          "operation": "소장품 상세 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://www.emuseum.go.kr/openapi/relic/detail",
+          "missing_params": [
+            "id"
+          ]
+        },
+        {
+          "dataset_id": "3036708",
+          "title": "문화체육관광부 국립중앙박물관_전국 박물관 유물정보",
+          "organization": "문화체육관광부 국립중앙박물관",
+          "operation": "코드 목록 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://www.emuseum.go.kr/openapi/code",
+          "missing_params": [
+            "parentCode"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 30,
+      "host": "data.wanju.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 2,
+      "specs": 2,
+      "organizations": [
+        "전북특별자치도 완주군"
+      ],
+      "source_categories": [
+        "공공행정",
+        "문화관광"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "JSON+XML"
+      ],
+      "missing_param_operations": 2,
+      "sample_operations": [
+        {
+          "dataset_id": "15010208",
+          "title": "전라북도 완주군_사회적기업 현황",
+          "organization": "전북특별자치도 완주군",
+          "operation": "사회적기업 정보",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.wanju.go.kr/rest/wanjusocial/getSocialInfo",
+          "missing_params": [
+            "dataValue",
+            "dataName",
+            "sid"
+          ]
+        },
+        {
+          "dataset_id": "15058097",
+          "title": "전라북도 완주군_공연행사 정보 서비스",
+          "organization": "전북특별자치도 완주군",
+          "operation": "공연행사 정보",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.wanju.go.kr/rest/wanjuevent/getEvent",
+          "missing_params": [
+            "sid",
+            "dataValue",
+            "dataName"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 31,
+      "host": "www.cid.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 2,
+      "specs": 1,
+      "organizations": [
+        "건설근로자공제회"
+      ],
+      "source_categories": [
+        "공공행정"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "JSON+XML"
+      ],
+      "missing_param_operations": 2,
+      "sample_operations": [
+        {
+          "dataset_id": "15012192",
+          "title": "건설근로자공제회_건설근로자 취업정보",
+          "organization": "건설근로자공제회",
+          "operation": "채용정보 목록조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://www.cid.or.kr/job/openApi/service/getJobOpenInfoList.do",
+          "missing_params": [
+            "rcritJssfc",
+            "area",
+            "wageSe",
+            "wageAmountFrom",
+            "wageAmountTo",
+            "acdmcr",
+            "career",
+            "careerYear",
+            "careerMonth",
+            "lhCntrwkAt",
+            "periodFrom",
+            "periodTo"
+          ]
+        },
+        {
+          "dataset_id": "15012192",
+          "title": "건설근로자공제회_건설근로자 취업정보",
+          "organization": "건설근로자공제회",
+          "operation": "채용정보 상세조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://www.cid.or.kr/job/openApi/service/getJobOpenInfoView.do",
+          "missing_params": [
+            "cmpnyJoSeq"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 32,
+      "host": "data.myhome.go.kr:443",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 1,
+      "specs": 1,
+      "organizations": [
+        "한국토지주택공사"
+      ],
+      "source_categories": [
+        "국토관리"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "JSON"
+      ],
+      "missing_param_operations": 1,
+      "sample_operations": [
+        {
+          "dataset_id": "15058476",
+          "title": "한국토지주택공사_공공임대주택 단지정보 조회 서비스",
+          "organization": "한국토지주택공사",
+          "operation": "임대주택목록 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://data.myhome.go.kr:443/rentalHouseList",
+          "missing_params": [
+            "brtcCode",
+            "signguCode"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 33,
+      "host": "openapi-lib.sen.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 1,
+      "specs": 1,
+      "organizations": [
+        "서울특별시교육청"
+      ],
+      "source_categories": [
+        "교육"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "missing_param_operations": 1,
+      "sample_operations": [
+        {
+          "dataset_id": "15001051",
+          "title": "서울특별시교육청 공공도서관 소장도서정보",
+          "organization": "서울특별시교육청",
+          "operation": "도서 자료 검색",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://openapi-lib.sen.go.kr",
+          "missing_params": [
+            "title",
+            "manageCd"
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 34,
+      "host": "www.dgeic.or.kr:8080",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 1,
+      "specs": 1,
+      "organizations": [
+        "대구공공시설관리공단"
+      ],
+      "source_categories": [
+        "환경기상"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "JSON+XML"
+      ],
+      "sample_operations": [
+        {
+          "dataset_id": "15001184",
+          "title": "대구환경공단_소각처리현황",
+          "organization": "대구공공시설관리공단",
+          "operation": "소각처리현황",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://www.dgeic.or.kr:8080/"
+        }
+      ]
+    },
+    {
+      "rank": 35,
+      "host": "www.simpan.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 1,
+      "specs": 1,
+      "organizations": [
+        "국민권익위원회"
+      ],
+      "source_categories": [
+        "공공행정"
+      ],
+      "api_types": [
+        "REST"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "missing_param_operations": 1,
+      "sample_operations": [
+        {
+          "dataset_id": "3084452",
+          "title": "국민권익위원회_행정심판 재결례 통합검색서비스(사용 불가)",
+          "organization": "국민권익위원회",
+          "operation": "재결례 목록 조회",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://www.simpan.go.kr/nsph/getAdjdexeList.do",
+          "missing_params": [
+            "Init",
+            "reqDate",
+            "row"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.release-readiness.v1.schema.json",
+  "title": "Datapan Release Readiness v1",
+  "description": "Readiness gate report for deciding whether a Datapan registry release is publishable.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "manifest",
+    "root",
+    "schema_version",
+    "generated_at",
+    "datapan_version",
+    "provider",
+    "ready",
+    "summary",
+    "gates"
+  ],
+  "properties": {
+    "manifest": {
+      "type": "string",
+      "minLength": 1
+    },
+    "root": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schema_version": {
+      "const": "datapan.release-readiness.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "datapan_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ready": {
+      "type": "boolean"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "gates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/gate"
+      }
+    }
+  },
+  "$defs": {
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gates_total",
+        "passed",
+        "warned",
+        "failed",
+        "required_artifacts",
+        "missing_required_artifacts",
+        "recommended_artifacts",
+        "missing_recommended_artifacts",
+        "schema_artifacts",
+        "registry_specs"
+      ],
+      "properties": {
+        "gates_total": { "$ref": "#/$defs/count" },
+        "passed": { "$ref": "#/$defs/count" },
+        "warned": { "$ref": "#/$defs/count" },
+        "failed": { "$ref": "#/$defs/count" },
+        "required_artifacts": { "$ref": "#/$defs/count" },
+        "missing_required_artifacts": { "$ref": "#/$defs/count" },
+        "recommended_artifacts": { "$ref": "#/$defs/count" },
+        "missing_recommended_artifacts": { "$ref": "#/$defs/count" },
+        "schema_artifacts": { "$ref": "#/$defs/count" },
+        "registry_specs": { "$ref": "#/$defs/count" }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status", "severity", "message"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": ["pass", "warn", "fail"]
+        },
+        "severity": {
+          "enum": ["required", "recommended"]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_kind": {
+          "type": "string"
+        },
+        "artifact_path": {
+          "type": "string"
+        },
+        "expected": { "$ref": "#/$defs/count" },
+        "actual": { "$ref": "#/$defs/count" }
+      }
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.verification.v1.schema.json",
+  "title": "Datapan Verification Report v1",
+  "description": "Runtime evidence for public-data API operations.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["generated_at", "provider", "limit", "truncated", "filtered_count", "summary", "results"],
+  "properties": {
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "registry": {
+      "type": "string"
+    },
+    "ref": {
+      "type": "string"
+    },
+    "operation": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "truncated": {
+      "type": "boolean"
+    },
+    "filters": {
+      "$ref": "#/$defs/filters"
+    },
+    "filtered_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/result"
+      }
+    }
+  },
+  "$defs": {
+    "filters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": ["verified", "failed", "skipped", "unknown"]
+        },
+        "provider": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "data_go_kr_gateway",
+            "external_endpoint",
+            "service_root",
+            "no_endpoint",
+            "malformed_endpoint",
+            "soap",
+            "wms"
+          ]
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total", "verified", "failed", "skipped", "unknown"],
+      "properties": {
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "verified": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "failed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "skipped": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unknown": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dataset_id",
+        "title",
+        "operation",
+        "provider",
+        "dependency_class",
+        "status"
+      ],
+      "properties": {
+        "dataset_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "endpoint_host": {
+          "type": "string"
+        },
+        "dependency_class": {
+          "enum": [
+            "data_go_kr_gateway",
+            "external_endpoint",
+            "service_root",
+            "no_endpoint",
+            "malformed_endpoint",
+            "soap",
+            "wms"
+          ]
+        },
+        "status": {
+          "enum": ["verified", "failed", "skipped", "unknown"]
+        },
+        "reason": {
+          "type": "string"
+        },
+        "verified_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "http_status": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 599
+        },
+        "semantic_status": {
+          "type": "string"
+        },
+        "provider_status": {
+          "$ref": "#/$defs/provider_status"
+        },
+        "url": {
+          "type": "string"
+        },
+        "params": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "missing_params": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "body_shape": {
+          "type": "string"
+        }
+      }
+    },
+    "provider_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ok", "source"],
+      "properties": {
+        "ok": {
+          "type": "boolean"
+        },
+        "source": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "reason_code": {
+          "type": "string"
+        },
+        "auth_message": {
+          "type": "string"
+        },
+        "error_message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

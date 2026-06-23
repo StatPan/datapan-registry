@@ -1,0 +1,31 @@
+{
+  "generated_at": "2026-06-23T23:17:24Z",
+  "datapan_version": "0.1.0-dev",
+  "adapter_count": 2,
+  "host_count": 5,
+  "adapters": [
+    {
+      "name": "epost",
+      "status": "registered",
+      "hosts": [
+        "openapi.epost.go.kr",
+        "openapi.epost.go.kr:80"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "q-net",
+      "status": "registered",
+      "hosts": [
+        "c.q-net.or.kr",
+        "open.api.q-net.or.kr",
+        "openapi.q-net.or.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    }
+  ]
+}
