@@ -2,16 +2,16 @@
   "manifest": "manifest.json",
   "root": ".",
   "schema_version": "datapan.release-readiness.v1",
-  "generated_at": "2026-06-24T11:00:16Z",
+  "generated_at": "2026-06-24T11:13:29Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "ready": true,
   "summary": {
-    "gates_total": 15,
-    "passed": 15,
+    "gates_total": 16,
+    "passed": 16,
     "warned": 0,
     "failed": 0,
-    "required_artifacts": 9,
+    "required_artifacts": 10,
     "missing_required_artifacts": 0,
     "recommended_artifacts": 3,
     "missing_recommended_artifacts": 0,
@@ -24,8 +24,8 @@
       "status": "pass",
       "severity": "required",
       "message": "release manifest checksums and schema-bound artifacts verified",
-      "expected": 28,
-      "actual": 28
+      "expected": 29,
+      "actual": 29
     },
     {
       "id": "required_artifact_schema_index",
@@ -114,6 +114,16 @@
       "message": "required release artifact is present",
       "artifact_kind": "provenance",
       "artifact_path": "provenance/data-go-kr.md",
+      "expected": 1,
+      "actual": 1
+    },
+    {
+      "id": "required_artifact_release_notes",
+      "status": "pass",
+      "severity": "required",
+      "message": "required release artifact is present",
+      "artifact_kind": "release_notes",
+      "artifact_path": "RELEASE_NOTES.md",
       "expected": 1,
       "actual": 1
     },
