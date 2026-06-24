@@ -94,7 +94,7 @@
       "required": ["kind", "path"],
       "properties": {
         "kind": {
-          "enum": ["overview", "datasets", "bundle"]
+          "enum": ["overview", "datasets", "bundle", "viewer"]
         },
         "path": {
           "type": "string",
