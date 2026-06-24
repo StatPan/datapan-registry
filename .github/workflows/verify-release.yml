@@ -7,6 +7,9 @@ on:
     tags:
       - "v*"
   pull_request:
+  schedule:
+    # Weekly release-health check, Monday 18:17 UTC / Tuesday 03:17 KST.
+    - cron: "17 18 * * 1"
   workflow_dispatch:
 
 permissions:
@@ -57,3 +60,19 @@ jobs:
             --manifest ../datapan-registry/manifest.json \
             --output ../datapan-registry/.datapan/ci/latest-release-readiness.json \
             --json
+
+      - name: Check latest GitHub release is installable
+        working-directory: datapan-cli
+        run: |
+          go run ./cmd/datapan catalog install datapan-registry \
+            --registry "${RUNNER_TEMP}/datapan-installed-latest.registry.json" \
+            --json
+          DATAPAN_REGISTRY_PATH="${RUNNER_TEMP}/datapan-installed-latest.registry.json" \
+            go run ./cmd/datapan doctor --json
+
+      - name: Upload release health reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: datapan-registry-release-health
+          path: datapan-registry/.datapan/ci/
+          if-no-files-found: error

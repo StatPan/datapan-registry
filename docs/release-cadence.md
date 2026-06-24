@@ -29,7 +29,8 @@ datapan catalog release readiness --manifest manifest.json --output reports/late
 ```
 
 The repository also runs `.github/workflows/verify-release.yml` on pushes, pull
-requests, manual dispatches, and `v*` tags. That workflow:
+requests, manual dispatches, `v*` tags, and a weekly scheduled release-health
+check. That workflow:
 
 - checks out `datapan-registry` with Git LFS enabled;
 - checks that `data/data-go-kr.registry.json` is the full materialized file,
@@ -37,6 +38,9 @@ requests, manual dispatches, and `v*` tags. That workflow:
 - checks out `StatPan/datapan-cli`;
 - runs `catalog release verify`;
 - runs `catalog release readiness`.
+- installs the latest GitHub Release zip with
+  `datapan catalog install datapan-registry`;
+- runs `datapan doctor --json` against that installed registry.
 
 Recommended evidence before tagging:
 
@@ -65,7 +69,12 @@ datapan catalog verify --registry data/data-go-kr.registry.json --provider epost
 
 ## Cadence
 
-Start with manual date-based releases. Move to scheduled automation only after:
+Start with date-based releases and keep a weekly scheduled health check running
+between releases. The scheduled workflow does not publish a new release by
+itself. It proves that the checked-in manifest remains verifiable and that the
+latest public release asset remains installable.
+
+Move from scheduled health checks to scheduled release drafting only after:
 
 - the import command is stable across repeated full catalog pulls;
 - release verification and readiness reports are consistently useful;
