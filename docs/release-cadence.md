@@ -41,7 +41,9 @@ check. That workflow:
   summaries for qnet, epost, ekape, forest, folk, airport, and the merged
   latest report;
 - runs `catalog release verify`;
-- runs `catalog release readiness`.
+- runs `catalog release readiness`;
+- checks that the README Current Snapshot matches the generated coverage,
+  provider-index, and verification-summary artifacts;
 - installs the latest GitHub Release zip with
   `datapan catalog install datapan-registry`;
 - runs `datapan doctor --json` against that installed registry.
@@ -84,6 +86,9 @@ key registration requirements, or upstream provider HTML responses.
 ## Publish
 
 1. Commit generated artifacts.
+   Update README Current Snapshot from `reports/coverage.json`,
+   `data/provider-index.json`, and `reports/latest-verification-summary.json`
+   in the same commit.
 2. Tag with `vYYYY.MM.DD`, or `vYYYY.MM.DD.N` for a second release on the same
    date.
 3. Push the branch and tag.

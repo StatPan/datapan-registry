@@ -11,13 +11,18 @@ re-importing the upstream data.go.kr catalog every time.
 
 - Provider: `data.go.kr`
 - Specs: `12060`
+- Operations: `12205`
+- Callable operations: `12063` (`98.8%`)
 - Latest release: `v2026.06.24.6`
 - Registered external adapters: `airport`, `ekape`, `epost`, `folk`, `forest`,
   `q-net`
-- Provider split readiness: `not_ready`
-  (`need_at_least_one_call_capable_adapter`)
-- Runtime verification evidence: `28` bounded external-provider checks merged
-  into `reports/latest-verification.json` (`6` verified, `9` failed, `13`
+- External adapter coverage: `237` registered-adapter operations out of `594`
+  external endpoint operations (`38.7%`)
+- Missing external adapter hosts: `31`
+- Provider split readiness: `ready`
+  (`6` adapters, `6` verification-capable, `2` call-capable)
+- Runtime verification evidence: `68` bounded checks merged into
+  `reports/latest-verification.json` (`14` verified, `10` failed, `44`
   skipped)
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`

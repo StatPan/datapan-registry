@@ -76,6 +76,41 @@ jobs:
             --output ../datapan-registry/.datapan/ci/latest-release-readiness.json \
             --json
 
+      - name: Check README current snapshot
+        run: |
+          readme="datapan-registry/README.md"
+          coverage="datapan-registry/reports/coverage.json"
+          verification="datapan-registry/reports/latest-verification-summary.json"
+          provider_index="datapan-registry/data/provider-index.json"
+
+          specs="$(jq -r '.summary.specs' "${coverage}")"
+          operations="$(jq -r '.summary.operations' "${coverage}")"
+          callable_operations="$(jq -r '.summary.callable_operations' "${coverage}")"
+          callable_percent="$(jq -r '.summary.callable_operation_percent' "${coverage}")"
+          registered_adapter_operations="$(jq -r '.summary.registered_adapter_operations' "${coverage}")"
+          external_endpoint_operations="$(jq -r '.summary.external_endpoint_operations' "${coverage}")"
+          external_adapter_percent="$(jq -r '.summary.external_adapter_coverage_percent' "${coverage}")"
+          missing_adapter_hosts="$(jq -r '.summary.missing_adapter_hosts' "${coverage}")"
+          split_status="$(jq -r '.split_readiness.status' "${provider_index}")"
+          adapter_count="$(jq -r '.split_readiness.adapter_count' "${provider_index}")"
+          verification_adapters="$(jq -r '.split_readiness.verification_capable_adapters' "${provider_index}")"
+          call_adapters="$(jq -r '.split_readiness.call_capable_adapters' "${provider_index}")"
+          evidence_total="$(jq -r '.summary.total' "${verification}")"
+          evidence_verified="$(jq -r '.summary.verified' "${verification}")"
+          evidence_failed="$(jq -r '.summary.failed' "${verification}")"
+          evidence_skipped="$(jq -r '.summary.skipped' "${verification}")"
+
+          grep -F -- "- Specs: \`${specs}\`" "${readme}"
+          grep -F -- "- Operations: \`${operations}\`" "${readme}"
+          grep -F -- "- Callable operations: \`${callable_operations}\` (\`${callable_percent}%\`)" "${readme}"
+          grep -F -- "- External adapter coverage: \`${registered_adapter_operations}\` registered-adapter operations out of \`${external_endpoint_operations}\`" "${readme}"
+          grep -F -- "external endpoint operations (\`${external_adapter_percent}%\`)" "${readme}"
+          grep -F -- "- Missing external adapter hosts: \`${missing_adapter_hosts}\`" "${readme}"
+          grep -F -- "- Provider split readiness: \`${split_status}\`" "${readme}"
+          grep -F -- "(\`${adapter_count}\` adapters, \`${verification_adapters}\` verification-capable, \`${call_adapters}\` call-capable)" "${readme}"
+          grep -F -- "- Runtime verification evidence: \`${evidence_total}\` bounded checks merged into" "${readme}"
+          grep -F -- "\`${evidence_verified}\` verified, \`${evidence_failed}\` failed, \`${evidence_skipped}\`" "${readme}"
+
       - name: Check latest GitHub release is installable
         working-directory: datapan-cli
         run: |
