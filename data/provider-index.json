@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-24T11:13:06Z",
+  "generated_at": "2026-06-24T11:47:11Z",
   "datapan_version": "0.1.0-dev",
   "adapter_count": 6,
   "host_count": 9,
@@ -52,6 +52,7 @@
         "api.forest.go.kr"
       ],
       "capabilities": [
+        "call",
         "verification"
       ]
     },
@@ -69,17 +70,15 @@
     }
   ],
   "split_readiness": {
-    "ready": false,
-    "status": "not_ready",
+    "ready": true,
+    "status": "ready",
     "adapter_count": 6,
     "verification_capable_adapters": 6,
-    "call_capable_adapters": 0,
+    "call_capable_adapters": 1,
     "required_adapters": 2,
     "required_verification_adapters": 2,
     "required_call_adapters": 1,
-    "reasons": [
-      "need_at_least_one_call_capable_adapter"
-    ],
-    "recommendation": "keep provider adapters inside datapan-cli until call behavior is proven by at least one external adapter"
+    "reasons": [],
+    "recommendation": "adapter boundary has enough exercised surface to consider a datapan-providers split"
   }
 }

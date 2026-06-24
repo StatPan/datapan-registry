@@ -1,6 +1,6 @@
 # Datapan Registry Release
 
-- generated_at: `2026-06-24T11:13:06Z`
+- generated_at: `2026-06-24T11:47:11Z`
 - provider: `data.go.kr`
 - datapan_version: `0.1.0-dev`
 - source_registry: `data\data-go-kr.registry.json`
@@ -16,9 +16,9 @@
 ## Provider Coverage
 
 - provider_adapters: `6` adapters, `9` hosts
-- split_readiness: `not_ready`
+- split_readiness: `ready`
 - verification_capable_adapters: `6`
-- call_capable_adapters: `0`
+- call_capable_adapters: `1`
 - dependency_operations: `12205` total, `11419` gateway, `594` external, `237` registered-adapter, `376` missing-adapter
 - adapter_backlog: `31` target hosts, `376` target operations
 - provider_backlog: `179` hosts, `31` missing-adapter hosts, `357` operations needing adapters
