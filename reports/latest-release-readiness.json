@@ -2,7 +2,7 @@
   "manifest": "manifest.json",
   "root": ".",
   "schema_version": "datapan.release-readiness.v1",
-  "generated_at": "2026-06-24T10:32:23Z",
+  "generated_at": "2026-06-24T10:53:55Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "ready": true,
@@ -15,7 +15,7 @@
     "missing_required_artifacts": 0,
     "recommended_artifacts": 3,
     "missing_recommended_artifacts": 0,
-    "schema_artifacts": 14,
+    "schema_artifacts": 16,
     "registry_specs": 12060
   },
   "gates": [
@@ -24,8 +24,8 @@
       "status": "pass",
       "severity": "required",
       "message": "release manifest checksums and schema-bound artifacts verified",
-      "expected": 26,
-      "actual": 26
+      "expected": 28,
+      "actual": 28
     },
     {
       "id": "required_artifact_schema_index",
@@ -152,8 +152,8 @@
       "status": "pass",
       "severity": "required",
       "message": "release includes all Datapan schema files known to this CLI",
-      "expected": 14,
-      "actual": 14
+      "expected": 16,
+      "actual": 16
     },
     {
       "id": "registry_has_specs",

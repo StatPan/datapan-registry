@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.studio-datasets.v1.schema.json",
+  "title": "Datapan Studio Datasets v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "provider",
+    "limit",
+    "filters",
+    "count",
+    "datasets"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.studio-datasets.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "registry": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "query": {
+      "type": "string"
+    },
+    "filters": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "datasets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/dataset_card"
+      }
+    }
+  },
+  "$defs": {
+    "dataset_card": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "title",
+        "provider",
+        "operations_count",
+        "callable",
+        "examples",
+        "operations"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provider": {
+          "type": "string"
+        },
+        "organization": {
+          "type": "string"
+        },
+        "source_category": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "operations_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "callable": {
+          "type": "boolean"
+        },
+        "application_url": {
+          "type": "string"
+        },
+        "examples": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      }
+    }
+  }
+}

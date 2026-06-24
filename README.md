@@ -23,6 +23,8 @@ re-importing the upstream data.go.kr catalog every time.
 - Registry data: `data/data-go-kr.registry.json`
 - Provider index: `data/provider-index.json`
 - Schema index: `schemas/index.json`
+- Studio bundle schemas: `datapan.studio-datasets.v1`,
+  `datapan.studio-bundle.v1`
 - Catalog diff: `reports/catalog-diff.json`
 
 `data/data-go-kr.registry.json` is stored with Git LFS because the normalized
