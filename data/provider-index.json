@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-24T22:23:56Z",
+  "generated_at": "2026-06-24T23:32:28Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 8,
-  "host_count": 11,
+  "adapter_count": 9,
+  "host_count": 12,
   "adapters": [
     {
       "name": "airport",
@@ -89,14 +89,25 @@
       "capabilities": [
         "verification"
       ]
+    },
+    {
+      "name": "uiryeong",
+      "status": "registered",
+      "hosts": [
+        "data.uiryeong.go.kr"
+      ],
+      "capabilities": [
+        "call",
+        "verification"
+      ]
     }
   ],
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 8,
-    "verification_capable_adapters": 8,
-    "call_capable_adapters": 3,
+    "adapter_count": 9,
+    "verification_capable_adapters": 9,
+    "call_capable_adapters": 4,
     "required_adapters": 2,
     "required_verification_adapters": 2,
     "required_call_adapters": 1,

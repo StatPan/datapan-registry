@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-24T22:23:56Z",
+  "generated_at": "2026-06-24T23:32:28Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-geoje\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-uiryeong\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "filtered_count": 179,
@@ -10,32 +10,17 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 40,
     "external_guide_hosts": 150,
-    "registered_adapter_hosts": 11,
+    "registered_adapter_hosts": 12,
     "operation_hosts": 42,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 29,
-    "needs_adapter_operations": 236,
+    "missing_adapter_hosts": 28,
+    "needs_adapter_operations": 196,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
     "malformed_source_url_count": 628
   },
   "providers": [
-    {
-      "host": "data.uiryeong.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "missing",
-      "specs": 32,
-      "operations": 40,
-      "external_endpoint_operations": 40,
-      "sample_ids": [
-        "15008883",
-        "15008884",
-        "15008887"
-      ]
-    },
     {
       "host": "oneclick.law.go.kr:80",
       "kinds": [
@@ -541,6 +526,22 @@
       ]
     },
     {
+      "host": "data.uiryeong.go.kr",
+      "provider": "uiryeong",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 32,
+      "operations": 40,
+      "external_endpoint_operations": 40,
+      "sample_ids": [
+        "15008883",
+        "15008884",
+        "15008887"
+      ]
+    },
+    {
       "host": "openapi.epost.go.kr:80",
       "provider": "epost",
       "kinds": [
@@ -955,6 +956,7 @@
     },
     {
       "host": "www.uiryeong.go.kr",
+      "provider": "uiryeong",
       "kinds": [
         "external_guide"
       ],

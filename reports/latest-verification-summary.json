@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-24T22:23:42Z",
-  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-geoje\\reports\\latest-verification.json",
+  "generated_at": "2026-06-24T23:32:17Z",
+  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-uiryeong\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 79,
+    "total": 85,
     "verified": 16,
-    "failed": 15,
+    "failed": 21,
     "skipped": 48,
     "unknown": 0
   },
@@ -20,14 +20,14 @@
         "status": "skipped"
       },
       {
+        "key": "failed",
+        "count": 21,
+        "status": "failed"
+      },
+      {
         "key": "verified",
         "count": 16,
         "status": "verified"
-      },
-      {
-        "key": "failed",
-        "count": 15,
-        "status": "failed"
       }
     ],
     "by_reason": [
@@ -50,6 +50,11 @@
         "key": "ekape_missing_required_params",
         "count": 7,
         "reason": "ekape_missing_required_params"
+      },
+      {
+        "key": "uiryeong_service_key_not_registered",
+        "count": 6,
+        "reason": "uiryeong_service_key_not_registered"
       },
       {
         "key": "epost_unsupported_protocol",
@@ -139,6 +144,11 @@
         "provider": "geoje"
       },
       {
+        "key": "uiryeong",
+        "count": 6,
+        "provider": "uiryeong"
+      },
+      {
         "key": "jeonju",
         "count": 5,
         "provider": "jeonju"
@@ -181,6 +191,11 @@
         "host": "data.geoje.go.kr"
       },
       {
+        "key": "data.uiryeong.go.kr",
+        "count": 6,
+        "host": "data.uiryeong.go.kr"
+      },
+      {
         "key": "openapi.airport.co.kr",
         "count": 6,
         "host": "openapi.airport.co.kr"
@@ -209,7 +224,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 69,
+        "count": 75,
         "kind": "external_endpoint"
       },
       {
