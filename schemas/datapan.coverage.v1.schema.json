@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.coverage.v1.schema.json",
+  "title": "Datapan Coverage Report v1",
+  "description": "Claim-oriented registry coverage, adapter coverage, and verification evidence gaps.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["generated_at", "provider", "summary", "evidence", "gaps", "adapters", "next"],
+  "properties": {
+    "generated_at": { "type": "string", "format": "date-time" },
+    "provider": { "type": "string", "minLength": 1 },
+    "registry": { "type": "string" },
+    "source": { "type": "string" },
+    "verification": { "type": "string" },
+    "summary": { "$ref": "#/$defs/summary" },
+    "evidence": { "$ref": "#/$defs/evidence" },
+    "gaps": { "$ref": "#/$defs/gaps" },
+    "adapters": { "type": "object" },
+    "next": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/next" }
+    }
+  },
+  "$defs": {
+    "count": { "type": "integer", "minimum": 0 },
+    "percent": { "type": "number", "minimum": 0, "maximum": 100 },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "specs",
+        "operations",
+        "callable_operations",
+        "callable_operation_percent",
+        "data_go_kr_gateway_operations",
+        "external_endpoint_operations",
+        "registered_adapter_operations",
+        "missing_adapter_operations",
+        "external_adapter_coverage_percent",
+        "approval_required_operations",
+        "no_endpoint_operations",
+        "service_root_operations",
+        "unsupported_protocol_operations",
+        "registered_adapter_hosts",
+        "missing_adapter_hosts",
+        "adapter_count",
+        "call_capable_adapters",
+        "provider_split_ready"
+      ],
+      "properties": {
+        "specs": { "$ref": "#/$defs/count" },
+        "operations": { "$ref": "#/$defs/count" },
+        "callable_operations": { "$ref": "#/$defs/count" },
+        "callable_operation_percent": { "$ref": "#/$defs/percent" },
+        "data_go_kr_gateway_operations": { "$ref": "#/$defs/count" },
+        "external_endpoint_operations": { "$ref": "#/$defs/count" },
+        "registered_adapter_operations": { "$ref": "#/$defs/count" },
+        "missing_adapter_operations": { "$ref": "#/$defs/count" },
+        "external_adapter_coverage_percent": { "$ref": "#/$defs/percent" },
+        "approval_required_operations": { "$ref": "#/$defs/count" },
+        "no_endpoint_operations": { "$ref": "#/$defs/count" },
+        "service_root_operations": { "$ref": "#/$defs/count" },
+        "unsupported_protocol_operations": { "$ref": "#/$defs/count" },
+        "registered_adapter_hosts": { "$ref": "#/$defs/count" },
+        "missing_adapter_hosts": { "$ref": "#/$defs/count" },
+        "adapter_count": { "$ref": "#/$defs/count" },
+        "call_capable_adapters": { "$ref": "#/$defs/count" },
+        "provider_split_ready": { "type": "boolean" }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "present",
+        "total",
+        "verified",
+        "failed",
+        "skipped",
+        "unknown",
+        "verified_percent",
+        "evidence_operation_percent"
+      ],
+      "properties": {
+        "present": { "type": "boolean" },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "timeout": { "type": "string" },
+        "total": { "$ref": "#/$defs/count" },
+        "verified": { "$ref": "#/$defs/count" },
+        "failed": { "$ref": "#/$defs/count" },
+        "skipped": { "$ref": "#/$defs/count" },
+        "unknown": { "$ref": "#/$defs/count" },
+        "verified_percent": { "$ref": "#/$defs/percent" },
+        "evidence_operation_percent": { "$ref": "#/$defs/percent" }
+      }
+    },
+    "gaps": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "missing_adapter_hosts": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "adapter_hosts": {
+          "type": "array",
+          "items": { "type": "object" }
+        }
+      }
+    },
+    "next": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "command"],
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "command": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
