@@ -1,12 +1,13 @@
 {
-  "generated_at": "2026-06-24T00:55:17Z",
+  "generated_at": "2026-06-24T01:21:52Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
+  "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 15,
-    "verified": 0,
+    "total": 19,
+    "verified": 4,
     "failed": 5,
     "skipped": 10,
     "unknown": 0
@@ -22,6 +23,11 @@
         "key": "failed",
         "count": 5,
         "status": "failed"
+      },
+      {
+        "key": "verified",
+        "count": 4,
+        "status": "verified"
       }
     ],
     "by_reason": [
@@ -66,6 +72,11 @@
         "key": "q-net",
         "count": 5,
         "provider": "q-net"
+      },
+      {
+        "key": "forest",
+        "count": 4,
+        "provider": "forest"
       }
     ],
     "by_endpoint_host": [
@@ -83,12 +94,17 @@
         "key": "openapi.q-net.or.kr",
         "count": 5,
         "host": "openapi.q-net.or.kr"
+      },
+      {
+        "key": "api.forest.go.kr",
+        "count": 4,
+        "host": "api.forest.go.kr"
       }
     ],
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 15,
+        "count": 19,
         "kind": "external_endpoint"
       }
     ]

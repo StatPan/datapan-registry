@@ -1,12 +1,13 @@
 {
-  "generated_at": "2026-06-24T00:55:17Z",
+  "generated_at": "2026-06-24T01:21:52Z",
   "provider": "data.go.kr",
-  "limit": 15,
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 19,
   "truncated": true,
-  "filtered_count": 15,
+  "filtered_count": 19,
   "summary": {
-    "total": 15,
-    "verified": 0,
+    "total": 19,
+    "verified": 4,
     "failed": 5,
     "skipped": 10,
     "unknown": 0
@@ -368,6 +369,105 @@
         "standYm": "202401"
       },
       "body_shape": "xml_notice"
+    },
+    {
+      "dataset_id": "3044607",
+      "title": "산림청_숲에 사는 식물 정보(산림문화·휴양정보)",
+      "operation": "숲에서 만날 수 있는 식물 이야기 목록 정보 검색",
+      "provider": "forest",
+      "endpoint_host": "api.forest.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-06-24T01:20:41Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "NORMAL SERVICE."
+      },
+      "url": "http://api.forest.go.kr/openapi/service/cultureInfoService/fStoryOpenAPI?numOfRows=1\u0026pageNo=1\u0026searchWrd=%EC%86%8C%EB%82%98%EB%AC%B4\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "searchWrd": "소나무"
+      },
+      "body_shape": "xml_items"
+    },
+    {
+      "dataset_id": "3044607",
+      "title": "산림청_숲에 사는 식물 정보(산림문화·휴양정보)",
+      "operation": "숲에서 만날 수 있는 식물 이야기 이미지 정보 검색",
+      "provider": "forest",
+      "endpoint_host": "api.forest.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-06-24T01:20:41Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "NORMAL SERVICE."
+      },
+      "url": "http://api.forest.go.kr/openapi/service/cultureInfoService/fStoryImgOpenAPI?numOfRows=1\u0026pageNo=1\u0026searchWrd=%EC%86%8C%EB%82%98%EB%AC%B4\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "searchWrd": "소나무"
+      },
+      "body_shape": "xml_empty_items"
+    },
+    {
+      "dataset_id": "3071170",
+      "title": "산림청_명산등산로",
+      "operation": "명산등산로 검색",
+      "provider": "forest",
+      "endpoint_host": "api.forest.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-06-24T01:20:41Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "NORMAL SERVICE."
+      },
+      "url": "http://api.forest.go.kr/openapi/service/cultureInfoService/gdTrailInfoOpenAPI?numOfRows=1\u0026pageNo=1\u0026searchArNm=%EC%84%9C%EC%9A%B8\u0026searchMtNm=%EB%B6%81%ED%95%9C%EC%82%B0\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "searchArNm": "서울",
+        "searchMtNm": "북한산"
+      },
+      "body_shape": "xml_items"
+    },
+    {
+      "dataset_id": "3071170",
+      "title": "산림청_명산등산로",
+      "operation": "명산등산로 조회",
+      "provider": "forest",
+      "endpoint_host": "api.forest.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-06-24T01:20:41Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "NORMAL SERVICE."
+      },
+      "url": "http://api.forest.go.kr/openapi/service/cultureInfoService/gdTrailInfoImgOpenAPI?searchWrd=%EC%86%8C%EB%82%98%EB%AC%B4\u0026serviceKey=REDACTED",
+      "params": {
+        "searchWrd": "소나무"
+      },
+      "body_shape": "xml_empty_items"
     }
   ]
 }

@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-24T00:55:28Z",
+  "generated_at": "2026-06-24T01:22:06Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 34,
+  "filtered_count": 33,
   "summary": {
-    "target_hosts": 34,
-    "target_operations": 389,
-    "external_endpoint_operations": 370,
+    "target_hosts": 33,
+    "target_operations": 385,
+    "external_endpoint_operations": 366,
     "service_root_operations": 19,
     "approval_required_operations": 42,
-    "missing_param_operations": 355,
+    "missing_param_operations": 351,
     "unsupported_protocol_operations": 30
   },
   "targets": [
@@ -1059,64 +1059,6 @@
     },
     {
       "rank": 18,
-      "host": "api.forest.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 4,
-      "specs": 2,
-      "organizations": [
-        "산림청"
-      ],
-      "source_categories": [
-        "농축수산"
-      ],
-      "api_types": [
-        "REST"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "missing_param_operations": 4,
-      "sample_operations": [
-        {
-          "dataset_id": "3044607",
-          "title": "산림청_숲에 사는 식물 정보(산림문화·휴양정보)",
-          "organization": "산림청",
-          "operation": "숲에서 만날 수 있는 식물 이야기 목록 정보 검색",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://api.forest.go.kr/openapi/service/cultureInfoService/fStoryOpenAPI",
-          "missing_params": [
-            "searchWrd"
-          ]
-        },
-        {
-          "dataset_id": "3044607",
-          "title": "산림청_숲에 사는 식물 정보(산림문화·휴양정보)",
-          "organization": "산림청",
-          "operation": "숲에서 만날 수 있는 식물 이야기 이미지 정보 검색",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://api.forest.go.kr/openapi/service/cultureInfoService/fStoryImgOpenAPI",
-          "missing_params": [
-            "searchWrd"
-          ]
-        },
-        {
-          "dataset_id": "3071170",
-          "title": "산림청_명산등산로",
-          "organization": "산림청",
-          "operation": "명산등산로 검색",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://api.forest.go.kr/openapi/service/cultureInfoService/gdTrailInfoOpenAPI",
-          "missing_params": [
-            "searchMtNm",
-            "searchArNm"
-          ]
-        }
-      ]
-    },
-    {
-      "rank": 19,
       "host": "data.jeju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1176,7 +1118,7 @@
       ]
     },
     {
-      "rank": 20,
+      "rank": 19,
       "host": "www.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1235,7 +1177,7 @@
       ]
     },
     {
-      "rank": 21,
+      "rank": 20,
       "host": "car.daegu.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1295,7 +1237,7 @@
       ]
     },
     {
-      "rank": 22,
+      "rank": 21,
       "host": "openapi.pqis.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1358,7 +1300,7 @@
       ]
     },
     {
-      "rank": 23,
+      "rank": 22,
       "host": "openapi.price.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1417,7 +1359,7 @@
       ]
     },
     {
-      "rank": 24,
+      "rank": 23,
       "host": "openapi.gblib.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1475,7 +1417,7 @@
       ]
     },
     {
-      "rank": 25,
+      "rank": 24,
       "host": "oneclick.law.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1544,7 +1486,7 @@
       ]
     },
     {
-      "rank": 26,
+      "rank": 25,
       "host": "folkency.nfm.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1612,7 +1554,7 @@
       ]
     },
     {
-      "rank": 27,
+      "rank": 26,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -1669,7 +1611,7 @@
       ]
     },
     {
-      "rank": 28,
+      "rank": 27,
       "host": "www.emuseum.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1739,7 +1681,7 @@
       ]
     },
     {
-      "rank": 29,
+      "rank": 28,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1790,7 +1732,7 @@
       ]
     },
     {
-      "rank": 30,
+      "rank": 29,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1847,7 +1789,7 @@
       ]
     },
     {
-      "rank": 31,
+      "rank": 30,
       "host": "data.myhome.go.kr:443",
       "kinds": [
         "external_endpoint"
@@ -1883,7 +1825,7 @@
       ]
     },
     {
-      "rank": 32,
+      "rank": 31,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1919,7 +1861,7 @@
       ]
     },
     {
-      "rank": 33,
+      "rank": 32,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -1950,7 +1892,7 @@
       ]
     },
     {
-      "rank": 34,
+      "rank": 33,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

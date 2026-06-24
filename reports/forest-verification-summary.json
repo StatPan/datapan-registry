@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-06-24T01:20:41Z",
+  "source": "reports\\forest-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 4,
+    "verified": 4,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 4,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "forest",
+        "count": 4,
+        "provider": "forest"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "api.forest.go.kr",
+        "count": 4,
+        "host": "api.forest.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 4,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

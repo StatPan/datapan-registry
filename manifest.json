@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.release-manifest.v1",
-  "generated_at": "2026-06-24T00:55:28Z",
+  "generated_at": "2026-06-24T01:22:06Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_registry": "data\\data-go-kr.registry.json",
@@ -96,7 +96,7 @@
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
       "bytes": 5263,
-      "sha256": "9ea1e2dd7c5cffc0aa017cf9baeaec93f5e23991ec8c9a5cfec331343494bd35"
+      "sha256": "bbf585069cec808cae44c8a722cd3ff6ebc1610cb879401dab23bfefb0832002"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -109,70 +109,70 @@
       "path": "data/provider-index.json",
       "kind": "provider_index",
       "schema": "https://schemas.datapan.dev/datapan.provider-index.v1.schema.json",
-      "bytes": 759,
-      "sha256": "d18aa11fab7cf71963c79a4a230dec362653b795b73ca841b9ce1e65d40f7aaf"
+      "bytes": 934,
+      "sha256": "437e562bdb2aed0036d217c7f76ffa8ff979c08a976dfa5178374fd8e44c1bf4"
     },
     {
       "path": "reports/catalog-diff.json",
       "kind": "catalog_diff",
       "schema": "https://schemas.datapan.dev/datapan.catalog-diff.v1.schema.json",
       "bytes": 407,
-      "sha256": "8566af45ca436ed64dd9571ce8b5a32cc507d82d69159f42e824c91f1f9f51a3"
+      "sha256": "73630cdc50e6d4c0bfb1db481911172dc6b014beee9b6cf49cf6c94d40cf1448"
     },
     {
       "path": "reports/catalog-audit.json",
       "kind": "catalog_audit",
       "schema": "https://schemas.datapan.dev/datapan.catalog-audit.v1.schema.json",
       "bytes": 15937,
-      "sha256": "205936abc2064429dfe5878ec290289834e90549e4367f225a2bc5f1eea18e3f"
+      "sha256": "62cf0344910b29b560291101f7f3209dc197efea994541969dfc49726cf1a457"
     },
     {
       "path": "reports/error-catalog.json",
       "kind": "error_catalog",
       "schema": "https://schemas.datapan.dev/datapan.error-catalog.v1.schema.json",
       "bytes": 3305315,
-      "sha256": "634396e2134afa84687883f6b28e1a32d76dd4a6443a68379d719411ad651a3e"
+      "sha256": "89bb7ac0be34dc93891a17e82f71a8aec069402bc63c7a618a9b513448f66107"
     },
     {
       "path": "reports/dependencies.json",
       "kind": "dependencies",
       "schema": "https://schemas.datapan.dev/datapan.dependencies.v1.schema.json",
-      "bytes": 11405627,
-      "sha256": "64ab88f6343928975dc82693c17771164a313a3d74a71b7d79883cc705a19985"
+      "bytes": 11406057,
+      "sha256": "15942a701adfee8fd5caac716a4c33a89f6238da8e128a371a4017dda5f4342f"
     },
     {
       "path": "reports/adapter-targets.json",
       "kind": "adapter_targets",
       "schema": "https://schemas.datapan.dev/datapan.adapter-targets.v1.schema.json",
-      "bytes": 62016,
-      "sha256": "ed5cbe32c40413eff465fd7d822be28ffcc03639870ad09142483c24794b54bb"
+      "bytes": 60151,
+      "sha256": "4da50cb8df99df2156b9afafdfc45fd4cd1c6ac36c634787fac58656df42e5a5"
     },
     {
       "path": "reports/provider-backlog.json",
       "kind": "provider_backlog",
       "schema": "https://schemas.datapan.dev/datapan.providers.v1.schema.json",
-      "bytes": 52765,
-      "sha256": "db49fe5970624a4866ee0251b79c0de7403ec9fb01907a769ec20918d2d23b3f"
+      "bytes": 52848,
+      "sha256": "2b942dd3ee4871b62a2492108bca629044914dc4d28c1953a98113717e35b135"
     },
     {
       "path": "reports/latest-verification.json",
       "kind": "verification",
       "schema": "https://schemas.datapan.dev/datapan.verification.v1.schema.json",
-      "bytes": 11885,
-      "sha256": "eae16f1b9f3d2dae38c4a204eacfb16ecba9caf3513c2982a7d307db8839ac2c"
+      "bytes": 15603,
+      "sha256": "f73d52933c486b5495714edd7d56847211f1c53c3aa4ec45776da2e47f6bdd89"
     },
     {
       "path": "reports/latest-verification-summary.json",
       "kind": "verification_summary",
       "schema": "https://schemas.datapan.dev/datapan.verification-summary.v1.schema.json",
-      "bytes": 1950,
-      "sha256": "ab486b216c25eec7952b7ea834073e5767327c1a2a9c0c10e8bf54cf4b39b21b"
+      "bytes": 2289,
+      "sha256": "a1a0498e8a26569f91f6d20529588b23ae2c5f0ccf0a8d25959658e4fd6bfba7"
     },
     {
       "path": "provenance/data-go-kr.md",
       "kind": "provenance",
       "bytes": 1638,
-      "sha256": "d1340a4061bed22d9ddf2778aa1b5de6b2e42f60a4a1633fff300ae6ab2c6e2a"
+      "sha256": "a5ab70408a02925294230d59e23f97c4ca62b95b661531ad29e63bf667e1d112"
     }
   ]
 }

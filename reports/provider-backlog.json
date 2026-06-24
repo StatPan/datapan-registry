@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-24T00:55:28Z",
+  "generated_at": "2026-06-24T01:22:06Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -10,11 +10,11 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 40,
     "external_guide_hosts": 150,
-    "registered_adapter_hosts": 6,
+    "registered_adapter_hosts": 7,
     "operation_hosts": 42,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 34,
-    "needs_adapter_operations": 370,
+    "missing_adapter_hosts": 33,
+    "needs_adapter_operations": 366,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
@@ -309,20 +309,6 @@
       ]
     },
     {
-      "host": "api.forest.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "missing",
-      "specs": 2,
-      "operations": 4,
-      "external_endpoint_operations": 4,
-      "sample_ids": [
-        "3044607",
-        "3071170"
-      ]
-    },
-    {
       "host": "car.daegu.go.kr",
       "kinds": [
         "external_endpoint"
@@ -549,6 +535,7 @@
     },
     {
       "host": "data.ekape.or.kr",
+      "provider": "ekape",
       "kinds": [
         "external_endpoint"
       ],
@@ -614,6 +601,21 @@
         "15000032",
         "15000124",
         "15000241"
+      ]
+    },
+    {
+      "host": "api.forest.go.kr",
+      "provider": "forest",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 2,
+      "operations": 4,
+      "external_endpoint_operations": 4,
+      "sample_ids": [
+        "3044607",
+        "3071170"
       ]
     },
     {
@@ -1920,6 +1922,7 @@
     },
     {
       "host": "data.forest.go.kr",
+      "provider": "forest",
       "kinds": [
         "external_guide"
       ],

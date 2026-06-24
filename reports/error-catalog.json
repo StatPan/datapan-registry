@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-24T00:55:28Z",
+  "generated_at": "2026-06-24T01:22:06Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -331,21 +331,6 @@
     },
     {
       "name": "resultCode",
-      "label": "호출 결과에 따른 응답코드 값",
-      "role": "result_code",
-      "source": "response_params",
-      "specs": 8,
-      "operations": 21,
-      "sample_ids": [
-        "15056670",
-        "15057288",
-        "15057921",
-        "15058627",
-        "15058655"
-      ]
-    },
-    {
-      "name": "resultCode",
       "label": "결과 코드",
       "role": "result_code",
       "source": "response_params",
@@ -357,6 +342,21 @@
         "15057573",
         "15099423",
         "15099428"
+      ]
+    },
+    {
+      "name": "resultCode",
+      "label": "호출 결과에 따른 응답코드 값",
+      "role": "result_code",
+      "source": "response_params",
+      "specs": 8,
+      "operations": 21,
+      "sample_ids": [
+        "15056670",
+        "15057288",
+        "15057921",
+        "15058627",
+        "15058655"
       ]
     },
     {
@@ -702,17 +702,6 @@
     },
     {
       "name": "resultCode",
-      "label": "응답메시지 코드",
-      "role": "result_code",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 5,
-      "sample_ids": [
-        "15057368"
-      ]
-    },
-    {
-      "name": "resultCode",
       "label": "요청에 대한 결과 코드",
       "role": "result_code",
       "source": "response_params",
@@ -724,34 +713,19 @@
     },
     {
       "name": "resultCode",
-      "label": "응답결과 코드",
+      "label": "응답메시지 코드",
       "role": "result_code",
-      "source": "response_params",
-      "specs": 5,
-      "operations": 5,
-      "sample_ids": [
-        "15029605",
-        "15057586",
-        "15057703",
-        "15058585",
-        "3056955"
-      ]
-    },
-    {
-      "name": "resultMsg",
-      "label": "요청에 대한 결과 메시지",
-      "role": "result_message",
       "source": "response_params",
       "specs": 1,
       "operations": 5,
       "sample_ids": [
-        "15098622"
+        "15057368"
       ]
     },
     {
-      "name": "resultMsg",
-      "label": "응답결과 메시지",
-      "role": "result_message",
+      "name": "resultCode",
+      "label": "응답결과 코드",
+      "role": "result_code",
       "source": "response_params",
       "specs": 5,
       "operations": 5,
@@ -772,6 +746,32 @@
       "operations": 5,
       "sample_ids": [
         "15057368"
+      ]
+    },
+    {
+      "name": "resultMsg",
+      "label": "응답결과 메시지",
+      "role": "result_message",
+      "source": "response_params",
+      "specs": 5,
+      "operations": 5,
+      "sample_ids": [
+        "15029605",
+        "15057586",
+        "15057703",
+        "15058585",
+        "3056955"
+      ]
+    },
+    {
+      "name": "resultMsg",
+      "label": "요청에 대한 결과 메시지",
+      "role": "result_message",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 5,
+      "sample_ids": [
+        "15098622"
       ]
     },
     {
@@ -861,18 +861,6 @@
     },
     {
       "name": "resultCode",
-      "label": "조회 성공",
-      "role": "result_code",
-      "source": "response_params",
-      "specs": 2,
-      "operations": 3,
-      "sample_ids": [
-        "15063096",
-        "15063505"
-      ]
-    },
-    {
-      "name": "resultCode",
       "label": "간지(일)",
       "role": "result_code",
       "source": "response_params",
@@ -883,16 +871,15 @@
       ]
     },
     {
-      "name": "resultMsg",
-      "label": "순번",
-      "role": "result_message",
+      "name": "resultCode",
+      "label": "조회 성공",
+      "role": "result_code",
       "source": "response_params",
-      "specs": 3,
+      "specs": 2,
       "operations": 3,
       "sample_ids": [
-        "15012690",
-        "15057110",
-        "15058269"
+        "15063096",
+        "15063505"
       ]
     },
     {
@@ -909,6 +896,19 @@
       ]
     },
     {
+      "name": "resultMsg",
+      "label": "순번",
+      "role": "result_message",
+      "source": "response_params",
+      "specs": 3,
+      "operations": 3,
+      "sample_ids": [
+        "15012690",
+        "15057110",
+        "15058269"
+      ]
+    },
+    {
       "name": "code",
       "label": "결과코",
       "role": "result_code",
@@ -917,29 +917,6 @@
       "operations": 2,
       "sample_ids": [
         "15159002"
-      ]
-    },
-    {
-      "name": "resultCode",
-      "label": "조회 성공 \"1\" 실패 \"0",
-      "role": "result_code",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 2,
-      "sample_ids": [
-        "15084594"
-      ]
-    },
-    {
-      "name": "resultCode",
-      "label": "결과코드 값",
-      "role": "result_code",
-      "source": "response_params",
-      "specs": 2,
-      "operations": 2,
-      "sample_ids": [
-        "15074404",
-        "15074408"
       ]
     },
     {
@@ -956,17 +933,6 @@
     },
     {
       "name": "resultCode",
-      "label": "결과코드(성공)",
-      "role": "result_code",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 2,
-      "sample_ids": [
-        "15097855"
-      ]
-    },
-    {
-      "name": "resultCode",
       "label": "정상적으로 응답한 경우 '00'",
       "role": "result_code",
       "source": "response_params",
@@ -974,6 +940,40 @@
       "operations": 2,
       "sample_ids": [
         "15062581"
+      ]
+    },
+    {
+      "name": "resultCode",
+      "label": "결과코드 값",
+      "role": "result_code",
+      "source": "response_params",
+      "specs": 2,
+      "operations": 2,
+      "sample_ids": [
+        "15074404",
+        "15074408"
+      ]
+    },
+    {
+      "name": "resultCode",
+      "label": "조회 성공 \"1\" 실패 \"0",
+      "role": "result_code",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 2,
+      "sample_ids": [
+        "15084594"
+      ]
+    },
+    {
+      "name": "resultCode",
+      "label": "결과코드(성공)",
+      "role": "result_code",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 2,
+      "sample_ids": [
+        "15097855"
       ]
     },
     {
@@ -990,6 +990,17 @@
     },
     {
       "name": "resultMsg",
+      "label": "결과메세지 (접속실패 , 접속성공 , 인증실패)",
+      "role": "result_message",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 2,
+      "sample_ids": [
+        "15084591"
+      ]
+    },
+    {
+      "name": "resultMsg",
       "label": "호출결과에 따른 응답코드 내용",
       "role": "result_message",
       "source": "response_params",
@@ -998,6 +1009,28 @@
       "sample_ids": [
         "15085690",
         "15085693"
+      ]
+    },
+    {
+      "name": "resultMsg",
+      "label": "결과메시지(접속실패",
+      "role": "result_message",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 2,
+      "sample_ids": [
+        "15084594"
+      ]
+    },
+    {
+      "name": "resultMsg",
+      "label": "에러원인 메시지",
+      "role": "result_message",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 2,
+      "sample_ids": [
+        "3048029"
       ]
     },
     {
@@ -1014,13 +1047,14 @@
     },
     {
       "name": "resultMsg",
-      "label": "에러원인 메시지",
+      "label": "결과 메시지 값",
       "role": "result_message",
       "source": "response_params",
-      "specs": 1,
+      "specs": 2,
       "operations": 2,
       "sample_ids": [
-        "3048029"
+        "15074404",
+        "15074408"
       ]
     },
     {
@@ -1037,28 +1071,6 @@
     },
     {
       "name": "resultMsg",
-      "label": "결과메세지 (접속실패 , 접속성공 , 인증실패)",
-      "role": "result_message",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 2,
-      "sample_ids": [
-        "15084591"
-      ]
-    },
-    {
-      "name": "resultMsg",
-      "label": "정상적으로 응답한 경우 '성공'",
-      "role": "result_message",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 2,
-      "sample_ids": [
-        "15062581"
-      ]
-    },
-    {
-      "name": "resultMsg",
       "label": "요청 응답 메세지",
       "role": "result_message",
       "source": "response_params",
@@ -1071,25 +1083,13 @@
     },
     {
       "name": "resultMsg",
-      "label": "결과 메시지 값",
-      "role": "result_message",
-      "source": "response_params",
-      "specs": 2,
-      "operations": 2,
-      "sample_ids": [
-        "15074404",
-        "15074408"
-      ]
-    },
-    {
-      "name": "resultMsg",
-      "label": "결과메시지(접속실패",
+      "label": "정상적으로 응답한 경우 '성공'",
       "role": "result_message",
       "source": "response_params",
       "specs": 1,
       "operations": 2,
       "sample_ids": [
-        "15084594"
+        "15062581"
       ]
     },
     {
@@ -1326,17 +1326,6 @@
     },
     {
       "name": "message",
-      "label": "처리 결과에 대한 텍스트",
-      "role": "result_message",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15012005"
-      ]
-    },
-    {
-      "name": "message",
       "label": "처리상태 로그 메세지",
       "role": "result_message",
       "source": "response_params",
@@ -1344,6 +1333,17 @@
       "operations": 1,
       "sample_ids": [
         "15041620"
+      ]
+    },
+    {
+      "name": "message",
+      "label": "처리 결과에 대한 텍스트",
+      "role": "result_message",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15012005"
       ]
     },
     {
@@ -1370,68 +1370,13 @@
     },
     {
       "name": "resultCode",
-      "label": "00\t결과처리성공여부코드",
+      "label": "사무대행기관주소",
       "role": "result_code",
       "source": "response_params",
       "specs": 1,
       "operations": 1,
       "sample_ids": [
-        "15000115"
-      ]
-    },
-    {
-      "name": "resultCode",
-      "label": "월일수(음력)",
-      "role": "result_code",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15012679"
-      ]
-    },
-    {
-      "name": "resultCode",
-      "label": "결과메시지",
-      "role": "result_code",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15025598"
-      ]
-    },
-    {
-      "name": "resultCode",
-      "label": "호출결과에 따른 응답코드 값",
-      "role": "result_code",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15085693"
-      ]
-    },
-    {
-      "name": "resultCode",
-      "label": "호출결과에따른 응답코드 값",
-      "role": "result_code",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15085690"
-      ]
-    },
-    {
-      "name": "resultCode",
-      "label": "결과",
-      "role": "result_code",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15076262"
+        "15059256"
       ]
     },
     {
@@ -1447,46 +1392,13 @@
     },
     {
       "name": "resultCode",
-      "label": "9시 고도",
+      "label": "결과메시지",
       "role": "result_code",
       "source": "response_params",
       "specs": 1,
       "operations": 1,
       "sample_ids": [
-        "15012692"
-      ]
-    },
-    {
-      "name": "resultCode",
-      "label": "검색결과 메시지",
-      "role": "result_code",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15083696"
-      ]
-    },
-    {
-      "name": "resultCode",
-      "label": "API 호출 성공 여부(코드)",
-      "role": "result_code",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15042355"
-      ]
-    },
-    {
-      "name": "resultCode",
-      "label": "2. Open API 응답코드정리 참조",
-      "role": "result_code",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15032175"
+        "15025598"
       ]
     },
     {
@@ -1502,13 +1414,35 @@
     },
     {
       "name": "resultCode",
-      "label": "0:성공",
+      "label": "결과",
       "role": "result_code",
       "source": "response_params",
       "specs": 1,
       "operations": 1,
       "sample_ids": [
-        "15046035"
+        "15076262"
+      ]
+    },
+    {
+      "name": "resultCode",
+      "label": "API 호출 성공 여부(코드)",
+      "role": "result_code",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15042355"
+      ]
+    },
+    {
+      "name": "resultCode",
+      "label": "검색결과 메시지",
+      "role": "result_code",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15083696"
       ]
     },
     {
@@ -1520,39 +1454,6 @@
       "operations": 1,
       "sample_ids": [
         "15058135"
-      ]
-    },
-    {
-      "name": "resultCode",
-      "label": "조회결과코드",
-      "role": "result_code",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15075330"
-      ]
-    },
-    {
-      "name": "resultCode",
-      "label": "200:정상,300:실패",
-      "role": "result_code",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "3057773"
-      ]
-    },
-    {
-      "name": "resultCode",
-      "label": "사무대행기관주소",
-      "role": "result_code",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15059256"
       ]
     },
     {
@@ -1575,6 +1476,127 @@
       "operations": 1,
       "sample_ids": [
         "15094964"
+      ]
+    },
+    {
+      "name": "resultCode",
+      "label": "0:성공",
+      "role": "result_code",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15046035"
+      ]
+    },
+    {
+      "name": "resultCode",
+      "label": "00\t결과처리성공여부코드",
+      "role": "result_code",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15000115"
+      ]
+    },
+    {
+      "name": "resultCode",
+      "label": "200:정상,300:실패",
+      "role": "result_code",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "3057773"
+      ]
+    },
+    {
+      "name": "resultCode",
+      "label": "호출결과에따른 응답코드 값",
+      "role": "result_code",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15085690"
+      ]
+    },
+    {
+      "name": "resultCode",
+      "label": "2. Open API 응답코드정리 참조",
+      "role": "result_code",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15032175"
+      ]
+    },
+    {
+      "name": "resultCode",
+      "label": "월일수(음력)",
+      "role": "result_code",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15012679"
+      ]
+    },
+    {
+      "name": "resultCode",
+      "label": "호출결과에 따른 응답코드 값",
+      "role": "result_code",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15085693"
+      ]
+    },
+    {
+      "name": "resultCode",
+      "label": "조회결과코드",
+      "role": "result_code",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15075330"
+      ]
+    },
+    {
+      "name": "resultCode",
+      "label": "9시 고도",
+      "role": "result_code",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15012692"
+      ]
+    },
+    {
+      "name": "resultMsg",
+      "label": "고유번호",
+      "role": "result_message",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15025598"
+      ]
+    },
+    {
+      "name": "resultMsg",
+      "label": "날짜",
+      "role": "result_message",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15012690"
       ]
     },
     {
@@ -1601,105 +1623,6 @@
     },
     {
       "name": "resultMsg",
-      "label": "한 페이지당 표출 데이터 수",
-      "role": "result_message",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15058883"
-      ]
-    },
-    {
-      "name": "resultMsg",
-      "label": "고유번호",
-      "role": "result_message",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15025598"
-      ]
-    },
-    {
-      "name": "resultMsg",
-      "label": "2. Open API 응답코드정리 참조",
-      "role": "result_message",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15032175"
-      ]
-    },
-    {
-      "name": "resultMsg",
-      "label": "결과메시지, 200이상 에러 메시지 표시",
-      "role": "result_message",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15128517"
-      ]
-    },
-    {
-      "name": "resultMsg",
-      "label": "응답 메시지",
-      "role": "result_message",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15098003"
-      ]
-    },
-    {
-      "name": "resultMsg",
-      "label": "결좌메세지",
-      "role": "result_message",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15089380"
-      ]
-    },
-    {
-      "name": "resultMsg",
-      "label": "표준기구코드",
-      "role": "result_message",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15057110"
-      ]
-    },
-    {
-      "name": "resultMsg",
-      "label": "API호출 결과메시지",
-      "role": "result_message",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15100647"
-      ]
-    },
-    {
-      "name": "resultMsg",
-      "label": "조회결과설명",
-      "role": "result_message",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15075330"
-      ]
-    },
-    {
-      "name": "resultMsg",
       "label": "SUCCESS,FAIL",
       "role": "result_message",
       "source": "response_params",
@@ -1707,50 +1630,6 @@
       "operations": 1,
       "sample_ids": [
         "3057773"
-      ]
-    },
-    {
-      "name": "resultMsg",
-      "label": "서비스 응답메세지",
-      "role": "result_message",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15078220"
-      ]
-    },
-    {
-      "name": "resultMsg",
-      "label": "결과메시지(접속실패, 접속성공, 인증실패)",
-      "role": "result_message",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15084605"
-      ]
-    },
-    {
-      "name": "resultMsg",
-      "label": "등록일",
-      "role": "result_message",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15086118"
-      ]
-    },
-    {
-      "name": "resultMsg",
-      "label": "날짜",
-      "role": "result_message",
-      "source": "response_params",
-      "specs": 1,
-      "operations": 1,
-      "sample_ids": [
-        "15012690"
       ]
     },
     {
@@ -1766,6 +1645,28 @@
     },
     {
       "name": "resultMsg",
+      "label": "표준기구코드",
+      "role": "result_message",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15057110"
+      ]
+    },
+    {
+      "name": "resultMsg",
+      "label": "한 페이지당 표출 데이터 수",
+      "role": "result_message",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15058883"
+      ]
+    },
+    {
+      "name": "resultMsg",
       "label": "API 호출 결과 메시지",
       "role": "result_message",
       "source": "response_params",
@@ -1773,6 +1674,105 @@
       "operations": 1,
       "sample_ids": [
         "15097923"
+      ]
+    },
+    {
+      "name": "resultMsg",
+      "label": "결좌메세지",
+      "role": "result_message",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15089380"
+      ]
+    },
+    {
+      "name": "resultMsg",
+      "label": "결과메시지, 200이상 에러 메시지 표시",
+      "role": "result_message",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15128517"
+      ]
+    },
+    {
+      "name": "resultMsg",
+      "label": "결과메시지(접속실패, 접속성공, 인증실패)",
+      "role": "result_message",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15084605"
+      ]
+    },
+    {
+      "name": "resultMsg",
+      "label": "응답 메시지",
+      "role": "result_message",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15098003"
+      ]
+    },
+    {
+      "name": "resultMsg",
+      "label": "조회결과설명",
+      "role": "result_message",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15075330"
+      ]
+    },
+    {
+      "name": "resultMsg",
+      "label": "2. Open API 응답코드정리 참조",
+      "role": "result_message",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15032175"
+      ]
+    },
+    {
+      "name": "resultMsg",
+      "label": "API호출 결과메시지",
+      "role": "result_message",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15100647"
+      ]
+    },
+    {
+      "name": "resultMsg",
+      "label": "등록일",
+      "role": "result_message",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15086118"
+      ]
+    },
+    {
+      "name": "resultMsg",
+      "label": "서비스 응답메세지",
+      "role": "result_message",
+      "source": "response_params",
+      "specs": 1,
+      "operations": 1,
+      "sample_ids": [
+        "15078220"
       ]
     },
     {
