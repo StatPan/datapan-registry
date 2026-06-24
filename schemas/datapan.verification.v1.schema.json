@@ -28,6 +28,10 @@
       "type": "integer",
       "minimum": 0
     },
+    "timeout": {
+      "type": "string",
+      "minLength": 1
+    },
     "truncated": {
       "type": "boolean"
     },
