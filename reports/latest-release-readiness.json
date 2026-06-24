@@ -2,19 +2,19 @@
   "manifest": "manifest.json",
   "root": ".",
   "schema_version": "datapan.release-readiness.v1",
-  "generated_at": "2026-06-24T00:28:04Z",
+  "generated_at": "2026-06-24T00:40:40Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "ready": true,
   "summary": {
     "gates_total": 15,
-    "passed": 14,
-    "warned": 1,
+    "passed": 15,
+    "warned": 0,
     "failed": 0,
     "required_artifacts": 9,
     "missing_required_artifacts": 0,
     "recommended_artifacts": 3,
-    "missing_recommended_artifacts": 1,
+    "missing_recommended_artifacts": 0,
     "schema_artifacts": 14,
     "registry_specs": 12060
   },
@@ -24,8 +24,8 @@
       "status": "pass",
       "severity": "required",
       "message": "release manifest checksums and schema-bound artifacts verified",
-      "expected": 25,
-      "actual": 25
+      "expected": 26,
+      "actual": 26
     },
     {
       "id": "required_artifact_schema_index",
@@ -119,11 +119,13 @@
     },
     {
       "id": "recommended_artifact_catalog_diff",
-      "status": "warn",
+      "status": "pass",
       "severity": "recommended",
-      "message": "recommended release artifact is not present yet",
+      "message": "recommended release artifact is present",
       "artifact_kind": "catalog_diff",
-      "expected": 1
+      "artifact_path": "reports/catalog-diff.json",
+      "expected": 1,
+      "actual": 1
     },
     {
       "id": "recommended_artifact_verification",

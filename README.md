@@ -19,6 +19,7 @@ re-importing the upstream data.go.kr catalog every time.
 - Registry data: `data/data-go-kr.registry.json`
 - Provider index: `data/provider-index.json`
 - Schema index: `schemas/index.json`
+- Catalog diff: `reports/catalog-diff.json`
 
 `data/data-go-kr.registry.json` is stored with Git LFS because the normalized
 registry is larger than GitHub's normal blob limit.
@@ -45,6 +46,7 @@ The current snapshot was generated from `datapan-cli` and includes:
 - normalized data.go.kr registry;
 - provider index for registered adapters;
 - schema index and versioned schemas;
+- catalog diff against the previous published registry;
 - catalog audit;
 - error catalog;
 - dependency inventory;
@@ -64,6 +66,7 @@ data/
   data-go-kr.registry.json
   provider-index.json
 reports/
+  catalog-diff.json
   catalog-audit.json
   error-catalog.json
   dependencies.json
@@ -89,6 +92,8 @@ A release is publishable when:
 
 - `manifest.json` verifies all required artifact checksums;
 - required readiness gates pass;
+- recommended readiness gates pass, including catalog diff and verification
+  evidence;
 - schema index and provider index are present;
 - registry size and LFS handling are explicit;
 - verification evidence is attached or documented;

@@ -6,15 +6,16 @@
 
 - A current `datapan-cli` build.
 - A data.go.kr API key available to the CLI environment.
-- The previous released registry when available.
+- The previous released registry when available, usually extracted under
+  `.datapan/previous/` from the last GitHub Release asset.
 
 ## Draft
 
-Generate a release draft from `datapan-cli`:
+Generate a release draft from the `datapan-registry` checkout:
 
 ```bash
 datapan catalog update data-go-kr --registry data/data-go-kr.registry.json --apply --backup --diff-limit 0 --json
-datapan catalog release draft --registry data/data-go-kr.registry.json --previous-registry previous/data-go-kr.registry.json --verification reports/latest-verification.json --output-dir .datapan/release --provider-limit 0 --json
+datapan catalog release draft --registry data/data-go-kr.registry.json --previous-registry .datapan/previous/data-go-kr.registry.json --verification reports/latest-verification.json --output-dir . --provider-limit 0 --json
 ```
 
 When there is no previous release yet, omit `--previous-registry`.
