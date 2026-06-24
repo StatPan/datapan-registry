@@ -9,7 +9,8 @@
     "generated_at",
     "adapter_count",
     "host_count",
-    "adapters"
+    "adapters",
+    "split_readiness"
   ],
   "properties": {
     "generated_at": {
@@ -33,6 +34,9 @@
       "items": {
         "$ref": "#/$defs/adapter"
       }
+    },
+    "split_readiness": {
+      "$ref": "#/$defs/split_readiness"
     }
   },
   "$defs": {
@@ -62,6 +66,68 @@
           "items": {
             "enum": ["verification", "call"]
           }
+        }
+      }
+    },
+    "split_readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ready",
+        "status",
+        "adapter_count",
+        "verification_capable_adapters",
+        "call_capable_adapters",
+        "required_adapters",
+        "required_verification_adapters",
+        "required_call_adapters",
+        "reasons",
+        "recommendation"
+      ],
+      "properties": {
+        "ready": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": ["ready", "not_ready"]
+        },
+        "adapter_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "verification_capable_adapters": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "call_capable_adapters": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_adapters": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_verification_adapters": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_call_adapters": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "need_at_least_two_external_adapters",
+              "need_at_least_two_verification_capable_adapters",
+              "need_at_least_one_call_capable_adapter"
+            ]
+          }
+        },
+        "recommendation": {
+          "type": "string",
+          "minLength": 1
         }
       }
     }

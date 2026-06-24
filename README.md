@@ -14,6 +14,8 @@ re-importing the upstream data.go.kr catalog every time.
 - Latest release: `v2026.06.24.6`
 - Registered external adapters: `airport`, `ekape`, `epost`, `folk`, `forest`,
   `q-net`
+- Provider split readiness: `not_ready`
+  (`need_at_least_one_call_capable_adapter`)
 - Runtime verification evidence: `28` bounded external-provider checks merged
   into `reports/latest-verification.json` (`6` verified, `9` failed, `13`
   skipped)

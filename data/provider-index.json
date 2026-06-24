@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-24T02:12:52Z",
+  "generated_at": "2026-06-24T10:31:56Z",
   "datapan_version": "0.1.0-dev",
   "adapter_count": 6,
   "host_count": 9,
@@ -67,5 +67,19 @@
         "verification"
       ]
     }
-  ]
+  ],
+  "split_readiness": {
+    "ready": false,
+    "status": "not_ready",
+    "adapter_count": 6,
+    "verification_capable_adapters": 6,
+    "call_capable_adapters": 0,
+    "required_adapters": 2,
+    "required_verification_adapters": 2,
+    "required_call_adapters": 1,
+    "reasons": [
+      "need_at_least_one_call_capable_adapter"
+    ],
+    "recommendation": "keep provider adapters inside datapan-cli until call behavior is proven by at least one external adapter"
+  }
 }
