@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-24T12:37:49Z",
+  "generated_at": "2026-06-24T12:43:59Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -21,7 +21,7 @@
     "registered_adapter_hosts": 9,
     "missing_adapter_hosts": 31,
     "adapter_count": 6,
-    "call_capable_adapters": 1,
+    "call_capable_adapters": 2,
     "provider_split_ready": true
   },
   "evidence": {
@@ -354,7 +354,7 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-06-24T12:37:49Z",
+    "generated_at": "2026-06-24T12:43:59Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 6,
     "host_count": 9,
@@ -387,6 +387,7 @@
           "openapi.epost.go.kr:80"
         ],
         "capabilities": [
+          "call",
           "verification"
         ]
       },
@@ -429,7 +430,7 @@
       "status": "ready",
       "adapter_count": 6,
       "verification_capable_adapters": 6,
-      "call_capable_adapters": 1,
+      "call_capable_adapters": 2,
       "required_adapters": 2,
       "required_verification_adapters": 2,
       "required_call_adapters": 1,

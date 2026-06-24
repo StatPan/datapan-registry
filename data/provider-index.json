@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-24T12:37:43Z",
+  "generated_at": "2026-06-24T12:43:54Z",
   "datapan_version": "0.1.0-dev",
   "adapter_count": 6,
   "host_count": 9,
@@ -32,6 +32,7 @@
         "openapi.epost.go.kr:80"
       ],
       "capabilities": [
+        "call",
         "verification"
       ]
     },
@@ -74,7 +75,7 @@
     "status": "ready",
     "adapter_count": 6,
     "verification_capable_adapters": 6,
-    "call_capable_adapters": 1,
+    "call_capable_adapters": 2,
     "required_adapters": 2,
     "required_verification_adapters": 2,
     "required_call_adapters": 1,
