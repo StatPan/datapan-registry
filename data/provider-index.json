@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-24T15:19:43Z",
+  "generated_at": "2026-06-24T22:23:56Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 7,
-  "host_count": 10,
+  "adapter_count": 8,
+  "host_count": 11,
   "adapters": [
     {
       "name": "airport",
@@ -58,6 +58,17 @@
       ]
     },
     {
+      "name": "geoje",
+      "status": "registered",
+      "hosts": [
+        "data.geoje.go.kr"
+      ],
+      "capabilities": [
+        "call",
+        "verification"
+      ]
+    },
+    {
       "name": "jeonju",
       "status": "registered",
       "hosts": [
@@ -83,9 +94,9 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 7,
-    "verification_capable_adapters": 7,
-    "call_capable_adapters": 2,
+    "adapter_count": 8,
+    "verification_capable_adapters": 8,
+    "call_capable_adapters": 3,
     "required_adapters": 2,
     "required_verification_adapters": 2,
     "required_call_adapters": 1,

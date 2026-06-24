@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-24T15:19:43Z",
+  "generated_at": "2026-06-24T22:23:56Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-jeonju\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-geoje\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "filtered_count": 179,
@@ -10,34 +10,17 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 40,
     "external_guide_hosts": 150,
-    "registered_adapter_hosts": 10,
+    "registered_adapter_hosts": 11,
     "operation_hosts": 42,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 30,
-    "needs_adapter_operations": 277,
+    "missing_adapter_hosts": 29,
+    "needs_adapter_operations": 236,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
     "malformed_source_url_count": 628
   },
   "providers": [
-    {
-      "host": "data.geoje.go.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "missing",
-      "specs": 12,
-      "operations": 41,
-      "external_endpoint_operations": 41,
-      "external_guide_specs": 11,
-      "sample_ids": [
-        "15005128",
-        "15005172",
-        "15014125"
-      ]
-    },
     {
       "host": "data.uiryeong.go.kr",
       "kinds": [
@@ -537,6 +520,24 @@
         "15037518",
         "15037520",
         "15056876"
+      ]
+    },
+    {
+      "host": "data.geoje.go.kr",
+      "provider": "geoje",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 12,
+      "operations": 41,
+      "external_endpoint_operations": 41,
+      "external_guide_specs": 11,
+      "sample_ids": [
+        "15005128",
+        "15005172",
+        "15014125"
       ]
     },
     {

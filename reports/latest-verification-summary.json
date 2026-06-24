@@ -1,32 +1,33 @@
 {
-  "generated_at": "2026-06-24T15:19:31Z",
-  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-jeonju\\reports\\latest-verification.json",
+  "generated_at": "2026-06-24T22:23:42Z",
+  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-geoje\\reports\\latest-verification.json",
   "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 73,
-    "verified": 14,
+    "total": 79,
+    "verified": 16,
     "failed": 15,
-    "skipped": 44,
+    "skipped": 48,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 44,
+        "count": 48,
         "status": "skipped"
+      },
+      {
+        "key": "verified",
+        "count": 16,
+        "status": "verified"
       },
       {
         "key": "failed",
         "count": 15,
         "status": "failed"
-      },
-      {
-        "key": "verified",
-        "count": 14,
-        "status": "verified"
       }
     ],
     "by_reason": [
@@ -64,6 +65,11 @@
         "key": "ekape_service_key_not_registered",
         "count": 4,
         "reason": "ekape_service_key_not_registered"
+      },
+      {
+        "key": "geoje_missing_required_params",
+        "count": 4,
+        "reason": "geoje_missing_required_params"
       },
       {
         "key": "jeonju_http_404_not_found",
@@ -128,6 +134,11 @@
         "provider": "airport"
       },
       {
+        "key": "geoje",
+        "count": 6,
+        "provider": "geoje"
+      },
+      {
         "key": "jeonju",
         "count": 5,
         "provider": "jeonju"
@@ -165,6 +176,11 @@
         "host": "apis.data.go.kr"
       },
       {
+        "key": "data.geoje.go.kr",
+        "count": 6,
+        "host": "data.geoje.go.kr"
+      },
+      {
         "key": "openapi.airport.co.kr",
         "count": 6,
         "host": "openapi.airport.co.kr"
@@ -193,7 +209,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 63,
+        "count": 69,
         "kind": "external_endpoint"
       },
       {

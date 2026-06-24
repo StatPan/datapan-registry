@@ -1,85 +1,22 @@
 {
-  "generated_at": "2026-06-24T15:19:43Z",
+  "generated_at": "2026-06-24T22:23:56Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-jeonju\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-geoje\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 30,
+  "filtered_count": 29,
   "summary": {
-    "target_hosts": 30,
-    "target_operations": 296,
-    "external_endpoint_operations": 277,
+    "target_hosts": 29,
+    "target_operations": 255,
+    "external_endpoint_operations": 236,
     "service_root_operations": 19,
     "approval_required_operations": 42,
-    "missing_param_operations": 268,
+    "missing_param_operations": 227,
     "unsupported_protocol_operations": 30
   },
   "targets": [
     {
       "rank": 1,
-      "host": "data.geoje.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 41,
-      "specs": 12,
-      "organizations": [
-        "경상남도 거제시"
-      ],
-      "source_categories": [
-        "교육",
-        "교통물류",
-        "문화관광",
-        "보건의료"
-      ],
-      "api_types": [
-        "REST"
-      ],
-      "data_formats": [
-        "JSON+XML",
-        "XML"
-      ],
-      "missing_param_operations": 41,
-      "sample_operations": [
-        {
-          "dataset_id": "15005128",
-          "title": "경상남도 거제시 의료기관 현황",
-          "organization": "경상남도 거제시",
-          "operation": "거제시 의료기관 목록정보",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.geoje.go.kr/rfcapi/rest/geojemedical/getGeojemedicalList",
-          "missing_params": [
-            "geojemedicalNm",
-            "geojemedicalCd",
-            "startPage"
-          ]
-        },
-        {
-          "dataset_id": "15005128",
-          "title": "경상남도 거제시 의료기관 현황",
-          "organization": "경상남도 거제시",
-          "operation": "거제시 의료기관 상세정보",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.geoje.go.kr/rfcapi/rest/geojemedical/getGeojemedicalList",
-          "missing_params": [
-            "geojemedicalId"
-          ]
-        },
-        {
-          "dataset_id": "15005128",
-          "title": "경상남도 거제시 의료기관 현황",
-          "organization": "경상남도 거제시",
-          "operation": "거제시 의료기관 이미지정보",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.geoje.go.kr/rfcapi/rest/geojemedical/getGeojemedicalList",
-          "missing_params": [
-            "geojemedicalId"
-          ]
-        }
-      ]
-    },
-    {
-      "rank": 2,
       "host": "data.uiryeong.go.kr",
       "kinds": [
         "external_endpoint"
@@ -157,7 +94,7 @@
       ]
     },
     {
-      "rank": 3,
+      "rank": 2,
       "host": "oneclick.law.go.kr:80",
       "kinds": [
         "external_endpoint"
@@ -216,7 +153,7 @@
       ]
     },
     {
-      "rank": 4,
+      "rank": 3,
       "host": "openapi.tour.go.kr",
       "kinds": [
         "external_endpoint",
@@ -277,7 +214,7 @@
       ]
     },
     {
-      "rank": 5,
+      "rank": 4,
       "host": "data.sisul.or.kr",
       "kinds": [
         "external_endpoint"
@@ -339,7 +276,7 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 5,
       "host": "openapi.its.ulsan.kr",
       "kinds": [
         "external_endpoint"
@@ -390,7 +327,7 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 6,
       "host": "www.korad.or.kr",
       "kinds": [
         "external_endpoint"
@@ -447,7 +384,7 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 7,
       "host": "www.andong.go.kr",
       "kinds": [
         "external_endpoint"
@@ -509,7 +446,7 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 8,
       "host": "open.itfind.or.kr",
       "kinds": [
         "external_endpoint"
@@ -569,7 +506,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "data.naqs.go.kr",
       "kinds": [
         "external_endpoint"
@@ -666,7 +603,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "data.humetro.busan.kr",
       "kinds": [
         "external_endpoint"
@@ -731,7 +668,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "openapi.ebid.lh.or.kr",
       "kinds": [
         "external_endpoint"
@@ -792,7 +729,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "host": "openapi.coast.kr",
       "kinds": [
         "external_endpoint"
@@ -839,7 +776,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 13,
       "host": "openapi.kpx.or.kr",
       "kinds": [
         "external_endpoint"
@@ -888,7 +825,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 14,
       "host": "ws.bus.go.kr",
       "kinds": [
         "external_endpoint"
@@ -947,7 +884,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 15,
       "host": "data.jeju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1007,7 +944,7 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 16,
       "host": "www.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1066,7 +1003,7 @@
       ]
     },
     {
-      "rank": 18,
+      "rank": 17,
       "host": "car.daegu.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1126,7 +1063,7 @@
       ]
     },
     {
-      "rank": 19,
+      "rank": 18,
       "host": "openapi.pqis.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1189,7 +1126,7 @@
       ]
     },
     {
-      "rank": 20,
+      "rank": 19,
       "host": "openapi.price.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1248,7 +1185,7 @@
       ]
     },
     {
-      "rank": 21,
+      "rank": 20,
       "host": "openapi.gblib.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1306,7 +1243,7 @@
       ]
     },
     {
-      "rank": 22,
+      "rank": 21,
       "host": "oneclick.law.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1375,7 +1312,7 @@
       ]
     },
     {
-      "rank": 23,
+      "rank": 22,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -1432,7 +1369,7 @@
       ]
     },
     {
-      "rank": 24,
+      "rank": 23,
       "host": "www.emuseum.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1502,7 +1439,7 @@
       ]
     },
     {
-      "rank": 25,
+      "rank": 24,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1553,7 +1490,7 @@
       ]
     },
     {
-      "rank": 26,
+      "rank": 25,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1610,7 +1547,7 @@
       ]
     },
     {
-      "rank": 27,
+      "rank": 26,
       "host": "data.myhome.go.kr:443",
       "kinds": [
         "external_endpoint"
@@ -1646,7 +1583,7 @@
       ]
     },
     {
-      "rank": 28,
+      "rank": 27,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1682,7 +1619,7 @@
       ]
     },
     {
-      "rank": 29,
+      "rank": 28,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -1713,7 +1650,7 @@
       ]
     },
     {
-      "rank": 30,
+      "rank": 29,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

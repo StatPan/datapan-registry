@@ -1,0 +1,138 @@
+{
+  "generated_at": "2026-06-24T22:23:30Z",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 6,
+  "timeout": "8s",
+  "truncated": true,
+  "filters": {
+    "provider": "geoje",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 6,
+  "summary": {
+    "total": 6,
+    "verified": 2,
+    "failed": 0,
+    "skipped": 4,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15005128",
+      "title": "경상남도 거제시 의료기관 현황",
+      "operation": "거제시 의료기관 목록정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-06-24T22:23:30Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "success"
+      },
+      "url": "http://data.geoje.go.kr/rfcapi/rest/geojemedical/getGeojemedicalList?pageSize=1\u0026serviceKey=REDACTED\u0026startPage=1",
+      "params": {
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "body_shape": "xml_list"
+    },
+    {
+      "dataset_id": "15005128",
+      "title": "경상남도 거제시 의료기관 현황",
+      "operation": "거제시 의료기관 상세정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-24T22:23:30Z",
+      "params": {
+        "geojemedicalId": ""
+      },
+      "missing_params": [
+        "geojemedicalId"
+      ]
+    },
+    {
+      "dataset_id": "15005128",
+      "title": "경상남도 거제시 의료기관 현황",
+      "operation": "거제시 의료기관 이미지정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-24T22:23:30Z",
+      "params": {
+        "geojemedicalId": ""
+      },
+      "missing_params": [
+        "geojemedicalId"
+      ]
+    },
+    {
+      "dataset_id": "15005172",
+      "title": "경상남도 거제시 공연행사 현황",
+      "operation": "거제시 공연전시 목록정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-06-24T22:23:30Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "success"
+      },
+      "url": "http://data.geoje.go.kr/rfcapi/rest/geojeshowexhibition/getGeojeshowexhibitionList?pageSize=1\u0026serviceKey=REDACTED\u0026startPage=1",
+      "params": {
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "body_shape": "xml_list"
+    },
+    {
+      "dataset_id": "15005172",
+      "title": "경상남도 거제시 공연행사 현황",
+      "operation": "거제시 공연전시 상세정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-24T22:23:30Z",
+      "params": {
+        "geojeshowexhibitionId": ""
+      },
+      "missing_params": [
+        "geojeshowexhibitionId"
+      ]
+    },
+    {
+      "dataset_id": "15005172",
+      "title": "경상남도 거제시 공연행사 현황",
+      "operation": "거제시 공연전시 이미지정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-24T22:23:30Z",
+      "params": {
+        "geojeshowexhibitionId": ""
+      },
+      "missing_params": [
+        "geojeshowexhibitionId"
+      ]
+    }
+  ]
+}

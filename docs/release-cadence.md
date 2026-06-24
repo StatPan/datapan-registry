@@ -38,7 +38,7 @@ check. That workflow:
   not an LFS pointer;
 - checks out `StatPan/datapan-cli`;
 - rereads provider-specific verification reports and regenerates bounded
-  summaries for qnet, epost, ekape, forest, folk, airport, jeonju, and the
+  summaries for qnet, epost, ekape, forest, folk, airport, jeonju, geoje, and the
   merged latest report;
 - runs `catalog release verify`;
 - runs `catalog release readiness`;
@@ -73,7 +73,9 @@ datapan catalog verify --registry data/data-go-kr.registry.json --provider airpo
 datapan catalog verify summary --input reports/airport-verification.json --output reports/airport-verification-summary.json --json
 datapan catalog verify --registry data/data-go-kr.registry.json --provider jeonju --kind external_endpoint --limit 5 --output reports/jeonju-verification.json --json
 datapan catalog verify summary --input reports/jeonju-verification.json --output reports/jeonju-verification-summary.json --json
-datapan catalog verify merge --input reports/qnet-verification.json --input reports/epost-verification.json --input reports/ekape-verification.json --input reports/forest-verification.json --input reports/folk-verification.json --input reports/airport-verification.json --input reports/jeonju-verification.json --output reports/latest-verification.json --json
+datapan catalog verify --registry data/data-go-kr.registry.json --provider geoje --kind external_endpoint --limit 6 --output reports/geoje-verification.json --json
+datapan catalog verify summary --input reports/geoje-verification.json --output reports/geoje-verification-summary.json --json
+datapan catalog verify merge --input reports/qnet-verification.json --input reports/epost-verification.json --input reports/ekape-verification.json --input reports/forest-verification.json --input reports/folk-verification.json --input reports/airport-verification.json --input reports/jeonju-verification.json --input reports/geoje-verification.json --output reports/latest-verification.json --json
 datapan catalog verify summary --input reports/latest-verification.json --output reports/latest-verification-summary.json --json
 ```
 
