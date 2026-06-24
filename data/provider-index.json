@@ -1,9 +1,19 @@
 {
-  "generated_at": "2026-06-24T01:42:28Z",
+  "generated_at": "2026-06-24T02:12:52Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 5,
-  "host_count": 8,
+  "adapter_count": 6,
+  "host_count": 9,
   "adapters": [
+    {
+      "name": "airport",
+      "status": "registered",
+      "hosts": [
+        "openapi.airport.co.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
     {
       "name": "ekape",
       "status": "registered",

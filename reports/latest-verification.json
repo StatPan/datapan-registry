@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-24T01:42:19Z",
+  "generated_at": "2026-06-24T02:12:42Z",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
-  "limit": 22,
+  "limit": 28,
   "truncated": true,
-  "filtered_count": 22,
+  "filtered_count": 28,
   "summary": {
-    "total": 22,
+    "total": 28,
     "verified": 6,
-    "failed": 5,
-    "skipped": 11,
+    "failed": 9,
+    "skipped": 13,
     "unknown": 0
   },
   "results": [
@@ -544,6 +544,144 @@
         "tit_idx": ""
       },
       "body_shape": "json_items"
+    },
+    {
+      "dataset_id": "15019937",
+      "title": "한국공항공사_김포공항 저시정경보 정보",
+      "operation": "김포공항 저시정 최신 정보조회 서비스",
+      "provider": "airport",
+      "endpoint_host": "openapi.airport.co.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "airport_service_key_not_registered",
+      "verified_at": "2026-06-24T02:12:24Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.airport.co.kr/service/rest/airportLowVisibility/getAirportLowVisibilityLast?serviceKey=REDACTED",
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15019937",
+      "title": "한국공항공사_김포공항 저시정경보 정보",
+      "operation": "김포공항 저시정 특정 인덱스상세 정보조회 서비스",
+      "provider": "airport",
+      "endpoint_host": "openapi.airport.co.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "airport_service_key_not_registered",
+      "verified_at": "2026-06-24T02:12:24Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.airport.co.kr/service/rest/airportLowVisibility/getAirportLowVisibilityIdx?serviceKey=REDACTED",
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15019937",
+      "title": "한국공항공사_김포공항 저시정경보 정보",
+      "operation": "김포공항 저시정목록 정보조회 서비스",
+      "provider": "airport",
+      "endpoint_host": "openapi.airport.co.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "airport_service_key_not_registered",
+      "verified_at": "2026-06-24T02:12:24Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.airport.co.kr/service/rest/airportLowVisibility/getAirportLowVisibility?serviceKey=REDACTED",
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15038409",
+      "title": "한국공항공사_소음지역정보",
+      "operation": "공항 인근 소음지역정보",
+      "provider": "airport",
+      "endpoint_host": "openapi.airport.co.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "airport_missing_required_params",
+      "verified_at": "2026-06-24T02:12:24Z",
+      "params": {
+        "build": "",
+        "buildno": "",
+        "city1": "",
+        "city2": "",
+        "dong": "",
+        "hosu": "",
+        "jibun": "",
+        "li": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "street": ""
+      },
+      "missing_params": [
+        "city1",
+        "city2",
+        "dong",
+        "li",
+        "jibun",
+        "street",
+        "build",
+        "buildno",
+        "hosu"
+      ]
+    },
+    {
+      "dataset_id": "3049544",
+      "title": "한국공항공사_공항상업시설 안내",
+      "operation": "공항 상업시설 임대계약 정보",
+      "provider": "airport",
+      "endpoint_host": "openapi.airport.co.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "airport_service_key_not_registered",
+      "verified_at": "2026-06-24T02:12:24Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.airport.co.kr/service/rest/contractService/getContractNo?serviceKey=REDACTED",
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "3050602",
+      "title": "한국공항공사_공항 온실가스",
+      "operation": "온실가스조회서비스",
+      "provider": "airport",
+      "endpoint_host": "openapi.airport.co.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "airport_missing_required_params",
+      "verified_at": "2026-06-24T02:12:24Z",
+      "params": {
+        "edate": "",
+        "sdate": ""
+      },
+      "missing_params": [
+        "edate",
+        "sdate"
+      ]
     }
   ]
 }

@@ -1,33 +1,33 @@
 {
-  "generated_at": "2026-06-24T01:42:19Z",
+  "generated_at": "2026-06-24T02:12:42Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 22,
+    "total": 28,
     "verified": 6,
-    "failed": 5,
-    "skipped": 11,
+    "failed": 9,
+    "skipped": 13,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 11,
+        "count": 13,
         "status": "skipped"
+      },
+      {
+        "key": "failed",
+        "count": 9,
+        "status": "failed"
       },
       {
         "key": "verified",
         "count": 6,
         "status": "verified"
-      },
-      {
-        "key": "failed",
-        "count": 5,
-        "status": "failed"
       }
     ],
     "by_reason": [
@@ -35,6 +35,11 @@
         "key": "qnet_wadl_metadata_only",
         "count": 5,
         "reason": "qnet_wadl_metadata_only"
+      },
+      {
+        "key": "airport_service_key_not_registered",
+        "count": 4,
+        "reason": "airport_service_key_not_registered"
       },
       {
         "key": "ekape_service_key_not_registered",
@@ -45,6 +50,11 @@
         "key": "epost_wadl_metadata_only",
         "count": 3,
         "reason": "epost_wadl_metadata_only"
+      },
+      {
+        "key": "airport_missing_required_params",
+        "count": 2,
+        "reason": "airport_missing_required_params"
       },
       {
         "key": "epost_unsupported_protocol",
@@ -63,6 +73,11 @@
       }
     ],
     "by_provider": [
+      {
+        "key": "airport",
+        "count": 6,
+        "provider": "airport"
+      },
       {
         "key": "ekape",
         "count": 5,
@@ -90,6 +105,11 @@
       }
     ],
     "by_endpoint_host": [
+      {
+        "key": "openapi.airport.co.kr",
+        "count": 6,
+        "host": "openapi.airport.co.kr"
+      },
       {
         "key": "data.ekape.or.kr",
         "count": 5,
@@ -119,7 +139,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 22,
+        "count": 28,
         "kind": "external_endpoint"
       }
     ]

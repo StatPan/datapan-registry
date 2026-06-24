@@ -1,0 +1,62 @@
+{
+  "generated_at": "2026-06-24T02:12:24Z",
+  "source": "reports\\airport-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 6,
+    "verified": 0,
+    "failed": 4,
+    "skipped": 2,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "failed",
+        "count": 4,
+        "status": "failed"
+      },
+      {
+        "key": "skipped",
+        "count": 2,
+        "status": "skipped"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "airport_service_key_not_registered",
+        "count": 4,
+        "reason": "airport_service_key_not_registered"
+      },
+      {
+        "key": "airport_missing_required_params",
+        "count": 2,
+        "reason": "airport_missing_required_params"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "airport",
+        "count": 6,
+        "provider": "airport"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "openapi.airport.co.kr",
+        "count": 6,
+        "host": "openapi.airport.co.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 6,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

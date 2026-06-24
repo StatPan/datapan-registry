@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-24T01:42:28Z",
+  "generated_at": "2026-06-24T02:12:52Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -10,11 +10,11 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 40,
     "external_guide_hosts": 150,
-    "registered_adapter_hosts": 8,
+    "registered_adapter_hosts": 9,
     "operation_hosts": 42,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 32,
-    "needs_adapter_operations": 363,
+    "missing_adapter_hosts": 31,
+    "needs_adapter_operations": 357,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
@@ -215,23 +215,6 @@
         "15000017",
         "15000063",
         "15000297"
-      ]
-    },
-    {
-      "host": "openapi.airport.co.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "missing",
-      "specs": 5,
-      "operations": 6,
-      "external_endpoint_operations": 6,
-      "external_guide_specs": 4,
-      "sample_ids": [
-        "15019937",
-        "15038409",
-        "15158628"
       ]
     },
     {
@@ -588,6 +571,24 @@
         "15000032",
         "15000124",
         "15000241"
+      ]
+    },
+    {
+      "host": "openapi.airport.co.kr",
+      "provider": "airport",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 5,
+      "operations": 6,
+      "external_endpoint_operations": 6,
+      "external_guide_specs": 4,
+      "sample_ids": [
+        "15019937",
+        "15038409",
+        "15158628"
       ]
     },
     {

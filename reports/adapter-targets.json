@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-24T01:42:28Z",
+  "generated_at": "2026-06-24T02:12:52Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 32,
+  "filtered_count": 31,
   "summary": {
-    "target_hosts": 32,
-    "target_operations": 382,
-    "external_endpoint_operations": 363,
+    "target_hosts": 31,
+    "target_operations": 376,
+    "external_endpoint_operations": 357,
     "service_root_operations": 19,
     "approval_required_operations": 42,
-    "missing_param_operations": 348,
+    "missing_param_operations": 346,
     "unsupported_protocol_operations": 30
   },
   "targets": [
@@ -856,54 +856,6 @@
     },
     {
       "rank": 14,
-      "host": "openapi.airport.co.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 6,
-      "specs": 4,
-      "organizations": [
-        "한국공항공사"
-      ],
-      "source_categories": [
-        "교통물류"
-      ],
-      "api_types": [
-        "REST"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "missing_param_operations": 2,
-      "sample_operations": [
-        {
-          "dataset_id": "15019937",
-          "title": "한국공항공사_김포공항 저시정경보 정보",
-          "organization": "한국공항공사",
-          "operation": "김포공항 저시정 최신 정보조회 서비스",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://openapi.airport.co.kr/service/rest/airportLowVisibility/getAirportLowVisibilityLast"
-        },
-        {
-          "dataset_id": "15019937",
-          "title": "한국공항공사_김포공항 저시정경보 정보",
-          "organization": "한국공항공사",
-          "operation": "김포공항 저시정 특정 인덱스상세 정보조회 서비스",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://openapi.airport.co.kr/service/rest/airportLowVisibility/getAirportLowVisibilityIdx"
-        },
-        {
-          "dataset_id": "15019937",
-          "title": "한국공항공사_김포공항 저시정경보 정보",
-          "organization": "한국공항공사",
-          "operation": "김포공항 저시정목록 정보조회 서비스",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://openapi.airport.co.kr/service/rest/airportLowVisibility/getAirportLowVisibility"
-        }
-      ]
-    },
-    {
-      "rank": 15,
       "host": "openapi.coast.kr",
       "kinds": [
         "external_endpoint"
@@ -950,7 +902,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 15,
       "host": "openapi.kpx.or.kr",
       "kinds": [
         "external_endpoint"
@@ -999,7 +951,7 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 16,
       "host": "ws.bus.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1058,7 +1010,7 @@
       ]
     },
     {
-      "rank": 18,
+      "rank": 17,
       "host": "data.jeju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1118,7 +1070,7 @@
       ]
     },
     {
-      "rank": 19,
+      "rank": 18,
       "host": "www.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1177,7 +1129,7 @@
       ]
     },
     {
-      "rank": 20,
+      "rank": 19,
       "host": "car.daegu.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1237,7 +1189,7 @@
       ]
     },
     {
-      "rank": 21,
+      "rank": 20,
       "host": "openapi.pqis.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1300,7 +1252,7 @@
       ]
     },
     {
-      "rank": 22,
+      "rank": 21,
       "host": "openapi.price.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1359,7 +1311,7 @@
       ]
     },
     {
-      "rank": 23,
+      "rank": 22,
       "host": "openapi.gblib.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1417,7 +1369,7 @@
       ]
     },
     {
-      "rank": 24,
+      "rank": 23,
       "host": "oneclick.law.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1486,7 +1438,7 @@
       ]
     },
     {
-      "rank": 25,
+      "rank": 24,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -1543,7 +1495,7 @@
       ]
     },
     {
-      "rank": 26,
+      "rank": 25,
       "host": "www.emuseum.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1613,7 +1565,7 @@
       ]
     },
     {
-      "rank": 27,
+      "rank": 26,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1664,7 +1616,7 @@
       ]
     },
     {
-      "rank": 28,
+      "rank": 27,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1721,7 +1673,7 @@
       ]
     },
     {
-      "rank": 29,
+      "rank": 28,
       "host": "data.myhome.go.kr:443",
       "kinds": [
         "external_endpoint"
@@ -1757,7 +1709,7 @@
       ]
     },
     {
-      "rank": 30,
+      "rank": 29,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1793,7 +1745,7 @@
       ]
     },
     {
-      "rank": 31,
+      "rank": 30,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -1824,7 +1776,7 @@
       ]
     },
     {
-      "rank": 32,
+      "rank": 31,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"
