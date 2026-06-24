@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-24T01:22:06Z",
+  "generated_at": "2026-06-24T01:42:28Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 33,
+  "filtered_count": 32,
   "summary": {
-    "target_hosts": 33,
-    "target_operations": 385,
-    "external_endpoint_operations": 366,
+    "target_hosts": 32,
+    "target_operations": 382,
+    "external_endpoint_operations": 363,
     "service_root_operations": 19,
     "approval_required_operations": 42,
-    "missing_param_operations": 351,
+    "missing_param_operations": 348,
     "unsupported_protocol_operations": 30
   },
   "targets": [
@@ -1487,74 +1487,6 @@
     },
     {
       "rank": 25,
-      "host": "folkency.nfm.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 3,
-      "specs": 1,
-      "organizations": [
-        "문화체육관광부 국립민속박물관"
-      ],
-      "source_categories": [
-        "교육"
-      ],
-      "api_types": [
-        "REST"
-      ],
-      "data_formats": [
-        "JSON"
-      ],
-      "missing_param_operations": 3,
-      "sample_operations": [
-        {
-          "dataset_id": "15126343",
-          "title": "문화체육관광부 국립민속박물관_한국민속대백과사전멀티미디어서비스JSON",
-          "organization": "문화체육관광부 국립민속박물관",
-          "operation": "한국민속대백과사전사진목록조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://folkency.nfm.go.kr/api/FolkTradClturMltmd/getPhotoList",
-          "missing_params": [
-            "dictionary",
-            "tit_idx",
-            "korname",
-            "summary",
-            "size"
-          ]
-        },
-        {
-          "dataset_id": "15126343",
-          "title": "문화체육관광부 국립민속박물관_한국민속대백과사전멀티미디어서비스JSON",
-          "organization": "문화체육관광부 국립민속박물관",
-          "operation": "한국민속대백과사전사진상세조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://folkency.nfm.go.kr/api/FolkTradClturMltmd/getPhotoItemList",
-          "missing_params": [
-            "tit_idx",
-            "group_name",
-            "md_idx",
-            "size"
-          ]
-        },
-        {
-          "dataset_id": "15126343",
-          "title": "문화체육관광부 국립민속박물관_한국민속대백과사전멀티미디어서비스JSON",
-          "organization": "문화체육관광부 국립민속박물관",
-          "operation": "한국민속대백과사전음원목록조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://folkency.nfm.go.kr/api/FolkTradClturMltmd/getSoundList",
-          "missing_params": [
-            "dictionary",
-            "tit_idx",
-            "korname",
-            "summary",
-            "size"
-          ]
-        }
-      ]
-    },
-    {
-      "rank": 26,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -1611,7 +1543,7 @@
       ]
     },
     {
-      "rank": 27,
+      "rank": 26,
       "host": "www.emuseum.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1681,7 +1613,7 @@
       ]
     },
     {
-      "rank": 28,
+      "rank": 27,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1732,7 +1664,7 @@
       ]
     },
     {
-      "rank": 29,
+      "rank": 28,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1789,7 +1721,7 @@
       ]
     },
     {
-      "rank": 30,
+      "rank": 29,
       "host": "data.myhome.go.kr:443",
       "kinds": [
         "external_endpoint"
@@ -1825,7 +1757,7 @@
       ]
     },
     {
-      "rank": 31,
+      "rank": 30,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1861,7 +1793,7 @@
       ]
     },
     {
-      "rank": 32,
+      "rank": 31,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -1892,7 +1824,7 @@
       ]
     },
     {
-      "rank": 33,
+      "rank": 32,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

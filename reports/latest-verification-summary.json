@@ -1,33 +1,33 @@
 {
-  "generated_at": "2026-06-24T01:21:52Z",
+  "generated_at": "2026-06-24T01:42:19Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 19,
-    "verified": 4,
+    "total": 22,
+    "verified": 6,
     "failed": 5,
-    "skipped": 10,
+    "skipped": 11,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 10,
+        "count": 11,
         "status": "skipped"
+      },
+      {
+        "key": "verified",
+        "count": 6,
+        "status": "verified"
       },
       {
         "key": "failed",
         "count": 5,
         "status": "failed"
-      },
-      {
-        "key": "verified",
-        "count": 4,
-        "status": "verified"
       }
     ],
     "by_reason": [
@@ -55,6 +55,11 @@
         "key": "ekape_html_response",
         "count": 1,
         "reason": "ekape_html_response"
+      },
+      {
+        "key": "folk_missing_required_params",
+        "count": 1,
+        "reason": "folk_missing_required_params"
       }
     ],
     "by_provider": [
@@ -77,6 +82,11 @@
         "key": "forest",
         "count": 4,
         "provider": "forest"
+      },
+      {
+        "key": "folk",
+        "count": 3,
+        "provider": "folk"
       }
     ],
     "by_endpoint_host": [
@@ -99,12 +109,17 @@
         "key": "api.forest.go.kr",
         "count": 4,
         "host": "api.forest.go.kr"
+      },
+      {
+        "key": "folkency.nfm.go.kr",
+        "count": 3,
+        "host": "folkency.nfm.go.kr"
       }
     ],
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 19,
+        "count": 22,
         "kind": "external_endpoint"
       }
     ]

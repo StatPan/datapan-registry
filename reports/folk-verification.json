@@ -1,0 +1,97 @@
+{
+  "generated_at": "2026-06-24T01:42:10Z",
+  "provider": "data.go.kr",
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 3,
+  "truncated": false,
+  "filters": {
+    "provider": "folk",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 3,
+  "summary": {
+    "total": 3,
+    "verified": 2,
+    "failed": 0,
+    "skipped": 1,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15126343",
+      "title": "문화체육관광부 국립민속박물관_한국민속대백과사전멀티미디어서비스JSON",
+      "operation": "한국민속대백과사전사진목록조회",
+      "provider": "folk",
+      "endpoint_host": "folkency.nfm.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-06-24T01:42:10Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "result_code/message",
+        "code": "200"
+      },
+      "url": "https://folkency.nfm.go.kr/api/FolkTradClturMltmd/getPhotoList?korname=%EC%86%8C%EB%82%98%EB%AC%B4\u0026page=1\u0026serviceKey=REDACTED\u0026size=1",
+      "params": {
+        "dictionary": "",
+        "korname": "소나무",
+        "page": "1",
+        "size": "1",
+        "summary": "",
+        "tit_idx": ""
+      },
+      "body_shape": "json_items"
+    },
+    {
+      "dataset_id": "15126343",
+      "title": "문화체육관광부 국립민속박물관_한국민속대백과사전멀티미디어서비스JSON",
+      "operation": "한국민속대백과사전사진상세조회",
+      "provider": "folk",
+      "endpoint_host": "folkency.nfm.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "folk_missing_required_params",
+      "verified_at": "2026-06-24T01:42:10Z",
+      "params": {
+        "group_name": "",
+        "md_idx": "",
+        "page": "1",
+        "size": "1",
+        "tit_idx": ""
+      },
+      "missing_params": [
+        "group_name",
+        "md_idx"
+      ]
+    },
+    {
+      "dataset_id": "15126343",
+      "title": "문화체육관광부 국립민속박물관_한국민속대백과사전멀티미디어서비스JSON",
+      "operation": "한국민속대백과사전음원목록조회",
+      "provider": "folk",
+      "endpoint_host": "folkency.nfm.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-06-24T01:42:10Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "result_code/message",
+        "code": "200"
+      },
+      "url": "https://folkency.nfm.go.kr/api/FolkTradClturMltmd/getSoundList?page=1\u0026serviceKey=REDACTED\u0026size=1",
+      "params": {
+        "dictionary": "",
+        "korname": "",
+        "page": "1",
+        "size": "1",
+        "summary": "",
+        "tit_idx": ""
+      },
+      "body_shape": "json_items"
+    }
+  ]
+}

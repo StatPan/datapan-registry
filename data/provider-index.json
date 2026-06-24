@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-24T01:22:06Z",
+  "generated_at": "2026-06-24T01:42:28Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 4,
-  "host_count": 7,
+  "adapter_count": 5,
+  "host_count": 8,
   "adapters": [
     {
       "name": "ekape",
@@ -20,6 +20,16 @@
       "hosts": [
         "openapi.epost.go.kr",
         "openapi.epost.go.kr:80"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "folk",
+      "status": "registered",
+      "hosts": [
+        "folkency.nfm.go.kr"
       ],
       "capabilities": [
         "verification"

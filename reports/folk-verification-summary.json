@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-06-24T01:42:10Z",
+  "source": "reports\\folk-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 3,
+    "verified": 2,
+    "failed": 0,
+    "skipped": 1,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 2,
+        "status": "verified"
+      },
+      {
+        "key": "skipped",
+        "count": 1,
+        "status": "skipped"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "folk_missing_required_params",
+        "count": 1,
+        "reason": "folk_missing_required_params"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "folk",
+        "count": 3,
+        "provider": "folk"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "folkency.nfm.go.kr",
+        "count": 3,
+        "host": "folkency.nfm.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 3,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

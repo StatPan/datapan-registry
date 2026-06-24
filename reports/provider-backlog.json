@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-24T01:22:06Z",
+  "generated_at": "2026-06-24T01:42:28Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -10,11 +10,11 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 40,
     "external_guide_hosts": 150,
-    "registered_adapter_hosts": 7,
+    "registered_adapter_hosts": 8,
     "operation_hosts": 42,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 33,
-    "needs_adapter_operations": 366,
+    "missing_adapter_hosts": 32,
+    "needs_adapter_operations": 363,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
@@ -380,19 +380,6 @@
       ]
     },
     {
-      "host": "folkency.nfm.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "missing",
-      "specs": 1,
-      "operations": 3,
-      "external_endpoint_operations": 3,
-      "sample_ids": [
-        "15126343"
-      ]
-    },
-    {
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -616,6 +603,20 @@
       "sample_ids": [
         "3044607",
         "3071170"
+      ]
+    },
+    {
+      "host": "folkency.nfm.go.kr",
+      "provider": "folk",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "sample_ids": [
+        "15126343"
       ]
     },
     {
