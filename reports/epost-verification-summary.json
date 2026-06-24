@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-06-24T00:23:42Z",
+  "source": "reports/epost-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 5,
+    "verified": 0,
+    "failed": 0,
+    "skipped": 5,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "skipped",
+        "count": 5,
+        "status": "skipped"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "epost_wadl_metadata_only",
+        "count": 3,
+        "reason": "epost_wadl_metadata_only"
+      },
+      {
+        "key": "epost_unsupported_protocol",
+        "count": 2,
+        "reason": "epost_unsupported_protocol"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "epost",
+        "count": 5,
+        "provider": "epost"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "openapi.epost.go.kr:80",
+        "count": 5,
+        "host": "openapi.epost.go.kr:80"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 5,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

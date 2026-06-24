@@ -37,6 +37,9 @@ check. That workflow:
 - checks that `data/data-go-kr.registry.json` is the full materialized file,
   not an LFS pointer;
 - checks out `StatPan/datapan-cli`;
+- rereads provider-specific verification reports and regenerates bounded
+  summaries for qnet, epost, ekape, forest, folk, airport, and the merged
+  latest report;
 - runs `catalog release verify`;
 - runs `catalog release readiness`.
 - installs the latest GitHub Release zip with
@@ -55,10 +58,18 @@ adapters:
 
 ```bash
 datapan catalog verify --registry data/data-go-kr.registry.json --provider q-net --kind external_endpoint --limit 5 --output reports/qnet-verification.json --json
+datapan catalog verify summary --input reports/qnet-verification.json --output reports/qnet-verification-summary.json --json
 datapan catalog verify --registry data/data-go-kr.registry.json --provider epost --kind external_endpoint --limit 5 --output reports/epost-verification.json --json
+datapan catalog verify summary --input reports/epost-verification.json --output reports/epost-verification-summary.json --json
 datapan catalog verify --registry data/data-go-kr.registry.json --provider ekape --kind external_endpoint --limit 5 --output reports/ekape-verification.json --json
 datapan catalog verify summary --input reports/ekape-verification.json --output reports/ekape-verification-summary.json --json
-datapan catalog verify merge --input reports/qnet-verification.json --input reports/epost-verification.json --input reports/ekape-verification.json --output reports/latest-verification.json --json
+datapan catalog verify --registry data/data-go-kr.registry.json --provider forest --kind external_endpoint --limit 4 --output reports/forest-verification.json --json
+datapan catalog verify summary --input reports/forest-verification.json --output reports/forest-verification-summary.json --json
+datapan catalog verify --registry data/data-go-kr.registry.json --provider folk --kind external_endpoint --limit 3 --output reports/folk-verification.json --json
+datapan catalog verify summary --input reports/folk-verification.json --output reports/folk-verification-summary.json --json
+datapan catalog verify --registry data/data-go-kr.registry.json --provider airport --kind external_endpoint --limit 6 --output reports/airport-verification.json --json
+datapan catalog verify summary --input reports/airport-verification.json --output reports/airport-verification-summary.json --json
+datapan catalog verify merge --input reports/qnet-verification.json --input reports/epost-verification.json --input reports/ekape-verification.json --input reports/forest-verification.json --input reports/folk-verification.json --input reports/airport-verification.json --output reports/latest-verification.json --json
 datapan catalog verify summary --input reports/latest-verification.json --output reports/latest-verification-summary.json --json
 ```
 

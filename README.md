@@ -11,10 +11,12 @@ re-importing the upstream data.go.kr catalog every time.
 
 - Provider: `data.go.kr`
 - Specs: `12060`
-- Latest release: `v2026.06.24.3`
-- Registered external adapters: `ekape`, `epost`, `q-net`
-- Runtime verification evidence: q-net, epost, and ekape bounded
-  external-provider runs merged into `reports/latest-verification.json`
+- Latest release: `v2026.06.24.6`
+- Registered external adapters: `airport`, `ekape`, `epost`, `folk`, `forest`,
+  `q-net`
+- Runtime verification evidence: `28` bounded external-provider checks merged
+  into `reports/latest-verification.json` (`6` verified, `9` failed, `13`
+  skipped)
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
 - Provider index: `data/provider-index.json`
@@ -37,8 +39,9 @@ The same checks run in GitHub Actions on pushes, pull requests, version tags,
 manual dispatches, and a weekly scheduled release-health check. The workflow
 checks out this repository with Git LFS enabled, verifies that
 `data/data-go-kr.registry.json` is materialized as the full registry file, runs
-release verification and readiness through `datapan-cli`, and smoke-tests that
-the latest GitHub Release zip can be installed with
+provider-specific verification summary checks, runs release verification and
+readiness through `datapan-cli`, and smoke-tests that the latest GitHub Release
+zip can be installed with
 `datapan catalog install datapan-registry`.
 
 The current snapshot was generated from `datapan-cli` and includes:
@@ -72,10 +75,18 @@ reports/
   dependencies.json
   adapter-targets.json
   provider-backlog.json
+  airport-verification.json
+  airport-verification-summary.json
   ekape-verification.json
   ekape-verification-summary.json
-  qnet-verification.json
   epost-verification.json
+  epost-verification-summary.json
+  folk-verification.json
+  folk-verification-summary.json
+  forest-verification.json
+  forest-verification-summary.json
+  qnet-verification.json
+  qnet-verification-summary.json
   latest-verification.json
   latest-verification-summary.json
   latest-release-verification.json
