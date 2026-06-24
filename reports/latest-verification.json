@@ -1,0 +1,255 @@
+{
+  "generated_at": "2026-06-24T00:25:28Z",
+  "provider": "data.go.kr",
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 10,
+  "truncated": true,
+  "filtered_count": 10,
+  "summary": {
+    "total": 10,
+    "verified": 0,
+    "failed": 0,
+    "skipped": 10,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15003003",
+      "title": "한국산업인력공단_국가자격 종목별 자격정보",
+      "operation": "국가기술자격의 종목별 자격정보를 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_wadl_metadata_only",
+      "verified_at": "2026-06-24T00:23:41Z",
+      "params": {
+        "jmCd": ""
+      },
+      "missing_params": [
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15003024",
+      "title": "한국산업인력공단_국가자격 종목 목록 정보",
+      "operation": "국가기술자격 종목 목록조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_wadl_metadata_only",
+      "verified_at": "2026-06-24T00:23:41Z"
+    },
+    {
+      "dataset_id": "15003027",
+      "title": "한국산업인력공단_국가전문자격 시험 시행일정 정보",
+      "operation": "국가전문자격 시험 시행일정 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_wadl_metadata_only",
+      "verified_at": "2026-06-24T00:23:41Z",
+      "params": {
+        "seriesCd": ""
+      },
+      "missing_params": [
+        "seriesCd"
+      ]
+    },
+    {
+      "dataset_id": "15003029",
+      "title": "한국산업인력공단_국가기술자격 종목별 시험정보",
+      "operation": "기능사 시험 시행일정 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_wadl_metadata_only",
+      "verified_at": "2026-06-24T00:23:41Z"
+    },
+    {
+      "dataset_id": "15003029",
+      "title": "한국산업인력공단_국가기술자격 종목별 시험정보",
+      "operation": "기능장 시험 시행일정 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_wadl_metadata_only",
+      "verified_at": "2026-06-24T00:23:41Z"
+    },
+    {
+      "dataset_id": "15000032",
+      "title": "과학기술정보통신부 우정사업본부_EMS신청 저장 서비스",
+      "operation": "EMS신청취소처리",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_unsupported_protocol",
+      "verified_at": "2026-06-24T00:23:42Z",
+      "params": {
+        "cancelCn": "",
+        "rceptNo 접수번호 14 1 E2010090300108 EMS 접수번호": ""
+      },
+      "missing_params": [
+        "rceptNo 접수번호 14 1 E2010090300108 EMS 접수번호",
+        "cancelCn"
+      ]
+    },
+    {
+      "dataset_id": "15000032",
+      "title": "과학기술정보통신부 우정사업본부_EMS신청 저장 서비스",
+      "operation": "건별EMS신청",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_unsupported_protocol",
+      "verified_at": "2026-06-24T00:23:42Z",
+      "params": {
+        "Applcnt": "",
+        "Co": "",
+        "Hscode": "",
+        "Metpay": "",
+        "Pc": "",
+        "Prdloc": "",
+        "Recptr": "",
+        "applcntAdresNm": "",
+        "applcntDetailAdresNm": "",
+        "applcntEmail": "",
+        "applcntMbtlnum1": "",
+        "applcntMbtlnum2": "",
+        "applcntMbtlnum3": "",
+        "applcntMbtlnum4": "",
+        "applcntNm": "",
+        "applcntTelno1": "",
+        "applcntTelno2": "",
+        "applcntTelno3": "",
+        "applcntTelno4": "",
+        "applcntZipNo": "",
+        "cnNm": "",
+        "pickupPartclrMatter": "",
+        "recptrAdresNm": "",
+        "recptrEmail": "",
+        "recptrNation1": "",
+        "recptrNation2": "",
+        "recptrNation3": "",
+        "recptrTelno1": "",
+        "recptrTelno2": "",
+        "recptrTelno3": "",
+        "recptrTelno4": "",
+        "recptrZipNo": "",
+        "seCd": "",
+        "seNm": "",
+        "todayRceptClosDe": "",
+        "todayRceptPlace": "",
+        "todayRceptPosblAt": "",
+        "visitHopeDe": "",
+        "visitHopeMt": "",
+        "visitHopeYy": "",
+        "wtUn": ""
+      },
+      "missing_params": [
+        "recptrTelno2",
+        "recptrTelno3",
+        "recptrTelno4",
+        "recptrNation1",
+        "recptrNation2",
+        "recptrNation3",
+        "recptrZipNo",
+        "recptrAdresNm",
+        "cnNm",
+        "Co",
+        "Pc",
+        "wtUn",
+        "Hscode",
+        "Prdloc",
+        "seCd",
+        "seNm",
+        "Applcnt",
+        "applcntNm",
+        "applcntTelno1",
+        "applcntTelno2",
+        "applcntTelno3",
+        "applcntTelno4",
+        "applcntEmail",
+        "applcntMbtlnum1",
+        "applcntMbtlnum2",
+        "applcntMbtlnum3",
+        "applcntMbtlnum4",
+        "applcntZipNo",
+        "applcntAdresNm",
+        "applcntDetailAdresNm",
+        "Metpay",
+        "visitHopeYy",
+        "visitHopeMt",
+        "visitHopeDe",
+        "pickupPartclrMatter",
+        "todayRceptPlace",
+        "todayRceptPosblAt",
+        "todayRceptClosDe",
+        "Recptr",
+        "recptrEmail",
+        "recptrTelno1"
+      ]
+    },
+    {
+      "dataset_id": "15000124",
+      "title": "과학기술정보통신부 우정사업본부_도로명주소조회서비스",
+      "operation": "새우편번호 도로명주소 조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-24T00:23:42Z",
+      "params": {
+        "countPerPage": "1",
+        "currentPage": "1",
+        "searchSe": "",
+        "srchwrd": ""
+      },
+      "missing_params": [
+        "searchSe",
+        "srchwrd"
+      ]
+    },
+    {
+      "dataset_id": "15000268",
+      "title": "과학기술정보통신부 우정사업본부_지번주소조회 서비스",
+      "operation": "광역시/도",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-24T00:23:42Z"
+    },
+    {
+      "dataset_id": "15000268",
+      "title": "과학기술정보통신부 우정사업본부_지번주소조회 서비스",
+      "operation": "복합검색",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-24T00:23:42Z",
+      "params": {
+        "areaNm": "",
+        "countPerPage": "1",
+        "currentPage": "1",
+        "searchSe": "",
+        "srchwrd": ""
+      },
+      "missing_params": [
+        "areaNm",
+        "searchSe",
+        "srchwrd"
+      ]
+    }
+  ]
+}

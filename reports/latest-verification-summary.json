@@ -1,0 +1,72 @@
+{
+  "generated_at": "2026-06-24T00:25:28Z",
+  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-with-evidence\\reports\\latest-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 0,
+  "truncated": false,
+  "summary": {
+    "total": 10,
+    "verified": 0,
+    "failed": 0,
+    "skipped": 10,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "skipped",
+        "count": 10,
+        "status": "skipped"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "qnet_wadl_metadata_only",
+        "count": 5,
+        "reason": "qnet_wadl_metadata_only"
+      },
+      {
+        "key": "epost_wadl_metadata_only",
+        "count": 3,
+        "reason": "epost_wadl_metadata_only"
+      },
+      {
+        "key": "epost_unsupported_protocol",
+        "count": 2,
+        "reason": "epost_unsupported_protocol"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "epost",
+        "count": 5,
+        "provider": "epost"
+      },
+      {
+        "key": "q-net",
+        "count": 5,
+        "provider": "q-net"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "openapi.epost.go.kr:80",
+        "count": 5,
+        "host": "openapi.epost.go.kr:80"
+      },
+      {
+        "key": "openapi.q-net.or.kr",
+        "count": 5,
+        "host": "openapi.q-net.or.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 10,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

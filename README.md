@@ -12,6 +12,8 @@ re-importing the upstream data.go.kr catalog every time.
 - Provider: `data.go.kr`
 - Specs: `12060`
 - Registered external adapters: `epost`, `q-net`
+- Runtime verification evidence: q-net and epost bounded external-provider
+  runs merged into `reports/latest-verification.json`
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
 - Provider index: `data/provider-index.json`
@@ -47,6 +49,8 @@ The current snapshot was generated from `datapan-cli` and includes:
 - dependency inventory;
 - adapter target work queue;
 - provider backlog;
+- latest merged verification evidence;
+- latest verification summary;
 - provenance.
 
 ## Layout
@@ -64,6 +68,10 @@ reports/
   dependencies.json
   adapter-targets.json
   provider-backlog.json
+  qnet-verification.json
+  epost-verification.json
+  latest-verification.json
+  latest-verification-summary.json
   latest-release-verification.json
   latest-release-readiness.json
 provenance/

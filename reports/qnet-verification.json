@@ -1,0 +1,88 @@
+{
+  "generated_at": "2026-06-24T00:23:41Z",
+  "provider": "data.go.kr",
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 5,
+  "truncated": true,
+  "filters": {
+    "provider": "q-net",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 5,
+  "summary": {
+    "total": 5,
+    "verified": 0,
+    "failed": 0,
+    "skipped": 5,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15003003",
+      "title": "한국산업인력공단_국가자격 종목별 자격정보",
+      "operation": "국가기술자격의 종목별 자격정보를 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_wadl_metadata_only",
+      "verified_at": "2026-06-24T00:23:41Z",
+      "params": {
+        "jmCd": ""
+      },
+      "missing_params": [
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15003024",
+      "title": "한국산업인력공단_국가자격 종목 목록 정보",
+      "operation": "국가기술자격 종목 목록조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_wadl_metadata_only",
+      "verified_at": "2026-06-24T00:23:41Z"
+    },
+    {
+      "dataset_id": "15003027",
+      "title": "한국산업인력공단_국가전문자격 시험 시행일정 정보",
+      "operation": "국가전문자격 시험 시행일정 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_wadl_metadata_only",
+      "verified_at": "2026-06-24T00:23:41Z",
+      "params": {
+        "seriesCd": ""
+      },
+      "missing_params": [
+        "seriesCd"
+      ]
+    },
+    {
+      "dataset_id": "15003029",
+      "title": "한국산업인력공단_국가기술자격 종목별 시험정보",
+      "operation": "기능사 시험 시행일정 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_wadl_metadata_only",
+      "verified_at": "2026-06-24T00:23:41Z"
+    },
+    {
+      "dataset_id": "15003029",
+      "title": "한국산업인력공단_국가기술자격 종목별 시험정보",
+      "operation": "기능장 시험 시행일정 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_wadl_metadata_only",
+      "verified_at": "2026-06-24T00:23:41Z"
+    }
+  ]
+}
