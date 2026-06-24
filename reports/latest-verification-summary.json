@@ -1,40 +1,60 @@
 {
-  "generated_at": "2026-06-24T02:12:42Z",
+  "generated_at": "2026-06-24T12:49:19Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 28,
-    "verified": 6,
-    "failed": 9,
-    "skipped": 13,
+    "total": 68,
+    "verified": 14,
+    "failed": 10,
+    "skipped": 44,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 13,
+        "count": 44,
         "status": "skipped"
       },
       {
-        "key": "failed",
-        "count": 9,
-        "status": "failed"
+        "key": "verified",
+        "count": 14,
+        "status": "verified"
       },
       {
-        "key": "verified",
-        "count": 6,
-        "status": "verified"
+        "key": "failed",
+        "count": 10,
+        "status": "failed"
       }
     ],
     "by_reason": [
       {
+        "key": "missing_required_params",
+        "count": 10,
+        "reason": "missing_required_params"
+      },
+      {
         "key": "qnet_wadl_metadata_only",
-        "count": 5,
+        "count": 9,
         "reason": "qnet_wadl_metadata_only"
+      },
+      {
+        "key": "epost_wadl_metadata_only",
+        "count": 8,
+        "reason": "epost_wadl_metadata_only"
+      },
+      {
+        "key": "ekape_missing_required_params",
+        "count": 7,
+        "reason": "ekape_missing_required_params"
+      },
+      {
+        "key": "epost_unsupported_protocol",
+        "count": 5,
+        "reason": "epost_unsupported_protocol"
       },
       {
         "key": "airport_service_key_not_registered",
@@ -47,19 +67,14 @@
         "reason": "ekape_service_key_not_registered"
       },
       {
-        "key": "epost_wadl_metadata_only",
-        "count": 3,
-        "reason": "epost_wadl_metadata_only"
-      },
-      {
         "key": "airport_missing_required_params",
         "count": 2,
         "reason": "airport_missing_required_params"
       },
       {
-        "key": "epost_unsupported_protocol",
+        "key": "epost_missing_required_params",
         "count": 2,
-        "reason": "epost_unsupported_protocol"
+        "reason": "epost_missing_required_params"
       },
       {
         "key": "ekape_html_response",
@@ -70,28 +85,38 @@
         "key": "folk_missing_required_params",
         "count": 1,
         "reason": "folk_missing_required_params"
+      },
+      {
+        "key": "qnet_connection_validation_failed",
+        "count": 1,
+        "reason": "qnet_connection_validation_failed"
       }
     ],
     "by_provider": [
       {
-        "key": "airport",
-        "count": 6,
-        "provider": "airport"
-      },
-      {
         "key": "ekape",
-        "count": 5,
+        "count": 15,
         "provider": "ekape"
       },
       {
         "key": "epost",
-        "count": 5,
+        "count": 15,
         "provider": "epost"
       },
       {
         "key": "q-net",
-        "count": 5,
+        "count": 15,
         "provider": "q-net"
+      },
+      {
+        "key": "data.go.kr",
+        "count": 10,
+        "provider": "data.go.kr"
+      },
+      {
+        "key": "airport",
+        "count": 6,
+        "provider": "airport"
       },
       {
         "key": "forest",
@@ -106,24 +131,29 @@
     ],
     "by_endpoint_host": [
       {
-        "key": "openapi.airport.co.kr",
-        "count": 6,
-        "host": "openapi.airport.co.kr"
-      },
-      {
         "key": "data.ekape.or.kr",
-        "count": 5,
+        "count": 15,
         "host": "data.ekape.or.kr"
       },
       {
+        "key": "openapi.q-net.or.kr",
+        "count": 15,
+        "host": "openapi.q-net.or.kr"
+      },
+      {
         "key": "openapi.epost.go.kr:80",
-        "count": 5,
+        "count": 13,
         "host": "openapi.epost.go.kr:80"
       },
       {
-        "key": "openapi.q-net.or.kr",
-        "count": 5,
-        "host": "openapi.q-net.or.kr"
+        "key": "apis.data.go.kr",
+        "count": 10,
+        "host": "apis.data.go.kr"
+      },
+      {
+        "key": "openapi.airport.co.kr",
+        "count": 6,
+        "host": "openapi.airport.co.kr"
       },
       {
         "key": "api.forest.go.kr",
@@ -134,13 +164,23 @@
         "key": "folkency.nfm.go.kr",
         "count": 3,
         "host": "folkency.nfm.go.kr"
+      },
+      {
+        "key": "openapi.epost.go.kr",
+        "count": 2,
+        "host": "openapi.epost.go.kr"
       }
     ],
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 28,
+        "count": 58,
         "kind": "external_endpoint"
+      },
+      {
+        "key": "data_go_kr_gateway",
+        "count": 10,
+        "kind": "data_go_kr_gateway"
       }
     ]
   }

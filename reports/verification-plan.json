@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-24T12:44:02Z",
+  "generated_at": "2026-06-24T12:49:48Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -8,9 +8,9 @@
   "timeout": "10s",
   "summary": {
     "operations": 12205,
-    "evidence_total": 28,
-    "uncovered_gateway_candidates": 11419,
-    "uncovered_adapter_candidates": 209,
+    "evidence_total": 68,
+    "uncovered_gateway_candidates": 11409,
+    "uncovered_adapter_candidates": 179,
     "missing_adapter_hosts": 31,
     "planned_batches": 4,
     "planned_operations": 40
@@ -20,7 +20,7 @@
       "label": "gateway",
       "kind": "data_go_kr_gateway",
       "candidates": 11419,
-      "uncovered_candidates": 11419,
+      "uncovered_candidates": 11409,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --kind data_go_kr_gateway --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gateway-next.json --json",
       "output": ".datapan/verification/gateway-next.json"
@@ -30,7 +30,7 @@
       "provider": "ekape",
       "kind": "external_endpoint",
       "candidates": 49,
-      "uncovered_candidates": 44,
+      "uncovered_candidates": 34,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider ekape --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ekape-next.json --json",
       "output": ".datapan/verification/ekape-next.json"
@@ -40,7 +40,7 @@
       "provider": "epost",
       "kind": "external_endpoint",
       "candidates": 28,
-      "uncovered_candidates": 23,
+      "uncovered_candidates": 13,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider epost --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/epost-next.json --json",
       "output": ".datapan/verification/epost-next.json"
@@ -50,7 +50,7 @@
       "provider": "q-net",
       "kind": "external_endpoint",
       "candidates": 147,
-      "uncovered_candidates": 142,
+      "uncovered_candidates": 132,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider q-net --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/q-net-next.json --json",
       "output": ".datapan/verification/q-net-next.json"

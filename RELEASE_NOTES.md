@@ -1,6 +1,6 @@
 # Datapan Registry Release
 
-- generated_at: `2026-06-24T12:43:54Z`
+- generated_at: `2026-06-24T12:49:40Z`
 - provider: `data.go.kr`
 - datapan_version: `0.1.0-dev`
 - source_registry: `data\data-go-kr.registry.json`
@@ -22,9 +22,9 @@
 - dependency_operations: `12205` total, `11419` gateway, `594` external, `237` registered-adapter, `376` missing-adapter
 - adapter_backlog: `31` target hosts, `376` target operations
 - provider_backlog: `179` hosts, `31` missing-adapter hosts, `357` operations needing adapters
-- coverage: `12063` callable operations (`98.8%`), external adapter coverage `38.7%`, verification evidence coverage `0.2%`
+- coverage: `12063` callable operations (`98.8%`), external adapter coverage `38.7%`, verification evidence coverage `0.6%`
 - coverage_artifact: `reports/coverage.json`
-- verification_plan: `4` batches, `40` planned operations, `11419` gateway gaps, `209` adapter gaps
+- verification_plan: `4` batches, `40` planned operations, `11409` gateway gaps, `179` adapter gaps
 - verification_plan_artifact: `reports/verification-plan.json`
 
 Top adapter targets:
@@ -37,18 +37,18 @@ Top adapter targets:
 
 ## Verification Evidence
 
-- verification: `28` total, `6` verified, `9` failed, `13` skipped, `0` unknown
+- verification: `68` total, `14` verified, `10` failed, `44` skipped, `0` unknown
 - verification_artifact: `reports/latest-verification.json`
 - verification_summary_artifact: `reports/latest-verification-summary.json`
 
 Provider evidence:
 
+- `ekape`: `15`
+- `epost`: `15`
+- `q-net`: `15`
+- `data.go.kr`: `10`
 - `airport`: `6`
-- `ekape`: `5`
-- `epost`: `5`
-- `q-net`: `5`
 - `forest`: `4`
-- `folk`: `3`
 
 ## Publication Checks
 

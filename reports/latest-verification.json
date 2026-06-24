@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-24T02:12:42Z",
+  "generated_at": "2026-06-24T12:49:19Z",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
-  "limit": 28,
+  "limit": 68,
   "truncated": true,
-  "filtered_count": 28,
+  "filtered_count": 68,
   "summary": {
-    "total": 28,
-    "verified": 6,
-    "failed": 9,
-    "skipped": 13,
+    "total": 68,
+    "verified": 14,
+    "failed": 10,
+    "skipped": 44,
     "unknown": 0
   },
   "results": [
@@ -682,6 +682,989 @@
         "edate",
         "sdate"
       ]
+    },
+    {
+      "dataset_id": "15000115",
+      "title": "법제처 국가법령정보 공유서비스",
+      "operation": "법령용어정보 목록 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "query": "",
+        "target": ""
+      },
+      "missing_params": [
+        "target",
+        "query"
+      ]
+    },
+    {
+      "dataset_id": "15000115",
+      "title": "법제처 국가법령정보 공유서비스",
+      "operation": "법령정보 목록 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "query": "",
+        "target": ""
+      },
+      "missing_params": [
+        "target",
+        "query"
+      ]
+    },
+    {
+      "dataset_id": "15000115",
+      "title": "법제처 국가법령정보 공유서비스",
+      "operation": "법령해석례정보 목록 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "query": "",
+        "target": ""
+      },
+      "missing_params": [
+        "target",
+        "query"
+      ]
+    },
+    {
+      "dataset_id": "15000115",
+      "title": "법제처 국가법령정보 공유서비스",
+      "operation": "별표서식정보 목록 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "query": "",
+        "target": ""
+      },
+      "missing_params": [
+        "target",
+        "query"
+      ]
+    },
+    {
+      "dataset_id": "15000115",
+      "title": "법제처 국가법령정보 공유서비스",
+      "operation": "자치법규정보 목록 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "query": "",
+        "target": ""
+      },
+      "missing_params": [
+        "target",
+        "query"
+      ]
+    },
+    {
+      "dataset_id": "15000115",
+      "title": "법제처 국가법령정보 공유서비스",
+      "operation": "조약정보 목록 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "query": "",
+        "target": ""
+      },
+      "missing_params": [
+        "target",
+        "query"
+      ]
+    },
+    {
+      "dataset_id": "15000115",
+      "title": "법제처 국가법령정보 공유서비스",
+      "operation": "행정규칙정보 목록 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "query": "",
+        "target": ""
+      },
+      "missing_params": [
+        "target",
+        "query"
+      ]
+    },
+    {
+      "dataset_id": "15000115",
+      "title": "법제처 국가법령정보 공유서비스",
+      "operation": "헌재결정례정보 목록 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "query": "",
+        "target": ""
+      },
+      "missing_params": [
+        "target",
+        "query"
+      ]
+    },
+    {
+      "dataset_id": "15000415",
+      "title": "기상청_기상특보 조회서비스",
+      "operation": "기상속보목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "dataType": "json",
+        "fromTmFc": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "stnId": "",
+        "toTmFc": ""
+      },
+      "missing_params": [
+        "stnId",
+        "fromTmFc",
+        "toTmFc"
+      ]
+    },
+    {
+      "dataset_id": "15000415",
+      "title": "기상청_기상특보 조회서비스",
+      "operation": "기상속보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "dataType": "json",
+        "fromTmFc": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "stnId": "",
+        "toTmFc": ""
+      },
+      "missing_params": [
+        "stnId",
+        "fromTmFc",
+        "toTmFc"
+      ]
+    },
+    {
+      "dataset_id": "15000577",
+      "title": "축산물품질평가원_축산물유통정보",
+      "operation": "연도별 축산물소비자가격 정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-24T12:48:04Z",
+      "params": {
+        "judgeKind": "1",
+        "standY": ""
+      },
+      "missing_params": [
+        "standY"
+      ]
+    },
+    {
+      "dataset_id": "15000577",
+      "title": "축산물품질평가원_축산물유통정보",
+      "operation": "오리 검수(소비)확인정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-06-24T12:48:04Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "NORMAL SERVICE."
+      },
+      "url": "http://data.ekape.or.kr/openapi-data/service/user/confirm/duckCoustomer?issueDate=20240101\u0026issueNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "issueDate": "20240101",
+        "issueNo": "1"
+      },
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15000577",
+      "title": "축산물품질평가원_축산물유통정보",
+      "operation": "월별 축산물소비자가격 정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-06-24T12:48:04Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "NORMAL SERVICE."
+      },
+      "url": "http://data.ekape.or.kr/openapi-data/service/user/grade/consumerPriceMonth?judgeKind=1\u0026serviceKey=REDACTED\u0026standYm=202401",
+      "params": {
+        "judgeKind": "1",
+        "standYm": "202401"
+      },
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15000577",
+      "title": "축산물품질평가원_축산물유통정보",
+      "operation": "일자별 축산물소비자가격 정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-24T12:48:04Z",
+      "params": {
+        "itemCd": "",
+        "judgeKind": "1",
+        "standYmd": ""
+      },
+      "missing_params": [
+        "standYmd",
+        "itemCd"
+      ]
+    },
+    {
+      "dataset_id": "15000577",
+      "title": "축산물품질평가원_축산물유통정보",
+      "operation": "축산물 재고동향",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-24T12:48:04Z",
+      "params": {
+        "judgeKind": "1",
+        "standMm": "",
+        "standYyyy": ""
+      },
+      "missing_params": [
+        "standYyyy",
+        "standMm"
+      ]
+    },
+    {
+      "dataset_id": "15056733",
+      "title": "축산물품질평가원_축산물DNA동일성검사 업소정보",
+      "operation": "축산물DNA동일성검사 업소정보 조회",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-24T12:48:04Z",
+      "params": {
+        "endYmd": "20240101",
+        "localNm": "",
+        "orgCd": "",
+        "sampleTypeCd": "",
+        "startYmd": "20240101"
+      },
+      "missing_params": [
+        "sampleTypeCd",
+        "localNm",
+        "orgCd"
+      ]
+    },
+    {
+      "dataset_id": "15057101",
+      "title": "축산물품질평가원_축산물등급판정확인서 발급정보",
+      "operation": "가금산물 등급판정확인서 발급번호정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-24T12:48:04Z",
+      "params": {
+        "animalNo": "",
+        "issueYear": ""
+      },
+      "missing_params": [
+        "animalNo",
+        "issueYear"
+      ]
+    },
+    {
+      "dataset_id": "15057101",
+      "title": "축산물품질평가원_축산물등급판정확인서 발급정보",
+      "operation": "소 묶음번호 정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-06-24T12:48:04Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "NORMAL SERVICE."
+      },
+      "url": "http://data.ekape.or.kr/openapi-data/service/user/grade/confirm/cattleLotIssueNo?lotNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "lotNo": "1"
+      },
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15057101",
+      "title": "축산물품질평가원_축산물등급판정확인서 발급정보",
+      "operation": "소,돼지 등급판정확인서 발급번호정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-24T12:48:04Z",
+      "params": {
+        "animalNo": ""
+      },
+      "missing_params": [
+        "animalNo"
+      ]
+    },
+    {
+      "dataset_id": "15057912",
+      "title": "축산물품질평가원_축산물경락가격정보",
+      "operation": "쇠고기 부분육 경락가격 조회",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-24T12:48:04Z",
+      "params": {
+        "abattCd": "",
+        "endYmd": "20240101",
+        "sexCd": "",
+        "startYmd": "20240101"
+      },
+      "missing_params": [
+        "abattCd",
+        "sexCd"
+      ]
+    },
+    {
+      "dataset_id": "15000268",
+      "title": "과학기술정보통신부 우정사업본부_지번주소조회 서비스",
+      "operation": "상세검색",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-24T12:48:17Z",
+      "params": {
+        "countPerPage": "1",
+        "currentPage": "1",
+        "searchSe": "",
+        "srchwrd": ""
+      },
+      "missing_params": [
+        "searchSe",
+        "srchwrd"
+      ]
+    },
+    {
+      "dataset_id": "15000268",
+      "title": "과학기술정보통신부 우정사업본부_지번주소조회 서비스",
+      "operation": "시/군/구",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-24T12:48:17Z",
+      "params": {
+        "brtcCd": ""
+      },
+      "missing_params": [
+        "brtcCd"
+      ]
+    },
+    {
+      "dataset_id": "15000268",
+      "title": "과학기술정보통신부 우정사업본부_지번주소조회 서비스",
+      "operation": "읍/면/동 조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-24T12:48:17Z",
+      "params": {
+        "brtcCd": "",
+        "signguCd": ""
+      },
+      "missing_params": [
+        "brtcCd",
+        "signguCd"
+      ]
+    },
+    {
+      "dataset_id": "15000268",
+      "title": "과학기술정보통신부 우정사업본부_지번주소조회 서비스",
+      "operation": "지번 조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-24T12:48:17Z",
+      "params": {
+        "brtcCd": "",
+        "countPerPage": "1",
+        "currentPage": "1",
+        "emdCd": "",
+        "signguCd": ""
+      },
+      "missing_params": [
+        "brtcCd",
+        "signguCd",
+        "emdCd"
+      ]
+    },
+    {
+      "dataset_id": "15000302",
+      "title": "과학기술정보통신부 우정사업본부_우편번호 다운로드 서비스",
+      "operation": "우편번호 DB 다운로드 서비스",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-24T12:48:17Z",
+      "params": {
+        "dwldSe": ""
+      },
+      "missing_params": [
+        "dwldSe"
+      ]
+    },
+    {
+      "dataset_id": "15000741",
+      "title": "과학기술정보통신부 우정사업본부_택배신청 저장 서비스",
+      "operation": "택배신청",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_unsupported_protocol",
+      "verified_at": "2026-06-24T12:48:17Z",
+      "params": {
+        "agreeYn": "",
+        "applcntAdresNm": "",
+        "applcntDetailAdresNm": "",
+        "applcntMbtlnum1": "",
+        "applcntMbtlnum2": "",
+        "applcntMbtlnum3": "",
+        "applcntNm": "",
+        "applcntTelno1": "",
+        "applcntTelno2": "",
+        "applcntTelno3": "",
+        "applcntZipNo": "",
+        "chrgeBndAt": "",
+        "cnCd": "",
+        "cnNm": "",
+        "dlvyPartclrMatter": "",
+        "ecptrZipNo": "",
+        "email": "",
+        "hopeRceptDe": "",
+        "lblAdresNm": "",
+        "lblAt": "",
+        "lblDetailAdresNm": "",
+        "lblMbtlnum1": "",
+        "lblMbtlnum2": "",
+        "lblMbtlnum3": "",
+        "lblNm": "",
+        "lblTelno1": "",
+        "lblTelno2": "",
+        "lblTelno3": "",
+        "lblZipNo": "",
+        "pickArea": "",
+        "pickMan": "",
+        "pickParty": "",
+        "rceptResultRecptnAt": "",
+        "recptr": "",
+        "recptrAdresNm": "",
+        "recptrDetailAdresNm": "",
+        "recptrMbtlnum1": "",
+        "recptrMbtlnum2": "",
+        "recptrMbtlnum3": "",
+        "recptrTelno1": "",
+        "recptrTelno2": "",
+        "recptrTelno3": "",
+        "userId": "",
+        "visitRceptDe": "",
+        "visitRceptPstofc": "",
+        "vlUn": "",
+        "wishReceiptTime": "",
+        "wishReceiptTimeInterval": "",
+        "wtUn": ""
+      },
+      "missing_params": [
+        "wishReceiptTime",
+        "applcntMbtlnum3",
+        "recptr",
+        "ecptrZipNo",
+        "recptrAdresNm",
+        "recptrDetailAdresNm",
+        "recptrTelno1",
+        "recptrTelno2",
+        "recptrTelno3",
+        "recptrMbtlnum1",
+        "recptrMbtlnum2",
+        "recptrMbtlnum3",
+        "wtUn",
+        "vlUn",
+        "cnNm",
+        "cnCd",
+        "dlvyPartclrMatter",
+        "email",
+        "visitRceptPstofc",
+        "chrgeBndAt",
+        "rceptResultRecptnAt",
+        "hopeRceptDe",
+        "visitRceptDe",
+        "lblAt",
+        "lblNm",
+        "lblZipNo",
+        "lblAdresNm",
+        "lblDetailAdresNm",
+        "lblTelno1",
+        "lblTelno2",
+        "lblTelno3",
+        "lblMbtlnum1",
+        "lblMbtlnum2",
+        "lblMbtlnum3",
+        "userId",
+        "wishReceiptTimeInterval",
+        "pickMan",
+        "pickArea",
+        "pickParty",
+        "agreeYn",
+        "applcntNm",
+        "applcntZipNo",
+        "applcntAdresNm",
+        "applcntDetailAdresNm",
+        "applcntTelno1",
+        "applcntTelno2",
+        "applcntTelno3",
+        "applcntMbtlnum1",
+        "applcntMbtlnum2"
+      ]
+    },
+    {
+      "dataset_id": "15000741",
+      "title": "과학기술정보통신부 우정사업본부_택배신청 저장 서비스",
+      "operation": "택배신청취소",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_unsupported_protocol",
+      "verified_at": "2026-06-24T12:48:17Z",
+      "params": {
+        "reqstNo": ""
+      },
+      "missing_params": [
+        "reqstNo"
+      ]
+    },
+    {
+      "dataset_id": "15000741",
+      "title": "과학기술정보통신부 우정사업본부_택배신청 저장 서비스",
+      "operation": "택배접수완료처리",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_unsupported_protocol",
+      "verified_at": "2026-06-24T12:48:17Z",
+      "params": {
+        "applcntAdresNm": "",
+        "applcntDetailAdresNm": "",
+        "applcntMbtlnum1": "",
+        "applcntMbtlnum2": "",
+        "applcntMbtlnum3": "",
+        "applcntNm": "",
+        "applcntTelno1": "",
+        "applcntTelno2": "",
+        "applcntTelno3": "",
+        "applcntZipNo": "",
+        "chrgeBndAt": "",
+        "cnCd": "",
+        "cnNm": "",
+        "dlvyPartclrMatter": "",
+        "ecptrZipNo": "",
+        "email": "",
+        "hopeRceptDe": "",
+        "lblAdresNm": "",
+        "lblAt": "",
+        "lblDetailAdresNm": "",
+        "lblMbtlnum1": "",
+        "lblMbtlnum2": "",
+        "lblMbtlnum3": "",
+        "lblNm": "",
+        "lblTelno1": "",
+        "lblTelno2": "",
+        "lblTelno3": "",
+        "lblZipNo": "",
+        "pickArea": "",
+        "pickMan": "",
+        "pickParty": "",
+        "rceptResultRecptnAt": "",
+        "recptr": "",
+        "recptrAdresNm": "",
+        "recptrDetailAdresNm": "",
+        "recptrMbtlnum1": "",
+        "recptrMbtlnum2": "",
+        "recptrMbtlnum3": "",
+        "recptrTelno1": "",
+        "recptrTelno2": "",
+        "recptrTelno3": "",
+        "userId": "",
+        "visitRceptDe": "",
+        "visitRceptPstofc": "",
+        "vlUn": "",
+        "wishReceiptTime": "",
+        "wishReceiptTimeInterval": "",
+        "wtUn": ""
+      },
+      "missing_params": [
+        "lblDetailAdresNm",
+        "lblTelno1",
+        "lblTelno2",
+        "lblTelno3",
+        "lblMbtlnum1",
+        "lblMbtlnum2",
+        "lblMbtlnum3",
+        "userId",
+        "wishReceiptTimeInterval",
+        "pickMan",
+        "pickArea",
+        "pickParty",
+        "wishReceiptTime",
+        "applcntNm",
+        "applcntZipNo",
+        "applcntAdresNm",
+        "applcntDetailAdresNm",
+        "applcntTelno1",
+        "applcntTelno2",
+        "applcntTelno3",
+        "applcntMbtlnum1",
+        "applcntMbtlnum2",
+        "applcntMbtlnum3",
+        "recptr",
+        "ecptrZipNo",
+        "recptrAdresNm",
+        "recptrDetailAdresNm",
+        "recptrTelno1",
+        "recptrTelno2",
+        "recptrTelno3",
+        "recptrMbtlnum1",
+        "recptrMbtlnum2",
+        "recptrMbtlnum3",
+        "wtUn",
+        "vlUn",
+        "cnNm",
+        "cnCd",
+        "dlvyPartclrMatter",
+        "email",
+        "visitRceptPstofc",
+        "chrgeBndAt",
+        "rceptResultRecptnAt",
+        "hopeRceptDe",
+        "visitRceptDe",
+        "lblAt",
+        "lblNm",
+        "lblZipNo",
+        "lblAdresNm"
+      ]
+    },
+    {
+      "dataset_id": "15035122",
+      "title": "과학기술정보통신부 우정사업본부_우체국 종적 조회",
+      "operation": "우체국통합배송목록조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_missing_required_params",
+      "verified_at": "2026-06-24T12:48:17Z",
+      "params": {
+        "rgist": ""
+      },
+      "missing_params": [
+        "rgist"
+      ]
+    },
+    {
+      "dataset_id": "15056672",
+      "title": "과학기술정보통신부 우정사업본부_우체국 배달점주소 조회 서비스",
+      "operation": "우체국 배달점주소 권역정보 조회 서비스",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_missing_required_params",
+      "verified_at": "2026-06-24T12:48:17Z",
+      "params": {
+        "Addr": ""
+      },
+      "missing_params": [
+        "Addr"
+      ]
+    },
+    {
+      "dataset_id": "15003029",
+      "title": "한국산업인력공단_국가기술자격 종목별 시험정보",
+      "operation": "기사, 산업기사 시험 시행일정 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_wadl_metadata_only",
+      "verified_at": "2026-06-24T12:48:49Z"
+    },
+    {
+      "dataset_id": "15003029",
+      "title": "한국산업인력공단_국가기술자격 종목별 시험정보",
+      "operation": "기술사 시험 시행일정 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_wadl_metadata_only",
+      "verified_at": "2026-06-24T12:48:49Z"
+    },
+    {
+      "dataset_id": "15003029",
+      "title": "한국산업인력공단_국가기술자격 종목별 시험정보",
+      "operation": "종목별 시행일정 목록  조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_wadl_metadata_only",
+      "verified_at": "2026-06-24T12:48:49Z",
+      "params": {
+        "jmCd": ""
+      },
+      "missing_params": [
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15003029",
+      "title": "한국산업인력공단_국가기술자격 종목별 시험정보",
+      "operation": "종목별 응시수수료 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_wadl_metadata_only",
+      "verified_at": "2026-06-24T12:48:49Z",
+      "params": {
+        "jmCd": ""
+      },
+      "missing_params": [
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15025329",
+      "title": "한국산업인력공단_산업인력 국가기술자격 통계 정보",
+      "operation": "연도별 등급별 실기 합격률 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-06-24T12:48:49Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "NORMAL SERVICE."
+      },
+      "url": "http://openapi.q-net.or.kr/api/service/rest/InquiryStatSVC/getGradSiPassList?baseYY=2023\u0026serviceKey=REDACTED",
+      "params": {
+        "baseYY": "2023"
+      },
+      "body_shape": "xml_items"
+    },
+    {
+      "dataset_id": "15025329",
+      "title": "한국산업인력공단_산업인력 국가기술자격 통계 정보",
+      "operation": "연도별 등급별 실기시험 응시자수 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-06-24T12:48:49Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "NORMAL SERVICE."
+      },
+      "url": "http://openapi.q-net.or.kr/api/service/rest/InquiryStatSVC/getGradSiExamList?baseYY=2023\u0026serviceKey=REDACTED",
+      "params": {
+        "baseYY": "2023"
+      },
+      "body_shape": "xml_items"
+    },
+    {
+      "dataset_id": "15025329",
+      "title": "한국산업인력공단_산업인력 국가기술자격 통계 정보",
+      "operation": "연도별 등급별 필기 응시자수",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-06-24T12:48:49Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "NORMAL SERVICE."
+      },
+      "url": "http://openapi.q-net.or.kr/api/service/rest/InquiryStatSVC/getGradPiExamList?baseYY=2023\u0026serviceKey=REDACTED",
+      "params": {
+        "baseYY": "2023"
+      },
+      "body_shape": "xml_items"
+    },
+    {
+      "dataset_id": "15025329",
+      "title": "한국산업인력공단_산업인력 국가기술자격 통계 정보",
+      "operation": "연도별 등급별 필기 합격률 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-06-24T12:48:49Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "NORMAL SERVICE."
+      },
+      "url": "http://openapi.q-net.or.kr/api/service/rest/InquiryStatSVC/getGradPiPassList?baseYY=2023\u0026serviceKey=REDACTED",
+      "params": {
+        "baseYY": "2023"
+      },
+      "body_shape": "xml_items"
+    },
+    {
+      "dataset_id": "15025329",
+      "title": "한국산업인력공단_산업인력 국가기술자격 통계 정보",
+      "operation": "연도별 응시자 및 합격자수 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "qnet_connection_validation_failed",
+      "verified_at": "2026-06-24T12:48:49Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "Failed to validate a newly established connection.",
+        "reason_code": "qnet_connection_validation_failed"
+      },
+      "url": "http://openapi.q-net.or.kr/api/service/rest/InquiryStatSVC/getTotExamList?baseYY=2023\u0026serviceKey=REDACTED",
+      "params": {
+        "baseYY": "2023"
+      },
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15025329",
+      "title": "한국산업인력공단_산업인력 국가기술자격 통계 정보",
+      "operation": "자격취득자 연도별 등급별 수 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-06-24T12:48:49Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "NORMAL SERVICE."
+      },
+      "url": "http://openapi.q-net.or.kr/api/service/rest/InquiryStatSVC/getCertYearGradeList?baseYY=2023\u0026serviceKey=REDACTED",
+      "params": {
+        "baseYY": "2023"
+      },
+      "body_shape": "xml_items"
     }
   ]
 }
