@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-24T12:49:45Z",
+  "generated_at": "2026-06-24T15:19:50Z",
   "provider": "data.go.kr",
-  "registry": ".\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-jeonju\\data\\data-go-kr.registry.json",
   "source": "release",
-  "verification": ".\\reports\\latest-verification.json",
+  "verification": "C:\\workspace\\datapan-registry\\.datapan\\release-jeonju\\reports\\latest-verification.json",
   "summary": {
     "specs": 12060,
     "operations": 12205,
@@ -11,49 +11,32 @@
     "callable_operation_percent": 98.8,
     "data_go_kr_gateway_operations": 11419,
     "external_endpoint_operations": 594,
-    "registered_adapter_operations": 237,
-    "missing_adapter_operations": 376,
-    "external_adapter_coverage_percent": 38.7,
+    "registered_adapter_operations": 317,
+    "missing_adapter_operations": 296,
+    "external_adapter_coverage_percent": 51.7,
     "approval_required_operations": 4142,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
-    "registered_adapter_hosts": 9,
-    "missing_adapter_hosts": 31,
-    "adapter_count": 6,
+    "registered_adapter_hosts": 10,
+    "missing_adapter_hosts": 30,
+    "adapter_count": 7,
     "call_capable_adapters": 2,
     "provider_split_ready": true
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-06-24T12:49:19Z",
-    "total": 68,
+    "generated_at": "2026-06-24T15:19:31Z",
+    "total": 73,
     "verified": 14,
-    "failed": 10,
+    "failed": 15,
     "skipped": 44,
     "unknown": 0,
-    "verified_percent": 20.6,
+    "verified_percent": 19.2,
     "evidence_operation_percent": 0.6
   },
   "gaps": {
     "missing_adapter_hosts": [
-      {
-        "host": "openapi.jeonju.go.kr",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "missing",
-        "specs": 49,
-        "operations": 80,
-        "external_endpoint_operations": 80,
-        "external_guide_specs": 32,
-        "sample_ids": [
-          "15000354",
-          "15004414",
-          "15004788"
-        ]
-      },
       {
         "host": "data.geoje.go.kr",
         "kinds": [
@@ -198,6 +181,23 @@
           "15000834",
           "15000935"
         ]
+      },
+      {
+        "host": "data.humetro.busan.kr",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "missing",
+        "specs": 8,
+        "operations": 8,
+        "external_endpoint_operations": 8,
+        "external_guide_specs": 1,
+        "sample_ids": [
+          "15001011",
+          "15001018",
+          "15001019"
+        ]
       }
     ],
     "adapter_hosts": [
@@ -218,6 +218,24 @@
           "15003003",
           "15003024",
           "15003027"
+        ]
+      },
+      {
+        "host": "openapi.jeonju.go.kr",
+        "provider": "jeonju",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "adapter",
+        "specs": 49,
+        "operations": 80,
+        "external_endpoint_operations": 80,
+        "external_guide_specs": 32,
+        "sample_ids": [
+          "15000354",
+          "15004414",
+          "15004788"
         ]
       },
       {
@@ -354,10 +372,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-06-24T12:49:45Z",
+    "generated_at": "2026-06-24T15:19:50Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 6,
-    "host_count": 9,
+    "adapter_count": 7,
+    "host_count": 10,
     "adapters": [
       {
         "name": "airport",
@@ -413,6 +431,16 @@
         ]
       },
       {
+        "name": "jeonju",
+        "status": "registered",
+        "hosts": [
+          "openapi.jeonju.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "q-net",
         "status": "registered",
         "hosts": [
@@ -428,8 +456,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 6,
-      "verification_capable_adapters": 6,
+      "adapter_count": 7,
+      "verification_capable_adapters": 7,
       "call_capable_adapters": 2,
       "required_adapters": 2,
       "required_verification_adapters": 2,
@@ -441,19 +469,19 @@
   "next": [
     {
       "label": "missing adapters",
-      "command": "datapan catalog providers --registry .\\data\\data-go-kr.registry.json --status missing --kind external_endpoint --limit 20 --json"
+      "command": "datapan providers --registry C:\\workspace\\datapan-registry\\.datapan\\release-jeonju\\data\\data-go-kr.registry.json --gaps --limit 20 --json"
     },
     {
       "label": "adapter targets",
-      "command": "datapan catalog adapter-targets --registry .\\data\\data-go-kr.registry.json --limit 20 --json"
+      "command": "datapan targets --registry C:\\workspace\\datapan-registry\\.datapan\\release-jeonju\\data\\data-go-kr.registry.json --limit 20 --json"
     },
     {
       "label": "coverage report",
-      "command": "datapan catalog coverage --registry .\\data\\data-go-kr.registry.json --verification .\\reports\\latest-verification.json --json"
+      "command": "datapan coverage --registry C:\\workspace\\datapan-registry\\.datapan\\release-jeonju\\data\\data-go-kr.registry.json --verification C:\\workspace\\datapan-registry\\.datapan\\release-jeonju\\reports\\latest-verification.json --json"
     },
     {
       "label": "verify forest",
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider forest --kind external_endpoint --limit 4 --timeout 10s --json"
+      "command": "datapan verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-jeonju\\data\\data-go-kr.registry.json --provider forest --kind external_endpoint --limit 4 --timeout 10s --json"
     }
   ]
 }

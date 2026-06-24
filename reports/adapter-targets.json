@@ -1,85 +1,22 @@
 {
-  "generated_at": "2026-06-24T12:49:40Z",
+  "generated_at": "2026-06-24T15:19:43Z",
   "provider": "data.go.kr",
-  "registry": ".\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-jeonju\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 31,
+  "filtered_count": 30,
   "summary": {
-    "target_hosts": 31,
-    "target_operations": 376,
-    "external_endpoint_operations": 357,
+    "target_hosts": 30,
+    "target_operations": 296,
+    "external_endpoint_operations": 277,
     "service_root_operations": 19,
     "approval_required_operations": 42,
-    "missing_param_operations": 346,
+    "missing_param_operations": 268,
     "unsupported_protocol_operations": 30
   },
   "targets": [
     {
       "rank": 1,
-      "host": "openapi.jeonju.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 80,
-      "specs": 49,
-      "organizations": [
-        "전북특별자치도 전주시"
-      ],
-      "source_categories": [
-        "공공행정",
-        "과학기술",
-        "교육",
-        "교통물류",
-        "국토관리",
-        "농축수산",
-        "문화관광",
-        "보건의료",
-        "사회복지",
-        "산업고용",
-        "재난안전",
-        "환경기상"
-      ],
-      "api_types": [
-        "REST"
-      ],
-      "data_formats": [
-        "JSON+XML",
-        "XML"
-      ],
-      "missing_param_operations": 78,
-      "sample_operations": [
-        {
-          "dataset_id": "15000354",
-          "title": "전북특별자치도 전주시_소통정보서비스",
-          "organization": "전북특별자치도 전주시",
-          "operation": "CCTV 목록 및 사진",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://openapi.jeonju.go.kr/jeonjubus/openApi/traffic"
-        },
-        {
-          "dataset_id": "15000354",
-          "title": "전북특별자치도 전주시_소통정보서비스",
-          "organization": "전북특별자치도 전주시",
-          "operation": "도로명 목록 조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://openapi.jeonju.go.kr/jeonjubus/openApi/traffic"
-        },
-        {
-          "dataset_id": "15000354",
-          "title": "전북특별자치도 전주시_소통정보서비스",
-          "organization": "전북특별자치도 전주시",
-          "operation": "도로별 현황 상세 정보",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://openapi.jeonju.go.kr/jeonjubus/openApi/traffic",
-          "missing_params": [
-            "loadResult"
-          ]
-        }
-      ]
-    },
-    {
-      "rank": 2,
       "host": "data.geoje.go.kr",
       "kinds": [
         "external_endpoint"
@@ -142,7 +79,7 @@
       ]
     },
     {
-      "rank": 3,
+      "rank": 2,
       "host": "data.uiryeong.go.kr",
       "kinds": [
         "external_endpoint"
@@ -220,7 +157,7 @@
       ]
     },
     {
-      "rank": 4,
+      "rank": 3,
       "host": "oneclick.law.go.kr:80",
       "kinds": [
         "external_endpoint"
@@ -279,7 +216,7 @@
       ]
     },
     {
-      "rank": 5,
+      "rank": 4,
       "host": "openapi.tour.go.kr",
       "kinds": [
         "external_endpoint",
@@ -340,7 +277,7 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 5,
       "host": "data.sisul.or.kr",
       "kinds": [
         "external_endpoint"
@@ -402,7 +339,7 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 6,
       "host": "openapi.its.ulsan.kr",
       "kinds": [
         "external_endpoint"
@@ -453,7 +390,7 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 7,
       "host": "www.korad.or.kr",
       "kinds": [
         "external_endpoint"
@@ -510,7 +447,7 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 8,
       "host": "www.andong.go.kr",
       "kinds": [
         "external_endpoint"
@@ -572,7 +509,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "open.itfind.or.kr",
       "kinds": [
         "external_endpoint"
@@ -632,7 +569,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "data.naqs.go.kr",
       "kinds": [
         "external_endpoint"
@@ -729,7 +666,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "data.humetro.busan.kr",
       "kinds": [
         "external_endpoint"
@@ -794,7 +731,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "host": "openapi.ebid.lh.or.kr",
       "kinds": [
         "external_endpoint"
@@ -855,7 +792,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 13,
       "host": "openapi.coast.kr",
       "kinds": [
         "external_endpoint"
@@ -902,7 +839,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 14,
       "host": "openapi.kpx.or.kr",
       "kinds": [
         "external_endpoint"
@@ -951,7 +888,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 15,
       "host": "ws.bus.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1010,7 +947,7 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 16,
       "host": "data.jeju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1070,7 +1007,7 @@
       ]
     },
     {
-      "rank": 18,
+      "rank": 17,
       "host": "www.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1129,7 +1066,7 @@
       ]
     },
     {
-      "rank": 19,
+      "rank": 18,
       "host": "car.daegu.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1189,7 +1126,7 @@
       ]
     },
     {
-      "rank": 20,
+      "rank": 19,
       "host": "openapi.pqis.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1252,7 +1189,7 @@
       ]
     },
     {
-      "rank": 21,
+      "rank": 20,
       "host": "openapi.price.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1311,7 +1248,7 @@
       ]
     },
     {
-      "rank": 22,
+      "rank": 21,
       "host": "openapi.gblib.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1369,7 +1306,7 @@
       ]
     },
     {
-      "rank": 23,
+      "rank": 22,
       "host": "oneclick.law.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1438,7 +1375,7 @@
       ]
     },
     {
-      "rank": 24,
+      "rank": 23,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -1495,7 +1432,7 @@
       ]
     },
     {
-      "rank": 25,
+      "rank": 24,
       "host": "www.emuseum.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1565,7 +1502,7 @@
       ]
     },
     {
-      "rank": 26,
+      "rank": 25,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1616,7 +1553,7 @@
       ]
     },
     {
-      "rank": 27,
+      "rank": 26,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1673,7 +1610,7 @@
       ]
     },
     {
-      "rank": 28,
+      "rank": 27,
       "host": "data.myhome.go.kr:443",
       "kinds": [
         "external_endpoint"
@@ -1709,7 +1646,7 @@
       ]
     },
     {
-      "rank": 29,
+      "rank": 28,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1745,7 +1682,7 @@
       ]
     },
     {
-      "rank": 30,
+      "rank": 29,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -1776,7 +1713,7 @@
       ]
     },
     {
-      "rank": 31,
+      "rank": 30,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

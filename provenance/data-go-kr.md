@@ -1,27 +1,27 @@
 # data.go.kr Release Provenance
 
-- generated_at: 2026-06-24T12:49:40Z
+- generated_at: 2026-06-24T15:19:43Z
 - datapan_version: 0.1.0-dev
 - source_provider: data.go.kr
-- source_registry: data\data-go-kr.registry.json
-- previous_registry: .datapan\previous\data-go-kr.registry.json
-- release_registry: .\data\data-go-kr.registry.json
+- source_registry: C:\workspace\datapan-registry\data\data-go-kr.registry.json
+- previous_registry: C:\workspace\datapan-registry\.datapan\previous\data-go-kr.registry.json
+- release_registry: C:\workspace\datapan-registry\.datapan\release-jeonju\data\data-go-kr.registry.json
 - provider_limit: 0
-- verification_source: reports\latest-verification.json
+- verification_source: C:\workspace\datapan-registry\reports\latest-verification.json
 
 ## Commands
 
 ```bash
-datapan catalog release draft --registry data\data-go-kr.registry.json --output-dir . --provider-limit 0 --previous-registry .datapan\previous\data-go-kr.registry.json --verification reports\latest-verification.json --json
-# provider index: .\data\provider-index.json
-datapan catalog diff --old .datapan\previous\data-go-kr.registry.json --new .\data\data-go-kr.registry.json --limit 0 --output .\reports\catalog-diff.json --json
-datapan catalog audit --registry .\data\data-go-kr.registry.json --output .\reports\catalog-audit.json --json
-datapan catalog errors --registry .\data\data-go-kr.registry.json --output .\reports\error-catalog.json --json
-datapan catalog dependencies --registry .\data\data-go-kr.registry.json --limit 0 --output .\reports\dependencies.json --json
-datapan catalog adapter-targets --registry .\data\data-go-kr.registry.json --limit 0 --output .\reports\adapter-targets.json --json
-datapan catalog providers --registry .\data\data-go-kr.registry.json --limit 0 --output .\reports\provider-backlog.json --json
-datapan catalog verify --input .\reports\latest-verification.json --json
-datapan catalog verify summary --input .\reports\latest-verification.json --output .\reports\latest-verification-summary.json --json
-datapan catalog coverage --registry .\data\data-go-kr.registry.json --verification .\reports\latest-verification.json --output .\reports\coverage.json --json
-datapan catalog verify plan --registry .\data\data-go-kr.registry.json --verification .\reports\latest-verification.json --output .\reports\verification-plan.json --json
+datapan catalog release draft --registry C:\workspace\datapan-registry\data\data-go-kr.registry.json --output-dir C:\workspace\datapan-registry\.datapan\release-jeonju --provider-limit 0 --previous-registry C:\workspace\datapan-registry\.datapan\previous\data-go-kr.registry.json --verification C:\workspace\datapan-registry\reports\latest-verification.json --json
+# provider index: C:\workspace\datapan-registry\.datapan\release-jeonju\data\provider-index.json
+datapan catalog diff --old C:\workspace\datapan-registry\.datapan\previous\data-go-kr.registry.json --new C:\workspace\datapan-registry\.datapan\release-jeonju\data\data-go-kr.registry.json --limit 0 --output C:\workspace\datapan-registry\.datapan\release-jeonju\reports\catalog-diff.json --json
+datapan catalog audit --registry C:\workspace\datapan-registry\.datapan\release-jeonju\data\data-go-kr.registry.json --output C:\workspace\datapan-registry\.datapan\release-jeonju\reports\catalog-audit.json --json
+datapan catalog errors --registry C:\workspace\datapan-registry\.datapan\release-jeonju\data\data-go-kr.registry.json --output C:\workspace\datapan-registry\.datapan\release-jeonju\reports\error-catalog.json --json
+datapan catalog dependencies --registry C:\workspace\datapan-registry\.datapan\release-jeonju\data\data-go-kr.registry.json --limit 0 --output C:\workspace\datapan-registry\.datapan\release-jeonju\reports\dependencies.json --json
+datapan catalog adapter-targets --registry C:\workspace\datapan-registry\.datapan\release-jeonju\data\data-go-kr.registry.json --limit 0 --output C:\workspace\datapan-registry\.datapan\release-jeonju\reports\adapter-targets.json --json
+datapan catalog providers --registry C:\workspace\datapan-registry\.datapan\release-jeonju\data\data-go-kr.registry.json --limit 0 --output C:\workspace\datapan-registry\.datapan\release-jeonju\reports\provider-backlog.json --json
+datapan catalog verify --input C:\workspace\datapan-registry\.datapan\release-jeonju\reports\latest-verification.json --json
+datapan catalog verify summary --input C:\workspace\datapan-registry\.datapan\release-jeonju\reports\latest-verification.json --output C:\workspace\datapan-registry\.datapan\release-jeonju\reports\latest-verification-summary.json --json
+datapan catalog coverage --registry C:\workspace\datapan-registry\.datapan\release-jeonju\data\data-go-kr.registry.json --verification C:\workspace\datapan-registry\.datapan\release-jeonju\reports\latest-verification.json --output C:\workspace\datapan-registry\.datapan\release-jeonju\reports\coverage.json --json
+datapan catalog verify plan --registry C:\workspace\datapan-registry\.datapan\release-jeonju\data\data-go-kr.registry.json --verification C:\workspace\datapan-registry\.datapan\release-jeonju\reports\latest-verification.json --output C:\workspace\datapan-registry\.datapan\release-jeonju\reports\verification-plan.json --json
 ```

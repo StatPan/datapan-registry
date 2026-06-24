@@ -1,14 +1,13 @@
 {
-  "generated_at": "2026-06-24T12:49:19Z",
+  "generated_at": "2026-06-24T15:19:31Z",
   "provider": "data.go.kr",
-  "registry": "data\\data-go-kr.registry.json",
-  "limit": 68,
+  "limit": 73,
   "truncated": true,
-  "filtered_count": 68,
+  "filtered_count": 73,
   "summary": {
-    "total": 68,
+    "total": 73,
     "verified": 14,
-    "failed": 10,
+    "failed": 15,
     "skipped": 44,
     "unknown": 0
   },
@@ -1665,6 +1664,93 @@
         "baseYY": "2023"
       },
       "body_shape": "xml_items"
+    },
+    {
+      "dataset_id": "15000354",
+      "title": "전북특별자치도 전주시_소통정보서비스",
+      "operation": "CCTV 목록 및 사진",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "jeonju_http_404_not_found",
+      "verified_at": "2026-06-24T15:18:45Z",
+      "http_status": 404,
+      "semantic_status": "http_error",
+      "url": "http://openapi.jeonju.go.kr/jeonjubus/openApi/traffic?ServiceKey=REDACTED",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15000354",
+      "title": "전북특별자치도 전주시_소통정보서비스",
+      "operation": "도로명 목록 조회",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "jeonju_http_404_not_found",
+      "verified_at": "2026-06-24T15:18:45Z",
+      "http_status": 404,
+      "semantic_status": "http_error",
+      "url": "http://openapi.jeonju.go.kr/jeonjubus/openApi/traffic?ServiceKey=REDACTED",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15000354",
+      "title": "전북특별자치도 전주시_소통정보서비스",
+      "operation": "도로별 현황 상세 정보",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "jeonju_http_404_not_found",
+      "verified_at": "2026-06-24T15:18:45Z",
+      "http_status": 404,
+      "semantic_status": "http_error",
+      "url": "http://openapi.jeonju.go.kr/jeonjubus/openApi/traffic?ServiceKey=REDACTED\u0026loadResult=%EB%B0%B1%EC%A0%9C%EB%8C%80%EB%A1%9C",
+      "params": {
+        "loadResult": "백제대로"
+      },
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15004414",
+      "title": "전북특별자치도 전주시_주요공사 정보",
+      "operation": "주요공사 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "jeonju_http_405_method_not_allowed",
+      "verified_at": "2026-06-24T15:18:45Z",
+      "http_status": 405,
+      "semantic_status": "http_error",
+      "url": "http://openapi.jeonju.go.kr/rest/work?indexNum=1\u0026pageSize=1\u0026serviceKey=REDACTED\u0026startPage=1\u0026subject=",
+      "params": {
+        "indexNum": "1",
+        "pageSize": "1",
+        "startPage": "1",
+        "subject": ""
+      },
+      "body_shape": "empty"
+    },
+    {
+      "dataset_id": "15004414",
+      "title": "전북특별자치도 전주시_주요공사 정보",
+      "operation": "현재날짜기준 진행중인 공사목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "jeonju_http_405_method_not_allowed",
+      "verified_at": "2026-06-24T15:18:45Z",
+      "http_status": 405,
+      "semantic_status": "http_error",
+      "url": "http://openapi.jeonju.go.kr/rest/work?dong=%EC%A4%91%EC%95%99%EB%8F%99\u0026serviceKey=REDACTED",
+      "params": {
+        "dong": "중앙동"
+      },
+      "body_shape": "empty"
     }
   ]
 }

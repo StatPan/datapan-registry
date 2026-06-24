@@ -1,14 +1,13 @@
 {
-  "generated_at": "2026-06-24T12:49:19Z",
-  "source": ".\\reports\\latest-verification.json",
+  "generated_at": "2026-06-24T15:19:31Z",
+  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-jeonju\\reports\\latest-verification.json",
   "provider": "data.go.kr",
-  "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 68,
+    "total": 73,
     "verified": 14,
-    "failed": 10,
+    "failed": 15,
     "skipped": 44,
     "unknown": 0
   },
@@ -20,14 +19,14 @@
         "status": "skipped"
       },
       {
+        "key": "failed",
+        "count": 15,
+        "status": "failed"
+      },
+      {
         "key": "verified",
         "count": 14,
         "status": "verified"
-      },
-      {
-        "key": "failed",
-        "count": 10,
-        "status": "failed"
       }
     ],
     "by_reason": [
@@ -67,6 +66,11 @@
         "reason": "ekape_service_key_not_registered"
       },
       {
+        "key": "jeonju_http_404_not_found",
+        "count": 3,
+        "reason": "jeonju_http_404_not_found"
+      },
+      {
         "key": "airport_missing_required_params",
         "count": 2,
         "reason": "airport_missing_required_params"
@@ -75,6 +79,11 @@
         "key": "epost_missing_required_params",
         "count": 2,
         "reason": "epost_missing_required_params"
+      },
+      {
+        "key": "jeonju_http_405_method_not_allowed",
+        "count": 2,
+        "reason": "jeonju_http_405_method_not_allowed"
       },
       {
         "key": "ekape_html_response",
@@ -119,6 +128,11 @@
         "provider": "airport"
       },
       {
+        "key": "jeonju",
+        "count": 5,
+        "provider": "jeonju"
+      },
+      {
         "key": "forest",
         "count": 4,
         "provider": "forest"
@@ -156,6 +170,11 @@
         "host": "openapi.airport.co.kr"
       },
       {
+        "key": "openapi.jeonju.go.kr",
+        "count": 5,
+        "host": "openapi.jeonju.go.kr"
+      },
+      {
         "key": "api.forest.go.kr",
         "count": 4,
         "host": "api.forest.go.kr"
@@ -174,7 +193,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 58,
+        "count": 63,
         "kind": "external_endpoint"
       },
       {

@@ -13,16 +13,16 @@ re-importing the upstream data.go.kr catalog every time.
 - Specs: `12060`
 - Operations: `12205`
 - Callable operations: `12063` (`98.8%`)
-- Latest release: `v2026.06.24.6`
+- Latest release: `v2026.06.25`
 - Registered external adapters: `airport`, `ekape`, `epost`, `folk`, `forest`,
-  `q-net`
-- External adapter coverage: `237` registered-adapter operations out of `594`
-  external endpoint operations (`38.7%`)
-- Missing external adapter hosts: `31`
+  `jeonju`, `q-net`
+- External adapter coverage: `317` registered-adapter operations out of `594`
+  external endpoint operations (`51.7%`)
+- Missing external adapter hosts: `30`
 - Provider split readiness: `ready`
-  (`6` adapters, `6` verification-capable, `2` call-capable)
-- Runtime verification evidence: `68` bounded checks merged into
-  `reports/latest-verification.json` (`14` verified, `10` failed, `44`
+  (`7` adapters, `7` verification-capable, `2` call-capable)
+- Runtime verification evidence: `73` bounded checks merged into
+  `reports/latest-verification.json` (`14` verified, `15` failed, `44`
   skipped)
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
@@ -94,6 +94,8 @@ reports/
   folk-verification-summary.json
   forest-verification.json
   forest-verification-summary.json
+  jeonju-verification.json
+  jeonju-verification-summary.json
   qnet-verification.json
   qnet-verification-summary.json
   latest-verification.json

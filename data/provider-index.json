@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-24T12:49:40Z",
+  "generated_at": "2026-06-24T15:19:43Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 6,
-  "host_count": 9,
+  "adapter_count": 7,
+  "host_count": 10,
   "adapters": [
     {
       "name": "airport",
@@ -58,6 +58,16 @@
       ]
     },
     {
+      "name": "jeonju",
+      "status": "registered",
+      "hosts": [
+        "openapi.jeonju.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "q-net",
       "status": "registered",
       "hosts": [
@@ -73,8 +83,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 6,
-    "verification_capable_adapters": 6,
+    "adapter_count": 7,
+    "verification_capable_adapters": 7,
     "call_capable_adapters": 2,
     "required_adapters": 2,
     "required_verification_adapters": 2,
