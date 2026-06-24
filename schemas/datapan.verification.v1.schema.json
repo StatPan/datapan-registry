@@ -32,6 +32,10 @@
       "type": "string",
       "minLength": 1
     },
+    "exclude_input": {
+      "type": "string",
+      "minLength": 1
+    },
     "truncated": {
       "type": "boolean"
     },

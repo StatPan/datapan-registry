@@ -1,6 +1,6 @@
 # data.go.kr Release Provenance
 
-- generated_at: 2026-06-24T12:22:04Z
+- generated_at: 2026-06-24T12:37:43Z
 - datapan_version: 0.1.0-dev
 - source_provider: data.go.kr
 - source_registry: data\data-go-kr.registry.json
@@ -23,4 +23,5 @@ datapan catalog providers --registry .\data\data-go-kr.registry.json --limit 0 -
 datapan catalog verify --input .\reports\latest-verification.json --json
 datapan catalog verify summary --input .\reports\latest-verification.json --output .\reports\latest-verification-summary.json --json
 datapan catalog coverage --registry .\data\data-go-kr.registry.json --verification .\reports\latest-verification.json --output .\reports\coverage.json --json
+datapan catalog verify plan --registry .\data\data-go-kr.registry.json --verification .\reports\latest-verification.json --output .\reports\verification-plan.json --json
 ```

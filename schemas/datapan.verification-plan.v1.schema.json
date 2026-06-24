@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.verification-plan.v1.schema.json",
+  "title": "Datapan Verification Plan v1",
+  "description": "Next verification batches for growing Datapan runtime evidence without repeating covered operations.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["generated_at", "provider", "batch_size", "timeout", "summary", "batches", "gaps", "next"],
+  "properties": {
+    "generated_at": { "type": "string", "format": "date-time" },
+    "provider": { "type": "string", "minLength": 1 },
+    "registry": { "type": "string" },
+    "source": { "type": "string" },
+    "verification": { "type": "string" },
+    "batch_size": { "type": "integer", "minimum": 1 },
+    "timeout": { "type": "string", "minLength": 1 },
+    "summary": { "$ref": "#/$defs/summary" },
+    "batches": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/batch" }
+    },
+    "gaps": { "$ref": "#/$defs/gaps" },
+    "next": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/next" }
+    }
+  },
+  "$defs": {
+    "count": { "type": "integer", "minimum": 0 },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operations",
+        "evidence_total",
+        "uncovered_gateway_candidates",
+        "uncovered_adapter_candidates",
+        "missing_adapter_hosts",
+        "planned_batches",
+        "planned_operations"
+      ],
+      "properties": {
+        "operations": { "$ref": "#/$defs/count" },
+        "evidence_total": { "$ref": "#/$defs/count" },
+        "uncovered_gateway_candidates": { "$ref": "#/$defs/count" },
+        "uncovered_adapter_candidates": { "$ref": "#/$defs/count" },
+        "missing_adapter_hosts": { "$ref": "#/$defs/count" },
+        "planned_batches": { "$ref": "#/$defs/count" },
+        "planned_operations": { "$ref": "#/$defs/count" }
+      }
+    },
+    "batch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "kind", "candidates", "uncovered_candidates", "planned_operations", "command"],
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string" },
+        "kind": {
+          "enum": [
+            "data_go_kr_gateway",
+            "external_endpoint",
+            "service_root",
+            "no_endpoint",
+            "malformed_endpoint",
+            "soap",
+            "wms"
+          ]
+        },
+        "candidates": { "$ref": "#/$defs/count" },
+        "uncovered_candidates": { "$ref": "#/$defs/count" },
+        "planned_operations": { "$ref": "#/$defs/count" },
+        "command": { "type": "string", "minLength": 1 },
+        "output": { "type": "string" }
+      }
+    },
+    "gaps": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "missing_adapter_hosts": {
+          "type": "array",
+          "items": { "type": "object" }
+        }
+      }
+    },
+    "next": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "command"],
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "command": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

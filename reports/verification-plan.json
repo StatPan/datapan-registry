@@ -1,0 +1,231 @@
+{
+  "generated_at": "2026-06-24T12:37:52Z",
+  "provider": "data.go.kr",
+  "registry": ".\\data\\data-go-kr.registry.json",
+  "source": "release",
+  "verification": ".\\reports\\latest-verification.json",
+  "batch_size": 10,
+  "timeout": "10s",
+  "summary": {
+    "operations": 12205,
+    "evidence_total": 28,
+    "uncovered_gateway_candidates": 11419,
+    "uncovered_adapter_candidates": 209,
+    "missing_adapter_hosts": 31,
+    "planned_batches": 4,
+    "planned_operations": 40
+  },
+  "batches": [
+    {
+      "label": "gateway",
+      "kind": "data_go_kr_gateway",
+      "candidates": 11419,
+      "uncovered_candidates": 11419,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --kind data_go_kr_gateway --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gateway-next.json --json",
+      "output": ".datapan/verification/gateway-next.json"
+    },
+    {
+      "label": "ekape",
+      "provider": "ekape",
+      "kind": "external_endpoint",
+      "candidates": 49,
+      "uncovered_candidates": 44,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider ekape --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ekape-next.json --json",
+      "output": ".datapan/verification/ekape-next.json"
+    },
+    {
+      "label": "epost",
+      "provider": "epost",
+      "kind": "external_endpoint",
+      "candidates": 28,
+      "uncovered_candidates": 23,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider epost --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/epost-next.json --json",
+      "output": ".datapan/verification/epost-next.json"
+    },
+    {
+      "label": "q-net",
+      "provider": "q-net",
+      "kind": "external_endpoint",
+      "candidates": 147,
+      "uncovered_candidates": 142,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider q-net --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/q-net-next.json --json",
+      "output": ".datapan/verification/q-net-next.json"
+    }
+  ],
+  "gaps": {
+    "missing_adapter_hosts": [
+      {
+        "host": "openapi.jeonju.go.kr",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "missing",
+        "specs": 49,
+        "operations": 80,
+        "external_endpoint_operations": 80,
+        "external_guide_specs": 32,
+        "sample_ids": [
+          "15000354",
+          "15004414",
+          "15004788"
+        ]
+      },
+      {
+        "host": "data.geoje.go.kr",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "missing",
+        "specs": 12,
+        "operations": 41,
+        "external_endpoint_operations": 41,
+        "external_guide_specs": 11,
+        "sample_ids": [
+          "15005128",
+          "15005172",
+          "15014125"
+        ]
+      },
+      {
+        "host": "data.uiryeong.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 32,
+        "operations": 40,
+        "external_endpoint_operations": 40,
+        "sample_ids": [
+          "15008883",
+          "15008884",
+          "15008887"
+        ]
+      },
+      {
+        "host": "oneclick.law.go.kr:80",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 3,
+        "operations": 27,
+        "external_endpoint_operations": 27,
+        "soap_operations": 27,
+        "approval_required_operations": 15,
+        "sample_ids": [
+          "15000021",
+          "15000122",
+          "15000215"
+        ]
+      },
+      {
+        "host": "data.sisul.or.kr",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "missing",
+        "specs": 40,
+        "operations": 20,
+        "external_endpoint_operations": 20,
+        "external_guide_specs": 40,
+        "approval_required_operations": 1,
+        "sample_ids": [
+          "15002793",
+          "15002794",
+          "15002797"
+        ]
+      },
+      {
+        "host": "openapi.its.ulsan.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 3,
+        "operations": 20,
+        "external_endpoint_operations": 20,
+        "sample_ids": [
+          "15052669",
+          "3057770",
+          "3057773"
+        ]
+      },
+      {
+        "host": "www.korad.or.kr",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "missing",
+        "specs": 21,
+        "operations": 15,
+        "external_endpoint_operations": 15,
+        "external_guide_specs": 20,
+        "approval_required_operations": 10,
+        "sample_ids": [
+          "15004087",
+          "15004088",
+          "15004206"
+        ]
+      },
+      {
+        "host": "www.andong.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 10,
+        "operations": 15,
+        "external_endpoint_operations": 15,
+        "sample_ids": [
+          "15003047",
+          "15005609",
+          "15005628"
+        ]
+      },
+      {
+        "host": "open.itfind.or.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 5,
+        "operations": 13,
+        "external_endpoint_operations": 13,
+        "sample_ids": [
+          "15036874",
+          "15036875",
+          "15036876"
+        ]
+      },
+      {
+        "host": "data.naqs.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 2,
+        "operations": 9,
+        "external_endpoint_operations": 9,
+        "approval_required_operations": 8,
+        "sample_ids": [
+          "15000834",
+          "15000935"
+        ]
+      }
+    ]
+  },
+  "next": [
+    {
+      "label": "coverage",
+      "command": "datapan catalog coverage --registry .\\data\\data-go-kr.registry.json --verification .\\reports\\latest-verification.json --json"
+    }
+  ]
+}
