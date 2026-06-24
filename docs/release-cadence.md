@@ -69,7 +69,8 @@ as WADL-only metadata or unsupported SOAP operations.
 ## Publish
 
 1. Commit generated artifacts.
-2. Tag with `vYYYY.MM.DD`.
+2. Tag with `vYYYY.MM.DD`, or `vYYYY.MM.DD.N` for a second release on the same
+   date.
 3. Push the branch and tag.
 4. Create a GitHub Release.
 5. Attach a zip archive of the release snapshot so users can consume it without

@@ -11,6 +11,7 @@ re-importing the upstream data.go.kr catalog every time.
 
 - Provider: `data.go.kr`
 - Specs: `12060`
+- Latest release: `v2026.06.24.1`
 - Registered external adapters: `epost`, `q-net`
 - Runtime verification evidence: q-net and epost bounded external-provider
   runs merged into `reports/latest-verification.json`
@@ -81,7 +82,8 @@ manifest.json
 
 ## Release Policy
 
-Use date-based tags such as `v2026.06.24`.
+Use date-based tags such as `v2026.06.24`. If a second registry release is
+needed on the same date, append a patch counter such as `v2026.06.24.1`.
 
 A release is publishable when:
 
