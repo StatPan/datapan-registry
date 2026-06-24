@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-06-24T00:54:09Z",
+  "source": "C:\\workspace\\datapan-registry\\reports\\ekape-verification.json",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 5,
+    "verified": 0,
+    "failed": 5,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "failed",
+        "count": 5,
+        "status": "failed"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "ekape_service_key_not_registered",
+        "count": 4,
+        "reason": "ekape_service_key_not_registered"
+      },
+      {
+        "key": "ekape_html_response",
+        "count": 1,
+        "reason": "ekape_html_response"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "ekape",
+        "count": 5,
+        "provider": "ekape"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "data.ekape.or.kr",
+        "count": 5,
+        "host": "data.ekape.or.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 5,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

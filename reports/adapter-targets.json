@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-24T00:40:33Z",
+  "generated_at": "2026-06-24T00:55:28Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 35,
+  "filtered_count": 34,
   "summary": {
-    "target_hosts": 35,
-    "target_operations": 438,
-    "external_endpoint_operations": 419,
+    "target_hosts": 34,
+    "target_operations": 389,
+    "external_endpoint_operations": 370,
     "service_root_operations": 19,
     "approval_required_operations": 42,
-    "missing_param_operations": 404,
+    "missing_param_operations": 355,
     "unsupported_protocol_operations": 30
   },
   "targets": [
@@ -80,66 +80,6 @@
     },
     {
       "rank": 2,
-      "host": "data.ekape.or.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 49,
-      "specs": 8,
-      "organizations": [
-        "축산물품질평가원"
-      ],
-      "source_categories": [
-        "농축수산"
-      ],
-      "api_types": [
-        "REST"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "missing_param_operations": 49,
-      "sample_operations": [
-        {
-          "dataset_id": "15000577",
-          "title": "축산물품질평가원_축산물유통정보",
-          "organization": "축산물품질평가원",
-          "operation": "계란 검수(소비)확인정보",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.ekape.or.kr/openapi-data/service/user/confirm/eggCoustomer",
-          "missing_params": [
-            "issueDate",
-            "issueNo"
-          ]
-        },
-        {
-          "dataset_id": "15000577",
-          "title": "축산물품질평가원_축산물유통정보",
-          "organization": "축산물품질평가원",
-          "operation": "닭 검수(소비)확인정보",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.ekape.or.kr/openapi-data/service/user/confirm/fowlCoustomer",
-          "missing_params": [
-            "issueDate",
-            "issueNo"
-          ]
-        },
-        {
-          "dataset_id": "15000577",
-          "title": "축산물품질평가원_축산물유통정보",
-          "organization": "축산물품질평가원",
-          "operation": "돼지 검수(소비)확인정보",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.ekape.or.kr/openapi-data/service/user/confirm/pigCoustomer",
-          "missing_params": [
-            "issueDate",
-            "issueNo"
-          ]
-        }
-      ]
-    },
-    {
-      "rank": 3,
       "host": "data.geoje.go.kr",
       "kinds": [
         "external_endpoint"
@@ -202,7 +142,7 @@
       ]
     },
     {
-      "rank": 4,
+      "rank": 3,
       "host": "data.uiryeong.go.kr",
       "kinds": [
         "external_endpoint"
@@ -280,7 +220,7 @@
       ]
     },
     {
-      "rank": 5,
+      "rank": 4,
       "host": "oneclick.law.go.kr:80",
       "kinds": [
         "external_endpoint"
@@ -339,7 +279,7 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 5,
       "host": "openapi.tour.go.kr",
       "kinds": [
         "external_endpoint",
@@ -400,7 +340,7 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 6,
       "host": "data.sisul.or.kr",
       "kinds": [
         "external_endpoint"
@@ -462,7 +402,7 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 7,
       "host": "openapi.its.ulsan.kr",
       "kinds": [
         "external_endpoint"
@@ -513,7 +453,7 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 8,
       "host": "www.korad.or.kr",
       "kinds": [
         "external_endpoint"
@@ -570,7 +510,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "www.andong.go.kr",
       "kinds": [
         "external_endpoint"
@@ -632,7 +572,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "open.itfind.or.kr",
       "kinds": [
         "external_endpoint"
@@ -692,7 +632,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "data.naqs.go.kr",
       "kinds": [
         "external_endpoint"
@@ -789,7 +729,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "host": "data.humetro.busan.kr",
       "kinds": [
         "external_endpoint"
@@ -854,7 +794,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 13,
       "host": "openapi.ebid.lh.or.kr",
       "kinds": [
         "external_endpoint"
@@ -915,7 +855,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 14,
       "host": "openapi.airport.co.kr",
       "kinds": [
         "external_endpoint"
@@ -963,7 +903,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 15,
       "host": "openapi.coast.kr",
       "kinds": [
         "external_endpoint"
@@ -1010,7 +950,7 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 16,
       "host": "openapi.kpx.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1059,7 +999,7 @@
       ]
     },
     {
-      "rank": 18,
+      "rank": 17,
       "host": "ws.bus.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1118,7 +1058,7 @@
       ]
     },
     {
-      "rank": 19,
+      "rank": 18,
       "host": "api.forest.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1176,7 +1116,7 @@
       ]
     },
     {
-      "rank": 20,
+      "rank": 19,
       "host": "data.jeju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1236,7 +1176,7 @@
       ]
     },
     {
-      "rank": 21,
+      "rank": 20,
       "host": "www.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1295,7 +1235,7 @@
       ]
     },
     {
-      "rank": 22,
+      "rank": 21,
       "host": "car.daegu.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1355,7 +1295,7 @@
       ]
     },
     {
-      "rank": 23,
+      "rank": 22,
       "host": "openapi.pqis.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1418,7 +1358,7 @@
       ]
     },
     {
-      "rank": 24,
+      "rank": 23,
       "host": "openapi.price.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1477,7 +1417,7 @@
       ]
     },
     {
-      "rank": 25,
+      "rank": 24,
       "host": "openapi.gblib.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1535,7 +1475,7 @@
       ]
     },
     {
-      "rank": 26,
+      "rank": 25,
       "host": "oneclick.law.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1604,7 +1544,7 @@
       ]
     },
     {
-      "rank": 27,
+      "rank": 26,
       "host": "folkency.nfm.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1672,7 +1612,7 @@
       ]
     },
     {
-      "rank": 28,
+      "rank": 27,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -1729,7 +1669,7 @@
       ]
     },
     {
-      "rank": 29,
+      "rank": 28,
       "host": "www.emuseum.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1799,7 +1739,7 @@
       ]
     },
     {
-      "rank": 30,
+      "rank": 29,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1850,7 +1790,7 @@
       ]
     },
     {
-      "rank": 31,
+      "rank": 30,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1907,7 +1847,7 @@
       ]
     },
     {
-      "rank": 32,
+      "rank": 31,
       "host": "data.myhome.go.kr:443",
       "kinds": [
         "external_endpoint"
@@ -1943,7 +1883,7 @@
       ]
     },
     {
-      "rank": 33,
+      "rank": 32,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1979,7 +1919,7 @@
       ]
     },
     {
-      "rank": 34,
+      "rank": 33,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -2010,7 +1950,7 @@
       ]
     },
     {
-      "rank": 35,
+      "rank": 34,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

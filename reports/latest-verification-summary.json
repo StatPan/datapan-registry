@@ -1,14 +1,13 @@
 {
-  "generated_at": "2026-06-24T00:25:28Z",
+  "generated_at": "2026-06-24T00:55:17Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
-  "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 10,
+    "total": 15,
     "verified": 0,
-    "failed": 0,
+    "failed": 5,
     "skipped": 10,
     "unknown": 0
   },
@@ -18,6 +17,11 @@
         "key": "skipped",
         "count": 10,
         "status": "skipped"
+      },
+      {
+        "key": "failed",
+        "count": 5,
+        "status": "failed"
       }
     ],
     "by_reason": [
@@ -25,6 +29,11 @@
         "key": "qnet_wadl_metadata_only",
         "count": 5,
         "reason": "qnet_wadl_metadata_only"
+      },
+      {
+        "key": "ekape_service_key_not_registered",
+        "count": 4,
+        "reason": "ekape_service_key_not_registered"
       },
       {
         "key": "epost_wadl_metadata_only",
@@ -35,9 +44,19 @@
         "key": "epost_unsupported_protocol",
         "count": 2,
         "reason": "epost_unsupported_protocol"
+      },
+      {
+        "key": "ekape_html_response",
+        "count": 1,
+        "reason": "ekape_html_response"
       }
     ],
     "by_provider": [
+      {
+        "key": "ekape",
+        "count": 5,
+        "provider": "ekape"
+      },
       {
         "key": "epost",
         "count": 5,
@@ -50,6 +69,11 @@
       }
     ],
     "by_endpoint_host": [
+      {
+        "key": "data.ekape.or.kr",
+        "count": 5,
+        "host": "data.ekape.or.kr"
+      },
       {
         "key": "openapi.epost.go.kr:80",
         "count": 5,
@@ -64,7 +88,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 10,
+        "count": 15,
         "kind": "external_endpoint"
       }
     ]

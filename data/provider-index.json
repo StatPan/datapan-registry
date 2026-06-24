@@ -1,9 +1,19 @@
 {
-  "generated_at": "2026-06-24T00:40:33Z",
+  "generated_at": "2026-06-24T00:55:28Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 2,
-  "host_count": 5,
+  "adapter_count": 3,
+  "host_count": 6,
   "adapters": [
+    {
+      "name": "ekape",
+      "status": "registered",
+      "hosts": [
+        "data.ekape.or.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
     {
       "name": "epost",
       "status": "registered",

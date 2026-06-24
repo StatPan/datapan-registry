@@ -1,0 +1,140 @@
+{
+  "generated_at": "2026-06-24T00:54:09Z",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 5,
+  "truncated": true,
+  "filters": {
+    "provider": "ekape",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 5,
+  "summary": {
+    "total": 5,
+    "verified": 0,
+    "failed": 5,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15000577",
+      "title": "축산물품질평가원_축산물유통정보",
+      "operation": "계란 검수(소비)확인정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "ekape_service_key_not_registered",
+      "verified_at": "2026-06-24T00:54:09Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://data.ekape.or.kr/openapi-data/service/user/confirm/eggCoustomer?issueDate=20240101\u0026issueNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "issueDate": "20240101",
+        "issueNo": "1"
+      },
+      "body_shape": "xml_notice"
+    },
+    {
+      "dataset_id": "15000577",
+      "title": "축산물품질평가원_축산물유통정보",
+      "operation": "닭 검수(소비)확인정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "ekape_service_key_not_registered",
+      "verified_at": "2026-06-24T00:54:09Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://data.ekape.or.kr/openapi-data/service/user/confirm/fowlCoustomer?issueDate=20240101\u0026issueNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "issueDate": "20240101",
+        "issueNo": "1"
+      },
+      "body_shape": "xml_notice"
+    },
+    {
+      "dataset_id": "15000577",
+      "title": "축산물품질평가원_축산물유통정보",
+      "operation": "돼지 검수(소비)확인정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "ekape_html_response",
+      "verified_at": "2026-06-24T00:54:09Z",
+      "http_status": 200,
+      "semantic_status": "html_response",
+      "url": "http://data.ekape.or.kr/openapi-data/service/user/confirm/pigCoustomer?issueDate=20240101\u0026issueNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "issueDate": "20240101",
+        "issueNo": "1"
+      },
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15000577",
+      "title": "축산물품질평가원_축산물유통정보",
+      "operation": "소 검수(소비)확인정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "ekape_service_key_not_registered",
+      "verified_at": "2026-06-24T00:54:09Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://data.ekape.or.kr/openapi-data/service/user/confirm/cattleCoustomer?issueDate=20240101\u0026issueNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "issueDate": "20240101",
+        "issueNo": "1"
+      },
+      "body_shape": "xml_notice"
+    },
+    {
+      "dataset_id": "15000577",
+      "title": "축산물품질평가원_축산물유통정보",
+      "operation": "순별 축산물소비자가격 정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "ekape_service_key_not_registered",
+      "verified_at": "2026-06-24T00:54:09Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://data.ekape.or.kr/openapi-data/service/user/grade/consumerPriceTenDays?judgeKind=1\u0026serviceKey=REDACTED\u0026standYm=202401",
+      "params": {
+        "judgeKind": "1",
+        "standYm": "202401"
+      },
+      "body_shape": "xml_notice"
+    }
+  ]
+}

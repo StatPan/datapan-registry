@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-24T00:40:33Z",
+  "generated_at": "2026-06-24T00:55:28Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -10,11 +10,11 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 40,
     "external_guide_hosts": 150,
-    "registered_adapter_hosts": 5,
+    "registered_adapter_hosts": 6,
     "operation_hosts": 42,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 35,
-    "needs_adapter_operations": 419,
+    "missing_adapter_hosts": 34,
+    "needs_adapter_operations": 370,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
@@ -36,21 +36,6 @@
         "15000354",
         "15004414",
         "15004788"
-      ]
-    },
-    {
-      "host": "data.ekape.or.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "missing",
-      "specs": 8,
-      "operations": 49,
-      "external_endpoint_operations": 49,
-      "sample_ids": [
-        "15000577",
-        "15056733",
-        "15057101"
       ]
     },
     {
@@ -560,6 +545,21 @@
         "15003003",
         "15003024",
         "15003027"
+      ]
+    },
+    {
+      "host": "data.ekape.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 8,
+      "operations": 49,
+      "external_endpoint_operations": 49,
+      "sample_ids": [
+        "15000577",
+        "15056733",
+        "15057101"
       ]
     },
     {

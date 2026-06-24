@@ -56,7 +56,9 @@ adapters:
 ```bash
 datapan catalog verify --registry data/data-go-kr.registry.json --provider q-net --kind external_endpoint --limit 5 --output reports/qnet-verification.json --json
 datapan catalog verify --registry data/data-go-kr.registry.json --provider epost --kind external_endpoint --limit 5 --output reports/epost-verification.json --json
-datapan catalog verify merge --input reports/qnet-verification.json --input reports/epost-verification.json --output reports/latest-verification.json --json
+datapan catalog verify --registry data/data-go-kr.registry.json --provider ekape --kind external_endpoint --limit 5 --output reports/ekape-verification.json --json
+datapan catalog verify summary --input reports/ekape-verification.json --output reports/ekape-verification-summary.json --json
+datapan catalog verify merge --input reports/qnet-verification.json --input reports/epost-verification.json --input reports/ekape-verification.json --output reports/latest-verification.json --json
 datapan catalog verify summary --input reports/latest-verification.json --output reports/latest-verification-summary.json --json
 ```
 
@@ -64,8 +66,9 @@ The merged report is the release evidence artifact. Provider-specific reports
 may stay in `reports/` as supporting evidence, while
 `reports/latest-verification.json` and
 `reports/latest-verification-summary.json` are included in `manifest.json`.
-Skipped results are kept because they explain current provider boundaries, such
-as WADL-only metadata or unsupported SOAP operations.
+Skipped and failed results are kept because they explain current provider
+boundaries, such as WADL-only metadata, unsupported SOAP operations, separate
+key registration requirements, or upstream provider HTML responses.
 
 ## Publish
 

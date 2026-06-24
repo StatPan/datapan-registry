@@ -11,10 +11,10 @@ re-importing the upstream data.go.kr catalog every time.
 
 - Provider: `data.go.kr`
 - Specs: `12060`
-- Latest release: `v2026.06.24.1`
-- Registered external adapters: `epost`, `q-net`
-- Runtime verification evidence: q-net and epost bounded external-provider
-  runs merged into `reports/latest-verification.json`
+- Latest release: `v2026.06.24.3`
+- Registered external adapters: `ekape`, `epost`, `q-net`
+- Runtime verification evidence: q-net, epost, and ekape bounded
+  external-provider runs merged into `reports/latest-verification.json`
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
 - Provider index: `data/provider-index.json`
@@ -72,6 +72,8 @@ reports/
   dependencies.json
   adapter-targets.json
   provider-backlog.json
+  ekape-verification.json
+  ekape-verification-summary.json
   qnet-verification.json
   epost-verification.json
   latest-verification.json
