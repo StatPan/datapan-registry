@@ -13,7 +13,7 @@ re-importing the upstream data.go.kr catalog every time.
 - Specs: `12060`
 - Operations: `12205`
 - Callable operations: `12063` (`98.8%`)
-- Latest release: `v2026.06.25.23`
+- Latest release: `v2026.06.25.24`
 - Registered external adapters: `airport`, `andong`, `ekape`, `emuseum`,
   `epost`, `folk`, `forest`, `gblib`, `geoje`, `humetro`, `itfind`, `jeju`,
   `jeonju`, `korad`, `kpx`, `lh-ebid`, `myhome`, `naqs`, `oneclick-law`, `pqis`,
@@ -32,6 +32,8 @@ re-importing the upstream data.go.kr catalog every time.
 - Route disposition: `28` missing external routes in
   `reports/route-disposition.json` (`14` dead-route candidates, `14`
   transient failures, `0` remaining adapter candidates)
+- Coverage route evidence: `reports/coverage.json` now carries the same route
+  evidence and reports `0` evidence-adjusted adapter candidates
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
 - Provider index: `data/provider-index.json`

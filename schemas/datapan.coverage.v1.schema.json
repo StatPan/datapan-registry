@@ -5,16 +5,18 @@
   "description": "Claim-oriented registry coverage, adapter coverage, and verification evidence gaps.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["generated_at", "provider", "summary", "goals", "evidence", "gaps", "adapters", "next"],
+  "required": ["generated_at", "provider", "summary", "goals", "evidence", "route_evidence", "gaps", "adapters", "next"],
   "properties": {
     "generated_at": { "type": "string", "format": "date-time" },
     "provider": { "type": "string", "minLength": 1 },
     "registry": { "type": "string" },
     "source": { "type": "string" },
     "verification": { "type": "string" },
+    "route_disposition": { "type": "string" },
     "summary": { "$ref": "#/$defs/summary" },
     "goals": { "$ref": "#/$defs/goals" },
     "evidence": { "$ref": "#/$defs/evidence" },
+    "route_evidence": { "$ref": "#/$defs/route_evidence" },
     "gaps": { "$ref": "#/$defs/gaps" },
     "adapters": { "type": "object" },
     "next": {
@@ -125,6 +127,33 @@
         "call_capable_adapters_met": { "type": "boolean" },
         "provider_split_ready_target": { "type": "boolean" },
         "provider_split_ready_met": { "type": "boolean" }
+      }
+    },
+    "route_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "present",
+        "routes_total",
+        "with_probe_evidence",
+        "dead_route_candidates",
+        "transient_failures",
+        "parameter_blocked_routes",
+        "remaining_adapter_candidates",
+        "raw_missing_adapter_operations",
+        "evidence_adjusted_adapter_candidates"
+      ],
+      "properties": {
+        "present": { "type": "boolean" },
+        "report": { "type": "string" },
+        "routes_total": { "$ref": "#/$defs/count" },
+        "with_probe_evidence": { "$ref": "#/$defs/count" },
+        "dead_route_candidates": { "$ref": "#/$defs/count" },
+        "transient_failures": { "$ref": "#/$defs/count" },
+        "parameter_blocked_routes": { "$ref": "#/$defs/count" },
+        "remaining_adapter_candidates": { "$ref": "#/$defs/count" },
+        "raw_missing_adapter_operations": { "$ref": "#/$defs/count" },
+        "evidence_adjusted_adapter_candidates": { "$ref": "#/$defs/count" }
       }
     },
     "gaps": {

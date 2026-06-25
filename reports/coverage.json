@@ -1,9 +1,10 @@
 {
-  "generated_at": "2026-06-25T06:05:34Z",
+  "generated_at": "2026-06-25T06:23:03Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
   "verification": "C:\\workspace\\datapan-registry\\reports\\latest-verification.json",
+  "route_disposition": "C:\\workspace\\datapan-registry\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
     "operations": 12205,
@@ -48,6 +49,18 @@
     "unknown": 0,
     "verified_percent": 8.6,
     "evidence_operation_percent": 2.1
+  },
+  "route_evidence": {
+    "present": true,
+    "report": "C:\\workspace\\datapan-registry\\reports\\route-disposition.json",
+    "routes_total": 28,
+    "with_probe_evidence": 28,
+    "dead_route_candidates": 14,
+    "transient_failures": 14,
+    "parameter_blocked_routes": 0,
+    "remaining_adapter_candidates": 0,
+    "raw_missing_adapter_operations": 28,
+    "evidence_adjusted_adapter_candidates": 0
   },
   "gaps": {
     "missing_adapter_hosts": [
@@ -368,8 +381,8 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-06-25T06:05:34Z",
-    "datapan_version": "v0.1.27",
+    "generated_at": "2026-06-25T06:23:03Z",
+    "datapan_version": "v0.1.29",
     "adapter_count": 26,
     "host_count": 30,
     "adapters": [
@@ -683,7 +696,7 @@
     },
     {
       "label": "coverage report",
-      "command": "datapan coverage --registry C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json --verification C:\\workspace\\datapan-registry\\reports\\latest-verification.json --json"
+      "command": "datapan coverage --registry C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json --verification C:\\workspace\\datapan-registry\\reports\\latest-verification.json --route-disposition C:\\workspace\\datapan-registry\\reports\\route-disposition.json --json"
     },
     {
       "label": "verify forest",

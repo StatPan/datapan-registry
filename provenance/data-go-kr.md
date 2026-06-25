@@ -1,7 +1,7 @@
 # data.go.kr Release Provenance
 
-- generated_at: 2026-06-25T06:05:29Z
-- datapan_version: v0.1.27
+- generated_at: 2026-06-25T06:22:58Z
+- datapan_version: v0.1.29
 - source_provider: data.go.kr
 - source_registry: C:\workspace\datapan-registry\data\data-go-kr.registry.json
 - previous_registry: C:\workspace\datapan-registry\.datapan\previous\data-go-kr.registry.json
@@ -26,6 +26,6 @@ datapan catalog verify --input C:\workspace\datapan-registry\reports\latest-veri
 datapan catalog verify summary --input C:\workspace\datapan-registry\reports\latest-verification.json --output C:\workspace\datapan-registry\reports\latest-verification-summary.json --json
 datapan catalog verify --input C:\workspace\datapan-registry\reports\unadapted-external-probe.json --json
 datapan catalog verify summary --input C:\workspace\datapan-registry\reports\unadapted-external-probe.json --output C:\workspace\datapan-registry\reports\unadapted-external-probe-summary.json --json
-datapan catalog coverage --registry C:\workspace\datapan-registry\data\data-go-kr.registry.json --verification C:\workspace\datapan-registry\reports\latest-verification.json --output C:\workspace\datapan-registry\reports\coverage.json --json
+datapan catalog coverage --registry C:\workspace\datapan-registry\data\data-go-kr.registry.json --verification C:\workspace\datapan-registry\reports\latest-verification.json --route-disposition C:\workspace\datapan-registry\reports\route-disposition.json --output C:\workspace\datapan-registry\reports\coverage.json --json
 datapan catalog verify plan --registry C:\workspace\datapan-registry\data\data-go-kr.registry.json --verification C:\workspace\datapan-registry\reports\latest-verification.json --output C:\workspace\datapan-registry\reports\verification-plan.json --json
 ```

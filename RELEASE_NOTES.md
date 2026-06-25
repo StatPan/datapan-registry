@@ -1,8 +1,8 @@
 # Datapan Registry Release
 
-- generated_at: `2026-06-25T06:05:29Z`
+- generated_at: `2026-06-25T06:22:58Z`
 - provider: `data.go.kr`
-- datapan_version: `v0.1.27`
+- datapan_version: `v0.1.29`
 - source_registry: `C:\workspace\datapan-registry\data\data-go-kr.registry.json`
 - previous_registry: `C:\workspace\datapan-registry\.datapan\previous\data-go-kr.registry.json`
 - release_manifest: `manifest.json`
@@ -24,7 +24,7 @@
 - route_disposition: `28` routes, `14` dead-route candidates, `14` transient failures, `0` parameter-blocked, `0` adapter candidates
 - route_disposition_artifact: `reports/route-disposition.json`
 - provider_backlog: `179` hosts, `10` missing-adapter hosts, `28` operations needing adapters
-- coverage: `12063` callable operations (`98.8%`), external adapter coverage `95.4%`, verification evidence coverage `2.1%`
+- coverage: `12063` callable operations (`98.8%`), external adapter coverage `95.4%`, verification evidence coverage `2.1%`, evidence-adjusted adapter candidates `0`
 - coverage_artifact: `reports/coverage.json`
 - coverage_goals: callable `99%`, external adapters `98%`, verification evidence `10%`, call-capable adapters `25`, missing-adapter operations `<=10`
 - verification_plan: `9` batches, `83` planned operations, `11409` gateway gaps, `340` adapter gaps
