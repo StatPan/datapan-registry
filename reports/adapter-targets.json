@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-25T03:20:56Z",
+  "generated_at": "2026-06-25T03:54:15Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 15,
+  "filtered_count": 14,
   "summary": {
-    "target_hosts": 15,
-    "target_operations": 45,
-    "external_endpoint_operations": 45,
+    "target_hosts": 14,
+    "target_operations": 41,
+    "external_endpoint_operations": 41,
     "service_root_operations": 0,
     "approval_required_operations": 5,
-    "missing_param_operations": 34,
+    "missing_param_operations": 30,
     "unsupported_protocol_operations": 0
   },
   "targets": [
@@ -292,69 +292,6 @@
     },
     {
       "rank": 6,
-      "host": "openapi.pqis.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 4,
-      "specs": 1,
-      "organizations": [
-        "농림축산식품부 농림축산검역본부"
-      ],
-      "source_categories": [
-        "농축수산"
-      ],
-      "api_types": [
-        "REST"
-      ],
-      "data_formats": [
-        "JSON+XML"
-      ],
-      "missing_param_operations": 4,
-      "sample_operations": [
-        {
-          "dataset_id": "3055528",
-          "title": "농림축산식품부 농림축산검역본부_식물검역정보",
-          "organization": "농림축산식품부 농림축산검역본부",
-          "operation": "국가코드",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://openapi.pqis.go.kr/openapi/service/plntQrantStats?_wadl\u0026type=xml",
-          "missing_params": [
-            "nationName"
-          ]
-        },
-        {
-          "dataset_id": "3055528",
-          "title": "농림축산식품부 농림축산검역본부_식물검역정보",
-          "organization": "농림축산식품부 농림축산검역본부",
-          "operation": "수입식물검역통계",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://openapi.pqis.go.kr/openapi/service/plntQrantStats?_wadl\u0026type=xml",
-          "missing_params": [
-            "fromYYYYMM",
-            "toYYYYMM",
-            "nationCode",
-            "plantCode"
-          ]
-        },
-        {
-          "dataset_id": "3055528",
-          "title": "농림축산식품부 농림축산검역본부_식물검역정보",
-          "organization": "농림축산식품부 농림축산검역본부",
-          "operation": "수출식물검역통계",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://openapi.pqis.go.kr/openapi/service/plntQrantStats?_wadl\u0026type=xml",
-          "missing_params": [
-            "fromYYYYMM",
-            "toYYYYMM",
-            "nationCode",
-            "plantCode"
-          ]
-        }
-      ]
-    },
-    {
-      "rank": 7,
       "host": "openapi.price.go.kr",
       "kinds": [
         "external_endpoint"
@@ -413,7 +350,7 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 7,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -470,7 +407,7 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 8,
       "host": "www.emuseum.go.kr",
       "kinds": [
         "external_endpoint"
@@ -540,7 +477,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -591,7 +528,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -648,7 +585,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "data.myhome.go.kr:443",
       "kinds": [
         "external_endpoint"
@@ -684,7 +621,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -720,7 +657,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 13,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -751,7 +688,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 14,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

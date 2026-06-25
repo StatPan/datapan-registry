@@ -1,0 +1,132 @@
+{
+  "generated_at": "2026-06-25T03:45:05Z",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 4,
+  "timeout": "15s",
+  "truncated": false,
+  "filters": {
+    "provider": "pqis",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 4,
+  "summary": {
+    "total": 4,
+    "verified": 0,
+    "failed": 4,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "3055528",
+      "title": "농림축산식품부 농림축산검역본부_식물검역정보",
+      "operation": "국가코드",
+      "provider": "pqis",
+      "endpoint_host": "openapi.pqis.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "pqis_service_key_not_registered",
+      "verified_at": "2026-06-25T03:45:05Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.pqis.go.kr/openapi/service/plntQrantStats/nationCode?nationName=%ED%95%9C%EA%B5%AD\u0026numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "nationName": "한국",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "3055528",
+      "title": "농림축산식품부 농림축산검역본부_식물검역정보",
+      "operation": "수입식물검역통계",
+      "provider": "pqis",
+      "endpoint_host": "openapi.pqis.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "pqis_service_key_not_registered",
+      "verified_at": "2026-06-25T03:45:05Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.pqis.go.kr/openapi/service/plntQrantStats/importStats?fromYYYYMM=202501\u0026nationCode=CN\u0026numOfRows=1\u0026pageNo=1\u0026plantCode=1000\u0026serviceKey=REDACTED\u0026toYYYYMM=202501",
+      "params": {
+        "fromYYYYMM": "202501",
+        "nationCode": "CN",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "plantCode": "1000",
+        "toYYYYMM": "202501"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "3055528",
+      "title": "농림축산식품부 농림축산검역본부_식물검역정보",
+      "operation": "수출식물검역통계",
+      "provider": "pqis",
+      "endpoint_host": "openapi.pqis.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "pqis_service_key_not_registered",
+      "verified_at": "2026-06-25T03:45:05Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.pqis.go.kr/openapi/service/plntQrantStats/exportStats?fromYYYYMM=202501\u0026nationCode=CN\u0026numOfRows=1\u0026pageNo=1\u0026plantCode=1000\u0026serviceKey=REDACTED\u0026toYYYYMM=202501",
+      "params": {
+        "fromYYYYMM": "202501",
+        "nationCode": "CN",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "plantCode": "1000",
+        "toYYYYMM": "202501"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "3055528",
+      "title": "농림축산식품부 농림축산검역본부_식물검역정보",
+      "operation": "식물코드",
+      "provider": "pqis",
+      "endpoint_host": "openapi.pqis.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "pqis_service_key_not_registered",
+      "verified_at": "2026-06-25T03:45:05Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.pqis.go.kr/openapi/service/plntQrantStats/plantCode?numOfRows=1\u0026pageNo=1\u0026plantName=%EC%82%AC%EA%B3%BC\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "plantName": "사과"
+      },
+      "body_shape": "xml_status"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T03:21:08Z",
+  "generated_at": "2026-06-25T03:54:27Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -8,10 +8,10 @@
   "timeout": "10s",
   "summary": {
     "operations": 12205,
-    "evidence_total": 241,
+    "evidence_total": 245,
     "uncovered_gateway_candidates": 11409,
     "uncovered_adapter_candidates": 337,
-    "missing_adapter_hosts": 15,
+    "missing_adapter_hosts": 14,
     "planned_batches": 8,
     "planned_operations": 80
   },
@@ -130,21 +130,6 @@
         ]
       },
       {
-        "host": "openapi.pqis.go.kr",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "missing",
-        "specs": 1,
-        "operations": 4,
-        "external_endpoint_operations": 4,
-        "external_guide_specs": 1,
-        "sample_ids": [
-          "3055528"
-        ]
-      },
-      {
         "host": "car.daegu.go.kr",
         "kinds": [
           "external_endpoint"
@@ -236,6 +221,19 @@
         "sample_ids": [
           "15010208",
           "15058097"
+        ]
+      },
+      {
+        "host": "www.cid.or.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 1,
+        "operations": 2,
+        "external_endpoint_operations": 2,
+        "sample_ids": [
+          "15012192"
         ]
       }
     ]

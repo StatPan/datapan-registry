@@ -1,0 +1,52 @@
+{
+  "generated_at": "2026-06-25T03:45:05Z",
+  "source": "C:\\workspace\\datapan-registry\\reports\\pqis-verification.json",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 4,
+    "verified": 0,
+    "failed": 4,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "failed",
+        "count": 4,
+        "status": "failed"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "pqis_service_key_not_registered",
+        "count": 4,
+        "reason": "pqis_service_key_not_registered"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "pqis",
+        "count": 4,
+        "provider": "pqis"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "openapi.pqis.go.kr",
+        "count": 4,
+        "host": "openapi.pqis.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 4,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

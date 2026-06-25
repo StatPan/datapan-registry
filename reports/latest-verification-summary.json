@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-25T03:20:44Z",
+  "generated_at": "2026-06-25T03:51:48Z",
   "source": "C:\\workspace\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 241,
+    "total": 245,
     "verified": 21,
-    "failed": 81,
+    "failed": 85,
     "skipped": 139,
     "unknown": 0
   },
@@ -21,7 +21,7 @@
       },
       {
         "key": "failed",
-        "count": 81,
+        "count": 85,
         "status": "failed"
       },
       {
@@ -140,6 +140,11 @@
         "key": "geoje_missing_required_params",
         "count": 4,
         "reason": "geoje_missing_required_params"
+      },
+      {
+        "key": "pqis_service_key_not_registered",
+        "count": 4,
+        "reason": "pqis_service_key_not_registered"
       },
       {
         "key": "seoul_bus_service_key_not_registered",
@@ -334,6 +339,11 @@
         "provider": "forest"
       },
       {
+        "key": "pqis",
+        "count": 4,
+        "provider": "pqis"
+      },
+      {
         "key": "folk",
         "count": 3,
         "provider": "folk"
@@ -446,6 +456,11 @@
         "host": "api.forest.go.kr"
       },
       {
+        "key": "openapi.pqis.go.kr",
+        "count": 4,
+        "host": "openapi.pqis.go.kr"
+      },
+      {
         "key": "folkency.nfm.go.kr",
         "count": 3,
         "host": "folkency.nfm.go.kr"
@@ -469,7 +484,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 212,
+        "count": 216,
         "kind": "external_endpoint"
       },
       {

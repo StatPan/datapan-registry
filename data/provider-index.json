@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T03:20:56Z",
+  "generated_at": "2026-06-25T03:54:15Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 21,
-  "host_count": 25,
+  "adapter_count": 22,
+  "host_count": 26,
   "adapters": [
     {
       "name": "airport",
@@ -168,6 +168,17 @@
       ]
     },
     {
+      "name": "pqis",
+      "status": "registered",
+      "hosts": [
+        "openapi.pqis.go.kr"
+      ],
+      "capabilities": [
+        "call",
+        "verification"
+      ]
+    },
+    {
       "name": "q-net",
       "status": "registered",
       "hosts": [
@@ -238,9 +249,9 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 21,
-    "verification_capable_adapters": 21,
-    "call_capable_adapters": 16,
+    "adapter_count": 22,
+    "verification_capable_adapters": 22,
+    "call_capable_adapters": 17,
     "required_adapters": 2,
     "required_verification_adapters": 2,
     "required_call_adapters": 1,

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T03:20:56Z",
+  "generated_at": "2026-06-25T03:54:15Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -10,11 +10,11 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 40,
     "external_guide_hosts": 150,
-    "registered_adapter_hosts": 25,
+    "registered_adapter_hosts": 26,
     "operation_hosts": 42,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 15,
-    "needs_adapter_operations": 45,
+    "missing_adapter_hosts": 14,
+    "needs_adapter_operations": 41,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
@@ -50,21 +50,6 @@
         "15051436",
         "15056640",
         "15056879"
-      ]
-    },
-    {
-      "host": "openapi.pqis.go.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "missing",
-      "specs": 1,
-      "operations": 4,
-      "external_endpoint_operations": 4,
-      "external_guide_specs": 1,
-      "sample_ids": [
-        "3055528"
       ]
     },
     {
@@ -571,6 +556,22 @@
       "external_endpoint_operations": 5,
       "sample_ids": [
         "15000332"
+      ]
+    },
+    {
+      "host": "openapi.pqis.go.kr",
+      "provider": "pqis",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 4,
+      "external_endpoint_operations": 4,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "3055528"
       ]
     },
     {
