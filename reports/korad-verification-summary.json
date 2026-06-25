@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-06-25T01:22:21Z",
+  "source": "C:\\workspace\\datapan-registry\\reports\\korad-verification.json",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 15,
+    "verified": 0,
+    "failed": 0,
+    "skipped": 15,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "skipped",
+        "count": 15,
+        "status": "skipped"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "korad_wadl_metadata_only",
+        "count": 8,
+        "reason": "korad_wadl_metadata_only"
+      },
+      {
+        "key": "approval_required",
+        "count": 7,
+        "reason": "approval_required"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "korad",
+        "count": 15,
+        "provider": "korad"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "www.korad.or.kr",
+        "count": 15,
+        "host": "www.korad.or.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 15,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

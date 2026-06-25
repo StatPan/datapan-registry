@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-25T01:03:56Z",
+  "generated_at": "2026-06-25T01:23:43Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 139,
+  "limit": 154,
   "truncated": true,
-  "filtered_count": 139,
+  "filtered_count": 154,
   "summary": {
-    "total": 139,
+    "total": 154,
     "verified": 20,
     "failed": 43,
-    "skipped": 76,
+    "skipped": 91,
     "unknown": 0
   },
   "results": [
@@ -3121,6 +3121,275 @@
         "searchWord": ""
       },
       "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15004087",
+      "title": "한국원자력환경공단_개봉선원폐기물 관리 현황_현황",
+      "operation": "RI폐기물중 개봉선원 폐기물의 누적 현황 조회",
+      "provider": "korad",
+      "endpoint_host": "www.korad.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "korad_wadl_metadata_only",
+      "verified_at": "2026-06-25T01:22:21Z",
+      "params": {
+        "N/A": ""
+      },
+      "missing_params": [
+        "N/A"
+      ],
+      "body_shape": "wadl_metadata"
+    },
+    {
+      "dataset_id": "15004088",
+      "title": "한국원자력환경공단_밀봉선원폐기물 관리 현황데이터_현황",
+      "operation": "RI폐기물중 밀봉선원 폐기물의 누적 현황 조회",
+      "provider": "korad",
+      "endpoint_host": "www.korad.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "korad_wadl_metadata_only",
+      "verified_at": "2026-06-25T01:22:21Z",
+      "params": {
+        "N/A": ""
+      },
+      "missing_params": [
+        "N/A"
+      ],
+      "body_shape": "wadl_metadata"
+    },
+    {
+      "dataset_id": "15004206",
+      "title": "한국원자력환경공단_방사성폐기물처분장 기상데이터_정보",
+      "operation": "주변지역 기상정보 실시간 데이터 조회",
+      "provider": "korad",
+      "endpoint_host": "www.korad.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "korad_wadl_metadata_only",
+      "verified_at": "2026-06-25T01:22:21Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "wadl_metadata"
+    },
+    {
+      "dataset_id": "15004210",
+      "title": "한국원자력환경공단_환경방사선량 데이터_정보",
+      "operation": "주변지역 방사선량 실시간 데이터 조회",
+      "provider": "korad",
+      "endpoint_host": "www.korad.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "korad_wadl_metadata_only",
+      "verified_at": "2026-06-25T01:22:21Z",
+      "params": {
+        "N/A": ""
+      },
+      "missing_params": [
+        "N/A"
+      ],
+      "body_shape": "wadl_metadata"
+    },
+    {
+      "dataset_id": "15004211",
+      "title": "한국원자력환경공단_처분고(silo)현황_현황",
+      "operation": "방폐물처분현황중 사일로별 처분현황 조회",
+      "provider": "korad",
+      "endpoint_host": "www.korad.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "korad_wadl_metadata_only",
+      "verified_at": "2026-06-25T01:22:21Z",
+      "params": {
+        "numOfRows": "1",
+        "order": "ASC",
+        "pageNo": "1",
+        "quart": "1",
+        "yyyy": "2024"
+      },
+      "body_shape": "wadl_metadata"
+    },
+    {
+      "dataset_id": "15038775",
+      "title": "한국원자력환경공단_부지감시시스템 지진데이터 현황",
+      "operation": "부지감시시스템 지진데이터 현황",
+      "provider": "korad",
+      "endpoint_host": "www.korad.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T01:22:21Z",
+      "params": {
+        "dd": "01",
+        "machine": "",
+        "mm": "01",
+        "numOfRows": "1",
+        "order": "ASC",
+        "pageNo": "1",
+        "yyyy": "2024"
+      },
+      "missing_params": [
+        "machine"
+      ]
+    },
+    {
+      "dataset_id": "15066784",
+      "title": "한국원자력환경공단_방사성폐기물 인수현황",
+      "operation": "getRadiTakeWasteStatsDataList",
+      "provider": "korad",
+      "endpoint_host": "www.korad.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T01:22:21Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "yyyy": "2024"
+      }
+    },
+    {
+      "dataset_id": "15066792",
+      "title": "한국원자력환경공단_개봉 및 밀봉선원 방폐물 관리현황",
+      "operation": "getRadiRiTotWasteStatsDataList",
+      "provider": "korad",
+      "endpoint_host": "www.korad.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T01:22:21Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "quart": "1",
+        "yyyy": "2024"
+      }
+    },
+    {
+      "dataset_id": "15087049",
+      "title": "한국원자력환경공단_중저준위방폐물 저장현황",
+      "operation": "getRadiRadiationStorsStatsDataList",
+      "provider": "korad",
+      "endpoint_host": "www.korad.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T01:22:21Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "yyyymm": "202401"
+      }
+    },
+    {
+      "dataset_id": "15105035",
+      "title": "한국원자력환경공단_불용선원 재활용 현황",
+      "operation": "불용선원 재활용 현황",
+      "provider": "korad",
+      "endpoint_host": "www.korad.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T01:22:21Z",
+      "params": {
+        "nuclide": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "yyyy": "2024"
+      }
+    },
+    {
+      "dataset_id": "15126693",
+      "title": "한국원자력환경공단_계약현황 조회 서비스",
+      "operation": "계약현황 조회 서비스",
+      "provider": "korad",
+      "endpoint_host": "www.korad.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T01:22:21Z",
+      "params": {
+        "contractNm": "",
+        "mm": "01",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "yyyy": "2024"
+      }
+    },
+    {
+      "dataset_id": "15140545",
+      "title": "한국원자력환경공단_생산공개문서 목록 조회 서비스",
+      "operation": "생산공개문서 목록 조회",
+      "provider": "korad",
+      "endpoint_host": "www.korad.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T01:22:21Z",
+      "params": {
+        "approvalDate": "20240101",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "subject": ""
+      }
+    },
+    {
+      "dataset_id": "3074263",
+      "title": "한국원자력환경공단_방사성폐기물 반입 현황_현황",
+      "operation": "방폐물반입현황중 년도별 반입현황 조회",
+      "provider": "korad",
+      "endpoint_host": "www.korad.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "korad_wadl_metadata_only",
+      "verified_at": "2026-06-25T01:22:21Z",
+      "params": {
+        "numOfRows": "1",
+        "order": "ASC",
+        "pageNo": "1",
+        "yyyy": "2024"
+      },
+      "body_shape": "wadl_metadata"
+    },
+    {
+      "dataset_id": "3074263",
+      "title": "한국원자력환경공단_방사성폐기물 반입 현황_현황",
+      "operation": "방폐물반입현황중 발생지별 반입현황 조회",
+      "provider": "korad",
+      "endpoint_host": "www.korad.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "korad_wadl_metadata_only",
+      "verified_at": "2026-06-25T01:22:21Z",
+      "params": {
+        "numOfRows": "1",
+        "order": "ASC",
+        "pageNo": "1",
+        "quart": "1",
+        "yyyy": "2024"
+      },
+      "body_shape": "wadl_metadata"
+    },
+    {
+      "dataset_id": "3074263",
+      "title": "한국원자력환경공단_방사성폐기물 반입 현황_현황",
+      "operation": "방폐물반입현황중 종류별 반입현황 조회",
+      "provider": "korad",
+      "endpoint_host": "www.korad.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "korad_wadl_metadata_only",
+      "verified_at": "2026-06-25T01:22:21Z",
+      "params": {
+        "numOfRows": "1",
+        "order": "ASC",
+        "pageNo": "1",
+        "quart": "1",
+        "yyyy": "2024"
+      },
+      "body_shape": "wadl_metadata"
     }
   ]
 }

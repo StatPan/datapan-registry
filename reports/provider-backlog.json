@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-25T01:04:08Z",
+  "generated_at": "2026-06-25T01:23:56Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-itfind\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-korad\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "filtered_count": 179,
@@ -10,11 +10,11 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 40,
     "external_guide_hosts": 150,
-    "registered_adapter_hosts": 16,
+    "registered_adapter_hosts": 17,
     "operation_hosts": 42,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 24,
-    "needs_adapter_operations": 128,
+    "missing_adapter_hosts": 23,
+    "needs_adapter_operations": 113,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
@@ -36,24 +36,6 @@
         "15000021",
         "15000122",
         "15000215"
-      ]
-    },
-    {
-      "host": "www.korad.or.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "missing",
-      "specs": 21,
-      "operations": 15,
-      "external_endpoint_operations": 15,
-      "external_guide_specs": 20,
-      "approval_required_operations": 10,
-      "sample_ids": [
-        "15004087",
-        "15004088",
-        "15004206"
       ]
     },
     {
@@ -528,6 +510,25 @@
         "15052669",
         "3057770",
         "3057773"
+      ]
+    },
+    {
+      "host": "www.korad.or.kr",
+      "provider": "korad",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 21,
+      "operations": 15,
+      "external_endpoint_operations": 15,
+      "external_guide_specs": 20,
+      "approval_required_operations": 10,
+      "sample_ids": [
+        "15004087",
+        "15004088",
+        "15004206"
       ]
     },
     {

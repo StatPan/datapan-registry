@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-06-25T01:03:56Z",
-  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-itfind\\reports\\latest-verification.json",
+  "generated_at": "2026-06-25T01:23:43Z",
+  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-korad\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 139,
+    "total": 154,
     "verified": 20,
     "failed": 43,
-    "skipped": 76,
+    "skipped": 91,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 76,
+        "count": 91,
         "status": "skipped"
       },
       {
@@ -52,9 +52,19 @@
         "reason": "qnet_wadl_metadata_only"
       },
       {
+        "key": "approval_required",
+        "count": 8,
+        "reason": "approval_required"
+      },
+      {
         "key": "epost_wadl_metadata_only",
         "count": 8,
         "reason": "epost_wadl_metadata_only"
+      },
+      {
+        "key": "korad_wadl_metadata_only",
+        "count": 8,
+        "reason": "korad_wadl_metadata_only"
       },
       {
         "key": "ekape_missing_required_params",
@@ -142,11 +152,6 @@
         "reason": "jeonju_http_405_method_not_allowed"
       },
       {
-        "key": "approval_required",
-        "count": 1,
-        "reason": "approval_required"
-      },
-      {
         "key": "ekape_html_response",
         "count": 1,
         "reason": "ekape_html_response"
@@ -182,6 +187,11 @@
         "key": "epost",
         "count": 15,
         "provider": "epost"
+      },
+      {
+        "key": "korad",
+        "count": 15,
+        "provider": "korad"
       },
       {
         "key": "q-net",
@@ -256,6 +266,11 @@
         "host": "www.andong.go.kr"
       },
       {
+        "key": "www.korad.or.kr",
+        "count": 15,
+        "host": "www.korad.or.kr"
+      },
+      {
         "key": "open.itfind.or.kr",
         "count": 13,
         "host": "open.itfind.or.kr"
@@ -314,7 +329,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 129,
+        "count": 144,
         "kind": "external_endpoint"
       },
       {

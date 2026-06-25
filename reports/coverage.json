@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-25T01:04:12Z",
+  "generated_at": "2026-06-25T01:24:01Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-itfind\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-korad\\data\\data-go-kr.registry.json",
   "source": "release",
-  "verification": "C:\\workspace\\datapan-registry\\.datapan\\release-itfind\\reports\\latest-verification.json",
+  "verification": "C:\\workspace\\datapan-registry\\.datapan\\release-korad\\reports\\latest-verification.json",
   "summary": {
     "specs": 12060,
     "operations": 12205,
@@ -11,29 +11,29 @@
     "callable_operation_percent": 98.8,
     "data_go_kr_gateway_operations": 11419,
     "external_endpoint_operations": 594,
-    "registered_adapter_operations": 466,
-    "missing_adapter_operations": 147,
-    "external_adapter_coverage_percent": 76,
+    "registered_adapter_operations": 481,
+    "missing_adapter_operations": 132,
+    "external_adapter_coverage_percent": 78.5,
     "approval_required_operations": 4142,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
-    "registered_adapter_hosts": 16,
-    "missing_adapter_hosts": 24,
-    "adapter_count": 13,
-    "call_capable_adapters": 8,
+    "registered_adapter_hosts": 17,
+    "missing_adapter_hosts": 23,
+    "adapter_count": 14,
+    "call_capable_adapters": 9,
     "provider_split_ready": true
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-06-25T01:03:56Z",
-    "total": 139,
+    "generated_at": "2026-06-25T01:23:43Z",
+    "total": 154,
     "verified": 20,
     "failed": 43,
-    "skipped": 76,
+    "skipped": 91,
     "unknown": 0,
-    "verified_percent": 14.4,
-    "evidence_operation_percent": 1.1
+    "verified_percent": 13,
+    "evidence_operation_percent": 1.3
   },
   "gaps": {
     "missing_adapter_hosts": [
@@ -52,24 +52,6 @@
           "15000021",
           "15000122",
           "15000215"
-        ]
-      },
-      {
-        "host": "www.korad.or.kr",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "missing",
-        "specs": 21,
-        "operations": 15,
-        "external_endpoint_operations": 15,
-        "external_guide_specs": 20,
-        "approval_required_operations": 10,
-        "sample_ids": [
-          "15004087",
-          "15004088",
-          "15004206"
         ]
       },
       {
@@ -193,6 +175,19 @@
         "external_guide_specs": 1,
         "sample_ids": [
           "3055528"
+        ]
+      },
+      {
+        "host": "car.daegu.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 1,
+        "operations": 4,
+        "external_endpoint_operations": 4,
+        "sample_ids": [
+          "15097855"
         ]
       }
     ],
@@ -356,28 +351,31 @@
         ]
       },
       {
-        "host": "www.andong.go.kr",
-        "provider": "andong",
+        "host": "www.korad.or.kr",
+        "provider": "korad",
         "kinds": [
-          "external_endpoint"
+          "external_endpoint",
+          "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 10,
+        "specs": 21,
         "operations": 15,
         "external_endpoint_operations": 15,
+        "external_guide_specs": 20,
+        "approval_required_operations": 10,
         "sample_ids": [
-          "15003047",
-          "15005609",
-          "15005628"
+          "15004087",
+          "15004088",
+          "15004206"
         ]
       }
     ]
   },
   "adapters": {
-    "generated_at": "2026-06-25T01:04:12Z",
+    "generated_at": "2026-06-25T01:24:01Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 13,
-    "host_count": 16,
+    "adapter_count": 14,
+    "host_count": 17,
     "adapters": [
       {
         "name": "airport",
@@ -476,6 +474,17 @@
         ]
       },
       {
+        "name": "korad",
+        "status": "registered",
+        "hosts": [
+          "www.korad.or.kr"
+        ],
+        "capabilities": [
+          "call",
+          "verification"
+        ]
+      },
+      {
         "name": "q-net",
         "status": "registered",
         "hosts": [
@@ -524,9 +533,9 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 13,
-      "verification_capable_adapters": 13,
-      "call_capable_adapters": 8,
+      "adapter_count": 14,
+      "verification_capable_adapters": 14,
+      "call_capable_adapters": 9,
       "required_adapters": 2,
       "required_verification_adapters": 2,
       "required_call_adapters": 1,
@@ -537,19 +546,19 @@
   "next": [
     {
       "label": "missing adapters",
-      "command": "datapan providers --registry C:\\workspace\\datapan-registry\\.datapan\\release-itfind\\data\\data-go-kr.registry.json --gaps --limit 20 --json"
+      "command": "datapan providers --registry C:\\workspace\\datapan-registry\\.datapan\\release-korad\\data\\data-go-kr.registry.json --gaps --limit 20 --json"
     },
     {
       "label": "adapter targets",
-      "command": "datapan targets --registry C:\\workspace\\datapan-registry\\.datapan\\release-itfind\\data\\data-go-kr.registry.json --limit 20 --json"
+      "command": "datapan targets --registry C:\\workspace\\datapan-registry\\.datapan\\release-korad\\data\\data-go-kr.registry.json --limit 20 --json"
     },
     {
       "label": "coverage report",
-      "command": "datapan coverage --registry C:\\workspace\\datapan-registry\\.datapan\\release-itfind\\data\\data-go-kr.registry.json --verification C:\\workspace\\datapan-registry\\.datapan\\release-itfind\\reports\\latest-verification.json --json"
+      "command": "datapan coverage --registry C:\\workspace\\datapan-registry\\.datapan\\release-korad\\data\\data-go-kr.registry.json --verification C:\\workspace\\datapan-registry\\.datapan\\release-korad\\reports\\latest-verification.json --json"
     },
     {
       "label": "verify forest",
-      "command": "datapan verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-itfind\\data\\data-go-kr.registry.json --provider forest --kind external_endpoint --limit 4 --timeout 10s --json"
+      "command": "datapan verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-korad\\data\\data-go-kr.registry.json --provider forest --kind external_endpoint --limit 4 --timeout 10s --json"
     }
   ]
 }

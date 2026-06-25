@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T01:04:08Z",
+  "generated_at": "2026-06-25T01:23:56Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 13,
-  "host_count": 16,
+  "adapter_count": 14,
+  "host_count": 17,
   "adapters": [
     {
       "name": "airport",
@@ -101,6 +101,17 @@
       ]
     },
     {
+      "name": "korad",
+      "status": "registered",
+      "hosts": [
+        "www.korad.or.kr"
+      ],
+      "capabilities": [
+        "call",
+        "verification"
+      ]
+    },
+    {
       "name": "q-net",
       "status": "registered",
       "hosts": [
@@ -149,9 +160,9 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 13,
-    "verification_capable_adapters": 13,
-    "call_capable_adapters": 8,
+    "adapter_count": 14,
+    "verification_capable_adapters": 14,
+    "call_capable_adapters": 9,
     "required_adapters": 2,
     "required_verification_adapters": 2,
     "required_call_adapters": 1,
