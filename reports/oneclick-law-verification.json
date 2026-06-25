@@ -1,0 +1,591 @@
+{
+  "generated_at": "2026-06-25T02:03:07Z",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 30,
+  "timeout": "10s",
+  "truncated": false,
+  "filters": {
+    "provider": "oneclick-law",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 30,
+  "summary": {
+    "total": 30,
+    "verified": 0,
+    "failed": 11,
+    "skipped": 19,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15000021",
+      "title": "법제처_영문생활법령정보 조회 서비스",
+      "operation": "영문생활분야관심규정분류목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "params": {
+        "CsmSeq": "1"
+      }
+    },
+    {
+      "dataset_id": "15000021",
+      "title": "법제처_영문생활법령정보 조회 서비스",
+      "operation": "영문생활분야목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T02:03:07Z"
+    },
+    {
+      "dataset_id": "15000021",
+      "title": "법제처_영문생활법령정보 조회 서비스",
+      "operation": "영문생활분야본문항목조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "params": {
+        "ccfNo": "1",
+        "cciNo": "1",
+        "cnpClsNo": "1",
+        "csmSeq": "1"
+      }
+    },
+    {
+      "dataset_id": "15000122",
+      "title": "법제처_생활법령검색조회 서비스",
+      "operation": "검색분류목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "oneclick_connection_refused",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "url": "http://oneclick.law.go.kr:80/OPENAPI/soap/LifeLawSearchService/getSearchGroupList",
+      "params": {
+        "CallBackURI": "",
+        "RequestMsgID": "datapan",
+        "RequestTime": "20000101000000"
+      }
+    },
+    {
+      "dataset_id": "15000122",
+      "title": "법제처_생활법령검색조회 서비스",
+      "operation": "관심규정해설검색목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "oneclick_connection_refused",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "url": "http://oneclick.law.go.kr:80/OPENAPI/soap/LifeLawSearchService/getSearchInterrestRuleList",
+      "params": {
+        "CallBackURI": "",
+        "RequestMsgID": "datapan",
+        "RequestTime": "20000101000000",
+        "nowPageNo": "1",
+        "pageMg": "1",
+        "section": "1",
+        "txtQuery": "법"
+      }
+    },
+    {
+      "dataset_id": "15000122",
+      "title": "법제처_생활법령검색조회 서비스",
+      "operation": "대법원판례목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "oneclick_connection_refused",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "url": "http://oneclick.law.go.kr:80/OPENAPI/soap/LifeLawSearchService/getSearchSuperMePrecedentList",
+      "params": {
+        "CallBackURI": "",
+        "RequestMsgID": "datapan",
+        "RequestTime": "20000101000000",
+        "nowPageNo": "1",
+        "pageMg": "1",
+        "section": "1",
+        "txtQuery": "법"
+      }
+    },
+    {
+      "dataset_id": "15000122",
+      "title": "법제처_생활법령검색조회 서비스",
+      "operation": "백문백답법령명검색목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "oneclick_connection_refused",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "url": "http://oneclick.law.go.kr:80/OPENAPI/soap/LifeLawSearchService/getMaskMAnswerLawNameList",
+      "params": {
+        "CallBackURI": "",
+        "RequestMsgID": "datapan",
+        "RequestTime": "20000101000000",
+        "nowPageNo": "1",
+        "pageMg": "1",
+        "section": "1",
+        "txtQuery": "법"
+      }
+    },
+    {
+      "dataset_id": "15000122",
+      "title": "법제처_생활법령검색조회 서비스",
+      "operation": "백문백답본문검색목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "oneclick_connection_refused",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "url": "http://oneclick.law.go.kr:80/OPENAPI/soap/LifeLawSearchService/getMaskMAnswerSearchContentList",
+      "params": {
+        "CallBackURI": "",
+        "RequestMsgID": "datapan",
+        "RequestTime": "20000101000000",
+        "nowPageNo": "1",
+        "pageMg": "1",
+        "section": "1",
+        "txtQuery": "법"
+      }
+    },
+    {
+      "dataset_id": "15000122",
+      "title": "법제처_생활법령검색조회 서비스",
+      "operation": "법령해석례목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "oneclick_connection_refused",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "url": "http://oneclick.law.go.kr:80/OPENAPI/soap/LifeLawSearchService/getSearchLawInterList",
+      "params": {
+        "CallBackURI": "",
+        "RequestMsgID": "datapan",
+        "RequestTime": "20000101000000",
+        "nowPageNo": "1",
+        "pageMg": "1",
+        "section": "1",
+        "txtQuery": "법"
+      }
+    },
+    {
+      "dataset_id": "15000122",
+      "title": "법제처_생활법령검색조회 서비스",
+      "operation": "분류검색 목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "oneclick_connection_refused",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "url": "http://oneclick.law.go.kr:80/OPENAPI/soap/LifeLawSearchService/getSearchGroupAreaList",
+      "params": {
+        "CallBackURI": "",
+        "RequestMsgID": "datapan",
+        "RequestTime": "20000101000000",
+        "nowPageNo": "1",
+        "pageMg": "1",
+        "section": "1",
+        "txtQuery": "법"
+      }
+    },
+    {
+      "dataset_id": "15000122",
+      "title": "법제처_생활법령검색조회 서비스",
+      "operation": "생활분야검색목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "oneclick_connection_refused",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "url": "http://oneclick.law.go.kr:80/OPENAPI/soap/LifeLawSearchService/getSearchLifeAreaList",
+      "params": {
+        "CallBackURI": "",
+        "RequestMsgID": "datapan",
+        "RequestTime": "20000101000000",
+        "nowPageNo": "1",
+        "pageMg": "1",
+        "section": "1",
+        "txtQuery": "법"
+      }
+    },
+    {
+      "dataset_id": "15000122",
+      "title": "법제처_생활법령검색조회 서비스",
+      "operation": "주요궁금사항목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "oneclick_connection_refused",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "url": "http://oneclick.law.go.kr:80/OPENAPI/soap/LifeLawSearchService/getSearchAskNoticeList",
+      "params": {
+        "CallBackURI": "",
+        "RequestMsgID": "datapan",
+        "RequestTime": "20000101000000",
+        "nowPageNo": "1",
+        "pageMg": "1",
+        "section": "1",
+        "txtQuery": "법"
+      }
+    },
+    {
+      "dataset_id": "15000122",
+      "title": "법제처_생활법령검색조회 서비스",
+      "operation": "키워드통합검색목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "oneclick_missing_required_params",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "params": {
+        "CallBackURI": "",
+        "RequestMsgID": "datapan",
+        "RequestTime": "20000101000000",
+        "chkClsno1": "",
+        "chkClsno10": "",
+        "chkClsno2": "",
+        "chkClsno3": "",
+        "chkClsno4": "",
+        "chkClsno5": "",
+        "chkClsno6": "",
+        "chkClsno7": "",
+        "chkClsno8": "",
+        "chkClsno9": "",
+        "nowPageNo": "1",
+        "pageMg": "1",
+        "txtQuery": "법"
+      },
+      "missing_params": [
+        "chkClsno1",
+        "chkClsno2",
+        "chkClsno3",
+        "chkClsno4",
+        "chkClsno5",
+        "chkClsno6",
+        "chkClsno7",
+        "chkClsno8",
+        "chkClsno9",
+        "chkClsno10"
+      ]
+    },
+    {
+      "dataset_id": "15000122",
+      "title": "법제처_생활법령검색조회 서비스",
+      "operation": "행정심판재결례목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "oneclick_connection_refused",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "url": "http://oneclick.law.go.kr:80/OPENAPI/soap/LifeLawSearchService/getSearchAadminRefereeList",
+      "params": {
+        "CallBackURI": "",
+        "RequestMsgID": "datapan",
+        "RequestTime": "20000101000000",
+        "nowPageNo": "1",
+        "pageMg": "1",
+        "section": "1",
+        "txtQuery": "법"
+      }
+    },
+    {
+      "dataset_id": "15000122",
+      "title": "법제처_생활법령검색조회 서비스",
+      "operation": "헌법재판소결정례목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "oneclick_connection_refused",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "url": "http://oneclick.law.go.kr:80/OPENAPI/soap/LifeLawSearchService/getSearchConstCourtPrecedentList",
+      "params": {
+        "CallBackURI": "",
+        "RequestMsgID": "datapan",
+        "RequestTime": "20000101000000",
+        "nowPageNo": "1",
+        "pageMg": "1",
+        "section": "1",
+        "txtQuery": "법"
+      }
+    },
+    {
+      "dataset_id": "15000215",
+      "title": "법제처_생활법령정보 조회 서비스",
+      "operation": "eBook정보목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "params": {
+        "nowPageNo": "1",
+        "onhunqnaAstSeq": "",
+        "onhunqueAstSeq": "",
+        "onhunqueSeq": "",
+        "pageMg": "1"
+      },
+      "missing_params": [
+        "onhunqnaAstSeq",
+        "onhunqueAstSeq",
+        "onhunqueSeq"
+      ]
+    },
+    {
+      "dataset_id": "15000215",
+      "title": "법제처_생활법령정보 조회 서비스",
+      "operation": "관심규정개요항목조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "params": {
+        "csmSeq": "1"
+      }
+    },
+    {
+      "dataset_id": "15000215",
+      "title": "법제처_생활법령정보 조회 서비스",
+      "operation": "대법원판례목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "params": {
+        "ccfNo": "1",
+        "cciNo": "1",
+        "cnpClsNo": "1",
+        "csmSeq": "1"
+      }
+    },
+    {
+      "dataset_id": "15000215",
+      "title": "법제처_생활법령정보 조회 서비스",
+      "operation": "동영상정보목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "params": {
+        "nowPageNo": "1",
+        "pageMg": "1"
+      }
+    },
+    {
+      "dataset_id": "15000215",
+      "title": "법제처_생활법령정보 조회 서비스",
+      "operation": "법령체계도목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "params": {
+        "csmSeq": "1"
+      }
+    },
+    {
+      "dataset_id": "15000215",
+      "title": "법제처_생활법령정보 조회 서비스",
+      "operation": "법령해석례목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "params": {
+        "cls": "",
+        "linkUrl": "",
+        "nm": "",
+        "srvYn": ""
+      },
+      "missing_params": [
+        "nm",
+        "srvYn",
+        "cls",
+        "linkUrl"
+      ]
+    },
+    {
+      "dataset_id": "15000215",
+      "title": "법제처_생활법령정보 조회 서비스",
+      "operation": "생활분류목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T02:03:07Z"
+    },
+    {
+      "dataset_id": "15000215",
+      "title": "법제처_생활법령정보 조회 서비스",
+      "operation": "생활분야관심규정분류목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "params": {
+        "csmAstSeq": ""
+      },
+      "missing_params": [
+        "csmAstSeq"
+      ]
+    },
+    {
+      "dataset_id": "15000215",
+      "title": "법제처_생활법령정보 조회 서비스",
+      "operation": "생활분야목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "params": {
+        "csmAstSeq": ""
+      },
+      "missing_params": [
+        "csmAstSeq"
+      ]
+    },
+    {
+      "dataset_id": "15000215",
+      "title": "법제처_생활법령정보 조회 서비스",
+      "operation": "주요궁금사항목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "params": {
+        "csmSeq": "1"
+      }
+    },
+    {
+      "dataset_id": "15000215",
+      "title": "법제처_생활법령정보 조회 서비스",
+      "operation": "행정심판재결례목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "params": {
+        "ccfNo": "1",
+        "cciNo": "1",
+        "cnpClsNo": "1",
+        "csmSeq": "1"
+      }
+    },
+    {
+      "dataset_id": "15000215",
+      "title": "법제처_생활법령정보 조회 서비스",
+      "operation": "헌법재판소결정례목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "params": {
+        "ccfNo": "1",
+        "cciNo": "1",
+        "cnpClsNo": "1",
+        "csmSeq": "1"
+      }
+    },
+    {
+      "dataset_id": "15000335",
+      "title": "법제처_생활법령 백문백답 서비스",
+      "operation": "백문백답항목조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "params": {
+        "CallBackURI": "",
+        "RequestMsgID": "datapan",
+        "RequestTime": "20000101000000"
+      }
+    },
+    {
+      "dataset_id": "15000335",
+      "title": "법제처_생활법령 백문백답 서비스",
+      "operation": "분류목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "params": {
+        "CallBackURI": "",
+        "RequestMsgID": "datapan",
+        "RequestTime": "20000101000000",
+        "onhunqnaAstSeq": "",
+        "onhunqueSeq": ""
+      },
+      "missing_params": [
+        "onhunqnaAstSeq",
+        "onhunqueSeq"
+      ]
+    },
+    {
+      "dataset_id": "15000335",
+      "title": "법제처_생활법령 백문백답 서비스",
+      "operation": "분류별백문백답목록조회",
+      "provider": "oneclick-law",
+      "endpoint_host": "oneclick.law.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T02:03:07Z",
+      "params": {
+        "CallBackURI": "",
+        "RequestMsgID": "datapan",
+        "RequestTime": "20000101000000",
+        "onhunqnaAstSeq": "",
+        "onhunqueAstSeq": ""
+      },
+      "missing_params": [
+        "onhunqnaAstSeq",
+        "onhunqueAstSeq"
+      ]
+    }
+  ]
+}

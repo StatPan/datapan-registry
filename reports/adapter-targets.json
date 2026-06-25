@@ -1,81 +1,22 @@
 {
-  "generated_at": "2026-06-25T01:43:47Z",
+  "generated_at": "2026-06-25T02:06:16Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-oneclick\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 21,
+  "filtered_count": 19,
   "summary": {
-    "target_hosts": 21,
-    "target_operations": 115,
-    "external_endpoint_operations": 96,
+    "target_hosts": 19,
+    "target_operations": 85,
+    "external_endpoint_operations": 66,
     "service_root_operations": 19,
-    "approval_required_operations": 23,
-    "missing_param_operations": 101,
-    "unsupported_protocol_operations": 30
+    "approval_required_operations": 5,
+    "missing_param_operations": 73,
+    "unsupported_protocol_operations": 0
   },
   "targets": [
     {
       "rank": 1,
-      "host": "oneclick.law.go.kr:80",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 27,
-      "specs": 3,
-      "organizations": [
-        "법제처"
-      ],
-      "source_categories": [
-        "법률"
-      ],
-      "api_types": [
-        "SOAP"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "approval_required_operations": 15,
-      "missing_param_operations": 25,
-      "unsupported_protocol_operations": 27,
-      "sample_operations": [
-        {
-          "dataset_id": "15000021",
-          "title": "법제처_영문생활법령정보 조회 서비스",
-          "organization": "법제처",
-          "operation": "영문생활분야관심규정분류목록조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://oneclick.law.go.kr:80/OPENAPI/soap/EnglishLifeLawInfoService/getEngAreaInterrestRuleClassList",
-          "missing_params": [
-            "CsmSeq"
-          ]
-        },
-        {
-          "dataset_id": "15000021",
-          "title": "법제처_영문생활법령정보 조회 서비스",
-          "organization": "법제처",
-          "operation": "영문생활분야목록조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://oneclick.law.go.kr:80/OPENAPI/soap/EnglishLifeLawInfoService/getEngAreaList"
-        },
-        {
-          "dataset_id": "15000021",
-          "title": "법제처_영문생활법령정보 조회 서비스",
-          "organization": "법제처",
-          "operation": "영문생활분야본문항목조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://oneclick.law.go.kr:80/OPENAPI/soap/EnglishLifeLawInfoService/getEngAreaContentItem",
-          "missing_params": [
-            "csmSeq",
-            "ccfNo",
-            "cciNo",
-            "cnpClsNo"
-          ]
-        }
-      ]
-    },
-    {
-      "rank": 2,
       "host": "openapi.tour.go.kr",
       "kinds": [
         "external_endpoint",
@@ -136,7 +77,7 @@
       ]
     },
     {
-      "rank": 3,
+      "rank": 2,
       "host": "openapi.ebid.lh.or.kr",
       "kinds": [
         "external_endpoint"
@@ -197,7 +138,7 @@
       ]
     },
     {
-      "rank": 4,
+      "rank": 3,
       "host": "openapi.coast.kr",
       "kinds": [
         "external_endpoint"
@@ -244,7 +185,7 @@
       ]
     },
     {
-      "rank": 5,
+      "rank": 4,
       "host": "openapi.kpx.or.kr",
       "kinds": [
         "external_endpoint"
@@ -293,7 +234,7 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 5,
       "host": "ws.bus.go.kr",
       "kinds": [
         "external_endpoint"
@@ -352,7 +293,7 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 6,
       "host": "data.jeju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -412,7 +353,7 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 7,
       "host": "www.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -471,7 +412,7 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 8,
       "host": "car.daegu.go.kr",
       "kinds": [
         "external_endpoint"
@@ -531,7 +472,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "openapi.pqis.go.kr",
       "kinds": [
         "external_endpoint"
@@ -594,7 +535,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "openapi.price.go.kr",
       "kinds": [
         "external_endpoint"
@@ -653,7 +594,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "openapi.gblib.or.kr",
       "kinds": [
         "external_endpoint"
@@ -711,76 +652,7 @@
       ]
     },
     {
-      "rank": 13,
-      "host": "oneclick.law.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 3,
-      "specs": 1,
-      "organizations": [
-        "법제처"
-      ],
-      "source_categories": [
-        "법률"
-      ],
-      "api_types": [
-        "SOAP"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "approval_required_operations": 3,
-      "missing_param_operations": 3,
-      "unsupported_protocol_operations": 3,
-      "sample_operations": [
-        {
-          "dataset_id": "15000335",
-          "title": "법제처_생활법령 백문백답 서비스",
-          "organization": "법제처",
-          "operation": "백문백답항목조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://oneclick.law.go.kr/OPENAPI/soap/ManyAskManyAnswerService/getMaskMAnswerClassList",
-          "missing_params": [
-            "RequestMsgID",
-            "RequestTime",
-            "CallBackURI"
-          ]
-        },
-        {
-          "dataset_id": "15000335",
-          "title": "법제처_생활법령 백문백답 서비스",
-          "organization": "법제처",
-          "operation": "분류목록조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://oneclick.law.go.kr/OPENAPI/soap/ManyAskManyAnswerService/getMaskMAnswerAreaItem",
-          "missing_params": [
-            "RequestMsgID",
-            "RequestTime",
-            "CallBackURI",
-            "onhunqnaAstSeq",
-            "onhunqueSeq"
-          ]
-        },
-        {
-          "dataset_id": "15000335",
-          "title": "법제처_생활법령 백문백답 서비스",
-          "organization": "법제처",
-          "operation": "분류별백문백답목록조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://oneclick.law.go.kr/OPENAPI/soap/ManyAskManyAnswerService/getMaskMAnswerAreaList",
-          "missing_params": [
-            "RequestMsgID",
-            "RequestTime",
-            "CallBackURI",
-            "onhunqnaAstSeq",
-            "onhunqueAstSeq"
-          ]
-        }
-      ]
-    },
-    {
-      "rank": 14,
+      "rank": 12,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -837,7 +709,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 13,
       "host": "www.emuseum.go.kr",
       "kinds": [
         "external_endpoint"
@@ -907,7 +779,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 14,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -958,7 +830,7 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 15,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1015,7 +887,7 @@
       ]
     },
     {
-      "rank": 18,
+      "rank": 16,
       "host": "data.myhome.go.kr:443",
       "kinds": [
         "external_endpoint"
@@ -1051,7 +923,7 @@
       ]
     },
     {
-      "rank": 19,
+      "rank": 17,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1087,7 +959,7 @@
       ]
     },
     {
-      "rank": 20,
+      "rank": 18,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -1118,7 +990,7 @@
       ]
     },
     {
-      "rank": 21,
+      "rank": 19,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

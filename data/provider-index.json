@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T01:43:47Z",
+  "generated_at": "2026-06-25T02:06:16Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 16,
-  "host_count": 19,
+  "adapter_count": 17,
+  "host_count": 21,
   "adapters": [
     {
       "name": "airport",
@@ -134,6 +134,18 @@
       ]
     },
     {
+      "name": "oneclick-law",
+      "status": "registered",
+      "hosts": [
+        "oneclick.law.go.kr",
+        "oneclick.law.go.kr:80"
+      ],
+      "capabilities": [
+        "call",
+        "verification"
+      ]
+    },
+    {
       "name": "q-net",
       "status": "registered",
       "hosts": [
@@ -182,9 +194,9 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 16,
-    "verification_capable_adapters": 16,
-    "call_capable_adapters": 11,
+    "adapter_count": 17,
+    "verification_capable_adapters": 17,
+    "call_capable_adapters": 12,
     "required_adapters": 2,
     "required_verification_adapters": 2,
     "required_call_adapters": 1,

@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-06-25T01:43:31Z",
-  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\reports\\latest-verification.json",
+  "generated_at": "2026-06-25T02:06:06Z",
+  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-oneclick\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 171,
+    "total": 201,
     "verified": 21,
-    "failed": 51,
-    "skipped": 99,
+    "failed": 62,
+    "skipped": 118,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 99,
+        "count": 118,
         "status": "skipped"
       },
       {
         "key": "failed",
-        "count": 51,
+        "count": 62,
         "status": "failed"
       },
       {
@@ -31,6 +31,16 @@
       }
     ],
     "by_reason": [
+      {
+        "key": "approval_required",
+        "count": 26,
+        "reason": "approval_required"
+      },
+      {
+        "key": "oneclick_connection_refused",
+        "count": 11,
+        "reason": "oneclick_connection_refused"
+      },
       {
         "key": "andong_service_not_registered",
         "count": 10,
@@ -50,11 +60,6 @@
         "key": "qnet_wadl_metadata_only",
         "count": 9,
         "reason": "qnet_wadl_metadata_only"
-      },
-      {
-        "key": "approval_required",
-        "count": 8,
-        "reason": "approval_required"
       },
       {
         "key": "epost_wadl_metadata_only",
@@ -177,12 +182,22 @@
         "reason": "humetro_deadline_expired"
       },
       {
+        "key": "oneclick_missing_required_params",
+        "count": 1,
+        "reason": "oneclick_missing_required_params"
+      },
+      {
         "key": "qnet_connection_validation_failed",
         "count": 1,
         "reason": "qnet_connection_validation_failed"
       }
     ],
     "by_provider": [
+      {
+        "key": "oneclick-law",
+        "count": 30,
+        "provider": "oneclick-law"
+      },
       {
         "key": "sisul",
         "count": 20,
@@ -271,6 +286,11 @@
     ],
     "by_endpoint_host": [
       {
+        "key": "oneclick.law.go.kr:80",
+        "count": 27,
+        "host": "oneclick.law.go.kr:80"
+      },
+      {
         "key": "data.sisul.or.kr",
         "count": 20,
         "host": "data.sisul.or.kr"
@@ -356,6 +376,11 @@
         "host": "folkency.nfm.go.kr"
       },
       {
+        "key": "oneclick.law.go.kr",
+        "count": 3,
+        "host": "oneclick.law.go.kr"
+      },
+      {
         "key": "openapi.epost.go.kr",
         "count": 2,
         "host": "openapi.epost.go.kr"
@@ -364,7 +389,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 161,
+        "count": 191,
         "kind": "external_endpoint"
       },
       {

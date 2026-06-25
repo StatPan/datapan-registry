@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-25T01:43:52Z",
+  "generated_at": "2026-06-25T02:06:21Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-oneclick\\data\\data-go-kr.registry.json",
   "source": "release",
-  "verification": "C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\reports\\latest-verification.json",
+  "verification": "C:\\workspace\\datapan-registry\\.datapan\\release-oneclick\\reports\\latest-verification.json",
   "summary": {
     "specs": 12060,
     "operations": 12205,
@@ -11,49 +11,32 @@
     "callable_operation_percent": 98.8,
     "data_go_kr_gateway_operations": 11419,
     "external_endpoint_operations": 594,
-    "registered_adapter_operations": 498,
-    "missing_adapter_operations": 115,
-    "external_adapter_coverage_percent": 81.2,
+    "registered_adapter_operations": 528,
+    "missing_adapter_operations": 85,
+    "external_adapter_coverage_percent": 86.1,
     "approval_required_operations": 4142,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
-    "registered_adapter_hosts": 19,
-    "missing_adapter_hosts": 21,
-    "adapter_count": 16,
-    "call_capable_adapters": 11,
+    "registered_adapter_hosts": 21,
+    "missing_adapter_hosts": 19,
+    "adapter_count": 17,
+    "call_capable_adapters": 12,
     "provider_split_ready": true
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-06-25T01:43:31Z",
-    "total": 171,
+    "generated_at": "2026-06-25T02:06:06Z",
+    "total": 201,
     "verified": 21,
-    "failed": 51,
-    "skipped": 99,
+    "failed": 62,
+    "skipped": 118,
     "unknown": 0,
-    "verified_percent": 12.3,
-    "evidence_operation_percent": 1.4
+    "verified_percent": 10.4,
+    "evidence_operation_percent": 1.6
   },
   "gaps": {
     "missing_adapter_hosts": [
-      {
-        "host": "oneclick.law.go.kr:80",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "missing",
-        "specs": 3,
-        "operations": 27,
-        "external_endpoint_operations": 27,
-        "soap_operations": 27,
-        "approval_required_operations": 15,
-        "sample_ids": [
-          "15000021",
-          "15000122",
-          "15000215"
-        ]
-      },
       {
         "host": "openapi.tour.go.kr",
         "kinds": [
@@ -184,6 +167,20 @@
         "sample_ids": [
           "3043385"
         ]
+      },
+      {
+        "host": "www.rda.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 2,
+        "operations": 4,
+        "external_endpoint_operations": 4,
+        "sample_ids": [
+          "15002002",
+          "15002055"
+        ]
       }
     ],
     "adapter_hosts": [
@@ -294,6 +291,24 @@
         ]
       },
       {
+        "host": "oneclick.law.go.kr:80",
+        "provider": "oneclick-law",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "adapter",
+        "specs": 3,
+        "operations": 27,
+        "external_endpoint_operations": 27,
+        "soap_operations": 27,
+        "approval_required_operations": 15,
+        "sample_ids": [
+          "15000021",
+          "15000122",
+          "15000215"
+        ]
+      },
+      {
         "host": "openapi.epost.go.kr:80",
         "provider": "epost",
         "kinds": [
@@ -344,33 +359,14 @@
           "3057770",
           "3057773"
         ]
-      },
-      {
-        "host": "www.korad.or.kr",
-        "provider": "korad",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "adapter",
-        "specs": 21,
-        "operations": 15,
-        "external_endpoint_operations": 15,
-        "external_guide_specs": 20,
-        "approval_required_operations": 10,
-        "sample_ids": [
-          "15004087",
-          "15004088",
-          "15004206"
-        ]
       }
     ]
   },
   "adapters": {
-    "generated_at": "2026-06-25T01:43:52Z",
+    "generated_at": "2026-06-25T02:06:21Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 16,
-    "host_count": 19,
+    "adapter_count": 17,
+    "host_count": 21,
     "adapters": [
       {
         "name": "airport",
@@ -502,6 +498,18 @@
         ]
       },
       {
+        "name": "oneclick-law",
+        "status": "registered",
+        "hosts": [
+          "oneclick.law.go.kr",
+          "oneclick.law.go.kr:80"
+        ],
+        "capabilities": [
+          "call",
+          "verification"
+        ]
+      },
+      {
         "name": "q-net",
         "status": "registered",
         "hosts": [
@@ -550,9 +558,9 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 16,
-      "verification_capable_adapters": 16,
-      "call_capable_adapters": 11,
+      "adapter_count": 17,
+      "verification_capable_adapters": 17,
+      "call_capable_adapters": 12,
       "required_adapters": 2,
       "required_verification_adapters": 2,
       "required_call_adapters": 1,
@@ -563,19 +571,19 @@
   "next": [
     {
       "label": "missing adapters",
-      "command": "datapan providers --registry C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\data\\data-go-kr.registry.json --gaps --limit 20 --json"
+      "command": "datapan providers --registry C:\\workspace\\datapan-registry\\.datapan\\release-oneclick\\data\\data-go-kr.registry.json --gaps --limit 20 --json"
     },
     {
       "label": "adapter targets",
-      "command": "datapan targets --registry C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\data\\data-go-kr.registry.json --limit 20 --json"
+      "command": "datapan targets --registry C:\\workspace\\datapan-registry\\.datapan\\release-oneclick\\data\\data-go-kr.registry.json --limit 20 --json"
     },
     {
       "label": "coverage report",
-      "command": "datapan coverage --registry C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\data\\data-go-kr.registry.json --verification C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\reports\\latest-verification.json --json"
+      "command": "datapan coverage --registry C:\\workspace\\datapan-registry\\.datapan\\release-oneclick\\data\\data-go-kr.registry.json --verification C:\\workspace\\datapan-registry\\.datapan\\release-oneclick\\reports\\latest-verification.json --json"
     },
     {
       "label": "verify forest",
-      "command": "datapan verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\data\\data-go-kr.registry.json --provider forest --kind external_endpoint --limit 4 --timeout 10s --json"
+      "command": "datapan verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-oneclick\\data\\data-go-kr.registry.json --provider forest --kind external_endpoint --limit 4 --timeout 10s --json"
     }
   ]
 }

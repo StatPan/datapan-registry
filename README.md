@@ -13,17 +13,17 @@ re-importing the upstream data.go.kr catalog every time.
 - Specs: `12060`
 - Operations: `12205`
 - Callable operations: `12063` (`98.8%`)
-- Latest release: `v2026.06.25.8`
+- Latest release: `v2026.06.25.9`
 - Registered external adapters: `airport`, `andong`, `ekape`, `epost`, `folk`,
-  `forest`, `geoje`, `humetro`, `itfind`, `jeonju`, `korad`, `naqs`, `q-net`,
-  `sisul`, `uiryeong`, `ulsan`
-- External adapter coverage: `498` registered-adapter operations out of `594`
-  external endpoint operations (`81.2%`)
-- Missing external adapter hosts: `21`
+  `forest`, `geoje`, `humetro`, `itfind`, `jeonju`, `korad`, `naqs`,
+  `oneclick-law`, `q-net`, `sisul`, `uiryeong`, `ulsan`
+- External adapter coverage: `528` registered-adapter operations out of `594`
+  external endpoint operations (`86.1%`)
+- Missing external adapter hosts: `19`
 - Provider split readiness: `ready`
-  (`16` adapters, `16` verification-capable, `11` call-capable)
-- Runtime verification evidence: `171` bounded checks merged into
-  `reports/latest-verification.json` (`21` verified, `51` failed, `99`
+  (`17` adapters, `17` verification-capable, `12` call-capable)
+- Runtime verification evidence: `201` bounded checks merged into
+  `reports/latest-verification.json` (`21` verified, `62` failed, `118`
   skipped)
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
@@ -109,6 +109,8 @@ reports/
   korad-verification-summary.json
   naqs-verification.json
   naqs-verification-summary.json
+  oneclick-law-verification.json
+  oneclick-law-verification-summary.json
   qnet-verification.json
   qnet-verification-summary.json
   sisul-verification.json

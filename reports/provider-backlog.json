@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-25T01:43:47Z",
+  "generated_at": "2026-06-25T02:06:16Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-oneclick\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "filtered_count": 179,
@@ -10,34 +10,17 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 40,
     "external_guide_hosts": 150,
-    "registered_adapter_hosts": 19,
+    "registered_adapter_hosts": 21,
     "operation_hosts": 42,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 21,
-    "needs_adapter_operations": 96,
+    "missing_adapter_hosts": 19,
+    "needs_adapter_operations": 66,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
     "malformed_source_url_count": 628
   },
   "providers": [
-    {
-      "host": "oneclick.law.go.kr:80",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "missing",
-      "specs": 3,
-      "operations": 27,
-      "external_endpoint_operations": 27,
-      "soap_operations": 27,
-      "approval_required_operations": 15,
-      "sample_ids": [
-        "15000021",
-        "15000122",
-        "15000215"
-      ]
-    },
     {
       "host": "openapi.tour.go.kr",
       "kinds": [
@@ -211,21 +194,6 @@
       "external_endpoint_operations": 3,
       "sample_ids": [
         "15021579"
-      ]
-    },
-    {
-      "host": "oneclick.law.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "missing",
-      "specs": 1,
-      "operations": 3,
-      "external_endpoint_operations": 3,
-      "soap_operations": 3,
-      "approval_required_operations": 3,
-      "sample_ids": [
-        "15000335"
       ]
     },
     {
@@ -429,6 +397,24 @@
       ]
     },
     {
+      "host": "oneclick.law.go.kr:80",
+      "provider": "oneclick-law",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 3,
+      "operations": 27,
+      "external_endpoint_operations": 27,
+      "soap_operations": 27,
+      "approval_required_operations": 15,
+      "sample_ids": [
+        "15000021",
+        "15000122",
+        "15000215"
+      ]
+    },
+    {
       "host": "openapi.epost.go.kr:80",
       "provider": "epost",
       "kinds": [
@@ -628,6 +614,22 @@
       "external_endpoint_operations": 3,
       "sample_ids": [
         "15126343"
+      ]
+    },
+    {
+      "host": "oneclick.law.go.kr",
+      "provider": "oneclick-law",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "soap_operations": 3,
+      "approval_required_operations": 3,
+      "sample_ids": [
+        "15000335"
       ]
     },
     {
