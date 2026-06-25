@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-25T02:50:14Z",
+  "generated_at": "2026-06-25T03:06:15Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 17,
+  "filtered_count": 16,
   "summary": {
-    "target_hosts": 17,
-    "target_operations": 53,
-    "external_endpoint_operations": 53,
+    "target_hosts": 16,
+    "target_operations": 48,
+    "external_endpoint_operations": 48,
     "service_root_operations": 0,
     "approval_required_operations": 5,
-    "missing_param_operations": 41,
+    "missing_param_operations": 36,
     "unsupported_protocol_operations": 0
   },
   "targets": [
@@ -113,65 +113,6 @@
     },
     {
       "rank": 3,
-      "host": "ws.bus.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 5,
-      "specs": 1,
-      "organizations": [
-        "서울특별시"
-      ],
-      "source_categories": [
-        "교통물류"
-      ],
-      "api_types": [
-        "REST"
-      ],
-      "data_formats": [
-        "JSON+XML"
-      ],
-      "missing_param_operations": 5,
-      "sample_operations": [
-        {
-          "dataset_id": "15000332",
-          "title": "서울특별시_버스위치정보조회 서비스",
-          "organization": "서울특별시",
-          "operation": "getBusPosByRouteStList",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://ws.bus.go.kr/api/rest/buspos/getBusPosByRouteSt",
-          "missing_params": [
-            "busRouteId",
-            "startOrd",
-            "endOrd"
-          ]
-        },
-        {
-          "dataset_id": "15000332",
-          "title": "서울특별시_버스위치정보조회 서비스",
-          "organization": "서울특별시",
-          "operation": "getBusPosByRtidList",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://ws.bus.go.kr/api/rest/buspos/getBusPosByRtid",
-          "missing_params": [
-            "busRouteId"
-          ]
-        },
-        {
-          "dataset_id": "15000332",
-          "title": "서울특별시_버스위치정보조회 서비스",
-          "organization": "서울특별시",
-          "operation": "getBusPosByVehIdItem",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://ws.bus.go.kr/api/rest/buspos/getBusPosByVehId",
-          "missing_params": [
-            "vehId"
-          ]
-        }
-      ]
-    },
-    {
-      "rank": 4,
       "host": "data.jeju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -231,7 +172,7 @@
       ]
     },
     {
-      "rank": 5,
+      "rank": 4,
       "host": "www.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -290,7 +231,7 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 5,
       "host": "car.daegu.go.kr",
       "kinds": [
         "external_endpoint"
@@ -350,7 +291,7 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 6,
       "host": "openapi.pqis.go.kr",
       "kinds": [
         "external_endpoint"
@@ -413,7 +354,7 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 7,
       "host": "openapi.price.go.kr",
       "kinds": [
         "external_endpoint"
@@ -472,7 +413,7 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 8,
       "host": "openapi.gblib.or.kr",
       "kinds": [
         "external_endpoint"
@@ -530,7 +471,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -587,7 +528,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "www.emuseum.go.kr",
       "kinds": [
         "external_endpoint"
@@ -657,7 +598,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -708,7 +649,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -765,7 +706,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 13,
       "host": "data.myhome.go.kr:443",
       "kinds": [
         "external_endpoint"
@@ -801,7 +742,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 14,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -837,7 +778,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 15,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -868,7 +809,7 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 16,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T02:50:14Z",
+  "generated_at": "2026-06-25T03:06:15Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 19,
-  "host_count": 23,
+  "adapter_count": 20,
+  "host_count": 24,
   "adapters": [
     {
       "name": "airport",
@@ -169,6 +169,17 @@
       ]
     },
     {
+      "name": "seoul-bus",
+      "status": "registered",
+      "hosts": [
+        "ws.bus.go.kr"
+      ],
+      "capabilities": [
+        "call",
+        "verification"
+      ]
+    },
+    {
       "name": "sisul",
       "status": "registered",
       "hosts": [
@@ -216,9 +227,9 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 19,
-    "verification_capable_adapters": 19,
-    "call_capable_adapters": 14,
+    "adapter_count": 20,
+    "verification_capable_adapters": 20,
+    "call_capable_adapters": 15,
     "required_adapters": 2,
     "required_verification_adapters": 2,
     "required_call_adapters": 1,

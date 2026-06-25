@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T02:50:19Z",
+  "generated_at": "2026-06-25T03:06:20Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -11,29 +11,29 @@
     "callable_operation_percent": 98.8,
     "data_go_kr_gateway_operations": 11419,
     "external_endpoint_operations": 594,
-    "registered_adapter_operations": 560,
-    "missing_adapter_operations": 53,
-    "external_adapter_coverage_percent": 91.4,
+    "registered_adapter_operations": 565,
+    "missing_adapter_operations": 48,
+    "external_adapter_coverage_percent": 92.2,
     "approval_required_operations": 4142,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
-    "registered_adapter_hosts": 23,
-    "missing_adapter_hosts": 17,
-    "adapter_count": 19,
-    "call_capable_adapters": 14,
+    "registered_adapter_hosts": 24,
+    "missing_adapter_hosts": 16,
+    "adapter_count": 20,
+    "call_capable_adapters": 15,
     "provider_split_ready": true
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-06-25T02:49:29Z",
-    "total": 233,
+    "generated_at": "2026-06-25T03:05:54Z",
+    "total": 238,
     "verified": 21,
-    "failed": 74,
-    "skipped": 138,
+    "failed": 78,
+    "skipped": 139,
     "unknown": 0,
-    "verified_percent": 9,
-    "evidence_operation_percent": 1.9
+    "verified_percent": 8.8,
+    "evidence_operation_percent": 2
   },
   "gaps": {
     "missing_adapter_hosts": [
@@ -66,19 +66,6 @@
           "15051436",
           "15056640",
           "15056879"
-        ]
-      },
-      {
-        "host": "ws.bus.go.kr",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "missing",
-        "specs": 1,
-        "operations": 5,
-        "external_endpoint_operations": 5,
-        "sample_ids": [
-          "15000332"
         ]
       },
       {
@@ -178,6 +165,19 @@
         "external_endpoint_operations": 3,
         "sample_ids": [
           "15021579"
+        ]
+      },
+      {
+        "host": "www.emuseum.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 1,
+        "operations": 3,
+        "external_endpoint_operations": 3,
+        "sample_ids": [
+          "3036708"
         ]
       }
     ],
@@ -361,10 +361,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-06-25T02:50:19Z",
+    "generated_at": "2026-06-25T03:06:20Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 19,
-    "host_count": 23,
+    "adapter_count": 20,
+    "host_count": 24,
     "adapters": [
       {
         "name": "airport",
@@ -531,6 +531,17 @@
         ]
       },
       {
+        "name": "seoul-bus",
+        "status": "registered",
+        "hosts": [
+          "ws.bus.go.kr"
+        ],
+        "capabilities": [
+          "call",
+          "verification"
+        ]
+      },
+      {
         "name": "sisul",
         "status": "registered",
         "hosts": [
@@ -578,9 +589,9 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 19,
-      "verification_capable_adapters": 19,
-      "call_capable_adapters": 14,
+      "adapter_count": 20,
+      "verification_capable_adapters": 20,
+      "call_capable_adapters": 15,
       "required_adapters": 2,
       "required_verification_adapters": 2,
       "required_call_adapters": 1,

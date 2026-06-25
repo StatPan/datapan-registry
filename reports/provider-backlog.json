@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T02:50:14Z",
+  "generated_at": "2026-06-25T03:06:15Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -10,11 +10,11 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 40,
     "external_guide_hosts": 150,
-    "registered_adapter_hosts": 23,
+    "registered_adapter_hosts": 24,
     "operation_hosts": 42,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 17,
-    "needs_adapter_operations": 53,
+    "missing_adapter_hosts": 16,
+    "needs_adapter_operations": 48,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
@@ -50,19 +50,6 @@
         "15051436",
         "15056640",
         "15056879"
-      ]
-    },
-    {
-      "host": "ws.bus.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "missing",
-      "specs": 1,
-      "operations": 5,
-      "external_endpoint_operations": 5,
-      "sample_ids": [
-        "15000332"
       ]
     },
     {
@@ -587,6 +574,20 @@
         "15021183",
         "15021184",
         "15042795"
+      ]
+    },
+    {
+      "host": "ws.bus.go.kr",
+      "provider": "seoul-bus",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 5,
+      "external_endpoint_operations": 5,
+      "sample_ids": [
+        "15000332"
       ]
     },
     {

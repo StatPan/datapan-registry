@@ -48,7 +48,7 @@ jobs:
         working-directory: datapan-cli
         run: |
           mkdir -p ../datapan-registry/.datapan/ci/provider-summaries
-          for provider in qnet epost ekape forest folk airport andong jeonju geoje humetro itfind korad lh-ebid naqs oneclick-law sisul tour uiryeong ulsan; do
+          for provider in qnet epost ekape forest folk airport andong jeonju geoje humetro itfind korad lh-ebid naqs oneclick-law seoul-bus sisul tour uiryeong ulsan; do
             go run ./cmd/datapan catalog verify summary \
               --input "../datapan-registry/reports/${provider}-verification.json" \
               --output "../datapan-registry/.datapan/ci/provider-summaries/${provider}-verification-summary.json" \

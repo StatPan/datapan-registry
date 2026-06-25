@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-06-25T02:49:29Z",
+  "generated_at": "2026-06-25T03:05:54Z",
   "source": "C:\\workspace\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 233,
+    "total": 238,
     "verified": 21,
-    "failed": 74,
-    "skipped": 138,
+    "failed": 78,
+    "skipped": 139,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 138,
+        "count": 139,
         "status": "skipped"
       },
       {
         "key": "failed",
-        "count": 74,
+        "count": 78,
         "status": "failed"
       },
       {
@@ -142,6 +142,11 @@
         "reason": "geoje_missing_required_params"
       },
       {
+        "key": "seoul_bus_service_key_not_registered",
+        "count": 4,
+        "reason": "seoul_bus_service_key_not_registered"
+      },
+      {
         "key": "itfind_endpoint_not_found",
         "count": 3,
         "reason": "itfind_endpoint_not_found"
@@ -210,6 +215,11 @@
         "key": "qnet_connection_validation_failed",
         "count": 1,
         "reason": "qnet_connection_validation_failed"
+      },
+      {
+        "key": "seoul_bus_missing_required_params",
+        "count": 1,
+        "reason": "seoul_bus_missing_required_params"
       }
     ],
     "by_provider": [
@@ -302,6 +312,11 @@
         "key": "jeonju",
         "count": 5,
         "provider": "jeonju"
+      },
+      {
+        "key": "seoul-bus",
+        "count": 5,
+        "provider": "seoul-bus"
       },
       {
         "key": "forest",
@@ -406,6 +421,11 @@
         "host": "openapi.jeonju.go.kr"
       },
       {
+        "key": "ws.bus.go.kr",
+        "count": 5,
+        "host": "ws.bus.go.kr"
+      },
+      {
         "key": "api.forest.go.kr",
         "count": 4,
         "host": "api.forest.go.kr"
@@ -429,7 +449,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 204,
+        "count": 209,
         "kind": "external_endpoint"
       },
       {

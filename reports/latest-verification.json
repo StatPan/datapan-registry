@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-25T02:49:29Z",
+  "generated_at": "2026-06-25T03:05:54Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 240,
+  "limit": 245,
   "truncated": true,
-  "filtered_count": 233,
+  "filtered_count": 238,
   "summary": {
-    "total": 233,
+    "total": 238,
     "verified": 21,
-    "failed": 74,
-    "skipped": 138,
+    "failed": 78,
+    "skipped": 139,
     "unknown": 0
   },
   "results": [
@@ -5202,6 +5202,123 @@
         "pageNo": "1"
       },
       "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15000332",
+      "title": "서울특별시_버스위치정보조회 서비스",
+      "operation": "getBusPosByRouteStList",
+      "provider": "seoul-bus",
+      "endpoint_host": "ws.bus.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "seoul_bus_service_key_not_registered",
+      "verified_at": "2026-06-25T03:05:31Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "ServiceResult/msgHeader",
+        "code": "7",
+        "message": "Key인증실패: SERVICE KEY IS NOT REGISTERED ERROR.[인증모듈 에러코드(30)]"
+      },
+      "url": "http://ws.bus.go.kr/api/rest/buspos/getBusPosByRouteSt?busRouteId=100100118\u0026endOrd=5\u0026serviceKey=REDACTED\u0026startOrd=1",
+      "params": {
+        "busRouteId": "100100118",
+        "endOrd": "5",
+        "startOrd": "1"
+      },
+      "body_shape": "xml_service_status"
+    },
+    {
+      "dataset_id": "15000332",
+      "title": "서울특별시_버스위치정보조회 서비스",
+      "operation": "getBusPosByRtidList",
+      "provider": "seoul-bus",
+      "endpoint_host": "ws.bus.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "seoul_bus_service_key_not_registered",
+      "verified_at": "2026-06-25T03:05:31Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "ServiceResult/msgHeader",
+        "code": "7",
+        "message": "Key인증실패: SERVICE KEY IS NOT REGISTERED ERROR.[인증모듈 에러코드(30)]"
+      },
+      "url": "http://ws.bus.go.kr/api/rest/buspos/getBusPosByRtid?busRouteId=100100118\u0026serviceKey=REDACTED",
+      "params": {
+        "busRouteId": "100100118"
+      },
+      "body_shape": "xml_service_status"
+    },
+    {
+      "dataset_id": "15000332",
+      "title": "서울특별시_버스위치정보조회 서비스",
+      "operation": "getBusPosByVehIdItem",
+      "provider": "seoul-bus",
+      "endpoint_host": "ws.bus.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "seoul_bus_missing_required_params",
+      "verified_at": "2026-06-25T03:05:31Z",
+      "params": {
+        "vehId": ""
+      },
+      "missing_params": [
+        "vehId"
+      ]
+    },
+    {
+      "dataset_id": "15000332",
+      "title": "서울특별시_버스위치정보조회 서비스",
+      "operation": "getLowBusPosByRouteStList",
+      "provider": "seoul-bus",
+      "endpoint_host": "ws.bus.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "seoul_bus_service_key_not_registered",
+      "verified_at": "2026-06-25T03:05:31Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "ServiceResult/msgHeader",
+        "code": "7",
+        "message": "Key인증실패: SERVICE KEY IS NOT REGISTERED ERROR.[인증모듈 에러코드(30)]"
+      },
+      "url": "http://ws.bus.go.kr/api/rest/buspos/getLowBusPosByRouteSt?busRouteId=100100118\u0026endOrd=5\u0026serviceKey=REDACTED\u0026startOrd=1",
+      "params": {
+        "busRouteId": "100100118",
+        "endOrd": "5",
+        "startOrd": "1"
+      },
+      "body_shape": "xml_service_status"
+    },
+    {
+      "dataset_id": "15000332",
+      "title": "서울특별시_버스위치정보조회 서비스",
+      "operation": "getLowBusPosByRtidList",
+      "provider": "seoul-bus",
+      "endpoint_host": "ws.bus.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "seoul_bus_service_key_not_registered",
+      "verified_at": "2026-06-25T03:05:31Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "ServiceResult/msgHeader",
+        "code": "7",
+        "message": "Key인증실패: SERVICE KEY IS NOT REGISTERED ERROR.[인증모듈 에러코드(30)]"
+      },
+      "url": "http://ws.bus.go.kr/api/rest/buspos/getLowBusPosByRtid?busRouteId=100100118\u0026serviceKey=REDACTED",
+      "params": {
+        "busRouteId": "100100118"
+      },
+      "body_shape": "xml_service_status"
     }
   ]
 }

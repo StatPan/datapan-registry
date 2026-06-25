@@ -13,17 +13,17 @@ re-importing the upstream data.go.kr catalog every time.
 - Specs: `12060`
 - Operations: `12205`
 - Callable operations: `12063` (`98.8%`)
-- Latest release: `v2026.06.25.11`
+- Latest release: `v2026.06.25.12`
 - Registered external adapters: `airport`, `andong`, `ekape`, `epost`, `folk`,
   `forest`, `geoje`, `humetro`, `itfind`, `jeonju`, `korad`, `lh-ebid`, `naqs`,
-  `oneclick-law`, `q-net`, `sisul`, `tour`, `uiryeong`, `ulsan`
-- External adapter coverage: `560` registered-adapter operations out of `594`
-  external endpoint operations (`91.4%`)
-- Missing external adapter hosts: `17`
+  `oneclick-law`, `q-net`, `seoul-bus`, `sisul`, `tour`, `uiryeong`, `ulsan`
+- External adapter coverage: `565` registered-adapter operations out of `594`
+  external endpoint operations (`92.2%`)
+- Missing external adapter hosts: `16`
 - Provider split readiness: `ready`
-  (`19` adapters, `19` verification-capable, `14` call-capable)
-- Runtime verification evidence: `233` bounded checks merged into
-  `reports/latest-verification.json` (`21` verified, `74` failed, `138`
+  (`20` adapters, `20` verification-capable, `15` call-capable)
+- Runtime verification evidence: `238` bounded checks merged into
+  `reports/latest-verification.json` (`21` verified, `78` failed, `139`
   skipped)
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
@@ -115,6 +115,8 @@ reports/
   oneclick-law-verification-summary.json
   qnet-verification.json
   qnet-verification-summary.json
+  seoul-bus-verification.json
+  seoul-bus-verification-summary.json
   sisul-verification.json
   sisul-verification-summary.json
   tour-verification.json
