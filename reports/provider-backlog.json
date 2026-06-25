@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-25T00:44:14Z",
+  "generated_at": "2026-06-25T01:04:08Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-andong\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-itfind\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "filtered_count": 179,
@@ -10,11 +10,11 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 40,
     "external_guide_hosts": 150,
-    "registered_adapter_hosts": 15,
+    "registered_adapter_hosts": 16,
     "operation_hosts": 42,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 25,
-    "needs_adapter_operations": 141,
+    "missing_adapter_hosts": 24,
+    "needs_adapter_operations": 128,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
@@ -54,21 +54,6 @@
         "15004087",
         "15004088",
         "15004206"
-      ]
-    },
-    {
-      "host": "open.itfind.or.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "missing",
-      "specs": 5,
-      "operations": 13,
-      "external_endpoint_operations": 13,
-      "sample_ids": [
-        "15036874",
-        "15036875",
-        "15036876"
       ]
     },
     {
@@ -559,6 +544,22 @@
         "15003047",
         "15005609",
         "15005628"
+      ]
+    },
+    {
+      "host": "open.itfind.or.kr",
+      "provider": "itfind",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 5,
+      "operations": 13,
+      "external_endpoint_operations": 13,
+      "sample_ids": [
+        "15036874",
+        "15036875",
+        "15036876"
       ]
     },
     {

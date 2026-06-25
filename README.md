@@ -13,16 +13,17 @@ re-importing the upstream data.go.kr catalog every time.
 - Specs: `12060`
 - Operations: `12205`
 - Callable operations: `12063` (`98.8%`)
-- Latest release: `v2026.06.25.5`
+- Latest release: `v2026.06.25.6`
 - Registered external adapters: `airport`, `andong`, `ekape`, `epost`, `folk`,
-  `forest`, `geoje`, `jeonju`, `q-net`, `sisul`, `uiryeong`, `ulsan`
-- External adapter coverage: `453` registered-adapter operations out of `594`
-  external endpoint operations (`73.9%`)
-- Missing external adapter hosts: `25`
+  `forest`, `geoje`, `itfind`, `jeonju`, `q-net`, `sisul`, `uiryeong`,
+  `ulsan`
+- External adapter coverage: `466` registered-adapter operations out of `594`
+  external endpoint operations (`76.0%`)
+- Missing external adapter hosts: `24`
 - Provider split readiness: `ready`
-  (`12` adapters, `12` verification-capable, `7` call-capable)
-- Runtime verification evidence: `126` bounded checks merged into
-  `reports/latest-verification.json` (`16` verified, `40` failed, `70`
+  (`13` adapters, `13` verification-capable, `8` call-capable)
+- Runtime verification evidence: `139` bounded checks merged into
+  `reports/latest-verification.json` (`20` verified, `43` failed, `76`
   skipped)
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
@@ -98,6 +99,8 @@ reports/
   forest-verification-summary.json
   geoje-verification.json
   geoje-verification-summary.json
+  itfind-verification.json
+  itfind-verification-summary.json
   jeonju-verification.json
   jeonju-verification-summary.json
   qnet-verification.json

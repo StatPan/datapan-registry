@@ -1,32 +1,32 @@
 {
-  "generated_at": "2026-06-25T00:44:11Z",
-  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-andong\\reports\\latest-verification.json",
+  "generated_at": "2026-06-25T01:03:56Z",
+  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-itfind\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 126,
-    "verified": 16,
-    "failed": 40,
-    "skipped": 70,
+    "total": 139,
+    "verified": 20,
+    "failed": 43,
+    "skipped": 76,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 70,
+        "count": 76,
         "status": "skipped"
       },
       {
         "key": "failed",
-        "count": 40,
+        "count": 43,
         "status": "failed"
       },
       {
         "key": "verified",
-        "count": 16,
+        "count": 20,
         "status": "verified"
       }
     ],
@@ -62,6 +62,11 @@
         "reason": "ekape_missing_required_params"
       },
       {
+        "key": "itfind_missing_required_params",
+        "count": 6,
+        "reason": "itfind_missing_required_params"
+      },
+      {
         "key": "sisul_request_timeout",
         "count": 6,
         "reason": "sisul_request_timeout"
@@ -95,6 +100,11 @@
         "key": "geoje_missing_required_params",
         "count": 4,
         "reason": "geoje_missing_required_params"
+      },
+      {
+        "key": "itfind_endpoint_not_found",
+        "count": 3,
+        "reason": "itfind_endpoint_not_found"
       },
       {
         "key": "jeonju_http_404_not_found",
@@ -179,6 +189,11 @@
         "provider": "q-net"
       },
       {
+        "key": "itfind",
+        "count": 13,
+        "provider": "itfind"
+      },
+      {
         "key": "data.go.kr",
         "count": 10,
         "provider": "data.go.kr"
@@ -241,6 +256,11 @@
         "host": "www.andong.go.kr"
       },
       {
+        "key": "open.itfind.or.kr",
+        "count": 13,
+        "host": "open.itfind.or.kr"
+      },
+      {
         "key": "openapi.epost.go.kr:80",
         "count": 13,
         "host": "openapi.epost.go.kr:80"
@@ -294,7 +314,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 116,
+        "count": 129,
         "kind": "external_endpoint"
       },
       {

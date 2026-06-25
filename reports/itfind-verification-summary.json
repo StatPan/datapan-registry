@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-06-25T01:01:29Z",
+  "source": "C:\\workspace\\datapan-registry\\reports\\itfind-verification.json",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 13,
+    "verified": 4,
+    "failed": 3,
+    "skipped": 6,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "skipped",
+        "count": 6,
+        "status": "skipped"
+      },
+      {
+        "key": "verified",
+        "count": 4,
+        "status": "verified"
+      },
+      {
+        "key": "failed",
+        "count": 3,
+        "status": "failed"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "itfind_missing_required_params",
+        "count": 6,
+        "reason": "itfind_missing_required_params"
+      },
+      {
+        "key": "itfind_endpoint_not_found",
+        "count": 3,
+        "reason": "itfind_endpoint_not_found"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "itfind",
+        "count": 13,
+        "provider": "itfind"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "open.itfind.or.kr",
+        "count": 13,
+        "host": "open.itfind.or.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 13,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

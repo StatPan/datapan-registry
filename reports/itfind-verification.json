@@ -1,0 +1,304 @@
+{
+  "generated_at": "2026-06-25T01:01:29Z",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 13,
+  "timeout": "8s",
+  "truncated": false,
+  "filters": {
+    "provider": "itfind",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 13,
+  "summary": {
+    "total": 13,
+    "verified": 4,
+    "failed": 3,
+    "skipped": 6,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15036874",
+      "title": "한국연구재단 _ICT 정기간행물 정보",
+      "operation": "ICT정기간행물 목록별 목차 정보 조회",
+      "provider": "itfind",
+      "endpoint_host": "open.itfind.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "itfind_missing_required_params",
+      "verified_at": "2026-06-25T01:01:29Z",
+      "params": {
+        "identifier": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "identifier"
+      ]
+    },
+    {
+      "dataset_id": "15036874",
+      "title": "한국연구재단 _ICT 정기간행물 정보",
+      "operation": "ICT정기간행물 목록별 상세 정보 조회",
+      "provider": "itfind",
+      "endpoint_host": "open.itfind.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "itfind_missing_required_params",
+      "verified_at": "2026-06-25T01:01:29Z",
+      "params": {
+        "identifier": ""
+      },
+      "missing_params": [
+        "identifier"
+      ]
+    },
+    {
+      "dataset_id": "15036874",
+      "title": "한국연구재단 _ICT 정기간행물 정보",
+      "operation": "SW Insight 리포트 정보 조회",
+      "provider": "itfind",
+      "endpoint_host": "open.itfind.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "itfind_endpoint_not_found",
+      "verified_at": "2026-06-25T01:01:29Z",
+      "http_status": 404,
+      "semantic_status": "http_error",
+      "url": "http://open.itfind.or.kr/openapi/service/ITPeriodicalsService/getSWInsightReportInfo?numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "issuedEnd": "",
+        "issuedStart": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "searchType": "",
+        "searchWord": ""
+      },
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15036874",
+      "title": "한국연구재단 _ICT 정기간행물 정보",
+      "operation": "모바일 트렌드 매거진 정보 조회",
+      "provider": "itfind",
+      "endpoint_host": "open.itfind.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "itfind_endpoint_not_found",
+      "verified_at": "2026-06-25T01:01:29Z",
+      "http_status": 404,
+      "semantic_status": "http_error",
+      "url": "http://open.itfind.or.kr/openapi/service/ITPeriodicalsService/getMobileTrendMagazineInfo?numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "issuedEnd": "",
+        "issuedStart": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "searchType": "",
+        "searchWord": ""
+      },
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15036874",
+      "title": "한국연구재단 _ICT 정기간행물 정보",
+      "operation": "백서 및 연차보고서 정보 목록 조회",
+      "provider": "itfind",
+      "endpoint_host": "open.itfind.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "itfind_endpoint_not_found",
+      "verified_at": "2026-06-25T01:01:29Z",
+      "http_status": 404,
+      "semantic_status": "http_error",
+      "url": "http://open.itfind.or.kr/openapi/service/ITPeriodicalsService/getWtpYrycReprtInfo?numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "issuedEnd": "",
+        "issuedStart": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "searchType": "",
+        "searchWord": ""
+      },
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15036875",
+      "title": "한국연구재단_연구결과보고서 정보",
+      "operation": "연구결과보고서 상세 정보 조회",
+      "provider": "itfind",
+      "endpoint_host": "open.itfind.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "itfind_missing_required_params",
+      "verified_at": "2026-06-25T01:01:29Z",
+      "params": {
+        "identifier": ""
+      },
+      "missing_params": [
+        "identifier"
+      ]
+    },
+    {
+      "dataset_id": "15036875",
+      "title": "한국연구재단_연구결과보고서 정보",
+      "operation": "연구결과보고서 정보 조회",
+      "provider": "itfind",
+      "endpoint_host": "open.itfind.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-06-25T01:01:29Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "NORMAL SERVICE."
+      },
+      "url": "http://open.itfind.or.kr/openapi/service/ResearchResultReportService/getResearchResultReport?numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "issuedEnd": "",
+        "issuedStart": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "searchType": "",
+        "searchWord": ""
+      },
+      "body_shape": "xml_items"
+    },
+    {
+      "dataset_id": "15036876",
+      "title": "한국연구재단_ ICT통계간행물 정보",
+      "operation": "ICT 통계간행물 정보 상세 조회",
+      "provider": "itfind",
+      "endpoint_host": "open.itfind.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "itfind_missing_required_params",
+      "verified_at": "2026-06-25T01:01:29Z",
+      "params": {
+        "identifier": ""
+      },
+      "missing_params": [
+        "identifier"
+      ]
+    },
+    {
+      "dataset_id": "15036876",
+      "title": "한국연구재단_ ICT통계간행물 정보",
+      "operation": "통계간행물 정보 조회",
+      "provider": "itfind",
+      "endpoint_host": "open.itfind.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-06-25T01:01:29Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "NORMAL SERVICE."
+      },
+      "url": "http://open.itfind.or.kr/openapi/service/ITStatsService/getStatsPublicationInfo?numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "searchWord": ""
+      },
+      "body_shape": "xml_items"
+    },
+    {
+      "dataset_id": "15036877",
+      "title": "한국연구재단_분석리포트 정보",
+      "operation": "분석리포트 정보 목록 조회",
+      "provider": "itfind",
+      "endpoint_host": "open.itfind.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-06-25T01:01:29Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "NORMAL SERVICE."
+      },
+      "url": "http://open.itfind.or.kr/openapi/service/AnalysisReportService/getAnalysisReportInfo?numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "issuedEnd": "",
+        "issuedStart": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "searchType": "",
+        "searchWord": ""
+      },
+      "body_shape": "xml_items"
+    },
+    {
+      "dataset_id": "15036877",
+      "title": "한국연구재단_분석리포트 정보",
+      "operation": "분석리포트 정보 상세 조회",
+      "provider": "itfind",
+      "endpoint_host": "open.itfind.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "itfind_missing_required_params",
+      "verified_at": "2026-06-25T01:01:29Z",
+      "params": {
+        "identifier": ""
+      },
+      "missing_params": [
+        "identifier"
+      ]
+    },
+    {
+      "dataset_id": "15036878",
+      "title": "한국연구재단_ICT동향정보",
+      "operation": "유관기관스크랩 정보 상세 조회",
+      "provider": "itfind",
+      "endpoint_host": "open.itfind.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "itfind_missing_required_params",
+      "verified_at": "2026-06-25T01:01:29Z",
+      "params": {
+        "identifier": ""
+      },
+      "missing_params": [
+        "identifier"
+      ]
+    },
+    {
+      "dataset_id": "15036878",
+      "title": "한국연구재단_ICT동향정보",
+      "operation": "유관기관스크랩 정보 조회",
+      "provider": "itfind",
+      "endpoint_host": "open.itfind.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-06-25T01:01:29Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "NORMAL SERVICE."
+      },
+      "url": "http://open.itfind.or.kr/openapi/service/ICTTrendInformationService/getCrdnsScrapInfo?numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "issuedEnd": "",
+        "issuedStart": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "searchType": "",
+        "searchWord": ""
+      },
+      "body_shape": "xml_status"
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T00:44:14Z",
+  "generated_at": "2026-06-25T01:04:08Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 12,
-  "host_count": 15,
+  "adapter_count": 13,
+  "host_count": 16,
   "adapters": [
     {
       "name": "airport",
@@ -80,6 +80,17 @@
       ]
     },
     {
+      "name": "itfind",
+      "status": "registered",
+      "hosts": [
+        "open.itfind.or.kr"
+      ],
+      "capabilities": [
+        "call",
+        "verification"
+      ]
+    },
+    {
       "name": "jeonju",
       "status": "registered",
       "hosts": [
@@ -138,9 +149,9 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 12,
-    "verification_capable_adapters": 12,
-    "call_capable_adapters": 7,
+    "adapter_count": 13,
+    "verification_capable_adapters": 13,
+    "call_capable_adapters": 8,
     "required_adapters": 2,
     "required_verification_adapters": 2,
     "required_call_adapters": 1,
