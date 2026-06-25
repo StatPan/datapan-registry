@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T03:06:20Z",
+  "generated_at": "2026-06-25T03:21:01Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -11,28 +11,28 @@
     "callable_operation_percent": 98.8,
     "data_go_kr_gateway_operations": 11419,
     "external_endpoint_operations": 594,
-    "registered_adapter_operations": 565,
-    "missing_adapter_operations": 48,
-    "external_adapter_coverage_percent": 92.2,
+    "registered_adapter_operations": 568,
+    "missing_adapter_operations": 45,
+    "external_adapter_coverage_percent": 92.7,
     "approval_required_operations": 4142,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
-    "registered_adapter_hosts": 24,
-    "missing_adapter_hosts": 16,
-    "adapter_count": 20,
-    "call_capable_adapters": 15,
+    "registered_adapter_hosts": 25,
+    "missing_adapter_hosts": 15,
+    "adapter_count": 21,
+    "call_capable_adapters": 16,
     "provider_split_ready": true
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-06-25T03:05:54Z",
-    "total": 238,
+    "generated_at": "2026-06-25T03:20:44Z",
+    "total": 241,
     "verified": 21,
-    "failed": 78,
+    "failed": 81,
     "skipped": 139,
     "unknown": 0,
-    "verified_percent": 8.8,
+    "verified_percent": 8.7,
     "evidence_operation_percent": 2
   },
   "gaps": {
@@ -138,23 +138,6 @@
         ]
       },
       {
-        "host": "openapi.gblib.or.kr",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "missing",
-        "specs": 3,
-        "operations": 3,
-        "external_endpoint_operations": 3,
-        "external_guide_specs": 3,
-        "sample_ids": [
-          "15003489",
-          "3075291",
-          "3075292"
-        ]
-      },
-      {
         "host": "its.gyeongju.go.kr:81",
         "kinds": [
           "external_endpoint"
@@ -178,6 +161,20 @@
         "external_endpoint_operations": 3,
         "sample_ids": [
           "3036708"
+        ]
+      },
+      {
+        "host": "data.wanju.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 2,
+        "operations": 2,
+        "external_endpoint_operations": 2,
+        "sample_ids": [
+          "15010208",
+          "15058097"
         ]
       }
     ],
@@ -361,10 +358,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-06-25T03:06:20Z",
+    "generated_at": "2026-06-25T03:21:01Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 20,
-    "host_count": 24,
+    "adapter_count": 21,
+    "host_count": 25,
     "adapters": [
       {
         "name": "airport",
@@ -424,6 +421,17 @@
         "status": "registered",
         "hosts": [
           "api.forest.go.kr"
+        ],
+        "capabilities": [
+          "call",
+          "verification"
+        ]
+      },
+      {
+        "name": "gblib",
+        "status": "registered",
+        "hosts": [
+          "openapi.gblib.or.kr"
         ],
         "capabilities": [
           "call",
@@ -589,9 +597,9 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 20,
-      "verification_capable_adapters": 20,
-      "call_capable_adapters": 15,
+      "adapter_count": 21,
+      "verification_capable_adapters": 21,
+      "call_capable_adapters": 16,
       "required_adapters": 2,
       "required_verification_adapters": 2,
       "required_call_adapters": 1,

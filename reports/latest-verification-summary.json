@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-25T03:05:54Z",
+  "generated_at": "2026-06-25T03:20:44Z",
   "source": "C:\\workspace\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 238,
+    "total": 241,
     "verified": 21,
-    "failed": 78,
+    "failed": 81,
     "skipped": 139,
     "unknown": 0
   },
@@ -21,7 +21,7 @@
       },
       {
         "key": "failed",
-        "count": 78,
+        "count": 81,
         "status": "failed"
       },
       {
@@ -182,6 +182,11 @@
         "reason": "epost_missing_required_params"
       },
       {
+        "key": "gblib_service_key_not_registered",
+        "count": 2,
+        "reason": "gblib_service_key_not_registered"
+      },
+      {
         "key": "jeonju_http_405_method_not_allowed",
         "count": 2,
         "reason": "jeonju_http_405_method_not_allowed"
@@ -195,6 +200,11 @@
         "key": "folk_missing_required_params",
         "count": 1,
         "reason": "folk_missing_required_params"
+      },
+      {
+        "key": "gblib_endpoint_not_found",
+        "count": 1,
+        "reason": "gblib_endpoint_not_found"
       },
       {
         "key": "humetro_deadline_expired",
@@ -327,6 +337,11 @@
         "key": "folk",
         "count": 3,
         "provider": "folk"
+      },
+      {
+        "key": "gblib",
+        "count": 3,
+        "provider": "gblib"
       }
     ],
     "by_endpoint_host": [
@@ -441,6 +456,11 @@
         "host": "oneclick.law.go.kr"
       },
       {
+        "key": "openapi.gblib.or.kr",
+        "count": 3,
+        "host": "openapi.gblib.or.kr"
+      },
+      {
         "key": "openapi.epost.go.kr",
         "count": 2,
         "host": "openapi.epost.go.kr"
@@ -449,7 +469,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 209,
+        "count": 212,
         "kind": "external_endpoint"
       },
       {

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T03:06:15Z",
+  "generated_at": "2026-06-25T03:20:56Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -10,11 +10,11 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 40,
     "external_guide_hosts": 150,
-    "registered_adapter_hosts": 24,
+    "registered_adapter_hosts": 25,
     "operation_hosts": 42,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 16,
-    "needs_adapter_operations": 48,
+    "missing_adapter_hosts": 15,
+    "needs_adapter_operations": 45,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
@@ -119,23 +119,6 @@
       "sample_ids": [
         "15002002",
         "15002055"
-      ]
-    },
-    {
-      "host": "openapi.gblib.or.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "missing",
-      "specs": 3,
-      "operations": 3,
-      "external_endpoint_operations": 3,
-      "external_guide_specs": 3,
-      "sample_ids": [
-        "15003489",
-        "3075291",
-        "3075292"
       ]
     },
     {
@@ -603,6 +586,24 @@
       "sample_ids": [
         "3044607",
         "3071170"
+      ]
+    },
+    {
+      "host": "openapi.gblib.or.kr",
+      "provider": "gblib",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 3,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "external_guide_specs": 3,
+      "sample_ids": [
+        "15003489",
+        "3075291",
+        "3075292"
       ]
     },
     {

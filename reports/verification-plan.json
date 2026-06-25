@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T03:06:26Z",
+  "generated_at": "2026-06-25T03:21:08Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -8,10 +8,10 @@
   "timeout": "10s",
   "summary": {
     "operations": 12205,
-    "evidence_total": 238,
+    "evidence_total": 241,
     "uncovered_gateway_candidates": 11409,
     "uncovered_adapter_candidates": 337,
-    "missing_adapter_hosts": 16,
+    "missing_adapter_hosts": 15,
     "planned_batches": 8,
     "planned_operations": 80
   },
@@ -199,23 +199,6 @@
         ]
       },
       {
-        "host": "openapi.gblib.or.kr",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "missing",
-        "specs": 3,
-        "operations": 3,
-        "external_endpoint_operations": 3,
-        "external_guide_specs": 3,
-        "sample_ids": [
-          "15003489",
-          "3075291",
-          "3075292"
-        ]
-      },
-      {
         "host": "its.gyeongju.go.kr:81",
         "kinds": [
           "external_endpoint"
@@ -239,6 +222,20 @@
         "external_endpoint_operations": 3,
         "sample_ids": [
           "3036708"
+        ]
+      },
+      {
+        "host": "data.wanju.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 2,
+        "operations": 2,
+        "external_endpoint_operations": 2,
+        "sample_ids": [
+          "15010208",
+          "15058097"
         ]
       }
     ]

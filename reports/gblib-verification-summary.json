@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-06-25T03:20:21Z",
+  "source": "C:\\workspace\\datapan-registry\\reports\\gblib-verification.json",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 3,
+    "verified": 0,
+    "failed": 3,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "failed",
+        "count": 3,
+        "status": "failed"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "gblib_service_key_not_registered",
+        "count": 2,
+        "reason": "gblib_service_key_not_registered"
+      },
+      {
+        "key": "gblib_endpoint_not_found",
+        "count": 1,
+        "reason": "gblib_endpoint_not_found"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "gblib",
+        "count": 3,
+        "provider": "gblib"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "openapi.gblib.or.kr",
+        "count": 3,
+        "host": "openapi.gblib.or.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 3,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

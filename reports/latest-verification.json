@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-25T03:05:54Z",
+  "generated_at": "2026-06-25T03:20:44Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 245,
+  "limit": 248,
   "truncated": true,
-  "filtered_count": 238,
+  "filtered_count": 241,
   "summary": {
-    "total": 238,
+    "total": 241,
     "verified": 21,
-    "failed": 78,
+    "failed": 81,
     "skipped": 139,
     "unknown": 0
   },
@@ -5319,6 +5319,76 @@
         "busRouteId": "100100118"
       },
       "body_shape": "xml_service_status"
+    },
+    {
+      "dataset_id": "15003489",
+      "title": "강북구도시관리공단 스포츠시설 현황",
+      "operation": "이용현황검색",
+      "provider": "gblib",
+      "endpoint_host": "openapi.gblib.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "gblib_service_key_not_registered",
+      "verified_at": "2026-06-25T03:20:21Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.gblib.or.kr/OpenAPI/service/SportsCenterNow/getNow?date=20260625\u0026numOfRows=1\u0026org=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "date": "20260625",
+        "numOfRows": "1",
+        "org": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "3075291",
+      "title": "강북구도시관리공단_강북문화정보도서관 소장자료정보",
+      "operation": "도서자료검색",
+      "provider": "gblib",
+      "endpoint_host": "openapi.gblib.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "gblib_service_key_not_registered",
+      "verified_at": "2026-06-25T03:20:21Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.gblib.or.kr/OpenAPI/service/SearchBook/getSearchBook?keyword=%EA%B3%B5%EA%B3%B5\u0026lib=MA\u0026numOfRows=1\u0026pageNo=1\u0026pub=%EB%8F%84%EC%84%9C\u0026serviceKey=REDACTED",
+      "params": {
+        "keyword": "공공",
+        "lib": "MA",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "pub": "도서"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "3075292",
+      "title": "강북구도시관리공단 일반열람실 현황조회",
+      "operation": "일반열람실 목록 조회",
+      "provider": "gblib",
+      "endpoint_host": "openapi.gblib.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "gblib_endpoint_not_found",
+      "verified_at": "2026-06-25T03:20:21Z",
+      "http_status": 404,
+      "semantic_status": "http_error",
+      "url": "http://openapi.gblib.or.kr/OpenAPI/service/ReadingRoomInfoService?serviceKey=REDACTED",
+      "body_shape": "empty"
     }
   ]
 }

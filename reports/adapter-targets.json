@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-25T03:06:15Z",
+  "generated_at": "2026-06-25T03:20:56Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 16,
+  "filtered_count": 15,
   "summary": {
-    "target_hosts": 16,
-    "target_operations": 48,
-    "external_endpoint_operations": 48,
+    "target_hosts": 15,
+    "target_operations": 45,
+    "external_endpoint_operations": 45,
     "service_root_operations": 0,
     "approval_required_operations": 5,
-    "missing_param_operations": 36,
+    "missing_param_operations": 34,
     "unsupported_protocol_operations": 0
   },
   "targets": [
@@ -414,64 +414,6 @@
     },
     {
       "rank": 8,
-      "host": "openapi.gblib.or.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 3,
-      "specs": 3,
-      "organizations": [
-        "강북구도시관리공단"
-      ],
-      "source_categories": [
-        "교육",
-        "문화관광"
-      ],
-      "api_types": [
-        "REST"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "missing_param_operations": 2,
-      "sample_operations": [
-        {
-          "dataset_id": "15003489",
-          "title": "강북구도시관리공단 스포츠시설 현황",
-          "organization": "강북구도시관리공단",
-          "operation": "이용현황검색",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://openapi.gblib.or.kr/OpenAPI/service/SportsCenterNow/getNow",
-          "missing_params": [
-            "org",
-            "date"
-          ]
-        },
-        {
-          "dataset_id": "3075291",
-          "title": "강북구도시관리공단_강북문화정보도서관 소장자료정보",
-          "organization": "강북구도시관리공단",
-          "operation": "도서자료검색",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://openapi.gblib.or.kr/OpenAPI/service/SearchBook/getSearchBook",
-          "missing_params": [
-            "keyword",
-            "pub",
-            "lib"
-          ]
-        },
-        {
-          "dataset_id": "3075292",
-          "title": "강북구도시관리공단 일반열람실 현황조회",
-          "organization": "강북구도시관리공단",
-          "operation": "일반열람실 목록 조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://openapi.gblib.or.kr/OpenAPI/service/ReadingRoomInfoService"
-        }
-      ]
-    },
-    {
-      "rank": 9,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -528,7 +470,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "www.emuseum.go.kr",
       "kinds": [
         "external_endpoint"
@@ -598,7 +540,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -649,7 +591,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -706,7 +648,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "host": "data.myhome.go.kr:443",
       "kinds": [
         "external_endpoint"
@@ -742,7 +684,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 13,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -778,7 +720,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 14,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -809,7 +751,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 15,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"
