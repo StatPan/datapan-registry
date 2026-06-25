@@ -18,7 +18,7 @@ re-importing the upstream data.go.kr catalog every time.
   `forest`, `geoje`, `itfind`, `jeonju`, `q-net`, `sisul`, `uiryeong`,
   `ulsan`
 - External adapter coverage: `466` registered-adapter operations out of `594`
-  external endpoint operations (`76.0%`)
+  external endpoint operations (`76%`)
 - Missing external adapter hosts: `24`
 - Provider split readiness: `ready`
   (`13` adapters, `13` verification-capable, `8` call-capable)
