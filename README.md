@@ -13,7 +13,7 @@ re-importing the upstream data.go.kr catalog every time.
 - Specs: `12060`
 - Operations: `12205`
 - Callable operations: `12063` (`98.8%`)
-- Latest release: `v2026.06.25.20`
+- Latest release: `v2026.06.25.21`
 - Registered external adapters: `airport`, `andong`, `ekape`, `emuseum`,
   `epost`, `folk`, `forest`, `gblib`, `geoje`, `humetro`, `itfind`, `jeju`,
   `jeonju`, `korad`, `kpx`, `lh-ebid`, `myhome`, `naqs`, `oneclick-law`, `pqis`,
@@ -157,12 +157,16 @@ manifest.json
 Datapan treats public-data coverage as an open-source operating target, not a
 vague claim.
 
-- Near term: reach `80%` data.go.kr external endpoint operation coverage with
-  registered provider adapters.
-- Mid term: keep `90%` of non-SOAP, non-WMS external endpoint host families in
-  either adapter or explicit unsupported/approval evidence.
-- Evidence target: every registered adapter keeps provider-specific verification
-  evidence under `reports/*-verification.json` before release.
+- Near term: reach `99%` callable operation coverage and `98%` external
+  adapter operation coverage.
+- Evidence target: reach `10%` operation-level runtime verification evidence
+  while keeping provider-specific evidence under `reports/*-verification.json`
+  before release.
+- Adapter target: grow to at least `25` call-capable provider adapters and no
+  more than `10` missing-adapter operations.
+- Drift target: keep dead external routes documented through
+  `reports/unadapted-external-probe.json` instead of treating them as unknown
+  adapter work.
 
 ## Release Policy
 

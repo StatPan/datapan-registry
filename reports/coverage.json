@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T05:29:56Z",
+  "generated_at": "2026-06-25T05:37:45Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -23,6 +23,20 @@
     "adapter_count": 26,
     "call_capable_adapters": 21,
     "provider_split_ready": true
+  },
+  "goals": {
+    "callable_operation_percent_target": 99,
+    "callable_operation_percent_met": false,
+    "external_adapter_coverage_percent_target": 98,
+    "external_adapter_coverage_percent_met": false,
+    "evidence_operation_percent_target": 10,
+    "evidence_operation_percent_met": false,
+    "missing_adapter_operations_target": 10,
+    "missing_adapter_operations_met": false,
+    "call_capable_adapters_target": 25,
+    "call_capable_adapters_met": false,
+    "provider_split_ready_target": true,
+    "provider_split_ready_met": true
   },
   "evidence": {
     "present": true,
@@ -354,7 +368,7 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-06-25T05:29:56Z",
+    "generated_at": "2026-06-25T05:37:45Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 26,
     "host_count": 30,

@@ -5,7 +5,7 @@
   "description": "Claim-oriented registry coverage, adapter coverage, and verification evidence gaps.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["generated_at", "provider", "summary", "evidence", "gaps", "adapters", "next"],
+  "required": ["generated_at", "provider", "summary", "goals", "evidence", "gaps", "adapters", "next"],
   "properties": {
     "generated_at": { "type": "string", "format": "date-time" },
     "provider": { "type": "string", "minLength": 1 },
@@ -13,6 +13,7 @@
     "source": { "type": "string" },
     "verification": { "type": "string" },
     "summary": { "$ref": "#/$defs/summary" },
+    "goals": { "$ref": "#/$defs/goals" },
     "evidence": { "$ref": "#/$defs/evidence" },
     "gaps": { "$ref": "#/$defs/gaps" },
     "adapters": { "type": "object" },
@@ -92,6 +93,38 @@
         "unknown": { "$ref": "#/$defs/count" },
         "verified_percent": { "$ref": "#/$defs/percent" },
         "evidence_operation_percent": { "$ref": "#/$defs/percent" }
+      }
+    },
+    "goals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "callable_operation_percent_target",
+        "callable_operation_percent_met",
+        "external_adapter_coverage_percent_target",
+        "external_adapter_coverage_percent_met",
+        "evidence_operation_percent_target",
+        "evidence_operation_percent_met",
+        "missing_adapter_operations_target",
+        "missing_adapter_operations_met",
+        "call_capable_adapters_target",
+        "call_capable_adapters_met",
+        "provider_split_ready_target",
+        "provider_split_ready_met"
+      ],
+      "properties": {
+        "callable_operation_percent_target": { "$ref": "#/$defs/percent" },
+        "callable_operation_percent_met": { "type": "boolean" },
+        "external_adapter_coverage_percent_target": { "$ref": "#/$defs/percent" },
+        "external_adapter_coverage_percent_met": { "type": "boolean" },
+        "evidence_operation_percent_target": { "$ref": "#/$defs/percent" },
+        "evidence_operation_percent_met": { "type": "boolean" },
+        "missing_adapter_operations_target": { "$ref": "#/$defs/count" },
+        "missing_adapter_operations_met": { "type": "boolean" },
+        "call_capable_adapters_target": { "$ref": "#/$defs/count" },
+        "call_capable_adapters_met": { "type": "boolean" },
+        "provider_split_ready_target": { "type": "boolean" },
+        "provider_split_ready_met": { "type": "boolean" }
       }
     },
     "gaps": {

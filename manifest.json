@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.release-manifest.v1",
-  "generated_at": "2026-06-25T05:29:51Z",
+  "generated_at": "2026-06-25T05:37:40Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
@@ -34,8 +34,8 @@
     {
       "path": "schemas/datapan.coverage.v1.schema.json",
       "kind": "schema",
-      "bytes": 4419,
-      "sha256": "e66d51503a4cc141b4e9a0782cee5f70dcd66652173ae818b942ada7596c4726"
+      "bytes": 5950,
+      "sha256": "56f1103f76593acf0db160ce4d8cab790eb9b67e10e165aeda169b285e8e6429"
     },
     {
       "path": "schemas/datapan.verification.v1.schema.json",
@@ -120,7 +120,7 @@
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
       "bytes": 6714,
-      "sha256": "2ca9f8d79b4b12210edbc1bcef28085a04e2736f25d635bea8f4da098bedf07d"
+      "sha256": "c47162b8f125411ca244d922a22513e1223b9108ae0e4846fcbb6d8307fc7358"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -134,63 +134,63 @@
       "kind": "provider_index",
       "schema": "https://schemas.datapan.dev/datapan.provider-index.v1.schema.json",
       "bytes": 5588,
-      "sha256": "5839974751f74a03ec43b8edb242231add688106e97b785883655ce638e58eae"
+      "sha256": "e43c8d6abce435d972cad42fed0e8c5d0fc281628f2202384c8abc46b638d24b"
     },
     {
       "path": "reports/catalog-diff.json",
       "kind": "catalog_diff",
       "schema": "https://schemas.datapan.dev/datapan.catalog-diff.v1.schema.json",
       "bytes": 470,
-      "sha256": "d8affd8fa4e8925fd84977a2147c25f461fe00b61e3673cca346bf506d140cc4"
+      "sha256": "00ecccd9b39110283fcf90924d88c1e3a1261c45aa2fc3f39eb37e95c4ced064"
     },
     {
       "path": "reports/catalog-audit.json",
       "kind": "catalog_audit",
       "schema": "https://schemas.datapan.dev/datapan.catalog-audit.v1.schema.json",
       "bytes": 15967,
-      "sha256": "2f5199842d142554b99a97b9aaf47ee24941a8a2df7eb9be55dede8789f48b27"
+      "sha256": "95730adc77c8b6028d6c9567ea1247390cb9202c026b88a92f755702df5f6f83"
     },
     {
       "path": "reports/error-catalog.json",
       "kind": "error_catalog",
       "schema": "https://schemas.datapan.dev/datapan.error-catalog.v1.schema.json",
       "bytes": 3305388,
-      "sha256": "505052b56d7bc1064a2526cb54eea2336f31a1f73a56b8c33c8e86a07f36af9d"
+      "sha256": "ca89f2d973b30b39a232f00afcf0af695b49368ece42a698f0126d33bbc40940"
     },
     {
       "path": "reports/dependencies.json",
       "kind": "dependencies",
       "schema": "https://schemas.datapan.dev/datapan.dependencies.v1.schema.json",
       "bytes": 11399459,
-      "sha256": "6e5b148ec51ecdc753c36044eaa5e135c4312eb1ad083cd475f0383d67c5c0cc"
+      "sha256": "7e3dd050b701ec6560114dc572a0c3045dcc29a5df0aa632fe189a584e439510"
     },
     {
       "path": "reports/adapter-targets.json",
       "kind": "adapter_targets",
       "schema": "https://schemas.datapan.dev/datapan.adapter-targets.v1.schema.json",
       "bytes": 15179,
-      "sha256": "f82a86a9deb9e3e8756f453dec5998ab6936d6fbc175fc7dac1c8e5edae3237b"
+      "sha256": "7c0649a5a23592097e22199a3eb0b87fe05e26bec1153e310bd7bea8a68f828b"
     },
     {
       "path": "reports/provider-backlog.json",
       "kind": "provider_backlog",
       "schema": "https://schemas.datapan.dev/datapan.providers.v1.schema.json",
       "bytes": 53695,
-      "sha256": "d8700cd7e8d9353d4f1f6c84e727233cc6f5c10d6544ae5c1c65969e18fe3eb6"
+      "sha256": "3bba9761d2ae467fed49bb6216450bc5cfd3312936cf03c1b6cecd415c571e29"
     },
     {
       "path": "reports/coverage.json",
       "kind": "coverage",
       "schema": "https://schemas.datapan.dev/datapan.coverage.v1.schema.json",
-      "bytes": 15705,
-      "sha256": "40a518bd517bf09c50cf5e07b3ec50154df07c2a3fbae5225c2a54e172def305"
+      "bytes": 16255,
+      "sha256": "9969066851959de83828bdc8e62154e11929ae210d5ebc2bf28ca05ca1d2f4ed"
     },
     {
       "path": "reports/verification-plan.json",
       "kind": "verification_plan",
       "schema": "https://schemas.datapan.dev/datapan.verification-plan.v1.schema.json",
       "bytes": 9095,
-      "sha256": "4b75a95dfe29f8e3ab5dc8937051ca3cc4cfc8eb5ac29d770b61573bfc01db8e"
+      "sha256": "6c54808b6eba7dd46b07dabf6305b5ddc8dd618cad76806a4db1b92137a11d5d"
     },
     {
       "path": "reports/latest-verification.json",
@@ -210,13 +210,13 @@
       "path": "provenance/data-go-kr.md",
       "kind": "provenance",
       "bytes": 2848,
-      "sha256": "7b2d952e04204f2ebd589d325715c9b90453656dde2a71596952f6e36dfd723f"
+      "sha256": "2db7d73e5f85d159bd35041e649df06d36e3f82cfd87fd94eac48bc4924cfefd"
     },
     {
       "path": "RELEASE_NOTES.md",
       "kind": "release_notes",
-      "bytes": 2437,
-      "sha256": "2c5c968e971d50b878cabbeced9ca450eb4f0dbd0f613535981d805775c85f6d"
+      "bytes": 2587,
+      "sha256": "def559c165b7d8dec0e083f693d0a374a09f6c983478f2bd8daa47a2dd06b821"
     }
   ]
 }
