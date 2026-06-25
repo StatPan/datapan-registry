@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-25T00:06:47Z",
+  "generated_at": "2026-06-25T00:29:58Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-ulsan\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-sisul\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 27,
+  "filtered_count": 26,
   "summary": {
-    "target_hosts": 27,
-    "target_operations": 195,
-    "external_endpoint_operations": 176,
+    "target_hosts": 26,
+    "target_operations": 175,
+    "external_endpoint_operations": 156,
     "service_root_operations": 19,
-    "approval_required_operations": 42,
-    "missing_param_operations": 171,
+    "approval_required_operations": 41,
+    "missing_param_operations": 158,
     "unsupported_protocol_operations": 30
   },
   "targets": [
@@ -137,68 +137,6 @@
     },
     {
       "rank": 3,
-      "host": "data.sisul.or.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 20,
-      "specs": 20,
-      "organizations": [
-        "서울시설공단"
-      ],
-      "source_categories": [
-        "공공행정",
-        "교통물류",
-        "국토관리",
-        "문화관광",
-        "사회복지"
-      ],
-      "api_types": [
-        "REST"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "approval_required_operations": 1,
-      "missing_param_operations": 13,
-      "sample_operations": [
-        {
-          "dataset_id": "15002793",
-          "title": "서울시설공단_도시고속도로 옹벽 설치 현황",
-          "organization": "서울시설공단",
-          "operation": "옹벽정보 조회 서비스",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.sisul.or.kr/AutoAPI/service/OpenDB/RetainingWalls?_wadl\u0026type=xml",
-          "missing_params": [
-            "proadlinename"
-          ]
-        },
-        {
-          "dataset_id": "15002794",
-          "title": "서울시설공단_도시고속도로 방음벽 정보",
-          "organization": "서울시설공단",
-          "operation": "방음벽정보 조회 서비스",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.sisul.or.kr/AutoAPI/service/OpenDB/NoiseBarrier?_wadl\u0026type=xml",
-          "missing_params": [
-            "roadlinename"
-          ]
-        },
-        {
-          "dataset_id": "15002797",
-          "title": "서울시설공단_서울어린이대공원 행사 정보",
-          "organization": "서울시설공단",
-          "operation": "어린이대공원행사정보 조회 서비스",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.sisul.or.kr/AutoAPI/service/OpenDB/ChildParkEventInfo?_wadl\u0026type=xml",
-          "missing_params": [
-            "pymd"
-          ]
-        }
-      ]
-    },
-    {
-      "rank": 4,
       "host": "www.korad.or.kr",
       "kinds": [
         "external_endpoint"
@@ -255,7 +193,7 @@
       ]
     },
     {
-      "rank": 5,
+      "rank": 4,
       "host": "www.andong.go.kr",
       "kinds": [
         "external_endpoint"
@@ -317,7 +255,7 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 5,
       "host": "open.itfind.or.kr",
       "kinds": [
         "external_endpoint"
@@ -377,7 +315,7 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 6,
       "host": "data.naqs.go.kr",
       "kinds": [
         "external_endpoint"
@@ -474,7 +412,7 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 7,
       "host": "data.humetro.busan.kr",
       "kinds": [
         "external_endpoint"
@@ -539,7 +477,7 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 8,
       "host": "openapi.ebid.lh.or.kr",
       "kinds": [
         "external_endpoint"
@@ -600,7 +538,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "openapi.coast.kr",
       "kinds": [
         "external_endpoint"
@@ -647,7 +585,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "openapi.kpx.or.kr",
       "kinds": [
         "external_endpoint"
@@ -696,7 +634,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "ws.bus.go.kr",
       "kinds": [
         "external_endpoint"
@@ -755,7 +693,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "host": "data.jeju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -815,7 +753,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 13,
       "host": "www.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -874,7 +812,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 14,
       "host": "car.daegu.go.kr",
       "kinds": [
         "external_endpoint"
@@ -934,7 +872,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 15,
       "host": "openapi.pqis.go.kr",
       "kinds": [
         "external_endpoint"
@@ -997,7 +935,7 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 16,
       "host": "openapi.price.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1056,7 +994,7 @@
       ]
     },
     {
-      "rank": 18,
+      "rank": 17,
       "host": "openapi.gblib.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1114,7 +1052,7 @@
       ]
     },
     {
-      "rank": 19,
+      "rank": 18,
       "host": "oneclick.law.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1183,7 +1121,7 @@
       ]
     },
     {
-      "rank": 20,
+      "rank": 19,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -1240,7 +1178,7 @@
       ]
     },
     {
-      "rank": 21,
+      "rank": 20,
       "host": "www.emuseum.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1310,7 +1248,7 @@
       ]
     },
     {
-      "rank": 22,
+      "rank": 21,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1361,7 +1299,7 @@
       ]
     },
     {
-      "rank": 23,
+      "rank": 22,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1418,7 +1356,7 @@
       ]
     },
     {
-      "rank": 24,
+      "rank": 23,
       "host": "data.myhome.go.kr:443",
       "kinds": [
         "external_endpoint"
@@ -1454,7 +1392,7 @@
       ]
     },
     {
-      "rank": 25,
+      "rank": 24,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1490,7 +1428,7 @@
       ]
     },
     {
-      "rank": 26,
+      "rank": 25,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -1521,7 +1459,7 @@
       ]
     },
     {
-      "rank": 27,
+      "rank": 26,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

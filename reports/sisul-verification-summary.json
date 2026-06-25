@@ -1,0 +1,72 @@
+{
+  "generated_at": "2026-06-25T00:23:08Z",
+  "source": "C:\\workspace\\datapan-registry\\reports\\sisul-verification.json",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 20,
+    "verified": 0,
+    "failed": 6,
+    "skipped": 14,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "skipped",
+        "count": 14,
+        "status": "skipped"
+      },
+      {
+        "key": "failed",
+        "count": 6,
+        "status": "failed"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "sisul_wadl_metadata_only",
+        "count": 10,
+        "reason": "sisul_wadl_metadata_only"
+      },
+      {
+        "key": "sisul_request_timeout",
+        "count": 6,
+        "reason": "sisul_request_timeout"
+      },
+      {
+        "key": "sisul_missing_required_params",
+        "count": 3,
+        "reason": "sisul_missing_required_params"
+      },
+      {
+        "key": "approval_required",
+        "count": 1,
+        "reason": "approval_required"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "sisul",
+        "count": 20,
+        "provider": "sisul"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "data.sisul.or.kr",
+        "count": 20,
+        "host": "data.sisul.or.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 20,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

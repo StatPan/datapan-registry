@@ -13,16 +13,16 @@ re-importing the upstream data.go.kr catalog every time.
 - Specs: `12060`
 - Operations: `12205`
 - Callable operations: `12063` (`98.8%`)
-- Latest release: `v2026.06.25.3`
+- Latest release: `v2026.06.25.4`
 - Registered external adapters: `airport`, `ekape`, `epost`, `folk`, `forest`,
-  `geoje`, `jeonju`, `q-net`, `uiryeong`, `ulsan`
-- External adapter coverage: `418` registered-adapter operations out of `594`
-  external endpoint operations (`68.2%`)
-- Missing external adapter hosts: `27`
+  `geoje`, `jeonju`, `q-net`, `sisul`, `uiryeong`, `ulsan`
+- External adapter coverage: `438` registered-adapter operations out of `594`
+  external endpoint operations (`71.5%`)
+- Missing external adapter hosts: `26`
 - Provider split readiness: `ready`
-  (`10` adapters, `10` verification-capable, `5` call-capable)
-- Runtime verification evidence: `91` bounded checks merged into
-  `reports/latest-verification.json` (`16` verified, `24` failed, `51`
+  (`11` adapters, `11` verification-capable, `6` call-capable)
+- Runtime verification evidence: `111` bounded checks merged into
+  `reports/latest-verification.json` (`16` verified, `30` failed, `65`
   skipped)
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
@@ -100,6 +100,8 @@ reports/
   jeonju-verification-summary.json
   qnet-verification.json
   qnet-verification-summary.json
+  sisul-verification.json
+  sisul-verification-summary.json
   uiryeong-verification.json
   uiryeong-verification-summary.json
   ulsan-verification.json
@@ -112,6 +114,18 @@ provenance/
   data-go-kr.md
 manifest.json
 ```
+
+## Coverage Targets
+
+Datapan treats public-data coverage as an open-source operating target, not a
+vague claim.
+
+- Near term: reach `80%` data.go.kr external endpoint operation coverage with
+  registered provider adapters.
+- Mid term: keep `90%` of non-SOAP, non-WMS external endpoint host families in
+  either adapter or explicit unsupported/approval evidence.
+- Evidence target: every registered adapter keeps provider-specific verification
+  evidence under `reports/*-verification.json` before release.
 
 ## Release Policy
 

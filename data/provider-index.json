@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T00:06:47Z",
+  "generated_at": "2026-06-25T00:29:58Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 10,
-  "host_count": 13,
+  "adapter_count": 11,
+  "host_count": 14,
   "adapters": [
     {
       "name": "airport",
@@ -91,6 +91,17 @@
       ]
     },
     {
+      "name": "sisul",
+      "status": "registered",
+      "hosts": [
+        "data.sisul.or.kr"
+      ],
+      "capabilities": [
+        "call",
+        "verification"
+      ]
+    },
+    {
       "name": "uiryeong",
       "status": "registered",
       "hosts": [
@@ -116,9 +127,9 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 10,
-    "verification_capable_adapters": 10,
-    "call_capable_adapters": 5,
+    "adapter_count": 11,
+    "verification_capable_adapters": 11,
+    "call_capable_adapters": 6,
     "required_adapters": 2,
     "required_verification_adapters": 2,
     "required_call_adapters": 1,

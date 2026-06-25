@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-25T00:06:47Z",
+  "generated_at": "2026-06-25T00:29:58Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-ulsan\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-sisul\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "filtered_count": 179,
@@ -10,11 +10,11 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 40,
     "external_guide_hosts": 150,
-    "registered_adapter_hosts": 13,
+    "registered_adapter_hosts": 14,
     "operation_hosts": 42,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 27,
-    "needs_adapter_operations": 176,
+    "missing_adapter_hosts": 26,
+    "needs_adapter_operations": 156,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
@@ -36,24 +36,6 @@
         "15000021",
         "15000122",
         "15000215"
-      ]
-    },
-    {
-      "host": "data.sisul.or.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "missing",
-      "specs": 40,
-      "operations": 20,
-      "external_endpoint_operations": 20,
-      "external_guide_specs": 40,
-      "approval_required_operations": 1,
-      "sample_ids": [
-        "15002793",
-        "15002794",
-        "15002797"
       ]
     },
     {
@@ -541,6 +523,25 @@
         "15000032",
         "15000124",
         "15000268"
+      ]
+    },
+    {
+      "host": "data.sisul.or.kr",
+      "provider": "sisul",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 40,
+      "operations": 20,
+      "external_endpoint_operations": 20,
+      "external_guide_specs": 40,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15002793",
+        "15002794",
+        "15002797"
       ]
     },
     {

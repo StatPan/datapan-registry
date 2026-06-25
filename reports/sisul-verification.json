@@ -1,0 +1,370 @@
+{
+  "generated_at": "2026-06-25T00:23:08Z",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 20,
+  "timeout": "4s",
+  "truncated": false,
+  "filters": {
+    "provider": "sisul",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 20,
+  "summary": {
+    "total": 20,
+    "verified": 0,
+    "failed": 6,
+    "skipped": 14,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15002793",
+      "title": "서울시설공단_도시고속도로 옹벽 설치 현황",
+      "operation": "옹벽정보 조회 서비스",
+      "provider": "sisul",
+      "endpoint_host": "data.sisul.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "sisul_wadl_metadata_only",
+      "verified_at": "2026-06-25T00:23:08Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "proadlinename": ""
+      },
+      "missing_params": [
+        "proadlinename"
+      ]
+    },
+    {
+      "dataset_id": "15002794",
+      "title": "서울시설공단_도시고속도로 방음벽 정보",
+      "operation": "방음벽정보 조회 서비스",
+      "provider": "sisul",
+      "endpoint_host": "data.sisul.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "sisul_wadl_metadata_only",
+      "verified_at": "2026-06-25T00:23:08Z",
+      "params": {
+        "roadlinename": ""
+      },
+      "missing_params": [
+        "roadlinename"
+      ]
+    },
+    {
+      "dataset_id": "15002797",
+      "title": "서울시설공단_서울어린이대공원 행사 정보",
+      "operation": "어린이대공원행사정보 조회 서비스",
+      "provider": "sisul",
+      "endpoint_host": "data.sisul.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "sisul_wadl_metadata_only",
+      "verified_at": "2026-06-25T00:23:08Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "pymd": ""
+      },
+      "missing_params": [
+        "pymd"
+      ]
+    },
+    {
+      "dataset_id": "15002808",
+      "title": "서울시설공단_도시고속도로 도로위치인식표지 현황",
+      "operation": "도로위치인식표지 정보 조회 서비스",
+      "provider": "sisul",
+      "endpoint_host": "data.sisul.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "sisul_wadl_metadata_only",
+      "verified_at": "2026-06-25T00:23:08Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "proadlinename": ""
+      },
+      "missing_params": [
+        "proadlinename"
+      ]
+    },
+    {
+      "dataset_id": "15002871",
+      "title": "서울시설공단_서울어린이대공원 입장객 현황",
+      "operation": "어린이대공원 입장객 현황정보 조회 서비스",
+      "provider": "sisul",
+      "endpoint_host": "data.sisul.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "sisul_wadl_metadata_only",
+      "verified_at": "2026-06-25T00:23:08Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "pdoor": "",
+        "pyyyymm": ""
+      },
+      "missing_params": [
+        "pyyyymm",
+        "pdoor"
+      ]
+    },
+    {
+      "dataset_id": "15044104",
+      "title": "서울시설공단_서울시 위탁 공사감독 처리정보",
+      "operation": "공사감독정보 조회 서비스",
+      "provider": "sisul",
+      "endpoint_host": "data.sisul.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "sisul_wadl_metadata_only",
+      "verified_at": "2026-06-25T00:23:08Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "pcnrtname": ""
+      },
+      "missing_params": [
+        "pcnrtname"
+      ]
+    },
+    {
+      "dataset_id": "15056603",
+      "title": "서울시설공단_서울시립화장장 사망원인별 화장통계",
+      "operation": "사망원인별 화장이용 현황 정보",
+      "provider": "sisul",
+      "endpoint_host": "data.sisul.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "sisul_missing_required_params",
+      "verified_at": "2026-06-25T00:23:08Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "pfromym": "",
+        "ptoym": ""
+      },
+      "missing_params": [
+        "pfromym",
+        "ptoym"
+      ]
+    },
+    {
+      "dataset_id": "15057153",
+      "title": "서울시설공단_서울월드컵경기장 주경기장 사용정보",
+      "operation": "월드컵주경기장 사용정보 조회 서비스",
+      "provider": "sisul",
+      "endpoint_host": "data.sisul.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "sisul_wadl_metadata_only",
+      "verified_at": "2026-06-25T00:23:08Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "pyyyymm": ""
+      },
+      "missing_params": [
+        "pyyyymm"
+      ]
+    },
+    {
+      "dataset_id": "15057501",
+      "title": "서울시설공단_서울월드컵경기장 경기장 현황",
+      "operation": "서울월드컵경기장 현황정보 조회 서비스",
+      "provider": "sisul",
+      "endpoint_host": "data.sisul.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "sisul_wadl_metadata_only",
+      "verified_at": "2026-06-25T00:23:08Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "pfcname": ""
+      },
+      "missing_params": [
+        "pfcname"
+      ]
+    },
+    {
+      "dataset_id": "15058433",
+      "title": "서울시설공단_서울시립화장장 연령별 화장통계",
+      "operation": "연령별 화장이용 현황 정보",
+      "provider": "sisul",
+      "endpoint_host": "data.sisul.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "sisul_missing_required_params",
+      "verified_at": "2026-06-25T00:23:08Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "pfromym": "",
+        "ptoym": ""
+      },
+      "missing_params": [
+        "pfromym",
+        "ptoym"
+      ]
+    },
+    {
+      "dataset_id": "15058659",
+      "title": "서울시설공단_서울월드컵경기장 보조경기장 사용정보",
+      "operation": "월드컵보조경기장 사용정보 조회 서비스",
+      "provider": "sisul",
+      "endpoint_host": "data.sisul.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "sisul_wadl_metadata_only",
+      "verified_at": "2026-06-25T00:23:08Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "pyyyymm": ""
+      },
+      "missing_params": [
+        "pyyyymm"
+      ]
+    },
+    {
+      "dataset_id": "15059112",
+      "title": "서울시설공단_서울월드컵경기장 부속시설물 사용정보",
+      "operation": "월드컵경기장 부속시설물 사용정보 조회 서비스",
+      "provider": "sisul",
+      "endpoint_host": "data.sisul.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "sisul_wadl_metadata_only",
+      "verified_at": "2026-06-25T00:23:08Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "pyyyymm": ""
+      },
+      "missing_params": [
+        "pyyyymm"
+      ]
+    },
+    {
+      "dataset_id": "15059450",
+      "title": "서울시설공단_서울시립화장장 지역별 화장통계",
+      "operation": "지역별 화장이용 현황 정보",
+      "provider": "sisul",
+      "endpoint_host": "data.sisul.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "sisul_missing_required_params",
+      "verified_at": "2026-06-25T00:23:08Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "pfromym": "",
+        "ptoym": ""
+      },
+      "missing_params": [
+        "pfromym",
+        "ptoym"
+      ]
+    },
+    {
+      "dataset_id": "15109030",
+      "title": "서울시설공단_버스 공영 차고지 현황",
+      "operation": "버스 차고지 현황 정보",
+      "provider": "sisul",
+      "endpoint_host": "data.sisul.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "sisul_request_timeout",
+      "verified_at": "2026-06-25T00:23:08Z",
+      "url": "http://data.sisul.or.kr/AutoAPI/service/OpenDB/Publicgarage/getPublicgarageQry?numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15110668",
+      "title": "서울시설공단_서울시립승화원 지역별 봉안 안치 통계 현황 조회 서비스",
+      "operation": "서울시설공단_서울시립승화원 지역별 봉안 안치 통계 현황",
+      "provider": "sisul",
+      "endpoint_host": "data.sisul.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "sisul_request_timeout",
+      "verified_at": "2026-06-25T00:23:08Z",
+      "url": "http://data.sisul.or.kr/AutoAPI/service/OpenDB/RegionFuneral/getRegionFuneralQry?numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15110675",
+      "title": "서울시설공단_지하도상가 실내측위용 좌표 메타정보 조회 서비스",
+      "operation": "서울시설공단_지하도상가 실내측위용 좌표 메타정보 조회 서비스",
+      "provider": "sisul",
+      "endpoint_host": "data.sisul.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "sisul_request_timeout",
+      "verified_at": "2026-06-25T00:23:08Z",
+      "url": "http://data.sisul.or.kr/AutoAPI/service/OpenDB/UnderShopLocation/getUnderShopLocationQry?numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15128767",
+      "title": "서울시설공단_어린이대공원 계약청구 정보",
+      "operation": "어린이대공원 계약청구 정보 조회 서비스",
+      "provider": "sisul",
+      "endpoint_host": "data.sisul.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "sisul_request_timeout",
+      "verified_at": "2026-06-25T00:23:08Z",
+      "url": "http://data.sisul.or.kr/AutoAPI/service/OpenDB/ContractCharge/getContractChargeQry?serviceKey=REDACTED"
+    },
+    {
+      "dataset_id": "15128768",
+      "title": "서울시설공단_어린이대공원 일별 입장객 인원 정보",
+      "operation": "어린이대공원 일별 입장객 인원 정보 조회 서비스",
+      "provider": "sisul",
+      "endpoint_host": "data.sisul.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "sisul_request_timeout",
+      "verified_at": "2026-06-25T00:23:08Z",
+      "url": "http://data.sisul.or.kr/AutoAPI/service/OpenDB/EnterCount/getEnterCountQry?serviceKey=REDACTED"
+    },
+    {
+      "dataset_id": "15128771",
+      "title": "서울시설공단_어린이대공원 동물 위치 정보",
+      "operation": "어린이대공원 동물 위치 정보 조회 서비스",
+      "provider": "sisul",
+      "endpoint_host": "data.sisul.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "sisul_request_timeout",
+      "verified_at": "2026-06-25T00:23:08Z",
+      "url": "http://data.sisul.or.kr/AutoAPI/service/OpenDB/AnmalLocation/getAnmalLocationQry?serviceKey=REDACTED"
+    },
+    {
+      "dataset_id": "15128772",
+      "title": "서울시설공단_상가 휠체어 리프트 정비 이력 조회",
+      "operation": "상가 휠체어 리프트 정비 이력 정보 조회 서비스",
+      "provider": "sisul",
+      "endpoint_host": "data.sisul.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T00:23:08Z"
+    }
+  ]
+}
