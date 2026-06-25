@@ -1,8 +1,8 @@
 # Datapan Registry Release
 
-- generated_at: `2026-06-25T05:37:40Z`
+- generated_at: `2026-06-25T05:50:33Z`
 - provider: `data.go.kr`
-- datapan_version: `0.1.0-dev`
+- datapan_version: `v0.1.26`
 - source_registry: `C:\workspace\datapan-registry\data\data-go-kr.registry.json`
 - previous_registry: `C:\workspace\datapan-registry\.datapan\previous\data-go-kr.registry.json`
 - release_manifest: `manifest.json`
@@ -41,9 +41,6 @@ Top adapter targets:
 - verification: `256` total, `22` verified, `87` failed, `147` skipped, `0` unknown
 - verification_artifact: `reports/latest-verification.json`
 - verification_summary_artifact: `reports/latest-verification-summary.json`
-- unadapted_external_probe: `28` total, `28` failed
-- unadapted_external_probe_artifact: `reports/unadapted-external-probe.json`
-- unadapted_external_probe_summary_artifact: `reports/unadapted-external-probe-summary.json`
 
 Provider evidence:
 
@@ -53,6 +50,17 @@ Provider evidence:
 - `andong`: `15`
 - `ekape`: `15`
 - `epost`: `15`
+
+- unadapted_external_probe: `28` total, `0` verified, `28` failed, `0` skipped, `0` unknown
+- unadapted_external_probe_artifact: `reports/unadapted-external-probe.json`
+- unadapted_external_probe_summary_artifact: `reports/unadapted-external-probe-summary.json`
+
+Unadapted external probe reasons:
+
+- `unadapted_probe_http_404`: `14`
+- `unadapted_probe_timeout`: `7`
+- `unadapted_probe_request_error`: `6`
+- `unadapted_probe_http_503`: `1`
 
 ## Publication Checks
 

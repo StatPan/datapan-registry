@@ -13,7 +13,7 @@ re-importing the upstream data.go.kr catalog every time.
 - Specs: `12060`
 - Operations: `12205`
 - Callable operations: `12063` (`98.8%`)
-- Latest release: `v2026.06.25.21`
+- Latest release: `v2026.06.25.22`
 - Registered external adapters: `airport`, `andong`, `ekape`, `emuseum`,
   `epost`, `folk`, `forest`, `gblib`, `geoje`, `humetro`, `itfind`, `jeju`,
   `jeonju`, `korad`, `kpx`, `lh-ebid`, `myhome`, `naqs`, `oneclick-law`, `pqis`,
@@ -71,6 +71,7 @@ The current snapshot was generated from `datapan-cli` and includes:
 - provider backlog;
 - latest merged verification evidence;
 - latest verification summary;
+- manifest-bound unadapted external endpoint probe evidence;
 - provenance.
 
 ## Layout
@@ -165,8 +166,8 @@ vague claim.
 - Adapter target: grow to at least `25` call-capable provider adapters and no
   more than `10` missing-adapter operations.
 - Drift target: keep dead external routes documented through
-  `reports/unadapted-external-probe.json` instead of treating them as unknown
-  adapter work.
+  manifest-bound `reports/unadapted-external-probe.json` evidence instead of
+  treating them as unknown adapter work.
 
 ## Release Policy
 
@@ -179,6 +180,9 @@ A release is publishable when:
 - required readiness gates pass;
 - recommended readiness gates pass, including catalog diff and verification
   evidence;
+- if coverage still has missing external adapter operations,
+  unadapted external probe evidence is present as a manifest-bound required
+  artifact;
 - schema index and provider index are present;
 - registry size and LFS handling are explicit;
 - verification evidence is attached or documented;

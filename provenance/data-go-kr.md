@@ -1,13 +1,14 @@
 # data.go.kr Release Provenance
 
-- generated_at: 2026-06-25T05:37:40Z
-- datapan_version: 0.1.0-dev
+- generated_at: 2026-06-25T05:50:33Z
+- datapan_version: v0.1.26
 - source_provider: data.go.kr
 - source_registry: C:\workspace\datapan-registry\data\data-go-kr.registry.json
 - previous_registry: C:\workspace\datapan-registry\.datapan\previous\data-go-kr.registry.json
 - release_registry: C:\workspace\datapan-registry\data\data-go-kr.registry.json
 - provider_limit: 0
 - verification_source: C:\workspace\datapan-registry\reports\latest-verification.json
+- unadapted_external_probe_source: C:\workspace\datapan-registry\reports\unadapted-external-probe.json
 
 ## Commands
 
@@ -22,6 +23,8 @@ datapan catalog adapter-targets --registry C:\workspace\datapan-registry\data\da
 datapan catalog providers --registry C:\workspace\datapan-registry\data\data-go-kr.registry.json --limit 0 --output C:\workspace\datapan-registry\reports\provider-backlog.json --json
 datapan catalog verify --input C:\workspace\datapan-registry\reports\latest-verification.json --json
 datapan catalog verify summary --input C:\workspace\datapan-registry\reports\latest-verification.json --output C:\workspace\datapan-registry\reports\latest-verification-summary.json --json
+datapan catalog verify --input C:\workspace\datapan-registry\reports\unadapted-external-probe.json --json
+datapan catalog verify summary --input C:\workspace\datapan-registry\reports\unadapted-external-probe.json --output C:\workspace\datapan-registry\reports\unadapted-external-probe-summary.json --json
 datapan catalog coverage --registry C:\workspace\datapan-registry\data\data-go-kr.registry.json --verification C:\workspace\datapan-registry\reports\latest-verification.json --output C:\workspace\datapan-registry\reports\coverage.json --json
 datapan catalog verify plan --registry C:\workspace\datapan-registry\data\data-go-kr.registry.json --verification C:\workspace\datapan-registry\reports\latest-verification.json --output C:\workspace\datapan-registry\reports\verification-plan.json --json
 ```

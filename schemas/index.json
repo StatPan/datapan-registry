@@ -1,7 +1,7 @@
 {
   "schema_version": "datapan.schema-index.v1",
-  "generated_at": "2026-06-25T05:37:40Z",
-  "datapan_version": "0.1.0-dev",
+  "generated_at": "2026-06-25T05:50:33Z",
+  "datapan_version": "v0.1.26",
   "count": 18,
   "schemas": [
     {
@@ -82,8 +82,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 2231,
-      "sha256": "4dd8fd78da1c1a3534fe4606b6510423733484010331073dc810027ce4f0bd12"
+      "bytes": 2319,
+      "sha256": "b4d76491e8da675088722e591af98691e7418d13983a4acfcff651e07a54c74f"
     },
     {
       "path": "schemas/datapan.release-verification.v1.schema.json",
@@ -91,8 +91,8 @@
       "title": "Datapan Release Verification v1",
       "contract": "release-verification",
       "version": "v1",
-      "bytes": 2828,
-      "sha256": "0e442e9cb25e2367ed0c39cfe9b602c1c2e1db904c8aa8f54094949055432ed0"
+      "bytes": 2916,
+      "sha256": "63ddca345fe5405b7c812bdd6dc05b9be8f99bb9c1a6358ee0e27e20e6ebfd8a"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",

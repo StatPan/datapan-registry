@@ -2,16 +2,16 @@
   "manifest": "C:\\workspace\\datapan-registry\\manifest.json",
   "root": "C:\\workspace\\datapan-registry",
   "schema_version": "datapan.release-readiness.v1",
-  "generated_at": "2026-06-25T05:38:49Z",
-  "datapan_version": "0.1.0-dev",
+  "generated_at": "2026-06-25T05:50:50Z",
+  "datapan_version": "v0.1.26",
   "provider": "data.go.kr",
   "ready": true,
   "summary": {
-    "gates_total": 18,
-    "passed": 18,
+    "gates_total": 20,
+    "passed": 20,
     "warned": 0,
     "failed": 0,
-    "required_artifacts": 12,
+    "required_artifacts": 14,
     "missing_required_artifacts": 0,
     "recommended_artifacts": 3,
     "missing_recommended_artifacts": 0,
@@ -24,8 +24,8 @@
       "status": "pass",
       "severity": "required",
       "message": "release manifest checksums and schema-bound artifacts verified",
-      "expected": 33,
-      "actual": 33
+      "expected": 35,
+      "actual": 35
     },
     {
       "id": "required_artifact_schema_index",
@@ -144,6 +144,26 @@
       "message": "required release artifact is present",
       "artifact_kind": "release_notes",
       "artifact_path": "RELEASE_NOTES.md",
+      "expected": 1,
+      "actual": 1
+    },
+    {
+      "id": "required_artifact_unadapted_external_probe",
+      "status": "pass",
+      "severity": "required",
+      "message": "unadapted external endpoint evidence is present",
+      "artifact_kind": "unadapted_external_probe",
+      "artifact_path": "reports/unadapted-external-probe.json",
+      "expected": 1,
+      "actual": 1
+    },
+    {
+      "id": "required_artifact_unadapted_external_probe_summary",
+      "status": "pass",
+      "severity": "required",
+      "message": "unadapted external endpoint evidence is present",
+      "artifact_kind": "unadapted_external_probe_summary",
+      "artifact_path": "reports/unadapted-external-probe-summary.json",
       "expected": 1,
       "actual": 1
     },

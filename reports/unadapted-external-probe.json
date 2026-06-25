@@ -28,7 +28,7 @@
       "reason": "unadapted_probe_http_503",
       "verified_at": "2026-06-25T05:21:35Z",
       "http_status": 503,
-      "url": "http://openapi-lib.sen.go.kr?numOfRows=1&pageNo=1",
+      "url": "http://openapi-lib.sen.go.kr?numOfRows=1\u0026pageNo=1",
       "params": {
         "manageCd": "",
         "numOfRows": "1",
@@ -52,7 +52,7 @@
       "reason": "unadapted_probe_http_404",
       "verified_at": "2026-06-25T05:21:35Z",
       "http_status": 404,
-      "url": "http://www.dgeic.or.kr:8080/?numOfRows=1&pageNo=1",
+      "url": "http://www.dgeic.or.kr:8080/?numOfRows=1\u0026pageNo=1",
       "params": {
         "numOfRows": "1",
         "pageNo": "1"
@@ -70,7 +70,7 @@
       "reason": "unadapted_probe_http_404",
       "verified_at": "2026-06-25T05:21:35Z",
       "http_status": 404,
-      "url": "http://www.rda.go.kr/openapidata/service/rdamachinesafe_api?numOfRows=1&pageNo=1",
+      "url": "http://www.rda.go.kr/openapidata/service/rdamachinesafe_api?numOfRows=1\u0026pageNo=1",
       "params": {
         "numOfRows": "1",
         "pageNo": "1",
@@ -114,7 +114,7 @@
       "reason": "unadapted_probe_http_404",
       "verified_at": "2026-06-25T05:21:35Z",
       "http_status": 404,
-      "url": "http://www.rda.go.kr/openapidata/service/interrobang_api?numOfRows=1&pageNo=1",
+      "url": "http://www.rda.go.kr/openapidata/service/interrobang_api?numOfRows=1\u0026pageNo=1",
       "params": {
         "numOfRows": "1",
         "pageNo": "1",
@@ -157,7 +157,7 @@
       "status": "failed",
       "reason": "unadapted_probe_timeout",
       "verified_at": "2026-06-25T05:21:35Z",
-      "url": "http://data.wanju.go.kr/rest/wanjusocial/getSocialInfo?numOfRows=1&pageNo=1",
+      "url": "http://data.wanju.go.kr/rest/wanjusocial/getSocialInfo?numOfRows=1\u0026pageNo=1",
       "params": {
         "dataName": "",
         "dataValue": "",
@@ -181,7 +181,7 @@
       "status": "failed",
       "reason": "unadapted_probe_timeout",
       "verified_at": "2026-06-25T05:21:35Z",
-      "url": "http://www.cid.or.kr/job/openApi/service/getJobOpenInfoList.do?numOfRows=1&pageNo=1",
+      "url": "http://www.cid.or.kr/job/openApi/service/getJobOpenInfoList.do?numOfRows=1\u0026pageNo=1",
       "params": {
         "acdmcr": "",
         "area": "",
@@ -241,7 +241,7 @@
       "status": "failed",
       "reason": "unadapted_probe_timeout",
       "verified_at": "2026-06-25T05:21:35Z",
-      "url": "http://its.gyeongju.go.kr:81/bis/openapi/getRouteNoList.do?numOfRows=1&pageNo=1",
+      "url": "http://its.gyeongju.go.kr:81/bis/openapi/getRouteNoList.do?numOfRows=1\u0026pageNo=1",
       "params": {
         "numOfRows": "1",
         "pageNo": "1",
@@ -261,7 +261,7 @@
       "status": "failed",
       "reason": "unadapted_probe_timeout",
       "verified_at": "2026-06-25T05:21:35Z",
-      "url": "http://its.gyeongju.go.kr:81/bis/openapi/getRouteAcctoBusLcList.do?numOfRows=1&pageNo=1",
+      "url": "http://its.gyeongju.go.kr:81/bis/openapi/getRouteAcctoBusLcList.do?numOfRows=1\u0026pageNo=1",
       "params": {
         "numOfRows": "1",
         "pageNo": "1",
@@ -281,7 +281,7 @@
       "status": "failed",
       "reason": "unadapted_probe_timeout",
       "verified_at": "2026-06-25T05:21:35Z",
-      "url": "http://its.gyeongju.go.kr:81/bis/openapi/getSttnNoList.do?numOfRows=1&pageNo=1",
+      "url": "http://its.gyeongju.go.kr:81/bis/openapi/getSttnNoList.do?numOfRows=1\u0026pageNo=1",
       "params": {
         "nodeNm": "",
         "numOfRows": "1",
@@ -301,7 +301,7 @@
       "status": "failed",
       "reason": "unadapted_probe_timeout",
       "verified_at": "2026-06-25T05:21:35Z",
-      "url": "http://data.wanju.go.kr/rest/wanjuevent/getEvent?numOfRows=1&pageNo=1",
+      "url": "http://data.wanju.go.kr/rest/wanjuevent/getEvent?numOfRows=1\u0026pageNo=1",
       "params": {
         "dataName": "",
         "dataValue": "",
@@ -398,7 +398,7 @@
       "reason": "unadapted_probe_http_404",
       "verified_at": "2026-06-25T05:21:35Z",
       "http_status": 404,
-      "url": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getFixTotal?_type=json&numOfRows=1&pageNo=1",
+      "url": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getFixTotal?_type=json\u0026numOfRows=1\u0026pageNo=1",
       "params": {
         "_type": "json",
         "gubun": "",
@@ -423,7 +423,7 @@
       "reason": "unadapted_probe_http_404",
       "verified_at": "2026-06-25T05:21:35Z",
       "http_status": 404,
-      "url": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getFix?_type=json&numOfRows=1&pageNo=1",
+      "url": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getFix?_type=json\u0026numOfRows=1\u0026pageNo=1",
       "params": {
         "_type": "json",
         "numOfRows": "1",
@@ -448,7 +448,7 @@
       "reason": "unadapted_probe_http_404",
       "verified_at": "2026-06-25T05:21:35Z",
       "http_status": 404,
-      "url": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getMove?_type=json&numOfRows=1&pageNo=1",
+      "url": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getMove?_type=json\u0026numOfRows=1\u0026pageNo=1",
       "params": {
         "_type": "json",
         "numOfRows": "1",
@@ -473,7 +473,7 @@
       "reason": "unadapted_probe_http_404",
       "verified_at": "2026-06-25T05:21:35Z",
       "http_status": 404,
-      "url": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getMoveTotal?_type=json&numOfRows=1&pageNo=1",
+      "url": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getMoveTotal?_type=json\u0026numOfRows=1\u0026pageNo=1",
       "params": {
         "_type": "json",
         "gubun": "",
