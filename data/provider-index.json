@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T02:29:04Z",
+  "generated_at": "2026-06-25T02:50:14Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 18,
-  "host_count": 22,
+  "adapter_count": 19,
+  "host_count": 23,
   "adapters": [
     {
       "name": "airport",
@@ -123,6 +123,17 @@
       ]
     },
     {
+      "name": "lh-ebid",
+      "status": "registered",
+      "hosts": [
+        "openapi.ebid.lh.or.kr"
+      ],
+      "capabilities": [
+        "call",
+        "verification"
+      ]
+    },
+    {
       "name": "naqs",
       "status": "registered",
       "hosts": [
@@ -205,9 +216,9 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 18,
-    "verification_capable_adapters": 18,
-    "call_capable_adapters": 13,
+    "adapter_count": 19,
+    "verification_capable_adapters": 19,
+    "call_capable_adapters": 14,
     "required_adapters": 2,
     "required_verification_adapters": 2,
     "required_call_adapters": 1,

@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-06-25T02:28:16Z",
-  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-tour\\reports\\latest-verification.json",
+  "generated_at": "2026-06-25T02:49:29Z",
+  "source": "C:\\workspace\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 227,
+    "total": 233,
     "verified": 21,
-    "failed": 69,
-    "skipped": 137,
+    "failed": 74,
+    "skipped": 138,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 137,
+        "count": 138,
         "status": "skipped"
       },
       {
         "key": "failed",
-        "count": 69,
+        "count": 74,
         "status": "failed"
       },
       {
@@ -122,6 +122,11 @@
         "reason": "epost_unsupported_protocol"
       },
       {
+        "key": "lh_ebid_service_key_not_registered",
+        "count": 5,
+        "reason": "lh_ebid_service_key_not_registered"
+      },
+      {
         "key": "airport_service_key_not_registered",
         "count": 4,
         "reason": "airport_service_key_not_registered"
@@ -190,6 +195,11 @@
         "key": "humetro_deadline_expired",
         "count": 1,
         "reason": "humetro_deadline_expired"
+      },
+      {
+        "key": "lh_ebid_missing_required_params",
+        "count": 1,
+        "reason": "lh_ebid_missing_required_params"
       },
       {
         "key": "oneclick_missing_required_params",
@@ -272,6 +282,11 @@
         "key": "geoje",
         "count": 6,
         "provider": "geoje"
+      },
+      {
+        "key": "lh-ebid",
+        "count": 6,
+        "provider": "lh-ebid"
       },
       {
         "key": "uiryeong",
@@ -376,6 +391,11 @@
         "host": "openapi.airport.co.kr"
       },
       {
+        "key": "openapi.ebid.lh.or.kr",
+        "count": 6,
+        "host": "openapi.ebid.lh.or.kr"
+      },
+      {
         "key": "openapi.its.ulsan.kr",
         "count": 6,
         "host": "openapi.its.ulsan.kr"
@@ -409,7 +429,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 198,
+        "count": 204,
         "kind": "external_endpoint"
       },
       {

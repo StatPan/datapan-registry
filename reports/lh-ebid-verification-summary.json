@@ -1,0 +1,62 @@
+{
+  "generated_at": "2026-06-25T02:49:08Z",
+  "source": "C:\\workspace\\datapan-registry\\reports\\lh-ebid-verification.json",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 6,
+    "verified": 0,
+    "failed": 5,
+    "skipped": 1,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "failed",
+        "count": 5,
+        "status": "failed"
+      },
+      {
+        "key": "skipped",
+        "count": 1,
+        "status": "skipped"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "lh_ebid_service_key_not_registered",
+        "count": 5,
+        "reason": "lh_ebid_service_key_not_registered"
+      },
+      {
+        "key": "lh_ebid_missing_required_params",
+        "count": 1,
+        "reason": "lh_ebid_missing_required_params"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "lh-ebid",
+        "count": 6,
+        "provider": "lh-ebid"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "openapi.ebid.lh.or.kr",
+        "count": 6,
+        "host": "openapi.ebid.lh.or.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 6,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

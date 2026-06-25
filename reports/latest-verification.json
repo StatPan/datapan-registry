@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-25T02:28:16Z",
+  "generated_at": "2026-06-25T02:49:29Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 234,
+  "limit": 240,
   "truncated": true,
-  "filtered_count": 227,
+  "filtered_count": 233,
   "summary": {
-    "total": 227,
+    "total": 233,
     "verified": 21,
-    "failed": 69,
-    "skipped": 137,
+    "failed": 74,
+    "skipped": 138,
     "unknown": 0
   },
   "results": [
@@ -5046,6 +5046,162 @@
         "RES_NM"
       ],
       "body_shape": "service_root"
+    },
+    {
+      "dataset_id": "15021183",
+      "title": "한국토지주택공사 입찰공고정보",
+      "operation": "입찰정보 조회",
+      "provider": "lh-ebid",
+      "endpoint_host": "openapi.ebid.lh.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "lh_ebid_service_key_not_registered",
+      "verified_at": "2026-06-25T02:49:08Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.ebid.lh.or.kr/ebid.com.openapi.service.OpenBidInfoList.dev?numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED\u0026tndrbidRegDtEnd=20240131\u0026tndrbidRegDtStart=20240101",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "tndrbidRegDtEnd": "20240131",
+        "tndrbidRegDtStart": "20240101"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15021184",
+      "title": "한국토지주택공사 계약현황정보",
+      "operation": "계약현황 조회",
+      "provider": "lh-ebid",
+      "endpoint_host": "openapi.ebid.lh.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "lh_ebid_missing_required_params",
+      "verified_at": "2026-06-25T02:49:08Z",
+      "params": {
+        "bidNum": "",
+        "contractDtEnd": "20240131",
+        "contractDtStart": "20240101",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "bidNum"
+      ]
+    },
+    {
+      "dataset_id": "15042795",
+      "title": "한국토지주택공사 전자조달-발주계획정보",
+      "operation": "발주계획정보 조회",
+      "provider": "lh-ebid",
+      "endpoint_host": "openapi.ebid.lh.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "lh_ebid_service_key_not_registered",
+      "verified_at": "2026-06-25T02:49:08Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.ebid.lh.or.kr/ebid.com.openapi.service.OpenOrdergPlanList.dev?numOfRows=1\u0026orderExpectYmEnd=202412\u0026orderExpectYmStart=202401\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRows": "1",
+        "orderExpectYmEnd": "202412",
+        "orderExpectYmStart": "202401",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15042796",
+      "title": "한국토지주택공사 전자조달-사전규격공개정보",
+      "operation": "사전규격공개정보 조회",
+      "provider": "lh-ebid",
+      "endpoint_host": "openapi.ebid.lh.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "lh_ebid_service_key_not_registered",
+      "verified_at": "2026-06-25T02:49:08Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.ebid.lh.or.kr/ebid.com.openapi.service.OpenAdvcinfoReqList.dev?numOfRows=1\u0026opinionRegEndDtmEnd=20240131\u0026opinionRegEndDtmStart=20240101\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRows": "1",
+        "opinionRegEndDtmEnd": "20240131",
+        "opinionRegEndDtmStart": "20240101",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15057180",
+      "title": "한국토지주택공사 전자조달-개찰정보(예정가격정보)",
+      "operation": "예정가격정보",
+      "provider": "lh-ebid",
+      "endpoint_host": "openapi.ebid.lh.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "lh_ebid_service_key_not_registered",
+      "verified_at": "2026-06-25T02:49:08Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.ebid.lh.or.kr/ebid.com.openapi.service.OpenPreprcList.dev?numOfRows=1\u0026openDtmEnd=20240131\u0026openDtmStart=20240101\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRows": "1",
+        "openDtmEnd": "20240131",
+        "openDtmStart": "20240101",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15058826",
+      "title": "한국토지주택공사 전자조달-개찰정보(개찰결과정보)",
+      "operation": "개찰결과정보",
+      "provider": "lh-ebid",
+      "endpoint_host": "openapi.ebid.lh.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "lh_ebid_service_key_not_registered",
+      "verified_at": "2026-06-25T02:49:08Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.ebid.lh.or.kr/ebid.com.openapi.service.OpenTenderopenList.dev?numOfRows=1\u0026openDtmEnd=20240131\u0026openDtmStart=20240101\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRows": "1",
+        "openDtmEnd": "20240131",
+        "openDtmStart": "20240101",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
     }
   ]
 }
