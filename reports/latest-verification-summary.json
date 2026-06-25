@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-06-25T03:51:48Z",
+  "generated_at": "2026-06-25T04:14:34Z",
   "source": "C:\\workspace\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 245,
+    "total": 251,
     "verified": 21,
     "failed": 85,
-    "skipped": 139,
+    "skipped": 145,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 139,
+        "count": 145,
         "status": "skipped"
       },
       {
@@ -33,7 +33,7 @@
     "by_reason": [
       {
         "key": "approval_required",
-        "count": 26,
+        "count": 32,
         "reason": "approval_required"
       },
       {
@@ -309,6 +309,11 @@
         "provider": "geoje"
       },
       {
+        "key": "kpx",
+        "count": 6,
+        "provider": "kpx"
+      },
+      {
         "key": "lh-ebid",
         "count": 6,
         "provider": "lh-ebid"
@@ -441,6 +446,11 @@
         "host": "openapi.its.ulsan.kr"
       },
       {
+        "key": "openapi.kpx.or.kr",
+        "count": 6,
+        "host": "openapi.kpx.or.kr"
+      },
+      {
         "key": "openapi.jeonju.go.kr",
         "count": 5,
         "host": "openapi.jeonju.go.kr"
@@ -484,7 +494,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 216,
+        "count": 222,
         "kind": "external_endpoint"
       },
       {

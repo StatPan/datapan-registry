@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T03:54:15Z",
+  "generated_at": "2026-06-25T04:14:38Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
@@ -18,15 +18,15 @@
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 313,
-      "external_endpoint_operations": 594,
+      "external_endpoint_specs": 314,
+      "external_endpoint_operations": 595,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 7,
       "dev_approval_required_operations": 207,
       "prod_approval_required_operations": 4036,
-      "malformed_endpoint_url_count": 43,
-      "malformed_guide_url_count": 585,
+      "malformed_endpoint_url_count": 42,
+      "malformed_guide_url_count": 582,
       "top_endpoint_hosts": [
         {
           "host": "apis.data.go.kr",

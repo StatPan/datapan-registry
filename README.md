@@ -13,18 +13,18 @@ re-importing the upstream data.go.kr catalog every time.
 - Specs: `12060`
 - Operations: `12205`
 - Callable operations: `12063` (`98.8%`)
-- Latest release: `v2026.06.25.15`
+- Latest release: `v2026.06.25.16`
 - Registered external adapters: `airport`, `andong`, `ekape`, `epost`, `folk`,
-  `forest`, `gblib`, `geoje`, `humetro`, `itfind`, `jeonju`, `korad`, `lh-ebid`, `naqs`,
-  `oneclick-law`, `pqis`, `q-net`, `seoul-bus`, `sisul`, `tour`, `uiryeong`,
-  `ulsan`
-- External adapter coverage: `572` registered-adapter operations out of `594`
-  external endpoint operations (`93.3%`)
-- Missing external adapter hosts: `14`
+  `forest`, `gblib`, `geoje`, `humetro`, `itfind`, `jeonju`, `korad`, `kpx`,
+  `lh-ebid`, `naqs`, `oneclick-law`, `pqis`, `q-net`, `seoul-bus`, `sisul`,
+  `tour`, `uiryeong`, `ulsan`
+- External adapter coverage: `578` registered-adapter operations out of `595`
+  external endpoint operations (`94.1%`)
+- Missing external adapter hosts: `13`
 - Provider split readiness: `ready`
-  (`22` adapters, `22` verification-capable, `17` call-capable)
-- Runtime verification evidence: `245` bounded checks merged into
-  `reports/latest-verification.json` (`21` verified, `85` failed, `139`
+  (`23` adapters, `23` verification-capable, `18` call-capable)
+- Runtime verification evidence: `251` bounded checks merged into
+  `reports/latest-verification.json` (`21` verified, `85` failed, `145`
   skipped)
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
@@ -110,6 +110,8 @@ reports/
   jeonju-verification-summary.json
   korad-verification.json
   korad-verification-summary.json
+  kpx-verification.json
+  kpx-verification-summary.json
   lh-ebid-verification.json
   lh-ebid-verification-summary.json
   naqs-verification.json

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T03:54:15Z",
+  "generated_at": "2026-06-25T04:14:38Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -9,16 +9,16 @@
     "hosts": 179,
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 40,
-    "external_guide_hosts": 150,
-    "registered_adapter_hosts": 26,
+    "external_guide_hosts": 151,
+    "registered_adapter_hosts": 27,
     "operation_hosts": 42,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 14,
-    "needs_adapter_operations": 41,
+    "missing_adapter_hosts": 13,
+    "needs_adapter_operations": 36,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
-    "malformed_source_url_count": 628
+    "malformed_source_url_count": 624
   },
   "providers": [
     {
@@ -35,21 +35,19 @@
       ]
     },
     {
-      "host": "openapi.kpx.or.kr",
+      "host": "www.rda.go.kr",
       "kinds": [
         "external_endpoint",
         "external_guide"
       ],
       "adapter_status": "missing",
-      "specs": 6,
-      "operations": 5,
-      "external_endpoint_operations": 5,
-      "external_guide_specs": 6,
-      "approval_required_operations": 5,
+      "specs": 2,
+      "operations": 4,
+      "external_endpoint_operations": 4,
+      "external_guide_specs": 1,
       "sample_ids": [
-        "15051436",
-        "15056640",
-        "15056879"
+        "15002002",
+        "15002055"
       ]
     },
     {
@@ -90,20 +88,6 @@
       "external_endpoint_operations": 4,
       "sample_ids": [
         "3043385"
-      ]
-    },
-    {
-      "host": "www.rda.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "missing",
-      "specs": 2,
-      "operations": 4,
-      "external_endpoint_operations": 4,
-      "sample_ids": [
-        "15002002",
-        "15002055"
       ]
     },
     {
@@ -508,6 +492,25 @@
         "15000032",
         "15000124",
         "15000241"
+      ]
+    },
+    {
+      "host": "openapi.kpx.or.kr",
+      "provider": "kpx",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 6,
+      "operations": 6,
+      "external_endpoint_operations": 6,
+      "external_guide_specs": 6,
+      "approval_required_operations": 6,
+      "sample_ids": [
+        "15051436",
+        "15056640",
+        "15056879"
       ]
     },
     {

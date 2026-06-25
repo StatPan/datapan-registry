@@ -1,6 +1,6 @@
 # Datapan Registry Release
 
-- generated_at: `2026-06-25T03:54:15Z`
+- generated_at: `2026-06-25T04:14:38Z`
 - provider: `data.go.kr`
 - datapan_version: `0.1.0-dev`
 - source_registry: `C:\workspace\datapan-registry\data\data-go-kr.registry.json`
@@ -15,14 +15,14 @@
 
 ## Provider Coverage
 
-- provider_adapters: `22` adapters, `26` hosts
+- provider_adapters: `23` adapters, `27` hosts
 - split_readiness: `ready`
-- verification_capable_adapters: `22`
-- call_capable_adapters: `17`
-- dependency_operations: `12205` total, `11419` gateway, `594` external, `572` registered-adapter, `41` missing-adapter
-- adapter_backlog: `14` target hosts, `41` target operations
-- provider_backlog: `179` hosts, `14` missing-adapter hosts, `41` operations needing adapters
-- coverage: `12063` callable operations (`98.8%`), external adapter coverage `93.3%`, verification evidence coverage `2.0%`
+- verification_capable_adapters: `23`
+- call_capable_adapters: `18`
+- dependency_operations: `12205` total, `11419` gateway, `595` external, `578` registered-adapter, `36` missing-adapter
+- adapter_backlog: `13` target hosts, `36` target operations
+- provider_backlog: `179` hosts, `13` missing-adapter hosts, `36` operations needing adapters
+- coverage: `12063` callable operations (`98.8%`), external adapter coverage `94.1%`, verification evidence coverage `2.1%`
 - coverage_artifact: `reports/coverage.json`
 - verification_plan: `8` batches, `80` planned operations, `11409` gateway gaps, `337` adapter gaps
 - verification_plan_artifact: `reports/verification-plan.json`
@@ -30,14 +30,14 @@
 Top adapter targets:
 
 - `1`. `openapi.coast.kr`: `6` operations across `1` specs
-- `2`. `openapi.kpx.or.kr`: `5` operations across `5` specs
-- `3`. `data.jeju.go.kr`: `4` operations across `2` specs
-- `4`. `www.rda.go.kr`: `4` operations across `2` specs
-- `5`. `car.daegu.go.kr`: `4` operations across `1` specs
+- `2`. `data.jeju.go.kr`: `4` operations across `2` specs
+- `3`. `www.rda.go.kr`: `4` operations across `2` specs
+- `4`. `car.daegu.go.kr`: `4` operations across `1` specs
+- `5`. `openapi.price.go.kr`: `4` operations across `1` specs
 
 ## Verification Evidence
 
-- verification: `245` total, `21` verified, `85` failed, `139` skipped, `0` unknown
+- verification: `251` total, `21` verified, `85` failed, `145` skipped, `0` unknown
 - verification_artifact: `reports/latest-verification.json`
 - verification_summary_artifact: `reports/latest-verification-summary.json`
 

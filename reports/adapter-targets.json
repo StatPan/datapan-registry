@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-25T03:54:15Z",
+  "generated_at": "2026-06-25T04:14:38Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 14,
+  "filtered_count": 13,
   "summary": {
-    "target_hosts": 14,
-    "target_operations": 41,
-    "external_endpoint_operations": 41,
+    "target_hosts": 13,
+    "target_operations": 36,
+    "external_endpoint_operations": 36,
     "service_root_operations": 0,
-    "approval_required_operations": 5,
-    "missing_param_operations": 30,
+    "approval_required_operations": 0,
+    "missing_param_operations": 29,
     "unsupported_protocol_operations": 0
   },
   "targets": [
@@ -64,55 +64,6 @@
     },
     {
       "rank": 2,
-      "host": "openapi.kpx.or.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 5,
-      "specs": 5,
-      "organizations": [
-        "한국전력거래소"
-      ],
-      "source_categories": [
-        "산업고용"
-      ],
-      "api_types": [
-        "REST"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "approval_required_operations": 5,
-      "missing_param_operations": 1,
-      "sample_operations": [
-        {
-          "dataset_id": "15051436",
-          "title": "한국전력거래소_전력수급예보조회",
-          "organization": "한국전력거래소",
-          "operation": "전력수급예보조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://openapi.kpx.or.kr/openapi/forecast1dMaxBaseDate/getForecast1dMaxBaseDate"
-        },
-        {
-          "dataset_id": "15056879",
-          "title": "한국전력거래소_오늘전력수급현황조회",
-          "organization": "한국전력거래소",
-          "operation": "오늘전력수급현황조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://openapi.kpx.or.kr/openapi/sukub5mToday/getSukub5mToday"
-        },
-        {
-          "dataset_id": "15058920",
-          "title": "한국전력거래소_오늘제주계통운영정보",
-          "organization": "한국전력거래소",
-          "operation": "오늘제주계통운영정보",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://openapi.kpx.or.kr/openapi/chejusukub5mToday/getChejuSukub5mToday"
-        }
-      ]
-    },
-    {
-      "rank": 3,
       "host": "data.jeju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -172,7 +123,7 @@
       ]
     },
     {
-      "rank": 4,
+      "rank": 3,
       "host": "www.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -231,7 +182,7 @@
       ]
     },
     {
-      "rank": 5,
+      "rank": 4,
       "host": "car.daegu.go.kr",
       "kinds": [
         "external_endpoint"
@@ -291,7 +242,7 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 5,
       "host": "openapi.price.go.kr",
       "kinds": [
         "external_endpoint"
@@ -350,7 +301,7 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 6,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -407,7 +358,7 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 7,
       "host": "www.emuseum.go.kr",
       "kinds": [
         "external_endpoint"
@@ -477,7 +428,7 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 8,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -528,7 +479,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -585,7 +536,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "data.myhome.go.kr:443",
       "kinds": [
         "external_endpoint"
@@ -621,7 +572,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -657,7 +608,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -688,7 +639,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 13,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

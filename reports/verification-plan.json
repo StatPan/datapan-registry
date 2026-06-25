@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T03:54:27Z",
+  "generated_at": "2026-06-25T04:14:50Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -8,10 +8,10 @@
   "timeout": "10s",
   "summary": {
     "operations": 12205,
-    "evidence_total": 245,
+    "evidence_total": 251,
     "uncovered_gateway_candidates": 11409,
     "uncovered_adapter_candidates": 337,
-    "missing_adapter_hosts": 14,
+    "missing_adapter_hosts": 13,
     "planned_batches": 8,
     "planned_operations": 80
   },
@@ -112,21 +112,19 @@
         ]
       },
       {
-        "host": "openapi.kpx.or.kr",
+        "host": "www.rda.go.kr",
         "kinds": [
           "external_endpoint",
           "external_guide"
         ],
         "adapter_status": "missing",
-        "specs": 6,
-        "operations": 5,
-        "external_endpoint_operations": 5,
-        "external_guide_specs": 6,
-        "approval_required_operations": 5,
+        "specs": 2,
+        "operations": 4,
+        "external_endpoint_operations": 4,
+        "external_guide_specs": 1,
         "sample_ids": [
-          "15051436",
-          "15056640",
-          "15056879"
+          "15002002",
+          "15002055"
         ]
       },
       {
@@ -167,20 +165,6 @@
         "external_endpoint_operations": 4,
         "sample_ids": [
           "3043385"
-        ]
-      },
-      {
-        "host": "www.rda.go.kr",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "missing",
-        "specs": 2,
-        "operations": 4,
-        "external_endpoint_operations": 4,
-        "sample_ids": [
-          "15002002",
-          "15002055"
         ]
       },
       {
@@ -234,6 +218,21 @@
         "external_endpoint_operations": 2,
         "sample_ids": [
           "15012192"
+        ]
+      },
+      {
+        "host": "www.dgeic.or.kr:8080",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "missing",
+        "specs": 1,
+        "operations": 1,
+        "external_endpoint_operations": 1,
+        "external_guide_specs": 1,
+        "sample_ids": [
+          "15001184"
         ]
       }
     ]

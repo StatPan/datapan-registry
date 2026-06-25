@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T03:54:15Z",
+  "generated_at": "2026-06-25T04:14:38Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -16417,7 +16417,8 @@
       "title": "한국전력거래소_현재전력수급현황조회",
       "operation": "현재전력수급현황조회",
       "provider": "data.go.kr",
-      "dependency_class": "malformed_endpoint",
+      "endpoint_host": "openapi.kpx.or.kr",
+      "dependency_class": "external_endpoint",
       "fields": [
         {
           "name": "resultCode",

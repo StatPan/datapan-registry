@@ -1,0 +1,52 @@
+{
+  "generated_at": "2026-06-25T04:14:20Z",
+  "source": "C:\\workspace\\datapan-registry\\reports\\kpx-verification.json",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 6,
+    "verified": 0,
+    "failed": 0,
+    "skipped": 6,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "skipped",
+        "count": 6,
+        "status": "skipped"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "approval_required",
+        "count": 6,
+        "reason": "approval_required"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "kpx",
+        "count": 6,
+        "provider": "kpx"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "openapi.kpx.or.kr",
+        "count": 6,
+        "host": "openapi.kpx.or.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 6,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

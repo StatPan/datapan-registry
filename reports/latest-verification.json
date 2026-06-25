@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-25T03:51:48Z",
+  "generated_at": "2026-06-25T04:14:34Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 252,
+  "limit": 258,
   "truncated": true,
-  "filtered_count": 245,
+  "filtered_count": 251,
   "summary": {
-    "total": 245,
+    "total": 251,
     "verified": 21,
     "failed": 85,
-    "skipped": 139,
+    "skipped": 145,
     "unknown": 0
   },
   "results": [
@@ -5499,6 +5499,100 @@
         "plantName": "사과"
       },
       "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15051436",
+      "title": "한국전력거래소_전력수급예보조회",
+      "operation": "전력수급예보조회",
+      "provider": "kpx",
+      "endpoint_host": "openapi.kpx.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T04:14:20Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15056640",
+      "title": "한국전력거래소_현재전력수급현황조회",
+      "operation": "현재전력수급현황조회",
+      "provider": "kpx",
+      "endpoint_host": "openapi.kpx.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T04:14:20Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15056879",
+      "title": "한국전력거래소_오늘전력수급현황조회",
+      "operation": "오늘전력수급현황조회",
+      "provider": "kpx",
+      "endpoint_host": "openapi.kpx.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T04:14:20Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15058920",
+      "title": "한국전력거래소_오늘제주계통운영정보",
+      "operation": "오늘제주계통운영정보",
+      "provider": "kpx",
+      "endpoint_host": "openapi.kpx.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T04:14:20Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15076302",
+      "title": "한국전력거래소_계통한계가격조회",
+      "operation": "계통한계가격조회",
+      "provider": "kpx",
+      "endpoint_host": "openapi.kpx.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T04:14:20Z",
+      "params": {
+        "areaCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "areaCd"
+      ]
+    },
+    {
+      "dataset_id": "15142651",
+      "title": "한국전력거래소_발전원별 발전량 현황조회",
+      "operation": "발전원별 발전량 현황조회",
+      "provider": "kpx",
+      "endpoint_host": "openapi.kpx.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-25T04:14:20Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
     }
   ]
 }
