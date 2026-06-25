@@ -1,0 +1,112 @@
+{
+  "generated_at": "2026-06-25T05:21:35Z",
+  "source": "C:\\workspace\\datapan-registry\\reports\\unadapted-external-probe.json",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 30,
+  "truncated": false,
+  "summary": {
+    "total": 28,
+    "verified": 0,
+    "failed": 28,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "failed",
+        "count": 28,
+        "status": "failed"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "unadapted_probe_http_404",
+        "count": 14,
+        "reason": "unadapted_probe_http_404"
+      },
+      {
+        "key": "unadapted_probe_timeout",
+        "count": 7,
+        "reason": "unadapted_probe_timeout"
+      },
+      {
+        "key": "unadapted_probe_request_error",
+        "count": 6,
+        "reason": "unadapted_probe_request_error"
+      },
+      {
+        "key": "unadapted_probe_http_503",
+        "count": 1,
+        "reason": "unadapted_probe_http_503"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "data.go.kr",
+        "count": 28,
+        "provider": "data.go.kr"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "openapi.coast.kr",
+        "count": 6,
+        "host": "openapi.coast.kr"
+      },
+      {
+        "key": "car.daegu.go.kr",
+        "count": 4,
+        "host": "car.daegu.go.kr"
+      },
+      {
+        "key": "openapi.price.go.kr",
+        "count": 4,
+        "host": "openapi.price.go.kr"
+      },
+      {
+        "key": "www.rda.go.kr",
+        "count": 4,
+        "host": "www.rda.go.kr"
+      },
+      {
+        "key": "its.gyeongju.go.kr:81",
+        "count": 3,
+        "host": "its.gyeongju.go.kr:81"
+      },
+      {
+        "key": "data.wanju.go.kr",
+        "count": 2,
+        "host": "data.wanju.go.kr"
+      },
+      {
+        "key": "www.cid.or.kr",
+        "count": 2,
+        "host": "www.cid.or.kr"
+      },
+      {
+        "key": "openapi-lib.sen.go.kr",
+        "count": 1,
+        "host": "openapi-lib.sen.go.kr"
+      },
+      {
+        "key": "www.dgeic.or.kr:8080",
+        "count": 1,
+        "host": "www.dgeic.or.kr:8080"
+      },
+      {
+        "key": "www.simpan.go.kr",
+        "count": 1,
+        "host": "www.simpan.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 28,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

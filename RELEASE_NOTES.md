@@ -1,6 +1,6 @@
 # Datapan Registry Release
 
-- generated_at: `2026-06-25T05:05:21Z`
+- generated_at: `2026-06-25T05:29:51Z`
 - provider: `data.go.kr`
 - datapan_version: `0.1.0-dev`
 - source_registry: `C:\workspace\datapan-registry\data\data-go-kr.registry.json`
@@ -27,11 +27,6 @@
 - verification_plan: `9` batches, `83` planned operations, `11409` gateway gaps, `340` adapter gaps
 - verification_plan_artifact: `reports/verification-plan.json`
 
-Jeju provider evidence was added in this snapshot. `data.jeju.go.kr` now has a
-registered call-capable adapter, one verified night-pharmacy list operation, and
-explicit stale-endpoint / missing-parameter evidence for the remaining Jeju
-operations.
-
 Top adapter targets:
 
 - `1`. `openapi.coast.kr`: `6` operations across `1` specs
@@ -45,6 +40,9 @@ Top adapter targets:
 - verification: `256` total, `22` verified, `87` failed, `147` skipped, `0` unknown
 - verification_artifact: `reports/latest-verification.json`
 - verification_summary_artifact: `reports/latest-verification-summary.json`
+- unadapted_external_probe: `28` total, `28` failed
+- unadapted_external_probe_artifact: `reports/unadapted-external-probe.json`
+- unadapted_external_probe_summary_artifact: `reports/unadapted-external-probe-summary.json`
 
 Provider evidence:
 

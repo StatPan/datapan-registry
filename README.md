@@ -13,7 +13,7 @@ re-importing the upstream data.go.kr catalog every time.
 - Specs: `12060`
 - Operations: `12205`
 - Callable operations: `12063` (`98.8%`)
-- Latest release: `v2026.06.25.19`
+- Latest release: `v2026.06.25.20`
 - Registered external adapters: `airport`, `andong`, `ekape`, `emuseum`,
   `epost`, `folk`, `forest`, `gblib`, `geoje`, `humetro`, `itfind`, `jeju`,
   `jeonju`, `korad`, `kpx`, `lh-ebid`, `myhome`, `naqs`, `oneclick-law`, `pqis`,
@@ -26,6 +26,9 @@ re-importing the upstream data.go.kr catalog every time.
 - Runtime verification evidence: `256` bounded checks merged into
   `reports/latest-verification.json` (`22` verified, `87` failed, `147`
   skipped)
+- Missing external host probe: `28` unadapted external endpoint checks in
+  `reports/unadapted-external-probe.json` (`14` HTTP 404, `7` timeout, `6`
+  request/DNS errors, `1` HTTP 503)
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
 - Provider index: `data/provider-index.json`
@@ -138,6 +141,8 @@ reports/
   uiryeong-verification-summary.json
   ulsan-verification.json
   ulsan-verification-summary.json
+  unadapted-external-probe.json
+  unadapted-external-probe-summary.json
   latest-verification.json
   latest-verification-summary.json
   latest-release-verification.json
