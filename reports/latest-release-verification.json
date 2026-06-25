@@ -176,8 +176,8 @@
       "status": "verified",
       "expected_bytes": 6714,
       "actual_bytes": 6714,
-      "expected_sha256": "b4c9a40a9d3a7175f0d4425bafdf0e6e2812c898c1694d59973dd43141519e08",
-      "actual_sha256": "b4c9a40a9d3a7175f0d4425bafdf0e6e2812c898c1694d59973dd43141519e08"
+      "expected_sha256": "160d02474246844ba988c14a8d04c39fb4921c74cd5a7bc9c501e018106d5dca",
+      "actual_sha256": "160d02474246844ba988c14a8d04c39fb4921c74cd5a7bc9c501e018106d5dca"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -192,10 +192,10 @@
       "path": "data/provider-index.json",
       "kind": "provider_index",
       "status": "verified",
-      "expected_bytes": 5207,
-      "actual_bytes": 5207,
-      "expected_sha256": "4b8dccff639ec7c552c0751058910abef7d2536c5b797f12c1e2e40cf5effc57",
-      "actual_sha256": "4b8dccff639ec7c552c0751058910abef7d2536c5b797f12c1e2e40cf5effc57"
+      "expected_bytes": 5400,
+      "actual_bytes": 5400,
+      "expected_sha256": "0f9edae8d78dbcf0c80068c0e35fe2395eb5731cc749fb4a6cf9ffd0e83b832c",
+      "actual_sha256": "0f9edae8d78dbcf0c80068c0e35fe2395eb5731cc749fb4a6cf9ffd0e83b832c"
     },
     {
       "path": "reports/catalog-diff.json",
@@ -203,8 +203,8 @@
       "status": "verified",
       "expected_bytes": 470,
       "actual_bytes": 470,
-      "expected_sha256": "f50b2479942b589195391bb7bb3666a28c38055ea348686da950071b4b4ae6cc",
-      "actual_sha256": "f50b2479942b589195391bb7bb3666a28c38055ea348686da950071b4b4ae6cc"
+      "expected_sha256": "e43b590ed6956936673bd472af718f87b8ac5fb7bfcfbcff4582b48757e934f8",
+      "actual_sha256": "e43b590ed6956936673bd472af718f87b8ac5fb7bfcfbcff4582b48757e934f8"
     },
     {
       "path": "reports/catalog-audit.json",
@@ -212,8 +212,8 @@
       "status": "verified",
       "expected_bytes": 15967,
       "actual_bytes": 15967,
-      "expected_sha256": "e56ccd0f06bc3d2b20667177a24ff7c9b82de819daa39106e305ad7c3fda469c",
-      "actual_sha256": "e56ccd0f06bc3d2b20667177a24ff7c9b82de819daa39106e305ad7c3fda469c"
+      "expected_sha256": "906e991e30940db5717f0041bdd1323cbdef0d245bebdc150f6c5ab48308f24d",
+      "actual_sha256": "906e991e30940db5717f0041bdd1323cbdef0d245bebdc150f6c5ab48308f24d"
     },
     {
       "path": "reports/error-catalog.json",
@@ -221,71 +221,71 @@
       "status": "verified",
       "expected_bytes": 3305388,
       "actual_bytes": 3305388,
-      "expected_sha256": "9046264b77e45c08273f6bd16b93f42c1e210fedfa353e308723f548eb3ade40",
-      "actual_sha256": "9046264b77e45c08273f6bd16b93f42c1e210fedfa353e308723f548eb3ade40"
+      "expected_sha256": "0b2e980f9d204adf5b0e3f8a5cbe33345a9eb4ddb450a8f5d0da54550f482c80",
+      "actual_sha256": "0b2e980f9d204adf5b0e3f8a5cbe33345a9eb4ddb450a8f5d0da54550f482c80"
     },
     {
       "path": "reports/dependencies.json",
       "kind": "dependencies",
       "status": "verified",
-      "expected_bytes": 11399625,
-      "actual_bytes": 11399625,
-      "expected_sha256": "4ae1f7111276df2fb8d34e50c2b2a2eab134569e302e5783f0eda5762995be8d",
-      "actual_sha256": "4ae1f7111276df2fb8d34e50c2b2a2eab134569e302e5783f0eda5762995be8d"
+      "expected_bytes": 11399559,
+      "actual_bytes": 11399559,
+      "expected_sha256": "f4f2341c94b19446aaf9d89d3db1d01ad70f2c27bfe178057d758d74a3974c22",
+      "actual_sha256": "f4f2341c94b19446aaf9d89d3db1d01ad70f2c27bfe178057d758d74a3974c22"
     },
     {
       "path": "reports/adapter-targets.json",
       "kind": "adapter_targets",
       "status": "verified",
-      "expected_bytes": 19190,
-      "actual_bytes": 19190,
-      "expected_sha256": "89f2232add21955a1b8c63eff43eddbfa2fde0cc7e380aac1963fa6e14058eb8",
-      "actual_sha256": "89f2232add21955a1b8c63eff43eddbfa2fde0cc7e380aac1963fa6e14058eb8"
+      "expected_bytes": 17013,
+      "actual_bytes": 17013,
+      "expected_sha256": "1417da7108cd82704cf8c81b5542ea872eb2c39071bf05354daafe5f8f36ff8e",
+      "actual_sha256": "1417da7108cd82704cf8c81b5542ea872eb2c39071bf05354daafe5f8f36ff8e"
     },
     {
       "path": "reports/provider-backlog.json",
       "kind": "provider_backlog",
       "status": "verified",
-      "expected_bytes": 53640,
-      "actual_bytes": 53640,
-      "expected_sha256": "ab0ca8fddb7aa8e18bdcd2f8897f44346a0e660dd5ada7497dc2743da8ebb932",
-      "actual_sha256": "ab0ca8fddb7aa8e18bdcd2f8897f44346a0e660dd5ada7497dc2743da8ebb932"
+      "expected_bytes": 53669,
+      "actual_bytes": 53669,
+      "expected_sha256": "11d674189d9dc2011c22041c8211b5a332a8205598fc2d7bec2beb8d7bc573b8",
+      "actual_sha256": "11d674189d9dc2011c22041c8211b5a332a8205598fc2d7bec2beb8d7bc573b8"
     },
     {
       "path": "reports/coverage.json",
       "kind": "coverage",
       "status": "verified",
-      "expected_bytes": 15297,
-      "actual_bytes": 15297,
-      "expected_sha256": "b43d6251a937b474f535c51d47df766c1936b2d0b956c3b9e56ba00059c5ada0",
-      "actual_sha256": "b43d6251a937b474f535c51d47df766c1936b2d0b956c3b9e56ba00059c5ada0"
+      "expected_bytes": 15517,
+      "actual_bytes": 15517,
+      "expected_sha256": "5ab5f54d4c76e063fe9d8517dfa32abc6d429562e375a16c5fac3fab2f1aa9c0",
+      "actual_sha256": "5ab5f54d4c76e063fe9d8517dfa32abc6d429562e375a16c5fac3fab2f1aa9c0"
     },
     {
       "path": "reports/verification-plan.json",
       "kind": "verification_plan",
       "status": "verified",
-      "expected_bytes": 8538,
-      "actual_bytes": 8538,
-      "expected_sha256": "70b615538f9b3da5a65bf7dbbbc0e106c7a816d5d09f713c2e734007a36a449b",
-      "actual_sha256": "70b615538f9b3da5a65bf7dbbbc0e106c7a816d5d09f713c2e734007a36a449b"
+      "expected_bytes": 8543,
+      "actual_bytes": 8543,
+      "expected_sha256": "2d67397631b3138529bd03e6f2d502de06614d9705cf19ea89995f644443ed51",
+      "actual_sha256": "2d67397631b3138529bd03e6f2d502de06614d9705cf19ea89995f644443ed51"
     },
     {
       "path": "reports/latest-verification.json",
       "kind": "verification",
       "status": "verified",
-      "expected_bytes": 183829,
-      "actual_bytes": 183829,
-      "expected_sha256": "c7e5ab686316e2534194fef131a27fc020c2070f7fb71075e6c023be436c14cb",
-      "actual_sha256": "c7e5ab686316e2534194fef131a27fc020c2070f7fb71075e6c023be436c14cb"
+      "expected_bytes": 185824,
+      "actual_bytes": 185824,
+      "expected_sha256": "e4f4f882b46bade77048f8c699bfdf83545e5a0d1192036095fcaf441a5f1b23",
+      "actual_sha256": "e4f4f882b46bade77048f8c699bfdf83545e5a0d1192036095fcaf441a5f1b23"
     },
     {
       "path": "reports/latest-verification-summary.json",
       "kind": "verification_summary",
       "status": "verified",
-      "expected_bytes": 12070,
-      "actual_bytes": 12070,
-      "expected_sha256": "0be8b89dff2a78c62195c8657458b17e3bec79de5b59caf26c433fad86c343a5",
-      "actual_sha256": "0be8b89dff2a78c62195c8657458b17e3bec79de5b59caf26c433fad86c343a5"
+      "expected_bytes": 12556,
+      "actual_bytes": 12556,
+      "expected_sha256": "4e303cdd153e4ba5644fcf0bb7d33b23e83a2c5612440c97ee8fee9ee21e9b0b",
+      "actual_sha256": "4e303cdd153e4ba5644fcf0bb7d33b23e83a2c5612440c97ee8fee9ee21e9b0b"
     },
     {
       "path": "provenance/data-go-kr.md",
@@ -293,8 +293,8 @@
       "status": "verified",
       "expected_bytes": 2848,
       "actual_bytes": 2848,
-      "expected_sha256": "b9044aacb9727196949eb051dcee1730cc9900214c862a0bae6bed297369356c",
-      "actual_sha256": "b9044aacb9727196949eb051dcee1730cc9900214c862a0bae6bed297369356c"
+      "expected_sha256": "a4b10e9d4a3277fce448aee59613aedef217242a2bf3ecfac74906aab39b9490",
+      "actual_sha256": "a4b10e9d4a3277fce448aee59613aedef217242a2bf3ecfac74906aab39b9490"
     },
     {
       "path": "RELEASE_NOTES.md",
@@ -302,8 +302,8 @@
       "status": "verified",
       "expected_bytes": 2209,
       "actual_bytes": 2209,
-      "expected_sha256": "9732c90308acc36078b0a971a265fa13caeb2b2b4cc5a33c525d1ecb5d99b6e6",
-      "actual_sha256": "9732c90308acc36078b0a971a265fa13caeb2b2b4cc5a33c525d1ecb5d99b6e6"
+      "expected_sha256": "44fc95eb164dacb8bffa92fcb0278a186e62cbc99756587792015b826450992d",
+      "actual_sha256": "44fc95eb164dacb8bffa92fcb0278a186e62cbc99756587792015b826450992d"
     }
   ]
 }

@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-06-25T04:26:45Z",
+  "generated_at": "2026-06-25T04:46:01Z",
   "source": "C:\\workspace\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 252,
+    "total": 255,
     "verified": 21,
-    "failed": 86,
-    "skipped": 145,
+    "failed": 87,
+    "skipped": 147,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 145,
+        "count": 147,
         "status": "skipped"
       },
       {
         "key": "failed",
-        "count": 86,
+        "count": 87,
         "status": "failed"
       },
       {
@@ -182,6 +182,11 @@
         "reason": "airport_missing_required_params"
       },
       {
+        "key": "emuseum_missing_required_params",
+        "count": 2,
+        "reason": "emuseum_missing_required_params"
+      },
+      {
         "key": "epost_missing_required_params",
         "count": 2,
         "reason": "epost_missing_required_params"
@@ -200,6 +205,11 @@
         "key": "ekape_html_response",
         "count": 1,
         "reason": "ekape_html_response"
+      },
+      {
+        "key": "emuseum_service_key_not_registered",
+        "count": 1,
+        "reason": "emuseum_service_key_not_registered"
       },
       {
         "key": "folk_missing_required_params",
@@ -354,6 +364,11 @@
         "provider": "pqis"
       },
       {
+        "key": "emuseum",
+        "count": 3,
+        "provider": "emuseum"
+      },
+      {
         "key": "folk",
         "count": 3,
         "provider": "folk"
@@ -496,6 +511,11 @@
         "host": "openapi.gblib.or.kr"
       },
       {
+        "key": "www.emuseum.go.kr",
+        "count": 3,
+        "host": "www.emuseum.go.kr"
+      },
+      {
         "key": "openapi.epost.go.kr",
         "count": 2,
         "host": "openapi.epost.go.kr"
@@ -509,7 +529,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 223,
+        "count": 226,
         "kind": "external_endpoint"
       },
       {

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T04:27:00Z",
+  "generated_at": "2026-06-25T04:46:17Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -8,10 +8,10 @@
   "timeout": "10s",
   "summary": {
     "operations": 12205,
-    "evidence_total": 252,
+    "evidence_total": 255,
     "uncovered_gateway_candidates": 11409,
     "uncovered_adapter_candidates": 337,
-    "missing_adapter_hosts": 12,
+    "missing_adapter_hosts": 11,
     "planned_batches": 8,
     "planned_operations": 80
   },
@@ -181,19 +181,6 @@
         ]
       },
       {
-        "host": "www.emuseum.go.kr",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "missing",
-        "specs": 1,
-        "operations": 3,
-        "external_endpoint_operations": 3,
-        "sample_ids": [
-          "3036708"
-        ]
-      },
-      {
         "host": "data.wanju.go.kr",
         "kinds": [
           "external_endpoint"
@@ -233,6 +220,19 @@
         "external_guide_specs": 1,
         "sample_ids": [
           "15001184"
+        ]
+      },
+      {
+        "host": "openapi-lib.sen.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 1,
+        "operations": 1,
+        "external_endpoint_operations": 1,
+        "sample_ids": [
+          "15001051"
         ]
       }
     ]

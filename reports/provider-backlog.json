@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T04:26:48Z",
+  "generated_at": "2026-06-25T04:46:05Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -10,11 +10,11 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 40,
     "external_guide_hosts": 151,
-    "registered_adapter_hosts": 28,
+    "registered_adapter_hosts": 29,
     "operation_hosts": 42,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 12,
-    "needs_adapter_operations": 35,
+    "missing_adapter_hosts": 11,
+    "needs_adapter_operations": 32,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
@@ -101,19 +101,6 @@
       "external_endpoint_operations": 3,
       "sample_ids": [
         "15021579"
-      ]
-    },
-    {
-      "host": "www.emuseum.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "missing",
-      "specs": 1,
-      "operations": 3,
-      "external_endpoint_operations": 3,
-      "sample_ids": [
-        "3036708"
       ]
     },
     {
@@ -625,6 +612,20 @@
       "approval_required_operations": 3,
       "sample_ids": [
         "15000335"
+      ]
+    },
+    {
+      "host": "www.emuseum.go.kr",
+      "provider": "emuseum",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "sample_ids": [
+        "3036708"
       ]
     },
     {

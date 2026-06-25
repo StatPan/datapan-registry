@@ -1,0 +1,62 @@
+{
+  "generated_at": "2026-06-25T04:44:53Z",
+  "source": "C:\\workspace\\datapan-registry\\reports\\emuseum-verification.json",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 3,
+    "verified": 0,
+    "failed": 1,
+    "skipped": 2,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "skipped",
+        "count": 2,
+        "status": "skipped"
+      },
+      {
+        "key": "failed",
+        "count": 1,
+        "status": "failed"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "emuseum_missing_required_params",
+        "count": 2,
+        "reason": "emuseum_missing_required_params"
+      },
+      {
+        "key": "emuseum_service_key_not_registered",
+        "count": 1,
+        "reason": "emuseum_service_key_not_registered"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "emuseum",
+        "count": 3,
+        "provider": "emuseum"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "www.emuseum.go.kr",
+        "count": 3,
+        "host": "www.emuseum.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 3,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

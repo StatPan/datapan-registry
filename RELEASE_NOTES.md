@@ -1,6 +1,6 @@
 # Datapan Registry Release
 
-- generated_at: `2026-06-25T04:26:48Z`
+- generated_at: `2026-06-25T04:46:05Z`
 - provider: `data.go.kr`
 - datapan_version: `0.1.0-dev`
 - source_registry: `C:\workspace\datapan-registry\data\data-go-kr.registry.json`
@@ -15,14 +15,14 @@
 
 ## Provider Coverage
 
-- provider_adapters: `24` adapters, `28` hosts
+- provider_adapters: `25` adapters, `29` hosts
 - split_readiness: `ready`
-- verification_capable_adapters: `24`
-- call_capable_adapters: `19`
-- dependency_operations: `12205` total, `11419` gateway, `595` external, `579` registered-adapter, `35` missing-adapter
-- adapter_backlog: `12` target hosts, `35` target operations
-- provider_backlog: `179` hosts, `12` missing-adapter hosts, `35` operations needing adapters
-- coverage: `12063` callable operations (`98.8%`), external adapter coverage `94.3%`, verification evidence coverage `2.1%`
+- verification_capable_adapters: `25`
+- call_capable_adapters: `20`
+- dependency_operations: `12205` total, `11419` gateway, `595` external, `582` registered-adapter, `32` missing-adapter
+- adapter_backlog: `11` target hosts, `32` target operations
+- provider_backlog: `179` hosts, `11` missing-adapter hosts, `32` operations needing adapters
+- coverage: `12063` callable operations (`98.8%`), external adapter coverage `94.8%`, verification evidence coverage `2.1%`
 - coverage_artifact: `reports/coverage.json`
 - verification_plan: `8` batches, `80` planned operations, `11409` gateway gaps, `337` adapter gaps
 - verification_plan_artifact: `reports/verification-plan.json`
@@ -37,7 +37,7 @@ Top adapter targets:
 
 ## Verification Evidence
 
-- verification: `252` total, `21` verified, `86` failed, `145` skipped, `0` unknown
+- verification: `255` total, `21` verified, `87` failed, `147` skipped, `0` unknown
 - verification_artifact: `reports/latest-verification.json`
 - verification_summary_artifact: `reports/latest-verification-summary.json`
 

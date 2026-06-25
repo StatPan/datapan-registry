@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-25T04:26:48Z",
+  "generated_at": "2026-06-25T04:46:05Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 12,
+  "filtered_count": 11,
   "summary": {
-    "target_hosts": 12,
-    "target_operations": 35,
-    "external_endpoint_operations": 35,
+    "target_hosts": 11,
+    "target_operations": 32,
+    "external_endpoint_operations": 32,
     "service_root_operations": 0,
     "approval_required_operations": 0,
-    "missing_param_operations": 28,
+    "missing_param_operations": 25,
     "unsupported_protocol_operations": 0
   },
   "targets": [
@@ -359,76 +359,6 @@
     },
     {
       "rank": 7,
-      "host": "www.emuseum.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 3,
-      "specs": 1,
-      "organizations": [
-        "문화체육관광부 국립중앙박물관"
-      ],
-      "source_categories": [
-        "문화관광"
-      ],
-      "api_types": [
-        "REST"
-      ],
-      "data_formats": [
-        "JSON+XML"
-      ],
-      "missing_param_operations": 3,
-      "sample_operations": [
-        {
-          "dataset_id": "3036708",
-          "title": "문화체육관광부 국립중앙박물관_전국 박물관 유물정보",
-          "organization": "문화체육관광부 국립중앙박물관",
-          "operation": "소장품 목록 조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://www.emuseum.go.kr/openapi/relic/list",
-          "missing_params": [
-            "id",
-            "museumCode",
-            "name",
-            "nameKr",
-            "nameEn",
-            "nameCn",
-            "author",
-            "nationalityCode",
-            "materialCode",
-            "purposeCode",
-            "sizeRangeCode",
-            "placeLandCode",
-            "designationCode",
-            "indexWord"
-          ]
-        },
-        {
-          "dataset_id": "3036708",
-          "title": "문화체육관광부 국립중앙박물관_전국 박물관 유물정보",
-          "organization": "문화체육관광부 국립중앙박물관",
-          "operation": "소장품 상세 조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://www.emuseum.go.kr/openapi/relic/detail",
-          "missing_params": [
-            "id"
-          ]
-        },
-        {
-          "dataset_id": "3036708",
-          "title": "문화체육관광부 국립중앙박물관_전국 박물관 유물정보",
-          "organization": "문화체육관광부 국립중앙박물관",
-          "operation": "코드 목록 조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://www.emuseum.go.kr/openapi/code",
-          "missing_params": [
-            "parentCode"
-          ]
-        }
-      ]
-    },
-    {
-      "rank": 8,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -479,7 +409,7 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 8,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -536,7 +466,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -572,7 +502,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -603,7 +533,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

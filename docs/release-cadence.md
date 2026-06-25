@@ -38,8 +38,8 @@ check. That workflow:
   not an LFS pointer;
 - checks out `StatPan/datapan-cli`;
 - rereads provider-specific verification reports and regenerates bounded
-  summaries for qnet, epost, ekape, forest, folk, airport, andong, jeonju,
-  gblib, geoje, humetro, itfind, korad, kpx, lh-ebid, myhome, naqs,
+  summaries for qnet, epost, ekape, emuseum, forest, folk, airport, andong,
+  jeonju, gblib, geoje, humetro, itfind, korad, kpx, lh-ebid, myhome, naqs,
   oneclick-law, pqis, seoul-bus, sisul, tour, uiryeong, ulsan, and the merged
   latest report;
 - runs `catalog release verify`;
@@ -67,6 +67,8 @@ datapan catalog verify --registry data/data-go-kr.registry.json --provider epost
 datapan catalog verify summary --input reports/epost-verification.json --output reports/epost-verification-summary.json --json
 datapan catalog verify --registry data/data-go-kr.registry.json --provider ekape --kind external_endpoint --limit 5 --output reports/ekape-verification.json --json
 datapan catalog verify summary --input reports/ekape-verification.json --output reports/ekape-verification-summary.json --json
+datapan catalog verify --registry data/data-go-kr.registry.json --provider emuseum --kind external_endpoint --limit 3 --timeout 20s --output reports/emuseum-verification.json --json
+datapan catalog verify summary --input reports/emuseum-verification.json --output reports/emuseum-verification-summary.json --json
 datapan catalog verify --registry data/data-go-kr.registry.json --provider forest --kind external_endpoint --limit 4 --output reports/forest-verification.json --json
 datapan catalog verify summary --input reports/forest-verification.json --output reports/forest-verification-summary.json --json
 datapan catalog verify --registry data/data-go-kr.registry.json --provider folk --kind external_endpoint --limit 3 --output reports/folk-verification.json --json
@@ -111,7 +113,7 @@ datapan catalog verify --registry data/data-go-kr.registry.json --provider uirye
 datapan catalog verify summary --input reports/uiryeong-verification.json --output reports/uiryeong-verification-summary.json --json
 datapan catalog verify --registry data/data-go-kr.registry.json --provider ulsan --kind external_endpoint --limit 6 --output reports/ulsan-verification.json --json
 datapan catalog verify summary --input reports/ulsan-verification.json --output reports/ulsan-verification-summary.json --json
-datapan catalog verify merge --input reports/qnet-verification.json --input reports/epost-verification.json --input reports/ekape-verification.json --input reports/forest-verification.json --input reports/folk-verification.json --input reports/gblib-verification.json --input reports/airport-verification.json --input reports/andong-verification.json --input reports/jeonju-verification.json --input reports/geoje-verification.json --input reports/humetro-verification.json --input reports/itfind-verification.json --input reports/korad-verification.json --input reports/kpx-verification.json --input reports/lh-ebid-verification.json --input reports/myhome-verification.json --input reports/naqs-verification.json --input reports/oneclick-law-verification.json --input reports/pqis-verification.json --input reports/seoul-bus-verification.json --input reports/sisul-verification.json --input reports/tour-verification.json --input reports/uiryeong-verification.json --input reports/ulsan-verification.json --output reports/latest-verification.json --json
+datapan catalog verify merge --input reports/qnet-verification.json --input reports/epost-verification.json --input reports/ekape-verification.json --input reports/emuseum-verification.json --input reports/forest-verification.json --input reports/folk-verification.json --input reports/gblib-verification.json --input reports/airport-verification.json --input reports/andong-verification.json --input reports/jeonju-verification.json --input reports/geoje-verification.json --input reports/humetro-verification.json --input reports/itfind-verification.json --input reports/korad-verification.json --input reports/kpx-verification.json --input reports/lh-ebid-verification.json --input reports/myhome-verification.json --input reports/naqs-verification.json --input reports/oneclick-law-verification.json --input reports/pqis-verification.json --input reports/seoul-bus-verification.json --input reports/sisul-verification.json --input reports/tour-verification.json --input reports/uiryeong-verification.json --input reports/ulsan-verification.json --output reports/latest-verification.json --json
 datapan catalog verify summary --input reports/latest-verification.json --output reports/latest-verification-summary.json --json
 ```
 

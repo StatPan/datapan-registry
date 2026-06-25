@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T04:26:48Z",
+  "generated_at": "2026-06-25T04:46:05Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 24,
-  "host_count": 28,
+  "adapter_count": 25,
+  "host_count": 29,
   "adapters": [
     {
       "name": "airport",
@@ -32,6 +32,17 @@
         "data.ekape.or.kr"
       ],
       "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "emuseum",
+      "status": "registered",
+      "hosts": [
+        "www.emuseum.go.kr"
+      ],
+      "capabilities": [
+        "call",
         "verification"
       ]
     },
@@ -271,9 +282,9 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 24,
-    "verification_capable_adapters": 24,
-    "call_capable_adapters": 19,
+    "adapter_count": 25,
+    "verification_capable_adapters": 25,
+    "call_capable_adapters": 20,
     "required_adapters": 2,
     "required_verification_adapters": 2,
     "required_call_adapters": 1,

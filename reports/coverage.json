@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T04:26:53Z",
+  "generated_at": "2026-06-25T04:46:10Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -11,28 +11,28 @@
     "callable_operation_percent": 98.8,
     "data_go_kr_gateway_operations": 11419,
     "external_endpoint_operations": 595,
-    "registered_adapter_operations": 579,
-    "missing_adapter_operations": 35,
-    "external_adapter_coverage_percent": 94.3,
+    "registered_adapter_operations": 582,
+    "missing_adapter_operations": 32,
+    "external_adapter_coverage_percent": 94.8,
     "approval_required_operations": 4142,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
-    "registered_adapter_hosts": 28,
-    "missing_adapter_hosts": 12,
-    "adapter_count": 24,
-    "call_capable_adapters": 19,
+    "registered_adapter_hosts": 29,
+    "missing_adapter_hosts": 11,
+    "adapter_count": 25,
+    "call_capable_adapters": 20,
     "provider_split_ready": true
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-06-25T04:26:45Z",
-    "total": 252,
+    "generated_at": "2026-06-25T04:46:01Z",
+    "total": 255,
     "verified": 21,
-    "failed": 86,
-    "skipped": 145,
+    "failed": 87,
+    "skipped": 147,
     "unknown": 0,
-    "verified_percent": 8.3,
+    "verified_percent": 8.2,
     "evidence_operation_percent": 2.1
   },
   "gaps": {
@@ -120,19 +120,6 @@
         ]
       },
       {
-        "host": "www.emuseum.go.kr",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "missing",
-        "specs": 1,
-        "operations": 3,
-        "external_endpoint_operations": 3,
-        "sample_ids": [
-          "3036708"
-        ]
-      },
-      {
         "host": "data.wanju.go.kr",
         "kinds": [
           "external_endpoint"
@@ -172,6 +159,19 @@
         "external_guide_specs": 1,
         "sample_ids": [
           "15001184"
+        ]
+      },
+      {
+        "host": "openapi-lib.sen.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 1,
+        "operations": 1,
+        "external_endpoint_operations": 1,
+        "sample_ids": [
+          "15001051"
         ]
       }
     ],
@@ -355,10 +355,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-06-25T04:26:53Z",
+    "generated_at": "2026-06-25T04:46:10Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 24,
-    "host_count": 28,
+    "adapter_count": 25,
+    "host_count": 29,
     "adapters": [
       {
         "name": "airport",
@@ -388,6 +388,17 @@
           "data.ekape.or.kr"
         ],
         "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "emuseum",
+        "status": "registered",
+        "hosts": [
+          "www.emuseum.go.kr"
+        ],
+        "capabilities": [
+          "call",
           "verification"
         ]
       },
@@ -627,9 +638,9 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 24,
-      "verification_capable_adapters": 24,
-      "call_capable_adapters": 19,
+      "adapter_count": 25,
+      "verification_capable_adapters": 25,
+      "call_capable_adapters": 20,
       "required_adapters": 2,
       "required_verification_adapters": 2,
       "required_call_adapters": 1,
