@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-24T23:32:28Z",
+  "generated_at": "2026-06-25T00:06:47Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-uiryeong\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-ulsan\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "filtered_count": 179,
@@ -10,11 +10,11 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 40,
     "external_guide_hosts": 150,
-    "registered_adapter_hosts": 12,
+    "registered_adapter_hosts": 13,
     "operation_hosts": 42,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 28,
-    "needs_adapter_operations": 196,
+    "missing_adapter_hosts": 27,
+    "needs_adapter_operations": 176,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
@@ -54,21 +54,6 @@
         "15002793",
         "15002794",
         "15002797"
-      ]
-    },
-    {
-      "host": "openapi.its.ulsan.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "missing",
-      "specs": 3,
-      "operations": 20,
-      "external_endpoint_operations": 20,
-      "sample_ids": [
-        "15052669",
-        "3057770",
-        "3057773"
       ]
     },
     {
@@ -556,6 +541,22 @@
         "15000032",
         "15000124",
         "15000268"
+      ]
+    },
+    {
+      "host": "openapi.its.ulsan.kr",
+      "provider": "ulsan",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 3,
+      "operations": 20,
+      "external_endpoint_operations": 20,
+      "sample_ids": [
+        "15052669",
+        "3057770",
+        "3057773"
       ]
     },
     {
@@ -2033,6 +2034,7 @@
     },
     {
       "host": "its.ulsan.kr",
+      "provider": "ulsan",
       "kinds": [
         "external_guide"
       ],

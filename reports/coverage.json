@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-24T23:32:33Z",
+  "generated_at": "2026-06-25T00:06:52Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-uiryeong\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-ulsan\\data\\data-go-kr.registry.json",
   "source": "release",
-  "verification": "C:\\workspace\\datapan-registry\\.datapan\\release-uiryeong\\reports\\latest-verification.json",
+  "verification": "C:\\workspace\\datapan-registry\\.datapan\\release-ulsan\\reports\\latest-verification.json",
   "summary": {
     "specs": 12060,
     "operations": 12205,
@@ -11,28 +11,28 @@
     "callable_operation_percent": 98.8,
     "data_go_kr_gateway_operations": 11419,
     "external_endpoint_operations": 594,
-    "registered_adapter_operations": 398,
-    "missing_adapter_operations": 215,
-    "external_adapter_coverage_percent": 64.9,
+    "registered_adapter_operations": 418,
+    "missing_adapter_operations": 195,
+    "external_adapter_coverage_percent": 68.2,
     "approval_required_operations": 4142,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
-    "registered_adapter_hosts": 12,
-    "missing_adapter_hosts": 28,
-    "adapter_count": 9,
-    "call_capable_adapters": 4,
+    "registered_adapter_hosts": 13,
+    "missing_adapter_hosts": 27,
+    "adapter_count": 10,
+    "call_capable_adapters": 5,
     "provider_split_ready": true
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-06-24T23:32:17Z",
-    "total": 85,
+    "generated_at": "2026-06-25T00:06:33Z",
+    "total": 91,
     "verified": 16,
-    "failed": 21,
-    "skipped": 48,
+    "failed": 24,
+    "skipped": 51,
     "unknown": 0,
-    "verified_percent": 18.8,
+    "verified_percent": 17.6,
     "evidence_operation_percent": 0.7
   },
   "gaps": {
@@ -70,21 +70,6 @@
           "15002793",
           "15002794",
           "15002797"
-        ]
-      },
-      {
-        "host": "openapi.its.ulsan.kr",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "missing",
-        "specs": 3,
-        "operations": 20,
-        "external_endpoint_operations": 20,
-        "sample_ids": [
-          "15052669",
-          "3057770",
-          "3057773"
         ]
       },
       {
@@ -195,6 +180,21 @@
         "external_endpoint_operations": 6,
         "sample_ids": [
           "15059302"
+        ]
+      },
+      {
+        "host": "openapi.ebid.lh.or.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 6,
+        "operations": 6,
+        "external_endpoint_operations": 6,
+        "sample_ids": [
+          "15021183",
+          "15021184",
+          "15042795"
         ]
       }
     ],
@@ -323,6 +323,22 @@
         ]
       },
       {
+        "host": "openapi.its.ulsan.kr",
+        "provider": "ulsan",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "adapter",
+        "specs": 3,
+        "operations": 20,
+        "external_endpoint_operations": 20,
+        "sample_ids": [
+          "15052669",
+          "3057770",
+          "3057773"
+        ]
+      },
+      {
         "host": "openapi.epost.go.kr",
         "provider": "epost",
         "kinds": [
@@ -357,29 +373,14 @@
           "15038409",
           "15158628"
         ]
-      },
-      {
-        "host": "api.forest.go.kr",
-        "provider": "forest",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "adapter",
-        "specs": 2,
-        "operations": 4,
-        "external_endpoint_operations": 4,
-        "sample_ids": [
-          "3044607",
-          "3071170"
-        ]
       }
     ]
   },
   "adapters": {
-    "generated_at": "2026-06-24T23:32:33Z",
+    "generated_at": "2026-06-25T00:06:52Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 9,
-    "host_count": 12,
+    "adapter_count": 10,
+    "host_count": 13,
     "adapters": [
       {
         "name": "airport",
@@ -477,14 +478,25 @@
           "call",
           "verification"
         ]
+      },
+      {
+        "name": "ulsan",
+        "status": "registered",
+        "hosts": [
+          "openapi.its.ulsan.kr"
+        ],
+        "capabilities": [
+          "call",
+          "verification"
+        ]
       }
     ],
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 9,
-      "verification_capable_adapters": 9,
-      "call_capable_adapters": 4,
+      "adapter_count": 10,
+      "verification_capable_adapters": 10,
+      "call_capable_adapters": 5,
       "required_adapters": 2,
       "required_verification_adapters": 2,
       "required_call_adapters": 1,
@@ -495,19 +507,19 @@
   "next": [
     {
       "label": "missing adapters",
-      "command": "datapan providers --registry C:\\workspace\\datapan-registry\\.datapan\\release-uiryeong\\data\\data-go-kr.registry.json --gaps --limit 20 --json"
+      "command": "datapan providers --registry C:\\workspace\\datapan-registry\\.datapan\\release-ulsan\\data\\data-go-kr.registry.json --gaps --limit 20 --json"
     },
     {
       "label": "adapter targets",
-      "command": "datapan targets --registry C:\\workspace\\datapan-registry\\.datapan\\release-uiryeong\\data\\data-go-kr.registry.json --limit 20 --json"
+      "command": "datapan targets --registry C:\\workspace\\datapan-registry\\.datapan\\release-ulsan\\data\\data-go-kr.registry.json --limit 20 --json"
     },
     {
       "label": "coverage report",
-      "command": "datapan coverage --registry C:\\workspace\\datapan-registry\\.datapan\\release-uiryeong\\data\\data-go-kr.registry.json --verification C:\\workspace\\datapan-registry\\.datapan\\release-uiryeong\\reports\\latest-verification.json --json"
+      "command": "datapan coverage --registry C:\\workspace\\datapan-registry\\.datapan\\release-ulsan\\data\\data-go-kr.registry.json --verification C:\\workspace\\datapan-registry\\.datapan\\release-ulsan\\reports\\latest-verification.json --json"
     },
     {
       "label": "verify forest",
-      "command": "datapan verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-uiryeong\\data\\data-go-kr.registry.json --provider forest --kind external_endpoint --limit 4 --timeout 10s --json"
+      "command": "datapan verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-ulsan\\data\\data-go-kr.registry.json --provider forest --kind external_endpoint --limit 4 --timeout 10s --json"
     }
   ]
 }

@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-24T23:32:28Z",
+  "generated_at": "2026-06-25T00:06:47Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 9,
-  "host_count": 12,
+  "adapter_count": 10,
+  "host_count": 13,
   "adapters": [
     {
       "name": "airport",
@@ -100,14 +100,25 @@
         "call",
         "verification"
       ]
+    },
+    {
+      "name": "ulsan",
+      "status": "registered",
+      "hosts": [
+        "openapi.its.ulsan.kr"
+      ],
+      "capabilities": [
+        "call",
+        "verification"
+      ]
     }
   ],
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 9,
-    "verification_capable_adapters": 9,
-    "call_capable_adapters": 4,
+    "adapter_count": 10,
+    "verification_capable_adapters": 10,
+    "call_capable_adapters": 5,
     "required_adapters": 2,
     "required_verification_adapters": 2,
     "required_call_adapters": 1,

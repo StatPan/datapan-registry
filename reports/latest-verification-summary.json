@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-06-24T23:32:17Z",
-  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-uiryeong\\reports\\latest-verification.json",
+  "generated_at": "2026-06-25T00:06:33Z",
+  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-ulsan\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 85,
+    "total": 91,
     "verified": 16,
-    "failed": 21,
-    "skipped": 48,
+    "failed": 24,
+    "skipped": 51,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 48,
+        "count": 51,
         "status": "skipped"
       },
       {
         "key": "failed",
-        "count": 21,
+        "count": 24,
         "status": "failed"
       },
       {
@@ -80,6 +80,16 @@
         "key": "jeonju_http_404_not_found",
         "count": 3,
         "reason": "jeonju_http_404_not_found"
+      },
+      {
+        "key": "ulsan_missing_required_params",
+        "count": 3,
+        "reason": "ulsan_missing_required_params"
+      },
+      {
+        "key": "ulsan_service_key_not_registered",
+        "count": 3,
+        "reason": "ulsan_service_key_not_registered"
       },
       {
         "key": "airport_missing_required_params",
@@ -149,6 +159,11 @@
         "provider": "uiryeong"
       },
       {
+        "key": "ulsan",
+        "count": 6,
+        "provider": "ulsan"
+      },
+      {
         "key": "jeonju",
         "count": 5,
         "provider": "jeonju"
@@ -201,6 +216,11 @@
         "host": "openapi.airport.co.kr"
       },
       {
+        "key": "openapi.its.ulsan.kr",
+        "count": 6,
+        "host": "openapi.its.ulsan.kr"
+      },
+      {
         "key": "openapi.jeonju.go.kr",
         "count": 5,
         "host": "openapi.jeonju.go.kr"
@@ -224,7 +244,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 75,
+        "count": 81,
         "kind": "external_endpoint"
       },
       {

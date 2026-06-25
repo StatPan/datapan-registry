@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-24T23:32:28Z",
+  "generated_at": "2026-06-25T00:06:47Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-uiryeong\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-ulsan\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 28,
+  "filtered_count": 27,
   "summary": {
-    "target_hosts": 28,
-    "target_operations": 215,
-    "external_endpoint_operations": 196,
+    "target_hosts": 27,
+    "target_operations": 195,
+    "external_endpoint_operations": 176,
     "service_root_operations": 19,
     "approval_required_operations": 42,
-    "missing_param_operations": 187,
+    "missing_param_operations": 171,
     "unsupported_protocol_operations": 30
   },
   "targets": [
@@ -199,57 +199,6 @@
     },
     {
       "rank": 4,
-      "host": "openapi.its.ulsan.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 20,
-      "specs": 3,
-      "organizations": [
-        "울산광역시"
-      ],
-      "source_categories": [
-        "교통물류"
-      ],
-      "api_types": [
-        "REST"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "missing_param_operations": 16,
-      "sample_operations": [
-        {
-          "dataset_id": "15052669",
-          "title": "울산광역시 BIS 정보",
-          "organization": "울산광역시",
-          "operation": "교통카드충전소정보 조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://openapi.its.ulsan.kr/UlsanAPI/TCardStoreInfo.xo"
-        },
-        {
-          "dataset_id": "15052669",
-          "title": "울산광역시 BIS 정보",
-          "organization": "울산광역시",
-          "operation": "노선별정류장정보 조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://openapi.its.ulsan.kr/UlsanAPI/AllRouteDetailInfo.xo",
-          "missing_params": [
-            "Routeid"
-          ]
-        },
-        {
-          "dataset_id": "15052669",
-          "title": "울산광역시 BIS 정보",
-          "organization": "울산광역시",
-          "operation": "노선정보 조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://openapi.its.ulsan.kr/UlsanAPI/RouteInfo.xo"
-        }
-      ]
-    },
-    {
-      "rank": 5,
       "host": "www.korad.or.kr",
       "kinds": [
         "external_endpoint"
@@ -306,7 +255,7 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 5,
       "host": "www.andong.go.kr",
       "kinds": [
         "external_endpoint"
@@ -368,7 +317,7 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 6,
       "host": "open.itfind.or.kr",
       "kinds": [
         "external_endpoint"
@@ -428,7 +377,7 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 7,
       "host": "data.naqs.go.kr",
       "kinds": [
         "external_endpoint"
@@ -525,7 +474,7 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 8,
       "host": "data.humetro.busan.kr",
       "kinds": [
         "external_endpoint"
@@ -590,7 +539,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "openapi.ebid.lh.or.kr",
       "kinds": [
         "external_endpoint"
@@ -651,7 +600,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "openapi.coast.kr",
       "kinds": [
         "external_endpoint"
@@ -698,7 +647,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "openapi.kpx.or.kr",
       "kinds": [
         "external_endpoint"
@@ -747,7 +696,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "host": "ws.bus.go.kr",
       "kinds": [
         "external_endpoint"
@@ -806,7 +755,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 13,
       "host": "data.jeju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -866,7 +815,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 14,
       "host": "www.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -925,7 +874,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 15,
       "host": "car.daegu.go.kr",
       "kinds": [
         "external_endpoint"
@@ -985,7 +934,7 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 16,
       "host": "openapi.pqis.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1048,7 +997,7 @@
       ]
     },
     {
-      "rank": 18,
+      "rank": 17,
       "host": "openapi.price.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1107,7 +1056,7 @@
       ]
     },
     {
-      "rank": 19,
+      "rank": 18,
       "host": "openapi.gblib.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1165,7 +1114,7 @@
       ]
     },
     {
-      "rank": 20,
+      "rank": 19,
       "host": "oneclick.law.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1234,7 +1183,7 @@
       ]
     },
     {
-      "rank": 21,
+      "rank": 20,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -1291,7 +1240,7 @@
       ]
     },
     {
-      "rank": 22,
+      "rank": 21,
       "host": "www.emuseum.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1361,7 +1310,7 @@
       ]
     },
     {
-      "rank": 23,
+      "rank": 22,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1412,7 +1361,7 @@
       ]
     },
     {
-      "rank": 24,
+      "rank": 23,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1469,7 +1418,7 @@
       ]
     },
     {
-      "rank": 25,
+      "rank": 24,
       "host": "data.myhome.go.kr:443",
       "kinds": [
         "external_endpoint"
@@ -1505,7 +1454,7 @@
       ]
     },
     {
-      "rank": 26,
+      "rank": 25,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1541,7 +1490,7 @@
       ]
     },
     {
-      "rank": 27,
+      "rank": 26,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -1572,7 +1521,7 @@
       ]
     },
     {
-      "rank": 28,
+      "rank": 27,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

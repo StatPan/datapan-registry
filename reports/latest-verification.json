@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-24T23:32:17Z",
+  "generated_at": "2026-06-25T00:06:33Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 85,
+  "limit": 91,
   "truncated": true,
-  "filtered_count": 85,
+  "filtered_count": 91,
   "summary": {
-    "total": 85,
+    "total": 91,
     "verified": 16,
-    "failed": 21,
-    "skipped": 48,
+    "failed": 24,
+    "skipped": 51,
     "unknown": 0
   },
   "results": [
@@ -2018,6 +2018,140 @@
         "pageNo": "1"
       },
       "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15052669",
+      "title": "울산광역시 BIS 정보",
+      "operation": "교통카드충전소정보 조회",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "ulsan_service_key_not_registered",
+      "verified_at": "2026-06-25T00:06:29Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.its.ulsan.kr/UlsanAPI/TCardStoreInfo.xo?numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_error"
+    },
+    {
+      "dataset_id": "15052669",
+      "title": "울산광역시 BIS 정보",
+      "operation": "노선별정류장정보 조회",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-25T00:06:29Z",
+      "params": {
+        "Routeid": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "Routeid"
+      ]
+    },
+    {
+      "dataset_id": "15052669",
+      "title": "울산광역시 BIS 정보",
+      "operation": "노선정보 조회",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "ulsan_service_key_not_registered",
+      "verified_at": "2026-06-25T00:06:29Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.its.ulsan.kr/UlsanAPI/RouteInfo.xo?numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_error"
+    },
+    {
+      "dataset_id": "15052669",
+      "title": "울산광역시 BIS 정보",
+      "operation": "버스도착정보 조회",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-25T00:06:29Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "stopid": ""
+      },
+      "missing_params": [
+        "stopid"
+      ]
+    },
+    {
+      "dataset_id": "15052669",
+      "title": "울산광역시 BIS 정보",
+      "operation": "버스시간표정보 조회",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-25T00:06:29Z",
+      "params": {
+        "dayOfWeek": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "routeNo": ""
+      },
+      "missing_params": [
+        "routeNo",
+        "dayOfWeek"
+      ]
+    },
+    {
+      "dataset_id": "15052669",
+      "title": "울산광역시 BIS 정보",
+      "operation": "버스정류장정보 조회",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "ulsan_service_key_not_registered",
+      "verified_at": "2026-06-25T00:06:29Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.its.ulsan.kr/UlsanAPI/BusStopInfo.xo?numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_error"
     }
   ]
 }
