@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-25T04:14:38Z",
+  "generated_at": "2026-06-25T04:26:48Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 13,
+  "filtered_count": 12,
   "summary": {
-    "target_hosts": 13,
-    "target_operations": 36,
-    "external_endpoint_operations": 36,
+    "target_hosts": 12,
+    "target_operations": 35,
+    "external_endpoint_operations": 35,
     "service_root_operations": 0,
     "approval_required_operations": 0,
-    "missing_param_operations": 29,
+    "missing_param_operations": 28,
     "unsupported_protocol_operations": 0
   },
   "targets": [
@@ -537,42 +537,6 @@
     },
     {
       "rank": 10,
-      "host": "data.myhome.go.kr:443",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 1,
-      "specs": 1,
-      "organizations": [
-        "한국토지주택공사"
-      ],
-      "source_categories": [
-        "국토관리"
-      ],
-      "api_types": [
-        "REST"
-      ],
-      "data_formats": [
-        "JSON"
-      ],
-      "missing_param_operations": 1,
-      "sample_operations": [
-        {
-          "dataset_id": "15058476",
-          "title": "한국토지주택공사_공공임대주택 단지정보 조회 서비스",
-          "organization": "한국토지주택공사",
-          "operation": "임대주택목록 조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://data.myhome.go.kr:443/rentalHouseList",
-          "missing_params": [
-            "brtcCode",
-            "signguCode"
-          ]
-        }
-      ]
-    },
-    {
-      "rank": 11,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -608,7 +572,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -639,7 +603,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

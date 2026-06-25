@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-25T04:14:34Z",
+  "generated_at": "2026-06-25T04:26:45Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 258,
+  "limit": 259,
   "truncated": true,
-  "filtered_count": 251,
+  "filtered_count": 252,
   "summary": {
-    "total": 251,
+    "total": 252,
     "verified": 21,
-    "failed": 85,
+    "failed": 86,
     "skipped": 145,
     "unknown": 0
   },
@@ -5593,6 +5593,33 @@
         "numOfRows": "1",
         "pageNo": "1"
       }
+    },
+    {
+      "dataset_id": "15058476",
+      "title": "한국토지주택공사_공공임대주택 단지정보 조회 서비스",
+      "operation": "임대주택목록 조회",
+      "provider": "myhome",
+      "endpoint_host": "data.myhome.go.kr:443",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "myhome_service_key_not_registered",
+      "verified_at": "2026-06-25T04:26:29Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "code/msg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "https://data.myhome.go.kr:443/rentalHouseList?ServiceKey=REDACTED\u0026numOfRows=1\u0026pageNo=1",
+      "params": {
+        "brtcCode": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "signguCode": ""
+      },
+      "body_shape": "json"
     }
   ]
 }

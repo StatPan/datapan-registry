@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T04:14:38Z",
+  "generated_at": "2026-06-25T04:26:48Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 23,
-  "host_count": 27,
+  "adapter_count": 24,
+  "host_count": 28,
   "adapters": [
     {
       "name": "airport",
@@ -156,6 +156,17 @@
       ]
     },
     {
+      "name": "myhome",
+      "status": "registered",
+      "hosts": [
+        "data.myhome.go.kr:443"
+      ],
+      "capabilities": [
+        "call",
+        "verification"
+      ]
+    },
+    {
       "name": "naqs",
       "status": "registered",
       "hosts": [
@@ -260,9 +271,9 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 23,
-    "verification_capable_adapters": 23,
-    "call_capable_adapters": 18,
+    "adapter_count": 24,
+    "verification_capable_adapters": 24,
+    "call_capable_adapters": 19,
     "required_adapters": 2,
     "required_verification_adapters": 2,
     "required_call_adapters": 1,

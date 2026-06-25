@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-25T04:14:34Z",
+  "generated_at": "2026-06-25T04:26:45Z",
   "source": "C:\\workspace\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 251,
+    "total": 252,
     "verified": 21,
-    "failed": 85,
+    "failed": 86,
     "skipped": 145,
     "unknown": 0
   },
@@ -21,7 +21,7 @@
       },
       {
         "key": "failed",
-        "count": 85,
+        "count": 86,
         "status": "failed"
       },
       {
@@ -222,6 +222,11 @@
         "reason": "lh_ebid_missing_required_params"
       },
       {
+        "key": "myhome_service_key_not_registered",
+        "count": 1,
+        "reason": "myhome_service_key_not_registered"
+      },
+      {
         "key": "oneclick_missing_required_params",
         "count": 1,
         "reason": "oneclick_missing_required_params"
@@ -357,6 +362,11 @@
         "key": "gblib",
         "count": 3,
         "provider": "gblib"
+      },
+      {
+        "key": "myhome",
+        "count": 1,
+        "provider": "myhome"
       }
     ],
     "by_endpoint_host": [
@@ -489,12 +499,17 @@
         "key": "openapi.epost.go.kr",
         "count": 2,
         "host": "openapi.epost.go.kr"
+      },
+      {
+        "key": "data.myhome.go.kr:443",
+        "count": 1,
+        "host": "data.myhome.go.kr:443"
       }
     ],
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 222,
+        "count": 223,
         "kind": "external_endpoint"
       },
       {

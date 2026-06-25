@@ -1,0 +1,52 @@
+{
+  "generated_at": "2026-06-25T04:26:29Z",
+  "source": "C:\\workspace\\datapan-registry\\reports\\myhome-verification.json",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 1,
+    "verified": 0,
+    "failed": 1,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "failed",
+        "count": 1,
+        "status": "failed"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "myhome_service_key_not_registered",
+        "count": 1,
+        "reason": "myhome_service_key_not_registered"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "myhome",
+        "count": 1,
+        "provider": "myhome"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "data.myhome.go.kr:443",
+        "count": 1,
+        "host": "data.myhome.go.kr:443"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 1,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}
