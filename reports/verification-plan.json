@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T04:46:17Z",
+  "generated_at": "2026-06-25T05:05:34Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -8,12 +8,12 @@
   "timeout": "10s",
   "summary": {
     "operations": 12205,
-    "evidence_total": 255,
+    "evidence_total": 256,
     "uncovered_gateway_candidates": 11409,
-    "uncovered_adapter_candidates": 337,
-    "missing_adapter_hosts": 11,
-    "planned_batches": 8,
-    "planned_operations": 80
+    "uncovered_adapter_candidates": 340,
+    "missing_adapter_hosts": 10,
+    "planned_batches": 9,
+    "planned_operations": 83
   },
   "batches": [
     {
@@ -34,6 +34,16 @@
       "planned_operations": 10,
       "command": "datapan catalog verify --registry C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json --provider ekape --kind external_endpoint --exclude-input C:\\workspace\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ekape-next.json --json",
       "output": ".datapan/verification/ekape-next.json"
+    },
+    {
+      "label": "emuseum",
+      "provider": "emuseum",
+      "kind": "external_endpoint",
+      "candidates": 3,
+      "uncovered_candidates": 3,
+      "planned_operations": 3,
+      "command": "datapan catalog verify --registry C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json --provider emuseum --kind external_endpoint --exclude-input C:\\workspace\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/emuseum-next.json --json",
+      "output": ".datapan/verification/emuseum-next.json"
     },
     {
       "label": "epost",
@@ -141,20 +151,6 @@
         ]
       },
       {
-        "host": "data.jeju.go.kr",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "missing",
-        "specs": 2,
-        "operations": 4,
-        "external_endpoint_operations": 4,
-        "sample_ids": [
-          "15001189",
-          "15043696"
-        ]
-      },
-      {
         "host": "openapi.price.go.kr",
         "kinds": [
           "external_endpoint"
@@ -233,6 +229,19 @@
         "external_endpoint_operations": 1,
         "sample_ids": [
           "15001051"
+        ]
+      },
+      {
+        "host": "www.simpan.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 1,
+        "operations": 1,
+        "external_endpoint_operations": 1,
+        "sample_ids": [
+          "3084452"
         ]
       }
     ]

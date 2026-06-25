@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T04:46:05Z",
+  "generated_at": "2026-06-25T05:05:21Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 25,
-  "host_count": 29,
+  "adapter_count": 26,
+  "host_count": 30,
   "adapters": [
     {
       "name": "airport",
@@ -117,6 +117,17 @@
       "status": "registered",
       "hosts": [
         "open.itfind.or.kr"
+      ],
+      "capabilities": [
+        "call",
+        "verification"
+      ]
+    },
+    {
+      "name": "jeju",
+      "status": "registered",
+      "hosts": [
+        "data.jeju.go.kr"
       ],
       "capabilities": [
         "call",
@@ -282,9 +293,9 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 25,
-    "verification_capable_adapters": 25,
-    "call_capable_adapters": 20,
+    "adapter_count": 26,
+    "verification_capable_adapters": 26,
+    "call_capable_adapters": 21,
     "required_adapters": 2,
     "required_verification_adapters": 2,
     "required_call_adapters": 1,

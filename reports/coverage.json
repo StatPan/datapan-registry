@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T04:46:10Z",
+  "generated_at": "2026-06-25T05:05:26Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -11,28 +11,28 @@
     "callable_operation_percent": 98.8,
     "data_go_kr_gateway_operations": 11419,
     "external_endpoint_operations": 595,
-    "registered_adapter_operations": 582,
-    "missing_adapter_operations": 32,
-    "external_adapter_coverage_percent": 94.8,
+    "registered_adapter_operations": 586,
+    "missing_adapter_operations": 28,
+    "external_adapter_coverage_percent": 95.4,
     "approval_required_operations": 4142,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
-    "registered_adapter_hosts": 29,
-    "missing_adapter_hosts": 11,
-    "adapter_count": 25,
-    "call_capable_adapters": 20,
+    "registered_adapter_hosts": 30,
+    "missing_adapter_hosts": 10,
+    "adapter_count": 26,
+    "call_capable_adapters": 21,
     "provider_split_ready": true
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-06-25T04:46:01Z",
-    "total": 255,
-    "verified": 21,
+    "generated_at": "2026-06-25T05:05:17Z",
+    "total": 256,
+    "verified": 22,
     "failed": 87,
     "skipped": 147,
     "unknown": 0,
-    "verified_percent": 8.2,
+    "verified_percent": 8.6,
     "evidence_operation_percent": 2.1
   },
   "gaps": {
@@ -77,20 +77,6 @@
         "external_endpoint_operations": 4,
         "sample_ids": [
           "15097855"
-        ]
-      },
-      {
-        "host": "data.jeju.go.kr",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "missing",
-        "specs": 2,
-        "operations": 4,
-        "external_endpoint_operations": 4,
-        "sample_ids": [
-          "15001189",
-          "15043696"
         ]
       },
       {
@@ -172,6 +158,19 @@
         "external_endpoint_operations": 1,
         "sample_ids": [
           "15001051"
+        ]
+      },
+      {
+        "host": "www.simpan.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 1,
+        "operations": 1,
+        "external_endpoint_operations": 1,
+        "sample_ids": [
+          "3084452"
         ]
       }
     ],
@@ -355,10 +354,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-06-25T04:46:10Z",
+    "generated_at": "2026-06-25T05:05:26Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 25,
-    "host_count": 29,
+    "adapter_count": 26,
+    "host_count": 30,
     "adapters": [
       {
         "name": "airport",
@@ -473,6 +472,17 @@
         "status": "registered",
         "hosts": [
           "open.itfind.or.kr"
+        ],
+        "capabilities": [
+          "call",
+          "verification"
+        ]
+      },
+      {
+        "name": "jeju",
+        "status": "registered",
+        "hosts": [
+          "data.jeju.go.kr"
         ],
         "capabilities": [
           "call",
@@ -638,9 +648,9 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 25,
-      "verification_capable_adapters": 25,
-      "call_capable_adapters": 20,
+      "adapter_count": 26,
+      "verification_capable_adapters": 26,
+      "call_capable_adapters": 21,
       "required_adapters": 2,
       "required_verification_adapters": 2,
       "required_call_adapters": 1,

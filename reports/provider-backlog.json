@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T04:46:05Z",
+  "generated_at": "2026-06-25T05:05:21Z",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -10,11 +10,11 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 40,
     "external_guide_hosts": 151,
-    "registered_adapter_hosts": 29,
+    "registered_adapter_hosts": 30,
     "operation_hosts": 42,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 11,
-    "needs_adapter_operations": 32,
+    "missing_adapter_hosts": 10,
+    "needs_adapter_operations": 28,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
@@ -61,20 +61,6 @@
       "external_endpoint_operations": 4,
       "sample_ids": [
         "15097855"
-      ]
-    },
-    {
-      "host": "data.jeju.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "missing",
-      "specs": 2,
-      "operations": 4,
-      "external_endpoint_operations": 4,
-      "sample_ids": [
-        "15001189",
-        "15043696"
       ]
     },
     {
@@ -564,6 +550,21 @@
       "sample_ids": [
         "3044607",
         "3071170"
+      ]
+    },
+    {
+      "host": "data.jeju.go.kr",
+      "provider": "jeju",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 2,
+      "operations": 4,
+      "external_endpoint_operations": 4,
+      "sample_ids": [
+        "15001189",
+        "15043696"
       ]
     },
     {

@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-06-25T05:02:21Z",
+  "source": "C:\\workspace\\datapan-registry\\reports\\jeju-verification.json",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 4,
+    "verified": 1,
+    "failed": 1,
+    "skipped": 2,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "skipped",
+        "count": 2,
+        "status": "skipped"
+      },
+      {
+        "key": "failed",
+        "count": 1,
+        "status": "failed"
+      },
+      {
+        "key": "verified",
+        "count": 1,
+        "status": "verified"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "jeju_missing_required_params",
+        "count": 2,
+        "reason": "jeju_missing_required_params"
+      },
+      {
+        "key": "jeju_method_not_allowed",
+        "count": 1,
+        "reason": "jeju_method_not_allowed"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "jeju",
+        "count": 4,
+        "provider": "jeju"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "data.jeju.go.kr",
+        "count": 4,
+        "host": "data.jeju.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 4,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

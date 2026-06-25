@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-06-25T04:46:01Z",
+  "generated_at": "2026-06-25T05:05:17Z",
   "source": "C:\\workspace\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 255,
-    "verified": 21,
+    "total": 256,
+    "verified": 22,
     "failed": 87,
     "skipped": 147,
     "unknown": 0
@@ -26,7 +26,7 @@
       },
       {
         "key": "verified",
-        "count": 21,
+        "count": 22,
         "status": "verified"
       }
     ],
@@ -182,11 +182,6 @@
         "reason": "airport_missing_required_params"
       },
       {
-        "key": "emuseum_missing_required_params",
-        "count": 2,
-        "reason": "emuseum_missing_required_params"
-      },
-      {
         "key": "epost_missing_required_params",
         "count": 2,
         "reason": "epost_missing_required_params"
@@ -197,6 +192,11 @@
         "reason": "gblib_service_key_not_registered"
       },
       {
+        "key": "jeju_missing_required_params",
+        "count": 2,
+        "reason": "jeju_missing_required_params"
+      },
+      {
         "key": "jeonju_http_405_method_not_allowed",
         "count": 2,
         "reason": "jeonju_http_405_method_not_allowed"
@@ -205,11 +205,6 @@
         "key": "ekape_html_response",
         "count": 1,
         "reason": "ekape_html_response"
-      },
-      {
-        "key": "emuseum_service_key_not_registered",
-        "count": 1,
-        "reason": "emuseum_service_key_not_registered"
       },
       {
         "key": "folk_missing_required_params",
@@ -225,6 +220,11 @@
         "key": "humetro_deadline_expired",
         "count": 1,
         "reason": "humetro_deadline_expired"
+      },
+      {
+        "key": "jeju_method_not_allowed",
+        "count": 1,
+        "reason": "jeju_method_not_allowed"
       },
       {
         "key": "lh_ebid_missing_required_params",
@@ -359,14 +359,14 @@
         "provider": "forest"
       },
       {
+        "key": "jeju",
+        "count": 4,
+        "provider": "jeju"
+      },
+      {
         "key": "pqis",
         "count": 4,
         "provider": "pqis"
-      },
-      {
-        "key": "emuseum",
-        "count": 3,
-        "provider": "emuseum"
       },
       {
         "key": "folk",
@@ -491,6 +491,11 @@
         "host": "api.forest.go.kr"
       },
       {
+        "key": "data.jeju.go.kr",
+        "count": 4,
+        "host": "data.jeju.go.kr"
+      },
+      {
         "key": "openapi.pqis.go.kr",
         "count": 4,
         "host": "openapi.pqis.go.kr"
@@ -511,11 +516,6 @@
         "host": "openapi.gblib.or.kr"
       },
       {
-        "key": "www.emuseum.go.kr",
-        "count": 3,
-        "host": "www.emuseum.go.kr"
-      },
-      {
         "key": "openapi.epost.go.kr",
         "count": 2,
         "host": "openapi.epost.go.kr"
@@ -529,7 +529,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 226,
+        "count": 227,
         "kind": "external_endpoint"
       },
       {
