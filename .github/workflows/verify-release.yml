@@ -113,6 +113,8 @@ jobs:
 
       - name: Check latest GitHub release is installable
         working-directory: datapan-cli
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           go run ./cmd/datapan catalog install datapan-registry \
             --registry "${RUNNER_TEMP}/datapan-installed-latest.registry.json" \

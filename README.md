@@ -13,7 +13,7 @@ re-importing the upstream data.go.kr catalog every time.
 - Specs: `12060`
 - Operations: `12205`
 - Callable operations: `12063` (`98.8%`)
-- Latest release: `v2026.06.25.14`
+- Latest release: `v2026.06.25.15`
 - Registered external adapters: `airport`, `andong`, `ekape`, `epost`, `folk`,
   `forest`, `gblib`, `geoje`, `humetro`, `itfind`, `jeonju`, `korad`, `lh-ebid`, `naqs`,
   `oneclick-law`, `pqis`, `q-net`, `seoul-bus`, `sisul`, `tour`, `uiryeong`,
