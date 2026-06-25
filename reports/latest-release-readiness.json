@@ -2,20 +2,20 @@
   "manifest": "C:\\workspace\\datapan-registry\\manifest.json",
   "root": "C:\\workspace\\datapan-registry",
   "schema_version": "datapan.release-readiness.v1",
-  "generated_at": "2026-06-25T05:50:50Z",
-  "datapan_version": "v0.1.26",
+  "generated_at": "2026-06-25T06:05:45Z",
+  "datapan_version": "v0.1.27",
   "provider": "data.go.kr",
   "ready": true,
   "summary": {
-    "gates_total": 20,
-    "passed": 20,
+    "gates_total": 21,
+    "passed": 21,
     "warned": 0,
     "failed": 0,
-    "required_artifacts": 14,
+    "required_artifacts": 15,
     "missing_required_artifacts": 0,
     "recommended_artifacts": 3,
     "missing_recommended_artifacts": 0,
-    "schema_artifacts": 18,
+    "schema_artifacts": 19,
     "registry_specs": 12060
   },
   "gates": [
@@ -24,8 +24,8 @@
       "status": "pass",
       "severity": "required",
       "message": "release manifest checksums and schema-bound artifacts verified",
-      "expected": 35,
-      "actual": 35
+      "expected": 37,
+      "actual": 37
     },
     {
       "id": "required_artifact_schema_index",
@@ -94,6 +94,16 @@
       "message": "required release artifact is present",
       "artifact_kind": "adapter_targets",
       "artifact_path": "reports/adapter-targets.json",
+      "expected": 1,
+      "actual": 1
+    },
+    {
+      "id": "required_artifact_route_disposition",
+      "status": "pass",
+      "severity": "required",
+      "message": "required release artifact is present",
+      "artifact_kind": "route_disposition",
+      "artifact_path": "reports/route-disposition.json",
       "expected": 1,
       "actual": 1
     },
@@ -202,8 +212,8 @@
       "status": "pass",
       "severity": "required",
       "message": "release includes all Datapan schema files known to this CLI",
-      "expected": 18,
-      "actual": 18
+      "expected": 19,
+      "actual": 19
     },
     {
       "id": "registry_has_specs",

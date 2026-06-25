@@ -13,7 +13,7 @@ re-importing the upstream data.go.kr catalog every time.
 - Specs: `12060`
 - Operations: `12205`
 - Callable operations: `12063` (`98.8%`)
-- Latest release: `v2026.06.25.22`
+- Latest release: `v2026.06.25.23`
 - Registered external adapters: `airport`, `andong`, `ekape`, `emuseum`,
   `epost`, `folk`, `forest`, `gblib`, `geoje`, `humetro`, `itfind`, `jeju`,
   `jeonju`, `korad`, `kpx`, `lh-ebid`, `myhome`, `naqs`, `oneclick-law`, `pqis`,
@@ -29,6 +29,9 @@ re-importing the upstream data.go.kr catalog every time.
 - Missing external host probe: `28` unadapted external endpoint checks in
   `reports/unadapted-external-probe.json` (`14` HTTP 404, `7` timeout, `6`
   request/DNS errors, `1` HTTP 503)
+- Route disposition: `28` missing external routes in
+  `reports/route-disposition.json` (`14` dead-route candidates, `14`
+  transient failures, `0` remaining adapter candidates)
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
 - Provider index: `data/provider-index.json`
@@ -68,6 +71,7 @@ The current snapshot was generated from `datapan-cli` and includes:
 - error catalog;
 - dependency inventory;
 - adapter target work queue;
+- route disposition evidence for missing external routes;
 - provider backlog;
 - latest merged verification evidence;
 - latest verification summary;
@@ -89,6 +93,7 @@ reports/
   error-catalog.json
   dependencies.json
   adapter-targets.json
+  route-disposition.json
   provider-backlog.json
   andong-verification.json
   andong-verification-summary.json
@@ -166,8 +171,9 @@ vague claim.
 - Adapter target: grow to at least `25` call-capable provider adapters and no
   more than `10` missing-adapter operations.
 - Drift target: keep dead external routes documented through
-  manifest-bound `reports/unadapted-external-probe.json` evidence instead of
-  treating them as unknown adapter work.
+  manifest-bound `reports/unadapted-external-probe.json` and
+  `reports/route-disposition.json` evidence instead of treating them as
+  unknown adapter work.
 
 ## Release Policy
 
@@ -181,8 +187,8 @@ A release is publishable when:
 - recommended readiness gates pass, including catalog diff and verification
   evidence;
 - if coverage still has missing external adapter operations,
-  unadapted external probe evidence is present as a manifest-bound required
-  artifact;
+  unadapted external probe evidence and route disposition evidence are present
+  as manifest-bound required artifacts;
 - schema index and provider index are present;
 - registry size and LFS handling are explicit;
 - verification evidence is attached or documented;

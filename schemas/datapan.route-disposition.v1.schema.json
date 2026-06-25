@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.route-disposition.v1.schema.json",
+  "title": "Datapan Route Disposition v1",
+  "description": "Disposition report for missing external routes, combining adapter backlog and probe evidence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["generated_at", "provider", "limit", "truncated", "summary", "routes"],
+  "properties": {
+    "generated_at": { "type": "string", "format": "date-time" },
+    "provider": { "type": "string", "minLength": 1 },
+    "registry": { "type": "string" },
+    "probe": { "type": "string" },
+    "limit": { "$ref": "#/$defs/count" },
+    "truncated": { "type": "boolean" },
+    "summary": { "$ref": "#/$defs/summary" },
+    "routes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/route" }
+    }
+  },
+  "$defs": {
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "routes_total",
+        "operations",
+        "hosts",
+        "with_probe_evidence",
+        "without_probe_evidence",
+        "dead_route_candidates",
+        "transient_failures",
+        "parameter_blocked_routes",
+        "adapter_candidates",
+        "by_disposition"
+      ],
+      "properties": {
+        "routes_total": { "$ref": "#/$defs/count" },
+        "operations": { "$ref": "#/$defs/count" },
+        "hosts": { "$ref": "#/$defs/count" },
+        "with_probe_evidence": { "$ref": "#/$defs/count" },
+        "without_probe_evidence": { "$ref": "#/$defs/count" },
+        "dead_route_candidates": { "$ref": "#/$defs/count" },
+        "transient_failures": { "$ref": "#/$defs/count" },
+        "parameter_blocked_routes": { "$ref": "#/$defs/count" },
+        "adapter_candidates": { "$ref": "#/$defs/count" },
+        "by_disposition": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/group" }
+        },
+        "by_reason": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/group" }
+        },
+        "by_host": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/group" }
+        }
+      }
+    },
+    "group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "count"],
+      "properties": {
+        "key": { "type": "string", "minLength": 1 },
+        "count": { "$ref": "#/$defs/count" },
+        "disposition": { "$ref": "#/$defs/disposition" },
+        "reason": { "type": "string" },
+        "host": { "type": "string" }
+      }
+    },
+    "route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dataset_id",
+        "title",
+        "operation",
+        "endpoint_host",
+        "dependency_class",
+        "disposition",
+        "recommended_action"
+      ],
+      "properties": {
+        "dataset_id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "organization": { "type": "string" },
+        "operation": { "type": "string" },
+        "endpoint": { "type": "string" },
+        "endpoint_host": { "type": "string", "minLength": 1 },
+        "dependency_class": { "enum": ["external_endpoint", "service_root"] },
+        "disposition": { "$ref": "#/$defs/disposition" },
+        "recommended_action": { "type": "string", "minLength": 1 },
+        "probe_status": { "enum": ["verified", "failed", "skipped", "unknown"] },
+        "probe_reason": { "type": "string" },
+        "http_status": { "type": "integer", "minimum": 100, "maximum": 599 },
+        "body_shape": { "type": "string" },
+        "missing_params": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "disposition": {
+      "enum": ["adapter_candidate", "dead_route_candidate", "transient_failure", "parameter_blocked"]
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

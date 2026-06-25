@@ -1,0 +1,590 @@
+{
+  "generated_at": "2026-06-25T06:05:29Z",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "probe": "C:\\workspace\\datapan-registry\\reports\\unadapted-external-probe.json",
+  "limit": 0,
+  "truncated": false,
+  "summary": {
+    "routes_total": 28,
+    "operations": 28,
+    "hosts": 10,
+    "with_probe_evidence": 28,
+    "without_probe_evidence": 0,
+    "dead_route_candidates": 14,
+    "transient_failures": 14,
+    "parameter_blocked_routes": 0,
+    "adapter_candidates": 0,
+    "by_disposition": [
+      {
+        "key": "dead_route_candidate",
+        "count": 14,
+        "disposition": "dead_route_candidate"
+      },
+      {
+        "key": "transient_failure",
+        "count": 14,
+        "disposition": "transient_failure"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "unadapted_probe_http_404",
+        "count": 14,
+        "reason": "unadapted_probe_http_404"
+      },
+      {
+        "key": "unadapted_probe_timeout",
+        "count": 7,
+        "reason": "unadapted_probe_timeout"
+      },
+      {
+        "key": "unadapted_probe_request_error",
+        "count": 6,
+        "reason": "unadapted_probe_request_error"
+      },
+      {
+        "key": "unadapted_probe_http_503",
+        "count": 1,
+        "reason": "unadapted_probe_http_503"
+      }
+    ],
+    "by_host": [
+      {
+        "key": "openapi.coast.kr",
+        "count": 6,
+        "host": "openapi.coast.kr"
+      },
+      {
+        "key": "car.daegu.go.kr",
+        "count": 4,
+        "host": "car.daegu.go.kr"
+      },
+      {
+        "key": "openapi.price.go.kr",
+        "count": 4,
+        "host": "openapi.price.go.kr"
+      },
+      {
+        "key": "www.rda.go.kr",
+        "count": 4,
+        "host": "www.rda.go.kr"
+      },
+      {
+        "key": "its.gyeongju.go.kr:81",
+        "count": 3,
+        "host": "its.gyeongju.go.kr:81"
+      },
+      {
+        "key": "data.wanju.go.kr",
+        "count": 2,
+        "host": "data.wanju.go.kr"
+      },
+      {
+        "key": "www.cid.or.kr",
+        "count": 2,
+        "host": "www.cid.or.kr"
+      },
+      {
+        "key": "openapi-lib.sen.go.kr",
+        "count": 1,
+        "host": "openapi-lib.sen.go.kr"
+      },
+      {
+        "key": "www.dgeic.or.kr:8080",
+        "count": 1,
+        "host": "www.dgeic.or.kr:8080"
+      },
+      {
+        "key": "www.simpan.go.kr",
+        "count": 1,
+        "host": "www.simpan.go.kr"
+      }
+    ]
+  },
+  "routes": [
+    {
+      "dataset_id": "15097855",
+      "title": "대구광역시_어린이 보호구역 위험요소 조회 서비스",
+      "organization": "대구광역시",
+      "operation": "어린이 보호구역 내 고정체 위험요소 조회 서비스",
+      "endpoint": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getFixTotal",
+      "endpoint_host": "car.daegu.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "dead_route_candidate",
+      "recommended_action": "confirm upstream metadata or mark the route stale before adapter work",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_http_404",
+      "http_status": 404,
+      "body_shape": "html",
+      "missing_params": [
+        "zoneNm",
+        "gubun"
+      ]
+    },
+    {
+      "dataset_id": "15097855",
+      "title": "대구광역시_어린이 보호구역 위험요소 조회 서비스",
+      "organization": "대구광역시",
+      "operation": "어린이 보호구역 내 시간별/구간별 고정체 위험요소 조회 서비스",
+      "endpoint": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getFix",
+      "endpoint_host": "car.daegu.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "dead_route_candidate",
+      "recommended_action": "confirm upstream metadata or mark the route stale before adapter work",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_http_404",
+      "http_status": 404,
+      "body_shape": "html",
+      "missing_params": [
+        "zoneNm",
+        "sectionClassifyNm"
+      ]
+    },
+    {
+      "dataset_id": "15097855",
+      "title": "대구광역시_어린이 보호구역 위험요소 조회 서비스",
+      "organization": "대구광역시",
+      "operation": "어린이 보호구역 내 시간별/구간별 이동체 위험요소 조회 서비스",
+      "endpoint": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getMove",
+      "endpoint_host": "car.daegu.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "dead_route_candidate",
+      "recommended_action": "confirm upstream metadata or mark the route stale before adapter work",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_http_404",
+      "http_status": 404,
+      "body_shape": "html",
+      "missing_params": [
+        "zoneNm",
+        "sectionClassifyNm"
+      ]
+    },
+    {
+      "dataset_id": "15097855",
+      "title": "대구광역시_어린이 보호구역 위험요소 조회 서비스",
+      "organization": "대구광역시",
+      "operation": "어린이 보호구역 내 이동체 위험요소 조회 서비스",
+      "endpoint": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getMoveTotal",
+      "endpoint_host": "car.daegu.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "dead_route_candidate",
+      "recommended_action": "confirm upstream metadata or mark the route stale before adapter work",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_http_404",
+      "http_status": 404,
+      "body_shape": "html",
+      "missing_params": [
+        "zoneNm",
+        "gubun"
+      ]
+    },
+    {
+      "dataset_id": "3043385",
+      "title": "한국소비자원_생필품 가격 정보",
+      "organization": "한국소비자원",
+      "operation": "상품정보 조회",
+      "endpoint": "http://openapi.price.go.kr/openApiImpl/ProductPriceInfoService",
+      "endpoint_host": "openapi.price.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "dead_route_candidate",
+      "recommended_action": "confirm upstream metadata or mark the route stale before adapter work",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_http_404",
+      "http_status": 404,
+      "body_shape": "html",
+      "missing_params": [
+        "goodId"
+      ]
+    },
+    {
+      "dataset_id": "3043385",
+      "title": "한국소비자원_생필품 가격 정보",
+      "organization": "한국소비자원",
+      "operation": "생필품 가격 정보 기준 데이터 조회",
+      "endpoint": "http://openapi.price.go.kr/openApiImpl/ProductPriceInfoService",
+      "endpoint_host": "openapi.price.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "dead_route_candidate",
+      "recommended_action": "confirm upstream metadata or mark the route stale before adapter work",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_http_404",
+      "http_status": 404,
+      "body_shape": "html",
+      "missing_params": [
+        "classCode"
+      ]
+    },
+    {
+      "dataset_id": "3043385",
+      "title": "한국소비자원_생필품 가격 정보",
+      "organization": "한국소비자원",
+      "operation": "생필품 가격 정보 조회",
+      "endpoint": "http://openapi.price.go.kr/openApiImpl/ProductPriceInfoService",
+      "endpoint_host": "openapi.price.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "dead_route_candidate",
+      "recommended_action": "confirm upstream metadata or mark the route stale before adapter work",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_http_404",
+      "http_status": 404,
+      "body_shape": "html",
+      "missing_params": [
+        "goodInspectDay",
+        "entpId",
+        "goodId"
+      ]
+    },
+    {
+      "dataset_id": "3043385",
+      "title": "한국소비자원_생필품 가격 정보",
+      "organization": "한국소비자원",
+      "operation": "판매점 정보 조회",
+      "endpoint": "http://openapi.price.go.kr/openApiImpl/ProductPriceInfoService",
+      "endpoint_host": "openapi.price.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "dead_route_candidate",
+      "recommended_action": "confirm upstream metadata or mark the route stale before adapter work",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_http_404",
+      "http_status": 404,
+      "body_shape": "html",
+      "missing_params": [
+        "entpId"
+      ]
+    },
+    {
+      "dataset_id": "15001184",
+      "title": "대구환경공단_소각처리현황",
+      "organization": "대구공공시설관리공단",
+      "operation": "소각처리현황",
+      "endpoint": "http://www.dgeic.or.kr:8080/",
+      "endpoint_host": "www.dgeic.or.kr:8080",
+      "dependency_class": "external_endpoint",
+      "disposition": "dead_route_candidate",
+      "recommended_action": "confirm upstream metadata or mark the route stale before adapter work",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_http_404",
+      "http_status": 404,
+      "body_shape": "empty"
+    },
+    {
+      "dataset_id": "15002002",
+      "title": "농촌진흥청_농업기계 안전정보",
+      "organization": "농촌진흥청",
+      "operation": "농기계안전정보 목록 조회",
+      "endpoint": "http://www.rda.go.kr/openapidata/service/rdamachinesafe_api",
+      "endpoint_host": "www.rda.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "dead_route_candidate",
+      "recommended_action": "confirm upstream metadata or mark the route stale before adapter work",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_http_404",
+      "http_status": 404,
+      "body_shape": "html",
+      "missing_params": [
+        "searchtype",
+        "searchword"
+      ]
+    },
+    {
+      "dataset_id": "15002055",
+      "title": "농촌진흥청_농업농촌종합정보(인테러뱅)",
+      "organization": "농촌진흥청",
+      "operation": "농업농촌종합정보(인테러뱅) 댓글보기 조회",
+      "endpoint": "http://www.rda.go.kr/openapidata/service/interrobang_api",
+      "endpoint_host": "www.rda.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "dead_route_candidate",
+      "recommended_action": "confirm upstream metadata or mark the route stale before adapter work",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_http_404",
+      "http_status": 404,
+      "body_shape": "html",
+      "missing_params": [
+        "seq"
+      ]
+    },
+    {
+      "dataset_id": "15002055",
+      "title": "농촌진흥청_농업농촌종합정보(인테러뱅)",
+      "organization": "농촌진흥청",
+      "operation": "농업농촌종합정보(인테러뱅) 목록 조회",
+      "endpoint": "http://www.rda.go.kr/openapidata/service/interrobang_api",
+      "endpoint_host": "www.rda.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "dead_route_candidate",
+      "recommended_action": "confirm upstream metadata or mark the route stale before adapter work",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_http_404",
+      "http_status": 404,
+      "body_shape": "html",
+      "missing_params": [
+        "searchtype",
+        "searchword"
+      ]
+    },
+    {
+      "dataset_id": "15002055",
+      "title": "농촌진흥청_농업농촌종합정보(인테러뱅)",
+      "organization": "농촌진흥청",
+      "operation": "농업농촌종합정보(인테러뱅) 상세보기 조회",
+      "endpoint": "http://www.rda.go.kr/openapidata/service/interrobang_api",
+      "endpoint_host": "www.rda.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "dead_route_candidate",
+      "recommended_action": "confirm upstream metadata or mark the route stale before adapter work",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_http_404",
+      "http_status": 404,
+      "body_shape": "html",
+      "missing_params": [
+        "seq"
+      ]
+    },
+    {
+      "dataset_id": "3084452",
+      "title": "국민권익위원회_행정심판 재결례 통합검색서비스(사용 불가)",
+      "organization": "국민권익위원회",
+      "operation": "재결례 목록 조회",
+      "endpoint": "http://www.simpan.go.kr/nsph/getAdjdexeList.do",
+      "endpoint_host": "www.simpan.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "dead_route_candidate",
+      "recommended_action": "confirm upstream metadata or mark the route stale before adapter work",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_http_404",
+      "http_status": 404,
+      "body_shape": "html",
+      "missing_params": [
+        "Init",
+        "reqDate",
+        "row"
+      ]
+    },
+    {
+      "dataset_id": "15010208",
+      "title": "전라북도 완주군_사회적기업 현황",
+      "organization": "전북특별자치도 완주군",
+      "operation": "사회적기업 정보",
+      "endpoint": "http://data.wanju.go.kr/rest/wanjusocial/getSocialInfo",
+      "endpoint_host": "data.wanju.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "transient_failure",
+      "recommended_action": "retry with bounded evidence before building a provider adapter",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_timeout",
+      "missing_params": [
+        "dataValue",
+        "dataName",
+        "sid"
+      ]
+    },
+    {
+      "dataset_id": "15058097",
+      "title": "전라북도 완주군_공연행사 정보 서비스",
+      "organization": "전북특별자치도 완주군",
+      "operation": "공연행사 정보",
+      "endpoint": "http://data.wanju.go.kr/rest/wanjuevent/getEvent",
+      "endpoint_host": "data.wanju.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "transient_failure",
+      "recommended_action": "retry with bounded evidence before building a provider adapter",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_timeout",
+      "missing_params": [
+        "sid",
+        "dataValue",
+        "dataName"
+      ]
+    },
+    {
+      "dataset_id": "15021579",
+      "title": "경상북도 경주시_버스 관련 정보",
+      "organization": "경상북도 경주시",
+      "operation": "노선정보 조회",
+      "endpoint": "http://its.gyeongju.go.kr:81/bis/openapi/getRouteNoList.do",
+      "endpoint_host": "its.gyeongju.go.kr:81",
+      "dependency_class": "external_endpoint",
+      "disposition": "transient_failure",
+      "recommended_action": "retry with bounded evidence before building a provider adapter",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_timeout",
+      "missing_params": [
+        "routeNo"
+      ]
+    },
+    {
+      "dataset_id": "15021579",
+      "title": "경상북도 경주시_버스 관련 정보",
+      "organization": "경상북도 경주시",
+      "operation": "실시간 버스정보 조회",
+      "endpoint": "http://its.gyeongju.go.kr:81/bis/openapi/getRouteAcctoBusLcList.do",
+      "endpoint_host": "its.gyeongju.go.kr:81",
+      "dependency_class": "external_endpoint",
+      "disposition": "transient_failure",
+      "recommended_action": "retry with bounded evidence before building a provider adapter",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_timeout",
+      "missing_params": [
+        "routeId"
+      ]
+    },
+    {
+      "dataset_id": "15021579",
+      "title": "경상북도 경주시_버스 관련 정보",
+      "organization": "경상북도 경주시",
+      "operation": "정류장정보 조회",
+      "endpoint": "http://its.gyeongju.go.kr:81/bis/openapi/getSttnNoList.do",
+      "endpoint_host": "its.gyeongju.go.kr:81",
+      "dependency_class": "external_endpoint",
+      "disposition": "transient_failure",
+      "recommended_action": "retry with bounded evidence before building a provider adapter",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_timeout",
+      "missing_params": [
+        "nodeNm"
+      ]
+    },
+    {
+      "dataset_id": "15001051",
+      "title": "서울특별시교육청 공공도서관 소장도서정보",
+      "organization": "서울특별시교육청",
+      "operation": "도서 자료 검색",
+      "endpoint": "http://openapi-lib.sen.go.kr",
+      "endpoint_host": "openapi-lib.sen.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "transient_failure",
+      "recommended_action": "retry with bounded evidence before building a provider adapter",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_http_503",
+      "http_status": 503,
+      "body_shape": "html",
+      "missing_params": [
+        "title",
+        "manageCd"
+      ]
+    },
+    {
+      "dataset_id": "15059302",
+      "title": "해양수산부_연안정보도 도엽제공 서비스",
+      "organization": "해양수산부",
+      "operation": "연안정보도 1:25000 축척 도엽 다운로드 정보 현황",
+      "endpoint": "http://openapi.coast.kr/openapi/service/coastSpatialDataService",
+      "endpoint_host": "openapi.coast.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "transient_failure",
+      "recommended_action": "retry with bounded evidence before building a provider adapter",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_request_error"
+    },
+    {
+      "dataset_id": "15059302",
+      "title": "해양수산부_연안정보도 도엽제공 서비스",
+      "organization": "해양수산부",
+      "operation": "연안정보도 1:25000 축척 도엽 상세정보 현황",
+      "endpoint": "http://openapi.coast.kr/openapi/service/coastSpatialDataService",
+      "endpoint_host": "openapi.coast.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "transient_failure",
+      "recommended_action": "retry with bounded evidence before building a provider adapter",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_request_error"
+    },
+    {
+      "dataset_id": "15059302",
+      "title": "해양수산부_연안정보도 도엽제공 서비스",
+      "organization": "해양수산부",
+      "operation": "연안정보도 1:25000 축척 도엽정보 리스트 정보 현황",
+      "endpoint": "http://openapi.coast.kr/openapi/service/coastSpatialDataService",
+      "endpoint_host": "openapi.coast.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "transient_failure",
+      "recommended_action": "retry with bounded evidence before building a provider adapter",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_request_error"
+    },
+    {
+      "dataset_id": "15059302",
+      "title": "해양수산부_연안정보도 도엽제공 서비스",
+      "organization": "해양수산부",
+      "operation": "연안정보도 1:5000 축척 도엽 다운로드 정보 현황",
+      "endpoint": "http://openapi.coast.kr/openapi/service/coastSpatialDataService",
+      "endpoint_host": "openapi.coast.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "transient_failure",
+      "recommended_action": "retry with bounded evidence before building a provider adapter",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_request_error"
+    },
+    {
+      "dataset_id": "15059302",
+      "title": "해양수산부_연안정보도 도엽제공 서비스",
+      "organization": "해양수산부",
+      "operation": "연안정보도 1:5000 축척 도엽 상세정보 현황",
+      "endpoint": "http://openapi.coast.kr/openapi/service/coastSpatialDataService",
+      "endpoint_host": "openapi.coast.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "transient_failure",
+      "recommended_action": "retry with bounded evidence before building a provider adapter",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_request_error"
+    },
+    {
+      "dataset_id": "15059302",
+      "title": "해양수산부_연안정보도 도엽제공 서비스",
+      "organization": "해양수산부",
+      "operation": "연안정보도 1:5000 축척 도엽정보 리스트 정보 현황",
+      "endpoint": "http://openapi.coast.kr/openapi/service/coastSpatialDataService",
+      "endpoint_host": "openapi.coast.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "transient_failure",
+      "recommended_action": "retry with bounded evidence before building a provider adapter",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_request_error"
+    },
+    {
+      "dataset_id": "15012192",
+      "title": "건설근로자공제회_건설근로자 취업정보",
+      "organization": "건설근로자공제회",
+      "operation": "채용정보 목록조회",
+      "endpoint": "http://www.cid.or.kr/job/openApi/service/getJobOpenInfoList.do",
+      "endpoint_host": "www.cid.or.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "transient_failure",
+      "recommended_action": "retry with bounded evidence before building a provider adapter",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_timeout",
+      "missing_params": [
+        "rcritJssfc",
+        "area",
+        "wageSe",
+        "wageAmountFrom",
+        "wageAmountTo",
+        "acdmcr",
+        "career",
+        "careerYear",
+        "careerMonth",
+        "lhCntrwkAt",
+        "periodFrom",
+        "periodTo"
+      ]
+    },
+    {
+      "dataset_id": "15012192",
+      "title": "건설근로자공제회_건설근로자 취업정보",
+      "organization": "건설근로자공제회",
+      "operation": "채용정보 상세조회",
+      "endpoint": "http://www.cid.or.kr/job/openApi/service/getJobOpenInfoView.do",
+      "endpoint_host": "www.cid.or.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "transient_failure",
+      "recommended_action": "retry with bounded evidence before building a provider adapter",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_timeout",
+      "missing_params": [
+        "cmpnyJoSeq"
+      ]
+    }
+  ]
+}

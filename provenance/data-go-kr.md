@@ -1,7 +1,7 @@
 # data.go.kr Release Provenance
 
-- generated_at: 2026-06-25T05:50:33Z
-- datapan_version: v0.1.26
+- generated_at: 2026-06-25T06:05:29Z
+- datapan_version: v0.1.27
 - source_provider: data.go.kr
 - source_registry: C:\workspace\datapan-registry\data\data-go-kr.registry.json
 - previous_registry: C:\workspace\datapan-registry\.datapan\previous\data-go-kr.registry.json
@@ -20,6 +20,7 @@ datapan catalog audit --registry C:\workspace\datapan-registry\data\data-go-kr.r
 datapan catalog errors --registry C:\workspace\datapan-registry\data\data-go-kr.registry.json --output C:\workspace\datapan-registry\reports\error-catalog.json --json
 datapan catalog dependencies --registry C:\workspace\datapan-registry\data\data-go-kr.registry.json --limit 0 --output C:\workspace\datapan-registry\reports\dependencies.json --json
 datapan catalog adapter-targets --registry C:\workspace\datapan-registry\data\data-go-kr.registry.json --limit 0 --output C:\workspace\datapan-registry\reports\adapter-targets.json --json
+datapan catalog route-disposition --registry C:\workspace\datapan-registry\data\data-go-kr.registry.json --probe C:\workspace\datapan-registry\reports\unadapted-external-probe.json --limit 0 --output C:\workspace\datapan-registry\reports\route-disposition.json --json
 datapan catalog providers --registry C:\workspace\datapan-registry\data\data-go-kr.registry.json --limit 0 --output C:\workspace\datapan-registry\reports\provider-backlog.json --json
 datapan catalog verify --input C:\workspace\datapan-registry\reports\latest-verification.json --json
 datapan catalog verify summary --input C:\workspace\datapan-registry\reports\latest-verification.json --output C:\workspace\datapan-registry\reports\latest-verification-summary.json --json
