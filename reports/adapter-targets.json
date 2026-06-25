@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-25T00:29:58Z",
+  "generated_at": "2026-06-25T00:44:14Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-sisul\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-andong\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 26,
+  "filtered_count": 25,
   "summary": {
-    "target_hosts": 26,
-    "target_operations": 175,
-    "external_endpoint_operations": 156,
+    "target_hosts": 25,
+    "target_operations": 160,
+    "external_endpoint_operations": 141,
     "service_root_operations": 19,
     "approval_required_operations": 41,
-    "missing_param_operations": 158,
+    "missing_param_operations": 145,
     "unsupported_protocol_operations": 30
   },
   "targets": [
@@ -194,68 +194,6 @@
     },
     {
       "rank": 4,
-      "host": "www.andong.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 15,
-      "specs": 10,
-      "organizations": [
-        "경상북도 안동시"
-      ],
-      "source_categories": [
-        "공공행정",
-        "국토관리",
-        "사회복지",
-        "산업고용",
-        "식품건강",
-        "환경기상"
-      ],
-      "api_types": [
-        "REST"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "missing_param_operations": 13,
-      "sample_operations": [
-        {
-          "dataset_id": "15003047",
-          "title": "경상북도 안동시_개별공시지가자료",
-          "organization": "경상북도 안동시",
-          "operation": "개별공시지가 동코드 조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://www.andong.go.kr/openapi/service/arDevJigaService/getCode"
-        },
-        {
-          "dataset_id": "15003047",
-          "title": "경상북도 안동시_개별공시지가자료",
-          "organization": "경상북도 안동시",
-          "operation": "개별공시지가 목록 조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://www.andong.go.kr/openapi/service/arDevJigaService/getList",
-          "missing_params": [
-            "dongCode",
-            "langKind",
-            "bonbun",
-            "bubun"
-          ]
-        },
-        {
-          "dataset_id": "15005609",
-          "title": "경상북도 안동시_의료기관 현황",
-          "organization": "경상북도 안동시",
-          "operation": "의무관리현황 목록 조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://www.andong.go.kr/openapi/service/mediHsptService/getList",
-          "missing_params": [
-            "numOfRowns"
-          ]
-        }
-      ]
-    },
-    {
-      "rank": 5,
       "host": "open.itfind.or.kr",
       "kinds": [
         "external_endpoint"
@@ -315,7 +253,7 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 5,
       "host": "data.naqs.go.kr",
       "kinds": [
         "external_endpoint"
@@ -412,7 +350,7 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 6,
       "host": "data.humetro.busan.kr",
       "kinds": [
         "external_endpoint"
@@ -477,7 +415,7 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 7,
       "host": "openapi.ebid.lh.or.kr",
       "kinds": [
         "external_endpoint"
@@ -538,7 +476,7 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 8,
       "host": "openapi.coast.kr",
       "kinds": [
         "external_endpoint"
@@ -585,7 +523,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "openapi.kpx.or.kr",
       "kinds": [
         "external_endpoint"
@@ -634,7 +572,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "ws.bus.go.kr",
       "kinds": [
         "external_endpoint"
@@ -693,7 +631,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "data.jeju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -753,7 +691,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "host": "www.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -812,7 +750,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 13,
       "host": "car.daegu.go.kr",
       "kinds": [
         "external_endpoint"
@@ -872,7 +810,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 14,
       "host": "openapi.pqis.go.kr",
       "kinds": [
         "external_endpoint"
@@ -935,7 +873,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 15,
       "host": "openapi.price.go.kr",
       "kinds": [
         "external_endpoint"
@@ -994,7 +932,7 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 16,
       "host": "openapi.gblib.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1052,7 +990,7 @@
       ]
     },
     {
-      "rank": 18,
+      "rank": 17,
       "host": "oneclick.law.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1121,7 +1059,7 @@
       ]
     },
     {
-      "rank": 19,
+      "rank": 18,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -1178,7 +1116,7 @@
       ]
     },
     {
-      "rank": 20,
+      "rank": 19,
       "host": "www.emuseum.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1248,7 +1186,7 @@
       ]
     },
     {
-      "rank": 21,
+      "rank": 20,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1299,7 +1237,7 @@
       ]
     },
     {
-      "rank": 22,
+      "rank": 21,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1356,7 +1294,7 @@
       ]
     },
     {
-      "rank": 23,
+      "rank": 22,
       "host": "data.myhome.go.kr:443",
       "kinds": [
         "external_endpoint"
@@ -1392,7 +1330,7 @@
       ]
     },
     {
-      "rank": 24,
+      "rank": 23,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1428,7 +1366,7 @@
       ]
     },
     {
-      "rank": 25,
+      "rank": 24,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -1459,7 +1397,7 @@
       ]
     },
     {
-      "rank": 26,
+      "rank": 25,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

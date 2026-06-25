@@ -13,16 +13,16 @@ re-importing the upstream data.go.kr catalog every time.
 - Specs: `12060`
 - Operations: `12205`
 - Callable operations: `12063` (`98.8%`)
-- Latest release: `v2026.06.25.4`
-- Registered external adapters: `airport`, `ekape`, `epost`, `folk`, `forest`,
-  `geoje`, `jeonju`, `q-net`, `sisul`, `uiryeong`, `ulsan`
-- External adapter coverage: `438` registered-adapter operations out of `594`
-  external endpoint operations (`71.5%`)
-- Missing external adapter hosts: `26`
+- Latest release: `v2026.06.25.5`
+- Registered external adapters: `airport`, `andong`, `ekape`, `epost`, `folk`,
+  `forest`, `geoje`, `jeonju`, `q-net`, `sisul`, `uiryeong`, `ulsan`
+- External adapter coverage: `453` registered-adapter operations out of `594`
+  external endpoint operations (`73.9%`)
+- Missing external adapter hosts: `25`
 - Provider split readiness: `ready`
-  (`11` adapters, `11` verification-capable, `6` call-capable)
-- Runtime verification evidence: `111` bounded checks merged into
-  `reports/latest-verification.json` (`16` verified, `30` failed, `65`
+  (`12` adapters, `12` verification-capable, `7` call-capable)
+- Runtime verification evidence: `126` bounded checks merged into
+  `reports/latest-verification.json` (`16` verified, `40` failed, `70`
   skipped)
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
@@ -84,6 +84,8 @@ reports/
   dependencies.json
   adapter-targets.json
   provider-backlog.json
+  andong-verification.json
+  andong-verification-summary.json
   airport-verification.json
   airport-verification-summary.json
   ekape-verification.json

@@ -1,0 +1,62 @@
+{
+  "generated_at": "2026-06-25T00:43:39Z",
+  "source": "C:\\workspace\\datapan-registry\\reports\\andong-verification.json",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 15,
+    "verified": 0,
+    "failed": 10,
+    "skipped": 5,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "failed",
+        "count": 10,
+        "status": "failed"
+      },
+      {
+        "key": "skipped",
+        "count": 5,
+        "status": "skipped"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "andong_service_not_registered",
+        "count": 10,
+        "reason": "andong_service_not_registered"
+      },
+      {
+        "key": "andong_missing_required_params",
+        "count": 5,
+        "reason": "andong_missing_required_params"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "andong",
+        "count": 15,
+        "provider": "andong"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "www.andong.go.kr",
+        "count": 15,
+        "host": "www.andong.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 15,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

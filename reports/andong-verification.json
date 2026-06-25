@@ -1,0 +1,361 @@
+{
+  "generated_at": "2026-06-25T00:43:39Z",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 15,
+  "timeout": "5s",
+  "truncated": false,
+  "filters": {
+    "provider": "andong",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 15,
+  "summary": {
+    "total": 15,
+    "verified": 0,
+    "failed": 10,
+    "skipped": 5,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15003047",
+      "title": "경상북도 안동시_개별공시지가자료",
+      "operation": "개별공시지가 동코드 조회",
+      "provider": "andong",
+      "endpoint_host": "www.andong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "andong_service_not_registered",
+      "verified_at": "2026-06-25T00:43:39Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "NO OPENAPI SERVICE ERROR."
+      },
+      "url": "https://www.andong.go.kr/openapi/service/arDevJigaService/getCode?serviceKey=REDACTED",
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15003047",
+      "title": "경상북도 안동시_개별공시지가자료",
+      "operation": "개별공시지가 목록 조회",
+      "provider": "andong",
+      "endpoint_host": "www.andong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "andong_missing_required_params",
+      "verified_at": "2026-06-25T00:43:39Z",
+      "params": {
+        "bonbun": "",
+        "bubun": "",
+        "dongCode": "",
+        "langKind": ""
+      },
+      "missing_params": [
+        "dongCode",
+        "langKind",
+        "bonbun",
+        "bubun"
+      ]
+    },
+    {
+      "dataset_id": "15005609",
+      "title": "경상북도 안동시_의료기관 현황",
+      "operation": "의무관리현황 목록 조회",
+      "provider": "andong",
+      "endpoint_host": "www.andong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "andong_service_not_registered",
+      "verified_at": "2026-06-25T00:43:39Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "NO OPENAPI SERVICE ERROR."
+      },
+      "url": "https://www.andong.go.kr/openapi/service/mediHsptService/getList?numOfRowns=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRowns": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15005628",
+      "title": "경상북도 안동시_약국 현황",
+      "operation": "의약관리현황 목록 조회",
+      "provider": "andong",
+      "endpoint_host": "www.andong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "andong_service_not_registered",
+      "verified_at": "2026-06-25T00:43:39Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "NO OPENAPI SERVICE ERROR."
+      },
+      "url": "https://www.andong.go.kr/openapi/service/mediPharService/getList?numOfRowns=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRowns": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15005629",
+      "title": "경상북도 안동시_취업정보",
+      "operation": "구인/구직 목록 조회",
+      "provider": "andong",
+      "endpoint_host": "www.andong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "andong_service_not_registered",
+      "verified_at": "2026-06-25T00:43:39Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "NO OPENAPI SERVICE ERROR."
+      },
+      "url": "https://www.andong.go.kr/openapi/service/induJobService/getList?numOfRowns=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRowns": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15005629",
+      "title": "경상북도 안동시_취업정보",
+      "operation": "구인/구직 세부내용 조회",
+      "provider": "andong",
+      "endpoint_host": "www.andong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "andong_missing_required_params",
+      "verified_at": "2026-06-25T00:43:39Z",
+      "params": {
+        "bIdx": ""
+      },
+      "missing_params": [
+        "bIdx"
+      ]
+    },
+    {
+      "dataset_id": "15005655",
+      "title": "경상북도 안동시_개별주택가격",
+      "operation": "안동시 개별주택가격 목록 조회",
+      "provider": "andong",
+      "endpoint_host": "www.andong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "andong_missing_required_params",
+      "verified_at": "2026-06-25T00:43:39Z",
+      "params": {
+        "bonbun": "",
+        "bubun": "",
+        "dongCode": "",
+        "동코드": ""
+      },
+      "missing_params": [
+        "dongCode",
+        "동코드",
+        "bonbun",
+        "bubun"
+      ]
+    },
+    {
+      "dataset_id": "15005655",
+      "title": "경상북도 안동시_개별주택가격",
+      "operation": "안동시 개별주택가격 코드 목록 조회",
+      "provider": "andong",
+      "endpoint_host": "www.andong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "andong_service_not_registered",
+      "verified_at": "2026-06-25T00:43:39Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "NO OPENAPI SERVICE ERROR."
+      },
+      "url": "https://www.andong.go.kr/openapi/service/arDevHousePriceService/getCode?serviceKey=REDACTED",
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15056996",
+      "title": "경상북도 안동시_제조업체현황 조회",
+      "operation": "안동시 제조업체현황목록 조회",
+      "provider": "andong",
+      "endpoint_host": "www.andong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "andong_service_not_registered",
+      "verified_at": "2026-06-25T00:43:39Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "NO OPENAPI SERVICE ERROR."
+      },
+      "url": "https://www.andong.go.kr/openapi/service/induManufacturerService/getList?numOfRowns=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRowns": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15057259",
+      "title": "경상북도 안동시_보육시설현황 조회",
+      "operation": "보육시설현황 목록 조회",
+      "provider": "andong",
+      "endpoint_host": "www.andong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "andong_service_not_registered",
+      "verified_at": "2026-06-25T00:43:39Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "NO OPENAPI SERVICE ERROR."
+      },
+      "url": "https://www.andong.go.kr/openapi/service/welfareChildCareService/getList?numOfRowns=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRowns": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15059090",
+      "title": "경상북도 안동시_사회복지시설현황 조회",
+      "operation": "사회복지시설현황 목록 조회",
+      "provider": "andong",
+      "endpoint_host": "www.andong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "andong_service_not_registered",
+      "verified_at": "2026-06-25T00:43:39Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "NO OPENAPI SERVICE ERROR."
+      },
+      "url": "https://www.andong.go.kr/openapi/service/welfareSocialService/getList?numOfRowns=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRowns": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15059128",
+      "title": "경상북도 안동시_에너지공급업체현황 조회",
+      "operation": "안동시 에너지공급업체현황 목록 조회",
+      "provider": "andong",
+      "endpoint_host": "www.andong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "andong_service_not_registered",
+      "verified_at": "2026-06-25T00:43:39Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "NO OPENAPI SERVICE ERROR."
+      },
+      "url": "https://www.andong.go.kr/openapi/service/induEnergyStateService/getList?numOfRowns=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRowns": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "3068537",
+      "title": "경상북도 안동시_상수도 수질검사 결과",
+      "operation": "수질검사결과 목록 조회",
+      "provider": "andong",
+      "endpoint_host": "www.andong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "andong_service_not_registered",
+      "verified_at": "2026-06-25T00:43:39Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "99",
+        "message": "NO OPENAPI SERVICE ERROR."
+      },
+      "url": "https://www.andong.go.kr/openapi/service/envWateranalysisResultService/getList?numOfRowns=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "numOfRowns": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "3068537",
+      "title": "경상북도 안동시_상수도 수질검사 결과",
+      "operation": "수질검사결과 세부내용 조회",
+      "provider": "andong",
+      "endpoint_host": "www.andong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "andong_missing_required_params",
+      "verified_at": "2026-06-25T00:43:39Z",
+      "params": {
+        "bIdx": ""
+      },
+      "missing_params": [
+        "bIdx"
+      ]
+    },
+    {
+      "dataset_id": "3068537",
+      "title": "경상북도 안동시_상수도 수질검사 결과",
+      "operation": "수질검사결과 파일 목록 조회",
+      "provider": "andong",
+      "endpoint_host": "www.andong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "andong_missing_required_params",
+      "verified_at": "2026-06-25T00:43:39Z",
+      "params": {
+        "attachId": ""
+      },
+      "missing_params": [
+        "attachId"
+      ]
+    }
+  ]
+}

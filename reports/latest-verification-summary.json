@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-06-25T00:29:15Z",
-  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-sisul\\reports\\latest-verification.json",
+  "generated_at": "2026-06-25T00:44:11Z",
+  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-andong\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 111,
+    "total": 126,
     "verified": 16,
-    "failed": 30,
-    "skipped": 65,
+    "failed": 40,
+    "skipped": 70,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 65,
+        "count": 70,
         "status": "skipped"
       },
       {
         "key": "failed",
-        "count": 30,
+        "count": 40,
         "status": "failed"
       },
       {
@@ -31,6 +31,11 @@
       }
     ],
     "by_reason": [
+      {
+        "key": "andong_service_not_registered",
+        "count": 10,
+        "reason": "andong_service_not_registered"
+      },
       {
         "key": "missing_required_params",
         "count": 10,
@@ -65,6 +70,11 @@
         "key": "uiryeong_service_key_not_registered",
         "count": 6,
         "reason": "uiryeong_service_key_not_registered"
+      },
+      {
+        "key": "andong_missing_required_params",
+        "count": 5,
+        "reason": "andong_missing_required_params"
       },
       {
         "key": "epost_unsupported_protocol",
@@ -149,6 +159,11 @@
         "provider": "sisul"
       },
       {
+        "key": "andong",
+        "count": 15,
+        "provider": "andong"
+      },
+      {
         "key": "ekape",
         "count": 15,
         "provider": "ekape"
@@ -221,6 +236,11 @@
         "host": "openapi.q-net.or.kr"
       },
       {
+        "key": "www.andong.go.kr",
+        "count": 15,
+        "host": "www.andong.go.kr"
+      },
+      {
         "key": "openapi.epost.go.kr:80",
         "count": 13,
         "host": "openapi.epost.go.kr:80"
@@ -274,7 +294,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 101,
+        "count": 116,
         "kind": "external_endpoint"
       },
       {
