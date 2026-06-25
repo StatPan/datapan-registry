@@ -1,83 +1,22 @@
 {
-  "generated_at": "2026-06-25T02:06:16Z",
+  "generated_at": "2026-06-25T02:29:04Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-oneclick\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-tour\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 19,
+  "filtered_count": 18,
   "summary": {
-    "target_hosts": 19,
-    "target_operations": 85,
-    "external_endpoint_operations": 66,
-    "service_root_operations": 19,
+    "target_hosts": 18,
+    "target_operations": 59,
+    "external_endpoint_operations": 59,
+    "service_root_operations": 0,
     "approval_required_operations": 5,
-    "missing_param_operations": 73,
+    "missing_param_operations": 47,
     "unsupported_protocol_operations": 0
   },
   "targets": [
     {
       "rank": 1,
-      "host": "openapi.tour.go.kr",
-      "kinds": [
-        "external_endpoint",
-        "service_root"
-      ],
-      "operations": 26,
-      "specs": 7,
-      "organizations": [
-        "한국문화관광연구원"
-      ],
-      "source_categories": [
-        "공공행정"
-      ],
-      "api_types": [
-        "REST"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "missing_param_operations": 26,
-      "sample_operations": [
-        {
-          "dataset_id": "15111604",
-          "title": "한국문화관광연구원_관광실태조사_외래관광객",
-          "organization": "한국문화관광연구원",
-          "operation": "외래관광객방한활동비율조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://openapi.tour.go.kr/openapi/service/TourismAccdtOutService/getForeignTuristWtrsnRateList",
-          "missing_params": [
-            "YY",
-            "ACTIVITY_CD"
-          ]
-        },
-        {
-          "dataset_id": "15111604",
-          "title": "한국문화관광연구원_관광실태조사_외래관광객",
-          "organization": "한국문화관광연구원",
-          "operation": "외래관광객지역비율조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://openapi.tour.go.kr/openapi/service/TourismAccdtOutService/getForeignTuristAreaRateList",
-          "missing_params": [
-            "YY",
-            "SIDO_CD"
-          ]
-        },
-        {
-          "dataset_id": "15111604",
-          "title": "한국문화관광연구원_관광실태조사_외래관광객",
-          "organization": "한국문화관광연구원",
-          "operation": "외래관광객지출조회",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://openapi.tour.go.kr/openapi/service/TourismAccdtOutService/getForeignTuristExpndtrList",
-          "missing_params": [
-            "YY",
-            "TOURTYPE_CD"
-          ]
-        }
-      ]
-    },
-    {
-      "rank": 2,
       "host": "openapi.ebid.lh.or.kr",
       "kinds": [
         "external_endpoint"
@@ -138,7 +77,7 @@
       ]
     },
     {
-      "rank": 3,
+      "rank": 2,
       "host": "openapi.coast.kr",
       "kinds": [
         "external_endpoint"
@@ -185,7 +124,7 @@
       ]
     },
     {
-      "rank": 4,
+      "rank": 3,
       "host": "openapi.kpx.or.kr",
       "kinds": [
         "external_endpoint"
@@ -234,7 +173,7 @@
       ]
     },
     {
-      "rank": 5,
+      "rank": 4,
       "host": "ws.bus.go.kr",
       "kinds": [
         "external_endpoint"
@@ -293,7 +232,7 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 5,
       "host": "data.jeju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -353,7 +292,7 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 6,
       "host": "www.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -412,7 +351,7 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 7,
       "host": "car.daegu.go.kr",
       "kinds": [
         "external_endpoint"
@@ -472,7 +411,7 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 8,
       "host": "openapi.pqis.go.kr",
       "kinds": [
         "external_endpoint"
@@ -535,7 +474,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "openapi.price.go.kr",
       "kinds": [
         "external_endpoint"
@@ -594,7 +533,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "openapi.gblib.or.kr",
       "kinds": [
         "external_endpoint"
@@ -652,7 +591,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -709,7 +648,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "host": "www.emuseum.go.kr",
       "kinds": [
         "external_endpoint"
@@ -779,7 +718,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 13,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -830,7 +769,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 14,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -887,7 +826,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 15,
       "host": "data.myhome.go.kr:443",
       "kinds": [
         "external_endpoint"
@@ -923,7 +862,7 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 16,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -959,7 +898,7 @@
       ]
     },
     {
-      "rank": 18,
+      "rank": 17,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -990,7 +929,7 @@
       ]
     },
     {
-      "rank": 19,
+      "rank": 18,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

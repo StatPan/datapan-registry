@@ -39,8 +39,8 @@ check. That workflow:
 - checks out `StatPan/datapan-cli`;
 - rereads provider-specific verification reports and regenerates bounded
   summaries for qnet, epost, ekape, forest, folk, airport, andong, jeonju,
-  geoje, humetro, itfind, korad, naqs, oneclick-law, sisul, uiryeong, ulsan, and the
-  merged latest report;
+  geoje, humetro, itfind, korad, naqs, oneclick-law, sisul, tour, uiryeong,
+  ulsan, and the merged latest report;
 - runs `catalog release verify`;
 - runs `catalog release readiness`;
 - checks that the README Current Snapshot matches the generated coverage,
@@ -90,11 +90,15 @@ datapan catalog verify --registry data/data-go-kr.registry.json --provider onecl
 datapan catalog verify summary --input reports/oneclick-law-verification.json --output reports/oneclick-law-verification-summary.json --json
 datapan catalog verify --registry data/data-go-kr.registry.json --provider sisul --kind external_endpoint --limit 20 --timeout 4s --output reports/sisul-verification.json --json
 datapan catalog verify summary --input reports/sisul-verification.json --output reports/sisul-verification-summary.json --json
+datapan catalog verify --registry data/data-go-kr.registry.json --provider tour --kind external_endpoint --limit 7 --output reports/tour-external-verification.json --json
+datapan catalog verify --registry data/data-go-kr.registry.json --provider tour --kind service_root --limit 26 --output reports/tour-service-root-verification.json --json
+datapan catalog verify merge --input reports/tour-external-verification.json --input reports/tour-service-root-verification.json --output reports/tour-verification.json --json
+datapan catalog verify summary --input reports/tour-verification.json --output reports/tour-verification-summary.json --json
 datapan catalog verify --registry data/data-go-kr.registry.json --provider uiryeong --kind external_endpoint --limit 6 --output reports/uiryeong-verification.json --json
 datapan catalog verify summary --input reports/uiryeong-verification.json --output reports/uiryeong-verification-summary.json --json
 datapan catalog verify --registry data/data-go-kr.registry.json --provider ulsan --kind external_endpoint --limit 6 --output reports/ulsan-verification.json --json
 datapan catalog verify summary --input reports/ulsan-verification.json --output reports/ulsan-verification-summary.json --json
-datapan catalog verify merge --input reports/qnet-verification.json --input reports/epost-verification.json --input reports/ekape-verification.json --input reports/forest-verification.json --input reports/folk-verification.json --input reports/airport-verification.json --input reports/andong-verification.json --input reports/jeonju-verification.json --input reports/geoje-verification.json --input reports/humetro-verification.json --input reports/itfind-verification.json --input reports/korad-verification.json --input reports/naqs-verification.json --input reports/oneclick-law-verification.json --input reports/sisul-verification.json --input reports/uiryeong-verification.json --input reports/ulsan-verification.json --output reports/latest-verification.json --json
+datapan catalog verify merge --input reports/qnet-verification.json --input reports/epost-verification.json --input reports/ekape-verification.json --input reports/forest-verification.json --input reports/folk-verification.json --input reports/airport-verification.json --input reports/andong-verification.json --input reports/jeonju-verification.json --input reports/geoje-verification.json --input reports/humetro-verification.json --input reports/itfind-verification.json --input reports/korad-verification.json --input reports/naqs-verification.json --input reports/oneclick-law-verification.json --input reports/sisul-verification.json --input reports/tour-verification.json --input reports/uiryeong-verification.json --input reports/ulsan-verification.json --output reports/latest-verification.json --json
 datapan catalog verify summary --input reports/latest-verification.json --output reports/latest-verification-summary.json --json
 ```
 

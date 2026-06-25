@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-06-25T02:06:06Z",
-  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-oneclick\\reports\\latest-verification.json",
+  "generated_at": "2026-06-25T02:28:16Z",
+  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-tour\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 201,
+    "total": 227,
     "verified": 21,
-    "failed": 62,
-    "skipped": 118,
+    "failed": 69,
+    "skipped": 137,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 118,
+        "count": 137,
         "status": "skipped"
       },
       {
         "key": "failed",
-        "count": 62,
+        "count": 69,
         "status": "failed"
       },
       {
@@ -35,6 +35,11 @@
         "key": "approval_required",
         "count": 26,
         "reason": "approval_required"
+      },
+      {
+        "key": "tour_service_root_missing_operation_path",
+        "count": 19,
+        "reason": "tour_service_root_missing_operation_path"
       },
       {
         "key": "oneclick_connection_refused",
@@ -85,6 +90,11 @@
         "key": "humetro_service_access_denied",
         "count": 7,
         "reason": "humetro_service_access_denied"
+      },
+      {
+        "key": "tour_service_key_not_registered",
+        "count": 7,
+        "reason": "tour_service_key_not_registered"
       },
       {
         "key": "itfind_missing_required_params",
@@ -197,6 +207,11 @@
         "key": "oneclick-law",
         "count": 30,
         "provider": "oneclick-law"
+      },
+      {
+        "key": "tour",
+        "count": 26,
+        "provider": "tour"
       },
       {
         "key": "sisul",
@@ -341,6 +356,11 @@
         "host": "data.humetro.busan.kr"
       },
       {
+        "key": "openapi.tour.go.kr",
+        "count": 7,
+        "host": "openapi.tour.go.kr"
+      },
+      {
         "key": "data.geoje.go.kr",
         "count": 6,
         "host": "data.geoje.go.kr"
@@ -389,8 +409,13 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 191,
+        "count": 198,
         "kind": "external_endpoint"
+      },
+      {
+        "key": "service_root",
+        "count": 19,
+        "kind": "service_root"
       },
       {
         "key": "data_go_kr_gateway",

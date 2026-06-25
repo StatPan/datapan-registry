@@ -1,0 +1,514 @@
+{
+  "generated_at": "2026-06-25T02:27:06Z",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 33,
+  "truncated": false,
+  "filtered_count": 26,
+  "summary": {
+    "total": 26,
+    "verified": 0,
+    "failed": 7,
+    "skipped": 19,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15111604",
+      "title": "한국문화관광연구원_관광실태조사_외래관광객",
+      "operation": "외래관광객방한활동비율조회",
+      "provider": "tour",
+      "endpoint_host": "openapi.tour.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "tour_service_key_not_registered",
+      "verified_at": "2026-06-25T02:26:51Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.tour.go.kr/openapi/service/TourismAccdtOutService/getForeignTuristWtrsnRateList?ACTIVITY_CD=A\u0026YY=2024\u0026numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "ACTIVITY_CD": "A",
+        "YY": "2024",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15111604",
+      "title": "한국문화관광연구원_관광실태조사_외래관광객",
+      "operation": "외래관광객지역비율조회",
+      "provider": "tour",
+      "endpoint_host": "openapi.tour.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "tour_service_key_not_registered",
+      "verified_at": "2026-06-25T02:26:51Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.tour.go.kr/openapi/service/TourismAccdtOutService/getForeignTuristAreaRateList?SIDO_CD=A\u0026YY=2024\u0026numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "SIDO_CD": "A",
+        "YY": "2024",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15111604",
+      "title": "한국문화관광연구원_관광실태조사_외래관광객",
+      "operation": "외래관광객지출조회",
+      "provider": "tour",
+      "endpoint_host": "openapi.tour.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "tour_service_key_not_registered",
+      "verified_at": "2026-06-25T02:26:51Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.tour.go.kr/openapi/service/TourismAccdtOutService/getForeignTuristExpndtrList?TOURTYPE_CD=Z\u0026YY=2024\u0026numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "TOURTYPE_CD": "Z",
+        "YY": "2024",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15111605",
+      "title": "한국문화관광연구원_관광실태조사_관광사업체",
+      "operation": "관광사업체매출액조회",
+      "provider": "tour",
+      "endpoint_host": "openapi.tour.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "tour_service_key_not_registered",
+      "verified_at": "2026-06-25T02:26:51Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.tour.go.kr/openapi/service/TourismAccdtTourBsnService/getTourismBsnesSalamtList?BIZTYPE_CD=Z\u0026YY=2024\u0026numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "BIZTYPE_CD": "Z",
+        "YY": "2024",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15111605",
+      "title": "한국문화관광연구원_관광실태조사_관광사업체",
+      "operation": "관광사업체수조회",
+      "provider": "tour",
+      "endpoint_host": "openapi.tour.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "tour_service_key_not_registered",
+      "verified_at": "2026-06-25T02:26:51Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.tour.go.kr/openapi/service/TourismAccdtTourBsnService/getTourismBsnesCoList?BIZTYPE_CD=Z\u0026YY=2024\u0026numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "BIZTYPE_CD": "Z",
+        "YY": "2024",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15111605",
+      "title": "한국문화관광연구원_관광실태조사_관광사업체",
+      "operation": "관광사업체종사자수조회",
+      "provider": "tour",
+      "endpoint_host": "openapi.tour.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "tour_service_key_not_registered",
+      "verified_at": "2026-06-25T02:26:51Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.tour.go.kr/openapi/service/TourismAccdtTourBsnService/getTourismBsnesEnfsnCoList?BIZTYPE_CD=Z\u0026YY=2024\u0026numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "BIZTYPE_CD": "Z",
+        "YY": "2024",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15111606",
+      "title": "한국문화관광연구원_출입국관광수지서비스",
+      "operation": "관광수지조회",
+      "provider": "tour",
+      "endpoint_host": "openapi.tour.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "tour_service_key_not_registered",
+      "verified_at": "2026-06-25T02:26:51Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.tour.go.kr/openapi/service/EdrcntTourismBalnaceService/getTourismBalcList?YM=202401\u0026serviceKey=REDACTED",
+      "params": {
+        "YM": "202401"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15000017",
+      "title": "한국문화관광연구원_관광실태조사서비스",
+      "operation": "관광사업체매출액조회",
+      "provider": "tour",
+      "dependency_class": "service_root",
+      "status": "skipped",
+      "reason": "tour_service_root_missing_operation_path",
+      "verified_at": "2026-06-25T02:26:40Z",
+      "params": {
+        "BIZTYPE_CD": "Z",
+        "YY": "2024"
+      },
+      "body_shape": "service_root"
+    },
+    {
+      "dataset_id": "15000017",
+      "title": "한국문화관광연구원_관광실태조사서비스",
+      "operation": "관광사업체수조회",
+      "provider": "tour",
+      "dependency_class": "service_root",
+      "status": "skipped",
+      "reason": "tour_service_root_missing_operation_path",
+      "verified_at": "2026-06-25T02:26:40Z",
+      "params": {
+        "BIZTYPE_CD": "Z",
+        "YY": "2024"
+      },
+      "body_shape": "service_root"
+    },
+    {
+      "dataset_id": "15000017",
+      "title": "한국문화관광연구원_관광실태조사서비스",
+      "operation": "관광사업체종사자수조회",
+      "provider": "tour",
+      "dependency_class": "service_root",
+      "status": "skipped",
+      "reason": "tour_service_root_missing_operation_path",
+      "verified_at": "2026-06-25T02:26:40Z",
+      "params": {
+        "BIZTYPE_CD": "Z",
+        "YY": "2024"
+      },
+      "body_shape": "service_root"
+    },
+    {
+      "dataset_id": "15000017",
+      "title": "한국문화관광연구원_관광실태조사서비스",
+      "operation": "국민여행경험률조회",
+      "provider": "tour",
+      "dependency_class": "service_root",
+      "status": "skipped",
+      "reason": "tour_service_root_missing_operation_path",
+      "verified_at": "2026-06-25T02:26:40Z",
+      "params": {
+        "YY": "2024"
+      },
+      "body_shape": "service_root"
+    },
+    {
+      "dataset_id": "15000017",
+      "title": "한국문화관광연구원_관광실태조사서비스",
+      "operation": "국민여행일수조회",
+      "provider": "tour",
+      "dependency_class": "service_root",
+      "status": "skipped",
+      "reason": "tour_service_root_missing_operation_path",
+      "verified_at": "2026-06-25T02:26:40Z",
+      "params": {
+        "YY": "2024"
+      },
+      "body_shape": "service_root"
+    },
+    {
+      "dataset_id": "15000017",
+      "title": "한국문화관광연구원_관광실태조사서비스",
+      "operation": "국민여행지출조회",
+      "provider": "tour",
+      "dependency_class": "service_root",
+      "status": "skipped",
+      "reason": "tour_service_root_missing_operation_path",
+      "verified_at": "2026-06-25T02:26:40Z",
+      "params": {
+        "YY": "2024"
+      },
+      "body_shape": "service_root"
+    },
+    {
+      "dataset_id": "15000017",
+      "title": "한국문화관광연구원_관광실태조사서비스",
+      "operation": "국민여행총량조회",
+      "provider": "tour",
+      "dependency_class": "service_root",
+      "status": "skipped",
+      "reason": "tour_service_root_missing_operation_path",
+      "verified_at": "2026-06-25T02:26:40Z",
+      "params": {
+        "YY": "2024"
+      },
+      "body_shape": "service_root"
+    },
+    {
+      "dataset_id": "15000017",
+      "title": "한국문화관광연구원_관광실태조사서비스",
+      "operation": "국민여행횟수조회",
+      "provider": "tour",
+      "dependency_class": "service_root",
+      "status": "skipped",
+      "reason": "tour_service_root_missing_operation_path",
+      "verified_at": "2026-06-25T02:26:40Z",
+      "params": {
+        "YY": "2024"
+      },
+      "body_shape": "service_root"
+    },
+    {
+      "dataset_id": "15000017",
+      "title": "한국문화관광연구원_관광실태조사서비스",
+      "operation": "외래관광객방한활동비율조회",
+      "provider": "tour",
+      "dependency_class": "service_root",
+      "status": "skipped",
+      "reason": "tour_service_root_missing_operation_path",
+      "verified_at": "2026-06-25T02:26:40Z",
+      "params": {
+        "ACTIVITY_CD": "A",
+        "YY": "2024"
+      },
+      "body_shape": "service_root"
+    },
+    {
+      "dataset_id": "15000017",
+      "title": "한국문화관광연구원_관광실태조사서비스",
+      "operation": "외래관광객지역비율조회",
+      "provider": "tour",
+      "dependency_class": "service_root",
+      "status": "skipped",
+      "reason": "tour_service_root_missing_operation_path",
+      "verified_at": "2026-06-25T02:26:40Z",
+      "params": {
+        "SIDO_CD": "A",
+        "YY": "2024"
+      },
+      "body_shape": "service_root"
+    },
+    {
+      "dataset_id": "15000017",
+      "title": "한국문화관광연구원_관광실태조사서비스",
+      "operation": "외래관광객지출조회",
+      "provider": "tour",
+      "dependency_class": "service_root",
+      "status": "skipped",
+      "reason": "tour_service_root_missing_operation_path",
+      "verified_at": "2026-06-25T02:26:40Z",
+      "params": {
+        "TOURTYPE_CD": "Z",
+        "YY": "2024"
+      },
+      "body_shape": "service_root"
+    },
+    {
+      "dataset_id": "15000063",
+      "title": "한국문화관광연구원_관광산업통계서비스",
+      "operation": "관광사업체경기동향지수조회",
+      "provider": "tour",
+      "dependency_class": "service_root",
+      "status": "skipped",
+      "reason": "tour_service_root_missing_operation_path",
+      "verified_at": "2026-06-25T02:26:40Z",
+      "params": {
+        "ID_CD": "A",
+        "T_CD": "",
+        "YQ": "2024Q1"
+      },
+      "missing_params": [
+        "T_CD"
+      ],
+      "body_shape": "service_root"
+    },
+    {
+      "dataset_id": "15000063",
+      "title": "한국문화관광연구원_관광산업통계서비스",
+      "operation": "국민관광지출전망지수조회",
+      "provider": "tour",
+      "dependency_class": "service_root",
+      "status": "skipped",
+      "reason": "tour_service_root_missing_operation_path",
+      "verified_at": "2026-06-25T02:26:40Z",
+      "params": {
+        "T_CD": "",
+        "YQ": "2024Q1"
+      },
+      "missing_params": [
+        "T_CD"
+      ],
+      "body_shape": "service_root"
+    },
+    {
+      "dataset_id": "15000297",
+      "title": "한국문화관광연구원_출입국관광통계서비스",
+      "operation": "관광수지조회",
+      "provider": "tour",
+      "dependency_class": "service_root",
+      "status": "skipped",
+      "reason": "tour_service_root_missing_operation_path",
+      "verified_at": "2026-06-25T02:26:40Z",
+      "params": {
+        "YM": "202401"
+      },
+      "body_shape": "service_root"
+    },
+    {
+      "dataset_id": "15000297",
+      "title": "한국문화관광연구원_출입국관광통계서비스",
+      "operation": "국민해외관광객통계조회",
+      "provider": "tour",
+      "dependency_class": "service_root",
+      "status": "skipped",
+      "reason": "tour_service_root_missing_operation_path",
+      "verified_at": "2026-06-25T02:26:40Z",
+      "params": {
+        "AGE_CD": "",
+        "PORT_CD": "",
+        "SEX_CD": "",
+        "YM": "202401"
+      },
+      "missing_params": [
+        "SEX_CD",
+        "AGE_CD",
+        "PORT_CD"
+      ],
+      "body_shape": "service_root"
+    },
+    {
+      "dataset_id": "15000297",
+      "title": "한국문화관광연구원_출입국관광통계서비스",
+      "operation": "방한외래관광객세부통계조회",
+      "provider": "tour",
+      "dependency_class": "service_root",
+      "status": "skipped",
+      "reason": "tour_service_root_missing_operation_path",
+      "verified_at": "2026-06-25T02:26:40Z",
+      "params": {
+        "AGE_CD": "",
+        "NAT_CD": "100",
+        "PORT_CD": "",
+        "SEX_CD": "",
+        "TRA_PURP_CD": "",
+        "YM": "202401"
+      },
+      "missing_params": [
+        "AGE_CD",
+        "TRA_PURP_CD",
+        "PORT_CD",
+        "SEX_CD"
+      ],
+      "body_shape": "service_root"
+    },
+    {
+      "dataset_id": "15000297",
+      "title": "한국문화관광연구원_출입국관광통계서비스",
+      "operation": "방한외래관광객평균체재일조회",
+      "provider": "tour",
+      "dependency_class": "service_root",
+      "status": "skipped",
+      "reason": "tour_service_root_missing_operation_path",
+      "verified_at": "2026-06-25T02:26:40Z",
+      "params": {
+        "NAT_CD": "100",
+        "YM": "202401"
+      },
+      "body_shape": "service_root"
+    },
+    {
+      "dataset_id": "15000297",
+      "title": "한국문화관광연구원_출입국관광통계서비스",
+      "operation": "출입국관광통계조회",
+      "provider": "tour",
+      "dependency_class": "service_root",
+      "status": "skipped",
+      "reason": "tour_service_root_missing_operation_path",
+      "verified_at": "2026-06-25T02:26:40Z",
+      "params": {
+        "ED_CD": "E",
+        "NAT_CD": "100",
+        "YM": "202401"
+      },
+      "body_shape": "service_root"
+    },
+    {
+      "dataset_id": "15000366",
+      "title": "한국문화관광연구원_관광자원통계서비스",
+      "operation": "유료관광지방문객수조회",
+      "provider": "tour",
+      "dependency_class": "service_root",
+      "status": "skipped",
+      "reason": "tour_service_root_missing_operation_path",
+      "verified_at": "2026-06-25T02:26:40Z",
+      "params": {
+        "GUNGU": "",
+        "RES_NM": "",
+        "SIDO": "",
+        "YM": "202401"
+      },
+      "missing_params": [
+        "SIDO",
+        "GUNGU",
+        "RES_NM"
+      ],
+      "body_shape": "service_root"
+    }
+  ]
+}

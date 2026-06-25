@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T02:06:16Z",
+  "generated_at": "2026-06-25T02:29:04Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 17,
-  "host_count": 21,
+  "adapter_count": 18,
+  "host_count": 22,
   "adapters": [
     {
       "name": "airport",
@@ -169,6 +169,17 @@
       ]
     },
     {
+      "name": "tour",
+      "status": "registered",
+      "hosts": [
+        "openapi.tour.go.kr"
+      ],
+      "capabilities": [
+        "call",
+        "verification"
+      ]
+    },
+    {
       "name": "uiryeong",
       "status": "registered",
       "hosts": [
@@ -194,9 +205,9 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 17,
-    "verification_capable_adapters": 17,
-    "call_capable_adapters": 12,
+    "adapter_count": 18,
+    "verification_capable_adapters": 18,
+    "call_capable_adapters": 13,
     "required_adapters": 2,
     "required_verification_adapters": 2,
     "required_call_adapters": 1,

@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-06-25T02:27:06Z",
+  "source": "C:\\workspace\\datapan-registry\\reports\\tour-verification.json",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 26,
+    "verified": 0,
+    "failed": 7,
+    "skipped": 19,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "skipped",
+        "count": 19,
+        "status": "skipped"
+      },
+      {
+        "key": "failed",
+        "count": 7,
+        "status": "failed"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "tour_service_root_missing_operation_path",
+        "count": 19,
+        "reason": "tour_service_root_missing_operation_path"
+      },
+      {
+        "key": "tour_service_key_not_registered",
+        "count": 7,
+        "reason": "tour_service_key_not_registered"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "tour",
+        "count": 26,
+        "provider": "tour"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "openapi.tour.go.kr",
+        "count": 7,
+        "host": "openapi.tour.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "service_root",
+        "count": 19,
+        "kind": "service_root"
+      },
+      {
+        "key": "external_endpoint",
+        "count": 7,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

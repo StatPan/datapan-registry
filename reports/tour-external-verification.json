@@ -1,0 +1,208 @@
+{
+  "generated_at": "2026-06-25T02:26:51Z",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 7,
+  "timeout": "10s",
+  "truncated": false,
+  "filters": {
+    "provider": "tour",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 7,
+  "summary": {
+    "total": 7,
+    "verified": 0,
+    "failed": 7,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15111604",
+      "title": "한국문화관광연구원_관광실태조사_외래관광객",
+      "operation": "외래관광객방한활동비율조회",
+      "provider": "tour",
+      "endpoint_host": "openapi.tour.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "tour_service_key_not_registered",
+      "verified_at": "2026-06-25T02:26:51Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.tour.go.kr/openapi/service/TourismAccdtOutService/getForeignTuristWtrsnRateList?ACTIVITY_CD=A\u0026YY=2024\u0026numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "ACTIVITY_CD": "A",
+        "YY": "2024",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15111604",
+      "title": "한국문화관광연구원_관광실태조사_외래관광객",
+      "operation": "외래관광객지역비율조회",
+      "provider": "tour",
+      "endpoint_host": "openapi.tour.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "tour_service_key_not_registered",
+      "verified_at": "2026-06-25T02:26:51Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.tour.go.kr/openapi/service/TourismAccdtOutService/getForeignTuristAreaRateList?SIDO_CD=A\u0026YY=2024\u0026numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "SIDO_CD": "A",
+        "YY": "2024",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15111604",
+      "title": "한국문화관광연구원_관광실태조사_외래관광객",
+      "operation": "외래관광객지출조회",
+      "provider": "tour",
+      "endpoint_host": "openapi.tour.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "tour_service_key_not_registered",
+      "verified_at": "2026-06-25T02:26:51Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.tour.go.kr/openapi/service/TourismAccdtOutService/getForeignTuristExpndtrList?TOURTYPE_CD=Z\u0026YY=2024\u0026numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "TOURTYPE_CD": "Z",
+        "YY": "2024",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15111605",
+      "title": "한국문화관광연구원_관광실태조사_관광사업체",
+      "operation": "관광사업체매출액조회",
+      "provider": "tour",
+      "endpoint_host": "openapi.tour.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "tour_service_key_not_registered",
+      "verified_at": "2026-06-25T02:26:51Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.tour.go.kr/openapi/service/TourismAccdtTourBsnService/getTourismBsnesSalamtList?BIZTYPE_CD=Z\u0026YY=2024\u0026numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "BIZTYPE_CD": "Z",
+        "YY": "2024",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15111605",
+      "title": "한국문화관광연구원_관광실태조사_관광사업체",
+      "operation": "관광사업체수조회",
+      "provider": "tour",
+      "endpoint_host": "openapi.tour.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "tour_service_key_not_registered",
+      "verified_at": "2026-06-25T02:26:51Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.tour.go.kr/openapi/service/TourismAccdtTourBsnService/getTourismBsnesCoList?BIZTYPE_CD=Z\u0026YY=2024\u0026numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "BIZTYPE_CD": "Z",
+        "YY": "2024",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15111605",
+      "title": "한국문화관광연구원_관광실태조사_관광사업체",
+      "operation": "관광사업체종사자수조회",
+      "provider": "tour",
+      "endpoint_host": "openapi.tour.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "tour_service_key_not_registered",
+      "verified_at": "2026-06-25T02:26:51Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.tour.go.kr/openapi/service/TourismAccdtTourBsnService/getTourismBsnesEnfsnCoList?BIZTYPE_CD=Z\u0026YY=2024\u0026numOfRows=1\u0026pageNo=1\u0026serviceKey=REDACTED",
+      "params": {
+        "BIZTYPE_CD": "Z",
+        "YY": "2024",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15111606",
+      "title": "한국문화관광연구원_출입국관광수지서비스",
+      "operation": "관광수지조회",
+      "provider": "tour",
+      "endpoint_host": "openapi.tour.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "tour_service_key_not_registered",
+      "verified_at": "2026-06-25T02:26:51Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR."
+      },
+      "url": "http://openapi.tour.go.kr/openapi/service/EdrcntTourismBalnaceService/getTourismBalcList?YM=202401\u0026serviceKey=REDACTED",
+      "params": {
+        "YM": "202401"
+      },
+      "body_shape": "xml_status"
+    }
+  ]
+}

@@ -13,17 +13,17 @@ re-importing the upstream data.go.kr catalog every time.
 - Specs: `12060`
 - Operations: `12205`
 - Callable operations: `12063` (`98.8%`)
-- Latest release: `v2026.06.25.9`
+- Latest release: `v2026.06.25.10`
 - Registered external adapters: `airport`, `andong`, `ekape`, `epost`, `folk`,
   `forest`, `geoje`, `humetro`, `itfind`, `jeonju`, `korad`, `naqs`,
-  `oneclick-law`, `q-net`, `sisul`, `uiryeong`, `ulsan`
-- External adapter coverage: `528` registered-adapter operations out of `594`
-  external endpoint operations (`86.1%`)
-- Missing external adapter hosts: `19`
+  `oneclick-law`, `q-net`, `sisul`, `tour`, `uiryeong`, `ulsan`
+- External adapter coverage: `554` registered-adapter operations out of `594`
+  external endpoint operations (`90.4%`)
+- Missing external adapter hosts: `18`
 - Provider split readiness: `ready`
-  (`17` adapters, `17` verification-capable, `12` call-capable)
-- Runtime verification evidence: `201` bounded checks merged into
-  `reports/latest-verification.json` (`21` verified, `62` failed, `118`
+  (`18` adapters, `18` verification-capable, `13` call-capable)
+- Runtime verification evidence: `227` bounded checks merged into
+  `reports/latest-verification.json` (`21` verified, `69` failed, `137`
   skipped)
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
@@ -115,6 +115,8 @@ reports/
   qnet-verification-summary.json
   sisul-verification.json
   sisul-verification-summary.json
+  tour-verification.json
+  tour-verification-summary.json
   uiryeong-verification.json
   uiryeong-verification-summary.json
   ulsan-verification.json

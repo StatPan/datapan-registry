@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-25T02:06:21Z",
+  "generated_at": "2026-06-25T02:29:09Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-oneclick\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-tour\\data\\data-go-kr.registry.json",
   "source": "release",
-  "verification": "C:\\workspace\\datapan-registry\\.datapan\\release-oneclick\\reports\\latest-verification.json",
+  "verification": "C:\\workspace\\datapan-registry\\.datapan\\release-tour\\reports\\latest-verification.json",
   "summary": {
     "specs": 12060,
     "operations": 12205,
@@ -11,49 +11,32 @@
     "callable_operation_percent": 98.8,
     "data_go_kr_gateway_operations": 11419,
     "external_endpoint_operations": 594,
-    "registered_adapter_operations": 528,
-    "missing_adapter_operations": 85,
-    "external_adapter_coverage_percent": 86.1,
+    "registered_adapter_operations": 554,
+    "missing_adapter_operations": 59,
+    "external_adapter_coverage_percent": 90.4,
     "approval_required_operations": 4142,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
-    "registered_adapter_hosts": 21,
-    "missing_adapter_hosts": 19,
-    "adapter_count": 17,
-    "call_capable_adapters": 12,
+    "registered_adapter_hosts": 22,
+    "missing_adapter_hosts": 18,
+    "adapter_count": 18,
+    "call_capable_adapters": 13,
     "provider_split_ready": true
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-06-25T02:06:06Z",
-    "total": 201,
+    "generated_at": "2026-06-25T02:28:16Z",
+    "total": 227,
     "verified": 21,
-    "failed": 62,
-    "skipped": 118,
+    "failed": 69,
+    "skipped": 137,
     "unknown": 0,
-    "verified_percent": 10.4,
-    "evidence_operation_percent": 1.6
+    "verified_percent": 9.3,
+    "evidence_operation_percent": 1.9
   },
   "gaps": {
     "missing_adapter_hosts": [
-      {
-        "host": "openapi.tour.go.kr",
-        "kinds": [
-          "external_endpoint",
-          "service_root"
-        ],
-        "adapter_status": "missing",
-        "specs": 7,
-        "operations": 7,
-        "external_endpoint_operations": 7,
-        "service_root_operations": 19,
-        "sample_ids": [
-          "15000017",
-          "15000063",
-          "15000297"
-        ]
-      },
       {
         "host": "openapi.coast.kr",
         "kinds": [
@@ -180,6 +163,23 @@
         "sample_ids": [
           "15002002",
           "15002055"
+        ]
+      },
+      {
+        "host": "openapi.gblib.or.kr",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "missing",
+        "specs": 3,
+        "operations": 3,
+        "external_endpoint_operations": 3,
+        "external_guide_specs": 3,
+        "sample_ids": [
+          "15003489",
+          "3075291",
+          "3075292"
         ]
       }
     ],
@@ -363,10 +363,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-06-25T02:06:21Z",
+    "generated_at": "2026-06-25T02:29:09Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 17,
-    "host_count": 21,
+    "adapter_count": 18,
+    "host_count": 22,
     "adapters": [
       {
         "name": "airport",
@@ -533,6 +533,17 @@
         ]
       },
       {
+        "name": "tour",
+        "status": "registered",
+        "hosts": [
+          "openapi.tour.go.kr"
+        ],
+        "capabilities": [
+          "call",
+          "verification"
+        ]
+      },
+      {
         "name": "uiryeong",
         "status": "registered",
         "hosts": [
@@ -558,9 +569,9 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 17,
-      "verification_capable_adapters": 17,
-      "call_capable_adapters": 12,
+      "adapter_count": 18,
+      "verification_capable_adapters": 18,
+      "call_capable_adapters": 13,
       "required_adapters": 2,
       "required_verification_adapters": 2,
       "required_call_adapters": 1,
@@ -571,19 +582,19 @@
   "next": [
     {
       "label": "missing adapters",
-      "command": "datapan providers --registry C:\\workspace\\datapan-registry\\.datapan\\release-oneclick\\data\\data-go-kr.registry.json --gaps --limit 20 --json"
+      "command": "datapan providers --registry C:\\workspace\\datapan-registry\\.datapan\\release-tour\\data\\data-go-kr.registry.json --gaps --limit 20 --json"
     },
     {
       "label": "adapter targets",
-      "command": "datapan targets --registry C:\\workspace\\datapan-registry\\.datapan\\release-oneclick\\data\\data-go-kr.registry.json --limit 20 --json"
+      "command": "datapan targets --registry C:\\workspace\\datapan-registry\\.datapan\\release-tour\\data\\data-go-kr.registry.json --limit 20 --json"
     },
     {
       "label": "coverage report",
-      "command": "datapan coverage --registry C:\\workspace\\datapan-registry\\.datapan\\release-oneclick\\data\\data-go-kr.registry.json --verification C:\\workspace\\datapan-registry\\.datapan\\release-oneclick\\reports\\latest-verification.json --json"
+      "command": "datapan coverage --registry C:\\workspace\\datapan-registry\\.datapan\\release-tour\\data\\data-go-kr.registry.json --verification C:\\workspace\\datapan-registry\\.datapan\\release-tour\\reports\\latest-verification.json --json"
     },
     {
       "label": "verify forest",
-      "command": "datapan verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-oneclick\\data\\data-go-kr.registry.json --provider forest --kind external_endpoint --limit 4 --timeout 10s --json"
+      "command": "datapan verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-tour\\data\\data-go-kr.registry.json --provider forest --kind external_endpoint --limit 4 --timeout 10s --json"
     }
   ]
 }

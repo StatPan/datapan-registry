@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-25T02:06:16Z",
+  "generated_at": "2026-06-25T02:29:04Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-oneclick\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-tour\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "filtered_count": 179,
@@ -10,34 +10,17 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 40,
     "external_guide_hosts": 150,
-    "registered_adapter_hosts": 21,
+    "registered_adapter_hosts": 22,
     "operation_hosts": 42,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 19,
-    "needs_adapter_operations": 66,
+    "missing_adapter_hosts": 18,
+    "needs_adapter_operations": 59,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
     "malformed_source_url_count": 628
   },
   "providers": [
-    {
-      "host": "openapi.tour.go.kr",
-      "kinds": [
-        "external_endpoint",
-        "service_root"
-      ],
-      "adapter_status": "missing",
-      "specs": 7,
-      "operations": 7,
-      "external_endpoint_operations": 7,
-      "service_root_operations": 19,
-      "sample_ids": [
-        "15000017",
-        "15000063",
-        "15000297"
-      ]
-    },
     {
       "host": "openapi.coast.kr",
       "kinds": [
@@ -549,6 +532,24 @@
         "15001011",
         "15001018",
         "15001019"
+      ]
+    },
+    {
+      "host": "openapi.tour.go.kr",
+      "provider": "tour",
+      "kinds": [
+        "external_endpoint",
+        "service_root"
+      ],
+      "adapter_status": "adapter",
+      "specs": 7,
+      "operations": 7,
+      "external_endpoint_operations": 7,
+      "service_root_operations": 19,
+      "sample_ids": [
+        "15000017",
+        "15000063",
+        "15000297"
       ]
     },
     {
