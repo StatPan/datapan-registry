@@ -1,32 +1,32 @@
 {
-  "generated_at": "2026-06-25T01:23:43Z",
-  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-korad\\reports\\latest-verification.json",
+  "generated_at": "2026-06-25T01:43:31Z",
+  "source": "C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 154,
-    "verified": 20,
-    "failed": 43,
-    "skipped": 91,
+    "total": 171,
+    "verified": 21,
+    "failed": 51,
+    "skipped": 99,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 91,
+        "count": 99,
         "status": "skipped"
       },
       {
         "key": "failed",
-        "count": 43,
+        "count": 51,
         "status": "failed"
       },
       {
         "key": "verified",
-        "count": 20,
+        "count": 21,
         "status": "verified"
       }
     ],
@@ -67,9 +67,19 @@
         "reason": "korad_wadl_metadata_only"
       },
       {
+        "key": "naqs_mutation_endpoint",
+        "count": 8,
+        "reason": "naqs_mutation_endpoint"
+      },
+      {
         "key": "ekape_missing_required_params",
         "count": 7,
         "reason": "ekape_missing_required_params"
+      },
+      {
+        "key": "humetro_service_access_denied",
+        "count": 7,
+        "reason": "humetro_service_access_denied"
       },
       {
         "key": "itfind_missing_required_params",
@@ -162,6 +172,11 @@
         "reason": "folk_missing_required_params"
       },
       {
+        "key": "humetro_deadline_expired",
+        "count": 1,
+        "reason": "humetro_deadline_expired"
+      },
+      {
         "key": "qnet_connection_validation_failed",
         "count": 1,
         "reason": "qnet_connection_validation_failed"
@@ -207,6 +222,16 @@
         "key": "data.go.kr",
         "count": 10,
         "provider": "data.go.kr"
+      },
+      {
+        "key": "naqs",
+        "count": 9,
+        "provider": "naqs"
+      },
+      {
+        "key": "humetro",
+        "count": 8,
+        "provider": "humetro"
       },
       {
         "key": "airport",
@@ -286,6 +311,16 @@
         "host": "apis.data.go.kr"
       },
       {
+        "key": "data.naqs.go.kr",
+        "count": 9,
+        "host": "data.naqs.go.kr"
+      },
+      {
+        "key": "data.humetro.busan.kr",
+        "count": 8,
+        "host": "data.humetro.busan.kr"
+      },
+      {
         "key": "data.geoje.go.kr",
         "count": 6,
         "host": "data.geoje.go.kr"
@@ -329,7 +364,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 144,
+        "count": 161,
         "kind": "external_endpoint"
       },
       {

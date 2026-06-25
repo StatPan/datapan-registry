@@ -1,6 +1,6 @@
 # Datapan Registry Release
 
-- generated_at: `2026-06-25T01:23:56Z`
+- generated_at: `2026-06-25T01:43:47Z`
 - provider: `data.go.kr`
 - datapan_version: `0.1.0-dev`
 - source_registry: `C:\workspace\datapan-registry\data\data-go-kr.registry.json`
@@ -15,14 +15,14 @@
 
 ## Provider Coverage
 
-- provider_adapters: `14` adapters, `17` hosts
+- provider_adapters: `16` adapters, `19` hosts
 - split_readiness: `ready`
-- verification_capable_adapters: `14`
-- call_capable_adapters: `9`
-- dependency_operations: `12205` total, `11419` gateway, `594` external, `481` registered-adapter, `132` missing-adapter
-- adapter_backlog: `23` target hosts, `132` target operations
-- provider_backlog: `179` hosts, `23` missing-adapter hosts, `113` operations needing adapters
-- coverage: `12063` callable operations (`98.8%`), external adapter coverage `78.5%`, verification evidence coverage `1.3%`
+- verification_capable_adapters: `16`
+- call_capable_adapters: `11`
+- dependency_operations: `12205` total, `11419` gateway, `594` external, `498` registered-adapter, `115` missing-adapter
+- adapter_backlog: `21` target hosts, `115` target operations
+- provider_backlog: `179` hosts, `21` missing-adapter hosts, `96` operations needing adapters
+- coverage: `12063` callable operations (`98.8%`), external adapter coverage `81.2%`, verification evidence coverage `1.4%`
 - coverage_artifact: `reports/coverage.json`
 - verification_plan: `8` batches, `80` planned operations, `11409` gateway gaps, `337` adapter gaps
 - verification_plan_artifact: `reports/verification-plan.json`
@@ -31,13 +31,13 @@ Top adapter targets:
 
 - `1`. `oneclick.law.go.kr:80`: `27` operations across `3` specs
 - `2`. `openapi.tour.go.kr`: `26` operations across `7` specs
-- `3`. `data.naqs.go.kr`: `9` operations across `2` specs
-- `4`. `data.humetro.busan.kr`: `8` operations across `8` specs
-- `5`. `openapi.ebid.lh.or.kr`: `6` operations across `6` specs
+- `3`. `openapi.ebid.lh.or.kr`: `6` operations across `6` specs
+- `4`. `openapi.coast.kr`: `6` operations across `1` specs
+- `5`. `openapi.kpx.or.kr`: `5` operations across `5` specs
 
 ## Verification Evidence
 
-- verification: `154` total, `20` verified, `43` failed, `91` skipped, `0` unknown
+- verification: `171` total, `21` verified, `51` failed, `99` skipped, `0` unknown
 - verification_artifact: `reports/latest-verification.json`
 - verification_summary_artifact: `reports/latest-verification-summary.json`
 

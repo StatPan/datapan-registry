@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-25T01:24:05Z",
+  "generated_at": "2026-06-25T01:43:58Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-korad\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\data\\data-go-kr.registry.json",
   "source": "release",
-  "verification": "C:\\workspace\\datapan-registry\\.datapan\\release-korad\\reports\\latest-verification.json",
+  "verification": "C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\reports\\latest-verification.json",
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
     "operations": 12205,
-    "evidence_total": 154,
+    "evidence_total": 171,
     "uncovered_gateway_candidates": 11409,
     "uncovered_adapter_candidates": 337,
-    "missing_adapter_hosts": 23,
+    "missing_adapter_hosts": 21,
     "planned_batches": 8,
     "planned_operations": 80
   },
@@ -22,7 +22,7 @@
       "candidates": 11419,
       "uncovered_candidates": 11409,
       "planned_operations": 10,
-      "command": "datapan catalog verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-korad\\data\\data-go-kr.registry.json --kind data_go_kr_gateway --exclude-input C:\\workspace\\datapan-registry\\.datapan\\release-korad\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gateway-next.json --json",
+      "command": "datapan catalog verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\data\\data-go-kr.registry.json --kind data_go_kr_gateway --exclude-input C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gateway-next.json --json",
       "output": ".datapan/verification/gateway-next.json"
     },
     {
@@ -32,7 +32,7 @@
       "candidates": 49,
       "uncovered_candidates": 34,
       "planned_operations": 10,
-      "command": "datapan catalog verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-korad\\data\\data-go-kr.registry.json --provider ekape --kind external_endpoint --exclude-input C:\\workspace\\datapan-registry\\.datapan\\release-korad\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ekape-next.json --json",
+      "command": "datapan catalog verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\data\\data-go-kr.registry.json --provider ekape --kind external_endpoint --exclude-input C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ekape-next.json --json",
       "output": ".datapan/verification/ekape-next.json"
     },
     {
@@ -42,7 +42,7 @@
       "candidates": 28,
       "uncovered_candidates": 13,
       "planned_operations": 10,
-      "command": "datapan catalog verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-korad\\data\\data-go-kr.registry.json --provider epost --kind external_endpoint --exclude-input C:\\workspace\\datapan-registry\\.datapan\\release-korad\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/epost-next.json --json",
+      "command": "datapan catalog verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\data\\data-go-kr.registry.json --provider epost --kind external_endpoint --exclude-input C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/epost-next.json --json",
       "output": ".datapan/verification/epost-next.json"
     },
     {
@@ -52,7 +52,7 @@
       "candidates": 41,
       "uncovered_candidates": 35,
       "planned_operations": 10,
-      "command": "datapan catalog verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-korad\\data\\data-go-kr.registry.json --provider geoje --kind external_endpoint --exclude-input C:\\workspace\\datapan-registry\\.datapan\\release-korad\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/geoje-next.json --json",
+      "command": "datapan catalog verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\data\\data-go-kr.registry.json --provider geoje --kind external_endpoint --exclude-input C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/geoje-next.json --json",
       "output": ".datapan/verification/geoje-next.json"
     },
     {
@@ -62,7 +62,7 @@
       "candidates": 80,
       "uncovered_candidates": 75,
       "planned_operations": 10,
-      "command": "datapan catalog verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-korad\\data\\data-go-kr.registry.json --provider jeonju --kind external_endpoint --exclude-input C:\\workspace\\datapan-registry\\.datapan\\release-korad\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jeonju-next.json --json",
+      "command": "datapan catalog verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\data\\data-go-kr.registry.json --provider jeonju --kind external_endpoint --exclude-input C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jeonju-next.json --json",
       "output": ".datapan/verification/jeonju-next.json"
     },
     {
@@ -72,7 +72,7 @@
       "candidates": 147,
       "uncovered_candidates": 132,
       "planned_operations": 10,
-      "command": "datapan catalog verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-korad\\data\\data-go-kr.registry.json --provider q-net --kind external_endpoint --exclude-input C:\\workspace\\datapan-registry\\.datapan\\release-korad\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/q-net-next.json --json",
+      "command": "datapan catalog verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\data\\data-go-kr.registry.json --provider q-net --kind external_endpoint --exclude-input C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/q-net-next.json --json",
       "output": ".datapan/verification/q-net-next.json"
     },
     {
@@ -82,7 +82,7 @@
       "candidates": 40,
       "uncovered_candidates": 34,
       "planned_operations": 10,
-      "command": "datapan catalog verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-korad\\data\\data-go-kr.registry.json --provider uiryeong --kind external_endpoint --exclude-input C:\\workspace\\datapan-registry\\.datapan\\release-korad\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/uiryeong-next.json --json",
+      "command": "datapan catalog verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\data\\data-go-kr.registry.json --provider uiryeong --kind external_endpoint --exclude-input C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/uiryeong-next.json --json",
       "output": ".datapan/verification/uiryeong-next.json"
     },
     {
@@ -92,7 +92,7 @@
       "candidates": 20,
       "uncovered_candidates": 14,
       "planned_operations": 10,
-      "command": "datapan catalog verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-korad\\data\\data-go-kr.registry.json --provider ulsan --kind external_endpoint --exclude-input C:\\workspace\\datapan-registry\\.datapan\\release-korad\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ulsan-next.json --json",
+      "command": "datapan catalog verify --registry C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\data\\data-go-kr.registry.json --provider ulsan --kind external_endpoint --exclude-input C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ulsan-next.json --json",
       "output": ".datapan/verification/ulsan-next.json"
     }
   ],
@@ -113,38 +113,6 @@
           "15000021",
           "15000122",
           "15000215"
-        ]
-      },
-      {
-        "host": "data.naqs.go.kr",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "missing",
-        "specs": 2,
-        "operations": 9,
-        "external_endpoint_operations": 9,
-        "approval_required_operations": 8,
-        "sample_ids": [
-          "15000834",
-          "15000935"
-        ]
-      },
-      {
-        "host": "data.humetro.busan.kr",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "missing",
-        "specs": 8,
-        "operations": 8,
-        "external_endpoint_operations": 8,
-        "external_guide_specs": 1,
-        "sample_ids": [
-          "15001011",
-          "15001018",
-          "15001019"
         ]
       },
       {
@@ -250,13 +218,40 @@
         "sample_ids": [
           "15097855"
         ]
+      },
+      {
+        "host": "data.jeju.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 2,
+        "operations": 4,
+        "external_endpoint_operations": 4,
+        "sample_ids": [
+          "15001189",
+          "15043696"
+        ]
+      },
+      {
+        "host": "openapi.price.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 1,
+        "operations": 4,
+        "external_endpoint_operations": 4,
+        "sample_ids": [
+          "3043385"
+        ]
       }
     ]
   },
   "next": [
     {
       "label": "coverage",
-      "command": "datapan catalog coverage --registry C:\\workspace\\datapan-registry\\.datapan\\release-korad\\data\\data-go-kr.registry.json --verification C:\\workspace\\datapan-registry\\.datapan\\release-korad\\reports\\latest-verification.json --json"
+      "command": "datapan catalog coverage --registry C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\data\\data-go-kr.registry.json --verification C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\reports\\latest-verification.json --json"
     }
   ]
 }

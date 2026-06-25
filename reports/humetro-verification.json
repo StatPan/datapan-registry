@@ -1,0 +1,233 @@
+{
+  "generated_at": "2026-06-25T01:41:13Z",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 8,
+  "timeout": "8s",
+  "truncated": false,
+  "filters": {
+    "provider": "humetro",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 8,
+  "summary": {
+    "total": 8,
+    "verified": 0,
+    "failed": 8,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15001011",
+      "title": "부산교통공사_부산도시철도 공공 시설물 정보",
+      "operation": "부산 도시철도 공공 시설물 정보",
+      "provider": "humetro",
+      "endpoint_host": "data.humetro.busan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "humetro_service_access_denied",
+      "verified_at": "2026-06-25T01:41:13Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "20",
+        "message": "SERVICE ACCESS DENIED ERROR."
+      },
+      "url": "http://data.humetro.busan.kr/voc/api/open_api_public.tnn?ServiceKey=REDACTED\u0026act=xml\u0026scode=101",
+      "params": {
+        "act": "xml",
+        "scode": "101"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15001018",
+      "title": "부산교통공사_부산도시철도 문화행사 정보",
+      "operation": "부산 도시철도 문화행사 정보",
+      "provider": "humetro",
+      "endpoint_host": "data.humetro.busan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "humetro_service_access_denied",
+      "verified_at": "2026-06-25T01:41:13Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "20",
+        "message": "SERVICE ACCESS DENIED ERROR."
+      },
+      "url": "http://data.humetro.busan.kr/voc/api/open_api_eventinfo.tnn?ServiceKey=REDACTED\u0026act=xml\u0026edate=2024-12-31\u0026kind=1\u0026scode=101\u0026sdate=2024-01-01",
+      "params": {
+        "act": "xml",
+        "edate": "2024-12-31",
+        "kind": "1",
+        "scode": "101",
+        "sdate": "2024-01-01"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15001019",
+      "title": "부산교통공사_부산도시철도 운행 정보",
+      "operation": "부산 도시철도 운행 정보",
+      "provider": "humetro",
+      "endpoint_host": "data.humetro.busan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "humetro_service_access_denied",
+      "verified_at": "2026-06-25T01:41:13Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "20",
+        "message": "SERVICE ACCESS DENIED ERROR."
+      },
+      "url": "http://data.humetro.busan.kr/voc/api/open_api_distance.tnn?ServiceKey=REDACTED\u0026act=xml\u0026scode=101",
+      "params": {
+        "act": "xml",
+        "scode": "101"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15001020",
+      "title": "부산교통공사_부산도시철도 장애인 편의시설 정보",
+      "operation": "부산 도시철도 장애인 편의시설 정보",
+      "provider": "humetro",
+      "endpoint_host": "data.humetro.busan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "humetro_deadline_expired",
+      "verified_at": "2026-06-25T01:41:13Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "31",
+        "message": "DEADLINE HAS EXPIRED ERROR."
+      },
+      "url": "http://data.humetro.busan.kr/voc/api/open_api_convenience.tnn?ServiceKey=REDACTED\u0026act=xml\u0026scode=101",
+      "params": {
+        "act": "xml",
+        "scode": "101"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15043685",
+      "title": "부산교통공사_부산도시철도 역사 정보",
+      "operation": "부산 도시철도 역사 정보",
+      "provider": "humetro",
+      "endpoint_host": "data.humetro.busan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "humetro_service_access_denied",
+      "verified_at": "2026-06-25T01:41:13Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "20",
+        "message": "SERVICE ACCESS DENIED ERROR."
+      },
+      "url": "http://data.humetro.busan.kr/voc/api/open_api_stationinfo.tnn?ServiceKey=REDACTED\u0026act=xml\u0026scode=101",
+      "params": {
+        "act": "xml",
+        "scode": "101"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "3033573",
+      "title": "공기질측정 정보",
+      "operation": "측정년도, 역코드별 공기질 측정 결과 조회",
+      "provider": "humetro",
+      "endpoint_host": "data.humetro.busan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "humetro_service_access_denied",
+      "verified_at": "2026-06-25T01:41:13Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "20",
+        "message": "SERVICE ACCESS DENIED ERROR."
+      },
+      "url": "http://data.humetro.busan.kr/voc/api/open_api_airquality.tnn?ServiceKey=REDACTED\u0026act=xml\u0026numOfRows=1\u0026pageNo=1\u0026scode=101\u0026year=2024",
+      "params": {
+        "act": "xml",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "scode": "101",
+        "year": "2024"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "3033575",
+      "title": "소음측정 정보",
+      "operation": "측정년도, 역코드별 소음 측정 결과 조회",
+      "provider": "humetro",
+      "endpoint_host": "data.humetro.busan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "humetro_service_access_denied",
+      "verified_at": "2026-06-25T01:41:13Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "20",
+        "message": "SERVICE ACCESS DENIED ERROR."
+      },
+      "url": "http://data.humetro.busan.kr/voc/api/open_api_noise.tnn?ServiceKey=REDACTED\u0026act=xml\u0026numOfRows=1\u0026pageNo=1\u0026scode=101\u0026year=2024",
+      "params": {
+        "act": "xml",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "scode": "101",
+        "year": "2024"
+      },
+      "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "3057227",
+      "title": "부산교통공사_계약 관리 정보",
+      "operation": "부산 도시철도 계약현황 정보",
+      "provider": "humetro",
+      "endpoint_host": "data.humetro.busan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "humetro_service_access_denied",
+      "verified_at": "2026-06-25T01:41:13Z",
+      "http_status": 200,
+      "semantic_status": "provider_error",
+      "provider_status": {
+        "ok": false,
+        "source": "resultCode/resultMsg",
+        "code": "20",
+        "message": "SERVICE ACCESS DENIED ERROR."
+      },
+      "url": "http://data.humetro.busan.kr/voc/api/open_api_contractinfo.tnn?ServiceKey=REDACTED\u0026act=xml\u0026c_page=1\u0026c_size=1\u0026kind=1",
+      "params": {
+        "act": "xml",
+        "c_page": "1",
+        "c_size": "1",
+        "kind": "1"
+      },
+      "body_shape": "xml_status"
+    }
+  ]
+}

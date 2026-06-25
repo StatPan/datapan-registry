@@ -13,17 +13,17 @@ re-importing the upstream data.go.kr catalog every time.
 - Specs: `12060`
 - Operations: `12205`
 - Callable operations: `12063` (`98.8%`)
-- Latest release: `v2026.06.25.7`
+- Latest release: `v2026.06.25.8`
 - Registered external adapters: `airport`, `andong`, `ekape`, `epost`, `folk`,
-  `forest`, `geoje`, `itfind`, `jeonju`, `korad`, `q-net`, `sisul`,
-  `uiryeong`, `ulsan`
-- External adapter coverage: `481` registered-adapter operations out of `594`
-  external endpoint operations (`78.5%`)
-- Missing external adapter hosts: `23`
+  `forest`, `geoje`, `humetro`, `itfind`, `jeonju`, `korad`, `naqs`, `q-net`,
+  `sisul`, `uiryeong`, `ulsan`
+- External adapter coverage: `498` registered-adapter operations out of `594`
+  external endpoint operations (`81.2%`)
+- Missing external adapter hosts: `21`
 - Provider split readiness: `ready`
-  (`14` adapters, `14` verification-capable, `9` call-capable)
-- Runtime verification evidence: `154` bounded checks merged into
-  `reports/latest-verification.json` (`20` verified, `43` failed, `91`
+  (`16` adapters, `16` verification-capable, `11` call-capable)
+- Runtime verification evidence: `171` bounded checks merged into
+  `reports/latest-verification.json` (`21` verified, `51` failed, `99`
   skipped)
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
@@ -99,12 +99,16 @@ reports/
   forest-verification-summary.json
   geoje-verification.json
   geoje-verification-summary.json
+  humetro-verification.json
+  humetro-verification-summary.json
   itfind-verification.json
   itfind-verification-summary.json
   jeonju-verification.json
   jeonju-verification-summary.json
   korad-verification.json
   korad-verification-summary.json
+  naqs-verification.json
+  naqs-verification-summary.json
   qnet-verification.json
   qnet-verification-summary.json
   sisul-verification.json

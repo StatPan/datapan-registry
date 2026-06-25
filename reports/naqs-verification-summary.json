@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-06-25T01:33:47Z",
+  "source": "C:\\workspace\\datapan-registry\\reports\\naqs-verification.json",
+  "provider": "data.go.kr",
+  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 9,
+    "verified": 1,
+    "failed": 0,
+    "skipped": 8,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "skipped",
+        "count": 8,
+        "status": "skipped"
+      },
+      {
+        "key": "verified",
+        "count": 1,
+        "status": "verified"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "naqs_mutation_endpoint",
+        "count": 8,
+        "reason": "naqs_mutation_endpoint"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "naqs",
+        "count": 9,
+        "provider": "naqs"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "data.naqs.go.kr",
+        "count": 9,
+        "host": "data.naqs.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 9,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-25T01:23:56Z",
+  "generated_at": "2026-06-25T01:43:47Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-korad\\data\\data-go-kr.registry.json",
+  "registry": "C:\\workspace\\datapan-registry\\.datapan\\release-humetro\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 23,
+  "filtered_count": 21,
   "summary": {
-    "target_hosts": 23,
-    "target_operations": 132,
-    "external_endpoint_operations": 113,
+    "target_hosts": 21,
+    "target_operations": 115,
+    "external_endpoint_operations": 96,
     "service_root_operations": 19,
-    "approval_required_operations": 31,
-    "missing_param_operations": 118,
+    "approval_required_operations": 23,
+    "missing_param_operations": 101,
     "unsupported_protocol_operations": 30
   },
   "targets": [
@@ -137,168 +137,6 @@
     },
     {
       "rank": 3,
-      "host": "data.naqs.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 9,
-      "specs": 2,
-      "organizations": [
-        "농림축산식품부 국립농산물품질관리원"
-      ],
-      "source_categories": [
-        "교통물류",
-        "농축수산"
-      ],
-      "api_types": [
-        "REST"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "approval_required_operations": 8,
-      "missing_param_operations": 9,
-      "sample_operations": [
-        {
-          "dataset_id": "15000834",
-          "title": "농림축산식품부 국립농산물품질관리원_농산물이력관리정보연계서비스",
-          "organization": "농림축산식품부 국립농산물품질관리원",
-          "operation": "상품속성정보연계",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.naqs.go.kr/pubc",
-          "missing_params": [
-            "proc",
-            "tra_reg_no",
-            "gds_seq",
-            "gds_nm",
-            "unit_qty",
-            "unit_cd",
-            "gds_prpt",
-            "cert_kd_cd",
-            "cert_no",
-            "pur_mthd_cd",
-            "pur_mthd_nm",
-            "sale_loc",
-            "tel_no",
-            "reg_nm"
-          ]
-        },
-        {
-          "dataset_id": "15000834",
-          "title": "농림축산식품부 국립농산물품질관리원_농산물이력관리정보연계서비스",
-          "organization": "농림축산식품부 국립농산물품질관리원",
-          "operation": "생산출하정보연계",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.naqs.go.kr/pubc",
-          "missing_params": [
-            "std_qty",
-            "qty_cd",
-            "qty_cd_nm",
-            "qty",
-            "prdn_tra_mng_no",
-            "shpm_tra_reg_no",
-            "dl_ofc_nm",
-            "gds_seq",
-            "proc",
-            "tra_reg_no",
-            "prdn_shpm_no",
-            "prdn_shpm_seq",
-            "shpm_tm",
-            "itm_cd",
-            "std_cd"
-          ]
-        },
-        {
-          "dataset_id": "15000834",
-          "title": "농림축산식품부 국립농산물품질관리원_농산물이력관리정보연계서비스",
-          "organization": "농림축산식품부 국립농산물품질관리원",
-          "operation": "수확 후 관리정보연계",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.naqs.go.kr/pubc",
-          "missing_params": [
-            "std_qty",
-            "qty",
-            "qty_cd",
-            "qty_cd_nm",
-            "circ_tra_mng_no",
-            "proc",
-            "tra_reg_no",
-            "havt_mng_seq",
-            "wrk_flow_nm",
-            "itm_cd",
-            "wrk_tm",
-            "std_cd"
-          ]
-        }
-      ]
-    },
-    {
-      "rank": 4,
-      "host": "data.humetro.busan.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 8,
-      "specs": 8,
-      "organizations": [
-        "부산교통공사"
-      ],
-      "source_categories": [
-        "공공행정",
-        "교통물류",
-        "환경기상"
-      ],
-      "api_types": [
-        "REST"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "missing_param_operations": 8,
-      "sample_operations": [
-        {
-          "dataset_id": "15001011",
-          "title": "부산교통공사_부산도시철도 공공 시설물 정보",
-          "organization": "부산교통공사",
-          "operation": "부산 도시철도 공공 시설물 정보",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.humetro.busan.kr/voc/api/open_api_public.tnn",
-          "missing_params": [
-            "act",
-            "scode"
-          ]
-        },
-        {
-          "dataset_id": "15001018",
-          "title": "부산교통공사_부산도시철도 문화행사 정보",
-          "organization": "부산교통공사",
-          "operation": "부산 도시철도 문화행사 정보",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.humetro.busan.kr/voc/api/open_api_eventinfo.tnn",
-          "missing_params": [
-            "act",
-            "scode",
-            "kind",
-            "sdate",
-            "edate"
-          ]
-        },
-        {
-          "dataset_id": "15001019",
-          "title": "부산교통공사_부산도시철도 운행 정보",
-          "organization": "부산교통공사",
-          "operation": "부산 도시철도 운행 정보",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.humetro.busan.kr/voc/api/open_api_distance.tnn",
-          "missing_params": [
-            "act",
-            "scode"
-          ]
-        }
-      ]
-    },
-    {
-      "rank": 5,
       "host": "openapi.ebid.lh.or.kr",
       "kinds": [
         "external_endpoint"
@@ -359,7 +197,7 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 4,
       "host": "openapi.coast.kr",
       "kinds": [
         "external_endpoint"
@@ -406,7 +244,7 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 5,
       "host": "openapi.kpx.or.kr",
       "kinds": [
         "external_endpoint"
@@ -455,7 +293,7 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 6,
       "host": "ws.bus.go.kr",
       "kinds": [
         "external_endpoint"
@@ -514,7 +352,7 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 7,
       "host": "data.jeju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -574,7 +412,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 8,
       "host": "www.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -633,7 +471,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 9,
       "host": "car.daegu.go.kr",
       "kinds": [
         "external_endpoint"
@@ -693,7 +531,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 10,
       "host": "openapi.pqis.go.kr",
       "kinds": [
         "external_endpoint"
@@ -756,7 +594,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 11,
       "host": "openapi.price.go.kr",
       "kinds": [
         "external_endpoint"
@@ -815,7 +653,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 12,
       "host": "openapi.gblib.or.kr",
       "kinds": [
         "external_endpoint"
@@ -873,7 +711,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 13,
       "host": "oneclick.law.go.kr",
       "kinds": [
         "external_endpoint"
@@ -942,7 +780,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 14,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -999,7 +837,7 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 15,
       "host": "www.emuseum.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1069,7 +907,7 @@
       ]
     },
     {
-      "rank": 18,
+      "rank": 16,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1120,7 +958,7 @@
       ]
     },
     {
-      "rank": 19,
+      "rank": 17,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1177,7 +1015,7 @@
       ]
     },
     {
-      "rank": 20,
+      "rank": 18,
       "host": "data.myhome.go.kr:443",
       "kinds": [
         "external_endpoint"
@@ -1213,7 +1051,7 @@
       ]
     },
     {
-      "rank": 21,
+      "rank": 19,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1249,7 +1087,7 @@
       ]
     },
     {
-      "rank": 22,
+      "rank": 20,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -1280,7 +1118,7 @@
       ]
     },
     {
-      "rank": 23,
+      "rank": 21,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"
