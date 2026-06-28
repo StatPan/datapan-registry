@@ -8,6 +8,10 @@ collector", or "review a database migration".
 `datapan.registry-impact-plan.v1` defines that bridge while keeping this
 repository as a source/spec/evidence ledger, not an execution runtime.
 
+The impact plan should be generated from source profiles informed by
+`docs/source-standardization-research.md`, not from assumptions copied from a
+single provider.
+
 ## Artifact
 
 Future release drafts should generate:

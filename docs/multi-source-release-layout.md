@@ -8,6 +8,9 @@ of unrelated dumps.
 This document defines the target layout contract. It does not migrate generated
 artifacts by itself.
 
+See `docs/source-standardization-research.md` for the source survey policy and
+official reference anchors that should inform each source-specific profile.
+
 ## Goals
 
 - Preserve the current `data/data-go-kr.registry.json` path for existing CLI,
