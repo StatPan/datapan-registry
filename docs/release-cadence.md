@@ -29,6 +29,23 @@ datapan catalog release verify --manifest manifest.json --output reports/latest-
 datapan catalog release readiness --manifest manifest.json --output reports/latest-release-readiness.json --json
 ```
 
+## Guarded GitHub Draft
+
+Maintainers may use the `Draft registry release` GitHub Actions workflow when
+they want a repeatable, reviewable release draft without publishing anything.
+The workflow is manually triggered with `workflow_dispatch` and has two modes:
+
+- `verify-only`: verify the checked-in `manifest.json` and readiness reports.
+- `draft-local`: generate a draft under `.datapan/draft/` from the checked-in
+  registry and verification evidence, then verify that draft manifest.
+
+The workflow uploads `.datapan/draft/` and `.datapan/ci/` as workflow artifacts.
+It does not push commits, create tags, publish GitHub Releases, or capture
+provider credentials. Use local generation when updating upstream catalog data
+or when provider API credentials are required. Use the guarded GitHub draft
+when the registry artifact is already present and the release operator wants
+Actions-based verification before committing or tagging generated artifacts.
+
 The repository also runs `.github/workflows/verify-release.yml` on pushes, pull
 requests, manual dispatches, `v*` tags, and a weekly scheduled release-health
 check. That workflow:
