@@ -124,10 +124,11 @@ Done when:
 - guarded release-draft workflow exists;
 - current release verification stays green.
 
-### M2: Hand-Reviewed Source Profiles
+### M2: data.go.kr Mastery
 
-Goal: master data.go.kr first, then prove the same profile contract against
-other official sources.
+Goal: master data.go.kr first as the reference implementation for source
+profiles, source-scoped reports, coverage gates, error routing, and downstream
+impact boundaries.
 
 Done when:
 
@@ -137,49 +138,53 @@ Done when:
   coverage separately;
 - data.go.kr missing external routes are governed by route-disposition evidence
   before becoming adapter work;
-- `sources/kosis.json` exists;
-- `sources/ecos.json` exists;
-- `sources/open_assembly.json` exists;
-- `sources/seoul_open_data.json` exists;
-- every profile validates against `datapan.source-profile.v1`;
-- every profile has official reference URLs and `last_reviewed_at`;
-- every profile records auth, request, response, errors, and runtime policy.
+- data.go.kr source-scoped artifacts have an explicit generation contract;
+- checked-in data.go.kr source-scoped reports validate in CI.
 
-### M3: Error Action Routing
+### M3: External Endpoint Coverage
 
-Goal: turn observed errors into operational decisions, starting with
-data.go.kr gateway and external endpoint failures.
+Goal: turn data.go.kr external endpoint evidence and observed failures into
+operational decisions before creating adapter backlog.
 
 Done when:
 
 - data.go.kr credential and approval failures have draft action rules;
 - data.go.kr external route disposition reasons are mapped to action
   classifications;
+- raw external adapter coverage and evidence-adjusted adapter candidates are
+  reported separately;
+- missing external routes without route-disposition evidence fail validation or
+  become tracked warnings;
 - error action catalog validation runs in CI;
-- source-specific draft error action catalogs exist for the M2 sources;
 - known credential, approval, rate limit, not-found, upstream, parser, and
   adapter cases have explicit actions;
 - route-disposition and verification evidence can reference action rules;
 - unknown signatures are counted instead of silently ignored.
 
-### M4: Source-Scoped Evidence
+### M4: Multi-Source Standardization
 
-Goal: stop treating all evidence as a single `data.go.kr` root report while
-preserving the current compatibility paths.
+Goal: prove the source profile contract against official public data sites
+outside data.go.kr without forcing data.go.kr-only assumptions onto them.
 
 Done when:
 
-- data.go.kr gateway and external endpoint coverage are reported separately;
-- evidence-adjusted external adapter candidates are reported;
+- `sources/kosis.json` exists;
+- `sources/ecos.json` exists;
+- `sources/open_assembly.json` exists;
+- `sources/seoul_open_data.json` exists;
+- every profile validates against `datapan.source-profile.v1`;
+- every profile has official reference URLs and `last_reviewed_at`;
+- every profile records auth, request, response, errors, and runtime policy;
 - source-scoped reports are generated under `reports/<source>/`;
 - root reports are documented as release-wide rollups;
 - CI validates source-scoped report paths where present;
 - the existing `data/data-go-kr.registry.json` compatibility path remains
   valid.
 
-### M5: Impact Plan Generation
+### M5: Client Server Impact Plans
 
-Goal: make registry changes actionable for CLI/Data/API/SDK/MCP consumers.
+Goal: make registry changes actionable for datapan-cli, datapan-api, SDK, and
+MCP consumers.
 
 Done when:
 
@@ -227,17 +232,18 @@ Use this order unless a production failure changes priority:
 3. Add data.go.kr error action catalog draft. Done in PR #4.
 4. Add evidence-adjusted external coverage summary for data.go.kr. Done in
    PR #4 as a checked-in draft artifact.
-5. Add source profile references to release draft documentation.
-6. Add hand-reviewed profiles for KOSIS, ECOS, Open Assembly, and Seoul Open
-   Data after data.go.kr profile validation is enforced.
-7. Add draft `reports/<source>/error-action-catalog.json` files for M2
+5. Generate data.go.kr source-scoped release artifacts. Tracked by Gira #5.
+6. Operationalize data.go.kr external endpoint evidence. Tracked by Gira #6.
+7. Add hand-reviewed profiles for KOSIS, ECOS, Open Assembly, and Seoul Open
+   Data. Tracked by Gira #7.
+8. Generate registry impact plans for CLI and API consumers. Tracked by Gira
+   #8.
+9. Add draft `reports/<source>/error-action-catalog.json` files for M4
    sources.
-8. Add action catalog validation to CI. Done in PR #4 for checked-in draft
+10. Add action catalog validation to CI. Done in PR #4 for checked-in draft
    catalogs.
-9. Add source reference drift report schema.
-10. Add a manual or scheduled drift-check workflow.
-11. Update `datapan-cli` to generate source-scoped reports.
-12. Update `datapan-cli` to generate registry impact plans.
+11. Add source reference drift report schema.
+12. Add a manual or scheduled drift-check workflow.
 13. Expand runtime verification evidence by source/provider priority.
 
 ## Measurement Rules

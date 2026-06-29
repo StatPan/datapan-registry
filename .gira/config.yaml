@@ -1,0 +1,31 @@
+repo: StatPan/datapan-registry
+profiles:
+  default:
+    labels:
+      - type:epic
+      - type:story
+      - type:task
+      - type:bug
+      - type:chore
+      - type:spike
+      - status:ready
+      - status:in-progress
+      - status:in-review
+      - status:blocked
+      - status:done
+      - priority:p1
+      - priority:p2
+      - area:backend
+      - area:docs
+      - area:ai
+    milestones:
+      - M1 Contract Baseline
+      - M2 data.go.kr Mastery
+      - M3 External Endpoint Coverage
+      - M4 Multi-Source Standardization
+      - M5 Client Server Impact Plans
+      - M6 Drift and Evidence Operations
+    issue_templates: []
+    review_policy:
+      required_approvals: 0
+      require_code_owners: false
