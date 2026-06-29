@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-29T09:31:15Z",
+  "generated_at": "2026-06-29T09:39:57Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 25,
+  "limit": 35,
   "truncated": true,
-  "filtered_count": 25,
+  "filtered_count": 35,
   "summary": {
-    "total": 25,
+    "total": 35,
     "verified": 0,
     "failed": 0,
-    "skipped": 25,
+    "skipped": 35,
     "unknown": 0
   },
   "results": [
@@ -370,6 +370,158 @@
       "status": "skipped",
       "reason": "missing_auth",
       "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15037521",
+      "title": "한국산업인력공단_국가자격 취득자 관련 통계 정보",
+      "operation": "학력별 자격취득자 현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15037522",
+      "title": "한국산업인력공단_국가자격 응시자격 관련 현황 데이터",
+      "operation": "실기합격자 응시자격현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "baseYY": "2023"
+      }
+    },
+    {
+      "dataset_id": "15037522",
+      "title": "한국산업인력공단_국가자격 응시자격 관련 현황 데이터",
+      "operation": "응시자격조항별 접수및합격현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15037523",
+      "title": "한국산업인력공단_국가자격 등급별 현황 정보",
+      "operation": "기술(서비스)분야 등급별 종목현황 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "baseYY": "2023"
+      }
+    },
+    {
+      "dataset_id": "15037523",
+      "title": "한국산업인력공단_국가자격 등급별 현황 정보",
+      "operation": "등급별 응시자격 검정현황 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15037523",
+      "title": "한국산업인력공단_국가자격 등급별 현황 정보",
+      "operation": "등급별 접수상위 종목현황 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15037523",
+      "title": "한국산업인력공단_국가자격 등급별 현황 정보",
+      "operation": "등급별 취득 상위종목 현황 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15037523",
+      "title": "한국산업인력공단_국가자격 등급별 현황 정보",
+      "operation": "타등급 자격취득 현황 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "baseYY": "2023"
+      }
+    },
+    {
+      "dataset_id": "15037524",
+      "title": "한국산업인력공단_국가자격 통계연보 정보",
+      "operation": "국가기술자격소지자현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "baseYY": "2023"
+      }
+    },
+    {
+      "dataset_id": "15037524",
+      "title": "한국산업인력공단_국가자격 통계연보 정보",
+      "operation": "연도별자격취득현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
       "params": {
         "baseYY": "2023",
         "numOfRows": "1",

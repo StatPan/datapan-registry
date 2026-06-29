@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-06-29T09:31:15Z",
-  "source": "/home/statpan/workspace/opensource/datapan-registry/reports/jeonju-verification.json",
+  "generated_at": "2026-06-29T09:39:57Z",
+  "source": "reports/jeonju-verification.json",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
   "limit": 20,
   "truncated": false,
   "summary": {
-    "total": 25,
+    "total": 35,
     "verified": 0,
     "failed": 5,
-    "skipped": 20,
+    "skipped": 30,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 20,
+        "count": 30,
         "status": "skipped"
       },
       {
@@ -28,7 +28,7 @@
     "by_reason": [
       {
         "key": "jeonju_missing_required_params",
-        "count": 13,
+        "count": 23,
         "reason": "jeonju_missing_required_params"
       },
       {
@@ -50,21 +50,21 @@
     "by_provider": [
       {
         "key": "jeonju",
-        "count": 25,
+        "count": 35,
         "provider": "jeonju"
       }
     ],
     "by_endpoint_host": [
       {
         "key": "openapi.jeonju.go.kr",
-        "count": 25,
+        "count": 35,
         "host": "openapi.jeonju.go.kr"
       }
     ],
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 25,
+        "count": 35,
         "kind": "external_endpoint"
       }
     ]

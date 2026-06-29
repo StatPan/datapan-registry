@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-29T09:31:15Z",
+  "generated_at": "2026-06-29T09:39:57Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 26,
+  "limit": 36,
   "truncated": true,
-  "filtered_count": 26,
+  "filtered_count": 36,
   "summary": {
-    "total": 26,
+    "total": 36,
     "verified": 2,
     "failed": 0,
-    "skipped": 24,
+    "skipped": 34,
     "unknown": 0
   },
   "results": [
@@ -456,6 +456,180 @@
         "numOfRows": "1",
         "pageNo": "1"
       }
+    },
+    {
+      "dataset_id": "3065177",
+      "title": "경상남도 거제시_교통 정보",
+      "operation": "거제시 도로전광판 표출메시지 정보 조회",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "3065177",
+      "title": "경상남도 거제시_교통 정보",
+      "operation": "거제시 차량 돌발정보 조회",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "3065177",
+      "title": "경상남도 거제시_교통 정보",
+      "operation": "거제시 차량 소통정보 조회",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "3065177",
+      "title": "경상남도 거제시_교통 정보",
+      "operation": "거제시 차량 시간별구간소통정보 조회",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "endDate": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "startDate": ""
+      },
+      "missing_params": [
+        "startDate",
+        "endDate"
+      ]
+    },
+    {
+      "dataset_id": "3065177",
+      "title": "경상남도 거제시_교통 정보",
+      "operation": "거제시 차량 월별구간소통정보 조회",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "endDate": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "startDate": ""
+      },
+      "missing_params": [
+        "startDate",
+        "endDate"
+      ]
+    },
+    {
+      "dataset_id": "3065177",
+      "title": "경상남도 거제시_교통 정보",
+      "operation": "거제시 차량 정체정보 조회",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "3065532",
+      "title": "경상남도 거제시 도서정보",
+      "operation": "거제시 도서 상세정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "geojebooksBookKey": ""
+      },
+      "missing_params": [
+        "geojebooksBookKey"
+      ]
+    },
+    {
+      "dataset_id": "3065532",
+      "title": "경상남도 거제시 도서정보",
+      "operation": "거제시 도서정보 목록",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "geojebooksAuthor": "",
+        "geojebooksPub": "",
+        "geojebooksTitle": ""
+      },
+      "missing_params": [
+        "geojebooksTitle",
+        "geojebooksAuthor",
+        "geojebooksPub"
+      ]
+    },
+    {
+      "dataset_id": "3079223",
+      "title": "경상남도 거제시_숙박업 등록현황",
+      "operation": "숙박 객실 목록 정보 서비스",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "lodgeId": ""
+      },
+      "missing_params": [
+        "lodgeId"
+      ]
+    },
+    {
+      "dataset_id": "3079223",
+      "title": "경상남도 거제시_숙박업 등록현황",
+      "operation": "숙박 목록 상세 정보 서비스",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "lodgeId": ""
+      },
+      "missing_params": [
+        "lodgeId"
+      ]
     }
   ]
 }
