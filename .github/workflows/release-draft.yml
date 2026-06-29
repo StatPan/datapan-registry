@@ -70,6 +70,16 @@ jobs:
           echo "${{ inputs.registry_path }} bytes=${bytes}"
           test "${bytes}" -gt "${{ inputs.min_registry_bytes }}"
 
+      - name: Validate source profiles
+        working-directory: datapan-registry
+        run: |
+          mkdir -p .datapan/ci
+          python3 -m venv .datapan/ci/source-profile-venv
+          . .datapan/ci/source-profile-venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install jsonschema
+          python scripts/validate-source-profiles.py
+
       - name: Select manifest path
         run: |
           if [ "${{ inputs.mode }}" = "draft-local" ]; then

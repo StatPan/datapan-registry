@@ -44,6 +44,15 @@ jobs:
           echo "data-go-kr.registry.json bytes=${bytes}"
           test "${bytes}" -gt 100000000
 
+      - name: Validate source profiles
+        working-directory: datapan-registry
+        run: |
+          python3 -m venv .datapan/ci/source-profile-venv
+          . .datapan/ci/source-profile-venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install jsonschema
+          python scripts/validate-source-profiles.py
+
       - name: Validate provider verification evidence
         working-directory: datapan-cli
         run: |

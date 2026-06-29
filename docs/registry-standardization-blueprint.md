@@ -68,6 +68,7 @@ Current strengths:
 
 - `manifest.json` provides artifact checksums for the current release.
 - `schemas/` contains versioned JSON contracts for existing release reports.
+- `sources/data_go_kr.json` validates against `datapan.source-profile.v1`.
 - `reports/coverage.json` reports high callable-operation coverage.
 - `reports/route-disposition.json` separates dead-route candidates from
   transient failures.
@@ -126,6 +127,7 @@ other official sources.
 Done when:
 
 - `sources/data_go_kr.json` exists and validates;
+- source profile validation runs in CI;
 - `docs/data-go-kr-mastery-plan.md` defines gateway and external endpoint
   coverage separately;
 - data.go.kr missing external routes are governed by route-disposition evidence
@@ -214,8 +216,8 @@ Done when:
 
 Use this order unless a production failure changes priority:
 
-1. Add and validate `sources/data_go_kr.json`.
-2. Add profile validation to CI.
+1. Add and validate `sources/data_go_kr.json`. Done in PR #4.
+2. Add profile validation to CI. Done in PR #4.
 3. Add data.go.kr error action catalog draft.
 4. Add evidence-adjusted external coverage summary for data.go.kr.
 5. Add source profile references to release draft documentation.

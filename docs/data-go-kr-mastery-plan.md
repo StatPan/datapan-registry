@@ -156,8 +156,8 @@ data.go.kr mastery should produce or preserve:
 
 ## Task Sequence
 
-1. Add and validate `sources/data_go_kr.json`.
-2. Add source profile validation to CI.
+1. Add and validate `sources/data_go_kr.json`. Done in PR #4.
+2. Add source profile validation to CI. Done in PR #4.
 3. Add a data.go.kr error action catalog draft.
 4. Connect route-disposition reasons to error/action classifications.
 5. Add an evidence-adjusted external coverage summary.

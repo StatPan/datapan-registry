@@ -66,6 +66,7 @@ Every PR should preserve or improve these gates:
 - JSON artifacts and schemas parse with `jq`.
 - GitHub workflow YAML parses.
 - `git diff --check` passes.
+- checked-in source profiles validate against `datapan.source-profile.v1`.
 - release verification remains green unless the PR explicitly changes the
   release gate and documents the migration path.
 - new schemas use versioned names and do not mutate existing generated release
