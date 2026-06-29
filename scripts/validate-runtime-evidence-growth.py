@@ -102,7 +102,7 @@ def validate_consistency(path: pathlib.Path, report: dict[str, object]) -> None:
 
     operations = int(report_coverage["operations"])
     evidence_total = int(report_evidence["total"])
-    expected_percent = round((evidence_total / operations) * 100, 2)
+    expected_percent = round((evidence_total / operations) * 100, 1)
     if report_evidence.get("coverage_percent") != expected_percent:
         raise ValueError(
             f"evidence.coverage_percent expected {expected_percent}, got {report_evidence.get('coverage_percent')}"

@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-25T05:05:17Z",
+  "generated_at": "2026-06-29T09:06:00Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 263,
+  "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
+  "limit": 283,
   "truncated": true,
-  "filtered_count": 256,
+  "filtered_count": 276,
   "summary": {
-    "total": 256,
+    "total": 276,
     "verified": 22,
     "failed": 87,
-    "skipped": 147,
+    "skipped": 167,
     "unknown": 0
   },
   "results": [
@@ -5689,6 +5689,416 @@
       "verified_at": "2026-06-25T05:02:21Z",
       "missing_params": [
         "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "15056971",
+      "title": "과학기술정보통신부 우정사업본부_우편번호 정보조회",
+      "operation": "새우편번호 정보",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "countPerPage": "1",
+        "currentPage": "1",
+        "srchwrd": ""
+      },
+      "missing_params": [
+        "srchwrd"
+      ]
+    },
+    {
+      "dataset_id": "15057018",
+      "title": "과학기술정보통신부 우정사업본부_집배구 구분코드 조회서비스",
+      "operation": "집배구 구분코드 조회서비스",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "addr": "",
+        "mailDivCd": "",
+        "zip": ""
+      },
+      "missing_params": [
+        "zip",
+        "addr",
+        "mailDivCd"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "광역시/도 조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-29T09:02:46Z"
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "도로명목록조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "cityEngName": "",
+        "roadEngFirstName": "",
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName",
+        "cityEngName",
+        "roadEngFirstName"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "도로명주소검색",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "cityEngName": "",
+        "countPerPage": "1",
+        "currentPage": "1",
+        "keyword": "",
+        "roadEngFirstName": "",
+        "roadEngName": "",
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName",
+        "cityEngName",
+        "roadEngFirstName",
+        "roadEngName",
+        "keyword"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "도로명첫자조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "cityEngName": "",
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName",
+        "cityEngName"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "시/군/구 조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "읍면동목록조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "cityEngName": "",
+        "districtEngFirstName": "",
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName",
+        "cityEngName",
+        "districtEngFirstName"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "읍면동첫자조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "cityEngName": "",
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName",
+        "cityEngName"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "지번주소검색",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "cityEngName": "",
+        "countPerPage": "1",
+        "currentPage": "1",
+        "districtEngFirstName": "",
+        "districtEngName": "",
+        "keyword": "",
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName",
+        "cityEngName",
+        "districtEngFirstName",
+        "districtEngName",
+        "keyword"
+      ]
+    },
+    {
+      "dataset_id": "3057770",
+      "title": "울산광역시 교통정보",
+      "operation": "AVNI통행패턴(동별)",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "basicDay": "",
+        "dongnm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "dongnm",
+        "basicDay"
+      ]
+    },
+    {
+      "dataset_id": "3057770",
+      "title": "울산광역시 교통정보",
+      "operation": "DSRC통행패턴(동별)",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "basicDay": "",
+        "dongnm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "dongnm",
+        "basicDay"
+      ]
+    },
+    {
+      "dataset_id": "3057770",
+      "title": "울산광역시 교통정보",
+      "operation": "가로별 버스 승하차 정보",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "BasicDay": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "roadnm": ""
+      },
+      "missing_params": [
+        "roadnm",
+        "BasicDay"
+      ]
+    },
+    {
+      "dataset_id": "3057770",
+      "title": "울산광역시 교통정보",
+      "operation": "가로별 정기 교통량",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "basicYear": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "streetName": ""
+      },
+      "missing_params": [
+        "streetName",
+        "basicYear"
+      ]
+    },
+    {
+      "dataset_id": "3057770",
+      "title": "울산광역시 교통정보",
+      "operation": "가로별 정기 통행속도",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "basicYear": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "streetName": ""
+      },
+      "missing_params": [
+        "streetName",
+        "basicYear"
+      ]
+    },
+    {
+      "dataset_id": "3057770",
+      "title": "울산광역시 교통정보",
+      "operation": "노선별 버스 승하차정보",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "basicDay": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "routeNo": ""
+      },
+      "missing_params": [
+        "routeNo",
+        "basicDay"
+      ]
+    },
+    {
+      "dataset_id": "3057770",
+      "title": "울산광역시 교통정보",
+      "operation": "버스통행패턴(동별)",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "basicDay": "",
+        "dongnm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "dongnm",
+        "basicDay"
+      ]
+    },
+    {
+      "dataset_id": "3057770",
+      "title": "울산광역시 교통정보",
+      "operation": "정류장별 버스 승하차정보",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "basicDay": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "stopName": ""
+      },
+      "missing_params": [
+        "stopName",
+        "basicDay"
+      ]
+    },
+    {
+      "dataset_id": "3057770",
+      "title": "울산광역시 교통정보",
+      "operation": "지역별 버스 승하차 정보",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "basicDay": "",
+        "dongnm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "dongnm",
+        "basicDay"
+      ]
+    },
+    {
+      "dataset_id": "3057773",
+      "title": "울산광역시 교통시스템 정보",
+      "operation": "구간레벨3 정보 조회",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "roadnm": ""
+      },
+      "missing_params": [
+        "roadnm"
       ]
     }
   ]

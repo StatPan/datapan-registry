@@ -1,34 +1,33 @@
 {
-  "generated_at": "2026-06-25T00:06:29Z",
-  "source": "C:\\workspace\\datapan-registry\\reports\\ulsan-verification.json",
+  "generated_at": "2026-06-29T09:04:28Z",
+  "source": "/home/statpan/workspace/opensource/datapan-registry/reports/ulsan-verification.json",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 20,
   "truncated": false,
   "summary": {
-    "total": 6,
+    "total": 16,
     "verified": 0,
     "failed": 3,
-    "skipped": 3,
+    "skipped": 13,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
+        "key": "skipped",
+        "count": 13,
+        "status": "skipped"
+      },
+      {
         "key": "failed",
         "count": 3,
         "status": "failed"
-      },
-      {
-        "key": "skipped",
-        "count": 3,
-        "status": "skipped"
       }
     ],
     "by_reason": [
       {
         "key": "ulsan_missing_required_params",
-        "count": 3,
+        "count": 13,
         "reason": "ulsan_missing_required_params"
       },
       {
@@ -40,21 +39,21 @@
     "by_provider": [
       {
         "key": "ulsan",
-        "count": 6,
+        "count": 16,
         "provider": "ulsan"
       }
     ],
     "by_endpoint_host": [
       {
         "key": "openapi.its.ulsan.kr",
-        "count": 6,
+        "count": 16,
         "host": "openapi.its.ulsan.kr"
       }
     ],
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 6,
+        "count": 16,
         "kind": "external_endpoint"
       }
     ]

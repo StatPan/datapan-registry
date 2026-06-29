@@ -1,20 +1,14 @@
 {
-  "generated_at": "2026-06-25T00:06:29Z",
+  "generated_at": "2026-06-29T09:04:28Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 6,
-  "timeout": "8s",
+  "limit": 16,
   "truncated": true,
-  "filters": {
-    "provider": "ulsan",
-    "kind": "external_endpoint"
-  },
-  "filtered_count": 6,
+  "filtered_count": 16,
   "summary": {
-    "total": 6,
+    "total": 16,
     "verified": 0,
     "failed": 3,
-    "skipped": 3,
+    "skipped": 13,
     "unknown": 0
   },
   "results": [
@@ -151,6 +145,214 @@
         "pageNo": "1"
       },
       "body_shape": "xml_error"
+    },
+    {
+      "dataset_id": "3057770",
+      "title": "울산광역시 교통정보",
+      "operation": "AVNI통행패턴(동별)",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "basicDay": "",
+        "dongnm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "dongnm",
+        "basicDay"
+      ]
+    },
+    {
+      "dataset_id": "3057770",
+      "title": "울산광역시 교통정보",
+      "operation": "DSRC통행패턴(동별)",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "basicDay": "",
+        "dongnm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "dongnm",
+        "basicDay"
+      ]
+    },
+    {
+      "dataset_id": "3057770",
+      "title": "울산광역시 교통정보",
+      "operation": "가로별 버스 승하차 정보",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "BasicDay": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "roadnm": ""
+      },
+      "missing_params": [
+        "roadnm",
+        "BasicDay"
+      ]
+    },
+    {
+      "dataset_id": "3057770",
+      "title": "울산광역시 교통정보",
+      "operation": "가로별 정기 교통량",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "basicYear": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "streetName": ""
+      },
+      "missing_params": [
+        "streetName",
+        "basicYear"
+      ]
+    },
+    {
+      "dataset_id": "3057770",
+      "title": "울산광역시 교통정보",
+      "operation": "가로별 정기 통행속도",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "basicYear": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "streetName": ""
+      },
+      "missing_params": [
+        "streetName",
+        "basicYear"
+      ]
+    },
+    {
+      "dataset_id": "3057770",
+      "title": "울산광역시 교통정보",
+      "operation": "노선별 버스 승하차정보",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "basicDay": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "routeNo": ""
+      },
+      "missing_params": [
+        "routeNo",
+        "basicDay"
+      ]
+    },
+    {
+      "dataset_id": "3057770",
+      "title": "울산광역시 교통정보",
+      "operation": "버스통행패턴(동별)",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "basicDay": "",
+        "dongnm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "dongnm",
+        "basicDay"
+      ]
+    },
+    {
+      "dataset_id": "3057770",
+      "title": "울산광역시 교통정보",
+      "operation": "정류장별 버스 승하차정보",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "basicDay": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "stopName": ""
+      },
+      "missing_params": [
+        "stopName",
+        "basicDay"
+      ]
+    },
+    {
+      "dataset_id": "3057770",
+      "title": "울산광역시 교통정보",
+      "operation": "지역별 버스 승하차 정보",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "basicDay": "",
+        "dongnm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "dongnm",
+        "basicDay"
+      ]
+    },
+    {
+      "dataset_id": "3057773",
+      "title": "울산광역시 교통시스템 정보",
+      "operation": "구간레벨3 정보 조회",
+      "provider": "ulsan",
+      "endpoint_host": "openapi.its.ulsan.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ulsan_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "roadnm": ""
+      },
+      "missing_params": [
+        "roadnm"
+      ]
     }
   ]
 }
