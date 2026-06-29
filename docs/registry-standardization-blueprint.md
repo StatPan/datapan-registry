@@ -85,6 +85,9 @@ Current strengths:
   hints for the current data.go.kr registry-only changes.
 - `reports/source-reference-drift.json` validates a manual baseline for
   official source references from every checked-in source profile.
+- `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
+  evidence against the 10% target and validates the next planned verification
+  batches.
 - `reports/coverage.json` reports high callable-operation coverage.
 - `reports/route-disposition.json` separates dead-route candidates from
   transient failures.
@@ -234,6 +237,8 @@ Done when:
 - live source reference drift checks run outside ordinary PR validation so
   external site outages are visible health failures without making every PR
   nondeterministic;
+- data.go.kr runtime evidence growth is measured by a checked-in source-scoped
+  report before additional verification batches are executed;
 - data.go.kr runtime evidence coverage trends toward the documented `10%`
   target;
 - external adapter coverage trends toward the documented `98%` target;
@@ -273,7 +278,8 @@ Use this order unless a production failure changes priority:
 11. Add source reference drift report schema and manual baseline. Tracked by
     Gira #11.
 12. Add a manual or scheduled drift-check workflow. Tracked by Gira #13.
-13. Expand runtime verification evidence by source/provider priority.
+13. Add a data.go.kr runtime evidence growth summary. Tracked by Gira #15.
+14. Expand runtime verification evidence by source/provider priority.
 
 ## Measurement Rules
 

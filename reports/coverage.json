@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-06-25T06:23:03Z",
+  "generated_at": "2026-06-29T08:46:08Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "registry": "/home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json",
   "source": "release",
-  "verification": "C:\\workspace\\datapan-registry\\reports\\latest-verification.json",
-  "route_disposition": "C:\\workspace\\datapan-registry\\reports\\route-disposition.json",
+  "verification": "/home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json",
+  "route_disposition": "/home/statpan/workspace/opensource/datapan-registry/reports/route-disposition.json",
   "summary": {
     "specs": 12060,
     "operations": 12205,
@@ -52,7 +52,7 @@
   },
   "route_evidence": {
     "present": true,
-    "report": "C:\\workspace\\datapan-registry\\reports\\route-disposition.json",
+    "report": "/home/statpan/workspace/opensource/datapan-registry/reports/route-disposition.json",
     "routes_total": 28,
     "with_probe_evidence": 28,
     "dead_route_candidates": 14,
@@ -381,8 +381,8 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-06-25T06:23:03Z",
-    "datapan_version": "v0.1.29",
+    "generated_at": "2026-06-29T08:46:08Z",
+    "datapan_version": "0.1.0-dev",
     "adapter_count": 26,
     "host_count": 30,
     "adapters": [
@@ -688,19 +688,19 @@
   "next": [
     {
       "label": "missing adapters",
-      "command": "datapan providers --registry C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json --gaps --limit 20 --json"
+      "command": "datapan providers --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --gaps --limit 20 --json"
     },
     {
       "label": "adapter targets",
-      "command": "datapan targets --registry C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json --limit 20 --json"
+      "command": "datapan targets --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --limit 20 --json"
     },
     {
       "label": "coverage report",
-      "command": "datapan coverage --registry C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json --verification C:\\workspace\\datapan-registry\\reports\\latest-verification.json --route-disposition C:\\workspace\\datapan-registry\\reports\\route-disposition.json --json"
+      "command": "datapan coverage --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --verification /home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json --route-disposition /home/statpan/workspace/opensource/datapan-registry/reports/route-disposition.json --json"
     },
     {
       "label": "verify forest",
-      "command": "datapan verify --registry C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json --provider forest --kind external_endpoint --limit 4 --timeout 10s --json"
+      "command": "datapan verify --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --provider forest --kind external_endpoint --limit 4 --timeout 10s --json"
     }
   ]
 }
