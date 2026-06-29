@@ -9,6 +9,11 @@ This blueprint is the planning layer above the individual schemas and reports.
 Every registry PR should be able to explain which gap in this document it
 reduces.
 
+Use `docs/registry-governance-policy.md` as the policy layer for gap statements,
+quality gates, naming, warning handling, and client/server integration
+boundaries. A milestone is not complete if it reaches the artifact checklist
+while violating that policy.
+
 ## North Star
 
 For every supported public data source, Datapan should be able to answer:
@@ -211,6 +216,14 @@ Avoid "support more sources" as a task description. Prefer "add validated
 source profiles for KOSIS and ECOS" or "classify ECOS credential and not-found
 errors".
 
+Every non-trivial PR should include a short gap statement in its description:
+
+- milestone targeted;
+- gap reduced;
+- artifact or gate changed;
+- metric changed or expected to change;
+- warnings introduced, resolved, or explicitly tracked.
+
 ## Decision Rules
 
 - Do not add a source importer before a source profile exists.
@@ -223,6 +236,7 @@ errors".
   provider boundary.
 - Do not update `manifest.json` or `schemas/index.json` by hand for generated
   release artifacts.
+- Do not treat a warning as harmless merely because the workflow succeeds.
 
 ## Review Cadence
 

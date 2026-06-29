@@ -5,6 +5,8 @@
 Release work should follow the standardization milestones in
 `docs/registry-standardization-blueprint.md`; generated artifact updates should
 identify which measured gap they reduce.
+Release PRs should also satisfy `docs/registry-governance-policy.md`, including
+warning handling and generated-artifact rules.
 
 ## Inputs
 

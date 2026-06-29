@@ -15,6 +15,8 @@ API, SDK, MCP, and provider adapter repositories.
 
 Use `docs/registry-standardization-blueprint.md` as the planning document for
 target architecture, gap measurement, milestones, and task sequencing.
+Use `docs/registry-governance-policy.md` as the quality and review policy for
+each step toward that blueprint.
 
 ## Current Contract Layers
 
