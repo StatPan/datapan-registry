@@ -1,15 +1,20 @@
 {
-  "generated_at": "2026-06-29T14:04:01Z",
+  "generated_at": "2026-06-29T14:13:44Z",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
-  "limit": 55,
-  "truncated": true,
-  "filtered_count": 55,
+  "limit": 0,
+  "timeout": "10s",
+  "truncated": false,
+  "filters": {
+    "provider": "jeonju",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 65,
   "summary": {
-    "total": 55,
+    "total": 65,
     "verified": 0,
     "failed": 5,
-    "skipped": 50,
+    "skipped": 60,
     "unknown": 0
   },
   "results": [
@@ -55,7 +60,7 @@
       "verified_at": "2026-06-24T15:18:45Z",
       "http_status": 404,
       "semantic_status": "http_error",
-      "url": "http://openapi.jeonju.go.kr/jeonjubus/openApi/traffic?ServiceKey=REDACTED\u0026loadResult=%EB%B0%B1%EC%A0%9C%EB%8C%80%EB%A1%9C",
+      "url": "http://openapi.jeonju.go.kr/jeonjubus/openApi/traffic?ServiceKey=REDACTED&loadResult=%EB%B0%B1%EC%A0%9C%EB%8C%80%EB%A1%9C",
       "params": {
         "loadResult": "백제대로"
       },
@@ -73,7 +78,7 @@
       "verified_at": "2026-06-24T15:18:45Z",
       "http_status": 405,
       "semantic_status": "http_error",
-      "url": "http://openapi.jeonju.go.kr/rest/work?indexNum=1\u0026pageSize=1\u0026serviceKey=REDACTED\u0026startPage=1\u0026subject=",
+      "url": "http://openapi.jeonju.go.kr/rest/work?indexNum=1&pageSize=1&serviceKey=REDACTED&startPage=1&subject=",
       "params": {
         "indexNum": "1",
         "pageSize": "1",
@@ -94,7 +99,7 @@
       "verified_at": "2026-06-24T15:18:45Z",
       "http_status": 405,
       "semantic_status": "http_error",
-      "url": "http://openapi.jeonju.go.kr/rest/work?dong=%EC%A4%91%EC%95%99%EB%8F%99\u0026serviceKey=REDACTED",
+      "url": "http://openapi.jeonju.go.kr/rest/work?dong=%EC%A4%91%EC%95%99%EB%8F%99&serviceKey=REDACTED",
       "params": {
         "dong": "중앙동"
       },
@@ -1073,6 +1078,207 @@
       "status": "skipped",
       "reason": "jeonju_missing_required_params",
       "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3045532",
+      "title": "전북특별자치도 전주시_어린이집 현황",
+      "operation": "어린이집 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "chidAddr": "",
+        "chidGubun": "",
+        "chidName": "",
+        "chidSid": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "chidSid",
+        "chidName",
+        "chidGubun",
+        "chidAddr"
+      ]
+    },
+    {
+      "dataset_id": "3045535",
+      "title": "전북특별자치도 전주시_병의원, 약국정보",
+      "operation": "병원.약국 정보 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "mediAddr": "",
+        "mediCdt": "",
+        "mediIsEmergency": "",
+        "mediIsHoliday": "",
+        "mediName": "",
+        "mediSid": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "mediAddr",
+        "mediSid",
+        "mediName",
+        "mediCdt",
+        "mediIsEmergency",
+        "mediIsHoliday"
+      ]
+    },
+    {
+      "dataset_id": "3045535",
+      "title": "전북특별자치도 전주시_병의원, 약국정보",
+      "operation": "병원.약국 현재위치 거리 정보",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "pageSize": "1",
+        "posx": "127.1480",
+        "posy": "35.8242",
+        "searchDts": "1000",
+        "startPage": "1"
+      }
+    },
+    {
+      "dataset_id": "3045544",
+      "title": "전북특별자치도 전주시_복지서비스",
+      "operation": "보건복지 서비스 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "dataValue": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "typeCode": "",
+        "typeCode2": ""
+      },
+      "missing_params": [
+        "dataValue",
+        "typeCode",
+        "typeCode2"
+      ]
+    },
+    {
+      "dataset_id": "3069041",
+      "title": "전북특별자치도 전주시_한옥숙박정보",
+      "operation": "한옥마을숙박정보 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "dataValue": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue"
+      ]
+    },
+    {
+      "dataset_id": "3069041",
+      "title": "전북특별자치도 전주시_한옥숙박정보",
+      "operation": "한옥마을숙박정보 상세보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3069041",
+      "title": "전북특별자치도 전주시_한옥숙박정보",
+      "operation": "한옥마을숙박정보 이미지보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3069053",
+      "title": "전북특별자치도 전주시_무형문화재",
+      "operation": "무형문화재 검색 서비스 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "dataValue": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue"
+      ]
+    },
+    {
+      "dataset_id": "3069053",
+      "title": "전북특별자치도 전주시_무형문화재",
+      "operation": "무형문화재 검색 서비스 상세보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3069053",
+      "title": "전북특별자치도 전주시_무형문화재",
+      "operation": "무형문화재 검색 서비스 이미지 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:11:31Z",
       "params": {
         "dataSid": ""
       },

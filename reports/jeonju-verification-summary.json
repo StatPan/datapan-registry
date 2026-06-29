@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-06-29T14:04:01Z",
+  "generated_at": "2026-06-29T14:13:44Z",
   "source": "reports\\jeonju-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 20,
   "truncated": false,
   "summary": {
-    "total": 55,
+    "total": 65,
     "verified": 0,
     "failed": 5,
-    "skipped": 50,
+    "skipped": 60,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 50,
+        "count": 60,
         "status": "skipped"
       },
       {
@@ -28,12 +28,12 @@
     "by_reason": [
       {
         "key": "jeonju_missing_required_params",
-        "count": 43,
+        "count": 52,
         "reason": "jeonju_missing_required_params"
       },
       {
         "key": "missing_auth",
-        "count": 7,
+        "count": 8,
         "reason": "missing_auth"
       },
       {
@@ -50,21 +50,21 @@
     "by_provider": [
       {
         "key": "jeonju",
-        "count": 55,
+        "count": 65,
         "provider": "jeonju"
       }
     ],
     "by_endpoint_host": [
       {
         "key": "openapi.jeonju.go.kr",
-        "count": 55,
+        "count": 65,
         "host": "openapi.jeonju.go.kr"
       }
     ],
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 55,
+        "count": 65,
         "kind": "external_endpoint"
       }
     ]

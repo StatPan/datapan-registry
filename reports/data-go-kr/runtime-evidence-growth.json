@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-06-29T14:04:12Z",
+  "generated_at": "2026-06-29T14:15:08Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -21,12 +21,12 @@
     "call_capable_adapters": 21
   },
   "evidence": {
-    "total": 519,
+    "total": 539,
     "verified": 22,
     "failed": 87,
-    "skipped": 410,
+    "skipped": 430,
     "unknown": 0,
-    "coverage_percent": 4.3,
+    "coverage_percent": 4.4,
     "by_kind": [
       {
         "key": "data_go_kr_gateway",
@@ -34,7 +34,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 460
+        "count": 480
       },
       {
         "key": "service_root",
@@ -45,14 +45,14 @@
   "growth_target": {
     "target_percent": 10,
     "target_evidence_total": 1221,
-    "remaining_to_target": 702,
+    "remaining_to_target": 682,
     "status": "below_target"
   },
   "verification_plan": {
     "planned_batches": 3,
     "planned_operations": 30,
     "uncovered_gateway_candidates": 11379,
-    "uncovered_adapter_candidates": 107,
+    "uncovered_adapter_candidates": 87,
     "missing_adapter_hosts": 10,
     "planned_by_kind": [
       {
@@ -78,7 +78,7 @@
         "provider": "jeonju",
         "kind": "external_endpoint",
         "candidates": 80,
-        "uncovered_candidates": 25,
+        "uncovered_candidates": 15,
         "planned_operations": 10,
         "output": ".datapan/verification/jeonju-next.json"
       },
@@ -87,7 +87,7 @@
         "provider": "q-net",
         "kind": "external_endpoint",
         "candidates": 147,
-        "uncovered_candidates": 82,
+        "uncovered_candidates": 72,
         "planned_operations": 10,
         "output": ".datapan/verification/q-net-next.json"
       }
@@ -103,7 +103,7 @@
     {
       "kind": "runtime_evidence_below_target",
       "severity": "warning",
-      "message": "Runtime evidence coverage is 4.3% against the 10.0% target; 702 additional evidence records are needed before this target is met."
+      "message": "Runtime evidence coverage is 4.4% against the 10.0% target; 682 additional evidence records are needed before this target is met."
     }
   ]
 }

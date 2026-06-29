@@ -1,23 +1,33 @@
 {
-  "generated_at": "2026-06-29T14:04:01Z",
+  "generated_at": "2026-06-29T14:13:44Z",
   "source": "reports\\qnet-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 20,
   "truncated": false,
   "summary": {
-    "total": 55,
-    "verified": 0,
-    "failed": 0,
-    "skipped": 55,
+    "total": 75,
+    "verified": 5,
+    "failed": 1,
+    "skipped": 69,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 55,
+        "count": 69,
         "status": "skipped"
+      },
+      {
+        "key": "verified",
+        "count": 5,
+        "status": "verified"
+      },
+      {
+        "key": "failed",
+        "count": 1,
+        "status": "failed"
       }
     ],
     "by_reason": [
@@ -27,44 +37,49 @@
         "reason": "missing_auth"
       },
       {
+        "key": "qnet_separate_service_key_required",
+        "count": 19,
+        "reason": "qnet_separate_service_key_required"
+      },
+      {
         "key": "qnet_missing_required_params",
         "count": 9,
         "reason": "qnet_missing_required_params"
       },
       {
-        "key": "qnet_separate_service_key_required",
+        "key": "qnet_wadl_metadata_only",
         "count": 9,
-        "reason": "qnet_separate_service_key_required"
+        "reason": "qnet_wadl_metadata_only"
       },
       {
-        "key": "qnet_wadl_metadata_only",
-        "count": 5,
-        "reason": "qnet_wadl_metadata_only"
+        "key": "qnet_connection_validation_failed",
+        "count": 1,
+        "reason": "qnet_connection_validation_failed"
       }
     ],
     "by_provider": [
       {
         "key": "q-net",
-        "count": 55,
+        "count": 75,
         "provider": "q-net"
       }
     ],
     "by_endpoint_host": [
       {
         "key": "openapi.q-net.or.kr",
-        "count": 46,
+        "count": 56,
         "host": "openapi.q-net.or.kr"
       },
       {
         "key": "c.q-net.or.kr",
-        "count": 9,
+        "count": 19,
         "host": "c.q-net.or.kr"
       }
     ],
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 55,
+        "count": 75,
         "kind": "external_endpoint"
       }
     ]
