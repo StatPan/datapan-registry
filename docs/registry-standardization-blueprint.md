@@ -83,6 +83,8 @@ Current strengths:
   adapter coverage from evidence-adjusted adapter candidates.
 - `reports/data-go-kr/registry-impact-plan.json` validates downstream action
   hints for the current data.go.kr registry-only changes.
+- `reports/source-reference-drift.json` validates a manual baseline for
+  official source references from every checked-in source profile.
 - `reports/coverage.json` reports high callable-operation coverage.
 - `reports/route-disposition.json` separates dead-route candidates from
   transient failures.
@@ -104,7 +106,9 @@ Current gaps:
 - Multi-source report grouping is designed but not implemented.
 - Impact plans are specified and a data.go.kr draft plan is checked in, but
   full `datapan-cli` generation is not implemented.
-- Drift checks for official source documentation are not implemented.
+- Live drift checks for official source documentation are not implemented, but
+  checked-in source reference baselines are now validated against source
+  profiles.
 
 ## Gap Matrix
 
@@ -118,7 +122,7 @@ Current gaps:
 | Multi-source layout | root `data/` and `reports/` | source-scoped reports plus root rollups | source-scoped artifact count and release rollup coverage |
 | Runtime confidence | `latest-verification.json` | scheduled source/provider verification matrix | evidence coverage percentage and provider pass/fail trend |
 | Downstream impact | draft data.go.kr impact plan plus human review | generated `reports/registry-impact-plan.json` rollup | changes with explicit downstream action hints |
-| Drift monitoring | weekly release health | source reference drift reports | official reference URLs checked and classified |
+| Drift monitoring | manual source reference baseline | source reference drift reports plus scheduled checks | official reference URLs checked and classified |
 
 ## Milestones
 
@@ -223,6 +227,8 @@ Goal: move from release-time confidence to ongoing registry health.
 Done when:
 
 - official reference drift reports exist;
+- source profile reference changes fail CI unless the drift baseline is
+  refreshed;
 - scheduled health checks include source reference drift and provider runtime
   verification;
 - data.go.kr runtime evidence coverage trends toward the documented `10%`
@@ -261,7 +267,8 @@ Use this order unless a production failure changes priority:
    sources. Tracked by Gira #9.
 10. Add action catalog validation to CI. Done in PR #4 for checked-in draft
    catalogs.
-11. Add source reference drift report schema.
+11. Add source reference drift report schema and manual baseline. Tracked by
+    Gira #11.
 12. Add a manual or scheduled drift-check workflow.
 13. Expand runtime verification evidence by source/provider priority.
 
