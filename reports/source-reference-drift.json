@@ -44,7 +44,7 @@
         },
         {
           "kind": "notice_url",
-          "url": "https://www.data.go.kr/bbs/ntc/selectNoticeList.do",
+          "url": "https://www.data.go.kr/bbs/ntc/selectNoticeListView.do",
           "reviewed_at": "2026-06-29",
           "check_mode": "manual_review",
           "drift_status": "baseline",
@@ -184,7 +184,7 @@
         },
         {
           "kind": "notice_url",
-          "url": "https://data.seoul.go.kr/together/notice/list.do",
+          "url": "https://data.seoul.go.kr/together/notice/boardList.do",
           "reviewed_at": "2026-06-29",
           "check_mode": "manual_review",
           "drift_status": "baseline",
@@ -192,7 +192,7 @@
         },
         {
           "kind": "terms_url",
-          "url": "https://data.seoul.go.kr/together/guide/terms.do",
+          "url": "https://data.seoul.go.kr/etc/accessTerms.do",
           "reviewed_at": "2026-06-29",
           "check_mode": "manual_review",
           "drift_status": "baseline",
