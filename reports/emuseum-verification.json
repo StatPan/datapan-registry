@@ -1,20 +1,14 @@
 {
-  "generated_at": "2026-06-25T04:44:53Z",
+  "generated_at": "2026-06-29T09:23:10Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 3,
-  "timeout": "20s",
+  "limit": 6,
   "truncated": false,
-  "filters": {
-    "provider": "emuseum",
-    "kind": "external_endpoint"
-  },
-  "filtered_count": 3,
+  "filtered_count": 6,
   "summary": {
-    "total": 3,
+    "total": 6,
     "verified": 0,
     "failed": 1,
-    "skipped": 2,
+    "skipped": 5,
     "unknown": 0
   },
   "results": [
@@ -71,6 +65,57 @@
       "status": "skipped",
       "reason": "emuseum_missing_required_params",
       "verified_at": "2026-06-25T04:44:53Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "parentCode"
+      ]
+    },
+    {
+      "dataset_id": "3036708",
+      "title": "문화체육관광부 국립중앙박물관_전국 박물관 유물정보",
+      "operation": "소장품 목록 조회",
+      "provider": "emuseum",
+      "endpoint_host": "www.emuseum.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:22:07Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "3036708",
+      "title": "문화체육관광부 국립중앙박물관_전국 박물관 유물정보",
+      "operation": "소장품 상세 조회",
+      "provider": "emuseum",
+      "endpoint_host": "www.emuseum.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "emuseum_missing_required_params",
+      "verified_at": "2026-06-29T09:22:07Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "id"
+      ]
+    },
+    {
+      "dataset_id": "3036708",
+      "title": "문화체육관광부 국립중앙박물관_전국 박물관 유물정보",
+      "operation": "코드 목록 조회",
+      "provider": "emuseum",
+      "endpoint_host": "www.emuseum.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "emuseum_missing_required_params",
+      "verified_at": "2026-06-29T09:22:07Z",
       "params": {
         "numOfRows": "1",
         "pageNo": "1"

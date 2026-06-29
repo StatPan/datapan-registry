@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-29T09:17:30Z",
+  "generated_at": "2026-06-29T09:24:10Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json",
   "source": "release",
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-06-29T09:17:01Z",
-    "total": 316,
+    "generated_at": "2026-06-29T09:23:42Z",
+    "total": 346,
     "verified": 22,
     "failed": 87,
-    "skipped": 207,
+    "skipped": 237,
     "unknown": 0,
-    "verified_percent": 7,
-    "evidence_operation_percent": 2.6
+    "verified_percent": 6.4,
+    "evidence_operation_percent": 2.8
   },
   "route_evidence": {
     "present": true,
@@ -381,7 +381,7 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-06-29T09:17:30Z",
+    "generated_at": "2026-06-29T09:24:10Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 26,
     "host_count": 30,

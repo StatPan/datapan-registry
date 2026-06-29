@@ -1,20 +1,14 @@
 {
-  "generated_at": "2026-06-24T23:32:13Z",
+  "generated_at": "2026-06-29T09:23:10Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 6,
-  "timeout": "8s",
+  "limit": 16,
   "truncated": true,
-  "filters": {
-    "provider": "uiryeong",
-    "kind": "external_endpoint"
-  },
-  "filtered_count": 6,
+  "filtered_count": 16,
   "summary": {
-    "total": 6,
+    "total": 16,
     "verified": 0,
     "failed": 6,
-    "skipped": 0,
+    "skipped": 10,
     "unknown": 0
   },
   "results": [
@@ -167,6 +161,156 @@
         "pageNo": "1"
       },
       "body_shape": "xml_status"
+    },
+    {
+      "dataset_id": "15008909",
+      "title": "경상남도 의령군_민박/펜션업소",
+      "operation": "민박/펜션업소 사진",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:22:07Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "uiryeongstayEntId": ""
+      },
+      "missing_params": [
+        "uiryeongstayEntId"
+      ]
+    },
+    {
+      "dataset_id": "15008921",
+      "title": "경상남도 의령군_농어촌체험마을",
+      "operation": "농어촌체험마을 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:22:07Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15017664",
+      "title": "경상남도 의령군_체육시설",
+      "operation": "체육시설 상세정보",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:22:07Z",
+      "params": {
+        "uiryeongphysicalEntId": ""
+      },
+      "missing_params": [
+        "uiryeongphysicalEntId"
+      ]
+    },
+    {
+      "dataset_id": "15017664",
+      "title": "경상남도 의령군_체육시설",
+      "operation": "체육시설 현황 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:22:07Z"
+    },
+    {
+      "dataset_id": "15017665",
+      "title": "경상남도 의령군_의료기관",
+      "operation": "의료기관 상세정보",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:22:07Z",
+      "params": {
+        "uiryeonghospitalEntId": ""
+      },
+      "missing_params": [
+        "uiryeonghospitalEntId"
+      ]
+    },
+    {
+      "dataset_id": "15017665",
+      "title": "경상남도 의령군_의료기관",
+      "operation": "의료기관 현황 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:22:07Z"
+    },
+    {
+      "dataset_id": "15017666",
+      "title": "경상남도_의령군_자동차정비업체",
+      "operation": "운송/정비사업체 현황 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:22:07Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15017667",
+      "title": "경상남도 의령군_주유소/LPG",
+      "operation": "주유소/LPG충전소 현황 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:22:07Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15053067",
+      "title": "경상남도 의령군_여관모텔",
+      "operation": "여관모텔 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:22:07Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15056736",
+      "title": "경상남도 의령군_여성복지시설",
+      "operation": "여성복지시설 현황 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:22:07Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
     }
   ]
 }
