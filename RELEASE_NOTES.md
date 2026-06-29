@@ -1,10 +1,10 @@
 # Datapan Registry Release
 
-- generated_at: `2026-06-25T06:22:58Z`
+- generated_at: `2026-06-29T08:46:04Z`
 - provider: `data.go.kr`
-- datapan_version: `v0.1.29`
-- source_registry: `C:\workspace\datapan-registry\data\data-go-kr.registry.json`
-- previous_registry: `C:\workspace\datapan-registry\.datapan\previous\data-go-kr.registry.json`
+- datapan_version: `0.1.0-dev`
+- source_registry: `/home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json`
+- previous_registry: `/home/statpan/workspace/opensource/datapan-registry/.datapan/previous/data-go-kr.registry.json`
 - release_manifest: `manifest.json`
 
 ## Registry
@@ -29,6 +29,9 @@
 - coverage_goals: callable `99%`, external adapters `98%`, verification evidence `10%`, call-capable adapters `25`, missing-adapter operations `<=10`
 - verification_plan: `9` batches, `83` planned operations, `11409` gateway gaps, `340` adapter gaps
 - verification_plan_artifact: `reports/verification-plan.json`
+- runtime_evidence_growth: `2.1%` coverage, target `10.0%`, remaining `965`, status `below_target`
+- runtime_evidence_growth_artifact: `reports/data-go-kr/runtime-evidence-growth.json`
+- runtime_evidence_warning: `warning` `runtime_evidence_below_target`
 
 Top adapter targets:
 

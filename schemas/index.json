@@ -1,8 +1,8 @@
 {
   "schema_version": "datapan.schema-index.v1",
-  "generated_at": "2026-06-25T06:22:58Z",
-  "datapan_version": "v0.1.29",
-  "count": 19,
+  "generated_at": "2026-06-29T08:46:04Z",
+  "datapan_version": "0.1.0-dev",
+  "count": 20,
   "schemas": [
     {
       "path": "schemas/datapan.specs.v1.schema.json",
@@ -86,13 +86,22 @@
       "sha256": "99f85d8e10d20c759df43ac42a15346f78dde3e199c61f6488a6086f49a4b936"
     },
     {
+      "path": "schemas/datapan.runtime-evidence-growth.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.runtime-evidence-growth.v1.schema.json",
+      "title": "Datapan Runtime Evidence Growth v1",
+      "contract": "runtime-evidence-growth",
+      "version": "v1",
+      "bytes": 7881,
+      "sha256": "8dbbcf9ad65c62fb253de6724709116fdfa5504d5a46334428baacaf87457b52"
+    },
+    {
       "path": "schemas/datapan.release-manifest.v1.schema.json",
       "id": "https://schemas.datapan.dev/datapan.release-manifest.v1.schema.json",
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 2352,
-      "sha256": "c258291f913f9fe9844fe9987c9180d1949c6f55cac47a45efcac6157afc2a65"
+      "bytes": 2391,
+      "sha256": "65b00ba5de25c7b382bd08baf4fe4ce0bea2ef2033a7a6e7c02e33a2a5ce84f0"
     },
     {
       "path": "schemas/datapan.release-verification.v1.schema.json",
