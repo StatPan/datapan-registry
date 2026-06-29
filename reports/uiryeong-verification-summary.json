@@ -1,21 +1,22 @@
 {
-  "generated_at": "2026-06-29T09:23:10Z",
+  "generated_at": "2026-06-29T09:31:16Z",
   "source": "/home/statpan/workspace/opensource/datapan-registry/reports/uiryeong-verification.json",
   "provider": "data.go.kr",
+  "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
   "limit": 20,
   "truncated": false,
   "summary": {
-    "total": 16,
+    "total": 26,
     "verified": 0,
     "failed": 6,
-    "skipped": 10,
+    "skipped": 20,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 10,
+        "count": 20,
         "status": "skipped"
       },
       {
@@ -27,38 +28,38 @@
     "by_reason": [
       {
         "key": "missing_auth",
-        "count": 7,
+        "count": 13,
         "reason": "missing_auth"
+      },
+      {
+        "key": "uiryeong_missing_required_params",
+        "count": 7,
+        "reason": "uiryeong_missing_required_params"
       },
       {
         "key": "uiryeong_service_key_not_registered",
         "count": 6,
         "reason": "uiryeong_service_key_not_registered"
-      },
-      {
-        "key": "uiryeong_missing_required_params",
-        "count": 3,
-        "reason": "uiryeong_missing_required_params"
       }
     ],
     "by_provider": [
       {
         "key": "uiryeong",
-        "count": 16,
+        "count": 26,
         "provider": "uiryeong"
       }
     ],
     "by_endpoint_host": [
       {
         "key": "data.uiryeong.go.kr",
-        "count": 16,
+        "count": 26,
         "host": "data.uiryeong.go.kr"
       }
     ],
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 16,
+        "count": 26,
         "kind": "external_endpoint"
       }
     ]

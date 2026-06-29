@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-06-29T09:23:42Z",
+  "generated_at": "2026-06-29T09:31:39Z",
   "source": "/home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 346,
+    "total": 406,
     "verified": 22,
     "failed": 87,
-    "skipped": 237,
+    "skipped": 297,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 237,
+        "count": 297,
         "status": "skipped"
       },
       {
@@ -33,18 +33,23 @@
     "by_reason": [
       {
         "key": "missing_auth",
-        "count": 34,
+        "count": 53,
         "reason": "missing_auth"
       },
       {
         "key": "approval_required",
-        "count": 32,
+        "count": 36,
         "reason": "approval_required"
       },
       {
         "key": "missing_required_params",
-        "count": 19,
+        "count": 22,
         "reason": "missing_required_params"
+      },
+      {
+        "key": "ekape_missing_required_params",
+        "count": 19,
+        "reason": "ekape_missing_required_params"
       },
       {
         "key": "tour_service_root_missing_operation_path",
@@ -57,14 +62,19 @@
         "reason": "epost_wadl_metadata_only"
       },
       {
+        "key": "geoje_missing_required_params",
+        "count": 16,
+        "reason": "geoje_missing_required_params"
+      },
+      {
         "key": "ulsan_missing_required_params",
         "count": 16,
         "reason": "ulsan_missing_required_params"
       },
       {
-        "key": "ekape_missing_required_params",
-        "count": 11,
-        "reason": "ekape_missing_required_params"
+        "key": "jeonju_missing_required_params",
+        "count": 13,
+        "reason": "jeonju_missing_required_params"
       },
       {
         "key": "oneclick_connection_refused",
@@ -75,11 +85,6 @@
         "key": "andong_service_not_registered",
         "count": 10,
         "reason": "andong_service_not_registered"
-      },
-      {
-        "key": "geoje_missing_required_params",
-        "count": 10,
-        "reason": "geoje_missing_required_params"
       },
       {
         "key": "sisul_wadl_metadata_only",
@@ -102,6 +107,11 @@
         "reason": "naqs_mutation_endpoint"
       },
       {
+        "key": "qnet_separate_service_key_required",
+        "count": 8,
+        "reason": "qnet_separate_service_key_required"
+      },
+      {
         "key": "humetro_service_access_denied",
         "count": 7,
         "reason": "humetro_service_access_denied"
@@ -110,6 +120,11 @@
         "key": "tour_service_key_not_registered",
         "count": 7,
         "reason": "tour_service_key_not_registered"
+      },
+      {
+        "key": "uiryeong_missing_required_params",
+        "count": 7,
+        "reason": "uiryeong_missing_required_params"
       },
       {
         "key": "itfind_missing_required_params",
@@ -177,11 +192,6 @@
         "reason": "jeonju_http_404_not_found"
       },
       {
-        "key": "jeonju_missing_required_params",
-        "count": 3,
-        "reason": "jeonju_missing_required_params"
-      },
-      {
         "key": "qnet_missing_required_params",
         "count": 3,
         "reason": "qnet_missing_required_params"
@@ -190,11 +200,6 @@
         "key": "sisul_missing_required_params",
         "count": 3,
         "reason": "sisul_missing_required_params"
-      },
-      {
-        "key": "uiryeong_missing_required_params",
-        "count": 3,
-        "reason": "uiryeong_missing_required_params"
       },
       {
         "key": "ulsan_service_key_not_registered",
@@ -225,11 +230,6 @@
         "key": "jeonju_http_405_method_not_allowed",
         "count": 2,
         "reason": "jeonju_http_405_method_not_allowed"
-      },
-      {
-        "key": "qnet_separate_service_key_required",
-        "count": 2,
-        "reason": "qnet_separate_service_key_required"
       },
       {
         "key": "ekape_html_response",
@@ -284,6 +284,21 @@
     ],
     "by_provider": [
       {
+        "key": "ekape",
+        "count": 35,
+        "provider": "ekape"
+      },
+      {
+        "key": "q-net",
+        "count": 35,
+        "provider": "q-net"
+      },
+      {
+        "key": "data.go.kr",
+        "count": 30,
+        "provider": "data.go.kr"
+      },
+      {
         "key": "oneclick-law",
         "count": 30,
         "provider": "oneclick-law"
@@ -294,24 +309,24 @@
         "provider": "epost"
       },
       {
+        "key": "geoje",
+        "count": 26,
+        "provider": "geoje"
+      },
+      {
         "key": "tour",
         "count": 26,
         "provider": "tour"
       },
       {
-        "key": "ekape",
-        "count": 25,
-        "provider": "ekape"
+        "key": "uiryeong",
+        "count": 26,
+        "provider": "uiryeong"
       },
       {
-        "key": "q-net",
+        "key": "jeonju",
         "count": 25,
-        "provider": "q-net"
-      },
-      {
-        "key": "data.go.kr",
-        "count": 20,
-        "provider": "data.go.kr"
+        "provider": "jeonju"
       },
       {
         "key": "sisul",
@@ -324,24 +339,9 @@
         "provider": "ulsan"
       },
       {
-        "key": "geoje",
-        "count": 16,
-        "provider": "geoje"
-      },
-      {
-        "key": "uiryeong",
-        "count": 16,
-        "provider": "uiryeong"
-      },
-      {
         "key": "andong",
         "count": 15,
         "provider": "andong"
-      },
-      {
-        "key": "jeonju",
-        "count": 15,
-        "provider": "jeonju"
       },
       {
         "key": "korad",
@@ -421,29 +421,44 @@
     ],
     "by_endpoint_host": [
       {
+        "key": "data.ekape.or.kr",
+        "count": 35,
+        "host": "data.ekape.or.kr"
+      },
+      {
+        "key": "apis.data.go.kr",
+        "count": 30,
+        "host": "apis.data.go.kr"
+      },
+      {
         "key": "oneclick.law.go.kr:80",
         "count": 27,
         "host": "oneclick.law.go.kr:80"
       },
       {
-        "key": "data.ekape.or.kr",
-        "count": 25,
-        "host": "data.ekape.or.kr"
+        "key": "openapi.q-net.or.kr",
+        "count": 27,
+        "host": "openapi.q-net.or.kr"
       },
       {
-        "key": "openapi.q-net.or.kr",
-        "count": 23,
-        "host": "openapi.q-net.or.kr"
+        "key": "data.geoje.go.kr",
+        "count": 26,
+        "host": "data.geoje.go.kr"
+      },
+      {
+        "key": "data.uiryeong.go.kr",
+        "count": 26,
+        "host": "data.uiryeong.go.kr"
+      },
+      {
+        "key": "openapi.jeonju.go.kr",
+        "count": 25,
+        "host": "openapi.jeonju.go.kr"
       },
       {
         "key": "openapi.epost.go.kr:80",
         "count": 22,
         "host": "openapi.epost.go.kr:80"
-      },
-      {
-        "key": "apis.data.go.kr",
-        "count": 20,
-        "host": "apis.data.go.kr"
       },
       {
         "key": "data.sisul.or.kr",
@@ -454,21 +469,6 @@
         "key": "openapi.its.ulsan.kr",
         "count": 20,
         "host": "openapi.its.ulsan.kr"
-      },
-      {
-        "key": "data.geoje.go.kr",
-        "count": 16,
-        "host": "data.geoje.go.kr"
-      },
-      {
-        "key": "data.uiryeong.go.kr",
-        "count": 16,
-        "host": "data.uiryeong.go.kr"
-      },
-      {
-        "key": "openapi.jeonju.go.kr",
-        "count": 15,
-        "host": "openapi.jeonju.go.kr"
       },
       {
         "key": "www.andong.go.kr",
@@ -489,6 +489,11 @@
         "key": "data.naqs.go.kr",
         "count": 9,
         "host": "data.naqs.go.kr"
+      },
+      {
+        "key": "c.q-net.or.kr",
+        "count": 8,
+        "host": "c.q-net.or.kr"
       },
       {
         "key": "data.humetro.busan.kr",
@@ -561,11 +566,6 @@
         "host": "www.emuseum.go.kr"
       },
       {
-        "key": "c.q-net.or.kr",
-        "count": 2,
-        "host": "c.q-net.or.kr"
-      },
-      {
         "key": "data.myhome.go.kr:443",
         "count": 1,
         "host": "data.myhome.go.kr:443"
@@ -574,12 +574,12 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 307,
+        "count": 357,
         "kind": "external_endpoint"
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 20,
+        "count": 30,
         "kind": "data_go_kr_gateway"
       },
       {

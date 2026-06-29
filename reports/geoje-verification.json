@@ -1,14 +1,15 @@
 {
-  "generated_at": "2026-06-29T09:16:46Z",
+  "generated_at": "2026-06-29T09:31:15Z",
   "provider": "data.go.kr",
-  "limit": 16,
+  "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
+  "limit": 26,
   "truncated": true,
-  "filtered_count": 16,
+  "filtered_count": 26,
   "summary": {
-    "total": 16,
+    "total": 26,
     "verified": 2,
     "failed": 0,
-    "skipped": 14,
+    "skipped": 24,
     "unknown": 0
   },
   "results": [
@@ -293,6 +294,168 @@
       "missing_params": [
         "geojefoodId"
       ]
+    },
+    {
+      "dataset_id": "15058133",
+      "title": "경상남도 거제시_추천관광정보",
+      "operation": "거제시 추천관광 목록정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "pageSize": "1",
+        "startPage": "1"
+      }
+    },
+    {
+      "dataset_id": "15058133",
+      "title": "경상남도 거제시_추천관광정보",
+      "operation": "거제시 추천관광 상세정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "geojetourId": ""
+      },
+      "missing_params": [
+        "geojetourId"
+      ]
+    },
+    {
+      "dataset_id": "15058133",
+      "title": "경상남도 거제시_추천관광정보",
+      "operation": "거제시 추천관광 이미지정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "geojetourId": ""
+      },
+      "missing_params": [
+        "geojetourId"
+      ]
+    },
+    {
+      "dataset_id": "15058426",
+      "title": "경상남도 거제시_시민자치대학정보",
+      "operation": "거제시 시민자치대학 목록정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "pageSize": "1",
+        "startPage": "1"
+      }
+    },
+    {
+      "dataset_id": "15058426",
+      "title": "경상남도 거제시_시민자치대학정보",
+      "operation": "거제시 시민자치대학 상세정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "geojejumineduId": ""
+      },
+      "missing_params": [
+        "geojejumineduId"
+      ]
+    },
+    {
+      "dataset_id": "15058426",
+      "title": "경상남도 거제시_시민자치대학정보",
+      "operation": "거제시 시민자치대학 이미지정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "geojejumineduId": ""
+      },
+      "missing_params": [
+        "geojejumineduId"
+      ]
+    },
+    {
+      "dataset_id": "15058567",
+      "title": "경상남도 거제시_정보화교육정보",
+      "operation": "거제시 정보화 교육 상세 정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "geojeeduId": ""
+      },
+      "missing_params": [
+        "geojeeduId"
+      ]
+    },
+    {
+      "dataset_id": "15058567",
+      "title": "경상남도 거제시_정보화교육정보",
+      "operation": "거제시 정보화 교육 첨부파일 정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "geojeeduId": ""
+      },
+      "missing_params": [
+        "geojeeduId"
+      ]
+    },
+    {
+      "dataset_id": "15058567",
+      "title": "경상남도 거제시_정보화교육정보",
+      "operation": "거제시 정보화교육 목록 정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "pageSize": "1",
+        "startPage": "1"
+      }
+    },
+    {
+      "dataset_id": "3065177",
+      "title": "경상남도 거제시_교통 정보",
+      "operation": "거제시 CCTV 정보 조회",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
     }
   ]
 }

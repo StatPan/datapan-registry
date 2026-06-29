@@ -1,21 +1,22 @@
 {
-  "generated_at": "2026-06-29T09:23:11Z",
+  "generated_at": "2026-06-29T09:31:15Z",
   "source": "/home/statpan/workspace/opensource/datapan-registry/reports/ekape-verification.json",
   "provider": "data.go.kr",
+  "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
   "limit": 20,
   "truncated": false,
   "summary": {
-    "total": 15,
+    "total": 25,
     "verified": 0,
     "failed": 5,
-    "skipped": 10,
+    "skipped": 20,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 10,
+        "count": 20,
         "status": "skipped"
       },
       {
@@ -26,14 +27,14 @@
     ],
     "by_reason": [
       {
-        "key": "missing_auth",
-        "count": 6,
-        "reason": "missing_auth"
+        "key": "ekape_missing_required_params",
+        "count": 12,
+        "reason": "ekape_missing_required_params"
       },
       {
-        "key": "ekape_missing_required_params",
-        "count": 4,
-        "reason": "ekape_missing_required_params"
+        "key": "missing_auth",
+        "count": 8,
+        "reason": "missing_auth"
       },
       {
         "key": "ekape_service_key_not_registered",
@@ -49,21 +50,21 @@
     "by_provider": [
       {
         "key": "ekape",
-        "count": 15,
+        "count": 25,
         "provider": "ekape"
       }
     ],
     "by_endpoint_host": [
       {
         "key": "data.ekape.or.kr",
-        "count": 15,
+        "count": 25,
         "host": "data.ekape.or.kr"
       }
     ],
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 15,
+        "count": 25,
         "kind": "external_endpoint"
       }
     ]
