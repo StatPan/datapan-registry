@@ -1,0 +1,88 @@
+{
+  "schema_version": "datapan.source-profile.v1",
+  "source_id": "ecos",
+  "provider": "ECOS",
+  "display_name": "Bank of Korea Economic Statistics System",
+  "status": "candidate",
+  "adapter": {
+    "name": "ecos",
+    "status": "none",
+    "capabilities": [],
+    "hosts": [
+      "ecos.bok.or.kr"
+    ]
+  },
+  "references": {
+    "homepage_url": "https://ecos.bok.or.kr/api/",
+    "api_docs_url": "https://ecos.bok.or.kr/api/#/",
+    "key_request_url": "https://ecos.bok.or.kr/api/#/AuthKeyApply",
+    "last_reviewed_at": "2026-06-29"
+  },
+  "catalogue": {
+    "model": "statistics",
+    "list_endpoint": "https://ecos.bok.or.kr/api/StatisticTableList/{apiKey}/json/kr/1/100",
+    "detail_endpoint": "https://ecos.bok.or.kr/api/StatisticSearch/{apiKey}/json/kr/{startCount}/{endCount}/{statCode}/{cycle}/{startDate}/{endDate}/{itemCode}",
+    "search_endpoint": "https://ecos.bok.or.kr/api/StatisticSearch/{apiKey}/json/kr/{startCount}/{endCount}/{statCode}/{cycle}/{startDate}/{endDate}/{itemCode}",
+    "update_cadence": "source-dependent",
+    "identity_fields": [
+      "statCode",
+      "itemCode",
+      "cycle",
+      "time"
+    ]
+  },
+  "auth": {
+    "type": "api_key",
+    "key_parameter_names": [
+      "apiKey"
+    ],
+    "key_locations": [
+      "path"
+    ],
+    "approval_scope": "source",
+    "credential_reference": "ECOS Open API key issued from the Bank of Korea ECOS Open API service."
+  },
+  "request": {
+    "methods": [
+      "GET"
+    ],
+    "parameter_model": "path",
+    "paging": {
+      "type": "offset",
+      "offset_param": "startCount",
+      "size_param": "endCount"
+    },
+    "date_range": {
+      "start_param": "startDate",
+      "end_param": "endDate",
+      "format": "YYYYMMDD, YYYYMM, YYYYQ, or YYYY depending on cycle"
+    },
+    "required_param_policy": "documented"
+  },
+  "response": {
+    "formats": [
+      "json",
+      "xml"
+    ],
+    "default_format": "json",
+    "encoding": "utf-8",
+    "envelope_path": "StatisticSearch",
+    "items_path": "StatisticSearch.row",
+    "schema_policy": "documented"
+  },
+  "errors": {
+    "taxonomy_status": "unknown"
+  },
+  "runtime": {
+    "verification_mode": "metadata_only",
+    "timeout_seconds": 20,
+    "retry_policy": "idempotent",
+    "rate_limit_policy": "documented",
+    "sample_param_policy": "manual"
+  },
+  "promotion": {
+    "default_status": "registry_only",
+    "mapping_reference": "ECOS time-series tables should be promoted only after statCode, itemCode, cycle, and date-window mappings are pinned."
+  },
+  "notes": "ECOS uses path-segment authentication and path-encoded request parameters rather than data.go.kr query serviceKey conventions."
+}

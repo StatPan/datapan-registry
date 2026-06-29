@@ -1,0 +1,185 @@
+{
+  "schema_version": "datapan.error-action-catalog.v1",
+  "generated_at": "2026-06-29T00:00:00Z",
+  "provider": "data.go.kr",
+  "source_id": "data_go_kr",
+  "source_profile": "sources/data_go_kr.json",
+  "error_catalog": "reports/error-catalog.json",
+  "summary": {
+    "rules": 6,
+    "blocking_rules": 2,
+    "manual_review_rules": 4,
+    "unknown_signature_rules": 1
+  },
+  "rules": [
+    {
+      "rule_id": "data-go-kr-service-key-not-registered",
+      "status": "draft",
+      "scope": {
+        "dependency_classes": [
+          "data_go_kr_gateway",
+          "external_endpoint"
+        ]
+      },
+      "match": {
+        "kind": "field_equals",
+        "field": "resultCode",
+        "value": "30",
+        "case_sensitive": false
+      },
+      "classification": "credential",
+      "severity": "blocking",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "manual_review",
+          "reason": "The service key is missing, not registered, not approved for the operation, or encoded incorrectly. Do not route this to parser or adapter work until credentials are verified."
+        },
+        {
+          "target": "documentation",
+          "action": "update_error_taxonomy",
+          "automation": "manual_review",
+          "reason": "Keep the data.go.kr credential error taxonomy aligned with official usage guidance and observed verification evidence."
+        }
+      ],
+      "impact_categories": [
+        "provider_error_taxonomy_changed",
+        "verification_status_changed"
+      ],
+      "evidence": {
+        "reference_url": "https://www.data.go.kr/ugs/selectPublicDataUseGuideView.do"
+      }
+    },
+    {
+      "rule_id": "data-go-kr-service-key-message",
+      "status": "draft",
+      "match": {
+        "kind": "message_contains",
+        "contains": "SERVICE KEY IS NOT REGISTERED",
+        "case_sensitive": false
+      },
+      "classification": "credential",
+      "severity": "blocking",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "manual_review",
+          "reason": "Observed response indicates credential or approval state, not a registry schema or parser failure."
+        }
+      ],
+      "impact_categories": [
+        "verification_status_changed"
+      ],
+      "evidence": {
+        "reference_url": "https://www.data.go.kr/ugs/selectPublicDataUseGuideView.do"
+      }
+    },
+    {
+      "rule_id": "data-go-kr-http-429",
+      "status": "draft",
+      "match": {
+        "kind": "http_status",
+        "http_status": 429
+      },
+      "classification": "rate_limit",
+      "severity": "medium",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "manual_review",
+          "reason": "Rate-limit responses should adjust verification cadence or retry policy before changing adapter or parser code."
+        },
+        {
+          "target": "provider-adapter",
+          "action": "update_adapter",
+          "automation": "manual_review",
+          "reason": "Only update adapter behavior if repeated evidence shows the provider needs source-specific throttling or backoff."
+        }
+      ],
+      "impact_categories": [
+        "verification_status_changed"
+      ]
+    },
+    {
+      "rule_id": "data-go-kr-external-http-404",
+      "status": "draft",
+      "scope": {
+        "dependency_classes": [
+          "external_endpoint"
+        ]
+      },
+      "match": {
+        "kind": "http_status",
+        "http_status": 404
+      },
+      "classification": "not_found",
+      "severity": "medium",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "manual_review",
+          "reason": "HTTP 404 on a missing external endpoint should update route-disposition evidence before becoming adapter backlog."
+        },
+        {
+          "target": "provider-adapter",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "Do not create adapter work for dead-route candidates without fresh viable route evidence."
+        }
+      ],
+      "impact_categories": [
+        "verification_status_changed"
+      ]
+    },
+    {
+      "rule_id": "data-go-kr-external-timeout",
+      "status": "draft",
+      "scope": {
+        "dependency_classes": [
+          "external_endpoint"
+        ]
+      },
+      "match": {
+        "kind": "timeout"
+      },
+      "classification": "upstream_outage",
+      "severity": "medium",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "manual_review",
+          "reason": "Timeouts on missing external routes should remain transient route evidence until repeated checks prove a stable adapter target."
+        }
+      ],
+      "impact_categories": [
+        "verification_status_changed"
+      ]
+    },
+    {
+      "rule_id": "data-go-kr-parse-error-unknown",
+      "status": "draft",
+      "match": {
+        "kind": "parse_error"
+      },
+      "classification": "unknown",
+      "severity": "high",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "investigate",
+          "automation": "manual_review",
+          "reason": "Parse failures require evidence before deciding whether the cause is response-shape drift, parser logic, or provider outage."
+        }
+      ],
+      "impact_categories": [
+        "response_shape_changed",
+        "verification_status_changed"
+      ]
+    }
+  ]
+}

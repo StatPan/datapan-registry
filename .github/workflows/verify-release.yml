@@ -20,19 +20,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout registry
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: datapan-registry
           lfs: true
 
       - name: Checkout CLI
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: StatPan/datapan-cli
           path: datapan-cli
 
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version-file: datapan-cli/go.mod
           check-latest: true
@@ -43,6 +43,20 @@ jobs:
           bytes="$(wc -c < datapan-registry/data/data-go-kr.registry.json)"
           echo "data-go-kr.registry.json bytes=${bytes}"
           test "${bytes}" -gt 100000000
+
+      - name: Validate registry policy artifacts
+        working-directory: datapan-registry
+        run: |
+          python3 -m venv .datapan/ci/source-profile-venv
+          . .datapan/ci/source-profile-venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install jsonschema
+          python scripts/validate-source-profiles.py
+          python scripts/validate-error-action-catalogs.py
+          python scripts/validate-external-coverage.py
+          python scripts/validate-impact-plans.py
+          python scripts/validate-source-reference-drift.py
+          python scripts/validate-runtime-evidence-growth.py
 
       - name: Validate provider verification evidence
         working-directory: datapan-cli
@@ -123,7 +137,7 @@ jobs:
             go run ./cmd/datapan doctor --json
 
       - name: Upload release health reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: datapan-registry-release-health
           path: datapan-registry/.datapan/ci/

@@ -1,0 +1,360 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
+  "title": "Datapan Registry Impact Plan v1",
+  "description": "Machine-readable downstream impact plan derived from registry release changes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "provider",
+    "source_id",
+    "registry_version_from",
+    "registry_version_to",
+    "summary",
+    "changes"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.registry-impact-plan.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "datapan_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+    },
+    "registry_version_from": {
+      "type": "string",
+      "minLength": 1
+    },
+    "registry_version_to": {
+      "type": "string",
+      "minLength": 1
+    },
+    "previous_registry": {
+      "type": "string"
+    },
+    "current_registry": {
+      "type": "string"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "changes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/change"
+      }
+    }
+  },
+  "$defs": {
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "total",
+        "by_category",
+        "by_target",
+        "requires_manual_review",
+        "requires_db_migration_review",
+        "requires_served_contract_regeneration"
+      ],
+      "properties": {
+        "total": {
+          "$ref": "#/$defs/count"
+        },
+        "by_category": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/category_count"
+          }
+        },
+        "by_target": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/target_count"
+          }
+        },
+        "requires_manual_review": {
+          "$ref": "#/$defs/count"
+        },
+        "requires_db_migration_review": {
+          "$ref": "#/$defs/count"
+        },
+        "requires_served_contract_regeneration": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity",
+        "category",
+        "severity",
+        "promoted_dataset",
+        "served_dataset",
+        "actions"
+      ],
+      "properties": {
+        "identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "category": {
+          "$ref": "#/$defs/change_category"
+        },
+        "severity": {
+          "enum": ["info", "low", "medium", "high", "blocking"]
+        },
+        "promoted_dataset": {
+          "type": "boolean"
+        },
+        "served_dataset": {
+          "type": "boolean"
+        },
+        "source_before": {
+          "$ref": "#/$defs/source_snapshot"
+        },
+        "source_after": {
+          "$ref": "#/$defs/source_snapshot"
+        },
+        "verification_before": {
+          "$ref": "#/$defs/verification_snapshot"
+        },
+        "verification_after": {
+          "$ref": "#/$defs/verification_snapshot"
+        },
+        "error_taxonomy": {
+          "$ref": "#/$defs/error_taxonomy_change"
+        },
+        "actions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/action"
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "source_id", "endpoint_id"],
+      "properties": {
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+        },
+        "list_id": {
+          "type": "string"
+        },
+        "operation_id": {
+          "type": "string"
+        },
+        "endpoint_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dataset_key": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        }
+      }
+    },
+    "source_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "endpoint": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "required_params": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "response_fingerprint": {
+          "type": "string"
+        },
+        "cadence": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        }
+      }
+    },
+    "verification_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": {
+          "enum": ["verified", "failed", "skipped", "unknown"]
+        },
+        "reason": {
+          "type": "string"
+        },
+        "checked_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "error_taxonomy_change": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "added_codes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "removed_codes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "changed_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "classification": {
+          "enum": [
+            "credential",
+            "rate_limit",
+            "provider_contract",
+            "upstream_outage",
+            "parser",
+            "adapter",
+            "unknown"
+          ]
+        }
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target", "action", "automation", "reason"],
+      "properties": {
+        "target": {
+          "$ref": "#/$defs/action_target"
+        },
+        "action": {
+          "$ref": "#/$defs/action_kind"
+        },
+        "automation": {
+          "enum": ["automated", "manual_review", "blocked"]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "issue_hint": {
+          "type": "string"
+        }
+      }
+    },
+    "change_category": {
+      "enum": [
+        "added",
+        "removed",
+        "deprecated",
+        "endpoint_changed",
+        "required_params_changed",
+        "response_shape_changed",
+        "cadence_changed",
+        "provider_error_taxonomy_changed",
+        "verification_status_changed"
+      ]
+    },
+    "action_target": {
+      "enum": [
+        "datapan-cli",
+        "datapan-data",
+        "dataset-api",
+        "sdk",
+        "mcp",
+        "provider-adapter",
+        "registry-release",
+        "documentation"
+      ]
+    },
+    "action_kind": {
+      "enum": [
+        "no_action",
+        "regenerate",
+        "refresh_verification",
+        "review_collector",
+        "review_parser",
+        "review_schema",
+        "db_migration_review",
+        "update_adapter",
+        "update_error_taxonomy",
+        "deprecate",
+        "remove",
+        "investigate"
+      ]
+    },
+    "category_count": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["category", "count"],
+      "properties": {
+        "category": {
+          "$ref": "#/$defs/change_category"
+        },
+        "count": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "target_count": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target", "count"],
+      "properties": {
+        "target": {
+          "$ref": "#/$defs/action_target"
+        },
+        "count": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

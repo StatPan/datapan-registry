@@ -1,0 +1,151 @@
+name: Draft registry release
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Workflow mode. verify-only checks current artifacts; draft-local regenerates a draft from the checked-in registry."
+        required: true
+        default: "verify-only"
+        type: choice
+        options:
+          - verify-only
+          - draft-local
+      registry_path:
+        description: "Registry file to verify or draft from."
+        required: true
+        default: "data/data-go-kr.registry.json"
+        type: string
+      verification_path:
+        description: "Verification evidence to bind into draft-local output."
+        required: true
+        default: "reports/latest-verification.json"
+        type: string
+      previous_registry_path:
+        description: "Optional previous registry path already present in the checkout."
+        required: false
+        default: ""
+        type: string
+      provider_limit:
+        description: "Provider report limit passed to release draft."
+        required: true
+        default: "0"
+        type: string
+      min_registry_bytes:
+        description: "Minimum registry byte size used to catch an unmaterialized LFS pointer."
+        required: true
+        default: "100000000"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  draft:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout registry
+        uses: actions/checkout@v7
+        with:
+          path: datapan-registry
+          lfs: true
+
+      - name: Checkout CLI
+        uses: actions/checkout@v7
+        with:
+          repository: StatPan/datapan-cli
+          path: datapan-cli
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: datapan-cli/go.mod
+          check-latest: true
+          cache-dependency-path: datapan-cli/go.sum
+
+      - name: Confirm registry LFS file is materialized
+        working-directory: datapan-registry
+        run: |
+          bytes="$(wc -c < "${{ inputs.registry_path }}")"
+          echo "${{ inputs.registry_path }} bytes=${bytes}"
+          test "${bytes}" -gt "${{ inputs.min_registry_bytes }}"
+
+      - name: Validate registry policy artifacts
+        working-directory: datapan-registry
+        run: |
+          mkdir -p .datapan/ci
+          python3 -m venv .datapan/ci/source-profile-venv
+          . .datapan/ci/source-profile-venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install jsonschema
+          python scripts/validate-source-profiles.py
+          python scripts/validate-error-action-catalogs.py
+          python scripts/validate-external-coverage.py
+          python scripts/validate-impact-plans.py
+          python scripts/validate-source-reference-drift.py
+          python scripts/validate-runtime-evidence-growth.py
+
+      - name: Select manifest path
+        run: |
+          if [ "${{ inputs.mode }}" = "draft-local" ]; then
+            echo "DATAPAN_RELEASE_MANIFEST=../datapan-registry/.datapan/draft/manifest.json" >> "${GITHUB_ENV}"
+          else
+            echo "DATAPAN_RELEASE_MANIFEST=../datapan-registry/manifest.json" >> "${GITHUB_ENV}"
+          fi
+
+      - name: Generate local release draft
+        if: inputs.mode == 'draft-local'
+        working-directory: datapan-cli
+        run: |
+          mkdir -p ../datapan-registry/.datapan/draft
+          args=(
+            catalog release draft
+            --registry "../datapan-registry/${{ inputs.registry_path }}"
+            --verification "../datapan-registry/${{ inputs.verification_path }}"
+            --output-dir ../datapan-registry/.datapan/draft
+            --provider-limit "${{ inputs.provider_limit }}"
+            --json
+          )
+          if [ -n "${{ inputs.previous_registry_path }}" ]; then
+            args+=(--previous-registry "../datapan-registry/${{ inputs.previous_registry_path }}")
+          fi
+          go run ./cmd/datapan "${args[@]}"
+
+      - name: Verify selected release manifest
+        working-directory: datapan-cli
+        run: |
+          mkdir -p ../datapan-registry/.datapan/ci
+          go run ./cmd/datapan catalog release verify \
+            --manifest "${DATAPAN_RELEASE_MANIFEST}" \
+            --output ../datapan-registry/.datapan/ci/latest-release-verification.json \
+            --json
+
+      - name: Check selected release readiness
+        working-directory: datapan-cli
+        run: |
+          go run ./cmd/datapan catalog release readiness \
+            --manifest "${DATAPAN_RELEASE_MANIFEST}" \
+            --output ../datapan-registry/.datapan/ci/latest-release-readiness.json \
+            --json
+
+      - name: Write workflow summary
+        run: |
+          {
+            echo "## Registry release draft"
+            echo
+            echo "- mode: \`${{ inputs.mode }}\`"
+            echo "- registry: \`${{ inputs.registry_path }}\`"
+            echo "- manifest: \`${DATAPAN_RELEASE_MANIFEST}\`"
+            echo "- publish: disabled"
+            echo
+            echo "This workflow does not push commits, tags, or GitHub Releases."
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+      - name: Upload draft artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: datapan-registry-draft
+          path: |
+            datapan-registry/.datapan/draft/
+            datapan-registry/.datapan/ci/
+          if-no-files-found: error

@@ -1,0 +1,93 @@
+{
+  "schema_version": "datapan.source-profile.v1",
+  "source_id": "seoul_open_data",
+  "provider": "data.seoul.go.kr",
+  "display_name": "Seoul Open Data Plaza",
+  "status": "candidate",
+  "adapter": {
+    "name": "seoul-open-data",
+    "status": "none",
+    "capabilities": [],
+    "hosts": [
+      "data.seoul.go.kr",
+      "openapi.seoul.go.kr"
+    ]
+  },
+  "references": {
+    "homepage_url": "https://data.seoul.go.kr/",
+    "api_docs_url": "https://data.seoul.go.kr/together/guide/useGuide.do",
+    "key_request_url": "https://data.seoul.go.kr/together/guide/useGuide.do",
+    "notice_url": "https://data.seoul.go.kr/together/notice/boardList.do",
+    "terms_url": "https://data.seoul.go.kr/etc/accessTerms.do",
+    "last_reviewed_at": "2026-06-29"
+  },
+  "catalogue": {
+    "model": "portal",
+    "list_endpoint": "https://data.seoul.go.kr/dataList/1/literacyView.do",
+    "detail_endpoint": "http://openapi.seoul.go.kr:8088/{key}/{format}/{service}/{start_index}/{end_index}",
+    "search_endpoint": "https://data.seoul.go.kr/dataList/OA-",
+    "notice_endpoint": "https://data.seoul.go.kr/together/notice/boardList.do",
+    "update_cadence": "source-dependent",
+    "identity_fields": [
+      "service",
+      "start_index",
+      "end_index"
+    ]
+  },
+  "auth": {
+    "type": "api_key",
+    "key_parameter_names": [
+      "KEY"
+    ],
+    "key_locations": [
+      "path"
+    ],
+    "approval_scope": "source",
+    "credential_reference": "Seoul Open Data Plaza Open API key issued through the portal; some real-time subway APIs use a separate key application."
+  },
+  "request": {
+    "methods": [
+      "GET"
+    ],
+    "parameter_model": "path",
+    "paging": {
+      "type": "offset",
+      "offset_param": "start_index",
+      "size_param": "end_index"
+    },
+    "required_param_policy": "operation_specific"
+  },
+  "response": {
+    "formats": [
+      "xml",
+      "json",
+      "xls"
+    ],
+    "default_format": "xml",
+    "encoding": "utf-8",
+    "envelope_path": "service-specific",
+    "items_path": "service-specific.row",
+    "schema_policy": "documented"
+  },
+  "errors": {
+    "taxonomy_status": "draft",
+    "status_code_fields": [
+      "RESULT.CODE"
+    ],
+    "message_fields": [
+      "RESULT.MESSAGE"
+    ]
+  },
+  "runtime": {
+    "verification_mode": "metadata_only",
+    "timeout_seconds": 20,
+    "retry_policy": "idempotent",
+    "rate_limit_policy": "documented",
+    "sample_param_policy": "manual"
+  },
+  "promotion": {
+    "default_status": "registry_only",
+    "mapping_reference": "Seoul datasets should be promoted only after service-specific row schema and key scope are pinned."
+  },
+  "notes": "Seoul Open Data Plaza uses path-segment keys and start/end index path parameters, with some service-specific limits and separate real-time subway key behavior."
+}

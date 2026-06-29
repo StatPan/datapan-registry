@@ -1,0 +1,205 @@
+{
+  "schema_version": "datapan.source-reference-drift.v1",
+  "generated_at": "2026-06-29T00:00:00Z",
+  "datapan_version": "v0.1.29",
+  "summary": {
+    "sources": 5,
+    "references": 18,
+    "manual_review_references": 18,
+    "network_checked_references": 0,
+    "changed_references": 0,
+    "missing_references": 0,
+    "contract_affecting_changes": 0
+  },
+  "sources": [
+    {
+      "source_id": "data_go_kr",
+      "provider": "data.go.kr",
+      "source_profile": "sources/data_go_kr.json",
+      "last_reviewed_at": "2026-06-29",
+      "references": [
+        {
+          "kind": "homepage_url",
+          "url": "https://www.data.go.kr/",
+          "reviewed_at": "2026-06-29",
+          "check_mode": "manual_review",
+          "drift_status": "baseline",
+          "contract_impact": ["source_identity"]
+        },
+        {
+          "kind": "api_docs_url",
+          "url": "https://www.data.go.kr/ugs/selectPublicDataUseGuideView.do",
+          "reviewed_at": "2026-06-29",
+          "check_mode": "manual_review",
+          "drift_status": "baseline",
+          "contract_impact": ["catalogue", "auth", "runtime"]
+        },
+        {
+          "kind": "key_request_url",
+          "url": "https://www.data.go.kr/ugs/selectPublicDataUseGuideView.do",
+          "reviewed_at": "2026-06-29",
+          "check_mode": "manual_review",
+          "drift_status": "baseline",
+          "contract_impact": ["auth"]
+        },
+        {
+          "kind": "notice_url",
+          "url": "https://www.data.go.kr/bbs/ntc/selectNoticeListView.do",
+          "reviewed_at": "2026-06-29",
+          "check_mode": "manual_review",
+          "drift_status": "baseline",
+          "contract_impact": ["notice", "runtime"]
+        }
+      ],
+      "notes": "Manual baseline only; no live network drift check is performed by this report."
+    },
+    {
+      "source_id": "ecos",
+      "provider": "ECOS",
+      "source_profile": "sources/ecos.json",
+      "last_reviewed_at": "2026-06-29",
+      "references": [
+        {
+          "kind": "homepage_url",
+          "url": "https://ecos.bok.or.kr/api/",
+          "reviewed_at": "2026-06-29",
+          "check_mode": "manual_review",
+          "drift_status": "baseline",
+          "contract_impact": ["source_identity"]
+        },
+        {
+          "kind": "api_docs_url",
+          "url": "https://ecos.bok.or.kr/api/#/",
+          "reviewed_at": "2026-06-29",
+          "check_mode": "manual_review",
+          "drift_status": "baseline",
+          "contract_impact": ["catalogue", "auth", "runtime"]
+        },
+        {
+          "kind": "key_request_url",
+          "url": "https://ecos.bok.or.kr/api/#/AuthKeyApply",
+          "reviewed_at": "2026-06-29",
+          "check_mode": "manual_review",
+          "drift_status": "baseline",
+          "contract_impact": ["auth"]
+        }
+      ],
+      "notes": "Manual baseline only; ECOS runtime verification is a separate future task."
+    },
+    {
+      "source_id": "kosis",
+      "provider": "KOSIS",
+      "source_profile": "sources/kosis.json",
+      "last_reviewed_at": "2026-06-29",
+      "references": [
+        {
+          "kind": "homepage_url",
+          "url": "https://kosis.kr/openapi/index/index.jsp",
+          "reviewed_at": "2026-06-29",
+          "check_mode": "manual_review",
+          "drift_status": "baseline",
+          "contract_impact": ["source_identity"]
+        },
+        {
+          "kind": "api_docs_url",
+          "url": "https://kosis.kr/openapi/devGuide/devGuide_0101List.do",
+          "reviewed_at": "2026-06-29",
+          "check_mode": "manual_review",
+          "drift_status": "baseline",
+          "contract_impact": ["catalogue", "auth", "runtime"]
+        },
+        {
+          "kind": "key_request_url",
+          "url": "https://kosis.kr/openapi/index/index.jsp",
+          "reviewed_at": "2026-06-29",
+          "check_mode": "manual_review",
+          "drift_status": "baseline",
+          "contract_impact": ["auth"]
+        }
+      ],
+      "notes": "Manual baseline only; KOSIS runtime verification is a separate future task."
+    },
+    {
+      "source_id": "open_assembly",
+      "provider": "open.assembly.go.kr",
+      "source_profile": "sources/open_assembly.json",
+      "last_reviewed_at": "2026-06-29",
+      "references": [
+        {
+          "kind": "homepage_url",
+          "url": "https://open.assembly.go.kr/portal/mainPage.do",
+          "reviewed_at": "2026-06-29",
+          "check_mode": "manual_review",
+          "drift_status": "baseline",
+          "contract_impact": ["source_identity"]
+        },
+        {
+          "kind": "api_docs_url",
+          "url": "https://open.assembly.go.kr/portal/openapi/main.do",
+          "reviewed_at": "2026-06-29",
+          "check_mode": "manual_review",
+          "drift_status": "baseline",
+          "contract_impact": ["catalogue", "auth", "runtime"]
+        },
+        {
+          "kind": "key_request_url",
+          "url": "https://open.assembly.go.kr/portal/mainPage.do",
+          "reviewed_at": "2026-06-29",
+          "check_mode": "manual_review",
+          "drift_status": "baseline",
+          "contract_impact": ["auth"]
+        }
+      ],
+      "notes": "Manual baseline only; Open Assembly runtime verification is a separate future task."
+    },
+    {
+      "source_id": "seoul_open_data",
+      "provider": "data.seoul.go.kr",
+      "source_profile": "sources/seoul_open_data.json",
+      "last_reviewed_at": "2026-06-29",
+      "references": [
+        {
+          "kind": "homepage_url",
+          "url": "https://data.seoul.go.kr/",
+          "reviewed_at": "2026-06-29",
+          "check_mode": "manual_review",
+          "drift_status": "baseline",
+          "contract_impact": ["source_identity"]
+        },
+        {
+          "kind": "api_docs_url",
+          "url": "https://data.seoul.go.kr/together/guide/useGuide.do",
+          "reviewed_at": "2026-06-29",
+          "check_mode": "manual_review",
+          "drift_status": "baseline",
+          "contract_impact": ["catalogue", "auth", "runtime"]
+        },
+        {
+          "kind": "key_request_url",
+          "url": "https://data.seoul.go.kr/together/guide/useGuide.do",
+          "reviewed_at": "2026-06-29",
+          "check_mode": "manual_review",
+          "drift_status": "baseline",
+          "contract_impact": ["auth"]
+        },
+        {
+          "kind": "notice_url",
+          "url": "https://data.seoul.go.kr/together/notice/boardList.do",
+          "reviewed_at": "2026-06-29",
+          "check_mode": "manual_review",
+          "drift_status": "baseline",
+          "contract_impact": ["notice", "runtime"]
+        },
+        {
+          "kind": "terms_url",
+          "url": "https://data.seoul.go.kr/etc/accessTerms.do",
+          "reviewed_at": "2026-06-29",
+          "check_mode": "manual_review",
+          "drift_status": "baseline",
+          "contract_impact": ["terms"]
+        }
+      ],
+      "notes": "Manual baseline only; Seoul Open Data runtime verification is a separate future task."
+    }
+  ]
+}
