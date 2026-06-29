@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-29T09:24:17Z",
+  "generated_at": "2026-06-29T09:32:26Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json",
   "source": "release",
@@ -8,9 +8,9 @@
   "timeout": "10s",
   "summary": {
     "operations": 12205,
-    "evidence_total": 346,
-    "uncovered_gateway_candidates": 11399,
-    "uncovered_adapter_candidates": 260,
+    "evidence_total": 406,
+    "uncovered_gateway_candidates": 11389,
+    "uncovered_adapter_candidates": 210,
     "missing_adapter_hosts": 10,
     "planned_batches": 6,
     "planned_operations": 60
@@ -20,7 +20,7 @@
       "label": "gateway",
       "kind": "data_go_kr_gateway",
       "candidates": 11419,
-      "uncovered_candidates": 11399,
+      "uncovered_candidates": 11389,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --kind data_go_kr_gateway --exclude-input /home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gateway-next.json --json",
       "output": ".datapan/verification/gateway-next.json"
@@ -30,7 +30,7 @@
       "provider": "ekape",
       "kind": "external_endpoint",
       "candidates": 49,
-      "uncovered_candidates": 24,
+      "uncovered_candidates": 14,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --provider ekape --kind external_endpoint --exclude-input /home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ekape-next.json --json",
       "output": ".datapan/verification/ekape-next.json"
@@ -40,7 +40,7 @@
       "provider": "geoje",
       "kind": "external_endpoint",
       "candidates": 41,
-      "uncovered_candidates": 25,
+      "uncovered_candidates": 15,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --provider geoje --kind external_endpoint --exclude-input /home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/geoje-next.json --json",
       "output": ".datapan/verification/geoje-next.json"
@@ -50,7 +50,7 @@
       "provider": "jeonju",
       "kind": "external_endpoint",
       "candidates": 80,
-      "uncovered_candidates": 65,
+      "uncovered_candidates": 55,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --provider jeonju --kind external_endpoint --exclude-input /home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jeonju-next.json --json",
       "output": ".datapan/verification/jeonju-next.json"
@@ -60,7 +60,7 @@
       "provider": "q-net",
       "kind": "external_endpoint",
       "candidates": 147,
-      "uncovered_candidates": 122,
+      "uncovered_candidates": 112,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --provider q-net --kind external_endpoint --exclude-input /home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/q-net-next.json --json",
       "output": ".datapan/verification/q-net-next.json"
@@ -70,7 +70,7 @@
       "provider": "uiryeong",
       "kind": "external_endpoint",
       "candidates": 40,
-      "uncovered_candidates": 24,
+      "uncovered_candidates": 14,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --provider uiryeong --kind external_endpoint --exclude-input /home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/uiryeong-next.json --json",
       "output": ".datapan/verification/uiryeong-next.json"

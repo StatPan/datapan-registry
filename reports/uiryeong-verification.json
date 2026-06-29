@@ -1,14 +1,15 @@
 {
-  "generated_at": "2026-06-29T09:23:10Z",
+  "generated_at": "2026-06-29T09:31:16Z",
   "provider": "data.go.kr",
-  "limit": 16,
+  "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
+  "limit": 26,
   "truncated": true,
-  "filtered_count": 16,
+  "filtered_count": 26,
   "summary": {
-    "total": 16,
+    "total": 26,
     "verified": 0,
     "failed": 6,
-    "skipped": 10,
+    "skipped": 20,
     "unknown": 0
   },
   "results": [
@@ -311,6 +312,168 @@
         "numOfRows": "1",
         "pageNo": "1"
       }
+    },
+    {
+      "dataset_id": "15056844",
+      "title": "경상남도 의령군_노인복지시설",
+      "operation": "노인복지시설 정보 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15056888",
+      "title": "경상남도 의령군_의병박물관유물",
+      "operation": "의병박물관 유물 사진",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "uiryeongrelicsEntId": ""
+      },
+      "missing_params": [
+        "uiryeongrelicsEntId"
+      ]
+    },
+    {
+      "dataset_id": "15056888",
+      "title": "경상남도 의령군_의병박물관유물",
+      "operation": "의병박물관 유물 현황 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15057207",
+      "title": "경상남도 의령군_보호수",
+      "operation": "보호수 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15057329",
+      "title": "경상남도 의령군_장애인복지시설",
+      "operation": "장애인복지시설 현황 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "uiryeongdisabledDerector": ""
+      },
+      "missing_params": [
+        "uiryeongdisabledDerector"
+      ]
+    },
+    {
+      "dataset_id": "15057493",
+      "title": "경상남도 의령군_금연구역",
+      "operation": "의령 금연구역 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15057883",
+      "title": "경상남도 의령군_무더위쉼터",
+      "operation": "무더위쉼터 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15058260",
+      "title": "경상남도 의령군_재해위험지구",
+      "operation": "재해위험지구 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "dangerArea": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "dangerArea"
+      ]
+    },
+    {
+      "dataset_id": "15058579",
+      "title": "경상남도 의령군 문화재",
+      "operation": "문화재 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15058579",
+      "title": "경상남도 의령군 문화재",
+      "operation": "문화재 사진",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "uiryeongculturalEntId": ""
+      },
+      "missing_params": [
+        "uiryeongculturalEntId"
+      ]
     }
   ]
 }

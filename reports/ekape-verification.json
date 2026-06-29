@@ -1,14 +1,15 @@
 {
-  "generated_at": "2026-06-29T09:23:11Z",
+  "generated_at": "2026-06-29T09:31:15Z",
   "provider": "data.go.kr",
-  "limit": 15,
+  "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
+  "limit": 25,
   "truncated": true,
-  "filtered_count": 15,
+  "filtered_count": 25,
   "summary": {
-    "total": 15,
+    "total": 25,
     "verified": 0,
     "failed": 5,
-    "skipped": 10,
+    "skipped": 20,
     "unknown": 0
   },
   "results": [
@@ -297,6 +298,226 @@
       },
       "missing_params": [
         "baseYmd"
+      ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "소 도매시장 정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "abattCd": "",
+        "kindCd": ""
+      },
+      "missing_params": [
+        "kindCd",
+        "abattCd"
+      ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "소 등급판정(확인서) 부위별고기및 부산물 정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "issueDate": "20240101",
+        "issueNo": "1",
+        "weight": ""
+      },
+      "missing_params": [
+        "weight"
+      ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "소 등급판정결과(확인서)정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "issueDate": "20240101",
+        "issueNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "소도체 1++ 등급 세부경락가격 상세정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "abattCode": "",
+        "breedCd": "",
+        "defectIncludeYn": "",
+        "endYmd": "20240101",
+        "sexCd": "",
+        "startYmd": "20240101"
+      },
+      "missing_params": [
+        "abattCode",
+        "breedCd",
+        "sexCd",
+        "defectIncludeYn"
+      ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "실시간 소도체 경매현황 조회",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "abattCd": "",
+        "auctDate": "",
+        "endNo": "",
+        "gradeCd": "",
+        "kindCd": "",
+        "sexCd": "",
+        "startNo": ""
+      },
+      "missing_params": [
+        "auctDate",
+        "abattCd",
+        "startNo",
+        "endNo",
+        "kindCd",
+        "sexCd",
+        "gradeCd"
+      ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "오리 등급판정결과(확인서)정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "issueDate": "20240101",
+        "issueNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "축산물 도매시장 소도체 1++등급 세부경락가격정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "breedCd": "",
+        "defectIncludeYn": "",
+        "endYmd": "20240101",
+        "qgradeYn": "",
+        "sexCd": "",
+        "startYmd": "20240101"
+      },
+      "missing_params": [
+        "breedCd",
+        "sexCd",
+        "qgradeYn",
+        "defectIncludeYn"
+      ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "축산물 도매시장 소도체 등급별 경락가격정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "breedCd": "",
+        "defectIncludeYn": "",
+        "endYmd": "20240101",
+        "qgradeYn": "",
+        "sexCd": "",
+        "startYmd": "20240101"
+      },
+      "missing_params": [
+        "breedCd",
+        "sexCd",
+        "qgradeYn",
+        "defectIncludeYn"
+      ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "축산물 돼지도체 경락가격 상세정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "abattCd": "",
+        "endYmd": "20240101",
+        "sexCd": "",
+        "skinYn": "",
+        "startYmd": "20240101"
+      },
+      "missing_params": [
+        "abattCd",
+        "skinYn",
+        "sexCd"
+      ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "축산물 소도체 경락상세정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "abattCode": "",
+        "breedCd": "",
+        "defectIncludeYn": "",
+        "endYmd": "20240101",
+        "sexCd": "",
+        "startYmd": "20240101"
+      },
+      "missing_params": [
+        "abattCode",
+        "breedCd",
+        "sexCd",
+        "defectIncludeYn"
       ]
     }
   ]

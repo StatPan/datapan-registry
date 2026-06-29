@@ -1,14 +1,15 @@
 {
-  "generated_at": "2026-06-29T09:16:46Z",
+  "generated_at": "2026-06-29T09:31:15Z",
   "provider": "data.go.kr",
-  "limit": 15,
+  "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
+  "limit": 25,
   "truncated": true,
-  "filtered_count": 15,
+  "filtered_count": 25,
   "summary": {
-    "total": 15,
+    "total": 25,
     "verified": 0,
     "failed": 5,
-    "skipped": 10,
+    "skipped": 20,
     "unknown": 0
   },
   "results": [
@@ -283,6 +284,202 @@
       },
       "missing_params": [
         "seq"
+      ]
+    },
+    {
+      "dataset_id": "15020604",
+      "title": "전북특별자치도 전주시_착한가격모범업소 현황",
+      "operation": "착한 가격 모법업소 정보 조회",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "address": "",
+        "chakName": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "pumName": ""
+      },
+      "missing_params": [
+        "chakName",
+        "pumName",
+        "address"
+      ]
+    },
+    {
+      "dataset_id": "15024710",
+      "title": "전북특별자치도 전주시_건설시공업체 현황",
+      "operation": "건설시공업체 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "seq": ""
+      },
+      "missing_params": [
+        "seq"
+      ]
+    },
+    {
+      "dataset_id": "15024711",
+      "title": "전북특별자치도 전주시_청소업체 현황",
+      "operation": "저수조 청소업체  현황목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "seq": ""
+      },
+      "missing_params": [
+        "seq"
+      ]
+    },
+    {
+      "dataset_id": "15028084",
+      "title": "전북특별자치도 전주시_현수막 지정현황",
+      "operation": "현수막 지정 게시대 현황 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "seq": ""
+      },
+      "missing_params": [
+        "seq"
+      ]
+    },
+    {
+      "dataset_id": "15028085",
+      "title": "전북특별자치도 전주시_장사시설 현황",
+      "operation": "장사시설 현황 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "seq": ""
+      },
+      "missing_params": [
+        "seq"
+      ]
+    },
+    {
+      "dataset_id": "15028086",
+      "title": "전북특별자치도 전주시_택시현황",
+      "operation": "법인택시 면허  현황 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "seq": ""
+      },
+      "missing_params": [
+        "seq"
+      ]
+    },
+    {
+      "dataset_id": "15047649",
+      "title": "전북특별자치도 전주시_아동복지시설현황 서비스",
+      "operation": "아동복지시설  목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "seq": ""
+      },
+      "missing_params": [
+        "seq"
+      ]
+    },
+    {
+      "dataset_id": "15047707",
+      "title": "전북특별자치도 전주시_바이전주상품 정보 서비스",
+      "operation": "바이전주 상품 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "seq": ""
+      },
+      "missing_params": [
+        "seq"
+      ]
+    },
+    {
+      "dataset_id": "15056885",
+      "title": "전북특별자치도 전주시_가로등 정보 서비스",
+      "operation": "가로등주 현황",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "boxNm": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "boxNm"
+      ]
+    },
+    {
+      "dataset_id": "15056979",
+      "title": "전북특별자치도 전주시_동물판매업소 정보 현황",
+      "operation": "동물판매업소 정보 조회",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:30:13Z",
+      "params": {
+        "address": "",
+        "dongName": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "address",
+        "dongName"
       ]
     }
   ]
