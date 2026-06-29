@@ -1,20 +1,15 @@
 {
-  "generated_at": "2026-06-29T14:13:44Z",
+  "generated_at": "2026-06-29T14:19:54Z",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
-  "limit": 0,
-  "timeout": "10s",
+  "limit": 100,
   "truncated": false,
-  "filters": {
-    "provider": "q-net",
-    "kind": "external_endpoint"
-  },
-  "filtered_count": 75,
+  "filtered_count": 147,
   "summary": {
-    "total": 75,
+    "total": 147,
     "verified": 5,
     "failed": 1,
-    "skipped": 69,
+    "skipped": 141,
     "unknown": 0
   },
   "results": [
@@ -158,7 +153,7 @@
         "code": "00",
         "message": "NORMAL SERVICE."
       },
-      "url": "http://openapi.q-net.or.kr/api/service/rest/InquiryStatSVC/getGradSiPassList?baseYY=2023&serviceKey=REDACTED",
+      "url": "http://openapi.q-net.or.kr/api/service/rest/InquiryStatSVC/getGradSiPassList?baseYY=2023\u0026serviceKey=REDACTED",
       "params": {
         "baseYY": "2023"
       },
@@ -181,7 +176,7 @@
         "code": "00",
         "message": "NORMAL SERVICE."
       },
-      "url": "http://openapi.q-net.or.kr/api/service/rest/InquiryStatSVC/getGradSiExamList?baseYY=2023&serviceKey=REDACTED",
+      "url": "http://openapi.q-net.or.kr/api/service/rest/InquiryStatSVC/getGradSiExamList?baseYY=2023\u0026serviceKey=REDACTED",
       "params": {
         "baseYY": "2023"
       },
@@ -204,7 +199,7 @@
         "code": "00",
         "message": "NORMAL SERVICE."
       },
-      "url": "http://openapi.q-net.or.kr/api/service/rest/InquiryStatSVC/getGradPiExamList?baseYY=2023&serviceKey=REDACTED",
+      "url": "http://openapi.q-net.or.kr/api/service/rest/InquiryStatSVC/getGradPiExamList?baseYY=2023\u0026serviceKey=REDACTED",
       "params": {
         "baseYY": "2023"
       },
@@ -227,7 +222,7 @@
         "code": "00",
         "message": "NORMAL SERVICE."
       },
-      "url": "http://openapi.q-net.or.kr/api/service/rest/InquiryStatSVC/getGradPiPassList?baseYY=2023&serviceKey=REDACTED",
+      "url": "http://openapi.q-net.or.kr/api/service/rest/InquiryStatSVC/getGradPiPassList?baseYY=2023\u0026serviceKey=REDACTED",
       "params": {
         "baseYY": "2023"
       },
@@ -252,7 +247,7 @@
         "message": "Failed to validate a newly established connection.",
         "reason_code": "qnet_connection_validation_failed"
       },
-      "url": "http://openapi.q-net.or.kr/api/service/rest/InquiryStatSVC/getTotExamList?baseYY=2023&serviceKey=REDACTED",
+      "url": "http://openapi.q-net.or.kr/api/service/rest/InquiryStatSVC/getTotExamList?baseYY=2023\u0026serviceKey=REDACTED",
       "params": {
         "baseYY": "2023"
       },
@@ -275,7 +270,7 @@
         "code": "00",
         "message": "NORMAL SERVICE."
       },
-      "url": "http://openapi.q-net.or.kr/api/service/rest/InquiryStatSVC/getCertYearGradeList?baseYY=2023&serviceKey=REDACTED",
+      "url": "http://openapi.q-net.or.kr/api/service/rest/InquiryStatSVC/getCertYearGradeList?baseYY=2023\u0026serviceKey=REDACTED",
       "params": {
         "baseYY": "2023"
       },
@@ -1247,6 +1242,1249 @@
       "status": "skipped",
       "reason": "qnet_separate_service_key_required",
       "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15063881",
+      "title": "한국산업인력공단_과정평가형일학습병행 과정 지정평가 관련 정보 조회 서비스",
+      "operation": "과정평가형일학습병행 과정 지정평가 관련 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15063884",
+      "title": "한국산업인력공단_과정평가형일학습병행 모니터링 일정 정보 서비스",
+      "operation": "과정평가형일학습병행 모니터링 일정 정보",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15063887",
+      "title": "한국산업인력공단_과정평가형일학습병행 설문 관련 정보 조회 서비스",
+      "operation": "과정평가형일학습병행 설문 관련 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15063889",
+      "title": "한국산업인력공단_과정평가형일학습병행 외부평가 채점결과 연계이력 서비스",
+      "operation": "과정평가형일학습병행 외부평가 채점결과 연계 이력",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15063891",
+      "title": "한국산업인력공단_과정평가형일학습병행  출제 관련 정보 서비스",
+      "operation": "과정평가형일학습병행 출제 관련 정보",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15063894",
+      "title": "한국산업인력공단_과정평가형일학습병행 홈페이지 관리 정보 서비스",
+      "operation": "과정평가형일학습병행 홈페이지 관리 정보",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15064547",
+      "title": "한국산업인력공단_국가자격 관심자격 정보",
+      "operation": "국가자격 관심자격 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064553",
+      "title": "한국산업인력공단_국가자격 시행제도 구분 정보",
+      "operation": "국가자격 시행제도 구분 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064554",
+      "title": "한국산업인력공단_국가자격 기능사보 전환 매핑 정보",
+      "operation": "국가자격 기능사보 전환 매핑 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064558",
+      "title": "한국산업인력공단_국가자격시험 채점 표준 편차 정보",
+      "operation": "국가자격시험 채점 표준 편차 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064564",
+      "title": "한국산업인력공단_자격정보 선택분야 정보",
+      "operation": "자격정보 선택분야 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064692",
+      "title": "한국산업인력공단_국가자격 확인서 정보",
+      "operation": "국가자격 확인서 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064703",
+      "title": "한국산업인력공단_법령 변천 이력 정보",
+      "operation": "법령 변천 이력 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064717",
+      "title": "한국산업인력공단_자격정보 교과과정 정보",
+      "operation": "자격정보 교과과정 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064759",
+      "title": "한국산업인력공단_자격정보 자격증 교부수수료 정보",
+      "operation": "자격정보 자격증 교부수수료 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064771",
+      "title": "한국산업인력공단_장애유형별 요청사항 정보",
+      "operation": "장애유형별 요청사항 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064833",
+      "title": "한국산업인력공단_지사 정보",
+      "operation": "지사정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064868",
+      "title": "한국산업인력공단_국가자격 계열 관련 정보",
+      "operation": "계열규칙",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064868",
+      "title": "한국산업인력공단_국가자격 계열 관련 정보",
+      "operation": "계열명 과목매핑",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064873",
+      "title": "한국산업인력공단_Q-net 컨텐츠 관련 정보",
+      "operation": "Q-Net 컨텐츠 관련 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064898",
+      "title": "한국산업인력공단_기능경기 관련 정보",
+      "operation": "기능경기 관련 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15068022",
+      "title": "한국산업인력공단_국가자격 종목 관련 정보(결격사유, 유사종목) 조회",
+      "operation": "유사 종목그룹",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15068022",
+      "title": "한국산업인력공단_국가자격 종목 관련 정보(결격사유, 유사종목) 조회",
+      "operation": "종목 결격사유",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15068045",
+      "title": "한국산업인력공단_자격정보 인정 기관 정보",
+      "operation": "자격정보 인정 기관 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15068172",
+      "title": "한국산업인력공단_국가자격시험 시험장소 정보",
+      "operation": "국가자격시험 시험장소",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "brchCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "brchCd"
+      ]
+    },
+    {
+      "dataset_id": "15087069",
+      "title": "한국산업인력공단_변경법령 및 자격관련정보",
+      "operation": "변경 법령 및 자격 관련 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15087082",
+      "title": "한국산업인력공단_전문자격 면제과목 정보",
+      "operation": "전문자격 면제과목 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15088904",
+      "title": "한국산업인력공단_고객만족조사 관련 정보",
+      "operation": "고객만족조사 관련 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15088942",
+      "title": "한국산업인력공단_국가기술자격 발급관련 정보",
+      "operation": "국가기술자격 발급관련 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYYMM": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "baseYYMM"
+      ]
+    },
+    {
+      "dataset_id": "15088943",
+      "title": "한국산업인력공단_국가기술자격 상시시험 관련 정보",
+      "operation": "국가기술자격 상시시험 관련 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15088949",
+      "title": "한국산업인력공단_국가기술자격 시험장 정보",
+      "operation": "국가기술자격 시험장 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "brchCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "brchCd"
+      ]
+    },
+    {
+      "dataset_id": "15088950",
+      "title": "한국산업인력공단_국가기술자격 자격취소 관련 정보",
+      "operation": "국가기술자격 자격취소 관련 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15088954",
+      "title": "한국산업인력공단_국가자격시험 과제관련 정보",
+      "operation": "국가자격시험 과제관련 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15088955",
+      "title": "한국산업인력공단_자격시험중 분실물 정보",
+      "operation": "자격시험중 분실물 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "brchCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "brchCd"
+      ]
+    },
+    {
+      "dataset_id": "15088957",
+      "title": "한국산업인력공단_큐넷 단체회원 정보",
+      "operation": "큐넷 단체회원 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "brchCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "brchCd"
+      ]
+    },
+    {
+      "dataset_id": "15088972",
+      "title": "한국산업인력공단_타기관 교환자료 정보",
+      "operation": "타기관 교환자료 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15088979",
+      "title": "한국산업인력공단_과정평가형일학습병행 외부평가  관련 정보",
+      "operation": "과정평가형일학습병행 외부평가 관련 정보",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "implSeq": "",
+        "implYy": "",
+        "implsysCd": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "qualgbcd": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "implYy",
+        "implSeq",
+        "qualgbcd",
+        "implsysCd"
+      ]
+    },
+    {
+      "dataset_id": "15089015",
+      "title": "한국산업인력공단_HRDNET 연계 정보",
+      "operation": "HRDNET 연계 정보",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15089051",
+      "title": "한국산업인력공단_과정평가형일학습병행 외부평가 시험장 정보",
+      "operation": "과정평가형일학습병행 외부평가 시험장 정보",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "implSeq": "",
+        "implYy": "",
+        "implsysCd": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "qualgbCd": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "implYy",
+        "implSeq",
+        "qualgbCd",
+        "implsysCd"
+      ]
+    },
+    {
+      "dataset_id": "15089062",
+      "title": "한국산업인력공단_과정평가형일학습병행 원서접수 수수료 관련 정보",
+      "operation": "과정평가 일학습 병행 자격 외부시험 접수 접수 수수로 관련 자격구분코드, 종목정보 , 수수",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "qualgbCd": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "qualgbCd"
+      ]
+    },
+    {
+      "dataset_id": "15089330",
+      "title": "한국산업인력공단_등급별 원서접수 상위종목 현황",
+      "operation": "등급별 원서접수 상위 종목 현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "grdCd": ""
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15089332",
+      "title": "한국산업인력공단_연도별 회별 국가기술자격시험 원서 점수 분포 정보",
+      "operation": "연도별 회별 국가기술자격시험 원서 점수 분포 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15089356",
+      "title": "한국산업인력공단_등급별 자격취득 상위종목 현황",
+      "operation": "등급별 자격취득 상위종목 현황 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15089357",
+      "title": "한국산업인력공단_전공별 국가기술자격 취득현황",
+      "operation": "전공별 국가기술자격 취득현황 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15089380",
+      "title": "한국산업인력공단_연도별 회별 국가기술자격 합격률",
+      "operation": "연도별 회별 국가기술자격 합격률 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15089434",
+      "title": "한국산업인력공단_응시자격별 국가기술자격 원서접수 및 합격 현황",
+      "operation": "응시자격별 국가기술자격 원서접수 및 합격 현황 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15089768",
+      "title": "한국산업인력공단_지역 관련 코드 정보",
+      "operation": "지역 관련 코드정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z"
+    },
+    {
+      "dataset_id": "15108793",
+      "title": "한국산업인력공단_과정평가형일학습병행 HRDNET연계 편성기준 시설기준",
+      "operation": "과정평가형일학습병행 HRDNET 연계 편성기준 시설기준 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15108794",
+      "title": "한국산업인력공단_과정평가형일학습병행 자격시험 연도별 응시자및합격자 수",
+      "operation": "과정펑가형. 일학습병행 자격시험 연도별 응시자 및 합격자 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "qualgbCd": "",
+        "typw": "",
+        "year": ""
+      },
+      "missing_params": [
+        "typw",
+        "qualgbCd",
+        "year"
+      ]
+    },
+    {
+      "dataset_id": "15108882",
+      "title": "한국산업인력공단_연도별 복수자격 취득현황 조회 서비스",
+      "operation": "연도별 복수자격 취득현황 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15109452",
+      "title": "한국산업인력공단_연도별 복수등급 자격 취득현황 조회 서비스",
+      "operation": "연도별 복수등급 자격 취득현황 조회 서비스",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15109466",
+      "title": "한국산업인력공단_거주지별 기술자격 시험 접수 현황정보 조회 서비스",
+      "operation": "거주지별 기술자격 시험 접수 현황정보 서비스",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15122453",
+      "title": "한국산업인력공단_국가자격 시험교시 과목 정보",
+      "operation": "시험교시 과목 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "jmCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15122463",
+      "title": "한국산업인력공단_국가자격 시험장별 시설목록 정보",
+      "operation": "시험장별 시설목록 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "jmCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15122470",
+      "title": "한국산업인력공단_등급별 종목시험 세부유형",
+      "operation": "등급별 종목시험 세부유형 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15122472",
+      "title": "한국산업인력공단_실기시험 지참물 정보",
+      "operation": "실기시험 지참물 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "implSeq": "",
+        "implYY": "",
+        "jmCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "implYY",
+        "implSeq",
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15134264",
+      "title": "한국산업인력공단_HRDNET연계_편성기준_능력단위그룹_능력단위",
+      "operation": "HRDNET연계_편성기준_능력단위그룹_능력단위",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15134269",
+      "title": "한국산업인력공단_등급별 취득소요기간현황",
+      "operation": "등급별 취득소요기간 현황",
+      "provider": "q-net",
+      "endpoint_host": "open.api.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15134271",
+      "title": "한국산업인력공단_시군구별 관할지사 정보",
+      "operation": "시군구별 관할지사 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15134290",
+      "title": "한국산업인력공단_종목 변천이력 정보",
+      "operation": "종목변천이력정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "jmCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15134292",
+      "title": "한국산업인력공단_종목별 직무정보",
+      "operation": "종목별 직무정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15134293",
+      "title": "한국산업인력공단_종목시험 응시유형정보",
+      "operation": "종목시험 응시유형정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15150242",
+      "title": "한국산업인력공단_국가기술자격시험_HRDNET연계",
+      "operation": "HRDNET연계 현황",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json",
+        "year": ""
+      },
+      "missing_params": [
+        "year"
+      ]
+    },
+    {
+      "dataset_id": "15150267",
+      "title": "한국산업인력공단_국가기술자격시험_공통 NCS 정보",
+      "operation": "공통 NCS 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15150277",
+      "title": "한국산업인력공단_국가기술자격시험_공통 모니터링",
+      "operation": "외부평가모니터링 현황",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json",
+        "year": ""
+      },
+      "missing_params": [
+        "year"
+      ]
+    },
+    {
+      "dataset_id": "15150358",
+      "title": "한국산업인력공단_국가기술자격시험_공통 시험기준",
+      "operation": "과정평가형 종목별 시험기준 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15150358",
+      "title": "한국산업인력공단_국가기술자격시험_공통 시험기준",
+      "operation": "능력단위별 내부평가방법",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "jmCd": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15150358",
+      "title": "한국산업인력공단_국가기술자격시험_공통 시험기준",
+      "operation": "직업기초능력 정보조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "jmCd": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15150372",
+      "title": "한국산업인력공단_국가기술자격시험_과정관리 지정평가",
+      "operation": "종목별 합격기준 정보",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "apevalPlanSeq": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "apevalPlanSeq"
+      ]
+    },
+    {
+      "dataset_id": "15150372",
+      "title": "한국산업인력공단_국가기술자격시험_과정관리 지정평가",
+      "operation": "평가영역별 심사결과 통계",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "apevalPlanSeq": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "apevalPlanSeq"
+      ]
+    },
+    {
+      "dataset_id": "15150372",
+      "title": "한국산업인력공단_국가기술자격시험_과정관리 지정평가",
+      "operation": "훈련비미지원 과정신청 통계",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15150414",
+      "title": "한국산업인력공단_국가기술자격시험_과정관리 평가운영",
+      "operation": "외부평가모니터링 현황",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
       "params": {
         "numOfRows": "1",
         "pageNo": "1",

@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.release-manifest.v1",
-  "generated_at": "2026-06-29T14:15:08Z",
+  "generated_at": "2026-06-29T14:20:54Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_registry": "data\\data-go-kr.registry.json",
@@ -132,7 +132,7 @@
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
       "bytes": 7490,
-      "sha256": "7ceb87d5590f81a5f4ca2a78bd43bf801ff3604e93c6f43bd67081c14bd52719"
+      "sha256": "e69e86a2efc4778135b2e521f7cc1a7bcadde98afcaf88de67118de29d553734"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -146,91 +146,91 @@
       "kind": "provider_index",
       "schema": "https://schemas.datapan.dev/datapan.provider-index.v1.schema.json",
       "bytes": 5588,
-      "sha256": "1ca23c6489a05aa35039903acfc775af7f5483a035ecdff70e9bc5bbb8c36108"
+      "sha256": "a8ca187004ad0b0e1fa6b4852a160e2838d700fe40c78df59728e9242ffc1c3d"
     },
     {
       "path": "reports/catalog-diff.json",
       "kind": "catalog_diff",
       "schema": "https://schemas.datapan.dev/datapan.catalog-diff.v1.schema.json",
       "bytes": 393,
-      "sha256": "3922554ed8287e9e80f874c6a35288913ce11935fadab0b18c326301ca7b6f09"
+      "sha256": "5a8ba2b417f81e179819b507ad99ad111f2c2f72e36fb97e929e1e76de141448"
     },
     {
       "path": "reports/catalog-audit.json",
       "kind": "catalog_audit",
       "schema": "https://schemas.datapan.dev/datapan.catalog-audit.v1.schema.json",
       "bytes": 15937,
-      "sha256": "2b0600ac5b68cf44d1510d2cbf94de487b66591d3780862818c2130d16664ea5"
+      "sha256": "265be90095e71aa107570b7363795e9e2823a52e491c96561b53bd7d0aa193d0"
     },
     {
       "path": "reports/error-catalog.json",
       "kind": "error_catalog",
       "schema": "https://schemas.datapan.dev/datapan.error-catalog.v1.schema.json",
       "bytes": 3305358,
-      "sha256": "feb7347c411db9b804f7efdc08aad22336fea614f06ff84bccbfe301d751e0f0"
+      "sha256": "29ea4ca2c0d126121eaa56538c7a0cbd0854dae2eeb401e09a91f80507946d87"
     },
     {
       "path": "reports/dependencies.json",
       "kind": "dependencies",
       "schema": "https://schemas.datapan.dev/datapan.dependencies.v1.schema.json",
       "bytes": 11399429,
-      "sha256": "725ec604a70a81a8be631481af945010612051980764da5336eea7ff011869cb"
+      "sha256": "ce58cc5891c11803037533a5fc5455d7c3f603471fac317766bdb1bebaa5abed"
     },
     {
       "path": "reports/adapter-targets.json",
       "kind": "adapter_targets",
       "schema": "https://schemas.datapan.dev/datapan.adapter-targets.v1.schema.json",
       "bytes": 15149,
-      "sha256": "03a89adb9e2f11da5e658ba1f25139d28400007ec7246fa0dca4de65a0b0c4a7"
+      "sha256": "006cfc8382301e3883cda77f945e2531f73926be9973de5f4545f788264bb43d"
     },
     {
       "path": "reports/route-disposition.json",
       "kind": "route_disposition",
       "schema": "https://schemas.datapan.dev/datapan.route-disposition.v1.schema.json",
       "bytes": 22278,
-      "sha256": "5241b26fad57bd8f11c2e1f29bad56f985dd02f9f61ca470f08280536c71778f"
+      "sha256": "7ce9ecb101c475206756ff7d64c8b0600406d45fe799d862170266a37f2b0661"
     },
     {
       "path": "reports/provider-backlog.json",
       "kind": "provider_backlog",
       "schema": "https://schemas.datapan.dev/datapan.providers.v1.schema.json",
       "bytes": 53665,
-      "sha256": "c097f2d0685dde5d527b078b26b8a19268ac8e77e48a6c6f0612574ab8117028"
+      "sha256": "8b6c9e8d3b29e23696d44af35c35ae5c4817d03102fcac2c3c4d26f71cea3820"
     },
     {
       "path": "reports/coverage.json",
       "kind": "coverage",
       "schema": "https://schemas.datapan.dev/datapan.coverage.v1.schema.json",
       "bytes": 16541,
-      "sha256": "f0f385dec32009df832188317b5c6bd33522a99c75e2ab84c38168e2497ea5d1"
+      "sha256": "ad9f842160ffbb735f9fa690051a8b6f04bd489ed360015a3528d22ca84d1916"
     },
     {
       "path": "reports/verification-plan.json",
       "kind": "verification_plan",
       "schema": "https://schemas.datapan.dev/datapan.verification-plan.v1.schema.json",
-      "bytes": 5369,
-      "sha256": "7fb035b28df2de411ed179a44a854de474654817f6d6c1c444fbb8fc11150473"
+      "bytes": 4348,
+      "sha256": "f405d9ce4f0e1a578ef0e150a01b55bdf39c39953dbb44ab6b30c80209c2dce4"
     },
     {
       "path": "reports/data-go-kr/runtime-evidence-growth.json",
       "kind": "runtime_evidence_growth",
       "schema": "https://schemas.datapan.dev/datapan.runtime-evidence-growth.v1.schema.json",
-      "bytes": 2924,
-      "sha256": "baff71af7918af1eea8e9f3eb6aa9b2fe8921e672f0fbeacc519abbd6439e4fd"
+      "bytes": 2320,
+      "sha256": "b2719010cf61052c7a85070ea01dba26470d4a2641de0c946b4163f1b7b0cf21"
     },
     {
       "path": "reports/latest-verification.json",
       "kind": "verification",
       "schema": "https://schemas.datapan.dev/datapan.verification.v1.schema.json",
-      "bytes": 341163,
-      "sha256": "4efa89256297466215847d802784f5beb0951c7570c6011c33f1a036e425d366"
+      "bytes": 389176,
+      "sha256": "d45001f0adf5712ac23f1f9ca92d4b9a031aa52f24cb8dd7f4112bdce9dbed24"
     },
     {
       "path": "reports/latest-verification-summary.json",
       "kind": "verification_summary",
       "schema": "https://schemas.datapan.dev/datapan.verification-summary.v1.schema.json",
-      "bytes": 13571,
-      "sha256": "629e2ff56d42c6bcab8e27e929e6358625c0a19b1e4f500dda39961f22b07453"
+      "bytes": 13690,
+      "sha256": "c139be2d0f0a25181db4bfc1e0d34497aea2fa036913cafd2375bca27325676b"
     },
     {
       "path": "reports/unadapted-external-probe.json",
@@ -250,13 +250,13 @@
       "path": "provenance/data-go-kr.md",
       "kind": "provenance",
       "bytes": 2460,
-      "sha256": "a865dedb7e87cb2a392c91c5e13d9d505729d1fff17f915c0522bf9958bdd19d"
+      "sha256": "5ab9b0dcdde81eec48ae96dfd0e6a7e21d54424c0cf4695fb3f31d3c553a6bf2"
     },
     {
       "path": "RELEASE_NOTES.md",
       "kind": "release_notes",
       "bytes": 3226,
-      "sha256": "062a36e881947bed4844e94cdd597a0afd423de000c10ef055258fc6b9b73b55"
+      "sha256": "c56891162a19dc3dc7e1336ed9bd8f03feb91867fd5bb05f3059ec3c46c2b18b"
     }
   ]
 }

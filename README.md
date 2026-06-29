@@ -23,11 +23,11 @@ re-importing the upstream data.go.kr catalog every time.
 - Missing external adapter hosts: `10`
 - Provider split readiness: `ready`
   (`26` adapters, `26` verification-capable, `21` call-capable)
-- Runtime verification evidence: `539` bounded checks merged into
-  `reports/latest-verification.json` (`22` verified, `87` failed, `430`
+- Runtime verification evidence: `626` bounded checks merged into
+  `reports/latest-verification.json` (`22` verified, `87` failed, `517`
   skipped)
-- Runtime evidence growth target: `4.4%` checked evidence against the `10%`
-  release target; `682` additional records are still required.
+- Runtime evidence growth target: `5.1%` checked evidence against the `10%`
+  release target; `595` additional records are still required.
 - Missing external host probe: `28` unadapted external endpoint checks in
   `reports/unadapted-external-probe.json` (`14` HTTP 404, `7` timeout, `6`
   request/DNS errors, `1` HTTP 503)
