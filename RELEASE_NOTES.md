@@ -1,6 +1,6 @@
 # Datapan Registry Release
 
-- generated_at: `2026-06-29T09:17:25Z`
+- generated_at: `2026-06-29T09:24:06Z`
 - provider: `data.go.kr`
 - datapan_version: `0.1.0-dev`
 - source_registry: `/home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json`
@@ -24,12 +24,12 @@
 - route_disposition: `28` routes, `14` dead-route candidates, `14` transient failures, `0` parameter-blocked, `0` adapter candidates
 - route_disposition_artifact: `reports/route-disposition.json`
 - provider_backlog: `179` hosts, `10` missing-adapter hosts, `28` operations needing adapters
-- coverage: `12063` callable operations (`98.8%`), external adapter coverage `95.4%`, verification evidence coverage `2.6%`, evidence-adjusted adapter candidates `0`
+- coverage: `12063` callable operations (`98.8%`), external adapter coverage `95.4%`, verification evidence coverage `2.8%`, evidence-adjusted adapter candidates `0`
 - coverage_artifact: `reports/coverage.json`
 - coverage_goals: callable `99%`, external adapters `98%`, verification evidence `10%`, call-capable adapters `25`, missing-adapter operations `<=10`
-- verification_plan: `9` batches, `70` planned operations, `11399` gateway gaps, `290` adapter gaps
+- verification_plan: `6` batches, `60` planned operations, `11399` gateway gaps, `260` adapter gaps
 - verification_plan_artifact: `reports/verification-plan.json`
-- runtime_evidence_growth: `2.6%` coverage, target `10.0%`, remaining `905`, status `below_target`
+- runtime_evidence_growth: `2.8%` coverage, target `10.0%`, remaining `875`, status `below_target`
 - runtime_evidence_growth_artifact: `reports/data-go-kr/runtime-evidence-growth.json`
 - runtime_evidence_warning: `warning` `runtime_evidence_below_target`
 
@@ -43,18 +43,18 @@ Top adapter targets:
 
 ## Verification Evidence
 
-- verification: `316` total, `22` verified, `87` failed, `207` skipped, `0` unknown
+- verification: `346` total, `22` verified, `87` failed, `237` skipped, `0` unknown
 - verification_artifact: `reports/latest-verification.json`
 - verification_summary_artifact: `reports/latest-verification-summary.json`
 
 Provider evidence:
 
 - `oneclick-law`: `30`
+- `epost`: `28`
 - `tour`: `26`
-- `epost`: `25`
+- `ekape`: `25`
 - `q-net`: `25`
 - `data.go.kr`: `20`
-- `sisul`: `20`
 
 - unadapted_external_probe: `28` total, `0` verified, `28` failed, `0` skipped, `0` unknown
 - unadapted_external_probe_artifact: `reports/unadapted-external-probe.json`

@@ -1,19 +1,14 @@
 {
-  "generated_at": "2026-06-24T00:54:09Z",
+  "generated_at": "2026-06-29T09:23:11Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 5,
+  "limit": 15,
   "truncated": true,
-  "filters": {
-    "provider": "ekape",
-    "kind": "external_endpoint"
-  },
-  "filtered_count": 5,
+  "filtered_count": 15,
   "summary": {
-    "total": 5,
+    "total": 15,
     "verified": 0,
     "failed": 5,
-    "skipped": 0,
+    "skipped": 10,
     "unknown": 0
   },
   "results": [
@@ -135,6 +130,174 @@
         "standYm": "202401"
       },
       "body_shape": "xml_notice"
+    },
+    {
+      "dataset_id": "15057912",
+      "title": "축산물품질평가원_축산물경락가격정보",
+      "operation": "제주 돼지도체 등급별 경락가격 정보 조회",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:22:07Z",
+      "params": {
+        "endYmd": "20240101",
+        "skinYn": "",
+        "startYmd": "20240101"
+      },
+      "missing_params": [
+        "skinYn"
+      ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "계란 등급판정결과(확인서)정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:22:07Z",
+      "params": {
+        "issueDate": "20240101",
+        "issueNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "닭 등급판정결과(확인서)정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:22:07Z",
+      "params": {
+        "issueDate": "20240101",
+        "issueNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "돈육대표가격 현황",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:22:07Z",
+      "params": {
+        "endYmd": "20240101",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "startYmd": "20240101"
+      }
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "돼지 권역별 경락가격 현황",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:22:07Z",
+      "params": {
+        "baseYmd": ""
+      },
+      "missing_params": [
+        "baseYmd"
+      ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "돼지 등급판정 부위별고기및부산물 정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:22:07Z",
+      "params": {
+        "issueDate": "20240101",
+        "issueNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "돼지 등급판정결과(확인서) 정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:22:07Z",
+      "params": {
+        "issueDate": "20240101",
+        "issueNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "돼지도체 등급별 경락가격정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:22:07Z",
+      "params": {
+        "egradeExceptYn": "",
+        "endYmd": "20240101",
+        "sexCd": "",
+        "skinYn": "",
+        "startYmd": "20240101"
+      },
+      "missing_params": [
+        "skinYn",
+        "sexCd",
+        "egradeExceptYn"
+      ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "말 등급판정결과(확인서)정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:22:07Z",
+      "params": {
+        "issueDate": "20240101",
+        "issueNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "소 권역별 경락가격현황",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:22:07Z",
+      "params": {
+        "baseYmd": ""
+      },
+      "missing_params": [
+        "baseYmd"
+      ]
     }
   ]
 }

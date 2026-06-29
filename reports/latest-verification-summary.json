@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-06-29T09:17:01Z",
+  "generated_at": "2026-06-29T09:23:42Z",
   "source": "/home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 316,
+    "total": 346,
     "verified": 22,
     "failed": 87,
-    "skipped": 207,
+    "skipped": 237,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 207,
+        "count": 237,
         "status": "skipped"
       },
       {
@@ -31,6 +31,11 @@
       }
     ],
     "by_reason": [
+      {
+        "key": "missing_auth",
+        "count": 34,
+        "reason": "missing_auth"
+      },
       {
         "key": "approval_required",
         "count": 32,
@@ -52,14 +57,14 @@
         "reason": "epost_wadl_metadata_only"
       },
       {
-        "key": "missing_auth",
-        "count": 17,
-        "reason": "missing_auth"
+        "key": "ulsan_missing_required_params",
+        "count": 16,
+        "reason": "ulsan_missing_required_params"
       },
       {
-        "key": "ulsan_missing_required_params",
-        "count": 13,
-        "reason": "ulsan_missing_required_params"
+        "key": "ekape_missing_required_params",
+        "count": 11,
+        "reason": "ekape_missing_required_params"
       },
       {
         "key": "oneclick_connection_refused",
@@ -95,11 +100,6 @@
         "key": "naqs_mutation_endpoint",
         "count": 8,
         "reason": "naqs_mutation_endpoint"
-      },
-      {
-        "key": "ekape_missing_required_params",
-        "count": 7,
-        "reason": "ekape_missing_required_params"
       },
       {
         "key": "humetro_service_access_denied",
@@ -152,6 +152,11 @@
         "reason": "ekape_service_key_not_registered"
       },
       {
+        "key": "epost_missing_required_params",
+        "count": 4,
+        "reason": "epost_missing_required_params"
+      },
+      {
         "key": "pqis_service_key_not_registered",
         "count": 4,
         "reason": "pqis_service_key_not_registered"
@@ -160,11 +165,6 @@
         "key": "seoul_bus_service_key_not_registered",
         "count": 4,
         "reason": "seoul_bus_service_key_not_registered"
-      },
-      {
-        "key": "epost_missing_required_params",
-        "count": 3,
-        "reason": "epost_missing_required_params"
       },
       {
         "key": "itfind_endpoint_not_found",
@@ -192,6 +192,11 @@
         "reason": "sisul_missing_required_params"
       },
       {
+        "key": "uiryeong_missing_required_params",
+        "count": 3,
+        "reason": "uiryeong_missing_required_params"
+      },
+      {
         "key": "ulsan_service_key_not_registered",
         "count": 3,
         "reason": "ulsan_service_key_not_registered"
@@ -200,6 +205,11 @@
         "key": "airport_missing_required_params",
         "count": 2,
         "reason": "airport_missing_required_params"
+      },
+      {
+        "key": "emuseum_missing_required_params",
+        "count": 2,
+        "reason": "emuseum_missing_required_params"
       },
       {
         "key": "gblib_service_key_not_registered",
@@ -279,14 +289,19 @@
         "provider": "oneclick-law"
       },
       {
+        "key": "epost",
+        "count": 28,
+        "provider": "epost"
+      },
+      {
         "key": "tour",
         "count": 26,
         "provider": "tour"
       },
       {
-        "key": "epost",
+        "key": "ekape",
         "count": 25,
-        "provider": "epost"
+        "provider": "ekape"
       },
       {
         "key": "q-net",
@@ -304,24 +319,24 @@
         "provider": "sisul"
       },
       {
+        "key": "ulsan",
+        "count": 20,
+        "provider": "ulsan"
+      },
+      {
         "key": "geoje",
         "count": 16,
         "provider": "geoje"
       },
       {
-        "key": "ulsan",
+        "key": "uiryeong",
         "count": 16,
-        "provider": "ulsan"
+        "provider": "uiryeong"
       },
       {
         "key": "andong",
         "count": 15,
         "provider": "andong"
-      },
-      {
-        "key": "ekape",
-        "count": 15,
-        "provider": "ekape"
       },
       {
         "key": "jeonju",
@@ -364,11 +379,6 @@
         "provider": "lh-ebid"
       },
       {
-        "key": "uiryeong",
-        "count": 6,
-        "provider": "uiryeong"
-      },
-      {
         "key": "seoul-bus",
         "count": 5,
         "provider": "seoul-bus"
@@ -387,6 +397,11 @@
         "key": "pqis",
         "count": 4,
         "provider": "pqis"
+      },
+      {
+        "key": "emuseum",
+        "count": 3,
+        "provider": "emuseum"
       },
       {
         "key": "folk",
@@ -411,6 +426,11 @@
         "host": "oneclick.law.go.kr:80"
       },
       {
+        "key": "data.ekape.or.kr",
+        "count": 25,
+        "host": "data.ekape.or.kr"
+      },
+      {
         "key": "openapi.q-net.or.kr",
         "count": 23,
         "host": "openapi.q-net.or.kr"
@@ -431,19 +451,19 @@
         "host": "data.sisul.or.kr"
       },
       {
+        "key": "openapi.its.ulsan.kr",
+        "count": 20,
+        "host": "openapi.its.ulsan.kr"
+      },
+      {
         "key": "data.geoje.go.kr",
         "count": 16,
         "host": "data.geoje.go.kr"
       },
       {
-        "key": "openapi.its.ulsan.kr",
+        "key": "data.uiryeong.go.kr",
         "count": 16,
-        "host": "openapi.its.ulsan.kr"
-      },
-      {
-        "key": "data.ekape.or.kr",
-        "count": 15,
-        "host": "data.ekape.or.kr"
+        "host": "data.uiryeong.go.kr"
       },
       {
         "key": "openapi.jeonju.go.kr",
@@ -481,11 +501,6 @@
         "host": "openapi.tour.go.kr"
       },
       {
-        "key": "data.uiryeong.go.kr",
-        "count": 6,
-        "host": "data.uiryeong.go.kr"
-      },
-      {
         "key": "openapi.airport.co.kr",
         "count": 6,
         "host": "openapi.airport.co.kr"
@@ -494,6 +509,11 @@
         "key": "openapi.ebid.lh.or.kr",
         "count": 6,
         "host": "openapi.ebid.lh.or.kr"
+      },
+      {
+        "key": "openapi.epost.go.kr",
+        "count": 6,
+        "host": "openapi.epost.go.kr"
       },
       {
         "key": "openapi.kpx.or.kr",
@@ -531,14 +551,14 @@
         "host": "oneclick.law.go.kr"
       },
       {
-        "key": "openapi.epost.go.kr",
-        "count": 3,
-        "host": "openapi.epost.go.kr"
-      },
-      {
         "key": "openapi.gblib.or.kr",
         "count": 3,
         "host": "openapi.gblib.or.kr"
+      },
+      {
+        "key": "www.emuseum.go.kr",
+        "count": 3,
+        "host": "www.emuseum.go.kr"
       },
       {
         "key": "c.q-net.or.kr",
@@ -554,7 +574,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 277,
+        "count": 307,
         "kind": "external_endpoint"
       },
       {

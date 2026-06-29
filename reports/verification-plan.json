@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-29T09:17:37Z",
+  "generated_at": "2026-06-29T09:24:17Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json",
   "source": "release",
@@ -8,12 +8,12 @@
   "timeout": "10s",
   "summary": {
     "operations": 12205,
-    "evidence_total": 316,
+    "evidence_total": 346,
     "uncovered_gateway_candidates": 11399,
-    "uncovered_adapter_candidates": 290,
+    "uncovered_adapter_candidates": 260,
     "missing_adapter_hosts": 10,
-    "planned_batches": 9,
-    "planned_operations": 70
+    "planned_batches": 6,
+    "planned_operations": 60
   },
   "batches": [
     {
@@ -30,30 +30,10 @@
       "provider": "ekape",
       "kind": "external_endpoint",
       "candidates": 49,
-      "uncovered_candidates": 34,
+      "uncovered_candidates": 24,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --provider ekape --kind external_endpoint --exclude-input /home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ekape-next.json --json",
       "output": ".datapan/verification/ekape-next.json"
-    },
-    {
-      "label": "emuseum",
-      "provider": "emuseum",
-      "kind": "external_endpoint",
-      "candidates": 3,
-      "uncovered_candidates": 3,
-      "planned_operations": 3,
-      "command": "datapan catalog verify --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --provider emuseum --kind external_endpoint --exclude-input /home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/emuseum-next.json --json",
-      "output": ".datapan/verification/emuseum-next.json"
-    },
-    {
-      "label": "epost",
-      "provider": "epost",
-      "kind": "external_endpoint",
-      "candidates": 28,
-      "uncovered_candidates": 3,
-      "planned_operations": 3,
-      "command": "datapan catalog verify --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --provider epost --kind external_endpoint --exclude-input /home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/epost-next.json --json",
-      "output": ".datapan/verification/epost-next.json"
     },
     {
       "label": "geoje",
@@ -90,20 +70,10 @@
       "provider": "uiryeong",
       "kind": "external_endpoint",
       "candidates": 40,
-      "uncovered_candidates": 34,
+      "uncovered_candidates": 24,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --provider uiryeong --kind external_endpoint --exclude-input /home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/uiryeong-next.json --json",
       "output": ".datapan/verification/uiryeong-next.json"
-    },
-    {
-      "label": "ulsan",
-      "provider": "ulsan",
-      "kind": "external_endpoint",
-      "candidates": 20,
-      "uncovered_candidates": 4,
-      "planned_operations": 4,
-      "command": "datapan catalog verify --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --provider ulsan --kind external_endpoint --exclude-input /home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ulsan-next.json --json",
-      "output": ".datapan/verification/ulsan-next.json"
     }
   ],
   "gaps": {
