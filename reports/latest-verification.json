@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-29T09:40:10Z",
+  "generated_at": "2026-06-29T13:48:49Z",
   "provider": "data.go.kr",
-  "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 473,
+  "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 523,
   "truncated": true,
-  "filtered_count": 466,
+  "filtered_count": 499,
   "summary": {
-    "total": 466,
+    "total": 499,
     "verified": 22,
     "failed": 87,
-    "skipped": 357,
+    "skipped": 390,
     "unknown": 0
   },
   "results": [
@@ -9519,6 +9519,575 @@
       "missing_params": [
         "deptNm"
       ]
+    },
+    {
+      "dataset_id": "15073985",
+      "title": "축산물품질평가원_가금산물 일일거래가격정보",
+      "operation": "육계(도매) 일일가격조회",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T13:47:19Z",
+      "params": {
+        "endYmd": "20240101",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "startYmd": "20240101"
+      }
+    },
+    {
+      "dataset_id": "15073985",
+      "title": "축산물품질평가원_가금산물 일일거래가격정보",
+      "operation": "육계(산지) 일일가격조회",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T13:47:19Z",
+      "params": {
+        "endYmd": "20240101",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "startYmd": "20240101",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15073985",
+      "title": "축산물품질평가원_가금산물 일일거래가격정보",
+      "operation": "토종닭 가격조회",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T13:47:19Z",
+      "params": {
+        "endYmd": "20240101",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "startYmd": "20240101"
+      }
+    },
+    {
+      "dataset_id": "15106233",
+      "title": "축산물품질평가원_농장식별번호정보",
+      "operation": "농장식별번호 정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T13:47:19Z",
+      "params": {
+        "farmUniqueNo": "",
+        "typeGbn": ""
+      },
+      "missing_params": [
+        "farmUniqueNo",
+        "typeGbn"
+      ]
+    },
+    {
+      "dataset_id": "3079223",
+      "title": "경상남도 거제시_숙박업 등록현황",
+      "operation": "숙박 목록 정보 서비스",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "pageSize": "1",
+        "startPage": "1"
+      }
+    },
+    {
+      "dataset_id": "3079223",
+      "title": "경상남도 거제시_숙박업 등록현황",
+      "operation": "숙박 이미지 정보 서비스",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "lodgeId": ""
+      },
+      "missing_params": [
+        "lodgeId"
+      ]
+    },
+    {
+      "dataset_id": "3079545",
+      "title": "경상남도 거제시 문화재 현황",
+      "operation": "거제시 문화재 상세정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "geojecultureId": ""
+      },
+      "missing_params": [
+        "geojecultureId"
+      ]
+    },
+    {
+      "dataset_id": "3079545",
+      "title": "경상남도 거제시 문화재 현황",
+      "operation": "거제시 문화재 이미지정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "geojecultureId": ""
+      },
+      "missing_params": [
+        "geojecultureId"
+      ]
+    },
+    {
+      "dataset_id": "3079545",
+      "title": "경상남도 거제시 문화재 현황",
+      "operation": "거제시 문화재목록정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "pageSize": "1",
+        "startPage": "1"
+      }
+    },
+    {
+      "dataset_id": "3036596",
+      "title": "전북특별자치도 전주시_전주음식",
+      "operation": "전주음식 이미지목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "foodUid": ""
+      },
+      "missing_params": [
+        "foodUid"
+      ]
+    },
+    {
+      "dataset_id": "3036596",
+      "title": "전북특별자치도 전주시_전주음식",
+      "operation": "콩나물국밥집 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "foodUid": "",
+        "keyword": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "keyword",
+        "foodUid"
+      ]
+    },
+    {
+      "dataset_id": "3036596",
+      "title": "전북특별자치도 전주시_전주음식",
+      "operation": "한옥마을 맛집 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "foodUid": "",
+        "keyword": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "keyword",
+        "foodUid"
+      ]
+    },
+    {
+      "dataset_id": "3036596",
+      "title": "전북특별자치도 전주시_전주음식",
+      "operation": "한정식목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "foodUid": "",
+        "keyword": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "keyword",
+        "foodUid"
+      ]
+    },
+    {
+      "dataset_id": "3036598",
+      "title": "전북특별자치도 전주시_문화공간",
+      "operation": "문화공간 정보 서비스 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "dataValue": "",
+        "pageSize": "1",
+        "startPage": "1",
+        "typeCode": ""
+      },
+      "missing_params": [
+        "typeCode",
+        "dataValue"
+      ]
+    },
+    {
+      "dataset_id": "3036598",
+      "title": "전북특별자치도 전주시_문화공간",
+      "operation": "문화공간 정보 서비스 상세보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036598",
+      "title": "전북특별자치도 전주시_문화공간",
+      "operation": "문화공간 정보 서비스 이미지 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036599",
+      "title": "전북특별자치도 전주시_문화체험",
+      "operation": "문화체험 정보 서비스 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "dataValue": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue"
+      ]
+    },
+    {
+      "dataset_id": "3036599",
+      "title": "전북특별자치도 전주시_문화체험",
+      "operation": "문화체험 정보 서비스 상세보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036599",
+      "title": "전북특별자치도 전주시_문화체험",
+      "operation": "문화체험 정보 서비스 이미지 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "15037524",
+      "title": "한국산업인력공단_국가자격 통계연보 정보",
+      "operation": "연령별취득현황(취득년도기준)",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15037524",
+      "title": "한국산업인력공단_국가자격 통계연보 정보",
+      "operation": "학력별연도별취득현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15037525",
+      "title": "한국산업인력공단_국가자격 접수 등 총괄 현황 데이터",
+      "operation": "거주지별 접수현황 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15037525",
+      "title": "한국산업인력공단_국가자격 접수 등 총괄 현황 데이터",
+      "operation": "시험접수 동향 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "baseYY": "2023",
+        "jmCD": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "trendDiv": ""
+      },
+      "missing_params": [
+        "jmCD",
+        "trendDiv"
+      ]
+    },
+    {
+      "dataset_id": "15039800",
+      "title": "한국산업인력공단_국가기술자격 취득 관련 현황",
+      "operation": "국가자격 취득소요기간",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15039800",
+      "title": "한국산업인력공단_국가기술자격 취득 관련 현황",
+      "operation": "국방부검정을 통한 종목별 자격취득자 현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15039800",
+      "title": "한국산업인력공단_국가기술자격 취득 관련 현황",
+      "operation": "신설종목 취득현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15039800",
+      "title": "한국산업인력공단_국가기술자격 취득 관련 현황",
+      "operation": "전공별취득현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15039800",
+      "title": "한국산업인력공단_국가기술자격 취득 관련 현황",
+      "operation": "취득자연도별현황 성별,연령별,학력별(수탁기관)",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15039800",
+      "title": "한국산업인력공단_국가기술자격 취득 관련 현황",
+      "operation": "취득자연도별현황 성별,연령별,학력별(수탁기관현재년기준)",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "3066163",
+      "title": "경상남도 의령군 모범 음식점정보",
+      "operation": "음식점 사진",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "uiryeongfoodEntId": ""
+      },
+      "missing_params": [
+        "uiryeongfoodEntId"
+      ]
+    },
+    {
+      "dataset_id": "3066163",
+      "title": "경상남도 의령군 모범 음식점정보",
+      "operation": "음식점 상세정보",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "uiryeongfoodEntId": ""
+      },
+      "missing_params": [
+        "uiryeongfoodEntId"
+      ]
+    },
+    {
+      "dataset_id": "3066163",
+      "title": "경상남도 의령군 모범 음식점정보",
+      "operation": "음식점 현황 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "3066441",
+      "title": "경상남도 의령군_관광명소",
+      "operation": "관광명소 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
     }
   ]
 }
