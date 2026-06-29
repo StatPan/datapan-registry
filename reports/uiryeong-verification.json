@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-29T09:31:16Z",
+  "generated_at": "2026-06-29T09:39:58Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 26,
+  "limit": 36,
   "truncated": true,
-  "filtered_count": 26,
+  "filtered_count": 36,
   "summary": {
-    "total": 26,
+    "total": 36,
     "verified": 0,
     "failed": 6,
-    "skipped": 20,
+    "skipped": 30,
     "unknown": 0
   },
   "results": [
@@ -473,6 +473,190 @@
       },
       "missing_params": [
         "uiryeongculturalEntId"
+      ]
+    },
+    {
+      "dataset_id": "15058579",
+      "title": "경상남도 의령군 문화재",
+      "operation": "문화재 상세정보",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "uiryeongculturalEntId": ""
+      },
+      "missing_params": [
+        "uiryeongculturalEntId"
+      ]
+    },
+    {
+      "dataset_id": "15058926",
+      "title": "경상남도 의령군_세차장",
+      "operation": "세차장 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15063439",
+      "title": "경상남도 의령군_가로수길정보",
+      "operation": "가로수길 정보 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sttree_stret_nm": ""
+      },
+      "missing_params": [
+        "sttree_stret_nm"
+      ]
+    },
+    {
+      "dataset_id": "15063440",
+      "title": "경상남도 의령군_무료와이파이",
+      "operation": "무료와이파이 정보 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "instl_place_nm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "instl_place_nm"
+      ]
+    },
+    {
+      "dataset_id": "15063444",
+      "title": "경상남도 의령군_민방위대피시설",
+      "operation": "민방위대피시설 정보 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "clns_shunt_fclty_nm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "clns_shunt_fclty_nm"
+      ]
+    },
+    {
+      "dataset_id": "15063446",
+      "title": "경상남도 의령군_보안등정보",
+      "operation": "보안등정보 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "chrstn_nm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "chrstn_nm"
+      ]
+    },
+    {
+      "dataset_id": "15063448",
+      "title": "경상남도 의령군_소규모공공시설위험지정정보",
+      "operation": "소규모공공시설위험지정정보 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "fclty_nm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "fclty_nm"
+      ]
+    },
+    {
+      "dataset_id": "15063451",
+      "title": "경상남도 의령군_자동심장충격기",
+      "operation": "자동심장충격기 정보 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "instl_instt_nm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "instl_instt_nm"
+      ]
+    },
+    {
+      "dataset_id": "15063452",
+      "title": "경상남도 의령군_전기차충전소",
+      "operation": "전기차충전소 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "chrstn_nm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "chrstn_nm"
+      ]
+    },
+    {
+      "dataset_id": "3034299",
+      "title": "경상남도 의령군_행정기관정보",
+      "operation": "행정기관 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "deptNm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "deptNm"
       ]
     }
   ]

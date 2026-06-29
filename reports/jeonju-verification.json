@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-29T09:31:15Z",
+  "generated_at": "2026-06-29T09:39:57Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 25,
+  "limit": 35,
   "truncated": true,
-  "filtered_count": 25,
+  "filtered_count": 35,
   "summary": {
-    "total": 25,
+    "total": 35,
     "verified": 0,
     "failed": 5,
-    "skipped": 20,
+    "skipped": 30,
     "unknown": 0
   },
   "results": [
@@ -480,6 +480,223 @@
       "missing_params": [
         "address",
         "dongName"
+      ]
+    },
+    {
+      "dataset_id": "15057130",
+      "title": "전북특별자치도 전주시_민방위 급수 시설 정보 서비스",
+      "operation": "민방위 급수 시설 현황",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "addr": "",
+        "gu": "완산구",
+        "pacNm": "",
+        "pageSize": "1",
+        "startPage": "1",
+        "waterQua": ""
+      },
+      "missing_params": [
+        "addr",
+        "waterQua"
+      ]
+    },
+    {
+      "dataset_id": "15057163",
+      "title": "전북특별자치도 전주시_보안등 정보 서비스",
+      "operation": "보안등 현황",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "bDong": "",
+        "gu": "완산구",
+        "hDong": "",
+        "kepcoCustom": "",
+        "newAddr": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "hDong",
+        "bDong",
+        "kepcoCustom"
+      ]
+    },
+    {
+      "dataset_id": "15057573",
+      "title": "전북특별자치도 전주시_민방위 대피시설 정보 서비스",
+      "operation": "민방위 대피 시설 정보",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "civilDefenseNm": "",
+        "civilDefenseType": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "roadAdd": ""
+      },
+      "missing_params": [
+        "civilDefenseNm",
+        "civilDefenseType"
+      ]
+    },
+    {
+      "dataset_id": "15057822",
+      "title": "전북특별자치도 전주시_유기동물보호소 정보 현황",
+      "operation": "유기동물보호소 정보 조회",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "address": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "yugiName": ""
+      },
+      "missing_params": [
+        "address",
+        "yugiName"
+      ]
+    },
+    {
+      "dataset_id": "15058084",
+      "title": "전북특별자치도 전주시_동물병원 정보 현황",
+      "operation": "동물병원 정보 조회",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "address": "",
+        "dongName": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "address",
+        "dongName"
+      ]
+    },
+    {
+      "dataset_id": "15058184",
+      "title": "전북특별자치도 전주시_동물등록제 대행업소 정보 현황",
+      "operation": "동물등록제 대행업소 정보 조회",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "address": "",
+        "dongName": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "address",
+        "dongName"
+      ]
+    },
+    {
+      "dataset_id": "15058560",
+      "title": "전북특별자치도 전주시_동물약국 정보 현황",
+      "operation": "동물약국정보 조회",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "address": "",
+        "dongName": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "address",
+        "dongName"
+      ]
+    },
+    {
+      "dataset_id": "3036596",
+      "title": "전북특별자치도 전주시_전주음식",
+      "operation": "막걸리집 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "foodUid": "",
+        "keyword": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "keyword",
+        "foodUid"
+      ]
+    },
+    {
+      "dataset_id": "3036596",
+      "title": "전북특별자치도 전주시_전주음식",
+      "operation": "백반집목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "foodUid": "",
+        "keyword": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "keyword",
+        "foodUid"
+      ]
+    },
+    {
+      "dataset_id": "3036596",
+      "title": "전북특별자치도 전주시_전주음식",
+      "operation": "전주비빔밥목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "foodUid": "",
+        "keyword": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "keyword",
+        "foodUid"
       ]
     }
   ]

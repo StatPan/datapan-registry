@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-29T09:31:15Z",
+  "generated_at": "2026-06-29T09:39:57Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 25,
+  "limit": 35,
   "truncated": true,
-  "filtered_count": 25,
+  "filtered_count": 35,
   "summary": {
-    "total": 25,
+    "total": 35,
     "verified": 0,
     "failed": 5,
-    "skipped": 20,
+    "skipped": 30,
     "unknown": 0
   },
   "results": [
@@ -519,6 +519,212 @@
         "sexCd",
         "defectIncludeYn"
       ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "축산물 소도체 육질육량 등급별 경락가격정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "breedCd": "",
+        "defectIncludeYn": "",
+        "endYmd": "20240101",
+        "qgradeYn": "",
+        "sexCd": "",
+        "startYmd": "20240101"
+      },
+      "missing_params": [
+        "breedCd",
+        "sexCd",
+        "qgradeYn",
+        "defectIncludeYn"
+      ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "축산물 실시간 경매시황중계정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "auctDate": "",
+        "auctFlag": ""
+      },
+      "missing_params": [
+        "auctDate",
+        "auctFlag"
+      ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "축산물 실시간 돼지도체 경매세부현황정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "abattCd": "",
+        "auctDate": "",
+        "endNo": "",
+        "gradeCd": "",
+        "sexCd": "",
+        "skinYn": "",
+        "startNo": ""
+      },
+      "missing_params": [
+        "auctDate",
+        "abattCd",
+        "startNo",
+        "endNo",
+        "skinYn",
+        "sexCd",
+        "gradeCd"
+      ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "축산물 실시간 돼지도체 등급별경매현황정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "abattCd": "",
+        "auctDate": ""
+      },
+      "missing_params": [
+        "auctDate",
+        "abattCd"
+      ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "축산물 실시간 소도체 등급별경매현황정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "abattCd": "",
+        "auctDate": ""
+      },
+      "missing_params": [
+        "auctDate",
+        "abattCd"
+      ]
+    },
+    {
+      "dataset_id": "15059251",
+      "title": "축산물품질평가원_계란등급판정정보",
+      "operation": "계란등급판정결과조회",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "eggshellNo": "",
+        "judgeYmd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "eggshellNo",
+        "judgeYmd"
+      ]
+    },
+    {
+      "dataset_id": "15073985",
+      "title": "축산물품질평가원_가금산물 일일거래가격정보",
+      "operation": "계란 일일가격조회",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "endYmd": "20240101",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "startYmd": "20240101",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15073985",
+      "title": "축산물품질평가원_가금산물 일일거래가격정보",
+      "operation": "산란계(노계) 가격조회",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "endYmd": "20240101",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "periodType": "",
+        "startYmd": "20240101"
+      },
+      "missing_params": [
+        "periodType"
+      ]
+    },
+    {
+      "dataset_id": "15073985",
+      "title": "축산물품질평가원_가금산물 일일거래가격정보",
+      "operation": "산란계(병아리) 가격조회",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "endYmd": "20240101",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "startYmd": "20240101"
+      }
+    },
+    {
+      "dataset_id": "15073985",
+      "title": "축산물품질평가원_가금산물 일일거래가격정보",
+      "operation": "오리 일일가격조회",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "endYmd": "20240101",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "startYmd": "20240101",
+        "type": "json"
+      }
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-06-29T09:32:14Z",
+  "generated_at": "2026-06-29T09:40:38Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -21,20 +21,20 @@
     "call_capable_adapters": 21
   },
   "evidence": {
-    "total": 406,
+    "total": 466,
     "verified": 22,
     "failed": 87,
-    "skipped": 297,
+    "skipped": 357,
     "unknown": 0,
-    "coverage_percent": 3.3,
+    "coverage_percent": 3.8,
     "by_kind": [
       {
         "key": "data_go_kr_gateway",
-        "count": 30
+        "count": 40
       },
       {
         "key": "external_endpoint",
-        "count": 357
+        "count": 407
       },
       {
         "key": "service_root",
@@ -45,14 +45,14 @@
   "growth_target": {
     "target_percent": 10,
     "target_evidence_total": 1221,
-    "remaining_to_target": 815,
+    "remaining_to_target": 755,
     "status": "below_target"
   },
   "verification_plan": {
     "planned_batches": 6,
-    "planned_operations": 60,
-    "uncovered_gateway_candidates": 11389,
-    "uncovered_adapter_candidates": 210,
+    "planned_operations": 43,
+    "uncovered_gateway_candidates": 11379,
+    "uncovered_adapter_candidates": 160,
     "missing_adapter_hosts": 10,
     "planned_by_kind": [
       {
@@ -61,7 +61,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 50
+        "count": 33
       }
     ],
     "batches": [
@@ -69,7 +69,7 @@
         "label": "gateway",
         "kind": "data_go_kr_gateway",
         "candidates": 11419,
-        "uncovered_candidates": 11389,
+        "uncovered_candidates": 11379,
         "planned_operations": 10,
         "output": ".datapan/verification/gateway-next.json"
       },
@@ -78,8 +78,8 @@
         "provider": "ekape",
         "kind": "external_endpoint",
         "candidates": 49,
-        "uncovered_candidates": 14,
-        "planned_operations": 10,
+        "uncovered_candidates": 4,
+        "planned_operations": 4,
         "output": ".datapan/verification/ekape-next.json"
       },
       {
@@ -87,8 +87,8 @@
         "provider": "geoje",
         "kind": "external_endpoint",
         "candidates": 41,
-        "uncovered_candidates": 15,
-        "planned_operations": 10,
+        "uncovered_candidates": 5,
+        "planned_operations": 5,
         "output": ".datapan/verification/geoje-next.json"
       },
       {
@@ -96,7 +96,7 @@
         "provider": "jeonju",
         "kind": "external_endpoint",
         "candidates": 80,
-        "uncovered_candidates": 55,
+        "uncovered_candidates": 45,
         "planned_operations": 10,
         "output": ".datapan/verification/jeonju-next.json"
       },
@@ -105,7 +105,7 @@
         "provider": "q-net",
         "kind": "external_endpoint",
         "candidates": 147,
-        "uncovered_candidates": 112,
+        "uncovered_candidates": 102,
         "planned_operations": 10,
         "output": ".datapan/verification/q-net-next.json"
       },
@@ -114,8 +114,8 @@
         "provider": "uiryeong",
         "kind": "external_endpoint",
         "candidates": 40,
-        "uncovered_candidates": 14,
-        "planned_operations": 10,
+        "uncovered_candidates": 4,
+        "planned_operations": 4,
         "output": ".datapan/verification/uiryeong-next.json"
       }
     ]
@@ -130,7 +130,7 @@
     {
       "kind": "runtime_evidence_below_target",
       "severity": "warning",
-      "message": "Runtime evidence coverage is 3.3% against the 10.0% target; 815 additional evidence records are needed before this target is met."
+      "message": "Runtime evidence coverage is 3.8% against the 10.0% target; 755 additional evidence records are needed before this target is met."
     }
   ]
 }

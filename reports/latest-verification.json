@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-29T09:31:39Z",
+  "generated_at": "2026-06-29T09:40:10Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 413,
+  "limit": 473,
   "truncated": true,
-  "filtered_count": 406,
+  "filtered_count": 466,
   "summary": {
-    "total": 406,
+    "total": 466,
     "verified": 22,
     "failed": 87,
-    "skipped": 297,
+    "skipped": 357,
     "unknown": 0
   },
   "results": [
@@ -8357,6 +8357,1167 @@
       },
       "missing_params": [
         "uiryeongculturalEntId"
+      ]
+    },
+    {
+      "dataset_id": "15000480",
+      "title": "국립중앙의료원_전국 명절 비상 진료기관 정보 조회 서비스",
+      "operation": "명절 진료 가능한 기관 위치정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth"
+    },
+    {
+      "dataset_id": "15000504",
+      "title": "외교부_여행금지제도",
+      "operation": "여행금지제도 단일조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "id": ""
+      },
+      "missing_params": [
+        "id"
+      ]
+    },
+    {
+      "dataset_id": "15000504",
+      "title": "외교부_여행금지제도",
+      "operation": "여행금지제도 목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "countryEnName": "",
+        "countryName": "",
+        "isoCode1": "",
+        "isoCode10": "",
+        "isoCode2": "",
+        "isoCode3": "",
+        "isoCode4": "",
+        "isoCode5": "",
+        "isoCode6": "",
+        "isoCode7": "",
+        "isoCode8": "",
+        "isoCode9": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "countryName",
+        "countryEnName",
+        "isoCode1",
+        "isoCode2",
+        "isoCode3",
+        "isoCode4",
+        "isoCode5",
+        "isoCode6",
+        "isoCode7",
+        "isoCode8",
+        "isoCode9",
+        "isoCode10"
+      ]
+    },
+    {
+      "dataset_id": "15000563",
+      "title": "국립중앙의료원_전국 응급의료기관 정보 조회 서비스",
+      "operation": "외상센터 기본정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "HPID": "",
+        "QN": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "HPID",
+        "QN"
+      ]
+    },
+    {
+      "dataset_id": "15000563",
+      "title": "국립중앙의료원_전국 응급의료기관 정보 조회 서비스",
+      "operation": "외상센터 목록정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ORD": "",
+        "Q0": "",
+        "Q1": "",
+        "QD": "",
+        "QN": "",
+        "QT": "",
+        "QZ": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "Q0",
+        "Q1",
+        "QT",
+        "QZ",
+        "QD",
+        "QN",
+        "ORD"
+      ]
+    },
+    {
+      "dataset_id": "15000563",
+      "title": "국립중앙의료원_전국 응급의료기관 정보 조회 서비스",
+      "operation": "외상센터 위치정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "WGS84_LAT": "",
+        "WGS84_LON": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "WGS84_LON",
+        "WGS84_LAT"
+      ]
+    },
+    {
+      "dataset_id": "15000563",
+      "title": "국립중앙의료원_전국 응급의료기관 정보 조회 서비스",
+      "operation": "응급실 및 중증질환 메시지 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "HPID": "",
+        "Q0": "",
+        "Q1": "",
+        "QN": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "HPID",
+        "QN",
+        "Q0",
+        "Q1"
+      ]
+    },
+    {
+      "dataset_id": "15000563",
+      "title": "국립중앙의료원_전국 응급의료기관 정보 조회 서비스",
+      "operation": "응급실 실시간 가용병상정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "STAGE1": "",
+        "STAGE2": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "STAGE1",
+        "STAGE2"
+      ]
+    },
+    {
+      "dataset_id": "15000563",
+      "title": "국립중앙의료원_전국 응급의료기관 정보 조회 서비스",
+      "operation": "응급의료기관 기본정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "HPID": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "HPID"
+      ]
+    },
+    {
+      "dataset_id": "15000563",
+      "title": "국립중앙의료원_전국 응급의료기관 정보 조회 서비스",
+      "operation": "응급의료기관 목록정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ORD": "",
+        "Q0": "",
+        "Q1": "",
+        "QD": "",
+        "QN": "",
+        "QT": "",
+        "QZ": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "Q0",
+        "Q1",
+        "QT",
+        "QZ",
+        "QD",
+        "QN",
+        "ORD"
+      ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "축산물 소도체 육질육량 등급별 경락가격정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "breedCd": "",
+        "defectIncludeYn": "",
+        "endYmd": "20240101",
+        "qgradeYn": "",
+        "sexCd": "",
+        "startYmd": "20240101"
+      },
+      "missing_params": [
+        "breedCd",
+        "sexCd",
+        "qgradeYn",
+        "defectIncludeYn"
+      ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "축산물 실시간 경매시황중계정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "auctDate": "",
+        "auctFlag": ""
+      },
+      "missing_params": [
+        "auctDate",
+        "auctFlag"
+      ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "축산물 실시간 돼지도체 경매세부현황정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "abattCd": "",
+        "auctDate": "",
+        "endNo": "",
+        "gradeCd": "",
+        "sexCd": "",
+        "skinYn": "",
+        "startNo": ""
+      },
+      "missing_params": [
+        "auctDate",
+        "abattCd",
+        "startNo",
+        "endNo",
+        "skinYn",
+        "sexCd",
+        "gradeCd"
+      ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "축산물 실시간 돼지도체 등급별경매현황정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "abattCd": "",
+        "auctDate": ""
+      },
+      "missing_params": [
+        "auctDate",
+        "abattCd"
+      ]
+    },
+    {
+      "dataset_id": "15058822",
+      "title": "축산물품질평가원_축산물등급판정정보",
+      "operation": "축산물 실시간 소도체 등급별경매현황정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "abattCd": "",
+        "auctDate": ""
+      },
+      "missing_params": [
+        "auctDate",
+        "abattCd"
+      ]
+    },
+    {
+      "dataset_id": "15059251",
+      "title": "축산물품질평가원_계란등급판정정보",
+      "operation": "계란등급판정결과조회",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "eggshellNo": "",
+        "judgeYmd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "eggshellNo",
+        "judgeYmd"
+      ]
+    },
+    {
+      "dataset_id": "15073985",
+      "title": "축산물품질평가원_가금산물 일일거래가격정보",
+      "operation": "계란 일일가격조회",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "endYmd": "20240101",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "startYmd": "20240101",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15073985",
+      "title": "축산물품질평가원_가금산물 일일거래가격정보",
+      "operation": "산란계(노계) 가격조회",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "endYmd": "20240101",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "periodType": "",
+        "startYmd": "20240101"
+      },
+      "missing_params": [
+        "periodType"
+      ]
+    },
+    {
+      "dataset_id": "15073985",
+      "title": "축산물품질평가원_가금산물 일일거래가격정보",
+      "operation": "산란계(병아리) 가격조회",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "endYmd": "20240101",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "startYmd": "20240101"
+      }
+    },
+    {
+      "dataset_id": "15073985",
+      "title": "축산물품질평가원_가금산물 일일거래가격정보",
+      "operation": "오리 일일가격조회",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "endYmd": "20240101",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "startYmd": "20240101",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "3065177",
+      "title": "경상남도 거제시_교통 정보",
+      "operation": "거제시 도로전광판 표출메시지 정보 조회",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "3065177",
+      "title": "경상남도 거제시_교통 정보",
+      "operation": "거제시 차량 돌발정보 조회",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "3065177",
+      "title": "경상남도 거제시_교통 정보",
+      "operation": "거제시 차량 소통정보 조회",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "3065177",
+      "title": "경상남도 거제시_교통 정보",
+      "operation": "거제시 차량 시간별구간소통정보 조회",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "endDate": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "startDate": ""
+      },
+      "missing_params": [
+        "startDate",
+        "endDate"
+      ]
+    },
+    {
+      "dataset_id": "3065177",
+      "title": "경상남도 거제시_교통 정보",
+      "operation": "거제시 차량 월별구간소통정보 조회",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "endDate": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "startDate": ""
+      },
+      "missing_params": [
+        "startDate",
+        "endDate"
+      ]
+    },
+    {
+      "dataset_id": "3065177",
+      "title": "경상남도 거제시_교통 정보",
+      "operation": "거제시 차량 정체정보 조회",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "3065532",
+      "title": "경상남도 거제시 도서정보",
+      "operation": "거제시 도서 상세정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "geojebooksBookKey": ""
+      },
+      "missing_params": [
+        "geojebooksBookKey"
+      ]
+    },
+    {
+      "dataset_id": "3065532",
+      "title": "경상남도 거제시 도서정보",
+      "operation": "거제시 도서정보 목록",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "geojebooksAuthor": "",
+        "geojebooksPub": "",
+        "geojebooksTitle": ""
+      },
+      "missing_params": [
+        "geojebooksTitle",
+        "geojebooksAuthor",
+        "geojebooksPub"
+      ]
+    },
+    {
+      "dataset_id": "3079223",
+      "title": "경상남도 거제시_숙박업 등록현황",
+      "operation": "숙박 객실 목록 정보 서비스",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "lodgeId": ""
+      },
+      "missing_params": [
+        "lodgeId"
+      ]
+    },
+    {
+      "dataset_id": "3079223",
+      "title": "경상남도 거제시_숙박업 등록현황",
+      "operation": "숙박 목록 상세 정보 서비스",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "lodgeId": ""
+      },
+      "missing_params": [
+        "lodgeId"
+      ]
+    },
+    {
+      "dataset_id": "15057130",
+      "title": "전북특별자치도 전주시_민방위 급수 시설 정보 서비스",
+      "operation": "민방위 급수 시설 현황",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "addr": "",
+        "gu": "완산구",
+        "pacNm": "",
+        "pageSize": "1",
+        "startPage": "1",
+        "waterQua": ""
+      },
+      "missing_params": [
+        "addr",
+        "waterQua"
+      ]
+    },
+    {
+      "dataset_id": "15057163",
+      "title": "전북특별자치도 전주시_보안등 정보 서비스",
+      "operation": "보안등 현황",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "bDong": "",
+        "gu": "완산구",
+        "hDong": "",
+        "kepcoCustom": "",
+        "newAddr": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "hDong",
+        "bDong",
+        "kepcoCustom"
+      ]
+    },
+    {
+      "dataset_id": "15057573",
+      "title": "전북특별자치도 전주시_민방위 대피시설 정보 서비스",
+      "operation": "민방위 대피 시설 정보",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "civilDefenseNm": "",
+        "civilDefenseType": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "roadAdd": ""
+      },
+      "missing_params": [
+        "civilDefenseNm",
+        "civilDefenseType"
+      ]
+    },
+    {
+      "dataset_id": "15057822",
+      "title": "전북특별자치도 전주시_유기동물보호소 정보 현황",
+      "operation": "유기동물보호소 정보 조회",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "address": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "yugiName": ""
+      },
+      "missing_params": [
+        "address",
+        "yugiName"
+      ]
+    },
+    {
+      "dataset_id": "15058084",
+      "title": "전북특별자치도 전주시_동물병원 정보 현황",
+      "operation": "동물병원 정보 조회",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "address": "",
+        "dongName": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "address",
+        "dongName"
+      ]
+    },
+    {
+      "dataset_id": "15058184",
+      "title": "전북특별자치도 전주시_동물등록제 대행업소 정보 현황",
+      "operation": "동물등록제 대행업소 정보 조회",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "address": "",
+        "dongName": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "address",
+        "dongName"
+      ]
+    },
+    {
+      "dataset_id": "15058560",
+      "title": "전북특별자치도 전주시_동물약국 정보 현황",
+      "operation": "동물약국정보 조회",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "address": "",
+        "dongName": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "address",
+        "dongName"
+      ]
+    },
+    {
+      "dataset_id": "3036596",
+      "title": "전북특별자치도 전주시_전주음식",
+      "operation": "막걸리집 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "foodUid": "",
+        "keyword": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "keyword",
+        "foodUid"
+      ]
+    },
+    {
+      "dataset_id": "3036596",
+      "title": "전북특별자치도 전주시_전주음식",
+      "operation": "백반집목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "foodUid": "",
+        "keyword": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "keyword",
+        "foodUid"
+      ]
+    },
+    {
+      "dataset_id": "3036596",
+      "title": "전북특별자치도 전주시_전주음식",
+      "operation": "전주비빔밥목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "foodUid": "",
+        "keyword": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "keyword",
+        "foodUid"
+      ]
+    },
+    {
+      "dataset_id": "15037521",
+      "title": "한국산업인력공단_국가자격 취득자 관련 통계 정보",
+      "operation": "학력별 자격취득자 현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15037522",
+      "title": "한국산업인력공단_국가자격 응시자격 관련 현황 데이터",
+      "operation": "실기합격자 응시자격현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "baseYY": "2023"
+      }
+    },
+    {
+      "dataset_id": "15037522",
+      "title": "한국산업인력공단_국가자격 응시자격 관련 현황 데이터",
+      "operation": "응시자격조항별 접수및합격현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15037523",
+      "title": "한국산업인력공단_국가자격 등급별 현황 정보",
+      "operation": "기술(서비스)분야 등급별 종목현황 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "baseYY": "2023"
+      }
+    },
+    {
+      "dataset_id": "15037523",
+      "title": "한국산업인력공단_국가자격 등급별 현황 정보",
+      "operation": "등급별 응시자격 검정현황 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15037523",
+      "title": "한국산업인력공단_국가자격 등급별 현황 정보",
+      "operation": "등급별 접수상위 종목현황 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15037523",
+      "title": "한국산업인력공단_국가자격 등급별 현황 정보",
+      "operation": "등급별 취득 상위종목 현황 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15037523",
+      "title": "한국산업인력공단_국가자격 등급별 현황 정보",
+      "operation": "타등급 자격취득 현황 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "baseYY": "2023"
+      }
+    },
+    {
+      "dataset_id": "15037524",
+      "title": "한국산업인력공단_국가자격 통계연보 정보",
+      "operation": "국가기술자격소지자현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "baseYY": "2023"
+      }
+    },
+    {
+      "dataset_id": "15037524",
+      "title": "한국산업인력공단_국가자격 통계연보 정보",
+      "operation": "연도별자격취득현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15058579",
+      "title": "경상남도 의령군 문화재",
+      "operation": "문화재 상세정보",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "uiryeongculturalEntId": ""
+      },
+      "missing_params": [
+        "uiryeongculturalEntId"
+      ]
+    },
+    {
+      "dataset_id": "15058926",
+      "title": "경상남도 의령군_세차장",
+      "operation": "세차장 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15063439",
+      "title": "경상남도 의령군_가로수길정보",
+      "operation": "가로수길 정보 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sttree_stret_nm": ""
+      },
+      "missing_params": [
+        "sttree_stret_nm"
+      ]
+    },
+    {
+      "dataset_id": "15063440",
+      "title": "경상남도 의령군_무료와이파이",
+      "operation": "무료와이파이 정보 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "instl_place_nm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "instl_place_nm"
+      ]
+    },
+    {
+      "dataset_id": "15063444",
+      "title": "경상남도 의령군_민방위대피시설",
+      "operation": "민방위대피시설 정보 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "clns_shunt_fclty_nm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "clns_shunt_fclty_nm"
+      ]
+    },
+    {
+      "dataset_id": "15063446",
+      "title": "경상남도 의령군_보안등정보",
+      "operation": "보안등정보 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "chrstn_nm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "chrstn_nm"
+      ]
+    },
+    {
+      "dataset_id": "15063448",
+      "title": "경상남도 의령군_소규모공공시설위험지정정보",
+      "operation": "소규모공공시설위험지정정보 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "fclty_nm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "fclty_nm"
+      ]
+    },
+    {
+      "dataset_id": "15063451",
+      "title": "경상남도 의령군_자동심장충격기",
+      "operation": "자동심장충격기 정보 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "instl_instt_nm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "instl_instt_nm"
+      ]
+    },
+    {
+      "dataset_id": "15063452",
+      "title": "경상남도 의령군_전기차충전소",
+      "operation": "전기차충전소 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "chrstn_nm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "chrstn_nm"
+      ]
+    },
+    {
+      "dataset_id": "3034299",
+      "title": "경상남도 의령군_행정기관정보",
+      "operation": "행정기관 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-29T09:39:29Z",
+      "params": {
+        "deptNm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "deptNm"
       ]
     }
   ]
