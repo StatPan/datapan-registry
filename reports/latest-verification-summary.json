@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-06-29T14:04:01Z",
+  "generated_at": "2026-06-29T14:14:00Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 519,
+    "total": 539,
     "verified": 22,
     "failed": 87,
-    "skipped": 410,
+    "skipped": 430,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 410,
+        "count": 430,
         "status": "skipped"
       },
       {
@@ -33,12 +33,12 @@
     "by_reason": [
       {
         "key": "missing_auth",
-        "count": 92,
+        "count": 93,
         "reason": "missing_auth"
       },
       {
         "key": "jeonju_missing_required_params",
-        "count": 43,
+        "count": 52,
         "reason": "jeonju_missing_required_params"
       },
       {
@@ -60,6 +60,11 @@
         "key": "geoje_missing_required_params",
         "count": 25,
         "reason": "geoje_missing_required_params"
+      },
+      {
+        "key": "qnet_separate_service_key_required",
+        "count": 19,
+        "reason": "qnet_separate_service_key_required"
       },
       {
         "key": "tour_service_root_missing_operation_path",
@@ -100,11 +105,6 @@
         "key": "qnet_missing_required_params",
         "count": 9,
         "reason": "qnet_missing_required_params"
-      },
-      {
-        "key": "qnet_separate_service_key_required",
-        "count": 9,
-        "reason": "qnet_separate_service_key_required"
       },
       {
         "key": "qnet_wadl_metadata_only",
@@ -285,12 +285,12 @@
     "by_provider": [
       {
         "key": "q-net",
-        "count": 65,
+        "count": 75,
         "provider": "q-net"
       },
       {
         "key": "jeonju",
-        "count": 55,
+        "count": 65,
         "provider": "jeonju"
       },
       {
@@ -421,14 +421,14 @@
     ],
     "by_endpoint_host": [
       {
+        "key": "openapi.jeonju.go.kr",
+        "count": 65,
+        "host": "openapi.jeonju.go.kr"
+      },
+      {
         "key": "openapi.q-net.or.kr",
         "count": 56,
         "host": "openapi.q-net.or.kr"
-      },
-      {
-        "key": "openapi.jeonju.go.kr",
-        "count": 55,
-        "host": "openapi.jeonju.go.kr"
       },
       {
         "key": "data.ekape.or.kr",
@@ -471,6 +471,11 @@
         "host": "openapi.its.ulsan.kr"
       },
       {
+        "key": "c.q-net.or.kr",
+        "count": 19,
+        "host": "c.q-net.or.kr"
+      },
+      {
         "key": "www.andong.go.kr",
         "count": 15,
         "host": "www.andong.go.kr"
@@ -484,11 +489,6 @@
         "key": "open.itfind.or.kr",
         "count": 13,
         "host": "open.itfind.or.kr"
-      },
-      {
-        "key": "c.q-net.or.kr",
-        "count": 9,
-        "host": "c.q-net.or.kr"
       },
       {
         "key": "data.naqs.go.kr",
@@ -574,7 +574,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 460,
+        "count": 480,
         "kind": "external_endpoint"
       },
       {
