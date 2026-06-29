@@ -10,6 +10,11 @@
     "generated_at",
     "provider",
     "source_id",
+    "source_profile",
+    "coverage_report",
+    "adapter_targets_report",
+    "route_disposition_report",
+    "provider_index",
     "summary",
     "route_disposition",
     "missing_hosts",
@@ -31,7 +36,13 @@
       "type": "string",
       "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
     },
+    "source_profile": {
+      "type": "string"
+    },
     "coverage_report": {
+      "type": "string"
+    },
+    "adapter_targets_report": {
       "type": "string"
     },
     "route_disposition_report": {

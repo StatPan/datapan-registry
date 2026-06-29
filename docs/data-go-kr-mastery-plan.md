@@ -155,6 +155,23 @@ data.go.kr mastery should produce or preserve:
 - `reports/data-go-kr/error-action-catalog.json`
 - future `reports/data-go-kr/registry-impact-plan.json`
 
+## Source-Scoped Generation Contract
+
+Checked-in data.go.kr source-scoped artifacts must name the root reports they
+are generated from, then CI must verify that the source-scoped values still
+match those roots.
+
+| Source-scoped artifact | Required generation inputs | CI gate |
+| --- | --- | --- |
+| `reports/data-go-kr/external-coverage-summary.json` | `sources/data_go_kr.json`, `reports/coverage.json`, `reports/adapter-targets.json`, `reports/route-disposition.json`, `data/provider-index.json` | `scripts/validate-external-coverage.py` validates schema and cross-checks source identity, raw coverage metrics, route evidence counts, adapter target counts, provider-index host count, and missing host counts. |
+| `reports/data-go-kr/error-action-catalog.json` | `sources/data_go_kr.json`, `reports/error-catalog.json`, `reports/route-disposition.json`, provider verification reports | `scripts/validate-error-action-catalogs.py` validates checked-in action rules; future generation should also fail on unmapped known error signatures. |
+| `reports/data-go-kr/registry-impact-plan.json` | `sources/data_go_kr.json`, catalog diff, verification evidence, route disposition, error action catalog, promoted dataset mappings | Future `datapan-cli` generation must validate against `datapan.registry-impact-plan.v1` before client/server consumers act on it. |
+
+This contract keeps `data/data-go-kr.registry.json` as the compatibility
+registry path while moving generated evidence toward `reports/data-go-kr/`.
+If any root report changes without the source-scoped artifact being refreshed,
+CI should fail rather than treating the checked-in summary as authoritative.
+
 ## Task Sequence
 
 1. Add and validate `sources/data_go_kr.json`. Done in PR #4.
@@ -164,8 +181,10 @@ data.go.kr mastery should produce or preserve:
    in `reports/data-go-kr/error-action-catalog.json`.
 5. Add an evidence-adjusted external coverage summary. Done in PR #4 as a
    checked-in draft artifact.
-6. Increase runtime verification evidence for call-capable registered adapters.
-7. Generate a data.go.kr impact plan from catalog diff, verification evidence,
+6. Add source-scoped generation input cross-checks for data.go.kr external
+   coverage. Done in PR #4.
+7. Increase runtime verification evidence for call-capable registered adapters.
+8. Generate a data.go.kr impact plan from catalog diff, verification evidence,
    route disposition, and promoted dataset mappings.
 
 ## Done Criteria
