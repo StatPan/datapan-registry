@@ -1,0 +1,163 @@
+{
+  "schema_version": "datapan.runtime-evidence-growth.v1",
+  "generated_at": "2026-06-29T00:00:00Z",
+  "datapan_version": "v0.1.29",
+  "provider": "data.go.kr",
+  "source_id": "data_go_kr",
+  "source_profile": "sources/data_go_kr.json",
+  "generation_inputs": {
+    "coverage": "reports/coverage.json",
+    "latest_verification": "reports/latest-verification.json",
+    "latest_verification_summary": "reports/latest-verification-summary.json",
+    "verification_plan": "reports/verification-plan.json",
+    "provider_index": "data/provider-index.json"
+  },
+  "coverage": {
+    "operations": 12205,
+    "callable_operations": 12063,
+    "data_go_kr_gateway_operations": 11419,
+    "external_endpoint_operations": 595,
+    "registered_adapter_operations": 586,
+    "call_capable_adapters": 21
+  },
+  "evidence": {
+    "total": 256,
+    "verified": 22,
+    "failed": 87,
+    "skipped": 147,
+    "unknown": 0,
+    "coverage_percent": 2.1,
+    "by_kind": [
+      {
+        "key": "data_go_kr_gateway",
+        "count": 10
+      },
+      {
+        "key": "external_endpoint",
+        "count": 227
+      },
+      {
+        "key": "service_root",
+        "count": 19
+      }
+    ]
+  },
+  "growth_target": {
+    "target_percent": 10.0,
+    "target_evidence_total": 1221,
+    "remaining_to_target": 965,
+    "status": "below_target"
+  },
+  "verification_plan": {
+    "planned_batches": 9,
+    "planned_operations": 83,
+    "uncovered_gateway_candidates": 11409,
+    "uncovered_adapter_candidates": 340,
+    "missing_adapter_hosts": 10,
+    "planned_by_kind": [
+      {
+        "key": "data_go_kr_gateway",
+        "count": 10
+      },
+      {
+        "key": "external_endpoint",
+        "count": 73
+      }
+    ],
+    "batches": [
+      {
+        "label": "gateway",
+        "kind": "data_go_kr_gateway",
+        "candidates": 11419,
+        "uncovered_candidates": 11409,
+        "planned_operations": 10,
+        "output": ".datapan/verification/gateway-next.json"
+      },
+      {
+        "label": "ekape",
+        "provider": "ekape",
+        "kind": "external_endpoint",
+        "candidates": 49,
+        "uncovered_candidates": 34,
+        "planned_operations": 10,
+        "output": ".datapan/verification/ekape-next.json"
+      },
+      {
+        "label": "emuseum",
+        "provider": "emuseum",
+        "kind": "external_endpoint",
+        "candidates": 3,
+        "uncovered_candidates": 3,
+        "planned_operations": 3,
+        "output": ".datapan/verification/emuseum-next.json"
+      },
+      {
+        "label": "epost",
+        "provider": "epost",
+        "kind": "external_endpoint",
+        "candidates": 28,
+        "uncovered_candidates": 13,
+        "planned_operations": 10,
+        "output": ".datapan/verification/epost-next.json"
+      },
+      {
+        "label": "geoje",
+        "provider": "geoje",
+        "kind": "external_endpoint",
+        "candidates": 41,
+        "uncovered_candidates": 35,
+        "planned_operations": 10,
+        "output": ".datapan/verification/geoje-next.json"
+      },
+      {
+        "label": "jeonju",
+        "provider": "jeonju",
+        "kind": "external_endpoint",
+        "candidates": 80,
+        "uncovered_candidates": 75,
+        "planned_operations": 10,
+        "output": ".datapan/verification/jeonju-next.json"
+      },
+      {
+        "label": "q-net",
+        "provider": "q-net",
+        "kind": "external_endpoint",
+        "candidates": 147,
+        "uncovered_candidates": 132,
+        "planned_operations": 10,
+        "output": ".datapan/verification/q-net-next.json"
+      },
+      {
+        "label": "uiryeong",
+        "provider": "uiryeong",
+        "kind": "external_endpoint",
+        "candidates": 40,
+        "uncovered_candidates": 34,
+        "planned_operations": 10,
+        "output": ".datapan/verification/uiryeong-next.json"
+      },
+      {
+        "label": "ulsan",
+        "provider": "ulsan",
+        "kind": "external_endpoint",
+        "candidates": 20,
+        "uncovered_candidates": 14,
+        "planned_operations": 10,
+        "output": ".datapan/verification/ulsan-next.json"
+      }
+    ]
+  },
+  "provider_split_readiness": {
+    "status": "ready",
+    "adapter_count": 26,
+    "verification_capable_adapters": 26,
+    "call_capable_adapters": 21
+  },
+  "warnings": [
+    {
+      "kind": "runtime_evidence_below_target",
+      "severity": "warning",
+      "message": "Runtime evidence coverage is 2.1% against the 10.0% target; 965 additional evidence records are needed before this target is met."
+    }
+  ]
+}
