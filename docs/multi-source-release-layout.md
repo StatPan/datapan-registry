@@ -10,6 +10,8 @@ artifacts by itself.
 
 See `docs/source-standardization-research.md` for the source survey policy and
 official reference anchors that should inform each source-specific profile.
+See `docs/registry-ops-scope.md` for the selected near-term scope and
+repository ownership boundaries.
 
 ## Goals
 

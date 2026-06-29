@@ -9,6 +9,11 @@ registry contracts and let repeated source surveys harden the schema.
 This document is a seed research ledger. It should be updated from official
 source pages before each source importer or provider profile is implemented.
 
+The operating boundary for turning this research into registry contracts is
+defined in `docs/registry-ops-scope.md`. Source-specific findings should be
+captured with `schemas/datapan.source-profile.v1.schema.json` before they are
+used for generated release evidence.
+
 ## Reference Policy
 
 Every source profile should carry reference URLs that can be checked for drift:
@@ -79,8 +84,8 @@ source reality, then expose mappings where they are reliable.
 
 ## Source Profile Fields To Prove
 
-Before freezing `datapan.provider-profile.v1`, survey each source against these
-candidate fields:
+Before freezing generated profiles, survey each source against these candidate
+fields:
 
 - identity: `source_id`, `provider`, `homepage_url`, official references.
 - catalogue: list endpoint, search endpoint, dataset detail endpoint, update

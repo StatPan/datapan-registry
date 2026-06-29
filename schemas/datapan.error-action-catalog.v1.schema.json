@@ -1,0 +1,296 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.error-action-catalog.v1.schema.json",
+  "title": "Datapan Error Action Catalog v1",
+  "description": "Rules that map provider error signatures to registry and downstream action hints.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "provider",
+    "source_id",
+    "summary",
+    "rules"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.error-action-catalog.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "datapan_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_id": {
+      "$ref": "#/$defs/source_id"
+    },
+    "source_profile": {
+      "type": "string"
+    },
+    "error_catalog": {
+      "type": "string"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/rule"
+      }
+    }
+  },
+  "$defs": {
+    "source_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rules", "blocking_rules", "manual_review_rules"],
+      "properties": {
+        "rules": {
+          "$ref": "#/$defs/count"
+        },
+        "blocking_rules": {
+          "$ref": "#/$defs/count"
+        },
+        "manual_review_rules": {
+          "$ref": "#/$defs/count"
+        },
+        "unknown_signature_rules": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rule_id",
+        "status",
+        "match",
+        "classification",
+        "severity",
+        "actions"
+      ],
+      "properties": {
+        "rule_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:[-_][a-z0-9]+)*$"
+        },
+        "status": {
+          "enum": ["draft", "verified", "deprecated", "blocked"]
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "match": {
+          "$ref": "#/$defs/match"
+        },
+        "classification": {
+          "$ref": "#/$defs/classification"
+        },
+        "severity": {
+          "enum": ["info", "low", "medium", "high", "blocking"]
+        },
+        "actions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/action"
+          }
+        },
+        "impact_categories": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "provider_error_taxonomy_changed",
+              "verification_status_changed",
+              "endpoint_changed",
+              "required_params_changed",
+              "response_shape_changed"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "hosts": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "dataset_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "operation_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "dependency_classes": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "data_go_kr_gateway",
+              "external_endpoint",
+              "service_root",
+              "no_endpoint",
+              "malformed_endpoint",
+              "soap",
+              "wms"
+            ]
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "match": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "enum": ["http_status", "field_equals", "field_contains", "message_contains", "timeout", "dns_error", "tls_error", "parse_error", "unknown"]
+        },
+        "http_status": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 599
+        },
+        "field": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "contains": {
+          "type": "string"
+        },
+        "case_sensitive": {
+          "type": "boolean"
+        }
+      }
+    },
+    "classification": {
+      "enum": [
+        "credential",
+        "approval",
+        "rate_limit",
+        "bad_request",
+        "not_found",
+        "provider_contract",
+        "upstream_outage",
+        "maintenance",
+        "parser",
+        "adapter",
+        "unknown"
+      ]
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target", "action", "automation", "reason"],
+      "properties": {
+        "target": {
+          "enum": [
+            "datapan-cli",
+            "datapan-data",
+            "dataset-api",
+            "sdk",
+            "mcp",
+            "provider-adapter",
+            "registry-release",
+            "documentation"
+          ]
+        },
+        "action": {
+          "enum": [
+            "no_action",
+            "regenerate",
+            "refresh_verification",
+            "review_collector",
+            "review_parser",
+            "review_schema",
+            "db_migration_review",
+            "update_adapter",
+            "update_error_taxonomy",
+            "deprecate",
+            "remove",
+            "investigate"
+          ]
+        },
+        "automation": {
+          "enum": ["automated", "manual_review", "blocked"]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "issue_hint": {
+          "type": "string"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "first_seen_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "last_seen_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "sample_count": {
+          "$ref": "#/$defs/count"
+        },
+        "sample_result_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reference_url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

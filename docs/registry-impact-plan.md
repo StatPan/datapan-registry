@@ -12,6 +12,10 @@ The impact plan should be generated from source profiles informed by
 `docs/source-standardization-research.md`, not from assumptions copied from a
 single provider.
 
+Known provider errors should be routed through
+`schemas/datapan.error-action-catalog.v1.schema.json` before they become
+downstream action hints.
+
 ## Artifact
 
 Future release drafts should generate:
