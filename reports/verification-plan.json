@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-29T09:06:32Z",
+  "generated_at": "2026-06-29T09:17:37Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json",
   "source": "release",
@@ -8,9 +8,9 @@
   "timeout": "10s",
   "summary": {
     "operations": 12205,
-    "evidence_total": 276,
-    "uncovered_gateway_candidates": 11409,
-    "uncovered_adapter_candidates": 320,
+    "evidence_total": 316,
+    "uncovered_gateway_candidates": 11399,
+    "uncovered_adapter_candidates": 290,
     "missing_adapter_hosts": 10,
     "planned_batches": 9,
     "planned_operations": 70
@@ -20,7 +20,7 @@
       "label": "gateway",
       "kind": "data_go_kr_gateway",
       "candidates": 11419,
-      "uncovered_candidates": 11409,
+      "uncovered_candidates": 11399,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --kind data_go_kr_gateway --exclude-input /home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gateway-next.json --json",
       "output": ".datapan/verification/gateway-next.json"
@@ -60,7 +60,7 @@
       "provider": "geoje",
       "kind": "external_endpoint",
       "candidates": 41,
-      "uncovered_candidates": 35,
+      "uncovered_candidates": 25,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --provider geoje --kind external_endpoint --exclude-input /home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/geoje-next.json --json",
       "output": ".datapan/verification/geoje-next.json"
@@ -70,7 +70,7 @@
       "provider": "jeonju",
       "kind": "external_endpoint",
       "candidates": 80,
-      "uncovered_candidates": 75,
+      "uncovered_candidates": 65,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --provider jeonju --kind external_endpoint --exclude-input /home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jeonju-next.json --json",
       "output": ".datapan/verification/jeonju-next.json"
@@ -80,7 +80,7 @@
       "provider": "q-net",
       "kind": "external_endpoint",
       "candidates": 147,
-      "uncovered_candidates": 132,
+      "uncovered_candidates": 122,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --provider q-net --kind external_endpoint --exclude-input /home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/q-net-next.json --json",
       "output": ".datapan/verification/q-net-next.json"

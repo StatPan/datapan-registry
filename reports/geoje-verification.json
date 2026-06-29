@@ -1,20 +1,14 @@
 {
-  "generated_at": "2026-06-24T22:23:30Z",
+  "generated_at": "2026-06-29T09:16:46Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 6,
-  "timeout": "8s",
+  "limit": 16,
   "truncated": true,
-  "filters": {
-    "provider": "geoje",
-    "kind": "external_endpoint"
-  },
-  "filtered_count": 6,
+  "filtered_count": 16,
   "summary": {
-    "total": 6,
+    "total": 16,
     "verified": 2,
     "failed": 0,
-    "skipped": 4,
+    "skipped": 14,
     "unknown": 0
   },
   "results": [
@@ -132,6 +126,172 @@
       },
       "missing_params": [
         "geojeshowexhibitionId"
+      ]
+    },
+    {
+      "dataset_id": "15014125",
+      "title": "경상남도 거제시_버스 정보",
+      "operation": "노선별 정류장 목록",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:15:44Z"
+    },
+    {
+      "dataset_id": "15014125",
+      "title": "경상남도 거제시_버스 정보",
+      "operation": "버스노선 정보 목록",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "pageSize": "1",
+        "startPage": "1"
+      }
+    },
+    {
+      "dataset_id": "15014125",
+      "title": "경상남도 거제시_버스 정보",
+      "operation": "버스도착 정보 목록",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "ars_id": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "ars_id"
+      ]
+    },
+    {
+      "dataset_id": "15014125",
+      "title": "경상남도 거제시_버스 정보",
+      "operation": "버스정류장 목록",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "ars_id": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "ars_id"
+      ]
+    },
+    {
+      "dataset_id": "15057807",
+      "title": "경상남도 거제시_착한가격업소",
+      "operation": "거제시 착한가격업소 목록정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "pageSize": "1",
+        "startPage": "1"
+      }
+    },
+    {
+      "dataset_id": "15057807",
+      "title": "경상남도 거제시_착한가격업소",
+      "operation": "거제시 착한가격업소 상세정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "goodshopId": ""
+      },
+      "missing_params": [
+        "goodshopId"
+      ]
+    },
+    {
+      "dataset_id": "15057807",
+      "title": "경상남도 거제시_착한가격업소",
+      "operation": "거제시 착한가격업소 이미지 정보",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "goodshopId": ""
+      },
+      "missing_params": [
+        "goodshopId"
+      ]
+    },
+    {
+      "dataset_id": "15057816",
+      "title": "경상남도 거제시_거제9미전문음식점정보",
+      "operation": "거제시 전문음식점 목록 정보 서비스",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "pageSize": "1",
+        "startPage": "1"
+      }
+    },
+    {
+      "dataset_id": "15057816",
+      "title": "경상남도 거제시_거제9미전문음식점정보",
+      "operation": "거제시 전문음식점 상세정보 서비스",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "geojefoodId": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "geojefoodId"
+      ]
+    },
+    {
+      "dataset_id": "15057816",
+      "title": "경상남도 거제시_거제9미전문음식점정보",
+      "operation": "거제시 전문음식점 이미지 정보 서비스",
+      "provider": "geoje",
+      "endpoint_host": "data.geoje.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "geoje_missing_required_params",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "geojefoodId": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "geojefoodId"
       ]
     }
   ]

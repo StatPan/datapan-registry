@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-06-29T09:06:00Z",
+  "generated_at": "2026-06-29T09:17:01Z",
   "source": "/home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 276,
+    "total": 316,
     "verified": 22,
     "failed": 87,
-    "skipped": 167,
+    "skipped": 207,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 167,
+        "count": 207,
         "status": "skipped"
       },
       {
@@ -37,6 +37,11 @@
         "reason": "approval_required"
       },
       {
+        "key": "missing_required_params",
+        "count": 19,
+        "reason": "missing_required_params"
+      },
+      {
         "key": "tour_service_root_missing_operation_path",
         "count": 19,
         "reason": "tour_service_root_missing_operation_path"
@@ -45,6 +50,11 @@
         "key": "epost_wadl_metadata_only",
         "count": 17,
         "reason": "epost_wadl_metadata_only"
+      },
+      {
+        "key": "missing_auth",
+        "count": 17,
+        "reason": "missing_auth"
       },
       {
         "key": "ulsan_missing_required_params",
@@ -62,9 +72,9 @@
         "reason": "andong_service_not_registered"
       },
       {
-        "key": "missing_required_params",
+        "key": "geoje_missing_required_params",
         "count": 10,
-        "reason": "missing_required_params"
+        "reason": "geoje_missing_required_params"
       },
       {
         "key": "sisul_wadl_metadata_only",
@@ -142,11 +152,6 @@
         "reason": "ekape_service_key_not_registered"
       },
       {
-        "key": "geoje_missing_required_params",
-        "count": 4,
-        "reason": "geoje_missing_required_params"
-      },
-      {
         "key": "pqis_service_key_not_registered",
         "count": 4,
         "reason": "pqis_service_key_not_registered"
@@ -170,6 +175,16 @@
         "key": "jeonju_http_404_not_found",
         "count": 3,
         "reason": "jeonju_http_404_not_found"
+      },
+      {
+        "key": "jeonju_missing_required_params",
+        "count": 3,
+        "reason": "jeonju_missing_required_params"
+      },
+      {
+        "key": "qnet_missing_required_params",
+        "count": 3,
+        "reason": "qnet_missing_required_params"
       },
       {
         "key": "sisul_missing_required_params",
@@ -200,6 +215,11 @@
         "key": "jeonju_http_405_method_not_allowed",
         "count": 2,
         "reason": "jeonju_http_405_method_not_allowed"
+      },
+      {
+        "key": "qnet_separate_service_key_required",
+        "count": 2,
+        "reason": "qnet_separate_service_key_required"
       },
       {
         "key": "ekape_html_response",
@@ -269,9 +289,24 @@
         "provider": "epost"
       },
       {
+        "key": "q-net",
+        "count": 25,
+        "provider": "q-net"
+      },
+      {
+        "key": "data.go.kr",
+        "count": 20,
+        "provider": "data.go.kr"
+      },
+      {
         "key": "sisul",
         "count": 20,
         "provider": "sisul"
+      },
+      {
+        "key": "geoje",
+        "count": 16,
+        "provider": "geoje"
       },
       {
         "key": "ulsan",
@@ -289,24 +324,19 @@
         "provider": "ekape"
       },
       {
+        "key": "jeonju",
+        "count": 15,
+        "provider": "jeonju"
+      },
+      {
         "key": "korad",
         "count": 15,
         "provider": "korad"
       },
       {
-        "key": "q-net",
-        "count": 15,
-        "provider": "q-net"
-      },
-      {
         "key": "itfind",
         "count": 13,
         "provider": "itfind"
-      },
-      {
-        "key": "data.go.kr",
-        "count": 10,
-        "provider": "data.go.kr"
       },
       {
         "key": "naqs",
@@ -324,11 +354,6 @@
         "provider": "airport"
       },
       {
-        "key": "geoje",
-        "count": 6,
-        "provider": "geoje"
-      },
-      {
         "key": "kpx",
         "count": 6,
         "provider": "kpx"
@@ -342,11 +367,6 @@
         "key": "uiryeong",
         "count": 6,
         "provider": "uiryeong"
-      },
-      {
-        "key": "jeonju",
-        "count": 5,
-        "provider": "jeonju"
       },
       {
         "key": "seoul-bus",
@@ -391,14 +411,29 @@
         "host": "oneclick.law.go.kr:80"
       },
       {
+        "key": "openapi.q-net.or.kr",
+        "count": 23,
+        "host": "openapi.q-net.or.kr"
+      },
+      {
         "key": "openapi.epost.go.kr:80",
         "count": 22,
         "host": "openapi.epost.go.kr:80"
       },
       {
+        "key": "apis.data.go.kr",
+        "count": 20,
+        "host": "apis.data.go.kr"
+      },
+      {
         "key": "data.sisul.or.kr",
         "count": 20,
         "host": "data.sisul.or.kr"
+      },
+      {
+        "key": "data.geoje.go.kr",
+        "count": 16,
+        "host": "data.geoje.go.kr"
       },
       {
         "key": "openapi.its.ulsan.kr",
@@ -411,9 +446,9 @@
         "host": "data.ekape.or.kr"
       },
       {
-        "key": "openapi.q-net.or.kr",
+        "key": "openapi.jeonju.go.kr",
         "count": 15,
-        "host": "openapi.q-net.or.kr"
+        "host": "openapi.jeonju.go.kr"
       },
       {
         "key": "www.andong.go.kr",
@@ -431,11 +466,6 @@
         "host": "open.itfind.or.kr"
       },
       {
-        "key": "apis.data.go.kr",
-        "count": 10,
-        "host": "apis.data.go.kr"
-      },
-      {
         "key": "data.naqs.go.kr",
         "count": 9,
         "host": "data.naqs.go.kr"
@@ -449,11 +479,6 @@
         "key": "openapi.tour.go.kr",
         "count": 7,
         "host": "openapi.tour.go.kr"
-      },
-      {
-        "key": "data.geoje.go.kr",
-        "count": 6,
-        "host": "data.geoje.go.kr"
       },
       {
         "key": "data.uiryeong.go.kr",
@@ -474,11 +499,6 @@
         "key": "openapi.kpx.or.kr",
         "count": 6,
         "host": "openapi.kpx.or.kr"
-      },
-      {
-        "key": "openapi.jeonju.go.kr",
-        "count": 5,
-        "host": "openapi.jeonju.go.kr"
       },
       {
         "key": "ws.bus.go.kr",
@@ -521,6 +541,11 @@
         "host": "openapi.gblib.or.kr"
       },
       {
+        "key": "c.q-net.or.kr",
+        "count": 2,
+        "host": "c.q-net.or.kr"
+      },
+      {
         "key": "data.myhome.go.kr:443",
         "count": 1,
         "host": "data.myhome.go.kr:443"
@@ -529,18 +554,18 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 247,
+        "count": 277,
         "kind": "external_endpoint"
+      },
+      {
+        "key": "data_go_kr_gateway",
+        "count": 20,
+        "kind": "data_go_kr_gateway"
       },
       {
         "key": "service_root",
         "count": 19,
         "kind": "service_root"
-      },
-      {
-        "key": "data_go_kr_gateway",
-        "count": 10,
-        "kind": "data_go_kr_gateway"
       }
     ]
   }

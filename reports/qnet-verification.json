@@ -1,19 +1,14 @@
 {
-  "generated_at": "2026-06-24T00:23:41Z",
+  "generated_at": "2026-06-29T09:16:46Z",
   "provider": "data.go.kr",
-  "registry": "data\\data-go-kr.registry.json",
-  "limit": 5,
+  "limit": 15,
   "truncated": true,
-  "filters": {
-    "provider": "q-net",
-    "kind": "external_endpoint"
-  },
-  "filtered_count": 5,
+  "filtered_count": 15,
   "summary": {
-    "total": 5,
+    "total": 15,
     "verified": 0,
     "failed": 0,
-    "skipped": 5,
+    "skipped": 15,
     "unknown": 0
   },
   "results": [
@@ -83,6 +78,158 @@
       "status": "skipped",
       "reason": "qnet_wadl_metadata_only",
       "verified_at": "2026-06-24T00:23:41Z"
+    },
+    {
+      "dataset_id": "15025329",
+      "title": "한국산업인력공단_산업인력 국가기술자격 통계 정보",
+      "operation": "자격취득자 연도별 연령별 수 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "baseYY": "2023"
+      }
+    },
+    {
+      "dataset_id": "15025329",
+      "title": "한국산업인력공단_산업인력 국가기술자격 통계 정보",
+      "operation": "종목별 연도별 실기현황 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "baseYY": "2023",
+        "jmCd": ""
+      },
+      "missing_params": [
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15025329",
+      "title": "한국산업인력공단_산업인력 국가기술자격 통계 정보",
+      "operation": "종목별 연도별 필기현황 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "baseYY": "2023",
+        "jmCd": ""
+      },
+      "missing_params": [
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15025329",
+      "title": "한국산업인력공단_산업인력 국가기술자격 통계 정보",
+      "operation": "종목별 자격취득자 연도별 성별 현황 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "baseYY": "2023",
+        "jmCd": ""
+      },
+      "missing_params": [
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15029006",
+      "title": "한국산업인력공단_국가기술자격 대학별 학과 데이터",
+      "operation": "대학별 학과정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15037354",
+      "title": "한국산업인력공단_국가자격 경력정보 제공기관 현황",
+      "operation": "경력기관 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15037355",
+      "title": "한국산업인력공단_국가자격 계열별 학과 정보 데이터",
+      "operation": "계열별 학과정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:15:44Z"
+    },
+    {
+      "dataset_id": "15037356",
+      "title": "한국산업인력공단_국가기술자격 학과별 직무정보",
+      "operation": "학과별 직무 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15037518",
+      "title": "한국산업인력공단_과정평가형, 일학습병행 통계 정보",
+      "operation": "과정평가형 년도별 취득자 현황 통계 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15037518",
+      "title": "한국산업인력공단_과정평가형, 일학습병행 통계 정보",
+      "operation": "과정평가형(일학습병행) 연령별 취득자 현황 통계 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "type": "json"
+      }
     }
   ]
 }

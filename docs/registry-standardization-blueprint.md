@@ -105,10 +105,10 @@ Current gaps:
 - Error inventory has draft action routing for data.go.kr and the first
   non-data.go.kr profile batch, but runtime evidence is not yet generated for
   those non-data.go.kr sources.
-- Runtime evidence coverage is much lower than callable coverage. Gira #19
-  raises data.go.kr runtime evidence from `256` to `276`, but the release
-  readiness warning remains active: the `10%` target requires `1,221` evidence
-  records, so `945` additional records are still required.
+- Runtime evidence coverage is much lower than callable coverage. Gira #19 and
+  Gira #21 raise data.go.kr runtime evidence from `256` to `316`, but the
+  release readiness warning remains active: the `10%` target requires `1,221`
+  evidence records, so `905` additional records are still required.
 - Multi-source report grouping is designed but not implemented.
 - Impact plans are specified and a data.go.kr draft plan is checked in, but
   full `datapan-cli` generation is not implemented.
@@ -283,9 +283,10 @@ Use this order unless a production failure changes priority:
 12. Add a manual or scheduled drift-check workflow. Tracked by Gira #13.
 13. Add a data.go.kr runtime evidence growth summary. Tracked by Gira #15.
 14. Expand runtime verification evidence by source/provider priority. Started
-    by Gira #19 with `epost` and `ulsan` external endpoint batches; this is
-    skipped boundary evidence growth, not proof that those operations are
-    callable.
+    by Gira #19 with `epost` and `ulsan` external endpoint batches and
+    continued by Gira #21 with gateway, `geoje`, `jeonju`, and `q-net`
+    batches; this is skipped boundary evidence growth, not proof that those
+    operations are callable.
 
 ## Measurement Rules
 
