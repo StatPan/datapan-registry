@@ -96,6 +96,8 @@ views:
   external endpoint operations;
 - evidence-adjusted adapter candidates: missing external routes excluding
   dead-route candidates and transient failures with current probe evidence.
+- operational gate: missing external routes without route-disposition evidence
+  must fail validation before they can become adapter backlog.
 
 ## External Endpoint Spec
 
@@ -183,8 +185,11 @@ CI should fail rather than treating the checked-in summary as authoritative.
    checked-in draft artifact.
 6. Add source-scoped generation input cross-checks for data.go.kr external
    coverage. Done in PR #4.
-7. Increase runtime verification evidence for call-capable registered adapters.
-8. Generate a data.go.kr impact plan from catalog diff, verification evidence,
+7. Add an operational gate that fails validation for missing external routes
+   without route-disposition evidence and permits adapter backlog only from
+   adapter-candidate evidence. Done in PR #4.
+8. Increase runtime verification evidence for call-capable registered adapters.
+9. Generate a data.go.kr impact plan from catalog diff, verification evidence,
    route disposition, and promoted dataset mappings.
 
 ## Done Criteria

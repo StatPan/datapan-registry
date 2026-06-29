@@ -17,6 +17,7 @@
     "provider_index",
     "summary",
     "route_disposition",
+    "operational_gate",
     "missing_hosts",
     "next"
   ],
@@ -56,6 +57,9 @@
     },
     "route_disposition": {
       "$ref": "#/$defs/route_disposition"
+    },
+    "operational_gate": {
+      "$ref": "#/$defs/operational_gate"
     },
     "missing_hosts": {
       "type": "array",
@@ -161,6 +165,35 @@
         },
         "reason": {
           "type": "string"
+        }
+      }
+    },
+    "operational_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "unclassified_missing_route_operations",
+        "adapter_backlog_candidate_operations",
+        "ci_action",
+        "adapter_backlog_policy"
+      ],
+      "properties": {
+        "status": {
+          "enum": ["passing", "action_required", "blocked"]
+        },
+        "unclassified_missing_route_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "adapter_backlog_candidate_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "ci_action": {
+          "enum": ["fail_on_unclassified_missing_routes"]
+        },
+        "adapter_backlog_policy": {
+          "type": "string",
+          "minLength": 1
         }
       }
     },

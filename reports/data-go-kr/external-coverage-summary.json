@@ -26,6 +26,13 @@
     "transient_failures": 14,
     "adapter_candidates": 0
   },
+  "operational_gate": {
+    "status": "passing",
+    "unclassified_missing_route_operations": 0,
+    "adapter_backlog_candidate_operations": 0,
+    "ci_action": "fail_on_unclassified_missing_routes",
+    "adapter_backlog_policy": "Create adapter backlog only from route-disposition adapter_candidate evidence, not from raw external endpoint status."
+  },
   "missing_hosts": [
     {
       "host": "openapi.coast.kr",

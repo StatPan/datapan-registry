@@ -92,6 +92,29 @@ def validate_generation_inputs(report_path: pathlib.Path, report: dict[str, obje
     for report_key, route_key in route_fields.items():
         expect_equal(f"route_disposition.{report_key}", report_route.get(report_key), route_summary.get(route_key))
 
+    operational_gate = as_dict(report.get("operational_gate"), report_path)
+    expect_equal(
+        "operational_gate.unclassified_missing_route_operations",
+        operational_gate.get("unclassified_missing_route_operations"),
+        route_summary.get("without_probe_evidence"),
+    )
+    expect_equal(
+        "operational_gate.adapter_backlog_candidate_operations",
+        operational_gate.get("adapter_backlog_candidate_operations"),
+        route_summary.get("adapter_candidates"),
+    )
+    if operational_gate.get("unclassified_missing_route_operations") != 0:
+        raise ValueError(
+            "operational_gate.unclassified_missing_route_operations must be 0; "
+            "refresh route-disposition evidence before treating missing external routes as adapter work"
+        )
+    expected_gate_status = (
+        "passing"
+        if operational_gate.get("unclassified_missing_route_operations") == 0
+        else "action_required"
+    )
+    expect_equal("operational_gate.status", operational_gate.get("status"), expected_gate_status)
+
     expect_equal(
         "summary.route_evidence_covered_operations",
         summary.get("route_evidence_covered_operations"),
