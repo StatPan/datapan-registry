@@ -1,0 +1,81 @@
+{
+  "schema_version": "datapan.source-profile.v1",
+  "source_id": "kosis",
+  "provider": "KOSIS",
+  "display_name": "Korean Statistical Information Service",
+  "status": "candidate",
+  "adapter": {
+    "name": "kosis",
+    "status": "none",
+    "capabilities": [],
+    "hosts": [
+      "kosis.kr"
+    ]
+  },
+  "references": {
+    "homepage_url": "https://kosis.kr/openapi/index/index.jsp",
+    "api_docs_url": "https://kosis.kr/openapi/devGuide/devGuide_0101List.do",
+    "key_request_url": "https://kosis.kr/openapi/index/index.jsp",
+    "last_reviewed_at": "2026-06-29"
+  },
+  "catalogue": {
+    "model": "statistics",
+    "list_endpoint": "https://kosis.kr/openapi/statisticsList.do?method=getList",
+    "detail_endpoint": "https://kosis.kr/openapi/statisticsData.do?method=getList",
+    "search_endpoint": "https://kosis.kr/openapi/statisticsSearch.do?method=getList",
+    "update_cadence": "source-dependent",
+    "identity_fields": [
+      "orgId",
+      "tblId",
+      "statId"
+    ]
+  },
+  "auth": {
+    "type": "api_key",
+    "key_parameter_names": [
+      "apiKey"
+    ],
+    "key_locations": [
+      "query"
+    ],
+    "approval_scope": "source",
+    "credential_reference": "KOSIS shared service Open API key issued through the KOSIS OpenAPI application flow."
+  },
+  "request": {
+    "methods": [
+      "GET"
+    ],
+    "parameter_model": "query",
+    "paging": {
+      "type": "offset",
+      "offset_param": "startCount",
+      "size_param": "resultCount"
+    },
+    "required_param_policy": "operation_specific"
+  },
+  "response": {
+    "formats": [
+      "json",
+      "xml",
+      "sdmx"
+    ],
+    "default_format": "json",
+    "encoding": "utf-8",
+    "schema_policy": "documented"
+  },
+  "errors": {
+    "taxonomy_status": "unknown"
+  },
+  "runtime": {
+    "verification_mode": "metadata_only",
+    "timeout_seconds": 20,
+    "retry_policy": "idempotent",
+    "rate_limit_policy": "documented",
+    "sample_param_policy": "manual"
+  },
+  "promotion": {
+    "default_status": "registry_only",
+    "mapping_reference": "KOSIS statistics should remain registry-only until promoted table mappings define downstream dataset contracts."
+  },
+  "notes": "KOSIS uses source-specific statistical identifiers such as orgId, tblId, statId, item, period, and classification parameters; do not force data.go.kr serviceKey or response-envelope assumptions onto this source."
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "datapan.source-profile.v1",
+  "source_id": "open_assembly",
+  "provider": "open.assembly.go.kr",
+  "display_name": "Open National Assembly Information",
+  "status": "candidate",
+  "adapter": {
+    "name": "open-assembly",
+    "status": "none",
+    "capabilities": [],
+    "hosts": [
+      "open.assembly.go.kr"
+    ]
+  },
+  "references": {
+    "homepage_url": "https://open.assembly.go.kr/portal/mainPage.do",
+    "api_docs_url": "https://open.assembly.go.kr/portal/openapi/main.do",
+    "key_request_url": "https://open.assembly.go.kr/portal/mainPage.do",
+    "last_reviewed_at": "2026-06-29"
+  },
+  "catalogue": {
+    "model": "legislative",
+    "list_endpoint": "https://open.assembly.go.kr/portal/openapi/OPENSRVAPI",
+    "detail_endpoint": "https://open.assembly.go.kr/portal/openapi/{service_id}",
+    "search_endpoint": "https://open.assembly.go.kr/portal/openapi/OPENSRVAPI",
+    "update_cadence": "source-dependent",
+    "identity_fields": [
+      "service_id",
+      "AGE",
+      "BILL_ID",
+      "committee_id"
+    ]
+  },
+  "auth": {
+    "type": "api_key",
+    "key_parameter_names": [
+      "KEY"
+    ],
+    "key_locations": [
+      "query"
+    ],
+    "approval_scope": "source",
+    "credential_reference": "Open Assembly API key issued through the Open National Assembly Information portal account flow."
+  },
+  "request": {
+    "methods": [
+      "GET"
+    ],
+    "parameter_model": "query",
+    "paging": {
+      "type": "page",
+      "page_param": "pIndex",
+      "size_param": "pSize"
+    },
+    "required_param_policy": "operation_specific"
+  },
+  "response": {
+    "formats": [
+      "xml",
+      "json"
+    ],
+    "default_format": "xml",
+    "encoding": "utf-8",
+    "envelope_path": "RESULT",
+    "items_path": "row",
+    "schema_policy": "documented"
+  },
+  "errors": {
+    "taxonomy_status": "draft",
+    "status_code_fields": [
+      "RESULT.CODE"
+    ],
+    "message_fields": [
+      "RESULT.MESSAGE"
+    ]
+  },
+  "runtime": {
+    "verification_mode": "metadata_only",
+    "timeout_seconds": 20,
+    "retry_policy": "idempotent",
+    "rate_limit_policy": "conservative",
+    "sample_param_policy": "manual"
+  },
+  "promotion": {
+    "default_status": "registry_only",
+    "mapping_reference": "Legislative datasets should be promoted only after service IDs and assembly-term parameters are pinned."
+  },
+  "notes": "Open Assembly uses KEY, Type, pIndex, and pSize query parameters and legislative identifiers such as AGE and BILL_ID; keep these separate from data.go.kr operation identity."
+}

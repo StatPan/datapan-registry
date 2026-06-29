@@ -46,6 +46,10 @@ contract.
 | Seoul Open Data Plaza | `seoul_open_data` | https://data.seoul.go.kr/ | City portal with OpenAPI, SHEET, FILE, LOD, CHART, MAP, and LINK distributions; frequent service notices and dataset lifecycle changes. |
 | Smart Seoul Map | `smart_seoul_map` | https://map.seoul.go.kr/smgis2/openApi | Map-specific API families, geospatial response types, separate application path, POI category APIs. |
 
+PR #4 starts the first non-data.go.kr profile batch with checked-in profiles
+for KOSIS, ECOS, Open Assembly, and Seoul Open Data Plaza. These profiles are
+hand-reviewed source contracts, not importer implementations.
+
 The first implementation batch should cover at least one statistical source
 (`kosis` or `ecos`), one government/legislative source (`open_assembly`), and
 one municipal source (`seoul_open_data`). That gives enough variation to avoid
