@@ -149,6 +149,7 @@ data.go.kr mastery should produce or preserve:
 - `reports/error-catalog.json`
 - `reports/adapter-targets.json`
 - `reports/route-disposition.json`
+- `reports/data-go-kr/external-coverage-summary.json`
 - `reports/latest-verification.json`
 - `reports/latest-verification-summary.json`
 - `reports/data-go-kr/error-action-catalog.json`
@@ -161,7 +162,8 @@ data.go.kr mastery should produce or preserve:
 3. Add a data.go.kr error action catalog draft. Done in PR #4.
 4. Connect route-disposition reasons to error/action classifications. Started
    in `reports/data-go-kr/error-action-catalog.json`.
-5. Add an evidence-adjusted external coverage summary.
+5. Add an evidence-adjusted external coverage summary. Done in PR #4 as a
+   checked-in draft artifact.
 6. Increase runtime verification evidence for call-capable registered adapters.
 7. Generate a data.go.kr impact plan from catalog diff, verification evidence,
    route disposition, and promoted dataset mappings.

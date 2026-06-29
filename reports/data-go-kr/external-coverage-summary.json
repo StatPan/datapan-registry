@@ -1,0 +1,95 @@
+{
+  "schema_version": "datapan.external-coverage.v1",
+  "generated_at": "2026-06-29T00:00:00Z",
+  "provider": "data.go.kr",
+  "source_id": "data_go_kr",
+  "coverage_report": "reports/coverage.json",
+  "route_disposition_report": "reports/route-disposition.json",
+  "provider_index": "data/provider-index.json",
+  "summary": {
+    "external_endpoint_operations": 595,
+    "registered_adapter_operations": 586,
+    "missing_adapter_operations": 28,
+    "raw_external_adapter_coverage_percent": 95.4,
+    "registered_adapter_hosts": 30,
+    "missing_adapter_hosts": 10,
+    "route_evidence_covered_operations": 28,
+    "evidence_adjusted_adapter_candidate_operations": 0
+  },
+  "route_disposition": {
+    "routes_total": 28,
+    "with_probe_evidence": 28,
+    "without_probe_evidence": 0,
+    "dead_route_candidates": 14,
+    "transient_failures": 14,
+    "adapter_candidates": 0
+  },
+  "missing_hosts": [
+    {
+      "host": "openapi.coast.kr",
+      "operations": 6,
+      "disposition": "mixed",
+      "reason": "route-disposition evidence exists; host operations are not current adapter candidates"
+    },
+    {
+      "host": "car.daegu.go.kr",
+      "operations": 4,
+      "disposition": "mixed",
+      "reason": "route-disposition evidence exists; host operations are not current adapter candidates"
+    },
+    {
+      "host": "openapi.price.go.kr",
+      "operations": 4,
+      "disposition": "mixed",
+      "reason": "route-disposition evidence exists; host operations are not current adapter candidates"
+    },
+    {
+      "host": "www.rda.go.kr",
+      "operations": 4,
+      "disposition": "mixed",
+      "reason": "route-disposition evidence exists; host operations are not current adapter candidates"
+    },
+    {
+      "host": "its.gyeongju.go.kr:81",
+      "operations": 3,
+      "disposition": "mixed",
+      "reason": "route-disposition evidence exists; host operations are not current adapter candidates"
+    },
+    {
+      "host": "data.wanju.go.kr",
+      "operations": 2,
+      "disposition": "mixed",
+      "reason": "route-disposition evidence exists; host operations are not current adapter candidates"
+    },
+    {
+      "host": "www.cid.or.kr",
+      "operations": 2,
+      "disposition": "mixed",
+      "reason": "route-disposition evidence exists; host operations are not current adapter candidates"
+    },
+    {
+      "host": "openapi-lib.sen.go.kr",
+      "operations": 1,
+      "disposition": "mixed",
+      "reason": "route-disposition evidence exists; host operations are not current adapter candidates"
+    },
+    {
+      "host": "www.dgeic.or.kr:8080",
+      "operations": 1,
+      "disposition": "mixed",
+      "reason": "route-disposition evidence exists; host operations are not current adapter candidates"
+    },
+    {
+      "host": "www.simpan.go.kr",
+      "operations": 1,
+      "disposition": "mixed",
+      "reason": "route-disposition evidence exists; host operations are not current adapter candidates"
+    }
+  ],
+  "next": [
+    "Preserve raw external adapter coverage at 95.4% until new adapters or catalog changes alter the denominator.",
+    "Treat evidence-adjusted adapter candidates as 0 while all 28 missing external routes remain covered by dead-route or transient-failure route disposition evidence.",
+    "Refresh unadapted external probes before creating adapter work for any listed missing host.",
+    "Promote host-level disposition from mixed to specific dead/transient classifications when generated route-disposition output exposes host-level dominant disposition."
+  ]
+}

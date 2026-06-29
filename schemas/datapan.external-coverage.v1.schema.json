@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.external-coverage.v1.schema.json",
+  "title": "Datapan External Coverage v1",
+  "description": "Source-scoped external endpoint coverage with route-evidence-adjusted adapter candidate accounting.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "provider",
+    "source_id",
+    "summary",
+    "route_disposition",
+    "missing_hosts",
+    "next"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.external-coverage.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+    },
+    "coverage_report": {
+      "type": "string"
+    },
+    "route_disposition_report": {
+      "type": "string"
+    },
+    "provider_index": {
+      "type": "string"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "route_disposition": {
+      "$ref": "#/$defs/route_disposition"
+    },
+    "missing_hosts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/missing_host"
+      }
+    },
+    "next": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "$defs": {
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "external_endpoint_operations",
+        "registered_adapter_operations",
+        "missing_adapter_operations",
+        "raw_external_adapter_coverage_percent",
+        "registered_adapter_hosts",
+        "missing_adapter_hosts",
+        "route_evidence_covered_operations",
+        "evidence_adjusted_adapter_candidate_operations"
+      ],
+      "properties": {
+        "external_endpoint_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "registered_adapter_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "missing_adapter_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "raw_external_adapter_coverage_percent": {
+          "$ref": "#/$defs/percent"
+        },
+        "registered_adapter_hosts": {
+          "$ref": "#/$defs/count"
+        },
+        "missing_adapter_hosts": {
+          "$ref": "#/$defs/count"
+        },
+        "route_evidence_covered_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "evidence_adjusted_adapter_candidate_operations": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "route_disposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "routes_total",
+        "with_probe_evidence",
+        "without_probe_evidence",
+        "dead_route_candidates",
+        "transient_failures",
+        "adapter_candidates"
+      ],
+      "properties": {
+        "routes_total": {
+          "$ref": "#/$defs/count"
+        },
+        "with_probe_evidence": {
+          "$ref": "#/$defs/count"
+        },
+        "without_probe_evidence": {
+          "$ref": "#/$defs/count"
+        },
+        "dead_route_candidates": {
+          "$ref": "#/$defs/count"
+        },
+        "transient_failures": {
+          "$ref": "#/$defs/count"
+        },
+        "adapter_candidates": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "missing_host": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host", "operations", "disposition"],
+      "properties": {
+        "host": {
+          "type": "string",
+          "minLength": 1
+        },
+        "operations": {
+          "$ref": "#/$defs/count"
+        },
+        "disposition": {
+          "enum": ["dead_route_candidate", "transient_failure", "adapter_candidate", "mixed", "unknown"]
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "percent": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    }
+  }
+}

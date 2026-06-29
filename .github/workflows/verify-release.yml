@@ -53,6 +53,7 @@ jobs:
           python -m pip install jsonschema
           python scripts/validate-source-profiles.py
           python scripts/validate-error-action-catalogs.py
+          python scripts/validate-external-coverage.py
 
       - name: Validate provider verification evidence
         working-directory: datapan-cli
