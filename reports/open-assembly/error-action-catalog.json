@@ -1,0 +1,139 @@
+{
+  "schema_version": "datapan.error-action-catalog.v1",
+  "generated_at": "2026-06-29T00:00:00Z",
+  "provider": "open.assembly.go.kr",
+  "source_id": "open_assembly",
+  "source_profile": "sources/open_assembly.json",
+  "summary": {
+    "rules": 5,
+    "blocking_rules": 1,
+    "manual_review_rules": 4,
+    "unknown_signature_rules": 1
+  },
+  "rules": [
+    {
+      "rule_id": "open-assembly-key-message",
+      "status": "draft",
+      "scope": {
+        "hosts": [
+          "open.assembly.go.kr"
+        ]
+      },
+      "match": {
+        "kind": "field_contains",
+        "field": "RESULT.MESSAGE",
+        "contains": "KEY",
+        "case_sensitive": false
+      },
+      "classification": "credential",
+      "severity": "blocking",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "manual_review",
+          "reason": "Open Assembly uses a KEY query parameter. Verify credential and service approval before routing to parser or adapter work."
+        },
+        {
+          "target": "documentation",
+          "action": "update_error_taxonomy",
+          "automation": "manual_review",
+          "reason": "Keep Open Assembly credential handling tied to its source-specific KEY parameter contract."
+        }
+      ],
+      "impact_categories": [
+        "provider_error_taxonomy_changed",
+        "verification_status_changed"
+      ],
+      "evidence": {
+        "reference_url": "https://open.assembly.go.kr/portal/openapi/main.do"
+      }
+    },
+    {
+      "rule_id": "open-assembly-required-parameter-message",
+      "status": "draft",
+      "match": {
+        "kind": "field_contains",
+        "field": "RESULT.MESSAGE",
+        "contains": "필수",
+        "case_sensitive": false
+      },
+      "classification": "bad_request",
+      "severity": "medium",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "manual_review",
+          "reason": "Refresh Open Assembly sample parameters such as service id, AGE, pIndex, and pSize before changing downstream parser or schema behavior."
+        }
+      ],
+      "impact_categories": [
+        "required_params_changed",
+        "verification_status_changed"
+      ]
+    },
+    {
+      "rule_id": "open-assembly-http-429",
+      "status": "draft",
+      "match": {
+        "kind": "http_status",
+        "http_status": 429
+      },
+      "classification": "rate_limit",
+      "severity": "medium",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "manual_review",
+          "reason": "Rate-limit evidence should adjust verification cadence before adding adapter work."
+        }
+      ],
+      "impact_categories": [
+        "verification_status_changed"
+      ]
+    },
+    {
+      "rule_id": "open-assembly-timeout",
+      "status": "draft",
+      "match": {
+        "kind": "timeout"
+      },
+      "classification": "upstream_outage",
+      "severity": "medium",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "manual_review",
+          "reason": "Treat Open Assembly timeouts as runtime evidence until repeated checks prove a source-specific adapter requirement."
+        }
+      ],
+      "impact_categories": [
+        "verification_status_changed"
+      ]
+    },
+    {
+      "rule_id": "open-assembly-parse-error-unknown",
+      "status": "draft",
+      "match": {
+        "kind": "parse_error"
+      },
+      "classification": "unknown",
+      "severity": "high",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "investigate",
+          "automation": "manual_review",
+          "reason": "Open Assembly supports XML and JSON response modes; parse failures need evidence before classifying response-shape drift or parser failure."
+        }
+      ],
+      "impact_categories": [
+        "response_shape_changed",
+        "verification_status_changed"
+      ]
+    }
+  ]
+}

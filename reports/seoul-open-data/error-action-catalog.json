@@ -1,0 +1,143 @@
+{
+  "schema_version": "datapan.error-action-catalog.v1",
+  "generated_at": "2026-06-29T00:00:00Z",
+  "provider": "data.seoul.go.kr",
+  "source_id": "seoul_open_data",
+  "source_profile": "sources/seoul_open_data.json",
+  "summary": {
+    "rules": 5,
+    "blocking_rules": 1,
+    "manual_review_rules": 4,
+    "unknown_signature_rules": 1
+  },
+  "rules": [
+    {
+      "rule_id": "seoul-open-data-info-100",
+      "status": "draft",
+      "scope": {
+        "hosts": [
+          "data.seoul.go.kr",
+          "openapi.seoul.go.kr"
+        ]
+      },
+      "match": {
+        "kind": "field_equals",
+        "field": "RESULT.CODE",
+        "value": "INFO-100",
+        "case_sensitive": false
+      },
+      "classification": "credential",
+      "severity": "blocking",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "manual_review",
+          "reason": "Seoul Open Data documents INFO-100 for invalid or missing keys. Verify key scope before routing the failure to parser or adapter work."
+        },
+        {
+          "target": "documentation",
+          "action": "update_error_taxonomy",
+          "automation": "manual_review",
+          "reason": "Keep Seoul Open Data RESULT.CODE handling aligned with official API result messages."
+        }
+      ],
+      "impact_categories": [
+        "provider_error_taxonomy_changed",
+        "verification_status_changed"
+      ],
+      "evidence": {
+        "reference_url": "https://data.seoul.go.kr/dataList/OA-2192/A/1/datasetView.do"
+      }
+    },
+    {
+      "rule_id": "seoul-open-data-error-300",
+      "status": "draft",
+      "match": {
+        "kind": "field_equals",
+        "field": "RESULT.CODE",
+        "value": "ERROR-300",
+        "case_sensitive": false
+      },
+      "classification": "bad_request",
+      "severity": "medium",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "manual_review",
+          "reason": "Seoul Open Data documents ERROR-300 for missing required values. Refresh path parameters and service-specific samples before changing parser code."
+        }
+      ],
+      "impact_categories": [
+        "required_params_changed",
+        "verification_status_changed"
+      ],
+      "evidence": {
+        "reference_url": "https://data.seoul.go.kr/dataList/OA-2192/A/1/datasetView.do"
+      }
+    },
+    {
+      "rule_id": "seoul-open-data-http-429",
+      "status": "draft",
+      "match": {
+        "kind": "http_status",
+        "http_status": 429
+      },
+      "classification": "rate_limit",
+      "severity": "medium",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "manual_review",
+          "reason": "Rate-limit evidence should adjust verification cadence before adding adapter work."
+        }
+      ],
+      "impact_categories": [
+        "verification_status_changed"
+      ]
+    },
+    {
+      "rule_id": "seoul-open-data-timeout",
+      "status": "draft",
+      "match": {
+        "kind": "timeout"
+      },
+      "classification": "upstream_outage",
+      "severity": "medium",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "manual_review",
+          "reason": "Treat Seoul Open Data timeouts as runtime evidence until repeated checks prove a source-specific adapter requirement."
+        }
+      ],
+      "impact_categories": [
+        "verification_status_changed"
+      ]
+    },
+    {
+      "rule_id": "seoul-open-data-parse-error-unknown",
+      "status": "draft",
+      "match": {
+        "kind": "parse_error"
+      },
+      "classification": "unknown",
+      "severity": "high",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "investigate",
+          "automation": "manual_review",
+          "reason": "Seoul Open Data responses are service-specific. Parse failures need evidence before classifying response-shape drift or parser failure."
+        }
+      ],
+      "impact_categories": [
+        "response_shape_changed",
+        "verification_status_changed"
+      ]
+    }
+  ]
+}

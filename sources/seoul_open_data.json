@@ -17,8 +17,8 @@
     "homepage_url": "https://data.seoul.go.kr/",
     "api_docs_url": "https://data.seoul.go.kr/together/guide/useGuide.do",
     "key_request_url": "https://data.seoul.go.kr/together/guide/useGuide.do",
-    "notice_url": "https://data.seoul.go.kr/together/notice/list.do",
-    "terms_url": "https://data.seoul.go.kr/together/guide/terms.do",
+    "notice_url": "https://data.seoul.go.kr/together/notice/boardList.do",
+    "terms_url": "https://data.seoul.go.kr/etc/accessTerms.do",
     "last_reviewed_at": "2026-06-29"
   },
   "catalogue": {
@@ -26,7 +26,7 @@
     "list_endpoint": "https://data.seoul.go.kr/dataList/1/literacyView.do",
     "detail_endpoint": "http://openapi.seoul.go.kr:8088/{key}/{format}/{service}/{start_index}/{end_index}",
     "search_endpoint": "https://data.seoul.go.kr/dataList/OA-",
-    "notice_endpoint": "https://data.seoul.go.kr/together/notice/list.do",
+    "notice_endpoint": "https://data.seoul.go.kr/together/notice/boardList.do",
     "update_cadence": "source-dependent",
     "identity_fields": [
       "service",

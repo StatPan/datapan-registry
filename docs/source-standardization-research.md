@@ -50,6 +50,13 @@ PR #4 starts the first non-data.go.kr profile batch with checked-in profiles
 for KOSIS, ECOS, Open Assembly, and Seoul Open Data Plaza. These profiles are
 hand-reviewed source contracts, not importer implementations.
 
+Gira #9 extends that batch with source-specific error action catalog drafts.
+Those catalogs should classify only what the official references and checked-in
+source profiles support. When a source does not expose stable public error
+codes in the reviewed documentation, the catalog should use draft
+`unknown`/`parse_error`/generic HTTP rules instead of inventing exact provider
+codes.
+
 The first implementation batch should cover at least one statistical source
 (`kosis` or `ecos`), one government/legislative source (`open_assembly`), and
 one municipal source (`seoul_open_data`). That gives enough variation to avoid
@@ -133,6 +140,22 @@ Reference drift is itself a registry signal. A future scheduled check should:
 Do not fail a release only because a homepage changed. Fail or warn based on
 the affected contract: API docs, key policy, endpoint shape, response shape, or
 verification evidence.
+
+Gira #11 adds the first checked-in drift baseline at
+`reports/source-reference-drift.json`. This is an offline/manual-review gate:
+it does not fetch official pages during CI, but it does fail validation when a
+source profile reference URL, provider, `source_id`, or `last_reviewed_at`
+changes without the baseline being refreshed. Live HTTP status, redirect, and
+content-hash checks remain a later scheduled-health task.
+
+Gira #13 adds the live check path:
+`scripts/check-source-reference-drift.py` and
+`.github/workflows/source-reference-drift.yml`. This workflow is scheduled and
+manual-only, not a pull request gate. It writes
+`.datapan/ci/source-reference-drift-live.json`, uploads the report, and fails
+when a reference is missing or cannot be fetched. Redirects and content hashes
+are recorded as evidence; turning a redirect or content-hash change into a
+blocking policy should happen only after the source-specific impact is known.
 
 ## Open Questions
 
