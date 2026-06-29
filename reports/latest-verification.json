@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-29T13:48:49Z",
+  "generated_at": "2026-06-29T14:04:01Z",
   "provider": "data.go.kr",
-  "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 523,
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 543,
   "truncated": true,
-  "filtered_count": 499,
+  "filtered_count": 519,
   "summary": {
-    "total": 499,
+    "total": 519,
     "verified": 22,
     "failed": 87,
-    "skipped": 390,
+    "skipped": 410,
     "unknown": 0
   },
   "results": [
@@ -10088,6 +10088,382 @@
         "numOfRows": "1",
         "pageNo": "1"
       }
+    },
+    {
+      "dataset_id": "3036600",
+      "title": "전북특별자치도 전주시_공연행사",
+      "operation": "공연행사 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "keyword": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "keyword"
+      ]
+    },
+    {
+      "dataset_id": "3036601",
+      "title": "전북특별자치도 전주시_주차장",
+      "operation": "주차장정보 검색 서비스 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataValue": "",
+        "pageSize": "1",
+        "parkingFee": "",
+        "parkingSize": "",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue",
+        "parkingFee",
+        "parkingSize"
+      ]
+    },
+    {
+      "dataset_id": "3036601",
+      "title": "전북특별자치도 전주시_주차장",
+      "operation": "주차장정보 검색 서비스 상세보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036602",
+      "title": "전북특별자치도 전주시_공원 정보",
+      "operation": "공원정보 검색 서비스 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataValue": "",
+        "pageSize": "1",
+        "parkLocation": "",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue",
+        "parkLocation"
+      ]
+    },
+    {
+      "dataset_id": "3036602",
+      "title": "전북특별자치도 전주시_공원 정보",
+      "operation": "공원정보 검색 서비스 상세보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036603",
+      "title": "전북특별자치도 전주시_개방화장실",
+      "operation": "화장실 정보 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataSid": "",
+        "dataValue": "",
+        "dong": "중앙동",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue",
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036603",
+      "title": "전북특별자치도 전주시_개방화장실",
+      "operation": "화장실 정보 첨부파일",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036604",
+      "title": "전북특별자치도 전주시_체육시설",
+      "operation": "체육시설 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "addr": "",
+        "charge": "",
+        "dataValue": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue",
+        "addr",
+        "charge"
+      ]
+    },
+    {
+      "dataset_id": "3036604",
+      "title": "전북특별자치도 전주시_체육시설",
+      "operation": "체육시설 상세보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036604",
+      "title": "전북특별자치도 전주시_체육시설",
+      "operation": "체육시설 첨부파일",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "15039800",
+      "title": "한국산업인력공단_국가기술자격 취득 관련 현황",
+      "operation": "토목(산업)기사 자격취득자 현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "baseYY": "2023"
+      }
+    },
+    {
+      "dataset_id": "15039800",
+      "title": "한국산업인력공단_국가기술자격 취득 관련 현황",
+      "operation": "학력별취득현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15039800",
+      "title": "한국산업인력공단_국가기술자격 취득 관련 현황",
+      "operation": "행정구역별연도별성별 취득현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15040265",
+      "title": "한국산업인력공단_국가기술자격증 배송주소구간 정보",
+      "operation": "배송 주소 구간 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:03:46Z"
+    },
+    {
+      "dataset_id": "15040265",
+      "title": "한국산업인력공단_국가기술자격증 배송주소구간 정보",
+      "operation": "활용 주소 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "gun": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "road": "",
+        "sido": ""
+      },
+      "missing_params": [
+        "sido",
+        "gun",
+        "road"
+      ]
+    },
+    {
+      "dataset_id": "15040841",
+      "title": "한국산업인력공단_국가기술자격 지역별 자격취득 정보",
+      "operation": "지역별 성별 자격취득현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "baseYY": "2023",
+        "quart": "",
+        "rgnCd": "",
+        "seriesCd": ""
+      },
+      "missing_params": [
+        "rgnCd",
+        "seriesCd",
+        "quart"
+      ]
+    },
+    {
+      "dataset_id": "15040841",
+      "title": "한국산업인력공단_국가기술자격 지역별 자격취득 정보",
+      "operation": "지역별 연도별 자격취득현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "baseYY": "2023",
+        "quart": "",
+        "rgnCd": "",
+        "seriesCd": ""
+      },
+      "missing_params": [
+        "rgnCd",
+        "seriesCd",
+        "quart"
+      ]
+    },
+    {
+      "dataset_id": "15040841",
+      "title": "한국산업인력공단_국가기술자격 지역별 자격취득 정보",
+      "operation": "지역별 연령별 자격취득현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "baseYY": "2023",
+        "quart": "",
+        "rgnCd": "",
+        "seriesCd": ""
+      },
+      "missing_params": [
+        "rgnCd",
+        "seriesCd",
+        "quart"
+      ]
+    },
+    {
+      "dataset_id": "15041600",
+      "title": "한국산업인력공단_국가기술자격 종목 정보",
+      "operation": "국가기술자격 종목 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "seriesCd": ""
+      },
+      "missing_params": [
+        "seriesCd"
+      ]
+    },
+    {
+      "dataset_id": "15056876",
+      "title": "한국산업인력공단_과정평가형자격 정보 조회",
+      "operation": "과정평가형 외부평가 일정정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json",
+        "year": ""
+      },
+      "missing_params": [
+        "year"
+      ]
     }
   ]
 }

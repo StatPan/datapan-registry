@@ -1,14 +1,15 @@
 {
-  "generated_at": "2026-06-29T13:48:38Z",
+  "generated_at": "2026-06-29T14:04:01Z",
   "provider": "data.go.kr",
-  "limit": 45,
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 55,
   "truncated": true,
-  "filtered_count": 45,
+  "filtered_count": 55,
   "summary": {
-    "total": 45,
+    "total": 55,
     "verified": 0,
     "failed": 5,
-    "skipped": 40,
+    "skipped": 50,
     "unknown": 0
   },
   "results": [
@@ -879,6 +880,199 @@
       "status": "skipped",
       "reason": "jeonju_missing_required_params",
       "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036600",
+      "title": "전북특별자치도 전주시_공연행사",
+      "operation": "공연행사 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "keyword": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "keyword"
+      ]
+    },
+    {
+      "dataset_id": "3036601",
+      "title": "전북특별자치도 전주시_주차장",
+      "operation": "주차장정보 검색 서비스 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataValue": "",
+        "pageSize": "1",
+        "parkingFee": "",
+        "parkingSize": "",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue",
+        "parkingFee",
+        "parkingSize"
+      ]
+    },
+    {
+      "dataset_id": "3036601",
+      "title": "전북특별자치도 전주시_주차장",
+      "operation": "주차장정보 검색 서비스 상세보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036602",
+      "title": "전북특별자치도 전주시_공원 정보",
+      "operation": "공원정보 검색 서비스 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataValue": "",
+        "pageSize": "1",
+        "parkLocation": "",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue",
+        "parkLocation"
+      ]
+    },
+    {
+      "dataset_id": "3036602",
+      "title": "전북특별자치도 전주시_공원 정보",
+      "operation": "공원정보 검색 서비스 상세보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036603",
+      "title": "전북특별자치도 전주시_개방화장실",
+      "operation": "화장실 정보 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataSid": "",
+        "dataValue": "",
+        "dong": "중앙동",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue",
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036603",
+      "title": "전북특별자치도 전주시_개방화장실",
+      "operation": "화장실 정보 첨부파일",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036604",
+      "title": "전북특별자치도 전주시_체육시설",
+      "operation": "체육시설 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "addr": "",
+        "charge": "",
+        "dataValue": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue",
+        "addr",
+        "charge"
+      ]
+    },
+    {
+      "dataset_id": "3036604",
+      "title": "전북특별자치도 전주시_체육시설",
+      "operation": "체육시설 상세보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036604",
+      "title": "전북특별자치도 전주시_체육시설",
+      "operation": "체육시설 첨부파일",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
       "params": {
         "dataSid": ""
       },
