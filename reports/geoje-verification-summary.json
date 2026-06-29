@@ -1,22 +1,21 @@
 {
-  "generated_at": "2026-06-29T09:39:57Z",
-  "source": "reports/geoje-verification.json",
+  "generated_at": "2026-06-29T13:48:38Z",
+  "source": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\geoje-verification.json",
   "provider": "data.go.kr",
-  "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
   "limit": 20,
   "truncated": false,
   "summary": {
-    "total": 36,
+    "total": 41,
     "verified": 2,
     "failed": 0,
-    "skipped": 34,
+    "skipped": 39,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 34,
+        "count": 39,
         "status": "skipped"
       },
       {
@@ -28,33 +27,33 @@
     "by_reason": [
       {
         "key": "geoje_missing_required_params",
-        "count": 22,
+        "count": 25,
         "reason": "geoje_missing_required_params"
       },
       {
         "key": "missing_auth",
-        "count": 12,
+        "count": 14,
         "reason": "missing_auth"
       }
     ],
     "by_provider": [
       {
         "key": "geoje",
-        "count": 36,
+        "count": 41,
         "provider": "geoje"
       }
     ],
     "by_endpoint_host": [
       {
         "key": "data.geoje.go.kr",
-        "count": 36,
+        "count": 41,
         "host": "data.geoje.go.kr"
       }
     ],
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 36,
+        "count": 41,
         "kind": "external_endpoint"
       }
     ]

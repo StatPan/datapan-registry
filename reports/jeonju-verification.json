@@ -1,15 +1,14 @@
 {
-  "generated_at": "2026-06-29T09:39:57Z",
+  "generated_at": "2026-06-29T13:48:38Z",
   "provider": "data.go.kr",
-  "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 35,
+  "limit": 45,
   "truncated": true,
-  "filtered_count": 35,
+  "filtered_count": 45,
   "summary": {
-    "total": 35,
+    "total": 45,
     "verified": 0,
     "failed": 5,
-    "skipped": 30,
+    "skipped": 40,
     "unknown": 0
   },
   "results": [
@@ -697,6 +696,194 @@
       "missing_params": [
         "keyword",
         "foodUid"
+      ]
+    },
+    {
+      "dataset_id": "3036596",
+      "title": "전북특별자치도 전주시_전주음식",
+      "operation": "전주음식 이미지목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "foodUid": ""
+      },
+      "missing_params": [
+        "foodUid"
+      ]
+    },
+    {
+      "dataset_id": "3036596",
+      "title": "전북특별자치도 전주시_전주음식",
+      "operation": "콩나물국밥집 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "foodUid": "",
+        "keyword": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "keyword",
+        "foodUid"
+      ]
+    },
+    {
+      "dataset_id": "3036596",
+      "title": "전북특별자치도 전주시_전주음식",
+      "operation": "한옥마을 맛집 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "foodUid": "",
+        "keyword": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "keyword",
+        "foodUid"
+      ]
+    },
+    {
+      "dataset_id": "3036596",
+      "title": "전북특별자치도 전주시_전주음식",
+      "operation": "한정식목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "foodUid": "",
+        "keyword": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "keyword",
+        "foodUid"
+      ]
+    },
+    {
+      "dataset_id": "3036598",
+      "title": "전북특별자치도 전주시_문화공간",
+      "operation": "문화공간 정보 서비스 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "dataValue": "",
+        "pageSize": "1",
+        "startPage": "1",
+        "typeCode": ""
+      },
+      "missing_params": [
+        "typeCode",
+        "dataValue"
+      ]
+    },
+    {
+      "dataset_id": "3036598",
+      "title": "전북특별자치도 전주시_문화공간",
+      "operation": "문화공간 정보 서비스 상세보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036598",
+      "title": "전북특별자치도 전주시_문화공간",
+      "operation": "문화공간 정보 서비스 이미지 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036599",
+      "title": "전북특별자치도 전주시_문화체험",
+      "operation": "문화체험 정보 서비스 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "dataValue": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue"
+      ]
+    },
+    {
+      "dataset_id": "3036599",
+      "title": "전북특별자치도 전주시_문화체험",
+      "operation": "문화체험 정보 서비스 상세보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036599",
+      "title": "전북특별자치도 전주시_문화체험",
+      "operation": "문화체험 정보 서비스 이미지 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T13:47:43Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
       ]
     }
   ]
