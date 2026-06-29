@@ -151,15 +151,16 @@ data.go.kr mastery should produce or preserve:
 - `reports/route-disposition.json`
 - `reports/latest-verification.json`
 - `reports/latest-verification-summary.json`
-- future `reports/data-go-kr/error-action-catalog.json`
+- `reports/data-go-kr/error-action-catalog.json`
 - future `reports/data-go-kr/registry-impact-plan.json`
 
 ## Task Sequence
 
 1. Add and validate `sources/data_go_kr.json`. Done in PR #4.
 2. Add source profile validation to CI. Done in PR #4.
-3. Add a data.go.kr error action catalog draft.
-4. Connect route-disposition reasons to error/action classifications.
+3. Add a data.go.kr error action catalog draft. Done in PR #4.
+4. Connect route-disposition reasons to error/action classifications. Started
+   in `reports/data-go-kr/error-action-catalog.json`.
 5. Add an evidence-adjusted external coverage summary.
 6. Increase runtime verification evidence for call-capable registered adapters.
 7. Generate a data.go.kr impact plan from catalog diff, verification evidence,

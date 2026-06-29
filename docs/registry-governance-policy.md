@@ -67,6 +67,8 @@ Every PR should preserve or improve these gates:
 - GitHub workflow YAML parses.
 - `git diff --check` passes.
 - checked-in source profiles validate against `datapan.source-profile.v1`.
+- checked-in error action catalogs validate against
+  `datapan.error-action-catalog.v1`.
 - release verification remains green unless the PR explicitly changes the
   release gate and documents the migration path.
 - new schemas use versioned names and do not mutate existing generated release

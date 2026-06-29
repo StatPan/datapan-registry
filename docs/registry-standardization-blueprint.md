@@ -69,6 +69,8 @@ Current strengths:
 - `manifest.json` provides artifact checksums for the current release.
 - `schemas/` contains versioned JSON contracts for existing release reports.
 - `sources/data_go_kr.json` validates against `datapan.source-profile.v1`.
+- `reports/data-go-kr/error-action-catalog.json` validates against
+  `datapan.error-action-catalog.v1`.
 - `reports/coverage.json` reports high callable-operation coverage.
 - `reports/route-disposition.json` separates dead-route candidates from
   transient failures.
@@ -150,6 +152,7 @@ Done when:
 - data.go.kr credential and approval failures have draft action rules;
 - data.go.kr external route disposition reasons are mapped to action
   classifications;
+- error action catalog validation runs in CI;
 - source-specific draft error action catalogs exist for the M2 sources;
 - known credential, approval, rate limit, not-found, upstream, parser, and
   adapter cases have explicit actions;
@@ -218,14 +221,15 @@ Use this order unless a production failure changes priority:
 
 1. Add and validate `sources/data_go_kr.json`. Done in PR #4.
 2. Add profile validation to CI. Done in PR #4.
-3. Add data.go.kr error action catalog draft.
+3. Add data.go.kr error action catalog draft. Done in PR #4.
 4. Add evidence-adjusted external coverage summary for data.go.kr.
 5. Add source profile references to release draft documentation.
 6. Add hand-reviewed profiles for KOSIS, ECOS, Open Assembly, and Seoul Open
    Data after data.go.kr profile validation is enforced.
 7. Add draft `reports/<source>/error-action-catalog.json` files for M2
    sources.
-8. Add action catalog validation to CI.
+8. Add action catalog validation to CI. Done in PR #4 for checked-in draft
+   catalogs.
 9. Add source reference drift report schema.
 10. Add a manual or scheduled drift-check workflow.
 11. Update `datapan-cli` to generate source-scoped reports.
