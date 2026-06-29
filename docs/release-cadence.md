@@ -78,6 +78,7 @@ Recommended evidence before tagging:
 ```bash
 datapan catalog verify --registry data/data-go-kr.registry.json --limit 100 --output reports/latest-verification.json --json
 datapan catalog verify summary --input reports/latest-verification.json --output reports/latest-verification-summary.json --json
+python scripts/generate-institution-api-overview.py
 ```
 
 Provider-specific evidence should be accumulated for registered external
