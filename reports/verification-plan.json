@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-29T13:55:59Z",
+  "generated_at": "2026-06-29T14:04:28Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -8,9 +8,9 @@
   "timeout": "10s",
   "summary": {
     "operations": 12205,
-    "evidence_total": 499,
+    "evidence_total": 519,
     "uncovered_gateway_candidates": 11379,
-    "uncovered_adapter_candidates": 127,
+    "uncovered_adapter_candidates": 107,
     "missing_adapter_hosts": 10,
     "planned_batches": 3,
     "planned_operations": 30
@@ -30,7 +30,7 @@
       "provider": "jeonju",
       "kind": "external_endpoint",
       "candidates": 80,
-      "uncovered_candidates": 35,
+      "uncovered_candidates": 25,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider jeonju --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jeonju-next.json --json",
       "output": ".datapan/verification/jeonju-next.json"
@@ -40,7 +40,7 @@
       "provider": "q-net",
       "kind": "external_endpoint",
       "candidates": 147,
-      "uncovered_candidates": 92,
+      "uncovered_candidates": 82,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider q-net --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/q-net-next.json --json",
       "output": ".datapan/verification/q-net-next.json"

@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.release-manifest.v1",
-  "generated_at": "2026-06-29T13:55:43Z",
+  "generated_at": "2026-06-29T14:04:12Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_registry": "data\\data-go-kr.registry.json",
@@ -132,7 +132,7 @@
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
       "bytes": 7490,
-      "sha256": "d01d790212ea3007fd92612f4ed7c2b1485a436ab7b53c3054982525c0832485"
+      "sha256": "698550c5a1826ffb1d2d6ce89a798a1a68d787c41d643902d50dbc3eecc825dc"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -146,91 +146,91 @@
       "kind": "provider_index",
       "schema": "https://schemas.datapan.dev/datapan.provider-index.v1.schema.json",
       "bytes": 5588,
-      "sha256": "5dcaaa2f3b73b617276c52277538394e56c83841f00d78233dce26ebef941d98"
+      "sha256": "ddbad8a83c7c380c435b535856788308afddb68edabd4e36e90f6be6dd430aa5"
     },
     {
       "path": "reports/catalog-diff.json",
       "kind": "catalog_diff",
       "schema": "https://schemas.datapan.dev/datapan.catalog-diff.v1.schema.json",
       "bytes": 393,
-      "sha256": "b7317e4ced20d1b24e7d185671bae5aa5de06ab8e0ede782462dfb262015ba28"
+      "sha256": "9a2215f9ce8976d77e0e12f9b77047e8f9fa09b62e9065ee6375585b9434b2f6"
     },
     {
       "path": "reports/catalog-audit.json",
       "kind": "catalog_audit",
       "schema": "https://schemas.datapan.dev/datapan.catalog-audit.v1.schema.json",
       "bytes": 15937,
-      "sha256": "8a9a3e494ee3dcd48889f21321e6c1c706675d566252f28ad3d61bda24f52b8b"
+      "sha256": "2e22c068acdbda86a1534c60dde82f0fb146cf1aca78b714d2aee8c367cca880"
     },
     {
       "path": "reports/error-catalog.json",
       "kind": "error_catalog",
       "schema": "https://schemas.datapan.dev/datapan.error-catalog.v1.schema.json",
       "bytes": 3305358,
-      "sha256": "f26edd2195fcc389dc8c447d6b32e468a960a4410075c08c39993a41f831375f"
+      "sha256": "041c92c508ab7f54efcc74fcda32e0adb8cd824a8dbc99a77d118db06e4c9487"
     },
     {
       "path": "reports/dependencies.json",
       "kind": "dependencies",
       "schema": "https://schemas.datapan.dev/datapan.dependencies.v1.schema.json",
       "bytes": 11399429,
-      "sha256": "f1405da35df524c39fdcc2316eadf0c74bbf85933d541310962097d43d362423"
+      "sha256": "44b421f759a33f24218e34ce64b5e0de27ef93320404209e0bc35d5eb09dd281"
     },
     {
       "path": "reports/adapter-targets.json",
       "kind": "adapter_targets",
       "schema": "https://schemas.datapan.dev/datapan.adapter-targets.v1.schema.json",
       "bytes": 15149,
-      "sha256": "8b2f8f1f5106597f3516de408b0995814f64cec0e16b5c8d81b4a4265cf9a4a4"
+      "sha256": "397e8856d174c9e779f737b977a976c900ca0282651bb599fdcf36056adad5ee"
     },
     {
       "path": "reports/route-disposition.json",
       "kind": "route_disposition",
       "schema": "https://schemas.datapan.dev/datapan.route-disposition.v1.schema.json",
       "bytes": 22278,
-      "sha256": "5f4ac4958f0acdb9ac3305d0eee7693a5f13c8cb66525a52be53ba20e923fe3a"
+      "sha256": "94546218054151b307bc2b6cb534c2d8d65849c9998ae15012358b85a24b3fbc"
     },
     {
       "path": "reports/provider-backlog.json",
       "kind": "provider_backlog",
       "schema": "https://schemas.datapan.dev/datapan.providers.v1.schema.json",
       "bytes": 53665,
-      "sha256": "d8cf17ef1118c5e6b882602c27ff582951ff86fed531cb213b9c95575014550b"
+      "sha256": "6b41b568e19ced641bc477b3a948f1a0335534827f43f3cece2a5f45fcf260a9"
     },
     {
       "path": "reports/coverage.json",
       "kind": "coverage",
       "schema": "https://schemas.datapan.dev/datapan.coverage.v1.schema.json",
       "bytes": 16541,
-      "sha256": "e47c415c9508a7b7676007f4de937d60020c990908f5b34533100b7b06c481d8"
+      "sha256": "e36cca1549bdbd6e7562098eec30601d5339379b35ad3f8a58abb8a53891041b"
     },
     {
       "path": "reports/verification-plan.json",
       "kind": "verification_plan",
       "schema": "https://schemas.datapan.dev/datapan.verification-plan.v1.schema.json",
       "bytes": 5370,
-      "sha256": "7461c98bb1bc4fc0d47b78960ffd2bf62f26185c5f6fb8009d45920566cdc332"
+      "sha256": "61f3d7776284c886f860b6ef2c4e8837593d3665348f5dbabdf2f5a11b59dde3"
     },
     {
       "path": "reports/data-go-kr/runtime-evidence-growth.json",
       "kind": "runtime_evidence_growth",
       "schema": "https://schemas.datapan.dev/datapan.runtime-evidence-growth.v1.schema.json",
       "bytes": 2925,
-      "sha256": "d6a0f097e82310b72dce6a75a78a8f8c6dc295b944e6f6822f6b8970d0573329"
+      "sha256": "4c9b46b6b54277f1170589075ce93f2b57f45ce2aed241674fa9c1d6970b855b"
     },
     {
       "path": "reports/latest-verification.json",
       "kind": "verification",
       "schema": "https://schemas.datapan.dev/datapan.verification.v1.schema.json",
-      "bytes": 318479,
-      "sha256": "4355f986a4543ef6612c66d96627226e4f459aab7a37337efa007a27c50179c8"
+      "bytes": 329631,
+      "sha256": "30202095a36aa8dee35c625c60e130604a22ac06d497eb739cbfdae21f1e9d50"
     },
     {
       "path": "reports/latest-verification-summary.json",
       "kind": "verification_summary",
       "schema": "https://schemas.datapan.dev/datapan.verification-summary.v1.schema.json",
-      "bytes": 13610,
-      "sha256": "7889f44b01949d534c5c442c2a9ebf781500201a710acd43f6ce9fd7fde04e3c"
+      "bytes": 13569,
+      "sha256": "fead3508eadd2d680826acafc5ffaa9270cc79344649ea4e7f6691771522cec2"
     },
     {
       "path": "reports/unadapted-external-probe.json",
@@ -250,13 +250,13 @@
       "path": "provenance/data-go-kr.md",
       "kind": "provenance",
       "bytes": 2460,
-      "sha256": "2c2f338baec41fe7dfbeb7ab62a7cd122008f676b3bc6de904c6e36742749f5d"
+      "sha256": "8abd4a98ea7a1f46f44cf6ed0dd23ef6bcf3423493cb72c0b15123cc0f4ddbd2"
     },
     {
       "path": "RELEASE_NOTES.md",
       "kind": "release_notes",
       "bytes": 3227,
-      "sha256": "6ec3ff7bbc138caf0b1656cd950dcb156e8d992ca41512eaa720f0c8cab0957b"
+      "sha256": "933922dbbf4aae1fa59f5f7a80cd8fb80cc158c7b1f551edf0b9986dd1848eb2"
     }
   ]
 }

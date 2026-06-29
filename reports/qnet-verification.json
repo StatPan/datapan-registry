@@ -1,14 +1,15 @@
 {
-  "generated_at": "2026-06-29T13:48:38Z",
+  "generated_at": "2026-06-29T14:04:01Z",
   "provider": "data.go.kr",
-  "limit": 45,
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 55,
   "truncated": true,
-  "filtered_count": 45,
+  "filtered_count": 55,
   "summary": {
-    "total": 45,
+    "total": 55,
     "verified": 0,
     "failed": 0,
-    "skipped": 45,
+    "skipped": 55,
     "unknown": 0
   },
   "results": [
@@ -691,6 +692,189 @@
         "numOfRows": "1",
         "pageNo": "1"
       }
+    },
+    {
+      "dataset_id": "15039800",
+      "title": "한국산업인력공단_국가기술자격 취득 관련 현황",
+      "operation": "토목(산업)기사 자격취득자 현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "baseYY": "2023"
+      }
+    },
+    {
+      "dataset_id": "15039800",
+      "title": "한국산업인력공단_국가기술자격 취득 관련 현황",
+      "operation": "학력별취득현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15039800",
+      "title": "한국산업인력공단_국가기술자격 취득 관련 현황",
+      "operation": "행정구역별연도별성별 취득현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15040265",
+      "title": "한국산업인력공단_국가기술자격증 배송주소구간 정보",
+      "operation": "배송 주소 구간 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:03:46Z"
+    },
+    {
+      "dataset_id": "15040265",
+      "title": "한국산업인력공단_국가기술자격증 배송주소구간 정보",
+      "operation": "활용 주소 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "gun": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "road": "",
+        "sido": ""
+      },
+      "missing_params": [
+        "sido",
+        "gun",
+        "road"
+      ]
+    },
+    {
+      "dataset_id": "15040841",
+      "title": "한국산업인력공단_국가기술자격 지역별 자격취득 정보",
+      "operation": "지역별 성별 자격취득현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "baseYY": "2023",
+        "quart": "",
+        "rgnCd": "",
+        "seriesCd": ""
+      },
+      "missing_params": [
+        "rgnCd",
+        "seriesCd",
+        "quart"
+      ]
+    },
+    {
+      "dataset_id": "15040841",
+      "title": "한국산업인력공단_국가기술자격 지역별 자격취득 정보",
+      "operation": "지역별 연도별 자격취득현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "baseYY": "2023",
+        "quart": "",
+        "rgnCd": "",
+        "seriesCd": ""
+      },
+      "missing_params": [
+        "rgnCd",
+        "seriesCd",
+        "quart"
+      ]
+    },
+    {
+      "dataset_id": "15040841",
+      "title": "한국산업인력공단_국가기술자격 지역별 자격취득 정보",
+      "operation": "지역별 연령별 자격취득현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "baseYY": "2023",
+        "quart": "",
+        "rgnCd": "",
+        "seriesCd": ""
+      },
+      "missing_params": [
+        "rgnCd",
+        "seriesCd",
+        "quart"
+      ]
+    },
+    {
+      "dataset_id": "15041600",
+      "title": "한국산업인력공단_국가기술자격 종목 정보",
+      "operation": "국가기술자격 종목 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "seriesCd": ""
+      },
+      "missing_params": [
+        "seriesCd"
+      ]
+    },
+    {
+      "dataset_id": "15056876",
+      "title": "한국산업인력공단_과정평가형자격 정보 조회",
+      "operation": "과정평가형 외부평가 일정정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json",
+        "year": ""
+      },
+      "missing_params": [
+        "year"
+      ]
     }
   ]
 }

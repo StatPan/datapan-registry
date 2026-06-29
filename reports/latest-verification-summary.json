@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-06-29T13:48:49Z",
+  "generated_at": "2026-06-29T14:04:01Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
-  "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
+  "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 499,
+    "total": 519,
     "verified": 22,
     "failed": 87,
-    "skipped": 390,
+    "skipped": 410,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 390,
+        "count": 410,
         "status": "skipped"
       },
       {
@@ -33,18 +33,18 @@
     "by_reason": [
       {
         "key": "missing_auth",
-        "count": 88,
+        "count": 92,
         "reason": "missing_auth"
+      },
+      {
+        "key": "jeonju_missing_required_params",
+        "count": 43,
+        "reason": "jeonju_missing_required_params"
       },
       {
         "key": "approval_required",
         "count": 36,
         "reason": "approval_required"
-      },
-      {
-        "key": "jeonju_missing_required_params",
-        "count": 33,
-        "reason": "jeonju_missing_required_params"
       },
       {
         "key": "missing_required_params",
@@ -97,6 +97,16 @@
         "reason": "sisul_wadl_metadata_only"
       },
       {
+        "key": "qnet_missing_required_params",
+        "count": 9,
+        "reason": "qnet_missing_required_params"
+      },
+      {
+        "key": "qnet_separate_service_key_required",
+        "count": 9,
+        "reason": "qnet_separate_service_key_required"
+      },
+      {
         "key": "qnet_wadl_metadata_only",
         "count": 9,
         "reason": "qnet_wadl_metadata_only"
@@ -110,11 +120,6 @@
         "key": "naqs_mutation_endpoint",
         "count": 8,
         "reason": "naqs_mutation_endpoint"
-      },
-      {
-        "key": "qnet_separate_service_key_required",
-        "count": 8,
-        "reason": "qnet_separate_service_key_required"
       },
       {
         "key": "humetro_service_access_denied",
@@ -175,11 +180,6 @@
         "key": "pqis_service_key_not_registered",
         "count": 4,
         "reason": "pqis_service_key_not_registered"
-      },
-      {
-        "key": "qnet_missing_required_params",
-        "count": 4,
-        "reason": "qnet_missing_required_params"
       },
       {
         "key": "seoul_bus_service_key_not_registered",
@@ -285,18 +285,18 @@
     "by_provider": [
       {
         "key": "q-net",
-        "count": 55,
+        "count": 65,
         "provider": "q-net"
+      },
+      {
+        "key": "jeonju",
+        "count": 55,
+        "provider": "jeonju"
       },
       {
         "key": "ekape",
         "count": 49,
         "provider": "ekape"
-      },
-      {
-        "key": "jeonju",
-        "count": 45,
-        "provider": "jeonju"
       },
       {
         "key": "geoje",
@@ -421,19 +421,19 @@
     ],
     "by_endpoint_host": [
       {
-        "key": "data.ekape.or.kr",
-        "count": 49,
-        "host": "data.ekape.or.kr"
-      },
-      {
         "key": "openapi.q-net.or.kr",
-        "count": 47,
+        "count": 56,
         "host": "openapi.q-net.or.kr"
       },
       {
         "key": "openapi.jeonju.go.kr",
-        "count": 45,
+        "count": 55,
         "host": "openapi.jeonju.go.kr"
+      },
+      {
+        "key": "data.ekape.or.kr",
+        "count": 49,
+        "host": "data.ekape.or.kr"
       },
       {
         "key": "data.geoje.go.kr",
@@ -486,14 +486,14 @@
         "host": "open.itfind.or.kr"
       },
       {
+        "key": "c.q-net.or.kr",
+        "count": 9,
+        "host": "c.q-net.or.kr"
+      },
+      {
         "key": "data.naqs.go.kr",
         "count": 9,
         "host": "data.naqs.go.kr"
-      },
-      {
-        "key": "c.q-net.or.kr",
-        "count": 8,
-        "host": "c.q-net.or.kr"
       },
       {
         "key": "data.humetro.busan.kr",
@@ -574,7 +574,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 440,
+        "count": 460,
         "kind": "external_endpoint"
       },
       {
