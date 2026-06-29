@@ -50,6 +50,13 @@ PR #4 starts the first non-data.go.kr profile batch with checked-in profiles
 for KOSIS, ECOS, Open Assembly, and Seoul Open Data Plaza. These profiles are
 hand-reviewed source contracts, not importer implementations.
 
+Gira #9 extends that batch with source-specific error action catalog drafts.
+Those catalogs should classify only what the official references and checked-in
+source profiles support. When a source does not expose stable public error
+codes in the reviewed documentation, the catalog should use draft
+`unknown`/`parse_error`/generic HTTP rules instead of inventing exact provider
+codes.
+
 The first implementation batch should cover at least one statistical source
 (`kosis` or `ecos`), one government/legislative source (`open_assembly`), and
 one municipal source (`seoul_open_data`). That gives enough variation to avoid

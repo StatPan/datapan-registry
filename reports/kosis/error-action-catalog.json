@@ -1,0 +1,140 @@
+{
+  "schema_version": "datapan.error-action-catalog.v1",
+  "generated_at": "2026-06-29T00:00:00Z",
+  "provider": "KOSIS",
+  "source_id": "kosis",
+  "source_profile": "sources/kosis.json",
+  "summary": {
+    "rules": 5,
+    "blocking_rules": 1,
+    "manual_review_rules": 4,
+    "unknown_signature_rules": 1
+  },
+  "rules": [
+    {
+      "rule_id": "kosis-api-key-message",
+      "status": "draft",
+      "scope": {
+        "hosts": [
+          "kosis.kr"
+        ]
+      },
+      "match": {
+        "kind": "message_contains",
+        "contains": "apiKey",
+        "case_sensitive": false
+      },
+      "classification": "credential",
+      "severity": "blocking",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "manual_review",
+          "reason": "KOSIS requests require the issued apiKey parameter. Verify credential and approval state before routing the failure to parser or adapter work."
+        },
+        {
+          "target": "documentation",
+          "action": "update_error_taxonomy",
+          "automation": "manual_review",
+          "reason": "Keep KOSIS credential error handling tied to the official OpenAPI request-variable documentation."
+        }
+      ],
+      "impact_categories": [
+        "provider_error_taxonomy_changed",
+        "verification_status_changed"
+      ],
+      "evidence": {
+        "reference_url": "https://kosis.kr/openapi/devGuide/devGuide_0101List.do"
+      }
+    },
+    {
+      "rule_id": "kosis-required-parameter-message",
+      "status": "draft",
+      "match": {
+        "kind": "message_contains",
+        "contains": "필수",
+        "case_sensitive": false
+      },
+      "classification": "bad_request",
+      "severity": "medium",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "manual_review",
+          "reason": "KOSIS endpoints have operation-specific required parameters such as apiKey, vwCd, parentListId, and format; sample requests should be refreshed before changing parser code."
+        }
+      ],
+      "impact_categories": [
+        "verification_status_changed",
+        "required_params_changed"
+      ],
+      "evidence": {
+        "reference_url": "https://kosis.kr/openapi/devGuide/devGuide_0101List.do"
+      }
+    },
+    {
+      "rule_id": "kosis-http-429",
+      "status": "draft",
+      "match": {
+        "kind": "http_status",
+        "http_status": 429
+      },
+      "classification": "rate_limit",
+      "severity": "medium",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "manual_review",
+          "reason": "Throttle verification cadence before adding source adapter changes."
+        }
+      ],
+      "impact_categories": [
+        "verification_status_changed"
+      ]
+    },
+    {
+      "rule_id": "kosis-timeout",
+      "status": "draft",
+      "match": {
+        "kind": "timeout"
+      },
+      "classification": "upstream_outage",
+      "severity": "medium",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "manual_review",
+          "reason": "Treat timeouts as provider/runtime evidence until repeated checks prove a stable adapter requirement."
+        }
+      ],
+      "impact_categories": [
+        "verification_status_changed"
+      ]
+    },
+    {
+      "rule_id": "kosis-parse-error-unknown",
+      "status": "draft",
+      "match": {
+        "kind": "parse_error"
+      },
+      "classification": "unknown",
+      "severity": "high",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "investigate",
+          "automation": "manual_review",
+          "reason": "KOSIS supports JSON, XML, and SDMX; parse failures need evidence before deciding whether the response contract or parser is wrong."
+        }
+      ],
+      "impact_categories": [
+        "response_shape_changed",
+        "verification_status_changed"
+      ]
+    }
+  ]
+}
