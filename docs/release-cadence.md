@@ -2,6 +2,10 @@
 
 `datapan-registry` releases should be boring, repeatable, and evidence-first.
 
+Release work should follow the standardization milestones in
+`docs/registry-standardization-blueprint.md`; generated artifact updates should
+identify which measured gap they reduce.
+
 ## Inputs
 
 - A current `datapan-cli` build.

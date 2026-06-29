@@ -14,6 +14,9 @@ defined in `docs/registry-ops-scope.md`. Source-specific findings should be
 captured with `schemas/datapan.source-profile.v1.schema.json` before they are
 used for generated release evidence.
 
+The milestone and task order for this work is tracked in
+`docs/registry-standardization-blueprint.md`.
+
 ## Reference Policy
 
 Every source profile should carry reference URLs that can be checked for drift:

@@ -13,6 +13,9 @@ It should not become the runtime that fetches, stores, or serves promoted
 datasets. Runtime execution belongs in `datapan-cli`, `datapan-data`, Dataset
 API, SDK, MCP, and provider adapter repositories.
 
+Use `docs/registry-standardization-blueprint.md` as the planning document for
+target architecture, gap measurement, milestones, and task sequencing.
+
 ## Current Contract Layers
 
 The registry should grow in layers:
