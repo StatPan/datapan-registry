@@ -76,6 +76,8 @@ Current strengths:
   `datapan.error-action-catalog.v1`.
 - `reports/data-go-kr/external-coverage-summary.json` separates raw external
   adapter coverage from evidence-adjusted adapter candidates.
+- `reports/data-go-kr/registry-impact-plan.json` validates downstream action
+  hints for the current data.go.kr registry-only changes.
 - `reports/coverage.json` reports high callable-operation coverage.
 - `reports/route-disposition.json` separates dead-route candidates from
   transient failures.
@@ -93,7 +95,8 @@ Current gaps:
 - Error inventory does not yet route to operational actions.
 - Runtime evidence coverage is much lower than callable coverage.
 - Multi-source report grouping is designed but not implemented.
-- Impact plans are specified but not generated.
+- Impact plans are specified and a data.go.kr draft plan is checked in, but
+  full `datapan-cli` generation is not implemented.
 - Drift checks for official source documentation are not implemented.
 
 ## Gap Matrix
@@ -107,7 +110,7 @@ Current gaps:
 | Error routing | `reports/error-catalog.json` | `reports/<source>/error-action-catalog.json` | known error signatures mapped to action rules |
 | Multi-source layout | root `data/` and `reports/` | source-scoped reports plus root rollups | source-scoped artifact count and release rollup coverage |
 | Runtime confidence | `latest-verification.json` | scheduled source/provider verification matrix | evidence coverage percentage and provider pass/fail trend |
-| Downstream impact | catalog diff and human review | `reports/registry-impact-plan.json` | changes with explicit downstream action hints |
+| Downstream impact | draft data.go.kr impact plan plus human review | generated `reports/registry-impact-plan.json` rollup | changes with explicit downstream action hints |
 | Drift monitoring | weekly release health | source reference drift reports | official reference URLs checked and classified |
 
 ## Milestones
@@ -193,6 +196,8 @@ Done when:
 
 - data.go.kr changes can produce impact-plan entries from catalog diff,
   verification evidence, route disposition, and promoted dataset mappings;
+- checked-in impact plans validate in CI before client/server consumers act on
+  them;
 - `reports/registry-impact-plan.json` is generated from registry diffs,
   verification evidence, source profiles, error action catalogs, and promoted
   dataset mappings;
@@ -241,8 +246,8 @@ Use this order unless a production failure changes priority:
    tracked by Gira #6.
 7. Add hand-reviewed profiles for KOSIS, ECOS, Open Assembly, and Seoul Open
    Data. Done in PR #4 and tracked by Gira #7.
-8. Generate registry impact plans for CLI and API consumers. Tracked by Gira
-   #8.
+8. Add and validate a data.go.kr impact plan for CLI and API consumers. Done
+   in PR #4 and tracked by Gira #8.
 9. Add draft `reports/<source>/error-action-catalog.json` files for M4
    sources.
 10. Add action catalog validation to CI. Done in PR #4 for checked-in draft

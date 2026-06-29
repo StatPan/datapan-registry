@@ -18,7 +18,8 @@ downstream action hints.
 
 ## Artifact
 
-Future release drafts should generate:
+Release drafts should generate a release-wide rollup when catalog diffs are
+available:
 
 ```text
 reports/registry-impact-plan.json
@@ -33,11 +34,15 @@ reports/open-assembly/registry-impact-plan.json
 ```
 
 Root-level `reports/registry-impact-plan.json` is the release-wide rollup.
+PR #4 adds a checked-in data.go.kr draft at
+`reports/data-go-kr/registry-impact-plan.json` and validates every checked-in
+impact plan with `scripts/validate-impact-plans.py`.
 
 The schema is checked in at
 `schemas/datapan.registry-impact-plan.v1.schema.json`, but the current release
-manifest is not updated by this design step. The schema should be added to
-`schemas/index.json` and `manifest.json` by a future generated release draft.
+manifest is not updated by this design step. The schema and checked-in draft
+plans should be added to `schemas/index.json` and `manifest.json` by a future
+generated release draft.
 
 ## Stable Identity
 
@@ -196,6 +201,10 @@ Promoted response shape change:
 `datapan-cli` should generate the impact plan from registry diffs, verification
 evidence, provider profiles, and promoted dataset mappings supplied by
 downstream repositories.
+
+Until generation is implemented, checked-in draft plans are allowed only when
+the validator proves their summary counts, target counts, identity fields, and
+promoted/served dataset boundaries are internally consistent.
 
 `datapan-data` should consume the plan as input to collector/parser/schema
 review. It should not be required to parse the full registry release to decide

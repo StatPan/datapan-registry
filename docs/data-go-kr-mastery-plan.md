@@ -155,7 +155,7 @@ data.go.kr mastery should produce or preserve:
 - `reports/latest-verification.json`
 - `reports/latest-verification-summary.json`
 - `reports/data-go-kr/error-action-catalog.json`
-- future `reports/data-go-kr/registry-impact-plan.json`
+- `reports/data-go-kr/registry-impact-plan.json`
 
 ## Source-Scoped Generation Contract
 
@@ -167,7 +167,7 @@ match those roots.
 | --- | --- | --- |
 | `reports/data-go-kr/external-coverage-summary.json` | `sources/data_go_kr.json`, `reports/coverage.json`, `reports/adapter-targets.json`, `reports/route-disposition.json`, `data/provider-index.json` | `scripts/validate-external-coverage.py` validates schema and cross-checks source identity, raw coverage metrics, route evidence counts, adapter target counts, provider-index host count, and missing host counts. |
 | `reports/data-go-kr/error-action-catalog.json` | `sources/data_go_kr.json`, `reports/error-catalog.json`, `reports/route-disposition.json`, provider verification reports | `scripts/validate-error-action-catalogs.py` validates checked-in action rules; future generation should also fail on unmapped known error signatures. |
-| `reports/data-go-kr/registry-impact-plan.json` | `sources/data_go_kr.json`, catalog diff, verification evidence, route disposition, error action catalog, promoted dataset mappings | Future `datapan-cli` generation must validate against `datapan.registry-impact-plan.v1` before client/server consumers act on it. |
+| `reports/data-go-kr/registry-impact-plan.json` | `sources/data_go_kr.json`, catalog diff, verification evidence, route disposition, error action catalog, promoted dataset mappings | `scripts/validate-impact-plans.py` validates schema, summary counts, target counts, identity fields, and promoted/served dataset boundaries before client/server consumers act on it. |
 
 This contract keeps `data/data-go-kr.registry.json` as the compatibility
 registry path while moving generated evidence toward `reports/data-go-kr/`.
@@ -189,8 +189,10 @@ CI should fail rather than treating the checked-in summary as authoritative.
    without route-disposition evidence and permits adapter backlog only from
    adapter-candidate evidence. Done in PR #4.
 8. Increase runtime verification evidence for call-capable registered adapters.
-9. Generate a data.go.kr impact plan from catalog diff, verification evidence,
-   route disposition, and promoted dataset mappings.
+9. Add a data.go.kr draft impact plan and validate its client/server action
+   boundaries in CI. Done in PR #4.
+10. Generate future data.go.kr impact plans directly from catalog diff,
+   verification evidence, route disposition, and promoted dataset mappings.
 
 ## Done Criteria
 
