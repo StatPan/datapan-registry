@@ -148,6 +148,15 @@ source profile reference URL, provider, `source_id`, or `last_reviewed_at`
 changes without the baseline being refreshed. Live HTTP status, redirect, and
 content-hash checks remain a later scheduled-health task.
 
+Gira #13 adds the live check path:
+`scripts/check-source-reference-drift.py` and
+`.github/workflows/source-reference-drift.yml`. This workflow is scheduled and
+manual-only, not a pull request gate. It writes
+`.datapan/ci/source-reference-drift-live.json`, uploads the report, and fails
+when a reference is missing or cannot be fetched. Redirects and content hashes
+are recorded as evidence; turning a redirect or content-hash change into a
+blocking policy should happen only after the source-specific impact is known.
+
 ## Open Questions
 
 - Should source profile references be checked into `providers/<source>.json` or
