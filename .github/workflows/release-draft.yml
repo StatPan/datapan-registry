@@ -82,6 +82,8 @@ jobs:
           python scripts/validate-error-action-catalogs.py
           python scripts/validate-external-coverage.py
           python scripts/validate-impact-plans.py
+          python scripts/validate-source-reference-drift.py
+          python scripts/validate-runtime-evidence-growth.py
 
       - name: Select manifest path
         run: |
