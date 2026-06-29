@@ -77,7 +77,10 @@ Current strengths:
 Current gaps:
 
 - Source identity is still mostly implicit in paths and provider names.
-- Source-specific operating profiles are not checked in yet.
+- `sources/data_go_kr.json` establishes the first source profile; non-data.go.kr
+  source profiles are not checked in yet.
+- data.go.kr gateway coverage and data.go.kr external endpoint coverage are not
+  yet governed by a dedicated mastery plan in generated release gates.
 - Error inventory does not yet route to operational actions.
 - Runtime evidence coverage is much lower than callable coverage.
 - Multi-source report grouping is designed but not implemented.
@@ -89,6 +92,7 @@ Current gaps:
 | Gap | Current artifact | Target artifact | Measurement |
 | --- | --- | --- | --- |
 | Source identity | `provider` strings and paths | `sources/<source_id>.json` | number of supported sources with valid source profiles |
+| data.go.kr mastery | coverage reports plus route evidence | `sources/data_go_kr.json` and data.go.kr mastery gates | gateway, external registered, external dead/transient, and evidence-adjusted adapter coverage |
 | Official references | documentation only | profile reference URLs with review dates | profiles with homepage/API/key/notice/terms references |
 | Site behavior | adapter code and manual knowledge | source profile auth/request/response/runtime sections | profiles covering auth, paging, response, errors, runtime |
 | Error routing | `reports/error-catalog.json` | `reports/<source>/error-action-catalog.json` | known error signatures mapped to action rules |
@@ -116,11 +120,16 @@ Done when:
 
 ### M2: Hand-Reviewed Source Profiles
 
-Goal: prove the source profile contract against diverse official sites.
+Goal: master data.go.kr first, then prove the same profile contract against
+other official sources.
 
 Done when:
 
-- `sources/data_go_kr.json` exists;
+- `sources/data_go_kr.json` exists and validates;
+- `docs/data-go-kr-mastery-plan.md` defines gateway and external endpoint
+  coverage separately;
+- data.go.kr missing external routes are governed by route-disposition evidence
+  before becoming adapter work;
 - `sources/kosis.json` exists;
 - `sources/ecos.json` exists;
 - `sources/open_assembly.json` exists;
@@ -131,10 +140,14 @@ Done when:
 
 ### M3: Error Action Routing
 
-Goal: turn observed errors into operational decisions.
+Goal: turn observed errors into operational decisions, starting with
+data.go.kr gateway and external endpoint failures.
 
 Done when:
 
+- data.go.kr credential and approval failures have draft action rules;
+- data.go.kr external route disposition reasons are mapped to action
+  classifications;
 - source-specific draft error action catalogs exist for the M2 sources;
 - known credential, approval, rate limit, not-found, upstream, parser, and
   adapter cases have explicit actions;
@@ -143,10 +156,13 @@ Done when:
 
 ### M4: Source-Scoped Evidence
 
-Goal: stop treating all evidence as a single `data.go.kr` root report.
+Goal: stop treating all evidence as a single `data.go.kr` root report while
+preserving the current compatibility paths.
 
 Done when:
 
+- data.go.kr gateway and external endpoint coverage are reported separately;
+- evidence-adjusted external adapter candidates are reported;
 - source-scoped reports are generated under `reports/<source>/`;
 - root reports are documented as release-wide rollups;
 - CI validates source-scoped report paths where present;
@@ -159,6 +175,8 @@ Goal: make registry changes actionable for CLI/Data/API/SDK/MCP consumers.
 
 Done when:
 
+- data.go.kr changes can produce impact-plan entries from catalog diff,
+  verification evidence, route disposition, and promoted dataset mappings;
 - `reports/registry-impact-plan.json` is generated from registry diffs,
   verification evidence, source profiles, error action catalogs, and promoted
   dataset mappings;
@@ -177,25 +195,40 @@ Done when:
 - official reference drift reports exist;
 - scheduled health checks include source reference drift and provider runtime
   verification;
-- runtime evidence coverage trends toward the documented `10%` target;
+- data.go.kr runtime evidence coverage trends toward the documented `10%`
+  target;
 - external adapter coverage trends toward the documented `98%` target;
 - warning annotations in CI are treated as work items, not background noise.
+
+### Later: Broad Source Expansion
+
+Goal: prove the source profile contract against diverse official sites.
+
+Done when:
+- data.go.kr mastery gates are stable;
+- at least three materially different non-data.go.kr source profiles validate;
+- source-scoped reports and impact plans can represent those sources without
+  changing the data.go.kr compatibility surface.
 
 ## Task Backlog
 
 Use this order unless a production failure changes priority:
 
-1. Add `sources/` and hand-reviewed profiles for M2 sources.
+1. Add and validate `sources/data_go_kr.json`.
 2. Add profile validation to CI.
-3. Add source profile references to release draft documentation.
-4. Add draft `reports/<source>/error-action-catalog.json` files for M2
+3. Add data.go.kr error action catalog draft.
+4. Add evidence-adjusted external coverage summary for data.go.kr.
+5. Add source profile references to release draft documentation.
+6. Add hand-reviewed profiles for KOSIS, ECOS, Open Assembly, and Seoul Open
+   Data after data.go.kr profile validation is enforced.
+7. Add draft `reports/<source>/error-action-catalog.json` files for M2
    sources.
-5. Add action catalog validation to CI.
-6. Add source reference drift report schema.
-7. Add a manual or scheduled drift-check workflow.
-8. Update `datapan-cli` to generate source-scoped reports.
-9. Update `datapan-cli` to generate registry impact plans.
-10. Expand runtime verification evidence by source/provider priority.
+8. Add action catalog validation to CI.
+9. Add source reference drift report schema.
+10. Add a manual or scheduled drift-check workflow.
+11. Update `datapan-cli` to generate source-scoped reports.
+12. Update `datapan-cli` to generate registry impact plans.
+13. Expand runtime verification evidence by source/provider priority.
 
 ## Measurement Rules
 

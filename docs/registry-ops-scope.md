@@ -52,7 +52,21 @@ The registry should grow in layers:
 
 The next work should focus on contracts and evidence, not broad data imports.
 
-### 1. Source Profiles
+### 1. data.go.kr Mastery
+
+Master `data.go.kr` before broad source expansion. The operating plan is in
+`docs/data-go-kr-mastery-plan.md`.
+
+The key split is:
+
+- gateway operations handled through data.go.kr gateway hosts;
+- external endpoint operations discovered from data.go.kr but requiring
+  provider adapters or route-disposition evidence.
+
+Missing external routes should not become adapter work until route evidence
+shows they are viable adapter candidates.
+
+### 2. Source Profiles
 
 Define source profiles for materially different source families:
 
@@ -66,7 +80,7 @@ Each profile should include official references, auth policy, request model,
 response formats, error field candidates, runtime verification policy, and
 promotion defaults.
 
-### 2. Error Action Catalogs
+### 3. Error Action Catalogs
 
 For each active source, turn observed provider errors into routing rules:
 
@@ -75,16 +89,16 @@ For each active source, turn observed provider errors into routing rules:
   evidence.
 - response-shape and parser failures should be separated from upstream outages.
 - promoted dataset impacts should be routed to manual review when storage or
-  served contracts may change.
+served contracts may change.
 
-### 3. Drift Evidence
+### 4. Drift Evidence
 
 Add a source-reference drift report before adding automatic source expansion.
 The report should record official reference URL status, final URL, content
 fingerprint, and checked timestamp. It should warn or fail based on contract
 impact, not on every homepage change.
 
-### 4. Runtime Evidence Growth
+### 5. Runtime Evidence Growth
 
 The current release has high callable coverage but shallow runtime evidence.
 The near-term target should be:

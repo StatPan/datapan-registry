@@ -17,6 +17,9 @@ used for generated release evidence.
 The milestone and task order for this work is tracked in
 `docs/registry-standardization-blueprint.md`.
 
+The first source to master is `data.go.kr`; see
+`docs/data-go-kr-mastery-plan.md` before adding broad source profiles.
+
 ## Reference Policy
 
 Every source profile should carry reference URLs that can be checked for drift:

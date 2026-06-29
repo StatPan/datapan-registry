@@ -1,0 +1,104 @@
+{
+  "schema_version": "datapan.source-profile.v1",
+  "source_id": "data_go_kr",
+  "provider": "data.go.kr",
+  "display_name": "Public Data Portal",
+  "status": "active",
+  "adapter": {
+    "name": "data-go-kr",
+    "status": "registered",
+    "capabilities": [
+      "catalogue_import",
+      "verification",
+      "call",
+      "normalization"
+    ],
+    "hosts": [
+      "www.data.go.kr",
+      "data.go.kr",
+      "apis.data.go.kr"
+    ]
+  },
+  "references": {
+    "homepage_url": "https://www.data.go.kr/",
+    "api_docs_url": "https://www.data.go.kr/ugs/selectPublicDataUseGuideView.do",
+    "key_request_url": "https://www.data.go.kr/ugs/selectPublicDataUseGuideView.do",
+    "notice_url": "https://www.data.go.kr/bbs/ntc/selectNoticeList.do",
+    "last_reviewed_at": "2026-06-29"
+  },
+  "catalogue": {
+    "model": "portal",
+    "update_cadence": "source-dependent",
+    "identity_fields": [
+      "list_id",
+      "operation_id",
+      "endpoint_id"
+    ]
+  },
+  "auth": {
+    "type": "service_key",
+    "key_parameter_names": [
+      "serviceKey"
+    ],
+    "key_locations": [
+      "query"
+    ],
+    "approval_scope": "operation",
+    "credential_reference": "OpenAPI service key issued from data.go.kr usage application flow."
+  },
+  "request": {
+    "methods": [
+      "GET"
+    ],
+    "parameter_model": "query",
+    "paging": {
+      "type": "page",
+      "page_param": "pageNo",
+      "size_param": "numOfRows",
+      "total_count_path": "response.body.totalCount"
+    },
+    "required_param_policy": "operation_specific"
+  },
+  "response": {
+    "formats": [
+      "xml",
+      "json"
+    ],
+    "default_format": "unknown",
+    "encoding": "utf-8",
+    "envelope_path": "response",
+    "items_path": "response.body.items",
+    "schema_policy": "documented"
+  },
+  "errors": {
+    "taxonomy_status": "draft",
+    "status_code_fields": [
+      "resultCode",
+      "returnReasonCode"
+    ],
+    "message_fields": [
+      "resultMsg",
+      "returnAuthMsg",
+      "errMsg"
+    ],
+    "known_error_codes": [
+      {
+        "code": "30",
+        "message": "SERVICE KEY IS NOT REGISTERED ERROR",
+        "classification": "credential"
+      }
+    ]
+  },
+  "runtime": {
+    "verification_mode": "bounded_call",
+    "timeout_seconds": 20,
+    "retry_policy": "idempotent",
+    "rate_limit_policy": "conservative",
+    "sample_param_policy": "catalogue_sample"
+  },
+  "promotion": {
+    "default_status": "registry_only",
+    "mapping_reference": "Registry additions require downstream promoted dataset mapping before datapan-api, SDK, or MCP action is required."
+  },
+  "notes": "data.go.kr is the baseline source. Mastery requires separating gateway operations from external endpoint operations and preserving route disposition evidence for endpoints that cannot be covered by the portal gateway."
+}
