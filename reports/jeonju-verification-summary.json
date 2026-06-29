@@ -1,19 +1,23 @@
 {
-  "generated_at": "2026-06-24T15:18:45Z",
-  "source": "C:\\workspace\\datapan-registry\\reports\\jeonju-verification.json",
+  "generated_at": "2026-06-29T09:16:46Z",
+  "source": "/home/statpan/workspace/opensource/datapan-registry/reports/jeonju-verification.json",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 20,
   "truncated": false,
   "summary": {
-    "total": 5,
+    "total": 15,
     "verified": 0,
     "failed": 5,
-    "skipped": 0,
+    "skipped": 10,
     "unknown": 0
   },
   "groups": {
     "by_status": [
+      {
+        "key": "skipped",
+        "count": 10,
+        "status": "skipped"
+      },
       {
         "key": "failed",
         "count": 5,
@@ -22,9 +26,19 @@
     ],
     "by_reason": [
       {
+        "key": "missing_auth",
+        "count": 7,
+        "reason": "missing_auth"
+      },
+      {
         "key": "jeonju_http_404_not_found",
         "count": 3,
         "reason": "jeonju_http_404_not_found"
+      },
+      {
+        "key": "jeonju_missing_required_params",
+        "count": 3,
+        "reason": "jeonju_missing_required_params"
       },
       {
         "key": "jeonju_http_405_method_not_allowed",
@@ -35,21 +49,21 @@
     "by_provider": [
       {
         "key": "jeonju",
-        "count": 5,
+        "count": 15,
         "provider": "jeonju"
       }
     ],
     "by_endpoint_host": [
       {
         "key": "openapi.jeonju.go.kr",
-        "count": 5,
+        "count": 15,
         "host": "openapi.jeonju.go.kr"
       }
     ],
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 5,
+        "count": 15,
         "kind": "external_endpoint"
       }
     ]

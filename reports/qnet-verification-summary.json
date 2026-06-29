@@ -1,50 +1,69 @@
 {
-  "generated_at": "2026-06-24T00:23:41Z",
-  "source": "reports/qnet-verification.json",
+  "generated_at": "2026-06-29T09:16:46Z",
+  "source": "/home/statpan/workspace/opensource/datapan-registry/reports/qnet-verification.json",
   "provider": "data.go.kr",
-  "registry": "data\\data-go-kr.registry.json",
   "limit": 20,
   "truncated": false,
   "summary": {
-    "total": 5,
+    "total": 15,
     "verified": 0,
     "failed": 0,
-    "skipped": 5,
+    "skipped": 15,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 5,
+        "count": 15,
         "status": "skipped"
       }
     ],
     "by_reason": [
       {
+        "key": "missing_auth",
+        "count": 5,
+        "reason": "missing_auth"
+      },
+      {
         "key": "qnet_wadl_metadata_only",
         "count": 5,
         "reason": "qnet_wadl_metadata_only"
+      },
+      {
+        "key": "qnet_missing_required_params",
+        "count": 3,
+        "reason": "qnet_missing_required_params"
+      },
+      {
+        "key": "qnet_separate_service_key_required",
+        "count": 2,
+        "reason": "qnet_separate_service_key_required"
       }
     ],
     "by_provider": [
       {
         "key": "q-net",
-        "count": 5,
+        "count": 15,
         "provider": "q-net"
       }
     ],
     "by_endpoint_host": [
       {
         "key": "openapi.q-net.or.kr",
-        "count": 5,
+        "count": 13,
         "host": "openapi.q-net.or.kr"
+      },
+      {
+        "key": "c.q-net.or.kr",
+        "count": 2,
+        "host": "c.q-net.or.kr"
       }
     ],
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 5,
+        "count": 15,
         "kind": "external_endpoint"
       }
     ]

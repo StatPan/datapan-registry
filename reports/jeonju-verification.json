@@ -1,20 +1,14 @@
 {
-  "generated_at": "2026-06-24T15:18:45Z",
+  "generated_at": "2026-06-29T09:16:46Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 5,
-  "timeout": "5s",
+  "limit": 15,
   "truncated": true,
-  "filters": {
-    "provider": "jeonju",
-    "kind": "external_endpoint"
-  },
-  "filtered_count": 5,
+  "filtered_count": 15,
   "summary": {
-    "total": 5,
+    "total": 15,
     "verified": 0,
     "failed": 5,
-    "skipped": 0,
+    "skipped": 10,
     "unknown": 0
   },
   "results": [
@@ -104,6 +98,192 @@
         "dong": "중앙동"
       },
       "body_shape": "empty"
+    },
+    {
+      "dataset_id": "15004788",
+      "title": "전북특별자치도 전주시_무선인터넷 존",
+      "operation": "무선인터넷존 위치정보 서비스 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "instfacType": "",
+        "instplaceNm": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "roadAdd": ""
+      }
+    },
+    {
+      "dataset_id": "15004788",
+      "title": "전북특별자치도 전주시_무선인터넷 존",
+      "operation": "현재위치에서 무선인터넷존 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "posx": "127.1480",
+        "posy": "35.8242",
+        "searchDts": "1000"
+      }
+    },
+    {
+      "dataset_id": "15004987",
+      "title": "전북특별자치도 전주시_지구대 현황",
+      "operation": "지구대현황 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "pageSize": "1",
+        "patrolDong": "중앙동",
+        "patrolSid": "",
+        "patrolTitle": "",
+        "startPage": "1"
+      }
+    },
+    {
+      "dataset_id": "15010319",
+      "title": "전북특별자치도 전주시_무인민원발급정보",
+      "operation": "무인민원발급 현황",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "insArea": "",
+        "newAddr": "",
+        "oldAddr": "",
+        "pageSize": "1",
+        "startPage": "1"
+      }
+    },
+    {
+      "dataset_id": "15010990",
+      "title": "전북특별자치도 전주시_어린이보호구역",
+      "operation": "어린이보호구역 현황",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "newAddr": "",
+        "oldAddr": "",
+        "pacNm": "",
+        "pageSize": "1",
+        "startPage": "1"
+      }
+    },
+    {
+      "dataset_id": "15012184",
+      "title": "전북특별자치도 전주시_자전거보관소",
+      "operation": "자전거보관소 현황",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "centerNm": "",
+        "gu": "완산구",
+        "pageSize": "1",
+        "startPage": "1",
+        "totalCount": ""
+      }
+    },
+    {
+      "dataset_id": "15012185",
+      "title": "전북특별자치도 전주시_중개업소",
+      "operation": "중개업소 정보 서비스",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "pageSize": "1",
+        "shopAddr": "",
+        "shopNm": "",
+        "startPage": "1"
+      }
+    },
+    {
+      "dataset_id": "15012201",
+      "title": "전북특별자치도 전주시_교통카드충전소",
+      "operation": "교통카드충전소 운영",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "addr": "",
+        "agencyNm�": "",
+        "franNm": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "agencyNm�",
+        "franNm",
+        "addr"
+      ]
+    },
+    {
+      "dataset_id": "15012203",
+      "title": "전북특별자치도 전주시_분리수거함 설치 정보",
+      "operation": "분리수거함 설치 정보",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "dong": "중앙동",
+        "gu": "완산구",
+        "insLocation": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "insLocation"
+      ]
+    },
+    {
+      "dataset_id": "15020602",
+      "title": "전북특별자치도 전주시_급식소 현황",
+      "operation": "집단급식소 현황 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T09:15:44Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "seq": ""
+      },
+      "missing_params": [
+        "seq"
+      ]
     }
   ]
 }

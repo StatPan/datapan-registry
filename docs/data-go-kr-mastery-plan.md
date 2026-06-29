@@ -197,8 +197,10 @@ CI should fail rather than treating the checked-in summary as authoritative.
    external adapters. Started by Gira #19 with `epost` and `ulsan`
    excluded-from-latest external endpoint batches. This grows checked runtime
    evidence from `256` to `276`, but the new records are skipped boundary
-   evidence, not successful callable coverage. Runtime evidence remains below
-   the `10%` target with `945` additional evidence records still required.
+   evidence, not successful callable coverage. Continued by Gira #21 with
+   gateway, `geoje`, `jeonju`, and `q-net` boundary batches, growing checked
+   runtime evidence to `316`. Runtime evidence remains below the `10%` target
+   with `905` additional evidence records still required.
 10. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 11. Generate future data.go.kr impact plans directly from catalog diff,
