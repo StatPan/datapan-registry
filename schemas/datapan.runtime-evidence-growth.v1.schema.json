@@ -1,0 +1,341 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.runtime-evidence-growth.v1.schema.json",
+  "title": "Datapan Runtime Evidence Growth v1",
+  "description": "Source-scoped runtime verification evidence coverage and growth plan.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "provider",
+    "source_id",
+    "source_profile",
+    "generation_inputs",
+    "coverage",
+    "evidence",
+    "growth_target",
+    "verification_plan",
+    "provider_split_readiness",
+    "warnings"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.runtime-evidence-growth.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "datapan_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_id": {
+      "$ref": "#/$defs/source_id"
+    },
+    "source_profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generation_inputs": {
+      "$ref": "#/$defs/generation_inputs"
+    },
+    "coverage": {
+      "$ref": "#/$defs/coverage"
+    },
+    "evidence": {
+      "$ref": "#/$defs/evidence"
+    },
+    "growth_target": {
+      "$ref": "#/$defs/growth_target"
+    },
+    "verification_plan": {
+      "$ref": "#/$defs/verification_plan"
+    },
+    "provider_split_readiness": {
+      "$ref": "#/$defs/provider_split_readiness"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/warning"
+      }
+    }
+  },
+  "$defs": {
+    "source_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "percent": {
+      "type": "number",
+      "minimum": 0
+    },
+    "generation_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "coverage",
+        "latest_verification",
+        "latest_verification_summary",
+        "verification_plan",
+        "provider_index"
+      ],
+      "properties": {
+        "coverage": {
+          "type": "string"
+        },
+        "latest_verification": {
+          "type": "string"
+        },
+        "latest_verification_summary": {
+          "type": "string"
+        },
+        "verification_plan": {
+          "type": "string"
+        },
+        "provider_index": {
+          "type": "string"
+        }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operations",
+        "callable_operations",
+        "data_go_kr_gateway_operations",
+        "external_endpoint_operations",
+        "registered_adapter_operations",
+        "call_capable_adapters"
+      ],
+      "properties": {
+        "operations": {
+          "$ref": "#/$defs/count"
+        },
+        "callable_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "data_go_kr_gateway_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "external_endpoint_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "registered_adapter_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "call_capable_adapters": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "total",
+        "verified",
+        "failed",
+        "skipped",
+        "unknown",
+        "coverage_percent",
+        "by_kind"
+      ],
+      "properties": {
+        "total": {
+          "$ref": "#/$defs/count"
+        },
+        "verified": {
+          "$ref": "#/$defs/count"
+        },
+        "failed": {
+          "$ref": "#/$defs/count"
+        },
+        "skipped": {
+          "$ref": "#/$defs/count"
+        },
+        "unknown": {
+          "$ref": "#/$defs/count"
+        },
+        "coverage_percent": {
+          "$ref": "#/$defs/percent"
+        },
+        "by_kind": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/key_count"
+          }
+        }
+      }
+    },
+    "growth_target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_percent",
+        "target_evidence_total",
+        "remaining_to_target",
+        "status"
+      ],
+      "properties": {
+        "target_percent": {
+          "$ref": "#/$defs/percent"
+        },
+        "target_evidence_total": {
+          "$ref": "#/$defs/count"
+        },
+        "remaining_to_target": {
+          "$ref": "#/$defs/count"
+        },
+        "status": {
+          "enum": ["below_target", "at_target", "above_target"]
+        }
+      }
+    },
+    "verification_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "planned_batches",
+        "planned_operations",
+        "uncovered_gateway_candidates",
+        "uncovered_adapter_candidates",
+        "missing_adapter_hosts",
+        "planned_by_kind",
+        "batches"
+      ],
+      "properties": {
+        "planned_batches": {
+          "$ref": "#/$defs/count"
+        },
+        "planned_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "uncovered_gateway_candidates": {
+          "$ref": "#/$defs/count"
+        },
+        "uncovered_adapter_candidates": {
+          "$ref": "#/$defs/count"
+        },
+        "missing_adapter_hosts": {
+          "$ref": "#/$defs/count"
+        },
+        "planned_by_kind": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/key_count"
+          }
+        },
+        "batches": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/batch"
+          }
+        }
+      }
+    },
+    "provider_split_readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "adapter_count",
+        "verification_capable_adapters",
+        "call_capable_adapters"
+      ],
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "adapter_count": {
+          "$ref": "#/$defs/count"
+        },
+        "verification_capable_adapters": {
+          "$ref": "#/$defs/count"
+        },
+        "call_capable_adapters": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "key_count": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "count"],
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "count": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "batch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "kind",
+        "candidates",
+        "uncovered_candidates",
+        "planned_operations",
+        "output"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provider": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": ["data_go_kr_gateway", "external_endpoint", "service_root"]
+        },
+        "candidates": {
+          "$ref": "#/$defs/count"
+        },
+        "uncovered_candidates": {
+          "$ref": "#/$defs/count"
+        },
+        "planned_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "output": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "warning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "severity", "message"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "severity": {
+          "enum": ["info", "warning", "blocking"]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}
