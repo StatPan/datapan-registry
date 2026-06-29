@@ -1,19 +1,14 @@
 {
-  "generated_at": "2026-06-24T00:23:42Z",
+  "generated_at": "2026-06-29T09:04:28Z",
   "provider": "data.go.kr",
-  "registry": "data\\data-go-kr.registry.json",
-  "limit": 5,
+  "limit": 15,
   "truncated": true,
-  "filters": {
-    "provider": "epost",
-    "kind": "external_endpoint"
-  },
-  "filtered_count": 5,
+  "filtered_count": 15,
   "summary": {
-    "total": 5,
+    "total": 15,
     "verified": 0,
     "failed": 0,
-    "skipped": 5,
+    "skipped": 15,
     "unknown": 0
   },
   "results": [
@@ -186,6 +181,208 @@
         "areaNm",
         "searchSe",
         "srchwrd"
+      ]
+    },
+    {
+      "dataset_id": "15056971",
+      "title": "과학기술정보통신부 우정사업본부_우편번호 정보조회",
+      "operation": "새우편번호 정보",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "countPerPage": "1",
+        "currentPage": "1",
+        "srchwrd": ""
+      },
+      "missing_params": [
+        "srchwrd"
+      ]
+    },
+    {
+      "dataset_id": "15057018",
+      "title": "과학기술정보통신부 우정사업본부_집배구 구분코드 조회서비스",
+      "operation": "집배구 구분코드 조회서비스",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_missing_required_params",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "addr": "",
+        "mailDivCd": "",
+        "zip": ""
+      },
+      "missing_params": [
+        "zip",
+        "addr",
+        "mailDivCd"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "광역시/도 조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-29T09:02:46Z"
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "도로명목록조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "cityEngName": "",
+        "roadEngFirstName": "",
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName",
+        "cityEngName",
+        "roadEngFirstName"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "도로명주소검색",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "cityEngName": "",
+        "countPerPage": "1",
+        "currentPage": "1",
+        "keyword": "",
+        "roadEngFirstName": "",
+        "roadEngName": "",
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName",
+        "cityEngName",
+        "roadEngFirstName",
+        "roadEngName",
+        "keyword"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "도로명첫자조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "cityEngName": "",
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName",
+        "cityEngName"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "시/군/구 조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "읍면동목록조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "cityEngName": "",
+        "districtEngFirstName": "",
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName",
+        "cityEngName",
+        "districtEngFirstName"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "읍면동첫자조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "cityEngName": "",
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName",
+        "cityEngName"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "지번주소검색",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-06-29T09:02:46Z",
+      "params": {
+        "cityEngName": "",
+        "countPerPage": "1",
+        "currentPage": "1",
+        "districtEngFirstName": "",
+        "districtEngName": "",
+        "keyword": "",
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName",
+        "cityEngName",
+        "districtEngFirstName",
+        "districtEngName",
+        "keyword"
       ]
     }
   ]

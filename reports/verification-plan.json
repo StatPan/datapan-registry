@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-29T08:46:15Z",
+  "generated_at": "2026-06-29T09:06:32Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json",
   "source": "release",
@@ -8,12 +8,12 @@
   "timeout": "10s",
   "summary": {
     "operations": 12205,
-    "evidence_total": 256,
+    "evidence_total": 276,
     "uncovered_gateway_candidates": 11409,
-    "uncovered_adapter_candidates": 340,
+    "uncovered_adapter_candidates": 320,
     "missing_adapter_hosts": 10,
     "planned_batches": 9,
-    "planned_operations": 83
+    "planned_operations": 70
   },
   "batches": [
     {
@@ -50,8 +50,8 @@
       "provider": "epost",
       "kind": "external_endpoint",
       "candidates": 28,
-      "uncovered_candidates": 13,
-      "planned_operations": 10,
+      "uncovered_candidates": 3,
+      "planned_operations": 3,
       "command": "datapan catalog verify --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --provider epost --kind external_endpoint --exclude-input /home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/epost-next.json --json",
       "output": ".datapan/verification/epost-next.json"
     },
@@ -100,8 +100,8 @@
       "provider": "ulsan",
       "kind": "external_endpoint",
       "candidates": 20,
-      "uncovered_candidates": 14,
-      "planned_operations": 10,
+      "uncovered_candidates": 4,
+      "planned_operations": 4,
       "command": "datapan catalog verify --registry /home/statpan/workspace/opensource/datapan-registry/data/data-go-kr.registry.json --provider ulsan --kind external_endpoint --exclude-input /home/statpan/workspace/opensource/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ulsan-next.json --json",
       "output": ".datapan/verification/ulsan-next.json"
     }

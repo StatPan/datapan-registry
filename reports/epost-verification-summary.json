@@ -1,55 +1,64 @@
 {
-  "generated_at": "2026-06-24T00:23:42Z",
-  "source": "reports/epost-verification.json",
+  "generated_at": "2026-06-29T09:04:28Z",
+  "source": "/home/statpan/workspace/opensource/datapan-registry/reports/epost-verification.json",
   "provider": "data.go.kr",
-  "registry": "data\\data-go-kr.registry.json",
   "limit": 20,
   "truncated": false,
   "summary": {
-    "total": 5,
+    "total": 15,
     "verified": 0,
     "failed": 0,
-    "skipped": 5,
+    "skipped": 15,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 5,
+        "count": 15,
         "status": "skipped"
       }
     ],
     "by_reason": [
       {
         "key": "epost_wadl_metadata_only",
-        "count": 3,
+        "count": 12,
         "reason": "epost_wadl_metadata_only"
       },
       {
         "key": "epost_unsupported_protocol",
         "count": 2,
         "reason": "epost_unsupported_protocol"
+      },
+      {
+        "key": "epost_missing_required_params",
+        "count": 1,
+        "reason": "epost_missing_required_params"
       }
     ],
     "by_provider": [
       {
         "key": "epost",
-        "count": 5,
+        "count": 15,
         "provider": "epost"
       }
     ],
     "by_endpoint_host": [
       {
         "key": "openapi.epost.go.kr:80",
-        "count": 5,
+        "count": 14,
         "host": "openapi.epost.go.kr:80"
+      },
+      {
+        "key": "openapi.epost.go.kr",
+        "count": 1,
+        "host": "openapi.epost.go.kr"
       }
     ],
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 5,
+        "count": 15,
         "kind": "external_endpoint"
       }
     ]
