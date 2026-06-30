@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-runtime-evidence-plan.v1",
-  "generated_at": "2026-06-30T08:22:19Z",
+  "generated_at": "2026-06-30T08:50:44Z",
   "provider": "KOSIS",
   "source_id": "kosis",
   "source_profile": "sources/kosis.json",
@@ -14,7 +14,7 @@
   "summary": {
     "evidence_total": 0,
     "blocking_count": 5,
-    "warning_count": 4,
+    "warning_count": 3,
     "next_action_count": 4
   },
   "runtime_state": {
@@ -71,14 +71,6 @@
       "expected_action": "Materialize a source-scoped KOSIS registry or verification candidate list before collecting evidence.",
       "owner": "registry",
       "status": "open"
-    },
-    {
-      "blocker_id": "source_specific_error_taxonomy_pending",
-      "severity": "warning",
-      "source_profile_field": "errors.taxonomy_status",
-      "expected_action": "Classify KOSIS credential, approval, parameter, provider-contract, and upstream signatures before treating failures as adapter defects.",
-      "owner": "registry",
-      "status": "open"
     }
   ],
   "next_evidence_plan": {
@@ -115,12 +107,6 @@
       "expected": "KOSIS first-batch sample parameters are pinned.",
       "actual": "runtime.sample_param_policy is manual.",
       "remaining": "Pin official KOSIS sample identifiers for bounded checks."
-    },
-    {
-      "warning_id": "source_runtime_error_taxonomy_pending",
-      "expected": "KOSIS source-specific error taxonomy is verified.",
-      "actual": "errors.taxonomy_status is unknown.",
-      "remaining": "Classify KOSIS error signatures before treating runtime failures as adapter defects."
     }
   ]
 }
