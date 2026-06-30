@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-30T07:35:15Z",
+  "generated_at": "2026-06-30T07:41:16Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 813,
+  "limit": 823,
   "truncated": true,
-  "filtered_count": 676,
+  "filtered_count": 686,
   "summary": {
-    "total": 676,
+    "total": 686,
     "verified": 22,
     "failed": 87,
-    "skipped": 567,
+    "skipped": 577,
     "unknown": 0
   },
   "results": [
@@ -13348,6 +13348,160 @@
         "area_nm",
         "search_nm"
       ]
+    },
+    {
+      "dataset_id": "15000985",
+      "title": "기후에너지환경부 국립환경과학원_환경시험검사기관 정도관리 검증현황",
+      "operation": "환경측정분석전문기관 인증현황",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "field_code": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "resultType": "json",
+        "subject_address": "",
+        "subject_name": ""
+      },
+      "missing_params": [
+        "field_code",
+        "subject_address",
+        "subject_name"
+      ]
+    },
+    {
+      "dataset_id": "15000988",
+      "title": "기후에너지환경부 국립환경과학원_자동차 배출가스 및 소음인증 정보",
+      "operation": "자동차 배출가스 및 소음인증 정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "certi_date": "",
+        "gubun": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "resultType": "json"
+      },
+      "missing_params": [
+        "gubun",
+        "certi_date"
+      ]
+    },
+    {
+      "dataset_id": "15000997",
+      "title": "기후에너지환경부 국립환경과학원_토양측정망 운영결과 DB",
+      "operation": "토양측정망 운영결과 정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "resultType": "json",
+        "search_instt": "",
+        "search_year": ""
+      },
+      "missing_params": [
+        "search_year",
+        "search_instt"
+      ]
+    },
+    {
+      "dataset_id": "15001021",
+      "title": "대전광역시 문화관광(숙박정보)",
+      "operation": "문화시설 여행숙소 상세 정보를 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15001034",
+      "title": "대전광역시 스토리대전",
+      "operation": "대전광역시 스토리대전 목록",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "categorySeq": "",
+        "ntatcSeq": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "searchCondition": "",
+        "searchKeyword": ""
+      },
+      "missing_params": [
+        "searchCondition",
+        "searchKeyword",
+        "categorySeq",
+        "ntatcSeq",
+        "ntatcSeq"
+      ]
+    },
+    {
+      "dataset_id": "15001034",
+      "title": "대전광역시 스토리대전",
+      "operation": "대전광역시 스토리대전 상세보기",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth"
+    },
+    {
+      "dataset_id": "15001034",
+      "title": "대전광역시 스토리대전",
+      "operation": "대전광역시 스토리대전 첨부파일 목록",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth"
+    },
+    {
+      "dataset_id": "15001041",
+      "title": "대전광역시_임대매각 입찰정보 의견수렴",
+      "operation": "대전광역시청 입찰정보 목록",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth"
+    },
+    {
+      "dataset_id": "15001041",
+      "title": "대전광역시_임대매각 입찰정보 의견수렴",
+      "operation": "대전광역시청 입찰정보 상세보기",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth"
+    },
+    {
+      "dataset_id": "15001041",
+      "title": "대전광역시_임대매각 입찰정보 의견수렴",
+      "operation": "대전광역시청 입찰정보 첨부파일 목록",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-06-30T07:35:27Z",
+  "generated_at": "2026-06-30T07:41:31Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -21,16 +21,16 @@
     "call_capable_adapters": 21
   },
   "evidence": {
-    "total": 676,
+    "total": 686,
     "verified": 22,
     "failed": 87,
-    "skipped": 567,
+    "skipped": 577,
     "unknown": 0,
-    "coverage_percent": 5.5,
+    "coverage_percent": 5.6,
     "by_kind": [
       {
         "key": "data_go_kr_gateway",
-        "count": 90
+        "count": 100
       },
       {
         "key": "external_endpoint",
@@ -45,13 +45,13 @@
   "growth_target": {
     "target_percent": 10,
     "target_evidence_total": 1221,
-    "remaining_to_target": 545,
+    "remaining_to_target": 535,
     "status": "below_target"
   },
   "verification_plan": {
     "planned_batches": 1,
     "planned_operations": 10,
-    "uncovered_gateway_candidates": 11329,
+    "uncovered_gateway_candidates": 11319,
     "uncovered_adapter_candidates": 0,
     "missing_adapter_hosts": 10,
     "planned_by_kind": [
@@ -65,7 +65,7 @@
         "label": "gateway",
         "kind": "data_go_kr_gateway",
         "candidates": 11419,
-        "uncovered_candidates": 11329,
+        "uncovered_candidates": 11319,
         "planned_operations": 10,
         "output": ".datapan/verification/gateway-next.json"
       }
@@ -81,7 +81,7 @@
     {
       "kind": "runtime_evidence_below_target",
       "severity": "warning",
-      "message": "Runtime evidence coverage is 5.5% against the 10.0% target; 545 additional evidence records are needed before this target is met."
+      "message": "Runtime evidence coverage is 5.6% against the 10.0% target; 535 additional evidence records are needed before this target is met."
     }
   ]
 }
