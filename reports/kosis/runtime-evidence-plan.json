@@ -1,9 +1,10 @@
 {
   "schema_version": "datapan.source-runtime-evidence-plan.v1",
-  "generated_at": "2026-06-30T08:50:44Z",
+  "generated_at": "2026-06-30T09:16:13Z",
   "provider": "KOSIS",
   "source_id": "kosis",
   "source_profile": "sources/kosis.json",
+  "candidate_batch": "reports/kosis/runtime-candidates.json",
   "references": {
     "official_reference_urls": [
       "https://kosis.kr/openapi/devGuide/devGuide_0101List.do",
@@ -13,8 +14,8 @@
   },
   "summary": {
     "evidence_total": 0,
-    "blocking_count": 5,
-    "warning_count": 3,
+    "blocking_count": 3,
+    "warning_count": 2,
     "next_action_count": 4
   },
   "runtime_state": {
@@ -29,7 +30,7 @@
     "adapter_capabilities": [],
     "auth_type": "api_key",
     "credential_required": true,
-    "sample_param_policy": "manual"
+    "sample_param_policy": "static"
   },
   "blockers": [
     {
@@ -55,22 +56,6 @@
       "expected_action": "Define a non-secret API key injection path for source-scoped CI and local bounded checks.",
       "owner": "operator",
       "status": "open"
-    },
-    {
-      "blocker_id": "sample_parameters_not_pinned",
-      "severity": "blocking",
-      "source_profile_field": "runtime.sample_param_policy",
-      "expected_action": "Pin at least one official orgId, tblId, statId, period, and classification sample for a bounded first batch.",
-      "owner": "registry",
-      "status": "open"
-    },
-    {
-      "blocker_id": "runtime_catalog_not_materialized",
-      "severity": "blocking",
-      "source_profile_field": "catalogue.identity_fields",
-      "expected_action": "Materialize a source-scoped KOSIS registry or verification candidate list before collecting evidence.",
-      "owner": "registry",
-      "status": "open"
     }
   ],
   "next_evidence_plan": {
@@ -81,7 +66,7 @@
       "reports/kosis/verification-plan.json"
     ],
     "required_cli_capabilities": [
-      "source-scoped registry input",
+      "runtime candidate batch ingestion",
       "KOSIS bounded sample-call adapter",
       "source credential injection",
       "KOSIS error signature extraction"
@@ -92,21 +77,15 @@
   "warnings": [
     {
       "warning_id": "non_data_runtime_evidence_not_collected",
-      "expected": "KOSIS has source-scoped runtime evidence after adapter and sample parameters are pinned.",
+      "expected": "KOSIS has source-scoped runtime evidence after the pinned candidate batch, adapter, and credential injection are available.",
       "actual": "0 runtime checks are collected for KOSIS.",
-      "remaining": "Create the KOSIS source registry/candidate list and run the first bounded verification batch."
+      "remaining": "Use reports/kosis/runtime-candidates.json with a registered adapter and credentials to run the first bounded verification batch."
     },
     {
       "warning_id": "source_runtime_adapter_not_registered",
       "expected": "KOSIS adapter has verification and call capabilities.",
       "actual": "adapter.status is none and adapter_capabilities is empty.",
       "remaining": "Register the KOSIS adapter before evidence collection."
-    },
-    {
-      "warning_id": "source_runtime_manual_samples_unpinned",
-      "expected": "KOSIS first-batch sample parameters are pinned.",
-      "actual": "runtime.sample_param_policy is manual.",
-      "remaining": "Pin official KOSIS sample identifiers for bounded checks."
     }
   ]
 }

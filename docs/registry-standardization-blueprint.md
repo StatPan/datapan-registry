@@ -97,12 +97,18 @@ Current strengths:
   `reports/seoul-open-data/runtime-evidence-plan.json` record the first
   non-data.go.kr sources as `0` runtime-evidence sources with explicit blocker
   and warning IDs instead of treating missing evidence as ready.
+- `reports/kosis/runtime-candidates.json`,
+  `reports/ecos/runtime-candidates.json`,
+  `reports/open-assembly/runtime-candidates.json`, and
+  `reports/seoul-open-data/runtime-candidates.json` pin official first-batch
+  runtime candidates without claiming that runtime evidence has been collected.
 - `reports/source-runtime-evidence-rollup.json` rolls those source runtime
   evidence plans into a release-wide inventory of `4` sources, `0` runtime
-  checks, `20` blocking blockers, and `12` warning instances after Seoul Open
+  checks, `12` blocking blockers, and `8` warning instances after Seoul Open
   Data error taxonomy verification in Gira #67, KOSIS error taxonomy
   verification in Gira #69, ECOS error taxonomy verification in Gira #71, and
-  Open Assembly error taxonomy verification in Gira #73.
+  Open Assembly error taxonomy verification in Gira #73, then runtime
+  candidate batch pinning in Gira #75.
 - `reports/coverage.json` reports high callable-operation coverage.
 - `reports/route-disposition.json` separates dead-route candidates from
   transient failures.
@@ -132,6 +138,12 @@ Current gaps:
   Gira #73 verifies Open Assembly official `RESULT.CODE`/`RESULT.MESSAGE`
   taxonomy and reduces `source_runtime_error_taxonomy_pending` from `1` source
   to `0`.
+  Gira #75 pins official runtime candidate batches for KOSIS, ECOS, Open
+  Assembly, and Seoul Open Data, reducing
+  `source_runtime_manual_samples_unpinned` from `4` sources to `0` and removing
+  `sample_parameters_not_pinned`/`runtime_catalog_not_materialized` blockers
+  for the candidate-batch stage. Actual runtime evidence remains `0` for each
+  source until adapters, credentials, and bounded runtime runs exist.
 - Runtime evidence coverage is much lower than callable coverage. Gira #19,
   Gira #21, Gira #23, Gira #25, Gira #27, Gira #29, Gira #31, Gira #33, and
   Gira #35 raise data.go.kr runtime evidence from `256` to `626`. Gira #39,
@@ -361,6 +373,10 @@ Use this order unless a production failure changes priority:
     `RESULT.CODE`/`RESULT.MESSAGE` references. Tracked by Gira #73; this clears
     the remaining `source_runtime_error_taxonomy_pending` warning while
     preserving runtime evidence, adapter, and sample-parameter warnings.
+22. Add non-data source runtime candidate batches for KOSIS, ECOS, Open
+    Assembly, and Seoul Open Data. Tracked by Gira #75; this validates pinned
+    registry-only first-batch candidates, clears manual sample warnings, and
+    leaves runtime evidence collection gated by adapters and credentials.
 
 ## Measurement Rules
 

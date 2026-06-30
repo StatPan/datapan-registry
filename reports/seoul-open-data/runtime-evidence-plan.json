@@ -1,9 +1,10 @@
 {
   "schema_version": "datapan.source-runtime-evidence-plan.v1",
-  "generated_at": "2026-06-30T08:41:37Z",
+  "generated_at": "2026-06-30T09:16:13Z",
   "provider": "data.seoul.go.kr",
   "source_id": "seoul_open_data",
   "source_profile": "sources/seoul_open_data.json",
+  "candidate_batch": "reports/seoul-open-data/runtime-candidates.json",
   "references": {
     "official_reference_urls": [
       "https://data.seoul.go.kr/",
@@ -15,8 +16,8 @@
   },
   "summary": {
     "evidence_total": 0,
-    "blocking_count": 5,
-    "warning_count": 3,
+    "blocking_count": 3,
+    "warning_count": 2,
     "next_action_count": 4
   },
   "runtime_state": {
@@ -31,7 +32,7 @@
     "adapter_capabilities": [],
     "auth_type": "api_key",
     "credential_required": true,
-    "sample_param_policy": "manual"
+    "sample_param_policy": "static"
   },
   "blockers": [
     {
@@ -57,22 +58,6 @@
       "expected_action": "Define a non-secret KEY injection path for source-scoped CI and local bounded checks.",
       "owner": "operator",
       "status": "open"
-    },
-    {
-      "blocker_id": "sample_parameters_not_pinned",
-      "severity": "blocking",
-      "source_profile_field": "runtime.sample_param_policy",
-      "expected_action": "Pin at least one service, start_index, end_index, and format sample for a bounded first batch.",
-      "owner": "registry",
-      "status": "open"
-    },
-    {
-      "blocker_id": "runtime_catalog_not_materialized",
-      "severity": "blocking",
-      "source_profile_field": "catalogue.identity_fields",
-      "expected_action": "Materialize a source-scoped Seoul Open Data registry or verification candidate list before collecting evidence.",
-      "owner": "registry",
-      "status": "open"
     }
   ],
   "next_evidence_plan": {
@@ -83,7 +68,7 @@
       "reports/seoul-open-data/verification-plan.json"
     ],
     "required_cli_capabilities": [
-      "source-scoped registry input",
+      "runtime candidate batch ingestion",
       "Seoul Open Data bounded sample-call adapter",
       "source credential injection",
       "Seoul RESULT code extraction"
@@ -94,21 +79,15 @@
   "warnings": [
     {
       "warning_id": "non_data_runtime_evidence_not_collected",
-      "expected": "Seoul Open Data has source-scoped runtime evidence after adapter and sample parameters are pinned.",
+      "expected": "Seoul Open Data has source-scoped runtime evidence after the pinned candidate batch, adapter, and credential injection are available.",
       "actual": "0 runtime checks are collected for Seoul Open Data.",
-      "remaining": "Create the Seoul Open Data source registry/candidate list and run the first bounded verification batch."
+      "remaining": "Use reports/seoul-open-data/runtime-candidates.json with a registered adapter and credentials to run the first bounded verification batch."
     },
     {
       "warning_id": "source_runtime_adapter_not_registered",
       "expected": "Seoul Open Data adapter has verification and call capabilities.",
       "actual": "adapter.status is none and adapter_capabilities is empty.",
       "remaining": "Register the Seoul Open Data adapter before evidence collection."
-    },
-    {
-      "warning_id": "source_runtime_manual_samples_unpinned",
-      "expected": "Seoul Open Data first-batch sample parameters are pinned.",
-      "actual": "runtime.sample_param_policy is manual.",
-      "remaining": "Pin official Seoul Open Data sample identifiers for bounded checks."
     }
   ]
 }

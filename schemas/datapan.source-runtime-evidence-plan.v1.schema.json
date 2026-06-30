@@ -37,6 +37,10 @@
       "type": "string",
       "minLength": 1
     },
+    "candidate_batch": {
+      "type": "string",
+      "minLength": 1
+    },
     "references": {
       "$ref": "#/$defs/references"
     },

@@ -1,0 +1,57 @@
+{
+  "schema_version": "datapan.source-runtime-candidates.v1",
+  "generated_at": "2026-06-30T09:16:13Z",
+  "provider": "ECOS",
+  "source_id": "ecos",
+  "source_profile": "sources/ecos.json",
+  "references": {
+    "official_reference_urls": [
+      "https://ecos.bok.or.kr/api/",
+      "https://ecos.bok.or.kr/api/#/",
+      "https://ecos.bok.or.kr/api/#/AuthKeyApply"
+    ],
+    "last_reviewed_at": "2026-06-30"
+  },
+  "summary": {
+    "candidates": 1,
+    "pinned_sample_count": 1,
+    "credential_required": true,
+    "evidence_total": 0
+  },
+  "candidates": [
+    {
+      "candidate_id": "ecos-statistic-search-102y004",
+      "label": "ECOS monthly statistic search bounded query",
+      "operation_kind": "data_query",
+      "method": "GET",
+      "endpoint_template": "https://ecos.bok.or.kr/api/StatisticSearch/{apiKey}/json/kr/{startCount}/{endCount}/{statCode}/{cycle}/{startDate}/{endDate}/{itemCode}",
+      "format": "json",
+      "sample_parameters": {
+        "apiKey": "${ECOS_API_KEY}",
+        "startCount": "1",
+        "endCount": "10",
+        "statCode": "102Y004",
+        "cycle": "M",
+        "startDate": "202401",
+        "endDate": "202401",
+        "itemCode": "ABA1"
+      },
+      "credential_policy": {
+        "required": true,
+        "key_names": [
+          "apiKey"
+        ],
+        "injection_location": "path",
+        "placeholder": "${ECOS_API_KEY}"
+      },
+      "expected_response": {
+        "envelope_path": "StatisticSearch",
+        "items_path": "StatisticSearch.row"
+      },
+      "evidence_status": "not_collected",
+      "promotion_status": "registry_only",
+      "reference_url": "https://ecos.bok.or.kr/api/#/",
+      "notes": "Pinned from the official ECOS StatisticSearch path model and known 102Y004 monthly sample usage; credentialed runtime execution remains blocked until key injection is available."
+    }
+  ]
+}
