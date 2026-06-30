@@ -64,7 +64,30 @@
     "schema_policy": "documented"
   },
   "errors": {
-    "taxonomy_status": "unknown"
+    "taxonomy_status": "verified",
+    "status_code_fields": [
+      "err"
+    ],
+    "message_fields": [
+      "errMsg"
+    ],
+    "known_error_codes": [
+      {
+        "code": "10",
+        "message": "Missing authentication key.",
+        "classification": "credential"
+      },
+      {
+        "code": "11",
+        "message": "Invalid authentication key.",
+        "classification": "credential"
+      },
+      {
+        "code": "20",
+        "message": "Missing required request variable.",
+        "classification": "bad_request"
+      }
+    ]
   },
   "runtime": {
     "verification_mode": "metadata_only",
