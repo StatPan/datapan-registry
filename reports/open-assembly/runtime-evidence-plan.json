@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-runtime-evidence-plan.v1",
-  "generated_at": "2026-06-30T08:22:19Z",
+  "generated_at": "2026-06-30T09:06:52Z",
   "provider": "open.assembly.go.kr",
   "source_id": "open_assembly",
   "source_profile": "sources/open_assembly.json",
@@ -9,12 +9,12 @@
       "https://open.assembly.go.kr/portal/mainPage.do",
       "https://open.assembly.go.kr/portal/openapi/main.do"
     ],
-    "last_reviewed_at": "2026-06-29"
+    "last_reviewed_at": "2026-06-30"
   },
   "summary": {
     "evidence_total": 0,
     "blocking_count": 5,
-    "warning_count": 4,
+    "warning_count": 3,
     "next_action_count": 4
   },
   "runtime_state": {
@@ -71,14 +71,6 @@
       "expected_action": "Materialize a source-scoped Open Assembly registry or verification candidate list before collecting evidence.",
       "owner": "registry",
       "status": "open"
-    },
-    {
-      "blocker_id": "source_specific_error_taxonomy_pending",
-      "severity": "warning",
-      "source_profile_field": "errors.taxonomy_status",
-      "expected_action": "Finish Open Assembly error taxonomy verification before treating provider RESULT codes as adapter defects.",
-      "owner": "registry",
-      "status": "open"
     }
   ],
   "next_evidence_plan": {
@@ -115,12 +107,6 @@
       "expected": "Open Assembly first-batch sample parameters are pinned.",
       "actual": "runtime.sample_param_policy is manual.",
       "remaining": "Pin official Open Assembly sample identifiers for bounded checks."
-    },
-    {
-      "warning_id": "source_runtime_error_taxonomy_pending",
-      "expected": "Open Assembly source-specific error taxonomy is verified.",
-      "actual": "errors.taxonomy_status is draft.",
-      "remaining": "Verify Open Assembly RESULT code classifications before treating runtime failures as adapter defects."
     }
   ]
 }

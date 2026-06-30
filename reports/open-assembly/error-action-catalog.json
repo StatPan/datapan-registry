@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.error-action-catalog.v1",
-  "generated_at": "2026-06-29T00:00:00Z",
+  "generated_at": "2026-06-30T09:06:52Z",
   "provider": "open.assembly.go.kr",
   "source_id": "open_assembly",
   "source_profile": "sources/open_assembly.json",
@@ -8,21 +8,21 @@
     "rules": 5,
     "blocking_rules": 1,
     "manual_review_rules": 4,
-    "unknown_signature_rules": 1
+    "unknown_signature_rules": 0
   },
   "rules": [
     {
-      "rule_id": "open-assembly-key-message",
-      "status": "draft",
+      "rule_id": "open-assembly-result-error-290-invalid-api-key",
+      "status": "verified",
       "scope": {
         "hosts": [
           "open.assembly.go.kr"
         ]
       },
       "match": {
-        "kind": "field_contains",
-        "field": "RESULT.MESSAGE",
-        "contains": "KEY",
+        "kind": "field_equals",
+        "field": "RESULT.CODE",
+        "value": "ERROR-290",
         "case_sensitive": false
       },
       "classification": "credential",
@@ -32,13 +32,13 @@
           "target": "registry-release",
           "action": "refresh_verification",
           "automation": "manual_review",
-          "reason": "Open Assembly uses a KEY query parameter. Verify credential and service approval before routing to parser or adapter work."
+          "reason": "Open Assembly official Open API responses use RESULT.CODE=ERROR-290 when the KEY query parameter is invalid or missing. Verify credential injection before routing the failure to parser or adapter work."
         },
         {
           "target": "documentation",
           "action": "update_error_taxonomy",
           "automation": "manual_review",
-          "reason": "Keep Open Assembly credential handling tied to its source-specific KEY parameter contract."
+          "reason": "Keep Open Assembly RESULT.CODE/RESULT.MESSAGE handling tied to its source-specific KEY parameter contract."
         }
       ],
       "impact_categories": [
@@ -46,32 +46,35 @@
         "verification_status_changed"
       ],
       "evidence": {
-        "reference_url": "https://open.assembly.go.kr/portal/openapi/main.do"
+        "reference_url": "https://open.assembly.go.kr/portal/openapi/OPENSRVAPI?KEY=INVALID&Type=json&pIndex=1&pSize=1"
       }
     },
     {
-      "rule_id": "open-assembly-required-parameter-message",
-      "status": "draft",
+      "rule_id": "open-assembly-result-error-310-service-not-found",
+      "status": "verified",
       "match": {
-        "kind": "field_contains",
-        "field": "RESULT.MESSAGE",
-        "contains": "필수",
+        "kind": "field_equals",
+        "field": "RESULT.CODE",
+        "value": "ERROR-310",
         "case_sensitive": false
       },
-      "classification": "bad_request",
+      "classification": "not_found",
       "severity": "medium",
       "actions": [
         {
           "target": "registry-release",
           "action": "refresh_verification",
           "automation": "manual_review",
-          "reason": "Refresh Open Assembly sample parameters such as service id, AGE, pIndex, and pSize before changing downstream parser or schema behavior."
+          "reason": "Open Assembly official Open API responses use RESULT.CODE=ERROR-310 when the requested service path is not found. Verify service IDs before changing parser or adapter behavior."
         }
       ],
       "impact_categories": [
-        "required_params_changed",
+        "endpoint_changed",
         "verification_status_changed"
-      ]
+      ],
+      "evidence": {
+        "reference_url": "https://open.assembly.go.kr/portal/openapi/NO_SUCH_SERVICE?KEY=INVALID&Type=json&pIndex=1&pSize=1"
+      }
     },
     {
       "rule_id": "open-assembly-http-429",
@@ -115,19 +118,19 @@
       ]
     },
     {
-      "rule_id": "open-assembly-parse-error-unknown",
+      "rule_id": "open-assembly-parse-error",
       "status": "draft",
       "match": {
         "kind": "parse_error"
       },
-      "classification": "unknown",
+      "classification": "parser",
       "severity": "high",
       "actions": [
         {
           "target": "registry-release",
           "action": "investigate",
           "automation": "manual_review",
-          "reason": "Open Assembly supports XML and JSON response modes; parse failures need evidence before classifying response-shape drift or parser failure."
+          "reason": "Open Assembly supports XML and JSON RESULT envelopes; parse failures are parser evidence unless an official RESULT.CODE maps the failure to the Open Assembly taxonomy."
         }
       ],
       "impact_categories": [

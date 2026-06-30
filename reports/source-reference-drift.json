@@ -123,12 +123,12 @@
       "source_id": "open_assembly",
       "provider": "open.assembly.go.kr",
       "source_profile": "sources/open_assembly.json",
-      "last_reviewed_at": "2026-06-29",
+      "last_reviewed_at": "2026-06-30",
       "references": [
         {
           "kind": "homepage_url",
           "url": "https://open.assembly.go.kr/portal/mainPage.do",
-          "reviewed_at": "2026-06-29",
+          "reviewed_at": "2026-06-30",
           "check_mode": "manual_review",
           "drift_status": "baseline",
           "contract_impact": ["source_identity"]
@@ -136,7 +136,7 @@
         {
           "kind": "api_docs_url",
           "url": "https://open.assembly.go.kr/portal/openapi/main.do",
-          "reviewed_at": "2026-06-29",
+          "reviewed_at": "2026-06-30",
           "check_mode": "manual_review",
           "drift_status": "baseline",
           "contract_impact": ["catalogue", "auth", "runtime"]
@@ -144,13 +144,13 @@
         {
           "kind": "key_request_url",
           "url": "https://open.assembly.go.kr/portal/mainPage.do",
-          "reviewed_at": "2026-06-29",
+          "reviewed_at": "2026-06-30",
           "check_mode": "manual_review",
           "drift_status": "baseline",
           "contract_impact": ["auth"]
         }
       ],
-      "notes": "Manual baseline only; Open Assembly runtime verification is a separate future task."
+      "notes": "Manual baseline only; Open Assembly error taxonomy was reviewed from official RESULT.CODE/RESULT.MESSAGE responses, and runtime verification is a separate future task."
     },
     {
       "source_id": "seoul_open_data",

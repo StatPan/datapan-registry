@@ -16,7 +16,7 @@
     "homepage_url": "https://open.assembly.go.kr/portal/mainPage.do",
     "api_docs_url": "https://open.assembly.go.kr/portal/openapi/main.do",
     "key_request_url": "https://open.assembly.go.kr/portal/mainPage.do",
-    "last_reviewed_at": "2026-06-29"
+    "last_reviewed_at": "2026-06-30"
   },
   "catalogue": {
     "model": "legislative",
@@ -66,12 +66,24 @@
     "schema_policy": "documented"
   },
   "errors": {
-    "taxonomy_status": "draft",
+    "taxonomy_status": "verified",
     "status_code_fields": [
       "RESULT.CODE"
     ],
     "message_fields": [
       "RESULT.MESSAGE"
+    ],
+    "known_error_codes": [
+      {
+        "code": "ERROR-290",
+        "message": "Invalid or missing Open Assembly API key.",
+        "classification": "credential"
+      },
+      {
+        "code": "ERROR-310",
+        "message": "Requested Open Assembly service not found.",
+        "classification": "not_found"
+      }
     ]
   },
   "runtime": {
