@@ -111,10 +111,10 @@ Current gaps:
 - Runtime evidence coverage is much lower than callable coverage. Gira #19,
   Gira #21, Gira #23, Gira #25, Gira #27, Gira #29, Gira #31, Gira #33, and
   Gira #35 raise data.go.kr runtime evidence from `256` to `626`. Gira #39,
-  Gira #41, Gira #43, Gira #45, Gira #49, Gira #51, Gira #53, Gira #55, and
-  Gira #57 continue gateway boundary evidence growth to `756`, but the release
-  readiness warning remains active: the `10%` target requires `1,221` evidence
-  records, so `465` additional records are still required.
+  Gira #41, Gira #43, Gira #45, Gira #49, Gira #51, Gira #53, Gira #55, Gira
+  #57, and Gira #59 continue gateway boundary evidence growth to `856`, but
+  the release readiness warning remains active: the `10%` target requires
+  `1,221` evidence records, so `365` additional records are still required.
 - Multi-source report grouping is designed but not implemented.
 - Impact plans are specified, a data.go.kr draft plan is checked in, and a
   release-wide rollup can be generated from source-scoped plans, but full
@@ -303,8 +303,9 @@ Use this order unless a production failure changes priority:
     batches, by Gira #33 with another `jeonju` and `q-net` batch, and by Gira
     #35 with the remaining planned `jeonju` and `q-net` external candidates,
     then by Gira #39, Gira #41, Gira #43, Gira #45, Gira #49, Gira #51, Gira
-    #53, Gira #55, and Gira #57 with gateway batches; this is skipped boundary
-    evidence growth, not proof that those operations are callable.
+    #53, Gira #55, Gira #57, and Gira #59 with gateway batches; this is
+    skipped boundary evidence growth, not proof that those operations are
+    callable.
 15. Add a release-wide registry impact plan rollup generated from checked-in
     source-scoped impact plans. Tracked by Gira #47; this establishes the
     client/server artifact path but does not complete full datapan-cli
