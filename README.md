@@ -23,11 +23,11 @@ re-importing the upstream data.go.kr catalog every time.
 - Missing external adapter hosts: `10`
 - Provider split readiness: `ready`
   (`26` adapters, `26` verification-capable, `21` call-capable)
-- Runtime verification evidence: `856` bounded checks merged into
-  `reports/latest-verification.json` (`22` verified, `87` failed, `747`
+- Runtime verification evidence: `1221` bounded checks merged into
+  `reports/latest-verification.json` (`22` verified, `87` failed, `1112`
   skipped)
-- Runtime evidence growth target: `7.0%` checked evidence against the `10%`
-  release target; `365` additional records are still required.
+- Runtime evidence growth target: `10.0%` checked evidence meets the `10%`
+  release target; `0` additional records are required for this target.
 - Institution API overview: `411` organizations, `12060` APIs, and `12205`
   operations in `reports/data-go-kr/institution-api-overview.json`; readable
   tables live in `docs/data-go-kr-institution-api-overview.md`.

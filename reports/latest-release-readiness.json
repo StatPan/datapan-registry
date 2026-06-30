@@ -2,14 +2,14 @@
   "manifest": "manifest.json",
   "root": ".",
   "schema_version": "datapan.release-readiness.v1",
-  "generated_at": "2026-06-30T08:05:54Z",
+  "generated_at": "2026-06-30T08:11:38Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "ready": true,
   "summary": {
     "gates_total": 23,
-    "passed": 22,
-    "warned": 1,
+    "passed": 23,
+    "warned": 0,
     "failed": 0,
     "required_artifacts": 16,
     "missing_required_artifacts": 0,
@@ -237,13 +237,13 @@
     },
     {
       "id": "runtime_evidence_growth_target",
-      "status": "warn",
+      "status": "pass",
       "severity": "recommended",
-      "message": "runtime evidence coverage is below the release target",
+      "message": "runtime evidence coverage meets the release target",
       "artifact_kind": "runtime_evidence_growth",
       "artifact_path": "reports/data-go-kr/runtime-evidence-growth.json",
       "expected": 1221,
-      "actual": 856
+      "actual": 1221
     }
   ]
 }

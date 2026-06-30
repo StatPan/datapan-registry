@@ -217,10 +217,11 @@ CI should fail rather than treating the checked-in summary as authoritative.
    batch, growing checked runtime evidence to `539`. Gira #35 completed the
    remaining planned `jeonju` and `q-net` external boundary candidates, growing
    checked runtime evidence to `626`. Continued by Gira #39, Gira #41, Gira
-   #43, Gira #45, Gira #49, Gira #51, Gira #53, Gira #55, Gira #57, and Gira
-   #59 with gateway boundary batches, growing checked runtime evidence to
-   `856`. Runtime evidence remains below the `10%` target with `365`
-   additional evidence records still required.
+   #43, Gira #45, Gira #49, Gira #51, Gira #53, Gira #55, Gira #57, Gira #59,
+   and Gira #61 with gateway boundary batches, growing checked runtime evidence
+   to `1221`. The documented `10%` runtime evidence growth target is met, but
+   this is still mostly skipped boundary evidence, not proof that the gateway
+   operations are callable.
 10. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 11. Generate future data.go.kr impact plans directly from catalog diff,
@@ -237,6 +238,7 @@ data.go.kr mastery is complete when:
 - evidence-adjusted adapter candidates are reported;
 - every missing external route has route disposition evidence;
 - known data.go.kr credential and approval failures map to error action rules;
-- runtime evidence coverage is moving toward the `10%` target;
+- runtime evidence coverage has met the `10%` target without treating skipped
+  boundary evidence as callable success;
 - downstream impact plans can express `no_action`, `refresh_verification`,
   `update_adapter`, and `db_migration_review` for data.go.kr changes.
