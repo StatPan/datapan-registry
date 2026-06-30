@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-30T07:48:47Z",
+  "generated_at": "2026-06-30T07:54:47Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 833,
+  "limit": 843,
   "truncated": true,
-  "filtered_count": 696,
+  "filtered_count": 706,
   "summary": {
-    "total": 696,
+    "total": 706,
     "verified": 22,
     "failed": 87,
-    "skipped": 587,
+    "skipped": 597,
     "unknown": 0
   },
   "results": [
@@ -13692,6 +13692,220 @@
         "sidoCd",
         "sgguCd",
         "yadmNm"
+      ]
+    },
+    {
+      "dataset_id": "15001674",
+      "title": "건강보험심사평가원_특수진료병원정보서비스",
+      "operation": "요양병원",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "emdongNm": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sgguCd": "",
+        "sidoCd": "",
+        "yadmNm": ""
+      },
+      "missing_params": [
+        "sidoCd",
+        "sgguCd",
+        "emdongNm",
+        "yadmNm"
+      ]
+    },
+    {
+      "dataset_id": "15001674",
+      "title": "건강보험심사평가원_특수진료병원정보서비스",
+      "operation": "전문병원 목록 정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "emdongNm": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sgguCd": "",
+        "sidoCd": "",
+        "srchCd": "",
+        "yadmNm": ""
+      },
+      "missing_params": [
+        "sidoCd",
+        "sgguCd",
+        "emdongNm",
+        "yadmNm",
+        "srchCd"
+      ]
+    },
+    {
+      "dataset_id": "15001674",
+      "title": "건강보험심사평가원_특수진료병원정보서비스",
+      "operation": "진료과목",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "dgsbjtCd": "",
+        "emdongNm": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sgguCd": "",
+        "sidoCd": "",
+        "yadmNm": ""
+      },
+      "missing_params": [
+        "sidoCd",
+        "sgguCd",
+        "emdongNm",
+        "yadmNm",
+        "dgsbjtCd"
+      ]
+    },
+    {
+      "dataset_id": "15001697",
+      "title": "건강보험심사평가원_병원코드정보서비스",
+      "operation": "의료기관종별코드조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15001697",
+      "title": "건강보험심사평가원_병원코드정보서비스",
+      "operation": "장비코드조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15001697",
+      "title": "건강보험심사평가원_병원코드정보서비스",
+      "operation": "전문병원코드조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15001697",
+      "title": "건강보험심사평가원_병원코드정보서비스",
+      "operation": "주소코드조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "addrTp": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sgguCdNm": "",
+        "sidoCd": "",
+        "sidoCdNm": ""
+      },
+      "missing_params": [
+        "addrTp",
+        "sidoCd",
+        "sidoCdNm",
+        "sgguCdNm"
+      ]
+    },
+    {
+      "dataset_id": "15001697",
+      "title": "건강보험심사평가원_병원코드정보서비스",
+      "operation": "진료과목코드조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "clCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "clCd"
+      ]
+    },
+    {
+      "dataset_id": "15001697",
+      "title": "건강보험심사평가원_병원코드정보서비스",
+      "operation": "특수진료코드조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "srchTpCd": ""
+      },
+      "missing_params": [
+        "srchTpCd"
+      ]
+    },
+    {
+      "dataset_id": "15001698",
+      "title": "건강보험심사평가원_병원정보서비스",
+      "operation": "병원기본목록",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "clCd": "",
+        "dgsbjtCd": "",
+        "emdongNm": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "radius": "",
+        "sgguCd": "",
+        "sidoCd": "",
+        "xPos": "",
+        "yPos": "",
+        "yadmNm": "",
+        "zipCd": ""
+      },
+      "missing_params": [
+        "sidoCd",
+        "sgguCd",
+        "emdongNm",
+        "yadmNm",
+        "zipCd",
+        "clCd",
+        "dgsbjtCd",
+        "xPos",
+        "yPos",
+        "radius"
       ]
     }
   ]
