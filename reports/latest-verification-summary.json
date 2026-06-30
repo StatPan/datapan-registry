@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-06-30T07:48:47Z",
+  "generated_at": "2026-06-30T07:54:47Z",
   "source": "./reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 696,
+    "total": 706,
     "verified": 22,
     "failed": 87,
-    "skipped": 587,
+    "skipped": 597,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 587,
+        "count": 597,
         "status": "skipped"
       },
       {
@@ -33,23 +33,23 @@
     "by_reason": [
       {
         "key": "missing_auth",
-        "count": 129,
+        "count": 132,
         "reason": "missing_auth"
       },
       {
         "key": "approval_required",
-        "count": 87,
+        "count": 88,
         "reason": "approval_required"
+      },
+      {
+        "key": "missing_required_params",
+        "count": 73,
+        "reason": "missing_required_params"
       },
       {
         "key": "jeonju_missing_required_params",
         "count": 67,
         "reason": "jeonju_missing_required_params"
-      },
-      {
-        "key": "missing_required_params",
-        "count": 67,
-        "reason": "missing_required_params"
       },
       {
         "key": "qnet_separate_service_key_required",
@@ -290,7 +290,7 @@
       },
       {
         "key": "data.go.kr",
-        "count": 110,
+        "count": 120,
         "provider": "data.go.kr"
       },
       {
@@ -422,7 +422,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 110,
+        "count": 120,
         "host": "apis.data.go.kr"
       },
       {
@@ -584,7 +584,7 @@
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 110,
+        "count": 120,
         "kind": "data_go_kr_gateway"
       },
       {
