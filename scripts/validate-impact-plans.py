@@ -18,6 +18,8 @@ except ImportError as exc:  # pragma: no cover - environment guard
 
 
 CLIENT_SERVER_TARGETS = {"dataset-api", "sdk", "mcp"}
+REGISTRY_ONLY_NO_ACTION_TARGETS = {"datapan-data", "dataset-api", "sdk", "mcp"}
+SCHEMA_RELEASE_ENDPOINT_ID = "registry:schema-release-surface"
 
 
 def load_json(path: pathlib.Path) -> object:
@@ -51,6 +53,82 @@ def count_summary(entries: object, key: str) -> dict[str, int]:
         if isinstance(value, str) and isinstance(count, int):
             counts[value] = count
     return counts
+
+
+def release_schema_gate_delta() -> tuple[int, int] | None:
+    readiness_path = pathlib.Path("reports/latest-release-readiness.json")
+    if not readiness_path.exists():
+        return None
+    readiness = as_dict(load_json(readiness_path), readiness_path)
+    gates = readiness.get("gates")
+    if not isinstance(gates, list):
+        return None
+    for gate in gates:
+        if not isinstance(gate, dict) or gate.get("id") != "schema_set_complete":
+            continue
+        expected = gate.get("expected")
+        actual = gate.get("actual")
+        if isinstance(expected, int) and isinstance(actual, int):
+            return expected, actual
+    return None
+
+
+def actions_by_target(change: dict[str, object]) -> dict[str, dict[str, object]]:
+    actions = change.get("actions")
+    if not isinstance(actions, list):
+        return {}
+    result: dict[str, dict[str, object]] = {}
+    for action in actions:
+        if isinstance(action, dict) and isinstance(action.get("target"), str):
+            result[str(action["target"])] = action
+    return result
+
+
+def validate_schema_release_impact_gate(path: pathlib.Path, plan: dict[str, object]) -> None:
+    if plan.get("scope", "source") != "release":
+        return
+    delta = release_schema_gate_delta()
+    if delta is None:
+        return
+    expected, actual = delta
+    if actual <= expected:
+        return
+
+    changes = plan.get("changes")
+    if not isinstance(changes, list):
+        raise ValueError("changes must be an array")
+    matching = [
+        change
+        for change in changes
+        if isinstance(change, dict)
+        and isinstance(change.get("identity"), dict)
+        and change["identity"].get("endpoint_id") == SCHEMA_RELEASE_ENDPOINT_ID
+    ]
+    if not matching:
+        raise ValueError(
+            f"missing {SCHEMA_RELEASE_ENDPOINT_ID} change for schema_set_complete expected={expected} actual={actual}"
+        )
+    if len(matching) > 1:
+        raise ValueError(f"duplicate {SCHEMA_RELEASE_ENDPOINT_ID} changes")
+
+    change = matching[0]
+    if change.get("category") != "release_schema_changed":
+        raise ValueError(f"{SCHEMA_RELEASE_ENDPOINT_ID} category must be release_schema_changed")
+    if change.get("promoted_dataset") is not False or change.get("served_dataset") is not False:
+        raise ValueError(f"{SCHEMA_RELEASE_ENDPOINT_ID} must remain registry-only")
+
+    by_target = actions_by_target(change)
+    cli_action = by_target.get("datapan-cli")
+    if not cli_action or cli_action.get("action") != "investigate" or cli_action.get("automation") != "manual_review":
+        raise ValueError(f"{SCHEMA_RELEASE_ENDPOINT_ID} must require datapan-cli manual investigate action")
+    release_action = by_target.get("registry-release")
+    if not release_action or release_action.get("action") != "refresh_verification":
+        raise ValueError(f"{SCHEMA_RELEASE_ENDPOINT_ID} must refresh registry-release verification")
+
+    for target in sorted(REGISTRY_ONLY_NO_ACTION_TARGETS):
+        action = by_target.get(target)
+        if not action or action.get("action") != "no_action":
+            raise ValueError(f"{SCHEMA_RELEASE_ENDPOINT_ID} must keep {target} at no_action")
 
 
 def validate_consistency(path: pathlib.Path, plan: dict[str, object]) -> None:
@@ -120,6 +198,7 @@ def validate_consistency(path: pathlib.Path, plan: dict[str, object]) -> None:
         raise ValueError("summary.requires_db_migration_review does not match actions")
     if summary.get("requires_served_contract_regeneration") != served_contract_regeneration:
         raise ValueError("summary.requires_served_contract_regeneration does not match actions")
+    validate_schema_release_impact_gate(path, plan)
 
 
 def main() -> int:

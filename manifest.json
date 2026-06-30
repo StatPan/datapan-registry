@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.release-manifest.v1",
-  "generated_at": "2026-06-30T09:32:00Z",
+  "generated_at": "2026-06-30T09:40:00Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_registry": "data/data-go-kr.registry.json",
@@ -142,8 +142,8 @@
     {
       "path": "schemas/datapan.registry-impact-plan.v1.schema.json",
       "kind": "schema",
-      "bytes": 8410,
-      "sha256": "7a1363e206d929718a70ee62621c31d8e5f72a2386e929e7c370549cee08806c"
+      "bytes": 8444,
+      "sha256": "830517bcda01cad7143c02dd13f861aa0b442d3d81e6b0f398c51e30eb14137a"
     },
     {
       "path": "schemas/datapan.source-profile.v1.schema.json",
@@ -180,7 +180,7 @@
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
       "bytes": 10658,
-      "sha256": "1243953f349693aac46ad354b1ad1a2ab5011031a23af00490328b0ce5bf7997"
+      "sha256": "48b3bb5fd56bf795568c8ab5e670ee8f48f188c1f82f156e286efb25a0c2128b"
     },
     {
       "path": "data/data-go-kr.registry.json",
