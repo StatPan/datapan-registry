@@ -70,12 +70,34 @@
     "schema_policy": "documented"
   },
   "errors": {
-    "taxonomy_status": "draft",
+    "taxonomy_status": "verified",
     "status_code_fields": [
       "RESULT.CODE"
     ],
     "message_fields": [
       "RESULT.MESSAGE"
+    ],
+    "known_error_codes": [
+      {
+        "code": "INFO-100",
+        "message": "Invalid or missing Open API key.",
+        "classification": "credential"
+      },
+      {
+        "code": "ERROR-300",
+        "message": "Missing required value.",
+        "classification": "bad_request"
+      },
+      {
+        "code": "ERROR-310",
+        "message": "Requested service not found.",
+        "classification": "not_found"
+      },
+      {
+        "code": "ERROR-500",
+        "message": "Provider server error.",
+        "classification": "upstream_outage"
+      }
     ]
   },
   "runtime": {
