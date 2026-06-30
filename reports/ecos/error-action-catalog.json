@@ -1,27 +1,28 @@
 {
   "schema_version": "datapan.error-action-catalog.v1",
-  "generated_at": "2026-06-29T00:00:00Z",
+  "generated_at": "2026-06-30T08:59:47Z",
   "provider": "ECOS",
   "source_id": "ecos",
   "source_profile": "sources/ecos.json",
   "summary": {
-    "rules": 5,
+    "rules": 7,
     "blocking_rules": 1,
-    "manual_review_rules": 4,
-    "unknown_signature_rules": 1
+    "manual_review_rules": 6,
+    "unknown_signature_rules": 0
   },
   "rules": [
     {
-      "rule_id": "ecos-auth-key-message",
-      "status": "draft",
+      "rule_id": "ecos-result-info-100-invalid-api-key",
+      "status": "verified",
       "scope": {
         "hosts": [
           "ecos.bok.or.kr"
         ]
       },
       "match": {
-        "kind": "message_contains",
-        "contains": "인증",
+        "kind": "field_equals",
+        "field": "RESULT.CODE",
+        "value": "INFO-100",
         "case_sensitive": false
       },
       "classification": "credential",
@@ -31,13 +32,13 @@
           "target": "registry-release",
           "action": "refresh_verification",
           "automation": "manual_review",
-          "reason": "ECOS uses a path-segment API key. Verify the issued key before routing the failure to parser, schema, or adapter work."
+          "reason": "ECOS official Open API responses use RESULT.CODE=INFO-100 when the path-segment activation key is invalid or missing. Verify credential injection before routing the failure to parser or adapter work."
         },
         {
           "target": "documentation",
           "action": "update_error_taxonomy",
           "automation": "manual_review",
-          "reason": "Keep ECOS credential handling aligned with the official ECOS Open API key flow."
+          "reason": "Keep ECOS RESULT.CODE/RESULT.MESSAGE handling aligned with official ECOS Open API responses."
         }
       ],
       "impact_categories": [
@@ -45,7 +46,71 @@
         "verification_status_changed"
       ],
       "evidence": {
-        "reference_url": "https://ecos.bok.or.kr/api/#/AuthKeyApply"
+        "reference_url": "https://ecos.bok.or.kr/api/StatisticTableList/INVALID/json/kr/1/1"
+      }
+    },
+    {
+      "rule_id": "ecos-result-error-200-invalid-request-type",
+      "status": "verified",
+      "scope": {
+        "hosts": [
+          "ecos.bok.or.kr"
+        ]
+      },
+      "match": {
+        "kind": "field_equals",
+        "field": "RESULT.CODE",
+        "value": "ERROR-200",
+        "case_sensitive": false
+      },
+      "classification": "bad_request",
+      "severity": "medium",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "manual_review",
+          "reason": "ECOS official Open API responses use RESULT.CODE=ERROR-200 when the request format/type path segment is missing or invalid. Refresh request construction before changing parser code."
+        }
+      ],
+      "impact_categories": [
+        "required_params_changed",
+        "verification_status_changed"
+      ],
+      "evidence": {
+        "reference_url": "https://ecos.bok.or.kr/api/StatisticTableList/INVALID/badfmt/kr/1/1"
+      }
+    },
+    {
+      "rule_id": "ecos-result-error-301-invalid-count",
+      "status": "verified",
+      "scope": {
+        "hosts": [
+          "ecos.bok.or.kr"
+        ]
+      },
+      "match": {
+        "kind": "field_equals",
+        "field": "RESULT.CODE",
+        "value": "ERROR-301",
+        "case_sensitive": false
+      },
+      "classification": "bad_request",
+      "severity": "medium",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "manual_review",
+          "reason": "ECOS official Open API responses use RESULT.CODE=ERROR-301 when start/end count path values are invalid. Refresh bounded sample pagination before changing adapter behavior."
+        }
+      ],
+      "impact_categories": [
+        "required_params_changed",
+        "verification_status_changed"
+      ],
+      "evidence": {
+        "reference_url": "https://ecos.bok.or.kr/api/StatisticTableList/INVALID/json/kr/a/b"
       }
     },
     {
@@ -112,19 +177,19 @@
       ]
     },
     {
-      "rule_id": "ecos-parse-error-unknown",
+      "rule_id": "ecos-parse-error",
       "status": "draft",
       "match": {
         "kind": "parse_error"
       },
-      "classification": "unknown",
+      "classification": "parser",
       "severity": "high",
       "actions": [
         {
           "target": "registry-release",
           "action": "investigate",
           "automation": "manual_review",
-          "reason": "ECOS response envelopes are service-specific; parse failures need evidence before classifying response-shape drift or parser failure."
+          "reason": "ECOS supports JSON and XML RESULT envelopes; parse failures are parser evidence unless an official RESULT.CODE maps the failure to the ECOS taxonomy."
         }
       ],
       "impact_categories": [

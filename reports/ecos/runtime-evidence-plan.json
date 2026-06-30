@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-runtime-evidence-plan.v1",
-  "generated_at": "2026-06-30T08:22:19Z",
+  "generated_at": "2026-06-30T08:59:47Z",
   "provider": "ECOS",
   "source_id": "ecos",
   "source_profile": "sources/ecos.json",
@@ -10,12 +10,12 @@
       "https://ecos.bok.or.kr/api/#/",
       "https://ecos.bok.or.kr/api/#/AuthKeyApply"
     ],
-    "last_reviewed_at": "2026-06-29"
+    "last_reviewed_at": "2026-06-30"
   },
   "summary": {
     "evidence_total": 0,
     "blocking_count": 5,
-    "warning_count": 4,
+    "warning_count": 3,
     "next_action_count": 4
   },
   "runtime_state": {
@@ -72,14 +72,6 @@
       "expected_action": "Materialize a source-scoped ECOS registry or verification candidate list before collecting evidence.",
       "owner": "registry",
       "status": "open"
-    },
-    {
-      "blocker_id": "source_specific_error_taxonomy_pending",
-      "severity": "warning",
-      "source_profile_field": "errors.taxonomy_status",
-      "expected_action": "Classify ECOS credential, parameter, provider-contract, and upstream signatures before treating failures as adapter defects.",
-      "owner": "registry",
-      "status": "open"
     }
   ],
   "next_evidence_plan": {
@@ -116,12 +108,6 @@
       "expected": "ECOS first-batch sample parameters are pinned.",
       "actual": "runtime.sample_param_policy is manual.",
       "remaining": "Pin official ECOS sample identifiers for bounded checks."
-    },
-    {
-      "warning_id": "source_runtime_error_taxonomy_pending",
-      "expected": "ECOS source-specific error taxonomy is verified.",
-      "actual": "errors.taxonomy_status is unknown.",
-      "remaining": "Classify ECOS error signatures before treating runtime failures as adapter defects."
     }
   ]
 }
