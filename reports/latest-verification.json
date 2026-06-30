@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-30T07:41:16Z",
+  "generated_at": "2026-06-30T07:48:47Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 823,
+  "limit": 833,
   "truncated": true,
-  "filtered_count": 686,
+  "filtered_count": 696,
   "summary": {
-    "total": 686,
+    "total": 696,
     "verified": 22,
     "failed": 87,
-    "skipped": 577,
+    "skipped": 587,
     "unknown": 0
   },
   "results": [
@@ -13502,6 +13502,197 @@
       "dependency_class": "data_go_kr_gateway",
       "status": "skipped",
       "reason": "missing_auth"
+    },
+    {
+      "dataset_id": "15001042",
+      "title": "대전광역시 시정소식",
+      "operation": "대전광역시청 시정소식 목록",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "searchCondition": "",
+        "searchKeyword": ""
+      },
+      "missing_params": [
+        "searchCondition",
+        "searchKeyword"
+      ]
+    },
+    {
+      "dataset_id": "15001042",
+      "title": "대전광역시 시정소식",
+      "operation": "대전광역시청 시정소식 상세보기",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ntatcSeq": ""
+      },
+      "missing_params": [
+        "ntatcSeq"
+      ]
+    },
+    {
+      "dataset_id": "15001042",
+      "title": "대전광역시 시정소식",
+      "operation": "대전광역시청 시정소식 첨부파일목록",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ntatcSeq": ""
+      },
+      "missing_params": [
+        "ntatcSeq"
+      ]
+    },
+    {
+      "dataset_id": "15001043",
+      "title": "대전광역시 대전뉴스동영상",
+      "operation": "대전광역시 대전뉴스동영상 목록",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "pageIndex": "1",
+        "recordCountPerPage": ""
+      },
+      "missing_params": [
+        "recordCountPerPage"
+      ]
+    },
+    {
+      "dataset_id": "15001043",
+      "title": "대전광역시 대전뉴스동영상",
+      "operation": "대전광역시 대전뉴스동영상 상세화면",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ocode": ""
+      },
+      "missing_params": [
+        "ocode"
+      ]
+    },
+    {
+      "dataset_id": "15001044",
+      "title": "대전광역시 시험정보",
+      "operation": "대전광역시청 시험정보 목록",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "categorySeq": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "searchCondition": "",
+        "searchKeyword": ""
+      },
+      "missing_params": [
+        "searchCondition",
+        "searchKeyword",
+        "categorySeq"
+      ]
+    },
+    {
+      "dataset_id": "15001044",
+      "title": "대전광역시 시험정보",
+      "operation": "대전광역시청 시험정보 상세보기",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ntatcSeq": ""
+      },
+      "missing_params": [
+        "ntatcSeq"
+      ]
+    },
+    {
+      "dataset_id": "15001044",
+      "title": "대전광역시 시험정보",
+      "operation": "대전광역시청 시험정보 첨부파일 목록",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ntatcSeq": ""
+      },
+      "missing_params": [
+        "ntatcSeq"
+      ]
+    },
+    {
+      "dataset_id": "15001673",
+      "title": "건강보험심사평가원_약국정보서비스",
+      "operation": "약국기본목록",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "emdongNm": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "radius": "",
+        "sgguCd": "",
+        "sidoCd": "",
+        "xPos": "",
+        "yPos": "",
+        "yadmNm": ""
+      },
+      "missing_params": [
+        "sidoCd",
+        "sgguCd",
+        "emdongNm",
+        "yadmNm",
+        "xPos",
+        "yPos",
+        "radius"
+      ]
+    },
+    {
+      "dataset_id": "15001674",
+      "title": "건강보험심사평가원_특수진료병원정보서비스",
+      "operation": "소아야간진료",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sgguCd": "",
+        "sidoCd": "",
+        "yadmNm": ""
+      },
+      "missing_params": [
+        "sidoCd",
+        "sgguCd",
+        "yadmNm"
+      ]
     }
   ]
 }

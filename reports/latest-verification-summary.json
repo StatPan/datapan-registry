@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-06-30T07:41:16Z",
+  "generated_at": "2026-06-30T07:48:47Z",
   "source": "./reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 686,
+    "total": 696,
     "verified": 22,
     "failed": 87,
-    "skipped": 577,
+    "skipped": 587,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 577,
+        "count": 587,
         "status": "skipped"
       },
       {
@@ -38,7 +38,7 @@
       },
       {
         "key": "approval_required",
-        "count": 86,
+        "count": 87,
         "reason": "approval_required"
       },
       {
@@ -48,7 +48,7 @@
       },
       {
         "key": "missing_required_params",
-        "count": 58,
+        "count": 67,
         "reason": "missing_required_params"
       },
       {
@@ -290,7 +290,7 @@
       },
       {
         "key": "data.go.kr",
-        "count": 100,
+        "count": 110,
         "provider": "data.go.kr"
       },
       {
@@ -421,14 +421,14 @@
     ],
     "by_endpoint_host": [
       {
+        "key": "apis.data.go.kr",
+        "count": 110,
+        "host": "apis.data.go.kr"
+      },
+      {
         "key": "openapi.q-net.or.kr",
         "count": 104,
         "host": "openapi.q-net.or.kr"
-      },
-      {
-        "key": "apis.data.go.kr",
-        "count": 100,
-        "host": "apis.data.go.kr"
       },
       {
         "key": "openapi.jeonju.go.kr",
@@ -584,7 +584,7 @@
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 100,
+        "count": 110,
         "kind": "data_go_kr_gateway"
       },
       {
