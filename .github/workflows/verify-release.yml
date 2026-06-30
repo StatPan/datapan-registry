@@ -51,6 +51,7 @@ jobs:
           . .datapan/ci/source-profile-venv/bin/activate
           python -m pip install --upgrade pip
           python -m pip install jsonschema
+          python scripts/sync-release-schema-artifacts.py --check
           python scripts/validate-source-profiles.py
           python scripts/validate-error-action-catalogs.py
           python scripts/validate-external-coverage.py
