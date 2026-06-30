@@ -1,0 +1,190 @@
+{
+  "schema_version": "datapan.registry-impact-plan.v1",
+  "generated_at": "2026-06-29T00:00:00Z",
+  "datapan_version": "v0.1.29",
+  "scope": "release",
+  "provider": "datapan-registry",
+  "source_id": "registry",
+  "registry_version_from": "v0.1.29",
+  "registry_version_to": "pr-4-draft",
+  "previous_registry": "reports/*/registry-impact-plan.json",
+  "current_registry": "reports/registry-impact-plan.json",
+  "summary": {
+    "total": 3,
+    "by_category": [
+      {
+        "category": "added",
+        "count": 3
+      }
+    ],
+    "by_target": [
+      {
+        "target": "datapan-cli",
+        "count": 2
+      },
+      {
+        "target": "datapan-data",
+        "count": 3
+      },
+      {
+        "target": "dataset-api",
+        "count": 3
+      },
+      {
+        "target": "mcp",
+        "count": 3
+      },
+      {
+        "target": "registry-release",
+        "count": 2
+      },
+      {
+        "target": "sdk",
+        "count": 3
+      }
+    ],
+    "requires_manual_review": 0,
+    "requires_db_migration_review": 0,
+    "requires_served_contract_regeneration": 0
+  },
+  "changes": [
+    {
+      "identity": {
+        "provider": "data.go.kr",
+        "source_id": "data_go_kr",
+        "endpoint_id": "data_go_kr:source-profile"
+      },
+      "category": "added",
+      "severity": "info",
+      "promoted_dataset": false,
+      "served_dataset": false,
+      "actions": [
+        {
+          "target": "datapan-cli",
+          "action": "refresh_verification",
+          "automation": "automated",
+          "reason": "CLI release verification should validate the checked-in data.go.kr source profile."
+        },
+        {
+          "target": "datapan-data",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "Source profile metadata does not create or change a promoted data block."
+        },
+        {
+          "target": "dataset-api",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "No served dataset contract changes are introduced by source profile metadata."
+        },
+        {
+          "target": "sdk",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "No served SDK contract changes are introduced by source profile metadata."
+        },
+        {
+          "target": "mcp",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "No served MCP tool contract changes are introduced by source profile metadata."
+        }
+      ],
+      "notes": "Registry-only source profile addition."
+    },
+    {
+      "identity": {
+        "provider": "data.go.kr",
+        "source_id": "data_go_kr",
+        "endpoint_id": "data_go_kr:external-coverage-summary"
+      },
+      "category": "added",
+      "severity": "info",
+      "promoted_dataset": false,
+      "served_dataset": false,
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "automated",
+          "reason": "External coverage summary must match coverage, adapter-target, route-disposition, and provider-index root reports."
+        },
+        {
+          "target": "datapan-data",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "Coverage evidence does not create or change a promoted data block."
+        },
+        {
+          "target": "dataset-api",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "Coverage evidence does not change served dataset API contracts."
+        },
+        {
+          "target": "sdk",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "Coverage evidence does not change SDK contracts."
+        },
+        {
+          "target": "mcp",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "Coverage evidence does not change MCP contracts."
+        }
+      ],
+      "notes": "Registry evidence addition with no promoted or served dataset impact."
+    },
+    {
+      "identity": {
+        "provider": "data.go.kr",
+        "source_id": "data_go_kr",
+        "endpoint_id": "data_go_kr:external-endpoint-operational-gate"
+      },
+      "category": "added",
+      "severity": "info",
+      "promoted_dataset": false,
+      "served_dataset": false,
+      "actions": [
+        {
+          "target": "datapan-cli",
+          "action": "refresh_verification",
+          "automation": "automated",
+          "reason": "CLI validation should fail releases with unclassified missing external routes."
+        },
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "automated",
+          "reason": "Registry release readiness should preserve the external endpoint operational gate."
+        },
+        {
+          "target": "datapan-data",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "External endpoint gate does not change promoted collector, parser, or schema contracts."
+        },
+        {
+          "target": "dataset-api",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "External endpoint gate does not change served dataset API contracts."
+        },
+        {
+          "target": "sdk",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "External endpoint gate does not change SDK contracts."
+        },
+        {
+          "target": "mcp",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "External endpoint gate does not change MCP contracts."
+        }
+      ],
+      "notes": "Adapter work remains blocked unless route disposition produces adapter_candidate evidence."
+    }
+  ]
+}

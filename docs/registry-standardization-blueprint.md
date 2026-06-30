@@ -83,6 +83,9 @@ Current strengths:
   adapter coverage from evidence-adjusted adapter candidates.
 - `reports/data-go-kr/registry-impact-plan.json` validates downstream action
   hints for the current data.go.kr registry-only changes.
+- `reports/registry-impact-plan.json` is generated from checked-in
+  source-scoped impact plans and validates as the release-wide client/server
+  action rollup.
 - `reports/source-reference-drift.json` validates a manual baseline for
   official source references from every checked-in source profile.
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
@@ -113,8 +116,10 @@ Current gaps:
   requires `1,221` evidence records, so `555` additional records are still
   required.
 - Multi-source report grouping is designed but not implemented.
-- Impact plans are specified and a data.go.kr draft plan is checked in, but
-  full `datapan-cli` generation is not implemented.
+- Impact plans are specified, a data.go.kr draft plan is checked in, and a
+  release-wide rollup can be generated from source-scoped plans, but full
+  `datapan-cli` generation from catalog diffs, verification evidence, route
+  disposition, and promoted dataset mappings is not implemented.
 - Live drift checks for official source documentation are not implemented, but
   checked-in source reference baselines are now validated against source
   profiles.
@@ -220,9 +225,10 @@ Done when:
   verification evidence, route disposition, and promoted dataset mappings;
 - checked-in impact plans validate in CI before client/server consumers act on
   them;
-- `reports/registry-impact-plan.json` is generated from registry diffs,
-  verification evidence, source profiles, error action catalogs, and promoted
-  dataset mappings;
+- `reports/registry-impact-plan.json` is generated from checked-in
+  source-scoped impact plans, and future CLI generation can replace that rollup
+  with output derived from registry diffs, verification evidence, source
+  profiles, error action catalogs, and promoted dataset mappings;
 - registry-only additions can explicitly produce `no_action`;
 - promoted dataset schema changes can explicitly produce
   `db_migration_review`;
@@ -299,6 +305,10 @@ Use this order unless a production failure changes priority:
     then by Gira #39, Gira #41, Gira #43, and Gira #45 with the next gateway
     batches; this is skipped boundary evidence growth, not proof that those
     operations are callable.
+15. Add a release-wide registry impact plan rollup generated from checked-in
+    source-scoped impact plans. Tracked by Gira #47; this establishes the
+    client/server artifact path but does not complete full datapan-cli
+    catalog-diff-based generation.
 
 ## Measurement Rules
 

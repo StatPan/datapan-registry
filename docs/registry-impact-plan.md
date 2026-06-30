@@ -38,11 +38,17 @@ PR #4 adds a checked-in data.go.kr draft at
 `reports/data-go-kr/registry-impact-plan.json` and validates every checked-in
 impact plan with `scripts/validate-impact-plans.py`.
 
+Gira #47 adds `scripts/generate-impact-plan-rollup.py`, which generates the
+root rollup from checked-in `reports/*/registry-impact-plan.json` source plans.
+The root rollup uses `scope: "release"` so change identities can keep their
+original source-specific `provider` and `source_id` values. Source-scoped plans
+keep the stricter default `scope: "source"` validation, where every change
+identity must match the plan's top-level provider and source id.
+
 The schema is checked in at
-`schemas/datapan.registry-impact-plan.v1.schema.json`, but the current release
-manifest is not updated by this design step. The schema and checked-in draft
-plans should be added to `schemas/index.json` and `manifest.json` by a future
-generated release draft.
+`schemas/datapan.registry-impact-plan.v1.schema.json`. Full `datapan-cli`
+generation from catalog diffs, verification evidence, route disposition, error
+action catalogs, and promoted dataset mappings is still future work.
 
 ## Stable Identity
 
@@ -202,9 +208,10 @@ Promoted response shape change:
 evidence, provider profiles, and promoted dataset mappings supplied by
 downstream repositories.
 
-Until generation is implemented, checked-in draft plans are allowed only when
-the validator proves their summary counts, target counts, identity fields, and
-promoted/served dataset boundaries are internally consistent.
+Until full diff-based generation is implemented, checked-in source plans and
+the generated root rollup are allowed only when the validator proves their
+summary counts, target counts, identity fields, and promoted/served dataset
+boundaries are internally consistent.
 
 `datapan-data` should consume the plan as input to collector/parser/schema
 review. It should not be required to parse the full registry release to decide

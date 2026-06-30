@@ -156,6 +156,7 @@ data.go.kr mastery should produce or preserve:
 - `reports/latest-verification-summary.json`
 - `reports/data-go-kr/error-action-catalog.json`
 - `reports/data-go-kr/registry-impact-plan.json`
+- `reports/registry-impact-plan.json`
 - `reports/data-go-kr/runtime-evidence-growth.json`
 - `reports/data-go-kr/institution-api-overview.json`
 
@@ -170,6 +171,7 @@ match those roots.
 | `reports/data-go-kr/external-coverage-summary.json` | `sources/data_go_kr.json`, `reports/coverage.json`, `reports/adapter-targets.json`, `reports/route-disposition.json`, `data/provider-index.json` | `scripts/validate-external-coverage.py` validates schema and cross-checks source identity, raw coverage metrics, route evidence counts, adapter target counts, provider-index host count, and missing host counts. |
 | `reports/data-go-kr/error-action-catalog.json` | `sources/data_go_kr.json`, `reports/error-catalog.json`, `reports/route-disposition.json`, provider verification reports | `scripts/validate-error-action-catalogs.py` validates checked-in action rules; future generation should also fail on unmapped known error signatures. |
 | `reports/data-go-kr/registry-impact-plan.json` | `sources/data_go_kr.json`, catalog diff, verification evidence, route disposition, error action catalog, promoted dataset mappings | `scripts/validate-impact-plans.py` validates schema, summary counts, target counts, identity fields, and promoted/served dataset boundaries before client/server consumers act on it. |
+| `reports/registry-impact-plan.json` | checked-in `reports/*/registry-impact-plan.json` source plans | `scripts/generate-impact-plan-rollup.py` generates the release-wide rollup, and `scripts/validate-impact-plans.py` validates mixed-source release scope while preserving strict source scope for source-specific plans. |
 | `reports/data-go-kr/runtime-evidence-growth.json` | `reports/coverage.json`, `reports/latest-verification.json`, `reports/latest-verification-summary.json`, `reports/verification-plan.json`, `data/provider-index.json` | `scripts/validate-runtime-evidence-growth.py` validates current evidence totals, evidence coverage percent, 10% target gap, provider split readiness, and next planned verification batches. |
 | `reports/data-go-kr/institution-api-overview.json` | `data/data-go-kr.registry.json`, `reports/dependencies.json`, `reports/latest-verification.json`, `reports/coverage.json`, `data/provider-index.json` | `scripts/validate-institution-api-overview.py` regenerates the overview and fails CI when institution API counts, operation counts, adapter status counts, or runtime evidence counts drift from checked-in artifacts. |
 
@@ -222,6 +224,8 @@ CI should fail rather than treating the checked-in summary as authoritative.
    boundaries in CI. Done in PR #4.
 11. Generate future data.go.kr impact plans directly from catalog diff,
    verification evidence, route disposition, and promoted dataset mappings.
+12. Add a release-wide registry impact plan rollup generated from checked-in
+   source-scoped impact plans. Tracked by Gira #47.
 
 ## Done Criteria
 
