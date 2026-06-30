@@ -1,14 +1,15 @@
 {
-  "generated_at": "2026-06-30T07:03:08Z",
+  "generated_at": "2026-06-30T07:09:50Z",
   "provider": "data.go.kr",
-  "limit": 773,
+  "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
+  "limit": 783,
   "truncated": true,
-  "filtered_count": 636,
+  "filtered_count": 646,
   "summary": {
-    "total": 636,
+    "total": 646,
     "verified": 22,
     "failed": 87,
-    "skipped": 527,
+    "skipped": 537,
     "unknown": 0
   },
   "results": [
@@ -12538,6 +12539,214 @@
       "dependency_class": "data_go_kr_gateway",
       "status": "skipped",
       "reason": "missing_auth"
+    },
+    {
+      "dataset_id": "15000652",
+      "title": "국립중앙의료원_전국 자동심장충격기(AED) 정보 조회 서비스",
+      "operation": "자동제세동기 FullData 내려받기",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15000654",
+      "title": "외교부_사건사고 예방정보",
+      "operation": "사건사고 예방정보 단일조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "id": ""
+      },
+      "missing_params": [
+        "id"
+      ]
+    },
+    {
+      "dataset_id": "15000654",
+      "title": "외교부_사건사고 예방정보",
+      "operation": "사건사고 예방정보 목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "countryEnName": "",
+        "countryName": "",
+        "isoCode1": "",
+        "isoCode10": "",
+        "isoCode2": "",
+        "isoCode3": "",
+        "isoCode4": "",
+        "isoCode5": "",
+        "isoCode6": "",
+        "isoCode7": "",
+        "isoCode8": "",
+        "isoCode9": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "isoCode10",
+        "countryName",
+        "countryEnName",
+        "isoCode1",
+        "isoCode2",
+        "isoCode3",
+        "isoCode4",
+        "isoCode5",
+        "isoCode6",
+        "isoCode7",
+        "isoCode8",
+        "isoCode9"
+      ]
+    },
+    {
+      "dataset_id": "15000736",
+      "title": "국립중앙의료원_전국 병·의원 찾기 서비스",
+      "operation": "달빛어린이병원 및 소아전문센터 목록정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ORD": "",
+        "Q0": "",
+        "Q1": "",
+        "QD": "",
+        "QN": "",
+        "QT": "",
+        "QZ": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "Q0",
+        "Q1",
+        "QZ",
+        "QD",
+        "QT",
+        "QN",
+        "ORD"
+      ]
+    },
+    {
+      "dataset_id": "15000736",
+      "title": "국립중앙의료원_전국 병·의원 찾기 서비스",
+      "operation": "달빛어린이병원 위치정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "WGS84_LAT": "",
+        "WGS84_LON": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "WGS84_LON",
+        "WGS84_LAT"
+      ]
+    },
+    {
+      "dataset_id": "15000736",
+      "title": "국립중앙의료원_전국 병·의원 찾기 서비스",
+      "operation": "병/의원 FullData 내려받기",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15000736",
+      "title": "국립중앙의료원_전국 병·의원 찾기 서비스",
+      "operation": "병‧의원 목록정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ORD": "",
+        "Q0": "",
+        "Q1": "",
+        "QD": "",
+        "QN": "",
+        "QT": "",
+        "QZ": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "Q0",
+        "Q1",
+        "QZ",
+        "QD",
+        "QT",
+        "QN",
+        "ORD"
+      ]
+    },
+    {
+      "dataset_id": "15000736",
+      "title": "국립중앙의료원_전국 병·의원 찾기 서비스",
+      "operation": "병‧의원 위치정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth"
+    },
+    {
+      "dataset_id": "15000736",
+      "title": "국립중앙의료원_전국 병·의원 찾기 서비스",
+      "operation": "병‧의원별 기본정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "HPID": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "HPID"
+      ]
+    },
+    {
+      "dataset_id": "15000760",
+      "title": "외교부_국가별 안전정보",
+      "operation": "국가별 안전정보 단일조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "id": ""
+      },
+      "missing_params": [
+        "id"
+      ]
     }
   ]
 }
