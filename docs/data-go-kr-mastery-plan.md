@@ -217,10 +217,10 @@ CI should fail rather than treating the checked-in summary as authoritative.
    batch, growing checked runtime evidence to `539`. Gira #35 completed the
    remaining planned `jeonju` and `q-net` external boundary candidates, growing
    checked runtime evidence to `626`. Continued by Gira #39, Gira #41, Gira
-   #43, Gira #45, Gira #49, Gira #51, Gira #53, Gira #55, and Gira #57 with
-   gateway boundary batches, growing checked runtime evidence to `756`.
-   Runtime evidence remains below the `10%` target with `465` additional
-   evidence records still required.
+   #43, Gira #45, Gira #49, Gira #51, Gira #53, Gira #55, Gira #57, and Gira
+   #59 with gateway boundary batches, growing checked runtime evidence to
+   `856`. Runtime evidence remains below the `10%` target with `365`
+   additional evidence records still required.
 10. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 11. Generate future data.go.kr impact plans directly from catalog diff,

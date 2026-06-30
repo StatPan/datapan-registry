@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-30T07:59:51Z",
+  "generated_at": "2026-06-30T08:05:26Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 893,
+  "limit": 993,
   "truncated": true,
-  "filtered_count": 756,
+  "filtered_count": 856,
   "summary": {
-    "total": 756,
+    "total": 856,
     "verified": 22,
     "failed": 87,
-    "skipped": 647,
+    "skipped": 747,
     "unknown": 0
   },
   "results": [
@@ -14890,6 +14890,2185 @@
       },
       "missing_params": [
         "fcltBiz"
+      ]
+    },
+    {
+      "dataset_id": "15001946",
+      "title": "해양수산부 국립해양조사원_해안선 통계 공표자료",
+      "operation": "해안선통계 정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "SIDOCD": "",
+        "SIGUNGUCD": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "SIDOCD",
+        "SIGUNGUCD"
+      ]
+    },
+    {
+      "dataset_id": "15002133",
+      "title": "지식재산처_한국전통 용어사전정보",
+      "operation": "용어사전 검색",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "termNm": ""
+      },
+      "missing_params": [
+        "termNm"
+      ]
+    },
+    {
+      "dataset_id": "15002133",
+      "title": "지식재산처_한국전통 용어사전정보",
+      "operation": "용어사전 상세정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "dicCd": ""
+      },
+      "missing_params": [
+        "dicCd"
+      ]
+    },
+    {
+      "dataset_id": "15002135",
+      "title": "지식재산처_한국전통 공예정보",
+      "operation": "전통공예 상세정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "craftCd": ""
+      },
+      "missing_params": [
+        "craftCd"
+      ]
+    },
+    {
+      "dataset_id": "15002135",
+      "title": "지식재산처_한국전통 공예정보",
+      "operation": "전통공예 자유검색",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "freeQuery": ""
+      },
+      "missing_params": [
+        "freeQuery"
+      ]
+    },
+    {
+      "dataset_id": "15002135",
+      "title": "지식재산처_한국전통 공예정보",
+      "operation": "전통공예 출전목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "authorNm": "",
+        "bookNm": ""
+      },
+      "missing_params": [
+        "bookNm",
+        "authorNm"
+      ]
+    },
+    {
+      "dataset_id": "15002135",
+      "title": "지식재산처_한국전통 공예정보",
+      "operation": "전통공예 출전상세정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "bookCd": ""
+      },
+      "missing_params": [
+        "bookCd"
+      ]
+    },
+    {
+      "dataset_id": "15002135",
+      "title": "지식재산처_한국전통 공예정보",
+      "operation": "전통공예 필드검색",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "bn": "",
+        "bnBool": "",
+        "cont4": "",
+        "cont4Bool": "",
+        "cont5": "",
+        "cont5Bool": "",
+        "cont6": "",
+        "cont6Bool": "",
+        "kwd1": "",
+        "kwd1Bool": "",
+        "ttl": "",
+        "ttlBool": ""
+      },
+      "missing_params": [
+        "ttl",
+        "ttlBool",
+        "cont4",
+        "cont4Bool",
+        "cont6",
+        "cont6Bool",
+        "cont5",
+        "cont5Bool",
+        "bn",
+        "bnBool",
+        "kwd1",
+        "kwd1Bool"
+      ]
+    },
+    {
+      "dataset_id": "15002136",
+      "title": "지식재산처_한국전통 화합물정보",
+      "operation": "화합물 검색",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "st": "",
+        "sw": ""
+      },
+      "missing_params": [
+        "sw",
+        "st"
+      ]
+    },
+    {
+      "dataset_id": "15002136",
+      "title": "지식재산처_한국전통 화합물정보",
+      "operation": "화합물 상세정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "chemCd": ""
+      },
+      "missing_params": [
+        "chemCd"
+      ]
+    },
+    {
+      "dataset_id": "15002147",
+      "title": "지식재산처_한국전통 논문정보",
+      "operation": "논문 상세정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ctrlNo": ""
+      },
+      "missing_params": [
+        "ctrlNo"
+      ]
+    },
+    {
+      "dataset_id": "15002147",
+      "title": "지식재산처_한국전통 논문정보",
+      "operation": "논문 자유검색",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "freeQuery": ""
+      },
+      "missing_params": [
+        "freeQuery"
+      ]
+    },
+    {
+      "dataset_id": "15002147",
+      "title": "지식재산처_한국전통 논문정보",
+      "operation": "논문 필드검색",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "KwmeBool": "",
+        "abs": "",
+        "absBool": "",
+        "anm": "",
+        "anmBool": "",
+        "che": "",
+        "cheBool": "",
+        "csrc": "",
+        "csrcBool": "",
+        "isn": "",
+        "isnBool": "",
+        "jtl": "",
+        "jtlBool": "",
+        "krwd": "",
+        "krwdBool": "",
+        "kwds": "",
+        "kwdsBool": "",
+        "kwet": "",
+        "kwetBool": "",
+        "kwme": "",
+        "kwpr": "",
+        "kwprBool": "",
+        "lorg": "",
+        "lorgBool": "",
+        "pbls": "",
+        "pblsBool": "",
+        "pdt": "",
+        "pdtBool": "",
+        "snm": "",
+        "snmBool": "",
+        "ssn": "",
+        "ssnBool": "",
+        "stpg": "",
+        "stpgBool": "",
+        "tipc": "",
+        "tipcBool": "",
+        "tpgn": "",
+        "tpgnBool": "",
+        "tpn": "",
+        "tpnBool": "",
+        "ttl": "",
+        "ttlBool": "",
+        "vol": "",
+        "volBool": ""
+      },
+      "missing_params": [
+        "stpg",
+        "tpgn",
+        "lorg",
+        "pbls",
+        "pdt",
+        "csrc",
+        "ttlBool",
+        "snmBool",
+        "jtlBool",
+        "absBool",
+        "isnBool",
+        "anmBool",
+        "tipcBool",
+        "cheBool",
+        "krwdBool",
+        "KwmeBool",
+        "kwprBool",
+        "kwdsBool",
+        "kwetBool",
+        "volBool",
+        "tpnBool",
+        "ssnBool",
+        "stpgBool",
+        "tpgnBool",
+        "lorgBool",
+        "pblsBool",
+        "pdtBool",
+        "csrcBool",
+        "ttl",
+        "snm",
+        "jtl",
+        "abs",
+        "isn",
+        "anm",
+        "tipc",
+        "che",
+        "krwd",
+        "kwme",
+        "kwpr",
+        "kwds",
+        "kwet",
+        "vol",
+        "tpn",
+        "ssn"
+      ]
+    },
+    {
+      "dataset_id": "15002147",
+      "title": "지식재산처_한국전통 논문정보",
+      "operation": "학술지 목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "jtl": ""
+      },
+      "missing_params": [
+        "jtl"
+      ]
+    },
+    {
+      "dataset_id": "15002147",
+      "title": "지식재산처_한국전통 논문정보",
+      "operation": "학회목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "Snm": ""
+      },
+      "missing_params": [
+        "Snm"
+      ]
+    },
+    {
+      "dataset_id": "15002148",
+      "title": "지식재산처_한국전통 약재정보",
+      "operation": "약재 상세정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "medCd": ""
+      },
+      "missing_params": [
+        "medCd"
+      ]
+    },
+    {
+      "dataset_id": "15002148",
+      "title": "지식재산처_한국전통 약재정보",
+      "operation": "약재 자유검색",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "freeQuery": ""
+      },
+      "missing_params": [
+        "freeQuery"
+      ]
+    },
+    {
+      "dataset_id": "15002148",
+      "title": "지식재산처_한국전통 약재정보",
+      "operation": "약재 필드검색",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "Che": "",
+        "Ep": "",
+        "Fn": "",
+        "Lmn": "",
+        "Ma": "",
+        "Mic": "",
+        "Mn": "",
+        "Mp": "",
+        "Prc": "",
+        "Sc": "",
+        "Tst": "",
+        "cheBool": "",
+        "epBool": "",
+        "fnBool": "",
+        "lmnBool": "",
+        "maBool": "",
+        "mct": "",
+        "mctBool": "",
+        "mdis": "",
+        "mdisBool": "",
+        "meff": "",
+        "meffBool": "",
+        "micBool": "",
+        "mipc": "",
+        "mipcBool": "",
+        "mkwd": "",
+        "mkwdBool": "",
+        "mnBool": "",
+        "mpBool": "",
+        "mpre": "",
+        "mpreBool": "",
+        "pmn": "",
+        "pmnBool": "",
+        "prcBool": "",
+        "scBool": "",
+        "tstBool": ""
+      },
+      "missing_params": [
+        "mdis",
+        "Prc",
+        "Ma",
+        "Tst",
+        "Ep",
+        "mct",
+        "mpre",
+        "Che",
+        "mipc",
+        "mkwd",
+        "mnBool",
+        "scBool",
+        "pmnBool",
+        "lmnBool",
+        "fnBool",
+        "mpBool",
+        "micBool",
+        "meffBool",
+        "mdisBool",
+        "prcBool",
+        "maBool",
+        "tstBool",
+        "epBool",
+        "mctBool",
+        "mpreBool",
+        "cheBool",
+        "mipcBool",
+        "mkwdBool",
+        "Mn",
+        "Sc",
+        "pmn",
+        "Lmn",
+        "Fn",
+        "Mp",
+        "Mic",
+        "meff"
+      ]
+    },
+    {
+      "dataset_id": "15002149",
+      "title": "지식재산처_한국전통 식품정보",
+      "operation": "전통식품 상세정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "foodCd": ""
+      },
+      "missing_params": [
+        "foodCd"
+      ]
+    },
+    {
+      "dataset_id": "15002149",
+      "title": "지식재산처_한국전통 식품정보",
+      "operation": "전통식품 자유검색",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "freeQuery": ""
+      },
+      "missing_params": [
+        "freeQuery"
+      ]
+    },
+    {
+      "dataset_id": "15002149",
+      "title": "지식재산처_한국전통 식품정보",
+      "operation": "전통식품 출전목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "author": "",
+        "docNm": ""
+      },
+      "missing_params": [
+        "docNm",
+        "author"
+      ]
+    },
+    {
+      "dataset_id": "15002149",
+      "title": "지식재산처_한국전통 식품정보",
+      "operation": "전통식품 출전상세정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "docCd": ""
+      },
+      "missing_params": [
+        "docCd"
+      ]
+    },
+    {
+      "dataset_id": "15002149",
+      "title": "지식재산처_한국전통 식품정보",
+      "operation": "전통식품 필드검색",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "bn": "",
+        "bnBool": "",
+        "cont1": "",
+        "cont1Bool": "",
+        "cont4": "",
+        "cont4Bool": "",
+        "kwd1": "",
+        "kwd1Bool": "",
+        "nm2": "",
+        "nm2Bool": "",
+        "ttl": "",
+        "ttlBool": ""
+      },
+      "missing_params": [
+        "ttl",
+        "nm2",
+        "cont1",
+        "cont4",
+        "bn",
+        "kwd1",
+        "ttlBool",
+        "nm2Bool",
+        "cont1Bool",
+        "cont4Bool",
+        "bnBool",
+        "kwd1Bool"
+      ]
+    },
+    {
+      "dataset_id": "15002265",
+      "title": "해양수산부_연안 자료제공 정보",
+      "operation": "연안 자료제공 리스트 정보 현황",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "_type": "json",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "searchKey": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "searchKey"
+      ]
+    },
+    {
+      "dataset_id": "15002265",
+      "title": "해양수산부_연안 자료제공 정보",
+      "operation": "연안 자료제공 상세정보 현황",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "_type": "json",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "seq": ""
+      },
+      "missing_params": [
+        "seq"
+      ]
+    },
+    {
+      "dataset_id": "15002265",
+      "title": "해양수산부_연안 자료제공 정보",
+      "operation": "연안 자료제공 파일다운로드 정보 현황",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "_type": "json",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "seq": ""
+      },
+      "missing_params": [
+        "seq"
+      ]
+    },
+    {
+      "dataset_id": "15004511",
+      "title": "부산광역시_실시간 환경방사선 현황 정보",
+      "operation": "부산 환경방사선 선량률 정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "resultType": "json"
+      }
+    },
+    {
+      "dataset_id": "15004512",
+      "title": "부산광역시_착한가격업소",
+      "operation": "부산 착한가격업소 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "cnCd": "",
+        "localeCd": "",
+        "mNm": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "resultType": "json",
+        "sj": ""
+      },
+      "missing_params": [
+        "cnCd",
+        "mNm",
+        "sj",
+        "localeCd"
+      ]
+    },
+    {
+      "dataset_id": "15004513",
+      "title": "부산광역시_상수도 공사 현황",
+      "operation": "부산 상수도 공사 현황",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "gno": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "resultType": "json"
+      },
+      "missing_params": [
+        "gno"
+      ]
+    },
+    {
+      "dataset_id": "15004683",
+      "title": "부산광역시_공영주차장 정보 조회",
+      "operation": "부산광역시 공영주차장 정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "resultType": "json"
+      }
+    },
+    {
+      "dataset_id": "15005710",
+      "title": "국민연금공단_국민연금 가입현황",
+      "operation": "가입현황 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "dataType": "json",
+        "jnngBrkdJnngpClssCd": "",
+        "jnngpAge": "",
+        "ldongAddrMgplDgCd": "",
+        "ldongAddrMgplSgguCd": "",
+        "ldongAddrMgplSgguEmdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sexDvcd": ""
+      },
+      "missing_params": [
+        "ldongAddrMgplDgCd",
+        "ldongAddrMgplSgguCd",
+        "ldongAddrMgplSgguEmdCd",
+        "jnngpAge",
+        "sexDvcd",
+        "jnngBrkdJnngpClssCd"
+      ]
+    },
+    {
+      "dataset_id": "15005710",
+      "title": "국민연금공단_국민연금 가입현황",
+      "operation": "연령별 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "dataType": "json",
+        "jnngBrkdJnngpClssCd": "",
+        "jnngpAge": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "jnngpAge",
+        "jnngBrkdJnngpClssCd"
+      ]
+    },
+    {
+      "dataset_id": "15005710",
+      "title": "국민연금공단_국민연금 가입현황",
+      "operation": "최고값 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "dataType": "json",
+        "jnngBrkdJnngpClssCd": "",
+        "jnngpAge": "",
+        "ldongAddrMgplDgCd": "",
+        "ldongAddrMgplSgguCd": "",
+        "ldongAddrMgplSgguEmdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sexDvcd": ""
+      },
+      "missing_params": [
+        "ldongAddrMgplDgCd",
+        "ldongAddrMgplSgguCd",
+        "ldongAddrMgplSgguEmdCd",
+        "jnngpAge",
+        "sexDvcd",
+        "jnngBrkdJnngpClssCd"
+      ]
+    },
+    {
+      "dataset_id": "15005941",
+      "title": "국립중앙의료원_민간구급차 현황정보",
+      "operation": "이송업체 구급차 FullData 내려받기",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15005941",
+      "title": "국립중앙의료원_민간구급차 현황정보",
+      "operation": "이송업체 구급차 목록정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "Q0": "",
+        "Q1": "",
+        "QN": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "QN",
+        "Q0",
+        "Q1"
+      ]
+    },
+    {
+      "dataset_id": "15006353",
+      "title": "해양수산부_선박운항정보",
+      "operation": "선박입출항신고조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "clsgn": "",
+        "deGb": "",
+        "ede": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "prtAgCd": "",
+        "sde": ""
+      },
+      "missing_params": [
+        "prtAgCd",
+        "sde",
+        "ede",
+        "deGb",
+        "clsgn"
+      ]
+    },
+    {
+      "dataset_id": "15006354",
+      "title": "해양수산부_관제정보",
+      "operation": "관제정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "clsgn": "",
+        "ede": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "prtAgCd": "",
+        "sde": ""
+      },
+      "missing_params": [
+        "prtAgCd",
+        "sde",
+        "ede",
+        "clsgn"
+      ]
+    },
+    {
+      "dataset_id": "15006969",
+      "title": "대전광역시 문화축제 정보",
+      "operation": "대전광역시 축제 및 행사 안내",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15007270",
+      "title": "대전광역시 도시공원정보",
+      "operation": "도시공원목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "searchCondition": "",
+        "searchKeyword": ""
+      },
+      "missing_params": [
+        "searchCondition",
+        "searchKeyword"
+      ]
+    },
+    {
+      "dataset_id": "15007270",
+      "title": "대전광역시 도시공원정보",
+      "operation": "도시공원상세화면조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ntatcSeq": ""
+      },
+      "missing_params": [
+        "ntatcSeq"
+      ]
+    },
+    {
+      "dataset_id": "15007288",
+      "title": "대전광역시 어린이보호구역 정보",
+      "operation": "어린이보호구역목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "searchCondition": "",
+        "searchKeyword": ""
+      },
+      "missing_params": [
+        "searchCondition",
+        "searchKeyword"
+      ]
+    },
+    {
+      "dataset_id": "15007288",
+      "title": "대전광역시 어린이보호구역 정보",
+      "operation": "어린이보호구역상세화면조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ntatcSeq": ""
+      },
+      "missing_params": [
+        "ntatcSeq"
+      ]
+    },
+    {
+      "dataset_id": "15010381",
+      "title": "국민연금공단_수급현황",
+      "operation": "수급현황 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "crtrAge": "",
+        "dataType": "json",
+        "ldongAddrMgplDgCd": "",
+        "ldongAddrMgplSgguCd": "",
+        "ldongAddrMgplSgguEmdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "payClssCd": "",
+        "sexDvcd": ""
+      },
+      "missing_params": [
+        "ldongAddrMgplDgCd",
+        "ldongAddrMgplSgguCd",
+        "ldongAddrMgplSgguEmdCd",
+        "crtrAge",
+        "sexDvcd",
+        "payClssCd"
+      ]
+    },
+    {
+      "dataset_id": "15010381",
+      "title": "국민연금공단_수급현황",
+      "operation": "연령별 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "crtrAge": "",
+        "dataType": "json",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "payClssCd": ""
+      },
+      "missing_params": [
+        "crtrAge",
+        "payClssCd"
+      ]
+    },
+    {
+      "dataset_id": "15010381",
+      "title": "국민연금공단_수급현황",
+      "operation": "최고값 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "crtrAge": "",
+        "dataType": "json",
+        "ldongAddrMgplDgCd": "",
+        "ldongAddrMgplSgguCd": "",
+        "ldongAddrMgplSgguEmdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "payClssCd": "",
+        "sexDvcd": ""
+      },
+      "missing_params": [
+        "ldongAddrMgplDgCd",
+        "ldongAddrMgplSgguCd",
+        "ldongAddrMgplSgguEmdCd",
+        "crtrAge",
+        "sexDvcd",
+        "payClssCd"
+      ]
+    },
+    {
+      "dataset_id": "15011942",
+      "title": "부산광역시 환경소음 정보",
+      "operation": "부산 환경소음 측정정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "inspecKb1": "",
+        "inspecKb2": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "resultType": "json"
+      },
+      "missing_params": [
+        "inspecKb1",
+        "inspecKb2"
+      ]
+    },
+    {
+      "dataset_id": "15012005",
+      "title": "소상공인시장진흥공단_상가(상권)정보_API",
+      "operation": "건물 단위 상가업소 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "indsLclsCd": "",
+        "indsMclsCd": "",
+        "indsSclsCd": "",
+        "key": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "key",
+        "indsLclsCd",
+        "indsMclsCd",
+        "indsSclsCd"
+      ]
+    },
+    {
+      "dataset_id": "15012005",
+      "title": "소상공인시장진흥공단_상가(상권)정보_API",
+      "operation": "다각형내 상가업소 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "indsLclsCd": "",
+        "indsMclsCd": "",
+        "indsSclsCd": "",
+        "key": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "key",
+        "indsLclsCd",
+        "indsMclsCd",
+        "indsSclsCd"
+      ]
+    },
+    {
+      "dataset_id": "15012005",
+      "title": "소상공인시장진흥공단_상가(상권)정보_API",
+      "operation": "단일 상가업소 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "key": ""
+      },
+      "missing_params": [
+        "key"
+      ]
+    },
+    {
+      "dataset_id": "15012005",
+      "title": "소상공인시장진흥공단_상가(상권)정보_API",
+      "operation": "반경내 상가업소 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "cx": "",
+        "cy": "",
+        "indsLclsCd": "",
+        "indsMclsCd": "",
+        "indsSclsCd": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "radius": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "radius",
+        "cx",
+        "cy",
+        "indsLclsCd",
+        "indsMclsCd",
+        "indsSclsCd"
+      ]
+    },
+    {
+      "dataset_id": "15012005",
+      "title": "소상공인시장진흥공단_상가(상권)정보_API",
+      "operation": "반경내 상권조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "cx": "",
+        "cy": "",
+        "radius": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "radius",
+        "cx",
+        "cy"
+      ]
+    },
+    {
+      "dataset_id": "15012005",
+      "title": "소상공인시장진흥공단_상가(상권)정보_API",
+      "operation": "사각형내 상가업소 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "indsLclsCd": "",
+        "indsMclsCd": "",
+        "indsSclsCd": "",
+        "maxx": "",
+        "maxy": "",
+        "minx": "",
+        "miny": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "minx",
+        "miny",
+        "maxx",
+        "maxy",
+        "indsLclsCd",
+        "indsMclsCd",
+        "indsSclsCd"
+      ]
+    },
+    {
+      "dataset_id": "15012005",
+      "title": "소상공인시장진흥공단_상가(상권)정보_API",
+      "operation": "사각형내 상권조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "maxx": "",
+        "maxy": "",
+        "minx": "",
+        "miny": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "minx",
+        "miny",
+        "maxx",
+        "maxy"
+      ]
+    },
+    {
+      "dataset_id": "15012005",
+      "title": "소상공인시장진흥공단_상가(상권)정보_API",
+      "operation": "상가업소정보 변경요청",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "adongCd": "",
+        "bizesId": "",
+        "bizesNm": "",
+        "bldNm": "",
+        "brchNm": "",
+        "clbizDt": "",
+        "dongNo": "",
+        "etcChgReqCnts": "",
+        "flrNo": "",
+        "hoNo": "",
+        "indsSclsCd": "",
+        "lnoAdr": "",
+        "opbizDt": "",
+        "rdnmAdr": ""
+      },
+      "missing_params": [
+        "bizesId",
+        "bizesNm",
+        "brchNm",
+        "indsSclsCd",
+        "adongCd",
+        "lnoAdr",
+        "rdnmAdr",
+        "bldNm",
+        "dongNo",
+        "flrNo",
+        "hoNo",
+        "opbizDt",
+        "clbizDt",
+        "etcChgReqCnts"
+      ]
+    },
+    {
+      "dataset_id": "15012005",
+      "title": "소상공인시장진흥공단_상가(상권)정보_API",
+      "operation": "상권내 상가업소 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "indsLclsCd": "",
+        "indsMclsCd": "",
+        "indsSclsCd": "",
+        "key": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "key",
+        "indsLclsCd",
+        "indsMclsCd",
+        "indsSclsCd"
+      ]
+    },
+    {
+      "dataset_id": "15012005",
+      "title": "소상공인시장진흥공단_상가(상권)정보_API",
+      "operation": "상권정보 업종 대분류 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15012005",
+      "title": "소상공인시장진흥공단_상가(상권)정보_API",
+      "operation": "상권정보 업종 소분류 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "indsLclsCd": "",
+        "indsMclsCd": ""
+      },
+      "missing_params": [
+        "indsLclsCd",
+        "indsMclsCd"
+      ]
+    },
+    {
+      "dataset_id": "15012005",
+      "title": "소상공인시장진흥공단_상가(상권)정보_API",
+      "operation": "상권정보 업종 중분류 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "indsLclsCd": ""
+      },
+      "missing_params": [
+        "indsLclsCd"
+      ]
+    },
+    {
+      "dataset_id": "15012005",
+      "title": "소상공인시장진흥공단_상가(상권)정보_API",
+      "operation": "수정일자기준 상가업소 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "indsLclsCd": "",
+        "indsMclsCd": "",
+        "indsSclsCd": "",
+        "key": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "key",
+        "indsLclsCd",
+        "indsMclsCd",
+        "indsSclsCd"
+      ]
+    },
+    {
+      "dataset_id": "15012005",
+      "title": "소상공인시장진흥공단_상가(상권)정보_API",
+      "operation": "업종별 상가업소 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "divId": "",
+        "key": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "divId",
+        "key"
+      ]
+    },
+    {
+      "dataset_id": "15012005",
+      "title": "소상공인시장진흥공단_상가(상권)정보_API",
+      "operation": "지번 단위 상가업소 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "indsLclsCd": "",
+        "indsMclsCd": "",
+        "indsSclsCd": "",
+        "key": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "key",
+        "indsLclsCd",
+        "indsMclsCd",
+        "indsSclsCd"
+      ]
+    },
+    {
+      "dataset_id": "15012005",
+      "title": "소상공인시장진흥공단_상가(상권)정보_API",
+      "operation": "지정 상권조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "key": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "key"
+      ]
+    },
+    {
+      "dataset_id": "15012005",
+      "title": "소상공인시장진흥공단_상가(상권)정보_API",
+      "operation": "행정경계조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "catId": "",
+        "resId": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "resId",
+        "catId"
+      ]
+    },
+    {
+      "dataset_id": "15012005",
+      "title": "소상공인시장진흥공단_상가(상권)정보_API",
+      "operation": "행정구역 단위 상권조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "divId": "",
+        "key": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "divId",
+        "key"
+      ]
+    },
+    {
+      "dataset_id": "15012005",
+      "title": "소상공인시장진흥공단_상가(상권)정보_API",
+      "operation": "행정동 단위 상가업소 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "divId": "",
+        "indsLclsCd": "",
+        "indsMclsCd": "",
+        "indsSclsCd": "",
+        "key": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "divId",
+        "key",
+        "indsLclsCd",
+        "indsMclsCd",
+        "indsSclsCd"
+      ]
+    },
+    {
+      "dataset_id": "15012299",
+      "title": "산지공판장 경락가격정보",
+      "operation": "원천산지공판장가격목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth"
+    },
+    {
+      "dataset_id": "15012351",
+      "title": "산림청 국립수목원_기증자료서비스",
+      "operation": "식물기증표본 목록 검색",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "st": "",
+        "sw": ""
+      },
+      "missing_params": [
+        "st",
+        "sw"
+      ]
+    },
+    {
+      "dataset_id": "15012351",
+      "title": "산림청 국립수목원_기증자료서비스",
+      "operation": "식물기증표본 상세정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "q1": "",
+        "q2": ""
+      },
+      "missing_params": [
+        "q1",
+        "q2"
+      ]
+    },
+    {
+      "dataset_id": "15012679",
+      "title": "한국천문연구원_음양력 정보",
+      "operation": "양력일정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "lunDay": "",
+        "lunMonth": "",
+        "lunYear": ""
+      },
+      "missing_params": [
+        "lunYear",
+        "lunMonth",
+        "lunDay"
+      ]
+    },
+    {
+      "dataset_id": "15012679",
+      "title": "한국천문연구원_음양력 정보",
+      "operation": "율리우스적일 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "solJd": ""
+      },
+      "missing_params": [
+        "solJd"
+      ]
+    },
+    {
+      "dataset_id": "15012679",
+      "title": "한국천문연구원_음양력 정보",
+      "operation": "음력일정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "solDay": "",
+        "solMonth": "",
+        "solYear": ""
+      },
+      "missing_params": [
+        "solYear",
+        "solMonth",
+        "solDay"
+      ]
+    },
+    {
+      "dataset_id": "15012679",
+      "title": "한국천문연구원_음양력 정보",
+      "operation": "특정 음력일 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "fromSolYear": "",
+        "leapMonth": "",
+        "lunDay": "",
+        "lunMonth": "",
+        "toSolYear": ""
+      },
+      "missing_params": [
+        "lunMonth",
+        "fromSolYear",
+        "toSolYear",
+        "lunDay",
+        "leapMonth"
+      ]
+    },
+    {
+      "dataset_id": "15012688",
+      "title": "한국천문연구원_출몰시각 정보",
+      "operation": "위치별 해달 출몰시각 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "dnYn": "",
+        "latitude": "",
+        "locdate": "",
+        "longitude": ""
+      },
+      "missing_params": [
+        "locdate",
+        "longitude",
+        "latitude",
+        "dnYn"
+      ]
+    },
+    {
+      "dataset_id": "15012688",
+      "title": "한국천문연구원_출몰시각 정보",
+      "operation": "지역별 해달 출몰시각 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "location": "",
+        "locdate": ""
+      },
+      "missing_params": [
+        "locdate",
+        "location"
+      ]
+    },
+    {
+      "dataset_id": "15012689",
+      "title": "한국천문연구원_월령 정보",
+      "operation": "월령 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "solDay": "",
+        "solMonth": "",
+        "solYear": ""
+      },
+      "missing_params": [
+        "solYear",
+        "solMonth",
+        "solDay"
+      ]
+    },
+    {
+      "dataset_id": "15012690",
+      "title": "한국천문연구원_특일 정보",
+      "operation": "24절기 정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "kst": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "solMonth": "",
+        "solYear": "",
+        "sunLongitude": "",
+        "totalCount": ""
+      },
+      "missing_params": [
+        "solYear",
+        "solMonth",
+        "kst",
+        "sunLongitude",
+        "totalCount"
+      ]
+    },
+    {
+      "dataset_id": "15012690",
+      "title": "한국천문연구원_특일 정보",
+      "operation": "공휴일 정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "solMonth": "",
+        "solYear": ""
+      },
+      "missing_params": [
+        "solYear",
+        "solMonth"
+      ]
+    },
+    {
+      "dataset_id": "15012690",
+      "title": "한국천문연구원_특일 정보",
+      "operation": "국경일 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "solMonth": "",
+        "solYear": ""
+      },
+      "missing_params": [
+        "solYear",
+        "solMonth"
+      ]
+    },
+    {
+      "dataset_id": "15012690",
+      "title": "한국천문연구원_특일 정보",
+      "operation": "기념일 정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "solMonth": "",
+        "solYear": ""
+      },
+      "missing_params": [
+        "solYear",
+        "solMonth"
+      ]
+    },
+    {
+      "dataset_id": "15012690",
+      "title": "한국천문연구원_특일 정보",
+      "operation": "잡절 정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "solMonth": "",
+        "solYear": ""
+      },
+      "missing_params": [
+        "solYear",
+        "solMonth"
+      ]
+    },
+    {
+      "dataset_id": "15012691",
+      "title": "한국천문연구원_천문현상 정보",
+      "operation": "천문현상 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "solMonth": "",
+        "solYear": ""
+      },
+      "missing_params": [
+        "solYear",
+        "solMonth"
+      ]
+    },
+    {
+      "dataset_id": "15012692",
+      "title": "한국천문연구원_태양고도 정보",
+      "operation": "위치별 태양고도 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "dnYn": "",
+        "latitude": "",
+        "locdate": "",
+        "longitude": "",
+        "totalCount": ""
+      },
+      "missing_params": [
+        "locdate",
+        "latitude",
+        "longitude",
+        "dnYn",
+        "totalCount"
+      ]
+    },
+    {
+      "dataset_id": "15012692",
+      "title": "한국천문연구원_태양고도 정보",
+      "operation": "지역별 태양고도 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "location": "",
+        "locdate": ""
+      },
+      "missing_params": [
+        "location",
+        "locdate"
+      ]
+    },
+    {
+      "dataset_id": "15012964",
+      "title": "국토교통부_공동주택 에너지 사용 정보",
+      "operation": "단지 공동주택 에너지 사용량 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "kaptCode": "",
+        "reqDate": ""
+      },
+      "missing_params": [
+        "kaptCode",
+        "reqDate"
+      ]
+    },
+    {
+      "dataset_id": "15012964",
+      "title": "국토교통부_공동주택 에너지 사용 정보",
+      "operation": "단지 평균 에너지 사용금액 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "kaptCode": "",
+        "reqDate": ""
+      },
+      "missing_params": [
+        "kaptCode",
+        "reqDate"
+      ]
+    },
+    {
+      "dataset_id": "15012964",
+      "title": "국토교통부_공동주택 에너지 사용 정보",
+      "operation": "시군구 평균 에너지 사용금액 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "searchDate": "",
+        "sigunguCode": ""
+      },
+      "missing_params": [
+        "sigunguCode",
+        "searchDate"
+      ]
+    },
+    {
+      "dataset_id": "15012964",
+      "title": "국토교통부_공동주택 에너지 사용 정보",
+      "operation": "시도 평균 에너지 사용금액 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "searchDate": "",
+        "sidoCode": ""
+      },
+      "missing_params": [
+        "sidoCode",
+        "searchDate"
+      ]
+    },
+    {
+      "dataset_id": "15012964",
+      "title": "국토교통부_공동주택 에너지 사용 정보",
+      "operation": "전국 평균 에너지 사용금액 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "searchDate": ""
+      },
+      "missing_params": [
+        "searchDate"
+      ]
+    },
+    {
+      "dataset_id": "15012966",
+      "title": "국토교통부_회계감사보고서 정보",
+      "operation": "단지별 회계감사보고서 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "audtYear": "",
+        "kaptCode": ""
+      },
+      "missing_params": [
+        "kaptCode",
+        "audtYear"
+      ]
+    },
+    {
+      "dataset_id": "15012966",
+      "title": "국토교통부_회계감사보고서 정보",
+      "operation": "회계감사보고서 목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "bjdCode": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "bjdCode"
+      ]
+    },
+    {
+      "dataset_id": "15015153",
+      "title": "한국노인인력개발원 노인 구인정보",
+      "operation": "100세누리 구인정보 목록 검색",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15015153",
+      "title": "한국노인인력개발원 노인 구인정보",
+      "operation": "100세누리 구인정보 상세 정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "id": ""
+      },
+      "missing_params": [
+        "id"
+      ]
+    },
+    {
+      "dataset_id": "15016368",
+      "title": "기후에너지환경부 국립환경과학원_미세먼지(금속성분) 실시간 정보",
+      "operation": "중금속 성분 측정 결과",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "date": "",
+        "itemcode": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "resultType": "json",
+        "stationcode": "",
+        "timecode": ""
+      },
+      "missing_params": [
+        "date",
+        "stationcode",
+        "itemcode",
+        "timecode"
+      ]
+    },
+    {
+      "dataset_id": "15016646",
+      "title": "대전광역시 유기동물공고 현황",
+      "operation": "유기동물공고현황 목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "gubun": "",
+        "memo": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "regId": "",
+        "searchCondition": "",
+        "searchCondition2": "",
+        "searchCondition3": "",
+        "searchKeyword": "",
+        "species": ""
+      },
+      "missing_params": [
+        "searchCondition",
+        "searchCondition2",
+        "searchCondition3",
+        "species",
+        "memo",
+        "regId",
+        "gubun",
+        "searchKeyword"
+      ]
+    },
+    {
+      "dataset_id": "15016646",
+      "title": "대전광역시 유기동물공고 현황",
+      "operation": "유기동물공고현황 상세조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "animalSeq": ""
+      },
+      "missing_params": [
+        "animalSeq"
+      ]
+    },
+    {
+      "dataset_id": "15017227",
+      "title": "병무청 맞춤형 특기병 정보",
+      "operation": "맞춤형특기병 군사특기별 모집 선발인원 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15017291",
+      "title": "국토안전관리원_노후화된 공공시설물현황",
+      "operation": "30년이상 노후화된 공공시설물현황",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "facilAddr": "",
+        "facilNm": "",
+        "facilNo": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "facilNo",
+        "facilNm",
+        "facilAddr"
+      ]
+    },
+    {
+      "dataset_id": "15017294",
+      "title": "국토안전관리원_공공시설물 점검진단 실시 정보",
+      "operation": "갑문시설물 점검진단실시정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "facilAddr": "",
+        "facilNm": "",
+        "facilNo": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "facilNo",
+        "facilNm",
+        "facilAddr"
+      ]
+    },
+    {
+      "dataset_id": "15017294",
+      "title": "국토안전관리원_공공시설물 점검진단 실시 정보",
+      "operation": "건축시설물 점검진단실시정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "facilAddr": "",
+        "facilNm": "",
+        "facilNo": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "facilNo",
+        "facilNm",
+        "facilAddr"
+      ]
+    },
+    {
+      "dataset_id": "15017294",
+      "title": "국토안전관리원_공공시설물 점검진단 실시 정보",
+      "operation": "계류시설물 점검진단실시정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "facilAddr": "",
+        "facilNm": "",
+        "facilNo": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "facilNo",
+        "facilNm",
+        "facilAddr"
       ]
     }
   ]
