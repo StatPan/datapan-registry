@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-30T07:09:50Z",
+  "generated_at": "2026-06-30T07:16:33Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 783,
+  "limit": 793,
   "truncated": true,
-  "filtered_count": 646,
+  "filtered_count": 656,
   "summary": {
-    "total": 646,
+    "total": 656,
     "verified": 22,
     "failed": 87,
-    "skipped": 537,
+    "skipped": 547,
     "unknown": 0
   },
   "results": [
@@ -12746,6 +12746,229 @@
       },
       "missing_params": [
         "id"
+      ]
+    },
+    {
+      "dataset_id": "15000760",
+      "title": "외교부_국가별 안전정보",
+      "operation": "국가별 안전정보 목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "content": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "title": ""
+      },
+      "missing_params": [
+        "title",
+        "content"
+      ]
+    },
+    {
+      "dataset_id": "15000799",
+      "title": "경찰청_분실물정보 조회 서비스",
+      "operation": "분류별, 지역별, 기간별 분실물 정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "END_YMD": "",
+        "LST_LCT_CD": "",
+        "PRDT_CL_CD_01": "",
+        "PRDT_CL_CD_02": "",
+        "START_YMD": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "START_YMD",
+        "END_YMD",
+        "PRDT_CL_CD_01",
+        "PRDT_CL_CD_02",
+        "LST_LCT_CD"
+      ]
+    },
+    {
+      "dataset_id": "15000799",
+      "title": "경찰청_분실물정보 조회 서비스",
+      "operation": "분실물 명칭, 보관 장소별분실물 정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "LST_PLACE": "",
+        "LST_PRDT_NM": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "LST_PLACE",
+        "LST_PRDT_NM"
+      ]
+    },
+    {
+      "dataset_id": "15000799",
+      "title": "경찰청_분실물정보 조회 서비스",
+      "operation": "분실물 상세정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "ATC_ID": ""
+      },
+      "missing_params": [
+        "ATC_ID"
+      ]
+    },
+    {
+      "dataset_id": "15000827",
+      "title": "외교부_여행경보제도",
+      "operation": "여행경보제도 목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "cond[country_en_name::EQ]": "",
+        "cond[country_name::EQ]": "",
+        "cond[iso_code::EQ]": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "returnType": "json"
+      },
+      "missing_params": [
+        "cond[country_name::EQ]",
+        "cond[country_en_name::EQ]",
+        "cond[iso_code::EQ]"
+      ]
+    },
+    {
+      "dataset_id": "15000830",
+      "title": "외교부_국가별 기본정보",
+      "operation": "국가별 기본정보 단일조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "id": ""
+      },
+      "missing_params": [
+        "id"
+      ]
+    },
+    {
+      "dataset_id": "15000830",
+      "title": "외교부_국가별 기본정보",
+      "operation": "국가별 기본정보 목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "countryEnName": "",
+        "countryName": "",
+        "isoCode1": "",
+        "isoCode10": "",
+        "isoCode2": "",
+        "isoCode3": "",
+        "isoCode4": "",
+        "isoCode5": "",
+        "isoCode6": "",
+        "isoCode7": "",
+        "isoCode8": "",
+        "isoCode9": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "countryName",
+        "countryEnName",
+        "isoCode1",
+        "isoCode2",
+        "isoCode3",
+        "isoCode4",
+        "isoCode5",
+        "isoCode6",
+        "isoCode7",
+        "isoCode8",
+        "isoCode9",
+        "isoCode10"
+      ]
+    },
+    {
+      "dataset_id": "15000831",
+      "title": "외교부_대륙 구분코드",
+      "operation": "대륙 구분코드 목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "continent": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "continent"
+      ]
+    },
+    {
+      "dataset_id": "15000836",
+      "title": "중앙선거관리위원회_투표소 정보",
+      "operation": "사전투표소",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sdName": "",
+        "sgId": "",
+        "wiwName": ""
+      },
+      "missing_params": [
+        "sgId",
+        "sdName",
+        "wiwName"
+      ]
+    },
+    {
+      "dataset_id": "15000836",
+      "title": "중앙선거관리위원회_투표소 정보",
+      "operation": "선거일투표소",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sdName": "",
+        "sgId": "",
+        "wiwName": ""
+      },
+      "missing_params": [
+        "sgId",
+        "sdName",
+        "wiwName"
       ]
     }
   ]
