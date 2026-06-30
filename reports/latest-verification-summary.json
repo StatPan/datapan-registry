@@ -1,22 +1,21 @@
 {
-  "generated_at": "2026-06-29T14:19:54Z",
-  "source": ".\\reports\\latest-verification.json",
+  "generated_at": "2026-06-30T07:03:08Z",
+  "source": "./reports/latest-verification.json",
   "provider": "data.go.kr",
-  "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 626,
+    "total": 636,
     "verified": 22,
     "failed": 87,
-    "skipped": 517,
+    "skipped": 527,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 517,
+        "count": 527,
         "status": "skipped"
       },
       {
@@ -33,12 +32,12 @@
     "by_reason": [
       {
         "key": "missing_auth",
-        "count": 113,
+        "count": 117,
         "reason": "missing_auth"
       },
       {
         "key": "approval_required",
-        "count": 69,
+        "count": 71,
         "reason": "approval_required"
       },
       {
@@ -48,7 +47,7 @@
       },
       {
         "key": "missing_required_params",
-        "count": 31,
+        "count": 35,
         "reason": "missing_required_params"
       },
       {
@@ -294,6 +293,11 @@
         "provider": "jeonju"
       },
       {
+        "key": "data.go.kr",
+        "count": 50,
+        "provider": "data.go.kr"
+      },
+      {
         "key": "ekape",
         "count": 49,
         "provider": "ekape"
@@ -302,11 +306,6 @@
         "key": "geoje",
         "count": 41,
         "provider": "geoje"
-      },
-      {
-        "key": "data.go.kr",
-        "count": 40,
-        "provider": "data.go.kr"
       },
       {
         "key": "uiryeong",
@@ -431,6 +430,11 @@
         "host": "openapi.jeonju.go.kr"
       },
       {
+        "key": "apis.data.go.kr",
+        "count": 50,
+        "host": "apis.data.go.kr"
+      },
+      {
         "key": "data.ekape.or.kr",
         "count": 49,
         "host": "data.ekape.or.kr"
@@ -444,11 +448,6 @@
         "key": "data.geoje.go.kr",
         "count": 41,
         "host": "data.geoje.go.kr"
-      },
-      {
-        "key": "apis.data.go.kr",
-        "count": 40,
-        "host": "apis.data.go.kr"
       },
       {
         "key": "data.uiryeong.go.kr",
@@ -584,7 +583,7 @@
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 40,
+        "count": 50,
         "kind": "data_go_kr_gateway"
       },
       {
