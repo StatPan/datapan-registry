@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-30T08:05:43Z",
+  "generated_at": "2026-06-30T08:11:27Z",
   "provider": "data.go.kr",
   "registry": "./data/data-go-kr.registry.json",
   "source": "release",
@@ -31,7 +31,7 @@
     "external_adapter_coverage_percent_target": 98,
     "external_adapter_coverage_percent_met": false,
     "evidence_operation_percent_target": 10,
-    "evidence_operation_percent_met": false,
+    "evidence_operation_percent_met": true,
     "missing_adapter_operations_target": 10,
     "missing_adapter_operations_met": false,
     "call_capable_adapters_target": 25,
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-06-30T08:05:26Z",
-    "total": 856,
+    "generated_at": "2026-06-30T08:11:07Z",
+    "total": 1221,
     "verified": 22,
     "failed": 87,
-    "skipped": 747,
+    "skipped": 1112,
     "unknown": 0,
-    "verified_percent": 2.6,
-    "evidence_operation_percent": 7
+    "verified_percent": 1.8,
+    "evidence_operation_percent": 10
   },
   "route_evidence": {
     "present": true,
@@ -381,7 +381,7 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-06-30T08:05:43Z",
+    "generated_at": "2026-06-30T08:11:27Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 26,
     "host_count": 30,

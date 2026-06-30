@@ -1,6 +1,6 @@
 # Datapan Registry Release
 
-- generated_at: `2026-06-30T08:05:39Z`
+- generated_at: `2026-06-30T08:11:23Z`
 - provider: `data.go.kr`
 - datapan_version: `0.1.0-dev`
 - source_registry: `data/data-go-kr.registry.json`
@@ -24,14 +24,13 @@
 - route_disposition: `28` routes, `14` dead-route candidates, `14` transient failures, `0` parameter-blocked, `0` adapter candidates
 - route_disposition_artifact: `reports/route-disposition.json`
 - provider_backlog: `179` hosts, `10` missing-adapter hosts, `28` operations needing adapters
-- coverage: `12063` callable operations (`98.8%`), external adapter coverage `95.4%`, verification evidence coverage `7.0%`, evidence-adjusted adapter candidates `0`
+- coverage: `12063` callable operations (`98.8%`), external adapter coverage `95.4%`, verification evidence coverage `10.0%`, evidence-adjusted adapter candidates `0`
 - coverage_artifact: `reports/coverage.json`
 - coverage_goals: callable `99%`, external adapters `98%`, verification evidence `10%`, call-capable adapters `25`, missing-adapter operations `<=10`
-- verification_plan: `1` batches, `10` planned operations, `11149` gateway gaps, `0` adapter gaps
+- verification_plan: `1` batches, `10` planned operations, `10784` gateway gaps, `0` adapter gaps
 - verification_plan_artifact: `reports/verification-plan.json`
-- runtime_evidence_growth: `7.0%` coverage, target `10.0%`, remaining `365`, status `below_target`
+- runtime_evidence_growth: `10.0%` coverage, target `10.0%`, remaining `0`, status `at_target`
 - runtime_evidence_growth_artifact: `reports/data-go-kr/runtime-evidence-growth.json`
-- runtime_evidence_warning: `warning` `runtime_evidence_below_target`
 
 Top adapter targets:
 
@@ -43,13 +42,13 @@ Top adapter targets:
 
 ## Verification Evidence
 
-- verification: `856` total, `22` verified, `87` failed, `747` skipped, `0` unknown
+- verification: `1221` total, `22` verified, `87` failed, `1112` skipped, `0` unknown
 - verification_artifact: `reports/latest-verification.json`
 - verification_summary_artifact: `reports/latest-verification-summary.json`
 
 Provider evidence:
 
-- `data.go.kr`: `270`
+- `data.go.kr`: `635`
 - `q-net`: `147`
 - `jeonju`: `80`
 - `ekape`: `49`
