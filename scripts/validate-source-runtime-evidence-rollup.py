@@ -20,6 +20,10 @@ except ImportError as exc:  # pragma: no cover - environment guard
 DEFAULT_ROLLUP = pathlib.Path("reports/source-runtime-evidence-rollup.json")
 
 
+def portable_path(path: pathlib.Path) -> str:
+    return path.as_posix()
+
+
 def load_json(path: pathlib.Path) -> object:
     with path.open("r", encoding="utf-8") as handle:
         return json.load(handle)
@@ -44,8 +48,11 @@ def validate_rollup(path: pathlib.Path, rollup: dict[str, object]) -> None:
         raise ValueError("source_plan_inputs must be a non-empty array")
 
     plan_paths = [pathlib.Path(str(item)) for item in source_plan_inputs]
-    expected_inputs = [str(item) for item in sorted(pathlib.Path("reports").glob("*/runtime-evidence-plan.json"))]
-    if [str(item) for item in plan_paths] != expected_inputs:
+    expected_inputs = [
+        portable_path(item)
+        for item in sorted(pathlib.Path("reports").glob("*/runtime-evidence-plan.json"))
+    ]
+    if [portable_path(item) for item in plan_paths] != expected_inputs:
         raise ValueError("source_plan_inputs must list all checked-in source runtime evidence plans")
 
     plans = [as_dict(load_json(plan_path), plan_path) for plan_path in plan_paths]
@@ -107,7 +114,7 @@ def validate_rollup(path: pathlib.Path, rollup: dict[str, object]) -> None:
             {
                 "source_id": source_id,
                 "provider": plan.get("provider"),
-                "runtime_evidence_plan": str(plan_path),
+                "runtime_evidence_plan": portable_path(plan_path),
                 "evidence_total": evidence_total,
                 "blocking_count": plan_summary.get("blocking_count"),
                 "warning_count": plan_summary.get("warning_count"),
