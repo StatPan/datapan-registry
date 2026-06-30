@@ -1,6 +1,6 @@
 # Datapan Registry Release
 
-- generated_at: `2026-06-30T07:03:19Z`
+- generated_at: `2026-06-30T07:10:08Z`
 - provider: `data.go.kr`
 - datapan_version: `0.1.0-dev`
 - source_registry: `data/data-go-kr.registry.json`
@@ -24,12 +24,12 @@
 - route_disposition: `28` routes, `14` dead-route candidates, `14` transient failures, `0` parameter-blocked, `0` adapter candidates
 - route_disposition_artifact: `reports/route-disposition.json`
 - provider_backlog: `179` hosts, `10` missing-adapter hosts, `28` operations needing adapters
-- coverage: `12063` callable operations (`98.8%`), external adapter coverage `95.4%`, verification evidence coverage `5.2%`, evidence-adjusted adapter candidates `0`
+- coverage: `12063` callable operations (`98.8%`), external adapter coverage `95.4%`, verification evidence coverage `5.3%`, evidence-adjusted adapter candidates `0`
 - coverage_artifact: `reports/coverage.json`
 - coverage_goals: callable `99%`, external adapters `98%`, verification evidence `10%`, call-capable adapters `25`, missing-adapter operations `<=10`
-- verification_plan: `1` batches, `10` planned operations, `11369` gateway gaps, `0` adapter gaps
+- verification_plan: `1` batches, `10` planned operations, `11359` gateway gaps, `0` adapter gaps
 - verification_plan_artifact: `reports/verification-plan.json`
-- runtime_evidence_growth: `5.2%` coverage, target `10.0%`, remaining `585`, status `below_target`
+- runtime_evidence_growth: `5.3%` coverage, target `10.0%`, remaining `575`, status `below_target`
 - runtime_evidence_growth_artifact: `reports/data-go-kr/runtime-evidence-growth.json`
 - runtime_evidence_warning: `warning` `runtime_evidence_below_target`
 
@@ -43,7 +43,7 @@ Top adapter targets:
 
 ## Verification Evidence
 
-- verification: `636` total, `22` verified, `87` failed, `527` skipped, `0` unknown
+- verification: `646` total, `22` verified, `87` failed, `537` skipped, `0` unknown
 - verification_artifact: `reports/latest-verification.json`
 - verification_summary_artifact: `reports/latest-verification-summary.json`
 
@@ -51,7 +51,7 @@ Provider evidence:
 
 - `q-net`: `147`
 - `jeonju`: `80`
-- `data.go.kr`: `50`
+- `data.go.kr`: `60`
 - `ekape`: `49`
 - `geoje`: `41`
 - `uiryeong`: `40`
