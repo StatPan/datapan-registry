@@ -97,6 +97,9 @@ Current strengths:
   `reports/seoul-open-data/runtime-evidence-plan.json` record the first
   non-data.go.kr sources as `0` runtime-evidence sources with explicit blocker
   and warning IDs instead of treating missing evidence as ready.
+- `reports/source-runtime-evidence-rollup.json` rolls those source runtime
+  evidence plans into a release-wide inventory of `4` sources, `0` runtime
+  checks, `20` blocking blockers, and `16` warning instances.
 - `reports/coverage.json` reports high callable-operation coverage.
 - `reports/route-disposition.json` separates dead-route candidates from
   transient failures.
@@ -113,9 +116,10 @@ Current gaps:
   artifacts.
 - Error inventory has draft action routing for data.go.kr and the first
   non-data.go.kr profile batch. Gira #63 adds source-scoped runtime evidence
-  plans for those non-data.go.kr sources, but actual runtime evidence remains
-  `0` for each source until adapters, credentials, sample parameters, and
-  source-scoped candidate artifacts are in place.
+  plans for those non-data.go.kr sources, and Gira #65 rolls them up so release
+  operators can see the remaining blocker and warning IDs centrally. Actual
+  runtime evidence remains `0` for each source until adapters, credentials,
+  sample parameters, and source-scoped candidate artifacts are in place.
 - Runtime evidence coverage is much lower than callable coverage. Gira #19,
   Gira #21, Gira #23, Gira #25, Gira #27, Gira #29, Gira #31, Gira #33, and
   Gira #35 raise data.go.kr runtime evidence from `256` to `626`. Gira #39,
@@ -219,6 +223,8 @@ Done when:
   cross-checks its source profile identity;
 - every checked-in source runtime evidence plan validates and records explicit
   blocker and warning IDs while evidence is absent;
+- the release-wide source runtime evidence rollup validates against checked-in
+  source plans;
 - source-scoped reports are generated under `reports/<source>/`;
 - root reports are documented as release-wide rollups;
 - CI validates source-scoped report paths where present;
@@ -325,6 +331,9 @@ Use this order unless a production failure changes priority:
     sources. Tracked by Gira #63; this records why KOSIS, ECOS, Open Assembly,
     and Seoul Open Data have `0` runtime checks and what must be built before
     evidence can be collected.
+17. Add a release-wide source runtime evidence rollup. Tracked by Gira #65;
+    this centralizes non-data.go.kr runtime evidence blockers and warnings
+    without treating missing evidence as ready.
 
 ## Measurement Rules
 

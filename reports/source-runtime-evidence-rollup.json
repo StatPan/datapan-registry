@@ -1,0 +1,270 @@
+{
+  "schema_version": "datapan.source-runtime-evidence-rollup.v1",
+  "generated_at": "2026-06-30T08:31:32Z",
+  "provider": "multi-source",
+  "source_plan_inputs": [
+    "reports/ecos/runtime-evidence-plan.json",
+    "reports/kosis/runtime-evidence-plan.json",
+    "reports/open-assembly/runtime-evidence-plan.json",
+    "reports/seoul-open-data/runtime-evidence-plan.json"
+  ],
+  "summary": {
+    "sources": 4,
+    "sources_without_evidence": 4,
+    "evidence_total": 0,
+    "verified": 0,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0,
+    "blocking_count": 20,
+    "warning_count": 16
+  },
+  "sources": [
+    {
+      "source_id": "ecos",
+      "provider": "ECOS",
+      "runtime_evidence_plan": "reports/ecos/runtime-evidence-plan.json",
+      "evidence_total": 0,
+      "blocking_count": 5,
+      "warning_count": 4,
+      "blocker_ids": [
+        "adapter_not_registered",
+        "credential_required",
+        "metadata_only_verification",
+        "runtime_catalog_not_materialized",
+        "sample_parameters_not_pinned",
+        "source_specific_error_taxonomy_pending"
+      ],
+      "warning_ids": [
+        "non_data_runtime_evidence_not_collected",
+        "source_runtime_adapter_not_registered",
+        "source_runtime_error_taxonomy_pending",
+        "source_runtime_manual_samples_unpinned"
+      ],
+      "next_action_count": 4
+    },
+    {
+      "source_id": "kosis",
+      "provider": "KOSIS",
+      "runtime_evidence_plan": "reports/kosis/runtime-evidence-plan.json",
+      "evidence_total": 0,
+      "blocking_count": 5,
+      "warning_count": 4,
+      "blocker_ids": [
+        "adapter_not_registered",
+        "credential_required",
+        "metadata_only_verification",
+        "runtime_catalog_not_materialized",
+        "sample_parameters_not_pinned",
+        "source_specific_error_taxonomy_pending"
+      ],
+      "warning_ids": [
+        "non_data_runtime_evidence_not_collected",
+        "source_runtime_adapter_not_registered",
+        "source_runtime_error_taxonomy_pending",
+        "source_runtime_manual_samples_unpinned"
+      ],
+      "next_action_count": 4
+    },
+    {
+      "source_id": "open_assembly",
+      "provider": "open.assembly.go.kr",
+      "runtime_evidence_plan": "reports/open-assembly/runtime-evidence-plan.json",
+      "evidence_total": 0,
+      "blocking_count": 5,
+      "warning_count": 4,
+      "blocker_ids": [
+        "adapter_not_registered",
+        "credential_required",
+        "metadata_only_verification",
+        "runtime_catalog_not_materialized",
+        "sample_parameters_not_pinned",
+        "source_specific_error_taxonomy_pending"
+      ],
+      "warning_ids": [
+        "non_data_runtime_evidence_not_collected",
+        "source_runtime_adapter_not_registered",
+        "source_runtime_error_taxonomy_pending",
+        "source_runtime_manual_samples_unpinned"
+      ],
+      "next_action_count": 4
+    },
+    {
+      "source_id": "seoul_open_data",
+      "provider": "data.seoul.go.kr",
+      "runtime_evidence_plan": "reports/seoul-open-data/runtime-evidence-plan.json",
+      "evidence_total": 0,
+      "blocking_count": 5,
+      "warning_count": 4,
+      "blocker_ids": [
+        "adapter_not_registered",
+        "credential_required",
+        "metadata_only_verification",
+        "runtime_catalog_not_materialized",
+        "sample_parameters_not_pinned",
+        "source_specific_error_taxonomy_pending"
+      ],
+      "warning_ids": [
+        "non_data_runtime_evidence_not_collected",
+        "source_runtime_adapter_not_registered",
+        "source_runtime_error_taxonomy_pending",
+        "source_runtime_manual_samples_unpinned"
+      ],
+      "next_action_count": 4
+    }
+  ],
+  "blockers_by_id": [
+    {
+      "id": "adapter_not_registered",
+      "count": 4,
+      "source_ids": [
+        "ecos",
+        "kosis",
+        "open_assembly",
+        "seoul_open_data"
+      ]
+    },
+    {
+      "id": "credential_required",
+      "count": 4,
+      "source_ids": [
+        "ecos",
+        "kosis",
+        "open_assembly",
+        "seoul_open_data"
+      ]
+    },
+    {
+      "id": "metadata_only_verification",
+      "count": 4,
+      "source_ids": [
+        "ecos",
+        "kosis",
+        "open_assembly",
+        "seoul_open_data"
+      ]
+    },
+    {
+      "id": "runtime_catalog_not_materialized",
+      "count": 4,
+      "source_ids": [
+        "ecos",
+        "kosis",
+        "open_assembly",
+        "seoul_open_data"
+      ]
+    },
+    {
+      "id": "sample_parameters_not_pinned",
+      "count": 4,
+      "source_ids": [
+        "ecos",
+        "kosis",
+        "open_assembly",
+        "seoul_open_data"
+      ]
+    },
+    {
+      "id": "source_specific_error_taxonomy_pending",
+      "count": 4,
+      "source_ids": [
+        "ecos",
+        "kosis",
+        "open_assembly",
+        "seoul_open_data"
+      ]
+    }
+  ],
+  "warnings_by_id": [
+    {
+      "id": "non_data_runtime_evidence_not_collected",
+      "count": 4,
+      "source_ids": [
+        "ecos",
+        "kosis",
+        "open_assembly",
+        "seoul_open_data"
+      ]
+    },
+    {
+      "id": "source_runtime_adapter_not_registered",
+      "count": 4,
+      "source_ids": [
+        "ecos",
+        "kosis",
+        "open_assembly",
+        "seoul_open_data"
+      ]
+    },
+    {
+      "id": "source_runtime_error_taxonomy_pending",
+      "count": 4,
+      "source_ids": [
+        "ecos",
+        "kosis",
+        "open_assembly",
+        "seoul_open_data"
+      ]
+    },
+    {
+      "id": "source_runtime_manual_samples_unpinned",
+      "count": 4,
+      "source_ids": [
+        "ecos",
+        "kosis",
+        "open_assembly",
+        "seoul_open_data"
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "warning_id": "non_data_runtime_evidence_not_collected",
+      "affected_sources": [
+        "ecos",
+        "kosis",
+        "open_assembly",
+        "seoul_open_data"
+      ],
+      "expected": "Every checked-in non-data.go.kr source has source-scoped runtime evidence after adapters and sample parameters are pinned.",
+      "actual": "4 of 4 non-data.go.kr sources have 0 runtime checks.",
+      "remaining": "Materialize source candidate artifacts, register adapters, inject credentials, and run bounded first batches."
+    },
+    {
+      "warning_id": "source_runtime_adapter_not_registered",
+      "affected_sources": [
+        "ecos",
+        "kosis",
+        "open_assembly",
+        "seoul_open_data"
+      ],
+      "expected": "Every checked-in non-data.go.kr source has verification and call adapter capabilities before runtime evidence collection.",
+      "actual": "4 of 4 non-data.go.kr sources have no registered runtime adapter.",
+      "remaining": "Register source-specific adapters for ECOS, KOSIS, Open Assembly, and Seoul Open Data."
+    },
+    {
+      "warning_id": "source_runtime_error_taxonomy_pending",
+      "affected_sources": [
+        "ecos",
+        "kosis",
+        "open_assembly",
+        "seoul_open_data"
+      ],
+      "expected": "Every checked-in non-data.go.kr source has verified source-specific error taxonomy before failures are classified as adapter defects.",
+      "actual": "4 of 4 non-data.go.kr sources have unknown or draft error taxonomy status.",
+      "remaining": "Verify source-specific error codes and message fields for the first non-data.go.kr source batch."
+    },
+    {
+      "warning_id": "source_runtime_manual_samples_unpinned",
+      "affected_sources": [
+        "ecos",
+        "kosis",
+        "open_assembly",
+        "seoul_open_data"
+      ],
+      "expected": "Every checked-in non-data.go.kr source has pinned first-batch sample parameters.",
+      "actual": "4 of 4 non-data.go.kr sources use manual sample parameter policy.",
+      "remaining": "Pin official first-batch sample parameters per source before bounded checks."
+    }
+  ]
+}
