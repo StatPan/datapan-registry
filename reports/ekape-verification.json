@@ -1,8 +1,7 @@
 {
-  "generated_at": "2026-06-30T06:58:35Z",
+  "generated_at": "2026-06-29T13:48:37Z",
   "provider": "data.go.kr",
-  "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 39,
+  "limit": 45,
   "truncated": true,
   "filtered_count": 39,
   "summary": {
@@ -735,7 +734,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:19Z",
       "params": {
         "endYmd": "20240101",
         "numOfRows": "1",
@@ -752,7 +751,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:19Z",
       "params": {
         "endYmd": "20240101",
         "numOfRows": "1",
@@ -770,7 +769,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:19Z",
       "params": {
         "endYmd": "20240101",
         "numOfRows": "1",
@@ -787,7 +786,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "ekape_missing_required_params",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:19Z",
       "params": {
         "farmUniqueNo": "",
         "typeGbn": ""

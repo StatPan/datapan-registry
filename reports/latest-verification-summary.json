@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-06-30T06:58:46Z",
-  "source": "./reports/latest-verification.json",
+  "generated_at": "2026-06-29T14:19:54Z",
+  "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
-  "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
+  "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 509,
+    "total": 626,
     "verified": 22,
     "failed": 87,
-    "skipped": 400,
+    "skipped": 517,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 400,
+        "count": 517,
         "status": "skipped"
       },
       {
@@ -33,13 +33,18 @@
     "by_reason": [
       {
         "key": "missing_auth",
-        "count": 92,
+        "count": 113,
         "reason": "missing_auth"
       },
       {
         "key": "approval_required",
-        "count": 38,
+        "count": 69,
         "reason": "approval_required"
+      },
+      {
+        "key": "jeonju_missing_required_params",
+        "count": 67,
+        "reason": "jeonju_missing_required_params"
       },
       {
         "key": "missing_required_params",
@@ -47,9 +52,9 @@
         "reason": "missing_required_params"
       },
       {
-        "key": "jeonju_missing_required_params",
-        "count": 33,
-        "reason": "jeonju_missing_required_params"
+        "key": "qnet_separate_service_key_required",
+        "count": 28,
+        "reason": "qnet_separate_service_key_required"
       },
       {
         "key": "ekape_missing_required_params",
@@ -60,6 +65,11 @@
         "key": "geoje_missing_required_params",
         "count": 25,
         "reason": "geoje_missing_required_params"
+      },
+      {
+        "key": "qnet_missing_required_params",
+        "count": 19,
+        "reason": "qnet_missing_required_params"
       },
       {
         "key": "tour_service_root_missing_operation_path",
@@ -110,11 +120,6 @@
         "key": "naqs_mutation_endpoint",
         "count": 8,
         "reason": "naqs_mutation_endpoint"
-      },
-      {
-        "key": "qnet_separate_service_key_required",
-        "count": 8,
-        "reason": "qnet_separate_service_key_required"
       },
       {
         "key": "humetro_service_access_denied",
@@ -285,13 +290,13 @@
     "by_provider": [
       {
         "key": "q-net",
-        "count": 55,
+        "count": 147,
         "provider": "q-net"
       },
       {
-        "key": "data.go.kr",
-        "count": 50,
-        "provider": "data.go.kr"
+        "key": "jeonju",
+        "count": 80,
+        "provider": "jeonju"
       },
       {
         "key": "ekape",
@@ -299,14 +304,14 @@
         "provider": "ekape"
       },
       {
-        "key": "jeonju",
-        "count": 45,
-        "provider": "jeonju"
-      },
-      {
         "key": "geoje",
         "count": 41,
         "provider": "geoje"
+      },
+      {
+        "key": "data.go.kr",
+        "count": 50,
+        "provider": "data.go.kr"
       },
       {
         "key": "uiryeong",
@@ -421,9 +426,14 @@
     ],
     "by_endpoint_host": [
       {
-        "key": "apis.data.go.kr",
-        "count": 50,
-        "host": "apis.data.go.kr"
+        "key": "openapi.q-net.or.kr",
+        "count": 104,
+        "host": "openapi.q-net.or.kr"
+      },
+      {
+        "key": "openapi.jeonju.go.kr",
+        "count": 80,
+        "host": "openapi.jeonju.go.kr"
       },
       {
         "key": "data.ekape.or.kr",
@@ -431,19 +441,19 @@
         "host": "data.ekape.or.kr"
       },
       {
-        "key": "openapi.q-net.or.kr",
-        "count": 47,
-        "host": "openapi.q-net.or.kr"
-      },
-      {
-        "key": "openapi.jeonju.go.kr",
-        "count": 45,
-        "host": "openapi.jeonju.go.kr"
+        "key": "c.q-net.or.kr",
+        "count": 42,
+        "host": "c.q-net.or.kr"
       },
       {
         "key": "data.geoje.go.kr",
         "count": 41,
         "host": "data.geoje.go.kr"
+      },
+      {
+        "key": "apis.data.go.kr",
+        "count": 50,
+        "host": "apis.data.go.kr"
       },
       {
         "key": "data.uiryeong.go.kr",
@@ -489,11 +499,6 @@
         "key": "data.naqs.go.kr",
         "count": 9,
         "host": "data.naqs.go.kr"
-      },
-      {
-        "key": "c.q-net.or.kr",
-        "count": 8,
-        "host": "c.q-net.or.kr"
       },
       {
         "key": "data.humetro.busan.kr",
@@ -569,12 +574,17 @@
         "key": "data.myhome.go.kr:443",
         "count": 1,
         "host": "data.myhome.go.kr:443"
+      },
+      {
+        "key": "open.api.q-net.or.kr",
+        "count": 1,
+        "host": "open.api.q-net.or.kr"
       }
     ],
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 440,
+        "count": 567,
         "kind": "external_endpoint"
       },
       {

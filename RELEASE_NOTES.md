@@ -1,10 +1,10 @@
 # Datapan Registry Release
 
-- generated_at: `2026-06-30T06:59:03Z`
+- generated_at: `2026-06-29T14:20:54Z`
 - provider: `data.go.kr`
 - datapan_version: `0.1.0-dev`
-- source_registry: `data/data-go-kr.registry.json`
-- previous_registry: `data/data-go-kr.registry.json`
+- source_registry: `data\data-go-kr.registry.json`
+- previous_registry: `data\data-go-kr.registry.json`
 - release_manifest: `manifest.json`
 
 ## Registry
@@ -24,12 +24,12 @@
 - route_disposition: `28` routes, `14` dead-route candidates, `14` transient failures, `0` parameter-blocked, `0` adapter candidates
 - route_disposition_artifact: `reports/route-disposition.json`
 - provider_backlog: `179` hosts, `10` missing-adapter hosts, `28` operations needing adapters
-- coverage: `12063` callable operations (`98.8%`), external adapter coverage `95.4%`, verification evidence coverage `4.2%`, evidence-adjusted adapter candidates `0`
+- coverage: `12063` callable operations (`98.8%`), external adapter coverage `95.4%`, verification evidence coverage `5.1%`, evidence-adjusted adapter candidates `0`
 - coverage_artifact: `reports/coverage.json`
 - coverage_goals: callable `99%`, external adapters `98%`, verification evidence `10%`, call-capable adapters `25`, missing-adapter operations `<=10`
-- verification_plan: `3` batches, `30` planned operations, `11369` gateway gaps, `127` adapter gaps
+- verification_plan: `1` batches, `10` planned operations, `11379` gateway gaps, `0` adapter gaps
 - verification_plan_artifact: `reports/verification-plan.json`
-- runtime_evidence_growth: `4.2%` coverage, target `10.0%`, remaining `712`, status `below_target`
+- runtime_evidence_growth: `5.1%` coverage, target `10.0%`, remaining `595`, status `below_target`
 - runtime_evidence_growth_artifact: `reports/data-go-kr/runtime-evidence-growth.json`
 - runtime_evidence_warning: `warning` `runtime_evidence_below_target`
 
@@ -43,17 +43,17 @@ Top adapter targets:
 
 ## Verification Evidence
 
-- verification: `509` total, `22` verified, `87` failed, `400` skipped, `0` unknown
+- verification: `626` total, `22` verified, `87` failed, `517` skipped, `0` unknown
 - verification_artifact: `reports/latest-verification.json`
 - verification_summary_artifact: `reports/latest-verification-summary.json`
 
 Provider evidence:
 
-- `q-net`: `55`
-- `data.go.kr`: `50`
+- `q-net`: `147`
+- `jeonju`: `80`
 - `ekape`: `49`
-- `jeonju`: `45`
 - `geoje`: `41`
+- `data.go.kr`: `40`
 - `uiryeong`: `40`
 
 - unadapted_external_probe: `28` total, `0` verified, `28` failed, `0` skipped, `0` unknown

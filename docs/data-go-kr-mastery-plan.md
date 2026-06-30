@@ -157,6 +157,7 @@ data.go.kr mastery should produce or preserve:
 - `reports/data-go-kr/error-action-catalog.json`
 - `reports/data-go-kr/registry-impact-plan.json`
 - `reports/data-go-kr/runtime-evidence-growth.json`
+- `reports/data-go-kr/institution-api-overview.json`
 
 ## Source-Scoped Generation Contract
 
@@ -170,6 +171,7 @@ match those roots.
 | `reports/data-go-kr/error-action-catalog.json` | `sources/data_go_kr.json`, `reports/error-catalog.json`, `reports/route-disposition.json`, provider verification reports | `scripts/validate-error-action-catalogs.py` validates checked-in action rules; future generation should also fail on unmapped known error signatures. |
 | `reports/data-go-kr/registry-impact-plan.json` | `sources/data_go_kr.json`, catalog diff, verification evidence, route disposition, error action catalog, promoted dataset mappings | `scripts/validate-impact-plans.py` validates schema, summary counts, target counts, identity fields, and promoted/served dataset boundaries before client/server consumers act on it. |
 | `reports/data-go-kr/runtime-evidence-growth.json` | `reports/coverage.json`, `reports/latest-verification.json`, `reports/latest-verification-summary.json`, `reports/verification-plan.json`, `data/provider-index.json` | `scripts/validate-runtime-evidence-growth.py` validates current evidence totals, evidence coverage percent, 10% target gap, provider split readiness, and next planned verification batches. |
+| `reports/data-go-kr/institution-api-overview.json` | `data/data-go-kr.registry.json`, `reports/dependencies.json`, `reports/latest-verification.json`, `reports/coverage.json`, `data/provider-index.json` | `scripts/validate-institution-api-overview.py` regenerates the overview and fails CI when institution API counts, operation counts, adapter status counts, or runtime evidence counts drift from checked-in artifacts. |
 
 This contract keeps `data/data-go-kr.registry.json` as the compatibility
 registry path while moving generated evidence toward `reports/data-go-kr/`.
@@ -205,10 +207,15 @@ CI should fail rather than treating the checked-in summary as authoritative.
    `jeonju`, `q-net`, and `uiryeong` boundary batches, growing checked runtime
    evidence to `406`. Continued by Gira #27 with the next gateway, `ekape`,
    `geoje`, `jeonju`, `q-net`, and `uiryeong` boundary batches, growing checked
-   runtime evidence to `466`. Continued by Gira #39 with the next gateway,
+   runtime evidence to `466`. Continued by Gira #29 with the next external
    `ekape`, `geoje`, `jeonju`, `q-net`, and `uiryeong` boundary batches,
-   growing checked runtime evidence to `509`. Runtime evidence remains below
-   the `10%` target with `712` additional evidence records still required.
+   growing checked runtime evidence to `499`. Continued by Gira #31 with the
+   next `jeonju` and `q-net` boundary batches, growing checked runtime evidence
+   to `519`. Continued by Gira #33 with another `jeonju` and `q-net` boundary
+   batch, growing checked runtime evidence to `539`. Gira #35 completed the
+   remaining planned `jeonju` and `q-net` external boundary candidates, growing
+   checked runtime evidence to `626`. Runtime evidence remains below the `10%`
+   target with `595` additional evidence records still required.
 10. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 11. Generate future data.go.kr impact plans directly from catalog diff,

@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-30T06:58:46Z",
+  "generated_at": "2026-06-29T14:19:54Z",
   "provider": "data.go.kr",
-  "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 516,
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 763,
   "truncated": true,
-  "filtered_count": 509,
+  "filtered_count": 626,
   "summary": {
-    "total": 509,
+    "total": 626,
     "verified": 22,
     "failed": 87,
-    "skipped": 400,
+    "skipped": 517,
     "unknown": 0
   },
   "results": [
@@ -9521,170 +9521,6 @@
       ]
     },
     {
-      "dataset_id": "15000563",
-      "title": "국립중앙의료원_전국 응급의료기관 정보 조회 서비스",
-      "operation": "응급의료기관 위치정보 조회",
-      "provider": "data.go.kr",
-      "endpoint_host": "apis.data.go.kr",
-      "dependency_class": "data_go_kr_gateway",
-      "status": "skipped",
-      "reason": "missing_required_params",
-      "params": {
-        "WGS84_LAT": "",
-        "WGS84_LON": "",
-        "numOfRows": "1",
-        "pageNo": "1"
-      },
-      "missing_params": [
-        "WGS84_LON",
-        "WGS84_LAT"
-      ]
-    },
-    {
-      "dataset_id": "15000563",
-      "title": "국립중앙의료원_전국 응급의료기관 정보 조회 서비스",
-      "operation": "중증질환자 수용가능정보 조회",
-      "provider": "data.go.kr",
-      "endpoint_host": "apis.data.go.kr",
-      "dependency_class": "data_go_kr_gateway",
-      "status": "skipped",
-      "reason": "missing_required_params",
-      "params": {
-        "SM_TYPE": "",
-        "STAGE1": "",
-        "STAGE2": "",
-        "numOfRows": "1",
-        "pageNo": "1"
-      },
-      "missing_params": [
-        "STAGE1",
-        "STAGE2",
-        "SM_TYPE"
-      ]
-    },
-    {
-      "dataset_id": "15000576",
-      "title": "국립중앙의료원_전국 약국 정보 조회 서비스",
-      "operation": "약국 FullData 내려받기",
-      "provider": "data.go.kr",
-      "endpoint_host": "apis.data.go.kr",
-      "dependency_class": "data_go_kr_gateway",
-      "status": "skipped",
-      "reason": "missing_auth",
-      "params": {
-        "numOfRows": "1",
-        "pageNo": "1"
-      }
-    },
-    {
-      "dataset_id": "15000576",
-      "title": "국립중앙의료원_전국 약국 정보 조회 서비스",
-      "operation": "약국 목록정보 조회",
-      "provider": "data.go.kr",
-      "endpoint_host": "apis.data.go.kr",
-      "dependency_class": "data_go_kr_gateway",
-      "status": "skipped",
-      "reason": "missing_required_params",
-      "params": {
-        "ORD": "",
-        "Q0": "",
-        "Q1": "",
-        "QN": "",
-        "QT": "",
-        "numOfRows": "1",
-        "pageNo": "1"
-      },
-      "missing_params": [
-        "Q0",
-        "Q1",
-        "QT",
-        "QN",
-        "ORD"
-      ]
-    },
-    {
-      "dataset_id": "15000576",
-      "title": "국립중앙의료원_전국 약국 정보 조회 서비스",
-      "operation": "약국 위치정보 조회",
-      "provider": "data.go.kr",
-      "endpoint_host": "apis.data.go.kr",
-      "dependency_class": "data_go_kr_gateway",
-      "status": "skipped",
-      "reason": "missing_auth"
-    },
-    {
-      "dataset_id": "15000576",
-      "title": "국립중앙의료원_전국 약국 정보 조회 서비스",
-      "operation": "약국별 기본정보 조회",
-      "provider": "data.go.kr",
-      "endpoint_host": "apis.data.go.kr",
-      "dependency_class": "data_go_kr_gateway",
-      "status": "skipped",
-      "reason": "missing_required_params",
-      "params": {
-        "HPID": "",
-        "numOfRows": "1",
-        "pageNo": "1"
-      },
-      "missing_params": [
-        "HPID"
-      ]
-    },
-    {
-      "dataset_id": "15000651",
-      "title": "경찰청_공통코드조회 서비스",
-      "operation": "공통코드조회",
-      "provider": "data.go.kr",
-      "endpoint_host": "apis.data.go.kr",
-      "dependency_class": "data_go_kr_gateway",
-      "status": "skipped",
-      "reason": "approval_required",
-      "params": {
-        "CD_NM": "",
-        "GRP_NM": ""
-      },
-      "missing_params": [
-        "GRP_NM",
-        "CD_NM"
-      ]
-    },
-    {
-      "dataset_id": "15000651",
-      "title": "경찰청_공통코드조회 서비스",
-      "operation": "물품분류코드조회",
-      "provider": "data.go.kr",
-      "endpoint_host": "apis.data.go.kr",
-      "dependency_class": "data_go_kr_gateway",
-      "status": "skipped",
-      "reason": "approval_required",
-      "params": {
-        "PRDT_CL_CD_01": ""
-      },
-      "missing_params": [
-        "PRDT_CL_CD_01"
-      ]
-    },
-    {
-      "dataset_id": "15000652",
-      "title": "국립중앙의료원_전국 자동심장충격기(AED) 정보 조회 서비스",
-      "operation": "응급 의료기관별 자동심장충격기 관리정보",
-      "provider": "data.go.kr",
-      "endpoint_host": "apis.data.go.kr",
-      "dependency_class": "data_go_kr_gateway",
-      "status": "skipped",
-      "reason": "missing_auth"
-    },
-    {
-      "dataset_id": "15000652",
-      "title": "국립중앙의료원_전국 자동심장충격기(AED) 정보 조회 서비스",
-      "operation": "자동심장충격기 위치정보 조회",
-      "provider": "data.go.kr",
-      "endpoint_host": "apis.data.go.kr",
-      "dependency_class": "data_go_kr_gateway",
-      "status": "skipped",
-      "reason": "missing_auth"
-    },
-    {
       "dataset_id": "15073985",
       "title": "축산물품질평가원_가금산물 일일거래가격정보",
       "operation": "육계(도매) 일일가격조회",
@@ -9693,7 +9529,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:19Z",
       "params": {
         "endYmd": "20240101",
         "numOfRows": "1",
@@ -9710,7 +9546,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:19Z",
       "params": {
         "endYmd": "20240101",
         "numOfRows": "1",
@@ -9728,7 +9564,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:19Z",
       "params": {
         "endYmd": "20240101",
         "numOfRows": "1",
@@ -9745,7 +9581,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "ekape_missing_required_params",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:19Z",
       "params": {
         "farmUniqueNo": "",
         "typeGbn": ""
@@ -9764,7 +9600,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "pageSize": "1",
         "startPage": "1"
@@ -9779,7 +9615,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "geoje_missing_required_params",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "lodgeId": ""
       },
@@ -9796,7 +9632,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "geoje_missing_required_params",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "geojecultureId": ""
       },
@@ -9813,7 +9649,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "geoje_missing_required_params",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "geojecultureId": ""
       },
@@ -9830,7 +9666,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "pageSize": "1",
         "startPage": "1"
@@ -9845,7 +9681,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "jeonju_missing_required_params",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "foodUid": ""
       },
@@ -9862,7 +9698,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "jeonju_missing_required_params",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "foodUid": "",
         "keyword": "",
@@ -9883,7 +9719,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "jeonju_missing_required_params",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "foodUid": "",
         "keyword": "",
@@ -9904,7 +9740,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "jeonju_missing_required_params",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "foodUid": "",
         "keyword": "",
@@ -9925,7 +9761,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "jeonju_missing_required_params",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "dataValue": "",
         "pageSize": "1",
@@ -9946,7 +9782,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "jeonju_missing_required_params",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "dataSid": ""
       },
@@ -9963,7 +9799,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "jeonju_missing_required_params",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "dataSid": ""
       },
@@ -9980,7 +9816,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "jeonju_missing_required_params",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "dataValue": "",
         "pageSize": "1",
@@ -9999,7 +9835,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "jeonju_missing_required_params",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "dataSid": ""
       },
@@ -10016,7 +9852,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "jeonju_missing_required_params",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "dataSid": ""
       },
@@ -10033,7 +9869,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "baseYY": "2023",
         "numOfRows": "1",
@@ -10049,7 +9885,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "baseYY": "2023",
         "numOfRows": "1",
@@ -10065,7 +9901,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "numOfRows": "1",
         "pageNo": "1"
@@ -10080,7 +9916,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "qnet_missing_required_params",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "baseYY": "2023",
         "jmCD": "",
@@ -10102,7 +9938,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "baseYY": "2023",
         "numOfRows": "1",
@@ -10118,7 +9954,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "baseYY": "2023",
         "numOfRows": "1",
@@ -10134,7 +9970,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "baseYY": "2023",
         "numOfRows": "1",
@@ -10150,7 +9986,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "baseYY": "2023",
         "numOfRows": "1",
@@ -10166,7 +10002,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "baseYY": "2023",
         "numOfRows": "1",
@@ -10182,7 +10018,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "baseYY": "2023",
         "numOfRows": "1",
@@ -10198,7 +10034,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "uiryeong_missing_required_params",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "uiryeongfoodEntId": ""
       },
@@ -10215,7 +10051,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "uiryeong_missing_required_params",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "uiryeongfoodEntId": ""
       },
@@ -10232,7 +10068,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "numOfRows": "1",
         "pageNo": "1"
@@ -10247,10 +10083,2297 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "numOfRows": "1",
         "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "3036600",
+      "title": "전북특별자치도 전주시_공연행사",
+      "operation": "공연행사 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "keyword": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "keyword"
+      ]
+    },
+    {
+      "dataset_id": "3036601",
+      "title": "전북특별자치도 전주시_주차장",
+      "operation": "주차장정보 검색 서비스 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataValue": "",
+        "pageSize": "1",
+        "parkingFee": "",
+        "parkingSize": "",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue",
+        "parkingFee",
+        "parkingSize"
+      ]
+    },
+    {
+      "dataset_id": "3036601",
+      "title": "전북특별자치도 전주시_주차장",
+      "operation": "주차장정보 검색 서비스 상세보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036602",
+      "title": "전북특별자치도 전주시_공원 정보",
+      "operation": "공원정보 검색 서비스 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataValue": "",
+        "pageSize": "1",
+        "parkLocation": "",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue",
+        "parkLocation"
+      ]
+    },
+    {
+      "dataset_id": "3036602",
+      "title": "전북특별자치도 전주시_공원 정보",
+      "operation": "공원정보 검색 서비스 상세보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036603",
+      "title": "전북특별자치도 전주시_개방화장실",
+      "operation": "화장실 정보 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataSid": "",
+        "dataValue": "",
+        "dong": "중앙동",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue",
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036603",
+      "title": "전북특별자치도 전주시_개방화장실",
+      "operation": "화장실 정보 첨부파일",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036604",
+      "title": "전북특별자치도 전주시_체육시설",
+      "operation": "체육시설 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "addr": "",
+        "charge": "",
+        "dataValue": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue",
+        "addr",
+        "charge"
+      ]
+    },
+    {
+      "dataset_id": "3036604",
+      "title": "전북특별자치도 전주시_체육시설",
+      "operation": "체육시설 상세보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3036604",
+      "title": "전북특별자치도 전주시_체육시설",
+      "operation": "체육시설 첨부파일",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "15039800",
+      "title": "한국산업인력공단_국가기술자격 취득 관련 현황",
+      "operation": "토목(산업)기사 자격취득자 현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "baseYY": "2023"
+      }
+    },
+    {
+      "dataset_id": "15039800",
+      "title": "한국산업인력공단_국가기술자격 취득 관련 현황",
+      "operation": "학력별취득현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15039800",
+      "title": "한국산업인력공단_국가기술자격 취득 관련 현황",
+      "operation": "행정구역별연도별성별 취득현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15040265",
+      "title": "한국산업인력공단_국가기술자격증 배송주소구간 정보",
+      "operation": "배송 주소 구간 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:03:46Z"
+    },
+    {
+      "dataset_id": "15040265",
+      "title": "한국산업인력공단_국가기술자격증 배송주소구간 정보",
+      "operation": "활용 주소 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "gun": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "road": "",
+        "sido": ""
+      },
+      "missing_params": [
+        "sido",
+        "gun",
+        "road"
+      ]
+    },
+    {
+      "dataset_id": "15040841",
+      "title": "한국산업인력공단_국가기술자격 지역별 자격취득 정보",
+      "operation": "지역별 성별 자격취득현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "baseYY": "2023",
+        "quart": "",
+        "rgnCd": "",
+        "seriesCd": ""
+      },
+      "missing_params": [
+        "rgnCd",
+        "seriesCd",
+        "quart"
+      ]
+    },
+    {
+      "dataset_id": "15040841",
+      "title": "한국산업인력공단_국가기술자격 지역별 자격취득 정보",
+      "operation": "지역별 연도별 자격취득현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "baseYY": "2023",
+        "quart": "",
+        "rgnCd": "",
+        "seriesCd": ""
+      },
+      "missing_params": [
+        "rgnCd",
+        "seriesCd",
+        "quart"
+      ]
+    },
+    {
+      "dataset_id": "15040841",
+      "title": "한국산업인력공단_국가기술자격 지역별 자격취득 정보",
+      "operation": "지역별 연령별 자격취득현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "baseYY": "2023",
+        "quart": "",
+        "rgnCd": "",
+        "seriesCd": ""
+      },
+      "missing_params": [
+        "rgnCd",
+        "seriesCd",
+        "quart"
+      ]
+    },
+    {
+      "dataset_id": "15041600",
+      "title": "한국산업인력공단_국가기술자격 종목 정보",
+      "operation": "국가기술자격 종목 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "seriesCd": ""
+      },
+      "missing_params": [
+        "seriesCd"
+      ]
+    },
+    {
+      "dataset_id": "15056876",
+      "title": "한국산업인력공단_과정평가형자격 정보 조회",
+      "operation": "과정평가형 외부평가 일정정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:03:46Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json",
+        "year": ""
+      },
+      "missing_params": [
+        "year"
+      ]
+    },
+    {
+      "dataset_id": "3045532",
+      "title": "전북특별자치도 전주시_어린이집 현황",
+      "operation": "어린이집 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "chidAddr": "",
+        "chidGubun": "",
+        "chidName": "",
+        "chidSid": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "chidSid",
+        "chidName",
+        "chidGubun",
+        "chidAddr"
+      ]
+    },
+    {
+      "dataset_id": "3045535",
+      "title": "전북특별자치도 전주시_병의원, 약국정보",
+      "operation": "병원.약국 정보 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "mediAddr": "",
+        "mediCdt": "",
+        "mediIsEmergency": "",
+        "mediIsHoliday": "",
+        "mediName": "",
+        "mediSid": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "mediAddr",
+        "mediSid",
+        "mediName",
+        "mediCdt",
+        "mediIsEmergency",
+        "mediIsHoliday"
+      ]
+    },
+    {
+      "dataset_id": "3045535",
+      "title": "전북특별자치도 전주시_병의원, 약국정보",
+      "operation": "병원.약국 현재위치 거리 정보",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "pageSize": "1",
+        "posx": "127.1480",
+        "posy": "35.8242",
+        "searchDts": "1000",
+        "startPage": "1"
+      }
+    },
+    {
+      "dataset_id": "3045544",
+      "title": "전북특별자치도 전주시_복지서비스",
+      "operation": "보건복지 서비스 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "dataValue": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "typeCode": "",
+        "typeCode2": ""
+      },
+      "missing_params": [
+        "dataValue",
+        "typeCode",
+        "typeCode2"
+      ]
+    },
+    {
+      "dataset_id": "3069041",
+      "title": "전북특별자치도 전주시_한옥숙박정보",
+      "operation": "한옥마을숙박정보 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "dataValue": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue"
+      ]
+    },
+    {
+      "dataset_id": "3069041",
+      "title": "전북특별자치도 전주시_한옥숙박정보",
+      "operation": "한옥마을숙박정보 상세보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3069041",
+      "title": "전북특별자치도 전주시_한옥숙박정보",
+      "operation": "한옥마을숙박정보 이미지보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3069053",
+      "title": "전북특별자치도 전주시_무형문화재",
+      "operation": "무형문화재 검색 서비스 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "dataValue": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue"
+      ]
+    },
+    {
+      "dataset_id": "3069053",
+      "title": "전북특별자치도 전주시_무형문화재",
+      "operation": "무형문화재 검색 서비스 상세보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3069053",
+      "title": "전북특별자치도 전주시_무형문화재",
+      "operation": "무형문화재 검색 서비스 이미지 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "15056876",
+      "title": "한국산업인력공단_과정평가형자격 정보 조회",
+      "operation": "과정평가형 종목 목록 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15056876",
+      "title": "한국산업인력공단_과정평가형자격 정보 조회",
+      "operation": "과정평가형 종목별 자격정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "jmCd": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15057196",
+      "title": "한국산업인력공단_일학습병행자격 종목별 NCS능력단위 정보",
+      "operation": "일학습병행자격 종목 목록 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15057196",
+      "title": "한국산업인력공단_일학습병행자격 종목별 NCS능력단위 정보",
+      "operation": "일학습병행자격 종목별 NCS능력단위 상세 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "jmCd": "",
+        "organStdVerCd": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "jmCd",
+        "organStdVerCd"
+      ]
+    },
+    {
+      "dataset_id": "15058885",
+      "title": "한국산업인력공단_과정평가형자격 종목별 NCS능력단위 정보",
+      "operation": "과정평가형 종목 목록 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15058885",
+      "title": "한국산업인력공단_과정평가형자격 종목별 NCS능력단위 정보",
+      "operation": "과정평가형 종목별 NCS능력단위 상세 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "jmCd": "",
+        "organStdVerCd": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "jmCd",
+        "organStdVerCd"
+      ]
+    },
+    {
+      "dataset_id": "15059383",
+      "title": "한국산업인력공단_일학습병행제 정보 조회",
+      "operation": "일학습병행제 외부평가 일정정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json",
+        "year": ""
+      },
+      "missing_params": [
+        "year"
+      ]
+    },
+    {
+      "dataset_id": "15059383",
+      "title": "한국산업인력공단_일학습병행제 정보 조회",
+      "operation": "일학습병행제 종목 목록 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15059383",
+      "title": "한국산업인력공단_일학습병행제 정보 조회",
+      "operation": "일학습병행제 종목별 상세 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "jmCd": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15063879",
+      "title": "한국산업인력공단_NCS 관련 정보 서비스",
+      "operation": "Ncs 관련 정보",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:11:31Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "3069055",
+      "title": "전북특별자치도 전주시_문화재 현황",
+      "operation": "지정문화재 검색 서비스 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "dataValue": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue"
+      ]
+    },
+    {
+      "dataset_id": "3069055",
+      "title": "전북특별자치도 전주시_문화재 현황",
+      "operation": "지정문화재 검색 서비스 상세보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3069055",
+      "title": "전북특별자치도 전주시_문화재 현황",
+      "operation": "지정문화재 검색 서비스 이미지 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3069061",
+      "title": "전북특별자치도 전주시_CCTV 설치현황",
+      "operation": "CCTV위치검색 서비스 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "dataValue": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue"
+      ]
+    },
+    {
+      "dataset_id": "3069073",
+      "title": "전북특별자치도 전주시_평생학습 교육강좌",
+      "operation": "평생학습 상세정보",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "clId": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "clId"
+      ]
+    },
+    {
+      "dataset_id": "3069073",
+      "title": "전북특별자치도 전주시_평생학습 교육강좌",
+      "operation": "평생학습 정보목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "pageSize": "1",
+        "searchConame": "",
+        "searchGubun": "",
+        "searchTeacher": "",
+        "searchTitle": "",
+        "searchaddr": "",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "searchGubun",
+        "searchTitle",
+        "searchaddr",
+        "searchTeacher",
+        "searchConame"
+      ]
+    },
+    {
+      "dataset_id": "3069084",
+      "title": "전북특별자치도 전주시_석면해체 일정",
+      "operation": "석면해체일정 서비스 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "asSid": "",
+        "endDay": "",
+        "keyword": "",
+        "pageSize": "1",
+        "startDay": "",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "asSid",
+        "keyword",
+        "startDay",
+        "endDay"
+      ]
+    },
+    {
+      "dataset_id": "3069087",
+      "title": "전북특별자치도 전주시_농기계수리업소",
+      "operation": "농기계 수리업소 정보 조회",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "address": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "suriName": ""
+      },
+      "missing_params": [
+        "address",
+        "suriName"
+      ]
+    },
+    {
+      "dataset_id": "3074284",
+      "title": "전북특별자치도 전주시_작은도서관",
+      "operation": "작은도서관명 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "dataSid": "",
+        "keyword": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataSid",
+        "keyword"
+      ]
+    },
+    {
+      "dataset_id": "3074287",
+      "title": "전북특별자치도 전주시_한옥마을 쇼핑센터",
+      "operation": "한옥마을쇼핑센터 검색 서비스 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "dataValue": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue"
+      ]
+    },
+    {
+      "dataset_id": "3074287",
+      "title": "전북특별자치도 전주시_한옥마을 쇼핑센터",
+      "operation": "한옥마을쇼핑센터 검색 서비스 상세보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3074287",
+      "title": "전북특별자치도 전주시_한옥마을 쇼핑센터",
+      "operation": "한옥마을쇼핑센터 검색 서비스 이미지 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3080519",
+      "title": "전북특별자치도 전주시_향토문화유산",
+      "operation": "향토문화유산 검색 서비스 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "dataValue": "",
+        "pageSize": "1",
+        "startPage": "1"
+      },
+      "missing_params": [
+        "dataValue"
+      ]
+    },
+    {
+      "dataset_id": "3080519",
+      "title": "전북특별자치도 전주시_향토문화유산",
+      "operation": "향토문화유산 검색 서비스 상세보기",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "3080519",
+      "title": "전북특별자치도 전주시_향토문화유산",
+      "operation": "향토문화유산 검색 서비스 이미지 목록",
+      "provider": "jeonju",
+      "endpoint_host": "openapi.jeonju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "jeonju_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "dataSid": ""
+      },
+      "missing_params": [
+        "dataSid"
+      ]
+    },
+    {
+      "dataset_id": "15063881",
+      "title": "한국산업인력공단_과정평가형일학습병행 과정 지정평가 관련 정보 조회 서비스",
+      "operation": "과정평가형일학습병행 과정 지정평가 관련 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15063884",
+      "title": "한국산업인력공단_과정평가형일학습병행 모니터링 일정 정보 서비스",
+      "operation": "과정평가형일학습병행 모니터링 일정 정보",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15063887",
+      "title": "한국산업인력공단_과정평가형일학습병행 설문 관련 정보 조회 서비스",
+      "operation": "과정평가형일학습병행 설문 관련 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15063889",
+      "title": "한국산업인력공단_과정평가형일학습병행 외부평가 채점결과 연계이력 서비스",
+      "operation": "과정평가형일학습병행 외부평가 채점결과 연계 이력",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15063891",
+      "title": "한국산업인력공단_과정평가형일학습병행  출제 관련 정보 서비스",
+      "operation": "과정평가형일학습병행 출제 관련 정보",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15063894",
+      "title": "한국산업인력공단_과정평가형일학습병행 홈페이지 관리 정보 서비스",
+      "operation": "과정평가형일학습병행 홈페이지 관리 정보",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15064547",
+      "title": "한국산업인력공단_국가자격 관심자격 정보",
+      "operation": "국가자격 관심자격 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064553",
+      "title": "한국산업인력공단_국가자격 시행제도 구분 정보",
+      "operation": "국가자격 시행제도 구분 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064554",
+      "title": "한국산업인력공단_국가자격 기능사보 전환 매핑 정보",
+      "operation": "국가자격 기능사보 전환 매핑 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064558",
+      "title": "한국산업인력공단_국가자격시험 채점 표준 편차 정보",
+      "operation": "국가자격시험 채점 표준 편차 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064564",
+      "title": "한국산업인력공단_자격정보 선택분야 정보",
+      "operation": "자격정보 선택분야 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064692",
+      "title": "한국산업인력공단_국가자격 확인서 정보",
+      "operation": "국가자격 확인서 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064703",
+      "title": "한국산업인력공단_법령 변천 이력 정보",
+      "operation": "법령 변천 이력 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064717",
+      "title": "한국산업인력공단_자격정보 교과과정 정보",
+      "operation": "자격정보 교과과정 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064759",
+      "title": "한국산업인력공단_자격정보 자격증 교부수수료 정보",
+      "operation": "자격정보 자격증 교부수수료 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064771",
+      "title": "한국산업인력공단_장애유형별 요청사항 정보",
+      "operation": "장애유형별 요청사항 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064833",
+      "title": "한국산업인력공단_지사 정보",
+      "operation": "지사정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064868",
+      "title": "한국산업인력공단_국가자격 계열 관련 정보",
+      "operation": "계열규칙",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064868",
+      "title": "한국산업인력공단_국가자격 계열 관련 정보",
+      "operation": "계열명 과목매핑",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064873",
+      "title": "한국산업인력공단_Q-net 컨텐츠 관련 정보",
+      "operation": "Q-Net 컨텐츠 관련 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15064898",
+      "title": "한국산업인력공단_기능경기 관련 정보",
+      "operation": "기능경기 관련 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15068022",
+      "title": "한국산업인력공단_국가자격 종목 관련 정보(결격사유, 유사종목) 조회",
+      "operation": "유사 종목그룹",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15068022",
+      "title": "한국산업인력공단_국가자격 종목 관련 정보(결격사유, 유사종목) 조회",
+      "operation": "종목 결격사유",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15068045",
+      "title": "한국산업인력공단_자격정보 인정 기관 정보",
+      "operation": "자격정보 인정 기관 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15068172",
+      "title": "한국산업인력공단_국가자격시험 시험장소 정보",
+      "operation": "국가자격시험 시험장소",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "brchCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "brchCd"
+      ]
+    },
+    {
+      "dataset_id": "15087069",
+      "title": "한국산업인력공단_변경법령 및 자격관련정보",
+      "operation": "변경 법령 및 자격 관련 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15087082",
+      "title": "한국산업인력공단_전문자격 면제과목 정보",
+      "operation": "전문자격 면제과목 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15088904",
+      "title": "한국산업인력공단_고객만족조사 관련 정보",
+      "operation": "고객만족조사 관련 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15088942",
+      "title": "한국산업인력공단_국가기술자격 발급관련 정보",
+      "operation": "국가기술자격 발급관련 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYYMM": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "baseYYMM"
+      ]
+    },
+    {
+      "dataset_id": "15088943",
+      "title": "한국산업인력공단_국가기술자격 상시시험 관련 정보",
+      "operation": "국가기술자격 상시시험 관련 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15088949",
+      "title": "한국산업인력공단_국가기술자격 시험장 정보",
+      "operation": "국가기술자격 시험장 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "brchCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "brchCd"
+      ]
+    },
+    {
+      "dataset_id": "15088950",
+      "title": "한국산업인력공단_국가기술자격 자격취소 관련 정보",
+      "operation": "국가기술자격 자격취소 관련 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15088954",
+      "title": "한국산업인력공단_국가자격시험 과제관련 정보",
+      "operation": "국가자격시험 과제관련 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15088955",
+      "title": "한국산업인력공단_자격시험중 분실물 정보",
+      "operation": "자격시험중 분실물 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "brchCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "brchCd"
+      ]
+    },
+    {
+      "dataset_id": "15088957",
+      "title": "한국산업인력공단_큐넷 단체회원 정보",
+      "operation": "큐넷 단체회원 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "brchCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "brchCd"
+      ]
+    },
+    {
+      "dataset_id": "15088972",
+      "title": "한국산업인력공단_타기관 교환자료 정보",
+      "operation": "타기관 교환자료 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15088979",
+      "title": "한국산업인력공단_과정평가형일학습병행 외부평가  관련 정보",
+      "operation": "과정평가형일학습병행 외부평가 관련 정보",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "implSeq": "",
+        "implYy": "",
+        "implsysCd": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "qualgbcd": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "implYy",
+        "implSeq",
+        "qualgbcd",
+        "implsysCd"
+      ]
+    },
+    {
+      "dataset_id": "15089015",
+      "title": "한국산업인력공단_HRDNET 연계 정보",
+      "operation": "HRDNET 연계 정보",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15089051",
+      "title": "한국산업인력공단_과정평가형일학습병행 외부평가 시험장 정보",
+      "operation": "과정평가형일학습병행 외부평가 시험장 정보",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "implSeq": "",
+        "implYy": "",
+        "implsysCd": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "qualgbCd": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "implYy",
+        "implSeq",
+        "qualgbCd",
+        "implsysCd"
+      ]
+    },
+    {
+      "dataset_id": "15089062",
+      "title": "한국산업인력공단_과정평가형일학습병행 원서접수 수수료 관련 정보",
+      "operation": "과정평가 일학습 병행 자격 외부시험 접수 접수 수수로 관련 자격구분코드, 종목정보 , 수수",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "qualgbCd": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "qualgbCd"
+      ]
+    },
+    {
+      "dataset_id": "15089330",
+      "title": "한국산업인력공단_등급별 원서접수 상위종목 현황",
+      "operation": "등급별 원서접수 상위 종목 현황",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "grdCd": ""
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15089332",
+      "title": "한국산업인력공단_연도별 회별 국가기술자격시험 원서 점수 분포 정보",
+      "operation": "연도별 회별 국가기술자격시험 원서 점수 분포 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15089356",
+      "title": "한국산업인력공단_등급별 자격취득 상위종목 현황",
+      "operation": "등급별 자격취득 상위종목 현황 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15089357",
+      "title": "한국산업인력공단_전공별 국가기술자격 취득현황",
+      "operation": "전공별 국가기술자격 취득현황 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15089380",
+      "title": "한국산업인력공단_연도별 회별 국가기술자격 합격률",
+      "operation": "연도별 회별 국가기술자격 합격률 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15089434",
+      "title": "한국산업인력공단_응시자격별 국가기술자격 원서접수 및 합격 현황",
+      "operation": "응시자격별 국가기술자격 원서접수 및 합격 현황 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15089768",
+      "title": "한국산업인력공단_지역 관련 코드 정보",
+      "operation": "지역 관련 코드정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z"
+    },
+    {
+      "dataset_id": "15108793",
+      "title": "한국산업인력공단_과정평가형일학습병행 HRDNET연계 편성기준 시설기준",
+      "operation": "과정평가형일학습병행 HRDNET 연계 편성기준 시설기준 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_separate_service_key_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15108794",
+      "title": "한국산업인력공단_과정평가형일학습병행 자격시험 연도별 응시자및합격자 수",
+      "operation": "과정펑가형. 일학습병행 자격시험 연도별 응시자 및 합격자 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "qualgbCd": "",
+        "typw": "",
+        "year": ""
+      },
+      "missing_params": [
+        "typw",
+        "qualgbCd",
+        "year"
+      ]
+    },
+    {
+      "dataset_id": "15108882",
+      "title": "한국산업인력공단_연도별 복수자격 취득현황 조회 서비스",
+      "operation": "연도별 복수자격 취득현황 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15109452",
+      "title": "한국산업인력공단_연도별 복수등급 자격 취득현황 조회 서비스",
+      "operation": "연도별 복수등급 자격 취득현황 조회 서비스",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15109466",
+      "title": "한국산업인력공단_거주지별 기술자격 시험 접수 현황정보 조회 서비스",
+      "operation": "거주지별 기술자격 시험 접수 현황정보 서비스",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15122453",
+      "title": "한국산업인력공단_국가자격 시험교시 과목 정보",
+      "operation": "시험교시 과목 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "jmCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15122463",
+      "title": "한국산업인력공단_국가자격 시험장별 시설목록 정보",
+      "operation": "시험장별 시설목록 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "jmCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15122470",
+      "title": "한국산업인력공단_등급별 종목시험 세부유형",
+      "operation": "등급별 종목시험 세부유형 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15122472",
+      "title": "한국산업인력공단_실기시험 지참물 정보",
+      "operation": "실기시험 지참물 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "implSeq": "",
+        "implYY": "",
+        "jmCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "implYY",
+        "implSeq",
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15134264",
+      "title": "한국산업인력공단_HRDNET연계_편성기준_능력단위그룹_능력단위",
+      "operation": "HRDNET연계_편성기준_능력단위그룹_능력단위",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15134269",
+      "title": "한국산업인력공단_등급별 취득소요기간현황",
+      "operation": "등급별 취득소요기간 현황",
+      "provider": "q-net",
+      "endpoint_host": "open.api.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "baseYY": "2023",
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15134271",
+      "title": "한국산업인력공단_시군구별 관할지사 정보",
+      "operation": "시군구별 관할지사 정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15134290",
+      "title": "한국산업인력공단_종목 변천이력 정보",
+      "operation": "종목변천이력정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "jmCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15134292",
+      "title": "한국산업인력공단_종목별 직무정보",
+      "operation": "종목별 직무정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15134293",
+      "title": "한국산업인력공단_종목시험 응시유형정보",
+      "operation": "종목시험 응시유형정보",
+      "provider": "q-net",
+      "endpoint_host": "openapi.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "qnet_missing_required_params",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "grdCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "grdCd"
+      ]
+    },
+    {
+      "dataset_id": "15150242",
+      "title": "한국산업인력공단_국가기술자격시험_HRDNET연계",
+      "operation": "HRDNET연계 현황",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json",
+        "year": ""
+      },
+      "missing_params": [
+        "year"
+      ]
+    },
+    {
+      "dataset_id": "15150267",
+      "title": "한국산업인력공단_국가기술자격시험_공통 NCS 정보",
+      "operation": "공통 NCS 정보 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15150277",
+      "title": "한국산업인력공단_국가기술자격시험_공통 모니터링",
+      "operation": "외부평가모니터링 현황",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json",
+        "year": ""
+      },
+      "missing_params": [
+        "year"
+      ]
+    },
+    {
+      "dataset_id": "15150358",
+      "title": "한국산업인력공단_국가기술자격시험_공통 시험기준",
+      "operation": "과정평가형 종목별 시험기준 조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15150358",
+      "title": "한국산업인력공단_국가기술자격시험_공통 시험기준",
+      "operation": "능력단위별 내부평가방법",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "jmCd": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15150358",
+      "title": "한국산업인력공단_국가기술자격시험_공통 시험기준",
+      "operation": "직업기초능력 정보조회",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "jmCd": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "jmCd"
+      ]
+    },
+    {
+      "dataset_id": "15150372",
+      "title": "한국산업인력공단_국가기술자격시험_과정관리 지정평가",
+      "operation": "종목별 합격기준 정보",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "apevalPlanSeq": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "apevalPlanSeq"
+      ]
+    },
+    {
+      "dataset_id": "15150372",
+      "title": "한국산업인력공단_국가기술자격시험_과정관리 지정평가",
+      "operation": "평가영역별 심사결과 통계",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "apevalPlanSeq": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "apevalPlanSeq"
+      ]
+    },
+    {
+      "dataset_id": "15150372",
+      "title": "한국산업인력공단_국가기술자격시험_과정관리 지정평가",
+      "operation": "훈련비미지원 과정신청 통계",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15150414",
+      "title": "한국산업인력공단_국가기술자격시험_과정관리 평가운영",
+      "operation": "외부평가모니터링 현황",
+      "provider": "q-net",
+      "endpoint_host": "c.q-net.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-06-29T14:19:37Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
       }
     }
   ]

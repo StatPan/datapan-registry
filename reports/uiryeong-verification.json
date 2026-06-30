@@ -1,8 +1,7 @@
 {
-  "generated_at": "2026-06-30T06:58:35Z",
+  "generated_at": "2026-06-29T13:48:38Z",
   "provider": "data.go.kr",
-  "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 40,
+  "limit": 46,
   "truncated": true,
   "filtered_count": 40,
   "summary": {
@@ -668,7 +667,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "uiryeong_missing_required_params",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "uiryeongfoodEntId": ""
       },
@@ -685,7 +684,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "uiryeong_missing_required_params",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "uiryeongfoodEntId": ""
       },
@@ -702,7 +701,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "numOfRows": "1",
         "pageNo": "1"
@@ -717,7 +716,7 @@
       "dependency_class": "external_endpoint",
       "status": "skipped",
       "reason": "missing_auth",
-      "verified_at": "2026-06-30T06:58:15Z",
+      "verified_at": "2026-06-29T13:47:43Z",
       "params": {
         "numOfRows": "1",
         "pageNo": "1"

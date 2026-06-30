@@ -23,11 +23,14 @@ re-importing the upstream data.go.kr catalog every time.
 - Missing external adapter hosts: `10`
 - Provider split readiness: `ready`
   (`26` adapters, `26` verification-capable, `21` call-capable)
-- Runtime verification evidence: `509` bounded checks merged into
-  `reports/latest-verification.json` (`22` verified, `87` failed, `400`
+- Runtime verification evidence: `626` bounded checks merged into
+  `reports/latest-verification.json` (`22` verified, `87` failed, `517`
   skipped)
-- Runtime evidence growth target: `4.2%` checked evidence against the `10%`
-  release target; `712` additional records are still required.
+- Runtime evidence growth target: `5.1%` checked evidence against the `10%`
+  release target; `595` additional records are still required.
+- Institution API overview: `411` organizations, `12060` APIs, and `12205`
+  operations in `reports/data-go-kr/institution-api-overview.json`; readable
+  tables live in `docs/data-go-kr-institution-api-overview.md`.
 - Missing external host probe: `28` unadapted external endpoint checks in
   `reports/unadapted-external-probe.json` (`14` HTTP 404, `7` timeout, `6`
   request/DNS errors, `1` HTTP 503)
@@ -76,6 +79,7 @@ The current snapshot was generated from `datapan-cli` and includes:
 - dependency inventory;
 - adapter target work queue;
 - route disposition evidence for missing external routes;
+- institution-level API and runtime-evidence overview;
 - provider backlog;
 - latest merged verification evidence;
 - latest verification summary;
@@ -157,6 +161,10 @@ reports/
   latest-verification-summary.json
   latest-release-verification.json
   latest-release-readiness.json
+  data-go-kr/
+    institution-api-overview.json
+docs/
+  data-go-kr-institution-api-overview.md
 provenance/
   data-go-kr.md
 manifest.json

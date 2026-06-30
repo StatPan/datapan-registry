@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-06-30T06:59:14Z",
+  "generated_at": "2026-06-29T14:21:07Z",
   "provider": "data.go.kr",
-  "registry": "./data/data-go-kr.registry.json",
+  "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
-  "verification": "./reports/latest-verification.json",
+  "verification": ".\\reports\\latest-verification.json",
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
     "operations": 12205,
-    "evidence_total": 509,
-    "uncovered_gateway_candidates": 11369,
-    "uncovered_adapter_candidates": 127,
+    "evidence_total": 626,
+    "uncovered_gateway_candidates": 11379,
+    "uncovered_adapter_candidates": 0,
     "missing_adapter_hosts": 10,
-    "planned_batches": 3,
-    "planned_operations": 30
+    "planned_batches": 1,
+    "planned_operations": 10
   },
   "batches": [
     {
@@ -22,28 +22,8 @@
       "candidates": 11419,
       "uncovered_candidates": 11369,
       "planned_operations": 10,
-      "command": "datapan catalog verify --registry ./data/data-go-kr.registry.json --kind data_go_kr_gateway --exclude-input ./reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gateway-next.json --json",
+      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --kind data_go_kr_gateway --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gateway-next.json --json",
       "output": ".datapan/verification/gateway-next.json"
-    },
-    {
-      "label": "jeonju",
-      "provider": "jeonju",
-      "kind": "external_endpoint",
-      "candidates": 80,
-      "uncovered_candidates": 35,
-      "planned_operations": 10,
-      "command": "datapan catalog verify --registry ./data/data-go-kr.registry.json --provider jeonju --kind external_endpoint --exclude-input ./reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jeonju-next.json --json",
-      "output": ".datapan/verification/jeonju-next.json"
-    },
-    {
-      "label": "q-net",
-      "provider": "q-net",
-      "kind": "external_endpoint",
-      "candidates": 147,
-      "uncovered_candidates": 92,
-      "planned_operations": 10,
-      "command": "datapan catalog verify --registry ./data/data-go-kr.registry.json --provider q-net --kind external_endpoint --exclude-input ./reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/q-net-next.json --json",
-      "output": ".datapan/verification/q-net-next.json"
     }
   ],
   "gaps": {
@@ -189,7 +169,7 @@
   "next": [
     {
       "label": "coverage",
-      "command": "datapan catalog coverage --registry ./data/data-go-kr.registry.json --verification ./reports/latest-verification.json --json"
+      "command": "datapan catalog coverage --registry .\\data\\data-go-kr.registry.json --verification .\\reports\\latest-verification.json --json"
     }
   ]
 }
