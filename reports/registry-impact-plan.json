@@ -10,40 +10,44 @@
   "previous_registry": "reports/*/registry-impact-plan.json",
   "current_registry": "reports/registry-impact-plan.json",
   "summary": {
-    "total": 3,
+    "total": 4,
     "by_category": [
       {
         "category": "added",
         "count": 3
+      },
+      {
+        "category": "release_schema_changed",
+        "count": 1
       }
     ],
     "by_target": [
       {
         "target": "datapan-cli",
-        "count": 2
+        "count": 3
       },
       {
         "target": "datapan-data",
-        "count": 3
+        "count": 4
       },
       {
         "target": "dataset-api",
-        "count": 3
+        "count": 4
       },
       {
         "target": "mcp",
-        "count": 3
+        "count": 4
       },
       {
         "target": "registry-release",
-        "count": 2
+        "count": 3
       },
       {
         "target": "sdk",
-        "count": 3
+        "count": 4
       }
     ],
-    "requires_manual_review": 0,
+    "requires_manual_review": 1,
     "requires_db_migration_review": 0,
     "requires_served_contract_regeneration": 0
   },
@@ -185,6 +189,57 @@
         }
       ],
       "notes": "Adapter work remains blocked unless route disposition produces adapter_candidate evidence."
+    },
+    {
+      "identity": {
+        "provider": "datapan-registry",
+        "source_id": "registry",
+        "endpoint_id": "registry:schema-release-surface"
+      },
+      "category": "release_schema_changed",
+      "severity": "medium",
+      "promoted_dataset": false,
+      "served_dataset": false,
+      "actions": [
+        {
+          "target": "datapan-cli",
+          "action": "investigate",
+          "automation": "manual_review",
+          "reason": "Release readiness reports schema_set_complete expected=20 and actual=28, so datapan-cli release draft schema knowledge must be reconciled with the registry release surface.",
+          "issue_hint": "Update datapan-cli datapanSchemaFiles/release draft schema generation for the 28 checked-in registry schemas."
+        },
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "automated",
+          "reason": "Registry release verification must continue checking all 28 schema artifacts and fail on schema index or manifest drift."
+        },
+        {
+          "target": "datapan-data",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "Schema release artifact coverage does not create or change a promoted data block."
+        },
+        {
+          "target": "dataset-api",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "Schema release artifact coverage does not change served dataset API contracts."
+        },
+        {
+          "target": "sdk",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "Schema release artifact coverage does not change SDK contracts."
+        },
+        {
+          "target": "mcp",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "Schema release artifact coverage does not change MCP tool contracts."
+        }
+      ],
+      "notes": "Registry-only release schema surface expansion from 20 to 28 schema artifacts."
     }
   ]
 }

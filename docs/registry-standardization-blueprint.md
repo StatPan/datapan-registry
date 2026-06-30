@@ -113,6 +113,12 @@ Current strengths:
   `schemas/*.schema.json` file is represented in `schemas/index.json` and
   `manifest.json`; Gira #77 raises release schema coverage from `20` to `28`
   artifacts while keeping readiness warnings at `0`.
+- `reports/registry-impact-plan.json` now carries a
+  `registry:schema-release-surface` impact entry, and
+  `scripts/validate-impact-plans.py` fails if release readiness reports schema
+  coverage beyond datapan-cli's known schema set without a downstream impact
+  action. Gira #79 tracks this as a datapan-cli manual investigation while
+  keeping Dataset API, SDK, MCP, and datapan-data actions at `no_action`.
 - `reports/coverage.json` reports high callable-operation coverage.
 - `reports/route-disposition.json` separates dead-route candidates from
   transient failures.
@@ -168,7 +174,8 @@ Current gaps:
   but the current datapan-cli release readiness gate still reports `expected=20`
   and `actual=28` for `schema_set_complete`, which means CLI-side schema
   generator knowledge must be updated before draft-local releases can be the
-  sole source of truth for these newer registry contracts.
+  sole source of truth for these newer registry contracts. Gira #79 makes that
+  mismatch an explicit impact-plan action instead of a remembered PR note.
 
 ## Gap Matrix
 
@@ -389,6 +396,11 @@ Use this order unless a production failure changes priority:
 23. Bind all checked-in registry schemas into release schema artifacts. Tracked
     by Gira #77; this raises schema artifact coverage from `20` to `28`, adds a
     CI drift check, and keeps runtime warning IDs unchanged.
+24. Add a registry schema release impact gate. Tracked by Gira #79; this
+    requires `reports/registry-impact-plan.json` to carry
+    `registry:schema-release-surface` whenever readiness reports
+    `schema_set_complete.actual > expected`, and preserves `no_action`
+    boundaries for Dataset API, SDK, MCP, and datapan-data.
 
 ## Measurement Rules
 
