@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-06-30T07:35:15Z",
+  "generated_at": "2026-06-30T07:41:16Z",
   "source": "./reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 676,
+    "total": 686,
     "verified": 22,
     "failed": 87,
-    "skipped": 567,
+    "skipped": 577,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 567,
+        "count": 577,
         "status": "skipped"
       },
       {
@@ -33,7 +33,7 @@
     "by_reason": [
       {
         "key": "missing_auth",
-        "count": 123,
+        "count": 129,
         "reason": "missing_auth"
       },
       {
@@ -48,7 +48,7 @@
       },
       {
         "key": "missing_required_params",
-        "count": 54,
+        "count": 58,
         "reason": "missing_required_params"
       },
       {
@@ -290,7 +290,7 @@
       },
       {
         "key": "data.go.kr",
-        "count": 90,
+        "count": 100,
         "provider": "data.go.kr"
       },
       {
@@ -427,7 +427,7 @@
       },
       {
         "key": "apis.data.go.kr",
-        "count": 90,
+        "count": 100,
         "host": "apis.data.go.kr"
       },
       {
@@ -584,7 +584,7 @@
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 90,
+        "count": 100,
         "kind": "data_go_kr_gateway"
       },
       {
