@@ -57,12 +57,12 @@
       "source_id": "ecos",
       "provider": "ECOS",
       "source_profile": "sources/ecos.json",
-      "last_reviewed_at": "2026-06-29",
+      "last_reviewed_at": "2026-06-30",
       "references": [
         {
           "kind": "homepage_url",
           "url": "https://ecos.bok.or.kr/api/",
-          "reviewed_at": "2026-06-29",
+          "reviewed_at": "2026-06-30",
           "check_mode": "manual_review",
           "drift_status": "baseline",
           "contract_impact": ["source_identity"]
@@ -70,7 +70,7 @@
         {
           "kind": "api_docs_url",
           "url": "https://ecos.bok.or.kr/api/#/",
-          "reviewed_at": "2026-06-29",
+          "reviewed_at": "2026-06-30",
           "check_mode": "manual_review",
           "drift_status": "baseline",
           "contract_impact": ["catalogue", "auth", "runtime"]
@@ -78,13 +78,13 @@
         {
           "kind": "key_request_url",
           "url": "https://ecos.bok.or.kr/api/#/AuthKeyApply",
-          "reviewed_at": "2026-06-29",
+          "reviewed_at": "2026-06-30",
           "check_mode": "manual_review",
           "drift_status": "baseline",
           "contract_impact": ["auth"]
         }
       ],
-      "notes": "Manual baseline only; ECOS runtime verification is a separate future task."
+      "notes": "Manual baseline only; ECOS error taxonomy was reviewed from official RESULT.CODE/RESULT.MESSAGE responses, and runtime verification is a separate future task."
     },
     {
       "source_id": "kosis",

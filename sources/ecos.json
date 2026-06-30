@@ -16,7 +16,7 @@
     "homepage_url": "https://ecos.bok.or.kr/api/",
     "api_docs_url": "https://ecos.bok.or.kr/api/#/",
     "key_request_url": "https://ecos.bok.or.kr/api/#/AuthKeyApply",
-    "last_reviewed_at": "2026-06-29"
+    "last_reviewed_at": "2026-06-30"
   },
   "catalogue": {
     "model": "statistics",
@@ -71,7 +71,30 @@
     "schema_policy": "documented"
   },
   "errors": {
-    "taxonomy_status": "unknown"
+    "taxonomy_status": "verified",
+    "status_code_fields": [
+      "RESULT.CODE"
+    ],
+    "message_fields": [
+      "RESULT.MESSAGE"
+    ],
+    "known_error_codes": [
+      {
+        "code": "INFO-100",
+        "message": "Invalid activation key.",
+        "classification": "credential"
+      },
+      {
+        "code": "ERROR-200",
+        "message": "Missing or invalid request type value.",
+        "classification": "bad_request"
+      },
+      {
+        "code": "ERROR-301",
+        "message": "Invalid query count value or invalid start/end count range.",
+        "classification": "bad_request"
+      }
+    ]
   },
   "runtime": {
     "verification_mode": "metadata_only",

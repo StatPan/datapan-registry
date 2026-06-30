@@ -99,9 +99,9 @@ Current strengths:
   and warning IDs instead of treating missing evidence as ready.
 - `reports/source-runtime-evidence-rollup.json` rolls those source runtime
   evidence plans into a release-wide inventory of `4` sources, `0` runtime
-  checks, `20` blocking blockers, and `14` warning instances after Seoul Open
-  Data error taxonomy verification in Gira #67 and KOSIS error taxonomy
-  verification in Gira #69.
+  checks, `20` blocking blockers, and `13` warning instances after Seoul Open
+  Data error taxonomy verification in Gira #67, KOSIS error taxonomy
+  verification in Gira #69, and ECOS error taxonomy verification in Gira #71.
 - `reports/coverage.json` reports high callable-operation coverage.
 - `reports/route-disposition.json` separates dead-route candidates from
   transient failures.
@@ -126,6 +126,8 @@ Current gaps:
   `source_runtime_error_taxonomy_pending` from `4` sources to `3`.
   Gira #69 verifies KOSIS official `err`/`errMsg` taxonomy and reduces
   `source_runtime_error_taxonomy_pending` from `3` sources to `2`.
+  Gira #71 verifies ECOS official `RESULT.CODE`/`RESULT.MESSAGE` taxonomy and
+  reduces `source_runtime_error_taxonomy_pending` from `2` sources to `1`.
 - Runtime evidence coverage is much lower than callable coverage. Gira #19,
   Gira #21, Gira #23, Gira #25, Gira #27, Gira #29, Gira #31, Gira #33, and
   Gira #35 raise data.go.kr runtime evidence from `256` to `626`. Gira #39,
@@ -345,6 +347,10 @@ Use this order unless a production failure changes priority:
     warning while leaving remaining non-data runtime evidence blockers explicit.
 19. Verify KOSIS error taxonomy from official `err`/`errMsg` references.
     Tracked by Gira #69; this reduces one more
+    `source_runtime_error_taxonomy_pending` warning while preserving runtime
+    evidence, adapter, and sample-parameter warnings.
+20. Verify ECOS error taxonomy from official `RESULT.CODE`/`RESULT.MESSAGE`
+    references. Tracked by Gira #71; this reduces one more
     `source_runtime_error_taxonomy_pending` warning while preserving runtime
     evidence, adapter, and sample-parameter warnings.
 
