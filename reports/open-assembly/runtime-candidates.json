@@ -1,0 +1,53 @@
+{
+  "schema_version": "datapan.source-runtime-candidates.v1",
+  "generated_at": "2026-06-30T09:16:13Z",
+  "provider": "open.assembly.go.kr",
+  "source_id": "open_assembly",
+  "source_profile": "sources/open_assembly.json",
+  "references": {
+    "official_reference_urls": [
+      "https://open.assembly.go.kr/portal/mainPage.do",
+      "https://open.assembly.go.kr/portal/openapi/main.do"
+    ],
+    "last_reviewed_at": "2026-06-30"
+  },
+  "summary": {
+    "candidates": 1,
+    "pinned_sample_count": 1,
+    "credential_required": true,
+    "evidence_total": 0
+  },
+  "candidates": [
+    {
+      "candidate_id": "open-assembly-opensrvapi-list",
+      "label": "Open Assembly API service catalogue list",
+      "operation_kind": "catalogue_list",
+      "method": "GET",
+      "endpoint_template": "https://open.assembly.go.kr/portal/openapi/OPENSRVAPI",
+      "format": "json",
+      "sample_parameters": {
+        "KEY": "${OPEN_ASSEMBLY_KEY}",
+        "Type": "json",
+        "pIndex": "1",
+        "pSize": "5"
+      },
+      "credential_policy": {
+        "required": true,
+        "key_names": [
+          "KEY"
+        ],
+        "injection_location": "query",
+        "placeholder": "${OPEN_ASSEMBLY_KEY}"
+      },
+      "expected_response": {
+        "envelope_path": "OPENSRVAPI.head.RESULT",
+        "items_path": "OPENSRVAPI.row",
+        "success_code": "INFO-000"
+      },
+      "evidence_status": "not_collected",
+      "promotion_status": "registry_only",
+      "reference_url": "https://open.assembly.go.kr/portal/openapi/main.do",
+      "notes": "Pinned from the official OPENSRVAPI catalogue endpoint; runtime execution remains separate from the already observed unauthenticated catalogue response."
+    }
+  ]
+}

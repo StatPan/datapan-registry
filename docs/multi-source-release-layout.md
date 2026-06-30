@@ -154,6 +154,7 @@ Recommended source-scoped reports:
 - `adapter-targets.json`
 - `route-disposition.json`
 - `verification-plan.json`
+- `runtime-candidates.json`
 - `runtime-evidence-plan.json`
 - `latest-verification.json`
 - `latest-verification-summary.json`

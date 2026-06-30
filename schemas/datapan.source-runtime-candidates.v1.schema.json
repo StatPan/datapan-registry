@@ -1,0 +1,212 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.source-runtime-candidates.v1.schema.json",
+  "title": "Datapan Source Runtime Candidates v1",
+  "description": "Pinned first-batch runtime candidates for a source before callable runtime evidence is collected.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "provider",
+    "source_id",
+    "source_profile",
+    "references",
+    "summary",
+    "candidates"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.source-runtime-candidates.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_id": {
+      "$ref": "#/$defs/source_id"
+    },
+    "source_profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "references": {
+      "$ref": "#/$defs/references"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/candidate"
+      }
+    }
+  },
+  "$defs": {
+    "source_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "references": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["official_reference_urls", "last_reviewed_at"],
+      "properties": {
+        "official_reference_urls": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "format": "uri"
+          },
+          "uniqueItems": true
+        },
+        "last_reviewed_at": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidates",
+        "pinned_sample_count",
+        "credential_required",
+        "evidence_total"
+      ],
+      "properties": {
+        "candidates": {
+          "$ref": "#/$defs/count"
+        },
+        "pinned_sample_count": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_required": {
+          "type": "boolean"
+        },
+        "evidence_total": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_id",
+        "label",
+        "operation_kind",
+        "method",
+        "endpoint_template",
+        "format",
+        "sample_parameters",
+        "credential_policy",
+        "evidence_status",
+        "promotion_status",
+        "reference_url"
+      ],
+      "properties": {
+        "candidate_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:[-_][a-z0-9]+)*$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "operation_kind": {
+          "enum": ["catalogue_list", "metadata_list", "data_query", "service_query"]
+        },
+        "method": {
+          "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"]
+        },
+        "endpoint_template": {
+          "type": "string",
+          "minLength": 1
+        },
+        "format": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sample_parameters": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "credential_policy": {
+          "$ref": "#/$defs/credential_policy"
+        },
+        "expected_response": {
+          "$ref": "#/$defs/expected_response"
+        },
+        "evidence_status": {
+          "const": "not_collected"
+        },
+        "promotion_status": {
+          "const": "registry_only"
+        },
+        "reference_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "credential_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "key_names", "injection_location", "placeholder"],
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "key_names": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "injection_location": {
+          "enum": ["query", "header", "path", "body", "none"]
+        },
+        "placeholder": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "expected_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "envelope_path": {
+          "type": "string"
+        },
+        "items_path": {
+          "type": "string"
+        },
+        "success_code": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

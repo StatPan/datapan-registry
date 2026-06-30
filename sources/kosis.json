@@ -94,7 +94,7 @@
     "timeout_seconds": 20,
     "retry_policy": "idempotent",
     "rate_limit_policy": "documented",
-    "sample_param_policy": "manual"
+    "sample_param_policy": "static"
   },
   "promotion": {
     "default_status": "registry_only",

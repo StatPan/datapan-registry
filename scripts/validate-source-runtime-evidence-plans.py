@@ -36,7 +36,11 @@ def source_dir(source_id: str) -> str:
     return source_id.replace("_", "-")
 
 
-def required_blockers(profile: dict[str, object], state: dict[str, object]) -> set[str]:
+def required_blockers(
+    profile: dict[str, object],
+    state: dict[str, object],
+    candidate_batch_materialized: bool,
+) -> set[str]:
     blockers: set[str] = set()
     runtime = as_dict(profile.get("runtime"), pathlib.Path("<source_profile>"))
     adapter = as_dict(profile.get("adapter"), pathlib.Path("<source_profile>"))
@@ -53,7 +57,7 @@ def required_blockers(profile: dict[str, object], state: dict[str, object]) -> s
         blockers.add("credential_required")
     if runtime.get("sample_param_policy") == "manual":
         blockers.add("sample_parameters_not_pinned")
-    if state.get("evidence_total") == 0:
+    if state.get("evidence_total") == 0 and not candidate_batch_materialized:
         blockers.add("runtime_catalog_not_materialized")
     if errors.get("taxonomy_status") != "verified":
         blockers.add("source_specific_error_taxonomy_pending")
@@ -70,6 +74,33 @@ def official_urls(profile: dict[str, object]) -> list[str]:
             if key.endswith("_url") and isinstance(value, str)
         }
     )
+
+
+def candidate_batch_materialized(
+    plan_path: pathlib.Path,
+    plan: dict[str, object],
+    profile: dict[str, object],
+) -> bool:
+    candidate_batch = plan.get("candidate_batch")
+    if not isinstance(candidate_batch, str) or not candidate_batch:
+        return False
+
+    batch_path = pathlib.Path(candidate_batch)
+    if not batch_path.exists():
+        raise ValueError(f"candidate_batch does not exist: {candidate_batch}")
+
+    batch = as_dict(load_json(batch_path), batch_path)
+    if batch.get("source_id") != profile.get("source_id"):
+        raise ValueError("candidate_batch source_id does not match source_profile")
+    if batch_path.parent != plan_path.parent:
+        raise ValueError("candidate_batch must be in the same source report directory as the runtime evidence plan")
+    if batch.get("provider") != profile.get("provider"):
+        raise ValueError("candidate_batch provider does not match source_profile")
+    if batch.get("source_profile") != str(plan.get("source_profile")):
+        raise ValueError("candidate_batch source_profile does not match runtime evidence plan")
+
+    summary = as_dict(batch.get("summary"), batch_path)
+    return int(summary.get("candidates", 0)) > 0 and int(summary.get("evidence_total", 0)) == 0
 
 
 def validate_consistency(plan_path: pathlib.Path, plan: dict[str, object]) -> None:
@@ -127,7 +158,8 @@ def validate_consistency(plan_path: pathlib.Path, plan: dict[str, object]) -> No
     duplicates = sorted(item for item, count in collections.Counter(blocker_ids).items() if count > 1)
     if duplicates:
         raise ValueError(f"duplicate blocker_id values: {', '.join(str(item) for item in duplicates)}")
-    missing_blockers = sorted(required_blockers(profile, state).difference(blocker_ids))
+    has_candidate_batch = candidate_batch_materialized(plan_path, plan, profile)
+    missing_blockers = sorted(required_blockers(profile, state, has_candidate_batch).difference(blocker_ids))
     if missing_blockers:
         raise ValueError(f"missing required blocker_id values: {', '.join(missing_blockers)}")
 

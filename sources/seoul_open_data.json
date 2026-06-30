@@ -24,7 +24,7 @@
   "catalogue": {
     "model": "portal",
     "list_endpoint": "https://data.seoul.go.kr/dataList/1/literacyView.do",
-    "detail_endpoint": "http://openapi.seoul.go.kr:8088/{key}/{format}/{service}/{start_index}/{end_index}",
+    "detail_endpoint": "http://openapi.seoul.go.kr:8088/{KEY}/{format}/{service}/{start_index}/{end_index}",
     "search_endpoint": "https://data.seoul.go.kr/dataList/OA-",
     "notice_endpoint": "https://data.seoul.go.kr/together/notice/boardList.do",
     "update_cadence": "source-dependent",
@@ -105,7 +105,7 @@
     "timeout_seconds": 20,
     "retry_policy": "idempotent",
     "rate_limit_policy": "documented",
-    "sample_param_policy": "manual"
+    "sample_param_policy": "static"
   },
   "promotion": {
     "default_status": "registry_only",
