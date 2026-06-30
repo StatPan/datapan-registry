@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-06-30T07:16:33Z",
+  "generated_at": "2026-06-30T07:22:42Z",
   "source": "./reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 656,
+    "total": 666,
     "verified": 22,
     "failed": 87,
-    "skipped": 547,
+    "skipped": 557,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 547,
+        "count": 557,
         "status": "skipped"
       },
       {
@@ -33,12 +33,12 @@
     "by_reason": [
       {
         "key": "missing_auth",
-        "count": 120,
+        "count": 122,
         "reason": "missing_auth"
       },
       {
         "key": "approval_required",
-        "count": 76,
+        "count": 82,
         "reason": "approval_required"
       },
       {
@@ -48,7 +48,7 @@
       },
       {
         "key": "missing_required_params",
-        "count": 47,
+        "count": 49,
         "reason": "missing_required_params"
       },
       {
@@ -289,14 +289,14 @@
         "provider": "q-net"
       },
       {
+        "key": "data.go.kr",
+        "count": 80,
+        "provider": "data.go.kr"
+      },
+      {
         "key": "jeonju",
         "count": 80,
         "provider": "jeonju"
-      },
-      {
-        "key": "data.go.kr",
-        "count": 70,
-        "provider": "data.go.kr"
       },
       {
         "key": "ekape",
@@ -426,14 +426,14 @@
         "host": "openapi.q-net.or.kr"
       },
       {
+        "key": "apis.data.go.kr",
+        "count": 80,
+        "host": "apis.data.go.kr"
+      },
+      {
         "key": "openapi.jeonju.go.kr",
         "count": 80,
         "host": "openapi.jeonju.go.kr"
-      },
-      {
-        "key": "apis.data.go.kr",
-        "count": 70,
-        "host": "apis.data.go.kr"
       },
       {
         "key": "data.ekape.or.kr",
@@ -584,7 +584,7 @@
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 70,
+        "count": 80,
         "kind": "data_go_kr_gateway"
       },
       {
