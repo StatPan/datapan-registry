@@ -54,12 +54,15 @@ def count_summary(entries: object, key: str) -> dict[str, int]:
 
 
 def validate_consistency(path: pathlib.Path, plan: dict[str, object]) -> None:
+    scope = plan.get("scope", "source")
     provider = plan.get("provider")
     source_id = plan.get("source_id")
     summary = as_dict(plan.get("summary"), path)
     changes = plan.get("changes")
     if not isinstance(changes, list):
         raise ValueError("changes must be an array")
+    if scope not in {"source", "release"}:
+        raise ValueError("scope must be source or release")
 
     category_counts: collections.Counter[str] = collections.Counter()
     target_counts: collections.Counter[str] = collections.Counter()
@@ -71,9 +74,9 @@ def validate_consistency(path: pathlib.Path, plan: dict[str, object]) -> None:
         if not isinstance(raw_change, dict):
             raise ValueError(f"changes[{index}] must be an object")
         identity = as_dict(raw_change.get("identity"), path)
-        if identity.get("provider") != provider:
+        if scope == "source" and identity.get("provider") != provider:
             raise ValueError(f"changes[{index}].identity.provider does not match plan provider")
-        if identity.get("source_id") != source_id:
+        if scope == "source" and identity.get("source_id") != source_id:
             raise ValueError(f"changes[{index}].identity.source_id does not match plan source_id")
 
         category = raw_change.get("category")

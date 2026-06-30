@@ -27,6 +27,10 @@
       "type": "string",
       "minLength": 1
     },
+    "scope": {
+      "enum": ["source", "release"],
+      "description": "source plans enforce one provider/source identity; release rollups may contain changes from multiple source plans."
+    },
     "provider": {
       "type": "string",
       "minLength": 1
