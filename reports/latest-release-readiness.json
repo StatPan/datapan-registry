@@ -2,7 +2,7 @@
   "manifest": "manifest.json",
   "root": ".",
   "schema_version": "datapan.release-readiness.v1",
-  "generated_at": "2026-06-30T07:55:12Z",
+  "generated_at": "2026-06-30T08:00:17Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "ready": true,
@@ -243,7 +243,7 @@
       "artifact_kind": "runtime_evidence_growth",
       "artifact_path": "reports/data-go-kr/runtime-evidence-growth.json",
       "expected": 1221,
-      "actual": 706
+      "actual": 756
     }
   ]
 }

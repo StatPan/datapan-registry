@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-30T07:54:47Z",
+  "generated_at": "2026-06-30T07:59:51Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 843,
+  "limit": 893,
   "truncated": true,
-  "filtered_count": 706,
+  "filtered_count": 756,
   "summary": {
-    "total": 706,
+    "total": 756,
     "verified": 22,
     "failed": 87,
-    "skipped": 597,
+    "skipped": 647,
     "unknown": 0
   },
   "results": [
@@ -13906,6 +13906,990 @@
         "xPos",
         "yPos",
         "radius"
+      ]
+    },
+    {
+      "dataset_id": "15001699",
+      "title": "건강보험심사평가원_의료기관별상세정보서비스",
+      "operation": "간호등급정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "_type": "json",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "ykiho": ""
+      },
+      "missing_params": [
+        "ykiho"
+      ]
+    },
+    {
+      "dataset_id": "15001699",
+      "title": "건강보험심사평가원_의료기관별상세정보서비스",
+      "operation": "교통정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "_type": "json",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "ykiho": ""
+      },
+      "missing_params": [
+        "ykiho"
+      ]
+    },
+    {
+      "dataset_id": "15001699",
+      "title": "건강보험심사평가원_의료기관별상세정보서비스",
+      "operation": "기타인력수",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "ykiho": ""
+      },
+      "missing_params": [
+        "ykiho"
+      ]
+    },
+    {
+      "dataset_id": "15001699",
+      "title": "건강보험심사평가원_의료기관별상세정보서비스",
+      "operation": "세부정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "_type": "json",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "ykiho": ""
+      },
+      "missing_params": [
+        "ykiho"
+      ]
+    },
+    {
+      "dataset_id": "15001699",
+      "title": "건강보험심사평가원_의료기관별상세정보서비스",
+      "operation": "시설정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "_type": "json",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "ykiho": ""
+      },
+      "missing_params": [
+        "ykiho"
+      ]
+    },
+    {
+      "dataset_id": "15001699",
+      "title": "건강보험심사평가원_의료기관별상세정보서비스",
+      "operation": "식대가산정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "_type": "json",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "ykiho": ""
+      },
+      "missing_params": [
+        "ykiho"
+      ]
+    },
+    {
+      "dataset_id": "15001699",
+      "title": "건강보험심사평가원_의료기관별상세정보서비스",
+      "operation": "의료장비정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "_type": "json",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "ykiho": ""
+      },
+      "missing_params": [
+        "ykiho"
+      ]
+    },
+    {
+      "dataset_id": "15001699",
+      "title": "건강보험심사평가원_의료기관별상세정보서비스",
+      "operation": "전문과목별 전문의 수",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "_type": "json",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "ykiho": ""
+      },
+      "missing_params": [
+        "ykiho"
+      ]
+    },
+    {
+      "dataset_id": "15001699",
+      "title": "건강보험심사평가원_의료기관별상세정보서비스",
+      "operation": "전문병원지정분야",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "_type": "json",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "ykiho": ""
+      },
+      "missing_params": [
+        "ykiho"
+      ]
+    },
+    {
+      "dataset_id": "15001699",
+      "title": "건강보험심사평가원_의료기관별상세정보서비스",
+      "operation": "진료과목정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "_type": "json",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "ykiho": ""
+      },
+      "missing_params": [
+        "ykiho"
+      ]
+    },
+    {
+      "dataset_id": "15001699",
+      "title": "건강보험심사평가원_의료기관별상세정보서비스",
+      "operation": "특수진료정보(진료가능분야조회)",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "_type": "json",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "ykiho": ""
+      },
+      "missing_params": [
+        "ykiho"
+      ]
+    },
+    {
+      "dataset_id": "15001700",
+      "title": "건강보험심사평가원_비급여진료비정보조회서비스",
+      "operation": "비급여진료비용종별정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15001700",
+      "title": "건강보험심사평가원_비급여진료비정보조회서비스",
+      "operation": "비급여진료비용지역별정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15001806",
+      "title": "산업통상부_무역정보서비스안내",
+      "operation": "거래물품 정보 안내",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "prtnum": ""
+      },
+      "missing_params": [
+        "prtnum"
+      ]
+    },
+    {
+      "dataset_id": "15001806",
+      "title": "산업통상부_무역정보서비스안내",
+      "operation": "기업 정보 안내",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "orgNm": "",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "orgNm"
+      ]
+    },
+    {
+      "dataset_id": "15001806",
+      "title": "산업통상부_무역정보서비스안내",
+      "operation": "지역별 수출입 정보 안내",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "endYearMonth": "",
+        "numOfRows": "1",
+        "orgCd": "",
+        "pageNo": "1",
+        "stYearMonth": ""
+      },
+      "missing_params": [
+        "stYearMonth",
+        "endYearMonth",
+        "orgCd"
+      ]
+    },
+    {
+      "dataset_id": "15001808",
+      "title": "산업통상부_거래업체정보서비스",
+      "operation": "거래 빈도 현황 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "splyPrtnum": ""
+      },
+      "missing_params": [
+        "splyPrtnum"
+      ]
+    },
+    {
+      "dataset_id": "15001808",
+      "title": "산업통상부_거래업체정보서비스",
+      "operation": "거래 현황 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "hscdSix": ""
+      },
+      "missing_params": [
+        "hscdSix"
+      ]
+    },
+    {
+      "dataset_id": "15001808",
+      "title": "산업통상부_거래업체정보서비스",
+      "operation": "거래업체 품목 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "splyPrtnum": ""
+      },
+      "missing_params": [
+        "splyPrtnum"
+      ]
+    },
+    {
+      "dataset_id": "15001808",
+      "title": "산업통상부_거래업체정보서비스",
+      "operation": "년도별 거래업체 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "splyPrtnum": ""
+      },
+      "missing_params": [
+        "splyPrtnum"
+      ]
+    },
+    {
+      "dataset_id": "15001808",
+      "title": "산업통상부_거래업체정보서비스",
+      "operation": "년도별 규모 현황 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "endYearMonth": "",
+        "krwAmt": "",
+        "stYearMonth": ""
+      },
+      "missing_params": [
+        "stYearMonth",
+        "endYearMonth",
+        "krwAmt"
+      ]
+    },
+    {
+      "dataset_id": "15001808",
+      "title": "산업통상부_거래업체정보서비스",
+      "operation": "지역 현황 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "splyPrtnum": ""
+      },
+      "missing_params": [
+        "splyPrtnum"
+      ]
+    },
+    {
+      "dataset_id": "15001808",
+      "title": "산업통상부_거래업체정보서비스",
+      "operation": "지역간 거래 현황 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "Year": "",
+        "splOrgNm": ""
+      },
+      "missing_params": [
+        "splOrgNm",
+        "Year"
+      ]
+    },
+    {
+      "dataset_id": "15001809",
+      "title": "산업통상부_거래물품정보서비스",
+      "operation": "HS 및 규격별 거래물품 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "hscdSix": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "hscdSix"
+      ]
+    },
+    {
+      "dataset_id": "15001809",
+      "title": "산업통상부_거래물품정보서비스",
+      "operation": "거래물품 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "endYearMonth": "",
+        "hscdSix": "",
+        "stYearMonth": ""
+      },
+      "missing_params": [
+        "stYearMonth",
+        "endYearMonth",
+        "hscdSix"
+      ]
+    },
+    {
+      "dataset_id": "15001809",
+      "title": "산업통상부_거래물품정보서비스",
+      "operation": "거래물품자료 지역별 점유율 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "hscdSix": "",
+        "krwAmt": "",
+        "splyorgcd": ""
+      },
+      "missing_params": [
+        "splyorgcd",
+        "hscdSix",
+        "krwAmt"
+      ]
+    },
+    {
+      "dataset_id": "15001809",
+      "title": "산업통상부_거래물품정보서비스",
+      "operation": "구매확인서 HS 및 규격별 평균단가 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "hscdSix": ""
+      },
+      "missing_params": [
+        "hscdSix"
+      ]
+    },
+    {
+      "dataset_id": "15001809",
+      "title": "산업통상부_거래물품정보서비스",
+      "operation": "구매확인서 거래물품 수량 및 구매일 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "endYearMonth": "",
+        "hscdSix": "",
+        "stYearMonth": ""
+      },
+      "missing_params": [
+        "stYearMonth",
+        "endYearMonth",
+        "hscdSix"
+      ]
+    },
+    {
+      "dataset_id": "15001810",
+      "title": "산업통상부_수출예정정보서비스",
+      "operation": "구매확인서발급 근거서류 통계",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "endYearMonth": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "stYearMonth": ""
+      },
+      "missing_params": [
+        "stYearMonth",
+        "endYearMonth"
+      ]
+    },
+    {
+      "dataset_id": "15001810",
+      "title": "산업통상부_수출예정정보서비스",
+      "operation": "구매확인서발급 수출 HS 정보 통계",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "endYearMonth": "",
+        "hscdSix": "",
+        "stYearMonth": ""
+      },
+      "missing_params": [
+        "hscdSix",
+        "stYearMonth",
+        "endYearMonth"
+      ]
+    },
+    {
+      "dataset_id": "15001810",
+      "title": "산업통상부_수출예정정보서비스",
+      "operation": "구매확인서발급 수출 예정 통계",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "endYearMonth": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "splOrgCd": "",
+        "stYearMonth": ""
+      },
+      "missing_params": [
+        "splOrgCd",
+        "stYearMonth",
+        "endYearMonth"
+      ]
+    },
+    {
+      "dataset_id": "15001810",
+      "title": "산업통상부_수출예정정보서비스",
+      "operation": "구매확인서발급 지역별 수출 품목 정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "endYearMonth": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "splOrgCd": "",
+        "stYearMonth": ""
+      },
+      "missing_params": [
+        "splOrgCd",
+        "stYearMonth",
+        "endYearMonth"
+      ]
+    },
+    {
+      "dataset_id": "15001810",
+      "title": "산업통상부_수출예정정보서비스",
+      "operation": "내국신용장계설 근거서류 통계",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "endYearMonth": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "stYearMonth": ""
+      },
+      "missing_params": [
+        "stYearMonth",
+        "endYearMonth"
+      ]
+    },
+    {
+      "dataset_id": "15001811",
+      "title": "산업통상부_내국거래 실적정보서비스",
+      "operation": "구매확인서 월간 지역별 품목통계",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "yearMonth": ""
+      },
+      "missing_params": [
+        "yearMonth"
+      ]
+    },
+    {
+      "dataset_id": "15001811",
+      "title": "산업통상부_내국거래 실적정보서비스",
+      "operation": "구매확인서 지역별 발급 통계",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "endYearMonth": "",
+        "numOfRows": "1",
+        "orgCd": "",
+        "pageNo": "1",
+        "stYearMonth": ""
+      },
+      "missing_params": [
+        "orgCd",
+        "stYearMonth",
+        "endYearMonth"
+      ]
+    },
+    {
+      "dataset_id": "15001811",
+      "title": "산업통상부_내국거래 실적정보서비스",
+      "operation": "구매확인서 품목별 통계",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "endYearMonth": "",
+        "hscd": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "stYearMonth": ""
+      },
+      "missing_params": [
+        "hscd",
+        "stYearMonth",
+        "endYearMonth"
+      ]
+    },
+    {
+      "dataset_id": "15001811",
+      "title": "산업통상부_내국거래 실적정보서비스",
+      "operation": "내국신용장 개설 품목별 통계",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "endYearMonth": "",
+        "hscd": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "stYearMonth": ""
+      },
+      "missing_params": [
+        "hscd",
+        "stYearMonth",
+        "endYearMonth"
+      ]
+    },
+    {
+      "dataset_id": "15001811",
+      "title": "산업통상부_내국거래 실적정보서비스",
+      "operation": "내국신용장 월간 지역별 품목통계",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "yearMonth": ""
+      },
+      "missing_params": [
+        "yearMonth"
+      ]
+    },
+    {
+      "dataset_id": "15001811",
+      "title": "산업통상부_내국거래 실적정보서비스",
+      "operation": "내국신용장 지역별 개설 통계",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "endYearMonth": "",
+        "numOfRows": "1",
+        "orgCd": "",
+        "pageNo": "1",
+        "stYearMonth": ""
+      },
+      "missing_params": [
+        "orgCd",
+        "stYearMonth",
+        "endYearMonth"
+      ]
+    },
+    {
+      "dataset_id": "15001838",
+      "title": "한국사회보장정보원_후원관리정보서비스 현황",
+      "operation": "시설 후원사용내역 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "endYearMonth": "",
+        "fcltCd": "",
+        "gubn": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "stYearMonth": ""
+      },
+      "missing_params": [
+        "gubn",
+        "fcltCd",
+        "stYearMonth",
+        "endYearMonth"
+      ]
+    },
+    {
+      "dataset_id": "15001838",
+      "title": "한국사회보장정보원_후원관리정보서비스 현황",
+      "operation": "시설 후원수입내역 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "endYearMonth": "",
+        "fcltCd": "",
+        "gubun": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "stYearMonth": ""
+      },
+      "missing_params": [
+        "gubun",
+        "fcltCd",
+        "stYearMonth",
+        "endYearMonth"
+      ]
+    },
+    {
+      "dataset_id": "15001838",
+      "title": "한국사회보장정보원_후원관리정보서비스 현황",
+      "operation": "시설별 후원정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "fcltCd": "",
+        "fcltKindCd": "",
+        "fcltKindNm": "",
+        "fcltNm": "",
+        "jrsdSggCd": "",
+        "jrsdSggNm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "fcltNm",
+        "fcltCd",
+        "fcltKindNm",
+        "fcltKindCd",
+        "jrsdSggNm",
+        "jrsdSggCd"
+      ]
+    },
+    {
+      "dataset_id": "15001839",
+      "title": "한국사회보장정보원_자원정보서비스 현황",
+      "operation": "민간 자원별 제공서비스 정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15001839",
+      "title": "한국사회보장정보원_자원정보서비스 현황",
+      "operation": "민간자원 정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15001848",
+      "title": "한국사회보장정보원_사회복지시설정보서비스 현황",
+      "operation": "시설 목록정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "fcltBldgMngtNo": "",
+        "fcltCd": "",
+        "fcltKindCd": "",
+        "fcltKindNm": "",
+        "fcltNm": "",
+        "jrsdSggCd": "",
+        "jrsdSggNm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "fcltNm",
+        "fcltCd",
+        "fcltKindNm",
+        "fcltKindCd",
+        "jrsdSggNm",
+        "jrsdSggCd",
+        "fcltBldgMngtNo"
+      ]
+    },
+    {
+      "dataset_id": "15001848",
+      "title": "한국사회보장정보원_사회복지시설정보서비스 현황",
+      "operation": "시설별 구인정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "fcltCd": "",
+        "fcltNm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "fcltNm",
+        "fcltCd"
+      ]
+    },
+    {
+      "dataset_id": "15001848",
+      "title": "한국사회보장정보원_사회복지시설정보서비스 현황",
+      "operation": "시설별 기본정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "fcltBldgMngtNo": "",
+        "fcltCd": "",
+        "fcltKindCd": "",
+        "fcltNm": "",
+        "jrsdSggCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "fcltNm",
+        "fcltCd",
+        "fcltKindCd",
+        "jrsdSggCd",
+        "fcltBldgMngtNo"
+      ]
+    },
+    {
+      "dataset_id": "15001848",
+      "title": "한국사회보장정보원_사회복지시설정보서비스 현황",
+      "operation": "시설별 행사정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "fcltCd": "",
+        "fcltKindCd": "",
+        "fcltKindaNm": "",
+        "fcltNm": "",
+        "jrsdSggCd": "",
+        "jrsdSggNm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "fcltNm",
+        "fcltCd",
+        "fcltKindaNm",
+        "fcltKindCd",
+        "jrsdSggNm",
+        "jrsdSggCd"
+      ]
+    },
+    {
+      "dataset_id": "15001848",
+      "title": "한국사회보장정보원_사회복지시설정보서비스 현황",
+      "operation": "시설종류코드 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "fcltKindCd": "",
+        "fcltKindNm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "fcltKindCd",
+        "fcltKindNm"
+      ]
+    },
+    {
+      "dataset_id": "15001848",
+      "title": "한국사회보장정보원_사회복지시설정보서비스 현황",
+      "operation": "시설통신요금관련(정보통신협회전용)",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "fcltBiz": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "fcltBiz"
       ]
     }
   ]
