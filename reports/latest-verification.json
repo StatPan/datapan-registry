@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-30T07:16:33Z",
+  "generated_at": "2026-06-30T07:22:42Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 793,
+  "limit": 803,
   "truncated": true,
-  "filtered_count": 656,
+  "filtered_count": 666,
   "summary": {
-    "total": 656,
+    "total": 666,
     "verified": 22,
     "failed": 87,
-    "skipped": 547,
+    "skipped": 557,
     "unknown": 0
   },
   "results": [
@@ -12969,6 +12969,170 @@
         "sgId",
         "sdName",
         "wiwName"
+      ]
+    },
+    {
+      "dataset_id": "15000863",
+      "title": "대전광역시 문화관광(모범음식점)",
+      "operation": "문화시설 식당 상세 정보를 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15000864",
+      "title": "중앙선거관리위원회_당선인 정보",
+      "operation": "당선인",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sdName": "",
+        "sgId": "",
+        "sgTypecode": "",
+        "sggName": ""
+      },
+      "missing_params": [
+        "sgId",
+        "sgTypecode",
+        "sdName",
+        "sggName"
+      ]
+    },
+    {
+      "dataset_id": "15000867",
+      "title": "대전광역시 문화관광(쇼핑)",
+      "operation": "문화시설 쇼핑 상세 정보를 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15000870",
+      "title": "대전광역시 당직의료기관",
+      "operation": "당직의료기관 목록조회(JSON)",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "searchKeyword": ""
+      },
+      "missing_params": [
+        "searchKeyword"
+      ]
+    },
+    {
+      "dataset_id": "15000870",
+      "title": "대전광역시 당직의료기관",
+      "operation": "당직의료기관 목록조회(XML)",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required"
+    },
+    {
+      "dataset_id": "15000870",
+      "title": "대전광역시 당직의료기관",
+      "operation": "당직의료기관 상세조회(JSON)",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "hospitalSeq": ""
+      },
+      "missing_params": [
+        "hospitalSeq"
+      ]
+    },
+    {
+      "dataset_id": "15000870",
+      "title": "대전광역시 당직의료기관",
+      "operation": "당직의료기관 상세조회(XML)",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "hospitalSeq": ""
+      },
+      "missing_params": [
+        "hospitalSeq"
+      ]
+    },
+    {
+      "dataset_id": "15000881",
+      "title": "대전광역시 문화관광(관광지)",
+      "operation": "문화시설 여행지 상세 정보를 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15000897",
+      "title": "중앙선거관리위원회_코드 정보",
+      "operation": "구시군코드",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sdName": "",
+        "sgId": ""
+      },
+      "missing_params": [
+        "sgId",
+        "sdName"
+      ]
+    },
+    {
+      "dataset_id": "15000897",
+      "title": "중앙선거관리위원회_코드 정보",
+      "operation": "선거구코드",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sgId": "",
+        "sgTypecode": ""
+      },
+      "missing_params": [
+        "sgId",
+        "sgTypecode"
       ]
     }
   ]
