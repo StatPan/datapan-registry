@@ -1,6 +1,6 @@
 # Datapan Registry Release
 
-- generated_at: `2026-06-30T07:22:51Z`
+- generated_at: `2026-06-30T07:35:27Z`
 - provider: `data.go.kr`
 - datapan_version: `0.1.0-dev`
 - source_registry: `data/data-go-kr.registry.json`
@@ -27,9 +27,9 @@
 - coverage: `12063` callable operations (`98.8%`), external adapter coverage `95.4%`, verification evidence coverage `5.5%`, evidence-adjusted adapter candidates `0`
 - coverage_artifact: `reports/coverage.json`
 - coverage_goals: callable `99%`, external adapters `98%`, verification evidence `10%`, call-capable adapters `25`, missing-adapter operations `<=10`
-- verification_plan: `1` batches, `10` planned operations, `11339` gateway gaps, `0` adapter gaps
+- verification_plan: `1` batches, `10` planned operations, `11329` gateway gaps, `0` adapter gaps
 - verification_plan_artifact: `reports/verification-plan.json`
-- runtime_evidence_growth: `5.5%` coverage, target `10.0%`, remaining `555`, status `below_target`
+- runtime_evidence_growth: `5.5%` coverage, target `10.0%`, remaining `545`, status `below_target`
 - runtime_evidence_growth_artifact: `reports/data-go-kr/runtime-evidence-growth.json`
 - runtime_evidence_warning: `warning` `runtime_evidence_below_target`
 
@@ -43,14 +43,14 @@ Top adapter targets:
 
 ## Verification Evidence
 
-- verification: `666` total, `22` verified, `87` failed, `557` skipped, `0` unknown
+- verification: `676` total, `22` verified, `87` failed, `567` skipped, `0` unknown
 - verification_artifact: `reports/latest-verification.json`
 - verification_summary_artifact: `reports/latest-verification-summary.json`
 
 Provider evidence:
 
 - `q-net`: `147`
-- `data.go.kr`: `80`
+- `data.go.kr`: `90`
 - `jeonju`: `80`
 - `ekape`: `49`
 - `geoje`: `41`

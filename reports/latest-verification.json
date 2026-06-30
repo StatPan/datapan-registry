@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-30T07:22:42Z",
+  "generated_at": "2026-06-30T07:35:15Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 803,
+  "limit": 813,
   "truncated": true,
-  "filtered_count": 666,
+  "filtered_count": 676,
   "summary": {
-    "total": 666,
+    "total": 676,
     "verified": 22,
     "failed": 87,
-    "skipped": 557,
+    "skipped": 567,
     "unknown": 0
   },
   "results": [
@@ -13133,6 +13133,220 @@
       "missing_params": [
         "sgId",
         "sgTypecode"
+      ]
+    },
+    {
+      "dataset_id": "15000897",
+      "title": "중앙선거관리위원회_코드 정보",
+      "operation": "선거코드",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "15000897",
+      "title": "중앙선거관리위원회_코드 정보",
+      "operation": "정당코드",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sgId": ""
+      },
+      "missing_params": [
+        "sgId"
+      ]
+    },
+    {
+      "dataset_id": "15000897",
+      "title": "중앙선거관리위원회_코드 정보",
+      "operation": "직업코드",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sgId": ""
+      },
+      "missing_params": [
+        "sgId"
+      ]
+    },
+    {
+      "dataset_id": "15000897",
+      "title": "중앙선거관리위원회_코드 정보",
+      "operation": "학력코드",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sgId": ""
+      },
+      "missing_params": [
+        "sgId"
+      ]
+    },
+    {
+      "dataset_id": "15000900",
+      "title": "중앙선거관리위원회_투·개표 정보",
+      "operation": "개표 결과",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sdName": "",
+        "sgId": "",
+        "sgTypecode": "",
+        "wiwName": ""
+      },
+      "missing_params": [
+        "sgId",
+        "sgTypecode",
+        "sdName",
+        "wiwName"
+      ]
+    },
+    {
+      "dataset_id": "15000900",
+      "title": "중앙선거관리위원회_투·개표 정보",
+      "operation": "투표 결과",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sdName": "",
+        "sgId": "",
+        "sgTypecode": "",
+        "wiwName": ""
+      },
+      "missing_params": [
+        "sgId",
+        "sgTypecode",
+        "sdName",
+        "wiwName"
+      ]
+    },
+    {
+      "dataset_id": "15000908",
+      "title": "중앙선거관리위원회_후보자 정보",
+      "operation": "예비후보자",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sdName": "",
+        "sgId": "",
+        "sgTypecode": "",
+        "sggName": ""
+      },
+      "missing_params": [
+        "sgId",
+        "sgTypecode",
+        "sggName",
+        "sdName"
+      ]
+    },
+    {
+      "dataset_id": "15000908",
+      "title": "중앙선거관리위원회_후보자 정보",
+      "operation": "후보자",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "jdName": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sdName": "",
+        "sgId": "",
+        "sgTypecode": "",
+        "sggName": ""
+      },
+      "missing_params": [
+        "sgId",
+        "sgTypecode",
+        "sggName",
+        "sdName",
+        "jdName"
+      ]
+    },
+    {
+      "dataset_id": "15000937",
+      "title": "기후에너지환경부 국립환경과학원_골프장 농약사용량 DB",
+      "operation": "골프장 농약사용량 DB 정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "resultType": "json",
+        "search_golfclub_nm": "",
+        "search_sido": "",
+        "search_year": ""
+      },
+      "missing_params": [
+        "search_year",
+        "search_golfclub_nm",
+        "search_sido"
+      ]
+    },
+    {
+      "dataset_id": "15000943",
+      "title": "기후에너지환경부 국립환경과학원_국립환경과학원 온실가스 검증기관 지정현황",
+      "operation": "정도관리 검증기관 현황",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "area_nm": "",
+        "field_code": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "resultType": "json",
+        "search_nm": "",
+        "search_year": ""
+      },
+      "missing_params": [
+        "search_year",
+        "field_code",
+        "area_nm",
+        "search_nm"
       ]
     }
   ]
