@@ -1,0 +1,126 @@
+{
+  "schema_version": "datapan.source-runtime-evidence-plan.v1",
+  "generated_at": "2026-06-30T08:22:19Z",
+  "provider": "open.assembly.go.kr",
+  "source_id": "open_assembly",
+  "source_profile": "sources/open_assembly.json",
+  "references": {
+    "official_reference_urls": [
+      "https://open.assembly.go.kr/portal/mainPage.do",
+      "https://open.assembly.go.kr/portal/openapi/main.do"
+    ],
+    "last_reviewed_at": "2026-06-29"
+  },
+  "summary": {
+    "evidence_total": 0,
+    "blocking_count": 5,
+    "warning_count": 4,
+    "next_action_count": 4
+  },
+  "runtime_state": {
+    "evidence_status": "no_runtime_evidence",
+    "evidence_total": 0,
+    "verified": 0,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0,
+    "verification_mode": "metadata_only",
+    "adapter_status": "none",
+    "adapter_capabilities": [],
+    "auth_type": "api_key",
+    "credential_required": true,
+    "sample_param_policy": "manual"
+  },
+  "blockers": [
+    {
+      "blocker_id": "metadata_only_verification",
+      "severity": "blocking",
+      "source_profile_field": "runtime.verification_mode",
+      "expected_action": "Promote Open Assembly from metadata-only to bounded sample-call verification after service IDs and legislative parameters are pinned.",
+      "owner": "datapan_cli",
+      "status": "open"
+    },
+    {
+      "blocker_id": "adapter_not_registered",
+      "severity": "blocking",
+      "source_profile_field": "adapter.status",
+      "expected_action": "Register an Open Assembly adapter with verification and call capabilities before runtime evidence can be generated.",
+      "owner": "datapan_cli",
+      "status": "open"
+    },
+    {
+      "blocker_id": "credential_required",
+      "severity": "blocking",
+      "source_profile_field": "auth.type",
+      "expected_action": "Define a non-secret KEY injection path for source-scoped CI and local bounded checks.",
+      "owner": "operator",
+      "status": "open"
+    },
+    {
+      "blocker_id": "sample_parameters_not_pinned",
+      "severity": "blocking",
+      "source_profile_field": "runtime.sample_param_policy",
+      "expected_action": "Pin at least one service_id, AGE, BILL_ID, or committee_id sample for a bounded first batch.",
+      "owner": "registry",
+      "status": "open"
+    },
+    {
+      "blocker_id": "runtime_catalog_not_materialized",
+      "severity": "blocking",
+      "source_profile_field": "catalogue.identity_fields",
+      "expected_action": "Materialize a source-scoped Open Assembly registry or verification candidate list before collecting evidence.",
+      "owner": "registry",
+      "status": "open"
+    },
+    {
+      "blocker_id": "source_specific_error_taxonomy_pending",
+      "severity": "warning",
+      "source_profile_field": "errors.taxonomy_status",
+      "expected_action": "Finish Open Assembly error taxonomy verification before treating provider RESULT codes as adapter defects.",
+      "owner": "registry",
+      "status": "open"
+    }
+  ],
+  "next_evidence_plan": {
+    "required_artifacts": [
+      "reports/open-assembly/coverage.json",
+      "reports/open-assembly/latest-verification.json",
+      "reports/open-assembly/latest-verification-summary.json",
+      "reports/open-assembly/verification-plan.json"
+    ],
+    "required_cli_capabilities": [
+      "source-scoped registry input",
+      "Open Assembly bounded sample-call adapter",
+      "source credential injection",
+      "Open Assembly RESULT code extraction"
+    ],
+    "first_batch_policy": "Run a credential-gated bounded sample-call batch only after service IDs and required legislative parameters are pinned.",
+    "promotion_gate": "Do not promote Open Assembly datasets beyond registry_only until runtime evidence and legislative identity mappings exist."
+  },
+  "warnings": [
+    {
+      "warning_id": "non_data_runtime_evidence_not_collected",
+      "expected": "Open Assembly has source-scoped runtime evidence after adapter and sample parameters are pinned.",
+      "actual": "0 runtime checks are collected for Open Assembly.",
+      "remaining": "Create the Open Assembly source registry/candidate list and run the first bounded verification batch."
+    },
+    {
+      "warning_id": "source_runtime_adapter_not_registered",
+      "expected": "Open Assembly adapter has verification and call capabilities.",
+      "actual": "adapter.status is none and adapter_capabilities is empty.",
+      "remaining": "Register the Open Assembly adapter before evidence collection."
+    },
+    {
+      "warning_id": "source_runtime_manual_samples_unpinned",
+      "expected": "Open Assembly first-batch sample parameters are pinned.",
+      "actual": "runtime.sample_param_policy is manual.",
+      "remaining": "Pin official Open Assembly sample identifiers for bounded checks."
+    },
+    {
+      "warning_id": "source_runtime_error_taxonomy_pending",
+      "expected": "Open Assembly source-specific error taxonomy is verified.",
+      "actual": "errors.taxonomy_status is draft.",
+      "remaining": "Verify Open Assembly RESULT code classifications before treating runtime failures as adapter defects."
+    }
+  ]
+}

@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.source-runtime-evidence-plan.v1.schema.json",
+  "title": "Datapan Source Runtime Evidence Plan v1",
+  "description": "Source-scoped runtime evidence status, blockers, and next evidence plan for public data sources that are not yet producing callable verification evidence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "provider",
+    "source_id",
+    "source_profile",
+    "references",
+    "summary",
+    "runtime_state",
+    "blockers",
+    "next_evidence_plan",
+    "warnings"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.source-runtime-evidence-plan.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_id": {
+      "$ref": "#/$defs/source_id"
+    },
+    "source_profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "references": {
+      "$ref": "#/$defs/references"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "runtime_state": {
+      "$ref": "#/$defs/runtime_state"
+    },
+    "blockers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/blocker"
+      }
+    },
+    "next_evidence_plan": {
+      "$ref": "#/$defs/next_evidence_plan"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/warning"
+      }
+    }
+  },
+  "$defs": {
+    "source_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "references": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["official_reference_urls", "last_reviewed_at"],
+      "properties": {
+        "official_reference_urls": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "format": "uri"
+          },
+          "uniqueItems": true
+        },
+        "last_reviewed_at": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_total",
+        "blocking_count",
+        "warning_count",
+        "next_action_count"
+      ],
+      "properties": {
+        "evidence_total": {
+          "$ref": "#/$defs/count"
+        },
+        "blocking_count": {
+          "$ref": "#/$defs/count"
+        },
+        "warning_count": {
+          "$ref": "#/$defs/count"
+        },
+        "next_action_count": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "runtime_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_status",
+        "evidence_total",
+        "verified",
+        "failed",
+        "skipped",
+        "unknown",
+        "verification_mode",
+        "adapter_status",
+        "adapter_capabilities",
+        "auth_type",
+        "credential_required",
+        "sample_param_policy"
+      ],
+      "properties": {
+        "evidence_status": {
+          "enum": ["no_runtime_evidence", "partial_runtime_evidence", "runtime_evidence_active"]
+        },
+        "evidence_total": {
+          "$ref": "#/$defs/count"
+        },
+        "verified": {
+          "$ref": "#/$defs/count"
+        },
+        "failed": {
+          "$ref": "#/$defs/count"
+        },
+        "skipped": {
+          "$ref": "#/$defs/count"
+        },
+        "unknown": {
+          "$ref": "#/$defs/count"
+        },
+        "verification_mode": {
+          "enum": ["none", "metadata_only", "sample_call", "bounded_call", "adapter_required"]
+        },
+        "adapter_status": {
+          "enum": ["none", "planned", "registered", "blocked"]
+        },
+        "adapter_capabilities": {
+          "type": "array",
+          "items": {
+            "enum": ["catalogue_import", "verification", "call", "normalization"]
+          },
+          "uniqueItems": true
+        },
+        "auth_type": {
+          "enum": ["none", "api_key", "service_key", "oauth2", "session", "approval_required", "mixed"]
+        },
+        "credential_required": {
+          "type": "boolean"
+        },
+        "sample_param_policy": {
+          "enum": ["none", "static", "generated", "catalogue_sample", "manual"]
+        }
+      }
+    },
+    "blocker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "blocker_id",
+        "severity",
+        "source_profile_field",
+        "expected_action",
+        "owner",
+        "status"
+      ],
+      "properties": {
+        "blocker_id": {
+          "enum": [
+            "metadata_only_verification",
+            "adapter_not_registered",
+            "credential_required",
+            "sample_parameters_not_pinned",
+            "runtime_catalog_not_materialized",
+            "source_specific_error_taxonomy_pending"
+          ]
+        },
+        "severity": {
+          "enum": ["blocking", "warning"]
+        },
+        "source_profile_field": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected_action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "enum": ["registry", "datapan_cli", "datapan_api", "operator", "source_provider"]
+        },
+        "status": {
+          "enum": ["open", "planned", "blocked"]
+        }
+      }
+    },
+    "next_evidence_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_artifacts",
+        "required_cli_capabilities",
+        "first_batch_policy",
+        "promotion_gate"
+      ],
+      "properties": {
+        "required_artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "required_cli_capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "first_batch_policy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "promotion_gate": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "warning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["warning_id", "expected", "actual", "remaining"],
+      "properties": {
+        "warning_id": {
+          "enum": [
+            "non_data_runtime_evidence_not_collected",
+            "source_runtime_adapter_not_registered",
+            "source_runtime_manual_samples_unpinned",
+            "source_runtime_error_taxonomy_pending"
+          ]
+        },
+        "expected": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actual": {
+          "type": "string",
+          "minLength": 1
+        },
+        "remaining": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}
