@@ -72,6 +72,7 @@ reports/
     verification-plan.json
     latest-verification.json
     latest-verification-summary.json
+  source-runtime-evidence-rollup.json
   open-assembly/
     coverage.json
     catalog-audit.json

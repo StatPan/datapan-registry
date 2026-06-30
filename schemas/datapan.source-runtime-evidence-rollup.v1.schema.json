@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.source-runtime-evidence-rollup.v1.schema.json",
+  "title": "Datapan Source Runtime Evidence Rollup v1",
+  "description": "Release-wide rollup of source-scoped runtime evidence plans, blockers, and warnings.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "provider",
+    "source_plan_inputs",
+    "summary",
+    "sources",
+    "blockers_by_id",
+    "warnings_by_id",
+    "warnings"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.source-runtime-evidence-rollup.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_plan_inputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "blockers_by_id": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/id_count"
+      }
+    },
+    "warnings_by_id": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/id_count"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/rollup_warning"
+      }
+    }
+  },
+  "$defs": {
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sources",
+        "sources_without_evidence",
+        "evidence_total",
+        "verified",
+        "failed",
+        "skipped",
+        "unknown",
+        "blocking_count",
+        "warning_count"
+      ],
+      "properties": {
+        "sources": {
+          "$ref": "#/$defs/count"
+        },
+        "sources_without_evidence": {
+          "$ref": "#/$defs/count"
+        },
+        "evidence_total": {
+          "$ref": "#/$defs/count"
+        },
+        "verified": {
+          "$ref": "#/$defs/count"
+        },
+        "failed": {
+          "$ref": "#/$defs/count"
+        },
+        "skipped": {
+          "$ref": "#/$defs/count"
+        },
+        "unknown": {
+          "$ref": "#/$defs/count"
+        },
+        "blocking_count": {
+          "$ref": "#/$defs/count"
+        },
+        "warning_count": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "provider",
+        "runtime_evidence_plan",
+        "evidence_total",
+        "blocking_count",
+        "warning_count",
+        "blocker_ids",
+        "warning_ids",
+        "next_action_count"
+      ],
+      "properties": {
+        "source_id": {
+          "$ref": "#/$defs/source_id"
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "runtime_evidence_plan": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_total": {
+          "$ref": "#/$defs/count"
+        },
+        "blocking_count": {
+          "$ref": "#/$defs/count"
+        },
+        "warning_count": {
+          "$ref": "#/$defs/count"
+        },
+        "blocker_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "warning_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "next_action_count": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "id_count": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "count", "source_ids"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "count": {
+          "$ref": "#/$defs/count"
+        },
+        "source_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source_id"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "rollup_warning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["warning_id", "affected_sources", "expected", "actual", "remaining"],
+      "properties": {
+        "warning_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "affected_sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source_id"
+          },
+          "uniqueItems": true
+        },
+        "expected": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actual": {
+          "type": "string",
+          "minLength": 1
+        },
+        "remaining": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}
