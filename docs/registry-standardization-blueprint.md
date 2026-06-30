@@ -106,10 +106,10 @@ Current gaps:
   non-data.go.kr profile batch, but runtime evidence is not yet generated for
   those non-data.go.kr sources.
 - Runtime evidence coverage is much lower than callable coverage. Gira #19,
-  Gira #21, Gira #23, Gira #25, and Gira #27 raise data.go.kr runtime evidence
-  from `256` to `466`, but the release readiness warning remains active: the
-  `10%` target requires `1,221` evidence records, so `755` additional records
-  are still required.
+  Gira #21, Gira #23, Gira #25, Gira #27, and Gira #39 raise data.go.kr runtime
+  evidence from `256` to `509`, but the release readiness warning remains
+  active: the `10%` target requires `1,221` evidence records, so `712`
+  additional records are still required.
 - Multi-source report grouping is designed but not implemented.
 - Impact plans are specified and a data.go.kr draft plan is checked in, but
   full `datapan-cli` generation is not implemented.
@@ -288,10 +288,11 @@ Use this order unless a production failure changes priority:
     continued by Gira #21 with gateway, `geoje`, `jeonju`, and `q-net`
     batches, then by Gira #23 with `ekape`, `emuseum`, `uiryeong`, `epost`,
     and `ulsan` batches, by Gira #25 with the next gateway, `ekape`, `geoje`,
-    `jeonju`, `q-net`, and `uiryeong` batches, and by Gira #27 with the next
-    gateway, `ekape`, `geoje`, `jeonju`, `q-net`, and `uiryeong` batches; this
-    is skipped boundary evidence growth, not proof that those operations are
-    callable.
+    `jeonju`, `q-net`, and `uiryeong` batches, by Gira #27 with the next
+    gateway, `ekape`, `geoje`, `jeonju`, `q-net`, and `uiryeong` batches, and
+    by Gira #39 with the next gateway, `ekape`, `geoje`, `jeonju`, `q-net`, and
+    `uiryeong` batches; this is skipped boundary evidence growth, not proof
+    that those operations are callable.
 
 ## Measurement Rules
 

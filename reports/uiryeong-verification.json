@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-29T09:39:58Z",
+  "generated_at": "2026-06-30T06:58:35Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 36,
+  "limit": 40,
   "truncated": true,
-  "filtered_count": 36,
+  "filtered_count": 40,
   "summary": {
-    "total": 36,
+    "total": 40,
     "verified": 0,
     "failed": 6,
-    "skipped": 30,
+    "skipped": 34,
     "unknown": 0
   },
   "results": [
@@ -658,6 +658,70 @@
       "missing_params": [
         "deptNm"
       ]
+    },
+    {
+      "dataset_id": "3066163",
+      "title": "경상남도 의령군 모범 음식점정보",
+      "operation": "음식점 사진",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-30T06:58:15Z",
+      "params": {
+        "uiryeongfoodEntId": ""
+      },
+      "missing_params": [
+        "uiryeongfoodEntId"
+      ]
+    },
+    {
+      "dataset_id": "3066163",
+      "title": "경상남도 의령군 모범 음식점정보",
+      "operation": "음식점 상세정보",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "uiryeong_missing_required_params",
+      "verified_at": "2026-06-30T06:58:15Z",
+      "params": {
+        "uiryeongfoodEntId": ""
+      },
+      "missing_params": [
+        "uiryeongfoodEntId"
+      ]
+    },
+    {
+      "dataset_id": "3066163",
+      "title": "경상남도 의령군 모범 음식점정보",
+      "operation": "음식점 현황 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-30T06:58:15Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
+    },
+    {
+      "dataset_id": "3066441",
+      "title": "경상남도 의령군_관광명소",
+      "operation": "관광명소 목록",
+      "provider": "uiryeong",
+      "endpoint_host": "data.uiryeong.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-30T06:58:15Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      }
     }
   ]
 }

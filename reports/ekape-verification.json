@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-06-29T09:39:57Z",
+  "generated_at": "2026-06-30T06:58:35Z",
   "provider": "data.go.kr",
   "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 35,
+  "limit": 39,
   "truncated": true,
-  "filtered_count": 35,
+  "filtered_count": 39,
   "summary": {
-    "total": 35,
+    "total": 39,
     "verified": 0,
     "failed": 5,
-    "skipped": 30,
+    "skipped": 34,
     "unknown": 0
   },
   "results": [
@@ -725,6 +725,77 @@
         "startYmd": "20240101",
         "type": "json"
       }
+    },
+    {
+      "dataset_id": "15073985",
+      "title": "축산물품질평가원_가금산물 일일거래가격정보",
+      "operation": "육계(도매) 일일가격조회",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-30T06:58:15Z",
+      "params": {
+        "endYmd": "20240101",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "startYmd": "20240101"
+      }
+    },
+    {
+      "dataset_id": "15073985",
+      "title": "축산물품질평가원_가금산물 일일거래가격정보",
+      "operation": "육계(산지) 일일가격조회",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-30T06:58:15Z",
+      "params": {
+        "endYmd": "20240101",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "startYmd": "20240101",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15073985",
+      "title": "축산물품질평가원_가금산물 일일거래가격정보",
+      "operation": "토종닭 가격조회",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-06-30T06:58:15Z",
+      "params": {
+        "endYmd": "20240101",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "startYmd": "20240101"
+      }
+    },
+    {
+      "dataset_id": "15106233",
+      "title": "축산물품질평가원_농장식별번호정보",
+      "operation": "농장식별번호 정보",
+      "provider": "ekape",
+      "endpoint_host": "data.ekape.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "ekape_missing_required_params",
+      "verified_at": "2026-06-30T06:58:15Z",
+      "params": {
+        "farmUniqueNo": "",
+        "typeGbn": ""
+      },
+      "missing_params": [
+        "farmUniqueNo",
+        "typeGbn"
+      ]
     }
   ]
 }

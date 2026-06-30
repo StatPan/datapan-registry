@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-29T09:40:50Z",
+  "generated_at": "2026-06-30T06:59:14Z",
   "provider": "data.go.kr",
   "registry": "./data/data-go-kr.registry.json",
   "source": "release",
@@ -8,49 +8,29 @@
   "timeout": "10s",
   "summary": {
     "operations": 12205,
-    "evidence_total": 466,
-    "uncovered_gateway_candidates": 11379,
-    "uncovered_adapter_candidates": 160,
+    "evidence_total": 509,
+    "uncovered_gateway_candidates": 11369,
+    "uncovered_adapter_candidates": 127,
     "missing_adapter_hosts": 10,
-    "planned_batches": 6,
-    "planned_operations": 43
+    "planned_batches": 3,
+    "planned_operations": 30
   },
   "batches": [
     {
       "label": "gateway",
       "kind": "data_go_kr_gateway",
       "candidates": 11419,
-      "uncovered_candidates": 11379,
+      "uncovered_candidates": 11369,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry ./data/data-go-kr.registry.json --kind data_go_kr_gateway --exclude-input ./reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gateway-next.json --json",
       "output": ".datapan/verification/gateway-next.json"
-    },
-    {
-      "label": "ekape",
-      "provider": "ekape",
-      "kind": "external_endpoint",
-      "candidates": 49,
-      "uncovered_candidates": 4,
-      "planned_operations": 4,
-      "command": "datapan catalog verify --registry ./data/data-go-kr.registry.json --provider ekape --kind external_endpoint --exclude-input ./reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ekape-next.json --json",
-      "output": ".datapan/verification/ekape-next.json"
-    },
-    {
-      "label": "geoje",
-      "provider": "geoje",
-      "kind": "external_endpoint",
-      "candidates": 41,
-      "uncovered_candidates": 5,
-      "planned_operations": 5,
-      "command": "datapan catalog verify --registry ./data/data-go-kr.registry.json --provider geoje --kind external_endpoint --exclude-input ./reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/geoje-next.json --json",
-      "output": ".datapan/verification/geoje-next.json"
     },
     {
       "label": "jeonju",
       "provider": "jeonju",
       "kind": "external_endpoint",
       "candidates": 80,
-      "uncovered_candidates": 45,
+      "uncovered_candidates": 35,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry ./data/data-go-kr.registry.json --provider jeonju --kind external_endpoint --exclude-input ./reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jeonju-next.json --json",
       "output": ".datapan/verification/jeonju-next.json"
@@ -60,20 +40,10 @@
       "provider": "q-net",
       "kind": "external_endpoint",
       "candidates": 147,
-      "uncovered_candidates": 102,
+      "uncovered_candidates": 92,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry ./data/data-go-kr.registry.json --provider q-net --kind external_endpoint --exclude-input ./reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/q-net-next.json --json",
       "output": ".datapan/verification/q-net-next.json"
-    },
-    {
-      "label": "uiryeong",
-      "provider": "uiryeong",
-      "kind": "external_endpoint",
-      "candidates": 40,
-      "uncovered_candidates": 4,
-      "planned_operations": 4,
-      "command": "datapan catalog verify --registry ./data/data-go-kr.registry.json --provider uiryeong --kind external_endpoint --exclude-input ./reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/uiryeong-next.json --json",
-      "output": ".datapan/verification/uiryeong-next.json"
     }
   ],
   "gaps": {
