@@ -1,8 +1,8 @@
 {
   "schema_version": "datapan.schema-index.v1",
-  "generated_at": "2026-06-30T08:11:23Z",
+  "generated_at": "2026-06-30T09:32:00Z",
   "datapan_version": "0.1.0-dev",
-  "count": 20,
+  "count": 28,
   "schemas": [
     {
       "path": "schemas/datapan.specs.v1.schema.json",
@@ -183,6 +183,78 @@
       "version": "v1",
       "bytes": 2367,
       "sha256": "177616c48df86a13f147282f1c368a9be8293ff5831b2f09067d1adcd8000120"
+    },
+    {
+      "path": "schemas/datapan.error-action-catalog.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.error-action-catalog.v1.schema.json",
+      "title": "Datapan Error Action Catalog v1",
+      "contract": "error-action-catalog",
+      "version": "v1",
+      "bytes": 6886,
+      "sha256": "959822bc57b93e8a084d18895c3cf3f81e793f5afea397a409c1909651395da7"
+    },
+    {
+      "path": "schemas/datapan.external-coverage.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.external-coverage.v1.schema.json",
+      "title": "Datapan External Coverage v1",
+      "contract": "external-coverage",
+      "version": "v1",
+      "bytes": 5249,
+      "sha256": "874be75ce42d355ce4956315cc1b9548ec1bda300e222d009a8d2e29fd1c9131"
+    },
+    {
+      "path": "schemas/datapan.registry-impact-plan.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
+      "title": "Datapan Registry Impact Plan v1",
+      "contract": "registry-impact-plan",
+      "version": "v1",
+      "bytes": 8410,
+      "sha256": "7a1363e206d929718a70ee62621c31d8e5f72a2386e929e7c370549cee08806c"
+    },
+    {
+      "path": "schemas/datapan.source-profile.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.source-profile.v1.schema.json",
+      "title": "Datapan Source Profile v1",
+      "contract": "source-profile",
+      "version": "v1",
+      "bytes": 9602,
+      "sha256": "ce01786b97680a16d0e58fdee8377502d5888deb72e03fee50344fcd5b89a2cf"
+    },
+    {
+      "path": "schemas/datapan.source-reference-drift.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.source-reference-drift.v1.schema.json",
+      "title": "Datapan Source Reference Drift v1",
+      "contract": "source-reference-drift",
+      "version": "v1",
+      "bytes": 4515,
+      "sha256": "e065ae7f7ea80ae512c48039dbd403a3fadc822c9b6f77dab80ada11a3cff204"
+    },
+    {
+      "path": "schemas/datapan.source-runtime-candidates.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.source-runtime-candidates.v1.schema.json",
+      "title": "Datapan Source Runtime Candidates v1",
+      "contract": "source-runtime-candidates",
+      "version": "v1",
+      "bytes": 5032,
+      "sha256": "2a8a009225b7ae99bf4e78e91dcf5fc6a487f9ca67faa1812f675f8651ab3492"
+    },
+    {
+      "path": "schemas/datapan.source-runtime-evidence-plan.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.source-runtime-evidence-plan.v1.schema.json",
+      "title": "Datapan Source Runtime Evidence Plan v1",
+      "contract": "source-runtime-evidence-plan",
+      "version": "v1",
+      "bytes": 7272,
+      "sha256": "73f325bc706b3596a1d44b5e325523f8f0bf0452ffae3adb047dbbf8ed8bd08d"
+    },
+    {
+      "path": "schemas/datapan.source-runtime-evidence-rollup.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.source-runtime-evidence-rollup.v1.schema.json",
+      "title": "Datapan Source Runtime Evidence Rollup v1",
+      "contract": "source-runtime-evidence-rollup",
+      "version": "v1",
+      "bytes": 5143,
+      "sha256": "73e870fbab654935cce35a4d68427aea58e03368777fe7801a31283e6566d187"
     }
   ]
 }

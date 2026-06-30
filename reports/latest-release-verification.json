@@ -3,8 +3,8 @@
   "root": ".",
   "schema_version": "datapan.release-verification.v1",
   "manifest_schema_version": "datapan.release-manifest.v1",
-  "artifact_count": 39,
-  "checked": 39,
+  "artifact_count": 47,
+  "checked": 47,
   "failed": 0,
   "ok": true,
   "results": [
@@ -189,13 +189,85 @@
       "actual_sha256": "177616c48df86a13f147282f1c368a9be8293ff5831b2f09067d1adcd8000120"
     },
     {
+      "path": "schemas/datapan.error-action-catalog.v1.schema.json",
+      "kind": "schema",
+      "status": "verified",
+      "expected_bytes": 6886,
+      "actual_bytes": 6886,
+      "expected_sha256": "959822bc57b93e8a084d18895c3cf3f81e793f5afea397a409c1909651395da7",
+      "actual_sha256": "959822bc57b93e8a084d18895c3cf3f81e793f5afea397a409c1909651395da7"
+    },
+    {
+      "path": "schemas/datapan.external-coverage.v1.schema.json",
+      "kind": "schema",
+      "status": "verified",
+      "expected_bytes": 5249,
+      "actual_bytes": 5249,
+      "expected_sha256": "874be75ce42d355ce4956315cc1b9548ec1bda300e222d009a8d2e29fd1c9131",
+      "actual_sha256": "874be75ce42d355ce4956315cc1b9548ec1bda300e222d009a8d2e29fd1c9131"
+    },
+    {
+      "path": "schemas/datapan.registry-impact-plan.v1.schema.json",
+      "kind": "schema",
+      "status": "verified",
+      "expected_bytes": 8410,
+      "actual_bytes": 8410,
+      "expected_sha256": "7a1363e206d929718a70ee62621c31d8e5f72a2386e929e7c370549cee08806c",
+      "actual_sha256": "7a1363e206d929718a70ee62621c31d8e5f72a2386e929e7c370549cee08806c"
+    },
+    {
+      "path": "schemas/datapan.source-profile.v1.schema.json",
+      "kind": "schema",
+      "status": "verified",
+      "expected_bytes": 9602,
+      "actual_bytes": 9602,
+      "expected_sha256": "ce01786b97680a16d0e58fdee8377502d5888deb72e03fee50344fcd5b89a2cf",
+      "actual_sha256": "ce01786b97680a16d0e58fdee8377502d5888deb72e03fee50344fcd5b89a2cf"
+    },
+    {
+      "path": "schemas/datapan.source-reference-drift.v1.schema.json",
+      "kind": "schema",
+      "status": "verified",
+      "expected_bytes": 4515,
+      "actual_bytes": 4515,
+      "expected_sha256": "e065ae7f7ea80ae512c48039dbd403a3fadc822c9b6f77dab80ada11a3cff204",
+      "actual_sha256": "e065ae7f7ea80ae512c48039dbd403a3fadc822c9b6f77dab80ada11a3cff204"
+    },
+    {
+      "path": "schemas/datapan.source-runtime-candidates.v1.schema.json",
+      "kind": "schema",
+      "status": "verified",
+      "expected_bytes": 5032,
+      "actual_bytes": 5032,
+      "expected_sha256": "2a8a009225b7ae99bf4e78e91dcf5fc6a487f9ca67faa1812f675f8651ab3492",
+      "actual_sha256": "2a8a009225b7ae99bf4e78e91dcf5fc6a487f9ca67faa1812f675f8651ab3492"
+    },
+    {
+      "path": "schemas/datapan.source-runtime-evidence-plan.v1.schema.json",
+      "kind": "schema",
+      "status": "verified",
+      "expected_bytes": 7272,
+      "actual_bytes": 7272,
+      "expected_sha256": "73f325bc706b3596a1d44b5e325523f8f0bf0452ffae3adb047dbbf8ed8bd08d",
+      "actual_sha256": "73f325bc706b3596a1d44b5e325523f8f0bf0452ffae3adb047dbbf8ed8bd08d"
+    },
+    {
+      "path": "schemas/datapan.source-runtime-evidence-rollup.v1.schema.json",
+      "kind": "schema",
+      "status": "verified",
+      "expected_bytes": 5143,
+      "actual_bytes": 5143,
+      "expected_sha256": "73e870fbab654935cce35a4d68427aea58e03368777fe7801a31283e6566d187",
+      "actual_sha256": "73e870fbab654935cce35a4d68427aea58e03368777fe7801a31283e6566d187"
+    },
+    {
       "path": "schemas/index.json",
       "kind": "schema_index",
       "status": "verified",
-      "expected_bytes": 7490,
-      "actual_bytes": 7490,
-      "expected_sha256": "0d5b8204e47679390ed8a3cd463cd6334d64baba317c626a45e91b14e7a54bd6",
-      "actual_sha256": "0d5b8204e47679390ed8a3cd463cd6334d64baba317c626a45e91b14e7a54bd6"
+      "expected_bytes": 10658,
+      "actual_bytes": 10658,
+      "expected_sha256": "1243953f349693aac46ad354b1ad1a2ab5011031a23af00490328b0ce5bf7997",
+      "actual_sha256": "1243953f349693aac46ad354b1ad1a2ab5011031a23af00490328b0ce5bf7997"
     },
     {
       "path": "data/data-go-kr.registry.json",
