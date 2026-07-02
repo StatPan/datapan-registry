@@ -18,14 +18,15 @@ re-importing the upstream data.go.kr catalog every time.
   `emuseum`, `epost`, `folk`, `forest`, `garak`, `gblib`, `geoje`, `gwanak`,
   `humetro`, `itfind`, `jeju`, `jeonju`, `korad`, `kpx`, `lh-ebid`, `mafra`,
   `myhome`, `naqs`, `nfqs`, `nongsaro`, `oneclick-law`, `pqis`, `q-net`,
-  `seoul-bus`, `sisul`, `tour`, `uiryeong`, `ulsan`, `work24`
-- External adapter coverage: `625` registered-adapter operations out of `643`
-  external endpoint operations (`94.4%`)
-- Missing external adapter hosts: `16`
+  `seoul-bus`, `seoul-open-data`, `sisul`, `tour`, `uiryeong`, `ulsan`,
+  `work24`
+- External adapter coverage: `627` registered-adapter operations out of `643`
+  external endpoint operations (`94.7%`)
+- Missing external adapter hosts: `15`
 - Provider split readiness: `ready`
-  (`33` adapters, `33` verification-capable, `21` call-capable)
-- Runtime verification evidence: `1270` bounded checks merged into
-  `reports/latest-verification.json` (`61` verified, `87` failed, `1122`
+  (`34` adapters, `34` verification-capable, `22` call-capable)
+- Runtime verification evidence: `1272` bounded checks merged into
+  `reports/latest-verification.json` (`63` verified, `87` failed, `1122`
   skipped)
 - Runtime evidence growth target: `10.0%` checked evidence is above the
   unrounded `10%` release target; `0` additional records are required for this
@@ -37,11 +38,11 @@ re-importing the upstream data.go.kr catalog every time.
   `reports/unadapted-external-probe.json` (`8` HTTP 2xx adapter candidates,
   `14` HTTP 404 dead-route candidates, `15` timeout/DNS/request transient
   failures)
-- Route disposition: `37` missing external routes in
+- Route disposition: `35` missing external routes in
   `reports/route-disposition.json` (`14` dead-route candidates, `15`
-  transient failures, `8` remaining adapter candidates)
+  transient failures, `6` remaining adapter candidates)
 - Coverage route evidence: `reports/coverage.json` now carries the same route
-  evidence and reports `8` evidence-adjusted adapter candidates
+  evidence and reports `6` evidence-adjusted adapter candidates
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
 - Provider index: `data/provider-index.json`
@@ -162,6 +163,8 @@ reports/
   qnet-verification-summary.json
   seoul-bus-verification.json
   seoul-bus-verification-summary.json
+  seoul-open-data-verification.json
+  seoul-open-data-verification-summary.json
   sisul-verification.json
   sisul-verification-summary.json
   tour-verification.json

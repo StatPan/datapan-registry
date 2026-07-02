@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-02T18:09:52Z",
+  "generated_at": "2026-07-02T18:39:23Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -14,13 +14,13 @@
     "institutions": 411,
     "apis": 12060,
     "operations": 12253,
-    "runtime_evidence": 1270,
+    "runtime_evidence": 1272,
     "runtime_evidence_percent": 10.4,
     "callable_operations": 12111,
     "external_endpoint_operations": 643,
-    "registered_adapter_operations": 625,
-    "missing_adapter_operations": 37,
-    "missing_adapter_hosts": 16
+    "registered_adapter_operations": 627,
+    "missing_adapter_operations": 35,
+    "missing_adapter_hosts": 15
   },
   "by_dependency_class": [
     {
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 625
+      "count": 627
     },
     {
       "key": "builtin",
@@ -59,7 +59,7 @@
     },
     {
       "key": "missing",
-      "count": 37
+      "count": 35
     },
     {
       "key": "not_applicable",
@@ -4266,9 +4266,9 @@
       "api_count": 25,
       "operation_api_count": 11,
       "operation_count": 37,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
+      "runtime_evidence_count": 2,
+      "runtime_evidence_percent": 5.4,
+      "verified": 2,
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
@@ -4286,12 +4286,12 @@
       ],
       "by_adapter_status": [
         {
-          "key": "builtin",
-          "count": 35
+          "key": "adapter",
+          "count": 2
         },
         {
-          "key": "missing",
-          "count": 2
+          "key": "builtin",
+          "count": 35
         }
       ],
       "top_categories": [
@@ -4307,7 +4307,13 @@
         },
         {
           "host": "data.seoul.go.kr",
-          "operation_count": 2
+          "operation_count": 2,
+          "adapter": "seoul-open-data",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
         }
       ]
     },

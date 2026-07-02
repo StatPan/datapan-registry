@@ -16,8 +16,8 @@
     "failed": 0,
     "skipped": 0,
     "unknown": 0,
-    "blocking_count": 12,
-    "warning_count": 8
+    "blocking_count": 11,
+    "warning_count": 7
   },
   "sources": [
     {
@@ -79,29 +79,26 @@
       "provider": "data.seoul.go.kr",
       "runtime_evidence_plan": "reports/seoul-open-data/runtime-evidence-plan.json",
       "evidence_total": 0,
-      "blocking_count": 3,
-      "warning_count": 2,
+      "blocking_count": 2,
+      "warning_count": 1,
       "blocker_ids": [
-        "adapter_not_registered",
         "credential_required",
         "metadata_only_verification"
       ],
       "warning_ids": [
-        "non_data_runtime_evidence_not_collected",
-        "source_runtime_adapter_not_registered"
+        "non_data_runtime_evidence_not_collected"
       ],
-      "next_action_count": 4
+      "next_action_count": 3
     }
   ],
   "blockers_by_id": [
     {
       "id": "adapter_not_registered",
-      "count": 4,
+      "count": 3,
       "source_ids": [
         "ecos",
         "kosis",
-        "open_assembly",
-        "seoul_open_data"
+        "open_assembly"
       ]
     },
     {
@@ -138,12 +135,11 @@
     },
     {
       "id": "source_runtime_adapter_not_registered",
-      "count": 4,
+      "count": 3,
       "source_ids": [
         "ecos",
         "kosis",
-        "open_assembly",
-        "seoul_open_data"
+        "open_assembly"
       ]
     }
   ],
@@ -165,12 +161,11 @@
       "affected_sources": [
         "ecos",
         "kosis",
-        "open_assembly",
-        "seoul_open_data"
+        "open_assembly"
       ],
       "expected": "Every checked-in non-data.go.kr source has verification and call adapter capabilities before runtime evidence collection.",
-      "actual": "4 of 4 non-data.go.kr sources have no registered runtime adapter.",
-      "remaining": "Register source-specific adapters for ECOS, KOSIS, Open Assembly, and Seoul Open Data."
+      "actual": "3 of 4 non-data.go.kr sources have no registered runtime adapter.",
+      "remaining": "Register source-specific adapters for ECOS, KOSIS, and Open Assembly."
     }
   ]
 }

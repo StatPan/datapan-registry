@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.external-adapter-backlog.v1",
-  "generated_at": "2026-07-02T18:09:52Z",
+  "generated_at": "2026-07-02T18:39:23Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "source_profile": "sources/data_go_kr.json",
@@ -10,19 +10,19 @@
     "coverage": "reports/coverage.json"
   },
   "summary": {
-    "candidate_hosts": 5,
-    "candidate_operations": 8,
-    "candidate_apis": 6,
-    "candidate_institutions": 5,
-    "raw_missing_adapter_operations": 37,
-    "raw_missing_adapter_hosts": 16,
-    "route_disposition_operations": 37,
-    "route_disposition_adapter_candidates": 8,
+    "candidate_hosts": 4,
+    "candidate_operations": 6,
+    "candidate_apis": 5,
+    "candidate_institutions": 4,
+    "raw_missing_adapter_operations": 35,
+    "raw_missing_adapter_hosts": 15,
+    "route_disposition_operations": 35,
+    "route_disposition_adapter_candidates": 6,
     "excluded_dead_route_candidates": 14,
     "excluded_transient_failures": 15,
     "unclassified_missing_routes": 0,
-    "adapter_target_operations": 37,
-    "candidate_share_of_missing_adapter_operations_percent": 21.6
+    "adapter_target_operations": 35,
+    "candidate_share_of_missing_adapter_operations_percent": 17.1
   },
   "policy": {
     "candidate_filter": "route_disposition.disposition == adapter_candidate",
@@ -30,66 +30,6 @@
     "gate": "unclassified_missing_routes must remain 0 before adapter backlog is actionable"
   },
   "hosts": [
-    {
-      "host": "data.seoul.go.kr",
-      "priority": 2,
-      "candidate_operations": 2,
-      "candidate_apis": 1,
-      "institutions": [
-        "서울교통공사"
-      ],
-      "probe_reasons": [
-        {
-          "key": "unadapted_probe_http_2xx",
-          "count": 2
-        }
-      ],
-      "body_shapes": [
-        {
-          "key": "html",
-          "count": 2
-        }
-      ],
-      "sample_dataset_ids": [
-        "15003164"
-      ],
-      "sample_routes": [
-        {
-          "dataset_id": "15003164",
-          "title": "서울교통공사_역사 건축 현황",
-          "organization": "서울교통공사",
-          "operation": "서울교통공사_역사 건축 현황_20240331 외부 링크 1",
-          "endpoint": "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-11572&srvType=F&serviceKind=1&currentPageNo=1",
-          "endpoint_host": "data.seoul.go.kr",
-          "dependency_class": "external_endpoint",
-          "disposition": "adapter_candidate",
-          "probe_status": "unknown",
-          "probe_reason": "unadapted_probe_http_2xx",
-          "http_status": 200,
-          "body_shape": "html",
-          "missing_params": [],
-          "recommended_action": "implement_provider_adapter"
-        },
-        {
-          "dataset_id": "15003164",
-          "title": "서울교통공사_역사 건축 현황",
-          "organization": "서울교통공사",
-          "operation": "서울교통공사_역사 건축 현황_20240331 외부 링크 2",
-          "endpoint": "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-12033&srvType=S&serviceKind=1¤tPageNo=1",
-          "endpoint_host": "data.seoul.go.kr",
-          "dependency_class": "external_endpoint",
-          "disposition": "adapter_candidate",
-          "probe_status": "unknown",
-          "probe_reason": "unadapted_probe_http_2xx",
-          "http_status": 200,
-          "body_shape": "html",
-          "missing_params": [],
-          "recommended_action": "implement_provider_adapter"
-        }
-      ],
-      "implementation_status": "adapter_not_registered",
-      "recommended_next_step": "Add a provider adapter for data.seoul.go.kr or mark the host with stronger route disposition evidence if the HTML surface is not machine-callable."
-    },
     {
       "host": "www.culture.go.kr",
       "priority": 2,
@@ -301,38 +241,6 @@
     }
   ],
   "candidate_routes": [
-    {
-      "dataset_id": "15003164",
-      "title": "서울교통공사_역사 건축 현황",
-      "organization": "서울교통공사",
-      "operation": "서울교통공사_역사 건축 현황_20240331 외부 링크 1",
-      "endpoint": "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-11572&srvType=F&serviceKind=1&currentPageNo=1",
-      "endpoint_host": "data.seoul.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html",
-      "missing_params": [],
-      "recommended_action": "implement_provider_adapter"
-    },
-    {
-      "dataset_id": "15003164",
-      "title": "서울교통공사_역사 건축 현황",
-      "organization": "서울교통공사",
-      "operation": "서울교통공사_역사 건축 현황_20240331 외부 링크 2",
-      "endpoint": "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-12033&srvType=S&serviceKind=1¤tPageNo=1",
-      "endpoint_host": "data.seoul.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html",
-      "missing_params": [],
-      "recommended_action": "implement_provider_adapter"
-    },
     {
       "dataset_id": "15002034",
       "title": "농촌진흥청_국가농작물병해충도감정보",

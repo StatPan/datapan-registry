@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-07-02T18:10:07Z",
+  "generated_at": "2026-07-02T18:39:39Z",
   "provider": "data.go.kr",
-  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
+  "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
-  "verification": "..\\datapan-registry\\reports\\latest-verification.json",
+  "verification": ".\\reports\\latest-verification.json",
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
     "operations": 12253,
-    "evidence_total": 1270,
+    "evidence_total": 1272,
     "uncovered_gateway_candidates": 10774,
     "uncovered_adapter_candidates": 0,
-    "missing_adapter_hosts": 16,
+    "missing_adapter_hosts": 15,
     "planned_batches": 1,
     "planned_operations": 10
   },
@@ -22,7 +22,7 @@
       "candidates": 11419,
       "uncovered_candidates": 10774,
       "planned_operations": 10,
-      "command": "datapan catalog verify --registry ..\\datapan-registry\\data\\data-go-kr.registry.json --kind data_go_kr_gateway --exclude-input ..\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gateway-next.json --json",
+      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --kind data_go_kr_gateway --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gateway-next.json --json",
       "output": ".datapan/verification/gateway-next.json"
     }
   ],
@@ -128,19 +128,6 @@
         ]
       },
       {
-        "host": "data.seoul.go.kr",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "missing",
-        "specs": 1,
-        "operations": 2,
-        "external_endpoint_operations": 2,
-        "sample_ids": [
-          "15003164"
-        ]
-      },
-      {
         "host": "data.wanju.go.kr",
         "kinds": [
           "external_endpoint"
@@ -166,13 +153,28 @@
         "sample_ids": [
           "15012192"
         ]
+      },
+      {
+        "host": "www.dgeic.or.kr:8080",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "missing",
+        "specs": 1,
+        "operations": 1,
+        "external_endpoint_operations": 1,
+        "external_guide_specs": 1,
+        "sample_ids": [
+          "15001184"
+        ]
       }
     ]
   },
   "next": [
     {
       "label": "coverage",
-      "command": "datapan catalog coverage --registry ..\\datapan-registry\\data\\data-go-kr.registry.json --verification ..\\datapan-registry\\reports\\latest-verification.json --json"
+      "command": "datapan catalog coverage --registry .\\data\\data-go-kr.registry.json --verification .\\reports\\latest-verification.json --json"
     }
   ]
 }

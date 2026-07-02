@@ -1,13 +1,12 @@
 {
-  "generated_at": "2026-07-02T18:09:50Z",
-  "source": "..\\datapan-registry\\reports\\latest-verification.json",
+  "generated_at": "2026-07-02T18:28:47Z",
+  "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
-  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1270,
-    "verified": 61,
+    "total": 1272,
+    "verified": 63,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0
@@ -26,7 +25,7 @@
       },
       {
         "key": "verified",
-        "count": 61,
+        "count": 63,
         "status": "verified"
       }
     ],
@@ -449,6 +448,11 @@
         "provider": "work24"
       },
       {
+        "key": "seoul-open-data",
+        "count": 2,
+        "provider": "seoul-open-data"
+      },
+      {
         "key": "myhome",
         "count": 1,
         "provider": "myhome"
@@ -636,6 +640,11 @@
         "host": "www.work24.go.kr"
       },
       {
+        "key": "data.seoul.go.kr",
+        "count": 2,
+        "host": "data.seoul.go.kr"
+      },
+      {
         "key": "data.myhome.go.kr:443",
         "count": 1,
         "host": "data.myhome.go.kr:443"
@@ -654,7 +663,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 606,
+        "count": 608,
         "kind": "external_endpoint"
       },
       {

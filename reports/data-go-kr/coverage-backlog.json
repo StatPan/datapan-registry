@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.coverage-backlog.v1",
-  "generated_at": "2026-07-02T18:09:52Z",
+  "generated_at": "2026-07-02T18:39:23Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -15,13 +15,13 @@
     "uncovered_api_count": 4850,
     "api_operation_coverage_percent": 59.8,
     "operation_total": 12253,
-    "runtime_evidence_operation_count": 1270,
+    "runtime_evidence_operation_count": 1272,
     "runtime_evidence_operation_percent": 10.4,
-    "runtime_verified_operation_count": 61,
+    "runtime_verified_operation_count": 63,
     "runtime_failed_operation_count": 87,
     "runtime_skipped_operation_count": 1122,
-    "runtime_evidence_api_count": 594,
-    "runtime_reactivation_api_count": 6616,
+    "runtime_evidence_api_count": 595,
+    "runtime_reactivation_api_count": 6615,
     "runtime_repair_api_count": 54
   },
   "institutions": [
@@ -2028,28 +2028,6 @@
       "priority_score": 25
     },
     {
-      "organization": "서울교통공사",
-      "api_count": 25,
-      "covered_api_count": 11,
-      "uncovered_api_count": 14,
-      "operation_count": 37,
-      "runtime_evidence_api_count": 0,
-      "runtime_reactivation_api_count": 11,
-      "runtime_repair_api_count": 0,
-      "runtime_evidence_count": 0,
-      "runtime_missing_evidence_count": 37,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 12,
-      "missing_adapter_operations": 2,
-      "no_endpoint_operations": 0,
-      "api_operation_coverage_percent": 44.0,
-      "runtime_evidence_percent": 0.0,
-      "priority_score": 25
-    },
-    {
       "organization": "기후에너지환경부 한강홍수통제소",
       "api_count": 25,
       "covered_api_count": 12,
@@ -2135,6 +2113,28 @@
       "no_endpoint_operations": 0,
       "api_operation_coverage_percent": 32.0,
       "runtime_evidence_percent": 16.7,
+      "priority_score": 24
+    },
+    {
+      "organization": "서울교통공사",
+      "api_count": 25,
+      "covered_api_count": 11,
+      "uncovered_api_count": 14,
+      "operation_count": 37,
+      "runtime_evidence_api_count": 1,
+      "runtime_reactivation_api_count": 10,
+      "runtime_repair_api_count": 0,
+      "runtime_evidence_count": 2,
+      "runtime_missing_evidence_count": 35,
+      "verified": 2,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 12,
+      "missing_adapter_operations": 0,
+      "no_endpoint_operations": 0,
+      "api_operation_coverage_percent": 44.0,
+      "runtime_evidence_percent": 5.4,
       "priority_score": 24
     },
     {
@@ -162791,38 +162791,6 @@
       "primary_endpoint_host": "apis.data.go.kr",
       "skip_reasons": [
         "missing_required_params"
-      ]
-    },
-    {
-      "dataset_id": "15003164",
-      "title": "서울교통공사_역사 건축 현황",
-      "organization": "서울교통공사",
-      "source_category": "교통물류",
-      "api_type": "LINK",
-      "data_format": "XML",
-      "register_status": "변경승인",
-      "dev_approval": "자동승인",
-      "prod_approval": "자동승인",
-      "created_at": "2018-09-19",
-      "updated_at": "2025-08-06",
-      "meta_url": "https://www.data.go.kr/catalog/15003164/openapi.json",
-      "action": "collect_runtime_evidence",
-      "reason": "operation_mapped_without_runtime_evidence",
-      "operation_count": 2,
-      "runtime_evidence_count": 0,
-      "runtime_missing_evidence_count": 2,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "missing_adapter_operations": 2,
-      "no_endpoint_operations": 0,
-      "primary_dependency_class": "external_endpoint",
-      "primary_adapter_status": "missing",
-      "primary_endpoint_host": "data.seoul.go.kr",
-      "skip_reasons": [
-        "external_provider_adapter_missing"
       ]
     },
     {

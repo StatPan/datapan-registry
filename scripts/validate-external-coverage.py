@@ -135,11 +135,36 @@ def validate_generation_inputs(report_path: pathlib.Path, report: dict[str, obje
         adapter_summary.get("target_hosts"),
         coverage_summary.get("missing_adapter_hosts"),
     )
-    expect_equal(
-        "provider index host_count",
-        provider_index.get("host_count"),
-        coverage_summary.get("registered_adapter_hosts"),
-    )
+    provider_hosts = {
+        host
+        for adapter in provider_index.get("adapters", [])
+        if isinstance(adapter, dict)
+        for host in adapter.get("hosts", [])
+        if isinstance(host, str)
+    }
+    coverage_adapter_hosts = {
+        item.get("host")
+        for item in as_dict(coverage.get("gaps"), pathlib.Path(str(report.get("coverage_report")))).get(
+            "adapter_hosts",
+            [],
+        )
+        if isinstance(item, dict) and isinstance(item.get("host"), str)
+    }
+    missing_provider_hosts = sorted(coverage_adapter_hosts.difference(provider_hosts))
+    if missing_provider_hosts:
+        raise ValueError(
+            "provider index missing coverage adapter hosts: "
+            + ", ".join(missing_provider_hosts)
+        )
+    provider_host_count = provider_index.get("host_count")
+    registered_adapter_hosts = coverage_summary.get("registered_adapter_hosts")
+    if not isinstance(provider_host_count, int) or not isinstance(registered_adapter_hosts, int):
+        raise ValueError("provider index host_count and coverage registered_adapter_hosts must be integers")
+    if provider_host_count < registered_adapter_hosts:
+        raise ValueError(
+            "provider index host_count must be at least coverage registered_adapter_hosts: "
+            f"expected >= {registered_adapter_hosts}, got {provider_host_count}"
+        )
 
     expected_hosts = {
         item.get("host"): item.get("count")

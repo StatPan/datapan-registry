@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-02T18:09:52Z",
+  "generated_at": "2026-07-02T18:39:23Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 33,
-  "host_count": 37,
+  "adapter_count": 34,
+  "host_count": 39,
   "adapters": [
     {
       "name": "airport",
@@ -306,6 +306,18 @@
       ]
     },
     {
+      "name": "seoul-open-data",
+      "status": "registered",
+      "hosts": [
+        "data.seoul.go.kr",
+        "openapi.seoul.go.kr:8088"
+      ],
+      "capabilities": [
+        "call",
+        "verification"
+      ]
+    },
+    {
       "name": "sisul",
       "status": "registered",
       "hosts": [
@@ -363,9 +375,9 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 33,
-    "verification_capable_adapters": 33,
-    "call_capable_adapters": 21,
+    "adapter_count": 34,
+    "verification_capable_adapters": 34,
+    "call_capable_adapters": 22,
     "required_adapters": 2,
     "required_verification_adapters": 2,
     "required_call_adapters": 1,

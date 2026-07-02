@@ -10,8 +10,8 @@ This overview is generated from `reports/source-runtime-evidence-rollup.json` an
 - Failed: `0`
 - Skipped: `0`
 - Unknown: `0`
-- Blocking blocker instances: `12`
-- Warning instances: `8`
+- Blocking blocker instances: `11`
+- Warning instances: `7`
 
 ## Source Summary
 
@@ -20,13 +20,13 @@ This overview is generated from `reports/source-runtime-evidence-rollup.json` an
 | ECOS | `ecos` | 0 | 3 | 2 | `adapter_not_registered`, `credential_required`, `metadata_only_verification` | `non_data_runtime_evidence_not_collected`, `source_runtime_adapter_not_registered` |
 | KOSIS | `kosis` | 0 | 3 | 2 | `adapter_not_registered`, `credential_required`, `metadata_only_verification` | `non_data_runtime_evidence_not_collected`, `source_runtime_adapter_not_registered` |
 | open.assembly.go.kr | `open_assembly` | 0 | 3 | 2 | `adapter_not_registered`, `credential_required`, `metadata_only_verification` | `non_data_runtime_evidence_not_collected`, `source_runtime_adapter_not_registered` |
-| data.seoul.go.kr | `seoul_open_data` | 0 | 3 | 2 | `adapter_not_registered`, `credential_required`, `metadata_only_verification` | `non_data_runtime_evidence_not_collected`, `source_runtime_adapter_not_registered` |
+| data.seoul.go.kr | `seoul_open_data` | 0 | 2 | 1 | `credential_required`, `metadata_only_verification` | `non_data_runtime_evidence_not_collected` |
 
 ## Blockers By ID
 
 | Blocker ID | Count | Sources |
 | --- | ---: | ---: |
-| adapter_not_registered | 4 | `ecos`, `kosis`, `open_assembly`, `seoul_open_data` |
+| adapter_not_registered | 3 | `ecos`, `kosis`, `open_assembly` |
 | credential_required | 4 | `ecos`, `kosis`, `open_assembly`, `seoul_open_data` |
 | metadata_only_verification | 4 | `ecos`, `kosis`, `open_assembly`, `seoul_open_data` |
 
@@ -35,7 +35,7 @@ This overview is generated from `reports/source-runtime-evidence-rollup.json` an
 | Warning ID | Count | Sources |
 | --- | ---: | ---: |
 | non_data_runtime_evidence_not_collected | 4 | `ecos`, `kosis`, `open_assembly`, `seoul_open_data` |
-| source_runtime_adapter_not_registered | 4 | `ecos`, `kosis`, `open_assembly`, `seoul_open_data` |
+| source_runtime_adapter_not_registered | 3 | `ecos`, `kosis`, `open_assembly` |
 
 ## Source Next Actions
 
@@ -151,7 +151,7 @@ Warnings:
 
 - Runtime evidence: `0`
 - Verification mode: `metadata_only`
-- Adapter status: `none`
+- Adapter status: `registered`
 - Credential required: `true`
 - Candidate batch: `reports/seoul-open-data/runtime-candidates.json`
 - First batch policy: Run a credential-gated bounded sample-call batch only after service/start_index/end_index/format parameters are pinned.
@@ -160,7 +160,6 @@ Warnings:
 Required CLI capabilities:
 
 - `runtime candidate batch ingestion`
-- `Seoul Open Data bounded sample-call adapter`
 - `source credential injection`
 - `Seoul RESULT code extraction`
 
@@ -174,11 +173,9 @@ Required source reports:
 Open blockers:
 
 - `metadata_only_verification` (datapan_cli): Promote Seoul Open Data from metadata-only to bounded sample-call verification after service and index parameters are pinned.
-- `adapter_not_registered` (datapan_cli): Register a Seoul Open Data adapter with verification and call capabilities before runtime evidence can be generated.
 - `credential_required` (operator): Define a non-secret KEY injection path for source-scoped CI and local bounded checks.
 
 Warnings:
 
 - `non_data_runtime_evidence_not_collected`: Use reports/seoul-open-data/runtime-candidates.json with a registered adapter and credentials to run the first bounded verification batch.
-- `source_runtime_adapter_not_registered`: Register the Seoul Open Data adapter before evidence collection.
 
