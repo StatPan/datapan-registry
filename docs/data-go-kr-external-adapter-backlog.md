@@ -2,12 +2,12 @@
 
 This backlog is generated from route-disposition evidence and includes only `adapter_candidate` routes. Dead-route and transient-failure routes remain evidence, not adapter implementation work.
 
-- Generated at: `2026-07-02T17:58:06Z`
-- Candidate hosts: `6`
-- Candidate operations: `11`
-- Candidate APIs: `7`
-- Candidate institutions: `6`
-- Raw missing adapter operations: `40`
+- Generated at: `2026-07-02T18:09:52Z`
+- Candidate hosts: `5`
+- Candidate operations: `8`
+- Candidate APIs: `6`
+- Candidate institutions: `5`
+- Raw missing adapter operations: `37`
 - Dead-route candidates excluded: `14`
 - Transient failures excluded: `15`
 - Unclassified missing routes: `0`
@@ -16,7 +16,6 @@ This backlog is generated from route-disposition evidence and includes only `ada
 
 | Host | Ops | APIs | Institutions | Status |
 | --- | --- | --- | --- | --- |
-| `www.work24.go.kr` | 3 | 1 | 한국고용정보원 | adapter_not_registered |
 | `data.seoul.go.kr` | 2 | 1 | 서울교통공사 | adapter_not_registered |
 | `www.culture.go.kr` | 2 | 1 | 한국체육산업개발주식회사 | adapter_not_registered |
 | `www.happysd.or.kr` | 2 | 2 | 서울특별시성동구도시관리공단 | adapter_not_registered |
@@ -35,8 +34,5 @@ This backlog is generated from route-disposition evidence and includes only `ada
 | `www.culture.go.kr` | 15008517 | 한국체육산업개발주식회사 | 한국체육산업개발주식회사_올림픽공원 도서정보 | 한국체육산업개발주식회사_올림픽공원 도서정보_20230918 외부 링크 2 |
 | `www.happysd.or.kr` | 15007444 | 서울특별시성동구도시관리공단 | 서울특별시성동구도시관리공단_체육시설 강좌정보 조회 | 서울특별시성동구도시관리공단_체육시설 강좌정보 조회_20220803 |
 | `www.happysd.or.kr` | 15007467 | 서울특별시성동구도시관리공단 | 서울특별시성동구도시관리공단_체육시설 대관정보 조회 | 서울특별시성동구도시관리공단_체육시설 대관정보 조회_20220804 |
-| `www.work24.go.kr` | 15003549 | 한국고용정보원 | 한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세 | 한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 1 |
-| `www.work24.go.kr` | 15003549 | 한국고용정보원 | 한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세 | 한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 2 |
-| `www.work24.go.kr` | 15003549 | 한국고용정보원 | 한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세 | 한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 3 |
 
 The full machine-readable backlog is `reports/data-go-kr/external-adapter-backlog.json`.

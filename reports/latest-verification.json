@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-02T17:58:04Z",
+  "generated_at": "2026-07-02T18:09:50Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 1404,
+  "limit": 1407,
   "truncated": true,
-  "filtered_count": 1267,
+  "filtered_count": 1270,
   "summary": {
-    "total": 1267,
-    "verified": 58,
+    "total": 1270,
+    "verified": 61,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0
@@ -24356,6 +24356,48 @@
       "http_status": 200,
       "semantic_status": "html_landing_page",
       "url": "https://www.garak.co.kr/homepage/M0000258/publicdata/selectPageListPublicData.do?publicDataRealmSn=24",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15003549",
+      "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
+      "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 1",
+      "provider": "work24",
+      "endpoint_host": "www.work24.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T18:09:48Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=\u0026fullApiSvcId=000000000000000000000000000034\u0026upprApiSvcId=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15003549",
+      "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
+      "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 2",
+      "provider": "work24",
+      "endpoint_host": "www.work24.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T18:09:48Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023\u0026fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000062\u0026upprApiSvcId=000000000000000000000000000022",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15003549",
+      "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
+      "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 3",
+      "provider": "work24",
+      "endpoint_host": "www.work24.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T18:09:48Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023\u0026fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000056\u0026upprApiSvcId=000000000000000000000000000022",
       "body_shape": "html"
     }
   ]

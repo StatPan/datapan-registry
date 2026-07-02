@@ -16,29 +16,29 @@ Current release metrics:
 - callable operations: `12111` (`98.8%`)
 - data.go.kr gateway operations: `11419`
 - external endpoint operations: `643`
-- registered adapter operations: `622`
-- missing adapter operations: `40`
-- external adapter coverage: `94.0%`
+- registered adapter operations: `625`
+- missing adapter operations: `37`
+- external adapter coverage: `94.4%`
 - approval-required operations: `4142`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `42`
-- registered adapter hosts: `36`
-- missing adapter hosts: `17`
+- registered adapter hosts: `37`
+- missing adapter hosts: `16`
 - call-capable adapters: `21`
 
 Current missing external route evidence:
 
-- routes: `40`
-- hosts: `17`
-- with probe evidence: `40`
+- routes: `37`
+- hosts: `16`
+- with probe evidence: `37`
 - dead-route candidates: `14`
 - transient failures: `15`
-- remaining adapter candidates: `11`
+- remaining adapter candidates: `8`
 
-The practical interpretation is important: the remaining `40` missing external
+The practical interpretation is important: the remaining `37` missing external
 routes are all covered by manifest-bound probe and route-disposition evidence.
-Only the `11` routes with current adapter-candidate evidence should become
+Only the `8` routes with current adapter-candidate evidence should become
 adapter backlog; dead-route and transient-failure routes remain evidence, not
 implementation work.
 
@@ -121,7 +121,7 @@ Registered external adapters currently cover these host families through
 `data/provider-index.json`: airport, andong, data-gg, ekape, emuseum, epost,
 folk, forest, garak, gblib, geoje, gwanak, humetro, itfind, jeju, jeonju,
 korad, kpx, lh-ebid, mafra, myhome, naqs, nfqs, nongsaro, oneclick-law, pqis,
-q-net, seoul-bus, sisul, tour, uiryeong, and ulsan.
+q-net, seoul-bus, sisul, tour, uiryeong, ulsan, and work24.
 
 Missing external route hosts currently requiring route-disposition tracking:
 
@@ -130,7 +130,6 @@ Missing external route hosts currently requiring route-disposition tracking:
 - `openapi.price.go.kr`: `4`
 - `www.rda.go.kr`: `4`
 - `its.gyeongju.go.kr:81`: `3`
-- `www.work24.go.kr`: `3`
 - `data.seoul.go.kr`: `2`
 - `data.wanju.go.kr`: `2`
 - `www.cid.or.kr`: `2`
@@ -248,9 +247,12 @@ CI should fail rather than treating the checked-in summary as authoritative.
    endpoint verification evidence, growing checked runtime evidence to `1264`
    and verified results to `55`. Gira #107 adds `garak` external endpoint
    verification evidence, growing checked runtime evidence to `1267` and
-   verified results to `58`. This is still mostly skipped boundary evidence,
-   and the new `data-gg`/`nfqs`/`nongsaro`/`gwanak`/`mafra`/`garak` results
-   prove landing-page reachability rather than generic machine-call support.
+   verified results to `58`. Gira #109 adds `work24` external endpoint
+   verification evidence, growing checked runtime evidence to `1270` and
+   verified results to `61`. This is still mostly skipped boundary evidence,
+   and the new `data-gg`/`nfqs`/`nongsaro`/`gwanak`/`mafra`/`garak`/`work24`
+   results prove landing-page reachability rather than generic machine-call
+   support.
 11. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 12. Generate future data.go.kr impact plans directly from catalog diff,

@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.external-coverage.v1",
-  "generated_at": "2026-07-02T17:58:06Z",
+  "generated_at": "2026-07-02T18:09:52Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "source_profile": "sources/data_go_kr.json",
@@ -10,26 +10,26 @@
   "provider_index": "data/provider-index.json",
   "summary": {
     "external_endpoint_operations": 643,
-    "registered_adapter_operations": 622,
-    "missing_adapter_operations": 40,
-    "raw_external_adapter_coverage_percent": 94.0,
-    "registered_adapter_hosts": 36,
-    "missing_adapter_hosts": 17,
-    "route_evidence_covered_operations": 40,
-    "evidence_adjusted_adapter_candidate_operations": 11
+    "registered_adapter_operations": 625,
+    "missing_adapter_operations": 37,
+    "raw_external_adapter_coverage_percent": 94.4,
+    "registered_adapter_hosts": 37,
+    "missing_adapter_hosts": 16,
+    "route_evidence_covered_operations": 37,
+    "evidence_adjusted_adapter_candidate_operations": 8
   },
   "route_disposition": {
-    "routes_total": 40,
-    "with_probe_evidence": 40,
+    "routes_total": 37,
+    "with_probe_evidence": 37,
     "without_probe_evidence": 0,
     "dead_route_candidates": 14,
     "transient_failures": 15,
-    "adapter_candidates": 11
+    "adapter_candidates": 8
   },
   "operational_gate": {
     "status": "passing",
     "unclassified_missing_route_operations": 0,
-    "adapter_backlog_candidate_operations": 11,
+    "adapter_backlog_candidate_operations": 8,
     "ci_action": "fail_on_unclassified_missing_routes",
     "adapter_backlog_policy": "Create adapter backlog only from route-disposition adapter_candidate evidence, not from raw external endpoint status."
   },
@@ -63,12 +63,6 @@
       "operations": 3,
       "disposition": "transient_failure",
       "reason": "transient_failure=3; reasons: unadapted_probe_timeout"
-    },
-    {
-      "host": "www.work24.go.kr",
-      "operations": 3,
-      "disposition": "adapter_candidate",
-      "reason": "adapter_candidate=3; reasons: unadapted_probe_http_2xx"
     },
     {
       "host": "data.seoul.go.kr",
@@ -138,8 +132,8 @@
     }
   ],
   "next": [
-    "Preserve raw external adapter coverage at 94.0% unless new adapters or catalog changes alter the denominator.",
-    "Treat 11 evidence-adjusted adapter candidate operations as the current external adapter backlog.",
+    "Preserve raw external adapter coverage at 94.4% unless new adapters or catalog changes alter the denominator.",
+    "Treat 8 evidence-adjusted adapter candidate operations as the current external adapter backlog.",
     "Keep unclassified missing external routes at 0; refresh unadapted external probes before creating adapter work from raw misses.",
     "Promote host-level disposition from mixed to specific dead/transient/adapter classifications as route evidence becomes stable."
   ]

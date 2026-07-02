@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-07-02T17:58:06Z",
+  "generated_at": "2026-07-02T18:09:52Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "probe": "..\\datapan-registry\\reports\\unadapted-external-probe.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "routes_total": 40,
-    "operations": 40,
-    "hosts": 17,
-    "with_probe_evidence": 40,
+    "routes_total": 37,
+    "operations": 37,
+    "hosts": 16,
+    "with_probe_evidence": 37,
     "without_probe_evidence": 0,
     "dead_route_candidates": 14,
     "transient_failures": 15,
     "parameter_blocked_routes": 0,
-    "adapter_candidates": 11,
+    "adapter_candidates": 8,
     "by_disposition": [
       {
         "key": "transient_failure",
@@ -28,7 +28,7 @@
       },
       {
         "key": "adapter_candidate",
-        "count": 11,
+        "count": 8,
         "disposition": "adapter_candidate"
       }
     ],
@@ -40,7 +40,7 @@
       },
       {
         "key": "unadapted_probe_http_2xx",
-        "count": 11,
+        "count": 8,
         "reason": "unadapted_probe_http_2xx"
       },
       {
@@ -84,11 +84,6 @@
         "key": "its.gyeongju.go.kr:81",
         "count": 3,
         "host": "its.gyeongju.go.kr:81"
-      },
-      {
-        "key": "www.work24.go.kr",
-        "count": 3,
-        "host": "www.work24.go.kr"
       },
       {
         "key": "data.seoul.go.kr",
@@ -754,51 +749,6 @@
       "operation": "서울특별시성동구도시관리공단_체육시설 대관정보 조회_20220804",
       "endpoint": "https://www.happysd.or.kr/c_76/cnt/m_109/view.do",
       "endpoint_host": "www.happysd.or.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15003549",
-      "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
-      "organization": "한국고용정보원",
-      "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 1",
-      "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=\u0026upprApiSvcId=\u0026fullApiSvcId=000000000000000000000000000034",
-      "endpoint_host": "www.work24.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15003549",
-      "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
-      "organization": "한국고용정보원",
-      "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 2",
-      "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023\u0026upprApiSvcId=000000000000000000000000000022\u0026fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000062",
-      "endpoint_host": "www.work24.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15003549",
-      "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
-      "organization": "한국고용정보원",
-      "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 3",
-      "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023\u0026upprApiSvcId=000000000000000000000000000022\u0026fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000056",
-      "endpoint_host": "www.work24.go.kr",
       "dependency_class": "external_endpoint",
       "disposition": "adapter_candidate",
       "recommended_action": "build a provider adapter using the captured probe evidence",
