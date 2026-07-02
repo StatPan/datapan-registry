@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-02T21:37:18Z`
+- Generated at: `2026-07-02T21:48:05Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `12495`
-- Runtime evidence: `1278` (`10.2%`)
-- External endpoint operations: `885`
-- Registered adapter operations: `875`
+- Operations: `12720`
+- Runtime evidence: `1278` (`10.0%`)
+- External endpoint operations: `1110`
+- Registered adapter operations: `1100`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -14,7 +14,7 @@
 | Institution | APIs | APIs with ops | Ops | Evidence | Evidence % | Verified | Failed | Skipped | Approval | No endpoint |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 행정안전부 | 1252 | 793 | 1054 | 0 | 0.0% | 0 | 0 | 0 | 215 | 0 |
-| 경기도 | 840 | 19 | 45 | 18 | 40.0% | 18 | 0 | 0 | 0 | 0 |
+| 경기도 | 840 | 111 | 270 | 18 | 6.7% | 18 | 0 | 0 | 3 | 0 |
 | 국토교통부 | 393 | 127 | 397 | 25 | 6.3% | 0 | 0 | 25 | 6 | 0 |
 | 식품의약품안전처 | 392 | 272 | 363 | 2 | 0.6% | 0 | 0 | 2 | 275 | 0 |
 | 국회 국회사무처 | 277 | 0 | 0 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
@@ -58,6 +58,7 @@
 | 한국산업인력공단 | 230 | 228 | 315 | 148 | 47.0% | 5 | 1 | 142 | 181 | 0 |
 | 공정거래위원회 | 250 | 216 | 295 | 0 | 0.0% | 0 | 0 | 0 | 279 | 0 |
 | 해양수산부 | 173 | 172 | 276 | 8 | 2.9% | 0 | 0 | 8 | 116 | 0 |
+| 경기도 | 840 | 111 | 270 | 18 | 6.7% | 18 | 0 | 0 | 3 | 0 |
 | 한국연구재단 | 26 | 24 | 247 | 13 | 5.3% | 4 | 3 | 6 | 234 | 0 |
 | 한국마사회 | 223 | 223 | 223 | 9 | 4.0% | 0 | 0 | 9 | 221 | 0 |
 | 한국관광공사 | 28 | 28 | 213 | 1 | 0.5% | 0 | 0 | 1 | 212 | 0 |
@@ -77,7 +78,6 @@
 | 농촌진흥청 국립농업과학원 | 27 | 27 | 102 | 0 | 0.0% | 0 | 0 | 0 | 3 | 0 |
 | 전북특별자치도 전주시 | 53 | 53 | 100 | 80 | 80.0% | 0 | 5 | 75 | 7 | 0 |
 | 국토안전관리원 | 23 | 23 | 96 | 23 | 24.0% | 0 | 0 | 23 | 63 | 0 |
-| 한국건강가정진흥원 | 85 | 85 | 90 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 
 The full machine-readable report is `reports/data-go-kr/institution-api-overview.json`.
 The full coverage backlog is `reports/data-go-kr/coverage-backlog.json`, with
@@ -85,20 +85,21 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 ## Largest Categories
 
-- 농축수산: `1337` operations
-- 교통물류: `1318` operations
-- 문화관광: `1280` operations
-- 공공행정: `1255` operations
-- 산업고용: `996` operations
-- 재정금융: `912` operations
-- 환경기상: `809` operations
-- 사회복지: `803` operations
-- 보건의료: `702` operations
+- 농축수산: `1353` operations
+- 교통물류: `1325` operations
+- 문화관광: `1291` operations
+- 공공행정: `1263` operations
+- 산업고용: `1023` operations
+- 재정금융: `915` operations
+- 사회복지: `860` operations
+- 환경기상: `843` operations
+- 보건의료: `705` operations
 - 식품건강: `649` operations
 
 ## Largest Hosts
 
 - apis.data.go.kr: `11423` operations
+- data.gg.go.kr: `257` operations
 - www.safetydata.go.kr: `180` operations
 - openapi.q-net.or.kr: `104` operations
 - openapi.jeonju.go.kr: `80` operations
@@ -106,5 +107,4 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 - c.q-net.or.kr: `42` operations
 - data.geoje.go.kr: `41` operations
 - data.uiryeong.go.kr: `40` operations
-- data.gg.go.kr: `33` operations
 - oneclick.law.go.kr:80: `27` operations

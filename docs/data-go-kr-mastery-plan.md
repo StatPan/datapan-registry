@@ -12,14 +12,14 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `12495`
-- callable operations: `12353` (`98.9%`)
+- operations: `12720`
+- callable operations: `12578` (`98.9%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `885`
-- registered adapter operations: `875`
+- external endpoint operations: `1110`
+- registered adapter operations: `1100`
 - missing adapter operations: `29`
-- external adapter coverage: `96.8%`
-- approval-required operations: `4322`
+- external adapter coverage: `97.4%`
+- approval-required operations: `4325`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `42`
@@ -309,9 +309,9 @@ coverage.
    increasing registered external adapter operations to `638`; the next
    Safety Data materialization batches add 175 행정안전부 operation mappings,
    increasing registered external adapter operations to `813`; an adapter-safe
-   link-detail enrichment batch then adds 24 APIs and 62 operations across
+   link-detail enrichment batches then add 116 APIs and 287 operations across
    already registered external hosts, increasing registered external adapter
-   operations to `875` while keeping evidence-adjusted adapter candidates at
+   operations to `1100` while keeping evidence-adjusted adapter candidates at
    `0`. This is still mostly skipped
    boundary evidence, and the new
    `data-gg`/`nfqs`/`nongsaro`/`gwanak`/`mafra`/`garak`/`work24`/

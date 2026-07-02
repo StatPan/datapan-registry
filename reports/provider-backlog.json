@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T21:37:18Z",
+  "generated_at": "2026-07-02T21:48:05Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -9,7 +9,7 @@
     "hosts": 193,
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 54,
-    "external_guide_hosts": 157,
+    "external_guide_hosts": 158,
     "registered_adapter_hosts": 43,
     "operation_hosts": 56,
     "guide_only_hosts": 137,
@@ -17,8 +17,8 @@
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
-    "approval_required_operations": 4322,
-    "malformed_source_url_count": 625
+    "approval_required_operations": 4325,
+    "malformed_source_url_count": 627
   },
   "providers": [
     {
@@ -171,6 +171,24 @@
       ]
     },
     {
+      "host": "data.gg.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 106,
+      "operations": 257,
+      "external_endpoint_operations": 257,
+      "external_guide_specs": 1,
+      "approval_required_operations": 3,
+      "sample_ids": [
+        "15005231",
+        "15011020",
+        "15011027"
+      ]
+    },
+    {
       "host": "www.safetydata.go.kr",
       "provider": "safetydata",
       "kinds": [
@@ -291,21 +309,6 @@
         "15008883",
         "15008884",
         "15008887"
-      ]
-    },
-    {
-      "host": "data.gg.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 14,
-      "operations": 33,
-      "external_endpoint_operations": 33,
-      "sample_ids": [
-        "15005231",
-        "15011020",
-        "15011027"
       ]
     },
     {
@@ -468,9 +471,9 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 6,
-      "operations": 10,
-      "external_endpoint_operations": 10,
+      "specs": 7,
+      "operations": 11,
+      "external_endpoint_operations": 11,
       "external_guide_specs": 3,
       "sample_ids": [
         "15002220",
