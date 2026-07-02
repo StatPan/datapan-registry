@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-02T22:04:09Z",
+  "generated_at": "2026-07-02T22:19:46Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 12963,
-    "callable_operations": 12821,
-    "specs_without_operations": 4466,
-    "specs_without_callable_operation": 4541,
+    "operations_total": 13066,
+    "callable_operations": 12924,
+    "specs_without_operations": 4368,
+    "specs_without_callable_operation": 4443,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 625,
-    "operations_without_response_params": 1847,
+    "operations_without_request_params": 728,
+    "operations_without_response_params": 1950,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 723,
-      "external_endpoint_operations": 1353,
+      "external_endpoint_specs": 821,
+      "external_endpoint_operations": 1456,
       "service_root_only_operations": 19,
       "soap_operations": 35,
-      "wms_operations": 7,
+      "wms_operations": 100,
       "dev_approval_required_operations": 207,
-      "prod_approval_required_operations": 4219,
+      "prod_approval_required_operations": 4322,
       "malformed_endpoint_url_count": 42,
       "malformed_guide_url_count": 585,
       "top_endpoint_hosts": [
@@ -34,15 +34,19 @@
         },
         {
           "host": "data.gg.go.kr",
-          "count": 498
+          "count": 503
         },
         {
           "host": "www.safetydata.go.kr",
-          "count": 180
+          "count": 184
         },
         {
           "host": "openapi.q-net.or.kr",
           "count": 104
+        },
+        {
+          "host": "www.safemap.go.kr",
+          "count": 94
         },
         {
           "host": "openapi.jeonju.go.kr",
@@ -103,24 +107,24 @@
         {
           "host": "data.mafra.go.kr",
           "count": 11
-        },
-        {
-          "host": "data.naqs.go.kr",
-          "count": 9
         }
       ],
       "top_external_endpoint_hosts": [
         {
           "host": "data.gg.go.kr",
-          "count": 498
+          "count": 503
         },
         {
           "host": "www.safetydata.go.kr",
-          "count": 180
+          "count": 184
         },
         {
           "host": "openapi.q-net.or.kr",
           "count": 104
+        },
+        {
+          "host": "www.safemap.go.kr",
+          "count": 94
         },
         {
           "host": "openapi.jeonju.go.kr",
@@ -184,10 +188,6 @@
         },
         {
           "host": "data.naqs.go.kr",
-          "count": 9
-        },
-        {
-          "host": "www.culture.go.kr",
           "count": 9
         }
       ],
@@ -521,34 +521,42 @@
       ],
       "wms": [
         {
-          "id": "15112353",
-          "title": "해양수산부_해양용도구역_에너지개발구역 서비스",
-          "organization": "해양수산부",
-          "source_category": "농축수산",
-          "operations_count": 2,
-          "callable_operations": 2
+          "id": "15101802",
+          "title": "행정안전부_생활안전지도 범죄주의구간(절도, WMS)",
+          "organization": "행정안전부",
+          "source_category": "재난안전",
+          "operations_count": 1,
+          "callable_operations": 1
         },
         {
-          "id": "15114234",
-          "title": "해양수산부_수상레저금지구역",
-          "organization": "해양수산부",
-          "source_category": "농축수산",
-          "operations_count": 2,
-          "callable_operations": 2
+          "id": "15101809",
+          "title": "행정안전부_생활안전지도 범죄주의구간(성폭력, WMS)",
+          "organization": "행정안전부",
+          "source_category": "재난안전",
+          "operations_count": 1,
+          "callable_operations": 1
         },
         {
-          "id": "15114236",
-          "title": "해양수산부_시운전금지해역",
-          "organization": "해양수산부",
-          "source_category": "농축수산",
-          "operations_count": 2,
-          "callable_operations": 2
+          "id": "15101813",
+          "title": "행정안전부_생활안전지도 여성밤길치안안전(전체, WMS)",
+          "organization": "행정안전부",
+          "source_category": "재난안전",
+          "operations_count": 1,
+          "callable_operations": 1
         },
         {
-          "id": "15127853",
-          "title": "해양수산부_수치모델을 이용한 과거해황 지도 서비스",
-          "organization": "해양수산부",
-          "source_category": "농축수산",
+          "id": "15101814",
+          "title": "행정안전부_생활안전지도 여성밤길치안안전(강도, WMS)",
+          "organization": "행정안전부",
+          "source_category": "재난안전",
+          "operations_count": 1,
+          "callable_operations": 1
+        },
+        {
+          "id": "15101815",
+          "title": "행정안전부_생활안전지도 여성밤길치안안전(절도, WMS)",
+          "organization": "행정안전부",
+          "source_category": "재난안전",
           "operations_count": 1,
           "callable_operations": 1
         }

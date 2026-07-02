@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-07-02T22:04:09Z",
+  "generated_at": "2026-07-02T22:19:46Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -13,20 +13,20 @@
     "provider_index": "data/provider-index.json"
   },
   "coverage": {
-    "operations": 12963,
-    "callable_operations": 12821,
+    "operations": 13066,
+    "callable_operations": 12924,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 1353,
-    "registered_adapter_operations": 1343,
+    "external_endpoint_operations": 1456,
+    "registered_adapter_operations": 1446,
     "call_capable_adapters": 23
   },
   "evidence": {
-    "total": 1303,
-    "verified": 94,
+    "total": 1313,
+    "verified": 104,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0,
-    "coverage_percent": 10.1,
+    "coverage_percent": 10,
     "by_kind": [
       {
         "key": "data_go_kr_gateway",
@@ -34,7 +34,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 639
+        "count": 649
       },
       {
         "key": "service_root",
@@ -44,15 +44,15 @@
   },
   "growth_target": {
     "target_percent": 10,
-    "target_evidence_total": 1297,
+    "target_evidence_total": 1307,
     "remaining_to_target": 0,
     "status": "above_target"
   },
   "verification_plan": {
-    "planned_batches": 6,
-    "planned_operations": 52,
+    "planned_batches": 7,
+    "planned_operations": 62,
     "uncovered_gateway_candidates": 10774,
-    "uncovered_adapter_candidates": 685,
+    "uncovered_adapter_candidates": 778,
     "missing_adapter_hosts": 11,
     "planned_by_kind": [
       {
@@ -61,7 +61,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 42
+        "count": 52
       }
     ],
     "batches": [
@@ -77,8 +77,8 @@
         "label": "data-gg",
         "provider": "data-gg",
         "kind": "external_endpoint",
-        "candidates": 498,
-        "uncovered_candidates": 470,
+        "candidates": 503,
+        "uncovered_candidates": 475,
         "planned_operations": 10,
         "output": ".datapan/verification/data-gg-next.json"
       },
@@ -95,10 +95,19 @@
         "label": "safetydata",
         "provider": "safetydata",
         "kind": "external_endpoint",
-        "candidates": 180,
-        "uncovered_candidates": 180,
+        "candidates": 184,
+        "uncovered_candidates": 184,
         "planned_operations": 10,
         "output": ".datapan/verification/safetydata-next.json"
+      },
+      {
+        "label": "safemap",
+        "provider": "safemap",
+        "kind": "external_endpoint",
+        "candidates": 94,
+        "uncovered_candidates": 84,
+        "planned_operations": 10,
+        "output": ".datapan/verification/safemap-next.json"
       },
       {
         "label": "seoul-open-data",
@@ -122,8 +131,8 @@
   },
   "provider_split_readiness": {
     "status": "ready",
-    "adapter_count": 39,
-    "verification_capable_adapters": 39,
+    "adapter_count": 40,
+    "verification_capable_adapters": 40,
     "call_capable_adapters": 23
   },
   "warnings": []

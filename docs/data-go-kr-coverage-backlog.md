@@ -2,25 +2,25 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-07-02T22:04:09Z`
+- Generated at: `2026-07-02T22:19:46Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `7594` (`63.0%`)
-- APIs without operation mapping: `4466`
-- Operations: `12963`
-- Runtime evidence operations: `1303` (`10.1%`)
-- Runtime verified operations: `94`
+- APIs with operation mapping: `7692` (`63.8%`)
+- APIs without operation mapping: `4368`
+- Operations: `13066`
+- Runtime evidence operations: `1313` (`10.0%`)
+- Runtime verified operations: `104`
 - Runtime failed operations: `87`
 - Runtime skipped operations: `1122`
-- APIs with runtime evidence: `612`
-- Runtime reactivation APIs: `6982`
+- APIs with runtime evidence: `622`
+- Runtime reactivation APIs: `7070`
 - Runtime repair APIs: `54`
 
 ## Highest Priority Institutions
 
 | Institution | APIs | Covered APIs | Uncovered APIs | API Coverage | Ops | Runtime APIs | Runtime Reactivation APIs | Runtime Repair APIs | Priority |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 행정안전부 | 1252 | 793 | 459 | 63.3% | 1054 | 0 | 793 | 0 | 1252 |
+| 행정안전부 | 1252 | 891 | 361 | 71.2% | 1157 | 10 | 881 | 0 | 1242 |
 | 경기도 | 840 | 199 | 641 | 23.7% | 513 | 14 | 185 | 0 | 826 |
 | 국토교통부 | 393 | 127 | 266 | 32.3% | 397 | 3 | 124 | 0 | 390 |
 | 식품의약품안전처 | 392 | 272 | 120 | 69.4% | 363 | 2 | 270 | 0 | 390 |

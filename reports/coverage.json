@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T22:04:11Z",
+  "generated_at": "2026-07-02T22:19:49Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 12963,
-    "callable_operations": 12821,
+    "operations": 13066,
+    "callable_operations": 12924,
     "callable_operation_percent": 98.9,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 1353,
-    "registered_adapter_operations": 1343,
+    "external_endpoint_operations": 1456,
+    "registered_adapter_operations": 1446,
     "missing_adapter_operations": 29,
-    "external_adapter_coverage_percent": 97.9,
-    "approval_required_operations": 4325,
+    "external_adapter_coverage_percent": 98,
+    "approval_required_operations": 4428,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
-    "unsupported_protocol_operations": 42,
-    "registered_adapter_hosts": 43,
+    "unsupported_protocol_operations": 135,
+    "registered_adapter_hosts": 44,
     "missing_adapter_hosts": 11,
-    "adapter_count": 39,
+    "adapter_count": 40,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -29,7 +29,7 @@
     "callable_operation_percent_target": 99,
     "callable_operation_percent_met": false,
     "external_adapter_coverage_percent_target": 98,
-    "external_adapter_coverage_percent_met": false,
+    "external_adapter_coverage_percent_met": true,
     "evidence_operation_percent_target": 10,
     "evidence_operation_percent_met": true,
     "missing_adapter_operations_target": 10,
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-02T22:03:35Z",
-    "total": 1303,
-    "verified": 94,
+    "generated_at": "2026-07-02T22:19:44Z",
+    "total": 1313,
+    "verified": 104,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0,
-    "verified_percent": 7.2,
-    "evidence_operation_percent": 10.1
+    "verified_percent": 7.9,
+    "evidence_operation_percent": 10
   },
   "route_evidence": {
     "present": true,
@@ -209,11 +209,12 @@
           "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 194,
-        "operations": 498,
-        "external_endpoint_operations": 498,
+        "specs": 199,
+        "operations": 503,
+        "external_endpoint_operations": 503,
         "external_guide_specs": 1,
-        "approval_required_operations": 3,
+        "wms_operations": 5,
+        "approval_required_operations": 8,
         "sample_ids": [
           "15005231",
           "15011020",
@@ -227,10 +228,10 @@
           "external_endpoint"
         ],
         "adapter_status": "adapter",
-        "specs": 180,
-        "operations": 180,
-        "external_endpoint_operations": 180,
-        "approval_required_operations": 180,
+        "specs": 184,
+        "operations": 184,
+        "external_endpoint_operations": 184,
+        "approval_required_operations": 184,
         "sample_ids": [
           "15147982",
           "15147984",
@@ -254,6 +255,23 @@
           "15003003",
           "15003024",
           "15003027"
+        ]
+      },
+      {
+        "host": "www.safemap.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "adapter",
+        "specs": 94,
+        "operations": 94,
+        "external_endpoint_operations": 94,
+        "wms_operations": 88,
+        "approval_required_operations": 94,
+        "sample_ids": [
+          "15101802",
+          "15101809",
+          "15101812"
         ]
       },
       {
@@ -360,31 +378,14 @@
           "15000122",
           "15000215"
         ]
-      },
-      {
-        "host": "openapi.epost.go.kr:80",
-        "provider": "epost",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "adapter",
-        "specs": 7,
-        "operations": 22,
-        "external_endpoint_operations": 22,
-        "soap_operations": 5,
-        "sample_ids": [
-          "15000032",
-          "15000124",
-          "15000268"
-        ]
       }
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-02T22:04:11Z",
+    "generated_at": "2026-07-02T22:19:49Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 39,
-    "host_count": 44,
+    "adapter_count": 40,
+    "host_count": 45,
     "adapters": [
       {
         "name": "airport",
@@ -717,6 +718,16 @@
         ]
       },
       {
+        "name": "safemap",
+        "status": "registered",
+        "hosts": [
+          "www.safemap.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "safetydata",
         "status": "registered",
         "hosts": [
@@ -808,8 +819,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 39,
-      "verification_capable_adapters": 39,
+      "adapter_count": 40,
+      "verification_capable_adapters": 40,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,
