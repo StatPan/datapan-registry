@@ -94,8 +94,8 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `4,368` data.go.kr APIs
-  without operation mappings, `7,070` operation-mapped APIs without runtime
+- `reports/data-go-kr/coverage-backlog.json` tracks `4,271` data.go.kr APIs
+  without operation mappings, `7,157` operation-mapped APIs without runtime
   evidence, and `54` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
@@ -189,11 +189,13 @@ Current gaps:
   current evidence target to `1297`, then culture, data-gg, and mafra external
   endpoint batches add `25` verified landing-page checks. The Safety Map
   adapter then opens the 행정안전부 safemap batch and adds `10` verified landing-page
-  checks, bringing runtime evidence to `1313` and keeping the `10%`
+  checks, bringing runtime evidence to `1313`. The following 행정안전부 Safety
+  Data batch adds `97` operation mappings and `10` approval-gated bounded
+  checks, bringing runtime evidence to `1323` and keeping the `10%`
   release-readiness target restored. Most evidence is still skipped boundary
   evidence, not proof that those operations are callable.
-- API operation coverage remains incomplete: `7,692` of `12,060` APIs have
-  operation mappings (`63.8%`), leaving `4,368` APIs to materialize and `7,070`
+- API operation coverage remains incomplete: `7,789` of `12,060` APIs have
+  operation mappings (`64.6%`), leaving `4,271` APIs to materialize and `7,157`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

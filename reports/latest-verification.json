@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-07-02T22:19:44Z",
+  "generated_at": "2026-07-02T22:37:31Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 1472,
+  "limit": 1482,
   "truncated": true,
-  "filtered_count": 1313,
+  "filtered_count": 1323,
   "summary": {
-    "total": 1313,
+    "total": 1323,
     "verified": 104,
     "failed": 87,
-    "skipped": 1122,
+    "skipped": 1132,
     "unknown": 0
   },
   "results": [
@@ -25001,6 +25001,141 @@
       "semantic_status": "html_landing_page",
       "url": "https://www.safemap.go.kr/opna/data/dataViewRenew.do?objtId=199",
       "body_shape": "html"
+    },
+    {
+      "dataset_id": "15147982",
+      "title": "행정안전부_자동심장충격기AED",
+      "operation": "행정안전부_자동심장충격기_AED",
+      "provider": "safetydata",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-07-02T22:37:21Z",
+      "params": {
+        "endLat": "",
+        "endLot": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "returnType": "json",
+        "startLat": "",
+        "startLot": ""
+      },
+      "missing_params": [
+        "startLot",
+        "endLot",
+        "startLat",
+        "endLat"
+      ]
+    },
+    {
+      "dataset_id": "15147984",
+      "title": "행정안전부_약국_POI",
+      "operation": "행정안전부_약국_POI",
+      "provider": "safetydata",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-07-02T22:37:21Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "returnType": "json"
+      }
+    },
+    {
+      "dataset_id": "15150588",
+      "title": "행정안전부_한국환경공단_황사주의보 발생정보",
+      "operation": "행정안전부_한국환경공단_황사주의보 발생정보_20250923",
+      "provider": "safetydata",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-07-02T22:37:21Z"
+    },
+    {
+      "dataset_id": "15150607",
+      "title": "행정안전부_농수로제원",
+      "operation": "행정안전부_농수로제원_20251103",
+      "provider": "safetydata",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-07-02T22:37:21Z"
+    },
+    {
+      "dataset_id": "15150608",
+      "title": "행정안전부_공통기반_본선_구간_정보_기본",
+      "operation": "공통기반_본선_구간_정보_기본",
+      "provider": "safetydata",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-07-02T22:37:21Z",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "returnType": "json"
+      }
+    },
+    {
+      "dataset_id": "15150619",
+      "title": "행정안전부_행정처분결과",
+      "operation": "행정안전부_행정처분결과_20250921",
+      "provider": "safetydata",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-07-02T22:37:21Z"
+    },
+    {
+      "dataset_id": "15150625",
+      "title": "행정안전부_행정처분결과_식품제조가공업",
+      "operation": "행정안전부_행정처분결과_식품제조가공업_20250922",
+      "provider": "safetydata",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-07-02T22:37:21Z"
+    },
+    {
+      "dataset_id": "15150629",
+      "title": "행정안전부_행정처분결과_식품판매업",
+      "operation": "행정안전부_행정처분결과_식품판매업_20250922",
+      "provider": "safetydata",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-07-02T22:37:21Z"
+    },
+    {
+      "dataset_id": "15150630",
+      "title": "행정안전부_회수_판매중지정보",
+      "operation": "행정안전부_회수_판매중지정보_20250920",
+      "provider": "safetydata",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-07-02T22:37:21Z"
+    },
+    {
+      "dataset_id": "15150633",
+      "title": "행정안전부_CPTED(위치포인트)",
+      "operation": "행정안전부_CPTED(위치포인트)_20250904",
+      "provider": "safetydata",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "approval_required",
+      "verified_at": "2026-07-02T22:37:21Z"
     }
   ]
 }
