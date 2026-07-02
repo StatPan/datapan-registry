@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-02T16:57:17Z",
+  "generated_at": "2026-07-02T17:14:35Z",
   "source": "..\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1254,
-    "verified": 45,
+    "total": 1258,
+    "verified": 49,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0
@@ -26,7 +26,7 @@
       },
       {
         "key": "verified",
-        "count": 45,
+        "count": 49,
         "status": "verified"
       }
     ],
@@ -404,6 +404,11 @@
         "provider": "jeju"
       },
       {
+        "key": "nongsaro",
+        "count": 4,
+        "provider": "nongsaro"
+      },
+      {
         "key": "pqis",
         "count": 4,
         "provider": "pqis"
@@ -566,6 +571,11 @@
         "host": "openapi.pqis.go.kr"
       },
       {
+        "key": "www.nongsaro.go.kr",
+        "count": 4,
+        "host": "www.nongsaro.go.kr"
+      },
+      {
         "key": "folkency.nfm.go.kr",
         "count": 3,
         "host": "folkency.nfm.go.kr"
@@ -604,7 +614,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 590,
+        "count": 594,
         "kind": "external_endpoint"
       },
       {

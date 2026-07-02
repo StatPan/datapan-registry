@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-02T16:57:24Z",
+  "generated_at": "2026-07-02T17:14:36Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 28,
-  "host_count": 32,
+  "adapter_count": 29,
+  "host_count": 33,
   "adapters": [
     {
       "name": "airport",
@@ -220,6 +220,16 @@
       ]
     },
     {
+      "name": "nongsaro",
+      "status": "registered",
+      "hosts": [
+        "www.nongsaro.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "oneclick-law",
       "status": "registered",
       "hosts": [
@@ -313,8 +323,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 28,
-    "verification_capable_adapters": 28,
+    "adapter_count": 29,
+    "verification_capable_adapters": 29,
     "call_capable_adapters": 21,
     "required_adapters": 2,
     "required_verification_adapters": 2,

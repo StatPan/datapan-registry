@@ -1,0 +1,78 @@
+{
+  "generated_at": "2026-07-02T17:14:23Z",
+  "provider": "data.go.kr",
+  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 4,
+  "timeout": "20s",
+  "truncated": false,
+  "filters": {
+    "provider": "nongsaro",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 4,
+  "summary": {
+    "total": 4,
+    "verified": 4,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15002034",
+      "title": "농촌진흥청_국가농작물병해충도감정보",
+      "operation": "농촌진흥청_국가농작물병해충도감정보_20240222 외부 링크 2",
+      "provider": "nongsaro",
+      "endpoint_host": "www.nongsaro.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T17:14:23Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EA%B3%B5%EA%B3%B5+%EB%8D%B0%EC%9D%B4%ED%84%B0",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15005257",
+      "title": "농촌진흥청_농촌교육농장 정보",
+      "operation": "농촌진흥청_농촌교육농장 정보_20171211 외부 링크 1",
+      "provider": "nongsaro",
+      "endpoint_host": "www.nongsaro.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T17:14:23Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EB%86%8D%EC%B4%8C%EA%B5%90%EC%9C%A1%EB%86%8D%EC%9E%A5",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15005257",
+      "title": "농촌진흥청_농촌교육농장 정보",
+      "operation": "농촌진흥청_농촌교육농장 정보_20171211 외부 링크 2",
+      "provider": "nongsaro",
+      "endpoint_host": "www.nongsaro.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T17:14:23Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EB%86%8D%EC%82%AC%EB%A1%9C+%EC%9D%B4%EB%B2%A4%ED%8A%B8",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15005257",
+      "title": "농촌진흥청_농촌교육농장 정보",
+      "operation": "농촌진흥청_농촌교육농장 정보_20171211 외부 링크 3",
+      "provider": "nongsaro",
+      "endpoint_host": "www.nongsaro.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T17:14:23Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EA%B3%B5%EA%B3%B5+%EB%8D%B0%EC%9D%B4%ED%84%B0",
+      "body_shape": "html"
+    }
+  ]
+}

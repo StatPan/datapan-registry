@@ -1,24 +1,24 @@
 {
-  "generated_at": "2026-07-02T16:57:24Z",
+  "generated_at": "2026-07-02T17:14:36Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "probe": "..\\datapan-registry\\reports\\unadapted-external-probe.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "routes_total": 53,
-    "operations": 53,
-    "hosts": 21,
-    "with_probe_evidence": 53,
+    "routes_total": 49,
+    "operations": 49,
+    "hosts": 20,
+    "with_probe_evidence": 49,
     "without_probe_evidence": 0,
     "dead_route_candidates": 14,
     "transient_failures": 15,
     "parameter_blocked_routes": 0,
-    "adapter_candidates": 24,
+    "adapter_candidates": 20,
     "by_disposition": [
       {
         "key": "adapter_candidate",
-        "count": 24,
+        "count": 20,
         "disposition": "adapter_candidate"
       },
       {
@@ -35,7 +35,7 @@
     "by_reason": [
       {
         "key": "unadapted_probe_http_2xx",
-        "count": 24,
+        "count": 20,
         "reason": "unadapted_probe_http_2xx"
       },
       {
@@ -74,11 +74,6 @@
         "key": "openapi.price.go.kr",
         "count": 4,
         "host": "openapi.price.go.kr"
-      },
-      {
-        "key": "www.nongsaro.go.kr",
-        "count": 4,
-        "host": "www.nongsaro.go.kr"
       },
       {
         "key": "www.rda.go.kr",
@@ -909,66 +904,6 @@
       "operation": "서울특별시성동구도시관리공단_체육시설 대관정보 조회_20220804",
       "endpoint": "https://www.happysd.or.kr/c_76/cnt/m_109/view.do",
       "endpoint_host": "www.happysd.or.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15002034",
-      "title": "농촌진흥청_국가농작물병해충도감정보",
-      "organization": "농촌진흥청",
-      "operation": "농촌진흥청_국가농작물병해충도감정보_20240222 외부 링크 2",
-      "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EA%B3%B5%EA%B3%B5+%EB%8D%B0%EC%9D%B4%ED%84%B0",
-      "endpoint_host": "www.nongsaro.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15005257",
-      "title": "농촌진흥청_농촌교육농장 정보",
-      "organization": "농촌진흥청",
-      "operation": "농촌진흥청_농촌교육농장 정보_20171211 외부 링크 1",
-      "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EB%86%8D%EC%B4%8C%EA%B5%90%EC%9C%A1%EB%86%8D%EC%9E%A5",
-      "endpoint_host": "www.nongsaro.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15005257",
-      "title": "농촌진흥청_농촌교육농장 정보",
-      "organization": "농촌진흥청",
-      "operation": "농촌진흥청_농촌교육농장 정보_20171211 외부 링크 2",
-      "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EB%86%8D%EC%82%AC%EB%A1%9C+%EC%9D%B4%EB%B2%A4%ED%8A%B8",
-      "endpoint_host": "www.nongsaro.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15005257",
-      "title": "농촌진흥청_농촌교육농장 정보",
-      "organization": "농촌진흥청",
-      "operation": "농촌진흥청_농촌교육농장 정보_20171211 외부 링크 3",
-      "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EA%B3%B5%EA%B3%B5+%EB%8D%B0%EC%9D%B4%ED%84%B0",
-      "endpoint_host": "www.nongsaro.go.kr",
       "dependency_class": "external_endpoint",
       "disposition": "adapter_candidate",
       "recommended_action": "build a provider adapter using the captured probe evidence",
