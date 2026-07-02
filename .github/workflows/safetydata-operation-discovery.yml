@@ -1,0 +1,51 @@
+name: Safety Data operation discovery
+
+on:
+  workflow_dispatch:
+    inputs:
+      batch:
+        description: "Operation materialization batch to inspect."
+        required: true
+        default: "reports/data-go-kr/operation-materialization-batches/institution-01.json"
+        type: string
+      limit:
+        description: "Maximum APIs to inspect. Use 0 for the full batch."
+        required: true
+        default: "10"
+        type: string
+      timeout:
+        description: "HTTP timeout in seconds."
+        required: true
+        default: "20"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout registry
+        uses: actions/checkout@v7
+        with:
+          path: datapan-registry
+          lfs: true
+
+      - name: Run Safety Data discovery
+        working-directory: datapan-registry
+        run: |
+          mkdir -p .datapan/safetydata-discovery
+          python scripts/generate-safetydata-operation-candidates.py \
+            --batch "${{ inputs.batch }}" \
+            --limit "${{ inputs.limit }}" \
+            --timeout "${{ inputs.timeout }}" \
+            --output .datapan/safetydata-discovery/safetydata-operation-candidates.json \
+            --markdown-output .datapan/safetydata-discovery/safetydata-operation-candidates.md
+
+      - name: Upload discovery artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: safetydata-operation-discovery
+          path: datapan-registry/.datapan/safetydata-discovery/
+          if-no-files-found: error
