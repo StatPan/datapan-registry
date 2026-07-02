@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-02T22:19:46Z",
+  "generated_at": "2026-07-02T22:37:33Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 13066,
-    "callable_operations": 12924,
-    "specs_without_operations": 4368,
-    "specs_without_callable_operation": 4443,
+    "operations_total": 13163,
+    "callable_operations": 13021,
+    "specs_without_operations": 4271,
+    "specs_without_callable_operation": 4346,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 728,
-    "operations_without_response_params": 1950,
+    "operations_without_request_params": 825,
+    "operations_without_response_params": 2047,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 821,
-      "external_endpoint_operations": 1456,
+      "external_endpoint_specs": 918,
+      "external_endpoint_operations": 1553,
       "service_root_only_operations": 19,
       "soap_operations": 35,
-      "wms_operations": 100,
+      "wms_operations": 105,
       "dev_approval_required_operations": 207,
-      "prod_approval_required_operations": 4322,
+      "prod_approval_required_operations": 4419,
       "malformed_endpoint_url_count": 42,
       "malformed_guide_url_count": 585,
       "top_endpoint_hosts": [
@@ -38,7 +38,7 @@
         },
         {
           "host": "www.safetydata.go.kr",
-          "count": 184
+          "count": 276
         },
         {
           "host": "openapi.q-net.or.kr",
@@ -46,7 +46,7 @@
         },
         {
           "host": "www.safemap.go.kr",
-          "count": 94
+          "count": 99
         },
         {
           "host": "openapi.jeonju.go.kr",
@@ -116,7 +116,7 @@
         },
         {
           "host": "www.safetydata.go.kr",
-          "count": 184
+          "count": 276
         },
         {
           "host": "openapi.q-net.or.kr",
@@ -124,7 +124,7 @@
         },
         {
           "host": "www.safemap.go.kr",
-          "count": 94
+          "count": 99
         },
         {
           "host": "openapi.jeonju.go.kr",
@@ -521,40 +521,40 @@
       ],
       "wms": [
         {
-          "id": "15101802",
-          "title": "행정안전부_생활안전지도 범죄주의구간(절도, WMS)",
+          "id": "15101789",
+          "title": "행정안전부_생활안전지도 해안침수예상도",
           "organization": "행정안전부",
           "source_category": "재난안전",
           "operations_count": 1,
           "callable_operations": 1
         },
         {
-          "id": "15101809",
-          "title": "행정안전부_생활안전지도 범죄주의구간(성폭력, WMS)",
+          "id": "15101794",
+          "title": "행정안전부_생활안전지도 침수흔적도(2019년 이전, WMS)",
           "organization": "행정안전부",
           "source_category": "재난안전",
           "operations_count": 1,
           "callable_operations": 1
         },
         {
-          "id": "15101813",
-          "title": "행정안전부_생활안전지도 여성밤길치안안전(전체, WMS)",
+          "id": "15101795",
+          "title": "행정안전부_생활안전지도 열분포도(WMS)",
           "organization": "행정안전부",
           "source_category": "재난안전",
           "operations_count": 1,
           "callable_operations": 1
         },
         {
-          "id": "15101814",
-          "title": "행정안전부_생활안전지도 여성밤길치안안전(강도, WMS)",
+          "id": "15101797",
+          "title": "행정안전부_생활안전지도 범죄주의구간(전체, WMS)",
           "organization": "행정안전부",
           "source_category": "재난안전",
           "operations_count": 1,
           "callable_operations": 1
         },
         {
-          "id": "15101815",
-          "title": "행정안전부_생활안전지도 여성밤길치안안전(절도, WMS)",
+          "id": "15101799",
+          "title": "행정안전부_생활안전지도 범죄주의구간(강도, WMS)",
           "organization": "행정안전부",
           "source_category": "재난안전",
           "operations_count": 1,

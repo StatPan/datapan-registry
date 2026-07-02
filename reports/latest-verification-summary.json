@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-07-02T22:19:44Z",
+  "generated_at": "2026-07-02T22:37:31Z",
   "source": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1313,
+    "total": 1323,
     "verified": 104,
     "failed": 87,
-    "skipped": 1122,
+    "skipped": 1132,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 1122,
+        "count": 1132,
         "status": "skipped"
       },
       {
@@ -43,7 +43,7 @@
       },
       {
         "key": "approval_required",
-        "count": 104,
+        "count": 114,
         "reason": "approval_required"
       },
       {
@@ -369,6 +369,11 @@
         "provider": "safemap"
       },
       {
+        "key": "safetydata",
+        "count": 10,
+        "provider": "safetydata"
+      },
+      {
         "key": "culture",
         "count": 9,
         "provider": "culture"
@@ -571,6 +576,11 @@
         "host": "www.safemap.go.kr"
       },
       {
+        "key": "www.safetydata.go.kr",
+        "count": 10,
+        "host": "www.safetydata.go.kr"
+      },
+      {
         "key": "data.naqs.go.kr",
         "count": 9,
         "host": "data.naqs.go.kr"
@@ -709,7 +719,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 649,
+        "count": 659,
         "kind": "external_endpoint"
       },
       {

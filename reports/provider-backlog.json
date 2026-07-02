@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T22:19:46Z",
+  "generated_at": "2026-07-02T22:37:33Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -16,8 +16,8 @@
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
-    "unsupported_protocol_operations": 135,
-    "approval_required_operations": 4428,
+    "unsupported_protocol_operations": 140,
+    "approval_required_operations": 4525,
     "malformed_source_url_count": 627
   },
   "providers": [
@@ -196,14 +196,14 @@
         "external_endpoint"
       ],
       "adapter_status": "adapter",
-      "specs": 184,
-      "operations": 184,
-      "external_endpoint_operations": 184,
-      "approval_required_operations": 184,
+      "specs": 276,
+      "operations": 276,
+      "external_endpoint_operations": 276,
+      "approval_required_operations": 276,
       "sample_ids": [
         "15147982",
         "15147984",
-        "15150608"
+        "15150588"
       ]
     },
     {
@@ -231,15 +231,15 @@
         "external_endpoint"
       ],
       "adapter_status": "adapter",
-      "specs": 94,
-      "operations": 94,
-      "external_endpoint_operations": 94,
-      "wms_operations": 88,
-      "approval_required_operations": 94,
+      "specs": 99,
+      "operations": 99,
+      "external_endpoint_operations": 99,
+      "wms_operations": 93,
+      "approval_required_operations": 99,
       "sample_ids": [
-        "15101802",
-        "15101809",
-        "15101812"
+        "15101789",
+        "15101794",
+        "15101795"
       ]
     },
     {
