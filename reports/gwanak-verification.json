@@ -1,0 +1,64 @@
+{
+  "generated_at": "2026-07-02T17:25:12Z",
+  "provider": "data.go.kr",
+  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 3,
+  "timeout": "20s",
+  "truncated": false,
+  "filters": {
+    "provider": "gwanak",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 3,
+  "summary": {
+    "total": 3,
+    "verified": 3,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15007009",
+      "title": "서울특별시 관악구_공중위생업소 현황",
+      "operation": "서울특별시 관악구_공중위생업소 현황_20220624 외부 링크 1",
+      "provider": "gwanak",
+      "endpoint_host": "data.gwanak.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T17:25:12Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gwanak.go.kr/openinf/sheetview.jsp?infId=OA-11496",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15007009",
+      "title": "서울특별시 관악구_공중위생업소 현황",
+      "operation": "서울특별시 관악구_공중위생업소 현황_20220624 외부 링크 2",
+      "provider": "gwanak",
+      "endpoint_host": "data.gwanak.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T17:25:12Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://data.gwanak.go.kr/openinf/dataset/datasetlist.jsp",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15009684",
+      "title": "서울특별시 관악구_공공시설개방정보",
+      "operation": "서울특별시 관악구_공공시설개방정보_20220624",
+      "provider": "gwanak",
+      "endpoint_host": "data.gwanak.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T17:25:12Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gwanak.go.kr/openinf/sheetview.jsp?infId=OA-12151",
+      "body_shape": "html"
+    }
+  ]
+}

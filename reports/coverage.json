@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T17:14:41Z",
+  "generated_at": "2026-07-02T17:25:21Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -12,16 +12,16 @@
     "callable_operation_percent": 98.8,
     "data_go_kr_gateway_operations": 11419,
     "external_endpoint_operations": 643,
-    "registered_adapter_operations": 613,
-    "missing_adapter_operations": 49,
-    "external_adapter_coverage_percent": 92.6,
+    "registered_adapter_operations": 616,
+    "missing_adapter_operations": 46,
+    "external_adapter_coverage_percent": 93.1,
     "approval_required_operations": 4142,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
-    "registered_adapter_hosts": 33,
-    "missing_adapter_hosts": 20,
-    "adapter_count": 29,
+    "registered_adapter_hosts": 34,
+    "missing_adapter_hosts": 19,
+    "adapter_count": 30,
     "call_capable_adapters": 21,
     "provider_split_ready": true
   },
@@ -41,26 +41,26 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-02T17:14:35Z",
-    "total": 1258,
-    "verified": 49,
+    "generated_at": "2026-07-02T17:25:14Z",
+    "total": 1261,
+    "verified": 52,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0,
-    "verified_percent": 3.9,
+    "verified_percent": 4.1,
     "evidence_operation_percent": 10.3
   },
   "route_evidence": {
     "present": true,
     "report": "..\\datapan-registry\\reports\\route-disposition.json",
-    "routes_total": 49,
-    "with_probe_evidence": 49,
+    "routes_total": 46,
+    "with_probe_evidence": 46,
     "dead_route_candidates": 14,
     "transient_failures": 15,
     "parameter_blocked_routes": 0,
-    "remaining_adapter_candidates": 20,
-    "raw_missing_adapter_operations": 49,
-    "evidence_adjusted_adapter_candidates": 20
+    "remaining_adapter_candidates": 17,
+    "raw_missing_adapter_operations": 46,
+    "evidence_adjusted_adapter_candidates": 17
   },
   "gaps": {
     "missing_adapter_hosts": [
@@ -166,20 +166,6 @@
         ]
       },
       {
-        "host": "data.gwanak.go.kr",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "missing",
-        "specs": 2,
-        "operations": 3,
-        "external_endpoint_operations": 3,
-        "sample_ids": [
-          "15007009",
-          "15009684"
-        ]
-      },
-      {
         "host": "its.gyeongju.go.kr:81",
         "kinds": [
           "external_endpoint"
@@ -205,6 +191,22 @@
         "external_guide_specs": 1,
         "sample_ids": [
           "15008517"
+        ]
+      },
+      {
+        "host": "www.happysd.or.kr",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "missing",
+        "specs": 2,
+        "operations": 2,
+        "external_endpoint_operations": 2,
+        "external_guide_specs": 1,
+        "sample_ids": [
+          "15007444",
+          "15007467"
         ]
       }
     ],
@@ -388,10 +390,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-02T17:14:41Z",
+    "generated_at": "2026-07-02T17:25:21Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 29,
-    "host_count": 33,
+    "adapter_count": 30,
+    "host_count": 34,
     "adapters": [
       {
         "name": "airport",
@@ -497,6 +499,16 @@
         ],
         "capabilities": [
           "call",
+          "verification"
+        ]
+      },
+      {
+        "name": "gwanak",
+        "status": "registered",
+        "hosts": [
+          "data.gwanak.go.kr"
+        ],
+        "capabilities": [
           "verification"
         ]
       },
@@ -712,8 +724,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 29,
-      "verification_capable_adapters": 29,
+      "adapter_count": 30,
+      "verification_capable_adapters": 30,
       "call_capable_adapters": 21,
       "required_adapters": 2,
       "required_verification_adapters": 2,

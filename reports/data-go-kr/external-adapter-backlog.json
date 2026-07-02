@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.external-adapter-backlog.v1",
-  "generated_at": "2026-07-02T17:14:36Z",
+  "generated_at": "2026-07-02T17:25:16Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "source_profile": "sources/data_go_kr.json",
@@ -10,19 +10,19 @@
     "coverage": "reports/coverage.json"
   },
   "summary": {
-    "candidate_hosts": 9,
-    "candidate_operations": 20,
-    "candidate_apis": 12,
-    "candidate_institutions": 10,
-    "raw_missing_adapter_operations": 49,
-    "raw_missing_adapter_hosts": 20,
-    "route_disposition_operations": 49,
-    "route_disposition_adapter_candidates": 20,
+    "candidate_hosts": 8,
+    "candidate_operations": 17,
+    "candidate_apis": 10,
+    "candidate_institutions": 9,
+    "raw_missing_adapter_operations": 46,
+    "raw_missing_adapter_hosts": 19,
+    "route_disposition_operations": 46,
+    "route_disposition_adapter_candidates": 17,
     "excluded_dead_route_candidates": 14,
     "excluded_transient_failures": 15,
     "unclassified_missing_routes": 0,
-    "adapter_target_operations": 49,
-    "candidate_share_of_missing_adapter_operations_percent": 40.8
+    "adapter_target_operations": 46,
+    "candidate_share_of_missing_adapter_operations_percent": 37.0
   },
   "policy": {
     "candidate_filter": "route_disposition.disposition == adapter_candidate",
@@ -30,83 +30,6 @@
     "gate": "unclassified_missing_routes must remain 0 before adapter backlog is actionable"
   },
   "hosts": [
-    {
-      "host": "data.gwanak.go.kr",
-      "priority": 3,
-      "candidate_operations": 3,
-      "candidate_apis": 2,
-      "institutions": [
-        "서울특별시 관악구"
-      ],
-      "probe_reasons": [
-        {
-          "key": "unadapted_probe_http_2xx",
-          "count": 3
-        }
-      ],
-      "body_shapes": [
-        {
-          "key": "html",
-          "count": 3
-        }
-      ],
-      "sample_dataset_ids": [
-        "15007009",
-        "15009684"
-      ],
-      "sample_routes": [
-        {
-          "dataset_id": "15007009",
-          "title": "서울특별시 관악구_공중위생업소 현황",
-          "organization": "서울특별시 관악구",
-          "operation": "서울특별시 관악구_공중위생업소 현황_20220624 외부 링크 1",
-          "endpoint": "https://data.gwanak.go.kr/openinf/sheetview.jsp?infId=OA-11496",
-          "endpoint_host": "data.gwanak.go.kr",
-          "dependency_class": "external_endpoint",
-          "disposition": "adapter_candidate",
-          "probe_status": "unknown",
-          "probe_reason": "unadapted_probe_http_2xx",
-          "http_status": 200,
-          "body_shape": "html",
-          "missing_params": [],
-          "recommended_action": "implement_provider_adapter"
-        },
-        {
-          "dataset_id": "15007009",
-          "title": "서울특별시 관악구_공중위생업소 현황",
-          "organization": "서울특별시 관악구",
-          "operation": "서울특별시 관악구_공중위생업소 현황_20220624 외부 링크 2",
-          "endpoint": "http://data.gwanak.go.kr/openinf/dataset/datasetlist.jsp",
-          "endpoint_host": "data.gwanak.go.kr",
-          "dependency_class": "external_endpoint",
-          "disposition": "adapter_candidate",
-          "probe_status": "unknown",
-          "probe_reason": "unadapted_probe_http_2xx",
-          "http_status": 200,
-          "body_shape": "html",
-          "missing_params": [],
-          "recommended_action": "implement_provider_adapter"
-        },
-        {
-          "dataset_id": "15009684",
-          "title": "서울특별시 관악구_공공시설개방정보",
-          "organization": "서울특별시 관악구",
-          "operation": "서울특별시 관악구_공공시설개방정보_20220624",
-          "endpoint": "https://data.gwanak.go.kr/openinf/sheetview.jsp?infId=OA-12151",
-          "endpoint_host": "data.gwanak.go.kr",
-          "dependency_class": "external_endpoint",
-          "disposition": "adapter_candidate",
-          "probe_status": "unknown",
-          "probe_reason": "unadapted_probe_http_2xx",
-          "http_status": 200,
-          "body_shape": "html",
-          "missing_params": [],
-          "recommended_action": "implement_provider_adapter"
-        }
-      ],
-      "implementation_status": "adapter_not_registered",
-      "recommended_next_step": "Add a provider adapter for data.gwanak.go.kr or mark the host with stronger route disposition evidence if the HTML surface is not machine-callable."
-    },
     {
       "host": "data.mafra.go.kr",
       "priority": 3,
@@ -608,54 +531,6 @@
     }
   ],
   "candidate_routes": [
-    {
-      "dataset_id": "15007009",
-      "title": "서울특별시 관악구_공중위생업소 현황",
-      "organization": "서울특별시 관악구",
-      "operation": "서울특별시 관악구_공중위생업소 현황_20220624 외부 링크 1",
-      "endpoint": "https://data.gwanak.go.kr/openinf/sheetview.jsp?infId=OA-11496",
-      "endpoint_host": "data.gwanak.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html",
-      "missing_params": [],
-      "recommended_action": "implement_provider_adapter"
-    },
-    {
-      "dataset_id": "15007009",
-      "title": "서울특별시 관악구_공중위생업소 현황",
-      "organization": "서울특별시 관악구",
-      "operation": "서울특별시 관악구_공중위생업소 현황_20220624 외부 링크 2",
-      "endpoint": "http://data.gwanak.go.kr/openinf/dataset/datasetlist.jsp",
-      "endpoint_host": "data.gwanak.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html",
-      "missing_params": [],
-      "recommended_action": "implement_provider_adapter"
-    },
-    {
-      "dataset_id": "15009684",
-      "title": "서울특별시 관악구_공공시설개방정보",
-      "organization": "서울특별시 관악구",
-      "operation": "서울특별시 관악구_공공시설개방정보_20220624",
-      "endpoint": "https://data.gwanak.go.kr/openinf/sheetview.jsp?infId=OA-12151",
-      "endpoint_host": "data.gwanak.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html",
-      "missing_params": [],
-      "recommended_action": "implement_provider_adapter"
-    },
     {
       "dataset_id": "15002220",
       "title": "농림축산식품부_유기농업자재 현황",
