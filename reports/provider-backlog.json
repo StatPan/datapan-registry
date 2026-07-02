@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T21:00:31Z",
+  "generated_at": "2026-07-02T21:15:44Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -17,7 +17,7 @@
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
-    "approval_required_operations": 4147,
+    "approval_required_operations": 4242,
     "malformed_source_url_count": 625
   },
   "providers": [
@@ -187,6 +187,23 @@
         "15003003",
         "15003024",
         "15003027"
+      ]
+    },
+    {
+      "host": "www.safetydata.go.kr",
+      "provider": "safetydata",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 100,
+      "operations": 100,
+      "external_endpoint_operations": 100,
+      "approval_required_operations": 100,
+      "sample_ids": [
+        "15147982",
+        "15147984",
+        "15150608"
       ]
     },
     {
@@ -564,23 +581,6 @@
       "external_endpoint_operations": 5,
       "sample_ids": [
         "15000332"
-      ]
-    },
-    {
-      "host": "www.safetydata.go.kr",
-      "provider": "safetydata",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 5,
-      "operations": 5,
-      "external_endpoint_operations": 5,
-      "approval_required_operations": 5,
-      "sample_ids": [
-        "15147982",
-        "15154049",
-        "15154052"
       ]
     },
     {

@@ -110,6 +110,9 @@ def build_report(registry_path: pathlib.Path, candidates_path: pathlib.Path) -> 
                 skipped.append({"dataset_id": dataset_id, "reason": "already_has_different_operations"})
                 continue
             already_applied += 1
+        if not operation.get("response_params"):
+            skipped.append({"dataset_id": dataset_id, "reason": "missing_response_params"})
+            continue
         patches.append(
             {
                 "dataset_id": dataset_id,
