@@ -81,6 +81,7 @@ datapan catalog verify --registry data/data-go-kr.registry.json --limit 100 --ou
 datapan catalog verify summary --input reports/latest-verification.json --output reports/latest-verification-summary.json --json
 python scripts/generate-coverage-backlog.py
 python scripts/generate-external-adapter-backlog.py
+python scripts/generate-operation-materialization-plan.py
 python scripts/generate-institution-api-overview.py
 python scripts/generate-institution-runtime-plan.py
 python scripts/generate-source-report-inventory.py
@@ -98,9 +99,11 @@ datapan catalog verify --registry data/data-go-kr.registry.json --org 행정안�
 datapan catalog verify merge --input reports/latest-verification.json --input reports/data-go-kr/mois-verification.json --output reports/latest-verification.json --json
 datapan catalog verify summary --input reports/latest-verification.json --output reports/latest-verification-summary.json --json
 python scripts/generate-coverage-backlog.py
+python scripts/generate-operation-materialization-plan.py
 python scripts/generate-institution-api-overview.py
 python scripts/generate-institution-runtime-plan.py
 python scripts/validate-coverage-backlog.py
+python scripts/validate-operation-materialization-plan.py
 python scripts/validate-institution-api-overview.py
 python scripts/validate-institution-runtime-plan.py
 ```
@@ -121,6 +124,14 @@ and uploads the verification report, summary, command, stdout, exit code, and
 non-secret metadata as an artifact. After inspecting the artifact, merge the
 completed report into `reports/latest-verification.json` with the commands
 above and regenerate the derived reports.
+
+Operation materialization should follow
+`docs/data-go-kr-operation-materialization-plan.md`. That plan is generated
+from `reports/data-go-kr/coverage-backlog.json` and keeps APIs without
+operation mappings separate from runtime reactivation work. Start with the
+largest institution surface, materialize the planned API metadata into registry
+operation mappings, then regenerate the coverage backlog, operation
+materialization plan, institution API overview, and institution runtime plan.
 
 Provider-specific evidence should be accumulated for registered external
 adapters:
