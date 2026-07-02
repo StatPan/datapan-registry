@@ -2,18 +2,18 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-07-02T16:06:15Z`
+- Generated at: `2026-07-02T16:17:23Z`
 - Institutions: `411`
 - APIs: `12060`
 - APIs with operation mapping: `7210` (`59.8%`)
 - APIs without operation mapping: `4850`
 - Operations: `12253`
-- Runtime evidence operations: `1221` (`10.0%`)
+- Runtime evidence operations: `1231` (`10.0%`)
 - Runtime verified operations: `22`
 - Runtime failed operations: `87`
-- Runtime skipped operations: `1112`
-- APIs with runtime evidence: `570`
-- Runtime reactivation APIs: `6640`
+- Runtime skipped operations: `1122`
+- APIs with runtime evidence: `575`
+- Runtime reactivation APIs: `6635`
 - Runtime repair APIs: `54`
 
 ## Highest Priority Institutions
@@ -25,7 +25,7 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 국토교통부 | 393 | 127 | 266 | 32.3% | 397 | 3 | 124 | 0 | 390 |
 | 식품의약품안전처 | 392 | 272 | 120 | 69.4% | 363 | 2 | 270 | 0 | 390 |
 | 국회 국회사무처 | 277 | 0 | 277 | 0.0% | 0 | 0 | 0 | 0 | 277 |
-| 성평등가족부 | 273 | 272 | 1 | 99.6% | 347 | 0 | 272 | 0 | 273 |
+| 성평등가족부 | 273 | 272 | 1 | 99.6% | 347 | 1 | 271 | 0 | 272 |
 | 공정거래위원회 | 250 | 216 | 34 | 86.4% | 295 | 0 | 216 | 0 | 250 |
 | 한국마사회 | 223 | 223 | 0 | 100.0% | 223 | 9 | 214 | 0 | 214 |
 | 국립암센터 | 212 | 204 | 8 | 96.2% | 367 | 6 | 198 | 0 | 206 |
@@ -33,7 +33,7 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 법제처 | 203 | 5 | 198 | 2.5% | 38 | 5 | 0 | 1 | 198 |
 | 경기도 광명시 | 197 | 0 | 197 | 0.0% | 0 | 0 | 0 | 0 | 197 |
 | 제주특별자치도 | 171 | 18 | 153 | 10.5% | 28 | 2 | 16 | 1 | 169 |
-| 해양수산부 | 173 | 172 | 1 | 99.4% | 276 | 5 | 167 | 0 | 168 |
+| 해양수산부 | 173 | 172 | 1 | 99.4% | 276 | 6 | 166 | 0 | 167 |
 | 한국산업인력공단 | 230 | 228 | 2 | 99.1% | 315 | 93 | 135 | 1 | 137 |
 | 농촌진흥청 | 136 | 9 | 127 | 6.6% | 30 | 1 | 8 | 0 | 135 |
 | 경상남도 | 129 | 129 | 0 | 100.0% | 134 | 0 | 129 | 0 | 129 |
@@ -48,8 +48,8 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 농림축산식품부 | 87 | 1 | 86 | 1.1% | 2 | 0 | 1 | 0 | 87 |
 | 문화체육관광부 | 86 | 1 | 85 | 1.2% | 1 | 0 | 1 | 0 | 86 |
 | 한국건강가정진흥원 | 85 | 85 | 0 | 100.0% | 90 | 0 | 85 | 0 | 85 |
-| 기상청 | 89 | 44 | 45 | 49.4% | 183 | 5 | 39 | 0 | 84 |
 | 한국수자원공사 | 84 | 79 | 5 | 94.0% | 148 | 0 | 79 | 0 | 84 |
+| 금융감독원 | 83 | 0 | 83 | 0.0% | 0 | 0 | 0 | 0 | 83 |
 
 ## Sample Uncovered APIs
 

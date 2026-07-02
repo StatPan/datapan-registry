@@ -236,9 +236,10 @@ CI should fail rather than treating the checked-in summary as authoritative.
    checked runtime evidence to `626`. Continued by Gira #39, Gira #41, Gira
    #43, Gira #45, Gira #49, Gira #51, Gira #53, Gira #55, Gira #57, Gira #59,
    and Gira #61 with gateway boundary batches, growing checked runtime evidence
-   to `1221`. The documented `10%` runtime evidence growth target is met, but
-   this is still mostly skipped boundary evidence, not proof that the gateway
-   operations are callable.
+   to `1221`. Gira #93 adds the next gateway boundary batch, growing checked
+   runtime evidence to `1231` and clearing the unrounded `10%` runtime evidence
+   target gap. This is still mostly skipped boundary evidence, not proof that
+   the gateway operations are callable.
 10. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 11. Generate future data.go.kr impact plans directly from catalog diff,
