@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-02T22:37:33Z",
+  "generated_at": "2026-07-02T22:51:13Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 13163,
-    "runtime_evidence": 1323,
-    "runtime_evidence_percent": 10.1,
-    "callable_operations": 13021,
-    "external_endpoint_operations": 1553,
-    "registered_adapter_operations": 1543,
+    "operations": 13284,
+    "runtime_evidence": 1333,
+    "runtime_evidence_percent": 10.0,
+    "callable_operations": 13142,
+    "external_endpoint_operations": 1674,
+    "registered_adapter_operations": 1664,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 1553
+      "count": 1674
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 1543
+      "count": 1664
     },
     {
       "key": "builtin",
@@ -69,19 +69,19 @@
   "top_source_categories": [
     {
       "category": "교통물류",
-      "operation_count": 1407
+      "operation_count": 1423
     },
     {
       "category": "농축수산",
-      "operation_count": 1361
+      "operation_count": 1364
+    },
+    {
+      "category": "공공행정",
+      "operation_count": 1326
     },
     {
       "category": "문화관광",
       "operation_count": 1300
-    },
-    {
-      "category": "공공행정",
-      "operation_count": 1287
     },
     {
       "category": "산업고용",
@@ -100,20 +100,20 @@
       "operation_count": 878
     },
     {
+      "category": "재난안전",
+      "operation_count": 776
+    },
+    {
       "category": "보건의료",
       "operation_count": 717
     },
     {
-      "category": "재난안전",
-      "operation_count": 717
-    },
-    {
       "category": "식품건강",
-      "operation_count": 660
+      "operation_count": 663
     },
     {
       "category": "국토관리",
-      "operation_count": 548
+      "operation_count": 549
     },
     {
       "category": "교육",
@@ -139,7 +139,7 @@
     },
     {
       "host": "data.gg.go.kr",
-      "operation_count": 503,
+      "operation_count": 504,
       "adapter": "data-gg",
       "adapter_status": "registered",
       "capabilities": [
@@ -148,7 +148,7 @@
     },
     {
       "host": "www.safetydata.go.kr",
-      "operation_count": 276,
+      "operation_count": 358,
       "adapter": "safetydata",
       "adapter_status": "registered",
       "capabilities": [
@@ -167,7 +167,7 @@
     },
     {
       "host": "www.safemap.go.kr",
-      "operation_count": 99,
+      "operation_count": 101,
       "adapter": "safemap",
       "adapter_status": "registered",
       "capabilities": [
@@ -218,6 +218,15 @@
       "adapter_status": "registered",
       "capabilities": [
         "call",
+        "verification"
+      ]
+    },
+    {
+      "host": "www.eshare.go.kr",
+      "operation_count": 36,
+      "adapter": "eshare",
+      "adapter_status": "registered",
+      "capabilities": [
         "verification"
       ]
     },
@@ -308,31 +317,21 @@
         "call",
         "verification"
       ]
-    },
-    {
-      "host": "open.itfind.or.kr",
-      "operation_count": 13,
-      "adapter": "itfind",
-      "adapter_status": "registered",
-      "capabilities": [
-        "call",
-        "verification"
-      ]
     }
   ],
   "institutions": [
     {
       "organization": "행정안전부",
       "api_count": 1252,
-      "operation_api_count": 988,
-      "operation_count": 1254,
-      "runtime_evidence_count": 20,
-      "runtime_evidence_percent": 1.6,
-      "verified": 10,
+      "operation_api_count": 1084,
+      "operation_count": 1375,
+      "runtime_evidence_count": 30,
+      "runtime_evidence_percent": 2.2,
+      "verified": 20,
       "failed": 0,
       "skipped": 10,
       "unknown": 0,
-      "approval_required_operations": 415,
+      "approval_required_operations": 536,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
@@ -341,7 +340,7 @@
         },
         {
           "key": "external_endpoint",
-          "count": 380
+          "count": 501
         },
         {
           "key": "malformed_endpoint",
@@ -351,7 +350,7 @@
       "by_adapter_status": [
         {
           "key": "adapter",
-          "count": 380
+          "count": 501
         },
         {
           "key": "builtin",
@@ -365,11 +364,11 @@
       "top_categories": [
         {
           "category": "공공행정",
-          "operation_count": 278
+          "operation_count": 317
         },
         {
           "category": "재난안전",
-          "operation_count": 246
+          "operation_count": 305
         },
         {
           "category": "문화관광",
@@ -377,11 +376,11 @@
         },
         {
           "category": "교통물류",
-          "operation_count": 112
+          "operation_count": 128
         },
         {
           "category": "농축수산",
-          "operation_count": 91
+          "operation_count": 94
         }
       ],
       "top_hosts": [
@@ -391,7 +390,7 @@
         },
         {
           "host": "www.safetydata.go.kr",
-          "operation_count": 276,
+          "operation_count": 358,
           "adapter": "safetydata",
           "adapter_status": "registered",
           "capabilities": [
@@ -401,7 +400,7 @@
         },
         {
           "host": "www.safemap.go.kr",
-          "operation_count": 99,
+          "operation_count": 101,
           "adapter": "safemap",
           "adapter_status": "registered",
           "capabilities": [
@@ -409,8 +408,17 @@
           ]
         },
         {
+          "host": "www.eshare.go.kr",
+          "operation_count": 36,
+          "adapter": "eshare",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
           "host": "data.gg.go.kr",
-          "operation_count": 5,
+          "operation_count": 6,
           "adapter": "data-gg",
           "adapter_status": "registered",
           "capabilities": [

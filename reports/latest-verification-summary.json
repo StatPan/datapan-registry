@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-02T22:37:31Z",
+  "generated_at": "2026-07-02T22:51:11Z",
   "source": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1323,
-    "verified": 104,
+    "total": 1333,
+    "verified": 114,
     "failed": 87,
     "skipped": 1132,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 104,
+        "count": 114,
         "status": "verified"
       },
       {
@@ -364,6 +364,11 @@
         "provider": "mafra"
       },
       {
+        "key": "eshare",
+        "count": 10,
+        "provider": "eshare"
+      },
+      {
         "key": "safemap",
         "count": 10,
         "provider": "safemap"
@@ -571,6 +576,11 @@
         "host": "data.mafra.go.kr"
       },
       {
+        "key": "www.eshare.go.kr",
+        "count": 10,
+        "host": "www.eshare.go.kr"
+      },
+      {
         "key": "www.safemap.go.kr",
         "count": 10,
         "host": "www.safemap.go.kr"
@@ -719,7 +729,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 659,
+        "count": 669,
         "kind": "external_endpoint"
       },
       {

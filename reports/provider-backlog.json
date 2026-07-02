@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-02T22:37:33Z",
+  "generated_at": "2026-07-02T22:51:13Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 194,
+  "filtered_count": 195,
   "summary": {
-    "hosts": 194,
+    "hosts": 195,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 55,
-    "external_guide_hosts": 158,
-    "registered_adapter_hosts": 44,
-    "operation_hosts": 57,
+    "external_endpoint_hosts": 56,
+    "external_guide_hosts": 159,
+    "registered_adapter_hosts": 45,
+    "operation_hosts": 58,
     "guide_only_hosts": 137,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
-    "unsupported_protocol_operations": 140,
-    "approval_required_operations": 4525,
+    "unsupported_protocol_operations": 142,
+    "approval_required_operations": 4646,
     "malformed_source_url_count": 627
   },
   "providers": [
@@ -177,12 +177,12 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 199,
-      "operations": 503,
-      "external_endpoint_operations": 503,
+      "specs": 200,
+      "operations": 504,
+      "external_endpoint_operations": 504,
       "external_guide_specs": 1,
       "wms_operations": 5,
-      "approval_required_operations": 8,
+      "approval_required_operations": 9,
       "sample_ids": [
         "15005231",
         "15011020",
@@ -196,14 +196,14 @@
         "external_endpoint"
       ],
       "adapter_status": "adapter",
-      "specs": 276,
-      "operations": 276,
-      "external_endpoint_operations": 276,
-      "approval_required_operations": 276,
+      "specs": 358,
+      "operations": 358,
+      "external_endpoint_operations": 358,
+      "approval_required_operations": 358,
       "sample_ids": [
-        "15147982",
-        "15147984",
-        "15150588"
+        "15134001",
+        "15138868",
+        "15138870"
       ]
     },
     {
@@ -231,15 +231,15 @@
         "external_endpoint"
       ],
       "adapter_status": "adapter",
-      "specs": 99,
-      "operations": 99,
-      "external_endpoint_operations": 99,
-      "wms_operations": 93,
-      "approval_required_operations": 99,
+      "specs": 101,
+      "operations": 101,
+      "external_endpoint_operations": 101,
+      "wms_operations": 95,
+      "approval_required_operations": 101,
       "sample_ids": [
         "15101789",
-        "15101794",
-        "15101795"
+        "15101791",
+        "15101794"
       ]
     },
     {
@@ -327,6 +327,24 @@
         "15008883",
         "15008884",
         "15008887"
+      ]
+    },
+    {
+      "host": "www.eshare.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 12,
+      "operations": 36,
+      "external_endpoint_operations": 36,
+      "external_guide_specs": 12,
+      "approval_required_operations": 36,
+      "sample_ids": [
+        "15076179",
+        "15076186",
+        "15076189"
       ]
     },
     {

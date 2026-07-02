@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T22:37:48Z",
+  "generated_at": "2026-07-02T22:51:28Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,13 +7,13 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 13163,
-    "evidence_total": 1323,
+    "operations": 13284,
+    "evidence_total": 1333,
     "uncovered_gateway_candidates": 10774,
-    "uncovered_adapter_candidates": 865,
+    "uncovered_adapter_candidates": 976,
     "missing_adapter_hosts": 11,
-    "planned_batches": 7,
-    "planned_operations": 62
+    "planned_batches": 8,
+    "planned_operations": 72
   },
   "batches": [
     {
@@ -29,11 +29,21 @@
       "label": "data-gg",
       "provider": "data-gg",
       "kind": "external_endpoint",
-      "candidates": 503,
-      "uncovered_candidates": 475,
+      "candidates": 504,
+      "uncovered_candidates": 476,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider data-gg --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/data-gg-next.json --json",
       "output": ".datapan/verification/data-gg-next.json"
+    },
+    {
+      "label": "eshare",
+      "provider": "eshare",
+      "kind": "external_endpoint",
+      "candidates": 36,
+      "uncovered_candidates": 26,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider eshare --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/eshare-next.json --json",
+      "output": ".datapan/verification/eshare-next.json"
     },
     {
       "label": "nongsaro",
@@ -49,8 +59,8 @@
       "label": "safetydata",
       "provider": "safetydata",
       "kind": "external_endpoint",
-      "candidates": 276,
-      "uncovered_candidates": 266,
+      "candidates": 358,
+      "uncovered_candidates": 348,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider safetydata --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/safetydata-next.json --json",
       "output": ".datapan/verification/safetydata-next.json"
@@ -59,8 +69,8 @@
       "label": "safemap",
       "provider": "safemap",
       "kind": "external_endpoint",
-      "candidates": 99,
-      "uncovered_candidates": 89,
+      "candidates": 101,
+      "uncovered_candidates": 91,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider safemap --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/safemap-next.json --json",
       "output": ".datapan/verification/safemap-next.json"
