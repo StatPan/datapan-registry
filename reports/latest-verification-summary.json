@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-02T16:41:43Z",
+  "generated_at": "2026-07-02T16:57:17Z",
   "source": "..\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1249,
-    "verified": 40,
+    "total": 1254,
+    "verified": 45,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0
@@ -26,7 +26,7 @@
       },
       {
         "key": "verified",
-        "count": 40,
+        "count": 45,
         "status": "verified"
       }
     ],
@@ -384,6 +384,11 @@
         "provider": "lh-ebid"
       },
       {
+        "key": "nfqs",
+        "count": 5,
+        "provider": "nfqs"
+      },
+      {
         "key": "seoul-bus",
         "count": 5,
         "provider": "seoul-bus"
@@ -541,6 +546,11 @@
         "host": "ws.bus.go.kr"
       },
       {
+        "key": "www.nfqs.go.kr",
+        "count": 5,
+        "host": "www.nfqs.go.kr"
+      },
+      {
         "key": "api.forest.go.kr",
         "count": 4,
         "host": "api.forest.go.kr"
@@ -594,7 +604,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 585,
+        "count": 590,
         "kind": "external_endpoint"
       },
       {

@@ -175,11 +175,11 @@ Current gaps:
   #57, Gira #59, and Gira #61 continue gateway boundary evidence growth to
   `1221`, and Gira #93 grows it to `1231`, meeting the `10%` runtime evidence
   target and clearing the release readiness warning. Gira #97 adds `18`
-  verified data-gg landing-page checks, bringing runtime evidence to `1249`.
-  Most evidence is still skipped boundary evidence, not proof that those
-  operations are callable.
+  verified data-gg landing-page checks, and Gira #99 adds `5` verified nfqs
+  landing-page checks, bringing runtime evidence to `1254`. Most evidence is
+  still skipped boundary evidence, not proof that those operations are callable.
 - API operation coverage remains incomplete: `7,210` of `12,060` APIs have
-  operation mappings (`59.8%`), leaving `4,850` APIs to materialize and `6,627`
+  operation mappings (`59.8%`), leaving `4,850` APIs to materialize and `6,624`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report
@@ -436,8 +436,9 @@ Use this order unless a production failure changes priority:
     this turned `47` route-disposition adapter-candidate operations into
     `12` host-scoped adapter implementation queues while keeping dead and
     transient routes out of adapter work. Gira #97 registers and verifies
-    `data.gg.go.kr`, reducing the active adapter backlog to `29` operations
-    across `11` host-scoped queues.
+    `data.gg.go.kr`, and Gira #99 registers and verifies `www.nfqs.go.kr`,
+    reducing the active adapter backlog to `24` operations across `10`
+    host-scoped queues.
 
 ## Measurement Rules
 

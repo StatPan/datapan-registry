@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-07-02T16:57:04Z",
+  "source": "..\\datapan-registry\\reports\\nfqs-verification.json",
+  "provider": "data.go.kr",
+  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 5,
+    "verified": 5,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 5,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "nfqs",
+        "count": 5,
+        "provider": "nfqs"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "www.nfqs.go.kr",
+        "count": 5,
+        "host": "www.nfqs.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 5,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

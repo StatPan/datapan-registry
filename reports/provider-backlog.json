@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T16:43:39Z",
+  "generated_at": "2026-07-02T16:57:24Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -10,11 +10,11 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 53,
     "external_guide_hosts": 157,
-    "registered_adapter_hosts": 31,
+    "registered_adapter_hosts": 32,
     "operation_hosts": 55,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 22,
-    "needs_adapter_operations": 58,
+    "missing_adapter_hosts": 21,
+    "needs_adapter_operations": 53,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
@@ -32,23 +32,6 @@
       "external_endpoint_operations": 6,
       "sample_ids": [
         "15059302"
-      ]
-    },
-    {
-      "host": "www.nfqs.go.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "missing",
-      "specs": 3,
-      "operations": 5,
-      "external_endpoint_operations": 5,
-      "external_guide_specs": 3,
-      "sample_ids": [
-        "15001668",
-        "15001702",
-        "15009422"
       ]
     },
     {
@@ -694,6 +677,23 @@
         "15021183",
         "15021184",
         "15042795"
+      ]
+    },
+    {
+      "host": "www.nfqs.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 3,
+      "operations": 5,
+      "external_endpoint_operations": 5,
+      "external_guide_specs": 3,
+      "sample_ids": [
+        "15001668",
+        "15001702",
+        "15009422"
       ]
     },
     {

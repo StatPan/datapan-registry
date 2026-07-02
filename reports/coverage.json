@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T16:43:44Z",
+  "generated_at": "2026-07-02T16:57:29Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -12,16 +12,16 @@
     "callable_operation_percent": 98.8,
     "data_go_kr_gateway_operations": 11419,
     "external_endpoint_operations": 643,
-    "registered_adapter_operations": 604,
-    "missing_adapter_operations": 58,
-    "external_adapter_coverage_percent": 91.2,
+    "registered_adapter_operations": 609,
+    "missing_adapter_operations": 53,
+    "external_adapter_coverage_percent": 92,
     "approval_required_operations": 4142,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
-    "registered_adapter_hosts": 31,
-    "missing_adapter_hosts": 22,
-    "adapter_count": 27,
+    "registered_adapter_hosts": 32,
+    "missing_adapter_hosts": 21,
+    "adapter_count": 28,
     "call_capable_adapters": 21,
     "provider_split_ready": true
   },
@@ -41,26 +41,26 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-02T16:41:43Z",
-    "total": 1249,
-    "verified": 40,
+    "generated_at": "2026-07-02T16:57:17Z",
+    "total": 1254,
+    "verified": 45,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0,
-    "verified_percent": 3.2,
+    "verified_percent": 3.6,
     "evidence_operation_percent": 10.2
   },
   "route_evidence": {
     "present": true,
     "report": "..\\datapan-registry\\reports\\route-disposition.json",
-    "routes_total": 58,
-    "with_probe_evidence": 58,
+    "routes_total": 53,
+    "with_probe_evidence": 53,
     "dead_route_candidates": 14,
     "transient_failures": 15,
     "parameter_blocked_routes": 0,
-    "remaining_adapter_candidates": 29,
-    "raw_missing_adapter_operations": 58,
-    "evidence_adjusted_adapter_candidates": 29
+    "remaining_adapter_candidates": 24,
+    "raw_missing_adapter_operations": 53,
+    "evidence_adjusted_adapter_candidates": 24
   },
   "gaps": {
     "missing_adapter_hosts": [
@@ -75,23 +75,6 @@
         "external_endpoint_operations": 6,
         "sample_ids": [
           "15059302"
-        ]
-      },
-      {
-        "host": "www.nfqs.go.kr",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "missing",
-        "specs": 3,
-        "operations": 5,
-        "external_endpoint_operations": 5,
-        "external_guide_specs": 3,
-        "sample_ids": [
-          "15001668",
-          "15001702",
-          "15009422"
         ]
       },
       {
@@ -208,6 +191,19 @@
         "sample_ids": [
           "15007009",
           "15009684"
+        ]
+      },
+      {
+        "host": "its.gyeongju.go.kr:81",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 1,
+        "operations": 3,
+        "external_endpoint_operations": 3,
+        "sample_ids": [
+          "15021579"
         ]
       }
     ],
@@ -391,10 +387,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-02T16:43:44Z",
+    "generated_at": "2026-07-02T16:57:29Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 27,
-    "host_count": 31,
+    "adapter_count": 28,
+    "host_count": 32,
     "adapters": [
       {
         "name": "airport",
@@ -602,6 +598,16 @@
         ]
       },
       {
+        "name": "nfqs",
+        "status": "registered",
+        "hosts": [
+          "www.nfqs.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "oneclick-law",
         "status": "registered",
         "hosts": [
@@ -695,8 +701,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 27,
-      "verification_capable_adapters": 27,
+      "adapter_count": 28,
+      "verification_capable_adapters": 28,
       "call_capable_adapters": 21,
       "required_adapters": 2,
       "required_verification_adapters": 2,

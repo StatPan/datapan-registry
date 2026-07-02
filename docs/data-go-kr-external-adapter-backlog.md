@@ -2,12 +2,12 @@
 
 This backlog is generated from route-disposition evidence and includes only `adapter_candidate` routes. Dead-route and transient-failure routes remain evidence, not adapter implementation work.
 
-- Generated at: `2026-07-02T16:43:39Z`
-- Candidate hosts: `11`
-- Candidate operations: `29`
-- Candidate APIs: `16`
-- Candidate institutions: `11`
-- Raw missing adapter operations: `58`
+- Generated at: `2026-07-02T16:57:24Z`
+- Candidate hosts: `10`
+- Candidate operations: `24`
+- Candidate APIs: `13`
+- Candidate institutions: `10`
+- Raw missing adapter operations: `53`
 - Dead-route candidates excluded: `14`
 - Transient failures excluded: `15`
 - Unclassified missing routes: `0`
@@ -16,7 +16,6 @@ This backlog is generated from route-disposition evidence and includes only `ada
 
 | Host | Ops | APIs | Institutions | Status |
 | --- | --- | --- | --- | --- |
-| `www.nfqs.go.kr` | 5 | 3 | 해양수산부 국립수산물품질관리원 | adapter_not_registered |
 | `www.nongsaro.go.kr` | 4 | 2 | 농촌진흥청 | adapter_not_registered |
 | `data.gwanak.go.kr` | 3 | 2 | 서울특별시 관악구 | adapter_not_registered |
 | `data.mafra.go.kr` | 3 | 2 | 농림수산식품교육문화정보원, 농림축산식품부 | adapter_not_registered |
@@ -49,11 +48,6 @@ This backlog is generated from route-disposition evidence and includes only `ada
 | `www.garak.co.kr` | 15004517 | 서울특별시농수산식품공사 | 서울특별시농수산식품공사_주요 품목 가격 | 서울특별시농수산식품공사_주요 품목 가격_20210113 외부 링크 3 |
 | `www.happysd.or.kr` | 15007444 | 서울특별시성동구도시관리공단 | 서울특별시성동구도시관리공단_체육시설 강좌정보 조회 | 서울특별시성동구도시관리공단_체육시설 강좌정보 조회_20220803 |
 | `www.happysd.or.kr` | 15007467 | 서울특별시성동구도시관리공단 | 서울특별시성동구도시관리공단_체육시설 대관정보 조회 | 서울특별시성동구도시관리공단_체육시설 대관정보 조회_20220804 |
-| `www.nfqs.go.kr` | 15001668 | 해양수산부 국립수산물품질관리원 | 해양수산부 국립수산물품질관리원_수산물재고동향 | 해양수산부 국립수산물품질관리원_수산물재고동향_20230629 |
-| `www.nfqs.go.kr` | 15001702 | 해양수산부 국립수산물품질관리원 | 해양수산부 국립수산물품질관리원_검역시행장정보 | 해양수산부 국립수산물품질관리원_검역시행장정보_20230629 외부 링크 1 |
-| `www.nfqs.go.kr` | 15001702 | 해양수산부 국립수산물품질관리원 | 해양수산부 국립수산물품질관리원_검역시행장정보 | 해양수산부 국립수산물품질관리원_검역시행장정보_20230629 외부 링크 2 |
-| `www.nfqs.go.kr` | 15009422 | 해양수산부 국립수산물품질관리원 | 해양수산부 국립수산물품질관리원_수산물 방사능 조사현황 | 해양수산부 국립수산물품질관리원_수산물 방사능 조사현황_20230629 외부 링크 1 |
-| `www.nfqs.go.kr` | 15009422 | 해양수산부 국립수산물품질관리원 | 해양수산부 국립수산물품질관리원_수산물 방사능 조사현황 | 해양수산부 국립수산물품질관리원_수산물 방사능 조사현황_20230629 외부 링크 2 |
 | `www.nongsaro.go.kr` | 15002034 | 농촌진흥청 | 농촌진흥청_국가농작물병해충도감정보 | 농촌진흥청_국가농작물병해충도감정보_20240222 외부 링크 2 |
 | `www.nongsaro.go.kr` | 15005257 | 농촌진흥청 | 농촌진흥청_농촌교육농장 정보 | 농촌진흥청_농촌교육농장 정보_20171211 외부 링크 1 |
 | `www.nongsaro.go.kr` | 15005257 | 농촌진흥청 | 농촌진흥청_농촌교육농장 정보 | 농촌진흥청_농촌교육농장 정보_20171211 외부 링크 2 |

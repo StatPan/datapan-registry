@@ -1,24 +1,24 @@
 {
-  "generated_at": "2026-07-02T16:43:39Z",
+  "generated_at": "2026-07-02T16:57:24Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "probe": "..\\datapan-registry\\reports\\unadapted-external-probe.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "routes_total": 58,
-    "operations": 58,
-    "hosts": 22,
-    "with_probe_evidence": 58,
+    "routes_total": 53,
+    "operations": 53,
+    "hosts": 21,
+    "with_probe_evidence": 53,
     "without_probe_evidence": 0,
     "dead_route_candidates": 14,
     "transient_failures": 15,
     "parameter_blocked_routes": 0,
-    "adapter_candidates": 29,
+    "adapter_candidates": 24,
     "by_disposition": [
       {
         "key": "adapter_candidate",
-        "count": 29,
+        "count": 24,
         "disposition": "adapter_candidate"
       },
       {
@@ -35,7 +35,7 @@
     "by_reason": [
       {
         "key": "unadapted_probe_http_2xx",
-        "count": 29,
+        "count": 24,
         "reason": "unadapted_probe_http_2xx"
       },
       {
@@ -64,11 +64,6 @@
         "key": "openapi.coast.kr",
         "count": 6,
         "host": "openapi.coast.kr"
-      },
-      {
-        "key": "www.nfqs.go.kr",
-        "count": 5,
-        "host": "www.nfqs.go.kr"
       },
       {
         "key": "car.daegu.go.kr",
@@ -914,81 +909,6 @@
       "operation": "서울특별시성동구도시관리공단_체육시설 대관정보 조회_20220804",
       "endpoint": "https://www.happysd.or.kr/c_76/cnt/m_109/view.do",
       "endpoint_host": "www.happysd.or.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15001668",
-      "title": "해양수산부 국립수산물품질관리원_수산물재고동향",
-      "organization": "해양수산부 국립수산물품질관리원",
-      "operation": "해양수산부 국립수산물품질관리원_수산물재고동향_20230629",
-      "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=009",
-      "endpoint_host": "www.nfqs.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15001702",
-      "title": "해양수산부 국립수산물품질관리원_검역시행장정보",
-      "organization": "해양수산부 국립수산물품질관리원",
-      "operation": "해양수산부 국립수산물품질관리원_검역시행장정보_20230629 외부 링크 1",
-      "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=008",
-      "endpoint_host": "www.nfqs.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15001702",
-      "title": "해양수산부 국립수산물품질관리원_검역시행장정보",
-      "organization": "해양수산부 국립수산물품질관리원",
-      "operation": "해양수산부 국립수산물품질관리원_검역시행장정보_20230629 외부 링크 2",
-      "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=003",
-      "endpoint_host": "www.nfqs.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15009422",
-      "title": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황",
-      "organization": "해양수산부 국립수산물품질관리원",
-      "operation": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황_20230629 외부 링크 1",
-      "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=007",
-      "endpoint_host": "www.nfqs.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15009422",
-      "title": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황",
-      "organization": "해양수산부 국립수산물품질관리원",
-      "operation": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황_20230629 외부 링크 2",
-      "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiReqView.do?API_CD=005",
-      "endpoint_host": "www.nfqs.go.kr",
       "dependency_class": "external_endpoint",
       "disposition": "adapter_candidate",
       "recommended_action": "build a provider adapter using the captured probe evidence",
