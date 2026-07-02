@@ -2,12 +2,12 @@
 
 This backlog is generated from route-disposition evidence and includes only `adapter_candidate` routes. Dead-route and transient-failure routes remain evidence, not adapter implementation work.
 
-- Generated at: `2026-07-02T16:57:24Z`
-- Candidate hosts: `10`
-- Candidate operations: `24`
-- Candidate APIs: `13`
+- Generated at: `2026-07-02T17:14:36Z`
+- Candidate hosts: `9`
+- Candidate operations: `20`
+- Candidate APIs: `12`
 - Candidate institutions: `10`
-- Raw missing adapter operations: `53`
+- Raw missing adapter operations: `49`
 - Dead-route candidates excluded: `14`
 - Transient failures excluded: `15`
 - Unclassified missing routes: `0`
@@ -16,7 +16,6 @@ This backlog is generated from route-disposition evidence and includes only `ada
 
 | Host | Ops | APIs | Institutions | Status |
 | --- | --- | --- | --- | --- |
-| `www.nongsaro.go.kr` | 4 | 2 | 농촌진흥청 | adapter_not_registered |
 | `data.gwanak.go.kr` | 3 | 2 | 서울특별시 관악구 | adapter_not_registered |
 | `data.mafra.go.kr` | 3 | 2 | 농림수산식품교육문화정보원, 농림축산식품부 | adapter_not_registered |
 | `www.garak.co.kr` | 3 | 1 | 서울특별시농수산식품공사 | adapter_not_registered |
@@ -48,10 +47,6 @@ This backlog is generated from route-disposition evidence and includes only `ada
 | `www.garak.co.kr` | 15004517 | 서울특별시농수산식품공사 | 서울특별시농수산식품공사_주요 품목 가격 | 서울특별시농수산식품공사_주요 품목 가격_20210113 외부 링크 3 |
 | `www.happysd.or.kr` | 15007444 | 서울특별시성동구도시관리공단 | 서울특별시성동구도시관리공단_체육시설 강좌정보 조회 | 서울특별시성동구도시관리공단_체육시설 강좌정보 조회_20220803 |
 | `www.happysd.or.kr` | 15007467 | 서울특별시성동구도시관리공단 | 서울특별시성동구도시관리공단_체육시설 대관정보 조회 | 서울특별시성동구도시관리공단_체육시설 대관정보 조회_20220804 |
-| `www.nongsaro.go.kr` | 15002034 | 농촌진흥청 | 농촌진흥청_국가농작물병해충도감정보 | 농촌진흥청_국가농작물병해충도감정보_20240222 외부 링크 2 |
-| `www.nongsaro.go.kr` | 15005257 | 농촌진흥청 | 농촌진흥청_농촌교육농장 정보 | 농촌진흥청_농촌교육농장 정보_20171211 외부 링크 1 |
-| `www.nongsaro.go.kr` | 15005257 | 농촌진흥청 | 농촌진흥청_농촌교육농장 정보 | 농촌진흥청_농촌교육농장 정보_20171211 외부 링크 2 |
-| `www.nongsaro.go.kr` | 15005257 | 농촌진흥청 | 농촌진흥청_농촌교육농장 정보 | 농촌진흥청_농촌교육농장 정보_20171211 외부 링크 3 |
 | `www.work24.go.kr` | 15003549 | 한국고용정보원 | 한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세 | 한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 1 |
 | `www.work24.go.kr` | 15003549 | 한국고용정보원 | 한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세 | 한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 2 |
 | `www.work24.go.kr` | 15003549 | 한국고용정보원 | 한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세 | 한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 3 |

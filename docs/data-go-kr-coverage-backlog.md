@@ -2,18 +2,18 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-07-02T16:57:24Z`
+- Generated at: `2026-07-02T17:14:36Z`
 - Institutions: `411`
 - APIs: `12060`
 - APIs with operation mapping: `7210` (`59.8%`)
 - APIs without operation mapping: `4850`
 - Operations: `12253`
-- Runtime evidence operations: `1254` (`10.2%`)
-- Runtime verified operations: `45`
+- Runtime evidence operations: `1258` (`10.3%`)
+- Runtime verified operations: `49`
 - Runtime failed operations: `87`
 - Runtime skipped operations: `1122`
-- APIs with runtime evidence: `586`
-- Runtime reactivation APIs: `6624`
+- APIs with runtime evidence: `588`
+- Runtime reactivation APIs: `6622`
 - Runtime repair APIs: `54`
 
 ## Highest Priority Institutions
@@ -35,7 +35,7 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 제주특별자치도 | 171 | 18 | 153 | 10.5% | 28 | 2 | 16 | 1 | 169 |
 | 해양수산부 | 173 | 172 | 1 | 99.4% | 276 | 6 | 166 | 0 | 167 |
 | 한국산업인력공단 | 230 | 228 | 2 | 99.1% | 315 | 93 | 135 | 1 | 137 |
-| 농촌진흥청 | 136 | 9 | 127 | 6.6% | 30 | 1 | 8 | 0 | 135 |
+| 농촌진흥청 | 136 | 9 | 127 | 6.6% | 30 | 3 | 6 | 0 | 133 |
 | 경상남도 | 129 | 129 | 0 | 100.0% | 134 | 0 | 129 | 0 | 129 |
 | 대전광역시 서구 | 125 | 0 | 125 | 0.0% | 0 | 0 | 0 | 0 | 125 |
 | 세종특별자치시 | 122 | 122 | 0 | 100.0% | 122 | 0 | 122 | 0 | 122 |

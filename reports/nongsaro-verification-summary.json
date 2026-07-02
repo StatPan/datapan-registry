@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-07-02T17:14:23Z",
+  "source": "..\\datapan-registry\\reports\\nongsaro-verification.json",
+  "provider": "data.go.kr",
+  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 4,
+    "verified": 4,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 4,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "nongsaro",
+        "count": 4,
+        "provider": "nongsaro"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "www.nongsaro.go.kr",
+        "count": 4,
+        "host": "www.nongsaro.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 4,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-02T16:57:24Z",
+  "generated_at": "2026-07-02T17:14:36Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -14,13 +14,13 @@
     "institutions": 411,
     "apis": 12060,
     "operations": 12253,
-    "runtime_evidence": 1254,
-    "runtime_evidence_percent": 10.2,
+    "runtime_evidence": 1258,
+    "runtime_evidence_percent": 10.3,
     "callable_operations": 12111,
     "external_endpoint_operations": 643,
-    "registered_adapter_operations": 609,
-    "missing_adapter_operations": 53,
-    "missing_adapter_hosts": 21
+    "registered_adapter_operations": 613,
+    "missing_adapter_operations": 49,
+    "missing_adapter_hosts": 20
   },
   "by_dependency_class": [
     {
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 609
+      "count": 613
     },
     {
       "key": "builtin",
@@ -59,7 +59,7 @@
     },
     {
       "key": "missing",
-      "count": 53
+      "count": 49
     },
     {
       "key": "not_applicable",
@@ -4799,9 +4799,9 @@
       "api_count": 136,
       "operation_api_count": 9,
       "operation_count": 30,
-      "runtime_evidence_count": 3,
-      "runtime_evidence_percent": 10.0,
-      "verified": 0,
+      "runtime_evidence_count": 7,
+      "runtime_evidence_percent": 23.3,
+      "verified": 4,
       "failed": 0,
       "skipped": 3,
       "unknown": 0,
@@ -4819,12 +4819,16 @@
       ],
       "by_adapter_status": [
         {
+          "key": "adapter",
+          "count": 4
+        },
+        {
           "key": "builtin",
           "count": 21
         },
         {
           "key": "missing",
-          "count": 9
+          "count": 5
         }
       ],
       "top_categories": [
@@ -4839,12 +4843,17 @@
           "operation_count": 21
         },
         {
-          "host": "www.nongsaro.go.kr",
+          "host": "www.rda.go.kr",
           "operation_count": 4
         },
         {
-          "host": "www.rda.go.kr",
-          "operation_count": 4
+          "host": "www.nongsaro.go.kr",
+          "operation_count": 4,
+          "adapter": "nongsaro",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         },
         {
           "host": "ncpms.rda.go.kr",

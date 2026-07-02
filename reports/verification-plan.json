@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T16:57:38Z",
+  "generated_at": "2026-07-02T17:14:50Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -8,10 +8,10 @@
   "timeout": "10s",
   "summary": {
     "operations": 12253,
-    "evidence_total": 1254,
+    "evidence_total": 1258,
     "uncovered_gateway_candidates": 10774,
     "uncovered_adapter_candidates": 0,
-    "missing_adapter_hosts": 21,
+    "missing_adapter_hosts": 20,
     "planned_batches": 1,
     "planned_operations": 10
   },
@@ -81,20 +81,6 @@
         "external_endpoint_operations": 4,
         "sample_ids": [
           "3043385"
-        ]
-      },
-      {
-        "host": "www.nongsaro.go.kr",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "missing",
-        "specs": 2,
-        "operations": 4,
-        "external_endpoint_operations": 4,
-        "sample_ids": [
-          "15002034",
-          "15005257"
         ]
       },
       {
@@ -168,6 +154,21 @@
         "external_endpoint_operations": 3,
         "sample_ids": [
           "15021579"
+        ]
+      },
+      {
+        "host": "www.culture.go.kr",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "missing",
+        "specs": 1,
+        "operations": 2,
+        "external_endpoint_operations": 2,
+        "external_guide_specs": 1,
+        "sample_ids": [
+          "15008517"
         ]
       }
     ]

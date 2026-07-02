@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-02T16:57:24Z",
+  "generated_at": "2026-07-02T17:14:36Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 21,
+  "filtered_count": 20,
   "summary": {
-    "target_hosts": 21,
-    "target_operations": 53,
-    "external_endpoint_operations": 53,
+    "target_hosts": 20,
+    "target_operations": 49,
+    "external_endpoint_operations": 49,
     "service_root_operations": 0,
     "approval_required_operations": 0,
     "missing_param_operations": 21,
@@ -64,53 +64,6 @@
     },
     {
       "rank": 2,
-      "host": "www.nongsaro.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 4,
-      "specs": 2,
-      "organizations": [
-        "농촌진흥청"
-      ],
-      "source_categories": [
-        "농축수산"
-      ],
-      "api_types": [
-        "LINK"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "sample_operations": [
-        {
-          "dataset_id": "15002034",
-          "title": "농촌진흥청_국가농작물병해충도감정보",
-          "organization": "농촌진흥청",
-          "operation": "농촌진흥청_국가농작물병해충도감정보_20240222 외부 링크 2",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EA%B3%B5%EA%B3%B5+%EB%8D%B0%EC%9D%B4%ED%84%B0"
-        },
-        {
-          "dataset_id": "15005257",
-          "title": "농촌진흥청_농촌교육농장 정보",
-          "organization": "농촌진흥청",
-          "operation": "농촌진흥청_농촌교육농장 정보_20171211 외부 링크 1",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EB%86%8D%EC%B4%8C%EA%B5%90%EC%9C%A1%EB%86%8D%EC%9E%A5"
-        },
-        {
-          "dataset_id": "15005257",
-          "title": "농촌진흥청_농촌교육농장 정보",
-          "organization": "농촌진흥청",
-          "operation": "농촌진흥청_농촌교육농장 정보_20171211 외부 링크 2",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EB%86%8D%EC%82%AC%EB%A1%9C+%EC%9D%B4%EB%B2%A4%ED%8A%B8"
-        }
-      ]
-    },
-    {
-      "rank": 3,
       "host": "www.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -169,7 +122,7 @@
       ]
     },
     {
-      "rank": 4,
+      "rank": 3,
       "host": "car.daegu.go.kr",
       "kinds": [
         "external_endpoint"
@@ -229,7 +182,7 @@
       ]
     },
     {
-      "rank": 5,
+      "rank": 4,
       "host": "openapi.price.go.kr",
       "kinds": [
         "external_endpoint"
@@ -288,7 +241,7 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 5,
       "host": "data.gwanak.go.kr",
       "kinds": [
         "external_endpoint"
@@ -336,7 +289,7 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 6,
       "host": "data.mafra.go.kr",
       "kinds": [
         "external_endpoint"
@@ -384,7 +337,7 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 7,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -441,7 +394,7 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 8,
       "host": "www.garak.co.kr",
       "kinds": [
         "external_endpoint"
@@ -488,7 +441,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "www.work24.go.kr",
       "kinds": [
         "external_endpoint"
@@ -535,7 +488,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -586,7 +539,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "www.happysd.or.kr",
       "kinds": [
         "external_endpoint"
@@ -625,7 +578,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "host": "data.seoul.go.kr",
       "kinds": [
         "external_endpoint"
@@ -664,7 +617,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 13,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -721,7 +674,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 14,
       "host": "www.culture.go.kr",
       "kinds": [
         "external_endpoint"
@@ -760,7 +713,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 15,
       "host": "ncpms.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -791,7 +744,7 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 16,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -827,7 +780,7 @@
       ]
     },
     {
-      "rank": 18,
+      "rank": 17,
       "host": "search.i815.or.kr",
       "kinds": [
         "external_endpoint"
@@ -858,7 +811,7 @@
       ]
     },
     {
-      "rank": 19,
+      "rank": 18,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -889,7 +842,7 @@
       ]
     },
     {
-      "rank": 20,
+      "rank": 19,
       "host": "www.jobplustv.or.kr",
       "kinds": [
         "external_endpoint"
@@ -920,7 +873,7 @@
       ]
     },
     {
-      "rank": 21,
+      "rank": 20,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"
