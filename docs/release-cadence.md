@@ -63,8 +63,8 @@ check. That workflow:
 - rereads provider-specific verification reports and regenerates bounded
   summaries for qnet, epost, ekape, emuseum, forest, folk, airport, andong,
   data-gg, jeonju, gblib, geoje, humetro, itfind, korad, kpx, lh-ebid, myhome,
-  naqs, oneclick-law, pqis, seoul-bus, sisul, tour, uiryeong, ulsan, and the
-  merged latest report;
+  naqs, nfqs, oneclick-law, pqis, seoul-bus, sisul, tour, uiryeong, ulsan, and
+  the merged latest report;
 - runs `catalog release verify`;
 - runs `catalog release readiness`;
 - checks that the README Current Snapshot matches the generated coverage,
@@ -127,6 +127,8 @@ datapan catalog verify --registry data/data-go-kr.registry.json --provider myhom
 datapan catalog verify summary --input reports/myhome-verification.json --output reports/myhome-verification-summary.json --json
 datapan catalog verify --registry data/data-go-kr.registry.json --provider naqs --kind external_endpoint --limit 9 --output reports/naqs-verification.json --json
 datapan catalog verify summary --input reports/naqs-verification.json --output reports/naqs-verification-summary.json --json
+datapan catalog verify --registry data/data-go-kr.registry.json --provider nfqs --kind external_endpoint --limit 5 --timeout 20s --output reports/nfqs-verification.json --json
+datapan catalog verify summary --input reports/nfqs-verification.json --output reports/nfqs-verification-summary.json --json
 datapan catalog verify --registry data/data-go-kr.registry.json --provider oneclick-law --kind external_endpoint --limit 30 --output reports/oneclick-law-verification.json --json
 datapan catalog verify summary --input reports/oneclick-law-verification.json --output reports/oneclick-law-verification-summary.json --json
 datapan catalog verify --registry data/data-go-kr.registry.json --provider pqis --kind external_endpoint --limit 4 --timeout 15s --output reports/pqis-verification.json --json
@@ -143,7 +145,7 @@ datapan catalog verify --registry data/data-go-kr.registry.json --provider uirye
 datapan catalog verify summary --input reports/uiryeong-verification.json --output reports/uiryeong-verification-summary.json --json
 datapan catalog verify --registry data/data-go-kr.registry.json --provider ulsan --kind external_endpoint --limit 6 --output reports/ulsan-verification.json --json
 datapan catalog verify summary --input reports/ulsan-verification.json --output reports/ulsan-verification-summary.json --json
-datapan catalog verify merge --input reports/qnet-verification.json --input reports/epost-verification.json --input reports/ekape-verification.json --input reports/emuseum-verification.json --input reports/forest-verification.json --input reports/folk-verification.json --input reports/gblib-verification.json --input reports/airport-verification.json --input reports/andong-verification.json --input reports/data-gg-verification.json --input reports/jeonju-verification.json --input reports/geoje-verification.json --input reports/humetro-verification.json --input reports/itfind-verification.json --input reports/korad-verification.json --input reports/kpx-verification.json --input reports/lh-ebid-verification.json --input reports/myhome-verification.json --input reports/naqs-verification.json --input reports/oneclick-law-verification.json --input reports/pqis-verification.json --input reports/seoul-bus-verification.json --input reports/sisul-verification.json --input reports/tour-verification.json --input reports/uiryeong-verification.json --input reports/ulsan-verification.json --output reports/latest-verification.json --json
+datapan catalog verify merge --input reports/qnet-verification.json --input reports/epost-verification.json --input reports/ekape-verification.json --input reports/emuseum-verification.json --input reports/forest-verification.json --input reports/folk-verification.json --input reports/gblib-verification.json --input reports/airport-verification.json --input reports/andong-verification.json --input reports/data-gg-verification.json --input reports/jeonju-verification.json --input reports/geoje-verification.json --input reports/humetro-verification.json --input reports/itfind-verification.json --input reports/korad-verification.json --input reports/kpx-verification.json --input reports/lh-ebid-verification.json --input reports/myhome-verification.json --input reports/naqs-verification.json --input reports/nfqs-verification.json --input reports/oneclick-law-verification.json --input reports/pqis-verification.json --input reports/seoul-bus-verification.json --input reports/sisul-verification.json --input reports/tour-verification.json --input reports/uiryeong-verification.json --input reports/ulsan-verification.json --output reports/latest-verification.json --json
 datapan catalog verify summary --input reports/latest-verification.json --output reports/latest-verification-summary.json --json
 ```
 

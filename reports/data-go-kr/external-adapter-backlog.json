@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.external-adapter-backlog.v1",
-  "generated_at": "2026-07-02T16:43:39Z",
+  "generated_at": "2026-07-02T16:57:24Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "source_profile": "sources/data_go_kr.json",
@@ -10,19 +10,19 @@
     "coverage": "reports/coverage.json"
   },
   "summary": {
-    "candidate_hosts": 11,
-    "candidate_operations": 29,
-    "candidate_apis": 16,
-    "candidate_institutions": 11,
-    "raw_missing_adapter_operations": 58,
-    "raw_missing_adapter_hosts": 22,
-    "route_disposition_operations": 58,
-    "route_disposition_adapter_candidates": 29,
+    "candidate_hosts": 10,
+    "candidate_operations": 24,
+    "candidate_apis": 13,
+    "candidate_institutions": 10,
+    "raw_missing_adapter_operations": 53,
+    "raw_missing_adapter_hosts": 21,
+    "route_disposition_operations": 53,
+    "route_disposition_adapter_candidates": 24,
     "excluded_dead_route_candidates": 14,
     "excluded_transient_failures": 15,
     "unclassified_missing_routes": 0,
-    "adapter_target_operations": 58,
-    "candidate_share_of_missing_adapter_operations_percent": 50.0
+    "adapter_target_operations": 53,
+    "candidate_share_of_missing_adapter_operations_percent": 45.3
   },
   "policy": {
     "candidate_filter": "route_disposition.disposition == adapter_candidate",
@@ -30,116 +30,6 @@
     "gate": "unclassified_missing_routes must remain 0 before adapter backlog is actionable"
   },
   "hosts": [
-    {
-      "host": "www.nfqs.go.kr",
-      "priority": 5,
-      "candidate_operations": 5,
-      "candidate_apis": 3,
-      "institutions": [
-        "해양수산부 국립수산물품질관리원"
-      ],
-      "probe_reasons": [
-        {
-          "key": "unadapted_probe_http_2xx",
-          "count": 5
-        }
-      ],
-      "body_shapes": [
-        {
-          "key": "html",
-          "count": 5
-        }
-      ],
-      "sample_dataset_ids": [
-        "15001668",
-        "15001702",
-        "15009422"
-      ],
-      "sample_routes": [
-        {
-          "dataset_id": "15001668",
-          "title": "해양수산부 국립수산물품질관리원_수산물재고동향",
-          "organization": "해양수산부 국립수산물품질관리원",
-          "operation": "해양수산부 국립수산물품질관리원_수산물재고동향_20230629",
-          "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=009",
-          "endpoint_host": "www.nfqs.go.kr",
-          "dependency_class": "external_endpoint",
-          "disposition": "adapter_candidate",
-          "probe_status": "unknown",
-          "probe_reason": "unadapted_probe_http_2xx",
-          "http_status": 200,
-          "body_shape": "html",
-          "missing_params": [],
-          "recommended_action": "implement_provider_adapter"
-        },
-        {
-          "dataset_id": "15001702",
-          "title": "해양수산부 국립수산물품질관리원_검역시행장정보",
-          "organization": "해양수산부 국립수산물품질관리원",
-          "operation": "해양수산부 국립수산물품질관리원_검역시행장정보_20230629 외부 링크 1",
-          "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=008",
-          "endpoint_host": "www.nfqs.go.kr",
-          "dependency_class": "external_endpoint",
-          "disposition": "adapter_candidate",
-          "probe_status": "unknown",
-          "probe_reason": "unadapted_probe_http_2xx",
-          "http_status": 200,
-          "body_shape": "html",
-          "missing_params": [],
-          "recommended_action": "implement_provider_adapter"
-        },
-        {
-          "dataset_id": "15001702",
-          "title": "해양수산부 국립수산물품질관리원_검역시행장정보",
-          "organization": "해양수산부 국립수산물품질관리원",
-          "operation": "해양수산부 국립수산물품질관리원_검역시행장정보_20230629 외부 링크 2",
-          "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=003",
-          "endpoint_host": "www.nfqs.go.kr",
-          "dependency_class": "external_endpoint",
-          "disposition": "adapter_candidate",
-          "probe_status": "unknown",
-          "probe_reason": "unadapted_probe_http_2xx",
-          "http_status": 200,
-          "body_shape": "html",
-          "missing_params": [],
-          "recommended_action": "implement_provider_adapter"
-        },
-        {
-          "dataset_id": "15009422",
-          "title": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황",
-          "organization": "해양수산부 국립수산물품질관리원",
-          "operation": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황_20230629 외부 링크 1",
-          "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=007",
-          "endpoint_host": "www.nfqs.go.kr",
-          "dependency_class": "external_endpoint",
-          "disposition": "adapter_candidate",
-          "probe_status": "unknown",
-          "probe_reason": "unadapted_probe_http_2xx",
-          "http_status": 200,
-          "body_shape": "html",
-          "missing_params": [],
-          "recommended_action": "implement_provider_adapter"
-        },
-        {
-          "dataset_id": "15009422",
-          "title": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황",
-          "organization": "해양수산부 국립수산물품질관리원",
-          "operation": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황_20230629 외부 링크 2",
-          "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiReqView.do?API_CD=005",
-          "endpoint_host": "www.nfqs.go.kr",
-          "dependency_class": "external_endpoint",
-          "disposition": "adapter_candidate",
-          "probe_status": "unknown",
-          "probe_reason": "unadapted_probe_http_2xx",
-          "http_status": 200,
-          "body_shape": "html",
-          "missing_params": [],
-          "recommended_action": "implement_provider_adapter"
-        }
-      ],
-      "implementation_status": "adapter_not_registered",
-      "recommended_next_step": "Add a provider adapter for www.nfqs.go.kr or mark the host with stronger route disposition evidence if the HTML surface is not machine-callable."
-    },
     {
       "host": "www.nongsaro.go.kr",
       "priority": 4,
@@ -1074,86 +964,6 @@
       "operation": "서울특별시성동구도시관리공단_체육시설 대관정보 조회_20220804",
       "endpoint": "https://www.happysd.or.kr/c_76/cnt/m_109/view.do",
       "endpoint_host": "www.happysd.or.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html",
-      "missing_params": [],
-      "recommended_action": "implement_provider_adapter"
-    },
-    {
-      "dataset_id": "15001668",
-      "title": "해양수산부 국립수산물품질관리원_수산물재고동향",
-      "organization": "해양수산부 국립수산물품질관리원",
-      "operation": "해양수산부 국립수산물품질관리원_수산물재고동향_20230629",
-      "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=009",
-      "endpoint_host": "www.nfqs.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html",
-      "missing_params": [],
-      "recommended_action": "implement_provider_adapter"
-    },
-    {
-      "dataset_id": "15001702",
-      "title": "해양수산부 국립수산물품질관리원_검역시행장정보",
-      "organization": "해양수산부 국립수산물품질관리원",
-      "operation": "해양수산부 국립수산물품질관리원_검역시행장정보_20230629 외부 링크 1",
-      "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=008",
-      "endpoint_host": "www.nfqs.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html",
-      "missing_params": [],
-      "recommended_action": "implement_provider_adapter"
-    },
-    {
-      "dataset_id": "15001702",
-      "title": "해양수산부 국립수산물품질관리원_검역시행장정보",
-      "organization": "해양수산부 국립수산물품질관리원",
-      "operation": "해양수산부 국립수산물품질관리원_검역시행장정보_20230629 외부 링크 2",
-      "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=003",
-      "endpoint_host": "www.nfqs.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html",
-      "missing_params": [],
-      "recommended_action": "implement_provider_adapter"
-    },
-    {
-      "dataset_id": "15009422",
-      "title": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황",
-      "organization": "해양수산부 국립수산물품질관리원",
-      "operation": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황_20230629 외부 링크 1",
-      "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=007",
-      "endpoint_host": "www.nfqs.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html",
-      "missing_params": [],
-      "recommended_action": "implement_provider_adapter"
-    },
-    {
-      "dataset_id": "15009422",
-      "title": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황",
-      "organization": "해양수산부 국립수산물품질관리원",
-      "operation": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황_20230629 외부 링크 2",
-      "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiReqView.do?API_CD=005",
-      "endpoint_host": "www.nfqs.go.kr",
       "dependency_class": "external_endpoint",
       "disposition": "adapter_candidate",
       "probe_status": "unknown",

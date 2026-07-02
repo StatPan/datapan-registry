@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T16:43:53Z",
+  "generated_at": "2026-07-02T16:57:38Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -8,10 +8,10 @@
   "timeout": "10s",
   "summary": {
     "operations": 12253,
-    "evidence_total": 1249,
+    "evidence_total": 1254,
     "uncovered_gateway_candidates": 10774,
     "uncovered_adapter_candidates": 0,
-    "missing_adapter_hosts": 22,
+    "missing_adapter_hosts": 21,
     "planned_batches": 1,
     "planned_operations": 10
   },
@@ -39,23 +39,6 @@
         "external_endpoint_operations": 6,
         "sample_ids": [
           "15059302"
-        ]
-      },
-      {
-        "host": "www.nfqs.go.kr",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "missing",
-        "specs": 3,
-        "operations": 5,
-        "external_endpoint_operations": 5,
-        "external_guide_specs": 3,
-        "sample_ids": [
-          "15001668",
-          "15001702",
-          "15009422"
         ]
       },
       {
@@ -172,6 +155,19 @@
         "sample_ids": [
           "15007009",
           "15009684"
+        ]
+      },
+      {
+        "host": "its.gyeongju.go.kr:81",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 1,
+        "operations": 3,
+        "external_endpoint_operations": 3,
+        "sample_ids": [
+          "15021579"
         ]
       }
     ]

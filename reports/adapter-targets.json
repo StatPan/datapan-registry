@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-02T16:43:39Z",
+  "generated_at": "2026-07-02T16:57:24Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 22,
+  "filtered_count": 21,
   "summary": {
-    "target_hosts": 22,
-    "target_operations": 58,
-    "external_endpoint_operations": 58,
+    "target_hosts": 21,
+    "target_operations": 53,
+    "external_endpoint_operations": 53,
     "service_root_operations": 0,
     "approval_required_operations": 0,
     "missing_param_operations": 21,
@@ -64,54 +64,6 @@
     },
     {
       "rank": 2,
-      "host": "www.nfqs.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 5,
-      "specs": 3,
-      "organizations": [
-        "해양수산부 국립수산물품질관리원"
-      ],
-      "source_categories": [
-        "농축수산"
-      ],
-      "api_types": [
-        "LINK"
-      ],
-      "data_formats": [
-        "JSON+XML",
-        "XML"
-      ],
-      "sample_operations": [
-        {
-          "dataset_id": "15001668",
-          "title": "해양수산부 국립수산물품질관리원_수산물재고동향",
-          "organization": "해양수산부 국립수산물품질관리원",
-          "operation": "해양수산부 국립수산물품질관리원_수산물재고동향_20230629",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=009"
-        },
-        {
-          "dataset_id": "15001702",
-          "title": "해양수산부 국립수산물품질관리원_검역시행장정보",
-          "organization": "해양수산부 국립수산물품질관리원",
-          "operation": "해양수산부 국립수산물품질관리원_검역시행장정보_20230629 외부 링크 1",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=008"
-        },
-        {
-          "dataset_id": "15001702",
-          "title": "해양수산부 국립수산물품질관리원_검역시행장정보",
-          "organization": "해양수산부 국립수산물품질관리원",
-          "operation": "해양수산부 국립수산물품질관리원_검역시행장정보_20230629 외부 링크 2",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=003"
-        }
-      ]
-    },
-    {
-      "rank": 3,
       "host": "www.nongsaro.go.kr",
       "kinds": [
         "external_endpoint"
@@ -158,7 +110,7 @@
       ]
     },
     {
-      "rank": 4,
+      "rank": 3,
       "host": "www.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -217,7 +169,7 @@
       ]
     },
     {
-      "rank": 5,
+      "rank": 4,
       "host": "car.daegu.go.kr",
       "kinds": [
         "external_endpoint"
@@ -277,7 +229,7 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 5,
       "host": "openapi.price.go.kr",
       "kinds": [
         "external_endpoint"
@@ -336,7 +288,7 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 6,
       "host": "data.gwanak.go.kr",
       "kinds": [
         "external_endpoint"
@@ -384,7 +336,7 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 7,
       "host": "data.mafra.go.kr",
       "kinds": [
         "external_endpoint"
@@ -432,7 +384,7 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 8,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -489,7 +441,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "www.garak.co.kr",
       "kinds": [
         "external_endpoint"
@@ -536,7 +488,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "www.work24.go.kr",
       "kinds": [
         "external_endpoint"
@@ -583,7 +535,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -634,7 +586,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "host": "www.happysd.or.kr",
       "kinds": [
         "external_endpoint"
@@ -673,7 +625,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 13,
       "host": "data.seoul.go.kr",
       "kinds": [
         "external_endpoint"
@@ -712,7 +664,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 14,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -769,7 +721,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 15,
       "host": "www.culture.go.kr",
       "kinds": [
         "external_endpoint"
@@ -808,7 +760,7 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 16,
       "host": "ncpms.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -839,7 +791,7 @@
       ]
     },
     {
-      "rank": 18,
+      "rank": 17,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -875,7 +827,7 @@
       ]
     },
     {
-      "rank": 19,
+      "rank": 18,
       "host": "search.i815.or.kr",
       "kinds": [
         "external_endpoint"
@@ -906,7 +858,7 @@
       ]
     },
     {
-      "rank": 20,
+      "rank": 19,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -937,7 +889,7 @@
       ]
     },
     {
-      "rank": 21,
+      "rank": 20,
       "host": "www.jobplustv.or.kr",
       "kinds": [
         "external_endpoint"
@@ -968,7 +920,7 @@
       ]
     },
     {
-      "rank": 22,
+      "rank": 21,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-02T16:43:39Z",
+  "generated_at": "2026-07-02T16:57:24Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 27,
-  "host_count": 31,
+  "adapter_count": 28,
+  "host_count": 32,
   "adapters": [
     {
       "name": "airport",
@@ -210,6 +210,16 @@
       ]
     },
     {
+      "name": "nfqs",
+      "status": "registered",
+      "hosts": [
+        "www.nfqs.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "oneclick-law",
       "status": "registered",
       "hosts": [
@@ -303,8 +313,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 27,
-    "verification_capable_adapters": 27,
+    "adapter_count": 28,
+    "verification_capable_adapters": 28,
     "call_capable_adapters": 21,
     "required_adapters": 2,
     "required_verification_adapters": 2,

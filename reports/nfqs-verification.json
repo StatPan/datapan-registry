@@ -1,0 +1,92 @@
+{
+  "generated_at": "2026-07-02T16:57:04Z",
+  "provider": "data.go.kr",
+  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 5,
+  "timeout": "20s",
+  "truncated": false,
+  "filters": {
+    "provider": "nfqs",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 5,
+  "summary": {
+    "total": 5,
+    "verified": 5,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15001668",
+      "title": "해양수산부 국립수산물품질관리원_수산물재고동향",
+      "operation": "해양수산부 국립수산물품질관리원_수산물재고동향_20230629",
+      "provider": "nfqs",
+      "endpoint_host": "www.nfqs.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T16:57:04Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=009",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15001702",
+      "title": "해양수산부 국립수산물품질관리원_검역시행장정보",
+      "operation": "해양수산부 국립수산물품질관리원_검역시행장정보_20230629 외부 링크 1",
+      "provider": "nfqs",
+      "endpoint_host": "www.nfqs.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T16:57:04Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=008",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15001702",
+      "title": "해양수산부 국립수산물품질관리원_검역시행장정보",
+      "operation": "해양수산부 국립수산물품질관리원_검역시행장정보_20230629 외부 링크 2",
+      "provider": "nfqs",
+      "endpoint_host": "www.nfqs.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T16:57:04Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=003",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15009422",
+      "title": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황",
+      "operation": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황_20230629 외부 링크 1",
+      "provider": "nfqs",
+      "endpoint_host": "www.nfqs.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T16:57:04Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=007",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15009422",
+      "title": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황",
+      "operation": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황_20230629 외부 링크 2",
+      "provider": "nfqs",
+      "endpoint_host": "www.nfqs.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T16:57:04Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.nfqs.go.kr/hpmg/api/actionApiReqView.do?API_CD=005",
+      "body_shape": "html"
+    }
+  ]
+}
