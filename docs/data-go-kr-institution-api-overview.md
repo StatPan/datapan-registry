@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-02T21:48:05Z`
+- Generated at: `2026-07-02T21:54:44Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `12720`
-- Runtime evidence: `1278` (`10.0%`)
-- External endpoint operations: `1110`
-- Registered adapter operations: `1100`
+- Operations: `12963`
+- Runtime evidence: `1278` (`9.9%`)
+- External endpoint operations: `1353`
+- Registered adapter operations: `1343`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -14,7 +14,7 @@
 | Institution | APIs | APIs with ops | Ops | Evidence | Evidence % | Verified | Failed | Skipped | Approval | No endpoint |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 행정안전부 | 1252 | 793 | 1054 | 0 | 0.0% | 0 | 0 | 0 | 215 | 0 |
-| 경기도 | 840 | 111 | 270 | 18 | 6.7% | 18 | 0 | 0 | 3 | 0 |
+| 경기도 | 840 | 199 | 513 | 18 | 3.5% | 18 | 0 | 0 | 3 | 0 |
 | 국토교통부 | 393 | 127 | 397 | 25 | 6.3% | 0 | 0 | 25 | 6 | 0 |
 | 식품의약품안전처 | 392 | 272 | 363 | 2 | 0.6% | 0 | 0 | 2 | 275 | 0 |
 | 국회 국회사무처 | 277 | 0 | 0 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
@@ -49,6 +49,7 @@
 | Institution | APIs | APIs with ops | Ops | Evidence | Evidence % | Verified | Failed | Skipped | Approval | No endpoint |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 행정안전부 | 1252 | 793 | 1054 | 0 | 0.0% | 0 | 0 | 0 | 215 | 0 |
+| 경기도 | 840 | 199 | 513 | 18 | 3.5% | 18 | 0 | 0 | 3 | 0 |
 | 국토교통부 | 393 | 127 | 397 | 25 | 6.3% | 0 | 0 | 25 | 6 | 0 |
 | 국립암센터 | 212 | 204 | 367 | 79 | 21.5% | 0 | 0 | 79 | 175 | 1 |
 | 식품의약품안전처 | 392 | 272 | 363 | 2 | 0.6% | 0 | 0 | 2 | 275 | 0 |
@@ -58,7 +59,6 @@
 | 한국산업인력공단 | 230 | 228 | 315 | 148 | 47.0% | 5 | 1 | 142 | 181 | 0 |
 | 공정거래위원회 | 250 | 216 | 295 | 0 | 0.0% | 0 | 0 | 0 | 279 | 0 |
 | 해양수산부 | 173 | 172 | 276 | 8 | 2.9% | 0 | 0 | 8 | 116 | 0 |
-| 경기도 | 840 | 111 | 270 | 18 | 6.7% | 18 | 0 | 0 | 3 | 0 |
 | 한국연구재단 | 26 | 24 | 247 | 13 | 5.3% | 4 | 3 | 6 | 234 | 0 |
 | 한국마사회 | 223 | 223 | 223 | 9 | 4.0% | 0 | 0 | 9 | 221 | 0 |
 | 한국관광공사 | 28 | 28 | 213 | 1 | 0.5% | 0 | 0 | 1 | 212 | 0 |
@@ -85,21 +85,21 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 ## Largest Categories
 
-- 농축수산: `1353` operations
-- 교통물류: `1325` operations
-- 문화관광: `1291` operations
-- 공공행정: `1263` operations
-- 산업고용: `1023` operations
-- 재정금융: `915` operations
-- 사회복지: `860` operations
-- 환경기상: `843` operations
-- 보건의료: `705` operations
-- 식품건강: `649` operations
+- 농축수산: `1356` operations
+- 교통물류: `1340` operations
+- 문화관광: `1299` operations
+- 공공행정: `1273` operations
+- 산업고용: `1034` operations
+- 사회복지: `998` operations
+- 재정금융: `918` operations
+- 환경기상: `855` operations
+- 보건의료: `708` operations
+- 식품건강: `652` operations
 
 ## Largest Hosts
 
 - apis.data.go.kr: `11423` operations
-- data.gg.go.kr: `257` operations
+- data.gg.go.kr: `498` operations
 - www.safetydata.go.kr: `180` operations
 - openapi.q-net.or.kr: `104` operations
 - openapi.jeonju.go.kr: `80` operations

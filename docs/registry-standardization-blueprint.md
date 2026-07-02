@@ -94,8 +94,8 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `4,554` data.go.kr APIs
-  without operation mappings, `6,907` operation-mapped APIs without runtime
+- `reports/data-go-kr/coverage-backlog.json` tracks `4,466` data.go.kr APIs
+  without operation mappings, `6,995` operation-mapped APIs without runtime
   evidence, and `54` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
@@ -175,9 +175,9 @@ Current gaps:
   Gira #35 raise data.go.kr runtime evidence from `256` to `626`. Gira #39,
   Gira #41, Gira #43, Gira #45, Gira #49, Gira #51, Gira #53, Gira #55, Gira
   #57, Gira #59, and Gira #61 continue gateway boundary evidence growth to
-  `1221`, and Gira #93 grows it to `1231`, meeting the `10%` runtime evidence
-  target and clearing the release readiness warning. Gira #97 adds `18`
-  verified data-gg landing-page checks, Gira #99 adds `5` verified nfqs
+  `1221`, and Gira #93 grows it to `1231`, meeting the then-current `10%`
+  runtime evidence target and clearing the release readiness warning. Gira #97
+  adds `18` verified data-gg landing-page checks, Gira #99 adds `5` verified nfqs
   landing-page checks, Gira #101 adds `4` verified nongsaro landing-page
   checks, Gira #103 adds `3` verified gwanak landing-page checks, and Gira
   #105 adds `3` verified mafra landing-page checks, Gira #107 adds `3`
@@ -185,10 +185,12 @@ Current gaps:
   landing-page checks, Gira #111 adds `2` verified seoul-open-data landing-page
   checks, and Gira #113 adds `4` verified culture/happysd landing-page checks,
   and Gira #115 adds `2` verified ncpms/i815 landing-page checks, bringing
-  runtime evidence to `1278`. Most evidence is still skipped boundary evidence,
-  not proof that those operations are callable.
-- API operation coverage remains incomplete: `7,506` of `12,060` APIs have
-  operation mappings (`62.2%`), leaving `4,554` APIs to materialize and `6,907`
+  runtime evidence to `1278`. Subsequent operation materialization raised the
+  current evidence target to `1297`, so `19` additional evidence records are
+  needed to restore the `10%` release-readiness target. Most evidence is still
+  skipped boundary evidence, not proof that those operations are callable.
+- API operation coverage remains incomplete: `7,594` of `12,060` APIs have
+  operation mappings (`63.0%`), leaving `4,466` APIs to materialize and `6,995`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

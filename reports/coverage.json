@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T21:48:07Z",
+  "generated_at": "2026-07-02T21:54:47Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,14 +7,14 @@
   "route_disposition": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 12720,
-    "callable_operations": 12578,
+    "operations": 12963,
+    "callable_operations": 12821,
     "callable_operation_percent": 98.9,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 1110,
-    "registered_adapter_operations": 1100,
+    "external_endpoint_operations": 1353,
+    "registered_adapter_operations": 1343,
     "missing_adapter_operations": 29,
-    "external_adapter_coverage_percent": 97.4,
+    "external_adapter_coverage_percent": 97.9,
     "approval_required_operations": 4325,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
@@ -31,7 +31,7 @@
     "external_adapter_coverage_percent_target": 98,
     "external_adapter_coverage_percent_met": false,
     "evidence_operation_percent_target": 10,
-    "evidence_operation_percent_met": true,
+    "evidence_operation_percent_met": false,
     "missing_adapter_operations_target": 10,
     "missing_adapter_operations_met": false,
     "call_capable_adapters_target": 25,
@@ -48,7 +48,7 @@
     "skipped": 1122,
     "unknown": 0,
     "verified_percent": 5.4,
-    "evidence_operation_percent": 10
+    "evidence_operation_percent": 9.9
   },
   "route_evidence": {
     "present": true,
@@ -209,9 +209,9 @@
           "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 106,
-        "operations": 257,
-        "external_endpoint_operations": 257,
+        "specs": 194,
+        "operations": 498,
+        "external_endpoint_operations": 498,
         "external_guide_specs": 1,
         "approval_required_operations": 3,
         "sample_ids": [
@@ -381,7 +381,7 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-02T21:48:07Z",
+    "generated_at": "2026-07-02T21:54:47Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 39,
     "host_count": 44,

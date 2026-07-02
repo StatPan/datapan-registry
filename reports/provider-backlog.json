@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T21:48:05Z",
+  "generated_at": "2026-07-02T21:54:44Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -177,9 +177,9 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 106,
-      "operations": 257,
-      "external_endpoint_operations": 257,
+      "specs": 194,
+      "operations": 498,
+      "external_endpoint_operations": 498,
       "external_guide_specs": 1,
       "approval_required_operations": 3,
       "sample_ids": [
@@ -699,6 +699,21 @@
       ]
     },
     {
+      "host": "data.seoul.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 3,
+      "operations": 4,
+      "external_endpoint_operations": 4,
+      "sample_ids": [
+        "15003164",
+        "15058614",
+        "15059503"
+      ]
+    },
+    {
       "host": "openapi.gblib.or.kr",
       "provider": "gblib",
       "kinds": [
@@ -803,19 +818,6 @@
       "sample_ids": [
         "15007444",
         "15007467"
-      ]
-    },
-    {
-      "host": "data.seoul.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 1,
-      "operations": 2,
-      "external_endpoint_operations": 2,
-      "sample_ids": [
-        "15003164"
       ]
     },
     {
