@@ -79,6 +79,7 @@ Recommended evidence before tagging:
 datapan catalog verify --registry data/data-go-kr.registry.json --limit 100 --output reports/latest-verification.json --json
 datapan catalog verify summary --input reports/latest-verification.json --output reports/latest-verification-summary.json --json
 python scripts/generate-coverage-backlog.py
+python scripts/generate-external-adapter-backlog.py
 python scripts/generate-institution-api-overview.py
 python scripts/generate-source-report-inventory.py
 python scripts/generate-source-runtime-readiness.py

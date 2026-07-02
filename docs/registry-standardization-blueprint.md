@@ -81,6 +81,9 @@ Current strengths:
   source-specific action routing for the first non-data.go.kr profile batch.
 - `reports/data-go-kr/external-coverage-summary.json` separates raw external
   adapter coverage from evidence-adjusted adapter candidates.
+- `reports/data-go-kr/external-adapter-backlog.json` turns current
+  route-disposition adapter candidates into a host/API implementation queue
+  while excluding dead-route and transient-failure evidence from adapter work.
 - `reports/data-go-kr/registry-impact-plan.json` validates downstream action
   hints for the current data.go.kr registry-only changes.
 - `reports/registry-impact-plan.json` is generated from checked-in
@@ -91,8 +94,8 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `4,875` data.go.kr APIs
-  without operation mappings, `6,615` operation-mapped APIs without runtime
+- `reports/data-go-kr/coverage-backlog.json` tracks `4,850` data.go.kr APIs
+  without operation mappings, `6,635` operation-mapped APIs without runtime
   evidence, and `54` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
@@ -427,6 +430,10 @@ Use this order unless a production failure changes priority:
 27. Add a generated data.go.kr coverage backlog. Tracked by Gira #89; this
     turns uncovered APIs and runtime reactivation targets into
     `reports/data-go-kr/coverage-backlog.json` work queues that validate in CI.
+28. Add a generated data.go.kr external adapter backlog. Tracked by Gira #95;
+    this turns `47` route-disposition adapter-candidate operations into
+    `12` host-scoped adapter implementation queues while keeping dead and
+    transient routes out of adapter work.
 
 ## Measurement Rules
 

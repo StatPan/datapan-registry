@@ -167,9 +167,11 @@ reports/
     institution-api-overview.json
     coverage-backlog.json
     external-coverage-summary.json
+    external-adapter-backlog.json
 docs/
   data-go-kr-institution-api-overview.md
   data-go-kr-coverage-backlog.md
+  data-go-kr-external-adapter-backlog.md
 provenance/
   data-go-kr.md
 manifest.json
