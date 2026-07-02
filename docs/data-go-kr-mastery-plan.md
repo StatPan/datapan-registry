@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `13667`
-- callable operations: `13525` (`99%`)
+- operations: `13676`
+- callable operations: `13534` (`99%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `2057`
-- registered adapter operations: `2047`
+- external endpoint operations: `2066`
+- registered adapter operations: `2056`
 - missing adapter operations: `29`
 - external adapter coverage: `98.6%`
-- approval-required operations: `4714`
+- approval-required operations: `4723`
 - no-endpoint operations: `123`
 - service-root operations: `19`
-- unsupported-protocol operations: `142`
-- registered adapter hosts: `45`
+- unsupported-protocol operations: `146`
+- registered adapter hosts: `52`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -120,10 +120,11 @@ Each external host should have:
 
 Registered external adapters currently cover these host families through
 `data/provider-index.json`: airport, andong, culture, data-gg, ekape, emuseum,
-epost, folk, forest, garak, gblib, geoje, gwanak, happysd, humetro, i815,
-itfind, jeju, jeonju, korad, kpx, lh-ebid, mafra, myhome, naqs, ncpms, nfqs,
-nongsaro, oneclick-law, pqis, q-net, safemap, safetydata, seoul-bus, seoul-open-data,
-sisul, tour, uiryeong, ulsan, and work24.
+epost, eshare, folk, foodsafetykorea, forest, garak, gblib, geoje, gwanak,
+happysd, humetro, i815, ins24, itfind, jeju, jejudatahub, jeonju, juso,
+korad, kpx, lh-ebid, lofin365, mafra, myhome, naqs, ncpms, nfqs, nongsaro,
+oneclick-law, pqis, q-net, safemap, safetydata, seoul-bus, seoul-open-data,
+sisul, tour, uiryeong, ulsan, vworld, and work24.
 
 Missing external route hosts currently requiring route-disposition tracking:
 
@@ -339,7 +340,11 @@ coverage.
    `www.juso.go.kr`, materializes `68` of the last `73` 행정안전부 APIs with
    `144` operations, and adds `10` verified Juso landing-page checks, bringing
    checked runtime evidence to `1368` and registered external adapter
-   operations to `2047`.
+   operations to `2047`. The remaining 행정안전부 link-detail hosts then add
+   Food Safety Korea, INS24, Jeju Data Hub, and VWorld adapters plus the bare
+   Seoul Open Data API host, opening the final `5` 행정안전부 APIs, adding `9`
+   operations, and merging `7` bounded checks. That brings checked runtime
+   evidence to `1375` and registered external adapter operations to `2056`.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

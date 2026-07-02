@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T23:17:07Z",
+  "generated_at": "2026-07-02T23:34:56Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,13 +7,13 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 13667,
-    "evidence_total": 1368,
+    "operations": 13676,
+    "evidence_total": 1375,
     "uncovered_gateway_candidates": 10774,
-    "uncovered_adapter_candidates": 1324,
+    "uncovered_adapter_candidates": 1326,
     "missing_adapter_hosts": 11,
-    "planned_batches": 10,
-    "planned_operations": 92
+    "planned_batches": 9,
+    "planned_operations": 90
   },
   "batches": [
     {
@@ -79,8 +79,8 @@
       "label": "safetydata",
       "provider": "safetydata",
       "kind": "external_endpoint",
-      "candidates": 368,
-      "uncovered_candidates": 358,
+      "candidates": 370,
+      "uncovered_candidates": 360,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider safetydata --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/safetydata-next.json --json",
       "output": ".datapan/verification/safetydata-next.json"
@@ -89,21 +89,11 @@
       "label": "safemap",
       "provider": "safemap",
       "kind": "external_endpoint",
-      "candidates": 102,
-      "uncovered_candidates": 92,
+      "candidates": 104,
+      "uncovered_candidates": 94,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider safemap --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/safemap-next.json --json",
       "output": ".datapan/verification/safemap-next.json"
-    },
-    {
-      "label": "seoul-open-data",
-      "provider": "seoul-open-data",
-      "kind": "external_endpoint",
-      "candidates": 4,
-      "uncovered_candidates": 2,
-      "planned_operations": 2,
-      "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider seoul-open-data --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/seoul-open-data-next.json --json",
-      "output": ".datapan/verification/seoul-open-data-next.json"
     },
     {
       "label": "work24",

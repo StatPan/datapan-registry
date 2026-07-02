@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-07-02T23:16:49Z",
+  "generated_at": "2026-07-02T23:34:28Z",
   "source": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1368,
-    "verified": 124,
+    "total": 1375,
+    "verified": 130,
     "failed": 112,
-    "skipped": 1132,
+    "skipped": 1133,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 1132,
+        "count": 1133,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 124,
+        "count": 130,
         "status": "verified"
       },
       {
@@ -38,7 +38,7 @@
       },
       {
         "key": "missing_auth",
-        "count": 293,
+        "count": 294,
         "reason": "missing_auth"
       },
       {
@@ -434,6 +434,11 @@
         "provider": "seoul-bus"
       },
       {
+        "key": "seoul-open-data",
+        "count": 5,
+        "provider": "seoul-open-data"
+      },
+      {
         "key": "forest",
         "count": 4,
         "provider": "forest"
@@ -489,14 +494,24 @@
         "provider": "happysd"
       },
       {
-        "key": "seoul-open-data",
-        "count": 2,
-        "provider": "seoul-open-data"
+        "key": "foodsafetykorea",
+        "count": 1,
+        "provider": "foodsafetykorea"
       },
       {
         "key": "i815",
         "count": 1,
         "provider": "i815"
+      },
+      {
+        "key": "ins24",
+        "count": 1,
+        "provider": "ins24"
+      },
+      {
+        "key": "jejudatahub",
+        "count": 1,
+        "provider": "jejudatahub"
       },
       {
         "key": "myhome",
@@ -507,6 +522,11 @@
         "key": "ncpms",
         "count": 1,
         "provider": "ncpms"
+      },
+      {
+        "key": "vworld",
+        "count": 1,
+        "provider": "vworld"
       }
     ],
     "by_endpoint_host": [
@@ -676,6 +696,11 @@
         "host": "data.jeju.go.kr"
       },
       {
+        "key": "data.seoul.go.kr",
+        "count": 4,
+        "host": "data.seoul.go.kr"
+      },
+      {
         "key": "openapi.pqis.go.kr",
         "count": 4,
         "host": "openapi.pqis.go.kr"
@@ -721,11 +746,6 @@
         "host": "www.work24.go.kr"
       },
       {
-        "key": "data.seoul.go.kr",
-        "count": 2,
-        "host": "data.seoul.go.kr"
-      },
-      {
         "key": "www.happysd.or.kr",
         "count": 2,
         "host": "www.happysd.or.kr"
@@ -746,15 +766,40 @@
         "host": "open.api.q-net.or.kr"
       },
       {
+        "key": "openapi.seoul.go.kr:8088",
+        "count": 1,
+        "host": "openapi.seoul.go.kr:8088"
+      },
+      {
         "key": "search.i815.or.kr",
         "count": 1,
         "host": "search.i815.or.kr"
+      },
+      {
+        "key": "www.foodsafetykorea.go.kr",
+        "count": 1,
+        "host": "www.foodsafetykorea.go.kr"
+      },
+      {
+        "key": "www.ins24.go.kr",
+        "count": 1,
+        "host": "www.ins24.go.kr"
+      },
+      {
+        "key": "www.jejudatahub.net",
+        "count": 1,
+        "host": "www.jejudatahub.net"
+      },
+      {
+        "key": "www.vworld.kr",
+        "count": 1,
+        "host": "www.vworld.kr"
       }
     ],
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 704,
+        "count": 711,
         "kind": "external_endpoint"
       },
       {
