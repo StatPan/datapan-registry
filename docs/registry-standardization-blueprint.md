@@ -109,6 +109,9 @@ Current strengths:
   verification in Gira #69, ECOS error taxonomy verification in Gira #71, and
   Open Assembly error taxonomy verification in Gira #73, then runtime
   candidate batch pinning in Gira #75.
+- `docs/source-runtime-readiness.md` is generated from the release-wide source
+  runtime evidence rollup and checked-in source plans, so operators can read
+  the same blocker, warning, and next-action inventory that CI validates.
 - `scripts/sync-release-schema-artifacts.py` checks that every checked-in
   `schemas/*.schema.json` file is represented in `schemas/index.json` and
   `manifest.json`; Gira #77 raises release schema coverage from `20` to `28`
@@ -401,6 +404,10 @@ Use this order unless a production failure changes priority:
     `registry:schema-release-surface` whenever readiness reports
     `schema_set_complete.actual > expected`, and preserves `no_action`
     boundaries for Dataset API, SDK, MCP, and datapan-data.
+25. Add a generated source runtime readiness overview. Tracked by Gira #83;
+    this makes the non-data.go.kr runtime blockers and warnings readable in
+    `docs/source-runtime-readiness.md` and keeps the document synced through
+    `scripts/validate-source-runtime-evidence-rollup.py`.
 
 ## Measurement Rules
 

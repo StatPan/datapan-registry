@@ -7,7 +7,9 @@ import argparse
 import collections
 import json
 import pathlib
+import subprocess
 import sys
+import tempfile
 
 try:
     import jsonschema
@@ -18,6 +20,7 @@ except ImportError as exc:  # pragma: no cover - environment guard
 
 
 DEFAULT_ROLLUP = pathlib.Path("reports/source-runtime-evidence-rollup.json")
+DEFAULT_MARKDOWN = pathlib.Path("docs/source-runtime-readiness.md")
 
 
 def portable_path(path: pathlib.Path) -> str:
@@ -150,6 +153,33 @@ def validate_rollup(path: pathlib.Path, rollup: dict[str, object]) -> None:
             raise ValueError(f"warnings.{warning_id}.affected_sources does not match plans")
 
 
+def validate_markdown(markdown_path: pathlib.Path, generator: pathlib.Path, rollup: pathlib.Path) -> None:
+    if not markdown_path.exists():
+        raise ValueError(f"{markdown_path} does not exist; regenerate with {generator}")
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        expected_path = pathlib.Path(temp_dir) / "source-runtime-readiness.md"
+        subprocess.run(
+            [
+                sys.executable,
+                str(generator),
+                "--rollup",
+                str(rollup),
+                "--output",
+                str(expected_path),
+            ],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        expected = expected_path.read_text(encoding="utf-8")
+
+    actual = markdown_path.read_text(encoding="utf-8")
+    if actual != expected:
+        raise ValueError(f"{markdown_path} is stale; regenerate with {generator}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -165,6 +195,18 @@ def main() -> int:
         type=pathlib.Path,
         help="rollup file to validate",
     )
+    parser.add_argument(
+        "--markdown",
+        default=DEFAULT_MARKDOWN,
+        type=pathlib.Path,
+        help="generated source runtime readiness markdown path",
+    )
+    parser.add_argument(
+        "--generator",
+        default="scripts/generate-source-runtime-readiness.py",
+        type=pathlib.Path,
+        help="source runtime readiness generator path",
+    )
     args = parser.parse_args()
 
     schema = load_json(args.schema)
@@ -176,6 +218,7 @@ def main() -> int:
         errors = sorted(validator.iter_errors(instance), key=lambda error: list(error.path))
         if not errors:
             validate_rollup(args.rollup, instance)
+            validate_markdown(args.markdown, args.generator, args.rollup)
     except Exception as exc:  # noqa: BLE001 - report all validation blockers
         print(f"FAIL {args.rollup}: {exc}", file=sys.stderr)
         return 1
