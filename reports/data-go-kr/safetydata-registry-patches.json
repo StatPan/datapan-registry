@@ -1,0 +1,505 @@
+{
+  "schema_version": "datapan.safetydata-registry-patches.v1",
+  "generated_at": "2026-07-02T20:29:16Z",
+  "provider": "data.go.kr",
+  "source_id": "data_go_kr",
+  "generation_inputs": {
+    "registry": "data/data-go-kr.registry.json",
+    "safetydata_operation_candidates": "reports/data-go-kr/safetydata-operation-candidates.json"
+  },
+  "summary": {
+    "candidate_results": 5,
+    "patches": 5,
+    "operations_to_add": 5,
+    "skipped": 0
+  },
+  "patches": [
+    {
+      "dataset_id": "15147982",
+      "title": "행정안전부_자동심장충격기AED",
+      "organization": "행정안전부",
+      "action": "add_operation_mapping",
+      "reason": "safetydata_operation_candidate",
+      "operation_count": 1,
+      "operations": [
+        {
+          "name": "행정안전부_자동심장충격기_AED",
+          "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-00068",
+          "method": "GET",
+          "request_params": [
+            {
+              "name": "serviceKey",
+              "label": "서비스키",
+              "required": true
+            },
+            {
+              "name": "numOfRows",
+              "label": "페이지당개수"
+            },
+            {
+              "name": "pageNo",
+              "label": "페이지번호"
+            },
+            {
+              "name": "returnType",
+              "label": "응답타입(json,xml)"
+            },
+            {
+              "name": "startLot",
+              "label": "시작경도"
+            },
+            {
+              "name": "endLot",
+              "label": "종료경도"
+            },
+            {
+              "name": "startLat",
+              "label": "시작위도"
+            },
+            {
+              "name": "endLat",
+              "label": "종료위도"
+            }
+          ],
+          "response_params": [
+            {
+              "name": "SN",
+              "label": "일련번호",
+              "required": true
+            },
+            {
+              "name": "INSTL_ADDR",
+              "label": "설치주소",
+              "required": true
+            },
+            {
+              "name": "INSTL_PSTN",
+              "label": "설치위치",
+              "required": true
+            },
+            {
+              "name": "SE",
+              "label": "구분",
+              "required": true
+            },
+            {
+              "name": "MNGR_NM",
+              "label": "관리자명",
+              "required": true
+            },
+            {
+              "name": "MNGR_TELNO",
+              "label": "관리자전화번호",
+              "required": true
+            },
+            {
+              "name": "MKR_NM",
+              "label": "제조사명",
+              "required": true
+            },
+            {
+              "name": "MDL_NM",
+              "label": "모델명",
+              "required": true
+            },
+            {
+              "name": "MNG_INST_NM",
+              "label": "관리기관명",
+              "required": true
+            },
+            {
+              "name": "CTPV_NM",
+              "label": "시도명",
+              "required": true
+            },
+            {
+              "name": "ZIP_1",
+              "label": "우편번호1",
+              "required": true
+            },
+            {
+              "name": "ZIP_2",
+              "label": "우편번호2",
+              "required": true
+            },
+            {
+              "name": "XMAP_CRTS",
+              "label": "X지도좌표",
+              "required": true
+            },
+            {
+              "name": "YMAP_CRTS",
+              "label": "Y지도좌표",
+              "required": true
+            },
+            {
+              "name": "LAT",
+              "label": "위도",
+              "required": true
+            },
+            {
+              "name": "LOT",
+              "label": "경도",
+              "required": true
+            },
+            {
+              "name": "ADDR",
+              "label": "주소",
+              "required": true
+            }
+          ],
+          "source": {
+            "system": "safetydata.go.kr",
+            "url": "https://www.safetydata.go.kr/disaster-data/view?dataSn=59",
+            "raw": {
+              "data_sn": "59",
+              "api_view_url": "https://www.safetydata.go.kr/disaster-data/getApiView?dataSn=59",
+              "api_table_url": "https://www.safetydata.go.kr/disaster-data/apiDataTable?dataSn=59",
+              "source_api_name": "행정안전부_자동심장충격기_AED",
+              "source_api_type": "REST",
+              "source_data_format": "JSON",
+              "source_interface_id": "DSSP-IF-00068"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15154065",
+      "title": "행정안전부_녹지_녹피_면적비율",
+      "organization": "행정안전부",
+      "action": "add_operation_mapping",
+      "reason": "safetydata_operation_candidate",
+      "operation_count": 1,
+      "operations": [
+        {
+          "name": "녹지(녹피)면적비율",
+          "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20552",
+          "method": "GET",
+          "request_params": [
+            {
+              "name": "serviceKey",
+              "label": "서비스키",
+              "required": true
+            },
+            {
+              "name": "numOfRows",
+              "label": "페이지당개수"
+            },
+            {
+              "name": "pageNo",
+              "label": "페이지번호"
+            },
+            {
+              "name": "returnType",
+              "label": "응답타입(json,xml)"
+            }
+          ],
+          "response_params": [
+            {
+              "name": "EXMN_YR",
+              "label": "조사연도",
+              "required": true
+            },
+            {
+              "name": "ADMDST_CD",
+              "label": "행정구역코드",
+              "required": true
+            },
+            {
+              "name": "ADMDST_NM",
+              "label": "행정구역명",
+              "required": true
+            },
+            {
+              "name": "GSN_AREA_RT",
+              "label": "녹피면적비율",
+              "required": true
+            },
+            {
+              "name": "GSN_AREA",
+              "label": "녹피면적",
+              "required": true
+            },
+            {
+              "name": "ADMDST_AREA",
+              "label": "행정구역면적",
+              "required": true
+            },
+            {
+              "name": "GBT_AREA",
+              "label": "녹지면적",
+              "required": true
+            },
+            {
+              "name": "GRS_GBT_AREA",
+              "label": "총녹지면적",
+              "required": true
+            },
+            {
+              "name": "PPLTN",
+              "label": "인구",
+              "required": true
+            }
+          ],
+          "source": {
+            "system": "safetydata.go.kr",
+            "url": "https://www.safetydata.go.kr/disaster-data/view?dataSn=3716",
+            "raw": {
+              "data_sn": "3716",
+              "api_view_url": "https://www.safetydata.go.kr/disaster-data/getApiView?dataSn=3716",
+              "api_table_url": "https://www.safetydata.go.kr/disaster-data/apiDataTable?dataSn=3716",
+              "source_api_name": "녹지(녹피)면적비율",
+              "source_api_type": "REST",
+              "source_data_format": "JSON",
+              "source_interface_id": "DSSP-IF-20552"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15154063",
+      "title": "행정안전부_기간별감염병발생현황",
+      "organization": "행정안전부",
+      "action": "add_operation_mapping",
+      "reason": "safetydata_operation_candidate",
+      "operation_count": 1,
+      "operations": [
+        {
+          "name": "기간별감염병발생현황",
+          "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20638",
+          "method": "GET",
+          "request_params": [
+            {
+              "name": "serviceKey",
+              "label": "서비스키",
+              "required": true
+            },
+            {
+              "name": "numOfRows",
+              "label": "페이지당개수"
+            },
+            {
+              "name": "pageNo",
+              "label": "페이지번호"
+            },
+            {
+              "name": "returnType",
+              "label": "응답타입(json,xml)"
+            }
+          ],
+          "response_params": [
+            {
+              "name": "OCRN_YR",
+              "label": "발생연도",
+              "required": true
+            },
+            {
+              "name": "ICD_GROUP_NM",
+              "label": "감염병등급명",
+              "required": true
+            },
+            {
+              "name": "ICD_NM",
+              "label": "감염병명",
+              "required": true
+            },
+            {
+              "name": "RESULT_VAL",
+              "label": "발생건수",
+              "required": true
+            }
+          ],
+          "source": {
+            "system": "safetydata.go.kr",
+            "url": "https://www.safetydata.go.kr/disaster-data/view?dataSn=3787",
+            "raw": {
+              "data_sn": "3787",
+              "api_view_url": "https://www.safetydata.go.kr/disaster-data/getApiView?dataSn=3787",
+              "api_table_url": "https://www.safetydata.go.kr/disaster-data/apiDataTable?dataSn=3787",
+              "source_api_name": "기간별감염병발생현황",
+              "source_api_type": "REST",
+              "source_data_format": "JSON",
+              "source_interface_id": "DSSP-IF-20638"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15154052",
+      "title": "행정안전부_국외전염병발생현황",
+      "organization": "행정안전부",
+      "action": "add_operation_mapping",
+      "reason": "safetydata_operation_candidate",
+      "operation_count": 1,
+      "operations": [
+        {
+          "name": "국외전염병발생현황",
+          "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20564",
+          "method": "GET",
+          "request_params": [
+            {
+              "name": "serviceKey",
+              "label": "서비스키",
+              "required": true
+            },
+            {
+              "name": "numOfRows",
+              "label": "페이지당개수"
+            },
+            {
+              "name": "pageNo",
+              "label": "페이지번호"
+            },
+            {
+              "name": "returnType",
+              "label": "응답타입(json,xml)"
+            }
+          ],
+          "response_params": [
+            {
+              "name": "ICTSD_KND",
+              "label": "전염병종류",
+              "required": true
+            },
+            {
+              "name": "ICTSD_CD",
+              "label": "전염병코드",
+              "required": true
+            },
+            {
+              "name": "ICTSD_OCRN_DT",
+              "label": "전염병발생일시",
+              "required": true
+            },
+            {
+              "name": "WNAWD_GNM_KND",
+              "label": "수상생물의종류",
+              "required": true
+            },
+            {
+              "name": "RGN_NM",
+              "label": "지역명",
+              "required": true
+            },
+            {
+              "name": "NTN_NM",
+              "label": "국가명",
+              "required": true
+            },
+            {
+              "name": "SEQ",
+              "label": "시퀀스",
+              "required": true
+            },
+            {
+              "name": "DSS_RPT_DT",
+              "label": "질병보고일시",
+              "required": true
+            }
+          ],
+          "source": {
+            "system": "safetydata.go.kr",
+            "url": "https://www.safetydata.go.kr/disaster-data/view?dataSn=3728",
+            "raw": {
+              "data_sn": "3728",
+              "api_view_url": "https://www.safetydata.go.kr/disaster-data/getApiView?dataSn=3728",
+              "api_table_url": "https://www.safetydata.go.kr/disaster-data/apiDataTable?dataSn=3728",
+              "source_api_name": "국외전염병발생현황",
+              "source_api_type": "REST",
+              "source_data_format": "JSON",
+              "source_interface_id": "DSSP-IF-20564"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15154049",
+      "title": "행정안전부_국외검사기관인정현황",
+      "organization": "행정안전부",
+      "action": "add_operation_mapping",
+      "reason": "safetydata_operation_candidate",
+      "operation_count": 1,
+      "operations": [
+        {
+          "name": "국외검사기관인정현황",
+          "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20141",
+          "method": "GET",
+          "request_params": [
+            {
+              "name": "serviceKey",
+              "label": "서비스키",
+              "required": true
+            },
+            {
+              "name": "numOfRows",
+              "label": "페이지당개수"
+            },
+            {
+              "name": "pageNo",
+              "label": "페이지번호"
+            },
+            {
+              "name": "returnType",
+              "label": "응답타입(json,xml)"
+            }
+          ],
+          "response_params": [
+            {
+              "name": "RCG_NO",
+              "label": "인정번호",
+              "required": true
+            },
+            {
+              "name": "INST_NM",
+              "label": "기관명",
+              "required": true
+            },
+            {
+              "name": "RPRSV",
+              "label": "대표자",
+              "required": true
+            },
+            {
+              "name": "DSGN_YMD",
+              "label": "지정일자",
+              "required": true
+            },
+            {
+              "name": "INSP_ARTCL",
+              "label": "검사항목",
+              "required": true
+            },
+            {
+              "name": "TELNO",
+              "label": "전화번호",
+              "required": true
+            },
+            {
+              "name": "ADDR",
+              "label": "주소",
+              "required": true
+            }
+          ],
+          "source": {
+            "system": "safetydata.go.kr",
+            "url": "https://www.safetydata.go.kr/disaster-data/view?dataSn=3392",
+            "raw": {
+              "data_sn": "3392",
+              "api_view_url": "https://www.safetydata.go.kr/disaster-data/getApiView?dataSn=3392",
+              "api_table_url": "https://www.safetydata.go.kr/disaster-data/apiDataTable?dataSn=3392",
+              "source_api_name": "국외검사기관인정현황",
+              "source_api_type": "REST",
+              "source_data_format": "JSON",
+              "source_interface_id": "DSSP-IF-20141"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "skipped": []
+}

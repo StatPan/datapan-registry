@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-02T20:23:28Z",
+  "generated_at": "2026-07-02T20:29:16Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 22,
+    "report_total": 23,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,7 +38,7 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 10,
+      "report_count": 11,
       "present_reports": [
         {
           "name": "coverage-backlog.json",
@@ -89,6 +89,11 @@
           "name": "safetydata-operation-candidates.json",
           "path": "reports/data-go-kr/safetydata-operation-candidates.json",
           "schema_version": "datapan.safetydata-operation-candidates.v1"
+        },
+        {
+          "name": "safetydata-registry-patches.json",
+          "path": "reports/data-go-kr/safetydata-registry-patches.json",
+          "schema_version": "datapan.safetydata-registry-patches.v1"
         }
       ],
       "present_recommended_reports": [],
@@ -117,7 +122,8 @@
         "operation-materialization-plan.json",
         "registry-impact-plan.json",
         "runtime-evidence-growth.json",
-        "safetydata-operation-candidates.json"
+        "safetydata-operation-candidates.json",
+        "safetydata-registry-patches.json"
       ],
       "recommended_report_coverage_percent": 0.0
     },

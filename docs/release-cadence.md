@@ -83,6 +83,7 @@ python scripts/generate-coverage-backlog.py
 python scripts/generate-external-adapter-backlog.py
 python scripts/generate-operation-materialization-plan.py
 python scripts/generate-safetydata-operation-candidates.py
+python scripts/generate-safetydata-registry-patches.py
 python scripts/generate-institution-api-overview.py
 python scripts/generate-institution-runtime-plan.py
 python scripts/generate-source-report-inventory.py
@@ -138,6 +139,8 @@ For Safety Data linked APIs, refresh operation candidates with:
 ```bash
 python scripts/generate-safetydata-operation-candidates.py --batch reports/data-go-kr/operation-materialization-batches/institution-01.json --limit 10
 python scripts/validate-safetydata-operation-candidates.py
+python scripts/generate-safetydata-registry-patches.py
+python scripts/validate-safetydata-registry-patches.py
 ```
 
 The `Safety Data operation discovery` workflow runs the same discovery without
