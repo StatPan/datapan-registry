@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-07-02T19:14:31Z",
+  "generated_at": "2026-07-02T20:45:38Z",
   "provider": "data.go.kr",
-  "registry": ".\\data\\data-go-kr.registry.json",
+  "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
-  "verification": ".\\reports\\latest-verification.json",
+  "verification": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json",
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 12253,
+    "operations": 12258,
     "evidence_total": 1278,
     "uncovered_gateway_candidates": 10774,
     "uncovered_adapter_candidates": 0,
-    "missing_adapter_hosts": 11,
+    "missing_adapter_hosts": 12,
     "planned_batches": 1,
     "planned_operations": 10
   },
@@ -22,7 +22,7 @@
       "candidates": 11419,
       "uncovered_candidates": 10774,
       "planned_operations": 10,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --kind data_go_kr_gateway --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gateway-next.json --json",
+      "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --kind data_go_kr_gateway --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gateway-next.json --json",
       "output": ".datapan/verification/gateway-next.json"
     }
   ],
@@ -39,6 +39,22 @@
         "external_endpoint_operations": 6,
         "sample_ids": [
           "15059302"
+        ]
+      },
+      {
+        "host": "www.safetydata.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 5,
+        "operations": 5,
+        "external_endpoint_operations": 5,
+        "approval_required_operations": 5,
+        "sample_ids": [
+          "15147982",
+          "15154049",
+          "15154052"
         ]
       },
       {
@@ -150,26 +166,13 @@
         "sample_ids": [
           "15001051"
         ]
-      },
-      {
-        "host": "www.jobplustv.or.kr",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "missing",
-        "specs": 1,
-        "operations": 1,
-        "external_endpoint_operations": 1,
-        "sample_ids": [
-          "15007088"
-        ]
       }
     ]
   },
   "next": [
     {
       "label": "coverage",
-      "command": "datapan catalog coverage --registry .\\data\\data-go-kr.registry.json --verification .\\reports\\latest-verification.json --json"
+      "command": "datapan catalog coverage --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --verification C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --json"
     }
   ]
 }

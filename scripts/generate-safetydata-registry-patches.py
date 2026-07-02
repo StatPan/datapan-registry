@@ -48,13 +48,10 @@ def portable_path(path: pathlib.Path) -> str:
 
 
 def param(row: dict[str, Any]) -> dict[str, Any]:
-    value = {
+    return {
         "name": row.get("name"),
         "label": row.get("name_ko") or row.get("description") or row.get("name"),
     }
-    if row.get("required") is True:
-        value["required"] = True
-    return value
 
 
 def build_operation(candidate: dict[str, Any]) -> dict[str, Any]:
@@ -62,7 +59,6 @@ def build_operation(candidate: dict[str, Any]) -> dict[str, Any]:
     return {
         "name": mapping.get("name") or candidate.get("title"),
         "endpoint": candidate.get("endpoint"),
-        "method": "GET",
         "request_params": [
             param(row)
             for row in as_list(candidate.get("request_params"), "request_params")
@@ -95,6 +91,7 @@ def build_report(registry_path: pathlib.Path, candidates_path: pathlib.Path) -> 
     candidates = as_dict(load_json(candidates_path), candidates_path)
     patches = []
     skipped = []
+    already_applied = 0
 
     for index, raw in enumerate(as_list(candidates.get("results"), "results")):
         candidate = as_dict(raw, f"results[{index}]")
@@ -106,10 +103,13 @@ def build_report(registry_path: pathlib.Path, candidates_path: pathlib.Path) -> 
         if not registry_row:
             skipped.append({"dataset_id": dataset_id, "reason": "missing_registry_row"})
             continue
-        if registry_row.get("operations"):
-            skipped.append({"dataset_id": dataset_id, "reason": "already_has_operations"})
-            continue
         operation = build_operation(candidate)
+        row_operations = registry_row.get("operations")
+        if row_operations:
+            if row_operations != [operation]:
+                skipped.append({"dataset_id": dataset_id, "reason": "already_has_different_operations"})
+                continue
+            already_applied += 1
         patches.append(
             {
                 "dataset_id": dataset_id,
@@ -117,6 +117,7 @@ def build_report(registry_path: pathlib.Path, candidates_path: pathlib.Path) -> 
                 "organization": registry_row.get("organization"),
                 "action": "add_operation_mapping",
                 "reason": "safetydata_operation_candidate",
+                "already_applied": bool(row_operations),
                 "operation_count": 1,
                 "operations": [operation],
             }
@@ -135,6 +136,7 @@ def build_report(registry_path: pathlib.Path, candidates_path: pathlib.Path) -> 
             "candidate_results": len(as_list(candidates.get("results"), "results")),
             "patches": len(patches),
             "operations_to_add": sum(int(row["operation_count"]) for row in patches),
+            "already_applied": already_applied,
             "skipped": len(skipped),
         },
         "patches": patches,
@@ -170,6 +172,7 @@ def build_markdown(report: dict[str, Any]) -> str:
                 patch.get("organization"),
                 patch.get("title"),
                 operation.get("endpoint"),
+                "yes" if patch.get("already_applied") else "no",
                 len(operation.get("request_params") or []),
                 len(operation.get("response_params") or []),
             ]
@@ -177,15 +180,16 @@ def build_markdown(report: dict[str, Any]) -> str:
     return (
         "# data.go.kr Safety Data Registry Patches\n\n"
         "This report converts checked Safety Data operation candidates into exact "
-        "registry operation mappings. It is a reviewable patch plan, not a registry "
-        "mutation by itself.\n\n"
+        "registry operation mappings. It is a reviewable patch plan before mutation "
+        "and an idempotent applied ledger after the mappings land in the registry.\n\n"
         f"- Generated at: `{report.get('generated_at')}`\n"
         f"- Candidate results: `{summary.get('candidate_results')}`\n"
         f"- Patches: `{summary.get('patches')}`\n"
         f"- Operations to add: `{summary.get('operations_to_add')}`\n"
+        f"- Already applied: `{summary.get('already_applied', 0)}`\n"
         f"- Skipped: `{summary.get('skipped')}`\n\n"
         "## Patches\n\n"
-        f"{table(['API ID', 'Institution', 'Title', 'Endpoint', 'Request Params', 'Response Params'], rows)}\n"
+        f"{table(['API ID', 'Institution', 'Title', 'Endpoint', 'Already Applied', 'Request Params', 'Response Params'], rows)}\n"
     )
 
 

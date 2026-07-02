@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.coverage-backlog.v1",
-  "generated_at": "2026-07-02T19:14:15Z",
+  "generated_at": "2026-07-02T20:45:24Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -11,39 +11,39 @@
   "summary": {
     "institutions": 411,
     "api_total": 12060,
-    "covered_api_count": 7210,
-    "uncovered_api_count": 4850,
+    "covered_api_count": 7215,
+    "uncovered_api_count": 4845,
     "api_operation_coverage_percent": 59.8,
-    "operation_total": 12253,
+    "operation_total": 12258,
     "runtime_evidence_operation_count": 1278,
     "runtime_evidence_operation_percent": 10.4,
     "runtime_verified_operation_count": 69,
     "runtime_failed_operation_count": 87,
     "runtime_skipped_operation_count": 1122,
     "runtime_evidence_api_count": 599,
-    "runtime_reactivation_api_count": 6611,
+    "runtime_reactivation_api_count": 6616,
     "runtime_repair_api_count": 54
   },
   "institutions": [
     {
       "organization": "행정안전부",
       "api_count": 1252,
-      "covered_api_count": 613,
-      "uncovered_api_count": 639,
-      "operation_count": 874,
+      "covered_api_count": 618,
+      "uncovered_api_count": 634,
+      "operation_count": 879,
       "runtime_evidence_api_count": 0,
-      "runtime_reactivation_api_count": 613,
+      "runtime_reactivation_api_count": 618,
       "runtime_repair_api_count": 0,
       "runtime_evidence_count": 0,
-      "runtime_missing_evidence_count": 874,
+      "runtime_missing_evidence_count": 879,
       "verified": 0,
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
-      "approval_required_operations": 35,
-      "missing_adapter_operations": 0,
+      "approval_required_operations": 40,
+      "missing_adapter_operations": 5,
       "no_endpoint_operations": 0,
-      "api_operation_coverage_percent": 49.0,
+      "api_operation_coverage_percent": 49.4,
       "runtime_evidence_percent": 0.0,
       "priority_score": 1252
     },
@@ -81230,22 +81230,6 @@
       "reason": "no_dependency_rows"
     },
     {
-      "dataset_id": "15147982",
-      "title": "행정안전부_자동심장충격기AED",
-      "organization": "행정안전부",
-      "source_category": "보건의료",
-      "api_type": "LINK",
-      "data_format": "JSON",
-      "register_status": "등록승인",
-      "dev_approval": "자동승인",
-      "prod_approval": "심의승인",
-      "created_at": "2025-08-28",
-      "updated_at": "2025-12-11",
-      "meta_url": "https://www.data.go.kr/catalog/15147982/openapi.json",
-      "action": "materialize_operation_mapping",
-      "reason": "no_dependency_rows"
-    },
-    {
       "dataset_id": "15147984",
       "title": "행정안전부_약국_POI",
       "organization": "행정안전부",
@@ -86554,70 +86538,6 @@
       "created_at": "2025-11-25",
       "updated_at": "2025-11-25",
       "meta_url": "https://www.data.go.kr/catalog/15154047/openapi.json",
-      "action": "materialize_operation_mapping",
-      "reason": "no_dependency_rows"
-    },
-    {
-      "dataset_id": "15154049",
-      "title": "행정안전부_국외검사기관인정현황",
-      "organization": "행정안전부",
-      "source_category": "식품건강",
-      "api_type": "LINK",
-      "data_format": "JSON",
-      "register_status": "등록승인",
-      "dev_approval": "자동승인",
-      "prod_approval": "심의승인",
-      "created_at": "2025-11-25",
-      "updated_at": "2025-11-25",
-      "meta_url": "https://www.data.go.kr/catalog/15154049/openapi.json",
-      "action": "materialize_operation_mapping",
-      "reason": "no_dependency_rows"
-    },
-    {
-      "dataset_id": "15154052",
-      "title": "행정안전부_국외전염병발생현황",
-      "organization": "행정안전부",
-      "source_category": "농축수산",
-      "api_type": "LINK",
-      "data_format": "JSON",
-      "register_status": "등록승인",
-      "dev_approval": "자동승인",
-      "prod_approval": "심의승인",
-      "created_at": "2025-11-25",
-      "updated_at": "2025-11-25",
-      "meta_url": "https://www.data.go.kr/catalog/15154052/openapi.json",
-      "action": "materialize_operation_mapping",
-      "reason": "no_dependency_rows"
-    },
-    {
-      "dataset_id": "15154063",
-      "title": "행정안전부_기간별감염병발생현황",
-      "organization": "행정안전부",
-      "source_category": "보건의료",
-      "api_type": "LINK",
-      "data_format": "JSON",
-      "register_status": "등록승인",
-      "dev_approval": "자동승인",
-      "prod_approval": "심의승인",
-      "created_at": "2025-11-25",
-      "updated_at": "2025-11-25",
-      "meta_url": "https://www.data.go.kr/catalog/15154063/openapi.json",
-      "action": "materialize_operation_mapping",
-      "reason": "no_dependency_rows"
-    },
-    {
-      "dataset_id": "15154065",
-      "title": "행정안전부_녹지_녹피_면적비율",
-      "organization": "행정안전부",
-      "source_category": "농축수산",
-      "api_type": "LINK",
-      "data_format": "JSON",
-      "register_status": "등록승인",
-      "dev_approval": "자동승인",
-      "prod_approval": "심의승인",
-      "created_at": "2025-11-25",
-      "updated_at": "2025-11-25",
-      "meta_url": "https://www.data.go.kr/catalog/15154065/openapi.json",
       "action": "materialize_operation_mapping",
       "reason": "no_dependency_rows"
     },
@@ -103417,9 +103337,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15157829",
@@ -134797,9 +134715,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15096412",
@@ -137571,9 +137487,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15136077",
@@ -138787,9 +138701,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15102029",
@@ -148345,9 +148257,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15088523",
@@ -148377,9 +148287,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15116867",
@@ -207543,9 +207451,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15057292",
@@ -294583,6 +294489,166 @@
       ]
     },
     {
+      "dataset_id": "15147982",
+      "title": "행정안전부_자동심장충격기AED",
+      "organization": "행정안전부",
+      "source_category": "보건의료",
+      "api_type": "LINK",
+      "data_format": "JSON",
+      "register_status": "등록승인",
+      "dev_approval": "자동승인",
+      "prod_approval": "심의승인",
+      "created_at": "2025-08-28",
+      "updated_at": "2025-12-11",
+      "meta_url": "https://www.data.go.kr/catalog/15147982/openapi.json",
+      "action": "collect_runtime_evidence",
+      "reason": "operation_mapped_without_runtime_evidence",
+      "operation_count": 1,
+      "runtime_evidence_count": 0,
+      "runtime_missing_evidence_count": 1,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 1,
+      "missing_adapter_operations": 1,
+      "no_endpoint_operations": 0,
+      "primary_dependency_class": "external_endpoint",
+      "primary_adapter_status": "missing",
+      "primary_endpoint_host": "www.safetydata.go.kr",
+      "skip_reasons": [
+        "external_provider_adapter_missing"
+      ]
+    },
+    {
+      "dataset_id": "15154049",
+      "title": "행정안전부_국외검사기관인정현황",
+      "organization": "행정안전부",
+      "source_category": "식품건강",
+      "api_type": "LINK",
+      "data_format": "JSON",
+      "register_status": "등록승인",
+      "dev_approval": "자동승인",
+      "prod_approval": "심의승인",
+      "created_at": "2025-11-25",
+      "updated_at": "2025-11-25",
+      "meta_url": "https://www.data.go.kr/catalog/15154049/openapi.json",
+      "action": "collect_runtime_evidence",
+      "reason": "operation_mapped_without_runtime_evidence",
+      "operation_count": 1,
+      "runtime_evidence_count": 0,
+      "runtime_missing_evidence_count": 1,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 1,
+      "missing_adapter_operations": 1,
+      "no_endpoint_operations": 0,
+      "primary_dependency_class": "external_endpoint",
+      "primary_adapter_status": "missing",
+      "primary_endpoint_host": "www.safetydata.go.kr",
+      "skip_reasons": [
+        "external_provider_adapter_missing"
+      ]
+    },
+    {
+      "dataset_id": "15154052",
+      "title": "행정안전부_국외전염병발생현황",
+      "organization": "행정안전부",
+      "source_category": "농축수산",
+      "api_type": "LINK",
+      "data_format": "JSON",
+      "register_status": "등록승인",
+      "dev_approval": "자동승인",
+      "prod_approval": "심의승인",
+      "created_at": "2025-11-25",
+      "updated_at": "2025-11-25",
+      "meta_url": "https://www.data.go.kr/catalog/15154052/openapi.json",
+      "action": "collect_runtime_evidence",
+      "reason": "operation_mapped_without_runtime_evidence",
+      "operation_count": 1,
+      "runtime_evidence_count": 0,
+      "runtime_missing_evidence_count": 1,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 1,
+      "missing_adapter_operations": 1,
+      "no_endpoint_operations": 0,
+      "primary_dependency_class": "external_endpoint",
+      "primary_adapter_status": "missing",
+      "primary_endpoint_host": "www.safetydata.go.kr",
+      "skip_reasons": [
+        "external_provider_adapter_missing"
+      ]
+    },
+    {
+      "dataset_id": "15154063",
+      "title": "행정안전부_기간별감염병발생현황",
+      "organization": "행정안전부",
+      "source_category": "보건의료",
+      "api_type": "LINK",
+      "data_format": "JSON",
+      "register_status": "등록승인",
+      "dev_approval": "자동승인",
+      "prod_approval": "심의승인",
+      "created_at": "2025-11-25",
+      "updated_at": "2025-11-25",
+      "meta_url": "https://www.data.go.kr/catalog/15154063/openapi.json",
+      "action": "collect_runtime_evidence",
+      "reason": "operation_mapped_without_runtime_evidence",
+      "operation_count": 1,
+      "runtime_evidence_count": 0,
+      "runtime_missing_evidence_count": 1,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 1,
+      "missing_adapter_operations": 1,
+      "no_endpoint_operations": 0,
+      "primary_dependency_class": "external_endpoint",
+      "primary_adapter_status": "missing",
+      "primary_endpoint_host": "www.safetydata.go.kr",
+      "skip_reasons": [
+        "external_provider_adapter_missing"
+      ]
+    },
+    {
+      "dataset_id": "15154065",
+      "title": "행정안전부_녹지_녹피_면적비율",
+      "organization": "행정안전부",
+      "source_category": "농축수산",
+      "api_type": "LINK",
+      "data_format": "JSON",
+      "register_status": "등록승인",
+      "dev_approval": "자동승인",
+      "prod_approval": "심의승인",
+      "created_at": "2025-11-25",
+      "updated_at": "2025-11-25",
+      "meta_url": "https://www.data.go.kr/catalog/15154065/openapi.json",
+      "action": "collect_runtime_evidence",
+      "reason": "operation_mapped_without_runtime_evidence",
+      "operation_count": 1,
+      "runtime_evidence_count": 0,
+      "runtime_missing_evidence_count": 1,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 1,
+      "missing_adapter_operations": 1,
+      "no_endpoint_operations": 0,
+      "primary_dependency_class": "external_endpoint",
+      "primary_adapter_status": "missing",
+      "primary_endpoint_host": "www.safetydata.go.kr",
+      "skip_reasons": [
+        "external_provider_adapter_missing"
+      ]
+    },
+    {
       "dataset_id": "15155044",
       "title": "행정안전부_자전거보관소정보 조회서비스",
       "organization": "행정안전부",
@@ -295250,9 +295316,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15056695",
@@ -295282,9 +295346,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15056798",
@@ -295314,9 +295376,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15056875",
@@ -295346,9 +295406,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15057225",
@@ -295378,9 +295436,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15057277",
@@ -295410,9 +295466,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15057401",
@@ -295442,9 +295496,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15057730",
@@ -295474,9 +295526,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15057762",
@@ -295506,9 +295556,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15057923",
@@ -295538,9 +295586,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15058242",
@@ -295570,9 +295616,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15058351",
@@ -295602,9 +295646,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15059189",
@@ -295634,9 +295676,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15061194",
@@ -296114,9 +296154,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15156857",
@@ -296146,9 +296184,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15156858",
@@ -296178,9 +296214,7 @@
       "primary_dependency_class": "data_go_kr_gateway",
       "primary_adapter_status": "builtin",
       "primary_endpoint_host": "apis.data.go.kr",
-      "skip_reasons": [
-        "missing_required_params"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15159757",

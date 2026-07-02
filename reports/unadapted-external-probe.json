@@ -1,16 +1,15 @@
 {
-  "generated_at": "2026-07-02T16:06:06Z",
+  "generated_at": "2026-07-02T20:40:08Z",
   "provider": "data.go.kr",
-  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 0,
+  "limit": 5,
   "truncated": false,
-  "filtered_count": 76,
+  "filtered_count": 81,
   "summary": {
-    "total": 76,
+    "total": 81,
     "verified": 0,
     "failed": 29,
     "skipped": 0,
-    "unknown": 47
+    "unknown": 52
   },
   "results": [
     {
@@ -1259,6 +1258,111 @@
       "http_status": 200,
       "url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023\u0026fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000056\u0026upprApiSvcId=000000000000000000000000000022",
       "body_shape": "html"
+    },
+    {
+      "dataset_id": "15147982",
+      "title": "행정안전부_자동심장충격기AED",
+      "operation": "행정안전부_자동심장충격기_AED",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T20:39:51Z",
+      "http_status": 200,
+      "url": "https://www.safetydata.go.kr/V2/api/DSSP-IF-00068?numOfRows=1\u0026pageNo=1\u0026returnType=json",
+      "params": {
+        "endLat": "",
+        "endLot": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "returnType": "json",
+        "startLat": "",
+        "startLot": ""
+      },
+      "missing_params": [
+        "startLot",
+        "endLot",
+        "startLat",
+        "endLat"
+      ],
+      "body_shape": "json"
+    },
+    {
+      "dataset_id": "15154049",
+      "title": "행정안전부_국외검사기관인정현황",
+      "operation": "국외검사기관인정현황",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T20:39:51Z",
+      "http_status": 200,
+      "url": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20141?numOfRows=1\u0026pageNo=1\u0026returnType=json",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "returnType": "json"
+      },
+      "body_shape": "json"
+    },
+    {
+      "dataset_id": "15154052",
+      "title": "행정안전부_국외전염병발생현황",
+      "operation": "국외전염병발생현황",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T20:39:51Z",
+      "http_status": 200,
+      "url": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20564?numOfRows=1\u0026pageNo=1\u0026returnType=json",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "returnType": "json"
+      },
+      "body_shape": "json"
+    },
+    {
+      "dataset_id": "15154063",
+      "title": "행정안전부_기간별감염병발생현황",
+      "operation": "기간별감염병발생현황",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T20:39:51Z",
+      "http_status": 200,
+      "url": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20638?numOfRows=1\u0026pageNo=1\u0026returnType=json",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "returnType": "json"
+      },
+      "body_shape": "json"
+    },
+    {
+      "dataset_id": "15154065",
+      "title": "행정안전부_녹지_녹피_면적비율",
+      "operation": "녹지(녹피)면적비율",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T20:39:51Z",
+      "http_status": 200,
+      "url": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20552?numOfRows=1\u0026pageNo=1\u0026returnType=json",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "returnType": "json"
+      },
+      "body_shape": "json"
     }
   ]
 }

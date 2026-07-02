@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-07-02T19:14:15Z",
+  "generated_at": "2026-07-02T20:45:24Z",
   "provider": "data.go.kr",
-  "registry": ".\\data\\data-go-kr.registry.json",
+  "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 12253,
+  "filtered_count": 12258,
   "summary": {
-    "operations_total": 12253,
+    "operations_total": 12258,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 643,
+    "external_endpoint_operations": 648,
     "service_root_operations": 19,
     "no_endpoint_operations": 123,
     "malformed_endpoint_operations": 42,
     "soap_operations": 35,
     "wms_operations": 7,
-    "approval_required_operations": 4142,
+    "approval_required_operations": 4147,
     "registered_adapter_operations": 633,
-    "missing_adapter_operations": 29
+    "missing_adapter_operations": 34
   },
   "dependencies": [
     {
@@ -702,6 +702,112 @@
       "missing_params": [
         "seq"
       ]
+    },
+    {
+      "dataset_id": "15147982",
+      "title": "행정안전부_자동심장충격기AED",
+      "organization": "행정안전부",
+      "source_category": "보건의료",
+      "operation": "행정안전부_자동심장충격기_AED",
+      "provider": "data.go.kr",
+      "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-00068",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "adapter_status": "missing",
+      "api_type": "LINK",
+      "data_format": "JSON",
+      "dev_approval": "자동승인",
+      "prod_approval": "심의승인",
+      "approval_required": true,
+      "skip_reason": "external_provider_adapter_missing",
+      "request_params_count": 8,
+      "response_params_count": 17,
+      "missing_params": [
+        "startLot",
+        "endLot",
+        "startLat",
+        "endLat"
+      ]
+    },
+    {
+      "dataset_id": "15154049",
+      "title": "행정안전부_국외검사기관인정현황",
+      "organization": "행정안전부",
+      "source_category": "식품건강",
+      "operation": "국외검사기관인정현황",
+      "provider": "data.go.kr",
+      "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20141",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "adapter_status": "missing",
+      "api_type": "LINK",
+      "data_format": "JSON",
+      "dev_approval": "자동승인",
+      "prod_approval": "심의승인",
+      "approval_required": true,
+      "skip_reason": "external_provider_adapter_missing",
+      "request_params_count": 4,
+      "response_params_count": 7
+    },
+    {
+      "dataset_id": "15154052",
+      "title": "행정안전부_국외전염병발생현황",
+      "organization": "행정안전부",
+      "source_category": "농축수산",
+      "operation": "국외전염병발생현황",
+      "provider": "data.go.kr",
+      "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20564",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "adapter_status": "missing",
+      "api_type": "LINK",
+      "data_format": "JSON",
+      "dev_approval": "자동승인",
+      "prod_approval": "심의승인",
+      "approval_required": true,
+      "skip_reason": "external_provider_adapter_missing",
+      "request_params_count": 4,
+      "response_params_count": 8
+    },
+    {
+      "dataset_id": "15154063",
+      "title": "행정안전부_기간별감염병발생현황",
+      "organization": "행정안전부",
+      "source_category": "보건의료",
+      "operation": "기간별감염병발생현황",
+      "provider": "data.go.kr",
+      "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20638",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "adapter_status": "missing",
+      "api_type": "LINK",
+      "data_format": "JSON",
+      "dev_approval": "자동승인",
+      "prod_approval": "심의승인",
+      "approval_required": true,
+      "skip_reason": "external_provider_adapter_missing",
+      "request_params_count": 4,
+      "response_params_count": 4
+    },
+    {
+      "dataset_id": "15154065",
+      "title": "행정안전부_녹지_녹피_면적비율",
+      "organization": "행정안전부",
+      "source_category": "농축수산",
+      "operation": "녹지(녹피)면적비율",
+      "provider": "data.go.kr",
+      "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20552",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "adapter_status": "missing",
+      "api_type": "LINK",
+      "data_format": "JSON",
+      "dev_approval": "자동승인",
+      "prod_approval": "심의승인",
+      "approval_required": true,
+      "skip_reason": "external_provider_adapter_missing",
+      "request_params_count": 4,
+      "response_params_count": 9
     },
     {
       "dataset_id": "3084452",
@@ -5814,7 +5920,6 @@
       "response_params_count": 19,
       "missing_params": [
         "act",
-        "year",
         "scode"
       ]
     },
@@ -5840,7 +5945,6 @@
       "response_params_count": 11,
       "missing_params": [
         "act",
-        "year",
         "scode"
       ]
     },
@@ -8499,7 +8603,6 @@
       "request_params_count": 5,
       "response_params_count": 8,
       "missing_params": [
-        "yyyy",
         "quart",
         "order"
       ]
@@ -8525,7 +8628,6 @@
       "request_params_count": 8,
       "response_params_count": 11,
       "missing_params": [
-        "yyyy",
         "mm",
         "dd",
         "machine",
@@ -8552,10 +8654,7 @@
       "prod_approval": "심의승인",
       "approval_required": true,
       "request_params_count": 4,
-      "response_params_count": 4,
-      "missing_params": [
-        "yyyy"
-      ]
+      "response_params_count": 4
     },
     {
       "dataset_id": "15066792",
@@ -8579,7 +8678,6 @@
       "request_params_count": 5,
       "response_params_count": 13,
       "missing_params": [
-        "yyyy",
         "quart"
       ]
     },
@@ -8630,7 +8728,6 @@
       "request_params_count": 5,
       "response_params_count": 9,
       "missing_params": [
-        "yyyy",
         "nuclide"
       ]
     },
@@ -8656,7 +8753,6 @@
       "request_params_count": 6,
       "response_params_count": 14,
       "missing_params": [
-        "yyyy",
         "mm",
         "contractNm"
       ]
@@ -8709,7 +8805,6 @@
       "request_params_count": 4,
       "response_params_count": 16,
       "missing_params": [
-        "yyyy",
         "order"
       ]
     },
@@ -8735,7 +8830,6 @@
       "request_params_count": 5,
       "response_params_count": 10,
       "missing_params": [
-        "yyyy",
         "quart",
         "order"
       ]
@@ -8762,7 +8856,6 @@
       "request_params_count": 5,
       "response_params_count": 12,
       "missing_params": [
-        "yyyy",
         "quart",
         "order"
       ]
@@ -10547,10 +10640,7 @@
       "prod_approval": "자동승인",
       "approval_required": false,
       "request_params_count": 5,
-      "response_params_count": 9,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 9
     },
     {
       "dataset_id": "15056876",
@@ -10712,10 +10802,7 @@
       "prod_approval": "자동승인",
       "approval_required": false,
       "request_params_count": 5,
-      "response_params_count": 9,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 9
     },
     {
       "dataset_id": "15059383",
@@ -11057,8 +11144,7 @@
       "response_params_count": 10,
       "missing_params": [
         "typw",
-        "qualgbCd",
-        "year"
+        "qualgbCd"
       ]
     },
     {
@@ -11102,10 +11188,7 @@
       "prod_approval": "심의승인",
       "approval_required": true,
       "request_params_count": 5,
-      "response_params_count": 13,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 13
     },
     {
       "dataset_id": "15150267",
@@ -11149,10 +11232,7 @@
       "prod_approval": "심의승인",
       "approval_required": true,
       "request_params_count": 5,
-      "response_params_count": 18,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 18
     },
     {
       "dataset_id": "15150358",
@@ -19730,7 +19810,6 @@
       "request_params_count": 5,
       "response_params_count": 12,
       "missing_params": [
-        "year",
         "sido",
         "signgu"
       ]
@@ -24165,8 +24244,7 @@
       "request_params_count": 2,
       "response_params_count": 5,
       "missing_params": [
-        "splOrgNm",
-        "Year"
+        "splOrgNm"
       ]
     },
     {
@@ -29274,12 +29352,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 13,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 13
     },
     {
       "dataset_id": "15034004",
@@ -29299,12 +29373,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 12,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 12
     },
     {
       "dataset_id": "15034004",
@@ -29324,12 +29394,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 14,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 14
     },
     {
       "dataset_id": "15034004",
@@ -29349,12 +29415,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 16,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 16
     },
     {
       "dataset_id": "15034004",
@@ -29374,12 +29436,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 12,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 12
     },
     {
       "dataset_id": "15034004",
@@ -29399,12 +29457,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 13,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 13
     },
     {
       "dataset_id": "15034004",
@@ -29424,12 +29478,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 27,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 27
     },
     {
       "dataset_id": "15034004",
@@ -29449,12 +29499,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 18,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 18
     },
     {
       "dataset_id": "15034004",
@@ -29474,12 +29520,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 16,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 16
     },
     {
       "dataset_id": "15034004",
@@ -29499,12 +29541,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 13,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 13
     },
     {
       "dataset_id": "15034004",
@@ -29524,12 +29562,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 13,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 13
     },
     {
       "dataset_id": "15034004",
@@ -29549,12 +29583,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 13,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 13
     },
     {
       "dataset_id": "15034004",
@@ -29574,12 +29604,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 13,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 13
     },
     {
       "dataset_id": "15034004",
@@ -29599,12 +29625,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 23,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 23
     },
     {
       "dataset_id": "15034004",
@@ -29624,12 +29646,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 16,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 16
     },
     {
       "dataset_id": "15034004",
@@ -29649,12 +29667,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 19,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 19
     },
     {
       "dataset_id": "15034004",
@@ -29674,12 +29688,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 20,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 20
     },
     {
       "dataset_id": "15034004",
@@ -29699,12 +29709,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 15,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 15
     },
     {
       "dataset_id": "15034004",
@@ -29724,12 +29730,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 15,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 15
     },
     {
       "dataset_id": "15034008",
@@ -32726,7 +32728,6 @@
       "request_params_count": 5,
       "response_params_count": 0,
       "missing_params": [
-        "year",
         "area",
         "ctvt",
         "expr"
@@ -32749,12 +32750,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 25,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 25
     },
     {
       "dataset_id": "15041872",
@@ -33426,12 +33423,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 9,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 9
     },
     {
       "dataset_id": "15042166",
@@ -36858,8 +36851,7 @@
       "response_params_count": 13,
       "missing_params": [
         "signguCd",
-        "idxCd",
-        "year"
+        "idxCd"
       ]
     },
     {
@@ -36885,8 +36877,7 @@
       "missing_params": [
         "signguCd",
         "emdCd",
-        "idxCd",
-        "year"
+        "idxCd"
       ]
     },
     {
@@ -38002,7 +37993,6 @@
       "response_params_count": 31,
       "missing_params": [
         "pnuCode",
-        "year",
         "beginMonth",
         "endMonth"
       ]
@@ -38056,7 +38046,6 @@
       "missing_params": [
         "positionX",
         "positionY",
-        "year",
         "beginMonth",
         "endMonth"
       ]
@@ -38110,7 +38099,6 @@
       "response_params_count": 31,
       "missing_params": [
         "id",
-        "year",
         "beginMonth",
         "endMonth"
       ]
@@ -38281,12 +38269,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 2,
-      "missing_params": [
-        "ac_year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15056681",
@@ -38369,12 +38353,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 2,
-      "missing_params": [
-        "ac_year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15056699",
@@ -38568,12 +38548,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 10,
-      "missing_params": [
-        "yyyy"
-      ]
+      "response_params_count": 10
     },
     {
       "dataset_id": "15056760",
@@ -39121,12 +39097,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 2,
-      "missing_params": [
-        "ac_year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15056812",
@@ -39363,12 +39335,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 2,
-      "missing_params": [
-        "ac_year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15056880",
@@ -39776,8 +39744,7 @@
       "response_params_count": 13,
       "missing_params": [
         "signguCd",
-        "idxCd",
-        "year"
+        "idxCd"
       ]
     },
     {
@@ -39803,8 +39770,7 @@
       "missing_params": [
         "signguCd",
         "emdCd",
-        "idxCd",
-        "year"
+        "idxCd"
       ]
     },
     {
@@ -39831,8 +39797,7 @@
         "signguCd",
         "emdCd",
         "opareaCd",
-        "idxCd",
-        "year"
+        "idxCd"
       ]
     },
     {
@@ -41032,12 +40997,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 2,
-      "missing_params": [
-        "ac_year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15057231",
@@ -41239,7 +41200,6 @@
       "request_params_count": 6,
       "response_params_count": 26,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -41264,7 +41224,6 @@
       "request_params_count": 6,
       "response_params_count": 26,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -41289,7 +41248,6 @@
       "request_params_count": 6,
       "response_params_count": 7,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -41314,7 +41272,6 @@
       "request_params_count": 7,
       "response_params_count": 26,
       "missing_params": [
-        "year",
         "month",
         "station"
       ]
@@ -41340,7 +41297,6 @@
       "request_params_count": 6,
       "response_params_count": 16,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -41365,7 +41321,6 @@
       "request_params_count": 6,
       "response_params_count": 7,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -41390,7 +41345,6 @@
       "request_params_count": 6,
       "response_params_count": 15,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -41415,7 +41369,6 @@
       "request_params_count": 7,
       "response_params_count": 28,
       "missing_params": [
-        "year",
         "month",
         "station"
       ]
@@ -41457,12 +41410,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 2,
-      "missing_params": [
-        "ac_year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15057288",
@@ -42530,12 +42479,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 2,
-      "missing_params": [
-        "ac_year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15057405",
@@ -43657,12 +43602,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 2,
-      "missing_params": [
-        "ac_year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15057736",
@@ -43966,12 +43907,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 2,
-      "missing_params": [
-        "ac_year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15057765",
@@ -44770,8 +44707,7 @@
       "response_params_count": 13,
       "missing_params": [
         "signguCd",
-        "gradeCd",
-        "year"
+        "gradeCd"
       ]
     },
     {
@@ -45153,12 +45089,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 2,
-      "missing_params": [
-        "ac_year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15057931",
@@ -46999,7 +46931,6 @@
       "request_params_count": 6,
       "response_params_count": 15,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -47024,7 +46955,6 @@
       "request_params_count": 6,
       "response_params_count": 19,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -47049,7 +46979,6 @@
       "request_params_count": 7,
       "response_params_count": 15,
       "missing_params": [
-        "year",
         "month",
         "station"
       ]
@@ -47075,7 +47004,6 @@
       "request_params_count": 7,
       "response_params_count": 11,
       "missing_params": [
-        "year",
         "month",
         "station"
       ]
@@ -47101,7 +47029,6 @@
       "request_params_count": 6,
       "response_params_count": 7,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -47126,7 +47053,6 @@
       "request_params_count": 7,
       "response_params_count": 16,
       "missing_params": [
-        "year",
         "month",
         "station"
       ]
@@ -48202,12 +48128,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 2,
-      "missing_params": [
-        "ac_year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15058257",
@@ -49185,12 +49107,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 2,
-      "missing_params": [
-        "ac_year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15058353",
@@ -49913,7 +49831,6 @@
       "request_params_count": 6,
       "response_params_count": 12,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -49938,7 +49855,6 @@
       "request_params_count": 6,
       "response_params_count": 22,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -49963,7 +49879,6 @@
       "request_params_count": 6,
       "response_params_count": 7,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -49988,7 +49903,6 @@
       "request_params_count": 7,
       "response_params_count": 17,
       "missing_params": [
-        "year",
         "month",
         "station"
       ]
@@ -50367,8 +50281,7 @@
       "response_params_count": 13,
       "missing_params": [
         "signguCd",
-        "gradeCd",
-        "year"
+        "gradeCd"
       ]
     },
     {
@@ -50394,8 +50307,7 @@
       "missing_params": [
         "signguCd",
         "emdCd",
-        "gradeCd",
-        "year"
+        "gradeCd"
       ]
     },
     {
@@ -50422,8 +50334,7 @@
         "signguCd",
         "emdCd",
         "opareaCd",
-        "gradeCd",
-        "year"
+        "gradeCd"
       ]
     },
     {
@@ -50813,8 +50724,7 @@
       "request_params_count": 6,
       "response_params_count": 33,
       "missing_params": [
-        "pnuCode",
-        "year"
+        "pnuCode"
       ]
     },
     {
@@ -50839,8 +50749,7 @@
       "response_params_count": 33,
       "missing_params": [
         "positionX",
-        "positionY",
-        "year"
+        "positionY"
       ]
     },
     {
@@ -50864,8 +50773,7 @@
       "request_params_count": 6,
       "response_params_count": 33,
       "missing_params": [
-        "id",
-        "year"
+        "id"
       ]
     },
     {
@@ -51928,12 +51836,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 9,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 9
     },
     {
       "dataset_id": "15058845",
@@ -51952,12 +51856,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 27,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 27
     },
     {
       "dataset_id": "15058845",
@@ -51976,12 +51876,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 26,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 26
     },
     {
       "dataset_id": "15058845",
@@ -52004,7 +51900,6 @@
       "request_params_count": 6,
       "response_params_count": 18,
       "missing_params": [
-        "year",
         "station"
       ]
     },
@@ -52029,7 +51924,6 @@
       "request_params_count": 6,
       "response_params_count": 19,
       "missing_params": [
-        "year",
         "station"
       ]
     },
@@ -52054,7 +51948,6 @@
       "request_params_count": 6,
       "response_params_count": 10,
       "missing_params": [
-        "year",
         "station"
       ]
     },
@@ -52075,12 +51968,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 14,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 14
     },
     {
       "dataset_id": "15058845",
@@ -52099,12 +51988,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 7,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 7
     },
     {
       "dataset_id": "15058845",
@@ -52123,12 +52008,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 16,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 16
     },
     {
       "dataset_id": "15058845",
@@ -52151,7 +52032,6 @@
       "request_params_count": 6,
       "response_params_count": 11,
       "missing_params": [
-        "year",
         "station"
       ]
     },
@@ -52176,7 +52056,6 @@
       "request_params_count": 6,
       "response_params_count": 11,
       "missing_params": [
-        "year",
         "station"
       ]
     },
@@ -52201,7 +52080,6 @@
       "request_params_count": 6,
       "response_params_count": 11,
       "missing_params": [
-        "year",
         "station"
       ]
     },
@@ -52222,12 +52100,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 9,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 9
     },
     {
       "dataset_id": "15058845",
@@ -52246,12 +52120,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 15,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 15
     },
     {
       "dataset_id": "15058846",
@@ -53583,8 +53453,7 @@
       "response_params_count": 13,
       "missing_params": [
         "signguCd",
-        "idxCd",
-        "year"
+        "idxCd"
       ]
     },
     {
@@ -54415,7 +54284,6 @@
       "request_params_count": 6,
       "response_params_count": 33,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -54440,7 +54308,6 @@
       "request_params_count": 6,
       "response_params_count": 24,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -54465,7 +54332,6 @@
       "request_params_count": 6,
       "response_params_count": 19,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -54490,7 +54356,6 @@
       "request_params_count": 6,
       "response_params_count": 7,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -54515,7 +54380,6 @@
       "request_params_count": 7,
       "response_params_count": 26,
       "missing_params": [
-        "year",
         "month",
         "station"
       ]
@@ -54541,7 +54405,6 @@
       "request_params_count": 7,
       "response_params_count": 20,
       "missing_params": [
-        "year",
         "month",
         "station"
       ]
@@ -54567,7 +54430,6 @@
       "request_params_count": 7,
       "response_params_count": 16,
       "missing_params": [
-        "year",
         "month",
         "station"
       ]
@@ -54593,7 +54455,6 @@
       "request_params_count": 6,
       "response_params_count": 16,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -54618,7 +54479,6 @@
       "request_params_count": 6,
       "response_params_count": 17,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -54643,7 +54503,6 @@
       "request_params_count": 6,
       "response_params_count": 13,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -54668,7 +54527,6 @@
       "request_params_count": 6,
       "response_params_count": 13,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -54693,7 +54551,6 @@
       "request_params_count": 6,
       "response_params_count": 16,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -54718,7 +54575,6 @@
       "request_params_count": 6,
       "response_params_count": 16,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -54743,7 +54599,6 @@
       "request_params_count": 6,
       "response_params_count": 16,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -55654,12 +55509,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 2,
-      "missing_params": [
-        "ac_year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15059195",
@@ -56665,12 +56516,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 6,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 6
     },
     {
       "dataset_id": "15059267",
@@ -57150,7 +56997,6 @@
       "request_params_count": 6,
       "response_params_count": 12,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -57175,7 +57021,6 @@
       "request_params_count": 6,
       "response_params_count": 21,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -57196,12 +57041,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 7,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 7
     },
     {
       "dataset_id": "15059466",
@@ -57224,7 +57065,6 @@
       "request_params_count": 7,
       "response_params_count": 11,
       "missing_params": [
-        "year",
         "month",
         "station"
       ]
@@ -63246,7 +63086,6 @@
       "request_params_count": 8,
       "response_params_count": 2,
       "missing_params": [
-        "ac_year",
         "from_month",
         "to_month",
         "sidoCd"
@@ -63423,7 +63262,6 @@
       "request_params_count": 8,
       "response_params_count": 2,
       "missing_params": [
-        "ac_year",
         "from_month",
         "to_month",
         "sidoCd"
@@ -63450,7 +63288,6 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "ac_year",
         "sidoCd"
       ]
     },
@@ -63475,7 +63312,6 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "ac_year",
         "sidoCd"
       ]
     },
@@ -63500,7 +63336,6 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "ac_year",
         "sidoCd"
       ]
     },
@@ -63525,7 +63360,6 @@
       "request_params_count": 8,
       "response_params_count": 2,
       "missing_params": [
-        "ac_year",
         "from_month",
         "to_month",
         "sidoCd"
@@ -63552,7 +63386,6 @@
       "request_params_count": 8,
       "response_params_count": 2,
       "missing_params": [
-        "ac_year",
         "from_month",
         "to_month",
         "sidoCd"
@@ -63579,7 +63412,6 @@
       "request_params_count": 8,
       "response_params_count": 2,
       "missing_params": [
-        "ac_year",
         "from_month",
         "to_month",
         "sidoCd"
@@ -63606,7 +63438,6 @@
       "request_params_count": 8,
       "response_params_count": 2,
       "missing_params": [
-        "ac_year",
         "from_month",
         "to_month",
         "sidoCd"
@@ -63633,7 +63464,6 @@
       "request_params_count": 8,
       "response_params_count": 2,
       "missing_params": [
-        "ac_year",
         "from_month",
         "to_month",
         "sidoCd"
@@ -63660,7 +63490,6 @@
       "request_params_count": 8,
       "response_params_count": 2,
       "missing_params": [
-        "ac_year",
         "from_month",
         "to_month",
         "sidoCd"
@@ -63687,7 +63516,6 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "ac_year",
         "sidoCd"
       ]
     },
@@ -63710,10 +63538,7 @@
       "approval_required": true,
       "skip_reason": "approval_required",
       "request_params_count": 5,
-      "response_params_count": 2,
-      "missing_params": [
-        "ac_year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15061220",
@@ -63736,7 +63561,6 @@
       "request_params_count": 8,
       "response_params_count": 2,
       "missing_params": [
-        "ac_year",
         "from_month",
         "to_month",
         "sidoCd"
@@ -66352,8 +66176,7 @@
       "response_params_count": 14,
       "missing_params": [
         "rentId",
-        "rentCode",
-        "yyyy"
+        "rentCode"
       ]
     },
     {
@@ -67079,7 +66902,6 @@
       "request_params_count": 5,
       "response_params_count": 18,
       "missing_params": [
-        "year",
         "businessCode"
       ]
     },
@@ -75803,8 +75625,7 @@
       "request_params_count": 5,
       "response_params_count": 15,
       "missing_params": [
-        "firstIndex",
-        "year"
+        "firstIndex"
       ]
     },
     {
@@ -76361,12 +76182,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 13,
-      "missing_params": [
-        "yyyy"
-      ]
+      "response_params_count": 13
     },
     {
       "dataset_id": "15073133",
@@ -78304,10 +78121,7 @@
       "approval_required": true,
       "skip_reason": "approval_required",
       "request_params_count": 5,
-      "response_params_count": 16,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 16
     },
     {
       "dataset_id": "15073872",
@@ -78328,10 +78142,7 @@
       "approval_required": true,
       "skip_reason": "approval_required",
       "request_params_count": 5,
-      "response_params_count": 9,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 9
     },
     {
       "dataset_id": "15073873",
@@ -78719,7 +78530,6 @@
       "request_params_count": 6,
       "response_params_count": 18,
       "missing_params": [
-        "year",
         "itemCode"
       ]
     },
@@ -79827,7 +79637,6 @@
       "response_params_count": 11,
       "missing_params": [
         "arName",
-        "year",
         "status",
         "startDate",
         "endDate"
@@ -86192,7 +86001,6 @@
       "request_params_count": 6,
       "response_params_count": 7,
       "missing_params": [
-        "year",
         "dtype",
         "output"
       ]
@@ -86218,7 +86026,6 @@
       "request_params_count": 7,
       "response_params_count": 7,
       "missing_params": [
-        "year",
         "dtype",
         "output",
         "month"
@@ -86245,7 +86052,6 @@
       "request_params_count": 7,
       "response_params_count": 7,
       "missing_params": [
-        "year",
         "dtype",
         "output",
         "month"
@@ -86272,7 +86078,6 @@
       "request_params_count": 6,
       "response_params_count": 7,
       "missing_params": [
-        "year",
         "dtype",
         "output"
       ]
@@ -96879,7 +96684,6 @@
       "response_params_count": 10,
       "missing_params": [
         "currentPage",
-        "YEAR",
         "MT",
         "ENFSN_POSIT",
         "POSIT_ACCTO_DTLCLFC",
@@ -96908,7 +96712,6 @@
       "response_params_count": 11,
       "missing_params": [
         "currentPage",
-        "YEAR",
         "MT",
         "ENFSN_POSIT",
         "POSIT_ACCTO_DTLCLFC",
@@ -96980,7 +96783,6 @@
       "response_params_count": 10,
       "missing_params": [
         "currentPage",
-        "YEAR",
         "MT",
         "OCCP",
         "OCCP_DTLCLFC",
@@ -97009,7 +96811,6 @@
       "response_params_count": 10,
       "missing_params": [
         "currentPage",
-        "YEAR",
         "MT",
         "INDUST",
         "INDUST_DTLCLFC",
@@ -97038,7 +96839,6 @@
       "response_params_count": 9,
       "missing_params": [
         "currentPage",
-        "YEAR",
         "MT",
         "AGRDE",
         "EMPYMN_POPLTN"
@@ -97066,7 +96866,6 @@
       "response_params_count": 8,
       "missing_params": [
         "currentPage",
-        "YEAR",
         "MT",
         "CT_ECNMY_ACT_POPLTN_CO"
       ]
@@ -97093,7 +96892,6 @@
       "response_params_count": 9,
       "missing_params": [
         "currentPage",
-        "YEAR",
         "MT",
         "SEXDSTN",
         "UNEMPL_PT"
@@ -97121,7 +96919,6 @@
       "response_params_count": 9,
       "missing_params": [
         "currentPage",
-        "YEAR",
         "MT",
         "SEXDSTN",
         "UNEMPL_POPLTN"
@@ -97149,7 +96946,6 @@
       "response_params_count": 9,
       "missing_params": [
         "currentPage",
-        "YEAR",
         "MT",
         "SEXDSTN",
         "EMPYMN_POPLTN"
@@ -97177,7 +96973,6 @@
       "response_params_count": 10,
       "missing_params": [
         "currentPage",
-        "YEAR",
         "MT",
         "PRDCTN_POSBL_POPLTN_EMPLYM_PT",
         "PRDCTN_POSBL_POPLTN_EMPYMN_POPLTN",
@@ -97206,7 +97001,6 @@
       "response_params_count": 9,
       "missing_params": [
         "currentPage",
-        "YEAR",
         "MT",
         "SEXDSTN",
         "ECNMY_ACT_PARTCPT_PT"
@@ -97234,7 +97028,6 @@
       "response_params_count": 9,
       "missing_params": [
         "currentPage",
-        "YEAR",
         "MT",
         "ECNMY_ACT_POPLTN_CO",
         "SEXDSTN"
@@ -97262,7 +97055,6 @@
       "response_params_count": 8,
       "missing_params": [
         "currentPage",
-        "YEAR",
         "MT",
         "POPLTN_CO"
       ]
@@ -97428,7 +97220,6 @@
       "response_params_count": 10,
       "missing_params": [
         "currentPage",
-        "YEAR",
         "STTUS",
         "DC",
         "SE",
@@ -99297,7 +99088,6 @@
       "request_params_count": 10,
       "response_params_count": 93,
       "missing_params": [
-        "yyyy",
         "sido",
         "period",
         "sgg",
@@ -100183,7 +99973,6 @@
       "request_params_count": 5,
       "response_params_count": 3,
       "missing_params": [
-        "Year",
         "Month",
         "Standard"
       ]
@@ -100209,7 +99998,6 @@
       "request_params_count": 5,
       "response_params_count": 3,
       "missing_params": [
-        "Year",
         "Month",
         "Standard"
       ]
@@ -103786,8 +103574,7 @@
       "request_params_count": 4,
       "response_params_count": 19,
       "missing_params": [
-        "recordCnt",
-        "year"
+        "recordCnt"
       ]
     },
     {
@@ -103860,8 +103647,7 @@
       "request_params_count": 4,
       "response_params_count": 15,
       "missing_params": [
-        "recordCnt",
-        "year"
+        "recordCnt"
       ]
     },
     {
@@ -103909,8 +103695,7 @@
       "request_params_count": 4,
       "response_params_count": 24,
       "missing_params": [
-        "recordCnt",
-        "year"
+        "recordCnt"
       ]
     },
     {
@@ -111932,12 +111717,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 10,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 10
     },
     {
       "dataset_id": "15088523",
@@ -111956,12 +111737,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 10,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 10
     },
     {
       "dataset_id": "15088651",
@@ -113560,7 +113337,6 @@
       "response_params_count": 21,
       "missing_params": [
         "viewType",
-        "year",
         "month",
         "BSI",
         "SIGUN"
@@ -113588,7 +113364,6 @@
       "response_params_count": 74,
       "missing_params": [
         "viewType",
-        "year",
         "month",
         "BSI",
         "SIGUN"
@@ -113616,7 +113391,6 @@
       "response_params_count": 21,
       "missing_params": [
         "viewType",
-        "year",
         "month",
         "BSI",
         "SIGUN"
@@ -114792,8 +114566,7 @@
       "response_params_count": 20,
       "missing_params": [
         "recordCountPerPage",
-        "gubun",
-        "year"
+        "gubun"
       ]
     },
     {
@@ -115393,7 +115166,6 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "year",
         "dept",
         "area",
         "ctvt",
@@ -117480,7 +117252,6 @@
         "likeBasDt",
         "cmpyNm",
         "likeCmpyNm",
-        "year",
         "beginYear",
         "endYear",
         "prdCtg"
@@ -120359,7 +120130,6 @@
       "request_params_count": 6,
       "response_params_count": 14,
       "missing_params": [
-        "year",
         "semester",
         "language"
       ]
@@ -120385,7 +120155,6 @@
       "request_params_count": 6,
       "response_params_count": 14,
       "missing_params": [
-        "year",
         "semester",
         "language"
       ]
@@ -120839,7 +120608,6 @@
       "request_params_count": 6,
       "response_params_count": 8,
       "missing_params": [
-        "YYYY",
         "MM"
       ]
     },
@@ -120864,7 +120632,6 @@
       "request_params_count": 6,
       "response_params_count": 10,
       "missing_params": [
-        "YYYY",
         "MM"
       ]
     },
@@ -120889,7 +120656,6 @@
       "request_params_count": 6,
       "response_params_count": 32,
       "missing_params": [
-        "year",
         "semester",
         "language"
       ]
@@ -120915,7 +120681,6 @@
       "request_params_count": 6,
       "response_params_count": 28,
       "missing_params": [
-        "year",
         "semester",
         "language"
       ]
@@ -123398,7 +123163,6 @@
       "response_params_count": 0,
       "missing_params": [
         "currentPage",
-        "YEAR",
         "STDMT"
       ]
     },
@@ -130082,7 +129846,6 @@
       "response_params_count": 8,
       "missing_params": [
         "spot_id",
-        "year",
         "dtype",
         "output"
       ]
@@ -130109,7 +129872,6 @@
       "response_params_count": 8,
       "missing_params": [
         "spot_id",
-        "year",
         "dtype",
         "output"
       ]
@@ -130136,7 +129898,6 @@
       "response_params_count": 8,
       "missing_params": [
         "spot_id",
-        "year",
         "month",
         "dtype",
         "output"
@@ -130164,7 +129925,6 @@
       "response_params_count": 8,
       "missing_params": [
         "spot_id",
-        "year",
         "month",
         "dtype",
         "output"
@@ -130192,7 +129952,6 @@
       "response_params_count": 8,
       "missing_params": [
         "spot_id",
-        "year",
         "month",
         "dtype",
         "output"
@@ -130220,7 +129979,6 @@
       "response_params_count": 8,
       "missing_params": [
         "spot_id",
-        "year",
         "month",
         "dtype",
         "output"
@@ -130248,7 +130006,6 @@
       "response_params_count": 8,
       "missing_params": [
         "spot_id",
-        "year",
         "dtype",
         "output"
       ]
@@ -130275,7 +130032,6 @@
       "response_params_count": 8,
       "missing_params": [
         "spot_id",
-        "year",
         "dtype",
         "output"
       ]
@@ -132838,7 +132594,6 @@
       "response_params_count": 22,
       "missing_params": [
         "currentPage",
-        "YEAR",
         "AREA",
         "SE",
         "PRPOS",
@@ -136438,7 +136193,6 @@
         "m_name",
         "m_creater",
         "m_producer",
-        "year",
         "genre",
         "key_word"
       ]
@@ -140159,8 +139913,7 @@
       "request_params_count": 5,
       "response_params_count": 18,
       "missing_params": [
-        "apiType",
-        "year"
+        "apiType"
       ]
     },
     {
@@ -140184,8 +139937,7 @@
       "request_params_count": 5,
       "response_params_count": 29,
       "missing_params": [
-        "apiType",
-        "year"
+        "apiType"
       ]
     },
     {
@@ -140210,7 +139962,6 @@
       "response_params_count": 10,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -140235,8 +139986,7 @@
       "request_params_count": 5,
       "response_params_count": 11,
       "missing_params": [
-        "apiType",
-        "year"
+        "apiType"
       ]
     },
     {
@@ -140260,8 +140010,7 @@
       "request_params_count": 5,
       "response_params_count": 12,
       "missing_params": [
-        "apiType",
-        "year"
+        "apiType"
       ]
     },
     {
@@ -140286,7 +140035,6 @@
       "response_params_count": 27,
       "missing_params": [
         "apiType",
-        "year",
         "dvs"
       ]
     },
@@ -140311,8 +140059,7 @@
       "request_params_count": 5,
       "response_params_count": 12,
       "missing_params": [
-        "apiType",
-        "year"
+        "apiType"
       ]
     },
     {
@@ -140337,7 +140084,6 @@
       "response_params_count": 67,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -140363,7 +140109,6 @@
       "response_params_count": 16,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -140389,7 +140134,6 @@
       "response_params_count": 15,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -140415,7 +140159,6 @@
       "response_params_count": 13,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -140441,7 +140184,6 @@
       "response_params_count": 64,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -140467,7 +140209,6 @@
       "response_params_count": 49,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -140493,7 +140234,6 @@
       "response_params_count": 25,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -140519,7 +140259,6 @@
       "response_params_count": 25,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -140544,8 +140283,7 @@
       "request_params_count": 5,
       "response_params_count": 14,
       "missing_params": [
-        "apiType",
-        "year"
+        "apiType"
       ]
     },
     {
@@ -140570,7 +140308,6 @@
       "response_params_count": 27,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -140596,7 +140333,6 @@
       "response_params_count": 21,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -140622,7 +140358,6 @@
       "response_params_count": 13,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -140648,7 +140383,6 @@
       "response_params_count": 10,
       "missing_params": [
         "apiType",
-        "year",
         "dvs"
       ]
     },
@@ -140673,8 +140407,7 @@
       "request_params_count": 5,
       "response_params_count": 11,
       "missing_params": [
-        "apiType",
-        "year"
+        "apiType"
       ]
     },
     {
@@ -140699,7 +140432,6 @@
       "response_params_count": 23,
       "missing_params": [
         "apiType",
-        "year",
         "dvs"
       ]
     },
@@ -140725,7 +140457,6 @@
       "response_params_count": 28,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -140750,8 +140481,7 @@
       "request_params_count": 5,
       "response_params_count": 14,
       "missing_params": [
-        "apiType",
-        "year"
+        "apiType"
       ]
     },
     {
@@ -140775,8 +140505,7 @@
       "request_params_count": 5,
       "response_params_count": 30,
       "missing_params": [
-        "apiType",
-        "year"
+        "apiType"
       ]
     },
     {
@@ -140801,7 +140530,6 @@
       "response_params_count": 14,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -140827,7 +140555,6 @@
       "response_params_count": 25,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -140853,7 +140580,6 @@
       "response_params_count": 12,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -140879,7 +140605,6 @@
       "response_params_count": 19,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -140905,7 +140630,6 @@
       "response_params_count": 17,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -140931,7 +140655,6 @@
       "response_params_count": 13,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -140956,8 +140679,7 @@
       "request_params_count": 5,
       "response_params_count": 14,
       "missing_params": [
-        "apiType",
-        "year"
+        "apiType"
       ]
     },
     {
@@ -140982,7 +140704,6 @@
       "response_params_count": 11,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -141008,7 +140729,6 @@
       "response_params_count": 21,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -141034,7 +140754,6 @@
       "response_params_count": 20,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -141060,7 +140779,6 @@
       "response_params_count": 55,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -141086,7 +140804,6 @@
       "response_params_count": 13,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -141111,8 +140828,7 @@
       "request_params_count": 5,
       "response_params_count": 13,
       "missing_params": [
-        "apiType",
-        "year"
+        "apiType"
       ]
     },
     {
@@ -141137,7 +140853,6 @@
       "response_params_count": 31,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -141163,7 +140878,6 @@
       "response_params_count": 28,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -141188,8 +140902,7 @@
       "request_params_count": 5,
       "response_params_count": 66,
       "missing_params": [
-        "apiType",
-        "year"
+        "apiType"
       ]
     },
     {
@@ -141213,8 +140926,7 @@
       "request_params_count": 5,
       "response_params_count": 15,
       "missing_params": [
-        "apiType",
-        "year"
+        "apiType"
       ]
     },
     {
@@ -141239,7 +140951,6 @@
       "response_params_count": 21,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -141265,7 +140976,6 @@
       "response_params_count": 16,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -141291,7 +141001,6 @@
       "response_params_count": 16,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -141317,7 +141026,6 @@
       "response_params_count": 16,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -141342,8 +141050,7 @@
       "request_params_count": 5,
       "response_params_count": 12,
       "missing_params": [
-        "apiType",
-        "year"
+        "apiType"
       ]
     },
     {
@@ -141368,7 +141075,6 @@
       "response_params_count": 12,
       "missing_params": [
         "apiType",
-        "year",
         "dvsd"
       ]
     },
@@ -145890,7 +145596,6 @@
       "request_params_count": 6,
       "response_params_count": 14,
       "missing_params": [
-        "year",
         "prjtDutyrNm",
         "prjtNm"
       ]
@@ -152566,12 +152271,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 2,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15102029",
@@ -155453,10 +155154,7 @@
       "approval_required": true,
       "skip_reason": "approval_required",
       "request_params_count": 5,
-      "response_params_count": 0,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 0
     },
     {
       "dataset_id": "15105136",
@@ -156381,7 +156079,6 @@
       "response_params_count": 0,
       "missing_params": [
         "apiType",
-        "year",
         "pwrSta"
       ]
     },
@@ -156427,7 +156124,6 @@
       "response_params_count": 0,
       "missing_params": [
         "apiType",
-        "year",
         "dvsn"
       ]
     },
@@ -156473,7 +156169,6 @@
       "response_params_count": 0,
       "missing_params": [
         "apiType",
-        "year",
         "pwrSta"
       ]
     },
@@ -159119,7 +158814,6 @@
       "response_params_count": 2,
       "missing_params": [
         "apiType",
-        "year",
         "site"
       ]
     },
@@ -159206,7 +158900,6 @@
       "response_params_count": 2,
       "missing_params": [
         "apiType",
-        "year",
         "site"
       ]
     },
@@ -159292,7 +158985,6 @@
       "response_params_count": 2,
       "missing_params": [
         "apiType",
-        "year",
         "site"
       ]
     },
@@ -159559,7 +159251,6 @@
       "response_params_count": 2,
       "missing_params": [
         "apiType",
-        "year",
         "site"
       ]
     },
@@ -163961,7 +163652,6 @@
       "request_params_count": 6,
       "response_params_count": 0,
       "missing_params": [
-        "year",
         "dept",
         "area",
         "ctvt",
@@ -163989,7 +163679,6 @@
       "request_params_count": 6,
       "response_params_count": 0,
       "missing_params": [
-        "year",
         "dept",
         "area",
         "ctvt",
@@ -164017,7 +163706,6 @@
       "request_params_count": 6,
       "response_params_count": 0,
       "missing_params": [
-        "year",
         "dept",
         "area",
         "ctvt",
@@ -165313,7 +165001,6 @@
       "request_params_count": 7,
       "response_params_count": 2,
       "missing_params": [
-        "year",
         "month",
         "day"
       ]
@@ -165339,7 +165026,6 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -168191,7 +167877,6 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "year",
         "observatory_year_name"
       ]
     },
@@ -168237,12 +167922,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 2,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15108264",
@@ -192789,7 +192470,6 @@
       "request_params_count": 5,
       "response_params_count": 0,
       "missing_params": [
-        "yyyy",
         "ntnlgCompUnitSeCcd",
         "jmDepmntNm"
       ]
@@ -195417,7 +195097,6 @@
       "request_params_count": 7,
       "response_params_count": 2,
       "missing_params": [
-        "year",
         "sickCd",
         "sickType",
         "medTp"
@@ -195444,7 +195123,6 @@
       "request_params_count": 7,
       "response_params_count": 2,
       "missing_params": [
-        "year",
         "sickCd",
         "sickType",
         "medTp"
@@ -195471,7 +195149,6 @@
       "request_params_count": 7,
       "response_params_count": 2,
       "missing_params": [
-        "year",
         "sickCd",
         "sickType",
         "medTp"
@@ -195498,7 +195175,6 @@
       "request_params_count": 7,
       "response_params_count": 2,
       "missing_params": [
-        "year",
         "sickCd",
         "sickType",
         "medTp"
@@ -196331,7 +196007,6 @@
       "response_params_count": 2,
       "missing_params": [
         "apiType",
-        "year",
         "empmnSe",
         "empmnDetailSe"
       ]
@@ -196564,7 +196239,6 @@
       "response_params_count": 2,
       "missing_params": [
         "apiType",
-        "year",
         "bizNm"
       ]
     },
@@ -196617,7 +196291,6 @@
       "response_params_count": 2,
       "missing_params": [
         "apiType",
-        "year",
         "se"
       ]
     },
@@ -196699,7 +196372,6 @@
       "response_params_count": 2,
       "missing_params": [
         "apiType",
-        "year",
         "se"
       ]
     },
@@ -198793,12 +198465,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 2,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15123696",
@@ -199193,7 +198861,6 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "year",
         "instlPlaceCd",
         "prvtPblcYnCd",
         "lvl1PbadmsZnCd",
@@ -199250,7 +198917,6 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "year",
         "lvl1PbadmsZnCd",
         "lvl2PbadmsZnCd",
         "instlPlaceCd",
@@ -199278,7 +198944,6 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "year",
         "lvl1PbadmsZnCd",
         "Lvl2PbadmsZnCd",
         "instlPlaceCd",
@@ -208280,7 +207945,6 @@
       "request_params_count": 3,
       "response_params_count": 4,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -209903,7 +209567,6 @@
       "request_params_count": 4,
       "response_params_count": 2,
       "missing_params": [
-        "year",
         "month",
         "day"
       ]
@@ -216945,7 +216608,6 @@
       "request_params_count": 6,
       "response_params_count": 0,
       "missing_params": [
-        "year",
         "stdType",
         "st5Cd"
       ]
@@ -216971,7 +216633,6 @@
       "request_params_count": 6,
       "response_params_count": 0,
       "missing_params": [
-        "year",
         "stdType",
         "st5Cd"
       ]
@@ -216997,7 +216658,6 @@
       "request_params_count": 6,
       "response_params_count": 0,
       "missing_params": [
-        "year",
         "stdType",
         "st5Cd"
       ]
@@ -217023,7 +216683,6 @@
       "request_params_count": 6,
       "response_params_count": 0,
       "missing_params": [
-        "year",
         "stdType",
         "st5Cd"
       ]
@@ -227280,7 +226939,6 @@
       "request_params_count": 4,
       "response_params_count": 0,
       "missing_params": [
-        "year",
         "startPage"
       ]
     },
@@ -228028,7 +227686,6 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "year",
         "ctpv"
       ]
     },
@@ -228053,7 +227710,6 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "year",
         "ctpv"
       ]
     },
@@ -228078,7 +227734,6 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "year",
         "ctpv"
       ]
     },
@@ -228103,7 +227758,6 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "year",
         "ctpv"
       ]
     },
@@ -228128,7 +227782,6 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "year",
         "ctpv"
       ]
     },
@@ -228153,7 +227806,6 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "year",
         "ctpv"
       ]
     },
@@ -229399,7 +229051,6 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "yyyy",
         "jiguname"
       ]
     },
@@ -229424,7 +229075,6 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "yyyy",
         "jiguname"
       ]
     },
@@ -230890,10 +230540,7 @@
       "approval_required": true,
       "skip_reason": "approval_required",
       "request_params_count": 4,
-      "response_params_count": 2,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15136267",
@@ -232942,8 +232589,7 @@
       "request_params_count": 3,
       "response_params_count": 2,
       "missing_params": [
-        "atdrcId",
-        "year"
+        "atdrcId"
       ]
     },
     {
@@ -239345,7 +238991,6 @@
       "response_params_count": 2,
       "missing_params": [
         "fields",
-        "year",
         "month"
       ]
     },
@@ -239449,7 +239094,6 @@
       "response_params_count": 2,
       "missing_params": [
         "fields",
-        "year",
         "month"
       ]
     },
@@ -239526,7 +239170,6 @@
       "response_params_count": 2,
       "missing_params": [
         "fields",
-        "year",
         "month"
       ]
     },
@@ -239552,7 +239195,6 @@
       "response_params_count": 2,
       "missing_params": [
         "fields",
-        "year",
         "month"
       ]
     },
@@ -239578,7 +239220,6 @@
       "response_params_count": 2,
       "missing_params": [
         "fields",
-        "year",
         "month"
       ]
     },
@@ -239604,7 +239245,6 @@
       "response_params_count": 2,
       "missing_params": [
         "fields",
-        "year",
         "month"
       ]
     },
@@ -239630,7 +239270,6 @@
       "response_params_count": 2,
       "missing_params": [
         "fields",
-        "year",
         "month"
       ]
     },
@@ -258915,7 +258554,6 @@
       "request_params_count": 5,
       "response_params_count": 2,
       "missing_params": [
-        "year",
         "month"
       ]
     },
@@ -278512,8 +278150,7 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "brgNm",
-        "year"
+        "brgNm"
       ]
     },
     {
@@ -282872,12 +282509,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 2,
-      "missing_params": [
-        "ac_year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15156857",
@@ -282896,12 +282529,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 2,
-      "missing_params": [
-        "ac_year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15156858",
@@ -282920,12 +282549,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 5,
-      "response_params_count": 2,
-      "missing_params": [
-        "ac_year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15156866",
@@ -285755,8 +285380,7 @@
       "missing_params": [
         "stkTpcd",
         "listTpcd",
-        "rankTpcd",
-        "year"
+        "rankTpcd"
       ]
     },
     {
@@ -291485,12 +291109,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 2,
-      "response_params_count": 2,
-      "missing_params": [
-        "yyyy"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15157698",
@@ -291509,12 +291129,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 2,
-      "response_params_count": 2,
-      "missing_params": [
-        "yyyy"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15157698",
@@ -291533,12 +291149,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 2,
-      "response_params_count": 2,
-      "missing_params": [
-        "yyyy"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15157698",
@@ -291557,12 +291169,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 2,
-      "response_params_count": 2,
-      "missing_params": [
-        "yyyy"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15157698",
@@ -291581,12 +291189,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 2,
-      "response_params_count": 2,
-      "missing_params": [
-        "yyyy"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15157698",
@@ -291605,12 +291209,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 2,
-      "missing_params": [
-        "yyyy"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15157698",
@@ -295185,12 +294785,8 @@
       "dev_approval": "자동승인",
       "prod_approval": "자동승인",
       "approval_required": false,
-      "skip_reason": "missing_required_params",
       "request_params_count": 4,
-      "response_params_count": 2,
-      "missing_params": [
-        "year"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15157829",
@@ -295286,8 +294882,7 @@
       "request_params_count": 5,
       "response_params_count": 2,
       "missing_params": [
-        "no",
-        "year"
+        "no"
       ]
     },
     {
@@ -296021,7 +295616,6 @@
       "request_params_count": 7,
       "response_params_count": 2,
       "missing_params": [
-        "year",
         "areaNm",
         "jobNm"
       ]
@@ -298778,10 +298372,7 @@
       "approval_required": true,
       "skip_reason": "approval_required",
       "request_params_count": 4,
-      "response_params_count": 2,
-      "missing_params": [
-        "yyyy"
-      ]
+      "response_params_count": 2
     },
     {
       "dataset_id": "15158622",
@@ -298805,7 +298396,6 @@
       "request_params_count": 5,
       "response_params_count": 0,
       "missing_params": [
-        "yyyy",
         "nuclide"
       ]
     },
@@ -298831,7 +298421,6 @@
       "request_params_count": 6,
       "response_params_count": 0,
       "missing_params": [
-        "yyyy",
         "mm",
         "contractNm"
       ]
@@ -302565,8 +302154,7 @@
       "request_params_count": 3,
       "response_params_count": 2,
       "missing_params": [
-        "prt_at_code",
-        "yyyy"
+        "prt_at_code"
       ]
     },
     {
@@ -302591,7 +302179,6 @@
       "response_params_count": 2,
       "missing_params": [
         "prt_at_code",
-        "yyyy",
         "g_in_out"
       ]
     },
@@ -302724,7 +302311,6 @@
       "response_params_count": 2,
       "missing_params": [
         "prt_at_code",
-        "yyyy",
         "g_in_out"
       ]
     },
@@ -302804,7 +302390,6 @@
       "response_params_count": 2,
       "missing_params": [
         "prt_at_code",
-        "yyyy",
         "g_in_out"
       ]
     },
@@ -302882,7 +302467,6 @@
       "request_params_count": 6,
       "response_params_count": 0,
       "missing_params": [
-        "yyyy",
         "quart",
         "order"
       ]
@@ -303479,7 +303063,6 @@
       "request_params_count": 5,
       "response_params_count": 2,
       "missing_params": [
-        "yyyy",
         "order"
       ]
     },
@@ -303505,7 +303088,6 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "yyyy",
         "quart",
         "order"
       ]
@@ -303532,7 +303114,6 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "yyyy",
         "quart",
         "order"
       ]
@@ -304517,8 +304098,7 @@
       "request_params_count": 6,
       "response_params_count": 2,
       "missing_params": [
-        "airportCode",
-        "year"
+        "airportCode"
       ]
     },
     {
@@ -307152,8 +306732,7 @@
       "response_params_count": 2,
       "missing_params": [
         "bgngYmd",
-        "endYmd",
-        "year"
+        "endYmd"
       ]
     },
     {
@@ -310964,7 +310543,6 @@
       "response_params_count": 11,
       "missing_params": [
         "sido",
-        "year",
         "fs_gb",
         "fs_nm",
         "type_gb"
@@ -310994,7 +310572,6 @@
       "missing_params": [
         "sido",
         "sgg",
-        "year",
         "fs_gb",
         "fs_nm",
         "type_gb"
@@ -311051,7 +310628,6 @@
       "response_params_count": 14,
       "missing_params": [
         "fs_gb",
-        "year",
         "fs_nm",
         "type_gb"
       ]

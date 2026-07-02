@@ -94,8 +94,8 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `4,850` data.go.kr APIs
-  without operation mappings, `6,611` operation-mapped APIs without runtime
+- `reports/data-go-kr/coverage-backlog.json` tracks `4,845` data.go.kr APIs
+  without operation mappings, `6,616` operation-mapped APIs without runtime
   evidence, and `54` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
@@ -120,7 +120,7 @@ Current strengths:
   the same blocker, warning, and next-action inventory that CI validates.
 - `reports/source-report-inventory.json` is generated from source profiles and
   checked-in `reports/<source>/` directories, measuring `5` source report
-  directories, `19` source-scoped JSON reports, and `12.3%` recommended
+  directories, `23` source-scoped JSON reports, and `12.3%` recommended
   source-scoped report coverage.
 - `scripts/sync-release-schema-artifacts.py` checks that every checked-in
   `schemas/*.schema.json` file is represented in `schemas/index.json` and
@@ -187,8 +187,8 @@ Current gaps:
   and Gira #115 adds `2` verified ncpms/i815 landing-page checks, bringing
   runtime evidence to `1278`. Most evidence is still skipped boundary evidence,
   not proof that those operations are callable.
-- API operation coverage remains incomplete: `7,210` of `12,060` APIs have
-  operation mappings (`59.8%`), leaving `4,850` APIs to materialize and `6,611`
+- API operation coverage remains incomplete: `7,215` of `12,060` APIs have
+  operation mappings (`59.8%`), leaving `4,845` APIs to materialize and `6,616`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

@@ -1,20 +1,20 @@
 {
-  "manifest": "manifest.json",
-  "root": ".",
+  "manifest": "C:\\Users\\statp\\dev\\datapan-registry\\manifest.json",
+  "root": "C:\\Users\\statp\\dev\\datapan-registry",
   "schema_version": "datapan.release-readiness.v1",
-  "generated_at": "2026-07-02T19:16:47Z",
+  "generated_at": "2026-07-02T20:48:48Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "ready": true,
   "summary": {
     "gates_total": 23,
-    "passed": 23,
-    "warned": 0,
+    "passed": 22,
+    "warned": 1,
     "failed": 0,
     "required_artifacts": 16,
     "missing_required_artifacts": 0,
     "recommended_artifacts": 3,
-    "missing_recommended_artifacts": 0,
+    "missing_recommended_artifacts": 1,
     "schema_artifacts": 29,
     "registry_specs": 12060
   },
@@ -24,8 +24,8 @@
       "status": "pass",
       "severity": "required",
       "message": "release manifest checksums and schema-bound artifacts verified",
-      "expected": 48,
-      "actual": 48
+      "expected": 47,
+      "actual": 47
     },
     {
       "id": "required_artifact_schema_index",
@@ -189,13 +189,12 @@
     },
     {
       "id": "recommended_artifact_catalog_diff",
-      "status": "pass",
+      "status": "warn",
       "severity": "recommended",
-      "message": "recommended release artifact is present",
+      "message": "recommended release artifact is not present yet",
       "artifact_kind": "catalog_diff",
-      "artifact_path": "reports/catalog-diff.json",
       "expected": 1,
-      "actual": 1
+      "actual": 0
     },
     {
       "id": "recommended_artifact_verification",

@@ -1,26 +1,26 @@
 {
-  "generated_at": "2026-07-02T19:14:20Z",
+  "generated_at": "2026-07-02T20:45:27Z",
   "provider": "data.go.kr",
-  "registry": ".\\data\\data-go-kr.registry.json",
+  "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
-  "verification": ".\\reports\\latest-verification.json",
-  "route_disposition": ".\\reports\\route-disposition.json",
+  "verification": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json",
+  "route_disposition": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 12253,
-    "callable_operations": 12111,
+    "operations": 12258,
+    "callable_operations": 12116,
     "callable_operation_percent": 98.8,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 643,
+    "external_endpoint_operations": 648,
     "registered_adapter_operations": 633,
-    "missing_adapter_operations": 29,
-    "external_adapter_coverage_percent": 95.6,
-    "approval_required_operations": 4142,
+    "missing_adapter_operations": 34,
+    "external_adapter_coverage_percent": 94.9,
+    "approval_required_operations": 4147,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "registered_adapter_hosts": 42,
-    "missing_adapter_hosts": 11,
+    "missing_adapter_hosts": 12,
     "adapter_count": 38,
     "call_capable_adapters": 22,
     "provider_split_ready": true
@@ -52,15 +52,15 @@
   },
   "route_evidence": {
     "present": true,
-    "report": ".\\reports\\route-disposition.json",
-    "routes_total": 29,
-    "with_probe_evidence": 29,
+    "report": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\route-disposition.json",
+    "routes_total": 34,
+    "with_probe_evidence": 34,
     "dead_route_candidates": 14,
     "transient_failures": 15,
-    "parameter_blocked_routes": 0,
-    "remaining_adapter_candidates": 0,
-    "raw_missing_adapter_operations": 29,
-    "evidence_adjusted_adapter_candidates": 0
+    "parameter_blocked_routes": 1,
+    "remaining_adapter_candidates": 4,
+    "raw_missing_adapter_operations": 34,
+    "evidence_adjusted_adapter_candidates": 4
   },
   "gaps": {
     "missing_adapter_hosts": [
@@ -75,6 +75,22 @@
         "external_endpoint_operations": 6,
         "sample_ids": [
           "15059302"
+        ]
+      },
+      {
+        "host": "www.safetydata.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 5,
+        "operations": 5,
+        "external_endpoint_operations": 5,
+        "approval_required_operations": 5,
+        "sample_ids": [
+          "15147982",
+          "15154049",
+          "15154052"
         ]
       },
       {
@@ -185,19 +201,6 @@
         "external_endpoint_operations": 1,
         "sample_ids": [
           "15001051"
-        ]
-      },
-      {
-        "host": "www.jobplustv.or.kr",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "missing",
-        "specs": 1,
-        "operations": 1,
-        "external_endpoint_operations": 1,
-        "sample_ids": [
-          "15007088"
         ]
       }
     ],
@@ -381,7 +384,7 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-02T19:14:20Z",
+    "generated_at": "2026-07-02T20:45:27Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 38,
     "host_count": 43,
@@ -810,19 +813,19 @@
   "next": [
     {
       "label": "missing adapters",
-      "command": "datapan providers --registry .\\data\\data-go-kr.registry.json --gaps --limit 20 --json"
+      "command": "datapan providers --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --gaps --limit 20 --json"
     },
     {
       "label": "adapter targets",
-      "command": "datapan targets --registry .\\data\\data-go-kr.registry.json --limit 20 --json"
+      "command": "datapan targets --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --limit 20 --json"
     },
     {
       "label": "coverage report",
-      "command": "datapan coverage --registry .\\data\\data-go-kr.registry.json --verification .\\reports\\latest-verification.json --route-disposition .\\reports\\route-disposition.json --json"
+      "command": "datapan coverage --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --verification C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --route-disposition C:\\Users\\statp\\dev\\datapan-registry\\reports\\route-disposition.json --json"
     },
     {
       "label": "verify forest",
-      "command": "datapan verify --registry .\\data\\data-go-kr.registry.json --provider forest --kind external_endpoint --limit 4 --timeout 10s --json"
+      "command": "datapan verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider forest --kind external_endpoint --limit 4 --timeout 10s --json"
     }
   ]
 }

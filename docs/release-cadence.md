@@ -111,7 +111,7 @@ python scripts/validate-institution-runtime-plan.py
 ```
 
 The first queue is `행정안전부`: the current backlog lists `1252` APIs,
-`613` APIs with operation mappings, `639` uncovered APIs, and `613` runtime
+`618` APIs with operation mappings, `634` uncovered APIs, and `618` runtime
 reactivation APIs. Gateway verification requires a data.go.kr service key in
 the local or CI environment; without it, the same command can only produce
 `missing_auth` boundary evidence and should not replace live runtime evidence.

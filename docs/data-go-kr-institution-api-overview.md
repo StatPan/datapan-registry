@@ -1,19 +1,19 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-02T19:14:15Z`
+- Generated at: `2026-07-02T20:45:24Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `12253`
+- Operations: `12258`
 - Runtime evidence: `1278` (`10.4%`)
-- External endpoint operations: `643`
+- External endpoint operations: `648`
 - Registered adapter operations: `633`
-- Missing adapter operations: `29`
+- Missing adapter operations: `34`
 
 ## Largest Institutions By API Count
 
 | Institution | APIs | APIs with ops | Ops | Evidence | Evidence % | Verified | Failed | Skipped | Approval | No endpoint |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 행정안전부 | 1252 | 613 | 874 | 0 | 0.0% | 0 | 0 | 0 | 35 | 0 |
+| 행정안전부 | 1252 | 618 | 879 | 0 | 0.0% | 0 | 0 | 0 | 40 | 0 |
 | 경기도 | 840 | 13 | 30 | 18 | 60.0% | 18 | 0 | 0 | 0 | 0 |
 | 국토교통부 | 393 | 127 | 397 | 25 | 6.3% | 0 | 0 | 25 | 6 | 0 |
 | 식품의약품안전처 | 392 | 272 | 363 | 2 | 0.6% | 0 | 0 | 2 | 275 | 0 |
@@ -48,7 +48,7 @@
 
 | Institution | APIs | APIs with ops | Ops | Evidence | Evidence % | Verified | Failed | Skipped | Approval | No endpoint |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 행정안전부 | 1252 | 613 | 874 | 0 | 0.0% | 0 | 0 | 0 | 35 | 0 |
+| 행정안전부 | 1252 | 618 | 879 | 0 | 0.0% | 0 | 0 | 0 | 40 | 0 |
 | 국토교통부 | 393 | 127 | 397 | 25 | 6.3% | 0 | 0 | 25 | 6 | 0 |
 | 국립암센터 | 212 | 204 | 367 | 79 | 21.5% | 0 | 0 | 79 | 175 | 1 |
 | 식품의약품안전처 | 392 | 272 | 363 | 2 | 0.6% | 0 | 0 | 2 | 275 | 0 |
@@ -86,15 +86,15 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 ## Largest Categories
 
 - 교통물류: `1290` operations
-- 농축수산: `1285` operations
+- 농축수산: `1287` operations
 - 문화관광: `1264` operations
 - 공공행정: `1250` operations
 - 산업고용: `969` operations
 - 재정금융: `912` operations
 - 사회복지: `800` operations
 - 환경기상: `798` operations
-- 보건의료: `689` operations
-- 식품건강: `636` operations
+- 보건의료: `691` operations
+- 식품건강: `637` operations
 
 ## Largest Hosts
 

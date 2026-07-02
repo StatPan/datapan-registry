@@ -11,8 +11,8 @@ re-importing the upstream data.go.kr catalog every time.
 
 - Provider: `data.go.kr`
 - Specs: `12060`
-- Operations: `12253`
-- Callable operations: `12111` (`98.8%`)
+- Operations: `12258`
+- Callable operations: `12116` (`98.8%`)
 - Latest release: `v2026.06.25.24`
 - Registered external adapters: `airport`, `andong`, `culture`, `data-gg`,
   `ekape`, `emuseum`, `epost`, `folk`, `forest`, `garak`, `gblib`, `geoje`,
@@ -20,9 +20,9 @@ re-importing the upstream data.go.kr catalog every time.
   `korad`, `kpx`, `lh-ebid`, `mafra`, `myhome`, `naqs`, `ncpms`, `nfqs`,
   `nongsaro`, `oneclick-law`, `pqis`, `q-net`, `seoul-bus`,
   `seoul-open-data`, `sisul`, `tour`, `uiryeong`, `ulsan`, `work24`
-- External adapter coverage: `633` registered-adapter operations out of `643`
-  external endpoint operations (`95.6%`)
-- Missing external adapter hosts: `11`
+- External adapter coverage: `633` registered-adapter operations out of `648`
+  external endpoint operations (`94.9%`)
+- Missing external adapter hosts: `12`
 - Provider split readiness: `ready`
   (`38` adapters, `38` verification-capable, `22` call-capable)
 - Runtime verification evidence: `1278` bounded checks merged into
@@ -31,18 +31,18 @@ re-importing the upstream data.go.kr catalog every time.
 - Runtime evidence growth target: `10.0%` checked evidence is above the
   unrounded `10%` release target; `0` additional records are required for this
   target.
-- Institution API overview: `411` organizations, `12060` APIs, and `12253`
+- Institution API overview: `411` organizations, `12060` APIs, and `12258`
   operations in `reports/data-go-kr/institution-api-overview.json`; readable
   tables live in `docs/data-go-kr-institution-api-overview.md`.
-- Missing external host probe: `76` manifest-bound probe records remain in
+- Missing external host probe: `81` manifest-bound probe records remain in
   `reports/unadapted-external-probe.json`; current route disposition consumes
-  the `29` routes that are still missing adapters after registered hosts are
+  the `34` routes that are still missing adapters after registered hosts are
   excluded
-- Route disposition: `29` missing external routes in
+- Route disposition: `34` missing external routes in
   `reports/route-disposition.json` (`14` dead-route candidates, `15`
-  transient failures, `0` remaining adapter candidates)
+  transient failures, `4` remaining adapter candidates)
 - Coverage route evidence: `reports/coverage.json` now carries the same route
-  evidence and reports `0` evidence-adjusted adapter candidates
+  evidence and reports `4` evidence-adjusted adapter candidates
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
 - Provider index: `data/provider-index.json`
