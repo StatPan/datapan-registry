@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-30T08:11:23Z",
+  "generated_at": "2026-07-02T16:06:15Z",
   "provider": "data.go.kr",
-  "old": "data/data-go-kr.registry.json",
-  "new": "./data/data-go-kr.registry.json",
+  "old": "..\\datapan-registry\\.datapan\\previous\\data-go-kr.registry.json",
+  "new": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "counts": {
@@ -12,10 +12,261 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 0,
-    "stable": 12060
+    "changed": 25,
+    "stable": 12035
   },
   "added": [],
   "removed": [],
-  "changed": []
+  "changed": [
+    {
+      "id": "15001668",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물재고동향",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물재고동향",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8fca929abb1f55374c26ef0bf4615b3c33d5d2aa24b80aa0d948b98baa07f32c",
+      "new_digest": "635c3cb74b770bdb352bed64f9b6225b09278cb1b4f6c69b3cd83d3d809b7a75"
+    },
+    {
+      "id": "15001702",
+      "old_title": "해양수산부 국립수산물품질관리원_검역시행장정보",
+      "new_title": "해양수산부 국립수산물품질관리원_검역시행장정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e2a393150bf3ce98f17baae79af55aef6c443ca57897d4ac52ab5b52a0694cba",
+      "new_digest": "d40aa9aefeb39d3cad4f95f996bf2c7b3457aa8e5d9686ffe53329ca3430a961"
+    },
+    {
+      "id": "15002034",
+      "old_title": "농촌진흥청_국가농작물병해충도감정보",
+      "new_title": "농촌진흥청_국가농작물병해충도감정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "34cf7ce25458e1479daaaa4c69266a73a1770ea766592d04c0e5c88c34bc6e1f",
+      "new_digest": "ade0dfa23ce377cbd5007843a00190aa494031ec0805333e516d59f9f5ea7f3a"
+    },
+    {
+      "id": "15002220",
+      "old_title": "농림축산식품부_유기농업자재 현황",
+      "new_title": "농림축산식품부_유기농업자재 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0e9ada1aaec84583eba2a1673bdeab7f031fe6d3ea2b67171b5f5487c79e415c",
+      "new_digest": "75f07d56ec394e5a66114f5c6d75e3e5a79b19eb401f6f9031fff1e5898c79e4"
+    },
+    {
+      "id": "15003164",
+      "old_title": "서울교통공사_역사 건축 현황",
+      "new_title": "서울교통공사_역사 건축 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bda79f5e63c2fcb7a303df16e803f5954dc3f9898b7d797ddc231a9b85469a2b",
+      "new_digest": "880b87d7ab00c02ce2c7afca4198b943bf805864efd3dfc527075066d0df426f"
+    },
+    {
+      "id": "15003549",
+      "old_title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
+      "new_title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e496e733371a3e308379608fc74d8532d131f2c8c09ac55d828f76104f81f564",
+      "new_digest": "3d02bed43664b78a35f6ec105166b13f94b2b7015292479bef06eec2d711df92"
+    },
+    {
+      "id": "15004517",
+      "old_title": "서울특별시농수산식품공사_주요 품목 가격",
+      "new_title": "서울특별시농수산식품공사_주요 품목 가격",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "44ac50ccb7808eb302371ffe93ddfe071a4fea79aaa28189fbfd535502a883ae",
+      "new_digest": "3cbd81f723addeefe8b72eb77566ed8cbfe043237f2d5ffc2e25a3848e3e2b67"
+    },
+    {
+      "id": "15005231",
+      "old_title": "경기도 정기간행물 현황",
+      "new_title": "경기도 정기간행물 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "12f91e3ddbc949fc5f34bdfe41e53eeafe55948af470d80e7307fe4a789fad72",
+      "new_digest": "178055d47fdc849867d66eabd15b4311cda10c760dc601272dc69230bf809899"
+    },
+    {
+      "id": "15005257",
+      "old_title": "농촌진흥청_농촌교육농장 정보",
+      "new_title": "농촌진흥청_농촌교육농장 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a6f912ade01ef3d3e25a6754cd91c7e3fe5531910df1973cea270ca3bf24158b",
+      "new_digest": "078b79286f7956cb924415391972a1d314b3870e241698e12085eb49fb8878a4"
+    },
+    {
+      "id": "15006273",
+      "old_title": "독립기념관_한국독립운동사 소장자료 정보 DB",
+      "new_title": "독립기념관_한국독립운동사 소장자료 정보 DB",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7616a46a2365f9c1a7ad734508c887ce0a8cee3c02090bf3921751050ef84ecb",
+      "new_digest": "3aa248013628a73835fce2648e525e15ead502d417f4e199161e90b159be7f05"
+    },
+    {
+      "id": "15007009",
+      "old_title": "서울특별시 관악구_공중위생업소 현황",
+      "new_title": "서울특별시 관악구_공중위생업소 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "13858203adec86d4c2af6376e205933ebb27ac99f72a29f726c807af2dadf4f7",
+      "new_digest": "0fa4294dff46500b3a0782d1bf44191d45cc960543d0d0d33fe11f3690472448"
+    },
+    {
+      "id": "15007088",
+      "old_title": "한국산업인력공단_한국직업방송 프로그램",
+      "new_title": "한국산업인력공단_한국직업방송 프로그램",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "79682244e4627ca3b56aef78dc260eb61f37b6f859a0769892b8da6311de16bd",
+      "new_digest": "40d8796b958b5a7ab3a17abed0999f88b92e45f6467f6d8ad5ec96b37b936f25"
+    },
+    {
+      "id": "15007444",
+      "old_title": "서울특별시성동구도시관리공단_체육시설 강좌정보 조회",
+      "new_title": "서울특별시성동구도시관리공단_체육시설 강좌정보 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5b966b28a9b7bc425228eb77054105d34b1b25cb8286e75048706b28d6d150fc",
+      "new_digest": "dd5204519e250ac887eabd6e426d8b294f0ea7dbd7662963b9cbda5287377333"
+    },
+    {
+      "id": "15007467",
+      "old_title": "서울특별시성동구도시관리공단_체육시설 대관정보 조회",
+      "new_title": "서울특별시성동구도시관리공단_체육시설 대관정보 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bfd5f63e3a7a63ac91d02b5cda660abfbea5e145b0ec87efff37a003b078e903",
+      "new_digest": "1159c57a03588d22d1b59a9b93e893c7587614431ac3d8c4defe068e984b9063"
+    },
+    {
+      "id": "15008409",
+      "old_title": "농림수산식품교육문화정보원_중국 도매시장 가격정보",
+      "new_title": "농림수산식품교육문화정보원_중국 도매시장 가격정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2744109fd260f7f9705c4cd08ff2bbfcf226c0d565bb2d596ca289411403f75f",
+      "new_digest": "290ab93adcf95bc156b5855d2a39189ae042b2d90873f600cbcbb8927e70c28c"
+    },
+    {
+      "id": "15008517",
+      "old_title": "한국체육산업개발주식회사_올림픽공원 도서정보",
+      "new_title": "한국체육산업개발주식회사_올림픽공원 도서정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7f801d65a2d41d52867ce964e3f441fc0ca58fd9ff272c92df69bbb1f84daed9",
+      "new_digest": "16fc4a0b2202482d8ad464d5b011e72978dbffbaf09180413e1e1c4db1c0f9de"
+    },
+    {
+      "id": "15009422",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "23b8d64e3df06cc1ef9f1ce3779f42dd0f0d84da44c14510bf5d836e4d56a1d5",
+      "new_digest": "90546fa171799b46b47707360d06bfe7f6574a1f5aecef48d0105d60e8c80a4f"
+    },
+    {
+      "id": "15009684",
+      "old_title": "서울특별시 관악구_공공시설개방정보",
+      "new_title": "서울특별시 관악구_공공시설개방정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c432add915b4b0986ebde40867be7a448358eff295a4cd3cb5d6a8cb6fcc3c11",
+      "new_digest": "39f8294f946ce027584325e976be9338d9ee8a44c8b6393d207b86c48defdce0"
+    },
+    {
+      "id": "15011020",
+      "old_title": "경기도 창업보육센터현황",
+      "new_title": "경기도 창업보육센터현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5d0f839f06f0921091f0c5659fa195140d3ab110da1629fa76409fd931a286c4",
+      "new_digest": "bc1859ab8e8e3b9ed36aac70535c4bfed5c99adae718a8fb9ce0ac8feac736ab"
+    },
+    {
+      "id": "15011027",
+      "old_title": "경기도 토양전문기관 및 토양정화업체 현황",
+      "new_title": "경기도 토양전문기관 및 토양정화업체 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4f18e44d889af7fabb555e03c6c92811fc3fe281ec264df1dd500311fed5ec44",
+      "new_digest": "9c38e61f11748700654c7c2826e5d0ba398e3fd62a82079b7198c20782f58644"
+    },
+    {
+      "id": "15011035",
+      "old_title": "경기도 평생교육 현황",
+      "new_title": "경기도 평생교육 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9336c2479d5d269340129226b188b117e27b405efcfefc6400d0b1f4333120d9",
+      "new_digest": "adf39eaf68d2739f1380ccc6879745e598fdcfd437cbafc62f78ca7599cb7190"
+    },
+    {
+      "id": "15011068",
+      "old_title": "경기도 광고업 현황",
+      "new_title": "경기도 광고업 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c61aecc5bb7036d77d41e628926e810dedbe8824a91cabca74b0d9837ca9bfce",
+      "new_digest": "338035541647961d41ff94e16f7bbe956b906c3ae5dd734f9d11a742f26fab40"
+    },
+    {
+      "id": "15011074",
+      "old_title": "경기도 중금속 측정결과 현황",
+      "new_title": "경기도 중금속 측정결과 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7987c8f9168a9a7ac9d2f38a773c3f313d6d6bbb4be1d4b5afd857be97132a06",
+      "new_digest": "d5801197ba45435ba802a2bde2c9630224e246c0c8a408e92777e61cc2d6179f"
+    },
+    {
+      "id": "15011075",
+      "old_title": "경기도_보육교사 교육원 현황",
+      "new_title": "경기도_보육교사 교육원 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3a6db1b567953de74f0b901236b645957d0840126b84c56c16080a4d3263300f",
+      "new_digest": "25057cb880346219a7f95bc7bc57b416c6929c55331739e2be8ed85dc3951f27"
+    },
+    {
+      "id": "15011147",
+      "old_title": "경기도 비점오염 저감시설 현황",
+      "new_title": "경기도 비점오염 저감시설 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fbea5ab4a56462cb2285dba9650ac9cf8f60b608f74edacf494a1317547cf275",
+      "new_digest": "caf75bb32ae305122a044c2be60280cf48cc5acd08d4da3f989e4d50e22bd390"
+    }
+  ]
 }

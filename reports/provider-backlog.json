@@ -1,26 +1,41 @@
 {
-  "generated_at": "2026-06-30T08:11:23Z",
+  "generated_at": "2026-07-02T16:06:15Z",
   "provider": "data.go.kr",
-  "registry": "./data/data-go-kr.registry.json",
+  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 179,
+  "filtered_count": 192,
   "summary": {
-    "hosts": 179,
+    "hosts": 192,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 40,
-    "external_guide_hosts": 151,
+    "external_endpoint_hosts": 53,
+    "external_guide_hosts": 157,
     "registered_adapter_hosts": 30,
-    "operation_hosts": 42,
+    "operation_hosts": 55,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 10,
-    "needs_adapter_operations": 28,
+    "missing_adapter_hosts": 23,
+    "needs_adapter_operations": 76,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
-    "malformed_source_url_count": 624
+    "malformed_source_url_count": 625
   },
   "providers": [
+    {
+      "host": "data.gg.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 8,
+      "operations": 18,
+      "external_endpoint_operations": 18,
+      "sample_ids": [
+        "15005231",
+        "15011020",
+        "15011027"
+      ]
+    },
     {
       "host": "openapi.coast.kr",
       "kinds": [
@@ -32,6 +47,23 @@
       "external_endpoint_operations": 6,
       "sample_ids": [
         "15059302"
+      ]
+    },
+    {
+      "host": "www.nfqs.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "missing",
+      "specs": 3,
+      "operations": 5,
+      "external_endpoint_operations": 5,
+      "external_guide_specs": 3,
+      "sample_ids": [
+        "15001668",
+        "15001702",
+        "15009422"
       ]
     },
     {
@@ -77,6 +109,80 @@
       ]
     },
     {
+      "host": "www.nongsaro.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 2,
+      "operations": 4,
+      "external_endpoint_operations": 4,
+      "sample_ids": [
+        "15002034",
+        "15005257"
+      ]
+    },
+    {
+      "host": "data.mafra.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "missing",
+      "specs": 2,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15002220",
+        "15008409"
+      ]
+    },
+    {
+      "host": "www.garak.co.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15004517"
+      ]
+    },
+    {
+      "host": "www.work24.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15003549"
+      ]
+    },
+    {
+      "host": "data.gwanak.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 2,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "sample_ids": [
+        "15007009",
+        "15009684"
+      ]
+    },
+    {
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -87,6 +193,50 @@
       "external_endpoint_operations": 3,
       "sample_ids": [
         "15021579"
+      ]
+    },
+    {
+      "host": "www.culture.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 2,
+      "external_endpoint_operations": 2,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15008517"
+      ]
+    },
+    {
+      "host": "www.happysd.or.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "missing",
+      "specs": 2,
+      "operations": 2,
+      "external_endpoint_operations": 2,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15007444",
+        "15007467"
+      ]
+    },
+    {
+      "host": "data.seoul.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 2,
+      "external_endpoint_operations": 2,
+      "sample_ids": [
+        "15003164"
       ]
     },
     {
@@ -132,6 +282,19 @@
       ]
     },
     {
+      "host": "ncpms.rda.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "15002034"
+      ]
+    },
+    {
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -142,6 +305,32 @@
       "external_endpoint_operations": 1,
       "sample_ids": [
         "15001051"
+      ]
+    },
+    {
+      "host": "search.i815.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "15006273"
+      ]
+    },
+    {
+      "host": "www.jobplustv.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "missing",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "15007088"
       ]
     },
     {

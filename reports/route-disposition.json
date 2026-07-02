@@ -1,33 +1,43 @@
 {
-  "generated_at": "2026-06-30T08:11:23Z",
+  "generated_at": "2026-07-02T16:06:15Z",
   "provider": "data.go.kr",
-  "registry": "./data/data-go-kr.registry.json",
-  "probe": "./reports/unadapted-external-probe.json",
+  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
+  "probe": "..\\datapan-registry\\reports\\unadapted-external-probe.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "routes_total": 28,
-    "operations": 28,
-    "hosts": 10,
-    "with_probe_evidence": 28,
+    "routes_total": 76,
+    "operations": 76,
+    "hosts": 23,
+    "with_probe_evidence": 76,
     "without_probe_evidence": 0,
     "dead_route_candidates": 14,
-    "transient_failures": 14,
+    "transient_failures": 15,
     "parameter_blocked_routes": 0,
-    "adapter_candidates": 0,
+    "adapter_candidates": 47,
     "by_disposition": [
+      {
+        "key": "adapter_candidate",
+        "count": 47,
+        "disposition": "adapter_candidate"
+      },
+      {
+        "key": "transient_failure",
+        "count": 15,
+        "disposition": "transient_failure"
+      },
       {
         "key": "dead_route_candidate",
         "count": 14,
         "disposition": "dead_route_candidate"
-      },
-      {
-        "key": "transient_failure",
-        "count": 14,
-        "disposition": "transient_failure"
       }
     ],
     "by_reason": [
+      {
+        "key": "unadapted_probe_http_2xx",
+        "count": 47,
+        "reason": "unadapted_probe_http_2xx"
+      },
       {
         "key": "unadapted_probe_http_404",
         "count": 14,
@@ -35,25 +45,35 @@
       },
       {
         "key": "unadapted_probe_timeout",
-        "count": 7,
+        "count": 8,
         "reason": "unadapted_probe_timeout"
       },
       {
-        "key": "unadapted_probe_request_error",
+        "key": "unadapted_probe_dns",
         "count": 6,
-        "reason": "unadapted_probe_request_error"
+        "reason": "unadapted_probe_dns"
       },
       {
-        "key": "unadapted_probe_http_503",
+        "key": "unadapted_probe_request_error",
         "count": 1,
-        "reason": "unadapted_probe_http_503"
+        "reason": "unadapted_probe_request_error"
       }
     ],
     "by_host": [
       {
+        "key": "data.gg.go.kr",
+        "count": 18,
+        "host": "data.gg.go.kr"
+      },
+      {
         "key": "openapi.coast.kr",
         "count": 6,
         "host": "openapi.coast.kr"
+      },
+      {
+        "key": "www.nfqs.go.kr",
+        "count": 5,
+        "host": "www.nfqs.go.kr"
       },
       {
         "key": "car.daegu.go.kr",
@@ -66,14 +86,44 @@
         "host": "openapi.price.go.kr"
       },
       {
+        "key": "www.nongsaro.go.kr",
+        "count": 4,
+        "host": "www.nongsaro.go.kr"
+      },
+      {
         "key": "www.rda.go.kr",
         "count": 4,
         "host": "www.rda.go.kr"
       },
       {
+        "key": "data.gwanak.go.kr",
+        "count": 3,
+        "host": "data.gwanak.go.kr"
+      },
+      {
+        "key": "data.mafra.go.kr",
+        "count": 3,
+        "host": "data.mafra.go.kr"
+      },
+      {
         "key": "its.gyeongju.go.kr:81",
         "count": 3,
         "host": "its.gyeongju.go.kr:81"
+      },
+      {
+        "key": "www.garak.co.kr",
+        "count": 3,
+        "host": "www.garak.co.kr"
+      },
+      {
+        "key": "www.work24.go.kr",
+        "count": 3,
+        "host": "www.work24.go.kr"
+      },
+      {
+        "key": "data.seoul.go.kr",
+        "count": 2,
+        "host": "data.seoul.go.kr"
       },
       {
         "key": "data.wanju.go.kr",
@@ -86,14 +136,39 @@
         "host": "www.cid.or.kr"
       },
       {
+        "key": "www.culture.go.kr",
+        "count": 2,
+        "host": "www.culture.go.kr"
+      },
+      {
+        "key": "www.happysd.or.kr",
+        "count": 2,
+        "host": "www.happysd.or.kr"
+      },
+      {
+        "key": "ncpms.rda.go.kr",
+        "count": 1,
+        "host": "ncpms.rda.go.kr"
+      },
+      {
         "key": "openapi-lib.sen.go.kr",
         "count": 1,
         "host": "openapi-lib.sen.go.kr"
       },
       {
+        "key": "search.i815.or.kr",
+        "count": 1,
+        "host": "search.i815.or.kr"
+      },
+      {
         "key": "www.dgeic.or.kr:8080",
         "count": 1,
         "host": "www.dgeic.or.kr:8080"
+      },
+      {
+        "key": "www.jobplustv.or.kr",
+        "count": 1,
+        "host": "www.jobplustv.or.kr"
       },
       {
         "key": "www.simpan.go.kr",
@@ -457,9 +532,7 @@
       "disposition": "transient_failure",
       "recommended_action": "retry with bounded evidence before building a provider adapter",
       "probe_status": "failed",
-      "probe_reason": "unadapted_probe_http_503",
-      "http_status": 503,
-      "body_shape": "html",
+      "probe_reason": "unadapted_probe_timeout",
       "missing_params": [
         "title",
         "manageCd"
@@ -476,7 +549,7 @@
       "disposition": "transient_failure",
       "recommended_action": "retry with bounded evidence before building a provider adapter",
       "probe_status": "failed",
-      "probe_reason": "unadapted_probe_request_error"
+      "probe_reason": "unadapted_probe_dns"
     },
     {
       "dataset_id": "15059302",
@@ -489,7 +562,7 @@
       "disposition": "transient_failure",
       "recommended_action": "retry with bounded evidence before building a provider adapter",
       "probe_status": "failed",
-      "probe_reason": "unadapted_probe_request_error"
+      "probe_reason": "unadapted_probe_dns"
     },
     {
       "dataset_id": "15059302",
@@ -502,7 +575,7 @@
       "disposition": "transient_failure",
       "recommended_action": "retry with bounded evidence before building a provider adapter",
       "probe_status": "failed",
-      "probe_reason": "unadapted_probe_request_error"
+      "probe_reason": "unadapted_probe_dns"
     },
     {
       "dataset_id": "15059302",
@@ -515,7 +588,7 @@
       "disposition": "transient_failure",
       "recommended_action": "retry with bounded evidence before building a provider adapter",
       "probe_status": "failed",
-      "probe_reason": "unadapted_probe_request_error"
+      "probe_reason": "unadapted_probe_dns"
     },
     {
       "dataset_id": "15059302",
@@ -528,7 +601,7 @@
       "disposition": "transient_failure",
       "recommended_action": "retry with bounded evidence before building a provider adapter",
       "probe_status": "failed",
-      "probe_reason": "unadapted_probe_request_error"
+      "probe_reason": "unadapted_probe_dns"
     },
     {
       "dataset_id": "15059302",
@@ -541,7 +614,7 @@
       "disposition": "transient_failure",
       "recommended_action": "retry with bounded evidence before building a provider adapter",
       "probe_status": "failed",
-      "probe_reason": "unadapted_probe_request_error"
+      "probe_reason": "unadapted_probe_dns"
     },
     {
       "dataset_id": "15012192",
@@ -585,6 +658,724 @@
       "missing_params": [
         "cmpnyJoSeq"
       ]
+    },
+    {
+      "dataset_id": "15007088",
+      "title": "한국산업인력공단_한국직업방송 프로그램",
+      "organization": "한국산업인력공단",
+      "operation": "한국산업인력공단_한국직업방송 프로그램_20250115",
+      "endpoint": "https://www.jobplustv.or.kr/openapi/guide/openapiIntro.do",
+      "endpoint_host": "www.jobplustv.or.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "transient_failure",
+      "recommended_action": "retry with bounded evidence before building a provider adapter",
+      "probe_status": "failed",
+      "probe_reason": "unadapted_probe_request_error"
+    },
+    {
+      "dataset_id": "15005231",
+      "title": "경기도 정기간행물 현황",
+      "organization": "경기도",
+      "operation": "정기간행물 현황 외부 링크 1",
+      "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026sortColumn=\u0026sortDirection=\u0026infId=PCG359G8UAD471M0GE9K15277158\u0026infSeq=3",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15005231",
+      "title": "경기도 정기간행물 현황",
+      "organization": "경기도",
+      "operation": "정기간행물 현황 외부 링크 2",
+      "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=8E1BBVOXNWLKUY0TDUVU29513229\u0026infSeq=2",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011020",
+      "title": "경기도 창업보육센터현황",
+      "organization": "경기도",
+      "operation": "창업보육 센터 현황(2014)",
+      "endpoint": "http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026rows=10\u0026sortColumn=\u0026sortDirection=\u0026infId=U6410C24Y846I1B808302067781\u0026infSeq=3\u0026searchWord=%EC%B0%BD%EC%97%85%EB%B3%B4%EC%9C%A1+%EC%84%BC%ED%84%B0+%ED%98%84%ED%99%A9",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011027",
+      "title": "경기도 토양전문기관 및 토양정화업체 현황",
+      "organization": "경기도",
+      "operation": "토양전문기관 및 토양정화업체 현황 외부 링크 1",
+      "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026sortColumn=\u0026sortDirection=\u0026infId=UB59Y8D2X82TIOGXONRB12806726\u0026infSeq=3\u0026searchWord=%ED%86%A0%EC%96%91%EC%A0%84%EB%AC%B8%EA%B8%B0%EA%B4%80+%EB%B0%8F+%ED%86%A0%EC%96%91%EC%A0%95%ED%99%94%EC%97%85%EC%B2%B4+%ED%98%84%ED%99%A9",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011027",
+      "title": "경기도 토양전문기관 및 토양정화업체 현황",
+      "organization": "경기도",
+      "operation": "토양전문기관 및 토양정화업체 현황 외부 링크 2",
+      "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026rows=10\u0026sortColumn=\u0026sortDirection=\u0026infId=B5NH8DK23P2RAJCCW0KU14118365\u0026infSeq=3\u0026order=\u0026loc=\u0026searchWord=%EC%98%A5%EC%99%B8%EA%B4%91%EA%B3%A0%EC%97%85+%ED%98%84%ED%99%A9",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011027",
+      "title": "경기도 토양전문기관 및 토양정화업체 현황",
+      "organization": "경기도",
+      "operation": "토양전문기관 및 토양정화업체 현황 외부 링크 3",
+      "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026rows=10\u0026sortColumn=\u0026sortDirection=\u0026infId=OZN18WC388B0NLZR2IG8104293\u0026infSeq=3\u0026order=\u0026loc=\u0026searchWord=%EC%98%81%ED%96%A5%EC%A1%B0%EC%82%AC%EA%B8%B0%EA%B4%80+%ED%98%84%ED%99%A9",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011035",
+      "title": "경기도 평생교육 현황",
+      "organization": "경기도",
+      "operation": "평생교육대학 운영 현황",
+      "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026rows=10\u0026sortColumn=\u0026sortDirection=\u0026infId=A2ECT4ESB2L60935518O11994735\u0026infSeq=2\u0026order=\u0026loc=\u0026searchWord=%ED%8F%89%EC%83%9D%EA%B5%90%EC%9C%A1%EB%8C%80%ED%95%99+%EC%9A%B4%EC%98%81+%ED%98%84%ED%99%A9",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011068",
+      "title": "경기도 광고업 현황",
+      "organization": "경기도",
+      "operation": "옥외광고업 현황 외부 링크 1",
+      "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026rows=10\u0026sortColumn=\u0026sortDirection=\u0026infId=B5NH8DK23P2RAJCCW0KU14118365\u0026infSeq=3\u0026order=\u0026loc=\u0026searchWord=%EC%98%A5%EC%99%B8%EA%B4%91%EA%B3%A0%EC%97%85+%ED%98%84%ED%99%A9",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011068",
+      "title": "경기도 광고업 현황",
+      "organization": "경기도",
+      "operation": "옥외광고업 현황 외부 링크 2",
+      "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026sortColumn=\u0026sortDirection=\u0026infId=8MHGE3K3CSUSBFX2G4MM14032562\u0026infSeq=3\u0026searchWord=%EC%8A%B9%EA%B0%95%EA%B8%B0%EC%A0%9C%EC%A1%B0%EB%B0%8F%EC%88%98%EC%9E%85%EC%97%85%EC%B2%B4+%ED%98%84%ED%99%A9",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011068",
+      "title": "경기도 광고업 현황",
+      "organization": "경기도",
+      "operation": "옥외광고업 현황 외부 링크 3",
+      "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026sortColumn=\u0026sortDirection=\u0026infId=ZCEL4QL7TJBTNIH2KTNF14683127\u0026infSeq=3\u0026searchWord=%EC%9A%B0%EC%9C%A0%EB%A5%98%ED%8C%90%EB%A7%A4%EC%97%85+%ED%98%84%ED%99%A9",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011074",
+      "title": "경기도 중금속 측정결과 현황",
+      "organization": "경기도",
+      "operation": "경기도 중금속 측정결과 현황_20250519 외부 링크 1",
+      "endpoint": "http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026rows=10\u0026sortColumn=\u0026sortDirection=\u0026infId=U296AUQAC7S3BZNYM66P11856499\u0026infSeq=3\u0026searchWord=%EC%A4%91%EA%B8%88%EC%86%8D+%EC%B8%A1%EC%A0%95+%EA%B2%B0%EA%B3%BC+%ED%98%84%ED%99%A9#none",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011074",
+      "title": "경기도 중금속 측정결과 현황",
+      "organization": "경기도",
+      "operation": "경기도 중금속 측정결과 현황_20250519 외부 링크 2",
+      "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026sortColumn=\u0026sortDirection=\u0026infId=H0Z8L0VN8HK3538X7OLL11949113\u0026infSeq=3\u0026searchWord=%EA%B5%B4%EB%9A%9D+%EC%9E%90%EB%8F%99+%EC%B8%A1%EC%A0%95%EA%B8%B0%EA%B8%B0%EC%84%A4%EC%B9%98+%ED%98%84%ED%99%A9",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011075",
+      "title": "경기도_보육교사 교육원 현황",
+      "organization": "경기도",
+      "operation": "보육교사 교육원 현황(2015) 외부 링크 1",
+      "endpoint": "http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026rows=10\u0026sortColumn=\u0026sortDirection=\u0026infId=04G2DOO3319D55RG8D7111674874\u0026infSeq=3\u0026searchWord=%EB%B3%B4%EC%9C%A1%EA%B5%90%EC%82%AC#none",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011075",
+      "title": "경기도_보육교사 교육원 현황",
+      "organization": "경기도",
+      "operation": "보육교사 교육원 현황(2015) 외부 링크 2",
+      "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026sortColumn=\u0026sortDirection=\u0026infId=DGSEEAHU34YPXN0IBBIT20995946\u0026infSeq=3\u0026searchWord=%ED%95%99%EC%9B%90+%ED%98%84%ED%99%A9",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011075",
+      "title": "경기도_보육교사 교육원 현황",
+      "organization": "경기도",
+      "operation": "보육교사 교육원 현황(2015) 외부 링크 3",
+      "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026sortColumn=\u0026sortDirection=\u0026infId=0UH7S75R45EM2FTI971A20528353\u0026infSeq=3\u0026searchWord=%EC%B4%88%EB%93%B1%ED%95%99%EA%B5%90+%ED%98%84%ED%99%A9",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011147",
+      "title": "경기도 비점오염 저감시설 현황",
+      "organization": "경기도",
+      "operation": "비점오염 저감시설 현황 외부 링크 1",
+      "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026sortColumn=\u0026sortDirection=\u0026infId=0856ISDY12ITD4N45F9A11682702\u0026infSeq=3",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011147",
+      "title": "경기도 비점오염 저감시설 현황",
+      "organization": "경기도",
+      "operation": "비점오염 저감시설 현황 외부 링크 2",
+      "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026rows=10\u0026sortColumn=\u0026sortDirection=\u0026infId=BQ32S20FMHZ09RAWERGE14744834\u0026infSeq=3\u0026order=\u0026loc=\u0026searchWord=%EC%88%98%EC%A7%88%EC%98%A4%EC%97%BC%EC%9B%90%EC%84%A4%EC%B9%98%EC%8B%9C",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011147",
+      "title": "경기도 비점오염 저감시설 현황",
+      "organization": "경기도",
+      "operation": "비점오염 저감시설 현황 외부 링크 3",
+      "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026rows=10\u0026sortColumn=\u0026sortDirection=\u0026infId=LOQBL0HZKV2285NJW2742364178\u0026infSeq=3",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15007009",
+      "title": "서울특별시 관악구_공중위생업소 현황",
+      "organization": "서울특별시 관악구",
+      "operation": "서울특별시 관악구_공중위생업소 현황_20220624 외부 링크 1",
+      "endpoint": "https://data.gwanak.go.kr/openinf/sheetview.jsp?infId=OA-11496",
+      "endpoint_host": "data.gwanak.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15007009",
+      "title": "서울특별시 관악구_공중위생업소 현황",
+      "organization": "서울특별시 관악구",
+      "operation": "서울특별시 관악구_공중위생업소 현황_20220624 외부 링크 2",
+      "endpoint": "http://data.gwanak.go.kr/openinf/dataset/datasetlist.jsp",
+      "endpoint_host": "data.gwanak.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15009684",
+      "title": "서울특별시 관악구_공공시설개방정보",
+      "organization": "서울특별시 관악구",
+      "operation": "서울특별시 관악구_공공시설개방정보_20220624",
+      "endpoint": "https://data.gwanak.go.kr/openinf/sheetview.jsp?infId=OA-12151",
+      "endpoint_host": "data.gwanak.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15002220",
+      "title": "농림축산식품부_유기농업자재 현황",
+      "organization": "농림축산식품부",
+      "operation": "유기농업자재 현황_20210402 외부 링크 1",
+      "endpoint": "https://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20200929000000001392\u0026filter_ty=O\u0026getBack=G\u0026sort_id=regist_dt\u0026s_data_nm=\u0026cl_code=\u0026shareYn=",
+      "endpoint_host": "data.mafra.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15002220",
+      "title": "농림축산식품부_유기농업자재 현황",
+      "organization": "농림축산식품부",
+      "operation": "유기농업자재 현황_20210402 외부 링크 2",
+      "endpoint": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20141014000000000013\u0026service_ty=O",
+      "endpoint_host": "data.mafra.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15008409",
+      "title": "농림수산식품교육문화정보원_중국 도매시장 가격정보",
+      "organization": "농림수산식품교육문화정보원",
+      "operation": "중국농산물 가격정보",
+      "endpoint": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20150827000000000463\u0026filter_ty=O\u0026getBack=\u0026sort_id=\u0026s_data_nm=\u0026instt_id=\u0026cl_code=\u0026shareYn=",
+      "endpoint_host": "data.mafra.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15003164",
+      "title": "서울교통공사_역사 건축 현황",
+      "organization": "서울교통공사",
+      "operation": "서울교통공사_역사 건축 현황_20240331 외부 링크 1",
+      "endpoint": "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-11572\u0026srvType=F\u0026serviceKind=1\u0026currentPageNo=1",
+      "endpoint_host": "data.seoul.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15003164",
+      "title": "서울교통공사_역사 건축 현황",
+      "organization": "서울교통공사",
+      "operation": "서울교통공사_역사 건축 현황_20240331 외부 링크 2",
+      "endpoint": "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-12033\u0026srvType=S\u0026serviceKind=1¤tPageNo=1",
+      "endpoint_host": "data.seoul.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15002034",
+      "title": "농촌진흥청_국가농작물병해충도감정보",
+      "organization": "농촌진흥청",
+      "operation": "농촌진흥청_국가농작물병해충도감정보_20240222 외부 링크 1",
+      "endpoint": "http://ncpms.rda.go.kr/npms/OpenApiInfo.np",
+      "endpoint_host": "ncpms.rda.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15006273",
+      "title": "독립기념관_한국독립운동사 소장자료 정보 DB",
+      "organization": "독립기념관",
+      "operation": "독립기념관_한국독립운동사 소장자료 정보 DB_20200703",
+      "endpoint": "https://search.i815.or.kr/openApi.do",
+      "endpoint_host": "search.i815.or.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15008517",
+      "title": "한국체육산업개발주식회사_올림픽공원 도서정보",
+      "organization": "한국체육산업개발주식회사",
+      "operation": "한국체육산업개발주식회사_올림픽공원 도서정보_20230918 외부 링크 1",
+      "endpoint": "https://www.culture.go.kr/data/openapi/openapiView.do?id=405\u0026keyword=%EB%8F%84%EC%84%9C\u0026searchField=all\u0026gubun=A",
+      "endpoint_host": "www.culture.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15008517",
+      "title": "한국체육산업개발주식회사_올림픽공원 도서정보",
+      "organization": "한국체육산업개발주식회사",
+      "operation": "한국체육산업개발주식회사_올림픽공원 도서정보_20230918 외부 링크 2",
+      "endpoint": "https://www.culture.go.kr/data/openapi/openapiView.do?id=111",
+      "endpoint_host": "www.culture.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15004517",
+      "title": "서울특별시농수산식품공사_주요 품목 가격",
+      "organization": "서울특별시농수산식품공사",
+      "operation": "서울특별시농수산식품공사_주요 품목 가격_20210113 외부 링크 1",
+      "endpoint": "https://www.garak.co.kr/homepage/M0000258/publicdata/selectPageListPublicData.do?publicDataRealmSn=30",
+      "endpoint_host": "www.garak.co.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15004517",
+      "title": "서울특별시농수산식품공사_주요 품목 가격",
+      "organization": "서울특별시농수산식품공사",
+      "operation": "서울특별시농수산식품공사_주요 품목 가격_20210113 외부 링크 2",
+      "endpoint": "https://www.garak.co.kr/homepage/M0000258/publicdata/selectPageListPublicData.do?publicDataRealmSn=23",
+      "endpoint_host": "www.garak.co.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15004517",
+      "title": "서울특별시농수산식품공사_주요 품목 가격",
+      "organization": "서울특별시농수산식품공사",
+      "operation": "서울특별시농수산식품공사_주요 품목 가격_20210113 외부 링크 3",
+      "endpoint": "https://www.garak.co.kr/homepage/M0000258/publicdata/selectPageListPublicData.do?publicDataRealmSn=24",
+      "endpoint_host": "www.garak.co.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15007444",
+      "title": "서울특별시성동구도시관리공단_체육시설 강좌정보 조회",
+      "organization": "서울특별시성동구도시관리공단",
+      "operation": "서울특별시성동구도시관리공단_체육시설 강좌정보 조회_20220803",
+      "endpoint": "https://www.happysd.or.kr/c_76/cnt/m_109/view.do",
+      "endpoint_host": "www.happysd.or.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15007467",
+      "title": "서울특별시성동구도시관리공단_체육시설 대관정보 조회",
+      "organization": "서울특별시성동구도시관리공단",
+      "operation": "서울특별시성동구도시관리공단_체육시설 대관정보 조회_20220804",
+      "endpoint": "https://www.happysd.or.kr/c_76/cnt/m_109/view.do",
+      "endpoint_host": "www.happysd.or.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15001668",
+      "title": "해양수산부 국립수산물품질관리원_수산물재고동향",
+      "organization": "해양수산부 국립수산물품질관리원",
+      "operation": "해양수산부 국립수산물품질관리원_수산물재고동향_20230629",
+      "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=009",
+      "endpoint_host": "www.nfqs.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15001702",
+      "title": "해양수산부 국립수산물품질관리원_검역시행장정보",
+      "organization": "해양수산부 국립수산물품질관리원",
+      "operation": "해양수산부 국립수산물품질관리원_검역시행장정보_20230629 외부 링크 1",
+      "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=008",
+      "endpoint_host": "www.nfqs.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15001702",
+      "title": "해양수산부 국립수산물품질관리원_검역시행장정보",
+      "organization": "해양수산부 국립수산물품질관리원",
+      "operation": "해양수산부 국립수산물품질관리원_검역시행장정보_20230629 외부 링크 2",
+      "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=003",
+      "endpoint_host": "www.nfqs.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15009422",
+      "title": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황",
+      "organization": "해양수산부 국립수산물품질관리원",
+      "operation": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황_20230629 외부 링크 1",
+      "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=007",
+      "endpoint_host": "www.nfqs.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15009422",
+      "title": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황",
+      "organization": "해양수산부 국립수산물품질관리원",
+      "operation": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황_20230629 외부 링크 2",
+      "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiReqView.do?API_CD=005",
+      "endpoint_host": "www.nfqs.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15002034",
+      "title": "농촌진흥청_국가농작물병해충도감정보",
+      "organization": "농촌진흥청",
+      "operation": "농촌진흥청_국가농작물병해충도감정보_20240222 외부 링크 2",
+      "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EA%B3%B5%EA%B3%B5+%EB%8D%B0%EC%9D%B4%ED%84%B0",
+      "endpoint_host": "www.nongsaro.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15005257",
+      "title": "농촌진흥청_농촌교육농장 정보",
+      "organization": "농촌진흥청",
+      "operation": "농촌진흥청_농촌교육농장 정보_20171211 외부 링크 1",
+      "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EB%86%8D%EC%B4%8C%EA%B5%90%EC%9C%A1%EB%86%8D%EC%9E%A5",
+      "endpoint_host": "www.nongsaro.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15005257",
+      "title": "농촌진흥청_농촌교육농장 정보",
+      "organization": "농촌진흥청",
+      "operation": "농촌진흥청_농촌교육농장 정보_20171211 외부 링크 2",
+      "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EB%86%8D%EC%82%AC%EB%A1%9C+%EC%9D%B4%EB%B2%A4%ED%8A%B8",
+      "endpoint_host": "www.nongsaro.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15005257",
+      "title": "농촌진흥청_농촌교육농장 정보",
+      "organization": "농촌진흥청",
+      "operation": "농촌진흥청_농촌교육농장 정보_20171211 외부 링크 3",
+      "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EA%B3%B5%EA%B3%B5+%EB%8D%B0%EC%9D%B4%ED%84%B0",
+      "endpoint_host": "www.nongsaro.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15003549",
+      "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
+      "organization": "한국고용정보원",
+      "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 1",
+      "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=\u0026upprApiSvcId=\u0026fullApiSvcId=000000000000000000000000000034",
+      "endpoint_host": "www.work24.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15003549",
+      "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
+      "organization": "한국고용정보원",
+      "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 2",
+      "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023\u0026upprApiSvcId=000000000000000000000000000022\u0026fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000062",
+      "endpoint_host": "www.work24.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15003549",
+      "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
+      "organization": "한국고용정보원",
+      "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 3",
+      "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023\u0026upprApiSvcId=000000000000000000000000000022\u0026fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000056",
+      "endpoint_host": "www.work24.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "recommended_action": "build a provider adapter using the captured probe evidence",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "html"
     }
   ]
 }

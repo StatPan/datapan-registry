@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.external-coverage.v1",
-  "generated_at": "2026-06-29T00:00:00Z",
+  "generated_at": "2026-07-02T16:06:15Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "source_profile": "sources/data_go_kr.json",
@@ -9,96 +9,174 @@
   "route_disposition_report": "reports/route-disposition.json",
   "provider_index": "data/provider-index.json",
   "summary": {
-    "external_endpoint_operations": 595,
+    "external_endpoint_operations": 643,
     "registered_adapter_operations": 586,
-    "missing_adapter_operations": 28,
-    "raw_external_adapter_coverage_percent": 95.4,
+    "missing_adapter_operations": 76,
+    "raw_external_adapter_coverage_percent": 88.5,
     "registered_adapter_hosts": 30,
-    "missing_adapter_hosts": 10,
-    "route_evidence_covered_operations": 28,
-    "evidence_adjusted_adapter_candidate_operations": 0
+    "missing_adapter_hosts": 23,
+    "route_evidence_covered_operations": 76,
+    "evidence_adjusted_adapter_candidate_operations": 47
   },
   "route_disposition": {
-    "routes_total": 28,
-    "with_probe_evidence": 28,
+    "routes_total": 76,
+    "with_probe_evidence": 76,
     "without_probe_evidence": 0,
     "dead_route_candidates": 14,
-    "transient_failures": 14,
-    "adapter_candidates": 0
+    "transient_failures": 15,
+    "adapter_candidates": 47
   },
   "operational_gate": {
     "status": "passing",
     "unclassified_missing_route_operations": 0,
-    "adapter_backlog_candidate_operations": 0,
+    "adapter_backlog_candidate_operations": 47,
     "ci_action": "fail_on_unclassified_missing_routes",
     "adapter_backlog_policy": "Create adapter backlog only from route-disposition adapter_candidate evidence, not from raw external endpoint status."
   },
   "missing_hosts": [
     {
+      "host": "data.gg.go.kr",
+      "operations": 18,
+      "disposition": "adapter_candidate",
+      "reason": "adapter_candidate=18; reasons: unadapted_probe_http_2xx"
+    },
+    {
       "host": "openapi.coast.kr",
       "operations": 6,
-      "disposition": "mixed",
-      "reason": "route-disposition evidence exists; host operations are not current adapter candidates"
+      "disposition": "transient_failure",
+      "reason": "transient_failure=6; reasons: unadapted_probe_dns"
+    },
+    {
+      "host": "www.nfqs.go.kr",
+      "operations": 5,
+      "disposition": "adapter_candidate",
+      "reason": "adapter_candidate=5; reasons: unadapted_probe_http_2xx"
     },
     {
       "host": "car.daegu.go.kr",
       "operations": 4,
-      "disposition": "mixed",
-      "reason": "route-disposition evidence exists; host operations are not current adapter candidates"
+      "disposition": "dead_route_candidate",
+      "reason": "dead_route_candidate=4; reasons: unadapted_probe_http_404"
     },
     {
       "host": "openapi.price.go.kr",
       "operations": 4,
-      "disposition": "mixed",
-      "reason": "route-disposition evidence exists; host operations are not current adapter candidates"
+      "disposition": "dead_route_candidate",
+      "reason": "dead_route_candidate=4; reasons: unadapted_probe_http_404"
+    },
+    {
+      "host": "www.nongsaro.go.kr",
+      "operations": 4,
+      "disposition": "adapter_candidate",
+      "reason": "adapter_candidate=4; reasons: unadapted_probe_http_2xx"
     },
     {
       "host": "www.rda.go.kr",
       "operations": 4,
-      "disposition": "mixed",
-      "reason": "route-disposition evidence exists; host operations are not current adapter candidates"
+      "disposition": "dead_route_candidate",
+      "reason": "dead_route_candidate=4; reasons: unadapted_probe_http_404"
+    },
+    {
+      "host": "data.gwanak.go.kr",
+      "operations": 3,
+      "disposition": "adapter_candidate",
+      "reason": "adapter_candidate=3; reasons: unadapted_probe_http_2xx"
+    },
+    {
+      "host": "data.mafra.go.kr",
+      "operations": 3,
+      "disposition": "adapter_candidate",
+      "reason": "adapter_candidate=3; reasons: unadapted_probe_http_2xx"
     },
     {
       "host": "its.gyeongju.go.kr:81",
       "operations": 3,
-      "disposition": "mixed",
-      "reason": "route-disposition evidence exists; host operations are not current adapter candidates"
+      "disposition": "transient_failure",
+      "reason": "transient_failure=3; reasons: unadapted_probe_timeout"
+    },
+    {
+      "host": "www.garak.co.kr",
+      "operations": 3,
+      "disposition": "adapter_candidate",
+      "reason": "adapter_candidate=3; reasons: unadapted_probe_http_2xx"
+    },
+    {
+      "host": "www.work24.go.kr",
+      "operations": 3,
+      "disposition": "adapter_candidate",
+      "reason": "adapter_candidate=3; reasons: unadapted_probe_http_2xx"
+    },
+    {
+      "host": "data.seoul.go.kr",
+      "operations": 2,
+      "disposition": "adapter_candidate",
+      "reason": "adapter_candidate=2; reasons: unadapted_probe_http_2xx"
     },
     {
       "host": "data.wanju.go.kr",
       "operations": 2,
-      "disposition": "mixed",
-      "reason": "route-disposition evidence exists; host operations are not current adapter candidates"
+      "disposition": "transient_failure",
+      "reason": "transient_failure=2; reasons: unadapted_probe_timeout"
     },
     {
       "host": "www.cid.or.kr",
       "operations": 2,
-      "disposition": "mixed",
-      "reason": "route-disposition evidence exists; host operations are not current adapter candidates"
+      "disposition": "transient_failure",
+      "reason": "transient_failure=2; reasons: unadapted_probe_timeout"
+    },
+    {
+      "host": "www.culture.go.kr",
+      "operations": 2,
+      "disposition": "adapter_candidate",
+      "reason": "adapter_candidate=2; reasons: unadapted_probe_http_2xx"
+    },
+    {
+      "host": "www.happysd.or.kr",
+      "operations": 2,
+      "disposition": "adapter_candidate",
+      "reason": "adapter_candidate=2; reasons: unadapted_probe_http_2xx"
+    },
+    {
+      "host": "ncpms.rda.go.kr",
+      "operations": 1,
+      "disposition": "adapter_candidate",
+      "reason": "adapter_candidate=1; reasons: unadapted_probe_http_2xx"
     },
     {
       "host": "openapi-lib.sen.go.kr",
       "operations": 1,
-      "disposition": "mixed",
-      "reason": "route-disposition evidence exists; host operations are not current adapter candidates"
+      "disposition": "transient_failure",
+      "reason": "transient_failure=1; reasons: unadapted_probe_timeout"
+    },
+    {
+      "host": "search.i815.or.kr",
+      "operations": 1,
+      "disposition": "adapter_candidate",
+      "reason": "adapter_candidate=1; reasons: unadapted_probe_http_2xx"
     },
     {
       "host": "www.dgeic.or.kr:8080",
       "operations": 1,
-      "disposition": "mixed",
-      "reason": "route-disposition evidence exists; host operations are not current adapter candidates"
+      "disposition": "dead_route_candidate",
+      "reason": "dead_route_candidate=1; reasons: unadapted_probe_http_404"
+    },
+    {
+      "host": "www.jobplustv.or.kr",
+      "operations": 1,
+      "disposition": "transient_failure",
+      "reason": "transient_failure=1; reasons: unadapted_probe_request_error"
     },
     {
       "host": "www.simpan.go.kr",
       "operations": 1,
-      "disposition": "mixed",
-      "reason": "route-disposition evidence exists; host operations are not current adapter candidates"
+      "disposition": "dead_route_candidate",
+      "reason": "dead_route_candidate=1; reasons: unadapted_probe_http_404"
     }
   ],
   "next": [
-    "Preserve raw external adapter coverage at 95.4% until new adapters or catalog changes alter the denominator.",
-    "Treat evidence-adjusted adapter candidates as 0 while all 28 missing external routes remain covered by dead-route or transient-failure route disposition evidence.",
-    "Refresh unadapted external probes before creating adapter work for any listed missing host.",
-    "Promote host-level disposition from mixed to specific dead/transient classifications when generated route-disposition output exposes host-level dominant disposition."
+    "Preserve raw external adapter coverage at 88.5% unless new adapters or catalog changes alter the denominator.",
+    "Treat 47 evidence-adjusted adapter candidate operations as the current external adapter backlog.",
+    "Keep unclassified missing external routes at 0; refresh unadapted external probes before creating adapter work from raw misses.",
+    "Promote host-level disposition from mixed to specific dead/transient/adapter classifications as route evidence becomes stable."
   ]
 }

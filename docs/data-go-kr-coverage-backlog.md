@@ -2,18 +2,18 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-06-30T08:11:23Z`
+- Generated at: `2026-07-02T16:06:15Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `7185` (`59.6%`)
-- APIs without operation mapping: `4875`
-- Operations: `12205`
+- APIs with operation mapping: `7210` (`59.8%`)
+- APIs without operation mapping: `4850`
+- Operations: `12253`
 - Runtime evidence operations: `1221` (`10.0%`)
 - Runtime verified operations: `22`
 - Runtime failed operations: `87`
 - Runtime skipped operations: `1112`
 - APIs with runtime evidence: `570`
-- Runtime reactivation APIs: `6615`
+- Runtime reactivation APIs: `6640`
 - Runtime repair APIs: `54`
 
 ## Highest Priority Institutions
@@ -21,7 +21,7 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | Institution | APIs | Covered APIs | Uncovered APIs | API Coverage | Ops | Runtime APIs | Runtime Reactivation APIs | Runtime Repair APIs | Priority |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 행정안전부 | 1252 | 613 | 639 | 49.0% | 874 | 0 | 613 | 0 | 1252 |
-| 경기도 | 840 | 5 | 835 | 0.6% | 12 | 0 | 5 | 0 | 840 |
+| 경기도 | 840 | 13 | 827 | 1.5% | 30 | 0 | 13 | 0 | 840 |
 | 국토교통부 | 393 | 127 | 266 | 32.3% | 397 | 3 | 124 | 0 | 390 |
 | 식품의약품안전처 | 392 | 272 | 120 | 69.4% | 363 | 2 | 270 | 0 | 390 |
 | 국회 국회사무처 | 277 | 0 | 277 | 0.0% | 0 | 0 | 0 | 0 | 277 |
@@ -34,8 +34,8 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 경기도 광명시 | 197 | 0 | 197 | 0.0% | 0 | 0 | 0 | 0 | 197 |
 | 제주특별자치도 | 171 | 18 | 153 | 10.5% | 28 | 2 | 16 | 1 | 169 |
 | 해양수산부 | 173 | 172 | 1 | 99.4% | 276 | 5 | 167 | 0 | 168 |
-| 한국산업인력공단 | 230 | 227 | 3 | 98.7% | 314 | 93 | 134 | 1 | 137 |
-| 농촌진흥청 | 136 | 7 | 129 | 5.1% | 25 | 1 | 6 | 0 | 135 |
+| 한국산업인력공단 | 230 | 228 | 2 | 99.1% | 315 | 93 | 135 | 1 | 137 |
+| 농촌진흥청 | 136 | 9 | 127 | 6.6% | 30 | 1 | 8 | 0 | 135 |
 | 경상남도 | 129 | 129 | 0 | 100.0% | 134 | 0 | 129 | 0 | 129 |
 | 대전광역시 서구 | 125 | 0 | 125 | 0.0% | 0 | 0 | 0 | 0 | 125 |
 | 세종특별자치시 | 122 | 122 | 0 | 100.0% | 122 | 0 | 122 | 0 | 122 |
@@ -45,7 +45,7 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 충청남도 | 96 | 69 | 27 | 71.9% | 77 | 0 | 69 | 0 | 96 |
 | 금융위원회 | 110 | 110 | 0 | 100.0% | 349 | 14 | 96 | 0 | 96 |
 | 한국도로공사 | 93 | 0 | 93 | 0.0% | 0 | 0 | 0 | 0 | 93 |
-| 농림축산식품부 | 87 | 0 | 87 | 0.0% | 0 | 0 | 0 | 0 | 87 |
+| 농림축산식품부 | 87 | 1 | 86 | 1.1% | 2 | 0 | 1 | 0 | 87 |
 | 문화체육관광부 | 86 | 1 | 85 | 1.2% | 1 | 0 | 1 | 0 | 86 |
 | 한국건강가정진흥원 | 85 | 85 | 0 | 100.0% | 90 | 0 | 85 | 0 | 85 |
 | 기상청 | 89 | 44 | 45 | 49.4% | 183 | 5 | 39 | 0 | 84 |
@@ -65,14 +65,6 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 개인정보보호위원회 | 15103266 | 개인정보보호위원회_결정문 본문 조회 | 공공행정 | 2022-08-05 |
 | 게임물관리위원회 | 15072675 | 게임물관리위원회_채용 정보 | 문화관광 | 2025-05-29 |
 | 게임물관리위원회 | 15120667 | 게임물관리위원회_게임 정보 | 문화관광 | 2025-05-28 |
-| 경기도 | 15005231 | 경기도 정기간행물 현황 | 공공행정 | 2025-09-11 |
-| 경기도 | 15011020 | 경기도 창업보육센터현황 | 산업고용 | 2025-06-17 |
-| 경기도 | 15011027 | 경기도 토양전문기관 및 토양정화업체 현황 | 산업고용 | 2025-07-07 |
-| 경기도 | 15011035 | 경기도 평생교육 현황 | 교육 | 2025-07-07 |
-| 경기도 | 15011068 | 경기도 광고업 현황 | 산업고용 | 2025-08-26 |
-| 경기도 | 15011074 | 경기도 중금속 측정결과 현황 | 환경기상 | 2025-06-17 |
-| 경기도 | 15011075 | 경기도_보육교사 교육원 현황 | 교육 | 2025-06-17 |
-| 경기도 | 15011147 | 경기도 비점오염 저감시설 현황 | 환경기상 | 2025-09-17 |
 | 경기도 | 15011175 | 경기도_전력기술감리업체 현황 | 산업고용 | 2025-09-18 |
 | 경기도 | 15011181 | 경기도 안전관리 우수 다중업소 현황 | 산업고용 | 2025-09-17 |
 | 경기도 | 15011249 | 경기도 지적측량업  현황 | 교통물류 | 2025-06-23 |
@@ -85,6 +77,14 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 경기도 | 15034926 | 경기도_보도자료 현황 | 공공행정 | 2025-09-25 |
 | 경기도 | 15037595 | 경기도_경기연구원 연구보고서 정보 | 과학기술 | 2025-06-23 |
 | 경기도 | 15038581 | 경기도_지방의회 정보 | 공공행정 | 2025-09-25 |
+| 경기도 | 15056497 | 경기도_공공체육시설 현황(하키) | 문화관광 | 2025-06-17 |
+| 경기도 | 15056498 | 경기도_템플스테이운영 현황 | 문화관광 | 2025-09-03 |
+| 경기도 | 15056501 | 경기도_신규 민간아파트 분양 가격 현황 | 국토관리 | 2025-06-23 |
+| 경기도 | 15056502 | 경기도_기초생활수급자 장애아동수당 수급자 현황 | 사회복지 | 2025-09-18 |
+| 경기도 | 15056504 | 경기도_체육시설 현황 | 문화관광 | 2025-09-09 |
+| 경기도 | 15056506 | 경기도 보호수지정 현황 | 환경기상 | 2025-06-17 |
+| 경기도 | 15056507 | 경기도_취수장 현황 | 국토관리 | 2025-09-12 |
+| 경기도 | 15056510 | 경기도_경기장애인구강진료센터 장애유형 운영현황 | 사회복지 | 2025-09-18 |
 
 ## Sample Runtime Reactivation APIs
 

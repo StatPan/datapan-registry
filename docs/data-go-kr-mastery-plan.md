@@ -12,34 +12,35 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `12205`
-- callable operations: `12063` (`98.8%`)
+- operations: `12253`
+- callable operations: `12111` (`98.8%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `595`
+- external endpoint operations: `643`
 - registered adapter operations: `586`
-- missing adapter operations: `28`
-- external adapter coverage: `95.4%`
+- missing adapter operations: `76`
+- external adapter coverage: `88.5%`
 - approval-required operations: `4142`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `42`
 - registered adapter hosts: `30`
-- missing adapter hosts: `10`
+- missing adapter hosts: `23`
 - call-capable adapters: `21`
 
 Current missing external route evidence:
 
-- routes: `28`
-- hosts: `10`
-- with probe evidence: `28`
+- routes: `76`
+- hosts: `23`
+- with probe evidence: `76`
 - dead-route candidates: `14`
-- transient failures: `14`
-- remaining adapter candidates: `0`
+- transient failures: `15`
+- remaining adapter candidates: `47`
 
-The practical interpretation is important: the remaining `28` missing external
-routes should not automatically be treated as adapter backlog. They are covered
-by manifest-bound probe and route-disposition evidence, and currently split
-between dead-route candidates and transient failures.
+The practical interpretation is important: the remaining `76` missing external
+routes are all covered by manifest-bound probe and route-disposition evidence.
+Only the `47` routes with current adapter-candidate evidence should become
+adapter backlog; dead-route and transient-failure routes remain evidence, not
+implementation work.
 
 ## Mastery Target
 
@@ -124,19 +125,33 @@ ulsan.
 
 Missing external route hosts currently requiring route-disposition tracking:
 
+- `data.gg.go.kr`: `18`
 - `openapi.coast.kr`: `6`
+- `www.nfqs.go.kr`: `5`
 - `car.daegu.go.kr`: `4`
 - `openapi.price.go.kr`: `4`
+- `www.nongsaro.go.kr`: `4`
 - `www.rda.go.kr`: `4`
+- `data.gwanak.go.kr`: `3`
+- `data.mafra.go.kr`: `3`
 - `its.gyeongju.go.kr:81`: `3`
+- `www.garak.co.kr`: `3`
+- `www.work24.go.kr`: `3`
+- `data.seoul.go.kr`: `2`
 - `data.wanju.go.kr`: `2`
 - `www.cid.or.kr`: `2`
+- `www.culture.go.kr`: `2`
+- `www.happysd.or.kr`: `2`
+- `ncpms.rda.go.kr`: `1`
 - `openapi-lib.sen.go.kr`: `1`
+- `search.i815.or.kr`: `1`
 - `www.dgeic.or.kr:8080`: `1`
+- `www.jobplustv.or.kr`: `1`
 - `www.simpan.go.kr`: `1`
 
-These hosts should not become adapter implementation tasks unless route
-evidence changes from dead/transient to viable adapter candidate.
+These hosts should become adapter implementation tasks only for routes with
+`adapter_candidate` evidence. Dead and transient routes stay in the
+route-disposition ledger until fresh probe evidence changes their status.
 
 ## Required Artifacts
 
@@ -168,7 +183,7 @@ match those roots.
 
 | Source-scoped artifact | Required generation inputs | CI gate |
 | --- | --- | --- |
-| `reports/data-go-kr/external-coverage-summary.json` | `sources/data_go_kr.json`, `reports/coverage.json`, `reports/adapter-targets.json`, `reports/route-disposition.json`, `data/provider-index.json` | `scripts/validate-external-coverage.py` validates schema and cross-checks source identity, raw coverage metrics, route evidence counts, adapter target counts, provider-index host count, and missing host counts. |
+| `reports/data-go-kr/external-coverage-summary.json` | `sources/data_go_kr.json`, `reports/coverage.json`, `reports/adapter-targets.json`, `reports/route-disposition.json`, `data/provider-index.json` | `scripts/generate-external-coverage-summary.py` regenerates the report, and `scripts/validate-external-coverage.py` validates schema and cross-checks source identity, raw coverage metrics, route evidence counts, adapter target counts, provider-index host count, and missing host counts. |
 | `reports/data-go-kr/error-action-catalog.json` | `sources/data_go_kr.json`, `reports/error-catalog.json`, `reports/route-disposition.json`, provider verification reports | `scripts/validate-error-action-catalogs.py` validates checked-in action rules; future generation should also fail on unmapped known error signatures. |
 | `reports/data-go-kr/registry-impact-plan.json` | `sources/data_go_kr.json`, catalog diff, verification evidence, route disposition, error action catalog, promoted dataset mappings | `scripts/validate-impact-plans.py` validates schema, summary counts, target counts, identity fields, and promoted/served dataset boundaries before client/server consumers act on it. |
 | `reports/registry-impact-plan.json` | checked-in `reports/*/registry-impact-plan.json` source plans | `scripts/generate-impact-plan-rollup.py` generates the release-wide rollup, and `scripts/validate-impact-plans.py` validates mixed-source release scope while preserving strict source scope for source-specific plans. |
@@ -187,10 +202,12 @@ CI should fail rather than treating the checked-in summary as authoritative.
 3. Add a data.go.kr error action catalog draft. Done in PR #4.
 4. Connect route-disposition reasons to error/action classifications. Started
    in `reports/data-go-kr/error-action-catalog.json`.
-5. Add an evidence-adjusted external coverage summary. Done in PR #4 as a
-   checked-in draft artifact.
+5. Add an evidence-adjusted external coverage summary. Done in PR #4 and made
+   reproducible with `scripts/generate-external-coverage-summary.py` in Gira
+   #91.
 6. Add source-scoped generation input cross-checks for data.go.kr external
-   coverage. Done in PR #4.
+   coverage. Done in PR #4 and extended with generator-backed maintenance in
+   Gira #91.
 7. Add an operational gate that fails validation for missing external routes
    without route-disposition evidence and permits adapter backlog only from
    adapter-candidate evidence. Done in PR #4.
