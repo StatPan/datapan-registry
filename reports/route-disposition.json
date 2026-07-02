@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-02T17:25:16Z",
+  "generated_at": "2026-07-02T17:45:14Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "probe": "..\\datapan-registry\\reports\\unadapted-external-probe.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "routes_total": 46,
-    "operations": 46,
-    "hosts": 19,
-    "with_probe_evidence": 46,
+    "routes_total": 43,
+    "operations": 43,
+    "hosts": 18,
+    "with_probe_evidence": 43,
     "without_probe_evidence": 0,
     "dead_route_candidates": 14,
     "transient_failures": 15,
     "parameter_blocked_routes": 0,
-    "adapter_candidates": 17,
+    "adapter_candidates": 14,
     "by_disposition": [
-      {
-        "key": "adapter_candidate",
-        "count": 17,
-        "disposition": "adapter_candidate"
-      },
       {
         "key": "transient_failure",
         "count": 15,
         "disposition": "transient_failure"
+      },
+      {
+        "key": "adapter_candidate",
+        "count": 14,
+        "disposition": "adapter_candidate"
       },
       {
         "key": "dead_route_candidate",
@@ -35,7 +35,7 @@
     "by_reason": [
       {
         "key": "unadapted_probe_http_2xx",
-        "count": 17,
+        "count": 14,
         "reason": "unadapted_probe_http_2xx"
       },
       {
@@ -79,11 +79,6 @@
         "key": "www.rda.go.kr",
         "count": 4,
         "host": "www.rda.go.kr"
-      },
-      {
-        "key": "data.mafra.go.kr",
-        "count": 3,
-        "host": "data.mafra.go.kr"
       },
       {
         "key": "its.gyeongju.go.kr:81",
@@ -651,51 +646,6 @@
       "recommended_action": "retry with bounded evidence before building a provider adapter",
       "probe_status": "failed",
       "probe_reason": "unadapted_probe_request_error"
-    },
-    {
-      "dataset_id": "15002220",
-      "title": "농림축산식품부_유기농업자재 현황",
-      "organization": "농림축산식품부",
-      "operation": "유기농업자재 현황_20210402 외부 링크 1",
-      "endpoint": "https://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20200929000000001392\u0026filter_ty=O\u0026getBack=G\u0026sort_id=regist_dt\u0026s_data_nm=\u0026cl_code=\u0026shareYn=",
-      "endpoint_host": "data.mafra.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15002220",
-      "title": "농림축산식품부_유기농업자재 현황",
-      "organization": "농림축산식품부",
-      "operation": "유기농업자재 현황_20210402 외부 링크 2",
-      "endpoint": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20141014000000000013\u0026service_ty=O",
-      "endpoint_host": "data.mafra.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15008409",
-      "title": "농림수산식품교육문화정보원_중국 도매시장 가격정보",
-      "organization": "농림수산식품교육문화정보원",
-      "operation": "중국농산물 가격정보",
-      "endpoint": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20150827000000000463\u0026filter_ty=O\u0026getBack=\u0026sort_id=\u0026s_data_nm=\u0026instt_id=\u0026cl_code=\u0026shareYn=",
-      "endpoint_host": "data.mafra.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
     },
     {
       "dataset_id": "15003164",

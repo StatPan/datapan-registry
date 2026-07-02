@@ -2,12 +2,12 @@
 
 This backlog is generated from route-disposition evidence and includes only `adapter_candidate` routes. Dead-route and transient-failure routes remain evidence, not adapter implementation work.
 
-- Generated at: `2026-07-02T17:25:16Z`
-- Candidate hosts: `8`
-- Candidate operations: `17`
-- Candidate APIs: `10`
-- Candidate institutions: `9`
-- Raw missing adapter operations: `46`
+- Generated at: `2026-07-02T17:45:14Z`
+- Candidate hosts: `7`
+- Candidate operations: `14`
+- Candidate APIs: `8`
+- Candidate institutions: `7`
+- Raw missing adapter operations: `43`
 - Dead-route candidates excluded: `14`
 - Transient failures excluded: `15`
 - Unclassified missing routes: `0`
@@ -16,7 +16,6 @@ This backlog is generated from route-disposition evidence and includes only `ada
 
 | Host | Ops | APIs | Institutions | Status |
 | --- | --- | --- | --- | --- |
-| `data.mafra.go.kr` | 3 | 2 | 농림수산식품교육문화정보원, 농림축산식품부 | adapter_not_registered |
 | `www.garak.co.kr` | 3 | 1 | 서울특별시농수산식품공사 | adapter_not_registered |
 | `www.work24.go.kr` | 3 | 1 | 한국고용정보원 | adapter_not_registered |
 | `data.seoul.go.kr` | 2 | 1 | 서울교통공사 | adapter_not_registered |
@@ -29,9 +28,6 @@ This backlog is generated from route-disposition evidence and includes only `ada
 
 | Host | API ID | Institution | Title | Operation |
 | --- | --- | --- | --- | --- |
-| `data.mafra.go.kr` | 15002220 | 농림축산식품부 | 농림축산식품부_유기농업자재 현황 | 유기농업자재 현황_20210402 외부 링크 1 |
-| `data.mafra.go.kr` | 15002220 | 농림축산식품부 | 농림축산식품부_유기농업자재 현황 | 유기농업자재 현황_20210402 외부 링크 2 |
-| `data.mafra.go.kr` | 15008409 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_중국 도매시장 가격정보 | 중국농산물 가격정보 |
 | `data.seoul.go.kr` | 15003164 | 서울교통공사 | 서울교통공사_역사 건축 현황 | 서울교통공사_역사 건축 현황_20240331 외부 링크 1 |
 | `data.seoul.go.kr` | 15003164 | 서울교통공사 | 서울교통공사_역사 건축 현황 | 서울교통공사_역사 건축 현황_20240331 외부 링크 2 |
 | `ncpms.rda.go.kr` | 15002034 | 농촌진흥청 | 농촌진흥청_국가농작물병해충도감정보 | 농촌진흥청_국가농작물병해충도감정보_20240222 외부 링크 1 |

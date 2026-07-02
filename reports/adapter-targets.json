@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-02T17:25:16Z",
+  "generated_at": "2026-07-02T17:45:14Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 19,
+  "filtered_count": 18,
   "summary": {
-    "target_hosts": 19,
-    "target_operations": 46,
-    "external_endpoint_operations": 46,
+    "target_hosts": 18,
+    "target_operations": 43,
+    "external_endpoint_operations": 43,
     "service_root_operations": 0,
     "approval_required_operations": 0,
     "missing_param_operations": 21,
@@ -242,54 +242,6 @@
     },
     {
       "rank": 5,
-      "host": "data.mafra.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 3,
-      "specs": 2,
-      "organizations": [
-        "농림수산식품교육문화정보원",
-        "농림축산식품부"
-      ],
-      "source_categories": [
-        "농축수산"
-      ],
-      "api_types": [
-        "LINK"
-      ],
-      "data_formats": [
-        "JSON+XML"
-      ],
-      "sample_operations": [
-        {
-          "dataset_id": "15002220",
-          "title": "농림축산식품부_유기농업자재 현황",
-          "organization": "농림축산식품부",
-          "operation": "유기농업자재 현황_20210402 외부 링크 1",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20200929000000001392\u0026filter_ty=O\u0026getBack=G\u0026sort_id=regist_dt\u0026s_data_nm=\u0026cl_code=\u0026shareYn="
-        },
-        {
-          "dataset_id": "15002220",
-          "title": "농림축산식품부_유기농업자재 현황",
-          "organization": "농림축산식품부",
-          "operation": "유기농업자재 현황_20210402 외부 링크 2",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20141014000000000013\u0026service_ty=O"
-        },
-        {
-          "dataset_id": "15008409",
-          "title": "농림수산식품교육문화정보원_중국 도매시장 가격정보",
-          "organization": "농림수산식품교육문화정보원",
-          "operation": "중국농산물 가격정보",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20150827000000000463\u0026filter_ty=O\u0026getBack=\u0026sort_id=\u0026s_data_nm=\u0026instt_id=\u0026cl_code=\u0026shareYn="
-        }
-      ]
-    },
-    {
-      "rank": 6,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -346,7 +298,7 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 6,
       "host": "www.garak.co.kr",
       "kinds": [
         "external_endpoint"
@@ -393,7 +345,7 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 7,
       "host": "www.work24.go.kr",
       "kinds": [
         "external_endpoint"
@@ -440,7 +392,7 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 8,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -491,7 +443,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "www.happysd.or.kr",
       "kinds": [
         "external_endpoint"
@@ -530,7 +482,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "data.seoul.go.kr",
       "kinds": [
         "external_endpoint"
@@ -569,7 +521,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -626,7 +578,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "host": "www.culture.go.kr",
       "kinds": [
         "external_endpoint"
@@ -665,7 +617,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 13,
       "host": "ncpms.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -696,7 +648,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 14,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -732,7 +684,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 15,
       "host": "search.i815.or.kr",
       "kinds": [
         "external_endpoint"
@@ -763,7 +715,7 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 16,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -794,7 +746,7 @@
       ]
     },
     {
-      "rank": 18,
+      "rank": 17,
       "host": "www.jobplustv.or.kr",
       "kinds": [
         "external_endpoint"
@@ -825,7 +777,7 @@
       ]
     },
     {
-      "rank": 19,
+      "rank": 18,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

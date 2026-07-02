@@ -1,0 +1,64 @@
+{
+  "generated_at": "2026-07-02T17:45:10Z",
+  "provider": "data.go.kr",
+  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
+  "limit": 3,
+  "timeout": "20s",
+  "truncated": false,
+  "filters": {
+    "provider": "mafra",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 3,
+  "summary": {
+    "total": 3,
+    "verified": 3,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15002220",
+      "title": "농림축산식품부_유기농업자재 현황",
+      "operation": "유기농업자재 현황_20210402 외부 링크 1",
+      "provider": "mafra",
+      "endpoint_host": "data.mafra.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T17:45:10Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?cl_code=\u0026data_id=20200929000000001392\u0026filter_ty=O\u0026getBack=G\u0026s_data_nm=\u0026shareYn=\u0026sort_id=regist_dt",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15002220",
+      "title": "농림축산식품부_유기농업자재 현황",
+      "operation": "유기농업자재 현황_20210402 외부 링크 2",
+      "provider": "mafra",
+      "endpoint_host": "data.mafra.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T17:45:10Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20141014000000000013\u0026service_ty=O",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15008409",
+      "title": "농림수산식품교육문화정보원_중국 도매시장 가격정보",
+      "operation": "중국농산물 가격정보",
+      "provider": "mafra",
+      "endpoint_host": "data.mafra.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T17:45:10Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?cl_code=\u0026data_id=20150827000000000463\u0026filter_ty=O\u0026getBack=\u0026instt_id=\u0026s_data_nm=\u0026shareYn=\u0026sort_id=",
+      "body_shape": "html"
+    }
+  ]
+}

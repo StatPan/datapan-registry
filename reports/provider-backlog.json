@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T17:25:16Z",
+  "generated_at": "2026-07-02T17:45:14Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -10,11 +10,11 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 53,
     "external_guide_hosts": 157,
-    "registered_adapter_hosts": 34,
+    "registered_adapter_hosts": 35,
     "operation_hosts": 55,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 19,
-    "needs_adapter_operations": 46,
+    "missing_adapter_hosts": 18,
+    "needs_adapter_operations": 43,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
@@ -74,22 +74,6 @@
       "external_endpoint_operations": 4,
       "sample_ids": [
         "3043385"
-      ]
-    },
-    {
-      "host": "data.mafra.go.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "missing",
-      "specs": 2,
-      "operations": 3,
-      "external_endpoint_operations": 3,
-      "external_guide_specs": 1,
-      "sample_ids": [
-        "15002220",
-        "15008409"
       ]
     },
     {
@@ -758,6 +742,22 @@
         "15003489",
         "3075291",
         "3075292"
+      ]
+    },
+    {
+      "host": "data.mafra.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 2,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15002220",
+        "15008409"
       ]
     },
     {
