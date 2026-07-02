@@ -12,14 +12,14 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `13523`
-- callable operations: `13381` (`98.9%`)
+- operations: `13667`
+- callable operations: `13525` (`99%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `1913`
-- registered adapter operations: `1903`
+- external endpoint operations: `2057`
+- registered adapter operations: `2047`
 - missing adapter operations: `29`
-- external adapter coverage: `98.5%`
-- approval-required operations: `4672`
+- external adapter coverage: `98.6%`
+- approval-required operations: `4714`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `142`
@@ -335,7 +335,11 @@ coverage.
    registers `www.lofin365.go.kr`, materializes another 행정안전부 batch with
    `95` APIs and `239` operations, and adds `25` failed-but-bounded Lofin365
    runtime checks, bringing checked runtime evidence to `1358` and registered
-   external adapter operations to `1903`.
+   external adapter operations to `1903`. The Juso adapter then registers
+   `www.juso.go.kr`, materializes `68` of the last `73` 행정안전부 APIs with
+   `144` operations, and adds `10` verified Juso landing-page checks, bringing
+   checked runtime evidence to `1368` and registered external adapter
+   operations to `2047`.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

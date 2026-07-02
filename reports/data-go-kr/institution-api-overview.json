@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-02T23:04:33Z",
+  "generated_at": "2026-07-02T23:16:51Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 13523,
-    "runtime_evidence": 1358,
+    "operations": 13667,
+    "runtime_evidence": 1368,
     "runtime_evidence_percent": 10.0,
-    "callable_operations": 13381,
-    "external_endpoint_operations": 1913,
-    "registered_adapter_operations": 1903,
+    "callable_operations": 13525,
+    "external_endpoint_operations": 2057,
+    "registered_adapter_operations": 2047,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 1913
+      "count": 2057
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 1903
+      "count": 2047
     },
     {
       "key": "builtin",
@@ -69,7 +69,7 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 1542
+      "operation_count": 1626
     },
     {
       "category": "교통물류",
@@ -93,7 +93,7 @@
     },
     {
       "category": "재정금융",
-      "operation_count": 933
+      "operation_count": 960
     },
     {
       "category": "환경기상",
@@ -101,7 +101,7 @@
     },
     {
       "category": "재난안전",
-      "operation_count": 784
+      "operation_count": 787
     },
     {
       "category": "보건의료",
@@ -116,12 +116,12 @@
       "operation_count": 549
     },
     {
-      "category": "교육",
-      "operation_count": 535
+      "category": "과학기술",
+      "operation_count": 548
     },
     {
-      "category": "과학기술",
-      "operation_count": 518
+      "category": "교육",
+      "operation_count": 535
     },
     {
       "category": "통일외교안보",
@@ -148,7 +148,7 @@
     },
     {
       "host": "www.safetydata.go.kr",
-      "operation_count": 366,
+      "operation_count": 368,
       "adapter": "safetydata",
       "adapter_status": "registered",
       "capabilities": [
@@ -158,7 +158,7 @@
     },
     {
       "host": "www.lofin365.go.kr",
-      "operation_count": 231,
+      "operation_count": 342,
       "adapter": "lofin365",
       "adapter_status": "registered",
       "capabilities": [
@@ -176,7 +176,7 @@
     },
     {
       "host": "www.safemap.go.kr",
-      "operation_count": 101,
+      "operation_count": 102,
       "adapter": "safemap",
       "adapter_status": "registered",
       "capabilities": [
@@ -234,6 +234,15 @@
       "host": "www.eshare.go.kr",
       "operation_count": 36,
       "adapter": "eshare",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "host": "www.juso.go.kr",
+      "operation_count": 30,
+      "adapter": "juso",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -306,31 +315,21 @@
       "capabilities": [
         "verification"
       ]
-    },
-    {
-      "host": "www.andong.go.kr",
-      "operation_count": 15,
-      "adapter": "andong",
-      "adapter_status": "registered",
-      "capabilities": [
-        "call",
-        "verification"
-      ]
     }
   ],
   "institutions": [
     {
       "organization": "행정안전부",
       "api_count": 1252,
-      "operation_api_count": 1179,
-      "operation_count": 1614,
-      "runtime_evidence_count": 55,
-      "runtime_evidence_percent": 3.4,
-      "verified": 20,
+      "operation_api_count": 1247,
+      "operation_count": 1758,
+      "runtime_evidence_count": 65,
+      "runtime_evidence_percent": 3.7,
+      "verified": 30,
       "failed": 25,
       "skipped": 10,
       "unknown": 0,
-      "approval_required_operations": 562,
+      "approval_required_operations": 604,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
@@ -339,7 +338,7 @@
         },
         {
           "key": "external_endpoint",
-          "count": 740
+          "count": 884
         },
         {
           "key": "malformed_endpoint",
@@ -349,7 +348,7 @@
       "by_adapter_status": [
         {
           "key": "adapter",
-          "count": 740
+          "count": 884
         },
         {
           "key": "builtin",
@@ -363,11 +362,11 @@
       "top_categories": [
         {
           "category": "공공행정",
-          "operation_count": 533
+          "operation_count": 617
         },
         {
           "category": "재난안전",
-          "operation_count": 313
+          "operation_count": 316
         },
         {
           "category": "문화관광",
@@ -389,7 +388,7 @@
         },
         {
           "host": "www.safetydata.go.kr",
-          "operation_count": 366,
+          "operation_count": 368,
           "adapter": "safetydata",
           "adapter_status": "registered",
           "capabilities": [
@@ -399,7 +398,7 @@
         },
         {
           "host": "www.lofin365.go.kr",
-          "operation_count": 231,
+          "operation_count": 342,
           "adapter": "lofin365",
           "adapter_status": "registered",
           "capabilities": [
@@ -408,7 +407,7 @@
         },
         {
           "host": "www.safemap.go.kr",
-          "operation_count": 101,
+          "operation_count": 102,
           "adapter": "safemap",
           "adapter_status": "registered",
           "capabilities": [

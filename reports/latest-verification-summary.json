@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-02T23:04:31Z",
+  "generated_at": "2026-07-02T23:16:49Z",
   "source": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1358,
-    "verified": 114,
+    "total": 1368,
+    "verified": 124,
     "failed": 112,
     "skipped": 1132,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 114,
+        "count": 124,
         "status": "verified"
       },
       {
@@ -379,6 +379,11 @@
         "provider": "eshare"
       },
       {
+        "key": "juso",
+        "count": 10,
+        "provider": "juso"
+      },
+      {
         "key": "safemap",
         "count": 10,
         "provider": "safemap"
@@ -596,6 +601,11 @@
         "host": "www.eshare.go.kr"
       },
       {
+        "key": "www.juso.go.kr",
+        "count": 10,
+        "host": "www.juso.go.kr"
+      },
+      {
         "key": "www.safemap.go.kr",
         "count": 10,
         "host": "www.safemap.go.kr"
@@ -744,7 +754,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 694,
+        "count": 704,
         "kind": "external_endpoint"
       },
       {

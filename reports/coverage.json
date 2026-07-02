@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T23:04:35Z",
+  "generated_at": "2026-07-02T23:16:54Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,27 +7,27 @@
   "route_disposition": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 13523,
-    "callable_operations": 13381,
-    "callable_operation_percent": 98.9,
+    "operations": 13667,
+    "callable_operations": 13525,
+    "callable_operation_percent": 99,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 1913,
-    "registered_adapter_operations": 1903,
+    "external_endpoint_operations": 2057,
+    "registered_adapter_operations": 2047,
     "missing_adapter_operations": 29,
-    "external_adapter_coverage_percent": 98.5,
-    "approval_required_operations": 4672,
+    "external_adapter_coverage_percent": 98.6,
+    "approval_required_operations": 4714,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 142,
-    "registered_adapter_hosts": 46,
+    "registered_adapter_hosts": 47,
     "missing_adapter_hosts": 11,
-    "adapter_count": 42,
+    "adapter_count": 43,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
   "goals": {
     "callable_operation_percent_target": 99,
-    "callable_operation_percent_met": false,
+    "callable_operation_percent_met": true,
     "external_adapter_coverage_percent_target": 98,
     "external_adapter_coverage_percent_met": true,
     "evidence_operation_percent_target": 10,
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-02T23:04:31Z",
-    "total": 1358,
-    "verified": 114,
+    "generated_at": "2026-07-02T23:16:49Z",
+    "total": 1368,
+    "verified": 124,
     "failed": 112,
     "skipped": 1132,
     "unknown": 0,
-    "verified_percent": 8.4,
+    "verified_percent": 9.1,
     "evidence_operation_percent": 10
   },
   "route_evidence": {
@@ -228,14 +228,14 @@
           "external_endpoint"
         ],
         "adapter_status": "adapter",
-        "specs": 366,
-        "operations": 366,
-        "external_endpoint_operations": 366,
-        "approval_required_operations": 366,
+        "specs": 368,
+        "operations": 368,
+        "external_endpoint_operations": 368,
+        "approval_required_operations": 368,
         "sample_ids": [
           "15134001",
-          "15138868",
-          "15138870"
+          "15138456",
+          "15138868"
         ]
       },
       {
@@ -244,14 +244,14 @@
           "external_endpoint"
         ],
         "adapter_status": "adapter",
-        "specs": 87,
-        "operations": 231,
-        "external_endpoint_operations": 231,
-        "approval_required_operations": 18,
+        "specs": 142,
+        "operations": 342,
+        "external_endpoint_operations": 342,
+        "approval_required_operations": 45,
         "sample_ids": [
+          "15056593",
           "15056639",
-          "15057096",
-          "15057340"
+          "15056650"
         ]
       },
       {
@@ -279,11 +279,11 @@
           "external_endpoint"
         ],
         "adapter_status": "adapter",
-        "specs": 101,
-        "operations": 101,
-        "external_endpoint_operations": 101,
+        "specs": 102,
+        "operations": 102,
+        "external_endpoint_operations": 102,
         "wms_operations": 95,
-        "approval_required_operations": 101,
+        "approval_required_operations": 102,
         "sample_ids": [
           "15101789",
           "15101791",
@@ -380,10 +380,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-02T23:04:35Z",
+    "generated_at": "2026-07-02T23:16:54Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 42,
-    "host_count": 47,
+    "adapter_count": 43,
+    "host_count": 48,
     "adapters": [
       {
         "name": "airport",
@@ -590,6 +590,16 @@
         "status": "registered",
         "hosts": [
           "openapi.jeonju.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "juso",
+        "status": "registered",
+        "hosts": [
+          "www.juso.go.kr"
         ],
         "capabilities": [
           "verification"
@@ -837,8 +847,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 42,
-      "verification_capable_adapters": 42,
+      "adapter_count": 43,
+      "verification_capable_adapters": 43,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,
