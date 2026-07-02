@@ -33,12 +33,14 @@ jobs:
     env:
       DATAPAN_DATA_GO_KR_KEY: ${{ secrets.DATAPAN_DATA_GO_KR_KEY }}
       DATA_PORTAL_API_KEY: ${{ secrets.DATA_PORTAL_API_KEY }}
+      DATA_GO_KR_SERVICE_KEY: ${{ secrets.DATA_GO_KR_SERVICE_KEY }}
       OUTPUT_DIR: datapan-registry/.datapan/institution-runtime
       VERIFY_REPORT: datapan-registry/.datapan/institution-runtime/verification.json
       VERIFY_SUMMARY: datapan-registry/.datapan/institution-runtime/verification-summary.json
       VERIFY_STDOUT: datapan-registry/.datapan/institution-runtime/verification-stdout.json
       VERIFY_EXIT_CODE: datapan-registry/.datapan/institution-runtime/exit-code.txt
       VERIFY_COMMAND: datapan-registry/.datapan/institution-runtime/command.txt
+      VERIFY_METADATA: datapan-registry/.datapan/institution-runtime/metadata.json
 
     steps:
       - name: Checkout registry
@@ -68,8 +70,23 @@ jobs:
 
       - name: Check live verification credential
         run: |
-          if [ -z "${DATAPAN_DATA_GO_KR_KEY}" ] && [ -z "${DATA_PORTAL_API_KEY}" ]; then
-            echo "DATAPAN_DATA_GO_KR_KEY or DATA_PORTAL_API_KEY secret is required." >&2
+          mkdir -p "${OUTPUT_DIR}"
+          cat > "${VERIFY_METADATA}" <<EOF
+          {
+            "organization": "${{ inputs.organization }}",
+            "kind": "${{ inputs.kind }}",
+            "limit": "${{ inputs.limit }}",
+            "timeout": "${{ inputs.timeout }}",
+            "credential_envs": {
+              "DATAPAN_DATA_GO_KR_KEY": $([ -n "${DATAPAN_DATA_GO_KR_KEY}" ] && echo true || echo false),
+              "DATA_PORTAL_API_KEY": $([ -n "${DATA_PORTAL_API_KEY}" ] && echo true || echo false),
+              "DATA_GO_KR_SERVICE_KEY": $([ -n "${DATA_GO_KR_SERVICE_KEY}" ] && echo true || echo false)
+            }
+          }
+          EOF
+          if [ -z "${DATAPAN_DATA_GO_KR_KEY}" ] && [ -z "${DATA_PORTAL_API_KEY}" ] && [ -z "${DATA_GO_KR_SERVICE_KEY}" ]; then
+            echo "DATAPAN_DATA_GO_KR_KEY, DATA_PORTAL_API_KEY, or DATA_GO_KR_SERVICE_KEY secret is required." >&2
+            echo "1" > "${VERIFY_EXIT_CODE}"
             exit 1
           fi
           echo "data.go.kr credential is configured."
