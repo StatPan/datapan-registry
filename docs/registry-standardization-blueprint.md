@@ -112,6 +112,10 @@ Current strengths:
 - `docs/source-runtime-readiness.md` is generated from the release-wide source
   runtime evidence rollup and checked-in source plans, so operators can read
   the same blocker, warning, and next-action inventory that CI validates.
+- `reports/source-report-inventory.json` is generated from source profiles and
+  checked-in `reports/<source>/` directories, measuring `5` source report
+  directories, `17` source-scoped JSON reports, and `12.3%` recommended
+  source-scoped report coverage.
 - `scripts/sync-release-schema-artifacts.py` checks that every checked-in
   `schemas/*.schema.json` file is represented in `schemas/index.json` and
   `manifest.json`; Gira #77 raises release schema coverage from `20` to `28`
@@ -165,7 +169,9 @@ Current gaps:
   `1221`, meeting the `10%` runtime evidence target and clearing the release
   readiness warning. Most of this growth is skipped boundary evidence, not
   proof that those operations are callable.
-- Multi-source report grouping is designed but not implemented.
+- Multi-source report grouping is measured by
+  `reports/source-report-inventory.json`, but full source-scoped report
+  generation remains incomplete.
 - Impact plans are specified, a data.go.kr draft plan is checked in, and a
   release-wide rollup can be generated from source-scoped plans, but full
   `datapan-cli` generation from catalog diffs, verification evidence, route
@@ -408,6 +414,9 @@ Use this order unless a production failure changes priority:
     this makes the non-data.go.kr runtime blockers and warnings readable in
     `docs/source-runtime-readiness.md` and keeps the document synced through
     `scripts/validate-source-runtime-evidence-rollup.py`.
+26. Add a generated source report inventory. Tracked by Gira #85; this turns
+    the multi-source report grouping gap into `reports/source-report-inventory.json`
+    coverage metrics and validates drift in CI.
 
 ## Measurement Rules
 

@@ -1,0 +1,212 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
+  "title": "Datapan Source Report Inventory v1",
+  "description": "Inventory of source-scoped report artifacts and recommended report coverage.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "provider",
+    "generation_inputs",
+    "recommended_reports",
+    "summary",
+    "sources"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.source-report-inventory.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generation_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_profiles_glob", "reports_root"],
+      "properties": {
+        "source_profiles_glob": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reports_root": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "recommended_reports": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    }
+  },
+  "$defs": {
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+    },
+    "percent": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sources",
+        "source_report_dirs",
+        "report_total",
+        "recommended_report_slots",
+        "present_recommended_reports",
+        "missing_recommended_reports",
+        "source_report_coverage_percent"
+      ],
+      "properties": {
+        "sources": {
+          "$ref": "#/$defs/count"
+        },
+        "source_report_dirs": {
+          "$ref": "#/$defs/count"
+        },
+        "report_total": {
+          "$ref": "#/$defs/count"
+        },
+        "recommended_report_slots": {
+          "$ref": "#/$defs/count"
+        },
+        "present_recommended_reports": {
+          "$ref": "#/$defs/count"
+        },
+        "missing_recommended_reports": {
+          "$ref": "#/$defs/count"
+        },
+        "source_report_coverage_percent": {
+          "$ref": "#/$defs/percent"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "provider",
+        "display_name",
+        "source_profile",
+        "report_dir",
+        "report_dir_exists",
+        "report_count",
+        "present_reports",
+        "present_recommended_reports",
+        "missing_recommended_reports",
+        "extra_reports",
+        "recommended_report_coverage_percent"
+      ],
+      "properties": {
+        "source_id": {
+          "$ref": "#/$defs/source_id"
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "display_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_profile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "report_dir": {
+          "type": "string",
+          "minLength": 1
+        },
+        "report_dir_exists": {
+          "type": "boolean"
+        },
+        "report_count": {
+          "$ref": "#/$defs/count"
+        },
+        "present_reports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/report"
+          }
+        },
+        "present_recommended_reports": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "missing_recommended_reports": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "extra_reports": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "recommended_report_coverage_percent": {
+          "$ref": "#/$defs/percent"
+        }
+      }
+    },
+    "report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "path"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_version": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

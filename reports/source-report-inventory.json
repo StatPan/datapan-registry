@@ -1,0 +1,283 @@
+{
+  "schema_version": "datapan.source-report-inventory.v1",
+  "generated_at": "2026-06-30T09:16:13Z",
+  "provider": "multi-source",
+  "generation_inputs": {
+    "source_profiles_glob": "sources/*.json",
+    "reports_root": "reports"
+  },
+  "recommended_reports": [
+    "adapter-targets.json",
+    "catalog-audit.json",
+    "catalog-diff.json",
+    "coverage.json",
+    "dependencies.json",
+    "error-catalog.json",
+    "latest-verification-summary.json",
+    "latest-verification.json",
+    "provider-backlog.json",
+    "route-disposition.json",
+    "runtime-candidates.json",
+    "runtime-evidence-plan.json",
+    "verification-plan.json"
+  ],
+  "summary": {
+    "sources": 5,
+    "source_report_dirs": 5,
+    "report_total": 17,
+    "recommended_report_slots": 65,
+    "present_recommended_reports": 8,
+    "missing_recommended_reports": 57,
+    "source_report_coverage_percent": 12.3
+  },
+  "sources": [
+    {
+      "source_id": "data_go_kr",
+      "provider": "data.go.kr",
+      "display_name": "Public Data Portal",
+      "source_profile": "sources/data_go_kr.json",
+      "report_dir": "reports/data-go-kr",
+      "report_dir_exists": true,
+      "report_count": 5,
+      "present_reports": [
+        {
+          "name": "error-action-catalog.json",
+          "path": "reports/data-go-kr/error-action-catalog.json",
+          "schema_version": "datapan.error-action-catalog.v1"
+        },
+        {
+          "name": "external-coverage-summary.json",
+          "path": "reports/data-go-kr/external-coverage-summary.json",
+          "schema_version": "datapan.external-coverage.v1"
+        },
+        {
+          "name": "institution-api-overview.json",
+          "path": "reports/data-go-kr/institution-api-overview.json",
+          "schema_version": "datapan.institution-api-overview.v1"
+        },
+        {
+          "name": "registry-impact-plan.json",
+          "path": "reports/data-go-kr/registry-impact-plan.json",
+          "schema_version": "datapan.registry-impact-plan.v1"
+        },
+        {
+          "name": "runtime-evidence-growth.json",
+          "path": "reports/data-go-kr/runtime-evidence-growth.json",
+          "schema_version": "datapan.runtime-evidence-growth.v1"
+        }
+      ],
+      "present_recommended_reports": [],
+      "missing_recommended_reports": [
+        "adapter-targets.json",
+        "catalog-audit.json",
+        "catalog-diff.json",
+        "coverage.json",
+        "dependencies.json",
+        "error-catalog.json",
+        "latest-verification-summary.json",
+        "latest-verification.json",
+        "provider-backlog.json",
+        "route-disposition.json",
+        "runtime-candidates.json",
+        "runtime-evidence-plan.json",
+        "verification-plan.json"
+      ],
+      "extra_reports": [
+        "error-action-catalog.json",
+        "external-coverage-summary.json",
+        "institution-api-overview.json",
+        "registry-impact-plan.json",
+        "runtime-evidence-growth.json"
+      ],
+      "recommended_report_coverage_percent": 0.0
+    },
+    {
+      "source_id": "ecos",
+      "provider": "ECOS",
+      "display_name": "Bank of Korea Economic Statistics System",
+      "source_profile": "sources/ecos.json",
+      "report_dir": "reports/ecos",
+      "report_dir_exists": true,
+      "report_count": 3,
+      "present_reports": [
+        {
+          "name": "error-action-catalog.json",
+          "path": "reports/ecos/error-action-catalog.json",
+          "schema_version": "datapan.error-action-catalog.v1"
+        },
+        {
+          "name": "runtime-candidates.json",
+          "path": "reports/ecos/runtime-candidates.json",
+          "schema_version": "datapan.source-runtime-candidates.v1"
+        },
+        {
+          "name": "runtime-evidence-plan.json",
+          "path": "reports/ecos/runtime-evidence-plan.json",
+          "schema_version": "datapan.source-runtime-evidence-plan.v1"
+        }
+      ],
+      "present_recommended_reports": [
+        "runtime-candidates.json",
+        "runtime-evidence-plan.json"
+      ],
+      "missing_recommended_reports": [
+        "adapter-targets.json",
+        "catalog-audit.json",
+        "catalog-diff.json",
+        "coverage.json",
+        "dependencies.json",
+        "error-catalog.json",
+        "latest-verification-summary.json",
+        "latest-verification.json",
+        "provider-backlog.json",
+        "route-disposition.json",
+        "verification-plan.json"
+      ],
+      "extra_reports": [
+        "error-action-catalog.json"
+      ],
+      "recommended_report_coverage_percent": 15.4
+    },
+    {
+      "source_id": "kosis",
+      "provider": "KOSIS",
+      "display_name": "Korean Statistical Information Service",
+      "source_profile": "sources/kosis.json",
+      "report_dir": "reports/kosis",
+      "report_dir_exists": true,
+      "report_count": 3,
+      "present_reports": [
+        {
+          "name": "error-action-catalog.json",
+          "path": "reports/kosis/error-action-catalog.json",
+          "schema_version": "datapan.error-action-catalog.v1"
+        },
+        {
+          "name": "runtime-candidates.json",
+          "path": "reports/kosis/runtime-candidates.json",
+          "schema_version": "datapan.source-runtime-candidates.v1"
+        },
+        {
+          "name": "runtime-evidence-plan.json",
+          "path": "reports/kosis/runtime-evidence-plan.json",
+          "schema_version": "datapan.source-runtime-evidence-plan.v1"
+        }
+      ],
+      "present_recommended_reports": [
+        "runtime-candidates.json",
+        "runtime-evidence-plan.json"
+      ],
+      "missing_recommended_reports": [
+        "adapter-targets.json",
+        "catalog-audit.json",
+        "catalog-diff.json",
+        "coverage.json",
+        "dependencies.json",
+        "error-catalog.json",
+        "latest-verification-summary.json",
+        "latest-verification.json",
+        "provider-backlog.json",
+        "route-disposition.json",
+        "verification-plan.json"
+      ],
+      "extra_reports": [
+        "error-action-catalog.json"
+      ],
+      "recommended_report_coverage_percent": 15.4
+    },
+    {
+      "source_id": "open_assembly",
+      "provider": "open.assembly.go.kr",
+      "display_name": "Open National Assembly Information",
+      "source_profile": "sources/open_assembly.json",
+      "report_dir": "reports/open-assembly",
+      "report_dir_exists": true,
+      "report_count": 3,
+      "present_reports": [
+        {
+          "name": "error-action-catalog.json",
+          "path": "reports/open-assembly/error-action-catalog.json",
+          "schema_version": "datapan.error-action-catalog.v1"
+        },
+        {
+          "name": "runtime-candidates.json",
+          "path": "reports/open-assembly/runtime-candidates.json",
+          "schema_version": "datapan.source-runtime-candidates.v1"
+        },
+        {
+          "name": "runtime-evidence-plan.json",
+          "path": "reports/open-assembly/runtime-evidence-plan.json",
+          "schema_version": "datapan.source-runtime-evidence-plan.v1"
+        }
+      ],
+      "present_recommended_reports": [
+        "runtime-candidates.json",
+        "runtime-evidence-plan.json"
+      ],
+      "missing_recommended_reports": [
+        "adapter-targets.json",
+        "catalog-audit.json",
+        "catalog-diff.json",
+        "coverage.json",
+        "dependencies.json",
+        "error-catalog.json",
+        "latest-verification-summary.json",
+        "latest-verification.json",
+        "provider-backlog.json",
+        "route-disposition.json",
+        "verification-plan.json"
+      ],
+      "extra_reports": [
+        "error-action-catalog.json"
+      ],
+      "recommended_report_coverage_percent": 15.4
+    },
+    {
+      "source_id": "seoul_open_data",
+      "provider": "data.seoul.go.kr",
+      "display_name": "Seoul Open Data Plaza",
+      "source_profile": "sources/seoul_open_data.json",
+      "report_dir": "reports/seoul-open-data",
+      "report_dir_exists": true,
+      "report_count": 3,
+      "present_reports": [
+        {
+          "name": "error-action-catalog.json",
+          "path": "reports/seoul-open-data/error-action-catalog.json",
+          "schema_version": "datapan.error-action-catalog.v1"
+        },
+        {
+          "name": "runtime-candidates.json",
+          "path": "reports/seoul-open-data/runtime-candidates.json",
+          "schema_version": "datapan.source-runtime-candidates.v1"
+        },
+        {
+          "name": "runtime-evidence-plan.json",
+          "path": "reports/seoul-open-data/runtime-evidence-plan.json",
+          "schema_version": "datapan.source-runtime-evidence-plan.v1"
+        }
+      ],
+      "present_recommended_reports": [
+        "runtime-candidates.json",
+        "runtime-evidence-plan.json"
+      ],
+      "missing_recommended_reports": [
+        "adapter-targets.json",
+        "catalog-audit.json",
+        "catalog-diff.json",
+        "coverage.json",
+        "dependencies.json",
+        "error-catalog.json",
+        "latest-verification-summary.json",
+        "latest-verification.json",
+        "provider-backlog.json",
+        "route-disposition.json",
+        "verification-plan.json"
+      ],
+      "extra_reports": [
+        "error-action-catalog.json"
+      ],
+      "recommended_report_coverage_percent": 15.4
+    }
+  ]
+}

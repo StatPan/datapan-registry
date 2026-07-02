@@ -73,6 +73,7 @@ reports/
     latest-verification.json
     latest-verification-summary.json
   source-runtime-evidence-rollup.json
+  source-report-inventory.json
   open-assembly/
     coverage.json
     catalog-audit.json
@@ -161,6 +162,9 @@ Recommended source-scoped reports:
 
 Root rollups should be generated from source-scoped reports and should not hide
 the source that produced a warning, failure, or skipped verification result.
+`reports/source-report-inventory.json` is the checked-in inventory for measuring
+which source-scoped report slots exist before the full source report set is
+generated for every source.
 
 ## GitHub Actions
 
