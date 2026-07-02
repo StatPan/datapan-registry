@@ -86,6 +86,28 @@ python scripts/generate-source-report-inventory.py
 python scripts/generate-source-runtime-readiness.py
 ```
 
+Institution-scoped runtime reactivation batches should follow the priority
+order in `docs/data-go-kr-coverage-backlog.md` and
+`docs/data-go-kr-institution-api-overview.md`. Start with the largest
+institution/runtime gap, run a bounded batch with `--org`, merge the batch into
+`reports/latest-verification.json`, then regenerate the backlog and overview:
+
+```bash
+datapan catalog verify --registry data/data-go-kr.registry.json --org 행정안전부 --kind data_go_kr_gateway --limit 100 --timeout 20s --output reports/data-go-kr/mois-verification.json --json
+datapan catalog verify merge --input reports/latest-verification.json --input reports/data-go-kr/mois-verification.json --output reports/latest-verification.json --json
+datapan catalog verify summary --input reports/latest-verification.json --output reports/latest-verification-summary.json --json
+python scripts/generate-coverage-backlog.py
+python scripts/generate-institution-api-overview.py
+python scripts/validate-coverage-backlog.py
+python scripts/validate-institution-api-overview.py
+```
+
+The first queue is `행정안전부`: the current backlog lists `1252` APIs,
+`613` APIs with operation mappings, `639` uncovered APIs, and `613` runtime
+reactivation APIs. Gateway verification requires a data.go.kr service key in
+the local or CI environment; without it, the same command can only produce
+`missing_auth` boundary evidence and should not replace live runtime evidence.
+
 Provider-specific evidence should be accumulated for registered external
 adapters:
 

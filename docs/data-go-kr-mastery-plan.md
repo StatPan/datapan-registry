@@ -187,6 +187,34 @@ registry path while moving generated evidence toward `reports/data-go-kr/`.
 If any root report changes without the source-scoped artifact being refreshed,
 CI should fail rather than treating the checked-in summary as authoritative.
 
+## Institution-Scoped Coverage Loop
+
+The registry now tracks API and runtime coverage at the institution level with
+two generated views:
+
+- `docs/data-go-kr-institution-api-overview.md` shows each institution's API
+  count, operation count, runtime evidence count, evidence percentage, and
+  top hosts/categories.
+- `docs/data-go-kr-coverage-backlog.md` ranks institutions by uncovered API
+  and runtime reactivation gaps.
+
+Use those views as the runtime reactivation queue. For each selected
+institution:
+
+1. Run a bounded verification batch with `datapan catalog verify --org <기관명>`.
+2. Merge the batch into `reports/latest-verification.json`.
+3. Regenerate `reports/latest-verification-summary.json`.
+4. Regenerate `reports/data-go-kr/coverage-backlog.json` and
+   `reports/data-go-kr/institution-api-overview.json`.
+5. Run `scripts/validate-coverage-backlog.py` and
+   `scripts/validate-institution-api-overview.py`.
+
+The current first queue is `행정안전부`: `1252` APIs, `613` APIs with operation
+mappings, `639` uncovered APIs, `874` mapped operations, and no checked-in
+runtime evidence yet. Gateway calls need a data.go.kr service key; no-key runs
+are useful only to prove parameter readiness, not to advance verified runtime
+coverage.
+
 ## Task Sequence
 
 1. Add and validate `sources/data_go_kr.json`. Done in PR #4.
@@ -208,7 +236,11 @@ CI should fail rather than treating the checked-in summary as authoritative.
 9. Add a runtime evidence growth summary that measures current evidence
    coverage against the 10% target and validates the next planned batches.
    Tracked by Gira #15.
-10. Execute the next runtime verification batches for gateway and registered
+10. Maintain institution-scoped coverage and runtime reactivation queues from
+    the generated overview/backlog artifacts. The first active queue is
+    `행정안전부`, using `datapan catalog verify --org 행정안전부` batches after
+    data.go.kr credentials are available.
+11. Execute the next runtime verification batches for gateway and registered
    external adapters. Started by Gira #19 with `epost` and `ulsan`
    excluded-from-latest external endpoint batches. This grows checked runtime
    evidence from `256` to `276`, but the new records are skipped boundary
@@ -260,11 +292,11 @@ CI should fail rather than treating the checked-in summary as authoritative.
    `data-gg`/`nfqs`/`nongsaro`/`gwanak`/`mafra`/`garak`/`work24`/
    `seoul-open-data`/`culture`/`happysd`/`ncpms`/`i815` results prove landing-page
    reachability rather than generic machine-call support.
-11. Add a data.go.kr draft impact plan and validate its client/server action
+12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
-12. Generate future data.go.kr impact plans directly from catalog diff,
+13. Generate future data.go.kr impact plans directly from catalog diff,
    verification evidence, route disposition, and promoted dataset mappings.
-13. Add a release-wide registry impact plan rollup generated from checked-in
+14. Add a release-wide registry impact plan rollup generated from checked-in
    source-scoped impact plans. Tracked by Gira #47.
 
 ## Done Criteria
