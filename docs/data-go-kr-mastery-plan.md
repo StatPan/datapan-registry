@@ -164,6 +164,7 @@ data.go.kr mastery should produce or preserve:
 - `reports/registry-impact-plan.json`
 - `reports/data-go-kr/runtime-evidence-growth.json`
 - `reports/data-go-kr/operation-materialization-plan.json`
+- `reports/data-go-kr/safetydata-operation-candidates.json`
 - `reports/data-go-kr/institution-api-overview.json`
 - `reports/data-go-kr/institution-runtime-plan.json`
 - `docs/data-go-kr-external-adapter-backlog.md`
@@ -183,6 +184,7 @@ match those roots.
 | `reports/registry-impact-plan.json` | checked-in `reports/*/registry-impact-plan.json` source plans | `scripts/generate-impact-plan-rollup.py` generates the release-wide rollup, and `scripts/validate-impact-plans.py` validates mixed-source release scope while preserving strict source scope for source-specific plans. |
 | `reports/data-go-kr/runtime-evidence-growth.json` | `reports/coverage.json`, `reports/latest-verification.json`, `reports/latest-verification-summary.json`, `reports/verification-plan.json`, `data/provider-index.json` | `scripts/validate-runtime-evidence-growth.py` validates current evidence totals, evidence coverage percent, 10% target gap, provider split readiness, and next planned verification batches. |
 | `reports/data-go-kr/operation-materialization-plan.json` | `reports/data-go-kr/coverage-backlog.json` | `scripts/validate-operation-materialization-plan.py` regenerates the institution-scoped materialization queue and fails CI when APIs without operation mappings drift from the coverage backlog. |
+| `reports/data-go-kr/safetydata-operation-candidates.json` | `reports/data-go-kr/operation-materialization-batches/institution-01.json`, public data.go.kr and safetydata.go.kr metadata | `scripts/validate-safetydata-operation-candidates.py` validates the checked-in candidate evidence schema and batch linkage; refresh is manual or workflow-dispatched because it depends on live public metadata. |
 | `reports/data-go-kr/institution-api-overview.json` | `data/data-go-kr.registry.json`, `reports/dependencies.json`, `reports/latest-verification.json`, `reports/coverage.json`, `data/provider-index.json` | `scripts/validate-institution-api-overview.py` regenerates the overview and fails CI when institution API counts, operation counts, adapter status counts, or runtime evidence counts drift from checked-in artifacts. |
 | `reports/data-go-kr/institution-runtime-plan.json` | `reports/data-go-kr/coverage-backlog.json`, `data/data-go-kr.registry.json`, `reports/latest-verification.json` | `scripts/validate-institution-runtime-plan.py` regenerates the executable institution batch plan and fails CI when the next `datapan catalog verify --org` queue drifts from the coverage backlog. |
 

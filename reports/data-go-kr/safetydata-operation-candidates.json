@@ -1,0 +1,1333 @@
+{
+  "schema_version": "datapan.safetydata-operation-candidates.v1",
+  "generated_at": "2026-07-02T20:23:28Z",
+  "provider": "data.go.kr",
+  "source_id": "data_go_kr",
+  "discovery_source": "safetydata.go.kr",
+  "generation_inputs": {
+    "batch": "reports/data-go-kr/operation-materialization-batches/institution-01.json"
+  },
+  "policy": {
+    "limit": 5,
+    "timeout_seconds": 20,
+    "delay_seconds": 0.1
+  },
+  "summary": {
+    "batch_label": "institution-01",
+    "organization": "행정안전부",
+    "input_apis": 5,
+    "candidates": 5,
+    "skipped": 0,
+    "failed": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15147982",
+      "title": "행정안전부_자동심장충격기AED",
+      "organization": "행정안전부",
+      "meta_url": "https://www.data.go.kr/catalog/15147982/openapi.json",
+      "status": "candidate",
+      "reason": "safetydata_open_api_metadata_extracted",
+      "data_go_kr_url": "https://www.data.go.kr/data/15147982/openapi.do",
+      "safetydata_url": "https://www.safetydata.go.kr/disaster-data/view?dataSn=59",
+      "data_sn": "59",
+      "api_view_url": "https://www.safetydata.go.kr/disaster-data/getApiView?dataSn=59",
+      "api_table_url": "https://www.safetydata.go.kr/disaster-data/apiDataTable?dataSn=59",
+      "source_api_name": "행정안전부_자동심장충격기_AED",
+      "source_api_type": "REST",
+      "source_data_format": "JSON",
+      "source_interface_id": "DSSP-IF-00068",
+      "method": "GET",
+      "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-00068",
+      "request_params": [
+        {
+          "name_ko": "서비스키",
+          "name": "serviceKey",
+          "type": "STRING",
+          "size": "50",
+          "required": true,
+          "description": "서비스키"
+        },
+        {
+          "name_ko": "페이지당개수",
+          "name": "numOfRows",
+          "type": "NUMBER",
+          "size": "30",
+          "required": false,
+          "description": "페이지당개수"
+        },
+        {
+          "name_ko": "페이지번호",
+          "name": "pageNo",
+          "type": "NUMBER",
+          "size": "30",
+          "required": false,
+          "description": "페이지번호"
+        },
+        {
+          "name_ko": "응답타입(json,xml)",
+          "name": "returnType",
+          "type": "VARCHAR",
+          "size": "30",
+          "required": false,
+          "description": "응답타입(json,xml)"
+        },
+        {
+          "name_ko": "시작경도",
+          "name": "startLot",
+          "type": "STRING",
+          "size": "",
+          "required": false,
+          "description": "시작경도"
+        },
+        {
+          "name_ko": "종료경도",
+          "name": "endLot",
+          "type": "STRING",
+          "size": "",
+          "required": false,
+          "description": "종료경도"
+        },
+        {
+          "name_ko": "시작위도",
+          "name": "startLat",
+          "type": "STRING",
+          "size": "",
+          "required": false,
+          "description": "시작위도"
+        },
+        {
+          "name_ko": "종료위도",
+          "name": "endLat",
+          "type": "STRING",
+          "size": "",
+          "required": false,
+          "description": "종료위도"
+        }
+      ],
+      "response_fields": [
+        {
+          "name_ko": "일련번호",
+          "name": "SN",
+          "type": "",
+          "size": "22",
+          "required": true,
+          "description": "일련번호"
+        },
+        {
+          "name_ko": "설치주소",
+          "name": "INSTL_ADDR",
+          "type": "",
+          "size": "200",
+          "required": true,
+          "description": "설치주소"
+        },
+        {
+          "name_ko": "설치위치",
+          "name": "INSTL_PSTN",
+          "type": "",
+          "size": "100",
+          "required": true,
+          "description": "설치위치"
+        },
+        {
+          "name_ko": "구분",
+          "name": "SE",
+          "type": "",
+          "size": "50",
+          "required": true,
+          "description": "구분"
+        },
+        {
+          "name_ko": "관리자명",
+          "name": "MNGR_NM",
+          "type": "",
+          "size": "100",
+          "required": true,
+          "description": "관리자명"
+        },
+        {
+          "name_ko": "관리자전화번호",
+          "name": "MNGR_TELNO",
+          "type": "",
+          "size": "11",
+          "required": true,
+          "description": "관리자전화번호"
+        },
+        {
+          "name_ko": "제조사명",
+          "name": "MKR_NM",
+          "type": "",
+          "size": "100",
+          "required": true,
+          "description": "제조사명"
+        },
+        {
+          "name_ko": "모델명",
+          "name": "MDL_NM",
+          "type": "",
+          "size": "100",
+          "required": true,
+          "description": "모델명"
+        },
+        {
+          "name_ko": "관리기관명",
+          "name": "MNG_INST_NM",
+          "type": "",
+          "size": "200",
+          "required": true,
+          "description": "관리기관명"
+        },
+        {
+          "name_ko": "시도명",
+          "name": "CTPV_NM",
+          "type": "",
+          "size": "40",
+          "required": true,
+          "description": "시도명"
+        },
+        {
+          "name_ko": "우편번호1",
+          "name": "ZIP_1",
+          "type": "",
+          "size": "500",
+          "required": true,
+          "description": "우편번호1"
+        },
+        {
+          "name_ko": "우편번호2",
+          "name": "ZIP_2",
+          "type": "",
+          "size": "500",
+          "required": true,
+          "description": "우편번호2"
+        },
+        {
+          "name_ko": "X지도좌표",
+          "name": "XMAP_CRTS",
+          "type": "",
+          "size": "22",
+          "required": true,
+          "description": "X지도좌표"
+        },
+        {
+          "name_ko": "Y지도좌표",
+          "name": "YMAP_CRTS",
+          "type": "",
+          "size": "22",
+          "required": true,
+          "description": "Y지도좌표"
+        },
+        {
+          "name_ko": "위도",
+          "name": "LAT",
+          "type": "",
+          "size": "12",
+          "required": true,
+          "description": "위도"
+        },
+        {
+          "name_ko": "경도",
+          "name": "LOT",
+          "type": "",
+          "size": "13",
+          "required": true,
+          "description": "경도"
+        },
+        {
+          "name_ko": "주소",
+          "name": "ADDR",
+          "type": "",
+          "size": "200",
+          "required": true,
+          "description": "주소"
+        }
+      ],
+      "required_params": [
+        "serviceKey"
+      ],
+      "optional_params": [
+        "numOfRows",
+        "pageNo",
+        "returnType",
+        "startLot",
+        "endLot",
+        "startLat",
+        "endLat"
+      ],
+      "operation_mapping_candidate": {
+        "name": "행정안전부_자동심장충격기_AED",
+        "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-00068",
+        "method": "GET",
+        "request_params": [
+          {
+            "name_ko": "서비스키",
+            "name": "serviceKey",
+            "type": "STRING",
+            "size": "50",
+            "required": true,
+            "description": "서비스키"
+          },
+          {
+            "name_ko": "페이지당개수",
+            "name": "numOfRows",
+            "type": "NUMBER",
+            "size": "30",
+            "required": false,
+            "description": "페이지당개수"
+          },
+          {
+            "name_ko": "페이지번호",
+            "name": "pageNo",
+            "type": "NUMBER",
+            "size": "30",
+            "required": false,
+            "description": "페이지번호"
+          },
+          {
+            "name_ko": "응답타입(json,xml)",
+            "name": "returnType",
+            "type": "VARCHAR",
+            "size": "30",
+            "required": false,
+            "description": "응답타입(json,xml)"
+          },
+          {
+            "name_ko": "시작경도",
+            "name": "startLot",
+            "type": "STRING",
+            "size": "",
+            "required": false,
+            "description": "시작경도"
+          },
+          {
+            "name_ko": "종료경도",
+            "name": "endLot",
+            "type": "STRING",
+            "size": "",
+            "required": false,
+            "description": "종료경도"
+          },
+          {
+            "name_ko": "시작위도",
+            "name": "startLat",
+            "type": "STRING",
+            "size": "",
+            "required": false,
+            "description": "시작위도"
+          },
+          {
+            "name_ko": "종료위도",
+            "name": "endLat",
+            "type": "STRING",
+            "size": "",
+            "required": false,
+            "description": "종료위도"
+          }
+        ],
+        "response_fields": [
+          {
+            "name_ko": "일련번호",
+            "name": "SN",
+            "type": "",
+            "size": "22",
+            "required": true,
+            "description": "일련번호"
+          },
+          {
+            "name_ko": "설치주소",
+            "name": "INSTL_ADDR",
+            "type": "",
+            "size": "200",
+            "required": true,
+            "description": "설치주소"
+          },
+          {
+            "name_ko": "설치위치",
+            "name": "INSTL_PSTN",
+            "type": "",
+            "size": "100",
+            "required": true,
+            "description": "설치위치"
+          },
+          {
+            "name_ko": "구분",
+            "name": "SE",
+            "type": "",
+            "size": "50",
+            "required": true,
+            "description": "구분"
+          },
+          {
+            "name_ko": "관리자명",
+            "name": "MNGR_NM",
+            "type": "",
+            "size": "100",
+            "required": true,
+            "description": "관리자명"
+          },
+          {
+            "name_ko": "관리자전화번호",
+            "name": "MNGR_TELNO",
+            "type": "",
+            "size": "11",
+            "required": true,
+            "description": "관리자전화번호"
+          },
+          {
+            "name_ko": "제조사명",
+            "name": "MKR_NM",
+            "type": "",
+            "size": "100",
+            "required": true,
+            "description": "제조사명"
+          },
+          {
+            "name_ko": "모델명",
+            "name": "MDL_NM",
+            "type": "",
+            "size": "100",
+            "required": true,
+            "description": "모델명"
+          },
+          {
+            "name_ko": "관리기관명",
+            "name": "MNG_INST_NM",
+            "type": "",
+            "size": "200",
+            "required": true,
+            "description": "관리기관명"
+          },
+          {
+            "name_ko": "시도명",
+            "name": "CTPV_NM",
+            "type": "",
+            "size": "40",
+            "required": true,
+            "description": "시도명"
+          },
+          {
+            "name_ko": "우편번호1",
+            "name": "ZIP_1",
+            "type": "",
+            "size": "500",
+            "required": true,
+            "description": "우편번호1"
+          },
+          {
+            "name_ko": "우편번호2",
+            "name": "ZIP_2",
+            "type": "",
+            "size": "500",
+            "required": true,
+            "description": "우편번호2"
+          },
+          {
+            "name_ko": "X지도좌표",
+            "name": "XMAP_CRTS",
+            "type": "",
+            "size": "22",
+            "required": true,
+            "description": "X지도좌표"
+          },
+          {
+            "name_ko": "Y지도좌표",
+            "name": "YMAP_CRTS",
+            "type": "",
+            "size": "22",
+            "required": true,
+            "description": "Y지도좌표"
+          },
+          {
+            "name_ko": "위도",
+            "name": "LAT",
+            "type": "",
+            "size": "12",
+            "required": true,
+            "description": "위도"
+          },
+          {
+            "name_ko": "경도",
+            "name": "LOT",
+            "type": "",
+            "size": "13",
+            "required": true,
+            "description": "경도"
+          },
+          {
+            "name_ko": "주소",
+            "name": "ADDR",
+            "type": "",
+            "size": "200",
+            "required": true,
+            "description": "주소"
+          }
+        ]
+      }
+    },
+    {
+      "dataset_id": "15154065",
+      "title": "행정안전부_녹지_녹피_면적비율",
+      "organization": "행정안전부",
+      "meta_url": "https://www.data.go.kr/catalog/15154065/openapi.json",
+      "status": "candidate",
+      "reason": "safetydata_open_api_metadata_extracted",
+      "data_go_kr_url": "https://www.data.go.kr/data/15154065/openapi.do",
+      "safetydata_url": "https://www.safetydata.go.kr/disaster-data/view?dataSn=3716",
+      "data_sn": "3716",
+      "api_view_url": "https://www.safetydata.go.kr/disaster-data/getApiView?dataSn=3716",
+      "api_table_url": "https://www.safetydata.go.kr/disaster-data/apiDataTable?dataSn=3716",
+      "source_api_name": "녹지(녹피)면적비율",
+      "source_api_type": "REST",
+      "source_data_format": "JSON",
+      "source_interface_id": "DSSP-IF-20552",
+      "method": "GET",
+      "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20552",
+      "request_params": [
+        {
+          "name_ko": "서비스키",
+          "name": "serviceKey",
+          "type": "STRING",
+          "size": "50",
+          "required": true,
+          "description": "서비스키"
+        },
+        {
+          "name_ko": "페이지당개수",
+          "name": "numOfRows",
+          "type": "NUMBER",
+          "size": "30",
+          "required": false,
+          "description": "페이지당개수"
+        },
+        {
+          "name_ko": "페이지번호",
+          "name": "pageNo",
+          "type": "NUMBER",
+          "size": "30",
+          "required": false,
+          "description": "페이지번호"
+        },
+        {
+          "name_ko": "응답타입(json,xml)",
+          "name": "returnType",
+          "type": "VARCHAR",
+          "size": "30",
+          "required": false,
+          "description": "응답타입(json,xml)"
+        }
+      ],
+      "response_fields": [
+        {
+          "name_ko": "조사연도",
+          "name": "EXMN_YR",
+          "type": "",
+          "size": "4",
+          "required": true,
+          "description": "조사연도"
+        },
+        {
+          "name_ko": "행정구역코드",
+          "name": "ADMDST_CD",
+          "type": "",
+          "size": "10",
+          "required": true,
+          "description": "행정구역코드"
+        },
+        {
+          "name_ko": "행정구역명",
+          "name": "ADMDST_NM",
+          "type": "",
+          "size": "20",
+          "required": true,
+          "description": "행정구역명"
+        },
+        {
+          "name_ko": "녹피면적비율",
+          "name": "GSN_AREA_RT",
+          "type": "",
+          "size": "22",
+          "required": true,
+          "description": "녹피면적비율"
+        },
+        {
+          "name_ko": "녹피면적",
+          "name": "GSN_AREA",
+          "type": "",
+          "size": "22",
+          "required": true,
+          "description": "녹피면적"
+        },
+        {
+          "name_ko": "행정구역면적",
+          "name": "ADMDST_AREA",
+          "type": "",
+          "size": "22",
+          "required": true,
+          "description": "행정구역면적"
+        },
+        {
+          "name_ko": "녹지면적",
+          "name": "GBT_AREA",
+          "type": "",
+          "size": "22",
+          "required": true,
+          "description": "녹지면적"
+        },
+        {
+          "name_ko": "총녹지면적",
+          "name": "GRS_GBT_AREA",
+          "type": "",
+          "size": "22",
+          "required": true,
+          "description": "총녹지면적"
+        },
+        {
+          "name_ko": "인구",
+          "name": "PPLTN",
+          "type": "",
+          "size": "22",
+          "required": true,
+          "description": "인구"
+        }
+      ],
+      "required_params": [
+        "serviceKey"
+      ],
+      "optional_params": [
+        "numOfRows",
+        "pageNo",
+        "returnType"
+      ],
+      "operation_mapping_candidate": {
+        "name": "녹지(녹피)면적비율",
+        "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20552",
+        "method": "GET",
+        "request_params": [
+          {
+            "name_ko": "서비스키",
+            "name": "serviceKey",
+            "type": "STRING",
+            "size": "50",
+            "required": true,
+            "description": "서비스키"
+          },
+          {
+            "name_ko": "페이지당개수",
+            "name": "numOfRows",
+            "type": "NUMBER",
+            "size": "30",
+            "required": false,
+            "description": "페이지당개수"
+          },
+          {
+            "name_ko": "페이지번호",
+            "name": "pageNo",
+            "type": "NUMBER",
+            "size": "30",
+            "required": false,
+            "description": "페이지번호"
+          },
+          {
+            "name_ko": "응답타입(json,xml)",
+            "name": "returnType",
+            "type": "VARCHAR",
+            "size": "30",
+            "required": false,
+            "description": "응답타입(json,xml)"
+          }
+        ],
+        "response_fields": [
+          {
+            "name_ko": "조사연도",
+            "name": "EXMN_YR",
+            "type": "",
+            "size": "4",
+            "required": true,
+            "description": "조사연도"
+          },
+          {
+            "name_ko": "행정구역코드",
+            "name": "ADMDST_CD",
+            "type": "",
+            "size": "10",
+            "required": true,
+            "description": "행정구역코드"
+          },
+          {
+            "name_ko": "행정구역명",
+            "name": "ADMDST_NM",
+            "type": "",
+            "size": "20",
+            "required": true,
+            "description": "행정구역명"
+          },
+          {
+            "name_ko": "녹피면적비율",
+            "name": "GSN_AREA_RT",
+            "type": "",
+            "size": "22",
+            "required": true,
+            "description": "녹피면적비율"
+          },
+          {
+            "name_ko": "녹피면적",
+            "name": "GSN_AREA",
+            "type": "",
+            "size": "22",
+            "required": true,
+            "description": "녹피면적"
+          },
+          {
+            "name_ko": "행정구역면적",
+            "name": "ADMDST_AREA",
+            "type": "",
+            "size": "22",
+            "required": true,
+            "description": "행정구역면적"
+          },
+          {
+            "name_ko": "녹지면적",
+            "name": "GBT_AREA",
+            "type": "",
+            "size": "22",
+            "required": true,
+            "description": "녹지면적"
+          },
+          {
+            "name_ko": "총녹지면적",
+            "name": "GRS_GBT_AREA",
+            "type": "",
+            "size": "22",
+            "required": true,
+            "description": "총녹지면적"
+          },
+          {
+            "name_ko": "인구",
+            "name": "PPLTN",
+            "type": "",
+            "size": "22",
+            "required": true,
+            "description": "인구"
+          }
+        ]
+      }
+    },
+    {
+      "dataset_id": "15154063",
+      "title": "행정안전부_기간별감염병발생현황",
+      "organization": "행정안전부",
+      "meta_url": "https://www.data.go.kr/catalog/15154063/openapi.json",
+      "status": "candidate",
+      "reason": "safetydata_open_api_metadata_extracted",
+      "data_go_kr_url": "https://www.data.go.kr/data/15154063/openapi.do",
+      "safetydata_url": "https://www.safetydata.go.kr/disaster-data/view?dataSn=3787",
+      "data_sn": "3787",
+      "api_view_url": "https://www.safetydata.go.kr/disaster-data/getApiView?dataSn=3787",
+      "api_table_url": "https://www.safetydata.go.kr/disaster-data/apiDataTable?dataSn=3787",
+      "source_api_name": "기간별감염병발생현황",
+      "source_api_type": "REST",
+      "source_data_format": "JSON",
+      "source_interface_id": "DSSP-IF-20638",
+      "method": "GET",
+      "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20638",
+      "request_params": [
+        {
+          "name_ko": "서비스키",
+          "name": "serviceKey",
+          "type": "STRING",
+          "size": "50",
+          "required": true,
+          "description": "서비스키"
+        },
+        {
+          "name_ko": "페이지당개수",
+          "name": "numOfRows",
+          "type": "NUMBER",
+          "size": "30",
+          "required": false,
+          "description": "페이지당개수"
+        },
+        {
+          "name_ko": "페이지번호",
+          "name": "pageNo",
+          "type": "NUMBER",
+          "size": "30",
+          "required": false,
+          "description": "페이지번호"
+        },
+        {
+          "name_ko": "응답타입(json,xml)",
+          "name": "returnType",
+          "type": "VARCHAR",
+          "size": "30",
+          "required": false,
+          "description": "응답타입(json,xml)"
+        }
+      ],
+      "response_fields": [
+        {
+          "name_ko": "발생연도",
+          "name": "OCRN_YR",
+          "type": "",
+          "size": "10",
+          "required": true,
+          "description": "발생연도"
+        },
+        {
+          "name_ko": "감염병등급명",
+          "name": "ICD_GROUP_NM",
+          "type": "",
+          "size": "200",
+          "required": true,
+          "description": "감염병등급명"
+        },
+        {
+          "name_ko": "감염병명",
+          "name": "ICD_NM",
+          "type": "",
+          "size": "200",
+          "required": true,
+          "description": "감염병명"
+        },
+        {
+          "name_ko": "발생건수",
+          "name": "RESULT_VAL",
+          "type": "",
+          "size": "22",
+          "required": true,
+          "description": "발생건수"
+        }
+      ],
+      "required_params": [
+        "serviceKey"
+      ],
+      "optional_params": [
+        "numOfRows",
+        "pageNo",
+        "returnType"
+      ],
+      "operation_mapping_candidate": {
+        "name": "기간별감염병발생현황",
+        "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20638",
+        "method": "GET",
+        "request_params": [
+          {
+            "name_ko": "서비스키",
+            "name": "serviceKey",
+            "type": "STRING",
+            "size": "50",
+            "required": true,
+            "description": "서비스키"
+          },
+          {
+            "name_ko": "페이지당개수",
+            "name": "numOfRows",
+            "type": "NUMBER",
+            "size": "30",
+            "required": false,
+            "description": "페이지당개수"
+          },
+          {
+            "name_ko": "페이지번호",
+            "name": "pageNo",
+            "type": "NUMBER",
+            "size": "30",
+            "required": false,
+            "description": "페이지번호"
+          },
+          {
+            "name_ko": "응답타입(json,xml)",
+            "name": "returnType",
+            "type": "VARCHAR",
+            "size": "30",
+            "required": false,
+            "description": "응답타입(json,xml)"
+          }
+        ],
+        "response_fields": [
+          {
+            "name_ko": "발생연도",
+            "name": "OCRN_YR",
+            "type": "",
+            "size": "10",
+            "required": true,
+            "description": "발생연도"
+          },
+          {
+            "name_ko": "감염병등급명",
+            "name": "ICD_GROUP_NM",
+            "type": "",
+            "size": "200",
+            "required": true,
+            "description": "감염병등급명"
+          },
+          {
+            "name_ko": "감염병명",
+            "name": "ICD_NM",
+            "type": "",
+            "size": "200",
+            "required": true,
+            "description": "감염병명"
+          },
+          {
+            "name_ko": "발생건수",
+            "name": "RESULT_VAL",
+            "type": "",
+            "size": "22",
+            "required": true,
+            "description": "발생건수"
+          }
+        ]
+      }
+    },
+    {
+      "dataset_id": "15154052",
+      "title": "행정안전부_국외전염병발생현황",
+      "organization": "행정안전부",
+      "meta_url": "https://www.data.go.kr/catalog/15154052/openapi.json",
+      "status": "candidate",
+      "reason": "safetydata_open_api_metadata_extracted",
+      "data_go_kr_url": "https://www.data.go.kr/data/15154052/openapi.do",
+      "safetydata_url": "https://www.safetydata.go.kr/disaster-data/view?dataSn=3728",
+      "data_sn": "3728",
+      "api_view_url": "https://www.safetydata.go.kr/disaster-data/getApiView?dataSn=3728",
+      "api_table_url": "https://www.safetydata.go.kr/disaster-data/apiDataTable?dataSn=3728",
+      "source_api_name": "국외전염병발생현황",
+      "source_api_type": "REST",
+      "source_data_format": "JSON",
+      "source_interface_id": "DSSP-IF-20564",
+      "method": "GET",
+      "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20564",
+      "request_params": [
+        {
+          "name_ko": "서비스키",
+          "name": "serviceKey",
+          "type": "STRING",
+          "size": "50",
+          "required": true,
+          "description": "서비스키"
+        },
+        {
+          "name_ko": "페이지당개수",
+          "name": "numOfRows",
+          "type": "NUMBER",
+          "size": "30",
+          "required": false,
+          "description": "페이지당개수"
+        },
+        {
+          "name_ko": "페이지번호",
+          "name": "pageNo",
+          "type": "NUMBER",
+          "size": "30",
+          "required": false,
+          "description": "페이지번호"
+        },
+        {
+          "name_ko": "응답타입(json,xml)",
+          "name": "returnType",
+          "type": "VARCHAR",
+          "size": "30",
+          "required": false,
+          "description": "응답타입(json,xml)"
+        }
+      ],
+      "response_fields": [
+        {
+          "name_ko": "전염병종류",
+          "name": "ICTSD_KND",
+          "type": "",
+          "size": "20",
+          "required": true,
+          "description": "전염병종류"
+        },
+        {
+          "name_ko": "전염병코드",
+          "name": "ICTSD_CD",
+          "type": "",
+          "size": "20",
+          "required": true,
+          "description": "전염병코드"
+        },
+        {
+          "name_ko": "전염병발생일시",
+          "name": "ICTSD_OCRN_DT",
+          "type": "",
+          "size": "50",
+          "required": true,
+          "description": "전염병발생일시"
+        },
+        {
+          "name_ko": "수상생물의종류",
+          "name": "WNAWD_GNM_KND",
+          "type": "",
+          "size": "200",
+          "required": true,
+          "description": "수상생물의종류"
+        },
+        {
+          "name_ko": "지역명",
+          "name": "RGN_NM",
+          "type": "",
+          "size": "200",
+          "required": true,
+          "description": "지역명"
+        },
+        {
+          "name_ko": "국가명",
+          "name": "NTN_NM",
+          "type": "",
+          "size": "100",
+          "required": true,
+          "description": "국가명"
+        },
+        {
+          "name_ko": "시퀀스",
+          "name": "SEQ",
+          "type": "",
+          "size": "22",
+          "required": true,
+          "description": "시퀀스"
+        },
+        {
+          "name_ko": "질병보고일시",
+          "name": "DSS_RPT_DT",
+          "type": "",
+          "size": "50",
+          "required": true,
+          "description": "질병보고일시"
+        }
+      ],
+      "required_params": [
+        "serviceKey"
+      ],
+      "optional_params": [
+        "numOfRows",
+        "pageNo",
+        "returnType"
+      ],
+      "operation_mapping_candidate": {
+        "name": "국외전염병발생현황",
+        "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20564",
+        "method": "GET",
+        "request_params": [
+          {
+            "name_ko": "서비스키",
+            "name": "serviceKey",
+            "type": "STRING",
+            "size": "50",
+            "required": true,
+            "description": "서비스키"
+          },
+          {
+            "name_ko": "페이지당개수",
+            "name": "numOfRows",
+            "type": "NUMBER",
+            "size": "30",
+            "required": false,
+            "description": "페이지당개수"
+          },
+          {
+            "name_ko": "페이지번호",
+            "name": "pageNo",
+            "type": "NUMBER",
+            "size": "30",
+            "required": false,
+            "description": "페이지번호"
+          },
+          {
+            "name_ko": "응답타입(json,xml)",
+            "name": "returnType",
+            "type": "VARCHAR",
+            "size": "30",
+            "required": false,
+            "description": "응답타입(json,xml)"
+          }
+        ],
+        "response_fields": [
+          {
+            "name_ko": "전염병종류",
+            "name": "ICTSD_KND",
+            "type": "",
+            "size": "20",
+            "required": true,
+            "description": "전염병종류"
+          },
+          {
+            "name_ko": "전염병코드",
+            "name": "ICTSD_CD",
+            "type": "",
+            "size": "20",
+            "required": true,
+            "description": "전염병코드"
+          },
+          {
+            "name_ko": "전염병발생일시",
+            "name": "ICTSD_OCRN_DT",
+            "type": "",
+            "size": "50",
+            "required": true,
+            "description": "전염병발생일시"
+          },
+          {
+            "name_ko": "수상생물의종류",
+            "name": "WNAWD_GNM_KND",
+            "type": "",
+            "size": "200",
+            "required": true,
+            "description": "수상생물의종류"
+          },
+          {
+            "name_ko": "지역명",
+            "name": "RGN_NM",
+            "type": "",
+            "size": "200",
+            "required": true,
+            "description": "지역명"
+          },
+          {
+            "name_ko": "국가명",
+            "name": "NTN_NM",
+            "type": "",
+            "size": "100",
+            "required": true,
+            "description": "국가명"
+          },
+          {
+            "name_ko": "시퀀스",
+            "name": "SEQ",
+            "type": "",
+            "size": "22",
+            "required": true,
+            "description": "시퀀스"
+          },
+          {
+            "name_ko": "질병보고일시",
+            "name": "DSS_RPT_DT",
+            "type": "",
+            "size": "50",
+            "required": true,
+            "description": "질병보고일시"
+          }
+        ]
+      }
+    },
+    {
+      "dataset_id": "15154049",
+      "title": "행정안전부_국외검사기관인정현황",
+      "organization": "행정안전부",
+      "meta_url": "https://www.data.go.kr/catalog/15154049/openapi.json",
+      "status": "candidate",
+      "reason": "safetydata_open_api_metadata_extracted",
+      "data_go_kr_url": "https://www.data.go.kr/data/15154049/openapi.do",
+      "safetydata_url": "https://www.safetydata.go.kr/disaster-data/view?dataSn=3392",
+      "data_sn": "3392",
+      "api_view_url": "https://www.safetydata.go.kr/disaster-data/getApiView?dataSn=3392",
+      "api_table_url": "https://www.safetydata.go.kr/disaster-data/apiDataTable?dataSn=3392",
+      "source_api_name": "국외검사기관인정현황",
+      "source_api_type": "REST",
+      "source_data_format": "JSON",
+      "source_interface_id": "DSSP-IF-20141",
+      "method": "GET",
+      "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20141",
+      "request_params": [
+        {
+          "name_ko": "서비스키",
+          "name": "serviceKey",
+          "type": "STRING",
+          "size": "50",
+          "required": true,
+          "description": "서비스키"
+        },
+        {
+          "name_ko": "페이지당개수",
+          "name": "numOfRows",
+          "type": "NUMBER",
+          "size": "30",
+          "required": false,
+          "description": "페이지당개수"
+        },
+        {
+          "name_ko": "페이지번호",
+          "name": "pageNo",
+          "type": "NUMBER",
+          "size": "30",
+          "required": false,
+          "description": "페이지번호"
+        },
+        {
+          "name_ko": "응답타입(json,xml)",
+          "name": "returnType",
+          "type": "VARCHAR",
+          "size": "30",
+          "required": false,
+          "description": "응답타입(json,xml)"
+        }
+      ],
+      "response_fields": [
+        {
+          "name_ko": "인정번호",
+          "name": "RCG_NO",
+          "type": "",
+          "size": "50",
+          "required": true,
+          "description": "인정번호"
+        },
+        {
+          "name_ko": "기관명",
+          "name": "INST_NM",
+          "type": "",
+          "size": "200",
+          "required": true,
+          "description": "기관명"
+        },
+        {
+          "name_ko": "대표자",
+          "name": "RPRSV",
+          "type": "",
+          "size": "100",
+          "required": true,
+          "description": "대표자"
+        },
+        {
+          "name_ko": "지정일자",
+          "name": "DSGN_YMD",
+          "type": "",
+          "size": "50",
+          "required": true,
+          "description": "지정일자"
+        },
+        {
+          "name_ko": "검사항목",
+          "name": "INSP_ARTCL",
+          "type": "",
+          "size": "500",
+          "required": true,
+          "description": "검사항목"
+        },
+        {
+          "name_ko": "전화번호",
+          "name": "TELNO",
+          "type": "",
+          "size": "50",
+          "required": true,
+          "description": "전화번호"
+        },
+        {
+          "name_ko": "주소",
+          "name": "ADDR",
+          "type": "",
+          "size": "1000",
+          "required": true,
+          "description": "주소"
+        }
+      ],
+      "required_params": [
+        "serviceKey"
+      ],
+      "optional_params": [
+        "numOfRows",
+        "pageNo",
+        "returnType"
+      ],
+      "operation_mapping_candidate": {
+        "name": "국외검사기관인정현황",
+        "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20141",
+        "method": "GET",
+        "request_params": [
+          {
+            "name_ko": "서비스키",
+            "name": "serviceKey",
+            "type": "STRING",
+            "size": "50",
+            "required": true,
+            "description": "서비스키"
+          },
+          {
+            "name_ko": "페이지당개수",
+            "name": "numOfRows",
+            "type": "NUMBER",
+            "size": "30",
+            "required": false,
+            "description": "페이지당개수"
+          },
+          {
+            "name_ko": "페이지번호",
+            "name": "pageNo",
+            "type": "NUMBER",
+            "size": "30",
+            "required": false,
+            "description": "페이지번호"
+          },
+          {
+            "name_ko": "응답타입(json,xml)",
+            "name": "returnType",
+            "type": "VARCHAR",
+            "size": "30",
+            "required": false,
+            "description": "응답타입(json,xml)"
+          }
+        ],
+        "response_fields": [
+          {
+            "name_ko": "인정번호",
+            "name": "RCG_NO",
+            "type": "",
+            "size": "50",
+            "required": true,
+            "description": "인정번호"
+          },
+          {
+            "name_ko": "기관명",
+            "name": "INST_NM",
+            "type": "",
+            "size": "200",
+            "required": true,
+            "description": "기관명"
+          },
+          {
+            "name_ko": "대표자",
+            "name": "RPRSV",
+            "type": "",
+            "size": "100",
+            "required": true,
+            "description": "대표자"
+          },
+          {
+            "name_ko": "지정일자",
+            "name": "DSGN_YMD",
+            "type": "",
+            "size": "50",
+            "required": true,
+            "description": "지정일자"
+          },
+          {
+            "name_ko": "검사항목",
+            "name": "INSP_ARTCL",
+            "type": "",
+            "size": "500",
+            "required": true,
+            "description": "검사항목"
+          },
+          {
+            "name_ko": "전화번호",
+            "name": "TELNO",
+            "type": "",
+            "size": "50",
+            "required": true,
+            "description": "전화번호"
+          },
+          {
+            "name_ko": "주소",
+            "name": "ADDR",
+            "type": "",
+            "size": "1000",
+            "required": true,
+            "description": "주소"
+          }
+        ]
+      }
+    }
+  ]
+}

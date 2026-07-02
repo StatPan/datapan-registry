@@ -82,6 +82,7 @@ datapan catalog verify summary --input reports/latest-verification.json --output
 python scripts/generate-coverage-backlog.py
 python scripts/generate-external-adapter-backlog.py
 python scripts/generate-operation-materialization-plan.py
+python scripts/generate-safetydata-operation-candidates.py
 python scripts/generate-institution-api-overview.py
 python scripts/generate-institution-runtime-plan.py
 python scripts/generate-source-report-inventory.py
@@ -132,6 +133,15 @@ operation mappings separate from runtime reactivation work. Start with the
 largest institution surface, materialize the planned API metadata into registry
 operation mappings, then regenerate the coverage backlog, operation
 materialization plan, institution API overview, and institution runtime plan.
+For Safety Data linked APIs, refresh operation candidates with:
+
+```bash
+python scripts/generate-safetydata-operation-candidates.py --batch reports/data-go-kr/operation-materialization-batches/institution-01.json --limit 10
+python scripts/validate-safetydata-operation-candidates.py
+```
+
+The `Safety Data operation discovery` workflow runs the same discovery without
+credentials and uploads the candidate report as an artifact.
 
 Provider-specific evidence should be accumulated for registered external
 adapters:
