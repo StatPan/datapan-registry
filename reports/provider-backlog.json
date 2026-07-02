@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T17:45:14Z",
+  "generated_at": "2026-07-02T17:58:06Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -10,11 +10,11 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 53,
     "external_guide_hosts": 157,
-    "registered_adapter_hosts": 35,
+    "registered_adapter_hosts": 36,
     "operation_hosts": 55,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 18,
-    "needs_adapter_operations": 43,
+    "missing_adapter_hosts": 17,
+    "needs_adapter_operations": 40,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
@@ -74,21 +74,6 @@
       "external_endpoint_operations": 4,
       "sample_ids": [
         "3043385"
-      ]
-    },
-    {
-      "host": "www.garak.co.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "missing",
-      "specs": 1,
-      "operations": 3,
-      "external_endpoint_operations": 3,
-      "external_guide_specs": 1,
-      "sample_ids": [
-        "15004517"
       ]
     },
     {
@@ -758,6 +743,21 @@
       "sample_ids": [
         "15002220",
         "15008409"
+      ]
+    },
+    {
+      "host": "www.garak.co.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15004517"
       ]
     },
     {

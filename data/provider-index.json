@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-02T17:45:14Z",
+  "generated_at": "2026-07-02T17:58:06Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 31,
-  "host_count": 35,
+  "adapter_count": 32,
+  "host_count": 36,
   "adapters": [
     {
       "name": "airport",
@@ -86,6 +86,16 @@
       ],
       "capabilities": [
         "call",
+        "verification"
+      ]
+    },
+    {
+      "name": "garak",
+      "status": "registered",
+      "hosts": [
+        "www.garak.co.kr"
+      ],
+      "capabilities": [
         "verification"
       ]
     },
@@ -343,8 +353,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 31,
-    "verification_capable_adapters": 31,
+    "adapter_count": 32,
+    "verification_capable_adapters": 32,
     "call_capable_adapters": 21,
     "required_adapters": 2,
     "required_verification_adapters": 2,

@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-02T17:45:12Z",
+  "generated_at": "2026-07-02T17:58:04Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 1401,
+  "limit": 1404,
   "truncated": true,
-  "filtered_count": 1264,
+  "filtered_count": 1267,
   "summary": {
-    "total": 1264,
-    "verified": 55,
+    "total": 1267,
+    "verified": 58,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0
@@ -24314,6 +24314,48 @@
       "http_status": 200,
       "semantic_status": "html_landing_page",
       "url": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?cl_code=\u0026data_id=20150827000000000463\u0026filter_ty=O\u0026getBack=\u0026instt_id=\u0026s_data_nm=\u0026shareYn=\u0026sort_id=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15004517",
+      "title": "서울특별시농수산식품공사_주요 품목 가격",
+      "operation": "서울특별시농수산식품공사_주요 품목 가격_20210113 외부 링크 1",
+      "provider": "garak",
+      "endpoint_host": "www.garak.co.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T17:58:01Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.garak.co.kr/homepage/M0000258/publicdata/selectPageListPublicData.do?publicDataRealmSn=30",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15004517",
+      "title": "서울특별시농수산식품공사_주요 품목 가격",
+      "operation": "서울특별시농수산식품공사_주요 품목 가격_20210113 외부 링크 2",
+      "provider": "garak",
+      "endpoint_host": "www.garak.co.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T17:58:01Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.garak.co.kr/homepage/M0000258/publicdata/selectPageListPublicData.do?publicDataRealmSn=23",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15004517",
+      "title": "서울특별시농수산식품공사_주요 품목 가격",
+      "operation": "서울특별시농수산식품공사_주요 품목 가격_20210113 외부 링크 3",
+      "provider": "garak",
+      "endpoint_host": "www.garak.co.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T17:58:01Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.garak.co.kr/homepage/M0000258/publicdata/selectPageListPublicData.do?publicDataRealmSn=24",
       "body_shape": "html"
     }
   ]

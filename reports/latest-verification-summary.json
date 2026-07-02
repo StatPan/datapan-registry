@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-02T17:45:12Z",
+  "generated_at": "2026-07-02T17:58:04Z",
   "source": "..\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1264,
-    "verified": 55,
+    "total": 1267,
+    "verified": 58,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0
@@ -26,7 +26,7 @@
       },
       {
         "key": "verified",
-        "count": 55,
+        "count": 58,
         "status": "verified"
       }
     ],
@@ -424,6 +424,11 @@
         "provider": "folk"
       },
       {
+        "key": "garak",
+        "count": 3,
+        "provider": "garak"
+      },
+      {
         "key": "gblib",
         "count": 3,
         "provider": "gblib"
@@ -616,6 +621,11 @@
         "host": "www.emuseum.go.kr"
       },
       {
+        "key": "www.garak.co.kr",
+        "count": 3,
+        "host": "www.garak.co.kr"
+      },
+      {
         "key": "data.myhome.go.kr:443",
         "count": 1,
         "host": "data.myhome.go.kr:443"
@@ -634,7 +644,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 600,
+        "count": 603,
         "kind": "external_endpoint"
       },
       {
