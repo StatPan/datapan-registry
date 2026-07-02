@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.release-manifest.v1",
-  "generated_at": "2026-07-02T16:06:15Z",
+  "generated_at": "2026-07-02T16:17:23Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
@@ -186,7 +186,7 @@
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
       "bytes": 11058,
-      "sha256": "abedc4f7082932663dbcec896514f791971f50458ad5724301edc9bea13e9570"
+      "sha256": "a1f36b6ea32608f08495c7d8b35a3eba15519a4120a3adc3929499277639ce6a"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -200,91 +200,91 @@
       "kind": "provider_index",
       "schema": "https://schemas.datapan.dev/datapan.provider-index.v1.schema.json",
       "bytes": 5588,
-      "sha256": "7563f7d8352ffd20a243ede9ff01df85dbc00d9a3b3b1d384fd40d61294bf096"
+      "sha256": "682c35c93442b930704d8b541150cc9efd277d66ca84ff59e714f3c263d408d2"
     },
     {
       "path": "reports/catalog-diff.json",
       "kind": "catalog_diff",
       "schema": "https://schemas.datapan.dev/datapan.catalog-diff.v1.schema.json",
       "bytes": 10813,
-      "sha256": "709945272ae4b52ad593820b620d21ac3dd5029e63fabffcf87ec458f1ddfe76"
+      "sha256": "9e59a8e1de35b0cea3ac5ce82db6b7ca6a2714b9a3ab0461d0e4f8a72c7029eb"
     },
     {
       "path": "reports/catalog-audit.json",
       "kind": "catalog_audit",
       "schema": "https://schemas.datapan.dev/datapan.catalog-audit.v1.schema.json",
       "bytes": 15760,
-      "sha256": "77a8d51aa701006ae48771b04eb096b76803ccb6427321385de4fa2c80a1f555"
+      "sha256": "5a6882ae27e79c52c506fc54c4b0b7fa5bac9dfcbf922577137842a962164403"
     },
     {
       "path": "reports/error-catalog.json",
       "kind": "error_catalog",
       "schema": "https://schemas.datapan.dev/datapan.error-catalog.v1.schema.json",
       "bytes": 3305377,
-      "sha256": "9246d5fb90795e8a6c2c4153a8062b2c553e112e24c1924a3f6a674b019edb09"
+      "sha256": "294a3772864ad4b2df176ed0f255408a83ff6d1f3edc96caf9c48c4614baab39"
     },
     {
       "path": "reports/dependencies.json",
       "kind": "dependencies",
       "schema": "https://schemas.datapan.dev/datapan.dependencies.v1.schema.json",
       "bytes": 11444324,
-      "sha256": "999b5cd5110683ad39e0ed36307825f4bd9db8b7bd316cb7a3f6288fc91d15a1"
+      "sha256": "b88ed14b232bf5d09bc01650cc94fc36011c1310e45cba7a6fab84f455072d4d"
     },
     {
       "path": "reports/adapter-targets.json",
       "kind": "adapter_targets",
       "schema": "https://schemas.datapan.dev/datapan.adapter-targets.v1.schema.json",
       "bytes": 35419,
-      "sha256": "45a41dc11eb8263e74050f2724ced4f17f53652eb9281a129f85931cf502297b"
+      "sha256": "8b15d0c9c2992740f5d7da2f8bd7315952065b0524e14cceadfcedf298f44b9a"
     },
     {
       "path": "reports/route-disposition.json",
       "kind": "route_disposition",
       "schema": "https://schemas.datapan.dev/datapan.route-disposition.v1.schema.json",
       "bytes": 61890,
-      "sha256": "7cb8a5b61789f187cdf1de438af34a11de53356055d5ffa64134d422cbadacb5"
+      "sha256": "c88c09d18f924ebbfbd934ff88628288400619739000c9ca2e6114e56a995a03"
     },
     {
       "path": "reports/provider-backlog.json",
       "kind": "provider_backlog",
       "schema": "https://schemas.datapan.dev/datapan.providers.v1.schema.json",
       "bytes": 57673,
-      "sha256": "481e51d0c37a55d81be495c30007cc65eb13b962abdd7b7d8aad49a841709a99"
+      "sha256": "393a26af37cae1ecd4c661f13a845ec23c48241333877c137fba996b030ce48a"
     },
     {
       "path": "reports/coverage.json",
       "kind": "coverage",
       "schema": "https://schemas.datapan.dev/datapan.coverage.v1.schema.json",
       "bytes": 17020,
-      "sha256": "97207cd656f4394c755678e8a569c0aa3fd749f6c07ba35f1045dc4ed2258be3"
+      "sha256": "26d1a5f4dd00f4f70794de7d35946a452edefcc7d1ec2a01a09f9bdd47c10275"
     },
     {
       "path": "reports/verification-plan.json",
       "kind": "verification_plan",
       "schema": "https://schemas.datapan.dev/datapan.verification-plan.v1.schema.json",
       "bytes": 4750,
-      "sha256": "dc3013730d531315c10133daf511ed761422ec29d5d0e483d134ffa643ceb418"
+      "sha256": "76386513b7adf71f4fd0e61c9bd13b2379fd8ad3bcb7b8f9125cdc21f073bd74"
     },
     {
       "path": "reports/data-go-kr/runtime-evidence-growth.json",
       "kind": "runtime_evidence_growth",
       "schema": "https://schemas.datapan.dev/datapan.runtime-evidence-growth.v1.schema.json",
-      "bytes": 2319,
-      "sha256": "31b80f7eea6dbea9c981eafb54b47fc1c6b3dc597cf2514e930eb31b7f984f28"
+      "bytes": 2080,
+      "sha256": "10e240d16bbaeb9f9ff9e839811007b34e9b73c921b186d916e23e5fd8789d26"
     },
     {
       "path": "reports/latest-verification.json",
       "kind": "verification",
       "schema": "https://schemas.datapan.dev/datapan.verification.v1.schema.json",
-      "bytes": 710148,
-      "sha256": "be91f6bfce70e89ecdb25037181531f2837f2dc759c7c876753b57dee79da602"
+      "bytes": 715494,
+      "sha256": "0029bdc9a0a0bb0b29474339037aa34f4261acfe818ad2f056ab7ba13eef268e"
     },
     {
       "path": "reports/latest-verification-summary.json",
       "kind": "verification_summary",
       "schema": "https://schemas.datapan.dev/datapan.verification-summary.v1.schema.json",
-      "bytes": 13772,
-      "sha256": "b22dedd08de5c592e1c7322d085ee898ecc76f76805187f58c60a4c5dda7a3c2"
+      "bytes": 13669,
+      "sha256": "661a52086355e1b1aed438eba59b6fe38b4253b5110e1179df62beffac303e5e"
     },
     {
       "path": "reports/unadapted-external-probe.json",
@@ -304,13 +304,13 @@
       "path": "provenance/data-go-kr.md",
       "kind": "provenance",
       "bytes": 3215,
-      "sha256": "5d28c428bd5f7f1b4757df40104bdd1254e0a52294f796b5bb223186c96a87a3"
+      "sha256": "428d5f7eb8cd9a45dc66540db5ceeb563106ac751ca7e86388acae5f48983d46"
     },
     {
       "path": "RELEASE_NOTES.md",
       "kind": "release_notes",
-      "bytes": 3307,
-      "sha256": "a8ceae43895d8784cd595cb7c057c18b70de8324ff968f5b3d562479cb194031"
+      "bytes": 3237,
+      "sha256": "286bb5954a0b8b4e102b7fc4a76482a1a930efab4a986e6b73e45dadbb666ca6"
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T16:06:31Z",
+  "generated_at": "2026-07-02T16:17:37Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -8,8 +8,8 @@
   "timeout": "10s",
   "summary": {
     "operations": 12253,
-    "evidence_total": 1221,
-    "uncovered_gateway_candidates": 10784,
+    "evidence_total": 1231,
+    "uncovered_gateway_candidates": 10774,
     "uncovered_adapter_candidates": 0,
     "missing_adapter_hosts": 23,
     "planned_batches": 1,
@@ -20,7 +20,7 @@
       "label": "gateway",
       "kind": "data_go_kr_gateway",
       "candidates": 11419,
-      "uncovered_candidates": 10784,
+      "uncovered_candidates": 10774,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry ..\\datapan-registry\\data\\data-go-kr.registry.json --kind data_go_kr_gateway --exclude-input ..\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gateway-next.json --json",
       "output": ".datapan/verification/gateway-next.json"

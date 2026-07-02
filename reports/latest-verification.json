@@ -1,15 +1,14 @@
 {
-  "generated_at": "2026-06-30T08:11:07Z",
+  "generated_at": "2026-07-02T16:17:09Z",
   "provider": "data.go.kr",
-  "registry": "/home/statpan/workspace/opensource/datapan-registry/.datapan/data-go-kr.registry.json",
-  "limit": 1358,
+  "limit": 1368,
   "truncated": true,
-  "filtered_count": 1221,
+  "filtered_count": 1231,
   "summary": {
-    "total": 1221,
+    "total": 1231,
     "verified": 22,
     "failed": 87,
-    "skipped": 1112,
+    "skipped": 1122,
     "unknown": 0
   },
   "results": [
@@ -23660,6 +23659,198 @@
       "missing_params": [
         "tmFc",
         "typSeq"
+      ]
+    },
+    {
+      "dataset_id": "15043565",
+      "title": "기상청_태풍정보 조회서비스",
+      "operation": "태풍정보목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "dataType": "json",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "tmFc": ""
+      },
+      "missing_params": [
+        "tmFc"
+      ]
+    },
+    {
+      "dataset_id": "15043565",
+      "title": "기상청_태풍정보 조회서비스",
+      "operation": "태풍정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "dataType": "json",
+        "fromTmFc": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "toTmFc": ""
+      },
+      "missing_params": [
+        "fromTmFc",
+        "toTmFc"
+      ]
+    },
+    {
+      "dataset_id": "15043603",
+      "title": "기상청_고층기상관측자료 조회서비스",
+      "operation": "수직측풍관측자료조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "dataType": "json",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "stnId": "",
+        "time": ""
+      },
+      "missing_params": [
+        "time",
+        "stnId"
+      ]
+    },
+    {
+      "dataset_id": "15043939",
+      "title": "해양수산부_연도별 총괄 어업생산통계",
+      "operation": "연도별 총괄 어업생산통계 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "baseDt": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "baseDt"
+      ]
+    },
+    {
+      "dataset_id": "15046035",
+      "title": "국토안전관리원_공공시설물 안전관리 정보조회 서비스",
+      "operation": "공공시설물 안전관리 정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "facilAddr": "",
+        "facilNm": "",
+        "facilNo": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "facilNo",
+        "facilNm",
+        "facilAddr"
+      ]
+    },
+    {
+      "dataset_id": "15046204",
+      "title": "성평등가족부_폭력예방교육자료 목록 조회 서비스",
+      "operation": "성평등가족부 폭력예방교육자료 목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "apiType": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "apiType"
+      ]
+    },
+    {
+      "dataset_id": "15047798",
+      "title": "한국식품연구원_전통식품정보 서비스",
+      "operation": "대표식품 목록 및 분류",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      }
+    },
+    {
+      "dataset_id": "15047798",
+      "title": "한국식품연구원_전통식품정보 서비스",
+      "operation": "대표식품별 건강기능(병증처방) 정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "tradFoodCd": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "tradFoodCd"
+      ]
+    },
+    {
+      "dataset_id": "15047798",
+      "title": "한국식품연구원_전통식품정보 서비스",
+      "operation": "대표식품별 건강기능(학술) 정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "foodCd": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "foodCd"
+      ]
+    },
+    {
+      "dataset_id": "15047798",
+      "title": "한국식품연구원_전통식품정보 서비스",
+      "operation": "대표식품별 건강기능(한의문헌) 정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "foodCd": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "foodCd"
       ]
     }
   ]
