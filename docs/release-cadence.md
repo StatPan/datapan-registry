@@ -64,7 +64,8 @@ check. That workflow:
   summaries for qnet, epost, ekape, emuseum, forest, folk, garak, airport,
   andong, data-gg, jeonju, gblib, geoje, gwanak, humetro, itfind, korad, kpx,
   lh-ebid, mafra, myhome, naqs, nfqs, nongsaro, oneclick-law, pqis, seoul-bus,
-  sisul, tour, uiryeong, ulsan, work24, and the merged latest report;
+  seoul-open-data, sisul, tour, uiryeong, ulsan, work24, and the merged latest
+  report;
 - runs `catalog release verify`;
 - runs `catalog release readiness`;
 - checks that the README Current Snapshot matches the generated coverage,
@@ -143,6 +144,8 @@ datapan catalog verify --registry data/data-go-kr.registry.json --provider pqis 
 datapan catalog verify summary --input reports/pqis-verification.json --output reports/pqis-verification-summary.json --json
 datapan catalog verify --registry data/data-go-kr.registry.json --provider seoul-bus --kind external_endpoint --limit 5 --output reports/seoul-bus-verification.json --json
 datapan catalog verify summary --input reports/seoul-bus-verification.json --output reports/seoul-bus-verification-summary.json --json
+datapan catalog verify --registry data/data-go-kr.registry.json --provider seoul-open-data --kind external_endpoint --limit 5 --timeout 20s --output reports/seoul-open-data-verification.json --json
+datapan catalog verify summary --input reports/seoul-open-data-verification.json --output reports/seoul-open-data-verification-summary.json --json
 datapan catalog verify --registry data/data-go-kr.registry.json --provider sisul --kind external_endpoint --limit 20 --timeout 4s --output reports/sisul-verification.json --json
 datapan catalog verify summary --input reports/sisul-verification.json --output reports/sisul-verification-summary.json --json
 datapan catalog verify --registry data/data-go-kr.registry.json --provider tour --kind external_endpoint --limit 7 --output reports/tour-external-verification.json --json
@@ -155,7 +158,7 @@ datapan catalog verify --registry data/data-go-kr.registry.json --provider ulsan
 datapan catalog verify summary --input reports/ulsan-verification.json --output reports/ulsan-verification-summary.json --json
 datapan catalog verify --registry data/data-go-kr.registry.json --provider work24 --kind external_endpoint --limit 3 --timeout 20s --output reports/work24-verification.json --json
 datapan catalog verify summary --input reports/work24-verification.json --output reports/work24-verification-summary.json --json
-datapan catalog verify merge --input reports/qnet-verification.json --input reports/epost-verification.json --input reports/ekape-verification.json --input reports/emuseum-verification.json --input reports/forest-verification.json --input reports/folk-verification.json --input reports/garak-verification.json --input reports/gblib-verification.json --input reports/airport-verification.json --input reports/andong-verification.json --input reports/data-gg-verification.json --input reports/jeonju-verification.json --input reports/geoje-verification.json --input reports/gwanak-verification.json --input reports/humetro-verification.json --input reports/itfind-verification.json --input reports/korad-verification.json --input reports/kpx-verification.json --input reports/lh-ebid-verification.json --input reports/mafra-verification.json --input reports/myhome-verification.json --input reports/naqs-verification.json --input reports/nfqs-verification.json --input reports/nongsaro-verification.json --input reports/oneclick-law-verification.json --input reports/pqis-verification.json --input reports/seoul-bus-verification.json --input reports/sisul-verification.json --input reports/tour-verification.json --input reports/uiryeong-verification.json --input reports/ulsan-verification.json --input reports/work24-verification.json --output reports/latest-verification.json --json
+datapan catalog verify merge --input reports/qnet-verification.json --input reports/epost-verification.json --input reports/ekape-verification.json --input reports/emuseum-verification.json --input reports/forest-verification.json --input reports/folk-verification.json --input reports/garak-verification.json --input reports/gblib-verification.json --input reports/airport-verification.json --input reports/andong-verification.json --input reports/data-gg-verification.json --input reports/jeonju-verification.json --input reports/geoje-verification.json --input reports/gwanak-verification.json --input reports/humetro-verification.json --input reports/itfind-verification.json --input reports/korad-verification.json --input reports/kpx-verification.json --input reports/lh-ebid-verification.json --input reports/mafra-verification.json --input reports/myhome-verification.json --input reports/naqs-verification.json --input reports/nfqs-verification.json --input reports/nongsaro-verification.json --input reports/oneclick-law-verification.json --input reports/pqis-verification.json --input reports/seoul-bus-verification.json --input reports/seoul-open-data-verification.json --input reports/sisul-verification.json --input reports/tour-verification.json --input reports/uiryeong-verification.json --input reports/ulsan-verification.json --input reports/work24-verification.json --output reports/latest-verification.json --json
 datapan catalog verify summary --input reports/latest-verification.json --output reports/latest-verification-summary.json --json
 ```
 

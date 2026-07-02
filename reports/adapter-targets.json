@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-02T18:09:52Z",
+  "generated_at": "2026-07-02T18:39:23Z",
   "provider": "data.go.kr",
-  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
+  "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 16,
+  "filtered_count": 15,
   "summary": {
-    "target_hosts": 16,
-    "target_operations": 37,
-    "external_endpoint_operations": 37,
+    "target_hosts": 15,
+    "target_operations": 35,
+    "external_endpoint_operations": 35,
     "service_root_operations": 0,
     "approval_required_operations": 0,
     "missing_param_operations": 21,
@@ -389,45 +389,6 @@
     },
     {
       "rank": 8,
-      "host": "data.seoul.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 2,
-      "specs": 1,
-      "organizations": [
-        "서울교통공사"
-      ],
-      "source_categories": [
-        "교통물류"
-      ],
-      "api_types": [
-        "LINK"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "sample_operations": [
-        {
-          "dataset_id": "15003164",
-          "title": "서울교통공사_역사 건축 현황",
-          "organization": "서울교통공사",
-          "operation": "서울교통공사_역사 건축 현황_20240331 외부 링크 1",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-11572\u0026srvType=F\u0026serviceKind=1\u0026currentPageNo=1"
-        },
-        {
-          "dataset_id": "15003164",
-          "title": "서울교통공사_역사 건축 현황",
-          "organization": "서울교통공사",
-          "operation": "서울교통공사_역사 건축 현황_20240331 외부 링크 2",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-12033\u0026srvType=S\u0026serviceKind=1¤tPageNo=1"
-        }
-      ]
-    },
-    {
-      "rank": 9,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -484,7 +445,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "www.culture.go.kr",
       "kinds": [
         "external_endpoint"
@@ -523,7 +484,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "ncpms.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -554,7 +515,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -590,7 +551,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "host": "search.i815.or.kr",
       "kinds": [
         "external_endpoint"
@@ -621,7 +582,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 13,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -652,7 +613,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 14,
       "host": "www.jobplustv.or.kr",
       "kinds": [
         "external_endpoint"
@@ -683,7 +644,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 15,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

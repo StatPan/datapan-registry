@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-07-02T18:09:52Z",
+  "generated_at": "2026-07-02T18:39:23Z",
   "provider": "data.go.kr",
-  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
-  "probe": "..\\datapan-registry\\reports\\unadapted-external-probe.json",
+  "registry": ".\\data\\data-go-kr.registry.json",
+  "probe": ".\\reports\\unadapted-external-probe.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "routes_total": 37,
-    "operations": 37,
-    "hosts": 16,
-    "with_probe_evidence": 37,
+    "routes_total": 35,
+    "operations": 35,
+    "hosts": 15,
+    "with_probe_evidence": 35,
     "without_probe_evidence": 0,
     "dead_route_candidates": 14,
     "transient_failures": 15,
     "parameter_blocked_routes": 0,
-    "adapter_candidates": 8,
+    "adapter_candidates": 6,
     "by_disposition": [
       {
         "key": "transient_failure",
@@ -28,7 +28,7 @@
       },
       {
         "key": "adapter_candidate",
-        "count": 8,
+        "count": 6,
         "disposition": "adapter_candidate"
       }
     ],
@@ -39,11 +39,6 @@
         "reason": "unadapted_probe_http_404"
       },
       {
-        "key": "unadapted_probe_http_2xx",
-        "count": 8,
-        "reason": "unadapted_probe_http_2xx"
-      },
-      {
         "key": "unadapted_probe_timeout",
         "count": 8,
         "reason": "unadapted_probe_timeout"
@@ -52,6 +47,11 @@
         "key": "unadapted_probe_dns",
         "count": 6,
         "reason": "unadapted_probe_dns"
+      },
+      {
+        "key": "unadapted_probe_http_2xx",
+        "count": 6,
+        "reason": "unadapted_probe_http_2xx"
       },
       {
         "key": "unadapted_probe_request_error",
@@ -84,11 +84,6 @@
         "key": "its.gyeongju.go.kr:81",
         "count": 3,
         "host": "its.gyeongju.go.kr:81"
-      },
-      {
-        "key": "data.seoul.go.kr",
-        "count": 2,
-        "host": "data.seoul.go.kr"
       },
       {
         "key": "data.wanju.go.kr",
@@ -636,36 +631,6 @@
       "recommended_action": "retry with bounded evidence before building a provider adapter",
       "probe_status": "failed",
       "probe_reason": "unadapted_probe_request_error"
-    },
-    {
-      "dataset_id": "15003164",
-      "title": "서울교통공사_역사 건축 현황",
-      "organization": "서울교통공사",
-      "operation": "서울교통공사_역사 건축 현황_20240331 외부 링크 1",
-      "endpoint": "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-11572\u0026srvType=F\u0026serviceKind=1\u0026currentPageNo=1",
-      "endpoint_host": "data.seoul.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15003164",
-      "title": "서울교통공사_역사 건축 현황",
-      "organization": "서울교통공사",
-      "operation": "서울교통공사_역사 건축 현황_20240331 외부 링크 2",
-      "endpoint": "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-12033\u0026srvType=S\u0026serviceKind=1¤tPageNo=1",
-      "endpoint_host": "data.seoul.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
     },
     {
       "dataset_id": "15002034",

@@ -1,13 +1,12 @@
 {
-  "generated_at": "2026-07-02T18:09:50Z",
+  "generated_at": "2026-07-02T18:28:47Z",
   "provider": "data.go.kr",
-  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 1407,
+  "limit": 1412,
   "truncated": true,
-  "filtered_count": 1270,
+  "filtered_count": 1272,
   "summary": {
-    "total": 1270,
-    "verified": 61,
+    "total": 1272,
+    "verified": 63,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0
@@ -24398,6 +24397,34 @@
       "http_status": 200,
       "semantic_status": "html_landing_page",
       "url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023\u0026fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000056\u0026upprApiSvcId=000000000000000000000000000022",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15003164",
+      "title": "서울교통공사_역사 건축 현황",
+      "operation": "서울교통공사_역사 건축 현황_20240331 외부 링크 1",
+      "provider": "seoul-open-data",
+      "endpoint_host": "data.seoul.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T18:28:02Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://data.seoul.go.kr/dataList/datasetView.do?currentPageNo=1\u0026infId=OA-11572\u0026serviceKind=1\u0026srvType=F",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15003164",
+      "title": "서울교통공사_역사 건축 현황",
+      "operation": "서울교통공사_역사 건축 현황_20240331 외부 링크 2",
+      "provider": "seoul-open-data",
+      "endpoint_host": "data.seoul.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T18:28:02Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-12033\u0026serviceKind=1%C2%A4tPageNo%3D1\u0026srvType=S",
       "body_shape": "html"
     }
   ]

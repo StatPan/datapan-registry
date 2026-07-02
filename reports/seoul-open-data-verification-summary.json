@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-07-02T18:28:02Z",
+  "source": "reports\\seoul-open-data-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 2,
+    "verified": 2,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 2,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "seoul-open-data",
+        "count": 2,
+        "provider": "seoul-open-data"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "data.seoul.go.kr",
+        "count": 2,
+        "host": "data.seoul.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 2,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

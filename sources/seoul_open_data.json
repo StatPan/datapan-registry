@@ -6,11 +6,14 @@
   "status": "candidate",
   "adapter": {
     "name": "seoul-open-data",
-    "status": "none",
-    "capabilities": [],
+    "status": "registered",
+    "capabilities": [
+      "verification",
+      "call"
+    ],
     "hosts": [
       "data.seoul.go.kr",
-      "openapi.seoul.go.kr"
+      "openapi.seoul.go.kr:8088"
     ]
   },
   "references": {

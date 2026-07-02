@@ -167,7 +167,9 @@ Current gaps:
   `source_runtime_manual_samples_unpinned` from `4` sources to `0` and removing
   `sample_parameters_not_pinned`/`runtime_catalog_not_materialized` blockers
   for the candidate-batch stage. Actual runtime evidence remains `0` for each
-  source until adapters, credentials, and bounded runtime runs exist.
+  source until credentials and bounded runtime runs exist; Gira #111 registers
+  the Seoul Open Data adapter and reduces
+  `source_runtime_adapter_not_registered` from `4` sources to `3`.
 - Runtime evidence coverage is much lower than callable coverage. Gira #19,
   Gira #21, Gira #23, Gira #25, Gira #27, Gira #29, Gira #31, Gira #33, and
   Gira #35 raise data.go.kr runtime evidence from `256` to `626`. Gira #39,
@@ -180,10 +182,11 @@ Current gaps:
   checks, Gira #103 adds `3` verified gwanak landing-page checks, and Gira
   #105 adds `3` verified mafra landing-page checks, Gira #107 adds `3`
   verified garak landing-page checks, and Gira #109 adds `3` verified work24
-  landing-page checks, bringing runtime evidence to `1270`. Most evidence is
+  landing-page checks, and Gira #111 adds `2` verified seoul-open-data
+  landing-page checks, bringing runtime evidence to `1272`. Most evidence is
   still skipped boundary evidence, not proof that those operations are callable.
 - API operation coverage remains incomplete: `7,210` of `12,060` APIs have
-  operation mappings (`59.8%`), leaving `4,850` APIs to materialize and `6,616`
+  operation mappings (`59.8%`), leaving `4,850` APIs to materialize and `6,615`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report
@@ -433,10 +436,15 @@ Use this order unless a production failure changes priority:
 26. Add a generated source report inventory. Tracked by Gira #85; this turns
     the multi-source report grouping gap into `reports/source-report-inventory.json`
     coverage metrics and validates drift in CI.
-27. Add a generated data.go.kr coverage backlog. Tracked by Gira #89; this
+27. Register Seoul Open Data runtime and data.go.kr external coverage.
+    Tracked by Gira #111; this adds the `seoul-open-data` adapter, refreshes
+    data.go.kr evidence to `1272` checks, moves Seoul out of
+    `source_runtime_adapter_not_registered`, and leaves the next source-runtime
+    blocker on credentialed bounded runs.
+28. Add a generated data.go.kr coverage backlog. Tracked by Gira #89; this
     turns uncovered APIs and runtime reactivation targets into
     `reports/data-go-kr/coverage-backlog.json` work queues that validate in CI.
-28. Add a generated data.go.kr external adapter backlog. Tracked by Gira #95;
+29. Add a generated data.go.kr external adapter backlog. Tracked by Gira #95;
     this turned `47` route-disposition adapter-candidate operations into
     `12` host-scoped adapter implementation queues while keeping dead and
     transient routes out of adapter work. Gira #97 registers and verifies
@@ -444,8 +452,9 @@ Use this order unless a production failure changes priority:
     #101 registers and verifies `www.nongsaro.go.kr`, Gira #103 registers and
     verifies `data.gwanak.go.kr`, Gira #105 registers and verifies
     `data.mafra.go.kr`, Gira #107 registers and verifies `www.garak.co.kr`,
-    and Gira #109 registers and verifies `www.work24.go.kr`, reducing the
-    active adapter backlog to `8` operations across `5` host-scoped queues.
+    Gira #109 registers and verifies `www.work24.go.kr`, and Gira #111
+    registers and verifies `data.seoul.go.kr`, reducing the active adapter
+    backlog to `6` operations across `4` host-scoped queues.
 
 ## Measurement Rules
 
