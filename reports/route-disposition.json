@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-07-02T18:58:34Z",
+  "generated_at": "2026-07-02T19:14:15Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "probe": ".\\reports\\unadapted-external-probe.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "routes_total": 31,
-    "operations": 31,
-    "hosts": 13,
-    "with_probe_evidence": 31,
+    "routes_total": 29,
+    "operations": 29,
+    "hosts": 11,
+    "with_probe_evidence": 29,
     "without_probe_evidence": 0,
     "dead_route_candidates": 14,
     "transient_failures": 15,
     "parameter_blocked_routes": 0,
-    "adapter_candidates": 2,
+    "adapter_candidates": 0,
     "by_disposition": [
       {
         "key": "transient_failure",
@@ -25,11 +25,6 @@
         "key": "dead_route_candidate",
         "count": 14,
         "disposition": "dead_route_candidate"
-      },
-      {
-        "key": "adapter_candidate",
-        "count": 2,
-        "disposition": "adapter_candidate"
       }
     ],
     "by_reason": [
@@ -47,11 +42,6 @@
         "key": "unadapted_probe_dns",
         "count": 6,
         "reason": "unadapted_probe_dns"
-      },
-      {
-        "key": "unadapted_probe_http_2xx",
-        "count": 2,
-        "reason": "unadapted_probe_http_2xx"
       },
       {
         "key": "unadapted_probe_request_error",
@@ -96,19 +86,9 @@
         "host": "www.cid.or.kr"
       },
       {
-        "key": "ncpms.rda.go.kr",
-        "count": 1,
-        "host": "ncpms.rda.go.kr"
-      },
-      {
         "key": "openapi-lib.sen.go.kr",
         "count": 1,
         "host": "openapi-lib.sen.go.kr"
-      },
-      {
-        "key": "search.i815.or.kr",
-        "count": 1,
-        "host": "search.i815.or.kr"
       },
       {
         "key": "www.dgeic.or.kr:8080",
@@ -621,36 +601,6 @@
       "recommended_action": "retry with bounded evidence before building a provider adapter",
       "probe_status": "failed",
       "probe_reason": "unadapted_probe_request_error"
-    },
-    {
-      "dataset_id": "15002034",
-      "title": "농촌진흥청_국가농작물병해충도감정보",
-      "organization": "농촌진흥청",
-      "operation": "농촌진흥청_국가농작물병해충도감정보_20240222 외부 링크 1",
-      "endpoint": "http://ncpms.rda.go.kr/npms/OpenApiInfo.np",
-      "endpoint_host": "ncpms.rda.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15006273",
-      "title": "독립기념관_한국독립운동사 소장자료 정보 DB",
-      "organization": "독립기념관",
-      "operation": "독립기념관_한국독립운동사 소장자료 정보 DB_20200703",
-      "endpoint": "https://search.i815.or.kr/openApi.do",
-      "endpoint_host": "search.i815.or.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
     }
   ]
 }

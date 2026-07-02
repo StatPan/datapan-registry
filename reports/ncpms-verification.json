@@ -1,0 +1,36 @@
+{
+  "generated_at": "2026-07-02T19:14:02Z",
+  "provider": "data.go.kr",
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 5,
+  "timeout": "20s",
+  "truncated": false,
+  "filters": {
+    "provider": "ncpms",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 1,
+  "summary": {
+    "total": 1,
+    "verified": 1,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15002034",
+      "title": "농촌진흥청_국가농작물병해충도감정보",
+      "operation": "농촌진흥청_국가농작물병해충도감정보_20240222 외부 링크 1",
+      "provider": "ncpms",
+      "endpoint_host": "ncpms.rda.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T19:14:02Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://ncpms.rda.go.kr/npms/OpenApiInfo.np",
+      "body_shape": "html"
+    }
+  ]
+}

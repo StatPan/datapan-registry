@@ -1,13 +1,13 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-02T18:58:34Z`
+- Generated at: `2026-07-02T19:14:15Z`
 - Institutions: `411`
 - APIs: `12060`
 - Operations: `12253`
-- Runtime evidence: `1276` (`10.4%`)
+- Runtime evidence: `1278` (`10.4%`)
 - External endpoint operations: `643`
-- Registered adapter operations: `631`
-- Missing adapter operations: `31`
+- Registered adapter operations: `633`
+- Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
 
@@ -28,7 +28,7 @@
 | 경기도 광명시 | 197 | 0 | 0 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 해양수산부 | 173 | 172 | 276 | 8 | 2.9% | 0 | 0 | 8 | 116 | 0 |
 | 제주특별자치도 | 171 | 18 | 28 | 4 | 14.3% | 1 | 1 | 2 | 8 | 0 |
-| 농촌진흥청 | 136 | 9 | 30 | 7 | 23.3% | 4 | 0 | 3 | 8 | 0 |
+| 농촌진흥청 | 136 | 9 | 30 | 8 | 26.7% | 5 | 0 | 3 | 8 | 0 |
 | 경상남도 | 129 | 129 | 134 | 0 | 0.0% | 0 | 0 | 0 | 116 | 0 |
 | 대전광역시 서구 | 125 | 0 | 0 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 세종특별자치시 | 122 | 122 | 122 | 0 | 0.0% | 0 | 0 | 0 | 117 | 0 |

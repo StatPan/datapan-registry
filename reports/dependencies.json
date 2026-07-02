@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T18:58:34Z",
+  "generated_at": "2026-07-02T19:14:15Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -15,8 +15,8 @@
     "soap_operations": 35,
     "wms_operations": 7,
     "approval_required_operations": 4142,
-    "registered_adapter_operations": 631,
-    "missing_adapter_operations": 31
+    "registered_adapter_operations": 633,
+    "missing_adapter_operations": 29
   },
   "dependencies": [
     {
@@ -242,26 +242,6 @@
       "missing_params": [
         "nodeNm"
       ]
-    },
-    {
-      "dataset_id": "15002034",
-      "title": "농촌진흥청_국가농작물병해충도감정보",
-      "organization": "농촌진흥청",
-      "source_category": "농축수산",
-      "operation": "농촌진흥청_국가농작물병해충도감정보_20240222 외부 링크 1",
-      "provider": "data.go.kr",
-      "endpoint": "http://ncpms.rda.go.kr/npms/OpenApiInfo.np",
-      "endpoint_host": "ncpms.rda.go.kr",
-      "dependency_class": "external_endpoint",
-      "adapter_status": "missing",
-      "api_type": "LINK",
-      "data_format": "XML",
-      "dev_approval": "자동승인",
-      "prod_approval": "자동승인",
-      "approval_required": false,
-      "skip_reason": "external_provider_adapter_missing",
-      "request_params_count": 0,
-      "response_params_count": 0
     },
     {
       "dataset_id": "15001051",
@@ -517,26 +497,6 @@
       "missing_params": [
         "entpId"
       ]
-    },
-    {
-      "dataset_id": "15006273",
-      "title": "독립기념관_한국독립운동사 소장자료 정보 DB",
-      "organization": "독립기념관",
-      "source_category": "교육",
-      "operation": "독립기념관_한국독립운동사 소장자료 정보 DB_20200703",
-      "provider": "data.go.kr",
-      "endpoint": "https://search.i815.or.kr/openApi.do",
-      "endpoint_host": "search.i815.or.kr",
-      "dependency_class": "external_endpoint",
-      "adapter_status": "missing",
-      "api_type": "LINK",
-      "data_format": "XML",
-      "dev_approval": "자동승인",
-      "prod_approval": "자동승인",
-      "approval_required": false,
-      "skip_reason": "external_provider_adapter_missing",
-      "request_params_count": 0,
-      "response_params_count": 0
     },
     {
       "dataset_id": "15012192",
@@ -1254,6 +1214,44 @@
       "provider": "data.go.kr",
       "endpoint": "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-12033\u0026srvType=S\u0026serviceKind=1¤tPageNo=1",
       "endpoint_host": "data.seoul.go.kr",
+      "dependency_class": "external_endpoint",
+      "adapter_status": "adapter",
+      "api_type": "LINK",
+      "data_format": "XML",
+      "dev_approval": "자동승인",
+      "prod_approval": "자동승인",
+      "approval_required": false,
+      "request_params_count": 0,
+      "response_params_count": 0
+    },
+    {
+      "dataset_id": "15002034",
+      "title": "농촌진흥청_국가농작물병해충도감정보",
+      "organization": "농촌진흥청",
+      "source_category": "농축수산",
+      "operation": "농촌진흥청_국가농작물병해충도감정보_20240222 외부 링크 1",
+      "provider": "data.go.kr",
+      "endpoint": "http://ncpms.rda.go.kr/npms/OpenApiInfo.np",
+      "endpoint_host": "ncpms.rda.go.kr",
+      "dependency_class": "external_endpoint",
+      "adapter_status": "adapter",
+      "api_type": "LINK",
+      "data_format": "XML",
+      "dev_approval": "자동승인",
+      "prod_approval": "자동승인",
+      "approval_required": false,
+      "request_params_count": 0,
+      "response_params_count": 0
+    },
+    {
+      "dataset_id": "15006273",
+      "title": "독립기념관_한국독립운동사 소장자료 정보 DB",
+      "organization": "독립기념관",
+      "source_category": "교육",
+      "operation": "독립기념관_한국독립운동사 소장자료 정보 DB_20200703",
+      "provider": "data.go.kr",
+      "endpoint": "https://search.i815.or.kr/openApi.do",
+      "endpoint_host": "search.i815.or.kr",
       "dependency_class": "external_endpoint",
       "adapter_status": "adapter",
       "api_type": "LINK",

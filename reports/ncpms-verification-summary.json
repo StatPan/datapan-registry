@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-07-02T19:14:02Z",
+  "source": "reports\\ncpms-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 1,
+    "verified": 1,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 1,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "ncpms",
+        "count": 1,
+        "provider": "ncpms"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "ncpms.rda.go.kr",
+        "count": 1,
+        "host": "ncpms.rda.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 1,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

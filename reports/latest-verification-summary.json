@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-02T18:58:24Z",
+  "generated_at": "2026-07-02T19:14:04Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1276,
-    "verified": 67,
+    "total": 1278,
+    "verified": 69,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0
@@ -26,7 +26,7 @@
       },
       {
         "key": "verified",
-        "count": 67,
+        "count": 69,
         "status": "verified"
       }
     ],
@@ -464,9 +464,19 @@
         "provider": "seoul-open-data"
       },
       {
+        "key": "i815",
+        "count": 1,
+        "provider": "i815"
+      },
+      {
         "key": "myhome",
         "count": 1,
         "provider": "myhome"
+      },
+      {
+        "key": "ncpms",
+        "count": 1,
+        "provider": "ncpms"
       }
     ],
     "by_endpoint_host": [
@@ -671,9 +681,19 @@
         "host": "data.myhome.go.kr:443"
       },
       {
+        "key": "ncpms.rda.go.kr",
+        "count": 1,
+        "host": "ncpms.rda.go.kr"
+      },
+      {
         "key": "open.api.q-net.or.kr",
         "count": 1,
         "host": "open.api.q-net.or.kr"
+      },
+      {
+        "key": "search.i815.or.kr",
+        "count": 1,
+        "host": "search.i815.or.kr"
       }
     ],
     "by_kind": [
@@ -684,7 +704,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 612,
+        "count": 614,
         "kind": "external_endpoint"
       },
       {

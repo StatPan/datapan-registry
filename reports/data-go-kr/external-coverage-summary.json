@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.external-coverage.v1",
-  "generated_at": "2026-07-02T18:58:34Z",
+  "generated_at": "2026-07-02T19:14:15Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "source_profile": "sources/data_go_kr.json",
@@ -10,26 +10,26 @@
   "provider_index": "data/provider-index.json",
   "summary": {
     "external_endpoint_operations": 643,
-    "registered_adapter_operations": 631,
-    "missing_adapter_operations": 31,
-    "raw_external_adapter_coverage_percent": 95.3,
-    "registered_adapter_hosts": 40,
-    "missing_adapter_hosts": 13,
-    "route_evidence_covered_operations": 31,
-    "evidence_adjusted_adapter_candidate_operations": 2
+    "registered_adapter_operations": 633,
+    "missing_adapter_operations": 29,
+    "raw_external_adapter_coverage_percent": 95.6,
+    "registered_adapter_hosts": 42,
+    "missing_adapter_hosts": 11,
+    "route_evidence_covered_operations": 29,
+    "evidence_adjusted_adapter_candidate_operations": 0
   },
   "route_disposition": {
-    "routes_total": 31,
-    "with_probe_evidence": 31,
+    "routes_total": 29,
+    "with_probe_evidence": 29,
     "without_probe_evidence": 0,
     "dead_route_candidates": 14,
     "transient_failures": 15,
-    "adapter_candidates": 2
+    "adapter_candidates": 0
   },
   "operational_gate": {
     "status": "passing",
     "unclassified_missing_route_operations": 0,
-    "adapter_backlog_candidate_operations": 2,
+    "adapter_backlog_candidate_operations": 0,
     "ci_action": "fail_on_unclassified_missing_routes",
     "adapter_backlog_policy": "Create adapter backlog only from route-disposition adapter_candidate evidence, not from raw external endpoint status."
   },
@@ -77,22 +77,10 @@
       "reason": "transient_failure=2; reasons: unadapted_probe_timeout"
     },
     {
-      "host": "ncpms.rda.go.kr",
-      "operations": 1,
-      "disposition": "adapter_candidate",
-      "reason": "adapter_candidate=1; reasons: unadapted_probe_http_2xx"
-    },
-    {
       "host": "openapi-lib.sen.go.kr",
       "operations": 1,
       "disposition": "transient_failure",
       "reason": "transient_failure=1; reasons: unadapted_probe_timeout"
-    },
-    {
-      "host": "search.i815.or.kr",
-      "operations": 1,
-      "disposition": "adapter_candidate",
-      "reason": "adapter_candidate=1; reasons: unadapted_probe_http_2xx"
     },
     {
       "host": "www.dgeic.or.kr:8080",
@@ -114,8 +102,8 @@
     }
   ],
   "next": [
-    "Preserve raw external adapter coverage at 95.3% unless new adapters or catalog changes alter the denominator.",
-    "Treat 2 evidence-adjusted adapter candidate operations as the current external adapter backlog.",
+    "Preserve raw external adapter coverage at 95.6% unless new adapters or catalog changes alter the denominator.",
+    "Treat 0 evidence-adjusted adapter candidate operations as the current external adapter backlog.",
     "Keep unclassified missing external routes at 0; refresh unadapted external probes before creating adapter work from raw misses.",
     "Promote host-level disposition from mixed to specific dead/transient/adapter classifications as route evidence becomes stable."
   ]
