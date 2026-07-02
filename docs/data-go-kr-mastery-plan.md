@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `13163`
-- callable operations: `13021` (`98.9%`)
+- operations: `13284`
+- callable operations: `13142` (`98.9%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `1553`
-- registered adapter operations: `1543`
+- external endpoint operations: `1674`
+- registered adapter operations: `1664`
 - missing adapter operations: `29`
-- external adapter coverage: `98.2%`
-- approval-required operations: `4525`
+- external adapter coverage: `98.3%`
+- approval-required operations: `4646`
 - no-endpoint operations: `123`
 - service-root operations: `19`
-- unsupported-protocol operations: `140`
-- registered adapter hosts: `44`
+- unsupported-protocol operations: `142`
+- registered adapter hosts: `45`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -327,7 +327,11 @@ coverage.
    `104`, and keeping the `10%` release-readiness target restored. The next
    행정안전부 Safety Data batch adds `97` operation mappings and `10`
    approval-gated bounded checks, bringing checked runtime evidence to `1323`
-   and registered external adapter operations to `1543`.
+   and registered external adapter operations to `1543`. The EShare adapter
+   then registers `www.eshare.go.kr`, materializes the next 행정안전부 link-detail
+   batch with `96` APIs and `121` operations, and adds `10` verified EShare
+   landing-page checks, bringing checked runtime evidence to `1333` and
+   registered external adapter operations to `1664`.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,
