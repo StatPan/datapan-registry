@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-07-02T23:34:28Z",
+  "generated_at": "2026-07-02T23:49:57Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 1577,
+  "limit": 1617,
   "truncated": true,
-  "filtered_count": 1375,
+  "filtered_count": 1406,
   "summary": {
-    "total": 1375,
-    "verified": 130,
+    "total": 1406,
+    "verified": 151,
     "failed": 112,
-    "skipped": 1133,
+    "skipped": 1143,
     "unknown": 0
   },
   "results": [
@@ -25811,6 +25811,517 @@
       "http_status": 200,
       "semantic_status": "html_landing_page",
       "url": "http://www.vworld.kr/dev/v4dv_2ddataguide2_s002.do?svcIde=uo101",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15047798",
+      "title": "한국식품연구원_전통식품정보 서비스",
+      "operation": "대표식품별 문화 정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "foodCd": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "foodCd"
+      ]
+    },
+    {
+      "dataset_id": "15047798",
+      "title": "한국식품연구원_전통식품정보 서비스",
+      "operation": "대표식품별 역사 정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "foodCd": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "foodCd"
+      ]
+    },
+    {
+      "dataset_id": "15047798",
+      "title": "한국식품연구원_전통식품정보 서비스",
+      "operation": "대표식품별 전통식품 목록",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "foodCd": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "foodCd"
+      ]
+    },
+    {
+      "dataset_id": "15047798",
+      "title": "한국식품연구원_전통식품정보 서비스",
+      "operation": "대표식품별 지역 정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "foodCd": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "foodCd"
+      ]
+    },
+    {
+      "dataset_id": "15047798",
+      "title": "한국식품연구원_전통식품정보 서비스",
+      "operation": "전통식품 상세정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "tradFoodCd": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "tradFoodCd"
+      ]
+    },
+    {
+      "dataset_id": "15047817",
+      "title": "중소기업은행_월평균\u0026연평균 환율 정보",
+      "operation": "중소기업은행 월평균 연평균 환율 정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "cocuCd": "",
+        "inqYm": ""
+      },
+      "missing_params": [
+        "inqYm",
+        "cocuCd"
+      ]
+    },
+    {
+      "dataset_id": "15047819",
+      "title": "건강보험심사평가원_의약품사용정보조회서비스",
+      "operation": "3단계ATC별상병별사용량목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "atcStep3Cd": "",
+        "cpmdPrscTp": "",
+        "diagYm": "",
+        "insupTp": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "diagYm",
+        "atcStep3Cd",
+        "insupTp",
+        "cpmdPrscTp"
+      ]
+    },
+    {
+      "dataset_id": "15047819",
+      "title": "건강보험심사평가원_의약품사용정보조회서비스",
+      "operation": "3단계ATC별의료기관종별사용량목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "atcStep3Cd": "",
+        "clCd": "",
+        "cpmdPrscTp": "",
+        "diagYm": "",
+        "insupTp": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sgguCd": "",
+        "sidoCd": ""
+      },
+      "missing_params": [
+        "diagYm",
+        "atcStep3Cd",
+        "insupTp",
+        "cpmdPrscTp",
+        "sidoCd",
+        "sgguCd",
+        "clCd"
+      ]
+    },
+    {
+      "dataset_id": "15047819",
+      "title": "건강보험심사평가원_의약품사용정보조회서비스",
+      "operation": "3단계ATC별지역별사용량목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "atcStep3Cd": "",
+        "cpmdPrscTp": "",
+        "diagYm": "",
+        "insupTp": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sgguCd": "",
+        "sidoCd": ""
+      },
+      "missing_params": [
+        "diagYm",
+        "atcStep3Cd",
+        "insupTp",
+        "cpmdPrscTp",
+        "sidoCd",
+        "sgguCd"
+      ]
+    },
+    {
+      "dataset_id": "15047819",
+      "title": "건강보험심사평가원_의약품사용정보조회서비스",
+      "operation": "4단계ATC별상병별사용량목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "atcStep4Cd": "",
+        "cpmdPrscTp": "",
+        "diagYm": "",
+        "insupTp": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "diagYm",
+        "atcStep4Cd",
+        "insupTp",
+        "cpmdPrscTp"
+      ]
+    },
+    {
+      "dataset_id": "15011370",
+      "title": "경기도 산후조리업체 현황",
+      "operation": "산후 조리업체 현황 외부 링크 2",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:43Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=0E1FRZLG1FPFCD83PVFI20242471\u0026infSeq=2\u0026page=1\u0026rows=10\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011370",
+      "title": "경기도 산후조리업체 현황",
+      "operation": "산후 조리업체 현황 외부 링크 3",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:43Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=CU863V2614IQQNM5BC3A21135849\u0026infSeq=3\u0026page=1\u0026searchWord=%EC%82%B0%EB%AA%A8%EC%82%AC%ED%9A%8C%EC%84%9C%EB%B9%84%EC%8A%A4%EC%A0%9C%EA%B3%B5%EA%B8%B0%EA%B4%80+%ED%98%84%ED%99%A9\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15029097",
+      "title": "경기도 행정사사무소 현황",
+      "operation": "행정사사무소 현황 외부 링크 1",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:43Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=G51IQOGVR4DU7PQ1JBID26789679\u0026infSeq=3",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15029097",
+      "title": "경기도 행정사사무소 현황",
+      "operation": "행정사사무소 현황 외부 링크 2",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:43Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=7VV6IWKWGKZFH3PG0ELH19127436\u0026infSeq=2\u0026page=1\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15029097",
+      "title": "경기도 행정사사무소 현황",
+      "operation": "행정사사무소 현황 외부 링크 3",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:43Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=T7IYJ3FOYUS7T12RWY4L14461530\u0026infSeq=3\u0026loc=\u0026order=\u0026page=1\u0026rows=10\u0026searchWord=%EA%B5%AD%EC%A0%9C%ED%9A%8C%EC%9D%98%EA%B8%B0%ED%9A%8D%EC%97%85+%ED%98%84%ED%99%A9\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15034922",
+      "title": "경기도_도서 관련 업체 현황",
+      "operation": "경기도_경기도 인증 지역서점 현황 외부 링크 1",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:43Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=EOE8RQ0K99WC72WJ754O28934129\u0026infSeq=2",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15034922",
+      "title": "경기도_도서 관련 업체 현황",
+      "operation": "경기도_경기도 인증 지역서점 현황 외부 링크 2",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:43Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=4K9YEYMEGUD0N4ZIATSR24291536\u0026infSeq=2\u0026page=1\u0026rows=10\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15034926",
+      "title": "경기도_보도자료 현황",
+      "operation": "경기도_경기도뉴스포털 보도자료 현황",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:43Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=APXKY127QXG0TVVR1Y6E28683342\u0026infSeq=2",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15038581",
+      "title": "경기도_지방의회 정보",
+      "operation": "지방의회 의안 정보 외부 링크 1",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:43Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=8E1BBVOXNWLKUY0TDUVU29513229\u0026infSeq=2",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15056502",
+      "title": "경기도_기초생활수급자 장애아동수당 수급자 현황",
+      "operation": "기초생활수급자 장애아동수당 수급자 현황 외부 링크 1",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:43Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=H5F8VEKK1BTSZ355FM3V25737294\u0026infSeq=2\u0026page=1\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15057118",
+      "title": "경기도_소방_경찰_지구대_치안센터 현황",
+      "operation": "경기도 소방·경찰·지구대·치안센터 현황 외부 링크 2",
+      "provider": "gwangmyeong",
+      "endpoint_host": "data.gm.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:46Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://data.gm.go.kr/portal/data/service/selectServicePage.do?infId=HMHRA2CAOI6208EAP14213",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15057118",
+      "title": "경기도_소방_경찰_지구대_치안센터 현황",
+      "operation": "경기도 소방·경찰·지구대·치안센터 현황 외부 링크 3",
+      "provider": "gwangmyeong",
+      "endpoint_host": "data.gm.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:46Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://data.gm.go.kr/portal/data/service/selectServicePage.do?infId=IRMJAFDDH977XB0J48661",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15057435",
+      "title": "경기도_노인의료복지시설 현황",
+      "operation": "경기도_노인의료복지시설 현황 외부 링크 2",
+      "provider": "gwangmyeong",
+      "endpoint_host": "data.gm.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:46Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://data.gm.go.kr/portal/data/service/selectServicePage.do?infId=9207X42RJX969U6C950647",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15057640",
+      "title": "경기도_장애인 관련 시설 현황",
+      "operation": "장애인 관련 시설 현황 외부 링크 2",
+      "provider": "gwangmyeong",
+      "endpoint_host": "data.gm.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:46Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://data.gm.go.kr/portal/data/service/selectServicePage.do?infId=NJD903HZT896590E829525",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15057650",
+      "title": "경기도_장애인어린이집 현황(전문,통합)",
+      "operation": "장애인어린이집 현황(전문,통합) 외부 링크 2",
+      "provider": "gwangmyeong",
+      "endpoint_host": "data.gm.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:46Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://data.gm.go.kr/portal/data/service/selectServicePage.do?infId=J5IPVSS80V615H26L23930",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15057677",
+      "title": "경기도_노인여가복지시설(노인복지관) 현황",
+      "operation": "경기도_노인여가복지시설(노인복지관) 현황 외부 링크 2",
+      "provider": "gwangmyeong",
+      "endpoint_host": "data.gm.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:46Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://data.gm.go.kr/portal/data/service/selectServicePage.do?infId=4CLHE5TKE151OG5D57446",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15057837",
+      "title": "경기도_노인여가복지시설(경로당) 현황",
+      "operation": "경기도_노인여가복지시설(경로당) 현황 외부 링크 2",
+      "provider": "gwangmyeong",
+      "endpoint_host": "data.gm.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:46Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://data.gm.go.kr/portal/data/service/selectServicePage.do?infId=4CLHE5TKE151OG5D57446",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15058189",
+      "title": "경기도_건설하도급 부조리 신고센터 현황",
+      "operation": "건설하도급부조리신고센터 현황 외부 링크 2",
+      "provider": "gwangmyeong",
+      "endpoint_host": "data.gm.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:46Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://data.gm.go.kr/portal/data/service/selectServicePage.do?infId=PZ4IPQ8NGX320A0X141044",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15058470",
+      "title": "경기도_급식비 집행 실적_부담 주체 현황",
+      "operation": "급식비 집행 실적_부담주체 현황 외부 링크 2",
+      "provider": "gwangmyeong",
+      "endpoint_host": "data.gm.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:46Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://data.gm.go.kr/portal/data/service/selectServicePage.do?infId=4YIM7QNCZ63959MH921082",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15058592",
+      "title": "경기도_재가 노인 복지시설 현황",
+      "operation": "재가 노인 복지시설 현황 외부 링크 2",
+      "provider": "gwangmyeong",
+      "endpoint_host": "data.gm.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:46Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://data.gm.go.kr/portal/data/service/selectServicePage.do?infId=UUE7FF7N7D115NNDE66619",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15058949",
+      "title": "경기도_주거복지기관 현황",
+      "operation": "주거복지기관 현황 외부 링크 3",
+      "provider": "seogu",
+      "endpoint_host": "seogu.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T23:49:48Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://seogu.go.kr/data/usr/openApi/openApiView.do?ds_pk=107",
       "body_shape": "html"
     }
   ]

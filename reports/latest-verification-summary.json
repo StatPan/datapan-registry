@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-07-02T23:34:28Z",
+  "generated_at": "2026-07-02T23:49:57Z",
   "source": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1375,
-    "verified": 130,
+    "total": 1406,
+    "verified": 151,
     "failed": 112,
-    "skipped": 1133,
+    "skipped": 1143,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 1133,
+        "count": 1143,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 130,
+        "count": 151,
         "status": "verified"
       },
       {
@@ -33,7 +33,7 @@
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 421,
+        "count": 427,
         "reason": "missing_required_params"
       },
       {
@@ -43,7 +43,7 @@
       },
       {
         "key": "approval_required",
-        "count": 114,
+        "count": 118,
         "reason": "approval_required"
       },
       {
@@ -290,7 +290,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 645,
+        "count": 655,
         "provider": "data.go.kr"
       },
       {
@@ -319,14 +319,14 @@
         "provider": "uiryeong"
       },
       {
+        "key": "data-gg",
+        "count": 38,
+        "provider": "data-gg"
+      },
+      {
         "key": "oneclick-law",
         "count": 30,
         "provider": "oneclick-law"
-      },
-      {
-        "key": "data-gg",
-        "count": 28,
-        "provider": "data-gg"
       },
       {
         "key": "epost",
@@ -377,6 +377,11 @@
         "key": "eshare",
         "count": 10,
         "provider": "eshare"
+      },
+      {
+        "key": "gwangmyeong",
+        "count": 10,
+        "provider": "gwangmyeong"
       },
       {
         "key": "juso",
@@ -524,6 +529,11 @@
         "provider": "ncpms"
       },
       {
+        "key": "seogu",
+        "count": 1,
+        "provider": "seogu"
+      },
+      {
         "key": "vworld",
         "count": 1,
         "provider": "vworld"
@@ -532,7 +542,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 645,
+        "count": 655,
         "host": "apis.data.go.kr"
       },
       {
@@ -567,7 +577,7 @@
       },
       {
         "key": "data.gg.go.kr",
-        "count": 28,
+        "count": 38,
         "host": "data.gg.go.kr"
       },
       {
@@ -614,6 +624,11 @@
         "key": "data.mafra.go.kr",
         "count": 11,
         "host": "data.mafra.go.kr"
+      },
+      {
+        "key": "data.gm.go.kr",
+        "count": 10,
+        "host": "data.gm.go.kr"
       },
       {
         "key": "www.eshare.go.kr",
@@ -776,6 +791,11 @@
         "host": "search.i815.or.kr"
       },
       {
+        "key": "seogu.go.kr",
+        "count": 1,
+        "host": "seogu.go.kr"
+      },
+      {
         "key": "www.foodsafetykorea.go.kr",
         "count": 1,
         "host": "www.foodsafetykorea.go.kr"
@@ -799,12 +819,12 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 711,
+        "count": 732,
         "kind": "external_endpoint"
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 645,
+        "count": 655,
         "kind": "data_go_kr_gateway"
       },
       {

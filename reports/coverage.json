@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T23:34:42Z",
+  "generated_at": "2026-07-02T23:50:10Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 13676,
-    "callable_operations": 13534,
+    "operations": 13967,
+    "callable_operations": 13825,
     "callable_operation_percent": 99,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 2066,
-    "registered_adapter_operations": 2056,
+    "external_endpoint_operations": 2357,
+    "registered_adapter_operations": 2347,
     "missing_adapter_operations": 29,
-    "external_adapter_coverage_percent": 98.6,
+    "external_adapter_coverage_percent": 98.8,
     "approval_required_operations": 4723,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 146,
-    "registered_adapter_hosts": 52,
+    "registered_adapter_hosts": 54,
     "missing_adapter_hosts": 11,
-    "adapter_count": 47,
+    "adapter_count": 49,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-02T23:34:28Z",
-    "total": 1375,
-    "verified": 130,
+    "generated_at": "2026-07-02T23:49:57Z",
+    "total": 1406,
+    "verified": 151,
     "failed": 112,
-    "skipped": 1133,
+    "skipped": 1143,
     "unknown": 0,
-    "verified_percent": 9.5,
+    "verified_percent": 10.7,
     "evidence_operation_percent": 10.1
   },
   "route_evidence": {
@@ -209,10 +209,10 @@
           "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 200,
-        "operations": 504,
-        "external_endpoint_operations": 504,
-        "external_guide_specs": 1,
+        "specs": 300,
+        "operations": 778,
+        "external_endpoint_operations": 778,
+        "external_guide_specs": 4,
         "wms_operations": 5,
         "approval_required_operations": 9,
         "sample_ids": [
@@ -244,14 +244,14 @@
           "external_endpoint"
         ],
         "adapter_status": "adapter",
-        "specs": 142,
-        "operations": 342,
-        "external_endpoint_operations": 342,
+        "specs": 143,
+        "operations": 343,
+        "external_endpoint_operations": 343,
         "approval_required_operations": 45,
         "sample_ids": [
+          "15038581",
           "15056593",
-          "15056639",
-          "15056650"
+          "15056639"
         ]
       },
       {
@@ -380,10 +380,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-02T23:34:42Z",
+    "generated_at": "2026-07-02T23:50:10Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 47,
-    "host_count": 53,
+    "adapter_count": 49,
+    "host_count": 55,
     "adapters": [
       {
         "name": "airport",
@@ -537,6 +537,16 @@
         "status": "registered",
         "hosts": [
           "data.gwanak.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "gwangmyeong",
+        "status": "registered",
+        "hosts": [
+          "data.gm.go.kr"
         ],
         "capabilities": [
           "verification"
@@ -797,6 +807,16 @@
         ]
       },
       {
+        "name": "seogu",
+        "status": "registered",
+        "hosts": [
+          "seogu.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "seoul-bus",
         "status": "registered",
         "hosts": [
@@ -888,8 +908,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 47,
-      "verification_capable_adapters": 47,
+      "adapter_count": 49,
+      "verification_capable_adapters": 49,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

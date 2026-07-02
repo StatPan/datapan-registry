@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-02T23:34:36Z",
+  "generated_at": "2026-07-02T23:50:05Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 13676,
-    "runtime_evidence": 1375,
+    "operations": 13967,
+    "runtime_evidence": 1406,
     "runtime_evidence_percent": 10.1,
-    "callable_operations": 13534,
-    "external_endpoint_operations": 2066,
-    "registered_adapter_operations": 2056,
+    "callable_operations": 13825,
+    "external_endpoint_operations": 2357,
+    "registered_adapter_operations": 2347,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 2066
+      "count": 2357
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 2056
+      "count": 2347
     },
     {
       "key": "builtin",
@@ -69,27 +69,27 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 1626
+      "operation_count": 1637
     },
     {
       "category": "교통물류",
-      "operation_count": 1423
+      "operation_count": 1424
     },
     {
       "category": "농축수산",
-      "operation_count": 1366
+      "operation_count": 1369
     },
     {
       "category": "문화관광",
-      "operation_count": 1300
-    },
-    {
-      "category": "산업고용",
-      "operation_count": 1034
+      "operation_count": 1305
     },
     {
       "category": "사회복지",
-      "operation_count": 998
+      "operation_count": 1163
+    },
+    {
+      "category": "산업고용",
+      "operation_count": 1063
     },
     {
       "category": "재정금융",
@@ -105,11 +105,15 @@
     },
     {
       "category": "보건의료",
-      "operation_count": 717
+      "operation_count": 738
     },
     {
       "category": "식품건강",
-      "operation_count": 665
+      "operation_count": 670
+    },
+    {
+      "category": "교육",
+      "operation_count": 588
     },
     {
       "category": "국토관리",
@@ -118,10 +122,6 @@
     {
       "category": "과학기술",
       "operation_count": 548
-    },
-    {
-      "category": "교육",
-      "operation_count": 537
     },
     {
       "category": "통일외교안보",
@@ -139,7 +139,7 @@
     },
     {
       "host": "data.gg.go.kr",
-      "operation_count": 504,
+      "operation_count": 778,
       "adapter": "data-gg",
       "adapter_status": "registered",
       "capabilities": [
@@ -158,7 +158,7 @@
     },
     {
       "host": "www.lofin365.go.kr",
-      "operation_count": 342,
+      "operation_count": 343,
       "adapter": "lofin365",
       "adapter_status": "registered",
       "capabilities": [
@@ -428,11 +428,11 @@
     {
       "organization": "경기도",
       "api_count": 840,
-      "operation_api_count": 199,
-      "operation_count": 513,
-      "runtime_evidence_count": 31,
-      "runtime_evidence_percent": 6.0,
-      "verified": 31,
+      "operation_api_count": 299,
+      "operation_count": 804,
+      "runtime_evidence_count": 52,
+      "runtime_evidence_percent": 6.5,
+      "verified": 52,
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
@@ -445,13 +445,13 @@
         },
         {
           "key": "external_endpoint",
-          "count": 501
+          "count": 792
         }
       ],
       "by_adapter_status": [
         {
           "key": "adapter",
-          "count": 501
+          "count": 792
         },
         {
           "key": "builtin",
@@ -461,15 +461,15 @@
       "top_categories": [
         {
           "category": "사회복지",
-          "operation_count": 198
-        },
-        {
-          "category": "산업고용",
-          "operation_count": 54
+          "operation_count": 363
         },
         {
           "category": "교육",
-          "operation_count": 51
+          "operation_count": 102
+        },
+        {
+          "category": "산업고용",
+          "operation_count": 83
         },
         {
           "category": "환경기상",
@@ -483,8 +483,17 @@
       "top_hosts": [
         {
           "host": "data.gg.go.kr",
-          "operation_count": 498,
+          "operation_count": 772,
           "adapter": "data-gg",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "data.gm.go.kr",
+          "operation_count": 12,
+          "adapter": "gwangmyeong",
           "adapter_status": "registered",
           "capabilities": [
             "verification"
@@ -505,9 +514,9 @@
           ]
         },
         {
-          "host": "data.mafra.go.kr",
-          "operation_count": 1,
-          "adapter": "mafra",
+          "host": "www.vworld.kr",
+          "operation_count": 2,
+          "adapter": "vworld",
           "adapter_status": "registered",
           "capabilities": [
             "verification"
@@ -2488,11 +2497,11 @@
       "api_count": 23,
       "operation_api_count": 23,
       "operation_count": 71,
-      "runtime_evidence_count": 30,
-      "runtime_evidence_percent": 42.3,
+      "runtime_evidence_count": 34,
+      "runtime_evidence_percent": 47.9,
       "verified": 0,
       "failed": 0,
-      "skipped": 30,
+      "skipped": 34,
       "unknown": 0,
       "approval_required_operations": 16,
       "no_endpoint_operations": 5,
@@ -9472,11 +9481,11 @@
       "api_count": 1,
       "operation_api_count": 1,
       "operation_count": 9,
-      "runtime_evidence_count": 4,
-      "runtime_evidence_percent": 44.4,
+      "runtime_evidence_count": 9,
+      "runtime_evidence_percent": 100.0,
       "verified": 0,
       "failed": 0,
-      "skipped": 4,
+      "skipped": 9,
       "unknown": 0,
       "approval_required_operations": 0,
       "no_endpoint_operations": 0,
@@ -11714,11 +11723,11 @@
       "api_count": 3,
       "operation_api_count": 3,
       "operation_count": 4,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
+      "runtime_evidence_count": 1,
+      "runtime_evidence_percent": 25.0,
       "verified": 0,
       "failed": 0,
-      "skipped": 0,
+      "skipped": 1,
       "unknown": 0,
       "approval_required_operations": 3,
       "no_endpoint_operations": 0,

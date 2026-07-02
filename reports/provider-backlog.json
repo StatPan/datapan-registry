@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-07-02T23:34:36Z",
+  "generated_at": "2026-07-02T23:50:05Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 203,
+  "filtered_count": 205,
   "summary": {
-    "hosts": 203,
+    "hosts": 205,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 63,
+    "external_endpoint_hosts": 65,
     "external_guide_hosts": 160,
-    "registered_adapter_hosts": 52,
-    "operation_hosts": 65,
+    "registered_adapter_hosts": 54,
+    "operation_hosts": 67,
     "guide_only_hosts": 138,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
@@ -177,10 +177,10 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 200,
-      "operations": 504,
-      "external_endpoint_operations": 504,
-      "external_guide_specs": 1,
+      "specs": 300,
+      "operations": 778,
+      "external_endpoint_operations": 778,
+      "external_guide_specs": 4,
       "wms_operations": 5,
       "approval_required_operations": 9,
       "sample_ids": [
@@ -212,14 +212,14 @@
         "external_endpoint"
       ],
       "adapter_status": "adapter",
-      "specs": 142,
-      "operations": 342,
-      "external_endpoint_operations": 342,
+      "specs": 143,
+      "operations": 343,
+      "external_endpoint_operations": 343,
       "approval_required_operations": 45,
       "sample_ids": [
+        "15038581",
         "15056593",
-        "15056639",
-        "15056650"
+        "15056639"
       ]
     },
     {
@@ -530,6 +530,21 @@
         "15036874",
         "15036875",
         "15036876"
+      ]
+    },
+    {
+      "host": "data.gm.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 10,
+      "operations": 12,
+      "external_endpoint_operations": 12,
+      "sample_ids": [
+        "15057118",
+        "15057435",
+        "15057640"
       ]
     },
     {
@@ -873,6 +888,23 @@
       ]
     },
     {
+      "host": "www.vworld.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 3,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "wms_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15057053",
+        "15059050",
+        "15149535"
+      ]
+    },
+    {
       "host": "www.happysd.or.kr",
       "kinds": [
         "external_endpoint",
@@ -886,6 +918,21 @@
       "sample_ids": [
         "15007444",
         "15007467"
+      ]
+    },
+    {
+      "host": "www.jejudatahub.net",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 2,
+      "operations": 2,
+      "external_endpoint_operations": 2,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15034922",
+        "15150280"
       ]
     },
     {
@@ -958,6 +1005,19 @@
       ]
     },
     {
+      "host": "seogu.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "15058949"
+      ]
+    },
+    {
       "host": "www.foodsafetykorea.go.kr",
       "kinds": [
         "external_endpoint"
@@ -983,35 +1043,6 @@
       "approval_required_operations": 1,
       "sample_ids": [
         "15136379"
-      ]
-    },
-    {
-      "host": "www.jejudatahub.net",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 1,
-      "operations": 1,
-      "external_endpoint_operations": 1,
-      "approval_required_operations": 1,
-      "sample_ids": [
-        "15150280"
-      ]
-    },
-    {
-      "host": "www.vworld.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 1,
-      "operations": 1,
-      "external_endpoint_operations": 1,
-      "wms_operations": 1,
-      "approval_required_operations": 1,
-      "sample_ids": [
-        "15149535"
       ]
     },
     {
