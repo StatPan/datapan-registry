@@ -205,14 +205,14 @@
           "target": "datapan-cli",
           "action": "investigate",
           "automation": "manual_review",
-          "reason": "Release readiness reports schema_set_complete expected=20 and actual=28, so datapan-cli release draft schema knowledge must be reconciled with the registry release surface.",
-          "issue_hint": "Update datapan-cli datapanSchemaFiles/release draft schema generation for the 28 checked-in registry schemas."
+          "reason": "Release readiness reports schema_set_complete expected=20 and actual=29, so datapan-cli release draft schema knowledge must be reconciled with the registry release surface.",
+          "issue_hint": "Update datapan-cli datapanSchemaFiles/release draft schema generation for the 29 checked-in registry schemas."
         },
         {
           "target": "registry-release",
           "action": "refresh_verification",
           "automation": "automated",
-          "reason": "Registry release verification must continue checking all 28 schema artifacts and fail on schema index or manifest drift."
+          "reason": "Registry release verification must continue checking all 29 schema artifacts and fail on schema index or manifest drift."
         },
         {
           "target": "datapan-data",
@@ -239,7 +239,7 @@
           "reason": "Schema release artifact coverage does not change MCP tool contracts."
         }
       ],
-      "notes": "Registry-only release schema surface expansion from 20 to 28 schema artifacts."
+      "notes": "Registry-only release schema surface expansion from 20 to 29 schema artifacts."
     }
   ]
 }

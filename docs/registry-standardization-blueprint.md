@@ -119,7 +119,8 @@ Current strengths:
 - `scripts/sync-release-schema-artifacts.py` checks that every checked-in
   `schemas/*.schema.json` file is represented in `schemas/index.json` and
   `manifest.json`; Gira #77 raises release schema coverage from `20` to `28`
-  artifacts while keeping readiness warnings at `0`.
+  artifacts, and Gira #85 adds the source report inventory schema as the
+  `29`th checked-in schema artifact while keeping readiness warnings at `0`.
 - `reports/registry-impact-plan.json` now carries a
   `registry:schema-release-surface` impact entry, and
   `scripts/validate-impact-plans.py` fails if release readiness reports schema
@@ -181,7 +182,7 @@ Current gaps:
   profiles.
 - The registry release surface now includes every checked-in registry schema,
   but the current datapan-cli release readiness gate still reports `expected=20`
-  and `actual=28` for `schema_set_complete`, which means CLI-side schema
+  and `actual=29` for `schema_set_complete`, which means CLI-side schema
   generator knowledge must be updated before draft-local releases can be the
   sole source of truth for these newer registry contracts. Gira #79 makes that
   mismatch an explicit impact-plan action instead of a remembered PR note.
