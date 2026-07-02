@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T23:04:48Z",
+  "generated_at": "2026-07-02T23:17:07Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,13 +7,13 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 13523,
-    "evidence_total": 1358,
+    "operations": 13667,
+    "evidence_total": 1368,
     "uncovered_gateway_candidates": 10774,
-    "uncovered_adapter_candidates": 1190,
+    "uncovered_adapter_candidates": 1324,
     "missing_adapter_hosts": 11,
-    "planned_batches": 9,
-    "planned_operations": 82
+    "planned_batches": 10,
+    "planned_operations": 92
   },
   "batches": [
     {
@@ -46,11 +46,21 @@
       "output": ".datapan/verification/eshare-next.json"
     },
     {
+      "label": "juso",
+      "provider": "juso",
+      "kind": "external_endpoint",
+      "candidates": 30,
+      "uncovered_candidates": 20,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider juso --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/juso-next.json --json",
+      "output": ".datapan/verification/juso-next.json"
+    },
+    {
       "label": "lofin365",
       "provider": "lofin365",
       "kind": "external_endpoint",
-      "candidates": 231,
-      "uncovered_candidates": 206,
+      "candidates": 342,
+      "uncovered_candidates": 317,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider lofin365 --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/lofin365-next.json --json",
       "output": ".datapan/verification/lofin365-next.json"
@@ -69,8 +79,8 @@
       "label": "safetydata",
       "provider": "safetydata",
       "kind": "external_endpoint",
-      "candidates": 366,
-      "uncovered_candidates": 356,
+      "candidates": 368,
+      "uncovered_candidates": 358,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider safetydata --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/safetydata-next.json --json",
       "output": ".datapan/verification/safetydata-next.json"
@@ -79,8 +89,8 @@
       "label": "safemap",
       "provider": "safemap",
       "kind": "external_endpoint",
-      "candidates": 101,
-      "uncovered_candidates": 91,
+      "candidates": 102,
+      "uncovered_candidates": 92,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider safemap --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/safemap-next.json --json",
       "output": ".datapan/verification/safemap-next.json"

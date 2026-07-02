@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-02T23:04:33Z",
+  "generated_at": "2026-07-02T23:16:51Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 42,
-  "host_count": 47,
+  "adapter_count": 43,
+  "host_count": 48,
   "adapters": [
     {
       "name": "airport",
@@ -209,6 +209,16 @@
       "status": "registered",
       "hosts": [
         "openapi.jeonju.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "juso",
+      "status": "registered",
+      "hosts": [
+        "www.juso.go.kr"
       ],
       "capabilities": [
         "verification"
@@ -456,8 +466,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 42,
-    "verification_capable_adapters": 42,
+    "adapter_count": 43,
+    "verification_capable_adapters": 43,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
