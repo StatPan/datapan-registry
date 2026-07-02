@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T16:17:37Z",
+  "generated_at": "2026-07-02T16:43:53Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -8,10 +8,10 @@
   "timeout": "10s",
   "summary": {
     "operations": 12253,
-    "evidence_total": 1231,
+    "evidence_total": 1249,
     "uncovered_gateway_candidates": 10774,
     "uncovered_adapter_candidates": 0,
-    "missing_adapter_hosts": 23,
+    "missing_adapter_hosts": 22,
     "planned_batches": 1,
     "planned_operations": 10
   },
@@ -28,21 +28,6 @@
   ],
   "gaps": {
     "missing_adapter_hosts": [
-      {
-        "host": "data.gg.go.kr",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "missing",
-        "specs": 8,
-        "operations": 18,
-        "external_endpoint_operations": 18,
-        "sample_ids": [
-          "15005231",
-          "15011020",
-          "15011027"
-        ]
-      },
       {
         "host": "openapi.coast.kr",
         "kinds": [
@@ -173,6 +158,20 @@
         "external_guide_specs": 1,
         "sample_ids": [
           "15003549"
+        ]
+      },
+      {
+        "host": "data.gwanak.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 2,
+        "operations": 3,
+        "external_endpoint_operations": 3,
+        "sample_ids": [
+          "15007009",
+          "15009684"
         ]
       }
     ]
