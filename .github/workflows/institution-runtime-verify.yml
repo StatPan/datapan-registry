@@ -1,0 +1,111 @@
+name: Institution runtime verification
+
+on:
+  workflow_dispatch:
+    inputs:
+      organization:
+        description: "data.go.kr institution name to verify."
+        required: true
+        default: "행정안전부"
+      kind:
+        description: "Operation dependency kind to verify."
+        required: true
+        default: "data_go_kr_gateway"
+        type: choice
+        options:
+          - data_go_kr_gateway
+          - external_endpoint
+      limit:
+        description: "Maximum operations to verify."
+        required: true
+        default: "100"
+      timeout:
+        description: "Per-request timeout."
+        required: true
+        default: "20s"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      DATAPAN_DATA_GO_KR_KEY: ${{ secrets.DATAPAN_DATA_GO_KR_KEY }}
+      DATA_PORTAL_API_KEY: ${{ secrets.DATA_PORTAL_API_KEY }}
+      OUTPUT_DIR: datapan-registry/.datapan/institution-runtime
+      VERIFY_REPORT: datapan-registry/.datapan/institution-runtime/verification.json
+      VERIFY_SUMMARY: datapan-registry/.datapan/institution-runtime/verification-summary.json
+      VERIFY_STDOUT: datapan-registry/.datapan/institution-runtime/verification-stdout.json
+      VERIFY_EXIT_CODE: datapan-registry/.datapan/institution-runtime/exit-code.txt
+      VERIFY_COMMAND: datapan-registry/.datapan/institution-runtime/command.txt
+
+    steps:
+      - name: Checkout registry
+        uses: actions/checkout@v7
+        with:
+          path: datapan-registry
+          lfs: true
+
+      - name: Checkout CLI
+        uses: actions/checkout@v7
+        with:
+          repository: StatPan/datapan-cli
+          path: datapan-cli
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: datapan-cli/go.mod
+          check-latest: true
+          cache-dependency-path: datapan-cli/go.sum
+
+      - name: Confirm registry LFS file is materialized
+        run: |
+          bytes="$(wc -c < datapan-registry/data/data-go-kr.registry.json)"
+          echo "data-go-kr.registry.json bytes=${bytes}"
+          test "${bytes}" -gt 100000000
+
+      - name: Check live verification credential
+        run: |
+          if [ -z "${DATAPAN_DATA_GO_KR_KEY}" ] && [ -z "${DATA_PORTAL_API_KEY}" ]; then
+            echo "DATAPAN_DATA_GO_KR_KEY or DATA_PORTAL_API_KEY secret is required." >&2
+            exit 1
+          fi
+          echo "data.go.kr credential is configured."
+
+      - name: Run institution verification
+        id: verify
+        working-directory: datapan-cli
+        run: |
+          mkdir -p "../${OUTPUT_DIR}"
+          printf "%s\n" "datapan catalog verify --registry ../datapan-registry/data/data-go-kr.registry.json --org '${{ inputs.organization }}' --kind '${{ inputs.kind }}' --exclude-input ../datapan-registry/reports/latest-verification.json --limit '${{ inputs.limit }}' --timeout '${{ inputs.timeout }}' --output ../${VERIFY_REPORT} --json" > "../${VERIFY_COMMAND}"
+          set +e
+          go run ./cmd/datapan catalog verify \
+            --registry ../datapan-registry/data/data-go-kr.registry.json \
+            --org "${{ inputs.organization }}" \
+            --kind "${{ inputs.kind }}" \
+            --exclude-input ../datapan-registry/reports/latest-verification.json \
+            --limit "${{ inputs.limit }}" \
+            --timeout "${{ inputs.timeout }}" \
+            --output "../${VERIFY_REPORT}" \
+            --json | tee "../${VERIFY_STDOUT}"
+          status="${PIPESTATUS[0]}"
+          set -e
+          echo "${status}" > "../${VERIFY_EXIT_CODE}"
+          if [ -f "../${VERIFY_REPORT}" ]; then
+            go run ./cmd/datapan catalog verify summary \
+              --input "../${VERIFY_REPORT}" \
+              --output "../${VERIFY_SUMMARY}" \
+              --json
+          fi
+          exit "${status}"
+
+      - name: Upload verification artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: institution-runtime-${{ github.run_id }}
+          path: |
+            datapan-registry/.datapan/institution-runtime
+          if-no-files-found: warn

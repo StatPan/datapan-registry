@@ -111,6 +111,16 @@ reactivation APIs. Gateway verification requires a data.go.kr service key in
 the local or CI environment; without it, the same command can only produce
 `missing_auth` boundary evidence and should not replace live runtime evidence.
 
+The `Institution runtime verification` workflow can run the same batch from
+GitHub Actions with repository secrets. Dispatch it with `organization`,
+`kind`, `limit`, and `timeout` inputs; it defaults to `행정안전부`,
+`data_go_kr_gateway`, `100`, and `20s`. The workflow requires either the
+`DATAPAN_DATA_GO_KR_KEY` or `DATA_PORTAL_API_KEY` secret, excludes
+`reports/latest-verification.json`, and uploads the verification report,
+summary, command, stdout, and exit code as an artifact. After inspecting the
+artifact, merge the completed report into `reports/latest-verification.json`
+with the commands above and regenerate the derived reports.
+
 Provider-specific evidence should be accumulated for registered external
 adapters:
 
