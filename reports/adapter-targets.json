@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-02T17:58:06Z",
+  "generated_at": "2026-07-02T18:09:52Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 17,
+  "filtered_count": 16,
   "summary": {
-    "target_hosts": 17,
-    "target_operations": 40,
-    "external_endpoint_operations": 40,
+    "target_hosts": 16,
+    "target_operations": 37,
+    "external_endpoint_operations": 37,
     "service_root_operations": 0,
     "approval_required_operations": 0,
     "missing_param_operations": 21,
@@ -299,53 +299,6 @@
     },
     {
       "rank": 6,
-      "host": "www.work24.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 3,
-      "specs": 1,
-      "organizations": [
-        "한국고용정보원"
-      ],
-      "source_categories": [
-        "산업고용"
-      ],
-      "api_types": [
-        "LINK"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "sample_operations": [
-        {
-          "dataset_id": "15003549",
-          "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
-          "organization": "한국고용정보원",
-          "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 1",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=\u0026upprApiSvcId=\u0026fullApiSvcId=000000000000000000000000000034"
-        },
-        {
-          "dataset_id": "15003549",
-          "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
-          "organization": "한국고용정보원",
-          "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 2",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023\u0026upprApiSvcId=000000000000000000000000000022\u0026fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000062"
-        },
-        {
-          "dataset_id": "15003549",
-          "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
-          "organization": "한국고용정보원",
-          "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 3",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023\u0026upprApiSvcId=000000000000000000000000000022\u0026fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000056"
-        }
-      ]
-    },
-    {
-      "rank": 7,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -396,7 +349,7 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 7,
       "host": "www.happysd.or.kr",
       "kinds": [
         "external_endpoint"
@@ -435,7 +388,7 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 8,
       "host": "data.seoul.go.kr",
       "kinds": [
         "external_endpoint"
@@ -474,7 +427,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -531,7 +484,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "www.culture.go.kr",
       "kinds": [
         "external_endpoint"
@@ -570,7 +523,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "ncpms.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -601,7 +554,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -637,7 +590,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 13,
       "host": "search.i815.or.kr",
       "kinds": [
         "external_endpoint"
@@ -668,7 +621,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 14,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -699,7 +652,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 15,
       "host": "www.jobplustv.or.kr",
       "kinds": [
         "external_endpoint"
@@ -730,7 +683,7 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 16,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

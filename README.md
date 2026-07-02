@@ -18,14 +18,14 @@ re-importing the upstream data.go.kr catalog every time.
   `emuseum`, `epost`, `folk`, `forest`, `garak`, `gblib`, `geoje`, `gwanak`,
   `humetro`, `itfind`, `jeju`, `jeonju`, `korad`, `kpx`, `lh-ebid`, `mafra`,
   `myhome`, `naqs`, `nfqs`, `nongsaro`, `oneclick-law`, `pqis`, `q-net`,
-  `seoul-bus`, `sisul`, `tour`, `uiryeong`, `ulsan`
-- External adapter coverage: `622` registered-adapter operations out of `643`
-  external endpoint operations (`94%`)
-- Missing external adapter hosts: `17`
+  `seoul-bus`, `sisul`, `tour`, `uiryeong`, `ulsan`, `work24`
+- External adapter coverage: `625` registered-adapter operations out of `643`
+  external endpoint operations (`94.4%`)
+- Missing external adapter hosts: `16`
 - Provider split readiness: `ready`
-  (`32` adapters, `32` verification-capable, `21` call-capable)
-- Runtime verification evidence: `1267` bounded checks merged into
-  `reports/latest-verification.json` (`58` verified, `87` failed, `1122`
+  (`33` adapters, `33` verification-capable, `21` call-capable)
+- Runtime verification evidence: `1270` bounded checks merged into
+  `reports/latest-verification.json` (`61` verified, `87` failed, `1122`
   skipped)
 - Runtime evidence growth target: `10.0%` checked evidence is above the
   unrounded `10%` release target; `0` additional records are required for this
@@ -33,15 +33,15 @@ re-importing the upstream data.go.kr catalog every time.
 - Institution API overview: `411` organizations, `12060` APIs, and `12253`
   operations in `reports/data-go-kr/institution-api-overview.json`; readable
   tables live in `docs/data-go-kr-institution-api-overview.md`.
-- Missing external host probe: `40` unadapted external endpoint checks in
-  `reports/unadapted-external-probe.json` (`11` HTTP 2xx adapter candidates,
+- Missing external host probe: `37` unadapted external endpoint checks in
+  `reports/unadapted-external-probe.json` (`8` HTTP 2xx adapter candidates,
   `14` HTTP 404 dead-route candidates, `15` timeout/DNS/request transient
   failures)
-- Route disposition: `40` missing external routes in
+- Route disposition: `37` missing external routes in
   `reports/route-disposition.json` (`14` dead-route candidates, `15`
-  transient failures, `11` remaining adapter candidates)
+  transient failures, `8` remaining adapter candidates)
 - Coverage route evidence: `reports/coverage.json` now carries the same route
-  evidence and reports `11` evidence-adjusted adapter candidates
+  evidence and reports `8` evidence-adjusted adapter candidates
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
 - Provider index: `data/provider-index.json`
@@ -170,6 +170,8 @@ reports/
   uiryeong-verification-summary.json
   ulsan-verification.json
   ulsan-verification-summary.json
+  work24-verification.json
+  work24-verification-summary.json
   unadapted-external-probe.json
   unadapted-external-probe-summary.json
   latest-verification.json

@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-02T17:58:06Z",
+  "generated_at": "2026-07-02T18:09:52Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 32,
-  "host_count": 36,
+  "adapter_count": 33,
+  "host_count": 37,
   "adapters": [
     {
       "name": "airport",
@@ -348,13 +348,23 @@
         "call",
         "verification"
       ]
+    },
+    {
+      "name": "work24",
+      "status": "registered",
+      "hosts": [
+        "www.work24.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
     }
   ],
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 32,
-    "verification_capable_adapters": 32,
+    "adapter_count": 33,
+    "verification_capable_adapters": 33,
     "call_capable_adapters": 21,
     "required_adapters": 2,
     "required_verification_adapters": 2,

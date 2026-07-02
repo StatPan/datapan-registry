@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-02T17:58:04Z",
+  "generated_at": "2026-07-02T18:09:50Z",
   "source": "..\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1267,
-    "verified": 58,
+    "total": 1270,
+    "verified": 61,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0
@@ -26,7 +26,7 @@
       },
       {
         "key": "verified",
-        "count": 58,
+        "count": 61,
         "status": "verified"
       }
     ],
@@ -444,6 +444,11 @@
         "provider": "mafra"
       },
       {
+        "key": "work24",
+        "count": 3,
+        "provider": "work24"
+      },
+      {
         "key": "myhome",
         "count": 1,
         "provider": "myhome"
@@ -626,6 +631,11 @@
         "host": "www.garak.co.kr"
       },
       {
+        "key": "www.work24.go.kr",
+        "count": 3,
+        "host": "www.work24.go.kr"
+      },
+      {
         "key": "data.myhome.go.kr:443",
         "count": 1,
         "host": "data.myhome.go.kr:443"
@@ -644,7 +654,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 603,
+        "count": 606,
         "kind": "external_endpoint"
       },
       {

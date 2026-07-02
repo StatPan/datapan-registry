@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.external-adapter-backlog.v1",
-  "generated_at": "2026-07-02T17:58:06Z",
+  "generated_at": "2026-07-02T18:09:52Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "source_profile": "sources/data_go_kr.json",
@@ -10,19 +10,19 @@
     "coverage": "reports/coverage.json"
   },
   "summary": {
-    "candidate_hosts": 6,
-    "candidate_operations": 11,
-    "candidate_apis": 7,
-    "candidate_institutions": 6,
-    "raw_missing_adapter_operations": 40,
-    "raw_missing_adapter_hosts": 17,
-    "route_disposition_operations": 40,
-    "route_disposition_adapter_candidates": 11,
+    "candidate_hosts": 5,
+    "candidate_operations": 8,
+    "candidate_apis": 6,
+    "candidate_institutions": 5,
+    "raw_missing_adapter_operations": 37,
+    "raw_missing_adapter_hosts": 16,
+    "route_disposition_operations": 37,
+    "route_disposition_adapter_candidates": 8,
     "excluded_dead_route_candidates": 14,
     "excluded_transient_failures": 15,
     "unclassified_missing_routes": 0,
-    "adapter_target_operations": 40,
-    "candidate_share_of_missing_adapter_operations_percent": 27.5
+    "adapter_target_operations": 37,
+    "candidate_share_of_missing_adapter_operations_percent": 21.6
   },
   "policy": {
     "candidate_filter": "route_disposition.disposition == adapter_candidate",
@@ -30,82 +30,6 @@
     "gate": "unclassified_missing_routes must remain 0 before adapter backlog is actionable"
   },
   "hosts": [
-    {
-      "host": "www.work24.go.kr",
-      "priority": 3,
-      "candidate_operations": 3,
-      "candidate_apis": 1,
-      "institutions": [
-        "한국고용정보원"
-      ],
-      "probe_reasons": [
-        {
-          "key": "unadapted_probe_http_2xx",
-          "count": 3
-        }
-      ],
-      "body_shapes": [
-        {
-          "key": "html",
-          "count": 3
-        }
-      ],
-      "sample_dataset_ids": [
-        "15003549"
-      ],
-      "sample_routes": [
-        {
-          "dataset_id": "15003549",
-          "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
-          "organization": "한국고용정보원",
-          "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 1",
-          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=&upprApiSvcId=&fullApiSvcId=000000000000000000000000000034",
-          "endpoint_host": "www.work24.go.kr",
-          "dependency_class": "external_endpoint",
-          "disposition": "adapter_candidate",
-          "probe_status": "unknown",
-          "probe_reason": "unadapted_probe_http_2xx",
-          "http_status": 200,
-          "body_shape": "html",
-          "missing_params": [],
-          "recommended_action": "implement_provider_adapter"
-        },
-        {
-          "dataset_id": "15003549",
-          "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
-          "organization": "한국고용정보원",
-          "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 2",
-          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023&upprApiSvcId=000000000000000000000000000022&fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000062",
-          "endpoint_host": "www.work24.go.kr",
-          "dependency_class": "external_endpoint",
-          "disposition": "adapter_candidate",
-          "probe_status": "unknown",
-          "probe_reason": "unadapted_probe_http_2xx",
-          "http_status": 200,
-          "body_shape": "html",
-          "missing_params": [],
-          "recommended_action": "implement_provider_adapter"
-        },
-        {
-          "dataset_id": "15003549",
-          "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
-          "organization": "한국고용정보원",
-          "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 3",
-          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023&upprApiSvcId=000000000000000000000000000022&fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000056",
-          "endpoint_host": "www.work24.go.kr",
-          "dependency_class": "external_endpoint",
-          "disposition": "adapter_candidate",
-          "probe_status": "unknown",
-          "probe_reason": "unadapted_probe_http_2xx",
-          "http_status": 200,
-          "body_shape": "html",
-          "missing_params": [],
-          "recommended_action": "implement_provider_adapter"
-        }
-      ],
-      "implementation_status": "adapter_not_registered",
-      "recommended_next_step": "Add a provider adapter for www.work24.go.kr or mark the host with stronger route disposition evidence if the HTML surface is not machine-callable."
-    },
     {
       "host": "data.seoul.go.kr",
       "priority": 2,
@@ -496,54 +420,6 @@
       "operation": "서울특별시성동구도시관리공단_체육시설 대관정보 조회_20220804",
       "endpoint": "https://www.happysd.or.kr/c_76/cnt/m_109/view.do",
       "endpoint_host": "www.happysd.or.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html",
-      "missing_params": [],
-      "recommended_action": "implement_provider_adapter"
-    },
-    {
-      "dataset_id": "15003549",
-      "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
-      "organization": "한국고용정보원",
-      "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 1",
-      "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=&upprApiSvcId=&fullApiSvcId=000000000000000000000000000034",
-      "endpoint_host": "www.work24.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html",
-      "missing_params": [],
-      "recommended_action": "implement_provider_adapter"
-    },
-    {
-      "dataset_id": "15003549",
-      "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
-      "organization": "한국고용정보원",
-      "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 2",
-      "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023&upprApiSvcId=000000000000000000000000000022&fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000062",
-      "endpoint_host": "www.work24.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html",
-      "missing_params": [],
-      "recommended_action": "implement_provider_adapter"
-    },
-    {
-      "dataset_id": "15003549",
-      "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
-      "organization": "한국고용정보원",
-      "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 3",
-      "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023&upprApiSvcId=000000000000000000000000000022&fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000056",
-      "endpoint_host": "www.work24.go.kr",
       "dependency_class": "external_endpoint",
       "disposition": "adapter_candidate",
       "probe_status": "unknown",
