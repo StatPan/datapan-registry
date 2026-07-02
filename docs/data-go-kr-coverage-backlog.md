@@ -2,18 +2,18 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-07-02T21:48:05Z`
+- Generated at: `2026-07-02T21:54:44Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `7506` (`62.2%`)
-- APIs without operation mapping: `4554`
-- Operations: `12720`
-- Runtime evidence operations: `1278` (`10.0%`)
+- APIs with operation mapping: `7594` (`63.0%`)
+- APIs without operation mapping: `4466`
+- Operations: `12963`
+- Runtime evidence operations: `1278` (`9.9%`)
 - Runtime verified operations: `69`
 - Runtime failed operations: `87`
 - Runtime skipped operations: `1122`
 - APIs with runtime evidence: `599`
-- Runtime reactivation APIs: `6907`
+- Runtime reactivation APIs: `6995`
 - Runtime repair APIs: `54`
 
 ## Highest Priority Institutions
@@ -21,7 +21,7 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | Institution | APIs | Covered APIs | Uncovered APIs | API Coverage | Ops | Runtime APIs | Runtime Reactivation APIs | Runtime Repair APIs | Priority |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 행정안전부 | 1252 | 793 | 459 | 63.3% | 1054 | 0 | 793 | 0 | 1252 |
-| 경기도 | 840 | 111 | 729 | 13.2% | 270 | 8 | 103 | 0 | 832 |
+| 경기도 | 840 | 199 | 641 | 23.7% | 513 | 8 | 191 | 0 | 832 |
 | 국토교통부 | 393 | 127 | 266 | 32.3% | 397 | 3 | 124 | 0 | 390 |
 | 식품의약품안전처 | 392 | 272 | 120 | 69.4% | 363 | 2 | 270 | 0 | 390 |
 | 국회 국회사무처 | 277 | 0 | 277 | 0.0% | 0 | 0 | 0 | 0 | 277 |
@@ -68,7 +68,6 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 경기도 | 15011425 | 경기도 공중화장실 현황 | 국토관리 | 2025-06-17 |
 | 경기도 | 15034385 | 경기도_음식물류 폐기물 다량배출사업장 현황 | 환경기상 | 2025-06-23 |
 | 경기도 | 15034922 | 경기도_도서 관련 업체 현황 | 교육 | 2025-09-25 |
-| 경기도 | 15034926 | 경기도_보도자료 현황 | 공공행정 | 2025-09-25 |
 | 경기도 | 15037595 | 경기도_경기연구원 연구보고서 정보 | 과학기술 | 2025-06-23 |
 | 경기도 | 15038581 | 경기도_지방의회 정보 | 공공행정 | 2025-09-25 |
 | 경기도 | 15056497 | 경기도_공공체육시설 현황(하키) | 문화관광 | 2025-06-17 |
@@ -82,9 +81,10 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 경기도 | 15056514 | 경기도_식품판매업 현황 | 식품건강 | 2025-07-23 |
 | 경기도 | 15056517 | 경기도_노인교실 현황 | 사회복지 | 2025-08-22 |
 | 경기도 | 15056524 | 경기도_수업일수 및 수업시수 현황(특) | 교육 | 2025-09-17 |
-| 경기도 | 15056526 | 경기도_골프 연습장업체 현황 | 문화관광 | 2025-09-25 |
 | 경기도 | 15056527 | 경기도_청각장애인 인공달팽이관 재활지원 집계현황 | 사회복지 | 2025-09-18 |
 | 경기도 | 15056528 | 경기도_공공체육시설 현황(빙상장) | 문화관광 | 2025-06-17 |
+| 경기도 | 15056540 | 경기도_발달재활기관 중심 사회서비스제공기관현황 | 사회복지 | 2025-09-18 |
+| 경기도 | 15056543 | 경기도_민방위 대피시설 현황 | 재난안전 | 2025-06-27 |
 
 ## Sample Runtime Reactivation APIs
 

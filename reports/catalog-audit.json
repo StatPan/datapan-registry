@@ -1,25 +1,25 @@
 {
-  "generated_at": "2026-07-02T21:48:05Z",
+  "generated_at": "2026-07-02T21:54:44Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 12720,
-    "callable_operations": 12578,
-    "specs_without_operations": 4554,
-    "specs_without_callable_operation": 4629,
+    "operations_total": 12963,
+    "callable_operations": 12821,
+    "specs_without_operations": 4466,
+    "specs_without_callable_operation": 4541,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 382,
-    "operations_without_response_params": 1604,
+    "operations_without_request_params": 625,
+    "operations_without_response_params": 1847,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 635,
-      "external_endpoint_operations": 1110,
+      "external_endpoint_specs": 723,
+      "external_endpoint_operations": 1353,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 7,
@@ -34,7 +34,7 @@
         },
         {
           "host": "data.gg.go.kr",
-          "count": 257
+          "count": 498
         },
         {
           "host": "www.safetydata.go.kr",
@@ -112,7 +112,7 @@
       "top_external_endpoint_hosts": [
         {
           "host": "data.gg.go.kr",
-          "count": 257
+          "count": 498
         },
         {
           "host": "www.safetydata.go.kr",

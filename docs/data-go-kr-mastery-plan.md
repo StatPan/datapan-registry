@@ -12,13 +12,13 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `12720`
-- callable operations: `12578` (`98.9%`)
+- operations: `12963`
+- callable operations: `12821` (`98.9%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `1110`
-- registered adapter operations: `1100`
+- external endpoint operations: `1353`
+- registered adapter operations: `1343`
 - missing adapter operations: `29`
-- external adapter coverage: `97.4%`
+- external adapter coverage: `97.9%`
 - approval-required operations: `4325`
 - no-endpoint operations: `123`
 - service-root operations: `19`
@@ -280,8 +280,9 @@ coverage.
    #43, Gira #45, Gira #49, Gira #51, Gira #53, Gira #55, Gira #57, Gira #59,
    and Gira #61 with gateway boundary batches, growing checked runtime evidence
    to `1221`. Gira #93 adds the next gateway boundary batch, growing checked
-   runtime evidence to `1231` and clearing the unrounded `10%` runtime evidence
-   target gap. Gira #97 adds `data-gg` external endpoint verification evidence,
+   runtime evidence to `1231` and clearing the then-current unrounded `10%`
+   runtime evidence target gap. Gira #97 adds `data-gg` external endpoint
+   verification evidence,
    growing checked runtime evidence to `1249` and verified results to `40`.
    Gira #99 adds `nfqs` external endpoint verification evidence, growing checked
    runtime evidence to `1254` and verified results to `45`. Gira #101 adds
@@ -309,16 +310,18 @@ coverage.
    increasing registered external adapter operations to `638`; the next
    Safety Data materialization batches add 175 행정안전부 operation mappings,
    increasing registered external adapter operations to `813`; an adapter-safe
-   link-detail enrichment batches then add 116 APIs and 287 operations across
+   link-detail enrichment batches then add 204 APIs and 530 operations across
    already registered external hosts, increasing registered external adapter
-   operations to `1100` while keeping evidence-adjusted adapter candidates at
+   operations to `1343` while keeping evidence-adjusted adapter candidates at
    `0`. This is still mostly skipped
    boundary evidence, and the new
    `data-gg`/`nfqs`/`nongsaro`/`gwanak`/`mafra`/`garak`/`work24`/
    `seoul-open-data`/`culture`/`happysd`/`ncpms`/`i815` results prove landing-page
    reachability rather than generic machine-call support; the Safety Data
    operations remain approval-gated until credentials and approval state are
-   available.
+   available. After the latest operation materialization growth, the current
+   runtime evidence target is `1297`, so `19` more evidence records are needed
+   to restore the `10%` release-readiness target.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,
@@ -335,7 +338,7 @@ data.go.kr mastery is complete when:
 - evidence-adjusted adapter candidates are reported;
 - every missing external route has route disposition evidence;
 - known data.go.kr credential and approval failures map to error action rules;
-- runtime evidence coverage has met the `10%` target without treating skipped
-  boundary evidence as callable success;
+- runtime evidence coverage meets the current `10%` target without treating
+  skipped boundary evidence as callable success;
 - downstream impact plans can express `no_action`, `refresh_verification`,
   `update_adapter`, and `db_migration_review` for data.go.kr changes.

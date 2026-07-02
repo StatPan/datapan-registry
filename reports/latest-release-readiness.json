@@ -2,14 +2,14 @@
   "manifest": "C:\\Users\\statp\\dev\\datapan-registry\\manifest.json",
   "root": "C:\\Users\\statp\\dev\\datapan-registry",
   "schema_version": "datapan.release-readiness.v1",
-  "generated_at": "2026-07-02T21:49:17Z",
+  "generated_at": "2026-07-02T21:58:17Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "ready": true,
   "summary": {
     "gates_total": 23,
-    "passed": 22,
-    "warned": 1,
+    "passed": 21,
+    "warned": 2,
     "failed": 0,
     "required_artifacts": 16,
     "missing_required_artifacts": 0,
@@ -236,12 +236,12 @@
     },
     {
       "id": "runtime_evidence_growth_target",
-      "status": "pass",
+      "status": "warn",
       "severity": "recommended",
-      "message": "runtime evidence coverage meets the release target",
+      "message": "runtime evidence coverage is below the release target",
       "artifact_kind": "runtime_evidence_growth",
       "artifact_path": "reports/data-go-kr/runtime-evidence-growth.json",
-      "expected": 1272,
+      "expected": 1297,
       "actual": 1278
     }
   ]

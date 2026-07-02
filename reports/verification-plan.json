@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T21:48:19Z",
+  "generated_at": "2026-07-02T21:54:59Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,13 +7,13 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 12720,
+    "operations": 12963,
     "evidence_total": 1278,
     "uncovered_gateway_candidates": 10774,
-    "uncovered_adapter_candidates": 467,
+    "uncovered_adapter_candidates": 710,
     "missing_adapter_hosts": 11,
-    "planned_batches": 7,
-    "planned_operations": 65
+    "planned_batches": 8,
+    "planned_operations": 67
   },
   "batches": [
     {
@@ -39,8 +39,8 @@
       "label": "data-gg",
       "provider": "data-gg",
       "kind": "external_endpoint",
-      "candidates": 257,
-      "uncovered_candidates": 239,
+      "candidates": 498,
+      "uncovered_candidates": 480,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider data-gg --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/data-gg-next.json --json",
       "output": ".datapan/verification/data-gg-next.json"
@@ -74,6 +74,16 @@
       "planned_operations": 10,
       "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider safetydata --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/safetydata-next.json --json",
       "output": ".datapan/verification/safetydata-next.json"
+    },
+    {
+      "label": "seoul-open-data",
+      "provider": "seoul-open-data",
+      "kind": "external_endpoint",
+      "candidates": 4,
+      "uncovered_candidates": 2,
+      "planned_operations": 2,
+      "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider seoul-open-data --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/seoul-open-data-next.json --json",
+      "output": ".datapan/verification/seoul-open-data-next.json"
     },
     {
       "label": "work24",
