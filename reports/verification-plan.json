@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T21:54:59Z",
+  "generated_at": "2026-07-02T22:04:23Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -8,12 +8,12 @@
   "timeout": "10s",
   "summary": {
     "operations": 12963,
-    "evidence_total": 1278,
+    "evidence_total": 1303,
     "uncovered_gateway_candidates": 10774,
-    "uncovered_adapter_candidates": 710,
+    "uncovered_adapter_candidates": 685,
     "missing_adapter_hosts": 11,
-    "planned_batches": 8,
-    "planned_operations": 67
+    "planned_batches": 6,
+    "planned_operations": 52
   },
   "batches": [
     {
@@ -26,34 +26,14 @@
       "output": ".datapan/verification/gateway-next.json"
     },
     {
-      "label": "culture",
-      "provider": "culture",
-      "kind": "external_endpoint",
-      "candidates": 9,
-      "uncovered_candidates": 7,
-      "planned_operations": 7,
-      "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider culture --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/culture-next.json --json",
-      "output": ".datapan/verification/culture-next.json"
-    },
-    {
       "label": "data-gg",
       "provider": "data-gg",
       "kind": "external_endpoint",
       "candidates": 498,
-      "uncovered_candidates": 480,
+      "uncovered_candidates": 470,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider data-gg --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/data-gg-next.json --json",
       "output": ".datapan/verification/data-gg-next.json"
-    },
-    {
-      "label": "mafra",
-      "provider": "mafra",
-      "kind": "external_endpoint",
-      "candidates": 11,
-      "uncovered_candidates": 8,
-      "planned_operations": 8,
-      "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider mafra --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/mafra-next.json --json",
-      "output": ".datapan/verification/mafra-next.json"
     },
     {
       "label": "nongsaro",

@@ -95,7 +95,7 @@ Current strengths:
   evidence against the 10% target and validates the next planned verification
   batches.
 - `reports/data-go-kr/coverage-backlog.json` tracks `4,466` data.go.kr APIs
-  without operation mappings, `6,995` operation-mapped APIs without runtime
+  without operation mappings, `6,982` operation-mapped APIs without runtime
   evidence, and `54` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
@@ -186,11 +186,13 @@ Current gaps:
   checks, and Gira #113 adds `4` verified culture/happysd landing-page checks,
   and Gira #115 adds `2` verified ncpms/i815 landing-page checks, bringing
   runtime evidence to `1278`. Subsequent operation materialization raised the
-  current evidence target to `1297`, so `19` additional evidence records are
-  needed to restore the `10%` release-readiness target. Most evidence is still
-  skipped boundary evidence, not proof that those operations are callable.
+  current evidence target to `1297`, then culture, data-gg, and mafra external
+  endpoint batches add `25` verified landing-page checks, bringing runtime
+  evidence to `1303` and restoring the `10%` release-readiness target. Most
+  evidence is still skipped boundary evidence, not proof that those operations
+  are callable.
 - API operation coverage remains incomplete: `7,594` of `12,060` APIs have
-  operation mappings (`63.0%`), leaving `4,466` APIs to materialize and `6,995`
+  operation mappings (`63.0%`), leaving `4,466` APIs to materialize and `6,982`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

@@ -1,10 +1,10 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-02T21:54:44Z`
+- Generated at: `2026-07-02T22:04:09Z`
 - Institutions: `411`
 - APIs: `12060`
 - Operations: `12963`
-- Runtime evidence: `1278` (`9.9%`)
+- Runtime evidence: `1303` (`10.1%`)
 - External endpoint operations: `1353`
 - Registered adapter operations: `1343`
 - Missing adapter operations: `29`
@@ -14,7 +14,7 @@
 | Institution | APIs | APIs with ops | Ops | Evidence | Evidence % | Verified | Failed | Skipped | Approval | No endpoint |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 행정안전부 | 1252 | 793 | 1054 | 0 | 0.0% | 0 | 0 | 0 | 215 | 0 |
-| 경기도 | 840 | 199 | 513 | 18 | 3.5% | 18 | 0 | 0 | 3 | 0 |
+| 경기도 | 840 | 199 | 513 | 29 | 5.7% | 29 | 0 | 0 | 3 | 0 |
 | 국토교통부 | 393 | 127 | 397 | 25 | 6.3% | 0 | 0 | 25 | 6 | 0 |
 | 식품의약품안전처 | 392 | 272 | 363 | 2 | 0.6% | 0 | 0 | 2 | 275 | 0 |
 | 국회 국회사무처 | 277 | 0 | 0 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
@@ -49,7 +49,7 @@
 | Institution | APIs | APIs with ops | Ops | Evidence | Evidence % | Verified | Failed | Skipped | Approval | No endpoint |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 행정안전부 | 1252 | 793 | 1054 | 0 | 0.0% | 0 | 0 | 0 | 215 | 0 |
-| 경기도 | 840 | 199 | 513 | 18 | 3.5% | 18 | 0 | 0 | 3 | 0 |
+| 경기도 | 840 | 199 | 513 | 29 | 5.7% | 29 | 0 | 0 | 3 | 0 |
 | 국토교통부 | 393 | 127 | 397 | 25 | 6.3% | 0 | 0 | 25 | 6 | 0 |
 | 국립암센터 | 212 | 204 | 367 | 79 | 21.5% | 0 | 0 | 79 | 175 | 1 |
 | 식품의약품안전처 | 392 | 272 | 363 | 2 | 0.6% | 0 | 0 | 2 | 275 | 0 |
