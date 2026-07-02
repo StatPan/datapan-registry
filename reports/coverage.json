@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T23:16:54Z",
+  "generated_at": "2026-07-02T23:34:42Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 13667,
-    "callable_operations": 13525,
+    "operations": 13676,
+    "callable_operations": 13534,
     "callable_operation_percent": 99,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 2057,
-    "registered_adapter_operations": 2047,
+    "external_endpoint_operations": 2066,
+    "registered_adapter_operations": 2056,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 98.6,
-    "approval_required_operations": 4714,
+    "approval_required_operations": 4723,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
-    "unsupported_protocol_operations": 142,
-    "registered_adapter_hosts": 47,
+    "unsupported_protocol_operations": 146,
+    "registered_adapter_hosts": 52,
     "missing_adapter_hosts": 11,
-    "adapter_count": 43,
+    "adapter_count": 47,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-02T23:16:49Z",
-    "total": 1368,
-    "verified": 124,
+    "generated_at": "2026-07-02T23:34:28Z",
+    "total": 1375,
+    "verified": 130,
     "failed": 112,
-    "skipped": 1132,
+    "skipped": 1133,
     "unknown": 0,
-    "verified_percent": 9.1,
-    "evidence_operation_percent": 10
+    "verified_percent": 9.5,
+    "evidence_operation_percent": 10.1
   },
   "route_evidence": {
     "present": true,
@@ -228,10 +228,10 @@
           "external_endpoint"
         ],
         "adapter_status": "adapter",
-        "specs": 368,
-        "operations": 368,
-        "external_endpoint_operations": 368,
-        "approval_required_operations": 368,
+        "specs": 370,
+        "operations": 370,
+        "external_endpoint_operations": 370,
+        "approval_required_operations": 370,
         "sample_ids": [
           "15134001",
           "15138456",
@@ -279,11 +279,11 @@
           "external_endpoint"
         ],
         "adapter_status": "adapter",
-        "specs": 102,
-        "operations": 102,
-        "external_endpoint_operations": 102,
-        "wms_operations": 95,
-        "approval_required_operations": 102,
+        "specs": 104,
+        "operations": 104,
+        "external_endpoint_operations": 104,
+        "wms_operations": 97,
+        "approval_required_operations": 104,
         "sample_ids": [
           "15101789",
           "15101791",
@@ -380,10 +380,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-02T23:16:54Z",
+    "generated_at": "2026-07-02T23:34:42Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 43,
-    "host_count": 48,
+    "adapter_count": 47,
+    "host_count": 53,
     "adapters": [
       {
         "name": "airport",
@@ -480,6 +480,16 @@
         ]
       },
       {
+        "name": "foodsafetykorea",
+        "status": "registered",
+        "hosts": [
+          "www.foodsafetykorea.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "forest",
         "status": "registered",
         "hosts": [
@@ -564,6 +574,16 @@
         ]
       },
       {
+        "name": "ins24",
+        "status": "registered",
+        "hosts": [
+          "www.ins24.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "itfind",
         "status": "registered",
         "hosts": [
@@ -582,6 +602,16 @@
         ],
         "capabilities": [
           "call",
+          "verification"
+        ]
+      },
+      {
+        "name": "jejudatahub",
+        "status": "registered",
+        "hosts": [
+          "www.jejudatahub.net"
+        ],
+        "capabilities": [
           "verification"
         ]
       },
@@ -782,6 +812,7 @@
         "status": "registered",
         "hosts": [
           "data.seoul.go.kr",
+          "openapi.seoul.go.kr",
           "openapi.seoul.go.kr:8088"
         ],
         "capabilities": [
@@ -834,6 +865,16 @@
         ]
       },
       {
+        "name": "vworld",
+        "status": "registered",
+        "hosts": [
+          "www.vworld.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "work24",
         "status": "registered",
         "hosts": [
@@ -847,8 +888,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 43,
-      "verification_capable_adapters": 43,
+      "adapter_count": 47,
+      "verification_capable_adapters": 47,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

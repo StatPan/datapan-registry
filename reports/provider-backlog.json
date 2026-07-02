@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-02T23:16:51Z",
+  "generated_at": "2026-07-02T23:34:36Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 198,
+  "filtered_count": 203,
   "summary": {
-    "hosts": 198,
+    "hosts": 203,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 58,
+    "external_endpoint_hosts": 63,
     "external_guide_hosts": 160,
-    "registered_adapter_hosts": 47,
-    "operation_hosts": 60,
+    "registered_adapter_hosts": 52,
+    "operation_hosts": 65,
     "guide_only_hosts": 138,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
-    "unsupported_protocol_operations": 142,
-    "approval_required_operations": 4714,
+    "unsupported_protocol_operations": 146,
+    "approval_required_operations": 4723,
     "malformed_source_url_count": 627
   },
   "providers": [
@@ -196,10 +196,10 @@
         "external_endpoint"
       ],
       "adapter_status": "adapter",
-      "specs": 368,
-      "operations": 368,
-      "external_endpoint_operations": 368,
-      "approval_required_operations": 368,
+      "specs": 370,
+      "operations": 370,
+      "external_endpoint_operations": 370,
+      "approval_required_operations": 370,
       "sample_ids": [
         "15134001",
         "15138456",
@@ -247,11 +247,11 @@
         "external_endpoint"
       ],
       "adapter_status": "adapter",
-      "specs": 102,
-      "operations": 102,
-      "external_endpoint_operations": 102,
-      "wms_operations": 95,
-      "approval_required_operations": 102,
+      "specs": 104,
+      "operations": 104,
+      "external_endpoint_operations": 104,
+      "wms_operations": 97,
+      "approval_required_operations": 104,
       "sample_ids": [
         "15101789",
         "15101791",
@@ -930,6 +930,21 @@
       ]
     },
     {
+      "host": "openapi.seoul.go.kr:8088",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "wms_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15101888"
+      ]
+    },
+    {
       "host": "search.i815.or.kr",
       "kinds": [
         "external_endpoint"
@@ -940,6 +955,63 @@
       "external_endpoint_operations": 1,
       "sample_ids": [
         "15006273"
+      ]
+    },
+    {
+      "host": "www.foodsafetykorea.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15151925"
+      ]
+    },
+    {
+      "host": "www.ins24.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15136379"
+      ]
+    },
+    {
+      "host": "www.jejudatahub.net",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15150280"
+      ]
+    },
+    {
+      "host": "www.vworld.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "wms_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15149535"
       ]
     },
     {

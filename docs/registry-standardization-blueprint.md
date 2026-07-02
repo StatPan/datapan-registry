@@ -94,9 +94,9 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `4,012` data.go.kr APIs
-  without operation mappings, `7,399` operation-mapped APIs without runtime
-  evidence, and `54` APIs with failed runtime evidence that need repair.
+- `reports/data-go-kr/coverage-backlog.json` tracks `4,007` data.go.kr APIs
+  without operation mappings, `7,397` operation-mapped APIs without runtime
+  evidence, and `63` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
   `reports/open-assembly/runtime-evidence-plan.json`, and
@@ -199,10 +199,13 @@ Current gaps:
   evidence to `1358`. The Juso adapter opens the real-time address batch and
   adds `68` APIs, `144` operations, and `10` verified landing-page checks,
   bringing runtime evidence to `1368` while keeping the `10%`
-  release-readiness target restored. Most evidence is still skipped boundary
-  evidence, not proof that those operations are callable.
-- API operation coverage remains incomplete: `8,048` of `12,060` APIs have
-  operation mappings (`66.7%`), leaving `4,012` APIs to materialize and `7,399`
+  release-readiness target restored. The remaining 행정안전부 link-detail hosts
+  then add the Food Safety Korea, INS24, Jeju Data Hub, and VWorld adapters,
+  extend Seoul Open Data host coverage, add `9` operations, and merge `7`
+  bounded checks, bringing runtime evidence to `1375`. Most evidence is still
+  skipped boundary evidence, not proof that those operations are callable.
+- API operation coverage remains incomplete: `8,053` of `12,060` APIs have
+  operation mappings (`66.8%`), leaving `4,007` APIs to materialize and `7,397`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report
@@ -215,11 +218,10 @@ Current gaps:
   checked-in source reference baselines are now validated against source
   profiles.
 - The registry release surface now includes every checked-in registry schema,
-  but the current datapan-cli release readiness gate still reports `expected=20`
-  and `actual=29` for `schema_set_complete`, which means CLI-side schema
-  generator knowledge must be updated before draft-local releases can be the
-  sole source of truth for these newer registry contracts. Gira #79 makes that
-  mismatch an explicit impact-plan action instead of a remembered PR note.
+  and the current datapan-cli release readiness gate passes with
+  `schema_set_complete` reporting `expected=20` and `actual=29`. Gira #79 keeps
+  the broader CLI-side schema-generator follow-up explicit in the impact plan
+  instead of relying on a remembered PR note.
 
 ## Gap Matrix
 

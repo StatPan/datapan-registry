@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-02T23:16:51Z",
+  "generated_at": "2026-07-02T23:34:36Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 43,
-  "host_count": 48,
+  "adapter_count": 47,
+  "host_count": 53,
   "adapters": [
     {
       "name": "airport",
@@ -99,6 +99,16 @@
       ]
     },
     {
+      "name": "foodsafetykorea",
+      "status": "registered",
+      "hosts": [
+        "www.foodsafetykorea.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "forest",
       "status": "registered",
       "hosts": [
@@ -183,6 +193,16 @@
       ]
     },
     {
+      "name": "ins24",
+      "status": "registered",
+      "hosts": [
+        "www.ins24.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "itfind",
       "status": "registered",
       "hosts": [
@@ -201,6 +221,16 @@
       ],
       "capabilities": [
         "call",
+        "verification"
+      ]
+    },
+    {
+      "name": "jejudatahub",
+      "status": "registered",
+      "hosts": [
+        "www.jejudatahub.net"
+      ],
+      "capabilities": [
         "verification"
       ]
     },
@@ -401,6 +431,7 @@
       "status": "registered",
       "hosts": [
         "data.seoul.go.kr",
+        "openapi.seoul.go.kr",
         "openapi.seoul.go.kr:8088"
       ],
       "capabilities": [
@@ -453,6 +484,16 @@
       ]
     },
     {
+      "name": "vworld",
+      "status": "registered",
+      "hosts": [
+        "www.vworld.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "work24",
       "status": "registered",
       "hosts": [
@@ -466,8 +507,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 43,
-    "verification_capable_adapters": 43,
+    "adapter_count": 47,
+    "verification_capable_adapters": 47,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
