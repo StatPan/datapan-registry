@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-02T21:15:44Z",
+  "generated_at": "2026-07-02T21:24:03Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 12353,
+    "operations": 12433,
     "runtime_evidence": 1278,
     "runtime_evidence_percent": 10.3,
-    "callable_operations": 12211,
-    "external_endpoint_operations": 743,
-    "registered_adapter_operations": 733,
+    "callable_operations": 12291,
+    "external_endpoint_operations": 823,
+    "registered_adapter_operations": 813,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 743
+      "count": 823
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 733
+      "count": 813
     },
     {
       "key": "builtin",
@@ -69,19 +69,19 @@
   "top_source_categories": [
     {
       "category": "교통물류",
-      "operation_count": 1296
+      "operation_count": 1317
     },
     {
       "category": "농축수산",
-      "operation_count": 1296
+      "operation_count": 1316
     },
     {
       "category": "문화관광",
-      "operation_count": 1267
+      "operation_count": 1274
     },
     {
       "category": "공공행정",
-      "operation_count": 1252
+      "operation_count": 1255
     },
     {
       "category": "산업고용",
@@ -93,7 +93,7 @@
     },
     {
       "category": "환경기상",
-      "operation_count": 806
+      "operation_count": 809
     },
     {
       "category": "사회복지",
@@ -101,19 +101,19 @@
     },
     {
       "category": "보건의료",
-      "operation_count": 698
+      "operation_count": 700
     },
     {
       "category": "식품건강",
-      "operation_count": 637
+      "operation_count": 649
     },
     {
       "category": "재난안전",
-      "operation_count": 599
+      "operation_count": 610
     },
     {
       "category": "국토관리",
-      "operation_count": 535
+      "operation_count": 536
     },
     {
       "category": "과학기술",
@@ -138,21 +138,21 @@
       "operation_count": 11423
     },
     {
+      "host": "www.safetydata.go.kr",
+      "operation_count": 180,
+      "adapter": "safetydata",
+      "adapter_status": "registered",
+      "capabilities": [
+        "call",
+        "verification"
+      ]
+    },
+    {
       "host": "openapi.q-net.or.kr",
       "operation_count": 104,
       "adapter": "q-net",
       "adapter_status": "registered",
       "capabilities": [
-        "verification"
-      ]
-    },
-    {
-      "host": "www.safetydata.go.kr",
-      "operation_count": 100,
-      "adapter": "safetydata",
-      "adapter_status": "registered",
-      "capabilities": [
-        "call",
         "verification"
       ]
     },
@@ -321,15 +321,15 @@
     {
       "organization": "행정안전부",
       "api_count": 1252,
-      "operation_api_count": 713,
-      "operation_count": 974,
+      "operation_api_count": 793,
+      "operation_count": 1054,
       "runtime_evidence_count": 0,
       "runtime_evidence_percent": 0.0,
       "verified": 0,
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
-      "approval_required_operations": 135,
+      "approval_required_operations": 215,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
@@ -338,7 +338,7 @@
         },
         {
           "key": "external_endpoint",
-          "count": 100
+          "count": 180
         },
         {
           "key": "malformed_endpoint",
@@ -348,7 +348,7 @@
       "by_adapter_status": [
         {
           "key": "adapter",
-          "count": 100
+          "count": 180
         },
         {
           "key": "builtin",
@@ -362,23 +362,23 @@
       "top_categories": [
         {
           "category": "공공행정",
-          "operation_count": 261
+          "operation_count": 264
         },
         {
           "category": "재난안전",
-          "operation_count": 166
+          "operation_count": 177
         },
         {
           "category": "문화관광",
-          "operation_count": 150
+          "operation_count": 157
         },
         {
           "category": "농축수산",
-          "operation_count": 66
+          "operation_count": 86
         },
         {
-          "category": "환경기상",
-          "operation_count": 59
+          "category": "식품건강",
+          "operation_count": 65
         }
       ],
       "top_hosts": [
@@ -388,7 +388,7 @@
         },
         {
           "host": "www.safetydata.go.kr",
-          "operation_count": 100,
+          "operation_count": 180,
           "adapter": "safetydata",
           "adapter_status": "registered",
           "capabilities": [

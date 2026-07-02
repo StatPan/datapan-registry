@@ -12,14 +12,14 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `12353`
-- callable operations: `12211` (`98.9%`)
+- operations: `12433`
+- callable operations: `12291` (`98.9%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `743`
-- registered adapter operations: `733`
+- external endpoint operations: `823`
+- registered adapter operations: `813`
 - missing adapter operations: `29`
-- external adapter coverage: `96.2%`
-- approval-required operations: `4242`
+- external adapter coverage: `96.6%`
+- approval-required operations: `4322`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `42`
@@ -224,8 +224,8 @@ institution:
    `scripts/validate-institution-runtime-plan.py`, and
    `scripts/validate-institution-api-overview.py`.
 
-The current first queue is `행정안전부`: `1252` APIs, `713` APIs with operation
-mappings, `539` uncovered APIs, `974` mapped operations, and no checked-in
+The current first queue is `행정안전부`: `1252` APIs, `793` APIs with operation
+mappings, `459` uncovered APIs, `1054` mapped operations, and no checked-in
 runtime evidence yet. Gateway calls need a data.go.kr service key; no-key runs
 are useful only to prove parameter readiness, not to advance verified runtime
 coverage.
@@ -305,8 +305,8 @@ coverage.
    operations to `633`, and reducing evidence-adjusted adapter candidates to
    `0`. The Safety Data adapter then registers `www.safetydata.go.kr`,
    increasing registered external adapter operations to `638`; the next
-   Safety Data materialization batch adds 95 행정안전부 operation mappings,
-   increasing registered external adapter operations to `733` while keeping
+   Safety Data materialization batches add 175 행정안전부 operation mappings,
+   increasing registered external adapter operations to `813` while keeping
    evidence-adjusted adapter candidates at `0`. This is still mostly skipped
    boundary evidence, and the new
    `data-gg`/`nfqs`/`nongsaro`/`gwanak`/`mafra`/`garak`/`work24`/

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T21:15:47Z",
+  "generated_at": "2026-07-02T21:24:06Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,15 +7,15 @@
   "route_disposition": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 12353,
-    "callable_operations": 12211,
+    "operations": 12433,
+    "callable_operations": 12291,
     "callable_operation_percent": 98.9,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 743,
-    "registered_adapter_operations": 733,
+    "external_endpoint_operations": 823,
+    "registered_adapter_operations": 813,
     "missing_adapter_operations": 29,
-    "external_adapter_coverage_percent": 96.2,
-    "approval_required_operations": 4242,
+    "external_adapter_coverage_percent": 96.6,
+    "approval_required_operations": 4322,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
@@ -203,6 +203,23 @@
     ],
     "adapter_hosts": [
       {
+        "host": "www.safetydata.go.kr",
+        "provider": "safetydata",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "adapter",
+        "specs": 180,
+        "operations": 180,
+        "external_endpoint_operations": 180,
+        "approval_required_operations": 180,
+        "sample_ids": [
+          "15147982",
+          "15147984",
+          "15150608"
+        ]
+      },
+      {
         "host": "openapi.q-net.or.kr",
         "provider": "q-net",
         "kinds": [
@@ -219,23 +236,6 @@
           "15003003",
           "15003024",
           "15003027"
-        ]
-      },
-      {
-        "host": "www.safetydata.go.kr",
-        "provider": "safetydata",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "adapter",
-        "specs": 100,
-        "operations": 100,
-        "external_endpoint_operations": 100,
-        "approval_required_operations": 100,
-        "sample_ids": [
-          "15147982",
-          "15147984",
-          "15150608"
         ]
       },
       {
@@ -382,7 +382,7 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-02T21:15:47Z",
+    "generated_at": "2026-07-02T21:24:06Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 39,
     "host_count": 44,

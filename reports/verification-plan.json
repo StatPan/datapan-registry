@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T21:15:58Z",
+  "generated_at": "2026-07-02T21:24:17Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,10 +7,10 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 12353,
+    "operations": 12433,
     "evidence_total": 1278,
     "uncovered_gateway_candidates": 10774,
-    "uncovered_adapter_candidates": 100,
+    "uncovered_adapter_candidates": 180,
     "missing_adapter_hosts": 11,
     "planned_batches": 2,
     "planned_operations": 20
@@ -29,8 +29,8 @@
       "label": "safetydata",
       "provider": "safetydata",
       "kind": "external_endpoint",
-      "candidates": 100,
-      "uncovered_candidates": 100,
+      "candidates": 180,
+      "uncovered_candidates": 180,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider safetydata --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/safetydata-next.json --json",
       "output": ".datapan/verification/safetydata-next.json"
