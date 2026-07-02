@@ -1,6 +1,6 @@
 # Datapan Registry Release
 
-- generated_at: `2026-07-02T21:00:31Z`
+- generated_at: `2026-07-02T21:15:44Z`
 - provider: `data.go.kr`
 - datapan_version: `0.1.0-dev`
 - source_registry: `C:\Users\statp\dev\datapan-registry\data\data-go-kr.registry.json`
@@ -17,17 +17,17 @@
 - split_readiness: `ready`
 - verification_capable_adapters: `39`
 - call_capable_adapters: `23`
-- dependency_operations: `12258` total, `11419` gateway, `648` external, `638` registered-adapter, `29` missing-adapter
+- dependency_operations: `12353` total, `11419` gateway, `743` external, `733` registered-adapter, `29` missing-adapter
 - adapter_backlog: `11` target hosts, `29` target operations
 - route_disposition: `29` routes, `14` dead-route candidates, `15` transient failures, `0` parameter-blocked, `0` adapter candidates
 - route_disposition_artifact: `reports/route-disposition.json`
 - provider_backlog: `193` hosts, `11` missing-adapter hosts, `29` operations needing adapters
-- coverage: `12116` callable operations (`98.8%`), external adapter coverage `95.7%`, verification evidence coverage `10.4%`, evidence-adjusted adapter candidates `0`
+- coverage: `12211` callable operations (`98.9%`), external adapter coverage `96.2%`, verification evidence coverage `10.3%`, evidence-adjusted adapter candidates `0`
 - coverage_artifact: `reports/coverage.json`
 - coverage_goals: callable `99%`, external adapters `98%`, verification evidence `10%`, call-capable adapters `25`, missing-adapter operations `<=10`
-- verification_plan: `2` batches, `15` planned operations, `10774` gateway gaps, `5` adapter gaps
+- verification_plan: `2` batches, `20` planned operations, `10774` gateway gaps, `100` adapter gaps
 - verification_plan_artifact: `reports/verification-plan.json`
-- runtime_evidence_growth: `10.4%` coverage, target `10.0%`, remaining `0`, status `above_target`
+- runtime_evidence_growth: `10.3%` coverage, target `10.0%`, remaining `0`, status `above_target`
 - runtime_evidence_growth_artifact: `reports/data-go-kr/runtime-evidence-growth.json`
 
 Top adapter targets:

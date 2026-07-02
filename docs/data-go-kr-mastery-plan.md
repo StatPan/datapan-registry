@@ -12,14 +12,14 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `12258`
-- callable operations: `12116` (`98.8%`)
+- operations: `12353`
+- callable operations: `12211` (`98.9%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `648`
-- registered adapter operations: `638`
+- external endpoint operations: `743`
+- registered adapter operations: `733`
 - missing adapter operations: `29`
-- external adapter coverage: `95.7%`
-- approval-required operations: `4147`
+- external adapter coverage: `96.2%`
+- approval-required operations: `4242`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `42`
@@ -122,8 +122,8 @@ Registered external adapters currently cover these host families through
 `data/provider-index.json`: airport, andong, culture, data-gg, ekape, emuseum,
 epost, folk, forest, garak, gblib, geoje, gwanak, happysd, humetro, i815,
 itfind, jeju, jeonju, korad, kpx, lh-ebid, mafra, myhome, naqs, ncpms, nfqs,
-nongsaro, oneclick-law, pqis, q-net, seoul-bus, seoul-open-data, sisul, tour,
-uiryeong, ulsan, and work24.
+nongsaro, oneclick-law, pqis, q-net, safetydata, seoul-bus, seoul-open-data,
+sisul, tour, uiryeong, ulsan, and work24.
 
 Missing external route hosts currently requiring route-disposition tracking:
 
@@ -224,8 +224,8 @@ institution:
    `scripts/validate-institution-runtime-plan.py`, and
    `scripts/validate-institution-api-overview.py`.
 
-The current first queue is `행정안전부`: `1252` APIs, `618` APIs with operation
-mappings, `634` uncovered APIs, `879` mapped operations, and no checked-in
+The current first queue is `행정안전부`: `1252` APIs, `713` APIs with operation
+mappings, `539` uncovered APIs, `974` mapped operations, and no checked-in
 runtime evidence yet. Gateway calls need a data.go.kr service key; no-key runs
 are useful only to prove parameter readiness, not to advance verified runtime
 coverage.
@@ -304,7 +304,9 @@ coverage.
    evidence to `1278`, verified results to `69`, registered external adapter
    operations to `633`, and reducing evidence-adjusted adapter candidates to
    `0`. The Safety Data adapter then registers `www.safetydata.go.kr`,
-   increasing registered external adapter operations to `638` while keeping
+   increasing registered external adapter operations to `638`; the next
+   Safety Data materialization batch adds 95 행정안전부 operation mappings,
+   increasing registered external adapter operations to `733` while keeping
    evidence-adjusted adapter candidates at `0`. This is still mostly skipped
    boundary evidence, and the new
    `data-gg`/`nfqs`/`nongsaro`/`gwanak`/`mafra`/`garak`/`work24`/

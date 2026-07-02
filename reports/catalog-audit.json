@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-02T21:00:31Z",
+  "generated_at": "2026-07-02T21:15:44Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 12258,
-    "callable_operations": 12116,
-    "specs_without_operations": 4845,
-    "specs_without_callable_operation": 4920,
+    "operations_total": 12353,
+    "callable_operations": 12211,
+    "specs_without_operations": 4750,
+    "specs_without_callable_operation": 4825,
     "operations_without_endpoint": 142,
     "operations_without_request_params": 95,
     "operations_without_response_params": 1317,
@@ -18,13 +18,13 @@
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 344,
-      "external_endpoint_operations": 648,
+      "external_endpoint_specs": 439,
+      "external_endpoint_operations": 743,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 7,
       "dev_approval_required_operations": 207,
-      "prod_approval_required_operations": 4041,
+      "prod_approval_required_operations": 4136,
       "malformed_endpoint_url_count": 42,
       "malformed_guide_url_count": 583,
       "top_endpoint_hosts": [
@@ -37,6 +37,10 @@
           "count": 104
         },
         {
+          "host": "www.safetydata.go.kr",
+          "count": 100
+        },
+        {
           "host": "openapi.jeonju.go.kr",
           "count": 80
         },
@@ -102,10 +106,6 @@
         },
         {
           "host": "openapi.airport.co.kr",
-          "count": 6
-        },
-        {
-          "host": "openapi.coast.kr",
           "count": 6
         }
       ],
@@ -115,6 +115,10 @@
           "count": 104
         },
         {
+          "host": "www.safetydata.go.kr",
+          "count": 100
+        },
+        {
           "host": "openapi.jeonju.go.kr",
           "count": 80
         },
@@ -184,10 +188,6 @@
         },
         {
           "host": "openapi.coast.kr",
-          "count": 6
-        },
-        {
-          "host": "openapi.ebid.lh.or.kr",
           "count": 6
         }
       ],

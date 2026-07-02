@@ -1,19 +1,19 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-02T21:00:31Z`
+- Generated at: `2026-07-02T21:15:44Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `12258`
-- Runtime evidence: `1278` (`10.4%`)
-- External endpoint operations: `648`
-- Registered adapter operations: `638`
+- Operations: `12353`
+- Runtime evidence: `1278` (`10.3%`)
+- External endpoint operations: `743`
+- Registered adapter operations: `733`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
 
 | Institution | APIs | APIs with ops | Ops | Evidence | Evidence % | Verified | Failed | Skipped | Approval | No endpoint |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 행정안전부 | 1252 | 618 | 879 | 0 | 0.0% | 0 | 0 | 0 | 40 | 0 |
+| 행정안전부 | 1252 | 713 | 974 | 0 | 0.0% | 0 | 0 | 0 | 135 | 0 |
 | 경기도 | 840 | 13 | 30 | 18 | 60.0% | 18 | 0 | 0 | 0 | 0 |
 | 국토교통부 | 393 | 127 | 397 | 25 | 6.3% | 0 | 0 | 25 | 6 | 0 |
 | 식품의약품안전처 | 392 | 272 | 363 | 2 | 0.6% | 0 | 0 | 2 | 275 | 0 |
@@ -48,7 +48,7 @@
 
 | Institution | APIs | APIs with ops | Ops | Evidence | Evidence % | Verified | Failed | Skipped | Approval | No endpoint |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 행정안전부 | 1252 | 618 | 879 | 0 | 0.0% | 0 | 0 | 0 | 40 | 0 |
+| 행정안전부 | 1252 | 713 | 974 | 0 | 0.0% | 0 | 0 | 0 | 135 | 0 |
 | 국토교통부 | 393 | 127 | 397 | 25 | 6.3% | 0 | 0 | 25 | 6 | 0 |
 | 국립암센터 | 212 | 204 | 367 | 79 | 21.5% | 0 | 0 | 79 | 175 | 1 |
 | 식품의약품안전처 | 392 | 272 | 363 | 2 | 0.6% | 0 | 0 | 2 | 275 | 0 |
@@ -85,21 +85,22 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 ## Largest Categories
 
-- 교통물류: `1290` operations
-- 농축수산: `1287` operations
-- 문화관광: `1264` operations
-- 공공행정: `1250` operations
+- 교통물류: `1296` operations
+- 농축수산: `1296` operations
+- 문화관광: `1267` operations
+- 공공행정: `1252` operations
 - 산업고용: `969` operations
 - 재정금융: `912` operations
+- 환경기상: `806` operations
 - 사회복지: `800` operations
-- 환경기상: `798` operations
-- 보건의료: `691` operations
+- 보건의료: `698` operations
 - 식품건강: `637` operations
 
 ## Largest Hosts
 
 - apis.data.go.kr: `11423` operations
 - openapi.q-net.or.kr: `104` operations
+- www.safetydata.go.kr: `100` operations
 - openapi.jeonju.go.kr: `80` operations
 - data.ekape.or.kr: `49` operations
 - c.q-net.or.kr: `42` operations
@@ -107,4 +108,3 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 - data.uiryeong.go.kr: `40` operations
 - oneclick.law.go.kr:80: `27` operations
 - openapi.tour.go.kr: `26` operations
-- openapi.epost.go.kr:80: `22` operations

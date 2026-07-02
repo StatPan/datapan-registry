@@ -56,9 +56,15 @@ def validate_report(report_path: pathlib.Path, markdown_path: pathlib.Path) -> N
     if len(patches) <= 0:
         raise ValueError("at least one patch is required")
 
-    saw_aed = False
+    seen_dataset_ids: set[str] = set()
     for index, raw in enumerate(patches):
         patch = as_dict(raw, f"patches[{index}]")
+        dataset_id = str(patch.get("dataset_id") or "")
+        if not dataset_id:
+            raise ValueError(f"patches[{index}].dataset_id must be non-empty")
+        if dataset_id in seen_dataset_ids:
+            raise ValueError(f"patches[{index}].dataset_id is duplicated: {dataset_id}")
+        seen_dataset_ids.add(dataset_id)
         if patch.get("action") != "add_operation_mapping":
             raise ValueError(f"patches[{index}].action must be add_operation_mapping")
         if patch.get("operation_count") != 1:
@@ -76,10 +82,6 @@ def validate_report(report_path: pathlib.Path, markdown_path: pathlib.Path) -> N
             raise ValueError(f"patches[{index}] must include serviceKey")
         if len(response_params) <= 0:
             raise ValueError(f"patches[{index}] must include response params")
-        if patch.get("dataset_id") == "15147982":
-            saw_aed = endpoint == "https://www.safetydata.go.kr/V2/api/DSSP-IF-00068"
-    if not saw_aed:
-        raise ValueError("AED dataset 15147982 patch must target DSSP-IF-00068")
     if not markdown_path.exists():
         raise ValueError(f"{markdown_path} is missing")
 

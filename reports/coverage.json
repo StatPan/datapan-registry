@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T21:00:34Z",
+  "generated_at": "2026-07-02T21:15:47Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,15 +7,15 @@
   "route_disposition": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 12258,
-    "callable_operations": 12116,
-    "callable_operation_percent": 98.8,
+    "operations": 12353,
+    "callable_operations": 12211,
+    "callable_operation_percent": 98.9,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 648,
-    "registered_adapter_operations": 638,
+    "external_endpoint_operations": 743,
+    "registered_adapter_operations": 733,
     "missing_adapter_operations": 29,
-    "external_adapter_coverage_percent": 95.7,
-    "approval_required_operations": 4147,
+    "external_adapter_coverage_percent": 96.2,
+    "approval_required_operations": 4242,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
@@ -48,7 +48,7 @@
     "skipped": 1122,
     "unknown": 0,
     "verified_percent": 5.4,
-    "evidence_operation_percent": 10.4
+    "evidence_operation_percent": 10.3
   },
   "route_evidence": {
     "present": true,
@@ -222,6 +222,23 @@
         ]
       },
       {
+        "host": "www.safetydata.go.kr",
+        "provider": "safetydata",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "adapter",
+        "specs": 100,
+        "operations": 100,
+        "external_endpoint_operations": 100,
+        "approval_required_operations": 100,
+        "sample_ids": [
+          "15147982",
+          "15147984",
+          "15150608"
+        ]
+      },
+      {
         "host": "openapi.jeonju.go.kr",
         "provider": "jeonju",
         "kinds": [
@@ -361,27 +378,11 @@
           "15002794",
           "15002797"
         ]
-      },
-      {
-        "host": "openapi.its.ulsan.kr",
-        "provider": "ulsan",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "adapter",
-        "specs": 3,
-        "operations": 20,
-        "external_endpoint_operations": 20,
-        "sample_ids": [
-          "15052669",
-          "3057770",
-          "3057773"
-        ]
       }
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-02T21:00:34Z",
+    "generated_at": "2026-07-02T21:15:47Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 39,
     "host_count": 44,
