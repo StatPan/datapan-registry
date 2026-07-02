@@ -64,6 +64,7 @@ jobs:
           python scripts/validate-source-runtime-evidence-plans.py
           python scripts/validate-source-runtime-evidence-rollup.py
           python scripts/validate-runtime-evidence-growth.py
+          python scripts/validate-operation-materialization-plan.py
           python scripts/validate-institution-api-overview.py
           python scripts/validate-institution-runtime-plan.py
 
