@@ -16,33 +16,32 @@ Current release metrics:
 - callable operations: `12116` (`98.8%`)
 - data.go.kr gateway operations: `11419`
 - external endpoint operations: `648`
-- registered adapter operations: `633`
-- missing adapter operations: `34`
-- external adapter coverage: `94.9%`
+- registered adapter operations: `638`
+- missing adapter operations: `29`
+- external adapter coverage: `95.7%`
 - approval-required operations: `4147`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `42`
-- registered adapter hosts: `42`
-- missing adapter hosts: `12`
-- call-capable adapters: `22`
+- registered adapter hosts: `43`
+- missing adapter hosts: `11`
+- call-capable adapters: `23`
 
 Current missing external route evidence:
 
-- routes: `34`
-- hosts: `12`
-- with probe evidence: `34`
+- routes: `29`
+- hosts: `11`
+- with probe evidence: `29`
 - dead-route candidates: `14`
 - transient failures: `15`
-- parameter-blocked routes: `1`
-- remaining adapter candidates: `4`
+- remaining adapter candidates: `0`
 
-The practical interpretation is important: the remaining `34` missing external
+The practical interpretation is important: the remaining `29` missing external
 routes are all covered by manifest-bound probe and route-disposition evidence.
-There are currently `4` routes with adapter-candidate evidence, all on
-`www.safetydata.go.kr`. Dead-route, transient-failure, and parameter-blocked
-routes remain evidence, not implementation work, until fresh probe evidence or
-safe default parameters change their disposition.
+There are currently `0` routes with adapter-candidate evidence after
+`www.safetydata.go.kr` was registered as a Safety Data adapter. Dead-route and
+transient-failure routes remain evidence, not implementation work, until fresh
+probe evidence changes their disposition.
 
 ## Mastery Target
 
@@ -129,7 +128,6 @@ uiryeong, ulsan, and work24.
 Missing external route hosts currently requiring route-disposition tracking:
 
 - `openapi.coast.kr`: `6`
-- `www.safetydata.go.kr`: `5`
 - `car.daegu.go.kr`: `4`
 - `openapi.price.go.kr`: `4`
 - `www.rda.go.kr`: `4`
@@ -305,10 +303,15 @@ coverage.
    `i815` external endpoint verification evidence, growing checked runtime
    evidence to `1278`, verified results to `69`, registered external adapter
    operations to `633`, and reducing evidence-adjusted adapter candidates to
-   `0`. This is still mostly skipped boundary evidence, and the new
+   `0`. The Safety Data adapter then registers `www.safetydata.go.kr`,
+   increasing registered external adapter operations to `638` while keeping
+   evidence-adjusted adapter candidates at `0`. This is still mostly skipped
+   boundary evidence, and the new
    `data-gg`/`nfqs`/`nongsaro`/`gwanak`/`mafra`/`garak`/`work24`/
    `seoul-open-data`/`culture`/`happysd`/`ncpms`/`i815` results prove landing-page
-   reachability rather than generic machine-call support.
+   reachability rather than generic machine-call support; the Safety Data
+   operations remain approval-gated until credentials and approval state are
+   available.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.coverage-backlog.v1",
-  "generated_at": "2026-07-02T20:45:24Z",
+  "generated_at": "2026-07-02T21:00:31Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -41,7 +41,7 @@
       "skipped": 0,
       "unknown": 0,
       "approval_required_operations": 40,
-      "missing_adapter_operations": 5,
+      "missing_adapter_operations": 0,
       "no_endpoint_operations": 0,
       "api_operation_coverage_percent": 49.4,
       "runtime_evidence_percent": 0.0,
@@ -294511,14 +294511,12 @@
       "skipped": 0,
       "unknown": 0,
       "approval_required_operations": 1,
-      "missing_adapter_operations": 1,
+      "missing_adapter_operations": 0,
       "no_endpoint_operations": 0,
       "primary_dependency_class": "external_endpoint",
-      "primary_adapter_status": "missing",
+      "primary_adapter_status": "adapter",
       "primary_endpoint_host": "www.safetydata.go.kr",
-      "skip_reasons": [
-        "external_provider_adapter_missing"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15154049",
@@ -294543,14 +294541,12 @@
       "skipped": 0,
       "unknown": 0,
       "approval_required_operations": 1,
-      "missing_adapter_operations": 1,
+      "missing_adapter_operations": 0,
       "no_endpoint_operations": 0,
       "primary_dependency_class": "external_endpoint",
-      "primary_adapter_status": "missing",
+      "primary_adapter_status": "adapter",
       "primary_endpoint_host": "www.safetydata.go.kr",
-      "skip_reasons": [
-        "external_provider_adapter_missing"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15154052",
@@ -294575,14 +294571,12 @@
       "skipped": 0,
       "unknown": 0,
       "approval_required_operations": 1,
-      "missing_adapter_operations": 1,
+      "missing_adapter_operations": 0,
       "no_endpoint_operations": 0,
       "primary_dependency_class": "external_endpoint",
-      "primary_adapter_status": "missing",
+      "primary_adapter_status": "adapter",
       "primary_endpoint_host": "www.safetydata.go.kr",
-      "skip_reasons": [
-        "external_provider_adapter_missing"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15154063",
@@ -294607,14 +294601,12 @@
       "skipped": 0,
       "unknown": 0,
       "approval_required_operations": 1,
-      "missing_adapter_operations": 1,
+      "missing_adapter_operations": 0,
       "no_endpoint_operations": 0,
       "primary_dependency_class": "external_endpoint",
-      "primary_adapter_status": "missing",
+      "primary_adapter_status": "adapter",
       "primary_endpoint_host": "www.safetydata.go.kr",
-      "skip_reasons": [
-        "external_provider_adapter_missing"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15154065",
@@ -294639,14 +294631,12 @@
       "skipped": 0,
       "unknown": 0,
       "approval_required_operations": 1,
-      "missing_adapter_operations": 1,
+      "missing_adapter_operations": 0,
       "no_endpoint_operations": 0,
       "primary_dependency_class": "external_endpoint",
-      "primary_adapter_status": "missing",
+      "primary_adapter_status": "adapter",
       "primary_endpoint_host": "www.safetydata.go.kr",
-      "skip_reasons": [
-        "external_provider_adapter_missing"
-      ]
+      "skip_reasons": []
     },
     {
       "dataset_id": "15155044",

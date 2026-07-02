@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-02T20:45:24Z",
+  "generated_at": "2026-07-02T21:00:31Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 38,
-  "host_count": 43,
+  "adapter_count": 39,
+  "host_count": 44,
   "adapters": [
     {
       "name": "airport",
@@ -335,6 +335,17 @@
       ]
     },
     {
+      "name": "safetydata",
+      "status": "registered",
+      "hosts": [
+        "www.safetydata.go.kr"
+      ],
+      "capabilities": [
+        "call",
+        "verification"
+      ]
+    },
+    {
       "name": "seoul-bus",
       "status": "registered",
       "hosts": [
@@ -415,9 +426,9 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 38,
-    "verification_capable_adapters": 38,
-    "call_capable_adapters": 22,
+    "adapter_count": 39,
+    "verification_capable_adapters": 39,
+    "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
     "required_call_adapters": 1,

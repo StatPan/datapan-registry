@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-07-02T20:45:24Z",
+  "generated_at": "2026-07-02T21:00:31Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -17,8 +17,8 @@
     "callable_operations": 12116,
     "data_go_kr_gateway_operations": 11419,
     "external_endpoint_operations": 648,
-    "registered_adapter_operations": 633,
-    "call_capable_adapters": 22
+    "registered_adapter_operations": 638,
+    "call_capable_adapters": 23
   },
   "evidence": {
     "total": 1278,
@@ -49,15 +49,19 @@
     "status": "above_target"
   },
   "verification_plan": {
-    "planned_batches": 1,
-    "planned_operations": 10,
+    "planned_batches": 2,
+    "planned_operations": 15,
     "uncovered_gateway_candidates": 10774,
-    "uncovered_adapter_candidates": 0,
-    "missing_adapter_hosts": 12,
+    "uncovered_adapter_candidates": 5,
+    "missing_adapter_hosts": 11,
     "planned_by_kind": [
       {
         "key": "data_go_kr_gateway",
         "count": 10
+      },
+      {
+        "key": "external_endpoint",
+        "count": 5
       }
     ],
     "batches": [
@@ -68,14 +72,23 @@
         "uncovered_candidates": 10774,
         "planned_operations": 10,
         "output": ".datapan/verification/gateway-next.json"
+      },
+      {
+        "label": "safetydata",
+        "provider": "safetydata",
+        "kind": "external_endpoint",
+        "candidates": 5,
+        "uncovered_candidates": 5,
+        "planned_operations": 5,
+        "output": ".datapan/verification/safetydata-next.json"
       }
     ]
   },
   "provider_split_readiness": {
     "status": "ready",
-    "adapter_count": 38,
-    "verification_capable_adapters": 38,
-    "call_capable_adapters": 22
+    "adapter_count": 39,
+    "verification_capable_adapters": 39,
+    "call_capable_adapters": 23
   },
   "warnings": []
 }

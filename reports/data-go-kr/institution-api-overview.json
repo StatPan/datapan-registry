@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-02T20:45:24Z",
+  "generated_at": "2026-07-02T21:00:31Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -18,9 +18,9 @@
     "runtime_evidence_percent": 10.4,
     "callable_operations": 12116,
     "external_endpoint_operations": 648,
-    "registered_adapter_operations": 633,
-    "missing_adapter_operations": 34,
-    "missing_adapter_hosts": 12
+    "registered_adapter_operations": 638,
+    "missing_adapter_operations": 29,
+    "missing_adapter_hosts": 11
   },
   "by_dependency_class": [
     {
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 633
+      "count": 638
     },
     {
       "key": "builtin",
@@ -59,7 +59,7 @@
     },
     {
       "key": "missing",
-      "count": 34
+      "count": 29
     },
     {
       "key": "not_applicable",
@@ -346,12 +346,12 @@
       ],
       "by_adapter_status": [
         {
-          "key": "builtin",
-          "count": 871
+          "key": "adapter",
+          "count": 5
         },
         {
-          "key": "missing",
-          "count": 5
+          "key": "builtin",
+          "count": 871
         },
         {
           "key": "not_applicable",
@@ -387,7 +387,13 @@
         },
         {
           "host": "www.safetydata.go.kr",
-          "operation_count": 5
+          "operation_count": 5,
+          "adapter": "safetydata",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
         }
       ]
     },
