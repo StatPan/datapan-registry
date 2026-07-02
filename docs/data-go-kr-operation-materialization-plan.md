@@ -2,11 +2,11 @@
 
 This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns APIs without operation mappings into bounded institution work queues. It is separate from runtime evidence reactivation: these APIs need operation metadata materialized before they can enter verification batches.
 
-- Generated at: `2026-07-02T21:24:03Z`
+- Generated at: `2026-07-02T21:37:18Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `7390` (`61.3%`)
-- APIs without operation mapping: `4670`
+- APIs with operation mapping: `7414` (`61.5%`)
+- APIs without operation mapping: `4646`
 - Planned institutions: `10`
 - Planned APIs: `645`
 - First queue: `행정안전부`
@@ -17,7 +17,7 @@ This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns
 | Rank | Institution | APIs | Covered APIs | Uncovered APIs | API Coverage | Planned APIs | Remaining After Batch |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 1 | 행정안전부 | 1252 | 793 | 459 | 63.3% | 100 | 359 |
-| 2 | 경기도 | 840 | 13 | 827 | 1.5% | 100 | 727 |
+| 2 | 경기도 | 840 | 19 | 821 | 2.3% | 100 | 721 |
 | 3 | 국토교통부 | 393 | 127 | 266 | 32.3% | 100 | 166 |
 | 4 | 식품의약품안전처 | 392 | 272 | 120 | 69.4% | 100 | 20 |
 | 5 | 국회 국회사무처 | 277 | 0 | 277 | 0.0% | 100 | 177 |

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T21:24:03Z",
+  "generated_at": "2026-07-02T21:37:18Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -294,6 +294,21 @@
       ]
     },
     {
+      "host": "data.gg.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 14,
+      "operations": 33,
+      "external_endpoint_operations": 33,
+      "sample_ids": [
+        "15005231",
+        "15011020",
+        "15011027"
+      ]
+    },
+    {
       "host": "oneclick.law.go.kr:80",
       "provider": "oneclick-law",
       "kinds": [
@@ -326,6 +341,23 @@
         "15000032",
         "15000124",
         "15000268"
+      ]
+    },
+    {
+      "host": "www.work24.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 7,
+      "operations": 21,
+      "external_endpoint_operations": 21,
+      "external_guide_specs": 7,
+      "sample_ids": [
+        "15003549",
+        "15026112",
+        "15027228"
       ]
     },
     {
@@ -364,18 +396,18 @@
       ]
     },
     {
-      "host": "data.gg.go.kr",
+      "host": "www.nongsaro.go.kr",
       "kinds": [
         "external_endpoint"
       ],
       "adapter_status": "adapter",
-      "specs": 8,
-      "operations": 18,
-      "external_endpoint_operations": 18,
+      "specs": 7,
+      "operations": 19,
+      "external_endpoint_operations": 19,
       "sample_ids": [
-        "15005231",
-        "15011020",
-        "15011027"
+        "15002034",
+        "15005257",
+        "15015158"
       ]
     },
     {
@@ -427,6 +459,40 @@
         "15036874",
         "15036875",
         "15036876"
+      ]
+    },
+    {
+      "host": "data.mafra.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 6,
+      "operations": 10,
+      "external_endpoint_operations": 10,
+      "external_guide_specs": 3,
+      "sample_ids": [
+        "15002220",
+        "15008409",
+        "15015139"
+      ]
+    },
+    {
+      "host": "www.culture.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 4,
+      "operations": 9,
+      "external_endpoint_operations": 9,
+      "external_guide_specs": 2,
+      "sample_ids": [
+        "15008517",
+        "15015212",
+        "15024888"
       ]
     },
     {
@@ -630,20 +696,6 @@
       ]
     },
     {
-      "host": "www.nongsaro.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 2,
-      "operations": 4,
-      "external_endpoint_operations": 4,
-      "sample_ids": [
-        "15002034",
-        "15005257"
-      ]
-    },
-    {
       "host": "openapi.gblib.or.kr",
       "provider": "gblib",
       "kinds": [
@@ -662,22 +714,6 @@
       ]
     },
     {
-      "host": "data.mafra.go.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 2,
-      "operations": 3,
-      "external_endpoint_operations": 3,
-      "external_guide_specs": 1,
-      "sample_ids": [
-        "15002220",
-        "15008409"
-      ]
-    },
-    {
       "host": "www.garak.co.kr",
       "kinds": [
         "external_endpoint",
@@ -690,21 +726,6 @@
       "external_guide_specs": 1,
       "sample_ids": [
         "15004517"
-      ]
-    },
-    {
-      "host": "www.work24.go.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 1,
-      "operations": 3,
-      "external_endpoint_operations": 3,
-      "external_guide_specs": 1,
-      "sample_ids": [
-        "15003549"
       ]
     },
     {
@@ -763,21 +784,6 @@
       "external_endpoint_operations": 3,
       "sample_ids": [
         "3036708"
-      ]
-    },
-    {
-      "host": "www.culture.go.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 1,
-      "operations": 2,
-      "external_endpoint_operations": 2,
-      "external_guide_specs": 1,
-      "sample_ids": [
-        "15008517"
       ]
     },
     {

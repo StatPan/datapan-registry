@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-02T21:24:23Z",
+  "generated_at": "2026-07-02T21:37:37Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 23,
+    "report_total": 24,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,7 +38,7 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 11,
+      "report_count": 12,
       "present_reports": [
         {
           "name": "coverage-backlog.json",
@@ -69,6 +69,11 @@
           "name": "institution-runtime-plan.json",
           "path": "reports/data-go-kr/institution-runtime-plan.json",
           "schema_version": "datapan.institution-runtime-plan.v1"
+        },
+        {
+          "name": "link-detail-registry-patches.json",
+          "path": "reports/data-go-kr/link-detail-registry-patches.json",
+          "schema_version": "datapan.link-detail-registry-patches.v1"
         },
         {
           "name": "operation-materialization-plan.json",
@@ -119,6 +124,7 @@
         "external-coverage-summary.json",
         "institution-api-overview.json",
         "institution-runtime-plan.json",
+        "link-detail-registry-patches.json",
         "operation-materialization-plan.json",
         "registry-impact-plan.json",
         "runtime-evidence-growth.json",

@@ -2,9 +2,9 @@
 
 This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns the highest-priority institution runtime gaps into bounded `datapan catalog verify --org` batches.
 
-- Generated at: `2026-07-02T21:24:03Z`
+- Generated at: `2026-07-02T21:37:18Z`
 - Planned institutions: `10`
-- Planned operations: `836`
+- Planned operations: `851`
 - First queue: `행정안전부`
 - Batch size: `100`
 - Timeout: `20s`
@@ -17,7 +17,7 @@ data.go.kr gateway verification requires a service key; no-key runs only prove p
 | Rank | Institution | APIs | Covered APIs | Uncovered APIs | Ops | Runtime Reactivation APIs | Missing Evidence Ops | Planned Ops |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 1 | 행정안전부 | 1252 | 793 | 459 | 1054 | 793 | 1054 | 100 |
-| 2 | 경기도 | 840 | 13 | 827 | 30 | 5 | 12 | 12 |
+| 2 | 경기도 | 840 | 19 | 821 | 45 | 11 | 27 | 27 |
 | 3 | 국토교통부 | 393 | 127 | 266 | 397 | 124 | 372 | 100 |
 | 4 | 식품의약품안전처 | 392 | 272 | 120 | 363 | 270 | 361 | 100 |
 | 5 | 성평등가족부 | 273 | 272 | 1 | 347 | 271 | 346 | 100 |
@@ -48,7 +48,7 @@ data.go.kr gateway verification requires a service key; no-key runs only prove p
 datapan catalog verify --registry data/data-go-kr.registry.json --org '행정안전부' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-01.json --json
 ```
 ```bash
-datapan catalog verify --registry data/data-go-kr.registry.json --org '경기도' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 12 --timeout 20s --output reports/data-go-kr/institution-batches/institution-02.json --json
+datapan catalog verify --registry data/data-go-kr.registry.json --org '경기도' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 27 --timeout 20s --output reports/data-go-kr/institution-batches/institution-02.json --json
 ```
 ```bash
 datapan catalog verify --registry data/data-go-kr.registry.json --org '국토교통부' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-03.json --json

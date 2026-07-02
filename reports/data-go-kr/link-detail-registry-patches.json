@@ -1,0 +1,3998 @@
+{
+  "schema_version": "datapan.link-detail-registry-patches.v1",
+  "generated_at": "2026-07-02T21:36:32Z",
+  "summary": {
+    "enriched_specs": 12060,
+    "patches": 24,
+    "operations_to_add": 62,
+    "skipped": 76,
+    "registered_hosts": 44
+  },
+  "patches": [
+    {
+      "dataset_id": "15011175",
+      "title": "경기도_전력기술감리업체 현황",
+      "organization": "경기도",
+      "action": "replace_empty_operations",
+      "operation_count": 3,
+      "hosts": [
+        "data.gg.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "전력기술의설계업및감리업체 현황 외부 링크 1",
+          "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&sortColumn=&sortDirection=&infId=VJ00ZDXJIX7GPMRVV5QW14478627&infSeq=3",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15011175/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "산업·통상·중소기업 > 산업·중소기업일반",
+              "created_at": "2017-11-23",
+              "data_format": "XML",
+              "dept_nm": "AI미래행정과",
+              "desc": "이 데이터는 경기도를 포함한 지역 내 전력기술감리업체의 인허가 현황을 정리한 자료로, 각 사업장의 시군명, 사업장명, 인허가일자, 영업상태, 전화번호, 소재지 도로명 주소 및 우편번호, WGS84 위도·경도 좌표, 업종 구분(감리업), 설계감리업종류(전문감리업, 종합감리업 등), 실질자본금 등의 항목으로 구성되어 있습니다. 이 데이터는 전력설비 관련 기술 감리업체의 등록·관리 현황을 파악하고, 인허가된 업체의 위치 정보 및 업종 특성별 분포를 분석하는 데 활용됩니다. 또한 지역별 감리업체 분포 현황, 전문성 구분, 인허가 변동 추세 등 전력 산업 인프라 및 감리 체계에 대한 정책 수립, 제도 개선, 시장 분석에 유용한 자료로 사용될 수 있습니다.",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:24f5a3de-e4ba-4f28-9e60-871db753df9d",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "전기사업,전기시설물,전문감리,전력기술감히,감리업,종합감리",
+              "list_id": "15011175",
+              "list_title": "경기도_전력기술감리업체 현황",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15011175/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "전력기술의설계업및감리업체 현황 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&sortColumn=&sortDirection=&infId=VJ00ZDXJIX7GPMRVV5QW14478627&infSeq=3",
+              "org_cd": "6410000",
+              "org_nm": "경기도",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 487,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "전력기술의설계업및감리업체 현황",
+              "title_en": "Design and supervision of power technology companies",
+              "updated_at": "2025-09-18"
+            }
+          }
+        },
+        {
+          "name": "전력기술의설계업및감리업체 현황 외부 링크 2",
+          "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&rows=10&sortColumn=&sortDirection=&infId=VI0D9IY634MNRGJITBI527985650&infSeq=2",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15011175/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "산업·통상·중소기업 > 산업·중소기업일반",
+              "created_at": "2017-11-23",
+              "data_format": "XML",
+              "dept_nm": "AI미래행정과",
+              "desc": "이 데이터는 경기도를 포함한 지역 내 전력기술감리업체의 인허가 현황을 정리한 자료로, 각 사업장의 시군명, 사업장명, 인허가일자, 영업상태, 전화번호, 소재지 도로명 주소 및 우편번호, WGS84 위도·경도 좌표, 업종 구분(감리업), 설계감리업종류(전문감리업, 종합감리업 등), 실질자본금 등의 항목으로 구성되어 있습니다. 이 데이터는 전력설비 관련 기술 감리업체의 등록·관리 현황을 파악하고, 인허가된 업체의 위치 정보 및 업종 특성별 분포를 분석하는 데 활용됩니다. 또한 지역별 감리업체 분포 현황, 전문성 구분, 인허가 변동 추세 등 전력 산업 인프라 및 감리 체계에 대한 정책 수립, 제도 개선, 시장 분석에 유용한 자료로 사용될 수 있습니다.",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:24f5a3de-e4ba-4f28-9e60-871db753df9d",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "전기사업,전기시설물,전문감리,전력기술감히,감리업,종합감리",
+              "list_id": "15011175",
+              "list_title": "경기도_전력기술감리업체 현황",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15011175/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "전력기술의설계업및감리업체 현황 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&rows=10&sortColumn=&sortDirection=&infId=VI0D9IY634MNRGJITBI527985650&infSeq=2",
+              "org_cd": "6410000",
+              "org_nm": "경기도",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 487,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "전력기술의설계업및감리업체 현황",
+              "title_en": "Design and supervision of power technology companies",
+              "updated_at": "2025-09-18"
+            }
+          }
+        },
+        {
+          "name": "전력기술의설계업및감리업체 현황 외부 링크 3",
+          "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&sortColumn=&sortDirection=&infId=NZPJP1V20Y7P1U7VV2MC14488995&infSeq=3",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15011175/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "산업·통상·중소기업 > 산업·중소기업일반",
+              "created_at": "2017-11-23",
+              "data_format": "XML",
+              "dept_nm": "AI미래행정과",
+              "desc": "이 데이터는 경기도를 포함한 지역 내 전력기술감리업체의 인허가 현황을 정리한 자료로, 각 사업장의 시군명, 사업장명, 인허가일자, 영업상태, 전화번호, 소재지 도로명 주소 및 우편번호, WGS84 위도·경도 좌표, 업종 구분(감리업), 설계감리업종류(전문감리업, 종합감리업 등), 실질자본금 등의 항목으로 구성되어 있습니다. 이 데이터는 전력설비 관련 기술 감리업체의 등록·관리 현황을 파악하고, 인허가된 업체의 위치 정보 및 업종 특성별 분포를 분석하는 데 활용됩니다. 또한 지역별 감리업체 분포 현황, 전문성 구분, 인허가 변동 추세 등 전력 산업 인프라 및 감리 체계에 대한 정책 수립, 제도 개선, 시장 분석에 유용한 자료로 사용될 수 있습니다.",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:24f5a3de-e4ba-4f28-9e60-871db753df9d",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "전기사업,전기시설물,전문감리,전력기술감히,감리업,종합감리",
+              "list_id": "15011175",
+              "list_title": "경기도_전력기술감리업체 현황",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15011175/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "전력기술의설계업및감리업체 현황 외부 링크 3",
+              "operation_seq": "",
+              "operation_url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&sortColumn=&sortDirection=&infId=NZPJP1V20Y7P1U7VV2MC14488995&infSeq=3",
+              "org_cd": "6410000",
+              "org_nm": "경기도",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 487,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "전력기술의설계업및감리업체 현황",
+              "title_en": "Design and supervision of power technology companies",
+              "updated_at": "2025-09-18"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15011181",
+      "title": "경기도 안전관리 우수 다중업소 현황",
+      "organization": "경기도",
+      "action": "replace_empty_operations",
+      "operation_count": 3,
+      "hosts": [
+        "data.gg.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "안전관리 우수 다중업소 인정 현황 외부 링크 1",
+          "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&sortColumn=&sortDirection=&infId=8195BH029XWBKN0R9MB64429658&infSeq=3",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15011181/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "산업·통상·중소기업 > 산업·중소기업일반",
+              "created_at": "2017-11-23",
+              "data_format": "XML",
+              "dept_nm": "AI미래행정과",
+              "desc": "이 데이터는 경기도 내 다중이용업소 중 안전관리 기준을 충족하여 ‘우수업소’로 지정된 업체들의 현황을 정리한 자료입니다. 업소명, 업종명, 지정연도, 그리고 도로명주소·지번주소·우편번호·WGS84 위도·경도와 같은 위치 정보가 포함되어 있어 지역별 분포를 확인할 수 있습니다. 영화관, 음식점, 학원 등 다양한 업종이 포함되며, 지정연도를 통해 해마다 새롭게 선정된 안전관리 우수업소를 파악할 수 있습니다. 이 데이터는 다중이용업소의 안전 관리 실태 모니터링, 지역별 안전 우수사례 분석, 공공안전 정책 수립, 시민들의 안전한 업소 이용 선택 등에 유용하게 활용될 수 있습니다.",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:0aaf9164-b0e9-4d3b-b971-e2d8814d649a",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "안전관리,안전우수,우수업소,다중이용업소,공공안전,소방안전",
+              "list_id": "15011181",
+              "list_title": "경기도 안전관리 우수 다중업소 현황",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15011181/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "안전관리 우수 다중업소 인정 현황 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&sortColumn=&sortDirection=&infId=8195BH029XWBKN0R9MB64429658&infSeq=3",
+              "org_cd": "6410000",
+              "org_nm": "경기도",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 114,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "안전관리 우수 다중업소 인정 현황",
+              "title_en": "Excellent management of safety management",
+              "updated_at": "2025-09-17"
+            }
+          }
+        },
+        {
+          "name": "안전관리 우수 다중업소 인정 현황 외부 링크 2",
+          "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&sortColumn=&sortDirection=&infId=E7Q900ID30P6CR7VZPK3181551&infSeq=3",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15011181/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "산업·통상·중소기업 > 산업·중소기업일반",
+              "created_at": "2017-11-23",
+              "data_format": "XML",
+              "dept_nm": "AI미래행정과",
+              "desc": "이 데이터는 경기도 내 다중이용업소 중 안전관리 기준을 충족하여 ‘우수업소’로 지정된 업체들의 현황을 정리한 자료입니다. 업소명, 업종명, 지정연도, 그리고 도로명주소·지번주소·우편번호·WGS84 위도·경도와 같은 위치 정보가 포함되어 있어 지역별 분포를 확인할 수 있습니다. 영화관, 음식점, 학원 등 다양한 업종이 포함되며, 지정연도를 통해 해마다 새롭게 선정된 안전관리 우수업소를 파악할 수 있습니다. 이 데이터는 다중이용업소의 안전 관리 실태 모니터링, 지역별 안전 우수사례 분석, 공공안전 정책 수립, 시민들의 안전한 업소 이용 선택 등에 유용하게 활용될 수 있습니다.",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:0aaf9164-b0e9-4d3b-b971-e2d8814d649a",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "안전관리,안전우수,우수업소,다중이용업소,공공안전,소방안전",
+              "list_id": "15011181",
+              "list_title": "경기도 안전관리 우수 다중업소 현황",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15011181/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "안전관리 우수 다중업소 인정 현황 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&sortColumn=&sortDirection=&infId=E7Q900ID30P6CR7VZPK3181551&infSeq=3",
+              "org_cd": "6410000",
+              "org_nm": "경기도",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 114,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "안전관리 우수 다중업소 인정 현황",
+              "title_en": "Excellent management of safety management",
+              "updated_at": "2025-09-17"
+            }
+          }
+        },
+        {
+          "name": "안전관리 우수 다중업소 인정 현황 외부 링크 3",
+          "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&rows=10&sortColumn=&sortDirection=&infId=WWP5RIQ6I7NGI8Q21G9F14159163&infSeq=3&order=&loc=&searchWord=%EC%84%B8%ED%83%81%EC%97%85",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15011181/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "산업·통상·중소기업 > 산업·중소기업일반",
+              "created_at": "2017-11-23",
+              "data_format": "XML",
+              "dept_nm": "AI미래행정과",
+              "desc": "이 데이터는 경기도 내 다중이용업소 중 안전관리 기준을 충족하여 ‘우수업소’로 지정된 업체들의 현황을 정리한 자료입니다. 업소명, 업종명, 지정연도, 그리고 도로명주소·지번주소·우편번호·WGS84 위도·경도와 같은 위치 정보가 포함되어 있어 지역별 분포를 확인할 수 있습니다. 영화관, 음식점, 학원 등 다양한 업종이 포함되며, 지정연도를 통해 해마다 새롭게 선정된 안전관리 우수업소를 파악할 수 있습니다. 이 데이터는 다중이용업소의 안전 관리 실태 모니터링, 지역별 안전 우수사례 분석, 공공안전 정책 수립, 시민들의 안전한 업소 이용 선택 등에 유용하게 활용될 수 있습니다.",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:0aaf9164-b0e9-4d3b-b971-e2d8814d649a",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "안전관리,안전우수,우수업소,다중이용업소,공공안전,소방안전",
+              "list_id": "15011181",
+              "list_title": "경기도 안전관리 우수 다중업소 현황",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15011181/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "안전관리 우수 다중업소 인정 현황 외부 링크 3",
+              "operation_seq": "",
+              "operation_url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&rows=10&sortColumn=&sortDirection=&infId=WWP5RIQ6I7NGI8Q21G9F14159163&infSeq=3&order=&loc=&searchWord=%EC%84%B8%ED%83%81%EC%97%85",
+              "org_cd": "6410000",
+              "org_nm": "경기도",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 114,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "안전관리 우수 다중업소 인정 현황",
+              "title_en": "Excellent management of safety management",
+              "updated_at": "2025-09-17"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15011249",
+      "title": "경기도 지적측량업  현황",
+      "organization": "경기도",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "data.gg.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "측량업체 현황",
+          "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&rows=10&sortColumn=&sortDirection=&infId=O1HI6KN7HUHKA6650H2W1805905&infSeq=3",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15011249/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "교통및물류 > 도로",
+              "created_at": "2017-11-15",
+              "data_format": "JSON+XML",
+              "dept_nm": "AI미래행정과",
+              "desc": "경기도 측량업 현황입니다. 업종명, 상호명, 전화번호 소재지주소(도로명/지번) 등의 정보를 제공합니다.\r\n\r\n※  사업자 등록번호를 제공합니다.\r\n\r\n이 데이터는 경기도 내 지적측량업을 영위하는 사업체에 대한 현황을 담고 있습니다. 항목에는 시군명, 상호명, 사업자등록번호, 대표자명, 전화번호, 업종명, 소재지 우편번호, 지번주소 및 도로명주소, WGS84 위도 및 경도 등의 정보가 포함되어 있습니다. 이를 통해 지역별 지적측량업체의 분포 및 상세 위치를 파악할 수 있으며, 관련 기관이나 기업은 위치 기반의 공간정보 활용, 민원 대응, 정책 수립 및 제도 개선에 활용할 수 있습니다. 사업자등록번호와 연락처 정보는 업체 식별 및 직접 연락을 위한 목적으로 유용하게 사용될 수 있습니다.",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:93676dd0-98c6-4944-bb34-f4ebf47d0e18",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "측량,측량업,일반측량,지적,지적측량업,위도경도",
+              "list_id": "15011249",
+              "list_title": "경기도 지적측량업  현황",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15011249/openapi.json",
+              "new_category_cd": "OC0011",
+              "new_category_nm": "교통물류",
+              "operation_nm": "측량업체 현황",
+              "operation_seq": "",
+              "operation_url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&rows=10&sortColumn=&sortDirection=&infId=O1HI6KN7HUHKA6650H2W1805905&infSeq=3",
+              "org_cd": "6410000",
+              "org_nm": "경기도",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 358,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "측량업체 현황",
+              "title_en": "Survey company status",
+              "updated_at": "2025-06-23"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15011336",
+      "title": "경기도 의료 유사업 현황",
+      "organization": "경기도",
+      "action": "replace_empty_operations",
+      "operation_count": 2,
+      "hosts": [
+        "data.gg.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "경기도 의료 유사업 현황(2015) 외부 링크 1",
+          "endpoint": "http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&rows=10&sortColumn=&sortDirection=&infId=3Z49464FE1Z29Q3172A82203953&infSeq=3&searchWord=%EC%95%88%EB%A7%88",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15011336/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "보건 > 보건의료",
+              "created_at": "2015-11-06",
+              "data_format": "XML",
+              "dept_nm": "AI데이터행정과",
+              "desc": "이 데이터는 경기도 내에서 의료 유사업소 중 안마를 목적으로 하는 업소의 현황을 제공합니다. 데이터에 포함된 업소는 연면적 830제곱미터 이하의 규모를 기준으로 선정됩니다. 보건의료 분야에 해당하며, 공공데이터 포털를 통해 제공되고 있습니다. 데이터는 API 형태로 제공되며 XML 포맷으로 활용할 수 있습니다. 주요 활용방안으로는 안마업소의 분포 현황 파악, 정책 수립 자료, 보건 위생 관리 기반 자료 등으로 사용할 수 있습니다. 데이터 제공기관은 경기도이며, 이용허락범위에 제한 없이 활용이 가능합니다.\r\n이 데이터는 경기도 내 안마 관련 의료 유사업소의 시설규모를 기준으로 관리되므로, 데이터 활용 시 적용 면적 기준과 관련 법령 등을 사전에 확인하는 것이 중요합니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:acd16fbc-76c0-48ec-abb4-b627c6bbcdef",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "의료,유사업소,안마,보건의료,경기도,면적기준,데이터활용",
+              "list_id": "15011336",
+              "list_title": "경기도 의료 유사업 현황",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15011336/openapi.json",
+              "new_category_cd": "OC0009",
+              "new_category_nm": "보건의료",
+              "operation_nm": "경기도 의료 유사업 현황(2015) 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&rows=10&sortColumn=&sortDirection=&infId=3Z49464FE1Z29Q3172A82203953&infSeq=3&searchWord=%EC%95%88%EB%A7%88",
+              "org_cd": "6410000",
+              "org_nm": "경기도",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 149,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "경기도 의료 유사업 현황(2015)",
+              "title_en": "Gyeonggi Medical oil Business Status (2015)",
+              "updated_at": "2025-06-17"
+            }
+          }
+        },
+        {
+          "name": "경기도 의료 유사업 현황(2015) 외부 링크 2",
+          "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&rows=10&sortColumn=&sortDirection=&infId=302402102AS0TA1SY80R404746&infSeq=3",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15011336/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "보건 > 보건의료",
+              "created_at": "2015-11-06",
+              "data_format": "XML",
+              "dept_nm": "AI데이터행정과",
+              "desc": "이 데이터는 경기도 내에서 의료 유사업소 중 안마를 목적으로 하는 업소의 현황을 제공합니다. 데이터에 포함된 업소는 연면적 830제곱미터 이하의 규모를 기준으로 선정됩니다. 보건의료 분야에 해당하며, 공공데이터 포털를 통해 제공되고 있습니다. 데이터는 API 형태로 제공되며 XML 포맷으로 활용할 수 있습니다. 주요 활용방안으로는 안마업소의 분포 현황 파악, 정책 수립 자료, 보건 위생 관리 기반 자료 등으로 사용할 수 있습니다. 데이터 제공기관은 경기도이며, 이용허락범위에 제한 없이 활용이 가능합니다.\r\n이 데이터는 경기도 내 안마 관련 의료 유사업소의 시설규모를 기준으로 관리되므로, 데이터 활용 시 적용 면적 기준과 관련 법령 등을 사전에 확인하는 것이 중요합니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:acd16fbc-76c0-48ec-abb4-b627c6bbcdef",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "의료,유사업소,안마,보건의료,경기도,면적기준,데이터활용",
+              "list_id": "15011336",
+              "list_title": "경기도 의료 유사업 현황",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15011336/openapi.json",
+              "new_category_cd": "OC0009",
+              "new_category_nm": "보건의료",
+              "operation_nm": "경기도 의료 유사업 현황(2015) 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&rows=10&sortColumn=&sortDirection=&infId=302402102AS0TA1SY80R404746&infSeq=3",
+              "org_cd": "6410000",
+              "org_nm": "경기도",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 149,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "경기도 의료 유사업 현황(2015)",
+              "title_en": "Gyeonggi Medical oil Business Status (2015)",
+              "updated_at": "2025-06-17"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15011370",
+      "title": "경기도 산후조리업체 현황",
+      "organization": "경기도",
+      "action": "replace_empty_operations",
+      "operation_count": 3,
+      "hosts": [
+        "data.gg.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "산후 조리업체 현황 외부 링크 1",
+          "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&sortColumn=&sortDirection=&infId=625AM5A7E618AM73HCLG1568643&infSeq=3",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15011370/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2017-11-16",
+              "data_format": "XML",
+              "dept_nm": "AI미래행정과",
+              "desc": "이 데이터는 경기도 내 산후조리업체의 운영 현황과 관련된 정보를 수록하고 있으며, 보건위생 및 산모·신생아 건강관리 정책 수립에 활용될 수 있습니다. 각 사업장의 인허가일자, 폐업일자, 영업상태 등을 통해 해당 업체의 운영 여부를 확인할 수 있고, 도로명 주소 및 우편번호 등의 위치정보가 포함되어 지역별 분포 분석에도 적합합니다. 조리원의 다양한 직종의 인원 수가 항목별로 기록되어 있으며, 각 사업장의 면적, 건물층수 등의 물리적 시설 정보도 함께 제공됩니다. 이 데이터는 산후조리원 서비스 수준 평가, 지역 내 조리원 선택 정보 제공, 정책적 지원 필요지역 도출 등에 유용하게 활용될 수 있습니다.",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:6148034c-aa38-4ccf-9221-e828055a0e6d",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "산후조리원,업체인력,조리원현황,산모,신생아,출산",
+              "list_id": "15011370",
+              "list_title": "경기도 산후조리업체 현황",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15011370/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "산후 조리업체 현황 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&sortColumn=&sortDirection=&infId=625AM5A7E618AM73HCLG1568643&infSeq=3",
+              "org_cd": "6410000",
+              "org_nm": "경기도",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 440,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "산후 조리업체 현황",
+              "title_en": "Status of postpartum cooking companies",
+              "updated_at": "2025-09-17"
+            }
+          }
+        },
+        {
+          "name": "산후 조리업체 현황 외부 링크 2",
+          "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&rows=10&sortColumn=&sortDirection=&infId=0E1FRZLG1FPFCD83PVFI20242471&infSeq=2",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15011370/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2017-11-16",
+              "data_format": "XML",
+              "dept_nm": "AI미래행정과",
+              "desc": "이 데이터는 경기도 내 산후조리업체의 운영 현황과 관련된 정보를 수록하고 있으며, 보건위생 및 산모·신생아 건강관리 정책 수립에 활용될 수 있습니다. 각 사업장의 인허가일자, 폐업일자, 영업상태 등을 통해 해당 업체의 운영 여부를 확인할 수 있고, 도로명 주소 및 우편번호 등의 위치정보가 포함되어 지역별 분포 분석에도 적합합니다. 조리원의 다양한 직종의 인원 수가 항목별로 기록되어 있으며, 각 사업장의 면적, 건물층수 등의 물리적 시설 정보도 함께 제공됩니다. 이 데이터는 산후조리원 서비스 수준 평가, 지역 내 조리원 선택 정보 제공, 정책적 지원 필요지역 도출 등에 유용하게 활용될 수 있습니다.",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:6148034c-aa38-4ccf-9221-e828055a0e6d",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "산후조리원,업체인력,조리원현황,산모,신생아,출산",
+              "list_id": "15011370",
+              "list_title": "경기도 산후조리업체 현황",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15011370/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "산후 조리업체 현황 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&rows=10&sortColumn=&sortDirection=&infId=0E1FRZLG1FPFCD83PVFI20242471&infSeq=2",
+              "org_cd": "6410000",
+              "org_nm": "경기도",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 440,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "산후 조리업체 현황",
+              "title_en": "Status of postpartum cooking companies",
+              "updated_at": "2025-09-17"
+            }
+          }
+        },
+        {
+          "name": "산후 조리업체 현황 외부 링크 3",
+          "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&sortColumn=&sortDirection=&infId=CU863V2614IQQNM5BC3A21135849&infSeq=3&searchWord=%EC%82%B0%EB%AA%A8%EC%82%AC%ED%9A%8C%EC%84%9C%EB%B9%84%EC%8A%A4%EC%A0%9C%EA%B3%B5%EA%B8%B0%EA%B4%80+%ED%98%84%ED%99%A9",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15011370/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2017-11-16",
+              "data_format": "XML",
+              "dept_nm": "AI미래행정과",
+              "desc": "이 데이터는 경기도 내 산후조리업체의 운영 현황과 관련된 정보를 수록하고 있으며, 보건위생 및 산모·신생아 건강관리 정책 수립에 활용될 수 있습니다. 각 사업장의 인허가일자, 폐업일자, 영업상태 등을 통해 해당 업체의 운영 여부를 확인할 수 있고, 도로명 주소 및 우편번호 등의 위치정보가 포함되어 지역별 분포 분석에도 적합합니다. 조리원의 다양한 직종의 인원 수가 항목별로 기록되어 있으며, 각 사업장의 면적, 건물층수 등의 물리적 시설 정보도 함께 제공됩니다. 이 데이터는 산후조리원 서비스 수준 평가, 지역 내 조리원 선택 정보 제공, 정책적 지원 필요지역 도출 등에 유용하게 활용될 수 있습니다.",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:6148034c-aa38-4ccf-9221-e828055a0e6d",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "산후조리원,업체인력,조리원현황,산모,신생아,출산",
+              "list_id": "15011370",
+              "list_title": "경기도 산후조리업체 현황",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15011370/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "산후 조리업체 현황 외부 링크 3",
+              "operation_seq": "",
+              "operation_url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&sortColumn=&sortDirection=&infId=CU863V2614IQQNM5BC3A21135849&infSeq=3&searchWord=%EC%82%B0%EB%AA%A8%EC%82%AC%ED%9A%8C%EC%84%9C%EB%B9%84%EC%8A%A4%EC%A0%9C%EA%B3%B5%EA%B8%B0%EA%B4%80+%ED%98%84%ED%99%A9",
+              "org_cd": "6410000",
+              "org_nm": "경기도",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 440,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "산후 조리업체 현황",
+              "title_en": "Status of postpartum cooking companies",
+              "updated_at": "2025-09-17"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15015139",
+      "title": "농림수산식품교육문화정보원_농업 마이스터대학 정보",
+      "organization": "농림수산식품교육문화정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 2,
+      "hosts": [
+        "data.mafra.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국마이스터대학현황 외부 링크 1",
+          "endpoint": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20160201000000000580&filter_ty=O&getBack=&sort_id=&s_data_nm=&instt_id=&cl_code=&shareYn=",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15015139/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 임업·산촌",
+              "created_at": "2016-05-24",
+              "data_format": "JSON+XML",
+              "dept_nm": "정보전략실",
+              "desc": "농림수산식품교육문화정보원에서 제공하는 농업 마이스터대학 정보는 전국에 위치한 9개 농업 마이스터대학의 연도별 현황 및 각 캠퍼스의 학사일정에 대한 상세하고 유용한 정보를 담고 있습니다. 이 데이터는 농업 관련 분야에서 전문 인력을 양성하기 위한 목적을 가지고 있으며, 각 대학의 교육과정, 입학 조건, 교육 기간, 지원 혜택, 그리고 졸업 후 진로와 같은 다양한 정보를 체계적으로 정리하여 사용자에게 제공됩니다. 이를 통해 농업 분야 종사자와 학생들은 적합한 교육 프로그램을 선택하고 진로를 계획하는 데에 도움을 받을 수 있습니다. 이 API의 운영 기능은 농업 마이스터대학 정보를 조회하는 것으로, 해당 오퍼레이션을 통해 제공되는 데이터는 마이스터대학이 운영하는 다양한 프로그램에 대한 요약 정보를 제공하고 있습니다. 예를 들어, 각 대학에서 제공하는 교육 과정이나 입학 요건, 지원 및 장학금 조건 등의 정보를 쉽게 파악할 수 있습니다.",
+              "end_point_url": "",
+              "guide_url": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20160201000000000580&filter_ty=O&getBack=&sort_id=&s_data_nm=&instt_id=&cl_code=&shareYn=",
+              "id": "uddi:c5db1567-027f-4f16-8973-b1fafe134fed",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "농업전문교육,전문인력양성,대학연혁,학사일정,지원헤택",
+              "list_id": "15015139",
+              "list_title": "농림수산식품교육문화정보원_농업 마이스터대학 정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15015139/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "한국마이스터대학현황 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20160201000000000580&filter_ty=O&getBack=&sort_id=&s_data_nm=&instt_id=&cl_code=&shareYn=",
+              "org_cd": "B552895",
+              "org_nm": "농림수산식품교육문화정보원",
+              "ownership_grounds": "농어업농어촌 및 식품산업기본법 제40조(농업인 소득 및 경영안정의 지원)\r\n농어업경영체육성 및 지원에 관한 법률 제22조(농어업교육 계획의 수립 등), 제23조(농어업인단체 등의 교육운영 지원)",
+              "register_status": "등록승인",
+              "request_cnt": 311,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국마이스터대학현황",
+              "title_en": "Korea University Master Status",
+              "updated_at": "2025-07-29"
+            }
+          }
+        },
+        {
+          "name": "한국마이스터대학현황 외부 링크 2",
+          "endpoint": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20161223000000000731&filter_ty=O&getBack=&sort_id=&s_data_nm=&instt_id=&cl_code=&shareYn=",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15015139/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 임업·산촌",
+              "created_at": "2016-05-24",
+              "data_format": "JSON+XML",
+              "dept_nm": "정보전략실",
+              "desc": "농림수산식품교육문화정보원에서 제공하는 농업 마이스터대학 정보는 전국에 위치한 9개 농업 마이스터대학의 연도별 현황 및 각 캠퍼스의 학사일정에 대한 상세하고 유용한 정보를 담고 있습니다. 이 데이터는 농업 관련 분야에서 전문 인력을 양성하기 위한 목적을 가지고 있으며, 각 대학의 교육과정, 입학 조건, 교육 기간, 지원 혜택, 그리고 졸업 후 진로와 같은 다양한 정보를 체계적으로 정리하여 사용자에게 제공됩니다. 이를 통해 농업 분야 종사자와 학생들은 적합한 교육 프로그램을 선택하고 진로를 계획하는 데에 도움을 받을 수 있습니다. 이 API의 운영 기능은 농업 마이스터대학 정보를 조회하는 것으로, 해당 오퍼레이션을 통해 제공되는 데이터는 마이스터대학이 운영하는 다양한 프로그램에 대한 요약 정보를 제공하고 있습니다. 예를 들어, 각 대학에서 제공하는 교육 과정이나 입학 요건, 지원 및 장학금 조건 등의 정보를 쉽게 파악할 수 있습니다.",
+              "end_point_url": "",
+              "guide_url": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20160201000000000580&filter_ty=O&getBack=&sort_id=&s_data_nm=&instt_id=&cl_code=&shareYn=",
+              "id": "uddi:c5db1567-027f-4f16-8973-b1fafe134fed",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "농업전문교육,전문인력양성,대학연혁,학사일정,지원헤택",
+              "list_id": "15015139",
+              "list_title": "농림수산식품교육문화정보원_농업 마이스터대학 정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15015139/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "한국마이스터대학현황 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20161223000000000731&filter_ty=O&getBack=&sort_id=&s_data_nm=&instt_id=&cl_code=&shareYn=",
+              "org_cd": "B552895",
+              "org_nm": "농림수산식품교육문화정보원",
+              "ownership_grounds": "농어업농어촌 및 식품산업기본법 제40조(농업인 소득 및 경영안정의 지원)\r\n농어업경영체육성 및 지원에 관한 법률 제22조(농어업교육 계획의 수립 등), 제23조(농어업인단체 등의 교육운영 지원)",
+              "register_status": "등록승인",
+              "request_cnt": 311,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국마이스터대학현황",
+              "title_en": "Korea University Master Status",
+              "updated_at": "2025-07-29"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15015146",
+      "title": "농림수산식품교육문화정보원_식품산업 일자리 정보",
+      "organization": "농림수산식품교육문화정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 2,
+      "hosts": [
+        "data.mafra.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "식품산업 채용정보 외부 링크 1",
+          "endpoint": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20161223000000000731&filter_ty=O&getBack=&sort_id=&s_data_nm=&instt_id=&cl_code=&shareYn=",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15015146/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 임업·산촌",
+              "created_at": "2016-05-24",
+              "data_format": "JSON+XML",
+              "dept_nm": "정보전략실",
+              "desc": "농림수산식품교육문화정보원에서 제공하는 식품산업 관련 구인구직 정보와 각종 교육과정에 대한 정보입니다. 이 데이터는 특히 식품제조업, 외식업, 유통업 등 식품산업 전반의 일자리 정보를 포함하고 있습니다. 이를 통해 구직자들이 관심 있는 분야의 구인정보를 손쉽게 검색할 수 있으며, 또한 구인업체는 적합한 인재를 찾는 데 도움을 받을 수 있습니다. 직종별 채용 공고, 근무 조건, 급여 수준 등의 상세 정보를 제공하여 구직 및 구인 과정에서 어려움을 겪는 사용자들이 좀 더 원활하게 소통할 수 있게 합니다. 식품산업 일자리 정보 조회 오퍼레이션을 이용하면, 사용자는 특정 직종의 채용 공고를 확인하고, 관련된 직업에 필요한 교육과정을 조회할 수 있습니다. 이를 통해 사용자는 자신의 경력 개발에 도움이 되는 정보를 찾아 적절한 선택을 할 수 있습니다.",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:9e99e060-a89d-46bd-ba03-de2e38d742eb",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "식품일자리,구인구직매칭,직업교육정보,산업채용,전문인력양성",
+              "list_id": "15015146",
+              "list_title": "농림수산식품교육문화정보원_식품산업 일자리 정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15015146/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "식품산업 채용정보 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20161223000000000731&filter_ty=O&getBack=&sort_id=&s_data_nm=&instt_id=&cl_code=&shareYn=",
+              "org_cd": "B552895",
+              "org_nm": "농림수산식품교육문화정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 118,
+              "request_param_nm": "\"공공데이터포털에서 받은 인증키\",\"페이지번호\",\"한 페이지 결과 수\",\"\"",
+              "request_param_nm_en": "ServiceKey,pageNo,numOfRows,",
+              "response_param_nm": "\"결과코드\",\"결과메시지\",\"한 페이지 결과 수\",\"페이지번호\",\"전체 결과 수\",\"\"",
+              "response_param_nm_en": "resultCode,resultMsg,numOfRows,pageNo,totalCount,",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "식품산업 채용정보",
+              "title_en": "Food Industry Jobs",
+              "updated_at": "2025-07-29"
+            }
+          }
+        },
+        {
+          "name": "식품산업 채용정보 외부 링크 2",
+          "endpoint": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20160201000000000580&filter_ty=O&getBack=&sort_id=&s_data_nm=&instt_id=&cl_code=&shareYn=",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15015146/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 임업·산촌",
+              "created_at": "2016-05-24",
+              "data_format": "JSON+XML",
+              "dept_nm": "정보전략실",
+              "desc": "농림수산식품교육문화정보원에서 제공하는 식품산업 관련 구인구직 정보와 각종 교육과정에 대한 정보입니다. 이 데이터는 특히 식품제조업, 외식업, 유통업 등 식품산업 전반의 일자리 정보를 포함하고 있습니다. 이를 통해 구직자들이 관심 있는 분야의 구인정보를 손쉽게 검색할 수 있으며, 또한 구인업체는 적합한 인재를 찾는 데 도움을 받을 수 있습니다. 직종별 채용 공고, 근무 조건, 급여 수준 등의 상세 정보를 제공하여 구직 및 구인 과정에서 어려움을 겪는 사용자들이 좀 더 원활하게 소통할 수 있게 합니다. 식품산업 일자리 정보 조회 오퍼레이션을 이용하면, 사용자는 특정 직종의 채용 공고를 확인하고, 관련된 직업에 필요한 교육과정을 조회할 수 있습니다. 이를 통해 사용자는 자신의 경력 개발에 도움이 되는 정보를 찾아 적절한 선택을 할 수 있습니다.",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:9e99e060-a89d-46bd-ba03-de2e38d742eb",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "식품일자리,구인구직매칭,직업교육정보,산업채용,전문인력양성",
+              "list_id": "15015146",
+              "list_title": "농림수산식품교육문화정보원_식품산업 일자리 정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15015146/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "식품산업 채용정보 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20160201000000000580&filter_ty=O&getBack=&sort_id=&s_data_nm=&instt_id=&cl_code=&shareYn=",
+              "org_cd": "B552895",
+              "org_nm": "농림수산식품교육문화정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 118,
+              "request_param_nm": "\"공공데이터포털에서 받은 인증키\",\"페이지번호\",\"한 페이지 결과 수\",\"\"",
+              "request_param_nm_en": "ServiceKey,pageNo,numOfRows,",
+              "response_param_nm": "\"결과코드\",\"결과메시지\",\"한 페이지 결과 수\",\"페이지번호\",\"전체 결과 수\",\"\"",
+              "response_param_nm_en": "resultCode,resultMsg,numOfRows,pageNo,totalCount,",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "식품산업 채용정보",
+              "title_en": "Food Industry Jobs",
+              "updated_at": "2025-07-29"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15015158",
+      "title": "농촌진흥청 병해충발생정보",
+      "organization": "농촌진흥청",
+      "action": "replace_empty_operations",
+      "operation_count": 3,
+      "hosts": [
+        "www.nongsaro.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "농촌진흥청 병해충발생정보_20211220 외부 링크 1",
+          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EB%B3%91%ED%95%B4%EC%B6%A9%EB%B0%9C%EC%83%9D%EC%A0%95%EB%B3%B4",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15015158/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 임업·산촌",
+              "created_at": "2016-07-25",
+              "data_format": "XML",
+              "dept_nm": "데이터정보화담당관",
+              "desc": "지역별·작물별 병해충 발생 정보를 신속하게 전달하여 피해 확산을 예방하고 농가의 피해를 최소화할 수 있도록 지원합니다. 농사로에서는 각 지역에서 발생 중인 병해충 현황과 특징, 방제 방법 등 핵심 정보를 파일 형태로 제공하여 현장에서 즉시 활용할 수 있습니다. 이를 통해 농업인은 사전에 위험 요소를 파악하고 선제적으로 대응할 수 있어 안정적인 작물 생산과 품질 유지에 큰 도움이 됩니다. 빠르고 정확한 정보 제공으로 병해충 확산을 줄이고, 효율적인 농업 경영을 실현해보세요. 농사로에서 확인하세요",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:22903d0b-f61c-4df3-87d6-89c88dde1493_202207011040",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "지역작물별,발생정보,농작물,과수병해충,농사로",
+              "list_id": "15015158",
+              "list_title": "농촌진흥청 병해충발생정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15015158/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "농촌진흥청 병해충발생정보_20211220 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EB%B3%91%ED%95%B4%EC%B6%A9%EB%B0%9C%EC%83%9D%EC%A0%95%EB%B3%B4",
+              "org_cd": "1390000",
+              "org_nm": "농촌진흥청",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 1139,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "농촌진흥청 병해충발생정보_20211220",
+              "title_en": "Rural Development Administration Pest outbreak information_20211220",
+              "updated_at": "2026-04-29"
+            }
+          }
+        },
+        {
+          "name": "농촌진흥청 병해충발생정보_20211220 외부 링크 2",
+          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EB%86%8D%EC%97%85%EA%B8%B0%EC%88%A0%EB%8F%99%EC%98%81%EC%83%81",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15015158/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 임업·산촌",
+              "created_at": "2016-07-25",
+              "data_format": "XML",
+              "dept_nm": "데이터정보화담당관",
+              "desc": "지역별·작물별 병해충 발생 정보를 신속하게 전달하여 피해 확산을 예방하고 농가의 피해를 최소화할 수 있도록 지원합니다. 농사로에서는 각 지역에서 발생 중인 병해충 현황과 특징, 방제 방법 등 핵심 정보를 파일 형태로 제공하여 현장에서 즉시 활용할 수 있습니다. 이를 통해 농업인은 사전에 위험 요소를 파악하고 선제적으로 대응할 수 있어 안정적인 작물 생산과 품질 유지에 큰 도움이 됩니다. 빠르고 정확한 정보 제공으로 병해충 확산을 줄이고, 효율적인 농업 경영을 실현해보세요. 농사로에서 확인하세요",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:22903d0b-f61c-4df3-87d6-89c88dde1493_202207011040",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "지역작물별,발생정보,농작물,과수병해충,농사로",
+              "list_id": "15015158",
+              "list_title": "농촌진흥청 병해충발생정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15015158/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "농촌진흥청 병해충발생정보_20211220 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EB%86%8D%EC%97%85%EA%B8%B0%EC%88%A0%EB%8F%99%EC%98%81%EC%83%81",
+              "org_cd": "1390000",
+              "org_nm": "농촌진흥청",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 1139,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "농촌진흥청 병해충발생정보_20211220",
+              "title_en": "Rural Development Administration Pest outbreak information_20211220",
+              "updated_at": "2026-04-29"
+            }
+          }
+        },
+        {
+          "name": "농촌진흥청 병해충발생정보_20211220 외부 링크 3",
+          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps;jsessionid=w9beFVQJm1T7vYh7DtvlfOtUIlexLxlyK6iwn1XuetkeqHzA7ozpamQmn6cQTXRd.nongsaro-web_servlet_engine1?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EB%86%8D%EC%B6%95%EC%82%B0%EB%AC%BC%EC%86%8C%EB%93%9D%EC%A0%95%EB%B3%B4",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15015158/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 임업·산촌",
+              "created_at": "2016-07-25",
+              "data_format": "XML",
+              "dept_nm": "데이터정보화담당관",
+              "desc": "지역별·작물별 병해충 발생 정보를 신속하게 전달하여 피해 확산을 예방하고 농가의 피해를 최소화할 수 있도록 지원합니다. 농사로에서는 각 지역에서 발생 중인 병해충 현황과 특징, 방제 방법 등 핵심 정보를 파일 형태로 제공하여 현장에서 즉시 활용할 수 있습니다. 이를 통해 농업인은 사전에 위험 요소를 파악하고 선제적으로 대응할 수 있어 안정적인 작물 생산과 품질 유지에 큰 도움이 됩니다. 빠르고 정확한 정보 제공으로 병해충 확산을 줄이고, 효율적인 농업 경영을 실현해보세요. 농사로에서 확인하세요",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:22903d0b-f61c-4df3-87d6-89c88dde1493_202207011040",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "지역작물별,발생정보,농작물,과수병해충,농사로",
+              "list_id": "15015158",
+              "list_title": "농촌진흥청 병해충발생정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15015158/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "농촌진흥청 병해충발생정보_20211220 외부 링크 3",
+              "operation_seq": "",
+              "operation_url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps;jsessionid=w9beFVQJm1T7vYh7DtvlfOtUIlexLxlyK6iwn1XuetkeqHzA7ozpamQmn6cQTXRd.nongsaro-web_servlet_engine1?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EB%86%8D%EC%B6%95%EC%82%B0%EB%AC%BC%EC%86%8C%EB%93%9D%EC%A0%95%EB%B3%B4",
+              "org_cd": "1390000",
+              "org_nm": "농촌진흥청",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 1139,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "농촌진흥청 병해충발생정보_20211220",
+              "title_en": "Rural Development Administration Pest outbreak information_20211220",
+              "updated_at": "2026-04-29"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15015163",
+      "title": "농촌진흥청_추천식단정보",
+      "organization": "농촌진흥청",
+      "action": "replace_empty_operations",
+      "operation_count": 3,
+      "hosts": [
+        "www.nongsaro.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "농촌진흥청_추천식단정보_20160617 외부 링크 1",
+          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EC%B6%94%EC%B2%9C%EC%8B%9D%EB%8B%A8%EC%A0%95%EB%B3%B4",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15015163/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 농업·농촌",
+              "created_at": "2016-05-25",
+              "data_format": "XML",
+              "dept_nm": "데이터정보화담당관",
+              "desc": "농산물을 활용한 건강한 식단과 개인별 맞춤 식단 정보를 추천해주는 서비스를 소개합니다. 이 서비스는 다양한 농산물의 영양 특성을 바탕으로 균형 잡힌 식단을 제안하며, 사람마다 다른 건강 상태와 생활 습관을 고려해 최적의 식단을 제공합니다. 제철 농산물을 활용한 레시피와 영양 정보를 함께 제공하여 일상 속에서 쉽고 맛있게 건강 관리를 할 수 있도록 돕습니다. 또한 개인의 필요에 맞춘 식단 추천을 통해 영양 불균형을 예방하고 건강한 식생활 실천을 지원합니다. 지금 바로 확인하고 농산물과 함께하는 맞춤형 건강 식단으로 더 활기찬 생활을 시작해보세요!",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:7b72476a-8947-4b88-8b27-cd5276e9ee88_202206211339",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "식단분류,분류별식단,추천,식단정보,농사",
+              "list_id": "15015163",
+              "list_title": "농촌진흥청_추천식단정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15015163/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "농촌진흥청_추천식단정보_20160617 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EC%B6%94%EC%B2%9C%EC%8B%9D%EB%8B%A8%EC%A0%95%EB%B3%B4",
+              "org_cd": "1390000",
+              "org_nm": "농촌진흥청",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 604,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "농촌진흥청_추천식단정보_20160617",
+              "title_en": "Rural Development Administration_Recommended diet information_20160617",
+              "updated_at": "2026-04-10"
+            }
+          }
+        },
+        {
+          "name": "농촌진흥청_추천식단정보_20160617 외부 링크 2",
+          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EC%9D%B4%EB%8B%AC%EC%9D%98+%EC%9D%8C%EC%8B%9D",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15015163/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 농업·농촌",
+              "created_at": "2016-05-25",
+              "data_format": "XML",
+              "dept_nm": "데이터정보화담당관",
+              "desc": "농산물을 활용한 건강한 식단과 개인별 맞춤 식단 정보를 추천해주는 서비스를 소개합니다. 이 서비스는 다양한 농산물의 영양 특성을 바탕으로 균형 잡힌 식단을 제안하며, 사람마다 다른 건강 상태와 생활 습관을 고려해 최적의 식단을 제공합니다. 제철 농산물을 활용한 레시피와 영양 정보를 함께 제공하여 일상 속에서 쉽고 맛있게 건강 관리를 할 수 있도록 돕습니다. 또한 개인의 필요에 맞춘 식단 추천을 통해 영양 불균형을 예방하고 건강한 식생활 실천을 지원합니다. 지금 바로 확인하고 농산물과 함께하는 맞춤형 건강 식단으로 더 활기찬 생활을 시작해보세요!",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:7b72476a-8947-4b88-8b27-cd5276e9ee88_202206211339",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "식단분류,분류별식단,추천,식단정보,농사",
+              "list_id": "15015163",
+              "list_title": "농촌진흥청_추천식단정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15015163/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "농촌진흥청_추천식단정보_20160617 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EC%9D%B4%EB%8B%AC%EC%9D%98+%EC%9D%8C%EC%8B%9D",
+              "org_cd": "1390000",
+              "org_nm": "농촌진흥청",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 604,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "농촌진흥청_추천식단정보_20160617",
+              "title_en": "Rural Development Administration_Recommended diet information_20160617",
+              "updated_at": "2026-04-10"
+            }
+          }
+        },
+        {
+          "name": "농촌진흥청_추천식단정보_20160617 외부 링크 3",
+          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EA%B3%B5%EA%B3%B5+%EB%8D%B0%EC%9D%B4%ED%84%B0",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15015163/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 농업·농촌",
+              "created_at": "2016-05-25",
+              "data_format": "XML",
+              "dept_nm": "데이터정보화담당관",
+              "desc": "농산물을 활용한 건강한 식단과 개인별 맞춤 식단 정보를 추천해주는 서비스를 소개합니다. 이 서비스는 다양한 농산물의 영양 특성을 바탕으로 균형 잡힌 식단을 제안하며, 사람마다 다른 건강 상태와 생활 습관을 고려해 최적의 식단을 제공합니다. 제철 농산물을 활용한 레시피와 영양 정보를 함께 제공하여 일상 속에서 쉽고 맛있게 건강 관리를 할 수 있도록 돕습니다. 또한 개인의 필요에 맞춘 식단 추천을 통해 영양 불균형을 예방하고 건강한 식생활 실천을 지원합니다. 지금 바로 확인하고 농산물과 함께하는 맞춤형 건강 식단으로 더 활기찬 생활을 시작해보세요!",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:7b72476a-8947-4b88-8b27-cd5276e9ee88_202206211339",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "식단분류,분류별식단,추천,식단정보,농사",
+              "list_id": "15015163",
+              "list_title": "농촌진흥청_추천식단정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15015163/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "농촌진흥청_추천식단정보_20160617 외부 링크 3",
+              "operation_seq": "",
+              "operation_url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EA%B3%B5%EA%B3%B5+%EB%8D%B0%EC%9D%B4%ED%84%B0",
+              "org_cd": "1390000",
+              "org_nm": "농촌진흥청",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 604,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "농촌진흥청_추천식단정보_20160617",
+              "title_en": "Rural Development Administration_Recommended diet information_20160617",
+              "updated_at": "2026-04-10"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15015164",
+      "title": "농촌진흥청_천연작물보호소재 정보",
+      "organization": "농촌진흥청",
+      "action": "replace_empty_operations",
+      "operation_count": 3,
+      "hosts": [
+        "www.nongsaro.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "농촌진흥청_천연작물보호소재 정보_20160617 외부 링크 1",
+          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EC%B2%9C%EC%97%B0%EC%9E%91%EB%AC%BC%EB%B3%B4%ED%98%B8%EC%86%8C%EC%9E%AC+",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15015164/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 농업·농촌",
+              "created_at": "2016-05-25",
+              "data_format": "XML",
+              "dept_nm": "데이터정보화담당관",
+              "desc": "천연작물을 자재로 활용하는 업체와 농업인을 위해 소재 정보를 체계적으로 제공하는 서비스를 소개합니다. 본 서비스는 과명, 학명, 국명 등 다양한 기준으로 손쉽게 검색할 수 있는 기능을 제공하여 필요한 식물 소재 정보를 빠르고 정확하게 확인할 수 있습니다. 각 작물의 특성과 활용 가능성을 한눈에 파악할 수 있어 연구 및 산업 활용에 큰 도움이 됩니다. 또한 신뢰성 있는 데이터를 기반으로 천연 소재의 활용 범위를 넓히고, 농업과 산업 간 연계를 강화합니다. 초보자부터 전문가까지 누구나 쉽게 이용할 수 있도록 구성되어 있어 정보 접근성이 뛰어납니다. 지금 바로 확인하고 천연작물 소재 정보를 활용해 새로운 가치를 창출해보세요!",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:552b4c99-5d9f-4ebc-85b5-a8ddf8113805_202206211340",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "천연,작물,식물화합물,보호소재,농사로",
+              "list_id": "15015164",
+              "list_title": "농촌진흥청_천연작물보호소재 정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15015164/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "농촌진흥청_천연작물보호소재 정보_20160617 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EC%B2%9C%EC%97%B0%EC%9E%91%EB%AC%BC%EB%B3%B4%ED%98%B8%EC%86%8C%EC%9E%AC+",
+              "org_cd": "1390000",
+              "org_nm": "농촌진흥청",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 99,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "농촌진흥청_천연작물보호소재 정보_20160617",
+              "title_en": "Rural Development Administration_Information on natural crop protection materials_20160617",
+              "updated_at": "2026-04-10"
+            }
+          }
+        },
+        {
+          "name": "농촌진흥청_천연작물보호소재 정보_20160617 외부 링크 2",
+          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EB%86%8D%EC%82%AC%EB%A1%9C+%EC%9D%B4%EB%B2%A4%ED%8A%B8",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15015164/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 농업·농촌",
+              "created_at": "2016-05-25",
+              "data_format": "XML",
+              "dept_nm": "데이터정보화담당관",
+              "desc": "천연작물을 자재로 활용하는 업체와 농업인을 위해 소재 정보를 체계적으로 제공하는 서비스를 소개합니다. 본 서비스는 과명, 학명, 국명 등 다양한 기준으로 손쉽게 검색할 수 있는 기능을 제공하여 필요한 식물 소재 정보를 빠르고 정확하게 확인할 수 있습니다. 각 작물의 특성과 활용 가능성을 한눈에 파악할 수 있어 연구 및 산업 활용에 큰 도움이 됩니다. 또한 신뢰성 있는 데이터를 기반으로 천연 소재의 활용 범위를 넓히고, 농업과 산업 간 연계를 강화합니다. 초보자부터 전문가까지 누구나 쉽게 이용할 수 있도록 구성되어 있어 정보 접근성이 뛰어납니다. 지금 바로 확인하고 천연작물 소재 정보를 활용해 새로운 가치를 창출해보세요!",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:552b4c99-5d9f-4ebc-85b5-a8ddf8113805_202206211340",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "천연,작물,식물화합물,보호소재,농사로",
+              "list_id": "15015164",
+              "list_title": "농촌진흥청_천연작물보호소재 정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15015164/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "농촌진흥청_천연작물보호소재 정보_20160617 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EB%86%8D%EC%82%AC%EB%A1%9C+%EC%9D%B4%EB%B2%A4%ED%8A%B8",
+              "org_cd": "1390000",
+              "org_nm": "농촌진흥청",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 99,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "농촌진흥청_천연작물보호소재 정보_20160617",
+              "title_en": "Rural Development Administration_Information on natural crop protection materials_20160617",
+              "updated_at": "2026-04-10"
+            }
+          }
+        },
+        {
+          "name": "농촌진흥청_천연작물보호소재 정보_20160617 외부 링크 3",
+          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EA%B3%B5%EA%B3%B5+%EB%8D%B0%EC%9D%B4%ED%84%B0",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15015164/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 농업·농촌",
+              "created_at": "2016-05-25",
+              "data_format": "XML",
+              "dept_nm": "데이터정보화담당관",
+              "desc": "천연작물을 자재로 활용하는 업체와 농업인을 위해 소재 정보를 체계적으로 제공하는 서비스를 소개합니다. 본 서비스는 과명, 학명, 국명 등 다양한 기준으로 손쉽게 검색할 수 있는 기능을 제공하여 필요한 식물 소재 정보를 빠르고 정확하게 확인할 수 있습니다. 각 작물의 특성과 활용 가능성을 한눈에 파악할 수 있어 연구 및 산업 활용에 큰 도움이 됩니다. 또한 신뢰성 있는 데이터를 기반으로 천연 소재의 활용 범위를 넓히고, 농업과 산업 간 연계를 강화합니다. 초보자부터 전문가까지 누구나 쉽게 이용할 수 있도록 구성되어 있어 정보 접근성이 뛰어납니다. 지금 바로 확인하고 천연작물 소재 정보를 활용해 새로운 가치를 창출해보세요!",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:552b4c99-5d9f-4ebc-85b5-a8ddf8113805_202206211340",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "천연,작물,식물화합물,보호소재,농사로",
+              "list_id": "15015164",
+              "list_title": "농촌진흥청_천연작물보호소재 정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15015164/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "농촌진흥청_천연작물보호소재 정보_20160617 외부 링크 3",
+              "operation_seq": "",
+              "operation_url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EA%B3%B5%EA%B3%B5+%EB%8D%B0%EC%9D%B4%ED%84%B0",
+              "org_cd": "1390000",
+              "org_nm": "농촌진흥청",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 99,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "농촌진흥청_천연작물보호소재 정보_20160617",
+              "title_en": "Rural Development Administration_Information on natural crop protection materials_20160617",
+              "updated_at": "2026-04-10"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15015212",
+      "title": "한국체육산업개발주식회사_올림픽공원 대관정보",
+      "organization": "한국체육산업개발주식회사",
+      "action": "replace_empty_operations",
+      "operation_count": 3,
+      "hosts": [
+        "www.culture.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "올림픽공원 공연 대관정보 외부 링크 1",
+          "endpoint": "http://www.culture.go.kr/data/openapi/openapiView.do?id=353&category=A&keyword=대관&searchField=all&gubun=A",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15015212/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "문화체육관광 > 문화체육관광일반",
+              "created_at": "2016-11-08",
+              "data_format": "XML",
+              "dept_nm": "디지털혁신팀",
+              "desc": "올림픽공원 시설 대관 정보 제공\r\n행사명, 행사기간, 장소에 대한 정보 제공\r\n2025년기준 717건 정보를 제공하고 있으며, 2013년부터 정보입니다.\r\n지선 단독콘서트, 놀이뮤지컬, 청춘페스티벌, 정동원 전국투어 콘서트. 서울 재즈 페스티벌, 민트 라이프, 이승윤 콘서트, 헬로카봇 뮤지컬 등 \r\n다양한 대관정보를 제공중에 있습니다.\r\nhttps://www.ksponco.or.kr/olympicpark/eventInfo/eventInfoList?mid=a20301010100",
+              "end_point_url": "",
+              "guide_url": "http://www.culture.go.kr/data/openapi/openapiView.do?id=353&category=A&keyword=대관&searchField=all&gubun=A",
+              "id": "uddi:e06163a7-34f0-4578-88a3-e09fb4f3ef03",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "올림픽공원,시설대관,행사정보,대관,공연",
+              "list_id": "15015212",
+              "list_title": "한국체육산업개발주식회사_올림픽공원 대관정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15015212/openapi.json",
+              "new_category_cd": "OC0008",
+              "new_category_nm": "문화관광",
+              "operation_nm": "올림픽공원 공연 대관정보 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "http://www.culture.go.kr/data/openapi/openapiView.do?id=353&category=A&keyword=대관&searchField=all&gubun=A",
+              "org_cd": "B552024",
+              "org_nm": "한국체육산업개발주식회사",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 2654,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "올림픽공원 공연 대관정보",
+              "title_en": "Olympic performances President Information",
+              "updated_at": "2025-07-07"
+            }
+          }
+        },
+        {
+          "name": "올림픽공원 공연 대관정보 외부 링크 2",
+          "endpoint": "https://www.culture.go.kr/data/openapi/openapiView.do?id=111",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15015212/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "문화체육관광 > 문화체육관광일반",
+              "created_at": "2016-11-08",
+              "data_format": "XML",
+              "dept_nm": "디지털혁신팀",
+              "desc": "올림픽공원 시설 대관 정보 제공\r\n행사명, 행사기간, 장소에 대한 정보 제공\r\n2025년기준 717건 정보를 제공하고 있으며, 2013년부터 정보입니다.\r\n지선 단독콘서트, 놀이뮤지컬, 청춘페스티벌, 정동원 전국투어 콘서트. 서울 재즈 페스티벌, 민트 라이프, 이승윤 콘서트, 헬로카봇 뮤지컬 등 \r\n다양한 대관정보를 제공중에 있습니다.\r\nhttps://www.ksponco.or.kr/olympicpark/eventInfo/eventInfoList?mid=a20301010100",
+              "end_point_url": "",
+              "guide_url": "http://www.culture.go.kr/data/openapi/openapiView.do?id=353&category=A&keyword=대관&searchField=all&gubun=A",
+              "id": "uddi:e06163a7-34f0-4578-88a3-e09fb4f3ef03",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "올림픽공원,시설대관,행사정보,대관,공연",
+              "list_id": "15015212",
+              "list_title": "한국체육산업개발주식회사_올림픽공원 대관정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15015212/openapi.json",
+              "new_category_cd": "OC0008",
+              "new_category_nm": "문화관광",
+              "operation_nm": "올림픽공원 공연 대관정보 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "https://www.culture.go.kr/data/openapi/openapiView.do?id=111",
+              "org_cd": "B552024",
+              "org_nm": "한국체육산업개발주식회사",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 2654,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "올림픽공원 공연 대관정보",
+              "title_en": "Olympic performances President Information",
+              "updated_at": "2025-07-07"
+            }
+          }
+        },
+        {
+          "name": "올림픽공원 공연 대관정보 외부 링크 3",
+          "endpoint": "https://www.culture.go.kr/data/openapi/openapiView.do?id=96",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15015212/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "문화체육관광 > 문화체육관광일반",
+              "created_at": "2016-11-08",
+              "data_format": "XML",
+              "dept_nm": "디지털혁신팀",
+              "desc": "올림픽공원 시설 대관 정보 제공\r\n행사명, 행사기간, 장소에 대한 정보 제공\r\n2025년기준 717건 정보를 제공하고 있으며, 2013년부터 정보입니다.\r\n지선 단독콘서트, 놀이뮤지컬, 청춘페스티벌, 정동원 전국투어 콘서트. 서울 재즈 페스티벌, 민트 라이프, 이승윤 콘서트, 헬로카봇 뮤지컬 등 \r\n다양한 대관정보를 제공중에 있습니다.\r\nhttps://www.ksponco.or.kr/olympicpark/eventInfo/eventInfoList?mid=a20301010100",
+              "end_point_url": "",
+              "guide_url": "http://www.culture.go.kr/data/openapi/openapiView.do?id=353&category=A&keyword=대관&searchField=all&gubun=A",
+              "id": "uddi:e06163a7-34f0-4578-88a3-e09fb4f3ef03",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "올림픽공원,시설대관,행사정보,대관,공연",
+              "list_id": "15015212",
+              "list_title": "한국체육산업개발주식회사_올림픽공원 대관정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15015212/openapi.json",
+              "new_category_cd": "OC0008",
+              "new_category_nm": "문화관광",
+              "operation_nm": "올림픽공원 공연 대관정보 외부 링크 3",
+              "operation_seq": "",
+              "operation_url": "https://www.culture.go.kr/data/openapi/openapiView.do?id=96",
+              "org_cd": "B552024",
+              "org_nm": "한국체육산업개발주식회사",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 2654,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "올림픽공원 공연 대관정보",
+              "title_en": "Olympic performances President Information",
+              "updated_at": "2025-07-07"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15019666",
+      "title": "농림축산식품부 농식품인재개발원_시설 대여 정보",
+      "organization": "농림축산식품부 농식품인재개발원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "data.mafra.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "농식품공무원교육원 시설 대여 신청 신청",
+          "endpoint": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20161205000000000627&filter_ty=O&getBack=&sort_id=regist_dt&s_data_nm=&instt_id=&cl_code=1600&shareYn=",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15019666/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "교육 > 교육일반",
+              "created_at": "2016-12-09",
+              "data_format": "JSON+XML",
+              "dept_nm": "교육기획과",
+              "desc": "농식품공무원교육원 보유시설 민간 대여 정보",
+              "end_point_url": "",
+              "guide_url": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20161205000000000627&filter_ty=O&getBack=&sort_id=regist_dt&s_data_nm=&instt_id=&cl_code=1600&shareYn=",
+              "id": "uddi:cd6714f3-3ca6-4baf-8157-ac539061f50f",
+              "is_charged": "N",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "시설,대여,사용료",
+              "list_id": "15019666",
+              "list_title": "농림축산식품부 농식품인재개발원_시설 대여 정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15019666/openapi.json",
+              "new_category_cd": "OC0001",
+              "new_category_nm": "교육",
+              "operation_nm": "농식품공무원교육원 시설 대여 신청 신청",
+              "operation_seq": "",
+              "operation_url": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20161205000000000627&filter_ty=O&getBack=&sort_id=regist_dt&s_data_nm=&instt_id=&cl_code=1600&shareYn=",
+              "org_cd": "1543582",
+              "org_nm": "농림축산식품부 농식품인재개발원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 113,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "농식품공무원교육원 시설 대여 신청 신청",
+              "title_en": "Application for rental of facilities of the Agricultural and Food Public Officials Training Institute",
+              "updated_at": "2016-12-13"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15020843",
+      "title": "농림수산식품교육문화정보원_전원마을 분양정보",
+      "organization": "농림수산식품교육문화정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 2,
+      "hosts": [
+        "data.mafra.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "전원마을 분양 공고정보 외부 링크 1",
+          "endpoint": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20151210000000000572&filter_ty=O&getBack=&sort_id=&s_data_nm=&instt_id=&cl_code=&shareYn=",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15020843/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 임업·산촌",
+              "created_at": "2016-12-07",
+              "data_format": "JSON+XML",
+              "dept_nm": "정보전략실",
+              "desc": "농림수산식품교육문화정보원이 제공하는 전원마을 분양정보는 일반농산어촌지역개발사업의 일환으로 신규마을 조성사업에 따른 다양한 분양 정보를 포함하고 있습니다. 이 정보는 농촌으로의 유입을 촉진하고 도시민의 농촌 정착을 지원하는 데 필수적이며, 사회적 가치입니다. 제공되는 데이터는 전원마을의 구체적인 위치, 분양 면적, 분양가격, 입주 조건, 그리고 다양한 편의시설에 대한 정보를 포함하고 있습니다. 이를 통해 관심 있는 개인이나 단체가 전원마을에 대한 충분한 정보를 얻어, 신중한 결정에 도움이 될 수 있도록 지원합니다. 또한, 이 API는 전원마을 조성사업과 관련된 정보를 종합적으로 조회할 수 있는 오퍼레이션을 제공합니다. 예를 들어, 전원마을의 다양한 조건을 중심으로 데이터를 쉽게 검색할 수 있어, 해당 정보를 필요로 하는 농촌 정착을 원하는 도시민에게 특별히 유용합니다.",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:5b40bd05-f44c-4af3-876f-eeba66bb7ef0",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "농촌정착,주거정보,분양조건,마을조성사업,편의시설",
+              "list_id": "15020843",
+              "list_title": "농림수산식품교육문화정보원_전원마을 분양정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15020843/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "전원마을 분양 공고정보 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20151210000000000572&filter_ty=O&getBack=&sort_id=&s_data_nm=&instt_id=&cl_code=&shareYn=",
+              "org_cd": "B552895",
+              "org_nm": "농림수산식품교육문화정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 239,
+              "request_param_nm": "\"공공데이터포털에서 받은 인증키\",\"페이지번호\",\"한 페이지 결과 수\",\"\"",
+              "request_param_nm_en": "ServiceKey,pageNo,numOfRows,",
+              "response_param_nm": "\"결과코드\",\"결과메시지\",\"한 페이지 결과 수\",\"페이지번호\",\"전체 결과 수\",\"\"",
+              "response_param_nm_en": "resultCode,resultMsg,numOfRows,pageNo,totalCount,",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "전원마을 분양 공고정보",
+              "title_en": "Power villages pre-sale information Announcement",
+              "updated_at": "2025-07-29"
+            }
+          }
+        },
+        {
+          "name": "전원마을 분양 공고정보 외부 링크 2",
+          "endpoint": "https://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20170216000000000771",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15020843/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 임업·산촌",
+              "created_at": "2016-12-07",
+              "data_format": "JSON+XML",
+              "dept_nm": "정보전략실",
+              "desc": "농림수산식품교육문화정보원이 제공하는 전원마을 분양정보는 일반농산어촌지역개발사업의 일환으로 신규마을 조성사업에 따른 다양한 분양 정보를 포함하고 있습니다. 이 정보는 농촌으로의 유입을 촉진하고 도시민의 농촌 정착을 지원하는 데 필수적이며, 사회적 가치입니다. 제공되는 데이터는 전원마을의 구체적인 위치, 분양 면적, 분양가격, 입주 조건, 그리고 다양한 편의시설에 대한 정보를 포함하고 있습니다. 이를 통해 관심 있는 개인이나 단체가 전원마을에 대한 충분한 정보를 얻어, 신중한 결정에 도움이 될 수 있도록 지원합니다. 또한, 이 API는 전원마을 조성사업과 관련된 정보를 종합적으로 조회할 수 있는 오퍼레이션을 제공합니다. 예를 들어, 전원마을의 다양한 조건을 중심으로 데이터를 쉽게 검색할 수 있어, 해당 정보를 필요로 하는 농촌 정착을 원하는 도시민에게 특별히 유용합니다.",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:5b40bd05-f44c-4af3-876f-eeba66bb7ef0",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "농촌정착,주거정보,분양조건,마을조성사업,편의시설",
+              "list_id": "15020843",
+              "list_title": "농림수산식품교육문화정보원_전원마을 분양정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15020843/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "전원마을 분양 공고정보 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "https://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20170216000000000771",
+              "org_cd": "B552895",
+              "org_nm": "농림수산식품교육문화정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 239,
+              "request_param_nm": "\"공공데이터포털에서 받은 인증키\",\"페이지번호\",\"한 페이지 결과 수\",\"\"",
+              "request_param_nm_en": "ServiceKey,pageNo,numOfRows,",
+              "response_param_nm": "\"결과코드\",\"결과메시지\",\"한 페이지 결과 수\",\"페이지번호\",\"전체 결과 수\",\"\"",
+              "response_param_nm_en": "resultCode,resultMsg,numOfRows,pageNo,totalCount,",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "전원마을 분양 공고정보",
+              "title_en": "Power villages pre-sale information Announcement",
+              "updated_at": "2025-07-29"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15024888",
+      "title": "한국체육산업개발주식회사_올림픽공원 수목정보",
+      "organization": "한국체육산업개발주식회사",
+      "action": "replace_empty_operations",
+      "operation_count": 3,
+      "hosts": [
+        "www.culture.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "올림픽공원 장미정보 외부 링크 1",
+          "endpoint": "http://www.culture.go.kr/data/openapi/openapiView.do?id=357&category=D&gubun=A",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15024888/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "문화체육관광 > 문화체육관광일반",
+              "created_at": "2017-07-13",
+              "data_format": "XML",
+              "dept_nm": "디지털혁신팀",
+              "desc": "올림픽공원 안에 있는 수목과 장미 등에 관한 정보 제공\r\n수목명, 수목종류, 설명 등 정보제공\r\n2025년 기준 182건의 데이터를 제공하고 있으며, \r\n한국체육산업개발의 올림픽공원 장미정보를 외부 개발자 및 사용자가 이를 활용 할 수 있도록 전달하는 API 서비스입니다. \r\n올림픽공원 장미광장의 장미 목록정보와 상세정보 등 다양한 정보를 제공합니다.\r\n올림픽공원 홈페이지에서도 정보를 제공하고있습니다.\r\n https://www.ksponco.or.kr/olympicpark/menu.es?mid=a20403010000",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:b941f44f-ccaf-4fbd-83ff-88f996d62cc7",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "올림픽공원,수목정보,장미정보,수목,장미광장",
+              "list_id": "15024888",
+              "list_title": "한국체육산업개발주식회사_올림픽공원 수목정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15024888/openapi.json",
+              "new_category_cd": "OC0008",
+              "new_category_nm": "문화관광",
+              "operation_nm": "올림픽공원 장미정보 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "http://www.culture.go.kr/data/openapi/openapiView.do?id=357&category=D&gubun=A",
+              "org_cd": "B552024",
+              "org_nm": "한국체육산업개발주식회사",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 300,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "올림픽공원 장미정보",
+              "title_en": "Olympic Park roses information",
+              "updated_at": "2025-06-19"
+            }
+          }
+        },
+        {
+          "name": "올림픽공원 장미정보 외부 링크 2",
+          "endpoint": "https://www.culture.go.kr/data/openapi/openapiView.do?id=111",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15024888/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "문화체육관광 > 문화체육관광일반",
+              "created_at": "2017-07-13",
+              "data_format": "XML",
+              "dept_nm": "디지털혁신팀",
+              "desc": "올림픽공원 안에 있는 수목과 장미 등에 관한 정보 제공\r\n수목명, 수목종류, 설명 등 정보제공\r\n2025년 기준 182건의 데이터를 제공하고 있으며, \r\n한국체육산업개발의 올림픽공원 장미정보를 외부 개발자 및 사용자가 이를 활용 할 수 있도록 전달하는 API 서비스입니다. \r\n올림픽공원 장미광장의 장미 목록정보와 상세정보 등 다양한 정보를 제공합니다.\r\n올림픽공원 홈페이지에서도 정보를 제공하고있습니다.\r\n https://www.ksponco.or.kr/olympicpark/menu.es?mid=a20403010000",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:b941f44f-ccaf-4fbd-83ff-88f996d62cc7",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "올림픽공원,수목정보,장미정보,수목,장미광장",
+              "list_id": "15024888",
+              "list_title": "한국체육산업개발주식회사_올림픽공원 수목정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15024888/openapi.json",
+              "new_category_cd": "OC0008",
+              "new_category_nm": "문화관광",
+              "operation_nm": "올림픽공원 장미정보 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "https://www.culture.go.kr/data/openapi/openapiView.do?id=111",
+              "org_cd": "B552024",
+              "org_nm": "한국체육산업개발주식회사",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 300,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "올림픽공원 장미정보",
+              "title_en": "Olympic Park roses information",
+              "updated_at": "2025-06-19"
+            }
+          }
+        },
+        {
+          "name": "올림픽공원 장미정보 외부 링크 3",
+          "endpoint": "https://www.culture.go.kr/data/openapi/openapiView.do?id=126",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15024888/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "문화체육관광 > 문화체육관광일반",
+              "created_at": "2017-07-13",
+              "data_format": "XML",
+              "dept_nm": "디지털혁신팀",
+              "desc": "올림픽공원 안에 있는 수목과 장미 등에 관한 정보 제공\r\n수목명, 수목종류, 설명 등 정보제공\r\n2025년 기준 182건의 데이터를 제공하고 있으며, \r\n한국체육산업개발의 올림픽공원 장미정보를 외부 개발자 및 사용자가 이를 활용 할 수 있도록 전달하는 API 서비스입니다. \r\n올림픽공원 장미광장의 장미 목록정보와 상세정보 등 다양한 정보를 제공합니다.\r\n올림픽공원 홈페이지에서도 정보를 제공하고있습니다.\r\n https://www.ksponco.or.kr/olympicpark/menu.es?mid=a20403010000",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:b941f44f-ccaf-4fbd-83ff-88f996d62cc7",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "올림픽공원,수목정보,장미정보,수목,장미광장",
+              "list_id": "15024888",
+              "list_title": "한국체육산업개발주식회사_올림픽공원 수목정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15024888/openapi.json",
+              "new_category_cd": "OC0008",
+              "new_category_nm": "문화관광",
+              "operation_nm": "올림픽공원 장미정보 외부 링크 3",
+              "operation_seq": "",
+              "operation_url": "https://www.culture.go.kr/data/openapi/openapiView.do?id=126",
+              "org_cd": "B552024",
+              "org_nm": "한국체육산업개발주식회사",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 300,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "올림픽공원 장미정보",
+              "title_en": "Olympic Park roses information",
+              "updated_at": "2025-06-19"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15026112",
+      "title": "한국고용정보원_워크넷  심리검사결과",
+      "organization": "한국고용정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 3,
+      "hosts": [
+        "www.work24.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국고용정보원_워크넷  심리검사결과_20210520 외부 링크 1",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000067&upprApiSvcId=000000000000000000000000000065&fullApiSvcId=000000000000000000000000000065%5E000000000000000000000000000066",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15026112/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 고용노동",
+              "created_at": "2018-11-01",
+              "data_format": "XML",
+              "dept_nm": "데이터기획운영팀",
+              "desc": "[심리검사 API - 심리검사결과]\r\n \r\n워크넷과 대학 연계를 통해 제공되는 4종의 대학전용 심리검사의 검사결과를 조회하여 활용할 수 있습니다. 본 정보활용 서비스 사용을 위해 대학의 기관등록이 선행되어야 합니다.\r\n\r\n 심리검사API를 이용하여 개인별 심리검사 결과를 조회할 수 있습니다.\r\n개인정보처리방침에 따라 직업심리검사 회원은 회원정책(보유기간 2년)/비회원(API등)은 보유기간 7일 이후에 개인정보가 삭제됨을 알려드리며 그 이후에는 검사이력은 조회되지 않습니다.\r\n \r\n<API 사용법>\r\n인증키,  xml 지정, 제공받은 학교코드, 학번, 심리검사코드 등을 파라미터로 받아 심리검사코드, 검사일자, 원점수, 표준점수, 백분위점수, 추천직업, 흥미코드, 적성요인, 직업선호도, 총합점수 등의 결과를 제공합니다.\r\n \r\n * 유의사항:  문자열로 입력되는 항목의 경우 공백이나 오탈자가 포함되면 검색 결과가 제대로 나오지 않을 수 있으므로 주의해야 합니다. 대부분의 파라미터는 선택적으로 입력할 수 있으며, 필요한 조건만 입력해도 조회는 가능합니다.",
+              "end_point_url": " ",
+              "guide_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiIntro.do?bbsClCd=OosccI71O3P2dBxVz5A40Q%3D%3D",
+              "id": "uddi:64e90135-26ef-44bd-aa10-d3460ecc2ce9_202410311548",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "적성,대입,워크넷,직업선호도검사,직업심리검사,흥미검사,창업적성검사,적성검사",
+              "list_id": "15026112",
+              "list_title": "한국고용정보원_워크넷  심리검사결과",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15026112/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "한국고용정보원_워크넷  심리검사결과_20210520 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000067&upprApiSvcId=000000000000000000000000000065&fullApiSvcId=000000000000000000000000000065%5E000000000000000000000000000066",
+              "org_cd": "B551904",
+              "org_nm": "한국고용정보원",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 344,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국고용정보원_워크넷  심리검사결과_20210520",
+              "title_en": "Korea Employment Information Service_Worknet Psychological Test Results_20210520",
+              "updated_at": "2025-07-21"
+            }
+          }
+        },
+        {
+          "name": "한국고용정보원_워크넷  심리검사결과_20210520 외부 링크 2",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023&upprApiSvcId=000000000000000000000000000022&fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000062",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15026112/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 고용노동",
+              "created_at": "2018-11-01",
+              "data_format": "XML",
+              "dept_nm": "데이터기획운영팀",
+              "desc": "[심리검사 API - 심리검사결과]\r\n \r\n워크넷과 대학 연계를 통해 제공되는 4종의 대학전용 심리검사의 검사결과를 조회하여 활용할 수 있습니다. 본 정보활용 서비스 사용을 위해 대학의 기관등록이 선행되어야 합니다.\r\n\r\n 심리검사API를 이용하여 개인별 심리검사 결과를 조회할 수 있습니다.\r\n개인정보처리방침에 따라 직업심리검사 회원은 회원정책(보유기간 2년)/비회원(API등)은 보유기간 7일 이후에 개인정보가 삭제됨을 알려드리며 그 이후에는 검사이력은 조회되지 않습니다.\r\n \r\n<API 사용법>\r\n인증키,  xml 지정, 제공받은 학교코드, 학번, 심리검사코드 등을 파라미터로 받아 심리검사코드, 검사일자, 원점수, 표준점수, 백분위점수, 추천직업, 흥미코드, 적성요인, 직업선호도, 총합점수 등의 결과를 제공합니다.\r\n \r\n * 유의사항:  문자열로 입력되는 항목의 경우 공백이나 오탈자가 포함되면 검색 결과가 제대로 나오지 않을 수 있으므로 주의해야 합니다. 대부분의 파라미터는 선택적으로 입력할 수 있으며, 필요한 조건만 입력해도 조회는 가능합니다.",
+              "end_point_url": " ",
+              "guide_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiIntro.do?bbsClCd=OosccI71O3P2dBxVz5A40Q%3D%3D",
+              "id": "uddi:64e90135-26ef-44bd-aa10-d3460ecc2ce9_202410311548",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "적성,대입,워크넷,직업선호도검사,직업심리검사,흥미검사,창업적성검사,적성검사",
+              "list_id": "15026112",
+              "list_title": "한국고용정보원_워크넷  심리검사결과",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15026112/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "한국고용정보원_워크넷  심리검사결과_20210520 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023&upprApiSvcId=000000000000000000000000000022&fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000062",
+              "org_cd": "B551904",
+              "org_nm": "한국고용정보원",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 344,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국고용정보원_워크넷  심리검사결과_20210520",
+              "title_en": "Korea Employment Information Service_Worknet Psychological Test Results_20210520",
+              "updated_at": "2025-07-21"
+            }
+          }
+        },
+        {
+          "name": "한국고용정보원_워크넷  심리검사결과_20210520 외부 링크 3",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000066&upprApiSvcId=000000000000000000000000000066&fullApiSvcId=000000000000000000000000000065%5E000000000000000000000000000068",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15026112/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 고용노동",
+              "created_at": "2018-11-01",
+              "data_format": "XML",
+              "dept_nm": "데이터기획운영팀",
+              "desc": "[심리검사 API - 심리검사결과]\r\n \r\n워크넷과 대학 연계를 통해 제공되는 4종의 대학전용 심리검사의 검사결과를 조회하여 활용할 수 있습니다. 본 정보활용 서비스 사용을 위해 대학의 기관등록이 선행되어야 합니다.\r\n\r\n 심리검사API를 이용하여 개인별 심리검사 결과를 조회할 수 있습니다.\r\n개인정보처리방침에 따라 직업심리검사 회원은 회원정책(보유기간 2년)/비회원(API등)은 보유기간 7일 이후에 개인정보가 삭제됨을 알려드리며 그 이후에는 검사이력은 조회되지 않습니다.\r\n \r\n<API 사용법>\r\n인증키,  xml 지정, 제공받은 학교코드, 학번, 심리검사코드 등을 파라미터로 받아 심리검사코드, 검사일자, 원점수, 표준점수, 백분위점수, 추천직업, 흥미코드, 적성요인, 직업선호도, 총합점수 등의 결과를 제공합니다.\r\n \r\n * 유의사항:  문자열로 입력되는 항목의 경우 공백이나 오탈자가 포함되면 검색 결과가 제대로 나오지 않을 수 있으므로 주의해야 합니다. 대부분의 파라미터는 선택적으로 입력할 수 있으며, 필요한 조건만 입력해도 조회는 가능합니다.",
+              "end_point_url": " ",
+              "guide_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiIntro.do?bbsClCd=OosccI71O3P2dBxVz5A40Q%3D%3D",
+              "id": "uddi:64e90135-26ef-44bd-aa10-d3460ecc2ce9_202410311548",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "적성,대입,워크넷,직업선호도검사,직업심리검사,흥미검사,창업적성검사,적성검사",
+              "list_id": "15026112",
+              "list_title": "한국고용정보원_워크넷  심리검사결과",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15026112/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "한국고용정보원_워크넷  심리검사결과_20210520 외부 링크 3",
+              "operation_seq": "",
+              "operation_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000066&upprApiSvcId=000000000000000000000000000066&fullApiSvcId=000000000000000000000000000065%5E000000000000000000000000000068",
+              "org_cd": "B551904",
+              "org_nm": "한국고용정보원",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 344,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국고용정보원_워크넷  심리검사결과_20210520",
+              "title_en": "Korea Employment Information Service_Worknet Psychological Test Results_20210520",
+              "updated_at": "2025-07-21"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15027228",
+      "title": "한국고용정보원_워크넷 공채속보 목록 및 상세정보",
+      "organization": "한국고용정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 3,
+      "hosts": [
+        "www.work24.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국고용정보원_워크넷 공채속보 목록 및 상세정보_20210520 외부 링크 1",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000082&upprApiSvcId=000000000000000000000000000097&fullApiSvcId=000000000000000000000000000000%5E000000000000000000000000000079",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15027228/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 고용노동",
+              "created_at": "2019-06-28",
+              "data_format": "XML",
+              "dept_nm": "데이터기획운영팀",
+              "desc": "[채용정보 API - 공채속보 및 상세정보]\r\n\r\n공채속보 API를 이용하여 빠르게 공채속보를 확인 할 수 있습니다. \r\n \r\n 워크넷의 정보 중 고용센터에서 등록되는 정보와는 별개로 기업에서 공개 채용을 통하여 진행되는 채용 정보들을 제공합니다.\r\n \r\n<API 사용법>\r\n인증키, 반환형식, 호출유형, 채용공고순번, 자기소개서제공여부, 전형단계제공여부, 모집공고제공여부 등을 파라미터로 받아,\r\n채용기업번호, 채용제목, 채용업체명, 기업구분명, 채용시작일자, 채용종료일자, 고용형태, 제출서류, 접수방법, 합격자발표일, 문의사항, 기타사항 등의 결과를 제공합니다.\r\n \r\n * 유의사항:  문자열로 입력되는 항목의 경우 공백이나 오탈자가 포함되면 검색 결과가 제대로 나오지 않을 수 있으므로 주의해야 합니다. 대부분의 파라미터는 선택적으로 입력할 수 있으며, 필요한 조건만 입력해도 조회는 가능합니다.",
+              "end_point_url": " ",
+              "guide_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiIntro.do?bbsClCd=OosccI71O3P2dBxVz5A40Q%3D%3D",
+              "id": "uddi:d47b090f-a067-4274-bb46-9ba3ed90b5d7_202410311538",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "정부지원통계,공공일자리,일모아,공채속보,공채정보,공채상세정보,공공기관,공개채용",
+              "list_id": "15027228",
+              "list_title": "한국고용정보원_워크넷 공채속보 목록 및 상세정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15027228/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "한국고용정보원_워크넷 공채속보 목록 및 상세정보_20210520 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000082&upprApiSvcId=000000000000000000000000000097&fullApiSvcId=000000000000000000000000000000%5E000000000000000000000000000079",
+              "org_cd": "B551904",
+              "org_nm": "한국고용정보원",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 134,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국고용정보원_워크넷 공채속보 목록 및 상세정보_20210520",
+              "title_en": "Korea Employment Information Service_Worknet Public Recruitment News List and Details_20210520",
+              "updated_at": "2025-07-21"
+            }
+          }
+        },
+        {
+          "name": "한국고용정보원_워크넷 공채속보 목록 및 상세정보_20210520 외부 링크 2",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000047&upprApiSvcId=000000000000000000000000000045&fullApiSvcId=000000000000000000000000000045%5E000000000000000000000000000055",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15027228/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 고용노동",
+              "created_at": "2019-06-28",
+              "data_format": "XML",
+              "dept_nm": "데이터기획운영팀",
+              "desc": "[채용정보 API - 공채속보 및 상세정보]\r\n\r\n공채속보 API를 이용하여 빠르게 공채속보를 확인 할 수 있습니다. \r\n \r\n 워크넷의 정보 중 고용센터에서 등록되는 정보와는 별개로 기업에서 공개 채용을 통하여 진행되는 채용 정보들을 제공합니다.\r\n \r\n<API 사용법>\r\n인증키, 반환형식, 호출유형, 채용공고순번, 자기소개서제공여부, 전형단계제공여부, 모집공고제공여부 등을 파라미터로 받아,\r\n채용기업번호, 채용제목, 채용업체명, 기업구분명, 채용시작일자, 채용종료일자, 고용형태, 제출서류, 접수방법, 합격자발표일, 문의사항, 기타사항 등의 결과를 제공합니다.\r\n \r\n * 유의사항:  문자열로 입력되는 항목의 경우 공백이나 오탈자가 포함되면 검색 결과가 제대로 나오지 않을 수 있으므로 주의해야 합니다. 대부분의 파라미터는 선택적으로 입력할 수 있으며, 필요한 조건만 입력해도 조회는 가능합니다.",
+              "end_point_url": " ",
+              "guide_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiIntro.do?bbsClCd=OosccI71O3P2dBxVz5A40Q%3D%3D",
+              "id": "uddi:d47b090f-a067-4274-bb46-9ba3ed90b5d7_202410311538",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "정부지원통계,공공일자리,일모아,공채속보,공채정보,공채상세정보,공공기관,공개채용",
+              "list_id": "15027228",
+              "list_title": "한국고용정보원_워크넷 공채속보 목록 및 상세정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15027228/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "한국고용정보원_워크넷 공채속보 목록 및 상세정보_20210520 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000047&upprApiSvcId=000000000000000000000000000045&fullApiSvcId=000000000000000000000000000045%5E000000000000000000000000000055",
+              "org_cd": "B551904",
+              "org_nm": "한국고용정보원",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 134,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국고용정보원_워크넷 공채속보 목록 및 상세정보_20210520",
+              "title_en": "Korea Employment Information Service_Worknet Public Recruitment News List and Details_20210520",
+              "updated_at": "2025-07-21"
+            }
+          }
+        },
+        {
+          "name": "한국고용정보원_워크넷 공채속보 목록 및 상세정보_20210520 외부 링크 3",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000054&upprApiSvcId=000000000000000000000000000045&fullApiSvcId=000000000000000000000000000045%5E000000000000000000000000000052",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15027228/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 고용노동",
+              "created_at": "2019-06-28",
+              "data_format": "XML",
+              "dept_nm": "데이터기획운영팀",
+              "desc": "[채용정보 API - 공채속보 및 상세정보]\r\n\r\n공채속보 API를 이용하여 빠르게 공채속보를 확인 할 수 있습니다. \r\n \r\n 워크넷의 정보 중 고용센터에서 등록되는 정보와는 별개로 기업에서 공개 채용을 통하여 진행되는 채용 정보들을 제공합니다.\r\n \r\n<API 사용법>\r\n인증키, 반환형식, 호출유형, 채용공고순번, 자기소개서제공여부, 전형단계제공여부, 모집공고제공여부 등을 파라미터로 받아,\r\n채용기업번호, 채용제목, 채용업체명, 기업구분명, 채용시작일자, 채용종료일자, 고용형태, 제출서류, 접수방법, 합격자발표일, 문의사항, 기타사항 등의 결과를 제공합니다.\r\n \r\n * 유의사항:  문자열로 입력되는 항목의 경우 공백이나 오탈자가 포함되면 검색 결과가 제대로 나오지 않을 수 있으므로 주의해야 합니다. 대부분의 파라미터는 선택적으로 입력할 수 있으며, 필요한 조건만 입력해도 조회는 가능합니다.",
+              "end_point_url": " ",
+              "guide_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiIntro.do?bbsClCd=OosccI71O3P2dBxVz5A40Q%3D%3D",
+              "id": "uddi:d47b090f-a067-4274-bb46-9ba3ed90b5d7_202410311538",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "정부지원통계,공공일자리,일모아,공채속보,공채정보,공채상세정보,공공기관,공개채용",
+              "list_id": "15027228",
+              "list_title": "한국고용정보원_워크넷 공채속보 목록 및 상세정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15027228/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "한국고용정보원_워크넷 공채속보 목록 및 상세정보_20210520 외부 링크 3",
+              "operation_seq": "",
+              "operation_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000054&upprApiSvcId=000000000000000000000000000045&fullApiSvcId=000000000000000000000000000045%5E000000000000000000000000000052",
+              "org_cd": "B551904",
+              "org_nm": "한국고용정보원",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 134,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국고용정보원_워크넷 공채속보 목록 및 상세정보_20210520",
+              "title_en": "Korea Employment Information Service_Worknet Public Recruitment News List and Details_20210520",
+              "updated_at": "2025-07-21"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15027423",
+      "title": "농촌진흥청_약초정보",
+      "organization": "농촌진흥청",
+      "action": "replace_empty_operations",
+      "operation_count": 3,
+      "hosts": [
+        "www.nongsaro.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "농촌진흥청_약초정보_20171211 외부 링크 1",
+          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EC%95%BD%EC%B4%88%EC%A0%95%EB%B3%B4",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15027423/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 농업·농촌",
+              "created_at": "2017-12-04",
+              "data_format": "XML",
+              "dept_nm": "데이터정보화담당관",
+              "desc": "산에는 우리가 잘 알지 못하거나 잘못 알고 있는 약초가 많아, 잘못된 정보로 채취·복용할 경우 건강에 큰 피해를 입을 수 있습니다. 농사로는 이러한 위험을 줄이기 위해 다양한 약초의 이미지와 정확한 이름, 형태적 특징, 효능, 안전한 복용법까지 상세하게 안내하고 있습니다. 누구나 쉽게 확인할 수 있는 신뢰도 높은 정보를 제공하여 혼동하기 쉬운 유사 식물 구분에도 도움을 주고, 올바른 약초 활용을 지원합니다. 농업인과 일반 국민 모두가 안전하게 약초를 이용할 수 있도록 돕는 농사로, 정확한 정보로 피해를 예방하고 건강한 삶을 지켜보세요.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:9f586429-c958-4c4c-b9c0-8d4ebcbf3279_202207010953",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "민간,약초,민간약초,복용법,약초이미지",
+              "list_id": "15027423",
+              "list_title": "농촌진흥청_약초정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15027423/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "농촌진흥청_약초정보_20171211 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EC%95%BD%EC%B4%88%EC%A0%95%EB%B3%B4",
+              "org_cd": "1390000",
+              "org_nm": "농촌진흥청",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 292,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "농촌진흥청_약초정보_20171211",
+              "title_en": "Rural Development Administration_Herbal information_20171211",
+              "updated_at": "2026-04-24"
+            }
+          }
+        },
+        {
+          "name": "농촌진흥청_약초정보_20171211 외부 링크 2",
+          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EB%86%8D%EC%82%AC%EB%A1%9C+%EC%9D%B4%EB%B2%A4%ED%8A%B8",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15027423/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 농업·농촌",
+              "created_at": "2017-12-04",
+              "data_format": "XML",
+              "dept_nm": "데이터정보화담당관",
+              "desc": "산에는 우리가 잘 알지 못하거나 잘못 알고 있는 약초가 많아, 잘못된 정보로 채취·복용할 경우 건강에 큰 피해를 입을 수 있습니다. 농사로는 이러한 위험을 줄이기 위해 다양한 약초의 이미지와 정확한 이름, 형태적 특징, 효능, 안전한 복용법까지 상세하게 안내하고 있습니다. 누구나 쉽게 확인할 수 있는 신뢰도 높은 정보를 제공하여 혼동하기 쉬운 유사 식물 구분에도 도움을 주고, 올바른 약초 활용을 지원합니다. 농업인과 일반 국민 모두가 안전하게 약초를 이용할 수 있도록 돕는 농사로, 정확한 정보로 피해를 예방하고 건강한 삶을 지켜보세요.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:9f586429-c958-4c4c-b9c0-8d4ebcbf3279_202207010953",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "민간,약초,민간약초,복용법,약초이미지",
+              "list_id": "15027423",
+              "list_title": "농촌진흥청_약초정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15027423/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "농촌진흥청_약초정보_20171211 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EB%86%8D%EC%82%AC%EB%A1%9C+%EC%9D%B4%EB%B2%A4%ED%8A%B8",
+              "org_cd": "1390000",
+              "org_nm": "농촌진흥청",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 292,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "농촌진흥청_약초정보_20171211",
+              "title_en": "Rural Development Administration_Herbal information_20171211",
+              "updated_at": "2026-04-24"
+            }
+          }
+        },
+        {
+          "name": "농촌진흥청_약초정보_20171211 외부 링크 3",
+          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EA%B3%B5%EA%B3%B5+%EB%8D%B0%EC%9D%B4%ED%84%B0",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15027423/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 농업·농촌",
+              "created_at": "2017-12-04",
+              "data_format": "XML",
+              "dept_nm": "데이터정보화담당관",
+              "desc": "산에는 우리가 잘 알지 못하거나 잘못 알고 있는 약초가 많아, 잘못된 정보로 채취·복용할 경우 건강에 큰 피해를 입을 수 있습니다. 농사로는 이러한 위험을 줄이기 위해 다양한 약초의 이미지와 정확한 이름, 형태적 특징, 효능, 안전한 복용법까지 상세하게 안내하고 있습니다. 누구나 쉽게 확인할 수 있는 신뢰도 높은 정보를 제공하여 혼동하기 쉬운 유사 식물 구분에도 도움을 주고, 올바른 약초 활용을 지원합니다. 농업인과 일반 국민 모두가 안전하게 약초를 이용할 수 있도록 돕는 농사로, 정확한 정보로 피해를 예방하고 건강한 삶을 지켜보세요.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:9f586429-c958-4c4c-b9c0-8d4ebcbf3279_202207010953",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "민간,약초,민간약초,복용법,약초이미지",
+              "list_id": "15027423",
+              "list_title": "농촌진흥청_약초정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15027423/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "농촌진흥청_약초정보_20171211 외부 링크 3",
+              "operation_seq": "",
+              "operation_url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EA%B3%B5%EA%B3%B5+%EB%8D%B0%EC%9D%B4%ED%84%B0",
+              "org_cd": "1390000",
+              "org_nm": "농촌진흥청",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 292,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "농촌진흥청_약초정보_20171211",
+              "title_en": "Rural Development Administration_Herbal information_20171211",
+              "updated_at": "2026-04-24"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15027426",
+      "title": "농촌진흥청_농가맛집 정보",
+      "organization": "농촌진흥청",
+      "action": "replace_empty_operations",
+      "operation_count": 3,
+      "hosts": [
+        "www.nongsaro.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "농촌진흥청_농가맛집 정보_20171211 외부 링크 1",
+          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EB%86%8D%EA%B0%80%EB%A7%9B%EC%A7%91",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15027426/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 농업·농촌",
+              "created_at": "2017-12-04",
+              "data_format": "XML",
+              "dept_nm": "데이터정보화담당관",
+              "desc": "농사로에서는 전국 각지의 매력적인 농가맛집을 소개하고, 주변 관광지와 볼거리 정보를 함께 제공하여 지역 상권 활성화에 기여하고 있습니다. 농가에서 직접 운영하는 맛집을 통해 신선한 지역 농산물로 만든 건강한 먹거리를 경험할 수 있으며, 여행과 미식이 결합된 특별한 체험을 즐길 수 있습니다. 또한 인근 관광 정보까지 함께 안내하여 방문객들이 보다 풍성한 여행 계획을 세울 수 있도록 돕습니다. 이를 통해 지역 농산물 소비를 촉진하고 농가 소득 증대에도 기여합니다. 지금 바로 농사로에서 농가맛집과 여행 정보를 확인하고, 맛과 즐거움이 함께하는 농촌 여행을 떠나보세요!",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:b4862053-6427-45db-8a8a-e76d58d96555_202206211341",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "농가식당,농가맛집,볼거리,관광,농사로",
+              "list_id": "15027426",
+              "list_title": "농촌진흥청_농가맛집 정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15027426/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "농촌진흥청_농가맛집 정보_20171211 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EB%86%8D%EA%B0%80%EB%A7%9B%EC%A7%91",
+              "org_cd": "1390000",
+              "org_nm": "농촌진흥청",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 506,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "농촌진흥청_농가맛집 정보_20171211",
+              "title_en": "Rural Development Administration_Farmhouse restaurant information_20171211",
+              "updated_at": "2026-04-10"
+            }
+          }
+        },
+        {
+          "name": "농촌진흥청_농가맛집 정보_20171211 외부 링크 2",
+          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EB%86%8D%EC%82%AC%EB%A1%9C+%EC%9D%B4%EB%B2%A4%ED%8A%B8",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15027426/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 농업·농촌",
+              "created_at": "2017-12-04",
+              "data_format": "XML",
+              "dept_nm": "데이터정보화담당관",
+              "desc": "농사로에서는 전국 각지의 매력적인 농가맛집을 소개하고, 주변 관광지와 볼거리 정보를 함께 제공하여 지역 상권 활성화에 기여하고 있습니다. 농가에서 직접 운영하는 맛집을 통해 신선한 지역 농산물로 만든 건강한 먹거리를 경험할 수 있으며, 여행과 미식이 결합된 특별한 체험을 즐길 수 있습니다. 또한 인근 관광 정보까지 함께 안내하여 방문객들이 보다 풍성한 여행 계획을 세울 수 있도록 돕습니다. 이를 통해 지역 농산물 소비를 촉진하고 농가 소득 증대에도 기여합니다. 지금 바로 농사로에서 농가맛집과 여행 정보를 확인하고, 맛과 즐거움이 함께하는 농촌 여행을 떠나보세요!",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:b4862053-6427-45db-8a8a-e76d58d96555_202206211341",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "농가식당,농가맛집,볼거리,관광,농사로",
+              "list_id": "15027426",
+              "list_title": "농촌진흥청_농가맛집 정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15027426/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "농촌진흥청_농가맛집 정보_20171211 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EB%86%8D%EC%82%AC%EB%A1%9C+%EC%9D%B4%EB%B2%A4%ED%8A%B8",
+              "org_cd": "1390000",
+              "org_nm": "농촌진흥청",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 506,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "농촌진흥청_농가맛집 정보_20171211",
+              "title_en": "Rural Development Administration_Farmhouse restaurant information_20171211",
+              "updated_at": "2026-04-10"
+            }
+          }
+        },
+        {
+          "name": "농촌진흥청_농가맛집 정보_20171211 외부 링크 3",
+          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EA%B3%B5%EA%B3%B5+%EB%8D%B0%EC%9D%B4%ED%84%B0",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15027426/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "농림 > 농업·농촌",
+              "created_at": "2017-12-04",
+              "data_format": "XML",
+              "dept_nm": "데이터정보화담당관",
+              "desc": "농사로에서는 전국 각지의 매력적인 농가맛집을 소개하고, 주변 관광지와 볼거리 정보를 함께 제공하여 지역 상권 활성화에 기여하고 있습니다. 농가에서 직접 운영하는 맛집을 통해 신선한 지역 농산물로 만든 건강한 먹거리를 경험할 수 있으며, 여행과 미식이 결합된 특별한 체험을 즐길 수 있습니다. 또한 인근 관광 정보까지 함께 안내하여 방문객들이 보다 풍성한 여행 계획을 세울 수 있도록 돕습니다. 이를 통해 지역 농산물 소비를 촉진하고 농가 소득 증대에도 기여합니다. 지금 바로 농사로에서 농가맛집과 여행 정보를 확인하고, 맛과 즐거움이 함께하는 농촌 여행을 떠나보세요!",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:b4862053-6427-45db-8a8a-e76d58d96555_202206211341",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "농가식당,농가맛집,볼거리,관광,농사로",
+              "list_id": "15027426",
+              "list_title": "농촌진흥청_농가맛집 정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15027426/openapi.json",
+              "new_category_cd": "OC0014",
+              "new_category_nm": "농축수산",
+              "operation_nm": "농촌진흥청_농가맛집 정보_20171211 외부 링크 3",
+              "operation_seq": "",
+              "operation_url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428&pageIndex=1&pageSize=&sLclasCode=&sText=%EA%B3%B5%EA%B3%B5+%EB%8D%B0%EC%9D%B4%ED%84%B0",
+              "org_cd": "1390000",
+              "org_nm": "농촌진흥청",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 506,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "농촌진흥청_농가맛집 정보_20171211",
+              "title_en": "Rural Development Administration_Farmhouse restaurant information_20171211",
+              "updated_at": "2026-04-10"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15029097",
+      "title": "경기도 행정사사무소 현황",
+      "organization": "경기도",
+      "action": "replace_empty_operations",
+      "operation_count": 3,
+      "hosts": [
+        "data.gg.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "행정사사무소 현황 외부 링크 1",
+          "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=G51IQOGVR4DU7PQ1JBID26789679&infSeq=3",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15029097/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "산업·통상·중소기업 > 산업·중소기업일반",
+              "created_at": "2018-04-04",
+              "data_format": "XML",
+              "dept_nm": "AI미래행정과",
+              "desc": "이 데이터는 경기도 내 행정사사무소의 운영 현황을 기준으로 정리한 자료로, 각 사무소의 명칭, 행정사 종류, 자격증 번호, 신고일자, 운영상태, 소재지 관할기관 등을 포함하고 있습니다. 행정사란 행정기관에 제출하는 서류 작성, 인허가 신청, 외국인 출입국 업무 등 다양한 행정 행위를 대행할 수 있는 자격자로, 해당 데이터는 일반행정사를 중심으로 제공됩니다. 주요 항목에는 사무소명, 행정사종류, 행정사자격증번호, 운영상태, 관리기관명과 최근 데이터 기준일자 등이 포함되어 있어, 특정 지역 내 행정사무소 분포 및 운영 실태를 파악하는 데 유용합니다. 이 데이터는 시민의 행정 서비스 접근성 분석, 행정사 자격자 수요 예측, 법률행정 대행 시장 분석 등에 활용될 수 있습니다.",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:a14ee7a1-c63d-40b4-a32d-c20eb84d56da",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "행정사,행정사무소,행정사종류,자격증,행정서비스,법률대행",
+              "list_id": "15029097",
+              "list_title": "경기도 행정사사무소 현황",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15029097/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "행정사사무소 현황 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=G51IQOGVR4DU7PQ1JBID26789679&infSeq=3",
+              "org_cd": "6410000",
+              "org_nm": "경기도",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 608,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "행정사사무소 현황",
+              "title_en": "Status of administrative offices",
+              "updated_at": "2025-09-24"
+            }
+          }
+        },
+        {
+          "name": "행정사사무소 현황 외부 링크 2",
+          "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&sortColumn=&sortDirection=&infId=7VV6IWKWGKZFH3PG0ELH19127436&infSeq=2",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15029097/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "산업·통상·중소기업 > 산업·중소기업일반",
+              "created_at": "2018-04-04",
+              "data_format": "XML",
+              "dept_nm": "AI미래행정과",
+              "desc": "이 데이터는 경기도 내 행정사사무소의 운영 현황을 기준으로 정리한 자료로, 각 사무소의 명칭, 행정사 종류, 자격증 번호, 신고일자, 운영상태, 소재지 관할기관 등을 포함하고 있습니다. 행정사란 행정기관에 제출하는 서류 작성, 인허가 신청, 외국인 출입국 업무 등 다양한 행정 행위를 대행할 수 있는 자격자로, 해당 데이터는 일반행정사를 중심으로 제공됩니다. 주요 항목에는 사무소명, 행정사종류, 행정사자격증번호, 운영상태, 관리기관명과 최근 데이터 기준일자 등이 포함되어 있어, 특정 지역 내 행정사무소 분포 및 운영 실태를 파악하는 데 유용합니다. 이 데이터는 시민의 행정 서비스 접근성 분석, 행정사 자격자 수요 예측, 법률행정 대행 시장 분석 등에 활용될 수 있습니다.",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:a14ee7a1-c63d-40b4-a32d-c20eb84d56da",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "행정사,행정사무소,행정사종류,자격증,행정서비스,법률대행",
+              "list_id": "15029097",
+              "list_title": "경기도 행정사사무소 현황",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15029097/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "행정사사무소 현황 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&sortColumn=&sortDirection=&infId=7VV6IWKWGKZFH3PG0ELH19127436&infSeq=2",
+              "org_cd": "6410000",
+              "org_nm": "경기도",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 608,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "행정사사무소 현황",
+              "title_en": "Status of administrative offices",
+              "updated_at": "2025-09-24"
+            }
+          }
+        },
+        {
+          "name": "행정사사무소 현황 외부 링크 3",
+          "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&rows=10&sortColumn=&sortDirection=&infId=T7IYJ3FOYUS7T12RWY4L14461530&infSeq=3&order=&loc=&searchWord=%EA%B5%AD%EC%A0%9C%ED%9A%8C%EC%9D%98%EA%B8%B0%ED%9A%8D%EC%97%85+%ED%98%84%ED%99%A9",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15029097/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "산업·통상·중소기업 > 산업·중소기업일반",
+              "created_at": "2018-04-04",
+              "data_format": "XML",
+              "dept_nm": "AI미래행정과",
+              "desc": "이 데이터는 경기도 내 행정사사무소의 운영 현황을 기준으로 정리한 자료로, 각 사무소의 명칭, 행정사 종류, 자격증 번호, 신고일자, 운영상태, 소재지 관할기관 등을 포함하고 있습니다. 행정사란 행정기관에 제출하는 서류 작성, 인허가 신청, 외국인 출입국 업무 등 다양한 행정 행위를 대행할 수 있는 자격자로, 해당 데이터는 일반행정사를 중심으로 제공됩니다. 주요 항목에는 사무소명, 행정사종류, 행정사자격증번호, 운영상태, 관리기관명과 최근 데이터 기준일자 등이 포함되어 있어, 특정 지역 내 행정사무소 분포 및 운영 실태를 파악하는 데 유용합니다. 이 데이터는 시민의 행정 서비스 접근성 분석, 행정사 자격자 수요 예측, 법률행정 대행 시장 분석 등에 활용될 수 있습니다.",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:a14ee7a1-c63d-40b4-a32d-c20eb84d56da",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "행정사,행정사무소,행정사종류,자격증,행정서비스,법률대행",
+              "list_id": "15029097",
+              "list_title": "경기도 행정사사무소 현황",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15029097/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "행정사사무소 현황 외부 링크 3",
+              "operation_seq": "",
+              "operation_url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1&rows=10&sortColumn=&sortDirection=&infId=T7IYJ3FOYUS7T12RWY4L14461530&infSeq=3&order=&loc=&searchWord=%EA%B5%AD%EC%A0%9C%ED%9A%8C%EC%9D%98%EA%B8%B0%ED%9A%8D%EC%97%85+%ED%98%84%ED%99%A9",
+              "org_cd": "6410000",
+              "org_nm": "경기도",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 608,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "행정사사무소 현황",
+              "title_en": "Status of administrative offices",
+              "updated_at": "2025-09-24"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15029122",
+      "title": "한국체육산업개발주식회사_올림픽공원 교육강좌정보",
+      "organization": "한국체육산업개발주식회사",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "www.culture.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "올림픽공원 평생교육원 교육정보",
+          "endpoint": "http://www.culture.go.kr/data/openapi/openapiView.do?id=398&category=E&gubun=A",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15029122/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "교육 > 교육일반",
+              "created_at": "2018-09-20",
+              "data_format": "XML",
+              "dept_nm": "디지털혁신팀",
+              "desc": "올림픽공원내에 위치하고있는 평생교육원 교육 강좌에 관한 정보데이터를 제공합니다.(강좌명, 교육일정, 교육내용 , 교육시간 등)\r\n2025년 6월 기준 63건 데이터가 제공중입니다.\r\n통키타, 드럼, 색소폰, 하모니카, 칼림바, 탭댄스, 훌라댄스 등 교육 강좌가 있으며, 초급 중급 고급 등 난이도 별로 강좌가 개설되어있습니다.\r\n음악실 예약도 가능하도록 되어있습니다.\r\n현재는 평생교육원에서는 음악연습실만 제공하고 있으며, 강습관련 등자세한 정보는 평생교육원 음악연습실로 연락을 주시기 바랍니다.",
+              "end_point_url": "",
+              "guide_url": "",
+              "id": "uddi:f56c2ac0-d10a-482d-86e8-892773a37b7a",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "올림픽공원,평생교육원,강좌정보,강좌,음악연습실",
+              "list_id": "15029122",
+              "list_title": "한국체육산업개발주식회사_올림픽공원 교육강좌정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15029122/openapi.json",
+              "new_category_cd": "OC0001",
+              "new_category_nm": "교육",
+              "operation_nm": "올림픽공원 평생교육원 교육정보",
+              "operation_seq": "",
+              "operation_url": "http://www.culture.go.kr/data/openapi/openapiView.do?id=398&category=E&gubun=A",
+              "org_cd": "B552024",
+              "org_nm": "한국체육산업개발주식회사",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 292,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "올림픽공원 평생교육원 교육정보",
+              "title_en": "Olympic Park Lifelong Education Center Education Information",
+              "updated_at": "2025-06-19"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15031945",
+      "title": "한국고용정보원_워크넷 강소기업 강소기업현장탐방기",
+      "organization": "한국고용정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 3,
+      "hosts": [
+        "www.work24.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국고용정보원_워크넷 강소기업 강소기업현장탐방기_20210520 외부 링크 1",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000042&upprApiSvcId=000000000000000000000000000092&fullApiSvcId=000000000000000000000000000038%5E000000000000000000000000000091",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15031945/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 고용노동",
+              "created_at": "2018-11-01",
+              "data_format": "XML",
+              "dept_nm": "데이터기획운영팀",
+              "desc": "[강소기업 API - 강소기업현장탐방기]\r\n\r\n고용노동부에서 선정하는 강소기업에 대해 고용노동부,한국고용정보원에서 등록하는 강소기업현장탐방기 정보를 제공합니다. 목록 및 상세 형태로 제공하고 있으며 강소기업현장탐방기는 워크넷에서도 확인이 가능합니다.\r\n \r\n강소기업현장탐방기 API를 활용하여 작지만 강한 강소기업의 진솔하고 생생한 탐방기를 구성할 수 있습니다.\r\n\r\n호출할 페이지 타입, 출력건수, 지역, 업종, 기업명 코드(선택) 등을 파라미터로 받아 총건수, 출력건수, 사업자등록번호, 기업명, 지역명, 업종명, 기업특징, 취재일 등의 결과를 제공합니다.\r\n \r\n * 유의사항:  문자열로 입력되는 항목의 경우 공백이나 오탈자가 포함되면 검색 결과가 제대로 나오지 않을 수 있으므로 주의해야 합니다. 대부분의 파라미터는 선택적으로 입력할 수 있으며, 필요한 조건만 입력해도 조회는 가능합니다.",
+              "end_point_url": " ",
+              "guide_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiIntro.do?bbsClCd=OosccI71O3P2dBxVz5A40Q%3D%3D",
+              "id": "uddi:793d673c-ebf9-4f34-9443-b721025e6862_202410311632",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "기업체험,직무체험,취업준비,강소기업,탐방기,기업현장탐방,중소기업,현장탐방기",
+              "list_id": "15031945",
+              "list_title": "한국고용정보원_워크넷 강소기업 강소기업현장탐방기",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15031945/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "한국고용정보원_워크넷 강소기업 강소기업현장탐방기_20210520 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000042&upprApiSvcId=000000000000000000000000000092&fullApiSvcId=000000000000000000000000000038%5E000000000000000000000000000091",
+              "org_cd": "B551904",
+              "org_nm": "한국고용정보원",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 30,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국고용정보원_워크넷 강소기업 강소기업현장탐방기_20210520",
+              "title_en": "Korea Employment Information Service_Worknet Small and Medium Business Small and Medium Business Field Trip_20210520",
+              "updated_at": "2025-07-21"
+            }
+          }
+        },
+        {
+          "name": "한국고용정보원_워크넷 강소기업 강소기업현장탐방기_20210520 외부 링크 2",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000044&upprApiSvcId=000000000000000000000000000038&fullApiSvcId=000000000000000000000000000038%5E000000000000000000000000000092",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15031945/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 고용노동",
+              "created_at": "2018-11-01",
+              "data_format": "XML",
+              "dept_nm": "데이터기획운영팀",
+              "desc": "[강소기업 API - 강소기업현장탐방기]\r\n\r\n고용노동부에서 선정하는 강소기업에 대해 고용노동부,한국고용정보원에서 등록하는 강소기업현장탐방기 정보를 제공합니다. 목록 및 상세 형태로 제공하고 있으며 강소기업현장탐방기는 워크넷에서도 확인이 가능합니다.\r\n \r\n강소기업현장탐방기 API를 활용하여 작지만 강한 강소기업의 진솔하고 생생한 탐방기를 구성할 수 있습니다.\r\n\r\n호출할 페이지 타입, 출력건수, 지역, 업종, 기업명 코드(선택) 등을 파라미터로 받아 총건수, 출력건수, 사업자등록번호, 기업명, 지역명, 업종명, 기업특징, 취재일 등의 결과를 제공합니다.\r\n \r\n * 유의사항:  문자열로 입력되는 항목의 경우 공백이나 오탈자가 포함되면 검색 결과가 제대로 나오지 않을 수 있으므로 주의해야 합니다. 대부분의 파라미터는 선택적으로 입력할 수 있으며, 필요한 조건만 입력해도 조회는 가능합니다.",
+              "end_point_url": " ",
+              "guide_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiIntro.do?bbsClCd=OosccI71O3P2dBxVz5A40Q%3D%3D",
+              "id": "uddi:793d673c-ebf9-4f34-9443-b721025e6862_202410311632",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "기업체험,직무체험,취업준비,강소기업,탐방기,기업현장탐방,중소기업,현장탐방기",
+              "list_id": "15031945",
+              "list_title": "한국고용정보원_워크넷 강소기업 강소기업현장탐방기",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15031945/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "한국고용정보원_워크넷 강소기업 강소기업현장탐방기_20210520 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000044&upprApiSvcId=000000000000000000000000000038&fullApiSvcId=000000000000000000000000000038%5E000000000000000000000000000092",
+              "org_cd": "B551904",
+              "org_nm": "한국고용정보원",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 30,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국고용정보원_워크넷 강소기업 강소기업현장탐방기_20210520",
+              "title_en": "Korea Employment Information Service_Worknet Small and Medium Business Small and Medium Business Field Trip_20210520",
+              "updated_at": "2025-07-21"
+            }
+          }
+        },
+        {
+          "name": "한국고용정보원_워크넷 강소기업 강소기업현장탐방기_20210520 외부 링크 3",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000039&upprApiSvcId=000000000000000000000000000039&fullApiSvcId=000000000000000000000000000038%5E000000000000000000000000000044",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15031945/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 고용노동",
+              "created_at": "2018-11-01",
+              "data_format": "XML",
+              "dept_nm": "데이터기획운영팀",
+              "desc": "[강소기업 API - 강소기업현장탐방기]\r\n\r\n고용노동부에서 선정하는 강소기업에 대해 고용노동부,한국고용정보원에서 등록하는 강소기업현장탐방기 정보를 제공합니다. 목록 및 상세 형태로 제공하고 있으며 강소기업현장탐방기는 워크넷에서도 확인이 가능합니다.\r\n \r\n강소기업현장탐방기 API를 활용하여 작지만 강한 강소기업의 진솔하고 생생한 탐방기를 구성할 수 있습니다.\r\n\r\n호출할 페이지 타입, 출력건수, 지역, 업종, 기업명 코드(선택) 등을 파라미터로 받아 총건수, 출력건수, 사업자등록번호, 기업명, 지역명, 업종명, 기업특징, 취재일 등의 결과를 제공합니다.\r\n \r\n * 유의사항:  문자열로 입력되는 항목의 경우 공백이나 오탈자가 포함되면 검색 결과가 제대로 나오지 않을 수 있으므로 주의해야 합니다. 대부분의 파라미터는 선택적으로 입력할 수 있으며, 필요한 조건만 입력해도 조회는 가능합니다.",
+              "end_point_url": " ",
+              "guide_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiIntro.do?bbsClCd=OosccI71O3P2dBxVz5A40Q%3D%3D",
+              "id": "uddi:793d673c-ebf9-4f34-9443-b721025e6862_202410311632",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "기업체험,직무체험,취업준비,강소기업,탐방기,기업현장탐방,중소기업,현장탐방기",
+              "list_id": "15031945",
+              "list_title": "한국고용정보원_워크넷 강소기업 강소기업현장탐방기",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15031945/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "한국고용정보원_워크넷 강소기업 강소기업현장탐방기_20210520 외부 링크 3",
+              "operation_seq": "",
+              "operation_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000039&upprApiSvcId=000000000000000000000000000039&fullApiSvcId=000000000000000000000000000038%5E000000000000000000000000000044",
+              "org_cd": "B551904",
+              "org_nm": "한국고용정보원",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 30,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국고용정보원_워크넷 강소기업 강소기업현장탐방기_20210520",
+              "title_en": "Korea Employment Information Service_Worknet Small and Medium Business Small and Medium Business Field Trip_20210520",
+              "updated_at": "2025-07-21"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15031946",
+      "title": "한국고용정보원_워크넷 강소기업 청년강소기업체험",
+      "organization": "한국고용정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 3,
+      "hosts": [
+        "www.work24.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국고용정보원_워크넷 강소기업 청년강소기업체험_20210520 외부 링크 1",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000044&upprApiSvcId=000000000000000000000000000038&fullApiSvcId=000000000000000000000000000038%5E000000000000000000000000000092",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15031946/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 고용노동",
+              "created_at": "2018-11-01",
+              "data_format": "XML",
+              "dept_nm": "데이터기획운영팀",
+              "desc": "[강소기업 API - 청년강소기업체험]\r\n\r\n고용노동부에서 제공하는 재학생직무체험 및 중소기업 탐방 프로그램인 청년강소기업체험정보를 제공합니다. 목록 및 상세 형태로 제공하고 있으며 일경험프로그램은 워크넷에서도 확인이 가능합니다.\r\n\r\n청년강소기업체험 API를 이용하여 다채로운 기관의 청년연수정보를 한눈에 확인할 수 있습니다.\r\n\r\n<API 사용법>\r\n호출할 페이지 타입, 출력건수, 근무지역코드, 직종코드, 검색할 등록일자의 기간, 연수기간조회 시작일자 및 종료일자, 사업자명, 운영기관명 등을 파라미터로 받아 총건수, 기본값 1(최대 1000 검색의 시작위치를 지정)., 출력건수, 구인인증번호, 운영기관명, 강소기업 여부(Y), 사업장명, 모집직종, 연수지역, 선발인원, 모집인원, 연수기간 시작일, 연수기간 종료일, 등록일 등의 결과를 제공합니다.\r\n \r\n * 유의사항:  문자열로 입력되는 항목의 경우 공백이나 오탈자가 포함되면 검색 결과가 제대로 나오지 않을 수 있으므로 주의해야 합니다. 대부분의 파라미터는 선택적으로 입력할 수 있으며, 필요한 조건만 입력해도 조회는 가능합니다.",
+              "end_point_url": " ",
+              "guide_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiIntro.do?bbsClCd=OosccI71O3P2dBxVz5A40Q%3D%3D",
+              "id": "uddi:5ca61f41-86e1-4c30-a2fc-db5a49e6926c_202410311633",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "기업체험,직무체험,취업준비,강소기업,청년취업,청년테험,재학생직무체험,중소기업탐방",
+              "list_id": "15031946",
+              "list_title": "한국고용정보원_워크넷 강소기업 청년강소기업체험",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15031946/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "한국고용정보원_워크넷 강소기업 청년강소기업체험_20210520 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000044&upprApiSvcId=000000000000000000000000000038&fullApiSvcId=000000000000000000000000000038%5E000000000000000000000000000092",
+              "org_cd": "B551904",
+              "org_nm": "한국고용정보원",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 61,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국고용정보원_워크넷 강소기업 청년강소기업체험_20210520",
+              "title_en": "Korea Employment Information Service_Worknet Small and Medium Business Youth Small and Medium Business Experience_20210520",
+              "updated_at": "2025-07-21"
+            }
+          }
+        },
+        {
+          "name": "한국고용정보원_워크넷 강소기업 청년강소기업체험_20210520 외부 링크 2",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000042&upprApiSvcId=000000000000000000000000000092&fullApiSvcId=000000000000000000000000000038%5E000000000000000000000000000091",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15031946/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 고용노동",
+              "created_at": "2018-11-01",
+              "data_format": "XML",
+              "dept_nm": "데이터기획운영팀",
+              "desc": "[강소기업 API - 청년강소기업체험]\r\n\r\n고용노동부에서 제공하는 재학생직무체험 및 중소기업 탐방 프로그램인 청년강소기업체험정보를 제공합니다. 목록 및 상세 형태로 제공하고 있으며 일경험프로그램은 워크넷에서도 확인이 가능합니다.\r\n\r\n청년강소기업체험 API를 이용하여 다채로운 기관의 청년연수정보를 한눈에 확인할 수 있습니다.\r\n\r\n<API 사용법>\r\n호출할 페이지 타입, 출력건수, 근무지역코드, 직종코드, 검색할 등록일자의 기간, 연수기간조회 시작일자 및 종료일자, 사업자명, 운영기관명 등을 파라미터로 받아 총건수, 기본값 1(최대 1000 검색의 시작위치를 지정)., 출력건수, 구인인증번호, 운영기관명, 강소기업 여부(Y), 사업장명, 모집직종, 연수지역, 선발인원, 모집인원, 연수기간 시작일, 연수기간 종료일, 등록일 등의 결과를 제공합니다.\r\n \r\n * 유의사항:  문자열로 입력되는 항목의 경우 공백이나 오탈자가 포함되면 검색 결과가 제대로 나오지 않을 수 있으므로 주의해야 합니다. 대부분의 파라미터는 선택적으로 입력할 수 있으며, 필요한 조건만 입력해도 조회는 가능합니다.",
+              "end_point_url": " ",
+              "guide_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiIntro.do?bbsClCd=OosccI71O3P2dBxVz5A40Q%3D%3D",
+              "id": "uddi:5ca61f41-86e1-4c30-a2fc-db5a49e6926c_202410311633",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "기업체험,직무체험,취업준비,강소기업,청년취업,청년테험,재학생직무체험,중소기업탐방",
+              "list_id": "15031946",
+              "list_title": "한국고용정보원_워크넷 강소기업 청년강소기업체험",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15031946/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "한국고용정보원_워크넷 강소기업 청년강소기업체험_20210520 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000042&upprApiSvcId=000000000000000000000000000092&fullApiSvcId=000000000000000000000000000038%5E000000000000000000000000000091",
+              "org_cd": "B551904",
+              "org_nm": "한국고용정보원",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 61,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국고용정보원_워크넷 강소기업 청년강소기업체험_20210520",
+              "title_en": "Korea Employment Information Service_Worknet Small and Medium Business Youth Small and Medium Business Experience_20210520",
+              "updated_at": "2025-07-21"
+            }
+          }
+        },
+        {
+          "name": "한국고용정보원_워크넷 강소기업 청년강소기업체험_20210520 외부 링크 3",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000039&upprApiSvcId=000000000000000000000000000039&fullApiSvcId=000000000000000000000000000038%5E000000000000000000000000000044",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15031946/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 고용노동",
+              "created_at": "2018-11-01",
+              "data_format": "XML",
+              "dept_nm": "데이터기획운영팀",
+              "desc": "[강소기업 API - 청년강소기업체험]\r\n\r\n고용노동부에서 제공하는 재학생직무체험 및 중소기업 탐방 프로그램인 청년강소기업체험정보를 제공합니다. 목록 및 상세 형태로 제공하고 있으며 일경험프로그램은 워크넷에서도 확인이 가능합니다.\r\n\r\n청년강소기업체험 API를 이용하여 다채로운 기관의 청년연수정보를 한눈에 확인할 수 있습니다.\r\n\r\n<API 사용법>\r\n호출할 페이지 타입, 출력건수, 근무지역코드, 직종코드, 검색할 등록일자의 기간, 연수기간조회 시작일자 및 종료일자, 사업자명, 운영기관명 등을 파라미터로 받아 총건수, 기본값 1(최대 1000 검색의 시작위치를 지정)., 출력건수, 구인인증번호, 운영기관명, 강소기업 여부(Y), 사업장명, 모집직종, 연수지역, 선발인원, 모집인원, 연수기간 시작일, 연수기간 종료일, 등록일 등의 결과를 제공합니다.\r\n \r\n * 유의사항:  문자열로 입력되는 항목의 경우 공백이나 오탈자가 포함되면 검색 결과가 제대로 나오지 않을 수 있으므로 주의해야 합니다. 대부분의 파라미터는 선택적으로 입력할 수 있으며, 필요한 조건만 입력해도 조회는 가능합니다.",
+              "end_point_url": " ",
+              "guide_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiIntro.do?bbsClCd=OosccI71O3P2dBxVz5A40Q%3D%3D",
+              "id": "uddi:5ca61f41-86e1-4c30-a2fc-db5a49e6926c_202410311633",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "기업체험,직무체험,취업준비,강소기업,청년취업,청년테험,재학생직무체험,중소기업탐방",
+              "list_id": "15031946",
+              "list_title": "한국고용정보원_워크넷 강소기업 청년강소기업체험",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15031946/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "한국고용정보원_워크넷 강소기업 청년강소기업체험_20210520 외부 링크 3",
+              "operation_seq": "",
+              "operation_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000039&upprApiSvcId=000000000000000000000000000039&fullApiSvcId=000000000000000000000000000038%5E000000000000000000000000000044",
+              "org_cd": "B551904",
+              "org_nm": "한국고용정보원",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 61,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국고용정보원_워크넷 강소기업 청년강소기업체험_20210520",
+              "title_en": "Korea Employment Information Service_Worknet Small and Medium Business Youth Small and Medium Business Experience_20210520",
+              "updated_at": "2025-07-21"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15031947",
+      "title": "한국고용정보원_워크넷 강소기업 청년친화강소기업",
+      "organization": "한국고용정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 3,
+      "hosts": [
+        "www.work24.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국고용정보원_워크넷 강소기업 청년친화강소기업_20210520 외부 링크 1",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000039&upprApiSvcId=000000000000000000000000000039&fullApiSvcId=000000000000000000000000000038%5E000000000000000000000000000044",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15031947/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 고용노동",
+              "created_at": "2018-11-01",
+              "data_format": "XML",
+              "dept_nm": "데이터기획운영팀",
+              "desc": "[강소기업 API - 청년친화강소기업]\r\n\r\n고용노동부에서 선정한 청년에게 추천하는 작지만 강한기업 '청년친화강소기업' 입니다. \r\n\r\n<API 사용법>\r\n기본값 1, 출력건수 등을 파라미터로 받아 총건수, 출력건수, 기업명, 사업자등록번호, 대표자, 업종코드(상), 업종명(상), 업종코드(중), 업종명(중), 지역코드, 지역명, 상시근로자 수 등의 결과를 제공합니다.\r\n \r\n * 유의사항:  문자열로 입력되는 항목의 경우 공백이나 오탈자가 포함되면 검색 결과가 제대로 나오지 않을 수 있으므로 주의해야 합니다. 대부분의 파라미터는 선택적으로 입력할 수 있으며, 필요한 조건만 입력해도 조회는 가능합니다.",
+              "end_point_url": " ",
+              "guide_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiIntro.do?bbsClCd=OosccI71O3P2dBxVz5A40Q%3D%3D",
+              "id": "uddi:b11f8974-4287-4147-acfb-dc4741c75cbb_202410311633",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "중소기업취업,취업정보,청년채용,청년친화강소기업,청년취업,강소기업,청년일자리",
+              "list_id": "15031947",
+              "list_title": "한국고용정보원_워크넷 강소기업 청년친화강소기업",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15031947/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "한국고용정보원_워크넷 강소기업 청년친화강소기업_20210520 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000039&upprApiSvcId=000000000000000000000000000039&fullApiSvcId=000000000000000000000000000038%5E000000000000000000000000000044",
+              "org_cd": "B551904",
+              "org_nm": "한국고용정보원",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 264,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국고용정보원_워크넷 강소기업 청년친화강소기업_20210520",
+              "title_en": "Korea Employment Information Service_Worknet Small and Medium Enterprises Youth-Friendly Small and Medium Enterprises_20210520",
+              "updated_at": "2025-07-21"
+            }
+          }
+        },
+        {
+          "name": "한국고용정보원_워크넷 강소기업 청년친화강소기업_20210520 외부 링크 2",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000044&upprApiSvcId=000000000000000000000000000038&fullApiSvcId=000000000000000000000000000038%5E000000000000000000000000000092",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15031947/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 고용노동",
+              "created_at": "2018-11-01",
+              "data_format": "XML",
+              "dept_nm": "데이터기획운영팀",
+              "desc": "[강소기업 API - 청년친화강소기업]\r\n\r\n고용노동부에서 선정한 청년에게 추천하는 작지만 강한기업 '청년친화강소기업' 입니다. \r\n\r\n<API 사용법>\r\n기본값 1, 출력건수 등을 파라미터로 받아 총건수, 출력건수, 기업명, 사업자등록번호, 대표자, 업종코드(상), 업종명(상), 업종코드(중), 업종명(중), 지역코드, 지역명, 상시근로자 수 등의 결과를 제공합니다.\r\n \r\n * 유의사항:  문자열로 입력되는 항목의 경우 공백이나 오탈자가 포함되면 검색 결과가 제대로 나오지 않을 수 있으므로 주의해야 합니다. 대부분의 파라미터는 선택적으로 입력할 수 있으며, 필요한 조건만 입력해도 조회는 가능합니다.",
+              "end_point_url": " ",
+              "guide_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiIntro.do?bbsClCd=OosccI71O3P2dBxVz5A40Q%3D%3D",
+              "id": "uddi:b11f8974-4287-4147-acfb-dc4741c75cbb_202410311633",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "중소기업취업,취업정보,청년채용,청년친화강소기업,청년취업,강소기업,청년일자리",
+              "list_id": "15031947",
+              "list_title": "한국고용정보원_워크넷 강소기업 청년친화강소기업",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15031947/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "한국고용정보원_워크넷 강소기업 청년친화강소기업_20210520 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000044&upprApiSvcId=000000000000000000000000000038&fullApiSvcId=000000000000000000000000000038%5E000000000000000000000000000092",
+              "org_cd": "B551904",
+              "org_nm": "한국고용정보원",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 264,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국고용정보원_워크넷 강소기업 청년친화강소기업_20210520",
+              "title_en": "Korea Employment Information Service_Worknet Small and Medium Enterprises Youth-Friendly Small and Medium Enterprises_20210520",
+              "updated_at": "2025-07-21"
+            }
+          }
+        },
+        {
+          "name": "한국고용정보원_워크넷 강소기업 청년친화강소기업_20210520 외부 링크 3",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000040&upprApiSvcId=000000000000000000000000000091&fullApiSvcId=000000000000000000000000000038%5E000000000000000000000000000039",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15031947/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 고용노동",
+              "created_at": "2018-11-01",
+              "data_format": "XML",
+              "dept_nm": "데이터기획운영팀",
+              "desc": "[강소기업 API - 청년친화강소기업]\r\n\r\n고용노동부에서 선정한 청년에게 추천하는 작지만 강한기업 '청년친화강소기업' 입니다. \r\n\r\n<API 사용법>\r\n기본값 1, 출력건수 등을 파라미터로 받아 총건수, 출력건수, 기업명, 사업자등록번호, 대표자, 업종코드(상), 업종명(상), 업종코드(중), 업종명(중), 지역코드, 지역명, 상시근로자 수 등의 결과를 제공합니다.\r\n \r\n * 유의사항:  문자열로 입력되는 항목의 경우 공백이나 오탈자가 포함되면 검색 결과가 제대로 나오지 않을 수 있으므로 주의해야 합니다. 대부분의 파라미터는 선택적으로 입력할 수 있으며, 필요한 조건만 입력해도 조회는 가능합니다.",
+              "end_point_url": " ",
+              "guide_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiIntro.do?bbsClCd=OosccI71O3P2dBxVz5A40Q%3D%3D",
+              "id": "uddi:b11f8974-4287-4147-acfb-dc4741c75cbb_202410311633",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "중소기업취업,취업정보,청년채용,청년친화강소기업,청년취업,강소기업,청년일자리",
+              "list_id": "15031947",
+              "list_title": "한국고용정보원_워크넷 강소기업 청년친화강소기업",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15031947/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "한국고용정보원_워크넷 강소기업 청년친화강소기업_20210520 외부 링크 3",
+              "operation_seq": "",
+              "operation_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000040&upprApiSvcId=000000000000000000000000000091&fullApiSvcId=000000000000000000000000000038%5E000000000000000000000000000039",
+              "org_cd": "B551904",
+              "org_nm": "한국고용정보원",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 264,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국고용정보원_워크넷 강소기업 청년친화강소기업_20210520",
+              "title_en": "Korea Employment Information Service_Worknet Small and Medium Enterprises Youth-Friendly Small and Medium Enterprises_20210520",
+              "updated_at": "2025-07-21"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15031951",
+      "title": "한국고용정보원_워크넷 공채속보 공채기업목록 및 상세정보",
+      "organization": "한국고용정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 3,
+      "hosts": [
+        "www.work24.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국고용정보원_워크넷 공채속보 공채기업목록 및 상세정보_20210520 외부 링크 1",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000080&upprApiSvcId=000000000000000000000000000079&fullApiSvcId=000000000000000000000000000000%5E000000000000000000000000000097",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15031951/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 고용노동",
+              "created_at": "2018-11-01",
+              "data_format": "XML",
+              "dept_nm": "데이터기획운영팀",
+              "desc": "[채용정보 API - 공채기업목록 및 상세정보]\r\n\r\n공채기업정보 API를 이용하여 보다 정확한 공채기업정보를 확인 할 수 있습니다.\r\n\r\n워크넷에서 제공하는 공채속보의 기업정보를 서비스로 제공합니다. 목록 및 상세 형태로 제공하고 있으며 공채기업의 목록정보는 워크넷에서도 확인이 가능합니다.\r\n\r\n<공채기업목록 API 사용법>\r\n인증키, 호출할 페이지 타입, xml 지정, 검색 시작위치, 출력건수, 기업 구분코드(대기업, 공기업, 공공기관, 중견기업, 외국계기업), 등록일, 회사명 등을 파라미터로 받아 총건수, 기본값 1, 출력건수, 채용기업번호, 회사명, 기업구분명, 사업자등록번호, 좌표:위도, 좌표:경도, 채용기업로고, 기업소개요약, 기업소개상세, 홈페이지, 주요사업 등의 결과를 제공합니다.\r\n\r\n<공채기업 상세정보 API 사용법>\r\n인증키, 호출할 페이지 타입, xml 지정, 채용기업번호 등을 파라미터로 받아 채용기업번호, 회사명, 기업구분명, 로고, 홈페이지, 사업자등록번호, 좌표:위도, 좌표:경도, 주요사업, 기업소개 요약, 기업소개 상세, 카테고리, 복리후생내용, 연혁년도, 연혁월, 연혁내용, 인재상키워드, 인재상내용 등의 결과를 제공합니다.\r\n \r\n \r\n * 유의사항:  문자열로 입력되는 항목의 경우 공백이나 오탈자가 포함되면 검색 결과가 제대로 나오지 않을 수 있으므로 주의해야 합니다. 대부분의 파라미터는 선택적으로 입력할 수 있으며, 필요한 조건만 입력해도 조회는 가능합니다.",
+              "end_point_url": " ",
+              "guide_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiIntro.do?bbsClCd=OosccI71O3P2dBxVz5A40Q%3D%3D",
+              "id": "uddi:5c9b4079-0fdf-47d2-9815-8c82f78b556b_202410311637",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "채용,취업,공고,공채기업,기업목록,공채속보,공채공고,공공기관",
+              "list_id": "15031951",
+              "list_title": "한국고용정보원_워크넷 공채속보 공채기업목록 및 상세정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15031951/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "한국고용정보원_워크넷 공채속보 공채기업목록 및 상세정보_20210520 외부 링크 1",
+              "operation_seq": "",
+              "operation_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000080&upprApiSvcId=000000000000000000000000000079&fullApiSvcId=000000000000000000000000000000%5E000000000000000000000000000097",
+              "org_cd": "B551904",
+              "org_nm": "한국고용정보원",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 272,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국고용정보원_워크넷 공채속보 공채기업목록 및 상세정보_20210520",
+              "title_en": "Korea Employment Information Service_Worknet Public Recruitment News Public Recruitment Company List and Detailed Information_20210520",
+              "updated_at": "2025-07-21"
+            }
+          }
+        },
+        {
+          "name": "한국고용정보원_워크넷 공채속보 공채기업목록 및 상세정보_20210520 외부 링크 2",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000082&upprApiSvcId=000000000000000000000000000097&fullApiSvcId=000000000000000000000000000000%5E000000000000000000000000000079",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15031951/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 고용노동",
+              "created_at": "2018-11-01",
+              "data_format": "XML",
+              "dept_nm": "데이터기획운영팀",
+              "desc": "[채용정보 API - 공채기업목록 및 상세정보]\r\n\r\n공채기업정보 API를 이용하여 보다 정확한 공채기업정보를 확인 할 수 있습니다.\r\n\r\n워크넷에서 제공하는 공채속보의 기업정보를 서비스로 제공합니다. 목록 및 상세 형태로 제공하고 있으며 공채기업의 목록정보는 워크넷에서도 확인이 가능합니다.\r\n\r\n<공채기업목록 API 사용법>\r\n인증키, 호출할 페이지 타입, xml 지정, 검색 시작위치, 출력건수, 기업 구분코드(대기업, 공기업, 공공기관, 중견기업, 외국계기업), 등록일, 회사명 등을 파라미터로 받아 총건수, 기본값 1, 출력건수, 채용기업번호, 회사명, 기업구분명, 사업자등록번호, 좌표:위도, 좌표:경도, 채용기업로고, 기업소개요약, 기업소개상세, 홈페이지, 주요사업 등의 결과를 제공합니다.\r\n\r\n<공채기업 상세정보 API 사용법>\r\n인증키, 호출할 페이지 타입, xml 지정, 채용기업번호 등을 파라미터로 받아 채용기업번호, 회사명, 기업구분명, 로고, 홈페이지, 사업자등록번호, 좌표:위도, 좌표:경도, 주요사업, 기업소개 요약, 기업소개 상세, 카테고리, 복리후생내용, 연혁년도, 연혁월, 연혁내용, 인재상키워드, 인재상내용 등의 결과를 제공합니다.\r\n \r\n \r\n * 유의사항:  문자열로 입력되는 항목의 경우 공백이나 오탈자가 포함되면 검색 결과가 제대로 나오지 않을 수 있으므로 주의해야 합니다. 대부분의 파라미터는 선택적으로 입력할 수 있으며, 필요한 조건만 입력해도 조회는 가능합니다.",
+              "end_point_url": " ",
+              "guide_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiIntro.do?bbsClCd=OosccI71O3P2dBxVz5A40Q%3D%3D",
+              "id": "uddi:5c9b4079-0fdf-47d2-9815-8c82f78b556b_202410311637",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "채용,취업,공고,공채기업,기업목록,공채속보,공채공고,공공기관",
+              "list_id": "15031951",
+              "list_title": "한국고용정보원_워크넷 공채속보 공채기업목록 및 상세정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15031951/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "한국고용정보원_워크넷 공채속보 공채기업목록 및 상세정보_20210520 외부 링크 2",
+              "operation_seq": "",
+              "operation_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000082&upprApiSvcId=000000000000000000000000000097&fullApiSvcId=000000000000000000000000000000%5E000000000000000000000000000079",
+              "org_cd": "B551904",
+              "org_nm": "한국고용정보원",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 272,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국고용정보원_워크넷 공채속보 공채기업목록 및 상세정보_20210520",
+              "title_en": "Korea Employment Information Service_Worknet Public Recruitment News Public Recruitment Company List and Detailed Information_20210520",
+              "updated_at": "2025-07-21"
+            }
+          }
+        },
+        {
+          "name": "한국고용정보원_워크넷 공채속보 공채기업목록 및 상세정보_20210520 외부 링크 3",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023&upprApiSvcId=000000000000000000000000000022&fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000062",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15031951/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 고용노동",
+              "created_at": "2018-11-01",
+              "data_format": "XML",
+              "dept_nm": "데이터기획운영팀",
+              "desc": "[채용정보 API - 공채기업목록 및 상세정보]\r\n\r\n공채기업정보 API를 이용하여 보다 정확한 공채기업정보를 확인 할 수 있습니다.\r\n\r\n워크넷에서 제공하는 공채속보의 기업정보를 서비스로 제공합니다. 목록 및 상세 형태로 제공하고 있으며 공채기업의 목록정보는 워크넷에서도 확인이 가능합니다.\r\n\r\n<공채기업목록 API 사용법>\r\n인증키, 호출할 페이지 타입, xml 지정, 검색 시작위치, 출력건수, 기업 구분코드(대기업, 공기업, 공공기관, 중견기업, 외국계기업), 등록일, 회사명 등을 파라미터로 받아 총건수, 기본값 1, 출력건수, 채용기업번호, 회사명, 기업구분명, 사업자등록번호, 좌표:위도, 좌표:경도, 채용기업로고, 기업소개요약, 기업소개상세, 홈페이지, 주요사업 등의 결과를 제공합니다.\r\n\r\n<공채기업 상세정보 API 사용법>\r\n인증키, 호출할 페이지 타입, xml 지정, 채용기업번호 등을 파라미터로 받아 채용기업번호, 회사명, 기업구분명, 로고, 홈페이지, 사업자등록번호, 좌표:위도, 좌표:경도, 주요사업, 기업소개 요약, 기업소개 상세, 카테고리, 복리후생내용, 연혁년도, 연혁월, 연혁내용, 인재상키워드, 인재상내용 등의 결과를 제공합니다.\r\n \r\n \r\n * 유의사항:  문자열로 입력되는 항목의 경우 공백이나 오탈자가 포함되면 검색 결과가 제대로 나오지 않을 수 있으므로 주의해야 합니다. 대부분의 파라미터는 선택적으로 입력할 수 있으며, 필요한 조건만 입력해도 조회는 가능합니다.",
+              "end_point_url": " ",
+              "guide_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiIntro.do?bbsClCd=OosccI71O3P2dBxVz5A40Q%3D%3D",
+              "id": "uddi:5c9b4079-0fdf-47d2-9815-8c82f78b556b_202410311637",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "채용,취업,공고,공채기업,기업목록,공채속보,공채공고,공공기관",
+              "list_id": "15031951",
+              "list_title": "한국고용정보원_워크넷 공채속보 공채기업목록 및 상세정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15031951/openapi.json",
+              "new_category_cd": "OC0005",
+              "new_category_nm": "산업고용",
+              "operation_nm": "한국고용정보원_워크넷 공채속보 공채기업목록 및 상세정보_20210520 외부 링크 3",
+              "operation_seq": "",
+              "operation_url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023&upprApiSvcId=000000000000000000000000000022&fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000062",
+              "org_cd": "B551904",
+              "org_nm": "한국고용정보원",
+              "ownership_grounds": "",
+              "register_status": "변경승인",
+              "request_cnt": 272,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국고용정보원_워크넷 공채속보 공채기업목록 및 상세정보_20210520",
+              "title_en": "Korea Employment Information Service_Worknet Public Recruitment News Public Recruitment Company List and Detailed Information_20210520",
+              "updated_at": "2025-07-21"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "skipped": [
+    {
+      "dataset_id": "15011425",
+      "title": "경기도 공중화장실 현황",
+      "organization": "경기도",
+      "operation_count": 2,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "data.gm.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15011457",
+      "title": "주택도시보증공사_분양보증현황(지역)",
+      "organization": "주택도시보증공사",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.khug.or.kr"
+      ]
+    },
+    {
+      "dataset_id": "15012530",
+      "title": "주택도시보증공사_월별 집합건물(아파트/상가) 사업장 공정율 현황",
+      "organization": "주택도시보증공사",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.khug.or.kr"
+      ]
+    },
+    {
+      "dataset_id": "15012716",
+      "title": "한국항공우주연구원_우수기술",
+      "organization": "한국항공우주연구원",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.kari.re.kr"
+      ]
+    },
+    {
+      "dataset_id": "15012717",
+      "title": "한국항공우주연구원_특허 기술",
+      "organization": "한국항공우주연구원",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.kari.re.kr"
+      ]
+    },
+    {
+      "dataset_id": "15013060",
+      "title": "국방부 병사 보급기준 정보",
+      "organization": "국방부",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "opendata.mnd.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15013068",
+      "title": "군 복지시설 주변 관광지 정보",
+      "organization": "국방부",
+      "operation_count": 2,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "opendata.mnd.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15013070",
+      "title": "국방부_TMO(여행장병 안내소) 정보",
+      "organization": "국방부",
+      "operation_count": 1,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "opendata.mnd.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15013382",
+      "title": "한국문학번역원_KLWAVE_한국문학도서 작품 발췌본 (Lines : Fiction)",
+      "organization": "한국문학번역원",
+      "operation_count": 1,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.ltikorea.or.kr"
+      ]
+    },
+    {
+      "dataset_id": "15013677",
+      "title": "경제인문사회연구회 연구정보",
+      "organization": "경제인문사회연구회",
+      "operation_count": 1,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.nkis.re.kr"
+      ]
+    },
+    {
+      "dataset_id": "15013679",
+      "title": "인천광역시 관광사업체 정보",
+      "organization": "인천광역시",
+      "operation_count": 2,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "itour.incheon.go.kr",
+        "www.gimhae.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15014378",
+      "title": "경상남도 창녕군_날씨정보",
+      "organization": "경상남도 창녕군",
+      "operation_count": 1,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.cng.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15014379",
+      "title": "경상남도 창녕군_교육정보",
+      "organization": "경상남도 창녕군",
+      "operation_count": 1,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.cng.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15014380",
+      "title": "경상남도 창녕군_행사정보",
+      "organization": "경상남도 창녕군",
+      "operation_count": 2,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.cng.go.kr",
+        "www.gimhae.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15014461",
+      "title": "경기도 이천시_물가동향",
+      "organization": "경기도 이천시",
+      "operation_count": 1,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.icheon.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15014462",
+      "title": "경기도 이천시_기업현황",
+      "organization": "경기도 이천시",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.icheon.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15014526",
+      "title": "대구광역시_기간제 및 타기관 채용정보",
+      "organization": "대구광역시",
+      "operation_count": 2,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.daegu.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15014832",
+      "title": "한국산업기술기획평가원_지역균형발전 지원기관 정보",
+      "organization": "한국산업기술기획평가원",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.nabis.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15015052",
+      "title": "국토교통부_골프장현황도",
+      "organization": "국토교통부",
+      "operation_count": 2,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.vworld.kr"
+      ]
+    },
+    {
+      "dataset_id": "15015627",
+      "title": "국가유산청 국립문화유산연구원_향교건축",
+      "organization": "국가유산청 국립문화유산연구원",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "portal.nrich.go.kr",
+        "www.nrich.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15015632",
+      "title": "국가유산청 국립문화유산연구원_괘불 국가지정목록",
+      "organization": "국가유산청 국립문화유산연구원",
+      "operation_count": 2,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "portal.nrich.go.kr",
+        "www.nrich.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15015633",
+      "title": "국가유산청 국립문화유산연구원_금석문 검색",
+      "organization": "국가유산청 국립문화유산연구원",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "portal.nrich.go.kr",
+        "www.nrich.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15015634",
+      "title": "국가유산청 국립문화유산연구원_석탑 원형기록화 3D데이터",
+      "organization": "국가유산청 국립문화유산연구원",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "portal.nrich.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15015637",
+      "title": "국가유산청 국립문화유산연구원_한국고고학사전",
+      "organization": "국가유산청 국립문화유산연구원",
+      "operation_count": 2,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "portal.nrich.go.kr",
+        "www.nrich.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15015644",
+      "title": "국가유산청 국립문화유산연구원_한국의 전통문양",
+      "organization": "국가유산청 국립문화유산연구원",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "portal.nrich.go.kr",
+        "www.nrich.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15015645",
+      "title": "국가유산청 국립문화유산연구원_고문헌(미술분야)",
+      "organization": "국가유산청 국립문화유산연구원",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "portal.nrich.go.kr",
+        "www.nrich.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15015647",
+      "title": "국가유산청 국립문화유산연구원_수리공사연표",
+      "organization": "국가유산청 국립문화유산연구원",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "portal.nrich.go.kr",
+        "www.nrich.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15015658",
+      "title": "국가유산청 국립문화유산연구원_석조문화유산 보존관리",
+      "organization": "국가유산청 국립문화유산연구원",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "portal.nrich.go.kr",
+        "www.nrich.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15015667",
+      "title": "국가유산청 국립문화유산연구원_조선고적도보",
+      "organization": "국가유산청 국립문화유산연구원",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "portal.nrich.go.kr",
+        "www.nrich.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15015669",
+      "title": "국가유산청 국립문화유산연구원_일제강점기(문헌목록)",
+      "organization": "국가유산청 국립문화유산연구원",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "portal.nrich.go.kr",
+        "www.nrich.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15015671",
+      "title": "국가유산청 국립문화유산연구원_고구려 벽화고분 유적",
+      "organization": "국가유산청 국립문화유산연구원",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "portal.nrich.go.kr",
+        "www.nrich.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15015672",
+      "title": "국가유산청 국립문화유산연구원_개성의 문화유적",
+      "organization": "국가유산청 국립문화유산연구원",
+      "operation_count": 2,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "portal.nrich.go.kr",
+        "www.nrich.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15016629",
+      "title": "서울특별시성동구도시관리공단_거주자우선주차장 현황",
+      "organization": "서울특별시성동구도시관리공단",
+      "operation_count": 1,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "parking.happysd.or.kr"
+      ]
+    },
+    {
+      "dataset_id": "15019347",
+      "title": "문화체육관광부 국립국어원_개방형 사전(우리말샘)",
+      "organization": "문화체육관광부 국립국어원",
+      "operation_count": 2,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "opendict.korean.go.kr",
+        "stdict.korean.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15020786",
+      "title": "한국교육학술정보원_유치원 공시정보",
+      "organization": "한국교육학술정보원",
+      "operation_count": 1,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "e-childschoolinfo.moe.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15020854",
+      "title": "한국방송통신전파진흥원_라디오 채널 정보",
+      "organization": "한국방송통신전파진흥원",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "spectrummap.kr"
+      ]
+    },
+    {
+      "dataset_id": "15020966",
+      "title": "한국국토정보공사_LX맵서비스",
+      "organization": "한국국토정보공사",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.vworld.kr"
+      ]
+    },
+    {
+      "dataset_id": "15021230",
+      "title": "국가데이터처_SGIS(통계지리정보)",
+      "organization": "국가데이터처",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "sgis.kostat.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15021305",
+      "title": "대전광역시 행정지도정보",
+      "organization": "대전광역시",
+      "operation_count": 2,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "bigdata.daejeon.go.kr",
+        "gis.daejeon.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15021448",
+      "title": "기후에너지환경부 한강홍수통제소_용수관련정보",
+      "organization": "기후에너지환경부 한강홍수통제소",
+      "operation_count": 2,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.wamis.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15021450",
+      "title": "기후에너지환경부 한강홍수통제소_수도시설 관련정보",
+      "organization": "기후에너지환경부 한강홍수통제소",
+      "operation_count": 2,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.wamis.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15021451",
+      "title": "기후에너지환경부 한강홍수통제소_강우레이더 영상 정보",
+      "organization": "기후에너지환경부 한강홍수통제소",
+      "operation_count": 2,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.hrfco.go.kr",
+        "www.wamis.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15022797",
+      "title": "한국임업진흥원_임산물정보",
+      "organization": "한국임업진흥원",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.kofpi.or.kr",
+        "www.vworld.kr"
+      ]
+    },
+    {
+      "dataset_id": "15022798",
+      "title": "한국임업진흥원_목재제품정보",
+      "organization": "한국임업진흥원",
+      "operation_count": 2,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.kofpi.or.kr"
+      ]
+    },
+    {
+      "dataset_id": "15024756",
+      "title": "기후에너지환경부 화학물질안전원_화학물질 배출 및 이동량 정보",
+      "organization": "기후에너지환경부 화학물질안전원",
+      "operation_count": 1,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "icis.me.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15028101",
+      "title": "국가유산청_궁궐ㆍ종묘 상세 조회",
+      "organization": "국가유산청",
+      "operation_count": 2,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.cha.go.kr",
+        "www.gogung.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15028102",
+      "title": "국토교통부_주요상권",
+      "organization": "국토교통부",
+      "operation_count": 1,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.vworld.kr"
+      ]
+    },
+    {
+      "dataset_id": "15028215",
+      "title": "국가유산청 국립무형유산원_국가무형문화재 현황",
+      "organization": "국가유산청 국립무형유산원",
+      "operation_count": 2,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.nihc.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15028217",
+      "title": "국가유산청 국립무형유산원_전수교육관 정보",
+      "organization": "국가유산청 국립무형유산원",
+      "operation_count": 1,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.nihc.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15028218",
+      "title": "국가유산청 국립무형유산원_기록영화(16mm) 정보",
+      "organization": "국가유산청 국립무형유산원",
+      "operation_count": 1,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.nihc.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15028219",
+      "title": "국가유산청 국립무형유산원_학술조사자료 정보",
+      "organization": "국가유산청 국립무형유산원",
+      "operation_count": 2,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "www.nihc.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15028223",
+      "title": "국가유산청 국립문화유산연구원_문화유산 전통재료",
+      "organization": "국가유산청 국립문화유산연구원",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "portal.nrich.go.kr",
+        "www.nrich.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15028224",
+      "title": "국가유산청 국립문화유산연구원_보존과학연구",
+      "organization": "국가유산청 국립문화유산연구원",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "portal.nrich.go.kr",
+        "www.nrich.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15028225",
+      "title": "국가유산청 국립문화유산연구원_제철유적 목록",
+      "organization": "국가유산청 국립문화유산연구원",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "portal.nrich.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15028226",
+      "title": "국가유산청 국립문화유산연구원_영산강유역 지석묘",
+      "organization": "국가유산청 국립문화유산연구원",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "portal.nrich.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15031948",
+      "title": "한국고용정보원_워크넷 채용행사 채용행사목록 및 상세정보",
+      "organization": "한국고용정보원",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "openapi.work.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15031993",
+      "title": "법제처_별표,서식(자치법규) 정보",
+      "organization": "법제처",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "open.law.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15031994",
+      "title": "법제처_자치법규(연계) 정보",
+      "organization": "법제처",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "open.law.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15032073",
+      "title": "법제처_모바일(법령용어) 정보",
+      "organization": "법제처",
+      "operation_count": 1,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "open.law.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15032576",
+      "title": "경기도 광명시_어린이 놀이시설 안전검사결과 현황",
+      "organization": "경기도 광명시",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "data.gm.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15032578",
+      "title": "경기도 광명시_산림욕장 현황",
+      "organization": "경기도 광명시",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "data.gm.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15032581",
+      "title": "경기도 광명시_어린이 공원 모래소독 현황",
+      "organization": "경기도 광명시",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "data.gm.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15032588",
+      "title": "경기도 광명시_경력단절여성취업지원교육훈련프로그램 현황",
+      "organization": "경기도 광명시",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "data.gm.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15032592",
+      "title": "경기도 광명시_노인일자리사업 현황",
+      "organization": "경기도 광명시",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "data.gm.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15032600",
+      "title": "경기도 광명시_급식 실시 현황",
+      "organization": "경기도 광명시",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "data.gm.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15032601",
+      "title": "경기도 광명시_급식비 집행 실적_부담주체 현황",
+      "organization": "경기도 광명시",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "data.gm.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15032604",
+      "title": "경기도 광명시_동아리 활동 현황",
+      "organization": "경기도 광명시",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "data.gm.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15032613",
+      "title": "경기도 광명시_직원 현황",
+      "organization": "경기도 광명시",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "data.gm.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15032624",
+      "title": "경기도 광명시_학교 현황(학급수)(초,중,고,그외)",
+      "organization": "경기도 광명시",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "data.gm.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15032644",
+      "title": "경기도 광명시_무료 직업소개소 현황",
+      "organization": "경기도 광명시",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "data.gm.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15032647",
+      "title": "경기도 광명시_유료 직업소개소 현황",
+      "organization": "경기도 광명시",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "data.gm.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15032650",
+      "title": "경기도 광명시_일자리센터 현황",
+      "organization": "경기도 광명시",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "data.gm.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15032652",
+      "title": "경기도 광명시_장례지도사 교육기관 현황",
+      "organization": "경기도 광명시",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "data.gm.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15032655",
+      "title": "경기도 광명시_공용차량 운영현황",
+      "organization": "경기도 광명시",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "data.gm.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15032656",
+      "title": "경기도 광명시_광명 세차장 현황",
+      "organization": "경기도 광명시",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "data.gm.go.kr"
+      ]
+    },
+    {
+      "dataset_id": "15032657",
+      "title": "경기도 광명시_광명 자전거도로현황",
+      "organization": "경기도 광명시",
+      "operation_count": 3,
+      "reason": "unregistered_adapter_host",
+      "hosts": [
+        "data.gm.go.kr"
+      ]
+    }
+  ]
+}

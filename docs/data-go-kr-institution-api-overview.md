@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-02T21:24:03Z`
+- Generated at: `2026-07-02T21:37:18Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `12433`
-- Runtime evidence: `1278` (`10.3%`)
-- External endpoint operations: `823`
-- Registered adapter operations: `813`
+- Operations: `12495`
+- Runtime evidence: `1278` (`10.2%`)
+- External endpoint operations: `885`
+- Registered adapter operations: `875`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -14,7 +14,7 @@
 | Institution | APIs | APIs with ops | Ops | Evidence | Evidence % | Verified | Failed | Skipped | Approval | No endpoint |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 행정안전부 | 1252 | 793 | 1054 | 0 | 0.0% | 0 | 0 | 0 | 215 | 0 |
-| 경기도 | 840 | 13 | 30 | 18 | 60.0% | 18 | 0 | 0 | 0 | 0 |
+| 경기도 | 840 | 19 | 45 | 18 | 40.0% | 18 | 0 | 0 | 0 | 0 |
 | 국토교통부 | 393 | 127 | 397 | 25 | 6.3% | 0 | 0 | 25 | 6 | 0 |
 | 식품의약품안전처 | 392 | 272 | 363 | 2 | 0.6% | 0 | 0 | 2 | 275 | 0 |
 | 국회 국회사무처 | 277 | 0 | 0 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
@@ -28,7 +28,7 @@
 | 경기도 광명시 | 197 | 0 | 0 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 해양수산부 | 173 | 172 | 276 | 8 | 2.9% | 0 | 0 | 8 | 116 | 0 |
 | 제주특별자치도 | 171 | 18 | 28 | 4 | 14.3% | 1 | 1 | 2 | 8 | 0 |
-| 농촌진흥청 | 136 | 9 | 30 | 8 | 26.7% | 5 | 0 | 3 | 8 | 0 |
+| 농촌진흥청 | 136 | 14 | 45 | 8 | 17.8% | 5 | 0 | 3 | 8 | 0 |
 | 경상남도 | 129 | 129 | 134 | 0 | 0.0% | 0 | 0 | 0 | 116 | 0 |
 | 대전광역시 서구 | 125 | 0 | 0 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 세종특별자치시 | 122 | 122 | 122 | 0 | 0.0% | 0 | 0 | 0 | 117 | 0 |
@@ -85,15 +85,15 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 ## Largest Categories
 
-- 교통물류: `1317` operations
-- 농축수산: `1316` operations
-- 문화관광: `1274` operations
+- 농축수산: `1337` operations
+- 교통물류: `1318` operations
+- 문화관광: `1280` operations
 - 공공행정: `1255` operations
-- 산업고용: `969` operations
+- 산업고용: `996` operations
 - 재정금융: `912` operations
 - 환경기상: `809` operations
-- 사회복지: `800` operations
-- 보건의료: `700` operations
+- 사회복지: `803` operations
+- 보건의료: `702` operations
 - 식품건강: `649` operations
 
 ## Largest Hosts
@@ -106,5 +106,5 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 - c.q-net.or.kr: `42` operations
 - data.geoje.go.kr: `41` operations
 - data.uiryeong.go.kr: `40` operations
+- data.gg.go.kr: `33` operations
 - oneclick.law.go.kr:80: `27` operations
-- openapi.tour.go.kr: `26` operations

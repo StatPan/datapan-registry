@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.external-coverage.v1",
-  "generated_at": "2026-07-02T21:24:03Z",
+  "generated_at": "2026-07-02T21:37:18Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "source_profile": "sources/data_go_kr.json",
@@ -9,10 +9,10 @@
   "route_disposition_report": "reports/route-disposition.json",
   "provider_index": "data/provider-index.json",
   "summary": {
-    "external_endpoint_operations": 823,
-    "registered_adapter_operations": 813,
+    "external_endpoint_operations": 885,
+    "registered_adapter_operations": 875,
     "missing_adapter_operations": 29,
-    "raw_external_adapter_coverage_percent": 96.6,
+    "raw_external_adapter_coverage_percent": 96.8,
     "registered_adapter_hosts": 43,
     "missing_adapter_hosts": 11,
     "route_evidence_covered_operations": 29,
@@ -102,7 +102,7 @@
     }
   ],
   "next": [
-    "Preserve raw external adapter coverage at 96.6% unless new adapters or catalog changes alter the denominator.",
+    "Preserve raw external adapter coverage at 96.8% unless new adapters or catalog changes alter the denominator.",
     "Treat 0 evidence-adjusted adapter candidate operations as the current external adapter backlog.",
     "Keep unclassified missing external routes at 0; refresh unadapted external probes before creating adapter work from raw misses.",
     "Promote host-level disposition from mixed to specific dead/transient/adapter classifications as route evidence becomes stable."

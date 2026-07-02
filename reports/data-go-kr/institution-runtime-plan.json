@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-runtime-plan.v1",
-  "generated_at": "2026-07-02T21:24:03Z",
+  "generated_at": "2026-07-02T21:37:18Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -20,9 +20,9 @@
   "summary": {
     "institutions": 411,
     "planned_institutions": 10,
-    "planned_operations": 836,
-    "runtime_reactivation_api_count": 6791,
-    "uncovered_api_count": 4670,
+    "planned_operations": 851,
+    "runtime_reactivation_api_count": 6815,
+    "uncovered_api_count": 4646,
     "first_queue": "행정안전부"
   },
   "batches": [
@@ -51,17 +51,17 @@
       "organization": "경기도",
       "kind": "data_go_kr_gateway",
       "api_count": 840,
-      "covered_api_count": 13,
-      "uncovered_api_count": 827,
-      "operation_count": 30,
+      "covered_api_count": 19,
+      "uncovered_api_count": 821,
+      "operation_count": 45,
       "runtime_evidence_api_count": 8,
-      "runtime_reactivation_api_count": 5,
-      "runtime_missing_evidence_count": 12,
+      "runtime_reactivation_api_count": 11,
+      "runtime_missing_evidence_count": 27,
       "approval_required_operations": 0,
       "priority_score": 832,
-      "planned_operations": 12,
+      "planned_operations": 27,
       "credential_required": true,
-      "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '경기도' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 12 --timeout 20s --output reports/data-go-kr/institution-batches/institution-02.json --json",
+      "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '경기도' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 27 --timeout 20s --output reports/data-go-kr/institution-batches/institution-02.json --json",
       "output": "reports/data-go-kr/institution-batches/institution-02.json"
     },
     {
