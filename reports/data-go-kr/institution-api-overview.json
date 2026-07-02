@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-02T17:25:16Z",
+  "generated_at": "2026-07-02T17:45:14Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -14,13 +14,13 @@
     "institutions": 411,
     "apis": 12060,
     "operations": 12253,
-    "runtime_evidence": 1261,
+    "runtime_evidence": 1264,
     "runtime_evidence_percent": 10.3,
     "callable_operations": 12111,
     "external_endpoint_operations": 643,
-    "registered_adapter_operations": 616,
-    "missing_adapter_operations": 46,
-    "missing_adapter_hosts": 19
+    "registered_adapter_operations": 619,
+    "missing_adapter_operations": 43,
+    "missing_adapter_hosts": 18
   },
   "by_dependency_class": [
     {
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 616
+      "count": 619
     },
     {
       "key": "builtin",
@@ -59,7 +59,7 @@
     },
     {
       "key": "missing",
-      "count": 46
+      "count": 43
     },
     {
       "key": "not_applicable",
@@ -6163,9 +6163,9 @@
       "api_count": 75,
       "operation_api_count": 6,
       "operation_count": 22,
-      "runtime_evidence_count": 1,
-      "runtime_evidence_percent": 4.5,
-      "verified": 0,
+      "runtime_evidence_count": 2,
+      "runtime_evidence_percent": 9.1,
+      "verified": 1,
       "failed": 0,
       "skipped": 1,
       "unknown": 0,
@@ -6183,12 +6183,12 @@
       ],
       "by_adapter_status": [
         {
-          "key": "builtin",
-          "count": 21
+          "key": "adapter",
+          "count": 1
         },
         {
-          "key": "missing",
-          "count": 1
+          "key": "builtin",
+          "count": 21
         }
       ],
       "top_categories": [
@@ -6204,7 +6204,12 @@
         },
         {
           "host": "data.mafra.go.kr",
-          "operation_count": 1
+          "operation_count": 1,
+          "adapter": "mafra",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },
@@ -12409,9 +12414,9 @@
       "api_count": 87,
       "operation_api_count": 1,
       "operation_count": 2,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
+      "runtime_evidence_count": 2,
+      "runtime_evidence_percent": 100.0,
+      "verified": 2,
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
@@ -12425,7 +12430,7 @@
       ],
       "by_adapter_status": [
         {
-          "key": "missing",
+          "key": "adapter",
           "count": 2
         }
       ],
@@ -12438,7 +12443,12 @@
       "top_hosts": [
         {
           "host": "data.mafra.go.kr",
-          "operation_count": 2
+          "operation_count": 2,
+          "adapter": "mafra",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },

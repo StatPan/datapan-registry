@@ -2,18 +2,18 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-07-02T17:25:16Z`
+- Generated at: `2026-07-02T17:45:14Z`
 - Institutions: `411`
 - APIs: `12060`
 - APIs with operation mapping: `7210` (`59.8%`)
 - APIs without operation mapping: `4850`
 - Operations: `12253`
-- Runtime evidence operations: `1261` (`10.3%`)
-- Runtime verified operations: `52`
+- Runtime evidence operations: `1264` (`10.3%`)
+- Runtime verified operations: `55`
 - Runtime failed operations: `87`
 - Runtime skipped operations: `1122`
-- APIs with runtime evidence: `590`
-- Runtime reactivation APIs: `6620`
+- APIs with runtime evidence: `592`
+- Runtime reactivation APIs: `6618`
 - Runtime repair APIs: `54`
 
 ## Highest Priority Institutions
@@ -45,7 +45,7 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 충청남도 | 96 | 69 | 27 | 71.9% | 77 | 0 | 69 | 0 | 96 |
 | 금융위원회 | 110 | 110 | 0 | 100.0% | 349 | 14 | 96 | 0 | 96 |
 | 한국도로공사 | 93 | 0 | 93 | 0.0% | 0 | 0 | 0 | 0 | 93 |
-| 농림축산식품부 | 87 | 1 | 86 | 1.1% | 2 | 0 | 1 | 0 | 87 |
+| 농림축산식품부 | 87 | 1 | 86 | 1.1% | 2 | 1 | 0 | 0 | 86 |
 | 문화체육관광부 | 86 | 1 | 85 | 1.2% | 1 | 0 | 1 | 0 | 86 |
 | 한국건강가정진흥원 | 85 | 85 | 0 | 100.0% | 90 | 0 | 85 | 0 | 85 |
 | 한국수자원공사 | 84 | 79 | 5 | 94.0% | 148 | 0 | 79 | 0 | 84 |

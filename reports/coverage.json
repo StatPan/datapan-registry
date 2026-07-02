@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T17:25:21Z",
+  "generated_at": "2026-07-02T17:45:19Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -12,16 +12,16 @@
     "callable_operation_percent": 98.8,
     "data_go_kr_gateway_operations": 11419,
     "external_endpoint_operations": 643,
-    "registered_adapter_operations": 616,
-    "missing_adapter_operations": 46,
-    "external_adapter_coverage_percent": 93.1,
+    "registered_adapter_operations": 619,
+    "missing_adapter_operations": 43,
+    "external_adapter_coverage_percent": 93.5,
     "approval_required_operations": 4142,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
-    "registered_adapter_hosts": 34,
-    "missing_adapter_hosts": 19,
-    "adapter_count": 30,
+    "registered_adapter_hosts": 35,
+    "missing_adapter_hosts": 18,
+    "adapter_count": 31,
     "call_capable_adapters": 21,
     "provider_split_ready": true
   },
@@ -41,26 +41,26 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-02T17:25:14Z",
-    "total": 1261,
-    "verified": 52,
+    "generated_at": "2026-07-02T17:45:12Z",
+    "total": 1264,
+    "verified": 55,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0,
-    "verified_percent": 4.1,
+    "verified_percent": 4.4,
     "evidence_operation_percent": 10.3
   },
   "route_evidence": {
     "present": true,
     "report": "..\\datapan-registry\\reports\\route-disposition.json",
-    "routes_total": 46,
-    "with_probe_evidence": 46,
+    "routes_total": 43,
+    "with_probe_evidence": 43,
     "dead_route_candidates": 14,
     "transient_failures": 15,
     "parameter_blocked_routes": 0,
-    "remaining_adapter_candidates": 17,
-    "raw_missing_adapter_operations": 46,
-    "evidence_adjusted_adapter_candidates": 17
+    "remaining_adapter_candidates": 14,
+    "raw_missing_adapter_operations": 43,
+    "evidence_adjusted_adapter_candidates": 14
   },
   "gaps": {
     "missing_adapter_hosts": [
@@ -117,22 +117,6 @@
         "external_endpoint_operations": 4,
         "sample_ids": [
           "3043385"
-        ]
-      },
-      {
-        "host": "data.mafra.go.kr",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "missing",
-        "specs": 2,
-        "operations": 3,
-        "external_endpoint_operations": 3,
-        "external_guide_specs": 1,
-        "sample_ids": [
-          "15002220",
-          "15008409"
         ]
       },
       {
@@ -207,6 +191,19 @@
         "sample_ids": [
           "15007444",
           "15007467"
+        ]
+      },
+      {
+        "host": "data.seoul.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 1,
+        "operations": 2,
+        "external_endpoint_operations": 2,
+        "sample_ids": [
+          "15003164"
         ]
       }
     ],
@@ -390,10 +387,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-02T17:25:21Z",
+    "generated_at": "2026-07-02T17:45:19Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 30,
-    "host_count": 34,
+    "adapter_count": 31,
+    "host_count": 35,
     "adapters": [
       {
         "name": "airport",
@@ -589,6 +586,16 @@
         ]
       },
       {
+        "name": "mafra",
+        "status": "registered",
+        "hosts": [
+          "data.mafra.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "myhome",
         "status": "registered",
         "hosts": [
@@ -724,8 +731,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 30,
-      "verification_capable_adapters": 30,
+      "adapter_count": 31,
+      "verification_capable_adapters": 31,
       "call_capable_adapters": 21,
       "required_adapters": 2,
       "required_verification_adapters": 2,

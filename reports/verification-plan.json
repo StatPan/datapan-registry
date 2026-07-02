@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T17:25:30Z",
+  "generated_at": "2026-07-02T17:45:28Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -8,10 +8,10 @@
   "timeout": "10s",
   "summary": {
     "operations": 12253,
-    "evidence_total": 1261,
+    "evidence_total": 1264,
     "uncovered_gateway_candidates": 10774,
     "uncovered_adapter_candidates": 0,
-    "missing_adapter_hosts": 19,
+    "missing_adapter_hosts": 18,
     "planned_batches": 1,
     "planned_operations": 10
   },
@@ -81,22 +81,6 @@
         "external_endpoint_operations": 4,
         "sample_ids": [
           "3043385"
-        ]
-      },
-      {
-        "host": "data.mafra.go.kr",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "missing",
-        "specs": 2,
-        "operations": 3,
-        "external_endpoint_operations": 3,
-        "external_guide_specs": 1,
-        "sample_ids": [
-          "15002220",
-          "15008409"
         ]
       },
       {
@@ -171,6 +155,19 @@
         "sample_ids": [
           "15007444",
           "15007467"
+        ]
+      },
+      {
+        "host": "data.seoul.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 1,
+        "operations": 2,
+        "external_endpoint_operations": 2,
+        "sample_ids": [
+          "15003164"
         ]
       }
     ]

@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-02T17:25:16Z",
+  "generated_at": "2026-07-02T17:45:14Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 30,
-  "host_count": 34,
+  "adapter_count": 31,
+  "host_count": 35,
   "adapters": [
     {
       "name": "airport",
@@ -198,6 +198,16 @@
       ]
     },
     {
+      "name": "mafra",
+      "status": "registered",
+      "hosts": [
+        "data.mafra.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "myhome",
       "status": "registered",
       "hosts": [
@@ -333,8 +343,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 30,
-    "verification_capable_adapters": 30,
+    "adapter_count": 31,
+    "verification_capable_adapters": 31,
     "call_capable_adapters": 21,
     "required_adapters": 2,
     "required_verification_adapters": 2,

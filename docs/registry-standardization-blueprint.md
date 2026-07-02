@@ -177,11 +177,12 @@ Current gaps:
   target and clearing the release readiness warning. Gira #97 adds `18`
   verified data-gg landing-page checks, Gira #99 adds `5` verified nfqs
   landing-page checks, Gira #101 adds `4` verified nongsaro landing-page
-  checks, and Gira #103 adds `3` verified gwanak landing-page checks, bringing
-  runtime evidence to `1261`. Most evidence is still skipped boundary evidence,
-  not proof that those operations are callable.
+  checks, Gira #103 adds `3` verified gwanak landing-page checks, and Gira
+  #105 adds `3` verified mafra landing-page checks, bringing runtime evidence
+  to `1264`. Most evidence is still skipped boundary evidence, not proof that
+  those operations are callable.
 - API operation coverage remains incomplete: `7,210` of `12,060` APIs have
-  operation mappings (`59.8%`), leaving `4,850` APIs to materialize and `6,620`
+  operation mappings (`59.8%`), leaving `4,850` APIs to materialize and `6,618`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report
@@ -439,9 +440,10 @@ Use this order unless a production failure changes priority:
     `12` host-scoped adapter implementation queues while keeping dead and
     transient routes out of adapter work. Gira #97 registers and verifies
     `data.gg.go.kr`, Gira #99 registers and verifies `www.nfqs.go.kr`, Gira
-    #101 registers and verifies `www.nongsaro.go.kr`, and Gira #103 registers
-    and verifies `data.gwanak.go.kr`, reducing the active adapter backlog to
-    `17` operations across `8` host-scoped queues.
+    #101 registers and verifies `www.nongsaro.go.kr`, Gira #103 registers and
+    verifies `data.gwanak.go.kr`, and Gira #105 registers and verifies
+    `data.mafra.go.kr`, reducing the active adapter backlog to `14` operations
+    across `7` host-scoped queues.
 
 ## Measurement Rules
 

@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-02T17:25:14Z",
+  "generated_at": "2026-07-02T17:45:12Z",
   "source": "..\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1261,
-    "verified": 52,
+    "total": 1264,
+    "verified": 55,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0
@@ -26,7 +26,7 @@
       },
       {
         "key": "verified",
-        "count": 52,
+        "count": 55,
         "status": "verified"
       }
     ],
@@ -434,6 +434,11 @@
         "provider": "gwanak"
       },
       {
+        "key": "mafra",
+        "count": 3,
+        "provider": "mafra"
+      },
+      {
         "key": "myhome",
         "count": 1,
         "provider": "myhome"
@@ -586,6 +591,11 @@
         "host": "data.gwanak.go.kr"
       },
       {
+        "key": "data.mafra.go.kr",
+        "count": 3,
+        "host": "data.mafra.go.kr"
+      },
+      {
         "key": "folkency.nfm.go.kr",
         "count": 3,
         "host": "folkency.nfm.go.kr"
@@ -624,7 +634,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 597,
+        "count": 600,
         "kind": "external_endpoint"
       },
       {

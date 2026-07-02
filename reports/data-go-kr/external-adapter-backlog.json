@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.external-adapter-backlog.v1",
-  "generated_at": "2026-07-02T17:25:16Z",
+  "generated_at": "2026-07-02T17:45:14Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "source_profile": "sources/data_go_kr.json",
@@ -10,19 +10,19 @@
     "coverage": "reports/coverage.json"
   },
   "summary": {
-    "candidate_hosts": 8,
-    "candidate_operations": 17,
-    "candidate_apis": 10,
-    "candidate_institutions": 9,
-    "raw_missing_adapter_operations": 46,
-    "raw_missing_adapter_hosts": 19,
-    "route_disposition_operations": 46,
-    "route_disposition_adapter_candidates": 17,
+    "candidate_hosts": 7,
+    "candidate_operations": 14,
+    "candidate_apis": 8,
+    "candidate_institutions": 7,
+    "raw_missing_adapter_operations": 43,
+    "raw_missing_adapter_hosts": 18,
+    "route_disposition_operations": 43,
+    "route_disposition_adapter_candidates": 14,
     "excluded_dead_route_candidates": 14,
     "excluded_transient_failures": 15,
     "unclassified_missing_routes": 0,
-    "adapter_target_operations": 46,
-    "candidate_share_of_missing_adapter_operations_percent": 37.0
+    "adapter_target_operations": 43,
+    "candidate_share_of_missing_adapter_operations_percent": 32.6
   },
   "policy": {
     "candidate_filter": "route_disposition.disposition == adapter_candidate",
@@ -30,84 +30,6 @@
     "gate": "unclassified_missing_routes must remain 0 before adapter backlog is actionable"
   },
   "hosts": [
-    {
-      "host": "data.mafra.go.kr",
-      "priority": 3,
-      "candidate_operations": 3,
-      "candidate_apis": 2,
-      "institutions": [
-        "농림수산식품교육문화정보원",
-        "농림축산식품부"
-      ],
-      "probe_reasons": [
-        {
-          "key": "unadapted_probe_http_2xx",
-          "count": 3
-        }
-      ],
-      "body_shapes": [
-        {
-          "key": "html",
-          "count": 3
-        }
-      ],
-      "sample_dataset_ids": [
-        "15002220",
-        "15008409"
-      ],
-      "sample_routes": [
-        {
-          "dataset_id": "15002220",
-          "title": "농림축산식품부_유기농업자재 현황",
-          "organization": "농림축산식품부",
-          "operation": "유기농업자재 현황_20210402 외부 링크 1",
-          "endpoint": "https://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20200929000000001392&filter_ty=O&getBack=G&sort_id=regist_dt&s_data_nm=&cl_code=&shareYn=",
-          "endpoint_host": "data.mafra.go.kr",
-          "dependency_class": "external_endpoint",
-          "disposition": "adapter_candidate",
-          "probe_status": "unknown",
-          "probe_reason": "unadapted_probe_http_2xx",
-          "http_status": 200,
-          "body_shape": "html",
-          "missing_params": [],
-          "recommended_action": "implement_provider_adapter"
-        },
-        {
-          "dataset_id": "15002220",
-          "title": "농림축산식품부_유기농업자재 현황",
-          "organization": "농림축산식품부",
-          "operation": "유기농업자재 현황_20210402 외부 링크 2",
-          "endpoint": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20141014000000000013&service_ty=O",
-          "endpoint_host": "data.mafra.go.kr",
-          "dependency_class": "external_endpoint",
-          "disposition": "adapter_candidate",
-          "probe_status": "unknown",
-          "probe_reason": "unadapted_probe_http_2xx",
-          "http_status": 200,
-          "body_shape": "html",
-          "missing_params": [],
-          "recommended_action": "implement_provider_adapter"
-        },
-        {
-          "dataset_id": "15008409",
-          "title": "농림수산식품교육문화정보원_중국 도매시장 가격정보",
-          "organization": "농림수산식품교육문화정보원",
-          "operation": "중국농산물 가격정보",
-          "endpoint": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20150827000000000463&filter_ty=O&getBack=&sort_id=&s_data_nm=&instt_id=&cl_code=&shareYn=",
-          "endpoint_host": "data.mafra.go.kr",
-          "dependency_class": "external_endpoint",
-          "disposition": "adapter_candidate",
-          "probe_status": "unknown",
-          "probe_reason": "unadapted_probe_http_2xx",
-          "http_status": 200,
-          "body_shape": "html",
-          "missing_params": [],
-          "recommended_action": "implement_provider_adapter"
-        }
-      ],
-      "implementation_status": "adapter_not_registered",
-      "recommended_next_step": "Add a provider adapter for data.mafra.go.kr or mark the host with stronger route disposition evidence if the HTML surface is not machine-callable."
-    },
     {
       "host": "www.garak.co.kr",
       "priority": 3,
@@ -531,54 +453,6 @@
     }
   ],
   "candidate_routes": [
-    {
-      "dataset_id": "15002220",
-      "title": "농림축산식품부_유기농업자재 현황",
-      "organization": "농림축산식품부",
-      "operation": "유기농업자재 현황_20210402 외부 링크 1",
-      "endpoint": "https://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20200929000000001392&filter_ty=O&getBack=G&sort_id=regist_dt&s_data_nm=&cl_code=&shareYn=",
-      "endpoint_host": "data.mafra.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html",
-      "missing_params": [],
-      "recommended_action": "implement_provider_adapter"
-    },
-    {
-      "dataset_id": "15002220",
-      "title": "농림축산식품부_유기농업자재 현황",
-      "organization": "농림축산식품부",
-      "operation": "유기농업자재 현황_20210402 외부 링크 2",
-      "endpoint": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20141014000000000013&service_ty=O",
-      "endpoint_host": "data.mafra.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html",
-      "missing_params": [],
-      "recommended_action": "implement_provider_adapter"
-    },
-    {
-      "dataset_id": "15008409",
-      "title": "농림수산식품교육문화정보원_중국 도매시장 가격정보",
-      "organization": "농림수산식품교육문화정보원",
-      "operation": "중국농산물 가격정보",
-      "endpoint": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20150827000000000463&filter_ty=O&getBack=&sort_id=&s_data_nm=&instt_id=&cl_code=&shareYn=",
-      "endpoint_host": "data.mafra.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html",
-      "missing_params": [],
-      "recommended_action": "implement_provider_adapter"
-    },
     {
       "dataset_id": "15003164",
       "title": "서울교통공사_역사 건축 현황",

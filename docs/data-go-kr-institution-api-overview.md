@@ -1,13 +1,13 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-02T17:25:16Z`
+- Generated at: `2026-07-02T17:45:14Z`
 - Institutions: `411`
 - APIs: `12060`
 - Operations: `12253`
-- Runtime evidence: `1261` (`10.3%`)
+- Runtime evidence: `1264` (`10.3%`)
 - External endpoint operations: `643`
-- Registered adapter operations: `616`
-- Missing adapter operations: `46`
+- Registered adapter operations: `619`
+- Missing adapter operations: `43`
 
 ## Largest Institutions By API Count
 
@@ -39,7 +39,7 @@
 | 충청남도 | 96 | 69 | 77 | 0 | 0.0% | 0 | 0 | 0 | 49 | 0 |
 | 한국도로공사 | 93 | 0 | 0 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 기상청 | 89 | 44 | 183 | 23 | 12.6% | 0 | 0 | 23 | 24 | 0 |
-| 농림축산식품부 | 87 | 1 | 2 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
+| 농림축산식품부 | 87 | 1 | 2 | 2 | 100.0% | 2 | 0 | 0 | 0 | 0 |
 | 문화체육관광부 | 86 | 1 | 1 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 한국건강가정진흥원 | 85 | 85 | 90 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 한국수자원공사 | 84 | 79 | 148 | 0 | 0.0% | 0 | 0 | 0 | 4 | 19 |
