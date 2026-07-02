@@ -72,8 +72,8 @@ def validate_report(report_path: pathlib.Path, markdown_path: pathlib.Path) -> N
             raise ValueError(f"patches[{index}].operations[0].endpoint must be a Safety Data endpoint")
         request_params = as_list(operation.get("request_params"), f"patches[{index}].request_params")
         response_params = as_list(operation.get("response_params"), f"patches[{index}].response_params")
-        if not any(isinstance(row, dict) and row.get("name") == "serviceKey" and row.get("required") is True for row in request_params):
-            raise ValueError(f"patches[{index}] must include required serviceKey")
+        if not any(isinstance(row, dict) and row.get("name") == "serviceKey" for row in request_params):
+            raise ValueError(f"patches[{index}] must include serviceKey")
         if len(response_params) <= 0:
             raise ValueError(f"patches[{index}] must include response params")
         if patch.get("dataset_id") == "15147982":

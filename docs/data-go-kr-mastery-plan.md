@@ -12,35 +12,37 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `12253`
-- callable operations: `12111` (`98.8%`)
+- operations: `12258`
+- callable operations: `12116` (`98.8%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `643`
+- external endpoint operations: `648`
 - registered adapter operations: `633`
-- missing adapter operations: `29`
-- external adapter coverage: `95.6%`
-- approval-required operations: `4142`
+- missing adapter operations: `34`
+- external adapter coverage: `94.9%`
+- approval-required operations: `4147`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `42`
 - registered adapter hosts: `42`
-- missing adapter hosts: `11`
+- missing adapter hosts: `12`
 - call-capable adapters: `22`
 
 Current missing external route evidence:
 
-- routes: `29`
-- hosts: `11`
-- with probe evidence: `29`
+- routes: `34`
+- hosts: `12`
+- with probe evidence: `34`
 - dead-route candidates: `14`
 - transient failures: `15`
-- remaining adapter candidates: `0`
+- parameter-blocked routes: `1`
+- remaining adapter candidates: `4`
 
-The practical interpretation is important: the remaining `29` missing external
+The practical interpretation is important: the remaining `34` missing external
 routes are all covered by manifest-bound probe and route-disposition evidence.
-There are currently `0` routes with adapter-candidate evidence. Dead-route and
-transient-failure routes remain evidence, not implementation work, until fresh
-probe evidence changes their disposition.
+There are currently `4` routes with adapter-candidate evidence, all on
+`www.safetydata.go.kr`. Dead-route, transient-failure, and parameter-blocked
+routes remain evidence, not implementation work, until fresh probe evidence or
+safe default parameters change their disposition.
 
 ## Mastery Target
 
@@ -127,6 +129,7 @@ uiryeong, ulsan, and work24.
 Missing external route hosts currently requiring route-disposition tracking:
 
 - `openapi.coast.kr`: `6`
+- `www.safetydata.go.kr`: `5`
 - `car.daegu.go.kr`: `4`
 - `openapi.price.go.kr`: `4`
 - `www.rda.go.kr`: `4`
@@ -186,7 +189,7 @@ match those roots.
 | `reports/data-go-kr/runtime-evidence-growth.json` | `reports/coverage.json`, `reports/latest-verification.json`, `reports/latest-verification-summary.json`, `reports/verification-plan.json`, `data/provider-index.json` | `scripts/validate-runtime-evidence-growth.py` validates current evidence totals, evidence coverage percent, 10% target gap, provider split readiness, and next planned verification batches. |
 | `reports/data-go-kr/operation-materialization-plan.json` | `reports/data-go-kr/coverage-backlog.json` | `scripts/validate-operation-materialization-plan.py` regenerates the institution-scoped materialization queue and fails CI when APIs without operation mappings drift from the coverage backlog. |
 | `reports/data-go-kr/safetydata-operation-candidates.json` | `reports/data-go-kr/operation-materialization-batches/institution-01.json`, public data.go.kr and safetydata.go.kr metadata | `scripts/validate-safetydata-operation-candidates.py` validates the checked-in candidate evidence schema and batch linkage; refresh is manual or workflow-dispatched because it depends on live public metadata. |
-| `reports/data-go-kr/safetydata-registry-patches.json` | `reports/data-go-kr/safetydata-operation-candidates.json`, `data/data-go-kr.registry.json` | `scripts/validate-safetydata-registry-patches.py` validates exact operation payloads before the large registry artifact is mutated. |
+| `reports/data-go-kr/safetydata-registry-patches.json` | `reports/data-go-kr/safetydata-operation-candidates.json`, `data/data-go-kr.registry.json` | `scripts/validate-safetydata-registry-patches.py` validates exact operation payloads before registry mutation and keeps already-applied Safety Data mappings reproducible after mutation. |
 | `reports/data-go-kr/institution-api-overview.json` | `data/data-go-kr.registry.json`, `reports/dependencies.json`, `reports/latest-verification.json`, `reports/coverage.json`, `data/provider-index.json` | `scripts/validate-institution-api-overview.py` regenerates the overview and fails CI when institution API counts, operation counts, adapter status counts, or runtime evidence counts drift from checked-in artifacts. |
 | `reports/data-go-kr/institution-runtime-plan.json` | `reports/data-go-kr/coverage-backlog.json`, `data/data-go-kr.registry.json`, `reports/latest-verification.json` | `scripts/validate-institution-runtime-plan.py` regenerates the executable institution batch plan and fails CI when the next `datapan catalog verify --org` queue drifts from the coverage backlog. |
 
@@ -223,8 +226,8 @@ institution:
    `scripts/validate-institution-runtime-plan.py`, and
    `scripts/validate-institution-api-overview.py`.
 
-The current first queue is `행정안전부`: `1252` APIs, `613` APIs with operation
-mappings, `639` uncovered APIs, `874` mapped operations, and no checked-in
+The current first queue is `행정안전부`: `1252` APIs, `618` APIs with operation
+mappings, `634` uncovered APIs, `879` mapped operations, and no checked-in
 runtime evidence yet. Gateway calls need a data.go.kr service key; no-key runs
 are useful only to prove parameter readiness, not to advance verified runtime
 coverage.

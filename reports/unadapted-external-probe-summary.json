@@ -1,22 +1,21 @@
 {
-  "generated_at": "2026-07-02T16:06:06Z",
-  "source": ".\\reports\\unadapted-external-probe.json",
+  "generated_at": "2026-07-02T20:40:08Z",
+  "source": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\unadapted-external-probe.json",
   "provider": "data.go.kr",
-  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 76,
+    "total": 81,
     "verified": 0,
     "failed": 29,
     "skipped": 0,
-    "unknown": 47
+    "unknown": 52
   },
   "groups": {
     "by_status": [
       {
         "key": "unknown",
-        "count": 47,
+        "count": 52,
         "status": "unknown"
       },
       {
@@ -28,7 +27,7 @@
     "by_reason": [
       {
         "key": "unadapted_probe_http_2xx",
-        "count": 47,
+        "count": 52,
         "reason": "unadapted_probe_http_2xx"
       },
       {
@@ -55,7 +54,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 76,
+        "count": 81,
         "provider": "data.go.kr"
       }
     ],
@@ -74,6 +73,11 @@
         "key": "www.nfqs.go.kr",
         "count": 5,
         "host": "www.nfqs.go.kr"
+      },
+      {
+        "key": "www.safetydata.go.kr",
+        "count": 5,
+        "host": "www.safetydata.go.kr"
       },
       {
         "key": "car.daegu.go.kr",
@@ -179,7 +183,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 76,
+        "count": 81,
         "kind": "external_endpoint"
       }
     ]

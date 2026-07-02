@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.external-adapter-backlog.v1",
-  "generated_at": "2026-07-02T19:14:15Z",
+  "generated_at": "2026-07-02T20:45:24Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "source_profile": "sources/data_go_kr.json",
@@ -10,27 +10,188 @@
     "coverage": "reports/coverage.json"
   },
   "summary": {
-    "candidate_hosts": 0,
-    "candidate_operations": 0,
-    "candidate_apis": 0,
-    "candidate_institutions": 0,
-    "raw_missing_adapter_operations": 29,
-    "raw_missing_adapter_hosts": 11,
-    "route_disposition_operations": 29,
-    "route_disposition_adapter_candidates": 0,
+    "candidate_hosts": 1,
+    "candidate_operations": 4,
+    "candidate_apis": 4,
+    "candidate_institutions": 1,
+    "raw_missing_adapter_operations": 34,
+    "raw_missing_adapter_hosts": 12,
+    "route_disposition_operations": 34,
+    "route_disposition_adapter_candidates": 4,
     "excluded_dead_route_candidates": 14,
     "excluded_transient_failures": 15,
     "unclassified_missing_routes": 0,
-    "adapter_target_operations": 29,
-    "candidate_share_of_missing_adapter_operations_percent": 0.0
+    "adapter_target_operations": 34,
+    "candidate_share_of_missing_adapter_operations_percent": 11.8
   },
   "policy": {
     "candidate_filter": "route_disposition.disposition == adapter_candidate",
     "excluded_policy": "Dead-route and transient-failure evidence remains in route-disposition and must not be converted into adapter implementation work.",
     "gate": "unclassified_missing_routes must remain 0 before adapter backlog is actionable"
   },
-  "hosts": [],
-  "candidate_routes": [],
+  "hosts": [
+    {
+      "host": "www.safetydata.go.kr",
+      "priority": 4,
+      "candidate_operations": 4,
+      "candidate_apis": 4,
+      "institutions": [
+        "행정안전부"
+      ],
+      "probe_reasons": [
+        {
+          "key": "unadapted_probe_http_2xx",
+          "count": 4
+        }
+      ],
+      "body_shapes": [
+        {
+          "key": "json",
+          "count": 4
+        }
+      ],
+      "sample_dataset_ids": [
+        "15154049",
+        "15154052",
+        "15154063",
+        "15154065"
+      ],
+      "sample_routes": [
+        {
+          "dataset_id": "15154049",
+          "title": "행정안전부_국외검사기관인정현황",
+          "organization": "행정안전부",
+          "operation": "국외검사기관인정현황",
+          "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20141",
+          "endpoint_host": "www.safetydata.go.kr",
+          "dependency_class": "external_endpoint",
+          "disposition": "adapter_candidate",
+          "probe_status": "unknown",
+          "probe_reason": "unadapted_probe_http_2xx",
+          "http_status": 200,
+          "body_shape": "json",
+          "missing_params": [],
+          "recommended_action": "implement_provider_adapter"
+        },
+        {
+          "dataset_id": "15154052",
+          "title": "행정안전부_국외전염병발생현황",
+          "organization": "행정안전부",
+          "operation": "국외전염병발생현황",
+          "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20564",
+          "endpoint_host": "www.safetydata.go.kr",
+          "dependency_class": "external_endpoint",
+          "disposition": "adapter_candidate",
+          "probe_status": "unknown",
+          "probe_reason": "unadapted_probe_http_2xx",
+          "http_status": 200,
+          "body_shape": "json",
+          "missing_params": [],
+          "recommended_action": "implement_provider_adapter"
+        },
+        {
+          "dataset_id": "15154063",
+          "title": "행정안전부_기간별감염병발생현황",
+          "organization": "행정안전부",
+          "operation": "기간별감염병발생현황",
+          "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20638",
+          "endpoint_host": "www.safetydata.go.kr",
+          "dependency_class": "external_endpoint",
+          "disposition": "adapter_candidate",
+          "probe_status": "unknown",
+          "probe_reason": "unadapted_probe_http_2xx",
+          "http_status": 200,
+          "body_shape": "json",
+          "missing_params": [],
+          "recommended_action": "implement_provider_adapter"
+        },
+        {
+          "dataset_id": "15154065",
+          "title": "행정안전부_녹지_녹피_면적비율",
+          "organization": "행정안전부",
+          "operation": "녹지(녹피)면적비율",
+          "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20552",
+          "endpoint_host": "www.safetydata.go.kr",
+          "dependency_class": "external_endpoint",
+          "disposition": "adapter_candidate",
+          "probe_status": "unknown",
+          "probe_reason": "unadapted_probe_http_2xx",
+          "http_status": 200,
+          "body_shape": "json",
+          "missing_params": [],
+          "recommended_action": "implement_provider_adapter"
+        }
+      ],
+      "implementation_status": "adapter_not_registered",
+      "recommended_next_step": "Add a provider adapter for www.safetydata.go.kr or mark the host with stronger route disposition evidence if the HTML surface is not machine-callable."
+    }
+  ],
+  "candidate_routes": [
+    {
+      "dataset_id": "15154049",
+      "title": "행정안전부_국외검사기관인정현황",
+      "organization": "행정안전부",
+      "operation": "국외검사기관인정현황",
+      "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20141",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "json",
+      "missing_params": [],
+      "recommended_action": "implement_provider_adapter"
+    },
+    {
+      "dataset_id": "15154052",
+      "title": "행정안전부_국외전염병발생현황",
+      "organization": "행정안전부",
+      "operation": "국외전염병발생현황",
+      "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20564",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "json",
+      "missing_params": [],
+      "recommended_action": "implement_provider_adapter"
+    },
+    {
+      "dataset_id": "15154063",
+      "title": "행정안전부_기간별감염병발생현황",
+      "organization": "행정안전부",
+      "operation": "기간별감염병발생현황",
+      "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20638",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "json",
+      "missing_params": [],
+      "recommended_action": "implement_provider_adapter"
+    },
+    {
+      "dataset_id": "15154065",
+      "title": "행정안전부_녹지_녹피_면적비율",
+      "organization": "행정안전부",
+      "operation": "녹지(녹피)면적비율",
+      "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20552",
+      "endpoint_host": "www.safetydata.go.kr",
+      "dependency_class": "external_endpoint",
+      "disposition": "adapter_candidate",
+      "probe_status": "unknown",
+      "probe_reason": "unadapted_probe_http_2xx",
+      "http_status": 200,
+      "body_shape": "json",
+      "missing_params": [],
+      "recommended_action": "implement_provider_adapter"
+    }
+  ],
   "excluded_dispositions": {
     "dead_route_candidate": [
       {
@@ -571,6 +732,7 @@
   },
   "next": [
     "Create host-scoped adapter implementation tickets from the hosts array in priority order.",
+    "Start with www.safetydata.go.kr because it currently owns the largest candidate-operation count (4).",
     "Refresh route probes before implementing any host whose evidence changes away from adapter_candidate."
   ]
 }

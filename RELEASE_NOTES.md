@@ -1,17 +1,15 @@
 # Datapan Registry Release
 
-- generated_at: `2026-07-02T19:14:15Z`
+- generated_at: `2026-07-02T20:45:24Z`
 - provider: `data.go.kr`
 - datapan_version: `0.1.0-dev`
-- source_registry: `data\data-go-kr.registry.json`
-- previous_registry: `.datapan\previous\data-go-kr.registry.json`
+- source_registry: `C:\Users\statp\dev\datapan-registry\data\data-go-kr.registry.json`
 - release_manifest: `manifest.json`
 
 ## Registry
 
 - specs: `12060`
-- catalog_diff: `0` added, `0` removed, `25` changed, `12035` stable
-- catalog_diff_artifact: `reports/catalog-diff.json`
+- catalog_diff: not included; no previous registry was provided
 
 ## Provider Coverage
 
@@ -19,12 +17,12 @@
 - split_readiness: `ready`
 - verification_capable_adapters: `38`
 - call_capable_adapters: `22`
-- dependency_operations: `12253` total, `11419` gateway, `643` external, `633` registered-adapter, `29` missing-adapter
-- adapter_backlog: `11` target hosts, `29` target operations
-- route_disposition: `29` routes, `14` dead-route candidates, `15` transient failures, `0` parameter-blocked, `0` adapter candidates
+- dependency_operations: `12258` total, `11419` gateway, `648` external, `633` registered-adapter, `34` missing-adapter
+- adapter_backlog: `12` target hosts, `34` target operations
+- route_disposition: `34` routes, `14` dead-route candidates, `15` transient failures, `1` parameter-blocked, `4` adapter candidates
 - route_disposition_artifact: `reports/route-disposition.json`
-- provider_backlog: `192` hosts, `11` missing-adapter hosts, `29` operations needing adapters
-- coverage: `12111` callable operations (`98.8%`), external adapter coverage `95.6%`, verification evidence coverage `10.4%`, evidence-adjusted adapter candidates `0`
+- provider_backlog: `193` hosts, `12` missing-adapter hosts, `34` operations needing adapters
+- coverage: `12116` callable operations (`98.8%`), external adapter coverage `94.9%`, verification evidence coverage `10.4%`, evidence-adjusted adapter candidates `4`
 - coverage_artifact: `reports/coverage.json`
 - coverage_goals: callable `99%`, external adapters `98%`, verification evidence `10%`, call-capable adapters `25`, missing-adapter operations `<=10`
 - verification_plan: `1` batches, `10` planned operations, `10774` gateway gaps, `0` adapter gaps
@@ -35,10 +33,10 @@
 Top adapter targets:
 
 - `1`. `openapi.coast.kr`: `6` operations across `1` specs
-- `2`. `www.rda.go.kr`: `4` operations across `2` specs
-- `3`. `car.daegu.go.kr`: `4` operations across `1` specs
-- `4`. `openapi.price.go.kr`: `4` operations across `1` specs
-- `5`. `its.gyeongju.go.kr:81`: `3` operations across `1` specs
+- `2`. `www.safetydata.go.kr`: `5` operations across `5` specs
+- `3`. `www.rda.go.kr`: `4` operations across `2` specs
+- `4`. `car.daegu.go.kr`: `4` operations across `1` specs
+- `5`. `openapi.price.go.kr`: `4` operations across `1` specs
 
 ## Verification Evidence
 
@@ -55,13 +53,13 @@ Provider evidence:
 - `geoje`: `41`
 - `uiryeong`: `40`
 
-- unadapted_external_probe: `76` total, `0` verified, `29` failed, `0` skipped, `47` unknown
+- unadapted_external_probe: `81` total, `0` verified, `29` failed, `0` skipped, `52` unknown
 - unadapted_external_probe_artifact: `reports/unadapted-external-probe.json`
 - unadapted_external_probe_summary_artifact: `reports/unadapted-external-probe-summary.json`
 
 Unadapted external probe reasons:
 
-- `unadapted_probe_http_2xx`: `47`
+- `unadapted_probe_http_2xx`: `52`
 - `unadapted_probe_http_404`: `14`
 - `unadapted_probe_timeout`: `8`
 - `unadapted_probe_dns`: `6`
