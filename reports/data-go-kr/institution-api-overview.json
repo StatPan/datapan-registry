@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-02T16:17:23Z",
+  "generated_at": "2026-07-02T16:43:39Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -14,13 +14,13 @@
     "institutions": 411,
     "apis": 12060,
     "operations": 12253,
-    "runtime_evidence": 1231,
-    "runtime_evidence_percent": 10.0,
+    "runtime_evidence": 1249,
+    "runtime_evidence_percent": 10.2,
     "callable_operations": 12111,
     "external_endpoint_operations": 643,
-    "registered_adapter_operations": 586,
-    "missing_adapter_operations": 76,
-    "missing_adapter_hosts": 23
+    "registered_adapter_operations": 604,
+    "missing_adapter_operations": 58,
+    "missing_adapter_hosts": 22
   },
   "by_dependency_class": [
     {
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 586
+      "count": 604
     },
     {
       "key": "builtin",
@@ -59,7 +59,7 @@
     },
     {
       "key": "missing",
-      "count": 76
+      "count": 58
     },
     {
       "key": "not_applicable",
@@ -245,7 +245,12 @@
     },
     {
       "host": "data.gg.go.kr",
-      "operation_count": 18
+      "operation_count": 18,
+      "adapter": "data-gg",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
     },
     {
       "host": "www.andong.go.kr",
@@ -4723,9 +4728,9 @@
       "api_count": 840,
       "operation_api_count": 13,
       "operation_count": 30,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
+      "runtime_evidence_count": 18,
+      "runtime_evidence_percent": 60.0,
+      "verified": 18,
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
@@ -4743,12 +4748,12 @@
       ],
       "by_adapter_status": [
         {
-          "key": "builtin",
-          "count": 12
+          "key": "adapter",
+          "count": 18
         },
         {
-          "key": "missing",
-          "count": 18
+          "key": "builtin",
+          "count": 12
         }
       ],
       "top_categories": [
@@ -4776,7 +4781,12 @@
       "top_hosts": [
         {
           "host": "data.gg.go.kr",
-          "operation_count": 18
+          "operation_count": 18,
+          "adapter": "data-gg",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         },
         {
           "host": "apis.data.go.kr",

@@ -1,12 +1,13 @@
 {
-  "generated_at": "2026-07-02T16:17:09Z",
+  "generated_at": "2026-07-02T16:41:43Z",
   "source": "..\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
+  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1231,
-    "verified": 22,
+    "total": 1249,
+    "verified": 40,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0
@@ -25,7 +26,7 @@
       },
       {
         "key": "verified",
-        "count": 22,
+        "count": 40,
         "status": "verified"
       }
     ],
@@ -338,6 +339,11 @@
         "provider": "ulsan"
       },
       {
+        "key": "data-gg",
+        "count": 18,
+        "provider": "data-gg"
+      },
+      {
         "key": "andong",
         "count": 15,
         "provider": "andong"
@@ -475,6 +481,11 @@
         "host": "openapi.its.ulsan.kr"
       },
       {
+        "key": "data.gg.go.kr",
+        "count": 18,
+        "host": "data.gg.go.kr"
+      },
+      {
         "key": "www.andong.go.kr",
         "count": 15,
         "host": "www.andong.go.kr"
@@ -583,7 +594,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 567,
+        "count": 585,
         "kind": "external_endpoint"
       },
       {

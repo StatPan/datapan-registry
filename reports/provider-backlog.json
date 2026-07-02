@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T16:17:23Z",
+  "generated_at": "2026-07-02T16:43:39Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -10,32 +10,17 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 53,
     "external_guide_hosts": 157,
-    "registered_adapter_hosts": 30,
+    "registered_adapter_hosts": 31,
     "operation_hosts": 55,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 23,
-    "needs_adapter_operations": 76,
+    "missing_adapter_hosts": 22,
+    "needs_adapter_operations": 58,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
     "malformed_source_url_count": 625
   },
   "providers": [
-    {
-      "host": "data.gg.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "missing",
-      "specs": 8,
-      "operations": 18,
-      "external_endpoint_operations": 18,
-      "sample_ids": [
-        "15005231",
-        "15011020",
-        "15011027"
-      ]
-    },
     {
       "host": "openapi.coast.kr",
       "kinds": [
@@ -520,6 +505,21 @@
         "15052669",
         "3057770",
         "3057773"
+      ]
+    },
+    {
+      "host": "data.gg.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 8,
+      "operations": 18,
+      "external_endpoint_operations": 18,
+      "sample_ids": [
+        "15005231",
+        "15011020",
+        "15011027"
       ]
     },
     {

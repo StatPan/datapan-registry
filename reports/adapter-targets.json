@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-02T16:17:23Z",
+  "generated_at": "2026-07-02T16:43:39Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 23,
+  "filtered_count": 22,
   "summary": {
-    "target_hosts": 23,
-    "target_operations": 76,
-    "external_endpoint_operations": 76,
+    "target_hosts": 22,
+    "target_operations": 58,
+    "external_endpoint_operations": 58,
     "service_root_operations": 0,
     "approval_required_operations": 0,
     "missing_param_operations": 21,
@@ -17,56 +17,6 @@
   "targets": [
     {
       "rank": 1,
-      "host": "data.gg.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 18,
-      "specs": 8,
-      "organizations": [
-        "경기도"
-      ],
-      "source_categories": [
-        "공공행정",
-        "교육",
-        "산업고용",
-        "환경기상"
-      ],
-      "api_types": [
-        "LINK"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "sample_operations": [
-        {
-          "dataset_id": "15005231",
-          "title": "경기도 정기간행물 현황",
-          "organization": "경기도",
-          "operation": "정기간행물 현황 외부 링크 1",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026sortColumn=\u0026sortDirection=\u0026infId=PCG359G8UAD471M0GE9K15277158\u0026infSeq=3"
-        },
-        {
-          "dataset_id": "15005231",
-          "title": "경기도 정기간행물 현황",
-          "organization": "경기도",
-          "operation": "정기간행물 현황 외부 링크 2",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=8E1BBVOXNWLKUY0TDUVU29513229\u0026infSeq=2"
-        },
-        {
-          "dataset_id": "15011020",
-          "title": "경기도 창업보육센터현황",
-          "organization": "경기도",
-          "operation": "창업보육 센터 현황(2014)",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026rows=10\u0026sortColumn=\u0026sortDirection=\u0026infId=U6410C24Y846I1B808302067781\u0026infSeq=3\u0026searchWord=%EC%B0%BD%EC%97%85%EB%B3%B4%EC%9C%A1+%EC%84%BC%ED%84%B0+%ED%98%84%ED%99%A9"
-        }
-      ]
-    },
-    {
-      "rank": 2,
       "host": "openapi.coast.kr",
       "kinds": [
         "external_endpoint"
@@ -113,7 +63,7 @@
       ]
     },
     {
-      "rank": 3,
+      "rank": 2,
       "host": "www.nfqs.go.kr",
       "kinds": [
         "external_endpoint"
@@ -161,7 +111,7 @@
       ]
     },
     {
-      "rank": 4,
+      "rank": 3,
       "host": "www.nongsaro.go.kr",
       "kinds": [
         "external_endpoint"
@@ -208,7 +158,7 @@
       ]
     },
     {
-      "rank": 5,
+      "rank": 4,
       "host": "www.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -267,7 +217,7 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 5,
       "host": "car.daegu.go.kr",
       "kinds": [
         "external_endpoint"
@@ -327,7 +277,7 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 6,
       "host": "openapi.price.go.kr",
       "kinds": [
         "external_endpoint"
@@ -386,7 +336,7 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 7,
       "host": "data.gwanak.go.kr",
       "kinds": [
         "external_endpoint"
@@ -434,7 +384,7 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 8,
       "host": "data.mafra.go.kr",
       "kinds": [
         "external_endpoint"
@@ -482,7 +432,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -539,7 +489,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "www.garak.co.kr",
       "kinds": [
         "external_endpoint"
@@ -586,7 +536,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "www.work24.go.kr",
       "kinds": [
         "external_endpoint"
@@ -633,7 +583,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -684,7 +634,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 13,
       "host": "www.happysd.or.kr",
       "kinds": [
         "external_endpoint"
@@ -723,7 +673,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 14,
       "host": "data.seoul.go.kr",
       "kinds": [
         "external_endpoint"
@@ -762,7 +712,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 15,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -819,7 +769,7 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 16,
       "host": "www.culture.go.kr",
       "kinds": [
         "external_endpoint"
@@ -858,7 +808,7 @@
       ]
     },
     {
-      "rank": 18,
+      "rank": 17,
       "host": "ncpms.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -889,7 +839,7 @@
       ]
     },
     {
-      "rank": 19,
+      "rank": 18,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -925,7 +875,7 @@
       ]
     },
     {
-      "rank": 20,
+      "rank": 19,
       "host": "search.i815.or.kr",
       "kinds": [
         "external_endpoint"
@@ -956,7 +906,7 @@
       ]
     },
     {
-      "rank": 21,
+      "rank": 20,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -987,7 +937,7 @@
       ]
     },
     {
-      "rank": 22,
+      "rank": 21,
       "host": "www.jobplustv.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1018,7 +968,7 @@
       ]
     },
     {
-      "rank": 23,
+      "rank": 22,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

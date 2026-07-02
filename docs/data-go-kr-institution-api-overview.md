@@ -1,20 +1,20 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-02T16:17:23Z`
+- Generated at: `2026-07-02T16:43:39Z`
 - Institutions: `411`
 - APIs: `12060`
 - Operations: `12253`
-- Runtime evidence: `1231` (`10.0%`)
+- Runtime evidence: `1249` (`10.2%`)
 - External endpoint operations: `643`
-- Registered adapter operations: `586`
-- Missing adapter operations: `76`
+- Registered adapter operations: `604`
+- Missing adapter operations: `58`
 
 ## Largest Institutions By API Count
 
 | Institution | APIs | APIs with ops | Ops | Evidence | Evidence % | Verified | Failed | Skipped | Approval | No endpoint |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 행정안전부 | 1252 | 613 | 874 | 0 | 0.0% | 0 | 0 | 0 | 35 | 0 |
-| 경기도 | 840 | 13 | 30 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
+| 경기도 | 840 | 13 | 30 | 18 | 60.0% | 18 | 0 | 0 | 0 | 0 |
 | 국토교통부 | 393 | 127 | 397 | 25 | 6.3% | 0 | 0 | 25 | 6 | 0 |
 | 식품의약품안전처 | 392 | 272 | 363 | 2 | 0.6% | 0 | 0 | 2 | 275 | 0 |
 | 국회 국회사무처 | 277 | 0 | 0 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |

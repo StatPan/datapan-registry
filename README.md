@@ -14,17 +14,18 @@ re-importing the upstream data.go.kr catalog every time.
 - Operations: `12253`
 - Callable operations: `12111` (`98.8%`)
 - Latest release: `v2026.06.25.24`
-- Registered external adapters: `airport`, `andong`, `ekape`, `emuseum`,
-  `epost`, `folk`, `forest`, `gblib`, `geoje`, `humetro`, `itfind`, `jeju`,
-  `jeonju`, `korad`, `kpx`, `lh-ebid`, `myhome`, `naqs`, `oneclick-law`, `pqis`,
-  `q-net`, `seoul-bus`, `sisul`, `tour`, `uiryeong`, `ulsan`
-- External adapter coverage: `586` registered-adapter operations out of `643`
-  external endpoint operations (`88.5%`)
-- Missing external adapter hosts: `23`
+- Registered external adapters: `airport`, `andong`, `data-gg`, `ekape`,
+  `emuseum`, `epost`, `folk`, `forest`, `gblib`, `geoje`, `humetro`, `itfind`,
+  `jeju`, `jeonju`, `korad`, `kpx`, `lh-ebid`, `myhome`, `naqs`,
+  `oneclick-law`, `pqis`, `q-net`, `seoul-bus`, `sisul`, `tour`, `uiryeong`,
+  `ulsan`
+- External adapter coverage: `604` registered-adapter operations out of `643`
+  external endpoint operations (`91.2%`)
+- Missing external adapter hosts: `22`
 - Provider split readiness: `ready`
-  (`26` adapters, `26` verification-capable, `21` call-capable)
-- Runtime verification evidence: `1231` bounded checks merged into
-  `reports/latest-verification.json` (`22` verified, `87` failed, `1122`
+  (`27` adapters, `27` verification-capable, `21` call-capable)
+- Runtime verification evidence: `1249` bounded checks merged into
+  `reports/latest-verification.json` (`40` verified, `87` failed, `1122`
   skipped)
 - Runtime evidence growth target: `10.0%` checked evidence is above the
   unrounded `10%` release target; `0` additional records are required for this
@@ -32,15 +33,15 @@ re-importing the upstream data.go.kr catalog every time.
 - Institution API overview: `411` organizations, `12060` APIs, and `12253`
   operations in `reports/data-go-kr/institution-api-overview.json`; readable
   tables live in `docs/data-go-kr-institution-api-overview.md`.
-- Missing external host probe: `76` unadapted external endpoint checks in
-  `reports/unadapted-external-probe.json` (`47` HTTP 2xx adapter candidates,
+- Missing external host probe: `58` unadapted external endpoint checks in
+  `reports/unadapted-external-probe.json` (`29` HTTP 2xx adapter candidates,
   `14` HTTP 404 dead-route candidates, `15` timeout/DNS/request transient
   failures)
-- Route disposition: `76` missing external routes in
+- Route disposition: `58` missing external routes in
   `reports/route-disposition.json` (`14` dead-route candidates, `15`
-  transient failures, `47` remaining adapter candidates)
+  transient failures, `29` remaining adapter candidates)
 - Coverage route evidence: `reports/coverage.json` now carries the same route
-  evidence and reports `47` evidence-adjusted adapter candidates
+  evidence and reports `29` evidence-adjusted adapter candidates
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
 - Provider index: `data/provider-index.json`
@@ -109,6 +110,8 @@ reports/
   andong-verification-summary.json
   airport-verification.json
   airport-verification-summary.json
+  data-gg-verification.json
+  data-gg-verification-summary.json
   ekape-verification.json
   ekape-verification-summary.json
   emuseum-verification.json

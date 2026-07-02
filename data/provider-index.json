@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-02T16:17:23Z",
+  "generated_at": "2026-07-02T16:43:39Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 26,
-  "host_count": 30,
+  "adapter_count": 27,
+  "host_count": 31,
   "adapters": [
     {
       "name": "airport",
@@ -22,6 +22,16 @@
       ],
       "capabilities": [
         "call",
+        "verification"
+      ]
+    },
+    {
+      "name": "data-gg",
+      "status": "registered",
+      "hosts": [
+        "data.gg.go.kr"
+      ],
+      "capabilities": [
         "verification"
       ]
     },
@@ -293,8 +303,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 26,
-    "verification_capable_adapters": 26,
+    "adapter_count": 27,
+    "verification_capable_adapters": 27,
     "call_capable_adapters": 21,
     "required_adapters": 2,
     "required_verification_adapters": 2,
