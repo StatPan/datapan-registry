@@ -164,6 +164,7 @@ data.go.kr mastery should produce or preserve:
 - `reports/registry-impact-plan.json`
 - `reports/data-go-kr/runtime-evidence-growth.json`
 - `reports/data-go-kr/institution-api-overview.json`
+- `reports/data-go-kr/institution-runtime-plan.json`
 - `docs/data-go-kr-external-adapter-backlog.md`
 
 ## Source-Scoped Generation Contract
@@ -181,6 +182,7 @@ match those roots.
 | `reports/registry-impact-plan.json` | checked-in `reports/*/registry-impact-plan.json` source plans | `scripts/generate-impact-plan-rollup.py` generates the release-wide rollup, and `scripts/validate-impact-plans.py` validates mixed-source release scope while preserving strict source scope for source-specific plans. |
 | `reports/data-go-kr/runtime-evidence-growth.json` | `reports/coverage.json`, `reports/latest-verification.json`, `reports/latest-verification-summary.json`, `reports/verification-plan.json`, `data/provider-index.json` | `scripts/validate-runtime-evidence-growth.py` validates current evidence totals, evidence coverage percent, 10% target gap, provider split readiness, and next planned verification batches. |
 | `reports/data-go-kr/institution-api-overview.json` | `data/data-go-kr.registry.json`, `reports/dependencies.json`, `reports/latest-verification.json`, `reports/coverage.json`, `data/provider-index.json` | `scripts/validate-institution-api-overview.py` regenerates the overview and fails CI when institution API counts, operation counts, adapter status counts, or runtime evidence counts drift from checked-in artifacts. |
+| `reports/data-go-kr/institution-runtime-plan.json` | `reports/data-go-kr/coverage-backlog.json`, `data/data-go-kr.registry.json`, `reports/latest-verification.json` | `scripts/validate-institution-runtime-plan.py` regenerates the executable institution batch plan and fails CI when the next `datapan catalog verify --org` queue drifts from the coverage backlog. |
 
 This contract keeps `data/data-go-kr.registry.json` as the compatibility
 registry path while moving generated evidence toward `reports/data-go-kr/`.
@@ -197,6 +199,8 @@ two generated views:
   top hosts/categories.
 - `docs/data-go-kr-coverage-backlog.md` ranks institutions by uncovered API
   and runtime reactivation gaps.
+- `docs/data-go-kr-institution-runtime-plan.md` turns the top runtime gaps into
+  bounded `datapan catalog verify --org` commands.
 
 Use those views as the runtime reactivation queue. For each selected
 institution:
@@ -206,7 +210,9 @@ institution:
 3. Regenerate `reports/latest-verification-summary.json`.
 4. Regenerate `reports/data-go-kr/coverage-backlog.json` and
    `reports/data-go-kr/institution-api-overview.json`.
-5. Run `scripts/validate-coverage-backlog.py` and
+5. Regenerate `reports/data-go-kr/institution-runtime-plan.json`.
+6. Run `scripts/validate-coverage-backlog.py`,
+   `scripts/validate-institution-runtime-plan.py`, and
    `scripts/validate-institution-api-overview.py`.
 
 The current first queue is `행정안전부`: `1252` APIs, `613` APIs with operation
