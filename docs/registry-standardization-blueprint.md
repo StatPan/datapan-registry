@@ -91,6 +91,9 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
+- `reports/data-go-kr/coverage-backlog.json` tracks `4,875` data.go.kr APIs
+  without operation mappings, `6,615` operation-mapped APIs without runtime
+  evidence, and `54` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
   `reports/open-assembly/runtime-evidence-plan.json`, and
@@ -114,7 +117,7 @@ Current strengths:
   the same blocker, warning, and next-action inventory that CI validates.
 - `reports/source-report-inventory.json` is generated from source profiles and
   checked-in `reports/<source>/` directories, measuring `5` source report
-  directories, `17` source-scoped JSON reports, and `12.3%` recommended
+  directories, `18` source-scoped JSON reports, and `12.3%` recommended
   source-scoped report coverage.
 - `scripts/sync-release-schema-artifacts.py` checks that every checked-in
   `schemas/*.schema.json` file is represented in `schemas/index.json` and
@@ -170,6 +173,9 @@ Current gaps:
   `1221`, meeting the `10%` runtime evidence target and clearing the release
   readiness warning. Most of this growth is skipped boundary evidence, not
   proof that those operations are callable.
+- API operation coverage remains incomplete: `7,185` of `12,060` APIs have
+  operation mappings (`59.6%`), leaving `4,875` APIs to materialize and `6,615`
+  operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report
   generation remains incomplete.
@@ -418,6 +424,9 @@ Use this order unless a production failure changes priority:
 26. Add a generated source report inventory. Tracked by Gira #85; this turns
     the multi-source report grouping gap into `reports/source-report-inventory.json`
     coverage metrics and validates drift in CI.
+27. Add a generated data.go.kr coverage backlog. Tracked by Gira #89; this
+    turns uncovered APIs and runtime reactivation targets into
+    `reports/data-go-kr/coverage-backlog.json` work queues that validate in CI.
 
 ## Measurement Rules
 
