@@ -13,6 +13,7 @@ from typing import Any
 
 
 EXPECTED_SCHEMA_VERSION = "datapan.operation-materialization-plan.v1"
+EXPECTED_BATCH_SCHEMA_VERSION = "datapan.operation-materialization-batch.v1"
 
 
 def load_json(path: pathlib.Path) -> Any:
@@ -34,6 +35,32 @@ def as_list(value: Any, label: str) -> list[Any]:
 
 def normalize_json(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+
+
+def portable_path(path: pathlib.Path) -> str:
+    return str(path).replace("\\", "/")
+
+
+def batch_file_payload(report: dict[str, Any], batch: dict[str, Any], plan_path: pathlib.Path) -> dict[str, Any]:
+    return {
+        "schema_version": EXPECTED_BATCH_SCHEMA_VERSION,
+        "generated_at": report.get("generated_at"),
+        "provider": report.get("provider"),
+        "source_id": report.get("source_id"),
+        "plan": portable_path(plan_path),
+        "label": batch.get("label"),
+        "rank": batch.get("rank"),
+        "organization": batch.get("organization"),
+        "api_count": batch.get("api_count"),
+        "covered_api_count": batch.get("covered_api_count"),
+        "uncovered_api_count": batch.get("uncovered_api_count"),
+        "api_operation_coverage_percent": batch.get("api_operation_coverage_percent"),
+        "planned_api_count": batch.get("planned_api_count"),
+        "remaining_after_batch": batch.get("remaining_after_batch"),
+        "action": batch.get("action"),
+        "reason": batch.get("reason"),
+        "apis": batch.get("apis"),
+    }
 
 
 def validate_report(report_path: pathlib.Path, markdown_path: pathlib.Path, generator: pathlib.Path) -> None:
@@ -80,6 +107,7 @@ def validate_report(report_path: pathlib.Path, markdown_path: pathlib.Path, gene
                 str(temp_json),
                 "--markdown-output",
                 str(temp_md),
+                "--no-batch-files",
             ],
             check=True,
             stdout=subprocess.PIPE,
@@ -116,6 +144,9 @@ def validate_report(report_path: pathlib.Path, markdown_path: pathlib.Path, gene
         planned_api_count = batch.get("planned_api_count")
         if not isinstance(organization, str) or not organization:
             raise ValueError(f"batches[{index}].organization must be non-empty")
+        output = batch.get("output")
+        if not isinstance(output, str) or not output:
+            raise ValueError(f"batches[{index}].output must be a non-empty path")
         if batch.get("action") != "materialize_operation_mapping":
             raise ValueError(f"batches[{index}].action must be materialize_operation_mapping")
         if not isinstance(planned_api_count, int) or planned_api_count <= 0:
@@ -134,6 +165,17 @@ def validate_report(report_path: pathlib.Path, markdown_path: pathlib.Path, gene
                 raise ValueError(f"batches[{index}].apis[{api_index}] organization mismatch")
             if not api.get("dataset_id"):
                 raise ValueError(f"batches[{index}].apis[{api_index}].dataset_id must be non-empty")
+        batch_path = pathlib.Path(output)
+        if not batch_path.exists():
+            raise ValueError(f"{batch_path} is missing; regenerate with scripts/generate-operation-materialization-plan.py")
+        actual_batch = as_dict(load_json(batch_path), batch_path)
+        if actual_batch.get("schema_version") != EXPECTED_BATCH_SCHEMA_VERSION:
+            raise ValueError(
+                f"{batch_path} schema_version expected {EXPECTED_BATCH_SCHEMA_VERSION}, got {actual_batch.get('schema_version')}"
+            )
+        expected_batch = batch_file_payload(report, batch, report_path)
+        if normalize_json(actual_batch) != normalize_json(expected_batch):
+            raise ValueError(f"{batch_path} is stale; regenerate with scripts/generate-operation-materialization-plan.py")
         planned_sum += planned_api_count
 
     if summary.get("planned_api_count") != planned_sum:

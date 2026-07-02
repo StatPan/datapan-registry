@@ -1,0 +1,36 @@
+{
+  "schema_version": "datapan.operation-materialization-batch.v1",
+  "generated_at": "2026-07-02T19:14:15Z",
+  "provider": "data.go.kr",
+  "source_id": "data_go_kr",
+  "plan": "reports/data-go-kr/operation-materialization-plan.json",
+  "label": "institution-06",
+  "rank": 6,
+  "organization": "성평등가족부",
+  "api_count": 273,
+  "covered_api_count": 272,
+  "uncovered_api_count": 1,
+  "api_operation_coverage_percent": 99.6,
+  "planned_api_count": 1,
+  "remaining_after_batch": 0,
+  "action": "materialize_operation_mapping",
+  "reason": "no_dependency_rows",
+  "apis": [
+    {
+      "dataset_id": "3072018",
+      "title": "성평등가족부_성범죄자 지역별 통계",
+      "organization": "성평등가족부",
+      "source_category": "사회복지",
+      "api_type": "LINK",
+      "data_format": "XML",
+      "register_status": "변경승인",
+      "dev_approval": "자동승인",
+      "prod_approval": "자동승인",
+      "created_at": "2016-01-26",
+      "updated_at": "2025-06-17",
+      "meta_url": "https://www.data.go.kr/catalog/3072018/openapi.json",
+      "action": "materialize_operation_mapping",
+      "reason": "no_dependency_rows"
+    }
+  ]
+}

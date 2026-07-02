@@ -11,6 +11,7 @@ from typing import Any
 
 
 SCHEMA_VERSION = "datapan.operation-materialization-plan.v1"
+BATCH_SCHEMA_VERSION = "datapan.operation-materialization-batch.v1"
 
 
 def load_json(path: pathlib.Path) -> Any:
@@ -59,6 +60,7 @@ def api_sort_key(row: dict[str, Any]) -> tuple[str, str]:
 
 def build_report(
     coverage_backlog_path: pathlib.Path,
+    batch_output_dir: pathlib.Path,
     institution_limit: int,
     batch_size: int,
     sample_limit: int,
@@ -111,7 +113,7 @@ def build_report(
                 "remaining_after_batch": max(0, len(apis) - planned),
                 "action": "materialize_operation_mapping",
                 "reason": "no_dependency_rows",
-                "output": portable_path(pathlib.Path("reports/data-go-kr/operation-materialization-batches") / f"institution-{index:02d}.json"),
+                "output": portable_path(batch_output_dir / f"institution-{index:02d}.json"),
                 "apis": apis[:planned],
                 "sample_apis": apis[:sample_limit],
             }
@@ -158,6 +160,37 @@ def build_report(
             },
         ],
     }
+
+
+def batch_file_payload(report: dict[str, Any], batch: dict[str, Any], plan_path: pathlib.Path) -> dict[str, Any]:
+    return {
+        "schema_version": BATCH_SCHEMA_VERSION,
+        "generated_at": report.get("generated_at"),
+        "provider": report.get("provider"),
+        "source_id": report.get("source_id"),
+        "plan": portable_path(plan_path),
+        "label": batch.get("label"),
+        "rank": batch.get("rank"),
+        "organization": batch.get("organization"),
+        "api_count": batch.get("api_count"),
+        "covered_api_count": batch.get("covered_api_count"),
+        "uncovered_api_count": batch.get("uncovered_api_count"),
+        "api_operation_coverage_percent": batch.get("api_operation_coverage_percent"),
+        "planned_api_count": batch.get("planned_api_count"),
+        "remaining_after_batch": batch.get("remaining_after_batch"),
+        "action": batch.get("action"),
+        "reason": batch.get("reason"),
+        "apis": batch.get("apis"),
+    }
+
+
+def write_batch_files(report: dict[str, Any], plan_path: pathlib.Path) -> None:
+    for raw in as_list(report.get("batches"), "batches"):
+        batch = as_dict(raw, "batch")
+        output = batch.get("output")
+        if not isinstance(output, str) or not output:
+            raise ValueError("batch.output must be a non-empty path")
+        write_json(pathlib.Path(output), batch_file_payload(report, batch, plan_path))
 
 
 def md(value: object) -> str:
@@ -237,7 +270,9 @@ def build_markdown(report: dict[str, Any], markdown_limit: int) -> str:
         "After materializing operation mappings for a batch, regenerate the coverage "
         "backlog, this plan, the institution API overview, and the institution runtime "
         "plan. APIs that gain operations should leave this plan and enter runtime "
-        "reactivation if they still lack verification evidence.\n"
+        "reactivation if they still lack verification evidence. The per-institution "
+        "batch JSON files under `reports/data-go-kr/operation-materialization-batches/` "
+        "are the handoff unit for mapping work.\n"
     )
 
 
@@ -247,9 +282,11 @@ def main() -> int:
     parser.add_argument("--institution-limit", default=10, type=int)
     parser.add_argument("--batch-size", default=100, type=int)
     parser.add_argument("--sample-limit", default=10, type=int)
+    parser.add_argument("--batch-output-dir", default="reports/data-go-kr/operation-materialization-batches", type=pathlib.Path)
     parser.add_argument("--output", default="reports/data-go-kr/operation-materialization-plan.json", type=pathlib.Path)
     parser.add_argument("--markdown-output", default="docs/data-go-kr-operation-materialization-plan.md", type=pathlib.Path)
     parser.add_argument("--markdown-limit", default=30, type=int)
+    parser.add_argument("--no-batch-files", action="store_true", help="skip writing per-institution batch JSON files")
     args = parser.parse_args()
 
     if args.institution_limit <= 0:
@@ -259,9 +296,17 @@ def main() -> int:
     if args.sample_limit <= 0:
         raise ValueError("--sample-limit must be positive")
 
-    report = build_report(args.coverage_backlog, args.institution_limit, args.batch_size, args.sample_limit)
+    report = build_report(
+        args.coverage_backlog,
+        args.batch_output_dir,
+        args.institution_limit,
+        args.batch_size,
+        args.sample_limit,
+    )
     write_json(args.output, report)
     write_text(args.markdown_output, build_markdown(report, args.markdown_limit))
+    if not args.no_batch_files:
+        write_batch_files(report, args.output)
     print(
         f"wrote {args.output} and {args.markdown_output} "
         f"(first_queue={report['summary']['first_queue']}, planned_apis={report['summary']['planned_api_count']})"
