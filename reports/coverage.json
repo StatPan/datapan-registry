@@ -1,26 +1,26 @@
 {
-  "generated_at": "2026-06-30T08:11:27Z",
+  "generated_at": "2026-07-02T16:06:21Z",
   "provider": "data.go.kr",
-  "registry": "./data/data-go-kr.registry.json",
+  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
-  "verification": "./reports/latest-verification.json",
-  "route_disposition": "./reports/route-disposition.json",
+  "verification": "..\\datapan-registry\\reports\\latest-verification.json",
+  "route_disposition": "..\\datapan-registry\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 12205,
-    "callable_operations": 12063,
+    "operations": 12253,
+    "callable_operations": 12111,
     "callable_operation_percent": 98.8,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 595,
+    "external_endpoint_operations": 643,
     "registered_adapter_operations": 586,
-    "missing_adapter_operations": 28,
-    "external_adapter_coverage_percent": 95.4,
+    "missing_adapter_operations": 76,
+    "external_adapter_coverage_percent": 88.5,
     "approval_required_operations": 4142,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "registered_adapter_hosts": 30,
-    "missing_adapter_hosts": 10,
+    "missing_adapter_hosts": 23,
     "adapter_count": 26,
     "call_capable_adapters": 21,
     "provider_split_ready": true
@@ -52,18 +52,33 @@
   },
   "route_evidence": {
     "present": true,
-    "report": "./reports/route-disposition.json",
-    "routes_total": 28,
-    "with_probe_evidence": 28,
+    "report": "..\\datapan-registry\\reports\\route-disposition.json",
+    "routes_total": 76,
+    "with_probe_evidence": 76,
     "dead_route_candidates": 14,
-    "transient_failures": 14,
+    "transient_failures": 15,
     "parameter_blocked_routes": 0,
-    "remaining_adapter_candidates": 0,
-    "raw_missing_adapter_operations": 28,
-    "evidence_adjusted_adapter_candidates": 0
+    "remaining_adapter_candidates": 47,
+    "raw_missing_adapter_operations": 76,
+    "evidence_adjusted_adapter_candidates": 47
   },
   "gaps": {
     "missing_adapter_hosts": [
+      {
+        "host": "data.gg.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 8,
+        "operations": 18,
+        "external_endpoint_operations": 18,
+        "sample_ids": [
+          "15005231",
+          "15011020",
+          "15011027"
+        ]
+      },
       {
         "host": "openapi.coast.kr",
         "kinds": [
@@ -75,6 +90,23 @@
         "external_endpoint_operations": 6,
         "sample_ids": [
           "15059302"
+        ]
+      },
+      {
+        "host": "www.nfqs.go.kr",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "missing",
+        "specs": 3,
+        "operations": 5,
+        "external_endpoint_operations": 5,
+        "external_guide_specs": 3,
+        "sample_ids": [
+          "15001668",
+          "15001702",
+          "15009422"
         ]
       },
       {
@@ -120,84 +152,63 @@
         ]
       },
       {
-        "host": "its.gyeongju.go.kr:81",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "missing",
-        "specs": 1,
-        "operations": 3,
-        "external_endpoint_operations": 3,
-        "sample_ids": [
-          "15021579"
-        ]
-      },
-      {
-        "host": "data.wanju.go.kr",
+        "host": "www.nongsaro.go.kr",
         "kinds": [
           "external_endpoint"
         ],
         "adapter_status": "missing",
         "specs": 2,
-        "operations": 2,
-        "external_endpoint_operations": 2,
+        "operations": 4,
+        "external_endpoint_operations": 4,
         "sample_ids": [
-          "15010208",
-          "15058097"
+          "15002034",
+          "15005257"
         ]
       },
       {
-        "host": "www.cid.or.kr",
+        "host": "data.mafra.go.kr",
         "kinds": [
-          "external_endpoint"
+          "external_endpoint",
+          "external_guide"
         ],
         "adapter_status": "missing",
-        "specs": 1,
-        "operations": 2,
-        "external_endpoint_operations": 2,
+        "specs": 2,
+        "operations": 3,
+        "external_endpoint_operations": 3,
+        "external_guide_specs": 1,
         "sample_ids": [
-          "15012192"
+          "15002220",
+          "15008409"
         ]
       },
       {
-        "host": "www.dgeic.or.kr:8080",
+        "host": "www.garak.co.kr",
         "kinds": [
           "external_endpoint",
           "external_guide"
         ],
         "adapter_status": "missing",
         "specs": 1,
-        "operations": 1,
-        "external_endpoint_operations": 1,
+        "operations": 3,
+        "external_endpoint_operations": 3,
         "external_guide_specs": 1,
         "sample_ids": [
-          "15001184"
+          "15004517"
         ]
       },
       {
-        "host": "openapi-lib.sen.go.kr",
+        "host": "www.work24.go.kr",
         "kinds": [
-          "external_endpoint"
+          "external_endpoint",
+          "external_guide"
         ],
         "adapter_status": "missing",
         "specs": 1,
-        "operations": 1,
-        "external_endpoint_operations": 1,
+        "operations": 3,
+        "external_endpoint_operations": 3,
+        "external_guide_specs": 1,
         "sample_ids": [
-          "15001051"
-        ]
-      },
-      {
-        "host": "www.simpan.go.kr",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "missing",
-        "specs": 1,
-        "operations": 1,
-        "external_endpoint_operations": 1,
-        "sample_ids": [
-          "3084452"
+          "15003549"
         ]
       }
     ],
@@ -381,7 +392,7 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-06-30T08:11:27Z",
+    "generated_at": "2026-07-02T16:06:21Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 26,
     "host_count": 30,
@@ -688,19 +699,19 @@
   "next": [
     {
       "label": "missing adapters",
-      "command": "datapan providers --registry ./data/data-go-kr.registry.json --gaps --limit 20 --json"
+      "command": "datapan providers --registry ..\\datapan-registry\\data\\data-go-kr.registry.json --gaps --limit 20 --json"
     },
     {
       "label": "adapter targets",
-      "command": "datapan targets --registry ./data/data-go-kr.registry.json --limit 20 --json"
+      "command": "datapan targets --registry ..\\datapan-registry\\data\\data-go-kr.registry.json --limit 20 --json"
     },
     {
       "label": "coverage report",
-      "command": "datapan coverage --registry ./data/data-go-kr.registry.json --verification ./reports/latest-verification.json --route-disposition ./reports/route-disposition.json --json"
+      "command": "datapan coverage --registry ..\\datapan-registry\\data\\data-go-kr.registry.json --verification ..\\datapan-registry\\reports\\latest-verification.json --route-disposition ..\\datapan-registry\\reports\\route-disposition.json --json"
     },
     {
       "label": "verify forest",
-      "command": "datapan verify --registry ./data/data-go-kr.registry.json --provider forest --kind external_endpoint --limit 4 --timeout 10s --json"
+      "command": "datapan verify --registry ..\\datapan-registry\\data\\data-go-kr.registry.json --provider forest --kind external_endpoint --limit 4 --timeout 10s --json"
     }
   ]
 }

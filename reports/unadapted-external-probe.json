@@ -1,150 +1,480 @@
 {
-  "generated_at": "2026-06-25T05:21:35Z",
+  "generated_at": "2026-07-02T16:06:06Z",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
-  "timeout": "12s",
   "truncated": false,
-  "filters": {
-    "kind": "external_endpoint"
-  },
-  "filtered_count": 28,
+  "filtered_count": 76,
   "summary": {
-    "total": 28,
+    "total": 76,
     "verified": 0,
-    "failed": 28,
+    "failed": 29,
     "skipped": 0,
-    "unknown": 0
+    "unknown": 47
   },
   "results": [
     {
-      "dataset_id": "15001051",
-      "title": "서울특별시교육청 공공도서관 소장도서정보",
-      "operation": "도서 자료 검색",
+      "dataset_id": "15097855",
+      "title": "대구광역시_어린이 보호구역 위험요소 조회 서비스",
+      "operation": "어린이 보호구역 내 고정체 위험요소 조회 서비스",
       "provider": "data.go.kr",
-      "endpoint_host": "openapi-lib.sen.go.kr",
+      "endpoint_host": "car.daegu.go.kr",
       "dependency_class": "external_endpoint",
       "status": "failed",
-      "reason": "unadapted_probe_http_503",
-      "verified_at": "2026-06-25T05:21:35Z",
-      "http_status": 503,
-      "url": "http://openapi-lib.sen.go.kr?numOfRows=1\u0026pageNo=1",
+      "reason": "unadapted_probe_http_404",
+      "verified_at": "2026-07-02T16:04:12Z",
+      "http_status": 404,
+      "url": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getFixTotal?_type=json\u0026numOfRows=1\u0026pageNo=1",
       "params": {
-        "manageCd": "",
+        "_type": "json",
+        "gubun": "",
         "numOfRows": "1",
         "pageNo": "1",
-        "title": ""
+        "zoneNm": ""
       },
       "missing_params": [
-        "title",
-        "manageCd"
+        "zoneNm",
+        "gubun"
       ],
       "body_shape": "html"
     },
     {
-      "dataset_id": "15001184",
-      "title": "대구환경공단_소각처리현황",
-      "operation": "소각처리현황",
+      "dataset_id": "15097855",
+      "title": "대구광역시_어린이 보호구역 위험요소 조회 서비스",
+      "operation": "어린이 보호구역 내 시간별/구간별 고정체 위험요소 조회 서비스",
       "provider": "data.go.kr",
-      "endpoint_host": "www.dgeic.or.kr:8080",
+      "endpoint_host": "car.daegu.go.kr",
       "dependency_class": "external_endpoint",
       "status": "failed",
       "reason": "unadapted_probe_http_404",
-      "verified_at": "2026-06-25T05:21:35Z",
+      "verified_at": "2026-07-02T16:04:12Z",
       "http_status": 404,
-      "url": "http://www.dgeic.or.kr:8080/?numOfRows=1\u0026pageNo=1",
+      "url": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getFix?_type=json\u0026numOfRows=1\u0026pageNo=1",
       "params": {
-        "numOfRows": "1",
-        "pageNo": "1"
-      },
-      "body_shape": "empty"
-    },
-    {
-      "dataset_id": "15002002",
-      "title": "농촌진흥청_농업기계 안전정보",
-      "operation": "농기계안전정보 목록 조회",
-      "provider": "data.go.kr",
-      "endpoint_host": "www.rda.go.kr",
-      "dependency_class": "external_endpoint",
-      "status": "failed",
-      "reason": "unadapted_probe_http_404",
-      "verified_at": "2026-06-25T05:21:35Z",
-      "http_status": 404,
-      "url": "http://www.rda.go.kr/openapidata/service/rdamachinesafe_api?numOfRows=1\u0026pageNo=1",
-      "params": {
+        "_type": "json",
         "numOfRows": "1",
         "pageNo": "1",
-        "searchtype": "",
-        "searchword": ""
+        "sectionClassifyNm": "",
+        "zoneNm": ""
       },
       "missing_params": [
-        "searchtype",
-        "searchword"
+        "zoneNm",
+        "sectionClassifyNm"
       ],
       "body_shape": "html"
     },
     {
-      "dataset_id": "15002055",
-      "title": "농촌진흥청_농업농촌종합정보(인테러뱅)",
-      "operation": "농업농촌종합정보(인테러뱅) 댓글보기 조회",
+      "dataset_id": "15097855",
+      "title": "대구광역시_어린이 보호구역 위험요소 조회 서비스",
+      "operation": "어린이 보호구역 내 시간별/구간별 이동체 위험요소 조회 서비스",
       "provider": "data.go.kr",
-      "endpoint_host": "www.rda.go.kr",
+      "endpoint_host": "car.daegu.go.kr",
       "dependency_class": "external_endpoint",
       "status": "failed",
       "reason": "unadapted_probe_http_404",
-      "verified_at": "2026-06-25T05:21:35Z",
+      "verified_at": "2026-07-02T16:04:12Z",
       "http_status": 404,
-      "url": "http://www.rda.go.kr/openapidata/service/interrobang_api",
+      "url": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getMove?_type=json\u0026numOfRows=1\u0026pageNo=1",
       "params": {
-        "seq": ""
-      },
-      "missing_params": [
-        "seq"
-      ],
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15002055",
-      "title": "농촌진흥청_농업농촌종합정보(인테러뱅)",
-      "operation": "농업농촌종합정보(인테러뱅) 목록 조회",
-      "provider": "data.go.kr",
-      "endpoint_host": "www.rda.go.kr",
-      "dependency_class": "external_endpoint",
-      "status": "failed",
-      "reason": "unadapted_probe_http_404",
-      "verified_at": "2026-06-25T05:21:35Z",
-      "http_status": 404,
-      "url": "http://www.rda.go.kr/openapidata/service/interrobang_api?numOfRows=1\u0026pageNo=1",
-      "params": {
+        "_type": "json",
         "numOfRows": "1",
         "pageNo": "1",
-        "searchtype": "",
-        "searchword": ""
+        "sectionClassifyNm": "",
+        "zoneNm": ""
       },
       "missing_params": [
-        "searchtype",
-        "searchword"
+        "zoneNm",
+        "sectionClassifyNm"
       ],
       "body_shape": "html"
     },
     {
-      "dataset_id": "15002055",
-      "title": "농촌진흥청_농업농촌종합정보(인테러뱅)",
-      "operation": "농업농촌종합정보(인테러뱅) 상세보기 조회",
+      "dataset_id": "15097855",
+      "title": "대구광역시_어린이 보호구역 위험요소 조회 서비스",
+      "operation": "어린이 보호구역 내 이동체 위험요소 조회 서비스",
       "provider": "data.go.kr",
-      "endpoint_host": "www.rda.go.kr",
+      "endpoint_host": "car.daegu.go.kr",
       "dependency_class": "external_endpoint",
       "status": "failed",
       "reason": "unadapted_probe_http_404",
-      "verified_at": "2026-06-25T05:21:35Z",
+      "verified_at": "2026-07-02T16:04:12Z",
       "http_status": 404,
-      "url": "http://www.rda.go.kr/openapidata/service/interrobang_api",
+      "url": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getMoveTotal?_type=json\u0026numOfRows=1\u0026pageNo=1",
       "params": {
-        "seq": ""
+        "_type": "json",
+        "gubun": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "zoneNm": ""
       },
       "missing_params": [
-        "seq"
+        "zoneNm",
+        "gubun"
       ],
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15005231",
+      "title": "경기도 정기간행물 현황",
+      "operation": "정기간행물 현황 외부 링크 1",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:15Z",
+      "http_status": 200,
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=PCG359G8UAD471M0GE9K15277158\u0026infSeq=3\u0026page=1\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15005231",
+      "title": "경기도 정기간행물 현황",
+      "operation": "정기간행물 현황 외부 링크 2",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:15Z",
+      "http_status": 200,
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=8E1BBVOXNWLKUY0TDUVU29513229\u0026infSeq=2",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011020",
+      "title": "경기도 창업보육센터현황",
+      "operation": "창업보육 센터 현황(2014)",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:15Z",
+      "http_status": 200,
+      "url": "http://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=U6410C24Y846I1B808302067781\u0026infSeq=3\u0026page=1\u0026rows=10\u0026searchWord=%EC%B0%BD%EC%97%85%EB%B3%B4%EC%9C%A1+%EC%84%BC%ED%84%B0+%ED%98%84%ED%99%A9\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011027",
+      "title": "경기도 토양전문기관 및 토양정화업체 현황",
+      "operation": "토양전문기관 및 토양정화업체 현황 외부 링크 1",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:15Z",
+      "http_status": 200,
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=UB59Y8D2X82TIOGXONRB12806726\u0026infSeq=3\u0026page=1\u0026searchWord=%ED%86%A0%EC%96%91%EC%A0%84%EB%AC%B8%EA%B8%B0%EA%B4%80+%EB%B0%8F+%ED%86%A0%EC%96%91%EC%A0%95%ED%99%94%EC%97%85%EC%B2%B4+%ED%98%84%ED%99%A9\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011027",
+      "title": "경기도 토양전문기관 및 토양정화업체 현황",
+      "operation": "토양전문기관 및 토양정화업체 현황 외부 링크 2",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:15Z",
+      "http_status": 200,
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=B5NH8DK23P2RAJCCW0KU14118365\u0026infSeq=3\u0026loc=\u0026order=\u0026page=1\u0026rows=10\u0026searchWord=%EC%98%A5%EC%99%B8%EA%B4%91%EA%B3%A0%EC%97%85+%ED%98%84%ED%99%A9\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011027",
+      "title": "경기도 토양전문기관 및 토양정화업체 현황",
+      "operation": "토양전문기관 및 토양정화업체 현황 외부 링크 3",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:15Z",
+      "http_status": 200,
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=OZN18WC388B0NLZR2IG8104293\u0026infSeq=3\u0026loc=\u0026order=\u0026page=1\u0026rows=10\u0026searchWord=%EC%98%81%ED%96%A5%EC%A1%B0%EC%82%AC%EA%B8%B0%EA%B4%80+%ED%98%84%ED%99%A9\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011035",
+      "title": "경기도 평생교육 현황",
+      "operation": "평생교육대학 운영 현황",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:15Z",
+      "http_status": 200,
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=A2ECT4ESB2L60935518O11994735\u0026infSeq=2\u0026loc=\u0026order=\u0026page=1\u0026rows=10\u0026searchWord=%ED%8F%89%EC%83%9D%EA%B5%90%EC%9C%A1%EB%8C%80%ED%95%99+%EC%9A%B4%EC%98%81+%ED%98%84%ED%99%A9\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011068",
+      "title": "경기도 광고업 현황",
+      "operation": "옥외광고업 현황 외부 링크 1",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:15Z",
+      "http_status": 200,
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=B5NH8DK23P2RAJCCW0KU14118365\u0026infSeq=3\u0026loc=\u0026order=\u0026page=1\u0026rows=10\u0026searchWord=%EC%98%A5%EC%99%B8%EA%B4%91%EA%B3%A0%EC%97%85+%ED%98%84%ED%99%A9\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011068",
+      "title": "경기도 광고업 현황",
+      "operation": "옥외광고업 현황 외부 링크 2",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:15Z",
+      "http_status": 200,
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=8MHGE3K3CSUSBFX2G4MM14032562\u0026infSeq=3\u0026page=1\u0026searchWord=%EC%8A%B9%EA%B0%95%EA%B8%B0%EC%A0%9C%EC%A1%B0%EB%B0%8F%EC%88%98%EC%9E%85%EC%97%85%EC%B2%B4+%ED%98%84%ED%99%A9\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011068",
+      "title": "경기도 광고업 현황",
+      "operation": "옥외광고업 현황 외부 링크 3",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:15Z",
+      "http_status": 200,
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=ZCEL4QL7TJBTNIH2KTNF14683127\u0026infSeq=3\u0026page=1\u0026searchWord=%EC%9A%B0%EC%9C%A0%EB%A5%98%ED%8C%90%EB%A7%A4%EC%97%85+%ED%98%84%ED%99%A9\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011074",
+      "title": "경기도 중금속 측정결과 현황",
+      "operation": "경기도 중금속 측정결과 현황_20250519 외부 링크 1",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:15Z",
+      "http_status": 200,
+      "url": "http://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=U296AUQAC7S3BZNYM66P11856499\u0026infSeq=3\u0026page=1\u0026rows=10\u0026searchWord=%EC%A4%91%EA%B8%88%EC%86%8D+%EC%B8%A1%EC%A0%95+%EA%B2%B0%EA%B3%BC+%ED%98%84%ED%99%A9\u0026sortColumn=\u0026sortDirection=#none",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011074",
+      "title": "경기도 중금속 측정결과 현황",
+      "operation": "경기도 중금속 측정결과 현황_20250519 외부 링크 2",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:15Z",
+      "http_status": 200,
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=H0Z8L0VN8HK3538X7OLL11949113\u0026infSeq=3\u0026page=1\u0026searchWord=%EA%B5%B4%EB%9A%9D+%EC%9E%90%EB%8F%99+%EC%B8%A1%EC%A0%95%EA%B8%B0%EA%B8%B0%EC%84%A4%EC%B9%98+%ED%98%84%ED%99%A9\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011075",
+      "title": "경기도_보육교사 교육원 현황",
+      "operation": "보육교사 교육원 현황(2015) 외부 링크 1",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:15Z",
+      "http_status": 200,
+      "url": "http://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=04G2DOO3319D55RG8D7111674874\u0026infSeq=3\u0026page=1\u0026rows=10\u0026searchWord=%EB%B3%B4%EC%9C%A1%EA%B5%90%EC%82%AC\u0026sortColumn=\u0026sortDirection=#none",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011075",
+      "title": "경기도_보육교사 교육원 현황",
+      "operation": "보육교사 교육원 현황(2015) 외부 링크 2",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:15Z",
+      "http_status": 200,
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=DGSEEAHU34YPXN0IBBIT20995946\u0026infSeq=3\u0026page=1\u0026searchWord=%ED%95%99%EC%9B%90+%ED%98%84%ED%99%A9\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011075",
+      "title": "경기도_보육교사 교육원 현황",
+      "operation": "보육교사 교육원 현황(2015) 외부 링크 3",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:15Z",
+      "http_status": 200,
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=0UH7S75R45EM2FTI971A20528353\u0026infSeq=3\u0026page=1\u0026searchWord=%EC%B4%88%EB%93%B1%ED%95%99%EA%B5%90+%ED%98%84%ED%99%A9\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011147",
+      "title": "경기도 비점오염 저감시설 현황",
+      "operation": "비점오염 저감시설 현황 외부 링크 1",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:15Z",
+      "http_status": 200,
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=0856ISDY12ITD4N45F9A11682702\u0026infSeq=3\u0026page=1\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011147",
+      "title": "경기도 비점오염 저감시설 현황",
+      "operation": "비점오염 저감시설 현황 외부 링크 2",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:15Z",
+      "http_status": 200,
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=BQ32S20FMHZ09RAWERGE14744834\u0026infSeq=3\u0026loc=\u0026order=\u0026page=1\u0026rows=10\u0026searchWord=%EC%88%98%EC%A7%88%EC%98%A4%EC%97%BC%EC%9B%90%EC%84%A4%EC%B9%98%EC%8B%9C\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15011147",
+      "title": "경기도 비점오염 저감시설 현황",
+      "operation": "비점오염 저감시설 현황 외부 링크 3",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:15Z",
+      "http_status": 200,
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=LOQBL0HZKV2285NJW2742364178\u0026infSeq=3\u0026page=1\u0026rows=10\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15007009",
+      "title": "서울특별시 관악구_공중위생업소 현황",
+      "operation": "서울특별시 관악구_공중위생업소 현황_20220624 외부 링크 1",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gwanak.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:22Z",
+      "http_status": 200,
+      "url": "https://data.gwanak.go.kr/openinf/sheetview.jsp?infId=OA-11496",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15007009",
+      "title": "서울특별시 관악구_공중위생업소 현황",
+      "operation": "서울특별시 관악구_공중위생업소 현황_20220624 외부 링크 2",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gwanak.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:22Z",
+      "http_status": 200,
+      "url": "http://data.gwanak.go.kr/openinf/dataset/datasetlist.jsp",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15009684",
+      "title": "서울특별시 관악구_공공시설개방정보",
+      "operation": "서울특별시 관악구_공공시설개방정보_20220624",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.gwanak.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:22Z",
+      "http_status": 200,
+      "url": "https://data.gwanak.go.kr/openinf/sheetview.jsp?infId=OA-12151",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15002220",
+      "title": "농림축산식품부_유기농업자재 현황",
+      "operation": "유기농업자재 현황_20210402 외부 링크 1",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.mafra.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:26Z",
+      "http_status": 200,
+      "url": "https://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?cl_code=\u0026data_id=20200929000000001392\u0026filter_ty=O\u0026getBack=G\u0026s_data_nm=\u0026shareYn=\u0026sort_id=regist_dt",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15002220",
+      "title": "농림축산식품부_유기농업자재 현황",
+      "operation": "유기농업자재 현황_20210402 외부 링크 2",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.mafra.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:26Z",
+      "http_status": 200,
+      "url": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20141014000000000013\u0026service_ty=O",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15008409",
+      "title": "농림수산식품교육문화정보원_중국 도매시장 가격정보",
+      "operation": "중국농산물 가격정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.mafra.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:26Z",
+      "http_status": 200,
+      "url": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?cl_code=\u0026data_id=20150827000000000463\u0026filter_ty=O\u0026getBack=\u0026instt_id=\u0026s_data_nm=\u0026shareYn=\u0026sort_id=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15003164",
+      "title": "서울교통공사_역사 건축 현황",
+      "operation": "서울교통공사_역사 건축 현황_20240331 외부 링크 1",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.seoul.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:29Z",
+      "http_status": 200,
+      "url": "http://data.seoul.go.kr/dataList/datasetView.do?currentPageNo=1\u0026infId=OA-11572\u0026serviceKind=1\u0026srvType=F",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15003164",
+      "title": "서울교통공사_역사 건축 현황",
+      "operation": "서울교통공사_역사 건축 현황_20240331 외부 링크 2",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.seoul.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:29Z",
+      "http_status": 200,
+      "url": "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-12033\u0026serviceKind=1%C2%A4tPageNo%3D1\u0026srvType=S",
       "body_shape": "html"
     },
     {
@@ -156,7 +486,7 @@
       "dependency_class": "external_endpoint",
       "status": "failed",
       "reason": "unadapted_probe_timeout",
-      "verified_at": "2026-06-25T05:21:35Z",
+      "verified_at": "2026-07-02T16:04:32Z",
       "url": "http://data.wanju.go.kr/rest/wanjusocial/getSocialInfo?numOfRows=1\u0026pageNo=1",
       "params": {
         "dataName": "",
@@ -172,6 +502,296 @@
       ]
     },
     {
+      "dataset_id": "15058097",
+      "title": "전라북도 완주군_공연행사 정보 서비스",
+      "operation": "공연행사 정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "data.wanju.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "unadapted_probe_timeout",
+      "verified_at": "2026-07-02T16:04:32Z",
+      "url": "http://data.wanju.go.kr/rest/wanjuevent/getEvent?numOfRows=1\u0026pageNo=1",
+      "params": {
+        "dataName": "",
+        "dataValue": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sid": ""
+      },
+      "missing_params": [
+        "sid",
+        "dataValue",
+        "dataName"
+      ]
+    },
+    {
+      "dataset_id": "15021579",
+      "title": "경상북도 경주시_버스 관련 정보",
+      "operation": "노선정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "its.gyeongju.go.kr:81",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "unadapted_probe_timeout",
+      "verified_at": "2026-07-02T16:04:40Z",
+      "url": "http://its.gyeongju.go.kr:81/bis/openapi/getRouteNoList.do?numOfRows=1\u0026pageNo=1",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "routeNo": ""
+      },
+      "missing_params": [
+        "routeNo"
+      ]
+    },
+    {
+      "dataset_id": "15021579",
+      "title": "경상북도 경주시_버스 관련 정보",
+      "operation": "실시간 버스정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "its.gyeongju.go.kr:81",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "unadapted_probe_timeout",
+      "verified_at": "2026-07-02T16:04:40Z",
+      "url": "http://its.gyeongju.go.kr:81/bis/openapi/getRouteAcctoBusLcList.do?numOfRows=1\u0026pageNo=1",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "routeId": ""
+      },
+      "missing_params": [
+        "routeId"
+      ]
+    },
+    {
+      "dataset_id": "15021579",
+      "title": "경상북도 경주시_버스 관련 정보",
+      "operation": "정류장정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "its.gyeongju.go.kr:81",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "unadapted_probe_timeout",
+      "verified_at": "2026-07-02T16:04:40Z",
+      "url": "http://its.gyeongju.go.kr:81/bis/openapi/getSttnNoList.do?numOfRows=1\u0026pageNo=1",
+      "params": {
+        "nodeNm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "nodeNm"
+      ]
+    },
+    {
+      "dataset_id": "15002034",
+      "title": "농촌진흥청_국가농작물병해충도감정보",
+      "operation": "농촌진흥청_국가농작물병해충도감정보_20240222 외부 링크 1",
+      "provider": "data.go.kr",
+      "endpoint_host": "ncpms.rda.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:04:52Z",
+      "http_status": 200,
+      "url": "http://ncpms.rda.go.kr/npms/OpenApiInfo.np",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15001051",
+      "title": "서울특별시교육청 공공도서관 소장도서정보",
+      "operation": "도서 자료 검색",
+      "provider": "data.go.kr",
+      "endpoint_host": "openapi-lib.sen.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "unadapted_probe_timeout",
+      "verified_at": "2026-07-02T16:04:55Z",
+      "url": "http://openapi-lib.sen.go.kr?numOfRows=1\u0026pageNo=1",
+      "params": {
+        "manageCd": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "title": ""
+      },
+      "missing_params": [
+        "title",
+        "manageCd"
+      ]
+    },
+    {
+      "dataset_id": "15059302",
+      "title": "해양수산부_연안정보도 도엽제공 서비스",
+      "operation": "연안정보도 1:25000 축척 도엽 다운로드 정보 현황",
+      "provider": "data.go.kr",
+      "endpoint_host": "openapi.coast.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "unadapted_probe_dns",
+      "verified_at": "2026-07-02T16:05:00Z",
+      "url": "http://openapi.coast.kr/openapi/service/coastSpatialDataService"
+    },
+    {
+      "dataset_id": "15059302",
+      "title": "해양수산부_연안정보도 도엽제공 서비스",
+      "operation": "연안정보도 1:25000 축척 도엽 상세정보 현황",
+      "provider": "data.go.kr",
+      "endpoint_host": "openapi.coast.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "unadapted_probe_dns",
+      "verified_at": "2026-07-02T16:05:00Z",
+      "url": "http://openapi.coast.kr/openapi/service/coastSpatialDataService"
+    },
+    {
+      "dataset_id": "15059302",
+      "title": "해양수산부_연안정보도 도엽제공 서비스",
+      "operation": "연안정보도 1:25000 축척 도엽정보 리스트 정보 현황",
+      "provider": "data.go.kr",
+      "endpoint_host": "openapi.coast.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "unadapted_probe_dns",
+      "verified_at": "2026-07-02T16:05:00Z",
+      "url": "http://openapi.coast.kr/openapi/service/coastSpatialDataService"
+    },
+    {
+      "dataset_id": "15059302",
+      "title": "해양수산부_연안정보도 도엽제공 서비스",
+      "operation": "연안정보도 1:5000 축척 도엽 다운로드 정보 현황",
+      "provider": "data.go.kr",
+      "endpoint_host": "openapi.coast.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "unadapted_probe_dns",
+      "verified_at": "2026-07-02T16:05:00Z",
+      "url": "http://openapi.coast.kr/openapi/service/coastSpatialDataService"
+    },
+    {
+      "dataset_id": "15059302",
+      "title": "해양수산부_연안정보도 도엽제공 서비스",
+      "operation": "연안정보도 1:5000 축척 도엽 상세정보 현황",
+      "provider": "data.go.kr",
+      "endpoint_host": "openapi.coast.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "unadapted_probe_dns",
+      "verified_at": "2026-07-02T16:05:00Z",
+      "url": "http://openapi.coast.kr/openapi/service/coastSpatialDataService"
+    },
+    {
+      "dataset_id": "15059302",
+      "title": "해양수산부_연안정보도 도엽제공 서비스",
+      "operation": "연안정보도 1:5000 축척 도엽정보 리스트 정보 현황",
+      "provider": "data.go.kr",
+      "endpoint_host": "openapi.coast.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "unadapted_probe_dns",
+      "verified_at": "2026-07-02T16:05:00Z",
+      "url": "http://openapi.coast.kr/openapi/service/coastSpatialDataService"
+    },
+    {
+      "dataset_id": "3043385",
+      "title": "한국소비자원_생필품 가격 정보",
+      "operation": "상품정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "openapi.price.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "unadapted_probe_http_404",
+      "verified_at": "2026-07-02T16:05:03Z",
+      "http_status": 404,
+      "url": "http://openapi.price.go.kr/openApiImpl/ProductPriceInfoService",
+      "params": {
+        "goodId": ""
+      },
+      "missing_params": [
+        "goodId"
+      ],
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "3043385",
+      "title": "한국소비자원_생필품 가격 정보",
+      "operation": "생필품 가격 정보 기준 데이터 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "openapi.price.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "unadapted_probe_http_404",
+      "verified_at": "2026-07-02T16:05:03Z",
+      "http_status": 404,
+      "url": "http://openapi.price.go.kr/openApiImpl/ProductPriceInfoService",
+      "params": {
+        "classCode": ""
+      },
+      "missing_params": [
+        "classCode"
+      ],
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "3043385",
+      "title": "한국소비자원_생필품 가격 정보",
+      "operation": "생필품 가격 정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "openapi.price.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "unadapted_probe_http_404",
+      "verified_at": "2026-07-02T16:05:03Z",
+      "http_status": 404,
+      "url": "http://openapi.price.go.kr/openApiImpl/ProductPriceInfoService",
+      "params": {
+        "entpId": "",
+        "goodId": "",
+        "goodInspectDay": ""
+      },
+      "missing_params": [
+        "goodInspectDay",
+        "entpId",
+        "goodId"
+      ],
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "3043385",
+      "title": "한국소비자원_생필품 가격 정보",
+      "operation": "판매점 정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "openapi.price.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "unadapted_probe_http_404",
+      "verified_at": "2026-07-02T16:05:03Z",
+      "http_status": 404,
+      "url": "http://openapi.price.go.kr/openApiImpl/ProductPriceInfoService",
+      "params": {
+        "entpId": ""
+      },
+      "missing_params": [
+        "entpId"
+      ],
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15006273",
+      "title": "독립기념관_한국독립운동사 소장자료 정보 DB",
+      "operation": "독립기념관_한국독립운동사 소장자료 정보 DB_20200703",
+      "provider": "data.go.kr",
+      "endpoint_host": "search.i815.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:05:05Z",
+      "http_status": 200,
+      "url": "https://search.i815.or.kr/openApi.do",
+      "body_shape": "html"
+    },
+    {
       "dataset_id": "15012192",
       "title": "건설근로자공제회_건설근로자 취업정보",
       "operation": "채용정보 목록조회",
@@ -180,7 +800,7 @@
       "dependency_class": "external_endpoint",
       "status": "failed",
       "reason": "unadapted_probe_timeout",
-      "verified_at": "2026-06-25T05:21:35Z",
+      "verified_at": "2026-07-02T16:05:08Z",
       "url": "http://www.cid.or.kr/job/openApi/service/getJobOpenInfoList.do?numOfRows=1\u0026pageNo=1",
       "params": {
         "acdmcr": "",
@@ -222,7 +842,7 @@
       "dependency_class": "external_endpoint",
       "status": "failed",
       "reason": "unadapted_probe_timeout",
-      "verified_at": "2026-06-25T05:21:35Z",
+      "verified_at": "2026-07-02T16:05:08Z",
       "url": "http://www.cid.or.kr/job/openApi/service/getJobOpenInfoView.do",
       "params": {
         "cmpnyJoSeq": ""
@@ -232,342 +852,344 @@
       ]
     },
     {
-      "dataset_id": "15021579",
-      "title": "경상북도 경주시_버스 관련 정보",
-      "operation": "노선정보 조회",
+      "dataset_id": "15008517",
+      "title": "한국체육산업개발주식회사_올림픽공원 도서정보",
+      "operation": "한국체육산업개발주식회사_올림픽공원 도서정보_20230918 외부 링크 1",
       "provider": "data.go.kr",
-      "endpoint_host": "its.gyeongju.go.kr:81",
+      "endpoint_host": "www.culture.go.kr",
       "dependency_class": "external_endpoint",
-      "status": "failed",
-      "reason": "unadapted_probe_timeout",
-      "verified_at": "2026-06-25T05:21:35Z",
-      "url": "http://its.gyeongju.go.kr:81/bis/openapi/getRouteNoList.do?numOfRows=1\u0026pageNo=1",
-      "params": {
-        "numOfRows": "1",
-        "pageNo": "1",
-        "routeNo": ""
-      },
-      "missing_params": [
-        "routeNo"
-      ]
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:05:17Z",
+      "http_status": 200,
+      "url": "https://www.culture.go.kr/data/openapi/openapiView.do?gubun=A\u0026id=405\u0026keyword=%EB%8F%84%EC%84%9C\u0026searchField=all",
+      "body_shape": "html"
     },
     {
-      "dataset_id": "15021579",
-      "title": "경상북도 경주시_버스 관련 정보",
-      "operation": "실시간 버스정보 조회",
+      "dataset_id": "15008517",
+      "title": "한국체육산업개발주식회사_올림픽공원 도서정보",
+      "operation": "한국체육산업개발주식회사_올림픽공원 도서정보_20230918 외부 링크 2",
       "provider": "data.go.kr",
-      "endpoint_host": "its.gyeongju.go.kr:81",
+      "endpoint_host": "www.culture.go.kr",
       "dependency_class": "external_endpoint",
-      "status": "failed",
-      "reason": "unadapted_probe_timeout",
-      "verified_at": "2026-06-25T05:21:35Z",
-      "url": "http://its.gyeongju.go.kr:81/bis/openapi/getRouteAcctoBusLcList.do?numOfRows=1\u0026pageNo=1",
-      "params": {
-        "numOfRows": "1",
-        "pageNo": "1",
-        "routeId": ""
-      },
-      "missing_params": [
-        "routeId"
-      ]
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:05:17Z",
+      "http_status": 200,
+      "url": "https://www.culture.go.kr/data/openapi/openapiView.do?id=111",
+      "body_shape": "html"
     },
     {
-      "dataset_id": "15021579",
-      "title": "경상북도 경주시_버스 관련 정보",
-      "operation": "정류장정보 조회",
+      "dataset_id": "15001184",
+      "title": "대구환경공단_소각처리현황",
+      "operation": "소각처리현황",
       "provider": "data.go.kr",
-      "endpoint_host": "its.gyeongju.go.kr:81",
+      "endpoint_host": "www.dgeic.or.kr:8080",
       "dependency_class": "external_endpoint",
       "status": "failed",
-      "reason": "unadapted_probe_timeout",
-      "verified_at": "2026-06-25T05:21:35Z",
-      "url": "http://its.gyeongju.go.kr:81/bis/openapi/getSttnNoList.do?numOfRows=1\u0026pageNo=1",
+      "reason": "unadapted_probe_http_404",
+      "verified_at": "2026-07-02T16:05:20Z",
+      "http_status": 404,
+      "url": "http://www.dgeic.or.kr:8080/?numOfRows=1\u0026pageNo=1",
       "params": {
-        "nodeNm": "",
         "numOfRows": "1",
         "pageNo": "1"
       },
-      "missing_params": [
-        "nodeNm"
-      ]
+      "body_shape": "empty"
     },
     {
-      "dataset_id": "15058097",
-      "title": "전라북도 완주군_공연행사 정보 서비스",
-      "operation": "공연행사 정보",
+      "dataset_id": "15004517",
+      "title": "서울특별시농수산식품공사_주요 품목 가격",
+      "operation": "서울특별시농수산식품공사_주요 품목 가격_20210113 외부 링크 1",
       "provider": "data.go.kr",
-      "endpoint_host": "data.wanju.go.kr",
+      "endpoint_host": "www.garak.co.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:05:22Z",
+      "http_status": 200,
+      "url": "https://www.garak.co.kr/homepage/M0000258/publicdata/selectPageListPublicData.do?publicDataRealmSn=30",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15004517",
+      "title": "서울특별시농수산식품공사_주요 품목 가격",
+      "operation": "서울특별시농수산식품공사_주요 품목 가격_20210113 외부 링크 2",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.garak.co.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:05:22Z",
+      "http_status": 200,
+      "url": "https://www.garak.co.kr/homepage/M0000258/publicdata/selectPageListPublicData.do?publicDataRealmSn=23",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15004517",
+      "title": "서울특별시농수산식품공사_주요 품목 가격",
+      "operation": "서울특별시농수산식품공사_주요 품목 가격_20210113 외부 링크 3",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.garak.co.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:05:22Z",
+      "http_status": 200,
+      "url": "https://www.garak.co.kr/homepage/M0000258/publicdata/selectPageListPublicData.do?publicDataRealmSn=24",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15007444",
+      "title": "서울특별시성동구도시관리공단_체육시설 강좌정보 조회",
+      "operation": "서울특별시성동구도시관리공단_체육시설 강좌정보 조회_20220803",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.happysd.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:05:26Z",
+      "http_status": 200,
+      "url": "https://www.happysd.or.kr/c_76/cnt/m_109/view.do",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15007467",
+      "title": "서울특별시성동구도시관리공단_체육시설 대관정보 조회",
+      "operation": "서울특별시성동구도시관리공단_체육시설 대관정보 조회_20220804",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.happysd.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:05:26Z",
+      "http_status": 200,
+      "url": "https://www.happysd.or.kr/c_76/cnt/m_109/view.do",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15007088",
+      "title": "한국산업인력공단_한국직업방송 프로그램",
+      "operation": "한국산업인력공단_한국직업방송 프로그램_20250115",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.jobplustv.or.kr",
       "dependency_class": "external_endpoint",
       "status": "failed",
-      "reason": "unadapted_probe_timeout",
-      "verified_at": "2026-06-25T05:21:35Z",
-      "url": "http://data.wanju.go.kr/rest/wanjuevent/getEvent?numOfRows=1\u0026pageNo=1",
+      "reason": "unadapted_probe_request_error",
+      "verified_at": "2026-07-02T16:05:30Z",
+      "url": "https://www.jobplustv.or.kr/openapi/guide/openapiIntro.do"
+    },
+    {
+      "dataset_id": "15001668",
+      "title": "해양수산부 국립수산물품질관리원_수산물재고동향",
+      "operation": "해양수산부 국립수산물품질관리원_수산물재고동향_20230629",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.nfqs.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:05:33Z",
+      "http_status": 200,
+      "url": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=009",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15001702",
+      "title": "해양수산부 국립수산물품질관리원_검역시행장정보",
+      "operation": "해양수산부 국립수산물품질관리원_검역시행장정보_20230629 외부 링크 1",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.nfqs.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:05:33Z",
+      "http_status": 200,
+      "url": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=008",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15001702",
+      "title": "해양수산부 국립수산물품질관리원_검역시행장정보",
+      "operation": "해양수산부 국립수산물품질관리원_검역시행장정보_20230629 외부 링크 2",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.nfqs.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:05:33Z",
+      "http_status": 200,
+      "url": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=003",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15009422",
+      "title": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황",
+      "operation": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황_20230629 외부 링크 1",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.nfqs.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:05:33Z",
+      "http_status": 200,
+      "url": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=007",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15009422",
+      "title": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황",
+      "operation": "해양수산부 국립수산물품질관리원_수산물 방사능 조사현황_20230629 외부 링크 2",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.nfqs.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:05:33Z",
+      "http_status": 200,
+      "url": "https://www.nfqs.go.kr/hpmg/api/actionApiReqView.do?API_CD=005",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15002034",
+      "title": "농촌진흥청_국가농작물병해충도감정보",
+      "operation": "농촌진흥청_국가농작물병해충도감정보_20240222 외부 링크 2",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.nongsaro.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:05:36Z",
+      "http_status": 200,
+      "url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EA%B3%B5%EA%B3%B5+%EB%8D%B0%EC%9D%B4%ED%84%B0",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15005257",
+      "title": "농촌진흥청_농촌교육농장 정보",
+      "operation": "농촌진흥청_농촌교육농장 정보_20171211 외부 링크 1",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.nongsaro.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:05:36Z",
+      "http_status": 200,
+      "url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EB%86%8D%EC%B4%8C%EA%B5%90%EC%9C%A1%EB%86%8D%EC%9E%A5",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15005257",
+      "title": "농촌진흥청_농촌교육농장 정보",
+      "operation": "농촌진흥청_농촌교육농장 정보_20171211 외부 링크 2",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.nongsaro.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:05:36Z",
+      "http_status": 200,
+      "url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EB%86%8D%EC%82%AC%EB%A1%9C+%EC%9D%B4%EB%B2%A4%ED%8A%B8",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15005257",
+      "title": "농촌진흥청_농촌교육농장 정보",
+      "operation": "농촌진흥청_농촌교육농장 정보_20171211 외부 링크 3",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.nongsaro.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:05:36Z",
+      "http_status": 200,
+      "url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EA%B3%B5%EA%B3%B5+%EB%8D%B0%EC%9D%B4%ED%84%B0",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15002002",
+      "title": "농촌진흥청_농업기계 안전정보",
+      "operation": "농기계안전정보 목록 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.rda.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "unadapted_probe_http_404",
+      "verified_at": "2026-07-02T16:05:39Z",
+      "http_status": 404,
+      "url": "http://www.rda.go.kr/openapidata/service/rdamachinesafe_api?numOfRows=1\u0026pageNo=1",
       "params": {
-        "dataName": "",
-        "dataValue": "",
         "numOfRows": "1",
         "pageNo": "1",
-        "sid": ""
+        "searchtype": "",
+        "searchword": ""
       },
       "missing_params": [
-        "sid",
-        "dataValue",
-        "dataName"
-      ]
+        "searchtype",
+        "searchword"
+      ],
+      "body_shape": "html"
     },
     {
-      "dataset_id": "15059302",
-      "title": "해양수산부_연안정보도 도엽제공 서비스",
-      "operation": "연안정보도 1:25000 축척 도엽 다운로드 정보 현황",
+      "dataset_id": "15002055",
+      "title": "농촌진흥청_농업농촌종합정보(인테러뱅)",
+      "operation": "농업농촌종합정보(인테러뱅) 댓글보기 조회",
       "provider": "data.go.kr",
-      "endpoint_host": "openapi.coast.kr",
-      "dependency_class": "external_endpoint",
-      "status": "failed",
-      "reason": "unadapted_probe_request_error",
-      "verified_at": "2026-06-25T05:21:35Z",
-      "url": "http://openapi.coast.kr/openapi/service/coastSpatialDataService"
-    },
-    {
-      "dataset_id": "15059302",
-      "title": "해양수산부_연안정보도 도엽제공 서비스",
-      "operation": "연안정보도 1:25000 축척 도엽 상세정보 현황",
-      "provider": "data.go.kr",
-      "endpoint_host": "openapi.coast.kr",
-      "dependency_class": "external_endpoint",
-      "status": "failed",
-      "reason": "unadapted_probe_request_error",
-      "verified_at": "2026-06-25T05:21:35Z",
-      "url": "http://openapi.coast.kr/openapi/service/coastSpatialDataService"
-    },
-    {
-      "dataset_id": "15059302",
-      "title": "해양수산부_연안정보도 도엽제공 서비스",
-      "operation": "연안정보도 1:25000 축척 도엽정보 리스트 정보 현황",
-      "provider": "data.go.kr",
-      "endpoint_host": "openapi.coast.kr",
-      "dependency_class": "external_endpoint",
-      "status": "failed",
-      "reason": "unadapted_probe_request_error",
-      "verified_at": "2026-06-25T05:21:35Z",
-      "url": "http://openapi.coast.kr/openapi/service/coastSpatialDataService"
-    },
-    {
-      "dataset_id": "15059302",
-      "title": "해양수산부_연안정보도 도엽제공 서비스",
-      "operation": "연안정보도 1:5000 축척 도엽 다운로드 정보 현황",
-      "provider": "data.go.kr",
-      "endpoint_host": "openapi.coast.kr",
-      "dependency_class": "external_endpoint",
-      "status": "failed",
-      "reason": "unadapted_probe_request_error",
-      "verified_at": "2026-06-25T05:21:35Z",
-      "url": "http://openapi.coast.kr/openapi/service/coastSpatialDataService"
-    },
-    {
-      "dataset_id": "15059302",
-      "title": "해양수산부_연안정보도 도엽제공 서비스",
-      "operation": "연안정보도 1:5000 축척 도엽 상세정보 현황",
-      "provider": "data.go.kr",
-      "endpoint_host": "openapi.coast.kr",
-      "dependency_class": "external_endpoint",
-      "status": "failed",
-      "reason": "unadapted_probe_request_error",
-      "verified_at": "2026-06-25T05:21:35Z",
-      "url": "http://openapi.coast.kr/openapi/service/coastSpatialDataService"
-    },
-    {
-      "dataset_id": "15059302",
-      "title": "해양수산부_연안정보도 도엽제공 서비스",
-      "operation": "연안정보도 1:5000 축척 도엽정보 리스트 정보 현황",
-      "provider": "data.go.kr",
-      "endpoint_host": "openapi.coast.kr",
-      "dependency_class": "external_endpoint",
-      "status": "failed",
-      "reason": "unadapted_probe_request_error",
-      "verified_at": "2026-06-25T05:21:35Z",
-      "url": "http://openapi.coast.kr/openapi/service/coastSpatialDataService"
-    },
-    {
-      "dataset_id": "15097855",
-      "title": "대구광역시_어린이 보호구역 위험요소 조회 서비스",
-      "operation": "어린이 보호구역 내 고정체 위험요소 조회 서비스",
-      "provider": "data.go.kr",
-      "endpoint_host": "car.daegu.go.kr",
+      "endpoint_host": "www.rda.go.kr",
       "dependency_class": "external_endpoint",
       "status": "failed",
       "reason": "unadapted_probe_http_404",
-      "verified_at": "2026-06-25T05:21:35Z",
+      "verified_at": "2026-07-02T16:05:39Z",
       "http_status": 404,
-      "url": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getFixTotal?_type=json\u0026numOfRows=1\u0026pageNo=1",
+      "url": "http://www.rda.go.kr/openapidata/service/interrobang_api",
       "params": {
-        "_type": "json",
-        "gubun": "",
+        "seq": ""
+      },
+      "missing_params": [
+        "seq"
+      ],
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15002055",
+      "title": "농촌진흥청_농업농촌종합정보(인테러뱅)",
+      "operation": "농업농촌종합정보(인테러뱅) 목록 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.rda.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "unadapted_probe_http_404",
+      "verified_at": "2026-07-02T16:05:39Z",
+      "http_status": 404,
+      "url": "http://www.rda.go.kr/openapidata/service/interrobang_api?numOfRows=1\u0026pageNo=1",
+      "params": {
         "numOfRows": "1",
         "pageNo": "1",
-        "zoneNm": ""
+        "searchtype": "",
+        "searchword": ""
       },
       "missing_params": [
-        "zoneNm",
-        "gubun"
+        "searchtype",
+        "searchword"
       ],
       "body_shape": "html"
     },
     {
-      "dataset_id": "15097855",
-      "title": "대구광역시_어린이 보호구역 위험요소 조회 서비스",
-      "operation": "어린이 보호구역 내 시간별/구간별 고정체 위험요소 조회 서비스",
+      "dataset_id": "15002055",
+      "title": "농촌진흥청_농업농촌종합정보(인테러뱅)",
+      "operation": "농업농촌종합정보(인테러뱅) 상세보기 조회",
       "provider": "data.go.kr",
-      "endpoint_host": "car.daegu.go.kr",
+      "endpoint_host": "www.rda.go.kr",
       "dependency_class": "external_endpoint",
       "status": "failed",
       "reason": "unadapted_probe_http_404",
-      "verified_at": "2026-06-25T05:21:35Z",
+      "verified_at": "2026-07-02T16:05:39Z",
       "http_status": 404,
-      "url": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getFix?_type=json\u0026numOfRows=1\u0026pageNo=1",
+      "url": "http://www.rda.go.kr/openapidata/service/interrobang_api",
       "params": {
-        "_type": "json",
-        "numOfRows": "1",
-        "pageNo": "1",
-        "sectionClassifyNm": "",
-        "zoneNm": ""
+        "seq": ""
       },
       "missing_params": [
-        "zoneNm",
-        "sectionClassifyNm"
-      ],
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15097855",
-      "title": "대구광역시_어린이 보호구역 위험요소 조회 서비스",
-      "operation": "어린이 보호구역 내 시간별/구간별 이동체 위험요소 조회 서비스",
-      "provider": "data.go.kr",
-      "endpoint_host": "car.daegu.go.kr",
-      "dependency_class": "external_endpoint",
-      "status": "failed",
-      "reason": "unadapted_probe_http_404",
-      "verified_at": "2026-06-25T05:21:35Z",
-      "http_status": 404,
-      "url": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getMove?_type=json\u0026numOfRows=1\u0026pageNo=1",
-      "params": {
-        "_type": "json",
-        "numOfRows": "1",
-        "pageNo": "1",
-        "sectionClassifyNm": "",
-        "zoneNm": ""
-      },
-      "missing_params": [
-        "zoneNm",
-        "sectionClassifyNm"
-      ],
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15097855",
-      "title": "대구광역시_어린이 보호구역 위험요소 조회 서비스",
-      "operation": "어린이 보호구역 내 이동체 위험요소 조회 서비스",
-      "provider": "data.go.kr",
-      "endpoint_host": "car.daegu.go.kr",
-      "dependency_class": "external_endpoint",
-      "status": "failed",
-      "reason": "unadapted_probe_http_404",
-      "verified_at": "2026-06-25T05:21:35Z",
-      "http_status": 404,
-      "url": "http://car.daegu.go.kr/openapi-data/service/dgcshazards/getMoveTotal?_type=json\u0026numOfRows=1\u0026pageNo=1",
-      "params": {
-        "_type": "json",
-        "gubun": "",
-        "numOfRows": "1",
-        "pageNo": "1",
-        "zoneNm": ""
-      },
-      "missing_params": [
-        "zoneNm",
-        "gubun"
-      ],
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "3043385",
-      "title": "한국소비자원_생필품 가격 정보",
-      "operation": "상품정보 조회",
-      "provider": "data.go.kr",
-      "endpoint_host": "openapi.price.go.kr",
-      "dependency_class": "external_endpoint",
-      "status": "failed",
-      "reason": "unadapted_probe_http_404",
-      "verified_at": "2026-06-25T05:21:35Z",
-      "http_status": 404,
-      "url": "http://openapi.price.go.kr/openApiImpl/ProductPriceInfoService",
-      "params": {
-        "goodId": ""
-      },
-      "missing_params": [
-        "goodId"
-      ],
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "3043385",
-      "title": "한국소비자원_생필품 가격 정보",
-      "operation": "생필품 가격 정보 기준 데이터 조회",
-      "provider": "data.go.kr",
-      "endpoint_host": "openapi.price.go.kr",
-      "dependency_class": "external_endpoint",
-      "status": "failed",
-      "reason": "unadapted_probe_http_404",
-      "verified_at": "2026-06-25T05:21:35Z",
-      "http_status": 404,
-      "url": "http://openapi.price.go.kr/openApiImpl/ProductPriceInfoService",
-      "params": {
-        "classCode": ""
-      },
-      "missing_params": [
-        "classCode"
-      ],
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "3043385",
-      "title": "한국소비자원_생필품 가격 정보",
-      "operation": "생필품 가격 정보 조회",
-      "provider": "data.go.kr",
-      "endpoint_host": "openapi.price.go.kr",
-      "dependency_class": "external_endpoint",
-      "status": "failed",
-      "reason": "unadapted_probe_http_404",
-      "verified_at": "2026-06-25T05:21:35Z",
-      "http_status": 404,
-      "url": "http://openapi.price.go.kr/openApiImpl/ProductPriceInfoService",
-      "params": {
-        "entpId": "",
-        "goodId": "",
-        "goodInspectDay": ""
-      },
-      "missing_params": [
-        "goodInspectDay",
-        "entpId",
-        "goodId"
-      ],
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "3043385",
-      "title": "한국소비자원_생필품 가격 정보",
-      "operation": "판매점 정보 조회",
-      "provider": "data.go.kr",
-      "endpoint_host": "openapi.price.go.kr",
-      "dependency_class": "external_endpoint",
-      "status": "failed",
-      "reason": "unadapted_probe_http_404",
-      "verified_at": "2026-06-25T05:21:35Z",
-      "http_status": 404,
-      "url": "http://openapi.price.go.kr/openApiImpl/ProductPriceInfoService",
-      "params": {
-        "entpId": ""
-      },
-      "missing_params": [
-        "entpId"
+        "seq"
       ],
       "body_shape": "html"
     },
@@ -580,7 +1202,7 @@
       "dependency_class": "external_endpoint",
       "status": "failed",
       "reason": "unadapted_probe_http_404",
-      "verified_at": "2026-06-25T05:21:35Z",
+      "verified_at": "2026-07-02T16:05:41Z",
       "http_status": 404,
       "url": "http://www.simpan.go.kr/nsph/getAdjdexeList.do?page=1",
       "params": {
@@ -594,6 +1216,48 @@
         "reqDate",
         "row"
       ],
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15003549",
+      "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
+      "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 1",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.work24.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:05:44Z",
+      "http_status": 200,
+      "url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=\u0026fullApiSvcId=000000000000000000000000000034\u0026upprApiSvcId=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15003549",
+      "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
+      "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 2",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.work24.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:05:44Z",
+      "http_status": 200,
+      "url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023\u0026fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000062\u0026upprApiSvcId=000000000000000000000000000022",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15003549",
+      "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
+      "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 3",
+      "provider": "data.go.kr",
+      "endpoint_host": "www.work24.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "unknown",
+      "reason": "unadapted_probe_http_2xx",
+      "verified_at": "2026-07-02T16:05:44Z",
+      "http_status": 200,
+      "url": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023\u0026fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000056\u0026upprApiSvcId=000000000000000000000000000022",
       "body_shape": "html"
     }
   ]

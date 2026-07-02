@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-06-30T08:11:23Z",
+  "generated_at": "2026-07-02T16:06:15Z",
   "provider": "data.go.kr",
-  "registry": "./data/data-go-kr.registry.json",
+  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 10,
+  "filtered_count": 23,
   "summary": {
-    "target_hosts": 10,
-    "target_operations": 28,
-    "external_endpoint_operations": 28,
+    "target_hosts": 23,
+    "target_operations": 76,
+    "external_endpoint_operations": 76,
     "service_root_operations": 0,
     "approval_required_operations": 0,
     "missing_param_operations": 21,
@@ -17,6 +17,56 @@
   "targets": [
     {
       "rank": 1,
+      "host": "data.gg.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 18,
+      "specs": 8,
+      "organizations": [
+        "경기도"
+      ],
+      "source_categories": [
+        "공공행정",
+        "교육",
+        "산업고용",
+        "환경기상"
+      ],
+      "api_types": [
+        "LINK"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "sample_operations": [
+        {
+          "dataset_id": "15005231",
+          "title": "경기도 정기간행물 현황",
+          "organization": "경기도",
+          "operation": "정기간행물 현황 외부 링크 1",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026sortColumn=\u0026sortDirection=\u0026infId=PCG359G8UAD471M0GE9K15277158\u0026infSeq=3"
+        },
+        {
+          "dataset_id": "15005231",
+          "title": "경기도 정기간행물 현황",
+          "organization": "경기도",
+          "operation": "정기간행물 현황 외부 링크 2",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=8E1BBVOXNWLKUY0TDUVU29513229\u0026infSeq=2"
+        },
+        {
+          "dataset_id": "15011020",
+          "title": "경기도 창업보육센터현황",
+          "organization": "경기도",
+          "operation": "창업보육 센터 현황(2014)",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.gg.go.kr/portal/data/service/selectServicePage.do?page=1\u0026rows=10\u0026sortColumn=\u0026sortDirection=\u0026infId=U6410C24Y846I1B808302067781\u0026infSeq=3\u0026searchWord=%EC%B0%BD%EC%97%85%EB%B3%B4%EC%9C%A1+%EC%84%BC%ED%84%B0+%ED%98%84%ED%99%A9"
+        }
+      ]
+    },
+    {
+      "rank": 2,
       "host": "openapi.coast.kr",
       "kinds": [
         "external_endpoint"
@@ -63,7 +113,102 @@
       ]
     },
     {
-      "rank": 2,
+      "rank": 3,
+      "host": "www.nfqs.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 5,
+      "specs": 3,
+      "organizations": [
+        "해양수산부 국립수산물품질관리원"
+      ],
+      "source_categories": [
+        "농축수산"
+      ],
+      "api_types": [
+        "LINK"
+      ],
+      "data_formats": [
+        "JSON+XML",
+        "XML"
+      ],
+      "sample_operations": [
+        {
+          "dataset_id": "15001668",
+          "title": "해양수산부 국립수산물품질관리원_수산물재고동향",
+          "organization": "해양수산부 국립수산물품질관리원",
+          "operation": "해양수산부 국립수산물품질관리원_수산물재고동향_20230629",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=009"
+        },
+        {
+          "dataset_id": "15001702",
+          "title": "해양수산부 국립수산물품질관리원_검역시행장정보",
+          "organization": "해양수산부 국립수산물품질관리원",
+          "operation": "해양수산부 국립수산물품질관리원_검역시행장정보_20230629 외부 링크 1",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=008"
+        },
+        {
+          "dataset_id": "15001702",
+          "title": "해양수산부 국립수산물품질관리원_검역시행장정보",
+          "organization": "해양수산부 국립수산물품질관리원",
+          "operation": "해양수산부 국립수산물품질관리원_검역시행장정보_20230629 외부 링크 2",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=003"
+        }
+      ]
+    },
+    {
+      "rank": 4,
+      "host": "www.nongsaro.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 4,
+      "specs": 2,
+      "organizations": [
+        "농촌진흥청"
+      ],
+      "source_categories": [
+        "농축수산"
+      ],
+      "api_types": [
+        "LINK"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "sample_operations": [
+        {
+          "dataset_id": "15002034",
+          "title": "농촌진흥청_국가농작물병해충도감정보",
+          "organization": "농촌진흥청",
+          "operation": "농촌진흥청_국가농작물병해충도감정보_20240222 외부 링크 2",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EA%B3%B5%EA%B3%B5+%EB%8D%B0%EC%9D%B4%ED%84%B0"
+        },
+        {
+          "dataset_id": "15005257",
+          "title": "농촌진흥청_농촌교육농장 정보",
+          "organization": "농촌진흥청",
+          "operation": "농촌진흥청_농촌교육농장 정보_20171211 외부 링크 1",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EB%86%8D%EC%B4%8C%EA%B5%90%EC%9C%A1%EB%86%8D%EC%9E%A5"
+        },
+        {
+          "dataset_id": "15005257",
+          "title": "농촌진흥청_농촌교육농장 정보",
+          "organization": "농촌진흥청",
+          "operation": "농촌진흥청_농촌교육농장 정보_20171211 외부 링크 2",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EB%86%8D%EC%82%AC%EB%A1%9C+%EC%9D%B4%EB%B2%A4%ED%8A%B8"
+        }
+      ]
+    },
+    {
+      "rank": 5,
       "host": "www.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -122,7 +267,7 @@
       ]
     },
     {
-      "rank": 3,
+      "rank": 6,
       "host": "car.daegu.go.kr",
       "kinds": [
         "external_endpoint"
@@ -182,7 +327,7 @@
       ]
     },
     {
-      "rank": 4,
+      "rank": 7,
       "host": "openapi.price.go.kr",
       "kinds": [
         "external_endpoint"
@@ -241,7 +386,103 @@
       ]
     },
     {
-      "rank": 5,
+      "rank": 8,
+      "host": "data.gwanak.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 3,
+      "specs": 2,
+      "organizations": [
+        "서울특별시 관악구"
+      ],
+      "source_categories": [
+        "공공행정",
+        "식품건강"
+      ],
+      "api_types": [
+        "LINK"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "sample_operations": [
+        {
+          "dataset_id": "15007009",
+          "title": "서울특별시 관악구_공중위생업소 현황",
+          "organization": "서울특별시 관악구",
+          "operation": "서울특별시 관악구_공중위생업소 현황_20220624 외부 링크 1",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://data.gwanak.go.kr/openinf/sheetview.jsp?infId=OA-11496"
+        },
+        {
+          "dataset_id": "15007009",
+          "title": "서울특별시 관악구_공중위생업소 현황",
+          "organization": "서울특별시 관악구",
+          "operation": "서울특별시 관악구_공중위생업소 현황_20220624 외부 링크 2",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.gwanak.go.kr/openinf/dataset/datasetlist.jsp"
+        },
+        {
+          "dataset_id": "15009684",
+          "title": "서울특별시 관악구_공공시설개방정보",
+          "organization": "서울특별시 관악구",
+          "operation": "서울특별시 관악구_공공시설개방정보_20220624",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://data.gwanak.go.kr/openinf/sheetview.jsp?infId=OA-12151"
+        }
+      ]
+    },
+    {
+      "rank": 9,
+      "host": "data.mafra.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 3,
+      "specs": 2,
+      "organizations": [
+        "농림수산식품교육문화정보원",
+        "농림축산식품부"
+      ],
+      "source_categories": [
+        "농축수산"
+      ],
+      "api_types": [
+        "LINK"
+      ],
+      "data_formats": [
+        "JSON+XML"
+      ],
+      "sample_operations": [
+        {
+          "dataset_id": "15002220",
+          "title": "농림축산식품부_유기농업자재 현황",
+          "organization": "농림축산식품부",
+          "operation": "유기농업자재 현황_20210402 외부 링크 1",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20200929000000001392\u0026filter_ty=O\u0026getBack=G\u0026sort_id=regist_dt\u0026s_data_nm=\u0026cl_code=\u0026shareYn="
+        },
+        {
+          "dataset_id": "15002220",
+          "title": "농림축산식품부_유기농업자재 현황",
+          "organization": "농림축산식품부",
+          "operation": "유기농업자재 현황_20210402 외부 링크 2",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20141014000000000013\u0026service_ty=O"
+        },
+        {
+          "dataset_id": "15008409",
+          "title": "농림수산식품교육문화정보원_중국 도매시장 가격정보",
+          "organization": "농림수산식품교육문화정보원",
+          "operation": "중국농산물 가격정보",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20150827000000000463\u0026filter_ty=O\u0026getBack=\u0026sort_id=\u0026s_data_nm=\u0026instt_id=\u0026cl_code=\u0026shareYn="
+        }
+      ]
+    },
+    {
+      "rank": 10,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -298,7 +539,101 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 11,
+      "host": "www.garak.co.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 3,
+      "specs": 1,
+      "organizations": [
+        "서울특별시농수산식품공사"
+      ],
+      "source_categories": [
+        "농축수산"
+      ],
+      "api_types": [
+        "LINK"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "sample_operations": [
+        {
+          "dataset_id": "15004517",
+          "title": "서울특별시농수산식품공사_주요 품목 가격",
+          "organization": "서울특별시농수산식품공사",
+          "operation": "서울특별시농수산식품공사_주요 품목 가격_20210113 외부 링크 1",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://www.garak.co.kr/homepage/M0000258/publicdata/selectPageListPublicData.do?publicDataRealmSn=30"
+        },
+        {
+          "dataset_id": "15004517",
+          "title": "서울특별시농수산식품공사_주요 품목 가격",
+          "organization": "서울특별시농수산식품공사",
+          "operation": "서울특별시농수산식품공사_주요 품목 가격_20210113 외부 링크 2",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://www.garak.co.kr/homepage/M0000258/publicdata/selectPageListPublicData.do?publicDataRealmSn=23"
+        },
+        {
+          "dataset_id": "15004517",
+          "title": "서울특별시농수산식품공사_주요 품목 가격",
+          "organization": "서울특별시농수산식품공사",
+          "operation": "서울특별시농수산식품공사_주요 품목 가격_20210113 외부 링크 3",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://www.garak.co.kr/homepage/M0000258/publicdata/selectPageListPublicData.do?publicDataRealmSn=24"
+        }
+      ]
+    },
+    {
+      "rank": 12,
+      "host": "www.work24.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 3,
+      "specs": 1,
+      "organizations": [
+        "한국고용정보원"
+      ],
+      "source_categories": [
+        "산업고용"
+      ],
+      "api_types": [
+        "LINK"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "sample_operations": [
+        {
+          "dataset_id": "15003549",
+          "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
+          "organization": "한국고용정보원",
+          "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 1",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=\u0026upprApiSvcId=\u0026fullApiSvcId=000000000000000000000000000034"
+        },
+        {
+          "dataset_id": "15003549",
+          "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
+          "organization": "한국고용정보원",
+          "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 2",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023\u0026upprApiSvcId=000000000000000000000000000022\u0026fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000062"
+        },
+        {
+          "dataset_id": "15003549",
+          "title": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세",
+          "organization": "한국고용정보원",
+          "operation": "한국고용정보원_워크넷_학과정보_학과목록 및 일반학과 상세, 이색학과 상세_20210520 외부 링크 3",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://www.work24.go.kr/cm/e/a/0110/selectOpenApiSvcInfo.do?apiSvcId=000000000000000000000000000023\u0026upprApiSvcId=000000000000000000000000000022\u0026fullApiSvcId=000000000000000000000000000093%5E000000000000000000000000000056"
+        }
+      ]
+    },
+    {
+      "rank": 13,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -349,7 +684,85 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 14,
+      "host": "www.happysd.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 2,
+      "specs": 2,
+      "organizations": [
+        "서울특별시성동구도시관리공단"
+      ],
+      "source_categories": [
+        "문화관광"
+      ],
+      "api_types": [
+        "LINK"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "sample_operations": [
+        {
+          "dataset_id": "15007444",
+          "title": "서울특별시성동구도시관리공단_체육시설 강좌정보 조회",
+          "organization": "서울특별시성동구도시관리공단",
+          "operation": "서울특별시성동구도시관리공단_체육시설 강좌정보 조회_20220803",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://www.happysd.or.kr/c_76/cnt/m_109/view.do"
+        },
+        {
+          "dataset_id": "15007467",
+          "title": "서울특별시성동구도시관리공단_체육시설 대관정보 조회",
+          "organization": "서울특별시성동구도시관리공단",
+          "operation": "서울특별시성동구도시관리공단_체육시설 대관정보 조회_20220804",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://www.happysd.or.kr/c_76/cnt/m_109/view.do"
+        }
+      ]
+    },
+    {
+      "rank": 15,
+      "host": "data.seoul.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 2,
+      "specs": 1,
+      "organizations": [
+        "서울교통공사"
+      ],
+      "source_categories": [
+        "교통물류"
+      ],
+      "api_types": [
+        "LINK"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "sample_operations": [
+        {
+          "dataset_id": "15003164",
+          "title": "서울교통공사_역사 건축 현황",
+          "organization": "서울교통공사",
+          "operation": "서울교통공사_역사 건축 현황_20240331 외부 링크 1",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-11572\u0026srvType=F\u0026serviceKind=1\u0026currentPageNo=1"
+        },
+        {
+          "dataset_id": "15003164",
+          "title": "서울교통공사_역사 건축 현황",
+          "organization": "서울교통공사",
+          "operation": "서울교통공사_역사 건축 현황_20240331 외부 링크 2",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-12033\u0026srvType=S\u0026serviceKind=1¤tPageNo=1"
+        }
+      ]
+    },
+    {
+      "rank": 16,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -406,7 +819,77 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 17,
+      "host": "www.culture.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 2,
+      "specs": 1,
+      "organizations": [
+        "한국체육산업개발주식회사"
+      ],
+      "source_categories": [
+        "문화관광"
+      ],
+      "api_types": [
+        "LINK"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "sample_operations": [
+        {
+          "dataset_id": "15008517",
+          "title": "한국체육산업개발주식회사_올림픽공원 도서정보",
+          "organization": "한국체육산업개발주식회사",
+          "operation": "한국체육산업개발주식회사_올림픽공원 도서정보_20230918 외부 링크 1",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://www.culture.go.kr/data/openapi/openapiView.do?id=405\u0026keyword=%EB%8F%84%EC%84%9C\u0026searchField=all\u0026gubun=A"
+        },
+        {
+          "dataset_id": "15008517",
+          "title": "한국체육산업개발주식회사_올림픽공원 도서정보",
+          "organization": "한국체육산업개발주식회사",
+          "operation": "한국체육산업개발주식회사_올림픽공원 도서정보_20230918 외부 링크 2",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://www.culture.go.kr/data/openapi/openapiView.do?id=111"
+        }
+      ]
+    },
+    {
+      "rank": 18,
+      "host": "ncpms.rda.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 1,
+      "specs": 1,
+      "organizations": [
+        "농촌진흥청"
+      ],
+      "source_categories": [
+        "농축수산"
+      ],
+      "api_types": [
+        "LINK"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "sample_operations": [
+        {
+          "dataset_id": "15002034",
+          "title": "농촌진흥청_국가농작물병해충도감정보",
+          "organization": "농촌진흥청",
+          "operation": "농촌진흥청_국가농작물병해충도감정보_20240222 외부 링크 1",
+          "dependency_class": "external_endpoint",
+          "endpoint": "http://ncpms.rda.go.kr/npms/OpenApiInfo.np"
+        }
+      ]
+    },
+    {
+      "rank": 19,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -442,7 +925,38 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 20,
+      "host": "search.i815.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 1,
+      "specs": 1,
+      "organizations": [
+        "독립기념관"
+      ],
+      "source_categories": [
+        "교육"
+      ],
+      "api_types": [
+        "LINK"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "sample_operations": [
+        {
+          "dataset_id": "15006273",
+          "title": "독립기념관_한국독립운동사 소장자료 정보 DB",
+          "organization": "독립기념관",
+          "operation": "독립기념관_한국독립운동사 소장자료 정보 DB_20200703",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://search.i815.or.kr/openApi.do"
+        }
+      ]
+    },
+    {
+      "rank": 21,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -473,7 +987,38 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 22,
+      "host": "www.jobplustv.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "operations": 1,
+      "specs": 1,
+      "organizations": [
+        "한국산업인력공단"
+      ],
+      "source_categories": [
+        "교육"
+      ],
+      "api_types": [
+        "LINK"
+      ],
+      "data_formats": [
+        "XML"
+      ],
+      "sample_operations": [
+        {
+          "dataset_id": "15007088",
+          "title": "한국산업인력공단_한국직업방송 프로그램",
+          "organization": "한국산업인력공단",
+          "operation": "한국산업인력공단_한국직업방송 프로그램_20250115",
+          "dependency_class": "external_endpoint",
+          "endpoint": "https://www.jobplustv.or.kr/openapi/guide/openapiIntro.do"
+        }
+      ]
+    },
+    {
+      "rank": 23,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

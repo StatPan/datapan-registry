@@ -11,34 +11,36 @@ re-importing the upstream data.go.kr catalog every time.
 
 - Provider: `data.go.kr`
 - Specs: `12060`
-- Operations: `12205`
-- Callable operations: `12063` (`98.8%`)
+- Operations: `12253`
+- Callable operations: `12111` (`98.8%`)
 - Latest release: `v2026.06.25.24`
 - Registered external adapters: `airport`, `andong`, `ekape`, `emuseum`,
   `epost`, `folk`, `forest`, `gblib`, `geoje`, `humetro`, `itfind`, `jeju`,
   `jeonju`, `korad`, `kpx`, `lh-ebid`, `myhome`, `naqs`, `oneclick-law`, `pqis`,
   `q-net`, `seoul-bus`, `sisul`, `tour`, `uiryeong`, `ulsan`
-- External adapter coverage: `586` registered-adapter operations out of `595`
-  external endpoint operations (`95.4%`)
-- Missing external adapter hosts: `10`
+- External adapter coverage: `586` registered-adapter operations out of `643`
+  external endpoint operations (`88.5%`)
+- Missing external adapter hosts: `23`
 - Provider split readiness: `ready`
   (`26` adapters, `26` verification-capable, `21` call-capable)
 - Runtime verification evidence: `1221` bounded checks merged into
   `reports/latest-verification.json` (`22` verified, `87` failed, `1112`
   skipped)
-- Runtime evidence growth target: `10.0%` checked evidence meets the `10%`
-  release target; `0` additional records are required for this target.
-- Institution API overview: `411` organizations, `12060` APIs, and `12205`
+- Runtime evidence growth target: `10.0%` checked evidence is still below the
+  unrounded `10%` release target; `5` additional records are required for this
+  target.
+- Institution API overview: `411` organizations, `12060` APIs, and `12253`
   operations in `reports/data-go-kr/institution-api-overview.json`; readable
   tables live in `docs/data-go-kr-institution-api-overview.md`.
-- Missing external host probe: `28` unadapted external endpoint checks in
-  `reports/unadapted-external-probe.json` (`14` HTTP 404, `7` timeout, `6`
-  request/DNS errors, `1` HTTP 503)
-- Route disposition: `28` missing external routes in
-  `reports/route-disposition.json` (`14` dead-route candidates, `14`
-  transient failures, `0` remaining adapter candidates)
+- Missing external host probe: `76` unadapted external endpoint checks in
+  `reports/unadapted-external-probe.json` (`47` HTTP 2xx adapter candidates,
+  `14` HTTP 404 dead-route candidates, `15` timeout/DNS/request transient
+  failures)
+- Route disposition: `76` missing external routes in
+  `reports/route-disposition.json` (`14` dead-route candidates, `15`
+  transient failures, `47` remaining adapter candidates)
 - Coverage route evidence: `reports/coverage.json` now carries the same route
-  evidence and reports `0` evidence-adjusted adapter candidates
+  evidence and reports `47` evidence-adjusted adapter candidates
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
 - Provider index: `data/provider-index.json`
@@ -163,8 +165,11 @@ reports/
   latest-release-readiness.json
   data-go-kr/
     institution-api-overview.json
+    coverage-backlog.json
+    external-coverage-summary.json
 docs/
   data-go-kr-institution-api-overview.md
+  data-go-kr-coverage-backlog.md
 provenance/
   data-go-kr.md
 manifest.json

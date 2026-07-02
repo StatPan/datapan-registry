@@ -1,32 +1,32 @@
 {
-  "generated_at": "2026-06-30T08:11:23Z",
+  "generated_at": "2026-07-02T16:06:15Z",
   "provider": "data.go.kr",
-  "registry": "./data/data-go-kr.registry.json",
+  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 12205,
-    "callable_operations": 12063,
-    "specs_without_operations": 4875,
-    "specs_without_callable_operation": 4950,
+    "operations_total": 12253,
+    "callable_operations": 12111,
+    "specs_without_operations": 4850,
+    "specs_without_callable_operation": 4925,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 47,
-    "operations_without_response_params": 1269,
+    "operations_without_request_params": 95,
+    "operations_without_response_params": 1317,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 314,
-      "external_endpoint_operations": 595,
+      "external_endpoint_specs": 339,
+      "external_endpoint_operations": 643,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 7,
       "dev_approval_required_operations": 207,
       "prod_approval_required_operations": 4036,
       "malformed_endpoint_url_count": 42,
-      "malformed_guide_url_count": 582,
+      "malformed_guide_url_count": 583,
       "top_endpoint_hosts": [
         {
           "host": "apis.data.go.kr",
@@ -73,6 +73,10 @@
           "count": 20
         },
         {
+          "host": "data.gg.go.kr",
+          "count": 18
+        },
+        {
           "host": "www.andong.go.kr",
           "count": 15
         },
@@ -102,10 +106,6 @@
         },
         {
           "host": "openapi.coast.kr",
-          "count": 6
-        },
-        {
-          "host": "openapi.ebid.lh.or.kr",
           "count": 6
         }
       ],
@@ -151,6 +151,10 @@
           "count": 20
         },
         {
+          "host": "data.gg.go.kr",
+          "count": 18
+        },
+        {
           "host": "www.andong.go.kr",
           "count": 15
         },
@@ -184,10 +188,6 @@
         },
         {
           "host": "openapi.ebid.lh.or.kr",
-          "count": 6
-        },
-        {
-          "host": "openapi.epost.go.kr",
           "count": 6
         }
       ],
@@ -277,42 +277,42 @@
     "samples": {
       "without_operations": [
         {
-          "id": "15001668",
-          "title": "해양수산부 국립수산물품질관리원_수산물재고동향",
-          "organization": "해양수산부 국립수산물품질관리원",
-          "source_category": "농축수산",
+          "id": "15011175",
+          "title": "경기도_전력기술감리업체 현황",
+          "organization": "경기도",
+          "source_category": "산업고용",
           "operations_count": 0,
           "callable_operations": 0
         },
         {
-          "id": "15001702",
-          "title": "해양수산부 국립수산물품질관리원_검역시행장정보",
-          "organization": "해양수산부 국립수산물품질관리원",
-          "source_category": "농축수산",
+          "id": "15011181",
+          "title": "경기도 안전관리 우수 다중업소 현황",
+          "organization": "경기도",
+          "source_category": "산업고용",
           "operations_count": 0,
           "callable_operations": 0
         },
         {
-          "id": "15002034",
-          "title": "농촌진흥청_국가농작물병해충도감정보",
-          "organization": "농촌진흥청",
-          "source_category": "농축수산",
-          "operations_count": 0,
-          "callable_operations": 0
-        },
-        {
-          "id": "15002220",
-          "title": "농림축산식품부_유기농업자재 현황",
-          "organization": "농림축산식품부",
-          "source_category": "농축수산",
-          "operations_count": 0,
-          "callable_operations": 0
-        },
-        {
-          "id": "15003164",
-          "title": "서울교통공사_역사 건축 현황",
-          "organization": "서울교통공사",
+          "id": "15011249",
+          "title": "경기도 지적측량업  현황",
+          "organization": "경기도",
           "source_category": "교통물류",
+          "operations_count": 0,
+          "callable_operations": 0
+        },
+        {
+          "id": "15011336",
+          "title": "경기도 의료 유사업 현황",
+          "organization": "경기도",
+          "source_category": "보건의료",
+          "operations_count": 0,
+          "callable_operations": 0
+        },
+        {
+          "id": "15011370",
+          "title": "경기도 산후조리업체 현황",
+          "organization": "경기도",
+          "source_category": "사회복지",
           "operations_count": 0,
           "callable_operations": 0
         }

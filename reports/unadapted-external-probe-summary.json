@@ -1,26 +1,36 @@
 {
-  "generated_at": "2026-06-25T05:21:35Z",
-  "source": "./reports/unadapted-external-probe.json",
+  "generated_at": "2026-07-02T16:06:06Z",
+  "source": "..\\datapan-registry\\reports\\unadapted-external-probe.json",
   "provider": "data.go.kr",
-  "registry": "C:\\workspace\\datapan-registry\\data\\data-go-kr.registry.json",
+  "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 28,
+    "total": 76,
     "verified": 0,
-    "failed": 28,
+    "failed": 29,
     "skipped": 0,
-    "unknown": 0
+    "unknown": 47
   },
   "groups": {
     "by_status": [
       {
+        "key": "unknown",
+        "count": 47,
+        "status": "unknown"
+      },
+      {
         "key": "failed",
-        "count": 28,
+        "count": 29,
         "status": "failed"
       }
     ],
     "by_reason": [
+      {
+        "key": "unadapted_probe_http_2xx",
+        "count": 47,
+        "reason": "unadapted_probe_http_2xx"
+      },
       {
         "key": "unadapted_probe_http_404",
         "count": 14,
@@ -28,32 +38,42 @@
       },
       {
         "key": "unadapted_probe_timeout",
-        "count": 7,
+        "count": 8,
         "reason": "unadapted_probe_timeout"
       },
       {
-        "key": "unadapted_probe_request_error",
+        "key": "unadapted_probe_dns",
         "count": 6,
-        "reason": "unadapted_probe_request_error"
+        "reason": "unadapted_probe_dns"
       },
       {
-        "key": "unadapted_probe_http_503",
+        "key": "unadapted_probe_request_error",
         "count": 1,
-        "reason": "unadapted_probe_http_503"
+        "reason": "unadapted_probe_request_error"
       }
     ],
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 28,
+        "count": 76,
         "provider": "data.go.kr"
       }
     ],
     "by_endpoint_host": [
       {
+        "key": "data.gg.go.kr",
+        "count": 18,
+        "host": "data.gg.go.kr"
+      },
+      {
         "key": "openapi.coast.kr",
         "count": 6,
         "host": "openapi.coast.kr"
+      },
+      {
+        "key": "www.nfqs.go.kr",
+        "count": 5,
+        "host": "www.nfqs.go.kr"
       },
       {
         "key": "car.daegu.go.kr",
@@ -66,14 +86,44 @@
         "host": "openapi.price.go.kr"
       },
       {
+        "key": "www.nongsaro.go.kr",
+        "count": 4,
+        "host": "www.nongsaro.go.kr"
+      },
+      {
         "key": "www.rda.go.kr",
         "count": 4,
         "host": "www.rda.go.kr"
       },
       {
+        "key": "data.gwanak.go.kr",
+        "count": 3,
+        "host": "data.gwanak.go.kr"
+      },
+      {
+        "key": "data.mafra.go.kr",
+        "count": 3,
+        "host": "data.mafra.go.kr"
+      },
+      {
         "key": "its.gyeongju.go.kr:81",
         "count": 3,
         "host": "its.gyeongju.go.kr:81"
+      },
+      {
+        "key": "www.garak.co.kr",
+        "count": 3,
+        "host": "www.garak.co.kr"
+      },
+      {
+        "key": "www.work24.go.kr",
+        "count": 3,
+        "host": "www.work24.go.kr"
+      },
+      {
+        "key": "data.seoul.go.kr",
+        "count": 2,
+        "host": "data.seoul.go.kr"
       },
       {
         "key": "data.wanju.go.kr",
@@ -86,14 +136,39 @@
         "host": "www.cid.or.kr"
       },
       {
+        "key": "www.culture.go.kr",
+        "count": 2,
+        "host": "www.culture.go.kr"
+      },
+      {
+        "key": "www.happysd.or.kr",
+        "count": 2,
+        "host": "www.happysd.or.kr"
+      },
+      {
+        "key": "ncpms.rda.go.kr",
+        "count": 1,
+        "host": "ncpms.rda.go.kr"
+      },
+      {
         "key": "openapi-lib.sen.go.kr",
         "count": 1,
         "host": "openapi-lib.sen.go.kr"
       },
       {
+        "key": "search.i815.or.kr",
+        "count": 1,
+        "host": "search.i815.or.kr"
+      },
+      {
         "key": "www.dgeic.or.kr:8080",
         "count": 1,
         "host": "www.dgeic.or.kr:8080"
+      },
+      {
+        "key": "www.jobplustv.or.kr",
+        "count": 1,
+        "host": "www.jobplustv.or.kr"
       },
       {
         "key": "www.simpan.go.kr",
@@ -104,7 +179,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 28,
+        "count": 76,
         "kind": "external_endpoint"
       }
     ]
