@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 17,
+    "report_total": 18,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,8 +38,13 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 5,
+      "report_count": 6,
       "present_reports": [
+        {
+          "name": "coverage-backlog.json",
+          "path": "reports/data-go-kr/coverage-backlog.json",
+          "schema_version": "datapan.coverage-backlog.v1"
+        },
         {
           "name": "error-action-catalog.json",
           "path": "reports/data-go-kr/error-action-catalog.json",
@@ -83,6 +88,7 @@
         "verification-plan.json"
       ],
       "extra_reports": [
+        "coverage-backlog.json",
         "error-action-catalog.json",
         "external-coverage-summary.json",
         "institution-api-overview.json",

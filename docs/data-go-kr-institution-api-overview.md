@@ -80,6 +80,8 @@
 | 한국건강가정진흥원 | 85 | 85 | 90 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 
 The full machine-readable report is `reports/data-go-kr/institution-api-overview.json`.
+The full coverage backlog is `reports/data-go-kr/coverage-backlog.json`, with
+the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 ## Largest Categories
 

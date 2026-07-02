@@ -367,7 +367,9 @@ def build_markdown(report: dict[str, Any], limit: int) -> str:
         "## Largest Institutions By Operation Count\n\n"
         f"{markdown_table(operation_rows)}\n\n"
         "The full machine-readable report is "
-        "`reports/data-go-kr/institution-api-overview.json`.\n\n"
+        "`reports/data-go-kr/institution-api-overview.json`.\n"
+        "The full coverage backlog is `reports/data-go-kr/coverage-backlog.json`, with\n"
+        "the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.\n\n"
         "## Largest Categories\n\n"
         + "\n".join(category_lines)
         + "\n\n## Largest Hosts\n\n"
