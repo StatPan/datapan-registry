@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-02T17:14:35Z",
+  "generated_at": "2026-07-02T17:25:14Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 1395,
+  "limit": 1398,
   "truncated": true,
-  "filtered_count": 1258,
+  "filtered_count": 1261,
   "summary": {
-    "total": 1258,
-    "verified": 49,
+    "total": 1261,
+    "verified": 52,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0
@@ -24230,6 +24230,48 @@
       "http_status": 200,
       "semantic_status": "html_landing_page",
       "url": "https://www.nongsaro.go.kr/portal/ps/psn/psnj/openApiLst.ps?menuId=PS65428\u0026pageIndex=1\u0026pageSize=\u0026sLclasCode=\u0026sText=%EA%B3%B5%EA%B3%B5+%EB%8D%B0%EC%9D%B4%ED%84%B0",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15007009",
+      "title": "서울특별시 관악구_공중위생업소 현황",
+      "operation": "서울특별시 관악구_공중위생업소 현황_20220624 외부 링크 1",
+      "provider": "gwanak",
+      "endpoint_host": "data.gwanak.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T17:25:12Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gwanak.go.kr/openinf/sheetview.jsp?infId=OA-11496",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15007009",
+      "title": "서울특별시 관악구_공중위생업소 현황",
+      "operation": "서울특별시 관악구_공중위생업소 현황_20220624 외부 링크 2",
+      "provider": "gwanak",
+      "endpoint_host": "data.gwanak.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T17:25:12Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://data.gwanak.go.kr/openinf/dataset/datasetlist.jsp",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15009684",
+      "title": "서울특별시 관악구_공공시설개방정보",
+      "operation": "서울특별시 관악구_공공시설개방정보_20220624",
+      "provider": "gwanak",
+      "endpoint_host": "data.gwanak.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T17:25:12Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gwanak.go.kr/openinf/sheetview.jsp?infId=OA-12151",
       "body_shape": "html"
     }
   ]

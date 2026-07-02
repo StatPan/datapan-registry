@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-02T17:14:36Z",
+  "generated_at": "2026-07-02T17:25:16Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 20,
+  "filtered_count": 19,
   "summary": {
-    "target_hosts": 20,
-    "target_operations": 49,
-    "external_endpoint_operations": 49,
+    "target_hosts": 19,
+    "target_operations": 46,
+    "external_endpoint_operations": 46,
     "service_root_operations": 0,
     "approval_required_operations": 0,
     "missing_param_operations": 21,
@@ -242,54 +242,6 @@
     },
     {
       "rank": 5,
-      "host": "data.gwanak.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 3,
-      "specs": 2,
-      "organizations": [
-        "서울특별시 관악구"
-      ],
-      "source_categories": [
-        "공공행정",
-        "식품건강"
-      ],
-      "api_types": [
-        "LINK"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "sample_operations": [
-        {
-          "dataset_id": "15007009",
-          "title": "서울특별시 관악구_공중위생업소 현황",
-          "organization": "서울특별시 관악구",
-          "operation": "서울특별시 관악구_공중위생업소 현황_20220624 외부 링크 1",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://data.gwanak.go.kr/openinf/sheetview.jsp?infId=OA-11496"
-        },
-        {
-          "dataset_id": "15007009",
-          "title": "서울특별시 관악구_공중위생업소 현황",
-          "organization": "서울특별시 관악구",
-          "operation": "서울특별시 관악구_공중위생업소 현황_20220624 외부 링크 2",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://data.gwanak.go.kr/openinf/dataset/datasetlist.jsp"
-        },
-        {
-          "dataset_id": "15009684",
-          "title": "서울특별시 관악구_공공시설개방정보",
-          "organization": "서울특별시 관악구",
-          "operation": "서울특별시 관악구_공공시설개방정보_20220624",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://data.gwanak.go.kr/openinf/sheetview.jsp?infId=OA-12151"
-        }
-      ]
-    },
-    {
-      "rank": 6,
       "host": "data.mafra.go.kr",
       "kinds": [
         "external_endpoint"
@@ -337,7 +289,7 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 6,
       "host": "its.gyeongju.go.kr:81",
       "kinds": [
         "external_endpoint"
@@ -394,7 +346,7 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 7,
       "host": "www.garak.co.kr",
       "kinds": [
         "external_endpoint"
@@ -441,7 +393,7 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 8,
       "host": "www.work24.go.kr",
       "kinds": [
         "external_endpoint"
@@ -488,7 +440,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -539,7 +491,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "www.happysd.or.kr",
       "kinds": [
         "external_endpoint"
@@ -578,7 +530,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "data.seoul.go.kr",
       "kinds": [
         "external_endpoint"
@@ -617,7 +569,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -674,7 +626,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 13,
       "host": "www.culture.go.kr",
       "kinds": [
         "external_endpoint"
@@ -713,7 +665,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 14,
       "host": "ncpms.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -744,7 +696,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 15,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -780,7 +732,7 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 16,
       "host": "search.i815.or.kr",
       "kinds": [
         "external_endpoint"
@@ -811,7 +763,7 @@
       ]
     },
     {
-      "rank": 18,
+      "rank": 17,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -842,7 +794,7 @@
       ]
     },
     {
-      "rank": 19,
+      "rank": 18,
       "host": "www.jobplustv.or.kr",
       "kinds": [
         "external_endpoint"
@@ -873,7 +825,7 @@
       ]
     },
     {
-      "rank": 20,
+      "rank": 19,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

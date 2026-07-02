@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.release-manifest.v1",
-  "generated_at": "2026-07-02T17:14:36Z",
+  "generated_at": "2026-07-02T17:25:16Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
@@ -186,7 +186,7 @@
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
       "bytes": 11058,
-      "sha256": "f74beabdd4b000b8e14ec9a7bd22f42f3a498d1ac7e91123e548b87a6796e66c"
+      "sha256": "64e73ca4a77a3cf92a38190361adcb3a5aaf8e1138375f3bd5d666cbf4b9f1ff"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -199,92 +199,92 @@
       "path": "data/provider-index.json",
       "kind": "provider_index",
       "schema": "https://schemas.datapan.dev/datapan.provider-index.v1.schema.json",
-      "bytes": 6111,
-      "sha256": "e9b9c4f904caf18ebafc117d0e34cedbe550c269cb7b17ad2a0055d134427e23"
+      "bytes": 6287,
+      "sha256": "4e55faf6ebedcb40f1a6c638195788c9410ef997b4a9a9ed3106535a80c44c7d"
     },
     {
       "path": "reports/catalog-diff.json",
       "kind": "catalog_diff",
       "schema": "https://schemas.datapan.dev/datapan.catalog-diff.v1.schema.json",
       "bytes": 10813,
-      "sha256": "79a21c0c8522a4b5d01cafa0f7fe2359360db18066cfdf5d7b6372c468f9f90d"
+      "sha256": "600f0bed74aa4a10757155966f5e6925a7147d5428d08a48f8e269c047f9432f"
     },
     {
       "path": "reports/catalog-audit.json",
       "kind": "catalog_audit",
       "schema": "https://schemas.datapan.dev/datapan.catalog-audit.v1.schema.json",
       "bytes": 15760,
-      "sha256": "f6decac5071ffd500368807bff17156ca41656ab18459a3730359240fcce6f3f"
+      "sha256": "c464ddbaae64520d836b9fcf9b07404c4c06d4c6990d252f9705d324efefa62f"
     },
     {
       "path": "reports/error-catalog.json",
       "kind": "error_catalog",
       "schema": "https://schemas.datapan.dev/datapan.error-catalog.v1.schema.json",
       "bytes": 3305377,
-      "sha256": "410f956304415eea7ec597d58bb0e846c95686aaacc5b0328ed2e4722a74e4f3"
+      "sha256": "2904e07101266b6d10a66f2d5198b45367e8415949865549e9ceac4d90db2eed"
     },
     {
       "path": "reports/dependencies.json",
       "kind": "dependencies",
       "schema": "https://schemas.datapan.dev/datapan.dependencies.v1.schema.json",
-      "bytes": 11442758,
-      "sha256": "0ec2af1316a3da198452ce465e699f770f85837e2e144e53a66a4697f95b63bc"
+      "bytes": 11442584,
+      "sha256": "759a8db4d590b2ba3b0ce61cfdf0186231b40bccf5d1d00d9bb585d3e89b1ea7"
     },
     {
       "path": "reports/adapter-targets.json",
       "kind": "adapter_targets",
       "schema": "https://schemas.datapan.dev/datapan.adapter-targets.v1.schema.json",
-      "bytes": 29667,
-      "sha256": "805a8526f026c1fb71ea77037aa669cf57a0c7494b5df6a531571330f292c784"
+      "bytes": 27966,
+      "sha256": "07f221db6d5b42d02f0d3cf4d1ebf5f22d46a8d1bf58af10ad4d2ac8b962957f"
     },
     {
       "path": "reports/route-disposition.json",
       "kind": "route_disposition",
       "schema": "https://schemas.datapan.dev/datapan.route-disposition.v1.schema.json",
-      "bytes": 39589,
-      "sha256": "dbca44903ac47c0d4585c73a61a1d9527ddcdf1d2c9781eb76cb862cc58cfae8"
+      "bytes": 37380,
+      "sha256": "49e57b6cce729e5fa30d9244f94fa747a4992f343c5d6ee39d051176a310ba97"
     },
     {
       "path": "reports/provider-backlog.json",
       "kind": "provider_backlog",
       "schema": "https://schemas.datapan.dev/datapan.providers.v1.schema.json",
       "bytes": 57673,
-      "sha256": "4209c43c48d85742d3ea293d4be0d091cefdffbf68ee9fe3cff9c4aa1061040e"
+      "sha256": "bc9d2a29d90bd4a6cbaf6f02dd4db3aa7d8715637abb6e833286107f4b0cf259"
     },
     {
       "path": "reports/coverage.json",
       "kind": "coverage",
       "schema": "https://schemas.datapan.dev/datapan.coverage.v1.schema.json",
-      "bytes": 17525,
-      "sha256": "b84031b80671be8f31871e87602d210a7eac7a6efeba61036b33689d75054942"
+      "bytes": 17784,
+      "sha256": "a7bdfe22d9a5fbadffbdd7eae8c3bae1ac7008b5a289f95a655bc94cabef5201"
     },
     {
       "path": "reports/verification-plan.json",
       "kind": "verification_plan",
       "schema": "https://schemas.datapan.dev/datapan.verification-plan.v1.schema.json",
-      "bytes": 4670,
-      "sha256": "ade8c9b0131fdb595a8aee604940b6af502960368749094546cff67405dbb421"
+      "bytes": 4733,
+      "sha256": "fa5c47de8e1d0004ffe0e3f75c753b906640f348311bf37792ccfe0502c18532"
     },
     {
       "path": "reports/data-go-kr/runtime-evidence-growth.json",
       "kind": "runtime_evidence_growth",
       "schema": "https://schemas.datapan.dev/datapan.runtime-evidence-growth.v1.schema.json",
       "bytes": 2082,
-      "sha256": "ed4d1387286d695f1bc36244094dfb322c4036c3f91b43a97e6caa534c093017"
+      "sha256": "67f33615687cbc8c9351e34379b49024ef3c738687794e2a49dea2a417463caa"
     },
     {
       "path": "reports/latest-verification.json",
       "kind": "verification",
       "schema": "https://schemas.datapan.dev/datapan.verification.v1.schema.json",
-      "bytes": 734440,
-      "sha256": "055d348fadcb1ea771652249d0d8bc5110dac55e3e055228e8924bbbec5dd624"
+      "bytes": 736168,
+      "sha256": "d37ef7d44009031c74854d6a839fbec5969604fb58a96c130c026818838c7632"
     },
     {
       "path": "reports/latest-verification-summary.json",
       "kind": "verification_summary",
       "schema": "https://schemas.datapan.dev/datapan.verification-summary.v1.schema.json",
-      "bytes": 14331,
-      "sha256": "7d81665a1b0357a8b4599dadebeb6dd51e995118e8eabb004161b7ca33fb90d6"
+      "bytes": 14531,
+      "sha256": "dac9f14d840485b6d6551eb34b94d1fbf28089a353f4c2f70b9fd322c2fc374a"
     },
     {
       "path": "reports/unadapted-external-probe.json",
@@ -304,13 +304,13 @@
       "path": "provenance/data-go-kr.md",
       "kind": "provenance",
       "bytes": 3215,
-      "sha256": "e8cefba67d096b8fdc2ff3be2fe17b23871930a3efaec8b105badb92041aed50"
+      "sha256": "86871a3459b89d7d2882c0a8d26e40b51b6c4d7b1d3fdc874fba484226a2fe3f"
     },
     {
       "path": "RELEASE_NOTES.md",
       "kind": "release_notes",
-      "bytes": 3242,
-      "sha256": "09495c6dbf321553b427f0e6ce0102b42967283e69b4a0b9786d47621ae72b04"
+      "bytes": 3241,
+      "sha256": "3aa4b6badfe8a83b6b914b94dda812608d51e40329895c121fc711debde3ce6b"
     }
   ]
 }

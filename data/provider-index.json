@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-02T17:14:36Z",
+  "generated_at": "2026-07-02T17:25:16Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 29,
-  "host_count": 33,
+  "adapter_count": 30,
+  "host_count": 34,
   "adapters": [
     {
       "name": "airport",
@@ -108,6 +108,16 @@
       ],
       "capabilities": [
         "call",
+        "verification"
+      ]
+    },
+    {
+      "name": "gwanak",
+      "status": "registered",
+      "hosts": [
+        "data.gwanak.go.kr"
+      ],
+      "capabilities": [
         "verification"
       ]
     },
@@ -323,8 +333,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 29,
-    "verification_capable_adapters": 29,
+    "adapter_count": 30,
+    "verification_capable_adapters": 30,
     "call_capable_adapters": 21,
     "required_adapters": 2,
     "required_verification_adapters": 2,

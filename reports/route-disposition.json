@@ -1,24 +1,24 @@
 {
-  "generated_at": "2026-07-02T17:14:36Z",
+  "generated_at": "2026-07-02T17:25:16Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "probe": "..\\datapan-registry\\reports\\unadapted-external-probe.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "routes_total": 49,
-    "operations": 49,
-    "hosts": 20,
-    "with_probe_evidence": 49,
+    "routes_total": 46,
+    "operations": 46,
+    "hosts": 19,
+    "with_probe_evidence": 46,
     "without_probe_evidence": 0,
     "dead_route_candidates": 14,
     "transient_failures": 15,
     "parameter_blocked_routes": 0,
-    "adapter_candidates": 20,
+    "adapter_candidates": 17,
     "by_disposition": [
       {
         "key": "adapter_candidate",
-        "count": 20,
+        "count": 17,
         "disposition": "adapter_candidate"
       },
       {
@@ -35,7 +35,7 @@
     "by_reason": [
       {
         "key": "unadapted_probe_http_2xx",
-        "count": 20,
+        "count": 17,
         "reason": "unadapted_probe_http_2xx"
       },
       {
@@ -79,11 +79,6 @@
         "key": "www.rda.go.kr",
         "count": 4,
         "host": "www.rda.go.kr"
-      },
-      {
-        "key": "data.gwanak.go.kr",
-        "count": 3,
-        "host": "data.gwanak.go.kr"
       },
       {
         "key": "data.mafra.go.kr",
@@ -656,51 +651,6 @@
       "recommended_action": "retry with bounded evidence before building a provider adapter",
       "probe_status": "failed",
       "probe_reason": "unadapted_probe_request_error"
-    },
-    {
-      "dataset_id": "15007009",
-      "title": "서울특별시 관악구_공중위생업소 현황",
-      "organization": "서울특별시 관악구",
-      "operation": "서울특별시 관악구_공중위생업소 현황_20220624 외부 링크 1",
-      "endpoint": "https://data.gwanak.go.kr/openinf/sheetview.jsp?infId=OA-11496",
-      "endpoint_host": "data.gwanak.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15007009",
-      "title": "서울특별시 관악구_공중위생업소 현황",
-      "organization": "서울특별시 관악구",
-      "operation": "서울특별시 관악구_공중위생업소 현황_20220624 외부 링크 2",
-      "endpoint": "http://data.gwanak.go.kr/openinf/dataset/datasetlist.jsp",
-      "endpoint_host": "data.gwanak.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15009684",
-      "title": "서울특별시 관악구_공공시설개방정보",
-      "organization": "서울특별시 관악구",
-      "operation": "서울특별시 관악구_공공시설개방정보_20220624",
-      "endpoint": "https://data.gwanak.go.kr/openinf/sheetview.jsp?infId=OA-12151",
-      "endpoint_host": "data.gwanak.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
     },
     {
       "dataset_id": "15002220",

@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-02T17:14:35Z",
+  "generated_at": "2026-07-02T17:25:14Z",
   "source": "..\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1258,
-    "verified": 49,
+    "total": 1261,
+    "verified": 52,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0
@@ -26,7 +26,7 @@
       },
       {
         "key": "verified",
-        "count": 49,
+        "count": 52,
         "status": "verified"
       }
     ],
@@ -429,6 +429,11 @@
         "provider": "gblib"
       },
       {
+        "key": "gwanak",
+        "count": 3,
+        "provider": "gwanak"
+      },
+      {
         "key": "myhome",
         "count": 1,
         "provider": "myhome"
@@ -576,6 +581,11 @@
         "host": "www.nongsaro.go.kr"
       },
       {
+        "key": "data.gwanak.go.kr",
+        "count": 3,
+        "host": "data.gwanak.go.kr"
+      },
+      {
         "key": "folkency.nfm.go.kr",
         "count": 3,
         "host": "folkency.nfm.go.kr"
@@ -614,7 +624,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 594,
+        "count": 597,
         "kind": "external_endpoint"
       },
       {

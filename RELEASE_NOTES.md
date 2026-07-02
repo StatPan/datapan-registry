@@ -1,6 +1,6 @@
 # Datapan Registry Release
 
-- generated_at: `2026-07-02T17:14:36Z`
+- generated_at: `2026-07-02T17:25:16Z`
 - provider: `data.go.kr`
 - datapan_version: `0.1.0-dev`
 - source_registry: `..\datapan-registry\data\data-go-kr.registry.json`
@@ -15,16 +15,16 @@
 
 ## Provider Coverage
 
-- provider_adapters: `29` adapters, `33` hosts
+- provider_adapters: `30` adapters, `34` hosts
 - split_readiness: `ready`
-- verification_capable_adapters: `29`
+- verification_capable_adapters: `30`
 - call_capable_adapters: `21`
-- dependency_operations: `12253` total, `11419` gateway, `643` external, `613` registered-adapter, `49` missing-adapter
-- adapter_backlog: `20` target hosts, `49` target operations
-- route_disposition: `49` routes, `14` dead-route candidates, `15` transient failures, `0` parameter-blocked, `20` adapter candidates
+- dependency_operations: `12253` total, `11419` gateway, `643` external, `616` registered-adapter, `46` missing-adapter
+- adapter_backlog: `19` target hosts, `46` target operations
+- route_disposition: `46` routes, `14` dead-route candidates, `15` transient failures, `0` parameter-blocked, `17` adapter candidates
 - route_disposition_artifact: `reports/route-disposition.json`
-- provider_backlog: `192` hosts, `20` missing-adapter hosts, `49` operations needing adapters
-- coverage: `12111` callable operations (`98.8%`), external adapter coverage `92.6%`, verification evidence coverage `10.3%`, evidence-adjusted adapter candidates `20`
+- provider_backlog: `192` hosts, `19` missing-adapter hosts, `46` operations needing adapters
+- coverage: `12111` callable operations (`98.8%`), external adapter coverage `93.1%`, verification evidence coverage `10.3%`, evidence-adjusted adapter candidates `17`
 - coverage_artifact: `reports/coverage.json`
 - coverage_goals: callable `99%`, external adapters `98%`, verification evidence `10%`, call-capable adapters `25`, missing-adapter operations `<=10`
 - verification_plan: `1` batches, `10` planned operations, `10774` gateway gaps, `0` adapter gaps
@@ -38,11 +38,11 @@ Top adapter targets:
 - `2`. `www.rda.go.kr`: `4` operations across `2` specs
 - `3`. `car.daegu.go.kr`: `4` operations across `1` specs
 - `4`. `openapi.price.go.kr`: `4` operations across `1` specs
-- `5`. `data.gwanak.go.kr`: `3` operations across `2` specs
+- `5`. `data.mafra.go.kr`: `3` operations across `2` specs
 
 ## Verification Evidence
 
-- verification: `1258` total, `49` verified, `87` failed, `1122` skipped, `0` unknown
+- verification: `1261` total, `52` verified, `87` failed, `1122` skipped, `0` unknown
 - verification_artifact: `reports/latest-verification.json`
 - verification_summary_artifact: `reports/latest-verification-summary.json`
 
