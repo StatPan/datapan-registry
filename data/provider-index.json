@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-02T22:51:13Z",
+  "generated_at": "2026-07-02T23:04:33Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 41,
-  "host_count": 46,
+  "adapter_count": 42,
+  "host_count": 47,
   "adapters": [
     {
       "name": "airport",
@@ -248,6 +248,16 @@
       ]
     },
     {
+      "name": "lofin365",
+      "status": "registered",
+      "hosts": [
+        "www.lofin365.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "mafra",
       "status": "registered",
       "hosts": [
@@ -446,8 +456,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 41,
-    "verification_capable_adapters": 41,
+    "adapter_count": 42,
+    "verification_capable_adapters": 42,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

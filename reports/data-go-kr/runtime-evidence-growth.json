@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-07-02T22:51:13Z",
+  "generated_at": "2026-07-02T23:04:33Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -13,17 +13,17 @@
     "provider_index": "data/provider-index.json"
   },
   "coverage": {
-    "operations": 13284,
-    "callable_operations": 13142,
+    "operations": 13523,
+    "callable_operations": 13381,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 1674,
-    "registered_adapter_operations": 1664,
+    "external_endpoint_operations": 1913,
+    "registered_adapter_operations": 1903,
     "call_capable_adapters": 23
   },
   "evidence": {
-    "total": 1333,
+    "total": 1358,
     "verified": 114,
-    "failed": 87,
+    "failed": 112,
     "skipped": 1132,
     "unknown": 0,
     "coverage_percent": 10,
@@ -34,7 +34,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 669
+        "count": 694
       },
       {
         "key": "service_root",
@@ -44,15 +44,15 @@
   },
   "growth_target": {
     "target_percent": 10,
-    "target_evidence_total": 1329,
+    "target_evidence_total": 1353,
     "remaining_to_target": 0,
     "status": "above_target"
   },
   "verification_plan": {
-    "planned_batches": 8,
-    "planned_operations": 72,
+    "planned_batches": 9,
+    "planned_operations": 82,
     "uncovered_gateway_candidates": 10774,
-    "uncovered_adapter_candidates": 976,
+    "uncovered_adapter_candidates": 1190,
     "missing_adapter_hosts": 11,
     "planned_by_kind": [
       {
@@ -61,7 +61,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 62
+        "count": 72
       }
     ],
     "batches": [
@@ -92,6 +92,15 @@
         "output": ".datapan/verification/eshare-next.json"
       },
       {
+        "label": "lofin365",
+        "provider": "lofin365",
+        "kind": "external_endpoint",
+        "candidates": 231,
+        "uncovered_candidates": 206,
+        "planned_operations": 10,
+        "output": ".datapan/verification/lofin365-next.json"
+      },
+      {
         "label": "nongsaro",
         "provider": "nongsaro",
         "kind": "external_endpoint",
@@ -104,8 +113,8 @@
         "label": "safetydata",
         "provider": "safetydata",
         "kind": "external_endpoint",
-        "candidates": 358,
-        "uncovered_candidates": 348,
+        "candidates": 366,
+        "uncovered_candidates": 356,
         "planned_operations": 10,
         "output": ".datapan/verification/safetydata-next.json"
       },
@@ -140,8 +149,8 @@
   },
   "provider_split_readiness": {
     "status": "ready",
-    "adapter_count": 41,
-    "verification_capable_adapters": 41,
+    "adapter_count": 42,
+    "verification_capable_adapters": 42,
     "call_capable_adapters": 23
   },
   "warnings": []

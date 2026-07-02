@@ -94,8 +94,8 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `4,175` data.go.kr APIs
-  without operation mappings, `7,249` operation-mapped APIs without runtime
+- `reports/data-go-kr/coverage-backlog.json` tracks `4,080` data.go.kr APIs
+  without operation mappings, `7,335` operation-mapped APIs without runtime
   evidence, and `54` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
@@ -194,11 +194,13 @@ Current gaps:
   checks, bringing runtime evidence to `1323`. The EShare adapter then opens
   `www.eshare.go.kr` and the next 행정안전부 batch adds `96` APIs, `121`
   operations, and `10` verified landing-page checks, bringing runtime evidence
-  to `1333` while keeping the `10%` release-readiness target restored. Most
-  evidence is still skipped boundary evidence, not proof that those operations
-  are callable.
-- API operation coverage remains incomplete: `7,885` of `12,060` APIs have
-  operation mappings (`65.4%`), leaving `4,175` APIs to materialize and `7,249`
+  to `1333`. The Lofin365 adapter opens the 지방재정365 batch and adds `95`
+  APIs, `239` operations, and `25` failed-but-bounded checks, bringing runtime
+  evidence to `1358` while keeping the `10%` release-readiness target restored.
+  Most evidence is still skipped boundary evidence, not proof that those
+  operations are callable.
+- API operation coverage remains incomplete: `7,980` of `12,060` APIs have
+  operation mappings (`66.2%`), leaving `4,080` APIs to materialize and `7,335`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

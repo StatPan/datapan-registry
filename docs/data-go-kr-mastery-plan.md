@@ -12,14 +12,14 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `13284`
-- callable operations: `13142` (`98.9%`)
+- operations: `13523`
+- callable operations: `13381` (`98.9%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `1674`
-- registered adapter operations: `1664`
+- external endpoint operations: `1913`
+- registered adapter operations: `1903`
 - missing adapter operations: `29`
-- external adapter coverage: `98.3%`
-- approval-required operations: `4646`
+- external adapter coverage: `98.5%`
+- approval-required operations: `4672`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `142`
@@ -331,7 +331,11 @@ coverage.
    then registers `www.eshare.go.kr`, materializes the next 행정안전부 link-detail
    batch with `96` APIs and `121` operations, and adds `10` verified EShare
    landing-page checks, bringing checked runtime evidence to `1333` and
-   registered external adapter operations to `1664`.
+   registered external adapter operations to `1664`. The Lofin365 adapter then
+   registers `www.lofin365.go.kr`, materializes another 행정안전부 batch with
+   `95` APIs and `239` operations, and adds `25` failed-but-bounded Lofin365
+   runtime checks, bringing checked runtime evidence to `1358` and registered
+   external adapter operations to `1903`.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,
