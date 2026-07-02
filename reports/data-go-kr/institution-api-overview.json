@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-02T22:04:09Z",
+  "generated_at": "2026-07-02T22:19:46Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 12963,
-    "runtime_evidence": 1303,
-    "runtime_evidence_percent": 10.1,
-    "callable_operations": 12821,
-    "external_endpoint_operations": 1353,
-    "registered_adapter_operations": 1343,
+    "operations": 13066,
+    "runtime_evidence": 1313,
+    "runtime_evidence_percent": 10.0,
+    "callable_operations": 12924,
+    "external_endpoint_operations": 1456,
+    "registered_adapter_operations": 1446,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 1353
+      "count": 1456
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 1343
+      "count": 1446
     },
     {
       "key": "builtin",
@@ -69,19 +69,19 @@
   "top_source_categories": [
     {
       "category": "농축수산",
-      "operation_count": 1356
+      "operation_count": 1358
     },
     {
       "category": "교통물류",
-      "operation_count": 1340
+      "operation_count": 1352
     },
     {
       "category": "문화관광",
-      "operation_count": 1299
+      "operation_count": 1300
     },
     {
       "category": "공공행정",
-      "operation_count": 1273
+      "operation_count": 1283
     },
     {
       "category": "산업고용",
@@ -97,19 +97,19 @@
     },
     {
       "category": "환경기상",
-      "operation_count": 855
+      "operation_count": 870
     },
     {
       "category": "보건의료",
-      "operation_count": 708
-    },
-    {
-      "category": "식품건강",
-      "operation_count": 652
+      "operation_count": 717
     },
     {
       "category": "재난안전",
-      "operation_count": 648
+      "operation_count": 696
+    },
+    {
+      "category": "식품건강",
+      "operation_count": 655
     },
     {
       "category": "국토관리",
@@ -117,7 +117,7 @@
     },
     {
       "category": "교육",
-      "operation_count": 532
+      "operation_count": 535
     },
     {
       "category": "과학기술",
@@ -139,7 +139,7 @@
     },
     {
       "host": "data.gg.go.kr",
-      "operation_count": 498,
+      "operation_count": 503,
       "adapter": "data-gg",
       "adapter_status": "registered",
       "capabilities": [
@@ -148,7 +148,7 @@
     },
     {
       "host": "www.safetydata.go.kr",
-      "operation_count": 180,
+      "operation_count": 184,
       "adapter": "safetydata",
       "adapter_status": "registered",
       "capabilities": [
@@ -160,6 +160,15 @@
       "host": "openapi.q-net.or.kr",
       "operation_count": 104,
       "adapter": "q-net",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "host": "www.safemap.go.kr",
+      "operation_count": 94,
+      "adapter": "safemap",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -309,30 +318,21 @@
         "call",
         "verification"
       ]
-    },
-    {
-      "host": "data.mafra.go.kr",
-      "operation_count": 11,
-      "adapter": "mafra",
-      "adapter_status": "registered",
-      "capabilities": [
-        "verification"
-      ]
     }
   ],
   "institutions": [
     {
       "organization": "행정안전부",
       "api_count": 1252,
-      "operation_api_count": 793,
-      "operation_count": 1054,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
+      "operation_api_count": 891,
+      "operation_count": 1157,
+      "runtime_evidence_count": 10,
+      "runtime_evidence_percent": 0.9,
+      "verified": 10,
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
-      "approval_required_operations": 215,
+      "approval_required_operations": 318,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
@@ -341,7 +341,7 @@
         },
         {
           "key": "external_endpoint",
-          "count": 180
+          "count": 283
         },
         {
           "key": "malformed_endpoint",
@@ -351,7 +351,7 @@
       "by_adapter_status": [
         {
           "key": "adapter",
-          "count": 180
+          "count": 283
         },
         {
           "key": "builtin",
@@ -365,23 +365,23 @@
       "top_categories": [
         {
           "category": "공공행정",
-          "operation_count": 264
+          "operation_count": 274
         },
         {
           "category": "재난안전",
-          "operation_count": 177
+          "operation_count": 225
         },
         {
           "category": "문화관광",
-          "operation_count": 157
+          "operation_count": 158
         },
         {
           "category": "농축수산",
-          "operation_count": 86
+          "operation_count": 88
         },
         {
-          "category": "식품건강",
-          "operation_count": 65
+          "category": "환경기상",
+          "operation_count": 77
         }
       ],
       "top_hosts": [
@@ -391,11 +391,29 @@
         },
         {
           "host": "www.safetydata.go.kr",
-          "operation_count": 180,
+          "operation_count": 184,
           "adapter": "safetydata",
           "adapter_status": "registered",
           "capabilities": [
             "call",
+            "verification"
+          ]
+        },
+        {
+          "host": "www.safemap.go.kr",
+          "operation_count": 94,
+          "adapter": "safemap",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "data.gg.go.kr",
+          "operation_count": 5,
+          "adapter": "data-gg",
+          "adapter_status": "registered",
+          "capabilities": [
             "verification"
           ]
         }

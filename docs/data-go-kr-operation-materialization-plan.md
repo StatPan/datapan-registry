@@ -2,11 +2,11 @@
 
 This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns APIs without operation mappings into bounded institution work queues. It is separate from runtime evidence reactivation: these APIs need operation metadata materialized before they can enter verification batches.
 
-- Generated at: `2026-07-02T22:04:09Z`
+- Generated at: `2026-07-02T22:19:46Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `7594` (`63.0%`)
-- APIs without operation mapping: `4466`
+- APIs with operation mapping: `7692` (`63.8%`)
+- APIs without operation mapping: `4368`
 - Planned institutions: `10`
 - Planned APIs: `645`
 - First queue: `행정안전부`
@@ -16,7 +16,7 @@ This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns
 
 | Rank | Institution | APIs | Covered APIs | Uncovered APIs | API Coverage | Planned APIs | Remaining After Batch |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 행정안전부 | 1252 | 793 | 459 | 63.3% | 100 | 359 |
+| 1 | 행정안전부 | 1252 | 891 | 361 | 71.2% | 100 | 261 |
 | 2 | 경기도 | 840 | 199 | 641 | 23.7% | 100 | 541 |
 | 3 | 국토교통부 | 393 | 127 | 266 | 32.3% | 100 | 166 |
 | 4 | 식품의약품안전처 | 392 | 272 | 120 | 69.4% | 100 | 20 |
@@ -31,11 +31,11 @@ This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns
 
 | Institution | API ID | Title | Category | Format | Dev Approval | Prod Approval | Updated |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 행정안전부 | 15153491 | 행정안전부_전통시장안전점검결과 | 재난안전 | JSON | 자동승인 | 심의승인 | 2025-11-21 |
-| 행정안전부 | 15153441 | 행정안전부_유해화학물질취급시설안전점검결과 | 재난안전 | JSON | 자동승인 | 심의승인 | 2025-11-21 |
-| 행정안전부 | 15153433 | 행정안전부_여객선안전점검결과 | 재난안전 | JSON | 자동승인 | 심의승인 | 2025-11-21 |
-| 행정안전부 | 15153429 | 행정안전부_어린이놀이시설안전점검결과 | 재난안전 | JSON | 자동승인 | 심의승인 | 2025-11-21 |
-| 행정안전부 | 15101860 | 행정안전부_생활안전지도 어린이 아토피 | 보건의료 | WMS | 자동승인 | 심의승인 | 2025-11-21 |
+| 행정안전부 | 15149535 | 행정안전부_생활안전지도 교육환경보호구역 | 국토관리 | WMS | 자동승인 | 심의승인 | 2025-11-19 |
+| 행정안전부 | 15101888 | 행정안전부_생활안전지도 유아시설 | 교육 | WMS | 자동승인 | 심의승인 | 2025-11-19 |
+| 행정안전부 | 15101799 | 행정안전부_생활안전지도 범죄주의구간(강도, WMS) | 재난안전 | WMS | 자동승인 | 심의승인 | 2025-11-19 |
+| 행정안전부 | 15101797 | 행정안전부_생활안전지도 범죄주의구간(전체, WMS) | 재난안전 | WMS | 자동승인 | 심의승인 | 2025-11-19 |
+| 행정안전부 | 15101795 | 행정안전부_생활안전지도 열분포도(WMS) | 재난안전 | WMS | 자동승인 | 심의승인 | 2025-11-19 |
 | 경기도 | 15059050 | 경기도_노인 휴양ㆍ복합복지시설 현황 | 사회복지 | XML | 자동승인 | 자동승인 | 2025-09-25 |
 | 경기도 | 15058592 | 경기도_재가 노인 복지시설 현황 | 사회복지 | XML | 자동승인 | 자동승인 | 2025-09-25 |
 | 경기도 | 15058470 | 경기도_급식비 집행 실적_부담 주체 현황 | 교육 | XML | 자동승인 | 자동승인 | 2025-09-25 |

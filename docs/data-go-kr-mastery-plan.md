@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `12963`
-- callable operations: `12821` (`98.9%`)
+- operations: `13066`
+- callable operations: `12924` (`98.9%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `1353`
-- registered adapter operations: `1343`
+- external endpoint operations: `1456`
+- registered adapter operations: `1446`
 - missing adapter operations: `29`
-- external adapter coverage: `97.9%`
-- approval-required operations: `4325`
+- external adapter coverage: `98.0%`
+- approval-required operations: `4428`
 - no-endpoint operations: `123`
 - service-root operations: `19`
-- unsupported-protocol operations: `42`
-- registered adapter hosts: `43`
+- unsupported-protocol operations: `135`
+- registered adapter hosts: `44`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -122,7 +122,7 @@ Registered external adapters currently cover these host families through
 `data/provider-index.json`: airport, andong, culture, data-gg, ekape, emuseum,
 epost, folk, forest, garak, gblib, geoje, gwanak, happysd, humetro, i815,
 itfind, jeju, jeonju, korad, kpx, lh-ebid, mafra, myhome, naqs, ncpms, nfqs,
-nongsaro, oneclick-law, pqis, q-net, safetydata, seoul-bus, seoul-open-data,
+nongsaro, oneclick-law, pqis, q-net, safemap, safetydata, seoul-bus, seoul-open-data,
 sisul, tour, uiryeong, ulsan, and work24.
 
 Missing external route hosts currently requiring route-disposition tracking:
@@ -310,19 +310,21 @@ coverage.
    increasing registered external adapter operations to `638`; the next
    Safety Data materialization batches add 175 행정안전부 operation mappings,
    increasing registered external adapter operations to `813`; an adapter-safe
-   link-detail enrichment batches then add 204 APIs and 530 operations across
+   link-detail enrichment batches then add 302 APIs and 633 operations across
    already registered external hosts, increasing registered external adapter
-   operations to `1343` while keeping evidence-adjusted adapter candidates at
+   operations to `1446` while keeping evidence-adjusted adapter candidates at
    `0`. This is still mostly skipped
    boundary evidence, and the new
    `data-gg`/`nfqs`/`nongsaro`/`gwanak`/`mafra`/`garak`/`work24`/
    `seoul-open-data`/`culture`/`happysd`/`ncpms`/`i815` results prove landing-page
    reachability rather than generic machine-call support; the Safety Data
    operations remain approval-gated until credentials and approval state are
-   available. After the latest operation materialization growth, culture,
-   data-gg, and mafra external endpoint batches add `25` verified landing-page
-   checks, bringing checked runtime evidence to `1303`, verified results to
-   `94`, and restoring the `10%` release-readiness target.
+   available. After that operation materialization growth, culture, data-gg,
+   and mafra external endpoint batches add `25` verified landing-page checks.
+   The Safety Map adapter then registers `www.safemap.go.kr`, materializes the
+   next 행정안전부 link-detail batch, and adds `10` verified safemap landing-page
+   checks, bringing checked runtime evidence to `1313`, verified results to
+   `104`, and keeping the `10%` release-readiness target restored.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

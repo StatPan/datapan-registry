@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-02T22:04:09Z",
+  "generated_at": "2026-07-02T22:19:46Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 193,
+  "filtered_count": 194,
   "summary": {
-    "hosts": 193,
+    "hosts": 194,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 54,
+    "external_endpoint_hosts": 55,
     "external_guide_hosts": 158,
-    "registered_adapter_hosts": 43,
-    "operation_hosts": 56,
+    "registered_adapter_hosts": 44,
+    "operation_hosts": 57,
     "guide_only_hosts": 137,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
-    "unsupported_protocol_operations": 42,
-    "approval_required_operations": 4325,
+    "unsupported_protocol_operations": 135,
+    "approval_required_operations": 4428,
     "malformed_source_url_count": 627
   },
   "providers": [
@@ -177,11 +177,12 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 194,
-      "operations": 498,
-      "external_endpoint_operations": 498,
+      "specs": 199,
+      "operations": 503,
+      "external_endpoint_operations": 503,
       "external_guide_specs": 1,
-      "approval_required_operations": 3,
+      "wms_operations": 5,
+      "approval_required_operations": 8,
       "sample_ids": [
         "15005231",
         "15011020",
@@ -195,10 +196,10 @@
         "external_endpoint"
       ],
       "adapter_status": "adapter",
-      "specs": 180,
-      "operations": 180,
-      "external_endpoint_operations": 180,
-      "approval_required_operations": 180,
+      "specs": 184,
+      "operations": 184,
+      "external_endpoint_operations": 184,
+      "approval_required_operations": 184,
       "sample_ids": [
         "15147982",
         "15147984",
@@ -222,6 +223,23 @@
         "15003003",
         "15003024",
         "15003027"
+      ]
+    },
+    {
+      "host": "www.safemap.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 94,
+      "operations": 94,
+      "external_endpoint_operations": 94,
+      "wms_operations": 88,
+      "approval_required_operations": 94,
+      "sample_ids": [
+        "15101802",
+        "15101809",
+        "15101812"
       ]
     },
     {
