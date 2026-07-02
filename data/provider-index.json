@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-02T23:34:36Z",
+  "generated_at": "2026-07-02T23:50:05Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 47,
-  "host_count": 53,
+  "adapter_count": 49,
+  "host_count": 55,
   "adapters": [
     {
       "name": "airport",
@@ -156,6 +156,16 @@
       "status": "registered",
       "hosts": [
         "data.gwanak.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "gwangmyeong",
+      "status": "registered",
+      "hosts": [
+        "data.gm.go.kr"
       ],
       "capabilities": [
         "verification"
@@ -416,6 +426,16 @@
       ]
     },
     {
+      "name": "seogu",
+      "status": "registered",
+      "hosts": [
+        "seogu.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "seoul-bus",
       "status": "registered",
       "hosts": [
@@ -507,8 +527,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 47,
-    "verification_capable_adapters": 47,
+    "adapter_count": 49,
+    "verification_capable_adapters": 49,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

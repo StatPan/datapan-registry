@@ -1,25 +1,25 @@
 {
-  "generated_at": "2026-07-02T23:34:36Z",
+  "generated_at": "2026-07-02T23:50:05Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 13676,
-    "callable_operations": 13534,
-    "specs_without_operations": 4007,
-    "specs_without_callable_operation": 4082,
+    "operations_total": 13967,
+    "callable_operations": 13825,
+    "specs_without_operations": 3907,
+    "specs_without_callable_operation": 3982,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 1338,
-    "operations_without_response_params": 2560,
+    "operations_without_request_params": 1629,
+    "operations_without_response_params": 2851,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 1182,
-      "external_endpoint_operations": 2066,
+      "external_endpoint_specs": 1282,
+      "external_endpoint_operations": 2357,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 111,
@@ -34,7 +34,7 @@
         },
         {
           "host": "data.gg.go.kr",
-          "count": 504
+          "count": 778
         },
         {
           "host": "www.safetydata.go.kr",
@@ -42,7 +42,7 @@
         },
         {
           "host": "www.lofin365.go.kr",
-          "count": 342
+          "count": 343
         },
         {
           "host": "openapi.q-net.or.kr",
@@ -112,7 +112,7 @@
       "top_external_endpoint_hosts": [
         {
           "host": "data.gg.go.kr",
-          "count": 504
+          "count": 778
         },
         {
           "host": "www.safetydata.go.kr",
@@ -120,7 +120,7 @@
         },
         {
           "host": "www.lofin365.go.kr",
-          "count": 342
+          "count": 343
         },
         {
           "host": "openapi.q-net.or.kr",
