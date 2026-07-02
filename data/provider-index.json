@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-02T18:58:34Z",
+  "generated_at": "2026-07-02T19:14:15Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 36,
-  "host_count": 41,
+  "adapter_count": 38,
+  "host_count": 43,
   "adapters": [
     {
       "name": "airport",
@@ -163,6 +163,16 @@
       ]
     },
     {
+      "name": "i815",
+      "status": "registered",
+      "hosts": [
+        "search.i815.or.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "itfind",
       "status": "registered",
       "hosts": [
@@ -256,6 +266,16 @@
       ],
       "capabilities": [
         "call",
+        "verification"
+      ]
+    },
+    {
+      "name": "ncpms",
+      "status": "registered",
+      "hosts": [
+        "ncpms.rda.go.kr"
+      ],
+      "capabilities": [
         "verification"
       ]
     },
@@ -395,8 +415,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 36,
-    "verification_capable_adapters": 36,
+    "adapter_count": 38,
+    "verification_capable_adapters": 38,
     "call_capable_adapters": 22,
     "required_adapters": 2,
     "required_verification_adapters": 2,

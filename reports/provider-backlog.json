@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T18:58:34Z",
+  "generated_at": "2026-07-02T19:14:15Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -10,11 +10,11 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 53,
     "external_guide_hosts": 157,
-    "registered_adapter_hosts": 40,
+    "registered_adapter_hosts": 42,
     "operation_hosts": 55,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 13,
-    "needs_adapter_operations": 31,
+    "missing_adapter_hosts": 11,
+    "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4142,
@@ -132,19 +132,6 @@
       ]
     },
     {
-      "host": "ncpms.rda.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "missing",
-      "specs": 1,
-      "operations": 1,
-      "external_endpoint_operations": 1,
-      "sample_ids": [
-        "15002034"
-      ]
-    },
-    {
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -155,19 +142,6 @@
       "external_endpoint_operations": 1,
       "sample_ids": [
         "15001051"
-      ]
-    },
-    {
-      "host": "search.i815.or.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "missing",
-      "specs": 1,
-      "operations": 1,
-      "external_endpoint_operations": 1,
-      "sample_ids": [
-        "15006273"
       ]
     },
     {
@@ -833,6 +807,19 @@
       ]
     },
     {
+      "host": "ncpms.rda.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "15002034"
+      ]
+    },
+    {
       "host": "open.api.q-net.or.kr",
       "provider": "q-net",
       "kinds": [
@@ -844,6 +831,19 @@
       "external_endpoint_operations": 1,
       "sample_ids": [
         "15134269"
+      ]
+    },
+    {
+      "host": "search.i815.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "15006273"
       ]
     },
     {

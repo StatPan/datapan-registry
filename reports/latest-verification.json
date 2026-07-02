@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-02T18:58:24Z",
+  "generated_at": "2026-07-02T19:14:04Z",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
-  "limit": 1422,
+  "limit": 1432,
   "truncated": true,
-  "filtered_count": 1276,
+  "filtered_count": 1278,
   "summary": {
-    "total": 1276,
-    "verified": 67,
+    "total": 1278,
+    "verified": 69,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0
@@ -24482,6 +24482,34 @@
       "http_status": 200,
       "semantic_status": "html_landing_page",
       "url": "https://www.happysd.or.kr/c_76/cnt/m_109/view.do",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15002034",
+      "title": "농촌진흥청_국가농작물병해충도감정보",
+      "operation": "농촌진흥청_국가농작물병해충도감정보_20240222 외부 링크 1",
+      "provider": "ncpms",
+      "endpoint_host": "ncpms.rda.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T19:14:02Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://ncpms.rda.go.kr/npms/OpenApiInfo.np",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15006273",
+      "title": "독립기념관_한국독립운동사 소장자료 정보 DB",
+      "operation": "독립기념관_한국독립운동사 소장자료 정보 DB_20200703",
+      "provider": "i815",
+      "endpoint_host": "search.i815.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T19:14:04Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://search.i815.or.kr/openApi.do",
       "body_shape": "html"
     }
   ]

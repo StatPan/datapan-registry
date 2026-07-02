@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-02T18:58:34Z",
+  "generated_at": "2026-07-02T19:14:15Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -14,13 +14,13 @@
     "institutions": 411,
     "apis": 12060,
     "operations": 12253,
-    "runtime_evidence": 1276,
+    "runtime_evidence": 1278,
     "runtime_evidence_percent": 10.4,
     "callable_operations": 12111,
     "external_endpoint_operations": 643,
-    "registered_adapter_operations": 631,
-    "missing_adapter_operations": 31,
-    "missing_adapter_hosts": 13
+    "registered_adapter_operations": 633,
+    "missing_adapter_operations": 29,
+    "missing_adapter_hosts": 11
   },
   "by_dependency_class": [
     {
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 631
+      "count": 633
     },
     {
       "key": "builtin",
@@ -59,7 +59,7 @@
     },
     {
       "key": "missing",
-      "count": 31
+      "count": 29
     },
     {
       "key": "not_applicable",
@@ -4805,9 +4805,9 @@
       "api_count": 136,
       "operation_api_count": 9,
       "operation_count": 30,
-      "runtime_evidence_count": 7,
-      "runtime_evidence_percent": 23.3,
-      "verified": 4,
+      "runtime_evidence_count": 8,
+      "runtime_evidence_percent": 26.7,
+      "verified": 5,
       "failed": 0,
       "skipped": 3,
       "unknown": 0,
@@ -4826,7 +4826,7 @@
       "by_adapter_status": [
         {
           "key": "adapter",
-          "count": 4
+          "count": 5
         },
         {
           "key": "builtin",
@@ -4834,7 +4834,7 @@
         },
         {
           "key": "missing",
-          "count": 5
+          "count": 4
         }
       ],
       "top_categories": [
@@ -4863,7 +4863,12 @@
         },
         {
           "host": "ncpms.rda.go.kr",
-          "operation_count": 1
+          "operation_count": 1,
+          "adapter": "ncpms",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },
@@ -13495,9 +13500,9 @@
       "api_count": 8,
       "operation_api_count": 1,
       "operation_count": 1,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
+      "runtime_evidence_count": 1,
+      "runtime_evidence_percent": 100.0,
+      "verified": 1,
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
@@ -13511,7 +13516,7 @@
       ],
       "by_adapter_status": [
         {
-          "key": "missing",
+          "key": "adapter",
           "count": 1
         }
       ],
@@ -13524,7 +13529,12 @@
       "top_hosts": [
         {
           "host": "search.i815.or.kr",
-          "operation_count": 1
+          "operation_count": 1,
+          "adapter": "i815",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },

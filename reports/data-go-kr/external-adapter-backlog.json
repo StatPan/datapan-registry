@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.external-adapter-backlog.v1",
-  "generated_at": "2026-07-02T18:58:34Z",
+  "generated_at": "2026-07-02T19:14:15Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "source_profile": "sources/data_go_kr.json",
@@ -10,149 +10,27 @@
     "coverage": "reports/coverage.json"
   },
   "summary": {
-    "candidate_hosts": 2,
-    "candidate_operations": 2,
-    "candidate_apis": 2,
-    "candidate_institutions": 2,
-    "raw_missing_adapter_operations": 31,
-    "raw_missing_adapter_hosts": 13,
-    "route_disposition_operations": 31,
-    "route_disposition_adapter_candidates": 2,
+    "candidate_hosts": 0,
+    "candidate_operations": 0,
+    "candidate_apis": 0,
+    "candidate_institutions": 0,
+    "raw_missing_adapter_operations": 29,
+    "raw_missing_adapter_hosts": 11,
+    "route_disposition_operations": 29,
+    "route_disposition_adapter_candidates": 0,
     "excluded_dead_route_candidates": 14,
     "excluded_transient_failures": 15,
     "unclassified_missing_routes": 0,
-    "adapter_target_operations": 31,
-    "candidate_share_of_missing_adapter_operations_percent": 6.5
+    "adapter_target_operations": 29,
+    "candidate_share_of_missing_adapter_operations_percent": 0.0
   },
   "policy": {
     "candidate_filter": "route_disposition.disposition == adapter_candidate",
     "excluded_policy": "Dead-route and transient-failure evidence remains in route-disposition and must not be converted into adapter implementation work.",
     "gate": "unclassified_missing_routes must remain 0 before adapter backlog is actionable"
   },
-  "hosts": [
-    {
-      "host": "ncpms.rda.go.kr",
-      "priority": 1,
-      "candidate_operations": 1,
-      "candidate_apis": 1,
-      "institutions": [
-        "농촌진흥청"
-      ],
-      "probe_reasons": [
-        {
-          "key": "unadapted_probe_http_2xx",
-          "count": 1
-        }
-      ],
-      "body_shapes": [
-        {
-          "key": "html",
-          "count": 1
-        }
-      ],
-      "sample_dataset_ids": [
-        "15002034"
-      ],
-      "sample_routes": [
-        {
-          "dataset_id": "15002034",
-          "title": "농촌진흥청_국가농작물병해충도감정보",
-          "organization": "농촌진흥청",
-          "operation": "농촌진흥청_국가농작물병해충도감정보_20240222 외부 링크 1",
-          "endpoint": "http://ncpms.rda.go.kr/npms/OpenApiInfo.np",
-          "endpoint_host": "ncpms.rda.go.kr",
-          "dependency_class": "external_endpoint",
-          "disposition": "adapter_candidate",
-          "probe_status": "unknown",
-          "probe_reason": "unadapted_probe_http_2xx",
-          "http_status": 200,
-          "body_shape": "html",
-          "missing_params": [],
-          "recommended_action": "implement_provider_adapter"
-        }
-      ],
-      "implementation_status": "adapter_not_registered",
-      "recommended_next_step": "Add a provider adapter for ncpms.rda.go.kr or mark the host with stronger route disposition evidence if the HTML surface is not machine-callable."
-    },
-    {
-      "host": "search.i815.or.kr",
-      "priority": 1,
-      "candidate_operations": 1,
-      "candidate_apis": 1,
-      "institutions": [
-        "독립기념관"
-      ],
-      "probe_reasons": [
-        {
-          "key": "unadapted_probe_http_2xx",
-          "count": 1
-        }
-      ],
-      "body_shapes": [
-        {
-          "key": "html",
-          "count": 1
-        }
-      ],
-      "sample_dataset_ids": [
-        "15006273"
-      ],
-      "sample_routes": [
-        {
-          "dataset_id": "15006273",
-          "title": "독립기념관_한국독립운동사 소장자료 정보 DB",
-          "organization": "독립기념관",
-          "operation": "독립기념관_한국독립운동사 소장자료 정보 DB_20200703",
-          "endpoint": "https://search.i815.or.kr/openApi.do",
-          "endpoint_host": "search.i815.or.kr",
-          "dependency_class": "external_endpoint",
-          "disposition": "adapter_candidate",
-          "probe_status": "unknown",
-          "probe_reason": "unadapted_probe_http_2xx",
-          "http_status": 200,
-          "body_shape": "html",
-          "missing_params": [],
-          "recommended_action": "implement_provider_adapter"
-        }
-      ],
-      "implementation_status": "adapter_not_registered",
-      "recommended_next_step": "Add a provider adapter for search.i815.or.kr or mark the host with stronger route disposition evidence if the HTML surface is not machine-callable."
-    }
-  ],
-  "candidate_routes": [
-    {
-      "dataset_id": "15002034",
-      "title": "농촌진흥청_국가농작물병해충도감정보",
-      "organization": "농촌진흥청",
-      "operation": "농촌진흥청_국가농작물병해충도감정보_20240222 외부 링크 1",
-      "endpoint": "http://ncpms.rda.go.kr/npms/OpenApiInfo.np",
-      "endpoint_host": "ncpms.rda.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html",
-      "missing_params": [],
-      "recommended_action": "implement_provider_adapter"
-    },
-    {
-      "dataset_id": "15006273",
-      "title": "독립기념관_한국독립운동사 소장자료 정보 DB",
-      "organization": "독립기념관",
-      "operation": "독립기념관_한국독립운동사 소장자료 정보 DB_20200703",
-      "endpoint": "https://search.i815.or.kr/openApi.do",
-      "endpoint_host": "search.i815.or.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html",
-      "missing_params": [],
-      "recommended_action": "implement_provider_adapter"
-    }
-  ],
+  "hosts": [],
+  "candidate_routes": [],
   "excluded_dispositions": {
     "dead_route_candidate": [
       {
@@ -693,7 +571,6 @@
   },
   "next": [
     "Create host-scoped adapter implementation tickets from the hosts array in priority order.",
-    "Start with ncpms.rda.go.kr because it currently owns the largest candidate-operation count (1).",
     "Refresh route probes before implementing any host whose evidence changes away from adapter_candidate."
   ]
 }

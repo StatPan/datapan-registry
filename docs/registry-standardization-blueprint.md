@@ -95,7 +95,7 @@ Current strengths:
   evidence against the 10% target and validates the next planned verification
   batches.
 - `reports/data-go-kr/coverage-backlog.json` tracks `4,850` data.go.kr APIs
-  without operation mappings, `6,612` operation-mapped APIs without runtime
+  without operation mappings, `6,611` operation-mapped APIs without runtime
   evidence, and `54` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
@@ -184,10 +184,11 @@ Current gaps:
   verified garak landing-page checks, and Gira #109 adds `3` verified work24
   landing-page checks, Gira #111 adds `2` verified seoul-open-data landing-page
   checks, and Gira #113 adds `4` verified culture/happysd landing-page checks,
-  bringing runtime evidence to `1276`. Most evidence is still skipped boundary
-  evidence, not proof that those operations are callable.
+  and Gira #115 adds `2` verified ncpms/i815 landing-page checks, bringing
+  runtime evidence to `1278`. Most evidence is still skipped boundary evidence,
+  not proof that those operations are callable.
 - API operation coverage remains incomplete: `7,210` of `12,060` APIs have
-  operation mappings (`59.8%`), leaving `4,850` APIs to materialize and `6,612`
+  operation mappings (`59.8%`), leaving `4,850` APIs to materialize and `6,611`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report
@@ -458,7 +459,8 @@ Use this order unless a production failure changes priority:
     backlog to `6` operations across `4` host-scoped queues. Gira #113
     registers and verifies `www.culture.go.kr` and `www.happysd.or.kr`,
     reducing the active adapter backlog to `2` operations across `2`
-    host-scoped queues.
+    host-scoped queues. Gira #115 registers and verifies `ncpms.rda.go.kr` and
+    `search.i815.or.kr`, reducing the active adapter backlog to `0`.
 
 ## Measurement Rules
 

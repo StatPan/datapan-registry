@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-02T18:58:34Z",
+  "generated_at": "2026-07-02T19:14:15Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 13,
+  "filtered_count": 11,
   "summary": {
-    "target_hosts": 13,
-    "target_operations": 31,
-    "external_endpoint_operations": 31,
+    "target_hosts": 11,
+    "target_operations": 29,
+    "external_endpoint_operations": 29,
     "service_root_operations": 0,
     "approval_required_operations": 0,
     "missing_param_operations": 21,
@@ -407,37 +407,6 @@
     },
     {
       "rank": 8,
-      "host": "ncpms.rda.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 1,
-      "specs": 1,
-      "organizations": [
-        "농촌진흥청"
-      ],
-      "source_categories": [
-        "농축수산"
-      ],
-      "api_types": [
-        "LINK"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "sample_operations": [
-        {
-          "dataset_id": "15002034",
-          "title": "농촌진흥청_국가농작물병해충도감정보",
-          "organization": "농촌진흥청",
-          "operation": "농촌진흥청_국가농작물병해충도감정보_20240222 외부 링크 1",
-          "dependency_class": "external_endpoint",
-          "endpoint": "http://ncpms.rda.go.kr/npms/OpenApiInfo.np"
-        }
-      ]
-    },
-    {
-      "rank": 9,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -473,38 +442,7 @@
       ]
     },
     {
-      "rank": 10,
-      "host": "search.i815.or.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 1,
-      "specs": 1,
-      "organizations": [
-        "독립기념관"
-      ],
-      "source_categories": [
-        "교육"
-      ],
-      "api_types": [
-        "LINK"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "sample_operations": [
-        {
-          "dataset_id": "15006273",
-          "title": "독립기념관_한국독립운동사 소장자료 정보 DB",
-          "organization": "독립기념관",
-          "operation": "독립기념관_한국독립운동사 소장자료 정보 DB_20200703",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://search.i815.or.kr/openApi.do"
-        }
-      ]
-    },
-    {
-      "rank": 11,
+      "rank": 9,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -535,7 +473,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 10,
       "host": "www.jobplustv.or.kr",
       "kinds": [
         "external_endpoint"
@@ -566,7 +504,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 11,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

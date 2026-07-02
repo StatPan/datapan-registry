@@ -16,31 +16,31 @@ Current release metrics:
 - callable operations: `12111` (`98.8%`)
 - data.go.kr gateway operations: `11419`
 - external endpoint operations: `643`
-- registered adapter operations: `631`
-- missing adapter operations: `31`
-- external adapter coverage: `95.3%`
+- registered adapter operations: `633`
+- missing adapter operations: `29`
+- external adapter coverage: `95.6%`
 - approval-required operations: `4142`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `42`
-- registered adapter hosts: `40`
-- missing adapter hosts: `13`
+- registered adapter hosts: `42`
+- missing adapter hosts: `11`
 - call-capable adapters: `22`
 
 Current missing external route evidence:
 
-- routes: `31`
-- hosts: `13`
-- with probe evidence: `31`
+- routes: `29`
+- hosts: `11`
+- with probe evidence: `29`
 - dead-route candidates: `14`
 - transient failures: `15`
-- remaining adapter candidates: `2`
+- remaining adapter candidates: `0`
 
-The practical interpretation is important: the remaining `31` missing external
+The practical interpretation is important: the remaining `29` missing external
 routes are all covered by manifest-bound probe and route-disposition evidence.
-Only the `2` routes with current adapter-candidate evidence should become
-adapter backlog; dead-route and transient-failure routes remain evidence, not
-implementation work.
+There are currently `0` routes with adapter-candidate evidence. Dead-route and
+transient-failure routes remain evidence, not implementation work, until fresh
+probe evidence changes their disposition.
 
 ## Mastery Target
 
@@ -119,10 +119,10 @@ Each external host should have:
 
 Registered external adapters currently cover these host families through
 `data/provider-index.json`: airport, andong, culture, data-gg, ekape, emuseum,
-epost, folk, forest, garak, gblib, geoje, gwanak, happysd, humetro, itfind,
-jeju, jeonju, korad, kpx, lh-ebid, mafra, myhome, naqs, nfqs, nongsaro,
-oneclick-law, pqis, q-net, seoul-bus, seoul-open-data, sisul, tour, uiryeong,
-ulsan, and work24.
+epost, folk, forest, garak, gblib, geoje, gwanak, happysd, humetro, i815,
+itfind, jeju, jeonju, korad, kpx, lh-ebid, mafra, myhome, naqs, ncpms, nfqs,
+nongsaro, oneclick-law, pqis, q-net, seoul-bus, seoul-open-data, sisul, tour,
+uiryeong, ulsan, and work24.
 
 Missing external route hosts currently requiring route-disposition tracking:
 
@@ -133,9 +133,7 @@ Missing external route hosts currently requiring route-disposition tracking:
 - `its.gyeongju.go.kr:81`: `3`
 - `data.wanju.go.kr`: `2`
 - `www.cid.or.kr`: `2`
-- `ncpms.rda.go.kr`: `1`
 - `openapi-lib.sen.go.kr`: `1`
-- `search.i815.or.kr`: `1`
 - `www.dgeic.or.kr:8080`: `1`
 - `www.jobplustv.or.kr`: `1`
 - `www.simpan.go.kr`: `1`
@@ -254,10 +252,13 @@ CI should fail rather than treating the checked-in summary as authoritative.
    `6`. Gira #113 adds `culture` and `happysd` external endpoint verification
    evidence, growing checked runtime evidence to `1276`, verified results to
    `67`, registered external adapter operations to `631`, and reducing
-   evidence-adjusted adapter candidates to `2`. This is still mostly skipped
-   boundary evidence, and the new
+   evidence-adjusted adapter candidates to `2`. Gira #115 adds `ncpms` and
+   `i815` external endpoint verification evidence, growing checked runtime
+   evidence to `1278`, verified results to `69`, registered external adapter
+   operations to `633`, and reducing evidence-adjusted adapter candidates to
+   `0`. This is still mostly skipped boundary evidence, and the new
    `data-gg`/`nfqs`/`nongsaro`/`gwanak`/`mafra`/`garak`/`work24`/
-   `seoul-open-data`/`culture`/`happysd` results prove landing-page
+   `seoul-open-data`/`culture`/`happysd`/`ncpms`/`i815` results prove landing-page
    reachability rather than generic machine-call support.
 11. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.

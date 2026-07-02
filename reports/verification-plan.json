@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T18:58:50Z",
+  "generated_at": "2026-07-02T19:14:31Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -8,10 +8,10 @@
   "timeout": "10s",
   "summary": {
     "operations": 12253,
-    "evidence_total": 1276,
+    "evidence_total": 1278,
     "uncovered_gateway_candidates": 10774,
     "uncovered_adapter_candidates": 0,
-    "missing_adapter_hosts": 13,
+    "missing_adapter_hosts": 11,
     "planned_batches": 1,
     "planned_operations": 10
   },
@@ -139,19 +139,6 @@
         ]
       },
       {
-        "host": "ncpms.rda.go.kr",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "missing",
-        "specs": 1,
-        "operations": 1,
-        "external_endpoint_operations": 1,
-        "sample_ids": [
-          "15002034"
-        ]
-      },
-      {
         "host": "openapi-lib.sen.go.kr",
         "kinds": [
           "external_endpoint"
@@ -162,6 +149,19 @@
         "external_endpoint_operations": 1,
         "sample_ids": [
           "15001051"
+        ]
+      },
+      {
+        "host": "www.jobplustv.or.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 1,
+        "operations": 1,
+        "external_endpoint_operations": 1,
+        "sample_ids": [
+          "15007088"
         ]
       }
     ]
