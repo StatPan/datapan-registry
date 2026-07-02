@@ -2,11 +2,11 @@
 
 This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns APIs without operation mappings into bounded institution work queues. It is separate from runtime evidence reactivation: these APIs need operation metadata materialized before they can enter verification batches.
 
-- Generated at: `2026-07-02T21:37:18Z`
+- Generated at: `2026-07-02T21:48:05Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `7414` (`61.5%`)
-- APIs without operation mapping: `4646`
+- APIs with operation mapping: `7506` (`62.2%`)
+- APIs without operation mapping: `4554`
 - Planned institutions: `10`
 - Planned APIs: `645`
 - First queue: `행정안전부`
@@ -17,7 +17,7 @@ This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns
 | Rank | Institution | APIs | Covered APIs | Uncovered APIs | API Coverage | Planned APIs | Remaining After Batch |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 1 | 행정안전부 | 1252 | 793 | 459 | 63.3% | 100 | 359 |
-| 2 | 경기도 | 840 | 19 | 821 | 2.3% | 100 | 721 |
+| 2 | 경기도 | 840 | 111 | 729 | 13.2% | 100 | 629 |
 | 3 | 국토교통부 | 393 | 127 | 266 | 32.3% | 100 | 166 |
 | 4 | 식품의약품안전처 | 392 | 272 | 120 | 69.4% | 100 | 20 |
 | 5 | 국회 국회사무처 | 277 | 0 | 277 | 0.0% | 100 | 177 |
@@ -36,11 +36,11 @@ This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns
 | 행정안전부 | 15153433 | 행정안전부_여객선안전점검결과 | 재난안전 | JSON | 자동승인 | 심의승인 | 2025-11-21 |
 | 행정안전부 | 15153429 | 행정안전부_어린이놀이시설안전점검결과 | 재난안전 | JSON | 자동승인 | 심의승인 | 2025-11-21 |
 | 행정안전부 | 15101860 | 행정안전부_생활안전지도 어린이 아토피 | 보건의료 | WMS | 자동승인 | 심의승인 | 2025-11-21 |
-| 경기도 | 15057625 | 경기도_물놀이형수경시설 설치운영신고 현황 | 환경기상 | XML | 자동승인 | 자동승인 | 2025-12-05 |
-| 경기도 | 15056758 | 경기도_물놀이형 수경시설 관리실태 점검결과 | 환경기상 | XML | 자동승인 | 자동승인 | 2025-12-05 |
-| 경기도 | 15121898 | 경기도_상시속도 | 교통물류 | XML | 자동승인 | 심의승인 | 2025-09-25 |
-| 경기도 | 15121891 | 경기도_상시교통량(고속도로) | 교통물류 | XML | 자동승인 | 심의승인 | 2025-09-25 |
-| 경기도 | 15121882 | 경기도_시군별 버스 이용객수 | 교통물류 | XML | 자동승인 | 심의승인 | 2025-09-25 |
+| 경기도 | 15059050 | 경기도_노인 휴양ㆍ복합복지시설 현황 | 사회복지 | XML | 자동승인 | 자동승인 | 2025-09-25 |
+| 경기도 | 15058592 | 경기도_재가 노인 복지시설 현황 | 사회복지 | XML | 자동승인 | 자동승인 | 2025-09-25 |
+| 경기도 | 15058470 | 경기도_급식비 집행 실적_부담 주체 현황 | 교육 | XML | 자동승인 | 자동승인 | 2025-09-25 |
+| 경기도 | 15058189 | 경기도_건설하도급 부조리 신고센터 현황 | 공공행정 | XML | 자동승인 | 자동승인 | 2025-09-25 |
+| 경기도 | 15057837 | 경기도_노인여가복지시설(경로당) 현황 | 사회복지 | XML | 자동승인 | 자동승인 | 2025-09-25 |
 | 국토교통부 | 15067164 | 국토교통부_건설보고서 | 산업고용 | JSON+XML | 자동승인 | 심의승인 | 2025-11-18 |
 | 국토교통부 | 15067161 | 국토교통부_건설 기술사례정보 | 산업고용 | JSON+XML | 자동승인 | 심의승인 | 2025-11-18 |
 | 국토교통부 | 15061112 | 국토교통부_건설공사 원가절감사례 목록 조회 | 교통물류 | JSON+XML | 자동승인 | 심의승인 | 2025-11-18 |

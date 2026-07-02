@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-07-02T21:37:18Z",
+  "generated_at": "2026-07-02T21:48:05Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -13,11 +13,11 @@
     "provider_index": "data/provider-index.json"
   },
   "coverage": {
-    "operations": 12495,
-    "callable_operations": 12353,
+    "operations": 12720,
+    "callable_operations": 12578,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 885,
-    "registered_adapter_operations": 875,
+    "external_endpoint_operations": 1110,
+    "registered_adapter_operations": 1100,
     "call_capable_adapters": 23
   },
   "evidence": {
@@ -26,7 +26,7 @@
     "failed": 87,
     "skipped": 1122,
     "unknown": 0,
-    "coverage_percent": 10.2,
+    "coverage_percent": 10,
     "by_kind": [
       {
         "key": "data_go_kr_gateway",
@@ -44,15 +44,15 @@
   },
   "growth_target": {
     "target_percent": 10,
-    "target_evidence_total": 1250,
+    "target_evidence_total": 1272,
     "remaining_to_target": 0,
     "status": "above_target"
   },
   "verification_plan": {
     "planned_batches": 7,
-    "planned_operations": 64,
+    "planned_operations": 65,
     "uncovered_gateway_candidates": 10774,
-    "uncovered_adapter_candidates": 242,
+    "uncovered_adapter_candidates": 467,
     "missing_adapter_hosts": 11,
     "planned_by_kind": [
       {
@@ -61,7 +61,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 54
+        "count": 55
       }
     ],
     "batches": [
@@ -86,8 +86,8 @@
         "label": "data-gg",
         "provider": "data-gg",
         "kind": "external_endpoint",
-        "candidates": 33,
-        "uncovered_candidates": 15,
+        "candidates": 257,
+        "uncovered_candidates": 239,
         "planned_operations": 10,
         "output": ".datapan/verification/data-gg-next.json"
       },
@@ -95,9 +95,9 @@
         "label": "mafra",
         "provider": "mafra",
         "kind": "external_endpoint",
-        "candidates": 10,
-        "uncovered_candidates": 7,
-        "planned_operations": 7,
+        "candidates": 11,
+        "uncovered_candidates": 8,
+        "planned_operations": 8,
         "output": ".datapan/verification/mafra-next.json"
       },
       {
