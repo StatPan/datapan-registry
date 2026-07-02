@@ -2,7 +2,7 @@
 
 This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns the highest-priority institution runtime gaps into bounded `datapan catalog verify --org` batches.
 
-- Generated at: `2026-07-02T21:15:44Z`
+- Generated at: `2026-07-02T21:24:03Z`
 - Planned institutions: `10`
 - Planned operations: `836`
 - First queue: `행정안전부`
@@ -16,7 +16,7 @@ data.go.kr gateway verification requires a service key; no-key runs only prove p
 
 | Rank | Institution | APIs | Covered APIs | Uncovered APIs | Ops | Runtime Reactivation APIs | Missing Evidence Ops | Planned Ops |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 행정안전부 | 1252 | 713 | 539 | 974 | 713 | 974 | 100 |
+| 1 | 행정안전부 | 1252 | 793 | 459 | 1054 | 793 | 1054 | 100 |
 | 2 | 경기도 | 840 | 13 | 827 | 30 | 5 | 12 | 12 |
 | 3 | 국토교통부 | 393 | 127 | 266 | 397 | 124 | 372 | 100 |
 | 4 | 식품의약품안전처 | 392 | 272 | 120 | 363 | 270 | 361 | 100 |
