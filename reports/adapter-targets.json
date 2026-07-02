@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-02T17:45:14Z",
+  "generated_at": "2026-07-02T17:58:06Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 18,
+  "filtered_count": 17,
   "summary": {
-    "target_hosts": 18,
-    "target_operations": 43,
-    "external_endpoint_operations": 43,
+    "target_hosts": 17,
+    "target_operations": 40,
+    "external_endpoint_operations": 40,
     "service_root_operations": 0,
     "approval_required_operations": 0,
     "missing_param_operations": 21,
@@ -299,53 +299,6 @@
     },
     {
       "rank": 6,
-      "host": "www.garak.co.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 3,
-      "specs": 1,
-      "organizations": [
-        "서울특별시농수산식품공사"
-      ],
-      "source_categories": [
-        "농축수산"
-      ],
-      "api_types": [
-        "LINK"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "sample_operations": [
-        {
-          "dataset_id": "15004517",
-          "title": "서울특별시농수산식품공사_주요 품목 가격",
-          "organization": "서울특별시농수산식품공사",
-          "operation": "서울특별시농수산식품공사_주요 품목 가격_20210113 외부 링크 1",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://www.garak.co.kr/homepage/M0000258/publicdata/selectPageListPublicData.do?publicDataRealmSn=30"
-        },
-        {
-          "dataset_id": "15004517",
-          "title": "서울특별시농수산식품공사_주요 품목 가격",
-          "organization": "서울특별시농수산식품공사",
-          "operation": "서울특별시농수산식품공사_주요 품목 가격_20210113 외부 링크 2",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://www.garak.co.kr/homepage/M0000258/publicdata/selectPageListPublicData.do?publicDataRealmSn=23"
-        },
-        {
-          "dataset_id": "15004517",
-          "title": "서울특별시농수산식품공사_주요 품목 가격",
-          "organization": "서울특별시농수산식품공사",
-          "operation": "서울특별시농수산식품공사_주요 품목 가격_20210113 외부 링크 3",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://www.garak.co.kr/homepage/M0000258/publicdata/selectPageListPublicData.do?publicDataRealmSn=24"
-        }
-      ]
-    },
-    {
-      "rank": 7,
       "host": "www.work24.go.kr",
       "kinds": [
         "external_endpoint"
@@ -392,7 +345,7 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 7,
       "host": "data.wanju.go.kr",
       "kinds": [
         "external_endpoint"
@@ -443,7 +396,7 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 8,
       "host": "www.happysd.or.kr",
       "kinds": [
         "external_endpoint"
@@ -482,7 +435,7 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "host": "data.seoul.go.kr",
       "kinds": [
         "external_endpoint"
@@ -521,7 +474,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -578,7 +531,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "host": "www.culture.go.kr",
       "kinds": [
         "external_endpoint"
@@ -617,7 +570,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "host": "ncpms.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -648,7 +601,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 13,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -684,7 +637,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 14,
       "host": "search.i815.or.kr",
       "kinds": [
         "external_endpoint"
@@ -715,7 +668,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 15,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -746,7 +699,7 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 16,
       "host": "www.jobplustv.or.kr",
       "kinds": [
         "external_endpoint"
@@ -777,7 +730,7 @@
       ]
     },
     {
-      "rank": 18,
+      "rank": 17,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

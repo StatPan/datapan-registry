@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T17:45:28Z",
+  "generated_at": "2026-07-02T17:58:21Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -8,10 +8,10 @@
   "timeout": "10s",
   "summary": {
     "operations": 12253,
-    "evidence_total": 1264,
+    "evidence_total": 1267,
     "uncovered_gateway_candidates": 10774,
     "uncovered_adapter_candidates": 0,
-    "missing_adapter_hosts": 18,
+    "missing_adapter_hosts": 17,
     "planned_batches": 1,
     "planned_operations": 10
   },
@@ -84,21 +84,6 @@
         ]
       },
       {
-        "host": "www.garak.co.kr",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "missing",
-        "specs": 1,
-        "operations": 3,
-        "external_endpoint_operations": 3,
-        "external_guide_specs": 1,
-        "sample_ids": [
-          "15004517"
-        ]
-      },
-      {
         "host": "www.work24.go.kr",
         "kinds": [
           "external_endpoint",
@@ -168,6 +153,20 @@
         "external_endpoint_operations": 2,
         "sample_ids": [
           "15003164"
+        ]
+      },
+      {
+        "host": "data.wanju.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 2,
+        "operations": 2,
+        "external_endpoint_operations": 2,
+        "sample_ids": [
+          "15010208",
+          "15058097"
         ]
       }
     ]

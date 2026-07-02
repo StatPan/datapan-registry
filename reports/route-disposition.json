@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-07-02T17:45:14Z",
+  "generated_at": "2026-07-02T17:58:06Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "probe": "..\\datapan-registry\\reports\\unadapted-external-probe.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "routes_total": 43,
-    "operations": 43,
-    "hosts": 18,
-    "with_probe_evidence": 43,
+    "routes_total": 40,
+    "operations": 40,
+    "hosts": 17,
+    "with_probe_evidence": 40,
     "without_probe_evidence": 0,
     "dead_route_candidates": 14,
     "transient_failures": 15,
     "parameter_blocked_routes": 0,
-    "adapter_candidates": 14,
+    "adapter_candidates": 11,
     "by_disposition": [
       {
         "key": "transient_failure",
@@ -22,26 +22,26 @@
         "disposition": "transient_failure"
       },
       {
-        "key": "adapter_candidate",
-        "count": 14,
-        "disposition": "adapter_candidate"
-      },
-      {
         "key": "dead_route_candidate",
         "count": 14,
         "disposition": "dead_route_candidate"
+      },
+      {
+        "key": "adapter_candidate",
+        "count": 11,
+        "disposition": "adapter_candidate"
       }
     ],
     "by_reason": [
       {
-        "key": "unadapted_probe_http_2xx",
-        "count": 14,
-        "reason": "unadapted_probe_http_2xx"
-      },
-      {
         "key": "unadapted_probe_http_404",
         "count": 14,
         "reason": "unadapted_probe_http_404"
+      },
+      {
+        "key": "unadapted_probe_http_2xx",
+        "count": 11,
+        "reason": "unadapted_probe_http_2xx"
       },
       {
         "key": "unadapted_probe_timeout",
@@ -84,11 +84,6 @@
         "key": "its.gyeongju.go.kr:81",
         "count": 3,
         "host": "its.gyeongju.go.kr:81"
-      },
-      {
-        "key": "www.garak.co.kr",
-        "count": 3,
-        "host": "www.garak.co.kr"
       },
       {
         "key": "www.work24.go.kr",
@@ -729,51 +724,6 @@
       "operation": "한국체육산업개발주식회사_올림픽공원 도서정보_20230918 외부 링크 2",
       "endpoint": "https://www.culture.go.kr/data/openapi/openapiView.do?id=111",
       "endpoint_host": "www.culture.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15004517",
-      "title": "서울특별시농수산식품공사_주요 품목 가격",
-      "organization": "서울특별시농수산식품공사",
-      "operation": "서울특별시농수산식품공사_주요 품목 가격_20210113 외부 링크 1",
-      "endpoint": "https://www.garak.co.kr/homepage/M0000258/publicdata/selectPageListPublicData.do?publicDataRealmSn=30",
-      "endpoint_host": "www.garak.co.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15004517",
-      "title": "서울특별시농수산식품공사_주요 품목 가격",
-      "organization": "서울특별시농수산식품공사",
-      "operation": "서울특별시농수산식품공사_주요 품목 가격_20210113 외부 링크 2",
-      "endpoint": "https://www.garak.co.kr/homepage/M0000258/publicdata/selectPageListPublicData.do?publicDataRealmSn=23",
-      "endpoint_host": "www.garak.co.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15004517",
-      "title": "서울특별시농수산식품공사_주요 품목 가격",
-      "organization": "서울특별시농수산식품공사",
-      "operation": "서울특별시농수산식품공사_주요 품목 가격_20210113 외부 링크 3",
-      "endpoint": "https://www.garak.co.kr/homepage/M0000258/publicdata/selectPageListPublicData.do?publicDataRealmSn=24",
-      "endpoint_host": "www.garak.co.kr",
       "dependency_class": "external_endpoint",
       "disposition": "adapter_candidate",
       "recommended_action": "build a provider adapter using the captured probe evidence",

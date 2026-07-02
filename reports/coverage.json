@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T17:45:19Z",
+  "generated_at": "2026-07-02T17:58:11Z",
   "provider": "data.go.kr",
   "registry": "..\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -12,16 +12,16 @@
     "callable_operation_percent": 98.8,
     "data_go_kr_gateway_operations": 11419,
     "external_endpoint_operations": 643,
-    "registered_adapter_operations": 619,
-    "missing_adapter_operations": 43,
-    "external_adapter_coverage_percent": 93.5,
+    "registered_adapter_operations": 622,
+    "missing_adapter_operations": 40,
+    "external_adapter_coverage_percent": 94,
     "approval_required_operations": 4142,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
-    "registered_adapter_hosts": 35,
-    "missing_adapter_hosts": 18,
-    "adapter_count": 31,
+    "registered_adapter_hosts": 36,
+    "missing_adapter_hosts": 17,
+    "adapter_count": 32,
     "call_capable_adapters": 21,
     "provider_split_ready": true
   },
@@ -41,26 +41,26 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-02T17:45:12Z",
-    "total": 1264,
-    "verified": 55,
+    "generated_at": "2026-07-02T17:58:04Z",
+    "total": 1267,
+    "verified": 58,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0,
-    "verified_percent": 4.4,
+    "verified_percent": 4.6,
     "evidence_operation_percent": 10.3
   },
   "route_evidence": {
     "present": true,
     "report": "..\\datapan-registry\\reports\\route-disposition.json",
-    "routes_total": 43,
-    "with_probe_evidence": 43,
+    "routes_total": 40,
+    "with_probe_evidence": 40,
     "dead_route_candidates": 14,
     "transient_failures": 15,
     "parameter_blocked_routes": 0,
-    "remaining_adapter_candidates": 14,
-    "raw_missing_adapter_operations": 43,
-    "evidence_adjusted_adapter_candidates": 14
+    "remaining_adapter_candidates": 11,
+    "raw_missing_adapter_operations": 40,
+    "evidence_adjusted_adapter_candidates": 11
   },
   "gaps": {
     "missing_adapter_hosts": [
@@ -117,21 +117,6 @@
         "external_endpoint_operations": 4,
         "sample_ids": [
           "3043385"
-        ]
-      },
-      {
-        "host": "www.garak.co.kr",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "missing",
-        "specs": 1,
-        "operations": 3,
-        "external_endpoint_operations": 3,
-        "external_guide_specs": 1,
-        "sample_ids": [
-          "15004517"
         ]
       },
       {
@@ -204,6 +189,20 @@
         "external_endpoint_operations": 2,
         "sample_ids": [
           "15003164"
+        ]
+      },
+      {
+        "host": "data.wanju.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 2,
+        "operations": 2,
+        "external_endpoint_operations": 2,
+        "sample_ids": [
+          "15010208",
+          "15058097"
         ]
       }
     ],
@@ -387,10 +386,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-02T17:45:19Z",
+    "generated_at": "2026-07-02T17:58:11Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 31,
-    "host_count": 35,
+    "adapter_count": 32,
+    "host_count": 36,
     "adapters": [
       {
         "name": "airport",
@@ -474,6 +473,16 @@
         ],
         "capabilities": [
           "call",
+          "verification"
+        ]
+      },
+      {
+        "name": "garak",
+        "status": "registered",
+        "hosts": [
+          "www.garak.co.kr"
+        ],
+        "capabilities": [
           "verification"
         ]
       },
@@ -731,8 +740,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 31,
-      "verification_capable_adapters": 31,
+      "adapter_count": 32,
+      "verification_capable_adapters": 32,
       "call_capable_adapters": 21,
       "required_adapters": 2,
       "required_verification_adapters": 2,

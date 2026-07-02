@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.coverage-backlog.v1",
-  "generated_at": "2026-07-02T17:45:14Z",
+  "generated_at": "2026-07-02T17:58:06Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -15,13 +15,13 @@
     "uncovered_api_count": 4850,
     "api_operation_coverage_percent": 59.8,
     "operation_total": 12253,
-    "runtime_evidence_operation_count": 1264,
+    "runtime_evidence_operation_count": 1267,
     "runtime_evidence_operation_percent": 10.3,
-    "runtime_verified_operation_count": 55,
+    "runtime_verified_operation_count": 58,
     "runtime_failed_operation_count": 87,
     "runtime_skipped_operation_count": 1122,
-    "runtime_evidence_api_count": 592,
-    "runtime_reactivation_api_count": 6618,
+    "runtime_evidence_api_count": 593,
+    "runtime_reactivation_api_count": 6617,
     "runtime_repair_api_count": 54
   },
   "institutions": [
@@ -1720,28 +1720,6 @@
       "priority_score": 28
     },
     {
-      "organization": "서울특별시농수산식품공사",
-      "api_count": 28,
-      "covered_api_count": 1,
-      "uncovered_api_count": 27,
-      "operation_count": 3,
-      "runtime_evidence_api_count": 0,
-      "runtime_reactivation_api_count": 1,
-      "runtime_repair_api_count": 0,
-      "runtime_evidence_count": 0,
-      "runtime_missing_evidence_count": 3,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "missing_adapter_operations": 3,
-      "no_endpoint_operations": 0,
-      "api_operation_coverage_percent": 3.6,
-      "runtime_evidence_percent": 0.0,
-      "priority_score": 28
-    },
-    {
       "organization": "울산광역시",
       "api_count": 31,
       "covered_api_count": 21,
@@ -1783,6 +1761,28 @@
       "no_endpoint_operations": 0,
       "api_operation_coverage_percent": 0.0,
       "runtime_evidence_percent": 0.0,
+      "priority_score": 27
+    },
+    {
+      "organization": "서울특별시농수산식품공사",
+      "api_count": 28,
+      "covered_api_count": 1,
+      "uncovered_api_count": 27,
+      "operation_count": 3,
+      "runtime_evidence_api_count": 1,
+      "runtime_reactivation_api_count": 0,
+      "runtime_repair_api_count": 0,
+      "runtime_evidence_count": 3,
+      "runtime_missing_evidence_count": 0,
+      "verified": 3,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 0,
+      "missing_adapter_operations": 0,
+      "no_endpoint_operations": 0,
+      "api_operation_coverage_percent": 3.6,
+      "runtime_evidence_percent": 100.0,
       "priority_score": 27
     },
     {
@@ -167397,38 +167397,6 @@
       "primary_endpoint_host": "apis.data.go.kr",
       "skip_reasons": [
         "approval_required"
-      ]
-    },
-    {
-      "dataset_id": "15004517",
-      "title": "서울특별시농수산식품공사_주요 품목 가격",
-      "organization": "서울특별시농수산식품공사",
-      "source_category": "농축수산",
-      "api_type": "LINK",
-      "data_format": "XML",
-      "register_status": "변경승인",
-      "dev_approval": "자동승인",
-      "prod_approval": "자동승인",
-      "created_at": "2015-09-09",
-      "updated_at": "2025-07-04",
-      "meta_url": "https://www.data.go.kr/catalog/15004517/openapi.json",
-      "action": "collect_runtime_evidence",
-      "reason": "operation_mapped_without_runtime_evidence",
-      "operation_count": 3,
-      "runtime_evidence_count": 0,
-      "runtime_missing_evidence_count": 3,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "missing_adapter_operations": 3,
-      "no_endpoint_operations": 0,
-      "primary_dependency_class": "external_endpoint",
-      "primary_adapter_status": "missing",
-      "primary_endpoint_host": "www.garak.co.kr",
-      "skip_reasons": [
-        "external_provider_adapter_missing"
       ]
     },
     {

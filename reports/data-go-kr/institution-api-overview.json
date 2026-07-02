@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-02T17:45:14Z",
+  "generated_at": "2026-07-02T17:58:06Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -14,13 +14,13 @@
     "institutions": 411,
     "apis": 12060,
     "operations": 12253,
-    "runtime_evidence": 1264,
+    "runtime_evidence": 1267,
     "runtime_evidence_percent": 10.3,
     "callable_operations": 12111,
     "external_endpoint_operations": 643,
-    "registered_adapter_operations": 619,
-    "missing_adapter_operations": 43,
-    "missing_adapter_hosts": 18
+    "registered_adapter_operations": 622,
+    "missing_adapter_operations": 40,
+    "missing_adapter_hosts": 17
   },
   "by_dependency_class": [
     {
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 619
+      "count": 622
     },
     {
       "key": "builtin",
@@ -59,7 +59,7 @@
     },
     {
       "key": "missing",
-      "count": 43
+      "count": 40
     },
     {
       "key": "not_applicable",
@@ -11700,9 +11700,9 @@
       "api_count": 28,
       "operation_api_count": 1,
       "operation_count": 3,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
+      "runtime_evidence_count": 3,
+      "runtime_evidence_percent": 100.0,
+      "verified": 3,
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
@@ -11716,7 +11716,7 @@
       ],
       "by_adapter_status": [
         {
-          "key": "missing",
+          "key": "adapter",
           "count": 3
         }
       ],
@@ -11729,7 +11729,12 @@
       "top_hosts": [
         {
           "host": "www.garak.co.kr",
-          "operation_count": 3
+          "operation_count": 3,
+          "adapter": "garak",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },
