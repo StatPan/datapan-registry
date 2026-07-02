@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-07-02T18:39:23Z",
+  "generated_at": "2026-07-02T18:58:34Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "probe": ".\\reports\\unadapted-external-probe.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "routes_total": 35,
-    "operations": 35,
-    "hosts": 15,
-    "with_probe_evidence": 35,
+    "routes_total": 31,
+    "operations": 31,
+    "hosts": 13,
+    "with_probe_evidence": 31,
     "without_probe_evidence": 0,
     "dead_route_candidates": 14,
     "transient_failures": 15,
     "parameter_blocked_routes": 0,
-    "adapter_candidates": 6,
+    "adapter_candidates": 2,
     "by_disposition": [
       {
         "key": "transient_failure",
@@ -28,7 +28,7 @@
       },
       {
         "key": "adapter_candidate",
-        "count": 6,
+        "count": 2,
         "disposition": "adapter_candidate"
       }
     ],
@@ -50,7 +50,7 @@
       },
       {
         "key": "unadapted_probe_http_2xx",
-        "count": 6,
+        "count": 2,
         "reason": "unadapted_probe_http_2xx"
       },
       {
@@ -94,16 +94,6 @@
         "key": "www.cid.or.kr",
         "count": 2,
         "host": "www.cid.or.kr"
-      },
-      {
-        "key": "www.culture.go.kr",
-        "count": 2,
-        "host": "www.culture.go.kr"
-      },
-      {
-        "key": "www.happysd.or.kr",
-        "count": 2,
-        "host": "www.happysd.or.kr"
       },
       {
         "key": "ncpms.rda.go.kr",
@@ -654,66 +644,6 @@
       "operation": "독립기념관_한국독립운동사 소장자료 정보 DB_20200703",
       "endpoint": "https://search.i815.or.kr/openApi.do",
       "endpoint_host": "search.i815.or.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15008517",
-      "title": "한국체육산업개발주식회사_올림픽공원 도서정보",
-      "organization": "한국체육산업개발주식회사",
-      "operation": "한국체육산업개발주식회사_올림픽공원 도서정보_20230918 외부 링크 1",
-      "endpoint": "https://www.culture.go.kr/data/openapi/openapiView.do?id=405\u0026keyword=%EB%8F%84%EC%84%9C\u0026searchField=all\u0026gubun=A",
-      "endpoint_host": "www.culture.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15008517",
-      "title": "한국체육산업개발주식회사_올림픽공원 도서정보",
-      "organization": "한국체육산업개발주식회사",
-      "operation": "한국체육산업개발주식회사_올림픽공원 도서정보_20230918 외부 링크 2",
-      "endpoint": "https://www.culture.go.kr/data/openapi/openapiView.do?id=111",
-      "endpoint_host": "www.culture.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15007444",
-      "title": "서울특별시성동구도시관리공단_체육시설 강좌정보 조회",
-      "organization": "서울특별시성동구도시관리공단",
-      "operation": "서울특별시성동구도시관리공단_체육시설 강좌정보 조회_20220803",
-      "endpoint": "https://www.happysd.or.kr/c_76/cnt/m_109/view.do",
-      "endpoint_host": "www.happysd.or.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "html"
-    },
-    {
-      "dataset_id": "15007467",
-      "title": "서울특별시성동구도시관리공단_체육시설 대관정보 조회",
-      "organization": "서울특별시성동구도시관리공단",
-      "operation": "서울특별시성동구도시관리공단_체육시설 대관정보 조회_20220804",
-      "endpoint": "https://www.happysd.or.kr/c_76/cnt/m_109/view.do",
-      "endpoint_host": "www.happysd.or.kr",
       "dependency_class": "external_endpoint",
       "disposition": "adapter_candidate",
       "recommended_action": "build a provider adapter using the captured probe evidence",

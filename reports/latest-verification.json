@@ -1,12 +1,13 @@
 {
-  "generated_at": "2026-07-02T18:28:47Z",
+  "generated_at": "2026-07-02T18:58:24Z",
   "provider": "data.go.kr",
-  "limit": 1412,
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 1422,
   "truncated": true,
-  "filtered_count": 1272,
+  "filtered_count": 1276,
   "summary": {
-    "total": 1272,
-    "verified": 63,
+    "total": 1276,
+    "verified": 67,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0
@@ -24425,6 +24426,62 @@
       "http_status": 200,
       "semantic_status": "html_landing_page",
       "url": "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-12033\u0026serviceKind=1%C2%A4tPageNo%3D1\u0026srvType=S",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15008517",
+      "title": "한국체육산업개발주식회사_올림픽공원 도서정보",
+      "operation": "한국체육산업개발주식회사_올림픽공원 도서정보_20230918 외부 링크 1",
+      "provider": "culture",
+      "endpoint_host": "www.culture.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T18:58:20Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.culture.go.kr/data/openapi/openapiView.do?gubun=A\u0026id=405\u0026keyword=%EB%8F%84%EC%84%9C\u0026searchField=all",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15008517",
+      "title": "한국체육산업개발주식회사_올림픽공원 도서정보",
+      "operation": "한국체육산업개발주식회사_올림픽공원 도서정보_20230918 외부 링크 2",
+      "provider": "culture",
+      "endpoint_host": "www.culture.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T18:58:20Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.culture.go.kr/data/openapi/openapiView.do?id=111",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15007444",
+      "title": "서울특별시성동구도시관리공단_체육시설 강좌정보 조회",
+      "operation": "서울특별시성동구도시관리공단_체육시설 강좌정보 조회_20220803",
+      "provider": "happysd",
+      "endpoint_host": "www.happysd.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T18:58:23Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.happysd.or.kr/c_76/cnt/m_109/view.do",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15007467",
+      "title": "서울특별시성동구도시관리공단_체육시설 대관정보 조회",
+      "operation": "서울특별시성동구도시관리공단_체육시설 대관정보 조회_20220804",
+      "provider": "happysd",
+      "endpoint_host": "www.happysd.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-02T18:58:23Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.happysd.or.kr/c_76/cnt/m_109/view.do",
       "body_shape": "html"
     }
   ]

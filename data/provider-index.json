@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-02T18:39:23Z",
+  "generated_at": "2026-07-02T18:58:34Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 34,
-  "host_count": 39,
+  "adapter_count": 36,
+  "host_count": 41,
   "adapters": [
     {
       "name": "airport",
@@ -22,6 +22,16 @@
       ],
       "capabilities": [
         "call",
+        "verification"
+      ]
+    },
+    {
+      "name": "culture",
+      "status": "registered",
+      "hosts": [
+        "www.culture.go.kr"
+      ],
+      "capabilities": [
         "verification"
       ]
     },
@@ -126,6 +136,16 @@
       "status": "registered",
       "hosts": [
         "data.gwanak.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "happysd",
+      "status": "registered",
+      "hosts": [
+        "www.happysd.or.kr"
       ],
       "capabilities": [
         "verification"
@@ -375,8 +395,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 34,
-    "verification_capable_adapters": 34,
+    "adapter_count": 36,
+    "verification_capable_adapters": 36,
     "call_capable_adapters": 22,
     "required_adapters": 2,
     "required_verification_adapters": 2,

@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-02T18:39:23Z",
+  "generated_at": "2026-07-02T18:58:34Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 15,
+  "filtered_count": 13,
   "summary": {
-    "target_hosts": 15,
-    "target_operations": 35,
-    "external_endpoint_operations": 35,
+    "target_hosts": 13,
+    "target_operations": 31,
+    "external_endpoint_operations": 31,
     "service_root_operations": 0,
     "approval_required_operations": 0,
     "missing_param_operations": 21,
@@ -350,45 +350,6 @@
     },
     {
       "rank": 7,
-      "host": "www.happysd.or.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 2,
-      "specs": 2,
-      "organizations": [
-        "서울특별시성동구도시관리공단"
-      ],
-      "source_categories": [
-        "문화관광"
-      ],
-      "api_types": [
-        "LINK"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "sample_operations": [
-        {
-          "dataset_id": "15007444",
-          "title": "서울특별시성동구도시관리공단_체육시설 강좌정보 조회",
-          "organization": "서울특별시성동구도시관리공단",
-          "operation": "서울특별시성동구도시관리공단_체육시설 강좌정보 조회_20220803",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://www.happysd.or.kr/c_76/cnt/m_109/view.do"
-        },
-        {
-          "dataset_id": "15007467",
-          "title": "서울특별시성동구도시관리공단_체육시설 대관정보 조회",
-          "organization": "서울특별시성동구도시관리공단",
-          "operation": "서울특별시성동구도시관리공단_체육시설 대관정보 조회_20220804",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://www.happysd.or.kr/c_76/cnt/m_109/view.do"
-        }
-      ]
-    },
-    {
-      "rank": 8,
       "host": "www.cid.or.kr",
       "kinds": [
         "external_endpoint"
@@ -445,46 +406,7 @@
       ]
     },
     {
-      "rank": 9,
-      "host": "www.culture.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "operations": 2,
-      "specs": 1,
-      "organizations": [
-        "한국체육산업개발주식회사"
-      ],
-      "source_categories": [
-        "문화관광"
-      ],
-      "api_types": [
-        "LINK"
-      ],
-      "data_formats": [
-        "XML"
-      ],
-      "sample_operations": [
-        {
-          "dataset_id": "15008517",
-          "title": "한국체육산업개발주식회사_올림픽공원 도서정보",
-          "organization": "한국체육산업개발주식회사",
-          "operation": "한국체육산업개발주식회사_올림픽공원 도서정보_20230918 외부 링크 1",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://www.culture.go.kr/data/openapi/openapiView.do?id=405\u0026keyword=%EB%8F%84%EC%84%9C\u0026searchField=all\u0026gubun=A"
-        },
-        {
-          "dataset_id": "15008517",
-          "title": "한국체육산업개발주식회사_올림픽공원 도서정보",
-          "organization": "한국체육산업개발주식회사",
-          "operation": "한국체육산업개발주식회사_올림픽공원 도서정보_20230918 외부 링크 2",
-          "dependency_class": "external_endpoint",
-          "endpoint": "https://www.culture.go.kr/data/openapi/openapiView.do?id=111"
-        }
-      ]
-    },
-    {
-      "rank": 10,
+      "rank": 8,
       "host": "ncpms.rda.go.kr",
       "kinds": [
         "external_endpoint"
@@ -515,7 +437,7 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 9,
       "host": "openapi-lib.sen.go.kr",
       "kinds": [
         "external_endpoint"
@@ -551,7 +473,7 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 10,
       "host": "search.i815.or.kr",
       "kinds": [
         "external_endpoint"
@@ -582,7 +504,7 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 11,
       "host": "www.dgeic.or.kr:8080",
       "kinds": [
         "external_endpoint"
@@ -613,7 +535,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 12,
       "host": "www.jobplustv.or.kr",
       "kinds": [
         "external_endpoint"
@@ -644,7 +566,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 13,
       "host": "www.simpan.go.kr",
       "kinds": [
         "external_endpoint"

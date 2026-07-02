@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T18:39:39Z",
+  "generated_at": "2026-07-02T18:58:50Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -8,10 +8,10 @@
   "timeout": "10s",
   "summary": {
     "operations": 12253,
-    "evidence_total": 1272,
+    "evidence_total": 1276,
     "uncovered_gateway_candidates": 10774,
     "uncovered_adapter_candidates": 0,
-    "missing_adapter_hosts": 15,
+    "missing_adapter_hosts": 13,
     "planned_batches": 1,
     "planned_operations": 10
   },
@@ -97,37 +97,6 @@
         ]
       },
       {
-        "host": "www.culture.go.kr",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "missing",
-        "specs": 1,
-        "operations": 2,
-        "external_endpoint_operations": 2,
-        "external_guide_specs": 1,
-        "sample_ids": [
-          "15008517"
-        ]
-      },
-      {
-        "host": "www.happysd.or.kr",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "missing",
-        "specs": 2,
-        "operations": 2,
-        "external_endpoint_operations": 2,
-        "external_guide_specs": 1,
-        "sample_ids": [
-          "15007444",
-          "15007467"
-        ]
-      },
-      {
         "host": "data.wanju.go.kr",
         "kinds": [
           "external_endpoint"
@@ -167,6 +136,32 @@
         "external_guide_specs": 1,
         "sample_ids": [
           "15001184"
+        ]
+      },
+      {
+        "host": "ncpms.rda.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 1,
+        "operations": 1,
+        "external_endpoint_operations": 1,
+        "sample_ids": [
+          "15002034"
+        ]
+      },
+      {
+        "host": "openapi-lib.sen.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 1,
+        "operations": 1,
+        "external_endpoint_operations": 1,
+        "sample_ids": [
+          "15001051"
         ]
       }
     ]
