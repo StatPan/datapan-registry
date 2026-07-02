@@ -167,6 +167,7 @@ data.go.kr mastery should produce or preserve:
 - `reports/adapter-targets.json`
 - `reports/route-disposition.json`
 - `reports/data-go-kr/external-coverage-summary.json`
+- `reports/data-go-kr/external-adapter-backlog.json`
 - `reports/latest-verification.json`
 - `reports/latest-verification-summary.json`
 - `reports/data-go-kr/error-action-catalog.json`
@@ -174,6 +175,7 @@ data.go.kr mastery should produce or preserve:
 - `reports/registry-impact-plan.json`
 - `reports/data-go-kr/runtime-evidence-growth.json`
 - `reports/data-go-kr/institution-api-overview.json`
+- `docs/data-go-kr-external-adapter-backlog.md`
 
 ## Source-Scoped Generation Contract
 
@@ -184,6 +186,7 @@ match those roots.
 | Source-scoped artifact | Required generation inputs | CI gate |
 | --- | --- | --- |
 | `reports/data-go-kr/external-coverage-summary.json` | `sources/data_go_kr.json`, `reports/coverage.json`, `reports/adapter-targets.json`, `reports/route-disposition.json`, `data/provider-index.json` | `scripts/generate-external-coverage-summary.py` regenerates the report, and `scripts/validate-external-coverage.py` validates schema and cross-checks source identity, raw coverage metrics, route evidence counts, adapter target counts, provider-index host count, and missing host counts. |
+| `reports/data-go-kr/external-adapter-backlog.json` | `sources/data_go_kr.json`, `reports/route-disposition.json`, `reports/adapter-targets.json`, `reports/coverage.json` | `scripts/generate-external-adapter-backlog.py` regenerates the host/API implementation backlog, and `scripts/validate-external-adapter-backlog.py` fails if adapter candidates, excluded dead/transient routes, host counts, or markdown drift from route-disposition evidence. |
 | `reports/data-go-kr/error-action-catalog.json` | `sources/data_go_kr.json`, `reports/error-catalog.json`, `reports/route-disposition.json`, provider verification reports | `scripts/validate-error-action-catalogs.py` validates checked-in action rules; future generation should also fail on unmapped known error signatures. |
 | `reports/data-go-kr/registry-impact-plan.json` | `sources/data_go_kr.json`, catalog diff, verification evidence, route disposition, error action catalog, promoted dataset mappings | `scripts/validate-impact-plans.py` validates schema, summary counts, target counts, identity fields, and promoted/served dataset boundaries before client/server consumers act on it. |
 | `reports/registry-impact-plan.json` | checked-in `reports/*/registry-impact-plan.json` source plans | `scripts/generate-impact-plan-rollup.py` generates the release-wide rollup, and `scripts/validate-impact-plans.py` validates mixed-source release scope while preserving strict source scope for source-specific plans. |
@@ -211,10 +214,12 @@ CI should fail rather than treating the checked-in summary as authoritative.
 7. Add an operational gate that fails validation for missing external routes
    without route-disposition evidence and permits adapter backlog only from
    adapter-candidate evidence. Done in PR #4.
-8. Add a runtime evidence growth summary that measures current evidence
+8. Generate the source-scoped external adapter implementation backlog directly
+   from route-disposition adapter candidates. Done in Gira #95.
+9. Add a runtime evidence growth summary that measures current evidence
    coverage against the 10% target and validates the next planned batches.
    Tracked by Gira #15.
-9. Execute the next runtime verification batches for gateway and registered
+10. Execute the next runtime verification batches for gateway and registered
    external adapters. Started by Gira #19 with `epost` and `ulsan`
    excluded-from-latest external endpoint batches. This grows checked runtime
    evidence from `256` to `276`, but the new records are skipped boundary
@@ -240,11 +245,11 @@ CI should fail rather than treating the checked-in summary as authoritative.
    runtime evidence to `1231` and clearing the unrounded `10%` runtime evidence
    target gap. This is still mostly skipped boundary evidence, not proof that
    the gateway operations are callable.
-10. Add a data.go.kr draft impact plan and validate its client/server action
+11. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
-11. Generate future data.go.kr impact plans directly from catalog diff,
+12. Generate future data.go.kr impact plans directly from catalog diff,
    verification evidence, route disposition, and promoted dataset mappings.
-12. Add a release-wide registry impact plan rollup generated from checked-in
+13. Add a release-wide registry impact plan rollup generated from checked-in
    source-scoped impact plans. Tracked by Gira #47.
 
 ## Done Criteria

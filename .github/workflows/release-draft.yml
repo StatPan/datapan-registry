@@ -80,6 +80,7 @@ jobs:
           python -m pip install jsonschema
           python scripts/sync-release-schema-artifacts.py --check
           python scripts/validate-coverage-backlog.py
+          python scripts/validate-external-adapter-backlog.py
           python scripts/validate-source-profiles.py
           python scripts/validate-error-action-catalogs.py
           python scripts/validate-external-coverage.py
