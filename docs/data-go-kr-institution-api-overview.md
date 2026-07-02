@@ -1,13 +1,13 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-02T20:45:24Z`
+- Generated at: `2026-07-02T21:00:31Z`
 - Institutions: `411`
 - APIs: `12060`
 - Operations: `12258`
 - Runtime evidence: `1278` (`10.4%`)
 - External endpoint operations: `648`
-- Registered adapter operations: `633`
-- Missing adapter operations: `34`
+- Registered adapter operations: `638`
+- Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
 

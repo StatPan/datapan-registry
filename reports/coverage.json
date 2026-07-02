@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T20:45:27Z",
+  "generated_at": "2026-07-02T21:00:34Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -12,17 +12,17 @@
     "callable_operation_percent": 98.8,
     "data_go_kr_gateway_operations": 11419,
     "external_endpoint_operations": 648,
-    "registered_adapter_operations": 633,
-    "missing_adapter_operations": 34,
-    "external_adapter_coverage_percent": 94.9,
+    "registered_adapter_operations": 638,
+    "missing_adapter_operations": 29,
+    "external_adapter_coverage_percent": 95.7,
     "approval_required_operations": 4147,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
-    "registered_adapter_hosts": 42,
-    "missing_adapter_hosts": 12,
-    "adapter_count": 38,
-    "call_capable_adapters": 22,
+    "registered_adapter_hosts": 43,
+    "missing_adapter_hosts": 11,
+    "adapter_count": 39,
+    "call_capable_adapters": 23,
     "provider_split_ready": true
   },
   "goals": {
@@ -53,14 +53,14 @@
   "route_evidence": {
     "present": true,
     "report": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\route-disposition.json",
-    "routes_total": 34,
-    "with_probe_evidence": 34,
+    "routes_total": 29,
+    "with_probe_evidence": 29,
     "dead_route_candidates": 14,
     "transient_failures": 15,
-    "parameter_blocked_routes": 1,
-    "remaining_adapter_candidates": 4,
-    "raw_missing_adapter_operations": 34,
-    "evidence_adjusted_adapter_candidates": 4
+    "parameter_blocked_routes": 0,
+    "remaining_adapter_candidates": 0,
+    "raw_missing_adapter_operations": 29,
+    "evidence_adjusted_adapter_candidates": 0
   },
   "gaps": {
     "missing_adapter_hosts": [
@@ -75,22 +75,6 @@
         "external_endpoint_operations": 6,
         "sample_ids": [
           "15059302"
-        ]
-      },
-      {
-        "host": "www.safetydata.go.kr",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "missing",
-        "specs": 5,
-        "operations": 5,
-        "external_endpoint_operations": 5,
-        "approval_required_operations": 5,
-        "sample_ids": [
-          "15147982",
-          "15154049",
-          "15154052"
         ]
       },
       {
@@ -201,6 +185,19 @@
         "external_endpoint_operations": 1,
         "sample_ids": [
           "15001051"
+        ]
+      },
+      {
+        "host": "www.jobplustv.or.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "missing",
+        "specs": 1,
+        "operations": 1,
+        "external_endpoint_operations": 1,
+        "sample_ids": [
+          "15007088"
         ]
       }
     ],
@@ -384,10 +381,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-02T20:45:27Z",
+    "generated_at": "2026-07-02T21:00:34Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 38,
-    "host_count": 43,
+    "adapter_count": 39,
+    "host_count": 44,
     "adapters": [
       {
         "name": "airport",
@@ -720,6 +717,17 @@
         ]
       },
       {
+        "name": "safetydata",
+        "status": "registered",
+        "hosts": [
+          "www.safetydata.go.kr"
+        ],
+        "capabilities": [
+          "call",
+          "verification"
+        ]
+      },
+      {
         "name": "seoul-bus",
         "status": "registered",
         "hosts": [
@@ -800,9 +808,9 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 38,
-      "verification_capable_adapters": 38,
-      "call_capable_adapters": 22,
+      "adapter_count": 39,
+      "verification_capable_adapters": 39,
+      "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,
       "required_call_adapters": 1,

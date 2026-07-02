@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-07-02T20:45:24Z",
+  "generated_at": "2026-07-02T21:00:31Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "probe": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\unadapted-external-probe.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "routes_total": 34,
-    "operations": 34,
-    "hosts": 12,
-    "with_probe_evidence": 34,
+    "routes_total": 29,
+    "operations": 29,
+    "hosts": 11,
+    "with_probe_evidence": 29,
     "without_probe_evidence": 0,
     "dead_route_candidates": 14,
     "transient_failures": 15,
-    "parameter_blocked_routes": 1,
-    "adapter_candidates": 4,
+    "parameter_blocked_routes": 0,
+    "adapter_candidates": 0,
     "by_disposition": [
       {
         "key": "transient_failure",
@@ -25,16 +25,6 @@
         "key": "dead_route_candidate",
         "count": 14,
         "disposition": "dead_route_candidate"
-      },
-      {
-        "key": "adapter_candidate",
-        "count": 4,
-        "disposition": "adapter_candidate"
-      },
-      {
-        "key": "parameter_blocked",
-        "count": 1,
-        "disposition": "parameter_blocked"
       }
     ],
     "by_reason": [
@@ -54,11 +44,6 @@
         "reason": "unadapted_probe_dns"
       },
       {
-        "key": "unadapted_probe_http_2xx",
-        "count": 5,
-        "reason": "unadapted_probe_http_2xx"
-      },
-      {
         "key": "unadapted_probe_request_error",
         "count": 1,
         "reason": "unadapted_probe_request_error"
@@ -69,11 +54,6 @@
         "key": "openapi.coast.kr",
         "count": 6,
         "host": "openapi.coast.kr"
-      },
-      {
-        "key": "www.safetydata.go.kr",
-        "count": 5,
-        "host": "www.safetydata.go.kr"
       },
       {
         "key": "car.daegu.go.kr",
@@ -621,87 +601,6 @@
       "recommended_action": "retry with bounded evidence before building a provider adapter",
       "probe_status": "failed",
       "probe_reason": "unadapted_probe_request_error"
-    },
-    {
-      "dataset_id": "15147982",
-      "title": "행정안전부_자동심장충격기AED",
-      "organization": "행정안전부",
-      "operation": "행정안전부_자동심장충격기_AED",
-      "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-00068",
-      "endpoint_host": "www.safetydata.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "parameter_blocked",
-      "recommended_action": "add safe default or smoke parameters before adapter work",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "json",
-      "missing_params": [
-        "startLot",
-        "endLot",
-        "startLat",
-        "endLat"
-      ]
-    },
-    {
-      "dataset_id": "15154049",
-      "title": "행정안전부_국외검사기관인정현황",
-      "organization": "행정안전부",
-      "operation": "국외검사기관인정현황",
-      "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20141",
-      "endpoint_host": "www.safetydata.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "json"
-    },
-    {
-      "dataset_id": "15154052",
-      "title": "행정안전부_국외전염병발생현황",
-      "organization": "행정안전부",
-      "operation": "국외전염병발생현황",
-      "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20564",
-      "endpoint_host": "www.safetydata.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "json"
-    },
-    {
-      "dataset_id": "15154063",
-      "title": "행정안전부_기간별감염병발생현황",
-      "organization": "행정안전부",
-      "operation": "기간별감염병발생현황",
-      "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20638",
-      "endpoint_host": "www.safetydata.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "json"
-    },
-    {
-      "dataset_id": "15154065",
-      "title": "행정안전부_녹지_녹피_면적비율",
-      "organization": "행정안전부",
-      "operation": "녹지(녹피)면적비율",
-      "endpoint": "https://www.safetydata.go.kr/V2/api/DSSP-IF-20552",
-      "endpoint_host": "www.safetydata.go.kr",
-      "dependency_class": "external_endpoint",
-      "disposition": "adapter_candidate",
-      "recommended_action": "build a provider adapter using the captured probe evidence",
-      "probe_status": "unknown",
-      "probe_reason": "unadapted_probe_http_2xx",
-      "http_status": 200,
-      "body_shape": "json"
     }
   ]
 }

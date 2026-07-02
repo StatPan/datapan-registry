@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T20:45:24Z",
+  "generated_at": "2026-07-02T21:00:31Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -10,11 +10,11 @@
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 54,
     "external_guide_hosts": 157,
-    "registered_adapter_hosts": 42,
+    "registered_adapter_hosts": 43,
     "operation_hosts": 56,
     "guide_only_hosts": 137,
-    "missing_adapter_hosts": 12,
-    "needs_adapter_operations": 34,
+    "missing_adapter_hosts": 11,
+    "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 42,
     "approval_required_operations": 4147,
@@ -32,22 +32,6 @@
       "external_endpoint_operations": 6,
       "sample_ids": [
         "15059302"
-      ]
-    },
-    {
-      "host": "www.safetydata.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "missing",
-      "specs": 5,
-      "operations": 5,
-      "external_endpoint_operations": 5,
-      "approval_required_operations": 5,
-      "sample_ids": [
-        "15147982",
-        "15154049",
-        "15154052"
       ]
     },
     {
@@ -580,6 +564,23 @@
       "external_endpoint_operations": 5,
       "sample_ids": [
         "15000332"
+      ]
+    },
+    {
+      "host": "www.safetydata.go.kr",
+      "provider": "safetydata",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 5,
+      "operations": 5,
+      "external_endpoint_operations": 5,
+      "approval_required_operations": 5,
+      "sample_ids": [
+        "15147982",
+        "15154049",
+        "15154052"
       ]
     },
     {

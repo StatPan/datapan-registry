@@ -2,7 +2,7 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-07-02T20:45:24Z`
+- Generated at: `2026-07-02T21:00:31Z`
 - Institutions: `411`
 - APIs: `12060`
 - APIs with operation mapping: `7215` (`59.8%`)

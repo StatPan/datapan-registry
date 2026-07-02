@@ -2,7 +2,7 @@
 
 This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns APIs without operation mappings into bounded institution work queues. It is separate from runtime evidence reactivation: these APIs need operation metadata materialized before they can enter verification batches.
 
-- Generated at: `2026-07-02T20:45:24Z`
+- Generated at: `2026-07-02T21:00:31Z`
 - Institutions: `411`
 - APIs: `12060`
 - APIs with operation mapping: `7215` (`59.8%`)
