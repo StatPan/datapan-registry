@@ -2,7 +2,7 @@
 
 This report converts checked Safety Data operation candidates into exact registry operation mappings. It is a reviewable patch plan before mutation and an idempotent applied ledger after the mappings land in the registry.
 
-- Generated at: `2026-07-02T21:24:23Z`
+- Generated at: `2026-07-02T21:37:37Z`
 - Candidate results: `100`
 - Patches: `80`
 - Operations to add: `80`

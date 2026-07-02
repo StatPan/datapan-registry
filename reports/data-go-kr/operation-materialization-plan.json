@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.operation-materialization-plan.v1",
-  "generated_at": "2026-07-02T21:24:03Z",
+  "generated_at": "2026-07-02T21:37:18Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -15,9 +15,9 @@
   "summary": {
     "institutions": 411,
     "api_total": 12060,
-    "covered_api_count": 7390,
-    "uncovered_api_count": 4670,
-    "api_operation_coverage_percent": 61.3,
+    "covered_api_count": 7414,
+    "uncovered_api_count": 4646,
+    "api_operation_coverage_percent": 61.5,
     "planned_institutions": 10,
     "planned_api_count": 645,
     "first_queue": "행정안전부"
@@ -1806,11 +1806,11 @@
       "rank": 2,
       "organization": "경기도",
       "api_count": 840,
-      "covered_api_count": 13,
-      "uncovered_api_count": 827,
-      "api_operation_coverage_percent": 1.5,
+      "covered_api_count": 19,
+      "uncovered_api_count": 821,
+      "api_operation_coverage_percent": 2.3,
       "planned_api_count": 100,
-      "remaining_after_batch": 727,
+      "remaining_after_batch": 721,
       "action": "materialize_operation_mapping",
       "reason": "no_dependency_rows",
       "output": "reports/data-go-kr/operation-materialization-batches/institution-02.json",

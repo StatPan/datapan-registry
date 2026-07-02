@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T21:24:06Z",
+  "generated_at": "2026-07-02T21:37:20Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,14 +7,14 @@
   "route_disposition": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 12433,
-    "callable_operations": 12291,
+    "operations": 12495,
+    "callable_operations": 12353,
     "callable_operation_percent": 98.9,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 823,
-    "registered_adapter_operations": 813,
+    "external_endpoint_operations": 885,
+    "registered_adapter_operations": 875,
     "missing_adapter_operations": 29,
-    "external_adapter_coverage_percent": 96.6,
+    "external_adapter_coverage_percent": 96.8,
     "approval_required_operations": 4322,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
@@ -48,7 +48,7 @@
     "skipped": 1122,
     "unknown": 0,
     "verified_percent": 5.4,
-    "evidence_operation_percent": 10.3
+    "evidence_operation_percent": 10.2
   },
   "route_evidence": {
     "present": true,
@@ -326,6 +326,21 @@
         ]
       },
       {
+        "host": "data.gg.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "adapter",
+        "specs": 14,
+        "operations": 33,
+        "external_endpoint_operations": 33,
+        "sample_ids": [
+          "15005231",
+          "15011020",
+          "15011027"
+        ]
+      },
+      {
         "host": "oneclick.law.go.kr:80",
         "provider": "oneclick-law",
         "kinds": [
@@ -359,30 +374,11 @@
           "15000124",
           "15000268"
         ]
-      },
-      {
-        "host": "data.sisul.or.kr",
-        "provider": "sisul",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "adapter",
-        "specs": 40,
-        "operations": 20,
-        "external_endpoint_operations": 20,
-        "external_guide_specs": 40,
-        "approval_required_operations": 1,
-        "sample_ids": [
-          "15002793",
-          "15002794",
-          "15002797"
-        ]
       }
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-02T21:24:06Z",
+    "generated_at": "2026-07-02T21:37:20Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 39,
     "host_count": 44,

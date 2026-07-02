@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T21:24:17Z",
+  "generated_at": "2026-07-02T21:37:32Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,13 +7,13 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 12433,
+    "operations": 12495,
     "evidence_total": 1278,
     "uncovered_gateway_candidates": 10774,
-    "uncovered_adapter_candidates": 180,
+    "uncovered_adapter_candidates": 242,
     "missing_adapter_hosts": 11,
-    "planned_batches": 2,
-    "planned_operations": 20
+    "planned_batches": 7,
+    "planned_operations": 64
   },
   "batches": [
     {
@@ -26,6 +26,46 @@
       "output": ".datapan/verification/gateway-next.json"
     },
     {
+      "label": "culture",
+      "provider": "culture",
+      "kind": "external_endpoint",
+      "candidates": 9,
+      "uncovered_candidates": 7,
+      "planned_operations": 7,
+      "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider culture --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/culture-next.json --json",
+      "output": ".datapan/verification/culture-next.json"
+    },
+    {
+      "label": "data-gg",
+      "provider": "data-gg",
+      "kind": "external_endpoint",
+      "candidates": 33,
+      "uncovered_candidates": 15,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider data-gg --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/data-gg-next.json --json",
+      "output": ".datapan/verification/data-gg-next.json"
+    },
+    {
+      "label": "mafra",
+      "provider": "mafra",
+      "kind": "external_endpoint",
+      "candidates": 10,
+      "uncovered_candidates": 7,
+      "planned_operations": 7,
+      "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider mafra --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/mafra-next.json --json",
+      "output": ".datapan/verification/mafra-next.json"
+    },
+    {
+      "label": "nongsaro",
+      "provider": "nongsaro",
+      "kind": "external_endpoint",
+      "candidates": 19,
+      "uncovered_candidates": 15,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider nongsaro --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/nongsaro-next.json --json",
+      "output": ".datapan/verification/nongsaro-next.json"
+    },
+    {
       "label": "safetydata",
       "provider": "safetydata",
       "kind": "external_endpoint",
@@ -34,6 +74,16 @@
       "planned_operations": 10,
       "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider safetydata --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/safetydata-next.json --json",
       "output": ".datapan/verification/safetydata-next.json"
+    },
+    {
+      "label": "work24",
+      "provider": "work24",
+      "kind": "external_endpoint",
+      "candidates": 21,
+      "uncovered_candidates": 18,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider work24 --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/work24-next.json --json",
+      "output": ".datapan/verification/work24-next.json"
     }
   ],
   "gaps": {

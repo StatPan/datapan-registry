@@ -12,13 +12,13 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `12433`
-- callable operations: `12291` (`98.9%`)
+- operations: `12495`
+- callable operations: `12353` (`98.9%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `823`
-- registered adapter operations: `813`
+- external endpoint operations: `885`
+- registered adapter operations: `875`
 - missing adapter operations: `29`
-- external adapter coverage: `96.6%`
+- external adapter coverage: `96.8%`
 - approval-required operations: `4322`
 - no-endpoint operations: `123`
 - service-root operations: `19`
@@ -167,6 +167,7 @@ data.go.kr mastery should produce or preserve:
 - `reports/data-go-kr/operation-materialization-plan.json`
 - `reports/data-go-kr/safetydata-operation-candidates.json`
 - `reports/data-go-kr/safetydata-registry-patches.json`
+- `reports/data-go-kr/link-detail-registry-patches.json`
 - `reports/data-go-kr/institution-api-overview.json`
 - `reports/data-go-kr/institution-runtime-plan.json`
 - `docs/data-go-kr-external-adapter-backlog.md`
@@ -188,6 +189,7 @@ match those roots.
 | `reports/data-go-kr/operation-materialization-plan.json` | `reports/data-go-kr/coverage-backlog.json` | `scripts/validate-operation-materialization-plan.py` regenerates the institution-scoped materialization queue and fails CI when APIs without operation mappings drift from the coverage backlog. |
 | `reports/data-go-kr/safetydata-operation-candidates.json` | `reports/data-go-kr/operation-materialization-batches/institution-01.json`, public data.go.kr and safetydata.go.kr metadata | `scripts/validate-safetydata-operation-candidates.py` validates the checked-in candidate evidence schema and batch linkage; refresh is manual or workflow-dispatched because it depends on live public metadata. |
 | `reports/data-go-kr/safetydata-registry-patches.json` | `reports/data-go-kr/safetydata-operation-candidates.json`, `data/data-go-kr.registry.json` | `scripts/validate-safetydata-registry-patches.py` validates exact operation payloads before registry mutation and keeps already-applied Safety Data mappings reproducible after mutation. |
+| `reports/data-go-kr/link-detail-registry-patches.json` | bounded `datapan catalog enrich link-details` output, `data/data-go-kr.registry.json`, `data/provider-index.json` | `scripts/validate-link-detail-registry-patches.py` validates that every materialized link-detail operation targets an already registered adapter host before registry mutation. |
 | `reports/data-go-kr/institution-api-overview.json` | `data/data-go-kr.registry.json`, `reports/dependencies.json`, `reports/latest-verification.json`, `reports/coverage.json`, `data/provider-index.json` | `scripts/validate-institution-api-overview.py` regenerates the overview and fails CI when institution API counts, operation counts, adapter status counts, or runtime evidence counts drift from checked-in artifacts. |
 | `reports/data-go-kr/institution-runtime-plan.json` | `reports/data-go-kr/coverage-backlog.json`, `data/data-go-kr.registry.json`, `reports/latest-verification.json` | `scripts/validate-institution-runtime-plan.py` regenerates the executable institution batch plan and fails CI when the next `datapan catalog verify --org` queue drifts from the coverage backlog. |
 
@@ -306,8 +308,11 @@ coverage.
    `0`. The Safety Data adapter then registers `www.safetydata.go.kr`,
    increasing registered external adapter operations to `638`; the next
    Safety Data materialization batches add 175 행정안전부 operation mappings,
-   increasing registered external adapter operations to `813` while keeping
-   evidence-adjusted adapter candidates at `0`. This is still mostly skipped
+   increasing registered external adapter operations to `813`; an adapter-safe
+   link-detail enrichment batch then adds 24 APIs and 62 operations across
+   already registered external hosts, increasing registered external adapter
+   operations to `875` while keeping evidence-adjusted adapter candidates at
+   `0`. This is still mostly skipped
    boundary evidence, and the new
    `data-gg`/`nfqs`/`nongsaro`/`gwanak`/`mafra`/`garak`/`work24`/
    `seoul-open-data`/`culture`/`happysd`/`ncpms`/`i815` results prove landing-page
