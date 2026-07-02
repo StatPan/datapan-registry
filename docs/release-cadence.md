@@ -82,6 +82,7 @@ datapan catalog verify summary --input reports/latest-verification.json --output
 python scripts/generate-coverage-backlog.py
 python scripts/generate-external-adapter-backlog.py
 python scripts/generate-institution-api-overview.py
+python scripts/generate-institution-runtime-plan.py
 python scripts/generate-source-report-inventory.py
 python scripts/generate-source-runtime-readiness.py
 ```
@@ -98,8 +99,10 @@ datapan catalog verify merge --input reports/latest-verification.json --input re
 datapan catalog verify summary --input reports/latest-verification.json --output reports/latest-verification-summary.json --json
 python scripts/generate-coverage-backlog.py
 python scripts/generate-institution-api-overview.py
+python scripts/generate-institution-runtime-plan.py
 python scripts/validate-coverage-backlog.py
 python scripts/validate-institution-api-overview.py
+python scripts/validate-institution-runtime-plan.py
 ```
 
 The first queue is `행정안전부`: the current backlog lists `1252` APIs,

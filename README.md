@@ -191,11 +191,13 @@ reports/
   latest-release-readiness.json
   data-go-kr/
     institution-api-overview.json
+    institution-runtime-plan.json
     coverage-backlog.json
     external-coverage-summary.json
     external-adapter-backlog.json
 docs/
   data-go-kr-institution-api-overview.md
+  data-go-kr-institution-runtime-plan.md
   data-go-kr-coverage-backlog.md
   data-go-kr-external-adapter-backlog.md
 provenance/
