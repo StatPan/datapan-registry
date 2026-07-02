@@ -1,6 +1,6 @@
 # Datapan Registry Release
 
-- generated_at: `2026-07-02T21:54:44Z`
+- generated_at: `2026-07-02T22:04:09Z`
 - provider: `data.go.kr`
 - datapan_version: `0.1.0-dev`
 - source_registry: `C:\Users\statp\dev\datapan-registry\data\data-go-kr.registry.json`
@@ -22,14 +22,13 @@
 - route_disposition: `29` routes, `14` dead-route candidates, `15` transient failures, `0` parameter-blocked, `0` adapter candidates
 - route_disposition_artifact: `reports/route-disposition.json`
 - provider_backlog: `193` hosts, `11` missing-adapter hosts, `29` operations needing adapters
-- coverage: `12821` callable operations (`98.9%`), external adapter coverage `97.9%`, verification evidence coverage `9.9%`, evidence-adjusted adapter candidates `0`
+- coverage: `12821` callable operations (`98.9%`), external adapter coverage `97.9%`, verification evidence coverage `10.1%`, evidence-adjusted adapter candidates `0`
 - coverage_artifact: `reports/coverage.json`
 - coverage_goals: callable `99%`, external adapters `98%`, verification evidence `10%`, call-capable adapters `25`, missing-adapter operations `<=10`
-- verification_plan: `8` batches, `67` planned operations, `10774` gateway gaps, `710` adapter gaps
+- verification_plan: `6` batches, `52` planned operations, `10774` gateway gaps, `685` adapter gaps
 - verification_plan_artifact: `reports/verification-plan.json`
-- runtime_evidence_growth: `9.9%` coverage, target `10.0%`, remaining `19`, status `below_target`
+- runtime_evidence_growth: `10.1%` coverage, target `10.0%`, remaining `0`, status `above_target`
 - runtime_evidence_growth_artifact: `reports/data-go-kr/runtime-evidence-growth.json`
-- runtime_evidence_warning: `warning` `runtime_evidence_below_target`
 
 Top adapter targets:
 
@@ -41,7 +40,7 @@ Top adapter targets:
 
 ## Verification Evidence
 
-- verification: `1278` total, `69` verified, `87` failed, `1122` skipped, `0` unknown
+- verification: `1303` total, `94` verified, `87` failed, `1122` skipped, `0` unknown
 - verification_artifact: `reports/latest-verification.json`
 - verification_summary_artifact: `reports/latest-verification-summary.json`
 

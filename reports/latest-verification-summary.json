@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-02T19:14:04Z",
+  "generated_at": "2026-07-02T22:03:35Z",
   "source": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
-  "registry": "data\\data-go-kr.registry.json",
+  "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1278,
-    "verified": 69,
+    "total": 1303,
+    "verified": 94,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0
@@ -20,14 +20,14 @@
         "status": "skipped"
       },
       {
+        "key": "verified",
+        "count": 94,
+        "status": "verified"
+      },
+      {
         "key": "failed",
         "count": 87,
         "status": "failed"
-      },
-      {
-        "key": "verified",
-        "count": 69,
-        "status": "verified"
       }
     ],
     "by_reason": [
@@ -319,6 +319,11 @@
         "provider": "oneclick-law"
       },
       {
+        "key": "data-gg",
+        "count": 28,
+        "provider": "data-gg"
+      },
+      {
         "key": "epost",
         "count": 28,
         "provider": "epost"
@@ -339,11 +344,6 @@
         "provider": "ulsan"
       },
       {
-        "key": "data-gg",
-        "count": 18,
-        "provider": "data-gg"
-      },
-      {
         "key": "andong",
         "count": 15,
         "provider": "andong"
@@ -357,6 +357,16 @@
         "key": "itfind",
         "count": 13,
         "provider": "itfind"
+      },
+      {
+        "key": "mafra",
+        "count": 11,
+        "provider": "mafra"
+      },
+      {
+        "key": "culture",
+        "count": 9,
+        "provider": "culture"
       },
       {
         "key": "naqs",
@@ -439,19 +449,9 @@
         "provider": "gwanak"
       },
       {
-        "key": "mafra",
-        "count": 3,
-        "provider": "mafra"
-      },
-      {
         "key": "work24",
         "count": 3,
         "provider": "work24"
-      },
-      {
-        "key": "culture",
-        "count": 2,
-        "provider": "culture"
       },
       {
         "key": "happysd",
@@ -516,6 +516,11 @@
         "host": "data.uiryeong.go.kr"
       },
       {
+        "key": "data.gg.go.kr",
+        "count": 28,
+        "host": "data.gg.go.kr"
+      },
+      {
         "key": "oneclick.law.go.kr:80",
         "count": 27,
         "host": "oneclick.law.go.kr:80"
@@ -536,11 +541,6 @@
         "host": "openapi.its.ulsan.kr"
       },
       {
-        "key": "data.gg.go.kr",
-        "count": 18,
-        "host": "data.gg.go.kr"
-      },
-      {
         "key": "www.andong.go.kr",
         "count": 15,
         "host": "www.andong.go.kr"
@@ -556,9 +556,19 @@
         "host": "open.itfind.or.kr"
       },
       {
+        "key": "data.mafra.go.kr",
+        "count": 11,
+        "host": "data.mafra.go.kr"
+      },
+      {
         "key": "data.naqs.go.kr",
         "count": 9,
         "host": "data.naqs.go.kr"
+      },
+      {
+        "key": "www.culture.go.kr",
+        "count": 9,
+        "host": "www.culture.go.kr"
       },
       {
         "key": "data.humetro.busan.kr",
@@ -626,11 +636,6 @@
         "host": "data.gwanak.go.kr"
       },
       {
-        "key": "data.mafra.go.kr",
-        "count": 3,
-        "host": "data.mafra.go.kr"
-      },
-      {
         "key": "folkency.nfm.go.kr",
         "count": 3,
         "host": "folkency.nfm.go.kr"
@@ -666,11 +671,6 @@
         "host": "data.seoul.go.kr"
       },
       {
-        "key": "www.culture.go.kr",
-        "count": 2,
-        "host": "www.culture.go.kr"
-      },
-      {
         "key": "www.happysd.or.kr",
         "count": 2,
         "host": "www.happysd.or.kr"
@@ -704,7 +704,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 614,
+        "count": 639,
         "kind": "external_endpoint"
       },
       {

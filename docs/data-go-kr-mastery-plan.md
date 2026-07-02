@@ -319,9 +319,10 @@ coverage.
    `seoul-open-data`/`culture`/`happysd`/`ncpms`/`i815` results prove landing-page
    reachability rather than generic machine-call support; the Safety Data
    operations remain approval-gated until credentials and approval state are
-   available. After the latest operation materialization growth, the current
-   runtime evidence target is `1297`, so `19` more evidence records are needed
-   to restore the `10%` release-readiness target.
+   available. After the latest operation materialization growth, culture,
+   data-gg, and mafra external endpoint batches add `25` verified landing-page
+   checks, bringing checked runtime evidence to `1303`, verified results to
+   `94`, and restoring the `10%` release-readiness target.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,
