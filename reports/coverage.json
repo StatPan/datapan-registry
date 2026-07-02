@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T22:51:15Z",
+  "generated_at": "2026-07-02T23:04:35Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 13284,
-    "callable_operations": 13142,
+    "operations": 13523,
+    "callable_operations": 13381,
     "callable_operation_percent": 98.9,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 1674,
-    "registered_adapter_operations": 1664,
+    "external_endpoint_operations": 1913,
+    "registered_adapter_operations": 1903,
     "missing_adapter_operations": 29,
-    "external_adapter_coverage_percent": 98.3,
-    "approval_required_operations": 4646,
+    "external_adapter_coverage_percent": 98.5,
+    "approval_required_operations": 4672,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 142,
-    "registered_adapter_hosts": 45,
+    "registered_adapter_hosts": 46,
     "missing_adapter_hosts": 11,
-    "adapter_count": 41,
+    "adapter_count": 42,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-02T22:51:11Z",
-    "total": 1333,
+    "generated_at": "2026-07-02T23:04:31Z",
+    "total": 1358,
     "verified": 114,
-    "failed": 87,
+    "failed": 112,
     "skipped": 1132,
     "unknown": 0,
-    "verified_percent": 8.6,
+    "verified_percent": 8.4,
     "evidence_operation_percent": 10
   },
   "route_evidence": {
@@ -228,14 +228,30 @@
           "external_endpoint"
         ],
         "adapter_status": "adapter",
-        "specs": 358,
-        "operations": 358,
-        "external_endpoint_operations": 358,
-        "approval_required_operations": 358,
+        "specs": 366,
+        "operations": 366,
+        "external_endpoint_operations": 366,
+        "approval_required_operations": 366,
         "sample_ids": [
           "15134001",
           "15138868",
           "15138870"
+        ]
+      },
+      {
+        "host": "www.lofin365.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "adapter",
+        "specs": 87,
+        "operations": 231,
+        "external_endpoint_operations": 231,
+        "approval_required_operations": 18,
+        "sample_ids": [
+          "15056639",
+          "15057096",
+          "15057340"
         ]
       },
       {
@@ -360,32 +376,14 @@
           "15008884",
           "15008887"
         ]
-      },
-      {
-        "host": "www.eshare.go.kr",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "adapter",
-        "specs": 12,
-        "operations": 36,
-        "external_endpoint_operations": 36,
-        "external_guide_specs": 12,
-        "approval_required_operations": 36,
-        "sample_ids": [
-          "15076179",
-          "15076186",
-          "15076189"
-        ]
       }
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-02T22:51:15Z",
+    "generated_at": "2026-07-02T23:04:35Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 41,
-    "host_count": 46,
+    "adapter_count": 42,
+    "host_count": 47,
     "adapters": [
       {
         "name": "airport",
@@ -631,6 +629,16 @@
         ]
       },
       {
+        "name": "lofin365",
+        "status": "registered",
+        "hosts": [
+          "www.lofin365.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "mafra",
         "status": "registered",
         "hosts": [
@@ -829,8 +837,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 41,
-      "verification_capable_adapters": 41,
+      "adapter_count": 42,
+      "verification_capable_adapters": 42,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

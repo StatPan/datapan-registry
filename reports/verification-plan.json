@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T22:51:28Z",
+  "generated_at": "2026-07-02T23:04:48Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,13 +7,13 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 13284,
-    "evidence_total": 1333,
+    "operations": 13523,
+    "evidence_total": 1358,
     "uncovered_gateway_candidates": 10774,
-    "uncovered_adapter_candidates": 976,
+    "uncovered_adapter_candidates": 1190,
     "missing_adapter_hosts": 11,
-    "planned_batches": 8,
-    "planned_operations": 72
+    "planned_batches": 9,
+    "planned_operations": 82
   },
   "batches": [
     {
@@ -46,6 +46,16 @@
       "output": ".datapan/verification/eshare-next.json"
     },
     {
+      "label": "lofin365",
+      "provider": "lofin365",
+      "kind": "external_endpoint",
+      "candidates": 231,
+      "uncovered_candidates": 206,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider lofin365 --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/lofin365-next.json --json",
+      "output": ".datapan/verification/lofin365-next.json"
+    },
+    {
       "label": "nongsaro",
       "provider": "nongsaro",
       "kind": "external_endpoint",
@@ -59,8 +69,8 @@
       "label": "safetydata",
       "provider": "safetydata",
       "kind": "external_endpoint",
-      "candidates": 358,
-      "uncovered_candidates": 348,
+      "candidates": 366,
+      "uncovered_candidates": 356,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider safetydata --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/safetydata-next.json --json",
       "output": ".datapan/verification/safetydata-next.json"

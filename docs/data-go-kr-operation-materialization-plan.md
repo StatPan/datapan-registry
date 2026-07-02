@@ -2,13 +2,13 @@
 
 This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns APIs without operation mappings into bounded institution work queues. It is separate from runtime evidence reactivation: these APIs need operation metadata materialized before they can enter verification batches.
 
-- Generated at: `2026-07-02T22:51:13Z`
+- Generated at: `2026-07-02T23:04:33Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `7885` (`65.4%`)
-- APIs without operation mapping: `4175`
+- APIs with operation mapping: `7980` (`66.2%`)
+- APIs without operation mapping: `4080`
 - Planned institutions: `10`
-- Planned APIs: `645`
+- Planned APIs: `618`
 - First queue: `행정안전부`
 - Batch size: `100`
 
@@ -16,7 +16,7 @@ This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns
 
 | Rank | Institution | APIs | Covered APIs | Uncovered APIs | API Coverage | Planned APIs | Remaining After Batch |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 행정안전부 | 1252 | 1084 | 168 | 86.6% | 100 | 68 |
+| 1 | 행정안전부 | 1252 | 1179 | 73 | 94.2% | 73 | 0 |
 | 2 | 경기도 | 840 | 199 | 641 | 23.7% | 100 | 541 |
 | 3 | 국토교통부 | 393 | 127 | 266 | 32.3% | 100 | 166 |
 | 4 | 식품의약품안전처 | 392 | 272 | 120 | 69.4% | 100 | 20 |
@@ -35,7 +35,7 @@ This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns
 | 행정안전부 | 15101888 | 행정안전부_생활안전지도 유아시설 | 교육 | WMS | 자동승인 | 심의승인 | 2025-11-19 |
 | 행정안전부 | 15151925 | 행정안전부_동물의약품별잔류허용기준 | 식품건강 | JSON | 자동승인 | 심의승인 | 2025-11-11 |
 | 행정안전부 | 15150280 | 행정안전부_가축전염병발생통계 | 농축수산 | JSON | 자동승인 | 심의승인 | 2025-09-23 |
-| 행정안전부 | 15139651 | 행정안전부_공유플랫폼_도로시설 | 재난안전 | JSON | 자동승인 | 심의승인 | 2025-05-26 |
+| 행정안전부 | 15096712 | 행정안전부_행정안전부_실시간 상세주소정보 조회(검색API) | 과학기술 | JSON+XML | 자동승인 | 심의승인 | 2025-05-26 |
 | 경기도 | 15059050 | 경기도_노인 휴양ㆍ복합복지시설 현황 | 사회복지 | XML | 자동승인 | 자동승인 | 2025-09-25 |
 | 경기도 | 15058592 | 경기도_재가 노인 복지시설 현황 | 사회복지 | XML | 자동승인 | 자동승인 | 2025-09-25 |
 | 경기도 | 15058470 | 경기도_급식비 집행 실적_부담 주체 현황 | 교육 | XML | 자동승인 | 자동승인 | 2025-09-25 |

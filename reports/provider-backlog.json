@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-02T22:51:13Z",
+  "generated_at": "2026-07-02T23:04:33Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 195,
+  "filtered_count": 197,
   "summary": {
-    "hosts": 195,
+    "hosts": 197,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 56,
-    "external_guide_hosts": 159,
-    "registered_adapter_hosts": 45,
-    "operation_hosts": 58,
-    "guide_only_hosts": 137,
+    "external_endpoint_hosts": 57,
+    "external_guide_hosts": 160,
+    "registered_adapter_hosts": 46,
+    "operation_hosts": 59,
+    "guide_only_hosts": 138,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 142,
-    "approval_required_operations": 4646,
+    "approval_required_operations": 4672,
     "malformed_source_url_count": 627
   },
   "providers": [
@@ -196,14 +196,30 @@
         "external_endpoint"
       ],
       "adapter_status": "adapter",
-      "specs": 358,
-      "operations": 358,
-      "external_endpoint_operations": 358,
-      "approval_required_operations": 358,
+      "specs": 366,
+      "operations": 366,
+      "external_endpoint_operations": 366,
+      "approval_required_operations": 366,
       "sample_ids": [
         "15134001",
         "15138868",
         "15138870"
+      ]
+    },
+    {
+      "host": "www.lofin365.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 87,
+      "operations": 231,
+      "external_endpoint_operations": 231,
+      "approval_required_operations": 18,
+      "sample_ids": [
+        "15056639",
+        "15057096",
+        "15057340"
       ]
     },
     {
@@ -1901,6 +1917,20 @@
       "sample_ids": [
         "15057479",
         "15058530"
+      ]
+    },
+    {
+      "host": "lofin.mois.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 2,
+      "operations": 0,
+      "external_guide_specs": 2,
+      "sample_ids": [
+        "15059434",
+        "3043181"
       ]
     },
     {

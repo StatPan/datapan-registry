@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-02T22:51:13Z",
+  "generated_at": "2026-07-02T23:04:33Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 13284,
-    "runtime_evidence": 1333,
+    "operations": 13523,
+    "runtime_evidence": 1358,
     "runtime_evidence_percent": 10.0,
-    "callable_operations": 13142,
-    "external_endpoint_operations": 1674,
-    "registered_adapter_operations": 1664,
+    "callable_operations": 13381,
+    "external_endpoint_operations": 1913,
+    "registered_adapter_operations": 1903,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 1674
+      "count": 1913
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 1664
+      "count": 1903
     },
     {
       "key": "builtin",
@@ -68,16 +68,16 @@
   ],
   "top_source_categories": [
     {
+      "category": "공공행정",
+      "operation_count": 1542
+    },
+    {
       "category": "교통물류",
       "operation_count": 1423
     },
     {
       "category": "농축수산",
       "operation_count": 1364
-    },
-    {
-      "category": "공공행정",
-      "operation_count": 1326
     },
     {
       "category": "문화관광",
@@ -93,7 +93,7 @@
     },
     {
       "category": "재정금융",
-      "operation_count": 918
+      "operation_count": 933
     },
     {
       "category": "환경기상",
@@ -101,7 +101,7 @@
     },
     {
       "category": "재난안전",
-      "operation_count": 776
+      "operation_count": 784
     },
     {
       "category": "보건의료",
@@ -148,11 +148,20 @@
     },
     {
       "host": "www.safetydata.go.kr",
-      "operation_count": 358,
+      "operation_count": 366,
       "adapter": "safetydata",
       "adapter_status": "registered",
       "capabilities": [
         "call",
+        "verification"
+      ]
+    },
+    {
+      "host": "www.lofin365.go.kr",
+      "operation_count": 231,
+      "adapter": "lofin365",
+      "adapter_status": "registered",
+      "capabilities": [
         "verification"
       ]
     },
@@ -307,31 +316,21 @@
         "call",
         "verification"
       ]
-    },
-    {
-      "host": "www.korad.or.kr",
-      "operation_count": 15,
-      "adapter": "korad",
-      "adapter_status": "registered",
-      "capabilities": [
-        "call",
-        "verification"
-      ]
     }
   ],
   "institutions": [
     {
       "organization": "행정안전부",
       "api_count": 1252,
-      "operation_api_count": 1084,
-      "operation_count": 1375,
-      "runtime_evidence_count": 30,
-      "runtime_evidence_percent": 2.2,
+      "operation_api_count": 1179,
+      "operation_count": 1614,
+      "runtime_evidence_count": 55,
+      "runtime_evidence_percent": 3.4,
       "verified": 20,
-      "failed": 0,
+      "failed": 25,
       "skipped": 10,
       "unknown": 0,
-      "approval_required_operations": 536,
+      "approval_required_operations": 562,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
@@ -340,7 +339,7 @@
         },
         {
           "key": "external_endpoint",
-          "count": 501
+          "count": 740
         },
         {
           "key": "malformed_endpoint",
@@ -350,7 +349,7 @@
       "by_adapter_status": [
         {
           "key": "adapter",
-          "count": 501
+          "count": 740
         },
         {
           "key": "builtin",
@@ -364,11 +363,11 @@
       "top_categories": [
         {
           "category": "공공행정",
-          "operation_count": 317
+          "operation_count": 533
         },
         {
           "category": "재난안전",
-          "operation_count": 305
+          "operation_count": 313
         },
         {
           "category": "문화관광",
@@ -390,11 +389,20 @@
         },
         {
           "host": "www.safetydata.go.kr",
-          "operation_count": 358,
+          "operation_count": 366,
           "adapter": "safetydata",
           "adapter_status": "registered",
           "capabilities": [
             "call",
+            "verification"
+          ]
+        },
+        {
+          "host": "www.lofin365.go.kr",
+          "operation_count": 231,
+          "adapter": "lofin365",
+          "adapter_status": "registered",
+          "capabilities": [
             "verification"
           ]
         },
@@ -411,15 +419,6 @@
           "host": "www.eshare.go.kr",
           "operation_count": 36,
           "adapter": "eshare",
-          "adapter_status": "registered",
-          "capabilities": [
-            "verification"
-          ]
-        },
-        {
-          "host": "data.gg.go.kr",
-          "operation_count": 6,
-          "adapter": "data-gg",
           "adapter_status": "registered",
           "capabilities": [
             "verification"
