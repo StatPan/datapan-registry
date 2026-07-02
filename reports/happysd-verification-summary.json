@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-07-02T18:58:23Z",
+  "source": "reports\\happysd-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 2,
+    "verified": 2,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 2,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "happysd",
+        "count": 2,
+        "provider": "happysd"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "www.happysd.or.kr",
+        "count": 2,
+        "host": "www.happysd.or.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 2,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

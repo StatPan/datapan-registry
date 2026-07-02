@@ -14,19 +14,19 @@ re-importing the upstream data.go.kr catalog every time.
 - Operations: `12253`
 - Callable operations: `12111` (`98.8%`)
 - Latest release: `v2026.06.25.24`
-- Registered external adapters: `airport`, `andong`, `data-gg`, `ekape`,
-  `emuseum`, `epost`, `folk`, `forest`, `garak`, `gblib`, `geoje`, `gwanak`,
-  `humetro`, `itfind`, `jeju`, `jeonju`, `korad`, `kpx`, `lh-ebid`, `mafra`,
-  `myhome`, `naqs`, `nfqs`, `nongsaro`, `oneclick-law`, `pqis`, `q-net`,
-  `seoul-bus`, `seoul-open-data`, `sisul`, `tour`, `uiryeong`, `ulsan`,
-  `work24`
-- External adapter coverage: `627` registered-adapter operations out of `643`
-  external endpoint operations (`94.7%`)
-- Missing external adapter hosts: `15`
+- Registered external adapters: `airport`, `andong`, `culture`, `data-gg`,
+  `ekape`, `emuseum`, `epost`, `folk`, `forest`, `garak`, `gblib`, `geoje`,
+  `gwanak`, `happysd`, `humetro`, `itfind`, `jeju`, `jeonju`, `korad`, `kpx`,
+  `lh-ebid`, `mafra`, `myhome`, `naqs`, `nfqs`, `nongsaro`, `oneclick-law`,
+  `pqis`, `q-net`, `seoul-bus`, `seoul-open-data`, `sisul`, `tour`,
+  `uiryeong`, `ulsan`, `work24`
+- External adapter coverage: `631` registered-adapter operations out of `643`
+  external endpoint operations (`95.3%`)
+- Missing external adapter hosts: `13`
 - Provider split readiness: `ready`
-  (`34` adapters, `34` verification-capable, `22` call-capable)
-- Runtime verification evidence: `1272` bounded checks merged into
-  `reports/latest-verification.json` (`63` verified, `87` failed, `1122`
+  (`36` adapters, `36` verification-capable, `22` call-capable)
+- Runtime verification evidence: `1276` bounded checks merged into
+  `reports/latest-verification.json` (`67` verified, `87` failed, `1122`
   skipped)
 - Runtime evidence growth target: `10.0%` checked evidence is above the
   unrounded `10%` release target; `0` additional records are required for this
@@ -38,11 +38,11 @@ re-importing the upstream data.go.kr catalog every time.
   `reports/unadapted-external-probe.json` (`8` HTTP 2xx adapter candidates,
   `14` HTTP 404 dead-route candidates, `15` timeout/DNS/request transient
   failures)
-- Route disposition: `35` missing external routes in
+- Route disposition: `31` missing external routes in
   `reports/route-disposition.json` (`14` dead-route candidates, `15`
-  transient failures, `6` remaining adapter candidates)
+  transient failures, `2` remaining adapter candidates)
 - Coverage route evidence: `reports/coverage.json` now carries the same route
-  evidence and reports `6` evidence-adjusted adapter candidates
+  evidence and reports `2` evidence-adjusted adapter candidates
 - Release manifest: `manifest.json`
 - Registry data: `data/data-go-kr.registry.json`
 - Provider index: `data/provider-index.json`
@@ -111,6 +111,8 @@ reports/
   andong-verification-summary.json
   airport-verification.json
   airport-verification-summary.json
+  culture-verification.json
+  culture-verification-summary.json
   data-gg-verification.json
   data-gg-verification-summary.json
   ekape-verification.json
@@ -125,6 +127,8 @@ reports/
   forest-verification-summary.json
   garak-verification.json
   garak-verification-summary.json
+  happysd-verification.json
+  happysd-verification-summary.json
   gblib-verification.json
   gblib-verification-summary.json
   geoje-verification.json

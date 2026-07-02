@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-02T18:39:23Z",
+  "generated_at": "2026-07-02T18:58:34Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -14,13 +14,13 @@
     "institutions": 411,
     "apis": 12060,
     "operations": 12253,
-    "runtime_evidence": 1272,
+    "runtime_evidence": 1276,
     "runtime_evidence_percent": 10.4,
     "callable_operations": 12111,
     "external_endpoint_operations": 643,
-    "registered_adapter_operations": 627,
-    "missing_adapter_operations": 35,
-    "missing_adapter_hosts": 15
+    "registered_adapter_operations": 631,
+    "missing_adapter_operations": 31,
+    "missing_adapter_hosts": 13
   },
   "by_dependency_class": [
     {
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 627
+      "count": 631
     },
     {
       "key": "builtin",
@@ -59,7 +59,7 @@
     },
     {
       "key": "missing",
-      "count": 35
+      "count": 31
     },
     {
       "key": "not_applicable",
@@ -12511,9 +12511,9 @@
       "api_count": 26,
       "operation_api_count": 1,
       "operation_count": 2,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
+      "runtime_evidence_count": 2,
+      "runtime_evidence_percent": 100.0,
+      "verified": 2,
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
@@ -12527,7 +12527,7 @@
       ],
       "by_adapter_status": [
         {
-          "key": "missing",
+          "key": "adapter",
           "count": 2
         }
       ],
@@ -12540,7 +12540,12 @@
       "top_hosts": [
         {
           "host": "www.culture.go.kr",
-          "operation_count": 2
+          "operation_count": 2,
+          "adapter": "culture",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },
@@ -12587,9 +12592,9 @@
       "api_count": 4,
       "operation_api_count": 2,
       "operation_count": 2,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
+      "runtime_evidence_count": 2,
+      "runtime_evidence_percent": 100.0,
+      "verified": 2,
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
@@ -12603,7 +12608,7 @@
       ],
       "by_adapter_status": [
         {
-          "key": "missing",
+          "key": "adapter",
           "count": 2
         }
       ],
@@ -12616,7 +12621,12 @@
       "top_hosts": [
         {
           "host": "www.happysd.or.kr",
-          "operation_count": 2
+          "operation_count": 2,
+          "adapter": "happysd",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },

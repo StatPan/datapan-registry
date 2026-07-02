@@ -159,6 +159,19 @@ def build_report(
     candidate_institutions = sorted(
         {str(route.get("organization") or "") for route in candidate_routes if route.get("organization")}
     )
+    next_steps = [
+        "Create host-scoped adapter implementation tickets from the hosts array in priority order.",
+        "Refresh route probes before implementing any host whose evidence changes away from adapter_candidate.",
+    ]
+    if hosts:
+        first_host = hosts[0]
+        next_steps.insert(
+            1,
+            (
+                f"Start with {first_host.get('host')} because it currently owns the largest "
+                f"candidate-operation count ({first_host.get('candidate_operations')})."
+            ),
+        )
     return {
         "schema_version": SCHEMA_VERSION,
         "generated_at": route_disposition.get("generated_at"),
@@ -214,11 +227,7 @@ def build_report(
                 route for route in routes if route.get("disposition") == "transient_failure"
             ],
         },
-        "next": [
-            "Create host-scoped adapter implementation tickets from the hosts array in priority order.",
-            "Start with data.gg.go.kr because it currently owns the largest candidate-operation count.",
-            "Refresh route probes before implementing any host whose evidence changes away from adapter_candidate.",
-        ],
+        "next": next_steps,
     }
 
 

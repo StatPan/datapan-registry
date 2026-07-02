@@ -95,7 +95,7 @@ Current strengths:
   evidence against the 10% target and validates the next planned verification
   batches.
 - `reports/data-go-kr/coverage-backlog.json` tracks `4,850` data.go.kr APIs
-  without operation mappings, `6,635` operation-mapped APIs without runtime
+  without operation mappings, `6,612` operation-mapped APIs without runtime
   evidence, and `54` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
@@ -182,11 +182,12 @@ Current gaps:
   checks, Gira #103 adds `3` verified gwanak landing-page checks, and Gira
   #105 adds `3` verified mafra landing-page checks, Gira #107 adds `3`
   verified garak landing-page checks, and Gira #109 adds `3` verified work24
-  landing-page checks, and Gira #111 adds `2` verified seoul-open-data
-  landing-page checks, bringing runtime evidence to `1272`. Most evidence is
-  still skipped boundary evidence, not proof that those operations are callable.
+  landing-page checks, Gira #111 adds `2` verified seoul-open-data landing-page
+  checks, and Gira #113 adds `4` verified culture/happysd landing-page checks,
+  bringing runtime evidence to `1276`. Most evidence is still skipped boundary
+  evidence, not proof that those operations are callable.
 - API operation coverage remains incomplete: `7,210` of `12,060` APIs have
-  operation mappings (`59.8%`), leaving `4,850` APIs to materialize and `6,615`
+  operation mappings (`59.8%`), leaving `4,850` APIs to materialize and `6,612`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report
@@ -454,7 +455,10 @@ Use this order unless a production failure changes priority:
     `data.mafra.go.kr`, Gira #107 registers and verifies `www.garak.co.kr`,
     Gira #109 registers and verifies `www.work24.go.kr`, and Gira #111
     registers and verifies `data.seoul.go.kr`, reducing the active adapter
-    backlog to `6` operations across `4` host-scoped queues.
+    backlog to `6` operations across `4` host-scoped queues. Gira #113
+    registers and verifies `www.culture.go.kr` and `www.happysd.or.kr`,
+    reducing the active adapter backlog to `2` operations across `2`
+    host-scoped queues.
 
 ## Measurement Rules
 

@@ -1,12 +1,13 @@
 {
-  "generated_at": "2026-07-02T18:28:47Z",
+  "generated_at": "2026-07-02T18:58:24Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
+  "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1272,
-    "verified": 63,
+    "total": 1276,
+    "verified": 67,
     "failed": 87,
     "skipped": 1122,
     "unknown": 0
@@ -25,7 +26,7 @@
       },
       {
         "key": "verified",
-        "count": 63,
+        "count": 67,
         "status": "verified"
       }
     ],
@@ -448,6 +449,16 @@
         "provider": "work24"
       },
       {
+        "key": "culture",
+        "count": 2,
+        "provider": "culture"
+      },
+      {
+        "key": "happysd",
+        "count": 2,
+        "provider": "happysd"
+      },
+      {
         "key": "seoul-open-data",
         "count": 2,
         "provider": "seoul-open-data"
@@ -645,6 +656,16 @@
         "host": "data.seoul.go.kr"
       },
       {
+        "key": "www.culture.go.kr",
+        "count": 2,
+        "host": "www.culture.go.kr"
+      },
+      {
+        "key": "www.happysd.or.kr",
+        "count": 2,
+        "host": "www.happysd.or.kr"
+      },
+      {
         "key": "data.myhome.go.kr:443",
         "count": 1,
         "host": "data.myhome.go.kr:443"
@@ -663,7 +684,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 608,
+        "count": 612,
         "kind": "external_endpoint"
       },
       {
