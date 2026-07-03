@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-02T23:50:05Z",
+  "generated_at": "2026-07-03T13:07:56Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 49,
-  "host_count": 55,
+  "adapter_count": 50,
+  "host_count": 56,
   "adapters": [
     {
       "name": "airport",
@@ -40,6 +40,16 @@
       "status": "registered",
       "hosts": [
         "data.gg.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "dgfca",
+      "status": "registered",
+      "hosts": [
+        "dgfca.or.kr"
       ],
       "capabilities": [
         "verification"
@@ -527,8 +537,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 49,
-    "verification_capable_adapters": 49,
+    "adapter_count": 50,
+    "verification_capable_adapters": 50,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T23:50:05Z",
+  "generated_at": "2026-07-03T13:07:56Z",
   "provider": "data.go.kr",
   "old": "C:\\Users\\statp\\dev\\datapan-registry\\.datapan\\previous\\data-go-kr.registry.json",
   "new": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 968,
-    "stable": 11092
+    "changed": 1068,
+    "stable": 10992
   },
   "added": [],
   "removed": [],
@@ -559,6 +559,16 @@
       "new_digest": "9efea2665818505171ee4645bd08bcd23781cb517c039ccc22cbb6d96c9d99c4"
     },
     {
+      "id": "15056524",
+      "old_title": "경기도_수업일수 및 수업시수 현황(특)",
+      "new_title": "경기도_수업일수 및 수업시수 현황(특)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a5b2c71753d9fd72ea518b435e35b5205835a2f2e0f5356afea390e5ac0fd899",
+      "new_digest": "5e9bfdf4300632f93a613952128d6861d881190e4b383d27bae9d464f93dbf9d"
+    },
+    {
       "id": "15056526",
       "old_title": "경기도_골프 연습장업체 현황",
       "new_title": "경기도_골프 연습장업체 현황",
@@ -669,6 +679,16 @@
       "new_digest": "14b156415aad6f8189bd3e82aa94116c75b7d6084ab4a441e2b070ce4d1a8923"
     },
     {
+      "id": "15056609",
+      "old_title": "경기도_가축 거래상 업체 현황",
+      "new_title": "경기도_가축 거래상 업체 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c940456302bf535075b7dc0102ec4c81cdc41bd6dcb353c055469f46bfdb45fb",
+      "new_digest": "75c1490b201a56967035bf78fa7a54061841b09695b68033d2dd5e65fe46eb1b"
+    },
+    {
       "id": "15056610",
       "old_title": "경기도_남한산성 탐방객조사 결과 집계 현황",
       "new_title": "경기도_남한산성 탐방객조사 결과 집계 현황",
@@ -697,6 +717,16 @@
       ],
       "old_digest": "4fdae0c4995d24cb5ee1d3259401f4bd1570e3ea7c80973898d97f9e8744817c",
       "new_digest": "ecca23b8d5486211ac0b84978af1b134b00eba71459d25d02d1cf8d60c82d38c"
+    },
+    {
+      "id": "15056626",
+      "old_title": "경기도_후계농업인 집계 현황",
+      "new_title": "경기도_후계농업인 집계 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "652e53decbe51db5bf58e9a01b5a69dd460d977aac626daafc5d58e980645d66",
+      "new_digest": "8aa0ab90267fb625a1c537dd2878ca9eaf7607879e2f644a055eefa1b4b89b3a"
     },
     {
       "id": "15056639",
@@ -759,6 +789,16 @@
       "new_digest": "4ab16866697931a53701a7b4c600ae6a1697da7c2ef03dda63a764977e30dd1e"
     },
     {
+      "id": "15056696",
+      "old_title": "경기도_한우농가 지도관리 현황",
+      "new_title": "경기도_한우농가 지도관리 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "83665d388768917a434fe67780595dcd36f6b00f0e96a98c425b84a860cacc6b",
+      "new_digest": "4659398c909309bb65a733fedfbc59a0aa7dd5287cec041e5efe9f2ca13b847e"
+    },
+    {
       "id": "15056707",
       "old_title": "경기도_학년별 일반학급 배치 학생수",
       "new_title": "경기도_학년별 일반학급 배치 학생수",
@@ -777,6 +817,16 @@
       ],
       "old_digest": "c5303104993b799471b56e3f257aed0cacad1df0a48834dc60deb69c4575eed7",
       "new_digest": "0625a9532fdfb35fccb1dec1bc06a380ac8f0f638e1e02861df02f34b7ee1dc1"
+    },
+    {
+      "id": "15056732",
+      "old_title": "경기도_상수원 보호구역 현황",
+      "new_title": "경기도_상수원 보호구역 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b7e7d7bf73d8214cf37585b9df67481b3308addfc4fca8c065ef3c0b028ea40b",
+      "new_digest": "28e73b6a6f8d03dc3175d9b72a854e59ea91ca3f894b2ea8b1e829c9dec09751"
     },
     {
       "id": "15056734",
@@ -829,6 +879,16 @@
       "new_digest": "21234511de7e4cb677c5d1b2752182477165edfb2f8e7e507a3e4a0013ac2053"
     },
     {
+      "id": "15056751",
+      "old_title": "경기도_숙박업체 현황(일반-여관업)",
+      "new_title": "경기도_숙박업체 현황(일반-여관업)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5688311759013ee4c7ca1ddb630a614399842507004836c3eaf8c409e2da9e62",
+      "new_digest": "00bfb0a0f921056341787eec1a0925ab98e69f4ec4e8aa67d9aab4b44caf0374"
+    },
+    {
       "id": "15056757",
       "old_title": "경기도_중증장애인자립생활지원센터 현황",
       "new_title": "경기도_중증장애인자립생활지원센터 현황",
@@ -867,6 +927,16 @@
       ],
       "old_digest": "0c94f954eafc6c025f358b10d10babdf5f19af3c6562abc44e46e991e061a9e4",
       "new_digest": "ea447dd724c853b02d0e653f37f065d462c915559bb5c96d3c4c6035e8456683"
+    },
+    {
+      "id": "15056771",
+      "old_title": "경기도_치매 상담센터 현황",
+      "new_title": "경기도_치매 상담센터 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e43faf4a641aa52db119aac10da04d99adeaa0d461a445b267ef3997a049bb15",
+      "new_digest": "ddb260864a0108dd87fd9890e01c2754b7f093f955818b6356984a3ec102776b"
     },
     {
       "id": "15056781",
@@ -917,6 +987,16 @@
       ],
       "old_digest": "5970ef98db2602748e043db0f5824bfa9b2017ff3e39b25c9095bc1ae5d4e1cc",
       "new_digest": "2c3557bccabda9bbfca6204b9192e738bdb4904d5c21926a91b32288da7e8b17"
+    },
+    {
+      "id": "15056859",
+      "old_title": "경기도_전문병원급산부인과 현황",
+      "new_title": "경기도_전문병원급산부인과 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c75c12bd969ec87c87234e8766fb162e92c71e0b134b456e24b23cced671fc94",
+      "new_digest": "0d4c671da614bec29d204d9e0931183ab632945d7fab430f79d3b02348abdf40"
     },
     {
       "id": "15056862",
@@ -999,6 +1079,16 @@
       "new_digest": "367a42aca0a294eda4910fbc7cbef45d8712115f3633663f9d640433cfd3c254"
     },
     {
+      "id": "15056917",
+      "old_title": "경기도_전문병원 현황",
+      "new_title": "경기도_전문병원 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ec299204b729a2677412bd0d32ed62292356e568db98c31b77cda26963d4e279",
+      "new_digest": "654676cccbef143263c3f2fc93eb96bc377c661c02804738584e74a234702272"
+    },
+    {
       "id": "15056921",
       "old_title": "경기도_중도탈락 학생 현황(대학원,대학원대학)",
       "new_title": "경기도_중도탈락 학생 현황(대학원,대학원대학)",
@@ -1007,6 +1097,16 @@
       ],
       "old_digest": "81db727cbcbae347bc4e31bd07f87b22a02f9f0d20ddea9345b73ffe157f9cbd",
       "new_digest": "349cb5a53c70d14f47fb777bc7d11b23c404a102d50ff35c3b64d2a33b3b5239"
+    },
+    {
+      "id": "15056928",
+      "old_title": "경기도_농지면적 및 농업진흥 지역면적 현황",
+      "new_title": "경기도_농지면적 및 농업진흥 지역면적 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "52cf81dbe696d26d26642ec1d2ca5095f55a6eceb9774eaad3da7ce1b11dc275",
+      "new_digest": "c0d26b4c87d984a5c24d5cc822458d02ebb3d58d87c7ee8fac3052e32cc6cdfc"
     },
     {
       "id": "15056937",
@@ -1119,6 +1219,26 @@
       "new_digest": "37f071d4c3695713fb51860448ff70f09358264d92cb35b91ee807aeba468076"
     },
     {
+      "id": "15057002",
+      "old_title": "경기도_학교도서관 현황(이용현황)",
+      "new_title": "경기도_학교도서관 현황(이용현황)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "edfab825e97741ad587eb0e4f0058daf5f075a95aa6f9026be1d6a484d0bbd3c",
+      "new_digest": "27df706068498b948b9ea4299fb36e039fe4aa28376d001d99f349157e7be379"
+    },
+    {
+      "id": "15057003",
+      "old_title": "경기도_병원평가정보(질병-의료급여정신과) 현황",
+      "new_title": "경기도_병원평가정보(질병-의료급여정신과) 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "05ed1ff1ba8d7fbb45ef99f2b011e2c3553952f6b6a1215fb3e1eff86e8d0f89",
+      "new_digest": "38f14a29a4492e4a3dcf2ec38d4ccdab05c67988bc8d36177dd242b7dce1de03"
+    },
+    {
       "id": "15057004",
       "old_title": "경기도_학원 및 교습소 현황",
       "new_title": "경기도_학원 및 교습소 현황",
@@ -1127,6 +1247,16 @@
       ],
       "old_digest": "05dd94c61ac57449879f606d2e401981ac94d7358b951930255b2e097069d299",
       "new_digest": "003dcbe812683724cc7060dc149c667eb255a3ee68578183da493ddced2cf62e"
+    },
+    {
+      "id": "15057013",
+      "old_title": "경기도_의료기관 세탁물 처리업체 현황",
+      "new_title": "경기도_의료기관 세탁물 처리업체 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0158e715523ddaedd34e356860b63aa9253554ceeabdd748ff429a64bfcae5b4",
+      "new_digest": "c7822f45912e89a507d183e0d94d1e35d4b65dd3e769c67a1ff9bf2368c7ce43"
     },
     {
       "id": "15057016",
@@ -1179,6 +1309,16 @@
       "new_digest": "9856432fe05dda63646f8faec13313e2db3a113b2b8fb0d53217c5f535b2bc1c"
     },
     {
+      "id": "15057070",
+      "old_title": "경기도_입학생 현황(특)",
+      "new_title": "경기도_입학생 현황(특)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "08334eba48ee66566a221c70668bb9a2c6489778b6ab73b4809df0d33d50e253",
+      "new_digest": "89aea0a9d9131ef7cb2e908d0c721c1512fa8731594a48d387f769f0ba80f5e3"
+    },
+    {
       "id": "15057078",
       "old_title": "행정안전부_지방재정365_통합재정수지비율(결산)",
       "new_title": "행정안전부_지방재정365_통합재정수지비율(결산)",
@@ -1207,6 +1347,16 @@
       ],
       "old_digest": "ca8853b72dbc62a2b717456b3433cbe431a385ed6fa74b12bce29ac96675ca79",
       "new_digest": "8ba89299c5150644659053cea75cd5aab84dc21f511e28c622f30803545cf8fb"
+    },
+    {
+      "id": "15057095",
+      "old_title": "경기도_요양 보호사 교육기관 현황",
+      "new_title": "경기도_요양 보호사 교육기관 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "353e67027047c48d2d583dfa23547bb6b8e13158264431ea7282fd2c544a2bc1",
+      "new_digest": "283464fd1999a1b3774d01c5b81edbe76a343cc27171532dd8efbeb2290aed8f"
     },
     {
       "id": "15057096",
@@ -1257,6 +1407,16 @@
       ],
       "old_digest": "a8cefe168ed638162d1c4b9fbf7b6794976c85b2bcaf9d4dce69e19226a9831b",
       "new_digest": "a2c916094688bc405d9f34672449f102317f69783cdeef462d1a3c354aaff8b4"
+    },
+    {
+      "id": "15057121",
+      "old_title": "경기도_중도탈락 학생 현황(대학,전문대학)",
+      "new_title": "경기도_중도탈락 학생 현황(대학,전문대학)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7435e974f68d2f46699dc1c96e2c263516850dcdf53cbd0a6e343fb5e0e5257d",
+      "new_digest": "a070867f04dc402ca8d14451531c4fa0a0d3f4667fb99dbb019471b895708421"
     },
     {
       "id": "15057122",
@@ -1329,6 +1489,16 @@
       "new_digest": "a670671c4c0902d395346dd70a12d050ce8d1a06c36c69aaf340ce0076da0caf"
     },
     {
+      "id": "15057186",
+      "old_title": "경기도_장학금 수혜 현황",
+      "new_title": "경기도_장학금 수혜 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c6ed4a80029fcc2dfeac9cc54cace2d072ba068d34944ef5c7778be0f372cbd8",
+      "new_digest": "c047efb1b941ded684e89fa1601ea5b7f9fda3fb36a0a753b21499ce0ae8ca71"
+    },
+    {
       "id": "15057187",
       "old_title": "행정안전부_지방재정365_성질별 단체별 세출결산",
       "new_title": "행정안전부_지방재정365_성질별 단체별 세출결산",
@@ -1347,6 +1517,16 @@
       ],
       "old_digest": "16b87031a07c362372680efb632c5ef2f5ff20f0ecda2d2c85be95b604377abb",
       "new_digest": "cbfd43c4ec99d8b0a308b57de6da8d46984f75f8859c6dd02e7f9a204f2e9903"
+    },
+    {
+      "id": "15057189",
+      "old_title": "경기도_유해화학물질사고현황",
+      "new_title": "경기도_유해화학물질사고현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4c5735bb8ca40a921a51ccde5a17067b83406d3a6b99f5e69ff808cc2e61bda3",
+      "new_digest": "74cedd7d0be71855953eae0f9011bb20b4084fd660f6342e3739a28e9a5b65e1"
     },
     {
       "id": "15057198",
@@ -1377,6 +1557,16 @@
       ],
       "old_digest": "10033b3a161118ced34d0ca0078f098f03f245c95ed5c67671d25b4518b62774",
       "new_digest": "052b2224d707c9342e49897a795c54edd2de72181a06fd456a8435214b346bdd"
+    },
+    {
+      "id": "15057218",
+      "old_title": "경기도_기회균형 선발 결과 현황",
+      "new_title": "경기도_기회균형 선발 결과 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5f93e087736464fff26f2073155420e5798cddf0659d77ecc4a1234203d5fd2d",
+      "new_digest": "63a65941a76ef027e6f60d0ba7f5464857690290a00af12ae1d0fadc4a0ce28a"
     },
     {
       "id": "15057223",
@@ -1429,6 +1619,16 @@
       "new_digest": "94e04d1a40a004a22c4f3b4aaef7906773376cc23de3a3b890be8b22263ca90a"
     },
     {
+      "id": "15057251",
+      "old_title": "경기도_장애인택시운전원 유형별 취업 현황",
+      "new_title": "경기도_장애인택시운전원 유형별 취업 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8176ec78cf5d0361490eeb8de594715ceeafb3b6475143cef25cd37d2128daa2",
+      "new_digest": "99ec1bb0946a0bf7369321eb494bf4c8dc584c038a491cdfbea86f43e99425a2"
+    },
+    {
       "id": "15057252",
       "old_title": "행정안전부_지방재정365_재정자립도(결산)",
       "new_title": "행정안전부_지방재정365_재정자립도(결산)",
@@ -1447,6 +1647,16 @@
       ],
       "old_digest": "799a2698ded99ca81011add505382785e404263a114c573ebd98361b6daa735e",
       "new_digest": "d1d6314ab4bf449a3f6b8a6fd3bb396d2651aa0b96f0e690417cce1140023a7d"
+    },
+    {
+      "id": "15057265",
+      "old_title": "경기도_자동차등록 집계 현황",
+      "new_title": "경기도_자동차등록 집계 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9fc1b8e1175d2a48eec5f237151a4076bdded939ad6cd1587aa8125299ace3a8",
+      "new_digest": "51d9b6d4862384086b85075e6e3498dd8311d49dffe43ce1afa550bf760ab719"
     },
     {
       "id": "15057268",
@@ -1589,6 +1799,16 @@
       "new_digest": "05431b21e09b327d2d4b485846f41683973c7b5e195225a3575da9ae4bd0bb44"
     },
     {
+      "id": "15057355",
+      "old_title": "경기도_세탁업(운동화전문세탁업) 현황",
+      "new_title": "경기도_세탁업(운동화전문세탁업) 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0238c72c7042a2f247c8c7a6e60a4c1eee1d2b734addf23c7a801b44fd8211ef",
+      "new_digest": "428388bfe3d0afa6b509efcb3d899821086acda961e49e74303f14e610d990ed"
+    },
+    {
       "id": "15057357",
       "old_title": "경기도_한국장애인고용공단 현황",
       "new_title": "경기도_한국장애인고용공단 현황",
@@ -1639,6 +1859,16 @@
       "new_digest": "511a97a7a2db70162794b4b68b8db2d5b72402d690b93a95e19416c0dd807bed"
     },
     {
+      "id": "15057390",
+      "old_title": "경기도_자격종별 교원 현황",
+      "new_title": "경기도_자격종별 교원 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c938cc6525159cd095bf229d0f4e04145b53ee917d9714e9d79e87f4d93da516",
+      "new_digest": "6e4766b0ef77a0b006ac3826c9075e513941fcff81ede12b0e4028990c5aff5d"
+    },
+    {
       "id": "15057393",
       "old_title": "경기도_사고다발지 현황",
       "new_title": "경기도_사고다발지 현황",
@@ -1647,6 +1877,16 @@
       ],
       "old_digest": "674c73cf739002467eec090b06226acece26614f13af012abe0afd79c5b10c22",
       "new_digest": "d22ed1274385c319529a226ee62672891c1ddb0e64a9788ddb66563b1b64efea"
+    },
+    {
+      "id": "15057394",
+      "old_title": "경기도_방문판매업 현황",
+      "new_title": "경기도_방문판매업 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "117ca979732a5df8791ca8c6072f9a1ea90e8e8492874205753eb4441f83cf5a",
+      "new_digest": "e93a379bc4266c2e6f8ae587b70deb1c25229ee850578ed22a7eaaa1634f18fa"
     },
     {
       "id": "15057395",
@@ -1667,6 +1907,16 @@
       ],
       "old_digest": "f855ba7e29766a632cbb6e96fb0c298852461c40f5ccc92cedb4994bf2fed136",
       "new_digest": "ffc4a8ba3ea08df9c887e0a1a77db93a2477752663ebb913e23b05587631352d"
+    },
+    {
+      "id": "15057402",
+      "old_title": "경기도 문화 전시 현황",
+      "new_title": "경기도 문화 전시 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "96b56e94738de786f1fc63178708ff2efa285bcdc3217568058e7a2afe44597c",
+      "new_digest": "c65125832e4b99edcfdf57720bb3da3acb8cdb6ae68e8d593cd4f49a5b3367de"
     },
     {
       "id": "15057408",
@@ -1809,6 +2059,36 @@
       "new_digest": "076a7f100a1c0bf85bcf335a2a0f61c09b2792f5d8c4c54d4a5e7c82674a584f"
     },
     {
+      "id": "15057475",
+      "old_title": "경기도_표시과목별 교원 현황(중,고)(교과별)",
+      "new_title": "경기도_표시과목별 교원 현황(중,고)(교과별)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0fe74e76ebb453b6e55a377b759f891c020946e8f34162f39811f4cb520dc3c5",
+      "new_digest": "a2dc099047236cc785c283c54ee7944b65fef2b78159e3e78c78410d155471cb"
+    },
+    {
+      "id": "15057478",
+      "old_title": "경기도_무료 직업소개소 현황",
+      "new_title": "경기도_무료 직업소개소 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "603df79dd579e91eb2c831d804574934ea0fc22429e50adfa8525a5b779bc6b9",
+      "new_digest": "1de225ca99708baab6de1be7a18d2d6d88bb59f6018772de8a50cd13c1adb8c2"
+    },
+    {
+      "id": "15057481",
+      "old_title": "경기도_온라인음악서비스제공업 현황",
+      "new_title": "경기도_온라인음악서비스제공업 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "11d674682fc8979e8972afaa8b688447118d19dd39e25129a211eed74c693ad5",
+      "new_digest": "8a923eb10f6805c4ba287b20f9a912852e0a31e2a4755dd94c047c8e2433be31"
+    },
+    {
       "id": "15057490",
       "old_title": "행정안전부_지방재정365_지역통합재정자금대비차입부채비율",
       "new_title": "행정안전부_지방재정365_지역통합재정자금대비차입부채비율",
@@ -1927,6 +2207,26 @@
       ],
       "old_digest": "a2b2d80622677f946ac340417eba56976ca907a60c5aa506fe5aa3b79a61a8ea",
       "new_digest": "b11d6e6f8fc2d5f867537126bade9087984668f2ea7f33eceb30684cd086e59c"
+    },
+    {
+      "id": "15057568",
+      "old_title": "경기도_농업인 자녀 대학 학자금 집계 현황",
+      "new_title": "경기도_농업인 자녀 대학 학자금 집계 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "19075ff579b44dbc185a9dcd768cd2c6d91a73f4097c874f456b811ff8a2d0b5",
+      "new_digest": "d40536af0aa16089e0b7aff1cd68b74b97f080ebe58a655daff03de7005a32ce"
+    },
+    {
+      "id": "15057574",
+      "old_title": "경기도 문화 교육 정보 현황",
+      "new_title": "경기도 문화 교육 정보 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ff30f243ffc22ef5b878fd143315e30ab206981ff13ce50c84d31a6cd004dd04",
+      "new_digest": "47274b0fabfb568895daa8be704f44950b479bd987632ee9f47b45ebebec8db4"
     },
     {
       "id": "15057577",
@@ -2199,6 +2499,16 @@
       "new_digest": "8220c490d7731007a30bc0f6439668309063d586a7dbc7f10a8c3fd4293ecbe9"
     },
     {
+      "id": "15057729",
+      "old_title": "경기도_부인과한방병원 현황",
+      "new_title": "경기도_부인과한방병원 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7e11e15e3bae7601bd8f8c78cc47c3e6f8c944ed78c41d6ae3670c8396a7267f",
+      "new_digest": "4d16801f1cfdc686795cb53704a96e7606f25da3a749b43f7b21db25f983634c"
+    },
+    {
       "id": "15057744",
       "old_title": "행정안전부_지방재정365_자체수입대인건비비교",
       "new_title": "행정안전부_지방재정365_자체수입대인건비비교",
@@ -2207,6 +2517,16 @@
       ],
       "old_digest": "6488e31825e2e0320e96e55d161e249c89d54a93241287872c87a9af9dc7106d",
       "new_digest": "854f602ab59cfc013bcbff4dbab63d6d7731bdf602543ae54c82e6dd0151a722"
+    },
+    {
+      "id": "15057746",
+      "old_title": "경기도_졸업생의 진로 현황(중과정, 중학교)",
+      "new_title": "경기도_졸업생의 진로 현황(중과정, 중학교)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "80e139a139a48cd307719d567dcd9042fc14b21600337be4b45ab8f4cc43383d",
+      "new_digest": "19df6c600d532e96db24995f32eeb6c05273a2e67e2c1ac8704c45eb2b5e723b"
     },
     {
       "id": "15057747",
@@ -2289,6 +2609,16 @@
       "new_digest": "dcb125a48df5ee82b59bb9a26bc3929668cc6707ea0f3ceddbf0d888ddcb3ef4"
     },
     {
+      "id": "15057815",
+      "old_title": "경기도_일반 여행업체 현황",
+      "new_title": "경기도_일반 여행업체 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9327cee7788b357e63b0b474a752293b8274278ce8aa7fb9cee06cf835fbe5ea",
+      "new_digest": "565a4b73136bbceaf8458aca29293d51b2f0468be08fb5462d14e0afb55ba120"
+    },
+    {
       "id": "15057818",
       "old_title": "경기도_특수교육지원센터 현황",
       "new_title": "경기도_특수교육지원센터 현황",
@@ -2297,6 +2627,36 @@
       ],
       "old_digest": "3f57cf41e0bbfb0ff14a7eda0f0c8c0830197f35c0583af6be3c799ff51aa1a1",
       "new_digest": "10bfbfbb499f72adcf382fdee922862154c03deb83d974dfbccd0e9ea5ecde05"
+    },
+    {
+      "id": "15057825",
+      "old_title": "경기도_지하수 시공업체 현황",
+      "new_title": "경기도_지하수 시공업체 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "70b9c430a1816d829d4fc465009ea2ca39735b3991f12c425f33b2f2a099a3a6",
+      "new_digest": "c2c4d2ebcb11bb099dd2065260fee75a7c10d56a7863dfe908056333b9ff193f"
+    },
+    {
+      "id": "15057828",
+      "old_title": "경기도_사료 제조업체 현황(수입)",
+      "new_title": "경기도_사료 제조업체 현황(수입)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3b749993c8217a5a19232b34963b2bbe0465bfa41c9057da52e7356ebceda075",
+      "new_digest": "5fd9ff41f35b5b872a1ab74e545e68f96ac6dc2c368566deabafac461aa18caf"
+    },
+    {
+      "id": "15057829",
+      "old_title": "경기도_장애인주간보호시설 현황",
+      "new_title": "경기도_장애인주간보호시설 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9d0f7ab3669edff304b23e13850e9a7e249e5bb4b20b7f1a589b8cd60841ebda",
+      "new_digest": "462a13c54807cdf24df59322bfee1371140f8edd3c5d0038172616b865352db8"
     },
     {
       "id": "15057836",
@@ -2359,6 +2719,16 @@
       "new_digest": "fe62d03d19f4e927ea767ad0e27231dc116c089bdc19d17035ebeb755eb12863"
     },
     {
+      "id": "15057888",
+      "old_title": "경기도_졸업생의 취업현황(대학,전문대학)",
+      "new_title": "경기도_졸업생의 취업현황(대학,전문대학)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "cecedee49d1f159d81efe6ae504455637d8072c7ecb38aced1b92d9ff4be8416",
+      "new_digest": "408da4131cfb6faefbf78f4c7abaffd34d6c159c358d458c5df595b1e6a7794f"
+    },
+    {
       "id": "15057894",
       "old_title": "경기도_버스정류소 현황",
       "new_title": "경기도_버스정류소 현황",
@@ -2387,6 +2757,16 @@
       ],
       "old_digest": "4972741f9e35ed0946a453d4265d27a63d15b916853b04381f5a5fe6127b509e",
       "new_digest": "8fccb0b3d1d68bccc25ac20b022b380baad0716f22642040f04259fadc5b111a"
+    },
+    {
+      "id": "15057903",
+      "old_title": "경기도_표시과목별 교원 현황(초)",
+      "new_title": "경기도_표시과목별 교원 현황(초)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a5cde175e2abad905b9a6ff21046e2e8d420a7e20ee826144acccf5a5e4e76a7",
+      "new_digest": "ff1a3a2822c9fa24713157451b4bb3d6930870e57ec8dbb5fa8382e203cae5b8"
     },
     {
       "id": "15057910",
@@ -2429,6 +2809,16 @@
       "new_digest": "d6cc4cafce54cfda22a2841d0579d9bca433c11e1c7377075b9cad416571c49d"
     },
     {
+      "id": "15057927",
+      "old_title": "경기도_숙박업체 현황(일반-일반호텔)",
+      "new_title": "경기도_숙박업체 현황(일반-일반호텔)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bf9781c55335c178d3d436d827c2784f4ef48751f976513b54d754b6d5174321",
+      "new_digest": "f53124841e06e79a4f3b8bb2696852234f9c0314d95461bd040bdbfa3bc3e3e8"
+    },
+    {
       "id": "15057930",
       "old_title": "경기도_지역화폐 발행 및 이용 현황",
       "new_title": "경기도_지역화폐 발행 및 이용 현황",
@@ -2469,6 +2859,16 @@
       "new_digest": "df9eec48dff033b3d703f2c2887d8846f9d11e4928e97175ee80fff9dc444efa"
     },
     {
+      "id": "15057951",
+      "old_title": "경기도_유료 직업소개소 현황",
+      "new_title": "경기도_유료 직업소개소 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4bba73b728947cd25a3148d36e7622fee0f19b9662f626d26c726582513b0bfc",
+      "new_digest": "2aebc20eaad4120f0f09b714129648e8031de427f400113bbb3b9e6c8ce76507"
+    },
+    {
       "id": "15057957",
       "old_title": "경기도_자동차정비업체 현황",
       "new_title": "경기도_자동차정비업체 현황",
@@ -2487,6 +2887,16 @@
       ],
       "old_digest": "c4fbff616b15325aea8be33c725c8ac9929bb617acf3aa2c9decfcb2e3460dba",
       "new_digest": "78256f7d74a2a3f56b26eeb7347bc46c99f4045f5c7ff915db64af9e60318c37"
+    },
+    {
+      "id": "15057962",
+      "old_title": "경기도_음반.음악영상물 배급업체 현황",
+      "new_title": "경기도_음반.음악영상물 배급업체 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "958ed9c83e162c90f6d8a33bf645f76a845cf0c4059c76e8c1866fbba9c05211",
+      "new_digest": "0ebe97d52036194b8ed3c4205200d5964a54a9ffe46a3320c39dfd25faa3fbd3"
     },
     {
       "id": "15057964",
@@ -2509,6 +2919,26 @@
       "new_digest": "b533c668fec7541e31f95d4d949981296c5fd7ec514c419d218e5b112f630fd7"
     },
     {
+      "id": "15057984",
+      "old_title": "경기도_비디오물 제작업체 현황",
+      "new_title": "경기도_비디오물 제작업체 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bd73cd866893b53635f9e7b7a423cc9ba51d04e8e80befc46ee1234cdc4f842f",
+      "new_digest": "e213861f113a0728cae889eefcffa808c8806c011e84f94a8a4f50ad4cc8b26e"
+    },
+    {
+      "id": "15057989",
+      "old_title": "경기도_입학전형 유형별 선발 결과 현황",
+      "new_title": "경기도_입학전형 유형별 선발 결과 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0ed7648c54b8943256c19f654359f44431a5bcf15e991300e77defbbb92f5355",
+      "new_digest": "aa2a49c84628c3890d35eb225b52eb427f7926d406a4aee4e8f611261221ad18"
+    },
+    {
       "id": "15058011",
       "old_title": "행정안전부_지방재정365_기능별 단체별 세출예산",
       "new_title": "행정안전부_지방재정365_기능별 단체별 세출예산",
@@ -2517,6 +2947,16 @@
       ],
       "old_digest": "d2afeb7439b8271ad81a02e42d0c4e1580fdee06015f626b0b345d393836b99a",
       "new_digest": "663cca796744c8005ec61ad7e2b41458d48ce3a1318d8a74fd7fdbed5be74dfa"
+    },
+    {
+      "id": "15058028",
+      "old_title": "경기도 공공-지역 도서관 인기대출도서 현황",
+      "new_title": "경기도 공공-지역 도서관 인기대출도서 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f92735fb1c73bf5acb1b5092ba5443469340079357317eefdfee30c74bfe53c1",
+      "new_digest": "afaf51ac813cb28da7dafe2f5d26ba09628ea2668cbd8668cfe7e0b8c43d3bb4"
     },
     {
       "id": "15058029",
@@ -2529,6 +2969,16 @@
       "new_digest": "dac3d42157cded3b17f0e535a6625fb9daebe042f4db420de8172ed71abae36b"
     },
     {
+      "id": "15058030",
+      "old_title": "경기도_사료 제조업체 현황(단미)",
+      "new_title": "경기도_사료 제조업체 현황(단미)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2e2b47a4e550f868099bd3b92b35f7d137a6f3010549d9eb252ba012a9b10b9c",
+      "new_digest": "49d899a462b44cd47147843b46b49602860d676494f464b0bc658e05df7e0631"
+    },
+    {
       "id": "15058050",
       "old_title": "행정안전부_지방재정365_업무추진비비율",
       "new_title": "행정안전부_지방재정365_업무추진비비율",
@@ -2537,6 +2987,16 @@
       ],
       "old_digest": "af84aebf99471617c3e4f7ac527e77fd09543764f099694617544bd176556de8",
       "new_digest": "36b2c7dcfdadf5dfd50836ef8e8aef2468a1eef97bf090fe90f60b71f065403c"
+    },
+    {
+      "id": "15058056",
+      "old_title": "경기도_병원평가정보(질병-폐렴) 현황",
+      "new_title": "경기도_병원평가정보(질병-폐렴) 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "853eeb597a26c8c14bef69530d4d871d4b6c82b4d42abe51e9341b04b76e810e",
+      "new_digest": "5efc4ebd4d17511678f217e0b479b30c38ea47c69f3a4b146570deaaf372d986"
     },
     {
       "id": "15058061",
@@ -2569,6 +3029,16 @@
       "new_digest": "f881c3c20672108757e461706b3b2b5298ebd2544fda59aafe3e40f50dff5b15"
     },
     {
+      "id": "15058086",
+      "old_title": "경기도_병원 현황(병원급)",
+      "new_title": "경기도_병원 현황(병원급)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ed3317abc95113f5d34ea3b819dcc7ca51146a10f10344a7e82c6cd91e7bc24e",
+      "new_digest": "f2227adb0fe33a7b579b96b3680a7865795ad226671f6c0411c7876b7443fc02"
+    },
+    {
       "id": "15058095",
       "old_title": "경기도_주요 도로별 구간 정보",
       "new_title": "경기도_주요 도로별 구간 정보",
@@ -2597,6 +3067,16 @@
       ],
       "old_digest": "217584398c5ccf55b8bddc8ccccea052c53b18e4acfab1e3fab688a14822b466",
       "new_digest": "bccb8ebef5b1a35556f53ca6c3d649fd91acd16c6ad4ccc0bc1019f2eab3e4de"
+    },
+    {
+      "id": "15058111",
+      "old_title": "경기도_비디오물시청제공업 현황",
+      "new_title": "경기도_비디오물시청제공업 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "62ee86c039d4153bedf1f86ce7d517620d331610718bb311022ae9868c41e075",
+      "new_digest": "70d2df815a0bdf4a308a6e1e96b6fce998ea8977d2d7ad781cf2c6fc83dfa167"
     },
     {
       "id": "15058112",
@@ -2649,6 +3129,16 @@
       "new_digest": "0361387b3ba76cfd0454a87534aacc36b87b84d2735533e203bd66d903f5bb2a"
     },
     {
+      "id": "15058126",
+      "old_title": "경기도_장애인 심부름센터 현황",
+      "new_title": "경기도_장애인 심부름센터 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "017f68970a2822d2b0aa32472c6af1c992a89e52a964af6447f3c371fa355a4e",
+      "new_digest": "c8ce43d0116fe408f7935880653be52f754b3dbb205954eef00c73b9b8a1c456"
+    },
+    {
       "id": "15058127",
       "old_title": "경기도_통합학급수 집계현황",
       "new_title": "경기도_통합학급수 집계현황",
@@ -2657,6 +3147,26 @@
       ],
       "old_digest": "14e1a05f177d9e928a29f59fab9fd818f2bcef885b35a1535466d39b9e8525f6",
       "new_digest": "34ea4ed28b002f804b0f1d2a0230be427a45b1b667e3e0de000c5e4671c20512"
+    },
+    {
+      "id": "15058139",
+      "old_title": "경기도_장애인 자립 자금대여 집계 현황",
+      "new_title": "경기도_장애인 자립 자금대여 집계 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "163dfde15bdcfe624dd50d7231f97ba0774e82b2c4b0a60029045e6f458e2509",
+      "new_digest": "4a345ff001d8e9c401f56abcb8a805f553ad57d2a06db2c15372817f1c5f7f5b"
+    },
+    {
+      "id": "15058140",
+      "old_title": "경기도_환경오염물질배출업소 현황",
+      "new_title": "경기도_환경오염물질배출업소 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "522791ba618bb2e7d7c23372c1d26338e4e229887a13ec490bba803f51e7ad83",
+      "new_digest": "9f49709a325b2069496f9fadf3bbfd80909c51a59d3b26582ef19add262a3284"
     },
     {
       "id": "15058151",
@@ -2687,6 +3197,16 @@
       ],
       "old_digest": "d30f9bd4bb382b1edb3d12e0ded7a9d177c033f67347bc74408bab6a2aa069a2",
       "new_digest": "184753c090827e83ac6b86ce53df08ab2ad3c6590ec73f6fa1e697f38ae8426b"
+    },
+    {
+      "id": "15058159",
+      "old_title": "경기도_전·출입 및 학업중단 학생 수(특) 현황",
+      "new_title": "경기도_전·출입 및 학업중단 학생 수(특) 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "62f278df3ab1b7b4f93d15e0ee417f988c2b63a85e874af7bc2eaca91b59fe16",
+      "new_digest": "e4751c54a3a17d6ad3cf4dd64b3d1a1a8f7fb0ed14bd0d8ce225eefa919bfc17"
     },
     {
       "id": "15058160",
@@ -2859,6 +3379,16 @@
       "new_digest": "386b900d2769e7ded8aad96b92a72d8d2e7f06f3afdab4126160bc572186825a"
     },
     {
+      "id": "15058261",
+      "old_title": "경기도_재적 학생 현황",
+      "new_title": "경기도_재적 학생 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c551f201bf19221cd9d0e5169027f3ccc75440a745ecf3b7141c2257d7372dd9",
+      "new_digest": "7019db13062883fe3a098276c454e597b75cb7e0caef6a692cb883c46523abcd"
+    },
+    {
       "id": "15058282",
       "old_title": "경기도_시군별 주민등록인구 대비 장애인 비율현황",
       "new_title": "경기도_시군별 주민등록인구 대비 장애인 비율현황",
@@ -2889,6 +3419,16 @@
       "new_digest": "aa44dca8fbd7cbb76d834834c295e681b67a1484c43342bb3f7061497cfe3424"
     },
     {
+      "id": "15058288",
+      "old_title": "경기도_비디오물감상실업 현황",
+      "new_title": "경기도_비디오물감상실업 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "742247f1fe6bd63571d55c328f05edebaae14093d618bcd31e2759dfb9f525e2",
+      "new_digest": "e5b7ab8037d51183f2ab38dc35b93c31a214a028e063dd401746ac33ea91d772"
+    },
+    {
       "id": "15058293",
       "old_title": "경기도_학생교육활동에 필요한 지원시설 현황",
       "new_title": "경기도_학생교육활동에 필요한 지원시설 현황",
@@ -2897,6 +3437,16 @@
       ],
       "old_digest": "2736b833fa2ad4ef06d2d5602334e39407d4bf17b428aa126858b03d2b6f3591",
       "new_digest": "04ef76ff59b305fefc28e87db2780edb9c2e8100d1252f517afdb7689998e3fd"
+    },
+    {
+      "id": "15058312",
+      "old_title": "경기도_전·출입 및 학업중단 학생 수(초,중,고) 현황",
+      "new_title": "경기도_전·출입 및 학업중단 학생 수(초,중,고) 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c0969a020b0fd204cedb7c2675751f4e2d20ea94d7ddfe9ff4bed395df399f3a",
+      "new_digest": "24633bdd650f2df51e277407cebe26554a047d2b4372055acea8abb1450a0a78"
     },
     {
       "id": "15058315",
@@ -2949,6 +3499,16 @@
       "new_digest": "caadc57e961755710390517c3a61159b6aa2b4bb0aa5c34f61ff2822737f51c5"
     },
     {
+      "id": "15058340",
+      "old_title": "경기도_석유·전기·가스 비상연락망 현황",
+      "new_title": "경기도_석유·전기·가스 비상연락망 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "696c64ac20d8dec76c2706e3fe9d0e63f4ceedf68d20dfd26adc05be1892329d",
+      "new_digest": "f09d9e5a35ff6f5f678c3daa30992c536742b4d82f66bf773a5f30217ce844d4"
+    },
+    {
       "id": "15058345",
       "old_title": "경기도_물향기수목원 일일 입장객 현황",
       "new_title": "경기도_물향기수목원 일일 입장객 현황",
@@ -2957,6 +3517,16 @@
       ],
       "old_digest": "c1bdd030dd5ccd59adcb43ef8163b8ba788449e89143fb5ab3536627c75a1da9",
       "new_digest": "c77fe5c57453426d4ea72ad4b8d3c4286586746ac90f336ae8dddb5b5d8eda91"
+    },
+    {
+      "id": "15058369",
+      "old_title": "경기도_숙박업(일반-휴양콘도미니엄업) 현황",
+      "new_title": "경기도_숙박업(일반-휴양콘도미니엄업) 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a342b1b3050776e585b1a76c3b3fa1d16663ce42f765ec213fe072fc6f8c3159",
+      "new_digest": "e61875cd76b6b592b5e9996cb0c27416eebf83741afd77acc95eddc8178ca6dd"
     },
     {
       "id": "15058370",
@@ -2979,6 +3549,16 @@
       "new_digest": "d41081953f1940c3666211042b32fe4ed9cd1394beb52a960e1ab6b8a554a036"
     },
     {
+      "id": "15058374",
+      "old_title": "경기도_외국인전용관광기념품판매점 현황",
+      "new_title": "경기도_외국인전용관광기념품판매점 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "897817d8c42d73e43c96d7e807cbf6bac8d5972c76ee3d44b8150651ac7fe366",
+      "new_digest": "c72c30d33a2ce16be51233c2a1e09a7aea75621a52f4de0fca44c965583b8343"
+    },
+    {
       "id": "15058377",
       "old_title": "행정안전부_지방재정365_지방보조금비율",
       "new_title": "행정안전부_지방재정365_지방보조금비율",
@@ -2987,6 +3567,16 @@
       ],
       "old_digest": "1dad07f913e3010a80ab1af766c9bcce8dc082315b436f1c4748c16d8c6f5f18",
       "new_digest": "ddc7a2d6306c1ebb39e989bfd6536bcf60c43b1a9ca5abb8f1b5b8246ae2dfd5"
+    },
+    {
+      "id": "15058380",
+      "old_title": "경기도_학생의 체력 증진에 관한 사항 현황",
+      "new_title": "경기도_학생의 체력 증진에 관한 사항 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "80ab0f9fefa8b20b1d055625581f3ac8de0298b100cd60dc394e6f78b5df9041",
+      "new_digest": "7808604025d2bf40dc20c89105cb078f40de6784cdc866dd8cd19af2b848738b"
     },
     {
       "id": "15058381",
@@ -3009,6 +3599,16 @@
       "new_digest": "55fcb8a54da4d1ee080c3c36f937d6be2040a76651d98f98340354421da725a0"
     },
     {
+      "id": "15058391",
+      "old_title": "경기도_도축업 현황",
+      "new_title": "경기도_도축업 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "58f36aaf6e02ef68f9842cf1a9bb5912ffa483c7fc11ad03a67a1b45d9baab22",
+      "new_digest": "09cd342eb22bb8285c7228fc7dab21e1b3a779bf3860026976ed75af6dd0d4b8"
+    },
+    {
       "id": "15058392",
       "old_title": "경기도_책나래서비스 제공도서관 현황",
       "new_title": "경기도_책나래서비스 제공도서관 현황",
@@ -3017,6 +3617,16 @@
       ],
       "old_digest": "963e86568f9e0546be3b795ff5b5c7908d2cac12f6f2062464da5daf3c364ad3",
       "new_digest": "66a8efa5f3d756a95b200bf61837075d5178fd342244c86f9fc8be41ec6aa682"
+    },
+    {
+      "id": "15058395",
+      "old_title": "경기도_숙박업체 현황(일반-관광호텔)",
+      "new_title": "경기도_숙박업체 현황(일반-관광호텔)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3e83f071d4fd69b48396a6422e04865ef6a8c4061b849341ff1283df5ba04a2e",
+      "new_digest": "1c6fb8a66bf323ce3e5c0345416f15cdfcb989da02620cdbfef01279f347b162"
     },
     {
       "id": "15058396",
@@ -3059,6 +3669,16 @@
       "new_digest": "8c4981c72cc7224f87c8546131cc7eb28b9b18d32c92b0f7d82e177456a91cb4"
     },
     {
+      "id": "15058435",
+      "old_title": "경기도_병원평가정보(질병-천식) 현황",
+      "new_title": "경기도_병원평가정보(질병-천식) 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2975061baad05f3ef6ccd3b9b9c0d7a4137d5cfe0c390a9276231bb6cf147ebd",
+      "new_digest": "27680ff52a5ba598a4b28c1c92de91bb331d9a561861c87cfff619eef7a7faed"
+    },
+    {
       "id": "15058440",
       "old_title": "경기도_특정고압가스업 현황",
       "new_title": "경기도_특정고압가스업 현황",
@@ -3077,6 +3697,16 @@
       ],
       "old_digest": "b36c99ac503f9ec0b83e34a6b47e380fdd515bfc83ec3592bea0b486b7110242",
       "new_digest": "c540d39086428c4fded00cad2b27d06e4161249d9dcc684d850b023aaafb04f6"
+    },
+    {
+      "id": "15058456",
+      "old_title": "경기도_대규모 재난발생시 인명피해 현황",
+      "new_title": "경기도_대규모 재난발생시 인명피해 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c377f2bee68ef23e38df220b221b1026f9f82cb91b2fae4d65aaabe7e9ca66cd",
+      "new_digest": "d0e6fede77930b95cb9b542ae060c19e0bee3a126240b951829b0e1c783740bf"
     },
     {
       "id": "15058458",
@@ -3119,6 +3749,16 @@
       "new_digest": "240282f9e3ab3ad88c3701bf63d03f09703e03258f0beca6bab90c85ab343fe1"
     },
     {
+      "id": "15058485",
+      "old_title": "경기도_숙박업체 현황",
+      "new_title": "경기도_숙박업체 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "189496a151b2fc92baa943cbeb04cb64329eb36d36d02b7677f346a734850094",
+      "new_digest": "b273b23c8c466f0e42ebde7bcfb030d6e6797ad7f9b5bbadf9e1d4039f1f81ce"
+    },
+    {
       "id": "15058488",
       "old_title": "경기도_전국 등록장애인 집계현황(유형,등급별)",
       "new_title": "경기도_전국 등록장애인 집계현황(유형,등급별)",
@@ -3127,6 +3767,16 @@
       ],
       "old_digest": "e9ee2fd7d9acd92fc39406e052286d08cc427a43e8ce85bc4d3b5350c187848e",
       "new_digest": "810ebdf10e78b9e3cc27d3ebf2768cebd307cc2f64df9f1b7804f0ceada82155"
+    },
+    {
+      "id": "15058490",
+      "old_title": "경기도_일반 유원시설업체 현황",
+      "new_title": "경기도_일반 유원시설업체 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "05c00e69a57770e8261a925d4b7310c6973cb653bcdf5cc1f95b2c2ad7ae08e2",
+      "new_digest": "3ed8416bc3bcaf11c6666d49e4f0b3006f0d151160633e63a27f7bc751853eb9"
     },
     {
       "id": "15058492",
@@ -3157,6 +3807,26 @@
       ],
       "old_digest": "3d19d5eec6493d99456694fe54003f17ad28a08619da218b97178569dcdcb074",
       "new_digest": "7359778212d79b5856086a9e69b6f8478128d5341fca84e8e94b0061176cecd1"
+    },
+    {
+      "id": "15058510",
+      "old_title": "경기도_비디오물소극장업 현황",
+      "new_title": "경기도_비디오물소극장업 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "dd529e915061da881a4a911304e90ecccd3da3d19167545339ec7c7090115d6a",
+      "new_digest": "6f31cc4caba7b8b0ce2ed5c73f938a492bcccadb9cf0d1707c2cff6a06b1e81d"
+    },
+    {
+      "id": "15058512",
+      "old_title": "경기도_병원급산부인과 현황",
+      "new_title": "경기도_병원급산부인과 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "dbaa909fff0f9e09d73eab4f33963644872e3324f045c48ca72dda836be49740",
+      "new_digest": "031d32debc024aa7d0436c6ad79cc803ce39db16dc4f40617a20626b7ecb404b"
     },
     {
       "id": "15058520",
@@ -3197,6 +3867,16 @@
       ],
       "old_digest": "57bc7998ae118a801f2a361cb91c06a11530286bd931ab0da2aa6eb7cfdad268",
       "new_digest": "8ba518d065c7b1ae455ca9f14866241894f074d8bc7b8218171a592372144ca3"
+    },
+    {
+      "id": "15058564",
+      "old_title": "경기도_장례시설 현황",
+      "new_title": "경기도_장례시설 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8b7e62efb030b1bff2d98d0876fdd393227495318201f6b53a1c45060a1db5e6",
+      "new_digest": "b7976c6046d1b187de269fa44fb3758e120be438c0520d1fcc807fd54e5054ee"
     },
     {
       "id": "15058572",
@@ -3249,6 +3929,26 @@
       "new_digest": "6d01be0152dbca22f5ae87d4fb80643e3102934d451ee81d47b4a2e7537c1527"
     },
     {
+      "id": "15058607",
+      "old_title": "경기도_사료 제조업체 현황(배합)",
+      "new_title": "경기도_사료 제조업체 현황(배합)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1ef2a8b2d994b80c3df2b4ee9c510cf23a6d8c2e1b157c06920ac2609443bada",
+      "new_digest": "352207bd4d0e3fd4ff767612b4ea7a5bc75da6168186af16f5976e229764944a"
+    },
+    {
+      "id": "15058612",
+      "old_title": "경기도_학교용지 현황",
+      "new_title": "경기도_학교용지 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4900aad869e4e7d7196358c6b87976aad04b6cd8cf9a5208741c5e5368bc3b6b",
+      "new_digest": "03a706da5a57a09c47bbc7b87a43f313d91691aa6857584ffdc7b191e25704fc"
+    },
+    {
       "id": "15058614",
       "old_title": "경기도_미용업(피부) 현황",
       "new_title": "경기도_미용업(피부) 현황",
@@ -3277,6 +3977,16 @@
       ],
       "old_digest": "b3e101a7653e11736f52643aa3f2c37b034384cb783519d006ed8e6cd7c05ed2",
       "new_digest": "e8aba619b89ca820bcae8e5cd300d578f11f7da4ae7fd8460d6f98e18be2bf39"
+    },
+    {
+      "id": "15058625",
+      "old_title": "경기도_음반.음악영상물 제작업체 현황",
+      "new_title": "경기도_음반.음악영상물 제작업체 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6fd54a1f87d13f1781353556b6b0bbcc2eda6edc1e6b489194b496dd08a00b23",
+      "new_digest": "777dbb5223a605ac59033e09b46a896ca5da278e12dcdbbd20e03a5f34301796"
     },
     {
       "id": "15058639",
@@ -3319,6 +4029,16 @@
       "new_digest": "baa1f3c42511f411146e82b31f7f5e8736fa94784c9129a2efbdcdbc47003e17"
     },
     {
+      "id": "15058674",
+      "old_title": "경기도_졸업생의 진로 현황(고과정, 고등학교)",
+      "new_title": "경기도_졸업생의 진로 현황(고과정, 고등학교)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "31205fdfcec94f4732a24c2a9783d98d7e181237ed901d403b82a49151879f0a",
+      "new_digest": "99edf23639ce97ba39bfdac8fdc897d8be8b26566e96bbac49ef286702c1560d"
+    },
+    {
       "id": "15058675",
       "old_title": "경기도_시도별 주민등록인구 대비 장애인 비율현황",
       "new_title": "경기도_시도별 주민등록인구 대비 장애인 비율현황",
@@ -3337,6 +4057,16 @@
       ],
       "old_digest": "b4e305a8ba81b2a8ef578591d58dd97d60abdb3c23ad81f4fe9ce2f1d6645f27",
       "new_digest": "e19e7a8fe7dd2885ab552f780e6da667674cfc289f56752c797e918d9b77ea36"
+    },
+    {
+      "id": "15058681",
+      "old_title": "경기도_병원평가정보(질병-혈액투석) 현황",
+      "new_title": "경기도_병원평가정보(질병-혈액투석) 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9373d8f352959a469677e3ec5caf13c9ff412ebdb217d54ce07210296f37dd6f",
+      "new_digest": "2d6bd846e2604ba05968e6268b6d664ba0725ea34c3c8e0b02b0f5a47bd31cfd"
     },
     {
       "id": "15058697",
@@ -3389,6 +4119,16 @@
       "new_digest": "daded5ed20b9111762c8331abc6620c7041cc7dbcfd77d0ef7a9b1d45d7d3d85"
     },
     {
+      "id": "15058725",
+      "old_title": "경기도_인쇄사 현황",
+      "new_title": "경기도_인쇄사 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f6b6c7f37c336b1d1c764f93aa7fa4845db0ab33f6e8015e2961c49da881ebe8",
+      "new_digest": "ac348dd59ce79b00e7fecc470e5eeb1f09a6fd8185c82f985aab30c6524db1aa"
+    },
+    {
       "id": "15058727",
       "old_title": "경기도_산재보험 장애급여 종류별 수급 집계현황",
       "new_title": "경기도_산재보험 장애급여 종류별 수급 집계현황",
@@ -3439,6 +4179,26 @@
       "new_digest": "6ec6f822fd7f6064f7ccd40c23e85a290daf00c3e5b08a9bb39367eb751b99f8"
     },
     {
+      "id": "15058783",
+      "old_title": "경기도_위생처리업 현황",
+      "new_title": "경기도_위생처리업 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f7d8e9ef489d7a62ef508d161354e7a905aa72f8d7336a97c3a6d47700ea5958",
+      "new_digest": "476bd0e6efbd1057d067b4e06ee12dfe4d0219d505e64660a820cbeb60fc1ac9"
+    },
+    {
+      "id": "15058784",
+      "old_title": "경기도_급식 실시 현황",
+      "new_title": "경기도_급식 실시 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f293b43f0c863050cb2345db017ae868e21070b937e584402f5e04aad46d9a0a",
+      "new_digest": "770b19ac4acc9fa2834ce35f05581c152ef16359e401dfa2551c93a0ae89622c"
+    },
+    {
       "id": "15058787",
       "old_title": "경기도_특수학급수 집계현황",
       "new_title": "경기도_특수학급수 집계현황",
@@ -3459,6 +4219,16 @@
       "new_digest": "1de2f82e3fd1628eea0db82d3bd1069298d71db856860bb9c5ac16cdaff202a9"
     },
     {
+      "id": "15058810",
+      "old_title": "경기도_장애인 근로사업장 현황",
+      "new_title": "경기도_장애인 근로사업장 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1041305133f8a38f747424e2707e11943c9d5f484ee489faf4a8c2b37bb279c7",
+      "new_digest": "81e6fd2a0166142f8a1b5b68e9a7d983422008cc1d9f5e71ef60ba303a4dc5ef"
+    },
+    {
       "id": "15058819",
       "old_title": "경기도_입학생 현황(중,고)",
       "new_title": "경기도_입학생 현황(중,고)",
@@ -3467,6 +4237,16 @@
       ],
       "old_digest": "5e33508fec3feb98d56c3bfc4c7ad9ae6434a8adb745d07a58ca1ae07e02249f",
       "new_digest": "8f30b725dcf91934c8ffdac447b1e236398e7d77ffeae361e647aeb1a1d75984"
+    },
+    {
+      "id": "15058827",
+      "old_title": "경기도_동아리 활동 현황",
+      "new_title": "경기도_동아리 활동 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2d369610c5b0e3b1d015842c2984e3ca1512673160126199064207b85af10f2a",
+      "new_digest": "5009acdfee16e5b5ce9faeb923910b33ec18ebc1b202789fc49e5e3e3ca912d9"
     },
     {
       "id": "15058830",
@@ -3559,6 +4339,16 @@
       "new_digest": "64422222284c2e72653c7a511826c886ba37a9bf2e42282cf745c9287e18a770"
     },
     {
+      "id": "15058903",
+      "old_title": "경기도_종량제봉투(가정및사업장용)판매가격 현황",
+      "new_title": "경기도_종량제봉투(가정및사업장용)판매가격 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3294969f07557a315f24101f6a4469722d548ae160fd93f82f3f60d3b90dee4c",
+      "new_digest": "39dffd015b8b6a48f68375c1687769a594dc246e79cf718b143e434cccfdd722"
+    },
+    {
       "id": "15058908",
       "old_title": "경기도_장애유형별 장애아동수당 수급자 집계현황",
       "new_title": "경기도_장애유형별 장애아동수당 수급자 집계현황",
@@ -3567,6 +4357,16 @@
       ],
       "old_digest": "6943117201a445ca94af1edb99a954c74c946c3c36831de53990d0c120be27cb",
       "new_digest": "cd6324ebcba23b2ef7a34b09cd290043e381d42d9780212cabcb1881e77a7c5d"
+    },
+    {
+      "id": "15058911",
+      "old_title": "경기도_국외 여행업체 현황",
+      "new_title": "경기도_국외 여행업체 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0bdff711e3206a657d366df197dc49cc52618326b9e0936450394c4b7c0975ff",
+      "new_digest": "9aa79a67eb9b01917d2c032a04c8a3417981ffe3554770e8426084b0ba3bd720"
     },
     {
       "id": "15058915",
@@ -3607,6 +4407,26 @@
       ],
       "old_digest": "24b7d8e7bb8bd80c43567bbc9a5caa49bf6ae668b23840c0565f88450bf644c6",
       "new_digest": "57f08d33923baa54038fca090ec66a22459737ff21ad5c2bfc12568daf4c0ca2"
+    },
+    {
+      "id": "15058957",
+      "old_title": "경기도_신입생 충원현황",
+      "new_title": "경기도_신입생 충원현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3d80080fc08f73df12590cfa4a7a1012720a1ffd1dc9091a36215b1e98f20769",
+      "new_digest": "2bd9cb778e94b4f62d5add4427059067be48be07fc896001d29e950e242b2e3d"
+    },
+    {
+      "id": "15058964",
+      "old_title": "경기도_집단급식소(수련원) 현황",
+      "new_title": "경기도_집단급식소(수련원) 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f9069e27b4f2c99b7325b93a3b27fce22ff4cb2d6c83b5589fef5946497047b7",
+      "new_digest": "91652ab8de76c1a824013e44993af29a7586440af4cf6f1d9ef1d0d35939ac92"
     },
     {
       "id": "15058965",
@@ -3829,6 +4649,16 @@
       "new_digest": "c0ffdb1512eabb378dfbec38bf1951cddde4fd37cf3edac1c3023f623dd2721b"
     },
     {
+      "id": "15059110",
+      "old_title": "경기도_위험물 제조소집계 현황",
+      "new_title": "경기도_위험물 제조소집계 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a8d65e3eae9bcd4042e480127471cffbcbf043fe79bbd43d8b5bef80f571978e",
+      "new_digest": "3e9aa4274bc81fc4b668821c8049b7e0a375510dc98f65111ad5874a6c9d11a8"
+    },
+    {
       "id": "15059121",
       "old_title": "행정안전부_지방재정365_지역통합부채현황",
       "new_title": "행정안전부_지방재정365_지역통합부채현황",
@@ -3837,6 +4667,16 @@
       ],
       "old_digest": "9605a47e07353f0e232266d2185405d2b69e877aef6c6560e2b2d62515ca0a79",
       "new_digest": "16ea6fdd34761d61ed02f2699b24c0e6463e0731f5140dff45475d95b7bcf885"
+    },
+    {
+      "id": "15059129",
+      "old_title": "경기도_평택항물동량 집계현황",
+      "new_title": "경기도_평택항물동량 집계현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5652dd4bcdd696f4f568f3432d67ef5d7b47f45539d94527017fbfb097b04a50",
+      "new_digest": "525bacfe9ddc480cb67e57bea18db0dad45d7f4b81891511e827554fb15b8600"
     },
     {
       "id": "15059134",
@@ -3909,6 +4749,16 @@
       "new_digest": "a236ccd4be8808dea1aa1da29a20c345376cb38baca4134fa568374f62053ac1"
     },
     {
+      "id": "15059178",
+      "old_title": "경기도_의원 현황(의원급)",
+      "new_title": "경기도_의원 현황(의원급)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "72a61ce3b29109632e0734396e8a8078923d0edb84f9949322c80910aaab856f",
+      "new_digest": "679bc807af8d06536cf7d0f48d455a1dd4a4d013f54d2c24f4f1e7e2a153f053"
+    },
+    {
       "id": "15059180",
       "old_title": "경기도_시도별 등록장애인 집계현황(장애유형별)",
       "new_title": "경기도_시도별 등록장애인 집계현황(장애유형별)",
@@ -3927,6 +4777,16 @@
       ],
       "old_digest": "d479cda012b5af9fc523ae16ae2c89a61c54c57d77e22cb0f34af36217b7bc49",
       "new_digest": "97ee72eabe8a286080f69ff244a30dd67fc7ca353a0fbfe3250ecfeaede4e98c"
+    },
+    {
+      "id": "15059192",
+      "old_title": "경기도_자동차매매·정비·폐차업 집계 현황",
+      "new_title": "경기도_자동차매매·정비·폐차업 집계 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b2c7d15b5b5212b9bec30c519a9f7a1f2a10270a6e1d5a6858cacb4249e6bc63",
+      "new_digest": "e475cdf3342b2005b14418d549583e0864ac99f061b2df80aae397712a2d4a61"
     },
     {
       "id": "15059211",
@@ -4019,6 +4879,16 @@
       "new_digest": "30bec8720fb8e190da329973d8bce1020e06ace29178505fe491e82c06ba8c92"
     },
     {
+      "id": "15059258",
+      "old_title": "경기도_사료 제조업체 현황(보조)",
+      "new_title": "경기도_사료 제조업체 현황(보조)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "59699c0830cbad1ab9730677c11a4342c8e61c2812f4de171f442acc0e1bd38d",
+      "new_digest": "ca3dd4f86de2a9a9ad99b03cc46cdacc90889ffd5441fac423c81d012c1882e2"
+    },
+    {
       "id": "15059260",
       "old_title": "경기도_가축분뇨처리시설 현황",
       "new_title": "경기도_가축분뇨처리시설 현황",
@@ -4059,6 +4929,16 @@
       "new_digest": "c2032307308dd2534b6e2beb7f68dc72b8b56c771a3d6ade35257cd9b04568c6"
     },
     {
+      "id": "15059288",
+      "old_title": "경기도_물류 창고업체 현황",
+      "new_title": "경기도_물류 창고업체 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "abe748dc3e64c67e42b4a54bb9351522099abcf0476c9b652f1bd92c60b2987b",
+      "new_digest": "d87fd20ec6ef716091d756569f4b35e5f9ba9ee9a37c85ef8fa1fd69625064dc"
+    },
+    {
       "id": "15059307",
       "old_title": "행정안전부_지방재정365_세입결산",
       "new_title": "행정안전부_지방재정365_세입결산",
@@ -4067,6 +4947,36 @@
       ],
       "old_digest": "fce18b12049ca395312beb22b0aff091f03314e3a7795bcd5e72e6bcd08a1480",
       "new_digest": "31529bd87a3d4543e9e60c80fc7f4be67b4d0b0e5d25c65e5d6deeb61b907bdb"
+    },
+    {
+      "id": "15059317",
+      "old_title": "경기도_복합영상물제공업 현황",
+      "new_title": "경기도_복합영상물제공업 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bf22d1c1079b3867df4c5549f44f46e306b7f968ff1a16e13658ac2edd6ad814",
+      "new_digest": "ef00665fb7decfc9ed2a8484b7e41f61bcfd2270f947ef841dc583b262db90e0"
+    },
+    {
+      "id": "15059331",
+      "old_title": "경기도_세척제제조업 현황",
+      "new_title": "경기도_세척제제조업 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5a0116c3540bc87de82af7d37293b37bd20508748ce3d4b7d24884070a6e3a7b",
+      "new_digest": "f91e0065a24b94e35a39838ad2ae0b18810689ecd3b62e25e727fbe96767bc14"
+    },
+    {
+      "id": "15059333",
+      "old_title": "경기도_시군별 장애인체육회 현황",
+      "new_title": "경기도_시군별 장애인체육회 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "351ca07cde1173348d2bfdb90d5e39fca26ae855304e5ad5d37e836bd8f00221",
+      "new_digest": "a7a0215abef64636b9602152c64157028518e08363d34af0545063ad73132dfd"
     },
     {
       "id": "15059343",
@@ -4097,6 +5007,26 @@
       ],
       "old_digest": "264162eb882bbe0090da26e45b3ea8f44972ab08f8b18f690ad9e61a21b50d13",
       "new_digest": "bc782fc9f456dd790c18dee8fc8750798ef070d2bd917abb126730b391f2d505"
+    },
+    {
+      "id": "15059359",
+      "old_title": "경기도_전기사업업체 현황",
+      "new_title": "경기도_전기사업업체 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a8ee275f710d1485508500d3f82ffcbf69b254e54181da8ebc6ff6dd00494aab",
+      "new_digest": "20b38a913cb7c82eb20b0a2019a06aaf3d7978e0b1d439bda69b05c300062c4b"
+    },
+    {
+      "id": "15059360",
+      "old_title": "경기도_중증장애인요양시설 현황",
+      "new_title": "경기도_중증장애인요양시설 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8514a6cf2ea78df969b30c8dcf69dd16a24bc7a945ea2c978247275618658ae0",
+      "new_digest": "f0e76a0f2ef24c773f157a2302bc0e8d27dd29eae11eb926b0ed6775d943eea5"
     },
     {
       "id": "15059369",
@@ -4149,6 +5079,16 @@
       "new_digest": "c7c2d37e8f9080532a117b77e529e6e02d95e5781524f41fd8340583e7022a50"
     },
     {
+      "id": "15059408",
+      "old_title": "경기도_종합병원 현황(병원급)",
+      "new_title": "경기도_종합병원 현황(병원급)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "91e4ff16e223aa83dac37f47e37e439ecb326be40f4a74a6e08edf49b7127daf",
+      "new_digest": "8aaf2b34016ecfa59c2696125a872817f6d70cf258aaa26ce3ca3801abb140fd"
+    },
+    {
       "id": "15059413",
       "old_title": "행정안전부_지방재정365_세입예산",
       "new_title": "행정안전부_지방재정365_세입예산",
@@ -4159,6 +5099,16 @@
       "new_digest": "e3d4f8291b8e371015ee59d73bb212d96104aa3386a935cbd6f6c75cb7585ac6"
     },
     {
+      "id": "15059418",
+      "old_title": "경기도_휴게음식점(과자점) 현황",
+      "new_title": "경기도_휴게음식점(과자점) 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "afd90c7ea9e87a695100c5fc05125907488efd8c2edaa7de048ebded5f62f1e0",
+      "new_digest": "64e60dd0ebdf9f684ec677512d8499a45f83a3cda0b5db89db08a2ea93fe120a"
+    },
+    {
       "id": "15059424",
       "old_title": "경기도_장애인출산비용지원 태아기준 집계현황",
       "new_title": "경기도_장애인출산비용지원 태아기준 집계현황",
@@ -4167,6 +5117,16 @@
       ],
       "old_digest": "f047091551942ca8e8de0f30f4393a957f4e5f68d5f56c26f0627408243984f2",
       "new_digest": "1d325ca89e901e38364a982d14e737d7baf2d0b3a4c7a75cc66dd170a76f8457"
+    },
+    {
+      "id": "15059428",
+      "old_title": "경기도_물류 주선업체 현황(국제)",
+      "new_title": "경기도_물류 주선업체 현황(국제)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0f74f835d1e63d131b0a2fec8e3cb5635ffe6b892fad672cab09138856b0f969",
+      "new_digest": "ad724feb258111fac8a33480ce033ca0bfb2e51ee75a12acd569a998df560d53"
     },
     {
       "id": "15059434",
@@ -4187,6 +5147,16 @@
       ],
       "old_digest": "492823a343e1de1a37b79c37c56b9ee9a78394d5e50f4fa8c7057ee22eddbed0",
       "new_digest": "38e479ee8f497b27a59afa38bf02c7a92d2aeae56c5c2d3e046d6fdfbfcb4098"
+    },
+    {
+      "id": "15059440",
+      "old_title": "경기도_외국대학과의 교류현황",
+      "new_title": "경기도_외국대학과의 교류현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3e913bf9b3a0cc51d2989e43a77440f279e8bde946f07a5bc235d33428b4cd59",
+      "new_digest": "62c401b61e529db6ace6f6dd278dbc969f3391a03b91bdfc64e0707143ee9edd"
     },
     {
       "id": "15059451",
@@ -4219,6 +5189,16 @@
       "new_digest": "820cf8650d745d309a248053386a4f3d2523a52dff895af97d82b6bf7b25837a"
     },
     {
+      "id": "15059470",
+      "old_title": "경기도_병원평가정보(폐암) 현황",
+      "new_title": "경기도_병원평가정보(폐암) 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6a167ca60d349e07f83f1be146f0c9665505d83be9ee995357b516c0dcc6c15c",
+      "new_digest": "9289278ec7a57dde67d16c541d90c047f961601a2ecdd930759556499d57de99"
+    },
+    {
       "id": "15059471",
       "old_title": "경기도_건설기계정비 사업자등록 집계 현황",
       "new_title": "경기도_건설기계정비 사업자등록 집계 현황",
@@ -4237,6 +5217,26 @@
       ],
       "old_digest": "59e4fa86b060a222929bfec98302100e164e21049db11a244871519f459ce708",
       "new_digest": "332717f8f8f342641b2ac3bcfa7e861397f7759403683e843c1a05c24821a482"
+    },
+    {
+      "id": "15059477",
+      "old_title": "경기도_상조업 현황",
+      "new_title": "경기도_상조업 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "17faf2e446aecf0a8f2495fbf0cc746a7947f55e6b01638d28c47669b8dddf43",
+      "new_digest": "b9dc7ff034c09bf409acb94d941ea5f24f870400cbb5d0f3961fc3e8cc2ca5bf"
+    },
+    {
+      "id": "15059478",
+      "old_title": "경기도_가축 분뇨 수집 운반업체 현황",
+      "new_title": "경기도_가축 분뇨 수집 운반업체 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4349cf5bd227473925065b8414cfafb77b86f238e02c543ac8d2aadf8c1baede",
+      "new_digest": "f873e5bf6be0fe2a277dfccdd2fad6212dbb005a38f48cf230e4e208d2ea4fcc"
     },
     {
       "id": "15059501",

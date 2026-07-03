@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-07-02T23:50:05Z",
+  "generated_at": "2026-07-03T13:07:56Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -13,28 +13,28 @@
     "provider_index": "data/provider-index.json"
   },
   "coverage": {
-    "operations": 13967,
-    "callable_operations": 13825,
+    "operations": 14249,
+    "callable_operations": 14107,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 2357,
-    "registered_adapter_operations": 2347,
+    "external_endpoint_operations": 2639,
+    "registered_adapter_operations": 2629,
     "call_capable_adapters": 23
   },
   "evidence": {
-    "total": 1406,
-    "verified": 151,
+    "total": 1427,
+    "verified": 162,
     "failed": 112,
-    "skipped": 1143,
+    "skipped": 1153,
     "unknown": 0,
-    "coverage_percent": 10.1,
+    "coverage_percent": 10,
     "by_kind": [
       {
         "key": "data_go_kr_gateway",
-        "count": 655
+        "count": 665
       },
       {
         "key": "external_endpoint",
-        "count": 732
+        "count": 743
       },
       {
         "key": "service_root",
@@ -44,15 +44,15 @@
   },
   "growth_target": {
     "target_percent": 10,
-    "target_evidence_total": 1397,
+    "target_evidence_total": 1425,
     "remaining_to_target": 0,
     "status": "above_target"
   },
   "verification_plan": {
-    "planned_batches": 12,
-    "planned_operations": 95,
-    "uncovered_gateway_candidates": 10764,
-    "uncovered_adapter_candidates": 1596,
+    "planned_batches": 14,
+    "planned_operations": 109,
+    "uncovered_gateway_candidates": 10754,
+    "uncovered_adapter_candidates": 1867,
     "missing_adapter_hosts": 11,
     "planned_by_kind": [
       {
@@ -61,7 +61,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 85
+        "count": 99
       }
     ],
     "batches": [
@@ -69,7 +69,7 @@
         "label": "gateway",
         "kind": "data_go_kr_gateway",
         "candidates": 11419,
-        "uncovered_candidates": 10764,
+        "uncovered_candidates": 10754,
         "planned_operations": 10,
         "output": ".datapan/verification/gateway-next.json"
       },
@@ -77,8 +77,8 @@
         "label": "data-gg",
         "provider": "data-gg",
         "kind": "external_endpoint",
-        "candidates": 778,
-        "uncovered_candidates": 740,
+        "candidates": 1044,
+        "uncovered_candidates": 996,
         "planned_operations": 10,
         "output": ".datapan/verification/data-gg-next.json"
       },
@@ -95,9 +95,9 @@
         "label": "gwangmyeong",
         "provider": "gwangmyeong",
         "kind": "external_endpoint",
-        "candidates": 12,
-        "uncovered_candidates": 2,
-        "planned_operations": 2,
+        "candidates": 21,
+        "uncovered_candidates": 11,
+        "planned_operations": 10,
         "output": ".datapan/verification/gwangmyeong-next.json"
       },
       {
@@ -128,6 +128,15 @@
         "output": ".datapan/verification/lofin365-next.json"
       },
       {
+        "label": "mafra",
+        "provider": "mafra",
+        "kind": "external_endpoint",
+        "candidates": 14,
+        "uncovered_candidates": 3,
+        "planned_operations": 3,
+        "output": ".datapan/verification/mafra-next.json"
+      },
+      {
         "label": "nongsaro",
         "provider": "nongsaro",
         "kind": "external_endpoint",
@@ -155,12 +164,21 @@
         "output": ".datapan/verification/safemap-next.json"
       },
       {
+        "label": "seoul-open-data",
+        "provider": "seoul-open-data",
+        "kind": "external_endpoint",
+        "candidates": 6,
+        "uncovered_candidates": 1,
+        "planned_operations": 1,
+        "output": ".datapan/verification/seoul-open-data-next.json"
+      },
+      {
         "label": "vworld",
         "provider": "vworld",
         "kind": "external_endpoint",
-        "candidates": 3,
-        "uncovered_candidates": 2,
-        "planned_operations": 2,
+        "candidates": 5,
+        "uncovered_candidates": 4,
+        "planned_operations": 4,
         "output": ".datapan/verification/vworld-next.json"
       },
       {
@@ -176,8 +194,8 @@
   },
   "provider_split_readiness": {
     "status": "ready",
-    "adapter_count": 49,
-    "verification_capable_adapters": 49,
+    "adapter_count": 50,
+    "verification_capable_adapters": 50,
     "call_capable_adapters": 23
   },
   "warnings": []

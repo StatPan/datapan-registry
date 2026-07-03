@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `13967`
-- callable operations: `13825` (`99%`)
+- operations: `14249`
+- callable operations: `14107` (`99%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `2357`
-- registered adapter operations: `2347`
+- external endpoint operations: `2639`
+- registered adapter operations: `2629`
 - missing adapter operations: `29`
-- external adapter coverage: `98.8%`
+- external adapter coverage: `98.9%`
 - approval-required operations: `4723`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `146`
-- registered adapter hosts: `54`
+- registered adapter hosts: `55`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -119,7 +119,7 @@ Each external host should have:
 - downstream impact when promoted datasets depend on the host.
 
 Registered external adapters currently cover these host families through
-`data/provider-index.json`: airport, andong, culture, data-gg, ekape, emuseum,
+`data/provider-index.json`: airport, andong, culture, data-gg, dgfca, ekape, emuseum,
 epost, eshare, folk, foodsafetykorea, forest, garak, gblib, geoje, gwanak,
 gwangmyeong, happysd, humetro, i815, ins24, itfind, jeju, jejudatahub, jeonju, juso,
 korad, kpx, lh-ebid, lofin365, mafra, myhome, naqs, ncpms, nfqs, nongsaro,
@@ -348,7 +348,10 @@ coverage.
    The first 경기도 batch then adds Gwangmyeong and Seogu adapters, materializes
    `100` APIs and `291` operations, and merges `31` bounded checks. That brings
    checked runtime evidence to `1406` and registered external adapter operations
-   to `2347`.
+   to `2347`. The second 경기도 batch then adds the DGFCA adapter, materializes
+   another `100` APIs and `282` operations, and merges `21` bounded checks.
+   That brings checked runtime evidence to `1427` and registered external
+   adapter operations to `2629`.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,
