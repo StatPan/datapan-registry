@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T16:46:57Z",
+  "generated_at": "2026-07-03T16:56:46Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 16685,
-    "callable_operations": 16543,
+    "operations": 16693,
+    "callable_operations": 16551,
     "callable_operation_percent": 99.1,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 5075,
-    "registered_adapter_operations": 5065,
+    "external_endpoint_operations": 5083,
+    "registered_adapter_operations": 5073,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.4,
-    "approval_required_operations": 5543,
+    "approval_required_operations": 5551,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 80,
+    "registered_adapter_hosts": 81,
     "missing_adapter_hosts": 11,
-    "adapter_count": 74,
+    "adapter_count": 75,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T16:46:37Z",
-    "total": 1716,
-    "verified": 378,
+    "generated_at": "2026-07-03T16:56:36Z",
+    "total": 1724,
+    "verified": 386,
     "failed": 145,
     "skipped": 1193,
     "unknown": 0,
-    "verified_percent": 22,
+    "verified_percent": 22.4,
     "evidence_operation_percent": 10.3
   },
   "route_evidence": {
@@ -384,10 +384,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T16:46:57Z",
+    "generated_at": "2026-07-03T16:56:46Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 74,
-    "host_count": 82,
+    "adapter_count": 75,
+    "host_count": 83,
     "adapters": [
       {
         "name": "airport",
@@ -415,6 +415,16 @@
         "status": "registered",
         "hosts": [
           "www.calspia.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "cancer",
+        "status": "registered",
+        "hosts": [
+          "cancer.go.kr"
         ],
         "capabilities": [
           "verification"
@@ -1164,8 +1174,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 74,
-      "verification_capable_adapters": 74,
+      "adapter_count": 75,
+      "verification_capable_adapters": 75,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

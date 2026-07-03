@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T16:46:50Z",
+  "generated_at": "2026-07-03T16:56:39Z",
   "provider": "data.go.kr",
   "old": ".datapan\\previous-data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,31 +12,91 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 2,
-    "stable": 12058
+    "changed": 8,
+    "stable": 12052
   },
   "added": [],
   "removed": [],
   "changed": [
     {
-      "id": "3038249",
-      "old_title": "한국산업인력공단_해외진출정보",
-      "new_title": "한국산업인력공단_해외진출정보",
+      "id": "15122208",
+      "old_title": "국립암센터_국가암정보센터 통계로 보는 암",
+      "new_title": "국립암센터_국가암정보센터 통계로 보는 암",
       "fields": [
         "operations"
       ],
-      "old_digest": "c7d70e2b5e8bdcc4d7bfea427443fb18489f6429f153cca0d57ae77a2177ec01",
-      "new_digest": "0d56f0e77f65c1e0f95f1436716951e6121a06e6a456c98fb687eab102efd96d"
+      "old_digest": "4942ca3d629cb1740582bed602fe1d6e50714b0b49808924ddf19f60ed0261b3",
+      "new_digest": "ad7f68b48b74c4d20adba8f7f56d1d6d7da6f3da50fa6755602eeb71ef55da3d"
     },
     {
-      "id": "3045136",
-      "old_title": "[산업인력] 해외취업 통계정보",
-      "new_title": "[산업인력] 해외취업 통계정보",
+      "id": "15122210",
+      "old_title": "국립암센터_국가암정보센터 내가 알고 싶은 암",
+      "new_title": "국립암센터_국가암정보센터 내가 알고 싶은 암",
       "fields": [
         "operations"
       ],
-      "old_digest": "456f47d804a00bc353114889ef6a60227e847ea1d7253357111378e0a46a2f20",
-      "new_digest": "e2da1c78e91ae1e9fc447e26f6fac3fb2c4ed7c533a3f6abd2af230b1725feab"
+      "old_digest": "a75cbaf69ff0a3e979516a4b4440e621b09ba65e4942925579f8979586572ea3",
+      "new_digest": "78e6555bf591f0720392e3723590fa3d2c18df13d8dd4d22f172082999df8260"
+    },
+    {
+      "id": "15122212",
+      "old_title": "국립암센터_국가암정보센터 암예방과 검진",
+      "new_title": "국립암센터_국가암정보센터 암예방과 검진",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "850cdc05d5132a9b405f158938d44d4457a443263ad4243b4c9929b7d1cae080",
+      "new_digest": "ef8e4a036d628fcdab015933ffc6210b50a893ffeacdd784370a37ebc58b7895"
+    },
+    {
+      "id": "15122222",
+      "old_title": "국립암센터_국가암정보센터 암예방과 검진 질문과 답변",
+      "new_title": "국립암센터_국가암정보센터 암예방과 검진 질문과 답변",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f3212bcd296972b56b96c19674cbbf2a6758ac6dee450a78405dc9cc6445456a",
+      "new_digest": "4e841edcc0cc5143a6796ce595975a1cf463bb546663de1a456f36708a664610"
+    },
+    {
+      "id": "15122227",
+      "old_title": "국립암센터_국가암정보센터 암환자 생활백서",
+      "new_title": "국립암센터_국가암정보센터 암환자 생활백서",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3d975127d83ecedc0b0f91964cbb02389656902e8c574926a19b089b4c16977d",
+      "new_digest": "61fc3064c214c9cdb8aee19437ff5a0370c57c65579c9f73a493398036f7ca28"
+    },
+    {
+      "id": "15122229",
+      "old_title": "국립암센터_국가암정보센터 게시물자료",
+      "new_title": "국립암센터_국가암정보센터 게시물자료",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "28d14f40be3e94927c41b3218ff1d665cf09eed2a56885b84f8664b2fc7fb01d",
+      "new_digest": "40f2bc059b237a4fc907daff823f618865ca1d60ea69c8bb53aa32e51b4a9155"
+    },
+    {
+      "id": "15122232",
+      "old_title": "국립암센터_국가암정보센터 암정보사전",
+      "new_title": "국립암센터_국가암정보센터 암정보사전",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b7fe303f5abeb8728eaf9f53b422004b86ca1b5b9d73f65ba1e2879676cd740c",
+      "new_digest": "d937b77b471985a17b48d9decf047f7104cd89e01b8fb2f48d858e09c1d97e84"
+    },
+    {
+      "id": "15122235",
+      "old_title": "국립암센터_국가암정보센터 내가 알고 싶은 암(100대암)",
+      "new_title": "국립암센터_국가암정보센터 내가 알고 싶은 암(100대암)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ac94bd85bd4582641a3cdc9856c9544534ed2df31ba5d616ef6a313d7c943a23",
+      "new_digest": "aeae087d63d5660d51264ba89d3e7a54713976ba6b54ad1bb110900cf95412e9"
     }
   ]
 }

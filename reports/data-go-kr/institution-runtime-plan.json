@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-runtime-plan.v1",
-  "generated_at": "2026-07-03T16:46:50Z",
+  "generated_at": "2026-07-03T16:56:39Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -22,7 +22,7 @@
     "planned_institutions": 10,
     "planned_operations": 1000,
     "runtime_reactivation_api_count": 8549,
-    "uncovered_api_count": 2666,
+    "uncovered_api_count": 2658,
     "first_queue": "행정안전부"
   },
   "batches": [
@@ -181,25 +181,6 @@
     {
       "rank": 9,
       "label": "institution-09",
-      "organization": "국립암센터",
-      "kind": "data_go_kr_gateway",
-      "api_count": 212,
-      "covered_api_count": 204,
-      "uncovered_api_count": 8,
-      "operation_count": 367,
-      "runtime_evidence_api_count": 6,
-      "runtime_reactivation_api_count": 198,
-      "runtime_missing_evidence_count": 288,
-      "approval_required_operations": 175,
-      "priority_score": 206,
-      "planned_operations": 100,
-      "credential_required": true,
-      "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '국립암센터' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-09.json --json",
-      "output": "reports/data-go-kr/institution-batches/institution-09.json"
-    },
-    {
-      "rank": 10,
-      "label": "institution-10",
       "organization": "부산광역시",
       "kind": "data_go_kr_gateway",
       "api_count": 259,
@@ -213,7 +194,26 @@
       "priority_score": 201,
       "planned_operations": 100,
       "credential_required": true,
-      "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '부산광역시' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-10.json --json",
+      "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '부산광역시' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-09.json --json",
+      "output": "reports/data-go-kr/institution-batches/institution-09.json"
+    },
+    {
+      "rank": 10,
+      "label": "institution-10",
+      "organization": "국립암센터",
+      "kind": "data_go_kr_gateway",
+      "api_count": 212,
+      "covered_api_count": 212,
+      "uncovered_api_count": 0,
+      "operation_count": 375,
+      "runtime_evidence_api_count": 14,
+      "runtime_reactivation_api_count": 198,
+      "runtime_missing_evidence_count": 288,
+      "approval_required_operations": 183,
+      "priority_score": 198,
+      "planned_operations": 100,
+      "credential_required": true,
+      "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '국립암센터' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-10.json --json",
       "output": "reports/data-go-kr/institution-batches/institution-10.json"
     }
   ],

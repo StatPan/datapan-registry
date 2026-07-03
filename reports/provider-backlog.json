@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T16:46:50Z",
+  "generated_at": "2026-07-03T16:56:39Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 233,
+  "filtered_count": 234,
   "summary": {
-    "hosts": 233,
+    "hosts": 234,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 91,
-    "external_guide_hosts": 174,
-    "registered_adapter_hosts": 80,
-    "operation_hosts": 93,
+    "external_endpoint_hosts": 92,
+    "external_guide_hosts": 175,
+    "registered_adapter_hosts": 81,
+    "operation_hosts": 94,
     "guide_only_hosts": 140,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 5543,
+    "approval_required_operations": 5551,
     "malformed_source_url_count": 640
   },
   "providers": [
@@ -723,6 +723,25 @@
       "sample_ids": [
         "15000834",
         "15000935"
+      ]
+    },
+    {
+      "host": "cancer.go.kr",
+      "provider": "cancer",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 8,
+      "operations": 8,
+      "external_endpoint_operations": 8,
+      "external_guide_specs": 8,
+      "approval_required_operations": 8,
+      "sample_ids": [
+        "15122208",
+        "15122210",
+        "15122212"
       ]
     },
     {

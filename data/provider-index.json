@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T16:46:50Z",
+  "generated_at": "2026-07-03T16:56:39Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 74,
-  "host_count": 82,
+  "adapter_count": 75,
+  "host_count": 83,
   "adapters": [
     {
       "name": "airport",
@@ -30,6 +30,16 @@
       "status": "registered",
       "hosts": [
         "www.calspia.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "cancer",
+      "status": "registered",
+      "hosts": [
+        "cancer.go.kr"
       ],
       "capabilities": [
         "verification"
@@ -779,8 +789,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 74,
-    "verification_capable_adapters": 74,
+    "adapter_count": 75,
+    "verification_capable_adapters": 75,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
