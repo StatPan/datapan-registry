@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T16:11:55Z",
+  "generated_at": "2026-07-03T16:21:22Z",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
-  "limit": 1971,
+  "limit": 1972,
   "truncated": true,
-  "filtered_count": 1690,
+  "filtered_count": 1691,
   "summary": {
-    "total": 1690,
-    "verified": 352,
+    "total": 1691,
+    "verified": 353,
     "failed": 145,
     "skipped": 1193,
     "unknown": 0
@@ -30804,6 +30804,20 @@
       "http_status": 400,
       "semantic_status": "http_error",
       "url": "https://open.assembly.go.kr/portal/data/service/selectServicePage.do?infId=OLH92R0011733J15777",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "3072018",
+      "title": "성평등가족부_성범죄자 지역별 통계",
+      "operation": "성평등가족부_성범죄자 지역별 통계_20220610",
+      "provider": "sexoffender",
+      "endpoint_host": "api.sexoffender.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T16:21:16Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://api.sexoffender.go.kr/index.jsp",
       "body_shape": "html"
     }
   ]

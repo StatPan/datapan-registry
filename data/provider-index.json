@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T16:12:05Z",
+  "generated_at": "2026-07-03T16:21:33Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 69,
-  "host_count": 77,
+  "adapter_count": 70,
+  "host_count": 78,
   "adapters": [
     {
       "name": "airport",
@@ -621,6 +621,16 @@
       ]
     },
     {
+      "name": "sexoffender",
+      "status": "registered",
+      "hosts": [
+        "api.sexoffender.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "sisul",
       "status": "registered",
       "hosts": [
@@ -729,8 +739,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 69,
-    "verification_capable_adapters": 69,
+    "adapter_count": 70,
+    "verification_capable_adapters": 70,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

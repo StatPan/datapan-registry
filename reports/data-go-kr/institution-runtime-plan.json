@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-runtime-plan.v1",
-  "generated_at": "2026-07-03T16:12:05Z",
+  "generated_at": "2026-07-03T16:21:33Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -22,7 +22,7 @@
     "planned_institutions": 10,
     "planned_operations": 1000,
     "runtime_reactivation_api_count": 8532,
-    "uncovered_api_count": 2703,
+    "uncovered_api_count": 2702,
     "first_queue": "행정안전부"
   },
   "batches": [
@@ -108,14 +108,14 @@
       "organization": "성평등가족부",
       "kind": "data_go_kr_gateway",
       "api_count": 273,
-      "covered_api_count": 272,
-      "uncovered_api_count": 1,
-      "operation_count": 347,
-      "runtime_evidence_api_count": 1,
+      "covered_api_count": 273,
+      "uncovered_api_count": 0,
+      "operation_count": 348,
+      "runtime_evidence_api_count": 2,
       "runtime_reactivation_api_count": 271,
       "runtime_missing_evidence_count": 346,
       "approval_required_operations": 0,
-      "priority_score": 272,
+      "priority_score": 271,
       "planned_operations": 100,
       "credential_required": true,
       "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '성평등가족부' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-05.json --json",

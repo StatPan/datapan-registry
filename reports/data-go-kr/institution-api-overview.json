@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T16:12:05Z",
+  "generated_at": "2026-07-03T16:21:33Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 16624,
-    "runtime_evidence": 1690,
+    "operations": 16625,
+    "runtime_evidence": 1691,
     "runtime_evidence_percent": 10.2,
-    "callable_operations": 16482,
-    "external_endpoint_operations": 5014,
-    "registered_adapter_operations": 5004,
+    "callable_operations": 16483,
+    "external_endpoint_operations": 5015,
+    "registered_adapter_operations": 5005,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 5014
+      "count": 5015
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 5004
+      "count": 5005
     },
     {
       "key": "builtin",
@@ -85,7 +85,7 @@
     },
     {
       "category": "사회복지",
-      "operation_count": 1345
+      "operation_count": 1346
     },
     {
       "category": "산업고용",
@@ -778,11 +778,11 @@
     {
       "organization": "성평등가족부",
       "api_count": 273,
-      "operation_api_count": 272,
-      "operation_count": 347,
-      "runtime_evidence_count": 1,
-      "runtime_evidence_percent": 0.3,
-      "verified": 0,
+      "operation_api_count": 273,
+      "operation_count": 348,
+      "runtime_evidence_count": 2,
+      "runtime_evidence_percent": 0.6,
+      "verified": 1,
       "failed": 0,
       "skipped": 1,
       "unknown": 0,
@@ -792,9 +792,17 @@
         {
           "key": "data_go_kr_gateway",
           "count": 347
+        },
+        {
+          "key": "external_endpoint",
+          "count": 1
         }
       ],
       "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 1
+        },
         {
           "key": "builtin",
           "count": 347
@@ -803,7 +811,7 @@
       "top_categories": [
         {
           "category": "사회복지",
-          "operation_count": 334
+          "operation_count": 335
         },
         {
           "category": "재난안전",
@@ -822,6 +830,15 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 347
+        },
+        {
+          "host": "api.sexoffender.go.kr",
+          "operation_count": 1,
+          "adapter": "sexoffender",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },

@@ -1,21 +1,21 @@
 {
-  "generated_at": "2026-07-03T16:12:05Z",
+  "generated_at": "2026-07-03T16:21:33Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 16624,
+  "filtered_count": 16625,
   "summary": {
-    "operations_total": 16624,
+    "operations_total": 16625,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 5014,
+    "external_endpoint_operations": 5015,
     "service_root_operations": 19,
     "no_endpoint_operations": 123,
     "malformed_endpoint_operations": 42,
     "soap_operations": 35,
     "wms_operations": 114,
     "approval_required_operations": 5521,
-    "registered_adapter_operations": 5004,
+    "registered_adapter_operations": 5005,
     "missing_adapter_operations": 29
   },
   "dependencies": [
@@ -98408,6 +98408,27 @@
       "missing_params": [
         "busRouteId"
       ]
+    },
+    {
+      "dataset_id": "3072018",
+      "title": "성평등가족부_성범죄자 지역별 통계",
+      "organization": "성평등가족부",
+      "source_category": "사회복지",
+      "operation": "성평등가족부_성범죄자 지역별 통계_20220610",
+      "provider": "data.go.kr",
+      "endpoint": "http://api.sexoffender.go.kr/index.jsp",
+      "endpoint_host": "api.sexoffender.go.kr",
+      "guide_host": "api.sexoffender.go.kr",
+      "dependency_class": "external_endpoint",
+      "adapter_status": "adapter",
+      "provider_family": "sexoffender",
+      "api_type": "LINK",
+      "data_format": "XML",
+      "dev_approval": "자동승인",
+      "prod_approval": "자동승인",
+      "approval_required": false,
+      "request_params_count": 0,
+      "response_params_count": 0
     },
     {
       "dataset_id": "15002793",
