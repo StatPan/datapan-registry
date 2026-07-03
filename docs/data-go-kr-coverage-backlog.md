@@ -2,17 +2,17 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-07-03T16:46:50Z`
+- Generated at: `2026-07-03T16:56:39Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `9394` (`77.9%`)
-- APIs without operation mapping: `2666`
-- Operations: `16685`
-- Runtime evidence operations: `1716` (`10.3%`)
-- Runtime verified operations: `378`
+- APIs with operation mapping: `9402` (`78.0%`)
+- APIs without operation mapping: `2658`
+- Operations: `16693`
+- Runtime evidence operations: `1724` (`10.3%`)
+- Runtime verified operations: `386`
 - Runtime failed operations: `145`
 - Runtime skipped operations: `1193`
-- APIs with runtime evidence: `845`
+- APIs with runtime evidence: `853`
 - Runtime reactivation APIs: `8549`
 - Runtime repair APIs: `96`
 
@@ -28,9 +28,9 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 국회 국회사무처 | 277 | 277 | 0 | 100.0% | 277 | 30 | 247 | 30 | 247 |
 | 공정거래위원회 | 250 | 250 | 0 | 100.0% | 353 | 17 | 233 | 0 | 233 |
 | 한국마사회 | 223 | 223 | 0 | 100.0% | 223 | 10 | 213 | 0 | 213 |
-| 국립암센터 | 212 | 204 | 8 | 96.2% | 367 | 6 | 198 | 0 | 206 |
 | 부산광역시 | 259 | 259 | 0 | 100.0% | 336 | 58 | 201 | 0 | 201 |
 | 법제처 | 203 | 5 | 198 | 2.5% | 38 | 5 | 0 | 1 | 198 |
+| 국립암센터 | 212 | 212 | 0 | 100.0% | 375 | 14 | 198 | 0 | 198 |
 | 경기도 광명시 | 197 | 0 | 197 | 0.0% | 0 | 0 | 0 | 0 | 197 |
 | 제주특별자치도 | 171 | 18 | 153 | 10.5% | 28 | 2 | 16 | 1 | 169 |
 | 해양수산부 | 173 | 172 | 1 | 99.4% | 276 | 8 | 164 | 0 | 165 |

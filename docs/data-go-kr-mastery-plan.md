@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `16685`
-- callable operations: `16543` (`99.1%`)
+- operations: `16693`
+- callable operations: `16551` (`99.1%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `5075`
-- registered adapter operations: `5065`
+- external endpoint operations: `5083`
+- registered adapter operations: `5073`
 - missing adapter operations: `29`
 - external adapter coverage: `99.4%`
 - approval-required operations: `5543`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `80`
+- registered adapter hosts: `81`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -124,7 +124,7 @@ epost, eshare, ex, fairdata, folk, foodsafetykorea, forest, franchise-ftc, garak
 gwangmyeong, happysd, humetro, i815, icheon, ins24, itfind, its, jeju, jeju-air, jeju-www, jejudatahub, jeonju, juso,
 kistep, kofpi, korad, kpx, lh-ebid, lofin365, mafra, myhome, naqs, ncpms, nfqs, nongsaro,
 oneclick-law, open-assembly, open-law, pqis, q-net, safemap, safetydata, seogu, seoul-bus, seoul-open-data,
-sexoffender, sisul, sisul-www, stcis, tour, uiryeong, ulsan, vworld, wamis, work, work24, and worldjob.
+sexoffender, sisul, sisul-www, stcis, tour, uiryeong, ulsan, vworld, wamis, work, work24, worldjob, and cancer.
 
 Missing external route hosts currently requiring route-disposition tracking:
 
@@ -227,8 +227,8 @@ institution:
    `scripts/validate-institution-runtime-plan.py`, and
    `scripts/validate-institution-api-overview.py`.
 
-The current operation materialization queue starts at `국립암센터`: `212`
-APIs, `204` APIs with operation mappings, and `8` uncovered APIs. The runtime
+The current operation materialization queue starts at `법제처`: `203`
+APIs, `5` APIs with operation mappings, and `198` uncovered APIs. The runtime
 reactivation queue starts at `행정안전부`: `1252` APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
 records, and `1202` APIs still needing runtime reactivation. Gateway calls need
@@ -425,6 +425,11 @@ readiness, not to advance verified runtime coverage.
    checks. That brings checked runtime evidence to `1716`, registered external
    adapter operations to `5065`, completes 한국산업인력공단 materialization at
    `230` of `230` APIs, and moves the first materialization queue to 국립암센터.
+   The 국립암센터 batch adds Cancer adapter coverage, materializes the remaining
+   `8` APIs and `8` operations, and merges `8` verified landing-page checks.
+   That brings checked runtime evidence to `1724`, registered external adapter
+   operations to `5073`, completes 국립암센터 materialization at `212` of `212`
+   APIs, and moves the first materialization queue to 법제처.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

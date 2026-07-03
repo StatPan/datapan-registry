@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T16:46:50Z",
+  "generated_at": "2026-07-03T16:56:39Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 16685,
-    "runtime_evidence": 1716,
+    "operations": 16693,
+    "runtime_evidence": 1724,
     "runtime_evidence_percent": 10.3,
-    "callable_operations": 16543,
-    "external_endpoint_operations": 5075,
-    "registered_adapter_operations": 5065,
+    "callable_operations": 16551,
+    "external_endpoint_operations": 5083,
+    "registered_adapter_operations": 5073,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 5075
+      "count": 5083
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 5065
+      "count": 5073
     },
     {
       "key": "builtin",
@@ -105,7 +105,7 @@
     },
     {
       "category": "보건의료",
-      "operation_count": 938
+      "operation_count": 946
     },
     {
       "category": "국토관리",
@@ -685,15 +685,15 @@
     {
       "organization": "국립암센터",
       "api_count": 212,
-      "operation_api_count": 204,
-      "operation_count": 367,
-      "runtime_evidence_count": 79,
-      "runtime_evidence_percent": 21.5,
-      "verified": 0,
+      "operation_api_count": 212,
+      "operation_count": 375,
+      "runtime_evidence_count": 87,
+      "runtime_evidence_percent": 23.2,
+      "verified": 8,
       "failed": 0,
       "skipped": 79,
       "unknown": 0,
-      "approval_required_operations": 175,
+      "approval_required_operations": 183,
       "no_endpoint_operations": 1,
       "by_dependency_class": [
         {
@@ -701,11 +701,19 @@
           "count": 366
         },
         {
+          "key": "external_endpoint",
+          "count": 8
+        },
+        {
           "key": "no_endpoint",
           "count": 1
         }
       ],
       "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 8
+        },
         {
           "key": "builtin",
           "count": 366
@@ -718,13 +726,22 @@
       "top_categories": [
         {
           "category": "보건의료",
-          "operation_count": 367
+          "operation_count": 375
         }
       ],
       "top_hosts": [
         {
           "host": "apis.data.go.kr",
           "operation_count": 366
+        },
+        {
+          "host": "cancer.go.kr",
+          "operation_count": 8,
+          "adapter": "cancer",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },

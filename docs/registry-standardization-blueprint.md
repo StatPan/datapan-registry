@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `2,666` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `2,658` data.go.kr APIs
   without operation mappings, `8,549` operation-mapped APIs without runtime
   evidence, and `96` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -259,8 +259,12 @@ Current gaps:
   remaining `2` APIs and `2` operations, and merges `2` verified landing-page
   checks, bringing runtime evidence to `1716` and moving the first
   materialization queue to 국립암센터.
-- API operation coverage remains incomplete: `9,394` of `12,060` APIs have
-  operation mappings (`77.9%`), leaving `2,666` APIs to materialize and `8,549`
+- The 국립암센터 batch adds Cancer adapter coverage, materializes the remaining
+  `8` APIs and `8` operations, and merges `8` verified landing-page checks,
+  bringing runtime evidence to `1724` and moving the first materialization
+  queue to 법제처.
+- API operation coverage remains incomplete: `9,402` of `12,060` APIs have
+  operation mappings (`78.0%`), leaving `2,658` APIs to materialize and `8,549`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

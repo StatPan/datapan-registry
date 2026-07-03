@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T16:46:37Z",
+  "generated_at": "2026-07-03T16:56:36Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1716,
-    "verified": 378,
+    "total": 1724,
+    "verified": 386,
     "failed": 145,
     "skipped": 1193,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 378,
+        "count": 386,
         "status": "verified"
       },
       {
@@ -459,6 +459,11 @@
         "provider": "naqs"
       },
       {
+        "key": "cancer",
+        "count": 8,
+        "provider": "cancer"
+      },
+      {
         "key": "humetro",
         "count": 8,
         "provider": "humetro"
@@ -836,6 +841,11 @@
         "host": "www.culture.go.kr"
       },
       {
+        "key": "cancer.go.kr",
+        "count": 8,
+        "host": "cancer.go.kr"
+      },
+      {
         "key": "data.humetro.busan.kr",
         "count": 8,
         "host": "data.humetro.busan.kr"
@@ -1094,7 +1104,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 992,
+        "count": 1000,
         "kind": "external_endpoint"
       },
       {
