@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T17:14:34Z",
+  "generated_at": "2026-07-03T17:22:31Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1774,
-    "verified": 436,
+    "total": 1799,
+    "verified": 461,
     "failed": 145,
     "skipped": 1193,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 436,
+        "count": 461,
         "status": "verified"
       },
       {
@@ -339,6 +339,11 @@
         "provider": "ekape"
       },
       {
+        "key": "gwangmyeong",
+        "count": 45,
+        "provider": "gwangmyeong"
+      },
+      {
         "key": "geoje",
         "count": 41,
         "provider": "geoje"
@@ -382,11 +387,6 @@
         "key": "lofin365",
         "count": 25,
         "provider": "lofin365"
-      },
-      {
-        "key": "gwangmyeong",
-        "count": 20,
-        "provider": "gwangmyeong"
       },
       {
         "key": "sisul",
@@ -716,6 +716,11 @@
         "host": "data.ekape.or.kr"
       },
       {
+        "key": "data.gm.go.kr",
+        "count": 45,
+        "host": "data.gm.go.kr"
+      },
+      {
         "key": "c.q-net.or.kr",
         "count": 42,
         "host": "c.q-net.or.kr"
@@ -764,11 +769,6 @@
         "key": "openapi.epost.go.kr:80",
         "count": 22,
         "host": "openapi.epost.go.kr:80"
-      },
-      {
-        "key": "data.gm.go.kr",
-        "count": 20,
-        "host": "data.gm.go.kr"
       },
       {
         "key": "data.sisul.or.kr",
@@ -1114,7 +1114,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 1050,
+        "count": 1075,
         "kind": "external_endpoint"
       },
       {

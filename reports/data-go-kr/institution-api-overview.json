@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T17:14:37Z",
+  "generated_at": "2026-07-03T17:22:34Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 17058,
-    "runtime_evidence": 1774,
+    "operations": 17348,
+    "runtime_evidence": 1799,
     "runtime_evidence_percent": 10.4,
-    "callable_operations": 16916,
-    "external_endpoint_operations": 5448,
-    "registered_adapter_operations": 5438,
+    "callable_operations": 17206,
+    "external_endpoint_operations": 5738,
+    "registered_adapter_operations": 5728,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 5448
+      "count": 5738
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 5438
+      "count": 5728
     },
     {
       "key": "builtin",
@@ -69,23 +69,23 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 2392
-    },
-    {
-      "category": "교통물류",
-      "operation_count": 1670
+      "operation_count": 2428
     },
     {
       "category": "문화관광",
-      "operation_count": 1605
+      "operation_count": 1685
+    },
+    {
+      "category": "교통물류",
+      "operation_count": 1676
     },
     {
       "category": "농축수산",
-      "operation_count": 1485
+      "operation_count": 1486
     },
     {
       "category": "사회복지",
-      "operation_count": 1346
+      "operation_count": 1374
     },
     {
       "category": "산업고용",
@@ -93,11 +93,11 @@
     },
     {
       "category": "식품건강",
-      "operation_count": 1139
+      "operation_count": 1166
     },
     {
       "category": "환경기상",
-      "operation_count": 1045
+      "operation_count": 1067
     },
     {
       "category": "재정금융",
@@ -105,19 +105,19 @@
     },
     {
       "category": "보건의료",
-      "operation_count": 946
+      "operation_count": 952
     },
     {
       "category": "국토관리",
-      "operation_count": 836
+      "operation_count": 905
     },
     {
       "category": "재난안전",
-      "operation_count": 826
+      "operation_count": 832
     },
     {
       "category": "교육",
-      "operation_count": 723
+      "operation_count": 732
     },
     {
       "category": "과학기술",
@@ -139,7 +139,7 @@
     },
     {
       "host": "data.gg.go.kr",
-      "operation_count": 2143,
+      "operation_count": 2156,
       "adapter": "data-gg",
       "adapter_status": "registered",
       "capabilities": [
@@ -169,6 +169,15 @@
       "host": "www.lofin365.go.kr",
       "operation_count": 343,
       "adapter": "lofin365",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "host": "data.gm.go.kr",
+      "operation_count": 335,
+      "adapter": "gwangmyeong",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -232,15 +241,6 @@
       "host": "openapi.jeonju.go.kr",
       "operation_count": 80,
       "adapter": "jeonju",
-      "adapter_status": "registered",
-      "capabilities": [
-        "verification"
-      ]
-    },
-    {
-      "host": "data.gm.go.kr",
-      "operation_count": 58,
-      "adapter": "gwangmyeong",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -318,9 +318,9 @@
       "api_count": 840,
       "operation_api_count": 840,
       "operation_count": 2241,
-      "runtime_evidence_count": 160,
-      "runtime_evidence_percent": 7.1,
-      "verified": 159,
+      "runtime_evidence_count": 161,
+      "runtime_evidence_percent": 7.2,
+      "verified": 160,
       "failed": 1,
       "skipped": 0,
       "unknown": 0,
@@ -1182,6 +1182,74 @@
         {
           "host": "www.jobplustv.or.kr",
           "operation_count": 1
+        }
+      ]
+    },
+    {
+      "organization": "경기도 광명시",
+      "api_count": 197,
+      "operation_api_count": 100,
+      "operation_count": 290,
+      "runtime_evidence_count": 24,
+      "runtime_evidence_percent": 8.3,
+      "verified": 24,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 23,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "external_endpoint",
+          "count": 290
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 290
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "문화관광",
+          "operation_count": 80
+        },
+        {
+          "category": "국토관리",
+          "operation_count": 69
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 36
+        },
+        {
+          "category": "사회복지",
+          "operation_count": 28
+        },
+        {
+          "category": "식품건강",
+          "operation_count": 27
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "data.gm.go.kr",
+          "operation_count": 277,
+          "adapter": "gwangmyeong",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "data.gg.go.kr",
+          "operation_count": 13,
+          "adapter": "data-gg",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },
@@ -14621,24 +14689,6 @@
           "operation_count": 1
         }
       ]
-    },
-    {
-      "organization": "경기도 광명시",
-      "api_count": 197,
-      "operation_api_count": 0,
-      "operation_count": 0,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [],
-      "by_adapter_status": [],
-      "top_categories": [],
-      "top_hosts": []
     },
     {
       "organization": "대전광역시 서구",

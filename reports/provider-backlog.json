@@ -1,24 +1,24 @@
 {
-  "generated_at": "2026-07-03T17:14:37Z",
+  "generated_at": "2026-07-03T17:22:34Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 236,
+  "filtered_count": 237,
   "summary": {
-    "hosts": 236,
+    "hosts": 237,
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 94,
-    "external_guide_hosts": 176,
+    "external_guide_hosts": 177,
     "registered_adapter_hosts": 83,
     "operation_hosts": 96,
-    "guide_only_hosts": 140,
+    "guide_only_hosts": 141,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 5687,
-    "malformed_source_url_count": 640
+    "approval_required_operations": 5710,
+    "malformed_source_url_count": 643
   },
   "providers": [
     {
@@ -177,12 +177,12 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 844,
-      "operations": 2143,
-      "external_endpoint_operations": 2143,
-      "external_guide_specs": 19,
+      "specs": 855,
+      "operations": 2156,
+      "external_endpoint_operations": 2156,
+      "external_guide_specs": 21,
       "wms_operations": 5,
-      "approval_required_operations": 37,
+      "approval_required_operations": 39,
       "sample_ids": [
         "15005231",
         "15011020",
@@ -239,6 +239,22 @@
         "15038581",
         "15056593",
         "15056639"
+      ]
+    },
+    {
+      "host": "data.gm.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 152,
+      "operations": 335,
+      "external_endpoint_operations": 335,
+      "approval_required_operations": 23,
+      "sample_ids": [
+        "15011425",
+        "15032576",
+        "15032578"
       ]
     },
     {
@@ -366,22 +382,6 @@
         "15000354",
         "15004414",
         "15004788"
-      ]
-    },
-    {
-      "host": "data.gm.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 52,
-      "operations": 58,
-      "external_endpoint_operations": 58,
-      "approval_required_operations": 2,
-      "sample_ids": [
-        "15011425",
-        "15056498",
-        "15056517"
       ]
     },
     {
@@ -3279,6 +3279,19 @@
       "external_guide_specs": 1,
       "sample_ids": [
         "15159541"
+      ]
+    },
+    {
+      "host": "www.gmmhc.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15032795"
       ]
     },
     {

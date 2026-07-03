@@ -1,32 +1,32 @@
 {
-  "generated_at": "2026-07-03T17:14:37Z",
+  "generated_at": "2026-07-03T17:22:34Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 17058,
-    "callable_operations": 16916,
-    "specs_without_operations": 2460,
-    "specs_without_callable_operation": 2535,
+    "operations_total": 17348,
+    "callable_operations": 17206,
+    "specs_without_operations": 2360,
+    "specs_without_callable_operation": 2435,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 4720,
-    "operations_without_response_params": 5942,
+    "operations_without_request_params": 5010,
+    "operations_without_response_params": 6232,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 2729,
-      "external_endpoint_operations": 5448,
+      "external_endpoint_specs": 2829,
+      "external_endpoint_operations": 5738,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 114,
       "dev_approval_required_operations": 208,
-      "prod_approval_required_operations": 5581,
+      "prod_approval_required_operations": 5604,
       "malformed_endpoint_url_count": 42,
-      "malformed_guide_url_count": 598,
+      "malformed_guide_url_count": 601,
       "top_endpoint_hosts": [
         {
           "host": "apis.data.go.kr",
@@ -34,7 +34,7 @@
         },
         {
           "host": "data.gg.go.kr",
-          "count": 2143
+          "count": 2156
         },
         {
           "host": "www.vworld.kr",
@@ -47,6 +47,10 @@
         {
           "host": "www.lofin365.go.kr",
           "count": 343
+        },
+        {
+          "host": "data.gm.go.kr",
+          "count": 335
         },
         {
           "host": "open.law.go.kr",
@@ -75,10 +79,6 @@
         {
           "host": "openapi.jeonju.go.kr",
           "count": 80
-        },
-        {
-          "host": "data.gm.go.kr",
-          "count": 58
         },
         {
           "host": "data.ekape.or.kr",
@@ -112,7 +112,7 @@
       "top_external_endpoint_hosts": [
         {
           "host": "data.gg.go.kr",
-          "count": 2143
+          "count": 2156
         },
         {
           "host": "www.vworld.kr",
@@ -125,6 +125,10 @@
         {
           "host": "www.lofin365.go.kr",
           "count": 343
+        },
+        {
+          "host": "data.gm.go.kr",
+          "count": 335
         },
         {
           "host": "open.law.go.kr",
@@ -153,10 +157,6 @@
         {
           "host": "openapi.jeonju.go.kr",
           "count": 80
-        },
-        {
-          "host": "data.gm.go.kr",
-          "count": 58
         },
         {
           "host": "data.ekape.or.kr",
@@ -233,16 +233,16 @@
           "count": 61
         },
         {
+          "host": "data.gg.go.kr",
+          "count": 55
+        },
+        {
           "host": "coast.mof.go.kr",
           "count": 54
         },
         {
           "host": "phdata.pohang.go.kr",
           "count": 52
-        },
-        {
-          "host": "data.gg.go.kr",
-          "count": 49
         },
         {
           "host": "www.vworld.kr",

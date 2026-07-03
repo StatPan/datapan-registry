@@ -11,8 +11,8 @@ re-importing the upstream data.go.kr catalog every time.
 
 - Provider: `data.go.kr`
 - Specs: `12060`
-- Operations: `17058`
-- Callable operations: `16916` (`99.2%`)
+- Operations: `17348`
+- Callable operations: `17206` (`99.2%`)
 - Latest release: `v2026.06.25.24`
 - Registered external adapters: `airport`, `andong`, `calspia`, `car`, `car365`, `codil`, `consumer`, `culture`, `data-gg`,
   `dgfca`, `dongjak`, `ekape`, `emuseum`, `epost`, `eshare`, `ex`, `fairdata`, `folk`, `foodsafetykorea`, `forest`,
@@ -22,18 +22,18 @@ re-importing the upstream data.go.kr catalog every time.
   `nongsaro`, `oneclick-law`, `open-assembly`, `open-law`, `pqis`, `q-net`, `safemap`, `safetydata`,
   `seoul-bus`, `seogu`, `seoul-open-data`, `sexoffender`, `sisul`, `sisul-www`, `stcis`, `tour`, `uiryeong`, `ulsan`, `vworld`,
   `wamis`, `work`, `work24`, `worldjob`, `cancer`
-- External adapter coverage: `5438` registered-adapter operations out of `5448`
+- External adapter coverage: `5728` registered-adapter operations out of `5738`
   external endpoint operations (`99.5%`)
 - Missing external adapter hosts: `11`
 - Provider split readiness: `ready`
   (`75` adapters, `75` verification-capable, `23` call-capable)
-- Runtime verification evidence: `1774` bounded checks merged into
-  `reports/latest-verification.json` (`436` verified, `145` failed, `1193`
+- Runtime verification evidence: `1799` bounded checks merged into
+  `reports/latest-verification.json` (`461` verified, `145` failed, `1193`
   skipped)
 - Runtime evidence growth target: `10.4%` checked evidence is above the
   unrounded `10%` release target; `0` additional records are required for this
   target.
-- Institution API overview: `411` organizations, `12060` APIs, and `17058`
+- Institution API overview: `411` organizations, `12060` APIs, and `17348`
   operations in `reports/data-go-kr/institution-api-overview.json`; readable
   tables live in `docs/data-go-kr-institution-api-overview.md`.
 - Missing external host probe: `81` manifest-bound probe records remain in

@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T17:14:37Z`
+- Generated at: `2026-07-03T17:22:34Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `17058`
-- Runtime evidence: `1774` (`10.4%`)
-- External endpoint operations: `5448`
-- Registered adapter operations: `5438`
+- Operations: `17348`
+- Runtime evidence: `1799` (`10.4%`)
+- External endpoint operations: `5738`
+- Registered adapter operations: `5728`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -14,7 +14,7 @@
 | Institution | APIs | APIs with ops | Ops | Evidence | Evidence % | Verified | Failed | Skipped | Approval | No endpoint |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 행정안전부 | 1252 | 1252 | 1767 | 96 | 5.4% | 60 | 25 | 11 | 613 | 0 |
-| 경기도 | 840 | 840 | 2241 | 160 | 7.1% | 159 | 1 | 0 | 32 | 0 |
+| 경기도 | 840 | 840 | 2241 | 161 | 7.2% | 160 | 1 | 0 | 32 | 0 |
 | 국토교통부 | 393 | 393 | 1055 | 87 | 8.2% | 58 | 2 | 27 | 258 | 0 |
 | 식품의약품안전처 | 392 | 392 | 648 | 41 | 6.3% | 10 | 0 | 31 | 515 | 0 |
 | 국회 국회사무처 | 277 | 277 | 277 | 30 | 10.8% | 0 | 30 | 0 | 277 | 0 |
@@ -25,7 +25,7 @@
 | 한국마사회 | 223 | 223 | 223 | 10 | 4.5% | 0 | 0 | 10 | 221 | 0 |
 | 국립암센터 | 212 | 212 | 375 | 87 | 23.2% | 8 | 0 | 79 | 183 | 1 |
 | 법제처 | 203 | 203 | 403 | 88 | 21.8% | 50 | 11 | 27 | 154 | 0 |
-| 경기도 광명시 | 197 | 0 | 0 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
+| 경기도 광명시 | 197 | 100 | 290 | 24 | 8.3% | 24 | 0 | 0 | 23 | 0 |
 | 해양수산부 | 173 | 172 | 276 | 10 | 3.6% | 0 | 0 | 10 | 116 | 0 |
 | 제주특별자치도 | 171 | 18 | 28 | 4 | 14.3% | 1 | 1 | 2 | 8 | 0 |
 | 농촌진흥청 | 136 | 14 | 45 | 8 | 17.8% | 5 | 0 | 3 | 8 | 0 |
@@ -48,7 +48,7 @@
 
 | Institution | APIs | APIs with ops | Ops | Evidence | Evidence % | Verified | Failed | Skipped | Approval | No endpoint |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 경기도 | 840 | 840 | 2241 | 160 | 7.1% | 159 | 1 | 0 | 32 | 0 |
+| 경기도 | 840 | 840 | 2241 | 161 | 7.2% | 160 | 1 | 0 | 32 | 0 |
 | 행정안전부 | 1252 | 1252 | 1767 | 96 | 5.4% | 60 | 25 | 11 | 613 | 0 |
 | 국토교통부 | 393 | 393 | 1055 | 87 | 8.2% | 58 | 2 | 27 | 258 | 0 |
 | 식품의약품안전처 | 392 | 392 | 648 | 41 | 6.3% | 10 | 0 | 31 | 515 | 0 |
@@ -59,6 +59,7 @@
 | 성평등가족부 | 273 | 273 | 348 | 2 | 0.6% | 1 | 0 | 1 | 0 | 0 |
 | 부산광역시 | 259 | 259 | 336 | 60 | 17.9% | 0 | 0 | 60 | 74 | 1 |
 | 한국산업인력공단 | 230 | 230 | 317 | 150 | 47.3% | 7 | 1 | 142 | 181 | 0 |
+| 경기도 광명시 | 197 | 100 | 290 | 24 | 8.3% | 24 | 0 | 0 | 23 | 0 |
 | 국회 국회사무처 | 277 | 277 | 277 | 30 | 10.8% | 0 | 30 | 0 | 277 | 0 |
 | 해양수산부 | 173 | 172 | 276 | 10 | 3.6% | 0 | 0 | 10 | 116 | 0 |
 | 한국연구재단 | 26 | 24 | 247 | 13 | 5.3% | 4 | 3 | 6 | 234 | 0 |
@@ -77,7 +78,6 @@
 | 서울올림픽기념국민체육진흥공단 | 70 | 70 | 111 | 0 | 0.0% | 0 | 0 | 0 | 1 | 0 |
 | 한국예탁결제원 | 10 | 10 | 110 | 0 | 0.0% | 0 | 0 | 0 | 110 | 0 |
 | 한국대학교육협의회 | 9 | 9 | 103 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
-| 농촌진흥청 국립농업과학원 | 27 | 27 | 102 | 0 | 0.0% | 0 | 0 | 0 | 3 | 0 |
 
 The full machine-readable report is `reports/data-go-kr/institution-api-overview.json`.
 The full coverage backlog is `reports/data-go-kr/coverage-backlog.json`, with
@@ -85,26 +85,26 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 ## Largest Categories
 
-- 공공행정: `2392` operations
-- 교통물류: `1670` operations
-- 문화관광: `1605` operations
-- 농축수산: `1485` operations
-- 사회복지: `1346` operations
+- 공공행정: `2428` operations
+- 문화관광: `1685` operations
+- 교통물류: `1676` operations
+- 농축수산: `1486` operations
+- 사회복지: `1374` operations
 - 산업고용: `1246` operations
-- 식품건강: `1139` operations
-- 환경기상: `1045` operations
+- 식품건강: `1166` operations
+- 환경기상: `1067` operations
 - 재정금융: `964` operations
-- 보건의료: `946` operations
+- 보건의료: `952` operations
 
 ## Largest Hosts
 
 - apis.data.go.kr: `11423` operations
-- data.gg.go.kr: `2143` operations
+- data.gg.go.kr: `2156` operations
 - www.vworld.kr: `458` operations
 - www.safetydata.go.kr: `370` operations
 - www.lofin365.go.kr: `343` operations
+- data.gm.go.kr: `335` operations
 - open.law.go.kr: `304` operations
 - www.foodsafetykorea.go.kr: `288` operations
 - open.assembly.go.kr: `277` operations
 - www.calspia.go.kr: `168` operations
-- www.safemap.go.kr: `104` operations
