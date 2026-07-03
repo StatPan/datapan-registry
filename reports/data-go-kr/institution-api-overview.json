@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T16:21:33Z",
+  "generated_at": "2026-07-03T16:35:13Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 16625,
-    "runtime_evidence": 1691,
-    "runtime_evidence_percent": 10.2,
-    "callable_operations": 16483,
-    "external_endpoint_operations": 5015,
-    "registered_adapter_operations": 5005,
+    "operations": 16683,
+    "runtime_evidence": 1714,
+    "runtime_evidence_percent": 10.3,
+    "callable_operations": 16541,
+    "external_endpoint_operations": 5073,
+    "registered_adapter_operations": 5063,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 5015
+      "count": 5073
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 5005
+      "count": 5063
     },
     {
       "key": "builtin",
@@ -69,7 +69,7 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 1989
+      "operation_count": 2027
     },
     {
       "category": "교통물류",
@@ -89,7 +89,7 @@
     },
     {
       "category": "산업고용",
-      "operation_count": 1224
+      "operation_count": 1244
     },
     {
       "category": "식품건강",
@@ -285,6 +285,15 @@
       ]
     },
     {
+      "host": "www.consumer.go.kr",
+      "operation_count": 36,
+      "adapter": "consumer",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "host": "www.juso.go.kr",
       "operation_count": 30,
       "adapter": "juso",
@@ -297,16 +306,6 @@
       "host": "oneclick.law.go.kr:80",
       "operation_count": 27,
       "adapter": "oneclick-law",
-      "adapter_status": "registered",
-      "capabilities": [
-        "call",
-        "verification"
-      ]
-    },
-    {
-      "host": "openapi.tour.go.kr",
-      "operation_count": 26,
-      "adapter": "tour",
       "adapter_status": "registered",
       "capabilities": [
         "call",
@@ -730,6 +729,96 @@
       ]
     },
     {
+      "organization": "공정거래위원회",
+      "api_count": 250,
+      "operation_api_count": 250,
+      "operation_count": 353,
+      "runtime_evidence_count": 23,
+      "runtime_evidence_percent": 6.5,
+      "verified": 23,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 301,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 295
+        },
+        {
+          "key": "external_endpoint",
+          "count": 58
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 58
+        },
+        {
+          "key": "builtin",
+          "count": 295
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "산업고용",
+          "operation_count": 155
+        },
+        {
+          "category": "재정금융",
+          "operation_count": 110
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 88
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 295
+        },
+        {
+          "host": "www.consumer.go.kr",
+          "operation_count": 36,
+          "adapter": "consumer",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.fairdata.go.kr",
+          "operation_count": 17,
+          "adapter": "fairdata",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "franchise.ftc.go.kr",
+          "operation_count": 3,
+          "adapter": "franchise-ftc",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "open.law.go.kr",
+          "operation_count": 2,
+          "adapter": "open-law",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "금융위원회",
       "api_count": 110,
       "operation_api_count": 110,
@@ -990,52 +1079,6 @@
           "capabilities": [
             "verification"
           ]
-        }
-      ]
-    },
-    {
-      "organization": "공정거래위원회",
-      "api_count": 250,
-      "operation_api_count": 216,
-      "operation_count": 295,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 279,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 295
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 295
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "산업고용",
-          "operation_count": 135
-        },
-        {
-          "category": "재정금융",
-          "operation_count": 110
-        },
-        {
-          "category": "공공행정",
-          "operation_count": 50
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 295
         }
       ]
     },

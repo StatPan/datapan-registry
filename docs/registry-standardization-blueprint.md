@@ -94,8 +94,8 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `2,702` data.go.kr APIs
-  without operation mappings, `8,532` operation-mapped APIs without runtime
+- `reports/data-go-kr/coverage-backlog.json` tracks `2,668` data.go.kr APIs
+  without operation mappings, `8,549` operation-mapped APIs without runtime
   evidence, and `96` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
@@ -251,8 +251,12 @@ Current gaps:
   the remaining `1` API and `1` operation, and merges `1` verified
   landing-page check, bringing runtime evidence to `1691` and moving the first
   materialization queue to 공정거래위원회.
-- API operation coverage remains incomplete: `9,358` of `12,060` APIs have
-  operation mappings (`77.6%`), leaving `2,702` APIs to materialize and `8,532`
+  The 공정거래위원회 batch adds Consumer, Fair Data, and Franchise FTC adapter
+  coverage, materializes the remaining `34` APIs and `58` operations, and
+  merges `23` verified landing-page checks, bringing runtime evidence to
+  `1714` and moving the first materialization queue to 한국산업인력공단.
+- API operation coverage remains incomplete: `9,392` of `12,060` APIs have
+  operation mappings (`77.9%`), leaving `2,668` APIs to materialize and `8,549`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

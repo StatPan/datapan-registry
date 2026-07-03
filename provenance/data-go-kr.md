@@ -1,6 +1,6 @@
 # data.go.kr Release Provenance
 
-- generated_at: 2026-07-03T16:21:33Z
+- generated_at: 2026-07-03T16:35:13Z
 - datapan_version: 0.1.0-dev
 - source_provider: data.go.kr
 - source_registry: data\data-go-kr.registry.json

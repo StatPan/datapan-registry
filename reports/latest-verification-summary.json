@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T16:21:22Z",
+  "generated_at": "2026-07-03T16:35:02Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1691,
-    "verified": 353,
+    "total": 1714,
+    "verified": 376,
     "failed": 145,
     "skipped": 1193,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 353,
+        "count": 376,
         "status": "verified"
       },
       {
@@ -424,6 +424,16 @@
         "provider": "mafra"
       },
       {
+        "key": "consumer",
+        "count": 10,
+        "provider": "consumer"
+      },
+      {
+        "key": "fairdata",
+        "count": 10,
+        "provider": "fairdata"
+      },
+      {
         "key": "juso",
         "count": 10,
         "provider": "juso"
@@ -527,6 +537,11 @@
         "key": "folk",
         "count": 3,
         "provider": "folk"
+      },
+      {
+        "key": "franchise-ftc",
+        "count": 3,
+        "provider": "franchise-ftc"
       },
       {
         "key": "garak",
@@ -781,6 +796,16 @@
         "host": "data.mafra.go.kr"
       },
       {
+        "key": "www.consumer.go.kr",
+        "count": 10,
+        "host": "www.consumer.go.kr"
+      },
+      {
+        "key": "www.fairdata.go.kr",
+        "count": 10,
+        "host": "www.fairdata.go.kr"
+      },
+      {
         "key": "www.juso.go.kr",
         "count": 10,
         "host": "www.juso.go.kr"
@@ -894,6 +919,11 @@
         "key": "folkency.nfm.go.kr",
         "count": 3,
         "host": "folkency.nfm.go.kr"
+      },
+      {
+        "key": "franchise.ftc.go.kr",
+        "count": 3,
+        "host": "franchise.ftc.go.kr"
       },
       {
         "key": "oneclick.law.go.kr",
@@ -1054,7 +1084,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 967,
+        "count": 990,
         "kind": "external_endpoint"
       },
       {

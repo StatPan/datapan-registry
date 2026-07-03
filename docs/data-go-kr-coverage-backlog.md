@@ -2,18 +2,18 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-07-03T16:21:33Z`
+- Generated at: `2026-07-03T16:35:13Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `9358` (`77.6%`)
-- APIs without operation mapping: `2702`
-- Operations: `16625`
-- Runtime evidence operations: `1691` (`10.2%`)
-- Runtime verified operations: `353`
+- APIs with operation mapping: `9392` (`77.9%`)
+- APIs without operation mapping: `2668`
+- Operations: `16683`
+- Runtime evidence operations: `1714` (`10.3%`)
+- Runtime verified operations: `376`
 - Runtime failed operations: `145`
 - Runtime skipped operations: `1193`
-- APIs with runtime evidence: `826`
-- Runtime reactivation APIs: `8532`
+- APIs with runtime evidence: `843`
+- Runtime reactivation APIs: `8549`
 - Runtime repair APIs: `96`
 
 ## Highest Priority Institutions
@@ -25,8 +25,8 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 식품의약품안전처 | 392 | 392 | 0 | 100.0% | 648 | 21 | 371 | 0 | 371 |
 | 국토교통부 | 393 | 393 | 0 | 100.0% | 1055 | 35 | 358 | 2 | 358 |
 | 성평등가족부 | 273 | 273 | 0 | 100.0% | 348 | 2 | 271 | 0 | 271 |
-| 공정거래위원회 | 250 | 216 | 34 | 86.4% | 295 | 0 | 216 | 0 | 250 |
 | 국회 국회사무처 | 277 | 277 | 0 | 100.0% | 277 | 30 | 247 | 30 | 247 |
+| 공정거래위원회 | 250 | 250 | 0 | 100.0% | 353 | 17 | 233 | 0 | 233 |
 | 한국마사회 | 223 | 223 | 0 | 100.0% | 223 | 10 | 213 | 0 | 213 |
 | 국립암센터 | 212 | 204 | 8 | 96.2% | 367 | 6 | 198 | 0 | 206 |
 | 부산광역시 | 259 | 259 | 0 | 100.0% | 336 | 58 | 201 | 0 | 201 |

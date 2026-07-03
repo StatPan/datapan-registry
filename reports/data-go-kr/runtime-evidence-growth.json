@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-07-03T16:21:33Z",
+  "generated_at": "2026-07-03T16:35:13Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -13,20 +13,20 @@
     "provider_index": "data/provider-index.json"
   },
   "coverage": {
-    "operations": 16625,
-    "callable_operations": 16483,
+    "operations": 16683,
+    "callable_operations": 16541,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 5015,
-    "registered_adapter_operations": 5005,
+    "external_endpoint_operations": 5073,
+    "registered_adapter_operations": 5063,
     "call_capable_adapters": 23
   },
   "evidence": {
-    "total": 1691,
-    "verified": 353,
+    "total": 1714,
+    "verified": 376,
     "failed": 145,
     "skipped": 1193,
     "unknown": 0,
-    "coverage_percent": 10.2,
+    "coverage_percent": 10.3,
     "by_kind": [
       {
         "key": "data_go_kr_gateway",
@@ -34,7 +34,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 967
+        "count": 990
       },
       {
         "key": "service_root",
@@ -44,15 +44,15 @@
   },
   "growth_target": {
     "target_percent": 10,
-    "target_evidence_total": 1663,
+    "target_evidence_total": 1669,
     "remaining_to_target": 0,
     "status": "above_target"
   },
   "verification_plan": {
-    "planned_batches": 19,
-    "planned_operations": 143,
+    "planned_batches": 20,
+    "planned_operations": 142,
     "uncovered_gateway_candidates": 10714,
-    "uncovered_adapter_candidates": 4019,
+    "uncovered_adapter_candidates": 3579,
     "missing_adapter_hosts": 11,
     "planned_by_kind": [
       {
@@ -61,7 +61,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 133
+        "count": 132
       }
     ],
     "batches": [
@@ -92,6 +92,15 @@
         "output": ".datapan/verification/car-next.json"
       },
       {
+        "label": "consumer",
+        "provider": "consumer",
+        "kind": "external_endpoint",
+        "candidates": 36,
+        "uncovered_candidates": 26,
+        "planned_operations": 10,
+        "output": ".datapan/verification/consumer-next.json"
+      },
+      {
         "label": "data-gg",
         "provider": "data-gg",
         "kind": "external_endpoint",
@@ -108,6 +117,15 @@
         "uncovered_candidates": 1,
         "planned_operations": 1,
         "output": ".datapan/verification/ex-next.json"
+      },
+      {
+        "label": "fairdata",
+        "provider": "fairdata",
+        "kind": "external_endpoint",
+        "candidates": 17,
+        "uncovered_candidates": 7,
+        "planned_operations": 7,
+        "output": ".datapan/verification/fairdata-next.json"
       },
       {
         "label": "foodsafetykorea",
@@ -191,6 +209,15 @@
         "output": ".datapan/verification/open-assembly-next.json"
       },
       {
+        "label": "open-law",
+        "provider": "open-law",
+        "kind": "external_endpoint",
+        "candidates": 3,
+        "uncovered_candidates": 2,
+        "planned_operations": 2,
+        "output": ".datapan/verification/open-law-next.json"
+      },
+      {
         "label": "safetydata",
         "provider": "safetydata",
         "kind": "external_endpoint",
@@ -216,31 +243,13 @@
         "uncovered_candidates": 4,
         "planned_operations": 4,
         "output": ".datapan/verification/seoul-open-data-next.json"
-      },
-      {
-        "label": "vworld",
-        "provider": "vworld",
-        "kind": "external_endpoint",
-        "candidates": 458,
-        "uncovered_candidates": 457,
-        "planned_operations": 10,
-        "output": ".datapan/verification/vworld-next.json"
-      },
-      {
-        "label": "work24",
-        "provider": "work24",
-        "kind": "external_endpoint",
-        "candidates": 21,
-        "uncovered_candidates": 18,
-        "planned_operations": 10,
-        "output": ".datapan/verification/work24-next.json"
       }
     ]
   },
   "provider_split_readiness": {
     "status": "ready",
-    "adapter_count": 70,
-    "verification_capable_adapters": 70,
+    "adapter_count": 73,
+    "verification_capable_adapters": 73,
     "call_capable_adapters": 23
   },
   "warnings": []

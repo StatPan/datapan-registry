@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T16:21:33Z",
+  "generated_at": "2026-07-03T16:35:13Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 229,
+  "filtered_count": 232,
   "summary": {
-    "hosts": 229,
+    "hosts": 232,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 87,
-    "external_guide_hosts": 171,
-    "registered_adapter_hosts": 76,
-    "operation_hosts": 89,
+    "external_endpoint_hosts": 90,
+    "external_guide_hosts": 173,
+    "registered_adapter_hosts": 79,
+    "operation_hosts": 92,
     "guide_only_hosts": 140,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 5521,
+    "approval_required_operations": 5543,
     "malformed_source_url_count": 640
   },
   "providers": [
@@ -453,6 +453,24 @@
       ]
     },
     {
+      "host": "www.consumer.go.kr",
+      "provider": "consumer",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 12,
+      "operations": 36,
+      "external_endpoint_operations": 36,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15056534",
+        "15056747",
+        "15056914"
+      ]
+    },
+    {
       "host": "www.juso.go.kr",
       "kinds": [
         "external_endpoint"
@@ -568,6 +586,23 @@
         "15002034",
         "15005257",
         "15015158"
+      ]
+    },
+    {
+      "host": "www.fairdata.go.kr",
+      "provider": "fairdata",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 17,
+      "operations": 17,
+      "external_endpoint_operations": 17,
+      "approval_required_operations": 17,
+      "sample_ids": [
+        "15143693",
+        "15143694",
+        "15143695"
       ]
     },
     {
@@ -974,6 +1009,25 @@
       ]
     },
     {
+      "host": "open.law.go.kr",
+      "provider": "open-law",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 3,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "external_guide_specs": 2,
+      "approval_required_operations": 3,
+      "sample_ids": [
+        "15103246",
+        "15103247",
+        "15148289"
+      ]
+    },
+    {
       "host": "www.garak.co.kr",
       "kinds": [
         "external_endpoint",
@@ -1000,6 +1054,23 @@
       "external_endpoint_operations": 3,
       "sample_ids": [
         "15126343"
+      ]
+    },
+    {
+      "host": "franchise.ftc.go.kr",
+      "provider": "franchise-ftc",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 3,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "approval_required_operations": 3,
+      "sample_ids": [
+        "15125569",
+        "15125570",
+        "15125571"
       ]
     },
     {
@@ -1229,21 +1300,6 @@
       "external_endpoint_operations": 1,
       "sample_ids": [
         "15134269"
-      ]
-    },
-    {
-      "host": "open.law.go.kr",
-      "provider": "open-law",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 1,
-      "operations": 1,
-      "external_endpoint_operations": 1,
-      "approval_required_operations": 1,
-      "sample_ids": [
-        "15148289"
       ]
     },
     {

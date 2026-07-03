@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T16:21:33Z",
+  "generated_at": "2026-07-03T16:35:13Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 70,
-  "host_count": 78,
+  "adapter_count": 73,
+  "host_count": 81,
   "adapters": [
     {
       "name": "airport",
@@ -60,6 +60,16 @@
       "status": "registered",
       "hosts": [
         "www.codil.or.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "consumer",
+      "status": "registered",
+      "hosts": [
+        "www.consumer.go.kr"
       ],
       "capabilities": [
         "verification"
@@ -159,6 +169,16 @@
       ]
     },
     {
+      "name": "fairdata",
+      "status": "registered",
+      "hosts": [
+        "www.fairdata.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "folk",
       "status": "registered",
       "hosts": [
@@ -186,6 +206,16 @@
       ],
       "capabilities": [
         "call",
+        "verification"
+      ]
+    },
+    {
+      "name": "franchise-ftc",
+      "status": "registered",
+      "hosts": [
+        "franchise.ftc.go.kr"
+      ],
+      "capabilities": [
         "verification"
       ]
     },
@@ -739,8 +769,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 70,
-    "verification_capable_adapters": 70,
+    "adapter_count": 73,
+    "verification_capable_adapters": 73,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
