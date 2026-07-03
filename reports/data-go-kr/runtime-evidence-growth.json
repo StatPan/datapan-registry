@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-07-03T13:54:19Z",
+  "generated_at": "2026-07-03T14:13:05Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -13,16 +13,16 @@
     "provider_index": "data/provider-index.json"
   },
   "coverage": {
-    "operations": 14780,
-    "callable_operations": 14638,
+    "operations": 15041,
+    "callable_operations": 14899,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 3170,
-    "registered_adapter_operations": 3160,
+    "external_endpoint_operations": 3431,
+    "registered_adapter_operations": 3421,
     "call_capable_adapters": 23
   },
   "evidence": {
-    "total": 1481,
-    "verified": 206,
+    "total": 1506,
+    "verified": 231,
     "failed": 112,
     "skipped": 1163,
     "unknown": 0,
@@ -34,7 +34,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 787
+        "count": 812
       },
       {
         "key": "service_root",
@@ -44,15 +44,15 @@
   },
   "growth_target": {
     "target_percent": 10,
-    "target_evidence_total": 1478,
+    "target_evidence_total": 1505,
     "remaining_to_target": 0,
     "status": "above_target"
   },
   "verification_plan": {
-    "planned_batches": 16,
-    "planned_operations": 110,
+    "planned_batches": 14,
+    "planned_operations": 102,
     "uncovered_gateway_candidates": 10744,
-    "uncovered_adapter_candidates": 2354,
+    "uncovered_adapter_candidates": 2590,
     "missing_adapter_hosts": 11,
     "planned_by_kind": [
       {
@@ -61,7 +61,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 100
+        "count": 92
       }
     ],
     "batches": [
@@ -77,28 +77,10 @@
         "label": "data-gg",
         "provider": "data-gg",
         "kind": "external_endpoint",
-        "candidates": 1549,
-        "uncovered_candidates": 1481,
+        "candidates": 1799,
+        "uncovered_candidates": 1721,
         "planned_operations": 10,
         "output": ".datapan/verification/data-gg-next.json"
-      },
-      {
-        "label": "eshare",
-        "provider": "eshare",
-        "kind": "external_endpoint",
-        "candidates": 36,
-        "uncovered_candidates": 6,
-        "planned_operations": 6,
-        "output": ".datapan/verification/eshare-next.json"
-      },
-      {
-        "label": "foodsafetykorea",
-        "provider": "foodsafetykorea",
-        "kind": "external_endpoint",
-        "candidates": 3,
-        "uncovered_candidates": 2,
-        "planned_operations": 2,
-        "output": ".datapan/verification/foodsafetykorea-next.json"
       },
       {
         "label": "gwanak",
@@ -113,8 +95,8 @@
         "label": "gwangmyeong",
         "provider": "gwangmyeong",
         "kind": "external_endpoint",
-        "candidates": 38,
-        "uncovered_candidates": 28,
+        "candidates": 42,
+        "uncovered_candidates": 32,
         "planned_operations": 10,
         "output": ".datapan/verification/gwangmyeong-next.json"
       },
@@ -212,8 +194,8 @@
   },
   "provider_split_readiness": {
     "status": "ready",
-    "adapter_count": 54,
-    "verification_capable_adapters": 54,
+    "adapter_count": 56,
+    "verification_capable_adapters": 56,
     "call_capable_adapters": 23
   },
   "warnings": []

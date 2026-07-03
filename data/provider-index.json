@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T13:54:19Z",
+  "generated_at": "2026-07-03T14:13:05Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 54,
-  "host_count": 61,
+  "adapter_count": 56,
+  "host_count": 63,
   "adapters": [
     {
       "name": "airport",
@@ -56,6 +56,16 @@
       ]
     },
     {
+      "name": "dongjak",
+      "status": "registered",
+      "hosts": [
+        "data.dongjak.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "ekape",
       "status": "registered",
       "hosts": [
@@ -93,6 +103,16 @@
       "status": "registered",
       "hosts": [
         "www.eshare.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "ex",
+      "status": "registered",
+      "hosts": [
+        "data.ex.co.kr"
       ],
       "capabilities": [
         "verification"
@@ -578,8 +598,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 54,
-    "verification_capable_adapters": 54,
+    "adapter_count": 56,
+    "verification_capable_adapters": 56,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

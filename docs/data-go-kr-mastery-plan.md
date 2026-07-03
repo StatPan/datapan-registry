@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `14780`
-- callable operations: `14638` (`99%`)
+- operations: `15041`
+- callable operations: `14899` (`99.1%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `3170`
-- registered adapter operations: `3160`
+- external endpoint operations: `3431`
+- registered adapter operations: `3421`
 - missing adapter operations: `29`
-- external adapter coverage: `99.1%`
+- external adapter coverage: `99.2%`
 - approval-required operations: `4723`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `146`
-- registered adapter hosts: `59`
+- registered adapter hosts: `61`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -119,8 +119,8 @@ Each external host should have:
 - downstream impact when promoted datasets depend on the host.
 
 Registered external adapters currently cover these host families through
-`data/provider-index.json`: airport, andong, culture, data-gg, dgfca, ekape, emuseum,
-epost, eshare, folk, foodsafetykorea, forest, garak, gblib, geoje, gimhae, gwanak,
+`data/provider-index.json`: airport, andong, culture, data-gg, dgfca, dongjak, ekape, emuseum,
+epost, eshare, ex, folk, foodsafetykorea, forest, garak, gblib, geoje, gimhae, gwanak,
 gwangmyeong, happysd, humetro, i815, ins24, itfind, jeju, jeju-air, jejudatahub, jeonju, juso,
 korad, kpx, lh-ebid, lofin365, mafra, myhome, naqs, ncpms, nfqs, nongsaro,
 oneclick-law, open-law, pqis, q-net, safemap, safetydata, seogu, seoul-bus, seoul-open-data,

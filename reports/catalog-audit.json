@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-03T13:54:19Z",
+  "generated_at": "2026-07-03T14:13:05Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 14780,
-    "callable_operations": 14638,
-    "specs_without_operations": 3607,
-    "specs_without_callable_operation": 3682,
+    "operations_total": 15041,
+    "callable_operations": 14899,
+    "specs_without_operations": 3507,
+    "specs_without_callable_operation": 3582,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 2442,
-    "operations_without_response_params": 3664,
+    "operations_without_request_params": 2703,
+    "operations_without_response_params": 3925,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 1582,
-      "external_endpoint_operations": 3170,
+      "external_endpoint_specs": 1682,
+      "external_endpoint_operations": 3431,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 111,
       "dev_approval_required_operations": 207,
-      "prod_approval_required_operations": 4620,
+      "prod_approval_required_operations": 4623,
       "malformed_endpoint_url_count": 42,
       "malformed_guide_url_count": 585,
       "top_endpoint_hosts": [
@@ -34,7 +34,7 @@
         },
         {
           "host": "data.gg.go.kr",
-          "count": 1549
+          "count": 1799
         },
         {
           "host": "www.safetydata.go.kr",
@@ -65,16 +65,16 @@
           "count": 42
         },
         {
+          "host": "data.gm.go.kr",
+          "count": 42
+        },
+        {
           "host": "data.geoje.go.kr",
           "count": 41
         },
         {
           "host": "data.uiryeong.go.kr",
           "count": 40
-        },
-        {
-          "host": "data.gm.go.kr",
-          "count": 38
         },
         {
           "host": "www.eshare.go.kr",
@@ -112,7 +112,7 @@
       "top_external_endpoint_hosts": [
         {
           "host": "data.gg.go.kr",
-          "count": 1549
+          "count": 1799
         },
         {
           "host": "www.safetydata.go.kr",
@@ -143,16 +143,16 @@
           "count": 42
         },
         {
+          "host": "data.gm.go.kr",
+          "count": 42
+        },
+        {
           "host": "data.geoje.go.kr",
           "count": 41
         },
         {
           "host": "data.uiryeong.go.kr",
           "count": 40
-        },
-        {
-          "host": "data.gm.go.kr",
-          "count": 38
         },
         {
           "host": "www.eshare.go.kr",
@@ -257,6 +257,10 @@
           "count": 36
         },
         {
+          "host": "data.gg.go.kr",
+          "count": 35
+        },
+        {
           "host": "weather.rda.go.kr",
           "count": 35
         },
@@ -267,10 +271,6 @@
         {
           "host": "http:",
           "count": 33
-        },
-        {
-          "host": "data.gg.go.kr",
-          "count": 31
         }
       ]
     },
