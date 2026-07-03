@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T17:22:31Z",
+  "generated_at": "2026-07-03T17:30:01Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1799,
-    "verified": 461,
+    "total": 1824,
+    "verified": 486,
     "failed": 145,
     "skipped": 1193,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 461,
+        "count": 486,
         "status": "verified"
       },
       {
@@ -329,6 +329,11 @@
         "provider": "jeonju"
       },
       {
+        "key": "gwangmyeong",
+        "count": 70,
+        "provider": "gwangmyeong"
+      },
+      {
         "key": "open-law",
         "count": 51,
         "provider": "open-law"
@@ -337,11 +342,6 @@
         "key": "ekape",
         "count": 49,
         "provider": "ekape"
-      },
-      {
-        "key": "gwangmyeong",
-        "count": 45,
-        "provider": "gwangmyeong"
       },
       {
         "key": "geoje",
@@ -711,14 +711,14 @@
         "host": "openapi.jeonju.go.kr"
       },
       {
+        "key": "data.gm.go.kr",
+        "count": 70,
+        "host": "data.gm.go.kr"
+      },
+      {
         "key": "data.ekape.or.kr",
         "count": 49,
         "host": "data.ekape.or.kr"
-      },
-      {
-        "key": "data.gm.go.kr",
-        "count": 45,
-        "host": "data.gm.go.kr"
       },
       {
         "key": "c.q-net.or.kr",
@@ -1114,7 +1114,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 1075,
+        "count": 1100,
         "kind": "external_endpoint"
       },
       {

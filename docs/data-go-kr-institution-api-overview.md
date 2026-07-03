@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T17:22:34Z`
+- Generated at: `2026-07-03T17:30:15Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `17348`
-- Runtime evidence: `1799` (`10.4%`)
-- External endpoint operations: `5738`
-- Registered adapter operations: `5728`
+- Operations: `17636`
+- Runtime evidence: `1824` (`10.3%`)
+- External endpoint operations: `6026`
+- Registered adapter operations: `6016`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -25,7 +25,7 @@
 | 한국마사회 | 223 | 223 | 223 | 10 | 4.5% | 0 | 0 | 10 | 221 | 0 |
 | 국립암센터 | 212 | 212 | 375 | 87 | 23.2% | 8 | 0 | 79 | 183 | 1 |
 | 법제처 | 203 | 203 | 403 | 88 | 21.8% | 50 | 11 | 27 | 154 | 0 |
-| 경기도 광명시 | 197 | 100 | 290 | 24 | 8.3% | 24 | 0 | 0 | 23 | 0 |
+| 경기도 광명시 | 197 | 197 | 578 | 49 | 8.5% | 49 | 0 | 0 | 23 | 0 |
 | 해양수산부 | 173 | 172 | 276 | 10 | 3.6% | 0 | 0 | 10 | 116 | 0 |
 | 제주특별자치도 | 171 | 18 | 28 | 4 | 14.3% | 1 | 1 | 2 | 8 | 0 |
 | 농촌진흥청 | 136 | 14 | 45 | 8 | 17.8% | 5 | 0 | 3 | 8 | 0 |
@@ -52,6 +52,7 @@
 | 행정안전부 | 1252 | 1252 | 1767 | 96 | 5.4% | 60 | 25 | 11 | 613 | 0 |
 | 국토교통부 | 393 | 393 | 1055 | 87 | 8.2% | 58 | 2 | 27 | 258 | 0 |
 | 식품의약품안전처 | 392 | 392 | 648 | 41 | 6.3% | 10 | 0 | 31 | 515 | 0 |
+| 경기도 광명시 | 197 | 197 | 578 | 49 | 8.5% | 49 | 0 | 0 | 23 | 0 |
 | 법제처 | 203 | 203 | 403 | 88 | 21.8% | 50 | 11 | 27 | 154 | 0 |
 | 국립암센터 | 212 | 212 | 375 | 87 | 23.2% | 8 | 0 | 79 | 183 | 1 |
 | 공정거래위원회 | 250 | 250 | 353 | 23 | 6.5% | 23 | 0 | 0 | 301 | 0 |
@@ -59,7 +60,6 @@
 | 성평등가족부 | 273 | 273 | 348 | 2 | 0.6% | 1 | 0 | 1 | 0 | 0 |
 | 부산광역시 | 259 | 259 | 336 | 60 | 17.9% | 0 | 0 | 60 | 74 | 1 |
 | 한국산업인력공단 | 230 | 230 | 317 | 150 | 47.3% | 7 | 1 | 142 | 181 | 0 |
-| 경기도 광명시 | 197 | 100 | 290 | 24 | 8.3% | 24 | 0 | 0 | 23 | 0 |
 | 국회 국회사무처 | 277 | 277 | 277 | 30 | 10.8% | 0 | 30 | 0 | 277 | 0 |
 | 해양수산부 | 173 | 172 | 276 | 10 | 3.6% | 0 | 0 | 10 | 116 | 0 |
 | 한국연구재단 | 26 | 24 | 247 | 13 | 5.3% | 4 | 3 | 6 | 234 | 0 |
@@ -85,25 +85,25 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 ## Largest Categories
 
-- 공공행정: `2428` operations
-- 문화관광: `1685` operations
-- 교통물류: `1676` operations
+- 공공행정: `2467` operations
+- 문화관광: `1734` operations
+- 교통물류: `1694` operations
 - 농축수산: `1486` operations
-- 사회복지: `1374` operations
+- 사회복지: `1413` operations
 - 산업고용: `1246` operations
-- 식품건강: `1166` operations
-- 환경기상: `1067` operations
+- 식품건강: `1177` operations
+- 환경기상: `1091` operations
+- 국토관리: `971` operations
 - 재정금융: `964` operations
-- 보건의료: `952` operations
 
 ## Largest Hosts
 
 - apis.data.go.kr: `11423` operations
-- data.gg.go.kr: `2156` operations
+- data.gg.go.kr: `2173` operations
+- data.gm.go.kr: `606` operations
 - www.vworld.kr: `458` operations
 - www.safetydata.go.kr: `370` operations
 - www.lofin365.go.kr: `343` operations
-- data.gm.go.kr: `335` operations
 - open.law.go.kr: `304` operations
 - www.foodsafetykorea.go.kr: `288` operations
 - open.assembly.go.kr: `277` operations

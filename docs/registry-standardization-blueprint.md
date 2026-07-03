@@ -94,8 +94,8 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `2,360` data.go.kr APIs
-  without operation mappings, `8,820` operation-mapped APIs without runtime
+- `reports/data-go-kr/coverage-backlog.json` tracks `2,263` data.go.kr APIs
+  without operation mappings, `8,907` operation-mapped APIs without runtime
   evidence, and `96` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
@@ -275,8 +275,13 @@ Current gaps:
   using existing Gwangmyeong adapter coverage, and merges `25` verified
   landing-page checks, bringing runtime evidence to `1799` while leaving
   경기도 광명시 as the first materialization queue for its remaining `97` APIs.
-- API operation coverage remains incomplete: `9,700` of `12,060` APIs have
-  operation mappings (`80.4%`), leaving `2,360` APIs to materialize and `8,820`
+- The final 경기도 광명시 batch materializes the remaining `97` APIs and `288`
+  operations using existing Gwangmyeong adapter coverage, and merges `25`
+  verified landing-page checks, bringing runtime evidence to `1824`, completing
+  경기도 광명시 materialization at `197` of `197` APIs, and moving the first
+  materialization queue to 해양수산부.
+- API operation coverage remains incomplete: `9,797` of `12,060` APIs have
+  operation mappings (`81.2%`), leaving `2,263` APIs to materialize and `8,907`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report
