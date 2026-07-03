@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T13:33:15Z",
+  "generated_at": "2026-07-03T13:54:19Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 51,
-  "host_count": 58,
+  "adapter_count": 54,
+  "host_count": 61,
   "adapters": [
     {
       "name": "airport",
@@ -162,6 +162,16 @@
       ]
     },
     {
+      "name": "gimhae",
+      "status": "registered",
+      "hosts": [
+        "www.gimhae.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "gwanak",
       "status": "registered",
       "hosts": [
@@ -241,6 +251,16 @@
       ],
       "capabilities": [
         "call",
+        "verification"
+      ]
+    },
+    {
+      "name": "jeju-air",
+      "status": "registered",
+      "hosts": [
+        "air.jeju.go.kr"
+      ],
+      "capabilities": [
         "verification"
       ]
     },
@@ -388,6 +408,16 @@
       ],
       "capabilities": [
         "call",
+        "verification"
+      ]
+    },
+    {
+      "name": "open-law",
+      "status": "registered",
+      "hosts": [
+        "open.law.go.kr"
+      ],
+      "capabilities": [
         "verification"
       ]
     },
@@ -548,8 +578,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 51,
-    "verification_capable_adapters": 51,
+    "adapter_count": 54,
+    "verification_capable_adapters": 54,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T13:33:38Z",
+  "generated_at": "2026-07-03T13:54:43Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,13 +7,13 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 14514,
-    "evidence_total": 1458,
+    "operations": 14780,
+    "evidence_total": 1481,
     "uncovered_gateway_candidates": 10744,
-    "uncovered_adapter_candidates": 2111,
+    "uncovered_adapter_candidates": 2354,
     "missing_adapter_hosts": 11,
-    "planned_batches": 15,
-    "planned_operations": 112
+    "planned_batches": 16,
+    "planned_operations": 110
   },
   "batches": [
     {
@@ -29,8 +29,8 @@
       "label": "data-gg",
       "provider": "data-gg",
       "kind": "external_endpoint",
-      "candidates": 1296,
-      "uncovered_candidates": 1238,
+      "candidates": 1549,
+      "uncovered_candidates": 1481,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider data-gg --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/data-gg-next.json --json",
       "output": ".datapan/verification/data-gg-next.json"
@@ -40,10 +40,20 @@
       "provider": "eshare",
       "kind": "external_endpoint",
       "candidates": 36,
-      "uncovered_candidates": 16,
-      "planned_operations": 10,
+      "uncovered_candidates": 6,
+      "planned_operations": 6,
       "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider eshare --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/eshare-next.json --json",
       "output": ".datapan/verification/eshare-next.json"
+    },
+    {
+      "label": "foodsafetykorea",
+      "provider": "foodsafetykorea",
+      "kind": "external_endpoint",
+      "candidates": 3,
+      "uncovered_candidates": 2,
+      "planned_operations": 2,
+      "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider foodsafetykorea --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/foodsafetykorea-next.json --json",
+      "output": ".datapan/verification/foodsafetykorea-next.json"
     },
     {
       "label": "gwanak",
@@ -59,8 +69,8 @@
       "label": "gwangmyeong",
       "provider": "gwangmyeong",
       "kind": "external_endpoint",
-      "candidates": 30,
-      "uncovered_candidates": 20,
+      "candidates": 38,
+      "uncovered_candidates": 28,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json --provider gwangmyeong --kind external_endpoint --exclude-input C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gwangmyeong-next.json --json",
       "output": ".datapan/verification/gwangmyeong-next.json"

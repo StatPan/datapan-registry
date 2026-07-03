@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-03T13:33:15Z",
+  "generated_at": "2026-07-03T13:54:19Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 14514,
-    "callable_operations": 14372,
-    "specs_without_operations": 3707,
-    "specs_without_callable_operation": 3782,
+    "operations_total": 14780,
+    "callable_operations": 14638,
+    "specs_without_operations": 3607,
+    "specs_without_callable_operation": 3682,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 2176,
-    "operations_without_response_params": 3398,
+    "operations_without_request_params": 2442,
+    "operations_without_response_params": 3664,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 1482,
-      "external_endpoint_operations": 2904,
+      "external_endpoint_specs": 1582,
+      "external_endpoint_operations": 3170,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 111,
       "dev_approval_required_operations": 207,
-      "prod_approval_required_operations": 4617,
+      "prod_approval_required_operations": 4620,
       "malformed_endpoint_url_count": 42,
       "malformed_guide_url_count": 585,
       "top_endpoint_hosts": [
@@ -34,7 +34,7 @@
         },
         {
           "host": "data.gg.go.kr",
-          "count": 1296
+          "count": 1549
         },
         {
           "host": "www.safetydata.go.kr",
@@ -73,12 +73,12 @@
           "count": 40
         },
         {
-          "host": "www.eshare.go.kr",
-          "count": 36
+          "host": "data.gm.go.kr",
+          "count": 38
         },
         {
-          "host": "data.gm.go.kr",
-          "count": 30
+          "host": "www.eshare.go.kr",
+          "count": 36
         },
         {
           "host": "www.juso.go.kr",
@@ -112,7 +112,7 @@
       "top_external_endpoint_hosts": [
         {
           "host": "data.gg.go.kr",
-          "count": 1296
+          "count": 1549
         },
         {
           "host": "www.safetydata.go.kr",
@@ -151,12 +151,12 @@
           "count": 40
         },
         {
-          "host": "www.eshare.go.kr",
-          "count": 36
+          "host": "data.gm.go.kr",
+          "count": 38
         },
         {
-          "host": "data.gm.go.kr",
-          "count": 30
+          "host": "www.eshare.go.kr",
+          "count": 36
         },
         {
           "host": "www.juso.go.kr",
