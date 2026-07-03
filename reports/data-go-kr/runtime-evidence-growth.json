@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-07-03T14:13:05Z",
+  "generated_at": "2026-07-03T14:33:40Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -13,17 +13,17 @@
     "provider_index": "data/provider-index.json"
   },
   "coverage": {
-    "operations": 15041,
-    "callable_operations": 14899,
+    "operations": 15293,
+    "callable_operations": 15151,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 3431,
-    "registered_adapter_operations": 3421,
+    "external_endpoint_operations": 3683,
+    "registered_adapter_operations": 3673,
     "call_capable_adapters": 23
   },
   "evidence": {
-    "total": 1506,
-    "verified": 231,
-    "failed": 112,
+    "total": 1530,
+    "verified": 254,
+    "failed": 113,
     "skipped": 1163,
     "unknown": 0,
     "coverage_percent": 10,
@@ -34,7 +34,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 812
+        "count": 836
       },
       {
         "key": "service_root",
@@ -44,15 +44,15 @@
   },
   "growth_target": {
     "target_percent": 10,
-    "target_evidence_total": 1505,
+    "target_evidence_total": 1530,
     "remaining_to_target": 0,
-    "status": "above_target"
+    "status": "at_target"
   },
   "verification_plan": {
-    "planned_batches": 14,
-    "planned_operations": 102,
+    "planned_batches": 16,
+    "planned_operations": 105,
     "uncovered_gateway_candidates": 10744,
-    "uncovered_adapter_candidates": 2590,
+    "uncovered_adapter_candidates": 2818,
     "missing_adapter_hosts": 11,
     "planned_by_kind": [
       {
@@ -61,7 +61,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 92
+        "count": 95
       }
     ],
     "batches": [
@@ -77,10 +77,28 @@
         "label": "data-gg",
         "provider": "data-gg",
         "kind": "external_endpoint",
-        "candidates": 1799,
-        "uncovered_candidates": 1721,
+        "candidates": 2033,
+        "uncovered_candidates": 1945,
         "planned_operations": 10,
         "output": ".datapan/verification/data-gg-next.json"
+      },
+      {
+        "label": "dongjak",
+        "provider": "dongjak",
+        "kind": "external_endpoint",
+        "candidates": 4,
+        "uncovered_candidates": 1,
+        "planned_operations": 1,
+        "output": ".datapan/verification/dongjak-next.json"
+      },
+      {
+        "label": "gimhae",
+        "provider": "gimhae",
+        "kind": "external_endpoint",
+        "candidates": 2,
+        "uncovered_candidates": 1,
+        "planned_operations": 1,
+        "output": ".datapan/verification/gimhae-next.json"
       },
       {
         "label": "gwanak",
@@ -95,8 +113,8 @@
         "label": "gwangmyeong",
         "provider": "gwangmyeong",
         "kind": "external_endpoint",
-        "candidates": 42,
-        "uncovered_candidates": 32,
+        "candidates": 53,
+        "uncovered_candidates": 33,
         "planned_operations": 10,
         "output": ".datapan/verification/gwangmyeong-next.json"
       },
@@ -167,9 +185,9 @@
         "label": "seoul-open-data",
         "provider": "seoul-open-data",
         "kind": "external_endpoint",
-        "candidates": 6,
-        "uncovered_candidates": 1,
-        "planned_operations": 1,
+        "candidates": 7,
+        "uncovered_candidates": 2,
+        "planned_operations": 2,
         "output": ".datapan/verification/seoul-open-data-next.json"
       },
       {
@@ -194,8 +212,8 @@
   },
   "provider_split_readiness": {
     "status": "ready",
-    "adapter_count": 56,
-    "verification_capable_adapters": 56,
+    "adapter_count": 60,
+    "verification_capable_adapters": 60,
     "call_capable_adapters": 23
   },
   "warnings": []
