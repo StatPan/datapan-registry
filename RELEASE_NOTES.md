@@ -1,6 +1,6 @@
 # Datapan Registry Release
 
-- generated_at: `2026-07-03T22:12:37Z`
+- generated_at: `2026-07-03T22:23:18Z`
 - provider: `data.go.kr`
 - datapan_version: `0.1.0-dev`
 - source_registry: `data/data-go-kr.registry.json`
@@ -10,21 +10,21 @@
 ## Registry
 
 - specs: `12060`
-- catalog_diff: `0` added, `0` removed, `3668` changed, `8392` stable
+- catalog_diff: `0` added, `0` removed, `3669` changed, `8391` stable
 - catalog_diff_artifact: `reports/catalog-diff.json`
 
 ## Provider Coverage
 
-- provider_adapters: `100` adapters, `120` hosts
+- provider_adapters: `101` adapters, `121` hosts
 - split_readiness: `ready`
-- verification_capable_adapters: `100`
+- verification_capable_adapters: `101`
 - call_capable_adapters: `23`
-- dependency_operations: `19860` total, `11419` gateway, `8250` external, `8240` registered-adapter, `29` missing-adapter
+- dependency_operations: `19861` total, `11419` gateway, `8251` external, `8241` registered-adapter, `29` missing-adapter
 - adapter_backlog: `11` target hosts, `29` target operations
 - route_disposition: `29` routes, `14` dead-route candidates, `15` transient failures, `0` parameter-blocked, `0` adapter candidates
 - route_disposition_artifact: `reports/route-disposition.json`
-- provider_backlog: `270` hosts, `11` missing-adapter hosts, `29` operations needing adapters
-- coverage: `19718` callable operations (`99.3%`), external adapter coverage `99.6%`, verification evidence coverage `16.7%`, evidence-adjusted adapter candidates `0`
+- provider_backlog: `271` hosts, `11` missing-adapter hosts, `29` operations needing adapters
+- coverage: `19719` callable operations (`99.3%`), external adapter coverage `99.6%`, verification evidence coverage `16.7%`, evidence-adjusted adapter candidates `0`
 - coverage_artifact: `reports/coverage.json`
 - coverage_goals: callable `99%`, external adapters `98%`, verification evidence `10%`, call-capable adapters `25`, missing-adapter operations `<=10`
 - verification_plan: `20` batches, `113` planned operations, `10714` gateway gaps, `3371` adapter gaps
@@ -42,7 +42,7 @@ Top adapter targets:
 
 ## Verification Evidence
 
-- verification: `3321` total, `1549` verified, `306` failed, `1466` skipped, `0` unknown
+- verification: `3322` total, `1550` verified, `306` failed, `1466` skipped, `0` unknown
 - verification_artifact: `reports/latest-verification.json`
 - verification_summary_artifact: `reports/latest-verification-summary.json`
 

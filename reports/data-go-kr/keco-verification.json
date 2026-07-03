@@ -1,0 +1,36 @@
+{
+  "generated_at": "2026-07-03T22:22:56Z",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 100,
+  "timeout": "20s",
+  "truncated": false,
+  "filters": {
+    "organization": "한국환경공단",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 1,
+  "summary": {
+    "total": 1,
+    "verified": 1,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15106003",
+      "title": "한국환경공단_자원순환정보시스템_폐기물통계정보",
+      "operation": "한국환경공단_자원순환정보시스템_폐기물통계정보_20201231",
+      "provider": "recycling-info",
+      "endpoint_host": "www.recycling-info.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T22:22:56Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.recycling-info.or.kr/rrs/viewPage.do?menuNo=M130401",
+      "body_shape": "html"
+    }
+  ]
+}

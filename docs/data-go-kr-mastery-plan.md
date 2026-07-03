@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `19860`
-- callable operations: `19718` (`99.3%`)
+- operations: `19861`
+- callable operations: `19719` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `8250`
-- registered adapter operations: `8240`
+- external endpoint operations: `8251`
+- registered adapter operations: `8241`
 - missing adapter operations: `29`
 - external adapter coverage: `99.6%`
-- approval-required operations: `7350`
+- approval-required operations: `7351`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `115`
+- registered adapter hosts: `116`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -569,6 +569,11 @@ readiness, not to advance verified runtime coverage.
    bounded checks. That brings checked runtime evidence to `3321`, verified
    checks to `1549`, registered external adapter operations to `8240`, and
    raises API operation coverage to `10,853` of `12,060` APIs (`90.0%`).
+   The 한국환경공단 batch registers Recycling Info host coverage, materializes
+   `1` API and `1` operation, and merges `1` verified bounded check. That
+   brings checked runtime evidence to `3322`, verified checks to `1550`,
+   registered external adapter operations to `8241`, and raises API operation
+   coverage to `10,854` of `12,060` APIs (`90.0%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

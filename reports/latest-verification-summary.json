@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T22:12:36Z",
+  "generated_at": "2026-07-03T22:23:17Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3321,
-    "verified": 1549,
+    "total": 3322,
+    "verified": 1550,
     "failed": 306,
     "skipped": 1466,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 1549,
+        "count": 1550,
         "status": "verified"
       },
       {
@@ -799,6 +799,11 @@
         "provider": "nosc"
       },
       {
+        "key": "recycling-info",
+        "count": 1,
+        "provider": "recycling-info"
+      },
+      {
         "key": "seoul-map",
         "count": 1,
         "provider": "seoul-map"
@@ -1361,6 +1366,11 @@
         "host": "www.naa.go.kr"
       },
       {
+        "key": "www.recycling-info.or.kr",
+        "count": 1,
+        "host": "www.recycling-info.or.kr"
+      },
+      {
         "key": "www.wamis.go.kr:8080",
         "count": 1,
         "host": "www.wamis.go.kr:8080"
@@ -1369,7 +1379,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 2597,
+        "count": 2598,
         "kind": "external_endpoint"
       },
       {

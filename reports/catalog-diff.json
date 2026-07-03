@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T22:12:37Z",
+  "generated_at": "2026-07-03T22:23:18Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3668,
-    "stable": 8392
+    "changed": 3669,
+    "stable": 8391
   },
   "added": [],
   "removed": [],
@@ -23617,6 +23617,16 @@
       ],
       "old_digest": "33fe50d5572f4ff96720ff0cc7c7c0b6ea8d07265a85fdc3b2b2e22d4126ece1",
       "new_digest": "fdabcd441e4369b8fbb94ee81ce9253628d302b7550be5278b49c05a30c8aafa"
+    },
+    {
+      "id": "15106003",
+      "old_title": "한국환경공단_자원순환정보시스템_폐기물통계정보",
+      "new_title": "한국환경공단_자원순환정보시스템_폐기물통계정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "812ea191a92e7dbe1975290a45d4a3631a7d57cefd6132c0945f0d329683b18d",
+      "new_digest": "b4f78e9191d67b65289f3ebfedcb8d988fa52517617da074b044594cbae8fea9"
     },
     {
       "id": "15106677",
