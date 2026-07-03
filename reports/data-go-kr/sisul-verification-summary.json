@@ -1,0 +1,102 @@
+{
+  "generated_at": "2026-07-03T23:14:46Z",
+  "source": "reports/data-go-kr/sisul-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 31,
+    "verified": 11,
+    "failed": 0,
+    "skipped": 20,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "skipped",
+        "count": 20,
+        "status": "skipped"
+      },
+      {
+        "key": "verified",
+        "count": 11,
+        "status": "verified"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "sisul_wadl_metadata_only",
+        "count": 10,
+        "reason": "sisul_wadl_metadata_only"
+      },
+      {
+        "key": "missing_auth",
+        "count": 6,
+        "reason": "missing_auth"
+      },
+      {
+        "key": "sisul_missing_required_params",
+        "count": 3,
+        "reason": "sisul_missing_required_params"
+      },
+      {
+        "key": "approval_required",
+        "count": 1,
+        "reason": "approval_required"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "sisul",
+        "count": 20,
+        "provider": "sisul"
+      },
+      {
+        "key": "seoul-open-data",
+        "count": 5,
+        "provider": "seoul-open-data"
+      },
+      {
+        "key": "sisul-www",
+        "count": 4,
+        "provider": "sisul-www"
+      },
+      {
+        "key": "data-gg",
+        "count": 2,
+        "provider": "data-gg"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "data.sisul.or.kr",
+        "count": 20,
+        "host": "data.sisul.or.kr"
+      },
+      {
+        "key": "data.seoul.go.kr",
+        "count": 5,
+        "host": "data.seoul.go.kr"
+      },
+      {
+        "key": "www.sisul.or.kr",
+        "count": 4,
+        "host": "www.sisul.or.kr"
+      },
+      {
+        "key": "data.gg.go.kr",
+        "count": 2,
+        "host": "data.gg.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 31,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

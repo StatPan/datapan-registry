@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T23:08:59Z",
+  "generated_at": "2026-07-03T23:15:15Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -17,7 +17,7 @@
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7436,
+    "approval_required_operations": 7441,
     "malformed_source_url_count": 712
   },
   "providers": [
@@ -178,9 +178,9 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 882,
-      "operations": 2189,
-      "external_endpoint_operations": 2189,
+      "specs": 884,
+      "operations": 2191,
+      "external_endpoint_operations": 2191,
       "external_guide_specs": 21,
       "wms_operations": 5,
       "approval_required_operations": 55,
@@ -496,11 +496,11 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 55,
-      "operations": 113,
-      "external_endpoint_operations": 113,
-      "external_guide_specs": 27,
-      "approval_required_operations": 40,
+      "specs": 58,
+      "operations": 118,
+      "external_endpoint_operations": 118,
+      "external_guide_specs": 28,
+      "approval_required_operations": 45,
       "sample_ids": [
         "15003164",
         "15040468",
@@ -1153,6 +1153,22 @@
       ]
     },
     {
+      "host": "www.sisul.or.kr",
+      "provider": "sisul-www",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 4,
+      "operations": 7,
+      "external_endpoint_operations": 7,
+      "sample_ids": [
+        "15047383",
+        "15057337",
+        "15057474"
+      ]
+    },
+    {
       "host": "openapi.epost.go.kr",
       "provider": "epost",
       "kinds": [
@@ -1565,21 +1581,6 @@
       "external_endpoint_operations": 3,
       "sample_ids": [
         "3036708"
-      ]
-    },
-    {
-      "host": "www.sisul.or.kr",
-      "provider": "sisul-www",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 2,
-      "operations": 3,
-      "external_endpoint_operations": 3,
-      "sample_ids": [
-        "15047383",
-        "15057337"
       ]
     },
     {

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T23:08:59Z",
+  "generated_at": "2026-07-03T23:15:15Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3742,
-    "stable": 8318
+    "changed": 3747,
+    "stable": 8313
   },
   "added": [],
   "removed": [],
@@ -6979,6 +6979,16 @@
       "new_digest": "620e8d03050848aa0f789961d19ae74163e241d27b0a7a0aa479221a4aa476aa"
     },
     {
+      "id": "15057474",
+      "old_title": "서울시설공단_장애인콜택시 목적지Best100",
+      "new_title": "서울시설공단_장애인콜택시 목적지Best100",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e9632cf0d5cc99dbee03465f3e07f02ce682487b7d3c2a8d2f83646b2f0f02c8",
+      "new_digest": "f0f177447a5d52e4f79f129883248bffabfcaacf4900d182a566c9728bd7a3a6"
+    },
+    {
       "id": "15057475",
       "old_title": "경기도_표시과목별 교원 현황(중,고)(교과별)",
       "new_title": "경기도_표시과목별 교원 현황(중,고)(교과별)",
@@ -8197,6 +8207,16 @@
       ],
       "old_digest": "413db6f241325ff62810c8236382d02f9e646baa52a964ab272a315c97dff333",
       "new_digest": "306f06925ba22ad80b35fc254d1abc11c90e5c39affe7eb90f7ef3b12fb42263"
+    },
+    {
+      "id": "15057705",
+      "old_title": "서울시설공단_장애인콜택시 일별 이용현황",
+      "new_title": "서울시설공단_장애인콜택시 일별 이용현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "cb91d7c9b400f22d637f4de068fd75886508f66b2bfbc04c9bc3c5892386abc8",
+      "new_digest": "c690eb7d4c7be20e7d392a80dfc93fae93614d8866042df10e0cb64fe90c76cf"
     },
     {
       "id": "15057706",
@@ -26049,6 +26069,16 @@
       "new_digest": "4a8fb6f030b89286030f7151c7e54545d5898d6006d3586cd525fba47a1115ed"
     },
     {
+      "id": "15118599",
+      "old_title": "서울시설공단_공공자전거 대여소 현황",
+      "new_title": "서울시설공단_공공자전거 대여소 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e0aaf610c7e7f3dcbedd9abb4e52134903d3b7a2eddfc9dacb37735baaa4bb52",
+      "new_digest": "afa41e4804c8840b0ca2ed813f6f1dd01fba79fb65117f136538e025824a1379"
+    },
+    {
       "id": "15118650",
       "old_title": "행정안전부_지방재정365_계약현황",
       "new_title": "행정안전부_지방재정365_계약현황",
@@ -29789,6 +29819,16 @@
       "new_digest": "b034374b0f99f3742bafd15ec80b1163222d07b747533e8727b477e3ed8b8b63"
     },
     {
+      "id": "15126330",
+      "old_title": "서울시설공단_공공자전거 대여이력 정보",
+      "new_title": "서울시설공단_공공자전거 대여이력 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "af1a09a2fa4ceed350a9eb1806d5327fdc9613871a52286563a99d6853ca3c7d",
+      "new_digest": "27cff5012c7452d2e9bd4c6a9c15784af1d77b3be99d3e98ab30782ac3e36fa5"
+    },
+    {
       "id": "15126640",
       "old_title": "기상청_기상1호 조회서비스",
       "new_title": "기상청_기상1호 조회서비스",
@@ -30377,6 +30417,16 @@
       ],
       "old_digest": "412fba11fa86b9d2fd5da8be360b13024e35755d4a8eeba281457b345e30e6fd",
       "new_digest": "690eb705b9550d7822542ddae0db400c30fa7c4cd9f28d96b5b10592e0979a23"
+    },
+    {
+      "id": "15130221",
+      "old_title": "서울시설공단_공공자전거 대여소별 이용정보",
+      "new_title": "서울시설공단_공공자전거 대여소별 이용정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5009fa4d790aa391d0e161f5e5868e20bdb568be47443d94954679c9b2c2a594",
+      "new_digest": "22d6c405f1d5bc7345889bedbf5644fa1df0fb94c456b5c899ebd8e634424ac7"
     },
     {
       "id": "15131782",

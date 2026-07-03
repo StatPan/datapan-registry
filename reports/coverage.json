@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T23:09:06Z",
+  "generated_at": "2026-07-03T23:15:21Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,15 +7,15 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 19946,
-    "callable_operations": 19804,
+    "operations": 19957,
+    "callable_operations": 19815,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 8336,
-    "registered_adapter_operations": 8326,
+    "external_endpoint_operations": 8347,
+    "registered_adapter_operations": 8337,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.7,
-    "approval_required_operations": 7436,
+    "approval_required_operations": 7441,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T23:08:45Z",
-    "total": 3407,
-    "verified": 1635,
+    "generated_at": "2026-07-03T23:15:02Z",
+    "total": 3438,
+    "verified": 1646,
     "failed": 306,
-    "skipped": 1466,
+    "skipped": 1486,
     "unknown": 0,
-    "verified_percent": 48,
-    "evidence_operation_percent": 17.1
+    "verified_percent": 47.9,
+    "evidence_operation_percent": 17.2
   },
   "route_evidence": {
     "present": true,
@@ -210,9 +210,9 @@
           "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 882,
-        "operations": 2189,
-        "external_endpoint_operations": 2189,
+        "specs": 884,
+        "operations": 2191,
+        "external_endpoint_operations": 2191,
         "external_guide_specs": 21,
         "wms_operations": 5,
         "approval_required_operations": 55,
@@ -382,7 +382,7 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T23:09:06Z",
+    "generated_at": "2026-07-03T23:15:21Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 105,
     "host_count": 125,
