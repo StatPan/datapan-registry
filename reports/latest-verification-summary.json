@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T18:42:08Z",
+  "generated_at": "2026-07-03T18:48:16Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1950,
-    "verified": 606,
+    "total": 1975,
+    "verified": 631,
     "failed": 147,
     "skipped": 1197,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 606,
+        "count": 631,
         "status": "verified"
       },
       {
@@ -330,7 +330,7 @@
       },
       {
         "key": "data-gg",
-        "count": 116,
+        "count": 117,
         "provider": "data-gg"
       },
       {
@@ -357,6 +357,11 @@
         "key": "ekape",
         "count": 49,
         "provider": "ekape"
+      },
+      {
+        "key": "seogu",
+        "count": 48,
+        "provider": "seogu"
       },
       {
         "key": "geoje",
@@ -409,11 +414,6 @@
         "provider": "lofin365"
       },
       {
-        "key": "seogu",
-        "count": 25,
-        "provider": "seogu"
-      },
-      {
         "key": "sisul",
         "count": 20,
         "provider": "sisul"
@@ -429,6 +429,11 @@
         "provider": "andong"
       },
       {
+        "key": "foodsafetykorea",
+        "count": 15,
+        "provider": "foodsafetykorea"
+      },
+      {
         "key": "its",
         "count": 15,
         "provider": "its"
@@ -437,11 +442,6 @@
         "key": "korad",
         "count": 15,
         "provider": "korad"
-      },
-      {
-        "key": "foodsafetykorea",
-        "count": 14,
-        "provider": "foodsafetykorea"
       },
       {
         "key": "itfind",
@@ -712,7 +712,7 @@
       },
       {
         "key": "data.gg.go.kr",
-        "count": 116,
+        "count": 117,
         "host": "data.gg.go.kr"
       },
       {
@@ -739,6 +739,11 @@
         "key": "www.nongsaro.go.kr",
         "count": 49,
         "host": "www.nongsaro.go.kr"
+      },
+      {
+        "key": "seogu.go.kr",
+        "count": 48,
+        "host": "seogu.go.kr"
       },
       {
         "key": "c.q-net.or.kr",
@@ -786,11 +791,6 @@
         "host": "oneclick.law.go.kr:80"
       },
       {
-        "key": "seogu.go.kr",
-        "count": 25,
-        "host": "seogu.go.kr"
-      },
-      {
         "key": "www.lofin365.go.kr",
         "count": 25,
         "host": "www.lofin365.go.kr"
@@ -816,14 +816,14 @@
         "host": "www.andong.go.kr"
       },
       {
+        "key": "www.foodsafetykorea.go.kr",
+        "count": 15,
+        "host": "www.foodsafetykorea.go.kr"
+      },
+      {
         "key": "www.korad.or.kr",
         "count": 15,
         "host": "www.korad.or.kr"
-      },
-      {
-        "key": "www.foodsafetykorea.go.kr",
-        "count": 14,
-        "host": "www.foodsafetykorea.go.kr"
       },
       {
         "key": "www.its.go.kr",
@@ -1144,7 +1144,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 1226,
+        "count": 1251,
         "kind": "external_endpoint"
       },
       {

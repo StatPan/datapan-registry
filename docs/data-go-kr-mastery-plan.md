@@ -12,14 +12,14 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `18457`
-- callable operations: `18315` (`99.2%`)
+- operations: `18489`
+- callable operations: `18347` (`99.2%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `6847`
-- registered adapter operations: `6837`
+- external endpoint operations: `6879`
+- registered adapter operations: `6869`
 - missing adapter operations: `29`
 - external adapter coverage: `99.6%`
-- approval-required operations: `6297`
+- approval-required operations: `6329`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
@@ -227,8 +227,8 @@ institution:
    `scripts/validate-institution-runtime-plan.py`, and
    `scripts/validate-institution-api-overview.py`.
 
-The current operation materialization queue starts at `대전광역시 서구`: `125`
-APIs, `100` APIs with operation mappings, and `25` uncovered APIs. The runtime
+The current operation materialization queue starts at `전라남도`: `109` APIs,
+`108` APIs with operation mappings, and `1` uncovered API. The runtime
 reactivation queue starts at `행정안전부`: `1252` APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
 records, and `1202` APIs still needing runtime reactivation. Gateway calls need
@@ -258,7 +258,7 @@ readiness, not to advance verified runtime coverage.
    Tracked by Gira #15.
 10. Maintain institution-scoped coverage and runtime reactivation queues from
     the generated overview/backlog artifacts. The first operation
-    materialization queue is `대전광역시 서구`, while the first runtime
+    materialization queue is `전라남도`, while the first runtime
     reactivation queue is `행정안전부`, using institution-scoped
     `datapan catalog verify --org` batches after data.go.kr credentials are
     available.
@@ -485,6 +485,11 @@ readiness, not to advance verified runtime coverage.
    merges `25` verified landing-page checks. That brings checked runtime
    evidence to `1950`, registered external adapter operations to `6837`, and
    raises 대전광역시 서구 operation coverage to `100` of `125` APIs.
+   The final 대전광역시 서구 batch materializes the remaining `25` APIs and `32`
+   operations, and merges `25` verified landing-page checks. That brings
+   checked runtime evidence to `1975`, registered external adapter operations
+   to `6869`, completes 대전광역시 서구 materialization at `125` of `125` APIs,
+   and moves the first materialization queue to 전라남도.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

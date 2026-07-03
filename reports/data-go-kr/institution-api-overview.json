@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T18:42:11Z",
+  "generated_at": "2026-07-03T18:48:19Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 18457,
-    "runtime_evidence": 1950,
-    "runtime_evidence_percent": 10.6,
-    "callable_operations": 18315,
-    "external_endpoint_operations": 6847,
-    "registered_adapter_operations": 6837,
+    "operations": 18489,
+    "runtime_evidence": 1975,
+    "runtime_evidence_percent": 10.7,
+    "callable_operations": 18347,
+    "external_endpoint_operations": 6879,
+    "registered_adapter_operations": 6869,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 6847
+      "count": 6879
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 6837
+      "count": 6869
     },
     {
       "key": "builtin",
@@ -85,27 +85,27 @@
     },
     {
       "category": "사회복지",
-      "operation_count": 1432
+      "operation_count": 1439
     },
     {
       "category": "산업고용",
-      "operation_count": 1284
+      "operation_count": 1287
     },
     {
       "category": "식품건강",
-      "operation_count": 1185
+      "operation_count": 1188
     },
     {
       "category": "환경기상",
-      "operation_count": 1109
+      "operation_count": 1113
+    },
+    {
+      "category": "보건의료",
+      "operation_count": 983
     },
     {
       "category": "국토관리",
       "operation_count": 982
-    },
-    {
-      "category": "보건의료",
-      "operation_count": 978
     },
     {
       "category": "재정금융",
@@ -113,7 +113,7 @@
     },
     {
       "category": "재난안전",
-      "operation_count": 849
+      "operation_count": 859
     },
     {
       "category": "교육",
@@ -139,7 +139,7 @@
     },
     {
       "host": "data.gg.go.kr",
-      "operation_count": 2185,
+      "operation_count": 2186,
       "adapter": "data-gg",
       "adapter_status": "registered",
       "capabilities": [
@@ -148,7 +148,7 @@
     },
     {
       "host": "data.gm.go.kr",
-      "operation_count": 606,
+      "operation_count": 607,
       "adapter": "gwangmyeong",
       "adapter_status": "registered",
       "capabilities": [
@@ -203,7 +203,7 @@
     },
     {
       "host": "www.foodsafetykorea.go.kr",
-      "operation_count": 288,
+      "operation_count": 289,
       "adapter": "foodsafetykorea",
       "adapter_status": "registered",
       "capabilities": [
@@ -248,7 +248,7 @@
     },
     {
       "host": "seogu.go.kr",
-      "operation_count": 125,
+      "operation_count": 154,
       "adapter": "seogu",
       "adapter_status": "registered",
       "capabilities": [
@@ -1856,6 +1856,102 @@
       ]
     },
     {
+      "organization": "대전광역시 서구",
+      "api_count": 125,
+      "operation_api_count": 125,
+      "operation_count": 171,
+      "runtime_evidence_count": 50,
+      "runtime_evidence_percent": 29.2,
+      "verified": 50,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 171,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "external_endpoint",
+          "count": 171
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 171
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "공공행정",
+          "operation_count": 52
+        },
+        {
+          "category": "보건의료",
+          "operation_count": 20
+        },
+        {
+          "category": "재난안전",
+          "operation_count": 20
+        },
+        {
+          "category": "사회복지",
+          "operation_count": 17
+        },
+        {
+          "category": "교육",
+          "operation_count": 17
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "seogu.go.kr",
+          "operation_count": 153,
+          "adapter": "seogu",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "data.gg.go.kr",
+          "operation_count": 12,
+          "adapter": "data-gg",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "data.seoul.go.kr",
+          "operation_count": 2,
+          "adapter": "seoul-open-data",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
+        },
+        {
+          "host": "data.gm.go.kr",
+          "operation_count": 1,
+          "adapter": "gwangmyeong",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.foodsafetykorea.go.kr",
+          "operation_count": 1,
+          "adapter": "foodsafetykorea",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "기후에너지환경부 국립환경과학원",
       "api_count": 48,
       "operation_api_count": 47,
@@ -2070,102 +2166,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 141
-        }
-      ]
-    },
-    {
-      "organization": "대전광역시 서구",
-      "api_count": 125,
-      "operation_api_count": 100,
-      "operation_count": 139,
-      "runtime_evidence_count": 25,
-      "runtime_evidence_percent": 18.0,
-      "verified": 25,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 139,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "external_endpoint",
-          "count": 139
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 139
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "공공행정",
-          "operation_count": 52
-        },
-        {
-          "category": "교육",
-          "operation_count": 17
-        },
-        {
-          "category": "보건의료",
-          "operation_count": 15
-        },
-        {
-          "category": "사회복지",
-          "operation_count": 10
-        },
-        {
-          "category": "재난안전",
-          "operation_count": 10
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "seogu.go.kr",
-          "operation_count": 124,
-          "adapter": "seogu",
-          "adapter_status": "registered",
-          "capabilities": [
-            "verification"
-          ]
-        },
-        {
-          "host": "data.gg.go.kr",
-          "operation_count": 11,
-          "adapter": "data-gg",
-          "adapter_status": "registered",
-          "capabilities": [
-            "verification"
-          ]
-        },
-        {
-          "host": "data.seoul.go.kr",
-          "operation_count": 2,
-          "adapter": "seoul-open-data",
-          "adapter_status": "registered",
-          "capabilities": [
-            "call",
-            "verification"
-          ]
-        },
-        {
-          "host": "www.nongsaro.go.kr",
-          "operation_count": 1,
-          "adapter": "nongsaro",
-          "adapter_status": "registered",
-          "capabilities": [
-            "verification"
-          ]
-        },
-        {
-          "host": "parking.happysd.or.kr",
-          "operation_count": 1,
-          "adapter": "happysd",
-          "adapter_status": "registered",
-          "capabilities": [
-            "verification"
-          ]
         }
       ]
     },

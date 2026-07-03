@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T18:42:17Z",
+  "generated_at": "2026-07-03T18:48:25Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,15 +7,15 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 18457,
-    "callable_operations": 18315,
+    "operations": 18489,
+    "callable_operations": 18347,
     "callable_operation_percent": 99.2,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 6847,
-    "registered_adapter_operations": 6837,
+    "external_endpoint_operations": 6879,
+    "registered_adapter_operations": 6869,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.6,
-    "approval_required_operations": 6297,
+    "approval_required_operations": 6329,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T18:42:08Z",
-    "total": 1950,
-    "verified": 606,
+    "generated_at": "2026-07-03T18:48:16Z",
+    "total": 1975,
+    "verified": 631,
     "failed": 147,
     "skipped": 1197,
     "unknown": 0,
-    "verified_percent": 31.1,
-    "evidence_operation_percent": 10.6
+    "verified_percent": 31.9,
+    "evidence_operation_percent": 10.7
   },
   "route_evidence": {
     "present": true,
@@ -210,12 +210,12 @@
           "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 878,
-        "operations": 2185,
-        "external_endpoint_operations": 2185,
+        "specs": 879,
+        "operations": 2186,
+        "external_endpoint_operations": 2186,
         "external_guide_specs": 21,
         "wms_operations": 5,
-        "approval_required_operations": 51,
+        "approval_required_operations": 52,
         "sample_ids": [
           "15005231",
           "15011020",
@@ -228,10 +228,10 @@
           "external_endpoint"
         ],
         "adapter_status": "adapter",
-        "specs": 249,
-        "operations": 606,
-        "external_endpoint_operations": 606,
-        "approval_required_operations": 23,
+        "specs": 250,
+        "operations": 607,
+        "external_endpoint_operations": 607,
+        "approval_required_operations": 24,
         "sample_ids": [
           "15011425",
           "15032576",
@@ -333,10 +333,10 @@
           "external_endpoint"
         ],
         "adapter_status": "adapter",
-        "specs": 124,
-        "operations": 288,
-        "external_endpoint_operations": 288,
-        "approval_required_operations": 240,
+        "specs": 125,
+        "operations": 289,
+        "external_endpoint_operations": 289,
+        "approval_required_operations": 241,
         "sample_ids": [
           "15056532",
           "15056661",
@@ -383,7 +383,7 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T18:42:17Z",
+    "generated_at": "2026-07-03T18:48:25Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 82,
     "host_count": 94,

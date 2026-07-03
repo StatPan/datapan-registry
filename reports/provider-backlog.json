@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T18:42:11Z",
+  "generated_at": "2026-07-03T18:48:19Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -9,7 +9,7 @@
     "hosts": 246,
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 103,
-    "external_guide_hosts": 184,
+    "external_guide_hosts": 185,
     "registered_adapter_hosts": 92,
     "operation_hosts": 105,
     "guide_only_hosts": 141,
@@ -17,7 +17,7 @@
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 6297,
+    "approval_required_operations": 6329,
     "malformed_source_url_count": 643
   },
   "providers": [
@@ -178,12 +178,12 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 878,
-      "operations": 2185,
-      "external_endpoint_operations": 2185,
+      "specs": 879,
+      "operations": 2186,
+      "external_endpoint_operations": 2186,
       "external_guide_specs": 21,
       "wms_operations": 5,
-      "approval_required_operations": 51,
+      "approval_required_operations": 52,
       "sample_ids": [
         "15005231",
         "15011020",
@@ -196,10 +196,10 @@
         "external_endpoint"
       ],
       "adapter_status": "adapter",
-      "specs": 249,
-      "operations": 606,
-      "external_endpoint_operations": 606,
-      "approval_required_operations": 23,
+      "specs": 250,
+      "operations": 607,
+      "external_endpoint_operations": 607,
+      "approval_required_operations": 24,
       "sample_ids": [
         "15011425",
         "15032576",
@@ -301,10 +301,10 @@
         "external_endpoint"
       ],
       "adapter_status": "adapter",
-      "specs": 124,
-      "operations": 288,
-      "external_endpoint_operations": 288,
-      "approval_required_operations": 240,
+      "specs": 125,
+      "operations": 289,
+      "external_endpoint_operations": 289,
+      "approval_required_operations": 241,
       "sample_ids": [
         "15056532",
         "15056661",
@@ -389,13 +389,15 @@
     {
       "host": "seogu.go.kr",
       "kinds": [
-        "external_endpoint"
+        "external_endpoint",
+        "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 101,
-      "operations": 125,
-      "external_endpoint_operations": 125,
-      "approval_required_operations": 124,
+      "specs": 126,
+      "operations": 154,
+      "external_endpoint_operations": 154,
+      "external_guide_specs": 1,
+      "approval_required_operations": 153,
       "sample_ids": [
         "15058949",
         "15095265",
