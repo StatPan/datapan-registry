@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T18:04:25Z",
+  "generated_at": "2026-07-03T18:17:16Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 18000,
-    "runtime_evidence": 1875,
+    "operations": 18260,
+    "runtime_evidence": 1900,
     "runtime_evidence_percent": 10.4,
-    "callable_operations": 17858,
-    "external_endpoint_operations": 6390,
-    "registered_adapter_operations": 6380,
+    "callable_operations": 18118,
+    "external_endpoint_operations": 6650,
+    "registered_adapter_operations": 6640,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 6390
+      "count": 6650
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 6380
+      "count": 6640
     },
     {
       "key": "builtin",
@@ -76,12 +76,12 @@
       "operation_count": 1887
     },
     {
-      "category": "교통물류",
-      "operation_count": 1740
+      "category": "농축수산",
+      "operation_count": 1759
     },
     {
-      "category": "농축수산",
-      "operation_count": 1499
+      "category": "교통물류",
+      "operation_count": 1740
     },
     {
       "category": "사회복지",
@@ -211,6 +211,15 @@
       ]
     },
     {
+      "host": "www.nongsaro.go.kr",
+      "operation_count": 267,
+      "adapter": "nongsaro",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "host": "www.jejudatahub.net",
       "operation_count": 177,
       "adapter": "jejudatahub",
@@ -299,15 +308,6 @@
       "adapter_status": "registered",
       "capabilities": [
         "call",
-        "verification"
-      ]
-    },
-    {
-      "host": "www.lawmaking.go.kr",
-      "operation_count": 38,
-      "adapter": "open-law",
-      "adapter_status": "registered",
-      "capabilities": [
         "verification"
       ]
     }
@@ -1348,6 +1348,87 @@
         {
           "host": "www.jobplustv.or.kr",
           "operation_count": 1
+        }
+      ]
+    },
+    {
+      "organization": "농촌진흥청",
+      "api_count": 136,
+      "operation_api_count": 114,
+      "operation_count": 305,
+      "runtime_evidence_count": 33,
+      "runtime_evidence_percent": 10.8,
+      "verified": 26,
+      "failed": 0,
+      "skipped": 7,
+      "unknown": 0,
+      "approval_required_operations": 204,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 21
+        },
+        {
+          "key": "external_endpoint",
+          "count": 284
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 280
+        },
+        {
+          "key": "builtin",
+          "count": 21
+        },
+        {
+          "key": "missing",
+          "count": 4
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "농축수산",
+          "operation_count": 305
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "www.nongsaro.go.kr",
+          "operation_count": 267,
+          "adapter": "nongsaro",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 21
+        },
+        {
+          "host": "nongsaro.go.kr",
+          "operation_count": 11,
+          "adapter": "nongsaro",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.rda.go.kr",
+          "operation_count": 4
+        },
+        {
+          "host": "ncpms.rda.go.kr",
+          "operation_count": 1,
+          "adapter": "ncpms",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },
@@ -4210,78 +4291,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 47
-        }
-      ]
-    },
-    {
-      "organization": "농촌진흥청",
-      "api_count": 136,
-      "operation_api_count": 14,
-      "operation_count": 45,
-      "runtime_evidence_count": 8,
-      "runtime_evidence_percent": 17.8,
-      "verified": 5,
-      "failed": 0,
-      "skipped": 3,
-      "unknown": 0,
-      "approval_required_operations": 8,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 21
-        },
-        {
-          "key": "external_endpoint",
-          "count": 24
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 20
-        },
-        {
-          "key": "builtin",
-          "count": 21
-        },
-        {
-          "key": "missing",
-          "count": 4
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "농축수산",
-          "operation_count": 45
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 21
-        },
-        {
-          "host": "www.nongsaro.go.kr",
-          "operation_count": 19,
-          "adapter": "nongsaro",
-          "adapter_status": "registered",
-          "capabilities": [
-            "verification"
-          ]
-        },
-        {
-          "host": "www.rda.go.kr",
-          "operation_count": 4
-        },
-        {
-          "host": "ncpms.rda.go.kr",
-          "operation_count": 1,
-          "adapter": "ncpms",
-          "adapter_status": "registered",
-          "capabilities": [
-            "verification"
-          ]
         }
       ]
     },

@@ -11,29 +11,29 @@ re-importing the upstream data.go.kr catalog every time.
 
 - Provider: `data.go.kr`
 - Specs: `12060`
-- Operations: `18000`
-- Callable operations: `17858` (`99.2%`)
+- Operations: `18260`
+- Callable operations: `18118` (`99.2%`)
 - Latest release: `v2026.06.25.24`
 - Registered external adapters: `airport`, `andong`, `calspia`, `car`, `car365`, `codil`, `consumer`, `culture`, `data-gg`,
   `dgfca`, `dongjak`, `ekape`, `emuseum`, `epost`, `eshare`, `ex`, `fairdata`, `folk`, `foodsafetykorea`, `forest`,
   `franchise-ftc`, `garak`, `gblib`, `geoje`, `gicoms`, `gimhae`, `gwanak`, `gwangjin`, `gwangmyeong`, `happysd`, `humetro`,
   `i815`, `icheon`, `ins24`, `itfind`, `its`, `jeju`, `jeju-air`, `jeju-www`, `jejudatahub`, `jejuits`, `jeonju`, `juso`,
   `kistep`, `kofpi`, `korad`, `kpx`, `lh-ebid`, `lofin365`, `mafra`, `mnd-open-data`, `myhome`, `naqs`, `ncpms`, `nfqs`,
-  `nongsaro`, `oneclick-law`, `open-assembly`, `open-law`, `pqis`, `q-net`, `safemap`, `safetydata`,
+  `nongsaro`, `oneclick-law`, `open-assembly`, `open-law`, `pqis`, `psis`, `q-net`, `safemap`, `safetydata`,
   `seoul-bus`, `seogu`, `seogwipo`, `seoul-open-data`, `sexoffender`, `sisul`, `sisul-www`, `stcis`, `tour`, `uiryeong`, `ulsan`, `vworld`,
   `wamis`, `work`, `work24`, `worldjob`, `cancer`
-- External adapter coverage: `6380` registered-adapter operations out of `6390`
-  external endpoint operations (`99.5%`)
+- External adapter coverage: `6640` registered-adapter operations out of `6650`
+  external endpoint operations (`99.6%`)
 - Missing external adapter hosts: `11`
 - Provider split readiness: `ready`
-  (`80` adapters, `80` verification-capable, `23` call-capable)
-- Runtime verification evidence: `1875` bounded checks merged into
-  `reports/latest-verification.json` (`535` verified, `147` failed, `1193`
+  (`81` adapters, `81` verification-capable, `23` call-capable)
+- Runtime verification evidence: `1900` bounded checks merged into
+  `reports/latest-verification.json` (`556` verified, `147` failed, `1197`
   skipped)
 - Runtime evidence growth target: `10.4%` checked evidence is above the
   unrounded `10%` release target; `0` additional records are required for this
   target.
-- Institution API overview: `411` organizations, `12060` APIs, and `18000`
+- Institution API overview: `411` organizations, `12060` APIs, and `18260`
   operations in `reports/data-go-kr/institution-api-overview.json`; readable
   tables live in `docs/data-go-kr-institution-api-overview.md`.
 - Missing external host probe: `81` manifest-bound probe records remain in

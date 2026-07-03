@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-07-03T18:04:25Z",
+  "generated_at": "2026-07-03T18:17:16Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -13,18 +13,18 @@
     "provider_index": "data/provider-index.json"
   },
   "coverage": {
-    "operations": 18000,
-    "callable_operations": 17858,
+    "operations": 18260,
+    "callable_operations": 18118,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 6390,
-    "registered_adapter_operations": 6380,
+    "external_endpoint_operations": 6650,
+    "registered_adapter_operations": 6640,
     "call_capable_adapters": 23
   },
   "evidence": {
-    "total": 1875,
-    "verified": 535,
+    "total": 1900,
+    "verified": 556,
     "failed": 147,
-    "skipped": 1193,
+    "skipped": 1197,
     "unknown": 0,
     "coverage_percent": 10.4,
     "by_kind": [
@@ -34,7 +34,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 1151
+        "count": 1176
       },
       {
         "key": "service_root",
@@ -44,7 +44,7 @@
   },
   "growth_target": {
     "target_percent": 10,
-    "target_evidence_total": 1800,
+    "target_evidence_total": 1826,
     "remaining_to_target": 0,
     "status": "above_target"
   },
@@ -52,7 +52,7 @@
     "planned_batches": 20,
     "planned_operations": 138,
     "uncovered_gateway_candidates": 10714,
-    "uncovered_adapter_candidates": 3706,
+    "uncovered_adapter_candidates": 3944,
     "missing_adapter_hosts": 11,
     "planned_by_kind": [
       {
@@ -239,8 +239,8 @@
         "label": "nongsaro",
         "provider": "nongsaro",
         "kind": "external_endpoint",
-        "candidates": 19,
-        "uncovered_candidates": 15,
+        "candidates": 278,
+        "uncovered_candidates": 253,
         "planned_operations": 10,
         "output": ".datapan/verification/nongsaro-next.json"
       }
@@ -248,8 +248,8 @@
   },
   "provider_split_readiness": {
     "status": "ready",
-    "adapter_count": 80,
-    "verification_capable_adapters": 80,
+    "adapter_count": 81,
+    "verification_capable_adapters": 81,
     "call_capable_adapters": 23
   },
   "warnings": []

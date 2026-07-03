@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T18:04:31Z",
+  "generated_at": "2026-07-03T18:17:22Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 18000,
-    "callable_operations": 17858,
+    "operations": 18260,
+    "callable_operations": 18118,
     "callable_operation_percent": 99.2,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 6390,
-    "registered_adapter_operations": 6380,
+    "external_endpoint_operations": 6650,
+    "registered_adapter_operations": 6640,
     "missing_adapter_operations": 29,
-    "external_adapter_coverage_percent": 99.5,
-    "approval_required_operations": 5923,
+    "external_adapter_coverage_percent": 99.6,
+    "approval_required_operations": 6119,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 88,
+    "registered_adapter_hosts": 90,
     "missing_adapter_hosts": 11,
-    "adapter_count": 80,
+    "adapter_count": 81,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T18:04:23Z",
-    "total": 1875,
-    "verified": 535,
+    "generated_at": "2026-07-03T18:17:00Z",
+    "total": 1900,
+    "verified": 556,
     "failed": 147,
-    "skipped": 1193,
+    "skipped": 1197,
     "unknown": 0,
-    "verified_percent": 28.5,
+    "verified_percent": 29.3,
     "evidence_operation_percent": 10.4
   },
   "route_evidence": {
@@ -344,6 +344,24 @@
         ]
       },
       {
+        "host": "www.nongsaro.go.kr",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "adapter",
+        "specs": 107,
+        "operations": 267,
+        "external_endpoint_operations": 267,
+        "external_guide_specs": 1,
+        "approval_required_operations": 187,
+        "sample_ids": [
+          "15002034",
+          "15005257",
+          "15015158"
+        ]
+      },
+      {
         "host": "www.jejudatahub.net",
         "kinds": [
           "external_endpoint",
@@ -360,33 +378,14 @@
           "15045335",
           "15056424"
         ]
-      },
-      {
-        "host": "www.calspia.go.kr",
-        "provider": "calspia",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "adapter",
-        "specs": 56,
-        "operations": 168,
-        "external_endpoint_operations": 168,
-        "external_guide_specs": 53,
-        "approval_required_operations": 168,
-        "sample_ids": [
-          "15061025",
-          "15061033",
-          "15061035"
-        ]
       }
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T18:04:31Z",
+    "generated_at": "2026-07-03T18:17:22Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 80,
-    "host_count": 90,
+    "adapter_count": 81,
+    "host_count": 92,
     "adapters": [
       {
         "name": "airport",
@@ -968,6 +967,7 @@
         "name": "nongsaro",
         "status": "registered",
         "hosts": [
+          "nongsaro.go.kr",
           "www.nongsaro.go.kr"
         ],
         "capabilities": [
@@ -1016,6 +1016,16 @@
         ],
         "capabilities": [
           "call",
+          "verification"
+        ]
+      },
+      {
+        "name": "psis",
+        "status": "registered",
+        "hosts": [
+          "psis.rda.go.kr"
+        ],
+        "capabilities": [
           "verification"
         ]
       },
@@ -1225,8 +1235,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 80,
-      "verification_capable_adapters": 80,
+      "adapter_count": 81,
+      "verification_capable_adapters": 81,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

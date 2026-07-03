@@ -94,8 +94,8 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `2,109` data.go.kr APIs
-  without operation mappings, `9,041` operation-mapped APIs without runtime
+- `reports/data-go-kr/coverage-backlog.json` tracks `2,009` data.go.kr APIs
+  without operation mappings, `9,132` operation-mapped APIs without runtime
   evidence, and `98` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
@@ -294,8 +294,14 @@ Current gaps:
   operations, and merges `25` verified landing-page checks, bringing runtime
   evidence to `1875`, completing 제주특별자치도 materialization at `171` of `171`
   APIs, and moving the first materialization queue to 농촌진흥청.
-- API operation coverage remains incomplete: `9,951` of `12,060` APIs have
-  operation mappings (`82.5%`), leaving `2,109` APIs to materialize and `9,041`
+- The first 농촌진흥청 batch extends Nongsaro host coverage to bare
+  `nongsaro.go.kr`, adds PSIS verification adapter coverage, materializes `100`
+  APIs and `260` operations, and merges `21` verified landing-page checks plus
+  `4` skipped parameter-blocked checks. That brings runtime evidence to
+  `1900`, registered external adapter operations to `6640`, and leaves
+  농촌진흥청 as the first materialization queue with `22` uncovered APIs.
+- API operation coverage remains incomplete: `10,051` of `12,060` APIs have
+  operation mappings (`83.3%`), leaving `2,009` APIs to materialize and `9,132`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

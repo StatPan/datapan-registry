@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T18:04:25Z",
+  "generated_at": "2026-07-03T18:17:16Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 80,
-  "host_count": 90,
+  "adapter_count": 81,
+  "host_count": 92,
   "adapters": [
     {
       "name": "airport",
@@ -584,6 +584,7 @@
       "name": "nongsaro",
       "status": "registered",
       "hosts": [
+        "nongsaro.go.kr",
         "www.nongsaro.go.kr"
       ],
       "capabilities": [
@@ -632,6 +633,16 @@
       ],
       "capabilities": [
         "call",
+        "verification"
+      ]
+    },
+    {
+      "name": "psis",
+      "status": "registered",
+      "hosts": [
+        "psis.rda.go.kr"
+      ],
+      "capabilities": [
         "verification"
       ]
     },
@@ -841,8 +852,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 80,
-    "verification_capable_adapters": 80,
+    "adapter_count": 81,
+    "verification_capable_adapters": 81,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
