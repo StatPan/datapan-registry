@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `15885`
-- callable operations: `15743` (`99.1%`)
+- operations: `16062`
+- callable operations: `15920` (`99.1%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `4275`
-- registered adapter operations: `4265`
+- external endpoint operations: `4452`
+- registered adapter operations: `4442`
 - missing adapter operations: `29`
-- external adapter coverage: `99.3%`
-- approval-required operations: `4882`
+- external adapter coverage: `99.4%`
+- approval-required operations: `5004`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `146`
-- registered adapter hosts: `72`
+- registered adapter hosts: `74`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -124,7 +124,7 @@ epost, eshare, ex, folk, foodsafetykorea, forest, garak, gblib, geoje, gimhae, g
 gwangmyeong, happysd, humetro, i815, icheon, ins24, itfind, its, jeju, jeju-air, jeju-www, jejudatahub, jeonju, juso,
 kistep, kofpi, korad, kpx, lh-ebid, lofin365, mafra, myhome, naqs, ncpms, nfqs, nongsaro,
 oneclick-law, open-law, pqis, q-net, safemap, safetydata, seogu, seoul-bus, seoul-open-data,
-sisul, sisul-www, tour, uiryeong, ulsan, vworld, wamis, work, and work24.
+sisul, sisul-www, stcis, tour, uiryeong, ulsan, vworld, wamis, work, and work24.
 
 Missing external route hosts currently requiring route-disposition tracking:
 
@@ -372,6 +372,12 @@ coverage.
    `22` bounded checks. That brings checked runtime evidence to `1589`,
    registered external adapter operations to `4265`, and raises 국토교통부
    operation coverage to `327` of `393` APIs.
+   The final 국토교통부 batch extends ITS host coverage, adds the STCIS
+   verification adapter, materializes the remaining `66` APIs and `177`
+   operations, and merges `18` verified bounded checks. That brings checked
+   runtime evidence to `1607`, registered external adapter operations to
+   `4442`, completes 국토교통부 materialization at `393` of `393` APIs, and moves
+   the first materialization queue to 식품의약품안전처.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,
