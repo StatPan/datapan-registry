@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T14:55:27Z",
+  "generated_at": "2026-07-03T15:10:11Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 221,
+  "filtered_count": 225,
   "summary": {
-    "hosts": 221,
+    "hosts": 225,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 79,
+    "external_endpoint_hosts": 83,
     "external_guide_hosts": 165,
-    "registered_adapter_hosts": 68,
-    "operation_hosts": 81,
+    "registered_adapter_hosts": 72,
+    "operation_hosts": 85,
     "guide_only_hosts": 140,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
-    "unsupported_protocol_operations": 147,
-    "approval_required_operations": 4836,
+    "unsupported_protocol_operations": 149,
+    "approval_required_operations": 4882,
     "malformed_source_url_count": 627
   },
   "providers": [
@@ -190,6 +190,25 @@
       ]
     },
     {
+      "host": "www.vworld.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 183,
+      "operations": 415,
+      "external_endpoint_operations": 415,
+      "external_guide_specs": 22,
+      "wms_operations": 4,
+      "approval_required_operations": 65,
+      "sample_ids": [
+        "15028102",
+        "15056679",
+        "15056690"
+      ]
+    },
+    {
       "host": "www.safetydata.go.kr",
       "provider": "safetydata",
       "kinds": [
@@ -220,25 +239,6 @@
         "15038581",
         "15056593",
         "15056639"
-      ]
-    },
-    {
-      "host": "www.vworld.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 83,
-      "operations": 198,
-      "external_endpoint_operations": 198,
-      "external_guide_specs": 8,
-      "wms_operations": 2,
-      "approval_required_operations": 20,
-      "sample_ids": [
-        "15056696",
-        "15056709",
-        "15056776"
       ]
     },
     {
@@ -1071,6 +1071,20 @@
       ]
     },
     {
+      "host": "car.go.kr",
+      "provider": "car",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "3068943"
+      ]
+    },
+    {
       "host": "data.myhome.go.kr:443",
       "provider": "myhome",
       "kinds": [
@@ -1223,6 +1237,35 @@
       ]
     },
     {
+      "host": "www.its.go.kr",
+      "provider": "its",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "15056842"
+      ]
+    },
+    {
+      "host": "www.jeju.go.kr",
+      "provider": "jeju-www",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15101084"
+      ]
+    },
+    {
       "host": "www.kistep.re.kr",
       "provider": "kistep",
       "kinds": [
@@ -1234,6 +1277,20 @@
       "external_endpoint_operations": 1,
       "sample_ids": [
         "15037595"
+      ]
+    },
+    {
+      "host": "www.kofpi.or.kr",
+      "provider": "kofpi",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "15058699"
       ]
     },
     {
@@ -1518,6 +1575,21 @@
         "15056567",
         "15056756",
         "15057292"
+      ]
+    },
+    {
+      "host": "dev.vworld.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 10,
+      "operations": 0,
+      "external_guide_specs": 10,
+      "sample_ids": [
+        "15056679",
+        "15056776",
+        "15057007"
       ]
     },
     {
@@ -1941,21 +2013,6 @@
         "15000096",
         "15000254",
         "15000386"
-      ]
-    },
-    {
-      "host": "dev.vworld.kr",
-      "kinds": [
-        "external_guide"
-      ],
-      "adapter_status": "guide_only",
-      "specs": 4,
-      "operations": 0,
-      "external_guide_specs": 4,
-      "sample_ids": [
-        "15056776",
-        "15057789",
-        "15058405"
       ]
     },
     {

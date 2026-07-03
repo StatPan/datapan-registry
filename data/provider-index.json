@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T14:55:27Z",
+  "generated_at": "2026-07-03T15:10:11Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 63,
-  "host_count": 70,
+  "adapter_count": 67,
+  "host_count": 74,
   "adapters": [
     {
       "name": "airport",
@@ -30,6 +30,16 @@
       "status": "registered",
       "hosts": [
         "www.calspia.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "car",
+      "status": "registered",
+      "hosts": [
+        "car.go.kr"
       ],
       "capabilities": [
         "verification"
@@ -304,6 +314,16 @@
       ]
     },
     {
+      "name": "its",
+      "status": "registered",
+      "hosts": [
+        "www.its.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "jeju",
       "status": "registered",
       "hosts": [
@@ -319,6 +339,16 @@
       "status": "registered",
       "hosts": [
         "air.jeju.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "jeju-www",
+      "status": "registered",
+      "hosts": [
+        "www.jeju.go.kr"
       ],
       "capabilities": [
         "verification"
@@ -359,6 +389,16 @@
       "status": "registered",
       "hosts": [
         "www.kistep.re.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "kofpi",
+      "status": "registered",
+      "hosts": [
+        "www.kofpi.or.kr"
       ],
       "capabilities": [
         "verification"
@@ -668,8 +708,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 63,
-    "verification_capable_adapters": 63,
+    "adapter_count": 67,
+    "verification_capable_adapters": 67,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

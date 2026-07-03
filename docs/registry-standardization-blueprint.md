@@ -94,9 +94,9 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `3,266` data.go.kr APIs
-  without operation mappings, `8,043` operation-mapped APIs without runtime
-  evidence, and `65` APIs with failed runtime evidence that need repair.
+- `reports/data-go-kr/coverage-backlog.json` tracks `3,166` data.go.kr APIs
+  without operation mappings, `8,134` operation-mapped APIs without runtime
+  evidence, and `66` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
   `reports/open-assembly/runtime-evidence-plan.json`, and
@@ -224,10 +224,12 @@ Current gaps:
   the first materialization queue to 국토교통부. The first 국토교통부 batch adds
   Calspia, Car365, and Codil verification adapters, materializes `100` APIs and
   `260` operations, and merges `26` bounded checks, bringing runtime evidence
-  to `1567`. Most evidence
+  to `1567`. The second 국토교통부 batch adds Car, ITS, Jeju WWW, and KOFPI
+  verification adapters, materializes another `100` APIs and `221` operations,
+  and merges `22` bounded checks, bringing runtime evidence to `1589`. Most evidence
   is still skipped boundary evidence, not proof that those operations are callable.
-- API operation coverage remains incomplete: `8,794` of `12,060` APIs have
-  operation mappings (`72.9%`), leaving `3,266` APIs to materialize and `8,043`
+- API operation coverage remains incomplete: `8,894` of `12,060` APIs have
+  operation mappings (`73.7%`), leaving `3,166` APIs to materialize and `8,134`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

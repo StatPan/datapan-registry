@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T14:55:33Z",
+  "generated_at": "2026-07-03T15:10:17Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 15664,
-    "callable_operations": 15522,
+    "operations": 15885,
+    "callable_operations": 15743,
     "callable_operation_percent": 99.1,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 4054,
-    "registered_adapter_operations": 4044,
+    "external_endpoint_operations": 4275,
+    "registered_adapter_operations": 4265,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.3,
-    "approval_required_operations": 4836,
+    "approval_required_operations": 4882,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
-    "unsupported_protocol_operations": 147,
-    "registered_adapter_hosts": 68,
+    "unsupported_protocol_operations": 149,
+    "registered_adapter_hosts": 72,
     "missing_adapter_hosts": 11,
-    "adapter_count": 63,
+    "adapter_count": 67,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T14:55:18Z",
-    "total": 1567,
-    "verified": 290,
-    "failed": 114,
+    "generated_at": "2026-07-03T15:10:03Z",
+    "total": 1589,
+    "verified": 311,
+    "failed": 115,
     "skipped": 1163,
     "unknown": 0,
-    "verified_percent": 18.5,
+    "verified_percent": 19.6,
     "evidence_operation_percent": 10
   },
   "route_evidence": {
@@ -222,6 +222,25 @@
         ]
       },
       {
+        "host": "www.vworld.kr",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "adapter",
+        "specs": 183,
+        "operations": 415,
+        "external_endpoint_operations": 415,
+        "external_guide_specs": 22,
+        "wms_operations": 4,
+        "approval_required_operations": 65,
+        "sample_ids": [
+          "15028102",
+          "15056679",
+          "15056690"
+        ]
+      },
+      {
         "host": "www.safetydata.go.kr",
         "provider": "safetydata",
         "kinds": [
@@ -252,25 +271,6 @@
           "15038581",
           "15056593",
           "15056639"
-        ]
-      },
-      {
-        "host": "www.vworld.kr",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "adapter",
-        "specs": 83,
-        "operations": 198,
-        "external_endpoint_operations": 198,
-        "external_guide_specs": 8,
-        "wms_operations": 2,
-        "approval_required_operations": 20,
-        "sample_ids": [
-          "15056696",
-          "15056709",
-          "15056776"
         ]
       },
       {
@@ -381,10 +381,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T14:55:33Z",
+    "generated_at": "2026-07-03T15:10:17Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 63,
-    "host_count": 70,
+    "adapter_count": 67,
+    "host_count": 74,
     "adapters": [
       {
         "name": "airport",
@@ -412,6 +412,16 @@
         "status": "registered",
         "hosts": [
           "www.calspia.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "car",
+        "status": "registered",
+        "hosts": [
+          "car.go.kr"
         ],
         "capabilities": [
           "verification"
@@ -686,6 +696,16 @@
         ]
       },
       {
+        "name": "its",
+        "status": "registered",
+        "hosts": [
+          "www.its.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "jeju",
         "status": "registered",
         "hosts": [
@@ -701,6 +721,16 @@
         "status": "registered",
         "hosts": [
           "air.jeju.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "jeju-www",
+        "status": "registered",
+        "hosts": [
+          "www.jeju.go.kr"
         ],
         "capabilities": [
           "verification"
@@ -741,6 +771,16 @@
         "status": "registered",
         "hosts": [
           "www.kistep.re.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "kofpi",
+        "status": "registered",
+        "hosts": [
+          "www.kofpi.or.kr"
         ],
         "capabilities": [
           "verification"
@@ -1050,8 +1090,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 63,
-      "verification_capable_adapters": 63,
+      "adapter_count": 67,
+      "verification_capable_adapters": 67,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

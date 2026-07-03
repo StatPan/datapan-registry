@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T14:55:54Z",
+  "generated_at": "2026-07-03T15:10:38Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,10 +7,10 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 15664,
-    "evidence_total": 1567,
+    "operations": 15885,
+    "evidence_total": 1589,
     "uncovered_gateway_candidates": 10744,
-    "uncovered_adapter_candidates": 3152,
+    "uncovered_adapter_candidates": 3351,
     "missing_adapter_hosts": 11,
     "planned_batches": 15,
     "planned_operations": 120
@@ -30,7 +30,7 @@
       "provider": "calspia",
       "kind": "external_endpoint",
       "candidates": 60,
-      "uncovered_candidates": 50,
+      "uncovered_candidates": 40,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider calspia --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/calspia-next.json --json",
       "output": ".datapan/verification/calspia-next.json"
@@ -40,7 +40,7 @@
       "provider": "data-gg",
       "kind": "external_endpoint",
       "candidates": 2141,
-      "uncovered_candidates": 2033,
+      "uncovered_candidates": 2025,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider data-gg --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/data-gg-next.json --json",
       "output": ".datapan/verification/data-gg-next.json"
@@ -149,8 +149,8 @@
       "label": "vworld",
       "provider": "vworld",
       "kind": "external_endpoint",
-      "candidates": 198,
-      "uncovered_candidates": 197,
+      "candidates": 415,
+      "uncovered_candidates": 414,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider vworld --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/vworld-next.json --json",
       "output": ".datapan/verification/vworld-next.json"
