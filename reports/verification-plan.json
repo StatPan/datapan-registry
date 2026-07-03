@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T17:08:33Z",
+  "generated_at": "2026-07-03T17:15:07Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,10 +7,10 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 16854,
-    "evidence_total": 1749,
+    "operations": 17058,
+    "evidence_total": 1774,
     "uncovered_gateway_candidates": 10714,
-    "uncovered_adapter_candidates": 3715,
+    "uncovered_adapter_candidates": 3894,
     "missing_adapter_hosts": 11,
     "planned_batches": 20,
     "planned_operations": 150
@@ -179,8 +179,8 @@
       "label": "open-law",
       "provider": "open-law",
       "kind": "external_endpoint",
-      "candidates": 164,
-      "uncovered_candidates": 138,
+      "candidates": 368,
+      "uncovered_candidates": 317,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider open-law --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/open-law-next.json --json",
       "output": ".datapan/verification/open-law-next.json"

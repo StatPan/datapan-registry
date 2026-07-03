@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T17:08:09Z",
+  "generated_at": "2026-07-03T17:14:44Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,15 +7,15 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 16854,
-    "callable_operations": 16712,
+    "operations": 17058,
+    "callable_operations": 16916,
     "callable_operation_percent": 99.2,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 5244,
-    "registered_adapter_operations": 5234,
+    "external_endpoint_operations": 5448,
+    "registered_adapter_operations": 5438,
     "missing_adapter_operations": 29,
-    "external_adapter_coverage_percent": 99.4,
-    "approval_required_operations": 5621,
+    "external_adapter_coverage_percent": 99.5,
+    "approval_required_operations": 5687,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T17:07:59Z",
-    "total": 1749,
-    "verified": 411,
+    "generated_at": "2026-07-03T17:14:34Z",
+    "total": 1774,
+    "verified": 436,
     "failed": 145,
     "skipped": 1193,
     "unknown": 0,
-    "verified_percent": 23.5,
+    "verified_percent": 24.6,
     "evidence_operation_percent": 10.4
   },
   "route_evidence": {
@@ -274,6 +274,25 @@
         ]
       },
       {
+        "host": "open.law.go.kr",
+        "provider": "open-law",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "adapter",
+        "specs": 183,
+        "operations": 304,
+        "external_endpoint_operations": 304,
+        "external_guide_specs": 28,
+        "approval_required_operations": 121,
+        "sample_ids": [
+          "15031993",
+          "15031994",
+          "15032073"
+        ]
+      },
+      {
         "host": "www.foodsafetykorea.go.kr",
         "kinds": [
           "external_endpoint"
@@ -328,25 +347,6 @@
         ]
       },
       {
-        "host": "open.law.go.kr",
-        "provider": "open-law",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "adapter",
-        "specs": 90,
-        "operations": 122,
-        "external_endpoint_operations": 122,
-        "external_guide_specs": 4,
-        "approval_required_operations": 71,
-        "sample_ids": [
-          "15032073",
-          "15057026",
-          "15057038"
-        ]
-      },
-      {
         "host": "openapi.q-net.or.kr",
         "provider": "q-net",
         "kinds": [
@@ -385,7 +385,7 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T17:08:09Z",
+    "generated_at": "2026-07-03T17:14:44Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 75,
     "host_count": 85,

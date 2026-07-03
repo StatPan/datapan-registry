@@ -12,13 +12,13 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `16854`
-- callable operations: `16712` (`99.2%`)
+- operations: `17058`
+- callable operations: `16916` (`99.2%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `5244`
-- registered adapter operations: `5234`
+- external endpoint operations: `5448`
+- registered adapter operations: `5438`
 - missing adapter operations: `29`
-- external adapter coverage: `99.4%`
+- external adapter coverage: `99.5%`
 - approval-required operations: `5543`
 - no-endpoint operations: `123`
 - service-root operations: `19`
@@ -227,8 +227,8 @@ institution:
    `scripts/validate-institution-runtime-plan.py`, and
    `scripts/validate-institution-api-overview.py`.
 
-The current operation materialization queue starts at `법제처`: `203`
-APIs, `105` APIs with operation mappings, and `98` uncovered APIs. The runtime
+The current operation materialization queue starts at `경기도 광명시`: `197`
+APIs, `0` APIs with operation mappings, and `197` uncovered APIs. The runtime
 reactivation queue starts at `행정안전부`: `1252` APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
 records, and `1202` APIs still needing runtime reactivation. Gateway calls need
@@ -435,6 +435,11 @@ readiness, not to advance verified runtime coverage.
    merges `25` verified landing-page checks. That brings checked runtime
    evidence to `1749`, registered external adapter operations to `5234`, and
    raises 법제처 operation coverage to `105` of `203` APIs.
+   The final 법제처 batch materializes the remaining `98` APIs and `204`
+   operations, and merges `25` verified Open Law landing-page checks. That
+   brings checked runtime evidence to `1774`, registered external adapter
+   operations to `5438`, completes 법제처 materialization at `203` of `203`
+   APIs, and moves the first materialization queue to 경기도 광명시.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

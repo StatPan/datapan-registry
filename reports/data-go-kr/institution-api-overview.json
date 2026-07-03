@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T17:08:03Z",
+  "generated_at": "2026-07-03T17:14:37Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 16854,
-    "runtime_evidence": 1749,
+    "operations": 17058,
+    "runtime_evidence": 1774,
     "runtime_evidence_percent": 10.4,
-    "callable_operations": 16712,
-    "external_endpoint_operations": 5244,
-    "registered_adapter_operations": 5234,
+    "callable_operations": 16916,
+    "external_endpoint_operations": 5448,
+    "registered_adapter_operations": 5438,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 5244
+      "count": 5448
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 5234
+      "count": 5438
     },
     {
       "key": "builtin",
@@ -69,7 +69,7 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 2188
+      "operation_count": 2392
     },
     {
       "category": "교통물류",
@@ -175,6 +175,15 @@
       ]
     },
     {
+      "host": "open.law.go.kr",
+      "operation_count": 304,
+      "adapter": "open-law",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "host": "www.foodsafetykorea.go.kr",
       "operation_count": 288,
       "adapter": "foodsafetykorea",
@@ -196,15 +205,6 @@
       "host": "www.calspia.go.kr",
       "operation_count": 168,
       "adapter": "calspia",
-      "adapter_status": "registered",
-      "capabilities": [
-        "verification"
-      ]
-    },
-    {
-      "host": "open.law.go.kr",
-      "operation_count": 122,
-      "adapter": "open-law",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -285,6 +285,15 @@
       ]
     },
     {
+      "host": "www.lawmaking.go.kr",
+      "operation_count": 38,
+      "adapter": "open-law",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "host": "www.eshare.go.kr",
       "operation_count": 36,
       "adapter": "eshare",
@@ -297,15 +306,6 @@
       "host": "www.consumer.go.kr",
       "operation_count": 36,
       "adapter": "consumer",
-      "adapter_status": "registered",
-      "capabilities": [
-        "verification"
-      ]
-    },
-    {
-      "host": "www.juso.go.kr",
-      "operation_count": 30,
-      "adapter": "juso",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -678,6 +678,93 @@
           "capabilities": [
             "verification"
           ]
+        }
+      ]
+    },
+    {
+      "organization": "법제처",
+      "api_count": 203,
+      "operation_api_count": 203,
+      "operation_count": 403,
+      "runtime_evidence_count": 88,
+      "runtime_evidence_percent": 21.8,
+      "verified": 50,
+      "failed": 11,
+      "skipped": 27,
+      "unknown": 0,
+      "approval_required_operations": 154,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 8
+        },
+        {
+          "key": "external_endpoint",
+          "count": 395
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 395
+        },
+        {
+          "key": "builtin",
+          "count": 8
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "공공행정",
+          "operation_count": 373
+        },
+        {
+          "category": "법률",
+          "operation_count": 30
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "open.law.go.kr",
+          "operation_count": 301,
+          "adapter": "open-law",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.lawmaking.go.kr",
+          "operation_count": 38,
+          "adapter": "open-law",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "oneclick.law.go.kr:80",
+          "operation_count": 27,
+          "adapter": "oneclick-law",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
+        },
+        {
+          "host": "www.law.go.kr",
+          "operation_count": 26,
+          "adapter": "open-law",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 8
         }
       ]
     },
@@ -1360,93 +1447,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 213
-        }
-      ]
-    },
-    {
-      "organization": "법제처",
-      "api_count": 203,
-      "operation_api_count": 105,
-      "operation_count": 199,
-      "runtime_evidence_count": 63,
-      "runtime_evidence_percent": 31.7,
-      "verified": 25,
-      "failed": 11,
-      "skipped": 27,
-      "unknown": 0,
-      "approval_required_operations": 88,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 8
-        },
-        {
-          "key": "external_endpoint",
-          "count": 191
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 191
-        },
-        {
-          "key": "builtin",
-          "count": 8
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "공공행정",
-          "operation_count": 169
-        },
-        {
-          "category": "법률",
-          "operation_count": 30
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "open.law.go.kr",
-          "operation_count": 119,
-          "adapter": "open-law",
-          "adapter_status": "registered",
-          "capabilities": [
-            "verification"
-          ]
-        },
-        {
-          "host": "oneclick.law.go.kr:80",
-          "operation_count": 27,
-          "adapter": "oneclick-law",
-          "adapter_status": "registered",
-          "capabilities": [
-            "call",
-            "verification"
-          ]
-        },
-        {
-          "host": "www.law.go.kr",
-          "operation_count": 22,
-          "adapter": "open-law",
-          "adapter_status": "registered",
-          "capabilities": [
-            "verification"
-          ]
-        },
-        {
-          "host": "www.lawmaking.go.kr",
-          "operation_count": 20,
-          "adapter": "open-law",
-          "adapter_status": "registered",
-          "capabilities": [
-            "verification"
-          ]
-        },
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 8
         }
       ]
     },

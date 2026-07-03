@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T17:08:03Z",
+  "generated_at": "2026-07-03T17:14:37Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -17,7 +17,7 @@
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 5621,
+    "approval_required_operations": 5687,
     "malformed_source_url_count": 640
   },
   "providers": [
@@ -242,6 +242,25 @@
       ]
     },
     {
+      "host": "open.law.go.kr",
+      "provider": "open-law",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 183,
+      "operations": 304,
+      "external_endpoint_operations": 304,
+      "external_guide_specs": 28,
+      "approval_required_operations": 121,
+      "sample_ids": [
+        "15031993",
+        "15031994",
+        "15032073"
+      ]
+    },
+    {
       "host": "www.foodsafetykorea.go.kr",
       "kinds": [
         "external_endpoint"
@@ -293,25 +312,6 @@
         "15061025",
         "15061033",
         "15061035"
-      ]
-    },
-    {
-      "host": "open.law.go.kr",
-      "provider": "open-law",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 90,
-      "operations": 122,
-      "external_endpoint_operations": 122,
-      "external_guide_specs": 4,
-      "approval_required_operations": 71,
-      "sample_ids": [
-        "15032073",
-        "15057026",
-        "15057038"
       ]
     },
     {
@@ -454,6 +454,25 @@
       ]
     },
     {
+      "host": "www.lawmaking.go.kr",
+      "provider": "open-law",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 16,
+      "operations": 38,
+      "external_endpoint_operations": 38,
+      "external_guide_specs": 5,
+      "approval_required_operations": 18,
+      "sample_ids": [
+        "15038873",
+        "15056627",
+        "15057092"
+      ]
+    },
+    {
       "host": "www.eshare.go.kr",
       "kinds": [
         "external_endpoint",
@@ -524,6 +543,22 @@
       ]
     },
     {
+      "host": "www.law.go.kr",
+      "provider": "open-law",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 12,
+      "operations": 26,
+      "external_endpoint_operations": 26,
+      "sample_ids": [
+        "15056579",
+        "15056821",
+        "15057358"
+      ]
+    },
+    {
       "host": "openapi.epost.go.kr:80",
       "provider": "epost",
       "kinds": [
@@ -538,22 +573,6 @@
         "15000032",
         "15000124",
         "15000268"
-      ]
-    },
-    {
-      "host": "www.law.go.kr",
-      "provider": "open-law",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 8,
-      "operations": 22,
-      "external_endpoint_operations": 22,
-      "sample_ids": [
-        "15056579",
-        "15056821",
-        "15057358"
       ]
     },
     {
@@ -590,25 +609,6 @@
         "15002793",
         "15002794",
         "15002797"
-      ]
-    },
-    {
-      "host": "www.lawmaking.go.kr",
-      "provider": "open-law",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 8,
-      "operations": 20,
-      "external_endpoint_operations": 20,
-      "external_guide_specs": 2,
-      "approval_required_operations": 2,
-      "sample_ids": [
-        "15056627",
-        "15057092",
-        "15057172"
       ]
     },
     {
