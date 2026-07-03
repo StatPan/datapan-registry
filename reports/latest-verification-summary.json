@@ -1,27 +1,28 @@
 {
-  "generated_at": "2026-07-03T20:23:22Z",
+  "generated_at": "2026-07-03T20:42:01Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 2655,
+    "total": 2900,
     "verified": 1217,
     "failed": 223,
-    "skipped": 1215,
+    "skipped": 1460,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
+        "key": "skipped",
+        "count": 1460,
+        "status": "skipped"
+      },
+      {
         "key": "verified",
         "count": 1217,
         "status": "verified"
-      },
-      {
-        "key": "skipped",
-        "count": 1215,
-        "status": "skipped"
       },
       {
         "key": "failed",
@@ -31,14 +32,14 @@
     ],
     "by_reason": [
       {
+        "key": "missing_auth",
+        "count": 546,
+        "reason": "missing_auth"
+      },
+      {
         "key": "missing_required_params",
         "count": 468,
         "reason": "missing_required_params"
-      },
-      {
-        "key": "missing_auth",
-        "count": 301,
-        "reason": "missing_auth"
       },
       {
         "key": "approval_required",
@@ -351,6 +352,11 @@
         "key": "ex",
         "count": 277,
         "provider": "ex"
+      },
+      {
+        "key": "opendart",
+        "count": 245,
+        "provider": "opendart"
       },
       {
         "key": "mafra",
@@ -778,6 +784,11 @@
         "key": "data.ex.co.kr",
         "count": 277,
         "host": "data.ex.co.kr"
+      },
+      {
+        "key": "opendart.fss.or.kr",
+        "count": 245,
+        "host": "opendart.fss.or.kr"
       },
       {
         "key": "data.mafra.go.kr",
@@ -1263,7 +1274,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 1931,
+        "count": 2176,
         "kind": "external_endpoint"
       },
       {

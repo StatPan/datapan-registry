@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T20:23:35Z",
+  "generated_at": "2026-07-03T20:42:11Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3354,
-    "stable": 8706
+    "changed": 3437,
+    "stable": 8623
   },
   "added": [],
   "removed": [],
@@ -2387,6 +2387,16 @@
       ],
       "old_digest": "cda6c5a4b994f7401ef426ee5ce3e29458c86d616d124de603680c1bbd000757",
       "new_digest": "6ec14081ae1933445f80429fff6614e08cd84ab3b4ef2dcc43d282873b98cd20"
+    },
+    {
+      "id": "15034604",
+      "old_title": "금융감독원_공시정보_기업개황",
+      "new_title": "금융감독원_공시정보_기업개황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "edd40cb3d7ec3f525ac5abf200f539a70056d0fc30c0bfbc80f8b4c9a55a63c5",
+      "new_digest": "23b8565c5532fec3716e959fd297364ac9c78f0745834410c830ab5ded476d0a"
     },
     {
       "id": "15034922",
@@ -15199,6 +15209,216 @@
       "new_digest": "ed7bd77779a8d0867e0e06df786c3512f6506299982dd6668f016a931d557489"
     },
     {
+      "id": "15060602",
+      "old_title": "금융감독원_공시정보_공시서류원본파일",
+      "new_title": "금융감독원_공시정보_공시서류원본파일",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fc5cce30a7dc51cf970cf7ea51f5cfc1133877f850af7447512b611a7096db96",
+      "new_digest": "a462097f3ff5b1eabd06bf106ab44adb7e2dbece6408d2c6c87a4034a760b904"
+    },
+    {
+      "id": "15060603",
+      "old_title": "금융감독원_공시정보_고유번호",
+      "new_title": "금융감독원_공시정보_고유번호",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9557b1086cde783b509bae0c99a9f5d72bf3e381268cfb523bf5d7fc18ca56ac",
+      "new_digest": "cca39963e01a8ebcbe73e5b9221d1ac35cff19049d86ff95d7ef1e9fe062d843"
+    },
+    {
+      "id": "15060605",
+      "old_title": "금융감독원_정기보고서 주요정보_증자(감자)현황",
+      "new_title": "금융감독원_정기보고서 주요정보_증자(감자)현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "47ead5081861172313c7d4152978578197a01a2406e7a3626a14e0245921fba8",
+      "new_digest": "3a7df18718fbea2deaa3d3313a37c3fd4dab14ead596fca3c61f4afbb678a86c"
+    },
+    {
+      "id": "15060607",
+      "old_title": "금융감독원_사업보고서 주요정보_배당에관한사항",
+      "new_title": "금융감독원_사업보고서 주요정보_배당에관한사항",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ce665f14fa6a878b3bcb92a55f4613ceacc4fb51dd3cc94235f9789529114468",
+      "new_digest": "7704dd758d05b022ffeb487a2e9a9efc6908b036f4369a588fadc44b9a1d402f"
+    },
+    {
+      "id": "15060608",
+      "old_title": "금융감독원_사업보고서 주요정보_자기주식취득및처분현황",
+      "new_title": "금융감독원_사업보고서 주요정보_자기주식취득및처분현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "01bcaacc6c85db834367db145a0bfb60cda3ee0c64cea6605d362d3b6c970ddb",
+      "new_digest": "7030e8b412f6eef5acef42a79a9169f6456d5abce8811ed8fc357f870a76ae02"
+    },
+    {
+      "id": "15060609",
+      "old_title": "금융감독원_사업보고서 주요정보_최대주주현황",
+      "new_title": "금융감독원_사업보고서 주요정보_최대주주현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "660a8c8b4688993353ed3dbf64752b716563a910925aa69e9c73ee64ae4288a5",
+      "new_digest": "49a49af23fd530b98c94b424e117187c198ae4f439c88bcd0c807b35cd424350"
+    },
+    {
+      "id": "15060610",
+      "old_title": "금융감독원_사업보고서 주요정보_최대주주변동현황",
+      "new_title": "금융감독원_사업보고서 주요정보_최대주주변동현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9ad594d62e72be0ce7db86f20a0207b58351e2f60cafb01ffe958656ec3d0f96",
+      "new_digest": "45b3e5f7159af8cfd279fda80ef6a1f3ef65b9d0806fd0ab2a4e4e961003938c"
+    },
+    {
+      "id": "15060611",
+      "old_title": "금융감독원_사업보고서 주요정보_소액주주현황",
+      "new_title": "금융감독원_사업보고서 주요정보_소액주주현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0a4a343d63f51b9699170c7250f3e35de880f865e393ff43cb40c245ba55eaf2",
+      "new_digest": "5127849021cc200d8c9a921c3da6e556cca5600de7ecf83bcb00844730b9a618"
+    },
+    {
+      "id": "15060612",
+      "old_title": "금융감독원_사업보고서 주요정보_임원현황",
+      "new_title": "금융감독원_사업보고서 주요정보_임원현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "87aa56c0766df9795bfda6e672a9ee2fe8cc05140b1af97a59a61d47164b73b0",
+      "new_digest": "0a2a58d354c8f13c69ca5d02eeed3ff12bc908a88c8c4029a36207fa1be2d6f2"
+    },
+    {
+      "id": "15060615",
+      "old_title": "금융감독원_사업보고서 주요정보_직원현황",
+      "new_title": "금융감독원_사업보고서 주요정보_직원현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7d6d11a33327dbc3cfbf6630e3f9d4b9ed5bc7be4491322f3158d8190b01bf0f",
+      "new_digest": "048ca0482ca31f4f91609b059ed1515adbe524ce767a558ce59fb45b9789f69d"
+    },
+    {
+      "id": "15060616",
+      "old_title": "금융감독원_사업보고서 주요정보_이사,감사의개인별보수현황",
+      "new_title": "금융감독원_사업보고서 주요정보_이사,감사의개인별보수현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "94cf4c39412181f590beca90de71ed552767827a19603528ef0fa234bf994644",
+      "new_digest": "e6e0dac4cfc1280f9f4040eb2460c392905d82d4b30a7ae8573e2d33ad05577a"
+    },
+    {
+      "id": "15060617",
+      "old_title": "금융감독원_사업보고서 주요정보_이사,감사전체의보수현황",
+      "new_title": "금융감독원_사업보고서 주요정보_이사,감사전체의보수현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0ffab2240021763494fb886ee4aef39eb55bd968969e8937012acf649e3d25dd",
+      "new_digest": "33cb5dfa146b7375f423025e52fafe6b17ed9b3b79fa154bfe999d52bba35342"
+    },
+    {
+      "id": "15060618",
+      "old_title": "금융감독원_사업보고서 주요정보_개인별보수지급금액(5억이상상위5인)",
+      "new_title": "금융감독원_사업보고서 주요정보_개인별보수지급금액(5억이상상위5인)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fbd871fc5ef2a4d8ec288b3ae67c93d1955329f112146b7d11877c6ef5579f13",
+      "new_digest": "df0b10e86b7b94ad5ff69c3df6248b1b0c1d82a9f897badde46c0f6a177c49ce"
+    },
+    {
+      "id": "15060619",
+      "old_title": "금융감독원_사업보고서 주요정보_타법인출자현황",
+      "new_title": "금융감독원_사업보고서 주요정보_타법인출자현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bde6d9d84ac4c51600025dd4334ecc948f2def6b5b27cc0dcf4f786e409b8b2a",
+      "new_digest": "52c3074f1916433afdb328848b80ebf10f3ff64a0b2790c54814801b4dcc02a8"
+    },
+    {
+      "id": "15060620",
+      "old_title": "금융감독원_정기보고서 재무정보_단일회사주요계정",
+      "new_title": "금융감독원_정기보고서 재무정보_단일회사주요계정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6168225548e226e8379c66d878f3041c411689a15ada754136f4354b3dee2ef5",
+      "new_digest": "6d28ece5ac852839f9936b58c5f6e13b50a0476d6d85e1ad71faa3ac288ae7a8"
+    },
+    {
+      "id": "15060622",
+      "old_title": "금융감독원_정기보고서 재무정보_다중회사주요계정",
+      "new_title": "금융감독원_정기보고서 재무정보_다중회사주요계정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a14d7e7dafd4611fd3a18c83ad15c269a7459f234ebe6f311ae08f0d317855f7",
+      "new_digest": "2810df386c05cbbb8a5acbf0a489b14919a3487282b6a1599ce7998201cbb409"
+    },
+    {
+      "id": "15060624",
+      "old_title": "금융감독원_정기보고서 재무정보_재무제표원본파일(XBRL)",
+      "new_title": "금융감독원_정기보고서 재무정보_재무제표원본파일(XBRL)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e1a2dd318fb72acb06655e7fadc2e3a8e6bf01769101d9e111da7282adbaa3c9",
+      "new_digest": "94dd7d7038d63f4ea3b401cf485dcfdad93990db85993b8d20f8c3c98273d066"
+    },
+    {
+      "id": "15060626",
+      "old_title": "금융감독원_정기보고서 재무정보_단일회사전체재무제표",
+      "new_title": "금융감독원_정기보고서 재무정보_단일회사전체재무제표",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "49978b9b50807120bee1554d798ed1ea0e11f4f2510d83c19e21bad9bb15d9f3",
+      "new_digest": "1a06c12166f9c480ffd18dcd4d3f794de8af5b884a2584e18b9c0325d76e8922"
+    },
+    {
+      "id": "15060628",
+      "old_title": "금융감독원_정기보고서 재무정보_XBRL택사노미재무제표양식",
+      "new_title": "금융감독원_정기보고서 재무정보_XBRL택사노미재무제표양식",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "da0db50725c39cf91f7beda0f4328014940a38e386fbd923b804995269b62516",
+      "new_digest": "c7479cc864d9321203982544ff0c717a0b758e8cd5569b88c289e7e678d13d55"
+    },
+    {
+      "id": "15060630",
+      "old_title": "금융감독원_지분공시 종합정보_대량보유상황보고",
+      "new_title": "금융감독원_지분공시 종합정보_대량보유상황보고",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d7e4479a5c06cedc59a354eeb26c76793f467f19605cdb3a1362a94d6e6a5db1",
+      "new_digest": "b48a44bdf6270e05722b54f52aa37277dd9585a7a97143604050c5acae199b51"
+    },
+    {
+      "id": "15060631",
+      "old_title": "금융감독원_지분공시 종합정보_임원,주요주주소유보고",
+      "new_title": "금융감독원_지분공시 종합정보_임원,주요주주소유보고",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "23e1e9b58765e49ffe2f5eb0436ec0620930da786ba68848ca59368661cd529d",
+      "new_digest": "07f4ddd79a394dc400edff26c361fd3d6a1687f5dab6c81031720d245b5b398d"
+    },
+    {
       "id": "15060883",
       "old_title": "식품의약품안전처_식품접객업소 위생등급 지정현황",
       "new_title": "식품의약품안전처_식품접객업소 위생등급 지정현황",
@@ -18509,6 +18729,226 @@
       "new_digest": "cf5d292efed0fac64db46e395a4b0945cdeb055e5fbf6389a4da699cf4a7b8aa"
     },
     {
+      "id": "15087392",
+      "old_title": "금융감독원_사업보고서 주요정보_주식의 총수 현황",
+      "new_title": "금융감독원_사업보고서 주요정보_주식의 총수 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "242030099920f42dc616dbde8d82cbd936e16beddec8ce4eee8341f12574bd4e",
+      "new_digest": "68f4020cbcba6b24d9c5ffa434067b27e3fbf81fc97ea256c0e136c2a36f4dd5"
+    },
+    {
+      "id": "15087396",
+      "old_title": "금융감독원_사업보고서 주요정보_채무증권 발행실적",
+      "new_title": "금융감독원_사업보고서 주요정보_채무증권 발행실적",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6903e3e6b856bd1e050b53ccda836915b100a482864ae520be0e2f36e9b8ca86",
+      "new_digest": "96663ad96c9cc57ea316d08dd96fbebecddf6db68aad2328386c9aa9b3518ad0"
+    },
+    {
+      "id": "15087399",
+      "old_title": "금융감독원_사업보고서 주요정보_기업어음증권 미상환 잔액",
+      "new_title": "금융감독원_사업보고서 주요정보_기업어음증권 미상환 잔액",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5a96711a9bd78621e3e3268460cda67d0302f8243765ed622b2eab5e02bba083",
+      "new_digest": "93366cd2f4ccb6b5f85025fecb479fa41d9fea5ce74cba808c598ce9fb7bbd07"
+    },
+    {
+      "id": "15087411",
+      "old_title": "금융감독원_사업보고서 주요정보_단기사채 미상환 잔액",
+      "new_title": "금융감독원_사업보고서 주요정보_단기사채 미상환 잔액",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "887bda8ae80c0d0b760f8acfeee42212f56fd20d3bc4066f7a7fc507e6582e9b",
+      "new_digest": "4b97cfc06b7a9ddcc6ff325bcb455d1299230ad4e6f82b150486d79d79b0e06c"
+    },
+    {
+      "id": "15087414",
+      "old_title": "금융감독원_사업보고서 주요정보_회사채 미상환 잔액",
+      "new_title": "금융감독원_사업보고서 주요정보_회사채 미상환 잔액",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b6ace6d09acf223242ff2b8de8a15b908e53c92b51b028c2de8d176549e40ad8",
+      "new_digest": "b0cd0cd912b4f891ccf3a51ced27167b0742651cc3d1efe72cf597253144a293"
+    },
+    {
+      "id": "15087415",
+      "old_title": "금융감독원_사업보고서 주요정보_신종자본증권 미상환 잔액",
+      "new_title": "금융감독원_사업보고서 주요정보_신종자본증권 미상환 잔액",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "495cd7e7ec95bc6f0c433d896d3e531773a1ff69557dfe5b783c38bbe79f8600",
+      "new_digest": "a0dd38b6c7db26702e2ff42521d0b01b88d973dbe65465b8aa470ee9418df424"
+    },
+    {
+      "id": "15087417",
+      "old_title": "금융감독원_사업보고서 주요정보_조건부 자본증권 미상환 잔액",
+      "new_title": "금융감독원_사업보고서 주요정보_조건부 자본증권 미상환 잔액",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c58663578eab31a10493297f24d8cbd9b9bb60387b1a856ca7d5c22cb3ceac5e",
+      "new_digest": "83855151c83debbc68bafd15c6ee38b1e77eb65d1ffaad68a7f203f0ab1da302"
+    },
+    {
+      "id": "15087418",
+      "old_title": "금융감독원_사업보고서 주요정보_회계감사인의 명칭 및 감사의견",
+      "new_title": "금융감독원_사업보고서 주요정보_회계감사인의 명칭 및 감사의견",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fa18869267b61d327725711ff7cb092077387c3e09d32def0339f205d6759c25",
+      "new_digest": "95f9410fee52be844e384eb8741c4f60c3f1b5ddae02b2195b51e48739ebcfdb"
+    },
+    {
+      "id": "15087419",
+      "old_title": "금융감독원_사업보고서 주요정보_감사용역 체결현황",
+      "new_title": "금융감독원_사업보고서 주요정보_감사용역 체결현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0885dfea2b3fa3e74bb3d09b3895aaf57918dbfa5ba0f44157f0d75877c5d169",
+      "new_digest": "acedd3781ca4316ba92119d8681ad9fe3a727457edf2f19ff401888050f3f60c"
+    },
+    {
+      "id": "15087422",
+      "old_title": "금융감독원_사업보고서 주요정보_회계감사인과의 비감사용역 계약체결 현황",
+      "new_title": "금융감독원_사업보고서 주요정보_회계감사인과의 비감사용역 계약체결 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "30a11fadf191ac601343b1aecf33c3ad1fa70e07f03b06830280f21d8091aa32",
+      "new_digest": "6f9097f40ac9c4a0cc1efeb65a1754fb8cd6a7672aa50bbd1a0cf864374960dd"
+    },
+    {
+      "id": "15087423",
+      "old_title": "금융감독원_사업보고서 주요정보_사외이사 및 그 변동현황",
+      "new_title": "금융감독원_사업보고서 주요정보_사외이사 및 그 변동현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e4df6c2e8d689c0ebe91f2710b939f867b896021a6e9084f954539497684a0e6",
+      "new_digest": "04532c44d786ab244454312827d5b177a3dc4f935f7a34c7a7711022d83eac74"
+    },
+    {
+      "id": "15087424",
+      "old_title": "금융감독원_사업보고서 주요정보_미등기임원 보수현황",
+      "new_title": "금융감독원_사업보고서 주요정보_미등기임원 보수현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "510e487f970bfb5943647dac20e39cff41a9cc9a1b4a0a4dcf0762d9a062c8c9",
+      "new_digest": "eb426040fa8d8b8c0f3d0e5c5b05be4f767931297fa31a80bdcdbab335342127"
+    },
+    {
+      "id": "15087426",
+      "old_title": "금융감독원_사업보고서 주요정보_이사ㆍ감사 전체의 보수현황(주주총회 승인금액)",
+      "new_title": "금융감독원_사업보고서 주요정보_이사ㆍ감사 전체의 보수현황(주주총회 승인금액)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e31a1e45870b304d1c4d923263f8c7a21d928096618075041de63faaaabc6593",
+      "new_digest": "3b7bb4565b487d52fdbb0ae6c3a8b2c8dc00552ad0414795966599ef2f07d359"
+    },
+    {
+      "id": "15087433",
+      "old_title": "금융감독원_사업보고서 주요정보_이사ㆍ감사 전체의 보수현황(보수지급금액-유형별)",
+      "new_title": "금융감독원_사업보고서 주요정보_이사ㆍ감사 전체의 보수현황(보수지급금액-유형별)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5659d69d7fbb4256c5fbe471deb8a26cb8eaca2c0b8059bdc2b47330206b7318",
+      "new_digest": "5785d837f36e16c26718adcf0bec85cb41b904fb447ba5abf8b856269dbb78ff"
+    },
+    {
+      "id": "15087435",
+      "old_title": "금융감독원_사업보고서 주요정보_공모자금의 사용내역",
+      "new_title": "금융감독원_사업보고서 주요정보_공모자금의 사용내역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d00eaac555f7cd3e73746466675512f101a6acb1139d1e3bbaace290a9f6fc04",
+      "new_digest": "069ca19328d63a745b68c4946e2c2459dc1269b37a692cba3979320d22fad421"
+    },
+    {
+      "id": "15087437",
+      "old_title": "금융감독원_사업보고서 주요정보_사모자금의 사용내역",
+      "new_title": "금융감독원_사업보고서 주요정보_사모자금의 사용내역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9aa03cefbe6c8e6f6f2c7e1d9bbfdba8b89766cf884dddb06f5c5a2319b3d30a",
+      "new_digest": "7eadfab9c2e9d63cbdd9120228a029c1bd5deffe4c687993b01a75e2a33a5018"
+    },
+    {
+      "id": "15087467",
+      "old_title": "금융감독원_증권신고서 주요정보_지분증권",
+      "new_title": "금융감독원_증권신고서 주요정보_지분증권",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bfa0e8aabab516fee345cc4ed2baf4a8787c6bd412fc6d057453400bcc6c65af",
+      "new_digest": "d92e7ee234808785f8ad880f21cf1ffbfde31634782e6ccc2949759a1de6e225"
+    },
+    {
+      "id": "15087472",
+      "old_title": "금융감독원_증권신고서 주요정보_채무증권",
+      "new_title": "금융감독원_증권신고서 주요정보_채무증권",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6135df27d62b98f8c74e2803a4913fc2f321d8cb9bf7835dd9f880af7ac40f78",
+      "new_digest": "265806aaf6b4f495ac15b513ca831951a670f2a08244a60636a32c76085dd5eb"
+    },
+    {
+      "id": "15087475",
+      "old_title": "금융감독원_증권신고서 주요정보_증권예탁증권",
+      "new_title": "금융감독원_증권신고서 주요정보_증권예탁증권",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "05986327b3284d4b1e4bacb8ff456d7e636fd3b2132b80089a315897d40bc9ad",
+      "new_digest": "e8a6b217303a719ad6f6a09f24daa0b12b1d2c7de573223d92c5a33a3ce9c3f5"
+    },
+    {
+      "id": "15087477",
+      "old_title": "금융감독원_증권신고서 주요정보_합병",
+      "new_title": "금융감독원_증권신고서 주요정보_합병",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "74e95073760e7da2e08ece995a9b61671fdba4f868c98f483e9aa5fb2bd46bfe",
+      "new_digest": "11167e978c3b0cb5f3d8597033a95863156c06d7ba5fb8bfe3bc8ecb370e88f1"
+    },
+    {
+      "id": "15087478",
+      "old_title": "금융감독원_증권신고서 주요정보_주식의 포괄적교환ㆍ이전",
+      "new_title": "금융감독원_증권신고서 주요정보_주식의 포괄적교환ㆍ이전",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3c538b851b4c3fdc6ad89ef8b3f28c97e6d96e9e12aa0591df2b4565482d49b9",
+      "new_digest": "d7d7b1168caf957d83561bf9e92af9201185a5e65283be2d8bcc91b43440f39e"
+    },
+    {
+      "id": "15087479",
+      "old_title": "금융감독원_증권신고서 주요정보_분할",
+      "new_title": "금융감독원_증권신고서 주요정보_분할",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e9f6df032968ddeb35b2ae48d152ae4cbc62c138c7e4cc6bfad91639affcabc8",
+      "new_digest": "d7113bf55590e9f489948b16214b707a3612e4feb42f53ec51a96e7ddb525c16"
+    },
+    {
       "id": "15089289",
       "old_title": "식품의약품안전처_식품제조가공업 폐업정보",
       "new_title": "식품의약품안전처_식품제조가공업 폐업정보",
@@ -18647,6 +19087,366 @@
       ],
       "old_digest": "77f124ebede18e9131243675cd7dd202606b01decfc02cafce3bf7829edad62b",
       "new_digest": "a1efc0fde1a3e48a66a5ea607901577be7f57370ed6d170f44a458f856e23159"
+    },
+    {
+      "id": "15094418",
+      "old_title": "금융감독원_주요사항보고서 주요정보_자산양수도(기타), 풋백옵션",
+      "new_title": "금융감독원_주요사항보고서 주요정보_자산양수도(기타), 풋백옵션",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e4e1168662efaa21ee7238b9700c9ddf37272ebfcaa6e03966d840447f7baec3",
+      "new_digest": "298888ab58deb730e0c905b8c5696571f64661f49c4539f8fae14c1ac50b1271"
+    },
+    {
+      "id": "15094421",
+      "old_title": "금융감독원_주요사항보고서 주요정보_부도발생",
+      "new_title": "금융감독원_주요사항보고서 주요정보_부도발생",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "71babb0183187738911039934dd0d369a18ac497c2d7585f04a17624ba4d02f8",
+      "new_digest": "c501f37a5850d9cb40a07871bf59c95b10c158cf7cc4339d9150e60847f4fbb1"
+    },
+    {
+      "id": "15094424",
+      "old_title": "금융감독원_주요사항보고서 주요정보_영업정지",
+      "new_title": "금융감독원_주요사항보고서 주요정보_영업정지",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "37f37f469f2c5cd2ffc434a568f52be5a76a3bacd0cee7691aa65f7816eb64aa",
+      "new_digest": "46034956febaa1616dbfb0c8f6f0b0c01c6883e13b206327140fa9aa7260f37d"
+    },
+    {
+      "id": "15094425",
+      "old_title": "금융감독원_주요사항보고서 주요정보_회생절차 개시신청",
+      "new_title": "금융감독원_주요사항보고서 주요정보_회생절차 개시신청",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fd01a3e430d8c2b36f01c2db79b03c28e5a534cbd48d17d373e93e78337a141f",
+      "new_digest": "4d07246a07c53e4bb1f4a672f01527b1c6bf0944799eff833e8f144a82efab69"
+    },
+    {
+      "id": "15094426",
+      "old_title": "금융감독원_주요사항보고서 주요정보_해산사유 발생",
+      "new_title": "금융감독원_주요사항보고서 주요정보_해산사유 발생",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "613d41aee413a1b12b7328ec62fb4bd89f28b2aae6f35dd0d786ba8d068dfa38",
+      "new_digest": "1736842a9978897ce6097dc22705b3ea6f4ce43ccd9829fe567c7ea3754bf30d"
+    },
+    {
+      "id": "15094427",
+      "old_title": "금융감독원_주요사항보고서 주요정보_유상증자 결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_유상증자 결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4fe6a8083be62069a83a15b163b1821fb244e40d0ad38532c0a405a79f4c896b",
+      "new_digest": "824526f2c45ca78a790cf548461a886288582c22edab3702d1c2374c6cbf9b81"
+    },
+    {
+      "id": "15094433",
+      "old_title": "금융감독원_주요사항보고서 주요정보_무상증자 결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_무상증자 결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "db4aef5512d8dbd0becc043ab6f60422ac0309324dc3d72772e6c28f0656f407",
+      "new_digest": "c41e1e193a2d76e98c1624e448f7a73cbef115f29bf80329e1c020dff63b967a"
+    },
+    {
+      "id": "15094438",
+      "old_title": "금융감독원_주요사항보고서 주요정보_유무상증자 결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_유무상증자 결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "caf557ac7a91a1a30929667083d5912131df6bc1bf9f76f0a5267ad4fdcdb655",
+      "new_digest": "270165d1106ffbbffc990fe503ef296b81a753b2375fe7ccc8630e31d71815c4"
+    },
+    {
+      "id": "15094461",
+      "old_title": "금융감독원_주요사항보고서 주요정보_감자 결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_감자 결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "85ad3f13d1e4eedb9d6dbf87a61fba563cab00f136fe0b98d5eb4e5b1ee38a1f",
+      "new_digest": "549ff35689ed76e775aafde86f7eccfd592707261ef86391c5918ef5462574e5"
+    },
+    {
+      "id": "15094466",
+      "old_title": "금융감독원_주요사항보고서 주요정보_채권은행 등의 관리절차 개시",
+      "new_title": "금융감독원_주요사항보고서 주요정보_채권은행 등의 관리절차 개시",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "465f0c2bf97fa79cb3063ee09d9147fca8cf34aa1c9566d810120d9408e94421",
+      "new_digest": "31f2c74fc835a27eee9e406c627ede73b0a50b7a4ed1f6b9e58d5ae081f637e2"
+    },
+    {
+      "id": "15094467",
+      "old_title": "금융감독원_주요사항보고서 주요정보_소송 등의 제기",
+      "new_title": "금융감독원_주요사항보고서 주요정보_소송 등의 제기",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7e3038f52efacf02136b8064e1d341efde8d41298efc1f5f9ecab90bbd9b4300",
+      "new_digest": "24792841261dc8c86545d0346344135bafc64baef58bb54a7f31a508da0bc632"
+    },
+    {
+      "id": "15094470",
+      "old_title": "금융감독원_주요사항보고서 주요정보_해외 증권시장 주권등 상장 결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_해외 증권시장 주권등 상장 결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "280551582c20d8d15b13089f055cd9e01953aab32c388379a94f2933f068b92c",
+      "new_digest": "1dfda7873de5a0c08063edc9504d51f04e628105e6624c2bc5c0fa60bdb38f35"
+    },
+    {
+      "id": "15094471",
+      "old_title": "금융감독원_주요사항보고서 주요정보_해외 증권시장 주권등 상장폐지 결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_해외 증권시장 주권등 상장폐지 결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ffa5bb678b9dfc987179485fbe08d7051f82ab30695179bf4a4c895bb5af5d12",
+      "new_digest": "ddaffc6770faf15c7d4f6180b54477f7497bbecbc4cdd4d16a1897986b44a1a8"
+    },
+    {
+      "id": "15094474",
+      "old_title": "금융감독원_주요사항보고서 주요정보_해외 증권시장 주권등 상장",
+      "new_title": "금융감독원_주요사항보고서 주요정보_해외 증권시장 주권등 상장",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1c7ed8538de1ab0ede6192ff2d61a88a7b3cceb622861f06a561384067b64d1b",
+      "new_digest": "e661cecb6313bee109493955cc1bb15738fa8a09eee5b9216b48d1e9b58724bc"
+    },
+    {
+      "id": "15094475",
+      "old_title": "금융감독원_주요사항보고서 주요정보_해외 증권시장 주권등 상장폐지",
+      "new_title": "금융감독원_주요사항보고서 주요정보_해외 증권시장 주권등 상장폐지",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "964936946639aa9d821676c1ab30458b64ccdb60788f0d0bf2337079f38af444",
+      "new_digest": "69262e19e529d86674eca39ae63ead115e035aa169470cf4582e07e2382c22e8"
+    },
+    {
+      "id": "15094476",
+      "old_title": "금융감독원_주요사항보고서 주요정보_전환사채권 발행결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_전환사채권 발행결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "707ec7f343bae63ff7a6bd05a81d7f6d6f073962f162f1e95cfffca77ea91ce6",
+      "new_digest": "94d79104818480684a64c9e86fe442608bd66bbd0bd6feb8953b64aa42ae35a4"
+    },
+    {
+      "id": "15094477",
+      "old_title": "금융감독원_주요사항보고서 주요정보_신주인수권부사채권 발행결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_신주인수권부사채권 발행결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "00c3ffa2200b8ba7c2892752801d8eed849a22b82f71bc4ad8f9ccf3b0188a3c",
+      "new_digest": "d3de83a3be6a1fe08d6856458e573aaf1039ce9e4b401567b299cb55f41ab054"
+    },
+    {
+      "id": "15094478",
+      "old_title": "금융감독원_주요사항보고서 주요정보_교환사채권 발행결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_교환사채권 발행결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4ba9f7d20bc83dde7d1e7e09e00c07be1592c4319d120a282512f7473b71abb6",
+      "new_digest": "508c429019c7563d0f1c88a74d0be284f1b9c3794bc83bf05d661752e1513848"
+    },
+    {
+      "id": "15094480",
+      "old_title": "금융감독원_주요사항보고서 주요정보_채권은행 등의 관리절차 중단",
+      "new_title": "금융감독원_주요사항보고서 주요정보_채권은행 등의 관리절차 중단",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d5d80c5f5301a84cdd4e631b4126b670043a063c2f3a5d06a2dbdeecd31165e4",
+      "new_digest": "22295e7931dd51ac372b555af9c46bf209a0a32f47e6ade8579d62e287acd361"
+    },
+    {
+      "id": "15094481",
+      "old_title": "금융감독원_주요사항보고서 주요정보_상각형 조건부자본증권 발행결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_상각형 조건부자본증권 발행결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7e447e252bfc987eddfe88681d501f7b0c63b22f5c98f1677542e6911be3cd7a",
+      "new_digest": "345ba15bd208f9d302a14b738791bde781914d5bd51bcb0e52ab2d820039401e"
+    },
+    {
+      "id": "15094482",
+      "old_title": "금융감독원_주요사항보고서 주요정보_자기주식 취득 결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_자기주식 취득 결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "042f1868607b92f94164b0effebcdc2edcc9c39d1a3c4d44c149cbaceda3b12c",
+      "new_digest": "905bd4d86448a953177435c333780ac770b221bc386863ac6714ee156816e3e4"
+    },
+    {
+      "id": "15094483",
+      "old_title": "금융감독원_주요사항보고서 주요정보_자기주식 처분 결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_자기주식 처분 결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1bc0d2eead6f31da06838c248e04aa2ab98232be638ff15baf5a2a23e020e627",
+      "new_digest": "2670e669fe7af6a072e5b973f0d49205457149e71513024e7c77d2fde4ace0aa"
+    },
+    {
+      "id": "15094484",
+      "old_title": "금융감독원_주요사항보고서 주요정보_자기주식취득 신탁계약 체결 결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_자기주식취득 신탁계약 체결 결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "89309d056497244aca6dc47fddae01561a5f30919ee5e4da929c175d9e518ef0",
+      "new_digest": "3f771669e55bdb11ca22250469dfbb5caaaab189f02df082ecc78cac3337eae7"
+    },
+    {
+      "id": "15094485",
+      "old_title": "금융감독원_주요사항보고서 주요정보_자기주식취득 신탁계약 해지 결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_자기주식취득 신탁계약 해지 결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0134838049fe4eab772aa767e506750475d2f8297fcf9a4a802886cb75718af8",
+      "new_digest": "caf647f895fbe12ca6e2889d007c98af302a8e524bea823fc8f0f4c1c54bf9d5"
+    },
+    {
+      "id": "15094486",
+      "old_title": "금융감독원_주요사항보고서 주요정보_영업양수 결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_영업양수 결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2370a2d387bf26dc9ed46c92102a2eedb3ff0727ad0c6e2b8bfe067dcdb3cc39",
+      "new_digest": "c4dafb44b5b9a7a2734a2c6fb6f9b88de23c505eaf3cc8d10ed64ab5ab609425"
+    },
+    {
+      "id": "15094487",
+      "old_title": "금융감독원_주요사항보고서 주요정보_영업양도 결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_영업양도 결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "587dfb3dfd92956dd2ade185e59a3b0f8a528bb62046ab61555572ffb1cc3113",
+      "new_digest": "ebdb100ca8823e7bca831fff54771bfff1f6cde37e6d3082ea59b8b41020ade8"
+    },
+    {
+      "id": "15094488",
+      "old_title": "금융감독원_주요사항보고서 주요정보_유형자산 양수 결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_유형자산 양수 결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6d3a024b68e3c1b463c7fa0dcb11d1da56e4d66708814f8ecc834307f5962e09",
+      "new_digest": "f6cc64a693ca8f37c2f147126217e65bdbdcffc0dd3be4b81276ecaed26df207"
+    },
+    {
+      "id": "15094489",
+      "old_title": "금융감독원_주요사항보고서 주요정보_유형자산 양도 결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_유형자산 양도 결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "92f28dfb3b704e6a10d1aef132003cf67bd941e3e0ecb7542060e60c1bd80df5",
+      "new_digest": "b72dda23f235127c489e46e9c64aaabffa342a7057d6ede4b42fc88a38f30e43"
+    },
+    {
+      "id": "15094493",
+      "old_title": "금융감독원_주요사항보고서 주요정보_타법인 주식 및 출자증권 양수결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_타법인 주식 및 출자증권 양수결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f26dd555d9e824643046c3b42c1651d44475cf794f6d689e43d88f89056ec541",
+      "new_digest": "8d16411dfd7a6ec237a8baa147eefd3414c419900b8c2a25a0338fbacf5e5c6e"
+    },
+    {
+      "id": "15094494",
+      "old_title": "금융감독원_주요사항보고서 주요정보_타법인 주식 및 출자증권 양도결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_타법인 주식 및 출자증권 양도결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "164fb9411dda15800a6d6c54009c39287b36e14df3d1e1acb2d2e57a2ba6a631",
+      "new_digest": "8f99ab31919ffa7b63b65a70941fb2768070c128541181e2d86af128385ffa8f"
+    },
+    {
+      "id": "15094495",
+      "old_title": "금융감독원_주요사항보고서 주요정보_주권 관련 사채권 양수 결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_주권 관련 사채권 양수 결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fbde4a3f295bb8b2d9c8eaadf058220f6e307945832bb2b7dfbde468a7317a3e",
+      "new_digest": "68ad129c5b0d239b386a9a3fc51800badc763077dc9ea12a3437d3fb59d24192"
+    },
+    {
+      "id": "15094496",
+      "old_title": "금융감독원_주요사항보고서 주요정보_주권 관련 사채권 양도 결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_주권 관련 사채권 양도 결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "59fd6d659c9cc7f9b7f976241230260ceebf0240ddc49c190eb3e960c6801fdf",
+      "new_digest": "b3d47baecd6dda312b63c570890a3d1a7c63f7547ad912bc5854a1d0501f48f4"
+    },
+    {
+      "id": "15094497",
+      "old_title": "금융감독원_주요사항보고서 주요정보_회사합병 결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_회사합병 결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "42e11c337c3aa67d2840e1375e162428dbf4d4ed16457adb7f9e27a59e79781f",
+      "new_digest": "be11836e46614d4d6f344d8ebb3cfaf437e63da31bb7327f21bf113c6469c960"
+    },
+    {
+      "id": "15094499",
+      "old_title": "금융감독원_주요사항보고서 주요정보_회사분할 결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_회사분할 결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ff60fed0e008f260804033b1226d5581b83ed45e6b8634b0dc50b667e536ffd0",
+      "new_digest": "d330e3364a239d267f799a8a0c7906b2bc6dd518a1268685645fb1536e6f96b4"
+    },
+    {
+      "id": "15094500",
+      "old_title": "금융감독원_주요사항보고서 주요정보_회사분할합병 결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_회사분할합병 결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "68cb1c823423013c1f79e90eeea187c5b45dab87a93a1f98d98bbed133fcae65",
+      "new_digest": "038ced44afdda4a0f9163bb8fd2f87bf79c4159f4da55b04bb7f362a224e3c74"
+    },
+    {
+      "id": "15094501",
+      "old_title": "금융감독원_주요사항보고서 주요정보_주식교환·이전 결정",
+      "new_title": "금융감독원_주요사항보고서 주요정보_주식교환·이전 결정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9bc122b376104304e75e0ab8a55d8e620603df8bb35513f36a8350d395bf1d84",
+      "new_digest": "6416dad7cd632000fe933a3e00be0c31520b410ebf9f045e8cc2bd904492da27"
     },
     {
       "id": "15094849",
@@ -27239,6 +28039,26 @@
       "new_digest": "3f12661c5bb0644c234e4ec414c4a20645a6ba08e8be9e8684e559b6e2bcc10c"
     },
     {
+      "id": "15139006",
+      "old_title": "금융감독원_정기보고서 재무정보_단일회사 주요 재무지표",
+      "new_title": "금융감독원_정기보고서 재무정보_단일회사 주요 재무지표",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7e4c3350a3de29a9b53e4b631f154da56ee8aa28abd8e2fa4af7865466f010ab",
+      "new_digest": "198da427ace16692d1c19b9e818b7718eba5972773da888eae0b327ced3c050d"
+    },
+    {
+      "id": "15139007",
+      "old_title": "금융감독원_정기보고서 재무정보_다중회사 주요 재무지표",
+      "new_title": "금융감독원_정기보고서 재무정보_다중회사 주요 재무지표",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "482b34260ef95a23b6c233dd2b36582d941f65cb256fb882a9d284014f299cb3",
+      "new_digest": "7e19e34347c8d8be0ab61d8d4d0cb5cf14ca01ee9cc9460d9ab4656e05524b77"
+    },
+    {
       "id": "15139148",
       "old_title": "행정안전부_이재민 임시주거시설 정보 조회 서비스",
       "new_title": "행정안전부_이재민 임시주거시설 정보 조회 서비스",
@@ -33487,6 +34307,16 @@
       ],
       "old_digest": "bc1a83339301b8d2cb1e3095ce3de1e5f3f06a416352a2a2feeae9d8103322d0",
       "new_digest": "ee86379a2169b1c55fc52f18fe0753800a2bb13db2dc532a0a1db31bbbc2aa2e"
+    },
+    {
+      "id": "3075133",
+      "old_title": "금융감독원_공시정보_공시검색",
+      "new_title": "금융감독원_공시정보_공시검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "03bb3c63371b486d79d04b5e3d54e408f8f5e8c48c7ca9372717575616a74485",
+      "new_digest": "df4fc2adfca79d723fe3e1788020d857107199e409ce0c99b74bd0922aa3152a"
     },
     {
       "id": "3076482",

@@ -1,24 +1,24 @@
 {
-  "generated_at": "2026-07-03T20:23:35Z",
+  "generated_at": "2026-07-03T20:42:11Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 258,
+  "filtered_count": 259,
   "summary": {
-    "hosts": 258,
+    "hosts": 259,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 114,
+    "external_endpoint_hosts": 115,
     "external_guide_hosts": 191,
-    "registered_adapter_hosts": 103,
-    "operation_hosts": 116,
+    "registered_adapter_hosts": 104,
+    "operation_hosts": 117,
     "guide_only_hosts": 142,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 6850,
-    "malformed_source_url_count": 643
+    "approval_required_operations": 7089,
+    "malformed_source_url_count": 710
   },
   "providers": [
     {
@@ -345,6 +345,22 @@
         "15125862",
         "15125863",
         "15125866"
+      ]
+    },
+    {
+      "host": "opendart.fss.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 83,
+      "operations": 245,
+      "external_endpoint_operations": 245,
+      "approval_required_operations": 239,
+      "sample_ids": [
+        "15034604",
+        "15060602",
+        "15060603"
       ]
     },
     {

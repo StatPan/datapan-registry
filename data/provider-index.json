@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T20:23:35Z",
+  "generated_at": "2026-07-03T20:42:11Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 90,
-  "host_count": 106,
+  "adapter_count": 91,
+  "host_count": 107,
   "adapters": [
     {
       "name": "airport",
@@ -711,6 +711,16 @@
       ]
     },
     {
+      "name": "opendart",
+      "status": "registered",
+      "hosts": [
+        "opendart.fss.or.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "pqis",
       "status": "registered",
       "hosts": [
@@ -947,8 +957,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 90,
-    "verification_capable_adapters": 90,
+    "adapter_count": 91,
+    "verification_capable_adapters": 91,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

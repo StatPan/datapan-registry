@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `19147`
-- callable operations: `19005` (`99.3%`)
+- operations: `19392`
+- callable operations: `19250` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `7537`
-- registered adapter operations: `7527`
+- external endpoint operations: `7782`
+- registered adapter operations: `7772`
 - missing adapter operations: `29`
 - external adapter coverage: `99.6%`
-- approval-required operations: `6850`
+- approval-required operations: `7089`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `103`
+- registered adapter hosts: `104`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -532,6 +532,12 @@ readiness, not to advance verified runtime coverage.
    `2655`, verified checks to `1217`, registered external adapter operations to
    `7527`, and raises API operation coverage to `10,539` of `12,060` APIs
    (`87.4%`).
+   The 금융감독원 batch registers OpenDART adapter coverage, materializes `83`
+   APIs and `245` operations, and merges `245` bounded checks (`0` verified,
+   `0` failed, `245` skipped for missing `crtfc_key`). That brings checked
+   runtime evidence to `2900`, verified checks to `1217`, registered external
+   adapter operations to `7772`, and raises API operation coverage to `10,622`
+   of `12,060` APIs (`88.1%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,
