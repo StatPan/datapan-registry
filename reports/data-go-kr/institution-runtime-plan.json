@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-runtime-plan.v1",
-  "generated_at": "2026-07-03T15:42:50Z",
+  "generated_at": "2026-07-03T15:58:25Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -20,9 +20,9 @@
   "summary": {
     "institutions": 411,
     "planned_institutions": 10,
-    "planned_operations": 924,
-    "runtime_reactivation_api_count": 8285,
-    "uncovered_api_count": 2980,
+    "planned_operations": 990,
+    "runtime_reactivation_api_count": 8375,
+    "uncovered_api_count": 2880,
     "first_queue": "행정안전부"
   },
   "batches": [
@@ -124,6 +124,25 @@
     {
       "rank": 6,
       "label": "institution-06",
+      "organization": "국회 국회사무처",
+      "kind": "data_go_kr_gateway",
+      "api_count": 277,
+      "covered_api_count": 100,
+      "uncovered_api_count": 177,
+      "operation_count": 100,
+      "runtime_evidence_api_count": 10,
+      "runtime_reactivation_api_count": 90,
+      "runtime_missing_evidence_count": 90,
+      "approval_required_operations": 100,
+      "priority_score": 267,
+      "planned_operations": 90,
+      "credential_required": true,
+      "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '국회 국회사무처' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 90 --timeout 20s --output reports/data-go-kr/institution-batches/institution-06.json --json",
+      "output": "reports/data-go-kr/institution-batches/institution-06.json"
+    },
+    {
+      "rank": 7,
+      "label": "institution-07",
       "organization": "공정거래위원회",
       "kind": "data_go_kr_gateway",
       "api_count": 250,
@@ -137,12 +156,12 @@
       "priority_score": 250,
       "planned_operations": 100,
       "credential_required": true,
-      "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '공정거래위원회' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-06.json --json",
-      "output": "reports/data-go-kr/institution-batches/institution-06.json"
+      "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '공정거래위원회' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-07.json --json",
+      "output": "reports/data-go-kr/institution-batches/institution-07.json"
     },
     {
-      "rank": 7,
-      "label": "institution-07",
+      "rank": 8,
+      "label": "institution-08",
       "organization": "한국마사회",
       "kind": "data_go_kr_gateway",
       "api_count": 223,
@@ -156,12 +175,12 @@
       "priority_score": 213,
       "planned_operations": 100,
       "credential_required": true,
-      "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '한국마사회' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-07.json --json",
-      "output": "reports/data-go-kr/institution-batches/institution-07.json"
+      "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '한국마사회' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-08.json --json",
+      "output": "reports/data-go-kr/institution-batches/institution-08.json"
     },
     {
-      "rank": 8,
-      "label": "institution-08",
+      "rank": 9,
+      "label": "institution-09",
       "organization": "국립암센터",
       "kind": "data_go_kr_gateway",
       "api_count": 212,
@@ -175,12 +194,12 @@
       "priority_score": 206,
       "planned_operations": 100,
       "credential_required": true,
-      "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '국립암센터' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-08.json --json",
-      "output": "reports/data-go-kr/institution-batches/institution-08.json"
+      "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '국립암센터' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-09.json --json",
+      "output": "reports/data-go-kr/institution-batches/institution-09.json"
     },
     {
-      "rank": 9,
-      "label": "institution-09",
+      "rank": 10,
+      "label": "institution-10",
       "organization": "부산광역시",
       "kind": "data_go_kr_gateway",
       "api_count": 259,
@@ -194,26 +213,7 @@
       "priority_score": 201,
       "planned_operations": 100,
       "credential_required": true,
-      "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '부산광역시' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-09.json --json",
-      "output": "reports/data-go-kr/institution-batches/institution-09.json"
-    },
-    {
-      "rank": 10,
-      "label": "institution-10",
-      "organization": "제주특별자치도",
-      "kind": "data_go_kr_gateway",
-      "api_count": 171,
-      "covered_api_count": 18,
-      "uncovered_api_count": 153,
-      "operation_count": 28,
-      "runtime_evidence_api_count": 2,
-      "runtime_reactivation_api_count": 16,
-      "runtime_missing_evidence_count": 24,
-      "approval_required_operations": 8,
-      "priority_score": 169,
-      "planned_operations": 24,
-      "credential_required": true,
-      "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '제주특별자치도' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 24 --timeout 20s --output reports/data-go-kr/institution-batches/institution-10.json --json",
+      "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '부산광역시' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-10.json --json",
       "output": "reports/data-go-kr/institution-batches/institution-10.json"
     }
   ],

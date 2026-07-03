@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T15:42:50Z",
+  "generated_at": "2026-07-03T15:58:25Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 16347,
-    "runtime_evidence": 1660,
+    "operations": 16447,
+    "runtime_evidence": 1670,
     "runtime_evidence_percent": 10.2,
-    "callable_operations": 16205,
-    "external_endpoint_operations": 4737,
-    "registered_adapter_operations": 4727,
+    "callable_operations": 16305,
+    "external_endpoint_operations": 4837,
+    "registered_adapter_operations": 4827,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 4737
+      "count": 4837
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 4727
+      "count": 4827
     },
     {
       "key": "builtin",
@@ -69,7 +69,7 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 1712
+      "operation_count": 1812
     },
     {
       "category": "교통물류",
@@ -211,6 +211,15 @@
       ]
     },
     {
+      "host": "open.assembly.go.kr",
+      "operation_count": 100,
+      "adapter": "open-assembly",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "host": "openapi.jeonju.go.kr",
       "operation_count": 80,
       "adapter": "jeonju",
@@ -298,16 +307,6 @@
       "host": "openapi.tour.go.kr",
       "operation_count": 26,
       "adapter": "tour",
-      "adapter_status": "registered",
-      "capabilities": [
-        "call",
-        "verification"
-      ]
-    },
-    {
-      "host": "openapi.epost.go.kr:80",
-      "operation_count": 22,
-      "adapter": "epost",
       "adapter_status": "registered",
       "capabilities": [
         "call",
@@ -1866,6 +1865,49 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 102
+        }
+      ]
+    },
+    {
+      "organization": "국회 국회사무처",
+      "api_count": 277,
+      "operation_api_count": 100,
+      "operation_count": 100,
+      "runtime_evidence_count": 10,
+      "runtime_evidence_percent": 10.0,
+      "verified": 0,
+      "failed": 10,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 100,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "external_endpoint",
+          "count": 100
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 100
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "공공행정",
+          "operation_count": 100
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "open.assembly.go.kr",
+          "operation_count": 100,
+          "adapter": "open-assembly",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },
@@ -14486,24 +14528,6 @@
           "operation_count": 1
         }
       ]
-    },
-    {
-      "organization": "국회 국회사무처",
-      "api_count": 277,
-      "operation_api_count": 0,
-      "operation_count": 0,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [],
-      "by_adapter_status": [],
-      "top_categories": [],
-      "top_hosts": []
     },
     {
       "organization": "경기도 광명시",

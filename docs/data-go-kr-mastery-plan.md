@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `16347`
-- callable operations: `16205` (`99.1%`)
+- operations: `16447`
+- callable operations: `16305` (`99.1%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `4737`
-- registered adapter operations: `4727`
+- external endpoint operations: `4837`
+- registered adapter operations: `4827`
 - missing adapter operations: `29`
 - external adapter coverage: `99.4%`
-- approval-required operations: `5244`
+- approval-required operations: `5344`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `74`
+- registered adapter hosts: `75`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -123,7 +123,7 @@ Registered external adapters currently cover these host families through
 epost, eshare, ex, folk, foodsafetykorea, forest, garak, gblib, geoje, gimhae, gwanak,
 gwangmyeong, happysd, humetro, i815, icheon, ins24, itfind, its, jeju, jeju-air, jeju-www, jejudatahub, jeonju, juso,
 kistep, kofpi, korad, kpx, lh-ebid, lofin365, mafra, myhome, naqs, ncpms, nfqs, nongsaro,
-oneclick-law, open-law, pqis, q-net, safemap, safetydata, seogu, seoul-bus, seoul-open-data,
+oneclick-law, open-assembly, open-law, pqis, q-net, safemap, safetydata, seogu, seoul-bus, seoul-open-data,
 sisul, sisul-www, stcis, tour, uiryeong, ulsan, vworld, wamis, work, and work24.
 
 Missing external route hosts currently requiring route-disposition tracking:
@@ -228,7 +228,7 @@ institution:
    `scripts/validate-institution-api-overview.py`.
 
 The current operation materialization queue starts at `국회 국회사무처`: `277`
-APIs, `0` APIs with operation mappings, and `277` uncovered APIs. The runtime
+APIs, `100` APIs with operation mappings, and `177` uncovered APIs. The runtime
 reactivation queue starts at `행정안전부`: `1252` APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
 records, and `1202` APIs still needing runtime reactivation. Gateway calls need
@@ -393,6 +393,11 @@ readiness, not to advance verified runtime coverage.
    to `1660`, registered external adapter operations to `4727`, completes
    식품의약품안전처 materialization at `392` of `392` APIs, and moves the first
    materialization queue to 국회 국회사무처.
+   The first 국회 국회사무처 batch adds the Open Assembly verification adapter,
+   materializes `100` APIs and `100` operations, and merges `10`
+   failed-but-bounded HTTP 400 checks. That brings checked runtime evidence to
+   `1670`, registered external adapter operations to `4827`, and raises 국회
+   국회사무처 operation coverage to `100` of `277` APIs.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

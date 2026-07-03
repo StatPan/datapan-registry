@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T15:42:57Z",
+  "generated_at": "2026-07-03T15:58:32Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 16347,
-    "callable_operations": 16205,
+    "operations": 16447,
+    "callable_operations": 16305,
     "callable_operation_percent": 99.1,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 4737,
-    "registered_adapter_operations": 4727,
+    "external_endpoint_operations": 4837,
+    "registered_adapter_operations": 4827,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.4,
-    "approval_required_operations": 5244,
+    "approval_required_operations": 5344,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 74,
+    "registered_adapter_hosts": 75,
     "missing_adapter_hosts": 11,
-    "adapter_count": 68,
+    "adapter_count": 69,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T15:42:13Z",
-    "total": 1660,
+    "generated_at": "2026-07-03T15:58:13Z",
+    "total": 1670,
     "verified": 352,
-    "failed": 115,
+    "failed": 125,
     "skipped": 1193,
     "unknown": 0,
-    "verified_percent": 21.2,
+    "verified_percent": 21.1,
     "evidence_operation_percent": 10.2
   },
   "route_evidence": {
@@ -345,6 +345,25 @@
         ]
       },
       {
+        "host": "open.assembly.go.kr",
+        "provider": "open-assembly",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "adapter",
+        "specs": 100,
+        "operations": 100,
+        "external_endpoint_operations": 100,
+        "external_guide_specs": 100,
+        "approval_required_operations": 100,
+        "sample_ids": [
+          "15126056",
+          "15126057",
+          "15126058"
+        ]
+      },
+      {
         "host": "openapi.jeonju.go.kr",
         "provider": "jeonju",
         "kinds": [
@@ -361,30 +380,14 @@
           "15004414",
           "15004788"
         ]
-      },
-      {
-        "host": "data.gm.go.kr",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "adapter",
-        "specs": 52,
-        "operations": 58,
-        "external_endpoint_operations": 58,
-        "approval_required_operations": 2,
-        "sample_ids": [
-          "15011425",
-          "15056498",
-          "15056517"
-        ]
       }
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T15:42:57Z",
+    "generated_at": "2026-07-03T15:58:32Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 68,
-    "host_count": 76,
+    "adapter_count": 69,
+    "host_count": 77,
     "adapters": [
       {
         "name": "airport",
@@ -905,6 +908,16 @@
         ]
       },
       {
+        "name": "open-assembly",
+        "status": "registered",
+        "hosts": [
+          "open.assembly.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "open-law",
         "status": "registered",
         "hosts": [
@@ -1101,8 +1114,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 68,
-      "verification_capable_adapters": 68,
+      "adapter_count": 69,
+      "verification_capable_adapters": 69,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

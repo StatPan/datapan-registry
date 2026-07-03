@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T15:42:50Z",
+  "generated_at": "2026-07-03T15:58:25Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 68,
-  "host_count": 76,
+  "adapter_count": 69,
+  "host_count": 77,
   "adapters": [
     {
       "name": "airport",
@@ -523,6 +523,16 @@
       ]
     },
     {
+      "name": "open-assembly",
+      "status": "registered",
+      "hosts": [
+        "open.assembly.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "open-law",
       "status": "registered",
       "hosts": [
@@ -719,8 +729,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 68,
-    "verification_capable_adapters": 68,
+    "adapter_count": 69,
+    "verification_capable_adapters": 69,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

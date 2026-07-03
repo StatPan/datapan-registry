@@ -94,9 +94,9 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `2,980` data.go.kr APIs
-  without operation mappings, `8,285` operation-mapped APIs without runtime
-  evidence, and `66` APIs with failed runtime evidence that need repair.
+- `reports/data-go-kr/coverage-backlog.json` tracks `2,880` data.go.kr APIs
+  without operation mappings, `8,375` operation-mapped APIs without runtime
+  evidence, and `76` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
   `reports/open-assembly/runtime-evidence-plan.json`, and
@@ -237,8 +237,11 @@ Current gaps:
   The final 식품의약품안전처 batch materializes the remaining `20` APIs and `51`
   operations, and merges `30` skipped bounded checks, bringing runtime evidence
   to `1660` and moving the first materialization queue to 국회 국회사무처.
-- API operation coverage remains incomplete: `9,080` of `12,060` APIs have
-  operation mappings (`75.3%`), leaving `2,980` APIs to materialize and `8,285`
+  The first 국회 국회사무처 batch adds Open Assembly adapter coverage,
+  materializes `100` APIs and `100` operations, and merges `10`
+  failed-but-bounded HTTP 400 checks, bringing runtime evidence to `1670`.
+- API operation coverage remains incomplete: `9,180` of `12,060` APIs have
+  operation mappings (`76.1%`), leaving `2,880` APIs to materialize and `8,375`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report
