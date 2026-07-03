@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T20:57:33Z",
+  "generated_at": "2026-07-03T21:17:58Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 92,
-  "host_count": 109,
+  "adapter_count": 96,
+  "host_count": 114,
   "adapters": [
     {
       "name": "airport",
@@ -491,6 +491,17 @@
       ]
     },
     {
+      "name": "jongno",
+      "status": "registered",
+      "hosts": [
+        "openapi.jongno.go.kr",
+        "openapi.jongno.go.kr:8088"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "juso",
       "status": "registered",
       "hosts": [
@@ -538,6 +549,16 @@
       ],
       "capabilities": [
         "call",
+        "verification"
+      ]
+    },
+    {
+      "name": "kosmes",
+      "status": "registered",
+      "hosts": [
+        "kosmes.or.kr"
+      ],
+      "capabilities": [
         "verification"
       ]
     },
@@ -817,6 +838,16 @@
       ]
     },
     {
+      "name": "seoul-map",
+      "status": "registered",
+      "hosts": [
+        "map.seoul.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "seoul-open-data",
       "status": "registered",
       "hosts": [
@@ -826,6 +857,16 @@
       ],
       "capabilities": [
         "call",
+        "verification"
+      ]
+    },
+    {
+      "name": "seoul-tdata",
+      "status": "registered",
+      "hosts": [
+        "t-data.seoul.go.kr"
+      ],
+      "capabilities": [
         "verification"
       ]
     },
@@ -968,8 +1009,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 92,
-    "verification_capable_adapters": 92,
+    "adapter_count": 96,
+    "verification_capable_adapters": 96,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

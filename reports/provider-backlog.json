@@ -1,24 +1,24 @@
 {
-  "generated_at": "2026-07-03T20:57:33Z",
+  "generated_at": "2026-07-03T21:17:58Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 261,
+  "filtered_count": 265,
   "summary": {
-    "hosts": 261,
+    "hosts": 265,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 117,
-    "external_guide_hosts": 192,
-    "registered_adapter_hosts": 106,
-    "operation_hosts": 119,
+    "external_endpoint_hosts": 121,
+    "external_guide_hosts": 193,
+    "registered_adapter_hosts": 110,
+    "operation_hosts": 123,
     "guide_only_hosts": 142,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7154,
-    "malformed_source_url_count": 710
+    "approval_required_operations": 7221,
+    "malformed_source_url_count": 712
   },
   "providers": [
     {
@@ -178,12 +178,12 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 881,
-      "operations": 2188,
-      "external_endpoint_operations": 2188,
+      "specs": 882,
+      "operations": 2189,
+      "external_endpoint_operations": 2189,
       "external_guide_specs": 21,
       "wms_operations": 5,
-      "approval_required_operations": 54,
+      "approval_required_operations": 55,
       "sample_ids": [
         "15005231",
         "15011020",
@@ -318,10 +318,10 @@
         "external_endpoint"
       ],
       "adapter_status": "adapter",
-      "specs": 99,
-      "operations": 278,
-      "external_endpoint_operations": 278,
-      "approval_required_operations": 270,
+      "specs": 100,
+      "operations": 279,
+      "external_endpoint_operations": 279,
+      "approval_required_operations": 271,
       "sample_ids": [
         "15040463",
         "15040465",
@@ -389,11 +389,11 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 85,
-      "operations": 169,
-      "external_endpoint_operations": 169,
+      "specs": 86,
+      "operations": 170,
+      "external_endpoint_operations": 170,
       "external_guide_specs": 34,
-      "approval_required_operations": 38,
+      "approval_required_operations": 39,
       "sample_ids": [
         "15045335",
         "15045467",
@@ -471,6 +471,24 @@
         "15008517",
         "15015212",
         "15024888"
+      ]
+    },
+    {
+      "host": "data.seoul.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 55,
+      "operations": 113,
+      "external_endpoint_operations": 113,
+      "external_guide_specs": 27,
+      "approval_required_operations": 40,
+      "sample_ids": [
+        "15003164",
+        "15040468",
+        "15047383"
       ]
     },
     {
@@ -769,6 +787,22 @@
       ]
     },
     {
+      "host": "t-data.seoul.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 22,
+      "operations": 22,
+      "external_endpoint_operations": 22,
+      "approval_required_operations": 22,
+      "sample_ids": [
+        "15102618",
+        "15102619",
+        "15102623"
+      ]
+    },
+    {
       "host": "www.work24.go.kr",
       "kinds": [
         "external_endpoint",
@@ -941,22 +975,6 @@
         "15036874",
         "15036875",
         "15036876"
-      ]
-    },
-    {
-      "host": "data.seoul.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 9,
-      "operations": 10,
-      "external_endpoint_operations": 10,
-      "approval_required_operations": 3,
-      "sample_ids": [
-        "15003164",
-        "15040468",
-        "15057394"
       ]
     },
     {
@@ -1159,6 +1177,23 @@
       ]
     },
     {
+      "host": "data.dongjak.go.kr",
+      "provider": "dongjak",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 6,
+      "operations": 6,
+      "external_endpoint_operations": 6,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15047488",
+        "15056754",
+        "15057700"
+      ]
+    },
+    {
       "host": "openapi.ebid.lh.or.kr",
       "provider": "lh-ebid",
       "kinds": [
@@ -1308,22 +1343,6 @@
       ]
     },
     {
-      "host": "data.dongjak.go.kr",
-      "provider": "dongjak",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 4,
-      "operations": 4,
-      "external_endpoint_operations": 4,
-      "sample_ids": [
-        "15056754",
-        "15057700",
-        "15057867"
-      ]
-    },
-    {
       "host": "data.gwanak.go.kr",
       "kinds": [
         "external_endpoint"
@@ -1465,6 +1484,21 @@
       ]
     },
     {
+      "host": "www.sisul.or.kr",
+      "provider": "sisul-www",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 2,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "sample_ids": [
+        "15047383",
+        "15057337"
+      ]
+    },
+    {
       "host": "car.go.kr",
       "provider": "car",
       "kinds": [
@@ -1531,6 +1565,21 @@
       "sample_ids": [
         "3038249",
         "3045136"
+      ]
+    },
+    {
+      "host": "map.seoul.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 2,
+      "operations": 2,
+      "external_endpoint_operations": 2,
+      "approval_required_operations": 2,
+      "sample_ids": [
+        "15061409",
+        "15146353"
       ]
     },
     {
@@ -1703,6 +1752,20 @@
       ]
     },
     {
+      "host": "kosmes.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15093934"
+      ]
+    },
+    {
       "host": "nabic.rda.go.kr",
       "provider": "nabic",
       "kinds": [
@@ -1728,6 +1791,20 @@
       "external_endpoint_operations": 1,
       "sample_ids": [
         "15134269"
+      ]
+    },
+    {
+      "host": "openapi.jongno.go.kr:8088",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15134872"
       ]
     },
     {
@@ -1899,20 +1976,6 @@
       "approval_required_operations": 1,
       "sample_ids": [
         "15121485"
-      ]
-    },
-    {
-      "host": "www.sisul.or.kr",
-      "provider": "sisul-www",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 1,
-      "operations": 1,
-      "external_endpoint_operations": 1,
-      "sample_ids": [
-        "15057337"
       ]
     },
     {

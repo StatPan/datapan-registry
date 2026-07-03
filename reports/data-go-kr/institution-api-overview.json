@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T20:57:33Z",
+  "generated_at": "2026-07-03T21:17:58Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 19459,
-    "runtime_evidence": 3000,
-    "runtime_evidence_percent": 15.4,
-    "callable_operations": 19317,
-    "external_endpoint_operations": 7849,
-    "registered_adapter_operations": 7839,
+    "operations": 19595,
+    "runtime_evidence": 3100,
+    "runtime_evidence_percent": 15.8,
+    "callable_operations": 19453,
+    "external_endpoint_operations": 7985,
+    "registered_adapter_operations": 7975,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 7849
+      "count": 7985
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 7839
+      "count": 7975
     },
     {
       "key": "builtin",
@@ -69,15 +69,15 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 2605
+      "operation_count": 2615
     },
     {
       "category": "교통물류",
-      "operation_count": 2019
+      "operation_count": 2108
     },
     {
       "category": "문화관광",
-      "operation_count": 2007
+      "operation_count": 2011
     },
     {
       "category": "농축수산",
@@ -85,7 +85,7 @@
     },
     {
       "category": "사회복지",
-      "operation_count": 1439
+      "operation_count": 1442
     },
     {
       "category": "산업고용",
@@ -93,7 +93,7 @@
     },
     {
       "category": "재정금융",
-      "operation_count": 1272
+      "operation_count": 1274
     },
     {
       "category": "식품건강",
@@ -101,11 +101,11 @@
     },
     {
       "category": "환경기상",
-      "operation_count": 1161
+      "operation_count": 1163
     },
     {
       "category": "국토관리",
-      "operation_count": 987
+      "operation_count": 1013
     },
     {
       "category": "보건의료",
@@ -139,7 +139,7 @@
     },
     {
       "host": "data.gg.go.kr",
-      "operation_count": 2188,
+      "operation_count": 2189,
       "adapter": "data-gg",
       "adapter_status": "registered",
       "capabilities": [
@@ -212,7 +212,7 @@
     },
     {
       "host": "data.ex.co.kr",
-      "operation_count": 278,
+      "operation_count": 279,
       "adapter": "ex",
       "adapter_status": "registered",
       "capabilities": [
@@ -248,7 +248,7 @@
     },
     {
       "host": "www.jeju.go.kr",
-      "operation_count": 169,
+      "operation_count": 170,
       "adapter": "jeju-www",
       "adapter_status": "registered",
       "capabilities": [
@@ -292,18 +292,19 @@
       ]
     },
     {
-      "host": "www.safemap.go.kr",
-      "operation_count": 104,
-      "adapter": "safemap",
+      "host": "data.seoul.go.kr",
+      "operation_count": 113,
+      "adapter": "seoul-open-data",
       "adapter_status": "registered",
       "capabilities": [
+        "call",
         "verification"
       ]
     },
     {
-      "host": "openapi.q-net.or.kr",
+      "host": "www.safemap.go.kr",
       "operation_count": 104,
-      "adapter": "q-net",
+      "adapter": "safemap",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -2073,6 +2074,114 @@
           "host": "www.foodsafetykorea.go.kr",
           "operation_count": 1,
           "adapter": "foodsafetykorea",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
+      "organization": "서울특별시",
+      "api_count": 79,
+      "operation_api_count": 79,
+      "operation_count": 167,
+      "runtime_evidence_count": 91,
+      "runtime_evidence_percent": 54.5,
+      "verified": 85,
+      "failed": 1,
+      "skipped": 5,
+      "unknown": 0,
+      "approval_required_operations": 73,
+      "no_endpoint_operations": 19,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 7
+        },
+        {
+          "key": "external_endpoint",
+          "count": 141
+        },
+        {
+          "key": "no_endpoint",
+          "count": 19
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 141
+        },
+        {
+          "key": "builtin",
+          "count": 7
+        },
+        {
+          "key": "not_applicable",
+          "count": 19
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "교통물류",
+          "operation_count": 113
+        },
+        {
+          "category": "국토관리",
+          "operation_count": 26
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 15
+        },
+        {
+          "category": "문화관광",
+          "operation_count": 4
+        },
+        {
+          "category": "사회복지",
+          "operation_count": 3
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "data.seoul.go.kr",
+          "operation_count": 103,
+          "adapter": "seoul-open-data",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
+        },
+        {
+          "host": "t-data.seoul.go.kr",
+          "operation_count": 22,
+          "adapter": "seoul-tdata",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 7
+        },
+        {
+          "host": "ws.bus.go.kr",
+          "operation_count": 5,
+          "adapter": "seoul-bus",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
+        },
+        {
+          "host": "map.seoul.go.kr",
+          "operation_count": 2,
+          "adapter": "seoul-map",
           "adapter_status": "registered",
           "capabilities": [
             "verification"
@@ -5672,78 +5781,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 33
-        }
-      ]
-    },
-    {
-      "organization": "서울특별시",
-      "api_count": 79,
-      "operation_api_count": 11,
-      "operation_count": 31,
-      "runtime_evidence_count": 5,
-      "runtime_evidence_percent": 16.1,
-      "verified": 0,
-      "failed": 4,
-      "skipped": 1,
-      "unknown": 0,
-      "approval_required_operations": 6,
-      "no_endpoint_operations": 19,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 7
-        },
-        {
-          "key": "external_endpoint",
-          "count": 5
-        },
-        {
-          "key": "no_endpoint",
-          "count": 19
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 5
-        },
-        {
-          "key": "builtin",
-          "count": 7
-        },
-        {
-          "key": "not_applicable",
-          "count": 19
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "교통물류",
-          "operation_count": 24
-        },
-        {
-          "category": "공공행정",
-          "operation_count": 5
-        },
-        {
-          "category": "과학기술",
-          "operation_count": 2
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 7
-        },
-        {
-          "host": "ws.bus.go.kr",
-          "operation_count": 5,
-          "adapter": "seoul-bus",
-          "adapter_status": "registered",
-          "capabilities": [
-            "call",
-            "verification"
-          ]
         }
       ]
     },
@@ -13804,11 +13841,11 @@
       "api_count": 2,
       "operation_api_count": 2,
       "operation_count": 2,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
+      "runtime_evidence_count": 1,
+      "runtime_evidence_percent": 50.0,
       "verified": 0,
       "failed": 0,
-      "skipped": 0,
+      "skipped": 1,
       "unknown": 0,
       "approval_required_operations": 1,
       "no_endpoint_operations": 0,

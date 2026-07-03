@@ -2,19 +2,19 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-07-03T20:57:33Z`
+- Generated at: `2026-07-03T21:17:58Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `10650` (`88.3%`)
-- APIs without operation mapping: `1410`
-- Operations: `19459`
-- Runtime evidence operations: `3000` (`15.4%`)
-- Runtime verified operations: `1259`
-- Runtime failed operations: `281`
-- Runtime skipped operations: `1460`
-- APIs with runtime evidence: `1409`
-- Runtime reactivation APIs: `9241`
-- Runtime repair APIs: `156`
+- APIs with operation mapping: `10718` (`88.9%`)
+- APIs without operation mapping: `1342`
+- Operations: `19595`
+- Runtime evidence operations: `3100` (`15.8%`)
+- Runtime verified operations: `1352`
+- Runtime failed operations: `282`
+- Runtime skipped operations: `1466`
+- APIs with runtime evidence: `1443`
+- Runtime reactivation APIs: `9275`
+- Runtime repair APIs: `157`
 
 ## Highest Priority Institutions
 
@@ -45,11 +45,11 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 대전광역시 서구 | 125 | 125 | 0 | 100.0% | 171 | 33 | 92 | 0 | 92 |
 | 한국건강가정진흥원 | 85 | 85 | 0 | 100.0% | 90 | 0 | 85 | 0 | 85 |
 | 한국수자원공사 | 84 | 84 | 0 | 100.0% | 153 | 5 | 79 | 0 | 79 |
-| 서울특별시 | 79 | 11 | 68 | 13.9% | 31 | 1 | 10 | 1 | 78 |
 | 충청남도 보령시 | 72 | 72 | 0 | 100.0% | 72 | 0 | 72 | 0 | 72 |
 | 보건복지부 | 71 | 71 | 0 | 100.0% | 71 | 0 | 71 | 0 | 71 |
 | 농림수산식품교육문화정보원 | 75 | 9 | 66 | 12.0% | 28 | 5 | 4 | 0 | 70 |
 | 서울올림픽기념국민체육진흥공단 | 70 | 70 | 0 | 100.0% | 111 | 0 | 70 | 0 | 70 |
+| 충청남도 | 96 | 96 | 0 | 100.0% | 142 | 27 | 69 | 27 | 69 |
 
 ## Sample Uncovered APIs
 
