@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T14:33:40Z",
+  "generated_at": "2026-07-03T14:40:13Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -177,10 +177,10 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 800,
-      "operations": 2033,
-      "external_endpoint_operations": 2033,
-      "external_guide_specs": 17,
+      "specs": 841,
+      "operations": 2140,
+      "external_endpoint_operations": 2140,
+      "external_guide_specs": 19,
       "wms_operations": 5,
       "approval_required_operations": 36,
       "sample_ids": [
@@ -282,14 +282,14 @@
         "external_endpoint"
       ],
       "adapter_status": "adapter",
-      "specs": 47,
-      "operations": 53,
-      "external_endpoint_operations": 53,
+      "specs": 50,
+      "operations": 56,
+      "external_endpoint_operations": 56,
       "approval_required_operations": 1,
       "sample_ids": [
+        "15011425",
         "15056498",
-        "15056517",
-        "15056600"
+        "15056517"
       ]
     },
     {
@@ -986,6 +986,22 @@
       ]
     },
     {
+      "host": "openapi.seoul.go.kr:8088",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 2,
+      "operations": 2,
+      "external_endpoint_operations": 2,
+      "wms_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15059341",
+        "15101888"
+      ]
+    },
+    {
       "host": "www.gimhae.go.kr",
       "provider": "gimhae",
       "kinds": [
@@ -1081,21 +1097,6 @@
       "approval_required_operations": 1,
       "sample_ids": [
         "15148289"
-      ]
-    },
-    {
-      "host": "openapi.seoul.go.kr:8088",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 1,
-      "operations": 1,
-      "external_endpoint_operations": 1,
-      "wms_operations": 1,
-      "approval_required_operations": 1,
-      "sample_ids": [
-        "15101888"
       ]
     },
     {

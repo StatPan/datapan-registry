@@ -1,25 +1,25 @@
 {
-  "generated_at": "2026-07-03T14:33:40Z",
+  "generated_at": "2026-07-03T14:40:13Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 15293,
-    "callable_operations": 15151,
-    "specs_without_operations": 3407,
-    "specs_without_callable_operation": 3482,
+    "operations_total": 15404,
+    "callable_operations": 15262,
+    "specs_without_operations": 3366,
+    "specs_without_callable_operation": 3441,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 2955,
-    "operations_without_response_params": 4177,
+    "operations_without_request_params": 3066,
+    "operations_without_response_params": 4288,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 1782,
-      "external_endpoint_operations": 3683,
+      "external_endpoint_specs": 1823,
+      "external_endpoint_operations": 3794,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 111,
@@ -34,7 +34,7 @@
         },
         {
           "host": "data.gg.go.kr",
-          "count": 2033
+          "count": 2140
         },
         {
           "host": "www.safetydata.go.kr",
@@ -58,7 +58,7 @@
         },
         {
           "host": "data.gm.go.kr",
-          "count": 53
+          "count": 56
         },
         {
           "host": "data.ekape.or.kr",
@@ -112,7 +112,7 @@
       "top_external_endpoint_hosts": [
         {
           "host": "data.gg.go.kr",
-          "count": 2033
+          "count": 2140
         },
         {
           "host": "www.safetydata.go.kr",
@@ -136,7 +136,7 @@
         },
         {
           "host": "data.gm.go.kr",
-          "count": 53
+          "count": 56
         },
         {
           "host": "data.ekape.or.kr",
@@ -233,16 +233,16 @@
           "count": 52
         },
         {
+          "host": "data.gg.go.kr",
+          "count": 49
+        },
+        {
           "host": "bigdata-cancer.kr",
           "count": 47
         },
         {
           "host": "soil.rda.go.kr",
           "count": 47
-        },
-        {
-          "host": "data.gg.go.kr",
-          "count": 44
         },
         {
           "host": "www.d2b.go.kr",
@@ -277,14 +277,6 @@
     "samples": {
       "without_operations": [
         {
-          "id": "15011425",
-          "title": "경기도 공중화장실 현황",
-          "organization": "경기도",
-          "source_category": "국토관리",
-          "operations_count": 0,
-          "callable_operations": 0
-        },
-        {
           "id": "15011457",
           "title": "주택도시보증공사_분양보증현황(지역)",
           "organization": "주택도시보증공사",
@@ -313,6 +305,14 @@
           "title": "한국항공우주연구원_특허 기술",
           "organization": "한국항공우주연구원",
           "source_category": "과학기술",
+          "operations_count": 0,
+          "callable_operations": 0
+        },
+        {
+          "id": "15013060",
+          "title": "국방부 병사 보급기준 정보",
+          "organization": "국방부",
+          "source_category": "통일외교안보",
           "operations_count": 0,
           "callable_operations": 0
         }

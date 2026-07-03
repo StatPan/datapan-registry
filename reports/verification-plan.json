@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T14:34:05Z",
+  "generated_at": "2026-07-03T14:40:38Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,12 +7,12 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 15293,
-    "evidence_total": 1530,
+    "operations": 15404,
+    "evidence_total": 1541,
     "uncovered_gateway_candidates": 10744,
-    "uncovered_adapter_candidates": 2818,
+    "uncovered_adapter_candidates": 2918,
     "missing_adapter_hosts": 11,
-    "planned_batches": 16,
+    "planned_batches": 15,
     "planned_operations": 105
   },
   "batches": [
@@ -29,21 +29,11 @@
       "label": "data-gg",
       "provider": "data-gg",
       "kind": "external_endpoint",
-      "candidates": 2033,
-      "uncovered_candidates": 1945,
+      "candidates": 2140,
+      "uncovered_candidates": 2042,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider data-gg --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/data-gg-next.json --json",
       "output": ".datapan/verification/data-gg-next.json"
-    },
-    {
-      "label": "dongjak",
-      "provider": "dongjak",
-      "kind": "external_endpoint",
-      "candidates": 4,
-      "uncovered_candidates": 1,
-      "planned_operations": 1,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider dongjak --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/dongjak-next.json --json",
-      "output": ".datapan/verification/dongjak-next.json"
     },
     {
       "label": "gimhae",
@@ -69,8 +59,8 @@
       "label": "gwangmyeong",
       "provider": "gwangmyeong",
       "kind": "external_endpoint",
-      "candidates": 53,
-      "uncovered_candidates": 33,
+      "candidates": 56,
+      "uncovered_candidates": 36,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider gwangmyeong --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gwangmyeong-next.json --json",
       "output": ".datapan/verification/gwangmyeong-next.json"
@@ -149,9 +139,9 @@
       "label": "seoul-open-data",
       "provider": "seoul-open-data",
       "kind": "external_endpoint",
-      "candidates": 7,
-      "uncovered_candidates": 2,
-      "planned_operations": 2,
+      "candidates": 8,
+      "uncovered_candidates": 3,
+      "planned_operations": 3,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider seoul-open-data --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/seoul-open-data-next.json --json",
       "output": ".datapan/verification/seoul-open-data-next.json"
     },

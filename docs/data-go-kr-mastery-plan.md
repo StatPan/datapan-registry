@@ -12,11 +12,11 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `15293`
-- callable operations: `15151` (`99.1%`)
+- operations: `15404`
+- callable operations: `15262` (`99.1%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `3683`
-- registered adapter operations: `3673`
+- external endpoint operations: `3794`
+- registered adapter operations: `3784`
 - missing adapter operations: `29`
 - external adapter coverage: `99.2%`
 - approval-required operations: `4752`
@@ -359,6 +359,10 @@ coverage.
    and KISTEP verification adapters, materializes another `100` APIs and `252`
    operations, and merges `24` bounded checks. That brings checked runtime
    evidence to `1530` and registered external adapter operations to `3673`.
+   The seventh 경기도 batch closes the remaining `41` 경기도 APIs with `111`
+   operations and merges `11` verified bounded checks, bringing checked runtime
+   evidence to `1541`, registered external adapter operations to `3784`, and
+   moving the first materialization queue to 국토교통부.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

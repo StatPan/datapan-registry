@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T14:33:40Z",
+  "generated_at": "2026-07-03T14:40:13Z",
   "provider": "data.go.kr",
   "old": ".datapan\\previous-data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,1011 +12,421 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 100,
-    "stable": 11960
+    "changed": 41,
+    "stable": 12019
   },
   "added": [],
   "removed": [],
   "changed": [
     {
-      "id": "15034385",
-      "old_title": "경기도_음식물류 폐기물 다량배출사업장 현황",
-      "new_title": "경기도_음식물류 폐기물 다량배출사업장 현황",
+      "id": "15011425",
+      "old_title": "경기도 공중화장실 현황",
+      "new_title": "경기도 공중화장실 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "cda6c5a4b994f7401ef426ee5ce3e29458c86d616d124de603680c1bbd000757",
-      "new_digest": "6ec14081ae1933445f80429fff6614e08cd84ab3b4ef2dcc43d282873b98cd20"
+      "old_digest": "77e30fd748906e1178a9bd9e5f2f2a1eda888cada2be48bf1b1ab3ec7d446217",
+      "new_digest": "6097fe79f52479b66f3052a9a5da38799c363fc0db269fce76f873431b18246b"
     },
     {
-      "id": "15037595",
-      "old_title": "경기도_경기연구원 연구보고서 정보",
-      "new_title": "경기도_경기연구원 연구보고서 정보",
+      "id": "15056497",
+      "old_title": "경기도_공공체육시설 현황(하키)",
+      "new_title": "경기도_공공체육시설 현황(하키)",
       "fields": [
         "operations"
       ],
-      "old_digest": "fdd465ebbe339f64e6a63f87bf86e3189eef1ebdddac7c4e635d2398b5b50521",
-      "new_digest": "e027f329b633676d5596c390a2eab59cd9f6bfdd28c3089709edd73aa326a484"
+      "old_digest": "8fe6a580d68b102686ad9aeee4ce3fb9782888f0a6b6f1e935f3ce04d51c71d4",
+      "new_digest": "89ed2d791fd8604a6e1d8cf4820e96610d911e6e1d62cb46b1a6ec708e7e727a"
     },
     {
-      "id": "15056501",
-      "old_title": "경기도_신규 민간아파트 분양 가격 현황",
-      "new_title": "경기도_신규 민간아파트 분양 가격 현황",
+      "id": "15056506",
+      "old_title": "경기도 보호수지정 현황",
+      "new_title": "경기도 보호수지정 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "850bbe7f96fb8121047a9cc934329cec474a81e47267a0b58f02fae991de54e4",
-      "new_digest": "760c3e1ac9130c985fe120ca801a428703c093af28a170babe342eea881db8db"
+      "old_digest": "fa26e7ac19617c528a42f0f42a3d022e6214085c73f324e1d9f07c00dc0fdabb",
+      "new_digest": "05bfb4e27a2e08d28642e4139d6013b8b98d2a9c0c3f3005857a5a18091b60c8"
     },
     {
-      "id": "15056558",
-      "old_title": "경기도_여성 일자리기관 현황",
-      "new_title": "경기도_여성 일자리기관 현황",
+      "id": "15056528",
+      "old_title": "경기도_공공체육시설 현황(빙상장)",
+      "new_title": "경기도_공공체육시설 현황(빙상장)",
       "fields": [
         "operations"
       ],
-      "old_digest": "b2523657bb6054c1a126184bd19cace41405033f51b8ef77854bdb1f63eccbd2",
-      "new_digest": "8501e5a6bea23d33384ac5d294b430fb04cfbcfd42dce4141d978f042bce238e"
+      "old_digest": "29316ecb2526acbe7428b558a8f2e91ca4fe799cc5b3375bcef02c968a737bf4",
+      "new_digest": "d0a46b757556ac44b223a81a10fe47d95a92001786c4ab45bbcb771dd2f64caa"
     },
     {
-      "id": "15056600",
-      "old_title": "경기도 소방서현황 및 관할구역 현황",
-      "new_title": "경기도 소방서현황 및 관할구역 현황",
+      "id": "15056604",
+      "old_title": "경기도_공공체육시설 현황(테니스)",
+      "new_title": "경기도_공공체육시설 현황(테니스)",
       "fields": [
         "operations"
       ],
-      "old_digest": "7bf407f45431fa754455dc0b64ccba04fa1dc2733cf32695e118719fcbf30298",
-      "new_digest": "e20333335d8e068fac6c43ae646429d7dafb5704be249c8e60c66a2190f38e3d"
+      "old_digest": "d4bf85f934f8d51144bcf9bbde2ee1a9c30c6fd920c607c007821c949c792f3e",
+      "new_digest": "2a45ee7d98f73bb5aa6fd7316976eab4e09476c15fe12aa0df4c1c806a46edf5"
     },
     {
-      "id": "15056614",
-      "old_title": "경기도_농촌교육농장(농촌에듀팜) 현황",
-      "new_title": "경기도_농촌교육농장(농촌에듀팜) 현황",
+      "id": "15056664",
+      "old_title": "경기도_아토피천식 안심학교 지정현황",
+      "new_title": "경기도_아토피천식 안심학교 지정현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "49a61360608d16cc7c807fa9007462e26f108d83b291f484b6fccfcc5d451c16",
-      "new_digest": "4ca90e537e484495c50f0c436cfe05d5165b97424f2ee1292ede89ec0f024afa"
+      "old_digest": "c09f61cee23eb3ebf49a1dadc14a85da4c957d4304ac0478e6af7b6ed850c3a3",
+      "new_digest": "036aa8671efc1ceca4a81cdcdceffdafb7d2c91e416303b6d0d274e89ef39c23"
     },
     {
-      "id": "15056659",
-      "old_title": "경기도_공동주택 시공 현황",
-      "new_title": "경기도_공동주택 시공 현황",
+      "id": "15056671",
+      "old_title": "경기도_공공체육시설 현황(요트)",
+      "new_title": "경기도_공공체육시설 현황(요트)",
       "fields": [
         "operations"
       ],
-      "old_digest": "c71b80356669ce0cfdc302a92c3a905eb0808dd2429e966680d41cdca930ecb6",
-      "new_digest": "7c1ac10088a29e2baf5b0f444f08705e28fea0dc8d37e92539b5013c6a369822"
+      "old_digest": "f9b7b747202e5bef3b8b940b03ff4203d43d9143391946aba766083041b04153",
+      "new_digest": "0bea9f856ddbe97c1bd6b16c0758ce67f89609569b4d23cd0c0cece20eba6f7b"
     },
     {
-      "id": "15056727",
-      "old_title": "경기도_하수관로 보급률 집계 현황",
-      "new_title": "경기도_하수관로 보급률 집계 현황",
+      "id": "15056792",
+      "old_title": "경기도_어린이승마교실 현황",
+      "new_title": "경기도_어린이승마교실 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "18763984b67c9c2e9407b25f551f4eb96332888c3ebafb267154f7d6b1490128",
-      "new_digest": "0a3d84246085aff9c8d96898e699649c8b62d3ae96a9e28349f63ec93ddfd0fe"
+      "old_digest": "e8f36044ff2558fe131f657a78360554ec6ac934101931cbd272c464f2d89624",
+      "new_digest": "212d7e135613335e74bab8acbd04e1ff2132056da265f842c5f888885ac753ba"
     },
     {
-      "id": "15056746",
-      "old_title": "경기도 병원 현황",
-      "new_title": "경기도 병원 현황",
+      "id": "15056823",
+      "old_title": "경기도_야생동물 구조치료기관 현황",
+      "new_title": "경기도_야생동물 구조치료기관 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "152716c6a1f52dfbcaedf43523347c951ad42b5bdd86511ca3fae6dfba548bf4",
-      "new_digest": "cc445c8faf5da361e7acf06338d7907d969954dd3254ac1a7ad81058bb7db003"
+      "old_digest": "6101921f25d1c115fc406fa7e89c2dcd842a4a06249c899cc189561107421590",
+      "new_digest": "d3ca97ca932207c9a9853a79808e9353935bf7bfb5f9a08afcb5626656cf8539"
     },
     {
-      "id": "15056754",
-      "old_title": "경기도_안전 상비의약품 판매업소 현황",
-      "new_title": "경기도_안전 상비의약품 판매업소 현황",
+      "id": "15057025",
+      "old_title": "경기도_공공체육시설 현황(조정카누장)",
+      "new_title": "경기도_공공체육시설 현황(조정카누장)",
       "fields": [
         "operations"
       ],
-      "old_digest": "bb5fd8bc650b218d565101c991a055dafc16d8949e435658951e364eca634ae1",
-      "new_digest": "51a59a97a06d6548244e6543debf184b2db3bbaddb4d110fac2740ac181766a1"
+      "old_digest": "7dc3d5e064769985faa1dcd40e98f44f946f34efba31bdd995fca3a492d8ba82",
+      "new_digest": "53f6d2109323db09d97d492952640c2f0948e82606a8dbd6e109b1c479b9dfae"
     },
     {
-      "id": "15056799",
-      "old_title": "경기도_연령별 장애수당 수급자 집계현황",
-      "new_title": "경기도_연령별 장애수당 수급자 집계현황",
+      "id": "15057048",
+      "old_title": "경기도_액화석유가스용품제조업체 현황",
+      "new_title": "경기도_액화석유가스용품제조업체 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "778e96e906e9c6e5b63be0f9251f9e70ae522bdcd843d753d6e2740f69c2fe07",
-      "new_digest": "e9ba275cd4216b8241fc093330f6467e430c3609ee648af4c947d21a48004005"
+      "old_digest": "d1b6476e051c2b38e14335aca15ffff83f7409773c4504ad93ba06b113a278e8",
+      "new_digest": "94743c391c57676d5f6970fa1de004efdccd9228178e9e0b4a9785bae1060e84"
     },
     {
-      "id": "15056846",
-      "old_title": "경기도_약국 현황",
-      "new_title": "경기도_약국 현황",
+      "id": "15057066",
+      "old_title": "경기도_공공체육시설 현황(야구)",
+      "new_title": "경기도_공공체육시설 현황(야구)",
       "fields": [
         "operations"
       ],
-      "old_digest": "f0f8b6bb4d8455ab1e0f40eef645093af6e2a38e48d5cca5ff49ceebddd2604d",
-      "new_digest": "e439b69d934f78bba05abdd2d72c75381bfee49018d350a513017efdf59e4801"
+      "old_digest": "603800bb705562bb728a1d9768ded0a077f7b7c0a6742e894329a7ad37f4c920",
+      "new_digest": "621affba00322e2aef7d9dff06ad40be7f385ec57cdcd53f15e1ec931435a496"
     },
     {
-      "id": "15056892",
-      "old_title": "경기도_공공폐수 처리 시설 현황",
-      "new_title": "경기도_공공폐수 처리 시설 현황",
+      "id": "15057082",
+      "old_title": "경기도_공공체육시설 현황(수영장)",
+      "new_title": "경기도_공공체육시설 현황(수영장)",
       "fields": [
         "operations"
       ],
-      "old_digest": "ca91b12a1e297e3136eb7b654e091db27cd3da8be1dafd13a8e07ddbca654e99",
-      "new_digest": "08988eb74594370281df55d134fd398b3eec6191f23e163d12c3551a63c1b57b"
+      "old_digest": "8a94445876a89ede9ea207a4cf569b388bff6e7e90ce12207171c0847478fbd0",
+      "new_digest": "dbd034d44696c088fad7025a9bef31b5547d12b44663df210d3b77e98f3d6f63"
     },
     {
-      "id": "15056900",
-      "old_title": "경기도_노동조합 현황",
-      "new_title": "경기도_노동조합 현황",
+      "id": "15057120",
+      "old_title": "경기도_공공체육시설 현황(육상)",
+      "new_title": "경기도_공공체육시설 현황(육상)",
       "fields": [
         "operations"
       ],
-      "old_digest": "5dba02d8fc6a9bd080451e04fdb8f94b07596d4f132cc7cd909c82ac73271c42",
-      "new_digest": "aa26f60b9c47404fcc9ab96b206fac174884f691c661b6fb8a13983340d883f0"
+      "old_digest": "569b23b63d900599ad14ff815ec5eee8b0d8cb00e923ab0b36fe04f48353d9b0",
+      "new_digest": "5690c1e268890da940e89ff40b16e410c417cadad8f5d3d72b9e9a1a95610a6d"
     },
     {
-      "id": "15056906",
-      "old_title": "경기도_구급활동 현황",
-      "new_title": "경기도_구급활동 현황",
+      "id": "15057427",
+      "old_title": "경기도_공공체육시설 현황(구기체육관)",
+      "new_title": "경기도_공공체육시설 현황(구기체육관)",
       "fields": [
         "operations"
       ],
-      "old_digest": "90d1f0f784137e0461780f95d6766bf9aef517a80a17379f13c96a582a16e6e0",
-      "new_digest": "6ff12b1110915c80aba4c6b1c5c7951acfd2166d403721b3708d6fdf5bab0dbe"
+      "old_digest": "d385a99651cab94b948d73aef699c22088ed555bdbb75c1e9babee843863db5c",
+      "new_digest": "1607f2100c9c1b694f99814f56aaa261caa6dc8f62d5609ca00fae7d47075e21"
     },
     {
-      "id": "15056916",
-      "old_title": "경기도_광교테크노벨리(기관 입주업체) 현황",
-      "new_title": "경기도_광교테크노벨리(기관 입주업체) 현황",
+      "id": "15057525",
+      "old_title": "경기도_안경업체 현황",
+      "new_title": "경기도_안경업체 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "5c493b67636eb7f7c310764422b8cbc3e9643074339288d5a61f90f1a87e2cd9",
-      "new_digest": "dd3febef090049347cc062864ef83de38d43fdc6aec95eebe0e56eebd8ee067a"
+      "old_digest": "1c2ac8f0f1649c19d58272f24d634daba3c97aa258bd45a80e2e13974ad8672e",
+      "new_digest": "fbaecdd7e425eba18cee9ec762bf64382097dc210fab0df0bd48ec5eb3addaf7"
     },
     {
-      "id": "15056934",
-      "old_title": "경기도 경찰관서 현황",
-      "new_title": "경기도 경찰관서 현황",
+      "id": "15057545",
+      "old_title": "경기도_공공체육시설 현황(양궁장)",
+      "new_title": "경기도_공공체육시설 현황(양궁장)",
       "fields": [
         "operations"
       ],
-      "old_digest": "a3b3edff2460eb31d39a6131672389d9ad54ee8c202bd29017c995b29415451a",
-      "new_digest": "6882eda0f800d2c1f8fcb953e4e5b8799875b801859ccc4d535145e87d15dadc"
+      "old_digest": "f52c5cca1e2acfa901dbc932e132e829e21644f5c41a4f201cb54ccb45fda46a",
+      "new_digest": "bb5080488ee4f54d49d835fee93960aefbdf58bd91664639b28723f9ac00cd89"
     },
     {
-      "id": "15056938",
-      "old_title": "경기도_고압가스업 현황",
-      "new_title": "경기도_고압가스업 현황",
+      "id": "15057597",
+      "old_title": "경기도_공공체육시설(생활체육시설) 현황",
+      "new_title": "경기도_공공체육시설(생활체육시설) 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "9c34aecbc4cb947a0f575ca65559d7bd874d3033ad70b9e809af5d79f1912588",
-      "new_digest": "09c2ebf79a5bed2e10db95c1be285356ff73f25b54d0d2b44f09f2c878bd8e51"
+      "old_digest": "b562b59e78e952e6e4af60a51fa75f838e243b2a9697060b4dae458274acdbc6",
+      "new_digest": "16a7a75779a61cd4960c334e99f63f8787bafbe78b2fb7bc0e46d236bcac1c84"
     },
     {
-      "id": "15056972",
-      "old_title": "경기도_낙농체험목장 현황",
-      "new_title": "경기도_낙농체험목장 현황",
+      "id": "15057633",
+      "old_title": "경기도_보건소 현황",
+      "new_title": "경기도_보건소 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "6c0c1684d09a9703b20e0eaf933d3101987a8a42c13b9ec8fe8d58773bd1bfef",
-      "new_digest": "955bcd9ed004d25a8cfda04dcd8e1541042f4912148fcb796125837c8a5798cf"
+      "old_digest": "c132ed910e486cbb4e8c4d0f5829961854988ffe3236be81aba3e713b1a3682d",
+      "new_digest": "4374b8629f3d07f3c943f2162fc5604d83b20e58f7b713cc64e50dea151d0bc0"
     },
     {
-      "id": "15056985",
-      "old_title": "경기도_어르신관련 중앙부처복지서비스 정보 현황",
-      "new_title": "경기도_어르신관련 중앙부처복지서비스 정보 현황",
+      "id": "15057706",
+      "old_title": "경기도 관사 현황",
+      "new_title": "경기도 관사 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "aeb1ea2c10273bed6aaf60c38a8856a7a71f4f1adbb3d4c26f8afc3a21d3bf0c",
-      "new_digest": "5e4267fe17fca19df323d4f69bab46a54dd1b84db7909371f8a7ae396c5fb192"
+      "old_digest": "3725e0fd3c4dce4b94121a31b8030ae8e20baa4f40ef46d17847730740d47e21",
+      "new_digest": "e6f0d6955cfd0f97712fabfb260f10a92e3760bbcd39c6e304a2a7106e998244"
     },
     {
-      "id": "15057023",
-      "old_title": "경기도_공장등록 현황",
-      "new_title": "경기도_공장등록 현황",
+      "id": "15057846",
+      "old_title": "경기도_공공체육시설 현황(씨름)",
+      "new_title": "경기도_공공체육시설 현황(씨름)",
       "fields": [
         "operations"
       ],
-      "old_digest": "3f5ad952d42ad3677415ca42800bffebece40a17f5c0300c923fa768f47ca1af",
-      "new_digest": "30976fc727342d47de34e4afcf3cd6dd76cf3375f5efc72732ce4529e59f8ed5"
+      "old_digest": "16f5bd9663155ebfca0d1d6fba1c775a32005236899db536a6ca25c4f854edea",
+      "new_digest": "e80ed993282490dfeda1b145cb76c341b7993fbb018d3b02433427ac78c9b987"
     },
     {
-      "id": "15057047",
-      "old_title": "경기도_관광지 현황",
-      "new_title": "경기도_관광지 현황",
+      "id": "15057965",
+      "old_title": "경기도_썰매장업체 현황",
+      "new_title": "경기도_썰매장업체 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "a4a09f34233e8c8d8618efafd440d906c367929afa9025f95030db4aa4b0e3c8",
-      "new_digest": "14966baeba4737e1d314b599d25fa01769b9a00829b31f8836cfa4525020f104"
+      "old_digest": "4b7a0b0a7a1f235cbfd6f2dd202cb7ac0dba4df3ee6570e840cba7a6c3f33191",
+      "new_digest": "94c4b0e99f0cc27f8b9670e68e5140c4e6d5d1700e90f340d7343a6a8a068823"
     },
     {
-      "id": "15057091",
-      "old_title": "경기도_교직원 현황",
-      "new_title": "경기도_교직원 현황",
+      "id": "15057979",
+      "old_title": "경기도_공공체육시설 현황(롤러스케이트)",
+      "new_title": "경기도_공공체육시설 현황(롤러스케이트)",
       "fields": [
         "operations"
       ],
-      "old_digest": "9fff9fb768b658f07c5e61a4c6b66aca80215d6186b5de4b3918393b9cbb5bf8",
-      "new_digest": "ee0e560d1df408e2a731ef1ef7df014d5b85923e95fa68b66e58d1cddbce5601"
+      "old_digest": "8c7095200e4f3a913eb94f7eeacbdb2b3342c6bf36807363daf6565ff7eb356b",
+      "new_digest": "26d3f05c3c094ea20f0d51371ebde02c0cbde0e65d80ec82b979b0ae7e3d61b9"
     },
     {
-      "id": "15057195",
-      "old_title": "경기도_어린이 국가 예방접종 지정의료기관 현황",
-      "new_title": "경기도_어린이 국가 예방접종 지정의료기관 현황",
+      "id": "15058128",
+      "old_title": "경기도_공공체육시설 현황(사격장)",
+      "new_title": "경기도_공공체육시설 현황(사격장)",
       "fields": [
         "operations"
       ],
-      "old_digest": "44728fdfa1497216122f2efb495c1e85666ec26d47dfd2c2dd17b1aaa74dd275",
-      "new_digest": "8016f3ea68603fd8f310c8ac9561a33626b212ba7a1e7f4b1578ecfffb81950a"
+      "old_digest": "a4aab50852c89f261800494f0500c21cd58a4330ef77839ac4b1f592ef2652a3",
+      "new_digest": "fbabe54ab88524781caabb92e59cba52bbfb4e2a01d4715451f1ff2e753324db"
     },
     {
-      "id": "15057206",
-      "old_title": "경기도_공동주택 미분양 현황",
-      "new_title": "경기도_공동주택 미분양 현황",
+      "id": "15058270",
+      "old_title": "경기도 하천 현황",
+      "new_title": "경기도 하천 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "b8e51d507c30cddd30b9ff941a44997baa7e72a9780e884a86e914633868b6e1",
-      "new_digest": "2d0748ef6e36fecbaffc904f9144ce2fc719a9e16244c67fae4ecb82be5f0980"
+      "old_digest": "114861f71d9bdb6546bf8b0794ad412528b060d2be4d75d222e80ab694a4153f",
+      "new_digest": "53192dd6df0846d8cb7e7b81ad9d437f254b6b6c29b26c2d4208c9abf4167c36"
     },
     {
-      "id": "15057208",
-      "old_title": "경기도_관광 펜션업체 현황",
-      "new_title": "경기도_관광 펜션업체 현황",
+      "id": "15058511",
+      "old_title": "경기도_축산가공업 현황",
+      "new_title": "경기도_축산가공업 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "2d691ae2c9df4eb6eb420d545b1e681ce0f142d4727834c3465db7aa767fbd4f",
-      "new_digest": "fc093b4c27d320878bd47b3b3c8e3f343c97c406c2c3a53808ce304e615b30b1"
+      "old_digest": "d1bba06907fb2031e61ad6d39c15311ed5e78eaea25c2aa2b69f927cf11c66c8",
+      "new_digest": "04ba08414ff96403364bd5b21de7f286e7a2797f988ce583487a1881575a4968"
     },
     {
-      "id": "15057228",
-      "old_title": "경기도_경력단절 여성 취업지원 교육훈련 프로그램 현황",
-      "new_title": "경기도_경력단절 여성 취업지원 교육훈련 프로그램 현황",
+      "id": "15058680",
+      "old_title": "경기도 토산어종 방류내역 현황",
+      "new_title": "경기도 토산어종 방류내역 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "2204f8b1772d1fc81752e4d6117d91179747564f7b461ece72b1d45dfed85698",
-      "new_digest": "94b71f241643501bb6df4d92ea7fddc82dd5cac03ebff1cf9652d022c5c9fe60"
+      "old_digest": "d90a9dcedfbd29f26181f4044a500b8adc248564113c6197f1c4fd763cd6a852",
+      "new_digest": "7e8cc50dc6a7b61065660e7760ce6a484f054062f76e47b56c74dd87e8ac8d13"
     },
     {
-      "id": "15057278",
-      "old_title": "경기도_공중이용시설 현황(공중이용시설기타)",
-      "new_title": "경기도_공중이용시설 현황(공중이용시설기타)",
+      "id": "15058775",
+      "old_title": "경기도_장애인맞춤형지원사사업 제공기관 현황",
+      "new_title": "경기도_장애인맞춤형지원사사업 제공기관 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "795f872919924fdb5e522b7559b7da277e8d1eea8ef1abba408aa26c0177de12",
-      "new_digest": "5d3828a8730b6897414b929712da4de7079d662b6252da47c695d32710028b33"
+      "old_digest": "00240126b83ba980b017390fafc955e0fda126812f983e1f7fca34ea32393f33",
+      "new_digest": "ae8876f1a218d3e0d84430eda17782810e85c8e7c3ea47a92a55ad4d0c95e77e"
     },
     {
-      "id": "15057283",
-      "old_title": "경기도_정신 보건 관련기관(시설) 현황",
-      "new_title": "경기도_정신 보건 관련기관(시설) 현황",
+      "id": "15058808",
+      "old_title": "경기도 수산자원 보호구역 관리 현황",
+      "new_title": "경기도 수산자원 보호구역 관리 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "dc988d8a54340a9d1c80c7708a37be72b6debe26f2e7c7b97cb7f06ca0255ece",
-      "new_digest": "9b15d34998d5fd73c3b0d0e70b10749fd050e77f3227dda56957e7e554a5d060"
+      "old_digest": "76eb80c9deb2414670db0ef7dc358f465d3b79b001970aedbeab058c0adaebc2",
+      "new_digest": "ac595c53bda8807095f7144e43a78ca9ec8afa30572aa76634f4367f2c446ec5"
     },
     {
-      "id": "15057286",
-      "old_title": "경기도_여성안심무인택배함 현황",
-      "new_title": "경기도_여성안심무인택배함 현황",
+      "id": "15058818",
+      "old_title": "경기도 치안센터 현황",
+      "new_title": "경기도 치안센터 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "dcdc79778b9f79d0cd538bb0ba32d67c1f990a4273c7d1c3a25a6a0ef256549f",
-      "new_digest": "77431eaa2f336285bcdb7e7d7c187b23c072e8c608448d0aadf6ee8ca193ac56"
+      "old_digest": "9f1f1baada265aa580ae9a2d9358262d63b88a2367cee6378134b1eecf6421b6",
+      "new_digest": "7d84d3afb6f0e7d2a5e47af6f9e07af3924d385a8b32a610e9c0217bef82232c"
     },
     {
-      "id": "15057319",
-      "old_title": "경기도_공중이용시설 현황(복합건축물)",
-      "new_title": "경기도_공중이용시설 현황(복합건축물)",
+      "id": "15059013",
+      "old_title": "경기도 지구대(파출소) 현황",
+      "new_title": "경기도 지구대(파출소) 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "e82fab22bbefb0318f1e65ba6cb7742c0cbafc8bffe8a6c50b90008ce2d1406c",
-      "new_digest": "d525b3c4039d0ca4ffd8d0f7f9ad3635c6c7060535498481c23bdf3aee6c774c"
+      "old_digest": "ef935792ed7f64c5908b0d5376962d92454a63b2605829ea752e081cf7b9efd2",
+      "new_digest": "5c8b7b3461efca4e6eaa1b1b3bee913805b8834aa4d46476f152c5e07a1f96c5"
     },
     {
-      "id": "15057337",
-      "old_title": "경기도_교통약자 이동지원센터 현황",
-      "new_title": "경기도_교통약자 이동지원센터 현황",
+      "id": "15059015",
+      "old_title": "경기도_공공체육시설 현황(투기)",
+      "new_title": "경기도_공공체육시설 현황(투기)",
       "fields": [
         "operations"
       ],
-      "old_digest": "c7f875e6a1d8fc85c15b3176bd09e665c1c6e3b796d28c2a15411df6324efb5f",
-      "new_digest": "89df0bda099080a92e7fa894a8e87d19548dfdb511d683d799e8c1247b9d4c76"
+      "old_digest": "9e49de1a61f43b8aa29a877de76768fd50e65dae537f88fd31bab3aa6ea5925b",
+      "new_digest": "daad3c23436683ee307758f0bffed9ff4300099ceb23152c14e7a17ccc1f73c4"
     },
     {
-      "id": "15057356",
-      "old_title": "경기도_교육 운영 특색사업 계획 현황",
-      "new_title": "경기도_교육 운영 특색사업 계획 현황",
+      "id": "15059016",
+      "old_title": "경기도_시설물안전법 안전취약시설물(DE등급) 현황",
+      "new_title": "경기도_시설물안전법 안전취약시설물(DE등급) 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "b8d2489985f4f734e6fd7f965befe0e8bf50a8a7fe1e6de159a92f847614d257",
-      "new_digest": "e823293376aea9cdbaf3f697255f36acfd6e6daefebf6b52ccf3a852a2267a37"
+      "old_digest": "f8ec7379af5e6f8c189f4e5f58bb7c2d476d6750189d0ec961d69464b71d1bff",
+      "new_digest": "a9fca93071a56c2b66878058f21db17cc5f36fb7a408952a9cb6fec4a877aed6"
     },
     {
-      "id": "15057399",
-      "old_title": "경기도_아동관련중앙부처복지서비스 현황",
-      "new_title": "경기도_아동관련중앙부처복지서비스 현황",
+      "id": "15059228",
+      "old_title": "경기도_공공체육시설 현황(국궁장)",
+      "new_title": "경기도_공공체육시설 현황(국궁장)",
       "fields": [
         "operations"
       ],
-      "old_digest": "abe4c8bfe8673e99c356cf7734f1c1ecb46b345c912a38ed0842ba370e2d41d5",
-      "new_digest": "3326850ea72fb9fbabd134039a929343f467b5e8ef020ffd7501fdc37196d03c"
+      "old_digest": "5806b44869246bd88f7269ffd4b51314613e1acf55d05cb6a59f73052b71d47b",
+      "new_digest": "0ac2707cf41fcc3dc8518cef3b25314e395425ffee86c901c37c73e8f1bb8e3a"
     },
     {
-      "id": "15057425",
-      "old_title": "경기도_공공의료사업(중증장애인치과운영)실적 현황",
-      "new_title": "경기도_공공의료사업(중증장애인치과운영)실적 현황",
+      "id": "15059278",
+      "old_title": "경기도_공공체육시설 현황(골프연습장)",
+      "new_title": "경기도_공공체육시설 현황(골프연습장)",
       "fields": [
         "operations"
       ],
-      "old_digest": "c71f30ba95739405ab99dd3f595c9abdc2edcaf2dc1c43891d8c58976371205c",
-      "new_digest": "5fb0cd0b4b548b4ddcea3893ce8237a70c2748ef781517bae9ee113e0ef18e29"
+      "old_digest": "35a1c8fd944bbb3d36c1fe688736af65a5db42da9b376319d4c99ab073f8ad0f",
+      "new_digest": "2aafe4a53466a1d7f635fbfd719834fa81592da315e3a3514c246c0b1babfc98"
     },
     {
-      "id": "15057442",
-      "old_title": "경기도_공동생활가정(기타복지) 현황",
-      "new_title": "경기도_공동생활가정(기타복지) 현황",
+      "id": "15059286",
+      "old_title": "경기도_후원방문 판매업,다단계 판매업,선불식 할부",
+      "new_title": "경기도_후원방문 판매업,다단계 판매업,선불식 할부",
       "fields": [
         "operations"
       ],
-      "old_digest": "0d0e1630509929f46ac23d48d6ca98196bc07da5906c69dc87f0535e3233d1a9",
-      "new_digest": "6e3925e53ba19c1a795fb1cfa95d0e3d4fc4b3c9d6c02172d8f5a1f881792d30"
+      "old_digest": "6b7364e14885a1daa0d820c178e340b8af3b2976fcad20813c3a5caa9f7df7e9",
+      "new_digest": "0b741d34f9751dcf02dad7624af3c07efdb7eb6df237186ad3ff614414faf862"
     },
     {
-      "id": "15057458",
-      "old_title": "경기도_긴급복지담당부서및연락처 현황",
-      "new_title": "경기도_긴급복지담당부서및연락처 현황",
+      "id": "15059297",
+      "old_title": "경기도_공공체육시설 현황(게이트볼)",
+      "new_title": "경기도_공공체육시설 현황(게이트볼)",
       "fields": [
         "operations"
       ],
-      "old_digest": "a4929856bb338fbbce78449928d85554f354fd4b0eaa48c7d71d2a986ee7b6fa",
-      "new_digest": "292d520b51624285f1ecf1896a1c7362f4d18eb03a5989ebecbbf56d0182044c"
+      "old_digest": "95c1dfee0476100854427d6b6f51a7f1373826254b7c83c09ff4ba79e3a092b8",
+      "new_digest": "5426888504e1267494d5dbb68183f7a4853129e2aedafe94b6ce849d800327a4"
     },
     {
-      "id": "15057527",
-      "old_title": "경기도_공중이용시설(실내체육관) 현황",
-      "new_title": "경기도_공중이용시설(실내체육관) 현황",
+      "id": "15059341",
+      "old_title": "경기도 영화상영관 현황",
+      "new_title": "경기도 영화상영관 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "4d695c62f3336542c10ccab396fc51eb6a3e340738d884c83f1a1ea52122fb2a",
-      "new_digest": "135b914a838be754b0ea64df5a36e6fb7a47680e5900d399d17c0778eca1adfc"
+      "old_digest": "19b725ecf7ea22d70634f137893789bd62e1dd358f9f1c0c94c1178dbe940c7b",
+      "new_digest": "23bdd7108e35729378706707ce412c72364c8d816e95afc1a76a863082ad03e0"
     },
     {
-      "id": "15057582",
-      "old_title": "경기도_공공의료사업(행복치아만들기사업)실적 현황",
-      "new_title": "경기도_공공의료사업(행복치아만들기사업)실적 현황",
+      "id": "15059355",
+      "old_title": "경기도_알코올상담센터(중독관리통합지원센터) 현황",
+      "new_title": "경기도_알코올상담센터(중독관리통합지원센터) 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "b02f175e6bee56306960f8fdf4bf80d7dddb538f90c352d8ba13bd4fc5af06cb",
-      "new_digest": "d80bd4237ff28012dccf3d57dbf3c579918fc966604bc5483736b9ebc7e48535"
+      "old_digest": "3f2262b4f7d3b3e12406dd92c8dbc21b518c8ad22d4cebfd73103e008a4768fa",
+      "new_digest": "235081164897437e788a7eff06a4cdec94102a4851a0b6af014c53253c9b148c"
     },
     {
-      "id": "15057588",
-      "old_title": "경기도_여성 인력 개발센터 현황",
-      "new_title": "경기도_여성 인력 개발센터 현황",
+      "id": "15059361",
+      "old_title": "경기도_여성교육 강좌 및 강의 현황",
+      "new_title": "경기도_여성교육 강좌 및 강의 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "3946214ef2b9ddc817b3c25cdd55af57ee9eb89d31ccc8f57255011bd6a302ed",
-      "new_digest": "acd6edfda7b25ad6d34297db59b691d775147300755390224ae6d720047d2e38"
+      "old_digest": "fa355f243fdafb47cb63f6b1a520741ebcadfb2952509a3cc99df270c2c83db4",
+      "new_digest": "a67fc18cdf60a118415253a335165b074b2314b765599d7f2af259d18d7700fb"
     },
     {
-      "id": "15057710",
-      "old_title": "경기도_교과과정별 특수학교 학생수 집계현황",
-      "new_title": "경기도_교과과정별 특수학교 학생수 집계현황",
+      "id": "15059364",
+      "old_title": "경기도_공공체육시설 현황(사이클)",
+      "new_title": "경기도_공공체육시설 현황(사이클)",
       "fields": [
         "operations"
       ],
-      "old_digest": "81cbe4282199bfcded9b3a692549a552a00cb54a0ed8bca4ff7f23200c2e1730",
-      "new_digest": "b63dd6ade3a933aae2178551a4b7b65bd3d6d12ee112742d7e9f4a9917e19346"
-    },
-    {
-      "id": "15057714",
-      "old_title": "경기도_어르신무료급식소 현황",
-      "new_title": "경기도_어르신무료급식소 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "ae70a2386998736ea2d3de8989362a348319a9d16d9a9bdc4d07115311ec2ef0",
-      "new_digest": "744f5ff7c9ae75b4bce7fd27f37435e968a5d486e60c1227d70a7bddfa062cc1"
-    },
-    {
-      "id": "15057777",
-      "old_title": "경기도_광교테크노벨리(기관 입주업체 분야별 종사자) 집계 현황",
-      "new_title": "경기도_광교테크노벨리(기관 입주업체 분야별 종사자) 집계 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "a2acdbc6e23ae13d4b5171166738f21870ad907a2d1812e42b73bfbe6132e808",
-      "new_digest": "f06bdbe25565f0354db5207d31a9a861d452a231318e2fcac4fd7c5695938654"
-    },
-    {
-      "id": "15057782",
-      "old_title": "경기도_공공의료사업(무료이동진료사업(외국인근로자))실적 현황",
-      "new_title": "경기도_공공의료사업(무료이동진료사업(외국인근로자))실적 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "f474e568247cd5999609cf52968d8bb4c88fc78c95e811e81c5ab8ac20f2f278",
-      "new_digest": "2d464d8c94f1ca47332467962e46d2b1459b41e2a793bb2b15100c6149ea50bd"
-    },
-    {
-      "id": "15057839",
-      "old_title": "경기도_촬영지원 현황",
-      "new_title": "경기도_촬영지원 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "447e05ca70b442fb146463a564b6a5f039067aa4549c973e2e7cc4b1d807f33f",
-      "new_digest": "6ad439b5ca7ff3feb6b62ef60f4054f8dcc222d688732b7f4a04860e95297711"
-    },
-    {
-      "id": "15057860",
-      "old_title": "경기도_아동 양육시설 현황",
-      "new_title": "경기도_아동 양육시설 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "0a67e90e37f590c12b75f54cf33699089393002fa5ca460ec65b242cd54881ca",
-      "new_digest": "3b6713841f7b7dfc1add055b58b407c1ec86b5f24a0d4f744b60326a4df37e33"
-    },
-    {
-      "id": "15057868",
-      "old_title": "경기도_아동복지관련 사회복지법인 현황",
-      "new_title": "경기도_아동복지관련 사회복지법인 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "2a50a1dc293621169d01f2ff8ac4a05a8ee48fa3aa56e9f33d98c378b6a15440",
-      "new_digest": "034fa56637b1522b5dc3f369192230f218d461575014c81a27209d6a6ab82f90"
-    },
-    {
-      "id": "15057877",
-      "old_title": "경기도_외국인 주민(복지)센터 현황",
-      "new_title": "경기도_외국인 주민(복지)센터 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "fd7e7737280135abd8c2608332b30abc529d8ef5ed7cdefa2445d9e6e422e7d7",
-      "new_digest": "a4968fd5ba8874bbee969430f7e86d173bdbc09148224e638b1349b00f4fdf7c"
-    },
-    {
-      "id": "15057882",
-      "old_title": "경기도_아이돌봄 서비스 제공기관 현황",
-      "new_title": "경기도_아이돌봄 서비스 제공기관 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "748ca9fe2f8277bf75174bea0ef06422b380f4f223a2b198313f48142a4477a0",
-      "new_digest": "2914619d2952d4cb302f943c8c75fdaa4df33010d71a7e102c78bc21182b1c6e"
-    },
-    {
-      "id": "15057904",
-      "old_title": "경기도_음식물쓰레기발생 현황",
-      "new_title": "경기도_음식물쓰레기발생 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "cd9477fabc6ae37fa4cda4d2185a39a2cf04ddde0811588a9b4c2dad2d844999",
-      "new_digest": "463217276633912ea74b98587145af7749446ece0b7df8d6c564af2906bae8b0"
-    },
-    {
-      "id": "15057920",
-      "old_title": "경기도_관광식당 현황",
-      "new_title": "경기도_관광식당 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "aa3eaa301b91818e34b4038cf6b6adfb920f1ff4e5a3d0749c996e73313dbafa",
-      "new_digest": "60cb1a66a28ef2a1e9da5016398b94a833ffa1031d614443e07127a16c3b38e5"
-    },
-    {
-      "id": "15057946",
-      "old_title": "경기도_고압가스저장소 현황",
-      "new_title": "경기도_고압가스저장소 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "bfda767ccb4b9c4ed2a7994461e8c9d3006a75eab2f926cbf73548451ea49036",
-      "new_digest": "6ec8b74129557aafb08d9cb76b6d4fd36c2f541c4b575fa2518924fb34c844ab"
-    },
-    {
-      "id": "15057950",
-      "old_title": "경기도_골프장 현황",
-      "new_title": "경기도_골프장 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "8261a9cf7aba160d3aebec9a1fcd1199268efeebf36fe34b2007976cb32c4e55",
-      "new_digest": "53aac9ec3cd2b84848450ec41014b6fb9af5be4e5c9e28be58e1887f5c3bd2e7"
-    },
-    {
-      "id": "15058130",
-      "old_title": "경기도_어선 집계 현황",
-      "new_title": "경기도_어선 집계 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "c995c6e20135c5928b193a8e256e4ef68145469667f54b4a560891d34d722206",
-      "new_digest": "a0aa75f5912edf4793fddd1e7b26a1cbf6e65dd499c5aaa7a74760547d60c61b"
-    },
-    {
-      "id": "15058131",
-      "old_title": "경기도_공공체육시설 현황(승마장)",
-      "new_title": "경기도_공공체육시설 현황(승마장)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "51512063b80aa00e661b1b49ef0d38c4bfc86cfbc1173c89091355e8707f4cbf",
-      "new_digest": "43461b7f0f673c4d97b23df5a0eacb7d52d26d4f5e6018b5c7389850cbaf98c8"
-    },
-    {
-      "id": "15058152",
-      "old_title": "경기도_아동복지시설(보호치료 등) 현황",
-      "new_title": "경기도_아동복지시설(보호치료 등) 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "04f6d4c352ae32f9b47309622b94c69aad10a5ea986201725719255b38fd85d3",
-      "new_digest": "03ca36d3486c86805a434ecbd9766773494ef12106c5c85afda4b8565f7d6b30"
-    },
-    {
-      "id": "15058173",
-      "old_title": "경기도_어르신자립형일자리사업 현황",
-      "new_title": "경기도_어르신자립형일자리사업 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "0e81655146f3ac522f499b2aa8e09bed0553acfb55832df81bf3afea2249af16",
-      "new_digest": "09f9aa1a36062e09c84955ec4cb41ed86c9729925e7554020857baf955e6fc05"
-    },
-    {
-      "id": "15058175",
-      "old_title": "경기도_물류단지 시설정보 현황",
-      "new_title": "경기도_물류단지 시설정보 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "88a2d7584cec57e6b2eef1db86893f2c775b380db8f4edacb3954e60167f7257",
-      "new_digest": "9ae57aa6edafda60c7dfd8a348563f716b0e69502067f4ac3c918332d2bde9c7"
-    },
-    {
-      "id": "15058191",
-      "old_title": "경기도_의원급 산부인과 현황",
-      "new_title": "경기도_의원급 산부인과 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "562ff74ec24e85f6e1709a1af68d65e7dbabc654237fc54920e737f252ac1e06",
-      "new_digest": "4e65bb64ff58af5c11c596e23538acc2b6e4f2d209f8354edad6ec839148b02f"
-    },
-    {
-      "id": "15058235",
-      "old_title": "경기도_국민건강보험공단(지사) 현황",
-      "new_title": "경기도_국민건강보험공단(지사) 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "73824d74864acb9f5ac764296c6b8877a8f35e6fa1d1b2eda6abbd9172fbf6d8",
-      "new_digest": "661d804938f4805e33efb8318a1939bf07ece521653730ff3c7a7a40e7066f05"
-    },
-    {
-      "id": "15058236",
-      "old_title": "경기도_관광 숙박업체 현황",
-      "new_title": "경기도_관광 숙박업체 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "be10d0f2f4bd05679376235e9586b117b3deebb8915b6dcd5c9068f374e560e5",
-      "new_digest": "85b3b4118636d9eaffa47f6f9d77216d42b674333e80731d2d75201b3cb9ad51"
-    },
-    {
-      "id": "15058245",
-      "old_title": "경기도_관광 사업자 현황",
-      "new_title": "경기도_관광 사업자 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "1c6b0e52b37032dd6eebe7348e6cbfe5ec5b079c04f4fcd69c540a34b38b5171",
-      "new_digest": "688094d0b73de75fae6a532cf41b12780b7009783160243e8721f38af41481ee"
-    },
-    {
-      "id": "15058363",
-      "old_title": "경기도_하수도 보급률 집계 현황",
-      "new_title": "경기도_하수도 보급률 집계 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "a5f5d7607367ced53749f376b99dca62ee56cc49fde382913ddf33433f7a37b5",
-      "new_digest": "a106fa65a6f0e3c8ed6ec1a3bc162ceeb0c622fe0ca847b3b90f6ab0d44b1884"
-    },
-    {
-      "id": "15058389",
-      "old_title": "경기도_재해피해 및 복구집계 현황",
-      "new_title": "경기도_재해피해 및 복구집계 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "c23d69bc1f7126bf04dacbcd66eba69378b2ab47d7404188d20c3d990bd626ad",
-      "new_digest": "cd68c961bad228c6c6a6641c9b4769e22b62245c1d2503a2d7349442d3c3ff92"
-    },
-    {
-      "id": "15058436",
-      "old_title": "경기도_여성 복지시설 현황",
-      "new_title": "경기도_여성 복지시설 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "f8ccf03620a2e29dbd21ed3d0690a233942323c4dce3b12c2b718e77a4b3951f",
-      "new_digest": "0033b5e685cd5e3b398a046323bb7c6741a6e36031300a54c8f8e98ef1668fc2"
-    },
-    {
-      "id": "15058464",
-      "old_title": "경기도_교사(校舍) 현황",
-      "new_title": "경기도_교사(校舍) 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "9cc8c312aeaccff890fa7a7f9b9b3506ea6e8a3fdd48432c9b467e41e2eae4f7",
-      "new_digest": "b8c0e75b5cdd77a845adc8fc7bc50dcb70005a475bfcf5378e006f186f6f4917"
-    },
-    {
-      "id": "15058505",
-      "old_title": "경기도_여성 상담기관 현황",
-      "new_title": "경기도_여성 상담기관 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "03ca92c7f90c4403ff3425a3e85fab858872c6ebadb1419b828923fba7de1904",
-      "new_digest": "72ea1a78c28bf7704c46458884a76806269cceed6c03b2c119c7612453d05fcc"
-    },
-    {
-      "id": "15058573",
-      "old_title": "경기도_공공자전거 운영 현황",
-      "new_title": "경기도_공공자전거 운영 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "76df6bcb88c59895d52df9ccc2678988db8d752f92927a777a5246499dcb7fea",
-      "new_digest": "57de157c539d5a615468ff16df1d6a0c774d45c427aaae3af601b68fc31ddfe4"
-    },
-    {
-      "id": "15058588",
-      "old_title": "경기도_국내 여행업체 현황",
-      "new_title": "경기도_국내 여행업체 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "0386d039aee948571570470d7badbb360c878173a78f7d9c42a94be7502a1333",
-      "new_digest": "5cd5a5e4c7e53057b9ac446fb0af7f489d37b55ffd6801d2914e75dec8968192"
-    },
-    {
-      "id": "15058636",
-      "old_title": "경기도_실버인력뱅크 현황",
-      "new_title": "경기도_실버인력뱅크 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "eb073c72abc411d1b6821f07c4ab281b1965545f8312142f73c74aed38216053",
-      "new_digest": "f5bdbe8603c73ec391aeceb6e221a7056c0db1e389f12486585d6448629d97fb"
-    },
-    {
-      "id": "15058672",
-      "old_title": "경기도_양로시설 현황",
-      "new_title": "경기도_양로시설 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "66bfdb84f83e907a00b6f121d8e8a507bdd3134109b2b247c8e9cb53236f4273",
-      "new_digest": "d6d64681483ef85f7f89cf83bde3eddab0357f8e654c4f332407fbaf53634d96"
-    },
-    {
-      "id": "15058683",
-      "old_title": "경기도_공연장 현황",
-      "new_title": "경기도_공연장 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "b5ec47735ef6426cf418f245c0bc4b459af37462dd126866440608d0605f0c7b",
-      "new_digest": "f76b08119710d7bf334843316fd24d8a614318f0ae818938bc91bb9145361fd7"
-    },
-    {
-      "id": "15058717",
-      "old_title": "경기도_아동 공동생활 가정 현황",
-      "new_title": "경기도_아동 공동생활 가정 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "05b35ab19bf71103b59ffb6af2a56f07a103a6d5ed0a42008f60aaa7ef967e0c",
-      "new_digest": "850ea95b11ebce06c7aea505d68ce7c632624cb2c6fae9bfd8f6780a32ae044a"
-    },
-    {
-      "id": "15058732",
-      "old_title": "경기도_어린이 놀이시설 현황",
-      "new_title": "경기도_어린이 놀이시설 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "72d5a7a1fcc8ff71456469422e439c103ae5a9b5bc4b0ef6431cf22c215de8cc",
-      "new_digest": "84128c1707905ed352d1d17dc9d3bd60db1319891b0e05da788b895e56491afd"
-    },
-    {
-      "id": "15058776",
-      "old_title": "경기도_공공의료사업(가정간호사업)실적 현황",
-      "new_title": "경기도_공공의료사업(가정간호사업)실적 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "359ab1b3718b93e3c1e0d366ffdd71e7a844816b2d6fce6cc4ccb88d6e5d200d",
-      "new_digest": "f46a5d8d19011976cfbe5f88baab84905ff5bdc16b4d27f1c66f2142dac4cf27"
-    },
-    {
-      "id": "15058797",
-      "old_title": "경기도_관광농원 지정 현황",
-      "new_title": "경기도_관광농원 지정 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "14ecc34e98a857adc413b3374958fcc8d31976bb02e33ceeb50ed072b4f5121a",
-      "new_digest": "8680d5b7f5ae42fd94e148651a092b8028c884a071032d32a07c421f1f02c5b8"
-    },
-    {
-      "id": "15058880",
-      "old_title": "경기도_공공체육시설 현황(축구)",
-      "new_title": "경기도_공공체육시설 현황(축구)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "7360e13b8f56fce44494c7b07dff72690d28d5a6eff9da921df4e89133006b20",
-      "new_digest": "aa874ce151a67585360ce46e4178b0d61f4532757ffe57be7299e163a0ff938c"
-    },
-    {
-      "id": "15058919",
-      "old_title": "경기도_어가 및 어가인구수 집계 현황",
-      "new_title": "경기도_어가 및 어가인구수 집계 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "cd6c46c2fa4d5313ab7cd074bf4a11c50a480b08f4b9be8d697c182429c517f1",
-      "new_digest": "15c83cc92d02920bc2d125d74dc6843532a776a6981161c1487c4afb34973f2c"
-    },
-    {
-      "id": "15058952",
-      "old_title": "경기도 공공도서관 현황",
-      "new_title": "경기도 공공도서관 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "d55df07ecec6bde5fd9c7ffcdb4e40760a71884a12af1dfa4534e62e7c793d7a",
-      "new_digest": "402e8db7bf85707aa3dc2b8a7560aeb002c5fb7c94e10f448fb3261a1f0da7fb"
-    },
-    {
-      "id": "15059006",
-      "old_title": "경기도_계약학과 설치 운영 현황",
-      "new_title": "경기도_계약학과 설치 운영 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "74b7303021307f965cdf72e857ff83ddb8e8392cf49f1b9a0773ac56d1ec921a",
-      "new_digest": "bc467c4b34296c584fca65bdf9b73b863628c1a188c0f7af786d45a66f468787"
-    },
-    {
-      "id": "15059064",
-      "old_title": "경기도_지역 아동센터 현황",
-      "new_title": "경기도_지역 아동센터 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "2eac83b02265fc1943b415350459815e2f3c55c813a32521a35630de7e447129",
-      "new_digest": "93ff3b777d0f52bd30e3ebcad0317c5039b5f499d6f14d32a08890c3a9e79abf"
-    },
-    {
-      "id": "15059116",
-      "old_title": "경기도_산모 사회서비스 제공기관 현황",
-      "new_title": "경기도_산모 사회서비스 제공기관 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "406c2b00de92d3cf238e8c4da55d0324de8251be337d913234e0b7c0680ae62d",
-      "new_digest": "1f52169fb715584706a89ad00c4ef211d445f91edf25598b91caa2a645e807a7"
-    },
-    {
-      "id": "15059204",
-      "old_title": "경기도_교복 구매 유형 및 단가 현황",
-      "new_title": "경기도_교복 구매 유형 및 단가 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "37eb59c5166207f320a5eb1df5ef5811fdcfc8242cd52d820bba2eecf9478d49",
-      "new_digest": "fe376586f0eccbc353deccd0337777a3b186f0aafd2ca7e0315b5db3728fa3c0"
-    },
-    {
-      "id": "15059229",
-      "old_title": "경기도_공중이용시설 현황(업무시설)",
-      "new_title": "경기도_공중이용시설 현황(업무시설)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "343656630e2d1ec9ff3e5dcf55332f7f6a0b42f11bc7e70f548d62bc04a95e0c",
-      "new_digest": "bce0b54acbab5aae0b9c8bf315c88361156a6bafeacc8127fc505773dfba5455"
-    },
-    {
-      "id": "15059366",
-      "old_title": "경기도_공유재산(토지) 현황",
-      "new_title": "경기도_공유재산(토지) 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "11e6d323751923b964e4896c1d5e782b98c021d9dec529bb27d2d2245535b6fc",
-      "new_digest": "883f8943106254047b15a9cd3dad80cdbe020d5941a117dbec0c0b6cc272dc40"
-    },
-    {
-      "id": "15059456",
-      "old_title": "경기도_종합병원 산부인과 현황",
-      "new_title": "경기도_종합병원 산부인과 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "d4619f7e70abca924baeca4f16c066d57adcf4bcaf5ef6a79def2286244118da",
-      "new_digest": "10bbd291dd1583d732da206fb2accb36a5553de8aa19f10dd0d94878b3d45e4b"
-    },
-    {
-      "id": "15059511",
-      "old_title": "경기도_공공체육시설 현황(기타체육시설)",
-      "new_title": "경기도_공공체육시설 현황(기타체육시설)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "23b8d0ecb562f2088c4e652b4ae463277d3108c5d62ec42774d181da440e3967",
-      "new_digest": "57061216af23518cae9e912d66ba6719a0ded539dc9e004b288da3993cc1fa95"
-    },
-    {
-      "id": "15107902",
-      "old_title": "경기도_선한영향력가게 현황",
-      "new_title": "경기도_선한영향력가게 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "3288ffc34a7e7d2a45b7211178c029b79f38bef06631d03bc101b8210a4311c2",
-      "new_digest": "a9ea4d7adf6faa0c92fef2a21457f75c5b76e60321f6662eac0daaca5706d9e5"
-    },
-    {
-      "id": "15112119",
-      "old_title": "경기도_한탄강수계 수질조사",
-      "new_title": "경기도_한탄강수계 수질조사",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "d97fd1c4faa5a80d108e4a02450db264e558fdfc7551c79965f4a3085282ca43",
-      "new_digest": "0dde23e4fbea24b1a29314a6454978f6a2d6fc31c5e60ea601abe3e284dee5a4"
-    },
-    {
-      "id": "15112349",
-      "old_title": "경기도_시군별 주유소 평균가격",
-      "new_title": "경기도_시군별 주유소 평균가격",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "0dddb5e7968f2348c880b77de3f429dc96f7ae8f3c34d91461d41d7fd2bb4ad5",
-      "new_digest": "4b7fedc1ca373302f916ab9b1c5d4ba7051ab085d6849c333573a30113306fbb"
-    },
-    {
-      "id": "15112622",
-      "old_title": "경기도_주유소의 요소수 판매가격(지역별)",
-      "new_title": "경기도_주유소의 요소수 판매가격(지역별)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "fd0a8d4215c4b1031d63a75c07e5dad97cdf9e9f2a3163e26f8b05e69682f397",
-      "new_digest": "0967254b93762eb9749594978a1ad301a9c5e1c434bc4c99bdf7ad4c768ae6e1"
-    },
-    {
-      "id": "15113315",
-      "old_title": "경기도_뉴스포털_경기뉴스광장",
-      "new_title": "경기도_뉴스포털_경기뉴스광장",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "5dc046f18f2e29f19bd40cbe26fdb8370a56c5af030b3348bd8f83790820a39a",
-      "new_digest": "5b4e282c22ada782cda63b155e878cfa998c182315fff5f73fe64d81d96b2ef4"
-    },
-    {
-      "id": "15113522",
-      "old_title": "경기도_역사내 승강기 현황",
-      "new_title": "경기도_역사내 승강기 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "9d378071d3d57b12367d307b23b83ddb7d7cafbddbd2cc0f1a43cf08bb01b9d6",
-      "new_digest": "eb4055e630a59484ec7c818c4cdc8e095afdbf303e85799855276441156cc5ff"
-    },
-    {
-      "id": "15117057",
-      "old_title": "경기도_문화 행사 현황",
-      "new_title": "경기도_문화 행사 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "315840cfeb162a03064021164ad52245805dc5b75eb88de1de6f8d20d4c2e85a",
-      "new_digest": "cbf9d99241208c6e4042fa077dce81305c440e20f87e9f42330c5e044de480e0"
-    },
-    {
-      "id": "15117059",
-      "old_title": "경기도_소식 현황",
-      "new_title": "경기도_소식 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "8aa31398cb3d57e6df5efde5de0e947045baee7a145dfd4accfa595e90ce0707",
-      "new_digest": "ea77911e6574f853164eda6335078ff7df85d2351601f835fca9df907027e00c"
-    },
-    {
-      "id": "15117064",
-      "old_title": "경기도_동물등록 현황",
-      "new_title": "경기도_동물등록 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "1b68c9e0105f568883c06fb0e3af5ab50f4abec1f1255e93017e6b146013d45b",
-      "new_digest": "c71fff146f6a97585588527655428f99fbf3fe0b7bc9a1a2bf27f076fae71bc5"
-    },
-    {
-      "id": "15117911",
-      "old_title": "경기도_공동주택관련정보",
-      "new_title": "경기도_공동주택관련정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "3549090b423fea55562789406c92b4f6ffad2ad89bebb9d34250ae5b39efefbd",
-      "new_digest": "4a8fb6f030b89286030f7151c7e54545d5898d6006d3586cd525fba47a1115ed"
-    },
-    {
-      "id": "15119896",
-      "old_title": "경기도_경기도일자리재단 잡아바 채용정보",
-      "new_title": "경기도_경기도일자리재단 잡아바 채용정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "01db5bed2037071839b6db0fcde245565e7ce3a457770ccd0822b376c0b8e492",
-      "new_digest": "521ec343e66f9780f28dc7641a334ccce75d14622f6babc4d1d47fc99140d633"
-    },
-    {
-      "id": "15119901",
-      "old_title": "경기도_계약 현황",
-      "new_title": "경기도_계약 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "5fd1034aa703d03a17eae14fed2a5c16109b62446a9af5f6acfd7a157256d898",
-      "new_digest": "92b41105bb0995c9985f16bafd8261d11a1b485ce5081850c8f0e9a508276062"
-    },
-    {
-      "id": "15143535",
-      "old_title": "경기도_의원 현황_인허가",
-      "new_title": "경기도_의원 현황_인허가",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "297b5c5db7c31bcfebc27a994dc5c1b8511266537cb8b1dd13bce6b1aebab059",
-      "new_digest": "ca992bf04487af2fd0d56a53c3656697945fa75efe3e3cb7af469e612a7dc81d"
+      "old_digest": "0eabcfd52dd447f48926e4ff52036f3f32aa52475f00551099a7d3a2a1f311ba",
+      "new_digest": "a4ed3ad98465cf4e07ee593119f90622d0696191e5ddc66abdaffa7d6abab5b3"
     }
   ]
 }
