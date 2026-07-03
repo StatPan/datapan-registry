@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `1,225` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `1,207` data.go.kr APIs
   without operation mappings, `9,292` operation-mapped APIs without runtime
   evidence, and `178` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -120,7 +120,7 @@ Current strengths:
   the same blocker, warning, and next-action inventory that CI validates.
 - `reports/source-report-inventory.json` is generated from source profiles and
   checked-in `reports/<source>/` directories, measuring `5` source report
-  directories, `40` source-scoped JSON reports, and `12.3%` recommended
+  directories, `42` source-scoped JSON reports, and `12.3%` recommended
   source-scoped report coverage.
 - `scripts/sync-release-schema-artifacts.py` checks that every checked-in
   `schemas/*.schema.json` file is represented in `schemas/index.json` and
@@ -372,8 +372,12 @@ Current gaps:
   adapter coverage, and merges `100` bounded checks (`76` verified, `24`
   failed, `0` skipped). That brings runtime evidence to `3291`, verified
   checks to `1519`, and registered external adapter operations to `8210`.
-- API operation coverage remains incomplete: `10,835` of `12,060` APIs have
-  operation mappings (`89.8%`), leaving `1,225` APIs to materialize and `9,292`
+- The 해양수산부 국립해양조사원 batch adds KHOA and NOSC host coverage,
+  materializes `18` APIs and `30` operations, and merges `30` verified
+  bounded checks. That brings runtime evidence to `3321`, verified checks to
+  `1549`, and registered external adapter operations to `8240`.
+- API operation coverage remains incomplete: `10,853` of `12,060` APIs have
+  operation mappings (`90.0%`), leaving `1,207` APIs to materialize and `9,292`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

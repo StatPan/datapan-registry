@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `19830`
-- callable operations: `19688` (`99.3%`)
+- operations: `19860`
+- callable operations: `19718` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `8220`
-- registered adapter operations: `8210`
+- external endpoint operations: `8250`
+- registered adapter operations: `8240`
 - missing adapter operations: `29`
 - external adapter coverage: `99.6%`
-- approval-required operations: `7336`
+- approval-required operations: `7350`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `113`
+- registered adapter hosts: `115`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -564,6 +564,11 @@ readiness, not to advance verified runtime coverage.
    verified checks to `1519`, registered external adapter operations to
    `8210`, and raises API operation coverage to `10,835` of `12,060` APIs
    (`89.8%`).
+   The 해양수산부 국립해양조사원 batch registers KHOA and NOSC host coverage,
+   materializes `18` APIs and `30` operations, and merges `30` verified
+   bounded checks. That brings checked runtime evidence to `3321`, verified
+   checks to `1549`, registered external adapter operations to `8240`, and
+   raises API operation coverage to `10,853` of `12,060` APIs (`90.0%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

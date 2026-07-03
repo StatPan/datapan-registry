@@ -2,17 +2,17 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-07-03T21:55:35Z`
+- Generated at: `2026-07-03T22:12:37Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `10835` (`89.8%`)
-- APIs without operation mapping: `1225`
-- Operations: `19830`
-- Runtime evidence operations: `3291` (`16.6%`)
-- Runtime verified operations: `1519`
+- APIs with operation mapping: `10853` (`90.0%`)
+- APIs without operation mapping: `1207`
+- Operations: `19860`
+- Runtime evidence operations: `3321` (`16.7%`)
+- Runtime verified operations: `1549`
 - Runtime failed operations: `306`
 - Runtime skipped operations: `1466`
-- APIs with runtime evidence: `1543`
+- APIs with runtime evidence: `1561`
 - Runtime reactivation APIs: `9292`
 - Runtime repair APIs: `178`
 
@@ -49,7 +49,7 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 보건복지부 | 71 | 71 | 0 | 100.0% | 71 | 0 | 71 | 0 | 71 |
 | 서울올림픽기념국민체육진흥공단 | 70 | 70 | 0 | 100.0% | 111 | 0 | 70 | 0 | 70 |
 | 충청남도 | 96 | 96 | 0 | 100.0% | 142 | 27 | 69 | 27 | 69 |
-| 해양수산부 국립해양조사원 | 68 | 50 | 18 | 73.5% | 51 | 1 | 49 | 0 | 67 |
+| 한국환경연구원 | 65 | 0 | 65 | 0.0% | 0 | 0 | 0 | 0 | 65 |
 
 ## Sample Uncovered APIs
 
