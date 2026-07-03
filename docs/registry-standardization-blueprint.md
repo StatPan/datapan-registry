@@ -94,9 +94,9 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `2,263` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `2,262` data.go.kr APIs
   without operation mappings, `8,907` operation-mapped APIs without runtime
-  evidence, and `96` APIs with failed runtime evidence that need repair.
+  evidence, and `97` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
   `reports/open-assembly/runtime-evidence-plan.json`, and
@@ -280,8 +280,13 @@ Current gaps:
   verified landing-page checks, bringing runtime evidence to `1824`, completing
   경기도 광명시 materialization at `197` of `197` APIs, and moving the first
   materialization queue to 해양수산부.
-- API operation coverage remains incomplete: `9,797` of `12,060` APIs have
-  operation mappings (`81.2%`), leaving `2,263` APIs to materialize and `8,907`
+- The 해양수산부 GICOMS batch adds `www.gicoms.go.kr` adapter coverage,
+  materializes the remaining `1` API and `1` operation, and merges `1`
+  failed-but-bounded timeout check, bringing runtime evidence to `1825`,
+  completing 해양수산부 materialization at `173` of `173` APIs, and moving the
+  first materialization queue to 제주특별자치도.
+- API operation coverage remains incomplete: `9,798` of `12,060` APIs have
+  operation mappings (`81.2%`), leaving `2,262` APIs to materialize and `8,907`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

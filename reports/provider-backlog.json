@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T17:30:15Z",
+  "generated_at": "2026-07-03T17:43:13Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 237,
+  "filtered_count": 238,
   "summary": {
-    "hosts": 237,
+    "hosts": 238,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 94,
+    "external_endpoint_hosts": 95,
     "external_guide_hosts": 177,
-    "registered_adapter_hosts": 83,
-    "operation_hosts": 96,
+    "registered_adapter_hosts": 84,
+    "operation_hosts": 97,
     "guide_only_hosts": 141,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 5710,
+    "approval_required_operations": 5711,
     "malformed_source_url_count": 643
   },
   "providers": [
@@ -1426,6 +1426,21 @@
       "approval_required_operations": 1,
       "sample_ids": [
         "15071233"
+      ]
+    },
+    {
+      "host": "www.gicoms.go.kr",
+      "provider": "gicoms",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15084033"
       ]
     },
     {

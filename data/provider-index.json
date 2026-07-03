@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T17:30:15Z",
+  "generated_at": "2026-07-03T17:43:13Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 75,
-  "host_count": 85,
+  "adapter_count": 76,
+  "host_count": 86,
   "adapters": [
     {
       "name": "airport",
@@ -258,6 +258,16 @@
       ],
       "capabilities": [
         "call",
+        "verification"
+      ]
+    },
+    {
+      "name": "gicoms",
+      "status": "registered",
+      "hosts": [
+        "www.gicoms.go.kr"
+      ],
+      "capabilities": [
         "verification"
       ]
     },
@@ -791,8 +801,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 75,
-    "verification_capable_adapters": 75,
+    "adapter_count": 76,
+    "verification_capable_adapters": 76,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
