@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-03T19:33:03Z",
+  "generated_at": "2026-07-03T19:52:08Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 18871,
-    "callable_operations": 18729,
-    "specs_without_operations": 1696,
-    "specs_without_callable_operation": 1771,
+    "operations_total": 19022,
+    "callable_operations": 18880,
+    "specs_without_operations": 1611,
+    "specs_without_callable_operation": 1686,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 6533,
-    "operations_without_response_params": 7755,
+    "operations_without_request_params": 6684,
+    "operations_without_response_params": 7906,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 3493,
-      "external_endpoint_operations": 7261,
+      "external_endpoint_specs": 3578,
+      "external_endpoint_operations": 7412,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 114,
       "dev_approval_required_operations": 208,
-      "prod_approval_required_operations": 6600,
+      "prod_approval_required_operations": 6647,
       "malformed_endpoint_url_count": 42,
       "malformed_guide_url_count": 601,
       "top_endpoint_hosts": [
@@ -34,7 +34,7 @@
         },
         {
           "host": "data.gg.go.kr",
-          "count": 2186
+          "count": 2187
         },
         {
           "host": "data.gm.go.kr",
@@ -85,6 +85,10 @@
           "count": 168
         },
         {
+          "host": "data.mafra.go.kr",
+          "count": 156
+        },
+        {
           "host": "seogu.go.kr",
           "count": 154
         },
@@ -103,16 +107,12 @@
         {
           "host": "data.ekape.or.kr",
           "count": 49
-        },
-        {
-          "host": "apihub.kma.go.kr",
-          "count": 45
         }
       ],
       "top_external_endpoint_hosts": [
         {
           "host": "data.gg.go.kr",
-          "count": 2186
+          "count": 2187
         },
         {
           "host": "data.gm.go.kr",
@@ -163,6 +163,10 @@
           "count": 168
         },
         {
+          "host": "data.mafra.go.kr",
+          "count": 156
+        },
+        {
           "host": "seogu.go.kr",
           "count": 154
         },
@@ -185,10 +189,6 @@
         {
           "host": "apihub.kma.go.kr",
           "count": 45
-        },
-        {
-          "host": "c.q-net.or.kr",
-          "count": 42
         }
       ],
       "top_external_guide_hosts": [

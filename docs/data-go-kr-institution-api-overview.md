@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T19:33:03Z`
+- Generated at: `2026-07-03T19:52:08Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `18871`
-- Runtime evidence: `2357` (`12.5%`)
-- External endpoint operations: `7261`
-- Registered adapter operations: `7251`
+- Operations: `19022`
+- Runtime evidence: `2524` (`13.3%`)
+- External endpoint operations: `7412`
+- Registered adapter operations: `7402`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -39,7 +39,7 @@
 | 충청남도 | 96 | 96 | 142 | 65 | 45.8% | 0 | 65 | 0 | 109 | 0 |
 | 한국도로공사 | 93 | 93 | 271 | 271 | 100.0% | 271 | 0 | 0 | 271 | 0 |
 | 기상청 | 89 | 89 | 228 | 68 | 29.8% | 45 | 0 | 23 | 69 | 0 |
-| 농림축산식품부 | 87 | 1 | 2 | 2 | 100.0% | 2 | 0 | 0 | 0 | 0 |
+| 농림축산식품부 | 87 | 86 | 153 | 153 | 100.0% | 151 | 2 | 0 | 47 | 0 |
 | 문화체육관광부 | 86 | 1 | 1 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 한국건강가정진흥원 | 85 | 85 | 90 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 한국수자원공사 | 84 | 79 | 148 | 0 | 0.0% | 0 | 0 | 0 | 4 | 19 |
@@ -74,10 +74,10 @@
 | 대전광역시 서구 | 125 | 125 | 171 | 50 | 29.2% | 50 | 0 | 0 | 171 | 0 |
 | 기후에너지환경부 국립환경과학원 | 48 | 47 | 156 | 8 | 5.1% | 0 | 0 | 8 | 0 | 0 |
 | 식품의약품안전처 식품의약품안전평가원 | 106 | 106 | 154 | 21 | 13.6% | 0 | 0 | 21 | 103 | 0 |
+| 농림축산식품부 | 87 | 86 | 153 | 153 | 100.0% | 151 | 2 | 0 | 47 | 0 |
 | 한국환경공단 | 66 | 65 | 151 | 2 | 1.3% | 0 | 0 | 2 | 40 | 0 |
 | 한국수자원공사 | 84 | 79 | 148 | 0 | 0.0% | 0 | 0 | 0 | 4 | 19 |
 | 충청남도 | 96 | 96 | 142 | 65 | 45.8% | 0 | 65 | 0 | 109 | 0 |
-| 인천항만공사 | 46 | 46 | 141 | 0 | 0.0% | 0 | 0 | 0 | 3 | 0 |
 
 The full machine-readable report is `reports/data-go-kr/institution-api-overview.json`.
 The full coverage backlog is `reports/data-go-kr/coverage-backlog.json`, with
@@ -87,10 +87,10 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 - 공공행정: `2593` operations
 - 교통물류: `2016` operations
+- 농축수산: `1993` operations
 - 문화관광: `1890` operations
-- 농축수산: `1844` operations
 - 사회복지: `1439` operations
-- 산업고용: `1288` operations
+- 산업고용: `1290` operations
 - 식품건강: `1188` operations
 - 환경기상: `1160` operations
 - 보건의료: `983` operations
@@ -99,7 +99,7 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 ## Largest Hosts
 
 - apis.data.go.kr: `11423` operations
-- data.gg.go.kr: `2186` operations
+- data.gg.go.kr: `2187` operations
 - data.gm.go.kr: `607` operations
 - www.vworld.kr: `458` operations
 - www.safetydata.go.kr: `370` operations

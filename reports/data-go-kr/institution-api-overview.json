@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T19:33:03Z",
+  "generated_at": "2026-07-03T19:52:08Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 18871,
-    "runtime_evidence": 2357,
-    "runtime_evidence_percent": 12.5,
-    "callable_operations": 18729,
-    "external_endpoint_operations": 7261,
-    "registered_adapter_operations": 7251,
+    "operations": 19022,
+    "runtime_evidence": 2524,
+    "runtime_evidence_percent": 13.3,
+    "callable_operations": 18880,
+    "external_endpoint_operations": 7412,
+    "registered_adapter_operations": 7402,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 7261
+      "count": 7412
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 7251
+      "count": 7402
     },
     {
       "key": "builtin",
@@ -76,12 +76,12 @@
       "operation_count": 2016
     },
     {
-      "category": "문화관광",
-      "operation_count": 1890
+      "category": "농축수산",
+      "operation_count": 1993
     },
     {
-      "category": "농축수산",
-      "operation_count": 1844
+      "category": "문화관광",
+      "operation_count": 1890
     },
     {
       "category": "사회복지",
@@ -89,7 +89,7 @@
     },
     {
       "category": "산업고용",
-      "operation_count": 1288
+      "operation_count": 1290
     },
     {
       "category": "식품건강",
@@ -139,7 +139,7 @@
     },
     {
       "host": "data.gg.go.kr",
-      "operation_count": 2186,
+      "operation_count": 2187,
       "adapter": "data-gg",
       "adapter_status": "registered",
       "capabilities": [
@@ -256,6 +256,15 @@
       ]
     },
     {
+      "host": "data.mafra.go.kr",
+      "operation_count": 156,
+      "adapter": "mafra",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "host": "seogu.go.kr",
       "operation_count": 154,
       "adapter": "seogu",
@@ -295,15 +304,6 @@
       "host": "data.ekape.or.kr",
       "operation_count": 49,
       "adapter": "ekape",
-      "adapter_status": "registered",
-      "capabilities": [
-        "verification"
-      ]
-    },
-    {
-      "host": "apihub.kma.go.kr",
-      "operation_count": 45,
-      "adapter": "kma-apihub",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -2114,6 +2114,89 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 154
+        }
+      ]
+    },
+    {
+      "organization": "농림축산식품부",
+      "api_count": 87,
+      "operation_api_count": 86,
+      "operation_count": 153,
+      "runtime_evidence_count": 153,
+      "runtime_evidence_percent": 100.0,
+      "verified": 151,
+      "failed": 2,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 47,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "external_endpoint",
+          "count": 153
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 153
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "농축수산",
+          "operation_count": 151
+        },
+        {
+          "category": "산업고용",
+          "operation_count": 2
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "data.mafra.go.kr",
+          "operation_count": 143,
+          "adapter": "mafra",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.smartfarmkorea.net",
+          "operation_count": 6,
+          "adapter": "smartfarm-korea",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.xn--6-6v7en42by2es7i6jc.com",
+          "operation_count": 2,
+          "adapter": "chungnam",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "211.237.50.150:7080",
+          "operation_count": 1,
+          "adapter": "mafra-legacy",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "data.gg.go.kr",
+          "operation_count": 1,
+          "adapter": "data-gg",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },
@@ -6495,8 +6578,8 @@
       "runtime_evidence_count": 4,
       "runtime_evidence_percent": 16.7,
       "verified": 0,
-      "failed": 4,
-      "skipped": 0,
+      "failed": 0,
+      "skipped": 4,
       "unknown": 0,
       "approval_required_operations": 0,
       "no_endpoint_operations": 0,
@@ -13096,49 +13179,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 3
-        }
-      ]
-    },
-    {
-      "organization": "농림축산식품부",
-      "api_count": 87,
-      "operation_api_count": 1,
-      "operation_count": 2,
-      "runtime_evidence_count": 2,
-      "runtime_evidence_percent": 100.0,
-      "verified": 2,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "external_endpoint",
-          "count": 2
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 2
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "농축수산",
-          "operation_count": 2
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "data.mafra.go.kr",
-          "operation_count": 2,
-          "adapter": "mafra",
-          "adapter_status": "registered",
-          "capabilities": [
-            "verification"
-          ]
         }
       ]
     },

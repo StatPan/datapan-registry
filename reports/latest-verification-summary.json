@@ -1,32 +1,32 @@
 {
-  "generated_at": "2026-07-03T19:33:02Z",
+  "generated_at": "2026-07-03T19:51:47Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 2357,
-    "verified": 948,
-    "failed": 212,
-    "skipped": 1197,
+    "total": 2524,
+    "verified": 1101,
+    "failed": 214,
+    "skipped": 1209,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 1197,
+        "count": 1209,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 948,
+        "count": 1101,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 212,
+        "count": 214,
         "status": "failed"
       }
     ],
@@ -38,7 +38,7 @@
       },
       {
         "key": "missing_auth",
-        "count": 294,
+        "count": 298,
         "reason": "missing_auth"
       },
       {
@@ -82,6 +82,11 @@
         "reason": "lofin365_request_failed"
       },
       {
+        "key": "chungnam_http_403",
+        "count": 19,
+        "reason": "chungnam_http_403"
+      },
+      {
         "key": "qnet_missing_required_params",
         "count": 19,
         "reason": "qnet_missing_required_params"
@@ -97,14 +102,14 @@
         "reason": "uiryeong_missing_required_params"
       },
       {
-        "key": "chungnam_http_403",
-        "count": 17,
-        "reason": "chungnam_http_403"
-      },
-      {
         "key": "epost_wadl_metadata_only",
         "count": 17,
         "reason": "epost_wadl_metadata_only"
+      },
+      {
+        "key": "naqs_mutation_endpoint",
+        "count": 16,
+        "reason": "naqs_mutation_endpoint"
       },
       {
         "key": "ulsan_missing_required_params",
@@ -135,11 +140,6 @@
         "key": "korad_wadl_metadata_only",
         "count": 8,
         "reason": "korad_wadl_metadata_only"
-      },
-      {
-        "key": "naqs_mutation_endpoint",
-        "count": 8,
-        "reason": "naqs_mutation_endpoint"
       },
       {
         "key": "humetro_service_access_denied",
@@ -339,13 +339,18 @@
         "provider": "ex"
       },
       {
+        "key": "mafra",
+        "count": 155,
+        "provider": "mafra"
+      },
+      {
         "key": "q-net",
         "count": 147,
         "provider": "q-net"
       },
       {
         "key": "data-gg",
-        "count": 117,
+        "count": 118,
         "provider": "data-gg"
       },
       {
@@ -360,7 +365,7 @@
       },
       {
         "key": "chungnam",
-        "count": 65,
+        "count": 67,
         "provider": "chungnam"
       },
       {
@@ -449,6 +454,11 @@
         "provider": "ulsan"
       },
       {
+        "key": "naqs",
+        "count": 18,
+        "provider": "naqs"
+      },
+      {
         "key": "andong",
         "count": 15,
         "provider": "andong"
@@ -477,11 +487,6 @@
         "key": "jejudatahub",
         "count": 11,
         "provider": "jejudatahub"
-      },
-      {
-        "key": "mafra",
-        "count": 11,
-        "provider": "mafra"
       },
       {
         "key": "consumer",
@@ -514,11 +519,6 @@
         "provider": "culture"
       },
       {
-        "key": "naqs",
-        "count": 9,
-        "provider": "naqs"
-      },
-      {
         "key": "cancer",
         "count": 8,
         "provider": "cancer"
@@ -527,6 +527,11 @@
         "key": "humetro",
         "count": 8,
         "provider": "humetro"
+      },
+      {
+        "key": "pqis",
+        "count": 8,
+        "provider": "pqis"
       },
       {
         "key": "seoul-open-data",
@@ -554,6 +559,11 @@
         "provider": "lh-ebid"
       },
       {
+        "key": "smartfarm-korea",
+        "count": 6,
+        "provider": "smartfarm-korea"
+      },
+      {
         "key": "nfqs",
         "count": 5,
         "provider": "nfqs"
@@ -577,11 +587,6 @@
         "key": "jeju",
         "count": 4,
         "provider": "jeju"
-      },
-      {
-        "key": "pqis",
-        "count": 4,
-        "provider": "pqis"
       },
       {
         "key": "emuseum",
@@ -689,6 +694,11 @@
         "provider": "kofpi"
       },
       {
+        "key": "mafra-legacy",
+        "count": 1,
+        "provider": "mafra-legacy"
+      },
+      {
         "key": "myhome",
         "count": 1,
         "provider": "myhome"
@@ -741,8 +751,13 @@
         "host": "data.ex.co.kr"
       },
       {
+        "key": "data.mafra.go.kr",
+        "count": 155,
+        "host": "data.mafra.go.kr"
+      },
+      {
         "key": "data.gg.go.kr",
-        "count": 117,
+        "count": 118,
         "host": "data.gg.go.kr"
       },
       {
@@ -852,8 +867,13 @@
       },
       {
         "key": "www.xn--6-6v7en42by2es7i6jc.com",
-        "count": 17,
+        "count": 19,
         "host": "www.xn--6-6v7en42by2es7i6jc.com"
+      },
+      {
+        "key": "data.naqs.go.kr",
+        "count": 18,
+        "host": "data.naqs.go.kr"
       },
       {
         "key": "www.andong.go.kr",
@@ -879,11 +899,6 @@
         "key": "open.itfind.or.kr",
         "count": 13,
         "host": "open.itfind.or.kr"
-      },
-      {
-        "key": "data.mafra.go.kr",
-        "count": 11,
-        "host": "data.mafra.go.kr"
       },
       {
         "key": "www.jejudatahub.net",
@@ -916,11 +931,6 @@
         "host": "www.safetydata.go.kr"
       },
       {
-        "key": "data.naqs.go.kr",
-        "count": 9,
-        "host": "data.naqs.go.kr"
-      },
-      {
         "key": "www.culture.go.kr",
         "count": 9,
         "host": "www.culture.go.kr"
@@ -944,6 +954,11 @@
         "key": "data.humetro.busan.kr",
         "count": 8,
         "host": "data.humetro.busan.kr"
+      },
+      {
+        "key": "openapi.pqis.go.kr",
+        "count": 8,
+        "host": "openapi.pqis.go.kr"
       },
       {
         "key": "openapi.tour.go.kr",
@@ -986,6 +1001,11 @@
         "host": "www.codil.or.kr"
       },
       {
+        "key": "www.smartfarmkorea.net",
+        "count": 6,
+        "host": "www.smartfarmkorea.net"
+      },
+      {
         "key": "ws.bus.go.kr",
         "count": 5,
         "host": "ws.bus.go.kr"
@@ -1009,11 +1029,6 @@
         "key": "data.jeju.go.kr",
         "count": 4,
         "host": "data.jeju.go.kr"
-      },
-      {
-        "key": "openapi.pqis.go.kr",
-        "count": 4,
-        "host": "openapi.pqis.go.kr"
       },
       {
         "key": "www.rda.go.kr",
@@ -1074,6 +1089,11 @@
         "key": "www.worldjob.or.kr",
         "count": 2,
         "host": "www.worldjob.or.kr"
+      },
+      {
+        "key": "211.237.50.150:7080",
+        "count": 1,
+        "host": "211.237.50.150:7080"
       },
       {
         "key": "air.jeju.go.kr",
@@ -1199,7 +1219,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 1633,
+        "count": 1800,
         "kind": "external_endpoint"
       },
       {
