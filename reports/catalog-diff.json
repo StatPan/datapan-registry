@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T18:42:11Z",
+  "generated_at": "2026-07-03T18:48:19Z",
   "provider": "data.go.kr",
   "old": ".datapan\\previous-data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,1011 +12,261 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 100,
-    "stable": 11960
+    "changed": 25,
+    "stable": 12035
   },
   "added": [],
   "removed": [],
   "changed": [
     {
-      "id": "15095265",
-      "old_title": "대전광역시 서구_CCTV(생활방범) 현황",
-      "new_title": "대전광역시 서구_CCTV(생활방범) 현황",
+      "id": "15095268",
+      "old_title": "대전광역시 서구_화재사고 사상자 및 화재구조 실적 현황",
+      "new_title": "대전광역시 서구_화재사고 사상자 및 화재구조 실적 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "ac10429383fde255c9480703da945ff5fd38d007c41aadef47d6d7e51ad8f086",
-      "new_digest": "5919dbecf0b8d44cb6d35b1080dd978da9f844e86061cc7ff36cb7b4f84bd8db"
+      "old_digest": "55a79eba304ff3d7d5c935de3b5905abb78da1bd04da2c78e8b9a9899dcb4079",
+      "new_digest": "e530d47f57de4b7ccba37f4ae51f84cc692fc2ef9115bff4078cd8f59119a7b5"
     },
     {
-      "id": "15095267",
-      "old_title": "대전광역시 서구_CCTV(교통단속, 정보수집, 재난재해) 현황",
-      "new_title": "대전광역시 서구_CCTV(교통단속, 정보수집, 재난재해) 현황",
+      "id": "15095270",
+      "old_title": "대전광역시 서구_교통사고 사상자 현황",
+      "new_title": "대전광역시 서구_교통사고 사상자 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "2756ed72e4ec284cb971cf8b748f66cc6d6a05138375d2a0ee241166383f626e",
-      "new_digest": "b6384e16caeba32bc93b2386568a78c42c06d3c097ea45e79311c5835f178c90"
+      "old_digest": "ee1da53cc90a4305d03d6f49f649e8e98391659cdfd6726178c5e31cd0260ae3",
+      "new_digest": "4d95b9dcb1a346ffcfd993e54481d34e34fce3c5ab9ec250b2137ce0b6b57db8"
     },
     {
-      "id": "15095278",
-      "old_title": "대전광역시 서구_어린이보호구역 현황",
-      "new_title": "대전광역시 서구_어린이보호구역 현황",
+      "id": "15095271",
+      "old_title": "대전광역시 서구_안전비상벨 현황",
+      "new_title": "대전광역시 서구_안전비상벨 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "91aaa47dbd905a032a9f06be1cf6a9f74005585e28eac1da9060d505cc4a0ff4",
-      "new_digest": "df373b65e95ce193c593a067269101e1641cc85cc213951920f711bf0dd94a36"
+      "old_digest": "b50b3d19770517e4bd716cf955ff773fdd9b4f6e278b71f1949c0836fc670072",
+      "new_digest": "93078275bfdb7c8af643b93733e5d183ee8786a7fa4bff2fdad1bd037f985a92"
     },
     {
-      "id": "15095279",
-      "old_title": "대전광역시 서구_초등학교 위치 현황",
-      "new_title": "대전광역시 서구_초등학교 위치 현황",
+      "id": "15095273",
+      "old_title": "대전광역시 서구_보안등 현황",
+      "new_title": "대전광역시 서구_보안등 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "c9b58e81a44f6f2eb65ea29d875a9d76c54b5d2a45f836827f73e8f744dc5241",
-      "new_digest": "3c5646746a6f340fbbb721f93f5a3f3eb04cf873cc4cb3c521a90cef326cfee9"
+      "old_digest": "49c8661c3571de3a4462102f36fa5d9807edb636972d2c49a055b7b7523ea442",
+      "new_digest": "c1f90eb4456a0fed86b288fed31d48689b8464f040944bf3b74d6bedebf12668"
     },
     {
-      "id": "15095280",
-      "old_title": "대전광역시 서구_중학교 위치 현황",
-      "new_title": "대전광역시 서구_중학교 위치 현황",
+      "id": "15095275",
+      "old_title": "대전광역시 서구_경찰서  현황",
+      "new_title": "대전광역시 서구_경찰서  현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "c1699203da67d3c922747bb46d24ba2ab843bb023073552e84a19372f658f7c0",
-      "new_digest": "e9adf32d96a5420a55f839fef0309f0fc10c2ae149ec7f1e8dd6bd7018d4940d"
+      "old_digest": "8de080a7feacdb4a66836e42ab48649f735aee09ae0d4d8e7efe04fd13960248",
+      "new_digest": "e851692f7927d4d85d4a8b9e8af2db45b37b5bdb18cf4ffcf40e83d85a8fa76d"
     },
     {
-      "id": "15095281",
-      "old_title": "대전광역시 서구_고등학교 위치 현황",
-      "new_title": "대전광역시 서구_고등학교 위치 현황",
+      "id": "15095276",
+      "old_title": "대전광역시 서구_자율방범대 초소 현황",
+      "new_title": "대전광역시 서구_자율방범대 초소 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "584069fc8e1ab47466c35e52a867789d94024ba26073374d54617d41af0cb48d",
-      "new_digest": "aa682115d514de569666f6d298fdf1285df57017ec328150d16177605ca7dfb9"
+      "old_digest": "f0f45fc04ae4421cc5f694607a3d572b0058504db3c2164f4cdcaca24eca556e",
+      "new_digest": "5de2a76b9ce5981994c15486fb5398840f81282298ba2b1c338649bc357dea99"
     },
     {
-      "id": "15095283",
-      "old_title": "대전광역시 서구_여성안심지킴이집 현황",
-      "new_title": "대전광역시 서구_여성안심지킴이집 현황",
+      "id": "15095286",
+      "old_title": "대전광역시 서구_의료기관 현황",
+      "new_title": "대전광역시 서구_의료기관 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "42f006f75ba0e7950ebaf9b8e4382c3d5296f6529b17676b9999aa7283d1c065",
-      "new_digest": "fe31d5a038fe2ade5c14ee67f0745c77fe7ba4bb7d75bff0ea312ddcdd33fcaf"
+      "old_digest": "241493fd5720d21be0a60113950ce0151c314a2930fbf951b8dd72f2df2d272e",
+      "new_digest": "7c14d5c5efce3893c99ee1344ec0fad5fe045d8486edd931ae0578b28940e612"
     },
     {
-      "id": "15095285",
-      "old_title": "대전광역시 서구_주택건물시설 현황",
-      "new_title": "대전광역시 서구_주택건물시설 현황",
+      "id": "15095290",
+      "old_title": "대전광역시 서구_장애인인구정보 현황",
+      "new_title": "대전광역시 서구_장애인인구정보 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "aeb0d7f17431195d8bf4577bd15a14230e8f8a36d0c7b5a36b1830e56b4af41b",
-      "new_digest": "4d06a99e247226378e2a2bcaed082005cc7ece78e8e882486fa188e2417fdd2e"
+      "old_digest": "b269710e9e831b50981c73c0dbc68a576f1253f2798cdf258446b183ea460c15",
+      "new_digest": "d41bd086d6dc55beac4e703895fcc650b450313d9e1c0dcabc48b454a0c8ce5e"
     },
     {
-      "id": "15095289",
-      "old_title": "대전광역시 서구_주민등록인구정보 현황",
-      "new_title": "대전광역시 서구_주민등록인구정보 현황",
+      "id": "15095292",
+      "old_title": "대전광역시 서구_소방서 현황",
+      "new_title": "대전광역시 서구_소방서 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "39a7d95c4e9b4a5bbceb41635587e61f8ae9c8b53035ab2b0a9e5bc9a56d01f5",
-      "new_digest": "bf4b2749ff5b95fa5dbc655dc17ceec4cd8ca4f915f9a9c270ee3657bdd27c8b"
+      "old_digest": "164b22e7171da1465cf1c0663fdd05e60a27318c878346a32fff3039411c9ed6",
+      "new_digest": "86bf685b5e9f22c5de897a490bc95952bdb98fb7885c75ccf367c0070b5daa5e"
     },
     {
-      "id": "15095293",
-      "old_title": "대전광역시 서구_유치원 위치 현황",
-      "new_title": "대전광역시 서구_유치원 위치 현황",
+      "id": "15108150",
+      "old_title": "대전광역시 서구_대기배출시설등록현황",
+      "new_title": "대전광역시 서구_대기배출시설등록현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "d3b1793b7e6612dd9f3fd50ba6db8e78dadbfca3d338c1de2796b193b0613aab",
-      "new_digest": "22988bda5f37d76481c8861e1e6a29cc75f55c200b5cf23f4f6289f98c2c3625"
+      "old_digest": "62899da9a65ec6644fc95b592fbae3112c752d496d41fd06727e0ab79c9dce2e",
+      "new_digest": "169259824e47bb426b9a163943c15099023f1b976380df9d7c10acaa0f8dcff1"
     },
     {
-      "id": "15095294",
-      "old_title": "대전광역시 서구_CCTV(주차단속) 현황",
-      "new_title": "대전광역시 서구_CCTV(주차단속) 현황",
+      "id": "15108156",
+      "old_title": "대전광역시 서구_모범음식점지정현황",
+      "new_title": "대전광역시 서구_모범음식점지정현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "3779dc4a6af97908be81ff02e08976b69c7b593f726e5ebc5b4ea64f80afd736",
-      "new_digest": "9ab3ea6d5e2c5a06abf66de80c0838b20af816693b491c04cebed999c48da8a0"
+      "old_digest": "2058bd2c24cb9fff466a406ce91805982249476e787b8888abad53418542b2de",
+      "new_digest": "bc3895c6bac4f113d7be48881414fbc9263c296fddf74b8f39849df4023fd4e1"
     },
     {
-      "id": "15108137",
-      "old_title": "대전광역시 서구_가수원도서관도서현황",
-      "new_title": "대전광역시 서구_가수원도서관도서현황",
+      "id": "15108159",
+      "old_title": "대전광역시 서구_복지자원연계현황",
+      "new_title": "대전광역시 서구_복지자원연계현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "fa44f7435580fdb6528f473ac4549e092d98272932dd939399a223d89d0e3b0f",
-      "new_digest": "f3be1d616e8e8798786256cdfad9b3cac8ad08a0b1a6dcd4a7f11300b0e8782b"
+      "old_digest": "14e7c5fafa1dc70d28b1e523e7441abe5a3be6fed39f1749c4f15aeb0fad71be",
+      "new_digest": "9a7d4afaa42a9c16808599b4b5ac4056ccd2f51e49c8fa42a736dc6bb791029f"
     },
     {
-      "id": "15108138",
-      "old_title": "대전광역시 서구_갈마도서관도서현황",
-      "new_title": "대전광역시 서구_갈마도서관도서현황",
+      "id": "15108161",
+      "old_title": "대전광역시 서구_안전상비의약품판매업현황",
+      "new_title": "대전광역시 서구_안전상비의약품판매업현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "50dca35feec0f4db913ee86d2e2dfeea513cdc4430d909232c5b83d37c2a5d0a",
-      "new_digest": "5a7da623a4adbda1a28d8a61cd498651a20283595828a64354a7d98955241af7"
+      "old_digest": "56eb120b4794e8133f74698d3f7d0a4a628a72c5c3d9fb0bca036cd29a0048c1",
+      "new_digest": "535dce78ffe158f1775ff74a578313397ac8fda053d9a9a8cee21b7417f9bca3"
     },
     {
-      "id": "15108145",
-      "old_title": "대전광역시 서구_개방화장실현황",
-      "new_title": "대전광역시 서구_개방화장실현황",
+      "id": "15108165",
+      "old_title": "대전광역시 서구_응급의료장비설치신고현황",
+      "new_title": "대전광역시 서구_응급의료장비설치신고현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "b4f37b3ea60f0ca04b95f996409524e5949a126d76449581374d2b5bdb75d81e",
-      "new_digest": "d254526fcddc5d243ad386f58b4deb7654d7c0d5238939724e1722048cabb264"
+      "old_digest": "9dc8f8acbc1755b5cfd5dd77b347e966ccf7bc0107124fde75267cd5bf958a0f",
+      "new_digest": "594b11c8f8fa218b4aef86a1e0abe281c1bdbacb7442ae5d731d1ef2fba0f486"
     },
     {
-      "id": "15108146",
-      "old_title": "대전광역시 서구_건축신고현황",
-      "new_title": "대전광역시 서구_건축신고현황",
+      "id": "15108166",
+      "old_title": "대전광역시 서구_일반음식점현황",
+      "new_title": "대전광역시 서구_일반음식점현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "d7c54481281409fb091be4a34441323801f5c84714f56e6b84ca5fb6aa123f30",
-      "new_digest": "1b171a366b2062b6aea33eedc830177f6a3fc18b421bfd687cfe76bc4d9c9ff6"
+      "old_digest": "82cf973443f7e422319015b0801173b0ef29e44c3d57613b990fb0a75457ab49",
+      "new_digest": "d8eb4fa481309f04de95b6826ee67b3270a8883a82bbab59d27b5a2a749eae1b"
     },
     {
-      "id": "15108147",
-      "old_title": "대전광역시 서구_건축허가현황",
-      "new_title": "대전광역시 서구_건축허가현황",
+      "id": "15108167",
+      "old_title": "대전광역시 서구_임산부우대업소현황",
+      "new_title": "대전광역시 서구_임산부우대업소현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "f4e7f75462a1ef0b5f3060aa2219a3596d26ee064f530fab250d54ca3bc60686",
-      "new_digest": "6475349558d7bdf0244b2cb6fed5895167a788be3cd71a103f9ab8c6d909d57b"
+      "old_digest": "fdb6aff01584100868a9b1ab450fea150a9ce9d61912ba5ecc6a21c75d1f5881",
+      "new_digest": "f17b50de493f070542bc6037d6d6ce8784194569419811f0ce78ab27d43cd462"
     },
     {
-      "id": "15108148",
-      "old_title": "대전광역시 서구_게임산업등록현황",
-      "new_title": "대전광역시 서구_게임산업등록현황",
+      "id": "15108169",
+      "old_title": "대전광역시 서구_재난예경보시설현황",
+      "new_title": "대전광역시 서구_재난예경보시설현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "7a06f01d7e2bf4e747c3ba0164a55b4cdecf5b226b083cd7dc7b5dd51f5580f2",
-      "new_digest": "9f4996e9c988e1d39ec9bb39a0d30bca41cc03b2a2b7928a7cdea4279cffb843"
+      "old_digest": "d120502b2e04a3451235d3590cb3baefbcd097e33f29f3c279909f25f3459913",
+      "new_digest": "dad40cfb7fe2ba84366541f741dc3805c6905887f459af0196c67cef53b239ee"
     },
     {
-      "id": "15108153",
-      "old_title": "대전광역시 서구_둔산도서관도서현황",
-      "new_title": "대전광역시 서구_둔산도서관도서현황",
+      "id": "15108174",
+      "old_title": "대전광역시 서구_취약보육어린이집지원현황",
+      "new_title": "대전광역시 서구_취약보육어린이집지원현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "84a27650aa4cd191b16933198f31355b2b0c7718494e328ec6f19fec17d65991",
-      "new_digest": "a60a554b0c62c1cc87b604bc571ca00c0a7b9ac0728c5a9c7069b15bf5a6646b"
+      "old_digest": "d8ec05d35d135480d92e21e7ae37be080ebd63603e59af21f21cc295f3ff779c",
+      "new_digest": "735a252c7c22972e27ceca278c40de0299bf060335f8fa1268e9b60c66de955f"
     },
     {
-      "id": "15108154",
-      "old_title": "대전광역시 서구_디지털자료(DVD)현황",
-      "new_title": "대전광역시 서구_디지털자료(DVD)현황",
+      "id": "15108176",
+      "old_title": "대전광역시 서구_치매시설현황",
+      "new_title": "대전광역시 서구_치매시설현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "ed66907b70ec379ef3549b5e12767da487b58f649617b20b4ed8d04f3ef33898",
-      "new_digest": "f226ffe43c01ef305e62537dc4dbae531ec9710d15abeb1b1fab4b5a33e43cc0"
+      "old_digest": "fb52878c79d06b58d6130f8bb2c771530b11c9889525f0a519fca406692813da",
+      "new_digest": "f67c1933dd46122172cec8e1f0fa9d6fe838db17e2b34c88dda3baa9761113ec"
     },
     {
-      "id": "15108157",
-      "old_title": "대전광역시 서구_무단방치차량단속현황",
-      "new_title": "대전광역시 서구_무단방치차량단속현황",
+      "id": "15108181",
+      "old_title": "대전광역시 서구_폐수배출시설현황",
+      "new_title": "대전광역시 서구_폐수배출시설현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "5f1cd8705f9151cad42a659124bb11074c4963d2bf5ca9dcd4aae60f5612e997",
-      "new_digest": "d5d91a64ea45bc17acac6523441054b51e58acaf93f354677c45aceee3bfbcf6"
+      "old_digest": "2c436494f3d4b6fd248c35080b1bea86f362fcefdefd46024a0816578b03186c",
+      "new_digest": "343ab26a65cacaef9b184999ce123be7d61695b33c1c0dd3559b46eb0e26fd3a"
     },
     {
-      "id": "15108158",
-      "old_title": "대전광역시 서구_무료와이파이현황",
-      "new_title": "대전광역시 서구_무료와이파이현황",
+      "id": "15108184",
+      "old_title": "대전광역시 서구_폐의약품수거함현황",
+      "new_title": "대전광역시 서구_폐의약품수거함현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "e06bc58e2ff85a6ae5f631cecb19d59bedaf25abbc871687998206062bb6c0fb",
-      "new_digest": "a7bbc330cebb5a0016a094af7dfe794bebf2a29e0c57a33a0d748394e35e147f"
+      "old_digest": "d0ee59f53b1ffaea7107461e62896235c0e907ff4cbb7105661e28a7c3eeaecb",
+      "new_digest": "9c8b5f26804c2deada0645435bd6b01bde96896401ae99fed5fa17f9eff16716"
     },
     {
-      "id": "15108160",
-      "old_title": "대전광역시 서구_소화전주변 불법주정차단속현황",
-      "new_title": "대전광역시 서구_소화전주변 불법주정차단속현황",
+      "id": "15108186",
+      "old_title": "대전광역시 서구_환경오염신고현황",
+      "new_title": "대전광역시 서구_환경오염신고현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "38c11e0e1a7bb3e73d88a5f62143c169139c2626c33ebd3a62a81ccb6feb1e69",
-      "new_digest": "749ee1befc15fbccc337d7d627eaa03ba6c97ec8222c4a9fa327c79312615714"
+      "old_digest": "03cd913217efde9aaa9d861a35b7aa8dfb872619d9b3c774a8ec41e3313de00a",
+      "new_digest": "dfce4afa7420e122567d1b2005cd77635767fbc4cb8f2e773185ab56595b653f"
     },
     {
-      "id": "15108162",
-      "old_title": "대전광역시 서구_어린이도서관도서현황",
-      "new_title": "대전광역시 서구_어린이도서관도서현황",
+      "id": "15108964",
+      "old_title": "대전광역시 서구_행정동별 업종별 인허가업소 현황",
+      "new_title": "대전광역시 서구_행정동별 업종별 인허가업소 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "aa00880502c2182b28ac272e54ba3ea446ad6b1a447acf772f11f0adcc9f9229",
-      "new_digest": "b6026e288d05e71b4482fce73cb5579389548db21b7d0fc5855aabfcaadee4f1"
+      "old_digest": "2f9e8d2a9747a929390821f62c643155271ca357a08dc0573214a58eefcdee3a",
+      "new_digest": "a23179f49feeb396cbdb7f9ecb2b690c7357e6e1b561796a5c46d4df282e1fbc"
     },
     {
-      "id": "15108163",
-      "old_title": "대전광역시 서구_어린이보호구역불법주정차단속현황",
-      "new_title": "대전광역시 서구_어린이보호구역불법주정차단속현황",
+      "id": "15108973",
+      "old_title": "대전광역시 서구_상권별 업종별 인허가업소 현황",
+      "new_title": "대전광역시 서구_상권별 업종별 인허가업소 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "ceb9266990967d3b3cfb9c34ba8b646f83118988b6a06f37986f4676e381d5de",
-      "new_digest": "aeb11a37c19a59c8d15c67877bd05ae2d65dde44ca4aa86acb0bbf3f051a06b1"
+      "old_digest": "f3ff7e8bb454c6bb0f4e0b765e747d073de569ca26846ccc6fac17865ede2b10",
+      "new_digest": "9497efb09d5bddfb3cb5dc433b8f5962fa7bc482c0faafa1a5795c790c70d151"
     },
     {
-      "id": "15108164",
-      "old_title": "대전광역시 서구_월평도서관도서현황",
-      "new_title": "대전광역시 서구_월평도서관도서현황",
+      "id": "15108978",
+      "old_title": "대전광역시 서구_상권별 업종별 신생업소 생존률",
+      "new_title": "대전광역시 서구_상권별 업종별 신생업소 생존률",
       "fields": [
         "operations"
       ],
-      "old_digest": "7a46ba0fa055c4470a24ab83409eee9fe49344d734efb27793a9d463bfc5b483",
-      "new_digest": "129e004cf92882d2d10e3df954d00f687adb7fb383b262318cbdb90809de7e60"
-    },
-    {
-      "id": "15108170",
-      "old_title": "대전광역시 서구_제과점현황",
-      "new_title": "대전광역시 서구_제과점현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "08c1d6436d50900eabce1f9979e97829a301730e18df0ff34d7aa6a912a77a8c",
-      "new_digest": "8cbaa140012a1352eb88f980bef7d38b87e8e01ef045b0eefafb151076548147"
-    },
-    {
-      "id": "15108173",
-      "old_title": "대전광역시 서구_종량제봉투지정판매소현황",
-      "new_title": "대전광역시 서구_종량제봉투지정판매소현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "711bc5afaa2b53ceac14f0f8460dad71f90d81d53873fbce736d652ca0377369",
-      "new_digest": "6fe4579ba175463d8cd4c46da78c79421155074d7182d9a97ce2fc57b445203a"
-    },
-    {
-      "id": "15108189",
-      "old_title": "대전광역시 서구_휴게음식점현황",
-      "new_title": "대전광역시 서구_휴게음식점현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "1a2f23d03c4e07a6f852d9585589557ca8998a2d9247d2dda6663aa35ca3cf3e",
-      "new_digest": "44414f12ffd1770a6c2347e262e9e5ce0085f2cd3410914141197b4fe962f53f"
-    },
-    {
-      "id": "15108957",
-      "old_title": "대전광역시 서구_상권별 시간대별 유동인구 현황",
-      "new_title": "대전광역시 서구_상권별 시간대별 유동인구 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "50dc2148d005e899579f9a1603892e6679e002617fbe67cc746afdbe3367ce6d",
-      "new_digest": "7380d8a5d202d429f73f5cf5f191ef8f24d270a3e1496fc166bd261d24b5f0f9"
-    },
-    {
-      "id": "15108966",
-      "old_title": "대전광역시 서구_행정동별 시간대별 유동인구 현황",
-      "new_title": "대전광역시 서구_행정동별 시간대별 유동인구 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "498fd6019a31960b0b84c72028a8202ec46cdf249b4912fd0072559b7336a3a4",
-      "new_digest": "5c2c69c66a150c5d3ee665417474493a0edc6d8de2f9409282ca438929bd3efe"
-    },
-    {
-      "id": "15108967",
-      "old_title": "대전광역시 서구_행정동별 연월별 유동인구 현황",
-      "new_title": "대전광역시 서구_행정동별 연월별 유동인구 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "93542feeb50c7efb1fb86d9c62dfbeda23e480f26b5a0c506e7e7b00ed58a257",
-      "new_digest": "3259f8d643f790032e2ebfc68842ef34ed9a495f0ec5df99fde9d80c8412cad6"
-    },
-    {
-      "id": "15108971",
-      "old_title": "대전광역시 서구_상권별 연령대별 유동인구 현황",
-      "new_title": "대전광역시 서구_상권별 연령대별 유동인구 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "279aa479233bb8ef7f72dfc890d80861d933ba6eadf3cff11dd2b6d30c95a279",
-      "new_digest": "a6f88bb7bf26ed8f67d33d9ca77d78d2fc3edffd1b346a95ac3ebbb0148a1fc8"
-    },
-    {
-      "id": "15108979",
-      "old_title": "대전광역시 서구_상권별 업종별 상권변화",
-      "new_title": "대전광역시 서구_상권별 업종별 상권변화",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "0780857b65f14904167d10c397396abeca737281e653eceb3213d04ec089d2b9",
-      "new_digest": "858dc29bc092c743f3e60c762797b77983eaf1e0e3e6796dca4e76683a4e2c02"
-    },
-    {
-      "id": "15108982",
-      "old_title": "대전광역시 서구_상권별 연월별 유동인구 현황",
-      "new_title": "대전광역시 서구_상권별 연월별 유동인구 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "07b5c7fdd6c7333e9d966ff6cc2b2b95e39ae1ca11437a1cc8197aff3622461f",
-      "new_digest": "5391e376cdabe99fb2590bb842ba2200573344273632954a0d39724fb215662a"
-    },
-    {
-      "id": "15108983",
-      "old_title": "대전광역시 서구_상권별 연령별 주민등록인구 현황",
-      "new_title": "대전광역시 서구_상권별 연령별 주민등록인구 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "740167ab5a96cc3bf992fc804c1fd838bcac7ff258a80d983c65b65c5c260241",
-      "new_digest": "00fe5e0d284b643b51cdffffe89c33a4db08a0047aec058762055ef8c974c754"
-    },
-    {
-      "id": "15108984",
-      "old_title": "대전광역시 서구_상권별 업종별 연차별 생존율 현황",
-      "new_title": "대전광역시 서구_상권별 업종별 연차별 생존율 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "b303da4767224352393f695927378968d74de1483d2f9d50827161289369d223",
-      "new_digest": "43a85ad871e7e62812dfc4ebb9b8b3bf57d97e8a8bd6d0319df943b7764d22dc"
-    },
-    {
-      "id": "15108985",
-      "old_title": "대전광역시 서구_상권별 업종별 개폐업소수(률)",
-      "new_title": "대전광역시 서구_상권별 업종별 개폐업소수(률)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "bde5c00b12f9afdf1ee9228ae40de4d413514ce0dde9cadaf059ad80ec084151",
-      "new_digest": "bca9295a0f1db63f4822b252c407a3526e33441f050319f190b58b57b64a640c"
-    },
-    {
-      "id": "15108987",
-      "old_title": "대전광역시 서구_상권별 영업상태별 업소 현황",
-      "new_title": "대전광역시 서구_상권별 영업상태별 업소 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "f0682c141722fd709bb3747af396cc02dc1ce0fe9c2f9edf651d15005a198b28",
-      "new_digest": "1e31b4cb34db374a4b312cb1004cc06f383f9bed6f6cf517ee0b1a7871e71a01"
-    },
-    {
-      "id": "15108988",
-      "old_title": "대전광역시 서구_행정동별 업종별 착한가격업소 현황",
-      "new_title": "대전광역시 서구_행정동별 업종별 착한가격업소 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "919e0d4b282f3f1bcb7e300e00034827949bd07aba1cee7ad1016ab8ad8e3971",
-      "new_digest": "d9013cbee4a6a739dd0e04a9bba01ab4a601317c633062a2d7e5f62bfb0aee93"
-    },
-    {
-      "id": "15108990",
-      "old_title": "대전광역시 서구_행정동별 업종별 생존업소 평균영업기간",
-      "new_title": "대전광역시 서구_행정동별 업종별 생존업소 평균영업기간",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "6fb1a88dbd6a213bba8faf0ea62e274f4aac3a503904f05031393fc24c8a9e19",
-      "new_digest": "68e0b78b7199fa5a6e491f230a1507684debfe72885b9b9e9e367b6ae5f812b5"
-    },
-    {
-      "id": "15108991",
-      "old_title": "대전광역시 서구_\t행정동별 업종별 폐업소 평균영업기간",
-      "new_title": "대전광역시 서구_\t행정동별 업종별 폐업소 평균영업기간",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "f9fada2d189220c21f5ea6145523a267d19f7e8a9d31aca983a6f03010608315",
-      "new_digest": "b74f90ddc7386110ad7145aa7d885992f6a61639b4fee030ccf31a0f8c41b43d"
-    },
-    {
-      "id": "15109957",
-      "old_title": "대전광역시 서구_행정동별 연령대별 유동인구 현황",
-      "new_title": "대전광역시 서구_행정동별 연령대별 유동인구 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "d0535ec6f9acd09747a0d728e6409130664b72cff6739ccee5fd711fd84b406d",
-      "new_digest": "2f59cf48b0382eb6ac9eaa9e6bfdab891a2e2311ed5fc71aef301d2c5a5eb452"
-    },
-    {
-      "id": "15109959",
-      "old_title": "대전광역시 서구_상권별 업종별 업소과밀도",
-      "new_title": "대전광역시 서구_상권별 업종별 업소과밀도",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "f3c775d628d8b335461ae5c6e35c639800906e4cf16ccd0d4b29610cf2a46a87",
-      "new_digest": "105f3affecce95f826435d1c2e751594fc5cc354f57edaf5eb7864dff45cf018"
-    },
-    {
-      "id": "15112450",
-      "old_title": "대전광역시 서구_안경업소",
-      "new_title": "대전광역시 서구_안경업소",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "25d6d5521aaef53026ecd365bdca62a246eb953b50f2ec97fb982bd2c077dd3a",
-      "new_digest": "baeba4d34d9295bbd6cedf254c1a70708db0eae791feba85443c472887f58730"
-    },
-    {
-      "id": "15112451",
-      "old_title": "대전광역시 서구_경로당",
-      "new_title": "대전광역시 서구_경로당",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "da95e622cc49774614e052c977d02233df2f97f7c13ff4ede84d8d17166d7df7",
-      "new_digest": "0cc2bc984b8e57b046b9c1a0855deb6fdfbb19b67fb142c0e97d7b11a7a0270a"
-    },
-    {
-      "id": "15112452",
-      "old_title": "대전광역시 서구_자동심장충격기",
-      "new_title": "대전광역시 서구_자동심장충격기",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "7caab3ceb26477892d29b173be014f74a5731ea922c3bd3055c555aae0710e7e",
-      "new_digest": "38c56c136e3cffbe39a9d18a5d2da97e4652e73748e8993a63e57f326c164292"
-    },
-    {
-      "id": "15112454",
-      "old_title": "대전광역시 서구_금연구역",
-      "new_title": "대전광역시 서구_금연구역",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "90c23f932eb59b7d8abbbc261aedb952c41ba9e9774ae706848b1f26da08c6e6",
-      "new_digest": "9ee3b59fc6918ed28ff058def450382008be0b039c28cd772cf5312874135055"
-    },
-    {
-      "id": "15112459",
-      "old_title": "대전광역시 서구_부동산중개업",
-      "new_title": "대전광역시 서구_부동산중개업",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "7716ee85d351c116ecaa2c1a74f68e694b74e9e5cc76ae51bd44611b3a260e07",
-      "new_digest": "6c65af6bdf36866f32f3c7f3983bd1b78b29f82f51d35c01b59567f78431bb2e"
-    },
-    {
-      "id": "15112461",
-      "old_title": "대전광역시 서구_동물병원현황",
-      "new_title": "대전광역시 서구_동물병원현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "2efefc515346930a6c109062ddd300c76076b3993b75d985d1768b2b4f07ff60",
-      "new_digest": "30969849495eac7ba8d3e1fb4719797e879f4dcdd66c9bdb7259e72e1b9cc830"
-    },
-    {
-      "id": "15112463",
-      "old_title": "대전광역시 서구_미용업소",
-      "new_title": "대전광역시 서구_미용업소",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "562e66c3b701764c1a1dfd27aa8f30e597232bee31e5e3478e55a3c3020e0009",
-      "new_digest": "bc9bfc8708c95d2463e091288d833568782789630a177eb3124c24a2103a0976"
-    },
-    {
-      "id": "15112464",
-      "old_title": "대전광역시 서구_약국",
-      "new_title": "대전광역시 서구_약국",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "4b3406a87e9ee86058bf0fc4827732c9af79cfaff9d0119fbd7e7e5cae836e6e",
-      "new_digest": "bfb682dfb718dfc9584e98b7ce569b83055be59c4170b9c8b338794617c8caaf"
-    },
-    {
-      "id": "15112469",
-      "old_title": "대전광역시 서구_공중화장실 현황",
-      "new_title": "대전광역시 서구_공중화장실 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "27c312907090e4f5d28417bdb80144533f7d58624162a982cc9a0d24872ecaec",
-      "new_digest": "0eb64af86ab781c9efa692a2811fff10178d13d3e00a9394ec29e2f4f3a7a908"
-    },
-    {
-      "id": "15112471",
-      "old_title": "대전광역시 서구_어린이집",
-      "new_title": "대전광역시 서구_어린이집",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "94ba4445d0351d67a4904a2e6e838de42b640f5da7dae680b2bfe9606fe43ed6",
-      "new_digest": "1d2b213b642de18f7330375796eb9113d839c394248b8562ae97638cf3a37aad"
-    },
-    {
-      "id": "15113309",
-      "old_title": "대전광역시 서구_치과기공소 현황",
-      "new_title": "대전광역시 서구_치과기공소 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "b1bec668ed3312d3a272de61cfb04a8b760d6347f421490ae6dd09af6c4c17ed",
-      "new_digest": "36fda7587d0f8b14d1155fe8b766e81b729b6c0d6fa9096357eeaf4ea4698524"
-    },
-    {
-      "id": "15127401",
-      "old_title": "대전광역시 서구_경찰서 현황",
-      "new_title": "대전광역시 서구_경찰서 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "1e9080e1cb0ab857151222047435ee12be80245168289b22ecd5e19c3a8a8e26",
-      "new_digest": "385bbb214a553bdb6b666d2ba572400862630a45a3edb832a322ee44451d6d48"
-    },
-    {
-      "id": "15127957",
-      "old_title": "대전광역시 서구_노인보호구역 현황",
-      "new_title": "대전광역시 서구_노인보호구역 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "7bdaa862b729592042cb10986e804b0277188e2a4304badbca07e2b17da8fd01",
-      "new_digest": "929de3f02371eb71ceffeec5fabed1b5fd1a85030155d8a3126cb55101b35442"
-    },
-    {
-      "id": "15127958",
-      "old_title": "대전광역시 서구_PP마대(특수규격봉투) 판매소현황",
-      "new_title": "대전광역시 서구_PP마대(특수규격봉투) 판매소현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "6d666458e34773351b7ce5704453e133125a735490a7aa9ad84818f803950e1d",
-      "new_digest": "393e0469eb905c508aa25ffde51c1e2c50cc48d71a4b4f4532401c42af7e7ff4"
-    },
-    {
-      "id": "15127959",
-      "old_title": "대전광역시 서구_유료공영주차장현황",
-      "new_title": "대전광역시 서구_유료공영주차장현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "64caf18973ec1c29eb20a202ebb5adf5f22713816e12a6ea39584e61af2b037f",
-      "new_digest": "ca5e97b1efbade51247605481791dd22db4ed5d991cb497ebbadf40d184f57b0"
-    },
-    {
-      "id": "15127960",
-      "old_title": "대전광역시 서구_치과병의원 현황",
-      "new_title": "대전광역시 서구_치과병의원 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "16f480cdbaf29a789b2c3f8c88e662fd3f5ba965319894adf5a407c9ead30702",
-      "new_digest": "a2e7ddf728b0e881fef2eb3684986130554947867e107dc5a35942b26d33ea7b"
-    },
-    {
-      "id": "15128299",
-      "old_title": "대전광역시 서구_대형폐기물 수수료정보",
-      "new_title": "대전광역시 서구_대형폐기물 수수료정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "cddce742909e9f3c58a88055eaa45a30e988f4ea3317134ca76ee0cae6a0f745",
-      "new_digest": "d02bb71b6845a89ec5ffda955c7570053833d2b03033ac54964d598517cafde3"
-    },
-    {
-      "id": "15128300",
-      "old_title": "대전광역시 서구_주민자치센터 프로그램 정보",
-      "new_title": "대전광역시 서구_주민자치센터 프로그램 정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "013c4cfa45505dd1037c4dbf198e1e3faaa7ef0af4f4d1b783132d3414018a23",
-      "new_digest": "fcf258b7da442250d12a482066ead025d3e88ad906c3055820e72602d8be316e"
-    },
-    {
-      "id": "15128301",
-      "old_title": "대전광역시 서구_축산현황 및 가금류 사육현황",
-      "new_title": "대전광역시 서구_축산현황 및 가금류 사육현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "4b8c7cb88ab873f5a586e92120584287bcf83c24fcb0d3868c78e4c82500236a",
-      "new_digest": "e00d479be7157c1a24a0e84bfa4a4ef0dad3bf90cc06a813d89373bb84d3463d"
-    },
-    {
-      "id": "15128302",
-      "old_title": "대전광역시 서구_공동주택 시공 현황",
-      "new_title": "대전광역시 서구_공동주택 시공 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "7e6601c9d7583f41e5c01970ad65dc1ae502484a805021dafa7ca801b1362d9f",
-      "new_digest": "eb666e3dffa63bd660ff2f8011aff700583a9a16b48c45c411f423cd92ea51ed"
-    },
-    {
-      "id": "15128303",
-      "old_title": "대전광역시 서구_대형폐기물 배출 처리 현황",
-      "new_title": "대전광역시 서구_대형폐기물 배출 처리 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "b946125fd663ac92b2f6f48b60cb1d5d90a0ae527f7ad514a9357cbc13e9c744",
-      "new_digest": "82d24e39c0744d83140659a5c790a9d33888c7358e9af73c9e34f19947a1b2e1"
-    },
-    {
-      "id": "15128304",
-      "old_title": "대전광역시 서구_도로건설 현황 정보",
-      "new_title": "대전광역시 서구_도로건설 현황 정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "4980be58e112356c3abf6766622a8f4f6e104d2daf50205b30633abf0fff5169",
-      "new_digest": "9ab2f0846b68d5077b1ab7af5dfe51ec2fa3b155e90ba2a8e5838bcd72677280"
-    },
-    {
-      "id": "15128305",
-      "old_title": "대전광역시 서구_공공시설물 내진성능 현황 정보",
-      "new_title": "대전광역시 서구_공공시설물 내진성능 현황 정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "a77c58eafa6a309380e127c98e5f9660538fe1ac1be102ac07d8d6202e4d6085",
-      "new_digest": "da108e2fad4f2d1f6bef3e8a7d35bf21ac76940da8f71f1461b0a46ef40cab39"
-    },
-    {
-      "id": "15128307",
-      "old_title": "대전광역시 서구_공공쓰레기통 현황정보",
-      "new_title": "대전광역시 서구_공공쓰레기통 현황정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "53fba2d02ee4ed5df264b86dfde647591d358f2082f85b7f84209d2a8af85d0e",
-      "new_digest": "32ec1949b5ce33c5fb83009917b58ec4b8edb1f7517cd533443e407ee094a649"
-    },
-    {
-      "id": "15128308",
-      "old_title": "대전광역시 서구_장애인주차장 위치 정보 현황",
-      "new_title": "대전광역시 서구_장애인주차장 위치 정보 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "f2a5b0dcdfbe8e31718078c9ad48300b00af7db8573b78d39e46fe8e36f2cc90",
-      "new_digest": "f0e4efdc1ce823e824c660ecf2dac705b08ed81eaf803e81ba9a11eb25ac8841"
-    },
-    {
-      "id": "15128482",
-      "old_title": "대전광역시 서구_한의원 현황",
-      "new_title": "대전광역시 서구_한의원 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "93dfa2afcf925a9160b5b6637a62b80d0ceec6c103bc5ba051235982cb993e2e",
-      "new_digest": "7d097e1d562e06d8f6610b1ba401599d67354d73029de1aec7cc6ae6113aaa1f"
-    },
-    {
-      "id": "15128483",
-      "old_title": "대전광역시 서구_표본감시 의료기관현황",
-      "new_title": "대전광역시 서구_표본감시 의료기관현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "17c743f15c63d87604b42f1aff956e961a4dd5f0c789e5a1a5b5938f7adcc4ea",
-      "new_digest": "7e6717ab31a8871ac4c579b985479fde7384f81ad294bdfed6e1d23b0af65448"
-    },
-    {
-      "id": "15128484",
-      "old_title": "대전광역시 서구_폐기물 처리업 현황",
-      "new_title": "대전광역시 서구_폐기물 처리업 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "c7e74b6813c03e643a3f6ee2807d32694c6624e67573fe89f311b629ad40e3ce",
-      "new_digest": "bc4da2f66431821af43657f11397fe95a8dacde9894f1bda9a3d5cd97d87c501"
-    },
-    {
-      "id": "15128485",
-      "old_title": "대전광역시 서구_중증장애인 생산품 구매업체현황",
-      "new_title": "대전광역시 서구_중증장애인 생산품 구매업체현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "62d1060505fae312ea38db7f7dda572792841d10ec8dced44f753f3ca7b2b720",
-      "new_digest": "d323016c1bf8aa2b102ad681b79c5dd6dd4c72871e6348a5d58bb8e0d4dae657"
-    },
-    {
-      "id": "15128486",
-      "old_title": "대전광역시 서구_전문건설업체 현황",
-      "new_title": "대전광역시 서구_전문건설업체 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "6b011101cbd12aa715e1c24b6b5744284a42a82036695ce59ca0aa0ed5fd10f7",
-      "new_digest": "caf6e7753a440ba8c4b3e09ea1996213cf5c5d71ca574170d6572b3b8e19ee9d"
-    },
-    {
-      "id": "15128487",
-      "old_title": "대전광역시 서구_재해우려지역 현황정보",
-      "new_title": "대전광역시 서구_재해우려지역 현황정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "1efb7264dcb868dd5176c14cb5035e10379eaf543f585bfa210d02bb4884429b",
-      "new_digest": "70a8c8441b2d9a92060c516449cbc8cca3199ec6ac23b257c5018b8d7c1bd139"
-    },
-    {
-      "id": "15128488",
-      "old_title": "대전광역시 서구_의원현황 정보",
-      "new_title": "대전광역시 서구_의원현황 정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "b5a92ecdea023aa046b57d147cac751e7333ac3cee533175af44714bac4a72e9",
-      "new_digest": "37526b0cd408858daef32bd9f81393494d5fd2c8eeb4dddc6f9143cd7cda2e5c"
-    },
-    {
-      "id": "15128489",
-      "old_title": "대전광역시 서구_의약품도매업소 현황정보",
-      "new_title": "대전광역시 서구_의약품도매업소 현황정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "3831403be0fef30af247cfb62ba4c3bb4d050ca05353db704b73501c448261d0",
-      "new_digest": "ad8d070a9328ae5543bb5e32bf24335b98ce0e9648bcd1247737f7a4867a9216"
-    },
-    {
-      "id": "15128490",
-      "old_title": "대전광역시 서구_유해야생동물 포획현황",
-      "new_title": "대전광역시 서구_유해야생동물 포획현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "6fc7e005d325d2ff94281228bb5463f16b8c5dc94b622b764ea2edf13fc14b74",
-      "new_digest": "1b7c7c8c3fb5784b37699cf110264221b0837fbffc410eed36a3256c9177cd20"
-    },
-    {
-      "id": "15128491",
-      "old_title": "대전광역시 서구_양약도매상 현황정보",
-      "new_title": "대전광역시 서구_양약도매상 현황정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "1a985290ae20cc7e0857afbde9d3d08cc5c856da243f725f7e1bccd7dfd22655",
-      "new_digest": "44a3bf4bb3f5866195dbfabdd7c7626c10171442a37d1fc4c31af29edf79ca42"
-    },
-    {
-      "id": "15128492",
-      "old_title": "대전광역시 서구_안심귀가단 운영 현황",
-      "new_title": "대전광역시 서구_안심귀가단 운영 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "754ca3630c95c820356834995461f5b145d0e225cc7a90a6db5c428f73546ffa",
-      "new_digest": "4ceed447cf59e642437a59968acdf18f1f097942311c1addac8438d6ac274756"
-    },
-    {
-      "id": "15128493",
-      "old_title": "대전광역시 서구_실내건축공사업체 현황정보",
-      "new_title": "대전광역시 서구_실내건축공사업체 현황정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "a474a833593ae2160dc98a8da9600c23c962af369bd47921207d0c8e3f63fa22",
-      "new_digest": "efe11a313f391e3a98d633a9709d97620fa0f9fd45ba7b1f4464cd7fefea2ace"
-    },
-    {
-      "id": "15128494",
-      "old_title": "대전광역시 서구_식품유통관련업 현황정보",
-      "new_title": "대전광역시 서구_식품유통관련업 현황정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "8133b1cf95722fcb2140b85bdba554ce0e6d8c2bd8907cdb16f9be292b81b124",
-      "new_digest": "ca0f4950285bd089e37cc8b1485d7053250d8865af19ea0a2cc86a5aaeee11dc"
-    },
-    {
-      "id": "15128495",
-      "old_title": "대전광역시 서구_시간제주차노선 운영 현황",
-      "new_title": "대전광역시 서구_시간제주차노선 운영 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "879aad35c67b5093b01ebfcd21e016b5f32ff89fe13ed6030ddd96ce47ac2202",
-      "new_digest": "efad8a3e838767f5e2d2bb04735eb5b7cfa966e3272f63fe167d8ba6e5af6d09"
-    },
-    {
-      "id": "15128496",
-      "old_title": "대전광역시 서구_병원현황 정보",
-      "new_title": "대전광역시 서구_병원현황 정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "ff642d7d182b307109b0fc0fe67e433ebaa5c2273d331190defc0624cb80b780",
-      "new_digest": "f264c4aeaec0c4ce92722a78112f1413f77527045f879e4ce5c3e0f7d4606f25"
-    },
-    {
-      "id": "15128497",
-      "old_title": "대전광역시 서구_발달재활 및 언어치료 기관현황 정보",
-      "new_title": "대전광역시 서구_발달재활 및 언어치료 기관현황 정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "3071d47db26925e61953925ac4a2e0e0be1236ef4048eeeb30bafce8529a6f6e",
-      "new_digest": "963a07e9f749e028e5d5d24054480854d116c1b663fb0c37ceae1aa0d4b305c3"
-    },
-    {
-      "id": "15128498",
-      "old_title": "대전광역시 서구_무더위쉼터 현황",
-      "new_title": "대전광역시 서구_무더위쉼터 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "fecb514d71863c15f1867f433ea8f2379d24bc8cdfc6dbf2985fba5bf59c78eb",
-      "new_digest": "12f98a7825b6fdf72e6e7e3e587ad6ed9feca04cc790c55bab5f03b4fa7227b1"
-    },
-    {
-      "id": "15128499",
-      "old_title": "대전광역시 서구_동물의약품도매상 등록 현황",
-      "new_title": "대전광역시 서구_동물의약품도매상 등록 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "358f5f849036a6de789656386717d8a1adbb7e403dae46faf5c223f85bd789da",
-      "new_digest": "d06caf7beaa7cc43ce486b7689c08819ead1a3f5e6c3e8f7d94a07dd755e5e34"
-    },
-    {
-      "id": "15128500",
-      "old_title": "대전광역시 서구_도로공사 현황 정보",
-      "new_title": "대전광역시 서구_도로공사 현황 정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "9151ad37b03f5557315119179b0447021253e9b9071e8ffc9a833bb2a0998426",
-      "new_digest": "8bce08e9b9bed23a50391ad515574b1ebab484a2aac9d601340b67dadc631992"
-    },
-    {
-      "id": "15128501",
-      "old_title": "대전광역시 서구_다함께돌봄센터 운영 현황",
-      "new_title": "대전광역시 서구_다함께돌봄센터 운영 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "c2d8589d609768cbbb309a5699fb30be42bea0e37066d35a6d4c655fe5b9befb",
-      "new_digest": "3d09def7ad6f9fa3233f935726eff37c55b1c9f8dc4953a5f1c9ba7d4eb1a2d5"
-    },
-    {
-      "id": "15128502",
-      "old_title": "대전광역시 서구_농어촌민박 등록 현황",
-      "new_title": "대전광역시 서구_농어촌민박 등록 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "daf7566ae403639a6a33b461cbad0267b84488ba766cea93f0422d9259f9d873",
-      "new_digest": "03f114499385b4b5c55a4fb8d5e86d2c0c9b9b410dbedc6881d6d21da74130c9"
-    },
-    {
-      "id": "15128503",
-      "old_title": "대전광역시 서구_농약판매업 등록 현황",
-      "new_title": "대전광역시 서구_농약판매업 등록 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "42af651f5080d5ac0db50714c55cefe08bab44d0b502307e26d28af680b204cc",
-      "new_digest": "8a6805bb666494dd80b88862e9ab8e62a595ef02a7c45249040a0ece3f5e53ba"
-    },
-    {
-      "id": "15128504",
-      "old_title": "대전광역시 서구_기계식주차장 현황",
-      "new_title": "대전광역시 서구_기계식주차장 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "d5c5c838c854af93782c9547b690d9abbe00a15fcdc22f8a8afc1486523b24f3",
-      "new_digest": "eaed0d73bce416f2dd00f161c10ca638e1cbca7156889c9997e4e0b18760520c"
-    },
-    {
-      "id": "15128505",
-      "old_title": "대전광역시 서구_급경사지 현황정보",
-      "new_title": "대전광역시 서구_급경사지 현황정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "765c320670d72150cf8f1b0aba42b17c258568f8c0326faa3d539108b0304d8d",
-      "new_digest": "00f4f3130ab5dedb63591ee84dabc6aa99be5b9c5bcabf56eda8e16af38628bb"
-    },
-    {
-      "id": "15128506",
-      "old_title": "대전광역시 서구_구급차운용 통보 현황",
-      "new_title": "대전광역시 서구_구급차운용 통보 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "cbde00998fd9efb5e0f633094f7adf8867a5b6b413981f1582d27f471b01ec16",
-      "new_digest": "5b26d328f8c9b2ffdc7e83d1cd89a9f5675c58e04bfe09c328b3931aec24fde5"
-    },
-    {
-      "id": "15128507",
-      "old_title": "대전광역시 서구_관내 장례식장 현황 정보",
-      "new_title": "대전광역시 서구_관내 장례식장 현황 정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "56dd20cef4ec697e88e7604305a9c89cd57f80ca7fe772d769114322f42c4850",
-      "new_digest": "2414edc628e1d4764a56e769581b3351beded6441589508a52dbb792ec7eabc2"
-    },
-    {
-      "id": "15128508",
-      "old_title": "대전광역시 서구_공장등록 현황 정보",
-      "new_title": "대전광역시 서구_공장등록 현황 정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "3dca215ce01f31af516aa73bf53a6415c5beb4abe22e40b8fb139edc8ae05aa8",
-      "new_digest": "aaed4ac8c4313f45ea1482057fdd6552a8f3ca014cb5670eb87c1abf48e4d01d"
-    },
-    {
-      "id": "15128509",
-      "old_title": "대전광역시 서구_공동주택 현황 정보",
-      "new_title": "대전광역시 서구_공동주택 현황 정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "fbccb18c6b66db3a94b8d052f9b3ec77c3a0ce80f4c0a28bff8d5fc751737783",
-      "new_digest": "da367177081d3bcfe6b7d4d2fdc72d3c56ee696f16eaa4acf1b1c029c9e1baa6"
-    },
-    {
-      "id": "15128510",
-      "old_title": "대전광역시 서구_공공형 어린이집 지정현황 정보",
-      "new_title": "대전광역시 서구_공공형 어린이집 지정현황 정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "fe5578c4ed1dbfa21cb43694f19a6f31a45e8ef67531cf3ec82d345e99dd8ee9",
-      "new_digest": "be06604794deaa928f73f491d180ecf3e8ce2f6cdb2b2bfa3ed9a57e92229d9f"
-    },
-    {
-      "id": "15128511",
-      "old_title": "대전광역시 서구_결식우려아동 급식지원현황 정보",
-      "new_title": "대전광역시 서구_결식우려아동 급식지원현황 정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "4148f1255f1cc9216f971575535dde26ba5e996ce4a72ec7eeba731cc4f31135",
-      "new_digest": "79927eff537fc68ba4bb9f40ad63d712c948e5ad771f1ea528f2e886cfc2e166"
-    },
-    {
-      "id": "15128512",
-      "old_title": "대전광역시 서구_거주자우선주차시스템 단속현황 정보",
-      "new_title": "대전광역시 서구_거주자우선주차시스템 단속현황 정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "d424b9c59314e0b85024b2fcc420f5e603307f12ddccc5e65b51ad629820a145",
-      "new_digest": "703e9420bec32f167aae3f66c2d9bd27cc78f645afc0feba8578ead639bcca5f"
-    },
-    {
-      "id": "15128513",
-      "old_title": "대전광역시 서구_0세아전용 어린이집 지정현황 정보",
-      "new_title": "대전광역시 서구_0세아전용 어린이집 지정현황 정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "9765f964a3b09b967a9372e41a07f6ede987c220ebb9c2becf6adffaf1740d0f",
-      "new_digest": "f2a8664b09cb7ba36cf49c137c30e325296ebb71715e663a5c51e68ff3fcc500"
+      "old_digest": "95dbf4280ff11bc8312ecccbbf6b5651b274dd6ceb36ab2cc577b4422472e485",
+      "new_digest": "b92cf5cc704f603e63c2152423d272a39de8cacbd894cf4dfff99bbbba333b51"
     }
   ]
 }

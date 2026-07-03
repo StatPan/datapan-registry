@@ -2,18 +2,18 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-07-03T18:42:11Z`
+- Generated at: `2026-07-03T18:48:19Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `10173` (`84.4%`)
-- APIs without operation mapping: `1887`
-- Operations: `18457`
-- Runtime evidence operations: `1950` (`10.6%`)
-- Runtime verified operations: `606`
+- APIs with operation mapping: `10198` (`84.6%`)
+- APIs without operation mapping: `1862`
+- Operations: `18489`
+- Runtime evidence operations: `1975` (`10.7%`)
+- Runtime verified operations: `631`
 - Runtime failed operations: `147`
 - Runtime skipped operations: `1197`
-- APIs with runtime evidence: `942`
-- Runtime reactivation APIs: `9231`
+- APIs with runtime evidence: `963`
+- Runtime reactivation APIs: `9235`
 - Runtime repair APIs: `98`
 
 ## Highest Priority Institutions
@@ -37,7 +37,6 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 한국산업인력공단 | 230 | 230 | 0 | 100.0% | 317 | 95 | 135 | 1 | 135 |
 | 경상남도 | 129 | 129 | 0 | 100.0% | 134 | 0 | 129 | 0 | 129 |
 | 세종특별자치시 | 122 | 122 | 0 | 100.0% | 122 | 0 | 122 | 0 | 122 |
-| 대전광역시 서구 | 125 | 100 | 25 | 80.0% | 139 | 12 | 88 | 0 | 113 |
 | 농촌진흥청 | 136 | 136 | 0 | 100.0% | 363 | 23 | 113 | 0 | 113 |
 | 전라남도 | 109 | 108 | 1 | 99.1% | 174 | 0 | 108 | 0 | 109 |
 | 식품의약품안전처 식품의약품안전평가원 | 106 | 106 | 0 | 100.0% | 154 | 2 | 104 | 0 | 104 |
@@ -45,6 +44,7 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 충청남도 | 96 | 69 | 27 | 71.9% | 77 | 0 | 69 | 0 | 96 |
 | 금융위원회 | 110 | 110 | 0 | 100.0% | 349 | 14 | 96 | 0 | 96 |
 | 한국도로공사 | 93 | 0 | 93 | 0.0% | 0 | 0 | 0 | 0 | 93 |
+| 대전광역시 서구 | 125 | 125 | 0 | 100.0% | 171 | 33 | 92 | 0 | 92 |
 | 농림축산식품부 | 87 | 1 | 86 | 1.1% | 2 | 1 | 0 | 0 | 86 |
 | 문화체육관광부 | 86 | 1 | 85 | 1.2% | 1 | 0 | 1 | 0 | 86 |
 | 한국건강가정진흥원 | 85 | 85 | 0 | 100.0% | 90 | 0 | 85 | 0 | 85 |
