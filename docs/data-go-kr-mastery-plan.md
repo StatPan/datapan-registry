@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `18318`
-- callable operations: `18176` (`99.2%`)
+- operations: `18457`
+- callable operations: `18315` (`99.2%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `6708`
-- registered adapter operations: `6698`
+- external endpoint operations: `6847`
+- registered adapter operations: `6837`
 - missing adapter operations: `29`
 - external adapter coverage: `99.6%`
-- approval-required operations: `6158`
+- approval-required operations: `6297`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `91`
+- registered adapter hosts: `92`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -228,7 +228,7 @@ institution:
    `scripts/validate-institution-api-overview.py`.
 
 The current operation materialization queue starts at `대전광역시 서구`: `125`
-APIs, `0` APIs with operation mappings, and `125` uncovered APIs. The runtime
+APIs, `100` APIs with operation mappings, and `25` uncovered APIs. The runtime
 reactivation queue starts at `행정안전부`: `1252` APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
 records, and `1202` APIs still needing runtime reactivation. Gateway calls need
@@ -480,6 +480,11 @@ readiness, not to advance verified runtime coverage.
    registered external adapter operations to `6698`, completes 농촌진흥청
    materialization at `136` of `136` APIs, and moves the first materialization
    queue to 대전광역시 서구.
+   The first 대전광역시 서구 batch extends HappySD host coverage to
+   `parking.happysd.or.kr`, materializes `100` APIs and `139` operations, and
+   merges `25` verified landing-page checks. That brings checked runtime
+   evidence to `1950`, registered external adapter operations to `6837`, and
+   raises 대전광역시 서구 operation coverage to `100` of `125` APIs.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

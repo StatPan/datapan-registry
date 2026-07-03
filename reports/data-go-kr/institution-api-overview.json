@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T18:30:56Z",
+  "generated_at": "2026-07-03T18:42:11Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 18318,
-    "runtime_evidence": 1925,
-    "runtime_evidence_percent": 10.5,
-    "callable_operations": 18176,
-    "external_endpoint_operations": 6708,
-    "registered_adapter_operations": 6698,
+    "operations": 18457,
+    "runtime_evidence": 1950,
+    "runtime_evidence_percent": 10.6,
+    "callable_operations": 18315,
+    "external_endpoint_operations": 6847,
+    "registered_adapter_operations": 6837,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 6708
+      "count": 6847
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 6698
+      "count": 6837
     },
     {
       "key": "builtin",
@@ -69,55 +69,55 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 2513
+      "operation_count": 2565
     },
     {
       "category": "문화관광",
-      "operation_count": 1887
+      "operation_count": 1889
     },
     {
       "category": "농축수산",
-      "operation_count": 1817
+      "operation_count": 1820
     },
     {
       "category": "교통물류",
-      "operation_count": 1740
+      "operation_count": 1745
     },
     {
       "category": "사회복지",
-      "operation_count": 1422
+      "operation_count": 1432
     },
     {
       "category": "산업고용",
-      "operation_count": 1277
+      "operation_count": 1284
     },
     {
       "category": "식품건강",
-      "operation_count": 1177
+      "operation_count": 1185
     },
     {
       "category": "환경기상",
-      "operation_count": 1104
+      "operation_count": 1109
     },
     {
       "category": "국토관리",
-      "operation_count": 977
+      "operation_count": 982
+    },
+    {
+      "category": "보건의료",
+      "operation_count": 978
     },
     {
       "category": "재정금융",
       "operation_count": 964
     },
     {
-      "category": "보건의료",
-      "operation_count": 963
-    },
-    {
       "category": "재난안전",
-      "operation_count": 839
+      "operation_count": 849
     },
     {
       "category": "교육",
-      "operation_count": 779
+      "operation_count": 796
     },
     {
       "category": "과학기술",
@@ -139,7 +139,7 @@
     },
     {
       "host": "data.gg.go.kr",
-      "operation_count": 2174,
+      "operation_count": 2185,
       "adapter": "data-gg",
       "adapter_status": "registered",
       "capabilities": [
@@ -185,7 +185,7 @@
     },
     {
       "host": "www.nongsaro.go.kr",
-      "operation_count": 313,
+      "operation_count": 314,
       "adapter": "nongsaro",
       "adapter_status": "registered",
       "capabilities": [
@@ -247,6 +247,15 @@
       ]
     },
     {
+      "host": "seogu.go.kr",
+      "operation_count": 125,
+      "adapter": "seogu",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "host": "www.safemap.go.kr",
       "operation_count": 104,
       "adapter": "safemap",
@@ -295,16 +304,6 @@
       "host": "data.geoje.go.kr",
       "operation_count": 41,
       "adapter": "geoje",
-      "adapter_status": "registered",
-      "capabilities": [
-        "call",
-        "verification"
-      ]
-    },
-    {
-      "host": "data.uiryeong.go.kr",
-      "operation_count": 40,
-      "adapter": "uiryeong",
       "adapter_status": "registered",
       "capabilities": [
         "call",
@@ -2071,6 +2070,102 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 141
+        }
+      ]
+    },
+    {
+      "organization": "대전광역시 서구",
+      "api_count": 125,
+      "operation_api_count": 100,
+      "operation_count": 139,
+      "runtime_evidence_count": 25,
+      "runtime_evidence_percent": 18.0,
+      "verified": 25,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 139,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "external_endpoint",
+          "count": 139
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 139
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "공공행정",
+          "operation_count": 52
+        },
+        {
+          "category": "교육",
+          "operation_count": 17
+        },
+        {
+          "category": "보건의료",
+          "operation_count": 15
+        },
+        {
+          "category": "사회복지",
+          "operation_count": 10
+        },
+        {
+          "category": "재난안전",
+          "operation_count": 10
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "seogu.go.kr",
+          "operation_count": 124,
+          "adapter": "seogu",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "data.gg.go.kr",
+          "operation_count": 11,
+          "adapter": "data-gg",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "data.seoul.go.kr",
+          "operation_count": 2,
+          "adapter": "seoul-open-data",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
+        },
+        {
+          "host": "www.nongsaro.go.kr",
+          "operation_count": 1,
+          "adapter": "nongsaro",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "parking.happysd.or.kr",
+          "operation_count": 1,
+          "adapter": "happysd",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },
@@ -14741,24 +14836,6 @@
           "operation_count": 1
         }
       ]
-    },
-    {
-      "organization": "대전광역시 서구",
-      "api_count": 125,
-      "operation_api_count": 0,
-      "operation_count": 0,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [],
-      "by_adapter_status": [],
-      "top_categories": [],
-      "top_hosts": []
     },
     {
       "organization": "한국도로공사",

@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T18:30:56Z",
+  "generated_at": "2026-07-03T18:42:11Z",
   "datapan_version": "0.1.0-dev",
   "adapter_count": 82,
-  "host_count": 93,
+  "host_count": 94,
   "adapters": [
     {
       "name": "airport",
@@ -315,6 +315,7 @@
       "name": "happysd",
       "status": "registered",
       "hosts": [
+        "parking.happysd.or.kr",
         "www.happysd.or.kr"
       ],
       "capabilities": [

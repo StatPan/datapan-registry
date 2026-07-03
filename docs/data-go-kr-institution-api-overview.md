@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T18:30:56Z`
+- Generated at: `2026-07-03T18:42:11Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `18318`
-- Runtime evidence: `1925` (`10.5%`)
-- External endpoint operations: `6708`
-- Registered adapter operations: `6698`
+- Operations: `18457`
+- Runtime evidence: `1950` (`10.6%`)
+- External endpoint operations: `6847`
+- Registered adapter operations: `6837`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -30,7 +30,7 @@
 | 제주특별자치도 | 171 | 171 | 391 | 54 | 13.8% | 50 | 2 | 2 | 220 | 0 |
 | 농촌진흥청 | 136 | 136 | 363 | 58 | 16.0% | 51 | 0 | 7 | 243 | 0 |
 | 경상남도 | 129 | 129 | 134 | 0 | 0.0% | 0 | 0 | 0 | 116 | 0 |
-| 대전광역시 서구 | 125 | 0 | 0 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
+| 대전광역시 서구 | 125 | 100 | 139 | 25 | 18.0% | 25 | 0 | 0 | 139 | 0 |
 | 세종특별자치시 | 122 | 122 | 122 | 0 | 0.0% | 0 | 0 | 0 | 117 | 0 |
 | 금융위원회 | 110 | 110 | 349 | 32 | 9.2% | 0 | 0 | 32 | 25 | 1 |
 | 전라남도 | 109 | 108 | 174 | 0 | 0.0% | 0 | 0 | 0 | 93 | 0 |
@@ -75,9 +75,9 @@
 | 한국환경공단 | 66 | 65 | 151 | 2 | 1.3% | 0 | 0 | 2 | 40 | 0 |
 | 한국수자원공사 | 84 | 79 | 148 | 0 | 0.0% | 0 | 0 | 0 | 4 | 19 |
 | 인천항만공사 | 46 | 46 | 141 | 0 | 0.0% | 0 | 0 | 0 | 3 | 0 |
+| 대전광역시 서구 | 125 | 100 | 139 | 25 | 18.0% | 25 | 0 | 0 | 139 | 0 |
 | 경상남도 | 129 | 129 | 134 | 0 | 0.0% | 0 | 0 | 0 | 116 | 0 |
 | 세종특별자치시 | 122 | 122 | 122 | 0 | 0.0% | 0 | 0 | 0 | 117 | 0 |
-| 서울올림픽기념국민체육진흥공단 | 70 | 70 | 111 | 0 | 0.0% | 0 | 0 | 0 | 1 | 0 |
 
 The full machine-readable report is `reports/data-go-kr/institution-api-overview.json`.
 The full coverage backlog is `reports/data-go-kr/coverage-backlog.json`, with
@@ -85,26 +85,26 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 ## Largest Categories
 
-- 공공행정: `2513` operations
-- 문화관광: `1887` operations
-- 농축수산: `1817` operations
-- 교통물류: `1740` operations
-- 사회복지: `1422` operations
-- 산업고용: `1277` operations
-- 식품건강: `1177` operations
-- 환경기상: `1104` operations
-- 국토관리: `977` operations
-- 재정금융: `964` operations
+- 공공행정: `2565` operations
+- 문화관광: `1889` operations
+- 농축수산: `1820` operations
+- 교통물류: `1745` operations
+- 사회복지: `1432` operations
+- 산업고용: `1284` operations
+- 식품건강: `1185` operations
+- 환경기상: `1109` operations
+- 국토관리: `982` operations
+- 보건의료: `978` operations
 
 ## Largest Hosts
 
 - apis.data.go.kr: `11423` operations
-- data.gg.go.kr: `2174` operations
+- data.gg.go.kr: `2185` operations
 - data.gm.go.kr: `606` operations
 - www.vworld.kr: `458` operations
 - www.safetydata.go.kr: `370` operations
 - www.lofin365.go.kr: `343` operations
-- www.nongsaro.go.kr: `313` operations
+- www.nongsaro.go.kr: `314` operations
 - open.law.go.kr: `304` operations
 - www.foodsafetykorea.go.kr: `288` operations
 - open.assembly.go.kr: `277` operations
