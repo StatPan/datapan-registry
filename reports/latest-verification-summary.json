@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T19:22:34Z",
+  "generated_at": "2026-07-03T19:33:02Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 2312,
-    "verified": 903,
+    "total": 2357,
+    "verified": 948,
     "failed": 212,
     "skipped": 1197,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 903,
+        "count": 948,
         "status": "verified"
       },
       {
@@ -382,6 +382,11 @@
         "key": "seogu",
         "count": 48,
         "provider": "seogu"
+      },
+      {
+        "key": "kma-apihub",
+        "count": 45,
+        "provider": "kma-apihub"
       },
       {
         "key": "geoje",
@@ -769,6 +774,11 @@
         "key": "seogu.go.kr",
         "count": 48,
         "host": "seogu.go.kr"
+      },
+      {
+        "key": "apihub.kma.go.kr",
+        "count": 45,
+        "host": "apihub.kma.go.kr"
       },
       {
         "key": "c.q-net.or.kr",
@@ -1189,7 +1199,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 1588,
+        "count": 1633,
         "kind": "external_endpoint"
       },
       {

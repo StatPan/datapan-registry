@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T19:22:42Z",
+  "generated_at": "2026-07-03T19:33:09Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 18826,
-    "callable_operations": 18684,
+    "operations": 18871,
+    "callable_operations": 18729,
     "callable_operation_percent": 99.2,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 7216,
-    "registered_adapter_operations": 7206,
+    "external_endpoint_operations": 7261,
+    "registered_adapter_operations": 7251,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.6,
-    "approval_required_operations": 6661,
+    "approval_required_operations": 6706,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 97,
+    "registered_adapter_hosts": 98,
     "missing_adapter_hosts": 11,
-    "adapter_count": 84,
+    "adapter_count": 85,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T19:22:34Z",
-    "total": 2312,
-    "verified": 903,
+    "generated_at": "2026-07-03T19:33:02Z",
+    "total": 2357,
+    "verified": 948,
     "failed": 212,
     "skipped": 1197,
     "unknown": 0,
-    "verified_percent": 39.1,
-    "evidence_operation_percent": 12.3
+    "verified_percent": 40.2,
+    "evidence_operation_percent": 12.5
   },
   "route_evidence": {
     "present": true,
@@ -382,10 +382,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T19:22:42Z",
+    "generated_at": "2026-07-03T19:33:09Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 84,
-    "host_count": 99,
+    "adapter_count": 85,
+    "host_count": 100,
     "adapters": [
       {
         "name": "airport",
@@ -873,6 +873,16 @@
         ]
       },
       {
+        "name": "kma-apihub",
+        "status": "registered",
+        "hosts": [
+          "apihub.kma.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "kofpi",
         "status": "registered",
         "hosts": [
@@ -1269,8 +1279,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 84,
-      "verification_capable_adapters": 84,
+      "adapter_count": 85,
+      "verification_capable_adapters": 85,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

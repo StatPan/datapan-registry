@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T19:22:36Z",
+  "generated_at": "2026-07-03T19:33:03Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 18826,
-    "runtime_evidence": 2312,
-    "runtime_evidence_percent": 12.3,
-    "callable_operations": 18684,
-    "external_endpoint_operations": 7216,
-    "registered_adapter_operations": 7206,
+    "operations": 18871,
+    "runtime_evidence": 2357,
+    "runtime_evidence_percent": 12.5,
+    "callable_operations": 18729,
+    "external_endpoint_operations": 7261,
+    "registered_adapter_operations": 7251,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 7216
+      "count": 7261
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 7206
+      "count": 7251
     },
     {
       "key": "builtin",
@@ -97,7 +97,7 @@
     },
     {
       "category": "환경기상",
-      "operation_count": 1116
+      "operation_count": 1160
     },
     {
       "category": "보건의료",
@@ -121,7 +121,7 @@
     },
     {
       "category": "과학기술",
-      "operation_count": 570
+      "operation_count": 571
     },
     {
       "category": "통일외교안보",
@@ -301,9 +301,9 @@
       ]
     },
     {
-      "host": "c.q-net.or.kr",
-      "operation_count": 42,
-      "adapter": "q-net",
+      "host": "apihub.kma.go.kr",
+      "operation_count": 45,
+      "adapter": "kma-apihub",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -1678,6 +1678,77 @@
       ]
     },
     {
+      "organization": "기상청",
+      "api_count": 89,
+      "operation_api_count": 89,
+      "operation_count": 228,
+      "runtime_evidence_count": 68,
+      "runtime_evidence_percent": 29.8,
+      "verified": 45,
+      "failed": 0,
+      "skipped": 23,
+      "unknown": 0,
+      "approval_required_operations": 69,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 183
+        },
+        {
+          "key": "external_endpoint",
+          "count": 45
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 45
+        },
+        {
+          "key": "builtin",
+          "count": 183
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "과학기술",
+          "operation_count": 161
+        },
+        {
+          "category": "환경기상",
+          "operation_count": 55
+        },
+        {
+          "category": "문화관광",
+          "operation_count": 6
+        },
+        {
+          "category": "보건의료",
+          "operation_count": 4
+        },
+        {
+          "category": "교통물류",
+          "operation_count": 2
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 183
+        },
+        {
+          "host": "apihub.kma.go.kr",
+          "operation_count": 45,
+          "adapter": "kma-apihub",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "한국마사회",
       "api_count": 223,
       "operation_api_count": 223,
@@ -1796,60 +1867,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 190
-        }
-      ]
-    },
-    {
-      "organization": "기상청",
-      "api_count": 89,
-      "operation_api_count": 44,
-      "operation_count": 183,
-      "runtime_evidence_count": 23,
-      "runtime_evidence_percent": 12.6,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 23,
-      "unknown": 0,
-      "approval_required_operations": 24,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 183
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 183
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "과학기술",
-          "operation_count": 160
-        },
-        {
-          "category": "환경기상",
-          "operation_count": 11
-        },
-        {
-          "category": "문화관광",
-          "operation_count": 6
-        },
-        {
-          "category": "보건의료",
-          "operation_count": 4
-        },
-        {
-          "category": "교통물류",
-          "operation_count": 2
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 183
         }
       ]
     },

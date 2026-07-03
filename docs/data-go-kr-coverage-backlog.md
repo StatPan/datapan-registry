@@ -2,17 +2,17 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-07-03T19:22:36Z`
+- Generated at: `2026-07-03T19:33:03Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `10319` (`85.6%`)
-- APIs without operation mapping: `1741`
-- Operations: `18826`
-- Runtime evidence operations: `2312` (`12.3%`)
-- Runtime verified operations: `903`
+- APIs with operation mapping: `10364` (`85.9%`)
+- APIs without operation mapping: `1696`
+- Operations: `18871`
+- Runtime evidence operations: `2357` (`12.5%`)
+- Runtime verified operations: `948`
 - Runtime failed operations: `212`
 - Runtime skipped operations: `1197`
-- APIs with runtime evidence: `1084`
+- APIs with runtime evidence: `1129`
 - Runtime reactivation APIs: `9235`
 - Runtime repair APIs: `125`
 
@@ -48,8 +48,8 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 한국건강가정진흥원 | 85 | 85 | 0 | 100.0% | 90 | 0 | 85 | 0 | 85 |
 | 한국수자원공사 | 84 | 79 | 5 | 94.0% | 148 | 0 | 79 | 0 | 84 |
 | 금융감독원 | 83 | 0 | 83 | 0.0% | 0 | 0 | 0 | 0 | 83 |
-| 기상청 | 89 | 44 | 45 | 49.4% | 183 | 6 | 38 | 0 | 83 |
 | 서울특별시 | 79 | 11 | 68 | 13.9% | 31 | 1 | 10 | 1 | 78 |
+| 충청남도 보령시 | 72 | 72 | 0 | 100.0% | 72 | 0 | 72 | 0 | 72 |
 
 ## Sample Uncovered APIs
 
