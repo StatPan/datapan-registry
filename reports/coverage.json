@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T20:06:29Z",
+  "generated_at": "2026-07-03T20:23:41Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 19142,
-    "callable_operations": 19000,
+    "operations": 19147,
+    "callable_operations": 19005,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 7532,
-    "registered_adapter_operations": 7522,
+    "external_endpoint_operations": 7537,
+    "registered_adapter_operations": 7527,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.6,
-    "approval_required_operations": 6845,
+    "approval_required_operations": 6850,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 102,
+    "registered_adapter_hosts": 103,
     "missing_adapter_hosts": 11,
-    "adapter_count": 89,
+    "adapter_count": 90,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T20:06:21Z",
-    "total": 2650,
-    "verified": 1212,
+    "generated_at": "2026-07-03T20:23:22Z",
+    "total": 2655,
+    "verified": 1217,
     "failed": 223,
     "skipped": 1215,
     "unknown": 0,
-    "verified_percent": 45.7,
-    "evidence_operation_percent": 13.8
+    "verified_percent": 45.8,
+    "evidence_operation_percent": 13.9
   },
   "route_evidence": {
     "present": true,
@@ -382,10 +382,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T20:06:29Z",
+    "generated_at": "2026-07-03T20:23:41Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 89,
-    "host_count": 105,
+    "adapter_count": 90,
+    "host_count": 106,
     "adapters": [
       {
         "name": "airport",
@@ -672,6 +672,16 @@
         "status": "registered",
         "hosts": [
           "www.gimhae.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "gims",
+        "status": "registered",
+        "hosts": [
+          "www.gims.go.kr"
         ],
         "capabilities": [
           "verification"
@@ -1320,8 +1330,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 89,
-      "verification_capable_adapters": 89,
+      "adapter_count": 90,
+      "verification_capable_adapters": 90,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

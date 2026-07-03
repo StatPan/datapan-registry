@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T20:06:23Z`
+- Generated at: `2026-07-03T20:23:35Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `19142`
-- Runtime evidence: `2650` (`13.8%`)
-- External endpoint operations: `7532`
-- Registered adapter operations: `7522`
+- Operations: `19147`
+- Runtime evidence: `2655` (`13.9%`)
+- External endpoint operations: `7537`
+- Registered adapter operations: `7527`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -42,7 +42,7 @@
 | 농림축산식품부 | 87 | 86 | 153 | 153 | 100.0% | 151 | 2 | 0 | 47 | 0 |
 | 문화체육관광부 | 86 | 86 | 121 | 120 | 99.2% | 111 | 9 | 0 | 92 | 0 |
 | 한국건강가정진흥원 | 85 | 85 | 90 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
-| 한국수자원공사 | 84 | 79 | 148 | 0 | 0.0% | 0 | 0 | 0 | 4 | 19 |
+| 한국수자원공사 | 84 | 84 | 153 | 5 | 3.3% | 5 | 0 | 0 | 9 | 19 |
 
 ## Largest Institutions By Operation Count
 
@@ -75,8 +75,8 @@
 | 기후에너지환경부 국립환경과학원 | 48 | 47 | 156 | 8 | 5.1% | 0 | 0 | 8 | 0 | 0 |
 | 식품의약품안전처 식품의약품안전평가원 | 106 | 106 | 154 | 21 | 13.6% | 0 | 0 | 21 | 103 | 0 |
 | 농림축산식품부 | 87 | 86 | 153 | 153 | 100.0% | 151 | 2 | 0 | 47 | 0 |
+| 한국수자원공사 | 84 | 84 | 153 | 5 | 3.3% | 5 | 0 | 0 | 9 | 19 |
 | 한국환경공단 | 66 | 65 | 151 | 2 | 1.3% | 0 | 0 | 2 | 40 | 0 |
-| 한국수자원공사 | 84 | 79 | 148 | 0 | 0.0% | 0 | 0 | 0 | 4 | 19 |
 | 충청남도 | 96 | 96 | 142 | 65 | 45.8% | 0 | 65 | 0 | 109 | 0 |
 
 The full machine-readable report is `reports/data-go-kr/institution-api-overview.json`.
@@ -93,8 +93,8 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 - 산업고용: `1290` operations
 - 식품건강: `1188` operations
 - 환경기상: `1160` operations
+- 국토관리: `987` operations
 - 보건의료: `983` operations
-- 국토관리: `982` operations
 
 ## Largest Hosts
 

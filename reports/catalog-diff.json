@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-03T20:06:23Z",
+  "generated_at": "2026-07-03T20:23:35Z",
   "provider": "data.go.kr",
-  "old": ".datapan\\previous\\data-go-kr.registry.json",
+  "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3349,
-    "stable": 8711
+    "changed": 3354,
+    "stable": 8706
   },
   "added": [],
   "removed": [],
@@ -22307,6 +22307,56 @@
       ],
       "old_digest": "9d378071d3d57b12367d307b23b83ddb7d7cafbddbd2cc0f1a43cf08bb01b9d6",
       "new_digest": "eb4055e630a59484ec7c818c4cdc8e095afdbf303e85799855276441156cc5ff"
+    },
+    {
+      "id": "15114448",
+      "old_title": "한국수자원공사_개발이용관정조회서비스",
+      "new_title": "한국수자원공사_개발이용관정조회서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "06a1b90360463d3e33dbc02e4e28104a4f40815f40c130a2800dc0dbbb127eb0",
+      "new_digest": "331b7fe614809bed3243397c74f585e01406b2f8e38b9cedda25ac5ae06cdf41"
+    },
+    {
+      "id": "15114508",
+      "old_title": "한국수자원공사_조사시설조회서비스",
+      "new_title": "한국수자원공사_조사시설조회서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3d31408374381c0e3a815b5147ccc6e093ab24a06f8b04316403248ef5a50248",
+      "new_digest": "a5c0e65cb6d423af340770e48b3ab908fe0332d3faafc15b458e9709c5de4755"
+    },
+    {
+      "id": "15114509",
+      "old_title": "한국수자원공사_국가지하수측정자료조회서비스",
+      "new_title": "한국수자원공사_국가지하수측정자료조회서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "23b019904cc0324b3c675b7e49188656322ff7ee06f1dd0b9e96d1b08616ab1a",
+      "new_digest": "779c3ec8fab8a94e9aba71b1144b8eded17c325f5e21c0724aa0fc857e0ff518"
+    },
+    {
+      "id": "15114511",
+      "old_title": "한국수자원공사_국가지하수측정자료조회서비스(시간자료)",
+      "new_title": "한국수자원공사_국가지하수측정자료조회서비스(시간자료)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "56c7ebd75cb6e4535b5596eeb0cc33a04ae28a5e46b5799e2e549bf9d183b5d7",
+      "new_digest": "581e4672d03b23175caed6d4d6f2ca53c967236ab03fc9d2389e7d415463f3a1"
+    },
+    {
+      "id": "15114516",
+      "old_title": "한국수자원공사_측정망제원조회서비스",
+      "new_title": "한국수자원공사_측정망제원조회서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b62eb6f077bdb804c0aa1b3552e34b0f1d953b6f2b07d785290ed2d0279437d1",
+      "new_digest": "254252c065d560356d3d920941b4264d0164ebede1d208b4290ddc13680d30d8"
     },
     {
       "id": "15114779",

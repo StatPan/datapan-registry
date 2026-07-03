@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `19142`
-- callable operations: `19000` (`99.3%`)
+- operations: `19147`
+- callable operations: `19005` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `7532`
-- registered adapter operations: `7522`
+- external endpoint operations: `7537`
+- registered adapter operations: `7527`
 - missing adapter operations: `29`
 - external adapter coverage: `99.6%`
-- approval-required operations: `6845`
+- approval-required operations: `6850`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `102`
+- registered adapter hosts: `103`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -526,6 +526,12 @@ readiness, not to advance verified runtime coverage.
    evidence to `2650`, verified checks to `1212`, registered external adapter
    operations to `7522`, and raises API operation coverage to `10,534` of
    `12,060` APIs (`87.3%`).
+   The 한국수자원공사 cleanup registers GIMS adapter coverage, materializes the
+   remaining `5` APIs and `5` operations, and merges `5` bounded checks (`5`
+   verified, `0` failed, `0` skipped). That brings checked runtime evidence to
+   `2655`, verified checks to `1217`, registered external adapter operations to
+   `7527`, and raises API operation coverage to `10,539` of `12,060` APIs
+   (`87.4%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,
