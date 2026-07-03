@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T18:48:19Z`
+- Generated at: `2026-07-03T18:58:36Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `18489`
-- Runtime evidence: `1975` (`10.7%`)
-- External endpoint operations: `6879`
-- Registered adapter operations: `6869`
+- Operations: `18490`
+- Runtime evidence: `1976` (`10.7%`)
+- External endpoint operations: `6880`
+- Registered adapter operations: `6870`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -33,7 +33,7 @@
 | 대전광역시 서구 | 125 | 125 | 171 | 50 | 29.2% | 50 | 0 | 0 | 171 | 0 |
 | 세종특별자치시 | 122 | 122 | 122 | 0 | 0.0% | 0 | 0 | 0 | 117 | 0 |
 | 금융위원회 | 110 | 110 | 349 | 32 | 9.2% | 0 | 0 | 32 | 25 | 1 |
-| 전라남도 | 109 | 108 | 174 | 0 | 0.0% | 0 | 0 | 0 | 93 | 0 |
+| 전라남도 | 109 | 109 | 175 | 1 | 0.6% | 1 | 0 | 0 | 94 | 0 |
 | 식품의약품안전처 식품의약품안전평가원 | 106 | 106 | 154 | 21 | 13.6% | 0 | 0 | 21 | 103 | 0 |
 | 울산항만공사 | 98 | 6 | 9 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 충청남도 | 96 | 69 | 77 | 0 | 0.0% | 0 | 0 | 0 | 49 | 0 |
@@ -69,7 +69,7 @@
 | 한국관광공사 | 28 | 28 | 213 | 1 | 0.5% | 0 | 0 | 1 | 212 | 0 |
 | 조달청 | 18 | 18 | 190 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 기상청 | 89 | 44 | 183 | 23 | 12.6% | 0 | 0 | 23 | 24 | 0 |
-| 전라남도 | 109 | 108 | 174 | 0 | 0.0% | 0 | 0 | 0 | 93 | 0 |
+| 전라남도 | 109 | 109 | 175 | 1 | 0.6% | 1 | 0 | 0 | 94 | 0 |
 | 대전광역시 서구 | 125 | 125 | 171 | 50 | 29.2% | 50 | 0 | 0 | 171 | 0 |
 | 기후에너지환경부 국립환경과학원 | 48 | 47 | 156 | 8 | 5.1% | 0 | 0 | 8 | 0 | 0 |
 | 식품의약품안전처 식품의약품안전평가원 | 106 | 106 | 154 | 21 | 13.6% | 0 | 0 | 21 | 103 | 0 |
@@ -86,7 +86,7 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 ## Largest Categories
 
 - 공공행정: `2565` operations
-- 문화관광: `1889` operations
+- 문화관광: `1890` operations
 - 농축수산: `1820` operations
 - 교통물류: `1745` operations
 - 사회복지: `1439` operations

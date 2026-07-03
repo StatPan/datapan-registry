@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T18:48:25Z",
+  "generated_at": "2026-07-03T18:58:42Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 18489,
-    "callable_operations": 18347,
+    "operations": 18490,
+    "callable_operations": 18348,
     "callable_operation_percent": 99.2,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 6879,
-    "registered_adapter_operations": 6869,
+    "external_endpoint_operations": 6880,
+    "registered_adapter_operations": 6870,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.6,
-    "approval_required_operations": 6329,
+    "approval_required_operations": 6330,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 92,
+    "registered_adapter_hosts": 93,
     "missing_adapter_hosts": 11,
-    "adapter_count": 82,
+    "adapter_count": 83,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T18:48:16Z",
-    "total": 1975,
-    "verified": 631,
+    "generated_at": "2026-07-03T18:58:33Z",
+    "total": 1976,
+    "verified": 632,
     "failed": 147,
     "skipped": 1197,
     "unknown": 0,
-    "verified_percent": 31.9,
+    "verified_percent": 32,
     "evidence_operation_percent": 10.7
   },
   "route_evidence": {
@@ -383,10 +383,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T18:48:25Z",
+    "generated_at": "2026-07-03T18:58:42Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 82,
-    "host_count": 94,
+    "adapter_count": 83,
+    "host_count": 95,
     "adapters": [
       {
         "name": "airport",
@@ -831,6 +831,16 @@
         ]
       },
       {
+        "name": "jeonnam-redtable",
+        "status": "registered",
+        "hosts": [
+          "jeonnam.openapi.redtable.global"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "juso",
         "status": "registered",
         "hosts": [
@@ -1247,8 +1257,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 82,
-      "verification_capable_adapters": 82,
+      "adapter_count": 83,
+      "verification_capable_adapters": 83,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

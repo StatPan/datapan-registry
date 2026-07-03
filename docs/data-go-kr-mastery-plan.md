@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `18489`
-- callable operations: `18347` (`99.2%`)
+- operations: `18490`
+- callable operations: `18348` (`99.2%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `6879`
-- registered adapter operations: `6869`
+- external endpoint operations: `6880`
+- registered adapter operations: `6870`
 - missing adapter operations: `29`
 - external adapter coverage: `99.6%`
-- approval-required operations: `6329`
+- approval-required operations: `6330`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `92`
+- registered adapter hosts: `93`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -121,7 +121,7 @@ Each external host should have:
 Registered external adapters currently cover these host families through
 `data/provider-index.json`: airport, andong, calspia, cancer, car, car365, codil, consumer, culture, data-gg, dgfca, dongjak, ekape, emuseum,
 epost, eshare, ex, fairdata, folk, foodsafetykorea, forest, franchise-ftc, garak, gblib, geoje, gicoms, gimhae, gwanak,
-gwangjin, gwangmyeong, happysd, humetro, i815, icheon, ins24, itfind, its, jeju, jeju-air, jeju-www, jejudatahub, jejuits, jeonju, juso,
+gwangjin, gwangmyeong, happysd, humetro, i815, icheon, ins24, itfind, its, jeju, jeju-air, jeju-www, jejudatahub, jejuits, jeonnam-redtable, jeonju, juso,
 kistep, kofpi, korad, kpx, lh-ebid, lofin365, mafra, mnd-open-data, myhome, nabic, naqs, ncpms, nfqs, nongsaro,
 oneclick-law, open-assembly, open-law, pqis, psis, q-net, safemap, safetydata, seogu, seoul-bus, seoul-open-data,
 seogwipo, sexoffender, sisul, sisul-www, stcis, tour, uiryeong, ulsan, vworld, wamis, work, work24, and worldjob.
@@ -227,8 +227,8 @@ institution:
    `scripts/validate-institution-runtime-plan.py`, and
    `scripts/validate-institution-api-overview.py`.
 
-The current operation materialization queue starts at `전라남도`: `109` APIs,
-`108` APIs with operation mappings, and `1` uncovered API. The runtime
+The current operation materialization queue starts at `울산항만공사`: `98` APIs,
+`6` APIs with operation mappings, and `92` uncovered APIs. The runtime
 reactivation queue starts at `행정안전부`: `1252` APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
 records, and `1202` APIs still needing runtime reactivation. Gateway calls need
@@ -258,7 +258,7 @@ readiness, not to advance verified runtime coverage.
    Tracked by Gira #15.
 10. Maintain institution-scoped coverage and runtime reactivation queues from
     the generated overview/backlog artifacts. The first operation
-    materialization queue is `전라남도`, while the first runtime
+    materialization queue is `울산항만공사`, while the first runtime
     reactivation queue is `행정안전부`, using institution-scoped
     `datapan catalog verify --org` batches after data.go.kr credentials are
     available.
@@ -490,6 +490,11 @@ readiness, not to advance verified runtime coverage.
    checked runtime evidence to `1975`, registered external adapter operations
    to `6869`, completes 대전광역시 서구 materialization at `125` of `125` APIs,
    and moves the first materialization queue to 전라남도.
+   The final 전라남도 batch adds Jeonnam Redtable adapter coverage, materializes
+   the remaining `1` API and `1` operation, and merges `1` verified landing-page
+   check. That brings checked runtime evidence to `1976`, registered external
+   adapter operations to `6870`, completes 전라남도 materialization at `109` of
+   `109` APIs, and moves the first materialization queue to 울산항만공사.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T18:48:19Z",
+  "generated_at": "2026-07-03T18:58:36Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 246,
+  "filtered_count": 247,
   "summary": {
-    "hosts": 246,
+    "hosts": 247,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 103,
-    "external_guide_hosts": 185,
-    "registered_adapter_hosts": 92,
-    "operation_hosts": 105,
+    "external_endpoint_hosts": 104,
+    "external_guide_hosts": 186,
+    "registered_adapter_hosts": 93,
+    "operation_hosts": 106,
     "guide_only_hosts": 141,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 6329,
+    "approval_required_operations": 6330,
     "malformed_source_url_count": 643
   },
   "providers": [
@@ -1455,6 +1455,23 @@
       "approval_required_operations": 1,
       "sample_ids": [
         "15141100"
+      ]
+    },
+    {
+      "host": "jeonnam.openapi.redtable.global",
+      "provider": "jeonnam-redtable",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "external_guide_specs": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15111780"
       ]
     },
     {

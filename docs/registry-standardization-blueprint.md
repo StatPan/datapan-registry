@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `1,862` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `1,861` data.go.kr APIs
   without operation mappings, `9,235` operation-mapped APIs without runtime
   evidence, and `98` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -316,8 +316,13 @@ Current gaps:
   evidence to `1975`, registered external adapter operations to `6869`,
   completes 대전광역시 서구 materialization at `125` of `125` APIs, and moves
   the first materialization queue to 전라남도.
-- API operation coverage remains incomplete: `10,198` of `12,060` APIs have
-  operation mappings (`84.6%`), leaving `1,862` APIs to materialize and `9,235`
+- The final 전라남도 batch adds Jeonnam Redtable adapter coverage, materializes
+  the remaining `1` API and `1` operation, and merges `1` verified landing-page
+  check. That brings runtime evidence to `1976`, registered external adapter
+  operations to `6870`, completes 전라남도 materialization at `109` of `109`
+  APIs, and moves the first materialization queue to 울산항만공사.
+- API operation coverage remains incomplete: `10,199` of `12,060` APIs have
+  operation mappings (`84.6%`), leaving `1,861` APIs to materialize and `9,235`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report
