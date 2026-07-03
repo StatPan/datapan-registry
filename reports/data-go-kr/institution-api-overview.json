@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T20:23:35Z",
+  "generated_at": "2026-07-03T20:42:11Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 19147,
-    "runtime_evidence": 2655,
-    "runtime_evidence_percent": 13.9,
-    "callable_operations": 19005,
-    "external_endpoint_operations": 7537,
-    "registered_adapter_operations": 7527,
+    "operations": 19392,
+    "runtime_evidence": 2900,
+    "runtime_evidence_percent": 15.0,
+    "callable_operations": 19250,
+    "external_endpoint_operations": 7782,
+    "registered_adapter_operations": 7772,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 7537
+      "count": 7782
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 7527
+      "count": 7772
     },
     {
       "key": "builtin",
@@ -92,6 +92,10 @@
       "operation_count": 1290
     },
     {
+      "category": "재정금융",
+      "operation_count": 1218
+    },
+    {
       "category": "식품건강",
       "operation_count": 1188
     },
@@ -106,10 +110,6 @@
     {
       "category": "보건의료",
       "operation_count": 983
-    },
-    {
-      "category": "재정금융",
-      "operation_count": 973
     },
     {
       "category": "재난안전",
@@ -229,6 +229,15 @@
       ]
     },
     {
+      "host": "opendart.fss.or.kr",
+      "operation_count": 245,
+      "adapter": "opendart",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "host": "www.jejudatahub.net",
       "operation_count": 177,
       "adapter": "jejudatahub",
@@ -295,15 +304,6 @@
       "host": "openapi.q-net.or.kr",
       "operation_count": 104,
       "adapter": "q-net",
-      "adapter_status": "registered",
-      "capabilities": [
-        "verification"
-      ]
-    },
-    {
-      "host": "openapi.jeonju.go.kr",
-      "operation_count": 80,
-      "adapter": "jeonju",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -1672,6 +1672,49 @@
           "adapter_status": "registered",
           "capabilities": [
             "call",
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
+      "organization": "금융감독원",
+      "api_count": 83,
+      "operation_api_count": 83,
+      "operation_count": 245,
+      "runtime_evidence_count": 245,
+      "runtime_evidence_percent": 100.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 245,
+      "unknown": 0,
+      "approval_required_operations": 239,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "external_endpoint",
+          "count": 245
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 245
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "재정금융",
+          "operation_count": 245
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "opendart.fss.or.kr",
+          "operation_count": 245,
+          "adapter": "opendart",
+          "adapter_status": "registered",
+          "capabilities": [
             "verification"
           ]
         }
@@ -15076,24 +15119,6 @@
           "operation_count": 1
         }
       ]
-    },
-    {
-      "organization": "금융감독원",
-      "api_count": 83,
-      "operation_api_count": 0,
-      "operation_count": 0,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [],
-      "by_adapter_status": [],
-      "top_categories": [],
-      "top_hosts": []
     },
     {
       "organization": "한국환경연구원",

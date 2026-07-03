@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T20:23:35Z`
+- Generated at: `2026-07-03T20:42:11Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `19147`
-- Runtime evidence: `2655` (`13.9%`)
-- External endpoint operations: `7537`
-- Registered adapter operations: `7527`
+- Operations: `19392`
+- Runtime evidence: `2900` (`15.0%`)
+- External endpoint operations: `7782`
+- Registered adapter operations: `7772`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -66,6 +66,7 @@
 | 해양수산부 | 173 | 173 | 277 | 11 | 4.0% | 0 | 1 | 10 | 117 | 0 |
 | 한국도로공사 | 93 | 93 | 271 | 271 | 100.0% | 271 | 0 | 0 | 271 | 0 |
 | 한국연구재단 | 26 | 24 | 247 | 13 | 5.3% | 4 | 3 | 6 | 234 | 0 |
+| 금융감독원 | 83 | 83 | 245 | 245 | 100.0% | 0 | 0 | 245 | 239 | 0 |
 | 기상청 | 89 | 89 | 228 | 68 | 29.8% | 45 | 0 | 23 | 69 | 0 |
 | 한국마사회 | 223 | 223 | 223 | 10 | 4.5% | 0 | 0 | 10 | 221 | 0 |
 | 한국관광공사 | 28 | 28 | 213 | 1 | 0.5% | 0 | 0 | 1 | 212 | 0 |
@@ -77,7 +78,6 @@
 | 농림축산식품부 | 87 | 86 | 153 | 153 | 100.0% | 151 | 2 | 0 | 47 | 0 |
 | 한국수자원공사 | 84 | 84 | 153 | 5 | 3.3% | 5 | 0 | 0 | 9 | 19 |
 | 한국환경공단 | 66 | 65 | 151 | 2 | 1.3% | 0 | 0 | 2 | 40 | 0 |
-| 충청남도 | 96 | 96 | 142 | 65 | 45.8% | 0 | 65 | 0 | 109 | 0 |
 
 The full machine-readable report is `reports/data-go-kr/institution-api-overview.json`.
 The full coverage backlog is `reports/data-go-kr/coverage-backlog.json`, with
@@ -91,10 +91,10 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 - 농축수산: `1993` operations
 - 사회복지: `1439` operations
 - 산업고용: `1290` operations
+- 재정금융: `1218` operations
 - 식품건강: `1188` operations
 - 환경기상: `1160` operations
 - 국토관리: `987` operations
-- 보건의료: `983` operations
 
 ## Largest Hosts
 

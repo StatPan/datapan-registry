@@ -1,32 +1,32 @@
 {
-  "generated_at": "2026-07-03T20:23:35Z",
+  "generated_at": "2026-07-03T20:42:11Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 19147,
-    "callable_operations": 19005,
-    "specs_without_operations": 1521,
-    "specs_without_callable_operation": 1596,
+    "operations_total": 19392,
+    "callable_operations": 19250,
+    "specs_without_operations": 1438,
+    "specs_without_callable_operation": 1513,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 6809,
-    "operations_without_response_params": 8031,
+    "operations_without_request_params": 7054,
+    "operations_without_response_params": 8276,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 3668,
-      "external_endpoint_operations": 7537,
+      "external_endpoint_specs": 3751,
+      "external_endpoint_operations": 7782,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 114,
       "dev_approval_required_operations": 208,
-      "prod_approval_required_operations": 6744,
+      "prod_approval_required_operations": 6983,
       "malformed_endpoint_url_count": 42,
-      "malformed_guide_url_count": 601,
+      "malformed_guide_url_count": 668,
       "top_endpoint_hosts": [
         {
           "host": "apis.data.go.kr",
@@ -73,6 +73,10 @@
           "count": 277
         },
         {
+          "host": "opendart.fss.or.kr",
+          "count": 245
+        },
+        {
           "host": "www.jejudatahub.net",
           "count": 177
         },
@@ -103,10 +107,6 @@
         {
           "host": "www.safemap.go.kr",
           "count": 104
-        },
-        {
-          "host": "openapi.jeonju.go.kr",
-          "count": 80
         }
       ],
       "top_external_endpoint_hosts": [
@@ -151,6 +151,10 @@
           "count": 277
         },
         {
+          "host": "opendart.fss.or.kr",
+          "count": 245
+        },
+        {
           "host": "www.jejudatahub.net",
           "count": 177
         },
@@ -185,10 +189,6 @@
         {
           "host": "openapi.jeonju.go.kr",
           "count": 80
-        },
-        {
-          "host": "data.ekape.or.kr",
-          "count": 49
         }
       ],
       "top_external_guide_hosts": [

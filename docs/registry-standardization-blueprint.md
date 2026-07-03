@@ -348,8 +348,13 @@ Current gaps:
   verified, `0` failed, `0` skipped). That brings runtime evidence to `2655`,
   verified checks to `1217`, and registered external adapter operations to
   `7527`.
-- API operation coverage remains incomplete: `10,539` of `12,060` APIs have
-  operation mappings (`87.4%`), leaving `1,521` APIs to materialize and `9,235`
+- The 금융감독원 batch adds OpenDART adapter coverage, materializes `83` APIs
+  and `245` operations, and merges `245` bounded checks (`0` verified, `0`
+  failed, `245` skipped for missing `crtfc_key`). That brings runtime evidence
+  to `2900`, verified checks to `1217`, and registered external adapter
+  operations to `7772`.
+- API operation coverage remains incomplete: `10,622` of `12,060` APIs have
+  operation mappings (`88.1%`), leaving `1,438` APIs to materialize and `9,235`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report
