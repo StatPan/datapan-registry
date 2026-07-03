@@ -12,17 +12,17 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `16296`
-- callable operations: `16154` (`99.1%`)
+- operations: `16347`
+- callable operations: `16205` (`99.1%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `4686`
-- registered adapter operations: `4676`
+- external endpoint operations: `4737`
+- registered adapter operations: `4727`
 - missing adapter operations: `29`
 - external adapter coverage: `99.4%`
-- approval-required operations: `5210`
+- approval-required operations: `5244`
 - no-endpoint operations: `123`
 - service-root operations: `19`
-- unsupported-protocol operations: `146`
+- unsupported-protocol operations: `149`
 - registered adapter hosts: `74`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
@@ -227,11 +227,13 @@ institution:
    `scripts/validate-institution-runtime-plan.py`, and
    `scripts/validate-institution-api-overview.py`.
 
-The current first queue is `행정안전부`: `1252` APIs, `793` APIs with operation
-mappings, `459` uncovered APIs, `1054` mapped operations, and no checked-in
-runtime evidence yet. Gateway calls need a data.go.kr service key; no-key runs
-are useful only to prove parameter readiness, not to advance verified runtime
-coverage.
+The current operation materialization queue starts at `국회 국회사무처`: `277`
+APIs, `0` APIs with operation mappings, and `277` uncovered APIs. The runtime
+reactivation queue starts at `행정안전부`: `1252` APIs, `1252` APIs with
+operation mappings, `1767` mapped operations, `96` checked runtime evidence
+records, and `1202` APIs still needing runtime reactivation. Gateway calls need
+a data.go.kr service key; no-key runs are useful only to prove parameter
+readiness, not to advance verified runtime coverage.
 
 ## Task Sequence
 
@@ -255,9 +257,11 @@ coverage.
    coverage against the 10% target and validates the next planned batches.
    Tracked by Gira #15.
 10. Maintain institution-scoped coverage and runtime reactivation queues from
-    the generated overview/backlog artifacts. The first active queue is
-    `행정안전부`, using `datapan catalog verify --org 행정안전부` batches after
-    data.go.kr credentials are available.
+    the generated overview/backlog artifacts. The first operation
+    materialization queue is `국회 국회사무처`, while the first runtime
+    reactivation queue is `행정안전부`, using institution-scoped
+    `datapan catalog verify --org` batches after data.go.kr credentials are
+    available.
 11. Execute the next runtime verification batches for gateway and registered
    external adapters. Started by Gira #19 with `epost` and `ulsan`
    excluded-from-latest external endpoint batches. This grows checked runtime
@@ -383,6 +387,12 @@ coverage.
    brings checked runtime evidence to `1630`, registered external adapter
    operations to `4676`, and raises 식품의약품안전처 operation coverage to `372`
    of `392` APIs.
+   The final 식품의약품안전처 batch materializes the remaining `20` APIs and `51`
+   operations without needing new adapters, and merges `30` skipped bounded
+   checks for missing required parameters. That brings checked runtime evidence
+   to `1660`, registered external adapter operations to `4727`, completes
+   식품의약품안전처 materialization at `392` of `392` APIs, and moves the first
+   materialization queue to 국회 국회사무처.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,
