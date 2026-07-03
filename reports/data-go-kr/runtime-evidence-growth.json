@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-07-03T17:14:37Z",
+  "generated_at": "2026-07-03T17:22:34Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -13,16 +13,16 @@
     "provider_index": "data/provider-index.json"
   },
   "coverage": {
-    "operations": 17058,
-    "callable_operations": 16916,
+    "operations": 17348,
+    "callable_operations": 17206,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 5448,
-    "registered_adapter_operations": 5438,
+    "external_endpoint_operations": 5738,
+    "registered_adapter_operations": 5728,
     "call_capable_adapters": 23
   },
   "evidence": {
-    "total": 1774,
-    "verified": 436,
+    "total": 1799,
+    "verified": 461,
     "failed": 145,
     "skipped": 1193,
     "unknown": 0,
@@ -34,7 +34,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 1050
+        "count": 1075
       },
       {
         "key": "service_root",
@@ -44,7 +44,7 @@
   },
   "growth_target": {
     "target_percent": 10,
-    "target_evidence_total": 1706,
+    "target_evidence_total": 1735,
     "remaining_to_target": 0,
     "status": "above_target"
   },
@@ -52,7 +52,7 @@
     "planned_batches": 20,
     "planned_operations": 150,
     "uncovered_gateway_candidates": 10714,
-    "uncovered_adapter_candidates": 3894,
+    "uncovered_adapter_candidates": 4159,
     "missing_adapter_hosts": 11,
     "planned_by_kind": [
       {
@@ -104,8 +104,8 @@
         "label": "data-gg",
         "provider": "data-gg",
         "kind": "external_endpoint",
-        "candidates": 2143,
-        "uncovered_candidates": 2027,
+        "candidates": 2156,
+        "uncovered_candidates": 2040,
         "planned_operations": 10,
         "output": ".datapan/verification/data-gg-next.json"
       },
@@ -149,8 +149,8 @@
         "label": "gwangmyeong",
         "provider": "gwangmyeong",
         "kind": "external_endpoint",
-        "candidates": 58,
-        "uncovered_candidates": 38,
+        "candidates": 335,
+        "uncovered_candidates": 290,
         "planned_operations": 10,
         "output": ".datapan/verification/gwangmyeong-next.json"
       },

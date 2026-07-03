@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-runtime-plan.v1",
-  "generated_at": "2026-07-03T17:14:37Z",
+  "generated_at": "2026-07-03T17:22:34Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -21,8 +21,8 @@
     "institutions": 411,
     "planned_institutions": 10,
     "planned_operations": 1000,
-    "runtime_reactivation_api_count": 8729,
-    "uncovered_api_count": 2460,
+    "runtime_reactivation_api_count": 8820,
+    "uncovered_api_count": 2360,
     "first_queue": "행정안전부"
   },
   "batches": [
@@ -56,7 +56,7 @@
       "operation_count": 2241,
       "runtime_evidence_api_count": 86,
       "runtime_reactivation_api_count": 754,
-      "runtime_missing_evidence_count": 2081,
+      "runtime_missing_evidence_count": 2080,
       "approval_required_operations": 32,
       "priority_score": 754,
       "planned_operations": 100,

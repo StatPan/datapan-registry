@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T17:14:44Z",
+  "generated_at": "2026-07-03T17:22:40Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,15 +7,15 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 17058,
-    "callable_operations": 16916,
+    "operations": 17348,
+    "callable_operations": 17206,
     "callable_operation_percent": 99.2,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 5448,
-    "registered_adapter_operations": 5438,
+    "external_endpoint_operations": 5738,
+    "registered_adapter_operations": 5728,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.5,
-    "approval_required_operations": 5687,
+    "approval_required_operations": 5710,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T17:14:34Z",
-    "total": 1774,
-    "verified": 436,
+    "generated_at": "2026-07-03T17:22:31Z",
+    "total": 1799,
+    "verified": 461,
     "failed": 145,
     "skipped": 1193,
     "unknown": 0,
-    "verified_percent": 24.6,
+    "verified_percent": 25.6,
     "evidence_operation_percent": 10.4
   },
   "route_evidence": {
@@ -209,12 +209,12 @@
           "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 844,
-        "operations": 2143,
-        "external_endpoint_operations": 2143,
-        "external_guide_specs": 19,
+        "specs": 855,
+        "operations": 2156,
+        "external_endpoint_operations": 2156,
+        "external_guide_specs": 21,
         "wms_operations": 5,
-        "approval_required_operations": 37,
+        "approval_required_operations": 39,
         "sample_ids": [
           "15005231",
           "15011020",
@@ -271,6 +271,22 @@
           "15038581",
           "15056593",
           "15056639"
+        ]
+      },
+      {
+        "host": "data.gm.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "adapter",
+        "specs": 152,
+        "operations": 335,
+        "external_endpoint_operations": 335,
+        "approval_required_operations": 23,
+        "sample_ids": [
+          "15011425",
+          "15032576",
+          "15032578"
         ]
       },
       {
@@ -364,28 +380,11 @@
           "15003024",
           "15003027"
         ]
-      },
-      {
-        "host": "www.safemap.go.kr",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "adapter",
-        "specs": 104,
-        "operations": 104,
-        "external_endpoint_operations": 104,
-        "wms_operations": 97,
-        "approval_required_operations": 104,
-        "sample_ids": [
-          "15101789",
-          "15101791",
-          "15101794"
-        ]
       }
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T17:14:44Z",
+    "generated_at": "2026-07-03T17:22:40Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 75,
     "host_count": 85,
