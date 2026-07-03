@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T16:06:05Z",
+  "generated_at": "2026-07-03T16:12:37Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,10 +7,10 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 16547,
-    "evidence_total": 1680,
+    "operations": 16624,
+    "evidence_total": 1690,
     "uncovered_gateway_candidates": 10714,
-    "uncovered_adapter_candidates": 3952,
+    "uncovered_adapter_candidates": 4019,
     "missing_adapter_hosts": 11,
     "planned_batches": 19,
     "planned_operations": 143
@@ -149,8 +149,8 @@
       "label": "open-assembly",
       "provider": "open-assembly",
       "kind": "external_endpoint",
-      "candidates": 200,
-      "uncovered_candidates": 180,
+      "candidates": 277,
+      "uncovered_candidates": 247,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider open-assembly --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/open-assembly-next.json --json",
       "output": ".datapan/verification/open-assembly-next.json"

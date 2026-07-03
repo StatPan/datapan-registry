@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T16:05:33Z`
+- Generated at: `2026-07-03T16:12:05Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `16547`
-- Runtime evidence: `1680` (`10.2%`)
-- External endpoint operations: `4937`
-- Registered adapter operations: `4927`
+- Operations: `16624`
+- Runtime evidence: `1690` (`10.2%`)
+- External endpoint operations: `5014`
+- Registered adapter operations: `5004`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -17,7 +17,7 @@
 | 경기도 | 840 | 840 | 2241 | 160 | 7.1% | 159 | 1 | 0 | 32 | 0 |
 | 국토교통부 | 393 | 393 | 1055 | 87 | 8.2% | 58 | 2 | 27 | 258 | 0 |
 | 식품의약품안전처 | 392 | 392 | 648 | 41 | 6.3% | 10 | 0 | 31 | 515 | 0 |
-| 국회 국회사무처 | 277 | 200 | 200 | 20 | 10.0% | 0 | 20 | 0 | 200 | 0 |
+| 국회 국회사무처 | 277 | 277 | 277 | 30 | 10.8% | 0 | 30 | 0 | 277 | 0 |
 | 성평등가족부 | 273 | 272 | 347 | 1 | 0.3% | 0 | 0 | 1 | 0 | 0 |
 | 부산광역시 | 259 | 259 | 336 | 60 | 17.9% | 0 | 0 | 60 | 74 | 1 |
 | 공정거래위원회 | 250 | 216 | 295 | 0 | 0.0% | 0 | 0 | 0 | 279 | 0 |
@@ -58,11 +58,11 @@
 | 부산광역시 | 259 | 259 | 336 | 60 | 17.9% | 0 | 0 | 60 | 74 | 1 |
 | 한국산업인력공단 | 230 | 228 | 315 | 148 | 47.0% | 5 | 1 | 142 | 181 | 0 |
 | 공정거래위원회 | 250 | 216 | 295 | 0 | 0.0% | 0 | 0 | 0 | 279 | 0 |
+| 국회 국회사무처 | 277 | 277 | 277 | 30 | 10.8% | 0 | 30 | 0 | 277 | 0 |
 | 해양수산부 | 173 | 172 | 276 | 10 | 3.6% | 0 | 0 | 10 | 116 | 0 |
 | 한국연구재단 | 26 | 24 | 247 | 13 | 5.3% | 4 | 3 | 6 | 234 | 0 |
 | 한국마사회 | 223 | 223 | 223 | 10 | 4.5% | 0 | 0 | 10 | 221 | 0 |
 | 한국관광공사 | 28 | 28 | 213 | 1 | 0.5% | 0 | 0 | 1 | 212 | 0 |
-| 국회 국회사무처 | 277 | 200 | 200 | 20 | 10.0% | 0 | 20 | 0 | 200 | 0 |
 | 조달청 | 18 | 18 | 190 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 기상청 | 89 | 44 | 183 | 23 | 12.6% | 0 | 0 | 23 | 24 | 0 |
 | 전라남도 | 109 | 108 | 174 | 0 | 0.0% | 0 | 0 | 0 | 93 | 0 |
@@ -85,7 +85,7 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 ## Largest Categories
 
-- 공공행정: `1912` operations
+- 공공행정: `1989` operations
 - 교통물류: `1670` operations
 - 문화관광: `1605` operations
 - 농축수산: `1485` operations
@@ -104,7 +104,7 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 - www.safetydata.go.kr: `370` operations
 - www.lofin365.go.kr: `343` operations
 - www.foodsafetykorea.go.kr: `288` operations
-- open.assembly.go.kr: `200` operations
+- open.assembly.go.kr: `277` operations
 - www.calspia.go.kr: `168` operations
 - www.safemap.go.kr: `104` operations
 - openapi.q-net.or.kr: `104` operations

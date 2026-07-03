@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-runtime-plan.v1",
-  "generated_at": "2026-07-03T16:05:33Z",
+  "generated_at": "2026-07-03T16:12:05Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -21,8 +21,8 @@
     "institutions": 411,
     "planned_institutions": 10,
     "planned_operations": 1000,
-    "runtime_reactivation_api_count": 8465,
-    "uncovered_api_count": 2780,
+    "runtime_reactivation_api_count": 8532,
+    "uncovered_api_count": 2703,
     "first_queue": "행정안전부"
   },
   "batches": [
@@ -124,25 +124,6 @@
     {
       "rank": 6,
       "label": "institution-06",
-      "organization": "국회 국회사무처",
-      "kind": "data_go_kr_gateway",
-      "api_count": 277,
-      "covered_api_count": 200,
-      "uncovered_api_count": 77,
-      "operation_count": 200,
-      "runtime_evidence_api_count": 20,
-      "runtime_reactivation_api_count": 180,
-      "runtime_missing_evidence_count": 180,
-      "approval_required_operations": 200,
-      "priority_score": 257,
-      "planned_operations": 100,
-      "credential_required": true,
-      "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '국회 국회사무처' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-06.json --json",
-      "output": "reports/data-go-kr/institution-batches/institution-06.json"
-    },
-    {
-      "rank": 7,
-      "label": "institution-07",
       "organization": "공정거래위원회",
       "kind": "data_go_kr_gateway",
       "api_count": 250,
@@ -156,7 +137,26 @@
       "priority_score": 250,
       "planned_operations": 100,
       "credential_required": true,
-      "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '공정거래위원회' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-07.json --json",
+      "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '공정거래위원회' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-06.json --json",
+      "output": "reports/data-go-kr/institution-batches/institution-06.json"
+    },
+    {
+      "rank": 7,
+      "label": "institution-07",
+      "organization": "국회 국회사무처",
+      "kind": "data_go_kr_gateway",
+      "api_count": 277,
+      "covered_api_count": 277,
+      "uncovered_api_count": 0,
+      "operation_count": 277,
+      "runtime_evidence_api_count": 30,
+      "runtime_reactivation_api_count": 247,
+      "runtime_missing_evidence_count": 247,
+      "approval_required_operations": 277,
+      "priority_score": 247,
+      "planned_operations": 100,
+      "credential_required": true,
+      "command": "datapan catalog verify --registry data/data-go-kr.registry.json --org '국회 국회사무처' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-07.json --json",
       "output": "reports/data-go-kr/institution-batches/institution-07.json"
     },
     {
