@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T22:34:30Z",
+  "generated_at": "2026-07-03T22:47:17Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 102,
-  "host_count": 122,
+  "adapter_count": 103,
+  "host_count": 123,
   "adapters": [
     {
       "name": "airport",
@@ -60,6 +60,16 @@
       "status": "registered",
       "hosts": [
         "www.car365.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "chungbuk-tour",
+      "status": "registered",
+      "hosts": [
+        "tour.chungbuk.go.kr"
       ],
       "capabilities": [
         "verification"
@@ -1071,8 +1081,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 102,
-    "verification_capable_adapters": 102,
+    "adapter_count": 103,
+    "verification_capable_adapters": 103,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

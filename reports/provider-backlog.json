@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T22:34:30Z",
+  "generated_at": "2026-07-03T22:47:17Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 272,
+  "filtered_count": 273,
   "summary": {
-    "hosts": 272,
+    "hosts": 273,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 128,
+    "external_endpoint_hosts": 129,
     "external_guide_hosts": 197,
-    "registered_adapter_hosts": 117,
-    "operation_hosts": 130,
+    "registered_adapter_hosts": 118,
+    "operation_hosts": 131,
     "guide_only_hosts": 142,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7416,
+    "approval_required_operations": 7417,
     "malformed_source_url_count": 712
   },
   "providers": [
@@ -1961,6 +1961,20 @@
       "external_endpoint_operations": 1,
       "sample_ids": [
         "15006273"
+      ]
+    },
+    {
+      "host": "tour.chungbuk.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15078182"
       ]
     },
     {

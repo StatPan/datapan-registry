@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `19926`
-- callable operations: `19784` (`99.3%`)
+- operations: `19927`
+- callable operations: `19785` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `8316`
-- registered adapter operations: `8306`
+- external endpoint operations: `8317`
+- registered adapter operations: `8307`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
 - approval-required operations: `7416`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `117`
+- registered adapter hosts: `118`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -579,6 +579,11 @@ readiness, not to advance verified runtime coverage.
    brings checked runtime evidence to `3387`, verified checks to `1615`,
    registered external adapter operations to `8306`, and raises API operation
    coverage to `10,919` of `12,060` APIs (`90.5%`).
+   The 충청북도 batch registers Chungbuk Tour host coverage, materializes `1`
+   API and `1` operation, and merges `1` verified bounded check. That brings
+   checked runtime evidence to `3388`, verified checks to `1616`, registered
+   external adapter operations to `8307`, and raises API operation coverage to
+   `10,920` of `12,060` APIs (`90.5%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,
