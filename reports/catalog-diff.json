@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T17:43:13Z",
+  "generated_at": "2026-07-03T17:58:13Z",
   "provider": "data.go.kr",
   "old": ".datapan\\previous-data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,21 +12,1011 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 1,
-    "stable": 12059
+    "changed": 100,
+    "stable": 11960
   },
   "added": [],
   "removed": [],
   "changed": [
     {
-      "id": "15084033",
-      "old_title": "해양수산부_선박위치정보(연안AIS) 통계정보",
-      "new_title": "해양수산부_선박위치정보(연안AIS) 통계정보",
+      "id": "15056566",
+      "old_title": "제주특별자치도_제주디지털콘텐츠-이미지정보",
+      "new_title": "제주특별자치도_제주디지털콘텐츠-이미지정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "326ba4641b357de96aa05017d6e12595766884ed10bb5a6c41956e9352a465ac",
-      "new_digest": "d3ecc3cd9d75d82bf82474c81301898d5978e526d74783df3f6534fda8652c90"
+      "old_digest": "d3f820e65055e264f8a4347197ff7d074f0c5f6265dac6cfb5572c8586243658",
+      "new_digest": "f7d7377d0aea5eacac2ba2cdeac027dde748339cc3a2ecf62648e504e520cdef"
+    },
+    {
+      "id": "15056648",
+      "old_title": "제주특별자치도_제주 역사인물 정보",
+      "new_title": "제주특별자치도_제주 역사인물 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bd4792c749cf53bafa84404cb1c9ed757fd5dc232937aa6d0c4ab19436f3123b",
+      "new_digest": "160143c8ed7a8fd36dc5028f85911b538a64399706fe80ec5160d8809cf286d5"
+    },
+    {
+      "id": "15056816",
+      "old_title": "제주특별자치도_제주추사관 소장품 정보",
+      "new_title": "제주특별자치도_제주추사관 소장품 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "28de4c696375f90c731a12b1adb903cb05d37c0b055128e04779e3a32e31bcb0",
+      "new_digest": "de708f78c9dde5c7921cbdead37f1ea91124a788bce1fc7e7df3b62ef8321300"
+    },
+    {
+      "id": "15056931",
+      "old_title": "제주특별자치도_제주 생활방언 정보",
+      "new_title": "제주특별자치도_제주 생활방언 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "033a70c41ce1d0d83c25446b95b37af54191a4b707712ba03ad0892c320173db",
+      "new_digest": "90a78010072bfcffc09ffb016b214b625b188086a520635f264bf8342860ada8"
+    },
+    {
+      "id": "15057031",
+      "old_title": "제주특별자치도_해녀박물관 프로그램 정보",
+      "new_title": "제주특별자치도_해녀박물관 프로그램 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "db767fdb11587dad70134737cb270b5b6c1da0b27119eac73e8a1fb08ade7270",
+      "new_digest": "d1d15ce6d132fe492950750ba96403ac2d643ec92e7f53e1244faaaee841ac35"
+    },
+    {
+      "id": "15057039",
+      "old_title": "제주특별자치도_제주디지털콘텐츠-동영상정보",
+      "new_title": "제주특별자치도_제주디지털콘텐츠-동영상정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0dd3558ad160c68c00c1412a21af0920d0b7540c9af8c52cdacd1684f4962610",
+      "new_digest": "8974ab56f8d49a0d2ce684fbb12406fc772e2bde3a5ff733f7bfde7be68afeda"
+    },
+    {
+      "id": "15057146",
+      "old_title": "제주특별자치도_제주복지서비스정보",
+      "new_title": "제주특별자치도_제주복지서비스정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "28e490c58ef2d8d80c5cc3857991a9b7d714d5977f8c112049a0d2da9b01dcc8",
+      "new_digest": "1eca2ed0ffc6e719a4c4b7acf71c10c116a7b79ebcfaa630df90286a20504ec8"
+    },
+    {
+      "id": "15057226",
+      "old_title": "제주특별자치도_제주 속담사전 조회",
+      "new_title": "제주특별자치도_제주 속담사전 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "df4afaf9cd4f1f4d32dfe9d5f41fb43171afae4d149cbe335313678d947cc4c2",
+      "new_digest": "d3b5278352afeae4233c6c67760b4edf74a44d8f8a5769efc42bd7c501dd9505"
+    },
+    {
+      "id": "15057632",
+      "old_title": "제주특별자치도_제주문화예술진흥원 공연/전시 정보",
+      "new_title": "제주특별자치도_제주문화예술진흥원 공연/전시 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b9600e18cbcd528cc15ae2b36c4e06dfeec325c5b8d4d2c6a56dc04a695b2793",
+      "new_digest": "db547c3cbce8a40b80b276fa5c867773903dff9559709fefd761c4b551e8a743"
+    },
+    {
+      "id": "15057643",
+      "old_title": "제주특별자치도_제주디지털콘텐츠-애니메이션정보",
+      "new_title": "제주특별자치도_제주디지털콘텐츠-애니메이션정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c12f0b6b89580c4e1d597b993575dccf84a007a8bb464eba0b64e8dd36a05368",
+      "new_digest": "2f033966985c2b653efd3294bf493e9d8bff3824a8afbe93b92dc499dda77d30"
+    },
+    {
+      "id": "15057810",
+      "old_title": "제주특별자치도_민속자연사박물관 소장자료정보",
+      "new_title": "제주특별자치도_민속자연사박물관 소장자료정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b32eb659b5950bc23b1d90e541192b9c26d1699a0b2bb41be990b6fd532fced6",
+      "new_digest": "64e6d7e61eab7eac2db03defd4a98389665a0e3fbb8f6e9d571fba017d554e85"
+    },
+    {
+      "id": "15057902",
+      "old_title": "제주특별자치도_제주기업지원시책-기술지원 상세보기",
+      "new_title": "제주특별자치도_제주기업지원시책-기술지원 상세보기",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2f258b9a6c0fa00e853627578cd54d00cbc05eeffbcadc0c207f90c250ea6f44",
+      "new_digest": "d86f14f783a219d4612b53b270cafaddec80b887b53461e34f213acd9adab023"
+    },
+    {
+      "id": "15057996",
+      "old_title": "제주특별자치도_현대미술관 소장자료정보",
+      "new_title": "제주특별자치도_현대미술관 소장자료정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "446d19fc8d2e8ecf45ccbbf900a195bc885486a700102ea4390055e3266ed7f3",
+      "new_digest": "cddba9d751883934218216ee8c96d8d6584bd2dd6d0bacde58ef59f26bc0ad7e"
+    },
+    {
+      "id": "15058039",
+      "old_title": "제주특별자치도_복지시설 정보",
+      "new_title": "제주특별자치도_복지시설 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ba019c5d4c8f2c67eb5ce71227d81ef41c6343d9efc3eb652d39e35c3c5aae0c",
+      "new_digest": "5b8c957d2328c227f4a873486698b6d30609cbda938991b949f197a24f03d51e"
+    },
+    {
+      "id": "15058058",
+      "old_title": "제주특별자치도_제주도립미술관 소장자료정보",
+      "new_title": "제주특별자치도_제주도립미술관 소장자료정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3f2b867b035cf24d7cee4a74e45691a0676623906b637f41c7ac055433051b9f",
+      "new_digest": "d38225aeaf6ba031fc4108042ed4b0741255d1cc08ad57b22985f660866dffad"
+    },
+    {
+      "id": "15058107",
+      "old_title": "제주특별자치도_제주기업지원시책-판로지원 목록조회",
+      "new_title": "제주특별자치도_제주기업지원시책-판로지원 목록조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "54105bf13f5d39e5d97fdff21a886fdf883fb11002cf64c1f2267b9b94f26e77",
+      "new_digest": "73e8fb47554899e122f220511ec66b6e8b172b4a7cc6d85262d1807873f3fa17"
+    },
+    {
+      "id": "15058412",
+      "old_title": "제주특별자치도_방언사전 정보",
+      "new_title": "제주특별자치도_방언사전 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "36665fe8de5fac43493b4af1afe4dad0d92f3997fd6476ec1d1cf82833e01e4e",
+      "new_digest": "3ff4d641e9742dd27afaf304ed809fe7138a0811c74d3ef38aa8f39d25c12f55"
+    },
+    {
+      "id": "15058648",
+      "old_title": "제주특별자치도_제주디지털콘텐츠-사진정보",
+      "new_title": "제주특별자치도_제주디지털콘텐츠-사진정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "15427aaa1f2ab24672b2f8d17350faa7fae106ea50636a4e4b5d39b86ff76100",
+      "new_digest": "3cecd782a45c3bb60b5d261ffba231ccebafad3ea6f279fbba82e13b7703d526"
+    },
+    {
+      "id": "15058913",
+      "old_title": "제주특별자치도_제주기업지원시책-기술지원 목록조회",
+      "new_title": "제주특별자치도_제주기업지원시책-기술지원 목록조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b3bc4139782cfb0736fba51cfbb783c4096020d48fa1702f5e5fe44522427811",
+      "new_digest": "16150b678ab8729c055560b39c6a3eef74fb39190fc22eda6fe5e3874bd0ab56"
+    },
+    {
+      "id": "15058958",
+      "old_title": "제주특별자치도_역사자료 정보",
+      "new_title": "제주특별자치도_역사자료 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b379f9e283e1b597451dc2a3ff2d94b749bb52089bd3abaf0e180309e5dd5ae2",
+      "new_digest": "cbd52b204840878e8a1d7320d2661824696f63ae968b6d81268101c9acb96e1e"
+    },
+    {
+      "id": "15058992",
+      "old_title": "제주특별자치도_삼다문화콘텐츠 정보",
+      "new_title": "제주특별자치도_삼다문화콘텐츠 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fdce0310b59ef97997e55fe2ed2f198d57783e385c8d4ca0419a155d43ac1291",
+      "new_digest": "cc4b844eeafd196b92db0ac201d647cca94ec7d046784357392545870937506f"
+    },
+    {
+      "id": "15059220",
+      "old_title": "제주특별자치도_설문대여성문화센터 행사정보",
+      "new_title": "제주특별자치도_설문대여성문화센터 행사정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "161233a826c40f1a3f02cc1b59a36fbc6571827222fde59680be0c6d45e8a75c",
+      "new_digest": "02b1ee8e5d5f288811b1084277893fd20ff2a9edc2391c642c38cd7f3904d2af"
+    },
+    {
+      "id": "15059447",
+      "old_title": "제주특별자치도_제주기업지원시책-판로지원 상세보기",
+      "new_title": "제주특별자치도_제주기업지원시책-판로지원 상세보기",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "66c896cf141b0dd957ebe49d4bd3b0e95c9b73f1fe357572726a923bf9d240c3",
+      "new_digest": "e42e6cfea6b0bdfd8801aa954b123974044f607df16533d5c82e64b3d78c219b"
+    },
+    {
+      "id": "15074257",
+      "old_title": "제주특별자치도_버스 월간 시간별 승객수 데이터",
+      "new_title": "제주특별자치도_버스 월간 시간별 승객수 데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b30b1e593dc6338f773f14f7bac24f800e3f902722b2be55d38a3e02c9b5e244",
+      "new_digest": "229ceb71af8897b0a292dbebc4b5c6a22d0cac5ea984a4ab53eb4c8f774d66b4"
+    },
+    {
+      "id": "15074258",
+      "old_title": "제주특별자치도_버스 월간 요일별 승객수 데이터",
+      "new_title": "제주특별자치도_버스 월간 요일별 승객수 데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4416ab808230bd80c237584b558645f33f5cb68ed49f129cc6bff6dea67b705a",
+      "new_digest": "44df26facf5f921bbf95a0999a94f2920c8e3dad53993fead53643e22a92f7e6"
+    },
+    {
+      "id": "15074261",
+      "old_title": "제주특별자치도_버스 일일 승객수 데이터",
+      "new_title": "제주특별자치도_버스 일일 승객수 데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b88233f0d4156ec842f2571953a7552045438ef328f4bfb1e7de416ee52bca36",
+      "new_digest": "c82e6ca097b48eb8febcebfc23263362dd2322ea1a0226ddcca52df4e59847fe"
+    },
+    {
+      "id": "15079829",
+      "old_title": "제주특별자치도_제주 C-ITS 교통정보",
+      "new_title": "제주특별자치도_제주 C-ITS 교통정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "184c3c807928d95e89b67f88522e2161e508039b493cd49bbd92271ad778ecd2",
+      "new_digest": "f62d0ad8b607d62ee3a1145c0bbc1b05b366a736b89a23e52aebb007eb7131c0"
+    },
+    {
+      "id": "15094861",
+      "old_title": "제주특별자치도_중국인 관광객 지역, 업종별 카드 이용 데이터",
+      "new_title": "제주특별자치도_중국인 관광객 지역, 업종별 카드 이용 데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1d5cdc3395f2141d69b534d245a188e8ef96990eeeb5d82db4ec66363b9dbf9c",
+      "new_digest": "bfca06d6f22ea94d6ec7708b964bb260f7da207b1e6f298fe4abba6c1fa4f47a"
+    },
+    {
+      "id": "15094863",
+      "old_title": "제주특별자치도_중국인 관광객 업종별 카드 이용 데이터",
+      "new_title": "제주특별자치도_중국인 관광객 업종별 카드 이용 데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8eb699ec14b30ef84b19c8b0a6d95ca59b95f9402546764350c1c1a822028a68",
+      "new_digest": "e868dc832b0472e6fabe9220df2f4bc3c556dbcfabb39d7dd299c4b2010c9577"
+    },
+    {
+      "id": "15094887",
+      "old_title": "제주특별자치도_중국인 관광객 테마별 카드 이용 데이터",
+      "new_title": "제주특별자치도_중국인 관광객 테마별 카드 이용 데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8fd7030311fabe734c56fe5868de5482cf287944cf8bc94c4715017fa043501d",
+      "new_digest": "764d22872ffafc40cd574d6c8899b66c21b9dcc4fac0ad4ca8754ecfc868fbcb"
+    },
+    {
+      "id": "15094888",
+      "old_title": "제주특별자치도_단체/개별 관광객 소비 데이터",
+      "new_title": "제주특별자치도_단체/개별 관광객 소비 데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "851676e00dc1586905fd154a3c7cc97c95a9bc4bc97454b2a30bae56db9aa656",
+      "new_digest": "c93c32b69e3b9ffe27c09f5b38f3556ab17d4e65bad9b9bf90aaa53d4d1c9b12"
+    },
+    {
+      "id": "15094889",
+      "old_title": "제주특별자치도_관광지 및 상업지구 이용자 유형별 카드 데이터",
+      "new_title": "제주특별자치도_관광지 및 상업지구 이용자 유형별 카드 데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "58fa3668d88def0265c51f4f5fe4497a99dac121e38fcfa71b574a8c0311c65e",
+      "new_digest": "dbd870bda02281d4c6292671bb3c1c601a83771dc7b7c0d1b29399a70c1e9ebe"
+    },
+    {
+      "id": "15094890",
+      "old_title": "제주특별자치도_관광지 및 상업지구 업종별 카드 데이터",
+      "new_title": "제주특별자치도_관광지 및 상업지구 업종별 카드 데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b0395bcd5a3e7508a90dbbc63158de1c7415e7459c24a1fe7f03f658b7d3c2a5",
+      "new_digest": "2b62b98a71442ba1ead16d091fe47047b468901eeb088cdeace75ea19aca18f9"
+    },
+    {
+      "id": "15094891",
+      "old_title": "제주특별자치도_관광지 및 상업지구 연령대, 성별 카드 데이터",
+      "new_title": "제주특별자치도_관광지 및 상업지구 연령대, 성별 카드 데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e783fc3db90732cf6067f2c1e084c23e30ba0d4b3c22785ae464d259d0ebbea4",
+      "new_digest": "ef1a72d64caf48459b83ac1ea3b7febc41b8515a16b9902274c76b50cebe046d"
+    },
+    {
+      "id": "15094892",
+      "old_title": "제주특별자치도_관광지 및 상업지구 시간대별 카드 데이터",
+      "new_title": "제주특별자치도_관광지 및 상업지구 시간대별 카드 데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1cb7f18a4c9b68630ce67f8b2299ee5d2d533da32fab6da7692c01093bbcece2",
+      "new_digest": "2e7ec2d5ef0f573cdb8e872abca7d8e835122aa9631694a4b476d5bcbc7fc97d"
+    },
+    {
+      "id": "15094893",
+      "old_title": "제주특별자치도_관광지 및 상업지구 요일별 카드 데이터",
+      "new_title": "제주특별자치도_관광지 및 상업지구 요일별 카드 데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e13e55e3728df227d62f1d8ac04a6886e04430f4ccec74de73ea504b1f5af7de",
+      "new_digest": "aa705915f18b7df148e1631f8baf9eba589753249d2db798b63892d11f9026fd"
+    },
+    {
+      "id": "15094894",
+      "old_title": "제주특별자치도_전통시장 대형마트 이용패턴별 카드 데이터",
+      "new_title": "제주특별자치도_전통시장 대형마트 이용패턴별 카드 데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2dd86bc4c1177d1ee312a6919e676666b24e2b0cb3dc472eac622a5476a76e62",
+      "new_digest": "d50c2b689a5dcae38ce3c95d7f61b4e32dc24584580c2dee49da96e6b7fa76e3"
+    },
+    {
+      "id": "15094895",
+      "old_title": "제주특별자치도_전통시장 대형마트 이용패턴, 연령대, 성별 카드 데이터",
+      "new_title": "제주특별자치도_전통시장 대형마트 이용패턴, 연령대, 성별 카드 데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7921e0eec6865de9b7fdb1520755afd60f543178e77bb7d5e8ed87e3cd452555",
+      "new_digest": "29121b772f4ed6056c2ba0c6397e2ec19d362087b7d2071514bccdefd9fc3270"
+    },
+    {
+      "id": "15095714",
+      "old_title": "제주특별자치도_시도별 문화재 지정 현황",
+      "new_title": "제주특별자치도_시도별 문화재 지정 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0f0782d9de0b1e4a1a52d596b2f218bd8e41d87bc638006f39ed46fbed4b0c6b",
+      "new_digest": "b962f2d4d3b9376b17d006000a93b16d36400228452900381f4209fc49158582"
+    },
+    {
+      "id": "15095715",
+      "old_title": "제주특별자치도_한라산 둘레길 코스별 정보",
+      "new_title": "제주특별자치도_한라산 둘레길 코스별 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f27b5ed37c0bb706cb4447135e1f956390eb50d2052b779c0fd84ac63e8c779d",
+      "new_digest": "0a1860b520be9a91b287500756f6e89f9407a66624e23cdad09c7f1f9b05a884"
+    },
+    {
+      "id": "15095716",
+      "old_title": "제주특별자치도_농어촌 체험 휴양 마을 현황",
+      "new_title": "제주특별자치도_농어촌 체험 휴양 마을 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "941f6dbd86334725bd1fcb1ebd533696f28586fed29aa2af6c85db0e6e6a97a3",
+      "new_digest": "06f8639d70a00057d35ead1e6296877725b57c0e115f564c9e19c1faa271eef8"
+    },
+    {
+      "id": "15095718",
+      "old_title": "제주특별자치도_해수욕장 수질 조사 정보",
+      "new_title": "제주특별자치도_해수욕장 수질 조사 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "415bda85219a33d7c86e1ce9985e5eba5fe38c47a69e8b7e8b9bc5cad5d9607f",
+      "new_digest": "e0f33921afba00811dfd778e9023a2b855f6f5d14b14a053a2b190731c619324"
+    },
+    {
+      "id": "15095719",
+      "old_title": "제주특별자치도_시도별 합계 출산율 정보",
+      "new_title": "제주특별자치도_시도별 합계 출산율 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ecb772958050c1cc00cfe4f3a12095319e63c653c1dc54a7d768c3aabd2392a4",
+      "new_digest": "ae954011d24e349055163cead852efeafc8a41483d7b2aae8015d6b96d80acfa"
+    },
+    {
+      "id": "15095720",
+      "old_title": "제주특별자치도_시도별 실업률 정보",
+      "new_title": "제주특별자치도_시도별 실업률 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d43df78bafa92c95cdca72b82f2d28072ff8cafdcf7afb465a73e66a9c201b79",
+      "new_digest": "edd12085952c7284e9d72b749db5e88ea71ee3f1c9bef0ff722d2b63e85472ac"
+    },
+    {
+      "id": "15095721",
+      "old_title": "제주특별자치도_시도별 학생 1인당 월평균 사교육비 정보",
+      "new_title": "제주특별자치도_시도별 학생 1인당 월평균 사교육비 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3e082d64089ac108cccdddd2c3ed93e9967bc69c9cb22ab86bce45f385a5e9b0",
+      "new_digest": "25a6d9d31f222c1fd2cdc3fac6766e3ea9c791b72569e43e3d87aa0dcbca6a8d"
+    },
+    {
+      "id": "15095723",
+      "old_title": "제주특별자치도_시도별 고등학생 사교육 참여율 정보",
+      "new_title": "제주특별자치도_시도별 고등학생 사교육 참여율 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "007f22ea9feff204afe430c69e8cd0fdb1ad7b6147b1b078a08ba32338155bd6",
+      "new_digest": "9b84d0b06d3f46b658616e0730020099251c7f9e2ed63dc0a46f6cb90864ac35"
+    },
+    {
+      "id": "15095725",
+      "old_title": "제주특별자치도_제주 공공 도서관 정보",
+      "new_title": "제주특별자치도_제주 공공 도서관 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f00e1991a9013d2869add2dedc12ad739982a1d1d8e68a055ad5b6e229ae30a2",
+      "new_digest": "5f085814b85773c9f6414154977264c33b24af1020faf66037471223f04cebfb"
+    },
+    {
+      "id": "15095726",
+      "old_title": "제주특별자치도_제주 새마을문고 정보",
+      "new_title": "제주특별자치도_제주 새마을문고 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "77a82663d2b96acfbab08b4de054a434cd9ae765e6f61a727687a12bd767f61f",
+      "new_digest": "e06cdb3fb98e05587da3efb6b518ba4f572a8579ae67f0a13d64e0f54718f95a"
+    },
+    {
+      "id": "15095727",
+      "old_title": "제주특별자치도_제주 치매 안심 센터 위치 정보",
+      "new_title": "제주특별자치도_제주 치매 안심 센터 위치 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8ca4d8309bab0d628a5be1063f2c48977431abb92aea5274d264433582ca9a53",
+      "new_digest": "c50184d341bb40788fce65062506b70d89e9fa2242ccdad53d1dd74ffb97be36"
+    },
+    {
+      "id": "15095728",
+      "old_title": "제주특별자치도_제주 노면 상태별 교통사고 통계",
+      "new_title": "제주특별자치도_제주 노면 상태별 교통사고 통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a5f4fdda51821b96768788c6ec37086b577f69313d433a6d217e562fd169fe2b",
+      "new_digest": "3b3f0ccffea7dbf017752a41717a56b33ac361a8fe871d0401561874bf54a3fc"
+    },
+    {
+      "id": "15095729",
+      "old_title": "제주특별자치도_제주 기상 상태별 교통사고 통계",
+      "new_title": "제주특별자치도_제주 기상 상태별 교통사고 통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "22e2cda67550ddf4640417b732e02f97d4934763d514b7df1a6d97a1daec43a2",
+      "new_digest": "7fe10765cf51d0b6647e633932d3e6e60b9f3b2cf2eadf90841dd91493406cd8"
+    },
+    {
+      "id": "15095730",
+      "old_title": "제주특별자치도_제주 주유소 연평균 판매 가격 정보",
+      "new_title": "제주특별자치도_제주 주유소 연평균 판매 가격 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2925056abfeed9a5d01b200f4b6d2d445d4aea17489facdf8124777130296014",
+      "new_digest": "599807602f03aa14ed195269f284adee97db4ff72f5ce379853a5ba6a026953b"
+    },
+    {
+      "id": "15095731",
+      "old_title": "제주특별자치도_제주 주유소 면세유 월평균 판매 가격 정보",
+      "new_title": "제주특별자치도_제주 주유소 면세유 월평균 판매 가격 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "65c2a3d3b0fa00e5d620110738e917bb5dad9e77cceaf7e1eedea84d7ed2990a",
+      "new_digest": "3984e3d38d75aef151a35980e1db646b589c9e022b3be077d3c40e30e02f3339"
+    },
+    {
+      "id": "15095732",
+      "old_title": "제주특별자치도_제주 대기 측정소 정보",
+      "new_title": "제주특별자치도_제주 대기 측정소 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "60524ddf5b21bb9821ae470b51e241e1fb1a56d4770d3b538ad2886a889ce9ac",
+      "new_digest": "c4fc51d4e55ea877d9a7d873da1ce22c730fc0a3a9d5854a9c07dab12707267e"
+    },
+    {
+      "id": "15095734",
+      "old_title": "제주특별자치도_제주 감염병 발생 통계",
+      "new_title": "제주특별자치도_제주 감염병 발생 통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8e524b46ee4d5b61baaa927ce497cc37c8621fc4970de39610804889b14157ce",
+      "new_digest": "9a53cc25f972327a718cbae601b05a1abf46d64c98735ed8bd0408e32a93cc83"
+    },
+    {
+      "id": "15095736",
+      "old_title": "제주특별자치도_제주 친환경 농축산물 출하 정보",
+      "new_title": "제주특별자치도_제주 친환경 농축산물 출하 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "50368acb271fdd174ab6b5fc27317db8f9a49cf71c8c1f61978a70b422167460",
+      "new_digest": "308524195087b6c6b379f6dd5b8db101561b370589e01a524248223d5e290f30"
+    },
+    {
+      "id": "15095737",
+      "old_title": "제주특별자치도_제주마 등록 현황",
+      "new_title": "제주특별자치도_제주마 등록 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0f5ebec8b50c6f5861bd8f1c1218f1bb678fbcc361d732bef3d309b24b43464f",
+      "new_digest": "5c427a800aa4b3bef1664090a5147440d11b1a0670216628c5ee8e103ae97e4b"
+    },
+    {
+      "id": "15095739",
+      "old_title": "제주특별자치도_제주 품종별 과수 생산량 통계",
+      "new_title": "제주특별자치도_제주 품종별 과수 생산량 통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4577a8c7301f1844ad8d9893e244b9b3ee6e0af947c905d93e47de73df6824be",
+      "new_digest": "598013b494236f776b2a1dbdfdbc002108dc0cacbd3c641bad9a58a0cba46a6c"
+    },
+    {
+      "id": "15099715",
+      "old_title": "제주특별자치도_주차장기본정보",
+      "new_title": "제주특별자치도_주차장기본정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2f778fe37848927b9a18dc02cdcfa85a16b602306163102d357ff945ede75c76",
+      "new_digest": "0d9302fa1abc351e95c9df53e66eac756715e6bce564662f05c7110fc8f15705"
+    },
+    {
+      "id": "15108328",
+      "old_title": "제주특별자치도_제주도지방공무원시험채용공고",
+      "new_title": "제주특별자치도_제주도지방공무원시험채용공고",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "df417b108aa5964cf7f1ce84d23af91224959bd03ed399f0d9ad21f5ca0ce55b",
+      "new_digest": "65b99567fb5091a21ded1e2356e501d1c2657386b6876b020d0f7b15bca58cb1"
+    },
+    {
+      "id": "15108330",
+      "old_title": "제주특별자치도_제주도임기제공무원시험채용공고",
+      "new_title": "제주특별자치도_제주도임기제공무원시험채용공고",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9a8eb7a5f812b0f955ba64868cfb727fa8041eb761ad51118a63372fa22d3731",
+      "new_digest": "bc0f2fde80daa5683d1be79b11800b3712fcc6a8e193955cfbbf2c4754775234"
+    },
+    {
+      "id": "15108331",
+      "old_title": "제주특별자치도_제주도소방공무원시험채용공고",
+      "new_title": "제주특별자치도_제주도소방공무원시험채용공고",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "978f44ea4bdb1204e7d74868f830d13b0efc65d0f8e27d0add47b1b487937e70",
+      "new_digest": "0681ec58d9628c38ffe68285c7035dc89ec67922be1e71ff870cca128decc153"
+    },
+    {
+      "id": "15108333",
+      "old_title": "제주특별자치도_제주도자치경찰시험채용공고",
+      "new_title": "제주특별자치도_제주도자치경찰시험채용공고",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "66ce02d0abee307de9433602d4f279a93ef655a1d52f9ec2baced7a6cdcca440",
+      "new_digest": "a13015917fcdb4a8c9b174bbedb63bcb749fd3110b11175b95d2b7ef616ed7af"
+    },
+    {
+      "id": "15108334",
+      "old_title": "제주특별자치도_제주도공공기관직원시험채용공고",
+      "new_title": "제주특별자치도_제주도공공기관직원시험채용공고",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d1b6d12d0516788ef0667426b7ac704ee54025c01a5d945901f8930e4cc4ff9c",
+      "new_digest": "5184d4b9c3b76f9fcc59adcd6bec6a8e49d58d8c9eb6d6aa2d6ec033288ba8ae"
+    },
+    {
+      "id": "15108336",
+      "old_title": "제주특별자치도_제주도공무직기간제근로자시험채용공고",
+      "new_title": "제주특별자치도_제주도공무직기간제근로자시험채용공고",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "07ca50844ef932c30f7ba91980f93c91bbab9df039630fd726192ee151e04979",
+      "new_digest": "b1e9f59dd45ee709877801adc0aafd3ad2f5a1343b00863b588c83513345e595"
+    },
+    {
+      "id": "15108342",
+      "old_title": "제주특별자치도_제주도공공근로단기일자리시험채용공고",
+      "new_title": "제주특별자치도_제주도공공근로단기일자리시험채용공고",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "aaf32d4c95a50e7f9b053dd72a933cdc11d8fa800e9f827a80d913e481503852",
+      "new_digest": "7322cb7fa7e69fc48a30d83bdad6372847e7dc68e2ca5edc6a50e6391729c170"
+    },
+    {
+      "id": "15108345",
+      "old_title": "제주특별자치도_제주도국가기타타시도시험채용공고",
+      "new_title": "제주특별자치도_제주도국가기타타시도시험채용공고",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "73cf00e6306c345fd9285436b4077acaa13192173130e88cc7fc8b8aebc9585d",
+      "new_digest": "1a8f14747e96ffca4340ac894b98cbe3fd21effa0309b41de43020e135ee3f7b"
+    },
+    {
+      "id": "15108346",
+      "old_title": "제주특별자치도_제주도수렵면허시험공고",
+      "new_title": "제주특별자치도_제주도수렵면허시험공고",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "433ebfaa3b2335c851ff6c1ddaaf32e2c6e77aaf3ab0d34f7dd14cd825536331",
+      "new_digest": "c899d2cfae82fe6888765353f15dce9d77f7f37838305785615c6ebb143772b4"
+    },
+    {
+      "id": "15108422",
+      "old_title": "제주특별자치도_제주도교육훈련정보",
+      "new_title": "제주특별자치도_제주도교육훈련정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "cb0b96a5a30a5d62c6a06a65525aaf81b72db6b098895342b76ccebf18f9beca",
+      "new_digest": "56c884411e572fa18e439e2510aeeb822583e803ef42329f315a52d9fd448d9c"
+    },
+    {
+      "id": "15109149",
+      "old_title": "제주특별자치도_사회적약자 시설데이터 로드뷰",
+      "new_title": "제주특별자치도_사회적약자 시설데이터 로드뷰",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "edffdf57d180ab7ab09d44d3b5c648f0ff11be456ddefbc69e12bd1e037d2791",
+      "new_digest": "51d64f11a1262f0453c524ae0404f14f26ae3421049757440eca52680bef153f"
+    },
+    {
+      "id": "15109632",
+      "old_title": "제주특별자치도_제주특별자치도 월별 전기차자동차 충전 이력 데이터",
+      "new_title": "제주특별자치도_제주특별자치도 월별 전기차자동차 충전 이력 데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "82849e4718e28265982988709ea230912a6f86b81928b849947101d6a198b4fc",
+      "new_digest": "5063aed13d0b48f0704fb6826d3f07bea97cf93d0cdcf66c6eaeaf6dfa771630"
+    },
+    {
+      "id": "15109636",
+      "old_title": "제주특별자치도_제주특별자치도 요일별 전기차자동차 충전 이력 데이터",
+      "new_title": "제주특별자치도_제주특별자치도 요일별 전기차자동차 충전 이력 데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e063e31a435051c7251923e2e357f1058e280ccbb7cd1d55c4c46462b7aeaf62",
+      "new_digest": "2bac2eb547791f15e8fc192316afec34d42a3a47254c609190a95820a2033263"
+    },
+    {
+      "id": "15109639",
+      "old_title": "제주특별자치도_제주특별자치도 일별 전기차자동차 충전 이력 데이터",
+      "new_title": "제주특별자치도_제주특별자치도 일별 전기차자동차 충전 이력 데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8c95554bb6583f126848c8f1f06c210bde4059545fea095ba4fa826495918b37",
+      "new_digest": "a3003185d5fa97888037c45583016a6a6c83d647ad3ec74bfab06971e5758f7e"
+    },
+    {
+      "id": "15109641",
+      "old_title": "제주특별자치도_제주특별자치도 월별전기자동차충전대기시간데이터",
+      "new_title": "제주특별자치도_제주특별자치도 월별전기자동차충전대기시간데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c98dafdc633dca82fed0d1f95cfca2d45ea3ff9be06ea1c9fa5c6ae089578e37",
+      "new_digest": "fe447ea241b24b128d7c5975d0c6c44f8e65db2a042ad685cb569d0e2b1a747a"
+    },
+    {
+      "id": "15109642",
+      "old_title": "제주특별자치도_제주특별자치도 요일별전기자동차충전대기시간데이터",
+      "new_title": "제주특별자치도_제주특별자치도 요일별전기자동차충전대기시간데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d82fcdd8908cb50303f4555c2fddc213d1f7cbcdaedd37b0cd199b698df98e86",
+      "new_digest": "908faecabecd7b81f5ec0264e7568170ea192b8a0a9678d035782d5653c7ab3c"
+    },
+    {
+      "id": "15109644",
+      "old_title": "제주특별자치도_제주특별자치도 일별전기자동차충전대기시간데이터",
+      "new_title": "제주특별자치도_제주특별자치도 일별전기자동차충전대기시간데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f7ea50e2649992063f5d193217ae7c512c9cbac5501b369ae8b9dd97d8e5a7c5",
+      "new_digest": "426e6df7c6fd4f0ddbd5928f573df3f97e409446728581b29bfc6d5dd723bd89"
+    },
+    {
+      "id": "15126194",
+      "old_title": "제주특별자치도_CFI(카본프리 아일랜드) 공지사항",
+      "new_title": "제주특별자치도_CFI(카본프리 아일랜드) 공지사항",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "65e91c45f6ff3c8bc3ea54e15b8be006e23693e7bb6be32bcfb6d9f6c1414324",
+      "new_digest": "2041fbcf612282a4e3411096390b89dd2c3cc3a3f8bc4d0e4356e5a0770f5e6d"
+    },
+    {
+      "id": "15126195",
+      "old_title": "제주특별자치도_공공저작물 문화재 정보",
+      "new_title": "제주특별자치도_공공저작물 문화재 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "cc152377141d430d8e5447f9f8e12c0f1e5f49bb1cc0f4c62ec1a13d553aaf2d",
+      "new_digest": "650e8895703f08741d368d718ec3419018439b80fe36c5880edd0f350f480f57"
+    },
+    {
+      "id": "15126196",
+      "old_title": "제주특별자치도_공공저작물 사진으로보는 역사 정보",
+      "new_title": "제주특별자치도_공공저작물 사진으로보는 역사 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "95d391a44482abeba723de6f5ff929f7c1b55701ba5554b7241f80b5e70bcea3",
+      "new_digest": "88e871fc5ea22996f2d63222553f6aeb0ea4cd0a8de096423033b2dce9b096af"
+    },
+    {
+      "id": "15126197",
+      "old_title": "제주특별자치도_공공저작물 영상자료",
+      "new_title": "제주특별자치도_공공저작물 영상자료",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3baebfd8ac3b94c97a1b8e35cce044c32ed5f9bb75a35d168170dca6aacfa181",
+      "new_digest": "d1c1d6b2593c12229b122c231cb32c8c7daac6cd6bac2176da4fddc6dd6d8291"
+    },
+    {
+      "id": "15126198",
+      "old_title": "제주특별자치도_문화/역사 문화달력",
+      "new_title": "제주특별자치도_문화/역사 문화달력",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e300e1fdded77c7f01d5688cdd5c1f4f611993d7603e6fe5b24ff4209db862ce",
+      "new_digest": "d1e032ad60472e4a77bcc6400f3721692d81b05f8bb303b829fee12a3c0b8709"
+    },
+    {
+      "id": "15126199",
+      "old_title": "제주특별자치도_보훈 이달의유공자",
+      "new_title": "제주특별자치도_보훈 이달의유공자",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f127f0c0df306748e3ede0c60a6712728742708d3350973c3aa4d2f31c242be8",
+      "new_digest": "5ebd0d3c0d92dc963204fb8bb840a90ef7e3b11a0094021a1fee01caa3b96dbb"
+    },
+    {
+      "id": "15126200",
+      "old_title": "제주특별자치도_보훈 제주유공자",
+      "new_title": "제주특별자치도_보훈 제주유공자",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d51f7f413bb8f65c91ae1712f2cf0489b2eeb0e7cca27b8c4c26eb641846bc57",
+      "new_digest": "760bc99e416a073146291a1047bbb18f4c912dafe84ce4f5eac73028b3ec0e1f"
+    },
+    {
+      "id": "15126201",
+      "old_title": "제주특별자치도_일자리/기업/청년 알림마당",
+      "new_title": "제주특별자치도_일자리/기업/청년 알림마당",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5a1e0032a16b570305ae3641cfbb14f77cd0264489497109dd76fc8e8f5b3f4c",
+      "new_digest": "a0856d88ac1271190dc960f28f340331e2b8ed94785cba3348e1ed82348e3788"
+    },
+    {
+      "id": "15126202",
+      "old_title": "제주특별자치도_일자리/청년 청년정책",
+      "new_title": "제주특별자치도_일자리/청년 청년정책",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "155ac202f770c230f774ba950df43923c01d0b4ef03aac25a68a90e9cf61559c",
+      "new_digest": "48bc5870712952f5f53bc6919598a1b92fd7397ed54c208ddc2d7000596c9352"
+    },
+    {
+      "id": "15126203",
+      "old_title": "제주특별자치도_제주환경자원순환센터 지하수수질 정보",
+      "new_title": "제주특별자치도_제주환경자원순환센터 지하수수질 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7fccd5acdb8398a92ac3d18ab1c3fcf8548f2dd046dda252583f67c085c53863",
+      "new_digest": "b034374b0f99f3742bafd15ec80b1163222d07b747533e8727b477e3ed8b8b63"
+    },
+    {
+      "id": "15139831",
+      "old_title": "제주특별자치도_산업재해발생현황",
+      "new_title": "제주특별자치도_산업재해발생현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3702d2dbd454be0ad4da994fde649562f794431e967e48cbd19bd0ab65542a50",
+      "new_digest": "397b0003d38127dfe90752010ad49c29c4e672f35c840420414f0526fce5e411"
+    },
+    {
+      "id": "15139832",
+      "old_title": "제주특별자치도_일자리청년정책현황",
+      "new_title": "제주특별자치도_일자리청년정책현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3c288b885371b4b672b6b472da4ddc1f66b83040fee2600c2d37af20f6666469",
+      "new_digest": "4765282479b6495dcef2b32b55d44331e74cbea02e5de13b3c87ff36b5723b61"
+    },
+    {
+      "id": "15139835",
+      "old_title": "제주특별자치도_중앙협력본부 제주브리핑",
+      "new_title": "제주특별자치도_중앙협력본부 제주브리핑",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4e6dc5d63ad160aa7b7cd50de7e2c11ac8fac825106638a870d289caedfc358c",
+      "new_digest": "4d4e041047dfe5bc08db92867b9377d07c0161b4bbf9f35186cc3a5190ae868c"
+    },
+    {
+      "id": "15139836",
+      "old_title": "제주특별자치도_중앙협력본부 행사축제소식",
+      "new_title": "제주특별자치도_중앙협력본부 행사축제소식",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b990a8d642a4a3b9f793b4257d082a3b683cc7d947dc55b5a25501a9719fccf0",
+      "new_digest": "d170862c2413095555230963481b6de1290438cf99fa5b59d70dbfc6051995a3"
+    },
+    {
+      "id": "15139837",
+      "old_title": "제주특별자치도_창업지원사업현황-창업교육",
+      "new_title": "제주특별자치도_창업지원사업현황-창업교육",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "caea06ceacdb227a9ae925c350d8200e02300a15648759e30915b944b56ce5dc",
+      "new_digest": "29165e9e04a94f2e80eccc5aa6dbffce9479dbc428c27c9ff4ce4e372137cb86"
+    },
+    {
+      "id": "15152709",
+      "old_title": "제주특별자치도_제주돌문화공원 소장자료",
+      "new_title": "제주특별자치도_제주돌문화공원 소장자료",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7500640cf7400cf2df6acba7828f8d6934c6d6da839173d5cac7a0362c53968e",
+      "new_digest": "88646705ee22eb105a33103ca86702a0dca0751773062894cafad14089c58c5a"
+    },
+    {
+      "id": "15152712",
+      "old_title": "제주특별자치도_공공도서관 프로그램 현황",
+      "new_title": "제주특별자치도_공공도서관 프로그램 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4561920e513dc6463d48180c9ec461e94c1603b3c9c41b9e5fece6d7bdb07f4f",
+      "new_digest": "1f83a00f2c20b655845ff2b28c97f3f7198f25a79238ad40237dff11404cc71f"
+    },
+    {
+      "id": "15152716",
+      "old_title": "제주특별자치도_상하수도본부 단수공사안내",
+      "new_title": "제주특별자치도_상하수도본부 단수공사안내",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "67a1b2f357622e1ff27fa10cc46a459cfd38c2c8802b82b8cecb4701b7536022",
+      "new_digest": "4e07e2eaf302caf8f9ea9c5b05790b41d07de08b2080342522dfc777be6f60e9"
+    },
+    {
+      "id": "15152720",
+      "old_title": "제주특별자치도_제주공익활동지원센터 행사홍보",
+      "new_title": "제주특별자치도_제주공익활동지원센터 행사홍보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "290c82fec5a0eb8725c5cdb8a81c74e330bf921f7da8cd19d2181949f51253c3",
+      "new_digest": "f14489f35b9a5f2e0fb224901f931472f40004ad2b507f1e38bf5266ab32e2cf"
+    },
+    {
+      "id": "15152721",
+      "old_title": "제주특별자치도_제주항일기념관 소장유물",
+      "new_title": "제주특별자치도_제주항일기념관 소장유물",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "29475e1a334f10f8a4944b2d604d654cc1f9bd994c77afbc658933595c0a32e4",
+      "new_digest": "05e5d0def58d0e77bd6df3419a55d40acfa047df2c3a04c199e9fbf62f03ab0a"
+    },
+    {
+      "id": "3043821",
+      "old_title": "제주특별자치도_제주민요",
+      "new_title": "제주특별자치도_제주민요",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b47550ecae3a204ac1f0bb0f787fcac5f23dc2844fefa0435050a5751fb81a06",
+      "new_digest": "4cad5ea3b4bdccba342da37522e30078ba6e59b4c79c9341148a5b172fe0f8aa"
+    },
+    {
+      "id": "3043823",
+      "old_title": "제주특별자치도_속담색인어사전정보",
+      "new_title": "제주특별자치도_속담색인어사전정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "76186e35c8516ad74d26c71dc93611031f0f85939acc8aaef1467a88d6f69f1e",
+      "new_digest": "6d35ecb13edb2653261c0bf6135e0b15b1f19bf7ff4fb9dad8ab94892f5652b2"
+    },
+    {
+      "id": "3045201",
+      "old_title": "제주특별자치도_제주도내물가정보",
+      "new_title": "제주특별자치도_제주도내물가정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "62bece997ce26b7985d4768882d89d839f8e3cddcfcd0514e80020b46de6539a",
+      "new_digest": "66bf551e8a8e8633b66ed5a2945cd7e7ce7b033e9f8c3f792a93ce8c2ba01f28"
+    },
+    {
+      "id": "3082721",
+      "old_title": "제주특별자치도_대기환경정보",
+      "new_title": "제주특별자치도_대기환경정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3dc3f58813ebc03047982b73b073ac78e5b60552f11acde3626af7ec6c6d24d5",
+      "new_digest": "f0945cbea3bfedbdabbea5b6eebce16a6396ffa0e709fc00c05c7e302d523886"
     }
   ]
 }

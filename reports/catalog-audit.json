@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-03T17:43:13Z",
+  "generated_at": "2026-07-03T17:58:13Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 17637,
-    "callable_operations": 17495,
-    "specs_without_operations": 2262,
-    "specs_without_callable_operation": 2337,
+    "operations_total": 17858,
+    "callable_operations": 17716,
+    "specs_without_operations": 2162,
+    "specs_without_callable_operation": 2237,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 5299,
-    "operations_without_response_params": 6521,
+    "operations_without_request_params": 5520,
+    "operations_without_response_params": 6742,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 2927,
-      "external_endpoint_operations": 6027,
+      "external_endpoint_specs": 3027,
+      "external_endpoint_operations": 6248,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 114,
       "dev_approval_required_operations": 208,
-      "prod_approval_required_operations": 5605,
+      "prod_approval_required_operations": 5748,
       "malformed_endpoint_url_count": 42,
       "malformed_guide_url_count": 601,
       "top_endpoint_hosts": [
@@ -34,7 +34,7 @@
         },
         {
           "host": "data.gg.go.kr",
-          "count": 2173
+          "count": 2174
         },
         {
           "host": "data.gm.go.kr",
@@ -69,12 +69,20 @@
           "count": 168
         },
         {
+          "host": "www.jeju.go.kr",
+          "count": 110
+        },
+        {
           "host": "openapi.q-net.or.kr",
           "count": 104
         },
         {
           "host": "www.safemap.go.kr",
           "count": 104
+        },
+        {
+          "host": "www.jejudatahub.net",
+          "count": 101
         },
         {
           "host": "openapi.jeonju.go.kr",
@@ -99,20 +107,12 @@
         {
           "host": "www.lawmaking.go.kr",
           "count": 38
-        },
-        {
-          "host": "www.consumer.go.kr",
-          "count": 36
-        },
-        {
-          "host": "www.eshare.go.kr",
-          "count": 36
         }
       ],
       "top_external_endpoint_hosts": [
         {
           "host": "data.gg.go.kr",
-          "count": 2173
+          "count": 2174
         },
         {
           "host": "data.gm.go.kr",
@@ -147,12 +147,20 @@
           "count": 168
         },
         {
+          "host": "www.jeju.go.kr",
+          "count": 110
+        },
+        {
           "host": "openapi.q-net.or.kr",
           "count": 104
         },
         {
           "host": "www.safemap.go.kr",
           "count": 104
+        },
+        {
+          "host": "www.jejudatahub.net",
+          "count": 101
         },
         {
           "host": "openapi.jeonju.go.kr",
@@ -181,14 +189,6 @@
         {
           "host": "www.consumer.go.kr",
           "count": 36
-        },
-        {
-          "host": "www.eshare.go.kr",
-          "count": 36
-        },
-        {
-          "host": "www.juso.go.kr",
-          "count": 30
         }
       ],
       "top_external_guide_hosts": [
@@ -233,6 +233,10 @@
           "count": 61
         },
         {
+          "host": "www.jeju.go.kr",
+          "count": 61
+        },
+        {
           "host": "data.gg.go.kr",
           "count": 55
         },
@@ -267,10 +271,6 @@
         {
           "host": "openapi.epost.go.kr",
           "count": 37
-        },
-        {
-          "host": "www.eshare.go.kr",
-          "count": 36
         }
       ]
     },

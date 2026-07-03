@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T17:43:13Z`
+- Generated at: `2026-07-03T17:58:13Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `17637`
-- Runtime evidence: `1825` (`10.3%`)
-- External endpoint operations: `6027`
-- Registered adapter operations: `6017`
+- Operations: `17858`
+- Runtime evidence: `1850` (`10.4%`)
+- External endpoint operations: `6248`
+- Registered adapter operations: `6238`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -27,7 +27,7 @@
 | 법제처 | 203 | 203 | 403 | 88 | 21.8% | 50 | 11 | 27 | 154 | 0 |
 | 경기도 광명시 | 197 | 197 | 578 | 49 | 8.5% | 49 | 0 | 0 | 23 | 0 |
 | 해양수산부 | 173 | 173 | 277 | 11 | 4.0% | 0 | 1 | 10 | 117 | 0 |
-| 제주특별자치도 | 171 | 18 | 28 | 4 | 14.3% | 1 | 1 | 2 | 8 | 0 |
+| 제주특별자치도 | 171 | 118 | 249 | 29 | 11.6% | 25 | 2 | 2 | 151 | 0 |
 | 농촌진흥청 | 136 | 14 | 45 | 8 | 17.8% | 5 | 0 | 3 | 8 | 0 |
 | 경상남도 | 129 | 129 | 134 | 0 | 0.0% | 0 | 0 | 0 | 116 | 0 |
 | 대전광역시 서구 | 125 | 0 | 0 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
@@ -62,6 +62,7 @@
 | 한국산업인력공단 | 230 | 230 | 317 | 150 | 47.3% | 7 | 1 | 142 | 181 | 0 |
 | 국회 국회사무처 | 277 | 277 | 277 | 30 | 10.8% | 0 | 30 | 0 | 277 | 0 |
 | 해양수산부 | 173 | 173 | 277 | 11 | 4.0% | 0 | 1 | 10 | 117 | 0 |
+| 제주특별자치도 | 171 | 118 | 249 | 29 | 11.6% | 25 | 2 | 2 | 151 | 0 |
 | 한국연구재단 | 26 | 24 | 247 | 13 | 5.3% | 4 | 3 | 6 | 234 | 0 |
 | 한국마사회 | 223 | 223 | 223 | 10 | 4.5% | 0 | 0 | 10 | 221 | 0 |
 | 한국관광공사 | 28 | 28 | 213 | 1 | 0.5% | 0 | 0 | 1 | 212 | 0 |
@@ -77,7 +78,6 @@
 | 세종특별자치시 | 122 | 122 | 122 | 0 | 0.0% | 0 | 0 | 0 | 117 | 0 |
 | 서울올림픽기념국민체육진흥공단 | 70 | 70 | 111 | 0 | 0.0% | 0 | 0 | 0 | 1 | 0 |
 | 한국예탁결제원 | 10 | 10 | 110 | 0 | 0.0% | 0 | 0 | 0 | 110 | 0 |
-| 한국대학교육협의회 | 9 | 9 | 103 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 
 The full machine-readable report is `reports/data-go-kr/institution-api-overview.json`.
 The full coverage backlog is `reports/data-go-kr/coverage-backlog.json`, with
@@ -85,21 +85,21 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 ## Largest Categories
 
-- 공공행정: `2467` operations
-- 문화관광: `1734` operations
-- 교통물류: `1694` operations
-- 농축수산: `1487` operations
-- 사회복지: `1413` operations
-- 산업고용: `1246` operations
+- 공공행정: `2493` operations
+- 문화관광: `1842` operations
+- 교통물류: `1720` operations
+- 농축수산: `1499` operations
+- 사회복지: `1419` operations
+- 산업고용: `1258` operations
 - 식품건강: `1177` operations
-- 환경기상: `1091` operations
+- 환경기상: `1097` operations
 - 국토관리: `971` operations
 - 재정금융: `964` operations
 
 ## Largest Hosts
 
 - apis.data.go.kr: `11423` operations
-- data.gg.go.kr: `2173` operations
+- data.gg.go.kr: `2174` operations
 - data.gm.go.kr: `606` operations
 - www.vworld.kr: `458` operations
 - www.safetydata.go.kr: `370` operations

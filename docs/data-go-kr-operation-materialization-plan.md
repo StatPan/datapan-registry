@@ -2,13 +2,13 @@
 
 This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns APIs without operation mappings into bounded institution work queues. It is separate from runtime evidence reactivation: these APIs need operation metadata materialized before they can enter verification batches.
 
-- Generated at: `2026-07-03T17:43:13Z`
+- Generated at: `2026-07-03T17:58:13Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `9798` (`81.2%`)
-- APIs without operation mapping: `2262`
+- APIs with operation mapping: `9898` (`82.1%`)
+- APIs without operation mapping: `2162`
 - Planned institutions: `10`
-- Planned APIs: `729`
+- Planned APIs: `682`
 - First queue: `제주특별자치도`
 - Batch size: `100`
 
@@ -16,7 +16,7 @@ This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns
 
 | Rank | Institution | APIs | Covered APIs | Uncovered APIs | API Coverage | Planned APIs | Remaining After Batch |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 제주특별자치도 | 171 | 18 | 153 | 10.5% | 100 | 53 |
+| 1 | 제주특별자치도 | 171 | 118 | 53 | 69.0% | 53 | 0 |
 | 2 | 농촌진흥청 | 136 | 14 | 122 | 10.3% | 100 | 22 |
 | 3 | 대전광역시 서구 | 125 | 0 | 125 | 0.0% | 100 | 25 |
 | 4 | 전라남도 | 109 | 108 | 1 | 99.1% | 1 | 0 |
@@ -31,11 +31,11 @@ This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns
 
 | Institution | API ID | Title | Category | Format | Dev Approval | Prod Approval | Updated |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 제주특별자치도 | 15079829 | 제주특별자치도_제주 C-ITS 교통정보 | 교통물류 | XML | 자동승인 | 심의승인 | 2026-04-06 |
-| 제주특별자치도 | 15152721 | 제주특별자치도_제주항일기념관 소장유물 | 문화관광 | JSON | 자동승인 | 심의승인 | 2025-11-18 |
-| 제주특별자치도 | 15152720 | 제주특별자치도_제주공익활동지원센터 행사홍보 | 문화관광 | JSON | 자동승인 | 심의승인 | 2025-11-18 |
-| 제주특별자치도 | 15152716 | 제주특별자치도_상하수도본부 단수공사안내 | 환경기상 | JSON | 자동승인 | 심의승인 | 2025-11-18 |
-| 제주특별자치도 | 15152712 | 제주특별자치도_공공도서관 프로그램 현황 | 교육 | JSON | 자동승인 | 심의승인 | 2025-11-18 |
+| 제주특별자치도 | 15094859 | 제주특별자치도_내국인 관광객 테마별 카드 이용 데이터 | 문화관광 | JSON | 자동승인 | 심의승인 | 2021-11-17 |
+| 제주특별자치도 | 15094858 | 제주특별자치도_내국인 관광객 업종별 카드 이용데이터 | 문화관광 | JSON | 자동승인 | 심의승인 | 2021-11-17 |
+| 제주특별자치도 | 15094857 | 제주특별자치도_내국인 관광객 지역, 업종, 성별, 연령대별 카드 이용 데이터 | 문화관광 | JSON | 자동승인 | 심의승인 | 2021-11-17 |
+| 제주특별자치도 | 15094854 | 제주특별자치도_와이파이 월간 사용자수 | 과학기술 | JSON | 자동승인 | 심의승인 | 2021-11-17 |
+| 제주특별자치도 | 15094851 | 제주특별자치도_와이파이 일일 사용자수 | 과학기술 | JSON | 자동승인 | 심의승인 | 2021-11-17 |
 | 농촌진흥청 | 3060744 | 농촌진흥청_주간농사정보 | 농축수산 | XML | 자동승인 | 자동승인 | 2026-04-29 |
 | 농촌진흥청 | 15101991 | 농촌진흥청_유기농실천사례 | 농축수산 | XML | 자동승인 | 심의승인 | 2026-04-29 |
 | 농촌진흥청 | 15101989 | 농촌진흥청_품목별 수출정보 | 농축수산 | XML | 자동승인 | 심의승인 | 2026-04-29 |

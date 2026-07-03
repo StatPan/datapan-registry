@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T17:43:19Z",
+  "generated_at": "2026-07-03T17:58:18Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 17637,
-    "callable_operations": 17495,
+    "operations": 17858,
+    "callable_operations": 17716,
     "callable_operation_percent": 99.2,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 6027,
-    "registered_adapter_operations": 6017,
+    "external_endpoint_operations": 6248,
+    "registered_adapter_operations": 6238,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.5,
-    "approval_required_operations": 5711,
+    "approval_required_operations": 5854,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 84,
+    "registered_adapter_hosts": 88,
     "missing_adapter_hosts": 11,
-    "adapter_count": 76,
+    "adapter_count": 80,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T17:43:10Z",
-    "total": 1825,
-    "verified": 486,
-    "failed": 146,
+    "generated_at": "2026-07-03T17:58:10Z",
+    "total": 1850,
+    "verified": 510,
+    "failed": 147,
     "skipped": 1193,
     "unknown": 0,
-    "verified_percent": 26.6,
-    "evidence_operation_percent": 10.3
+    "verified_percent": 27.6,
+    "evidence_operation_percent": 10.4
   },
   "route_evidence": {
     "present": true,
@@ -209,12 +209,12 @@
           "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 869,
-        "operations": 2173,
-        "external_endpoint_operations": 2173,
+        "specs": 870,
+        "operations": 2174,
+        "external_endpoint_operations": 2174,
         "external_guide_specs": 21,
         "wms_operations": 5,
-        "approval_required_operations": 39,
+        "approval_required_operations": 40,
         "sample_ids": [
           "15005231",
           "15011020",
@@ -363,31 +363,31 @@
         ]
       },
       {
-        "host": "openapi.q-net.or.kr",
-        "provider": "q-net",
+        "host": "www.jeju.go.kr",
+        "provider": "jeju-www",
         "kinds": [
           "external_endpoint",
           "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 65,
-        "operations": 104,
-        "external_endpoint_operations": 104,
-        "external_guide_specs": 22,
-        "approval_required_operations": 19,
+        "specs": 59,
+        "operations": 110,
+        "external_endpoint_operations": 110,
+        "external_guide_specs": 32,
+        "approval_required_operations": 34,
         "sample_ids": [
-          "15003003",
-          "15003024",
-          "15003027"
+          "15056566",
+          "15056648",
+          "15056816"
         ]
       }
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T17:43:19Z",
+    "generated_at": "2026-07-03T17:58:18Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 76,
-    "host_count": 86,
+    "adapter_count": 80,
+    "host_count": 90,
     "adapters": [
       {
         "name": "airport",
@@ -677,6 +677,16 @@
         ]
       },
       {
+        "name": "gwangjin",
+        "status": "registered",
+        "hosts": [
+          "www.gwangjin.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "gwangmyeong",
         "status": "registered",
         "hosts": [
@@ -801,6 +811,16 @@
         ]
       },
       {
+        "name": "jejuits",
+        "status": "registered",
+        "hosts": [
+          "www.jejuits.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "jeonju",
         "status": "registered",
         "hosts": [
@@ -888,6 +908,16 @@
         "status": "registered",
         "hosts": [
           "data.mafra.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "mnd-open-data",
+        "status": "registered",
+        "hosts": [
+          "opendata.mnd.go.kr"
         ],
         "capabilities": [
           "verification"
@@ -1028,6 +1058,16 @@
         "status": "registered",
         "hosts": [
           "seogu.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "seogwipo",
+        "status": "registered",
+        "hosts": [
+          "www.seogwipo.go.kr"
         ],
         "capabilities": [
           "verification"
@@ -1186,8 +1226,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 76,
-      "verification_capable_adapters": 76,
+      "adapter_count": 80,
+      "verification_capable_adapters": 80,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T17:43:13Z",
+  "generated_at": "2026-07-03T17:58:13Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 17637,
-    "runtime_evidence": 1825,
-    "runtime_evidence_percent": 10.3,
-    "callable_operations": 17495,
-    "external_endpoint_operations": 6027,
-    "registered_adapter_operations": 6017,
+    "operations": 17858,
+    "runtime_evidence": 1850,
+    "runtime_evidence_percent": 10.4,
+    "callable_operations": 17716,
+    "external_endpoint_operations": 6248,
+    "registered_adapter_operations": 6238,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 6027
+      "count": 6248
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 6017
+      "count": 6238
     },
     {
       "key": "builtin",
@@ -69,27 +69,27 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 2467
+      "operation_count": 2493
     },
     {
       "category": "문화관광",
-      "operation_count": 1734
+      "operation_count": 1842
     },
     {
       "category": "교통물류",
-      "operation_count": 1694
+      "operation_count": 1720
     },
     {
       "category": "농축수산",
-      "operation_count": 1487
+      "operation_count": 1499
     },
     {
       "category": "사회복지",
-      "operation_count": 1413
+      "operation_count": 1419
     },
     {
       "category": "산업고용",
-      "operation_count": 1246
+      "operation_count": 1258
     },
     {
       "category": "식품건강",
@@ -97,7 +97,7 @@
     },
     {
       "category": "환경기상",
-      "operation_count": 1091
+      "operation_count": 1097
     },
     {
       "category": "국토관리",
@@ -109,15 +109,15 @@
     },
     {
       "category": "보건의료",
-      "operation_count": 961
+      "operation_count": 963
     },
     {
       "category": "재난안전",
-      "operation_count": 838
+      "operation_count": 839
     },
     {
       "category": "교육",
-      "operation_count": 759
+      "operation_count": 777
     },
     {
       "category": "과학기술",
@@ -125,7 +125,7 @@
     },
     {
       "category": "통일외교안보",
-      "operation_count": 206
+      "operation_count": 210
     },
     {
       "category": "법률",
@@ -139,7 +139,7 @@
     },
     {
       "host": "data.gg.go.kr",
-      "operation_count": 2173,
+      "operation_count": 2174,
       "adapter": "data-gg",
       "adapter_status": "registered",
       "capabilities": [
@@ -220,6 +220,15 @@
       ]
     },
     {
+      "host": "www.jeju.go.kr",
+      "operation_count": 110,
+      "adapter": "jeju-www",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "host": "www.safemap.go.kr",
       "operation_count": 104,
       "adapter": "safemap",
@@ -232,6 +241,15 @@
       "host": "openapi.q-net.or.kr",
       "operation_count": 104,
       "adapter": "q-net",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "host": "www.jejudatahub.net",
+      "operation_count": 101,
+      "adapter": "jejudatahub",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -288,24 +306,6 @@
       "host": "www.lawmaking.go.kr",
       "operation_count": 38,
       "adapter": "open-law",
-      "adapter_status": "registered",
-      "capabilities": [
-        "verification"
-      ]
-    },
-    {
-      "host": "www.eshare.go.kr",
-      "operation_count": 36,
-      "adapter": "eshare",
-      "adapter_status": "registered",
-      "capabilities": [
-        "verification"
-      ]
-    },
-    {
-      "host": "www.consumer.go.kr",
-      "operation_count": 36,
-      "adapter": "consumer",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -1378,6 +1378,105 @@
           "adapter": "gicoms",
           "adapter_status": "registered",
           "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
+      "organization": "제주특별자치도",
+      "api_count": 171,
+      "operation_api_count": 118,
+      "operation_count": 249,
+      "runtime_evidence_count": 29,
+      "runtime_evidence_percent": 11.6,
+      "verified": 25,
+      "failed": 2,
+      "skipped": 2,
+      "unknown": 0,
+      "approval_required_operations": 151,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 24
+        },
+        {
+          "key": "external_endpoint",
+          "count": 225
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 225
+        },
+        {
+          "key": "builtin",
+          "count": 24
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "문화관광",
+          "operation_count": 109
+        },
+        {
+          "category": "교통물류",
+          "operation_count": 49
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 26
+        },
+        {
+          "category": "교육",
+          "operation_count": 18
+        },
+        {
+          "category": "산업고용",
+          "operation_count": 15
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "www.jeju.go.kr",
+          "operation_count": 109,
+          "adapter": "jeju-www",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.jejudatahub.net",
+          "operation_count": 98,
+          "adapter": "jejudatahub",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 24
+        },
+        {
+          "host": "www.seogwipo.go.kr",
+          "operation_count": 5,
+          "adapter": "seogwipo",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "data.jeju.go.kr",
+          "operation_count": 4,
+          "adapter": "jeju",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
             "verification"
           ]
         }
@@ -5547,74 +5646,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 28
-        }
-      ]
-    },
-    {
-      "organization": "제주특별자치도",
-      "api_count": 171,
-      "operation_api_count": 18,
-      "operation_count": 28,
-      "runtime_evidence_count": 4,
-      "runtime_evidence_percent": 14.3,
-      "verified": 1,
-      "failed": 1,
-      "skipped": 2,
-      "unknown": 0,
-      "approval_required_operations": 8,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 24
-        },
-        {
-          "key": "external_endpoint",
-          "count": 4
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 4
-        },
-        {
-          "key": "builtin",
-          "count": 24
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "교통물류",
-          "operation_count": 23
-        },
-        {
-          "category": "산업고용",
-          "operation_count": 3
-        },
-        {
-          "category": "문화관광",
-          "operation_count": 1
-        },
-        {
-          "category": "환경기상",
-          "operation_count": 1
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 24
-        },
-        {
-          "host": "data.jeju.go.kr",
-          "operation_count": 4,
-          "adapter": "jeju",
-          "adapter_status": "registered",
-          "capabilities": [
-            "call",
-            "verification"
-          ]
         }
       ]
     },
