@@ -94,9 +94,9 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `3,507` data.go.kr APIs
-  without operation mappings, `7,835` operation-mapped APIs without runtime
-  evidence, and `63` APIs with failed runtime evidence that need repair.
+- `reports/data-go-kr/coverage-backlog.json` tracks `3,407` data.go.kr APIs
+  without operation mappings, `7,920` operation-mapped APIs without runtime
+  evidence, and `64` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
   `reports/open-assembly/runtime-evidence-plan.json`, and
@@ -215,10 +215,13 @@ Current gaps:
   verified bounded checks, bringing runtime evidence to `1481`. The fifth
   경기도 batch adds Dongjak and Korea Expressway verification adapters,
   materializes another `100` APIs and `261` operations, and merges `25`
-  verified bounded checks, bringing runtime evidence to `1506`. Most evidence
+  verified bounded checks, bringing runtime evidence to `1506`. The sixth
+  경기도 batch adds Work, Icheon, Sisul WWW, and KISTEP verification adapters,
+  materializes another `100` APIs and `252` operations, and merges `24`
+  bounded checks, bringing runtime evidence to `1530`. Most evidence
   is still skipped boundary evidence, not proof that those operations are callable.
-- API operation coverage remains incomplete: `8,553` of `12,060` APIs have
-  operation mappings (`70.9%`), leaving `3,507` APIs to materialize and `7,835`
+- API operation coverage remains incomplete: `8,653` of `12,060` APIs have
+  operation mappings (`71.7%`), leaving `3,407` APIs to materialize and `7,920`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

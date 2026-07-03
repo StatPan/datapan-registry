@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T14:13:05Z",
+  "generated_at": "2026-07-03T14:33:40Z",
   "provider": "data.go.kr",
-  "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
+  "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 212,
+  "filtered_count": 216,
   "summary": {
-    "hosts": 212,
+    "hosts": 216,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 72,
+    "external_endpoint_hosts": 76,
     "external_guide_hosts": 160,
-    "registered_adapter_hosts": 61,
-    "operation_hosts": 74,
+    "registered_adapter_hosts": 65,
+    "operation_hosts": 78,
     "guide_only_hosts": 138,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 146,
-    "approval_required_operations": 4729,
+    "approval_required_operations": 4752,
     "malformed_source_url_count": 627
   },
   "providers": [
@@ -177,12 +177,12 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 700,
-      "operations": 1799,
-      "external_endpoint_operations": 1799,
-      "external_guide_specs": 14,
+      "specs": 800,
+      "operations": 2033,
+      "external_endpoint_operations": 2033,
+      "external_guide_specs": 17,
       "wms_operations": 5,
-      "approval_required_operations": 14,
+      "approval_required_operations": 36,
       "sample_ids": [
         "15005231",
         "15011020",
@@ -277,6 +277,22 @@
       ]
     },
     {
+      "host": "data.gm.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 47,
+      "operations": 53,
+      "external_endpoint_operations": 53,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15056498",
+        "15056517",
+        "15056600"
+      ]
+    },
+    {
       "host": "data.ekape.or.kr",
       "provider": "ekape",
       "kinds": [
@@ -309,21 +325,6 @@
         "15037518",
         "15037520",
         "15056876"
-      ]
-    },
-    {
-      "host": "data.gm.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 38,
-      "operations": 42,
-      "external_endpoint_operations": 42,
-      "sample_ids": [
-        "15056498",
-        "15056517",
-        "15056869"
       ]
     },
     {
@@ -689,6 +690,21 @@
       ]
     },
     {
+      "host": "data.seoul.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 5,
+      "operations": 6,
+      "external_endpoint_operations": 6,
+      "sample_ids": [
+        "15003164",
+        "15057394",
+        "15058573"
+      ]
+    },
+    {
       "host": "openapi.ebid.lh.or.kr",
       "provider": "lh-ebid",
       "kinds": [
@@ -719,21 +735,6 @@
         "15001668",
         "15001702",
         "15009422"
-      ]
-    },
-    {
-      "host": "data.seoul.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 4,
-      "operations": 5,
-      "external_endpoint_operations": 5,
-      "sample_ids": [
-        "15003164",
-        "15057394",
-        "15058614"
       ]
     },
     {
@@ -796,6 +797,22 @@
       "sample_ids": [
         "3044607",
         "3071170"
+      ]
+    },
+    {
+      "host": "data.dongjak.go.kr",
+      "provider": "dongjak",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 4,
+      "operations": 4,
+      "external_endpoint_operations": 4,
+      "sample_ids": [
+        "15056754",
+        "15057700",
+        "15057867"
       ]
     },
     {
@@ -875,22 +892,6 @@
       "external_guide_specs": 1,
       "sample_ids": [
         "15004517"
-      ]
-    },
-    {
-      "host": "data.dongjak.go.kr",
-      "provider": "dongjak",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 3,
-      "operations": 3,
-      "external_endpoint_operations": 3,
-      "sample_ids": [
-        "15057700",
-        "15057867",
-        "15059138"
       ]
     },
     {
@@ -982,6 +983,21 @@
       "sample_ids": [
         "15007444",
         "15007467"
+      ]
+    },
+    {
+      "host": "www.gimhae.go.kr",
+      "provider": "gimhae",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 2,
+      "operations": 2,
+      "external_endpoint_operations": 2,
+      "sample_ids": [
+        "15057047",
+        "15059539"
       ]
     },
     {
@@ -1083,6 +1099,20 @@
       ]
     },
     {
+      "host": "openapi.work.go.kr",
+      "provider": "work",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "15058173"
+      ]
+    },
+    {
       "host": "search.i815.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1109,8 +1139,8 @@
       ]
     },
     {
-      "host": "www.gimhae.go.kr",
-      "provider": "gimhae",
+      "host": "www.icheon.go.kr",
+      "provider": "icheon",
       "kinds": [
         "external_endpoint"
       ],
@@ -1119,7 +1149,7 @@
       "operations": 1,
       "external_endpoint_operations": 1,
       "sample_ids": [
-        "15059539"
+        "15057777"
       ]
     },
     {
@@ -1134,6 +1164,34 @@
       "approval_required_operations": 1,
       "sample_ids": [
         "15136379"
+      ]
+    },
+    {
+      "host": "www.kistep.re.kr",
+      "provider": "kistep",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "15037595"
+      ]
+    },
+    {
+      "host": "www.sisul.or.kr",
+      "provider": "sisul-www",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "15057337"
       ]
     },
     {
@@ -2549,6 +2607,7 @@
     },
     {
       "host": "its.icheon.go.kr",
+      "provider": "icheon",
       "kinds": [
         "external_guide"
       ],

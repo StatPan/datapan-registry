@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T14:13:05Z",
+  "generated_at": "2026-07-03T14:33:40Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 56,
-  "host_count": 63,
+  "adapter_count": 60,
+  "host_count": 67,
   "adapters": [
     {
       "name": "airport",
@@ -243,6 +243,16 @@
       ]
     },
     {
+      "name": "icheon",
+      "status": "registered",
+      "hosts": [
+        "www.icheon.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "ins24",
       "status": "registered",
       "hosts": [
@@ -309,6 +319,16 @@
       "status": "registered",
       "hosts": [
         "www.juso.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "kistep",
+      "status": "registered",
+      "hosts": [
+        "www.kistep.re.kr"
       ],
       "capabilities": [
         "verification"
@@ -531,6 +551,16 @@
       ]
     },
     {
+      "name": "sisul-www",
+      "status": "registered",
+      "hosts": [
+        "www.sisul.or.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "tour",
       "status": "registered",
       "hosts": [
@@ -585,6 +615,16 @@
       ]
     },
     {
+      "name": "work",
+      "status": "registered",
+      "hosts": [
+        "openapi.work.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "work24",
       "status": "registered",
       "hosts": [
@@ -598,8 +638,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 56,
-    "verification_capable_adapters": 56,
+    "adapter_count": 60,
+    "verification_capable_adapters": 60,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
