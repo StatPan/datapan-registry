@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T23:09:23Z",
+  "generated_at": "2026-07-03T23:15:39Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,8 +7,8 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 19946,
-    "evidence_total": 3407,
+    "operations": 19957,
+    "evidence_total": 3438,
     "uncovered_gateway_candidates": 10714,
     "uncovered_adapter_candidates": 3371,
     "missing_adapter_hosts": 11,
@@ -69,7 +69,7 @@
       "label": "data-gg",
       "provider": "data-gg",
       "kind": "external_endpoint",
-      "candidates": 2189,
+      "candidates": 2191,
       "uncovered_candidates": 2069,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider data-gg --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/data-gg-next.json --json",

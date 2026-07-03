@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T23:08:59Z",
+  "generated_at": "2026-07-03T23:15:15Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 19946,
-    "runtime_evidence": 3407,
-    "runtime_evidence_percent": 17.1,
-    "callable_operations": 19804,
-    "external_endpoint_operations": 8336,
-    "registered_adapter_operations": 8326,
+    "operations": 19957,
+    "runtime_evidence": 3438,
+    "runtime_evidence_percent": 17.2,
+    "callable_operations": 19815,
+    "external_endpoint_operations": 8347,
+    "registered_adapter_operations": 8337,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 8336
+      "count": 8347
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 8326
+      "count": 8337
     },
     {
       "key": "builtin",
@@ -73,7 +73,7 @@
     },
     {
       "category": "교통물류",
-      "operation_count": 2135
+      "operation_count": 2140
     },
     {
       "category": "농축수산",
@@ -85,7 +85,7 @@
     },
     {
       "category": "사회복지",
-      "operation_count": 1442
+      "operation_count": 1448
     },
     {
       "category": "산업고용",
@@ -139,7 +139,7 @@
     },
     {
       "host": "data.gg.go.kr",
-      "operation_count": 2189,
+      "operation_count": 2191,
       "adapter": "data-gg",
       "adapter_status": "registered",
       "capabilities": [
@@ -302,7 +302,7 @@
     },
     {
       "host": "data.seoul.go.kr",
-      "operation_count": 113,
+      "operation_count": 118,
       "adapter": "seoul-open-data",
       "adapter_status": "registered",
       "capabilities": [
@@ -4905,6 +4905,106 @@
       ]
     },
     {
+      "organization": "서울시설공단",
+      "api_count": 45,
+      "operation_api_count": 45,
+      "operation_count": 51,
+      "runtime_evidence_count": 31,
+      "runtime_evidence_percent": 60.8,
+      "verified": 11,
+      "failed": 0,
+      "skipped": 20,
+      "unknown": 0,
+      "approval_required_operations": 7,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 20
+        },
+        {
+          "key": "external_endpoint",
+          "count": 31
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 31
+        },
+        {
+          "key": "builtin",
+          "count": 20
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "문화관광",
+          "operation_count": 18
+        },
+        {
+          "category": "사회복지",
+          "operation_count": 16
+        },
+        {
+          "category": "교통물류",
+          "operation_count": 11
+        },
+        {
+          "category": "국토관리",
+          "operation_count": 4
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 2
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "data.sisul.or.kr",
+          "operation_count": 20,
+          "adapter": "sisul",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
+        },
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 20
+        },
+        {
+          "host": "data.seoul.go.kr",
+          "operation_count": 5,
+          "adapter": "seoul-open-data",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
+        },
+        {
+          "host": "www.sisul.or.kr",
+          "operation_count": 4,
+          "adapter": "sisul-www",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "data.gg.go.kr",
+          "operation_count": 2,
+          "adapter": "data-gg",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "행정안전부 한국지역정보개발원",
       "api_count": 38,
       "operation_api_count": 38,
@@ -5423,78 +5523,6 @@
             "call",
             "verification"
           ]
-        }
-      ]
-    },
-    {
-      "organization": "서울시설공단",
-      "api_count": 45,
-      "operation_api_count": 40,
-      "operation_count": 40,
-      "runtime_evidence_count": 20,
-      "runtime_evidence_percent": 50.0,
-      "verified": 0,
-      "failed": 6,
-      "skipped": 14,
-      "unknown": 0,
-      "approval_required_operations": 2,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 20
-        },
-        {
-          "key": "external_endpoint",
-          "count": 20
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 20
-        },
-        {
-          "key": "builtin",
-          "count": 20
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "문화관광",
-          "operation_count": 18
-        },
-        {
-          "category": "사회복지",
-          "operation_count": 10
-        },
-        {
-          "category": "교통물류",
-          "operation_count": 6
-        },
-        {
-          "category": "국토관리",
-          "operation_count": 4
-        },
-        {
-          "category": "공공행정",
-          "operation_count": 2
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "data.sisul.or.kr",
-          "operation_count": 20,
-          "adapter": "sisul",
-          "adapter_status": "registered",
-          "capabilities": [
-            "call",
-            "verification"
-          ]
-        },
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 20
         }
       ]
     },

@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-07-03T23:08:45Z",
+  "generated_at": "2026-07-03T23:15:02Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3407,
-    "verified": 1635,
+    "total": 3438,
+    "verified": 1646,
     "failed": 306,
-    "skipped": 1466,
+    "skipped": 1486,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "verified",
-        "count": 1635,
+        "count": 1646,
         "status": "verified"
       },
       {
         "key": "skipped",
-        "count": 1466,
+        "count": 1486,
         "status": "skipped"
       },
       {
@@ -33,7 +33,7 @@
     "by_reason": [
       {
         "key": "missing_auth",
-        "count": 550,
+        "count": 556,
         "reason": "missing_auth"
       },
       {
@@ -43,7 +43,7 @@
       },
       {
         "key": "approval_required",
-        "count": 127,
+        "count": 128,
         "reason": "approval_required"
       },
       {
@@ -92,6 +92,11 @@
         "reason": "kipris-plus_http_404"
       },
       {
+        "key": "sisul_wadl_metadata_only",
+        "count": 20,
+        "reason": "sisul_wadl_metadata_only"
+      },
+      {
         "key": "chungnam_http_403",
         "count": 19,
         "reason": "chungnam_http_403"
@@ -137,11 +142,6 @@
         "reason": "andong_service_not_registered"
       },
       {
-        "key": "sisul_wadl_metadata_only",
-        "count": 10,
-        "reason": "sisul_wadl_metadata_only"
-      },
-      {
         "key": "qnet_wadl_metadata_only",
         "count": 9,
         "reason": "qnet_wadl_metadata_only"
@@ -165,6 +165,11 @@
         "key": "itfind_missing_required_params",
         "count": 6,
         "reason": "itfind_missing_required_params"
+      },
+      {
+        "key": "sisul_missing_required_params",
+        "count": 6,
+        "reason": "sisul_missing_required_params"
       },
       {
         "key": "sisul_request_timeout",
@@ -245,11 +250,6 @@
         "key": "jeonju_http_404_not_found",
         "count": 3,
         "reason": "jeonju_http_404_not_found"
-      },
-      {
-        "key": "sisul_missing_required_params",
-        "count": 3,
-        "reason": "sisul_missing_required_params"
       },
       {
         "key": "ulsan_service_key_not_registered",
@@ -395,7 +395,7 @@
       },
       {
         "key": "data-gg",
-        "count": 121,
+        "count": 123,
         "provider": "data-gg"
       },
       {
@@ -405,7 +405,7 @@
       },
       {
         "key": "seoul-open-data",
-        "count": 88,
+        "count": 93,
         "provider": "seoul-open-data"
       },
       {
@@ -469,6 +469,11 @@
         "provider": "geoje"
       },
       {
+        "key": "sisul",
+        "count": 40,
+        "provider": "sisul"
+      },
+      {
         "key": "uiryeong",
         "count": 40,
         "provider": "uiryeong"
@@ -512,11 +517,6 @@
         "key": "lofin365",
         "count": 25,
         "provider": "lofin365"
-      },
-      {
-        "key": "sisul",
-        "count": 20,
-        "provider": "sisul"
       },
       {
         "key": "ulsan",
@@ -614,6 +614,11 @@
         "provider": "pqis"
       },
       {
+        "key": "sisul-www",
+        "count": 7,
+        "provider": "sisul-www"
+      },
+      {
         "key": "airport",
         "count": 6,
         "provider": "airport"
@@ -692,11 +697,6 @@
         "key": "gblib",
         "count": 3,
         "provider": "gblib"
-      },
-      {
-        "key": "sisul-www",
-        "count": 3,
-        "provider": "sisul-www"
       },
       {
         "key": "vworld",
@@ -877,7 +877,7 @@
       },
       {
         "key": "data.gg.go.kr",
-        "count": 121,
+        "count": 123,
         "host": "data.gg.go.kr"
       },
       {
@@ -892,7 +892,7 @@
       },
       {
         "key": "data.seoul.go.kr",
-        "count": 87,
+        "count": 92,
         "host": "data.seoul.go.kr"
       },
       {
@@ -956,6 +956,11 @@
         "host": "data.geoje.go.kr"
       },
       {
+        "key": "data.sisul.or.kr",
+        "count": 40,
+        "host": "data.sisul.or.kr"
+      },
+      {
         "key": "data.uiryeong.go.kr",
         "count": 40,
         "host": "data.uiryeong.go.kr"
@@ -999,11 +1004,6 @@
         "key": "openapi.epost.go.kr:80",
         "count": 22,
         "host": "openapi.epost.go.kr:80"
-      },
-      {
-        "key": "data.sisul.or.kr",
-        "count": 20,
-        "host": "data.sisul.or.kr"
       },
       {
         "key": "openapi.its.ulsan.kr",
@@ -1116,6 +1116,11 @@
         "host": "openapi.tour.go.kr"
       },
       {
+        "key": "www.sisul.or.kr",
+        "count": 7,
+        "host": "www.sisul.or.kr"
+      },
+      {
         "key": "data.gwanak.go.kr",
         "count": 6,
         "host": "data.gwanak.go.kr"
@@ -1224,11 +1229,6 @@
         "key": "openapi.gblib.or.kr",
         "count": 3,
         "host": "openapi.gblib.or.kr"
-      },
-      {
-        "key": "www.sisul.or.kr",
-        "count": 3,
-        "host": "www.sisul.or.kr"
       },
       {
         "key": "www.vworld.kr",
@@ -1419,7 +1419,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 2683,
+        "count": 2714,
         "kind": "external_endpoint"
       },
       {

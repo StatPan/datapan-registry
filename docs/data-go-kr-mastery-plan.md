@@ -12,11 +12,11 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `19946`
-- callable operations: `19804` (`99.3%`)
+- operations: `19957`
+- callable operations: `19815` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `8336`
-- registered adapter operations: `8326`
+- external endpoint operations: `8347`
+- registered adapter operations: `8337`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
 - approval-required operations: `7416`
@@ -594,6 +594,12 @@ readiness, not to advance verified runtime coverage.
    check. That brings checked runtime evidence to `3407`, verified checks to
    `1635`, registered external adapter operations to `8326`, and raises API
    operation coverage to `10,927` of `12,060` APIs (`90.6%`).
+   The 서울시설공단 batch materializes `5` APIs and `11` operations, and merges
+   `31` bounded checks (`11` verified, `20` skipped due to existing auth,
+   parameter, metadata, or approval boundaries). That brings checked runtime
+   evidence to `3438`, verified checks to `1646`, registered external adapter
+   operations to `8337`, and raises API operation coverage to `10,932` of
+   `12,060` APIs (`90.6%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,
