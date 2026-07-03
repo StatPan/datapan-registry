@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `15664`
-- callable operations: `15522` (`99.1%`)
+- operations: `15885`
+- callable operations: `15743` (`99.1%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `4054`
-- registered adapter operations: `4044`
+- external endpoint operations: `4275`
+- registered adapter operations: `4265`
 - missing adapter operations: `29`
 - external adapter coverage: `99.3%`
-- approval-required operations: `4836`
+- approval-required operations: `4882`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `146`
-- registered adapter hosts: `68`
+- registered adapter hosts: `72`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -119,10 +119,10 @@ Each external host should have:
 - downstream impact when promoted datasets depend on the host.
 
 Registered external adapters currently cover these host families through
-`data/provider-index.json`: airport, andong, calspia, car365, codil, culture, data-gg, dgfca, dongjak, ekape, emuseum,
+`data/provider-index.json`: airport, andong, calspia, car, car365, codil, culture, data-gg, dgfca, dongjak, ekape, emuseum,
 epost, eshare, ex, folk, foodsafetykorea, forest, garak, gblib, geoje, gimhae, gwanak,
-gwangmyeong, happysd, humetro, i815, icheon, ins24, itfind, jeju, jeju-air, jejudatahub, jeonju, juso,
-kistep, korad, kpx, lh-ebid, lofin365, mafra, myhome, naqs, ncpms, nfqs, nongsaro,
+gwangmyeong, happysd, humetro, i815, icheon, ins24, itfind, its, jeju, jeju-air, jeju-www, jejudatahub, jeonju, juso,
+kistep, kofpi, korad, kpx, lh-ebid, lofin365, mafra, myhome, naqs, ncpms, nfqs, nongsaro,
 oneclick-law, open-law, pqis, q-net, safemap, safetydata, seogu, seoul-bus, seoul-open-data,
 sisul, sisul-www, tour, uiryeong, ulsan, vworld, wamis, work, and work24.
 
@@ -367,6 +367,11 @@ coverage.
    APIs and `260` operations, and merges `26` bounded checks. That brings
    checked runtime evidence to `1567`, registered external adapter operations
    to `4044`, and raises 국토교통부 operation coverage to `227` of `393` APIs.
+   The second 국토교통부 batch adds Car, ITS, Jeju WWW, and KOFPI verification
+   adapters, materializes another `100` APIs and `221` operations, and merges
+   `22` bounded checks. That brings checked runtime evidence to `1589`,
+   registered external adapter operations to `4265`, and raises 국토교통부
+   operation coverage to `327` of `393` APIs.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

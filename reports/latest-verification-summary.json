@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-03T14:55:18Z",
+  "generated_at": "2026-07-03T15:10:03Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1567,
-    "verified": 290,
-    "failed": 114,
+    "total": 1589,
+    "verified": 311,
+    "failed": 115,
     "skipped": 1163,
     "unknown": 0
   },
@@ -21,12 +21,12 @@
       },
       {
         "key": "verified",
-        "count": 290,
+        "count": 311,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 114,
+        "count": 115,
         "status": "failed"
       }
     ],
@@ -267,6 +267,11 @@
         "reason": "icheon_http_400"
       },
       {
+        "key": "jeju-www_request_failed",
+        "count": 1,
+        "reason": "jeju-www_request_failed"
+      },
+      {
         "key": "jeju_method_not_allowed",
         "count": 1,
         "reason": "jeju_method_not_allowed"
@@ -310,7 +315,7 @@
       },
       {
         "key": "data-gg",
-        "count": 108,
+        "count": 116,
         "provider": "data-gg"
       },
       {
@@ -359,6 +364,11 @@
         "provider": "lofin365"
       },
       {
+        "key": "calspia",
+        "count": 20,
+        "provider": "calspia"
+      },
+      {
         "key": "gwangmyeong",
         "count": 20,
         "provider": "gwangmyeong"
@@ -392,11 +402,6 @@
         "key": "mafra",
         "count": 11,
         "provider": "mafra"
-      },
-      {
-        "key": "calspia",
-        "count": 10,
-        "provider": "calspia"
       },
       {
         "key": "juso",
@@ -539,6 +544,11 @@
         "provider": "happysd"
       },
       {
+        "key": "car",
+        "count": 1,
+        "provider": "car"
+      },
+      {
         "key": "car365",
         "count": 1,
         "provider": "car365"
@@ -564,9 +574,19 @@
         "provider": "ins24"
       },
       {
+        "key": "its",
+        "count": 1,
+        "provider": "its"
+      },
+      {
         "key": "jeju-air",
         "count": 1,
         "provider": "jeju-air"
+      },
+      {
+        "key": "jeju-www",
+        "count": 1,
+        "provider": "jeju-www"
       },
       {
         "key": "jejudatahub",
@@ -577,6 +597,11 @@
         "key": "kistep",
         "count": 1,
         "provider": "kistep"
+      },
+      {
+        "key": "kofpi",
+        "count": 1,
+        "provider": "kofpi"
       },
       {
         "key": "myhome",
@@ -627,7 +652,7 @@
       },
       {
         "key": "data.gg.go.kr",
-        "count": 108,
+        "count": 116,
         "host": "data.gg.go.kr"
       },
       {
@@ -696,6 +721,11 @@
         "host": "openapi.its.ulsan.kr"
       },
       {
+        "key": "www.calspia.go.kr",
+        "count": 20,
+        "host": "www.calspia.go.kr"
+      },
+      {
         "key": "www.andong.go.kr",
         "count": 15,
         "host": "www.andong.go.kr"
@@ -714,11 +744,6 @@
         "key": "data.mafra.go.kr",
         "count": 11,
         "host": "data.mafra.go.kr"
-      },
-      {
-        "key": "www.calspia.go.kr",
-        "count": 10,
-        "host": "www.calspia.go.kr"
       },
       {
         "key": "www.juso.go.kr",
@@ -881,6 +906,11 @@
         "host": "air.jeju.go.kr"
       },
       {
+        "key": "car.go.kr",
+        "count": 1,
+        "host": "car.go.kr"
+      },
+      {
         "key": "data.myhome.go.kr:443",
         "count": 1,
         "host": "data.myhome.go.kr:443"
@@ -941,6 +971,16 @@
         "host": "www.ins24.go.kr"
       },
       {
+        "key": "www.its.go.kr",
+        "count": 1,
+        "host": "www.its.go.kr"
+      },
+      {
+        "key": "www.jeju.go.kr",
+        "count": 1,
+        "host": "www.jeju.go.kr"
+      },
+      {
         "key": "www.jejudatahub.net",
         "count": 1,
         "host": "www.jejudatahub.net"
@@ -949,6 +989,11 @@
         "key": "www.kistep.re.kr",
         "count": 1,
         "host": "www.kistep.re.kr"
+      },
+      {
+        "key": "www.kofpi.or.kr",
+        "count": 1,
+        "host": "www.kofpi.or.kr"
       },
       {
         "key": "www.sisul.or.kr",
@@ -969,7 +1014,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 873,
+        "count": 895,
         "kind": "external_endpoint"
       },
       {
