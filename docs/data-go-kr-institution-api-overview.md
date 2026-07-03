@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T21:32:33Z`
+- Generated at: `2026-07-03T21:55:35Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `19679`
-- Runtime evidence: `3191` (`16.2%`)
-- External endpoint operations: `8069`
-- Registered adapter operations: `8059`
+- Operations: `19830`
+- Runtime evidence: `3291` (`16.6%`)
+- External endpoint operations: `8220`
+- Registered adapter operations: `8210`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -68,6 +68,7 @@
 | 한국연구재단 | 26 | 24 | 247 | 13 | 5.3% | 4 | 3 | 6 | 234 | 0 |
 | 금융감독원 | 83 | 83 | 245 | 245 | 100.0% | 0 | 0 | 245 | 239 | 0 |
 | 기상청 | 89 | 89 | 228 | 68 | 29.8% | 45 | 0 | 23 | 69 | 0 |
+| 지식재산처 | 67 | 67 | 227 | 122 | 53.7% | 76 | 24 | 22 | 58 | 0 |
 | 한국마사회 | 223 | 223 | 223 | 10 | 4.5% | 0 | 0 | 10 | 221 | 0 |
 | 한국관광공사 | 28 | 28 | 213 | 1 | 0.5% | 0 | 0 | 1 | 212 | 0 |
 | 조달청 | 18 | 18 | 190 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
@@ -77,7 +78,6 @@
 | 기후에너지환경부 국립환경과학원 | 48 | 47 | 156 | 8 | 5.1% | 0 | 0 | 8 | 0 | 0 |
 | 식품의약품안전처 식품의약품안전평가원 | 106 | 106 | 154 | 21 | 13.6% | 0 | 0 | 21 | 103 | 0 |
 | 농림축산식품부 | 87 | 86 | 153 | 153 | 100.0% | 151 | 2 | 0 | 47 | 0 |
-| 한국수자원공사 | 84 | 84 | 153 | 5 | 3.3% | 5 | 0 | 0 | 9 | 19 |
 
 The full machine-readable report is `reports/data-go-kr/institution-api-overview.json`.
 The full coverage backlog is `reports/data-go-kr/coverage-backlog.json`, with
@@ -85,7 +85,7 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 ## Largest Categories
 
-- 공공행정: `2615` operations
+- 공공행정: `2616` operations
 - 교통물류: `2129` operations
 - 농축수산: `2047` operations
 - 문화관광: `2011` operations

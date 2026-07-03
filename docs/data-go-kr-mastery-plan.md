@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `19679`
-- callable operations: `19537` (`99.3%`)
+- operations: `19830`
+- callable operations: `19688` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `8069`
-- registered adapter operations: `8059`
+- external endpoint operations: `8220`
+- registered adapter operations: `8210`
 - missing adapter operations: `29`
 - external adapter coverage: `99.6%`
-- approval-required operations: `7278`
+- approval-required operations: `7336`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `111`
+- registered adapter hosts: `113`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -39,9 +39,10 @@ Current missing external route evidence:
 The practical interpretation is important: the remaining `29` missing external
 routes are all covered by manifest-bound probe and route-disposition evidence.
 There are currently `0` routes with adapter-candidate evidence after
-`www.safetydata.go.kr` was registered as a Safety Data adapter. Dead-route and
-transient-failure routes remain evidence, not implementation work, until fresh
-probe evidence changes their disposition.
+`www.safetydata.go.kr` was registered as a Safety Data adapter and IP-NAVI
+port-host coverage was folded into the registered adapter inventory.
+Dead-route and transient-failure routes remain evidence, not implementation
+work, until fresh probe evidence changes their disposition.
 
 ## Mastery Target
 
@@ -556,6 +557,13 @@ readiness, not to advance verified runtime coverage.
    runtime evidence to `3191`, verified checks to `1443`, registered external
    adapter operations to `8059`, and raises API operation coverage to `10,784`
    of `12,060` APIs (`89.4%`).
+   The 지식재산처 batch registers KIPRIS Plus and IP-NAVI host coverage,
+   materializes `51` APIs and `151` operations, folds the IP-NAVI port host
+   into adapter coverage, and merges `100` bounded checks (`76` verified, `24`
+   failed, `0` skipped). That brings checked runtime evidence to `3291`,
+   verified checks to `1519`, registered external adapter operations to
+   `8210`, and raises API operation coverage to `10,835` of `12,060` APIs
+   (`89.8%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

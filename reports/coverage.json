@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T21:32:39Z",
+  "generated_at": "2026-07-03T21:55:44Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 19679,
-    "callable_operations": 19537,
+    "operations": 19830,
+    "callable_operations": 19688,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 8069,
-    "registered_adapter_operations": 8059,
+    "external_endpoint_operations": 8220,
+    "registered_adapter_operations": 8210,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.6,
-    "approval_required_operations": 7278,
+    "approval_required_operations": 7336,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 111,
+    "registered_adapter_hosts": 113,
     "missing_adapter_hosts": 11,
-    "adapter_count": 96,
+    "adapter_count": 98,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T21:32:31Z",
-    "total": 3191,
-    "verified": 1443,
-    "failed": 282,
+    "generated_at": "2026-07-03T21:51:01Z",
+    "total": 3291,
+    "verified": 1519,
+    "failed": 306,
     "skipped": 1466,
     "unknown": 0,
-    "verified_percent": 45.2,
-    "evidence_operation_percent": 16.2
+    "verified_percent": 46.2,
+    "evidence_operation_percent": 16.6
   },
   "route_evidence": {
     "present": true,
@@ -382,10 +382,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T21:32:39Z",
+    "generated_at": "2026-07-03T21:55:44Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 96,
-    "host_count": 115,
+    "adapter_count": 98,
+    "host_count": 118,
     "adapters": [
       {
         "name": "airport",
@@ -781,6 +781,17 @@
         ]
       },
       {
+        "name": "ip-navi",
+        "status": "registered",
+        "hosts": [
+          "api.ip-navi.or.kr",
+          "api.ip-navi.or.kr:8000"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "itfind",
         "status": "registered",
         "hosts": [
@@ -889,6 +900,16 @@
         "status": "registered",
         "hosts": [
           "www.juso.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "kipris-plus",
+        "status": "registered",
+        "hosts": [
+          "plus.kipris.or.kr"
         ],
         "capabilities": [
           "verification"
@@ -1393,8 +1414,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 96,
-      "verification_capable_adapters": 96,
+      "adapter_count": 98,
+      "verification_capable_adapters": 98,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

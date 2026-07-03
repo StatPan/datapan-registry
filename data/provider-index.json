@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T21:32:33Z",
+  "generated_at": "2026-07-03T21:55:35Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 96,
-  "host_count": 115,
+  "adapter_count": 98,
+  "host_count": 118,
   "adapters": [
     {
       "name": "airport",
@@ -398,6 +398,17 @@
       ]
     },
     {
+      "name": "ip-navi",
+      "status": "registered",
+      "hosts": [
+        "api.ip-navi.or.kr",
+        "api.ip-navi.or.kr:8000"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "itfind",
       "status": "registered",
       "hosts": [
@@ -506,6 +517,16 @@
       "status": "registered",
       "hosts": [
         "www.juso.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "kipris-plus",
+      "status": "registered",
+      "hosts": [
+        "plus.kipris.or.kr"
       ],
       "capabilities": [
         "verification"
@@ -1010,8 +1031,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 96,
-    "verification_capable_adapters": 96,
+    "adapter_count": 98,
+    "verification_capable_adapters": 98,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
