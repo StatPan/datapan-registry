@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T21:17:58Z",
+  "generated_at": "2026-07-03T21:32:33Z",
   "datapan_version": "0.1.0-dev",
   "adapter_count": 96,
-  "host_count": 114,
+  "host_count": 115,
   "adapters": [
     {
       "name": "airport",
@@ -905,6 +905,7 @@
       "name": "smartfarm-korea",
       "status": "registered",
       "hosts": [
+        "smartfarmkorea.net",
         "www.smartfarmkorea.net"
       ],
       "capabilities": [
