@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T18:17:41Z",
+  "generated_at": "2026-07-03T18:31:20Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,13 +7,13 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 18260,
-    "evidence_total": 1900,
+    "operations": 18318,
+    "evidence_total": 1925,
     "uncovered_gateway_candidates": 10714,
-    "uncovered_adapter_candidates": 3944,
+    "uncovered_adapter_candidates": 3692,
     "missing_adapter_hosts": 11,
     "planned_batches": 20,
-    "planned_operations": 138
+    "planned_operations": 129
   },
   "batches": [
     {
@@ -206,14 +206,14 @@
       "output": ".datapan/verification/mnd-open-data-next.json"
     },
     {
-      "label": "nongsaro",
-      "provider": "nongsaro",
+      "label": "nabic",
+      "provider": "nabic",
       "kind": "external_endpoint",
-      "candidates": 278,
-      "uncovered_candidates": 253,
-      "planned_operations": 10,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider nongsaro --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/nongsaro-next.json --json",
-      "output": ".datapan/verification/nongsaro-next.json"
+      "candidates": 1,
+      "uncovered_candidates": 1,
+      "planned_operations": 1,
+      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider nabic --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/nabic-next.json --json",
+      "output": ".datapan/verification/nabic-next.json"
     }
   ],
   "gaps": {
@@ -238,13 +238,14 @@
           "external_guide"
         ],
         "adapter_status": "missing",
-        "specs": 2,
+        "specs": 3,
         "operations": 4,
         "external_endpoint_operations": 4,
-        "external_guide_specs": 1,
+        "external_guide_specs": 2,
         "sample_ids": [
           "15002002",
-          "15002055"
+          "15002055",
+          "15123725"
         ]
       },
       {

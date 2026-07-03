@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T18:17:16Z",
+  "generated_at": "2026-07-03T18:30:56Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 244,
+  "filtered_count": 245,
   "summary": {
-    "hosts": 244,
+    "hosts": 245,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 101,
-    "external_guide_hosts": 182,
-    "registered_adapter_hosts": 90,
-    "operation_hosts": 103,
+    "external_endpoint_hosts": 102,
+    "external_guide_hosts": 184,
+    "registered_adapter_hosts": 91,
+    "operation_hosts": 104,
     "guide_only_hosts": 141,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 6119,
+    "approval_required_operations": 6158,
     "malformed_source_url_count": 643
   },
   "providers": [
@@ -41,13 +41,14 @@
         "external_guide"
       ],
       "adapter_status": "missing",
-      "specs": 2,
+      "specs": 3,
       "operations": 4,
       "external_endpoint_operations": 4,
-      "external_guide_specs": 1,
+      "external_guide_specs": 2,
       "sample_ids": [
         "15002002",
-        "15002055"
+        "15002055",
+        "15123725"
       ]
     },
     {
@@ -258,6 +259,24 @@
       ]
     },
     {
+      "host": "www.nongsaro.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 127,
+      "operations": 313,
+      "external_endpoint_operations": 313,
+      "external_guide_specs": 2,
+      "approval_required_operations": 220,
+      "sample_ids": [
+        "15002034",
+        "15005257",
+        "15015158"
+      ]
+    },
+    {
       "host": "open.law.go.kr",
       "provider": "open-law",
       "kinds": [
@@ -309,24 +328,6 @@
         "15125862",
         "15125863",
         "15125866"
-      ]
-    },
-    {
-      "host": "www.nongsaro.go.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 107,
-      "operations": 267,
-      "external_endpoint_operations": 267,
-      "external_guide_specs": 1,
-      "approval_required_operations": 187,
-      "sample_ids": [
-        "15002034",
-        "15005257",
-        "15015158"
       ]
     },
     {
@@ -736,6 +737,24 @@
       ]
     },
     {
+      "host": "nongsaro.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 15,
+      "operations": 15,
+      "external_endpoint_operations": 15,
+      "external_guide_specs": 1,
+      "approval_required_operations": 11,
+      "sample_ids": [
+        "15040895",
+        "15057808",
+        "15058192"
+      ]
+    },
+    {
       "host": "www.andong.go.kr",
       "provider": "andong",
       "kinds": [
@@ -784,22 +803,6 @@
         "15036874",
         "15036875",
         "15036876"
-      ]
-    },
-    {
-      "host": "nongsaro.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 11,
-      "operations": 11,
-      "external_endpoint_operations": 11,
-      "approval_required_operations": 9,
-      "sample_ids": [
-        "15040895",
-        "15057808",
-        "15064154"
       ]
     },
     {
@@ -1084,6 +1087,24 @@
       ]
     },
     {
+      "host": "ncpms.rda.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 4,
+      "operations": 5,
+      "external_endpoint_operations": 5,
+      "external_guide_specs": 1,
+      "approval_required_operations": 2,
+      "sample_ids": [
+        "15002034",
+        "15058192",
+        "15058504"
+      ]
+    },
+    {
       "host": "ws.bus.go.kr",
       "provider": "seoul-bus",
       "kinds": [
@@ -1172,6 +1193,23 @@
       "sample_ids": [
         "15001189",
         "15043696"
+      ]
+    },
+    {
+      "host": "psis.rda.go.kr",
+      "provider": "psis",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 3,
+      "operations": 4,
+      "external_endpoint_operations": 4,
+      "approval_required_operations": 2,
+      "sample_ids": [
+        "15057994",
+        "15059306",
+        "15102241"
       ]
     },
     {
@@ -1444,7 +1482,8 @@
       ]
     },
     {
-      "host": "ncpms.rda.go.kr",
+      "host": "nabic.rda.go.kr",
+      "provider": "nabic",
       "kinds": [
         "external_endpoint"
       ],
@@ -1453,7 +1492,7 @@
       "operations": 1,
       "external_endpoint_operations": 1,
       "sample_ids": [
-        "15002034"
+        "15058606"
       ]
     },
     {
@@ -1482,20 +1521,6 @@
       "external_endpoint_operations": 1,
       "sample_ids": [
         "15058173"
-      ]
-    },
-    {
-      "host": "psis.rda.go.kr",
-      "provider": "psis",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 1,
-      "operations": 1,
-      "external_endpoint_operations": 1,
-      "sample_ids": [
-        "15059306"
       ]
     },
     {
