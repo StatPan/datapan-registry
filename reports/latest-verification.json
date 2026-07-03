@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T23:44:48Z",
+  "generated_at": "2026-07-03T23:54:58Z",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
-  "limit": 4857,
+  "limit": 4957,
   "truncated": true,
-  "filtered_count": 3622,
+  "filtered_count": 3625,
   "summary": {
-    "total": 3622,
-    "verified": 1805,
+    "total": 3625,
+    "verified": 1808,
     "failed": 306,
     "skipped": 1511,
     "unknown": 0
@@ -57923,6 +57923,48 @@
       "reason": "missing_auth",
       "verified_at": "2026-07-03T23:44:33Z",
       "url": "http://openapi.seoul.go.kr:8088/sample/xml/LOCALDATA_031201_DJ/1/5"
+    },
+    {
+      "dataset_id": "15126268",
+      "title": "관세청_화물통관진행정보",
+      "operation": "관세청_화물통관진행정보_20240105 외부 링크 1",
+      "provider": "unipass",
+      "endpoint_host": "unipass.customs.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T23:54:49Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://unipass.customs.go.kr/csp/index.do",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15126268",
+      "title": "관세청_화물통관진행정보",
+      "operation": "관세청_화물통관진행정보_20240105 외부 링크 2",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T23:54:49Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=A9X70TR23HP30GDP5872933112\u0026infSeq=3\u0026page=1\u0026searchWord=%EC%9D%B4%EC%82%AC%ED%99%94%EB%AC%BC%EC%97%85%EC%B2%B4+%ED%98%84%ED%99%A9\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15126269",
+      "title": "관세청_수출이행내역",
+      "operation": "관세청_수출이행내역_20240105",
+      "provider": "unipass",
+      "endpoint_host": "unipass.customs.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T23:54:49Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://unipass.customs.go.kr/csp/index.do",
+      "body_shape": "html"
     }
   ]
 }

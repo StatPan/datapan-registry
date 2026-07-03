@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T23:45:00Z",
+  "generated_at": "2026-07-03T23:55:09Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3859,
-    "stable": 8201
+    "changed": 3861,
+    "stable": 8199
   },
   "added": [],
   "removed": [],
@@ -30677,6 +30677,26 @@
       ],
       "old_digest": "7fccd5acdb8398a92ac3d18ab1c3fcf8548f2dd046dda252583f67c085c53863",
       "new_digest": "b034374b0f99f3742bafd15ec80b1163222d07b747533e8727b477e3ed8b8b63"
+    },
+    {
+      "id": "15126268",
+      "old_title": "관세청_화물통관진행정보",
+      "new_title": "관세청_화물통관진행정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ef53fd8bac36ddd56d103a00cf71004430e8cfe4f5cf1849ba8b7f6f95bb9679",
+      "new_digest": "47de2f4b9f4bd9d197be14c3103a8cb4e10bd5451345953c33863c580bf0d3e8"
+    },
+    {
+      "id": "15126269",
+      "old_title": "관세청_수출이행내역",
+      "new_title": "관세청_수출이행내역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0f6eaf624e116a6292a40e63a50c03f41996f5f9681e05fae427edc1928fbddf",
+      "new_digest": "fafa4e80eec97653c82815f03679057373c3bf915f862b3e391a3e34165d4658"
     },
     {
       "id": "15126330",

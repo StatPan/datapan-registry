@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T23:45:00Z",
+  "generated_at": "2026-07-03T23:55:09Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 276,
+  "filtered_count": 277,
   "summary": {
-    "hosts": 276,
+    "hosts": 277,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 132,
-    "external_guide_hosts": 201,
-    "registered_adapter_hosts": 121,
-    "operation_hosts": 134,
+    "external_endpoint_hosts": 133,
+    "external_guide_hosts": 202,
+    "registered_adapter_hosts": 122,
+    "operation_hosts": 135,
     "guide_only_hosts": 142,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7566,
+    "approval_required_operations": 7569,
     "malformed_source_url_count": 712
   },
   "providers": [
@@ -178,12 +178,12 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 885,
-      "operations": 2192,
-      "external_endpoint_operations": 2192,
+      "specs": 886,
+      "operations": 2193,
+      "external_endpoint_operations": 2193,
       "external_guide_specs": 21,
       "wms_operations": 5,
-      "approval_required_operations": 56,
+      "approval_required_operations": 57,
       "sample_ids": [
         "15005231",
         "15011020",
@@ -1619,6 +1619,23 @@
       "external_endpoint_operations": 3,
       "sample_ids": [
         "3036708"
+      ]
+    },
+    {
+      "host": "unipass.customs.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 2,
+      "operations": 2,
+      "external_endpoint_operations": 2,
+      "external_guide_specs": 2,
+      "approval_required_operations": 2,
+      "sample_ids": [
+        "15126268",
+        "15126269"
       ]
     },
     {

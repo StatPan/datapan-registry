@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T23:44:48Z",
+  "generated_at": "2026-07-03T23:54:58Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3622,
-    "verified": 1805,
+    "total": 3625,
+    "verified": 1808,
     "failed": 306,
     "skipped": 1511,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 1805,
+        "count": 1808,
         "status": "verified"
       },
       {
@@ -389,14 +389,14 @@
         "provider": "q-net"
       },
       {
+        "key": "data-gg",
+        "count": 125,
+        "provider": "data-gg"
+      },
+      {
         "key": "culture",
         "count": 124,
         "provider": "culture"
-      },
-      {
-        "key": "data-gg",
-        "count": 124,
-        "provider": "data-gg"
       },
       {
         "key": "seoul-open-data",
@@ -719,6 +719,11 @@
         "provider": "gimhae"
       },
       {
+        "key": "unipass",
+        "count": 2,
+        "provider": "unipass"
+      },
+      {
         "key": "worldjob",
         "count": 2,
         "provider": "worldjob"
@@ -877,7 +882,7 @@
       },
       {
         "key": "data.gg.go.kr",
-        "count": 124,
+        "count": 125,
         "host": "data.gg.go.kr"
       },
       {
@@ -1261,6 +1266,11 @@
         "host": "gis.daejeon.go.kr"
       },
       {
+        "key": "unipass.customs.go.kr",
+        "count": 2,
+        "host": "unipass.customs.go.kr"
+      },
+      {
         "key": "www.gimhae.go.kr",
         "count": 2,
         "host": "www.gimhae.go.kr"
@@ -1429,7 +1439,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 2898,
+        "count": 2901,
         "kind": "external_endpoint"
       },
       {

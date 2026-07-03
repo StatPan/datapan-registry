@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T23:45:00Z",
+  "generated_at": "2026-07-03T23:55:09Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 106,
-  "host_count": 126,
+  "adapter_count": 107,
+  "host_count": 127,
   "adapters": [
     {
       "name": "airport",
@@ -1057,6 +1057,16 @@
       ]
     },
     {
+      "name": "unipass",
+      "status": "registered",
+      "hosts": [
+        "unipass.customs.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "vworld",
       "status": "registered",
       "hosts": [
@@ -1111,8 +1121,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 106,
-    "verification_capable_adapters": 106,
+    "adapter_count": 107,
+    "verification_capable_adapters": 107,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
