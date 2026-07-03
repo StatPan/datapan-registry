@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T15:24:56Z",
+  "generated_at": "2026-07-03T15:34:17Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -17,8 +17,8 @@
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 5004,
-    "malformed_source_url_count": 627
+    "approval_required_operations": 5210,
+    "malformed_source_url_count": 632
   },
   "providers": [
     {
@@ -242,6 +242,22 @@
       ]
     },
     {
+      "host": "www.foodsafetykorea.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 104,
+      "operations": 237,
+      "external_endpoint_operations": 237,
+      "approval_required_operations": 206,
+      "sample_ids": [
+        "15056661",
+        "15056847",
+        "15057328"
+      ]
+    },
+    {
       "host": "www.calspia.go.kr",
       "provider": "calspia",
       "kinds": [
@@ -320,10 +336,10 @@
         "external_endpoint"
       ],
       "adapter_status": "adapter",
-      "specs": 51,
-      "operations": 57,
-      "external_endpoint_operations": 57,
-      "approval_required_operations": 1,
+      "specs": 52,
+      "operations": 58,
+      "external_endpoint_operations": 58,
+      "approval_required_operations": 2,
       "sample_ids": [
         "15011425",
         "15056498",
@@ -918,22 +934,6 @@
       "sample_ids": [
         "15001189",
         "15043696"
-      ]
-    },
-    {
-      "host": "www.foodsafetykorea.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 4,
-      "operations": 4,
-      "external_endpoint_operations": 4,
-      "approval_required_operations": 1,
-      "sample_ids": [
-        "15056661",
-        "15058548",
-        "15059299"
       ]
     },
     {

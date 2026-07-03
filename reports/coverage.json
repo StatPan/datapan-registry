@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T15:25:03Z",
+  "generated_at": "2026-07-03T15:34:24Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,15 +7,15 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 16062,
-    "callable_operations": 15920,
+    "operations": 16296,
+    "callable_operations": 16154,
     "callable_operation_percent": 99.1,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 4452,
-    "registered_adapter_operations": 4442,
+    "external_endpoint_operations": 4686,
+    "registered_adapter_operations": 4676,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.4,
-    "approval_required_operations": 5004,
+    "approval_required_operations": 5210,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T15:24:43Z",
-    "total": 1607,
-    "verified": 329,
+    "generated_at": "2026-07-03T15:34:08Z",
+    "total": 1630,
+    "verified": 352,
     "failed": 115,
     "skipped": 1163,
     "unknown": 0,
-    "verified_percent": 20.5,
+    "verified_percent": 21.6,
     "evidence_operation_percent": 10
   },
   "route_evidence": {
@@ -274,6 +274,22 @@
         ]
       },
       {
+        "host": "www.foodsafetykorea.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "adapter",
+        "specs": 104,
+        "operations": 237,
+        "external_endpoint_operations": 237,
+        "approval_required_operations": 206,
+        "sample_ids": [
+          "15056661",
+          "15056847",
+          "15057328"
+        ]
+      },
+      {
         "host": "www.calspia.go.kr",
         "provider": "calspia",
         "kinds": [
@@ -352,36 +368,20 @@
           "external_endpoint"
         ],
         "adapter_status": "adapter",
-        "specs": 51,
-        "operations": 57,
-        "external_endpoint_operations": 57,
-        "approval_required_operations": 1,
+        "specs": 52,
+        "operations": 58,
+        "external_endpoint_operations": 58,
+        "approval_required_operations": 2,
         "sample_ids": [
           "15011425",
           "15056498",
           "15056517"
         ]
-      },
-      {
-        "host": "data.ekape.or.kr",
-        "provider": "ekape",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "adapter",
-        "specs": 8,
-        "operations": 49,
-        "external_endpoint_operations": 49,
-        "sample_ids": [
-          "15000577",
-          "15056733",
-          "15057101"
-        ]
       }
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T15:25:03Z",
+    "generated_at": "2026-07-03T15:34:24Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 68,
     "host_count": 76,

@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T15:24:43Z",
+  "generated_at": "2026-07-03T15:34:08Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1607,
-    "verified": 329,
+    "total": 1630,
+    "verified": 352,
     "failed": 115,
     "skipped": 1163,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 329,
+        "count": 352,
         "status": "verified"
       },
       {
@@ -389,9 +389,19 @@
         "provider": "andong"
       },
       {
+        "key": "its",
+        "count": 15,
+        "provider": "its"
+      },
+      {
         "key": "korad",
         "count": 15,
         "provider": "korad"
+      },
+      {
+        "key": "foodsafetykorea",
+        "count": 14,
+        "provider": "foodsafetykorea"
       },
       {
         "key": "itfind",
@@ -434,6 +444,11 @@
         "provider": "humetro"
       },
       {
+        "key": "ex",
+        "count": 7,
+        "provider": "ex"
+      },
+      {
         "key": "airport",
         "count": 6,
         "provider": "airport"
@@ -442,11 +457,6 @@
         "key": "codil",
         "count": 6,
         "provider": "codil"
-      },
-      {
-        "key": "its",
-        "count": 6,
-        "provider": "its"
       },
       {
         "key": "kpx",
@@ -479,11 +489,6 @@
         "provider": "dongjak"
       },
       {
-        "key": "foodsafetykorea",
-        "count": 4,
-        "provider": "foodsafetykorea"
-      },
-      {
         "key": "forest",
         "count": 4,
         "provider": "forest"
@@ -507,11 +512,6 @@
         "key": "emuseum",
         "count": 3,
         "provider": "emuseum"
-      },
-      {
-        "key": "ex",
-        "count": 3,
-        "provider": "ex"
       },
       {
         "key": "folk",
@@ -741,6 +741,16 @@
         "host": "www.korad.or.kr"
       },
       {
+        "key": "www.foodsafetykorea.go.kr",
+        "count": 14,
+        "host": "www.foodsafetykorea.go.kr"
+      },
+      {
+        "key": "www.its.go.kr",
+        "count": 14,
+        "host": "www.its.go.kr"
+      },
+      {
         "key": "open.itfind.or.kr",
         "count": 13,
         "host": "open.itfind.or.kr"
@@ -781,6 +791,11 @@
         "host": "data.humetro.busan.kr"
       },
       {
+        "key": "data.ex.co.kr",
+        "count": 7,
+        "host": "data.ex.co.kr"
+      },
+      {
         "key": "openapi.tour.go.kr",
         "count": 7,
         "host": "openapi.tour.go.kr"
@@ -809,11 +824,6 @@
         "key": "www.codil.or.kr",
         "count": 6,
         "host": "www.codil.or.kr"
-      },
-      {
-        "key": "www.its.go.kr",
-        "count": 6,
-        "host": "www.its.go.kr"
       },
       {
         "key": "ws.bus.go.kr",
@@ -851,19 +861,9 @@
         "host": "openapi.pqis.go.kr"
       },
       {
-        "key": "www.foodsafetykorea.go.kr",
-        "count": 4,
-        "host": "www.foodsafetykorea.go.kr"
-      },
-      {
         "key": "www.nongsaro.go.kr",
         "count": 4,
         "host": "www.nongsaro.go.kr"
-      },
-      {
-        "key": "data.ex.co.kr",
-        "count": 3,
-        "host": "data.ex.co.kr"
       },
       {
         "key": "data.gwanak.go.kr",
@@ -929,6 +929,11 @@
         "key": "dgfca.or.kr",
         "count": 1,
         "host": "dgfca.or.kr"
+      },
+      {
+        "key": "its.go.kr",
+        "count": 1,
+        "host": "its.go.kr"
       },
       {
         "key": "ncpms.rda.go.kr",
@@ -1024,7 +1029,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 913,
+        "count": 936,
         "kind": "external_endpoint"
       },
       {

@@ -12,14 +12,14 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `16062`
-- callable operations: `15920` (`99.1%`)
+- operations: `16296`
+- callable operations: `16154` (`99.1%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `4452`
-- registered adapter operations: `4442`
+- external endpoint operations: `4686`
+- registered adapter operations: `4676`
 - missing adapter operations: `29`
 - external adapter coverage: `99.4%`
-- approval-required operations: `5004`
+- approval-required operations: `5210`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `146`
@@ -378,6 +378,11 @@ coverage.
    runtime evidence to `1607`, registered external adapter operations to
    `4442`, completes 국토교통부 materialization at `393` of `393` APIs, and moves
    the first materialization queue to 식품의약품안전처.
+   The first 식품의약품안전처 batch materializes `100` APIs and `234` operations
+   without needing new adapters, and merges `23` verified bounded checks. That
+   brings checked runtime evidence to `1630`, registered external adapter
+   operations to `4676`, and raises 식품의약품안전처 operation coverage to `372`
+   of `392` APIs.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,
