@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-07-02T23:49:57Z",
+  "generated_at": "2026-07-03T13:07:47Z",
   "source": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1406,
-    "verified": 151,
+    "total": 1427,
+    "verified": 162,
     "failed": 112,
-    "skipped": 1143,
+    "skipped": 1153,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 1143,
+        "count": 1153,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 151,
+        "count": 162,
         "status": "verified"
       },
       {
@@ -33,7 +33,7 @@
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 427,
+        "count": 429,
         "reason": "missing_required_params"
       },
       {
@@ -43,7 +43,7 @@
       },
       {
         "key": "approval_required",
-        "count": 118,
+        "count": 126,
         "reason": "approval_required"
       },
       {
@@ -290,7 +290,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 655,
+        "count": 665,
         "provider": "data.go.kr"
       },
       {
@@ -309,6 +309,11 @@
         "provider": "ekape"
       },
       {
+        "key": "data-gg",
+        "count": 48,
+        "provider": "data-gg"
+      },
+      {
         "key": "geoje",
         "count": 41,
         "provider": "geoje"
@@ -317,11 +322,6 @@
         "key": "uiryeong",
         "count": 40,
         "provider": "uiryeong"
-      },
-      {
-        "key": "data-gg",
-        "count": 38,
-        "provider": "data-gg"
       },
       {
         "key": "oneclick-law",
@@ -499,6 +499,11 @@
         "provider": "happysd"
       },
       {
+        "key": "dgfca",
+        "count": 1,
+        "provider": "dgfca"
+      },
+      {
         "key": "foodsafetykorea",
         "count": 1,
         "provider": "foodsafetykorea"
@@ -542,7 +547,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 655,
+        "count": 665,
         "host": "apis.data.go.kr"
       },
       {
@@ -561,6 +566,11 @@
         "host": "data.ekape.or.kr"
       },
       {
+        "key": "data.gg.go.kr",
+        "count": 48,
+        "host": "data.gg.go.kr"
+      },
+      {
         "key": "c.q-net.or.kr",
         "count": 42,
         "host": "c.q-net.or.kr"
@@ -574,11 +584,6 @@
         "key": "data.uiryeong.go.kr",
         "count": 40,
         "host": "data.uiryeong.go.kr"
-      },
-      {
-        "key": "data.gg.go.kr",
-        "count": 38,
-        "host": "data.gg.go.kr"
       },
       {
         "key": "oneclick.law.go.kr:80",
@@ -771,6 +776,11 @@
         "host": "data.myhome.go.kr:443"
       },
       {
+        "key": "dgfca.or.kr",
+        "count": 1,
+        "host": "dgfca.or.kr"
+      },
+      {
         "key": "ncpms.rda.go.kr",
         "count": 1,
         "host": "ncpms.rda.go.kr"
@@ -819,12 +829,12 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 732,
+        "count": 743,
         "kind": "external_endpoint"
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 655,
+        "count": 665,
         "kind": "data_go_kr_gateway"
       },
       {

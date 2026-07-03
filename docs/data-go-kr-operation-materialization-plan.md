@@ -2,11 +2,11 @@
 
 This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns APIs without operation mappings into bounded institution work queues. It is separate from runtime evidence reactivation: these APIs need operation metadata materialized before they can enter verification batches.
 
-- Generated at: `2026-07-02T23:50:05Z`
+- Generated at: `2026-07-03T13:07:56Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `8153` (`67.6%`)
-- APIs without operation mapping: `3907`
+- APIs with operation mapping: `8253` (`68.4%`)
+- APIs without operation mapping: `3807`
 - Planned institutions: `10`
 - Planned APIs: `645`
 - First queue: `경기도`
@@ -16,7 +16,7 @@ This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns
 
 | Rank | Institution | APIs | Covered APIs | Uncovered APIs | API Coverage | Planned APIs | Remaining After Batch |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 경기도 | 840 | 299 | 541 | 35.6% | 100 | 441 |
+| 1 | 경기도 | 840 | 399 | 441 | 47.5% | 100 | 341 |
 | 2 | 국토교통부 | 393 | 127 | 266 | 32.3% | 100 | 166 |
 | 3 | 식품의약품안전처 | 392 | 272 | 120 | 69.4% | 100 | 20 |
 | 4 | 국회 국회사무처 | 277 | 0 | 277 | 0.0% | 100 | 177 |
@@ -31,11 +31,11 @@ This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns
 
 | Institution | API ID | Title | Category | Format | Dev Approval | Prod Approval | Updated |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 경기도 | 15059478 | 경기도_가축 분뇨 수집 운반업체 현황 | 농축수산 | XML | 자동승인 | 자동승인 | 2025-09-17 |
-| 경기도 | 15059470 | 경기도_병원평가정보(폐암) 현황 | 보건의료 | XML | 자동승인 | 자동승인 | 2025-09-17 |
-| 경기도 | 15059440 | 경기도_외국대학과의 교류현황 | 교육 | XML | 자동승인 | 자동승인 | 2025-09-17 |
-| 경기도 | 15059428 | 경기도_물류 주선업체 현황(국제) | 국토관리 | XML | 자동승인 | 자동승인 | 2025-09-17 |
-| 경기도 | 15059359 | 경기도_전기사업업체 현황 | 산업고용 | XML | 자동승인 | 자동승인 | 2025-09-17 |
+| 경기도 | 15058080 | 경기도_휴게음식점(관광호텔) 현황 | 식품건강 | XML | 자동승인 | 자동승인 | 2025-09-12 |
+| 경기도 | 15058026 | 경기도_정수장 현황 | 국토관리 | XML | 자동승인 | 자동승인 | 2025-09-12 |
+| 경기도 | 15057987 | 경기도_지적장애인시설 현황 | 사회복지 | XML | 자동승인 | 자동승인 | 2025-09-12 |
+| 경기도 | 15057809 | 경기도_출판사 현황 | 문화관광 | XML | 자동승인 | 자동승인 | 2025-09-12 |
+| 경기도 | 15057771 | 경기도_수화통역센터 현황 | 사회복지 | XML | 자동승인 | 자동승인 | 2025-09-12 |
 | 국토교통부 | 15067164 | 국토교통부_건설보고서 | 산업고용 | JSON+XML | 자동승인 | 심의승인 | 2025-11-18 |
 | 국토교통부 | 15067161 | 국토교통부_건설 기술사례정보 | 산업고용 | JSON+XML | 자동승인 | 심의승인 | 2025-11-18 |
 | 국토교통부 | 15061112 | 국토교통부_건설공사 원가절감사례 목록 조회 | 교통물류 | JSON+XML | 자동승인 | 심의승인 | 2025-11-18 |

@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-07-02T23:49:57Z",
+  "generated_at": "2026-07-03T13:07:47Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 1617,
+  "limit": 1647,
   "truncated": true,
-  "filtered_count": 1406,
+  "filtered_count": 1427,
   "summary": {
-    "total": 1406,
-    "verified": 151,
+    "total": 1427,
+    "verified": 162,
     "failed": 112,
-    "skipped": 1143,
+    "skipped": 1153,
     "unknown": 0
   },
   "results": [
@@ -26323,6 +26323,428 @@
       "semantic_status": "html_landing_page",
       "url": "https://seogu.go.kr/data/usr/openApi/openApiView.do?ds_pk=107",
       "body_shape": "html"
+    },
+    {
+      "dataset_id": "15047819",
+      "title": "건강보험심사평가원_의약품사용정보조회서비스",
+      "operation": "4단계ATC별의료기관종별사용량목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "atcStep4Cd": "",
+        "clCd": "",
+        "cpmdPrscTp": "",
+        "diagYm": "",
+        "insupTp": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sgguCd": "",
+        "sidoCd": ""
+      },
+      "missing_params": [
+        "diagYm",
+        "atcStep4Cd",
+        "insupTp",
+        "cpmdPrscTp",
+        "sidoCd",
+        "sgguCd",
+        "clCd"
+      ]
+    },
+    {
+      "dataset_id": "15047819",
+      "title": "건강보험심사평가원_의약품사용정보조회서비스",
+      "operation": "4단계ATC별지역별사용량목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "atcStep4Cd": "",
+        "cpmdPrscTp": "",
+        "diagYm": "",
+        "insupTp": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sgguCd": "",
+        "sidoCd": ""
+      },
+      "missing_params": [
+        "diagYm",
+        "atcStep4Cd",
+        "insupTp",
+        "cpmdPrscTp",
+        "sidoCd",
+        "sgguCd"
+      ]
+    },
+    {
+      "dataset_id": "15047819",
+      "title": "건강보험심사평가원_의약품사용정보조회서비스",
+      "operation": "성분별상병별사용량목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "cpmdPrscTp": "",
+        "diagYm": "",
+        "gnlNmCd": "",
+        "insupTp": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "diagYm",
+        "gnlNmCd",
+        "insupTp",
+        "cpmdPrscTp"
+      ]
+    },
+    {
+      "dataset_id": "15047819",
+      "title": "건강보험심사평가원_의약품사용정보조회서비스",
+      "operation": "성분별의료기관종별사용량목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "clCd": "",
+        "cpmdPrscTp": "",
+        "diagYm": "",
+        "gnlNmCd": "",
+        "insupTp": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sgguCd": "",
+        "sidoCd": ""
+      },
+      "missing_params": [
+        "diagYm",
+        "gnlNmCd",
+        "insupTp",
+        "cpmdPrscTp",
+        "sidoCd",
+        "sgguCd",
+        "clCd"
+      ]
+    },
+    {
+      "dataset_id": "15047819",
+      "title": "건강보험심사평가원_의약품사용정보조회서비스",
+      "operation": "성분별지역별사용량목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "cpmdPrscTp": "",
+        "diagYm": "",
+        "gnlNmCd": "",
+        "insupTp": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sgguCd": "",
+        "sidoCd": ""
+      },
+      "missing_params": [
+        "diagYm",
+        "gnlNmCd",
+        "insupTp",
+        "cpmdPrscTp",
+        "sidoCd",
+        "sgguCd"
+      ]
+    },
+    {
+      "dataset_id": "15047819",
+      "title": "건강보험심사평가원_의약품사용정보조회서비스",
+      "operation": "약효분류군상병별사용량목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "cpmdPrscTp": "",
+        "diagYm": "",
+        "insupTp": "",
+        "meftDivNo": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "diagYm",
+        "meftDivNo",
+        "insupTp",
+        "cpmdPrscTp"
+      ]
+    },
+    {
+      "dataset_id": "15047819",
+      "title": "건강보험심사평가원_의약품사용정보조회서비스",
+      "operation": "약효분류군의료기관종별사용량목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "clCd": "",
+        "cpmdPrscTp": "",
+        "diagYm": "",
+        "insupTp": "",
+        "meftDivNo": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sgguCd": "",
+        "sidoCd": ""
+      },
+      "missing_params": [
+        "diagYm",
+        "meftDivNo",
+        "insupTp",
+        "cpmdPrscTp",
+        "sidoCd",
+        "sgguCd",
+        "clCd"
+      ]
+    },
+    {
+      "dataset_id": "15047819",
+      "title": "건강보험심사평가원_의약품사용정보조회서비스",
+      "operation": "약효분류군지역별사용량목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "cpmdPrscTp": "",
+        "diagYm": "",
+        "insupTp": "",
+        "meftDivNo": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "sgguCd": "",
+        "sidoCd": ""
+      },
+      "missing_params": [
+        "diagYm",
+        "meftDivNo",
+        "insupTp",
+        "cpmdPrscTp",
+        "sidoCd",
+        "sgguCd"
+      ]
+    },
+    {
+      "dataset_id": "15048846",
+      "title": "국토교통부_활성화지역 진단 지표(시군구/읍면동)",
+      "operation": "국토교통부_시군구 지표 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "idxCd": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "signguCd": "",
+        "type": "json",
+        "year": "2024"
+      },
+      "missing_params": [
+        "signguCd",
+        "idxCd"
+      ]
+    },
+    {
+      "dataset_id": "15048846",
+      "title": "국토교통부_활성화지역 진단 지표(시군구/읍면동)",
+      "operation": "국토교통부_읍면동 지표 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "emdCd": "",
+        "idxCd": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "signguCd": "",
+        "type": "json",
+        "year": "2024"
+      },
+      "missing_params": [
+        "signguCd",
+        "emdCd",
+        "idxCd"
+      ]
+    },
+    {
+      "dataset_id": "15056502",
+      "title": "경기도_기초생활수급자 장애아동수당 수급자 현황",
+      "operation": "기초생활수급자 장애아동수당 수급자 현황 외부 링크 2",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:07:35Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=S4XNZEWR3IZILI0SRMQF25646207\u0026infSeq=2\u0026page=1\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15056502",
+      "title": "경기도_기초생활수급자 장애아동수당 수급자 현황",
+      "operation": "기초생활수급자 장애아동수당 수급자 현황 외부 링크 3",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:07:35Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=XAXEHLVZQSWKIR9SW77M25701717\u0026infSeq=2\u0026page=1\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15056510",
+      "title": "경기도_경기장애인구강진료센터 장애유형 운영현황",
+      "operation": "경기장애인구강진료센터 장애유형 운영현황 외부 링크 1",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:07:35Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=ZORB9GU6RKZSXLSDLW2926069233\u0026infSeq=2\u0026page=1\u0026rows=10\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15056510",
+      "title": "경기도_경기장애인구강진료센터 장애유형 운영현황",
+      "operation": "경기장애인구강진료센터 장애유형 운영현황 외부 링크 2",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:07:35Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=33EYMP2GGWFUN580AZ7V26045612\u0026infSeq=2\u0026page=1\u0026rows=10\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15056510",
+      "title": "경기도_경기장애인구강진료센터 장애유형 운영현황",
+      "operation": "경기장애인구강진료센터 장애유형 운영현황 외부 링크 3",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:07:35Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=5OBIPZM9C7GBX5T6C24S26053092\u0026infSeq=2\u0026page=1\u0026rows=10\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15056524",
+      "title": "경기도_수업일수 및 수업시수 현황(특)",
+      "operation": "수업일수 및 수업시수 현황(특) 외부 링크 1",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:07:35Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=FTXBZJ0SUYLQ9EDCSTEB23226294\u0026infSeq=1\u0026page=1\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15056524",
+      "title": "경기도_수업일수 및 수업시수 현황(특)",
+      "operation": "수업일수 및 수업시수 현황(특) 외부 링크 2",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:07:35Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=ILC0HP9F67F5824TTLMM23213447\u0026infSeq=3\u0026page=1\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15056524",
+      "title": "경기도_수업일수 및 수업시수 현황(특)",
+      "operation": "수업일수 및 수업시수 현황(특) 외부 링크 3",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:07:35Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=X5TK0E41Y1Y6O3H3EBCK23323506\u0026infSeq=1\u0026page=1\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15056526",
+      "title": "경기도_골프 연습장업체 현황",
+      "operation": "골프 연습장업체 현황 외부 링크 1",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:07:35Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=713RY08G3A3TSH85H2DT899077\u0026infSeq=3\u0026page=1\u0026searchWord=%EA%B3%A8%ED%94%84+%EC%97%B0%EC%8A%B5%EC%9E%A5%EC%97%85%EC%B2%B4+%ED%98%84%ED%99%A9\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15056526",
+      "title": "경기도_골프 연습장업체 현황",
+      "operation": "골프 연습장업체 현황 외부 링크 2",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:07:35Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=9HXC5WO150SLGTE0038Z839829\u0026infSeq=3\u0026page=1\u0026searchWord=%EA%B3%A8%ED%94%84%EC%9E%A5+%ED%98%84%ED%99%A9\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15057574",
+      "title": "경기도 문화 교육 정보 현황",
+      "operation": "경기도 문화 교육 정보 현황 외부 링크 3",
+      "provider": "dgfca",
+      "endpoint_host": "dgfca.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:07:39Z",
+      "http_status": 200,
+      "semantic_status": "unclassified_response",
+      "url": "https://dgfca.or.kr/api/daegu/cultural-events",
+      "body_shape": "json"
     }
   ]
 }

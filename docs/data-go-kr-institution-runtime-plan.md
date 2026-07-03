@@ -2,7 +2,7 @@
 
 This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns the highest-priority institution runtime gaps into bounded `datapan catalog verify --org` batches.
 
-- Generated at: `2026-07-02T23:50:05Z`
+- Generated at: `2026-07-03T13:07:56Z`
 - Planned institutions: `10`
 - Planned operations: `924`
 - First queue: `행정안전부`
@@ -17,9 +17,9 @@ data.go.kr gateway verification requires a service key; no-key runs only prove p
 | Rank | Institution | APIs | Covered APIs | Uncovered APIs | Ops | Runtime Reactivation APIs | Missing Evidence Ops | Planned Ops |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 1 | 행정안전부 | 1252 | 1252 | 0 | 1767 | 1210 | 1697 | 100 |
-| 2 | 경기도 | 840 | 299 | 541 | 804 | 268 | 752 | 100 |
-| 3 | 국토교통부 | 393 | 127 | 266 | 397 | 124 | 372 | 100 |
-| 4 | 식품의약품안전처 | 392 | 272 | 120 | 363 | 270 | 361 | 100 |
+| 2 | 경기도 | 840 | 399 | 441 | 1086 | 364 | 1023 | 100 |
+| 3 | 식품의약품안전처 | 392 | 272 | 120 | 363 | 270 | 361 | 100 |
+| 4 | 국토교통부 | 393 | 127 | 266 | 397 | 123 | 370 | 100 |
 | 5 | 성평등가족부 | 273 | 272 | 1 | 347 | 271 | 346 | 100 |
 | 6 | 공정거래위원회 | 250 | 216 | 34 | 295 | 216 | 295 | 100 |
 | 7 | 한국마사회 | 223 | 223 | 0 | 223 | 214 | 214 | 100 |
@@ -33,8 +33,8 @@ data.go.kr gateway verification requires a service key; no-key runs only prove p
 | --- | ---: | ---: |
 | 1 | 행정안전부 | `reports/data-go-kr/institution-batches/institution-01.json` |
 | 2 | 경기도 | `reports/data-go-kr/institution-batches/institution-02.json` |
-| 3 | 국토교통부 | `reports/data-go-kr/institution-batches/institution-03.json` |
-| 4 | 식품의약품안전처 | `reports/data-go-kr/institution-batches/institution-04.json` |
+| 3 | 식품의약품안전처 | `reports/data-go-kr/institution-batches/institution-03.json` |
+| 4 | 국토교통부 | `reports/data-go-kr/institution-batches/institution-04.json` |
 | 5 | 성평등가족부 | `reports/data-go-kr/institution-batches/institution-05.json` |
 | 6 | 공정거래위원회 | `reports/data-go-kr/institution-batches/institution-06.json` |
 | 7 | 한국마사회 | `reports/data-go-kr/institution-batches/institution-07.json` |
@@ -51,7 +51,7 @@ datapan catalog verify --registry data/data-go-kr.registry.json --org '행정안
 datapan catalog verify --registry data/data-go-kr.registry.json --org '경기도' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-02.json --json
 ```
 ```bash
-datapan catalog verify --registry data/data-go-kr.registry.json --org '국토교통부' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-03.json --json
+datapan catalog verify --registry data/data-go-kr.registry.json --org '식품의약품안전처' --kind data_go_kr_gateway --exclude-input reports/latest-verification.json --limit 100 --timeout 20s --output reports/data-go-kr/institution-batches/institution-03.json --json
 ```
 
 After a completed batch, merge it into `reports/latest-verification.json`, regenerate the verification summary, coverage backlog, institution overview, and this plan.

@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-07-02T23:50:05Z",
+  "generated_at": "2026-07-03T13:07:56Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 205,
+  "filtered_count": 206,
   "summary": {
-    "hosts": 205,
+    "hosts": 206,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 65,
+    "external_endpoint_hosts": 66,
     "external_guide_hosts": 160,
-    "registered_adapter_hosts": 54,
-    "operation_hosts": 67,
+    "registered_adapter_hosts": 55,
+    "operation_hosts": 68,
     "guide_only_hosts": 138,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
@@ -177,10 +177,10 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 300,
-      "operations": 778,
-      "external_endpoint_operations": 778,
-      "external_guide_specs": 4,
+      "specs": 400,
+      "operations": 1044,
+      "external_endpoint_operations": 1044,
+      "external_guide_specs": 7,
       "wms_operations": 5,
       "approval_required_operations": 9,
       "sample_ids": [
@@ -432,6 +432,21 @@
       ]
     },
     {
+      "host": "data.gm.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 18,
+      "operations": 21,
+      "external_endpoint_operations": 21,
+      "sample_ids": [
+        "15057095",
+        "15057118",
+        "15057435"
+      ]
+    },
+    {
       "host": "data.sisul.or.kr",
       "provider": "sisul",
       "kinds": [
@@ -517,6 +532,23 @@
       ]
     },
     {
+      "host": "data.mafra.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 10,
+      "operations": 14,
+      "external_endpoint_operations": 14,
+      "external_guide_specs": 3,
+      "sample_ids": [
+        "15002220",
+        "15008409",
+        "15015139"
+      ]
+    },
+    {
       "host": "open.itfind.or.kr",
       "provider": "itfind",
       "kinds": [
@@ -530,38 +562,6 @@
         "15036874",
         "15036875",
         "15036876"
-      ]
-    },
-    {
-      "host": "data.gm.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 10,
-      "operations": 12,
-      "external_endpoint_operations": 12,
-      "sample_ids": [
-        "15057118",
-        "15057435",
-        "15057640"
-      ]
-    },
-    {
-      "host": "data.mafra.go.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 7,
-      "operations": 11,
-      "external_endpoint_operations": 11,
-      "external_guide_specs": 3,
-      "sample_ids": [
-        "15002220",
-        "15008409",
-        "15015139"
       ]
     },
     {
@@ -722,6 +722,21 @@
       ]
     },
     {
+      "host": "data.seoul.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 4,
+      "operations": 5,
+      "external_endpoint_operations": 5,
+      "sample_ids": [
+        "15003164",
+        "15057394",
+        "15058614"
+      ]
+    },
+    {
       "host": "ws.bus.go.kr",
       "provider": "seoul-bus",
       "kinds": [
@@ -733,6 +748,23 @@
       "external_endpoint_operations": 5,
       "sample_ids": [
         "15000332"
+      ]
+    },
+    {
+      "host": "www.vworld.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 5,
+      "operations": 5,
+      "external_endpoint_operations": 5,
+      "wms_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15056696",
+        "15056928",
+        "15057053"
       ]
     },
     {
@@ -779,21 +811,6 @@
       "sample_ids": [
         "15001189",
         "15043696"
-      ]
-    },
-    {
-      "host": "data.seoul.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 3,
-      "operations": 4,
-      "external_endpoint_operations": 4,
-      "sample_ids": [
-        "15003164",
-        "15058614",
-        "15059503"
       ]
     },
     {
@@ -888,23 +905,6 @@
       ]
     },
     {
-      "host": "www.vworld.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 3,
-      "operations": 3,
-      "external_endpoint_operations": 3,
-      "wms_operations": 1,
-      "approval_required_operations": 1,
-      "sample_ids": [
-        "15057053",
-        "15059050",
-        "15149535"
-      ]
-    },
-    {
       "host": "www.happysd.or.kr",
       "kinds": [
         "external_endpoint",
@@ -947,6 +947,19 @@
       "external_endpoint_operations": 1,
       "sample_ids": [
         "15058476"
+      ]
+    },
+    {
+      "host": "dgfca.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "15057574"
       ]
     },
     {

@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-02T23:50:05Z",
+  "generated_at": "2026-07-03T13:07:56Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 13967,
-    "runtime_evidence": 1406,
-    "runtime_evidence_percent": 10.1,
-    "callable_operations": 13825,
-    "external_endpoint_operations": 2357,
-    "registered_adapter_operations": 2347,
+    "operations": 14249,
+    "runtime_evidence": 1427,
+    "runtime_evidence_percent": 10.0,
+    "callable_operations": 14107,
+    "external_endpoint_operations": 2639,
+    "registered_adapter_operations": 2629,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 2357
+      "count": 2639
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 2347
+      "count": 2629
     },
     {
       "key": "builtin",
@@ -69,27 +69,27 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 1637
+      "operation_count": 1642
     },
     {
       "category": "교통물류",
-      "operation_count": 1424
+      "operation_count": 1427
     },
     {
       "category": "농축수산",
-      "operation_count": 1369
+      "operation_count": 1400
     },
     {
       "category": "문화관광",
-      "operation_count": 1305
+      "operation_count": 1360
     },
     {
       "category": "사회복지",
-      "operation_count": 1163
+      "operation_count": 1191
     },
     {
       "category": "산업고용",
-      "operation_count": 1063
+      "operation_count": 1082
     },
     {
       "category": "재정금융",
@@ -97,27 +97,27 @@
     },
     {
       "category": "환경기상",
-      "operation_count": 878
+      "operation_count": 883
     },
     {
       "category": "재난안전",
-      "operation_count": 788
+      "operation_count": 793
     },
     {
       "category": "보건의료",
-      "operation_count": 738
+      "operation_count": 779
     },
     {
       "category": "식품건강",
-      "operation_count": 670
+      "operation_count": 673
     },
     {
       "category": "교육",
-      "operation_count": 588
+      "operation_count": 666
     },
     {
       "category": "국토관리",
-      "operation_count": 551
+      "operation_count": 560
     },
     {
       "category": "과학기술",
@@ -139,7 +139,7 @@
     },
     {
       "host": "data.gg.go.kr",
-      "operation_count": 778,
+      "operation_count": 1044,
       "adapter": "data-gg",
       "adapter_status": "registered",
       "capabilities": [
@@ -279,6 +279,15 @@
       ]
     },
     {
+      "host": "data.gm.go.kr",
+      "operation_count": 21,
+      "adapter": "gwangmyeong",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "host": "www.work24.go.kr",
       "operation_count": 21,
       "adapter": "work24",
@@ -304,15 +313,6 @@
       "adapter_status": "registered",
       "capabilities": [
         "call",
-        "verification"
-      ]
-    },
-    {
-      "host": "www.nongsaro.go.kr",
-      "operation_count": 19,
-      "adapter": "nongsaro",
-      "adapter_status": "registered",
-      "capabilities": [
         "verification"
       ]
     }
@@ -428,11 +428,11 @@
     {
       "organization": "경기도",
       "api_count": 840,
-      "operation_api_count": 299,
-      "operation_count": 804,
-      "runtime_evidence_count": 52,
-      "runtime_evidence_percent": 6.5,
-      "verified": 52,
+      "operation_api_count": 399,
+      "operation_count": 1086,
+      "runtime_evidence_count": 63,
+      "runtime_evidence_percent": 5.8,
+      "verified": 63,
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
@@ -445,13 +445,13 @@
         },
         {
           "key": "external_endpoint",
-          "count": 792
+          "count": 1074
         }
       ],
       "by_adapter_status": [
         {
           "key": "adapter",
-          "count": 792
+          "count": 1074
         },
         {
           "key": "builtin",
@@ -461,29 +461,29 @@
       "top_categories": [
         {
           "category": "사회복지",
-          "operation_count": 363
+          "operation_count": 391
         },
         {
           "category": "교육",
-          "operation_count": 102
+          "operation_count": 180
         },
         {
           "category": "산업고용",
-          "operation_count": 83
+          "operation_count": 102
         },
         {
-          "category": "환경기상",
-          "operation_count": 51
+          "category": "문화관광",
+          "operation_count": 79
         },
         {
-          "category": "재난안전",
-          "operation_count": 38
+          "category": "보건의료",
+          "operation_count": 70
         }
       ],
       "top_hosts": [
         {
           "host": "data.gg.go.kr",
-          "operation_count": 772,
+          "operation_count": 1038,
           "adapter": "data-gg",
           "adapter_status": "registered",
           "capabilities": [
@@ -492,7 +492,7 @@
         },
         {
           "host": "data.gm.go.kr",
-          "operation_count": 12,
+          "operation_count": 21,
           "adapter": "gwangmyeong",
           "adapter_status": "registered",
           "capabilities": [
@@ -504,18 +504,17 @@
           "operation_count": 12
         },
         {
-          "host": "data.seoul.go.kr",
-          "operation_count": 2,
-          "adapter": "seoul-open-data",
+          "host": "data.mafra.go.kr",
+          "operation_count": 4,
+          "adapter": "mafra",
           "adapter_status": "registered",
           "capabilities": [
-            "call",
             "verification"
           ]
         },
         {
           "host": "www.vworld.kr",
-          "operation_count": 2,
+          "operation_count": 4,
           "adapter": "vworld",
           "adapter_status": "registered",
           "capabilities": [
@@ -529,11 +528,11 @@
       "api_count": 393,
       "operation_api_count": 127,
       "operation_count": 397,
-      "runtime_evidence_count": 25,
-      "runtime_evidence_percent": 6.3,
+      "runtime_evidence_count": 27,
+      "runtime_evidence_percent": 6.8,
       "verified": 0,
       "failed": 0,
-      "skipped": 25,
+      "skipped": 27,
       "unknown": 0,
       "approval_required_operations": 6,
       "no_endpoint_operations": 0,
@@ -2497,11 +2496,11 @@
       "api_count": 23,
       "operation_api_count": 23,
       "operation_count": 71,
-      "runtime_evidence_count": 34,
-      "runtime_evidence_percent": 47.9,
+      "runtime_evidence_count": 42,
+      "runtime_evidence_percent": 59.2,
       "verified": 0,
       "failed": 0,
-      "skipped": 34,
+      "skipped": 42,
       "unknown": 0,
       "approval_required_operations": 16,
       "no_endpoint_operations": 5,
