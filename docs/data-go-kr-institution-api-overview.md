@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T15:24:56Z`
+- Generated at: `2026-07-03T15:34:17Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `16062`
-- Runtime evidence: `1607` (`10.0%`)
-- External endpoint operations: `4452`
-- Registered adapter operations: `4442`
+- Operations: `16296`
+- Runtime evidence: `1630` (`10.0%`)
+- External endpoint operations: `4686`
+- Registered adapter operations: `4676`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -15,8 +15,8 @@
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 행정안전부 | 1252 | 1252 | 1767 | 96 | 5.4% | 60 | 25 | 11 | 613 | 0 |
 | 경기도 | 840 | 840 | 2241 | 160 | 7.1% | 159 | 1 | 0 | 32 | 0 |
-| 국토교통부 | 393 | 393 | 1055 | 74 | 7.0% | 45 | 2 | 27 | 258 | 0 |
-| 식품의약품안전처 | 392 | 272 | 363 | 3 | 0.8% | 0 | 0 | 3 | 275 | 0 |
+| 국토교통부 | 393 | 393 | 1055 | 87 | 8.2% | 58 | 2 | 27 | 258 | 0 |
+| 식품의약품안전처 | 392 | 372 | 597 | 13 | 2.2% | 10 | 0 | 3 | 481 | 0 |
 | 국회 국회사무처 | 277 | 0 | 0 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 성평등가족부 | 273 | 272 | 347 | 1 | 0.3% | 0 | 0 | 1 | 0 | 0 |
 | 부산광역시 | 259 | 259 | 336 | 60 | 17.9% | 0 | 0 | 60 | 74 | 1 |
@@ -50,9 +50,9 @@
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 경기도 | 840 | 840 | 2241 | 160 | 7.1% | 159 | 1 | 0 | 32 | 0 |
 | 행정안전부 | 1252 | 1252 | 1767 | 96 | 5.4% | 60 | 25 | 11 | 613 | 0 |
-| 국토교통부 | 393 | 393 | 1055 | 74 | 7.0% | 45 | 2 | 27 | 258 | 0 |
+| 국토교통부 | 393 | 393 | 1055 | 87 | 8.2% | 58 | 2 | 27 | 258 | 0 |
+| 식품의약품안전처 | 392 | 372 | 597 | 13 | 2.2% | 10 | 0 | 3 | 481 | 0 |
 | 국립암센터 | 212 | 204 | 367 | 79 | 21.5% | 0 | 0 | 79 | 175 | 1 |
-| 식품의약품안전처 | 392 | 272 | 363 | 3 | 0.8% | 0 | 0 | 3 | 275 | 0 |
 | 금융위원회 | 110 | 110 | 349 | 32 | 9.2% | 0 | 0 | 32 | 25 | 1 |
 | 성평등가족부 | 273 | 272 | 347 | 1 | 0.3% | 0 | 0 | 1 | 0 | 0 |
 | 부산광역시 | 259 | 259 | 336 | 60 | 17.9% | 0 | 0 | 60 | 74 | 1 |
@@ -91,10 +91,10 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 - 농축수산: `1485` operations
 - 사회복지: `1345` operations
 - 산업고용: `1224` operations
+- 식품건강: `1088` operations
 - 환경기상: `1045` operations
 - 재정금융: `964` operations
 - 보건의료: `938` operations
-- 식품건강: `854` operations
 
 ## Largest Hosts
 
@@ -103,8 +103,8 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 - www.vworld.kr: `458` operations
 - www.safetydata.go.kr: `370` operations
 - www.lofin365.go.kr: `343` operations
+- www.foodsafetykorea.go.kr: `237` operations
 - www.calspia.go.kr: `168` operations
 - www.safemap.go.kr: `104` operations
 - openapi.q-net.or.kr: `104` operations
 - openapi.jeonju.go.kr: `80` operations
-- data.gm.go.kr: `57` operations

@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T15:24:56Z",
+  "generated_at": "2026-07-03T15:34:17Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 16062,
-    "runtime_evidence": 1607,
+    "operations": 16296,
+    "runtime_evidence": 1630,
     "runtime_evidence_percent": 10.0,
-    "callable_operations": 15920,
-    "external_endpoint_operations": 4452,
-    "registered_adapter_operations": 4442,
+    "callable_operations": 16154,
+    "external_endpoint_operations": 4686,
+    "registered_adapter_operations": 4676,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 4452
+      "count": 4686
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 4442
+      "count": 4676
     },
     {
       "key": "builtin",
@@ -92,6 +92,10 @@
       "operation_count": 1224
     },
     {
+      "category": "식품건강",
+      "operation_count": 1088
+    },
+    {
       "category": "환경기상",
       "operation_count": 1045
     },
@@ -102,10 +106,6 @@
     {
       "category": "보건의료",
       "operation_count": 938
-    },
-    {
-      "category": "식품건강",
-      "operation_count": 854
     },
     {
       "category": "국토관리",
@@ -175,6 +175,15 @@
       ]
     },
     {
+      "host": "www.foodsafetykorea.go.kr",
+      "operation_count": 237,
+      "adapter": "foodsafetykorea",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "host": "www.calspia.go.kr",
       "operation_count": 168,
       "adapter": "calspia",
@@ -212,7 +221,7 @@
     },
     {
       "host": "data.gm.go.kr",
-      "operation_count": 57,
+      "operation_count": 58,
       "adapter": "gwangmyeong",
       "adapter_status": "registered",
       "capabilities": [
@@ -302,15 +311,6 @@
       "adapter_status": "registered",
       "capabilities": [
         "call",
-        "verification"
-      ]
-    },
-    {
-      "host": "www.work24.go.kr",
-      "operation_count": 21,
-      "adapter": "work24",
-      "adapter_status": "registered",
-      "capabilities": [
         "verification"
       ]
     }
@@ -527,9 +527,9 @@
       "api_count": 393,
       "operation_api_count": 393,
       "operation_count": 1055,
-      "runtime_evidence_count": 74,
-      "runtime_evidence_percent": 7.0,
-      "verified": 45,
+      "runtime_evidence_count": 87,
+      "runtime_evidence_percent": 8.2,
+      "verified": 58,
       "failed": 2,
       "skipped": 27,
       "unknown": 0,
@@ -621,6 +621,70 @@
       ]
     },
     {
+      "organization": "식품의약품안전처",
+      "api_count": 392,
+      "operation_api_count": 372,
+      "operation_count": 597,
+      "runtime_evidence_count": 13,
+      "runtime_evidence_percent": 2.2,
+      "verified": 10,
+      "failed": 0,
+      "skipped": 3,
+      "unknown": 0,
+      "approval_required_operations": 481,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 363
+        },
+        {
+          "key": "external_endpoint",
+          "count": 234
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 234
+        },
+        {
+          "key": "builtin",
+          "count": 363
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "식품건강",
+          "operation_count": 597
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 363
+        },
+        {
+          "host": "www.foodsafetykorea.go.kr",
+          "operation_count": 233,
+          "adapter": "foodsafetykorea",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "data.gm.go.kr",
+          "operation_count": 1,
+          "adapter": "gwangmyeong",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "국립암센터",
       "api_count": 212,
       "operation_api_count": 204,
@@ -663,44 +727,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 366
-        }
-      ]
-    },
-    {
-      "organization": "식품의약품안전처",
-      "api_count": 392,
-      "operation_api_count": 272,
-      "operation_count": 363,
-      "runtime_evidence_count": 3,
-      "runtime_evidence_percent": 0.8,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 3,
-      "unknown": 0,
-      "approval_required_operations": 275,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 363
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 363
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "식품건강",
-          "operation_count": 363
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 363
         }
       ]
     },

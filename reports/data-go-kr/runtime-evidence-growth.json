@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-07-03T15:24:56Z",
+  "generated_at": "2026-07-03T15:34:17Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -13,16 +13,16 @@
     "provider_index": "data/provider-index.json"
   },
   "coverage": {
-    "operations": 16062,
-    "callable_operations": 15920,
+    "operations": 16296,
+    "callable_operations": 16154,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 4452,
-    "registered_adapter_operations": 4442,
+    "external_endpoint_operations": 4686,
+    "registered_adapter_operations": 4676,
     "call_capable_adapters": 23
   },
   "evidence": {
-    "total": 1607,
-    "verified": 329,
+    "total": 1630,
+    "verified": 352,
     "failed": 115,
     "skipped": 1163,
     "unknown": 0,
@@ -34,7 +34,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 913
+        "count": 936
       },
       {
         "key": "service_root",
@@ -44,15 +44,15 @@
   },
   "growth_target": {
     "target_percent": 10,
-    "target_evidence_total": 1607,
+    "target_evidence_total": 1630,
     "remaining_to_target": 0,
     "status": "at_target"
   },
   "verification_plan": {
     "planned_batches": 18,
-    "planned_operations": 136,
+    "planned_operations": 133,
     "uncovered_gateway_candidates": 10744,
-    "uncovered_adapter_candidates": 3510,
+    "uncovered_adapter_candidates": 3721,
     "missing_adapter_hosts": 11,
     "planned_by_kind": [
       {
@@ -61,7 +61,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 126
+        "count": 123
       }
     ],
     "batches": [
@@ -105,9 +105,18 @@
         "provider": "ex",
         "kind": "external_endpoint",
         "candidates": 8,
-        "uncovered_candidates": 5,
-        "planned_operations": 5,
+        "uncovered_candidates": 1,
+        "planned_operations": 1,
         "output": ".datapan/verification/ex-next.json"
+      },
+      {
+        "label": "foodsafetykorea",
+        "provider": "foodsafetykorea",
+        "kind": "external_endpoint",
+        "candidates": 237,
+        "uncovered_candidates": 223,
+        "planned_operations": 10,
+        "output": ".datapan/verification/foodsafetykorea-next.json"
       },
       {
         "label": "gwanak",
@@ -122,19 +131,10 @@
         "label": "gwangmyeong",
         "provider": "gwangmyeong",
         "kind": "external_endpoint",
-        "candidates": 57,
-        "uncovered_candidates": 37,
+        "candidates": 58,
+        "uncovered_candidates": 38,
         "planned_operations": 10,
         "output": ".datapan/verification/gwangmyeong-next.json"
-      },
-      {
-        "label": "its",
-        "provider": "its",
-        "kind": "external_endpoint",
-        "candidates": 15,
-        "uncovered_candidates": 9,
-        "planned_operations": 9,
-        "output": ".datapan/verification/its-next.json"
       },
       {
         "label": "jejudatahub",

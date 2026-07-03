@@ -94,8 +94,8 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `3,100` data.go.kr APIs
-  without operation mappings, `8,190` operation-mapped APIs without runtime
+- `reports/data-go-kr/coverage-backlog.json` tracks `3,000` data.go.kr APIs
+  without operation mappings, `8,280` operation-mapped APIs without runtime
   evidence, and `66` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
@@ -230,10 +230,12 @@ Current gaps:
   국토교통부 batch extends ITS host coverage, adds the STCIS verification adapter,
   materializes the remaining `66` APIs and `177` operations, and merges `18`
   verified bounded checks, bringing runtime evidence to `1607` and moving the
-  first materialization queue to 식품의약품안전처. Most evidence
+  first materialization queue to 식품의약품안전처. The first 식품의약품안전처 batch
+  materializes `100` APIs and `234` operations, and merges `23` verified
+  bounded checks, bringing runtime evidence to `1630`. Most evidence
   is still skipped boundary evidence, not proof that those operations are callable.
-- API operation coverage remains incomplete: `8,960` of `12,060` APIs have
-  operation mappings (`74.3%`), leaving `3,100` APIs to materialize and `8,190`
+- API operation coverage remains incomplete: `9,060` of `12,060` APIs have
+  operation mappings (`75.1%`), leaving `3,000` APIs to materialize and `8,280`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

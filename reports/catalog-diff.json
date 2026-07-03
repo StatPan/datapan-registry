@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T15:24:56Z",
+  "generated_at": "2026-07-03T15:34:17Z",
   "provider": "data.go.kr",
   "old": ".datapan\\previous-data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,671 +12,1011 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 66,
-    "stable": 11994
+    "changed": 100,
+    "stable": 11960
   },
   "added": [],
   "removed": [],
   "changed": [
     {
-      "id": "15015052",
-      "old_title": "국토교통부_골프장현황도",
-      "new_title": "국토교통부_골프장현황도",
+      "id": "15056847",
+      "old_title": "식품의약품안전처_식품 검사 개별기준규격",
+      "new_title": "식품의약품안전처_식품 검사 개별기준규격",
       "fields": [
         "operations"
       ],
-      "old_digest": "14d2c4015eb6db5fb29ae9a22fca5399f8acc72f3812cdcb349277eb9037f35f",
-      "new_digest": "0cdbab8660e847dbe2059625f370219653369119dadbd8227cebd1e0ad1716ad"
+      "old_digest": "fa8780f130649d1ee80fb619ccf82ece6ce1942469b2ae458b6a9ee995f378f8",
+      "new_digest": "fb343289cccc1435a8a936f8ca91a9c2aa8ecb5be18fad3009b78dfeac65a3af"
     },
     {
-      "id": "15040463",
-      "old_title": "국토교통부_교통소통정보",
-      "new_title": "국토교통부_교통소통정보",
+      "id": "15057328",
+      "old_title": "식품의약품안전처_식품 검사 공통기준규격",
+      "new_title": "식품의약품안전처_식품 검사 공통기준규격",
       "fields": [
         "operations"
       ],
-      "old_digest": "1332a5ed34585773c81c10870d174b4cc1c7181b48ddc9a1870c139ffecdec87",
-      "new_digest": "0b00028caddea895933a77782d53360cd89561d98e89aa9a084f13e4e5d8c40e"
+      "old_digest": "1638734ac56754bfd43aa69c36ddc8fca67a5de6a085bb1c2588d939c1060951",
+      "new_digest": "778649048a86417e12043de801d3db066e40eb4a14439046aaea62d6ab615342"
     },
     {
-      "id": "15040464",
-      "old_title": "국토교통부_사고 정보",
-      "new_title": "국토교통부_사고 정보",
+      "id": "15057717",
+      "old_title": "식품의약품안전처_위생용품영업정보",
+      "new_title": "식품의약품안전처_위생용품영업정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "1a8a680e5483b6dd0bc35e2a3e37992ed4f0e754eedb13ce12c3f96e91b7b5d9",
-      "new_digest": "961b497b9fb2601db2690db3db421a79ed424db6db844ad1dcdf4c9d63e2a0bd"
+      "old_digest": "d40d728d22b7cbce0b4de25512cab86dd747cc32cb25376382257ec867db566e",
+      "new_digest": "0e075bfe4cf5581d5bf1dc95420b22e5c9afa01ef2b2884237f8220093febc40"
     },
     {
-      "id": "15040465",
-      "old_title": "국토교통부_돌발상황정보",
-      "new_title": "국토교통부_돌발상황정보",
+      "id": "15057728",
+      "old_title": "식품의약품안전처_어린이 기호식품 품질 인증대장",
+      "new_title": "식품의약품안전처_어린이 기호식품 품질 인증대장",
       "fields": [
         "operations"
       ],
-      "old_digest": "1d499d4dac6f7550ea00d424ea09e4400b9d076e1d4e0ae52274a10c1d40bb54",
-      "new_digest": "036001f14a947b298ecf581d4b6ab3ec5b6de44b343a1a0c8197477a868c954f"
+      "old_digest": "eb8a5e8391a239b1a3f2570852dcc9dcc05300aeae1fbbbc2cbbb724ce95b65c",
+      "new_digest": "0570b30b41cf4674b8753719ac8218e69568a5e15eae7ba3c57d05c3a3c8a993"
     },
     {
-      "id": "15040466",
-      "old_title": "국토교통부_CCTV 화상자료",
-      "new_title": "국토교통부_CCTV 화상자료",
+      "id": "15057831",
+      "old_title": "식품의약품안전처_해외직구 위해식품 차단정보",
+      "new_title": "식품의약품안전처_해외직구 위해식품 차단정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "187e95208ec39a0f6716de90759636a68ae67d2ef4cc505b9745c51896242b31",
-      "new_digest": "e9fc4025dafaf28dc67d036a3e7613b54938f8b4e1a5fbd5a7d69030fbfe9335"
+      "old_digest": "1d09d2950bbe0375bb9271b2e6ba115e24e7464baa8f4cb29b55fdcef86fe8bd",
+      "new_digest": "90beaab7e2e4edfdc61e0cb8d0ea934c672088b836d82f05d5b04cd4f065adce"
     },
     {
-      "id": "15040468",
-      "old_title": "국토교통부_도로전광표지(VMS) 정보",
-      "new_title": "국토교통부_도로전광표지(VMS) 정보",
+      "id": "15058429",
+      "old_title": "식품의약품안전처_행정처분결과(식품접객업)",
+      "new_title": "식품의약품안전처_행정처분결과(식품접객업)",
       "fields": [
         "operations"
       ],
-      "old_digest": "2d87394b4ed902a51bf8097f55d5e16c533179e36531d4b1361281ed9bd0a265",
-      "new_digest": "b74e75cd81b90d462f1757ee9926961a7c61f04058e2960fd0032b739a14d90f"
+      "old_digest": "e8934989c04374da569e2f4b8f7d480075fa7caff0e1c7f976c41bab807e6bf7",
+      "new_digest": "c97be83c04cd889cf79ae13a67f354bff9a9775708a1473b24923529a8b1f472"
     },
     {
-      "id": "15040469",
-      "old_title": "국토교통부_주의운전구간 정보",
-      "new_title": "국토교통부_주의운전구간 정보",
+      "id": "15058469",
+      "old_title": "식품의약품안전처_식품원료의 한시적 기준 및 규격 인정 현황",
+      "new_title": "식품의약품안전처_식품원료의 한시적 기준 및 규격 인정 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "730d346aa11d2a8f031a9e13d01a5273d42fe2b2ef2e4aca8321f993eaf8f90e",
-      "new_digest": "ec5547f42aa4a2298dc731e5aa2696b07460e5b9273e983b095c5f94fe129610"
+      "old_digest": "46291cdaab38c6ea84ff534f90b1ca7db2bd92407c96ffeedb17534ff9fcccd4",
+      "new_digest": "61309569e19f83c4f6759fbc49407c25df73a6bc6c6a6414ebe8ce61bc00ace2"
     },
     {
-      "id": "15040507",
-      "old_title": "국토교통부_교통예측정보",
-      "new_title": "국토교통부_교통예측정보",
+      "id": "15058631",
+      "old_title": "식품의약품안전처_식품첨가물의 한시적 기준 및 규격 인정 현황",
+      "new_title": "식품의약품안전처_식품첨가물의 한시적 기준 및 규격 인정 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "337dbac85fe1a1a375011e8cbafcf2cabe6dee8d27797dba4f7252b6ce934f78",
-      "new_digest": "1ddacd986400311c23d1f9ef406e77c53dbd101f23891b92c8c8acf6f7b7ad52"
+      "old_digest": "cded832b50beb5555e7dd5ffdc8eba2cdcd4d648c82729fa52355448fb731b48",
+      "new_digest": "ec80bd4d8fe839f2e10d355a93380741fd18d00dc918cd67cd1c61663cc7e737"
     },
     {
-      "id": "15056538",
-      "old_title": "국토교통부_첨단산업단지",
-      "new_title": "국토교통부_첨단산업단지",
+      "id": "15058685",
+      "old_title": "식품의약품안전처_축산물 품목제조정보",
+      "new_title": "식품의약품안전처_축산물 품목제조정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "b88aaffabbafc41be798ee0106dfd6782a76e9bbf885c9fb0c11336a1cfa2bdf",
-      "new_digest": "ed6a9a465249af52f65d1b955d00b0e79bd5539d14b21712ab6be3ee90068ee9"
+      "old_digest": "de46a66b31adae201e36dd5b53b515199d5eb325e7c7aad6b4e67424ef736504",
+      "new_digest": "3c6747a7b8b80b2b2d11dacaf3c364ddc10a82c252501191d61db6151e4a677a"
     },
     {
-      "id": "15056574",
-      "old_title": "국토교통부_국민임대주택",
-      "new_title": "국토교통부_국민임대주택",
+      "id": "15058838",
+      "old_title": "식품의약품안전처_식품 유해물질 기준규격 정보",
+      "new_title": "식품의약품안전처_식품 유해물질 기준규격 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "55894cbb430133650816ccfffb7c2f84b09db08eb784a5c2e718ab7ddceefdb7",
-      "new_digest": "65aaa4a37a5c7484d1455f5dd99f323770b810cc64b829e208c691f101a7926a"
+      "old_digest": "a506193f8cbc9f77753e7b120d8e0aa932673d0d2f48e094f7ea73a43ecad8c9",
+      "new_digest": "68481137e48dc81cfbfaf1535d6df238c82a57533807794a36fcd17076cee711"
     },
     {
-      "id": "15056608",
-      "old_title": "국토교통부_가축사육제한구역",
-      "new_title": "국토교통부_가축사육제한구역",
+      "id": "15059069",
+      "old_title": "식품의약품안전처_식품첨가물공전",
+      "new_title": "식품의약품안전처_식품첨가물공전",
       "fields": [
         "operations"
       ],
-      "old_digest": "4cab39921aab78d875a2035ddd17236757e6131202c4136f93a6541a929e78b4",
-      "new_digest": "29a04bd0c7752fe4897676f0c7cb6d88637a9d44bc663c310d004b40dd37da71"
+      "old_digest": "c731a27866ed9e9be6bd28a774a19179ed969fd15bc813d646674243e446a098",
+      "new_digest": "748b12e579aa6637e50530fc8c6781eb3839a5d6b2dc7f79a3190f47c0146f54"
     },
     {
-      "id": "15056655",
-      "old_title": "국토교통부_수질측정망하천수지점",
-      "new_title": "국토교통부_수질측정망하천수지점",
+      "id": "15059199",
+      "old_title": "식품의약품안전처_식품용 기구 및 용기포장 공전",
+      "new_title": "식품의약품안전처_식품용 기구 및 용기포장 공전",
       "fields": [
         "operations"
       ],
-      "old_digest": "d200074e6b7ce5428c6df8bf41abf1547bdedebf65c0d52e9923e19772d8b3e9",
-      "new_digest": "3ccf80cee179f49b38cb0548595b49037be956cb4b44dd42e2647ce39924f8c2"
+      "old_digest": "f502dc16f9bf1c0bcb014435c1e00dece3cade893ca8510a4f01a80c4bcfb98e",
+      "new_digest": "f3fe72125388f6cd5572db65c0da65c7e45f4619fae151667cb5a1d2ce7b825a"
     },
     {
-      "id": "15056674",
-      "old_title": "국토교통부_교통링크",
-      "new_title": "국토교통부_교통링크",
+      "id": "15059500",
+      "old_title": "식품의약품안전처_행정처분결과",
+      "new_title": "식품의약품안전처_행정처분결과",
       "fields": [
         "operations"
       ],
-      "old_digest": "4a3810c7c2a4d1ae50040e7c1b55f8a5cb6f541f000e35acf5808db31810e6ec",
-      "new_digest": "1a7c2b9f795ad076c1029a706b0e8e16e29d075798fca674da16caa87dc455f6"
+      "old_digest": "700e604816798ba31fee1e3ea14b4e72da6f0407439cb937d515aa2ec7c7c81e",
+      "new_digest": "04516f7a8a58d02a633421ae2fc7293e9e55682c0e6bb60cfe185c81cf78f696"
     },
     {
-      "id": "15056790",
-      "old_title": "국토교통부_표준권역",
-      "new_title": "국토교통부_표준권역",
+      "id": "15059675",
+      "old_title": "식품의약품안전처_위생용품품목제조보고",
+      "new_title": "식품의약품안전처_위생용품품목제조보고",
       "fields": [
         "operations"
       ],
-      "old_digest": "42dc639d3adc7652d190ad46a852b6836bfb7b5701d741b9a2e6bbf21f84cc43",
-      "new_digest": "afbbb79a24f170dba1f43623a62add20e870dd731e5a9b0e95296ca477c37128"
+      "old_digest": "e4e8e6c4f0a9ab7a0a1e357dc78004026d05bdf713632883b930085d61d6f0da",
+      "new_digest": "861abf848d8c9086028783c9da492cf4aad3b3783adc741c42352c4afa16741e"
     },
     {
-      "id": "15056802",
-      "old_title": "국토교통부_국토계획구역",
-      "new_title": "국토교통부_국토계획구역",
+      "id": "15060073",
+      "old_title": "식품의약품안전처_조리식품의 레시피 DB",
+      "new_title": "식품의약품안전처_조리식품의 레시피 DB",
       "fields": [
         "operations"
       ],
-      "old_digest": "0d02c8853b425ee9c8749b7f351fd4eb4d6e47d2fc78e1e64d42a1173a378abd",
-      "new_digest": "3ac3e11c07c9b590c1dd55383261c87ca4516bcdb5872fceb0f9d6b01feebbf5"
+      "old_digest": "cae1e52303a5acdcaaf1fd2e713177ce74d1abec9652ac666257e341293662b6",
+      "new_digest": "0c5e6a4ad99741bebdf08960beb0e9220805ac0bc8b91602e275d34b1b680c18"
     },
     {
-      "id": "15056910",
-      "old_title": "국토교통부_연속지적도",
-      "new_title": "국토교통부_연속지적도",
+      "id": "15060883",
+      "old_title": "식품의약품안전처_식품접객업소 위생등급 지정현황",
+      "new_title": "식품의약품안전처_식품접객업소 위생등급 지정현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "a1720a64bfc9c420e576793b9d516d2c86f11a9b91c30f4dda2ecb2b41599a14",
-      "new_digest": "52393d07b94bcad58e088df272ced3383129bbfdebbcf3d420cfe48622e737dc"
+      "old_digest": "4bff97f0f44b1c2bcff503dec9536681f80fdaae881ca1d74278c3ba6d617886",
+      "new_digest": "79672b1788b80768c0b5b44c62bcde24f217f5dda4366dc533e96a5eaed608df"
     },
     {
-      "id": "15057635",
-      "old_title": "국토교통부_수질측정망공단배수지점",
-      "new_title": "국토교통부_수질측정망공단배수지점",
+      "id": "15062098",
+      "old_title": "식품의약품안전처_식품(첨가물)품목제조보고(원재료)",
+      "new_title": "식품의약품안전처_식품(첨가물)품목제조보고(원재료)",
       "fields": [
         "operations"
       ],
-      "old_digest": "4899ff4564fb367e223d8eb5d7455c02df79b948fef8b7b90f17e44831615695",
-      "new_digest": "6dd0412ac84771436ff0ad52ad1cce1d962fccaf2c6ef9447d5dad9c9b6afe27"
+      "old_digest": "87f640b688195cee1e6d50c641a95e77b5ae7beab8ac87b1edf3907878e8064d",
+      "new_digest": "1f0f5533455b6b913004f6f9faaf50d71017cd4e29dcadc9e828ff833e7fc386"
     },
     {
-      "id": "15057734",
-      "old_title": "국토교통부_수질측정망호소수지점",
-      "new_title": "국토교통부_수질측정망호소수지점",
+      "id": "15064775",
+      "old_title": "식품의약품안전처_유통바코드",
+      "new_title": "식품의약품안전처_유통바코드",
       "fields": [
         "operations"
       ],
-      "old_digest": "03081f290850b8165488a91f01a87be2880389a147d9a68dc74f4b70a048cc24",
-      "new_digest": "30ce4a94e14c76f6bbbd21e19cee1bce09495a9746005d8cf068242c68c5ab75"
+      "old_digest": "5039f8bf82905f4def9fa84677945b3e3e1b271371038383e29c532b26e822b6",
+      "new_digest": "a20e467d480227a8ab5fec725b470a62474babdf85f7ed70a61668c36922d917"
     },
     {
-      "id": "15057773",
-      "old_title": "국토교통부_수질측정망도시관류지점",
-      "new_title": "국토교통부_수질측정망도시관류지점",
+      "id": "15064777",
+      "old_title": "식품의약품안전처_영업소재지 GIS 코드",
+      "new_title": "식품의약품안전처_영업소재지 GIS 코드",
       "fields": [
         "operations"
       ],
-      "old_digest": "61a67a91e529998c7b28048bd71757ad2aed694204e410190b908f40b70643c2",
-      "new_digest": "407f2b400b993853d5e245d1ebad718871c822b11d76b418bde50b192ee4c364"
+      "old_digest": "9d5113fd7449ae715e8c002ffe6424fc9a9881c838ffb397e984656f8beb3a41",
+      "new_digest": "4fcb83ddc3a51b1b7714c429b0682d6cca2c2f024b10ebfd79b553071ed2c3f3"
     },
     {
-      "id": "15058539",
-      "old_title": "국토교통부_국가산업단지",
-      "new_title": "국토교통부_국가산업단지",
+      "id": "15064778",
+      "old_title": "식품의약품안전처_처분기준코드",
+      "new_title": "식품의약품안전처_처분기준코드",
       "fields": [
         "operations"
       ],
-      "old_digest": "aca65e2a19cbea3588194048a36a98799e3ffbc432277334360c2f9ffb000bc3",
-      "new_digest": "6b33931430e346b7fb02ea92e807871526bb60550267fbb13a4f7166bbea8735"
+      "old_digest": "5244dba939a8771220a304ee40aa1d9e1ebd32eba23ecf9b0519bb0042d86126",
+      "new_digest": "50f0705a7e5469fdd614fdcbc99a2da667b1f4d9396370b0d7991e0629698120"
     },
     {
-      "id": "15058706",
-      "old_title": "국토교통부_수질측정망농업용수지점",
-      "new_title": "국토교통부_수질측정망농업용수지점",
+      "id": "15064780",
+      "old_title": "식품의약품안전처_식품원재료코드",
+      "new_title": "식품의약품안전처_식품원재료코드",
       "fields": [
         "operations"
       ],
-      "old_digest": "095fc2aadf691491f3924550d37b5eb87386be9d8364af366ff6e14d73b1d0ef",
-      "new_digest": "6520954d38c146c351658d38a5b2dd3a79cd7d6f843feba02fd956db0045c890"
+      "old_digest": "008496ce304fdd493d2803e031385f2dcb45a835b769682c177bc9e835bf6d0c",
+      "new_digest": "929cd7ef732afc7b3ed2aaf5027e7bd6c982bd7d9f80a463aafb9c7a2559262f"
     },
     {
-      "id": "15061025",
-      "old_title": "국토교통부_공사정보 목록",
-      "new_title": "국토교통부_공사정보 목록",
+      "id": "15064783",
+      "old_title": "식품의약품안전처_식품등수입판매업정보",
+      "new_title": "식품의약품안전처_식품등수입판매업정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "edbb7d25cfe13129303e9df87df39d885b502d069cef10cc09791bbeece611cc",
-      "new_digest": "75570b65380ce8946d3ca41c20783241b22cb6fc9e8947b091007b13e30fa3ae"
+      "old_digest": "e25f3339fa7a954e42af2447149f8209fe864b750220c9b59b2ddcb6dc64ac55",
+      "new_digest": "ea069f6860f4c89bff7c1bdf9519f7ca5980ad2ff00cbc82e45abbfd77d6af72"
     },
     {
-      "id": "15061033",
-      "old_title": "국토교통부_기성보고 현황",
-      "new_title": "국토교통부_기성보고 현황",
+      "id": "15064785",
+      "old_title": "식품의약품안전처_축산물 집유업영업허가대장",
+      "new_title": "식품의약품안전처_축산물 집유업영업허가대장",
       "fields": [
         "operations"
       ],
-      "old_digest": "d4830cd1ab2b8636d01a3d15a2bb5725da62d7270f10ed7fd39bbaa8abd679c0",
-      "new_digest": "d5fbf7a18a673b9d2a6596edb6a6be5503d39cdb90a01d2e507c721d78af3cec"
+      "old_digest": "f9f6891ee232bdef7887ba9b455790e878bb2557f13dee99e7b4054fed80b9c5",
+      "new_digest": "49fca661bd746b0f904a3d932458f212a6d667820736699537b1ac3cdc9b4918"
     },
     {
-      "id": "15061040",
-      "old_title": "국토교통부_업체별 참여공사 목록",
-      "new_title": "국토교통부_업체별 참여공사 목록",
+      "id": "15064786",
+      "old_title": "식품의약품안전처_축산물 판매업영업신고대장",
+      "new_title": "식품의약품안전처_축산물 판매업영업신고대장",
       "fields": [
         "operations"
       ],
-      "old_digest": "c9c14caa2b5fc8a007d21f5e81b59810aa7f4c80043920dec1c91ba807e026be",
-      "new_digest": "6583f75e78ccbb312c682a97a61ed0d9007461703a16b37e47887748c57543d6"
+      "old_digest": "24dfdc2f31cd7fa7e1ca1adcf62649c5e4f9ffeeb8d83141aaaa73da9866ec4d",
+      "new_digest": "b0c347d3ac9754f2ec05194c7121ed802b8f1c257592e83eadcc2d639b0dc83b"
     },
     {
-      "id": "15061041",
-      "old_title": "국토교통부_월간공정 현황",
-      "new_title": "국토교통부_월간공정 현황",
+      "id": "15064787",
+      "old_title": "식품의약품안전처_축산물 운반업영업신고대장",
+      "new_title": "식품의약품안전처_축산물 운반업영업신고대장",
       "fields": [
         "operations"
       ],
-      "old_digest": "b03fb4af5a791754d82eac5c6804d3620c71d64f27e620e4e50c6366717c1533",
-      "new_digest": "b0ee62a8a5dd3da9aa51dcd202219e80f5b918a5130d093f50ab6f809b662999"
+      "old_digest": "e1b495ec2916d93a26a006a94603a8457ee3d138e2a47de472d054a532335a0c",
+      "new_digest": "4b5ef12a1664f773c9d4ca5a5b9b022e1835b3e8a926c5ed6f6fdcd9479a1a34"
     },
     {
-      "id": "15061051",
-      "old_title": "국토교통부_공사중인 시설물(제방) 목록",
-      "new_title": "국토교통부_공사중인 시설물(제방) 목록",
+      "id": "15064831",
+      "old_title": "식품의약품안전처_축산물 보관업영업허가대장",
+      "new_title": "식품의약품안전처_축산물 보관업영업허가대장",
       "fields": [
         "operations"
       ],
-      "old_digest": "d484ffd53ce47c351a40f93dfef2402d5f9595788caca3eae68ba2ee20384785",
-      "new_digest": "4578e5c993194711d7af7283a322b7edae4822ea9d9942e79346cc46f43cf815"
+      "old_digest": "92a8e97a2b448ec7edec9c48785abbe3e8b0bc063aa134e17cb7a6207564ffb1",
+      "new_digest": "d1dc6422adb78e4329639b4ff780e90c8672195b6126d2f0b5bad3215447cb5f"
     },
     {
-      "id": "15061052",
-      "old_title": "국토교통부_설계변경 내역서 현황",
-      "new_title": "국토교통부_설계변경 내역서 현황",
+      "id": "15064840",
+      "old_title": "식품의약품안전처_축산물 식육포장처리업영업허가대장",
+      "new_title": "식품의약품안전처_축산물 식육포장처리업영업허가대장",
       "fields": [
         "operations"
       ],
-      "old_digest": "d457e44cd2e69c485ea96fa3ed8c47bad9c09dc2bb952d334c74f5e7a91663e7",
-      "new_digest": "3a43c22242167f487187da59fa321f85445975fabef77ed77b29e59164f22991"
+      "old_digest": "1419b831b70f3d2e7769148dfe0ee904d84cc7220d7f86c8431b704162d9e723",
+      "new_digest": "e28dc499d507209fd6e40bb7959faf5f28fc07fa2c7aa02e6ece05d87a2986b2"
     },
     {
-      "id": "15061056",
-      "old_title": "국토교통부_설계변경 현황",
-      "new_title": "국토교통부_설계변경 현황",
+      "id": "15064844",
+      "old_title": "식품의약품안전처_축산물 가공업허가정보",
+      "new_title": "식품의약품안전처_축산물 가공업허가정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "620de66cb108a31d12326e19bb1501fbcb21838f98b3f5dd88a32ffde14e675f",
-      "new_digest": "ab55f55921f7879257a35f384f15fd42706313200e8f0da638de755e6ce54b42"
+      "old_digest": "9b9fe177c9ff32bd23388ed43786d20cbd94b79c4f1e847ca889582639e6dd91",
+      "new_digest": "06c3ae58f8c1c0e14609515ee9a9080545dfdb485ca64dee69dbb1cc81e5ae53"
     },
     {
-      "id": "15061058",
-      "old_title": "국토교통부_도로, 하천 공사정보",
-      "new_title": "국토교통부_도로, 하천 공사정보",
+      "id": "15064853",
+      "old_title": "식품의약품안전처_식품첨가물제조업",
+      "new_title": "식품의약품안전처_식품첨가물제조업",
       "fields": [
         "operations"
       ],
-      "old_digest": "4526e3539bdb0bbdb7323f60044f321c457b7be90ecb6ffe53f820c14ba8fe83",
-      "new_digest": "2c74ad976f81aee7e2dceed06c36426c1e2d92efc06516875d0048de7c22901e"
+      "old_digest": "6e21ef719e2d68d348cd43a8861f89ce72d473ce51221336b93721abb8d947c1",
+      "new_digest": "e7b87acfdff6276aefe32b5049c823683a4fe2e92463d087b62cb962c7edf86a"
     },
     {
-      "id": "15061059",
-      "old_title": "국토교통부_시설물 목록",
-      "new_title": "국토교통부_시설물 목록",
+      "id": "15064855",
+      "old_title": "식품의약품안전처_식품제조가공업정보",
+      "new_title": "식품의약품안전처_식품제조가공업정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "aaeea43e32309797273e3ea64e19781e23fe50d6fd4aeaaa9584501437d27112",
-      "new_digest": "f1d839f12f4669545928d005518af0d3ae9e1527545e17d16cdcfee97c9e3174"
+      "old_digest": "6f5667cd29259296d18ffdfaf710782d30818e2b931eb40f6677c494eea2fa38",
+      "new_digest": "35d2cdf8770451518200b4da69fde4894368e91a0cafa0d8c21a719b60dde593"
     },
     {
-      "id": "15061061",
-      "old_title": "국토교통부_시설물 점검진단계획 목록",
-      "new_title": "국토교통부_시설물 점검진단계획 목록",
+      "id": "15064859",
+      "old_title": "식품의약품안전처_식품접객업정보",
+      "new_title": "식품의약품안전처_식품접객업정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "392b16ed2c3082037fb1cd7d34fde85f31ccc61da688856869011556c05622c9",
-      "new_digest": "15e1e970213a9a10b3c430c9284d9174f67a9f0e8986603852cc8a131cb643f4"
+      "old_digest": "f8dd7eaeba51c251f20119d8144b511063e2aa76611fe80e03b41025a0e670e6",
+      "new_digest": "de0bff5122bb0aedc3a9a5d2162c8a21efa0af06768cb8c6899672f003d6c306"
     },
     {
-      "id": "15061062",
-      "old_title": "국토교통부_시설물 점검진단이력 목록",
-      "new_title": "국토교통부_시설물 점검진단이력 목록",
+      "id": "15064865",
+      "old_title": "식품의약품안전처_식품조사처리업 인허가 현황",
+      "new_title": "식품의약품안전처_식품조사처리업 인허가 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "6473ed85a0bf3934f704ccd4b77455afe41ddfcf3c9f522eaaa97f62cf72ed4f",
-      "new_digest": "f233260d18d513d62cbdea1634acbae7e376165e24043ab8d98ce090271fa6cd"
+      "old_digest": "1fb1930f61cd36334a33c8fb282fdfc4de29dd679bd5fe696bbe56645a964cec",
+      "new_digest": "66b37dae01600c0e7aecd71fddbea9b42a4c44a4d1ea53344606d66bdf835367"
     },
     {
-      "id": "15061063",
-      "old_title": "국토교통부_시설물 보수보강이력 목록",
-      "new_title": "국토교통부_시설물 보수보강이력 목록",
+      "id": "15064905",
+      "old_title": "식품의약품안전처_식품이력추적관리 등록 현황",
+      "new_title": "식품의약품안전처_식품이력추적관리 등록 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "323a239ce126b5d4d9ce95124c9173237128457daebbf40f4ebc007893538f3b",
-      "new_digest": "1f0d083a1fccc5b906c39d1efc6548c7e1bf0a2c94909def76040738d879e18c"
+      "old_digest": "5a7f1c8b2acd7f2ee4cd408f8dc020643fa14c3dc145312d6b41eed1e008a66a",
+      "new_digest": "f214dcc3692d57d716440a68c559eb2abad798fcd4fcdb3c03a7600c710557c0"
     },
     {
-      "id": "15061064",
-      "old_title": "국토교통부_시설물 유지보수대장 목록",
-      "new_title": "국토교통부_시설물 유지보수대장 목록",
+      "id": "15064909",
+      "old_title": "식품의약품안전처_식품(첨가물)품목제조보고",
+      "new_title": "식품의약품안전처_식품(첨가물)품목제조보고",
       "fields": [
         "operations"
       ],
-      "old_digest": "22aeae030215be4a86490499e505ade691af35c80109210ad904978ac9c2da8e",
-      "new_digest": "6d612565211ba089aa362ae0165f58f7ff5787e8c62f93f6d78dd58144ebce24"
+      "old_digest": "defe38a5a4b137d88b44749bb516193a9e702efec9d83bfce96cd959c785b546",
+      "new_digest": "2989b634196e21ca77e37b4f34258f7830598be2c7624730c3c63aec14a7735b"
     },
     {
-      "id": "15061066",
-      "old_title": "국토교통부_공공용지 취득실적-전체보상액 규모 기준 실적 현황",
-      "new_title": "국토교통부_공공용지 취득실적-전체보상액 규모 기준 실적 현황",
+      "id": "15064910",
+      "old_title": "식품의약품안전처_식품위생교육내역",
+      "new_title": "식품의약품안전처_식품위생교육내역",
       "fields": [
         "operations"
       ],
-      "old_digest": "a1597bb4edc4801219762f4def759703823bd19d0b9fe954462e81e6cd68a26a",
-      "new_digest": "74627b59bf637761207d6938b7f1583050f18efea4d5eab462b19753045345a0"
+      "old_digest": "e5da6d3b4bf2bae81674cc19a720cd06a651d82c4e5c53311461208f94f05180",
+      "new_digest": "6d17d76c65aab67cf96ea898d731b9ea45cdc949c62bb9a356a9bda590fa4cb0"
     },
     {
-      "id": "15061067",
-      "old_title": "국토교통부_공공용지 취득실적-사업별 면적 및 보상액 기준 실적 현황",
-      "new_title": "국토교통부_공공용지 취득실적-사업별 면적 및 보상액 기준 실적 현황",
+      "id": "15064913",
+      "old_title": "식품의약품안전처_어린이 식품안전보호구역 관리 현황",
+      "new_title": "식품의약품안전처_어린이 식품안전보호구역 관리 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "2efa02a6da2275195d4fbb5ad75b86201cd1b44799028d9e58a8b2584d7cdf26",
-      "new_digest": "93171f382ff76db209a4298d9586e87a0ab2db732ca625f9d49039f459b24735"
+      "old_digest": "1ebe0c9216b495c32bf9c4df55d151a07e3a6f263ceb31e7b5c2a556c9ff114a",
+      "new_digest": "48bce2d186077ca06f9d91a9283d3d2473a1bae94a08442e1aef5b5c9b796590"
     },
     {
-      "id": "15061072",
-      "old_title": "국토교통부_공공용지 취득실적 (잔여지 및 간접보상)",
-      "new_title": "국토교통부_공공용지 취득실적 (잔여지 및 간접보상)",
+      "id": "15064914",
+      "old_title": "식품의약품안전처_우수수입업소 등록 현황",
+      "new_title": "식품의약품안전처_우수수입업소 등록 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "1c84a83fd011ae5a268b75d67eaa0c88248e438d597ab781eac6f17cb7f6e0cd",
-      "new_digest": "7b0967ccb3da6a75bc35de0d0e94e02e69ec728c7a03e55614f02f17a75f49e4"
+      "old_digest": "6ff0372f1174a4d2a21865cbffb145b67ce8406ffa24b4befcc7416f4e47460c",
+      "new_digest": "02535b4ae162a630339d8a032f1b51e616b300955e6a177e0d96e3dcdd2b5c6f"
     },
     {
-      "id": "15061074",
-      "old_title": "국토교통부_공공용지 취득실적 (환매권 행사)",
-      "new_title": "국토교통부_공공용지 취득실적 (환매권 행사)",
+      "id": "15064916",
+      "old_title": "식품의약품안전처_주류제조.면허자 식품제조.가공영업 등록 현황",
+      "new_title": "식품의약품안전처_주류제조.면허자 식품제조.가공영업 등록 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "a881eeacc3d41895fb4a7987d7f29ab3616d727de3a696e1efb9dde2df94fa1e",
-      "new_digest": "681f38a01201f1ded3a75d5f78e4fe4dda843e7a46a2b7f1b77773688be9ba01"
+      "old_digest": "169975d552454a8b28ead9aad77e43586a43f9a844f20dac8c403c95b4bf6f88",
+      "new_digest": "21531da3f693b2325e298f13ba56a2d6d80b436ee5766548381eb00ef1c01f04"
     },
     {
-      "id": "15061076",
-      "old_title": "국토교통부_공공용지 취득실적 (부동산소유사실 확인서)",
-      "new_title": "국토교통부_공공용지 취득실적 (부동산소유사실 확인서)",
+      "id": "15064937",
+      "old_title": "식품의약품안전처_위생관리등급별 업소 현황",
+      "new_title": "식품의약품안전처_위생관리등급별 업소 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "4d7550e593e68a4753fc9bc8c8cbf77569480411aee5ad2e290894841a40385d",
-      "new_digest": "6fbf1a78d22f9b7d71da4a9b5280412903a52b9c76167b33b183b1b1ccf49687"
+      "old_digest": "1cf3ee68dcc8a35561ae4d6960240fc919b373c7dd27a46d705299ef52326a11",
+      "new_digest": "6e4ee1e498c746170ea494ef6c28b16503768d65ce1c9642245adc5763cfc556"
     },
     {
-      "id": "15061078",
-      "old_title": "국토교통부_공공용지 취득실적-기관별 취득면적 및 보상액 기준 실적 현황",
-      "new_title": "국토교통부_공공용지 취득실적-기관별 취득면적 및 보상액 기준 실적 현황",
+      "id": "15064939",
+      "old_title": "식품의약품안전처_식품위생검사기관 지정 현황",
+      "new_title": "식품의약품안전처_식품위생검사기관 지정 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "76805585b78832a6430ae9ecb9a6fc4d7117843eb63e0840392e7be4992a4a9c",
-      "new_digest": "4c875bf19f26ff08966e63e5774bd77bbe631fea440c76c8e3a3f48947376d2c"
+      "old_digest": "013dc2b8265493a5a0137fa45f2dd48b8ea96be7b3ec10c451f84249cdd7b599",
+      "new_digest": "a7f419664d7f03e59dffa7b2343624cb8baca2c8b017b521c872e0ef39c83c78"
     },
     {
-      "id": "15061080",
-      "old_title": "국토교통부_공공용지 취득실적-취득방법별 면적 및 보상액 기준 실적 현황",
-      "new_title": "국토교통부_공공용지 취득실적-취득방법별 면적 및 보상액 기준 실적 현황",
+      "id": "15064962",
+      "old_title": "식품의약품안전처_신고대상분류기준",
+      "new_title": "식품의약품안전처_신고대상분류기준",
       "fields": [
         "operations"
       ],
-      "old_digest": "559343e419eb5ec381a97ac45d5f50268549551de31667ea7df068be7a095e40",
-      "new_digest": "d369f2686c4e08651841406c37368feee52fa583a9ac033db6bb05bba6314e57"
+      "old_digest": "5cf38fd3b7b95d1eebe3b95079cd7a3c7db828752185c9986ee5c5d4975c257f",
+      "new_digest": "58892acc740f9e7a08bb2375e6f9c856d8b83cc400116191663839f57eb3f38a"
     },
     {
-      "id": "15061084",
-      "old_title": "국토교통부_공공용지 취득실적-공공사업의 물건보상액 기준 실적 현황",
-      "new_title": "국토교통부_공공용지 취득실적-공공사업의 물건보상액 기준 실적 현황",
+      "id": "15064964",
+      "old_title": "식품의약품안전처_식품모범음식점",
+      "new_title": "식품의약품안전처_식품모범음식점",
       "fields": [
         "operations"
       ],
-      "old_digest": "786c92df0e2ce8b83d087c4412bb385bb141dd6e42c103221c0053dd62da5b5c",
-      "new_digest": "bb5964d911ad1aa1525700889eaa5ba1e1224164b32cb72bcf4d77524d27e2af"
+      "old_digest": "0147bf22da327bac6614fd03514badec98d3c81bae6e9aa47bfdd75066c0715d",
+      "new_digest": "e2dcdc4cd0f7a1a8519977911c28c45fe0243c2b1cdc371117886e85ead2e7cd"
     },
     {
-      "id": "15061085",
-      "old_title": "국토교통부_공공용지 취득실적-소속 기관별 취득면적 및 보상액 기준 실적 현황",
-      "new_title": "국토교통부_공공용지 취득실적-소속 기관별 취득면적 및 보상액 기준 실적 현황",
+      "id": "15064968",
+      "old_title": "식품의약품안전처_위생공통교육기관내역",
+      "new_title": "식품의약품안전처_위생공통교육기관내역",
       "fields": [
         "operations"
       ],
-      "old_digest": "336049f22c937a97f1cd85ba33cdbbcf2147e5d3c72d4aea41d0af8013130933",
-      "new_digest": "9c0b619ae7a454cbd5aecfdba120427287e1b08e7eb303c9530e375a4b5117ac"
+      "old_digest": "96a5eda92788168ea637b03bdc89be75885576607d3390eec999cc631df64062",
+      "new_digest": "58981960e7e49947e58bec84dea495f91d1ea632350f2f369e9486383ff33a4c"
     },
     {
-      "id": "15061094",
-      "old_title": "국토교통부_도로점용허가내용 목록",
-      "new_title": "국토교통부_도로점용허가내용 목록",
+      "id": "15064969",
+      "old_title": "식품의약품안전처_식품위생등급평가관리내역",
+      "new_title": "식품의약품안전처_식품위생등급평가관리내역",
       "fields": [
         "operations"
       ],
-      "old_digest": "646165d3749bc558b9ca13972bbad9cffe231abcdc8ac4535e7188a061b105ea",
-      "new_digest": "d3dfb6f4e306591c906d9923d651971d03fd4a5de0ea4b82f96af932bbf430c1"
+      "old_digest": "9661db5f2b9fe1d9c6adf64beac3709312c5672d38745575c0811dd1eaf1d6d2",
+      "new_digest": "e8fe330b85f96416d1627cfe0dec8bf79168e339d874965205fc8b7eb3d9a19d"
     },
     {
-      "id": "15061095",
-      "old_title": "국토교통부_품질검사성적서 등록 목록",
-      "new_title": "국토교통부_품질검사성적서 등록 목록",
+      "id": "15064972",
+      "old_title": "식품의약품안전처_수산물 수입업체 현황 정보",
+      "new_title": "식품의약품안전처_수산물 수입업체 현황 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "60b7971e65f6a01a6c88b3997e7b425c618ccc89c4549bbcebe690e519a55a9d",
-      "new_digest": "cf891945a6c94e2e01b44a6dc85e042514189a5f2d58969550254a1491cea449"
+      "old_digest": "0d7c5123c7174dac22dead0dd90299a77e91073eb631448d27d9545f9697dfdb",
+      "new_digest": "fc51eda728426b863ec3e6b5bfe992c51e8ffd9b1f983848510e11580f2b2db6"
     },
     {
-      "id": "15061096",
-      "old_title": "국토교통부_품질검사성적서 상세정보 현황",
-      "new_title": "국토교통부_품질검사성적서 상세정보 현황",
+      "id": "15064977",
+      "old_title": "식품의약품안전처_인허가 업소 정보",
+      "new_title": "식품의약품안전처_인허가 업소 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "67c29230a06b85939312b6fd5b929ee91ebd11064d3aede71bf986521996f0cb",
-      "new_digest": "ee7de4782c1760731949d4c294117014cd440d496c3a39412a5efae560832973"
+      "old_digest": "760fadeeff838e789ec2dba5b91f31c8f9b607d428ebb5c1db81dc9b5aa392f4",
+      "new_digest": "761cd1bf87216d586f10c797ddd2536381d6dc0c3f04b60f92ecb4fcd3a195db"
     },
     {
-      "id": "15061099",
-      "old_title": "국토교통부_건설자재 품질검사 등록정보",
-      "new_title": "국토교통부_건설자재 품질검사 등록정보",
+      "id": "15064978",
+      "old_title": "식품의약품안전처_집단급식소 설치 현황",
+      "new_title": "식품의약품안전처_집단급식소 설치 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "d6071c9c58325c975304244d7d7c287956d8a114b540f40258dd07c4bfc07c50",
-      "new_digest": "5d04901b78b5c97decd8ba6176802547d108fb1523af0abd01eb2e6aaf99f0e9"
+      "old_digest": "a6b6e392a1633bc5627b805eb125173a11bcbf046043d106cbe39b079afa5e39",
+      "new_digest": "30bde0da2759ca03be1ae2a776318b055134f5e2d06333c0550e570d14cafc8c"
     },
     {
-      "id": "15061100",
-      "old_title": "국토교통부_설계VE 상세 검토조직 조회",
-      "new_title": "국토교통부_설계VE 상세 검토조직 조회",
+      "id": "15074310",
+      "old_title": "식품의약품안전처_축산물HACCP지정 정보",
+      "new_title": "식품의약품안전처_축산물HACCP지정 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "2dc9f9a01eabf9cb9b123a7d1dd1bfca65f53edd9ce8735ddb56002bf984224b",
-      "new_digest": "971cf90ee2051f5f8f6acfc744e8402c1169cf76a6f9383d93c648e2bb99a551"
+      "old_digest": "fd5709b997d74aee534ace034fae154a1ed4eb433e2b9341dea650b66be1609d",
+      "new_digest": "3682c8b6a26d524a63e70b4bba0a97494b82739e57930054a27004212535652d"
     },
     {
-      "id": "15061102",
-      "old_title": "국토교통부_국토교통부_설계VE 목록 조회",
-      "new_title": "국토교통부_국토교통부_설계VE 목록 조회",
+      "id": "15074311",
+      "old_title": "식품의약품안전처_건강기능식품 개별인정형 정보",
+      "new_title": "식품의약품안전처_건강기능식품 개별인정형 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "c132be1f53832940f44d2ccac21ce26f6a09eb24dc4ef449944a3dcbf6df06df",
-      "new_digest": "26e80be7cba07f27dc7815a256c99172a1a578fdc9d71dcb5b8be1eb4fa93f3b"
+      "old_digest": "ecfe56abfcb49d8f9fb0574bb281de5098b8197fd68dd74c91084988a9e26915",
+      "new_digest": "89615b61917b28843afae28cb15f27be58483d7983ca48f6965aff0cd2a0f0e5"
     },
     {
-      "id": "15061104",
-      "old_title": "국토교통부_설계VE 상세정보",
-      "new_title": "국토교통부_설계VE 상세정보",
+      "id": "15074312",
+      "old_title": "식품의약품안전처_LMO 수입승인 정보",
+      "new_title": "식품의약품안전처_LMO 수입승인 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "1ad8c78dd8ea297fe6e8925710163b2ae3e07d6b4197e28a1a8065465bdd0d84",
-      "new_digest": "de4ee17547d4596e8d33275577f992cc7befe1f68814b8e82ed6e43370f538bb"
+      "old_digest": "cd5b899f4a858c9bc8dbf19bffef4f27f02e03f79e2335a668e6d1a69ae29909",
+      "new_digest": "0ce8faf5f7c01a536f9f76cd90f9def5d1c8a28d34cd3ca19336f248743b105a"
     },
     {
-      "id": "15061106",
-      "old_title": "국토교통부_건설공사 사후평가 목록 조회",
-      "new_title": "국토교통부_건설공사 사후평가 목록 조회",
+      "id": "15074313",
+      "old_title": "식품의약품안전처_유전자변형식품등의 안전성 평가 심사 결과 현황",
+      "new_title": "식품의약품안전처_유전자변형식품등의 안전성 평가 심사 결과 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "dd71aa8fa28a2aa2805fd8a2a04129fe71d0b7c8107b1bd36d88053d81926001",
-      "new_digest": "f1f830572e742001bc398567384840e83160c24769575f7f03fa7a417478490e"
+      "old_digest": "d5f16663963b9b3c28beaf86d3b6b54704afde591f6fbbca8ef3e5f23759fcc1",
+      "new_digest": "d554ba62fdc0023a9831928b349a2de72b19b13f3d1c61826e789ea509aff45f"
     },
     {
-      "id": "15061107",
-      "old_title": "국토교통부_사후평가 수행실적표 - 사업수행성과 평가표",
-      "new_title": "국토교통부_사후평가 수행실적표 - 사업수행성과 평가표",
+      "id": "15074314",
+      "old_title": "식품의약품안전처_후대교배종의 안전성 평가 신청 및 검토 정보",
+      "new_title": "식품의약품안전처_후대교배종의 안전성 평가 신청 및 검토 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "cbfcdbd2efc878c65036e291092109c416323ffd9afed06aa3aff3f08eab385e",
-      "new_digest": "bccd56e272c944920f4a4da4566ca5784ac86417f89dd878d9095fa643bdf931"
+      "old_digest": "920a7a2185f4b2e6127c5f55cb1e586664f2d9af01ff6c62351c2cb98b86b7d0",
+      "new_digest": "0e812ff5cb1bc829cb35c821d562af887816156a0f888f8dbc75059cc8f7fb40"
     },
     {
-      "id": "15061109",
-      "old_title": "국토교통부_사후평가 수행실적표 - 사업효율 및 파급효과 평가표",
-      "new_title": "국토교통부_사후평가 수행실적표 - 사업효율 및 파급효과 평가표",
+      "id": "15074315",
+      "old_title": "식품의약품안전처_건강기능식품 생산실적보고 품목 정보",
+      "new_title": "식품의약품안전처_건강기능식품 생산실적보고 품목 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "bb4a10422ffc85146d24cf878f42b95b897112eae378528353f2e61937381b0b",
-      "new_digest": "0faeff6e62c0ba82595c1765e6d7ad72cc433436341eef008f25f8eed5406a0e"
+      "old_digest": "534dd736a55f8306534da00f35a01f76100ed9a3c3ca141330e5870a5af68280",
+      "new_digest": "74b6e8ff972fbae5f3cada5d2dcbf0aa204e3b6bed78bec0ca4f51e07f191372"
     },
     {
-      "id": "15061110",
-      "old_title": "국토교통부_설계도서등록 사업목록 조회",
-      "new_title": "국토교통부_설계도서등록 사업목록 조회",
+      "id": "15074317",
+      "old_title": "식품의약품안전처_식품수거검사 계획 및 실적 정보",
+      "new_title": "식품의약품안전처_식품수거검사 계획 및 실적 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "84b0c6a91a4e58b93f4622f3532834513a54b9e03376715678f8f07a938f2a32",
-      "new_digest": "e8359224d2d040b354e1930fd16fe706f93332160b4e3a2edeca4f9e55e8d58d"
+      "old_digest": "f662931a63193599937b89546791962c19a85564dc03a425e39cc3661951f541",
+      "new_digest": "7f8ba154f76d656d9d88e3396d7c6b1c28cbc0013d33d9ac74b15f91205262c2"
     },
     {
-      "id": "15061111",
-      "old_title": "국토교통부_설계도서등록 상세정보 조회",
-      "new_title": "국토교통부_설계도서등록 상세정보 조회",
+      "id": "15074318",
+      "old_title": "식품의약품안전처_식품의 회수 및 판매중지 정보",
+      "new_title": "식품의약품안전처_식품의 회수 및 판매중지 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "1eb4be56958340a3b572025e160f14dd9ef66c0b83791fc9f2a7d44ab9f20e4c",
-      "new_digest": "3d533fa84edb2fddcb12cfcc2359f969d44fa099e1c0b2e9b8bb29d46de8270f"
+      "old_digest": "08238090b18c84b4deaf06102926b59d6b235be5e0f197539f1de036cd677157",
+      "new_digest": "02cf3489327199e0d23b53d6b72d0ac801fd42c1708f999c5ec0fa2e44069a4d"
     },
     {
-      "id": "15061114",
-      "old_title": "국토교통부_건설공사 원가절감사례 상세 조회",
-      "new_title": "국토교통부_건설공사 원가절감사례 상세 조회",
+      "id": "15074319",
+      "old_title": "식품의약품안전처_축산물위생검사기관 지정 정보",
+      "new_title": "식품의약품안전처_축산물위생검사기관 지정 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "cfeed1c51f3c3d053cdfd9b73481473fd786eee2df185a4b5b6f56364a7f20a4",
-      "new_digest": "5c5eaef426d96ecb66db9b036b7d46ecf4a57ee85948fc4686a16abfa4f238e0"
+      "old_digest": "abcec6838963ac6bb800a02534c7e86d66903992b400c9b396cbfbd2aa413e5e",
+      "new_digest": "7c258c2987dc4e3713e5755b25c95950b76dd0f30d3737f5819c1fb3c55bb404"
     },
     {
-      "id": "15061115",
-      "old_title": "국토교통부_설계VE 계약정보",
-      "new_title": "국토교통부_설계VE 계약정보",
+      "id": "15074320",
+      "old_title": "식품의약품안전처_국외시험검사기관 지정 정보",
+      "new_title": "식품의약품안전처_국외시험검사기관 지정 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "e92f943902d685fe462427abe627b14588bb05221082f0dde52042bbfd7d058e",
-      "new_digest": "8e5d0c85cb842b9473d4c929ce99543a21b744e49868ec2bed6e46f995e0822c"
+      "old_digest": "0afab25fcdf4d695599d3b3d72407c9281c13cde64db51c2b7a0d6e68f382cec",
+      "new_digest": "d924d0ddaa709f2e13376d9e8655b929a7c6087a528149c62dfe2b71e6688126"
     },
     {
-      "id": "15075780",
-      "old_title": "국토교통부_차량검지정보",
-      "new_title": "국토교통부_차량검지정보",
+      "id": "15074321",
+      "old_title": "식품의약품안전처_건강기능식품의 기준 및 규격 정보",
+      "new_title": "식품의약품안전처_건강기능식품의 기준 및 규격 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "7fa0917c5d74a41d5c8a3ccf6b1968f5fc6fd87d79fd33e72281f1a9e7604165",
-      "new_digest": "9547d9098c9b8181ff8e7a95eb6e81f4d6792ea1d10b479a6dc8c71acd90e3a9"
+      "old_digest": "3e562b34d5dafe8cd42509c40f3b902faf94fe5a7af38cabb3ce65593c048865",
+      "new_digest": "96d4b2101b36679f9a46f7744426e5092da569906a26ffd5701b11bdbc6cba59"
     },
     {
-      "id": "15075781",
-      "old_title": "국토교통부_가변형 속도제한표지정보(VSL)",
-      "new_title": "국토교통부_가변형 속도제한표지정보(VSL)",
+      "id": "15074322",
+      "old_title": "식품의약품안전처_방사선조사식품 품목인정 정보",
+      "new_title": "식품의약품안전처_방사선조사식품 품목인정 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "006e201e209c40e9cea0314bdc80f8537957b16bef0716b481a2e259039c8d03",
-      "new_digest": "4e392fc8bb25b98429207bde366fe5b15ac0e021248be71ae908d6b1356a72b0"
+      "old_digest": "3edcc0395b5ee09573313276f0cba637c3b30b287cb8dd0861544c63cf155510",
+      "new_digest": "21b79636d7db7f27a2abddf34e68e668a5143be9876620f268a8934b68a1ad98"
     },
     {
-      "id": "15089863",
-      "old_title": "국토교통부_자동차 리콜정보 API 서비스",
-      "new_title": "국토교통부_자동차 리콜정보 API 서비스",
+      "id": "15074323",
+      "old_title": "식품의약품안전처_농약의 잔류허용기준 정보",
+      "new_title": "식품의약품안전처_농약의 잔류허용기준 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "ebe1929a5eb387d4de0a64c398794e1ab666b23c26a4890de50328b15ee123aa",
-      "new_digest": "e43b413ea6516b0624707f1e5e871d3d6c43ca5a88dd5a08ce970d0ec435c7cb"
+      "old_digest": "273ef8a395fface06c0643644dd53dfacc16c8680559f9c9b81edb0bb3a51f7d",
+      "new_digest": "c9f98330ac26abf2462d44e30c902b13b8052d5d29012b564f1a4f16ed4dc5da"
     },
     {
-      "id": "15123457",
-      "old_title": "국토교통부_건축물연령정보(WMS/WFS/속성정보)",
-      "new_title": "국토교통부_건축물연령정보(WMS/WFS/속성정보)",
+      "id": "15074324",
+      "old_title": "식품의약품안전처_식품별 농약잔류허용기준 정보",
+      "new_title": "식품의약품안전처_식품별 농약잔류허용기준 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "4c0f67b0200f2abc75f0a5f80424d520f8a1757820e46985ee888b7b7887fd73",
-      "new_digest": "3c8bc49da3b6063aeb69225faf970bef3af0f9bea2c2f80d4ab7ede5d0d080c5"
+      "old_digest": "8006fda0565fd608564501821b9b7f6af44b1612e93c353229eade5640f890a0",
+      "new_digest": "a11afe4a1aa4babcbfe56098d1eeb10a1b5f016a537f5efae542140c8c491a5d"
     },
     {
-      "id": "15123458",
-      "old_title": "국토교통부_용도별건물정보(WMS/WFS/속성정보)",
-      "new_title": "국토교통부_용도별건물정보(WMS/WFS/속성정보)",
+      "id": "15074325",
+      "old_title": "식품의약품안전처_시약(식품첨가물) 정보",
+      "new_title": "식품의약품안전처_시약(식품첨가물) 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "ec0f0bb09aef40606bd3bb1738d528f73c3e0b74202e7f2d2585a8190be0f16c",
-      "new_digest": "b4e1936dddb945769d4847f7accb0b587e7d5c1b557d9a0ff02674b5e71785c2"
+      "old_digest": "ef4a71f48fdd1f4fb0ed95becccec726162a83f0b71884a07dd2168a66389eeb",
+      "new_digest": "c23096768126a6fe9e478759d59f73168a15d2516b1755a8a7f8ee9c7a776d40"
     },
     {
-      "id": "15123549",
-      "old_title": "국토교통부_토지특성정보(WMS/WFS/속성정보)",
-      "new_title": "국토교통부_토지특성정보(WMS/WFS/속성정보)",
+      "id": "15074326",
+      "old_title": "식품의약품안전처_동물용의약품 정보",
+      "new_title": "식품의약품안전처_동물용의약품 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "49f5e254b22d8e62388f501fc621c89e98c3d63fa7fab2cae4f2aa076ed7a57e",
-      "new_digest": "cfed342f43986492c17b712a485e2767c8d5ace9fadaadb8bbaa71ca2260abda"
+      "old_digest": "53dad1e3eb0e8ae85a98f2dcc1f92f51d97188eff94dfbb78bf19fd884e44c2d",
+      "new_digest": "b1d5db0d46ac9072d77ea4c2c2f75e92b98c6f095e94f72779d89e883ee34a71"
     },
     {
-      "id": "15129453",
-      "old_title": "국토교통부_정류장 현황",
-      "new_title": "국토교통부_정류장 현황",
+      "id": "15074328",
+      "old_title": "식품의약품안전처_식품별 동물용의약품 잔류허용기준 정보",
+      "new_title": "식품의약품안전처_식품별 동물용의약품 잔류허용기준 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "6e9206888e563dffc0a30e5e578685f99b8d12a1a688efeb4fe3d3ba1800b26e",
-      "new_digest": "a22d982ddbecf9da8787a6f51f659f8aca992d0a355cb803d05dabc4928aa161"
+      "old_digest": "c160fb8b329ee51df8d15c8b7d06d2dd8ceb8ffb3d8f7a0ea964e7d1b7a59789",
+      "new_digest": "593f8250a83dbbfb35c23967204ad5f33ad8eadcfc0c0abb7ad41038b5904679"
     },
     {
-      "id": "15131782",
-      "old_title": "국토교통부_국내외 건설기술 사이트",
-      "new_title": "국토교통부_국내외 건설기술 사이트",
+      "id": "15074329",
+      "old_title": "식품의약품안전처_기구등의 살균소독제 기준규격 정보",
+      "new_title": "식품의약품안전처_기구등의 살균소독제 기준규격 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "ca1ded03cff129debb6e056ec7bbe27e30774f16bcd64740053ac584c5929b21",
-      "new_digest": "d690c65f00e95b545814ac8d5da0a4006bf9b8c0be19565546fed58cbc2c05c3"
+      "old_digest": "f994c2ac872427766c96303be5ddbfc583b109b572ca64583d12ecdf2e0bd002",
+      "new_digest": "34c08e6c1800ed427153353d66ac016eac5e60f408ec78aaf1c6862fd0e75758"
     },
     {
-      "id": "15141100",
-      "old_title": "국토교통부_위험물질 운송차량 사고정보",
-      "new_title": "국토교통부_위험물질 운송차량 사고정보",
+      "id": "15074331",
+      "old_title": "식품의약품안전처_식품품목유형코드 정보",
+      "new_title": "식품의약품안전처_식품품목유형코드 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "7e86825025c9f4bd585bad480fd1fdd1c008d500781f17195501cd4af15681b2",
-      "new_digest": "6304d15c3f8c2a757ed88abf1d695f0814ac889e1720b5f9cf9a1edef0871bda"
+      "old_digest": "c3572ca076fb4b63767c1202a57d3aa885ffe3f2eb7e3abf6fc72665dc6d4ab1",
+      "new_digest": "d105ffd8b1d29f9adc8a94262c3d453b1fb985e7495567e521d1cf4f398c3c05"
+    },
+    {
+      "id": "15074332",
+      "old_title": "식품의약품안전처_수입쇠고기 유통이력 정보",
+      "new_title": "식품의약품안전처_수입쇠고기 유통이력 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7cb4b8fb2a8f002444710e1a521cea72e6892f38925a519dfb3c83001fb9e3f9",
+      "new_digest": "5f8d2ffe99028ec9b39ee9891b9b25449343f57faf6fe69196fc40341268863c"
+    },
+    {
+      "id": "15076885",
+      "old_title": "식품의약품안전처_용어사전(기구용기포장∙식의약품용어집)",
+      "new_title": "식품의약품안전처_용어사전(기구용기포장∙식의약품용어집)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "538e54209f71fe23c8e6f5acea168dae7d7002f5418b872e835e08551b025be3",
+      "new_digest": "3acdb4fd5bdb9f4d015936576de0ea774baeba580ba270b4e5875056407fae10"
+    },
+    {
+      "id": "15077132",
+      "old_title": "식품의약품안전처_즉석판매제조가공업 폐업정보",
+      "new_title": "식품의약품안전처_즉석판매제조가공업 폐업정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "58c45d981fcd5c4fbf23d8acba78fb0b365c111d78ba4cc2244d661a0805066b",
+      "new_digest": "ad44cd7507b0e374cabe7add354ba49c8dfc351ec0798e9dea7387be88846da5"
+    },
+    {
+      "id": "15077539",
+      "old_title": "식품의약품안전처_식품소분업 폐업정보",
+      "new_title": "식품의약품안전처_식품소분업 폐업정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2174e757af7d231a8317051593c1feb09dac8f8faecfc4e05eda15255beab489",
+      "new_digest": "a5e80ffd9b545a93663430501f12b1a91592532848d9a32d3d05919868ed5669"
+    },
+    {
+      "id": "15077647",
+      "old_title": "식품의약품안전처_식품판매업 폐업정보",
+      "new_title": "식품의약품안전처_식품판매업 폐업정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2da1576afb299855f1f6a3c107ed297632a33b8839d260e6cb921d019e856675",
+      "new_digest": "8d9ffa229346f965e051692fd0f93f97e83478016f0da2d92b67b541716b4e8f"
+    },
+    {
+      "id": "15077772",
+      "old_title": "식품의약품안전처_해외 위해식품 회수정보",
+      "new_title": "식품의약품안전처_해외 위해식품 회수정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2678a845ef9a92d0fc86efd5979040c42645037eb82aebcfc8097c257320952c",
+      "new_digest": "40b7b5fabda95808facae9bcbbfc6d203fac7f2868e6e591b995bc2f434df16e"
+    },
+    {
+      "id": "15078191",
+      "old_title": "식품의약품안전처_쇠고기(국내)이력추적 정보",
+      "new_title": "식품의약품안전처_쇠고기(국내)이력추적 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e5bd253927d97bc7b64be83093356ea1e3fe7aec1322c9698aad208ecaf6b78f",
+      "new_digest": "578fb674c063a6c16a2cddfb71703e5dfc916239203976aaf67159a233501c46"
+    },
+    {
+      "id": "15080688",
+      "old_title": "식품의약품안전처_식품운반업 폐업정보",
+      "new_title": "식품의약품안전처_식품운반업 폐업정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f2766b2807909712984c52c6caf84c2beab76e472dfd3c084bb3b348f369c89a",
+      "new_digest": "395e6313a79f1177e0fdabd7af14fde347c8b2186c3f703dc3be5d8f21d009ce"
+    },
+    {
+      "id": "15080782",
+      "old_title": "식품의약품안전처_식중독 원인시설별 정보",
+      "new_title": "식품의약품안전처_식중독 원인시설별 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e8b3a983a8a4bca0573201126aada1e5a75f795bea411b1c162c2f3a82bee7fe",
+      "new_digest": "525365796fe5030acdbf317217941c21b0d5fdc183dc8191eed1eb0f65d8cad4"
+    },
+    {
+      "id": "15080799",
+      "old_title": "식품의약품안전처_식중독 원인물질별 정보",
+      "new_title": "식품의약품안전처_식중독 원인물질별 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ac902a0c86d9cf930f32e878f9882d0e96a01db5e05172c82837f927fcde313f",
+      "new_digest": "ab2afba1116bdfc5c47bb80410fe6430d2a21908ecb49bad3cb33e611c240915"
+    },
+    {
+      "id": "15080800",
+      "old_title": "식품의약품안전처_식중독 발생지역별 정보",
+      "new_title": "식품의약품안전처_식중독 발생지역별 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b988873736e6c3c6dcd6e63a766decc7cc44fe2369e90dbd00eb98af742aaba8",
+      "new_digest": "65e30bd24d72ea311ecd3d673acc2be0b20ce6f8d38dc8c245973a872ccabe07"
+    },
+    {
+      "id": "15081274",
+      "old_title": "식품의약품안전처_식품원재료(식물,동물,미생물,수산물) 정보",
+      "new_title": "식품의약품안전처_식품원재료(식물,동물,미생물,수산물) 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3bffb66da0c352299a1e8ace82bcb8dc65dc51986623b2d498e7a3546e3cce2d",
+      "new_digest": "f551686ac4ef3cd9264216ad8925b3925043c6c0acca2820119b81d818752512"
+    },
+    {
+      "id": "15083646",
+      "old_title": "식품의약품안전처_축산물 생산실적정보",
+      "new_title": "식품의약품안전처_축산물 생산실적정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9b64490b20673ab2cb69f5ea9d729255300fb863148ef89746b6fd7446c47401",
+      "new_digest": "12411372f2730a7bc599c81ad3541e0db02e2d12cf219ea5c7616edc60e1c07d"
+    },
+    {
+      "id": "15083970",
+      "old_title": "식품의약품안전처_동물의약품별 잔류허용 기준",
+      "new_title": "식품의약품안전처_동물의약품별 잔류허용 기준",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6e8420d94ee4d406954c6667dca4d021943ea87c3440b0bf22e5f9b7ff18e204",
+      "new_digest": "081163add9aad4b55e663c32f144e914bb91b40cd022709d25a6246df90ca046"
+    },
+    {
+      "id": "15084267",
+      "old_title": "식품의약품안전처_잔류동물의약품 식품별 잔류허용 기준",
+      "new_title": "식품의약품안전처_잔류동물의약품 식품별 잔류허용 기준",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "09e4873056727b33f2af21676e0644189fffe031de913ce0e31dd2026fa3e79d",
+      "new_digest": "3eb38288153998dfed516dd88e0eed9cb1e70781d0d79ebf6d9aa91a8f5228c9"
+    },
+    {
+      "id": "15085712",
+      "old_title": "식품의약품안전처_건강기능식품 영양DB",
+      "new_title": "식품의약품안전처_건강기능식품 영양DB",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bf9e8beb701a8ab4fc16f37c94faeeaf0b5e003bb045da10f0390e8052af8ea6",
+      "new_digest": "689e73a5b2ce797bdd1b82c88b4c4d92d9d3fc87e5bc44fa186769e191cac132"
+    },
+    {
+      "id": "15087239",
+      "old_title": "식품의약품안전처_농약 등록정보",
+      "new_title": "식품의약품안전처_농약 등록정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4726f110f7056c2d650322f88a7bd691142dea09bf987808a1e4fae92eee7d1f",
+      "new_digest": "cf5d292efed0fac64db46e395a4b0945cdeb055e5fbf6389a4da699cf4a7b8aa"
+    },
+    {
+      "id": "15089289",
+      "old_title": "식품의약품안전처_식품제조가공업 폐업정보",
+      "new_title": "식품의약품안전처_식품제조가공업 폐업정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "70d67d78997b775f703c0b1927199e6df2104dc7b4fa26d4e107f9ee47f7f0e4",
+      "new_digest": "4fef25ade02d3773b20cae858ed8a3465c767f68b943a35de8ce3c1c888142e7"
+    },
+    {
+      "id": "15091535",
+      "old_title": "식품의약품안전처_수입식품업 폐업정보",
+      "new_title": "식품의약품안전처_수입식품업 폐업정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ca51dc078ca0aa62490d33934770cc559562f369d6c5a25475e115b34fd08263",
+      "new_digest": "4315c6f8a384b6c85967065d398e6375d22a7056f35a49d30e0b2e48c412f20a"
+    },
+    {
+      "id": "15092275",
+      "old_title": "식품의약품안전처_생산중단제품정보",
+      "new_title": "식품의약품안전처_생산중단제품정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c2beeee75755ec49f94ad0ec7a5eba5c519280f983f31ce981a90a1a5fcac659",
+      "new_digest": "b78b719ec143e527af645659747990c19fcd974af7d011a8bf710a5763003b7d"
+    },
+    {
+      "id": "15094984",
+      "old_title": "식품의약품안전처_HACCP 교육훈련기관 지정 현황",
+      "new_title": "식품의약품안전처_HACCP 교육훈련기관 지정 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2b668878234a0f22ae0837a0cf530605bd901503dacb0a8048e10749ae5a7e93",
+      "new_digest": "d841cad08f0645bfcc3b880edd71751b4009b797ee5f538bb480bb28e09b3ba6"
+    },
+    {
+      "id": "15095544",
+      "old_title": "식품의약품안전처_축산물품목제조보고(원재료)",
+      "new_title": "식품의약품안전처_축산물품목제조보고(원재료)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7fcdf39d70f8ffb0bb163120763904e210e5ddf9341c62d5a83163c9572009ec",
+      "new_digest": "08311ddabbaf4442ad6dd07358dda9b5b57b1bb0f70066ad1f13282d8f3e2ad8"
+    },
+    {
+      "id": "15096590",
+      "old_title": "식품의약품안전처_식품.식품첨가물 생산실적 보고 현황",
+      "new_title": "식품의약품안전처_식품.식품첨가물 생산실적 보고 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2201f606b5a9c69623cb37e19c99c08fd56b74782f6ac3a1911571d5abed36ab",
+      "new_digest": "3fed4858ba1f0c2a169c6f3b4153aa83b40ad440537b248cc398d487f9d876ae"
+    },
+    {
+      "id": "15096882",
+      "old_title": "식품의약품안전처_집단급식소 인허가 대장",
+      "new_title": "식품의약품안전처_집단급식소 인허가 대장",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e92a12d5bad5005e33014b6d23e4dd8f33c3fb8004f3f67c48f5a047a4b45119",
+      "new_digest": "4fbfae51be4b2b311cc4a2d1581b3b39a6d15b0e28274cda9ee8e8e4b73c6edb"
+    },
+    {
+      "id": "15096884",
+      "old_title": "식품의약품안전처_집단급식소 폐업 정보",
+      "new_title": "식품의약품안전처_집단급식소 폐업 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1544840da50f23073e49df4952c41266c7e1f4bee72341d159c76e1e7c71420e",
+      "new_digest": "553ab2923de52c270197d1d0541c2b53d2e6360ad2480594082d665e500e0d4d"
+    },
+    {
+      "id": "15096888",
+      "old_title": "식품의약품안전처_어린이 급식센터 지원현황",
+      "new_title": "식품의약품안전처_어린이 급식센터 지원현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "39f406c2fc44abdcb84ca7aed97c377014669b5d84d67ad199531fbf1f8fa5cf",
+      "new_digest": "1216f316505cd74b83e5ec1629a1f948c7031187ccc21fa5cb3a5e529116af2a"
+    },
+    {
+      "id": "15097884",
+      "old_title": "식품의약품안전처_수입쇠고기 냉동전환 정보",
+      "new_title": "식품의약품안전처_수입쇠고기 냉동전환 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "be2c1450e08727c024c4e33550dfca0a6c07a370a432d488dd6f76114fa37313",
+      "new_digest": "e63a686ff43647fa00d9979e04cfc751fb6f0eaf20cad85b9ad40efe8e521983"
+    },
+    {
+      "id": "15098712",
+      "old_title": "식품의약품안전처_HACCP 적용업소 지정 현황",
+      "new_title": "식품의약품안전처_HACCP 적용업소 지정 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b3098ee7a1dd527f94ed00c540b28d469569b06317f69944bcc0d61d7d0e04bf",
+      "new_digest": "13ca9fe381a10c9f86a566a355f8c5bb11ae09bef0a39fc56e4aaa8ab40f4965"
+    },
+    {
+      "id": "15111807",
+      "old_title": "식품의약품안전처_농산물 안전성검사기관 정보",
+      "new_title": "식품의약품안전처_농산물 안전성검사기관 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ae811bbfe582ce940eb8777b5ce1120d5d43485ab992a68ab614442ddc1f0731",
+      "new_digest": "bad51954b7c86563f3e5ccc187c79730628623b602bbb22c4f558fae2cf8f65d"
+    },
+    {
+      "id": "15111813",
+      "old_title": "식품의약품안전처_농축산물유통관리 허위표시공표정보",
+      "new_title": "식품의약품안전처_농축산물유통관리 허위표시공표정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "26bb328a4a84fd1638e20665988b270382cdd4d94fc5149227cf3e7318789eb3",
+      "new_digest": "72498fe13a9b14a0c2f59fc8da510253125a78a2fece22a1b1e1b3a3b4b6b8b1"
+    },
+    {
+      "id": "15111816",
+      "old_title": "식품의약품안전처_어류질병정보",
+      "new_title": "식품의약품안전처_어류질병정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "90a3a141ac975f8292efdfa5fd19569b6ca4bb24af631f4e4fab0c2368ddeeb5",
+      "new_digest": "794069f9ac46116af316f7fc89c890be6e4075661fd6fbb7bb61dd68a426d572"
+    },
+    {
+      "id": "15111822",
+      "old_title": "식품의약품안전처_물환경 수질정보",
+      "new_title": "식품의약품안전처_물환경 수질정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "769db84fb4e0b338aca174d13c65e099257fe0f03cc6e5124b3c2b58c8f4baec",
+      "new_digest": "8d22f2da878d098e9e8b9e044000edd1663fe9c314ea1661e5437bd3a7db1833"
+    },
+    {
+      "id": "15111829",
+      "old_title": "식품의약품안전처_토양지하수 토양실태조사정보",
+      "new_title": "식품의약품안전처_토양지하수 토양실태조사정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7c40aa138bd7b6d9f942894b68d80c2cdaf2c91ecc0a595167e12612f895be1a",
+      "new_digest": "b025bc5c297c4ce906d9300153336b5945c146da60c64247d1dd432339357de7"
+    },
+    {
+      "id": "15111830",
+      "old_title": "식품의약품안전처_지하수 수질측정망 측정결과",
+      "new_title": "식품의약품안전처_지하수 수질측정망 측정결과",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "43b0fa21d4d71d51fe20c80bb367cf4ddaba84e068ec1df9f09a4272928c6c9a",
+      "new_digest": "a43d54acb5ba163a7bee8b90a4fefa0326e00dee592a7cf78da10cc7fe53a1c5"
     }
   ]
 }

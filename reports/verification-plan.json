@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T15:25:29Z",
+  "generated_at": "2026-07-03T15:34:48Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,13 +7,13 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 16062,
-    "evidence_total": 1607,
+    "operations": 16296,
+    "evidence_total": 1630,
     "uncovered_gateway_candidates": 10744,
-    "uncovered_adapter_candidates": 3510,
+    "uncovered_adapter_candidates": 3721,
     "missing_adapter_hosts": 11,
     "planned_batches": 18,
-    "planned_operations": 136
+    "planned_operations": 133
   },
   "batches": [
     {
@@ -60,10 +60,20 @@
       "provider": "ex",
       "kind": "external_endpoint",
       "candidates": 8,
-      "uncovered_candidates": 5,
-      "planned_operations": 5,
+      "uncovered_candidates": 1,
+      "planned_operations": 1,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider ex --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ex-next.json --json",
       "output": ".datapan/verification/ex-next.json"
+    },
+    {
+      "label": "foodsafetykorea",
+      "provider": "foodsafetykorea",
+      "kind": "external_endpoint",
+      "candidates": 237,
+      "uncovered_candidates": 223,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider foodsafetykorea --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/foodsafetykorea-next.json --json",
+      "output": ".datapan/verification/foodsafetykorea-next.json"
     },
     {
       "label": "gwanak",
@@ -79,21 +89,11 @@
       "label": "gwangmyeong",
       "provider": "gwangmyeong",
       "kind": "external_endpoint",
-      "candidates": 57,
-      "uncovered_candidates": 37,
+      "candidates": 58,
+      "uncovered_candidates": 38,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider gwangmyeong --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gwangmyeong-next.json --json",
       "output": ".datapan/verification/gwangmyeong-next.json"
-    },
-    {
-      "label": "its",
-      "provider": "its",
-      "kind": "external_endpoint",
-      "candidates": 15,
-      "uncovered_candidates": 9,
-      "planned_operations": 9,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider its --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/its-next.json --json",
-      "output": ".datapan/verification/its-next.json"
     },
     {
       "label": "jejudatahub",
