@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T18:58:42Z",
+  "generated_at": "2026-07-03T19:14:08Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 18490,
-    "callable_operations": 18348,
+    "operations": 18555,
+    "callable_operations": 18413,
     "callable_operation_percent": 99.2,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 6880,
-    "registered_adapter_operations": 6870,
+    "external_endpoint_operations": 6945,
+    "registered_adapter_operations": 6935,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.6,
-    "approval_required_operations": 6330,
+    "approval_required_operations": 6390,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 93,
+    "registered_adapter_hosts": 97,
     "missing_adapter_hosts": 11,
-    "adapter_count": 83,
+    "adapter_count": 84,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T18:58:33Z",
-    "total": 1976,
+    "generated_at": "2026-07-03T19:14:00Z",
+    "total": 2041,
     "verified": 632,
-    "failed": 147,
+    "failed": 212,
     "skipped": 1197,
     "unknown": 0,
-    "verified_percent": 32,
-    "evidence_operation_percent": 10.7
+    "verified_percent": 31,
+    "evidence_operation_percent": 11
   },
   "route_evidence": {
     "present": true,
@@ -383,10 +383,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T18:58:42Z",
+    "generated_at": "2026-07-03T19:14:08Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 83,
-    "host_count": 95,
+    "adapter_count": 84,
+    "host_count": 99,
     "adapters": [
       {
         "name": "airport",
@@ -444,6 +444,19 @@
         "status": "registered",
         "hosts": [
           "www.car365.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "chungnam",
+        "status": "registered",
+        "hosts": [
+          "alldam.chungnam.go.kr",
+          "localfood.chungnam.go.kr",
+          "www.chungnam.go.kr",
+          "www.xn--6-6v7en42by2es7i6jc.com"
         ],
         "capabilities": [
           "verification"
@@ -1257,8 +1270,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 83,
-      "verification_capable_adapters": 83,
+      "adapter_count": 84,
+      "verification_capable_adapters": 84,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

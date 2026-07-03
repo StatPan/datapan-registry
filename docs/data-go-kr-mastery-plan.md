@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `18490`
-- callable operations: `18348` (`99.2%`)
+- operations: `18555`
+- callable operations: `18413` (`99.2%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `6880`
-- registered adapter operations: `6870`
+- external endpoint operations: `6945`
+- registered adapter operations: `6935`
 - missing adapter operations: `29`
 - external adapter coverage: `99.6%`
-- approval-required operations: `6330`
+- approval-required operations: `6390`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `93`
+- registered adapter hosts: `97`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -227,9 +227,12 @@ institution:
    `scripts/validate-institution-runtime-plan.py`, and
    `scripts/validate-institution-api-overview.py`.
 
-The current operation materialization queue starts at `울산항만공사`: `98` APIs,
-`6` APIs with operation mappings, and `92` uncovered APIs. The runtime
-reactivation queue starts at `행정안전부`: `1252` APIs, `1252` APIs with
+The current operation materialization queue still starts at `울산항만공사`: `98`
+APIs, `6` APIs with operation mappings, and `92` uncovered APIs. The July 2026
+portal pages and catalog JSON for that queue return error/not-found responses,
+so it should be tracked as a reactivation blocker while the next viable queue
+is processed. The runtime reactivation queue starts at `행정안전부`: `1252`
+APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
 records, and `1202` APIs still needing runtime reactivation. Gateway calls need
 a data.go.kr service key; no-key runs are useful only to prove parameter
@@ -495,6 +498,12 @@ readiness, not to advance verified runtime coverage.
    check. That brings checked runtime evidence to `1976`, registered external
    adapter operations to `6870`, completes 전라남도 materialization at `109` of
    `109` APIs, and moves the first materialization queue to 울산항만공사.
+   The next 충청남도 batch registers the Chungnam host family, materializes `27`
+   APIs and `65` operations, and merges `65` failed-but-bounded runtime checks
+   (`48` HTTP 404 and `17` HTTP 403). That brings checked runtime evidence to
+   `2041`, registered external adapter operations to `6935`, raises API
+   operation coverage to `10,226` of `12,060` APIs (`84.8%`), and leaves
+   울산항만공사 as a blocked materialization/reactivation queue.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

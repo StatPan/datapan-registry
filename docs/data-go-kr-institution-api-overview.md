@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T18:58:36Z`
+- Generated at: `2026-07-03T19:14:02Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `18490`
-- Runtime evidence: `1976` (`10.7%`)
-- External endpoint operations: `6880`
-- Registered adapter operations: `6870`
+- Operations: `18555`
+- Runtime evidence: `2041` (`11.0%`)
+- External endpoint operations: `6945`
+- Registered adapter operations: `6935`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -36,7 +36,7 @@
 | 전라남도 | 109 | 109 | 175 | 1 | 0.6% | 1 | 0 | 0 | 94 | 0 |
 | 식품의약품안전처 식품의약품안전평가원 | 106 | 106 | 154 | 21 | 13.6% | 0 | 0 | 21 | 103 | 0 |
 | 울산항만공사 | 98 | 6 | 9 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
-| 충청남도 | 96 | 69 | 77 | 0 | 0.0% | 0 | 0 | 0 | 49 | 0 |
+| 충청남도 | 96 | 96 | 142 | 65 | 45.8% | 0 | 65 | 0 | 109 | 0 |
 | 한국도로공사 | 93 | 0 | 0 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 기상청 | 89 | 44 | 183 | 23 | 12.6% | 0 | 0 | 23 | 24 | 0 |
 | 농림축산식품부 | 87 | 1 | 2 | 2 | 100.0% | 2 | 0 | 0 | 0 | 0 |
@@ -75,9 +75,9 @@
 | 식품의약품안전처 식품의약품안전평가원 | 106 | 106 | 154 | 21 | 13.6% | 0 | 0 | 21 | 103 | 0 |
 | 한국환경공단 | 66 | 65 | 151 | 2 | 1.3% | 0 | 0 | 2 | 40 | 0 |
 | 한국수자원공사 | 84 | 79 | 148 | 0 | 0.0% | 0 | 0 | 0 | 4 | 19 |
+| 충청남도 | 96 | 96 | 142 | 65 | 45.8% | 0 | 65 | 0 | 109 | 0 |
 | 인천항만공사 | 46 | 46 | 141 | 0 | 0.0% | 0 | 0 | 0 | 3 | 0 |
 | 경상남도 | 129 | 129 | 134 | 0 | 0.0% | 0 | 0 | 0 | 116 | 0 |
-| 세종특별자치시 | 122 | 122 | 122 | 0 | 0.0% | 0 | 0 | 0 | 117 | 0 |
 
 The full machine-readable report is `reports/data-go-kr/institution-api-overview.json`.
 The full coverage backlog is `reports/data-go-kr/coverage-backlog.json`, with
@@ -85,14 +85,14 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 ## Largest Categories
 
-- 공공행정: `2565` operations
+- 공공행정: `2593` operations
 - 문화관광: `1890` operations
-- 농축수산: `1820` operations
+- 농축수산: `1844` operations
 - 교통물류: `1745` operations
 - 사회복지: `1439` operations
-- 산업고용: `1287` operations
+- 산업고용: `1288` operations
 - 식품건강: `1188` operations
-- 환경기상: `1113` operations
+- 환경기상: `1116` operations
 - 보건의료: `983` operations
 - 국토관리: `982` operations
 

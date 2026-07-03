@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-03T18:58:36Z",
+  "generated_at": "2026-07-03T19:14:02Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 18490,
-    "callable_operations": 18348,
-    "specs_without_operations": 1861,
-    "specs_without_callable_operation": 1936,
+    "operations_total": 18555,
+    "callable_operations": 18413,
+    "specs_without_operations": 1834,
+    "specs_without_callable_operation": 1909,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 6152,
-    "operations_without_response_params": 7374,
+    "operations_without_request_params": 6217,
+    "operations_without_response_params": 7439,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 3328,
-      "external_endpoint_operations": 6880,
+      "external_endpoint_specs": 3355,
+      "external_endpoint_operations": 6945,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 114,
       "dev_approval_required_operations": 208,
-      "prod_approval_required_operations": 6224,
+      "prod_approval_required_operations": 6284,
       "malformed_endpoint_url_count": 42,
       "malformed_guide_url_count": 601,
       "top_endpoint_hosts": [
@@ -187,8 +187,8 @@
           "count": 41
         },
         {
-          "host": "data.uiryeong.go.kr",
-          "count": 40
+          "host": "www.chungnam.go.kr",
+          "count": 41
         }
       ],
       "top_external_guide_hosts": [
@@ -265,12 +265,12 @@
           "count": 42
         },
         {
-          "host": "data.sisul.or.kr",
-          "count": 40
+          "host": "www.chungnam.go.kr",
+          "count": 41
         },
         {
-          "host": "openapi.epost.go.kr",
-          "count": 37
+          "host": "data.sisul.or.kr",
+          "count": 40
         }
       ]
     },
