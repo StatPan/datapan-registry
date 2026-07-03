@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T15:42:50Z",
+  "generated_at": "2026-07-03T15:58:25Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 227,
+  "filtered_count": 228,
   "summary": {
-    "hosts": 227,
+    "hosts": 228,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 85,
-    "external_guide_hosts": 169,
-    "registered_adapter_hosts": 74,
-    "operation_hosts": 87,
+    "external_endpoint_hosts": 86,
+    "external_guide_hosts": 170,
+    "registered_adapter_hosts": 75,
+    "operation_hosts": 88,
     "guide_only_hosts": 140,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 5244,
+    "approval_required_operations": 5344,
     "malformed_source_url_count": 640
   },
   "providers": [
@@ -310,6 +310,25 @@
         "15101789",
         "15101791",
         "15101794"
+      ]
+    },
+    {
+      "host": "open.assembly.go.kr",
+      "provider": "open-assembly",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 100,
+      "operations": 100,
+      "external_endpoint_operations": 100,
+      "external_guide_specs": 100,
+      "approval_required_operations": 100,
+      "sample_ids": [
+        "15126056",
+        "15126057",
+        "15126058"
       ]
     },
     {

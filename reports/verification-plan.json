@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T15:43:23Z",
+  "generated_at": "2026-07-03T15:58:58Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,13 +7,13 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 16347,
-    "evidence_total": 1660,
+    "operations": 16447,
+    "evidence_total": 1670,
     "uncovered_gateway_candidates": 10714,
-    "uncovered_adapter_candidates": 3772,
+    "uncovered_adapter_candidates": 3862,
     "missing_adapter_hosts": 11,
-    "planned_batches": 18,
-    "planned_operations": 133
+    "planned_batches": 19,
+    "planned_operations": 143
   },
   "batches": [
     {
@@ -144,6 +144,16 @@
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider nongsaro --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/nongsaro-next.json --json",
       "output": ".datapan/verification/nongsaro-next.json"
+    },
+    {
+      "label": "open-assembly",
+      "provider": "open-assembly",
+      "kind": "external_endpoint",
+      "candidates": 100,
+      "uncovered_candidates": 90,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider open-assembly --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/open-assembly-next.json --json",
+      "output": ".datapan/verification/open-assembly-next.json"
     },
     {
       "label": "safetydata",

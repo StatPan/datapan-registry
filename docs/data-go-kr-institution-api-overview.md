@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T15:42:50Z`
+- Generated at: `2026-07-03T15:58:25Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `16347`
-- Runtime evidence: `1660` (`10.2%`)
-- External endpoint operations: `4737`
-- Registered adapter operations: `4727`
+- Operations: `16447`
+- Runtime evidence: `1670` (`10.2%`)
+- External endpoint operations: `4837`
+- Registered adapter operations: `4827`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -17,7 +17,7 @@
 | 경기도 | 840 | 840 | 2241 | 160 | 7.1% | 159 | 1 | 0 | 32 | 0 |
 | 국토교통부 | 393 | 393 | 1055 | 87 | 8.2% | 58 | 2 | 27 | 258 | 0 |
 | 식품의약품안전처 | 392 | 392 | 648 | 41 | 6.3% | 10 | 0 | 31 | 515 | 0 |
-| 국회 국회사무처 | 277 | 0 | 0 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
+| 국회 국회사무처 | 277 | 100 | 100 | 10 | 10.0% | 0 | 10 | 0 | 100 | 0 |
 | 성평등가족부 | 273 | 272 | 347 | 1 | 0.3% | 0 | 0 | 1 | 0 | 0 |
 | 부산광역시 | 259 | 259 | 336 | 60 | 17.9% | 0 | 0 | 60 | 74 | 1 |
 | 공정거래위원회 | 250 | 216 | 295 | 0 | 0.0% | 0 | 0 | 0 | 279 | 0 |
@@ -76,8 +76,8 @@
 | 한국예탁결제원 | 10 | 10 | 110 | 0 | 0.0% | 0 | 0 | 0 | 110 | 0 |
 | 한국대학교육협의회 | 9 | 9 | 103 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 농촌진흥청 국립농업과학원 | 27 | 27 | 102 | 0 | 0.0% | 0 | 0 | 0 | 3 | 0 |
+| 국회 국회사무처 | 277 | 100 | 100 | 10 | 10.0% | 0 | 10 | 0 | 100 | 0 |
 | 전북특별자치도 전주시 | 53 | 53 | 100 | 80 | 80.0% | 0 | 5 | 75 | 7 | 0 |
-| 국토안전관리원 | 23 | 23 | 96 | 24 | 25.0% | 0 | 0 | 24 | 63 | 0 |
 
 The full machine-readable report is `reports/data-go-kr/institution-api-overview.json`.
 The full coverage backlog is `reports/data-go-kr/coverage-backlog.json`, with
@@ -85,7 +85,7 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 ## Largest Categories
 
-- 공공행정: `1712` operations
+- 공공행정: `1812` operations
 - 교통물류: `1670` operations
 - 문화관광: `1605` operations
 - 농축수산: `1485` operations
@@ -107,4 +107,4 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 - www.calspia.go.kr: `168` operations
 - www.safemap.go.kr: `104` operations
 - openapi.q-net.or.kr: `104` operations
-- openapi.jeonju.go.kr: `80` operations
+- open.assembly.go.kr: `100` operations

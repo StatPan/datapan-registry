@@ -2,11 +2,11 @@
 
 This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns APIs without operation mappings into bounded institution work queues. It is separate from runtime evidence reactivation: these APIs need operation metadata materialized before they can enter verification batches.
 
-- Generated at: `2026-07-03T15:42:50Z`
+- Generated at: `2026-07-03T15:58:25Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `9080` (`75.3%`)
-- APIs without operation mapping: `2980`
+- APIs with operation mapping: `9180` (`76.1%`)
+- APIs without operation mapping: `2880`
 - Planned institutions: `10`
 - Planned APIs: `546`
 - First queue: `국회 국회사무처`
@@ -16,7 +16,7 @@ This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns
 
 | Rank | Institution | APIs | Covered APIs | Uncovered APIs | API Coverage | Planned APIs | Remaining After Batch |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 국회 국회사무처 | 277 | 0 | 277 | 0.0% | 100 | 177 |
+| 1 | 국회 국회사무처 | 277 | 100 | 177 | 36.1% | 100 | 77 |
 | 2 | 성평등가족부 | 273 | 272 | 1 | 99.6% | 1 | 0 |
 | 3 | 공정거래위원회 | 250 | 216 | 34 | 86.4% | 34 | 0 |
 | 4 | 한국산업인력공단 | 230 | 228 | 2 | 99.1% | 2 | 0 |
@@ -31,11 +31,11 @@ This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns
 
 | Institution | API ID | Title | Category | Format | Dev Approval | Prod Approval | Updated |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 국회 국회사무처 | 15152558 | 국회 국회사무처_법률안 제안이유 및 주요내용 | 공공행정 | XML | 자동승인 | 심의승인 | 2025-11-17 |
-| 국회 국회사무처 | 15142964 | 국회 국회사무처_회의록 대별 위원회 목록 | 공공행정 | XML | 자동승인 | 심의승인 | 2025-04-10 |
-| 국회 국회사무처 | 15126161 | 국회 국회사무처_회의별 의안목록 | 공공행정 | XML | 자동승인 | 심의승인 | 2024-07-12 |
-| 국회 국회사무처 | 15126160 | 국회 국회사무처_회의별 안건목록 | 공공행정 | XML | 자동승인 | 심의승인 | 2024-07-12 |
-| 국회 국회사무처 | 15126159 | 국회 국회사무처_시정조치 결과보고서 목록 | 공공행정 | XML | 자동승인 | 심의승인 | 2024-07-12 |
+| 국회 국회사무처 | 15126055 | 국회 국회사무처_전원위원회 회의록 | 공공행정 | XML | 자동승인 | 심의승인 | 2024-07-12 |
+| 국회 국회사무처 | 15126054 | 국회 국회사무처_전원위원회 일정 | 공공행정 | XML | 자동승인 | 심의승인 | 2024-07-12 |
+| 국회 국회사무처 | 15126053 | 국회 국회사무처_입법고시(5급) 채용현황 | 공공행정 | XML | 자동승인 | 심의승인 | 2024-07-12 |
+| 국회 국회사무처 | 15126052 | 국회 국회사무처_인사청문회 | 공공행정 | XML | 자동승인 | 심의승인 | 2024-07-12 |
+| 국회 국회사무처 | 15126051 | 국회 국회사무처_의회외교포럼 활동보고 | 공공행정 | XML | 자동승인 | 심의승인 | 2024-07-12 |
 | 성평등가족부 | 3072018 | 성평등가족부_성범죄자 지역별 통계 | 사회복지 | XML | 자동승인 | 자동승인 | 2025-06-17 |
 | 공정거래위원회 | 15144425 | 공정거래위원회_페어데이터_가맹정보 자연어 기반 질의 학습데이터 목록 제공서비스 | 산업고용 | JSON | 자동승인 | 심의승인 | 2025-08-04 |
 | 공정거래위원회 | 15143710 | 공정거래위원회_페어데이터_브랜드별 가맹점/직영점 집계 및 가맹사업자 평균매출 학습데이터 제공서비스 | 산업고용 | JSON+XML | 자동승인 | 심의승인 | 2025-07-01 |
