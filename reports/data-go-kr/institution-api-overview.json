@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T22:23:18Z",
+  "generated_at": "2026-07-03T22:34:30Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 19861,
-    "runtime_evidence": 3322,
-    "runtime_evidence_percent": 16.7,
-    "callable_operations": 19719,
-    "external_endpoint_operations": 8251,
-    "registered_adapter_operations": 8241,
+    "operations": 19926,
+    "runtime_evidence": 3387,
+    "runtime_evidence_percent": 17.0,
+    "callable_operations": 19784,
+    "external_endpoint_operations": 8316,
+    "registered_adapter_operations": 8306,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 8251
+      "count": 8316
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 8241
+      "count": 8306
     },
     {
       "key": "builtin",
@@ -96,12 +96,12 @@
       "operation_count": 1274
     },
     {
-      "category": "식품건강",
-      "operation_count": 1197
+      "category": "환경기상",
+      "operation_count": 1241
     },
     {
-      "category": "환경기상",
-      "operation_count": 1176
+      "category": "식품건강",
+      "operation_count": 1197
     },
     {
       "category": "국토관리",
@@ -4080,6 +4080,49 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 69
+        }
+      ]
+    },
+    {
+      "organization": "한국환경연구원",
+      "api_count": 65,
+      "operation_api_count": 65,
+      "operation_count": 65,
+      "runtime_evidence_count": 65,
+      "runtime_evidence_percent": 100.0,
+      "verified": 65,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 65,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "external_endpoint",
+          "count": 65
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 65
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "환경기상",
+          "operation_count": 65
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "ecvam.neins.go.kr",
+          "operation_count": 65,
+          "adapter": "ecvam",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },
@@ -15277,24 +15320,6 @@
           "operation_count": 1
         }
       ]
-    },
-    {
-      "organization": "한국환경연구원",
-      "api_count": 65,
-      "operation_api_count": 0,
-      "operation_count": 0,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [],
-      "by_adapter_status": [],
-      "top_categories": [],
-      "top_hosts": []
     },
     {
       "organization": "제주특별자치도 서귀포시",

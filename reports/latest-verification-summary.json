@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T22:23:17Z",
+  "generated_at": "2026-07-03T22:34:29Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3322,
-    "verified": 1550,
+    "total": 3387,
+    "verified": 1615,
     "failed": 306,
     "skipped": 1466,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 1550,
+        "count": 1615,
         "status": "verified"
       },
       {
@@ -427,6 +427,11 @@
         "key": "chungnam",
         "count": 68,
         "provider": "chungnam"
+      },
+      {
+        "key": "ecvam",
+        "count": 65,
+        "provider": "ecvam"
       },
       {
         "key": "daejeon",
@@ -889,6 +894,11 @@
         "key": "data.gm.go.kr",
         "count": 70,
         "host": "data.gm.go.kr"
+      },
+      {
+        "key": "ecvam.neins.go.kr",
+        "count": 65,
+        "host": "ecvam.neins.go.kr"
       },
       {
         "key": "bigdata.daejeon.go.kr",
@@ -1379,7 +1389,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 2598,
+        "count": 2663,
         "kind": "external_endpoint"
       },
       {

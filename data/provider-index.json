@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T22:23:18Z",
+  "generated_at": "2026-07-03T22:34:30Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 101,
-  "host_count": 121,
+  "adapter_count": 102,
+  "host_count": 122,
   "adapters": [
     {
       "name": "airport",
@@ -144,6 +144,16 @@
       "status": "registered",
       "hosts": [
         "data.dongjak.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "ecvam",
+      "status": "registered",
+      "hosts": [
+        "ecvam.neins.go.kr"
       ],
       "capabilities": [
         "verification"
@@ -1061,8 +1071,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 101,
-    "verification_capable_adapters": 101,
+    "adapter_count": 102,
+    "verification_capable_adapters": 102,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
