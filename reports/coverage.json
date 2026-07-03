@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T14:40:19Z",
+  "generated_at": "2026-07-03T14:55:33Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 15404,
-    "callable_operations": 15262,
+    "operations": 15664,
+    "callable_operations": 15522,
     "callable_operation_percent": 99.1,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 3794,
-    "registered_adapter_operations": 3784,
+    "external_endpoint_operations": 4054,
+    "registered_adapter_operations": 4044,
     "missing_adapter_operations": 29,
-    "external_adapter_coverage_percent": 99.2,
-    "approval_required_operations": 4752,
+    "external_adapter_coverage_percent": 99.3,
+    "approval_required_operations": 4836,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
-    "unsupported_protocol_operations": 146,
-    "registered_adapter_hosts": 65,
+    "unsupported_protocol_operations": 147,
+    "registered_adapter_hosts": 68,
     "missing_adapter_hosts": 11,
-    "adapter_count": 60,
+    "adapter_count": 63,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T14:40:06Z",
-    "total": 1541,
-    "verified": 265,
-    "failed": 113,
+    "generated_at": "2026-07-03T14:55:18Z",
+    "total": 1567,
+    "verified": 290,
+    "failed": 114,
     "skipped": 1163,
     "unknown": 0,
-    "verified_percent": 17.2,
+    "verified_percent": 18.5,
     "evidence_operation_percent": 10
   },
   "route_evidence": {
@@ -209,12 +209,12 @@
           "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 841,
-        "operations": 2140,
-        "external_endpoint_operations": 2140,
+        "specs": 842,
+        "operations": 2141,
+        "external_endpoint_operations": 2141,
         "external_guide_specs": 19,
         "wms_operations": 5,
-        "approval_required_operations": 36,
+        "approval_required_operations": 37,
         "sample_ids": [
           "15005231",
           "15011020",
@@ -252,6 +252,25 @@
           "15038581",
           "15056593",
           "15056639"
+        ]
+      },
+      {
+        "host": "www.vworld.kr",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "adapter",
+        "specs": 83,
+        "operations": 198,
+        "external_endpoint_operations": 198,
+        "external_guide_specs": 8,
+        "wms_operations": 2,
+        "approval_required_operations": 20,
+        "sample_ids": [
+          "15056696",
+          "15056709",
+          "15056776"
         ]
       },
       {
@@ -309,14 +328,33 @@
         ]
       },
       {
+        "host": "www.calspia.go.kr",
+        "provider": "calspia",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "adapter",
+        "specs": 20,
+        "operations": 60,
+        "external_endpoint_operations": 60,
+        "external_guide_specs": 19,
+        "approval_required_operations": 60,
+        "sample_ids": [
+          "15061035",
+          "15061037",
+          "15061039"
+        ]
+      },
+      {
         "host": "data.gm.go.kr",
         "kinds": [
           "external_endpoint"
         ],
         "adapter_status": "adapter",
-        "specs": 50,
-        "operations": 56,
-        "external_endpoint_operations": 56,
+        "specs": 51,
+        "operations": 57,
+        "external_endpoint_operations": 57,
         "approval_required_operations": 1,
         "sample_ids": [
           "15011425",
@@ -339,51 +377,14 @@
           "15056733",
           "15057101"
         ]
-      },
-      {
-        "host": "c.q-net.or.kr",
-        "provider": "q-net",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "adapter",
-        "specs": 26,
-        "operations": 42,
-        "external_endpoint_operations": 42,
-        "external_guide_specs": 14,
-        "approval_required_operations": 14,
-        "sample_ids": [
-          "15037518",
-          "15037520",
-          "15056876"
-        ]
-      },
-      {
-        "host": "data.geoje.go.kr",
-        "provider": "geoje",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "adapter",
-        "specs": 12,
-        "operations": 41,
-        "external_endpoint_operations": 41,
-        "external_guide_specs": 11,
-        "sample_ids": [
-          "15005128",
-          "15005172",
-          "15014125"
-        ]
       }
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T14:40:19Z",
+    "generated_at": "2026-07-03T14:55:33Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 60,
-    "host_count": 67,
+    "adapter_count": 63,
+    "host_count": 70,
     "adapters": [
       {
         "name": "airport",
@@ -403,6 +404,36 @@
         ],
         "capabilities": [
           "call",
+          "verification"
+        ]
+      },
+      {
+        "name": "calspia",
+        "status": "registered",
+        "hosts": [
+          "www.calspia.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "car365",
+        "status": "registered",
+        "hosts": [
+          "www.car365.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "codil",
+        "status": "registered",
+        "hosts": [
+          "www.codil.or.kr"
+        ],
+        "capabilities": [
           "verification"
         ]
       },
@@ -1019,8 +1050,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 60,
-      "verification_capable_adapters": 60,
+      "adapter_count": 63,
+      "verification_capable_adapters": 63,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

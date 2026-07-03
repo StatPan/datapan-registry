@@ -2,11 +2,11 @@
 
 This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns APIs without operation mappings into bounded institution work queues. It is separate from runtime evidence reactivation: these APIs need operation metadata materialized before they can enter verification batches.
 
-- Generated at: `2026-07-03T14:40:13Z`
+- Generated at: `2026-07-03T14:55:27Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `8694` (`72.1%`)
-- APIs without operation mapping: `3366`
+- APIs with operation mapping: `8794` (`72.9%`)
+- APIs without operation mapping: `3266`
 - Planned institutions: `10`
 - Planned APIs: `546`
 - First queue: `국토교통부`
@@ -16,7 +16,7 @@ This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns
 
 | Rank | Institution | APIs | Covered APIs | Uncovered APIs | API Coverage | Planned APIs | Remaining After Batch |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 국토교통부 | 393 | 127 | 266 | 32.3% | 100 | 166 |
+| 1 | 국토교통부 | 393 | 227 | 166 | 57.8% | 100 | 66 |
 | 2 | 식품의약품안전처 | 392 | 272 | 120 | 69.4% | 100 | 20 |
 | 3 | 국회 국회사무처 | 277 | 0 | 277 | 0.0% | 100 | 177 |
 | 4 | 성평등가족부 | 273 | 272 | 1 | 99.6% | 1 | 0 |
@@ -31,11 +31,11 @@ This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns
 
 | Institution | API ID | Title | Category | Format | Dev Approval | Prod Approval | Updated |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 국토교통부 | 15067164 | 국토교통부_건설보고서 | 산업고용 | JSON+XML | 자동승인 | 심의승인 | 2025-11-18 |
-| 국토교통부 | 15067161 | 국토교통부_건설 기술사례정보 | 산업고용 | JSON+XML | 자동승인 | 심의승인 | 2025-11-18 |
-| 국토교통부 | 15061112 | 국토교통부_건설공사 원가절감사례 목록 조회 | 교통물류 | JSON+XML | 자동승인 | 심의승인 | 2025-11-18 |
-| 국토교통부 | 15061101 | 국토교통부_설계VE 상세 VE제안목록 | 교통물류 | JSON+XML | 자동승인 | 심의승인 | 2025-11-18 |
-| 국토교통부 | 15061098 | 국토교통부_품질검사전문기관 상세정보 | 교통물류 | JSON+XML | 자동승인 | 심의승인 | 2025-11-18 |
+| 국토교통부 | 15123899 | 국토교통부_연속지적도형정보(WMS/WFS) | 국토관리 | JSON+XML | 자동승인 | 심의승인 | 2025-07-09 |
+| 국토교통부 | 15123895 | 국토교통부_용도지역지구정보(WMS/WFS) | 국토관리 | JSON+XML | 자동승인 | 심의승인 | 2025-07-09 |
+| 국토교통부 | 15123894 | 국토교통부_지적도근점정보(WMS/WFS) | 국토관리 | JSON+XML | 자동승인 | 심의승인 | 2025-07-09 |
+| 국토교통부 | 15123893 | 국토교통부_지적삼각보조점정보(WMS/WFS) | 국토관리 | JSON+XML | 자동승인 | 심의승인 | 2025-07-09 |
+| 국토교통부 | 15123890 | 국토교통부_지적삼각점정보(WMS/WFS) | 국토관리 | JSON+XML | 자동승인 | 심의승인 | 2025-07-09 |
 | 식품의약품안전처 | 15064859 | 식품의약품안전처_식품접객업정보 | 식품건강 | JSON+XML | 자동승인 | 심의승인 | 2026-03-26 |
 | 식품의약품안전처 | 15091535 | 식품의약품안전처_수입식품업 폐업정보 | 식품건강 | JSON+XML | 자동승인 | 심의승인 | 2025-09-19 |
 | 식품의약품안전처 | 15111830 | 식품의약품안전처_지하수 수질측정망 측정결과 | 식품건강 | XML | 자동승인 | 심의승인 | 2025-08-27 |

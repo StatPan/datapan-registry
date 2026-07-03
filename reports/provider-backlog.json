@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T14:40:13Z",
+  "generated_at": "2026-07-03T14:55:27Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 216,
+  "filtered_count": 221,
   "summary": {
-    "hosts": 216,
+    "hosts": 221,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 76,
-    "external_guide_hosts": 160,
-    "registered_adapter_hosts": 65,
-    "operation_hosts": 78,
-    "guide_only_hosts": 138,
+    "external_endpoint_hosts": 79,
+    "external_guide_hosts": 165,
+    "registered_adapter_hosts": 68,
+    "operation_hosts": 81,
+    "guide_only_hosts": 140,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
-    "unsupported_protocol_operations": 146,
-    "approval_required_operations": 4752,
+    "unsupported_protocol_operations": 147,
+    "approval_required_operations": 4836,
     "malformed_source_url_count": 627
   },
   "providers": [
@@ -177,12 +177,12 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 841,
-      "operations": 2140,
-      "external_endpoint_operations": 2140,
+      "specs": 842,
+      "operations": 2141,
+      "external_endpoint_operations": 2141,
       "external_guide_specs": 19,
       "wms_operations": 5,
-      "approval_required_operations": 36,
+      "approval_required_operations": 37,
       "sample_ids": [
         "15005231",
         "15011020",
@@ -220,6 +220,25 @@
         "15038581",
         "15056593",
         "15056639"
+      ]
+    },
+    {
+      "host": "www.vworld.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 83,
+      "operations": 198,
+      "external_endpoint_operations": 198,
+      "external_guide_specs": 8,
+      "wms_operations": 2,
+      "approval_required_operations": 20,
+      "sample_ids": [
+        "15056696",
+        "15056709",
+        "15056776"
       ]
     },
     {
@@ -277,14 +296,33 @@
       ]
     },
     {
+      "host": "www.calspia.go.kr",
+      "provider": "calspia",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 20,
+      "operations": 60,
+      "external_endpoint_operations": 60,
+      "external_guide_specs": 19,
+      "approval_required_operations": 60,
+      "sample_ids": [
+        "15061035",
+        "15061037",
+        "15061039"
+      ]
+    },
+    {
       "host": "data.gm.go.kr",
       "kinds": [
         "external_endpoint"
       ],
       "adapter_status": "adapter",
-      "specs": 50,
-      "operations": 56,
-      "external_endpoint_operations": 56,
+      "specs": 51,
+      "operations": 57,
+      "external_endpoint_operations": 57,
       "approval_required_operations": 1,
       "sample_ids": [
         "15011425",
@@ -752,20 +790,22 @@
       ]
     },
     {
-      "host": "www.vworld.kr",
+      "host": "www.codil.or.kr",
+      "provider": "codil",
       "kinds": [
-        "external_endpoint"
+        "external_endpoint",
+        "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 5,
-      "operations": 5,
-      "external_endpoint_operations": 5,
-      "wms_operations": 1,
-      "approval_required_operations": 1,
+      "specs": 3,
+      "operations": 4,
+      "external_endpoint_operations": 4,
+      "external_guide_specs": 2,
+      "approval_required_operations": 3,
       "sample_ids": [
-        "15056696",
-        "15056928",
-        "15057053"
+        "15067161",
+        "15067164",
+        "3073144"
       ]
     },
     {
@@ -1137,6 +1177,21 @@
       "external_endpoint_operations": 1,
       "sample_ids": [
         "15058949"
+      ]
+    },
+    {
+      "host": "www.car365.go.kr",
+      "provider": "car365",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15071233"
       ]
     },
     {
@@ -1889,6 +1944,21 @@
       ]
     },
     {
+      "host": "dev.vworld.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 4,
+      "operations": 0,
+      "external_guide_specs": 4,
+      "sample_ids": [
+        "15056776",
+        "15057789",
+        "15058405"
+      ]
+    },
+    {
       "host": "farmer.rda.go.kr",
       "kinds": [
         "external_guide"
@@ -2591,6 +2661,19 @@
       "external_guide_specs": 1,
       "sample_ids": [
         "15059649"
+      ]
+    },
+    {
+      "host": "https:",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15061035"
       ]
     },
     {
