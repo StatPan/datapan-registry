@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `18871`
-- callable operations: `18729` (`99.2%`)
+- operations: `19022`
+- callable operations: `18880` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `7261`
-- registered adapter operations: `7251`
+- external endpoint operations: `7412`
+- registered adapter operations: `7402`
 - missing adapter operations: `29`
 - external adapter coverage: `99.6%`
-- approval-required operations: `6706`
+- approval-required operations: `6753`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `98`
+- registered adapter hosts: `100`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -514,6 +514,12 @@ readiness, not to advance verified runtime coverage.
    brings checked runtime evidence to `2357`, verified checks to `948`,
    registered external adapter operations to `7251`, and raises API operation
    coverage to `10,364` of `12,060` APIs (`85.9%`).
+   The 농림축산식품부 batch registers Smart Farm Korea and MAFRA legacy adapter
+   coverage, materializes `85` APIs and `151` operations, and merges `167`
+   bounded checks (`153` verified, `2` failed, `12` skipped). That brings
+   checked runtime evidence to `2524`, verified checks to `1101`, registered
+   external adapter operations to `7402`, and raises API operation coverage to
+   `10,449` of `12,060` APIs (`86.6%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

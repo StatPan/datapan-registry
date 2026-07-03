@@ -1,0 +1,132 @@
+{
+  "generated_at": "2026-07-03T19:50:46Z",
+  "source": "reports\\data-go-kr\\mafra-ministry-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 167,
+    "verified": 153,
+    "failed": 2,
+    "skipped": 12,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 153,
+        "status": "verified"
+      },
+      {
+        "key": "skipped",
+        "count": 12,
+        "status": "skipped"
+      },
+      {
+        "key": "failed",
+        "count": 2,
+        "status": "failed"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "naqs_mutation_endpoint",
+        "count": 8,
+        "reason": "naqs_mutation_endpoint"
+      },
+      {
+        "key": "missing_auth",
+        "count": 4,
+        "reason": "missing_auth"
+      },
+      {
+        "key": "chungnam_http_403",
+        "count": 2,
+        "reason": "chungnam_http_403"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "mafra",
+        "count": 144,
+        "provider": "mafra"
+      },
+      {
+        "key": "naqs",
+        "count": 9,
+        "provider": "naqs"
+      },
+      {
+        "key": "smartfarm-korea",
+        "count": 6,
+        "provider": "smartfarm-korea"
+      },
+      {
+        "key": "pqis",
+        "count": 4,
+        "provider": "pqis"
+      },
+      {
+        "key": "chungnam",
+        "count": 2,
+        "provider": "chungnam"
+      },
+      {
+        "key": "data-gg",
+        "count": 1,
+        "provider": "data-gg"
+      },
+      {
+        "key": "mafra-legacy",
+        "count": 1,
+        "provider": "mafra-legacy"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "data.mafra.go.kr",
+        "count": 144,
+        "host": "data.mafra.go.kr"
+      },
+      {
+        "key": "data.naqs.go.kr",
+        "count": 9,
+        "host": "data.naqs.go.kr"
+      },
+      {
+        "key": "www.smartfarmkorea.net",
+        "count": 6,
+        "host": "www.smartfarmkorea.net"
+      },
+      {
+        "key": "openapi.pqis.go.kr",
+        "count": 4,
+        "host": "openapi.pqis.go.kr"
+      },
+      {
+        "key": "www.xn--6-6v7en42by2es7i6jc.com",
+        "count": 2,
+        "host": "www.xn--6-6v7en42by2es7i6jc.com"
+      },
+      {
+        "key": "211.237.50.150:7080",
+        "count": 1,
+        "host": "211.237.50.150:7080"
+      },
+      {
+        "key": "data.gg.go.kr",
+        "count": 1,
+        "host": "data.gg.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 167,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

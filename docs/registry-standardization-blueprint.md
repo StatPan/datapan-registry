@@ -94,9 +94,9 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `1,696` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `1,611` data.go.kr APIs
   without operation mappings, `9,235` operation-mapped APIs without runtime
-  evidence, and `125` APIs with failed runtime evidence that need repair.
+  evidence, and `126` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
   `reports/open-assembly/runtime-evidence-plan.json`, and
@@ -334,8 +334,13 @@ Current gaps:
   and `45` operations, and merges `45` verified landing-page checks. That
   brings runtime evidence to `2357`, verified checks to `948`, and registered
   external adapter operations to `7251`.
-- API operation coverage remains incomplete: `10,364` of `12,060` APIs have
-  operation mappings (`85.9%`), leaving `1,696` APIs to materialize and `9,235`
+- The 농림축산식품부 batch adds Smart Farm Korea and MAFRA legacy adapter
+  coverage, materializes `85` APIs and `151` operations, and merges `167`
+  bounded checks (`153` verified, `2` failed, `12` skipped). That brings
+  runtime evidence to `2524`, verified checks to `1101`, and registered
+  external adapter operations to `7402`.
+- API operation coverage remains incomplete: `10,449` of `12,060` APIs have
+  operation mappings (`86.6%`), leaving `1,611` APIs to materialize and `9,235`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

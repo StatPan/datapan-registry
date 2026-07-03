@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-03T19:33:03Z",
+  "generated_at": "2026-07-03T19:52:08Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 24,
+    "report_total": 26,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,7 +38,7 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 12,
+      "report_count": 14,
       "present_reports": [
         {
           "name": "coverage-backlog.json",
@@ -74,6 +74,14 @@
           "name": "link-detail-registry-patches.json",
           "path": "reports/data-go-kr/link-detail-registry-patches.json",
           "schema_version": "datapan.link-detail-registry-patches.v1"
+        },
+        {
+          "name": "mafra-ministry-verification-summary.json",
+          "path": "reports/data-go-kr/mafra-ministry-verification-summary.json"
+        },
+        {
+          "name": "mafra-ministry-verification.json",
+          "path": "reports/data-go-kr/mafra-ministry-verification.json"
         },
         {
           "name": "operation-materialization-plan.json",
@@ -125,6 +133,8 @@
         "institution-api-overview.json",
         "institution-runtime-plan.json",
         "link-detail-registry-patches.json",
+        "mafra-ministry-verification-summary.json",
+        "mafra-ministry-verification.json",
         "operation-materialization-plan.json",
         "registry-impact-plan.json",
         "runtime-evidence-growth.json",

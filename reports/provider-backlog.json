@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T19:33:03Z",
+  "generated_at": "2026-07-03T19:52:08Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 252,
+  "filtered_count": 255,
   "summary": {
-    "hosts": 252,
+    "hosts": 255,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 109,
-    "external_guide_hosts": 189,
-    "registered_adapter_hosts": 98,
-    "operation_hosts": 111,
-    "guide_only_hosts": 141,
+    "external_endpoint_hosts": 111,
+    "external_guide_hosts": 190,
+    "registered_adapter_hosts": 100,
+    "operation_hosts": 113,
+    "guide_only_hosts": 142,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 6706,
+    "approval_required_operations": 6753,
     "malformed_source_url_count": 643
   },
   "providers": [
@@ -178,12 +178,12 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 879,
-      "operations": 2186,
-      "external_endpoint_operations": 2186,
+      "specs": 880,
+      "operations": 2187,
+      "external_endpoint_operations": 2187,
       "external_guide_specs": 21,
       "wms_operations": 5,
-      "approval_required_operations": 52,
+      "approval_required_operations": 53,
       "sample_ids": [
         "15005231",
         "15011020",
@@ -401,6 +401,24 @@
         "15045335",
         "15045467",
         "15056017"
+      ]
+    },
+    {
+      "host": "data.mafra.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 90,
+      "operations": 156,
+      "external_endpoint_operations": 156,
+      "external_guide_specs": 10,
+      "approval_required_operations": 37,
+      "sample_ids": [
+        "15002220",
+        "15008409",
+        "15015139"
       ]
     },
     {
@@ -759,11 +777,11 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 6,
-      "operations": 17,
-      "external_endpoint_operations": 17,
+      "specs": 7,
+      "operations": 19,
+      "external_endpoint_operations": 19,
       "external_guide_specs": 5,
-      "approval_required_operations": 17,
+      "approval_required_operations": 19,
       "sample_ids": [
         "15059757",
         "15059758",
@@ -804,23 +822,6 @@
         "15004087",
         "15004088",
         "15004206"
-      ]
-    },
-    {
-      "host": "data.mafra.go.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 11,
-      "operations": 15,
-      "external_endpoint_operations": 15,
-      "external_guide_specs": 3,
-      "sample_ids": [
-        "15002220",
-        "15008409",
-        "15015139"
       ]
     },
     {
@@ -1138,6 +1139,22 @@
         "15021183",
         "15021184",
         "15042795"
+      ]
+    },
+    {
+      "host": "www.smartfarmkorea.net",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 6,
+      "operations": 6,
+      "external_endpoint_operations": 6,
+      "approval_required_operations": 6,
+      "sample_ids": [
+        "15121324",
+        "15121325",
+        "15121328"
       ]
     },
     {
@@ -1560,6 +1577,20 @@
       "approval_required_operations": 1,
       "sample_ids": [
         "15129453"
+      ]
+    },
+    {
+      "host": "211.237.50.150:7080",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15101560"
       ]
     },
     {
@@ -2893,6 +2924,20 @@
       "sample_ids": [
         "15077870",
         "15077871"
+      ]
+    },
+    {
+      "host": "www.hanwooai.co.kr:7080",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 2,
+      "operations": 0,
+      "external_guide_specs": 2,
+      "sample_ids": [
+        "15157584",
+        "15157585"
       ]
     },
     {

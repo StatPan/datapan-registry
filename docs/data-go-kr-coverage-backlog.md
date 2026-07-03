@@ -2,19 +2,19 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-07-03T19:33:03Z`
+- Generated at: `2026-07-03T19:52:08Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `10364` (`85.9%`)
-- APIs without operation mapping: `1696`
-- Operations: `18871`
-- Runtime evidence operations: `2357` (`12.5%`)
-- Runtime verified operations: `948`
-- Runtime failed operations: `212`
-- Runtime skipped operations: `1197`
-- APIs with runtime evidence: `1129`
+- APIs with operation mapping: `10449` (`86.6%`)
+- APIs without operation mapping: `1611`
+- Operations: `19022`
+- Runtime evidence operations: `2524` (`13.3%`)
+- Runtime verified operations: `1101`
+- Runtime failed operations: `214`
+- Runtime skipped operations: `1209`
+- APIs with runtime evidence: `1214`
 - Runtime reactivation APIs: `9235`
-- Runtime repair APIs: `125`
+- Runtime repair APIs: `126`
 
 ## Highest Priority Institutions
 
@@ -43,13 +43,13 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 울산항만공사 | 98 | 6 | 92 | 6.1% | 9 | 0 | 6 | 0 | 98 |
 | 금융위원회 | 110 | 110 | 0 | 100.0% | 349 | 14 | 96 | 0 | 96 |
 | 대전광역시 서구 | 125 | 125 | 0 | 100.0% | 171 | 33 | 92 | 0 | 92 |
-| 농림축산식품부 | 87 | 1 | 86 | 1.1% | 2 | 1 | 0 | 0 | 86 |
 | 문화체육관광부 | 86 | 1 | 85 | 1.2% | 1 | 0 | 1 | 0 | 86 |
 | 한국건강가정진흥원 | 85 | 85 | 0 | 100.0% | 90 | 0 | 85 | 0 | 85 |
 | 한국수자원공사 | 84 | 79 | 5 | 94.0% | 148 | 0 | 79 | 0 | 84 |
 | 금융감독원 | 83 | 0 | 83 | 0.0% | 0 | 0 | 0 | 0 | 83 |
 | 서울특별시 | 79 | 11 | 68 | 13.9% | 31 | 1 | 10 | 1 | 78 |
 | 충청남도 보령시 | 72 | 72 | 0 | 100.0% | 72 | 0 | 72 | 0 | 72 |
+| 보건복지부 | 71 | 71 | 0 | 100.0% | 71 | 0 | 71 | 0 | 71 |
 
 ## Sample Uncovered APIs
 
