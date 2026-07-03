@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T14:33:40Z",
+  "generated_at": "2026-07-03T14:40:13Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 15293,
-    "runtime_evidence": 1530,
+    "operations": 15404,
+    "runtime_evidence": 1541,
     "runtime_evidence_percent": 10.0,
-    "callable_operations": 15151,
-    "external_endpoint_operations": 3683,
-    "registered_adapter_operations": 3673,
+    "callable_operations": 15262,
+    "external_endpoint_operations": 3794,
+    "registered_adapter_operations": 3784,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 3683
+      "count": 3794
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 3673
+      "count": 3784
     },
     {
       "key": "builtin",
@@ -69,11 +69,11 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 1677
+      "operation_count": 1684
     },
     {
       "category": "문화관광",
-      "operation_count": 1520
+      "operation_count": 1581
     },
     {
       "category": "교통물류",
@@ -85,15 +85,15 @@
     },
     {
       "category": "사회복지",
-      "operation_count": 1321
+      "operation_count": 1330
     },
     {
       "category": "산업고용",
-      "operation_count": 1191
+      "operation_count": 1198
     },
     {
       "category": "환경기상",
-      "operation_count": 966
+      "operation_count": 977
     },
     {
       "category": "재정금융",
@@ -101,7 +101,7 @@
     },
     {
       "category": "보건의료",
-      "operation_count": 928
+      "operation_count": 938
     },
     {
       "category": "식품건강",
@@ -109,15 +109,15 @@
     },
     {
       "category": "재난안전",
-      "operation_count": 809
+      "operation_count": 810
     },
     {
       "category": "교육",
-      "operation_count": 720
+      "operation_count": 723
     },
     {
       "category": "국토관리",
-      "operation_count": 602
+      "operation_count": 604
     },
     {
       "category": "과학기술",
@@ -139,7 +139,7 @@
     },
     {
       "host": "data.gg.go.kr",
-      "operation_count": 2033,
+      "operation_count": 2140,
       "adapter": "data-gg",
       "adapter_status": "registered",
       "capabilities": [
@@ -194,7 +194,7 @@
     },
     {
       "host": "data.gm.go.kr",
-      "operation_count": 53,
+      "operation_count": 56,
       "adapter": "gwangmyeong",
       "adapter_status": "registered",
       "capabilities": [
@@ -321,11 +321,11 @@
     {
       "organization": "경기도",
       "api_count": 840,
-      "operation_api_count": 799,
-      "operation_count": 2130,
-      "runtime_evidence_count": 130,
-      "runtime_evidence_percent": 6.1,
-      "verified": 129,
+      "operation_api_count": 840,
+      "operation_count": 2241,
+      "runtime_evidence_count": 141,
+      "runtime_evidence_percent": 6.3,
+      "verified": 140,
       "failed": 1,
       "skipped": 0,
       "unknown": 0,
@@ -338,13 +338,13 @@
         },
         {
           "key": "external_endpoint",
-          "count": 2118
+          "count": 2229
         }
       ],
       "by_adapter_status": [
         {
           "key": "adapter",
-          "count": 2118
+          "count": 2229
         },
         {
           "key": "builtin",
@@ -354,29 +354,29 @@
       "top_categories": [
         {
           "category": "사회복지",
-          "operation_count": 521
+          "operation_count": 530
         },
         {
           "category": "문화관광",
-          "operation_count": 239
+          "operation_count": 300
         },
         {
           "category": "교육",
-          "operation_count": 234
+          "operation_count": 237
         },
         {
           "category": "보건의료",
-          "operation_count": 219
+          "operation_count": 229
         },
         {
           "category": "산업고용",
-          "operation_count": 211
+          "operation_count": 218
         }
       ],
       "top_hosts": [
         {
           "host": "data.gg.go.kr",
-          "operation_count": 2027,
+          "operation_count": 2134,
           "adapter": "data-gg",
           "adapter_status": "registered",
           "capabilities": [
@@ -385,7 +385,7 @@
         },
         {
           "host": "data.gm.go.kr",
-          "operation_count": 53,
+          "operation_count": 56,
           "adapter": "gwangmyeong",
           "adapter_status": "registered",
           "capabilities": [

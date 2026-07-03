@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T14:33:46Z",
+  "generated_at": "2026-07-03T14:40:19Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,12 +7,12 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 15293,
-    "callable_operations": 15151,
+    "operations": 15404,
+    "callable_operations": 15262,
     "callable_operation_percent": 99.1,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 3683,
-    "registered_adapter_operations": 3673,
+    "external_endpoint_operations": 3794,
+    "registered_adapter_operations": 3784,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.2,
     "approval_required_operations": 4752,
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T14:29:50Z",
-    "total": 1530,
-    "verified": 254,
+    "generated_at": "2026-07-03T14:40:06Z",
+    "total": 1541,
+    "verified": 265,
     "failed": 113,
     "skipped": 1163,
     "unknown": 0,
-    "verified_percent": 16.6,
+    "verified_percent": 17.2,
     "evidence_operation_percent": 10
   },
   "route_evidence": {
@@ -209,10 +209,10 @@
           "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 800,
-        "operations": 2033,
-        "external_endpoint_operations": 2033,
-        "external_guide_specs": 17,
+        "specs": 841,
+        "operations": 2140,
+        "external_endpoint_operations": 2140,
+        "external_guide_specs": 19,
         "wms_operations": 5,
         "approval_required_operations": 36,
         "sample_ids": [
@@ -314,14 +314,14 @@
           "external_endpoint"
         ],
         "adapter_status": "adapter",
-        "specs": 47,
-        "operations": 53,
-        "external_endpoint_operations": 53,
+        "specs": 50,
+        "operations": 56,
+        "external_endpoint_operations": 56,
         "approval_required_operations": 1,
         "sample_ids": [
+          "15011425",
           "15056498",
-          "15056517",
-          "15056600"
+          "15056517"
         ]
       },
       {
@@ -380,7 +380,7 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T14:33:46Z",
+    "generated_at": "2026-07-03T14:40:19Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 60,
     "host_count": 67,

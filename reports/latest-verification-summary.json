@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T14:29:50Z",
+  "generated_at": "2026-07-03T14:40:06Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1530,
-    "verified": 254,
+    "total": 1541,
+    "verified": 265,
     "failed": 113,
     "skipped": 1163,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 254,
+        "count": 265,
         "status": "verified"
       },
       {
@@ -305,7 +305,7 @@
       },
       {
         "key": "data-gg",
-        "count": 88,
+        "count": 98,
         "provider": "data-gg"
       },
       {
@@ -449,6 +449,11 @@
         "provider": "seoul-open-data"
       },
       {
+        "key": "dongjak",
+        "count": 4,
+        "provider": "dongjak"
+      },
+      {
         "key": "foodsafetykorea",
         "count": 4,
         "provider": "foodsafetykorea"
@@ -472,11 +477,6 @@
         "key": "pqis",
         "count": 4,
         "provider": "pqis"
-      },
-      {
-        "key": "dongjak",
-        "count": 3,
-        "provider": "dongjak"
       },
       {
         "key": "emuseum",
@@ -612,7 +612,7 @@
       },
       {
         "key": "data.gg.go.kr",
-        "count": 88,
+        "count": 98,
         "host": "data.gg.go.kr"
       },
       {
@@ -766,6 +766,11 @@
         "host": "api.forest.go.kr"
       },
       {
+        "key": "data.dongjak.go.kr",
+        "count": 4,
+        "host": "data.dongjak.go.kr"
+      },
+      {
         "key": "data.jeju.go.kr",
         "count": 4,
         "host": "data.jeju.go.kr"
@@ -789,11 +794,6 @@
         "key": "www.nongsaro.go.kr",
         "count": 4,
         "host": "www.nongsaro.go.kr"
-      },
-      {
-        "key": "data.dongjak.go.kr",
-        "count": 3,
-        "host": "data.dongjak.go.kr"
       },
       {
         "key": "data.ex.co.kr",
@@ -934,7 +934,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 836,
+        "count": 847,
         "kind": "external_endpoint"
       },
       {
