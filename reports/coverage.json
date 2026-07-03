@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T15:58:32Z",
+  "generated_at": "2026-07-03T16:05:40Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,15 +7,15 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 16447,
-    "callable_operations": 16305,
+    "operations": 16547,
+    "callable_operations": 16405,
     "callable_operation_percent": 99.1,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 4837,
-    "registered_adapter_operations": 4827,
+    "external_endpoint_operations": 4937,
+    "registered_adapter_operations": 4927,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.4,
-    "approval_required_operations": 5344,
+    "approval_required_operations": 5444,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T15:58:13Z",
-    "total": 1670,
+    "generated_at": "2026-07-03T16:05:23Z",
+    "total": 1680,
     "verified": 352,
-    "failed": 125,
+    "failed": 135,
     "skipped": 1193,
     "unknown": 0,
-    "verified_percent": 21.1,
+    "verified_percent": 21,
     "evidence_operation_percent": 10.2
   },
   "route_evidence": {
@@ -290,6 +290,25 @@
         ]
       },
       {
+        "host": "open.assembly.go.kr",
+        "provider": "open-assembly",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "adapter",
+        "specs": 200,
+        "operations": 200,
+        "external_endpoint_operations": 200,
+        "external_guide_specs": 200,
+        "approval_required_operations": 200,
+        "sample_ids": [
+          "15125943",
+          "15125944",
+          "15125946"
+        ]
+      },
+      {
         "host": "www.calspia.go.kr",
         "provider": "calspia",
         "kinds": [
@@ -345,25 +364,6 @@
         ]
       },
       {
-        "host": "open.assembly.go.kr",
-        "provider": "open-assembly",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "adapter",
-        "specs": 100,
-        "operations": 100,
-        "external_endpoint_operations": 100,
-        "external_guide_specs": 100,
-        "approval_required_operations": 100,
-        "sample_ids": [
-          "15126056",
-          "15126057",
-          "15126058"
-        ]
-      },
-      {
         "host": "openapi.jeonju.go.kr",
         "provider": "jeonju",
         "kinds": [
@@ -384,7 +384,7 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T15:58:32Z",
+    "generated_at": "2026-07-03T16:05:40Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 69,
     "host_count": 77,

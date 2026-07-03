@@ -2,9 +2,9 @@
 
 This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns the highest-priority institution runtime gaps into bounded `datapan catalog verify --org` batches.
 
-- Generated at: `2026-07-03T15:58:25Z`
+- Generated at: `2026-07-03T16:05:33Z`
 - Planned institutions: `10`
-- Planned operations: `990`
+- Planned operations: `1000`
 - First queue: `행정안전부`
 - Batch size: `100`
 - Timeout: `20s`
@@ -21,7 +21,7 @@ data.go.kr gateway verification requires a service key; no-key runs only prove p
 | 3 | 식품의약품안전처 | 392 | 392 | 0 | 648 | 371 | 607 | 100 |
 | 4 | 국토교통부 | 393 | 393 | 0 | 1055 | 358 | 968 | 100 |
 | 5 | 성평등가족부 | 273 | 272 | 1 | 347 | 271 | 346 | 100 |
-| 6 | 국회 국회사무처 | 277 | 100 | 177 | 100 | 90 | 90 | 90 |
+| 6 | 국회 국회사무처 | 277 | 200 | 77 | 200 | 180 | 180 | 100 |
 | 7 | 공정거래위원회 | 250 | 216 | 34 | 295 | 216 | 295 | 100 |
 | 8 | 한국마사회 | 223 | 223 | 0 | 223 | 213 | 213 | 100 |
 | 9 | 국립암센터 | 212 | 204 | 8 | 367 | 198 | 288 | 100 |
