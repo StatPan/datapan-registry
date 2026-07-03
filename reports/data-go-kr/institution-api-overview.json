@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T20:06:23Z",
+  "generated_at": "2026-07-03T20:23:35Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 19142,
-    "runtime_evidence": 2650,
-    "runtime_evidence_percent": 13.8,
-    "callable_operations": 19000,
-    "external_endpoint_operations": 7532,
-    "registered_adapter_operations": 7522,
+    "operations": 19147,
+    "runtime_evidence": 2655,
+    "runtime_evidence_percent": 13.9,
+    "callable_operations": 19005,
+    "external_endpoint_operations": 7537,
+    "registered_adapter_operations": 7527,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 7532
+      "count": 7537
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 7522
+      "count": 7527
     },
     {
       "key": "builtin",
@@ -100,12 +100,12 @@
       "operation_count": 1160
     },
     {
-      "category": "보건의료",
-      "operation_count": 983
+      "category": "국토관리",
+      "operation_count": 987
     },
     {
-      "category": "국토관리",
-      "operation_count": 982
+      "category": "보건의료",
+      "operation_count": 983
     },
     {
       "category": "재정금융",
@@ -2201,6 +2201,85 @@
       ]
     },
     {
+      "organization": "한국수자원공사",
+      "api_count": 84,
+      "operation_api_count": 84,
+      "operation_count": 153,
+      "runtime_evidence_count": 5,
+      "runtime_evidence_percent": 3.3,
+      "verified": 5,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 9,
+      "no_endpoint_operations": 19,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 129
+        },
+        {
+          "key": "external_endpoint",
+          "count": 5
+        },
+        {
+          "key": "no_endpoint",
+          "count": 19
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 5
+        },
+        {
+          "key": "builtin",
+          "count": 129
+        },
+        {
+          "key": "not_applicable",
+          "count": 19
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "환경기상",
+          "operation_count": 74
+        },
+        {
+          "category": "국토관리",
+          "operation_count": 60
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 14
+        },
+        {
+          "category": "산업고용",
+          "operation_count": 3
+        },
+        {
+          "category": "과학기술",
+          "operation_count": 1
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 129
+        },
+        {
+          "host": "www.gims.go.kr",
+          "operation_count": 5,
+          "adapter": "gims",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "한국환경공단",
       "api_count": 66,
       "operation_api_count": 65,
@@ -2235,68 +2314,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 151
-        }
-      ]
-    },
-    {
-      "organization": "한국수자원공사",
-      "api_count": 84,
-      "operation_api_count": 79,
-      "operation_count": 148,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 4,
-      "no_endpoint_operations": 19,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 129
-        },
-        {
-          "key": "no_endpoint",
-          "count": 19
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 129
-        },
-        {
-          "key": "not_applicable",
-          "count": 19
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "환경기상",
-          "operation_count": 74
-        },
-        {
-          "category": "국토관리",
-          "operation_count": 55
-        },
-        {
-          "category": "공공행정",
-          "operation_count": 14
-        },
-        {
-          "category": "산업고용",
-          "operation_count": 3
-        },
-        {
-          "category": "과학기술",
-          "operation_count": 1
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 129
         }
       ]
     },

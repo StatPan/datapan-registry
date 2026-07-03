@@ -1,13 +1,12 @@
 {
-  "generated_at": "2026-07-03T20:06:21Z",
+  "generated_at": "2026-07-03T20:23:22Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
-  "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 2650,
-    "verified": 1212,
+    "total": 2655,
+    "verified": 1217,
     "failed": 223,
     "skipped": 1215,
     "unknown": 0
@@ -15,14 +14,14 @@
   "groups": {
     "by_status": [
       {
+        "key": "verified",
+        "count": 1217,
+        "status": "verified"
+      },
+      {
         "key": "skipped",
         "count": 1215,
         "status": "skipped"
-      },
-      {
-        "key": "verified",
-        "count": 1212,
-        "status": "verified"
       },
       {
         "key": "failed",
@@ -589,6 +588,11 @@
         "provider": "smartfarm-korea"
       },
       {
+        "key": "gims",
+        "count": 5,
+        "provider": "gims"
+      },
+      {
         "key": "nfqs",
         "count": 5,
         "provider": "nfqs"
@@ -1046,6 +1050,11 @@
         "host": "ws.bus.go.kr"
       },
       {
+        "key": "www.gims.go.kr",
+        "count": 5,
+        "host": "www.gims.go.kr"
+      },
+      {
         "key": "www.nfqs.go.kr",
         "count": 5,
         "host": "www.nfqs.go.kr"
@@ -1254,7 +1263,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 1926,
+        "count": 1931,
         "kind": "external_endpoint"
       },
       {

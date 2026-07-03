@@ -343,8 +343,13 @@ Current gaps:
   APIs and `120` operations, and merges `126` bounded checks (`111` verified,
   `9` failed, `6` skipped). That brings runtime evidence to `2650`, verified
   checks to `1212`, and registered external adapter operations to `7522`.
-- API operation coverage remains incomplete: `10,534` of `12,060` APIs have
-  operation mappings (`87.3%`), leaving `1,526` APIs to materialize and `9,235`
+- The 한국수자원공사 cleanup adds GIMS adapter coverage, materializes the
+  remaining `5` APIs and `5` operations, and merges `5` bounded checks (`5`
+  verified, `0` failed, `0` skipped). That brings runtime evidence to `2655`,
+  verified checks to `1217`, and registered external adapter operations to
+  `7527`.
+- API operation coverage remains incomplete: `10,539` of `12,060` APIs have
+  operation mappings (`87.4%`), leaving `1,521` APIs to materialize and `9,235`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

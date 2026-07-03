@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T20:06:23Z",
+  "generated_at": "2026-07-03T20:23:35Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 89,
-  "host_count": 105,
+  "adapter_count": 90,
+  "host_count": 106,
   "adapters": [
     {
       "name": "airport",
@@ -289,6 +289,16 @@
       "status": "registered",
       "hosts": [
         "www.gimhae.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "gims",
+      "status": "registered",
+      "hosts": [
+        "www.gims.go.kr"
       ],
       "capabilities": [
         "verification"
@@ -937,8 +947,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 89,
-    "verification_capable_adapters": 89,
+    "adapter_count": 90,
+    "verification_capable_adapters": 90,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
