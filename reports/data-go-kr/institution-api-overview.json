@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T19:52:08Z",
+  "generated_at": "2026-07-03T20:06:23Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 19022,
-    "runtime_evidence": 2524,
-    "runtime_evidence_percent": 13.3,
-    "callable_operations": 18880,
-    "external_endpoint_operations": 7412,
-    "registered_adapter_operations": 7402,
+    "operations": 19142,
+    "runtime_evidence": 2650,
+    "runtime_evidence_percent": 13.8,
+    "callable_operations": 19000,
+    "external_endpoint_operations": 7532,
+    "registered_adapter_operations": 7522,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 7412
+      "count": 7532
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 7402
+      "count": 7522
     },
     {
       "key": "builtin",
@@ -69,19 +69,19 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 2593
+      "operation_count": 2597
     },
     {
       "category": "교통물류",
       "operation_count": 2016
     },
     {
-      "category": "농축수산",
-      "operation_count": 1993
+      "category": "문화관광",
+      "operation_count": 2006
     },
     {
-      "category": "문화관광",
-      "operation_count": 1890
+      "category": "농축수산",
+      "operation_count": 1993
     },
     {
       "category": "사회복지",
@@ -139,7 +139,7 @@
     },
     {
       "host": "data.gg.go.kr",
-      "operation_count": 2187,
+      "operation_count": 2188,
       "adapter": "data-gg",
       "adapter_status": "registered",
       "capabilities": [
@@ -238,18 +238,18 @@
       ]
     },
     {
-      "host": "www.calspia.go.kr",
-      "operation_count": 168,
-      "adapter": "calspia",
+      "host": "www.jeju.go.kr",
+      "operation_count": 169,
+      "adapter": "jeju-www",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
       ]
     },
     {
-      "host": "www.jeju.go.kr",
+      "host": "www.calspia.go.kr",
       "operation_count": 168,
-      "adapter": "jeju-www",
+      "adapter": "calspia",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -268,6 +268,15 @@
       "host": "seogu.go.kr",
       "operation_count": 154,
       "adapter": "seogu",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "host": "www.culture.go.kr",
+      "operation_count": 124,
+      "adapter": "culture",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -295,15 +304,6 @@
       "host": "openapi.jeonju.go.kr",
       "operation_count": 80,
       "adapter": "jeonju",
-      "adapter_status": "registered",
-      "capabilities": [
-        "verification"
-      ]
-    },
-    {
-      "host": "data.ekape.or.kr",
-      "operation_count": 49,
-      "adapter": "ekape",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -2541,6 +2541,97 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 122
+        }
+      ]
+    },
+    {
+      "organization": "문화체육관광부",
+      "api_count": 86,
+      "operation_api_count": 86,
+      "operation_count": 121,
+      "runtime_evidence_count": 120,
+      "runtime_evidence_percent": 99.2,
+      "verified": 111,
+      "failed": 9,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 92,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 1
+        },
+        {
+          "key": "external_endpoint",
+          "count": 120
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 120
+        },
+        {
+          "key": "builtin",
+          "count": 1
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "문화관광",
+          "operation_count": 117
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 4
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "www.culture.go.kr",
+          "operation_count": 115,
+          "adapter": "culture",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "data.gg.go.kr",
+          "operation_count": 1,
+          "adapter": "data-gg",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.chungnam.go.kr",
+          "operation_count": 1,
+          "adapter": "chungnam",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.much.go.kr",
+          "operation_count": 1,
+          "adapter": "much",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.naa.go.kr",
+          "operation_count": 1,
+          "adapter": "naa",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },
@@ -12950,9 +13041,9 @@
       "operation_count": 3,
       "runtime_evidence_count": 3,
       "runtime_evidence_percent": 100.0,
-      "verified": 2,
+      "verified": 0,
       "failed": 0,
-      "skipped": 1,
+      "skipped": 3,
       "unknown": 0,
       "approval_required_operations": 0,
       "no_endpoint_operations": 0,
@@ -14082,44 +14173,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 2
-        }
-      ]
-    },
-    {
-      "organization": "문화체육관광부",
-      "api_count": 86,
-      "operation_api_count": 1,
-      "operation_count": 1,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 1
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 1
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "문화관광",
-          "operation_count": 1
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 1
         }
       ]
     },

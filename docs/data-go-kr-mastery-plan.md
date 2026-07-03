@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `19022`
-- callable operations: `18880` (`99.3%`)
+- operations: `19142`
+- callable operations: `19000` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `7412`
-- registered adapter operations: `7402`
+- external endpoint operations: `7532`
+- registered adapter operations: `7522`
 - missing adapter operations: `29`
 - external adapter coverage: `99.6%`
-- approval-required operations: `6753`
+- approval-required operations: `6845`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `100`
+- registered adapter hosts: `102`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -520,6 +520,12 @@ readiness, not to advance verified runtime coverage.
    checked runtime evidence to `2524`, verified checks to `1101`, registered
    external adapter operations to `7402`, and raises API operation coverage to
    `10,449` of `12,060` APIs (`86.6%`).
+   The 문화체육관광부 batch registers NAA and MUCH adapter coverage,
+   materializes `85` APIs and `120` operations, and merges `126` bounded checks
+   (`111` verified, `9` failed, `6` skipped). That brings checked runtime
+   evidence to `2650`, verified checks to `1212`, registered external adapter
+   operations to `7522`, and raises API operation coverage to `10,534` of
+   `12,060` APIs (`87.3%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

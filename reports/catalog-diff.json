@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T19:52:08Z",
+  "generated_at": "2026-07-03T20:06:23Z",
   "provider": "data.go.kr",
   "old": ".datapan\\previous\\data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3264,
-    "stable": 8796
+    "changed": 3349,
+    "stable": 8711
   },
   "added": [],
   "removed": [],
@@ -3989,6 +3989,16 @@
       "new_digest": "212d7e135613335e74bab8acbd04e1ff2132056da265f842c5f888885ac753ba"
     },
     {
+      "id": "15056795",
+      "old_title": "문화체육관광부_유물정보(국립청주박물관)",
+      "new_title": "문화체육관광부_유물정보(국립청주박물관)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "43212d330b1f735a4d68f69bf2dd1738d58fafc83c2b29f282a311b3e4b5caa0",
+      "new_digest": "6b92b727b8f510ce1ce4fec9257203813a74acf6d15b740c8042a3d2a2c4aacb"
+    },
+    {
       "id": "15056796",
       "old_title": "행정안전부_지방재정365_사회복지비비율",
       "new_title": "행정안전부_지방재정365_사회복지비비율",
@@ -4257,6 +4267,16 @@
       ],
       "old_digest": "216eaa5fbec3ca37075f0da8cfcc94b4254bfd9b325fef808379fc02621a7a70",
       "new_digest": "dd7ece5a392981a45b0ed91fe45d41e5b700bdba2761b4fc7a546b7e038013cc"
+    },
+    {
+      "id": "15056881",
+      "old_title": "문화체육관광부_공연 정보(예술의 전당)",
+      "new_title": "문화체육관광부_공연 정보(예술의 전당)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bf31ff9145ed5398e8d1a3113a65d6be56a560f96ee26b41dc69bc8187370d48",
+      "new_digest": "f3ff8353c92e65b14601305a16d1b6fb334436e15c462d8026865f04f9a32080"
     },
     {
       "id": "15056883",
@@ -6159,6 +6179,16 @@
       "new_digest": "511a97a7a2db70162794b4b68b8db2d5b72402d690b93a95e19416c0dd807bed"
     },
     {
+      "id": "15057388",
+      "old_title": "문화체육관광부_시나리오 정보(한국영상자료원)",
+      "new_title": "문화체육관광부_시나리오 정보(한국영상자료원)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ea61cd1f86b4c1e8eeb58912c6e4cb447b04709e8add341aaa6c20270d254535",
+      "new_digest": "6428d200da821420e610a963f84f292c511d69852f390fafabb4570f6dd1d038"
+    },
+    {
       "id": "15057390",
       "old_title": "경기도_자격종별 교원 현황",
       "new_title": "경기도_자격종별 교원 현황",
@@ -7267,6 +7297,16 @@
       ],
       "old_digest": "70dd6cc7cb16cda021b70b746ddb814dbf23cf74e40964b3ea180dffbea0bb46",
       "new_digest": "8bf996c948162540afd40bcca1f22dd55b537f3b5f24a88c767407b3856ef6d6"
+    },
+    {
+      "id": "15057615",
+      "old_title": "문화체육관광부_도서 정보(한국영상자료원)",
+      "new_title": "문화체육관광부_도서 정보(한국영상자료원)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "67d60d49dd694110de9c72e4bba9ef07a0c043fae9ff4742140361db5f12bb51",
+      "new_digest": "4ede63251c571b895472f1d053907aa1719861fc29e5fd17e0dd5580cf7eea62"
     },
     {
       "id": "15057618",
@@ -9209,6 +9249,16 @@
       "new_digest": "9b6a4320d24eb4cc300867bd6252cabac8489e4ff35f1ab3cb6e35e083bce453"
     },
     {
+      "id": "15058099",
+      "old_title": "문화체육관광부_공연정보(국립김해박물관)",
+      "new_title": "문화체육관광부_공연정보(국립김해박물관)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3bffa7a2f0c000fa89981c988e3db5d13187d2268430431c8493ea98a375c005",
+      "new_digest": "2aa540a24f8661f025783fb217e295a77a539b6c37c9fcf58694dfcf5dd1fea8"
+    },
+    {
       "id": "15058101",
       "old_title": "국토교통부_유효토심",
       "new_title": "국토교통부_유효토심",
@@ -10087,6 +10137,16 @@
       ],
       "old_digest": "c0969a020b0fd204cedb7c2675751f4e2d20ea94d7ddfe9ff4bed395df399f3a",
       "new_digest": "24633bdd650f2df51e277407cebe26554a047d2b4372055acea8abb1450a0a78"
+    },
+    {
+      "id": "15058313",
+      "old_title": "문화체육관광부_전시정보(국립현대미술관)",
+      "new_title": "문화체육관광부_전시정보(국립현대미술관)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "161a56791344e6b5f0d8c7270d95c3fe346b51b9090bdf9a980395358bcc8ec6",
+      "new_digest": "e45a0bbf5b10debf485f31584d548e9501f0238753648d2f0809a5b96189db5c"
     },
     {
       "id": "15058314",
@@ -12689,6 +12749,16 @@
       "new_digest": "402e8db7bf85707aa3dc2b8a7560aeb002c5fb7c94e10f448fb3261a1f0da7fb"
     },
     {
+      "id": "15058956",
+      "old_title": "문화체육관광부_유물정보(국립춘천박물관)",
+      "new_title": "문화체육관광부_유물정보(국립춘천박물관)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "dc09b2449f7013d1e65394527f8b6fc1ea8cc82835f6684d3f5640188b543318",
+      "new_digest": "32650fc115074fdbc2defd773e4ab7c6898ef3b561ef57a40715468f112d7540"
+    },
+    {
       "id": "15058957",
       "old_title": "경기도_신입생 충원현황",
       "new_title": "경기도_신입생 충원현황",
@@ -13579,6 +13649,16 @@
       "new_digest": "f3fe72125388f6cd5572db65c0da65c7e45f4619fae151667cb5a1d2ce7b825a"
     },
     {
+      "id": "15059201",
+      "old_title": "문화체육관광부_공연정보(국립민속국악원)",
+      "new_title": "문화체육관광부_공연정보(국립민속국악원)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e24d3840eccb7de08a886305f5e5aba215ec606ba388618fe129cbdd744e1254",
+      "new_digest": "701eb3fab08880ddd7c608974acb7c7854595b3d2a52729f697f4069157e503e"
+    },
+    {
       "id": "15059203",
       "old_title": "법제처_법령 체계도 본문 조회",
       "new_title": "법제처_법령 체계도 본문 조회",
@@ -14047,6 +14127,16 @@
       ],
       "old_digest": "700f7163e2dd38e29d0471c055c24a5035bc09245ab2d3a9916581b2051005e8",
       "new_digest": "f22a4e25274195360b7fc4038146100f0b5cb7d580c77104d6149b750546ca1f"
+    },
+    {
+      "id": "15059312",
+      "old_title": "문화체육관광부_유물정보(국립대구박물관)",
+      "new_title": "문화체육관광부_유물정보(국립대구박물관)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c285953503926c183caf85ede4d4ee7293add001e3348c758903277bc16e8ecf",
+      "new_digest": "30d628d72f94dc2186ccbb07cf7d9a5149135f2ff24c7b4389a50ab57d36a3e3"
     },
     {
       "id": "15059315",
@@ -19499,6 +19589,26 @@
       "new_digest": "88456f9ff120a0bcbd2045220f28cc272e8fa35bec3b6beb7970d0107fe30288"
     },
     {
+      "id": "15101126",
+      "old_title": "문화체육관광부_문화칼럼",
+      "new_title": "문화체육관광부_문화칼럼",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "22670f3aeae91a436806cf9b6b5f3b9b6635e3a0d8622fff568db9ca7103bbd5",
+      "new_digest": "fc188a7970cbd9aee93b0183f789d5708200a260846273942dc86281a4324484"
+    },
+    {
+      "id": "15101213",
+      "old_title": "문화체육관광부_e브리핑",
+      "new_title": "문화체육관광부_e브리핑",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f0867a59c76fe86b4b19ec481ac9c076b5449bee42fb524ad93782cee925355d",
+      "new_digest": "19066edd9903eb24e9fd8b109a6f46231a59af8881ccaf8194af50ef4b217964"
+    },
+    {
       "id": "15101361",
       "old_title": "농촌진흥청_지역특산물",
       "new_title": "농촌진흥청_지역특산물",
@@ -20527,6 +20637,606 @@
       ],
       "old_digest": "6b5d33978269da40ea74fe09d5d93e13eb7c786d88457d242630272763ec1993",
       "new_digest": "f0ad3fd0e25d7b5775dc9c87ba2167a177aae79c452f6cf9c0ece17a72fe837c"
+    },
+    {
+      "id": "15104928",
+      "old_title": "문화체육관광부_국립경주박물관 유물정보",
+      "new_title": "문화체육관광부_국립경주박물관 유물정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7715180c022a9cae5d516d92c35ad06fa91c958321d6186393493bfaafbde87b",
+      "new_digest": "11c8542e093f2dbd822985ccea60e439258d3ed341c9e61b8a519c0790f509e1"
+    },
+    {
+      "id": "15104931",
+      "old_title": "문화체육관광부_국립광주박물관 유물정보",
+      "new_title": "문화체육관광부_국립광주박물관 유물정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "79655893fea2c8430193932ae53c520f5857d56b8d3c75b855569370e86549e7",
+      "new_digest": "57469d9d3f8b1baf5c1e4ae37fd12c1ba43fca4bb450d428aa625fbd1af1eac2"
+    },
+    {
+      "id": "15104933",
+      "old_title": "문화체육관광부_국립전주박물관 유물정보",
+      "new_title": "문화체육관광부_국립전주박물관 유물정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "83b5030e0dfd9b07d87f58a516c6e4e53cae51ab9e212359f7c0e5fd9c3d0e2d",
+      "new_digest": "095de98ca0d6619ae7ff80f97da290158ebfa1a6972dc6c3f9eb2607fbc824ae"
+    },
+    {
+      "id": "15104941",
+      "old_title": "문화체육관광부_국립김해박물관 유물정보",
+      "new_title": "문화체육관광부_국립김해박물관 유물정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "30fbf02264ec84a4a7d1826b2302540fd3fa50a4b8d77182ab121b345aa3d988",
+      "new_digest": "2666e3ae8a140a86a5b4fc8ecc4e3ea7daa2a2990a7893f877e424ecc07aefaa"
+    },
+    {
+      "id": "15104945",
+      "old_title": "문화체육관광부_국립제주박물관 유물정보",
+      "new_title": "문화체육관광부_국립제주박물관 유물정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0939433c2c87443dad4e2cb6667f52382940664dfc8cbe9f92496b2c79f65f1e",
+      "new_digest": "846504dc6efbcd43213d34610a4076354bf1e53d199dd09798279ae9ed4351c6"
+    },
+    {
+      "id": "15104946",
+      "old_title": "문화체육관광부_국립진주박물관 유물정보",
+      "new_title": "문화체육관광부_국립진주박물관 유물정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d66d99b6018d83674d665f0e36d40c4211a755f965bc0d9d3a0ebf3075a0b9f1",
+      "new_digest": "6905b86ec1dee686a06771856151693ad2dde1d05e7a95beae6896a63eed3aa0"
+    },
+    {
+      "id": "15104947",
+      "old_title": "문화체육관광부_국립공주박물관 유물정보",
+      "new_title": "문화체육관광부_국립공주박물관 유물정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "395f1dda837334ffee7371d83cd7e537cb666686e598197446e355b99b6bd77e",
+      "new_digest": "c5dc18a225e2b2e493a6f8cc7fb890581ea1e1fcb40dfca5890b368cc5826316"
+    },
+    {
+      "id": "15104950",
+      "old_title": "문화체육관광부_국립국악원 공연정보",
+      "new_title": "문화체육관광부_국립국악원 공연정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "278aa7e3e2c78659bf7a960242fc41be299ea7d71a975548d01ea7125a52df20",
+      "new_digest": "e8b31cbeb7be09244691ef6dcd6383d82148d43d0a888219d3455448bf810fd0"
+    },
+    {
+      "id": "15104952",
+      "old_title": "문화체육관광부_국립민속국악원 공연정보",
+      "new_title": "문화체육관광부_국립민속국악원 공연정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7096c70ce365f6e389ef88d9de2c21c3cdd9057ddc3cb9b5eb606a46fdd5ee75",
+      "new_digest": "2c299f9b9a31719bebd8bd486c3ef4b5eb61cf6c31db2e0759aca871134dfcd0"
+    },
+    {
+      "id": "15104957",
+      "old_title": "문화체육관광부_국립남도국악원 공연정보",
+      "new_title": "문화체육관광부_국립남도국악원 공연정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7e6e0f21c4de8da4bf4d7b04ef9a9a07fb0d6b491c3629d23b827ebeeefb4c8e",
+      "new_digest": "c8f7ac9c890a038ac3102670a10ddfac18fa9ffaeb1d93d30e79009bf10839b8"
+    },
+    {
+      "id": "15104962",
+      "old_title": "문화체육관광부_국립부산국악원 공연정보",
+      "new_title": "문화체육관광부_국립부산국악원 공연정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6b6ad0d095f71e186048e08d9fe40762c5dcb113e9a6b82ba2bb8a3dd7d6e5a3",
+      "new_digest": "dc4e64ce0fcc2c9bebf13472aeb68c774e7965755138956d91b633b5c3a9668c"
+    },
+    {
+      "id": "15104964",
+      "old_title": "문화체육관광부_국립중앙박물관_e뮤지엄_유물정보",
+      "new_title": "문화체육관광부_국립중앙박물관_e뮤지엄_유물정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4cd972ee7e4ec4b8337499d9ecf93d1a6f48fd8acd79e457dc4671f035ebfebd",
+      "new_digest": "5762baef9da4bf0cfb5ae45e27965f59272f50d8650f40ad3f88a72224754152"
+    },
+    {
+      "id": "15104967",
+      "old_title": "문화체육관광부_정책기자마당",
+      "new_title": "문화체육관광부_정책기자마당",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "31f82adf0eb4186ac5ea99add9519b5da35b77e659c60114a98f74bd341596c3",
+      "new_digest": "e41141c134458542b72dcfef4bcbb92e57d30328584ecff5b62aa1e25a992807"
+    },
+    {
+      "id": "15104971",
+      "old_title": "문화체육관광부_국립민속박물관_민속아카이브_사진자료",
+      "new_title": "문화체육관광부_국립민속박물관_민속아카이브_사진자료",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "26a215c2cce015bb351b3cc7caae547d778e2981716558d927dc0921e67b58bd",
+      "new_digest": "6acb90842b4f72545b41014aa138ed02a64b1456f9375cda98e76e738b1ebd56"
+    },
+    {
+      "id": "15104973",
+      "old_title": "문화체육관광부_국립민속박물관_발간도서",
+      "new_title": "문화체육관광부_국립민속박물관_발간도서",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4d01959ab26c62a27c4181235effbbc9a70fe1a90136453130a817d8982c6bdb",
+      "new_digest": "96803edd7151482d9796cf257873196ff14c3bc82641f07d8022eeebf84a16d8"
+    },
+    {
+      "id": "15104975",
+      "old_title": "문화체육관광부_국립민속박물관_현장조사DB",
+      "new_title": "문화체육관광부_국립민속박물관_현장조사DB",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6e0c8d0d8a0d144831e7b076e1ef9a53469b47ebcd232daf5a8edb0975e81d21",
+      "new_digest": "0f79008fffad134069e082385fbbeca1ac8cf0017f4ebdf707a2de97be5d46e8"
+    },
+    {
+      "id": "15104976",
+      "old_title": "문화체육관광부_국립어린이청소년도서관_사서추천도서",
+      "new_title": "문화체육관광부_국립어린이청소년도서관_사서추천도서",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "81b78f1fcfc67e8856859da08a83c64346132775f128dde748c1fbe98a9e7e41",
+      "new_digest": "104f4cbe5abb7c1575fc1e123f7995709147ff1ccef4d63a24b574b1c8171cd8"
+    },
+    {
+      "id": "15104978",
+      "old_title": "문화체육관광부_국립어린이청소년도서관_전시실정보",
+      "new_title": "문화체육관광부_국립어린이청소년도서관_전시실정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "378715b8c5417f0ac838b85a09ff42523ea67648201a912f56ec4196be384212",
+      "new_digest": "39715044cc97919b6fbdb7cc04d289fb4bf0e7e0a598ebe0cd8e58a3d44c62a2"
+    },
+    {
+      "id": "15104992",
+      "old_title": "문화체육관광부_공감코리아_정책정보문화_정보",
+      "new_title": "문화체육관광부_공감코리아_정책정보문화_정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d9e1c74b2c965a65be03d9c892a99f730d0c8221a39152ee228d370b98f6bfff",
+      "new_digest": "db9b1368c0b5bc26ae288d059d2089c702fdcf1ce550d4a0d44d702cbede24d9"
+    },
+    {
+      "id": "15104994",
+      "old_title": "문화체육관광부_체육소식",
+      "new_title": "문화체육관광부_체육소식",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f21ee7b46378b920e6c863a89dd131b4017726b1aab66406d6440683a9e5760e",
+      "new_digest": "010e263c55a138bfbc463cf69ea6e512660db59978e02c894ea8d36400ffc50e"
+    },
+    {
+      "id": "15104997",
+      "old_title": "문화체육관광부_국립고궁박물관_ICT유물안내",
+      "new_title": "문화체육관광부_국립고궁박물관_ICT유물안내",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1b7b3f958b3f5f8b3bbb5ed051f45ba5ba810f53b5e952de71786cae23d68895",
+      "new_digest": "e43e26dbfcecb5cc4ad290c62e7bee02668d65849504ac23b13434d8d46375b4"
+    },
+    {
+      "id": "15104999",
+      "old_title": "문화체육관광부_국립국어원_외래어표기법",
+      "new_title": "문화체육관광부_국립국어원_외래어표기법",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ba207751692ee7c36de8e92bf8450345d26e6f6e59c77b95cd706bd9a11f91bf",
+      "new_digest": "0950dce640ab13f2a57ae9270e10b9a4da01e16b3476844bd28886030c5a7680"
+    },
+    {
+      "id": "15105007",
+      "old_title": "문화체육관광부_예술자료원 소장자료",
+      "new_title": "문화체육관광부_예술자료원 소장자료",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4f8bb89bf32a72989ef05c4a45d54957107ed9b8f57b7abed3b3e5cfb2261715",
+      "new_digest": "20a227368db95589e61cde012eff4fde9ef1dcefa4e493f7190bbc29ad7a98f7"
+    },
+    {
+      "id": "15105010",
+      "old_title": "문화체육관광부_소속 및 산하기관 교육정보",
+      "new_title": "문화체육관광부_소속 및 산하기관 교육정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4ed38e7fc03f7f0d4add58407063a95d3101843543d4b3261b77e886fba0ce06",
+      "new_digest": "1ef763398c73b5edd32a35f5a7843b88b8ba8982e8e993f1d3a283c673b4cc0c"
+    },
+    {
+      "id": "15105015",
+      "old_title": "문화체육관광부_15개 기관 보도자료",
+      "new_title": "문화체육관광부_15개 기관 보도자료",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7d05290701f8cf244a5ffe01610616dec95f57acc9ecc02acd8733a3e66ac3f4",
+      "new_digest": "f1d0da11df269878ba2c61eb452f6c9502d5d2c317291e3ae869361e5f855bca"
+    },
+    {
+      "id": "15105037",
+      "old_title": "문화체육관광부_12개 기관 전시정보",
+      "new_title": "문화체육관광부_12개 기관 전시정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c68eea8d09ed5e0fbb8af43e06fd93fa25d7023e3c59489cb592a40521839a07",
+      "new_digest": "d374dd777b279331ec1227dcd997d140b660f6f44a6c45104ef6aa969c9efc44"
+    },
+    {
+      "id": "15105038",
+      "old_title": "문화체육관광부_20개 기관 유물정보",
+      "new_title": "문화체육관광부_20개 기관 유물정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "cb928a4f5839134184723f6fd7e022187d0416e24fd2eadf3f86cd0ff7b25767",
+      "new_digest": "e304b86900c44bbd62d1e9dbc62ca7c2c16d3cc59421fadfcb7d462646757d2e"
+    },
+    {
+      "id": "15105044",
+      "old_title": "문화체육관광부_국립국악원 교육연구 국악사전",
+      "new_title": "문화체육관광부_국립국악원 교육연구 국악사전",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7c38d0079e26c5056940908b959ba15a59b61c1c1e93790da09d1b7dd30e3a31",
+      "new_digest": "584185a06ace219cba255a42d84e7f6ed185dcdcef449aed29cea9a39d19add0"
+    },
+    {
+      "id": "15105046",
+      "old_title": "문화체육관광부_국립국악원 학술연구 고서",
+      "new_title": "문화체육관광부_국립국악원 학술연구 고서",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "cff23e75348d05119675d62998c064ca20cf26b452214884131a2a2a81387906",
+      "new_digest": "4b63ebc911763ac20acf76b0181a2222773462a9cb0b95355837e20530610dba"
+    },
+    {
+      "id": "15105053",
+      "old_title": "문화체육관광부_국립국악원 학술연구 악보 및 무보",
+      "new_title": "문화체육관광부_국립국악원 학술연구 악보 및 무보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3dc2f75e3eb29af4aa1adac8f0304bd5c066e5d5015b213125d6f455bb870117",
+      "new_digest": "fb0a765b6d17c163ce208d3fa509aac5192fd7288bfe0161ed395cad4f5aa354"
+    },
+    {
+      "id": "15105054",
+      "old_title": "문화체육관광부_국립국악원 학술연구 국악원 논문집",
+      "new_title": "문화체육관광부_국립국악원 학술연구 국악원 논문집",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d81c0d41571bd63208ae8dad15e3b097c890ccd415e9a9ff27d06af41d05b899",
+      "new_digest": "705287f3ce5888ffea0e5dcaefc3ccc3ca82ceb3092f951f81a992802f6f6ac0"
+    },
+    {
+      "id": "15105055",
+      "old_title": "문화체육관광부_국립국악원 학술연구 영인 번역",
+      "new_title": "문화체육관광부_국립국악원 학술연구 영인 번역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fe1c2651597d9420f18cb94d1d0b2137a21c8ac465e6347c277758d227810fbb",
+      "new_digest": "03d86cf99e518a132b8a456355c81822c4a4b2eb949bff56b107dd9abf24704c"
+    },
+    {
+      "id": "15105056",
+      "old_title": "문화체육관광부_ 국립한글박물관 아카이브",
+      "new_title": "문화체육관광부_ 국립한글박물관 아카이브",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "09190323285385709d140d5799c48cb93bca567d32e021616e4bbeed77316d53",
+      "new_digest": "cd538badc806943814e45defcbb2755ee3dbf966f1013f620b2524163b9d0299"
+    },
+    {
+      "id": "15105059",
+      "old_title": "문화체육관광부_국립국어원 한국어기초사전",
+      "new_title": "문화체육관광부_국립국어원 한국어기초사전",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4d9f825572cc081a0af7a766389bdc6583253fed1c83e3132337ea55a2b93a1d",
+      "new_digest": "afa6b09f18db7d9da1f414ba66558e202460bd45fd357068897d3133bfe53d41"
+    },
+    {
+      "id": "15105149",
+      "old_title": "문화체육관광부_국립세종도서관 사서추천도서",
+      "new_title": "문화체육관광부_국립세종도서관 사서추천도서",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3695ac78120664cce6deb26c935b5e6acdb259e619b4a5ec3aaa44bf0e2a8688",
+      "new_digest": "f43c63a65dee374ffacd0a938a56a0516077763fc78e2b0c8274eaf8f3092e1b"
+    },
+    {
+      "id": "15105152",
+      "old_title": "문화체육관광부_일상생활 수어",
+      "new_title": "문화체육관광부_일상생활 수어",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "91be188828c54ab84fca79fd05a1b780179f5481409b4dbf4d57c07481a3d443",
+      "new_digest": "a2b00a2c0da2acfa8c2f6243a142a86fcfbaab9c61cab517c1e3c5c57afdd2d2"
+    },
+    {
+      "id": "15105154",
+      "old_title": "문화체육관광부_전문용어 수어",
+      "new_title": "문화체육관광부_전문용어 수어",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9af88347b2c6e58599958ab4e16053c9b82c60a1320c98a5b610c1b7c3d02b21",
+      "new_digest": "6955686ddf5cbce2a23be442595c65c17d60473256cc8aec677c49b199bcdbbb"
+    },
+    {
+      "id": "15105164",
+      "old_title": "문화체육관광부_문화정보 수어",
+      "new_title": "문화체육관광부_문화정보 수어",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "da79692bb1355067af0ee1b47fed162f81f4a204b88819629cfea08d3a4d49af",
+      "new_digest": "19000a273651049f37db8df91e39bff79216d2ff604fce1f0fb709342de0f961"
+    },
+    {
+      "id": "15105166",
+      "old_title": "문화체육관광부_국악아카이브",
+      "new_title": "문화체육관광부_국악아카이브",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "30ff4764983b629aa620a9c6461b9a1b45913625144542c25cd08b63aadbf06d",
+      "new_digest": "0ad232cefb73f245d4af5cc26f4561fd35d723db4614f816314efa92b2766af9"
+    },
+    {
+      "id": "15105169",
+      "old_title": "문화체육관광부_정책정보포털 최신 정책동향 국내",
+      "new_title": "문화체육관광부_정책정보포털 최신 정책동향 국내",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f14eb44384c3e5e9e5f48d704485b93c8d790e578da0f6befb18f81de251d29d",
+      "new_digest": "10d70907d5d5eb09366b26337677c5a9855be76db15791942af164c65bb6b721"
+    },
+    {
+      "id": "15105184",
+      "old_title": "문화체육관광부_정책정보포털 최신정책 동향 국외",
+      "new_title": "문화체육관광부_정책정보포털 최신정책 동향 국외",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "212c5daba6c46bbf91a8d58c9b16bc0a093c7b5931d4ca7ea6739902fb49d702",
+      "new_digest": "8ebe6a37aaf6921fab18439a8c838f564884ad96e7b964c9abb3d1741a0cfd5a"
+    },
+    {
+      "id": "15105190",
+      "old_title": "문화체육관광부_올림픽공원 장미광장 정보",
+      "new_title": "문화체육관광부_올림픽공원 장미광장 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "00aa459d81c55cd35f41ea617cfba69233a31d3694a13f99e5d84780a7830e89",
+      "new_digest": "cda9443729a392886769b97ea5f2d5d859b8ddf51c3c76cc8264df95399b8b1b"
+    },
+    {
+      "id": "15105193",
+      "old_title": "문화체육관광부_우리말샘",
+      "new_title": "문화체육관광부_우리말샘",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "34724df03d3d525c5c80fbb7b2159c662f5f91478e1840b8234a8066ce06375a",
+      "new_digest": "514730bb74a12d6e30a8a805c242524d642250ce50e4951ef3f83b66512add39"
+    },
+    {
+      "id": "15105195",
+      "old_title": "문화체육관광부_올림픽공원 공연정보",
+      "new_title": "문화체육관광부_올림픽공원 공연정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5d3d5f8b96d0655b40bb506b42c0fbbd7a0aa5b7ac7ff82470851fcee83cbe69",
+      "new_digest": "87930186c64874fb8e09a8e1311caca27ef35a3f208f0544e60cb192b315a23a"
+    },
+    {
+      "id": "15105208",
+      "old_title": "문화체육관광부_사서의 책장",
+      "new_title": "문화체육관광부_사서의 책장",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b41aafff586b18379ad75a739f2a2dda12bcca73ec35a73d586fb64de12555d8",
+      "new_digest": "0e9feb1489d9d5bb05e579f592b4e72d022085c5a327e780b15d770da2a6378d"
+    },
+    {
+      "id": "15105210",
+      "old_title": "문화체육관광부_문화기반시설 통계정보",
+      "new_title": "문화체육관광부_문화기반시설 통계정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "95f03577298480fb139faa947afb6bf53019fa6d5a30a8fddcb576ae4ad50b42",
+      "new_digest": "4743436ff31fcff6e58617419d2fa4c7af50e28e724142db485087aadd4f59bc"
+    },
+    {
+      "id": "15105211",
+      "old_title": "문화체육관광부_관광지 안전정보",
+      "new_title": "문화체육관광부_관광지 안전정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d8c7c2674f8bf70f5987085992223381dbbc6e1da628a34e617a63b305f99bbb",
+      "new_digest": "0c4e02baffa550902a62a974fad4c045b2e5196d3986257a40bfcca8cc3b24d6"
+    },
+    {
+      "id": "15105212",
+      "old_title": "문화체육관광부_문헌자료와 해제 정보",
+      "new_title": "문화체육관광부_문헌자료와 해제 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9c147ab5f06386ce537f15b669d9a99857085add33f49aaeaa9e21ef91bdcc82",
+      "new_digest": "5d70851f744fd6a1a7cbcd982837d07ec686985aba0e9384da36d25150236470"
+    },
+    {
+      "id": "15105214",
+      "old_title": "문화체육관광부_국립한글박물관 전시정보",
+      "new_title": "문화체육관광부_국립한글박물관 전시정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2edc397cd9a54c50d6a53238827549f97b7fec3002e9d06cd86ef91992bd1c2c",
+      "new_digest": "c6795179ea443c2dd6a5d3997e5b989ef7222377cbc4451218bdbd8fa7310962"
+    },
+    {
+      "id": "15105215",
+      "old_title": "문화체육관광부_국립한글박물관 소장자료",
+      "new_title": "문화체육관광부_국립한글박물관 소장자료",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3ca460127a7b1a0dc30d4bbb9a323ca953103c1874212c70ab96cc5301af9741",
+      "new_digest": "2415d3250f58f60ec49488c1dc86820a30d6254f8f7e2635fde768e6f2ab8e0d"
+    },
+    {
+      "id": "15105216",
+      "old_title": "문화체육관광부_국립세종도서관 국내DB",
+      "new_title": "문화체육관광부_국립세종도서관 국내DB",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "003abef44fea1d956e2696dd711698e861dfcbb1c7438729539a4945254fc7a2",
+      "new_digest": "7068fc14f32d45edb552399eb0e29fbc6b29d2fa3a77a6b07dbe98e015bdbc0c"
+    },
+    {
+      "id": "15105219",
+      "old_title": "문화체육관광부_역사가 있는 여행 이야기",
+      "new_title": "문화체육관광부_역사가 있는 여행 이야기",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "647d9d748b43cc200f6fee12b592616a90cc912027335031fec33c9c9bf969ab",
+      "new_digest": "d7022d36bff5f3f92ec84976a7b7955c472b56514d001edb7b10361e796ad1f2"
+    },
+    {
+      "id": "15105220",
+      "old_title": "문화체육관광부_국립지방박물관 전시 통합정보",
+      "new_title": "문화체육관광부_국립지방박물관 전시 통합정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "55bfcffaeb6e993feae4253b57717e236a5014a28e922105e7dbaa489d49f2f0",
+      "new_digest": "7fed8e822af6b8d21a6f614205ffd3b492bf8c5c8a6234dfe31cdd8272bc2f7a"
+    },
+    {
+      "id": "15105222",
+      "old_title": "문화체육관광부_국립지방박물관 문화행사 통합정보",
+      "new_title": "문화체육관광부_국립지방박물관 문화행사 통합정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "58321f7331b3855488020904d0897cfe360263f1f91d13f347530e5b5c4c3c39",
+      "new_digest": "9ed1b72955b3e9dbc9524c10cdeb30dc72d7fac53b6fde1f2417e17afcee0520"
+    },
+    {
+      "id": "15105225",
+      "old_title": "문화체육관광부_국악연감 서비스",
+      "new_title": "문화체육관광부_국악연감 서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3f583cb51160ec3183409a571b84e8f68d030216fcc9ca013ebf7a85d594b020",
+      "new_digest": "ca455c9640cfa5485ff895d0409a1a04649ae3c096a087cfd256076f1d434f19"
+    },
+    {
+      "id": "15105229",
+      "old_title": "문화체육관광부_문체부 기관 보도자료",
+      "new_title": "문화체육관광부_문체부 기관 보도자료",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b250c8910d385937076068dc9a9cae9ede1b2de21cc9a19e30cd268b49dd2cf8",
+      "new_digest": "fbd8fd28910bdd1e1b47d4a8c514ea1ced8e1af5c4c84a7491035b4ac882b99d"
+    },
+    {
+      "id": "15105232",
+      "old_title": "문화체육관광부_국립박물관 전시도록",
+      "new_title": "문화체육관광부_국립박물관 전시도록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8f527c0a6be599f179f3f8369e7a5ccbc37a32de083ec612e8264037677e5a6f",
+      "new_digest": "012811d5175caf9332aeea427ed37b6f1e23f0def4f4c19d3352e6390385ac7f"
+    },
+    {
+      "id": "15105235",
+      "old_title": "문화체육관광부_문체부 기관 문화 및 행사정보",
+      "new_title": "문화체육관광부_문체부 기관 문화 및 행사정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "dd316791ed0a7e087ffb7832aea1ffa0a13d7bd773c66393f1351753c5e31398",
+      "new_digest": "14ff757c12f24a53adb66bd0b87bcb1d5fd6b1fa29b837c5519eb0a5273bcfbf"
+    },
+    {
+      "id": "15105238",
+      "old_title": "문화체육관광부_문체부 기관 공연정보",
+      "new_title": "문화체육관광부_문체부 기관 공연정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8ffd9bf0612f5bf3ac1ed2d718e5693669de152d4357ea01224acfa53aab2e08",
+      "new_digest": "d6a0502f0e2720bfc17e86ef5347766083daf02296827e4a9a0a35b603bcf1b6"
+    },
+    {
+      "id": "15105243",
+      "old_title": "문화체육관광부_통합 수어정보",
+      "new_title": "문화체육관광부_통합 수어정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "33fe50d5572f4ff96720ff0cc7c7c0b6ea8d07265a85fdc3b2b2e22d4126ece1",
+      "new_digest": "fdabcd441e4369b8fbb94ee81ce9253628d302b7550be5278b49c05a30c8aafa"
     },
     {
       "id": "15106677",
@@ -21747,6 +22457,136 @@
       ],
       "old_digest": "464209439a22434c61f432167df7a4685b6a81631cf2b29687f7160f0596374c",
       "new_digest": "661da8dbb9dce58db5239128479d65369b3251a762dc8864387c307a69bdc8da"
+    },
+    {
+      "id": "15121483",
+      "old_title": "문화체육관광부_일자리정보_채용정보",
+      "new_title": "문화체육관광부_일자리정보_채용정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fcbf3d23dec0863c658a7260a02895426e751dc2de96eebd6667e8e0ed668849",
+      "new_digest": "6201a28b819e52638b5ba8b38e6e1955272dd43e5e18945a2c4962e738ae8a63"
+    },
+    {
+      "id": "15121485",
+      "old_title": "문화체육관광부_일자리정보_일자리뉴스",
+      "new_title": "문화체육관광부_일자리정보_일자리뉴스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "956fb52f8078886791e43263273be8873abd97aadf18c745e5211296791e9ec5",
+      "new_digest": "d6e26eff251fd3de0676972fd30c1171bb6511dc25c2e89739bf6bbddb960b14"
+    },
+    {
+      "id": "15121487",
+      "old_title": "문화체육관광부_문화체육관광부_문화예술공연(통합)",
+      "new_title": "문화체육관광부_문화체육관광부_문화예술공연(통합)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3c1566b3f569dc5b7dc936c45d7a05b9b810f8cbee97e5d91ae74b2f894e8f40",
+      "new_digest": "1ba0d589aa09f4c6afb9cb2b67e17922577e024ddf3ee5626c522f371e42e043"
+    },
+    {
+      "id": "15121498",
+      "old_title": "문화체육관광부_대한민국예술원 사진갤러리",
+      "new_title": "문화체육관광부_대한민국예술원 사진갤러리",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6bbb6c860d7c524367cc5a5949d1f3896727ea4b331b8fe08031a4731919c81c",
+      "new_digest": "c5f9f8a69634a7f5727091f54141bfb8df443989240571e661acda4d69f2210b"
+    },
+    {
+      "id": "15121504",
+      "old_title": "문화체육관광부_대한민국예술원 기타 간행물",
+      "new_title": "문화체육관광부_대한민국예술원 기타 간행물",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d28de7349ddcadf453ac641a9a23c868fad6831269abc60458a3eb9b31e8f892",
+      "new_digest": "d90bc559e987cf5a588ff34d6cc3e26c042cc1ef946239b42c055fb21e6bda2e"
+    },
+    {
+      "id": "15121511",
+      "old_title": "문화체육관광부_대한민국역사박물관_특별 전시",
+      "new_title": "문화체육관광부_대한민국역사박물관_특별 전시",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "eb664157a103dac1c78907e01f3b407ec48a9fa5f8676938b97134fa6be0a041",
+      "new_digest": "87c31941431c6a1f803f2cadf4826c30c3600b3b5506da95389d36108b1cdf68"
+    },
+    {
+      "id": "15121513",
+      "old_title": "문화체육관광부_국립현대미술관_소장작품",
+      "new_title": "문화체육관광부_국립현대미술관_소장작품",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b89fac8c96d5f251a7f93c6f26c14e6812a1870385316099aac16ec75b8d1822",
+      "new_digest": "dc1f91a10c8b0a6b7c5827a96bb259f70e68ba177cce07bc8d0b3e8cfb30f21e"
+    },
+    {
+      "id": "15121515",
+      "old_title": "문화체육관광부_국립중앙박물관 유물정보",
+      "new_title": "문화체육관광부_국립중앙박물관 유물정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1c9ad6e4baf3dac08c0deae089d6b53e0ecb7f334784f120f80bf7e4dbc8e548",
+      "new_digest": "e9220783feb0680eb0bcd25f70548824bb3862890cddf133ad6e8ccbf217ea9f"
+    },
+    {
+      "id": "15121518",
+      "old_title": "문화체육관광부_국립어린이청소년도서관_공개모집",
+      "new_title": "문화체육관광부_국립어린이청소년도서관_공개모집",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c66ec35d540e0b140d71da1287479a93c72e6a924113286c6176cdb34f76c8cf",
+      "new_digest": "92d4869f4d0907fb0ba22e3e74d331751b6f1836a5b1d7f52fea37c53002bc85"
+    },
+    {
+      "id": "15121519",
+      "old_title": "문화체육관광부_국립국악원 학술연구_국악이론",
+      "new_title": "문화체육관광부_국립국악원 학술연구_국악이론",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6a1802d93440ea985498f19f66b1c2f33e639f92f2a53662964fbdd801a81483",
+      "new_digest": "745f110c9d6884370d40f7a12c8a8d2453acaed9771b16082296c80c559a144a"
+    },
+    {
+      "id": "15121525",
+      "old_title": "문화체육관광부_대한민국예술원_예술논문집",
+      "new_title": "문화체육관광부_대한민국예술원_예술논문집",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9f14ccb65a28696c57cfff60390afeb912e3a020dcb42c68218c1628f73f4cb0",
+      "new_digest": "cecf8651a227fbb90ef2ba5e013f039e87d1e0decb8a22631f7281d01b30bc43"
+    },
+    {
+      "id": "15121527",
+      "old_title": "문화체육관광부_국립중앙극장_공연아카이브정보",
+      "new_title": "문화체육관광부_국립중앙극장_공연아카이브정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "69c61b8b054cb0878032b2a7ef9005b4022bda321a7e68d929a28b64096fd6e0",
+      "new_digest": "8a43753c207ba5a42b4497dd4c1425111b136d2e14b1989e92a11af71e51f314"
+    },
+    {
+      "id": "15121531",
+      "old_title": "문화체육관광부_국립국악원_구술채록",
+      "new_title": "문화체육관광부_국립국악원_구술채록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c01899b2847d107ff1173e3c0f101029e1e769654faa4a141ea67d16aa87e809",
+      "new_digest": "9e9d541da304b0a635983823dd2e810a1c4cdd6e43309dd32e3cb46ee8725925"
     },
     {
       "id": "15121882",
@@ -32617,6 +33457,16 @@
       ],
       "old_digest": "65308cb4f812c534b55b57d3143e55a554f630ee0f2ba2d3639a5385dbfed66d",
       "new_digest": "ce147019f1080ac49e4671344374ae043864c8469a32d714d94bc80207506968"
+    },
+    {
+      "id": "3078569",
+      "old_title": "문화체육관광부 국립중앙박물관 국립공주박물관_유물정보",
+      "new_title": "문화체육관광부 국립중앙박물관 국립공주박물관_유물정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "881b3ef42985582cb81f18750fa8d651b002da67d46ffdb5aa759e92f80b712f",
+      "new_digest": "80fe6f9e1c07dc5772a3875475d99bda9424103805b8485b31a499e067ac57e1"
     },
     {
       "id": "3082721",

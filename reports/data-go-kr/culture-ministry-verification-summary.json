@@ -1,0 +1,167 @@
+{
+  "generated_at": "2026-07-03T20:03:35Z",
+  "source": "reports\\data-go-kr\\culture-ministry-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 126,
+    "verified": 111,
+    "failed": 9,
+    "skipped": 6,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 111,
+        "status": "verified"
+      },
+      {
+        "key": "failed",
+        "count": 9,
+        "status": "failed"
+      },
+      {
+        "key": "skipped",
+        "count": 6,
+        "status": "skipped"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "culture_request_timeout",
+        "count": 5,
+        "reason": "culture_request_timeout"
+      },
+      {
+        "key": "missing_auth",
+        "count": 3,
+        "reason": "missing_auth"
+      },
+      {
+        "key": "emuseum_missing_required_params",
+        "count": 2,
+        "reason": "emuseum_missing_required_params"
+      },
+      {
+        "key": "chungnam_http_404",
+        "count": 1,
+        "reason": "chungnam_http_404"
+      },
+      {
+        "key": "culture_http_500",
+        "count": 1,
+        "reason": "culture_http_500"
+      },
+      {
+        "key": "folk_missing_required_params",
+        "count": 1,
+        "reason": "folk_missing_required_params"
+      },
+      {
+        "key": "jeju-www_request_failed",
+        "count": 1,
+        "reason": "jeju-www_request_failed"
+      },
+      {
+        "key": "naa_http_404",
+        "count": 1,
+        "reason": "naa_http_404"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "culture",
+        "count": 115,
+        "provider": "culture"
+      },
+      {
+        "key": "emuseum",
+        "count": 3,
+        "provider": "emuseum"
+      },
+      {
+        "key": "folk",
+        "count": 3,
+        "provider": "folk"
+      },
+      {
+        "key": "chungnam",
+        "count": 1,
+        "provider": "chungnam"
+      },
+      {
+        "key": "data-gg",
+        "count": 1,
+        "provider": "data-gg"
+      },
+      {
+        "key": "jeju-www",
+        "count": 1,
+        "provider": "jeju-www"
+      },
+      {
+        "key": "much",
+        "count": 1,
+        "provider": "much"
+      },
+      {
+        "key": "naa",
+        "count": 1,
+        "provider": "naa"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "www.culture.go.kr",
+        "count": 115,
+        "host": "www.culture.go.kr"
+      },
+      {
+        "key": "folkency.nfm.go.kr",
+        "count": 3,
+        "host": "folkency.nfm.go.kr"
+      },
+      {
+        "key": "www.emuseum.go.kr",
+        "count": 3,
+        "host": "www.emuseum.go.kr"
+      },
+      {
+        "key": "data.gg.go.kr",
+        "count": 1,
+        "host": "data.gg.go.kr"
+      },
+      {
+        "key": "www.chungnam.go.kr",
+        "count": 1,
+        "host": "www.chungnam.go.kr"
+      },
+      {
+        "key": "www.jeju.go.kr",
+        "count": 1,
+        "host": "www.jeju.go.kr"
+      },
+      {
+        "key": "www.much.go.kr",
+        "count": 1,
+        "host": "www.much.go.kr"
+      },
+      {
+        "key": "www.naa.go.kr",
+        "count": 1,
+        "host": "www.naa.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 126,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

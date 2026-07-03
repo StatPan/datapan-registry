@@ -94,9 +94,9 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `1,611` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `1,526` data.go.kr APIs
   without operation mappings, `9,235` operation-mapped APIs without runtime
-  evidence, and `126` APIs with failed runtime evidence that need repair.
+  evidence, and `135` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
   `reports/open-assembly/runtime-evidence-plan.json`, and
@@ -339,8 +339,12 @@ Current gaps:
   bounded checks (`153` verified, `2` failed, `12` skipped). That brings
   runtime evidence to `2524`, verified checks to `1101`, and registered
   external adapter operations to `7402`.
-- API operation coverage remains incomplete: `10,449` of `12,060` APIs have
-  operation mappings (`86.6%`), leaving `1,611` APIs to materialize and `9,235`
+- The 문화체육관광부 batch adds NAA and MUCH adapter coverage, materializes `85`
+  APIs and `120` operations, and merges `126` bounded checks (`111` verified,
+  `9` failed, `6` skipped). That brings runtime evidence to `2650`, verified
+  checks to `1212`, and registered external adapter operations to `7522`.
+- API operation coverage remains incomplete: `10,534` of `12,060` APIs have
+  operation mappings (`87.3%`), leaving `1,526` APIs to materialize and `9,235`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T19:52:08Z`
+- Generated at: `2026-07-03T20:06:23Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `19022`
-- Runtime evidence: `2524` (`13.3%`)
-- External endpoint operations: `7412`
-- Registered adapter operations: `7402`
+- Operations: `19142`
+- Runtime evidence: `2650` (`13.8%`)
+- External endpoint operations: `7532`
+- Registered adapter operations: `7522`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -40,7 +40,7 @@
 | 한국도로공사 | 93 | 93 | 271 | 271 | 100.0% | 271 | 0 | 0 | 271 | 0 |
 | 기상청 | 89 | 89 | 228 | 68 | 29.8% | 45 | 0 | 23 | 69 | 0 |
 | 농림축산식품부 | 87 | 86 | 153 | 153 | 100.0% | 151 | 2 | 0 | 47 | 0 |
-| 문화체육관광부 | 86 | 1 | 1 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
+| 문화체육관광부 | 86 | 86 | 121 | 120 | 99.2% | 111 | 9 | 0 | 92 | 0 |
 | 한국건강가정진흥원 | 85 | 85 | 90 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 한국수자원공사 | 84 | 79 | 148 | 0 | 0.0% | 0 | 0 | 0 | 4 | 19 |
 
@@ -85,10 +85,10 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 ## Largest Categories
 
-- 공공행정: `2593` operations
+- 공공행정: `2597` operations
 - 교통물류: `2016` operations
+- 문화관광: `2006` operations
 - 농축수산: `1993` operations
-- 문화관광: `1890` operations
 - 사회복지: `1439` operations
 - 산업고용: `1290` operations
 - 식품건강: `1188` operations
@@ -99,7 +99,7 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 ## Largest Hosts
 
 - apis.data.go.kr: `11423` operations
-- data.gg.go.kr: `2187` operations
+- data.gg.go.kr: `2188` operations
 - data.gm.go.kr: `607` operations
 - www.vworld.kr: `458` operations
 - www.safetydata.go.kr: `370` operations
