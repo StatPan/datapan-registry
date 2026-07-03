@@ -12,14 +12,14 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `16447`
-- callable operations: `16305` (`99.1%`)
+- operations: `16547`
+- callable operations: `16405` (`99.1%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `4837`
-- registered adapter operations: `4827`
+- external endpoint operations: `4937`
+- registered adapter operations: `4927`
 - missing adapter operations: `29`
 - external adapter coverage: `99.4%`
-- approval-required operations: `5344`
+- approval-required operations: `5444`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
@@ -228,7 +228,7 @@ institution:
    `scripts/validate-institution-api-overview.py`.
 
 The current operation materialization queue starts at `국회 국회사무처`: `277`
-APIs, `100` APIs with operation mappings, and `177` uncovered APIs. The runtime
+APIs, `200` APIs with operation mappings, and `77` uncovered APIs. The runtime
 reactivation queue starts at `행정안전부`: `1252` APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
 records, and `1202` APIs still needing runtime reactivation. Gateway calls need
@@ -398,6 +398,11 @@ readiness, not to advance verified runtime coverage.
    failed-but-bounded HTTP 400 checks. That brings checked runtime evidence to
    `1670`, registered external adapter operations to `4827`, and raises 국회
    국회사무처 operation coverage to `100` of `277` APIs.
+   The second 국회 국회사무처 batch materializes another `100` APIs and `100`
+   operations, and merges `10` more failed-but-bounded HTTP 400 checks. That
+   brings checked runtime evidence to `1680`, registered external adapter
+   operations to `4927`, and raises 국회 국회사무처 operation coverage to `200`
+   of `277` APIs.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

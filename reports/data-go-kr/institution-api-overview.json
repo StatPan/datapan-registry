@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T15:58:25Z",
+  "generated_at": "2026-07-03T16:05:33Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 16447,
-    "runtime_evidence": 1670,
+    "operations": 16547,
+    "runtime_evidence": 1680,
     "runtime_evidence_percent": 10.2,
-    "callable_operations": 16305,
-    "external_endpoint_operations": 4837,
-    "registered_adapter_operations": 4827,
+    "callable_operations": 16405,
+    "external_endpoint_operations": 4937,
+    "registered_adapter_operations": 4927,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 4837
+      "count": 4937
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 4827
+      "count": 4927
     },
     {
       "key": "builtin",
@@ -69,7 +69,7 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 1812
+      "operation_count": 1912
     },
     {
       "category": "교통물류",
@@ -184,6 +184,15 @@
       ]
     },
     {
+      "host": "open.assembly.go.kr",
+      "operation_count": 200,
+      "adapter": "open-assembly",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "host": "www.calspia.go.kr",
       "operation_count": 168,
       "adapter": "calspia",
@@ -205,15 +214,6 @@
       "host": "openapi.q-net.or.kr",
       "operation_count": 104,
       "adapter": "q-net",
-      "adapter_status": "registered",
-      "capabilities": [
-        "verification"
-      ]
-    },
-    {
-      "host": "open.assembly.go.kr",
-      "operation_count": 100,
-      "adapter": "open-assembly",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -1245,6 +1245,49 @@
       ]
     },
     {
+      "organization": "국회 국회사무처",
+      "api_count": 277,
+      "operation_api_count": 200,
+      "operation_count": 200,
+      "runtime_evidence_count": 20,
+      "runtime_evidence_percent": 10.0,
+      "verified": 0,
+      "failed": 20,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 200,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "external_endpoint",
+          "count": 200
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 200
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "공공행정",
+          "operation_count": 200
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "open.assembly.go.kr",
+          "operation_count": 200,
+          "adapter": "open-assembly",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "조달청",
       "api_count": 18,
       "operation_api_count": 18,
@@ -1865,49 +1908,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 102
-        }
-      ]
-    },
-    {
-      "organization": "국회 국회사무처",
-      "api_count": 277,
-      "operation_api_count": 100,
-      "operation_count": 100,
-      "runtime_evidence_count": 10,
-      "runtime_evidence_percent": 10.0,
-      "verified": 0,
-      "failed": 10,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 100,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "external_endpoint",
-          "count": 100
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 100
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "공공행정",
-          "operation_count": 100
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "open.assembly.go.kr",
-          "operation_count": 100,
-          "adapter": "open-assembly",
-          "adapter_status": "registered",
-          "capabilities": [
-            "verification"
-          ]
         }
       ]
     },

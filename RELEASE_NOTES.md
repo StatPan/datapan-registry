@@ -1,6 +1,6 @@
 # Datapan Registry Release
 
-- generated_at: `2026-07-03T15:58:25Z`
+- generated_at: `2026-07-03T16:05:33Z`
 - provider: `data.go.kr`
 - datapan_version: `0.1.0-dev`
 - source_registry: `data\data-go-kr.registry.json`
@@ -19,15 +19,15 @@
 - split_readiness: `ready`
 - verification_capable_adapters: `69`
 - call_capable_adapters: `23`
-- dependency_operations: `16447` total, `11419` gateway, `4837` external, `4827` registered-adapter, `29` missing-adapter
+- dependency_operations: `16547` total, `11419` gateway, `4937` external, `4927` registered-adapter, `29` missing-adapter
 - adapter_backlog: `11` target hosts, `29` target operations
 - route_disposition: `29` routes, `14` dead-route candidates, `15` transient failures, `0` parameter-blocked, `0` adapter candidates
 - route_disposition_artifact: `reports/route-disposition.json`
 - provider_backlog: `228` hosts, `11` missing-adapter hosts, `29` operations needing adapters
-- coverage: `16305` callable operations (`99.1%`), external adapter coverage `99.4%`, verification evidence coverage `10.2%`, evidence-adjusted adapter candidates `0`
+- coverage: `16405` callable operations (`99.1%`), external adapter coverage `99.4%`, verification evidence coverage `10.2%`, evidence-adjusted adapter candidates `0`
 - coverage_artifact: `reports/coverage.json`
 - coverage_goals: callable `99%`, external adapters `98%`, verification evidence `10%`, call-capable adapters `25`, missing-adapter operations `<=10`
-- verification_plan: `19` batches, `143` planned operations, `10714` gateway gaps, `3862` adapter gaps
+- verification_plan: `19` batches, `143` planned operations, `10714` gateway gaps, `3952` adapter gaps
 - verification_plan_artifact: `reports/verification-plan.json`
 - runtime_evidence_growth: `10.2%` coverage, target `10.0%`, remaining `0`, status `above_target`
 - runtime_evidence_growth_artifact: `reports/data-go-kr/runtime-evidence-growth.json`
@@ -42,7 +42,7 @@ Top adapter targets:
 
 ## Verification Evidence
 
-- verification: `1670` total, `352` verified, `125` failed, `1193` skipped, `0` unknown
+- verification: `1680` total, `352` verified, `135` failed, `1193` skipped, `0` unknown
 - verification_artifact: `reports/latest-verification.json`
 - verification_summary_artifact: `reports/latest-verification-summary.json`
 

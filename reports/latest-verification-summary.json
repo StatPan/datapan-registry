@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-03T15:58:13Z",
+  "generated_at": "2026-07-03T16:05:23Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1670,
+    "total": 1680,
     "verified": 352,
-    "failed": 125,
+    "failed": 135,
     "skipped": 1193,
     "unknown": 0
   },
@@ -26,7 +26,7 @@
       },
       {
         "key": "failed",
-        "count": 125,
+        "count": 135,
         "status": "failed"
       }
     ],
@@ -72,6 +72,11 @@
         "reason": "lofin365_request_failed"
       },
       {
+        "key": "open-assembly_http_400",
+        "count": 20,
+        "reason": "open-assembly_http_400"
+      },
+      {
         "key": "qnet_missing_required_params",
         "count": 19,
         "reason": "qnet_missing_required_params"
@@ -105,11 +110,6 @@
         "key": "andong_service_not_registered",
         "count": 10,
         "reason": "andong_service_not_registered"
-      },
-      {
-        "key": "open-assembly_http_400",
-        "count": 10,
-        "reason": "open-assembly_http_400"
       },
       {
         "key": "sisul_wadl_metadata_only",
@@ -379,6 +379,11 @@
         "provider": "gwangmyeong"
       },
       {
+        "key": "open-assembly",
+        "count": 20,
+        "provider": "open-assembly"
+      },
+      {
         "key": "sisul",
         "count": 20,
         "provider": "sisul"
@@ -422,11 +427,6 @@
         "key": "juso",
         "count": 10,
         "provider": "juso"
-      },
-      {
-        "key": "open-assembly",
-        "count": 10,
-        "provider": "open-assembly"
       },
       {
         "key": "safemap",
@@ -736,6 +736,11 @@
         "host": "data.sisul.or.kr"
       },
       {
+        "key": "open.assembly.go.kr",
+        "count": 20,
+        "host": "open.assembly.go.kr"
+      },
+      {
         "key": "openapi.its.ulsan.kr",
         "count": 20,
         "host": "openapi.its.ulsan.kr"
@@ -769,11 +774,6 @@
         "key": "data.mafra.go.kr",
         "count": 11,
         "host": "data.mafra.go.kr"
-      },
-      {
-        "key": "open.assembly.go.kr",
-        "count": 10,
-        "host": "open.assembly.go.kr"
       },
       {
         "key": "www.juso.go.kr",
@@ -1044,7 +1044,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 946,
+        "count": 956,
         "kind": "external_endpoint"
       },
       {
