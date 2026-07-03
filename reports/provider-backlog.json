@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T21:55:35Z",
+  "generated_at": "2026-07-03T22:12:37Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 268,
+  "filtered_count": 270,
   "summary": {
-    "hosts": 268,
+    "hosts": 270,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 124,
-    "external_guide_hosts": 194,
-    "registered_adapter_hosts": 113,
-    "operation_hosts": 126,
+    "external_endpoint_hosts": 126,
+    "external_guide_hosts": 196,
+    "registered_adapter_hosts": 115,
+    "operation_hosts": 128,
     "guide_only_hosts": 142,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7336,
+    "approval_required_operations": 7350,
     "malformed_source_url_count": 712
   },
   "providers": [
@@ -749,6 +749,24 @@
         "15056663",
         "15056797",
         "15057017"
+      ]
+    },
+    {
+      "host": "www.khoa.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 17,
+      "operations": 29,
+      "external_endpoint_operations": 29,
+      "external_guide_specs": 4,
+      "approval_required_operations": 13,
+      "sample_ids": [
+        "15038992",
+        "15039006",
+        "15039007"
       ]
     },
     {
@@ -1725,6 +1743,22 @@
       "approval_required_operations": 1,
       "sample_ids": [
         "15111780"
+      ]
+    },
+    {
+      "host": "nosc.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "external_guide_specs": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15128154"
       ]
     },
     {

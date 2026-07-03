@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T21:55:35Z",
+  "generated_at": "2026-07-03T22:12:37Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 19830,
-    "runtime_evidence": 3291,
-    "runtime_evidence_percent": 16.6,
-    "callable_operations": 19688,
-    "external_endpoint_operations": 8220,
-    "registered_adapter_operations": 8210,
+    "operations": 19860,
+    "runtime_evidence": 3321,
+    "runtime_evidence_percent": 16.7,
+    "callable_operations": 19718,
+    "external_endpoint_operations": 8250,
+    "registered_adapter_operations": 8240,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 8220
+      "count": 8250
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 8210
+      "count": 8240
     },
     {
       "key": "builtin",
@@ -73,11 +73,11 @@
     },
     {
       "category": "교통물류",
-      "operation_count": 2129
+      "operation_count": 2135
     },
     {
       "category": "농축수산",
-      "operation_count": 2047
+      "operation_count": 2059
     },
     {
       "category": "문화관광",
@@ -101,7 +101,7 @@
     },
     {
       "category": "환경기상",
-      "operation_count": 1163
+      "operation_count": 1175
     },
     {
       "category": "국토관리",
@@ -3345,6 +3345,78 @@
       ]
     },
     {
+      "organization": "해양수산부 국립해양조사원",
+      "api_count": 68,
+      "operation_api_count": 68,
+      "operation_count": 81,
+      "runtime_evidence_count": 31,
+      "runtime_evidence_percent": 38.3,
+      "verified": 30,
+      "failed": 0,
+      "skipped": 1,
+      "unknown": 0,
+      "approval_required_operations": 60,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 51
+        },
+        {
+          "key": "external_endpoint",
+          "count": 30
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 30
+        },
+        {
+          "key": "builtin",
+          "count": 51
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "농축수산",
+          "operation_count": 58
+        },
+        {
+          "category": "환경기상",
+          "operation_count": 13
+        },
+        {
+          "category": "교통물류",
+          "operation_count": 10
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 51
+        },
+        {
+          "host": "www.khoa.go.kr",
+          "operation_count": 29,
+          "adapter": "khoa",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "nosc.go.kr",
+          "operation_count": 1,
+          "adapter": "nosc",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "경상남도 의령군",
       "api_count": 64,
       "operation_api_count": 64,
@@ -4560,52 +4632,6 @@
           "capabilities": [
             "verification"
           ]
-        }
-      ]
-    },
-    {
-      "organization": "해양수산부 국립해양조사원",
-      "api_count": 68,
-      "operation_api_count": 50,
-      "operation_count": 51,
-      "runtime_evidence_count": 1,
-      "runtime_evidence_percent": 2.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 1,
-      "unknown": 0,
-      "approval_required_operations": 46,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 51
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 51
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "농축수산",
-          "operation_count": 46
-        },
-        {
-          "category": "교통물류",
-          "operation_count": 4
-        },
-        {
-          "category": "환경기상",
-          "operation_count": 1
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 51
         }
       ]
     },

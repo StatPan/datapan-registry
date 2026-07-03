@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T21:51:01Z",
+  "generated_at": "2026-07-03T22:12:36Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3291,
-    "verified": 1519,
+    "total": 3321,
+    "verified": 1549,
     "failed": 306,
     "skipped": 1466,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 1519,
+        "count": 1549,
         "status": "verified"
       },
       {
@@ -489,6 +489,11 @@
         "provider": "open-assembly"
       },
       {
+        "key": "khoa",
+        "count": 29,
+        "provider": "khoa"
+      },
+      {
         "key": "epost",
         "count": 28,
         "provider": "epost"
@@ -789,6 +794,11 @@
         "provider": "ncpms"
       },
       {
+        "key": "nosc",
+        "count": 1,
+        "provider": "nosc"
+      },
+      {
         "key": "seoul-map",
         "count": 1,
         "provider": "seoul-map"
@@ -939,6 +949,11 @@
         "key": "www.calspia.go.kr",
         "count": 30,
         "host": "www.calspia.go.kr"
+      },
+      {
+        "key": "www.khoa.go.kr",
+        "count": 29,
+        "host": "www.khoa.go.kr"
       },
       {
         "key": "oneclick.law.go.kr:80",
@@ -1271,6 +1286,11 @@
         "host": "nongsaro.go.kr"
       },
       {
+        "key": "nosc.go.kr",
+        "count": 1,
+        "host": "nosc.go.kr"
+      },
+      {
         "key": "open.api.q-net.or.kr",
         "count": 1,
         "host": "open.api.q-net.or.kr"
@@ -1349,7 +1369,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 2567,
+        "count": 2597,
         "kind": "external_endpoint"
       },
       {

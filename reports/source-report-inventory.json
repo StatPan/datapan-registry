@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-03T21:55:35Z",
+  "generated_at": "2026-07-03T22:12:37Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 40,
+    "report_total": 42,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,7 +38,7 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 28,
+      "report_count": 30,
       "present_reports": [
         {
           "name": "coverage-backlog.json",
@@ -101,6 +101,14 @@
           "name": "institution-runtime-plan.json",
           "path": "reports/data-go-kr/institution-runtime-plan.json",
           "schema_version": "datapan.institution-runtime-plan.v1"
+        },
+        {
+          "name": "khoa-verification-summary.json",
+          "path": "reports/data-go-kr/khoa-verification-summary.json"
+        },
+        {
+          "name": "khoa-verification.json",
+          "path": "reports/data-go-kr/khoa-verification.json"
         },
         {
           "name": "kipris-verification-summary.json",
@@ -196,6 +204,8 @@
         "fss-verification.json",
         "institution-api-overview.json",
         "institution-runtime-plan.json",
+        "khoa-verification-summary.json",
+        "khoa-verification.json",
         "kipris-verification-summary.json",
         "kipris-verification.json",
         "kwater-verification-summary.json",

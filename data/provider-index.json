@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T21:55:35Z",
+  "generated_at": "2026-07-03T22:12:37Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 98,
-  "host_count": 118,
+  "adapter_count": 100,
+  "host_count": 120,
   "adapters": [
     {
       "name": "airport",
@@ -523,6 +523,16 @@
       ]
     },
     {
+      "name": "khoa",
+      "status": "registered",
+      "hosts": [
+        "www.khoa.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "kipris-plus",
       "status": "registered",
       "hosts": [
@@ -724,6 +734,16 @@
       "hosts": [
         "nongsaro.go.kr",
         "www.nongsaro.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "nosc",
+      "status": "registered",
+      "hosts": [
+        "nosc.go.kr"
       ],
       "capabilities": [
         "verification"
@@ -1031,8 +1051,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 98,
-    "verification_capable_adapters": 98,
+    "adapter_count": 100,
+    "verification_capable_adapters": 100,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

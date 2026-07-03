@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T21:55:35Z",
+  "generated_at": "2026-07-03T22:12:37Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3650,
-    "stable": 8410
+    "changed": 3668,
+    "stable": 8392
   },
   "added": [],
   "removed": [],
@@ -2479,6 +2479,56 @@
       "new_digest": "5ace6057b1f7156b692015837eee64f6ae544e2c063c9bfbfb578b3704596b3e"
     },
     {
+      "id": "15038992",
+      "old_title": "해양수산부 국립해양조사원_조위관측소 조화상수",
+      "new_title": "해양수산부 국립해양조사원_조위관측소 조화상수",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8c78205448ee85f75c6b4f765f4208a939c84a6458c1cd03cefdab4bc49e5859",
+      "new_digest": "6aed7632b2e6c87ba18673df8cf088e98c5ec6b3efe52fa83bc7c47de0bb4610"
+    },
+    {
+      "id": "15039006",
+      "old_title": "해양수산부 국립해양조사원_수치조류도 예측 유향 유속",
+      "new_title": "해양수산부 국립해양조사원_수치조류도 예측 유향 유속",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e653bbe1bba27e291091bf190687da5ba0ed7528fe33d9fc4e6dd8ae11e4180c",
+      "new_digest": "0812ced9caed8dc17720c5820e5e445de791f5a55f0944522d5b31ddc9c1dedf"
+    },
+    {
+      "id": "15039007",
+      "old_title": "해양수산부 국립해양조사원_면(지역)단위 수치조류도 예측 유향 유속",
+      "new_title": "해양수산부 국립해양조사원_면(지역)단위 수치조류도 예측 유향 유속",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4fff98c307ecc4b8b2cc88c29550961e161df24a63baaca4ff65c3bf3c957e51",
+      "new_digest": "4b717f7df3871c28d67af64a521946c31910b5dd0db1731eded0fa1d5b30f8e9"
+    },
+    {
+      "id": "15039013",
+      "old_title": "해양수산부 국립해양조사원_수치조류도 지점별 최강창낙조",
+      "new_title": "해양수산부 국립해양조사원_수치조류도 지점별 최강창낙조",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "598bb3dd28d509b286a05dd3bc8f3d00452458bd997cac2a3049962bccce7e69",
+      "new_digest": "e8fd9faa5ca2354ad5af6f6643bd3c7ec0e4c8c818e53d384db8b60641b527c3"
+    },
+    {
+      "id": "15039031",
+      "old_title": "해양수산부 국립해양조사원_기본수준점",
+      "new_title": "해양수산부 국립해양조사원_기본수준점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "047411b65f8b34346ae02fa9e36912b16bc159c845dee41260220a98f322d085",
+      "new_digest": "acdc1dbf1ee73057f4d8fec3952e609747b59afb7b6c6acfaf7529472e9d878d"
+    },
+    {
       "id": "15039347",
       "old_title": "지식재산처_KIPRISPlus_특허 염기서열_REST API",
       "new_title": "지식재산처_KIPRISPlus_특허 염기서열_REST API",
@@ -3129,6 +3179,16 @@
       "new_digest": "99067cf0b3b1d50b116e84e0fb6ec18f76351c2eee7c3af4dcfdb24c17fbf83c"
     },
     {
+      "id": "15056545",
+      "old_title": "해양수산부 국립해양조사원_지명정보",
+      "new_title": "해양수산부 국립해양조사원_지명정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "436e2814d720e3dd8b47a7706762c7c9e8e5a3f9a39e9417a6ef61eab1a218b8",
+      "new_digest": "a934d27bc148f755f05c98a028e69d36e220ab8a5afaa82a1228ced82c65d2f7"
+    },
+    {
       "id": "15056548",
       "old_title": "농림축산식품부_년도별 농작물 보험금지급 통계정보",
       "new_title": "농림축산식품부_년도별 농작물 보험금지급 통계정보",
@@ -3629,6 +3689,16 @@
       "new_digest": "02e911f18b6903ae71358f54c8b5d9fb7779f9f1275e7a794aefa46c923743bb"
     },
     {
+      "id": "15056666",
+      "old_title": "해양수산부 국립해양조사원_해상구역정보",
+      "new_title": "해양수산부 국립해양조사원_해상구역정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f4085346b739522a674be7662f190722011efcce6df32670809199a657d71ef7",
+      "new_digest": "dda17d5f9e9085d751c07310515ab8da798da9383ef470de4e9c9620e6ab85a3"
+    },
+    {
       "id": "15056668",
       "old_title": "경기도_축산물 수입 판매업체 현황",
       "new_title": "경기도_축산물 수입 판매업체 현황",
@@ -3797,6 +3867,16 @@
       ],
       "old_digest": "bc3b89de28fe8e90b389cb928bb059a527ba0c4aa845da8d885f059e42479bb1",
       "new_digest": "e6405cca85638d4032678caa31f8b5ac1ad91b4f4be68eefacc70236323b7c6f"
+    },
+    {
+      "id": "15056719",
+      "old_title": "해양수산부 국립해양조사원_해상교통안전",
+      "new_title": "해양수산부 국립해양조사원_해상교통안전",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2871c439eb0a532d434640a200dcfb5bc6a90d24ad534c088708a75fa2a97c26",
+      "new_digest": "916a4bf2a246972eec8346723f65bdde505c5af9a90ff6d9ae567d469e12b052"
     },
     {
       "id": "15056723",
@@ -10399,6 +10479,16 @@
       "new_digest": "688094d0b73de75fae6a532cf41b12780b7009783160243e8721f38af41481ee"
     },
     {
+      "id": "15058246",
+      "old_title": "해양수산부 국립해양조사원_레저관광",
+      "new_title": "해양수산부 국립해양조사원_레저관광",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "91fac4008cfa76b97c9aaa0c7faf615cf45f6d6ae5c434fdaee8dbaabe2e8422",
+      "new_digest": "d6c0c9d6187129141e528579cf364f3ff4d96262586a48edd733ce8726132ab4"
+    },
+    {
       "id": "15058248",
       "old_title": "국토교통부_지하수등수위선",
       "new_title": "국토교통부_지하수등수위선",
@@ -12529,6 +12619,16 @@
       "new_digest": "e7b67229dcc20dcb45d82b964dc592aac19dc3bd475ea2ab88dbe686d40d2bb7"
     },
     {
+      "id": "15058724",
+      "old_title": "해양수산부 국립해양조사원_맞춤안전",
+      "new_title": "해양수산부 국립해양조사원_맞춤안전",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4faaaaaa2ff37898d84b8220a3574a88bb731b526746efc62dc058a61edb14d0",
+      "new_digest": "82009d90853aa3d6060c04188d1051257cfd7deb252d70c2cd335a9968bd7c29"
+    },
+    {
       "id": "15058725",
       "old_title": "경기도_인쇄사 현황",
       "new_title": "경기도_인쇄사 현황",
@@ -13087,6 +13187,16 @@
       ],
       "old_digest": "0dd6ecbd42c39908d783965386bfc6d74319a7a04c9b6ac58ef06d92dea8221b",
       "new_digest": "12f04d30129cdd5957aa6f938b90de3a4a0d3d276e42e5fe528ea92e1a89154d"
+    },
+    {
+      "id": "15058871",
+      "old_title": "해양수산부 국립해양조사원_시설안전",
+      "new_title": "해양수산부 국립해양조사원_시설안전",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "85131ffe54a97565847d6c4816b6494432df1ef4aca1cf463ba2d8e3606b3967",
+      "new_digest": "564d3967afc30b4c08031170dea18c2772589d571ed31a667682880e68ae9321"
     },
     {
       "id": "15058875",
@@ -17549,6 +17659,16 @@
       "new_digest": "b5150af64d2ce7ac1cfa8303c7aeec25de1cb5f37ba652afb1e30e18c884156d"
     },
     {
+      "id": "15068856",
+      "old_title": "해양수산부 국립해양조사원_객체사전",
+      "new_title": "해양수산부 국립해양조사원_객체사전",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e6ae8c27ba37c4be666d2ebe6a91c3c2b3893027b2c4920f37bbcebff40eef75",
+      "new_digest": "363d2e4ced5fcd9ec71cede7cfe4f8e80632349992bfcfb5fe035d90130088bb"
+    },
+    {
       "id": "15069189",
       "old_title": "농림수산식품교육문화정보원_국가농식품통계",
       "new_title": "농림수산식품교육문화정보원_국가농식품통계",
@@ -19829,6 +19949,16 @@
       "new_digest": "d7113bf55590e9f489948b16214b707a3612e4feb42f53ec51a96e7ddb525c16"
     },
     {
+      "id": "15088848",
+      "old_title": "해양수산부 국립해양조사원_해도객체정보",
+      "new_title": "해양수산부 국립해양조사원_해도객체정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b8d7d5ef82362b8c74769570ee206ccc0c607fa80bcca25ad5dac22b09729f67",
+      "new_digest": "54dffd5434c6252e330dcd9878de5cae47bbb5744d71342db9bda24dde3bfcaa"
+    },
+    {
       "id": "15089289",
       "old_title": "식품의약품안전처_식품제조가공업 폐업정보",
       "new_title": "식품의약품안전처_식품제조가공업 폐업정보",
@@ -21437,6 +21567,26 @@
       ],
       "old_digest": "b3098ee7a1dd527f94ed00c540b28d469569b06317f69944bcc0d61d7d0e04bf",
       "new_digest": "13ca9fe381a10c9f86a566a355f8c5bb11ae09bef0a39fc56e4aaa8ab40f4965"
+    },
+    {
+      "id": "15099707",
+      "old_title": "해양수산부 국립해양조사원_해수욕장 정보",
+      "new_title": "해양수산부 국립해양조사원_해수욕장 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "16d4c6c0c9cda2c1fafb27b724c2401219e0412a362e40839fed59e1d11e12c6",
+      "new_digest": "b8230e10d60f58bdf3065b671e6af1c1c89cfa67efbdb50f74be31416f2a7de1"
+    },
+    {
+      "id": "15099708",
+      "old_title": "해양수산부 국립해양조사원_이어도 대기중 방사선 총량",
+      "new_title": "해양수산부 국립해양조사원_이어도 대기중 방사선 총량",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a10525177523706b884526f2c5a9d1f61d50403b1e52143c6e6c43c3debeb506",
+      "new_digest": "a5fe2dda0688288635a2c2da9379d7ce8d2673ab13a1e84c53be48af81038ca0"
     },
     {
       "id": "15099715",
@@ -25027,6 +25177,26 @@
       ],
       "old_digest": "9d378071d3d57b12367d307b23b83ddb7d7cafbddbd2cc0f1a43cf08bb01b9d6",
       "new_digest": "eb4055e630a59484ec7c818c4cdc8e095afdbf303e85799855276441156cc5ff"
+    },
+    {
+      "id": "15114020",
+      "old_title": "해양수산부 국립해양조사원_해안선 객체정보 건수(통계)",
+      "new_title": "해양수산부 국립해양조사원_해안선 객체정보 건수(통계)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d116ae5165c793901aba8e99ab6acd7a50be1c9f9b549952b0954f236280415e",
+      "new_digest": "d2eefa030f24c6be90516472f553c956250509eda64826425647ed34aa4710a5"
+    },
+    {
+      "id": "15114021",
+      "old_title": "해양수산부 국립해양조사원_측량원도 년도별 제작건수(통계)",
+      "new_title": "해양수산부 국립해양조사원_측량원도 년도별 제작건수(통계)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ed482fe89b55d8588a09ffe9a1abc852c00a2aaa8f2698e8e96c836629eeb610",
+      "new_digest": "e550eb45f492a7ac4b7a300ea4aea49aa5f37488159f9347cd36f9b1d8f56232"
     },
     {
       "id": "15114448",
@@ -29007,6 +29177,16 @@
       ],
       "old_digest": "ac7c759ad0a25771fe9d799d9a416ac3f17892aa76f37ccfce5a71dc72f14543",
       "new_digest": "5547edd06b3ea030bf6c87feb070be69f34136f6a3d4e934fec73213c10f58da"
+    },
+    {
+      "id": "15128154",
+      "old_title": "해양수산부 국립해양조사원_국가해양위성정보 메타데이터",
+      "new_title": "해양수산부 국립해양조사원_국가해양위성정보 메타데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "af542730eb89b466cc8ea02a5679fc8123d54af921fbb2fd33abd9fe199df438",
+      "new_digest": "f394c32061754e44f4291115b2dd43e794a5b7ce982f396ca9659c385d92ebdc"
     },
     {
       "id": "15128299",

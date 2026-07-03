@@ -1,0 +1,55 @@
+{
+  "generated_at": "2026-07-03T22:12:19Z",
+  "source": "reports/data-go-kr/khoa-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 30,
+    "verified": 30,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 30,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "khoa",
+        "count": 29,
+        "provider": "khoa"
+      },
+      {
+        "key": "nosc",
+        "count": 1,
+        "provider": "nosc"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "www.khoa.go.kr",
+        "count": 29,
+        "host": "www.khoa.go.kr"
+      },
+      {
+        "key": "nosc.go.kr",
+        "count": 1,
+        "host": "nosc.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 30,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}
