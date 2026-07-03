@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-03T22:47:17Z",
+  "generated_at": "2026-07-03T22:57:38Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 48,
+    "report_total": 50,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,7 +38,7 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 36,
+      "report_count": 38,
       "present_reports": [
         {
           "name": "chungbuk-verification-summary.json",
@@ -195,6 +195,14 @@
         {
           "name": "seoul-verification.json",
           "path": "reports/data-go-kr/seoul-verification.json"
+        },
+        {
+          "name": "western-power-verification-summary.json",
+          "path": "reports/data-go-kr/western-power-verification-summary.json"
+        },
+        {
+          "name": "western-power-verification.json",
+          "path": "reports/data-go-kr/western-power-verification.json"
         }
       ],
       "present_recommended_reports": [],
@@ -249,7 +257,9 @@
         "safetydata-operation-candidates.json",
         "safetydata-registry-patches.json",
         "seoul-verification-summary.json",
-        "seoul-verification.json"
+        "seoul-verification.json",
+        "western-power-verification-summary.json",
+        "western-power-verification.json"
       ],
       "recommended_report_coverage_percent": 0.0
     },
