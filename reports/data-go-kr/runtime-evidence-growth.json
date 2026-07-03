@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-07-03T23:15:15Z",
+  "generated_at": "2026-07-03T23:29:13Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -13,20 +13,20 @@
     "provider_index": "data/provider-index.json"
   },
   "coverage": {
-    "operations": 19957,
-    "callable_operations": 19815,
+    "operations": 19996,
+    "callable_operations": 19854,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 8347,
-    "registered_adapter_operations": 8337,
+    "external_endpoint_operations": 8386,
+    "registered_adapter_operations": 8376,
     "call_capable_adapters": 23
   },
   "evidence": {
-    "total": 3438,
-    "verified": 1646,
+    "total": 3477,
+    "verified": 1685,
     "failed": 306,
     "skipped": 1486,
     "unknown": 0,
-    "coverage_percent": 17.2,
+    "coverage_percent": 17.4,
     "by_kind": [
       {
         "key": "data_go_kr_gateway",
@@ -34,7 +34,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 2714
+        "count": 2753
       },
       {
         "key": "service_root",
@@ -44,7 +44,7 @@
   },
   "growth_target": {
     "target_percent": 10,
-    "target_evidence_total": 1996,
+    "target_evidence_total": 2000,
     "remaining_to_target": 0,
     "status": "above_target"
   },
@@ -248,8 +248,8 @@
   },
   "provider_split_readiness": {
     "status": "ready",
-    "adapter_count": 105,
-    "verification_capable_adapters": 105,
+    "adapter_count": 106,
+    "verification_capable_adapters": 106,
     "call_capable_adapters": 23
   },
   "warnings": []

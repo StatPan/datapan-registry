@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `19957`
-- callable operations: `19815` (`99.3%`)
+- operations: `19996`
+- callable operations: `19854` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `8347`
-- registered adapter operations: `8337`
+- external endpoint operations: `8386`
+- registered adapter operations: `8376`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
-- approval-required operations: `7416`
+- approval-required operations: `7480`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `120`
+- registered adapter hosts: `121`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -232,7 +232,9 @@ The current operation materialization queue still starts at `울산항만공사`
 APIs, `6` APIs with operation mappings, and `92` uncovered APIs. The July 2026
 portal pages and catalog JSON for that queue return error/not-found responses,
 so it should be tracked as a reactivation blocker while the next viable queue
-is processed. The runtime reactivation queue starts at `행정안전부`: `1252`
+is processed. The latest viable queue was `국립생태원`: `43` APIs, now `43`
+covered APIs after `39` materialized Ecobank link-detail operations. The
+runtime reactivation queue starts at `행정안전부`: `1252`
 APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
 records, and `1202` APIs still needing runtime reactivation. Gateway calls need
@@ -600,6 +602,11 @@ readiness, not to advance verified runtime coverage.
    evidence to `3438`, verified checks to `1646`, registered external adapter
    operations to `8337`, and raises API operation coverage to `10,932` of
    `12,060` APIs (`90.6%`).
+   The 국립생태원 batch registers NIE Ecobank host coverage, materializes `39`
+   APIs and `39` operations, and merges `39` verified landing-page checks. That
+   brings checked runtime evidence to `3477`, verified checks to `1685`,
+   registered external adapter operations to `8376`, and raises API operation
+   coverage to `10,971` of `12,060` APIs (`91.0%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

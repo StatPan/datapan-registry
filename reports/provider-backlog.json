@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T23:15:15Z",
+  "generated_at": "2026-07-03T23:29:13Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 275,
+  "filtered_count": 276,
   "summary": {
-    "hosts": 275,
+    "hosts": 276,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 131,
-    "external_guide_hosts": 199,
-    "registered_adapter_hosts": 120,
-    "operation_hosts": 133,
+    "external_endpoint_hosts": 132,
+    "external_guide_hosts": 200,
+    "registered_adapter_hosts": 121,
+    "operation_hosts": 134,
     "guide_only_hosts": 142,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7441,
+    "approval_required_operations": 7480,
     "malformed_source_url_count": 712
   },
   "providers": [
@@ -694,6 +694,24 @@
         "15008883",
         "15008884",
         "15008887"
+      ]
+    },
+    {
+      "host": "www.nie-ecobank.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 39,
+      "operations": 39,
+      "external_endpoint_operations": 39,
+      "external_guide_specs": 39,
+      "approval_required_operations": 39,
+      "sample_ids": [
+        "15101051",
+        "15101287",
+        "15101288"
       ]
     },
     {

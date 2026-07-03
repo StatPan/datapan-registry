@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-03T23:15:15Z",
+  "generated_at": "2026-07-03T23:29:13Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 54,
+    "report_total": 56,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,7 +38,7 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 42,
+      "report_count": 44,
       "present_reports": [
         {
           "name": "chungbuk-verification-summary.json",
@@ -164,6 +164,14 @@
           "path": "reports/data-go-kr/mafra-ministry-verification.json"
         },
         {
+          "name": "nie-ecobank-verification-summary.json",
+          "path": "reports/data-go-kr/nie-ecobank-verification-summary.json"
+        },
+        {
+          "name": "nie-ecobank-verification.json",
+          "path": "reports/data-go-kr/nie-ecobank-verification.json"
+        },
+        {
           "name": "nier-nesc-verification-summary.json",
           "path": "reports/data-go-kr/nier-nesc-verification-summary.json"
         },
@@ -267,6 +275,8 @@
         "link-detail-registry-patches.json",
         "mafra-ministry-verification-summary.json",
         "mafra-ministry-verification.json",
+        "nie-ecobank-verification-summary.json",
+        "nie-ecobank-verification.json",
         "nier-nesc-verification-summary.json",
         "nier-nesc-verification.json",
         "operation-materialization-plan.json",

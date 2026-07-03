@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T23:15:15Z",
+  "generated_at": "2026-07-03T23:29:13Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 105,
-  "host_count": 125,
+  "adapter_count": 106,
+  "host_count": 126,
   "adapters": [
     {
       "name": "airport",
@@ -759,6 +759,16 @@
       ]
     },
     {
+      "name": "nie-ecobank",
+      "status": "registered",
+      "hosts": [
+        "www.nie-ecobank.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "nier-nesc",
       "status": "registered",
       "hosts": [
@@ -1101,8 +1111,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 105,
-    "verification_capable_adapters": 105,
+    "adapter_count": 106,
+    "verification_capable_adapters": 106,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

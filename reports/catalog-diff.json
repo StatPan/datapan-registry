@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T23:15:15Z",
+  "generated_at": "2026-07-03T23:29:13Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3747,
-    "stable": 8313
+    "changed": 3786,
+    "stable": 8274
   },
   "added": [],
   "removed": [],
@@ -22339,6 +22339,16 @@
       "new_digest": "0d9302fa1abc351e95c9df53e66eac756715e6bce564662f05c7110fc8f15705"
     },
     {
+      "id": "15101051",
+      "old_title": "국립생태원_자연환경조사_곤충_점",
+      "new_title": "국립생태원_자연환경조사_곤충_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9ea76d672ff442b7f6cf315c85e3c562c127926067e0874266a0599c49753d11",
+      "new_digest": "dde6f492c95cb447b179f60211b4a5df94919d7e634c943aad670524a069641f"
+    },
+    {
       "id": "15101073",
       "old_title": "국토교통부_비행금지구역",
       "new_title": "국토교통부_비행금지구역",
@@ -22467,6 +22477,386 @@
       ],
       "old_digest": "f0867a59c76fe86b4b19ec481ac9c076b5449bee42fb524ad93782cee925355d",
       "new_digest": "19066edd9903eb24e9fd8b109a6f46231a59af8881ccaf8194af50ef4b217964"
+    },
+    {
+      "id": "15101287",
+      "old_title": "국립생태원_자연환경조사_식물상_점",
+      "new_title": "국립생태원_자연환경조사_식물상_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5a4f53a52746cb6d8b53d1875b5693c32d7f451093ddd780f804cce2bf2383eb",
+      "new_digest": "cb1fbe4c46e0272208c39fde476356597174cacef1dad0255c24512b9b4c17d0"
+    },
+    {
+      "id": "15101288",
+      "old_title": "국립생태원_자연환경조사_식생_면",
+      "new_title": "국립생태원_자연환경조사_식생_면",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "86e9d26540112cf0857f5dc8d8b8b3f5fc4c88fe218d32b50badef8ff8d5b93a",
+      "new_digest": "f9ba29be00a7a3fe7dda9dd01498dc58690dc8dcdaf5ab9a8019c3862a68e9d0"
+    },
+    {
+      "id": "15101289",
+      "old_title": "국립생태원_자연환경조사_양서파충류_점",
+      "new_title": "국립생태원_자연환경조사_양서파충류_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e982d0e0687f302f28e859dc05856ac4ced8739c9a231651e797a932cb3774ee",
+      "new_digest": "7dd77374c6c2c98d1a2d575f0b5fce980213198ef0def02769859df0f0c44508"
+    },
+    {
+      "id": "15101290",
+      "old_title": "국립생태원_자연환경조사_어류_점",
+      "new_title": "국립생태원_자연환경조사_어류_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "08c328c6a757b441ae775e655445c52a6956e115f8b1a30fe7776a1b1261c2af",
+      "new_digest": "42aed8c56fb44945e7738066d022bdc214fb8a5d7c793a7872163752af815aff"
+    },
+    {
+      "id": "15101291",
+      "old_title": "국립생태원_자연환경조사_저서무척추동물_점",
+      "new_title": "국립생태원_자연환경조사_저서무척추동물_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "352d52a50ce422fc91ced2f15e8eecb95c6fd87b557c62651de6705da09f483d",
+      "new_digest": "40edc60b2fac30af47a6525d8b4a8ca1d1253feebdd4b010d16c15a265f1a068"
+    },
+    {
+      "id": "15101293",
+      "old_title": "국립생태원_자연환경조사_조류_점",
+      "new_title": "국립생태원_자연환경조사_조류_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d23bb42cb4a356875db3fab850d598f7d10176f7404f00cada40d13b17647525",
+      "new_digest": "abb5dbf4b4476cf2afc649fda617bfe5ad4a41b6a2af58ab9e99fe622227e559"
+    },
+    {
+      "id": "15101294",
+      "old_title": "국립생태원_자연환경조사_지형경관_선",
+      "new_title": "국립생태원_자연환경조사_지형경관_선",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1cf96de9a99b155982d7199d417c0ea35a83402fa2ed6dc6e0c0d9a70897b94a",
+      "new_digest": "352afeedab8830d740a6a650c0e3a4fa74b9c4afc1f3ec14195dd1082d72a463"
+    },
+    {
+      "id": "15101296",
+      "old_title": "국립생태원_자연환경조사_포유류_점",
+      "new_title": "국립생태원_자연환경조사_포유류_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "89b62cbfe497207ae91d20bc0c97d186618bed8a4966171eb46e5c21c217d55f",
+      "new_digest": "eaa2ea0d544ef807ec75b28eee94ed3dfa630f1fd4d67e83525c0be70bb637cc"
+    },
+    {
+      "id": "15101297",
+      "old_title": "국립생태원_자연환경조사_해안생물_선",
+      "new_title": "국립생태원_자연환경조사_해안생물_선",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "51abf64334b88c5604a32ab728188fedf7d8e2c164244523d8d57ae8d9a5b6c3",
+      "new_digest": "2e8a9f637bf84247d6d34113d6d24f4f53f91f1d754cbce2d3d8120826841e7c"
+    },
+    {
+      "id": "15101298",
+      "old_title": "국립생태원_자연환경조사_지형경관",
+      "new_title": "국립생태원_자연환경조사_지형경관",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d1068c630ff90209d4aba4970fbc8d7ed78b211bdc0625ae2bd7a60ba2291c5b",
+      "new_digest": "9847e2bbefd5be7726528adada25c6ffde9f9a259b2ca497f849d5cd13b0a8ab"
+    },
+    {
+      "id": "15101299",
+      "old_title": "국립생태원_백두대간정밀조사_곤충_점",
+      "new_title": "국립생태원_백두대간정밀조사_곤충_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c05057c80ef3bb7439eefb7748decb8c9b51e0dce56b31f5c1ffeeacf420e3d0",
+      "new_digest": "ea564c66f99cec2663115ab87ceb6d6d4e841541a6c9c94b4502cc8804025c68"
+    },
+    {
+      "id": "15101300",
+      "old_title": "국립생태원_백두대간정밀조사_식물상_점",
+      "new_title": "국립생태원_백두대간정밀조사_식물상_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d0389728c3b9ac4eb00862a545baacd5ddb67c9bb893271782a6237387325d4e",
+      "new_digest": "583965acbbc6ddfec9706ef081b38941029683de8a9c882a3dd6a05d1ec1714d"
+    },
+    {
+      "id": "15101301",
+      "old_title": "국립생태원_백두대간정밀조사_식생_면",
+      "new_title": "국립생태원_백두대간정밀조사_식생_면",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "293552c3982f3d0a8601c47c713c15ce1cd4179e3bf7dadd236c605026dfcc2c",
+      "new_digest": "9840169aadda88a76a0c5a99195552977ee44b49282118b0234178e366d61863"
+    },
+    {
+      "id": "15101302",
+      "old_title": "국립생태원_백두대간정밀조사_양서파충류_점",
+      "new_title": "국립생태원_백두대간정밀조사_양서파충류_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "144e9d0452276861ee42525cf1b1dd729562cf2c39dba81fef35fcac62f1d609",
+      "new_digest": "748429cea45f99dca07722fd297a1ebebb51547780ffff0dd4b935ec0ce86897"
+    },
+    {
+      "id": "15101303",
+      "old_title": "국립생태원_백두대간정밀조사_어류_점",
+      "new_title": "국립생태원_백두대간정밀조사_어류_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ed9d8aa48323d20ceb75b48befcee155c4679c300c53245714ff841abcfd8112",
+      "new_digest": "a17a54e7f7ed34d4bed1c8b4b07b6ce7c3c44449e734338bdd79e6c65b061d07"
+    },
+    {
+      "id": "15101304",
+      "old_title": "국립생태원_백두대간정밀조사_저서무척추동물_점",
+      "new_title": "국립생태원_백두대간정밀조사_저서무척추동물_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "eabc14502c3ca98b6d38e7f645f3bc950f137552b4cb03726f65ba8dfb643abe",
+      "new_digest": "c0ab1b7f88169915242f81df1308dfe4456bd6ea8bd8334bde8c71edbc067905"
+    },
+    {
+      "id": "15101305",
+      "old_title": "국립생태원_백두대간정밀조사_조류_점",
+      "new_title": "국립생태원_백두대간정밀조사_조류_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6df72d7201f1638a6025633151389f190a231b118f9511b5449925cfb9055541",
+      "new_digest": "ca35e186debac6f3883b2d6fda0f36390ac6510762ea18137f1d450250b8f4a4"
+    },
+    {
+      "id": "15101306",
+      "old_title": "국립생태원_백두대간정밀조사_지의류_점",
+      "new_title": "국립생태원_백두대간정밀조사_지의류_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ee3662ebfb425f11cb57ba1b96bc06b4a0b3499d529a52570d5b483f2162c255",
+      "new_digest": "b727b45251d9b871b68b7402632ab4ccd419d3986a6cba46c3e175f04d34f5a7"
+    },
+    {
+      "id": "15101307",
+      "old_title": "국립생태원_백두대간정밀조사_지형경관_점",
+      "new_title": "국립생태원_백두대간정밀조사_지형경관_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5d4a527fd89a7023df547cedfca06f2efd452f0045bc4b72ebf6d6aba7d4d631",
+      "new_digest": "c439ee87c522e3141d663153c64053a1bee454fa996eabe9e3376d53401f391e"
+    },
+    {
+      "id": "15101308",
+      "old_title": "국립생태원_백두대간정밀조사_포유류_점",
+      "new_title": "국립생태원_백두대간정밀조사_포유류_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "03d646fa0683f3e751c6faafcae7100bc65baaa2cb605e7947f0e24df1fe8bc8",
+      "new_digest": "730304e26e5460ac3b5bdfc52c4ee4038acde2cebb2ee5098ffc256796e5aec3"
+    },
+    {
+      "id": "15101312",
+      "old_title": "국립생태원_생태계정밀조사_곤충",
+      "new_title": "국립생태원_생태계정밀조사_곤충",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e5bc7e41e524a6f8c0cd0122d52b5c436524f1ab9812a244d19196fdd69dc513",
+      "new_digest": "428a3be75d35b4cee295e461530dcb4c67fc344d17ea6126169c6575bf3549ef"
+    },
+    {
+      "id": "15101313",
+      "old_title": "국립생태원_생태계정밀조사_곤충_점",
+      "new_title": "국립생태원_생태계정밀조사_곤충_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f9377bec8092549f14d7f46b517e5392d3b5a1eea31c4a4f4bb6eaaf78da580e",
+      "new_digest": "300ab090d2da6f913a9ff584b8932c237db5a6c615bb7da2314563b7801758b1"
+    },
+    {
+      "id": "15101314",
+      "old_title": "국립생태원_생태계정밀조사_균류_점",
+      "new_title": "국립생태원_생태계정밀조사_균류_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "42fcdcb82891d0db479f93d0b71fcb03498ef8c390053482ab942b32044e4ff5",
+      "new_digest": "90999a1d51cf625e4e509b29d310b1461b06d54ce9028092005eb0ba1da21295"
+    },
+    {
+      "id": "15101315",
+      "old_title": "국립생태원_생태계정밀조사_생태계조사지역_면",
+      "new_title": "국립생태원_생태계정밀조사_생태계조사지역_면",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ee9ab53b45bdac31e8ebc621627994fe227942a8b547d11886cc746ca3703646",
+      "new_digest": "343a4a32f3aaf3d1a425ec7fb98a2329495611fd272b0a2be23a63ab1085bae9"
+    },
+    {
+      "id": "15101316",
+      "old_title": "국립생태원_생태계정밀조사_생태계조사지역_점",
+      "new_title": "국립생태원_생태계정밀조사_생태계조사지역_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7aac7d63afc6e81547e794f27cdc9ba2ae656dea64aa1cbd8acc0193b7f64708",
+      "new_digest": "9cca100b7d155418b66072c7ddf396f0aef2ed47190021c84bb0ff0cabad5815"
+    },
+    {
+      "id": "15101317",
+      "old_title": "국립생태원_생태계정밀조사_식생_면",
+      "new_title": "국립생태원_생태계정밀조사_식생_면",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5915caabc2e845facdf58ee8f1a369d948fe148193089ffb8bd1e2a0d323e1be",
+      "new_digest": "a36bcbdb00aa7125282032955dc7275842abbe78a896b5fcfe7fcf751ddbfb10"
+    },
+    {
+      "id": "15101318",
+      "old_title": "국립생태원_생태계정밀조사_식생_점",
+      "new_title": "국립생태원_생태계정밀조사_식생_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8b3f365f2133a5318bb7b43486cc156658d7765a2947db2e6d46f69ea5f14ea2",
+      "new_digest": "363a876e843ff93d99191ba12bd2067d068232961a7c78e4b2faffe4d0866b15"
+    },
+    {
+      "id": "15101319",
+      "old_title": "국립생태원_생태계정밀조사_양서파충류_점",
+      "new_title": "국립생태원_생태계정밀조사_양서파충류_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f9f8788ac5cf4ad9e8811a402e3e367f724061801eab2988bbda44baa7d1cf81",
+      "new_digest": "28b62989903c688eb864485c097aecf68f30117e7660484fe0116de60a263f25"
+    },
+    {
+      "id": "15101320",
+      "old_title": "국립생태원_생태계정밀조사_어류",
+      "new_title": "국립생태원_생태계정밀조사_어류",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7b65c9b0b21eb5f963c83bc4f3b6a2f82372237bbf8a7ff840bee14a0d4dc22d",
+      "new_digest": "2eb2bb1c4dfbe9ff5aab3802f004af00c6202ccefe6a0386f8f6127dbcc813e8"
+    },
+    {
+      "id": "15101321",
+      "old_title": "국립생태원_생태계정밀조사_어류_점",
+      "new_title": "국립생태원_생태계정밀조사_어류_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "47624fbf8d214c313ba6a8d7964b7a2750ea7a8861a7412f4546ae1b4ba60506",
+      "new_digest": "00fdec2fa25048382545627ca3b8ea2078c012b5e2265d541d43172dcd54e4c8"
+    },
+    {
+      "id": "15101322",
+      "old_title": "국립생태원_생태계정밀조사_저서무척추동물_점",
+      "new_title": "국립생태원_생태계정밀조사_저서무척추동물_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6ceafef36e32b6afc480f4d336cb56ee46fe06327f69c23769f94fa294693461",
+      "new_digest": "a18de1e1cb18cfc698b210a36ab99bbb4a2aef8f14b3d29b830252d438b7ded0"
+    },
+    {
+      "id": "15101323",
+      "old_title": "국립생태원_생태계정밀조사_조류_점",
+      "new_title": "국립생태원_생태계정밀조사_조류_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8210f15be67e500147813f993d995ccdcb499a21c4659bb4a850153a93fdc0b0",
+      "new_digest": "33e3b23722e60c54e1288ecd5cfbe67ac03aa07a6c7c838d81d0eadf7890e2f8"
+    },
+    {
+      "id": "15101324",
+      "old_title": "국립생태원_생태계정밀조사_지형경관_점",
+      "new_title": "국립생태원_생태계정밀조사_지형경관_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ac6e4cbb6e9e85f83bd6919750b5b826dc56902adcf8f8227f5b72f0773ffa0e",
+      "new_digest": "3a4864e906c24d3c284d2cc0e3dbbf184bfb146cca3adf9d4cec7095a0806251"
+    },
+    {
+      "id": "15101325",
+      "old_title": "국립생태원_생태계정밀조사_포유류_면",
+      "new_title": "국립생태원_생태계정밀조사_포유류_면",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1a14f2324d9643e8da6218b13157ce0bc2931eb79585b7aa06310236c50dd84f",
+      "new_digest": "a207d4e6beb2205815df458d7ebfded72a6f0d0cde78e1df33650029caf99005"
+    },
+    {
+      "id": "15101326",
+      "old_title": "국립생태원_생태계정밀조사_포유류_점",
+      "new_title": "국립생태원_생태계정밀조사_포유류_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "db7c3d46dcf40ff1f65151010b118929740d7a6df04ba11a9f8df9e2891245f8",
+      "new_digest": "4c2bce47fe76796f86e4867a30cbb9545b1870a38a7b0adcfa8398c9ce92fcd7"
+    },
+    {
+      "id": "15101327",
+      "old_title": "국립생태원_생태계정밀조사_플랑크톤_점",
+      "new_title": "국립생태원_생태계정밀조사_플랑크톤_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "695e4698821f2ea5ac659ed379d0af6a639868a17cb6a39ff622277b4a2759fc",
+      "new_digest": "92fe25ae5f8ee215108d41ebc0cf6fcef39bae58dc523f27c14814de4c38f318"
+    },
+    {
+      "id": "15101328",
+      "old_title": "국립생태원_생태계정밀조사_식물상",
+      "new_title": "국립생태원_생태계정밀조사_식물상",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8596b44f1877a09b9a9ca9e1b3b15d82b3d205511eb528bb19caa3078637596d",
+      "new_digest": "1638fef7e82a6534b2de8af136d049fae22e6ac41981a8f63f3c5f0dca76f4cd"
+    },
+    {
+      "id": "15101329",
+      "old_title": "국립생태원_생태계정밀조사_식물상_점",
+      "new_title": "국립생태원_생태계정밀조사_식물상_점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "53f02e984f31d1fc75935ce9d6c68901151d9e38094eb46ac61574191edc0a13",
+      "new_digest": "31ebf960ab3b54c76a154d3144579c810acf5997977235837ae4c22c0c99d84e"
     },
     {
       "id": "15101361",

@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T23:15:02Z",
+  "generated_at": "2026-07-03T23:29:05Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3438,
-    "verified": 1646,
+    "total": 3477,
+    "verified": 1685,
     "failed": 306,
     "skipped": 1486,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 1646,
+        "count": 1685,
         "status": "verified"
       },
       {
@@ -477,6 +477,11 @@
         "key": "uiryeong",
         "count": 40,
         "provider": "uiryeong"
+      },
+      {
+        "key": "nie-ecobank",
+        "count": 39,
+        "provider": "nie-ecobank"
       },
       {
         "key": "eshare",
@@ -966,6 +971,11 @@
         "host": "data.uiryeong.go.kr"
       },
       {
+        "key": "www.nie-ecobank.kr",
+        "count": 39,
+        "host": "www.nie-ecobank.kr"
+      },
+      {
         "key": "www.eshare.go.kr",
         "count": 36,
         "host": "www.eshare.go.kr"
@@ -1419,7 +1429,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 2714,
+        "count": 2753,
         "kind": "external_endpoint"
       },
       {
