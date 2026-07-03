@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T22:12:37Z",
+  "generated_at": "2026-07-03T22:23:18Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 19860,
-    "runtime_evidence": 3321,
+    "operations": 19861,
+    "runtime_evidence": 3322,
     "runtime_evidence_percent": 16.7,
-    "callable_operations": 19718,
-    "external_endpoint_operations": 8250,
-    "registered_adapter_operations": 8240,
+    "callable_operations": 19719,
+    "external_endpoint_operations": 8251,
+    "registered_adapter_operations": 8241,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 8250
+      "count": 8251
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 8240
+      "count": 8241
     },
     {
       "key": "builtin",
@@ -101,7 +101,7 @@
     },
     {
       "category": "환경기상",
-      "operation_count": 1175
+      "operation_count": 1176
     },
     {
       "category": "국토관리",
@@ -2506,23 +2506,31 @@
     {
       "organization": "한국환경공단",
       "api_count": 66,
-      "operation_api_count": 65,
-      "operation_count": 151,
-      "runtime_evidence_count": 2,
-      "runtime_evidence_percent": 1.3,
-      "verified": 0,
+      "operation_api_count": 66,
+      "operation_count": 152,
+      "runtime_evidence_count": 3,
+      "runtime_evidence_percent": 2.0,
+      "verified": 1,
       "failed": 0,
       "skipped": 2,
       "unknown": 0,
-      "approval_required_operations": 40,
+      "approval_required_operations": 41,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
           "key": "data_go_kr_gateway",
           "count": 151
+        },
+        {
+          "key": "external_endpoint",
+          "count": 1
         }
       ],
       "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 1
+        },
         {
           "key": "builtin",
           "count": 151
@@ -2531,13 +2539,22 @@
       "top_categories": [
         {
           "category": "환경기상",
-          "operation_count": 151
+          "operation_count": 152
         }
       ],
       "top_hosts": [
         {
           "host": "apis.data.go.kr",
           "operation_count": 151
+        },
+        {
+          "host": "www.recycling-info.or.kr",
+          "operation_count": 1,
+          "adapter": "recycling-info",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T22:12:43Z",
+  "generated_at": "2026-07-03T22:23:26Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 19860,
-    "callable_operations": 19718,
+    "operations": 19861,
+    "callable_operations": 19719,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 8250,
-    "registered_adapter_operations": 8240,
+    "external_endpoint_operations": 8251,
+    "registered_adapter_operations": 8241,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.6,
-    "approval_required_operations": 7350,
+    "approval_required_operations": 7351,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 115,
+    "registered_adapter_hosts": 116,
     "missing_adapter_hosts": 11,
-    "adapter_count": 100,
+    "adapter_count": 101,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T22:12:36Z",
-    "total": 3321,
-    "verified": 1549,
+    "generated_at": "2026-07-03T22:23:17Z",
+    "total": 3322,
+    "verified": 1550,
     "failed": 306,
     "skipped": 1466,
     "unknown": 0,
-    "verified_percent": 46.6,
+    "verified_percent": 46.7,
     "evidence_operation_percent": 16.7
   },
   "route_evidence": {
@@ -382,10 +382,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T22:12:43Z",
+    "generated_at": "2026-07-03T22:23:26Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 100,
-    "host_count": 120,
+    "adapter_count": 101,
+    "host_count": 121,
     "adapters": [
       {
         "name": "airport",
@@ -1210,6 +1210,16 @@
         ]
       },
       {
+        "name": "recycling-info",
+        "status": "registered",
+        "hosts": [
+          "www.recycling-info.or.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "safemap",
         "status": "registered",
         "hosts": [
@@ -1434,8 +1444,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 100,
-      "verification_capable_adapters": 100,
+      "adapter_count": 101,
+      "verification_capable_adapters": 101,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,
