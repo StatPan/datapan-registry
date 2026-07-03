@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T23:15:15Z",
+  "generated_at": "2026-07-03T23:29:13Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 19957,
-    "runtime_evidence": 3438,
-    "runtime_evidence_percent": 17.2,
-    "callable_operations": 19815,
-    "external_endpoint_operations": 8347,
-    "registered_adapter_operations": 8337,
+    "operations": 19996,
+    "runtime_evidence": 3477,
+    "runtime_evidence_percent": 17.4,
+    "callable_operations": 19854,
+    "external_endpoint_operations": 8386,
+    "registered_adapter_operations": 8376,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 8347
+      "count": 8386
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 8337
+      "count": 8376
     },
     {
       "key": "builtin",
@@ -92,12 +92,12 @@
       "operation_count": 1308
     },
     {
-      "category": "재정금융",
-      "operation_count": 1274
+      "category": "환경기상",
+      "operation_count": 1281
     },
     {
-      "category": "환경기상",
-      "operation_count": 1242
+      "category": "재정금융",
+      "operation_count": 1274
     },
     {
       "category": "식품건강",
@@ -5005,6 +5005,61 @@
       ]
     },
     {
+      "organization": "국립생태원",
+      "api_count": 43,
+      "operation_api_count": 43,
+      "operation_count": 51,
+      "runtime_evidence_count": 39,
+      "runtime_evidence_percent": 76.5,
+      "verified": 39,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 39,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 12
+        },
+        {
+          "key": "external_endpoint",
+          "count": 39
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 39
+        },
+        {
+          "key": "builtin",
+          "count": 12
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "환경기상",
+          "operation_count": 51
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "www.nie-ecobank.kr",
+          "operation_count": 39,
+          "adapter": "nie-ecobank",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 12
+        }
+      ]
+    },
+    {
       "organization": "행정안전부 한국지역정보개발원",
       "api_count": 38,
       "operation_api_count": 38,
@@ -9322,44 +9377,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 13
-        }
-      ]
-    },
-    {
-      "organization": "국립생태원",
-      "api_count": 43,
-      "operation_api_count": 4,
-      "operation_count": 12,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 12
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 12
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "환경기상",
-          "operation_count": 12
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 12
         }
       ]
     },
