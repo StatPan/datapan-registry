@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-07-03T17:43:13Z",
+  "generated_at": "2026-07-03T17:58:13Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -13,20 +13,20 @@
     "provider_index": "data/provider-index.json"
   },
   "coverage": {
-    "operations": 17637,
-    "callable_operations": 17495,
+    "operations": 17858,
+    "callable_operations": 17716,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 6027,
-    "registered_adapter_operations": 6017,
+    "external_endpoint_operations": 6248,
+    "registered_adapter_operations": 6238,
     "call_capable_adapters": 23
   },
   "evidence": {
-    "total": 1825,
-    "verified": 486,
-    "failed": 146,
+    "total": 1850,
+    "verified": 510,
+    "failed": 147,
     "skipped": 1193,
     "unknown": 0,
-    "coverage_percent": 10.3,
+    "coverage_percent": 10.4,
     "by_kind": [
       {
         "key": "data_go_kr_gateway",
@@ -34,7 +34,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 1101
+        "count": 1126
       },
       {
         "key": "service_root",
@@ -44,15 +44,15 @@
   },
   "growth_target": {
     "target_percent": 10,
-    "target_evidence_total": 1764,
+    "target_evidence_total": 1786,
     "remaining_to_target": 0,
     "status": "above_target"
   },
   "verification_plan": {
     "planned_batches": 20,
-    "planned_operations": 150,
+    "planned_operations": 132,
     "uncovered_gateway_candidates": 10714,
-    "uncovered_adapter_candidates": 4422,
+    "uncovered_adapter_candidates": 3591,
     "missing_adapter_hosts": 11,
     "planned_by_kind": [
       {
@@ -61,7 +61,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 140
+        "count": 122
       }
     ],
     "batches": [
@@ -104,8 +104,8 @@
         "label": "data-gg",
         "provider": "data-gg",
         "kind": "external_endpoint",
-        "candidates": 2173,
-        "uncovered_candidates": 2057,
+        "candidates": 2174,
+        "uncovered_candidates": 2058,
         "planned_operations": 10,
         "output": ".datapan/verification/data-gg-next.json"
       },
@@ -146,6 +146,15 @@
         "output": ".datapan/verification/gwanak-next.json"
       },
       {
+        "label": "gwangjin",
+        "provider": "gwangjin",
+        "kind": "external_endpoint",
+        "candidates": 1,
+        "uncovered_candidates": 1,
+        "planned_operations": 1,
+        "output": ".datapan/verification/gwangjin-next.json"
+      },
+      {
         "label": "gwangmyeong",
         "provider": "gwangmyeong",
         "kind": "external_endpoint",
@@ -155,13 +164,40 @@
         "output": ".datapan/verification/gwangmyeong-next.json"
       },
       {
-        "label": "jejudatahub",
-        "provider": "jejudatahub",
+        "label": "jeju-air",
+        "provider": "jeju-air",
         "kind": "external_endpoint",
         "candidates": 3,
         "uncovered_candidates": 2,
         "planned_operations": 2,
+        "output": ".datapan/verification/jeju-air-next.json"
+      },
+      {
+        "label": "jejudatahub",
+        "provider": "jejudatahub",
+        "kind": "external_endpoint",
+        "candidates": 101,
+        "uncovered_candidates": 100,
+        "planned_operations": 10,
         "output": ".datapan/verification/jejudatahub-next.json"
+      },
+      {
+        "label": "jejuits",
+        "provider": "jejuits",
+        "kind": "external_endpoint",
+        "candidates": 3,
+        "uncovered_candidates": 3,
+        "planned_operations": 3,
+        "output": ".datapan/verification/jejuits-next.json"
+      },
+      {
+        "label": "jeju-www",
+        "provider": "jeju-www",
+        "kind": "external_endpoint",
+        "candidates": 110,
+        "uncovered_candidates": 84,
+        "planned_operations": 10,
+        "output": ".datapan/verification/jeju-www-next.json"
       },
       {
         "label": "juso",
@@ -191,6 +227,15 @@
         "output": ".datapan/verification/mafra-next.json"
       },
       {
+        "label": "mnd-open-data",
+        "provider": "mnd-open-data",
+        "kind": "external_endpoint",
+        "candidates": 2,
+        "uncovered_candidates": 2,
+        "planned_operations": 2,
+        "output": ".datapan/verification/mnd-open-data-next.json"
+      },
+      {
         "label": "nongsaro",
         "provider": "nongsaro",
         "kind": "external_endpoint",
@@ -198,58 +243,13 @@
         "uncovered_candidates": 15,
         "planned_operations": 10,
         "output": ".datapan/verification/nongsaro-next.json"
-      },
-      {
-        "label": "open-assembly",
-        "provider": "open-assembly",
-        "kind": "external_endpoint",
-        "candidates": 277,
-        "uncovered_candidates": 247,
-        "planned_operations": 10,
-        "output": ".datapan/verification/open-assembly-next.json"
-      },
-      {
-        "label": "open-law",
-        "provider": "open-law",
-        "kind": "external_endpoint",
-        "candidates": 368,
-        "uncovered_candidates": 317,
-        "planned_operations": 10,
-        "output": ".datapan/verification/open-law-next.json"
-      },
-      {
-        "label": "safetydata",
-        "provider": "safetydata",
-        "kind": "external_endpoint",
-        "candidates": 370,
-        "uncovered_candidates": 360,
-        "planned_operations": 10,
-        "output": ".datapan/verification/safetydata-next.json"
-      },
-      {
-        "label": "safemap",
-        "provider": "safemap",
-        "kind": "external_endpoint",
-        "candidates": 104,
-        "uncovered_candidates": 94,
-        "planned_operations": 10,
-        "output": ".datapan/verification/safemap-next.json"
-      },
-      {
-        "label": "seoul-open-data",
-        "provider": "seoul-open-data",
-        "kind": "external_endpoint",
-        "candidates": 9,
-        "uncovered_candidates": 4,
-        "planned_operations": 4,
-        "output": ".datapan/verification/seoul-open-data-next.json"
       }
     ]
   },
   "provider_split_readiness": {
     "status": "ready",
-    "adapter_count": 76,
-    "verification_capable_adapters": 76,
+    "adapter_count": 80,
+    "verification_capable_adapters": 80,
     "call_capable_adapters": 23
   },
   "warnings": []

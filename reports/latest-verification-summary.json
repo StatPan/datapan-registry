@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-03T17:43:10Z",
+  "generated_at": "2026-07-03T17:58:10Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1825,
-    "verified": 486,
-    "failed": 146,
+    "total": 1850,
+    "verified": 510,
+    "failed": 147,
     "skipped": 1193,
     "unknown": 0
   },
@@ -21,12 +21,12 @@
       },
       {
         "key": "verified",
-        "count": 486,
+        "count": 510,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 146,
+        "count": 147,
         "status": "failed"
       }
     ],
@@ -232,6 +232,11 @@
         "reason": "gblib_service_key_not_registered"
       },
       {
+        "key": "jeju-www_request_failed",
+        "count": 2,
+        "reason": "jeju-www_request_failed"
+      },
+      {
         "key": "jeju_missing_required_params",
         "count": 2,
         "reason": "jeju_missing_required_params"
@@ -275,11 +280,6 @@
         "key": "icheon_http_400",
         "count": 1,
         "reason": "icheon_http_400"
-      },
-      {
-        "key": "jeju-www_request_failed",
-        "count": 1,
-        "reason": "jeju-www_request_failed"
       },
       {
         "key": "jeju_method_not_allowed",
@@ -382,6 +382,11 @@
         "key": "epost",
         "count": 28,
         "provider": "epost"
+      },
+      {
+        "key": "jeju-www",
+        "count": 26,
+        "provider": "jeju-www"
       },
       {
         "key": "tour",
@@ -634,11 +639,6 @@
         "provider": "jeju-air"
       },
       {
-        "key": "jeju-www",
-        "count": 1,
-        "provider": "jeju-www"
-      },
-      {
         "key": "jejudatahub",
         "count": 1,
         "provider": "jejudatahub"
@@ -769,6 +769,11 @@
         "key": "oneclick.law.go.kr:80",
         "count": 27,
         "host": "oneclick.law.go.kr:80"
+      },
+      {
+        "key": "www.jeju.go.kr",
+        "count": 26,
+        "host": "www.jeju.go.kr"
       },
       {
         "key": "www.lofin365.go.kr",
@@ -1091,11 +1096,6 @@
         "host": "www.ins24.go.kr"
       },
       {
-        "key": "www.jeju.go.kr",
-        "count": 1,
-        "host": "www.jeju.go.kr"
-      },
-      {
         "key": "www.jejudatahub.net",
         "count": 1,
         "host": "www.jejudatahub.net"
@@ -1129,7 +1129,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 1101,
+        "count": 1126,
         "kind": "external_endpoint"
       },
       {

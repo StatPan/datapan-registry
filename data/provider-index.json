@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T17:43:13Z",
+  "generated_at": "2026-07-03T17:58:13Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 76,
-  "host_count": 86,
+  "adapter_count": 80,
+  "host_count": 90,
   "adapters": [
     {
       "name": "airport",
@@ -292,6 +292,16 @@
       ]
     },
     {
+      "name": "gwangjin",
+      "status": "registered",
+      "hosts": [
+        "www.gwangjin.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "gwangmyeong",
       "status": "registered",
       "hosts": [
@@ -416,6 +426,16 @@
       ]
     },
     {
+      "name": "jejuits",
+      "status": "registered",
+      "hosts": [
+        "www.jejuits.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "jeonju",
       "status": "registered",
       "hosts": [
@@ -503,6 +523,16 @@
       "status": "registered",
       "hosts": [
         "data.mafra.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "mnd-open-data",
+      "status": "registered",
+      "hosts": [
+        "opendata.mnd.go.kr"
       ],
       "capabilities": [
         "verification"
@@ -643,6 +673,16 @@
       "status": "registered",
       "hosts": [
         "seogu.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "seogwipo",
+      "status": "registered",
+      "hosts": [
+        "www.seogwipo.go.kr"
       ],
       "capabilities": [
         "verification"
@@ -801,8 +841,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 76,
-    "verification_capable_adapters": 76,
+    "adapter_count": 80,
+    "verification_capable_adapters": 80,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

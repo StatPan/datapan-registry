@@ -94,9 +94,9 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `2,262` data.go.kr APIs
-  without operation mappings, `8,907` operation-mapped APIs without runtime
-  evidence, and `97` APIs with failed runtime evidence that need repair.
+- `reports/data-go-kr/coverage-backlog.json` tracks `2,162` data.go.kr APIs
+  without operation mappings, `8,998` operation-mapped APIs without runtime
+  evidence, and `98` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
   `reports/open-assembly/runtime-evidence-plan.json`, and
@@ -285,8 +285,13 @@ Current gaps:
   failed-but-bounded timeout check, bringing runtime evidence to `1825`,
   completing 해양수산부 materialization at `173` of `173` APIs, and moving the
   first materialization queue to 제주특별자치도.
-- API operation coverage remains incomplete: `9,798` of `12,060` APIs have
-  operation mappings (`81.2%`), leaving `2,262` APIs to materialize and `8,907`
+- The first 제주특별자치도 batch adds Gwangjin, Jeju ITS, MND Open Data, and
+  Seogwipo adapter coverage, materializes `100` APIs and `221` operations, and
+  merges `24` verified landing-page checks plus `1` failed bounded check,
+  bringing runtime evidence to `1850` while leaving 제주특별자치도 as the first
+  materialization queue for its remaining `53` APIs.
+- API operation coverage remains incomplete: `9,898` of `12,060` APIs have
+  operation mappings (`82.1%`), leaving `2,162` APIs to materialize and `8,998`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report
