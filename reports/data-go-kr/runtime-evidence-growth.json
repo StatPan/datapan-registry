@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-07-03T16:56:39Z",
+  "generated_at": "2026-07-03T17:08:03Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -13,20 +13,20 @@
     "provider_index": "data/provider-index.json"
   },
   "coverage": {
-    "operations": 16693,
-    "callable_operations": 16551,
+    "operations": 16854,
+    "callable_operations": 16712,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 5083,
-    "registered_adapter_operations": 5073,
+    "external_endpoint_operations": 5244,
+    "registered_adapter_operations": 5234,
     "call_capable_adapters": 23
   },
   "evidence": {
-    "total": 1724,
-    "verified": 386,
+    "total": 1749,
+    "verified": 411,
     "failed": 145,
     "skipped": 1193,
     "unknown": 0,
-    "coverage_percent": 10.3,
+    "coverage_percent": 10.4,
     "by_kind": [
       {
         "key": "data_go_kr_gateway",
@@ -34,7 +34,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 1000
+        "count": 1025
       },
       {
         "key": "service_root",
@@ -44,15 +44,15 @@
   },
   "growth_target": {
     "target_percent": 10,
-    "target_evidence_total": 1670,
+    "target_evidence_total": 1686,
     "remaining_to_target": 0,
     "status": "above_target"
   },
   "verification_plan": {
     "planned_batches": 20,
-    "planned_operations": 142,
+    "planned_operations": 150,
     "uncovered_gateway_candidates": 10714,
-    "uncovered_adapter_candidates": 3579,
+    "uncovered_adapter_candidates": 3715,
     "missing_adapter_hosts": 11,
     "planned_by_kind": [
       {
@@ -61,7 +61,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 132
+        "count": 140
       }
     ],
     "batches": [
@@ -212,9 +212,9 @@
         "label": "open-law",
         "provider": "open-law",
         "kind": "external_endpoint",
-        "candidates": 3,
-        "uncovered_candidates": 2,
-        "planned_operations": 2,
+        "candidates": 164,
+        "uncovered_candidates": 138,
+        "planned_operations": 10,
         "output": ".datapan/verification/open-law-next.json"
       },
       {

@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T16:56:39Z",
+  "generated_at": "2026-07-03T17:08:03Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 16693,
-    "runtime_evidence": 1724,
-    "runtime_evidence_percent": 10.3,
-    "callable_operations": 16551,
-    "external_endpoint_operations": 5083,
-    "registered_adapter_operations": 5073,
+    "operations": 16854,
+    "runtime_evidence": 1749,
+    "runtime_evidence_percent": 10.4,
+    "callable_operations": 16712,
+    "external_endpoint_operations": 5244,
+    "registered_adapter_operations": 5234,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 5083
+      "count": 5244
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 5073
+      "count": 5234
     },
     {
       "key": "builtin",
@@ -69,7 +69,7 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 2027
+      "operation_count": 2188
     },
     {
       "category": "교통물류",
@@ -202,6 +202,15 @@
       ]
     },
     {
+      "host": "open.law.go.kr",
+      "operation_count": 122,
+      "adapter": "open-law",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "host": "www.safemap.go.kr",
       "operation_count": 104,
       "adapter": "safemap",
@@ -299,16 +308,6 @@
       "adapter": "juso",
       "adapter_status": "registered",
       "capabilities": [
-        "verification"
-      ]
-    },
-    {
-      "host": "oneclick.law.go.kr:80",
-      "operation_count": 27,
-      "adapter": "oneclick-law",
-      "adapter_status": "registered",
-      "capabilities": [
-        "call",
         "verification"
       ]
     }
@@ -1361,6 +1360,93 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 213
+        }
+      ]
+    },
+    {
+      "organization": "법제처",
+      "api_count": 203,
+      "operation_api_count": 105,
+      "operation_count": 199,
+      "runtime_evidence_count": 63,
+      "runtime_evidence_percent": 31.7,
+      "verified": 25,
+      "failed": 11,
+      "skipped": 27,
+      "unknown": 0,
+      "approval_required_operations": 88,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 8
+        },
+        {
+          "key": "external_endpoint",
+          "count": 191
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 191
+        },
+        {
+          "key": "builtin",
+          "count": 8
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "공공행정",
+          "operation_count": 169
+        },
+        {
+          "category": "법률",
+          "operation_count": 30
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "open.law.go.kr",
+          "operation_count": 119,
+          "adapter": "open-law",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "oneclick.law.go.kr:80",
+          "operation_count": 27,
+          "adapter": "oneclick-law",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
+        },
+        {
+          "host": "www.law.go.kr",
+          "operation_count": 22,
+          "adapter": "open-law",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.lawmaking.go.kr",
+          "operation_count": 20,
+          "adapter": "open-law",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 8
         }
       ]
     },
@@ -4544,76 +4630,6 @@
           "adapter": "airport",
           "adapter_status": "registered",
           "capabilities": [
-            "verification"
-          ]
-        }
-      ]
-    },
-    {
-      "organization": "법제처",
-      "api_count": 203,
-      "operation_api_count": 5,
-      "operation_count": 38,
-      "runtime_evidence_count": 38,
-      "runtime_evidence_percent": 100.0,
-      "verified": 0,
-      "failed": 11,
-      "skipped": 27,
-      "unknown": 0,
-      "approval_required_operations": 18,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 8
-        },
-        {
-          "key": "external_endpoint",
-          "count": 30
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 30
-        },
-        {
-          "key": "builtin",
-          "count": 8
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "법률",
-          "operation_count": 30
-        },
-        {
-          "category": "공공행정",
-          "operation_count": 8
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "oneclick.law.go.kr:80",
-          "operation_count": 27,
-          "adapter": "oneclick-law",
-          "adapter_status": "registered",
-          "capabilities": [
-            "call",
-            "verification"
-          ]
-        },
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 8
-        },
-        {
-          "host": "oneclick.law.go.kr",
-          "operation_count": 3,
-          "adapter": "oneclick-law",
-          "adapter_status": "registered",
-          "capabilities": [
-            "call",
             "verification"
           ]
         }

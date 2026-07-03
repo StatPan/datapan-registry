@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T16:56:39Z",
+  "generated_at": "2026-07-03T17:08:03Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 234,
+  "filtered_count": 236,
   "summary": {
-    "hosts": 234,
+    "hosts": 236,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 92,
-    "external_guide_hosts": 175,
-    "registered_adapter_hosts": 81,
-    "operation_hosts": 94,
+    "external_endpoint_hosts": 94,
+    "external_guide_hosts": 176,
+    "registered_adapter_hosts": 83,
+    "operation_hosts": 96,
     "guide_only_hosts": 140,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 5551,
+    "approval_required_operations": 5621,
     "malformed_source_url_count": 640
   },
   "providers": [
@@ -296,6 +296,25 @@
       ]
     },
     {
+      "host": "open.law.go.kr",
+      "provider": "open-law",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 90,
+      "operations": 122,
+      "external_endpoint_operations": 122,
+      "external_guide_specs": 4,
+      "approval_required_operations": 71,
+      "sample_ids": [
+        "15032073",
+        "15057026",
+        "15057038"
+      ]
+    },
+    {
       "host": "openapi.q-net.or.kr",
       "provider": "q-net",
       "kinds": [
@@ -522,6 +541,22 @@
       ]
     },
     {
+      "host": "www.law.go.kr",
+      "provider": "open-law",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 8,
+      "operations": 22,
+      "external_endpoint_operations": 22,
+      "sample_ids": [
+        "15056579",
+        "15056821",
+        "15057358"
+      ]
+    },
+    {
       "host": "www.work24.go.kr",
       "kinds": [
         "external_endpoint",
@@ -555,6 +590,25 @@
         "15002793",
         "15002794",
         "15002797"
+      ]
+    },
+    {
+      "host": "www.lawmaking.go.kr",
+      "provider": "open-law",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 8,
+      "operations": 20,
+      "external_endpoint_operations": 20,
+      "external_guide_specs": 2,
+      "approval_required_operations": 2,
+      "sample_ids": [
+        "15056627",
+        "15057092",
+        "15057172"
       ]
     },
     {
@@ -1025,25 +1079,6 @@
         "15003489",
         "3075291",
         "3075292"
-      ]
-    },
-    {
-      "host": "open.law.go.kr",
-      "provider": "open-law",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 3,
-      "operations": 3,
-      "external_endpoint_operations": 3,
-      "external_guide_specs": 2,
-      "approval_required_operations": 3,
-      "sample_ids": [
-        "15103246",
-        "15103247",
-        "15148289"
       ]
     },
     {

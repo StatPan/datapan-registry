@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T16:56:39Z`
+- Generated at: `2026-07-03T17:08:03Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `16693`
-- Runtime evidence: `1724` (`10.3%`)
-- External endpoint operations: `5083`
-- Registered adapter operations: `5073`
+- Operations: `16854`
+- Runtime evidence: `1749` (`10.4%`)
+- External endpoint operations: `5244`
+- Registered adapter operations: `5234`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -24,7 +24,7 @@
 | 한국산업인력공단 | 230 | 230 | 317 | 150 | 47.3% | 7 | 1 | 142 | 181 | 0 |
 | 한국마사회 | 223 | 223 | 223 | 10 | 4.5% | 0 | 0 | 10 | 221 | 0 |
 | 국립암센터 | 212 | 212 | 375 | 87 | 23.2% | 8 | 0 | 79 | 183 | 1 |
-| 법제처 | 203 | 5 | 38 | 38 | 100.0% | 0 | 11 | 27 | 18 | 0 |
+| 법제처 | 203 | 105 | 199 | 63 | 31.7% | 25 | 11 | 27 | 88 | 0 |
 | 경기도 광명시 | 197 | 0 | 0 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 해양수산부 | 173 | 172 | 276 | 10 | 3.6% | 0 | 0 | 10 | 116 | 0 |
 | 제주특별자치도 | 171 | 18 | 28 | 4 | 14.3% | 1 | 1 | 2 | 8 | 0 |
@@ -63,6 +63,7 @@
 | 한국연구재단 | 26 | 24 | 247 | 13 | 5.3% | 4 | 3 | 6 | 234 | 0 |
 | 한국마사회 | 223 | 223 | 223 | 10 | 4.5% | 0 | 0 | 10 | 221 | 0 |
 | 한국관광공사 | 28 | 28 | 213 | 1 | 0.5% | 0 | 0 | 1 | 212 | 0 |
+| 법제처 | 203 | 105 | 199 | 63 | 31.7% | 25 | 11 | 27 | 88 | 0 |
 | 조달청 | 18 | 18 | 190 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 기상청 | 89 | 44 | 183 | 23 | 12.6% | 0 | 0 | 23 | 24 | 0 |
 | 전라남도 | 109 | 108 | 174 | 0 | 0.0% | 0 | 0 | 0 | 93 | 0 |
@@ -77,7 +78,6 @@
 | 한국예탁결제원 | 10 | 10 | 110 | 0 | 0.0% | 0 | 0 | 0 | 110 | 0 |
 | 한국대학교육협의회 | 9 | 9 | 103 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 농촌진흥청 국립농업과학원 | 27 | 27 | 102 | 0 | 0.0% | 0 | 0 | 0 | 3 | 0 |
-| 전북특별자치도 전주시 | 53 | 53 | 100 | 80 | 80.0% | 0 | 5 | 75 | 7 | 0 |
 
 The full machine-readable report is `reports/data-go-kr/institution-api-overview.json`.
 The full coverage backlog is `reports/data-go-kr/coverage-backlog.json`, with
@@ -85,7 +85,7 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 ## Largest Categories
 
-- 공공행정: `2027` operations
+- 공공행정: `2188` operations
 - 교통물류: `1670` operations
 - 문화관광: `1605` operations
 - 농축수산: `1485` operations
@@ -106,5 +106,5 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 - www.foodsafetykorea.go.kr: `288` operations
 - open.assembly.go.kr: `277` operations
 - www.calspia.go.kr: `168` operations
+- open.law.go.kr: `122` operations
 - www.safemap.go.kr: `104` operations
-- openapi.q-net.or.kr: `104` operations

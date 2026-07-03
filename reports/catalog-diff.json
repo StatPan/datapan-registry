@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T16:56:39Z",
+  "generated_at": "2026-07-03T17:08:03Z",
   "provider": "data.go.kr",
   "old": ".datapan\\previous-data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,91 +12,1011 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 8,
-    "stable": 12052
+    "changed": 100,
+    "stable": 11960
   },
   "added": [],
   "removed": [],
   "changed": [
     {
-      "id": "15122208",
-      "old_title": "국립암센터_국가암정보센터 통계로 보는 암",
-      "new_title": "국립암센터_국가암정보센터 통계로 보는 암",
+      "id": "15032073",
+      "old_title": "법제처_모바일(법령용어) 정보",
+      "new_title": "법제처_모바일(법령용어) 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "4942ca3d629cb1740582bed602fe1d6e50714b0b49808924ddf19f60ed0261b3",
-      "new_digest": "ad7f68b48b74c4d20adba8f7f56d1d6d7da6f3da50fa6755602eeb71ef55da3d"
+      "old_digest": "029f644f3ca8efd49f1875ebe64ca84661b89f6d94e970f90879147fe4a0d7d4",
+      "new_digest": "9b9cd7bb3e6acbecbf464932cdc302116d0187b5b9d046e83b709fca6e9335ff"
     },
     {
-      "id": "15122210",
-      "old_title": "국립암센터_국가암정보센터 내가 알고 싶은 암",
-      "new_title": "국립암센터_국가암정보센터 내가 알고 싶은 암",
+      "id": "15056579",
+      "old_title": "법제처_행정규칙 본문 조회",
+      "new_title": "법제처_행정규칙 본문 조회",
       "fields": [
         "operations"
       ],
-      "old_digest": "a75cbaf69ff0a3e979516a4b4440e621b09ba65e4942925579f8979586572ea3",
-      "new_digest": "78e6555bf591f0720392e3723590fa3d2c18df13d8dd4d22f172082999df8260"
+      "old_digest": "b380ff767647b0fb503770154bf3c02e0a2df02de90f3fe0c3a8fa762271f370",
+      "new_digest": "58b0d7c156e8c097b646a2f1e68853aecf2cc29cdb680a94a77ac6c1d28849a4"
     },
     {
-      "id": "15122212",
-      "old_title": "국립암센터_국가암정보센터 암예방과 검진",
-      "new_title": "국립암센터_국가암정보센터 암예방과 검진",
+      "id": "15056627",
+      "old_title": "법제처_정부행정예고",
+      "new_title": "법제처_정부행정예고",
       "fields": [
         "operations"
       ],
-      "old_digest": "850cdc05d5132a9b405f158938d44d4457a443263ad4243b4c9929b7d1cae080",
-      "new_digest": "ef8e4a036d628fcdab015933ffc6210b50a893ffeacdd784370a37ebc58b7895"
+      "old_digest": "fbc66c9d56b0f78342b70cdc34d4211fcc543d675f648b8aae6ab19db06b25f4",
+      "new_digest": "b74a834c5092fdd32f7ceb68a9ca59b5be60982d2529535fd3cf7b32e11a6f8e"
     },
     {
-      "id": "15122222",
-      "old_title": "국립암센터_국가암정보센터 암예방과 검진 질문과 답변",
-      "new_title": "국립암센터_국가암정보센터 암예방과 검진 질문과 답변",
+      "id": "15056821",
+      "old_title": "법제처_현행법령 목록 조회",
+      "new_title": "법제처_현행법령 목록 조회",
       "fields": [
         "operations"
       ],
-      "old_digest": "f3212bcd296972b56b96c19674cbbf2a6758ac6dee450a78405dc9cc6445456a",
-      "new_digest": "4e841edcc0cc5143a6796ce595975a1cf463bb546663de1a456f36708a664610"
+      "old_digest": "0d2924f4d6d5b6f5b700761278dab6c8e3ddff8e32d324ce05fb660e6e479d57",
+      "new_digest": "3676d1b27394fb1a2d2179591b8a9fba1a2369be5af781a74a78c18108ab6ec5"
     },
     {
-      "id": "15122227",
-      "old_title": "국립암센터_국가암정보센터 암환자 생활백서",
-      "new_title": "국립암센터_국가암정보센터 암환자 생활백서",
+      "id": "15057026",
+      "old_title": "법제처_모바일 행정규칙 별표,서식 목록 조회",
+      "new_title": "법제처_모바일 행정규칙 별표,서식 목록 조회",
       "fields": [
         "operations"
       ],
-      "old_digest": "3d975127d83ecedc0b0f91964cbb02389656902e8c574926a19b089b4c16977d",
-      "new_digest": "61fc3064c214c9cdb8aee19437ff5a0370c57c65579c9f73a493398036f7ca28"
+      "old_digest": "57cf890e3fa613a6676abaf9b1a042b67807d8209147765ef22b1cc84cac8207",
+      "new_digest": "927a033b78dfe0f62f67ace77c870c33761fc740dc540cffeb92237c7e16dc26"
     },
     {
-      "id": "15122229",
-      "old_title": "국립암센터_국가암정보센터 게시물자료",
-      "new_title": "국립암센터_국가암정보센터 게시물자료",
+      "id": "15057038",
+      "old_title": "법제처_모바일 조약 목록 조회",
+      "new_title": "법제처_모바일 조약 목록 조회",
       "fields": [
         "operations"
       ],
-      "old_digest": "28d14f40be3e94927c41b3218ff1d665cf09eed2a56885b84f8664b2fc7fb01d",
-      "new_digest": "40f2bc059b237a4fc907daff823f618865ca1d60ea69c8bb53aa32e51b4a9155"
+      "old_digest": "ceb35faa640ef0787a4e229e92eadedfd944790ec155845299155ca88b8440bb",
+      "new_digest": "e9fab42f1adcdbd9e73d6de4c775d631c0abe0b7089955b118ebe9dd46a55f58"
     },
     {
-      "id": "15122232",
-      "old_title": "국립암센터_국가암정보센터 암정보사전",
-      "new_title": "국립암센터_국가암정보센터 암정보사전",
+      "id": "15057092",
+      "old_title": "법제처_법령해석례",
+      "new_title": "법제처_법령해석례",
       "fields": [
         "operations"
       ],
-      "old_digest": "b7fe303f5abeb8728eaf9f53b422004b86ca1b5b9d73f65ba1e2879676cd740c",
-      "new_digest": "d937b77b471985a17b48d9decf047f7104cd89e01b8fb2f48d858e09c1d97e84"
+      "old_digest": "a40b85afbf1aea28896df88d573de3869815bd131468bd1ed31afddad1c37702",
+      "new_digest": "013253e4e6c5009d542dd30d039f313cb128de704e5ca26056965338505e6346"
     },
     {
-      "id": "15122235",
-      "old_title": "국립암센터_국가암정보센터 내가 알고 싶은 암(100대암)",
-      "new_title": "국립암센터_국가암정보센터 내가 알고 싶은 암(100대암)",
+      "id": "15057172",
+      "old_title": "법제처_정부입법현황",
+      "new_title": "법제처_정부입법현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "ac94bd85bd4582641a3cdc9856c9544534ed2df31ba5d616ef6a313d7c943a23",
-      "new_digest": "aeae087d63d5660d51264ba89d3e7a54713976ba6b54ad1bb110900cf95412e9"
+      "old_digest": "09339d2b906f8a135aeaf352d6b3e6a62dd6b6c8b4c20c1f646afe1f13ff2e0d",
+      "new_digest": "49f0ce6eb0fa7b7f4f76657bc46399f3446d6bd46187fc024adb724a24729090"
+    },
+    {
+      "id": "15057358",
+      "old_title": "법제처_현행법령 본문 조회",
+      "new_title": "법제처_현행법령 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "65dc2c831cc7deaa9b72b20083016eaab142fe220482a21b2d493207b1e3a47c",
+      "new_digest": "08ec4556391217fa4513838a1952ba2a0202d03b47e16cb7995d5a4338417fd8"
+    },
+    {
+      "id": "15057523",
+      "old_title": "법제처_시행일 법령 본문 조회",
+      "new_title": "법제처_시행일 법령 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "124c0cab412455bbbe8ad3c294d2b22fe1597c0ce326d35226d1f7c7ad4c1f2e",
+      "new_digest": "aef997c9fe17c673f88505c72926a11ee8a078bfb0c80ed35585f9f553fdd9a6"
+    },
+    {
+      "id": "15057542",
+      "old_title": "법제처_행정규칙 목록 조회",
+      "new_title": "법제처_행정규칙 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4efb05be10bbdb726091d3b49f43b44c5ebbd87a0de66e61a2eb5016a7e805e5",
+      "new_digest": "295cb28798ea679a30ef4287943f49cf58b18d443c32f6943fd8cd53c6273e15"
+    },
+    {
+      "id": "15057801",
+      "old_title": "법제처_모바일 조약 본문 조회",
+      "new_title": "법제처_모바일 조약 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "32dc3f497dd3417740df857ed2c5e5ffdd82ec1bd97fa3ed2ab64a3ba8871cc3",
+      "new_digest": "8cc1c0293171c218dcd3fe1b5d65c64bfd601f934ce384f69a3bb90fa4bc60e1"
+    },
+    {
+      "id": "15057958",
+      "old_title": "법제처_정부입법계획",
+      "new_title": "법제처_정부입법계획",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "90e05279cf5596e0e3dc4c6298f92c8d55762f4e69aa8a1e7db1d9ddc9e745eb",
+      "new_digest": "ebf1637e774d398b58b0f287aa4a53db62a2ca3a4e48ab22120b31841c6384c6"
+    },
+    {
+      "id": "15058147",
+      "old_title": "법제처_모바일 자치법규 별표,서식 목록 조회",
+      "new_title": "법제처_모바일 자치법규 별표,서식 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "41bf2a43e6f931cd66050ca0b14d372cce6ff31cdf29bcf03157e25ddec8df2c",
+      "new_digest": "1833b07529bd96d0e9592c8bbfd390072a66fd9a61c074d0175ed7c50f9e6bc3"
+    },
+    {
+      "id": "15058172",
+      "old_title": "법제처_모바일 행정심판례 목록 조회",
+      "new_title": "법제처_모바일 행정심판례 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d41d9b22415112adf3c9e57fcddb2336fe13d72f948c64d08f3d838ac2340e13",
+      "new_digest": "5b21bdda9c7c449767353b6c705539ce8233e5a513649b178c80c1b5eed910ba"
+    },
+    {
+      "id": "15058217",
+      "old_title": "법제처_시행일 법령 목록 조회",
+      "new_title": "법제처_시행일 법령 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3a85640a6aee3f746810e6c2177a31d97e56d49c0121e0e8848e4d48ad098225",
+      "new_digest": "923d26fd061a0a8aeb95046e52530e4431f87a9b69b1c0ceca1952f1262da83f"
+    },
+    {
+      "id": "15058294",
+      "old_title": "법제처_자치법규 본문 조회",
+      "new_title": "법제처_자치법규 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8135bbeb22f16acd30207020760c45f19d4647a79594738045f54acfcd5025f1",
+      "new_digest": "f97323c5cf1b44b0461ebc9288ac544618ef9e2696bd0388ee0ad42ed5bc60b4"
+    },
+    {
+      "id": "15058355",
+      "old_title": "법제처_모바일 헌재결정례 본문 조회",
+      "new_title": "법제처_모바일 헌재결정례 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0fd9f4aecb11592ae91c655b34ad6ba8ff50060ff88d6e2cfba165fc381aa209",
+      "new_digest": "c65e127eca71b9dd231c1d9e26bd0c7f8293c851d62894eb53746cb5717a5ac7"
+    },
+    {
+      "id": "15058407",
+      "old_title": "법제처_정부입법예고",
+      "new_title": "법제처_정부입법예고",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6a19f9293f010ef5879c32ba0c2662c545e7882c788ed3afcd2280d4d7dca77a",
+      "new_digest": "409a20c74bf9f54dca9c6dbb542ac4953b8422d9218bb379280d3af0ab7a4f08"
+    },
+    {
+      "id": "15058421",
+      "old_title": "법제처_자치법규 의견제시사례",
+      "new_title": "법제처_자치법규 의견제시사례",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1080e6f73208f98a88f834757ace2f4219c7fc3771b2df32924a594b0bfe9285",
+      "new_digest": "5aeef71ec99c4185fe40032247bc386468d7619b3ff1b551ad618a12146e9ca9"
+    },
+    {
+      "id": "15058523",
+      "old_title": "법제처_모바일 판례 본문 조회",
+      "new_title": "법제처_모바일 판례 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9a02fbb7430399af0d53e3a5023201d4b0d357d816e04c10e03fe47828369c81",
+      "new_digest": "1d20dd5c8fb1b0b4d8bd69f6500de78dcd7e689966d4f4a29137dd39bf2bdf35"
+    },
+    {
+      "id": "15058583",
+      "old_title": "법제처_모바일 행정심판례 본문 조회",
+      "new_title": "법제처_모바일 행정심판례 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3441f0405e3fdb184576e5b885d2460502f9082acdb47f9783cc6b72760aa05c",
+      "new_digest": "61b9f0a84cb1ca0b6fa7ee72fe08308d258820788a5b93e7c8ca8bf83cfddf32"
+    },
+    {
+      "id": "15058848",
+      "old_title": "법제처_법령 연혁 본문 조회",
+      "new_title": "법제처_법령 연혁 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "aa245d87950c6d64353656b514f651bc2c83c17c24f3b567999c635fd0c6af82",
+      "new_digest": "245ea4b569486996bf40d82939924db4ad03508877010b5ea9500cd9513ffc57"
+    },
+    {
+      "id": "15059149",
+      "old_title": "법제처_법령 연혁 목록 조회",
+      "new_title": "법제처_법령 연혁 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "023181d085baf1e2726f00e0a622e9d114de2132ac998bc4ce5fb54ad9fcaff2",
+      "new_digest": "2ec3906db3b5ab4e246f3f9c4cdb9e842c7b05007e0678ca3e9f6c6006f23544"
+    },
+    {
+      "id": "15059309",
+      "old_title": "법제처_모바일 법령 별표,서식 목록 조회",
+      "new_title": "법제처_모바일 법령 별표,서식 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "700f7163e2dd38e29d0471c055c24a5035bc09245ab2d3a9916581b2051005e8",
+      "new_digest": "f22a4e25274195360b7fc4038146100f0b5cb7d580c77104d6149b750546ca1f"
+    },
+    {
+      "id": "15059368",
+      "old_title": "법제처_모바일 헌재결정례 목록 조회",
+      "new_title": "법제처_모바일 헌재결정례 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4eccbb9600ac3a68b08f81a1c73d1d5a9fc7f900dfdf32cf5253a95f5c339f2a",
+      "new_digest": "212165d22ea8fec84b86a461b363eefe09aa380ac268990b6586c86f18a28351"
+    },
+    {
+      "id": "15059386",
+      "old_title": "법제처_모바일 행정규칙 목록 조회",
+      "new_title": "법제처_모바일 행정규칙 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c66775b78c5eaf587200f2ca1deb25016794ce852d5f2ac6b37be238f292e62d",
+      "new_digest": "07a2763dfe41a8ae9846111c353458596e71aab066c30dd13e5cba0c9b1347db"
+    },
+    {
+      "id": "15059404",
+      "old_title": "법제처_모바일 판례 목록 조회",
+      "new_title": "법제처_모바일 판례 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "987af5ea050d3903f9cba33b91c63a600be37ec928129db10717c1dfa09c1ac6",
+      "new_digest": "5e48d4e3b5e42da9b81668388e62548b3b20dafb1b93f59d9161f38fce38aa01"
+    },
+    {
+      "id": "15059439",
+      "old_title": "법제처_모바일 법령해석례 본문 조회",
+      "new_title": "법제처_모바일 법령해석례 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e10fe36b9520aec529c07a2f3bfa55c588482fe166677282b55afc14af898de9",
+      "new_digest": "31d4a75946ebb9f2eaff3ca205a4f378615a7e7d3daa420173c67e49ae8ba19c"
+    },
+    {
+      "id": "15059509",
+      "old_title": "법제처_행정심판례 본문 조회",
+      "new_title": "법제처_행정심판례 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4381bbca523853464e79865a3acc39b08a5d0d17812089007c15a6f52ec24c31",
+      "new_digest": "1b85855d0ff7ddff75a83a4813f124c5df6461849d382d0053d15400d7abae96"
+    },
+    {
+      "id": "15059542",
+      "old_title": "법제처_모바일 법령 목록 조회",
+      "new_title": "법제처_모바일 법령 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ed7ce5d9300a59129dcfbdad839b4d50f0e4ae50e34c97c2e98042f15002a779",
+      "new_digest": "5b33e39edd5a69099cfb574a6c8b176727116db4a3a4d493c5505fa4aafc5187"
+    },
+    {
+      "id": "15090746",
+      "old_title": "법제처_법령해석례 상세 조회 정보",
+      "new_title": "법제처_법령해석례 상세 조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d33711da60bcd3883d47f940a8f9bcbc3fefec90859ca3946ee0989cee85c774",
+      "new_digest": "0a1a12360e81d45e346891e684c1f45ab954ba97879ebd1f0ad5c22b59d400b4"
+    },
+    {
+      "id": "15153015",
+      "old_title": "법제처_교육부 법령해석 목록 조회",
+      "new_title": "법제처_교육부 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "de55c98dee294cd5d371b1189b548039b0591df3f4df873017fea5d9c878744a",
+      "new_digest": "190fb7b61f3bdb10c2097b3f90db533490b2581e34c5c25418a0d17a46080c3d"
+    },
+    {
+      "id": "15153023",
+      "old_title": "법제처_과학기술정보통신부 법령해석 목록 조회",
+      "new_title": "법제처_과학기술정보통신부 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0b83a6c56fe84f96b4571b66896eb8f790090678754c6b8e0a96b624067a852c",
+      "new_digest": "17bcdd9b3972afb650ae2efe4449f48cb648653b6d588c1a9a5fbf4ed94bfe46"
+    },
+    {
+      "id": "15153024",
+      "old_title": "법제처_과학기술정보통신부 법령해석 본문 조회",
+      "new_title": "법제처_과학기술정보통신부 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c0df00fd568d61bec5979b9168ee8051b30e0c5c3788f563bb587128b385b5d5",
+      "new_digest": "22e9d4bf1abdcbb93f7b3ff21f3da070a7ac98f9d4d47faebd0072c2a1b4526d"
+    },
+    {
+      "id": "15153025",
+      "old_title": "법제처_교육부 법령해석 본문 조회",
+      "new_title": "법제처_교육부 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "30107c96bbbd1416e06db1ae8ed0fb8552b4e8c4940bd1535730d7926db22454",
+      "new_digest": "2078bef7233837e235a4bdb11919c89f34a55d33117b324808d3066b358c2ffe"
+    },
+    {
+      "id": "15153029",
+      "old_title": "법제처_국가보훈부 법령해석 목록 조회",
+      "new_title": "법제처_국가보훈부 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "94fc4cb21c4f0474eba0b1ca06808f6d6f0e0b22f9b67dedd93b6ff740eae3f0",
+      "new_digest": "17e252bc8aeb69520711a720db3735790bfe2924def63ac5869c27932f8ccaa4"
+    },
+    {
+      "id": "15153030",
+      "old_title": "법제처_국가보훈부 법령해석 본문 조회",
+      "new_title": "법제처_국가보훈부 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ef0bfff678c6dda240e77915ec47c84fb4e9e52c6c14e9016b0acc40b49761cf",
+      "new_digest": "1165cc07810dcdac1889ba5c251fe9405e4bd234ca9afc730e30345fa034f8de"
+    },
+    {
+      "id": "15153031",
+      "old_title": "법제처_국가유산청 법령해석 목록 조회",
+      "new_title": "법제처_국가유산청 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "74695f69907994afdfd8e364cb35118de70069a989a3476520ab0f737ef865d4",
+      "new_digest": "12584e981ee4a9438dc9875d6b750e2b60bd577e9a690a81985004ce9a009b04"
+    },
+    {
+      "id": "15153032",
+      "old_title": "법제처_국가유산청 법령해석 본문 조회",
+      "new_title": "법제처_국가유산청 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "dd2d9337066cd29647bfdd3cad7bbd33d14cfd5ee8eeeb5e3e1d831558159b87",
+      "new_digest": "3f71b609178d527573dce61e88a4fff87b0bcbc3334e31e583abf0366d5e3dc5"
+    },
+    {
+      "id": "15153035",
+      "old_title": "법제처_국방부 법령해석 목록 조회",
+      "new_title": "법제처_국방부 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8e7604863599b7443ce1c64b4211757582e48f941a507c2064092e2d5b2150b4",
+      "new_digest": "6c37649642269d477408453435d8cedbd043e7ea46ddfea9ec912c2d1b9da4c2"
+    },
+    {
+      "id": "15153037",
+      "old_title": "법제처_국방부 법령해석 본문 조회",
+      "new_title": "법제처_국방부 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9bc9bad3c1e3bdf0885c77eb40821fe790afb737008e707c3aa20bdef30b3416",
+      "new_digest": "cac5a0e97c5a90f175b48cff2086828ac43d91df56ff4461750ea313cd7178ab"
+    },
+    {
+      "id": "15153038",
+      "old_title": "법제처_농림축산식품부 법령해석 목록 조회",
+      "new_title": "법제처_농림축산식품부 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7fe153b8b476e967fdb0651b961bdb1c03d15fef8b236f2b4a7febf11f16ecde",
+      "new_digest": "22878a6e4203c6557e2b3eaa6826f46f53241300d51698d9929d4859848574d6"
+    },
+    {
+      "id": "15153039",
+      "old_title": "법제처_농림축산식품부 법령해석 본문 조회",
+      "new_title": "법제처_농림축산식품부 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ba2b875a43c2c39f6efe13bfcfaf366f09424e68d5d66ec248df9b1c9b3ecadc",
+      "new_digest": "4d772a1920181bc2e75a118296c8c6fc647fb5f755b9b15f2be6583b048cafa0"
+    },
+    {
+      "id": "15153040",
+      "old_title": "법제처_농촌진흥청 법령해석 목록 조회",
+      "new_title": "법제처_농촌진흥청 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8cf394ee9f692c6a39dd5c7fa16f30fb663b77d00eb21928ccc5f26e35d6e5a5",
+      "new_digest": "cc584bc7e62bc012e2c127bca1dadbe4f2a92742cbfc8c4f4fcd2369cc353800"
+    },
+    {
+      "id": "15153043",
+      "old_title": "법제처_농촌진흥청 법령해석 본문 조회",
+      "new_title": "법제처_농촌진흥청 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1dc02a0651c8da8f07ee6aa293de6be8afcf669d4979323c66261e04891444c8",
+      "new_digest": "82c21e420fee63e91524b40759e64ee36fcd9257a7a9f88f4f337c00becda1a9"
+    },
+    {
+      "id": "15153045",
+      "old_title": "법제처_문화체육관광부 법령해석 목록 조회",
+      "new_title": "법제처_문화체육관광부 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c149710bd7e8f1904e2b8cd3c8c370b3cd60fcf993deaa75b021a59636e7e580",
+      "new_digest": "1df5be51678ce1c91b6c2cf7a65603b8cde903ca48c4eb95e5a1b3fc3a7dd66d"
+    },
+    {
+      "id": "15153050",
+      "old_title": "법제처_문화체육관광부 법령해석 본문 조회",
+      "new_title": "법제처_문화체육관광부 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "47da554eeecfba81e7d79e69a6af763f056c0e47d8fb620f7319af2f19e6e853",
+      "new_digest": "3fda2d35af2f3af34631a6f4bfc31dc4b40caf4baede5268ad3c976043863352"
+    },
+    {
+      "id": "15153052",
+      "old_title": "법제처_법무부 법령해석 목록 조회",
+      "new_title": "법제처_법무부 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b41635a14ae6d302dedac2e2cb0b5e560ee2f7c42a7056d980d84661c594e8dc",
+      "new_digest": "c832452390fe2604036690fefbf242a8f9e66a18a22f73c279178ae78a706173"
+    },
+    {
+      "id": "15153056",
+      "old_title": "법제처_법무부 법령해석 본문 조회",
+      "new_title": "법제처_법무부 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "84586b6195296b057424300ad53b9c644e58c52fc01d390d97ec47add0ebf82f",
+      "new_digest": "2138ed32f6f9bf81a8e059fbf702d7e6516961c1aaf9652cac5568468c86572c"
+    },
+    {
+      "id": "15153058",
+      "old_title": "법제처_보건복지부 법령해석 목록 조회",
+      "new_title": "법제처_보건복지부 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "15776233c419065bd64012760555c61a6dbc098c98b22b52a2cead48d4cfef8a",
+      "new_digest": "b580ba8b3cb621abecf489b8bc26efd603c88fe4a255f6c0745d98bd2184159e"
+    },
+    {
+      "id": "15153060",
+      "old_title": "법제처_보건복지부 법령해석 본문 조회",
+      "new_title": "법제처_보건복지부 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9095e8110d5008edd7c8bd5bd5546cfdafc981c10157a6ae1f8a656b7adaf69e",
+      "new_digest": "5da72a73f19a977cd745ffc4c1210a70ec289d306cf4744346128a61039db7d3"
+    },
+    {
+      "id": "15153062",
+      "old_title": "법제처_산업통상부 법령해석 목록 조회",
+      "new_title": "법제처_산업통상부 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a1e26050958839789dcce850d095f439c0d14072ffbd3530f5f8dc39d3c16c2f",
+      "new_digest": "debcf8115b601e1607181eaba90855d23409f3d77cbc6c536f9b0a7d8eab7391"
+    },
+    {
+      "id": "15153063",
+      "old_title": "법제처_산업통상부 법령해석 본문 조회",
+      "new_title": "법제처_산업통상부 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "97c9dcc7238897258b9428bdebaccbe5257864276b55e6a6cff82fcbe8709102",
+      "new_digest": "6d0933756477a9f53d01b27838ff2a1d794215eaedb79cbb6d804140864f3374"
+    },
+    {
+      "id": "15153064",
+      "old_title": "법제처_성평등가족부 법령해석 목록 조회",
+      "new_title": "법제처_성평등가족부 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4e5ee2ef71a320562078e85ca5ae9002c35d9a0529cb717f8e59a81d99af59b2",
+      "new_digest": "5f9926c257066f77472668ad99a657d32dd9f5a64928cefae71521c2d80a5a64"
+    },
+    {
+      "id": "15153067",
+      "old_title": "법제처_성평등가족부 법령해석 본문 조회",
+      "new_title": "법제처_성평등가족부 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2abd6a0ba0562c3193a72aaeda7324a749c3b23838257eaf99dc5df8c7d3f947",
+      "new_digest": "3d96616fe0427605e81a7af797195ff346c6b1e05e5777fcf8c020c46dfe0935"
+    },
+    {
+      "id": "15153068",
+      "old_title": "법제처_외교부 법령해석 목록 조회",
+      "new_title": "법제처_외교부 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d77493e203c95ffae885cc76f4e9577484092870a780b52f51da83e1092cd9b3",
+      "new_digest": "3839e021ab96ba1b74161540ee5cf90d229120ba23324fcc11116efb1e032acd"
+    },
+    {
+      "id": "15153069",
+      "old_title": "법제처_외교부 법령해석 본문 조회",
+      "new_title": "법제처_외교부 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "863627f229283e59a4963dda1c3f772919a66b64a902d5cc37825a14f73f69d7",
+      "new_digest": "0a85e7e79a62058ffc8cdc56abf3e80bf784299a397cedc0f3416c2a8777f491"
+    },
+    {
+      "id": "15153071",
+      "old_title": "법제처_중소벤처기업부 법령해석 목록 조회",
+      "new_title": "법제처_중소벤처기업부 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9494a8609d7e61531388710b9d1b016cc241113e89d1b4d9161e5e380d01b5bb",
+      "new_digest": "b82900d81e5a56b0ed6a619dd7efe90859bb378e851b8f72c104015203155e94"
+    },
+    {
+      "id": "15153075",
+      "old_title": "법제처_중소벤처기업부 법령해석 본문 조회",
+      "new_title": "법제처_중소벤처기업부 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5cd203aa3cca10a780c7f0ccfa90f85eff8829444f0c3d666bd40a49b9f98983",
+      "new_digest": "cf9afc704ea941c57ed0964fa088c193cb9b40a431170b77e720247744ca22d8"
+    },
+    {
+      "id": "15153077",
+      "old_title": "법제처_통일부 법령해석 목록 조회",
+      "new_title": "법제처_통일부 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bea64367f3ca4512d07ad81ccfe58a1858960d7326af8e8d774274a43130891f",
+      "new_digest": "56f80e3dde17ed23a1fe0fdc8e7e5b0e5e12056fd30f4021648e15410f61358b"
+    },
+    {
+      "id": "15153079",
+      "old_title": "법제처_통일부 법령해석 본문 조회",
+      "new_title": "법제처_통일부 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "128d48d6a3b6134df5f9ef9add822353b279e217df618678184d7873896e884a",
+      "new_digest": "450d6b4ea28867b61e94d70c9a1f359c3c6fc753343087653a6ee438f2a543d9"
+    },
+    {
+      "id": "15153080",
+      "old_title": "법제처_법제처 법령해석 목록 조회",
+      "new_title": "법제처_법제처 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3605937fc4cff29e1f45f621b4f18594713a1cdcb10a03754ea219eaa34a10a7",
+      "new_digest": "8d0572bcac8c875848b7c22857078d38fd5c866d8ca7f61d468c680253f8b69c"
+    },
+    {
+      "id": "15153083",
+      "old_title": "법제처_법제처 법령해석 본문 조회",
+      "new_title": "법제처_법제처 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0cccb37bbdb1c6138e1dd90aa2edc64be5e7e865b6203a9c9d4145a6ad5ef4c6",
+      "new_digest": "f6be89bfce4447730c6e7a5538c5a592b0dad314e6ece8359120ae30ab7801dd"
+    },
+    {
+      "id": "15153087",
+      "old_title": "법제처_식품의약품안전처 법령해석 목록 조회",
+      "new_title": "법제처_식품의약품안전처 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ad8cd697b718450be17b8da0b563bca0c3db632f7287791426262a6f4adb02d3",
+      "new_digest": "fd3ebc0cdc3962b57f33db43fd1ae0c378dabdf529af6cf8f97ec5b57aa41177"
+    },
+    {
+      "id": "15153088",
+      "old_title": "법제처_식품의약품안전처 법령해석 본문 조회",
+      "new_title": "법제처_식품의약품안전처 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "68ff9ef6dab5451fe3f2762ff8647a060fed44ca1500882c9c5f9141c8555ac5",
+      "new_digest": "99c7bc42a928554d4c2c62395801d3627482565e4dae6150ee00de40feb4f673"
+    },
+    {
+      "id": "15153089",
+      "old_title": "법제처_인사혁신처 법령해석 목록 조회",
+      "new_title": "법제처_인사혁신처 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2cc4842d71de5894d4988e163ae3dbb934b962a0caa1a2f765f05cc5ac59aab6",
+      "new_digest": "abe7563f7c8f234ad60e92a0e56667726640467900ab8aebaecf5cea26ea7f3b"
+    },
+    {
+      "id": "15153091",
+      "old_title": "법제처_인사혁신처 법령해석 본문 조회",
+      "new_title": "법제처_인사혁신처 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d7a8c0d67b6b8d6a20ae1ed92878622c92a63b8238bd6ffd8825272b0cf75053",
+      "new_digest": "dad5bea2a9ac8a83e57e3156c2df9fb0c0c0c372e1413637c9d5d7c4b4eb5e9a"
+    },
+    {
+      "id": "15153092",
+      "old_title": "법제처_기상청 법령해석 목록 조회",
+      "new_title": "법제처_기상청 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "96087fb62b19cc492042c35351045cee265a1004a2ad084624850f246fc74267",
+      "new_digest": "3f023fbe0adda33d92cf5b8ffc158370303bcbf7f79e702e18c347b971b12f2d"
+    },
+    {
+      "id": "15153095",
+      "old_title": "법제처_기상청 법령해석 본문 조회",
+      "new_title": "법제처_기상청 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "56f12a97021573a53d954149f082ac938fbbcaa207d546a832b53b429628e6b3",
+      "new_digest": "dd10e54db51203c333b66d7a50e611a48a2bf83d549a1d36e7d543ce9e954e3c"
+    },
+    {
+      "id": "15153099",
+      "old_title": "법제처_방위사업청 법령해석 목록 조회",
+      "new_title": "법제처_방위사업청 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "dedb53721b8cde4255423abb7f5d7c1b3f8578b173712342443fa1cf107dfe87",
+      "new_digest": "fbc03b783c2744b3de3583ef7a5edd0efa2a186ac27e79d610fd5c8492f00e9c"
+    },
+    {
+      "id": "15153110",
+      "old_title": "법제처_방위사업청 법령해석 본문 조회",
+      "new_title": "법제처_방위사업청 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "92d9ca304a89a81231e97f122f90f7390a1a728dc9d658bef882987981be98ff",
+      "new_digest": "d8eab3f86f4d7a728cb0ff3d73350299cda1b7a9bd264dff51cfd762c894dea7"
+    },
+    {
+      "id": "15153111",
+      "old_title": "법제처_병무청 법령해석 목록 조회",
+      "new_title": "법제처_병무청 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "aae8ddd3fb9a72956e043fc16cd025925e928b7b3e055267a4ab969327dd8bd8",
+      "new_digest": "a1b972211b1ed4852bc36c352642af642384d5a6bbe2cb1a1335fccc46e1aaf0"
+    },
+    {
+      "id": "15153114",
+      "old_title": "법제처_병무청 법령해석 본문 조회",
+      "new_title": "법제처_병무청 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "32120356783c644a8060bf24da561afc5f9831656a57eb1fa79b8c55cd88dbed",
+      "new_digest": "de67b102bfba30422cbc009aae93f89a77eb9da83d14463354045cd38eea60f8"
+    },
+    {
+      "id": "15153115",
+      "old_title": "법제처_재외동포청 법령해석 목록 조회",
+      "new_title": "법제처_재외동포청 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1646b8e299decdac2252275525ce1fc492df6cc76c92b05111703b2d4bafc6ec",
+      "new_digest": "f8322d23acabde5cf5eec9fbd376053d335a00351bb7effd221a29ee95717403"
+    },
+    {
+      "id": "15153122",
+      "old_title": "법제처_재외동포청 법령해석 본문 조회",
+      "new_title": "법제처_재외동포청 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4b2ff885690a9d1d923380b29913ebfde5648b4dd0a9c2e070baa06f0419309b",
+      "new_digest": "c2681e06a36318f6de8867778af95c5d9cadb2af4b7ea77a5c3932fe4d25f58f"
+    },
+    {
+      "id": "15153126",
+      "old_title": "법제처_경찰청 법령해석 목록 조회",
+      "new_title": "법제처_경찰청 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4390fbc130286a1cc301c6e4bfce05db291ffd34b22f83afd791c0857b27bf9f",
+      "new_digest": "89e9c7cac7677472ea5d9fce56fc4e0dd0ac1591b3b1c8cc5a8a001e50fd80d8"
+    },
+    {
+      "id": "15153127",
+      "old_title": "법제처_경찰청 법령해석 본문 조회",
+      "new_title": "법제처_경찰청 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "da487e021072da12b7924ae6dfcf549be736939b42252f40a6b7dce95b987d92",
+      "new_digest": "4f6bfcffa94181d2616f457a88deba00a51617743c4ae6ca1a5cf236bc364bc4"
+    },
+    {
+      "id": "15153129",
+      "old_title": "법제처_산림청 법령해석 목록 조회",
+      "new_title": "법제처_산림청 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a90abc3e47fdd8d55bddbe2da89119fc38ebed66a30f1e318f0391225233d965",
+      "new_digest": "6e49eeb0c1212876202830f8b695ab1ce8dda4552fbb0cfdad646a42004791d8"
+    },
+    {
+      "id": "15153131",
+      "old_title": "법제처_산림청 법령해석 본문 조회",
+      "new_title": "법제처_산림청 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2db13a2464b20881e5a369ded34b0ce64e90dbc52bf6775fe117aa4cff5f506e",
+      "new_digest": "2a81f4050ee890c57a6951739e1af2d542078009fffe4382d8933a60f0274dd2"
+    },
+    {
+      "id": "15153132",
+      "old_title": "법제처_소방청 법령해석 목록 조회",
+      "new_title": "법제처_소방청 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a931c222de8276ab245edce5b52163db1d0ff8ba11a837ed0bec3805af28f13b",
+      "new_digest": "c84ac9112c4b25af3eb9c70363c50dd38cccd0149f1a609c298b3e16f63e707f"
+    },
+    {
+      "id": "15153134",
+      "old_title": "법제처_소방청 법령해석 본문 조회",
+      "new_title": "법제처_소방청 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "678282d3257655cc9b5c21fea366b57c9c868a00dbd0f18b619872d62893fd32",
+      "new_digest": "abb889013144573824e726d740c5c8b3d7311af19abde10138f82623a6be6b0a"
+    },
+    {
+      "id": "15153135",
+      "old_title": "법제처_조달청 법령해석 목록 조회",
+      "new_title": "법제처_조달청 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "46a69b6e9ff1345b6618d628550060b4117c847f8ea12f95e9035fa7fc87c65c",
+      "new_digest": "96c6da1d473886f74c7ed7cc8fde402b8b4d3aca089f5c2b82df5f5618c19e6d"
+    },
+    {
+      "id": "15153137",
+      "old_title": "법제처_조달청 법령해석 본문 조회",
+      "new_title": "법제처_조달청 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ad3022b34a2152baee33d497f3a193e452a0c1b9a8dc92b470cc2a9846398261",
+      "new_digest": "da9ffe61c765e58a24dcbf7a6655be90b64f05894f464ecc141e62081ec0880b"
+    },
+    {
+      "id": "15153138",
+      "old_title": "법제처_질병관리청 법령해석 목록 조회",
+      "new_title": "법제처_질병관리청 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7944e9216222ece3d9f62f847d4dc7bd40ba6944b178dbb2905f4428e56792d8",
+      "new_digest": "253b2a1564d7947730db7472c4fde381084d2cdf8144acd49c6824b5e3844348"
+    },
+    {
+      "id": "15153140",
+      "old_title": "법제처_질병관리청 법령해석 본문 조회",
+      "new_title": "법제처_질병관리청 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f6d86d2c442f579ae6a2951e1194b95f9c2bfd67e3695baa9d50a2307d244083",
+      "new_digest": "518d143b522d0e18af2b715afce8acbddaed572b2bb8a877f27492205fa20f48"
+    },
+    {
+      "id": "15153141",
+      "old_title": "법제처_해양경찰청 법령해석 목록 조회",
+      "new_title": "법제처_해양경찰청 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "94acd861970886e8298eee54657089d073e45b3863e4150ac0a6ad2474add9e3",
+      "new_digest": "43dcd29c71855a917711f34d2a3d95e85bb39695921eae2d2e044682092dfc17"
+    },
+    {
+      "id": "15153144",
+      "old_title": "법제처_해양경찰청 법령해석 본문 조회",
+      "new_title": "법제처_해양경찰청 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "aced734e5c2b7c6ad3abaf6c01efc3cc14f88c534ba6f3f62c84a97025abe20a",
+      "new_digest": "62e217f2201a67a2743166bb57fea8ef3b46be7e7ab72c931c08f6ec4e1a4a9d"
+    },
+    {
+      "id": "15153147",
+      "old_title": "법제처_행정중심복합도시건설청 법령해석 목록 조회",
+      "new_title": "법제처_행정중심복합도시건설청 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6e9ec3c93c1aa4ee245f732c0c3dfba59381c2b94f4f1817c5296ada8f6e3f49",
+      "new_digest": "21fde12703489013d858a23245188a9a1dbbb1ce689125e994baee72b460f9c8"
+    },
+    {
+      "id": "15153149",
+      "old_title": "법제처_행정중심복합도시건설청 법령해석 본문 조회",
+      "new_title": "법제처_행정중심복합도시건설청 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "923dd51e4006a0372577aa4c65cd14c922e2ba05248c15132e3223c42c86a1c8",
+      "new_digest": "203e87028b76f7b714c7b3a32a96fe48b02de715c5ee6cedc91450b4aabb0f46"
+    },
+    {
+      "id": "15153150",
+      "old_title": "법제처_국가데이터처 법령해석 목록 조회",
+      "new_title": "법제처_국가데이터처 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "20495c6b150d2c79ce70f98b696741791fd7f202fc1661b2eedcfbaae829243e",
+      "new_digest": "92c484b7b0582a92d60ad1e56a8ef48985ee70cfefb39386ce934fa754fd142a"
+    },
+    {
+      "id": "15153152",
+      "old_title": "법제처_국가데이터처 법령해석 본문 조회",
+      "new_title": "법제처_국가데이터처 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7bbce30063b7bf31d34e9e8daa24dda4e2ef2d428583655d227d7d041779164b",
+      "new_digest": "364a3a1512a64bd39a1807c45eb46a700fd7e4be2ef26617f60f38da6a0bdeed"
+    },
+    {
+      "id": "15153153",
+      "old_title": "법제처_지식재산처 법령해석 목록 조회",
+      "new_title": "법제처_지식재산처 법령해석 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2939e9de78caa806400006e64f610b884e1391d7c50368b41162d1a35e90f96d",
+      "new_digest": "532c9c3679b1eaf445257afece323926341e3a21cb1c358ae40221a8a90978bf"
+    },
+    {
+      "id": "15153154",
+      "old_title": "법제처_지식재산처 법령해석 본문 조회",
+      "new_title": "법제처_지식재산처 법령해석 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b71334023dd0ab182347811520199f2f5a7dc3188502c567ea1c20bbb473bb79",
+      "new_digest": "92afba7cbe924e59e65588ad04a5fbec8d40163ce9c269ac3ba63a45c6217688"
+    },
+    {
+      "id": "15153156",
+      "old_title": "법제처_국민권익위원회 특별행정심판 재결례 목록 조회",
+      "new_title": "법제처_국민권익위원회 특별행정심판 재결례 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1347cdcc5b69f0e9f7548eec6504846c1c56f48016bae6e07f18825684d22056",
+      "new_digest": "f5b9a4ad2fa7667bb2261652316cc533dc63e0cd02ced8c6f76e02b7cbf2eb9c"
+    },
+    {
+      "id": "15153157",
+      "old_title": "법제처_국민권익위원회 특별행정심판 재결례 본문 조회",
+      "new_title": "법제처_국민권익위원회 특별행정심판 재결례 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9f800e0851e5af782ed55e25bca52dda2c73ad19beb096baba7a15a34d500c42",
+      "new_digest": "e37f810c8fe09f518ebb90eb83cabc453357cf86ca3990112f229d5ab520a344"
+    },
+    {
+      "id": "15153159",
+      "old_title": "법제처_인사혁신처 소청심사위원회 특별행정심판 재결례 목록 조회",
+      "new_title": "법제처_인사혁신처 소청심사위원회 특별행정심판 재결례 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d39d4b2f05a2168d6159448d7275b22c496820983b0215274dc51ea4912e3a83",
+      "new_digest": "26291e98e5056441573aa5cf3e34c6adb045d89c10a24cb162904d3fcd1a4dfa"
+    },
+    {
+      "id": "15153161",
+      "old_title": "법제처_인사혁신처 소청심사위원회 특별행정심판 재결례 본문 조회",
+      "new_title": "법제처_인사혁신처 소청심사위원회 특별행정심판 재결례 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "370cbbf35cbbf6473c22acf04a7fd244ef36209279cafe84f1680ae5662a763c",
+      "new_digest": "aac2209aa3032698ff447e21edf6d8ce37cfc24a0205e2f97e14d0027d17853f"
+    },
+    {
+      "id": "15157095",
+      "old_title": "법제처_법령정보지식베이스 지능형 법령검색 시스템 검색",
+      "new_title": "법제처_법령정보지식베이스 지능형 법령검색 시스템 검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "056de0c096eb405d11032f4b0629596f6ac4e48280619706c2527860ab8d872b",
+      "new_digest": "e25b10a2bffaba51d4d68795484ee09c881351fd4554efb24c3d309bc855038d"
+    },
+    {
+      "id": "15157096",
+      "old_title": "법제처_법령정보지식베이스 지능형 법령검색 시스템 연관법령",
+      "new_title": "법제처_법령정보지식베이스 지능형 법령검색 시스템 연관법령",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "57ea0a2bd7c470544d6f3f29233b4d9131e20f8c51385291e450cbf32ce2950e",
+      "new_digest": "c6ad4e570f0718b5c84fc53572c5151ae1313677b61c2a200b3acea6f07d3cd2"
     }
   ]
 }
