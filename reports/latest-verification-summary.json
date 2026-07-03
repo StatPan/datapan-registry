@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T16:11:55Z",
+  "generated_at": "2026-07-03T16:21:22Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1690,
-    "verified": 352,
+    "total": 1691,
+    "verified": 353,
     "failed": 145,
     "skipped": 1193,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 352,
+        "count": 353,
         "status": "verified"
       },
       {
@@ -634,6 +634,11 @@
         "provider": "seogu"
       },
       {
+        "key": "sexoffender",
+        "count": 1,
+        "provider": "sexoffender"
+      },
+      {
         "key": "sisul-www",
         "count": 1,
         "provider": "sisul-www"
@@ -931,6 +936,11 @@
         "host": "air.jeju.go.kr"
       },
       {
+        "key": "api.sexoffender.go.kr",
+        "count": 1,
+        "host": "api.sexoffender.go.kr"
+      },
+      {
         "key": "car.go.kr",
         "count": 1,
         "host": "car.go.kr"
@@ -1044,7 +1054,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 966,
+        "count": 967,
         "kind": "external_endpoint"
       },
       {

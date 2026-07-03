@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.operation-materialization-plan.v1",
-  "generated_at": "2026-07-03T16:12:05Z",
+  "generated_at": "2026-07-03T16:21:33Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -15,67 +15,17 @@
   "summary": {
     "institutions": 411,
     "api_total": 12060,
-    "covered_api_count": 9357,
-    "uncovered_api_count": 2703,
+    "covered_api_count": 9358,
+    "uncovered_api_count": 2702,
     "api_operation_coverage_percent": 77.6,
     "planned_institutions": 10,
     "planned_api_count": 546,
-    "first_queue": "성평등가족부"
+    "first_queue": "공정거래위원회"
   },
   "batches": [
     {
       "label": "institution-01",
       "rank": 1,
-      "organization": "성평등가족부",
-      "api_count": 273,
-      "covered_api_count": 272,
-      "uncovered_api_count": 1,
-      "api_operation_coverage_percent": 99.6,
-      "planned_api_count": 1,
-      "remaining_after_batch": 0,
-      "action": "materialize_operation_mapping",
-      "reason": "no_dependency_rows",
-      "output": "reports/data-go-kr/operation-materialization-batches/institution-01.json",
-      "apis": [
-        {
-          "dataset_id": "3072018",
-          "title": "성평등가족부_성범죄자 지역별 통계",
-          "organization": "성평등가족부",
-          "source_category": "사회복지",
-          "api_type": "LINK",
-          "data_format": "XML",
-          "register_status": "변경승인",
-          "dev_approval": "자동승인",
-          "prod_approval": "자동승인",
-          "created_at": "2016-01-26",
-          "updated_at": "2025-06-17",
-          "meta_url": "https://www.data.go.kr/catalog/3072018/openapi.json",
-          "action": "materialize_operation_mapping",
-          "reason": "no_dependency_rows"
-        }
-      ],
-      "sample_apis": [
-        {
-          "dataset_id": "3072018",
-          "title": "성평등가족부_성범죄자 지역별 통계",
-          "organization": "성평등가족부",
-          "source_category": "사회복지",
-          "api_type": "LINK",
-          "data_format": "XML",
-          "register_status": "변경승인",
-          "dev_approval": "자동승인",
-          "prod_approval": "자동승인",
-          "created_at": "2016-01-26",
-          "updated_at": "2025-06-17",
-          "meta_url": "https://www.data.go.kr/catalog/3072018/openapi.json",
-          "action": "materialize_operation_mapping",
-          "reason": "no_dependency_rows"
-        }
-      ]
-    },
-    {
-      "label": "institution-02",
-      "rank": 2,
       "organization": "공정거래위원회",
       "api_count": 250,
       "covered_api_count": 216,
@@ -85,7 +35,7 @@
       "remaining_after_batch": 0,
       "action": "materialize_operation_mapping",
       "reason": "no_dependency_rows",
-      "output": "reports/data-go-kr/operation-materialization-batches/institution-02.json",
+      "output": "reports/data-go-kr/operation-materialization-batches/institution-01.json",
       "apis": [
         {
           "dataset_id": "15144425",
@@ -796,8 +746,8 @@
       ]
     },
     {
-      "label": "institution-03",
-      "rank": 3,
+      "label": "institution-02",
+      "rank": 2,
       "organization": "한국산업인력공단",
       "api_count": 230,
       "covered_api_count": 228,
@@ -807,7 +757,7 @@
       "remaining_after_batch": 0,
       "action": "materialize_operation_mapping",
       "reason": "no_dependency_rows",
-      "output": "reports/data-go-kr/operation-materialization-batches/institution-03.json",
+      "output": "reports/data-go-kr/operation-materialization-batches/institution-02.json",
       "apis": [
         {
           "dataset_id": "3045136",
@@ -878,8 +828,8 @@
       ]
     },
     {
-      "label": "institution-04",
-      "rank": 4,
+      "label": "institution-03",
+      "rank": 3,
       "organization": "국립암센터",
       "api_count": 212,
       "covered_api_count": 204,
@@ -889,7 +839,7 @@
       "remaining_after_batch": 0,
       "action": "materialize_operation_mapping",
       "reason": "no_dependency_rows",
-      "output": "reports/data-go-kr/operation-materialization-batches/institution-04.json",
+      "output": "reports/data-go-kr/operation-materialization-batches/institution-03.json",
       "apis": [
         {
           "dataset_id": "15122235",
@@ -1152,8 +1102,8 @@
       ]
     },
     {
-      "label": "institution-05",
-      "rank": 5,
+      "label": "institution-04",
+      "rank": 4,
       "organization": "법제처",
       "api_count": 203,
       "covered_api_count": 5,
@@ -1163,7 +1113,7 @@
       "remaining_after_batch": 98,
       "action": "materialize_operation_mapping",
       "reason": "no_dependency_rows",
-      "output": "reports/data-go-kr/operation-materialization-batches/institution-05.json",
+      "output": "reports/data-go-kr/operation-materialization-batches/institution-04.json",
       "apis": [
         {
           "dataset_id": "15157096",
@@ -2930,8 +2880,8 @@
       ]
     },
     {
-      "label": "institution-06",
-      "rank": 6,
+      "label": "institution-05",
+      "rank": 5,
       "organization": "경기도 광명시",
       "api_count": 197,
       "covered_api_count": 0,
@@ -2941,7 +2891,7 @@
       "remaining_after_batch": 97,
       "action": "materialize_operation_mapping",
       "reason": "no_dependency_rows",
-      "output": "reports/data-go-kr/operation-materialization-batches/institution-06.json",
+      "output": "reports/data-go-kr/operation-materialization-batches/institution-05.json",
       "apis": [
         {
           "dataset_id": "15114779",
@@ -4708,8 +4658,8 @@
       ]
     },
     {
-      "label": "institution-07",
-      "rank": 7,
+      "label": "institution-06",
+      "rank": 6,
       "organization": "해양수산부",
       "api_count": 173,
       "covered_api_count": 172,
@@ -4719,7 +4669,7 @@
       "remaining_after_batch": 0,
       "action": "materialize_operation_mapping",
       "reason": "no_dependency_rows",
-      "output": "reports/data-go-kr/operation-materialization-batches/institution-07.json",
+      "output": "reports/data-go-kr/operation-materialization-batches/institution-06.json",
       "apis": [
         {
           "dataset_id": "15084033",
@@ -4758,8 +4708,8 @@
       ]
     },
     {
-      "label": "institution-08",
-      "rank": 8,
+      "label": "institution-07",
+      "rank": 7,
       "organization": "제주특별자치도",
       "api_count": 171,
       "covered_api_count": 18,
@@ -4769,7 +4719,7 @@
       "remaining_after_batch": 53,
       "action": "materialize_operation_mapping",
       "reason": "no_dependency_rows",
-      "output": "reports/data-go-kr/operation-materialization-batches/institution-08.json",
+      "output": "reports/data-go-kr/operation-materialization-batches/institution-07.json",
       "apis": [
         {
           "dataset_id": "15079829",
@@ -6536,8 +6486,8 @@
       ]
     },
     {
-      "label": "institution-09",
-      "rank": 9,
+      "label": "institution-08",
+      "rank": 8,
       "organization": "농촌진흥청",
       "api_count": 136,
       "covered_api_count": 14,
@@ -6547,7 +6497,7 @@
       "remaining_after_batch": 22,
       "action": "materialize_operation_mapping",
       "reason": "no_dependency_rows",
-      "output": "reports/data-go-kr/operation-materialization-batches/institution-09.json",
+      "output": "reports/data-go-kr/operation-materialization-batches/institution-08.json",
       "apis": [
         {
           "dataset_id": "3060744",
@@ -8314,8 +8264,8 @@
       ]
     },
     {
-      "label": "institution-10",
-      "rank": 10,
+      "label": "institution-09",
+      "rank": 9,
       "organization": "대전광역시 서구",
       "api_count": 125,
       "covered_api_count": 0,
@@ -8325,7 +8275,7 @@
       "remaining_after_batch": 25,
       "action": "materialize_operation_mapping",
       "reason": "no_dependency_rows",
-      "output": "reports/data-go-kr/operation-materialization-batches/institution-10.json",
+      "output": "reports/data-go-kr/operation-materialization-batches/institution-09.json",
       "apis": [
         {
           "dataset_id": "15109957",
@@ -10086,6 +10036,56 @@
           "created_at": "2024-06-11",
           "updated_at": "2025-11-21",
           "meta_url": "https://www.data.go.kr/catalog/15128500/openapi.json",
+          "action": "materialize_operation_mapping",
+          "reason": "no_dependency_rows"
+        }
+      ]
+    },
+    {
+      "label": "institution-10",
+      "rank": 10,
+      "organization": "전라남도",
+      "api_count": 109,
+      "covered_api_count": 108,
+      "uncovered_api_count": 1,
+      "api_operation_coverage_percent": 99.1,
+      "planned_api_count": 1,
+      "remaining_after_batch": 0,
+      "action": "materialize_operation_mapping",
+      "reason": "no_dependency_rows",
+      "output": "reports/data-go-kr/operation-materialization-batches/institution-10.json",
+      "apis": [
+        {
+          "dataset_id": "15111780",
+          "title": "전라남도_전남관광플랫폼(J-TaaS)의 음식관광 정보 확대를 위한 음식점 DB OPEN API",
+          "organization": "전라남도",
+          "source_category": "문화관광",
+          "api_type": "LINK",
+          "data_format": "JSON",
+          "register_status": "등록승인",
+          "dev_approval": "자동승인",
+          "prod_approval": "심의승인",
+          "created_at": "2023-01-10",
+          "updated_at": "2025-07-21",
+          "meta_url": "https://www.data.go.kr/catalog/15111780/openapi.json",
+          "action": "materialize_operation_mapping",
+          "reason": "no_dependency_rows"
+        }
+      ],
+      "sample_apis": [
+        {
+          "dataset_id": "15111780",
+          "title": "전라남도_전남관광플랫폼(J-TaaS)의 음식관광 정보 확대를 위한 음식점 DB OPEN API",
+          "organization": "전라남도",
+          "source_category": "문화관광",
+          "api_type": "LINK",
+          "data_format": "JSON",
+          "register_status": "등록승인",
+          "dev_approval": "자동승인",
+          "prod_approval": "심의승인",
+          "created_at": "2023-01-10",
+          "updated_at": "2025-07-21",
+          "meta_url": "https://www.data.go.kr/catalog/15111780/openapi.json",
           "action": "materialize_operation_mapping",
           "reason": "no_dependency_rows"
         }

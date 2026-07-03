@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-07-03T16:12:05Z",
+  "generated_at": "2026-07-03T16:21:33Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 228,
+  "filtered_count": 229,
   "summary": {
-    "hosts": 228,
+    "hosts": 229,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 86,
-    "external_guide_hosts": 170,
-    "registered_adapter_hosts": 75,
-    "operation_hosts": 88,
+    "external_endpoint_hosts": 87,
+    "external_guide_hosts": 171,
+    "registered_adapter_hosts": 76,
+    "operation_hosts": 89,
     "guide_only_hosts": 140,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
@@ -1111,6 +1111,22 @@
       "sample_ids": [
         "15057047",
         "15059539"
+      ]
+    },
+    {
+      "host": "api.sexoffender.go.kr",
+      "provider": "sexoffender",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "3072018"
       ]
     },
     {

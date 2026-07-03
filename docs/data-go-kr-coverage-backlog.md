@@ -2,17 +2,17 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-07-03T16:12:05Z`
+- Generated at: `2026-07-03T16:21:33Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `9357` (`77.6%`)
-- APIs without operation mapping: `2703`
-- Operations: `16624`
-- Runtime evidence operations: `1690` (`10.2%`)
-- Runtime verified operations: `352`
+- APIs with operation mapping: `9358` (`77.6%`)
+- APIs without operation mapping: `2702`
+- Operations: `16625`
+- Runtime evidence operations: `1691` (`10.2%`)
+- Runtime verified operations: `353`
 - Runtime failed operations: `145`
 - Runtime skipped operations: `1193`
-- APIs with runtime evidence: `825`
+- APIs with runtime evidence: `826`
 - Runtime reactivation APIs: `8532`
 - Runtime repair APIs: `96`
 
@@ -24,7 +24,7 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 경기도 | 840 | 840 | 0 | 100.0% | 2241 | 86 | 754 | 1 | 754 |
 | 식품의약품안전처 | 392 | 392 | 0 | 100.0% | 648 | 21 | 371 | 0 | 371 |
 | 국토교통부 | 393 | 393 | 0 | 100.0% | 1055 | 35 | 358 | 2 | 358 |
-| 성평등가족부 | 273 | 272 | 1 | 99.6% | 347 | 1 | 271 | 0 | 272 |
+| 성평등가족부 | 273 | 273 | 0 | 100.0% | 348 | 2 | 271 | 0 | 271 |
 | 공정거래위원회 | 250 | 216 | 34 | 86.4% | 295 | 0 | 216 | 0 | 250 |
 | 국회 국회사무처 | 277 | 277 | 0 | 100.0% | 277 | 30 | 247 | 30 | 247 |
 | 한국마사회 | 223 | 223 | 0 | 100.0% | 223 | 10 | 213 | 0 | 213 |

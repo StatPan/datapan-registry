@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `2,703` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `2,702` data.go.kr APIs
   without operation mappings, `8,532` operation-mapped APIs without runtime
   evidence, and `96` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -247,8 +247,12 @@ Current gaps:
   operations, and merges `10` failed-but-bounded HTTP 400 checks, bringing
   runtime evidence to `1690` and moving the first materialization queue to
   성평등가족부.
-- API operation coverage remains incomplete: `9,357` of `12,060` APIs have
-  operation mappings (`77.6%`), leaving `2,703` APIs to materialize and `8,532`
+  The final 성평등가족부 batch adds Sex Offender adapter coverage, materializes
+  the remaining `1` API and `1` operation, and merges `1` verified
+  landing-page check, bringing runtime evidence to `1691` and moving the first
+  materialization queue to 공정거래위원회.
+- API operation coverage remains incomplete: `9,358` of `12,060` APIs have
+  operation mappings (`77.6%`), leaving `2,702` APIs to materialize and `8,532`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report
