@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T23:29:05Z",
+  "generated_at": "2026-07-03T23:38:48Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3477,
-    "verified": 1685,
+    "total": 3527,
+    "verified": 1735,
     "failed": 306,
     "skipped": 1486,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 1685,
+        "count": 1735,
         "status": "verified"
       },
       {
@@ -439,6 +439,11 @@
         "provider": "daejeon"
       },
       {
+        "key": "nfqs",
+        "count": 55,
+        "provider": "nfqs"
+      },
+      {
         "key": "open-law",
         "count": 51,
         "provider": "open-law"
@@ -672,11 +677,6 @@
         "key": "gims",
         "count": 5,
         "provider": "gims"
-      },
-      {
-        "key": "nfqs",
-        "count": 5,
-        "provider": "nfqs"
       },
       {
         "key": "forest",
@@ -924,6 +924,11 @@
         "key": "bigdata.daejeon.go.kr",
         "count": 57,
         "host": "bigdata.daejeon.go.kr"
+      },
+      {
+        "key": "www.nfqs.go.kr",
+        "count": 55,
+        "host": "www.nfqs.go.kr"
       },
       {
         "key": "data.ekape.or.kr",
@@ -1201,11 +1206,6 @@
         "host": "www.gims.go.kr"
       },
       {
-        "key": "www.nfqs.go.kr",
-        "count": 5,
-        "host": "www.nfqs.go.kr"
-      },
-      {
         "key": "api.forest.go.kr",
         "count": 4,
         "host": "api.forest.go.kr"
@@ -1429,7 +1429,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 2753,
+        "count": 2803,
         "kind": "external_endpoint"
       },
       {
