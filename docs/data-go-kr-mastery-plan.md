@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `17636`
-- callable operations: `17494` (`99.2%`)
+- operations: `17637`
+- callable operations: `17495` (`99.2%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `6026`
-- registered adapter operations: `6016`
+- external endpoint operations: `6027`
+- registered adapter operations: `6017`
 - missing adapter operations: `29`
 - external adapter coverage: `99.5%`
-- approval-required operations: `5710`
+- approval-required operations: `5711`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `83`
+- registered adapter hosts: `84`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -227,8 +227,8 @@ institution:
    `scripts/validate-institution-runtime-plan.py`, and
    `scripts/validate-institution-api-overview.py`.
 
-The current operation materialization queue starts at `해양수산부`: `173`
-APIs, `172` APIs with operation mappings, and `1` uncovered API. The runtime
+The current operation materialization queue starts at `제주특별자치도`: `171`
+APIs, `18` APIs with operation mappings, and `153` uncovered APIs. The runtime
 reactivation queue starts at `행정안전부`: `1252` APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
 records, and `1202` APIs still needing runtime reactivation. Gateway calls need
@@ -451,6 +451,12 @@ readiness, not to advance verified runtime coverage.
    `1824`, registered external adapter operations to `6016`, completes 경기도
    광명시 materialization at `197` of `197` APIs, and moves the first
    materialization queue to 해양수산부.
+   The 해양수산부 GICOMS batch adds `www.gicoms.go.kr` adapter coverage,
+   materializes the remaining `1` API and `1` operation, and merges `1`
+   failed-but-bounded timeout check. That brings checked runtime evidence to
+   `1825`, registered external adapter operations to `6017`, completes
+   해양수산부 materialization at `173` of `173` APIs, and moves the first
+   materialization queue to 제주특별자치도.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

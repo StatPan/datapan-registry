@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-03T17:30:01Z",
+  "generated_at": "2026-07-03T17:43:10Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1824,
+    "total": 1825,
     "verified": 486,
-    "failed": 145,
+    "failed": 146,
     "skipped": 1193,
     "unknown": 0
   },
@@ -26,7 +26,7 @@
       },
       {
         "key": "failed",
-        "count": 145,
+        "count": 146,
         "status": "failed"
       }
     ],
@@ -260,6 +260,11 @@
         "key": "gblib_endpoint_not_found",
         "count": 1,
         "reason": "gblib_endpoint_not_found"
+      },
+      {
+        "key": "gicoms_request_timeout",
+        "count": 1,
+        "reason": "gicoms_request_timeout"
       },
       {
         "key": "humetro_deadline_expired",
@@ -602,6 +607,11 @@
         "key": "dgfca",
         "count": 1,
         "provider": "dgfca"
+      },
+      {
+        "key": "gicoms",
+        "count": 1,
+        "provider": "gicoms"
       },
       {
         "key": "i815",
@@ -1066,6 +1076,11 @@
         "host": "www.car365.go.kr"
       },
       {
+        "key": "www.gicoms.go.kr",
+        "count": 1,
+        "host": "www.gicoms.go.kr"
+      },
+      {
         "key": "www.icheon.go.kr",
         "count": 1,
         "host": "www.icheon.go.kr"
@@ -1114,7 +1129,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 1100,
+        "count": 1101,
         "kind": "external_endpoint"
       },
       {

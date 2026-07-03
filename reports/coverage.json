@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T17:30:21Z",
+  "generated_at": "2026-07-03T17:43:19Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 17636,
-    "callable_operations": 17494,
+    "operations": 17637,
+    "callable_operations": 17495,
     "callable_operation_percent": 99.2,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 6026,
-    "registered_adapter_operations": 6016,
+    "external_endpoint_operations": 6027,
+    "registered_adapter_operations": 6017,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.5,
-    "approval_required_operations": 5710,
+    "approval_required_operations": 5711,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 83,
+    "registered_adapter_hosts": 84,
     "missing_adapter_hosts": 11,
-    "adapter_count": 75,
+    "adapter_count": 76,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,10 +41,10 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T17:30:01Z",
-    "total": 1824,
+    "generated_at": "2026-07-03T17:43:10Z",
+    "total": 1825,
     "verified": 486,
-    "failed": 145,
+    "failed": 146,
     "skipped": 1193,
     "unknown": 0,
     "verified_percent": 26.6,
@@ -384,10 +384,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T17:30:21Z",
+    "generated_at": "2026-07-03T17:43:19Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 75,
-    "host_count": 85,
+    "adapter_count": 76,
+    "host_count": 86,
     "adapters": [
       {
         "name": "airport",
@@ -643,6 +643,16 @@
         ],
         "capabilities": [
           "call",
+          "verification"
+        ]
+      },
+      {
+        "name": "gicoms",
+        "status": "registered",
+        "hosts": [
+          "www.gicoms.go.kr"
+        ],
+        "capabilities": [
           "verification"
         ]
       },
@@ -1176,8 +1186,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 75,
-      "verification_capable_adapters": 75,
+      "adapter_count": 76,
+      "verification_capable_adapters": 76,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

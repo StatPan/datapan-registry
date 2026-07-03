@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T17:30:15Z",
+  "generated_at": "2026-07-03T17:43:13Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 17636,
-    "runtime_evidence": 1824,
+    "operations": 17637,
+    "runtime_evidence": 1825,
     "runtime_evidence_percent": 10.3,
-    "callable_operations": 17494,
-    "external_endpoint_operations": 6026,
-    "registered_adapter_operations": 6016,
+    "callable_operations": 17495,
+    "external_endpoint_operations": 6027,
+    "registered_adapter_operations": 6017,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 6026
+      "count": 6027
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 6016
+      "count": 6017
     },
     {
       "key": "builtin",
@@ -81,7 +81,7 @@
     },
     {
       "category": "농축수산",
-      "operation_count": 1486
+      "operation_count": 1487
     },
     {
       "category": "사회복지",
@@ -1299,15 +1299,15 @@
     {
       "organization": "해양수산부",
       "api_count": 173,
-      "operation_api_count": 172,
-      "operation_count": 276,
-      "runtime_evidence_count": 10,
-      "runtime_evidence_percent": 3.6,
+      "operation_api_count": 173,
+      "operation_count": 277,
+      "runtime_evidence_count": 11,
+      "runtime_evidence_percent": 4.0,
       "verified": 0,
-      "failed": 0,
+      "failed": 1,
       "skipped": 10,
       "unknown": 0,
-      "approval_required_operations": 116,
+      "approval_required_operations": 117,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
@@ -1316,7 +1316,7 @@
         },
         {
           "key": "external_endpoint",
-          "count": 6
+          "count": 7
         },
         {
           "key": "wms",
@@ -1324,6 +1324,10 @@
         }
       ],
       "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 1
+        },
         {
           "key": "builtin",
           "count": 263
@@ -1340,7 +1344,7 @@
       "top_categories": [
         {
           "category": "농축수산",
-          "operation_count": 199
+          "operation_count": 200
         },
         {
           "category": "환경기상",
@@ -1367,6 +1371,15 @@
         {
           "host": "openapi.coast.kr",
           "operation_count": 6
+        },
+        {
+          "host": "www.gicoms.go.kr",
+          "operation_count": 1,
+          "adapter": "gicoms",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },

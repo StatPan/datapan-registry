@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-03T17:30:01Z",
+  "generated_at": "2026-07-03T17:43:10Z",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
-  "limit": 2117,
+  "limit": 2127,
   "truncated": true,
-  "filtered_count": 1824,
+  "filtered_count": 1825,
   "summary": {
-    "total": 1824,
+    "total": 1825,
     "verified": 486,
-    "failed": 145,
+    "failed": 146,
     "skipped": 1193,
     "unknown": 0
   },
@@ -32681,6 +32681,18 @@
       "semantic_status": "html_landing_page",
       "url": "http://data.gm.go.kr/portal/data/service/selectServicePage.do?infId=X5WXVZ9CW71031K1FN97932",
       "body_shape": "html"
+    },
+    {
+      "dataset_id": "15084033",
+      "title": "해양수산부_선박위치정보(연안AIS) 통계정보",
+      "operation": "해양수산부_선박위치정보(연안AIS) 통계정보_20210622",
+      "provider": "gicoms",
+      "endpoint_host": "www.gicoms.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "failed",
+      "reason": "gicoms_request_timeout",
+      "verified_at": "2026-07-03T17:42:41Z",
+      "url": "https://www.gicoms.go.kr/kodispub/cmm/main/mainPage.do"
     }
   ]
 }

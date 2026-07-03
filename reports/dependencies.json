@@ -1,21 +1,21 @@
 {
-  "generated_at": "2026-07-03T17:30:15Z",
+  "generated_at": "2026-07-03T17:43:13Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 17636,
+  "filtered_count": 17637,
   "summary": {
-    "operations_total": 17636,
+    "operations_total": 17637,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 6026,
+    "external_endpoint_operations": 6027,
     "service_root_operations": 19,
     "no_endpoint_operations": 123,
     "malformed_endpoint_operations": 42,
     "soap_operations": 35,
     "wms_operations": 114,
-    "approval_required_operations": 5710,
-    "registered_adapter_operations": 6016,
+    "approval_required_operations": 5711,
+    "registered_adapter_operations": 6017,
     "missing_adapter_operations": 29
   },
   "dependencies": [
@@ -88772,6 +88772,26 @@
         "geojecultureCd",
         "startPage"
       ]
+    },
+    {
+      "dataset_id": "15084033",
+      "title": "해양수산부_선박위치정보(연안AIS) 통계정보",
+      "organization": "해양수산부",
+      "source_category": "농축수산",
+      "operation": "해양수산부_선박위치정보(연안AIS) 통계정보_20210622",
+      "provider": "data.go.kr",
+      "endpoint": "https://www.gicoms.go.kr/kodispub/cmm/main/mainPage.do",
+      "endpoint_host": "www.gicoms.go.kr",
+      "dependency_class": "external_endpoint",
+      "adapter_status": "adapter",
+      "provider_family": "gicoms",
+      "api_type": "LINK",
+      "data_format": "JSON",
+      "dev_approval": "자동승인",
+      "prod_approval": "심의승인",
+      "approval_required": true,
+      "request_params_count": 0,
+      "response_params_count": 0
     },
     {
       "dataset_id": "15057047",
