@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T13:08:02Z",
+  "generated_at": "2026-07-03T13:33:21Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 14249,
-    "callable_operations": 14107,
+    "operations": 14514,
+    "callable_operations": 14372,
     "callable_operation_percent": 99,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 2639,
-    "registered_adapter_operations": 2629,
+    "external_endpoint_operations": 2904,
+    "registered_adapter_operations": 2894,
     "missing_adapter_operations": 29,
-    "external_adapter_coverage_percent": 98.9,
+    "external_adapter_coverage_percent": 99,
     "approval_required_operations": 4723,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 146,
-    "registered_adapter_hosts": 55,
+    "registered_adapter_hosts": 56,
     "missing_adapter_hosts": 11,
-    "adapter_count": 50,
+    "adapter_count": 51,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T13:07:47Z",
-    "total": 1427,
-    "verified": 162,
+    "generated_at": "2026-07-03T13:33:03Z",
+    "total": 1458,
+    "verified": 183,
     "failed": 112,
-    "skipped": 1153,
+    "skipped": 1163,
     "unknown": 0,
-    "verified_percent": 11.4,
+    "verified_percent": 12.6,
     "evidence_operation_percent": 10
   },
   "route_evidence": {
@@ -209,10 +209,10 @@
           "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 400,
-        "operations": 1044,
-        "external_endpoint_operations": 1044,
-        "external_guide_specs": 7,
+        "specs": 500,
+        "operations": 1296,
+        "external_endpoint_operations": 1296,
+        "external_guide_specs": 12,
         "wms_operations": 5,
         "approval_required_operations": 9,
         "sample_ids": [
@@ -380,10 +380,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T13:08:02Z",
+    "generated_at": "2026-07-03T13:33:21Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 50,
-    "host_count": 56,
+    "adapter_count": 51,
+    "host_count": 58,
     "adapters": [
       {
         "name": "airport",
@@ -905,6 +905,17 @@
         ]
       },
       {
+        "name": "wamis",
+        "status": "registered",
+        "hosts": [
+          "www.wamis.go.kr",
+          "www.wamis.go.kr:8080"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "work24",
         "status": "registered",
         "hosts": [
@@ -918,8 +929,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 50,
-      "verification_capable_adapters": 50,
+      "adapter_count": 51,
+      "verification_capable_adapters": 51,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

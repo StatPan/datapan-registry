@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-07-03T13:07:56Z",
+  "generated_at": "2026-07-03T13:33:15Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 206,
+  "filtered_count": 207,
   "summary": {
-    "hosts": 206,
+    "hosts": 207,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 66,
+    "external_endpoint_hosts": 67,
     "external_guide_hosts": 160,
-    "registered_adapter_hosts": 55,
-    "operation_hosts": 68,
+    "registered_adapter_hosts": 56,
+    "operation_hosts": 69,
     "guide_only_hosts": 138,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
@@ -177,10 +177,10 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 400,
-      "operations": 1044,
-      "external_endpoint_operations": 1044,
-      "external_guide_specs": 7,
+      "specs": 500,
+      "operations": 1296,
+      "external_endpoint_operations": 1296,
+      "external_guide_specs": 12,
       "wms_operations": 5,
       "approval_required_operations": 9,
       "sample_ids": [
@@ -364,6 +364,21 @@
       ]
     },
     {
+      "host": "data.gm.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 26,
+      "operations": 30,
+      "external_endpoint_operations": 30,
+      "sample_ids": [
+        "15056869",
+        "15057024",
+        "15057095"
+      ]
+    },
+    {
       "host": "www.juso.go.kr",
       "kinds": [
         "external_endpoint"
@@ -429,21 +444,6 @@
         "15003549",
         "15026112",
         "15027228"
-      ]
-    },
-    {
-      "host": "data.gm.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 18,
-      "operations": 21,
-      "external_endpoint_operations": 21,
-      "sample_ids": [
-        "15057095",
-        "15057118",
-        "15057435"
       ]
     },
     {
@@ -516,6 +516,23 @@
       ]
     },
     {
+      "host": "data.mafra.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 11,
+      "operations": 15,
+      "external_endpoint_operations": 15,
+      "external_guide_specs": 3,
+      "sample_ids": [
+        "15002220",
+        "15008409",
+        "15015139"
+      ]
+    },
+    {
       "host": "www.andong.go.kr",
       "provider": "andong",
       "kinds": [
@@ -529,23 +546,6 @@
         "15003047",
         "15005609",
         "15005628"
-      ]
-    },
-    {
-      "host": "data.mafra.go.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 10,
-      "operations": 14,
-      "external_endpoint_operations": 14,
-      "external_guide_specs": 3,
-      "sample_ids": [
-        "15002220",
-        "15008409",
-        "15015139"
       ]
     },
     {
@@ -799,6 +799,21 @@
       ]
     },
     {
+      "host": "data.gwanak.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 3,
+      "operations": 4,
+      "external_endpoint_operations": 4,
+      "sample_ids": [
+        "15007009",
+        "15009684",
+        "15057674"
+      ]
+    },
+    {
       "host": "data.jeju.go.kr",
       "provider": "jeju",
       "kinds": [
@@ -847,20 +862,6 @@
       ]
     },
     {
-      "host": "data.gwanak.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 2,
-      "operations": 3,
-      "external_endpoint_operations": 3,
-      "sample_ids": [
-        "15007009",
-        "15009684"
-      ]
-    },
-    {
       "host": "folkency.nfm.go.kr",
       "provider": "folk",
       "kinds": [
@@ -905,6 +906,22 @@
       ]
     },
     {
+      "host": "www.jejudatahub.net",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 3,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15034922",
+        "15058931",
+        "15150280"
+      ]
+    },
+    {
       "host": "www.happysd.or.kr",
       "kinds": [
         "external_endpoint",
@@ -918,21 +935,6 @@
       "sample_ids": [
         "15007444",
         "15007467"
-      ]
-    },
-    {
-      "host": "www.jejudatahub.net",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 2,
-      "operations": 2,
-      "external_endpoint_operations": 2,
-      "approval_required_operations": 1,
-      "sample_ids": [
-        "15034922",
-        "15150280"
       ]
     },
     {
@@ -1056,6 +1058,19 @@
       "approval_required_operations": 1,
       "sample_ids": [
         "15136379"
+      ]
+    },
+    {
+      "host": "www.wamis.go.kr:8080",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "15058026"
       ]
     },
     {

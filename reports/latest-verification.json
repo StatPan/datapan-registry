@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-07-03T13:07:47Z",
+  "generated_at": "2026-07-03T13:33:03Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
-  "limit": 1647,
+  "limit": 1687,
   "truncated": true,
-  "filtered_count": 1427,
+  "filtered_count": 1458,
   "summary": {
-    "total": 1427,
-    "verified": 162,
+    "total": 1458,
+    "verified": 183,
     "failed": 112,
-    "skipped": 1153,
+    "skipped": 1163,
     "unknown": 0
   },
   "results": [
@@ -26745,6 +26745,522 @@
       "semantic_status": "unclassified_response",
       "url": "https://dgfca.or.kr/api/daegu/cultural-events",
       "body_shape": "json"
+    },
+    {
+      "dataset_id": "15048854",
+      "title": "기후에너지환경부 국립환경과학원_먹는샘물 수질검사결과 정보",
+      "operation": "유통제품수거 수질검사결과",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "search_mgc": "",
+        "search_qu": "",
+        "search_year": ""
+      },
+      "missing_params": [
+        "search_year",
+        "search_qu",
+        "search_mgc"
+      ]
+    },
+    {
+      "dataset_id": "15048854",
+      "title": "기후에너지환경부 국립환경과학원_먹는샘물 수질검사결과 정보",
+      "operation": "제조업체원수 수질검사결과",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "search_ht": "",
+        "search_mgc": "",
+        "search_year": ""
+      },
+      "missing_params": [
+        "search_year",
+        "search_ht",
+        "search_mgc"
+      ]
+    },
+    {
+      "dataset_id": "15051043",
+      "title": "건강보험심사평가원_요양기관개폐업정보조회서비스",
+      "operation": "병원약국개폐업목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "crtrYm": "",
+        "numOfRows": "1",
+        "opCloTp": "",
+        "pageNo": "1",
+        "sidoCd": "",
+        "yadmTp": ""
+      },
+      "missing_params": [
+        "crtrYm",
+        "yadmTp",
+        "opCloTp",
+        "sidoCd"
+      ]
+    },
+    {
+      "dataset_id": "15053339",
+      "title": "국토안전관리원_사고사례 정보조회 서비스",
+      "operation": "사고사례 정보",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "accdntNm": "",
+        "facilAddr": "",
+        "facilNm": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "accdntNm",
+        "facilNm",
+        "facilAddr"
+      ]
+    },
+    {
+      "dataset_id": "15054445",
+      "title": "건강보험심사평가원_약가기준정보조회서비스",
+      "operation": "약가목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "adtStaDd": "",
+        "itmNm": "",
+        "mdsCd": "",
+        "mnfEntpNm": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "mdsCd",
+        "itmNm",
+        "mnfEntpNm",
+        "adtStaDd"
+      ]
+    },
+    {
+      "dataset_id": "15054445",
+      "title": "건강보험심사평가원_약가기준정보조회서비스",
+      "operation": "한방약가목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "adtStaDd": "",
+        "itmNm": "",
+        "mdsCd": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "mdsCd",
+        "itmNm",
+        "adtStaDd"
+      ]
+    },
+    {
+      "dataset_id": "15055851",
+      "title": "해양수산부_선박제원정보 서비스",
+      "operation": "선박제원정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "clsgn": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "vsslNm": ""
+      },
+      "missing_params": [
+        "vsslNm",
+        "clsgn"
+      ]
+    },
+    {
+      "dataset_id": "15056499",
+      "title": "한국마사회 경주계획표",
+      "operation": "전국 경마공원 경주계획표",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required",
+      "params": {
+        "_type": "json",
+        "meet": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "rc_date": "",
+        "rc_month": "",
+        "rc_year": ""
+      },
+      "missing_params": [
+        "meet",
+        "rc_date",
+        "rc_month",
+        "rc_year"
+      ]
+    },
+    {
+      "dataset_id": "15056511",
+      "title": "해양수산부_수협 산지조합 위판장 정보",
+      "operation": "수협 산지조합 위판장 정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "csmtmktCode": "",
+        "csmtmktNm": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "csmtmktCode",
+        "csmtmktNm"
+      ]
+    },
+    {
+      "dataset_id": "15056516",
+      "title": "식품의약품안전처_검사 부적합 식품정보",
+      "operation": "부적합식품 목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "Prduct": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "Prduct"
+      ]
+    },
+    {
+      "dataset_id": "15056504",
+      "title": "경기도_체육시설 현황",
+      "operation": "체육시설 현황 외부 링크 1",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=6LMU5TBQ6RJJRBLAZWBC21105087\u0026infSeq=3\u0026page=3\u0026rows=10\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15056504",
+      "title": "경기도_체육시설 현황",
+      "operation": "체육시설 현황 외부 링크 2",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=8W04SZMFQ2J43JEE23BN4499697\u0026infSeq=3\u0026page=1\u0026searchWord=%EC%88%98%EC%98%81%EC%9E%A5\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15056504",
+      "title": "경기도_체육시설 현황",
+      "operation": "체육시설 현황 외부 링크 3",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=C2V7PT97153860SH50324475843\u0026infSeq=3\u0026page=1\u0026rows=10\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15056507",
+      "title": "경기도_취수장 현황",
+      "operation": "취수장 현황 외부 링크 1",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=A74470W5NNZK1O8591051115022\u0026infSeq=2\u0026page=1\u0026rows=10\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15056507",
+      "title": "경기도_취수장 현황",
+      "operation": "취수장 현황 외부 링크 2",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=0094KE0I5D60WZ6671ZY1136334\u0026infSeq=5\u0026page=1\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15056526",
+      "title": "경기도_골프 연습장업체 현황",
+      "operation": "골프 연습장업체 현황 외부 링크 3",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=UQ2C2H8831F9WQ02Y1FP4543682\u0026infSeq=3\u0026page=1\u0026searchWord=%EA%B3%A8%ED%94%84%EC%97%B0%EC%8A%B5%EC%9E%A5\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15056527",
+      "title": "경기도_청각장애인 인공달팽이관 재활지원 집계현황",
+      "operation": "청각장애인 인공달팽이관 재활지원 집계현황 외부 링크 1",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=Q1T1I2DBF712PVTZRFIV26105152\u0026infSeq=2\u0026page=1\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15056527",
+      "title": "경기도_청각장애인 인공달팽이관 재활지원 집계현황",
+      "operation": "청각장애인 인공달팽이관 재활지원 집계현황 외부 링크 2",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=AUGQOYO4S57EYV5BE33A26091320\u0026infSeq=2\u0026page=1\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15056527",
+      "title": "경기도_청각장애인 인공달팽이관 재활지원 집계현황",
+      "operation": "청각장애인 인공달팽이관 재활지원 집계현황 외부 링크 3",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=66GALOVS40M295UYV2U426036490\u0026infSeq=2\u0026page=1\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15056540",
+      "title": "경기도_발달재활기관 중심 사회서비스제공기관현황",
+      "operation": "발달재활기관 중심 사회서비스제공기관현황 외부 링크 1",
+      "provider": "data-gg",
+      "endpoint_host": "data.gg.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=0Y8OK5RSZCKSD0FLJ34B24926677\u0026infSeq=2\u0026page=1\u0026sortColumn=\u0026sortDirection=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15076356",
+      "title": "행정안전부_공공개방자원  목록정보",
+      "operation": "행정안전부_공공개방자원  목록정보_20210102 외부 링크 2",
+      "provider": "eshare",
+      "endpoint_host": "www.eshare.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.eshare.go.kr/OpenApi/Info/detail.do?svcNo=12",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15076356",
+      "title": "행정안전부_공공개방자원  목록정보",
+      "operation": "행정안전부_공공개방자원  목록정보_20210102 외부 링크 3",
+      "provider": "eshare",
+      "endpoint_host": "www.eshare.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.eshare.go.kr/OpenApi/Info/detail.do?svcNo=15",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15077518",
+      "title": "행정안전부_공공개방자원  문화숙박시설 목록",
+      "operation": "행정안전부_공공개방자원  문화숙박시설 목록_20210201 외부 링크 1",
+      "provider": "eshare",
+      "endpoint_host": "www.eshare.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.eshare.go.kr/OpenApi/Info/detail.do?svcNo=11",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15077518",
+      "title": "행정안전부_공공개방자원  문화숙박시설 목록",
+      "operation": "행정안전부_공공개방자원  문화숙박시설 목록_20210201 외부 링크 2",
+      "provider": "eshare",
+      "endpoint_host": "www.eshare.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.eshare.go.kr/OpenApi/Info/detail.do?svcNo=12",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15077518",
+      "title": "행정안전부_공공개방자원  문화숙박시설 목록",
+      "operation": "행정안전부_공공개방자원  문화숙박시설 목록_20210201 외부 링크 3",
+      "provider": "eshare",
+      "endpoint_host": "www.eshare.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.eshare.go.kr/OpenApi/Info/detail.do?svcNo=15",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15077519",
+      "title": "행정안전부_공공개방자원  회의실 목록",
+      "operation": "행정안전부_공공개방자원  회의실 목록_20210201 외부 링크 1",
+      "provider": "eshare",
+      "endpoint_host": "www.eshare.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.eshare.go.kr/OpenApi/Info/detail.do?svcNo=12",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15077519",
+      "title": "행정안전부_공공개방자원  회의실 목록",
+      "operation": "행정안전부_공공개방자원  회의실 목록_20210201 외부 링크 2",
+      "provider": "eshare",
+      "endpoint_host": "www.eshare.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.eshare.go.kr/OpenApi/Info/detail.do?svcNo=15",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15077519",
+      "title": "행정안전부_공공개방자원  회의실 목록",
+      "operation": "행정안전부_공공개방자원  회의실 목록_20210201 외부 링크 3",
+      "provider": "eshare",
+      "endpoint_host": "www.eshare.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.eshare.go.kr/OpenApi/Info/detail.do?svcNo=16",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15077520",
+      "title": "행정안전부_공공개방자원  강의실강당 목록",
+      "operation": "행정안전부_공공개방자원  강의실강당 목록_20210201 외부 링크 1",
+      "provider": "eshare",
+      "endpoint_host": "www.eshare.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.eshare.go.kr/OpenApi/Info/detail.do?svcNo=13",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15077520",
+      "title": "행정안전부_공공개방자원  강의실강당 목록",
+      "operation": "행정안전부_공공개방자원  강의실강당 목록_20210201 외부 링크 2",
+      "provider": "eshare",
+      "endpoint_host": "www.eshare.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.eshare.go.kr/OpenApi/Info/detail.do?svcNo=12",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15058026",
+      "title": "경기도_정수장 현황",
+      "operation": "정수장 현황 외부 링크 2",
+      "provider": "wamis",
+      "endpoint_host": "www.wamis.go.kr:8080",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T13:32:53Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://www.wamis.go.kr:8080/wamisweb/wks/w44.do",
+      "body_shape": "html"
     }
   ]
 }
