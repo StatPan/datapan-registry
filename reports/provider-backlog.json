@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T18:04:25Z",
+  "generated_at": "2026-07-03T18:17:16Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 242,
+  "filtered_count": 244,
   "summary": {
-    "hosts": 242,
+    "hosts": 244,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 99,
-    "external_guide_hosts": 181,
-    "registered_adapter_hosts": 88,
-    "operation_hosts": 101,
+    "external_endpoint_hosts": 101,
+    "external_guide_hosts": 182,
+    "registered_adapter_hosts": 90,
+    "operation_hosts": 103,
     "guide_only_hosts": 141,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 5923,
+    "approval_required_operations": 6119,
     "malformed_source_url_count": 643
   },
   "providers": [
@@ -309,6 +309,24 @@
         "15125862",
         "15125863",
         "15125866"
+      ]
+    },
+    {
+      "host": "www.nongsaro.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 107,
+      "operations": 267,
+      "external_endpoint_operations": 267,
+      "external_guide_specs": 1,
+      "approval_required_operations": 187,
+      "sample_ids": [
+        "15002034",
+        "15005257",
+        "15015158"
       ]
     },
     {
@@ -665,21 +683,6 @@
       ]
     },
     {
-      "host": "www.nongsaro.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 7,
-      "operations": 19,
-      "external_endpoint_operations": 19,
-      "sample_ids": [
-        "15002034",
-        "15005257",
-        "15015158"
-      ]
-    },
-    {
       "host": "www.fairdata.go.kr",
       "provider": "fairdata",
       "kinds": [
@@ -781,6 +784,22 @@
         "15036874",
         "15036875",
         "15036876"
+      ]
+    },
+    {
+      "host": "nongsaro.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 11,
+      "operations": 11,
+      "external_endpoint_operations": 11,
+      "approval_required_operations": 9,
+      "sample_ids": [
+        "15040895",
+        "15057808",
+        "15064154"
       ]
     },
     {
@@ -1463,6 +1482,20 @@
       "external_endpoint_operations": 1,
       "sample_ids": [
         "15058173"
+      ]
+    },
+    {
+      "host": "psis.rda.go.kr",
+      "provider": "psis",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "15059306"
       ]
     },
     {

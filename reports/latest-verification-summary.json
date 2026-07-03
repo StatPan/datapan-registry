@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-07-03T18:04:23Z",
+  "generated_at": "2026-07-03T18:17:00Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1875,
-    "verified": 535,
+    "total": 1900,
+    "verified": 556,
     "failed": 147,
-    "skipped": 1193,
+    "skipped": 1197,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 1193,
+        "count": 1197,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 535,
+        "count": 556,
         "status": "verified"
       },
       {
@@ -187,6 +187,11 @@
         "reason": "epost_missing_required_params"
       },
       {
+        "key": "external_provider_adapter_missing",
+        "count": 4,
+        "reason": "external_provider_adapter_missing"
+      },
+      {
         "key": "pqis_service_key_not_registered",
         "count": 4,
         "reason": "pqis_service_key_not_registered"
@@ -315,7 +320,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 705,
+        "count": 709,
         "provider": "data.go.kr"
       },
       {
@@ -397,6 +402,11 @@
         "key": "lofin365",
         "count": 25,
         "provider": "lofin365"
+      },
+      {
+        "key": "nongsaro",
+        "count": 25,
+        "provider": "nongsaro"
       },
       {
         "key": "sisul",
@@ -542,11 +552,6 @@
         "key": "jeju",
         "count": 4,
         "provider": "jeju"
-      },
-      {
-        "key": "nongsaro",
-        "count": 4,
-        "provider": "nongsaro"
       },
       {
         "key": "pqis",
@@ -781,6 +786,11 @@
         "host": "www.lofin365.go.kr"
       },
       {
+        "key": "www.nongsaro.go.kr",
+        "count": 24,
+        "host": "www.nongsaro.go.kr"
+      },
+      {
         "key": "openapi.epost.go.kr:80",
         "count": 22,
         "host": "openapi.epost.go.kr:80"
@@ -956,9 +966,9 @@
         "host": "openapi.pqis.go.kr"
       },
       {
-        "key": "www.nongsaro.go.kr",
+        "key": "www.rda.go.kr",
         "count": 4,
-        "host": "www.nongsaro.go.kr"
+        "host": "www.rda.go.kr"
       },
       {
         "key": "data.gwanak.go.kr",
@@ -1051,6 +1061,11 @@
         "host": "ncpms.rda.go.kr"
       },
       {
+        "key": "nongsaro.go.kr",
+        "count": 1,
+        "host": "nongsaro.go.kr"
+      },
+      {
         "key": "open.api.q-net.or.kr",
         "count": 1,
         "host": "open.api.q-net.or.kr"
@@ -1129,7 +1144,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 1151,
+        "count": 1176,
         "kind": "external_endpoint"
       },
       {
