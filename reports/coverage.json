@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T13:54:25Z",
+  "generated_at": "2026-07-03T14:13:11Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 14780,
-    "callable_operations": 14638,
-    "callable_operation_percent": 99,
+    "operations": 15041,
+    "callable_operations": 14899,
+    "callable_operation_percent": 99.1,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 3170,
-    "registered_adapter_operations": 3160,
+    "external_endpoint_operations": 3431,
+    "registered_adapter_operations": 3421,
     "missing_adapter_operations": 29,
-    "external_adapter_coverage_percent": 99.1,
-    "approval_required_operations": 4726,
+    "external_adapter_coverage_percent": 99.2,
+    "approval_required_operations": 4729,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 146,
-    "registered_adapter_hosts": 59,
+    "registered_adapter_hosts": 61,
     "missing_adapter_hosts": 11,
-    "adapter_count": 54,
+    "adapter_count": 56,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T13:54:09Z",
-    "total": 1481,
-    "verified": 206,
+    "generated_at": "2026-07-03T14:12:54Z",
+    "total": 1506,
+    "verified": 231,
     "failed": 112,
     "skipped": 1163,
     "unknown": 0,
-    "verified_percent": 13.9,
+    "verified_percent": 15.3,
     "evidence_operation_percent": 10
   },
   "route_evidence": {
@@ -209,12 +209,12 @@
           "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 600,
-        "operations": 1549,
-        "external_endpoint_operations": 1549,
-        "external_guide_specs": 12,
+        "specs": 700,
+        "operations": 1799,
+        "external_endpoint_operations": 1799,
+        "external_guide_specs": 14,
         "wms_operations": 5,
-        "approval_required_operations": 11,
+        "approval_required_operations": 14,
         "sample_ids": [
           "15005231",
           "15011020",
@@ -344,6 +344,21 @@
         ]
       },
       {
+        "host": "data.gm.go.kr",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "adapter",
+        "specs": 38,
+        "operations": 42,
+        "external_endpoint_operations": 42,
+        "sample_ids": [
+          "15056498",
+          "15056517",
+          "15056869"
+        ]
+      },
+      {
         "host": "data.geoje.go.kr",
         "provider": "geoje",
         "kinds": [
@@ -360,30 +375,14 @@
           "15005172",
           "15014125"
         ]
-      },
-      {
-        "host": "data.uiryeong.go.kr",
-        "provider": "uiryeong",
-        "kinds": [
-          "external_endpoint"
-        ],
-        "adapter_status": "adapter",
-        "specs": 32,
-        "operations": 40,
-        "external_endpoint_operations": 40,
-        "sample_ids": [
-          "15008883",
-          "15008884",
-          "15008887"
-        ]
       }
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T13:54:25Z",
+    "generated_at": "2026-07-03T14:13:11Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 54,
-    "host_count": 61,
+    "adapter_count": 56,
+    "host_count": 63,
     "adapters": [
       {
         "name": "airport",
@@ -437,6 +436,16 @@
         ]
       },
       {
+        "name": "dongjak",
+        "status": "registered",
+        "hosts": [
+          "data.dongjak.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "ekape",
         "status": "registered",
         "hosts": [
@@ -474,6 +483,16 @@
         "status": "registered",
         "hosts": [
           "www.eshare.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "ex",
+        "status": "registered",
+        "hosts": [
+          "data.ex.co.kr"
         ],
         "capabilities": [
           "verification"
@@ -959,8 +978,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 54,
-      "verification_capable_adapters": 54,
+      "adapter_count": 56,
+      "verification_capable_adapters": 56,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

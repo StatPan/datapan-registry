@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T13:54:19Z",
+  "generated_at": "2026-07-03T14:13:05Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 210,
+  "filtered_count": 212,
   "summary": {
-    "hosts": 210,
+    "hosts": 212,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 70,
+    "external_endpoint_hosts": 72,
     "external_guide_hosts": 160,
-    "registered_adapter_hosts": 59,
-    "operation_hosts": 72,
+    "registered_adapter_hosts": 61,
+    "operation_hosts": 74,
     "guide_only_hosts": 138,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 146,
-    "approval_required_operations": 4726,
+    "approval_required_operations": 4729,
     "malformed_source_url_count": 627
   },
   "providers": [
@@ -177,12 +177,12 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 600,
-      "operations": 1549,
-      "external_endpoint_operations": 1549,
-      "external_guide_specs": 12,
+      "specs": 700,
+      "operations": 1799,
+      "external_endpoint_operations": 1799,
+      "external_guide_specs": 14,
       "wms_operations": 5,
-      "approval_required_operations": 11,
+      "approval_required_operations": 14,
       "sample_ids": [
         "15005231",
         "15011020",
@@ -312,6 +312,21 @@
       ]
     },
     {
+      "host": "data.gm.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 38,
+      "operations": 42,
+      "external_endpoint_operations": 42,
+      "sample_ids": [
+        "15056498",
+        "15056517",
+        "15056869"
+      ]
+    },
+    {
       "host": "data.geoje.go.kr",
       "provider": "geoje",
       "kinds": [
@@ -343,21 +358,6 @@
         "15008883",
         "15008884",
         "15008887"
-      ]
-    },
-    {
-      "host": "data.gm.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 34,
-      "operations": 38,
-      "external_endpoint_operations": 38,
-      "sample_ids": [
-        "15056498",
-        "15056517",
-        "15056869"
       ]
     },
     {
@@ -829,6 +829,22 @@
       ]
     },
     {
+      "host": "www.foodsafetykorea.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 4,
+      "operations": 4,
+      "external_endpoint_operations": 4,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15056661",
+        "15058548",
+        "15059299"
+      ]
+    },
+    {
       "host": "openapi.gblib.or.kr",
       "provider": "gblib",
       "kinds": [
@@ -859,6 +875,37 @@
       "external_guide_specs": 1,
       "sample_ids": [
         "15004517"
+      ]
+    },
+    {
+      "host": "data.dongjak.go.kr",
+      "provider": "dongjak",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 3,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "sample_ids": [
+        "15057700",
+        "15057867",
+        "15059138"
+      ]
+    },
+    {
+      "host": "data.ex.co.kr",
+      "provider": "ex",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 2,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "sample_ids": [
+        "15057627",
+        "15058552"
       ]
     },
     {
@@ -903,22 +950,6 @@
       "external_endpoint_operations": 3,
       "sample_ids": [
         "3036708"
-      ]
-    },
-    {
-      "host": "www.foodsafetykorea.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 3,
-      "operations": 3,
-      "external_endpoint_operations": 3,
-      "approval_required_operations": 1,
-      "sample_ids": [
-        "15058548",
-        "15059299",
-        "15151925"
       ]
     },
     {

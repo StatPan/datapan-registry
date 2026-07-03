@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T13:54:09Z",
+  "generated_at": "2026-07-03T14:12:54Z",
   "source": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1481,
-    "verified": 206,
+    "total": 1506,
+    "verified": 231,
     "failed": 112,
     "skipped": 1163,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 206,
+        "count": 231,
         "status": "verified"
       },
       {
@@ -305,7 +305,7 @@
       },
       {
         "key": "data-gg",
-        "count": 68,
+        "count": 78,
         "provider": "data-gg"
       },
       {
@@ -325,7 +325,7 @@
       },
       {
         "key": "eshare",
-        "count": 30,
+        "count": 36,
         "provider": "eshare"
       },
       {
@@ -444,6 +444,11 @@
         "provider": "seoul-open-data"
       },
       {
+        "key": "foodsafetykorea",
+        "count": 4,
+        "provider": "foodsafetykorea"
+      },
+      {
         "key": "forest",
         "count": 4,
         "provider": "forest"
@@ -464,9 +469,19 @@
         "provider": "pqis"
       },
       {
+        "key": "dongjak",
+        "count": 3,
+        "provider": "dongjak"
+      },
+      {
         "key": "emuseum",
         "count": 3,
         "provider": "emuseum"
+      },
+      {
+        "key": "ex",
+        "count": 3,
+        "provider": "ex"
       },
       {
         "key": "folk",
@@ -502,11 +517,6 @@
         "key": "dgfca",
         "count": 1,
         "provider": "dgfca"
-      },
-      {
-        "key": "foodsafetykorea",
-        "count": 1,
-        "provider": "foodsafetykorea"
       },
       {
         "key": "gimhae",
@@ -582,7 +592,7 @@
       },
       {
         "key": "data.gg.go.kr",
-        "count": 68,
+        "count": 78,
         "host": "data.gg.go.kr"
       },
       {
@@ -607,7 +617,7 @@
       },
       {
         "key": "www.eshare.go.kr",
-        "count": 30,
+        "count": 36,
         "host": "www.eshare.go.kr"
       },
       {
@@ -746,9 +756,24 @@
         "host": "openapi.pqis.go.kr"
       },
       {
+        "key": "www.foodsafetykorea.go.kr",
+        "count": 4,
+        "host": "www.foodsafetykorea.go.kr"
+      },
+      {
         "key": "www.nongsaro.go.kr",
         "count": 4,
         "host": "www.nongsaro.go.kr"
+      },
+      {
+        "key": "data.dongjak.go.kr",
+        "count": 3,
+        "host": "data.dongjak.go.kr"
+      },
+      {
+        "key": "data.ex.co.kr",
+        "count": 3,
+        "host": "data.ex.co.kr"
       },
       {
         "key": "data.gwanak.go.kr",
@@ -836,11 +861,6 @@
         "host": "seogu.go.kr"
       },
       {
-        "key": "www.foodsafetykorea.go.kr",
-        "count": 1,
-        "host": "www.foodsafetykorea.go.kr"
-      },
-      {
         "key": "www.gimhae.go.kr",
         "count": 1,
         "host": "www.gimhae.go.kr"
@@ -869,7 +889,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 787,
+        "count": 812,
         "kind": "external_endpoint"
       },
       {
