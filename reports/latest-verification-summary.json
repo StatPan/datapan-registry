@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-03T14:40:06Z",
+  "generated_at": "2026-07-03T14:55:18Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1541,
-    "verified": 265,
-    "failed": 113,
+    "total": 1567,
+    "verified": 290,
+    "failed": 114,
     "skipped": 1163,
     "unknown": 0
   },
@@ -21,12 +21,12 @@
       },
       {
         "key": "verified",
-        "count": 265,
+        "count": 290,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 113,
+        "count": 114,
         "status": "failed"
       }
     ],
@@ -237,6 +237,11 @@
         "reason": "jeonju_http_405_method_not_allowed"
       },
       {
+        "key": "car365_http_400",
+        "count": 1,
+        "reason": "car365_http_400"
+      },
+      {
         "key": "ekape_html_response",
         "count": 1,
         "reason": "ekape_html_response"
@@ -305,7 +310,7 @@
       },
       {
         "key": "data-gg",
-        "count": 98,
+        "count": 108,
         "provider": "data-gg"
       },
       {
@@ -389,6 +394,11 @@
         "provider": "mafra"
       },
       {
+        "key": "calspia",
+        "count": 10,
+        "provider": "calspia"
+      },
+      {
         "key": "juso",
         "count": 10,
         "provider": "juso"
@@ -447,6 +457,11 @@
         "key": "seoul-open-data",
         "count": 5,
         "provider": "seoul-open-data"
+      },
+      {
+        "key": "codil",
+        "count": 4,
+        "provider": "codil"
       },
       {
         "key": "dongjak",
@@ -514,19 +529,24 @@
         "provider": "work24"
       },
       {
+        "key": "gimhae",
+        "count": 2,
+        "provider": "gimhae"
+      },
+      {
         "key": "happysd",
         "count": 2,
         "provider": "happysd"
       },
       {
+        "key": "car365",
+        "count": 1,
+        "provider": "car365"
+      },
+      {
         "key": "dgfca",
         "count": 1,
         "provider": "dgfca"
-      },
-      {
-        "key": "gimhae",
-        "count": 1,
-        "provider": "gimhae"
       },
       {
         "key": "i815",
@@ -606,14 +626,14 @@
         "host": "apis.data.go.kr"
       },
       {
+        "key": "data.gg.go.kr",
+        "count": 108,
+        "host": "data.gg.go.kr"
+      },
+      {
         "key": "openapi.q-net.or.kr",
         "count": 104,
         "host": "openapi.q-net.or.kr"
-      },
-      {
-        "key": "data.gg.go.kr",
-        "count": 98,
-        "host": "data.gg.go.kr"
       },
       {
         "key": "openapi.jeonju.go.kr",
@@ -694,6 +714,11 @@
         "key": "data.mafra.go.kr",
         "count": 11,
         "host": "data.mafra.go.kr"
+      },
+      {
+        "key": "www.calspia.go.kr",
+        "count": 10,
+        "host": "www.calspia.go.kr"
       },
       {
         "key": "www.juso.go.kr",
@@ -786,6 +811,11 @@
         "host": "openapi.pqis.go.kr"
       },
       {
+        "key": "www.codil.or.kr",
+        "count": 4,
+        "host": "www.codil.or.kr"
+      },
+      {
         "key": "www.foodsafetykorea.go.kr",
         "count": 4,
         "host": "www.foodsafetykorea.go.kr"
@@ -834,6 +864,11 @@
         "key": "www.work24.go.kr",
         "count": 3,
         "host": "www.work24.go.kr"
+      },
+      {
+        "key": "www.gimhae.go.kr",
+        "count": 2,
+        "host": "www.gimhae.go.kr"
       },
       {
         "key": "www.happysd.or.kr",
@@ -891,9 +926,9 @@
         "host": "seogu.go.kr"
       },
       {
-        "key": "www.gimhae.go.kr",
+        "key": "www.car365.go.kr",
         "count": 1,
-        "host": "www.gimhae.go.kr"
+        "host": "www.car365.go.kr"
       },
       {
         "key": "www.icheon.go.kr",
@@ -934,7 +969,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 847,
+        "count": 873,
         "kind": "external_endpoint"
       },
       {

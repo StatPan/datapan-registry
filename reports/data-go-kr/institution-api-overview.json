@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T14:40:13Z",
+  "generated_at": "2026-07-03T14:55:27Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 15404,
-    "runtime_evidence": 1541,
+    "operations": 15664,
+    "runtime_evidence": 1567,
     "runtime_evidence_percent": 10.0,
-    "callable_operations": 15262,
-    "external_endpoint_operations": 3794,
-    "registered_adapter_operations": 3784,
+    "callable_operations": 15522,
+    "external_endpoint_operations": 4054,
+    "registered_adapter_operations": 4044,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 3794
+      "count": 4054
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 3784
+      "count": 4044
     },
     {
       "key": "builtin",
@@ -69,31 +69,31 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 1684
+      "operation_count": 1696
     },
     {
       "category": "문화관광",
-      "operation_count": 1581
+      "operation_count": 1593
     },
     {
       "category": "교통물류",
-      "operation_count": 1465
+      "operation_count": 1530
     },
     {
       "category": "농축수산",
-      "operation_count": 1441
+      "operation_count": 1453
     },
     {
       "category": "사회복지",
-      "operation_count": 1330
+      "operation_count": 1333
     },
     {
       "category": "산업고용",
-      "operation_count": 1198
+      "operation_count": 1219
     },
     {
       "category": "환경기상",
-      "operation_count": 977
+      "operation_count": 1002
     },
     {
       "category": "재정금융",
@@ -109,7 +109,7 @@
     },
     {
       "category": "재난안전",
-      "operation_count": 810
+      "operation_count": 819
     },
     {
       "category": "교육",
@@ -117,7 +117,7 @@
     },
     {
       "category": "국토관리",
-      "operation_count": 604
+      "operation_count": 705
     },
     {
       "category": "과학기술",
@@ -139,7 +139,7 @@
     },
     {
       "host": "data.gg.go.kr",
-      "operation_count": 2140,
+      "operation_count": 2141,
       "adapter": "data-gg",
       "adapter_status": "registered",
       "capabilities": [
@@ -160,6 +160,15 @@
       "host": "www.lofin365.go.kr",
       "operation_count": 343,
       "adapter": "lofin365",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "host": "www.vworld.kr",
+      "operation_count": 198,
+      "adapter": "vworld",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -193,8 +202,17 @@
       ]
     },
     {
+      "host": "www.calspia.go.kr",
+      "operation_count": 60,
+      "adapter": "calspia",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "host": "data.gm.go.kr",
-      "operation_count": 56,
+      "operation_count": 57,
       "adapter": "gwangmyeong",
       "adapter_status": "registered",
       "capabilities": [
@@ -295,26 +313,6 @@
       "capabilities": [
         "verification"
       ]
-    },
-    {
-      "host": "data.sisul.or.kr",
-      "operation_count": 20,
-      "adapter": "sisul",
-      "adapter_status": "registered",
-      "capabilities": [
-        "call",
-        "verification"
-      ]
-    },
-    {
-      "host": "openapi.its.ulsan.kr",
-      "operation_count": 20,
-      "adapter": "ulsan",
-      "adapter_status": "registered",
-      "capabilities": [
-        "call",
-        "verification"
-      ]
     }
   ],
   "institutions": [
@@ -323,9 +321,9 @@
       "api_count": 840,
       "operation_api_count": 840,
       "operation_count": 2241,
-      "runtime_evidence_count": 141,
-      "runtime_evidence_percent": 6.3,
-      "verified": 140,
+      "runtime_evidence_count": 152,
+      "runtime_evidence_percent": 6.8,
+      "verified": 151,
       "failed": 1,
       "skipped": 0,
       "unknown": 0,
@@ -527,23 +525,31 @@
     {
       "organization": "국토교통부",
       "api_count": 393,
-      "operation_api_count": 127,
-      "operation_count": 397,
-      "runtime_evidence_count": 27,
-      "runtime_evidence_percent": 6.8,
-      "verified": 0,
-      "failed": 0,
+      "operation_api_count": 227,
+      "operation_count": 657,
+      "runtime_evidence_count": 42,
+      "runtime_evidence_percent": 6.4,
+      "verified": 14,
+      "failed": 1,
       "skipped": 27,
       "unknown": 0,
-      "approval_required_operations": 6,
+      "approval_required_operations": 90,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
           "key": "data_go_kr_gateway",
           "count": 397
+        },
+        {
+          "key": "external_endpoint",
+          "count": 260
         }
       ],
       "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 260
+        },
         {
           "key": "builtin",
           "count": 397
@@ -551,30 +557,66 @@
       ],
       "top_categories": [
         {
-          "category": "교통물류",
-          "operation_count": 181
-        },
-        {
           "category": "국토관리",
-          "operation_count": 170
+          "operation_count": 271
         },
         {
-          "category": "재난안전",
-          "operation_count": 18
-        },
-        {
-          "category": "공공행정",
-          "operation_count": 18
+          "category": "교통물류",
+          "operation_count": 246
         },
         {
           "category": "산업고용",
-          "operation_count": 10
+          "operation_count": 31
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 30
+        },
+        {
+          "category": "재난안전",
+          "operation_count": 27
         }
       ],
       "top_hosts": [
         {
           "host": "apis.data.go.kr",
           "operation_count": 397
+        },
+        {
+          "host": "www.vworld.kr",
+          "operation_count": 193,
+          "adapter": "vworld",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.calspia.go.kr",
+          "operation_count": 60,
+          "adapter": "calspia",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.codil.or.kr",
+          "operation_count": 4,
+          "adapter": "codil",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "data.gg.go.kr",
+          "operation_count": 1,
+          "adapter": "data-gg",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },

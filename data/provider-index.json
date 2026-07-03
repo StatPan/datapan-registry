@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T14:40:13Z",
+  "generated_at": "2026-07-03T14:55:27Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 60,
-  "host_count": 67,
+  "adapter_count": 63,
+  "host_count": 70,
   "adapters": [
     {
       "name": "airport",
@@ -22,6 +22,36 @@
       ],
       "capabilities": [
         "call",
+        "verification"
+      ]
+    },
+    {
+      "name": "calspia",
+      "status": "registered",
+      "hosts": [
+        "www.calspia.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "car365",
+      "status": "registered",
+      "hosts": [
+        "www.car365.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "codil",
+      "status": "registered",
+      "hosts": [
+        "www.codil.or.kr"
+      ],
+      "capabilities": [
         "verification"
       ]
     },
@@ -638,8 +668,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 60,
-    "verification_capable_adapters": 60,
+    "adapter_count": 63,
+    "verification_capable_adapters": 63,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

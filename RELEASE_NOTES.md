@@ -1,6 +1,6 @@
 # Datapan Registry Release
 
-- generated_at: `2026-07-03T14:40:13Z`
+- generated_at: `2026-07-03T14:55:27Z`
 - provider: `data.go.kr`
 - datapan_version: `0.1.0-dev`
 - source_registry: `data\data-go-kr.registry.json`
@@ -10,24 +10,24 @@
 ## Registry
 
 - specs: `12060`
-- catalog_diff: `0` added, `0` removed, `41` changed, `12019` stable
+- catalog_diff: `0` added, `0` removed, `100` changed, `11960` stable
 - catalog_diff_artifact: `reports/catalog-diff.json`
 
 ## Provider Coverage
 
-- provider_adapters: `60` adapters, `67` hosts
+- provider_adapters: `63` adapters, `70` hosts
 - split_readiness: `ready`
-- verification_capable_adapters: `60`
+- verification_capable_adapters: `63`
 - call_capable_adapters: `23`
-- dependency_operations: `15404` total, `11419` gateway, `3794` external, `3784` registered-adapter, `29` missing-adapter
+- dependency_operations: `15664` total, `11419` gateway, `4054` external, `4044` registered-adapter, `29` missing-adapter
 - adapter_backlog: `11` target hosts, `29` target operations
 - route_disposition: `29` routes, `14` dead-route candidates, `15` transient failures, `0` parameter-blocked, `0` adapter candidates
 - route_disposition_artifact: `reports/route-disposition.json`
-- provider_backlog: `216` hosts, `11` missing-adapter hosts, `29` operations needing adapters
-- coverage: `15262` callable operations (`99.1%`), external adapter coverage `99.2%`, verification evidence coverage `10.0%`, evidence-adjusted adapter candidates `0`
+- provider_backlog: `221` hosts, `11` missing-adapter hosts, `29` operations needing adapters
+- coverage: `15522` callable operations (`99.1%`), external adapter coverage `99.3%`, verification evidence coverage `10.0%`, evidence-adjusted adapter candidates `0`
 - coverage_artifact: `reports/coverage.json`
 - coverage_goals: callable `99%`, external adapters `98%`, verification evidence `10%`, call-capable adapters `25`, missing-adapter operations `<=10`
-- verification_plan: `15` batches, `105` planned operations, `10744` gateway gaps, `2918` adapter gaps
+- verification_plan: `15` batches, `120` planned operations, `10744` gateway gaps, `3152` adapter gaps
 - verification_plan_artifact: `reports/verification-plan.json`
 - runtime_evidence_growth: `10.0%` coverage, target `10.0%`, remaining `0`, status `at_target`
 - runtime_evidence_growth_artifact: `reports/data-go-kr/runtime-evidence-growth.json`
@@ -42,7 +42,7 @@ Top adapter targets:
 
 ## Verification Evidence
 
-- verification: `1541` total, `265` verified, `113` failed, `1163` skipped, `0` unknown
+- verification: `1567` total, `290` verified, `114` failed, `1163` skipped, `0` unknown
 - verification_artifact: `reports/latest-verification.json`
 - verification_summary_artifact: `reports/latest-verification-summary.json`
 
@@ -50,7 +50,7 @@ Provider evidence:
 
 - `data.go.kr`: `675`
 - `q-net`: `147`
-- `data-gg`: `98`
+- `data-gg`: `108`
 - `jeonju`: `80`
 - `ekape`: `49`
 - `geoje`: `41`

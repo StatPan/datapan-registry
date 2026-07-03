@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-03T14:40:13Z",
+  "generated_at": "2026-07-03T14:55:27Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 15404,
-    "callable_operations": 15262,
-    "specs_without_operations": 3366,
-    "specs_without_callable_operation": 3441,
+    "operations_total": 15664,
+    "callable_operations": 15522,
+    "specs_without_operations": 3266,
+    "specs_without_callable_operation": 3341,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 3066,
-    "operations_without_response_params": 4288,
+    "operations_without_request_params": 3326,
+    "operations_without_response_params": 4548,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 1823,
-      "external_endpoint_operations": 3794,
+      "external_endpoint_specs": 1923,
+      "external_endpoint_operations": 4054,
       "service_root_only_operations": 19,
       "soap_operations": 35,
-      "wms_operations": 111,
+      "wms_operations": 112,
       "dev_approval_required_operations": 207,
-      "prod_approval_required_operations": 4646,
+      "prod_approval_required_operations": 4730,
       "malformed_endpoint_url_count": 42,
       "malformed_guide_url_count": 585,
       "top_endpoint_hosts": [
@@ -34,7 +34,7 @@
         },
         {
           "host": "data.gg.go.kr",
-          "count": 2140
+          "count": 2141
         },
         {
           "host": "www.safetydata.go.kr",
@@ -43,6 +43,10 @@
         {
           "host": "www.lofin365.go.kr",
           "count": 343
+        },
+        {
+          "host": "www.vworld.kr",
+          "count": 198
         },
         {
           "host": "openapi.q-net.or.kr",
@@ -57,8 +61,12 @@
           "count": 80
         },
         {
+          "host": "www.calspia.go.kr",
+          "count": 60
+        },
+        {
           "host": "data.gm.go.kr",
-          "count": 56
+          "count": 57
         },
         {
           "host": "data.ekape.or.kr",
@@ -99,20 +107,12 @@
         {
           "host": "data.sisul.or.kr",
           "count": 20
-        },
-        {
-          "host": "openapi.its.ulsan.kr",
-          "count": 20
-        },
-        {
-          "host": "www.nongsaro.go.kr",
-          "count": 19
         }
       ],
       "top_external_endpoint_hosts": [
         {
           "host": "data.gg.go.kr",
-          "count": 2140
+          "count": 2141
         },
         {
           "host": "www.safetydata.go.kr",
@@ -121,6 +121,10 @@
         {
           "host": "www.lofin365.go.kr",
           "count": 343
+        },
+        {
+          "host": "www.vworld.kr",
+          "count": 198
         },
         {
           "host": "openapi.q-net.or.kr",
@@ -135,8 +139,12 @@
           "count": 80
         },
         {
+          "host": "www.calspia.go.kr",
+          "count": 60
+        },
+        {
           "host": "data.gm.go.kr",
-          "count": 56
+          "count": 57
         },
         {
           "host": "data.ekape.or.kr",
@@ -181,14 +189,6 @@
         {
           "host": "openapi.its.ulsan.kr",
           "count": 20
-        },
-        {
-          "host": "www.nongsaro.go.kr",
-          "count": 19
-        },
-        {
-          "host": "data.mafra.go.kr",
-          "count": 15
         }
       ],
       "top_external_guide_hosts": [
@@ -223,6 +223,10 @@
         {
           "host": "openapi.jeonju.go.kr",
           "count": 61
+        },
+        {
+          "host": "www.calspia.go.kr",
+          "count": 57
         },
         {
           "host": "coast.mof.go.kr",
@@ -267,10 +271,6 @@
         {
           "host": "data.geoje.go.kr",
           "count": 34
-        },
-        {
-          "host": "http:",
-          "count": 33
         }
       ]
     },
