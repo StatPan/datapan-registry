@@ -94,8 +94,8 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `1,987` data.go.kr APIs
-  without operation mappings, `9,143` operation-mapped APIs without runtime
+- `reports/data-go-kr/coverage-backlog.json` tracks `1,887` data.go.kr APIs
+  without operation mappings, `9,231` operation-mapped APIs without runtime
   evidence, and `98` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
@@ -306,8 +306,13 @@ Current gaps:
   external adapter operations to `6698`, completes 농촌진흥청 materialization at
   `136` of `136` APIs, and moves the first materialization queue to
   대전광역시 서구.
-- API operation coverage remains incomplete: `10,073` of `12,060` APIs have
-  operation mappings (`83.5%`), leaving `1,987` APIs to materialize and `9,143`
+- The first 대전광역시 서구 batch extends HappySD host coverage to
+  `parking.happysd.or.kr`, materializes `100` APIs and `139` operations, and
+  merges `25` verified landing-page checks. That brings runtime evidence to
+  `1950`, registered external adapter operations to `6837`, and leaves
+  대전광역시 서구 as the first materialization queue with `25` uncovered APIs.
+- API operation coverage remains incomplete: `10,173` of `12,060` APIs have
+  operation mappings (`84.4%`), leaving `1,887` APIs to materialize and `9,231`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T18:31:02Z",
+  "generated_at": "2026-07-03T18:42:17Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,19 +7,19 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 18318,
-    "callable_operations": 18176,
+    "operations": 18457,
+    "callable_operations": 18315,
     "callable_operation_percent": 99.2,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 6708,
-    "registered_adapter_operations": 6698,
+    "external_endpoint_operations": 6847,
+    "registered_adapter_operations": 6837,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.6,
-    "approval_required_operations": 6158,
+    "approval_required_operations": 6297,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 91,
+    "registered_adapter_hosts": 92,
     "missing_adapter_hosts": 11,
     "adapter_count": 82,
     "call_capable_adapters": 23,
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T18:30:46Z",
-    "total": 1925,
-    "verified": 581,
+    "generated_at": "2026-07-03T18:42:08Z",
+    "total": 1950,
+    "verified": 606,
     "failed": 147,
     "skipped": 1197,
     "unknown": 0,
-    "verified_percent": 30.2,
-    "evidence_operation_percent": 10.5
+    "verified_percent": 31.1,
+    "evidence_operation_percent": 10.6
   },
   "route_evidence": {
     "present": true,
@@ -210,12 +210,12 @@
           "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 870,
-        "operations": 2174,
-        "external_endpoint_operations": 2174,
+        "specs": 878,
+        "operations": 2185,
+        "external_endpoint_operations": 2185,
         "external_guide_specs": 21,
         "wms_operations": 5,
-        "approval_required_operations": 40,
+        "approval_required_operations": 51,
         "sample_ids": [
           "15005231",
           "15011020",
@@ -297,11 +297,11 @@
           "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 127,
-        "operations": 313,
-        "external_endpoint_operations": 313,
+        "specs": 128,
+        "operations": 314,
+        "external_endpoint_operations": 314,
         "external_guide_specs": 2,
-        "approval_required_operations": 220,
+        "approval_required_operations": 221,
         "sample_ids": [
           "15002034",
           "15005257",
@@ -383,10 +383,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T18:31:02Z",
+    "generated_at": "2026-07-03T18:42:17Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 82,
-    "host_count": 93,
+    "host_count": 94,
     "adapters": [
       {
         "name": "airport",
@@ -699,6 +699,7 @@
         "name": "happysd",
         "status": "registered",
         "hosts": [
+          "parking.happysd.or.kr",
           "www.happysd.or.kr"
         ],
         "capabilities": [

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T18:31:20Z",
+  "generated_at": "2026-07-03T18:42:34Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,10 +7,10 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 18318,
-    "evidence_total": 1925,
+    "operations": 18457,
+    "evidence_total": 1950,
     "uncovered_gateway_candidates": 10714,
-    "uncovered_adapter_candidates": 3692,
+    "uncovered_adapter_candidates": 3703,
     "missing_adapter_hosts": 11,
     "planned_batches": 20,
     "planned_operations": 129
@@ -59,8 +59,8 @@
       "label": "data-gg",
       "provider": "data-gg",
       "kind": "external_endpoint",
-      "candidates": 2174,
-      "uncovered_candidates": 2058,
+      "candidates": 2185,
+      "uncovered_candidates": 2069,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider data-gg --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/data-gg-next.json --json",
       "output": ".datapan/verification/data-gg-next.json"
@@ -124,6 +124,16 @@
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider gwangmyeong --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gwangmyeong-next.json --json",
       "output": ".datapan/verification/gwangmyeong-next.json"
+    },
+    {
+      "label": "happysd",
+      "provider": "happysd",
+      "kind": "external_endpoint",
+      "candidates": 3,
+      "uncovered_candidates": 1,
+      "planned_operations": 1,
+      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider happysd --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/happysd-next.json --json",
+      "output": ".datapan/verification/happysd-next.json"
     },
     {
       "label": "jeju-air",
@@ -204,16 +214,6 @@
       "planned_operations": 2,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider mnd-open-data --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/mnd-open-data-next.json --json",
       "output": ".datapan/verification/mnd-open-data-next.json"
-    },
-    {
-      "label": "nabic",
-      "provider": "nabic",
-      "kind": "external_endpoint",
-      "candidates": 1,
-      "uncovered_candidates": 1,
-      "planned_operations": 1,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider nabic --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/nabic-next.json --json",
-      "output": ".datapan/verification/nabic-next.json"
     }
   ],
   "gaps": {

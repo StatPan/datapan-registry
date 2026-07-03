@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T18:30:56Z",
+  "generated_at": "2026-07-03T18:42:11Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 245,
+  "filtered_count": 246,
   "summary": {
-    "hosts": 245,
+    "hosts": 246,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 102,
+    "external_endpoint_hosts": 103,
     "external_guide_hosts": 184,
-    "registered_adapter_hosts": 91,
-    "operation_hosts": 104,
+    "registered_adapter_hosts": 92,
+    "operation_hosts": 105,
     "guide_only_hosts": 141,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 6158,
+    "approval_required_operations": 6297,
     "malformed_source_url_count": 643
   },
   "providers": [
@@ -178,12 +178,12 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 870,
-      "operations": 2174,
-      "external_endpoint_operations": 2174,
+      "specs": 878,
+      "operations": 2185,
+      "external_endpoint_operations": 2185,
       "external_guide_specs": 21,
       "wms_operations": 5,
-      "approval_required_operations": 40,
+      "approval_required_operations": 51,
       "sample_ids": [
         "15005231",
         "15011020",
@@ -265,11 +265,11 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 127,
-      "operations": 313,
-      "external_endpoint_operations": 313,
+      "specs": 128,
+      "operations": 314,
+      "external_endpoint_operations": 314,
       "external_guide_specs": 2,
-      "approval_required_operations": 220,
+      "approval_required_operations": 221,
       "sample_ids": [
         "15002034",
         "15005257",
@@ -384,6 +384,22 @@
         "15045335",
         "15045467",
         "15056017"
+      ]
+    },
+    {
+      "host": "seogu.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 101,
+      "operations": 125,
+      "external_endpoint_operations": 125,
+      "approval_required_operations": 124,
+      "sample_ids": [
+        "15058949",
+        "15095265",
+        "15095267"
       ]
     },
     {
@@ -839,6 +855,22 @@
       ]
     },
     {
+      "host": "data.seoul.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 8,
+      "operations": 9,
+      "external_endpoint_operations": 9,
+      "approval_required_operations": 2,
+      "sample_ids": [
+        "15003164",
+        "15040468",
+        "15057394"
+      ]
+    },
+    {
       "host": "cancer.go.kr",
       "provider": "cancer",
       "kinds": [
@@ -908,21 +940,6 @@
         "15079829",
         "15093660",
         "15093664"
-      ]
-    },
-    {
-      "host": "data.seoul.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 6,
-      "operations": 7,
-      "external_endpoint_operations": 7,
-      "sample_ids": [
-        "15003164",
-        "15040468",
-        "15057394"
       ]
     },
     {
@@ -1326,6 +1343,7 @@
     },
     {
       "host": "www.happysd.or.kr",
+      "provider": "happysd",
       "kinds": [
         "external_endpoint",
         "external_guide"
@@ -1524,6 +1542,21 @@
       ]
     },
     {
+      "host": "parking.happysd.or.kr",
+      "provider": "happysd",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15128512"
+      ]
+    },
+    {
       "host": "search.i815.or.kr",
       "kinds": [
         "external_endpoint"
@@ -1534,19 +1567,6 @@
       "external_endpoint_operations": 1,
       "sample_ids": [
         "15006273"
-      ]
-    },
-    {
-      "host": "seogu.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 1,
-      "operations": 1,
-      "external_endpoint_operations": 1,
-      "sample_ids": [
-        "15058949"
       ]
     },
     {

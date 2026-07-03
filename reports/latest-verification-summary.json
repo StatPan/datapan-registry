@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T18:30:46Z",
+  "generated_at": "2026-07-03T18:42:08Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1925,
-    "verified": 581,
+    "total": 1950,
+    "verified": 606,
     "failed": 147,
     "skipped": 1197,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 581,
+        "count": 606,
         "status": "verified"
       },
       {
@@ -409,6 +409,11 @@
         "provider": "lofin365"
       },
       {
+        "key": "seogu",
+        "count": 25,
+        "provider": "seogu"
+      },
+      {
         "key": "sisul",
         "count": 20,
         "provider": "sisul"
@@ -524,6 +529,11 @@
         "provider": "lh-ebid"
       },
       {
+        "key": "seoul-open-data",
+        "count": 6,
+        "provider": "seoul-open-data"
+      },
+      {
         "key": "nfqs",
         "count": 5,
         "provider": "nfqs"
@@ -532,11 +542,6 @@
         "key": "seoul-bus",
         "count": 5,
         "provider": "seoul-bus"
-      },
-      {
-        "key": "seoul-open-data",
-        "count": 5,
-        "provider": "seoul-open-data"
       },
       {
         "key": "dongjak",
@@ -669,11 +674,6 @@
         "provider": "ncpms"
       },
       {
-        "key": "seogu",
-        "count": 1,
-        "provider": "seogu"
-      },
-      {
         "key": "sexoffender",
         "count": 1,
         "provider": "sexoffender"
@@ -784,6 +784,11 @@
         "key": "oneclick.law.go.kr:80",
         "count": 27,
         "host": "oneclick.law.go.kr:80"
+      },
+      {
+        "key": "seogu.go.kr",
+        "count": 25,
+        "host": "seogu.go.kr"
       },
       {
         "key": "www.lofin365.go.kr",
@@ -931,6 +936,11 @@
         "host": "www.codil.or.kr"
       },
       {
+        "key": "data.seoul.go.kr",
+        "count": 5,
+        "host": "data.seoul.go.kr"
+      },
+      {
         "key": "ws.bus.go.kr",
         "count": 5,
         "host": "ws.bus.go.kr"
@@ -954,11 +964,6 @@
         "key": "data.jeju.go.kr",
         "count": 4,
         "host": "data.jeju.go.kr"
-      },
-      {
-        "key": "data.seoul.go.kr",
-        "count": 4,
-        "host": "data.seoul.go.kr"
       },
       {
         "key": "openapi.pqis.go.kr",
@@ -1086,11 +1091,6 @@
         "host": "search.i815.or.kr"
       },
       {
-        "key": "seogu.go.kr",
-        "count": 1,
-        "host": "seogu.go.kr"
-      },
-      {
         "key": "stcis.go.kr",
         "count": 1,
         "host": "stcis.go.kr"
@@ -1144,7 +1144,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 1201,
+        "count": 1226,
         "kind": "external_endpoint"
       },
       {
