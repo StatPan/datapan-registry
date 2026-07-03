@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T17:58:37Z",
+  "generated_at": "2026-07-03T18:04:50Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,13 +7,13 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 17858,
-    "evidence_total": 1850,
+    "operations": 18000,
+    "evidence_total": 1875,
     "uncovered_gateway_candidates": 10714,
-    "uncovered_adapter_candidates": 3591,
+    "uncovered_adapter_candidates": 3706,
     "missing_adapter_hosts": 11,
     "planned_batches": 20,
-    "planned_operations": 132
+    "planned_operations": 138
   },
   "batches": [
     {
@@ -129,9 +129,9 @@
       "label": "jeju-air",
       "provider": "jeju-air",
       "kind": "external_endpoint",
-      "candidates": 3,
-      "uncovered_candidates": 2,
-      "planned_operations": 2,
+      "candidates": 5,
+      "uncovered_candidates": 4,
+      "planned_operations": 4,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider jeju-air --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jeju-air-next.json --json",
       "output": ".datapan/verification/jeju-air-next.json"
     },
@@ -139,8 +139,8 @@
       "label": "jejudatahub",
       "provider": "jejudatahub",
       "kind": "external_endpoint",
-      "candidates": 101,
-      "uncovered_candidates": 100,
+      "candidates": 177,
+      "uncovered_candidates": 166,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider jejudatahub --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jejudatahub-next.json --json",
       "output": ".datapan/verification/jejudatahub-next.json"
@@ -149,9 +149,9 @@
       "label": "jejuits",
       "provider": "jejuits",
       "kind": "external_endpoint",
-      "candidates": 3,
-      "uncovered_candidates": 3,
-      "planned_operations": 3,
+      "candidates": 7,
+      "uncovered_candidates": 7,
+      "planned_operations": 7,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider jejuits --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jejuits-next.json --json",
       "output": ".datapan/verification/jejuits-next.json"
     },
@@ -159,8 +159,8 @@
       "label": "jeju-www",
       "provider": "jeju-www",
       "kind": "external_endpoint",
-      "candidates": 110,
-      "uncovered_candidates": 84,
+      "candidates": 168,
+      "uncovered_candidates": 127,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider jeju-www --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jeju-www-next.json --json",
       "output": ".datapan/verification/jeju-www-next.json"

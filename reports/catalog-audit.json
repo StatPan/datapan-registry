@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-03T17:58:13Z",
+  "generated_at": "2026-07-03T18:04:25Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 17858,
-    "callable_operations": 17716,
-    "specs_without_operations": 2162,
-    "specs_without_callable_operation": 2237,
+    "operations_total": 18000,
+    "callable_operations": 17858,
+    "specs_without_operations": 2109,
+    "specs_without_callable_operation": 2184,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 5520,
-    "operations_without_response_params": 6742,
+    "operations_without_request_params": 5662,
+    "operations_without_response_params": 6884,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 3027,
-      "external_endpoint_operations": 6248,
+      "external_endpoint_specs": 3080,
+      "external_endpoint_operations": 6390,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 114,
       "dev_approval_required_operations": 208,
-      "prod_approval_required_operations": 5748,
+      "prod_approval_required_operations": 5817,
       "malformed_endpoint_url_count": 42,
       "malformed_guide_url_count": 601,
       "top_endpoint_hosts": [
@@ -65,12 +65,16 @@
           "count": 277
         },
         {
+          "host": "www.jejudatahub.net",
+          "count": 177
+        },
+        {
           "host": "www.calspia.go.kr",
           "count": 168
         },
         {
           "host": "www.jeju.go.kr",
-          "count": 110
+          "count": 168
         },
         {
           "host": "openapi.q-net.or.kr",
@@ -79,10 +83,6 @@
         {
           "host": "www.safemap.go.kr",
           "count": 104
-        },
-        {
-          "host": "www.jejudatahub.net",
-          "count": 101
         },
         {
           "host": "openapi.jeonju.go.kr",
@@ -143,12 +143,16 @@
           "count": 277
         },
         {
+          "host": "www.jejudatahub.net",
+          "count": 177
+        },
+        {
           "host": "www.calspia.go.kr",
           "count": 168
         },
         {
           "host": "www.jeju.go.kr",
-          "count": 110
+          "count": 168
         },
         {
           "host": "openapi.q-net.or.kr",
@@ -157,10 +161,6 @@
         {
           "host": "www.safemap.go.kr",
           "count": 104
-        },
-        {
-          "host": "www.jejudatahub.net",
-          "count": 101
         },
         {
           "host": "openapi.jeonju.go.kr",
@@ -229,11 +229,11 @@
           "count": 68
         },
         {
-          "host": "openapi.jeonju.go.kr",
-          "count": 61
+          "host": "www.jeju.go.kr",
+          "count": 63
         },
         {
-          "host": "www.jeju.go.kr",
+          "host": "openapi.jeonju.go.kr",
           "count": 61
         },
         {

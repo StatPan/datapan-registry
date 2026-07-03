@@ -12,14 +12,14 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `17858`
-- callable operations: `17716` (`99.2%`)
+- operations: `18000`
+- callable operations: `17858` (`99.2%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `6248`
-- registered adapter operations: `6238`
+- external endpoint operations: `6390`
+- registered adapter operations: `6380`
 - missing adapter operations: `29`
 - external adapter coverage: `99.5%`
-- approval-required operations: `5854`
+- approval-required operations: `5923`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
@@ -227,8 +227,8 @@ institution:
    `scripts/validate-institution-runtime-plan.py`, and
    `scripts/validate-institution-api-overview.py`.
 
-The current operation materialization queue starts at `제주특별자치도`: `171`
-APIs, `118` APIs with operation mappings, and `53` uncovered APIs. The runtime
+The current operation materialization queue starts at `농촌진흥청`: `136`
+APIs, `14` APIs with operation mappings, and `122` uncovered APIs. The runtime
 reactivation queue starts at `행정안전부`: `1252` APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
 records, and `1202` APIs still needing runtime reactivation. Gateway calls need
@@ -463,6 +463,11 @@ readiness, not to advance verified runtime coverage.
    That brings checked runtime evidence to `1850`, registered external adapter
    operations to `6238`, and raises 제주특별자치도 operation coverage to `118`
    of `171` APIs.
+   The final 제주특별자치도 batch materializes the remaining `53` APIs and `142`
+   operations, and merges `25` verified landing-page checks. That brings
+   checked runtime evidence to `1875`, registered external adapter operations
+   to `6380`, completes 제주특별자치도 materialization at `171` of `171` APIs,
+   and moves the first materialization queue to 농촌진흥청.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,
