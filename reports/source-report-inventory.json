@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-03T21:17:58Z",
+  "generated_at": "2026-07-03T21:32:33Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 36,
+    "report_total": 38,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,7 +38,7 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 24,
+      "report_count": 26,
       "present_reports": [
         {
           "name": "coverage-backlog.json",
@@ -60,6 +60,14 @@
         {
           "name": "daejeon-verification.json",
           "path": "reports/data-go-kr/daejeon-verification.json"
+        },
+        {
+          "name": "epis-verification-summary.json",
+          "path": "reports/data-go-kr/epis-verification-summary.json"
+        },
+        {
+          "name": "epis-verification.json",
+          "path": "reports/data-go-kr/epis-verification.json"
         },
         {
           "name": "error-action-catalog.json",
@@ -171,6 +179,8 @@
         "culture-ministry-verification.json",
         "daejeon-verification-summary.json",
         "daejeon-verification.json",
+        "epis-verification-summary.json",
+        "epis-verification.json",
         "error-action-catalog.json",
         "external-adapter-backlog.json",
         "external-coverage-summary.json",

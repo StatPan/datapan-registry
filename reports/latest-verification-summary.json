@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T21:14:29Z",
+  "generated_at": "2026-07-03T21:32:31Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3100,
-    "verified": 1352,
+    "total": 3191,
+    "verified": 1443,
     "failed": 282,
     "skipped": 1466,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 1352,
+        "count": 1443,
         "status": "verified"
       },
       {
@@ -375,7 +375,7 @@
       },
       {
         "key": "mafra",
-        "count": 155,
+        "count": 241,
         "provider": "mafra"
       },
       {
@@ -539,6 +539,11 @@
         "provider": "jejudatahub"
       },
       {
+        "key": "smartfarm-korea",
+        "count": 11,
+        "provider": "smartfarm-korea"
+      },
+      {
         "key": "consumer",
         "count": 10,
         "provider": "consumer"
@@ -622,11 +627,6 @@
         "key": "lh-ebid",
         "count": 6,
         "provider": "lh-ebid"
-      },
-      {
-        "key": "smartfarm-korea",
-        "count": 6,
-        "provider": "smartfarm-korea"
       },
       {
         "key": "dongjak",
@@ -822,7 +822,7 @@
       },
       {
         "key": "data.mafra.go.kr",
-        "count": 155,
+        "count": 241,
         "host": "data.mafra.go.kr"
       },
       {
@@ -1111,6 +1111,11 @@
         "host": "data.dongjak.go.kr"
       },
       {
+        "key": "smartfarmkorea.net",
+        "count": 5,
+        "host": "smartfarmkorea.net"
+      },
+      {
         "key": "www.gims.go.kr",
         "count": 5,
         "host": "www.gims.go.kr"
@@ -1329,7 +1334,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 2376,
+        "count": 2467,
         "kind": "external_endpoint"
       },
       {

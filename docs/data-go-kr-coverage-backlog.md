@@ -2,17 +2,17 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-07-03T21:17:58Z`
+- Generated at: `2026-07-03T21:32:33Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `10718` (`88.9%`)
-- APIs without operation mapping: `1342`
-- Operations: `19595`
-- Runtime evidence operations: `3100` (`15.8%`)
-- Runtime verified operations: `1352`
+- APIs with operation mapping: `10784` (`89.4%`)
+- APIs without operation mapping: `1276`
+- Operations: `19679`
+- Runtime evidence operations: `3191` (`16.2%`)
+- Runtime verified operations: `1443`
 - Runtime failed operations: `282`
 - Runtime skipped operations: `1466`
-- APIs with runtime evidence: `1443`
+- APIs with runtime evidence: `1509`
 - Runtime reactivation APIs: `9275`
 - Runtime repair APIs: `157`
 
@@ -47,9 +47,9 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 한국수자원공사 | 84 | 84 | 0 | 100.0% | 153 | 5 | 79 | 0 | 79 |
 | 충청남도 보령시 | 72 | 72 | 0 | 100.0% | 72 | 0 | 72 | 0 | 72 |
 | 보건복지부 | 71 | 71 | 0 | 100.0% | 71 | 0 | 71 | 0 | 71 |
-| 농림수산식품교육문화정보원 | 75 | 9 | 66 | 12.0% | 28 | 5 | 4 | 0 | 70 |
 | 서울올림픽기념국민체육진흥공단 | 70 | 70 | 0 | 100.0% | 111 | 0 | 70 | 0 | 70 |
 | 충청남도 | 96 | 96 | 0 | 100.0% | 142 | 27 | 69 | 27 | 69 |
+| 해양수산부 국립해양조사원 | 68 | 50 | 18 | 73.5% | 51 | 1 | 49 | 0 | 67 |
 
 ## Sample Uncovered APIs
 

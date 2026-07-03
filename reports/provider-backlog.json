@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T21:17:58Z",
+  "generated_at": "2026-07-03T21:32:33Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 265,
+  "filtered_count": 266,
   "summary": {
-    "hosts": 265,
+    "hosts": 266,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 121,
+    "external_endpoint_hosts": 122,
     "external_guide_hosts": 193,
-    "registered_adapter_hosts": 110,
-    "operation_hosts": 123,
+    "registered_adapter_hosts": 111,
+    "operation_hosts": 124,
     "guide_only_hosts": 142,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7221,
+    "approval_required_operations": 7278,
     "malformed_source_url_count": 712
   },
   "providers": [
@@ -364,6 +364,24 @@
       ]
     },
     {
+      "host": "data.mafra.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 151,
+      "operations": 235,
+      "external_endpoint_operations": 235,
+      "external_guide_specs": 42,
+      "approval_required_operations": 89,
+      "sample_ids": [
+        "15002220",
+        "15008409",
+        "15015139"
+      ]
+    },
+    {
       "host": "www.jejudatahub.net",
       "kinds": [
         "external_endpoint",
@@ -417,24 +435,6 @@
         "15061025",
         "15061033",
         "15061035"
-      ]
-    },
-    {
-      "host": "data.mafra.go.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 90,
-      "operations": 156,
-      "external_endpoint_operations": 156,
-      "external_guide_specs": 10,
-      "approval_required_operations": 37,
-      "sample_ids": [
-        "15002220",
-        "15008409",
-        "15015139"
       ]
     },
     {
@@ -1295,6 +1295,22 @@
         "15002034",
         "15058192",
         "15058504"
+      ]
+    },
+    {
+      "host": "smartfarmkorea.net",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 5,
+      "operations": 5,
+      "external_endpoint_operations": 5,
+      "approval_required_operations": 5,
+      "sample_ids": [
+        "15135883",
+        "15135894",
+        "15135912"
       ]
     },
     {

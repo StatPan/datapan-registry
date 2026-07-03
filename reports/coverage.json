@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T21:18:04Z",
+  "generated_at": "2026-07-03T21:32:39Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,19 +7,19 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 19595,
-    "callable_operations": 19453,
+    "operations": 19679,
+    "callable_operations": 19537,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 7985,
-    "registered_adapter_operations": 7975,
+    "external_endpoint_operations": 8069,
+    "registered_adapter_operations": 8059,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.6,
-    "approval_required_operations": 7221,
+    "approval_required_operations": 7278,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 110,
+    "registered_adapter_hosts": 111,
     "missing_adapter_hosts": 11,
     "adapter_count": 96,
     "call_capable_adapters": 23,
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T21:14:29Z",
-    "total": 3100,
-    "verified": 1352,
+    "generated_at": "2026-07-03T21:32:31Z",
+    "total": 3191,
+    "verified": 1443,
     "failed": 282,
     "skipped": 1466,
     "unknown": 0,
-    "verified_percent": 43.6,
-    "evidence_operation_percent": 15.8
+    "verified_percent": 45.2,
+    "evidence_operation_percent": 16.2
   },
   "route_evidence": {
     "present": true,
@@ -382,10 +382,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T21:18:04Z",
+    "generated_at": "2026-07-03T21:32:39Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 96,
-    "host_count": 114,
+    "host_count": 115,
     "adapters": [
       {
         "name": "airport",
@@ -1288,6 +1288,7 @@
         "name": "smartfarm-korea",
         "status": "registered",
         "hosts": [
+          "smartfarmkorea.net",
           "www.smartfarmkorea.net"
         ],
         "capabilities": [
