@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-03T20:42:01Z",
+  "generated_at": "2026-07-03T20:57:26Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 2900,
-    "verified": 1217,
-    "failed": 223,
+    "total": 3000,
+    "verified": 1259,
+    "failed": 281,
     "skipped": 1460,
     "unknown": 0
   },
@@ -21,12 +21,12 @@
       },
       {
         "key": "verified",
-        "count": 1217,
+        "count": 1259,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 223,
+        "count": 281,
         "status": "failed"
       }
     ],
@@ -50,6 +50,11 @@
         "key": "jeonju_missing_required_params",
         "count": 67,
         "reason": "jeonju_missing_required_params"
+      },
+      {
+        "key": "NORMAL SERVICE",
+        "count": 56,
+        "reason": "NORMAL SERVICE"
       },
       {
         "key": "chungnam_http_404",
@@ -252,6 +257,11 @@
         "reason": "airport_missing_required_params"
       },
       {
+        "key": "daejeon_http_404",
+        "count": 2,
+        "reason": "daejeon_http_404"
+      },
+      {
         "key": "folk_missing_required_params",
         "count": 2,
         "reason": "folk_missing_required_params"
@@ -375,8 +385,13 @@
       },
       {
         "key": "data-gg",
-        "count": 119,
+        "count": 120,
         "provider": "data-gg"
+      },
+      {
+        "key": "seogu",
+        "count": 85,
+        "provider": "seogu"
       },
       {
         "key": "jeonju",
@@ -394,6 +409,11 @@
         "provider": "chungnam"
       },
       {
+        "key": "daejeon",
+        "count": 59,
+        "provider": "daejeon"
+      },
+      {
         "key": "open-law",
         "count": 51,
         "provider": "open-law"
@@ -407,11 +427,6 @@
         "key": "ekape",
         "count": 49,
         "provider": "ekape"
-      },
-      {
-        "key": "seogu",
-        "count": 48,
-        "provider": "seogu"
       },
       {
         "key": "kma-apihub",
@@ -555,7 +570,7 @@
       },
       {
         "key": "seoul-open-data",
-        "count": 7,
+        "count": 8,
         "provider": "seoul-open-data"
       },
       {
@@ -642,6 +657,11 @@
         "key": "gwanak",
         "count": 3,
         "provider": "gwanak"
+      },
+      {
+        "key": "vworld",
+        "count": 3,
+        "provider": "vworld"
       },
       {
         "key": "work24",
@@ -759,11 +779,6 @@
         "provider": "stcis"
       },
       {
-        "key": "vworld",
-        "count": 1,
-        "provider": "vworld"
-      },
-      {
         "key": "wamis",
         "count": 1,
         "provider": "wamis"
@@ -802,13 +817,18 @@
       },
       {
         "key": "data.gg.go.kr",
-        "count": 119,
+        "count": 120,
         "host": "data.gg.go.kr"
       },
       {
         "key": "openapi.q-net.or.kr",
         "count": 104,
         "host": "openapi.q-net.or.kr"
+      },
+      {
+        "key": "seogu.go.kr",
+        "count": 85,
+        "host": "seogu.go.kr"
       },
       {
         "key": "openapi.jeonju.go.kr",
@@ -821,6 +841,11 @@
         "host": "data.gm.go.kr"
       },
       {
+        "key": "bigdata.daejeon.go.kr",
+        "count": 57,
+        "host": "bigdata.daejeon.go.kr"
+      },
+      {
         "key": "data.ekape.or.kr",
         "count": 49,
         "host": "data.ekape.or.kr"
@@ -829,11 +854,6 @@
         "key": "www.nongsaro.go.kr",
         "count": 49,
         "host": "www.nongsaro.go.kr"
-      },
-      {
-        "key": "seogu.go.kr",
-        "count": 48,
-        "host": "seogu.go.kr"
       },
       {
         "key": "apihub.kma.go.kr",
@@ -1001,14 +1021,14 @@
         "host": "openapi.pqis.go.kr"
       },
       {
+        "key": "data.seoul.go.kr",
+        "count": 7,
+        "host": "data.seoul.go.kr"
+      },
+      {
         "key": "openapi.tour.go.kr",
         "count": 7,
         "host": "openapi.tour.go.kr"
-      },
-      {
-        "key": "data.seoul.go.kr",
-        "count": 6,
-        "host": "data.seoul.go.kr"
       },
       {
         "key": "folkency.nfm.go.kr",
@@ -1116,9 +1136,19 @@
         "host": "www.garak.co.kr"
       },
       {
+        "key": "www.vworld.kr",
+        "count": 3,
+        "host": "www.vworld.kr"
+      },
+      {
         "key": "www.work24.go.kr",
         "count": 3,
         "host": "www.work24.go.kr"
+      },
+      {
+        "key": "gis.daejeon.go.kr",
+        "count": 2,
+        "host": "gis.daejeon.go.kr"
       },
       {
         "key": "www.gimhae.go.kr",
@@ -1261,11 +1291,6 @@
         "host": "www.sisul.or.kr"
       },
       {
-        "key": "www.vworld.kr",
-        "count": 1,
-        "host": "www.vworld.kr"
-      },
-      {
         "key": "www.wamis.go.kr:8080",
         "count": 1,
         "host": "www.wamis.go.kr:8080"
@@ -1274,7 +1299,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 2176,
+        "count": 2276,
         "kind": "external_endpoint"
       },
       {

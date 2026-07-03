@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T20:42:36Z",
+  "generated_at": "2026-07-03T20:57:59Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,13 +7,13 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 19392,
-    "evidence_total": 2900,
+    "operations": 19459,
+    "evidence_total": 3000,
     "uncovered_gateway_candidates": 10714,
-    "uncovered_adapter_candidates": 3704,
+    "uncovered_adapter_candidates": 3708,
     "missing_adapter_hosts": 11,
     "planned_batches": 20,
-    "planned_operations": 129
+    "planned_operations": 133
   },
   "batches": [
     {
@@ -54,6 +54,16 @@
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider consumer --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/consumer-next.json --json",
       "output": ".datapan/verification/consumer-next.json"
+    },
+    {
+      "label": "daejeon",
+      "provider": "daejeon",
+      "kind": "external_endpoint",
+      "candidates": 65,
+      "uncovered_candidates": 6,
+      "planned_operations": 6,
+      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider daejeon --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/daejeon-next.json --json",
+      "output": ".datapan/verification/daejeon-next.json"
     },
     {
       "label": "data-gg",
@@ -204,16 +214,6 @@
       "planned_operations": 4,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider mafra --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/mafra-next.json --json",
       "output": ".datapan/verification/mafra-next.json"
-    },
-    {
-      "label": "mnd-open-data",
-      "provider": "mnd-open-data",
-      "kind": "external_endpoint",
-      "candidates": 2,
-      "uncovered_candidates": 2,
-      "planned_operations": 2,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider mnd-open-data --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/mnd-open-data-next.json --json",
-      "output": ".datapan/verification/mnd-open-data-next.json"
     }
   ],
   "gaps": {

@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T20:42:11Z",
+  "generated_at": "2026-07-03T20:57:33Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 91,
-  "host_count": 107,
+  "adapter_count": 92,
+  "host_count": 109,
   "adapters": [
     {
       "name": "airport",
@@ -103,6 +103,17 @@
       "status": "registered",
       "hosts": [
         "www.culture.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "daejeon",
+      "status": "registered",
+      "hosts": [
+        "bigdata.daejeon.go.kr",
+        "gis.daejeon.go.kr"
       ],
       "capabilities": [
         "verification"
@@ -957,8 +968,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 91,
-    "verification_capable_adapters": 91,
+    "adapter_count": 92,
+    "verification_capable_adapters": 92,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

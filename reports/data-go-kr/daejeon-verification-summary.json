@@ -1,0 +1,107 @@
+{
+  "generated_at": "2026-07-03T20:55:36Z",
+  "source": "reports/data-go-kr/daejeon-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 100,
+    "verified": 42,
+    "failed": 58,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "failed",
+        "count": 58,
+        "status": "failed"
+      },
+      {
+        "key": "verified",
+        "count": 42,
+        "status": "verified"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "NORMAL SERVICE",
+        "count": 56,
+        "reason": "NORMAL SERVICE"
+      },
+      {
+        "key": "daejeon_http_404",
+        "count": 2,
+        "reason": "daejeon_http_404"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "daejeon",
+        "count": 59,
+        "provider": "daejeon"
+      },
+      {
+        "key": "seogu",
+        "count": 37,
+        "provider": "seogu"
+      },
+      {
+        "key": "vworld",
+        "count": 2,
+        "provider": "vworld"
+      },
+      {
+        "key": "data-gg",
+        "count": 1,
+        "provider": "data-gg"
+      },
+      {
+        "key": "seoul-open-data",
+        "count": 1,
+        "provider": "seoul-open-data"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "bigdata.daejeon.go.kr",
+        "count": 57,
+        "host": "bigdata.daejeon.go.kr"
+      },
+      {
+        "key": "seogu.go.kr",
+        "count": 37,
+        "host": "seogu.go.kr"
+      },
+      {
+        "key": "gis.daejeon.go.kr",
+        "count": 2,
+        "host": "gis.daejeon.go.kr"
+      },
+      {
+        "key": "www.vworld.kr",
+        "count": 2,
+        "host": "www.vworld.kr"
+      },
+      {
+        "key": "data.gg.go.kr",
+        "count": 1,
+        "host": "data.gg.go.kr"
+      },
+      {
+        "key": "data.seoul.go.kr",
+        "count": 1,
+        "host": "data.seoul.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 100,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

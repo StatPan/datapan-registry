@@ -94,9 +94,9 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `1,526` data.go.kr APIs
-  without operation mappings, `9,235` operation-mapped APIs without runtime
-  evidence, and `135` APIs with failed runtime evidence that need repair.
+- `reports/data-go-kr/coverage-backlog.json` tracks `1,410` data.go.kr APIs
+  without operation mappings, `9,241` operation-mapped APIs without runtime
+  evidence, and `156` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
   `reports/open-assembly/runtime-evidence-plan.json`, and
@@ -120,7 +120,7 @@ Current strengths:
   the same blocker, warning, and next-action inventory that CI validates.
 - `reports/source-report-inventory.json` is generated from source profiles and
   checked-in `reports/<source>/` directories, measuring `5` source report
-  directories, `24` source-scoped JSON reports, and `12.3%` recommended
+  directories, `34` source-scoped JSON reports, and `12.3%` recommended
   source-scoped report coverage.
 - `scripts/sync-release-schema-artifacts.py` checks that every checked-in
   `schemas/*.schema.json` file is represented in `schemas/index.json` and
@@ -353,8 +353,12 @@ Current gaps:
   failed, `245` skipped for missing `crtfc_key`). That brings runtime evidence
   to `2900`, verified checks to `1217`, and registered external adapter
   operations to `7772`.
-- API operation coverage remains incomplete: `10,622` of `12,060` APIs have
-  operation mappings (`88.1%`), leaving `1,438` APIs to materialize and `9,235`
+- The 대전광역시 batch adds Daejeon adapter coverage, materializes `28` APIs
+  and `67` operations, and merges `100` bounded checks (`42` verified, `58`
+  failed, `0` skipped). That brings runtime evidence to `3000`, verified
+  checks to `1259`, and registered external adapter operations to `7839`.
+- API operation coverage remains incomplete: `10,650` of `12,060` APIs have
+  operation mappings (`88.3%`), leaving `1,410` APIs to materialize and `9,241`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

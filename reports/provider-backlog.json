@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T20:42:11Z",
+  "generated_at": "2026-07-03T20:57:33Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 259,
+  "filtered_count": 261,
   "summary": {
-    "hosts": 259,
+    "hosts": 261,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 115,
-    "external_guide_hosts": 191,
-    "registered_adapter_hosts": 104,
-    "operation_hosts": 117,
+    "external_endpoint_hosts": 117,
+    "external_guide_hosts": 192,
+    "registered_adapter_hosts": 106,
+    "operation_hosts": 119,
     "guide_only_hosts": 142,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7089,
+    "approval_required_operations": 7154,
     "malformed_source_url_count": 710
   },
   "providers": [
@@ -213,12 +213,12 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 202,
-      "operations": 458,
-      "external_endpoint_operations": 458,
+      "specs": 203,
+      "operations": 460,
+      "external_endpoint_operations": 460,
       "external_guide_specs": 23,
       "wms_operations": 4,
-      "approval_required_operations": 71,
+      "approval_required_operations": 73,
       "sample_ids": [
         "15015052",
         "15028102",
@@ -525,6 +525,22 @@
         "15000354",
         "15004414",
         "15004788"
+      ]
+    },
+    {
+      "host": "bigdata.daejeon.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 27,
+      "operations": 63,
+      "external_endpoint_operations": 63,
+      "approval_required_operations": 62,
+      "sample_ids": [
+        "15021305",
+        "15098038",
+        "15098055"
       ]
     },
     {
@@ -1464,6 +1480,23 @@
       "sample_ids": [
         "15089863",
         "3068943"
+      ]
+    },
+    {
+      "host": "gis.daejeon.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 2,
+      "operations": 2,
+      "external_endpoint_operations": 2,
+      "external_guide_specs": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15021305",
+        "15094377"
       ]
     },
     {
