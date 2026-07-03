@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T16:22:06Z",
+  "generated_at": "2026-07-03T16:35:43Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,13 +7,13 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 16625,
-    "evidence_total": 1691,
+    "operations": 16683,
+    "evidence_total": 1714,
     "uncovered_gateway_candidates": 10714,
-    "uncovered_adapter_candidates": 4019,
+    "uncovered_adapter_candidates": 3579,
     "missing_adapter_hosts": 11,
-    "planned_batches": 19,
-    "planned_operations": 143
+    "planned_batches": 20,
+    "planned_operations": 142
   },
   "batches": [
     {
@@ -46,6 +46,16 @@
       "output": ".datapan/verification/car-next.json"
     },
     {
+      "label": "consumer",
+      "provider": "consumer",
+      "kind": "external_endpoint",
+      "candidates": 36,
+      "uncovered_candidates": 26,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider consumer --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/consumer-next.json --json",
+      "output": ".datapan/verification/consumer-next.json"
+    },
+    {
       "label": "data-gg",
       "provider": "data-gg",
       "kind": "external_endpoint",
@@ -64,6 +74,16 @@
       "planned_operations": 1,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider ex --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ex-next.json --json",
       "output": ".datapan/verification/ex-next.json"
+    },
+    {
+      "label": "fairdata",
+      "provider": "fairdata",
+      "kind": "external_endpoint",
+      "candidates": 17,
+      "uncovered_candidates": 7,
+      "planned_operations": 7,
+      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider fairdata --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/fairdata-next.json --json",
+      "output": ".datapan/verification/fairdata-next.json"
     },
     {
       "label": "foodsafetykorea",
@@ -156,6 +176,16 @@
       "output": ".datapan/verification/open-assembly-next.json"
     },
     {
+      "label": "open-law",
+      "provider": "open-law",
+      "kind": "external_endpoint",
+      "candidates": 3,
+      "uncovered_candidates": 2,
+      "planned_operations": 2,
+      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider open-law --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/open-law-next.json --json",
+      "output": ".datapan/verification/open-law-next.json"
+    },
+    {
       "label": "safetydata",
       "provider": "safetydata",
       "kind": "external_endpoint",
@@ -184,26 +214,6 @@
       "planned_operations": 4,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider seoul-open-data --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/seoul-open-data-next.json --json",
       "output": ".datapan/verification/seoul-open-data-next.json"
-    },
-    {
-      "label": "vworld",
-      "provider": "vworld",
-      "kind": "external_endpoint",
-      "candidates": 458,
-      "uncovered_candidates": 457,
-      "planned_operations": 10,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider vworld --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/vworld-next.json --json",
-      "output": ".datapan/verification/vworld-next.json"
-    },
-    {
-      "label": "work24",
-      "provider": "work24",
-      "kind": "external_endpoint",
-      "candidates": 21,
-      "uncovered_candidates": 18,
-      "planned_operations": 10,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider work24 --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/work24-next.json --json",
-      "output": ".datapan/verification/work24-next.json"
     }
   ],
   "gaps": {

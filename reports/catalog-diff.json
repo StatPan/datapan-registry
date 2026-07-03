@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T16:21:33Z",
+  "generated_at": "2026-07-03T16:35:13Z",
   "provider": "data.go.kr",
   "old": ".datapan\\previous-data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,21 +12,351 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 1,
-    "stable": 12059
+    "changed": 34,
+    "stable": 12026
   },
   "added": [],
   "removed": [],
   "changed": [
     {
-      "id": "3072018",
-      "old_title": "성평등가족부_성범죄자 지역별 통계",
-      "new_title": "성평등가족부_성범죄자 지역별 통계",
+      "id": "15056534",
+      "old_title": "공정거래위원회_비교공감",
+      "new_title": "공정거래위원회_비교공감",
       "fields": [
         "operations"
       ],
-      "old_digest": "721ad7242040d6144a3a32d0cfe3709a0ab4893af0a1f6e17a48b115a9d56c47",
-      "new_digest": "735fde3a901e9be657cd51f8a72890fe459c8161b94feaedb02007402b0e3e7a"
+      "old_digest": "b6458fc9b1390e1ac4756f6be3c49a551eb3bd1d0247f18e1c124a2b7e89cc48",
+      "new_digest": "64483cd91b06a3c9b70ba2720402bc1b163123b2d7bf176586ac88677573867e"
+    },
+    {
+      "id": "15056747",
+      "old_title": "공정거래위원회_먹는물 리콜정보",
+      "new_title": "공정거래위원회_먹는물 리콜정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2cb8c74dd9dcdf099907981f9c41ab63e7506ed6e809123ee733535e8260ee0f",
+      "new_digest": "b4b7161b432fce3ae5f7b70f3289cb5ffcc2718540ae6695914c2ad11726eca0"
+    },
+    {
+      "id": "15056914",
+      "old_title": "공정거래위원회_식품 리콜정보",
+      "new_title": "공정거래위원회_식품 리콜정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "62b36cf150d573c815eb60e1af45812d47aac62dbacd72b07653b4395d15ea97",
+      "new_digest": "2ef0e4dfd752eceb4240d54a8f2c9af36e3892fba99b2409f1c6b3600a2d82ff"
+    },
+    {
+      "id": "15057410",
+      "old_title": "공정거래위원회_자동차 리콜정보",
+      "new_title": "공정거래위원회_자동차 리콜정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "90bea5089077b9c82b37be6e3c47383d7f45d337976172d60cd5bfb06c3e6eb6",
+      "new_digest": "0921f30c2e56eeebd45a55413803c1b901f7b951e9baaf9f68680f01d20d50e4"
+    },
+    {
+      "id": "15057536",
+      "old_title": "공정거래위원회_피해주의보",
+      "new_title": "공정거래위원회_피해주의보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fec57aa791e315d206937b496e02720f857c1585bd16cbc714f2c5141871e7ec",
+      "new_digest": "d1d7c420b841dc7a12d4a532c89994e47f842d7a9578bd38222cb76ec35556e0"
+    },
+    {
+      "id": "15058422",
+      "old_title": "공정거래위원회_화장품 리콜정보",
+      "new_title": "공정거래위원회_화장품 리콜정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8ed7011f9f6bc48f2de48d7a4a6c2a57f9bfeedd1c0329f93e0edbc99068520c",
+      "new_digest": "dd102ff0fdbb32ad4c4aafb9514182b86d41d3f1df6aedc6d3befc5b1d213525"
+    },
+    {
+      "id": "15058714",
+      "old_title": "공정거래위원회_의약품 리콜정보",
+      "new_title": "공정거래위원회_의약품 리콜정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7ea86bf828cb9fa697bd8baa013606d38afff35f554245db47648e55186e954f",
+      "new_digest": "27016d09da73131fa12ad973454611d810c6b02332f3c249ff95348e4886642f"
+    },
+    {
+      "id": "15058745",
+      "old_title": "공정거래위원회_축산물 리콜정보",
+      "new_title": "공정거래위원회_축산물 리콜정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c49fec04ce5e6f117ea873da9b6df02dc121f80120fb0351373ea52c1a385082",
+      "new_digest": "7aa92a5c93f42e11ebee3f2be43f5e21c4ce92501f73431735aea3caf576aa7f"
+    },
+    {
+      "id": "15058869",
+      "old_title": "공정거래위원회_일반비교정보",
+      "new_title": "공정거래위원회_일반비교정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a6c09d21bfcafaa943d1691230ff1d565fee7651fb1dcfcf51552a0a72d482ea",
+      "new_digest": "94076d2d66fb6d3dbac4198dd45c4dd589c23f025cce98bdc8ea57111502b593"
+    },
+    {
+      "id": "15058938",
+      "old_title": "공정거래위원회_의료기기 리콜정보",
+      "new_title": "공정거래위원회_의료기기 리콜정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e150a69bbd09aca9213d791f5609788021daa1f8fbffb93994dae4403a888f75",
+      "new_digest": "15bdacd6da92a7717cfe51e0b2a2ad4d27a725b5da155460e620825728a0d8dd"
+    },
+    {
+      "id": "15059073",
+      "old_title": "공정거래위원회_공산품 리콜정보",
+      "new_title": "공정거래위원회_공산품 리콜정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "153ff34086f31692b17ba81bd72804b45fdaf7634fea202e72ee174813a0f92c",
+      "new_digest": "766b61297fff0472874e2f00e45fd7215530805420e2466b442bca008cf1e700"
+    },
+    {
+      "id": "15059289",
+      "old_title": "공정거래위원회_해외리콜정보",
+      "new_title": "공정거래위원회_해외리콜정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "794fd9088fc0ab490b6629a2d86196999d750af6063f1d8c6d90f911f4682321",
+      "new_digest": "38d3684fe03e43d4bbdc4c71f88530c42bafbf5b2d13ad893d1e54ae49ac5696"
+    },
+    {
+      "id": "15103246",
+      "old_title": "공정거래위원회_결정문 목록 조회",
+      "new_title": "공정거래위원회_결정문 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "432501962804e5e522e0b39b3472b7308664d084204f9649a364d0a1a060d257",
+      "new_digest": "219396b6965fe026bb1aca4c984ff1a43b2001a707ab69d04dad523f2737690d"
+    },
+    {
+      "id": "15103247",
+      "old_title": "공정거래위원회_결정문 본문 조회",
+      "new_title": "공정거래위원회_결정문 본문 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6b5d33978269da40ea74fe09d5d93e13eb7c786d88457d242630272763ec1993",
+      "new_digest": "f0ad3fd0e25d7b5775dc9c87ba2167a177aae79c452f6cf9c0ece17a72fe837c"
+    },
+    {
+      "id": "15125569",
+      "old_title": "공정거래위원회_가맹정보_정보공개서_목록_조회",
+      "new_title": "공정거래위원회_가맹정보_정보공개서_목록_조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "01461756612680f9c710525993b41afff64acd3566f14ffd5cb00bb483ee6750",
+      "new_digest": "ba7f8843904910d5471766163e94abb1b2e2d62983ca25c36919304a7e01a51e"
+    },
+    {
+      "id": "15125570",
+      "old_title": "공정거래위원회_가맹정보_정보공개서_목차_조회",
+      "new_title": "공정거래위원회_가맹정보_정보공개서_목차_조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "38f8ad8086b5950b65aca6d8b1b36c84a2f412869f26cbea56a1f9816101aff4",
+      "new_digest": "4da0fedcf5ba1440eb27fab78c041f71aae636f016f508ee62274f2f89fe462f"
+    },
+    {
+      "id": "15125571",
+      "old_title": "공정거래위원회_가맹정보_정보공개서_본문_조회",
+      "new_title": "공정거래위원회_가맹정보_정보공개서_본문_조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "31af1f5bbb44687f8d525d9711779f06ad8dfcee7aabe8e71d3506ca72ac736b",
+      "new_digest": "0f348be415a304e72900c213fa0a4ac8267bc0d4723cdebede14e45b1683879b"
+    },
+    {
+      "id": "15143693",
+      "old_title": "공정거래위원회_페어데이터_브랜드 지역별 직영점 목록 정보 제공서비스",
+      "new_title": "공정거래위원회_페어데이터_브랜드 지역별 직영점 목록 정보 제공서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3e5ff39b5bdd8e506365288ffe9b687e46238542112cfb62b50edbc2751d85b9",
+      "new_digest": "2d7367cb6213278bf451ce0c1c42cd3e00173f0224294299b98104ea76755a6e"
+    },
+    {
+      "id": "15143694",
+      "old_title": "공정거래위원회_페어데이터_브랜드_지역별 가맹점 계약상태정보 제공서비스",
+      "new_title": "공정거래위원회_페어데이터_브랜드_지역별 가맹점 계약상태정보 제공서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "651f60d769f3f67416c1bee2cc5995738e3c62e662cab163046d66a34843b5e5",
+      "new_digest": "7c2afe8569f781c0f95756d3f4f74616735e12ae9398dfb55a7dbefcf8044729"
+    },
+    {
+      "id": "15143695",
+      "old_title": "공정거래위원회_페어데이터_브랜드별 사업개시일 및 업종정보 학습데이터 제공서비스",
+      "new_title": "공정거래위원회_페어데이터_브랜드별 사업개시일 및 업종정보 학습데이터 제공서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "378ab688b370ee4d9e4f6f1d16034ccf2694f24b7410de2f2f856ad645c04dd4",
+      "new_digest": "009c133083d5c46f1ef01697bccfb1352468ce6ab1a5ce081ef940127b075102"
+    },
+    {
+      "id": "15143696",
+      "old_title": "공정거래위원회_페어데이터_가맹정보공개서 처리상태 현황 학습데이터 제공서비스",
+      "new_title": "공정거래위원회_페어데이터_가맹정보공개서 처리상태 현황 학습데이터 제공서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b94f27f083b2ab0d4e1f8b11de728c0f44213c60f99af16b449ca524438b18ec",
+      "new_digest": "21f30f753d40f8178941c0ae90371fa033b0bbf97350367882d84262cb53ad49"
+    },
+    {
+      "id": "15143697",
+      "old_title": "공정거래위원회_페어데이터_브랜드별 가맹점 계약상태 집계 학습데이터 제공서비스",
+      "new_title": "공정거래위원회_페어데이터_브랜드별 가맹점 계약상태 집계 학습데이터 제공서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b6136c6ddec28f55b11a6dc4fa786c4c6c0f3da2726fe98a017dba1f7237a8c5",
+      "new_digest": "98dc76dc28ae1c34c1baabb59d0bb27a0f3827b6954998e4fcb70e447fb23bd8"
+    },
+    {
+      "id": "15143698",
+      "old_title": "공정거래위원회_페어데이터_브랜드별 위치정보 학습데이터 제공서비스",
+      "new_title": "공정거래위원회_페어데이터_브랜드별 위치정보 학습데이터 제공서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "439e814611710b50ddcbe880b92c6d5407ce4885d8016ebbbae413147d771031",
+      "new_digest": "4a139de194d427847eb989dc8ff084dfa15bd32d4f0708b6f7120c73df8ad606"
+    },
+    {
+      "id": "15143699",
+      "old_title": "공정거래위원회_페어데이터_브랜드별 가맹정보공개서 취소내역 학습데이터 제공서비스",
+      "new_title": "공정거래위원회_페어데이터_브랜드별 가맹정보공개서 취소내역 학습데이터 제공서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "473261d7fdb76e5a697a18416898428f7267dcfb4368c945a504d496d1622d00",
+      "new_digest": "fc3abeff38e85d930946e4951978efad5bf9e7ce3cca8f3a5656b56b4c857fe8"
+    },
+    {
+      "id": "15143700",
+      "old_title": "공정거래위원회_페어데이터_브랜드별 가맹지역본부 일반정보 학습데이터 제공서비스",
+      "new_title": "공정거래위원회_페어데이터_브랜드별 가맹지역본부 일반정보 학습데이터 제공서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2047b0e4ae2a9e93dba5089fdd8a3340242493955145129f8e78cd4f9e283281",
+      "new_digest": "8c94eb7e6a85c313c2f2ddadb2eb174245eaf0207b86ca0cc717e3aa99da0410"
+    },
+    {
+      "id": "15143701",
+      "old_title": "공정거래위원회_페어데이터_가맹본부별 재무 주요 계정과목별 학습데이터 제공서비스",
+      "new_title": "공정거래위원회_페어데이터_가맹본부별 재무 주요 계정과목별 학습데이터 제공서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8d73a31b80c239c699c3870ca74624b7e38d8b32073b31ef773558c56b477124",
+      "new_digest": "777fe72afbcda13af1f6ec52455def2696f7dcd2b02a1231ab47d03f596dd8a7"
+    },
+    {
+      "id": "15143702",
+      "old_title": "공정거래위원회_페어데이터_가맹본부별 법 위반 처리 현황 학습데이터 제공서비스",
+      "new_title": "공정거래위원회_페어데이터_가맹본부별 법 위반 처리 현황 학습데이터 제공서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5c2a918be5e926b113430fa2b75485fe7887f2b45c032d88becf3b95acf7bf64",
+      "new_digest": "50937bb31b35aacf413b4b786f00586a083b7cc488e1602567e731e24f38b587"
+    },
+    {
+      "id": "15143703",
+      "old_title": "공정거래위원회_페어데이터_가맹본부 일반정보 학습데이터 제공서비스",
+      "new_title": "공정거래위원회_페어데이터_가맹본부 일반정보 학습데이터 제공서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9487b1fe0467b4f56b98109ba29384d02741a54cba5df58ab9b4c3229ba44346",
+      "new_digest": "5b638b0e8fcddada7546a880dbe7415008ec396b822a6b4e2fa39a6fb8219c0b"
+    },
+    {
+      "id": "15143704",
+      "old_title": "공정거래위원회_페어데이터_해외 가맹본부 주소 및 브랜드수/계열회사수 학습데이터 제공서비스",
+      "new_title": "공정거래위원회_페어데이터_해외 가맹본부 주소 및 브랜드수/계열회사수 학습데이터 제공서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e9f89761bfe194ca0902eaf4bffb466cb952dd600c2d18b24606fb306c40dcc3",
+      "new_digest": "4a9fa527704c038a80ee9a83feda2ab33c3cb56284795622dd763b0ad207a0ae"
+    },
+    {
+      "id": "15143709",
+      "old_title": "공정거래위원회_페어데이터_브랜드 지역별 가맹점 평균 매출액 제공서비스",
+      "new_title": "공정거래위원회_페어데이터_브랜드 지역별 가맹점 평균 매출액 제공서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7880bd0a21791a7c86a190a64f9585c246f6f21539f016e055dffce54d49e48c",
+      "new_digest": "a668fde1a4e8f6900529d8b607a1edfb85a107341c1e2f2203048ec5c961ba2c"
+    },
+    {
+      "id": "15143710",
+      "old_title": "공정거래위원회_페어데이터_브랜드별 가맹점/직영점 집계 및 가맹사업자 평균매출 학습데이터 제공서비스",
+      "new_title": "공정거래위원회_페어데이터_브랜드별 가맹점/직영점 집계 및 가맹사업자 평균매출 학습데이터 제공서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2aff5b778ac2f5f8125ba7bf52c29789ab8977b28a27250907203c9e74a3a5cf",
+      "new_digest": "b81bb8297fdaa2e34c6f078db926068577b017319be6015d02b9f368c7d00437"
+    },
+    {
+      "id": "15143711",
+      "old_title": "공정거래위원회_페어데이터_가맹사업자 부담금 및 인테리어금액 학습데이터 제공서비스",
+      "new_title": "공정거래위원회_페어데이터_가맹사업자 부담금 및 인테리어금액 학습데이터 제공서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0071a5e4569a3212d2a079db6660b821d7561ac3435e1be8c6edf5bb7b48eb92",
+      "new_digest": "26e0b31136e388185e7991774c07f882a942b20001e1e5eec10cc0355878b55a"
+    },
+    {
+      "id": "15143801",
+      "old_title": "공정거래위원회_페어데이터_인공지능 학습데이터 정보공개서 목차별 제공서비스",
+      "new_title": "공정거래위원회_페어데이터_인공지능 학습데이터 정보공개서 목차별 제공서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "33c3c9ff7a4a586cb29739894cb9db48a45ee2b19cbfa31148db218e8bc174b5",
+      "new_digest": "cf8fc5c23c772bb5695030ce6e07a15f62e19cf6c527386022b27ab2a5f0954d"
+    },
+    {
+      "id": "15144425",
+      "old_title": "공정거래위원회_페어데이터_가맹정보 자연어 기반 질의 학습데이터 목록 제공서비스",
+      "new_title": "공정거래위원회_페어데이터_가맹정보 자연어 기반 질의 학습데이터 목록 제공서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8b52c2e5488a33561e8990c65ec8d313f519a3176fd2926c8c1a1c6585d28f45",
+      "new_digest": "4f8a15a47a0f3fba195d91d227c492e67c249bfbc88b0fdbf332f04ecc781a6a"
     }
   ]
 }
