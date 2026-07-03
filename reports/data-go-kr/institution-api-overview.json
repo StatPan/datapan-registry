@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T15:10:11Z",
+  "generated_at": "2026-07-03T15:24:56Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 15885,
-    "runtime_evidence": 1589,
+    "operations": 16062,
+    "runtime_evidence": 1607,
     "runtime_evidence_percent": 10.0,
-    "callable_operations": 15743,
-    "external_endpoint_operations": 4275,
-    "registered_adapter_operations": 4265,
+    "callable_operations": 15920,
+    "external_endpoint_operations": 4452,
+    "registered_adapter_operations": 4442,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 4275
+      "count": 4452
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 4265
+      "count": 4442
     },
     {
       "key": "builtin",
@@ -72,16 +72,16 @@
       "operation_count": 1712
     },
     {
-      "category": "문화관광",
-      "operation_count": 1603
+      "category": "교통물류",
+      "operation_count": 1670
     },
     {
-      "category": "교통물류",
-      "operation_count": 1540
+      "category": "문화관광",
+      "operation_count": 1605
     },
     {
       "category": "농축수산",
-      "operation_count": 1482
+      "operation_count": 1485
     },
     {
       "category": "사회복지",
@@ -89,11 +89,11 @@
     },
     {
       "category": "산업고용",
-      "operation_count": 1221
+      "operation_count": 1224
     },
     {
       "category": "환경기상",
-      "operation_count": 1030
+      "operation_count": 1045
     },
     {
       "category": "재정금융",
@@ -108,12 +108,12 @@
       "operation_count": 854
     },
     {
-      "category": "재난안전",
-      "operation_count": 823
+      "category": "국토관리",
+      "operation_count": 836
     },
     {
-      "category": "국토관리",
-      "operation_count": 815
+      "category": "재난안전",
+      "operation_count": 826
     },
     {
       "category": "교육",
@@ -139,7 +139,7 @@
     },
     {
       "host": "data.gg.go.kr",
-      "operation_count": 2141,
+      "operation_count": 2143,
       "adapter": "data-gg",
       "adapter_status": "registered",
       "capabilities": [
@@ -148,7 +148,7 @@
     },
     {
       "host": "www.vworld.kr",
-      "operation_count": 415,
+      "operation_count": 458,
       "adapter": "vworld",
       "adapter_status": "registered",
       "capabilities": [
@@ -169,6 +169,15 @@
       "host": "www.lofin365.go.kr",
       "operation_count": 343,
       "adapter": "lofin365",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "host": "www.calspia.go.kr",
+      "operation_count": 168,
+      "adapter": "calspia",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -196,15 +205,6 @@
       "host": "openapi.jeonju.go.kr",
       "operation_count": 80,
       "adapter": "jeonju",
-      "adapter_status": "registered",
-      "capabilities": [
-        "verification"
-      ]
-    },
-    {
-      "host": "www.calspia.go.kr",
-      "operation_count": 60,
-      "adapter": "calspia",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -525,15 +525,15 @@
     {
       "organization": "국토교통부",
       "api_count": 393,
-      "operation_api_count": 327,
-      "operation_count": 878,
-      "runtime_evidence_count": 56,
-      "runtime_evidence_percent": 6.4,
-      "verified": 27,
+      "operation_api_count": 393,
+      "operation_count": 1055,
+      "runtime_evidence_count": 74,
+      "runtime_evidence_percent": 7.0,
+      "verified": 45,
       "failed": 2,
       "skipped": 27,
       "unknown": 0,
-      "approval_required_operations": 136,
+      "approval_required_operations": 258,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
@@ -542,13 +542,13 @@
         },
         {
           "key": "external_endpoint",
-          "count": 481
+          "count": 658
         }
       ],
       "by_adapter_status": [
         {
           "key": "adapter",
-          "count": 481
+          "count": 658
         },
         {
           "key": "builtin",
@@ -558,15 +558,15 @@
       "top_categories": [
         {
           "category": "국토관리",
-          "operation_count": 381
+          "operation_count": 402
         },
         {
           "category": "교통물류",
-          "operation_count": 256
+          "operation_count": 386
         },
         {
           "category": "환경기상",
-          "operation_count": 53
+          "operation_count": 68
         },
         {
           "category": "공공행정",
@@ -574,13 +574,13 @@
         },
         {
           "category": "농축수산",
-          "operation_count": 41
+          "operation_count": 44
         }
       ],
       "top_hosts": [
         {
           "host": "www.vworld.kr",
-          "operation_count": 410,
+          "operation_count": 453,
           "adapter": "vworld",
           "adapter_status": "registered",
           "capabilities": [
@@ -593,7 +593,7 @@
         },
         {
           "host": "www.calspia.go.kr",
-          "operation_count": 60,
+          "operation_count": 168,
           "adapter": "calspia",
           "adapter_status": "registered",
           "capabilities": [
@@ -601,18 +601,18 @@
           ]
         },
         {
-          "host": "www.codil.or.kr",
-          "operation_count": 4,
-          "adapter": "codil",
+          "host": "www.its.go.kr",
+          "operation_count": 14,
+          "adapter": "its",
           "adapter_status": "registered",
           "capabilities": [
             "verification"
           ]
         },
         {
-          "host": "data.gg.go.kr",
-          "operation_count": 1,
-          "adapter": "data-gg",
+          "host": "www.codil.or.kr",
+          "operation_count": 6,
+          "adapter": "codil",
           "adapter_status": "registered",
           "capabilities": [
             "verification"

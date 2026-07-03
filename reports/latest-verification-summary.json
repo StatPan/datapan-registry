@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T15:10:03Z",
+  "generated_at": "2026-07-03T15:24:43Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1589,
-    "verified": 311,
+    "total": 1607,
+    "verified": 329,
     "failed": 115,
     "skipped": 1163,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 311,
+        "count": 329,
         "status": "verified"
       },
       {
@@ -344,6 +344,11 @@
         "provider": "eshare"
       },
       {
+        "key": "calspia",
+        "count": 30,
+        "provider": "calspia"
+      },
+      {
         "key": "oneclick-law",
         "count": 30,
         "provider": "oneclick-law"
@@ -362,11 +367,6 @@
         "key": "lofin365",
         "count": 25,
         "provider": "lofin365"
-      },
-      {
-        "key": "calspia",
-        "count": 20,
-        "provider": "calspia"
       },
       {
         "key": "gwangmyeong",
@@ -439,6 +439,16 @@
         "provider": "airport"
       },
       {
+        "key": "codil",
+        "count": 6,
+        "provider": "codil"
+      },
+      {
+        "key": "its",
+        "count": 6,
+        "provider": "its"
+      },
+      {
         "key": "kpx",
         "count": 6,
         "provider": "kpx"
@@ -462,11 +472,6 @@
         "key": "seoul-open-data",
         "count": 5,
         "provider": "seoul-open-data"
-      },
-      {
-        "key": "codil",
-        "count": 4,
-        "provider": "codil"
       },
       {
         "key": "dongjak",
@@ -574,11 +579,6 @@
         "provider": "ins24"
       },
       {
-        "key": "its",
-        "count": 1,
-        "provider": "its"
-      },
-      {
         "key": "jeju-air",
         "count": 1,
         "provider": "jeju-air"
@@ -627,6 +627,11 @@
         "key": "sisul-www",
         "count": 1,
         "provider": "sisul-www"
+      },
+      {
+        "key": "stcis",
+        "count": 1,
+        "provider": "stcis"
       },
       {
         "key": "vworld",
@@ -691,6 +696,11 @@
         "host": "www.eshare.go.kr"
       },
       {
+        "key": "www.calspia.go.kr",
+        "count": 30,
+        "host": "www.calspia.go.kr"
+      },
+      {
         "key": "oneclick.law.go.kr:80",
         "count": 27,
         "host": "oneclick.law.go.kr:80"
@@ -719,11 +729,6 @@
         "key": "openapi.its.ulsan.kr",
         "count": 20,
         "host": "openapi.its.ulsan.kr"
-      },
-      {
-        "key": "www.calspia.go.kr",
-        "count": 20,
-        "host": "www.calspia.go.kr"
       },
       {
         "key": "www.andong.go.kr",
@@ -801,6 +806,16 @@
         "host": "openapi.kpx.or.kr"
       },
       {
+        "key": "www.codil.or.kr",
+        "count": 6,
+        "host": "www.codil.or.kr"
+      },
+      {
+        "key": "www.its.go.kr",
+        "count": 6,
+        "host": "www.its.go.kr"
+      },
+      {
         "key": "ws.bus.go.kr",
         "count": 5,
         "host": "ws.bus.go.kr"
@@ -834,11 +849,6 @@
         "key": "openapi.pqis.go.kr",
         "count": 4,
         "host": "openapi.pqis.go.kr"
-      },
-      {
-        "key": "www.codil.or.kr",
-        "count": 4,
-        "host": "www.codil.or.kr"
       },
       {
         "key": "www.foodsafetykorea.go.kr",
@@ -956,6 +966,11 @@
         "host": "seogu.go.kr"
       },
       {
+        "key": "stcis.go.kr",
+        "count": 1,
+        "host": "stcis.go.kr"
+      },
+      {
         "key": "www.car365.go.kr",
         "count": 1,
         "host": "www.car365.go.kr"
@@ -969,11 +984,6 @@
         "key": "www.ins24.go.kr",
         "count": 1,
         "host": "www.ins24.go.kr"
-      },
-      {
-        "key": "www.its.go.kr",
-        "count": 1,
-        "host": "www.its.go.kr"
       },
       {
         "key": "www.jeju.go.kr",
@@ -1014,7 +1024,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 895,
+        "count": 913,
         "kind": "external_endpoint"
       },
       {

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T15:10:17Z",
+  "generated_at": "2026-07-03T15:25:03Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 15885,
-    "callable_operations": 15743,
+    "operations": 16062,
+    "callable_operations": 15920,
     "callable_operation_percent": 99.1,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 4275,
-    "registered_adapter_operations": 4265,
+    "external_endpoint_operations": 4452,
+    "registered_adapter_operations": 4442,
     "missing_adapter_operations": 29,
-    "external_adapter_coverage_percent": 99.3,
-    "approval_required_operations": 4882,
+    "external_adapter_coverage_percent": 99.4,
+    "approval_required_operations": 5004,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 72,
+    "registered_adapter_hosts": 74,
     "missing_adapter_hosts": 11,
-    "adapter_count": 67,
+    "adapter_count": 68,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T15:10:03Z",
-    "total": 1589,
-    "verified": 311,
+    "generated_at": "2026-07-03T15:24:43Z",
+    "total": 1607,
+    "verified": 329,
     "failed": 115,
     "skipped": 1163,
     "unknown": 0,
-    "verified_percent": 19.6,
+    "verified_percent": 20.5,
     "evidence_operation_percent": 10
   },
   "route_evidence": {
@@ -209,9 +209,9 @@
           "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 842,
-        "operations": 2141,
-        "external_endpoint_operations": 2141,
+        "specs": 844,
+        "operations": 2143,
+        "external_endpoint_operations": 2143,
         "external_guide_specs": 19,
         "wms_operations": 5,
         "approval_required_operations": 37,
@@ -228,16 +228,16 @@
           "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 183,
-        "operations": 415,
-        "external_endpoint_operations": 415,
-        "external_guide_specs": 22,
+        "specs": 202,
+        "operations": 458,
+        "external_endpoint_operations": 458,
+        "external_guide_specs": 23,
         "wms_operations": 4,
-        "approval_required_operations": 65,
+        "approval_required_operations": 71,
         "sample_ids": [
+          "15015052",
           "15028102",
-          "15056679",
-          "15056690"
+          "15056538"
         ]
       },
       {
@@ -271,6 +271,25 @@
           "15038581",
           "15056593",
           "15056639"
+        ]
+      },
+      {
+        "host": "www.calspia.go.kr",
+        "provider": "calspia",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "adapter",
+        "specs": 56,
+        "operations": 168,
+        "external_endpoint_operations": 168,
+        "external_guide_specs": 53,
+        "approval_required_operations": 168,
+        "sample_ids": [
+          "15061025",
+          "15061033",
+          "15061035"
         ]
       },
       {
@@ -328,25 +347,6 @@
         ]
       },
       {
-        "host": "www.calspia.go.kr",
-        "provider": "calspia",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "adapter",
-        "specs": 20,
-        "operations": 60,
-        "external_endpoint_operations": 60,
-        "external_guide_specs": 19,
-        "approval_required_operations": 60,
-        "sample_ids": [
-          "15061035",
-          "15061037",
-          "15061039"
-        ]
-      },
-      {
         "host": "data.gm.go.kr",
         "kinds": [
           "external_endpoint"
@@ -381,10 +381,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T15:10:17Z",
+    "generated_at": "2026-07-03T15:25:03Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 67,
-    "host_count": 74,
+    "adapter_count": 68,
+    "host_count": 76,
     "adapters": [
       {
         "name": "airport",
@@ -699,6 +699,7 @@
         "name": "its",
         "status": "registered",
         "hosts": [
+          "its.go.kr",
           "www.its.go.kr"
         ],
         "capabilities": [
@@ -1013,6 +1014,16 @@
         ]
       },
       {
+        "name": "stcis",
+        "status": "registered",
+        "hosts": [
+          "stcis.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "tour",
         "status": "registered",
         "hosts": [
@@ -1090,8 +1101,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 67,
-      "verification_capable_adapters": 67,
+      "adapter_count": 68,
+      "verification_capable_adapters": 68,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

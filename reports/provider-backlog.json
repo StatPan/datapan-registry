@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T15:10:11Z",
+  "generated_at": "2026-07-03T15:24:56Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 225,
+  "filtered_count": 227,
   "summary": {
-    "hosts": 225,
+    "hosts": 227,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 83,
-    "external_guide_hosts": 165,
-    "registered_adapter_hosts": 72,
-    "operation_hosts": 85,
+    "external_endpoint_hosts": 85,
+    "external_guide_hosts": 169,
+    "registered_adapter_hosts": 74,
+    "operation_hosts": 87,
     "guide_only_hosts": 140,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 4882,
+    "approval_required_operations": 5004,
     "malformed_source_url_count": 627
   },
   "providers": [
@@ -177,9 +177,9 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 842,
-      "operations": 2141,
-      "external_endpoint_operations": 2141,
+      "specs": 844,
+      "operations": 2143,
+      "external_endpoint_operations": 2143,
       "external_guide_specs": 19,
       "wms_operations": 5,
       "approval_required_operations": 37,
@@ -196,16 +196,16 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 183,
-      "operations": 415,
-      "external_endpoint_operations": 415,
-      "external_guide_specs": 22,
+      "specs": 202,
+      "operations": 458,
+      "external_endpoint_operations": 458,
+      "external_guide_specs": 23,
       "wms_operations": 4,
-      "approval_required_operations": 65,
+      "approval_required_operations": 71,
       "sample_ids": [
+        "15015052",
         "15028102",
-        "15056679",
-        "15056690"
+        "15056538"
       ]
     },
     {
@@ -239,6 +239,25 @@
         "15038581",
         "15056593",
         "15056639"
+      ]
+    },
+    {
+      "host": "www.calspia.go.kr",
+      "provider": "calspia",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 56,
+      "operations": 168,
+      "external_endpoint_operations": 168,
+      "external_guide_specs": 53,
+      "approval_required_operations": 168,
+      "sample_ids": [
+        "15061025",
+        "15061033",
+        "15061035"
       ]
     },
     {
@@ -293,25 +312,6 @@
         "15000354",
         "15004414",
         "15004788"
-      ]
-    },
-    {
-      "host": "www.calspia.go.kr",
-      "provider": "calspia",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 20,
-      "operations": 60,
-      "external_endpoint_operations": 60,
-      "external_guide_specs": 19,
-      "approval_required_operations": 60,
-      "sample_ids": [
-        "15061035",
-        "15061037",
-        "15061039"
       ]
     },
     {
@@ -588,6 +588,25 @@
       ]
     },
     {
+      "host": "www.its.go.kr",
+      "provider": "its",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 11,
+      "operations": 14,
+      "external_endpoint_operations": 14,
+      "external_guide_specs": 2,
+      "approval_required_operations": 3,
+      "sample_ids": [
+        "15040463",
+        "15040464",
+        "15040465"
+      ]
+    },
+    {
       "host": "open.itfind.or.kr",
       "provider": "itfind",
       "kinds": [
@@ -652,6 +671,37 @@
         "15001011",
         "15001018",
         "15001019"
+      ]
+    },
+    {
+      "host": "data.ex.co.kr",
+      "provider": "ex",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 6,
+      "operations": 8,
+      "external_endpoint_operations": 8,
+      "sample_ids": [
+        "15040463",
+        "15040465",
+        "15040468"
+      ]
+    },
+    {
+      "host": "data.seoul.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 6,
+      "operations": 7,
+      "external_endpoint_operations": 7,
+      "sample_ids": [
+        "15003164",
+        "15040468",
+        "15057394"
       ]
     },
     {
@@ -728,18 +778,22 @@
       ]
     },
     {
-      "host": "data.seoul.go.kr",
+      "host": "www.codil.or.kr",
+      "provider": "codil",
       "kinds": [
-        "external_endpoint"
+        "external_endpoint",
+        "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 5,
+      "specs": 4,
       "operations": 6,
       "external_endpoint_operations": 6,
+      "external_guide_specs": 3,
+      "approval_required_operations": 5,
       "sample_ids": [
-        "15003164",
-        "15057394",
-        "15058573"
+        "15067161",
+        "15067164",
+        "15131782"
       ]
     },
     {
@@ -787,25 +841,6 @@
       "external_endpoint_operations": 5,
       "sample_ids": [
         "15000332"
-      ]
-    },
-    {
-      "host": "www.codil.or.kr",
-      "provider": "codil",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 3,
-      "operations": 4,
-      "external_endpoint_operations": 4,
-      "external_guide_specs": 2,
-      "approval_required_operations": 3,
-      "sample_ids": [
-        "15067161",
-        "15067164",
-        "3073144"
       ]
     },
     {
@@ -935,21 +970,6 @@
       ]
     },
     {
-      "host": "data.ex.co.kr",
-      "provider": "ex",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 2,
-      "operations": 3,
-      "external_endpoint_operations": 3,
-      "sample_ids": [
-        "15057627",
-        "15058552"
-      ]
-    },
-    {
       "host": "folkency.nfm.go.kr",
       "provider": "folk",
       "kinds": [
@@ -1010,6 +1030,24 @@
       ]
     },
     {
+      "host": "car.go.kr",
+      "provider": "car",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 2,
+      "operations": 2,
+      "external_endpoint_operations": 2,
+      "external_guide_specs": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15089863",
+        "3068943"
+      ]
+    },
+    {
       "host": "www.happysd.or.kr",
       "kinds": [
         "external_endpoint",
@@ -1057,6 +1095,40 @@
       ]
     },
     {
+      "host": "its.go.kr",
+      "provider": "its",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "external_guide_specs": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15141100"
+      ]
+    },
+    {
+      "host": "stcis.go.kr",
+      "provider": "stcis",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "external_guide_specs": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15129453"
+      ]
+    },
+    {
       "host": "air.jeju.go.kr",
       "provider": "jeju-air",
       "kinds": [
@@ -1068,20 +1140,6 @@
       "external_endpoint_operations": 1,
       "sample_ids": [
         "15058679"
-      ]
-    },
-    {
-      "host": "car.go.kr",
-      "provider": "car",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 1,
-      "operations": 1,
-      "external_endpoint_operations": 1,
-      "sample_ids": [
-        "3068943"
       ]
     },
     {
@@ -1234,20 +1292,6 @@
       "approval_required_operations": 1,
       "sample_ids": [
         "15136379"
-      ]
-    },
-    {
-      "host": "www.its.go.kr",
-      "provider": "its",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 1,
-      "operations": 1,
-      "external_endpoint_operations": 1,
-      "sample_ids": [
-        "15056842"
       ]
     },
     {
@@ -1563,6 +1607,21 @@
       ]
     },
     {
+      "host": "dev.vworld.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 11,
+      "operations": 0,
+      "external_guide_specs": 11,
+      "sample_ids": [
+        "15056538",
+        "15056679",
+        "15056776"
+      ]
+    },
+    {
       "host": "jbdc.co.kr",
       "kinds": [
         "external_guide"
@@ -1575,21 +1634,6 @@
         "15056567",
         "15056756",
         "15057292"
-      ]
-    },
-    {
-      "host": "dev.vworld.kr",
-      "kinds": [
-        "external_guide"
-      ],
-      "adapter_status": "guide_only",
-      "specs": 10,
-      "operations": 0,
-      "external_guide_specs": 10,
-      "sample_ids": [
-        "15056679",
-        "15056776",
-        "15057007"
       ]
     },
     {
@@ -2227,6 +2271,21 @@
       ]
     },
     {
+      "host": "https:",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 3,
+      "operations": 0,
+      "external_guide_specs": 3,
+      "sample_ids": [
+        "15061025",
+        "15061033",
+        "15061035"
+      ]
+    },
+    {
       "host": "lofin.mois.go.kr",
       "kinds": [
         "external_guide"
@@ -2718,19 +2777,6 @@
       "external_guide_specs": 1,
       "sample_ids": [
         "15059649"
-      ]
-    },
-    {
-      "host": "https:",
-      "kinds": [
-        "external_guide"
-      ],
-      "adapter_status": "guide_only",
-      "specs": 1,
-      "operations": 0,
-      "external_guide_specs": 1,
-      "sample_ids": [
-        "15061035"
       ]
     },
     {

@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T15:10:11Z",
+  "generated_at": "2026-07-03T15:24:56Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 67,
-  "host_count": 74,
+  "adapter_count": 68,
+  "host_count": 76,
   "adapters": [
     {
       "name": "airport",
@@ -317,6 +317,7 @@
       "name": "its",
       "status": "registered",
       "hosts": [
+        "its.go.kr",
         "www.its.go.kr"
       ],
       "capabilities": [
@@ -631,6 +632,16 @@
       ]
     },
     {
+      "name": "stcis",
+      "status": "registered",
+      "hosts": [
+        "stcis.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "tour",
       "status": "registered",
       "hosts": [
@@ -708,8 +719,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 67,
-    "verification_capable_adapters": 67,
+    "adapter_count": 68,
+    "verification_capable_adapters": 68,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T15:10:11Z",
+  "generated_at": "2026-07-03T15:24:56Z",
   "provider": "data.go.kr",
   "old": ".datapan\\previous-data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,1011 +12,671 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 100,
-    "stable": 11960
+    "changed": 66,
+    "stable": 11994
   },
   "added": [],
   "removed": [],
   "changed": [
     {
-      "id": "15028102",
-      "old_title": "국토교통부_주요상권",
-      "new_title": "국토교통부_주요상권",
+      "id": "15015052",
+      "old_title": "국토교통부_골프장현황도",
+      "new_title": "국토교통부_골프장현황도",
       "fields": [
         "operations"
       ],
-      "old_digest": "ecf58393dc76fbfc4e3d095a01bb503ca884b15df3c8bd2abb5c2c1986842956",
-      "new_digest": "85faedfcd0f7fc35e4c5f57b7e32224f22447f8bc3a9a630eab39c31ab0c3c04"
+      "old_digest": "14d2c4015eb6db5fb29ae9a22fca5399f8acc72f3812cdcb349277eb9037f35f",
+      "new_digest": "0cdbab8660e847dbe2059625f370219653369119dadbd8227cebd1e0ad1716ad"
     },
     {
-      "id": "15056679",
-      "old_title": "국토교통부_지하수측정망(오염우려지역) WMS/WFS",
-      "new_title": "국토교통부_지하수측정망(오염우려지역) WMS/WFS",
+      "id": "15040463",
+      "old_title": "국토교통부_교통소통정보",
+      "new_title": "국토교통부_교통소통정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "6aa230a24551748245451c12eab1c4ae9ec92efd467cb7b552bcb2e89248ba15",
-      "new_digest": "fe967eb033f21e3cb779d29e8e18c59b63e4d0d53db0c309c6649b5c53a4a060"
+      "old_digest": "1332a5ed34585773c81c10870d174b4cc1c7181b48ddc9a1870c139ffecdec87",
+      "new_digest": "0b00028caddea895933a77782d53360cd89561d98e89aa9a084f13e4e5d8c40e"
     },
     {
-      "id": "15056690",
-      "old_title": "국토교통부_지하수등수심선",
-      "new_title": "국토교통부_지하수등수심선",
+      "id": "15040464",
+      "old_title": "국토교통부_사고 정보",
+      "new_title": "국토교통부_사고 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "766d5469e86fb4c7b602fd66f2733c197d99dbf37bbdd40408003bcef04347b0",
-      "new_digest": "6ccfec8b4f0ad2428fdb1553404fc7102668da0095b45a22a81cd240bea0da2b"
+      "old_digest": "1a8a680e5483b6dd0bc35e2a3e37992ed4f0e754eedb13ce12c3f96e91b7b5d9",
+      "new_digest": "961b497b9fb2601db2690db3db421a79ed424db6db844ad1dcdf4c9d63e2a0bd"
     },
     {
-      "id": "15056842",
-      "old_title": "국토교통부_국토교통부_도로중심선(WMS/WFS)",
-      "new_title": "국토교통부_국토교통부_도로중심선(WMS/WFS)",
+      "id": "15040465",
+      "old_title": "국토교통부_돌발상황정보",
+      "new_title": "국토교통부_돌발상황정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "337c51d3fdf9b61c40742a4a3e8c0fce475b88271ed738a26736d05cf1463156",
-      "new_digest": "641fa0645e6605761412838a5882c3f8a9b82fbca29885cd0d5a5d3b7b38327b"
+      "old_digest": "1d499d4dac6f7550ea00d424ea09e4400b9d076e1d4e0ae52274a10c1d40bb54",
+      "new_digest": "036001f14a947b298ecf581d4b6ab3ec5b6de44b343a1a0c8197477a868c954f"
     },
     {
-      "id": "15056863",
-      "old_title": "국토교통부_국가교통정보도(WMS/WFS)",
-      "new_title": "국토교통부_국가교통정보도(WMS/WFS)",
+      "id": "15040466",
+      "old_title": "국토교통부_CCTV 화상자료",
+      "new_title": "국토교통부_CCTV 화상자료",
       "fields": [
         "operations"
       ],
-      "old_digest": "9846592319a9ab6a79fecb2b39a5ecaf6be7bea44a668aafdd7db1c09d1f4227",
-      "new_digest": "49ed541b9d13c2a860d3f070c118e7933b1f6b478b2c2f4b20919dc19f33449e"
+      "old_digest": "187e95208ec39a0f6716de90759636a68ae67d2ef4cc505b9745c51896242b31",
+      "new_digest": "e9fc4025dafaf28dc67d036a3e7613b54938f8b4e1a5fbd5a7d69030fbfe9335"
     },
     {
-      "id": "15056929",
-      "old_title": "국토교통부_노인복지시설",
-      "new_title": "국토교통부_노인복지시설",
+      "id": "15040468",
+      "old_title": "국토교통부_도로전광표지(VMS) 정보",
+      "new_title": "국토교통부_도로전광표지(VMS) 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "33be51ead36926ab9808f93792a1a8b6db003bd186799ca6bd37585ea45b5d19",
-      "new_digest": "ce2eed026abc807474854141d1e4c06593abecf85afbd2a2d61d2f67441df229"
+      "old_digest": "2d87394b4ed902a51bf8097f55d5e16c533179e36531d4b1361281ed9bd0a265",
+      "new_digest": "b74e75cd81b90d462f1757ee9926961a7c61f04058e2960fd0032b739a14d90f"
     },
     {
-      "id": "15056932",
-      "old_title": "국토교통부_지질구조밀도",
-      "new_title": "국토교통부_지질구조밀도",
+      "id": "15040469",
+      "old_title": "국토교통부_주의운전구간 정보",
+      "new_title": "국토교통부_주의운전구간 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "3de5250ee0a9af0b8e14f15beb8d3165fd810ddb157d47a3ed9bcbb597d69c1a",
-      "new_digest": "78863e1d76e521bf9c5197e7b646a21fe7f2b731bb95e42ca0d0f8e4db93f7c3"
+      "old_digest": "730d346aa11d2a8f031a9e13d01a5273d42fe2b2ef2e4aca8321f993eaf8f90e",
+      "new_digest": "ec5547f42aa4a2298dc731e5aa2696b07460e5b9273e983b095c5f94fe129610"
     },
     {
-      "id": "15057007",
-      "old_title": "국토교통부_항공정보도(WMS/WFS)",
-      "new_title": "국토교통부_항공정보도(WMS/WFS)",
+      "id": "15040507",
+      "old_title": "국토교통부_교통예측정보",
+      "new_title": "국토교통부_교통예측정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "4615d543900c8d12078b56c65b563e16ec52c9fa71a5b5dc2dbcaa3d6cd9c309",
-      "new_digest": "9b1395fb8309e4e4ac1f3b996ed3061e8766ddf1bbbd8ee90cee51e7ffebd490"
+      "old_digest": "337dbac85fe1a1a375011e8cbafcf2cabe6dee8d27797dba4f7252b6ce934f78",
+      "new_digest": "1ddacd986400311c23d1f9ef406e77c53dbd101f23891b92c8c8acf6f7b7ad52"
     },
     {
-      "id": "15057019",
-      "old_title": "국토교통부_전통사찰보존(WMS/WFS)",
-      "new_title": "국토교통부_전통사찰보존(WMS/WFS)",
+      "id": "15056538",
+      "old_title": "국토교통부_첨단산업단지",
+      "new_title": "국토교통부_첨단산업단지",
       "fields": [
         "operations"
       ],
-      "old_digest": "2ba88ca3c51951583b129a3d1114f681948ecd410b82832b174f0b07b532e6b8",
-      "new_digest": "4705d80fb697507b10352a5c559373fb14c7e90d949e25e35f5c86b32ce7b3cf"
+      "old_digest": "b88aaffabbafc41be798ee0106dfd6782a76e9bbf885c9fb0c11336a1cfa2bdf",
+      "new_digest": "ed6a9a465249af52f65d1b955d00b0e79bd5539d14b21712ab6be3ee90068ee9"
     },
     {
-      "id": "15057304",
-      "old_title": "국토교통부_농업진흥지역도",
-      "new_title": "국토교통부_농업진흥지역도",
+      "id": "15056574",
+      "old_title": "국토교통부_국민임대주택",
+      "new_title": "국토교통부_국민임대주택",
       "fields": [
         "operations"
       ],
-      "old_digest": "d35e56e574be3766498cbc6a009c5358eff602c299cc31c5e82c512b462b82d8",
-      "new_digest": "3ee65699fb34b5711c6ea9aba7a5704e6b7bcae7b9ea82a4313fc30e4c68d105"
+      "old_digest": "55894cbb430133650816ccfffb7c2f84b09db08eb784a5c2e718ab7ddceefdb7",
+      "new_digest": "65aaa4a37a5c7484d1455f5dd99f323770b810cc64b829e208c691f101a7926a"
     },
     {
-      "id": "15057419",
-      "old_title": "국토교통부_재해위험지구(WMS/WFS)",
-      "new_title": "국토교통부_재해위험지구(WMS/WFS)",
+      "id": "15056608",
+      "old_title": "국토교통부_가축사육제한구역",
+      "new_title": "국토교통부_가축사육제한구역",
       "fields": [
         "operations"
       ],
-      "old_digest": "e039e08ad00516b238564bea6f520c34e05f735acf445369ea4642b00293d5bc",
-      "new_digest": "f6ea03ab99fe50b1c3be8d8fabac79867419070331a964bdc87e5352138d4849"
+      "old_digest": "4cab39921aab78d875a2035ddd17236757e6131202c4136f93a6541a929e78b4",
+      "new_digest": "29a04bd0c7752fe4897676f0c7cb6d88637a9d44bc663c310d004b40dd37da71"
     },
     {
-      "id": "15057463",
-      "old_title": "국토교통부_교통노드",
-      "new_title": "국토교통부_교통노드",
+      "id": "15056655",
+      "old_title": "국토교통부_수질측정망하천수지점",
+      "new_title": "국토교통부_수질측정망하천수지점",
       "fields": [
         "operations"
       ],
-      "old_digest": "f99b542840840389b192e63aaba70048eda020c3a0abfba995dfcc368035c039",
-      "new_digest": "9c0f19fce634f12a73ffba96e7a976dc9f45d3de6bdb431442b6a63b24ea8f53"
+      "old_digest": "d200074e6b7ce5428c6df8bf41abf1547bdedebf65c0d52e9923e19772d8b3e9",
+      "new_digest": "3ccf80cee179f49b38cb0548595b49037be956cb4b44dd42e2647ce39924f8c2"
     },
     {
-      "id": "15057513",
-      "old_title": "국토교통부_일반산업단지",
-      "new_title": "국토교통부_일반산업단지",
+      "id": "15056674",
+      "old_title": "국토교통부_교통링크",
+      "new_title": "국토교통부_교통링크",
       "fields": [
         "operations"
       ],
-      "old_digest": "89d2fb2ba87a52ecc4843cee67e8aab38a3c33fa4f2dc71e2f083fbea1cc7076",
-      "new_digest": "0683bf23a1c6b1f2f2c96241b1be176086156c1a4c56e3a5c2697a1fdb02b250"
+      "old_digest": "4a3810c7c2a4d1ae50040e7c1b55f8a5cb6f541f000e35acf5808db31810e6ec",
+      "new_digest": "1a7c2b9f795ad076c1029a706b0e8e16e29d075798fca674da16caa87dc455f6"
     },
     {
-      "id": "15057535",
-      "old_title": "국토교통부_심토토성",
-      "new_title": "국토교통부_심토토성",
+      "id": "15056790",
+      "old_title": "국토교통부_표준권역",
+      "new_title": "국토교통부_표준권역",
       "fields": [
         "operations"
       ],
-      "old_digest": "5b6a3f8b589a46f552a3b4d8f3f413aaac3e9f807fe9f1c534899e8e397d3c58",
-      "new_digest": "589b9395c1a25030715e3a6bdade9b266f6cb491a370b261df8cf95fe6c69fa2"
+      "old_digest": "42dc639d3adc7652d190ad46a852b6836bfb7b5701d741b9a2e6bbf21f84cc43",
+      "new_digest": "afbbb79a24f170dba1f43623a62add20e870dd731e5a9b0e95296ca477c37128"
     },
     {
-      "id": "15057554",
-      "old_title": "국토교통부_경관지구",
-      "new_title": "국토교통부_경관지구",
+      "id": "15056802",
+      "old_title": "국토교통부_국토계획구역",
+      "new_title": "국토교통부_국토계획구역",
       "fields": [
         "operations"
       ],
-      "old_digest": "96e8030a6638edb3e8424068943d495f8a73ce4fd21efcff9efc2cffe6fdd009",
-      "new_digest": "096f8c17fc990d48763f2eec516dd37b22ae687d68207ecc6a1044b81ae3fb4f"
+      "old_digest": "0d02c8853b425ee9c8749b7f351fd4eb4d6e47d2fc78e1e64d42a1173a378abd",
+      "new_digest": "3ac3e11c07c9b590c1dd55383261c87ca4516bcdb5872fceb0f9d6b01feebbf5"
     },
     {
-      "id": "15057580",
-      "old_title": "국토교통부_지구단위계획",
-      "new_title": "국토교통부_지구단위계획",
+      "id": "15056910",
+      "old_title": "국토교통부_연속지적도",
+      "new_title": "국토교통부_연속지적도",
       "fields": [
         "operations"
       ],
-      "old_digest": "1c84b9c48f96b365c1ee2b62c510d7b6595e507895de06472b015a882586ae4d",
-      "new_digest": "28170a96347444381c6f71f7d7be6a8bb7ddffb85ecc36d696609a586ff3e053"
+      "old_digest": "a1720a64bfc9c420e576793b9d516d2c86f11a9b91c30f4dda2ecb2b41599a14",
+      "new_digest": "52393d07b94bcad58e088df272ced3383129bbfdebbcf3d420cfe48622e737dc"
     },
     {
-      "id": "15057583",
-      "old_title": "국토교통부_지하수유동방향",
-      "new_title": "국토교통부_지하수유동방향",
+      "id": "15057635",
+      "old_title": "국토교통부_수질측정망공단배수지점",
+      "new_title": "국토교통부_수질측정망공단배수지점",
       "fields": [
         "operations"
       ],
-      "old_digest": "ce296e506fde1297fd4c2c9254cf00b0aa1f4d474ddd8eb5f071c03482b55fb8",
-      "new_digest": "73a2b2365b32975b7ed6c1a70b8fe8b257e008e371b6a93380b5ac8be1046652"
+      "old_digest": "4899ff4564fb367e223d8eb5d7455c02df79b948fef8b7b90f17e44831615695",
+      "new_digest": "6dd0412ac84771436ff0ad52ad1cce1d962fccaf2c6ef9447d5dad9c9b6afe27"
     },
     {
-      "id": "15057713",
-      "old_title": "국토교통부_영농여건불리농지도",
-      "new_title": "국토교통부_영농여건불리농지도",
+      "id": "15057734",
+      "old_title": "국토교통부_수질측정망호소수지점",
+      "new_title": "국토교통부_수질측정망호소수지점",
       "fields": [
         "operations"
       ],
-      "old_digest": "af6c5e324650d6cf19652d761ef4b8457767403a0fb0d16aace521fa939eeb9e",
-      "new_digest": "1130750f1e3f45b7a0f614f76e4519737366a5edd5ac1e5cbfe1b59ddbb7c51b"
+      "old_digest": "03081f290850b8165488a91f01a87be2880389a147d9a68dc74f4b70a048cc24",
+      "new_digest": "30ce4a94e14c76f6bbbd21e19cee1bce09495a9746005d8cf068242c68c5ab75"
     },
     {
-      "id": "15057731",
-      "old_title": "국토교통부_자연환경보전지역",
-      "new_title": "국토교통부_자연환경보전지역",
+      "id": "15057773",
+      "old_title": "국토교통부_수질측정망도시관류지점",
+      "new_title": "국토교통부_수질측정망도시관류지점",
       "fields": [
         "operations"
       ],
-      "old_digest": "892db285456845f6f10af358a32116b84aa7c401a02c4ea6f4d8100c7af0624f",
-      "new_digest": "99d47793c6c26b8ad3b4db1000c4d84a57fb69d799c26ea2a70d70f1369e84d0"
+      "old_digest": "61a67a91e529998c7b28048bd71757ad2aed694204e410190b908f40b70643c2",
+      "new_digest": "407f2b400b993853d5e245d1ebad718871c822b11d76b418bde50b192ee4c364"
     },
     {
-      "id": "15057751",
-      "old_title": "국토교통부_공유수면매립기본계획",
-      "new_title": "국토교통부_공유수면매립기본계획",
+      "id": "15058539",
+      "old_title": "국토교통부_국가산업단지",
+      "new_title": "국토교통부_국가산업단지",
       "fields": [
         "operations"
       ],
-      "old_digest": "c953579298beb938f1b56925bde8bb7ade82d177983a298ede0b1d300a4ea7e1",
-      "new_digest": "4c559e9396fa78e9fcd6f11f216d09ccd6309c79be37d1f6d058f80aabaa8210"
+      "old_digest": "aca65e2a19cbea3588194048a36a98799e3ffbc432277334360c2f9ffb000bc3",
+      "new_digest": "6b33931430e346b7fb02ea92e807871526bb60550267fbb13a4f7166bbea8735"
     },
     {
-      "id": "15057866",
-      "old_title": "국토교통부_아동안전지킴이집",
-      "new_title": "국토교통부_아동안전지킴이집",
+      "id": "15058706",
+      "old_title": "국토교통부_수질측정망농업용수지점",
+      "new_title": "국토교통부_수질측정망농업용수지점",
       "fields": [
         "operations"
       ],
-      "old_digest": "49815b5124d6e939d5247d98a91f2a9c0e8c0eff8697b5193f0dfbd1a884a47e",
-      "new_digest": "d65cd7a5325cc0ef36eb4311376b53a0393689ceee38dc16a014054778b30f77"
+      "old_digest": "095fc2aadf691491f3924550d37b5eb87386be9d8364af366ff6e14d73b1d0ef",
+      "new_digest": "6520954d38c146c351658d38a5b2dd3a79cd7d6f843feba02fd956db0045c890"
     },
     {
-      "id": "15057875",
-      "old_title": "국토교통부_개발행위허가제한지역",
-      "new_title": "국토교통부_개발행위허가제한지역",
+      "id": "15061025",
+      "old_title": "국토교통부_공사정보 목록",
+      "new_title": "국토교통부_공사정보 목록",
       "fields": [
         "operations"
       ],
-      "old_digest": "ec2610ba64a31d5529ec5aefe4dcf764ae53a6579fac1865d13b8f93a8ead1f9",
-      "new_digest": "e75d001c40766edae7fb937d35b27b154ea8c7256c0a85d9d203c017d8d00dff"
+      "old_digest": "edbb7d25cfe13129303e9df87df39d885b502d069cef10cc09791bbeece611cc",
+      "new_digest": "75570b65380ce8946d3ca41c20783241b22cb6fc9e8947b091007b13e30fa3ae"
     },
     {
-      "id": "15057876",
-      "old_title": "국토교통부_토지이용계획도",
-      "new_title": "국토교통부_토지이용계획도",
+      "id": "15061033",
+      "old_title": "국토교통부_기성보고 현황",
+      "new_title": "국토교통부_기성보고 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "44e42a32263b8a32ad105986c4592d53734124b5eceeaff6e3bb808e8a8bdb67",
-      "new_digest": "21f4e3a8918656a7aecb449448fe78f825ede9a76c2fc02307b59557cf763cf5"
+      "old_digest": "d4830cd1ab2b8636d01a3d15a2bb5725da62d7270f10ed7fd39bbaa8abd679c0",
+      "new_digest": "d5fbf7a18a673b9d2a6596edb6a6be5503d39cdb90a01d2e507c721d78af3cec"
     },
     {
-      "id": "15057893",
-      "old_title": "국토교통부_군립자연공원",
-      "new_title": "국토교통부_군립자연공원",
+      "id": "15061040",
+      "old_title": "국토교통부_업체별 참여공사 목록",
+      "new_title": "국토교통부_업체별 참여공사 목록",
       "fields": [
         "operations"
       ],
-      "old_digest": "af9b779d2a0ebbf2d7c4c5bfc50ea483208f4d5f60f97aa76073789c81dec4a6",
-      "new_digest": "0fb5a720a225e9bc673a01ce0f73ef77b2211d402f6166a45ded21dd622351dc"
+      "old_digest": "c9c14caa2b5fc8a007d21f5e81b59810aa7f4c80043920dec1c91ba807e026be",
+      "new_digest": "6583f75e78ccbb312c682a97a61ed0d9007461703a16b37e47887748c57543d6"
     },
     {
-      "id": "15057944",
-      "old_title": "국토교통부_고도지구",
-      "new_title": "국토교통부_고도지구",
+      "id": "15061041",
+      "old_title": "국토교통부_월간공정 현황",
+      "new_title": "국토교통부_월간공정 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "06a247944acf1db6c35233e2742104fd69552305903cb0e43fe80fc3e1c40d42",
-      "new_digest": "8ac17f9d4de12f89276a0020be1a80d805b13385003dff362423f83be4575f36"
+      "old_digest": "b03fb4af5a791754d82eac5c6804d3620c71d64f27e620e4e50c6366717c1533",
+      "new_digest": "b0ee62a8a5dd3da9aa51dcd202219e80f5b918a5130d093f50ab6f809b662999"
     },
     {
-      "id": "15058014",
-      "old_title": "국토교통부_지하수정보도(WMS/WFS)",
-      "new_title": "국토교통부_지하수정보도(WMS/WFS)",
+      "id": "15061051",
+      "old_title": "국토교통부_공사중인 시설물(제방) 목록",
+      "new_title": "국토교통부_공사중인 시설물(제방) 목록",
       "fields": [
         "operations"
       ],
-      "old_digest": "8ba837abd3a18e569434f34925c3adc26b90087e5bebbf701ae2bb20ca7c80ee",
-      "new_digest": "2417c74b32eb93085c1d120d66243b636acbe2fdce077888c995104ec54beff4"
+      "old_digest": "d484ffd53ce47c351a40f93dfef2402d5f9595788caca3eae68ba2ee20384785",
+      "new_digest": "4578e5c993194711d7af7283a322b7edae4822ea9d9942e79346cc46f43cf815"
     },
     {
-      "id": "15058035",
-      "old_title": "국토교통부_개발진흥지구",
-      "new_title": "국토교통부_개발진흥지구",
+      "id": "15061052",
+      "old_title": "국토교통부_설계변경 내역서 현황",
+      "new_title": "국토교통부_설계변경 내역서 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "43b5dc24392e61c05ca20b530eb9b22cf92697881fc4d1610401af776237e08d",
-      "new_digest": "7a6816aef3f69f49bd19ed12719eb1db6e0c4a811877af256edce4d931091878"
+      "old_digest": "d457e44cd2e69c485ea96fa3ed8c47bad9c09dc2bb952d334c74f5e7a91663e7",
+      "new_digest": "3a43c22242167f487187da59fa321f85445975fabef77ed77b29e59164f22991"
     },
     {
-      "id": "15058055",
-      "old_title": "국토교통부_유통단지",
-      "new_title": "국토교통부_유통단지",
+      "id": "15061056",
+      "old_title": "국토교통부_설계변경 현황",
+      "new_title": "국토교통부_설계변경 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "72eb6ec1c6b3583d4865da8ea5f47a65e38873aa9637d3ab34cce65418f1fc16",
-      "new_digest": "dbc47163015d8aefc03663983ec326be869a0c001a4b1f44c09671729434b3d7"
+      "old_digest": "620de66cb108a31d12326e19bb1501fbcb21838f98b3f5dd88a32ffde14e675f",
+      "new_digest": "ab55f55921f7879257a35f384f15fd42706313200e8f0da638de755e6ce54b42"
     },
     {
-      "id": "15058068",
-      "old_title": "국토교통부_중권역",
-      "new_title": "국토교통부_중권역",
+      "id": "15061058",
+      "old_title": "국토교통부_도로, 하천 공사정보",
+      "new_title": "국토교통부_도로, 하천 공사정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "ea9b14b0c1d86f2f7a9d7277808165d9e4e01148048cd5c7b75330c0697fd04b",
-      "new_digest": "9d2d7f2d20b89aeeacedb3b418f8e0a0f4fced9895e2b8a573a1ccbd103a5c53"
+      "old_digest": "4526e3539bdb0bbdb7323f60044f321c457b7be90ecb6ffe53f820c14ba8fe83",
+      "new_digest": "2c74ad976f81aee7e2dceed06c36426c1e2d92efc06516875d0048de7c22901e"
     },
     {
-      "id": "15058101",
-      "old_title": "국토교통부_유효토심",
-      "new_title": "국토교통부_유효토심",
+      "id": "15061059",
+      "old_title": "국토교통부_시설물 목록",
+      "new_title": "국토교통부_시설물 목록",
       "fields": [
         "operations"
       ],
-      "old_digest": "30d053e8a5765d9fa432ea2267e332d1bd6ce2c9293793d064794bb5e551a317",
-      "new_digest": "d220bae7c5ded47048a03f8ca2155f8ed4abce13ea7358c9ee8d0bb10753e814"
+      "old_digest": "aaeea43e32309797273e3ea64e19781e23fe50d6fd4aeaaa9584501437d27112",
+      "new_digest": "f1d839f12f4669545928d005518af0d3ae9e1527545e17d16cdcfee97c9e3174"
     },
     {
-      "id": "15058202",
-      "old_title": "국토교통부_읍면동",
-      "new_title": "국토교통부_읍면동",
+      "id": "15061061",
+      "old_title": "국토교통부_시설물 점검진단계획 목록",
+      "new_title": "국토교통부_시설물 점검진단계획 목록",
       "fields": [
         "operations"
       ],
-      "old_digest": "456d1f8b5f547c78d84dd44aaef3f1f5d1e643c7366935425d423205fa7be888",
-      "new_digest": "38f48eb3668af08e58db23504df468a80e7e600e959b947840a17e3fc9bd4dbf"
+      "old_digest": "392b16ed2c3082037fb1cd7d34fde85f31ccc61da688856869011556c05622c9",
+      "new_digest": "15e1e970213a9a10b3c430c9284d9174f67a9f0e8986603852cc8a131cb643f4"
     },
     {
-      "id": "15058248",
-      "old_title": "국토교통부_지하수등수위선",
-      "new_title": "국토교통부_지하수등수위선",
+      "id": "15061062",
+      "old_title": "국토교통부_시설물 점검진단이력 목록",
+      "new_title": "국토교통부_시설물 점검진단이력 목록",
       "fields": [
         "operations"
       ],
-      "old_digest": "66a88b96472f4fda9d5602caf43706f3a0aba4eb7a41c24eb9e8128885faa79f",
-      "new_digest": "2ae1f306b61d995764f539025d12075b0964a25aeb3f0310328601cceefff929"
+      "old_digest": "6473ed85a0bf3934f704ccd4b77455afe41ddfcf3c9f522eaaa97f62cf72ed4f",
+      "new_digest": "f233260d18d513d62cbdea1634acbae7e376165e24043ab8d98ce090271fa6cd"
     },
     {
-      "id": "15058306",
-      "old_title": "국토교통부_기타보호시설",
-      "new_title": "국토교통부_기타보호시설",
+      "id": "15061063",
+      "old_title": "국토교통부_시설물 보수보강이력 목록",
+      "new_title": "국토교통부_시설물 보수보강이력 목록",
       "fields": [
         "operations"
       ],
-      "old_digest": "faadc9f2cc6b7e4384af4970508643a6a447387e6ba017f81a10f211dbde17ce",
-      "new_digest": "0f3d89342ec917a3fdef1df964838c0bec9ea02f69ccd35e5106b56393272cb2"
+      "old_digest": "323a239ce126b5d4d9ce95124c9173237128457daebbf40f4ebc007893538f3b",
+      "new_digest": "1f0d083a1fccc5b906c39d1efc6548c7e1bf0a2c94909def76040738d879e18c"
     },
     {
-      "id": "15058394",
-      "old_title": "국토교통부_야생동식물보호",
-      "new_title": "국토교통부_야생동식물보호",
+      "id": "15061064",
+      "old_title": "국토교통부_시설물 유지보수대장 목록",
+      "new_title": "국토교통부_시설물 유지보수대장 목록",
       "fields": [
         "operations"
       ],
-      "old_digest": "1050443b4bb90ab4d5c49713ee754330d372e85d5d2da249ec533118748bdc22",
-      "new_digest": "9f6f6cf66f0ea2be46eeeedfe0fb9027a045fe47cbb01cbead94fbe1159c4d2a"
+      "old_digest": "22aeae030215be4a86490499e505ade691af35c80109210ad904978ac9c2da8e",
+      "new_digest": "6d612565211ba089aa362ae0165f58f7ff5787e8c62f93f6d78dd58144ebce24"
     },
     {
-      "id": "15058420",
-      "old_title": "국토교통부_국립자연공원",
-      "new_title": "국토교통부_국립자연공원",
+      "id": "15061066",
+      "old_title": "국토교통부_공공용지 취득실적-전체보상액 규모 기준 실적 현황",
+      "new_title": "국토교통부_공공용지 취득실적-전체보상액 규모 기준 실적 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "6b3b8b036ba699fa5ffebca31885b603211c6ae01de220da9f25718236102906",
-      "new_digest": "a29a6a1fef2a43e44d7583de8169315395e500b91b45a6f715a6401f63427e7a"
+      "old_digest": "a1597bb4edc4801219762f4def759703823bd19d0b9fe954462e81e6cd68a26a",
+      "new_digest": "74627b59bf637761207d6938b7f1583050f18efea4d5eab462b19753045345a0"
     },
     {
-      "id": "15058441",
-      "old_title": "국토교통부_공유수면매립준공",
-      "new_title": "국토교통부_공유수면매립준공",
+      "id": "15061067",
+      "old_title": "국토교통부_공공용지 취득실적-사업별 면적 및 보상액 기준 실적 현황",
+      "new_title": "국토교통부_공공용지 취득실적-사업별 면적 및 보상액 기준 실적 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "c5da059bf08e09fba0791eef6cd99dc9422524625589d431d02df53d6c440c9d",
-      "new_digest": "dc88a4fa7557160240eec6abbe5fcdbe92af307a955edf09613f9b56fd102ae3"
+      "old_digest": "2efa02a6da2275195d4fbb5ad75b86201cd1b44799028d9e58a8b2584d7cdf26",
+      "new_digest": "93171f382ff76db209a4298d9586e87a0ab2db732ca625f9d49039f459b24735"
     },
     {
-      "id": "15058475",
-      "old_title": "국토교통부_급경사재해예방지역(WMS/WFS)",
-      "new_title": "국토교통부_급경사재해예방지역(WMS/WFS)",
+      "id": "15061072",
+      "old_title": "국토교통부_공공용지 취득실적 (잔여지 및 간접보상)",
+      "new_title": "국토교통부_공공용지 취득실적 (잔여지 및 간접보상)",
       "fields": [
         "operations"
       ],
-      "old_digest": "ee8ba3cb78d34a9a3c6d7eef18cb4853d9448b3d8b0becb8f95b0fe2658ee65f",
-      "new_digest": "24162802a861064b1cde759d206d259e4ca92e6988b894db48c18e3ae42ce47a"
+      "old_digest": "1c84a83fd011ae5a268b75d67eaa0c88248e438d597ab781eac6f17cb7f6e0cd",
+      "new_digest": "7b0967ccb3da6a75bc35de0d0e94e02e69ec728c7a03e55614f02f17a75f49e4"
     },
     {
-      "id": "15058562",
-      "old_title": "국토교통부_관광안내소",
-      "new_title": "국토교통부_관광안내소",
+      "id": "15061074",
+      "old_title": "국토교통부_공공용지 취득실적 (환매권 행사)",
+      "new_title": "국토교통부_공공용지 취득실적 (환매권 행사)",
       "fields": [
         "operations"
       ],
-      "old_digest": "9ca5cf5599c9cdc29ba6288b24288265ef0007da7364ebac64559603308e2868",
-      "new_digest": "f7ce444e36cf7cd323c27bf15a47738bcbd0f85acc9df0764848cfe109a1c792"
+      "old_digest": "a881eeacc3d41895fb4a7987d7f29ab3616d727de3a696e1efb9dde2df94fa1e",
+      "new_digest": "681f38a01201f1ded3a75d5f78e4fe4dda843e7a46a2b7f1b77773688be9ba01"
     },
     {
-      "id": "15058597",
-      "old_title": "국토교통부_농공단지",
-      "new_title": "국토교통부_농공단지",
+      "id": "15061076",
+      "old_title": "국토교통부_공공용지 취득실적 (부동산소유사실 확인서)",
+      "new_title": "국토교통부_공공용지 취득실적 (부동산소유사실 확인서)",
       "fields": [
         "operations"
       ],
-      "old_digest": "6c0316e9b2ffe2715a23a8fa37a3211fa4423d13806e6a8f92dace3c11de9cba",
-      "new_digest": "656b3d865d4897b12fd11d77b9427cd9dad402436fc3ba183dd61d65292588c9"
+      "old_digest": "4d7550e593e68a4753fc9bc8c8cbf77569480411aee5ad2e290894841a40385d",
+      "new_digest": "6fbf1a78d22f9b7d71da4a9b5280412903a52b9c76167b33b183b1b1ccf49687"
     },
     {
-      "id": "15058628",
-      "old_title": "국토교통부_국가지명",
-      "new_title": "국토교통부_국가지명",
+      "id": "15061078",
+      "old_title": "국토교통부_공공용지 취득실적-기관별 취득면적 및 보상액 기준 실적 현황",
+      "new_title": "국토교통부_공공용지 취득실적-기관별 취득면적 및 보상액 기준 실적 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "d720898fb5e3fd2899e907d3c503be7ce99b8ed3725ebe8ade00ffe2d29aa1bb",
-      "new_digest": "43bdfc737231f1daafca44ddc3cbe8af75ad3d04fd25a39ee3fa72d5419a92eb"
+      "old_digest": "76805585b78832a6430ae9ecb9a6fc4d7117843eb63e0840392e7be4992a4a9c",
+      "new_digest": "4c875bf19f26ff08966e63e5774bd77bbe631fea440c76c8e3a3f48947376d2c"
     },
     {
-      "id": "15058645",
-      "old_title": "국토교통부_지질구조선",
-      "new_title": "국토교통부_지질구조선",
+      "id": "15061080",
+      "old_title": "국토교통부_공공용지 취득실적-취득방법별 면적 및 보상액 기준 실적 현황",
+      "new_title": "국토교통부_공공용지 취득실적-취득방법별 면적 및 보상액 기준 실적 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "8d5a5ea31d31ed091df028d1d55e6e31bddfa90e547e89fd179d81debba64360",
-      "new_digest": "89646e26cf18256bba11116bfc64c729cf829452199330a4e3a73286f1f74b5e"
+      "old_digest": "559343e419eb5ec381a97ac45d5f50268549551de31667ea7df068be7a095e40",
+      "new_digest": "d369f2686c4e08651841406c37368feee52fa583a9ac033db6bb05bba6314e57"
     },
     {
-      "id": "15058656",
-      "old_title": "국토교통부_관광지",
-      "new_title": "국토교통부_관광지",
+      "id": "15061084",
+      "old_title": "국토교통부_공공용지 취득실적-공공사업의 물건보상액 기준 실적 현황",
+      "new_title": "국토교통부_공공용지 취득실적-공공사업의 물건보상액 기준 실적 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "00e35df977792aa85750214172749a9bde439e439fd277c6eaa8b7b300891bca",
-      "new_digest": "4568963e7d7913d26dda1f1281d0d0db4c7eefffef2293474bdb5fd4fc29163d"
+      "old_digest": "786c92df0e2ce8b83d087c4412bb385bb141dd6e42c103221c0053dd62da5b5c",
+      "new_digest": "bb5964d911ad1aa1525700889eaa5ba1e1224164b32cb72bcf4d77524d27e2af"
     },
     {
-      "id": "15058699",
-      "old_title": "국토교통부_임업및산촌진흥권역(WMS/WFS)",
-      "new_title": "국토교통부_임업및산촌진흥권역(WMS/WFS)",
+      "id": "15061085",
+      "old_title": "국토교통부_공공용지 취득실적-소속 기관별 취득면적 및 보상액 기준 실적 현황",
+      "new_title": "국토교통부_공공용지 취득실적-소속 기관별 취득면적 및 보상액 기준 실적 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "9e45366f2d112e206cb4ad2423cd118bcd0bdea43d9cc6f3747e53378248f7f0",
-      "new_digest": "a96e3830e16b3741f59f844bd572361d4029f091782efdff329f3826c1848dc5"
+      "old_digest": "336049f22c937a97f1cd85ba33cdbbcf2147e5d3c72d4aea41d0af8013130933",
+      "new_digest": "9c0b619ae7a454cbd5aecfdba120427287e1b08e7eb303c9530e375a4b5117ac"
     },
     {
-      "id": "15058722",
-      "old_title": "국토교통부_자유무역지역지정및운영",
-      "new_title": "국토교통부_자유무역지역지정및운영",
+      "id": "15061094",
+      "old_title": "국토교통부_도로점용허가내용 목록",
+      "new_title": "국토교통부_도로점용허가내용 목록",
       "fields": [
         "operations"
       ],
-      "old_digest": "b96d53019be9ed240dc33229ef692cd618724084ae72817c4475deee1d023cff",
-      "new_digest": "e7b67229dcc20dcb45d82b964dc592aac19dc3bd475ea2ab88dbe686d40d2bb7"
+      "old_digest": "646165d3749bc558b9ca13972bbad9cffe231abcdc8ac4535e7188a061b105ea",
+      "new_digest": "d3dfb6f4e306591c906d9923d651971d03fd4a5de0ea4b82f96af932bbf430c1"
     },
     {
-      "id": "15058758",
-      "old_title": "국토교통부_아동복지시설",
-      "new_title": "국토교통부_아동복지시설",
+      "id": "15061095",
+      "old_title": "국토교통부_품질검사성적서 등록 목록",
+      "new_title": "국토교통부_품질검사성적서 등록 목록",
       "fields": [
         "operations"
       ],
-      "old_digest": "15da16eba22559a2a91b326e8f921e2eb8d7f4e6e77bc8ee4edd1074bfdd3f86",
-      "new_digest": "0b33c24299875b9feeb52f11075d0fbf83e20e8adfc1dfa41c6e8755bb274488"
+      "old_digest": "60b7971e65f6a01a6c88b3997e7b425c618ccc89c4549bbcebe690e519a55a9d",
+      "new_digest": "cf891945a6c94e2e01b44a6dc85e042514189a5f2d58969550254a1491cea449"
     },
     {
-      "id": "15058798",
-      "old_title": "국토교통부_온천지구",
-      "new_title": "국토교통부_온천지구",
+      "id": "15061096",
+      "old_title": "국토교통부_품질검사성적서 상세정보 현황",
+      "new_title": "국토교통부_품질검사성적서 상세정보 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "f58ffee25327a54fdb9113399ea6df9bc0c1853808ea97256a6a89d24770d67d",
-      "new_digest": "7be223998b7899343a7041709ce33b38cc9d4553aa17c920c68aefb9102efb46"
+      "old_digest": "67c29230a06b85939312b6fd5b929ee91ebd11064d3aede71bf986521996f0cb",
+      "new_digest": "ee7de4782c1760731949d4c294117014cd440d496c3a39412a5efae560832973"
     },
     {
-      "id": "15058799",
-      "old_title": "국토교통부_검색 API",
-      "new_title": "국토교통부_검색 API",
+      "id": "15061099",
+      "old_title": "국토교통부_건설자재 품질검사 등록정보",
+      "new_title": "국토교통부_건설자재 품질검사 등록정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "14fbdf83766f5a5aad14f864450939441440a7d8d52b9a996fec0c7858e63e78",
-      "new_digest": "2a5e4ea841aad45d8ae7383d026359e7b9d3984d97ac1a111a0688f5b633a853"
+      "old_digest": "d6071c9c58325c975304244d7d7c287956d8a114b540f40258dd07c4bfc07c50",
+      "new_digest": "5d04901b78b5c97decd8ba6176802547d108fb1523af0abd01eb2e6aaf99f0e9"
     },
     {
-      "id": "15058805",
-      "old_title": "국토교통부_공간정보오픈플랫폼_(WMS/WFS)",
-      "new_title": "국토교통부_공간정보오픈플랫폼_(WMS/WFS)",
+      "id": "15061100",
+      "old_title": "국토교통부_설계VE 상세 검토조직 조회",
+      "new_title": "국토교통부_설계VE 상세 검토조직 조회",
       "fields": [
         "operations"
       ],
-      "old_digest": "159e6164bc298e151c7c20e0ef63688f64dd6a6911a81232cbdbb726da5d3282",
-      "new_digest": "8573dd35f7f0c7e0594626c539ffdeb890f28527606b6f0cd498e15bcfc06db4"
+      "old_digest": "2dc9f9a01eabf9cb9b123a7d1dd1bfca65f53edd9ce8735ddb56002bf984224b",
+      "new_digest": "971cf90ee2051f5f8f6acfc744e8402c1169cf76a6f9383d93c648e2bb99a551"
     },
     {
-      "id": "15058814",
-      "old_title": "국토교통부_광역시도",
-      "new_title": "국토교통부_광역시도",
+      "id": "15061102",
+      "old_title": "국토교통부_국토교통부_설계VE 목록 조회",
+      "new_title": "국토교통부_국토교통부_설계VE 목록 조회",
       "fields": [
         "operations"
       ],
-      "old_digest": "759d4e5e1425ff63ac53394fdd81fa6d50be0f41da16ccd128cad454a912cb62",
-      "new_digest": "834050d8a198a353618ad84a09193d20bb26ef5da0664298d064a6006f692af7"
+      "old_digest": "c132be1f53832940f44d2ccac21ce26f6a09eb24dc4ef449944a3dcbf6df06df",
+      "new_digest": "26e80be7cba07f27dc7815a256c99172a1a578fdc9d71dcb5b8be1eb4fa93f3b"
     },
     {
-      "id": "15058825",
-      "old_title": "국토교통부_하천망",
-      "new_title": "국토교통부_하천망",
+      "id": "15061104",
+      "old_title": "국토교통부_설계VE 상세정보",
+      "new_title": "국토교통부_설계VE 상세정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "43188c052d1276d9216b8a5a8456f238f090f3e8daa29f956c54f657dc7893d6",
-      "new_digest": "9669c4fd580df3a008ce8a3c9aa850c1970a2e72c64daf081e28c201ee7eb319"
+      "old_digest": "1ad8c78dd8ea297fe6e8925710163b2ae3e07d6b4197e28a1a8065465bdd0d84",
+      "new_digest": "de4ee17547d4596e8d33275577f992cc7befe1f68814b8e82ed6e43370f538bb"
     },
     {
-      "id": "15058986",
-      "old_title": "국토교통부_교육환경보호구역",
-      "new_title": "국토교통부_교육환경보호구역",
+      "id": "15061106",
+      "old_title": "국토교통부_건설공사 사후평가 목록 조회",
+      "new_title": "국토교통부_건설공사 사후평가 목록 조회",
       "fields": [
         "operations"
       ],
-      "old_digest": "64b8008395b173d0f5afa8b0f8a1f9cfe545d9bb183bc8e52d092c5e01e3fd31",
-      "new_digest": "81cd54cf0fc45981f22e92620234baea0c03375ff81e5e7f2f8a4da13f51309d"
+      "old_digest": "dd71aa8fa28a2aa2805fd8a2a04129fe71d0b7c8107b1bd36d88053d81926001",
+      "new_digest": "f1f830572e742001bc398567384840e83160c24769575f7f03fa7a417478490e"
     },
     {
-      "id": "15059008",
-      "old_title": "국토교통부_행정구역도(WMS/WFS)",
-      "new_title": "국토교통부_행정구역도(WMS/WFS)",
+      "id": "15061107",
+      "old_title": "국토교통부_사후평가 수행실적표 - 사업수행성과 평가표",
+      "new_title": "국토교통부_사후평가 수행실적표 - 사업수행성과 평가표",
       "fields": [
         "operations"
       ],
-      "old_digest": "8efe90a267c6e8f972f185ce489a7cdbbb5f46b66453213fee7e6015d76aa90c",
-      "new_digest": "27b8ae057651914b9fb544fea5d9d119999df53d501f640e89e478452b23d963"
+      "old_digest": "cbfcdbd2efc878c65036e291092109c416323ffd9afed06aa3aff3f08eab385e",
+      "new_digest": "bccd56e272c944920f4a4da4566ca5784ac86417f89dd878d9095fa643bdf931"
     },
     {
-      "id": "15059118",
-      "old_title": "국토교통부_전국자전거보관소(WMS/WFS)",
-      "new_title": "국토교통부_전국자전거보관소(WMS/WFS)",
+      "id": "15061109",
+      "old_title": "국토교통부_사후평가 수행실적표 - 사업효율 및 파급효과 평가표",
+      "new_title": "국토교통부_사후평가 수행실적표 - 사업효율 및 파급효과 평가표",
       "fields": [
         "operations"
       ],
-      "old_digest": "525a9eb7977a387be315abaef5e83511354b544df43aa15a86f00622d5a45705",
-      "new_digest": "ae7a87235287aad90a1076d65adc12b8decd7743de94d459697286a27f8cf680"
+      "old_digest": "bb4a10422ffc85146d24cf878f42b95b897112eae378528353f2e61937381b0b",
+      "new_digest": "0faeff6e62c0ba82595c1765e6d7ad72cc433436341eef008f25f8eed5406a0e"
     },
     {
-      "id": "15059255",
-      "old_title": "국토교통부_농림지역",
-      "new_title": "국토교통부_농림지역",
+      "id": "15061110",
+      "old_title": "국토교통부_설계도서등록 사업목록 조회",
+      "new_title": "국토교통부_설계도서등록 사업목록 조회",
       "fields": [
         "operations"
       ],
-      "old_digest": "b11f6ba92c2baa60f52b689e726a2df0e3e00e367fc266faadf37eb2d2308d21",
-      "new_digest": "d7ae14f107accce8456b57ce00bd88f823e26ac1e2638f498bc7ccf81d67bdf9"
+      "old_digest": "84b0c6a91a4e58b93f4622f3532834513a54b9e03376715678f8f07a938f2a32",
+      "new_digest": "e8359224d2d040b354e1930fd16fe706f93332160b4e3a2edeca4f9e55e8d58d"
     },
     {
-      "id": "15059282",
-      "old_title": "국토교통부_취락지구",
-      "new_title": "국토교통부_취락지구",
+      "id": "15061111",
+      "old_title": "국토교통부_설계도서등록 상세정보 조회",
+      "new_title": "국토교통부_설계도서등록 상세정보 조회",
       "fields": [
         "operations"
       ],
-      "old_digest": "9ea1bea643d729b0890fa84d8f8e140a2b89b7258c53a55196925e5557844386",
-      "new_digest": "2cc5b650dc2369963caf4b6c9f701189ef0b4c1e3859dd393fd96e4b6ecf08b8"
+      "old_digest": "1eb4be56958340a3b572025e160f14dd9ef66c0b83791fc9f2a7d44ab9f20e4c",
+      "new_digest": "3d533fa84edb2fddcb12cfcc2359f969d44fa099e1c0b2e9b8bb29d46de8270f"
     },
     {
-      "id": "15059308",
-      "old_title": "국토교통부_특정용도제한지구",
-      "new_title": "국토교통부_특정용도제한지구",
+      "id": "15061114",
+      "old_title": "국토교통부_건설공사 원가절감사례 상세 조회",
+      "new_title": "국토교통부_건설공사 원가절감사례 상세 조회",
       "fields": [
         "operations"
       ],
-      "old_digest": "154015e91da54307d00e31d6b0ae366beb6f251ee928af750d08c52935efb401",
-      "new_digest": "b5fbbdb926358c1c898a764ca313ace7d159386be78079a6ccb796424955cbaf"
+      "old_digest": "cfeed1c51f3c3d053cdfd9b73481473fd786eee2df185a4b5b6f56364a7f20a4",
+      "new_digest": "5c5eaef426d96ecb66db9b036b7d46ecf4a57ee85948fc4686a16abfa4f238e0"
     },
     {
-      "id": "15059339",
-      "old_title": "국토교통부_전기전도도",
-      "new_title": "국토교통부_전기전도도",
+      "id": "15061115",
+      "old_title": "국토교통부_설계VE 계약정보",
+      "new_title": "국토교통부_설계VE 계약정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "094b9f172dd00ff053f49bdd8af8083fbca4872313877557ff67750da2697781",
-      "new_digest": "228558f424b4d700b850aaef16dbfa9f6847b3a36dd319ec8afd1350479fb8e9"
+      "old_digest": "e92f943902d685fe462427abe627b14588bb05221082f0dde52042bbfd7d058e",
+      "new_digest": "8e5d0c85cb842b9473d4c929ce99543a21b744e49868ec2bed6e46f995e0822c"
     },
     {
-      "id": "15059398",
-      "old_title": "국토교통부_헬기장",
-      "new_title": "국토교통부_헬기장",
+      "id": "15075780",
+      "old_title": "국토교통부_차량검지정보",
+      "new_title": "국토교통부_차량검지정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "0ecbe59b1be6f130e21d607b9552b1bac6393665f75ec759ca55f4b38a874734",
-      "new_digest": "8c28b68d6e0d1923c6cc608644457d20a1b88063994845b9f8fbb2e1709b9d67"
+      "old_digest": "7fa0917c5d74a41d5c8a3ccf6b1968f5fc6fd87d79fd33e72281f1a9e7604165",
+      "new_digest": "9547d9098c9b8181ff8e7a95eb6e81f4d6792ea1d10b479a6dc8c71acd90e3a9"
     },
     {
-      "id": "15059409",
-      "old_title": "국토교통부_관리지역",
-      "new_title": "국토교통부_관리지역",
+      "id": "15075781",
+      "old_title": "국토교통부_가변형 속도제한표지정보(VSL)",
+      "new_title": "국토교통부_가변형 속도제한표지정보(VSL)",
       "fields": [
         "operations"
       ],
-      "old_digest": "caa705b6f053665c6ed7d665f0ad6dd8207263c550a280645ff5fd2ee715214d",
-      "new_digest": "019ab6b7f299c80f1b8266d0c27b4571bb59d46a874e82c205693aabd4cd68e1"
+      "old_digest": "006e201e209c40e9cea0314bdc80f8537957b16bef0716b481a2e259039c8d03",
+      "new_digest": "4e392fc8bb25b98429207bde366fe5b15ac0e021248be71ae908d6b1356a72b0"
     },
     {
-      "id": "15059454",
-      "old_title": "국토교통부_자갈함량",
-      "new_title": "국토교통부_자갈함량",
+      "id": "15089863",
+      "old_title": "국토교통부_자동차 리콜정보 API 서비스",
+      "new_title": "국토교통부_자동차 리콜정보 API 서비스",
       "fields": [
         "operations"
       ],
-      "old_digest": "851652f34bb3361b0e6aa2f7184fe895cde4c15f28a4da8465585fe47c2fa6e9",
-      "new_digest": "2d1fa831775ba07c9bf8cb0a3ec1c4a2907ca730caae6e599840a0afd44d190b"
+      "old_digest": "ebe1929a5eb387d4de0a64c398794e1ab666b23c26a4890de50328b15ee123aa",
+      "new_digest": "e43b413ea6516b0624707f1e5e871d3d6c43ca5a88dd5a08ce970d0ec435c7cb"
     },
     {
-      "id": "15059497",
-      "old_title": "국토교통부_국가지명(WMS/WFS)",
-      "new_title": "국토교통부_국가지명(WMS/WFS)",
+      "id": "15123457",
+      "old_title": "국토교통부_건축물연령정보(WMS/WFS/속성정보)",
+      "new_title": "국토교통부_건축물연령정보(WMS/WFS/속성정보)",
       "fields": [
         "operations"
       ],
-      "old_digest": "0c356d18649a8943b74f7d8e92329e74f785ca8c17a59b32f04ebb775ca05e6f",
-      "new_digest": "6134e5d3117fca2407e6fe0b1bfaae2d10443cd564d787045273cf51312cbd08"
+      "old_digest": "4c0f67b0200f2abc75f0a5f80424d520f8a1757820e46985ee888b7b7887fd73",
+      "new_digest": "3c8bc49da3b6063aeb69225faf970bef3af0f9bea2c2f80d4ab7ede5d0d080c5"
     },
     {
-      "id": "15059525",
-      "old_title": "국토교통부_주거환경개선지구도(WMS/WFS)",
-      "new_title": "국토교통부_주거환경개선지구도(WMS/WFS)",
+      "id": "15123458",
+      "old_title": "국토교통부_용도별건물정보(WMS/WFS/속성정보)",
+      "new_title": "국토교통부_용도별건물정보(WMS/WFS/속성정보)",
       "fields": [
         "operations"
       ],
-      "old_digest": "5b85e9395b7b7f4899de8cb6527f978f6cc26ac1b48cf887cb1937fe15195d0c",
-      "new_digest": "41cd8c77470a221cdd0a5f8d53fed1a402d20cedfa78d95b526678543611b786"
+      "old_digest": "ec0f0bb09aef40606bd3bb1738d528f73c3e0b74202e7f2d2585a8190be0f16c",
+      "new_digest": "b4e1936dddb945769d4847f7accb0b587e7d5c1b557d9a0ff02674b5e71785c2"
     },
     {
-      "id": "15101084",
-      "old_title": "국토교통부_작은도서관",
-      "new_title": "국토교통부_작은도서관",
+      "id": "15123549",
+      "old_title": "국토교통부_토지특성정보(WMS/WFS/속성정보)",
+      "new_title": "국토교통부_토지특성정보(WMS/WFS/속성정보)",
       "fields": [
         "operations"
       ],
-      "old_digest": "2dbf391ff389d76f7e70f85343fc7149165b7e941d57c72630729b820a34e2c4",
-      "new_digest": "9cc99ef55a9eb2e9d8889c261b1bde3fa6c72ba93e780edc67388e08fbbc9d61"
+      "old_digest": "49f5e254b22d8e62388f501fc621c89e98c3d63fa7fab2cae4f2aa076ed7a57e",
+      "new_digest": "cfed342f43986492c17b712a485e2767c8d5ace9fadaadb8bbaa71ca2260abda"
     },
     {
-      "id": "15101085",
-      "old_title": "국토교통부_창업보육센터",
-      "new_title": "국토교통부_창업보육센터",
+      "id": "15129453",
+      "old_title": "국토교통부_정류장 현황",
+      "new_title": "국토교통부_정류장 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "94be808604b782429a6d5c2a8c9660597d43b55b2fdbb450a9cbdead0c3ba98d",
-      "new_digest": "454c48e8ce4185b2b211a4fc363b9a83c00fe73bca674453a21d810bc2c8bf90"
+      "old_digest": "6e9206888e563dffc0a30e5e578685f99b8d12a1a688efeb4fe3d3ba1800b26e",
+      "new_digest": "a22d982ddbecf9da8787a6f51f659f8aca992d0a355cb803d05dabc4928aa161"
     },
     {
-      "id": "15101089",
-      "old_title": "국토교통부_해양보호구역",
-      "new_title": "국토교통부_해양보호구역",
+      "id": "15131782",
+      "old_title": "국토교통부_국내외 건설기술 사이트",
+      "new_title": "국토교통부_국내외 건설기술 사이트",
       "fields": [
         "operations"
       ],
-      "old_digest": "28e4bae7934d5e0b31e11c883c423509ce5074670fa81f925fa4a1ff4a4f11f5",
-      "new_digest": "1c61e2af8f7783c8dae42dd2d2f77e38e345e3512a73beca614eeef3fd57356f"
+      "old_digest": "ca1ded03cff129debb6e056ec7bbe27e30774f16bcd64740053ac584c5929b21",
+      "new_digest": "d690c65f00e95b545814ac8d5da0a4006bf9b8c0be19565546fed58cbc2c05c3"
     },
     {
-      "id": "15101106",
-      "old_title": "국토교통부_지오코더 API",
-      "new_title": "국토교통부_지오코더 API",
+      "id": "15141100",
+      "old_title": "국토교통부_위험물질 운송차량 사고정보",
+      "new_title": "국토교통부_위험물질 운송차량 사고정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "3f5ab3e48b3a77d697344d517d3501569539e98f0ed2d2257eec17518edfe521",
-      "new_digest": "c7fcb78bca42432a8c82468f346855dcdfc8e47d57b26f7c5b30a77a094c6fba"
-    },
-    {
-      "id": "15101108",
-      "old_title": "국토교통부_Static Map API",
-      "new_title": "국토교통부_Static Map API",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "53e8ed301a324fb4ca2073c9fd7be06d40ffb89778869fed4208d8fd9980ffaf",
-      "new_digest": "af752196b98a0733c76162b65e97ee22ee4c93601ec10b8f3fb9a81ce28922bb"
-    },
-    {
-      "id": "15101109",
-      "old_title": "국토교통부_3D 데스크톱 API",
-      "new_title": "국토교통부_3D 데스크톱 API",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "198525200039a7b2e33db87e3bb3b4f82b2c6c4bc7c12f797a355a0b6b25defe",
-      "new_digest": "88456f9ff120a0bcbd2045220f28cc272e8fa35bec3b6beb7970d0107fe30288"
-    },
-    {
-      "id": "15122590",
-      "old_title": "국토교통부_전통시장현황",
-      "new_title": "국토교통부_전통시장현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "6673db7a8e7bc52fec2e49b8da40991baceed588eb599bd9d77b649a7117d500",
-      "new_digest": "671754e29b73e47952be16b5f35fd0f0068a2a5b4b4581ea5b1c65d613a72003"
-    },
-    {
-      "id": "15123552",
-      "old_title": "국토교통부_GIS건물일반집합정보(WMS/WFS)",
-      "new_title": "국토교통부_GIS건물일반집합정보(WMS/WFS)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "f0527aea6b0e1df2033034048409506ec41c6c69d0f2ae94b8e323acc8259a55",
-      "new_digest": "2c1cd50fc74797131cf6007c1eecd0ba0e1e96627d477f3ef07504f9dc3ae9de"
-    },
-    {
-      "id": "15123884",
-      "old_title": "국토교통부_토지임야정보(속성정보)",
-      "new_title": "국토교통부_토지임야정보(속성정보)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "d598fa11712677ba8b3da1a47e7b9946f5db78b17716b7648ac3027a0a2485ac",
-      "new_digest": "717ee9948e3242ebb5f655526ee20bac39b6b91c7ea9e9e3a96eb4f5f08ea4fe"
-    },
-    {
-      "id": "15123887",
-      "old_title": "국토교통부_토지등급정보(속성정보)",
-      "new_title": "국토교통부_토지등급정보(속성정보)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "e389cafed28c401b9c6b387d81cb1adb6da2e5a87217a92fee53c52e154c1fe1",
-      "new_digest": "5158b3433902253246d550fbebbca074c872cfef6b17e994d98169f1d94b390c"
-    },
-    {
-      "id": "15123890",
-      "old_title": "국토교통부_지적삼각점정보(WMS/WFS)",
-      "new_title": "국토교통부_지적삼각점정보(WMS/WFS)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "bdc03a864313255848dc5087534c73ce11ccf9c52130c165a4d94ce78dce6496",
-      "new_digest": "9a5dff31b0f5082b456304b3abb1502c6a17ab432a1136fc2d28191a382527f4"
-    },
-    {
-      "id": "15123893",
-      "old_title": "국토교통부_지적삼각보조점정보(WMS/WFS)",
-      "new_title": "국토교통부_지적삼각보조점정보(WMS/WFS)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "2f7768d48d61c2b4a398d6ede84fa1de008fc56f9db1d3144b511ceac9bd834e",
-      "new_digest": "8dd4bcbfd7e20a863656e2bf456853c0601a423d7de80e311f3e2d98a2e06eec"
-    },
-    {
-      "id": "15123894",
-      "old_title": "국토교통부_지적도근점정보(WMS/WFS)",
-      "new_title": "국토교통부_지적도근점정보(WMS/WFS)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "ae10c098e4fd72cecc7d3a6d5f13581f1188f8665b4eb7f901435c934e82a57d",
-      "new_digest": "2a0bcee7927b7216fcf249cff62050efc78b4adfa135b9692b79d387e06a66a9"
-    },
-    {
-      "id": "15123895",
-      "old_title": "국토교통부_용도지역지구정보(WMS/WFS)",
-      "new_title": "국토교통부_용도지역지구정보(WMS/WFS)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "8324c50b998b6e89cbfa7700f6881d48a2085db244e6c5a022de36095204a061",
-      "new_digest": "4bc2f68dd6585856ddf67d74e76ad544414982cbb73b9eb0c43b5d15586e75c1"
-    },
-    {
-      "id": "15123899",
-      "old_title": "국토교통부_연속지적도형정보(WMS/WFS)",
-      "new_title": "국토교통부_연속지적도형정보(WMS/WFS)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "19a6b469794a6961599f9c82924b4651be0998812d169e1c86d0e5930f92e6b3",
-      "new_digest": "89586ae730ba49747bb33b4ccc03c8c9fac726a41fd4d9333fc4cc642ef4ee88"
-    },
-    {
-      "id": "15123969",
-      "old_title": "국토교통부_공유지연명정보(속성정보)",
-      "new_title": "국토교통부_공유지연명정보(속성정보)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "81be9ef75ed3590959999ed26b776d777ac6b231290b4aff36a8c2418590be72",
-      "new_digest": "415f87624454463660451ac8a4b8ae877de0fd3a297565c068ccf66d12d32292"
-    },
-    {
-      "id": "15123970",
-      "old_title": "국토교통부_GIS건물통합정보(WMS/WFS)",
-      "new_title": "국토교통부_GIS건물통합정보(WMS/WFS)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "a64d3778d40998e9659acbdc2c52cc7c5d02dafcf8f9f4498b8b64f37b16f180",
-      "new_digest": "b836e71f3bef65e492ffb8c0d767ff82264e608c8854ed11b02b25286811fe92"
-    },
-    {
-      "id": "15123971",
-      "old_title": "국토교통부_표준지공시지가정보(WMS/WFS/속성정보)",
-      "new_title": "국토교통부_표준지공시지가정보(WMS/WFS/속성정보)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "8636f649c72d66f0d39719cc31a2179872707bb68ed43dab89f215f1477354ae",
-      "new_digest": "30ac531013cf8affea667ad4abdec2cb69632ba1d620b1667a2fe18495cd4933"
-    },
-    {
-      "id": "15123972",
-      "old_title": "국토교통부_통계성지표정보(속성정보)",
-      "new_title": "국토교통부_통계성지표정보(속성정보)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "ff7ac256bfdf5b71a4df0a909bb664be25f7052026815cb2fd8206c38274ed6b",
-      "new_digest": "1d91bf59199d97da5cb771f313d593fa7a0a6c6359c15f13805aea152bc9f05b"
-    },
-    {
-      "id": "15123973",
-      "old_title": "국토교통부_토지이용계획정보(WMS/WFS/속성정보)",
-      "new_title": "국토교통부_토지이용계획정보(WMS/WFS/속성정보)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "38870701e1e89b783cd43a09e5c1c495bdc9192c62d9c3652d8977b5262440e1",
-      "new_digest": "b42a2452a7cf2ef4367c4b80c28f5f19b5b9ae9f26065624115e71d5cae6284c"
-    },
-    {
-      "id": "15123974",
-      "old_title": "국토교통부_토지이동이력정보(속성정보)",
-      "new_title": "국토교통부_토지이동이력정보(속성정보)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "39826a0935ec322b44ce2c98684cd8c7ff4d14f4b016135f4915a9a9886ef723",
-      "new_digest": "7aefa4e4df6df83be716bec53620b1b5f31b57d2ac92613f136aa4339af15dba"
-    },
-    {
-      "id": "15123976",
-      "old_title": "국토교통부_토지소유정보(WMS/WFS/속성정보)",
-      "new_title": "국토교통부_토지소유정보(WMS/WFS/속성정보)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "d5b6bb522123d2f944dc7124d01c0441de19749634b6e0def179c7e968123dea",
-      "new_digest": "c65d07c54cb4bc013da9738e2b3a5693e046583a6fee1a6c16e0850d5d870ce7"
-    },
-    {
-      "id": "15124003",
-      "old_title": "국토교통부_공동주택가격정보(WMS/WFS/속성정보)",
-      "new_title": "국토교통부_공동주택가격정보(WMS/WFS/속성정보)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "8874c6461a45100e755f04dff22953916999382ad2cbf2b210472fb530a08cd9",
-      "new_digest": "1ca33e494130fcba03a5c395cf2144582a275629486aa38236e524a726fda3e1"
-    },
-    {
-      "id": "15124006",
-      "old_title": "국토교통부_개별주택가격정보(WMS/WFS/속성정보)",
-      "new_title": "국토교통부_개별주택가격정보(WMS/WFS/속성정보)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "6c05e1bc1dd654a0445e3fc0ff2c1c7432e7bd66e69702bc06e5e6ab39c0fb63",
-      "new_digest": "3aba122bbb9d5fc23ebd17fb2758c78432f206ac4f2148a02d368a07bb5a066e"
-    },
-    {
-      "id": "15124014",
-      "old_title": "국토교통부_개별공시지가정보(WMS/WFS/속성정보)",
-      "new_title": "국토교통부_개별공시지가정보(WMS/WFS/속성정보)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "5c2123948af917b22053bb13b22a92bfd6ce12006c729ad6fc60be196add1f54",
-      "new_digest": "874dbb444deacf789f80dc7562cb53693aaf9acb0a98de7060c9571e4c7ca7fc"
-    },
-    {
-      "id": "15140363",
-      "old_title": "국토교통부_건물일련번호조회",
-      "new_title": "국토교통부_건물일련번호조회",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "54ea0f19a460efd7edb1766e404d370e278f384aea4b0e25f8cc60d0382e269e",
-      "new_digest": "c7b5d4621ae1df33044e4b20c2d9a1f630d424aa2f6c22156a26cdec50373723"
-    },
-    {
-      "id": "15140364",
-      "old_title": "국토교통부_건물동명조회",
-      "new_title": "국토교통부_건물동명조회",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "c29019f622aaddddc49befd944365d400dcb524bf9a658b6983804e901c08836",
-      "new_digest": "4148a71f4f2ce56862b957f6a8c084f632dc8d0231c83543cca9ec094ab970f6"
-    },
-    {
-      "id": "15140365",
-      "old_title": "국토교통부_건물층수조회",
-      "new_title": "국토교통부_건물층수조회",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "b2963473163b2c8b1d5d46c239a4b4a24b1d7fde46f156e4610781a72cca1894",
-      "new_digest": "a5dad092c2847c532eb8a6f5f7b5c7f4a12566ca0446416f40ab83af13e73d44"
-    },
-    {
-      "id": "15140366",
-      "old_title": "국토교통부_건물호수조회",
-      "new_title": "국토교통부_건물호수조회",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "6f599994affc5fde076903ab3af48ef8b17ba6cb0b51c000f5e9c273064cc881",
-      "new_digest": "9f442d2fe6db1e73f7915ecb1f9653964475c6f9ac38157c166253dceb95946f"
-    },
-    {
-      "id": "15140368",
-      "old_title": "국토교통부_건물실명조회",
-      "new_title": "국토교통부_건물실명조회",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "3a99cd7c37cdf3a1275fceeae877fcaaa63ed706af9ba566224afac395f3b974",
-      "new_digest": "bced9e0be417be74e66e7e06732870a10ef872be6fbe80d502aed3d604639bea"
-    },
-    {
-      "id": "15140369",
-      "old_title": "국토교통부_2D모바일 API",
-      "new_title": "국토교통부_2D모바일 API",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "909614735f1e0fc5fe75dcb1c18d26b960127b055022331f15044c879838296f",
-      "new_digest": "bc65f917467928f5ffbdf0b3bf8c56ad8d2be1d8f201fb452042c6022c47f978"
-    },
-    {
-      "id": "15140370",
-      "old_title": "국토교통부_3D모바일 API",
-      "new_title": "국토교통부_3D모바일 API",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "397ce807a769b95a5d4bbf7a5dc89c44beb7dc0e9001ddf5817f654c6fe4bda1",
-      "new_digest": "713625f70d963ee3fd14133a3840ed0ad892e4598fb6048c65cc31c651663a58"
-    },
-    {
-      "id": "15140372",
-      "old_title": "국토교통부_2D데이터 API",
-      "new_title": "국토교통부_2D데이터 API",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "2189dffc3146c019be7a6323952bdebff006a75b56edad42a67233957d692992",
-      "new_digest": "4351d38fb8cccc0ef888fbf2ac4e14e867221c3beda9f3b94c8d0b878e45c81f"
-    },
-    {
-      "id": "3046388",
-      "old_title": "국토교통부_WMTS/TMS API",
-      "new_title": "국토교통부_WMTS/TMS API",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "47a8ea4b25ed4ba639a2e66354a72d2e421e67b30bd9f328c0eb7b64a0456f25",
-      "new_digest": "3ac5c6f993d94408a9d43b23c2fc843bde73f2ef376bb2487e7d53ed9b7986bf"
-    },
-    {
-      "id": "3046389",
-      "old_title": "국토교통부_개발제한구역",
-      "new_title": "국토교통부_개발제한구역",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "8417abd2247708e52746adfdbb01daf36a54f516fe4e448ed51e147a7c2915b0",
-      "new_digest": "6f14cc83972902995592ddc45fe9e11cd1dd801479a368e7857ebb8d14325a12"
-    },
-    {
-      "id": "3047691",
-      "old_title": "국토교통부_해안선도(WMS/WFS)",
-      "new_title": "국토교통부_해안선도(WMS/WFS)",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "15b02e5e59fdae8697d02b4b87659711c35b9a82223aaeb5ea8e6829963d290c",
-      "new_digest": "fff10bbf3cdc9e720babc068b12e66de171761955def274dcc34c3e4f4eb166a"
-    },
-    {
-      "id": "3052419",
-      "old_title": "국토교통부_2D 지도 API",
-      "new_title": "국토교통부_2D 지도 API",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "27ffead59ff26adad4ef48b4e26b7f3c48fd9f08464458956c6464fd00b76fb0",
-      "new_digest": "db94d7e0f64b82f3aa6d0dcfdf5d7639e2917bd13e35848373b5fe1032d4d553"
-    },
-    {
-      "id": "3068943",
-      "old_title": "국토교통부_교통CCTV",
-      "new_title": "국토교통부_교통CCTV",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "54e1ad6de1b13894e8888a95f1440e3b2c161b62f4b0184b3c81ffd59b633087",
-      "new_digest": "867b63af33990cc7b6a44097a07a98eefc262240f253c7be9f1a8cd18162c09c"
+      "old_digest": "7e86825025c9f4bd585bad480fd1fdd1c008d500781f17195501cd4af15681b2",
+      "new_digest": "6304d15c3f8c2a757ed88abf1d695f0814ac889e1720b5f9cf9a1edef0871bda"
     }
   ]
 }

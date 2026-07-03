@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T15:10:38Z",
+  "generated_at": "2026-07-03T15:25:29Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,13 +7,13 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 15885,
-    "evidence_total": 1589,
+    "operations": 16062,
+    "evidence_total": 1607,
     "uncovered_gateway_candidates": 10744,
-    "uncovered_adapter_candidates": 3351,
+    "uncovered_adapter_candidates": 3510,
     "missing_adapter_hosts": 11,
-    "planned_batches": 15,
-    "planned_operations": 120
+    "planned_batches": 18,
+    "planned_operations": 136
   },
   "batches": [
     {
@@ -29,21 +29,41 @@
       "label": "calspia",
       "provider": "calspia",
       "kind": "external_endpoint",
-      "candidates": 60,
-      "uncovered_candidates": 40,
+      "candidates": 168,
+      "uncovered_candidates": 138,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider calspia --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/calspia-next.json --json",
       "output": ".datapan/verification/calspia-next.json"
     },
     {
+      "label": "car",
+      "provider": "car",
+      "kind": "external_endpoint",
+      "candidates": 2,
+      "uncovered_candidates": 1,
+      "planned_operations": 1,
+      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider car --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/car-next.json --json",
+      "output": ".datapan/verification/car-next.json"
+    },
+    {
       "label": "data-gg",
       "provider": "data-gg",
       "kind": "external_endpoint",
-      "candidates": 2141,
-      "uncovered_candidates": 2025,
+      "candidates": 2143,
+      "uncovered_candidates": 2027,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider data-gg --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/data-gg-next.json --json",
       "output": ".datapan/verification/data-gg-next.json"
+    },
+    {
+      "label": "ex",
+      "provider": "ex",
+      "kind": "external_endpoint",
+      "candidates": 8,
+      "uncovered_candidates": 5,
+      "planned_operations": 5,
+      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider ex --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ex-next.json --json",
+      "output": ".datapan/verification/ex-next.json"
     },
     {
       "label": "gwanak",
@@ -64,6 +84,16 @@
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider gwangmyeong --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gwangmyeong-next.json --json",
       "output": ".datapan/verification/gwangmyeong-next.json"
+    },
+    {
+      "label": "its",
+      "provider": "its",
+      "kind": "external_endpoint",
+      "candidates": 15,
+      "uncovered_candidates": 9,
+      "planned_operations": 9,
+      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider its --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/its-next.json --json",
+      "output": ".datapan/verification/its-next.json"
     },
     {
       "label": "jejudatahub",
@@ -139,9 +169,9 @@
       "label": "seoul-open-data",
       "provider": "seoul-open-data",
       "kind": "external_endpoint",
-      "candidates": 8,
-      "uncovered_candidates": 3,
-      "planned_operations": 3,
+      "candidates": 9,
+      "uncovered_candidates": 4,
+      "planned_operations": 4,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider seoul-open-data --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/seoul-open-data-next.json --json",
       "output": ".datapan/verification/seoul-open-data-next.json"
     },
@@ -149,8 +179,8 @@
       "label": "vworld",
       "provider": "vworld",
       "kind": "external_endpoint",
-      "candidates": 415,
-      "uncovered_candidates": 414,
+      "candidates": 458,
+      "uncovered_candidates": 457,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider vworld --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/vworld-next.json --json",
       "output": ".datapan/verification/vworld-next.json"
