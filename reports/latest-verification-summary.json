@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T17:07:59Z",
+  "generated_at": "2026-07-03T17:14:34Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1749,
-    "verified": 411,
+    "total": 1774,
+    "verified": 436,
     "failed": 145,
     "skipped": 1193,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 411,
+        "count": 436,
         "status": "verified"
       },
       {
@@ -329,6 +329,11 @@
         "provider": "jeonju"
       },
       {
+        "key": "open-law",
+        "count": 51,
+        "provider": "open-law"
+      },
+      {
         "key": "ekape",
         "count": 49,
         "provider": "ekape"
@@ -367,11 +372,6 @@
         "key": "epost",
         "count": 28,
         "provider": "epost"
-      },
-      {
-        "key": "open-law",
-        "count": 26,
-        "provider": "open-law"
       },
       {
         "key": "tour",
@@ -736,6 +736,11 @@
         "host": "www.eshare.go.kr"
       },
       {
+        "key": "open.law.go.kr",
+        "count": 33,
+        "host": "open.law.go.kr"
+      },
+      {
         "key": "open.assembly.go.kr",
         "count": 30,
         "host": "open.assembly.go.kr"
@@ -836,11 +841,6 @@
         "host": "data.naqs.go.kr"
       },
       {
-        "key": "open.law.go.kr",
-        "count": 9,
-        "host": "open.law.go.kr"
-      },
-      {
         "key": "www.culture.go.kr",
         "count": 9,
         "host": "www.culture.go.kr"
@@ -851,6 +851,11 @@
         "host": "www.law.go.kr"
       },
       {
+        "key": "www.lawmaking.go.kr",
+        "count": 9,
+        "host": "www.lawmaking.go.kr"
+      },
+      {
         "key": "cancer.go.kr",
         "count": 8,
         "host": "cancer.go.kr"
@@ -859,11 +864,6 @@
         "key": "data.humetro.busan.kr",
         "count": 8,
         "host": "data.humetro.busan.kr"
-      },
-      {
-        "key": "www.lawmaking.go.kr",
-        "count": 8,
-        "host": "www.lawmaking.go.kr"
       },
       {
         "key": "data.ex.co.kr",
@@ -1114,7 +1114,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 1025,
+        "count": 1050,
         "kind": "external_endpoint"
       },
       {

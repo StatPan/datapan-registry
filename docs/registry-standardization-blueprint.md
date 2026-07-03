@@ -94,8 +94,8 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `2,558` data.go.kr APIs
-  without operation mappings, `8,640` operation-mapped APIs without runtime
+- `reports/data-go-kr/coverage-backlog.json` tracks `2,460` data.go.kr APIs
+  without operation mappings, `8,729` operation-mapped APIs without runtime
   evidence, and `96` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
@@ -267,8 +267,12 @@ Current gaps:
   APIs and `161` operations, and merges `25` verified landing-page checks,
   bringing runtime evidence to `1749` while leaving 법제처 as the first
   materialization queue for its remaining `98` APIs.
-- API operation coverage remains incomplete: `9,502` of `12,060` APIs have
-  operation mappings (`78.8%`), leaving `2,558` APIs to materialize and `8,640`
+- The final 법제처 batch materializes the remaining `98` APIs and `204`
+  operations, and merges `25` verified Open Law landing-page checks, bringing
+  runtime evidence to `1774` and moving the first materialization queue to
+  경기도 광명시.
+- API operation coverage remains incomplete: `9,600` of `12,060` APIs have
+  operation mappings (`79.6%`), leaving `2,460` APIs to materialize and `8,729`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

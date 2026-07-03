@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-03T17:08:03Z",
+  "generated_at": "2026-07-03T17:14:37Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 16854,
-    "callable_operations": 16712,
-    "specs_without_operations": 2558,
-    "specs_without_callable_operation": 2633,
+    "operations_total": 17058,
+    "callable_operations": 16916,
+    "specs_without_operations": 2460,
+    "specs_without_callable_operation": 2535,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 4516,
-    "operations_without_response_params": 5738,
+    "operations_without_request_params": 4720,
+    "operations_without_response_params": 5942,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 2631,
-      "external_endpoint_operations": 5244,
+      "external_endpoint_specs": 2729,
+      "external_endpoint_operations": 5448,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 114,
       "dev_approval_required_operations": 208,
-      "prod_approval_required_operations": 5515,
+      "prod_approval_required_operations": 5581,
       "malformed_endpoint_url_count": 42,
       "malformed_guide_url_count": 598,
       "top_endpoint_hosts": [
@@ -49,6 +49,10 @@
           "count": 343
         },
         {
+          "host": "open.law.go.kr",
+          "count": 304
+        },
+        {
           "host": "www.foodsafetykorea.go.kr",
           "count": 288
         },
@@ -59,10 +63,6 @@
         {
           "host": "www.calspia.go.kr",
           "count": 168
-        },
-        {
-          "host": "open.law.go.kr",
-          "count": 122
         },
         {
           "host": "openapi.q-net.or.kr",
@@ -97,16 +97,16 @@
           "count": 40
         },
         {
+          "host": "www.lawmaking.go.kr",
+          "count": 38
+        },
+        {
           "host": "www.consumer.go.kr",
           "count": 36
         },
         {
           "host": "www.eshare.go.kr",
           "count": 36
-        },
-        {
-          "host": "www.juso.go.kr",
-          "count": 30
         }
       ],
       "top_external_endpoint_hosts": [
@@ -127,6 +127,10 @@
           "count": 343
         },
         {
+          "host": "open.law.go.kr",
+          "count": 304
+        },
+        {
           "host": "www.foodsafetykorea.go.kr",
           "count": 288
         },
@@ -137,10 +141,6 @@
         {
           "host": "www.calspia.go.kr",
           "count": 168
-        },
-        {
-          "host": "open.law.go.kr",
-          "count": 122
         },
         {
           "host": "openapi.q-net.or.kr",
@@ -175,6 +175,10 @@
           "count": 40
         },
         {
+          "host": "www.lawmaking.go.kr",
+          "count": 38
+        },
+        {
           "host": "www.consumer.go.kr",
           "count": 36
         },
@@ -185,10 +189,6 @@
         {
           "host": "www.juso.go.kr",
           "count": 30
-        },
-        {
-          "host": "oneclick.law.go.kr:80",
-          "count": 27
         }
       ],
       "top_external_guide_hosts": [
