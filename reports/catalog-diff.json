@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T22:34:30Z",
+  "generated_at": "2026-07-03T22:47:17Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3734,
-    "stable": 8326
+    "changed": 3735,
+    "stable": 8325
   },
   "added": [],
   "removed": [],
@@ -19807,6 +19807,16 @@
       ],
       "old_digest": "b334d0c5ddf8ab5deb6bca6a4bf24bb363ab8c257d58a55be3c8fb6d802acf62",
       "new_digest": "50955f5f43acd1e27f1bfdaa0b48592959ef28e7ff0b1faa750fff923b81b333"
+    },
+    {
+      "id": "15078182",
+      "old_title": "충청북도_관광명소정보",
+      "new_title": "충청북도_관광명소정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a704e9cb9b2902a59f90eed8c5eb45192895ba0fc24574a3022fbcf5753c4a7d",
+      "new_digest": "1825c0823d9d9365452d61a916d11b84366cee808c9cee53ff2ae2208cbb799a"
     },
     {
       "id": "15078191",

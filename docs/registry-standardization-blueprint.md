@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `1,141` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `1,140` data.go.kr APIs
   without operation mappings, `9,292` operation-mapped APIs without runtime
   evidence, and `178` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -120,7 +120,7 @@ Current strengths:
   the same blocker, warning, and next-action inventory that CI validates.
 - `reports/source-report-inventory.json` is generated from source profiles and
   checked-in `reports/<source>/` directories, measuring `5` source report
-  directories, `46` source-scoped JSON reports, and `12.3%` recommended
+  directories, `48` source-scoped JSON reports, and `12.3%` recommended
   source-scoped report coverage.
 - `scripts/sync-release-schema-artifacts.py` checks that every checked-in
   `schemas/*.schema.json` file is represented in `schemas/index.json` and
@@ -384,8 +384,12 @@ Current gaps:
   `65` operations, and merges `65` verified bounded checks. That brings runtime
   evidence to `3387`, verified checks to `1615`, and registered external
   adapter operations to `8306`.
-- API operation coverage remains incomplete: `10,919` of `12,060` APIs have
-  operation mappings (`90.5%`), leaving `1,141` APIs to materialize and `9,292`
+- The 충청북도 batch adds Chungbuk Tour host coverage, materializes `1` API and
+  `1` operation, and merges `1` verified bounded check. That brings runtime
+  evidence to `3388`, verified checks to `1616`, and registered external
+  adapter operations to `8307`.
+- API operation coverage remains incomplete: `10,920` of `12,060` APIs have
+  operation mappings (`90.5%`), leaving `1,140` APIs to materialize and `9,292`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

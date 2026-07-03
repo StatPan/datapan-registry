@@ -1,0 +1,36 @@
+{
+  "generated_at": "2026-07-03T22:45:58Z",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 100,
+  "timeout": "20s",
+  "truncated": false,
+  "filters": {
+    "organization": "충청북도",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 1,
+  "summary": {
+    "total": 1,
+    "verified": 1,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15078182",
+      "title": "충청북도_관광명소정보",
+      "operation": "충청북도_충청북도 관광명소 정보_20210301",
+      "provider": "chungbuk-tour",
+      "endpoint_host": "tour.chungbuk.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T22:45:58Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://tour.chungbuk.go.kr/openapi/tourInfo/attr.do",
+      "body_shape": "html"
+    }
+  ]
+}

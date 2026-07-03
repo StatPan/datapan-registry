@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T22:34:29Z",
+  "generated_at": "2026-07-03T22:46:06Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3387,
-    "verified": 1615,
+    "total": 3388,
+    "verified": 1616,
     "failed": 306,
     "skipped": 1466,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 1615,
+        "count": 1616,
         "status": "verified"
       },
       {
@@ -724,6 +724,11 @@
         "provider": "car365"
       },
       {
+        "key": "chungbuk-tour",
+        "count": 1,
+        "provider": "chungbuk-tour"
+      },
+      {
         "key": "dgfca",
         "count": 1,
         "provider": "dgfca"
@@ -1336,6 +1341,11 @@
         "host": "stcis.go.kr"
       },
       {
+        "key": "tour.chungbuk.go.kr",
+        "count": 1,
+        "host": "tour.chungbuk.go.kr"
+      },
+      {
         "key": "www.car365.go.kr",
         "count": 1,
         "host": "www.car365.go.kr"
@@ -1389,7 +1399,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 2663,
+        "count": 2664,
         "kind": "external_endpoint"
       },
       {

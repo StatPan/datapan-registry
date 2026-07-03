@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T22:34:30Z",
+  "generated_at": "2026-07-03T22:47:17Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 19926,
-    "runtime_evidence": 3387,
+    "operations": 19927,
+    "runtime_evidence": 3388,
     "runtime_evidence_percent": 17.0,
-    "callable_operations": 19784,
-    "external_endpoint_operations": 8316,
-    "registered_adapter_operations": 8306,
+    "callable_operations": 19785,
+    "external_endpoint_operations": 8317,
+    "registered_adapter_operations": 8307,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 8316
+      "count": 8317
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 8306
+      "count": 8307
     },
     {
       "key": "builtin",
@@ -81,7 +81,7 @@
     },
     {
       "category": "문화관광",
-      "operation_count": 2011
+      "operation_count": 2012
     },
     {
       "category": "사회복지",
@@ -4750,6 +4750,77 @@
       ]
     },
     {
+      "organization": "충청북도",
+      "api_count": 51,
+      "operation_api_count": 51,
+      "operation_count": 51,
+      "runtime_evidence_count": 1,
+      "runtime_evidence_percent": 2.0,
+      "verified": 1,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 12,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 50
+        },
+        {
+          "key": "external_endpoint",
+          "count": 1
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 1
+        },
+        {
+          "key": "builtin",
+          "count": 50
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "산업고용",
+          "operation_count": 17
+        },
+        {
+          "category": "환경기상",
+          "operation_count": 17
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 6
+        },
+        {
+          "category": "식품건강",
+          "operation_count": 5
+        },
+        {
+          "category": "문화관광",
+          "operation_count": 2
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 50
+        },
+        {
+          "host": "tour.chungbuk.go.kr",
+          "operation_count": 1,
+          "adapter": "chungbuk-tour",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "행정안전부 한국지역정보개발원",
       "api_count": 38,
       "operation_api_count": 38,
@@ -4866,60 +4937,6 @@
         {
           "host": "car.daegu.go.kr",
           "operation_count": 4
-        }
-      ]
-    },
-    {
-      "organization": "충청북도",
-      "api_count": 51,
-      "operation_api_count": 50,
-      "operation_count": 50,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 11,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 50
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 50
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "산업고용",
-          "operation_count": 17
-        },
-        {
-          "category": "환경기상",
-          "operation_count": 17
-        },
-        {
-          "category": "공공행정",
-          "operation_count": 6
-        },
-        {
-          "category": "식품건강",
-          "operation_count": 5
-        },
-        {
-          "category": "재난안전",
-          "operation_count": 1
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 50
         }
       ]
     },

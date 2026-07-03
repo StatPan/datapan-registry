@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-07-03T22:45:58Z",
+  "source": "reports/data-go-kr/chungbuk-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 1,
+    "verified": 1,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 1,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "chungbuk-tour",
+        "count": 1,
+        "provider": "chungbuk-tour"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "tour.chungbuk.go.kr",
+        "count": 1,
+        "host": "tour.chungbuk.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 1,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}
