@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T22:47:17Z",
+  "generated_at": "2026-07-03T22:57:38Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 19927,
-    "runtime_evidence": 3388,
-    "runtime_evidence_percent": 17.0,
-    "callable_operations": 19785,
-    "external_endpoint_operations": 8317,
-    "registered_adapter_operations": 8307,
+    "operations": 19945,
+    "runtime_evidence": 3406,
+    "runtime_evidence_percent": 17.1,
+    "callable_operations": 19803,
+    "external_endpoint_operations": 8335,
+    "registered_adapter_operations": 8325,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 8317
+      "count": 8335
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 8307
+      "count": 8325
     },
     {
       "key": "builtin",
@@ -89,7 +89,7 @@
     },
     {
       "category": "산업고용",
-      "operation_count": 1290
+      "operation_count": 1308
     },
     {
       "category": "재정금융",
@@ -4181,6 +4181,73 @@
       ]
     },
     {
+      "organization": "한국서부발전(주)",
+      "api_count": 50,
+      "operation_api_count": 50,
+      "operation_count": 62,
+      "runtime_evidence_count": 18,
+      "runtime_evidence_percent": 29.0,
+      "verified": 18,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 42,
+      "no_endpoint_operations": 20,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 24
+        },
+        {
+          "key": "external_endpoint",
+          "count": 18
+        },
+        {
+          "key": "no_endpoint",
+          "count": 20
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 18
+        },
+        {
+          "key": "builtin",
+          "count": 24
+        },
+        {
+          "key": "not_applicable",
+          "count": 20
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "산업고용",
+          "operation_count": 58
+        },
+        {
+          "category": "환경기상",
+          "operation_count": 4
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 24
+        },
+        {
+          "host": "www.iwest.co.kr",
+          "operation_count": 18,
+          "adapter": "iwest",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "경상남도 남해군",
       "api_count": 58,
       "operation_api_count": 58,
@@ -5133,56 +5200,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 45
-        }
-      ]
-    },
-    {
-      "organization": "한국서부발전(주)",
-      "api_count": 50,
-      "operation_api_count": 44,
-      "operation_count": 44,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 24,
-      "no_endpoint_operations": 20,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 24
-        },
-        {
-          "key": "no_endpoint",
-          "count": 20
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 24
-        },
-        {
-          "key": "not_applicable",
-          "count": 20
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "산업고용",
-          "operation_count": 40
-        },
-        {
-          "category": "환경기상",
-          "operation_count": 4
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 24
         }
       ]
     },

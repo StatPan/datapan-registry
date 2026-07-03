@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T22:47:17Z",
+  "generated_at": "2026-07-03T22:57:38Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 103,
-  "host_count": 123,
+  "adapter_count": 104,
+  "host_count": 124,
   "adapters": [
     {
       "name": "airport",
@@ -445,6 +445,16 @@
       "hosts": [
         "its.go.kr",
         "www.its.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "iwest",
+      "status": "registered",
+      "hosts": [
+        "www.iwest.co.kr"
       ],
       "capabilities": [
         "verification"
@@ -1081,8 +1091,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 103,
-    "verification_capable_adapters": 103,
+    "adapter_count": 104,
+    "verification_capable_adapters": 104,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

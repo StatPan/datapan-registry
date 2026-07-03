@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T22:47:17Z",
+  "generated_at": "2026-07-03T22:57:38Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3735,
-    "stable": 8325
+    "changed": 3741,
+    "stable": 8319
   },
   "added": [],
   "removed": [],
@@ -20629,6 +20629,56 @@
       "new_digest": "4fef25ade02d3773b20cae858ed8a3465c767f68b943a35de8ce3c1c888142e7"
     },
     {
+      "id": "15089752",
+      "old_title": "한국서부발전(주)_태안군의항리대기정보",
+      "new_title": "한국서부발전(주)_태안군의항리대기정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "19b6de492c369626de794e44cc9f0e3401851ffc1364739caf3f5330da2de5be",
+      "new_digest": "aac4af969b2fcfad9bd9c69c447d424417a60b474506d7fe31bfbc7a1136e5e9"
+    },
+    {
+      "id": "15089759",
+      "old_title": "한국서부발전(주)_태안군평천리대기정보",
+      "new_title": "한국서부발전(주)_태안군평천리대기정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "965793970010687af6e341097a94136a84f8c890d6f791115fca920781d6c453",
+      "new_digest": "cabc010c4cd0461bd642a289bf12516e2ccffef753a15117292fc357828bfbb9"
+    },
+    {
+      "id": "15089762",
+      "old_title": "한국서부발전(주)_태안군안기리대기정보",
+      "new_title": "한국서부발전(주)_태안군안기리대기정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "02acca4973dfe864d4b1a1942b4d4b42b49f78cf1631971aacda4aeec7913740",
+      "new_digest": "8e7ab6d39701c45ca01d1d1e9412e4beae704f28c13884421aad98af63fd43a3"
+    },
+    {
+      "id": "15089766",
+      "old_title": "한국서부발전(주)_태안군이원초대기정보",
+      "new_title": "한국서부발전(주)_태안군이원초대기정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "25029196cb5a3287d1069f0e0c49ec2f6902aff8ab925104971a2a7d5adcff4e",
+      "new_digest": "42d3ca80df18e80060ea2b5b6380d3dabd4f82ea228dda210cf02b78f1e954a2"
+    },
+    {
+      "id": "15089767",
+      "old_title": "한국서부발전(주)_태안군산후리대기정보",
+      "new_title": "한국서부발전(주)_태안군산후리대기정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "de59d65826ac7c202b82c47dc8d23af18d167a4da1a01eead891cf6f834b43c7",
+      "new_digest": "3694804ca857241536f479d1be0f179331692914551086c0711cca22c325b3a3"
+    },
+    {
       "id": "15089863",
       "old_title": "국토교통부_자동차 리콜정보 API 서비스",
       "new_title": "국토교통부_자동차 리콜정보 API 서비스",
@@ -20637,6 +20687,16 @@
       ],
       "old_digest": "ebe1929a5eb387d4de0a64c398794e1ab666b23c26a4890de50328b15ee123aa",
       "new_digest": "e43b413ea6516b0624707f1e5e871d3d6c43ca5a88dd5a08ce970d0ec435c7cb"
+    },
+    {
+      "id": "15090195",
+      "old_title": "한국서부발전(주)_태안군대기초대기정보",
+      "new_title": "한국서부발전(주)_태안군대기초대기정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3598cc0cb91d5e74bda0c413972c81bf3ad8bb5679bc7d4961566d6f12741615",
+      "new_digest": "4b03a6a9c7627319250ee8ddbe6f44aa140f84be219e2d0ac0a598abf975de21"
     },
     {
       "id": "15090725",

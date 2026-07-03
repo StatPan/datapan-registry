@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `19927`
-- callable operations: `19785` (`99.3%`)
+- operations: `19945`
+- callable operations: `19803` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `8317`
-- registered adapter operations: `8307`
+- external endpoint operations: `8335`
+- registered adapter operations: `8325`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
 - approval-required operations: `7416`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `118`
+- registered adapter hosts: `119`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -584,6 +584,11 @@ readiness, not to advance verified runtime coverage.
    checked runtime evidence to `3388`, verified checks to `1616`, registered
    external adapter operations to `8307`, and raises API operation coverage to
    `10,920` of `12,060` APIs (`90.5%`).
+   The 한국서부발전(주) batch registers IWest host coverage, materializes `6`
+   APIs and `18` operations, and merges `18` verified bounded checks. That
+   brings checked runtime evidence to `3406`, verified checks to `1634`,
+   registered external adapter operations to `8325`, and raises API operation
+   coverage to `10,926` of `12,060` APIs (`90.6%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

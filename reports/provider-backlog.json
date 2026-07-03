@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T22:47:17Z",
+  "generated_at": "2026-07-03T22:57:38Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 273,
+  "filtered_count": 274,
   "summary": {
-    "hosts": 273,
+    "hosts": 274,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 129,
-    "external_guide_hosts": 197,
-    "registered_adapter_hosts": 118,
-    "operation_hosts": 131,
+    "external_endpoint_hosts": 130,
+    "external_guide_hosts": 198,
+    "registered_adapter_hosts": 119,
+    "operation_hosts": 132,
     "guide_only_hosts": 142,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7417,
+    "approval_required_operations": 7435,
     "malformed_source_url_count": 712
   },
   "providers": [
@@ -920,6 +920,24 @@
         "15059757",
         "15059758",
         "15059759"
+      ]
+    },
+    {
+      "host": "www.iwest.co.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 6,
+      "operations": 18,
+      "external_endpoint_operations": 18,
+      "external_guide_specs": 6,
+      "approval_required_operations": 18,
+      "sample_ids": [
+        "15089752",
+        "15089759",
+        "15089762"
       ]
     },
     {

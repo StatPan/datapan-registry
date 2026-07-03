@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-07-03T22:57:16Z",
+  "source": "reports/data-go-kr/western-power-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 18,
+    "verified": 18,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 18,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "iwest",
+        "count": 18,
+        "provider": "iwest"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "www.iwest.co.kr",
+        "count": 18,
+        "host": "www.iwest.co.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 18,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

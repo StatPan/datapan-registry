@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T22:46:06Z",
+  "generated_at": "2026-07-03T22:57:25Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3388,
-    "verified": 1616,
+    "total": 3406,
+    "verified": 1634,
     "failed": 306,
     "skipped": 1466,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 1616,
+        "count": 1634,
         "status": "verified"
       },
       {
@@ -524,6 +524,11 @@
         "provider": "ulsan"
       },
       {
+        "key": "iwest",
+        "count": 18,
+        "provider": "iwest"
+      },
+      {
         "key": "naqs",
         "count": 18,
         "provider": "naqs"
@@ -1011,6 +1016,11 @@
         "host": "data.naqs.go.kr"
       },
       {
+        "key": "www.iwest.co.kr",
+        "count": 18,
+        "host": "www.iwest.co.kr"
+      },
+      {
         "key": "www.andong.go.kr",
         "count": 15,
         "host": "www.andong.go.kr"
@@ -1399,7 +1409,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 2664,
+        "count": 2682,
         "kind": "external_endpoint"
       },
       {
