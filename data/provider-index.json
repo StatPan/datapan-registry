@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T19:52:08Z",
+  "generated_at": "2026-07-03T20:06:23Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 87,
-  "host_count": 103,
+  "adapter_count": 89,
+  "host_count": 105,
   "adapters": [
     {
       "name": "airport",
@@ -584,6 +584,16 @@
       ]
     },
     {
+      "name": "much",
+      "status": "registered",
+      "hosts": [
+        "www.much.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "myhome",
       "status": "registered",
       "hosts": [
@@ -591,6 +601,16 @@
       ],
       "capabilities": [
         "call",
+        "verification"
+      ]
+    },
+    {
+      "name": "naa",
+      "status": "registered",
+      "hosts": [
+        "www.naa.go.kr"
+      ],
+      "capabilities": [
         "verification"
       ]
     },
@@ -917,8 +937,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 87,
-    "verification_capable_adapters": 87,
+    "adapter_count": 89,
+    "verification_capable_adapters": 89,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

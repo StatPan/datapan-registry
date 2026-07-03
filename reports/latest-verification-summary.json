@@ -1,32 +1,32 @@
 {
-  "generated_at": "2026-07-03T19:51:47Z",
+  "generated_at": "2026-07-03T20:06:21Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 2524,
-    "verified": 1101,
-    "failed": 214,
-    "skipped": 1209,
+    "total": 2650,
+    "verified": 1212,
+    "failed": 223,
+    "skipped": 1215,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 1209,
+        "count": 1215,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 1101,
+        "count": 1212,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 214,
+        "count": 223,
         "status": "failed"
       }
     ],
@@ -38,7 +38,7 @@
       },
       {
         "key": "missing_auth",
-        "count": 298,
+        "count": 301,
         "reason": "missing_auth"
       },
       {
@@ -53,7 +53,7 @@
       },
       {
         "key": "chungnam_http_404",
-        "count": 48,
+        "count": 49,
         "reason": "chungnam_http_404"
       },
       {
@@ -172,6 +172,11 @@
         "reason": "andong_missing_required_params"
       },
       {
+        "key": "culture_request_timeout",
+        "count": 5,
+        "reason": "culture_request_timeout"
+      },
+      {
         "key": "epost_unsupported_protocol",
         "count": 5,
         "reason": "epost_unsupported_protocol"
@@ -190,6 +195,11 @@
         "key": "ekape_service_key_not_registered",
         "count": 4,
         "reason": "ekape_service_key_not_registered"
+      },
+      {
+        "key": "emuseum_missing_required_params",
+        "count": 4,
+        "reason": "emuseum_missing_required_params"
       },
       {
         "key": "epost_missing_required_params",
@@ -217,6 +227,11 @@
         "reason": "itfind_endpoint_not_found"
       },
       {
+        "key": "jeju-www_request_failed",
+        "count": 3,
+        "reason": "jeju-www_request_failed"
+      },
+      {
         "key": "jeonju_http_404_not_found",
         "count": 3,
         "reason": "jeonju_http_404_not_found"
@@ -237,19 +252,14 @@
         "reason": "airport_missing_required_params"
       },
       {
-        "key": "emuseum_missing_required_params",
+        "key": "folk_missing_required_params",
         "count": 2,
-        "reason": "emuseum_missing_required_params"
+        "reason": "folk_missing_required_params"
       },
       {
         "key": "gblib_service_key_not_registered",
         "count": 2,
         "reason": "gblib_service_key_not_registered"
-      },
-      {
-        "key": "jeju-www_request_failed",
-        "count": 2,
-        "reason": "jeju-www_request_failed"
       },
       {
         "key": "jeju_missing_required_params",
@@ -267,14 +277,14 @@
         "reason": "car365_http_400"
       },
       {
+        "key": "culture_http_500",
+        "count": 1,
+        "reason": "culture_http_500"
+      },
+      {
         "key": "ekape_html_response",
         "count": 1,
         "reason": "ekape_html_response"
-      },
-      {
-        "key": "folk_missing_required_params",
-        "count": 1,
-        "reason": "folk_missing_required_params"
       },
       {
         "key": "gblib_endpoint_not_found",
@@ -310,6 +320,11 @@
         "key": "myhome_service_key_not_registered",
         "count": 1,
         "reason": "myhome_service_key_not_registered"
+      },
+      {
+        "key": "naa_http_404",
+        "count": 1,
+        "reason": "naa_http_404"
       },
       {
         "key": "oneclick_missing_required_params",
@@ -349,8 +364,13 @@
         "provider": "q-net"
       },
       {
+        "key": "culture",
+        "count": 124,
+        "provider": "culture"
+      },
+      {
         "key": "data-gg",
-        "count": 118,
+        "count": 119,
         "provider": "data-gg"
       },
       {
@@ -365,7 +385,7 @@
       },
       {
         "key": "chungnam",
-        "count": 67,
+        "count": 68,
         "provider": "chungnam"
       },
       {
@@ -394,14 +414,14 @@
         "provider": "kma-apihub"
       },
       {
+        "key": "jeju-www",
+        "count": 42,
+        "provider": "jeju-www"
+      },
+      {
         "key": "geoje",
         "count": 41,
         "provider": "geoje"
-      },
-      {
-        "key": "jeju-www",
-        "count": 41,
-        "provider": "jeju-www"
       },
       {
         "key": "uiryeong",
@@ -514,11 +534,6 @@
         "provider": "safetydata"
       },
       {
-        "key": "culture",
-        "count": 9,
-        "provider": "culture"
-      },
-      {
         "key": "cancer",
         "count": 8,
         "provider": "cancer"
@@ -547,6 +562,16 @@
         "key": "codil",
         "count": 6,
         "provider": "codil"
+      },
+      {
+        "key": "emuseum",
+        "count": 6,
+        "provider": "emuseum"
+      },
+      {
+        "key": "folk",
+        "count": 6,
+        "provider": "folk"
       },
       {
         "key": "kpx",
@@ -587,16 +612,6 @@
         "key": "jeju",
         "count": 4,
         "provider": "jeju"
-      },
-      {
-        "key": "emuseum",
-        "count": 3,
-        "provider": "emuseum"
-      },
-      {
-        "key": "folk",
-        "count": 3,
-        "provider": "folk"
       },
       {
         "key": "franchise-ftc",
@@ -699,9 +714,19 @@
         "provider": "mafra-legacy"
       },
       {
+        "key": "much",
+        "count": 1,
+        "provider": "much"
+      },
+      {
         "key": "myhome",
         "count": 1,
         "provider": "myhome"
+      },
+      {
+        "key": "naa",
+        "count": 1,
+        "provider": "naa"
       },
       {
         "key": "ncpms",
@@ -756,8 +781,13 @@
         "host": "data.mafra.go.kr"
       },
       {
+        "key": "www.culture.go.kr",
+        "count": 124,
+        "host": "www.culture.go.kr"
+      },
+      {
         "key": "data.gg.go.kr",
-        "count": 118,
+        "count": 119,
         "host": "data.gg.go.kr"
       },
       {
@@ -801,19 +831,19 @@
         "host": "c.q-net.or.kr"
       },
       {
-        "key": "data.geoje.go.kr",
-        "count": 41,
-        "host": "data.geoje.go.kr"
-      },
-      {
         "key": "www.chungnam.go.kr",
-        "count": 41,
+        "count": 42,
         "host": "www.chungnam.go.kr"
       },
       {
         "key": "www.jeju.go.kr",
-        "count": 41,
+        "count": 42,
         "host": "www.jeju.go.kr"
+      },
+      {
+        "key": "data.geoje.go.kr",
+        "count": 41,
+        "host": "data.geoje.go.kr"
       },
       {
         "key": "data.uiryeong.go.kr",
@@ -931,11 +961,6 @@
         "host": "www.safetydata.go.kr"
       },
       {
-        "key": "www.culture.go.kr",
-        "count": 9,
-        "host": "www.culture.go.kr"
-      },
-      {
         "key": "www.law.go.kr",
         "count": 9,
         "host": "www.law.go.kr"
@@ -971,6 +996,11 @@
         "host": "data.seoul.go.kr"
       },
       {
+        "key": "folkency.nfm.go.kr",
+        "count": 6,
+        "host": "folkency.nfm.go.kr"
+      },
+      {
         "key": "localfood.chungnam.go.kr",
         "count": 6,
         "host": "localfood.chungnam.go.kr"
@@ -999,6 +1029,11 @@
         "key": "www.codil.or.kr",
         "count": 6,
         "host": "www.codil.or.kr"
+      },
+      {
+        "key": "www.emuseum.go.kr",
+        "count": 6,
+        "host": "www.emuseum.go.kr"
       },
       {
         "key": "www.smartfarmkorea.net",
@@ -1041,11 +1076,6 @@
         "host": "data.gwanak.go.kr"
       },
       {
-        "key": "folkency.nfm.go.kr",
-        "count": 3,
-        "host": "folkency.nfm.go.kr"
-      },
-      {
         "key": "franchise.ftc.go.kr",
         "count": 3,
         "host": "franchise.ftc.go.kr"
@@ -1059,11 +1089,6 @@
         "key": "openapi.gblib.or.kr",
         "count": 3,
         "host": "openapi.gblib.or.kr"
-      },
-      {
-        "key": "www.emuseum.go.kr",
-        "count": 3,
-        "host": "www.emuseum.go.kr"
       },
       {
         "key": "www.garak.co.kr",
@@ -1201,6 +1226,16 @@
         "host": "www.kofpi.or.kr"
       },
       {
+        "key": "www.much.go.kr",
+        "count": 1,
+        "host": "www.much.go.kr"
+      },
+      {
+        "key": "www.naa.go.kr",
+        "count": 1,
+        "host": "www.naa.go.kr"
+      },
+      {
         "key": "www.sisul.or.kr",
         "count": 1,
         "host": "www.sisul.or.kr"
@@ -1219,7 +1254,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 1800,
+        "count": 1926,
         "kind": "external_endpoint"
       },
       {

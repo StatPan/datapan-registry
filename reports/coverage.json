@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T19:52:14Z",
+  "generated_at": "2026-07-03T20:06:29Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 19022,
-    "callable_operations": 18880,
+    "operations": 19142,
+    "callable_operations": 19000,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 7412,
-    "registered_adapter_operations": 7402,
+    "external_endpoint_operations": 7532,
+    "registered_adapter_operations": 7522,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.6,
-    "approval_required_operations": 6753,
+    "approval_required_operations": 6845,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 100,
+    "registered_adapter_hosts": 102,
     "missing_adapter_hosts": 11,
-    "adapter_count": 87,
+    "adapter_count": 89,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T19:51:47Z",
-    "total": 2524,
-    "verified": 1101,
-    "failed": 214,
-    "skipped": 1209,
+    "generated_at": "2026-07-03T20:06:21Z",
+    "total": 2650,
+    "verified": 1212,
+    "failed": 223,
+    "skipped": 1215,
     "unknown": 0,
-    "verified_percent": 43.6,
-    "evidence_operation_percent": 13.3
+    "verified_percent": 45.7,
+    "evidence_operation_percent": 13.8
   },
   "route_evidence": {
     "present": true,
@@ -210,12 +210,12 @@
           "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 880,
-        "operations": 2187,
-        "external_endpoint_operations": 2187,
+        "specs": 881,
+        "operations": 2188,
+        "external_endpoint_operations": 2188,
         "external_guide_specs": 21,
         "wms_operations": 5,
-        "approval_required_operations": 53,
+        "approval_required_operations": 54,
         "sample_ids": [
           "15005231",
           "15011020",
@@ -382,10 +382,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T19:52:14Z",
+    "generated_at": "2026-07-03T20:06:29Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 87,
-    "host_count": 103,
+    "adapter_count": 89,
+    "host_count": 105,
     "adapters": [
       {
         "name": "airport",
@@ -967,6 +967,16 @@
         ]
       },
       {
+        "name": "much",
+        "status": "registered",
+        "hosts": [
+          "www.much.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "myhome",
         "status": "registered",
         "hosts": [
@@ -974,6 +984,16 @@
         ],
         "capabilities": [
           "call",
+          "verification"
+        ]
+      },
+      {
+        "name": "naa",
+        "status": "registered",
+        "hosts": [
+          "www.naa.go.kr"
+        ],
+        "capabilities": [
           "verification"
         ]
       },
@@ -1300,8 +1320,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 87,
-      "verification_capable_adapters": 87,
+      "adapter_count": 89,
+      "verification_capable_adapters": 89,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

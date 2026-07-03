@@ -11,29 +11,29 @@ re-importing the upstream data.go.kr catalog every time.
 
 - Provider: `data.go.kr`
 - Specs: `12060`
-- Operations: `19022`
-- Callable operations: `18880` (`99.3%`)
+- Operations: `19142`
+- Callable operations: `19000` (`99.3%`)
 - Latest release: `v2026.06.25.24`
 - Registered external adapters: `airport`, `andong`, `calspia`, `car`, `car365`, `chungnam`, `codil`, `consumer`, `culture`, `data-gg`,
   `dgfca`, `dongjak`, `ekape`, `emuseum`, `epost`, `eshare`, `ex`, `fairdata`, `folk`, `foodsafetykorea`, `forest`,
   `franchise-ftc`, `garak`, `gblib`, `geoje`, `gicoms`, `gimhae`, `gwanak`, `gwangjin`, `gwangmyeong`, `happysd`, `humetro`,
   `i815`, `icheon`, `ins24`, `itfind`, `its`, `jeju`, `jeju-air`, `jeju-www`, `jejudatahub`, `jejuits`, `jeonnam-redtable`, `jeonju`, `juso`,
-  `kistep`, `kma-apihub`, `kofpi`, `korad`, `kpx`, `lh-ebid`, `lofin365`, `mafra`, `mafra-legacy`, `mnd-open-data`, `myhome`, `nabic`, `naqs`, `ncpms`, `nfqs`,
+  `kistep`, `kma-apihub`, `kofpi`, `korad`, `kpx`, `lh-ebid`, `lofin365`, `mafra`, `mafra-legacy`, `mnd-open-data`, `much`, `myhome`, `naa`, `nabic`, `naqs`, `ncpms`, `nfqs`,
   `nongsaro`, `oneclick-law`, `open-assembly`, `open-law`, `pqis`, `psis`, `q-net`, `safemap`, `safetydata`,
   `seoul-bus`, `seogu`, `seogwipo`, `seoul-open-data`, `sexoffender`, `sisul`, `sisul-www`, `smartfarm-korea`, `stcis`, `tour`, `uiryeong`, `ulsan`, `vworld`,
   `wamis`, `work`, `work24`, `worldjob`, `cancer`
-- External adapter coverage: `7402` registered-adapter operations out of `7412`
+- External adapter coverage: `7522` registered-adapter operations out of `7532`
   external endpoint operations (`99.6%`)
 - Missing external adapter hosts: `11`
 - Provider split readiness: `ready`
-  (`87` adapters, `87` verification-capable, `23` call-capable)
-- Runtime verification evidence: `2524` bounded checks merged into
-  `reports/latest-verification.json` (`1101` verified, `214` failed, `1209`
+  (`89` adapters, `89` verification-capable, `23` call-capable)
+- Runtime verification evidence: `2650` bounded checks merged into
+  `reports/latest-verification.json` (`1212` verified, `223` failed, `1215`
   skipped)
-- Runtime evidence growth target: `13.3%` checked evidence is above the
+- Runtime evidence growth target: `13.8%` checked evidence is above the
   unrounded `10%` release target; `0` additional records are required for this
   target.
-- Institution API overview: `411` organizations, `12060` APIs, and `19022`
+- Institution API overview: `411` organizations, `12060` APIs, and `19142`
   operations in `reports/data-go-kr/institution-api-overview.json`; readable
   tables live in `docs/data-go-kr-institution-api-overview.md`.
 - Missing external host probe: `81` manifest-bound probe records remain in
