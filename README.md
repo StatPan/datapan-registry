@@ -11,8 +11,8 @@ re-importing the upstream data.go.kr catalog every time.
 
 - Provider: `data.go.kr`
 - Specs: `12060`
-- Operations: `14249`
-- Callable operations: `14107` (`99%`)
+- Operations: `14514`
+- Callable operations: `14372` (`99%`)
 - Latest release: `v2026.06.25.24`
 - Registered external adapters: `airport`, `andong`, `culture`, `data-gg`,
   `dgfca`, `ekape`, `emuseum`, `epost`, `eshare`, `folk`, `foodsafetykorea`, `forest`,
@@ -20,19 +20,20 @@ re-importing the upstream data.go.kr catalog every time.
   `itfind`, `jeju`, `jejudatahub`, `jeonju`, `juso`,
   `korad`, `kpx`, `lh-ebid`, `lofin365`, `mafra`, `myhome`, `naqs`, `ncpms`, `nfqs`,
   `nongsaro`, `oneclick-law`, `pqis`, `q-net`, `safemap`, `safetydata`, `seoul-bus`,
-  `seogu`, `seoul-open-data`, `sisul`, `tour`, `uiryeong`, `ulsan`, `vworld`, `work24`
-- External adapter coverage: `2629` registered-adapter operations out of `2639`
-  external endpoint operations (`98.9%`)
+  `seogu`, `seoul-open-data`, `sisul`, `tour`, `uiryeong`, `ulsan`, `vworld`, `wamis`,
+  `work24`
+- External adapter coverage: `2894` registered-adapter operations out of `2904`
+  external endpoint operations (`99%`)
 - Missing external adapter hosts: `11`
 - Provider split readiness: `ready`
-  (`50` adapters, `50` verification-capable, `23` call-capable)
-- Runtime verification evidence: `1427` bounded checks merged into
-  `reports/latest-verification.json` (`162` verified, `112` failed, `1153`
+  (`51` adapters, `51` verification-capable, `23` call-capable)
+- Runtime verification evidence: `1458` bounded checks merged into
+  `reports/latest-verification.json` (`183` verified, `112` failed, `1163`
   skipped)
-- Runtime evidence growth target: `10.1%` checked evidence is above the
+- Runtime evidence growth target: `10.0%` checked evidence is above the
   unrounded `10%` release target; `0` additional records are required for this
   target.
-- Institution API overview: `411` organizations, `12060` APIs, and `14249`
+- Institution API overview: `411` organizations, `12060` APIs, and `14514`
   operations in `reports/data-go-kr/institution-api-overview.json`; readable
   tables live in `docs/data-go-kr-institution-api-overview.md`.
 - Missing external host probe: `81` manifest-bound probe records remain in

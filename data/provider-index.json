@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T13:07:56Z",
+  "generated_at": "2026-07-03T13:33:15Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 50,
-  "host_count": 56,
+  "adapter_count": 51,
+  "host_count": 58,
   "adapters": [
     {
       "name": "airport",
@@ -524,6 +524,17 @@
       ]
     },
     {
+      "name": "wamis",
+      "status": "registered",
+      "hosts": [
+        "www.wamis.go.kr",
+        "www.wamis.go.kr:8080"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "work24",
       "status": "registered",
       "hosts": [
@@ -537,8 +548,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 50,
-    "verification_capable_adapters": 50,
+    "adapter_count": 51,
+    "verification_capable_adapters": 51,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

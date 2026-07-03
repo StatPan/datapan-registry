@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-07-03T13:07:47Z",
+  "generated_at": "2026-07-03T13:33:03Z",
   "source": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1427,
-    "verified": 162,
+    "total": 1458,
+    "verified": 183,
     "failed": 112,
-    "skipped": 1153,
+    "skipped": 1163,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 1153,
+        "count": 1163,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 162,
+        "count": 183,
         "status": "verified"
       },
       {
@@ -33,7 +33,7 @@
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 429,
+        "count": 438,
         "reason": "missing_required_params"
       },
       {
@@ -43,7 +43,7 @@
       },
       {
         "key": "approval_required",
-        "count": 126,
+        "count": 127,
         "reason": "approval_required"
       },
       {
@@ -290,7 +290,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 665,
+        "count": 675,
         "provider": "data.go.kr"
       },
       {
@@ -304,14 +304,14 @@
         "provider": "jeonju"
       },
       {
+        "key": "data-gg",
+        "count": 58,
+        "provider": "data-gg"
+      },
+      {
         "key": "ekape",
         "count": 49,
         "provider": "ekape"
-      },
-      {
-        "key": "data-gg",
-        "count": 48,
-        "provider": "data-gg"
       },
       {
         "key": "geoje",
@@ -344,6 +344,11 @@
         "provider": "lofin365"
       },
       {
+        "key": "eshare",
+        "count": 20,
+        "provider": "eshare"
+      },
+      {
         "key": "sisul",
         "count": 20,
         "provider": "sisul"
@@ -372,11 +377,6 @@
         "key": "mafra",
         "count": 11,
         "provider": "mafra"
-      },
-      {
-        "key": "eshare",
-        "count": 10,
-        "provider": "eshare"
       },
       {
         "key": "gwangmyeong",
@@ -542,12 +542,17 @@
         "key": "vworld",
         "count": 1,
         "provider": "vworld"
+      },
+      {
+        "key": "wamis",
+        "count": 1,
+        "provider": "wamis"
       }
     ],
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 665,
+        "count": 675,
         "host": "apis.data.go.kr"
       },
       {
@@ -561,14 +566,14 @@
         "host": "openapi.jeonju.go.kr"
       },
       {
+        "key": "data.gg.go.kr",
+        "count": 58,
+        "host": "data.gg.go.kr"
+      },
+      {
         "key": "data.ekape.or.kr",
         "count": 49,
         "host": "data.ekape.or.kr"
-      },
-      {
-        "key": "data.gg.go.kr",
-        "count": 48,
-        "host": "data.gg.go.kr"
       },
       {
         "key": "c.q-net.or.kr",
@@ -611,6 +616,11 @@
         "host": "openapi.its.ulsan.kr"
       },
       {
+        "key": "www.eshare.go.kr",
+        "count": 20,
+        "host": "www.eshare.go.kr"
+      },
+      {
         "key": "www.andong.go.kr",
         "count": 15,
         "host": "www.andong.go.kr"
@@ -634,11 +644,6 @@
         "key": "data.gm.go.kr",
         "count": 10,
         "host": "data.gm.go.kr"
-      },
-      {
-        "key": "www.eshare.go.kr",
-        "count": 10,
-        "host": "www.eshare.go.kr"
       },
       {
         "key": "www.juso.go.kr",
@@ -824,17 +829,22 @@
         "key": "www.vworld.kr",
         "count": 1,
         "host": "www.vworld.kr"
+      },
+      {
+        "key": "www.wamis.go.kr:8080",
+        "count": 1,
+        "host": "www.wamis.go.kr:8080"
       }
     ],
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 743,
+        "count": 764,
         "kind": "external_endpoint"
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 665,
+        "count": 675,
         "kind": "data_go_kr_gateway"
       },
       {
