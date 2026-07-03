@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-03T16:05:23Z",
+  "generated_at": "2026-07-03T16:11:55Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1680,
+    "total": 1690,
     "verified": 352,
-    "failed": 135,
+    "failed": 145,
     "skipped": 1193,
     "unknown": 0
   },
@@ -26,7 +26,7 @@
       },
       {
         "key": "failed",
-        "count": 135,
+        "count": 145,
         "status": "failed"
       }
     ],
@@ -52,6 +52,11 @@
         "reason": "jeonju_missing_required_params"
       },
       {
+        "key": "open-assembly_http_400",
+        "count": 30,
+        "reason": "open-assembly_http_400"
+      },
+      {
         "key": "qnet_separate_service_key_required",
         "count": 28,
         "reason": "qnet_separate_service_key_required"
@@ -70,11 +75,6 @@
         "key": "lofin365_request_failed",
         "count": 25,
         "reason": "lofin365_request_failed"
-      },
-      {
-        "key": "open-assembly_http_400",
-        "count": 20,
-        "reason": "open-assembly_http_400"
       },
       {
         "key": "qnet_missing_required_params",
@@ -359,6 +359,11 @@
         "provider": "oneclick-law"
       },
       {
+        "key": "open-assembly",
+        "count": 30,
+        "provider": "open-assembly"
+      },
+      {
         "key": "epost",
         "count": 28,
         "provider": "epost"
@@ -377,11 +382,6 @@
         "key": "gwangmyeong",
         "count": 20,
         "provider": "gwangmyeong"
-      },
-      {
-        "key": "open-assembly",
-        "count": 20,
-        "provider": "open-assembly"
       },
       {
         "key": "sisul",
@@ -706,6 +706,11 @@
         "host": "www.eshare.go.kr"
       },
       {
+        "key": "open.assembly.go.kr",
+        "count": 30,
+        "host": "open.assembly.go.kr"
+      },
+      {
         "key": "www.calspia.go.kr",
         "count": 30,
         "host": "www.calspia.go.kr"
@@ -734,11 +739,6 @@
         "key": "data.sisul.or.kr",
         "count": 20,
         "host": "data.sisul.or.kr"
-      },
-      {
-        "key": "open.assembly.go.kr",
-        "count": 20,
-        "host": "open.assembly.go.kr"
       },
       {
         "key": "openapi.its.ulsan.kr",
@@ -1044,7 +1044,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 956,
+        "count": 966,
         "kind": "external_endpoint"
       },
       {

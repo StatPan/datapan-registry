@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-03T16:05:33Z",
+  "generated_at": "2026-07-03T16:12:05Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 16547,
-    "callable_operations": 16405,
-    "specs_without_operations": 2780,
-    "specs_without_callable_operation": 2855,
+    "operations_total": 16624,
+    "callable_operations": 16482,
+    "specs_without_operations": 2703,
+    "specs_without_callable_operation": 2778,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 4209,
-    "operations_without_response_params": 5431,
+    "operations_without_request_params": 4286,
+    "operations_without_response_params": 5508,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 2409,
-      "external_endpoint_operations": 4937,
+      "external_endpoint_specs": 2486,
+      "external_endpoint_operations": 5014,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 114,
       "dev_approval_required_operations": 208,
-      "prod_approval_required_operations": 5338,
+      "prod_approval_required_operations": 5415,
       "malformed_endpoint_url_count": 42,
       "malformed_guide_url_count": 598,
       "top_endpoint_hosts": [
@@ -54,7 +54,7 @@
         },
         {
           "host": "open.assembly.go.kr",
-          "count": 200
+          "count": 277
         },
         {
           "host": "www.calspia.go.kr",
@@ -132,7 +132,7 @@
         },
         {
           "host": "open.assembly.go.kr",
-          "count": 200
+          "count": 277
         },
         {
           "host": "www.calspia.go.kr",
@@ -193,12 +193,12 @@
       ],
       "top_external_guide_hosts": [
         {
-          "host": "data.mfds.go.kr",
-          "count": 235
+          "host": "open.assembly.go.kr",
+          "count": 277
         },
         {
-          "host": "open.assembly.go.kr",
-          "count": 200
+          "host": "data.mfds.go.kr",
+          "count": 235
         },
         {
           "host": "api.visitkorea.or.kr",

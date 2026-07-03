@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T16:05:33Z",
+  "generated_at": "2026-07-03T16:12:05Z",
   "provider": "data.go.kr",
   "old": ".datapan\\previous-data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,1011 +12,781 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 100,
-    "stable": 11960
+    "changed": 77,
+    "stable": 11983
   },
   "added": [],
   "removed": [],
   "changed": [
     {
-      "id": "15125943",
-      "old_title": "국회 국회사무처_국회의원 겸직 결정 내역",
-      "new_title": "국회 국회사무처_국회의원 겸직 결정 내역",
+      "id": "15125862",
+      "old_title": "국회 국회사무처_정당 및 교섭단체 의석수 현황",
+      "new_title": "국회 국회사무처_정당 및 교섭단체 의석수 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "d94073d94d90510431aecfd8b12748c2c41933284d523ef6cc749f5b4f9a966f",
-      "new_digest": "17fd5697921f1e7f39279f701780e6c2fb9f3b2d0acf7ff1b556d25c1f97eb2e"
+      "old_digest": "a4b31bd923905f19dc0f9bdc772037a7fb544bbaedd038059852fbacb16b48ff",
+      "new_digest": "6b1aeffd0e290d43ef71d117d035007b3a63847c088e5364f6b7202e4ec778db"
     },
     {
-      "id": "15125944",
-      "old_title": "국회 국회사무처_국회의원 기자회견",
-      "new_title": "국회 국회사무처_국회의원 기자회견",
+      "id": "15125863",
+      "old_title": "국회 국회사무처_8급 공개경쟁 채용현황",
+      "new_title": "국회 국회사무처_8급 공개경쟁 채용현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "e8d1936f78f04aa0070f5310d5d0ed9eb23eda0db6dc950dfdcbfdd0586656ff",
-      "new_digest": "787bcd8c489bfb070dc1b39851597e60f21dc4ded12d37cd0bef7763e7e4bd20"
+      "old_digest": "7ab7a825bbfc7c1e1ed2c527afc79513a8ad41d997d78237f691a2b8364e1bf1",
+      "new_digest": "44fc9df97000a7bdbf94f901ba620b776b631a8d5bbea6ea85dd15b40db61388"
     },
     {
-      "id": "15125946",
-      "old_title": "국회 국회사무처_국회의원 발의법률안",
-      "new_title": "국회 국회사무처_국회의원 발의법률안",
+      "id": "15125866",
+      "old_title": "국회 국회사무처_9급 공개경쟁 채용현황",
+      "new_title": "국회 국회사무처_9급 공개경쟁 채용현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "2c7e24c3a848181946cdba857fd94efc75c4238bac913bd8b7e0189bd70cc82b",
-      "new_digest": "e08c45243992a51470a0ab99e228ee63d53e0fcb9357bc82dc84768885bb70d4"
+      "old_digest": "68162be6d0786bf32690dfe3e8cfa8fcf96b263bffd69b363ca0a4175842dcc1",
+      "new_digest": "70527034fb22dfec7004c5384d2cf33fd93abbd152a7a286f2145a03bd22b14a"
     },
     {
-      "id": "15125947",
-      "old_title": "국회 국회사무처_국회의원 보좌직원 채용",
-      "new_title": "국회 국회사무처_국회의원 보좌직원 채용",
+      "id": "15125867",
+      "old_title": "국회 국회사무처_NABO Focus",
+      "new_title": "국회 국회사무처_NABO Focus",
       "fields": [
         "operations"
       ],
-      "old_digest": "1cc576ea119ebc48fd605589b403d71d347de8359f08d60d102cdd807884ec24",
-      "new_digest": "aab4b7a19f995c53fd9a5a2d0451aca065d8d3740303f8e1b7f96f9e17b9a7bf"
+      "old_digest": "d40ce08016177f48eb0c53671e26b559e93aa1b7ddfa14bdeb1f1d979b4c9c46",
+      "new_digest": "4dbf03850f2db4760ef82fffa628c8e96e0cbdc8f119cd35f1d4c509ccc0ecc0"
     },
     {
-      "id": "15125948",
-      "old_title": "국회 국회사무처_국회의원 본회의 표결정보",
-      "new_title": "국회 국회사무처_국회의원 본회의 표결정보",
+      "id": "15125868",
+      "old_title": "국회 국회사무처_NABO 결산 분석",
+      "new_title": "국회 국회사무처_NABO 결산 분석",
       "fields": [
         "operations"
       ],
-      "old_digest": "a093b63daa0d6e86754c82a50a1b421c7e530d366f53d34ef1055ef2babe9a94",
-      "new_digest": "2abbb75c66346111a8a00ee5b76117c72e8b9ee1125482a9e3180e7361985383"
+      "old_digest": "81a2a28e1ccd8c56989dac133b7de8c8bd902c762d5e269456e85d066300b61f",
+      "new_digest": "74bb8bd67c374dc52c89a5e61a4324a706f74e5f88117074ac2555180cb5f460"
     },
     {
-      "id": "15125949",
-      "old_title": "국회 국회사무처_국회의원 상임위 활동",
-      "new_title": "국회 국회사무처_국회의원 상임위 활동",
+      "id": "15125869",
+      "old_title": "국회 국회사무처_NABO 경제 정책 및 동향 분석",
+      "new_title": "국회 국회사무처_NABO 경제 정책 및 동향 분석",
       "fields": [
         "operations"
       ],
-      "old_digest": "d205e6476a438dad340764541d279e3bdcfe74f310138c8e04cf88e9c331a2e6",
-      "new_digest": "a5a16be5f4e70a3504514e17d207136a3c1df4b054492fad512559b47a4b1128"
+      "old_digest": "31cbdcc431ff409bbf7f7573f5f19c1276a6af6507101a8ddac6b53be1280b0e",
+      "new_digest": "9c2b7683a35506602a05d4191848213f52ab878d7522ad8a730f2efd19fc5cdc"
     },
     {
-      "id": "15125950",
-      "old_title": "국회 국회사무처_국회의원 세미나 일정",
-      "new_title": "국회 국회사무처_국회의원 세미나 일정",
+      "id": "15125870",
+      "old_title": "국회 국회사무처_NABO 경제ㆍ산업동향 이슈",
+      "new_title": "국회 국회사무처_NABO 경제ㆍ산업동향 이슈",
       "fields": [
         "operations"
       ],
-      "old_digest": "28048fd1479cee8051d8f4e8f6e2b76026435ea9670f42e2fb24a1388d1c030b",
-      "new_digest": "4b27b4679a7cd77921e78fabd172101dc285b618d5c4268a3bb8dee49a8ca08a"
+      "old_digest": "be817b209188e3bbbcb9e497b062e05c2f98594670197e8f96c3abac43ba6fb5",
+      "new_digest": "41e9053e98a27b7e7eed15386ad8ed1046ace5305827b07194259f5bf92a2cfe"
     },
     {
-      "id": "15125951",
-      "old_title": "국회 국회사무처_국회의원 소규모 연구용역 결과보고서",
-      "new_title": "국회 국회사무처_국회의원 소규모 연구용역 결과보고서",
+      "id": "15125871",
+      "old_title": "국회 국회사무처_NABO 경제재정수첩",
+      "new_title": "국회 국회사무처_NABO 경제재정수첩",
       "fields": [
         "operations"
       ],
-      "old_digest": "a863effc7abb7c54fadca8f8bb9fb31dfbc0b8bb5fe77841bf9360249408e271",
-      "new_digest": "d76afeab8749c5c227daf9cf63e8e9cac3d1cbd7347e8cb867687a32ebc3d28a"
+      "old_digest": "46bee49bfc6a9996fa59e18cc14b66ac51ae173a763fe22ee3a8bb0cb5b17387",
+      "new_digest": "994cdf30696b0f079c31b74138b8239c99d4a53b4f10b339a6e6ee77308ab2f3"
     },
     {
-      "id": "15125952",
-      "old_title": "국회 국회사무처_국회의원 연구단체 등록현황",
-      "new_title": "국회 국회사무처_국회의원 연구단체 등록현황",
+      "id": "15125873",
+      "old_title": "국회 국회사무처_NABO 경제전망",
+      "new_title": "국회 국회사무처_NABO 경제전망",
       "fields": [
         "operations"
       ],
-      "old_digest": "f845ad64dcec88f71fbdbe532c89d46ab60158fbf661bcdaf6468b9955d6bcf9",
-      "new_digest": "65d4b90d786df7e43807f5ac81d01ab92f9ed494f3aa5c9d391ceb0c385b10c4"
+      "old_digest": "1d690d58b2455d0d4ce10e0f161f083e82f182b6de63472aa726acb9b7012b4c",
+      "new_digest": "d042ab31954440d6325913935eb40d9925573b044d51f8524915df5f12f2949a"
     },
     {
-      "id": "15125953",
-      "old_title": "국회 국회사무처_국회의원 영상회의록(발언영상)",
-      "new_title": "국회 국회사무처_국회의원 영상회의록(발언영상)",
+      "id": "15125874",
+      "old_title": "국회 국회사무처_NABO 대한민국 공공기관",
+      "new_title": "국회 국회사무처_NABO 대한민국 공공기관",
       "fields": [
         "operations"
       ],
-      "old_digest": "6c81ea2d10684eaf218b231a7bf23c2436ffda7814118a7311a614ca7c63fed2",
-      "new_digest": "c866ecd96faaca16c1b7eb0a2861dc96c8073c0fe6097c67a4d46907177295e1"
+      "old_digest": "be6e18b1ae2826139e32bf380c8f002f4b5c6707fd2f4505f807020fe790c53d",
+      "new_digest": "085c808dd43e93eea512f47f2d9ec1124f30a304c9e7610d6a077aad40f873f0"
     },
     {
-      "id": "15125954",
-      "old_title": "국회 국회사무처_국회의원 위원회 경력",
-      "new_title": "국회 국회사무처_국회의원 위원회 경력",
+      "id": "15125875",
+      "old_title": "국회 국회사무처_NABO 대한민국 재정",
+      "new_title": "국회 국회사무처_NABO 대한민국 재정",
       "fields": [
         "operations"
       ],
-      "old_digest": "a431455429be54febf56dce6ea09394ba32c1ed94cb99094eb28e24bccbed048",
-      "new_digest": "e9523c352adb971e0192fb222da5c1fc43fab529570f8fac42f5cacd23804ece"
+      "old_digest": "6bb888dafb55f9cc809c0936d786936dcc1864e63e009b3291d2d0b2625dd541",
+      "new_digest": "7241648a0ed4867ce02dfaf61315412140d397a926e637cc3c4dcf139cea62b4"
     },
     {
-      "id": "15125956",
-      "old_title": "국회 국회사무처_국회의원 의원이력",
-      "new_title": "국회 국회사무처_국회의원 의원이력",
+      "id": "15125876",
+      "old_title": "국회 국회사무처_NABO 대한민국 지방재정",
+      "new_title": "국회 국회사무처_NABO 대한민국 지방재정",
       "fields": [
         "operations"
       ],
-      "old_digest": "cd6e0c5895f1c7c2d6a8a07311ff420c954a321a27b4c0cdc09753a58f912096",
-      "new_digest": "07bde93a22bbeea67692045c27660ad6690727178e4d312c65fff5ebbab53b0b"
+      "old_digest": "390c41e479cd6674545cfd91df5ee5f867b356205847d5d81724d56f35d3bb2a",
+      "new_digest": "e7fc5fca408dc4e3349bbee3c0f634c2d09a1565d096cea657a61db2629aca3a"
     },
     {
-      "id": "15125957",
-      "old_title": "국회 국회사무처_국회의원 의정보고서",
-      "new_title": "국회 국회사무처_국회의원 의정보고서",
+      "id": "15125877",
+      "old_title": "국회 국회사무처_NABO 비용추계 및 재정전망",
+      "new_title": "국회 국회사무처_NABO 비용추계 및 재정전망",
       "fields": [
         "operations"
       ],
-      "old_digest": "e66ba2be6214cf5d6ef3b4847d12d604ce621bbdca6bf68fa3a55c0404655345",
-      "new_digest": "ea2ac4728958c36bcb7450385b584f704198a170e5ca1d1bfde90f156cd73d67"
+      "old_digest": "08da96f0cd7f20fe249e42e4a884ee6738263357ccb5d3cded9fec8b62cdf60f",
+      "new_digest": "1b50db59aa1559653065f2b1ec56bb49923b5765f7869c6abf1cd7fcde57a88a"
     },
     {
-      "id": "15125958",
-      "old_title": "국회 국회사무처_국회의원 인적사항",
-      "new_title": "국회 국회사무처_국회의원 인적사항",
+      "id": "15125878",
+      "old_title": "국회 국회사무처_NABO 예산 분석",
+      "new_title": "국회 국회사무처_NABO 예산 분석",
       "fields": [
         "operations"
       ],
-      "old_digest": "fd4116b971c1c59a1a265a7ff5910373c4409fa9d9da45d647aa93f7405b5f7d",
-      "new_digest": "c34f8b2b6f630b9de17001557cea0c7968b7ba89ddf277b091c31022d05e3c1e"
+      "old_digest": "95b0bcaca4022706819c5592e2f22e54376f64b01508cd8ce0a88340ff34ed72",
+      "new_digest": "625ab14e88b5ec7e7e2ddea0a4818c23a20a0d9b911ad6d06625d536caad3421"
     },
     {
-      "id": "15125959",
-      "old_title": "국회 국회사무처_국회의원 정책 세미나 개최 현황",
-      "new_title": "국회 국회사무처_국회의원 정책 세미나 개최 현황",
+      "id": "15125879",
+      "old_title": "국회 국회사무처_NABO 재정동향 이슈",
+      "new_title": "국회 국회사무처_NABO 재정동향 이슈",
       "fields": [
         "operations"
       ],
-      "old_digest": "019545d9aa506fdb003bc3a6894b37c0460d8c99f2b58ccf3255c4a2874a7c9f",
-      "new_digest": "c9b56fde2fbc53c30996c3901bc928b3c3153cc7eed44fddb96ac0bdff19555c"
+      "old_digest": "ffc494f615f5d58047c8366f3010e58a9d8d96823734096654d21140e6d83206",
+      "new_digest": "ae8822825f287a1987e3ca7ca699b528bc3a183d117adbb194e6f17f78e2d063"
     },
     {
-      "id": "15125960",
-      "old_title": "국회 국회사무처_국회의원 정책자료실",
-      "new_title": "국회 국회사무처_국회의원 정책자료실",
+      "id": "15125880",
+      "old_title": "국회 국회사무처_NABO 재정사업 평가",
+      "new_title": "국회 국회사무처_NABO 재정사업 평가",
       "fields": [
         "operations"
       ],
-      "old_digest": "b425227fec789b3fc3ebc1977704b4d8ce4c9c8d714aa24bd4f9b55366e1369a",
-      "new_digest": "8d2ceea70e5770aa9b5b4bf5a8df2cf68bf6d542b4dc35ed338fee919f7d741b"
+      "old_digest": "319ec21cd616452292d032a2742847c60e3be1b2dfb78923db8e0981cf01dcfb",
+      "new_digest": "af01cbab90b95713b0510dab22a5e082af8a246e41e14610d4e352630e78378c"
     },
     {
-      "id": "15125961",
-      "old_title": "국회 국회사무처_국회의원 직무상 국외활동 신고 내역",
-      "new_title": "국회 국회사무처_국회의원 직무상 국외활동 신고 내역",
+      "id": "15125881",
+      "old_title": "국회 국회사무처_NABO 조세분석 및 연구",
+      "new_title": "국회 국회사무처_NABO 조세분석 및 연구",
       "fields": [
         "operations"
       ],
-      "old_digest": "842437722fd2d528feca40276a21ae8d78758edf6ad391757c419f215c7d6c4b",
-      "new_digest": "745db818cd81774148c4e1e4b55fb6289f1fc146ff139d7a291cd50b440129a8"
+      "old_digest": "69be7b826fb1c146d6347baf5ece9e0936764d3c7fe76c211dfd5afd163f2e72",
+      "new_digest": "f60de60ed34d1dcc9e8ccbea10b474f4ac8db74231f12eadf1dc01c800f37903"
     },
     {
-      "id": "15125962",
-      "old_title": "국회 국회사무처_국회의장 주요일정",
-      "new_title": "국회 국회사무처_국회의장 주요일정",
+      "id": "15125882",
+      "old_title": "국회 국회사무처_NABO 조세수첩",
+      "new_title": "국회 국회사무처_NABO 조세수첩",
       "fields": [
         "operations"
       ],
-      "old_digest": "9ee177acc67107d6a3cdd671ef3052fb21c6f771b18ecc057a66eb2fdcb04ca0",
-      "new_digest": "92ddcb0ff458ceab3d9204ba87f24071528cb99543368b2f9904f699a7af114c"
+      "old_digest": "682a63a45552b8fe0c93be7f062b6d4a4c71b8e0b80cbc10577aed3bdfd19d29",
+      "new_digest": "626030537809b7cc64adf1da7f2b564a95d27525cf3702a9787fca65f3effd38"
     },
     {
-      "id": "15125963",
-      "old_title": "국회 국회사무처_국회입법조사처 기타자료",
-      "new_title": "국회 국회사무처_국회입법조사처 기타자료",
+      "id": "15125883",
+      "old_title": "국회 국회사무처_NABO 추계 세제 이슈",
+      "new_title": "국회 국회사무처_NABO 추계 세제 이슈",
       "fields": [
         "operations"
       ],
-      "old_digest": "6f6755eedcb06ffb2ebe3aadb96c477c5e9e8acbdac3db9af2093ce65dbb48b3",
-      "new_digest": "9153fba3fb3b8007c142194baa37bfefea5e6c324961936e9bf1e29ee88c9a0a"
+      "old_digest": "a73aa229d0f34a8164b888acbb9fd6da3f7360b089ad2953d6405c538cc35c6b",
+      "new_digest": "787c097f0e7a9ca1b01c5dd8231036ecd9d46a5d1f9ead21487bcc0d532376c0"
     },
     {
-      "id": "15125965",
-      "old_title": "국회 국회사무처_국회입법조사처 세미나·간담회",
-      "new_title": "국회 국회사무처_국회입법조사처 세미나·간담회",
+      "id": "15125884",
+      "old_title": "국회 국회사무처_NATV 뉴스_기타",
+      "new_title": "국회 국회사무처_NATV 뉴스_기타",
       "fields": [
         "operations"
       ],
-      "old_digest": "32ce8f5461137fe3fbdb5cce86b36fd7277d8b2d9187cca5327821bddef4a7c0",
-      "new_digest": "643f75447af7a353d05011c19d6e38d41e0cf7a4c5d24cecbc59f137382cc828"
+      "old_digest": "e9a527ca1e97f3bab03395d7fc2629b37d44bcb4c7cec3edecb902d7b1266790",
+      "new_digest": "c5a4ed16f7f658b984a8515a45b4a99b8e5854a2d688d937edc95f28ee713592"
     },
     {
-      "id": "15125966",
-      "old_title": "국회 국회사무처_국회입법조사처 알림지(국회입법조사처보)",
-      "new_title": "국회 국회사무처_국회입법조사처 알림지(국회입법조사처보)",
+      "id": "15125885",
+      "old_title": "국회 국회사무처_NATV 뉴스_본회의",
+      "new_title": "국회 국회사무처_NATV 뉴스_본회의",
       "fields": [
         "operations"
       ],
-      "old_digest": "0fdeff5ef4599c6b0cc71b9570d300a89ef4ccd3293ec362685d293436c66767",
-      "new_digest": "4365a19fb39935767462d3a46703cdafafebda32cb1020d60f410fd18fac51df"
+      "old_digest": "9e97ce7def58e9ec168d629dcbbff12f0767b7f3dffdecd549c64a0bae8165c9",
+      "new_digest": "9cca4b150b505a55eeacf8029a8d632728f7ad635cd2121cda1879c544cad3d4"
     },
     {
-      "id": "15125967",
-      "old_title": "국회 국회사무처_국회입법조사처 알림지(홍보책자)",
-      "new_title": "국회 국회사무처_국회입법조사처 알림지(홍보책자)",
+      "id": "15125886",
+      "old_title": "국회 국회사무처_NATV 뉴스_위원회",
+      "new_title": "국회 국회사무처_NATV 뉴스_위원회",
       "fields": [
         "operations"
       ],
-      "old_digest": "ececd52f2c7a47208271f757d3274676cebdf100b42de30c5a581eab329509b6",
-      "new_digest": "c22dd9d6e5afb9680f256c7bdcf5ad93229402971c1d8e83a9f3d40794614d5b"
+      "old_digest": "c37db430845254c107f63afbfadaf122482e9ff3e95f253846c1f67229ab1676",
+      "new_digest": "e5b25432d9e89fe1ac537fbaab2cc20508a107572628f1d43c0ba1f01d36cfaa"
     },
     {
-      "id": "15125968",
-      "old_title": "국회 국회사무처_국회입법조사처 업무추진비 집행현황",
-      "new_title": "국회 국회사무처_국회입법조사처 업무추진비 집행현황",
+      "id": "15125887",
+      "old_title": "국회 국회사무처_NATV 뉴스_의장단",
+      "new_title": "국회 국회사무처_NATV 뉴스_의장단",
       "fields": [
         "operations"
       ],
-      "old_digest": "676df53575f9be6634553bc59fed56534db0bc1e9305787fa3bc4db3a59bb787",
-      "new_digest": "82f94130b0c85b1fbaa592f598674c1f6b6237d006b7060217c17b1144a028e3"
+      "old_digest": "d42f55ee4743f0df6cdd83a9832d003bae0e5c9e9ac03cdc89ad52f198bb2011",
+      "new_digest": "d5e2f0c7e0e0895edd6bf30ae53c95a51c54ffbc18e9371f15e17ff49d39b83b"
     },
     {
-      "id": "15125970",
-      "old_title": "국회 국회사무처_국회입법조사처 연구보고서(NARS 현안분석)",
-      "new_title": "국회 국회사무처_국회입법조사처 연구보고서(NARS 현안분석)",
+      "id": "15125888",
+      "old_title": "국회 국회사무처_NATV 뉴스_인물",
+      "new_title": "국회 국회사무처_NATV 뉴스_인물",
       "fields": [
         "operations"
       ],
-      "old_digest": "c5d77d3631be7d18f7b9f5528ad717fd0c3f6ec9196ee2e31633c743eedcf5f9",
-      "new_digest": "6efad72c23e5f3e4b3946b621399960f0e5278c7bc146b3d87ee25ce3d5b45c3"
+      "old_digest": "097c63f0c9a57c3fd13873ffdde63e3460f9ee742076445be0c88c6b2ee82f21",
+      "new_digest": "248553359dc05867c6ed98a2980ee36584b0cf2dd65d24702d3243f68d478760"
     },
     {
-      "id": "15125971",
-      "old_title": "국회 국회사무처_국회입법조사처 연구보고서(국정감사관련(보고서))",
-      "new_title": "국회 국회사무처_국회입법조사처 연구보고서(국정감사관련(보고서))",
+      "id": "15125889",
+      "old_title": "국회 국회사무처_NATV 뉴스_정당",
+      "new_title": "국회 국회사무처_NATV 뉴스_정당",
       "fields": [
         "operations"
       ],
-      "old_digest": "2bdcb089663d6294b04e2587fcfc841da46bcb90d37f58baf080925f93569dad",
-      "new_digest": "6c836fa5475e6f33ec704774c693a2fb8aae30d607f26a320af0f449dd639c79"
+      "old_digest": "5927cf3a7dada28f65a8628c955dd9dce04430747fc50f87a2780f025ef021cd",
+      "new_digest": "e341122fd4c17f8904edf99ae9bf8f18e44e91c7ba8aff0c020a8643a383a5eb"
     },
     {
-      "id": "15125972",
-      "old_title": "국회 국회사무처_국회입법조사처 연구보고서(국제통계 동향과 분석)",
-      "new_title": "국회 국회사무처_국회입법조사처 연구보고서(국제통계 동향과 분석)",
+      "id": "15125890",
+      "old_title": "국회 국회사무처_NATV 뉴스_토론회/세미나",
+      "new_title": "국회 국회사무처_NATV 뉴스_토론회/세미나",
       "fields": [
         "operations"
       ],
-      "old_digest": "145f7d8e9ae218b7e927b261503c1699009ccf8f63ddfdad56a972430c0f4077",
-      "new_digest": "bc04c4bd8e8f50a2de3a233a05389a94fb88bfbbdc3a8df7e11dc3d9aa5a2ca4"
+      "old_digest": "c9d28e8a692acdf47cd7c86579819544791d44ed89ed0d4b846457bee6323655",
+      "new_digest": "20c68de78c0db6dc52163ff6697ba5cbd67a1445e9faf247f24115aea47e6af3"
     },
     {
-      "id": "15125973",
-      "old_title": "국회 국회사무처_국회입법조사처 연구보고서(외국입법 동향과 분석)",
-      "new_title": "국회 국회사무처_국회입법조사처 연구보고서(외국입법 동향과 분석)",
+      "id": "15125891",
+      "old_title": "국회 국회사무처_OPEN API 전체 현황",
+      "new_title": "국회 국회사무처_OPEN API 전체 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "7c4d2e8cfc970eddafdd52415779db3834c550805af8a477442e0cb3b1e5b45b",
-      "new_digest": "9d8c39a7a02b6a9ff9bb978f62157617acff0cc8908cef496e0fe701dc53b88c"
+      "old_digest": "25b55617f97d0e823c96429e4bf00d2b48dd42581ae5a4db7ecb32f794fdacb5",
+      "new_digest": "993f84adf8c8d79ebda1338c30a00dcab01ab9dbd1887c0a5d59dc1350a3d600"
     },
     {
-      "id": "15125974",
-      "old_title": "국회 국회사무처_국회입법조사처 연구보고서(외국입법·정책 분석)",
-      "new_title": "국회 국회사무처_국회입법조사처 연구보고서(외국입법·정책 분석)",
+      "id": "15125892",
+      "old_title": "국회 국회사무처_국회 기자회견장 사용현황",
+      "new_title": "국회 국회사무처_국회 기자회견장 사용현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "6d3d2ed3f0570182e0fcd6d35b61ac47b5effcbc5733e38198b48369cb9c1523",
-      "new_digest": "4098af0564792f6889d564583dbe5745496bc376564e97ee4c6ed3c49ed533dd"
+      "old_digest": "b576277085ffde905b3595d27b743b5841dbe18ba0e443976c7ca483772531a5",
+      "new_digest": "d00a4d611c35a65d5a26e5703c56f0e1f9c61bb8cfe6cc0fbef773c22fe7097a"
     },
     {
-      "id": "15125975",
-      "old_title": "국회 국회사무처_국회입법조사처 연구보고서(이슈와 논점)",
-      "new_title": "국회 국회사무처_국회입법조사처 연구보고서(이슈와 논점)",
+      "id": "15125893",
+      "old_title": "국회 국회사무처_국회 및 국회사무처 소관 법인별 보조금 예산",
+      "new_title": "국회 국회사무처_국회 및 국회사무처 소관 법인별 보조금 예산",
       "fields": [
         "operations"
       ],
-      "old_digest": "d3b52f1abeff5094b105762af8367644bb558d1aa0972d850f6be31984a8ce0b",
-      "new_digest": "2f28bde5178c783e5a8a9d7d9fd00a96025d872ec4f3f15cc9563d2fc777ba18"
+      "old_digest": "06e3070e956e6fe4f4405124ad2805c24fb31e68bd44f376ac93655d665f78bf",
+      "new_digest": "f4585fe54e7a622393f3d822a1f53cd9953a4ec9a30ea9f9c539e4cb04090e0b"
     },
     {
-      "id": "15125976",
-      "old_title": "국회 국회사무처_국회입법조사처 연구보고서(입법·정책보고서)",
-      "new_title": "국회 국회사무처_국회입법조사처 연구보고서(입법·정책보고서)",
+      "id": "15125894",
+      "old_title": "국회 국회사무처_국회 보유 자산(건물)",
+      "new_title": "국회 국회사무처_국회 보유 자산(건물)",
       "fields": [
         "operations"
       ],
-      "old_digest": "893a503773004d48711c806a6b33a957b03450c5f44cf5ab3920e9285e6e5641",
-      "new_digest": "906dbd7cf84b40b7dcacbd18338b9a809090d9a39e532bc56ecf5826c11c4722"
+      "old_digest": "29f3aaa6ddcdb15de558ed2c96de9e5dea58e9eaf2c3df007e3b9484b921c9a5",
+      "new_digest": "a95dd6a0dcfee0e857f34ff8ed994db3e7be33130f6458b0e226b8abf9daf705"
     },
     {
-      "id": "15125977",
-      "old_title": "국회 국회사무처_국회입법조사처 연구보고서(입법영향분석보고서)",
-      "new_title": "국회 국회사무처_국회입법조사처 연구보고서(입법영향분석보고서)",
+      "id": "15125895",
+      "old_title": "국회 국회사무처_국회 보유 자산(전체)",
+      "new_title": "국회 국회사무처_국회 보유 자산(전체)",
       "fields": [
         "operations"
       ],
-      "old_digest": "3850a614198e9a18e439e5e90d4b3521fc0798431d98c36885714be524dce8d3",
-      "new_digest": "74a5f0b3de34b40600c6638da3669cb13bb6e59d8e97a9e4c7fd6c062b953f7a"
+      "old_digest": "b4ee72ccdb178bc36ec932a43ff3f08c26e1873111683d8590e633b539651b02",
+      "new_digest": "0b22ea911cd84ad13dda34fe4c26e5c6e1ecb7e27757eefe4b24067b0fc25be5"
     },
     {
-      "id": "15125979",
-      "old_title": "국회 국회사무처_국회입법조사처 연구보고서(지표로 보는 이슈)",
-      "new_title": "국회 국회사무처_국회입법조사처 연구보고서(지표로 보는 이슈)",
+      "id": "15125896",
+      "old_title": "국회 국회사무처_국회 보유 자산(토지)",
+      "new_title": "국회 국회사무처_국회 보유 자산(토지)",
       "fields": [
         "operations"
       ],
-      "old_digest": "92b6a4e07cd802d43063e839c51c720dd2c55b5e73f32c75e4513230d50b66db",
-      "new_digest": "bc352155eaeb9f57a1bc078ec1e72af1c05a4623254dd90312ff90d52c4a35df"
+      "old_digest": "186d09e3b90350acd771b55cb13657b3199d6b70fbc59d27174cb0bad9278f3e",
+      "new_digest": "117bf9c3c2e17b60b3c15d19ba18ec77fe0eda6175c669348248546ca7d14224"
     },
     {
-      "id": "15125980",
-      "old_title": "국회 국회사무처_국회입법조사처 연차보고서",
-      "new_title": "국회 국회사무처_국회입법조사처 연차보고서",
+      "id": "15125897",
+      "old_title": "국회 국회사무처_국회 시설물 안내",
+      "new_title": "국회 국회사무처_국회 시설물 안내",
       "fields": [
         "operations"
       ],
-      "old_digest": "59d2f2aea9b59648ad52272954046fbff0a1e629cd271c6fb6ae7a6b99eb38bb",
-      "new_digest": "f50accbb7fae5e1df1cba79b77a11ef68ae966830f5e4a8590ea7541cccb5484"
+      "old_digest": "98347ec65f47789c213fad3f565d199523859ccfdfdcc8e9535d47c61af71485",
+      "new_digest": "127fe6ea36036fcb19c8217cd37f56f9932570584873401fe9c70633f55cc7bd"
     },
     {
-      "id": "15125981",
-      "old_title": "국회 국회사무처_국회입법조사처 정보공개청구 처리현황 목록",
-      "new_title": "국회 국회사무처_국회입법조사처 정보공개청구 처리현황 목록",
+      "id": "15125898",
+      "old_title": "국회 국회사무처_국회개방행사 일정",
+      "new_title": "국회 국회사무처_국회개방행사 일정",
       "fields": [
         "operations"
       ],
-      "old_digest": "565f8900d5f5b4dc2d8c1d8551daa2cd23b7a2a0e2fc8c53cb06aff090b41fa0",
-      "new_digest": "72ce8111c3ffeddae30a2a6132b8cb9b327a14f0ab89ed6cc8f409875129483f"
+      "old_digest": "0b9df0afb1d76a8b418dd33312256a89681e796efa22795e8f24a0fbb1157093",
+      "new_digest": "594bc66b0c05d160173786570b686f9dea51037f0dc022066456ce3662c5b18f"
     },
     {
-      "id": "15125982",
-      "old_title": "국회 국회사무처_국회입법조사처 정보목록",
-      "new_title": "국회 국회사무처_국회입법조사처 정보목록",
+      "id": "15125899",
+      "old_title": "국회 국회사무처_국회뉴스ON_국회는 지금",
+      "new_title": "국회 국회사무처_국회뉴스ON_국회는 지금",
       "fields": [
         "operations"
       ],
-      "old_digest": "b4bccbd7c0adb08d4fc5cf330aab10a94dba2936a7ed9e6ed0b5dd7839dbbd73",
-      "new_digest": "96a351192669bb72f3f7035a569a46e8fa04d72020bf6d58f0d61f4d292034fc"
+      "old_digest": "714632edb4c348b48f6aa746b409d557bcef79e1ecb61f9ce5817a312cee10b3",
+      "new_digest": "e9ed978da5cbc5cd0f3f30ab6e5e9c9352f932b1e8f989fc4e3aa207082bbd80"
     },
     {
-      "id": "15125984",
-      "old_title": "국회 국회사무처_국회입법조사처 정책연구용역자료",
-      "new_title": "국회 국회사무처_국회입법조사처 정책연구용역자료",
+      "id": "15125900",
+      "old_title": "국회 국회사무처_국회뉴스ON_국회동향기타",
+      "new_title": "국회 국회사무처_국회뉴스ON_국회동향기타",
       "fields": [
         "operations"
       ],
-      "old_digest": "663b02b9f88f132dc96516e365566f4631f04b927d9afa05aabf89ec7c1d46e6",
-      "new_digest": "9fa004d743d938bf0e85350c4c189be1acaf8c78b15e4dcae57f38595f752989"
+      "old_digest": "62a28148976b25ce2c8c089a8dbcb8bf8128d5cb65a762f33271521617604e15",
+      "new_digest": "e7ac1a1b08eed99b85d8dda80c89c5913b314154c75bdaed971e2410fb6f5ffd"
     },
     {
-      "id": "15125985",
-      "old_title": "국회 국회사무처_국회입법조사처 학술지(입법과 정책)",
-      "new_title": "국회 국회사무처_국회입법조사처 학술지(입법과 정책)",
+      "id": "15125901",
+      "old_title": "국회 국회사무처_국회뉴스ON_그건 이렇습니다",
+      "new_title": "국회 국회사무처_국회뉴스ON_그건 이렇습니다",
       "fields": [
         "operations"
       ],
-      "old_digest": "8e5a53459e0775c96c7978fd99638699e3571ce7b3b251be9b324e84a7f385bf",
-      "new_digest": "bd39cc7cef09545f75acc4002946ef1aca1fa00365293afca72916c13896e5a3"
+      "old_digest": "e71cf503c64daaf2e23e6b7ac052222d0111ff75a8e609c042139ab8e8be256a",
+      "new_digest": "22fecc9fef1a8f57a80aebfd1fc71f611048546dc15aeaca625324b1e45aa408"
     },
     {
-      "id": "15125986",
-      "old_title": "국회 국회사무처_국회채용_종합현황",
-      "new_title": "국회 국회사무처_국회채용_종합현황",
+      "id": "15125902",
+      "old_title": "국회 국회사무처_국회뉴스ON_발행물 및 보고서",
+      "new_title": "국회 국회사무처_국회뉴스ON_발행물 및 보고서",
       "fields": [
         "operations"
       ],
-      "old_digest": "d47849b13abab6c90d1d4a07f7d59d23adb1d506906097f4353fb2239a829324",
-      "new_digest": "8e758568d83bf735cc564d405b373507e3dec7322aadc4e9c1c8b50b4274d79d"
+      "old_digest": "398132fa237d5b8528754f3881821ecce0630f3c8e06953ae5f2f9de320d99f8",
+      "new_digest": "6b38e932d5ac89e60e1bbeec0123e209ce5024e873a742f6aacbbcc5aecf6f72"
     },
     {
-      "id": "15125987",
-      "old_title": "국회 국회사무처_국회채용정보",
-      "new_title": "국회 국회사무처_국회채용정보",
+      "id": "15125903",
+      "old_title": "국회 국회사무처_국회뉴스ON_보좌진 이야기",
+      "new_title": "국회 국회사무처_국회뉴스ON_보좌진 이야기",
       "fields": [
         "operations"
       ],
-      "old_digest": "9e7975a6773f29a5c54cfefd0376f483401c3e1ee0ab7a614dfe11bb4e7de078",
-      "new_digest": "8bdd6b8c5d2269bfa26accc7cfade683d30b8b0b14bb53e8ce84b16474b7cea8"
+      "old_digest": "e379eebf7e716a7894e7b2fed2b00bb16ef550969474d0a94ebb33c8635aa0a3",
+      "new_digest": "94ad55cc455d1c7500472c96c66dd70ea8ac8dc59aad9267aabb6c208d31de22"
     },
     {
-      "id": "15125989",
-      "old_title": "국회 국회사무처_날짜별 의정활동",
-      "new_title": "국회 국회사무처_날짜별 의정활동",
+      "id": "15125904",
+      "old_title": "국회 국회사무처_국회뉴스ON_부의장동향",
+      "new_title": "국회 국회사무처_국회뉴스ON_부의장동향",
       "fields": [
         "operations"
       ],
-      "old_digest": "ce7390be20c4c6717a27b5d2c96cd697b7e4356df7ec68491eb2373048a3ea1e",
-      "new_digest": "bae3ada1e0f8d1ec0b07b593d13f11366f1888dc86ae2ba50a28a6fdaa9144d6"
+      "old_digest": "64d8cae02214154ca6b4ed0aab2e3eb8a2422033ae4314feb47fc1ca8f114e15",
+      "new_digest": "fd7bfca6e4b15725efd7d606b97d75dce8ca3afdb085f39dcd242b7e1da898da"
     },
     {
-      "id": "15125990",
-      "old_title": "국회 국회사무처_법률안 심사 및 처리(계류의안)",
-      "new_title": "국회 국회사무처_법률안 심사 및 처리(계류의안)",
+      "id": "15125905",
+      "old_title": "국회 국회사무처_국회뉴스ON_사무총장동향",
+      "new_title": "국회 국회사무처_국회뉴스ON_사무총장동향",
       "fields": [
         "operations"
       ],
-      "old_digest": "7848820f2f928170b1e10625ce321e7626e063c4ec508c9b204690079415a775",
-      "new_digest": "66d36862bcd118b42679957dcf1f1ef0d1c64f0f4dd60d287880a4535b44bde4"
+      "old_digest": "85e8a83651098085818342e6e64c78dead25527090216befecddc2906ce86434",
+      "new_digest": "887ea5fefeda33aeb82c37274b1319f133012f6f14651a06cba2a57a3f605049"
     },
     {
-      "id": "15125991",
-      "old_title": "국회 국회사무처_법률안 심사 및 처리(본회의부의안건)",
-      "new_title": "국회 국회사무처_법률안 심사 및 처리(본회의부의안건)",
+      "id": "15125906",
+      "old_title": "국회 국회사무처_국회뉴스ON_상임위·본회의",
+      "new_title": "국회 국회사무처_국회뉴스ON_상임위·본회의",
       "fields": [
         "operations"
       ],
-      "old_digest": "8619496a2ae3156dcf3b98ff34c471320a3cf5808a14d54142b7f63fe3a8ecca",
-      "new_digest": "8f81e4d916207b152c970dd6bcd7d324a659044f5021aa1fbb4bc6fbc7840cca"
+      "old_digest": "1796cd31eaaee3143b4c58e269fa6e041ebc6ba49c31274ae3b5c98275c48d07",
+      "new_digest": "30541e4d263f57f426792716863580f8d4ad44f3ca765d7bc6225d3d56be7c29"
     },
     {
-      "id": "15125992",
-      "old_title": "국회 국회사무처_법률안 심사 및 처리(위원회안, 대안)",
-      "new_title": "국회 국회사무처_법률안 심사 및 처리(위원회안, 대안)",
+      "id": "15125907",
+      "old_title": "국회 국회사무처_국회뉴스ON_외부기고",
+      "new_title": "국회 국회사무처_국회뉴스ON_외부기고",
       "fields": [
         "operations"
       ],
-      "old_digest": "d56eef2ab71853d864b735e41da05bf6c7418ed8f8e39bcf1caffd9c099d02dc",
-      "new_digest": "b09ed21586e20b6c902462f1a53fea890a7a0f6b27f099fb1451ef6518bf1e4a"
+      "old_digest": "a602d7b604b50df25bb65d3304bb00031fc6eaaabf33ac62470cf9c6c970bc39",
+      "new_digest": "c711abb07b37dd2c7821667039965126999d15b55c61aa7b129e60b562b61351"
     },
     {
-      "id": "15125994",
-      "old_title": "국회 국회사무처_법률안 심사 및 처리(의안검색)",
-      "new_title": "국회 국회사무처_법률안 심사 및 처리(의안검색)",
+      "id": "15125908",
+      "old_title": "국회 국회사무처_국회뉴스ON_의원 입법안",
+      "new_title": "국회 국회사무처_국회뉴스ON_의원 입법안",
       "fields": [
         "operations"
       ],
-      "old_digest": "bafaadf795cd54db1263d5f6b8cfd7db108c40c3e58638c61ffd663f9f2bc2b5",
-      "new_digest": "da2f374747bfa7770ec15dab4f8184aab9a86ab085202b7a3432fcf17afaf9ee"
+      "old_digest": "0770d4fbd9f07aa0c70bc96c0be010e37873add94c3e77ea8917f327965cd55e",
+      "new_digest": "66fc43122d8228deefd8063d4ef30eedd6be0e61a38d3c8e5339eec559867d66"
     },
     {
-      "id": "15125995",
-      "old_title": "국회 국회사무처_법률안 심사 및 처리(처리의안)",
-      "new_title": "국회 국회사무처_법률안 심사 및 처리(처리의안)",
+      "id": "15125909",
+      "old_title": "국회 국회사무처_국회뉴스ON_의원실 행사",
+      "new_title": "국회 국회사무처_국회뉴스ON_의원실 행사",
       "fields": [
         "operations"
       ],
-      "old_digest": "3407942e1fa5a8b4077854decdc05147198e0977355e471ff689e382adc60bf2",
-      "new_digest": "69dafe8556d67ee7ec85ad1435495ee8e8ad5a584e3821f742ee69f725ddbee7"
+      "old_digest": "771a600a10f4fc1dabed6af63f0baef825482e1ae8d32475ef47e894893be2b2",
+      "new_digest": "df50a7e5cbbbe0f42a869098bce96bb847b56d5cad63b88c194b21861d2129c4"
     },
     {
-      "id": "15125996",
-      "old_title": "국회 국회사무처_법률안 심사 및 처리(최근 본회의처리 의안)",
-      "new_title": "국회 국회사무처_법률안 심사 및 처리(최근 본회의처리 의안)",
+      "id": "15125910",
+      "old_title": "국회 국회사무처_국회뉴스ON_의원의 맛과멋",
+      "new_title": "국회 국회사무처_국회뉴스ON_의원의 맛과멋",
       "fields": [
         "operations"
       ],
-      "old_digest": "eb06c4b7f3e36a9db42bebe7b921355774760d3614f7cb4a4dc88c005b3060f1",
-      "new_digest": "9567bbe4991f68b76fd549274756677e0b6a5cec870ed51bc5e343ab9c3abda4"
+      "old_digest": "6a4d7bc27d14933b23b8e634a57720dd04afb7a7cf173450558e022d32fb709d",
+      "new_digest": "25ccaf478e7518d1b5e3aa129e6e413c452ffb95e069a29e637868cdde0a33d5"
     },
     {
-      "id": "15125997",
-      "old_title": "국회 국회사무처_법제사례 연구발표",
-      "new_title": "국회 국회사무처_법제사례 연구발표",
+      "id": "15125911",
+      "old_title": "국회 국회사무처_국회뉴스ON_의장동향",
+      "new_title": "국회 국회사무처_국회뉴스ON_의장동향",
       "fields": [
         "operations"
       ],
-      "old_digest": "aa3fedc845003eb26f51b4a5f7152c1e70528aedc172d918a72e13d8e4c020a7",
-      "new_digest": "9273bda9c7f43b7abbf92151d1b1b97e547ea40776bbafbd2739be8ccb625c78"
+      "old_digest": "21e8c0ac8854fd86c6a990d55c5b54d9077dfe8cf46534a9c12c09575ea06640",
+      "new_digest": "b7da94140b0126b354870561266941b8b9c770784050e304cb642b324523f191"
     },
     {
-      "id": "15125998",
-      "old_title": "국회 국회사무처_법제실 발간자료",
-      "new_title": "국회 국회사무처_법제실 발간자료",
+      "id": "15125912",
+      "old_title": "국회 국회사무처_국회도서관 기타 행정정보 공표",
+      "new_title": "국회 국회사무처_국회도서관 기타 행정정보 공표",
       "fields": [
         "operations"
       ],
-      "old_digest": "14a3e903051c63a5dec64805947db61bf053a285fe38e849fcc1edc28996ecc2",
-      "new_digest": "b58198c304733ab25543f50ff8a79c47ed97702b6039afed1fbb6576803edc04"
+      "old_digest": "df3bf9f59a9db1d5b3bbd989d98b9ed42517ce53f7004beb03bf69457b7d5c78",
+      "new_digest": "975ef5d622213a67350eee8a38399ac18efea0371bb91b49011feef7be19ccb3"
     },
     {
-      "id": "15126000",
-      "old_title": "국회 국회사무처_보도자료",
-      "new_title": "국회 국회사무처_보도자료",
+      "id": "15125913",
+      "old_title": "국회 국회사무처_국회도서관 사업에 관한 행정정보 공표",
+      "new_title": "국회 국회사무처_국회도서관 사업에 관한 행정정보 공표",
       "fields": [
         "operations"
       ],
-      "old_digest": "f399b08f4a64dd5e25eaed3ed7c9fc8fdb6eb171a62dc5532caaa1de666030ee",
-      "new_digest": "7ee6bc8bef58672673c65eaf1d2cdd6efc57d383b9de559cd2ff4b06e4e7c3b7"
+      "old_digest": "2eba3de76cba73975e688d2bca26b14595c0eb5f14ff19765d810b5055a3f7a6",
+      "new_digest": "4b197235c9c4bc30d2e19f1aef46285e113853412661877b9ccc86a8256e9343"
     },
     {
-      "id": "15126001",
-      "old_title": "국회 국회사무처_본회의 일정",
-      "new_title": "국회 국회사무처_본회의 일정",
+      "id": "15125914",
+      "old_title": "국회 국회사무처_국회도서관 업무추진비 집행현황",
+      "new_title": "국회 국회사무처_국회도서관 업무추진비 집행현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "fc4e35a34a04222d4091ea80bdcefd836e1cce9e1aa599b04952778ff9dcf930",
-      "new_digest": "bbd88df288e5589bf3901b099decc6c5c921a3ba242ee04de2e7f4a796b600ce"
+      "old_digest": "410d6f4859452d94993c2e384d81286fe281adf31e865041a8d2113289014380",
+      "new_digest": "e65098ff66b15b3002c67e8260b50b5cd639d2328e559aa945111dfe90ce0446"
     },
     {
-      "id": "15126002",
-      "old_title": "국회 국회사무처_본회의 처리안건_결산",
-      "new_title": "국회 국회사무처_본회의 처리안건_결산",
+      "id": "15125915",
+      "old_title": "국회 국회사무처_국회도서관 정보공개청구 처리현황 목록",
+      "new_title": "국회 국회사무처_국회도서관 정보공개청구 처리현황 목록",
       "fields": [
         "operations"
       ],
-      "old_digest": "0976660360fbc422416de346eabd2462b679ef3055c26d8a520b83b93b092030",
-      "new_digest": "b9fa028276403995b9a350744da0e605a509b0c9df0f985250bbc7119d79f65b"
+      "old_digest": "e45555b15e18a7a847f6af461ff67cef38a5ec335a5dd9e2754d3083094df0cf",
+      "new_digest": "5ca3e496112894a395e33ab0eb58816e1d8248c51eabd818a197899e1d9a298b"
     },
     {
-      "id": "15126003",
-      "old_title": "국회 국회사무처_본회의 처리안건_기타",
-      "new_title": "국회 국회사무처_본회의 처리안건_기타",
+      "id": "15125916",
+      "old_title": "국회 국회사무처_국회도서관 정보목록",
+      "new_title": "국회 국회사무처_국회도서관 정보목록",
       "fields": [
         "operations"
       ],
-      "old_digest": "9b09436411264cc88e5651a746263314ba44ac1c30ace8fa77f9430633ed1c1a",
-      "new_digest": "c79607086be20bd1b24f224560a10ffbb85274217017ddb7b77ea264ba3713ca"
+      "old_digest": "a84bd8cabe89c45ee9435148e796389a6bfab65e41dfd386503164928b369026",
+      "new_digest": "c31cf0a2f12da4c371fcfba099071fa2d9963c8dbfc2045697933408d448e782"
     },
     {
-      "id": "15126004",
-      "old_title": "국회 국회사무처_본회의 처리안건_법률안",
-      "new_title": "국회 국회사무처_본회의 처리안건_법률안",
+      "id": "15125917",
+      "old_title": "국회 국회사무처_국회도서관 정책에 관한 행정정보 공표",
+      "new_title": "국회 국회사무처_국회도서관 정책에 관한 행정정보 공표",
       "fields": [
         "operations"
       ],
-      "old_digest": "6106d4a02487f6e7fe1185111e707806c4788b789e7d63aae5f4d76b6e8db4c9",
-      "new_digest": "5a611b46edc97dd1a2032f3f32f56a9b0af9e321fca2ffbaa6f442d5ee548202"
+      "old_digest": "cd3b1727b353541e483484a2316728537ef1f90633542196418cd95fcb2392b4",
+      "new_digest": "7610ded545a1ff9be621db412ef929e6a541b214a0e3cd4c2f0e54e1a2c7a7d5"
     },
     {
-      "id": "15126005",
-      "old_title": "국회 국회사무처_본회의 처리안건_예산안",
-      "new_title": "국회 국회사무처_본회의 처리안건_예산안",
+      "id": "15125918",
+      "old_title": "국회 국회사무처_국회도서관 정책연구용역 보고서",
+      "new_title": "국회 국회사무처_국회도서관 정책연구용역 보고서",
       "fields": [
         "operations"
       ],
-      "old_digest": "2e4ef1619f506a6e644b709b3149902ee1b7264460514eeea2f6670cdcc2ef5c",
-      "new_digest": "348b7d00aa3abce04642e69b74d914e10f1f3917cc4c43b5ed9a0702444a972c"
+      "old_digest": "52f2182531e6237ef5dee55b494068ae8841687a63e8dac20e41a157c01705ad",
+      "new_digest": "f1a7739df2074d5cceae6ad2bcbd35ab8697ba56b0473e0aad2e31a9c9850749"
     },
     {
-      "id": "15126007",
-      "old_title": "국회 국회사무처_본회의 회의록",
-      "new_title": "국회 국회사무처_본회의 회의록",
+      "id": "15125919",
+      "old_title": "국회 국회사무처_국회도서관 행정감시 행정정보 공표",
+      "new_title": "국회 국회사무처_국회도서관 행정감시 행정정보 공표",
       "fields": [
         "operations"
       ],
-      "old_digest": "363d03f3a8c1195e09ebeeae28e6bf074feffcbf7545972787d2626d564d55bb",
-      "new_digest": "933f8e17c86a269c1f5869dc76e08f885883ff48f5cc7fb10b422256ec10c541"
+      "old_digest": "0feb1425b3aab00d76597126bf165859543d5c1962676bfad17e03ed43450ea8",
+      "new_digest": "4226dccf70af2340aaceaadd271d3dea426c5acfc0d1367ad5b9d7a3b8b61bbb"
     },
     {
-      "id": "15126008",
-      "old_title": "국회 국회사무처_사업별 예산 편성 규모",
-      "new_title": "국회 국회사무처_사업별 예산 편성 규모",
+      "id": "15125920",
+      "old_title": "국회 국회사무처_국회도서관 행정정보 공표목록",
+      "new_title": "국회 국회사무처_국회도서관 행정정보 공표목록",
       "fields": [
         "operations"
       ],
-      "old_digest": "f396d2f5fb0f49f3253d6c6173373e20bc6b781485a6d1d3d8c26c7afca17d25",
-      "new_digest": "575ad189e25381beeb091dc1e23fec80c85254b4516ef1a91e01a35a8514cacf"
+      "old_digest": "6645608030235a2a80fba5fe1089b70b45c67b928ef13cd332d353d4ad33464a",
+      "new_digest": "a85c3ed8e9ab092ee7afe48bb5553a7eae42f0f64f969e2ee32ac619239f10e1"
     },
     {
-      "id": "15126009",
-      "old_title": "국회 국회사무처_수입징수현황(수입목별)",
-      "new_title": "국회 국회사무처_수입징수현황(수입목별)",
+      "id": "15125921",
+      "old_title": "국회 국회사무처_국회문화극장 공연 일정",
+      "new_title": "국회 국회사무처_국회문화극장 공연 일정",
       "fields": [
         "operations"
       ],
-      "old_digest": "086732714d44a07491ab238076247d1381ad610493ac10a7a6c9789488b25585",
-      "new_digest": "d7172476f1350ef9b81ac6002b27d1cb8a87000d4787e968da87038fab311832"
+      "old_digest": "d938c099728f18df3d6c833873f3658d2e488a3db288ce95aaa52c2a356ab63d",
+      "new_digest": "e377464bbdb2559d3e5716d7d2696e7df1d494531abbfa4e7b1ca3481b656918"
     },
     {
-      "id": "15126010",
-      "old_title": "국회 국회사무처_수입징수현황(수입항별)",
-      "new_title": "국회 국회사무처_수입징수현황(수입항별)",
+      "id": "15125922",
+      "old_title": "국회 국회사무처_국회문화극장 영화 일정",
+      "new_title": "국회 국회사무처_국회문화극장 영화 일정",
       "fields": [
         "operations"
       ],
-      "old_digest": "5373a6e303df9c7106976e9830fb633f042b16e326b0f2d452c4b57ccff1e32d",
-      "new_digest": "bf0c6855e7fef9d3930214b7cef2cdddd597518519297c0601e10d13decd8c5d"
+      "old_digest": "2fa09994d0c23031ac2cbba9236a023f7ec764fde6737f2c93e641e50048c6c3",
+      "new_digest": "40d25e096a1c2342317ec9023eba75c2a15a305294fc64ab50de250e4e0bdc0d"
     },
     {
-      "id": "15126011",
-      "old_title": "국회 국회사무처_시민의정연수",
-      "new_title": "국회 국회사무처_시민의정연수",
+      "id": "15125923",
+      "old_title": "국회 국회사무처_국회미래연구원 미래생각",
+      "new_title": "국회 국회사무처_국회미래연구원 미래생각",
       "fields": [
         "operations"
       ],
-      "old_digest": "b5d2dc1e1ef5f0c5acc5e93ee14a3bbc5ac13a9dafc494a91250b2f77cd609e9",
-      "new_digest": "df5ea395b82ed40f6b6458b94ca1107f98e76055e11a40962afb6abf8d3f7737"
+      "old_digest": "d2562a0fd1efd7be71a56acb013e3ad69fc6fb2c426c4e4adb5745adf5713a0a",
+      "new_digest": "890a0590f93bd26ec6eacb13e743a073c55040c68d81e6f29ecad6da268ff709"
     },
     {
-      "id": "15126012",
-      "old_title": "국회 국회사무처_아트갤러리 전시 일정",
-      "new_title": "국회 국회사무처_아트갤러리 전시 일정",
+      "id": "15125924",
+      "old_title": "국회 국회사무처_국회미래연구원 미래서평",
+      "new_title": "국회 국회사무처_국회미래연구원 미래서평",
       "fields": [
         "operations"
       ],
-      "old_digest": "531c2f81c0dc6e9f25190778f46d72e57a3d6ab8145a9570a98ed2918d6b6bb5",
-      "new_digest": "db9e585e3be928a9c77c481d883001986a2dc1f553b43896590a9d409786d87e"
+      "old_digest": "e3dd4bbabfd01d628b26bd8d93fa2ceb51b544ecf26dc4f68001e51bc67f3e01",
+      "new_digest": "3e7f5c8a8227837d41a7e5c557fef32b3b62daf48e5dbe9d64726e8f3c52d476"
     },
     {
-      "id": "15126013",
-      "old_title": "국회 국회사무처_역대 국회 선거일, 의원정수, 임기정보",
-      "new_title": "국회 국회사무처_역대 국회 선거일, 의원정수, 임기정보",
+      "id": "15125925",
+      "old_title": "국회 국회사무처_국회미래연구원 미래칼럼",
+      "new_title": "국회 국회사무처_국회미래연구원 미래칼럼",
       "fields": [
         "operations"
       ],
-      "old_digest": "0e52c99c6c0c3f066534cfc2e374f60ca188146871cb2881e3618ad91720af48",
-      "new_digest": "d184365e9826903d74cfb0dafde403d865f99ea1e989a757eafd9c07927b0b3d"
+      "old_digest": "a87d511c35263ff61fe74fed8571ee600ac50c5b4d4a5614737f39fc1b781602",
+      "new_digest": "1a0800671d3f87c4e1a33d80a4a39961a31e1c2c6fdbd0731745e7b1195ac2ce"
     },
     {
-      "id": "15126014",
-      "old_title": "국회 국회사무처_역대 국회 정당별 국회의원 지역분포",
-      "new_title": "국회 국회사무처_역대 국회 정당별 국회의원 지역분포",
+      "id": "15125926",
+      "old_title": "국회 국회사무처_국회미래연구원 미래포럼",
+      "new_title": "국회 국회사무처_국회미래연구원 미래포럼",
       "fields": [
         "operations"
       ],
-      "old_digest": "a7b3caf631db83775cf0f55b149c935de5155a1456c77aa9d30186f06197d491",
-      "new_digest": "ca416566f861f6daa899640ae432c8a88b3ae6c5546bc5782c2094e1a6f3d665"
+      "old_digest": "0ae978964aaaefd223c19b79106b31242e31c59e6869b613c5ba4bc7d3e2ef22",
+      "new_digest": "416f89926c86f4101496a71d4092e16940015fd7319144a0523b1b36f94d0973"
     },
     {
-      "id": "15126016",
-      "old_title": "국회 국회사무처_역대 국회의원 위원회 경력",
-      "new_title": "국회 국회사무처_역대 국회의원 위원회 경력",
+      "id": "15125927",
+      "old_title": "국회 국회사무처_국회미래연구원 브리프형 심층분석 보고서",
+      "new_title": "국회 국회사무처_국회미래연구원 브리프형 심층분석 보고서",
       "fields": [
         "operations"
       ],
-      "old_digest": "97426f8cb6dc777b202fd84ba618c36325a9a5d1b3a374c637c3d724e7fff0f9",
-      "new_digest": "9bc1b3e19162ed3c36ef7d962371b3265537c467d9be5f2987fbc7c787c2adf7"
+      "old_digest": "7d2e2a9ced15cdbda05f7287f1a0b81116ac5a0925a6b5c060981a1720a4aea1",
+      "new_digest": "f440c7af91f473deba4d6bdf1bac81f9e326414272d6104c7957fdec987d7a84"
     },
     {
-      "id": "15126017",
-      "old_title": "국회 국회사무처_역대 국회의원 의원이력",
-      "new_title": "국회 국회사무처_역대 국회의원 의원이력",
+      "id": "15125928",
+      "old_title": "국회 국회사무처_국회미래연구원 연구보고서",
+      "new_title": "국회 국회사무처_국회미래연구원 연구보고서",
       "fields": [
         "operations"
       ],
-      "old_digest": "fd89f53fa12dda9bc6bf88337e488cbf4358539489f4c12f7d8a5af8cdbacdaa",
-      "new_digest": "c59c3c399c1431c568436fd5390c4150fb4bb4e71272d2c843730899133b5c36"
+      "old_digest": "cc08fd28a6bfed95df5466d3bb57cc68a535013c2fe23036375549c66701280c",
+      "new_digest": "3bc195405735e4688595da6df2fcbddacd355d2f8d96b74941800b0643a50ce3"
     },
     {
-      "id": "15126018",
-      "old_title": "국회 국회사무처_역대 국회의원 인적사항",
-      "new_title": "국회 국회사무처_역대 국회의원 인적사항",
+      "id": "15125929",
+      "old_title": "국회 국회사무처_국회미래연구원 연차보고서",
+      "new_title": "국회 국회사무처_국회미래연구원 연차보고서",
       "fields": [
         "operations"
       ],
-      "old_digest": "49d7ee84aaf6e79db268fdae2003b9632661000ef55dac71bc88cefa58784c24",
-      "new_digest": "3a92d02d5a96ac4f71ad63ea0d24bf0492a62a6ed39b8539bf4deb8021db9846"
+      "old_digest": "b2c0f044e33e695dd6328910a80d295f70ff5deb045ef0989a508846cba97799",
+      "new_digest": "8e2d043332fee3445a69f8412730ce7e48c8a7fb497dbba7cc6282663b4514ae"
     },
     {
-      "id": "15126019",
-      "old_title": "국회 국회사무처_역대 국회의원 재선 현황",
-      "new_title": "국회 국회사무처_역대 국회의원 재선 현황",
+      "id": "15125930",
+      "old_title": "국회 국회사무처_국회방송 편성표",
+      "new_title": "국회 국회사무처_국회방송 편성표",
       "fields": [
         "operations"
       ],
-      "old_digest": "af122d69735fd4b58a7b7a63dc13036aac96643b685f442b26971b9e826fa5ba",
-      "new_digest": "ce9929a8025fd38adc8c01e28e904a441e6f86f7c8bdbae47876cb685c694b40"
+      "old_digest": "44fda44aad5c92431460defce2a8d77b0389543a1cb09c3a4a90a977b26b38ec",
+      "new_digest": "35da54a0ae9f1992aa274a8f5a5ed463f64b7645dd3932e03ca0a8e19f078849"
     },
     {
-      "id": "15126020",
-      "old_title": "국회 국회사무처_역대 국회의원 현황",
-      "new_title": "국회 국회사무처_역대 국회의원 현황",
+      "id": "15125931",
+      "old_title": "국회 국회사무처_국회사무처 1억원 이상 계약 현황",
+      "new_title": "국회 국회사무처_국회사무처 1억원 이상 계약 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "cf261e3a42221658de69528b1f9956fc6d85a254f8750b87c00cd014a0754951",
-      "new_digest": "1c41de9c633092ffceb0454e8586b4723a4ff9bfce326ca02ca4881b3fab7eb6"
+      "old_digest": "bc82f3c566b555f135ee67f89b694a3a8df797716ca4b26734d0a06aa9a914e9",
+      "new_digest": "5fb8ec7c0aa6e8a580a6a29c7515a7d0340a1cb536d92337ebed712ba29a4c8b"
     },
     {
-      "id": "15126021",
-      "old_title": "국회 국회사무처_역대 국회의장단 정보",
-      "new_title": "국회 국회사무처_역대 국회의장단 정보",
+      "id": "15125932",
+      "old_title": "국회 국회사무처_국회사무처 2천만원 이상 수의계약 현황",
+      "new_title": "국회 국회사무처_국회사무처 2천만원 이상 수의계약 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "9cc18100dfbe555538d6ddd414b5668f125e277c9531bdeefdc761a45057871f",
-      "new_digest": "62a78e17db2aeea7cbdbc122225285c46ba5949b1b2169c8dbc5d0d55642d952"
+      "old_digest": "6af2c4b703b32aedb62aac624cbe10323f32167415442b294f945674dc238191",
+      "new_digest": "b6b5e183eb4aa061357b4fb320fac88d899a56e00dc14faa8cfc9ba49fb72013"
     },
     {
-      "id": "15126022",
-      "old_title": "국회 국회사무처_역대 여성 국회의원 현황",
-      "new_title": "국회 국회사무처_역대 여성 국회의원 현황",
+      "id": "15125933",
+      "old_title": "국회 국회사무처_국회사무처 업무추진비 집행현황",
+      "new_title": "국회 국회사무처_국회사무처 업무추진비 집행현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "a0e972b87b292fd47caac2eecaf47926598a905292293155174a2eea6907720c",
-      "new_digest": "8a1dc8b9b8eb22602e9262012200939341374c11562dcba1f883ccd6eecbc0df"
+      "old_digest": "3cc952135b3f7e94cef6adf121115dcdcd76c9ed76313850deb3109ee90f1449",
+      "new_digest": "5fa4fbad951519fe486522a777606503d11fb5dbf195cda54ce1b46b05cc98de"
     },
     {
-      "id": "15126023",
-      "old_title": "국회 국회사무처_역대 의안 통계",
-      "new_title": "국회 국회사무처_역대 의안 통계",
+      "id": "15125934",
+      "old_title": "국회 국회사무처_국회사무처 정보공개청구 처리현황 목록",
+      "new_title": "국회 국회사무처_국회사무처 정보공개청구 처리현황 목록",
       "fields": [
         "operations"
       ],
-      "old_digest": "ea85fe395e55e27daea9f1963dfdab45c6a9f4349de27e7c94b6562fc638eca7",
-      "new_digest": "abae59e53578800679a5e3d24b3db3893fcc3414b45b0852103e83aa2e71b896"
+      "old_digest": "f228304c31e4d92819586491771866a8d8fcb39fc7311295203c00776610d60a",
+      "new_digest": "0ca4c4540538481c26bc92ee8240939885ebb395c394de2f593935a13aca1ec5"
     },
     {
-      "id": "15126024",
-      "old_title": "국회 국회사무처_역대 정당별 국회의원 선거결과",
-      "new_title": "국회 국회사무처_역대 정당별 국회의원 선거결과",
+      "id": "15125935",
+      "old_title": "국회 국회사무처_국회사무처 정보목록",
+      "new_title": "국회 국회사무처_국회사무처 정보목록",
       "fields": [
         "operations"
       ],
-      "old_digest": "fb5f89a717542e49bd032663efb3550ab38c2cf780f0abb16d934cf3cec674df",
-      "new_digest": "4dca5c97029423af490cbd9549bfe8b02f6c4f3f2abfdd86f2ed43be4ece8652"
+      "old_digest": "bd252d6d15aa5560118eca445a007d2f7f728d98557c4f98334d6acd3e74efbb",
+      "new_digest": "5c456fae83e85be5af97b8164c19af17dcca1dfcaa4885ac57bfb5b6bf13788c"
     },
     {
-      "id": "15126025",
-      "old_title": "국회 국회사무처_연구단체 연구활동 보고서",
-      "new_title": "국회 국회사무처_연구단체 연구활동 보고서",
+      "id": "15125937",
+      "old_title": "국회 국회사무처_국회예산정책처 업무추진비 집행현황",
+      "new_title": "국회 국회사무처_국회예산정책처 업무추진비 집행현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "af49d0eba42ecca30fcf96c796959b2d08dc1e13b26f2082f13c2eec1bc9e08f",
-      "new_digest": "b1ffe1bd0bbcdd86d5229c213119ab30c0f20bc6e4cb0ca418a462cb9d40d9c9"
+      "old_digest": "a0f13e38ef21bb546aa488462f44792107f9d8cf19ffb6aebf54531ac65987cd",
+      "new_digest": "8efc4dc25fe933f8eb140de3267e42b55f553cbb5d6e23dfca73a31fad2b48a6"
     },
     {
-      "id": "15126026",
-      "old_title": "국회 국회사무처_연구단체 연구활동비 집행현황",
-      "new_title": "국회 국회사무처_연구단체 연구활동비 집행현황",
+      "id": "15125938",
+      "old_title": "국회 국회사무처_국회예산정책처 연차보고서",
+      "new_title": "국회 국회사무처_국회예산정책처 연차보고서",
       "fields": [
         "operations"
       ],
-      "old_digest": "da8921a4e96b7b6d3e5fdfd1adc01ceaf5721b7ef0bf4c5841e4a845e7561592",
-      "new_digest": "16e15e122fd761fcbb291a8973f2eba828541c9d5d49b3ddb4392ad3a8f0f367"
+      "old_digest": "f8c0f9587673f3445298d9d0f7765f9d5ef130a6bb95134a85dc5cecf1662808",
+      "new_digest": "a27c8d85f47a2a31d8ad494c5579afd7d2f8d991e2d9f3052fdf29382694e4d1"
     },
     {
-      "id": "15126027",
-      "old_title": "국회 국회사무처_연구단체 활동실적",
-      "new_title": "국회 국회사무처_연구단체 활동실적",
+      "id": "15125939",
+      "old_title": "국회 국회사무처_국회예산정책처 정보공개청구 처리현황 목록",
+      "new_title": "국회 국회사무처_국회예산정책처 정보공개청구 처리현황 목록",
       "fields": [
         "operations"
       ],
-      "old_digest": "ad9fcf9820a10a6e85ee82c828957756d23e0ede919c084154c63db0ebb7f9a8",
-      "new_digest": "0530ff18bee8ff00322a31a85281764d7040b8795d0fb0aaaa258b90194552db"
+      "old_digest": "d196b53253e169d99f36f547189ef702730de44925158f6e5618731147856a7c",
+      "new_digest": "eca35b71acd456c319960e51f48c367a7daec01ba2eb71e9beca4ed11338c4b6"
     },
     {
-      "id": "15126028",
-      "old_title": "국회 국회사무처_연도별 연구단체 건수",
-      "new_title": "국회 국회사무처_연도별 연구단체 건수",
+      "id": "15125940",
+      "old_title": "국회 국회사무처_국회예산정책처 정보목록",
+      "new_title": "국회 국회사무처_국회예산정책처 정보목록",
       "fields": [
         "operations"
       ],
-      "old_digest": "be172b21757ca8ab0f20a1ed98b8aefc93d7455d7f3064ff6ade9717dd3c0131",
-      "new_digest": "dee4fc7f2155a48d819aa53ae798948cd09d603dc619ca73cdac981f25ae9a7f"
+      "old_digest": "7cb0f3afb02dffed9ab832fbc68561bf2d58697cffa90609818673fb70feb6d0",
+      "new_digest": "bbe193b6d0ce62a043c86e0b69db9906e942e43936eb42ac41edf03603d1161a"
     },
     {
-      "id": "15126029",
-      "old_title": "국회 국회사무처_예산정책연구",
-      "new_title": "국회 국회사무처_예산정책연구",
+      "id": "15125941",
+      "old_title": "국회 국회사무처_국회예산정책처 홍보물",
+      "new_title": "국회 국회사무처_국회예산정책처 홍보물",
       "fields": [
         "operations"
       ],
-      "old_digest": "03830a9e929f8666da5d4598ab7dae31dbbb7faf3832471e1eacda71ca9cc7d5",
-      "new_digest": "ceb9b39552da1beab238a27644537b4243815fb5c74f3f6fed8c01508fc839ac"
+      "old_digest": "e4008ee4aeb445b85a2b08550e1726bdde5f18c1686369e8e6ac6e0f943e6c62",
+      "new_digest": "93fd1290fdf1e967664fab9a5a8e7042b812553f5b7635c245af24f8edc46480"
     },
     {
-      "id": "15126031",
-      "old_title": "국회 국회사무처_예산춘추",
-      "new_title": "국회 국회사무처_예산춘추",
+      "id": "15125942",
+      "old_title": "국회 국회사무처_국회의원 SNS정보",
+      "new_title": "국회 국회사무처_국회의원 SNS정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "2870f28be4daa52078141aa17a83ac36c1a43825841e5675a5a7a1d93d07cae4",
-      "new_digest": "9127c8c8bc344f9c3b0ff119e93ffb07d69099809e23f12a7008f961a8fa0aff"
-    },
-    {
-      "id": "15126033",
-      "old_title": "국회 국회사무처_우수연구단체 현황",
-      "new_title": "국회 국회사무처_우수연구단체 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "0969c9ba3f8edb7573511c8a0c153a676cbdd1f032abed0ce5c75df620ed9a3a",
-      "new_digest": "5ea60c07f07701f0351a3aee001163ba3eea153cd3f743c680eda7222a6854d2"
-    },
-    {
-      "id": "15126034",
-      "old_title": "국회 국회사무처_위원회 계류법률안",
-      "new_title": "국회 국회사무처_위원회 계류법률안",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "d649ce47d5874494959ef0d203d1542c2d7905f70831ce2e4095268f824277c8",
-      "new_digest": "dcf58044525b66eb2d16f23f4c98845352f63481791b4f137a1af89451c7f1d4"
-    },
-    {
-      "id": "15126035",
-      "old_title": "국회 국회사무처_위원회 위원 명단",
-      "new_title": "국회 국회사무처_위원회 위원 명단",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "ff6a5463a7ed0dcf90689fee520e9ce9f44287eea8016c50e8e2d880043a96e5",
-      "new_digest": "e75100273058b7ef52ce4e2bd5f2f93745d0cf0c4a716c4be1b10edca3bfc367"
-    },
-    {
-      "id": "15126036",
-      "old_title": "국회 국회사무처_위원회 자료실",
-      "new_title": "국회 국회사무처_위원회 자료실",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "1373bbef035f337cd857d6a453f8a4466a3f6945fa256ed67f1e90cbdd86cb94",
-      "new_digest": "c4c705875467b76b8331bf0cb3de8ce9405631e1d41a53ba5a57bf9bc6c45f45"
-    },
-    {
-      "id": "15126037",
-      "old_title": "국회 국회사무처_위원회 현황 정보",
-      "new_title": "국회 국회사무처_위원회 현황 정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "9e3bae53c5b46dd4653321412d1851aa207d533c5409c82d73c16e43a53fdf9b",
-      "new_digest": "7ec07a9e1152d2c0756ea717ca8bf41addc7c4597a00929a712743d3f6df939c"
-    },
-    {
-      "id": "15126038",
-      "old_title": "국회 국회사무처_위원회 회의록",
-      "new_title": "국회 국회사무처_위원회 회의록",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "4a533e9be4b2bd69d0022858d21b407d8aebbd04c6fb4bf6b84fd1e52a1b8adf",
-      "new_digest": "0ca1abd8ac62dd41d76c302281d215d6ef67b7f40bbbafa8ec88b782c58a6f7a"
-    },
-    {
-      "id": "15126039",
-      "old_title": "국회 국회사무처_위원회별 공청회 일정",
-      "new_title": "국회 국회사무처_위원회별 공청회 일정",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "4c9c03a5c667c1c6921fba90310f00e489e9c4e20473bd6679962fbf37903b3b",
-      "new_digest": "64130d02be3ac5fe9cac3fc77ef0f6b516cceecf534b51e211f3337557ded384"
-    },
-    {
-      "id": "15126040",
-      "old_title": "국회 국회사무처_위원회별 소위원회 일정",
-      "new_title": "국회 국회사무처_위원회별 소위원회 일정",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "ca8a60a8cb87f8edc0fc6b39d060fbd1b2fe6a3824a040d06c11b68d04966ae7",
-      "new_digest": "81dc134ff1e92b5cc296fea507d119dfafa51d3aba3ea5739507628ea90ef10a"
-    },
-    {
-      "id": "15126041",
-      "old_title": "국회 국회사무처_위원회별 일정",
-      "new_title": "국회 국회사무처_위원회별 일정",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "a46edabbd1b1e949b17788cadfc56e10bddd13c63eedefa82ff2d8cee8386759",
-      "new_digest": "7890dce409ba908c741a38b57ca8a60330f4fd9fd9d7596d6c1b681eb0dd02cc"
-    },
-    {
-      "id": "15126042",
-      "old_title": "국회 국회사무처_위원회별 전체회의 일정",
-      "new_title": "국회 국회사무처_위원회별 전체회의 일정",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "3e66671261327198b0eced83567f96097ef2f4825d06ff47d4bf51fcd5d02d6d",
-      "new_digest": "c51fe2883245fdfe98532b5b4d65e91f8810ba4b960d2ca942e0c9723e76e5e0"
-    },
-    {
-      "id": "15126043",
-      "old_title": "국회 국회사무처_의사일정공지",
-      "new_title": "국회 국회사무처_의사일정공지",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "1310a717d7f7306fe94fb9e73bb1d90c57620a2925d55cbbc4793d2977005481",
-      "new_digest": "a83954a39cb39e96ddf71da3dce01cc8546b9a9090328048af94a65a88b9eb81"
-    },
-    {
-      "id": "15126044",
-      "old_title": "국회 국회사무처_의안별 표결현황",
-      "new_title": "국회 국회사무처_의안별 표결현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "f2d1e4560ba724bd0ba8fa5625d3e2b22a905ee6d33d2cb176e438044bf8eefd",
-      "new_digest": "8b31b3b366720ffeb671e7392851d6dd5c96a2de850d915642d126b40a5c3bc7"
-    },
-    {
-      "id": "15126045",
-      "old_title": "국회 국회사무처_의원실 지원경비 현황",
-      "new_title": "국회 국회사무처_의원실 지원경비 현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "b6d8cee8d934055a02c6d13acb032fcf5af07ee29756ccd10131cc8b0c2be74b",
-      "new_digest": "6351a31b6b38a6036af9b2581f41676f130a4062b3550f527b50e5ce651c268a"
-    },
-    {
-      "id": "15126046",
-      "old_title": "국회 국회사무처_의원연맹별 보조금 예산",
-      "new_title": "국회 국회사무처_의원연맹별 보조금 예산",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "af0528fb656f7296f55b308bf3d0cac872707e98e41e695ac35b55b76895f23e",
-      "new_digest": "b75f3180b397ad5d0fd56cc9c82cc54d1861cdd2a3f257fefb97ad140c9792d9"
-    },
-    {
-      "id": "15126047",
-      "old_title": "국회 국회사무처_의원외교협의회 명단",
-      "new_title": "국회 국회사무처_의원외교협의회 명단",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "7ea41a9768b1fac6af6ec1c8405e60e837d44cd7cc0b189df5bb8b7103139656",
-      "new_digest": "b01bcce8fda2dca9670ec13b520862e2c0c9fa4c586f997dd566a55b7ad28914"
-    },
-    {
-      "id": "15126048",
-      "old_title": "국회 국회사무처_의원친선협회 임·회원 명단",
-      "new_title": "국회 국회사무처_의원친선협회 임·회원 명단",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "c49940985c27efcacf71fa3d082905b8f9e79cf9ea25bb2dc0fdef6d2bd2d3b3",
-      "new_digest": "1e185924515180202b2de3960e319e845ef94ec8da055a7f7baea4f397380b7f"
-    },
-    {
-      "id": "15126049",
-      "old_title": "국회 국회사무처_의회외교 동향과 분석",
-      "new_title": "국회 국회사무처_의회외교 동향과 분석",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "65f0ed1bc6c516294b7c3d21cc9a5af0b1041585326fccd11e720e12f1d2e174",
-      "new_digest": "f585b140cfbff19a6a4557e75c6d30feca6eac647c7fd3701f88f3500c86cc51"
-    },
-    {
-      "id": "15126050",
-      "old_title": "국회 국회사무처_의회외교 실시내역",
-      "new_title": "국회 국회사무처_의회외교 실시내역",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "5fb32f48a28a77766196cdd43a3cfcf33f6e4f335fbfcab81a04005c697876fd",
-      "new_digest": "48f742ef8f606d08e2e1e386ef8f4bb649331f259d301a91cd76a8909eec04fe"
-    },
-    {
-      "id": "15126051",
-      "old_title": "국회 국회사무처_의회외교포럼 활동보고",
-      "new_title": "국회 국회사무처_의회외교포럼 활동보고",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "a67bafc9e02629bb6327a4d62612a483c23bed0170c8503e31ff3dac4e7a178a",
-      "new_digest": "06a060bb3d7ed40f9770ff5ccb7679c06133635157eba0d7412e67b522c5b3ee"
-    },
-    {
-      "id": "15126052",
-      "old_title": "국회 국회사무처_인사청문회",
-      "new_title": "국회 국회사무처_인사청문회",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "5de7428a81d8ed448e7ffb740cb591dcfa8481e3d2a10f301260631155bcb266",
-      "new_digest": "5ee82ddc319e94b7f36f6f6f2952b6232c8f1e5bba5f56d6c5795e272955f4bd"
-    },
-    {
-      "id": "15126053",
-      "old_title": "국회 국회사무처_입법고시(5급) 채용현황",
-      "new_title": "국회 국회사무처_입법고시(5급) 채용현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "4029afc0daedd7887a1dec2b2aa66be8def0a807d5aabd17c5410fedca4178a3",
-      "new_digest": "130f14f5a7b385bbc09cd9e3c61c0c9c9b92c71f986700486fcf26de27399125"
-    },
-    {
-      "id": "15126054",
-      "old_title": "국회 국회사무처_전원위원회 일정",
-      "new_title": "국회 국회사무처_전원위원회 일정",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "1b737eb5054386d2c6627b412a3052410d7c81ddff08bdb8518a24a659a0ea12",
-      "new_digest": "6d1ae887a5bcabbb6030b8e1ff6a1a4d3f0edc1c33330a80283a400fc1eff3e7"
-    },
-    {
-      "id": "15126055",
-      "old_title": "국회 국회사무처_전원위원회 회의록",
-      "new_title": "국회 국회사무처_전원위원회 회의록",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "ba0f4b3075ca901627f37c60ae92ed6fd58eed5eeac36fd0324562bbb4eca331",
-      "new_digest": "65a1c8c688e4332780aee4804af8fb9b5f10f2eab578234b798f356dcbcfcc49"
+      "old_digest": "356f312ff4b88f832fa41d071dd69d840ffc143b6f463df100682db5a22ac697",
+      "new_digest": "c5d127c9776fd480a5c12aedb5ec64522362d81a1a49378daf2160ce4b56519c"
     }
   ]
 }
