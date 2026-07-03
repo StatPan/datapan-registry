@@ -1,32 +1,32 @@
 {
-  "generated_at": "2026-07-03T15:34:17Z",
+  "generated_at": "2026-07-03T15:42:50Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 16296,
-    "callable_operations": 16154,
-    "specs_without_operations": 3000,
-    "specs_without_callable_operation": 3075,
+    "operations_total": 16347,
+    "callable_operations": 16205,
+    "specs_without_operations": 2980,
+    "specs_without_callable_operation": 3055,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 3958,
-    "operations_without_response_params": 5180,
+    "operations_without_request_params": 4009,
+    "operations_without_response_params": 5231,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 2189,
-      "external_endpoint_operations": 4686,
+      "external_endpoint_specs": 2209,
+      "external_endpoint_operations": 4737,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 114,
       "dev_approval_required_operations": 207,
-      "prod_approval_required_operations": 5104,
+      "prod_approval_required_operations": 5138,
       "malformed_endpoint_url_count": 42,
-      "malformed_guide_url_count": 590,
+      "malformed_guide_url_count": 598,
       "top_endpoint_hosts": [
         {
           "host": "apis.data.go.kr",
@@ -50,7 +50,7 @@
         },
         {
           "host": "www.foodsafetykorea.go.kr",
-          "count": 237
+          "count": 288
         },
         {
           "host": "www.calspia.go.kr",
@@ -128,7 +128,7 @@
         },
         {
           "host": "www.foodsafetykorea.go.kr",
-          "count": 237
+          "count": 288
         },
         {
           "host": "www.calspia.go.kr",

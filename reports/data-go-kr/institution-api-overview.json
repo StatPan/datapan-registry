@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T15:34:17Z",
+  "generated_at": "2026-07-03T15:42:50Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 16296,
-    "runtime_evidence": 1630,
-    "runtime_evidence_percent": 10.0,
-    "callable_operations": 16154,
-    "external_endpoint_operations": 4686,
-    "registered_adapter_operations": 4676,
+    "operations": 16347,
+    "runtime_evidence": 1660,
+    "runtime_evidence_percent": 10.2,
+    "callable_operations": 16205,
+    "external_endpoint_operations": 4737,
+    "registered_adapter_operations": 4727,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 4686
+      "count": 4737
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 4676
+      "count": 4727
     },
     {
       "key": "builtin",
@@ -93,7 +93,7 @@
     },
     {
       "category": "식품건강",
-      "operation_count": 1088
+      "operation_count": 1139
     },
     {
       "category": "환경기상",
@@ -176,7 +176,7 @@
     },
     {
       "host": "www.foodsafetykorea.go.kr",
-      "operation_count": 237,
+      "operation_count": 288,
       "adapter": "foodsafetykorea",
       "adapter_status": "registered",
       "capabilities": [
@@ -623,15 +623,15 @@
     {
       "organization": "식품의약품안전처",
       "api_count": 392,
-      "operation_api_count": 372,
-      "operation_count": 597,
-      "runtime_evidence_count": 13,
-      "runtime_evidence_percent": 2.2,
+      "operation_api_count": 392,
+      "operation_count": 648,
+      "runtime_evidence_count": 41,
+      "runtime_evidence_percent": 6.3,
       "verified": 10,
       "failed": 0,
-      "skipped": 3,
+      "skipped": 31,
       "unknown": 0,
-      "approval_required_operations": 481,
+      "approval_required_operations": 515,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
@@ -640,13 +640,13 @@
         },
         {
           "key": "external_endpoint",
-          "count": 234
+          "count": 285
         }
       ],
       "by_adapter_status": [
         {
           "key": "adapter",
-          "count": 234
+          "count": 285
         },
         {
           "key": "builtin",
@@ -656,7 +656,7 @@
       "top_categories": [
         {
           "category": "식품건강",
-          "operation_count": 597
+          "operation_count": 648
         }
       ],
       "top_hosts": [
@@ -666,7 +666,7 @@
         },
         {
           "host": "www.foodsafetykorea.go.kr",
-          "operation_count": 233,
+          "operation_count": 284,
           "adapter": "foodsafetykorea",
           "adapter_status": "registered",
           "capabilities": [
@@ -1438,11 +1438,11 @@
       "api_count": 106,
       "operation_api_count": 106,
       "operation_count": 154,
-      "runtime_evidence_count": 19,
-      "runtime_evidence_percent": 12.3,
+      "runtime_evidence_count": 21,
+      "runtime_evidence_percent": 13.6,
       "verified": 0,
       "failed": 0,
-      "skipped": 19,
+      "skipped": 21,
       "unknown": 0,
       "approval_required_operations": 103,
       "no_endpoint_operations": 0,

@@ -2,18 +2,18 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-07-03T15:34:17Z`
+- Generated at: `2026-07-03T15:42:50Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `9060` (`75.1%`)
-- APIs without operation mapping: `3000`
-- Operations: `16296`
-- Runtime evidence operations: `1630` (`10.0%`)
+- APIs with operation mapping: `9080` (`75.3%`)
+- APIs without operation mapping: `2980`
+- Operations: `16347`
+- Runtime evidence operations: `1660` (`10.2%`)
 - Runtime verified operations: `352`
 - Runtime failed operations: `115`
-- Runtime skipped operations: `1163`
-- APIs with runtime evidence: `780`
-- Runtime reactivation APIs: `8280`
+- Runtime skipped operations: `1193`
+- APIs with runtime evidence: `795`
+- Runtime reactivation APIs: `8285`
 - Runtime repair APIs: `66`
 
 ## Highest Priority Institutions
@@ -22,7 +22,7 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 행정안전부 | 1252 | 1252 | 0 | 100.0% | 1767 | 50 | 1202 | 9 | 1202 |
 | 경기도 | 840 | 840 | 0 | 100.0% | 2241 | 86 | 754 | 1 | 754 |
-| 식품의약품안전처 | 392 | 372 | 20 | 94.9% | 597 | 7 | 365 | 0 | 385 |
+| 식품의약품안전처 | 392 | 392 | 0 | 100.0% | 648 | 21 | 371 | 0 | 371 |
 | 국토교통부 | 393 | 393 | 0 | 100.0% | 1055 | 35 | 358 | 2 | 358 |
 | 국회 국회사무처 | 277 | 0 | 277 | 0.0% | 0 | 0 | 0 | 0 | 277 |
 | 성평등가족부 | 273 | 272 | 1 | 99.6% | 347 | 1 | 271 | 0 | 272 |
@@ -40,7 +40,7 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 대전광역시 서구 | 125 | 0 | 125 | 0.0% | 0 | 0 | 0 | 0 | 125 |
 | 세종특별자치시 | 122 | 122 | 0 | 100.0% | 122 | 0 | 122 | 0 | 122 |
 | 전라남도 | 109 | 108 | 1 | 99.1% | 174 | 0 | 108 | 0 | 109 |
-| 식품의약품안전처 식품의약품안전평가원 | 106 | 106 | 0 | 100.0% | 154 | 1 | 105 | 0 | 105 |
+| 식품의약품안전처 식품의약품안전평가원 | 106 | 106 | 0 | 100.0% | 154 | 2 | 104 | 0 | 104 |
 | 울산항만공사 | 98 | 6 | 92 | 6.1% | 9 | 0 | 6 | 0 | 98 |
 | 충청남도 | 96 | 69 | 27 | 71.9% | 77 | 0 | 69 | 0 | 96 |
 | 금융위원회 | 110 | 110 | 0 | 100.0% | 349 | 14 | 96 | 0 | 96 |

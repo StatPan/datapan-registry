@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T15:34:17Z",
+  "generated_at": "2026-07-03T15:42:50Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -17,8 +17,8 @@
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 5210,
-    "malformed_source_url_count": 632
+    "approval_required_operations": 5244,
+    "malformed_source_url_count": 640
   },
   "providers": [
     {
@@ -247,14 +247,14 @@
         "external_endpoint"
       ],
       "adapter_status": "adapter",
-      "specs": 104,
-      "operations": 237,
-      "external_endpoint_operations": 237,
-      "approval_required_operations": 206,
+      "specs": 124,
+      "operations": 288,
+      "external_endpoint_operations": 288,
+      "approval_required_operations": 240,
       "sample_ids": [
+        "15056532",
         "15056661",
-        "15056847",
-        "15057328"
+        "15056847"
       ]
     },
     {

@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-07-03T15:34:08Z",
+  "generated_at": "2026-07-03T15:42:13Z",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
-  "limit": 1911,
+  "limit": 1941,
   "truncated": true,
-  "filtered_count": 1630,
+  "filtered_count": 1660,
   "summary": {
-    "total": 1630,
+    "total": 1660,
     "verified": 352,
     "failed": 115,
-    "skipped": 1163,
+    "skipped": 1193,
     "unknown": 0
   },
   "results": [
@@ -29669,6 +29669,692 @@
       "semantic_status": "html_landing_page",
       "url": "http://data.ex.co.kr/openapi/basicinfo/openApiInfoM?apiId=0163",
       "body_shape": "html"
+    },
+    {
+      "dataset_id": "15056516",
+      "title": "식품의약품안전처_검사 부적합 식품정보",
+      "operation": "부적합식품 상세정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "Prduct": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "Prduct"
+      ]
+    },
+    {
+      "dataset_id": "15056518",
+      "title": "식품의약품안전처_실험동물제도 및 실험동물 시설정보",
+      "operation": "동물실험시설등록현황조회(동물실험시설)",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "entp_name": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "receipt_no": "",
+        "receipt_time": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "receipt_time",
+        "receipt_no",
+        "entp_name"
+      ]
+    },
+    {
+      "dataset_id": "15056518",
+      "title": "식품의약품안전처_실험동물제도 및 실험동물 시설정보",
+      "operation": "동물실험시설등록현황조회(실험동물공급자)",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "entp_name": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "receipt_no": "",
+        "receipt_time": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "receipt_time",
+        "receipt_no",
+        "entp_name"
+      ]
+    },
+    {
+      "dataset_id": "15056518",
+      "title": "식품의약품안전처_실험동물제도 및 실험동물 시설정보",
+      "operation": "동물실험시설등록현황조회(우수실험동물생산시설)",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "entp_name": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "receipt_no": "",
+        "receipt_time": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "receipt_time",
+        "receipt_no",
+        "entp_name"
+      ]
+    },
+    {
+      "dataset_id": "15056544",
+      "title": "식품의약품안전처_의료기기 광고사전심의 정보",
+      "operation": "의료기기광고사전심의 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ad_entp_name": "",
+        "boss_item_name": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "ad_entp_name",
+        "boss_item_name"
+      ]
+    },
+    {
+      "dataset_id": "15056710",
+      "title": "식품의약품안전처_국내소송 의약품(특허) 정보",
+      "operation": "의약품심판현황",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ingr_name": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "prt_name": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "ingr_name",
+        "prt_name"
+      ]
+    },
+    {
+      "dataset_id": "15056760",
+      "title": "식품의약품안전처_건강기능식품정보",
+      "operation": "건강기능식품 목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "Entrps": "",
+        "Prduct": "",
+        "Sttemnt_no": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "Entrps",
+        "Prduct",
+        "Sttemnt_no"
+      ]
+    },
+    {
+      "dataset_id": "15056760",
+      "title": "식품의약품안전처_건강기능식품정보",
+      "operation": "건강기능식품 상세정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "Prduct": "",
+        "STTEMNT_NO": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "Prduct",
+        "STTEMNT_NO"
+      ]
+    },
+    {
+      "dataset_id": "15056780",
+      "title": "식품의약품안전처_의약품안전사용서비스(DUR)성분정보",
+      "operation": "노인주의 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ingrCode": "",
+        "ingrName": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json",
+        "typeName": ""
+      },
+      "missing_params": [
+        "typeName",
+        "ingrCode",
+        "ingrName"
+      ]
+    },
+    {
+      "dataset_id": "15056780",
+      "title": "식품의약품안전처_의약품안전사용서비스(DUR)성분정보",
+      "operation": "병용금기 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ingrCode": "",
+        "ingrKorName": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json",
+        "typeName": ""
+      },
+      "missing_params": [
+        "typeName",
+        "ingrCode",
+        "ingrKorName"
+      ]
+    },
+    {
+      "dataset_id": "15056780",
+      "title": "식품의약품안전처_의약품안전사용서비스(DUR)성분정보",
+      "operation": "용량주의 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ingrCode": "",
+        "ingrName": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json",
+        "typeName": ""
+      },
+      "missing_params": [
+        "typeName",
+        "ingrCode",
+        "ingrName"
+      ]
+    },
+    {
+      "dataset_id": "15056780",
+      "title": "식품의약품안전처_의약품안전사용서비스(DUR)성분정보",
+      "operation": "임부금기 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ingrCode": "",
+        "ingrName": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json",
+        "typeName": ""
+      },
+      "missing_params": [
+        "typeName",
+        "ingrCode",
+        "ingrName"
+      ]
+    },
+    {
+      "dataset_id": "15056780",
+      "title": "식품의약품안전처_의약품안전사용서비스(DUR)성분정보",
+      "operation": "투여기간주의 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ingrCode": "",
+        "ingrName": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json",
+        "typeName": ""
+      },
+      "missing_params": [
+        "typeName",
+        "ingrCode",
+        "ingrName"
+      ]
+    },
+    {
+      "dataset_id": "15056780",
+      "title": "식품의약품안전처_의약품안전사용서비스(DUR)성분정보",
+      "operation": "특정연령대금기 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ingrCode": "",
+        "ingrName": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json",
+        "typeName": ""
+      },
+      "missing_params": [
+        "typeName",
+        "ingrCode",
+        "ingrName"
+      ]
+    },
+    {
+      "dataset_id": "15056780",
+      "title": "식품의약품안전처_의약품안전사용서비스(DUR)성분정보",
+      "operation": "효능군중복 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ingrCode": "",
+        "ingrName": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json",
+        "typeName": ""
+      },
+      "missing_params": [
+        "typeName",
+        "ingrCode",
+        "ingrName"
+      ]
+    },
+    {
+      "dataset_id": "15056785",
+      "title": "식품의약품안전처_의료기기 회수·판매중지정보",
+      "operation": "업체명 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "entp_name": "",
+        "meddev_entp_seq": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "entp_name",
+        "meddev_entp_seq"
+      ]
+    },
+    {
+      "dataset_id": "15056785",
+      "title": "식품의약품안전처_의료기기 회수·판매중지정보",
+      "operation": "제조번호 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "make_no": "",
+        "make_no_seq": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "make_no_seq",
+        "make_no"
+      ]
+    },
+    {
+      "dataset_id": "15056785",
+      "title": "식품의약품안전처_의료기기 회수·판매중지정보",
+      "operation": "품목명 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "item_name": "",
+        "meddev_item_seq": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "item_name",
+        "meddev_item_seq"
+      ]
+    },
+    {
+      "dataset_id": "15056785",
+      "title": "식품의약품안전처_의료기기 회수·판매중지정보",
+      "operation": "형명 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1",
+        "recall_item_seq": "",
+        "type": "json",
+        "type_name": ""
+      },
+      "missing_params": [
+        "recall_item_seq",
+        "type_name"
+      ]
+    },
+    {
+      "dataset_id": "15056835",
+      "title": "식품의약품안전처_의약품 임상시험 정보",
+      "operation": "의약품 임상시험 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "approval_time": "",
+        "clinic_exam_title": "",
+        "clnc_test_sn": "",
+        "goods_name": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "approval_time",
+        "goods_name",
+        "clnc_test_sn",
+        "clinic_exam_title"
+      ]
+    },
+    {
+      "dataset_id": "15056880",
+      "title": "식품의약품안전처_의약품 생산·수입실적현황",
+      "operation": "의약품 생산·수입실적조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "date_year": "",
+        "entp_name": "",
+        "item_name": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "result_part": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "result_part",
+        "date_year",
+        "item_name",
+        "entp_name"
+      ]
+    },
+    {
+      "dataset_id": "15056886",
+      "title": "식품의약품안전처_의약품공급부족 정보",
+      "operation": "의약품공급부족 정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "entpName": "",
+        "itemName": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "entpName",
+        "itemName"
+      ]
+    },
+    {
+      "dataset_id": "15056939",
+      "title": "식품의약품안전처 식품의약품안전평가원_기능성화장품 심사품목 정보",
+      "operation": "업체정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "entp_name": "",
+        "entp_seq": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "entp_seq",
+        "entp_name"
+      ]
+    },
+    {
+      "dataset_id": "15056939",
+      "title": "식품의약품안전처 식품의약품안전평가원_기능성화장품 심사품목 정보",
+      "operation": "품목정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "item_name": "",
+        "item_seq": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "item_seq",
+        "item_name"
+      ]
+    },
+    {
+      "dataset_id": "15057075",
+      "title": "식품의약품안전처_원료의약품등록(DMF)현황",
+      "operation": "DMF현황",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "entp_name": "",
+        "ingr_kor_name": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "entp_name",
+        "ingr_kor_name"
+      ]
+    },
+    {
+      "dataset_id": "15057382",
+      "title": "식품의약품안전처_의약품 재평가 정보",
+      "operation": "의약품재평가조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "entp_name": "",
+        "entp_no": "",
+        "item_name": "",
+        "item_no": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "entp_name",
+        "entp_no",
+        "item_name",
+        "item_no"
+      ]
+    },
+    {
+      "dataset_id": "15057456",
+      "title": "식품의약품안전처_의료기기 품목허가 정보",
+      "operation": "의료기기 품목허가 허가정보 목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "entrps": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "prduct": "",
+        "prductPrmisnNo": "",
+        "prmisnDt": "",
+        "type": "json"
+      },
+      "missing_params": [
+        "entrps",
+        "prduct",
+        "prductPrmisnNo",
+        "prmisnDt"
+      ]
+    },
+    {
+      "dataset_id": "15057456",
+      "title": "식품의약품안전처_의료기기 품목허가 정보",
+      "operation": "의료기기 품목허가 허가정보 상세정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "BRNO": "",
+        "ENTRPS": "",
+        "PRDUCT": "",
+        "PRDUCT_PRMISN_NO": "",
+        "PRMISN_DT": "",
+        "TYPE_NAME": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "PRDUCT",
+        "ENTRPS",
+        "PRDUCT_PRMISN_NO",
+        "PRMISN_DT",
+        "TYPE_NAME",
+        "BRNO"
+      ]
+    },
+    {
+      "dataset_id": "15057623",
+      "title": "식품의약품안전처_의약품 특허정보",
+      "operation": "의약품특허정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ingr_eng_name": "",
+        "ingr_name": "",
+        "item_eng_name": "",
+        "item_name": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "ingr_eng_name",
+        "ingr_name",
+        "item_eng_name",
+        "item_name"
+      ]
+    },
+    {
+      "dataset_id": "15057639",
+      "title": "식품의약품안전처_의약품 낱알식별 정보",
+      "operation": "의약품 낱알식별정보조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "bizrno": "",
+        "edi_code": "",
+        "entp_name": "",
+        "img_regist_ts": "",
+        "item_name": "",
+        "item_seq": "",
+        "numOfRows": "1",
+        "pageNo": "1",
+        "type": "json"
+      },
+      "missing_params": [
+        "item_name",
+        "entp_name",
+        "item_seq",
+        "img_regist_ts",
+        "edi_code",
+        "bizrno"
+      ]
     }
   ]
 }

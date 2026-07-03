@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T15:34:48Z",
+  "generated_at": "2026-07-03T15:43:23Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,10 +7,10 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 16296,
-    "evidence_total": 1630,
-    "uncovered_gateway_candidates": 10744,
-    "uncovered_adapter_candidates": 3721,
+    "operations": 16347,
+    "evidence_total": 1660,
+    "uncovered_gateway_candidates": 10714,
+    "uncovered_adapter_candidates": 3772,
     "missing_adapter_hosts": 11,
     "planned_batches": 18,
     "planned_operations": 133
@@ -20,7 +20,7 @@
       "label": "gateway",
       "kind": "data_go_kr_gateway",
       "candidates": 11419,
-      "uncovered_candidates": 10744,
+      "uncovered_candidates": 10714,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --kind data_go_kr_gateway --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gateway-next.json --json",
       "output": ".datapan/verification/gateway-next.json"
@@ -69,8 +69,8 @@
       "label": "foodsafetykorea",
       "provider": "foodsafetykorea",
       "kind": "external_endpoint",
-      "candidates": 237,
-      "uncovered_candidates": 223,
+      "candidates": 288,
+      "uncovered_candidates": 274,
       "planned_operations": 10,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider foodsafetykorea --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/foodsafetykorea-next.json --json",
       "output": ".datapan/verification/foodsafetykorea-next.json"
