@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T23:29:13Z",
+  "generated_at": "2026-07-03T23:38:57Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3786,
-    "stable": 8274
+    "changed": 3823,
+    "stable": 8237
   },
   "added": [],
   "removed": [],
@@ -5999,6 +5999,16 @@
       "new_digest": "63a65941a76ef027e6f60d0ba7f5464857690290a00af12ae1d0fadc4a0ce28a"
     },
     {
+      "id": "15057221",
+      "old_title": "해양수산부 국립수산물품질관리원_국내수산물생산위생시설현황",
+      "new_title": "해양수산부 국립수산물품질관리원_국내수산물생산위생시설현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "edcb72e48fb010ed24e79ae905d46b9d0a8cc032120beec8a8d79366be5bab1e",
+      "new_digest": "f57986c0e9ff8a4436f9de28ee898055b4895e3c9afb674eb8162a376a451484"
+    },
+    {
       "id": "15057223",
       "old_title": "행정안전부_지방재정365_주민1인당세외수입액",
       "new_title": "행정안전부_지방재정365_주민1인당세외수입액",
@@ -6167,6 +6177,16 @@
       ],
       "old_digest": "4e4da98e759735f8022c56d217418abbf4953ddeb54ea8dc8e1c70da2a4f3abd",
       "new_digest": "a5ef14dc22403d052818e7779aa403dc12bf3d3b4950cbe151603f0013a65fc3"
+    },
+    {
+      "id": "15057270",
+      "old_title": "해양수산부 국립수산물품질관리원_수입소금(비식용)검사통계",
+      "new_title": "해양수산부 국립수산물품질관리원_수입소금(비식용)검사통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "673b314c7f648efb22f76364e9fb291507d88ec300b2c99477e0c006eeb77ea9",
+      "new_digest": "18b6cbb084db7ec14cc685d904127fa92f2344be6e45dbb621d7e0f057c8518b"
     },
     {
       "id": "15057274",
@@ -6507,6 +6527,16 @@
       ],
       "old_digest": "10dbc21876069444f375216d04ae0d56236a1e271883321f42f23b2bb91c99a8",
       "new_digest": "32342279e2270f52b868a46ee76ebc8772dbcb85a45158cbafa7845802e5b5dd"
+    },
+    {
+      "id": "15057367",
+      "old_title": "해양수산부 국립수산물품질관리원_유기인증수산물(API)",
+      "new_title": "해양수산부 국립수산물품질관리원_유기인증수산물(API)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bfc2f66cc6ee6ca497a5e1f0f882c1e1709530924565bf7abd43d368f9b3c2c3",
+      "new_digest": "d82b90e72c482a8a251d7ef3cdfb708e62f42a216af766d2ad495ddf27d711dc"
     },
     {
       "id": "15057370",
@@ -10189,6 +10219,16 @@
       "new_digest": "e457d1783f39198065215abed94dd66822d64441ba32a825e484de567e6d2fe0"
     },
     {
+      "id": "15058183",
+      "old_title": "해양수산부 국립수산물품질관리원_해외수산물생산위생시설현황",
+      "new_title": "해양수산부 국립수산물품질관리원_해외수산물생산위생시설현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "db468eabb1521f7c62d06f5d2dee49167cf8d1042ffcc9631bbbfcc3afb217ae",
+      "new_digest": "1fd5408cd3f3d2ae2801beab6945632eb08dcf0d4a5a8b02bc852efd16a8a27e"
+    },
+    {
       "id": "15058185",
       "old_title": "경기도_전국대비 장애인연금 대상/수급자 집계현황",
       "new_title": "경기도_전국대비 장애인연금 대상/수급자 집계현황",
@@ -10617,6 +10657,16 @@
       ],
       "old_digest": "511d168f88ade39c2e64f54da694b7ebe4daa656a55fb1f35cd0b697ac5f37a2",
       "new_digest": "c24d38441fb9ab920735097aa4c1b3ef4e79e4bc3105a72ece3b0edbfb432f68"
+    },
+    {
+      "id": "15058281",
+      "old_title": "해양수산부 국립수산물품질관리원_지리적표시수산물(API)",
+      "new_title": "해양수산부 국립수산물품질관리원_지리적표시수산물(API)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "37afee0ad5287098c15b9f95c64865d15c2d6b512c7202611bbf3216d9e1bf88",
+      "new_digest": "782a3894d55a348d26679d0476d537a0e4a8703c0a1f15b37a0c8ff4311eed54"
     },
     {
       "id": "15058282",
@@ -12499,6 +12549,16 @@
       "new_digest": "3c6747a7b8b80b2b2d11dacaf3c364ddc10a82c252501191d61db6151e4a677a"
     },
     {
+      "id": "15058693",
+      "old_title": "해양수산부 국립수산물품질관리원_품질인증수산물(API)",
+      "new_title": "해양수산부 국립수산물품질관리원_품질인증수산물(API)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "12f2898fec18a7af826ebc4b3cc528c2d83d2f7d2e0d4d7edba69fe88bf31035",
+      "new_digest": "4d11eed90df10204dddbdb80f79f5025270072be1957766ecb3767a6099b72d1"
+    },
+    {
       "id": "15058694",
       "old_title": "경기도_휴게음식점(편의점) 현황",
       "new_title": "경기도_휴게음식점(편의점) 현황",
@@ -14027,6 +14087,16 @@
       ],
       "old_digest": "c731a27866ed9e9be6bd28a774a19179ed969fd15bc813d646674243e446a098",
       "new_digest": "748b12e579aa6637e50530fc8c6781eb3839a5d6b2dc7f79a3190f47c0146f54"
+    },
+    {
+      "id": "15059071",
+      "old_title": "해양수산부 국립수산물품질관리원_국내소금검사통계",
+      "new_title": "해양수산부 국립수산물품질관리원_국내소금검사통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b014f527735ec0deed1ce248e9edae08d0e9ff5944346420fd18bc25cc0a9920",
+      "new_digest": "34a165e884bcb621d278ef402eda976ff18619252fa1bae54e491b312ad6e102"
     },
     {
       "id": "15059073",
@@ -26409,6 +26479,26 @@
       "new_digest": "0d10abe72865869b5203880b7476c3f23741020c3612672a87e399d531fecab7"
     },
     {
+      "id": "15115751",
+      "old_title": "해양수산부 국립수산물품질관리원_생산단계 수산물 방사능 검사현황",
+      "new_title": "해양수산부 국립수산물품질관리원_생산단계 수산물 방사능 검사현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ed4c72b9536632c45b57ead44a078c1cd17f37cd254160003506af681dda9079",
+      "new_digest": "a5e7fd115b342ea410d00809f38a1f3cc171dfa97550d94fef3cc639fb042c1e"
+    },
+    {
+      "id": "15115752",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물 방사능 생산 지역별 안전 현황",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물 방사능 생산 지역별 안전 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c83e739a7285515a58f60e9217afae77f35db9cebdbd46a973c4a46975491883",
+      "new_digest": "72e1a81041e71ac3c4c88200ccf48899f6fc472e2ae405e65c72bef7da15b354"
+    },
+    {
       "id": "15116497",
       "old_title": "기후에너지환경부 국립환경과학원_환경위성자료 조회서비스",
       "new_title": "기후에너지환경부 국립환경과학원_환경위성자료 조회서비스",
@@ -26417,6 +26507,26 @@
       ],
       "old_digest": "b290b972660e56ed0d8d8ac871ac17db3772c8d6cde0ea846901ece1cb883193",
       "new_digest": "e0c1d0d3eaa7f36c1e4428595ebfae358260ba9300b4fe9b8ce26e31fc03e9eb"
+    },
+    {
+      "id": "15116918",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물이력제 수산 뉴스 정보",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물이력제 수산 뉴스 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "383d915d01f425394ea44a1ee9256747bf91067f5c62643cf46b0b95203d3058",
+      "new_digest": "c05c100bbd5226fae45936dbf49b358826828df496180d50be4882de5b6e8451"
+    },
+    {
+      "id": "15116927",
+      "old_title": "해양수산부 국립수산물품질관리원_천일염 생산 및 유통정보",
+      "new_title": "해양수산부 국립수산물품질관리원_천일염 생산 및 유통정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f054cae153cb5d376644c3fda239b0a558e75a698d4a02bd815ddb2de678e203",
+      "new_digest": "d3e0ff3647266d1be4b6f534d761169cfb97f2c31fda90b351e1d79b149ef03a"
     },
     {
       "id": "15117057",
@@ -30809,6 +30919,46 @@
       "new_digest": "690eb705b9550d7822542ddae0db400c30fa7c4cd9f28d96b5b10592e0979a23"
     },
     {
+      "id": "15130186",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물이력제 등록업체 현황",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물이력제 등록업체 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7ebef1fc1ac3fe75c4f84e236379171c817dacc614d1047d5f961d419517bc7a",
+      "new_digest": "1ada16187773c8087cd4298805cb02b058fab47f858f05e924565d71f8a980c7"
+    },
+    {
+      "id": "15130187",
+      "old_title": "해양수산부 국립수산물품질관리원_매체별 이력 조회 현황",
+      "new_title": "해양수산부 국립수산물품질관리원_매체별 이력 조회 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "45600a360314a01f1900f0bad2930c12fe515e1d2c7dbbbf8190fc20389fd3bb",
+      "new_digest": "2ad1f19cac1987a82af2f0680ca4c95a7bd1196d0656d597776b7092cca4a1c5"
+    },
+    {
+      "id": "15130188",
+      "old_title": "해양수산부 국립수산물품질관리원_등록업체별 품목 현황",
+      "new_title": "해양수산부 국립수산물품질관리원_등록업체별 품목 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4375bfc274679399ad8c929a031c301b591e93051ff70b5b67024c254726e642",
+      "new_digest": "13eedc66b54fdb207bb589a42cbcfe5b41eedb9ce732191c048e60a9599ad08d"
+    },
+    {
+      "id": "15130190",
+      "old_title": "해양수산부 국립수산물품질관리원_우리수산물 구분법",
+      "new_title": "해양수산부 국립수산물품질관리원_우리수산물 구분법",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2af28b8559515e275c7ab7a3e781fc0c3b326871a4d20aaca34616caec0458dd",
+      "new_digest": "7aedc5dfd113d35d7b82742beac1aa9b8e8f895daa4604f92a7cc56446284be0"
+    },
+    {
       "id": "15130221",
       "old_title": "서울시설공단_공공자전거 대여소별 이용정보",
       "new_title": "서울시설공단_공공자전거 대여소별 이용정보",
@@ -30817,6 +30967,46 @@
       ],
       "old_digest": "5009fa4d790aa391d0e161f5e5868e20bdb568be47443d94954679c9b2c2a594",
       "new_digest": "22d6c405f1d5bc7345889bedbf5644fa1df0fb94c456b5c899ebd8e634424ac7"
+    },
+    {
+      "id": "15130259",
+      "old_title": "해양수산부 국립수산물품질관리원_천일염이력제 게시글 정보",
+      "new_title": "해양수산부 국립수산물품질관리원_천일염이력제 게시글 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4f7b05c668ab9e13bd3676306446fefe96c7b964a8641607c0a4f05ec0fa4e38",
+      "new_digest": "009fdbce6c9a6082e62ed7349d9d1ba5ec24241cfd73c1e3ff4d7ffa7ae0693b"
+    },
+    {
+      "id": "15130260",
+      "old_title": "해양수산부 국립수산물품질관리원_천일염이력제 대형소분유통업체 상품정보",
+      "new_title": "해양수산부 국립수산물품질관리원_천일염이력제 대형소분유통업체 상품정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "be53f8a302cbea24d31e22801c8d079c8e4d7add25e88967ec5ab1d041728191",
+      "new_digest": "865cd6b2c85433ee6a035fa6bd8b8dd2f8c3ef75cba7c017189885e7e8dc1f58"
+    },
+    {
+      "id": "15130261",
+      "old_title": "해양수산부 국립수산물품질관리원_천일염이력제 대형소분유통업체 상품생산 현황",
+      "new_title": "해양수산부 국립수산물품질관리원_천일염이력제 대형소분유통업체 상품생산 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8b47bb97254615491fb907846ecf549f132fac412cca12c033dd8b721b7fb7ef",
+      "new_digest": "b3d8875765e319d2562a461efdf7078175f15e68945e67d6bb885473fe89afbb"
+    },
+    {
+      "id": "15130262",
+      "old_title": "해양수산부 국립수산물품질관리원_천일염이력제 대형소분유통소분상품 출하내역",
+      "new_title": "해양수산부 국립수산물품질관리원_천일염이력제 대형소분유통소분상품 출하내역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "18a792e6be1cf590afa12d15061969c859648c1676eecbdd2c054bd3a1717361",
+      "new_digest": "53089aede07b0d6500167632e1e1f89dbabc5329498da412459b4ef22398afbb"
     },
     {
       "id": "15131782",
@@ -32997,6 +33187,156 @@
       ],
       "old_digest": "068a9a2b564fc88672b7ac7482bc129156b9b7a6735d108fb7cf269923782adb",
       "new_digest": "934f0bce20ec3d31dad6755ddfb04455da95cfd2a1193974b2abdb67cf2b47b0"
+    },
+    {
+      "id": "15142294",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물이력제 기본정보제공서비스 품목코드조회",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물이력제 기본정보제공서비스 품목코드조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8b22751482895ddea850377eaa2e7f61e2040200519599ff10322ad28cb51da8",
+      "new_digest": "db743c6031ee6331e926813f4dad2c2484318857438da95ba232386937a55ef2"
+    },
+    {
+      "id": "15142447",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물이력제 기본정보제공서비스 이력조회",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물이력제 기본정보제공서비스 이력조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "028bd33e7e85408a45978d8a33c04f72ca475c9f3342eea23e1d4eac2f9c57e2",
+      "new_digest": "04072cdbf580ddb01792c76b3e52231ff121c72ed2e09b06febd01a2a8dfe000"
+    },
+    {
+      "id": "15142448",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물이력제 기본정보제공서비스 품목별이력조회",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물이력제 기본정보제공서비스 품목별이력조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4fc6bcb6006c15db8a0205b65d7233ebd5791d380da92c2129045895c3757163",
+      "new_digest": "75958e0dab4604d19bf166caa02d55cfd92d4da2a082ddb3bdab73d5c300b7e4"
+    },
+    {
+      "id": "15142449",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물이력제 기본정보제공서비스 상품별 이력번호 조회",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물이력제 기본정보제공서비스 상품별 이력번호 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "50ee89bf299a2c11540051ef39dc4e42aab07feef8015ef2e759256e2932fc3a",
+      "new_digest": "8d6e0493ccbde0d822bd2506f3ef164c0e3cf4fea2e5f487d102771ef6cf27ed"
+    },
+    {
+      "id": "15142450",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물이력제 기본정보제공서비스 지역별 이력번호조회",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물이력제 기본정보제공서비스 지역별 이력번호조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2320fb6eb094f6f1ce8e238f7729bb47f020511dc4c9ea93b3a6d576d8f0f6e2",
+      "new_digest": "79be805cec95f00d655817816fc6644215366a7f73bd51cb586f589cba8482f8"
+    },
+    {
+      "id": "15142452",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물이력제 기본정보제공서비스 기간별이력번호조회",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물이력제 기본정보제공서비스 기간별이력번호조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bbb3a92040182af76579ce39ee6879a8a08aedeba5f2cdf295db1e1c899a2cbc",
+      "new_digest": "4e1e272305f0b838867bb2679c874e338e3fc260f8bd45cc96182bd4c0181d3a"
+    },
+    {
+      "id": "15142453",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물이력제 기본정보제공서비스 위치기반 이력번호조회",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물이력제 기본정보제공서비스 위치기반 이력번호조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7a631775942edaffda240cc3a5b9720c8b1f31e1e96bd9df23e068f17cb9ce3f",
+      "new_digest": "fa804593925c1b2c5f4a21e7117bdce0f8b234796ae14c6b6c6686859b2390c9"
+    },
+    {
+      "id": "15142455",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물이력제 상세정보제공서비스 참여업체목록조회",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물이력제 상세정보제공서비스 참여업체목록조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "dc8f1672d6c576d59617ef396094013b18b9169c5777a44944ee9300fa4b6baa",
+      "new_digest": "b1c6c04b3255ab88ec073c86c683602404e011d46a4d21889cadbf0e18d24870"
+    },
+    {
+      "id": "15142456",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물이력제 상세정보제공서비스 참여업체상세정보조회",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물이력제 상세정보제공서비스 참여업체상세정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8fa6aedfb200f18be868e9548570559031ab57d88e2b94193f0919e1bf5835d8",
+      "new_digest": "cce9232090d6ad5692cb3f31d398c46658469285ce8ab5eaaba7743278faefbd"
+    },
+    {
+      "id": "15142457",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물이력제 상세정보제공서비스 상품정보 목록조회",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물이력제 상세정보제공서비스 상품정보 목록조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "52df80b924792d38612fd93429b88235f90dde096c36a585b4a88c754c01612e",
+      "new_digest": "83ffa658002a6c3f14fcfff36460e086e904bbabe6d47ee9f391d59cb9d8676e"
+    },
+    {
+      "id": "15142459",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물이력제 상세정보제공서비스 상품정보 상세정보조회",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물이력제 상세정보제공서비스 상품정보 상세정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d32e937a78e8239843c87aa9d810fb30709ce3cbae53ee64d1149e43f7dde0c5",
+      "new_digest": "a0c19cd13b240df942d30798b95ce6831c1be76a8cfb388e3dc170ddbe029155"
+    },
+    {
+      "id": "15142460",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물이력제 상세정보제공서비스 생산정보 목록조회",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물이력제 상세정보제공서비스 생산정보 목록조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "37030a19086139c913c539aaef448aa5e023d9b7f338eb5b112491c6f9839bd8",
+      "new_digest": "c1f75bc303856b581f00cc9b2c0ea24f11aea710777994bf855ad0a18fe1cc22"
+    },
+    {
+      "id": "15142461",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물이력제 상세정보제공서비스 생산정보 상세정보조회",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물이력제 상세정보제공서비스 생산정보 상세정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f2b80da3373600c0198525ef62ecd8b8e2b8c84a45764806c65c44b992b6c974",
+      "new_digest": "063669a1865283489620189755ceefb0c06e36c14474d3693c5099bcbf440097"
+    },
+    {
+      "id": "15142462",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물이력제 상세정보제공서비스 출하정보 목록조회",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물이력제 상세정보제공서비스 출하정보 목록조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "93ec9e7c53e2c45535e706104a37f95645acf903cf9629c27c3c7da113f90ac0",
+      "new_digest": "ba7efc0703a03639148bb40b26abae49005c35faa9dbe9c1f72f1f5e4d8ef9b9"
+    },
+    {
+      "id": "15142463",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물이력제 상세정보제공서비스 출하정보 상세정보조회",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물이력제 상세정보제공서비스 출하정보 상세정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f06acf3d7a5c71cd2dcdd41ab8d9517e7d7c5f39847316ed7585a94f4b1c4742",
+      "new_digest": "82adf56c7c21d4da2a707f73f18a12cfbcd254044e85310f5e1bacc243f440e3"
     },
     {
       "id": "15142964",
@@ -37427,6 +37767,36 @@
       ],
       "old_digest": "fe97080178d252bbd8fac5fa77281b888f763cb38048cff7b4f730bf8a6eaf0e",
       "new_digest": "cdb8753ae4593a004105a6ca0df2b04f80cf9276fd783c7f470c13ed6967eafc"
+    },
+    {
+      "id": "15159171",
+      "old_title": "해양수산부 국립수산물품질관리원_천일염이력제 일일 출하량 집계정보 조회",
+      "new_title": "해양수산부 국립수산물품질관리원_천일염이력제 일일 출하량 집계정보 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c7b15fde0320583b51fb5c76c8bbbfc250ee8fc969b2d936be5e6dbbc9ce97a9",
+      "new_digest": "dabb8e46e692e26cca84f72a898f0bbe57e693ad435baaad0e58db63b81b46ef"
+    },
+    {
+      "id": "3033749",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물수출검사통계",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물수출검사통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fbc8a2ace715f0fc91f88a64067ad1f16e563b414d4200f8932c8cef94f6a827",
+      "new_digest": "b8bab8a64eb29ceea36228cda81bbf164ac9172eda1bac183a096744a092c8de"
+    },
+    {
+      "id": "3033757",
+      "old_title": "해양수산부 국립수산물품질관리원_수산물수출입검역통계",
+      "new_title": "해양수산부 국립수산물품질관리원_수산물수출입검역통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4e3293df641d81a84cce2c11338d35f557a6b7691e9fbd94ca6a4d7ab4e3389a",
+      "new_digest": "5fbd73ab7e50c7f75c2a460056b42a9217ac6c946b6bc937e4189200968ca21b"
     },
     {
       "id": "3033938",
