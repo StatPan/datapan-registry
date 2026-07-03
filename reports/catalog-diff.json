@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T20:42:11Z",
+  "generated_at": "2026-07-03T20:57:33Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3437,
-    "stable": 8623
+    "changed": 3465,
+    "stable": 8595
   },
   "added": [],
   "removed": [],
@@ -417,6 +417,16 @@
       ],
       "old_digest": "2d05212dc926c34638b5af98315dae3c8e4a699fe801c9cdefab879583e1959a",
       "new_digest": "d33f2749b256b6d0a595bfcdb65a847751353a37843392e8c7fb68b2f6c22832"
+    },
+    {
+      "id": "15021305",
+      "old_title": "대전광역시 행정지도정보",
+      "new_title": "대전광역시 행정지도정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ecc3d02f9924a19a3be1c3ef66cc817541c1ecfd553bcee9d00d33857f0bd7d4",
+      "new_digest": "3ec960ceceb9d3cba91bc846844259749c9efbc4f75752b530c1ab3b5bec99f3"
     },
     {
       "id": "15024888",
@@ -19089,6 +19099,16 @@
       "new_digest": "a1efc0fde1a3e48a66a5ea607901577be7f57370ed6d170f44a458f856e23159"
     },
     {
+      "id": "15094377",
+      "old_title": "대전광역시_지도서비스 API",
+      "new_title": "대전광역시_지도서비스 API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "81732c6f279bff7ce048404a22b92636f629caf44df063dd3fa444fbd760ea56",
+      "new_digest": "2a427d8b33f141e72e9398f478c71d390ba09c452f0351c7aa9cb4bcafff2da4"
+    },
+    {
       "id": "15094418",
       "old_title": "금융감독원_주요사항보고서 주요정보_자산양수도(기타), 풋백옵션",
       "new_title": "금융감독원_주요사항보고서 주요정보_자산양수도(기타), 풋백옵션",
@@ -20207,6 +20227,206 @@
       ],
       "old_digest": "be2c1450e08727c024c4e33550dfca0a6c07a370a432d488dd6f76114fa37313",
       "new_digest": "e63a686ff43647fa00d9979e04cfc751fb6f0eaf20cad85b9ad40efe8e521983"
+    },
+    {
+      "id": "15098038",
+      "old_title": "대전광역시_온통대전 월별 가맹점 수",
+      "new_title": "대전광역시_온통대전 월별 가맹점 수",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2a22aab94d1ec17b98c33cea8ddec0992872c753e178e20fb8f3cc85a67441f4",
+      "new_digest": "f24e68c61dd4ab79401a838df19e6d79c119af2eb54494d96e86e8db2c05bb56"
+    },
+    {
+      "id": "15098055",
+      "old_title": "대전광역시_온통대전 월별 매출액 조회",
+      "new_title": "대전광역시_온통대전 월별 매출액 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6fa0492efba2dca6aa6416a3e253feb9d2313110c29be699008e79ce6276d81d",
+      "new_digest": "dc0cdc7258a4d580f4eda47a0da946e020fca1dac9ca0f0f0b50aa58e5825278"
+    },
+    {
+      "id": "15098057",
+      "old_title": "대전광역시_온통대전 월별 업종별 가맹점 수 조회",
+      "new_title": "대전광역시_온통대전 월별 업종별 가맹점 수 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8f299198a5d4c552ead001c187f154fb70966556893bbf03603b16d3bb65d924",
+      "new_digest": "056916824947430985d8c7a7e285b85eb3e94ed163aaeade50839340e49c10c1"
+    },
+    {
+      "id": "15098058",
+      "old_title": "대전광역시_온통대전 월별 업종별 매출액 조회",
+      "new_title": "대전광역시_온통대전 월별 업종별 매출액 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6a9f0edb5b341219c57f15a89c12bfd1ff41d8a57cb4be54beb553c450dabb09",
+      "new_digest": "748ba46688b0249d2bed673eed5b3db1e1a961e176befcbcf413e7d37e893ba8"
+    },
+    {
+      "id": "15098059",
+      "old_title": "대전광역시_온통대전 월별 신규 가맹점 수 조회",
+      "new_title": "대전광역시_온통대전 월별 신규 가맹점 수 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c38edbaedb24e4a3ab65837ab172a0ff2f00431864e686285e1bebb566c83208",
+      "new_digest": "b6db0ac78faa774627a1fbf2b397391c6f677830d2eb91af5256caa8bb2776b4"
+    },
+    {
+      "id": "15098060",
+      "old_title": "대전광역시_온통대전 월별 폐업점 수 조회",
+      "new_title": "대전광역시_온통대전 월별 폐업점 수 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "07d8c71d41aeff025cdf5f981bf3e6b5b3ecd580e64c65e1f6ef50742e8f31b9",
+      "new_digest": "4cff11719747645a61215952b11a5b2be25699d441fd3f045948b9422d86ba2e"
+    },
+    {
+      "id": "15098064",
+      "old_title": "대전광역시_온통대전 신청 가맹점 목록 조회",
+      "new_title": "대전광역시_온통대전 신청 가맹점 목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8100c95ab71ff2916c1cc881bd131a7e022e0da92a42875e1f994fe24fdf5644",
+      "new_digest": "26285f0abe4e8ba4e45c945c01ffeac82b23d4c32d486a669dfe0db0c7d91369"
+    },
+    {
+      "id": "15098133",
+      "old_title": "대전광역시_온통대전 월별 업종별 신규 가맹점 수 조회",
+      "new_title": "대전광역시_온통대전 월별 업종별 신규 가맹점 수 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1e4478ca63410509b60c50965b983495bc82ff8d8e9af14b36edaa79a4d14f30",
+      "new_digest": "e2a75657e33a089bb545eff4614d26ca28152671ac4da85cdbaa70b1f081d67c"
+    },
+    {
+      "id": "15098134",
+      "old_title": "대전광역시_온통대전 월별 업종별 폐업점 수 조회",
+      "new_title": "대전광역시_온통대전 월별 업종별 폐업점 수 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8b740f5d51c4e6f0f4e7b3587f7f0203705b2bf0cf7c2b2691c0e9a1346308cb",
+      "new_digest": "8937dae087ff93970e43e788d9e123b7f4594a309a43ae9d6dcfef3eeb9c6e9d"
+    },
+    {
+      "id": "15098135",
+      "old_title": "대전광역시_대전공공구매플랫폼 기준 업종 대분류별 구별 기업수 조회",
+      "new_title": "대전광역시_대전공공구매플랫폼 기준 업종 대분류별 구별 기업수 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fc8ed0f18a4ddc4fde1f5d77bc7b3981b382d72c8fda36a7a30b392d1724cdb5",
+      "new_digest": "523922a90e08212cba40ee9e3ae775396eb6f15437062edb9d06f512ceedd38f"
+    },
+    {
+      "id": "15098136",
+      "old_title": "대전광역시_대전공공구매플랫폼 기준 업종 중분류별 구별 기업수 조회",
+      "new_title": "대전광역시_대전공공구매플랫폼 기준 업종 중분류별 구별 기업수 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "691922ee008d6f8c72337962801cfdd94ad0831be24deae0570276b445d1958b",
+      "new_digest": "5f038f637a42f6f30fcd9607165844619892e98b388e18e5525bfd896004659c"
+    },
+    {
+      "id": "15098137",
+      "old_title": "대전광역시_대전공공구매플랫폼 기준 업종 대분류별 동별 기업수 조회",
+      "new_title": "대전광역시_대전공공구매플랫폼 기준 업종 대분류별 동별 기업수 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d09afcdc9f6bb64bb3d9588eb6e238e53292e0741cd6d375d28d175f7adc4dc6",
+      "new_digest": "9bb4d7293aa7c919b40b25e80c2c52f21a13adf430ac07f5a3f62b01b291f297"
+    },
+    {
+      "id": "15098138",
+      "old_title": "대전광역시_대전공공구매플랫폼 기준 업종 중분류별 동별 기업수 조회",
+      "new_title": "대전광역시_대전공공구매플랫폼 기준 업종 중분류별 동별 기업수 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3edc4e56779c49cabbb6e7ea9f90bc473899b6f0900ca03123b4f3d255d50013",
+      "new_digest": "6132bcb8a9bdf7684f22842529be80b0e3cc06525b5e1f4b9455a0b7a40d51f7"
+    },
+    {
+      "id": "15098139",
+      "old_title": "대전광역시_소상공인 설문조사 빅데이터 조회",
+      "new_title": "대전광역시_소상공인 설문조사 빅데이터 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6f61759b68ba56acdaabb5f2fdb7139189969ddc8495a19559bd1167004bbac4",
+      "new_digest": "166a67419875ed0f8cff080126e3927a1735ca345b826d12630e14f9b248b433"
+    },
+    {
+      "id": "15098140",
+      "old_title": "대전광역시_소상공인 설문조사 항목 조회",
+      "new_title": "대전광역시_소상공인 설문조사 항목 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a4f5321b9a4f8da036a6daa2f1e6f61d00b3c93a47a544e81295ec386636a06e",
+      "new_digest": "93808568d444108d44fa5f16e0c848e8eaa7c4c721dc0bf2b27be6680eaff3ed"
+    },
+    {
+      "id": "15098142",
+      "old_title": "대전광역시_소상공인 설문조사 공간빅데이터 조회",
+      "new_title": "대전광역시_소상공인 설문조사 공간빅데이터 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2a723d25c5de89ba38ba44311ef6b5e4e5e28bd29ae172fa47eeddba116b70b0",
+      "new_digest": "116f1b06a291cdee4ee7377f5ec2d811b37938f6c31490230090ebc3c9e26cae"
+    },
+    {
+      "id": "15098143",
+      "old_title": "대전광역시_인허가업소 정보 조회",
+      "new_title": "대전광역시_인허가업소 정보 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "308ca4c544689c5437b7e0d650e8f9ffdcdcba8c656d33ad5b8ac2dd0e692b16",
+      "new_digest": "a67662418a1c2c6ade3842ed526caf9ce4f19d8ad45a96b4ba7dfdad53483594"
+    },
+    {
+      "id": "15098144",
+      "old_title": "대전광역시_도로안전시설물 설치현황 조회",
+      "new_title": "대전광역시_도로안전시설물 설치현황 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e7ee2e7b9c2c67cbc0b1fc566cd87fe809db0d7c80bc71f456479e9c176927e9",
+      "new_digest": "928fc566efc1609dfd7b0d89bff9ee8304f5e1ae5187c9a6b30f4b062a15955c"
+    },
+    {
+      "id": "15098145",
+      "old_title": "대전광역시_주요도로변 방음벽 현황 조회",
+      "new_title": "대전광역시_주요도로변 방음벽 현황 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "dfbdb778e1ec80fc27854137af30ca7368bf2907dc8317534651b05c7203531d",
+      "new_digest": "f316f99f0298b458460c52c291325a040fc7ca3e7be2c96a51ae572cf3e87251"
+    },
+    {
+      "id": "15098146",
+      "old_title": "대전광역시_관내 음식점 정보조회",
+      "new_title": "대전광역시_관내 음식점 정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "da372aa5b8559afe2579cd34db38676568fd38545e08a6c4b72db94632743385",
+      "new_digest": "fcff55285f45a1093385aa919aab3e085503d1e09f7199c9f5275cba4d8dbeaa"
     },
     {
       "id": "15098628",
@@ -22857,6 +23077,66 @@
       ],
       "old_digest": "a1ed994deebfc747490e033ada5d8e1482e476213e5c8a33f32f693bb4f9b975",
       "new_digest": "b596a11ba2f6bcab18be85c4c64519f5bb8e86db4d4baa45744ac1e0daaefcd4"
+    },
+    {
+      "id": "15111565",
+      "old_title": "대전광역시_소상공인 구별 생존율_폐업율 현황",
+      "new_title": "대전광역시_소상공인 구별 생존율_폐업율 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d4a9bfca270ffec8129c8f8539d3bd0f8ae8ced1b99f94c0d83c247c940e0ecd",
+      "new_digest": "2d16301d7965aee0700370d698d2bc7ea0f39f9a50fee212805efebeef920a86"
+    },
+    {
+      "id": "15111566",
+      "old_title": "대전광역시_소상공인 기간별 생존율_폐업율 현황",
+      "new_title": "대전광역시_소상공인 기간별 생존율_폐업율 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "defd870d8f9ca31a71fbf22e9ece7afdac2ccd50a91b56c4a2822ba63ffd7e57",
+      "new_digest": "7c56c24b80a8b1595407e5cf918101912770398006dbe124048a0214db9c6c74"
+    },
+    {
+      "id": "15111568",
+      "old_title": "대전광역시_소상공인 업종별 생존율 폐업율 현황",
+      "new_title": "대전광역시_소상공인 업종별 생존율 폐업율 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "06ff246788da8e3a319193afe214839a75642c48194f323356e2cae64f7ece1c",
+      "new_digest": "2eed19a6fa43ae165ccd38dde65085d334d3b6c6d40df062815496d50f4d4695"
+    },
+    {
+      "id": "15111570",
+      "old_title": "대전광역시_구별 기간별 업종별 인허가 현황",
+      "new_title": "대전광역시_구별 기간별 업종별 인허가 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "dd1b534483edc193675c21921d8308c911a3d78d111deace3576aed5d024d2db",
+      "new_digest": "9f00d56ae0bd458ea2302f82aa78bfc9117117e62f112d9c4eb09b73cc6b26be"
+    },
+    {
+      "id": "15111573",
+      "old_title": "대전광역시_구별 업종별 영업상태 현황",
+      "new_title": "대전광역시_구별 업종별 영업상태 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0559ef8694db9c2339916c0b05f02ab5fbf4b0c3275352ac7b9dc64f2f2e0ec0",
+      "new_digest": "78ab45a83efc1124ada8d7deb4b38d686d6aadbe0545f9c6bcadbff1132f4bd9"
+    },
+    {
+      "id": "15111576",
+      "old_title": "대전광역시_기상센서 측정정보 현황",
+      "new_title": "대전광역시_기상센서 측정정보 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bca6e3919ee528d27f68e810457cffb22f6d4fe30c294f1ca67624a1bb889d5a",
+      "new_digest": "db7faa113add3f4f4f4d889d2e3cd152e47b23d3c8fed5b3a807826a4ca591c1"
     },
     {
       "id": "15111644",

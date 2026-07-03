@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T20:42:17Z",
+  "generated_at": "2026-07-03T20:57:40Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 19392,
-    "callable_operations": 19250,
+    "operations": 19459,
+    "callable_operations": 19317,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 7782,
-    "registered_adapter_operations": 7772,
+    "external_endpoint_operations": 7849,
+    "registered_adapter_operations": 7839,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.6,
-    "approval_required_operations": 7089,
+    "approval_required_operations": 7154,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 104,
+    "registered_adapter_hosts": 106,
     "missing_adapter_hosts": 11,
-    "adapter_count": 91,
+    "adapter_count": 92,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T20:42:01Z",
-    "total": 2900,
-    "verified": 1217,
-    "failed": 223,
+    "generated_at": "2026-07-03T20:57:26Z",
+    "total": 3000,
+    "verified": 1259,
+    "failed": 281,
     "skipped": 1460,
     "unknown": 0,
     "verified_percent": 42,
-    "evidence_operation_percent": 15
+    "evidence_operation_percent": 15.4
   },
   "route_evidence": {
     "present": true,
@@ -245,12 +245,12 @@
           "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 202,
-        "operations": 458,
-        "external_endpoint_operations": 458,
+        "specs": 203,
+        "operations": 460,
+        "external_endpoint_operations": 460,
         "external_guide_specs": 23,
         "wms_operations": 4,
-        "approval_required_operations": 71,
+        "approval_required_operations": 73,
         "sample_ids": [
           "15015052",
           "15028102",
@@ -382,10 +382,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T20:42:17Z",
+    "generated_at": "2026-07-03T20:57:40Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 91,
-    "host_count": 107,
+    "adapter_count": 92,
+    "host_count": 109,
     "adapters": [
       {
         "name": "airport",
@@ -486,6 +486,17 @@
         "status": "registered",
         "hosts": [
           "www.culture.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "daejeon",
+        "status": "registered",
+        "hosts": [
+          "bigdata.daejeon.go.kr",
+          "gis.daejeon.go.kr"
         ],
         "capabilities": [
           "verification"
@@ -1340,8 +1351,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 91,
-      "verification_capable_adapters": 91,
+      "adapter_count": 92,
+      "verification_capable_adapters": 92,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

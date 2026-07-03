@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T20:42:11Z`
+- Generated at: `2026-07-03T20:57:33Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `19392`
-- Runtime evidence: `2900` (`15.0%`)
-- External endpoint operations: `7782`
-- Registered adapter operations: `7772`
+- Operations: `19459`
+- Runtime evidence: `3000` (`15.4%`)
+- External endpoint operations: `7849`
+- Registered adapter operations: `7839`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -85,15 +85,15 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 ## Largest Categories
 
-- 공공행정: `2597` operations
-- 교통물류: `2016` operations
-- 문화관광: `2006` operations
+- 공공행정: `2605` operations
+- 교통물류: `2019` operations
+- 문화관광: `2007` operations
 - 농축수산: `1993` operations
 - 사회복지: `1439` operations
 - 산업고용: `1290` operations
-- 재정금융: `1218` operations
+- 재정금융: `1272` operations
 - 식품건강: `1188` operations
-- 환경기상: `1160` operations
+- 환경기상: `1161` operations
 - 국토관리: `987` operations
 
 ## Largest Hosts
@@ -101,7 +101,7 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 - apis.data.go.kr: `11423` operations
 - data.gg.go.kr: `2188` operations
 - data.gm.go.kr: `607` operations
-- www.vworld.kr: `458` operations
+- www.vworld.kr: `460` operations
 - www.safetydata.go.kr: `370` operations
 - www.lofin365.go.kr: `343` operations
 - www.nongsaro.go.kr: `314` operations

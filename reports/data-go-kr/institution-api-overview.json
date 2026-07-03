@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T20:42:11Z",
+  "generated_at": "2026-07-03T20:57:33Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 19392,
-    "runtime_evidence": 2900,
-    "runtime_evidence_percent": 15.0,
-    "callable_operations": 19250,
-    "external_endpoint_operations": 7782,
-    "registered_adapter_operations": 7772,
+    "operations": 19459,
+    "runtime_evidence": 3000,
+    "runtime_evidence_percent": 15.4,
+    "callable_operations": 19317,
+    "external_endpoint_operations": 7849,
+    "registered_adapter_operations": 7839,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 7782
+      "count": 7849
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 7772
+      "count": 7839
     },
     {
       "key": "builtin",
@@ -69,15 +69,15 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 2597
+      "operation_count": 2605
     },
     {
       "category": "교통물류",
-      "operation_count": 2016
+      "operation_count": 2019
     },
     {
       "category": "문화관광",
-      "operation_count": 2006
+      "operation_count": 2007
     },
     {
       "category": "농축수산",
@@ -93,7 +93,7 @@
     },
     {
       "category": "재정금융",
-      "operation_count": 1218
+      "operation_count": 1272
     },
     {
       "category": "식품건강",
@@ -101,7 +101,7 @@
     },
     {
       "category": "환경기상",
-      "operation_count": 1160
+      "operation_count": 1161
     },
     {
       "category": "국토관리",
@@ -157,7 +157,7 @@
     },
     {
       "host": "www.vworld.kr",
-      "operation_count": 458,
+      "operation_count": 460,
       "adapter": "vworld",
       "adapter_status": "registered",
       "capabilities": [
@@ -2361,6 +2361,95 @@
       ]
     },
     {
+      "organization": "대전광역시",
+      "api_count": 81,
+      "operation_api_count": 81,
+      "operation_count": 143,
+      "runtime_evidence_count": 92,
+      "runtime_evidence_percent": 64.3,
+      "verified": 3,
+      "failed": 58,
+      "skipped": 31,
+      "unknown": 0,
+      "approval_required_operations": 75,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 76
+        },
+        {
+          "key": "external_endpoint",
+          "count": 67
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 67
+        },
+        {
+          "key": "builtin",
+          "count": 76
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "재정금융",
+          "operation_count": 54
+        },
+        {
+          "category": "교통물류",
+          "operation_count": 35
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 27
+        },
+        {
+          "category": "문화관광",
+          "operation_count": 8
+        },
+        {
+          "category": "사회복지",
+          "operation_count": 7
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 76
+        },
+        {
+          "host": "bigdata.daejeon.go.kr",
+          "operation_count": 63,
+          "adapter": "daejeon",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "gis.daejeon.go.kr",
+          "operation_count": 2,
+          "adapter": "daejeon",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.vworld.kr",
+          "operation_count": 2,
+          "adapter": "vworld",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "충청남도",
       "api_count": 96,
       "operation_api_count": 96,
@@ -3071,60 +3160,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 40
-        }
-      ]
-    },
-    {
-      "organization": "대전광역시",
-      "api_count": 81,
-      "operation_api_count": 53,
-      "operation_count": 76,
-      "runtime_evidence_count": 31,
-      "runtime_evidence_percent": 40.8,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 31,
-      "unknown": 0,
-      "approval_required_operations": 10,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 76
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 76
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "교통물류",
-          "operation_count": 32
-        },
-        {
-          "category": "공공행정",
-          "operation_count": 19
-        },
-        {
-          "category": "문화관광",
-          "operation_count": 7
-        },
-        {
-          "category": "사회복지",
-          "operation_count": 7
-        },
-        {
-          "category": "보건의료",
-          "operation_count": 5
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 76
         }
       ]
     },
