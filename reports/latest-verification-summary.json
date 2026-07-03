@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-07-03T23:38:48Z",
+  "generated_at": "2026-07-03T23:44:48Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3527,
-    "verified": 1735,
+    "total": 3622,
+    "verified": 1805,
     "failed": 306,
-    "skipped": 1486,
+    "skipped": 1511,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "verified",
-        "count": 1735,
+        "count": 1805,
         "status": "verified"
       },
       {
         "key": "skipped",
-        "count": 1486,
+        "count": 1511,
         "status": "skipped"
       },
       {
@@ -33,7 +33,7 @@
     "by_reason": [
       {
         "key": "missing_auth",
-        "count": 556,
+        "count": 581,
         "reason": "missing_auth"
       },
       {
@@ -395,18 +395,18 @@
       },
       {
         "key": "data-gg",
-        "count": 123,
+        "count": 124,
         "provider": "data-gg"
+      },
+      {
+        "key": "seoul-open-data",
+        "count": 121,
+        "provider": "seoul-open-data"
       },
       {
         "key": "kipris-plus",
         "count": 100,
         "provider": "kipris-plus"
-      },
-      {
-        "key": "seoul-open-data",
-        "count": 93,
-        "provider": "seoul-open-data"
       },
       {
         "key": "seogu",
@@ -417,6 +417,11 @@
         "key": "jeonju",
         "count": 80,
         "provider": "jeonju"
+      },
+      {
+        "key": "dongjak",
+        "count": 70,
+        "provider": "dongjak"
       },
       {
         "key": "gwangmyeong",
@@ -570,7 +575,7 @@
       },
       {
         "key": "jejudatahub",
-        "count": 11,
+        "count": 12,
         "provider": "jejudatahub"
       },
       {
@@ -667,11 +672,6 @@
         "key": "lh-ebid",
         "count": 6,
         "provider": "lh-ebid"
-      },
-      {
-        "key": "dongjak",
-        "count": 5,
-        "provider": "dongjak"
       },
       {
         "key": "gims",
@@ -876,14 +876,14 @@
         "host": "data.mafra.go.kr"
       },
       {
+        "key": "data.gg.go.kr",
+        "count": 124,
+        "host": "data.gg.go.kr"
+      },
+      {
         "key": "www.culture.go.kr",
         "count": 124,
         "host": "www.culture.go.kr"
-      },
-      {
-        "key": "data.gg.go.kr",
-        "count": 123,
-        "host": "data.gg.go.kr"
       },
       {
         "key": "openapi.q-net.or.kr",
@@ -897,7 +897,7 @@
       },
       {
         "key": "data.seoul.go.kr",
-        "count": 92,
+        "count": 95,
         "host": "data.seoul.go.kr"
       },
       {
@@ -909,6 +909,11 @@
         "key": "openapi.jeonju.go.kr",
         "count": 80,
         "host": "openapi.jeonju.go.kr"
+      },
+      {
+        "key": "data.dongjak.go.kr",
+        "count": 70,
+        "host": "data.dongjak.go.kr"
       },
       {
         "key": "data.gm.go.kr",
@@ -1011,6 +1016,11 @@
         "host": "oneclick.law.go.kr:80"
       },
       {
+        "key": "openapi.seoul.go.kr:8088",
+        "count": 26,
+        "host": "openapi.seoul.go.kr:8088"
+      },
+      {
         "key": "www.lofin365.go.kr",
         "count": 25,
         "host": "www.lofin365.go.kr"
@@ -1067,7 +1077,7 @@
       },
       {
         "key": "www.jejudatahub.net",
-        "count": 11,
+        "count": 12,
         "host": "www.jejudatahub.net"
       },
       {
@@ -1189,11 +1199,6 @@
         "key": "www.smartfarmkorea.net",
         "count": 6,
         "host": "www.smartfarmkorea.net"
-      },
-      {
-        "key": "data.dongjak.go.kr",
-        "count": 5,
-        "host": "data.dongjak.go.kr"
       },
       {
         "key": "smartfarmkorea.net",
@@ -1351,11 +1356,6 @@
         "host": "openapi-lib.sen.go.kr"
       },
       {
-        "key": "openapi.seoul.go.kr:8088",
-        "count": 1,
-        "host": "openapi.seoul.go.kr:8088"
-      },
-      {
         "key": "openapi.work.go.kr",
         "count": 1,
         "host": "openapi.work.go.kr"
@@ -1429,7 +1429,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 2803,
+        "count": 2898,
         "kind": "external_endpoint"
       },
       {

@@ -1,0 +1,92 @@
+{
+  "generated_at": "2026-07-03T23:44:33Z",
+  "source": "reports/data-go-kr/dongjak-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 95,
+    "verified": 70,
+    "failed": 0,
+    "skipped": 25,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 70,
+        "status": "verified"
+      },
+      {
+        "key": "skipped",
+        "count": 25,
+        "status": "skipped"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "missing_auth",
+        "count": 25,
+        "reason": "missing_auth"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "dongjak",
+        "count": 65,
+        "provider": "dongjak"
+      },
+      {
+        "key": "seoul-open-data",
+        "count": 28,
+        "provider": "seoul-open-data"
+      },
+      {
+        "key": "data-gg",
+        "count": 1,
+        "provider": "data-gg"
+      },
+      {
+        "key": "jejudatahub",
+        "count": 1,
+        "provider": "jejudatahub"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "data.dongjak.go.kr",
+        "count": 65,
+        "host": "data.dongjak.go.kr"
+      },
+      {
+        "key": "openapi.seoul.go.kr:8088",
+        "count": 25,
+        "host": "openapi.seoul.go.kr:8088"
+      },
+      {
+        "key": "data.seoul.go.kr",
+        "count": 3,
+        "host": "data.seoul.go.kr"
+      },
+      {
+        "key": "data.gg.go.kr",
+        "count": 1,
+        "host": "data.gg.go.kr"
+      },
+      {
+        "key": "www.jejudatahub.net",
+        "count": 1,
+        "host": "www.jejudatahub.net"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 95,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

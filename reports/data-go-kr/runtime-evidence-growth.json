@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-07-03T23:38:57Z",
+  "generated_at": "2026-07-03T23:45:00Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -13,20 +13,20 @@
     "provider_index": "data/provider-index.json"
   },
   "coverage": {
-    "operations": 20041,
-    "callable_operations": 19899,
+    "operations": 20136,
+    "callable_operations": 19994,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 8431,
-    "registered_adapter_operations": 8421,
+    "external_endpoint_operations": 8526,
+    "registered_adapter_operations": 8516,
     "call_capable_adapters": 23
   },
   "evidence": {
-    "total": 3527,
-    "verified": 1735,
+    "total": 3622,
+    "verified": 1805,
     "failed": 306,
-    "skipped": 1486,
+    "skipped": 1511,
     "unknown": 0,
-    "coverage_percent": 17.6,
+    "coverage_percent": 18,
     "by_kind": [
       {
         "key": "data_go_kr_gateway",
@@ -34,7 +34,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 2803
+        "count": 2898
       },
       {
         "key": "service_root",
@@ -44,7 +44,7 @@
   },
   "growth_target": {
     "target_percent": 10,
-    "target_evidence_total": 2005,
+    "target_evidence_total": 2014,
     "remaining_to_target": 0,
     "status": "above_target"
   },
@@ -113,7 +113,7 @@
         "label": "data-gg",
         "provider": "data-gg",
         "kind": "external_endpoint",
-        "candidates": 2191,
+        "candidates": 2192,
         "uncovered_candidates": 2069,
         "planned_operations": 10,
         "output": ".datapan/verification/data-gg-next.json"
@@ -122,7 +122,7 @@
         "label": "dongjak",
         "provider": "dongjak",
         "kind": "external_endpoint",
-        "candidates": 6,
+        "candidates": 71,
         "uncovered_candidates": 1,
         "planned_operations": 1,
         "output": ".datapan/verification/dongjak-next.json"
@@ -212,7 +212,7 @@
         "label": "jejudatahub",
         "provider": "jejudatahub",
         "kind": "external_endpoint",
-        "candidates": 177,
+        "candidates": 178,
         "uncovered_candidates": 166,
         "planned_operations": 10,
         "output": ".datapan/verification/jejudatahub-next.json"

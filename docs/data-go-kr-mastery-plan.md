@@ -12,14 +12,14 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `20041`
-- callable operations: `19899` (`99.3%`)
+- operations: `20136`
+- callable operations: `19994` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `8431`
-- registered adapter operations: `8421`
+- external endpoint operations: `8526`
+- registered adapter operations: `8516`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
-- approval-required operations: `7508`
+- approval-required operations: `7566`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
@@ -232,9 +232,10 @@ The current operation materialization queue still starts at `울산항만공사`
 APIs, `6` APIs with operation mappings, and `92` uncovered APIs. The July 2026
 portal pages and catalog JSON for that queue return error/not-found responses,
 so it should be tracked as a reactivation blocker while the next viable queue
-is processed. The latest viable queues were `국립생태원` and
-`해양수산부 국립수산물품질관리원`, now completed through `39` Ecobank and `45`
-NFQS link-detail operations. The
+is processed. The latest viable queues were `국립생태원`,
+`해양수산부 국립수산물품질관리원`, and `서울특별시 동작구`, now completed through
+`39` Ecobank, `45` NFQS, and `95` Dongjak/Seoul Open Data link-detail
+operations. The
 runtime reactivation queue starts at `행정안전부`: `1252`
 APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
@@ -613,6 +614,11 @@ readiness, not to advance verified runtime coverage.
    checked runtime evidence to `3527`, verified checks to `1735`, registered
    external adapter operations to `8421`, and raises API operation coverage to
    `11,008` of `12,060` APIs (`91.3%`).
+   The 서울특별시 동작구 batch materializes `36` APIs and `95` operations, and
+   merges `95` bounded checks (`70` verified and `25` skipped for Seoul Open
+   Data auth). That brings checked runtime evidence to `3622`, verified checks
+   to `1805`, registered external adapter operations to `8516`, and raises API
+   operation coverage to `11,044` of `12,060` APIs (`91.6%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

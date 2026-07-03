@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T23:38:57Z",
+  "generated_at": "2026-07-03T23:45:00Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3823,
-    "stable": 8237
+    "changed": 3859,
+    "stable": 8201
   },
   "added": [],
   "removed": [],
@@ -2439,6 +2439,126 @@
       "new_digest": "e027f329b633676d5596c390a2eab59cd9f6bfdd28c3089709edd73aa326a484"
     },
     {
+      "id": "15038281",
+      "old_title": "서울특별시 동작구 식품등 수입판매업 현황",
+      "new_title": "서울특별시 동작구 식품등 수입판매업 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d9121f5d55fcab7227a0ba40a02be1e40bcbf5cdfa3ed87345f21a41d4914796",
+      "new_digest": "65cf18b61e192348c62516daa7154423d98b2107c205a00ea984a27b073c5acd"
+    },
+    {
+      "id": "15038284",
+      "old_title": "서울특별시 동작구 식품위생업소 행정처분내역 현황",
+      "new_title": "서울특별시 동작구 식품위생업소 행정처분내역 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7ee5d2c09bf2cbc134065192f4034d3106badfbc517d1b6edf78e60df0891740",
+      "new_digest": "5516a95e0338d5e0ed77f73359d292cc3610a30bbce4237366909886b7a55c18"
+    },
+    {
+      "id": "15038287",
+      "old_title": "서울특별시 동작구_축산가공업 인허가 정보",
+      "new_title": "서울특별시 동작구_축산가공업 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b54c491b0308d9c0ffccbf67c02e7b2fa835f8735990071e810d375495bb9752",
+      "new_digest": "22dbc43a1cbdefb46abf3959409c77c969dd98288bdf88b8b7d9dbe13cf705b5"
+    },
+    {
+      "id": "15038289",
+      "old_title": "서울특별시 동작구_식품판매업(기타) 인허가 정보",
+      "new_title": "서울특별시 동작구_식품판매업(기타) 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f7d6e14d9ddd05033267923c4fced7a92a8302392ee554c042c394aec8f8d7ce",
+      "new_digest": "dabdd566d4912a0fe57698de636571619bd78793e4fd50c56a46541182ec29eb"
+    },
+    {
+      "id": "15038292",
+      "old_title": "서울특별시 동작구_미용업 인허가 정보",
+      "new_title": "서울특별시 동작구_미용업 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "61e656d00ee457310fa9fd6f2ca62a2992a44d7b8164cbae0762467782604147",
+      "new_digest": "e4ea2adbd7e87c530f56a008c62271bd7ab235c79b81d77a4e986d0b2c92be9f"
+    },
+    {
+      "id": "15038293",
+      "old_title": "서울특별시 동작구 동물용의약품도매상 인허가 정보",
+      "new_title": "서울특별시 동작구 동물용의약품도매상 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e667bd42df70589e23960f4b0b9a04e747b9a99d4f82692a245b811b46479cfa",
+      "new_digest": "89a0187f778ed492fbde475a5d950ef2b1d3b8f868fb0a733c0df344d4df726b"
+    },
+    {
+      "id": "15038372",
+      "old_title": "서울특별시 동작구_집단급식소 인허가 정보",
+      "new_title": "서울특별시 동작구_집단급식소 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "68780486508516ebef2283803d7efb4badd9b6f45d1d471d346d9ac8268590e7",
+      "new_digest": "0bf4886ed3b103419c48dd9cd3e0c7f9c15bf5bbd289161b727157889e997ffa"
+    },
+    {
+      "id": "15038449",
+      "old_title": "서울특별시 동작구 새소식 정보",
+      "new_title": "서울특별시 동작구 새소식 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8435a37f9c0815421c3ea4257e85d1745c95f20b63eae0f6cdc705544ad77fa0",
+      "new_digest": "b094709d8b3cc74e857213850245d40a18665baac5f256325079a311cc5bf8dd"
+    },
+    {
+      "id": "15038450",
+      "old_title": "서울특별시 동작구 보건소 새소식 정보",
+      "new_title": "서울특별시 동작구 보건소 새소식 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0601eb63532b9cfe1e946b7f635d18d9281f818148b6d27fb46310ef1fcd139c",
+      "new_digest": "51dde6c02e6712c52ac6054562a2fb8e8ebc1f01edd129d38b0dfa150e68156a"
+    },
+    {
+      "id": "15038451",
+      "old_title": "서울특별시 동작구 채용공고 현황",
+      "new_title": "서울특별시 동작구 채용공고 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d4134986e87003fee72d6869a4ca0eaa6132badf7383dc7e356b3badce9324b4",
+      "new_digest": "d292b430aa30d8a52e508a4da65f9ac11ae44cd53b1eaeb68e0084a4f34a647c"
+    },
+    {
+      "id": "15038554",
+      "old_title": "서울특별시 동작구_유흥주점영업 인허가 정보",
+      "new_title": "서울특별시 동작구_유흥주점영업 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "22ee478fc3eb4557c418c08a912180b3557fb3cdfb29d09b9873ad23f267de49",
+      "new_digest": "2e9bffe8dfb617a9aa73790fb52715544ef46f108dae62173b353947664c0501"
+    },
+    {
+      "id": "15038557",
+      "old_title": "서울특별시 동작구_단란주점영업 인허가 정보",
+      "new_title": "서울특별시 동작구_단란주점영업 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4c83f03256b9720acd679b7f2850cbd38565f58ccd2785c5ec8769101458ccb6",
+      "new_digest": "4b83e752da6bae6af891845ad8a6554ea047e078f48a3011f71ee695589ad7b1"
+    },
+    {
       "id": "15038581",
       "old_title": "경기도_지방의회 정보",
       "new_title": "경기도_지방의회 정보",
@@ -2447,6 +2567,16 @@
       ],
       "old_digest": "368cbb7cc9395100d7b1b12f3e575423070f6833ddb7965453a09bcc7960d385",
       "new_digest": "29e30267fe6204d3ec7cd11c3836f3956758f7da091c78fcc4872be859514350"
+    },
+    {
+      "id": "15038776",
+      "old_title": "서울특별시 동작구 교육문화행사 정보",
+      "new_title": "서울특별시 동작구 교육문화행사 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1ab1c6b302086abc876c6b3924fc37bb3b53d44be231554653ea91ec38eb9014",
+      "new_digest": "bd159615ef90218bcad398dae4c59b67cb5fccd50537fd6ee8701af110ca6f42"
     },
     {
       "id": "15038873",
@@ -17659,6 +17789,126 @@
       "new_digest": "4043521e92c4b662d3c9f47b915584f24aa02e2d97585f50bc6410aacfe72688"
     },
     {
+      "id": "15063124",
+      "old_title": "서울특별시 동작구_약국 인허가 정보",
+      "new_title": "서울특별시 동작구_약국 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "123cb01825f9c41c3fdb7d86940c63ad62710bdc334b9e6545761fd257df8664",
+      "new_digest": "501170c058145561db1101bd068329a7fb050ee5854048dc751354eee5d1166a"
+    },
+    {
+      "id": "15063125",
+      "old_title": "서울특별시 동작구_병원 인허가 정보",
+      "new_title": "서울특별시 동작구_병원 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2ef67ba49ecbf12a611d150b4fb0a59b59da34841d08433d2f6b3ca5f466a32c",
+      "new_digest": "f305715b4fe594d3f39f98b90da6ce122c6f8998d8fb00289dacc6c71ea05374"
+    },
+    {
+      "id": "15063126",
+      "old_title": "서울특별시 동작구_동물병원 인허가 정보",
+      "new_title": "서울특별시 동작구_동물병원 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1d94d23e0e3772256659cdc058dfb8acfa7900eec2a418b2dcb5b89174425a10",
+      "new_digest": "9429bf2a2d877bc9af15f98a1a6bfa2deb041b1e74f9e20c33a1b0bc4ee3ca08"
+    },
+    {
+      "id": "15063127",
+      "old_title": "서울특별시 동작구_의원 인허가 정보",
+      "new_title": "서울특별시 동작구_의원 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "034286fe39102c179f53964368afcba7cde95e8ced5e2e4f2e730f6e81ee3430",
+      "new_digest": "fb56ce868de98f65104584aae52cb8e93a6cf66cfd091f1f631a505859cd5dc2"
+    },
+    {
+      "id": "15063128",
+      "old_title": "서울특별시 동작구_노래연습장업 인허가 정보",
+      "new_title": "서울특별시 동작구_노래연습장업 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b97b9948bc2e50505e4350d42d69b25f9f8ef783791e9cf37044c2fe05de6101",
+      "new_digest": "905797e6d3b35cf0a9d55e00988aa8385d6e504edbfc1bf2a9b7ea039ea53956"
+    },
+    {
+      "id": "15063129",
+      "old_title": "서울특별시 동작구_공연장 인허가 정보",
+      "new_title": "서울특별시 동작구_공연장 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5d0a12536f9a74964128b3c6293473b9931f407a06b71943043a339910f6dc93",
+      "new_digest": "03195f7cf3c3a8d05741b7c908cbaae81a879f3650f51f5eb3b2cfe8b264393a"
+    },
+    {
+      "id": "15063130",
+      "old_title": "서울특별시 동작구_청소년게임제공업 인허가 정보",
+      "new_title": "서울특별시 동작구_청소년게임제공업 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f57aca03044b3efc1d1f9a50bb3eca0209419bd11024b1d7ff4cc4c34b779597",
+      "new_digest": "a49e1ef21a5efc8e34dd6e4c8cbe27e5b8e63a397de489c35ab173875e2f0262"
+    },
+    {
+      "id": "15063252",
+      "old_title": "서울특별시 동작구_사료제조업 인하가 정보",
+      "new_title": "서울특별시 동작구_사료제조업 인하가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fe1d805c47eb2018f92bd560b7dbdad7e23d8da9793bc39b0ef64d0775bfba47",
+      "new_digest": "a582265e5b067fe46101e4b81fb475fb762c4000f57a38040080b4b52b3ed146"
+    },
+    {
+      "id": "15063253",
+      "old_title": "서울특별시 동작구_동물판매업 인허가 정보",
+      "new_title": "서울특별시 동작구_동물판매업 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5fd968deeb4c4c37a04370e49067664abb517d56445bbc807613679e589aa149",
+      "new_digest": "ad52ced93756e869e8cd405aed85c4dd1fec73dd2cb834ab9d75cfbcd79fac9e"
+    },
+    {
+      "id": "15063254",
+      "old_title": "서울특별시 동작구_동물용의료용구판매업 인허가 정보",
+      "new_title": "서울특별시 동작구_동물용의료용구판매업 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "64497afefe15c7d38214eaf2959e8ed3efb94758b6d5f2eeb24a64fe47d9519d",
+      "new_digest": "04fd6b457f23f2471cf3fbeb8dd56ca8e4fc4e7b72f58956d9ca1b370449bca6"
+    },
+    {
+      "id": "15063255",
+      "old_title": "서울특별시 동작구_동물약국 인허가 정보",
+      "new_title": "서울특별시 동작구_동물약국 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "006db8068cac3b38e845b85ed66c99175b781945fc1c03f2a5416790fe7f833b",
+      "new_digest": "948c06b504ed1c1fc7c66c2b7f79f9aec4937be5f666645293d7bb71bb9b87ba"
+    },
+    {
+      "id": "15063256",
+      "old_title": "서울특별시 동작구_안전상비의약품 판매업소 인허가 정보",
+      "new_title": "서울특별시 동작구_안전상비의약품 판매업소 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3a89dd4d48af59306ba7d181e9ec9a0c14977fd3a82f2319a081dc9026c2a7a1",
+      "new_digest": "5a5f4f5b1ceb29989fd0ce523bd514ea2bad0c560833e70589c510684b593332"
+    },
+    {
       "id": "15063677",
       "old_title": "식품의약품안전처_검사부적합(국내)",
       "new_title": "식품의약품안전처_검사부적합(국내)",
@@ -21287,6 +21537,116 @@
       ],
       "old_digest": "9bc122b376104304e75e0ab8a55d8e620603df8bb35513f36a8350d395bf1d84",
       "new_digest": "6416dad7cd632000fe933a3e00be0c31520b410ebf9f045e8cc2bd904492da27"
+    },
+    {
+      "id": "15094612",
+      "old_title": "서울특별시 동작구_공공와이파이 서비스 위치 정보",
+      "new_title": "서울특별시 동작구_공공와이파이 서비스 위치 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d22fd5458658f977dff0e965de95cc4ae4f572755ec3d6866c492de11e4de703",
+      "new_digest": "f909ecc2d7fb4430a14fb58f3cac420337ae7321a7074356974cf7199c2791d9"
+    },
+    {
+      "id": "15094614",
+      "old_title": "서울특별시 동작구_학교 기본정보",
+      "new_title": "서울특별시 동작구_학교 기본정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "88320a37da29389ab741275bca937ae18a6c6d1a36b9b0ec00633b73a1641f88",
+      "new_digest": "68748e01e08a5522381ab8df717ae4fc145d89c7ef5f3135e4f638bf4f179ad4"
+    },
+    {
+      "id": "15094615",
+      "old_title": "서울특별시 동작구_불법주정차위반단속 CCTV 위치정보",
+      "new_title": "서울특별시 동작구_불법주정차위반단속 CCTV 위치정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "030064c2b68a82ee6772d075d20f20f6c446417a3e982c713f5037051c6f8822",
+      "new_digest": "5b5796504cca6e7dd4da18cd7ac689d0a13e49af477058d1c402260826776c96"
+    },
+    {
+      "id": "15094616",
+      "old_title": "서울특별시 동작구_사회복지시설 목록",
+      "new_title": "서울특별시 동작구_사회복지시설 목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3ae2e9980b0fb5d428e4471b5c21bcc2614728ee00060cfd7d15b3ca54b69b2d",
+      "new_digest": "a5920121aa2f0e6291f93b6146a1a4169e4891c517c0990b783e5a64bca2774d"
+    },
+    {
+      "id": "15094617",
+      "old_title": "서울특별시 동작구_민방위대피시설 인허가 정보",
+      "new_title": "서울특별시 동작구_민방위대피시설 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3d004fdc2482a9d5cf4515992fc0a792269d0de087a2548ecd5e8d756d7ed53f",
+      "new_digest": "56c06fe887e63489d8610554f73df45b60a1f473d8a67d3f11d242454047b2f7"
+    },
+    {
+      "id": "15094618",
+      "old_title": "서울특별시 동작구_통신판매업 인허가 정보",
+      "new_title": "서울특별시 동작구_통신판매업 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2615c6da33ab2fc3d0840b04aabfe00dae0d79630263914e77b614f2f031b9ac",
+      "new_digest": "be46a9608584842029c71e1c1213a20d25065a3527ff10d01beac5c2d4597b0f"
+    },
+    {
+      "id": "15094621",
+      "old_title": "서울특별시 동작구_일반음식점 인허가 정보",
+      "new_title": "서울특별시 동작구_일반음식점 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2e1634d10411e1355d8a6eeca9ad4ca84e4d675a45bb5764c9825ece01bbc9ed",
+      "new_digest": "865617712542bbd1e0026288a1148902244b48a7d25ee509a44b48ed432072a1"
+    },
+    {
+      "id": "15094622",
+      "old_title": "서울특별시 동작구_영화상영관 인허가 정보",
+      "new_title": "서울특별시 동작구_영화상영관 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f973634f35f8ca4cc1854ab5ac8b5a73cf49f45bdeaff70cf3c69d2734f59fcb",
+      "new_digest": "21d222d3b21c904b874533044b2bfc7ad15fd506cad8d47fa01b93be2a0d9624"
+    },
+    {
+      "id": "15094623",
+      "old_title": "서울특별시 동작구_국외여행업 인허가 정보",
+      "new_title": "서울특별시 동작구_국외여행업 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "76778ddb75ee19ba9e19873ba791e88f4fcc34faa0e49e8ab15aa30e786eba29",
+      "new_digest": "89b213e7bee84a0926488c9d67b2f95d9e987477dc50973d64d27a3d907ebc63"
+    },
+    {
+      "id": "15094624",
+      "old_title": "서울특별시 동작구_국내여행업 인허가 정보",
+      "new_title": "서울특별시 동작구_국내여행업 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6105c5bfdbe34d6c54cab181aaf05ab1ae0d7126647ce5a4757024b3fa4cc6e6",
+      "new_digest": "e3f97cad1fda944052b2b0dffdc7c703d5b68ed17d347ea8f1a4522d2d466bdb"
+    },
+    {
+      "id": "15094625",
+      "old_title": "서울특별시 동작구_숙박업 인허가 정보",
+      "new_title": "서울특별시 동작구_숙박업 인허가 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9a8958e4e246a83b7aac83127ebaae48a66a8d7f2cf2bd44db95055e79c6db51",
+      "new_digest": "e3940d0130a7808882076f2f80648e82195b5873f5d2b750a06f35c1745b340a"
     },
     {
       "id": "15094849",

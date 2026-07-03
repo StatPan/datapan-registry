@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T23:38:57Z",
+  "generated_at": "2026-07-03T23:45:00Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -9,7 +9,7 @@
     "hosts": 276,
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 132,
-    "external_guide_hosts": 200,
+    "external_guide_hosts": 201,
     "registered_adapter_hosts": 121,
     "operation_hosts": 134,
     "guide_only_hosts": 142,
@@ -17,7 +17,7 @@
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7508,
+    "approval_required_operations": 7566,
     "malformed_source_url_count": 712
   },
   "providers": [
@@ -178,12 +178,12 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 884,
-      "operations": 2191,
-      "external_endpoint_operations": 2191,
+      "specs": 885,
+      "operations": 2192,
+      "external_endpoint_operations": 2192,
       "external_guide_specs": 21,
       "wms_operations": 5,
-      "approval_required_operations": 55,
+      "approval_required_operations": 56,
       "sample_ids": [
         "15005231",
         "15011020",
@@ -388,11 +388,11 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 74,
-      "operations": 177,
-      "external_endpoint_operations": 177,
+      "specs": 75,
+      "operations": 178,
+      "external_endpoint_operations": 178,
       "external_guide_specs": 7,
-      "approval_required_operations": 158,
+      "approval_required_operations": 159,
       "sample_ids": [
         "15034922",
         "15045335",
@@ -496,11 +496,11 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 58,
-      "operations": 118,
-      "external_endpoint_operations": 118,
+      "specs": 61,
+      "operations": 121,
+      "external_endpoint_operations": 121,
       "external_guide_specs": 28,
-      "approval_required_operations": 45,
+      "approval_required_operations": 48,
       "sample_ids": [
         "15003164",
         "15040468",
@@ -559,6 +559,25 @@
         "15000354",
         "15004414",
         "15004788"
+      ]
+    },
+    {
+      "host": "data.dongjak.go.kr",
+      "provider": "dongjak",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 34,
+      "operations": 71,
+      "external_endpoint_operations": 71,
+      "external_guide_specs": 7,
+      "approval_required_operations": 34,
+      "sample_ids": [
+        "15038281",
+        "15038284",
+        "15038287"
       ]
     },
     {
@@ -837,6 +856,23 @@
         "15000021",
         "15000122",
         "15000215"
+      ]
+    },
+    {
+      "host": "openapi.seoul.go.kr:8088",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 20,
+      "operations": 27,
+      "external_endpoint_operations": 27,
+      "wms_operations": 1,
+      "approval_required_operations": 21,
+      "sample_ids": [
+        "15038287",
+        "15038292",
+        "15038372"
       ]
     },
     {
@@ -1297,23 +1333,6 @@
       ]
     },
     {
-      "host": "data.dongjak.go.kr",
-      "provider": "dongjak",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 6,
-      "operations": 6,
-      "external_endpoint_operations": 6,
-      "approval_required_operations": 1,
-      "sample_ids": [
-        "15047488",
-        "15056754",
-        "15057700"
-      ]
-    },
-    {
       "host": "openapi.ebid.lh.or.kr",
       "provider": "lh-ebid",
       "kinds": [
@@ -1684,22 +1703,6 @@
       "sample_ids": [
         "15061409",
         "15146353"
-      ]
-    },
-    {
-      "host": "openapi.seoul.go.kr:8088",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 2,
-      "operations": 2,
-      "external_endpoint_operations": 2,
-      "wms_operations": 1,
-      "approval_required_operations": 1,
-      "sample_ids": [
-        "15059341",
-        "15101888"
       ]
     },
     {
