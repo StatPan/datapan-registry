@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T18:48:16Z",
+  "generated_at": "2026-07-03T18:58:33Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1975,
-    "verified": 631,
+    "total": 1976,
+    "verified": 632,
     "failed": 147,
     "skipped": 1197,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 631,
+        "count": 632,
         "status": "verified"
       },
       {
@@ -654,6 +654,11 @@
         "provider": "jeju-air"
       },
       {
+        "key": "jeonnam-redtable",
+        "count": 1,
+        "provider": "jeonnam-redtable"
+      },
+      {
         "key": "kistep",
         "count": 1,
         "provider": "kistep"
@@ -1061,6 +1066,11 @@
         "host": "its.go.kr"
       },
       {
+        "key": "jeonnam.openapi.redtable.global",
+        "count": 1,
+        "host": "jeonnam.openapi.redtable.global"
+      },
+      {
         "key": "ncpms.rda.go.kr",
         "count": 1,
         "host": "ncpms.rda.go.kr"
@@ -1144,7 +1154,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 1251,
+        "count": 1252,
         "kind": "external_endpoint"
       },
       {

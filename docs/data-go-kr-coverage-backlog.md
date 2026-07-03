@@ -2,17 +2,17 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-07-03T18:48:19Z`
+- Generated at: `2026-07-03T18:58:36Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `10198` (`84.6%`)
-- APIs without operation mapping: `1862`
-- Operations: `18489`
-- Runtime evidence operations: `1975` (`10.7%`)
-- Runtime verified operations: `631`
+- APIs with operation mapping: `10199` (`84.6%`)
+- APIs without operation mapping: `1861`
+- Operations: `18490`
+- Runtime evidence operations: `1976` (`10.7%`)
+- Runtime verified operations: `632`
 - Runtime failed operations: `147`
 - Runtime skipped operations: `1197`
-- APIs with runtime evidence: `963`
+- APIs with runtime evidence: `964`
 - Runtime reactivation APIs: `9235`
 - Runtime repair APIs: `98`
 
@@ -38,7 +38,7 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 경상남도 | 129 | 129 | 0 | 100.0% | 134 | 0 | 129 | 0 | 129 |
 | 세종특별자치시 | 122 | 122 | 0 | 100.0% | 122 | 0 | 122 | 0 | 122 |
 | 농촌진흥청 | 136 | 136 | 0 | 100.0% | 363 | 23 | 113 | 0 | 113 |
-| 전라남도 | 109 | 108 | 1 | 99.1% | 174 | 0 | 108 | 0 | 109 |
+| 전라남도 | 109 | 109 | 0 | 100.0% | 175 | 1 | 108 | 0 | 108 |
 | 식품의약품안전처 식품의약품안전평가원 | 106 | 106 | 0 | 100.0% | 154 | 2 | 104 | 0 | 104 |
 | 울산항만공사 | 98 | 6 | 92 | 6.1% | 9 | 0 | 6 | 0 | 98 |
 | 충청남도 | 96 | 69 | 27 | 71.9% | 77 | 0 | 69 | 0 | 96 |

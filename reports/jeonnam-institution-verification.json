@@ -1,0 +1,37 @@
+{
+  "generated_at": "2026-07-03T18:58:23Z",
+  "provider": "data.go.kr",
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 25,
+  "timeout": "20s",
+  "exclude_input": "reports\\latest-verification.json",
+  "truncated": false,
+  "filters": {
+    "organization": "전라남도",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 1,
+  "summary": {
+    "total": 1,
+    "verified": 1,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15111780",
+      "title": "전라남도_전남관광플랫폼(J-TaaS)의 음식관광 정보 확대를 위한 음식점 DB OPEN API",
+      "operation": "전라남도_전남관광플랫폼(J-TaaS)의 음식관광 정보 확대를 위한 음식점 DB OPEN API_20221216",
+      "provider": "jeonnam-redtable",
+      "endpoint_host": "jeonnam.openapi.redtable.global",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T18:58:23Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://jeonnam.openapi.redtable.global",
+      "body_shape": "html"
+    }
+  ]
+}
