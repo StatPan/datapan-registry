@@ -2,13 +2,13 @@
 
 This report fetches one operation-materialization batch from public data.go.kr detail pages and keeps only operations whose hosts already have registered adapters.
 
-- Generated at: `2026-07-03T21:31:29Z`
-- Batch: `institution-03`
-- Organization: `농림수산식품교육문화정보원`
-- Input APIs: `66`
-- Details fetched: `66`
-- Patches: `66`
-- Operations to add: `84`
+- Generated at: `2026-07-03T21:48:36Z`
+- Batch: `institution-04`
+- Organization: `지식재산처`
+- Input APIs: `51`
+- Details fetched: `51`
+- Patches: `51`
+- Operations to add: `151`
 - Skipped: `0`
 - Failed: `0`
 
@@ -16,71 +16,56 @@ This report fetches one operation-materialization batch from public data.go.kr d
 
 | Dataset ID | Organization | Title | Operations | Hosts |
 | --- | --- | --- | ---: | --- |
-| 15142145 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_지역기상특보현황 | 1 | data.mafra.go.kr |
-| 15142144 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_기상관측현황 | 1 | data.mafra.go.kr |
-| 15142143 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_지역강수량저수율 | 1 | data.mafra.go.kr |
-| 15135919 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_스마트팜코리아_ 혁신밸리 빅데이터 제공 서비스 | 1 | smartfarmkorea.net |
-| 15135915 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_스마트팜코리아_스마트팜 빅데이터 제공 서비스 | 1 | smartfarmkorea.net |
-| 15135912 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_스마트팜코리아_ 품목별 데이터셋 제공 서비스 | 1 | smartfarmkorea.net |
-| 15135894 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_스마트팜코리아_작기별 데이터셋 제공 서비스 | 1 | smartfarmkorea.net |
-| 15135883 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_스마트팜코리아_노지 빅데이터 제공 서비스 | 1 | smartfarmkorea.net |
-| 15131878 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_텃밭 분양 상세정보 | 1 | data.mafra.go.kr |
-| 15110625 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_GPC품목매핑목록조회 | 1 | data.mafra.go.kr |
-| 15109246 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_표준단위매핑목록조회 | 1 | data.mafra.go.kr |
-| 15109245 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_표준시장매핑목록조회 | 1 | data.mafra.go.kr |
-| 15109241 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_표준품목매핑목록조회 | 1 | data.mafra.go.kr |
-| 15109240 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_HSK품목매핑목록조회 | 1 | data.mafra.go.kr |
-| 15109239 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_원천산지위판장가격목록조회 | 1 | data.mafra.go.kr |
-| 15109237 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_원천실시간경락가격도매시장목록조회 | 1 | data.mafra.go.kr |
-| 15109236 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_원천실시간경락가격품목목록조회 | 1 | data.mafra.go.kr |
-| 15109234 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_원천정산경락가격도매시장목록조회 | 1 | data.mafra.go.kr |
-| 15109233 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_원천정산경락가격품목목록조회 | 1 | data.mafra.go.kr |
-| 15109229 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_수입농산물가격조회 | 1 | data.mafra.go.kr |
-| 15109228 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_신구표준산지목록조회 | 1 | data.mafra.go.kr |
-| 15109227 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_신구표준등급목록조회 | 1 | data.mafra.go.kr |
-| 15109225 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_신구표준크기목록조회 | 1 | data.mafra.go.kr |
-| 15109224 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_신구표준포장목록조회 | 1 | data.mafra.go.kr |
-| 15109223 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_신구표준단위목록조회 | 1 | data.mafra.go.kr |
-| 15109222 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_신구표준시장목록조회 | 1 | data.mafra.go.kr |
-| 15109221 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_신구표준품목목록조회 | 1 | data.mafra.go.kr |
-| 15109219 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_실시간경매속보조회 | 1 | data.mafra.go.kr |
-| 15109218 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_원천조사가격목록조회 | 1 | data.mafra.go.kr |
-| 15109069 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_산지위판장 유통통계정보 조회 | 1 | data.mafra.go.kr |
-| 15109068 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_산지공판장 유통통계정보 조회 | 1 | data.mafra.go.kr |
-| 15109067 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_정산경락 도매시장 유통통계 조회 | 1 | data.mafra.go.kr |
-| 15109066 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_실시간경락 도매시장 유통통계 조회 | 1 | data.mafra.go.kr |
-| 15109065 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_농수축산물 거래단량 매핑 정보조회 | 1 | data.mafra.go.kr |
-| 15109064 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_농수축산물 전문가 시황 정보조회 | 1 | data.mafra.go.kr |
-| 15109063 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_농수축산물 유통단계별 변환 규칙 정보조회 | 1 | data.mafra.go.kr |
-| 15109062 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_농수축산물 유통단계별 가격 정보조회 | 1 | data.mafra.go.kr |
-| 15109061 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_지자체 농수축산물 물가조사가격 정보조회 | 1 | data.mafra.go.kr |
-| 15109060 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_임산물지역별가격조회 | 1 | data.mafra.go.kr |
-| 15109059 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_임산물품목별가격조회 | 1 | data.mafra.go.kr |
-| 15109058 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_농수축산물지역별가격조회 | 1 | data.mafra.go.kr |
-| 15109057 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_산지코드조회 | 1 | data.mafra.go.kr |
-| 15109056 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_부류표준품목코드조회 | 1 | data.mafra.go.kr |
-| 15109055 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_가락시장품목코드조회 | 1 | data.mafra.go.kr |
-| 15109054 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_종합유통센터센터별경락가격조회 | 1 | data.mafra.go.kr |
-| 15109053 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_종합유통센터품목별경락가격조회 | 1 | data.mafra.go.kr |
-| 15109052 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_산지공판장별경락가격조회 | 1 | data.mafra.go.kr |
-| 15109051 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_산지공판장품목별경락가격조회 | 1 | data.mafra.go.kr |
-| 15109050 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_화훼류농협공판장별경락가격조회 | 1 | data.mafra.go.kr |
-| 15109049 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_수산물도매시장별도매경락가격조회 | 1 | data.mafra.go.kr |
-| 15109048 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_수산물품목별도매경락가격조회 | 1 | data.mafra.go.kr |
-| 15102526 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_농촌 마을 현황 정보 | 1 | data.mafra.go.kr |
-| 15102415 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_농식품공공데이터포털 개방목록 | 1 | data.mafra.go.kr |
-| 15102410 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_축산물 부분육 경락가격 | 1 | data.mafra.go.kr |
-| 15102408 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_농업 수입지출 통계정보 | 1 | data.mafra.go.kr |
-| 15069189 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_국가농식품통계 | 1 | data.mafra.go.kr |
-| 15058981 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_레시피 재료정보 | 3 | data.mafra.go.kr |
-| 15058324 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_농촌마을별 연계자원 정보 | 3 | data.mafra.go.kr |
-| 15057698 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_농촌마을별 인원정보 | 3 | data.mafra.go.kr |
-| 15057280 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_농촌마을별 기본정보 | 3 | data.mafra.go.kr |
-| 15057205 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_레시피 기본정보 | 3 | data.mafra.go.kr |
-| 15057145 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_행복마을만들기 콘테스트 실적 | 3 | data.mafra.go.kr |
-| 15056992 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_행복마을만들기 선정마을정보 | 3 | data.mafra.go.kr |
-| 15056562 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_농촌마을별 자원 및 조직정보 | 3 | data.mafra.go.kr |
-| 15056535 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_레시피 과정정보 | 3 | data.mafra.go.kr |
-| 15109047 | 농림수산식품교육문화정보원 | 농림수산식품교육문화정보원_농산물도매법인별경락가격조회 | 1 | data.mafra.go.kr |
+| 15065473 | 지식재산처 | 지식재산처_KIPRISPlus_법적 상태 이력(특허실용(ST.27)_상표_디자인(ST.87))_REST API | 3 | plus.kipris.or.kr |
+| 15058608 | 지식재산처 | 지식재산처_권리자 변동 이력_REST API | 3 | plus.kipris.or.kr |
+| 15065437 | 지식재산처 | 지식재산처_KIPRISPlus_특허_실용 공개_등록공보_REST API | 3 | plus.kipris.or.kr |
+| 15098425 | 지식재산처 | 지식재산처_KIPRISPlus_특허 중한 코퍼스_REST API | 3 | plus.kipris.or.kr |
+| 15075971 | 지식재산처 | 지식재산처_KIPRISPlus_특허 기탁 미생물_REST API | 3 | plus.kipris.or.kr |
+| 15085728 | 지식재산처 | 지식재산처_KIPRISPlus_일본 특허 합금조성비_REST API | 3 | plus.kipris.or.kr |
+| 15075968 | 지식재산처 | 지식재산처_KIPRISPlus_국유특허_REST API | 3 | plus.kipris.or.kr |
+| 15075967 | 지식재산처 | 지식재산처_KIPRISPlus_상표 원산지 명칭_REST API | 3 | plus.kipris.or.kr |
+| 15075966 | 지식재산처 | 지식재산처_KIPRISPlus_품종보호권 등록 식물 명칭_REST API | 3 | plus.kipris.or.kr |
+| 15065476 | 지식재산처 | 지식재산처_KIPRISPlus_의약품 국제일반명칭_REST API | 3 | plus.kipris.or.kr |
+| 15065474 | 지식재산처 | 지식재산처_KIPRISPlus_심판사항_REST API | 3 | plus.kipris.or.kr |
+| 15065472 | 지식재산처 | 지식재산처_KIPRISPlus_특허 패밀리_REST API | 3 | plus.kipris.or.kr |
+| 15065447 | 지식재산처 | 지식재산처_KIPRISPlus_상표 출원 속보_REST API | 3 | plus.kipris.or.kr |
+| 15065444 | 지식재산처 | 지식재산처_KIPRISPlus_디자인 공보_REST API | 3 | plus.kipris.or.kr |
+| 15065443 | 지식재산처 | 지식재산처_KIPRISPlus_특허권 존속기간 연장등록 공보_REST API | 3 | plus.kipris.or.kr |
+| 15058549 | 지식재산처 | 지식재산처_KIPRISPlus_특허·실용 피인용문헌_REST API | 3 | plus.kipris.or.kr |
+| 15057628 | 지식재산처 | 지식재산처_KIPRISPlus_디자인맵 형태분류_REST API | 3 | plus.kipris.or.kr |
+| 15057315 | 지식재산처 | 지식재산처_KIPRISPlus_TM5 공통상태 지표_REST API | 3 | plus.kipris.or.kr |
+| 15057262 | 지식재산처 | 지식재산처_KIPRISPlus_청구항 변동이력_REST API | 3 | plus.kipris.or.kr |
+| 15039347 | 지식재산처 | 지식재산처_KIPRISPlus_특허 염기서열_REST API | 3 | plus.kipris.or.kr |
+| 15059446 | 지식재산처 | 지식재산처_KIPRISPlus_의견제출통지서_REST API | 3 | plus.kipris.or.kr |
+| 15059277 | 지식재산처 | 지식재산처_KIPRISPlus_출원인 법인_REST API | 3 | plus.kipris.or.kr |
+| 15059142 | 지식재산처 | 지식재산처_KIPRISPlus_상표 분류코드 변동 이력_REST API | 3 | plus.kipris.or.kr |
+| 15059036 | 지식재산처 | 지식재산처_KIPRISPlus_등록결정서_REST API | 3 | plus.kipris.or.kr |
+| 15058910 | 지식재산처 | 지식재산처_KIPRISPlus_디자인 행정처리 이력_REST API | 3 | plus.kipris.or.kr |
+| 15058895 | 지식재산처 | 지식재산처_KIPRISPlus_기계번역용 국문초록_REST API | 3 | plus.kipris.or.kr |
+| 15058701 | 지식재산처 | 지식재산처_KIPRISPlus_해외특허_REST API | 3 | plus.kipris.or.kr |
+| 15058649 | 지식재산처 | 지식재산처_KIPRISPlus_디자인 분류코드 변동 이력_REST API | 3 | plus.kipris.or.kr |
+| 15058602 | 지식재산처 | 지식재산처_KIPRISPlus_정정공보_REST API | 3 | plus.kipris.or.kr |
+| 15058587 | 지식재산처 | 지식재산처_KIPRISPlus_특허_실용 분류코드 변동 이력_REST API | 3 | plus.kipris.or.kr |
+| 15058419 | 지식재산처 | 지식재산처_KIPRISPlus_IP_Biz 하나로 서비스 기술분류_REST API | 3 | plus.kipris.or.kr |
+| 15058265 | 지식재산처 | 지식재산처_KIPRISPlus_상표 행정처리 이력_REST API | 3 | plus.kipris.or.kr |
+| 15058250 | 지식재산처 | 지식재산처_KIPRISPlus_시소러스_REST API | 3 | plus.kipris.or.kr |
+| 15058125 | 지식재산처 | 지식재산처_KIPRISPlus_등록사항_REST API | 3 | plus.kipris.or.kr |
+| 15058003 | 지식재산처 | 지식재산처_KIPRISPlus_해외디자인_REST API | 3 | plus.kipris.or.kr |
+| 15057851 | 지식재산처 | 지식재산처_KIPRISPlus_대표 출원인_REST API | 3 | plus.kipris.or.kr |
+| 15057631 | 지식재산처 | 지식재산처_KIPRISPlus_공통_REST API | 3 | plus.kipris.or.kr |
+| 15057617 | 지식재산처 | 지식재산처_KIPRISPlus_특허_실용 인용문헌_REST API | 3 | plus.kipris.or.kr |
+| 15057547 | 지식재산처 | 지식재산처_KIPRISPlus_출원인 기술분야_REST API | 3 | plus.kipris.or.kr |
+| 15057376 | 지식재산처 | 지식재산처_KIPRISPlus_다인용 선행문헌_REST API | 3 | plus.kipris.or.kr |
+| 15057314 | 지식재산처 | 지식재산처_KIPRISPlus_출원인 명칭 변동 이력_REST API | 3 | plus.kipris.or.kr |
+| 15057149 | 지식재산처 | 지식재산처_KIPRISPlus_특허_실용 통지서 마감기한_REST API | 3 | plus.kipris.or.kr |
+| 15056951 | 지식재산처 | 지식재산처_KIPRISPlus_거절결정서_REST API | 3 | plus.kipris.or.kr |
+| 15056944 | 지식재산처 | 지식재산처_KIPRISPlus_인터넷기술공지_REST API | 3 | plus.kipris.or.kr |
+| 15056923 | 지식재산처 | 지식재산처_KIPRISPlus_한국특허영문초록(KPA)_REST API | 3 | plus.kipris.or.kr |
+| 15056882 | 지식재산처 | 지식재산처_KIPRISPlus_특허_실용 행정처리 이력_REST API | 3 | plus.kipris.or.kr |
+| 15056861 | 지식재산처 | 지식재산처_KIPRISPlus_해외상표_REST API | 3 | plus.kipris.or.kr |
+| 15056752 | 지식재산처 | 지식재산처_KIPRISPlus_공모전 아이디어_REST API | 3 | plus.kipris.or.kr |
+| 15056585 | 지식재산처 | 지식재산처_KIPRISPlus_분류코드_REST API | 3 | plus.kipris.or.kr |
+| 15039350 | 지식재산처 | 지식재산처_KIPRISPlus_특허 합금조성비_REST API | 3 | plus.kipris.or.kr |
+| 15080884 | 지식재산처 | 지식재산처_분쟁정보 | 1 | api.ip-navi.or.kr |
 
 ## Skipped Reasons

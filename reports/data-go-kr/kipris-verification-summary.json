@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-07-03T21:48:56Z",
+  "source": "reports/data-go-kr/kipris-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 100,
+    "verified": 76,
+    "failed": 24,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 76,
+        "status": "verified"
+      },
+      {
+        "key": "failed",
+        "count": 24,
+        "status": "failed"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "kipris-plus_http_404",
+        "count": 24,
+        "reason": "kipris-plus_http_404"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "kipris-plus",
+        "count": 100,
+        "provider": "kipris-plus"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "plus.kipris.or.kr",
+        "count": 100,
+        "host": "plus.kipris.or.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 100,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

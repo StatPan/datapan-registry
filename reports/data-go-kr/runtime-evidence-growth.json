@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-07-03T21:32:33Z",
+  "generated_at": "2026-07-03T21:55:35Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -13,20 +13,20 @@
     "provider_index": "data/provider-index.json"
   },
   "coverage": {
-    "operations": 19679,
-    "callable_operations": 19537,
+    "operations": 19830,
+    "callable_operations": 19688,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 8069,
-    "registered_adapter_operations": 8059,
+    "external_endpoint_operations": 8220,
+    "registered_adapter_operations": 8210,
     "call_capable_adapters": 23
   },
   "evidence": {
-    "total": 3191,
-    "verified": 1443,
-    "failed": 282,
+    "total": 3291,
+    "verified": 1519,
+    "failed": 306,
     "skipped": 1466,
     "unknown": 0,
-    "coverage_percent": 16.2,
+    "coverage_percent": 16.6,
     "by_kind": [
       {
         "key": "data_go_kr_gateway",
@@ -34,7 +34,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 2467
+        "count": 2567
       },
       {
         "key": "service_root",
@@ -44,15 +44,15 @@
   },
   "growth_target": {
     "target_percent": 10,
-    "target_evidence_total": 1968,
+    "target_evidence_total": 1983,
     "remaining_to_target": 0,
     "status": "above_target"
   },
   "verification_plan": {
     "planned_batches": 20,
-    "planned_operations": 122,
+    "planned_operations": 113,
     "uncovered_gateway_candidates": 10714,
-    "uncovered_adapter_candidates": 3390,
+    "uncovered_adapter_candidates": 3371,
     "missing_adapter_hosts": 11,
     "planned_by_kind": [
       {
@@ -61,7 +61,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 112
+        "count": 103
       }
     ],
     "batches": [
@@ -191,6 +191,15 @@
         "output": ".datapan/verification/happysd-next.json"
       },
       {
+        "label": "ip-navi",
+        "provider": "ip-navi",
+        "kind": "external_endpoint",
+        "candidates": 1,
+        "uncovered_candidates": 1,
+        "planned_operations": 1,
+        "output": ".datapan/verification/ip-navi-next.json"
+      },
+      {
         "label": "jeju-air",
         "provider": "jeju-air",
         "kind": "external_endpoint",
@@ -234,22 +243,13 @@
         "uncovered_candidates": 1,
         "planned_operations": 1,
         "output": ".datapan/verification/jongno-next.json"
-      },
-      {
-        "label": "juso",
-        "provider": "juso",
-        "kind": "external_endpoint",
-        "candidates": 30,
-        "uncovered_candidates": 20,
-        "planned_operations": 10,
-        "output": ".datapan/verification/juso-next.json"
       }
     ]
   },
   "provider_split_readiness": {
     "status": "ready",
-    "adapter_count": 96,
-    "verification_capable_adapters": 96,
+    "adapter_count": 98,
+    "verification_capable_adapters": 98,
     "call_capable_adapters": 23
   },
   "warnings": []

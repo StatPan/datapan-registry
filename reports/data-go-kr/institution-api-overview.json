@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T21:32:33Z",
+  "generated_at": "2026-07-03T21:55:35Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 19679,
-    "runtime_evidence": 3191,
-    "runtime_evidence_percent": 16.2,
-    "callable_operations": 19537,
-    "external_endpoint_operations": 8069,
-    "registered_adapter_operations": 8059,
+    "operations": 19830,
+    "runtime_evidence": 3291,
+    "runtime_evidence_percent": 16.6,
+    "callable_operations": 19688,
+    "external_endpoint_operations": 8220,
+    "registered_adapter_operations": 8210,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 8069
+      "count": 8220
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 8059
+      "count": 8210
     },
     {
       "key": "builtin",
@@ -69,7 +69,7 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 2615
+      "operation_count": 2616
     },
     {
       "category": "교통물류",
@@ -121,7 +121,7 @@
     },
     {
       "category": "과학기술",
-      "operation_count": 571
+      "operation_count": 721
     },
     {
       "category": "통일외교안보",
@@ -283,6 +283,15 @@
       ]
     },
     {
+      "host": "plus.kipris.or.kr",
+      "operation_count": 150,
+      "adapter": "kipris-plus",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "host": "www.culture.go.kr",
       "operation_count": 124,
       "adapter": "culture",
@@ -298,15 +307,6 @@
       "adapter_status": "registered",
       "capabilities": [
         "call",
-        "verification"
-      ]
-    },
-    {
-      "host": "www.safemap.go.kr",
-      "operation_count": 104,
-      "adapter": "safemap",
-      "adapter_status": "registered",
-      "capabilities": [
         "verification"
       ]
     }
@@ -1785,6 +1785,78 @@
           "host": "apihub.kma.go.kr",
           "operation_count": 45,
           "adapter": "kma-apihub",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
+      "organization": "지식재산처",
+      "api_count": 67,
+      "operation_api_count": 67,
+      "operation_count": 227,
+      "runtime_evidence_count": 122,
+      "runtime_evidence_percent": 53.7,
+      "verified": 76,
+      "failed": 24,
+      "skipped": 22,
+      "unknown": 0,
+      "approval_required_operations": 58,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 76
+        },
+        {
+          "key": "external_endpoint",
+          "count": 151
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 151
+        },
+        {
+          "key": "builtin",
+          "count": 76
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "과학기술",
+          "operation_count": 209
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 9
+        },
+        {
+          "category": "산업고용",
+          "operation_count": 9
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "plus.kipris.or.kr",
+          "operation_count": 150,
+          "adapter": "kipris-plus",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 76
+        },
+        {
+          "host": "api.ip-navi.or.kr:8000",
+          "operation_count": 1,
+          "adapter": "ip-navi",
           "adapter_status": "registered",
           "capabilities": [
             "verification"
@@ -3341,52 +3413,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 40
-        }
-      ]
-    },
-    {
-      "organization": "지식재산처",
-      "api_count": 67,
-      "operation_api_count": 16,
-      "operation_count": 76,
-      "runtime_evidence_count": 22,
-      "runtime_evidence_percent": 28.9,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 22,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 76
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 76
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "과학기술",
-          "operation_count": 59
-        },
-        {
-          "category": "산업고용",
-          "operation_count": 9
-        },
-        {
-          "category": "공공행정",
-          "operation_count": 8
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 76
         }
       ]
     },

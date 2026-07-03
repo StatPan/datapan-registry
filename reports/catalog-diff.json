@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T21:32:33Z",
+  "generated_at": "2026-07-03T21:55:35Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3599,
-    "stable": 8461
+    "changed": 3650,
+    "stable": 8410
   },
   "added": [],
   "removed": [],
@@ -2479,6 +2479,26 @@
       "new_digest": "5ace6057b1f7156b692015837eee64f6ae544e2c063c9bfbfb578b3704596b3e"
     },
     {
+      "id": "15039347",
+      "old_title": "지식재산처_KIPRISPlus_특허 염기서열_REST API",
+      "new_title": "지식재산처_KIPRISPlus_특허 염기서열_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8abbe89d55269ed0e36ef8fc7b62cd4100259f6f041dae20c1b9a5342a6bcfac",
+      "new_digest": "082bef638b99921007f2c889c466258b55afbe15bc1e83ef8e16ea7660b123cc"
+    },
+    {
+      "id": "15039350",
+      "old_title": "지식재산처_KIPRISPlus_특허 합금조성비_REST API",
+      "new_title": "지식재산처_KIPRISPlus_특허 합금조성비_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ca3c8fb6b3e7b7bb86042428eb2932dd97019841919555c6d7b20ff724109c73",
+      "new_digest": "40fd0a8227af3cbe368af4b01751efb61fd6f1cdd621113f13729a109dc511d4"
+    },
+    {
       "id": "15040131",
       "old_title": "경기도_광명시_법정동별 반려동물 현황",
       "new_title": "경기도_광명시_법정동별 반려동물 현황",
@@ -3239,6 +3259,16 @@
       "new_digest": "ea674eb9a712d8470f6cef747f701aecdf3fbef85125a22d627ac3a8b953233a"
     },
     {
+      "id": "15056585",
+      "old_title": "지식재산처_KIPRISPlus_분류코드_REST API",
+      "new_title": "지식재산처_KIPRISPlus_분류코드_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "19d98ca94e6f127ca1cc8f604b6aab8551ad6460b81321debc68143447dece78",
+      "new_digest": "aa0e89f4c5e6806612f2689bcdc5d8af7977eb7928dfec648bacce18f7cce324"
+    },
+    {
       "id": "15056592",
       "old_title": "경기도_보건 의료기관별 공중보건의 배치 현황",
       "new_title": "경기도_보건 의료기관별 공중보건의 배치 현황",
@@ -3929,6 +3959,16 @@
       "new_digest": "00bfb0a0f921056341787eec1a0925ab98e69f4ec4e8aa67d9aab4b44caf0374"
     },
     {
+      "id": "15056752",
+      "old_title": "지식재산처_KIPRISPlus_공모전 아이디어_REST API",
+      "new_title": "지식재산처_KIPRISPlus_공모전 아이디어_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0492fb1726cdbbe5255dab710003ff741acd9d0969858f76d04ef53ad452f8e7",
+      "new_digest": "ab8aaaa437bccbaf9bcc2c44fb70bdf4e32c01ef4cc8ab59c11ce5b3175c7288"
+    },
+    {
       "id": "15056753",
       "old_title": "경기도_수질 자동측정소 현황",
       "new_title": "경기도_수질 자동측정소 현황",
@@ -4329,6 +4369,16 @@
       "new_digest": "0d4c671da614bec29d204d9e0931183ab632945d7fab430f79d3b02348abdf40"
     },
     {
+      "id": "15056861",
+      "old_title": "지식재산처_KIPRISPlus_해외상표_REST API",
+      "new_title": "지식재산처_KIPRISPlus_해외상표_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "25298934d2c3ce86f3d2febf30ea7a76b020eeefd13be38ba18a35d512b9094f",
+      "new_digest": "24c46bc6ef703631ff46bc304f2fd2bf7840ddf2aa9c8544c563d6a261e68ce3"
+    },
+    {
       "id": "15056862",
       "old_title": "경기도_장애영역별 일반학급 배치 학생수 집계현황",
       "new_title": "경기도_장애영역별 일반학급 배치 학생수 집계현황",
@@ -4397,6 +4447,16 @@
       ],
       "old_digest": "bf31ff9145ed5398e8d1a3113a65d6be56a560f96ee26b41dc69bc8187370d48",
       "new_digest": "f3ff8353c92e65b14601305a16d1b6fb334436e15c462d8026865f04f9a32080"
+    },
+    {
+      "id": "15056882",
+      "old_title": "지식재산처_KIPRISPlus_특허_실용 행정처리 이력_REST API",
+      "new_title": "지식재산처_KIPRISPlus_특허_실용 행정처리 이력_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f5fd47b44e0add1cea677c0521542e878a137ee9bf68dbd4c55bbd5562cb8697",
+      "new_digest": "28cb8be5d134e803265b108dbaa0bad5b7f87e4546a095ede01d34b185b27e73"
     },
     {
       "id": "15056883",
@@ -4609,6 +4669,16 @@
       "new_digest": "349cb5a53c70d14f47fb777bc7d11b23c404a102d50ff35c3b64d2a33b3b5239"
     },
     {
+      "id": "15056923",
+      "old_title": "지식재산처_KIPRISPlus_한국특허영문초록(KPA)_REST API",
+      "new_title": "지식재산처_KIPRISPlus_한국특허영문초록(KPA)_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "566d1203dc02a6c47d47391272c00e024003dcb99f4a911d9f7d3f05acd0bb06",
+      "new_digest": "bf88555f80dac266881bdca6b2916e304472e20b310f0a5c7a25496a03d1dd96"
+    },
+    {
       "id": "15056928",
       "old_title": "경기도_농지면적 및 농업진흥 지역면적 현황",
       "new_title": "경기도_농지면적 및 농업진흥 지역면적 현황",
@@ -4709,6 +4779,16 @@
       "new_digest": "9a992683dc9ed7200ffd5b9ab6fc28e7567f3cd919c97029fa147a59a4599721"
     },
     {
+      "id": "15056944",
+      "old_title": "지식재산처_KIPRISPlus_인터넷기술공지_REST API",
+      "new_title": "지식재산처_KIPRISPlus_인터넷기술공지_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b70ef75c51ed8a4f363ee1eb651689a1f73ff9cc24fc7fdae7c36b81652a7020",
+      "new_digest": "57f576f7a5bf45d334c3fea3f17a94e0fdb5729ff011ee4c1e7b5afc436922f8"
+    },
+    {
       "id": "15056947",
       "old_title": "경기도_학교 현황(학생수)(특)",
       "new_title": "경기도_학교 현황(학생수)(특)",
@@ -4727,6 +4807,16 @@
       ],
       "old_digest": "4fe322abf099639336189b14abcd50f9e77d42e822b0477c03c7f53095cbcdb7",
       "new_digest": "247aa5c4af6c0e17ec95dbb8c30f620f5557e08bbdbc6f74de97720c11cd7547"
+    },
+    {
+      "id": "15056951",
+      "old_title": "지식재산처_KIPRISPlus_거절결정서_REST API",
+      "new_title": "지식재산처_KIPRISPlus_거절결정서_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "59cf46f82e4df1a56850ee6ff91d3797d01ae6ee4ba98e1372312ec2b018c948",
+      "new_digest": "db8f7ae83c842c79880591b4c7d4593dad9dd73e2092cd3cf3ce179f0c04bd1f"
     },
     {
       "id": "15056952",
@@ -5509,6 +5599,16 @@
       "new_digest": "1eca2ed0ffc6e719a4c4b7acf71c10c116a7b79ebcfaa630df90286a20504ec8"
     },
     {
+      "id": "15057149",
+      "old_title": "지식재산처_KIPRISPlus_특허_실용 통지서 마감기한_REST API",
+      "new_title": "지식재산처_KIPRISPlus_특허_실용 통지서 마감기한_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "93c397125ebf8ffd312eb4860b0b3edd4e9c0001bd87323ffe2d4dc381701d90",
+      "new_digest": "805f201a655573e2659343d8a31dbfe9bd71b3602be48e4c76ab67572c089ebd"
+    },
+    {
       "id": "15057150",
       "old_title": "법제처_맞춤형 법령 조문 목록 조회",
       "new_title": "법제처_맞춤형 법령 조문 목록 조회",
@@ -5959,6 +6059,16 @@
       "new_digest": "78eb610980a3b2f65e290f432f8f9387686a8293fac7c35e7bfcd2a4a90d0912"
     },
     {
+      "id": "15057262",
+      "old_title": "지식재산처_KIPRISPlus_청구항 변동이력_REST API",
+      "new_title": "지식재산처_KIPRISPlus_청구항 변동이력_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "19b2ed469d477bca4894aa2501a7479198ca6364fbdd009f1377bb8d525335f6",
+      "new_digest": "289c0e72b8e8c726f15652949abaf9df85cce723c596c4ce50c2b016d373e528"
+    },
+    {
       "id": "15057265",
       "old_title": "경기도_자동차등록 집계 현황",
       "new_title": "경기도_자동차등록 집계 현황",
@@ -6117,6 +6227,26 @@
       ],
       "old_digest": "0dd878040c35f3e220eccd8e7840c037415ef520a067f86b25eb6524fc22c36d",
       "new_digest": "12c131d55c0e54fcbf7c5123d3a173f1c2b4de5f8493df4e4e975e394a7a35b5"
+    },
+    {
+      "id": "15057314",
+      "old_title": "지식재산처_KIPRISPlus_출원인 명칭 변동 이력_REST API",
+      "new_title": "지식재산처_KIPRISPlus_출원인 명칭 변동 이력_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c13ad33d534247a1b2802b99a25880a90b40d13a4f5fdfbd8564c87ac8a6c9cd",
+      "new_digest": "0a8d6823669062eb85191766cc000917adf26e639a4f94e585f564ce1c55b230"
+    },
+    {
+      "id": "15057315",
+      "old_title": "지식재산처_KIPRISPlus_TM5 공통상태 지표_REST API",
+      "new_title": "지식재산처_KIPRISPlus_TM5 공통상태 지표_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "eef8b9a278162e3c11ce98113a3931d4c7d54bcea88c2ae35ebd19d23ba7971a",
+      "new_digest": "8fd608296b3575e5338395329645ccd8e70225f7e54d014ac707d54a13692070"
     },
     {
       "id": "15057319",
@@ -6327,6 +6457,16 @@
       ],
       "old_digest": "c77ee68d8554a23c8ab5fd717532836b8a7126afbb12d67c05245251bfa78ea2",
       "new_digest": "1fa87a2ba3942082f79bd13974e6c4853ec98e688a277dab83578d8f9fd4e47c"
+    },
+    {
+      "id": "15057376",
+      "old_title": "지식재산처_KIPRISPlus_다인용 선행문헌_REST API",
+      "new_title": "지식재산처_KIPRISPlus_다인용 선행문헌_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "57364077ff61740f48e04d02186d953ac337c8b47c0b9fa0abf491f10adac483",
+      "new_digest": "24e13ee265160ee56820a7e7a06248be54a24345851d4c93ab01e7f1e8c86f66"
     },
     {
       "id": "15057379",
@@ -7139,6 +7279,16 @@
       "new_digest": "bb5080488ee4f54d49d835fee93960aefbdf58bd91664639b28723f9ac00cd89"
     },
     {
+      "id": "15057547",
+      "old_title": "지식재산처_KIPRISPlus_출원인 기술분야_REST API",
+      "new_title": "지식재산처_KIPRISPlus_출원인 기술분야_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c42db271eda57b8a7941a053ccbc5efe477c5d5e9c98cfbe48332537bc41f33f",
+      "new_digest": "a9034adc4b3e6c45c5bde73e386c1f3b47cc5ee202f640c60efb2ff335c7df49"
+    },
+    {
       "id": "15057548",
       "old_title": "행정안전부_지방재정365_예산대비채무비율",
       "new_title": "행정안전부_지방재정365_예산대비채무비율",
@@ -7499,6 +7649,16 @@
       "new_digest": "4ede63251c571b895472f1d053907aa1719861fc29e5fd17e0dd5580cf7eea62"
     },
     {
+      "id": "15057617",
+      "old_title": "지식재산처_KIPRISPlus_특허_실용 인용문헌_REST API",
+      "new_title": "지식재산처_KIPRISPlus_특허_실용 인용문헌_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6c7df498505090c879be79fa9b9ba8fc7c3e58d817cc49c6b9ac236213590266",
+      "new_digest": "80b7b0400d819d1bc9cca33c4d8426f8e8952cb94c136669ef69511b232a01d2"
+    },
+    {
       "id": "15057618",
       "old_title": "경기도_연령별 장애아동수당 수급자 집계현황",
       "new_title": "경기도_연령별 장애아동수당 수급자 집계현황",
@@ -7549,6 +7709,16 @@
       "new_digest": "7005766fe01440a4bbd0ce43904bcd84ba6da25ab894376931fdee5b1bdd8e44"
     },
     {
+      "id": "15057628",
+      "old_title": "지식재산처_KIPRISPlus_디자인맵 형태분류_REST API",
+      "new_title": "지식재산처_KIPRISPlus_디자인맵 형태분류_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7741a83c1843258b659fa986c6fac6bb2363f49522f8f12b972a7d56373ec3e9",
+      "new_digest": "1bb227bbef06b6216909a83519e8a0b2eb4d53bf6b15b0951cfc921406d5cbdc"
+    },
+    {
       "id": "15057630",
       "old_title": "경기도_휴게음식점(아이스크림) 현황",
       "new_title": "경기도_휴게음식점(아이스크림) 현황",
@@ -7557,6 +7727,16 @@
       ],
       "old_digest": "bd40244a065b79f3db94ecea73358bfe053c0beffa043f4b89beb897879fd232",
       "new_digest": "2807151b200b5389823c370388442c25219360478fb7b6b69f5d1919105435db"
+    },
+    {
+      "id": "15057631",
+      "old_title": "지식재산처_KIPRISPlus_공통_REST API",
+      "new_title": "지식재산처_KIPRISPlus_공통_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "76299926bbe5b2da9a8a1da6aea7ade8a84110fbf755b98e9afa8474c1fc585f",
+      "new_digest": "004ba3a7c7a1da802e5f159e81f10778638c0047c593ad0b978112cb6562f6d6"
     },
     {
       "id": "15057632",
@@ -8589,6 +8769,16 @@
       "new_digest": "3ab79e7f4c4113c249161ad3e1354ddfadb6c1d904b7e312e7fd989e31c7cef3"
     },
     {
+      "id": "15057851",
+      "old_title": "지식재산처_KIPRISPlus_대표 출원인_REST API",
+      "new_title": "지식재산처_KIPRISPlus_대표 출원인_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3caa68587e9c70d3ae38024111ba6dd85b52e1f96b77e1eb37d1333de9254095",
+      "new_digest": "042e55294f6b26d03e74d1dc8eab9e20b7faa0862669b3677170875837661321"
+    },
+    {
       "id": "15057853",
       "old_title": "경기도_일반 협동조합 현황",
       "new_title": "경기도_일반 협동조합 현황",
@@ -9189,6 +9379,16 @@
       "new_digest": "168c71bc28991a4903e301f29d2c5e20462a9af53be847f30f542449a84e47e0"
     },
     {
+      "id": "15058003",
+      "old_title": "지식재산처_KIPRISPlus_해외디자인_REST API",
+      "new_title": "지식재산처_KIPRISPlus_해외디자인_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9a107484823aec852b291e559a01aeb20448b4135e8815ee87a072be510cc762",
+      "new_digest": "a4bdc8237bb79804adca178b99b4f0491a2b3fcad196d7f3042edf7745c7df69"
+    },
+    {
       "id": "15058005",
       "old_title": "농림축산식품부_품목별 농작물보험료 통계정보",
       "new_title": "농림축산식품부_품목별 농작물보험료 통계정보",
@@ -9597,6 +9797,16 @@
       ],
       "old_digest": "c9e351eed1f7b2e75836038ba84a82e8a48d689b6d2ce2edb61d88deff31a270",
       "new_digest": "0361387b3ba76cfd0454a87534aacc36b87b84d2735533e203bd66d903f5bb2a"
+    },
+    {
+      "id": "15058125",
+      "old_title": "지식재산처_KIPRISPlus_등록사항_REST API",
+      "new_title": "지식재산처_KIPRISPlus_등록사항_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2c0198f7faa7d93ae4e409427b276556c41bd5debeb3c7617d6e6c5576c35766",
+      "new_digest": "a2b5d96de2e3a49db6145025296cd240df0f708e4a72626e8fa6fb7112fa319d"
     },
     {
       "id": "15058126",
@@ -10199,6 +10409,16 @@
       "new_digest": "2ae1f306b61d995764f539025d12075b0964a25aeb3f0310328601cceefff929"
     },
     {
+      "id": "15058250",
+      "old_title": "지식재산처_KIPRISPlus_시소러스_REST API",
+      "new_title": "지식재산처_KIPRISPlus_시소러스_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0e2f0abc4c44662fd7a35e369316f1d170d2eb7e42f49749b2958504a85d3335",
+      "new_digest": "711fb9863ffd009b27fe8b68c85633444e3c07ee21df5c9d51d88e99a2fe1858"
+    },
+    {
       "id": "15058252",
       "old_title": "경기도_정보화마을 현황",
       "new_title": "경기도_정보화마을 현황",
@@ -10237,6 +10457,16 @@
       ],
       "old_digest": "c551f201bf19221cd9d0e5169027f3ccc75440a745ecf3b7141c2257d7372dd9",
       "new_digest": "7019db13062883fe3a098276c454e597b75cb7e0caef6a692cb883c46523abcd"
+    },
+    {
+      "id": "15058265",
+      "old_title": "지식재산처_KIPRISPlus_상표 행정처리 이력_REST API",
+      "new_title": "지식재산처_KIPRISPlus_상표 행정처리 이력_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bcd21b37c45dce6fc0377fc3b24bc6129c59b4045705ae962f836291134fd222",
+      "new_digest": "0323fc69cfec1fd26b781d7153eea2941802237a83b520439aab4ac234f9af23"
     },
     {
       "id": "15058266",
@@ -10909,6 +11139,16 @@
       "new_digest": "6db012627f133decb3cdebab94cae52632997ad26142b908159b21535565a303"
     },
     {
+      "id": "15058419",
+      "old_title": "지식재산처_KIPRISPlus_IP_Biz 하나로 서비스 기술분류_REST API",
+      "new_title": "지식재산처_KIPRISPlus_IP_Biz 하나로 서비스 기술분류_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e8e01d50441102568cdf8eff304fc2e0f8974cb4e06540da370098feca3e1700",
+      "new_digest": "07a79b309151d5c7e38160ab4db6a97f94e3738168240bc10cf45acb2d5625ee"
+    },
+    {
       "id": "15058420",
       "old_title": "국토교통부_국립자연공원",
       "new_title": "국토교통부_국립자연공원",
@@ -11479,6 +11719,16 @@
       "new_digest": "b49a5fa31dc4de67b313e9df8f8acad97c76be7f9eed2f9d9065abf944c0a726"
     },
     {
+      "id": "15058549",
+      "old_title": "지식재산처_KIPRISPlus_특허·실용 피인용문헌_REST API",
+      "new_title": "지식재산처_KIPRISPlus_특허·실용 피인용문헌_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f31c9c4b1b9d7c881ba03d2058ff86ba2ab9285d196ba23a1ed0e9a882339699",
+      "new_digest": "1660efc569e6eeea0130cc93bb5acb417e46c36fd6242a858bb04e5700bf1458"
+    },
+    {
       "id": "15058551",
       "old_title": "경기도_사회복지법인 행정 처분결과 현황",
       "new_title": "경기도_사회복지법인 행정 처분결과 현황",
@@ -11619,6 +11869,16 @@
       "new_digest": "61b9f0a84cb1ca0b6fa7ee72fe08308d258820788a5b93e7c8ca8bf83cfddf32"
     },
     {
+      "id": "15058587",
+      "old_title": "지식재산처_KIPRISPlus_특허_실용 분류코드 변동 이력_REST API",
+      "new_title": "지식재산처_KIPRISPlus_특허_실용 분류코드 변동 이력_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c71606663832305b65226a792589f325e2cb2bc48b020fdf8219c21ee16cb80f",
+      "new_digest": "ff7b4f047e6e5dd359be9870b987f33b475680f4e212d9a1d6d1004120385cb1"
+    },
+    {
       "id": "15058588",
       "old_title": "경기도_국내 여행업체 현황",
       "new_title": "경기도_국내 여행업체 현황",
@@ -11689,6 +11949,16 @@
       "new_digest": "f3902f823a54c5948d00213ee54fe890e9c48f2fad54459771dc235a3b634a9f"
     },
     {
+      "id": "15058602",
+      "old_title": "지식재산처_KIPRISPlus_정정공보_REST API",
+      "new_title": "지식재산처_KIPRISPlus_정정공보_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9fc8a2f9c3d24d547078d14f98d1e004aab9cf403e2ad3cb35d493c217bd897f",
+      "new_digest": "51c908939d516ae99a409f91ff871b173f1967e28b5fa31e648f3e0c1b89b41a"
+    },
+    {
       "id": "15058603",
       "old_title": "제주특별자치도_제주신화정보",
       "new_title": "제주특별자치도_제주신화정보",
@@ -11727,6 +11997,16 @@
       ],
       "old_digest": "1ef2a8b2d994b80c3df2b4ee9c510cf23a6d8c2e1b157c06920ac2609443bada",
       "new_digest": "352207bd4d0e3fd4ff767612b4ea7a5bc75da6168186af16f5976e229764944a"
+    },
+    {
+      "id": "15058608",
+      "old_title": "지식재산처_권리자 변동 이력_REST API",
+      "new_title": "지식재산처_권리자 변동 이력_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1b3639ee7c15f30a10ba1061f8334dd811b5ea8be0aeb8d095d0419e6ea3b4bb",
+      "new_digest": "80caf8593522791655030f8f6863e38a378f2de9db55e452edb81c8852967b02"
     },
     {
       "id": "15058609",
@@ -11939,6 +12219,16 @@
       "new_digest": "3cecd782a45c3bb60b5d261ffba231ccebafad3ea6f279fbba82e13b7703d526"
     },
     {
+      "id": "15058649",
+      "old_title": "지식재산처_KIPRISPlus_디자인 분류코드 변동 이력_REST API",
+      "new_title": "지식재산처_KIPRISPlus_디자인 분류코드 변동 이력_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "70a874b05d05fb53408917e67328e7b74ba382bb9cf1554bb13557a14210fb0f",
+      "new_digest": "a572a52694e5b61107a818135301774e5dd5d2546fd45183b68d7983e9e6b3f3"
+    },
+    {
       "id": "15058652",
       "old_title": "국토교통부_산림입지도",
       "new_title": "국토교통부_산림입지도",
@@ -12137,6 +12427,16 @@
       ],
       "old_digest": "9e45366f2d112e206cb4ad2423cd118bcd0bdea43d9cc6f3747e53378248f7f0",
       "new_digest": "a96e3830e16b3741f59f844bd572361d4029f091782efdff329f3826c1848dc5"
+    },
+    {
+      "id": "15058701",
+      "old_title": "지식재산처_KIPRISPlus_해외특허_REST API",
+      "new_title": "지식재산처_KIPRISPlus_해외특허_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "cece8b21a10fa6638aeaf3b21f5b4d548bbbfe5320ce148c4fc929ffca8b9a4e",
+      "new_digest": "8c4680a7b10483daf9b318519634299e623e81e9c9649561b66a8381fd0c725c"
     },
     {
       "id": "15058703",
@@ -12869,6 +13169,16 @@
       "new_digest": "20a5b8d7186fa0b4715030cdb5230e12d01205cec32ac77f0497a7bee1d2c463"
     },
     {
+      "id": "15058895",
+      "old_title": "지식재산처_KIPRISPlus_기계번역용 국문초록_REST API",
+      "new_title": "지식재산처_KIPRISPlus_기계번역용 국문초록_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "44b7bb60aa5df9cfd608f726a6786c2467957b169afd374e73608b52b3a35dcc",
+      "new_digest": "d84ae7699cf357dc34dc656f5b666f27328180baa43a78bda0da759581270f08"
+    },
+    {
       "id": "15058903",
       "old_title": "경기도_종량제봉투(가정및사업장용)판매가격 현황",
       "new_title": "경기도_종량제봉투(가정및사업장용)판매가격 현황",
@@ -12907,6 +13217,16 @@
       ],
       "old_digest": "9af1a5aab96c0ad1070d61c286a4f8dce34c22712d7462ce5e93dca9d8ae6b1d",
       "new_digest": "f07ce940d13e64baf22d868ac4453519116d16d0e6207f870405bc1ee72b68f7"
+    },
+    {
+      "id": "15058910",
+      "old_title": "지식재산처_KIPRISPlus_디자인 행정처리 이력_REST API",
+      "new_title": "지식재산처_KIPRISPlus_디자인 행정처리 이력_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5e67eb3664244926b22ea671aa195ffecf04e90844ad1b61c38963bdfda02ef9",
+      "new_digest": "17d568eaf401d4f8694134da1a7c753498a98e566d8f39c7b1e8d6a064d95b8a"
     },
     {
       "id": "15058911",
@@ -13449,6 +13769,16 @@
       "new_digest": "d9bb4ba50229315a564e2a37a1920b0ba700414f7c0f10ae7a85c36e29470f45"
     },
     {
+      "id": "15059036",
+      "old_title": "지식재산처_KIPRISPlus_등록결정서_REST API",
+      "new_title": "지식재산처_KIPRISPlus_등록결정서_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "199ce6c418e53bb5d1f314125e7b7381b9e9cc9b13e6bfbe4bbe88243df60729",
+      "new_digest": "128c63dce217697a66f59813256d335d8c603d83b979b7a4197bd9d68111325a"
+    },
+    {
       "id": "15059040",
       "old_title": "경기도_구조활동 현황",
       "new_title": "경기도_구조활동 현황",
@@ -13797,6 +14127,16 @@
       ],
       "old_digest": "005ff92dc629c8ba654a739f951938fe28eb8652454794e6aecaf4aa77ca3e4a",
       "new_digest": "af37e905494241a7e0089332d0c96d21cedece8469e8b2222c507834dc7af9dd"
+    },
+    {
+      "id": "15059142",
+      "old_title": "지식재산처_KIPRISPlus_상표 분류코드 변동 이력_REST API",
+      "new_title": "지식재산처_KIPRISPlus_상표 분류코드 변동 이력_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c847a3dbedb64aea797e87398712021e77abb53feee8018cd022d248494c4139",
+      "new_digest": "ad01c984ead826c31803445339788f6271cb8048d60329687b48983610333348"
     },
     {
       "id": "15059149",
@@ -14317,6 +14657,16 @@
       ],
       "old_digest": "276b4653d42f8d31fb66aa4bd2aec30036085300cc5c971ace750537e17ffb96",
       "new_digest": "6cacc2437cf90b95112716a9f3b7301f3466c4179d5349c1034583cc5c22469f"
+    },
+    {
+      "id": "15059277",
+      "old_title": "지식재산처_KIPRISPlus_출원인 법인_REST API",
+      "new_title": "지식재산처_KIPRISPlus_출원인 법인_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5fd64cda91a2c30d19d911c661ad1665cc514c07b3c2e2851ec3eb59df080dc1",
+      "new_digest": "82e022b2c239350033874f239ba68b4c91f2ccbf8f473ec1e8e3f7254430dbc8"
     },
     {
       "id": "15059278",
@@ -14987,6 +15337,16 @@
       ],
       "old_digest": "3e913bf9b3a0cc51d2989e43a77440f279e8bde946f07a5bc235d33428b4cd59",
       "new_digest": "62c401b61e529db6ace6f6dd278dbc969f3391a03b91bdfc64e0707143ee9edd"
+    },
+    {
+      "id": "15059446",
+      "old_title": "지식재산처_KIPRISPlus_의견제출통지서_REST API",
+      "new_title": "지식재산처_KIPRISPlus_의견제출통지서_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ce3314656c26ea1ce192ededf1dd1b690603307501eae5dc9c92687bfbd68124",
+      "new_digest": "f52bf45d07d6cc4944eca697e831b0d9b9dabccf4e7e0e62c7522e14e275a291"
     },
     {
       "id": "15059447",
@@ -17059,6 +17419,86 @@
       "new_digest": "30bde0da2759ca03be1ae2a776318b055134f5e2d06333c0550e570d14cafc8c"
     },
     {
+      "id": "15065437",
+      "old_title": "지식재산처_KIPRISPlus_특허_실용 공개_등록공보_REST API",
+      "new_title": "지식재산처_KIPRISPlus_특허_실용 공개_등록공보_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "91f1475da7b3d8fa6e86768c3b192802035f87c089917086f9c2954fd8be1981",
+      "new_digest": "5a22d110632686393a6a3da23847a1671c5e054fe0aa3611d32dadc69f1f50a4"
+    },
+    {
+      "id": "15065443",
+      "old_title": "지식재산처_KIPRISPlus_특허권 존속기간 연장등록 공보_REST API",
+      "new_title": "지식재산처_KIPRISPlus_특허권 존속기간 연장등록 공보_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "777a83e8f18f4b2adf597aed723d704194ab9cca7003d984fe1869cf236ae793",
+      "new_digest": "05e204190ed65337117d41b93dd3d3b2455fb36a77b0b93697949499efe4ae96"
+    },
+    {
+      "id": "15065444",
+      "old_title": "지식재산처_KIPRISPlus_디자인 공보_REST API",
+      "new_title": "지식재산처_KIPRISPlus_디자인 공보_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5f43e42ae72f85c0f0229bbd78dcb6556edaeb4eee95c39108daf3efffdd351e",
+      "new_digest": "2a1d21382a32b361c6b99ef094775451e053360e54f76479826d6748aeef245e"
+    },
+    {
+      "id": "15065447",
+      "old_title": "지식재산처_KIPRISPlus_상표 출원 속보_REST API",
+      "new_title": "지식재산처_KIPRISPlus_상표 출원 속보_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2c040a9ff198873f54cc02814de26c55cd0812754fee3ba4ec6580d4b636892f",
+      "new_digest": "792b0b8cfc4e42c658dd0d0bb7de346ec2f2f5d626bbc63cb2f3bdb69efcff20"
+    },
+    {
+      "id": "15065472",
+      "old_title": "지식재산처_KIPRISPlus_특허 패밀리_REST API",
+      "new_title": "지식재산처_KIPRISPlus_특허 패밀리_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8ed5f784add5f780d8e031f6ccaa3a62682f6f04b7d845185c6593bbb3694d1f",
+      "new_digest": "08a3a04c3cc04de9734e3bb39351d1642c1d2afec2c5dc6ce7442d32bbf8feff"
+    },
+    {
+      "id": "15065473",
+      "old_title": "지식재산처_KIPRISPlus_법적 상태 이력(특허실용(ST.27)_상표_디자인(ST.87))_REST API",
+      "new_title": "지식재산처_KIPRISPlus_법적 상태 이력(특허실용(ST.27)_상표_디자인(ST.87))_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "604bc4d91bcbee0bfc8afddebbbe2110a75c96d430e6adcbc60eb01bea726280",
+      "new_digest": "fa6b415625d14e14b53ca429b0d261ef6a2b06dddbf15621978ed6a09178ec45"
+    },
+    {
+      "id": "15065474",
+      "old_title": "지식재산처_KIPRISPlus_심판사항_REST API",
+      "new_title": "지식재산처_KIPRISPlus_심판사항_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b686b052e95d94d7ca8ec2554e736946abd091511ba98349b7ff0f64a7863843",
+      "new_digest": "68c99635b6bd8102693410dee53cbaf8c0392240c763f95a396f4bdacfa286a2"
+    },
+    {
+      "id": "15065476",
+      "old_title": "지식재산처_KIPRISPlus_의약품 국제일반명칭_REST API",
+      "new_title": "지식재산처_KIPRISPlus_의약품 국제일반명칭_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "63f831ce25760e65d89b79f2afaec09af027b41164778dbd6462f694c3d87c71",
+      "new_digest": "524a7d5c8fa4c051fb5f9e122250008dc60fd00da7afa6085317eca5be2c390c"
+    },
+    {
       "id": "15066742",
       "old_title": "한국도로공사_AVC원시자료",
       "new_title": "한국도로공사_AVC원시자료",
@@ -17517,6 +17957,46 @@
       ],
       "old_digest": "006e201e209c40e9cea0314bdc80f8537957b16bef0716b481a2e259039c8d03",
       "new_digest": "4e392fc8bb25b98429207bde366fe5b15ac0e021248be71ae908d6b1356a72b0"
+    },
+    {
+      "id": "15075966",
+      "old_title": "지식재산처_KIPRISPlus_품종보호권 등록 식물 명칭_REST API",
+      "new_title": "지식재산처_KIPRISPlus_품종보호권 등록 식물 명칭_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4142bfbedd448e6b708fa50c8cf814384b4328d9dc5904c90d319755a5e5ccf4",
+      "new_digest": "0e4d72c8273505ed2284005e06db40f64b495360eb5d4a50d8f7f05ce570b28a"
+    },
+    {
+      "id": "15075967",
+      "old_title": "지식재산처_KIPRISPlus_상표 원산지 명칭_REST API",
+      "new_title": "지식재산처_KIPRISPlus_상표 원산지 명칭_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d10647e2a5bd51967cc689dd2723dba9159c0bdeaf2ce33defb0f069459ba736",
+      "new_digest": "9df49127666482b26b6c97cc7a091fdffef59f2d50d0ee68de4eaf707c81cad3"
+    },
+    {
+      "id": "15075968",
+      "old_title": "지식재산처_KIPRISPlus_국유특허_REST API",
+      "new_title": "지식재산처_KIPRISPlus_국유특허_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b2204b8f38ff6acef4f5cc71810006294101685829770a22743f6f69b85b3a8e",
+      "new_digest": "eb239452ee47d83cbb2c078d3c5675ad694cad3dd646f59511c3a82f11bbb4e3"
+    },
+    {
+      "id": "15075971",
+      "old_title": "지식재산처_KIPRISPlus_특허 기탁 미생물_REST API",
+      "new_title": "지식재산처_KIPRISPlus_특허 기탁 미생물_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fb31d7cef3125eac1bf0ae1a8c2d8dce3cf99f8fb3e97de4fd6b906c36ca9526",
+      "new_digest": "f1e2d955cd33ca5cf77b2a0696e6759d5d5160d400441d4f04e74274ace97f15"
     },
     {
       "id": "15076179",
@@ -18619,6 +19099,16 @@
       "new_digest": "65e30bd24d72ea311ecd3d673acc2be0b20ce6f8d38dc8c245973a872ccabe07"
     },
     {
+      "id": "15080884",
+      "old_title": "지식재산처_분쟁정보",
+      "new_title": "지식재산처_분쟁정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4b5d1c8bc81da94e6bb38a8a9243f5a482f16ebc692b53ba56c8a65c7d43fe78",
+      "new_digest": "6e60235f72a8712384f3e5f428cbc7658d4a025f064cf1276e16883f2f5bce6b"
+    },
+    {
       "id": "15080891",
       "old_title": "농촌진흥청_농촌문화 이슈",
       "new_title": "농촌진흥청_농촌문화 이슈",
@@ -18837,6 +19327,16 @@
       ],
       "old_digest": "bf9e8beb701a8ab4fc16f37c94faeeaf0b5e003bb045da10f0390e8052af8ea6",
       "new_digest": "689e73a5b2ce797bdd1b82c88b4c4d92d9d3fc87e5bc44fa186769e191cac132"
+    },
+    {
+      "id": "15085728",
+      "old_title": "지식재산처_KIPRISPlus_일본 특허 합금조성비_REST API",
+      "new_title": "지식재산처_KIPRISPlus_일본 특허 합금조성비_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9263ad2140305a778213deb805332b231b4990dceb98b9796bbc347f8b31e738",
+      "new_digest": "3e19f7cd732853d047e28c5da1124d33a9e7129377788c390313af1742ba20f4"
     },
     {
       "id": "15086334",
@@ -20867,6 +21367,16 @@
       ],
       "old_digest": "c406be762452792501c26f984fb97bb881ba8f992d6d454b772df7ef30a1c131",
       "new_digest": "8cbc0b50109876fe614bf937e592e87571e1f544caff1da905659a138c326d54"
+    },
+    {
+      "id": "15098425",
+      "old_title": "지식재산처_KIPRISPlus_특허 중한 코퍼스_REST API",
+      "new_title": "지식재산처_KIPRISPlus_특허 중한 코퍼스_REST API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "89fc4a14c9d9909572949b61b26dada2e61192e27fee3edf0b5529c357989f55",
+      "new_digest": "bd9e9830da22057b847eb2bb59f7fca2bfff28e50e268c94536f039f8e9a87e8"
     },
     {
       "id": "15098628",

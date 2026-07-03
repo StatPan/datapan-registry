@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T21:32:33Z",
+  "generated_at": "2026-07-03T21:55:35Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 266,
+  "filtered_count": 268,
   "summary": {
-    "hosts": 266,
+    "hosts": 268,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 122,
-    "external_guide_hosts": 193,
-    "registered_adapter_hosts": 111,
-    "operation_hosts": 124,
+    "external_endpoint_hosts": 124,
+    "external_guide_hosts": 194,
+    "registered_adapter_hosts": 113,
+    "operation_hosts": 126,
     "guide_only_hosts": 142,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7278,
+    "approval_required_operations": 7336,
     "malformed_source_url_count": 712
   },
   "providers": [
@@ -453,6 +453,22 @@
         "15058949",
         "15095265",
         "15095267"
+      ]
+    },
+    {
+      "host": "plus.kipris.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 50,
+      "operations": 150,
+      "external_endpoint_operations": 150,
+      "approval_required_operations": 57,
+      "sample_ids": [
+        "15039347",
+        "15039350",
+        "15056585"
       ]
     },
     {
@@ -1643,6 +1659,22 @@
       "sample_ids": [
         "15057047",
         "15059539"
+      ]
+    },
+    {
+      "host": "api.ip-navi.or.kr:8000",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "external_guide_specs": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15080884"
       ]
     },
     {

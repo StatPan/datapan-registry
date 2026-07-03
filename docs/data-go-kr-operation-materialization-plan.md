@@ -2,13 +2,13 @@
 
 This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns APIs without operation mappings into bounded institution work queues. It is separate from runtime evidence reactivation: these APIs need operation metadata materialized before they can enter verification batches.
 
-- Generated at: `2026-07-03T21:32:33Z`
+- Generated at: `2026-07-03T21:55:35Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `10784` (`89.4%`)
-- APIs without operation mapping: `1276`
+- APIs with operation mapping: `10835` (`89.8%`)
+- APIs without operation mapping: `1225`
 - Planned institutions: `10`
-- Planned APIs: `241`
+- Planned APIs: `229`
 - First queue: `울산항만공사`
 - Batch size: `100`
 
@@ -19,13 +19,13 @@ This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns
 | 1 | 울산항만공사 | 98 | 6 | 92 | 6.1% | 92 | 0 |
 | 2 | 농림축산식품부 | 87 | 86 | 1 | 98.9% | 1 | 0 |
 | 3 | 해양수산부 국립해양조사원 | 68 | 50 | 18 | 73.5% | 18 | 0 |
-| 4 | 지식재산처 | 67 | 16 | 51 | 23.9% | 51 | 0 |
-| 5 | 한국환경공단 | 66 | 65 | 1 | 98.5% | 1 | 0 |
-| 6 | 한국환경연구원 | 65 | 0 | 65 | 0.0% | 65 | 0 |
-| 7 | 충청북도 | 51 | 50 | 1 | 98.0% | 1 | 0 |
-| 8 | 한국서부발전(주) | 50 | 44 | 6 | 88.0% | 6 | 0 |
-| 9 | 기후에너지환경부 국립환경과학원 | 48 | 47 | 1 | 97.9% | 1 | 0 |
-| 10 | 서울시설공단 | 45 | 40 | 5 | 88.9% | 5 | 0 |
+| 4 | 한국환경공단 | 66 | 65 | 1 | 98.5% | 1 | 0 |
+| 5 | 한국환경연구원 | 65 | 0 | 65 | 0.0% | 65 | 0 |
+| 6 | 충청북도 | 51 | 50 | 1 | 98.0% | 1 | 0 |
+| 7 | 한국서부발전(주) | 50 | 44 | 6 | 88.0% | 6 | 0 |
+| 8 | 기후에너지환경부 국립환경과학원 | 48 | 47 | 1 | 97.9% | 1 | 0 |
+| 9 | 서울시설공단 | 45 | 40 | 5 | 88.9% | 5 | 0 |
+| 10 | 국립생태원 | 43 | 4 | 39 | 9.3% | 39 | 0 |
 
 ## Sample APIs To Materialize
 

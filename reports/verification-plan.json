@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T21:32:56Z",
+  "generated_at": "2026-07-03T21:56:01Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,13 +7,13 @@
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 19679,
-    "evidence_total": 3191,
+    "operations": 19830,
+    "evidence_total": 3291,
     "uncovered_gateway_candidates": 10714,
-    "uncovered_adapter_candidates": 3390,
+    "uncovered_adapter_candidates": 3371,
     "missing_adapter_hosts": 11,
     "planned_batches": 20,
-    "planned_operations": 122
+    "planned_operations": 113
   },
   "batches": [
     {
@@ -156,6 +156,16 @@
       "output": ".datapan/verification/happysd-next.json"
     },
     {
+      "label": "ip-navi",
+      "provider": "ip-navi",
+      "kind": "external_endpoint",
+      "candidates": 1,
+      "uncovered_candidates": 1,
+      "planned_operations": 1,
+      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider ip-navi --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ip-navi-next.json --json",
+      "output": ".datapan/verification/ip-navi-next.json"
+    },
+    {
       "label": "jeju-air",
       "provider": "jeju-air",
       "kind": "external_endpoint",
@@ -204,16 +214,6 @@
       "planned_operations": 1,
       "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider jongno --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jongno-next.json --json",
       "output": ".datapan/verification/jongno-next.json"
-    },
-    {
-      "label": "juso",
-      "provider": "juso",
-      "kind": "external_endpoint",
-      "candidates": 30,
-      "uncovered_candidates": 20,
-      "planned_operations": 10,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider juso --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/juso-next.json --json",
-      "output": ".datapan/verification/juso-next.json"
     }
   ],
   "gaps": {

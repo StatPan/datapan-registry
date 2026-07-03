@@ -1,32 +1,32 @@
 {
-  "generated_at": "2026-07-03T21:32:31Z",
+  "generated_at": "2026-07-03T21:51:01Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3191,
-    "verified": 1443,
-    "failed": 282,
+    "total": 3291,
+    "verified": 1519,
+    "failed": 306,
     "skipped": 1466,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
+        "key": "verified",
+        "count": 1519,
+        "status": "verified"
+      },
+      {
         "key": "skipped",
         "count": 1466,
         "status": "skipped"
       },
       {
-        "key": "verified",
-        "count": 1443,
-        "status": "verified"
-      },
-      {
         "key": "failed",
-        "count": 282,
+        "count": 306,
         "status": "failed"
       }
     ],
@@ -85,6 +85,11 @@
         "key": "lofin365_request_failed",
         "count": 25,
         "reason": "lofin365_request_failed"
+      },
+      {
+        "key": "kipris-plus_http_404",
+        "count": 24,
+        "reason": "kipris-plus_http_404"
       },
       {
         "key": "chungnam_http_403",
@@ -392,6 +397,11 @@
         "key": "data-gg",
         "count": 121,
         "provider": "data-gg"
+      },
+      {
+        "key": "kipris-plus",
+        "count": 100,
+        "provider": "kipris-plus"
       },
       {
         "key": "seoul-open-data",
@@ -839,6 +849,11 @@
         "key": "openapi.q-net.or.kr",
         "count": 104,
         "host": "openapi.q-net.or.kr"
+      },
+      {
+        "key": "plus.kipris.or.kr",
+        "count": 100,
+        "host": "plus.kipris.or.kr"
       },
       {
         "key": "data.seoul.go.kr",
@@ -1334,7 +1349,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 2467,
+        "count": 2567,
         "kind": "external_endpoint"
       },
       {
