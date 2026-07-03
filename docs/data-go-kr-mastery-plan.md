@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `18826`
-- callable operations: `18684` (`99.2%`)
+- operations: `18871`
+- callable operations: `18729` (`99.2%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `7216`
-- registered adapter operations: `7206`
+- external endpoint operations: `7261`
+- registered adapter operations: `7251`
 - missing adapter operations: `29`
 - external adapter coverage: `99.6%`
-- approval-required operations: `6661`
+- approval-required operations: `6706`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `97`
+- registered adapter hosts: `98`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -509,6 +509,11 @@ readiness, not to advance verified runtime coverage.
    checks. That brings checked runtime evidence to `2312`, verified checks to
    `903`, registered external adapter operations to `7206`, and raises API
    operation coverage to `10,319` of `12,060` APIs (`85.6%`).
+   The 기상청 batch registers KMA API Hub adapter coverage, materializes `45`
+   APIs and `45` operations, and merges `45` verified landing-page checks. That
+   brings checked runtime evidence to `2357`, verified checks to `948`,
+   registered external adapter operations to `7251`, and raises API operation
+   coverage to `10,364` of `12,060` APIs (`85.9%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T19:22:36Z",
+  "generated_at": "2026-07-03T19:33:03Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 84,
-  "host_count": 99,
+  "adapter_count": 85,
+  "host_count": 100,
   "adapters": [
     {
       "name": "airport",
@@ -490,6 +490,16 @@
       ]
     },
     {
+      "name": "kma-apihub",
+      "status": "registered",
+      "hosts": [
+        "apihub.kma.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "kofpi",
       "status": "registered",
       "hosts": [
@@ -886,8 +896,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 84,
-    "verification_capable_adapters": 84,
+    "adapter_count": 85,
+    "verification_capable_adapters": 85,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
