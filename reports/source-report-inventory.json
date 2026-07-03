@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-03T22:57:38Z",
+  "generated_at": "2026-07-03T23:08:59Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 50,
+    "report_total": 52,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,7 +38,7 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 38,
+      "report_count": 40,
       "present_reports": [
         {
           "name": "chungbuk-verification-summary.json",
@@ -164,6 +164,14 @@
           "path": "reports/data-go-kr/mafra-ministry-verification.json"
         },
         {
+          "name": "nier-nesc-verification-summary.json",
+          "path": "reports/data-go-kr/nier-nesc-verification-summary.json"
+        },
+        {
+          "name": "nier-nesc-verification.json",
+          "path": "reports/data-go-kr/nier-nesc-verification.json"
+        },
+        {
           "name": "operation-materialization-plan.json",
           "path": "reports/data-go-kr/operation-materialization-plan.json",
           "schema_version": "datapan.operation-materialization-plan.v1"
@@ -251,6 +259,8 @@
         "link-detail-registry-patches.json",
         "mafra-ministry-verification-summary.json",
         "mafra-ministry-verification.json",
+        "nier-nesc-verification-summary.json",
+        "nier-nesc-verification.json",
         "operation-materialization-plan.json",
         "registry-impact-plan.json",
         "runtime-evidence-growth.json",

@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T22:57:38Z",
+  "generated_at": "2026-07-03T23:08:59Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 19945,
-    "runtime_evidence": 3406,
+    "operations": 19946,
+    "runtime_evidence": 3407,
     "runtime_evidence_percent": 17.1,
-    "callable_operations": 19803,
-    "external_endpoint_operations": 8335,
-    "registered_adapter_operations": 8325,
+    "callable_operations": 19804,
+    "external_endpoint_operations": 8336,
+    "registered_adapter_operations": 8326,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 8335
+      "count": 8336
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 8325
+      "count": 8326
     },
     {
       "key": "builtin",
@@ -97,7 +97,7 @@
     },
     {
       "category": "환경기상",
-      "operation_count": 1241
+      "operation_count": 1242
     },
     {
       "category": "식품건강",
@@ -2264,23 +2264,31 @@
     {
       "organization": "기후에너지환경부 국립환경과학원",
       "api_count": 48,
-      "operation_api_count": 47,
-      "operation_count": 156,
-      "runtime_evidence_count": 8,
-      "runtime_evidence_percent": 5.1,
-      "verified": 0,
+      "operation_api_count": 48,
+      "operation_count": 157,
+      "runtime_evidence_count": 9,
+      "runtime_evidence_percent": 5.7,
+      "verified": 1,
       "failed": 0,
       "skipped": 8,
       "unknown": 0,
-      "approval_required_operations": 0,
+      "approval_required_operations": 1,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
           "key": "data_go_kr_gateway",
           "count": 156
+        },
+        {
+          "key": "external_endpoint",
+          "count": 1
         }
       ],
       "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 1
+        },
         {
           "key": "builtin",
           "count": 156
@@ -2289,7 +2297,7 @@
       "top_categories": [
         {
           "category": "환경기상",
-          "operation_count": 140
+          "operation_count": 141
         },
         {
           "category": "공공행정",
@@ -2300,6 +2308,15 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 156
+        },
+        {
+          "host": "nesc.nier.go.kr",
+          "operation_count": 1,
+          "adapter": "nier-nesc",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },

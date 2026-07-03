@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T22:57:25Z",
+  "generated_at": "2026-07-03T23:08:45Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3406,
-    "verified": 1634,
+    "total": 3407,
+    "verified": 1635,
     "failed": 306,
     "skipped": 1466,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 1634,
+        "count": 1635,
         "status": "verified"
       },
       {
@@ -809,6 +809,11 @@
         "provider": "ncpms"
       },
       {
+        "key": "nier-nesc",
+        "count": 1,
+        "provider": "nier-nesc"
+      },
+      {
         "key": "nosc",
         "count": 1,
         "provider": "nosc"
@@ -1311,6 +1316,11 @@
         "host": "ncpms.rda.go.kr"
       },
       {
+        "key": "nesc.nier.go.kr",
+        "count": 1,
+        "host": "nesc.nier.go.kr"
+      },
+      {
         "key": "nongsaro.go.kr",
         "count": 1,
         "host": "nongsaro.go.kr"
@@ -1409,7 +1419,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 2682,
+        "count": 2683,
         "kind": "external_endpoint"
       },
       {

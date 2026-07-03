@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `19945`
-- callable operations: `19803` (`99.3%`)
+- operations: `19946`
+- callable operations: `19804` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `8335`
-- registered adapter operations: `8325`
+- external endpoint operations: `8336`
+- registered adapter operations: `8326`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
 - approval-required operations: `7416`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `119`
+- registered adapter hosts: `120`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -589,6 +589,11 @@ readiness, not to advance verified runtime coverage.
    brings checked runtime evidence to `3406`, verified checks to `1634`,
    registered external adapter operations to `8325`, and raises API operation
    coverage to `10,926` of `12,060` APIs (`90.6%`).
+   The 기후에너지환경부 국립환경과학원 batch registers NIER NESC host coverage,
+   materializes `1` API and `1` operation, and merges `1` verified bounded
+   check. That brings checked runtime evidence to `3407`, verified checks to
+   `1635`, registered external adapter operations to `8326`, and raises API
+   operation coverage to `10,927` of `12,060` APIs (`90.6%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,
