@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T16:35:13Z",
+  "generated_at": "2026-07-03T16:46:50Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 16683,
-    "runtime_evidence": 1714,
+    "operations": 16685,
+    "runtime_evidence": 1716,
     "runtime_evidence_percent": 10.3,
-    "callable_operations": 16541,
-    "external_endpoint_operations": 5073,
-    "registered_adapter_operations": 5063,
+    "callable_operations": 16543,
+    "external_endpoint_operations": 5075,
+    "registered_adapter_operations": 5065,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 5073
+      "count": 5075
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 5063
+      "count": 5065
     },
     {
       "key": "builtin",
@@ -89,7 +89,7 @@
     },
     {
       "category": "산업고용",
-      "operation_count": 1244
+      "operation_count": 1246
     },
     {
       "category": "식품건강",
@@ -996,11 +996,11 @@
     {
       "organization": "한국산업인력공단",
       "api_count": 230,
-      "operation_api_count": 228,
-      "operation_count": 315,
-      "runtime_evidence_count": 148,
-      "runtime_evidence_percent": 47.0,
-      "verified": 5,
+      "operation_api_count": 230,
+      "operation_count": 317,
+      "runtime_evidence_count": 150,
+      "runtime_evidence_percent": 47.3,
+      "verified": 7,
       "failed": 1,
       "skipped": 142,
       "unknown": 0,
@@ -1013,13 +1013,13 @@
         },
         {
           "key": "external_endpoint",
-          "count": 148
+          "count": 150
         }
       ],
       "by_adapter_status": [
         {
           "key": "adapter",
-          "count": 147
+          "count": 149
         },
         {
           "key": "builtin",
@@ -1037,7 +1037,7 @@
         },
         {
           "category": "산업고용",
-          "operation_count": 63
+          "operation_count": 65
         },
         {
           "category": "공공행정",
@@ -1068,17 +1068,17 @@
           ]
         },
         {
-          "host": "www.jobplustv.or.kr",
-          "operation_count": 1
-        },
-        {
-          "host": "open.api.q-net.or.kr",
-          "operation_count": 1,
-          "adapter": "q-net",
+          "host": "www.worldjob.or.kr",
+          "operation_count": 2,
+          "adapter": "worldjob",
           "adapter_status": "registered",
           "capabilities": [
             "verification"
           ]
+        },
+        {
+          "host": "www.jobplustv.or.kr",
+          "operation_count": 1
         }
       ]
     },

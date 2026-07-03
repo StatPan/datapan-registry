@@ -2,37 +2,35 @@
 
 This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns APIs without operation mappings into bounded institution work queues. It is separate from runtime evidence reactivation: these APIs need operation metadata materialized before they can enter verification batches.
 
-- Generated at: `2026-07-03T16:35:13Z`
+- Generated at: `2026-07-03T16:46:50Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `9392` (`77.9%`)
-- APIs without operation mapping: `2668`
+- APIs with operation mapping: `9394` (`77.9%`)
+- APIs without operation mapping: `2666`
 - Planned institutions: `10`
-- Planned APIs: `604`
-- First queue: `한국산업인력공단`
+- Planned APIs: `629`
+- First queue: `국립암센터`
 - Batch size: `100`
 
 ## Planned Institution Batches
 
 | Rank | Institution | APIs | Covered APIs | Uncovered APIs | API Coverage | Planned APIs | Remaining After Batch |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 한국산업인력공단 | 230 | 228 | 2 | 99.1% | 2 | 0 |
-| 2 | 국립암센터 | 212 | 204 | 8 | 96.2% | 8 | 0 |
-| 3 | 법제처 | 203 | 5 | 198 | 2.5% | 100 | 98 |
-| 4 | 경기도 광명시 | 197 | 0 | 197 | 0.0% | 100 | 97 |
-| 5 | 해양수산부 | 173 | 172 | 1 | 99.4% | 1 | 0 |
-| 6 | 제주특별자치도 | 171 | 18 | 153 | 10.5% | 100 | 53 |
-| 7 | 농촌진흥청 | 136 | 14 | 122 | 10.3% | 100 | 22 |
-| 8 | 대전광역시 서구 | 125 | 0 | 125 | 0.0% | 100 | 25 |
-| 9 | 전라남도 | 109 | 108 | 1 | 99.1% | 1 | 0 |
-| 10 | 울산항만공사 | 98 | 6 | 92 | 6.1% | 92 | 0 |
+| 1 | 국립암센터 | 212 | 204 | 8 | 96.2% | 8 | 0 |
+| 2 | 법제처 | 203 | 5 | 198 | 2.5% | 100 | 98 |
+| 3 | 경기도 광명시 | 197 | 0 | 197 | 0.0% | 100 | 97 |
+| 4 | 해양수산부 | 173 | 172 | 1 | 99.4% | 1 | 0 |
+| 5 | 제주특별자치도 | 171 | 18 | 153 | 10.5% | 100 | 53 |
+| 6 | 농촌진흥청 | 136 | 14 | 122 | 10.3% | 100 | 22 |
+| 7 | 대전광역시 서구 | 125 | 0 | 125 | 0.0% | 100 | 25 |
+| 8 | 전라남도 | 109 | 108 | 1 | 99.1% | 1 | 0 |
+| 9 | 울산항만공사 | 98 | 6 | 92 | 6.1% | 92 | 0 |
+| 10 | 충청남도 | 96 | 69 | 27 | 71.9% | 27 | 0 |
 
 ## Sample APIs To Materialize
 
 | Institution | API ID | Title | Category | Format | Dev Approval | Prod Approval | Updated |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 한국산업인력공단 | 3045136 | [산업인력] 해외취업 통계정보 | 산업고용 | XML | 자동승인 | 자동승인 | 2025-06-11 |
-| 한국산업인력공단 | 3038249 | 한국산업인력공단_해외진출정보 | 산업고용 | XML | 자동승인 | 자동승인 | 2018-05-02 |
 | 국립암센터 | 15122235 | 국립암센터_국가암정보센터 내가 알고 싶은 암(100대암) | 보건의료 | TEXT | 자동승인 | 심의승인 | 2025-05-29 |
 | 국립암센터 | 15122232 | 국립암센터_국가암정보센터 암정보사전 | 보건의료 | TEXT | 자동승인 | 심의승인 | 2025-05-29 |
 | 국립암센터 | 15122229 | 국립암센터_국가암정보센터 게시물자료 | 보건의료 | TEXT | 자동승인 | 심의승인 | 2025-05-29 |
@@ -43,6 +41,11 @@ This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns
 | 법제처 | 15090746 | 법제처_법령해석례 상세 조회 정보 | 공공행정 | XML | 자동승인 | 심의승인 | 2026-01-02 |
 | 법제처 | 15153083 | 법제처_법제처 법령해석 본문 조회 | 공공행정 | JSON+XML | 자동승인 | 심의승인 | 2025-12-04 |
 | 법제처 | 15153080 | 법제처_법제처 법령해석 목록 조회 | 공공행정 | JSON+XML | 자동승인 | 심의승인 | 2025-12-04 |
+| 경기도 광명시 | 15114779 | 경기도 광명시_박물관 미술관 | 문화관광 | XML | 자동승인 | 심의승인 | 2026-06-04 |
+| 경기도 광명시 | 15032655 | 경기도 광명시_공용차량 운영현황 | 교통물류 | JSON+XML | 자동승인 | 자동승인 | 2025-02-10 |
+| 경기도 광명시 | 15040131 | 경기도_광명시_법정동별 반려동물 현황 | 농축수산 | JSON+XML | 자동승인 | 자동승인 | 2024-02-08 |
+| 경기도 광명시 | 15034060 | 경기도 광명시_의무소독대상 현황 | 보건의료 | JSON+XML | 자동승인 | 자동승인 | 2023-12-06 |
+| 경기도 광명시 | 15033101 | 경기도 광명시_건축허가 현황 | 국토관리 | JSON+XML | 자동승인 | 자동승인 | 2023-12-06 |
 
 ## Regeneration Loop
 

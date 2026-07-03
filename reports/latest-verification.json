@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T16:35:02Z",
+  "generated_at": "2026-07-03T16:46:37Z",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
-  "limit": 2002,
+  "limit": 2007,
   "truncated": true,
-  "filtered_count": 1714,
+  "filtered_count": 1716,
   "summary": {
-    "total": 1714,
-    "verified": 376,
+    "total": 1716,
+    "verified": 378,
     "failed": 145,
     "skipped": 1193,
     "unknown": 0
@@ -31140,6 +31140,34 @@
       "http_status": 200,
       "semantic_status": "html_landing_page",
       "url": "https://franchise.ftc.go.kr/openApi/guide.do",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "3038249",
+      "title": "한국산업인력공단_해외진출정보",
+      "operation": "월드잡플러스 해외진출모집공고 API",
+      "provider": "worldjob",
+      "endpoint_host": "www.worldjob.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T16:46:31Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://www.worldjob.or.kr/info/openApi.do",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "3045136",
+      "title": "[산업인력] 해외취업 통계정보",
+      "operation": "해외진출 통계정보",
+      "provider": "worldjob",
+      "endpoint_host": "www.worldjob.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T16:46:31Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.worldjob.or.kr/info/statsOpenApi.do?menuId=1000005128",
       "body_shape": "html"
     }
   ]

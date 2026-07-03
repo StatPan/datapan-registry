@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `2,668` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `2,666` data.go.kr APIs
   without operation mappings, `8,549` operation-mapped APIs without runtime
   evidence, and `96` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -255,8 +255,12 @@ Current gaps:
   coverage, materializes the remaining `34` APIs and `58` operations, and
   merges `23` verified landing-page checks, bringing runtime evidence to
   `1714` and moving the first materialization queue to 한국산업인력공단.
-- API operation coverage remains incomplete: `9,392` of `12,060` APIs have
-  operation mappings (`77.9%`), leaving `2,668` APIs to materialize and `8,549`
+- The 한국산업인력공단 batch adds WorldJob adapter coverage, materializes the
+  remaining `2` APIs and `2` operations, and merges `2` verified landing-page
+  checks, bringing runtime evidence to `1716` and moving the first
+  materialization queue to 국립암센터.
+- API operation coverage remains incomplete: `9,394` of `12,060` APIs have
+  operation mappings (`77.9%`), leaving `2,666` APIs to materialize and `8,549`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

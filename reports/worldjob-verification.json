@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-03T16:46:31Z",
+  "provider": "data.go.kr",
+  "registry": "data\\data-go-kr.registry.json",
+  "limit": 5,
+  "timeout": "20s",
+  "exclude_input": "reports\\latest-verification.json",
+  "truncated": false,
+  "filters": {
+    "provider": "worldjob",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 2,
+  "summary": {
+    "total": 2,
+    "verified": 2,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "3038249",
+      "title": "한국산업인력공단_해외진출정보",
+      "operation": "월드잡플러스 해외진출모집공고 API",
+      "provider": "worldjob",
+      "endpoint_host": "www.worldjob.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T16:46:31Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://www.worldjob.or.kr/info/openApi.do",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "3045136",
+      "title": "[산업인력] 해외취업 통계정보",
+      "operation": "해외진출 통계정보",
+      "provider": "worldjob",
+      "endpoint_host": "www.worldjob.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T16:46:31Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.worldjob.or.kr/info/statsOpenApi.do?menuId=1000005128",
+      "body_shape": "html"
+    }
+  ]
+}

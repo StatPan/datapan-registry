@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-07-03T16:35:13Z",
+  "generated_at": "2026-07-03T16:46:50Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 232,
+  "filtered_count": 233,
   "summary": {
-    "hosts": 232,
+    "hosts": 233,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 90,
-    "external_guide_hosts": 173,
-    "registered_adapter_hosts": 79,
-    "operation_hosts": 92,
+    "external_endpoint_hosts": 91,
+    "external_guide_hosts": 174,
+    "registered_adapter_hosts": 80,
+    "operation_hosts": 93,
     "guide_only_hosts": 140,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
@@ -1151,6 +1151,23 @@
       "sample_ids": [
         "15007444",
         "15007467"
+      ]
+    },
+    {
+      "host": "www.worldjob.or.kr",
+      "provider": "worldjob",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 2,
+      "operations": 2,
+      "external_endpoint_operations": 2,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "3038249",
+        "3045136"
       ]
     },
     {

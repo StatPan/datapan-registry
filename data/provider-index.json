@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T16:35:13Z",
+  "generated_at": "2026-07-03T16:46:50Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 73,
-  "host_count": 81,
+  "adapter_count": 74,
+  "host_count": 82,
   "adapters": [
     {
       "name": "airport",
@@ -764,13 +764,23 @@
       "capabilities": [
         "verification"
       ]
+    },
+    {
+      "name": "worldjob",
+      "status": "registered",
+      "hosts": [
+        "www.worldjob.or.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
     }
   ],
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 73,
-    "verification_capable_adapters": 73,
+    "adapter_count": 74,
+    "verification_capable_adapters": 74,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

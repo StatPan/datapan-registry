@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T16:35:20Z",
+  "generated_at": "2026-07-03T16:46:57Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 16683,
-    "callable_operations": 16541,
+    "operations": 16685,
+    "callable_operations": 16543,
     "callable_operation_percent": 99.1,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 5073,
-    "registered_adapter_operations": 5063,
+    "external_endpoint_operations": 5075,
+    "registered_adapter_operations": 5065,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.4,
     "approval_required_operations": 5543,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 79,
+    "registered_adapter_hosts": 80,
     "missing_adapter_hosts": 11,
-    "adapter_count": 73,
+    "adapter_count": 74,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T16:35:02Z",
-    "total": 1714,
-    "verified": 376,
+    "generated_at": "2026-07-03T16:46:37Z",
+    "total": 1716,
+    "verified": 378,
     "failed": 145,
     "skipped": 1193,
     "unknown": 0,
-    "verified_percent": 21.9,
+    "verified_percent": 22,
     "evidence_operation_percent": 10.3
   },
   "route_evidence": {
@@ -384,10 +384,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T16:35:20Z",
+    "generated_at": "2026-07-03T16:46:57Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 73,
-    "host_count": 81,
+    "adapter_count": 74,
+    "host_count": 82,
     "adapters": [
       {
         "name": "airport",
@@ -1149,13 +1149,23 @@
         "capabilities": [
           "verification"
         ]
+      },
+      {
+        "name": "worldjob",
+        "status": "registered",
+        "hosts": [
+          "www.worldjob.or.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
       }
     ],
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 73,
-      "verification_capable_adapters": 73,
+      "adapter_count": 74,
+      "verification_capable_adapters": 74,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,
