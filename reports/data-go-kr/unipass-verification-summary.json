@@ -1,0 +1,55 @@
+{
+  "generated_at": "2026-07-03T23:54:49Z",
+  "source": "reports/data-go-kr/unipass-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 3,
+    "verified": 3,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 3,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "unipass",
+        "count": 2,
+        "provider": "unipass"
+      },
+      {
+        "key": "data-gg",
+        "count": 1,
+        "provider": "data-gg"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "unipass.customs.go.kr",
+        "count": 2,
+        "host": "unipass.customs.go.kr"
+      },
+      {
+        "key": "data.gg.go.kr",
+        "count": 1,
+        "host": "data.gg.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 3,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

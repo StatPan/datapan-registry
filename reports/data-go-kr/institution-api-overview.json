@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T23:45:00Z",
+  "generated_at": "2026-07-03T23:55:09Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 20136,
-    "runtime_evidence": 3622,
+    "operations": 20139,
+    "runtime_evidence": 3625,
     "runtime_evidence_percent": 18.0,
-    "callable_operations": 19994,
-    "external_endpoint_operations": 8526,
-    "registered_adapter_operations": 8516,
+    "callable_operations": 19997,
+    "external_endpoint_operations": 8529,
+    "registered_adapter_operations": 8519,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 8526
+      "count": 8529
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 8516
+      "count": 8519
     },
     {
       "key": "builtin",
@@ -73,7 +73,7 @@
     },
     {
       "category": "교통물류",
-      "operation_count": 2141
+      "operation_count": 2144
     },
     {
       "category": "농축수산",
@@ -139,7 +139,7 @@
     },
     {
       "host": "data.gg.go.kr",
-      "operation_count": 2192,
+      "operation_count": 2193,
       "adapter": "data-gg",
       "adapter_status": "registered",
       "capabilities": [
@@ -5833,6 +5833,74 @@
       ]
     },
     {
+      "organization": "관세청",
+      "api_count": 38,
+      "operation_api_count": 38,
+      "operation_count": 39,
+      "runtime_evidence_count": 3,
+      "runtime_evidence_percent": 7.7,
+      "verified": 3,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 8,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 36
+        },
+        {
+          "key": "external_endpoint",
+          "count": 3
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 3
+        },
+        {
+          "key": "builtin",
+          "count": 36
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "재정금융",
+          "operation_count": 34
+        },
+        {
+          "category": "교통물류",
+          "operation_count": 5
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 36
+        },
+        {
+          "host": "unipass.customs.go.kr",
+          "operation_count": 2,
+          "adapter": "unipass",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "data.gg.go.kr",
+          "operation_count": 1,
+          "adapter": "data-gg",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "한국공항공사",
       "api_count": 25,
       "operation_api_count": 25,
@@ -5986,48 +6054,6 @@
             "call",
             "verification"
           ]
-        }
-      ]
-    },
-    {
-      "organization": "관세청",
-      "api_count": 38,
-      "operation_api_count": 36,
-      "operation_count": 36,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 5,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 36
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 36
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "재정금융",
-          "operation_count": 34
-        },
-        {
-          "category": "교통물류",
-          "operation_count": 2
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 36
         }
       ]
     },

@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-03T23:45:00Z",
+  "generated_at": "2026-07-03T23:55:09Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 60,
+    "report_total": 62,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,7 +38,7 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 48,
+      "report_count": 50,
       "present_reports": [
         {
           "name": "chungbuk-verification-summary.json",
@@ -237,6 +237,14 @@
           "path": "reports/data-go-kr/sisul-verification.json"
         },
         {
+          "name": "unipass-verification-summary.json",
+          "path": "reports/data-go-kr/unipass-verification-summary.json"
+        },
+        {
+          "name": "unipass-verification.json",
+          "path": "reports/data-go-kr/unipass-verification.json"
+        },
+        {
           "name": "western-power-verification-summary.json",
           "path": "reports/data-go-kr/western-power-verification-summary.json"
         },
@@ -308,6 +316,8 @@
         "seoul-verification.json",
         "sisul-verification-summary.json",
         "sisul-verification.json",
+        "unipass-verification-summary.json",
+        "unipass-verification.json",
         "western-power-verification-summary.json",
         "western-power-verification.json"
       ],
