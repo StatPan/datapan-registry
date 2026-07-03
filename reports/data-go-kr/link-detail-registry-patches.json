@@ -1,72 +1,3848 @@
 {
   "schema_version": "datapan.link-detail-registry-patches.v1",
-  "generated_at": "2026-07-03T22:22:41Z",
+  "generated_at": "2026-07-03T22:33:51Z",
   "summary": {
     "batch_label": "institution-03",
-    "organization": "한국환경공단",
-    "input_apis": 1,
-    "details_fetched": 1,
-    "patches": 1,
-    "operations_to_add": 1,
+    "organization": "한국환경연구원",
+    "input_apis": 65,
+    "details_fetched": 65,
+    "patches": 65,
+    "operations_to_add": 65,
     "skipped": 0,
     "failed": 0,
-    "registered_hosts": 121
+    "registered_hosts": 122
   },
   "patches": [
     {
-      "dataset_id": "15106003",
-      "title": "한국환경공단_자원순환정보시스템_폐기물통계정보",
-      "organization": "한국환경공단",
+      "dataset_id": "15062691",
+      "title": "한국환경연구원_국토환경성평가_공원보호구역",
+      "organization": "한국환경연구원",
       "action": "replace_empty_operations",
       "operation_count": 1,
       "hosts": [
-        "www.recycling-info.or.kr"
+        "ecvam.neins.go.kr"
       ],
       "operations": [
         {
-          "name": "한국환경공단_자원순환정보시스템_폐기물통계정보_20201231",
-          "endpoint": "https://www.recycling-info.or.kr/rrs/viewPage.do?menuNo=M130401",
+          "name": "한국환경정책평가연구원_국토환경성평가_공원보호구역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
           "source": {
             "system": "data.go.kr",
-            "url": "https://www.data.go.kr/catalog/15106003/openapi.json",
+            "url": "https://www.data.go.kr/catalog/15062691/openapi.json",
             "raw": {
               "api_type": "LINK",
-              "category_nm": "환경 > 폐기물",
-              "created_at": "2022-08-30",
-              "data_format": "JSON",
-              "dept_nm": "자원순환정책지원부",
-              "desc": "국가승인 폐기물 통계 중 [전국폐기물 발생 및 처리현황], [폐기물 재활용실적 및 업체현황] 등 공표된 주요 통계 정보에 대해 제공하고 있습니다.",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
               "end_point_url": " ",
-              "guide_url": "https://www.recycling-info.or.kr/rrs/viewPage.do?menuNo=M130401",
-              "id": "uddi:d0fa3d7d-8c5a-4337-b044-8b3f3326d9a6_202402271007",
+              "guide_url": "",
+              "id": "uddi:8c1ef798-f645-4952-9cf6-daaf1cdca260",
               "is_charged": "무료",
               "is_confirmed_for_dev_nm": "자동승인",
               "is_confirmed_for_prod_nm": "심의승인",
               "is_deleted": "N",
               "is_list_deleted": "N",
-              "keywords": "폐기물통계,전국폐기물 발생 및 처리현황,폐기물 재활용실적 및 업체현황",
-              "list_id": "15106003",
-              "list_title": "한국환경공단_자원순환정보시스템_폐기물통계정보",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062691",
+              "list_title": "한국환경연구원_국토환경성평가_공원보호구역",
               "list_type": "PR0027",
-              "meta_url": "https://www.data.go.kr/catalog/15106003/openapi.json",
+              "meta_url": "https://www.data.go.kr/catalog/15062691/openapi.json",
               "new_category_cd": "OC0012",
               "new_category_nm": "환경기상",
-              "operation_nm": "한국환경공단_자원순환정보시스템_폐기물통계정보_20201231",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_공원보호구역_20200701",
               "operation_seq": "",
-              "operation_url": "https://www.recycling-info.or.kr/rrs/viewPage.do?menuNo=M130401",
-              "org_cd": "B552584",
-              "org_nm": "한국환경공단",
-              "ownership_grounds": "「자원의 절약과 재활용촉진에 관한 법률」 제34조의7(자원순환 정보의 제공 등)",
-              "register_status": "변경승인",
-              "request_cnt": 3019,
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 40,
               "request_param_nm": "",
               "request_param_nm_en": "",
               "response_param_nm": "",
               "response_param_nm_en": "",
               "share_scope_nm": "행정/공공/민간",
-              "title": "한국환경공단_자원순환정보시스템_폐기물통계정보_20201231",
-              "title_en": "Korea Environment Corporation_Resource Circulation Information System_Waste Statistics Information_20201231",
-              "updated_at": "2024-02-27"
+              "title": "한국환경정책평가연구원_국토환경성평가_공원보호구역_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Park Protection Area_20200701",
+              "updated_at": "2024-12-05"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062622",
+      "title": "한국환경연구원_환경생태적 평가결과",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_환경생태적 평가결과_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062622/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-04",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "환경생태적 평가항목(자연성·종다양성 등 생태계 보전과 생물다양성 유지 등과 관련된 항목)에 대한 국토환경성평가 결과",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:0272fb1f-fd12-4020-8299-da33167c5014",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,환경생태적 평가",
+              "list_id": "15062622",
+              "list_title": "한국환경연구원_환경생태적 평가결과",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062622/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_환경생태적 평가결과_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 253,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_환경생태적 평가결과_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_Environmental Ecological Evaluation Results_20200701",
+              "updated_at": "2024-12-05"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062619",
+      "title": "한국환경연구원_법제적 평가결과",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_법제적 평가결과_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062619/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-04",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법제적 평가항목(법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역에) 대한 국토환경성평가 결과",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:075488d1-41a3-4fc2-b9d2-cbd491ecab67",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,환경생태적 평가",
+              "list_id": "15062619",
+              "list_title": "한국환경연구원_법제적 평가결과",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062619/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_법제적 평가결과_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 75,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_법제적 평가결과_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_Legal Evaluation Results_20200701",
+              "updated_at": "2024-12-05"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063093",
+      "title": "한국환경연구원_국토환경성평가_가축사육제한구역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_가축사육제한구역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063093/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:d6da7562-3240-4c0d-8b61-b2d4ba2d2a04",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063093",
+              "list_title": "한국환경연구원_국토환경성평가_가축사육제한구역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063093/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_가축사육제한구역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 44,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_가축사육제한구역_20200701",
+              "title_en": "Korea Institute of Environmental Policy Evaluation_National Territory Environment Evaluation_Livestock breeding restricted area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063088",
+      "title": "한국환경연구원_국토환경성평가_이용가능무인도서",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_이용가능무인도서_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063088/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:d6d0e731-6723-4ac8-b86b-fb7fa1d145d6",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063088",
+              "list_title": "한국환경연구원_국토환경성평가_이용가능무인도서",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063088/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_이용가능무인도서_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 16,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_이용가능무인도서_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Land Environment Evaluation_Available Unmanned Book_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063085",
+      "title": "한국환경연구원_국토환경성평가_준보전무인도서",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_준보전무인도서_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063085/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:bdf09829-0861-48ea-ab17-fc22ca5f6bf2",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063085",
+              "list_title": "한국환경연구원_국토환경성평가_준보전무인도서",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063085/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_준보전무인도서_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 15,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_준보전무인도서_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Land Environment Evaluation_Junbo Executive Book_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063084",
+      "title": "한국환경연구원_국토환경성평가_절대보전무인도서",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_절대보전무인도서_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063084/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:aaa65828-f1aa-4088-9b02-ff35168da7e9",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063084",
+              "list_title": "한국환경연구원_국토환경성평가_절대보전무인도서",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063084/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_절대보전무인도서_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 34,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_절대보전무인도서_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Land Environment Evaluation_Absolute Conservation Unguided Book_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063082",
+      "title": "한국환경연구원_국토환경성평가_천연기념물지정지역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_천연기념물지정지역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063082/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:5c1614cd-7cdf-415d-a8ad-f0ad378238cc",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063082",
+              "list_title": "한국환경연구원_국토환경성평가_천연기념물지정지역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063082/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_천연기념물지정지역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 29,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_천연기념물지정지역_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Territory Environment Evaluation_Designated as a Natural Monument_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063081",
+      "title": "한국환경연구원_국토환경성평가_천연보호구역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_천연보호구역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063081/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:cdd0912f-71be-4315-97b5-c12f89e555c9",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063081",
+              "list_title": "한국환경연구원_국토환경성평가_천연보호구역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063081/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_천연보호구역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 32,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_천연보호구역_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Land Environment Evaluation_Natural Protected Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063080",
+      "title": "한국환경연구원_국토환경성평가_관리보전지역(경관보전)",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_관리보전지역(경관보전)_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063080/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:d32c6a2f-0278-4404-b9d9-c0f591f3e119",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063080",
+              "list_title": "한국환경연구원_국토환경성평가_관리보전지역(경관보전)",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063080/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_관리보전지역(경관보전)_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 19,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_관리보전지역(경관보전)_20200701",
+              "title_en": "Korea Institute of Environmental Policy Evaluation_National Land Environment Evaluation_Management and Preservation Area (landscape conservation)_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063079",
+      "title": "한국환경연구원_국토환경성평가_관리보전지역(생태계보전)",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_관리보전지역(생태계보전)_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063079/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:c531dad9-08c4-47eb-bab1-f1e883fab991",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063079",
+              "list_title": "한국환경연구원_국토환경성평가_관리보전지역(생태계보전)",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063079/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_관리보전지역(생태계보전)_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 48,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_관리보전지역(생태계보전)_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Land Environment Evaluation_Management and Conservation Area (Ecosystem Conservation)_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063076",
+      "title": "한국환경연구원_국토환경성평가_관리보전지역(지하수자원보전)",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_관리보전지역(지하수자원보전)_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063076/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:af60f1c3-6bb6-4289-8c58-8657485a8ccb",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063076",
+              "list_title": "한국환경연구원_국토환경성평가_관리보전지역(지하수자원보전)",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063076/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_관리보전지역(지하수자원보전)_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 26,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_관리보전지역(지하수자원보전)_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Land Environment Evaluation_Management and Preservation Area (groundwater resource conservation)_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063075",
+      "title": "한국환경연구원_국토환경성평가_상대보전지역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_상대보전지역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063075/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:96f68af4-ce93-45be-a48a-f1282c1a9f7e",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063075",
+              "list_title": "한국환경연구원_국토환경성평가_상대보전지역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063075/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_상대보전지역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 8,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_상대보전지역_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Land Environment Evaluation_Relative Conservation Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063073",
+      "title": "한국환경연구원_국토환경성평가_절대보전지역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_절대보전지역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063073/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:c3ed093a-0386-48f6-ad9c-9b0b1d24e2d6",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063073",
+              "list_title": "한국환경연구원_국토환경성평가_절대보전지역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063073/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_절대보전지역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 29,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_절대보전지역_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Land Environment Evaluation_Absolute Conservation Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063071",
+      "title": "한국환경연구원_국토환경성평가_특별관리해역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_특별관리해역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063071/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:74fc7637-0b37-4bf5-b6b9-ef81894d3d37",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063071",
+              "list_title": "한국환경연구원_국토환경성평가_특별관리해역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063071/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_특별관리해역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 41,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_특별관리해역_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Land Environment Evaluation_Special Management Sea_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063069",
+      "title": "한국환경연구원_국토환경성평가_환경보전해역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_환경보전해역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063069/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:aea0aca7-0df0-4900-ac90-f0e7af0558ae",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063069",
+              "list_title": "한국환경연구원_국토환경성평가_환경보전해역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063069/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_환경보전해역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 22,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_환경보전해역_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Land Environment Evaluation_Environmental Conservation Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063064",
+      "title": "한국환경연구원_국토환경성평가_농업진흥지역(농업보호구역)",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_농업진흥지역(농업보호구역)_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063064/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:11f4e38a-cc95-476f-9187-8f01096eaa51",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063064",
+              "list_title": "한국환경연구원_국토환경성평가_농업진흥지역(농업보호구역)",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063064/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_농업진흥지역(농업보호구역)_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 50,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_농업진흥지역(농업보호구역)_20200701",
+              "title_en": "Korea Institute of Environmental Policy Evaluation_National Territory Environment Evaluation_Agricultural Promotion Area (Agricultural Protection Area)_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063062",
+      "title": "한국환경연구원_국토환경성평가_농업진흥지역(농업진흥구역)",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_농업진흥지역(농업진흥구역)_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063062/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:e4596b44-6d72-468b-a1a6-ecfa0908707a",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063062",
+              "list_title": "한국환경연구원_국토환경성평가_농업진흥지역(농업진흥구역)",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063062/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_농업진흥지역(농업진흥구역)_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 92,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_농업진흥지역(농업진흥구역)_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Environment Evaluation_Agricultural Promotion Zone (Agricultural Promotion Zone)_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063061",
+      "title": "한국환경연구원_국토환경성평가_토석채취제한지역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_토석채취제한지역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063061/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:dc20bd69-22be-4f58-856e-edce5e66d933",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063061",
+              "list_title": "한국환경연구원_국토환경성평가_토석채취제한지역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063061/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_토석채취제한지역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 103,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_토석채취제한지역_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Territory Environmental Assessment_Restricted areas for soil collection_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063060",
+      "title": "한국환경연구원_국토환경성평가_산림유전자원보호구역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_산림유전자원보호구역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063060/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:93bd3f4c-e247-40c1-8cb4-e8e32775adcc",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063060",
+              "list_title": "한국환경연구원_국토환경성평가_산림유전자원보호구역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063060/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_산림유전자원보호구역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 253,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_산림유전자원보호구역_20200701",
+              "title_en": "Korea Environmental Policy Assessment Institute_National Land Environment Assessment_Forest Genetic Resource Protection Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063059",
+      "title": "한국환경연구원_국토환경성평가_재해방지보호구역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_재해방지보호구역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063059/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:7752b093-ad70-4b80-b8d6-a9270d8809d0",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063059",
+              "list_title": "한국환경연구원_국토환경성평가_재해방지보호구역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063059/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_재해방지보호구역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 27,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_재해방지보호구역_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Territory Environment Evaluation_Disaster Prevention Protection Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063058",
+      "title": "한국환경연구원_국토환경성평가_수원함양보호구역1~3종",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_수원함양보호구역1~3종_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063058/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:992eeb1e-0fb2-4293-b457-c90def7b8604",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063058",
+              "list_title": "한국환경연구원_국토환경성평가_수원함양보호구역1~3종",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063058/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_수원함양보호구역1~3종_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 168,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_수원함양보호구역1~3종_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Land Environment Evaluation_Suwon Hamyang Protection Area 1~3 types_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063056",
+      "title": "한국환경연구원_국토환경성평가_경관보호구역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_경관보호구역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063056/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:10f5eec8-745f-4d8c-bd18-dfda4ac4c9b7",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063056",
+              "list_title": "한국환경연구원_국토환경성평가_경관보호구역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063056/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_경관보호구역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 30,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_경관보호구역_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Land Environment Evaluation_Scenery Protection Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063054",
+      "title": "한국환경연구원_국토환경성평가_보전산지(공익용산지)",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_보전산지(공익용산지)_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063054/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:697d4f38-b8cd-4791-8436-b90dffc73a67",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063054",
+              "list_title": "한국환경연구원_국토환경성평가_보전산지(공익용산지)",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063054/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_보전산지(공익용산지)_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 83,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_보전산지(공익용산지)_20200701",
+              "title_en": "Korea Institute of Environmental Policy Evaluation_National Territory Environmental Assessment_Preservation production site (public interest)_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063053",
+      "title": "한국환경연구원_국토환경성평가_보전산지(임업용산지)",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_보전산지(임업용산지)_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063053/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:d9addc8d-2e14-424c-9199-e15b7f52fbac",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063053",
+              "list_title": "한국환경연구원_국토환경성평가_보전산지(임업용산지)",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063053/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_보전산지(임업용산지)_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 45,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_보전산지(임업용산지)_20200701",
+              "title_en": "Korea Institute of Environmental Policy Evaluation_National Territory Environment Evaluation_Preservation production site (forestry)_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063052",
+      "title": "한국환경연구원_국토환경성평가_경관녹지,연결녹지",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_경관녹지,연결녹지_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063052/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:4f242a53-1afa-4bd3-aafe-abbbbdefcf65",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063052",
+              "list_title": "한국환경연구원_국토환경성평가_경관녹지,연결녹지",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063052/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_경관녹지,연결녹지_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 101,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_경관녹지,연결녹지_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Land Environment Evaluation_Landscape Green Area, Connected Green Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063051",
+      "title": "한국환경연구원_국토환경성평가_완충녹지",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_완충녹지_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063051/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:6c68c3c6-6b2b-4098-91c6-d07cee104110",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063051",
+              "list_title": "한국환경연구원_국토환경성평가_완충녹지",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063051/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_완충녹지_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 75,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_완충녹지_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Land Environment Evaluation_Reserved green area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063050",
+      "title": "한국환경연구원_국토환경성평가_주제공원",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_주제공원_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063050/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:06372fcb-8124-44a6-adc4-cdedfb98abe5",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063050",
+              "list_title": "한국환경연구원_국토환경성평가_주제공원",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063050/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_주제공원_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 12,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_주제공원_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Land Environment Evaluation_Theme Park_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063049",
+      "title": "한국환경연구원_국토환경성평가_도시자연공원구역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_도시자연공원구역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063049/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-11",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:1b821a17-91e6-4e59-a9b5-ceae40809311",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063049",
+              "list_title": "한국환경연구원_국토환경성평가_도시자연공원구역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063049/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_도시자연공원구역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 27,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_도시자연공원구역_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Land Environment Evaluation_Urban Natural Park Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063008",
+      "title": "한국환경연구원_국토환경성평가_생활권공원",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_생활권공원_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063008/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-10",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:7a13b130-28ec-4a2b-8322-f8f764ca6217",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063008",
+              "list_title": "한국환경연구원_국토환경성평가_생활권공원",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063008/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_생활권공원_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 54,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_생활권공원_20200701",
+              "title_en": "Korea Institute of Environmental Policy Evaluation_National Land Environment Evaluation_Living Area Park_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15063006",
+      "title": "한국환경연구원_국토환경성평가_개발제한구역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_개발제한구역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15063006/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-10",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:fda84345-f837-4eb7-ad40-ff6050e69093",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15063006",
+              "list_title": "한국환경연구원_국토환경성평가_개발제한구역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15063006/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_개발제한구역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 202,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_개발제한구역_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Territory Environment Evaluation_Development Restricted Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062763",
+      "title": "한국환경연구원_국토환경성평가_보호지구(문화재보호지구)",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_보호지구(문화재보호지구)_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062763/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:f01341d0-4519-46c3-bca0-bbc3c566a758",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062763",
+              "list_title": "한국환경연구원_국토환경성평가_보호지구(문화재보호지구)",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062763/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_보호지구(문화재보호지구)_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 23,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_보호지구(문화재보호지구)_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Protection District(Cultural Property Protection District)_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062761",
+      "title": "한국환경연구원_국토환경성평가_보호지구(생태계보호지구)",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_보호지구(생태계보호지구)_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062761/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:6024acfb-e016-48a7-959f-a0c7064e3d1f",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062761",
+              "list_title": "한국환경연구원_국토환경성평가_보호지구(생태계보호지구)",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062761/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_보호지구(생태계보호지구)_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 54,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_보호지구(생태계보호지구)_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Protection Zone (Ecological Protection Zone)_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062758",
+      "title": "한국환경연구원_국토환경성평가_경관지구",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_경관지구_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062758/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:b238c49d-c8f0-40d1-bd2a-8c716e685cd5",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062758",
+              "list_title": "한국환경연구원_국토환경성평가_경관지구",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062758/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_경관지구_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 13,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_경관지구_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Environment Assessment_Gyeonggwan District_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062757",
+      "title": "한국환경연구원_국토환경성평가_녹지지역(자연녹지)",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_녹지지역(자연녹지)_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062757/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:007ad214-02db-4b21-b645-85eca0c3b7db",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062757",
+              "list_title": "한국환경연구원_국토환경성평가_녹지지역(자연녹지)",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062757/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_녹지지역(자연녹지)_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 244,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_녹지지역(자연녹지)_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Green Area (Natural Green Area)_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062754",
+      "title": "한국환경연구원_국토환경성평가_녹지지역(생산녹지)",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_녹지지역(생산녹지)_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062754/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:74f33d30-e584-40f5-8dbd-e45c38e04e4e",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062754",
+              "list_title": "한국환경연구원_국토환경성평가_녹지지역(생산녹지)",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062754/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_녹지지역(생산녹지)_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 51,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_녹지지역(생산녹지)_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Green Area (Production Green Area)_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062752",
+      "title": "한국환경연구원_국토환경성평가_녹지지역(보전녹지)",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_녹지지역(보전녹지)_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062752/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:2c79a492-2f54-4bef-8bd8-c3397b65673c",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062752",
+              "list_title": "한국환경연구원_국토환경성평가_녹지지역(보전녹지)",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062752/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_녹지지역(보전녹지)_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 90,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_녹지지역(보전녹지)_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Green Area (Conservation Green Area)_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062751",
+      "title": "한국환경연구원_국토환경성평가_자연환경보전지역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_자연환경보전지역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062751/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:0748e2f1-e347-4849-8a83-e9087b272827",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062751",
+              "list_title": "한국환경연구원_국토환경성평가_자연환경보전지역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062751/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_자연환경보전지역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 33,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_자연환경보전지역_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Environment Assessment_Natural Environment Conservation Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062709",
+      "title": "한국환경연구원_국토환경성평가_오염행위제한지역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_오염행위제한지역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062709/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:cf126449-9bbf-43ef-86a5-9cf9b55a522d",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062709",
+              "list_title": "한국환경연구원_국토환경성평가_오염행위제한지역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062709/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_오염행위제한지역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 38,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_오염행위제한지역_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Pollution Restriction Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062708",
+      "title": "한국환경연구원_국토환경성평가_배출시설설치제한지역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_배출시설설치제한지역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062708/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:7de4852c-2663-4628-8644-bed29f00fa65",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062708",
+              "list_title": "한국환경연구원_국토환경성평가_배출시설설치제한지역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062708/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_배출시설설치제한지역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 42,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_배출시설설치제한지역_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Restricted Area for Emission Facilities Installation_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062706",
+      "title": "한국환경연구원_국토환경성평가_폐기물매립시설설치제한지역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_폐기물매립시설설치제한지역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062706/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:2ab0c533-4cb3-48b7-baf9-de7f2f39ada2",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062706",
+              "list_title": "한국환경연구원_국토환경성평가_폐기물매립시설설치제한지역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062706/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_폐기물매립시설설치제한지역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 80,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_폐기물매립시설설치제한지역_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Environment Assessment_Restricted Area for Waste Landfill Facilities_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062704",
+      "title": "한국환경연구원_국토환경성평가_폐수배출시설설치제한지역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_폐수배출시설설치제한지역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062704/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:c99afdf0-8bb1-43e1-852f-a133cf2a725f",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062704",
+              "list_title": "한국환경연구원_국토환경성평가_폐수배출시설설치제한지역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062704/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_폐수배출시설설치제한지역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 62,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_폐수배출시설설치제한지역_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Restricted Area for the Installation of Wastewater Discharge Facilities_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062703",
+      "title": "한국환경연구원_국토환경성평가_상수원상류공장설립제한승인지역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_상수원상류공장설립제한승인지역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062703/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:105ef5a4-4a06-42ac-849d-eea37d53f605",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062703",
+              "list_title": "한국환경연구원_국토환경성평가_상수원상류공장설립제한승인지역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062703/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_상수원상류공장설립제한승인지역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 44,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_상수원상류공장설립제한승인지역_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_Environmental Evaluation of Land Environment_Limited Area for the Establishment of Sangsuwon Upstream Factory_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062702",
+      "title": "한국환경연구원_국토환경성평가_상수원보호구역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_상수원보호구역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062702/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:509d9e92-623a-4c55-afbd-a752e5c3d9e7",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062702",
+              "list_title": "한국환경연구원_국토환경성평가_상수원보호구역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062702/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_상수원보호구역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 100,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_상수원보호구역_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Susanwon Protection Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062701",
+      "title": "한국환경연구원_국토환경성평가_지하수보전구역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_지하수보전구역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062701/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:b810e4f3-5b0f-4dc1-ac59-b3d68686c1c0",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062701",
+              "list_title": "한국환경연구원_국토환경성평가_지하수보전구역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062701/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_지하수보전구역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 56,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_지하수보전구역_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Environment Assessment_Groundwater Conservation Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062700",
+      "title": "한국환경연구원_국토환경성평가_상수원호소",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_상수원호소_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062700/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:f865a944-8535-4618-8558-aec25bc0e617",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062700",
+              "list_title": "한국환경연구원_국토환경성평가_상수원호소",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062700/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_상수원호소_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 22,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_상수원호소_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Environment Assessment_Suwonwon Appeal_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062699",
+      "title": "한국환경연구원_국토환경성평가_소하천구역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_소하천구역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062699/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:50c1abf3-a400-4a93-ba4f-9980969e8121",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062699",
+              "list_title": "한국환경연구원_국토환경성평가_소하천구역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062699/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_소하천구역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 112,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_소하천구역_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Sho River District_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062697",
+      "title": "한국환경연구원_국토환경성평가_홍수관리구역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_홍수관리구역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062697/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:47420416-5801-41df-a5de-bd4c17c5cf8c",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062697",
+              "list_title": "한국환경연구원_국토환경성평가_홍수관리구역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062697/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_홍수관리구역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 366,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_홍수관리구역_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Flood Management Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062696",
+      "title": "한국환경연구원_국토환경성평가_하천구역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_하천구역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062696/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:8f8c5210-5b6e-4afb-a742-d90ce83b201d",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062696",
+              "list_title": "한국환경연구원_국토환경성평가_하천구역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062696/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_하천구역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 83,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_하천구역_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_River Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062694",
+      "title": "한국환경연구원_국토환경성평가_수변구역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_수변구역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062694/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:6d0cdbfb-257d-4262-be65-add4c7ea28e7",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062694",
+              "list_title": "한국환경연구원_국토환경성평가_수변구역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062694/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_수변구역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 99,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_수변구역_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Waterside Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062692",
+      "title": "한국환경연구원_국토환경성평가_백두대간보호구역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_백두대간보호구역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062692/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:f85a1007-5abe-41a2-858b-d28259505ff5",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062692",
+              "list_title": "한국환경연구원_국토환경성평가_백두대간보호구역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062692/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_백두대간보호구역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 43,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_백두대간보호구역_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Baekdudaegan Protected Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062686",
+      "title": "한국환경연구원_국토환경성평가_공원문화유산지구",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_공원문화유산지구_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062686/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:3dfbcc56-7381-4e2f-9b7c-f52a803a7a2a",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062686",
+              "list_title": "한국환경연구원_국토환경성평가_공원문화유산지구",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062686/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_공원문화유산지구_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 14,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_공원문화유산지구_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Environment Assessment_Park Cultural Heritage District_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062683",
+      "title": "한국환경연구원_국토환경성평가_공원마을지구",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_공원마을지구_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062683/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:802390c4-ffa5-4422-bdcc-bfa9f986a281",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062683",
+              "list_title": "한국환경연구원_국토환경성평가_공원마을지구",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062683/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_공원마을지구_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 7,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_공원마을지구_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Park Village District_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062680",
+      "title": "한국환경연구원_국토환경성평가_공원자연환경지구",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_공원자연환경지구_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062680/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:1b767c78-85c8-4588-8d86-b99313de5c6c",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062680",
+              "list_title": "한국환경연구원_국토환경성평가_공원자연환경지구",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062680/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_공원자연환경지구_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 44,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_공원자연환경지구_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Park Natural Environment District_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062678",
+      "title": "한국환경연구원_국토환경성평가_공원자연보존지구",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_공원자연보존지구_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062678/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:ce0ee87d-b227-4dc3-b243-d501391f6e64",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062678",
+              "list_title": "한국환경연구원_국토환경성평가_공원자연보존지구",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062678/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_공원자연보존지구_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 48,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_공원자연보존지구_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Park Nature Conservation Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062675",
+      "title": "한국환경연구원_국토환경성평가_특정도서",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_특정도서_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062675/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:5e7a3c59-9e9e-4f01-8f8b-e17a6c8b99a3",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062675",
+              "list_title": "한국환경연구원_국토환경성평가_특정도서",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062675/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_특정도서_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 86,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_특정도서_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Environment Assessment_Special Statement_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062674",
+      "title": "한국환경연구원_국토환경성평가_야생생물(특별)보호구역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_야생생물(특별)보호구역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062674/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:db255984-5bde-45ad-9acd-d169369eabdf",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062674",
+              "list_title": "한국환경연구원_국토환경성평가_야생생물(특별)보호구역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062674/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_야생생물(특별)보호구역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 782,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_야생생물(특별)보호구역_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Wildlife (special) protected area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062671",
+      "title": "한국환경연구원_국토환경성평가_습지개선지역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_습지개선지역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062671/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:9a247683-2ac8-48f9-aebf-82d14d372b89",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062671",
+              "list_title": "한국환경연구원_국토환경성평가_습지개선지역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062671/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_습지개선지역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 24,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_습지개선지역_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Environment Assessment_Wetland Improvement Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062668",
+      "title": "한국환경연구원_국토환경성평가_습지주변관리지역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_습지주변관리지역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062668/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:3ab5dd90-b217-4f82-b7e9-e13da4c15de7",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062668",
+              "list_title": "한국환경연구원_국토환경성평가_습지주변관리지역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062668/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_습지주변관리지역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 79,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_습지주변관리지역_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Management area around wetlands_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062667",
+      "title": "한국환경연구원_국토환경성평가_시도습지보호지역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_시도습지보호지역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062667/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:ba334c86-cd1e-4283-8151-9a09fc70cb97",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062667",
+              "list_title": "한국환경연구원_국토환경성평가_시도습지보호지역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062667/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_시도습지보호지역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 18,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_시도습지보호지역_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_Environmental Assessment of Land Environment_Provincial Wetland Protection Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062666",
+      "title": "한국환경연구원_국토환경성평가_습지보호지역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_습지보호지역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062666/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:00c4fd64-1f01-44ca-965f-e1bd61477a54",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062666",
+              "list_title": "한국환경연구원_국토환경성평가_습지보호지역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062666/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_습지보호지역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 35,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_습지보호지역_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Wetland Protection Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062664",
+      "title": "한국환경연구원_국토환경성평가_시도생태경관보전지역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_시도생태경관보전지역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062664/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:4110470a-0cd6-495d-8bc0-ec3fa2bdcb23",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062664",
+              "list_title": "한국환경연구원_국토환경성평가_시도생태경관보전지역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062664/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_시도생태경관보전지역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 176,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_시도생태경관보전지역_20200701",
+              "title_en": "Korea Institute for Environmental Policy Evaluation_National Environment Assessment_Location Ecological Landscape Conservation Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062663",
+      "title": "한국환경연구원_국토환경성평가_자연유보지역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_자연유보지역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062663/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:8b387e9e-08be-48e7-abc2-af6d39edb358",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062663",
+              "list_title": "한국환경연구원_국토환경성평가_자연유보지역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062663/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_자연유보지역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 111,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_자연유보지역_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Land Environment Evaluation_Natural Reserve Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062654",
+      "title": "한국환경연구원_국토환경성평가_생태경관보전지역",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경정책평가연구원_국토환경성평가_생태경관보전지역_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062654/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-05",
+              "data_format": "XML",
+              "dept_nm": "국토환경연구본부 국토관리연구실",
+              "desc": "법령에 의하여 환경보전을 위해 지정한 입지의 타당성 검토가 필요한 지역·지구·구역 등을 평가하여 환경정보로 나타낸 법제적 평가항목",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:68850878-1f08-4cd6-88c5-bf2ae8fa4c9f",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,법제적 평가항목",
+              "list_id": "15062654",
+              "list_title": "한국환경연구원_국토환경성평가_생태경관보전지역",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062654/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경정책평가연구원_국토환경성평가_생태경관보전지역_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 103,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경정책평가연구원_국토환경성평가_생태경관보전지역_20200701",
+              "title_en": "Korea Environmental Policy Evaluation Institute_National Land Environment Evaluation_Ecological Landscape Conservation Area_20200701",
+              "updated_at": "2024-12-04"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15062612",
+      "title": "한국환경연구원_국토환경성평가지도",
+      "organization": "한국환경연구원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "ecvam.neins.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국환경연구원_국토환경성평가지도_20200701",
+          "endpoint": "https://ecvam.neins.go.kr/api/apiWrite.do",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15062612/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "환경 > 자연",
+              "created_at": "2020-08-04",
+              "data_format": "XML",
+              "dept_nm": "지식정보팀",
+              "desc": "국토를 친환경․계획적으로 보전·이용하기 위하여 환경적 가치를 종합적으로 평가하여, 환경적 중요도에 따라 5개 등급으로 구분하고 색채를 달리 표시하여 알기 쉽게 작성한 1:25,000축척의 지도",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:680ee3b6-a312-4680-9590-b2866adbaccb_202412041844",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "국토환경성평가,법제적 평가,환경생태적 평가",
+              "list_id": "15062612",
+              "list_title": "한국환경연구원_국토환경성평가지도",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15062612/openapi.json",
+              "new_category_cd": "OC0012",
+              "new_category_nm": "환경기상",
+              "operation_nm": "한국환경연구원_국토환경성평가지도_20200701",
+              "operation_seq": "",
+              "operation_url": "https://ecvam.neins.go.kr/api/apiWrite.do",
+              "org_cd": "B554639",
+              "org_nm": "한국환경연구원",
+              "ownership_grounds": "환경정책기본법 제23조",
+              "register_status": "변경승인",
+              "request_cnt": 761,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국환경연구원_국토환경성평가지도_20200701",
+              "title_en": "Korea Environmental Research Institute_National Land Environmental Assessment Map_20200701",
+              "updated_at": "2024-12-04"
             }
           }
         }

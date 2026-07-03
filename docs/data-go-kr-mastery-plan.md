@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `19861`
-- callable operations: `19719` (`99.3%`)
+- operations: `19926`
+- callable operations: `19784` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `8251`
-- registered adapter operations: `8241`
+- external endpoint operations: `8316`
+- registered adapter operations: `8306`
 - missing adapter operations: `29`
-- external adapter coverage: `99.6%`
-- approval-required operations: `7351`
+- external adapter coverage: `99.7%`
+- approval-required operations: `7416`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `116`
+- registered adapter hosts: `117`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -574,6 +574,11 @@ readiness, not to advance verified runtime coverage.
    brings checked runtime evidence to `3322`, verified checks to `1550`,
    registered external adapter operations to `8241`, and raises API operation
    coverage to `10,854` of `12,060` APIs (`90.0%`).
+   The 한국환경연구원 batch registers ECVAM host coverage, materializes `65`
+   APIs and `65` operations, and merges `65` verified bounded checks. That
+   brings checked runtime evidence to `3387`, verified checks to `1615`,
+   registered external adapter operations to `8306`, and raises API operation
+   coverage to `10,919` of `12,060` APIs (`90.5%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

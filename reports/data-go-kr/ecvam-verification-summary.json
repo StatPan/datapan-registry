@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-07-03T22:34:12Z",
+  "source": "reports/data-go-kr/ecvam-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 65,
+    "verified": 65,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 65,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "ecvam",
+        "count": 65,
+        "provider": "ecvam"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "ecvam.neins.go.kr",
+        "count": 65,
+        "host": "ecvam.neins.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 65,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

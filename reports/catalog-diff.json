@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T22:23:18Z",
+  "generated_at": "2026-07-03T22:34:30Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3669,
-    "stable": 8391
+    "changed": 3734,
+    "stable": 8326
   },
   "added": [],
   "removed": [],
@@ -16909,6 +16909,376 @@
       "new_digest": "59f3dca1873ebb0051d4ba8b8455600af722e692d79a60cafd41f34ab40ac1a4"
     },
     {
+      "id": "15062612",
+      "old_title": "한국환경연구원_국토환경성평가지도",
+      "new_title": "한국환경연구원_국토환경성평가지도",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "163f08bb693a1251bbb7b34bb31a54e55caa4b90f32f89df58047e408ea57854",
+      "new_digest": "eaf962499476d883e53a5eb1edd5cfb71659e10c970903818af3bf5627afa337"
+    },
+    {
+      "id": "15062619",
+      "old_title": "한국환경연구원_법제적 평가결과",
+      "new_title": "한국환경연구원_법제적 평가결과",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "160fbe34a0f0dc53c5662b1f237b8b02bfceee7fa0092870c63d96adce10904c",
+      "new_digest": "d953c941053bb5729f0292a9b7f70b3bf5dbc47cd53025211d3a9cbf7c1616ab"
+    },
+    {
+      "id": "15062622",
+      "old_title": "한국환경연구원_환경생태적 평가결과",
+      "new_title": "한국환경연구원_환경생태적 평가결과",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3d23c052b5c73a8f71b074ab5fbb2cddad47bd3447585825cb27d8a0ec187c2a",
+      "new_digest": "fb908b1de33b1b644e328a505b8871a57ff322ff61274da9f01ddb3388cec697"
+    },
+    {
+      "id": "15062654",
+      "old_title": "한국환경연구원_국토환경성평가_생태경관보전지역",
+      "new_title": "한국환경연구원_국토환경성평가_생태경관보전지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2e8a4dd55f4cd84939b711b0d6a2f5c9e50704fed766cca087c88713af2d68cb",
+      "new_digest": "5b2da358d39658fddc29cfc78ef74f9b98eb537c7fcf0462763cd7ecb029b1b2"
+    },
+    {
+      "id": "15062663",
+      "old_title": "한국환경연구원_국토환경성평가_자연유보지역",
+      "new_title": "한국환경연구원_국토환경성평가_자연유보지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1d4f2cb091d9e9817fe89f6a4436e8914f1d5e43eea2a06ebf6e94f13d274c1b",
+      "new_digest": "8603ec1af6cb129cfcbc21eaee1b82c4082f8085d417cd0b339cb430e0fa0b38"
+    },
+    {
+      "id": "15062664",
+      "old_title": "한국환경연구원_국토환경성평가_시도생태경관보전지역",
+      "new_title": "한국환경연구원_국토환경성평가_시도생태경관보전지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "449d91f9ebaac8a5466459a13b88f4cb3efdccbf79bb0efb267c1e1c5be13b0f",
+      "new_digest": "6a518a3cd40da675525404ee06207786c259759d60a7fbdaef9f9f036380d6e4"
+    },
+    {
+      "id": "15062666",
+      "old_title": "한국환경연구원_국토환경성평가_습지보호지역",
+      "new_title": "한국환경연구원_국토환경성평가_습지보호지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3bc92da0458c1e565fcd7054ec09d3116c4cdca00749f718c488858635a31547",
+      "new_digest": "19327976841fb1d42c135d96893a2da22f6b6f53d27c75fb90353c7ba2fe02b5"
+    },
+    {
+      "id": "15062667",
+      "old_title": "한국환경연구원_국토환경성평가_시도습지보호지역",
+      "new_title": "한국환경연구원_국토환경성평가_시도습지보호지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e52c1521da8f167f77acacf6d10b7ab014e4e18001fe6d8aaa2e59c5ae56adc5",
+      "new_digest": "f8a393150a48c88afbca2d4eb16d27ee0e3e364260f95a44ee84e08c098d1b6f"
+    },
+    {
+      "id": "15062668",
+      "old_title": "한국환경연구원_국토환경성평가_습지주변관리지역",
+      "new_title": "한국환경연구원_국토환경성평가_습지주변관리지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "defb1fa2ce0eb0ecbe5c7a6dede745a449640b9823ed869598730bb6cb5f7e1e",
+      "new_digest": "d77b07fd5aa5f0edb3444f09d82a9ab5b84961e052bf0cd81d5dc1dd311aec4c"
+    },
+    {
+      "id": "15062671",
+      "old_title": "한국환경연구원_국토환경성평가_습지개선지역",
+      "new_title": "한국환경연구원_국토환경성평가_습지개선지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8f2861a9ca27e89cadd049e8b6b2147fce31220e707ffbec1bc2e2edfc538b82",
+      "new_digest": "f80f03a80f4641092f3ff007230e99306cd6c84faed43e4297abbb3e5ebe7f25"
+    },
+    {
+      "id": "15062674",
+      "old_title": "한국환경연구원_국토환경성평가_야생생물(특별)보호구역",
+      "new_title": "한국환경연구원_국토환경성평가_야생생물(특별)보호구역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ceb9132071916a2c2acb4741fb0a8ac61b7dbd0455ea3ea7afc976013bc60499",
+      "new_digest": "3cda45d5f4f1e07b21f7b0a4567d4bcf67701256f11e633ed10b08e5db6bd0bd"
+    },
+    {
+      "id": "15062675",
+      "old_title": "한국환경연구원_국토환경성평가_특정도서",
+      "new_title": "한국환경연구원_국토환경성평가_특정도서",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "34f7a6560a2921d664bb961bfb57e1139adbb38aa18159e7657ca531fcc9281d",
+      "new_digest": "e3bb123f18792fedaad9c1cdb1e837fe810a767fe98dc3a7e768c194019df2b4"
+    },
+    {
+      "id": "15062678",
+      "old_title": "한국환경연구원_국토환경성평가_공원자연보존지구",
+      "new_title": "한국환경연구원_국토환경성평가_공원자연보존지구",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "62edb4bbfdc06401db3436b42afce8d44218a084ae6995133a4db9627ab01d3f",
+      "new_digest": "73e6ea935280c6d6c77b11dc4853bb50d83582318a754443990d6306deed88cc"
+    },
+    {
+      "id": "15062680",
+      "old_title": "한국환경연구원_국토환경성평가_공원자연환경지구",
+      "new_title": "한국환경연구원_국토환경성평가_공원자연환경지구",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0f9be5b5fba7d709fa7683a9bbad51a9b76efa8acd5c029e5e1b508c59524c34",
+      "new_digest": "50e5971da45c0cabb422c17ef14476ae55f0202bb1d4e7de201d28ae785c8028"
+    },
+    {
+      "id": "15062683",
+      "old_title": "한국환경연구원_국토환경성평가_공원마을지구",
+      "new_title": "한국환경연구원_국토환경성평가_공원마을지구",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "72ceb6f10779b408482b2d7d03b91862e0c144a031e4648f7b3a02e16987cf8b",
+      "new_digest": "4dbb172b7ae9a43dc3014f8be1cf6ed7297122e045051808fadbb0fe92b50364"
+    },
+    {
+      "id": "15062686",
+      "old_title": "한국환경연구원_국토환경성평가_공원문화유산지구",
+      "new_title": "한국환경연구원_국토환경성평가_공원문화유산지구",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c1a7f242a745ebb80f24bfd5cdf9ae28154e9ce9b7d07911c7538c602faf700d",
+      "new_digest": "acef3a869079db59ecb80c7f7d2367d846ebea6634e8a14c9d924d8265fc6449"
+    },
+    {
+      "id": "15062691",
+      "old_title": "한국환경연구원_국토환경성평가_공원보호구역",
+      "new_title": "한국환경연구원_국토환경성평가_공원보호구역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e6c4aa34177caa9dffbb363b1a08292ce56288ad610482e63c1cbcc7df8b53db",
+      "new_digest": "985b01d3e6831436f74e495de0c3eee3a8b8e1a6a3813ff87427b236a45b045f"
+    },
+    {
+      "id": "15062692",
+      "old_title": "한국환경연구원_국토환경성평가_백두대간보호구역",
+      "new_title": "한국환경연구원_국토환경성평가_백두대간보호구역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "34797e9729b24e9adf09d7a736dabb89e96d506f9f2edab15c33a7d5fb3a910b",
+      "new_digest": "d6e33a9b7918fe0ec7ec3932a952dc3a8f1cb6961240c616c5e6940f8d1148c0"
+    },
+    {
+      "id": "15062694",
+      "old_title": "한국환경연구원_국토환경성평가_수변구역",
+      "new_title": "한국환경연구원_국토환경성평가_수변구역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4104f72a066a36e8761a6710b6f89534bd9ce689e56f0d73aaea15459ae170c7",
+      "new_digest": "81d0527fa498abfac0909e9e9179cf5eec77c0e131865729e4f7d76c42292c3d"
+    },
+    {
+      "id": "15062696",
+      "old_title": "한국환경연구원_국토환경성평가_하천구역",
+      "new_title": "한국환경연구원_국토환경성평가_하천구역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "91a4c085c0d5383af03803e46b2a072468082c0a237c83a742add99aa1eda08e",
+      "new_digest": "1a77c6a9107fff21f9ca9c244e1a93b92dfa9a19f30e8b30d3cee1598fcb9139"
+    },
+    {
+      "id": "15062697",
+      "old_title": "한국환경연구원_국토환경성평가_홍수관리구역",
+      "new_title": "한국환경연구원_국토환경성평가_홍수관리구역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e33bf16781b808b4274bf5f34ece5b7e90990e4ab08ded211212de78f6704a1d",
+      "new_digest": "c53552a119c66f75c2178fc0a2757558be4f3740fbc087b5487cc30e80d6fd64"
+    },
+    {
+      "id": "15062699",
+      "old_title": "한국환경연구원_국토환경성평가_소하천구역",
+      "new_title": "한국환경연구원_국토환경성평가_소하천구역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d26f3416a422d0e4bcfa3f91e9295f3dccfd84fb3b8734a7b00febe4ec6961f6",
+      "new_digest": "64703ed0f2661f47bcfd64ab645ba6d65415cc3381cb3c0877ae37699c89c15f"
+    },
+    {
+      "id": "15062700",
+      "old_title": "한국환경연구원_국토환경성평가_상수원호소",
+      "new_title": "한국환경연구원_국토환경성평가_상수원호소",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1fd7514a884a06b51548d59a49f75002acae69a666603b865199d32504f123e1",
+      "new_digest": "2d315096ef297bce5c9044802177e0aa36d272ffe4cf85781ba32cba6b4b969f"
+    },
+    {
+      "id": "15062701",
+      "old_title": "한국환경연구원_국토환경성평가_지하수보전구역",
+      "new_title": "한국환경연구원_국토환경성평가_지하수보전구역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "af381968206253c9b32bed8c1a2c2b4a5253b59d42a059c67223785b3c80146e",
+      "new_digest": "493d9564948b0dc376aced6a4caf03884712fff1c2292bf2244d8379285584f4"
+    },
+    {
+      "id": "15062702",
+      "old_title": "한국환경연구원_국토환경성평가_상수원보호구역",
+      "new_title": "한국환경연구원_국토환경성평가_상수원보호구역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "29339f12b5181b34708267254566db292e7665aaa87766b13df0c63f376a25dc",
+      "new_digest": "913d5dd447cd875dde01466f3dfc6983459efafb48aa554f26eb8e3838cdacab"
+    },
+    {
+      "id": "15062703",
+      "old_title": "한국환경연구원_국토환경성평가_상수원상류공장설립제한승인지역",
+      "new_title": "한국환경연구원_국토환경성평가_상수원상류공장설립제한승인지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "831419b3e6644a90897f5b14affd5cea4b9569db608752e6f93b63cbd1b65ea7",
+      "new_digest": "6596b137613db499d8b44a217e6ae42172acf3d2edbafb25ad558e92e70f9ed4"
+    },
+    {
+      "id": "15062704",
+      "old_title": "한국환경연구원_국토환경성평가_폐수배출시설설치제한지역",
+      "new_title": "한국환경연구원_국토환경성평가_폐수배출시설설치제한지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c089921b35a2041dfdbf79ea19902c131b0c98bff007060e5cb9da147219ebc3",
+      "new_digest": "f19f62a12a45b546e30ed296b4e1e12db33e046f49a816ffdaab88f3746b3136"
+    },
+    {
+      "id": "15062706",
+      "old_title": "한국환경연구원_국토환경성평가_폐기물매립시설설치제한지역",
+      "new_title": "한국환경연구원_국토환경성평가_폐기물매립시설설치제한지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0aa370ed698b0c79143b7807ebe3b71fef7ce44eaeeb9c143159563e4cc0757b",
+      "new_digest": "0fec8f5d6c59e334cde658494c3fbb43019eaac6f31945ab468b41202408496b"
+    },
+    {
+      "id": "15062708",
+      "old_title": "한국환경연구원_국토환경성평가_배출시설설치제한지역",
+      "new_title": "한국환경연구원_국토환경성평가_배출시설설치제한지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2c4a46a7d7149f1cb765f0dce88c0b1923bb9b39a71b8e3492a4cda2d9a35e1c",
+      "new_digest": "c5076ffd5e17ca93b84a3303516cb36ed8e715009691dd5ce51d777e18f9ce6c"
+    },
+    {
+      "id": "15062709",
+      "old_title": "한국환경연구원_국토환경성평가_오염행위제한지역",
+      "new_title": "한국환경연구원_국토환경성평가_오염행위제한지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c7a4e8e6c8eb80bc37c370e663318c4524dd205db221e077c43afe03e9b4deb3",
+      "new_digest": "01df60cea0eae970b6b8e6ee3fdfc2f856f82719c6c2112c46d18494ffba641f"
+    },
+    {
+      "id": "15062751",
+      "old_title": "한국환경연구원_국토환경성평가_자연환경보전지역",
+      "new_title": "한국환경연구원_국토환경성평가_자연환경보전지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0c8fbda8fb3aaaa777618083a1dda7ac5380645386d7ea1c14c20ca7ac24e277",
+      "new_digest": "f1513a26f5dfb27ff5303d138383fc6f17a7f4aff0d1929a4fe3c2a6659baa27"
+    },
+    {
+      "id": "15062752",
+      "old_title": "한국환경연구원_국토환경성평가_녹지지역(보전녹지)",
+      "new_title": "한국환경연구원_국토환경성평가_녹지지역(보전녹지)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ce56d15489b7f996c7afbc2f3ce1a40d785c690c681f3075bb1fbec48b5b702c",
+      "new_digest": "c924362091cd85280cc6a8586e9191df6970c1cdc2e3ea19c900c95971ac4227"
+    },
+    {
+      "id": "15062754",
+      "old_title": "한국환경연구원_국토환경성평가_녹지지역(생산녹지)",
+      "new_title": "한국환경연구원_국토환경성평가_녹지지역(생산녹지)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f1a306901c7044197c74c68908a279f3e1643cd56cd8dbaa777f64ab34b4200c",
+      "new_digest": "ec5631edd438962cace60bf94efbe30700c462fcf153aa068ad0f6655babf486"
+    },
+    {
+      "id": "15062757",
+      "old_title": "한국환경연구원_국토환경성평가_녹지지역(자연녹지)",
+      "new_title": "한국환경연구원_국토환경성평가_녹지지역(자연녹지)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5aa3fc9048b2e9d932648112714a695f5f8a88021460b19d1c50fb4fa52eaaca",
+      "new_digest": "8e25a2b090190013bbb96ad849051d933e0fe7c9097381324cc09ad901caeed4"
+    },
+    {
+      "id": "15062758",
+      "old_title": "한국환경연구원_국토환경성평가_경관지구",
+      "new_title": "한국환경연구원_국토환경성평가_경관지구",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "987bb5b78d7250c919301a4f4441b073485b9784dec23ac543b405dceacc0cee",
+      "new_digest": "8d29c6a6041ce4f80e6f589c29d2f70c4f2aa2d1f436037d21ce51df2a23c1b4"
+    },
+    {
+      "id": "15062761",
+      "old_title": "한국환경연구원_국토환경성평가_보호지구(생태계보호지구)",
+      "new_title": "한국환경연구원_국토환경성평가_보호지구(생태계보호지구)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "85ea66339dcb29710f0f87470fbba4eb9e3606758d37318c07709573339b773f",
+      "new_digest": "02e8502f2828a576b7e2968c66e67d8840a950d2cca2035931f4e39d89e248bd"
+    },
+    {
+      "id": "15062763",
+      "old_title": "한국환경연구원_국토환경성평가_보호지구(문화재보호지구)",
+      "new_title": "한국환경연구원_국토환경성평가_보호지구(문화재보호지구)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2b50658b3a2f2540504a8478b76357ee1ea1571d0d257259440982a891195fe6",
+      "new_digest": "9db3abce9bbe11e01427421548a3c362beffe5857a2b6d9b01515a506e1ca0a3"
+    },
+    {
       "id": "15062902",
       "old_title": "식품의약품안전처_수입식품등영업신고대장",
       "new_title": "식품의약품안전처_수입식품등영업신고대장",
@@ -16917,6 +17287,286 @@
       ],
       "old_digest": "b5c328469f0a891353f10242e7a7c73dea46a3cb2030047a3415bbceaf081f47",
       "new_digest": "a4b3744a744fd1b84084766076c7cd0d303eb2ac1fdf41c56d54453a5ce23552"
+    },
+    {
+      "id": "15063006",
+      "old_title": "한국환경연구원_국토환경성평가_개발제한구역",
+      "new_title": "한국환경연구원_국토환경성평가_개발제한구역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "20e393d1d8f3c4348eed7f81b5997206bdc4ff211179227f61e38ef8049a7f07",
+      "new_digest": "1bb7b209618194915d9c5befbb2695e0d857ed7843db47b8ddf5fa7580340879"
+    },
+    {
+      "id": "15063008",
+      "old_title": "한국환경연구원_국토환경성평가_생활권공원",
+      "new_title": "한국환경연구원_국토환경성평가_생활권공원",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d7e0be77b6ee4f96e1c1a4095b60f2acf0a451fff3747da7fc02b55c83872780",
+      "new_digest": "4281f0bc528da997c2ec090e3728769964ca86a4041f59b892ae4cecc37c8ece"
+    },
+    {
+      "id": "15063049",
+      "old_title": "한국환경연구원_국토환경성평가_도시자연공원구역",
+      "new_title": "한국환경연구원_국토환경성평가_도시자연공원구역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8e4022181026f6ca50112b6c334642595d1d374297f6a4617ba34ae7f10ae9da",
+      "new_digest": "c42996525f7df5afb19ced055d83210f3f146c2dfdd08ae894ad86c1c2b72df3"
+    },
+    {
+      "id": "15063050",
+      "old_title": "한국환경연구원_국토환경성평가_주제공원",
+      "new_title": "한국환경연구원_국토환경성평가_주제공원",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1155d7a068b25cbdbdd82fa54dcf14f941678f5211bbf7a5f000ef156828078a",
+      "new_digest": "e01b13a1ee576d2c160f97142032baeb6495fa4c19cd5cf40b53e96d491ea71f"
+    },
+    {
+      "id": "15063051",
+      "old_title": "한국환경연구원_국토환경성평가_완충녹지",
+      "new_title": "한국환경연구원_국토환경성평가_완충녹지",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7173ec502a673912baf7d2217680ef7b40c93a52a38155ef9e09adf280d9e294",
+      "new_digest": "4720098652e0b7b59afc5d38e025eebb329419a282ce1f26466f8efcc76d1250"
+    },
+    {
+      "id": "15063052",
+      "old_title": "한국환경연구원_국토환경성평가_경관녹지,연결녹지",
+      "new_title": "한국환경연구원_국토환경성평가_경관녹지,연결녹지",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3f677bf717c5c05d9ad24f0848625ad9e999f0a891153a0fae7eb920b89dd339",
+      "new_digest": "6a6e6d4e80c515d7f295621e03a189e8963f6f9ade331c139722a32dcdd09c8c"
+    },
+    {
+      "id": "15063053",
+      "old_title": "한국환경연구원_국토환경성평가_보전산지(임업용산지)",
+      "new_title": "한국환경연구원_국토환경성평가_보전산지(임업용산지)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4aa3c766195938edb5d560878de97ac96b8f1ae539fe5142d423ece9d7581d59",
+      "new_digest": "6e34d4033c8d0a66f9ff11abbf22cee198fdb26574ec34ac60ce0289922091d8"
+    },
+    {
+      "id": "15063054",
+      "old_title": "한국환경연구원_국토환경성평가_보전산지(공익용산지)",
+      "new_title": "한국환경연구원_국토환경성평가_보전산지(공익용산지)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c743dee0fa91bdf399515a979b71ebb47e6c5ddbc71f111b11e5a74960542844",
+      "new_digest": "588d8fe3e97f2fae10716766fe5d31b58bb0962a9d60c899ddd390766acd69d0"
+    },
+    {
+      "id": "15063056",
+      "old_title": "한국환경연구원_국토환경성평가_경관보호구역",
+      "new_title": "한국환경연구원_국토환경성평가_경관보호구역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "98aadc99285cef8494f9834ca326127fdcc914bcb331886f1fd9bb77df038646",
+      "new_digest": "2a18f89a12b76a99aa23e2b9e84133146f671cb5164ded10deee459d1f92e555"
+    },
+    {
+      "id": "15063058",
+      "old_title": "한국환경연구원_국토환경성평가_수원함양보호구역1~3종",
+      "new_title": "한국환경연구원_국토환경성평가_수원함양보호구역1~3종",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7c3cf262baec47003e0cfc4eac09fb104b73c49b85e410e9c671f5181121b8b0",
+      "new_digest": "acea701e7415dbf7bd1825b56dea358126ee3ecdb9a47c4b174a2febd15553b0"
+    },
+    {
+      "id": "15063059",
+      "old_title": "한국환경연구원_국토환경성평가_재해방지보호구역",
+      "new_title": "한국환경연구원_국토환경성평가_재해방지보호구역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d871624f4b9df2f2f52a247c9659be69419b845edca1d1c30d48c47405082962",
+      "new_digest": "b534419a0e7ec5dcfb0a54e04cdf520b90f91b3f862b2a712fbc7aa837b4878e"
+    },
+    {
+      "id": "15063060",
+      "old_title": "한국환경연구원_국토환경성평가_산림유전자원보호구역",
+      "new_title": "한국환경연구원_국토환경성평가_산림유전자원보호구역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1a551143cc4690c7f763b27038f94a929349860d7d87241d6cf1756b1640b5cd",
+      "new_digest": "3f0229cce6df4ab69b2df892bb9571536fba3041fe64b46e4333abf317702e80"
+    },
+    {
+      "id": "15063061",
+      "old_title": "한국환경연구원_국토환경성평가_토석채취제한지역",
+      "new_title": "한국환경연구원_국토환경성평가_토석채취제한지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "67ee4fd8d47c097ca7ab78351d45bc1988098c09ed9fd57c564e47015e293768",
+      "new_digest": "b0c3cd5e9ea45ebd328130349dcebb8536ba2719b77cc99f9f0ad851e8919642"
+    },
+    {
+      "id": "15063062",
+      "old_title": "한국환경연구원_국토환경성평가_농업진흥지역(농업진흥구역)",
+      "new_title": "한국환경연구원_국토환경성평가_농업진흥지역(농업진흥구역)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4a2528b10be2b8cfea0883d89cc62c0b4f731490528b57cf7b70620da4b553d1",
+      "new_digest": "9be8f1162d6517f224f377aa9eac03dbdc6232099d0a4c1951c37c1362bcda77"
+    },
+    {
+      "id": "15063064",
+      "old_title": "한국환경연구원_국토환경성평가_농업진흥지역(농업보호구역)",
+      "new_title": "한국환경연구원_국토환경성평가_농업진흥지역(농업보호구역)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9653037b74a688f7aa41766543db4d26d47f9fc54ede48e1483d32454d3edc09",
+      "new_digest": "85bbbdd730b81ef0b4c8ff90a0017bf9e5b1c641827411681b5ddccc1dbef9d5"
+    },
+    {
+      "id": "15063069",
+      "old_title": "한국환경연구원_국토환경성평가_환경보전해역",
+      "new_title": "한국환경연구원_국토환경성평가_환경보전해역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1b38c862de4475b4a564f1a77f3a34e63b2555a0f7a8c33e6ca3e9ac418d09da",
+      "new_digest": "d22a92d9834572d07768330a9024232570780025358f793665cb6a37794e2821"
+    },
+    {
+      "id": "15063071",
+      "old_title": "한국환경연구원_국토환경성평가_특별관리해역",
+      "new_title": "한국환경연구원_국토환경성평가_특별관리해역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c83fc3396c8c82b286fa4f79145900057f9373f321416e835cd66a870cb0379f",
+      "new_digest": "a3969ba3b88a77314f5845a0179454323440084fdfa7ab69a3505d026122d67f"
+    },
+    {
+      "id": "15063073",
+      "old_title": "한국환경연구원_국토환경성평가_절대보전지역",
+      "new_title": "한국환경연구원_국토환경성평가_절대보전지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "82cf77a6631e93003024089062c6857d80aa67e945d60240c03846762dcb0448",
+      "new_digest": "bf993266cdf85c5d6747e96f5bc982ec1cd1a9b0e6478e63a6e86d8c7dc62fa0"
+    },
+    {
+      "id": "15063075",
+      "old_title": "한국환경연구원_국토환경성평가_상대보전지역",
+      "new_title": "한국환경연구원_국토환경성평가_상대보전지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "16a4e0a4e3f117242aeecae2e9650ffa9d972d65fab8541ea3dbb765a09cf7de",
+      "new_digest": "0e6d8d2148ab7d35319d70271c5bcb73b19ea59f63f94a000cdc477f3577e73c"
+    },
+    {
+      "id": "15063076",
+      "old_title": "한국환경연구원_국토환경성평가_관리보전지역(지하수자원보전)",
+      "new_title": "한국환경연구원_국토환경성평가_관리보전지역(지하수자원보전)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9b50157cdfcbd034700be5ae7ca47c694b9e7027a55fa6f6225c05d5a2f96b5b",
+      "new_digest": "f566f8040e8139b159f2fd47a06ede80a9e2c0ae1b56ce30c8ac8e561149867c"
+    },
+    {
+      "id": "15063079",
+      "old_title": "한국환경연구원_국토환경성평가_관리보전지역(생태계보전)",
+      "new_title": "한국환경연구원_국토환경성평가_관리보전지역(생태계보전)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4ab97a5edb8701dbc6d9114198768fdcc36574121d21633bbf0bfbea56fc0f71",
+      "new_digest": "24451ec03cdac07e62e615cb790052590175b958d37fee865daae88ead647fa8"
+    },
+    {
+      "id": "15063080",
+      "old_title": "한국환경연구원_국토환경성평가_관리보전지역(경관보전)",
+      "new_title": "한국환경연구원_국토환경성평가_관리보전지역(경관보전)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7c3ec65304f1605e1b3ce76ec7d269b13043402062af89e4058549b43b38e524",
+      "new_digest": "1a03c4d3bd137e906507b9b501f4385cd63cb6037d160f172b77486ffb0c4920"
+    },
+    {
+      "id": "15063081",
+      "old_title": "한국환경연구원_국토환경성평가_천연보호구역",
+      "new_title": "한국환경연구원_국토환경성평가_천연보호구역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b791eb783f4af57a4741c7404929746fd3aaf997b1b00e2ad26db0b1a3fa2eb8",
+      "new_digest": "869802e00dbbf114b10d003eb8c437da69b81ebee6c36d3d7ae7271ee0f65918"
+    },
+    {
+      "id": "15063082",
+      "old_title": "한국환경연구원_국토환경성평가_천연기념물지정지역",
+      "new_title": "한국환경연구원_국토환경성평가_천연기념물지정지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a1603a9dbd60727d391746497d7bfa59354d44f32c8bb236fa1aa47f26471efc",
+      "new_digest": "268682f3635b4230ea2b5eabf38c4af14085021076a3261b42b3c099615196b2"
+    },
+    {
+      "id": "15063084",
+      "old_title": "한국환경연구원_국토환경성평가_절대보전무인도서",
+      "new_title": "한국환경연구원_국토환경성평가_절대보전무인도서",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fc7742c963c489efa91b826c7dd524b2fc7c3cfeca31fee333d827c196cb5398",
+      "new_digest": "263bef3a9416a179a50b9bd6966ffae6b06f08d5ff7879e31b1f8e6174594c21"
+    },
+    {
+      "id": "15063085",
+      "old_title": "한국환경연구원_국토환경성평가_준보전무인도서",
+      "new_title": "한국환경연구원_국토환경성평가_준보전무인도서",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "04a30d35f53e3aca6adf14d9c1b90755a95d427033a52b5d937c3209e1a60537",
+      "new_digest": "0f1d7924ce92a9567224bfa8ac739a115ab80c8a4405fa03178804352118431b"
+    },
+    {
+      "id": "15063088",
+      "old_title": "한국환경연구원_국토환경성평가_이용가능무인도서",
+      "new_title": "한국환경연구원_국토환경성평가_이용가능무인도서",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a20e3138c6ef70997c6be8dd7fcf2486eaf9b87447d1e07e35e517ab1f2d9ea4",
+      "new_digest": "49c35bcb47508ec94ba1fef4de9a27816857d4c3ae900d9b569fb9d10d10da0c"
+    },
+    {
+      "id": "15063093",
+      "old_title": "한국환경연구원_국토환경성평가_가축사육제한구역",
+      "new_title": "한국환경연구원_국토환경성평가_가축사육제한구역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a7bf82947fc3b3b8667cdc59f384be99d923832a0647004aac2ae7f9fc4211ab",
+      "new_digest": "4043521e92c4b662d3c9f47b915584f24aa02e2d97585f50bc6410aacfe72688"
     },
     {
       "id": "15063677",

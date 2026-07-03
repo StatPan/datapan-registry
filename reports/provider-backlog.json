@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T22:23:18Z",
+  "generated_at": "2026-07-03T22:34:30Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 271,
+  "filtered_count": 272,
   "summary": {
-    "hosts": 271,
+    "hosts": 272,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 127,
+    "external_endpoint_hosts": 128,
     "external_guide_hosts": 197,
-    "registered_adapter_hosts": 116,
-    "operation_hosts": 129,
+    "registered_adapter_hosts": 117,
+    "operation_hosts": 130,
     "guide_only_hosts": 142,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7351,
+    "approval_required_operations": 7416,
     "malformed_source_url_count": 712
   },
   "providers": [
@@ -559,6 +559,22 @@
         "15000354",
         "15004414",
         "15004788"
+      ]
+    },
+    {
+      "host": "ecvam.neins.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 65,
+      "operations": 65,
+      "external_endpoint_operations": 65,
+      "approval_required_operations": 65,
+      "sample_ids": [
+        "15062612",
+        "15062619",
+        "15062622"
       ]
     },
     {
