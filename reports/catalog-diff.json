@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T18:58:36Z",
+  "generated_at": "2026-07-03T19:14:02Z",
   "provider": "data.go.kr",
   "old": ".datapan\\previous-data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,21 +12,281 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 1,
-    "stable": 12059
+    "changed": 27,
+    "stable": 12033
   },
   "added": [],
   "removed": [],
   "changed": [
     {
-      "id": "15111780",
-      "old_title": "전라남도_전남관광플랫폼(J-TaaS)의 음식관광 정보 확대를 위한 음식점 DB OPEN API",
-      "new_title": "전라남도_전남관광플랫폼(J-TaaS)의 음식관광 정보 확대를 위한 음식점 DB OPEN API",
+      "id": "15043313",
+      "old_title": "충청남도_학교급식 로컬푸드 식자재 수발주내역",
+      "new_title": "충청남도_학교급식 로컬푸드 식자재 수발주내역",
       "fields": [
         "operations"
       ],
-      "old_digest": "e8b36cdb645a7fc04b0c728ec25df12521f29d48c7f22a65ee9f9af7f159ae64",
-      "new_digest": "4ff67ef87ff24018ea60d73e689cb2486d2103b4dad7ca9cc1f2d1d5fd8c029f"
+      "old_digest": "078d1f52975bb473b12118033ed91f725ee4dd072998be6bda0a900a190feebc",
+      "new_digest": "0624728598b0aa0efe5a98415028f39119cab97349ea9a30644efb3bb3a70bd8"
+    },
+    {
+      "id": "15043314",
+      "old_title": "충청남도_학교급식 로컬푸드 수요기관 현황",
+      "new_title": "충청남도_학교급식 로컬푸드 수요기관 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "673f65251f054d9842eac3cade8aaad9d0d8207af44f0870f03b38fe7667dd3e",
+      "new_digest": "2b52df6dc3fddf07564c33f4fa6707e1fa1d6097c5d42f65bf836c0d06492fde"
+    },
+    {
+      "id": "15043315",
+      "old_title": "충청남도_학교급식 로컬푸드 공급기관 현황",
+      "new_title": "충청남도_학교급식 로컬푸드 공급기관 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9e09b91a267968a1ab5d8d775725f6cda6f719362bd3a5134f0d837f8f79227a",
+      "new_digest": "7b99bb4860a28732ec1a3887b5ff4433766c6e41d00796149986681274151e67"
+    },
+    {
+      "id": "15043316",
+      "old_title": "충청남도_학교급식 로컬푸드 식자재 현품정보",
+      "new_title": "충청남도_학교급식 로컬푸드 식자재 현품정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "30bf393b66033ddc7680cd2d9c4cb34cb97e92a4fe396478471e96653499ff6b",
+      "new_digest": "1314399a09f5cdad312417e537fc92350de7e2635fde30526269f4056d55b918"
+    },
+    {
+      "id": "15059757",
+      "old_title": "충청남도_농촌융복합산업 자원현황",
+      "new_title": "충청남도_농촌융복합산업 자원현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5566240ac8714286a21336504c61945d370fe321a08ea92e52c57b9ebc03d1d1",
+      "new_digest": "ae77f26534b9b74d5895ae5d529cb75bf5a319c86a8f22bb0fbe393078aaecbe"
+    },
+    {
+      "id": "15059758",
+      "old_title": "충청남도_농촌융복합산업 생산시설 및 기계장비",
+      "new_title": "충청남도_농촌융복합산업 생산시설 및 기계장비",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8b7936b0b7ac9f698acbfd5a137af33b5ca2f555ce09cb6f22a12d49fd83bd4a",
+      "new_digest": "a2ff93732e23caabcdf5660e0eddc6e7f7e9678186ec39c2894d3a0e92680c5c"
+    },
+    {
+      "id": "15059759",
+      "old_title": "충청남도_농촌융복합산업 경영체정보",
+      "new_title": "충청남도_농촌융복합산업 경영체정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ec08e849d3020bd7f3ac1792c517b2231c4d9c16b19c51268033e48b166825e4",
+      "new_digest": "d76e09d6fdcb2db9c8912bed5d1fd9dc505c72b33be0bf1c219339fbc7157a40"
+    },
+    {
+      "id": "15059760",
+      "old_title": "충청남도_농촌융복합산업 인증경영체 상품정보",
+      "new_title": "충청남도_농촌융복합산업 인증경영체 상품정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "179d4a2087b98a00eaf829716ee3d0cb00bd0aec69e818e64f114cfea092637e",
+      "new_digest": "7d0543206b1724595424d033c7e8368c9b4d0d2d47619fb08ec3705b68bb8ce1"
+    },
+    {
+      "id": "15059761",
+      "old_title": "충청남도_농촌융복합산업 인증업체정보",
+      "new_title": "충청남도_농촌융복합산업 인증업체정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e3f4e1d1af4086906f3f66b879ef68e3d46f24a53757b7fffc224b974bc94da3",
+      "new_digest": "be2110c1ca1fd8cc356ddc35f3e37a2fcefee71d0c6840d83056d8953ae4dc27"
+    },
+    {
+      "id": "15060266",
+      "old_title": "충청남도_대표홈페이지 공통게시판",
+      "new_title": "충청남도_대표홈페이지 공통게시판",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9d1214f762f7464ca93c7d80c4a97d3cca9cc808cd1dc9d96220f1596d3cfe2b",
+      "new_digest": "80387a787742003477fdb3ff7615558ef8e40fe55ca1ed4cf72538b9e0fd9fa2"
+    },
+    {
+      "id": "15060267",
+      "old_title": "충청남도_인구정보",
+      "new_title": "충청남도_인구정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8043e0b8295694f3a2a174bbeff01118df501c057410dad88aa7906bbfbd5d2b",
+      "new_digest": "2e2c58cc2570cb197099d1cb8c09dfac6be410cab2e272c348060f4579ef20be"
+    },
+    {
+      "id": "15060268",
+      "old_title": "충청남도_재정정보",
+      "new_title": "충청남도_재정정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0e4da3c271f2826d87367a85698e71b29eadc8726b9f3a400dbaa8ee2a80c628",
+      "new_digest": "0cb7974f762fd3b49e5432d7b84d78fdfdc959a4c4e41151f42bdf70efcd7d98"
+    },
+    {
+      "id": "15062140",
+      "old_title": "충청남도_재정정보_예산집행현황",
+      "new_title": "충청남도_재정정보_예산집행현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "83af9cb4967d9316f036af9de6bb0461ab446617b101d95780a6db610b867fd0",
+      "new_digest": "494def98fae2579a587fd6c2c163735ebbe2fbbb6be8965eabd2cde92dc946a8"
+    },
+    {
+      "id": "15062142",
+      "old_title": "충청남도_재정정보_사업 및 예산정보",
+      "new_title": "충청남도_재정정보_사업 및 예산정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bf69a97d86d5c6f4e29d7c4e7f0e211d5e16ee0cbbb53dce8ccac7859704e51a",
+      "new_digest": "ebda8501cdab46358eff9bbf6887aaa05ef39beeb3dc8b3896f1bafb94b00bd6"
+    },
+    {
+      "id": "15062143",
+      "old_title": "충청남도_재정정보_지출정보",
+      "new_title": "충청남도_재정정보_지출정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "330b0ab2a2ddd4cfb6fd1750a00c48549dd9e0116271179bf1bbf929ecd00a9e",
+      "new_digest": "59f3dca1873ebb0051d4ba8b8455600af722e692d79a60cafd41f34ab40ac1a4"
+    },
+    {
+      "id": "15077058",
+      "old_title": "충청남도_간부일정(API)",
+      "new_title": "충청남도_간부일정(API)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2445c7a1f180edd6fcd84bec9430339c552737729f5d20e537780410afab74f5",
+      "new_digest": "28097b68bf4f2bf4f15e832a5ede925cbb2af48450b9f203c05d3f080d255b3b"
+    },
+    {
+      "id": "15096606",
+      "old_title": "충청남도_충남넷_민원사무서식",
+      "new_title": "충청남도_충남넷_민원사무서식",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3ce7d5dd016e0fc5a4752fcd3d90042b6e20a4d5657b9a599692228a5ae8d2b8",
+      "new_digest": "2950955eed82593bc5c1cd07f135c1157d7313cb239da3e4922f9852467b2f5a"
+    },
+    {
+      "id": "15096607",
+      "old_title": "충청남도_충남넷_축산알림",
+      "new_title": "충청남도_충남넷_축산알림",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fc7a03b2bbd46695ae2c45c845ac67b2facbf9f8de39f2c2202ab06992d84ec5",
+      "new_digest": "c6b10afcc9a42912ab0b69f367e3a3ef68bb4d3475914bf2debfd00e158e4115"
+    },
+    {
+      "id": "15096610",
+      "old_title": "충청남도_충남넷_환경소식",
+      "new_title": "충청남도_충남넷_환경소식",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b119bcfba9d0f626844b85d9a7752225f819cfda9e3c430cddf6d2b3336e3694",
+      "new_digest": "15ffc51f6d2abc554c3e9cea49d2672cc4ebc5695ec9d43ce5c776d96258e935"
+    },
+    {
+      "id": "15096613",
+      "old_title": "충청남도_충남넷_학술용역",
+      "new_title": "충청남도_충남넷_학술용역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "313d83654b1be10fe5a4beab559e6a6998d3a2bd34433c8ca350e482e41a1179",
+      "new_digest": "5baa51ffc74f380a1992a399e3d96455f488f701b495e3a5e63e95c22885fa21"
+    },
+    {
+      "id": "15096614",
+      "old_title": "충청남도_충남넷_정책실명제",
+      "new_title": "충청남도_충남넷_정책실명제",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e8e5444f1461e7c60da6741593a8aa6f69e57290d52ef5aa7dd5213da19a8f06",
+      "new_digest": "17326e98afecd005cb77340b62252dd42d70f661926873fce09d0cd77b6af5ae"
+    },
+    {
+      "id": "15096615",
+      "old_title": "충청남도_충남넷_수출입동향",
+      "new_title": "충청남도_충남넷_수출입동향",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "19b9dcdf062bb873b119be8a73c411e20bc45be4c7699deda187ccdbd411f117",
+      "new_digest": "7b03d46395075fc8a113c8dab4bfce0a87ba1fe420ec656ba4e17648ef096cc1"
+    },
+    {
+      "id": "15096616",
+      "old_title": "충청남도_충남넷_공모일정",
+      "new_title": "충청남도_충남넷_공모일정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "089f159d43b5ddff53a69336f2c1f1a249f015c6600baca4eb519f38d5372497",
+      "new_digest": "fc1a29738fe13ba1fbbfaf0585de6462dff3c755d96cfeed3a1a96d95df61320"
+    },
+    {
+      "id": "15096617",
+      "old_title": "충청남도_충남넷_공모전공지사항",
+      "new_title": "충청남도_충남넷_공모전공지사항",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "39cb0bef411b472b7fb1788e1a1e8cb967352268cb8acf2f929b9326980234ef",
+      "new_digest": "41edc2292b68949dd0efe3e5c4eb9036e3a4018e20c3b97692bb18a47f83fcdc"
+    },
+    {
+      "id": "15107977",
+      "old_title": "충청남도_지방하천 정보",
+      "new_title": "충청남도_지방하천 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6cd22008673e5fd2f0d614df670b754e845413a097b0d2875c4fcac02223e61a",
+      "new_digest": "695b455ea68f0f14e1cb68514c48601bb227c9b63a309ad8e5c9e01c5d3fc6f7"
+    },
+    {
+      "id": "15140463",
+      "old_title": "충청남도_학교급식지원시스템 수발주 내역",
+      "new_title": "충청남도_학교급식지원시스템 수발주 내역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "74ba0054960ede3d8934570a99452e8a9d30d8bc78fe745fbb83a3e2e189a32c",
+      "new_digest": "83b2dac54d326ddca0a376034dd0a3b1880d2a67b8a7f00abbdf06cfe2ecb1a3"
+    },
+    {
+      "id": "3046861",
+      "old_title": "충청남도 물가정보",
+      "new_title": "충청남도 물가정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "21466b97ff7657b6ed821a03b0e78a5dec855bc66ab087d5d3a4de3c47c0e4cc",
+      "new_digest": "10219069c94f6ac16eacc82e27227996719d92a09df089a7e7b884b42c88fae9"
     }
   ]
 }

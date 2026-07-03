@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T18:58:36Z",
+  "generated_at": "2026-07-03T19:14:02Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 247,
+  "filtered_count": 251,
   "summary": {
-    "hosts": 247,
+    "hosts": 251,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 104,
-    "external_guide_hosts": 186,
-    "registered_adapter_hosts": 93,
-    "operation_hosts": 106,
+    "external_endpoint_hosts": 108,
+    "external_guide_hosts": 189,
+    "registered_adapter_hosts": 97,
+    "operation_hosts": 110,
     "guide_only_hosts": 141,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 6330,
+    "approval_required_operations": 6390,
     "malformed_source_url_count": 643
   },
   "providers": [
@@ -494,6 +494,24 @@
       ]
     },
     {
+      "host": "www.chungnam.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 17,
+      "operations": 41,
+      "external_endpoint_operations": 41,
+      "external_guide_specs": 16,
+      "approval_required_operations": 40,
+      "sample_ids": [
+        "15060266",
+        "15060267",
+        "15060268"
+      ]
+    },
+    {
       "host": "data.geoje.go.kr",
       "provider": "geoje",
       "kinds": [
@@ -699,6 +717,24 @@
         "15052669",
         "3057770",
         "3057773"
+      ]
+    },
+    {
+      "host": "www.xn--6-6v7en42by2es7i6jc.com",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 6,
+      "operations": 17,
+      "external_endpoint_operations": 17,
+      "external_guide_specs": 5,
+      "approval_required_operations": 17,
+      "sample_ids": [
+        "15059757",
+        "15059758",
+        "15059759"
       ]
     },
     {
@@ -1051,6 +1087,24 @@
         "15067161",
         "15067164",
         "15131782"
+      ]
+    },
+    {
+      "host": "localfood.chungnam.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 6,
+      "operations": 6,
+      "external_endpoint_operations": 6,
+      "external_guide_specs": 1,
+      "approval_required_operations": 2,
+      "sample_ids": [
+        "15043313",
+        "15043314",
+        "15043315"
       ]
     },
     {
@@ -1489,6 +1543,20 @@
       "approval_required_operations": 1,
       "sample_ids": [
         "15129453"
+      ]
+    },
+    {
+      "host": "alldam.chungnam.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15107977"
       ]
     },
     {

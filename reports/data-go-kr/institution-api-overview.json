@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T18:58:36Z",
+  "generated_at": "2026-07-03T19:14:02Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 18490,
-    "runtime_evidence": 1976,
-    "runtime_evidence_percent": 10.7,
-    "callable_operations": 18348,
-    "external_endpoint_operations": 6880,
-    "registered_adapter_operations": 6870,
+    "operations": 18555,
+    "runtime_evidence": 2041,
+    "runtime_evidence_percent": 11.0,
+    "callable_operations": 18413,
+    "external_endpoint_operations": 6945,
+    "registered_adapter_operations": 6935,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 6880
+      "count": 6945
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 6870
+      "count": 6935
     },
     {
       "key": "builtin",
@@ -69,7 +69,7 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 2565
+      "operation_count": 2593
     },
     {
       "category": "문화관광",
@@ -77,7 +77,7 @@
     },
     {
       "category": "농축수산",
-      "operation_count": 1820
+      "operation_count": 1844
     },
     {
       "category": "교통물류",
@@ -89,7 +89,7 @@
     },
     {
       "category": "산업고용",
-      "operation_count": 1287
+      "operation_count": 1288
     },
     {
       "category": "식품건강",
@@ -97,7 +97,7 @@
     },
     {
       "category": "환경기상",
-      "operation_count": 1113
+      "operation_count": 1116
     },
     {
       "category": "보건의료",
@@ -109,7 +109,7 @@
     },
     {
       "category": "재정금융",
-      "operation_count": 964
+      "operation_count": 973
     },
     {
       "category": "재난안전",
@@ -301,12 +301,11 @@
       ]
     },
     {
-      "host": "data.geoje.go.kr",
+      "host": "www.chungnam.go.kr",
       "operation_count": 41,
-      "adapter": "geoje",
+      "adapter": "chungnam",
       "adapter_status": "registered",
       "capabilities": [
-        "call",
         "verification"
       ]
     }
@@ -2149,6 +2148,104 @@
       ]
     },
     {
+      "organization": "충청남도",
+      "api_count": 96,
+      "operation_api_count": 96,
+      "operation_count": 142,
+      "runtime_evidence_count": 65,
+      "runtime_evidence_percent": 45.8,
+      "verified": 0,
+      "failed": 65,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 109,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 77
+        },
+        {
+          "key": "external_endpoint",
+          "count": 65
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 65
+        },
+        {
+          "key": "builtin",
+          "count": 77
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "공공행정",
+          "operation_count": 50
+        },
+        {
+          "category": "환경기상",
+          "operation_count": 37
+        },
+        {
+          "category": "농축수산",
+          "operation_count": 24
+        },
+        {
+          "category": "재정금융",
+          "operation_count": 9
+        },
+        {
+          "category": "산업고용",
+          "operation_count": 7
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 77
+        },
+        {
+          "host": "www.chungnam.go.kr",
+          "operation_count": 41,
+          "adapter": "chungnam",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.xn--6-6v7en42by2es7i6jc.com",
+          "operation_count": 17,
+          "adapter": "chungnam",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "localfood.chungnam.go.kr",
+          "operation_count": 6,
+          "adapter": "chungnam",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "alldam.chungnam.go.kr",
+          "operation_count": 1,
+          "adapter": "chungnam",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "인천항만공사",
       "api_count": 46,
       "operation_api_count": 46,
@@ -2670,60 +2767,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 40
-        }
-      ]
-    },
-    {
-      "organization": "충청남도",
-      "api_count": 96,
-      "operation_api_count": 69,
-      "operation_count": 77,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 49,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 77
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 77
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "환경기상",
-          "operation_count": 34
-        },
-        {
-          "category": "공공행정",
-          "operation_count": 22
-        },
-        {
-          "category": "산업고용",
-          "operation_count": 6
-        },
-        {
-          "category": "국토관리",
-          "operation_count": 6
-        },
-        {
-          "category": "문화관광",
-          "operation_count": 2
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 77
         }
       ]
     },

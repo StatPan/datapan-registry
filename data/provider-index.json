@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T18:58:36Z",
+  "generated_at": "2026-07-03T19:14:02Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 83,
-  "host_count": 95,
+  "adapter_count": 84,
+  "host_count": 99,
   "adapters": [
     {
       "name": "airport",
@@ -60,6 +60,19 @@
       "status": "registered",
       "hosts": [
         "www.car365.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "chungnam",
+      "status": "registered",
+      "hosts": [
+        "alldam.chungnam.go.kr",
+        "localfood.chungnam.go.kr",
+        "www.chungnam.go.kr",
+        "www.xn--6-6v7en42by2es7i6jc.com"
       ],
       "capabilities": [
         "verification"
@@ -873,8 +886,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 83,
-    "verification_capable_adapters": 83,
+    "adapter_count": 84,
+    "verification_capable_adapters": 84,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

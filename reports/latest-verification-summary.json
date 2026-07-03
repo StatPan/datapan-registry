@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-03T18:58:33Z",
+  "generated_at": "2026-07-03T19:14:00Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1976,
+    "total": 2041,
     "verified": 632,
-    "failed": 147,
+    "failed": 212,
     "skipped": 1197,
     "unknown": 0
   },
@@ -26,7 +26,7 @@
       },
       {
         "key": "failed",
-        "count": 147,
+        "count": 212,
         "status": "failed"
       }
     ],
@@ -50,6 +50,11 @@
         "key": "jeonju_missing_required_params",
         "count": 67,
         "reason": "jeonju_missing_required_params"
+      },
+      {
+        "key": "chungnam_http_404",
+        "count": 48,
+        "reason": "chungnam_http_404"
       },
       {
         "key": "open-assembly_http_400",
@@ -90,6 +95,11 @@
         "key": "uiryeong_missing_required_params",
         "count": 18,
         "reason": "uiryeong_missing_required_params"
+      },
+      {
+        "key": "chungnam_http_403",
+        "count": 17,
+        "reason": "chungnam_http_403"
       },
       {
         "key": "epost_wadl_metadata_only",
@@ -342,6 +352,11 @@
         "key": "gwangmyeong",
         "count": 70,
         "provider": "gwangmyeong"
+      },
+      {
+        "key": "chungnam",
+        "count": 65,
+        "provider": "chungnam"
       },
       {
         "key": "open-law",
@@ -761,6 +776,11 @@
         "host": "data.geoje.go.kr"
       },
       {
+        "key": "www.chungnam.go.kr",
+        "count": 41,
+        "host": "www.chungnam.go.kr"
+      },
+      {
         "key": "www.jeju.go.kr",
         "count": 41,
         "host": "www.jeju.go.kr"
@@ -814,6 +834,11 @@
         "key": "openapi.its.ulsan.kr",
         "count": 20,
         "host": "openapi.its.ulsan.kr"
+      },
+      {
+        "key": "www.xn--6-6v7en42by2es7i6jc.com",
+        "count": 17,
+        "host": "www.xn--6-6v7en42by2es7i6jc.com"
       },
       {
         "key": "www.andong.go.kr",
@@ -914,6 +939,11 @@
         "key": "openapi.tour.go.kr",
         "count": 7,
         "host": "openapi.tour.go.kr"
+      },
+      {
+        "key": "localfood.chungnam.go.kr",
+        "count": 6,
+        "host": "localfood.chungnam.go.kr"
       },
       {
         "key": "openapi.airport.co.kr",
@@ -1041,6 +1071,11 @@
         "host": "air.jeju.go.kr"
       },
       {
+        "key": "alldam.chungnam.go.kr",
+        "count": 1,
+        "host": "alldam.chungnam.go.kr"
+      },
+      {
         "key": "api.sexoffender.go.kr",
         "count": 1,
         "host": "api.sexoffender.go.kr"
@@ -1154,7 +1189,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 1252,
+        "count": 1317,
         "kind": "external_endpoint"
       },
       {

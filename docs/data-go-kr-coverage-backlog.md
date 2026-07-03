@@ -2,19 +2,19 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-07-03T18:58:36Z`
+- Generated at: `2026-07-03T19:14:02Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `10199` (`84.6%`)
-- APIs without operation mapping: `1861`
-- Operations: `18490`
-- Runtime evidence operations: `1976` (`10.7%`)
+- APIs with operation mapping: `10226` (`84.8%`)
+- APIs without operation mapping: `1834`
+- Operations: `18555`
+- Runtime evidence operations: `2041` (`11.0%`)
 - Runtime verified operations: `632`
-- Runtime failed operations: `147`
+- Runtime failed operations: `212`
 - Runtime skipped operations: `1197`
-- APIs with runtime evidence: `964`
+- APIs with runtime evidence: `991`
 - Runtime reactivation APIs: `9235`
-- Runtime repair APIs: `98`
+- Runtime repair APIs: `125`
 
 ## Highest Priority Institutions
 
@@ -41,7 +41,6 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 전라남도 | 109 | 109 | 0 | 100.0% | 175 | 1 | 108 | 0 | 108 |
 | 식품의약품안전처 식품의약품안전평가원 | 106 | 106 | 0 | 100.0% | 154 | 2 | 104 | 0 | 104 |
 | 울산항만공사 | 98 | 6 | 92 | 6.1% | 9 | 0 | 6 | 0 | 98 |
-| 충청남도 | 96 | 69 | 27 | 71.9% | 77 | 0 | 69 | 0 | 96 |
 | 금융위원회 | 110 | 110 | 0 | 100.0% | 349 | 14 | 96 | 0 | 96 |
 | 한국도로공사 | 93 | 0 | 93 | 0.0% | 0 | 0 | 0 | 0 | 93 |
 | 대전광역시 서구 | 125 | 125 | 0 | 100.0% | 171 | 33 | 92 | 0 | 92 |
@@ -50,6 +49,7 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 한국건강가정진흥원 | 85 | 85 | 0 | 100.0% | 90 | 0 | 85 | 0 | 85 |
 | 한국수자원공사 | 84 | 79 | 5 | 94.0% | 148 | 0 | 79 | 0 | 84 |
 | 금융감독원 | 83 | 0 | 83 | 0.0% | 0 | 0 | 0 | 0 | 83 |
+| 기상청 | 89 | 44 | 45 | 49.4% | 183 | 6 | 38 | 0 | 83 |
 
 ## Sample Uncovered APIs
 
