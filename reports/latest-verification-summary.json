@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T17:58:10Z",
+  "generated_at": "2026-07-03T18:04:23Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1850,
-    "verified": 510,
+    "total": 1875,
+    "verified": 535,
     "failed": 147,
     "skipped": 1193,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 510,
+        "count": 535,
         "status": "verified"
       },
       {
@@ -354,6 +354,11 @@
         "provider": "geoje"
       },
       {
+        "key": "jeju-www",
+        "count": 41,
+        "provider": "jeju-www"
+      },
+      {
         "key": "uiryeong",
         "count": 40,
         "provider": "uiryeong"
@@ -382,11 +387,6 @@
         "key": "epost",
         "count": 28,
         "provider": "epost"
-      },
-      {
-        "key": "jeju-www",
-        "count": 26,
-        "provider": "jeju-www"
       },
       {
         "key": "tour",
@@ -432,6 +432,11 @@
         "key": "itfind",
         "count": 13,
         "provider": "itfind"
+      },
+      {
+        "key": "jejudatahub",
+        "count": 11,
+        "provider": "jejudatahub"
       },
       {
         "key": "mafra",
@@ -639,11 +644,6 @@
         "provider": "jeju-air"
       },
       {
-        "key": "jejudatahub",
-        "count": 1,
-        "provider": "jejudatahub"
-      },
-      {
         "key": "kistep",
         "count": 1,
         "provider": "kistep"
@@ -741,6 +741,11 @@
         "host": "data.geoje.go.kr"
       },
       {
+        "key": "www.jeju.go.kr",
+        "count": 41,
+        "host": "www.jeju.go.kr"
+      },
+      {
         "key": "data.uiryeong.go.kr",
         "count": 40,
         "host": "data.uiryeong.go.kr"
@@ -769,11 +774,6 @@
         "key": "oneclick.law.go.kr:80",
         "count": 27,
         "host": "oneclick.law.go.kr:80"
-      },
-      {
-        "key": "www.jeju.go.kr",
-        "count": 26,
-        "host": "www.jeju.go.kr"
       },
       {
         "key": "www.lofin365.go.kr",
@@ -824,6 +824,11 @@
         "key": "data.mafra.go.kr",
         "count": 11,
         "host": "data.mafra.go.kr"
+      },
+      {
+        "key": "www.jejudatahub.net",
+        "count": 11,
+        "host": "www.jejudatahub.net"
       },
       {
         "key": "www.consumer.go.kr",
@@ -1096,11 +1101,6 @@
         "host": "www.ins24.go.kr"
       },
       {
-        "key": "www.jejudatahub.net",
-        "count": 1,
-        "host": "www.jejudatahub.net"
-      },
-      {
         "key": "www.kistep.re.kr",
         "count": 1,
         "host": "www.kistep.re.kr"
@@ -1129,7 +1129,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 1126,
+        "count": 1151,
         "kind": "external_endpoint"
       },
       {

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T17:58:13Z",
+  "generated_at": "2026-07-03T18:04:25Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -17,7 +17,7 @@
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 5854,
+    "approval_required_operations": 5923,
     "malformed_source_url_count": 643
   },
   "providers": [
@@ -312,6 +312,24 @@
       ]
     },
     {
+      "host": "www.jejudatahub.net",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 74,
+      "operations": 177,
+      "external_endpoint_operations": 177,
+      "external_guide_specs": 7,
+      "approval_required_operations": 158,
+      "sample_ids": [
+        "15034922",
+        "15045335",
+        "15056424"
+      ]
+    },
+    {
       "host": "www.calspia.go.kr",
       "provider": "calspia",
       "kinds": [
@@ -338,15 +356,15 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 59,
-      "operations": 110,
-      "external_endpoint_operations": 110,
-      "external_guide_specs": 32,
-      "approval_required_operations": 34,
+      "specs": 84,
+      "operations": 168,
+      "external_endpoint_operations": 168,
+      "external_guide_specs": 34,
+      "approval_required_operations": 37,
       "sample_ids": [
-        "15056566",
-        "15056648",
-        "15056816"
+        "15045335",
+        "15045467",
+        "15056017"
       ]
     },
     {
@@ -383,24 +401,6 @@
         "15101789",
         "15101791",
         "15101794"
-      ]
-    },
-    {
-      "host": "www.jejudatahub.net",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 46,
-      "operations": 101,
-      "external_endpoint_operations": 101,
-      "external_guide_specs": 7,
-      "approval_required_operations": 98,
-      "sample_ids": [
-        "15034922",
-        "15058931",
-        "15074257"
       ]
     },
     {
@@ -870,6 +870,25 @@
       ]
     },
     {
+      "host": "www.jejuits.go.kr",
+      "provider": "jejuits",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 6,
+      "operations": 7,
+      "external_endpoint_operations": 7,
+      "external_guide_specs": 1,
+      "approval_required_operations": 7,
+      "sample_ids": [
+        "15079829",
+        "15093660",
+        "15093664"
+      ]
+    },
+    {
       "host": "data.seoul.go.kr",
       "kinds": [
         "external_endpoint"
@@ -900,6 +919,23 @@
         "15000017",
         "15000063",
         "15000297"
+      ]
+    },
+    {
+      "host": "www.seogwipo.go.kr",
+      "provider": "seogwipo",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 7,
+      "operations": 7,
+      "external_endpoint_operations": 7,
+      "approval_required_operations": 5,
+      "sample_ids": [
+        "15057144",
+        "15057370",
+        "15095727"
       ]
     },
     {
@@ -1010,6 +1046,25 @@
       ]
     },
     {
+      "host": "air.jeju.go.kr",
+      "provider": "jeju-air",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 5,
+      "operations": 5,
+      "external_endpoint_operations": 5,
+      "external_guide_specs": 1,
+      "approval_required_operations": 3,
+      "sample_ids": [
+        "15058679",
+        "15074271",
+        "15074272"
+      ]
+    },
+    {
       "host": "ws.bus.go.kr",
       "provider": "seoul-bus",
       "kinds": [
@@ -1021,23 +1076,6 @@
       "external_endpoint_operations": 5,
       "sample_ids": [
         "15000332"
-      ]
-    },
-    {
-      "host": "www.seogwipo.go.kr",
-      "provider": "seogwipo",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 5,
-      "operations": 5,
-      "external_endpoint_operations": 5,
-      "approval_required_operations": 5,
-      "sample_ids": [
-        "15095727",
-        "15126194",
-        "15126201"
       ]
     },
     {
@@ -1136,25 +1174,6 @@
       ]
     },
     {
-      "host": "air.jeju.go.kr",
-      "provider": "jeju-air",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 3,
-      "operations": 3,
-      "external_endpoint_operations": 3,
-      "external_guide_specs": 1,
-      "approval_required_operations": 1,
-      "sample_ids": [
-        "15058679",
-        "15095732",
-        "3082721"
-      ]
-    },
-    {
       "host": "www.garak.co.kr",
       "kinds": [
         "external_endpoint",
@@ -1167,24 +1186,6 @@
       "external_guide_specs": 1,
       "sample_ids": [
         "15004517"
-      ]
-    },
-    {
-      "host": "www.jejuits.go.kr",
-      "provider": "jejuits",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 2,
-      "operations": 3,
-      "external_endpoint_operations": 3,
-      "external_guide_specs": 1,
-      "approval_required_operations": 3,
-      "sample_ids": [
-        "15079829",
-        "15099715"
       ]
     },
     {

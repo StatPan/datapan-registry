@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T17:58:18Z",
+  "generated_at": "2026-07-03T18:04:31Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,15 +7,15 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 17858,
-    "callable_operations": 17716,
+    "operations": 18000,
+    "callable_operations": 17858,
     "callable_operation_percent": 99.2,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 6248,
-    "registered_adapter_operations": 6238,
+    "external_endpoint_operations": 6390,
+    "registered_adapter_operations": 6380,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.5,
-    "approval_required_operations": 5854,
+    "approval_required_operations": 5923,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T17:58:10Z",
-    "total": 1850,
-    "verified": 510,
+    "generated_at": "2026-07-03T18:04:23Z",
+    "total": 1875,
+    "verified": 535,
     "failed": 147,
     "skipped": 1193,
     "unknown": 0,
-    "verified_percent": 27.6,
+    "verified_percent": 28.5,
     "evidence_operation_percent": 10.4
   },
   "route_evidence": {
@@ -344,6 +344,24 @@
         ]
       },
       {
+        "host": "www.jejudatahub.net",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "adapter",
+        "specs": 74,
+        "operations": 177,
+        "external_endpoint_operations": 177,
+        "external_guide_specs": 7,
+        "approval_required_operations": 158,
+        "sample_ids": [
+          "15034922",
+          "15045335",
+          "15056424"
+        ]
+      },
+      {
         "host": "www.calspia.go.kr",
         "provider": "calspia",
         "kinds": [
@@ -361,30 +379,11 @@
           "15061033",
           "15061035"
         ]
-      },
-      {
-        "host": "www.jeju.go.kr",
-        "provider": "jeju-www",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "adapter",
-        "specs": 59,
-        "operations": 110,
-        "external_endpoint_operations": 110,
-        "external_guide_specs": 32,
-        "approval_required_operations": 34,
-        "sample_ids": [
-          "15056566",
-          "15056648",
-          "15056816"
-        ]
       }
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T17:58:18Z",
+    "generated_at": "2026-07-03T18:04:31Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 80,
     "host_count": 90,

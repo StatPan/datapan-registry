@@ -2,18 +2,18 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-07-03T17:58:13Z`
+- Generated at: `2026-07-03T18:04:25Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `9898` (`82.1%`)
-- APIs without operation mapping: `2162`
-- Operations: `17858`
-- Runtime evidence operations: `1850` (`10.4%`)
-- Runtime verified operations: `510`
+- APIs with operation mapping: `9951` (`82.5%`)
+- APIs without operation mapping: `2109`
+- Operations: `18000`
+- Runtime evidence operations: `1875` (`10.4%`)
+- Runtime verified operations: `535`
 - Runtime failed operations: `147`
 - Runtime skipped operations: `1193`
-- APIs with runtime evidence: `900`
-- Runtime reactivation APIs: `8998`
+- APIs with runtime evidence: `910`
+- Runtime reactivation APIs: `9041`
 - Runtime repair APIs: `98`
 
 ## Highest Priority Institutions
@@ -33,7 +33,7 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 법제처 | 203 | 203 | 0 | 100.0% | 403 | 23 | 180 | 1 | 180 |
 | 경기도 광명시 | 197 | 197 | 0 | 100.0% | 578 | 19 | 178 | 0 | 178 |
 | 해양수산부 | 173 | 173 | 0 | 100.0% | 277 | 9 | 164 | 1 | 164 |
-| 제주특별자치도 | 171 | 118 | 53 | 69.0% | 249 | 11 | 107 | 2 | 160 |
+| 제주특별자치도 | 171 | 171 | 0 | 100.0% | 391 | 21 | 150 | 2 | 150 |
 | 한국산업인력공단 | 230 | 230 | 0 | 100.0% | 317 | 95 | 135 | 1 | 135 |
 | 농촌진흥청 | 136 | 14 | 122 | 10.3% | 45 | 3 | 11 | 0 | 133 |
 | 경상남도 | 129 | 129 | 0 | 100.0% | 134 | 0 | 129 | 0 | 129 |
