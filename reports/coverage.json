@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T22:57:45Z",
+  "generated_at": "2026-07-03T23:09:06Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 19945,
-    "callable_operations": 19803,
+    "operations": 19946,
+    "callable_operations": 19804,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 8335,
-    "registered_adapter_operations": 8325,
+    "external_endpoint_operations": 8336,
+    "registered_adapter_operations": 8326,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.7,
-    "approval_required_operations": 7435,
+    "approval_required_operations": 7436,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 119,
+    "registered_adapter_hosts": 120,
     "missing_adapter_hosts": 11,
-    "adapter_count": 104,
+    "adapter_count": 105,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,9 +41,9 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T22:57:25Z",
-    "total": 3406,
-    "verified": 1634,
+    "generated_at": "2026-07-03T23:08:45Z",
+    "total": 3407,
+    "verified": 1635,
     "failed": 306,
     "skipped": 1466,
     "unknown": 0,
@@ -382,10 +382,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T22:57:45Z",
+    "generated_at": "2026-07-03T23:09:06Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 104,
-    "host_count": 124,
+    "adapter_count": 105,
+    "host_count": 125,
     "adapters": [
       {
         "name": "airport",
@@ -1142,6 +1142,16 @@
         ]
       },
       {
+        "name": "nier-nesc",
+        "status": "registered",
+        "hosts": [
+          "nesc.nier.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "nongsaro",
         "status": "registered",
         "hosts": [
@@ -1474,8 +1484,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 104,
-      "verification_capable_adapters": 104,
+      "adapter_count": 105,
+      "verification_capable_adapters": 105,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

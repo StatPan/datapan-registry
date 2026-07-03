@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T22:57:38Z`
+- Generated at: `2026-07-03T23:08:59Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `19945`
-- Runtime evidence: `3406` (`17.1%`)
-- External endpoint operations: `8335`
-- Registered adapter operations: `8325`
+- Operations: `19946`
+- Runtime evidence: `3407` (`17.1%`)
+- External endpoint operations: `8336`
+- Registered adapter operations: `8326`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -75,7 +75,7 @@
 | 전라남도 | 109 | 109 | 175 | 1 | 0.6% | 1 | 0 | 0 | 94 | 0 |
 | 대전광역시 서구 | 125 | 125 | 171 | 50 | 29.2% | 50 | 0 | 0 | 171 | 0 |
 | 서울특별시 | 79 | 79 | 167 | 91 | 54.5% | 85 | 1 | 5 | 73 | 19 |
-| 기후에너지환경부 국립환경과학원 | 48 | 47 | 156 | 8 | 5.1% | 0 | 0 | 8 | 0 | 0 |
+| 기후에너지환경부 국립환경과학원 | 48 | 48 | 157 | 9 | 5.7% | 1 | 0 | 8 | 1 | 0 |
 | 식품의약품안전처 식품의약품안전평가원 | 106 | 106 | 154 | 21 | 13.6% | 0 | 0 | 21 | 103 | 0 |
 | 농림축산식품부 | 87 | 86 | 153 | 153 | 100.0% | 151 | 2 | 0 | 47 | 0 |
 
@@ -92,7 +92,7 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 - 사회복지: `1442` operations
 - 산업고용: `1308` operations
 - 재정금융: `1274` operations
-- 환경기상: `1241` operations
+- 환경기상: `1242` operations
 - 식품건강: `1197` operations
 - 국토관리: `1013` operations
 

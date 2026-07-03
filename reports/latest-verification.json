@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T22:57:25Z",
+  "generated_at": "2026-07-03T23:08:45Z",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
-  "limit": 4337,
+  "limit": 4437,
   "truncated": true,
-  "filtered_count": 3406,
+  "filtered_count": 3407,
   "summary": {
-    "total": 3406,
-    "verified": 1634,
+    "total": 3407,
+    "verified": 1635,
     "failed": 306,
     "skipped": 1466,
     "unknown": 0
@@ -54887,6 +54887,20 @@
       "semantic_status": "unclassified_response",
       "url": "https://www.iwest.co.kr/openapi/services/rest/airQuality03.do?numOfRows=1\u0026pageNo=1\u0026ver=1.0",
       "body_shape": "json"
+    },
+    {
+      "dataset_id": "15116497",
+      "title": "기후에너지환경부 국립환경과학원_환경위성자료 조회서비스",
+      "operation": "기후에너지환경부 국립환경과학원_환경위성자료 조회서비스_20230703",
+      "provider": "nier-nesc",
+      "endpoint_host": "nesc.nier.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T23:08:37Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://nesc.nier.go.kr/ko/html/svc/openapi/explain.do",
+      "body_shape": "html"
     }
   ]
 }

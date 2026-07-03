@@ -1,0 +1,36 @@
+{
+  "generated_at": "2026-07-03T23:08:37Z",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 100,
+  "timeout": "20s",
+  "truncated": false,
+  "filters": {
+    "organization": "기후에너지환경부 국립환경과학원",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 1,
+  "summary": {
+    "total": 1,
+    "verified": 1,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15116497",
+      "title": "기후에너지환경부 국립환경과학원_환경위성자료 조회서비스",
+      "operation": "기후에너지환경부 국립환경과학원_환경위성자료 조회서비스_20230703",
+      "provider": "nier-nesc",
+      "endpoint_host": "nesc.nier.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-03T23:08:37Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://nesc.nier.go.kr/ko/html/svc/openapi/explain.do",
+      "body_shape": "html"
+    }
+  ]
+}
