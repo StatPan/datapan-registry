@@ -2,7 +2,7 @@
 
 This backlog is generated from route-disposition evidence and includes only `adapter_candidate` routes. Dead-route and transient-failure routes remain evidence, not adapter implementation work.
 
-- Generated at: `2026-07-03T19:14:02Z`
+- Generated at: `2026-07-03T19:22:36Z`
 - Candidate hosts: `0`
 - Candidate operations: `0`
 - Candidate APIs: `0`

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T19:14:02Z",
+  "generated_at": "2026-07-03T19:22:36Z",
   "provider": "data.go.kr",
   "old": ".datapan\\previous-data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,281 +12,941 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 27,
-    "stable": 12033
+    "changed": 93,
+    "stable": 11967
   },
   "added": [],
   "removed": [],
   "changed": [
     {
-      "id": "15043313",
-      "old_title": "충청남도_학교급식 로컬푸드 식자재 수발주내역",
-      "new_title": "충청남도_학교급식 로컬푸드 식자재 수발주내역",
+      "id": "15062047",
+      "old_title": "한국도로공사_고속도로휴게소코드정보(하이쉼마루)",
+      "new_title": "한국도로공사_고속도로휴게소코드정보(하이쉼마루)",
       "fields": [
         "operations"
       ],
-      "old_digest": "078d1f52975bb473b12118033ed91f725ee4dd072998be6bda0a900a190feebc",
-      "new_digest": "0624728598b0aa0efe5a98415028f39119cab97349ea9a30644efb3bb3a70bd8"
+      "old_digest": "eee2fb276c7996f8bd224157b03d43b7d7879ab9b9d22a6195b39c9104d7820e",
+      "new_digest": "2c3dbf71e1bb5627afd8feb473cff62e47a8ea9656b786bc5da9007cf0bfed12"
     },
     {
-      "id": "15043314",
-      "old_title": "충청남도_학교급식 로컬푸드 수요기관 현황",
-      "new_title": "충청남도_학교급식 로컬푸드 수요기관 현황",
+      "id": "15062048",
+      "old_title": "한국도로공사_공간정보노선현황",
+      "new_title": "한국도로공사_공간정보노선현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "673f65251f054d9842eac3cade8aaad9d0d8207af44f0870f03b38fe7667dd3e",
-      "new_digest": "2b52df6dc3fddf07564c33f4fa6707e1fa1d6097c5d42f65bf836c0d06492fde"
+      "old_digest": "4b3ca84d812fa506e3c992299fa6d17a70de494075e603807ffb9f21cfee7b2a",
+      "new_digest": "e7bd8ca88c06340ac2d61aa20b9a44adb176337e4ee4a9efe4da2e8d743e66b2"
     },
     {
-      "id": "15043315",
-      "old_title": "충청남도_학교급식 로컬푸드 공급기관 현황",
-      "new_title": "충청남도_학교급식 로컬푸드 공급기관 현황",
+      "id": "15062049",
+      "old_title": "한국도로공사_일자별 전국 교통량",
+      "new_title": "한국도로공사_일자별 전국 교통량",
       "fields": [
         "operations"
       ],
-      "old_digest": "9e09b91a267968a1ab5d8d775725f6cda6f719362bd3a5134f0d837f8f79227a",
-      "new_digest": "7b99bb4860a28732ec1a3887b5ff4433766c6e41d00796149986681274151e67"
+      "old_digest": "759a8b0f3463b59753a23900bf08a77d3991709cf4ae1b28fbb8728bc4524863",
+      "new_digest": "8a90204f9d7e16e9a503d7c017c3de56f1776b088357949aed18a753e417e321"
     },
     {
-      "id": "15043316",
-      "old_title": "충청남도_학교급식 로컬푸드 식자재 현품정보",
-      "new_title": "충청남도_학교급식 로컬푸드 식자재 현품정보",
+      "id": "15066742",
+      "old_title": "한국도로공사_AVC원시자료",
+      "new_title": "한국도로공사_AVC원시자료",
       "fields": [
         "operations"
       ],
-      "old_digest": "30bf393b66033ddc7680cd2d9c4cb34cb97e92a4fe396478471e96653499ff6b",
-      "new_digest": "1314399a09f5cdad312417e537fc92350de7e2635fde30526269f4056d55b918"
+      "old_digest": "49646408f0fc299d7dea923c5e2579e41d5026c706fa2681837bb7d7860958ce",
+      "new_digest": "46301676db9665a3ac736ff6e4d81e779afae67e48293fe786da0adf0706c1f2"
     },
     {
-      "id": "15059757",
-      "old_title": "충청남도_농촌융복합산업 자원현황",
-      "new_title": "충청남도_농촌융복합산업 자원현황",
+      "id": "15076350",
+      "old_title": "한국도로공사_톨게이트간 통행시간",
+      "new_title": "한국도로공사_톨게이트간 통행시간",
       "fields": [
         "operations"
       ],
-      "old_digest": "5566240ac8714286a21336504c61945d370fe321a08ea92e52c57b9ebc03d1d1",
-      "new_digest": "ae77f26534b9b74d5895ae5d529cb75bf5a319c86a8f22bb0fbe393078aaecbe"
+      "old_digest": "bdefcc8978df894e912f726e746d4c22658cbe71f382d4d0d6cde37e8e76c367",
+      "new_digest": "43bcddbc453b33da9a5d2469e3a203c41ef396a1119f4af6b724032b24ff1d59"
     },
     {
-      "id": "15059758",
-      "old_title": "충청남도_농촌융복합산업 생산시설 및 기계장비",
-      "new_title": "충청남도_농촌융복합산업 생산시설 및 기계장비",
+      "id": "15076636",
+      "old_title": "한국도로공사_주유소별 가격,업체 현황",
+      "new_title": "한국도로공사_주유소별 가격,업체 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "8b7936b0b7ac9f698acbfd5a137af33b5ca2f555ce09cb6f22a12d49fd83bd4a",
-      "new_digest": "a2ff93732e23caabcdf5660e0eddc6e7f7e9678186ec39c2894d3a0e92680c5c"
+      "old_digest": "a12166922bc5f2682d0cce977fd224cb7cc1b61a79e53918d49b7ba032033f1b",
+      "new_digest": "5639f38f3fcc296bc7ada5048b4103b7dbe6ee5bf436d0d05dfb20ad9b60d598"
     },
     {
-      "id": "15059759",
-      "old_title": "충청남도_농촌융복합산업 경영체정보",
-      "new_title": "충청남도_농촌융복합산업 경영체정보",
+      "id": "15076637",
+      "old_title": "한국도로공사_알뜰(LPG) 주유소 현황",
+      "new_title": "한국도로공사_알뜰(LPG) 주유소 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "ec08e849d3020bd7f3ac1792c517b2231c4d9c16b19c51268033e48b166825e4",
-      "new_digest": "d76e09d6fdcb2db9c8912bed5d1fd9dc505c72b33be0bf1c219339fbc7157a40"
+      "old_digest": "4b39cef275c385fe538c06bab2e840e081ed10770c40eae73f11fac395257396",
+      "new_digest": "467ee37844a4f7d27361f1382bc3249a0ce5ee8038feec61c8b771d8dfeb88be"
     },
     {
-      "id": "15059760",
-      "old_title": "충청남도_농촌융복합산업 인증경영체 상품정보",
-      "new_title": "충청남도_농촌융복합산업 인증경영체 상품정보",
+      "id": "15076638",
+      "old_title": "한국도로공사_LPG 휴게소 현황",
+      "new_title": "한국도로공사_LPG 휴게소 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "179d4a2087b98a00eaf829716ee3d0cb00bd0aec69e818e64f114cfea092637e",
-      "new_digest": "7d0543206b1724595424d033c7e8368c9b4d0d2d47619fb08ec3705b68bb8ce1"
+      "old_digest": "6f2ede862b1893bb35db0c4bebfa9af499963646203ebb2c402d55740d7a8c7e",
+      "new_digest": "cab1ed9ce0007931450ae82b5d3cc2d87f875eeb3d535e773c53c2bf2f8e4ee0"
     },
     {
-      "id": "15059761",
-      "old_title": "충청남도_농촌융복합산업 인증업체정보",
-      "new_title": "충청남도_농촌융복합산업 인증업체정보",
+      "id": "15076640",
+      "old_title": "한국도로공사_노선별, 방향별 휴게소 편의시설 현황",
+      "new_title": "한국도로공사_노선별, 방향별 휴게소 편의시설 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "e3f4e1d1af4086906f3f66b879ef68e3d46f24a53757b7fffc224b974bc94da3",
-      "new_digest": "be2110c1ca1fd8cc356ddc35f3e37a2fcefee71d0c6840d83056d8953ae4dc27"
+      "old_digest": "1fdeedf174a66955a475b4c4a0cf4c7fda0694f38b438380b517e0e00a56568a",
+      "new_digest": "3c749b335f078a48df4132865baf51e8cf52745aa279c2b02cf8452281704b23"
     },
     {
-      "id": "15060266",
-      "old_title": "충청남도_대표홈페이지 공통게시판",
-      "new_title": "충청남도_대표홈페이지 공통게시판",
+      "id": "15076641",
+      "old_title": "한국도로공사_노선별 휴게시설 현황",
+      "new_title": "한국도로공사_노선별 휴게시설 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "9d1214f762f7464ca93c7d80c4a97d3cca9cc808cd1dc9d96220f1596d3cfe2b",
-      "new_digest": "80387a787742003477fdb3ff7615558ef8e40fe55ca1ed4cf72538b9e0fd9fa2"
+      "old_digest": "8bb31c95f8173b605966f9ea7fb3840375aac427d3c1a41d77cfcb93b4d35c46",
+      "new_digest": "0b3b811f04b6ea2fa0562d3acb9ec635d2b3d9e44c9fb99beed22710c3c25cb7"
     },
     {
-      "id": "15060267",
-      "old_title": "충청남도_인구정보",
-      "new_title": "충청남도_인구정보",
+      "id": "15076642",
+      "old_title": "한국도로공사_휴게소 브랜드 매장현황 조회 서비스",
+      "new_title": "한국도로공사_휴게소 브랜드 매장현황 조회 서비스",
       "fields": [
         "operations"
       ],
-      "old_digest": "8043e0b8295694f3a2a174bbeff01118df501c057410dad88aa7906bbfbd5d2b",
-      "new_digest": "2e2c58cc2570cb197099d1cb8c09dfac6be410cab2e272c348060f4579ef20be"
+      "old_digest": "e6ad319b82a43561dde780b9088ed97fb21d087610efd5ff9716c732e9d7a3c5",
+      "new_digest": "8d2b21c0baada8f51c16e5d0fe4034b3ca8fa6db48964e4ae73cdd2bdea99716"
     },
     {
-      "id": "15060268",
-      "old_title": "충청남도_재정정보",
-      "new_title": "충청남도_재정정보",
+      "id": "15076643",
+      "old_title": "한국도로공사_휴게소 푸드메뉴현황 조회 서비스",
+      "new_title": "한국도로공사_휴게소 푸드메뉴현황 조회 서비스",
       "fields": [
         "operations"
       ],
-      "old_digest": "0e4da3c271f2826d87367a85698e71b29eadc8726b9f3a400dbaa8ee2a80c628",
-      "new_digest": "0cb7974f762fd3b49e5432d7b84d78fdfdc959a4c4e41151f42bdf70efcd7d98"
+      "old_digest": "6ac0d4b8354a09e54a589c36ab4f2593123fdea251d6c1c1eb4143c605f8684e",
+      "new_digest": "bfcdac987a2b4fa27239dcadfe5d86bedd50dca3cc1d759093bb1a8284dcc051"
     },
     {
-      "id": "15062140",
-      "old_title": "충청남도_재정정보_예산집행현황",
-      "new_title": "충청남도_재정정보_예산집행현황",
+      "id": "15076644",
+      "old_title": "한국도로공사_휴게소 편의시설 현황 조회 서비스",
+      "new_title": "한국도로공사_휴게소 편의시설 현황 조회 서비스",
       "fields": [
         "operations"
       ],
-      "old_digest": "83af9cb4967d9316f036af9de6bb0461ab446617b101d95780a6db610b867fd0",
-      "new_digest": "494def98fae2579a587fd6c2c163735ebbe2fbbb6be8965eabd2cde92dc946a8"
+      "old_digest": "b6e99881182e33a8778a4c5ddc0483f89bd8114a342c382cb29299638520c82b",
+      "new_digest": "ffac336ca62676e182b59a581d8fbbc29bae1af76963842eac29ff8faae78ce7"
     },
     {
-      "id": "15062142",
-      "old_title": "충청남도_재정정보_사업 및 예산정보",
-      "new_title": "충청남도_재정정보_사업 및 예산정보",
+      "id": "15076645",
+      "old_title": "한국도로공사_휴게소 편의시설 현황(주유소)",
+      "new_title": "한국도로공사_휴게소 편의시설 현황(주유소)",
       "fields": [
         "operations"
       ],
-      "old_digest": "bf69a97d86d5c6f4e29d7c4e7f0e211d5e16ee0cbbb53dce8ccac7859704e51a",
-      "new_digest": "ebda8501cdab46358eff9bbf6887aaa05ef39beeb3dc8b3896f1bafb94b00bd6"
+      "old_digest": "b66431d13b04dcd1cf3c53f81a2464acf0b2edc881c07cf6cbed6f9ecf3442fa",
+      "new_digest": "7551c5bafc0b63d8f14d00585c095160527fa2700e74f1529977934fcdbf7dc9"
     },
     {
-      "id": "15062143",
-      "old_title": "충청남도_재정정보_지출정보",
-      "new_title": "충청남도_재정정보_지출정보",
+      "id": "15076647",
+      "old_title": "한국도로공사_휴게소 이벤트 현황 조회 서비스",
+      "new_title": "한국도로공사_휴게소 이벤트 현황 조회 서비스",
       "fields": [
         "operations"
       ],
-      "old_digest": "330b0ab2a2ddd4cfb6fd1750a00c48549dd9e0116271179bf1bbf929ecd00a9e",
-      "new_digest": "59f3dca1873ebb0051d4ba8b8455600af722e692d79a60cafd41f34ab40ac1a4"
+      "old_digest": "c3e7167469c282d8cbfa8f0f99d7d9122c96dbb5d27ed6dc05dbbd085cf41158",
+      "new_digest": "cc2d27864b429dfcbc68ab36a68ebdc7ac14174bb9eaf5ece7638b44f66539de"
     },
     {
-      "id": "15077058",
-      "old_title": "충청남도_간부일정(API)",
-      "new_title": "충청남도_간부일정(API)",
+      "id": "15076648",
+      "old_title": "한국도로공사_테마휴게소 현황 조회 서비스",
+      "new_title": "한국도로공사_테마휴게소 현황 조회 서비스",
       "fields": [
         "operations"
       ],
-      "old_digest": "2445c7a1f180edd6fcd84bec9430339c552737729f5d20e537780410afab74f5",
-      "new_digest": "28097b68bf4f2bf4f15e832a5ede925cbb2af48450b9f203c05d3f080d255b3b"
+      "old_digest": "28ee5338056a19170cca1bd1df1021f77a06d5c90a9b8a4e9590253a3d6afc47",
+      "new_digest": "f41f9f8badafe97e88f5a80db215331f3e571551edeba5806ea0b0b95cdfe990"
     },
     {
-      "id": "15096606",
-      "old_title": "충청남도_충남넷_민원사무서식",
-      "new_title": "충청남도_충남넷_민원사무서식",
+      "id": "15076649",
+      "old_title": "한국도로공사_휴게소 청년창업매장 현황",
+      "new_title": "한국도로공사_휴게소 청년창업매장 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "3ce7d5dd016e0fc5a4752fcd3d90042b6e20a4d5657b9a599692228a5ae8d2b8",
-      "new_digest": "2950955eed82593bc5c1cd07f135c1157d7313cb239da3e4922f9852467b2f5a"
+      "old_digest": "b61d3f360f2b14172167216a39a52032810334344fa908eb936ee5cdec83b5b9",
+      "new_digest": "fc7df38754dbe797b1b0ddef044daaa5fa7e4f5f34d81760e92e73a53faedbd2"
     },
     {
-      "id": "15096607",
-      "old_title": "충청남도_충남넷_축산알림",
-      "new_title": "충청남도_충남넷_축산알림",
+      "id": "15076650",
+      "old_title": "한국도로공사_공사 및 도로 차단 계획",
+      "new_title": "한국도로공사_공사 및 도로 차단 계획",
       "fields": [
         "operations"
       ],
-      "old_digest": "fc7a03b2bbd46695ae2c45c845ac67b2facbf9f8de39f2c2202ab06992d84ec5",
-      "new_digest": "c6b10afcc9a42912ab0b69f367e3a3ef68bb4d3475914bf2debfd00e158e4115"
+      "old_digest": "db185f7dafcb54bb3d8ee473a731b3127f7fe0e8bba12f77a5fc7bbda778fb1c",
+      "new_digest": "a2316018ea7ac5c75024a8c7e5d3e9a7a12d1873e1628efd17c9c8762220b097"
     },
     {
-      "id": "15096610",
-      "old_title": "충청남도_충남넷_환경소식",
-      "new_title": "충청남도_충남넷_환경소식",
+      "id": "15076651",
+      "old_title": "한국도로공사_휴게소별/영업소별 인근지역 식중독지수",
+      "new_title": "한국도로공사_휴게소별/영업소별 인근지역 식중독지수",
       "fields": [
         "operations"
       ],
-      "old_digest": "b119bcfba9d0f626844b85d9a7752225f819cfda9e3c430cddf6d2b3336e3694",
-      "new_digest": "15ffc51f6d2abc554c3e9cea49d2672cc4ebc5695ec9d43ce5c776d96258e935"
+      "old_digest": "20e18784a9ded9afa7cc371cdf7207375b777b92862bb6526ad83990896471b5",
+      "new_digest": "352871a2f30a1bae7084b8b2b683240d658af40914bb2a7e5f559ff630ed05f5"
     },
     {
-      "id": "15096613",
-      "old_title": "충청남도_충남넷_학술용역",
-      "new_title": "충청남도_충남넷_학술용역",
+      "id": "15076652",
+      "old_title": "한국도로공사_휴게소별/영업소별 인근지역 불쾌지수",
+      "new_title": "한국도로공사_휴게소별/영업소별 인근지역 불쾌지수",
       "fields": [
         "operations"
       ],
-      "old_digest": "313d83654b1be10fe5a4beab559e6a6998d3a2bd34433c8ca350e482e41a1179",
-      "new_digest": "5baa51ffc74f380a1992a399e3d96455f488f701b495e3a5e63e95c22885fa21"
+      "old_digest": "3784a9cc6ee9a7fef124a7874ba6d5176d23844ae50fd260e866f69edf0c0f9c",
+      "new_digest": "2a2b0734ee3da10d4a1cc6723ef610242ab373c94e1401a531d38e65efb3ba45"
     },
     {
-      "id": "15096614",
-      "old_title": "충청남도_충남넷_정책실명제",
-      "new_title": "충청남도_충남넷_정책실명제",
+      "id": "15076654",
+      "old_title": "한국도로공사_휴게소별/영업소별 인근지역 체감온도",
+      "new_title": "한국도로공사_휴게소별/영업소별 인근지역 체감온도",
       "fields": [
         "operations"
       ],
-      "old_digest": "e8e5444f1461e7c60da6741593a8aa6f69e57290d52ef5aa7dd5213da19a8f06",
-      "new_digest": "17326e98afecd005cb77340b62252dd42d70f661926873fce09d0cd77b6af5ae"
+      "old_digest": "32a6afdf8dec92cea393e8b8f74dea68eefee1ed2c059fe5c55c7e82c334394a",
+      "new_digest": "5838ccf50229c80168c30f691501b16c4a3d953b15598f9a8563097629fe7844"
     },
     {
-      "id": "15096615",
-      "old_title": "충청남도_충남넷_수출입동향",
-      "new_title": "충청남도_충남넷_수출입동향",
+      "id": "15076656",
+      "old_title": "한국도로공사_휴게소별/영업소별 인근지역 천식폐질환가능지수",
+      "new_title": "한국도로공사_휴게소별/영업소별 인근지역 천식폐질환가능지수",
       "fields": [
         "operations"
       ],
-      "old_digest": "19b9dcdf062bb873b119be8a73c411e20bc45be4c7699deda187ccdbd411f117",
-      "new_digest": "7b03d46395075fc8a113c8dab4bfce0a87ba1fe420ec656ba4e17648ef096cc1"
+      "old_digest": "f0798e814cc9b6b930889434f644b3d61f4777ab6826572befffdca6403517d8",
+      "new_digest": "ad1fe2a83e2ee19e85499b54fd3bf397dd96ad4162f66dd45d17f847bf999d8d"
     },
     {
-      "id": "15096616",
-      "old_title": "충청남도_충남넷_공모일정",
-      "new_title": "충청남도_충남넷_공모일정",
+      "id": "15076658",
+      "old_title": "한국도로공사_휴게소별/영업소별 인근지역 감기가능지수",
+      "new_title": "한국도로공사_휴게소별/영업소별 인근지역 감기가능지수",
       "fields": [
         "operations"
       ],
-      "old_digest": "089f159d43b5ddff53a69336f2c1f1a249f015c6600baca4eb519f38d5372497",
-      "new_digest": "fc1a29738fe13ba1fbbfaf0585de6462dff3c755d96cfeed3a1a96d95df61320"
+      "old_digest": "6dc90a722cda99b79eb4b18f6659d49d54e7cd6edc0c263cabafce8b5634029d",
+      "new_digest": "3f729b6c26e14624c9bee527a5635a256386d92595147fdda532557a9528a2bd"
     },
     {
-      "id": "15096617",
-      "old_title": "충청남도_충남넷_공모전공지사항",
-      "new_title": "충청남도_충남넷_공모전공지사항",
+      "id": "15076661",
+      "old_title": "한국도로공사_휴게소별 날씨 정보",
+      "new_title": "한국도로공사_휴게소별 날씨 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "39cb0bef411b472b7fb1788e1a1e8cb967352268cb8acf2f929b9326980234ef",
-      "new_digest": "41edc2292b68949dd0efe3e5c4eb9036e3a4018e20c3b97692bb18a47f83fcdc"
+      "old_digest": "1583e3c6e6c90668c4d20a9cc5f38949018fbf549521fb02eabe17e6577b65bb",
+      "new_digest": "a9a8e3d4bfd44d12d787079c58d9f3ac2b78c65f8a58ae7af35c11907a753618"
     },
     {
-      "id": "15107977",
-      "old_title": "충청남도_지방하천 정보",
-      "new_title": "충청남도_지방하천 정보",
+      "id": "15076662",
+      "old_title": "한국도로공사_주유소 가격 과 고속도로 통행량의 상관성",
+      "new_title": "한국도로공사_주유소 가격 과 고속도로 통행량의 상관성",
       "fields": [
         "operations"
       ],
-      "old_digest": "6cd22008673e5fd2f0d614df670b754e845413a097b0d2875c4fcac02223e61a",
-      "new_digest": "695b455ea68f0f14e1cb68514c48601bb227c9b63a309ad8e5c9e01c5d3fc6f7"
+      "old_digest": "b1197aa44fb496c6026f682867918b6a47973a8b6a0113a6f10b7b47b50e1959",
+      "new_digest": "ba93e7da164b916ecec7eb2eb96fd282ee28ce97f5e703425e125e51ffbcde79"
     },
     {
-      "id": "15140463",
-      "old_title": "충청남도_학교급식지원시스템 수발주 내역",
-      "new_title": "충청남도_학교급식지원시스템 수발주 내역",
+      "id": "15076663",
+      "old_title": "한국도로공사_휴게소별/영업소별 인근지역 개별공시지가",
+      "new_title": "한국도로공사_휴게소별/영업소별 인근지역 개별공시지가",
       "fields": [
         "operations"
       ],
-      "old_digest": "74ba0054960ede3d8934570a99452e8a9d30d8bc78fe745fbb83a3e2e189a32c",
-      "new_digest": "83b2dac54d326ddca0a376034dd0a3b1880d2a67b8a7f00abbdf06cfe2ecb1a3"
+      "old_digest": "158429369e90d9b67cef2af7007e5842ca030d586446f47d9e5f3024be642348",
+      "new_digest": "7b2ddd82784f1d50759363a6d417ee71c1b6bc4c2a23ed331ea236ed65efdf34"
     },
     {
-      "id": "3046861",
-      "old_title": "충청남도 물가정보",
-      "new_title": "충청남도 물가정보",
+      "id": "15076664",
+      "old_title": "한국도로공사_지적 재산권 현황",
+      "new_title": "한국도로공사_지적 재산권 현황",
       "fields": [
         "operations"
       ],
-      "old_digest": "21466b97ff7657b6ed821a03b0e78a5dec855bc66ab087d5d3a4de3c47c0e4cc",
-      "new_digest": "10219069c94f6ac16eacc82e27227996719d92a09df089a7e7b884b42c88fae9"
+      "old_digest": "7c4c6ddc0d74c4b00e5e5a3df3deef8ebf81d190c919dcdc93baedcd57b580c8",
+      "new_digest": "8f4e39a37038a56dcd4ece3d7bb2aa789a0b7275d0fdc2101db2238b9f06953e"
+    },
+    {
+      "id": "15076666",
+      "old_title": "한국도로공사_긴급구조기관 현황",
+      "new_title": "한국도로공사_긴급구조기관 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "841a652fe77410fe1a9c31e5713c3c10ee01287513120116645b863397861ae7",
+      "new_digest": "472d79b444d862cd4113f9d4710b3ea62a886b5540034e08b55723f569cd313b"
+    },
+    {
+      "id": "15076667",
+      "old_title": "한국도로공사_비상연결로 현황",
+      "new_title": "한국도로공사_비상연결로 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f17e91635a88abb5f415fd475c66e5c1bf8ad34fe58a68400611e5c337cc47e0",
+      "new_digest": "a4fb9f9d44311538b8669dcf1bb319c6fdade963509a1e6c0f64d8c1104efd72"
+    },
+    {
+      "id": "15076668",
+      "old_title": "한국도로공사_우회도로 현황",
+      "new_title": "한국도로공사_우회도로 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "759110470ddb6a979535ec04db2d1c1842ac1c25330f7ab67f8f3aeace86e47a",
+      "new_digest": "e81fe4809b1c62c148e7b30f37bc5f9fad30716ab0cb91ec25a1ecee50a8702e"
+    },
+    {
+      "id": "15076670",
+      "old_title": "한국도로공사_중앙분리대 개구부  현황",
+      "new_title": "한국도로공사_중앙분리대 개구부  현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c460686e498d3d599ad5f17b3c44d1c0eed43c609ebb76588edeb8e98e92e0f3",
+      "new_digest": "762477e0de9f2eeede57604c4a4eb5cb6c06ee327c3bcc5af0730f7ff948387c"
+    },
+    {
+      "id": "15076671",
+      "old_title": "한국도로공사_1종시설물-교량",
+      "new_title": "한국도로공사_1종시설물-교량",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "50fefb7ce4af9c4e5c05f8b400333cf5cf222f5b0bbeb2a359c6a029647f525e",
+      "new_digest": "51002e1c34bbb3bb30efb390d45eae3b8aab5ca4d478c724658e0cf717bf0601"
+    },
+    {
+      "id": "15076673",
+      "old_title": "한국도로공사_내진미반영교량",
+      "new_title": "한국도로공사_내진미반영교량",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f8e9c96ed408040b1a8bd0d8738decbc9d89a7d9bb6fd32422ebef9b39a39a0c",
+      "new_digest": "842b8d7525967d941fd869f06797f2f8f6dae182f59430e5a10d77226cc8022b"
+    },
+    {
+      "id": "15076674",
+      "old_title": "한국도로공사_설해취약구간 현황",
+      "new_title": "한국도로공사_설해취약구간 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a943e4d32cd24565f40a57c39d2a9f31ae2246ea7ea46557b4e40702bfca57fd",
+      "new_digest": "edc40b10d4eaf306f5ce5e00a6aa080c9cdf71868867b73256f2643bf13f49e4"
+    },
+    {
+      "id": "15076684",
+      "old_title": "한국도로공사_실시간 소통 데이터",
+      "new_title": "한국도로공사_실시간 소통 데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6a959e3abee5165638f1af73fc68567c488ede85a72779813bb5600d43a8757d",
+      "new_digest": "f1689e95695400f82f5a6dc873e538f8db36ff5a992d3b63d19e040e3fc399eb"
+    },
+    {
+      "id": "15076685",
+      "old_title": "한국도로공사_실시간 고속도로 정체상황",
+      "new_title": "한국도로공사_실시간 고속도로 정체상황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "aef82fe5b996594a5be7e74192ca753839f85008649120d100ca19fb1c97324f",
+      "new_digest": "5328ab5eb3cfc73715c24f6b6d7ae0664b44be049393a521f76f4d8071127791"
+    },
+    {
+      "id": "15076687",
+      "old_title": "한국도로공사_고속도로 출입시설 위치정보",
+      "new_title": "한국도로공사_고속도로 출입시설 위치정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1990ef7d5208f06764bdbbb2a1de87e35e339085cf77d32d18abbe690d7a7f70",
+      "new_digest": "f02d97bdb8aea0a6aac264fdf8cf76f5e1cdd26565c87953e81d0b05f9e134aa"
+    },
+    {
+      "id": "15076689",
+      "old_title": "한국도로공사_톨게이트 목록 현황",
+      "new_title": "한국도로공사_톨게이트 목록 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8de2571fc1b4659abf846250bd6bdb6c091b697bda1bb5dc976c50f909f0df94",
+      "new_digest": "a1705ae19c3b9333e1e20ac2147e2c91592b05530851dd7a0825d5fa33b02961"
+    },
+    {
+      "id": "15076690",
+      "old_title": "한국도로공사_AVC 설치정보 조회 서비스",
+      "new_title": "한국도로공사_AVC 설치정보 조회 서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0137918ff60c7706dce5e7424e766605d0888fa352b18ee7564ec5d5ecb71b12",
+      "new_digest": "325fc0b01d76acb4f21a7a8a8ce488a7a67fee1e416e3a50f282fe88f6a2a722"
+    },
+    {
+      "id": "15076691",
+      "old_title": "한국도로공사_VDS 설치정보 조회 서비스",
+      "new_title": "한국도로공사_VDS 설치정보 조회 서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "690aa7d9573f3a83fe4f289652bb60646b81bd2c374232bd6ab43c64a551a099",
+      "new_digest": "07d2abcf325acd504d2b4f776e9e58958d18c750b9802e01099b17589ec8f8d7"
+    },
+    {
+      "id": "15076692",
+      "old_title": "한국도로공사_문자정보 제공이력",
+      "new_title": "한국도로공사_문자정보 제공이력",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2208837f9e7b5593d7b164f6ae0777254fd854f9abc9b8b2bf69103f6ce30c2d",
+      "new_digest": "23d782468f46cf2c6b3192ef2d5e581482d89808c799b46cc8115a6bb932329d"
+    },
+    {
+      "id": "15076693",
+      "old_title": "한국도로공사_실시간 문자정보",
+      "new_title": "한국도로공사_실시간 문자정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b91c85e3fb0d4dfb096bc3a1b252fa4b875a9703b5654cca7926caca35a2795b",
+      "new_digest": "a635e0eaa5f2e2e3547da91265dfb6bfaedfd8ae52466e04e6a55f8547aed5e7"
+    },
+    {
+      "id": "15076694",
+      "old_title": "한국도로공사_RSE 설치정보",
+      "new_title": "한국도로공사_RSE 설치정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0c87907f1b96b815c0818822c207201ddb0ab2e76ddbc581518e6f07de1f281d",
+      "new_digest": "7d8e99b17a28e4814791bdabbe9c5a2e6575e1c0172d0117967592d37a6451c6"
+    },
+    {
+      "id": "15076696",
+      "old_title": "한국도로공사_현재 교통예보 현황",
+      "new_title": "한국도로공사_현재 교통예보 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "79feaacf9b7d79be60403e8eb8fb7d0d80392ff3ef788e238a8dc824718bbe06",
+      "new_digest": "cd8318dbd50052480d83802612e160039b625f2c1a5846274fa9d60e41800957"
+    },
+    {
+      "id": "15076697",
+      "old_title": "한국도로공사_VMS 본부별 목록 현황",
+      "new_title": "한국도로공사_VMS 본부별 목록 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "88bd2ad6843b19bf8d8332ce6a65827a3d37dc40815363208dcb4d9e945c0aeb",
+      "new_digest": "7332b9bbab1a21a1b6563a18c976783cd786c55c0f0f81d857bc960fc5526b39"
+    },
+    {
+      "id": "15076704",
+      "old_title": "한국도로공사_노선별 VMS표출내용 일괄조회",
+      "new_title": "한국도로공사_노선별 VMS표출내용 일괄조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c3459bad3592618ffbf66e5b5778fd2a0329c8aa1f2a30a62906fff686a190f3",
+      "new_digest": "fbba8a0ece6eea275ec2e54d7eb690820ee153431016973011021fae888d1ba1"
+    },
+    {
+      "id": "15076705",
+      "old_title": "한국도로공사_VMS 표출내용 현황",
+      "new_title": "한국도로공사_VMS 표출내용 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "52d62d0d6189379feb430e064ed6a74b68cb9317e921c2b9c8741ebbbdea3082",
+      "new_digest": "902b27ec44366404b349f8ff88ac55080fa130860ff77ad3252e71758c5c6081"
+    },
+    {
+      "id": "15076706",
+      "old_title": "한국도로공사_버스전용차로 시행여부 현황(콘존단위)",
+      "new_title": "한국도로공사_버스전용차로 시행여부 현황(콘존단위)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "446e308409396d801a8d296cef7482ae4aa16dd558d19bf13b44db3ef77ba32b",
+      "new_digest": "f1bf51dc6e532c2c973278fea25787f6e4f4f3f1f8a295940da0be2acbe371ba"
+    },
+    {
+      "id": "15076707",
+      "old_title": "한국도로공사_버스전용차로 운영구간/시간 조회(콘존단위)",
+      "new_title": "한국도로공사_버스전용차로 운영구간/시간 조회(콘존단위)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6aa5d6c1e0545f46c6e5e064a514f84abbef88d527a3ae29184247698aae7184",
+      "new_digest": "db1a9cda0573b74f7a5a3090c2ab69bb1bdb3bceaeb30ad1679ad501f4596f71"
+    },
+    {
+      "id": "15076708",
+      "old_title": "한국도로공사_노선별 방향별 일별 15분 구간교통량",
+      "new_title": "한국도로공사_노선별 방향별 일별 15분 구간교통량",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4a20e03f8c9d584f2d83a13bad24ef319e6cfab2c3fcfe7702baac557df12d61",
+      "new_digest": "66d7cee4d5a54523063853755fc49e600c23205ff1b8d9079561bdd6cfa4c7c2"
+    },
+    {
+      "id": "15076721",
+      "old_title": "한국도로공사_톨게이트 입/출구 교통량",
+      "new_title": "한국도로공사_톨게이트 입/출구 교통량",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "db69b7cdcf2a0af293e2e6d376fe3b388795efb484c58489ae85dc17d9d2689f",
+      "new_digest": "f1fca8a973076e0c3ecad06f9eeda862537b42cd72e466790a6c63d50c6caf53"
+    },
+    {
+      "id": "15076728",
+      "old_title": "한국도로공사_영업소 위치정보",
+      "new_title": "한국도로공사_영업소 위치정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0a3cfe73b605449ecf401c0fcd73caa16fb4abfe335f41ba3835acb915617658",
+      "new_digest": "7ddc9cd9a0629ad4838cba7d338d8076f7119d677dbf0aa48a1e6f1815754408"
+    },
+    {
+      "id": "15076729",
+      "old_title": "한국도로공사_영업소 진입조절 대상 영업소목록 조회",
+      "new_title": "한국도로공사_영업소 진입조절 대상 영업소목록 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d317e4e137940aa9787cfdca680c10a61ee2d09b178e0b8444d60caabaa44927",
+      "new_digest": "32287e6444c9662ef27de9326c7166c152bdf00220f4ee76a9fc8314c5ba48df"
+    },
+    {
+      "id": "15076730",
+      "old_title": "한국도로공사_영업소 진입조절 시행여부 현황",
+      "new_title": "한국도로공사_영업소 진입조절 시행여부 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "455bbdb74e2ba93a5b1ee4d0412d1784fd15e0e0a8e8218ef8015eb9c4d030e3",
+      "new_digest": "9fa11cd7cf1fc4c01460246b360f93c61dc153f3c71b25369f6994ad98564652"
+    },
+    {
+      "id": "15076731",
+      "old_title": "한국도로공사_노선별 영업소 진입조절 시행여부 조회",
+      "new_title": "한국도로공사_노선별 영업소 진입조절 시행여부 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c7ea7882e1af979276e18129bb4faecf15e0bf3ebce388ab0ce5b6fb2fb24fe6",
+      "new_digest": "6c4ec3f0520ffe9a4f39d5ab87302b4609fe855e240f3b811b8adc966ed54873"
+    },
+    {
+      "id": "15076732",
+      "old_title": "한국도로공사_톨게이트간 톨게이트 목록조회",
+      "new_title": "한국도로공사_톨게이트간 톨게이트 목록조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "dab16be86159044afd27c7dfd6851266d8cc03632d6f79e9e19bd63dff757db1",
+      "new_digest": "227cda39dc3428883db019670f770a7826f6e45cf56bba6c4417a5ad13634dfb"
+    },
+    {
+      "id": "15076733",
+      "old_title": "한국도로공사_영업소간 교통량 정보 현황",
+      "new_title": "한국도로공사_영업소간 교통량 정보 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bebf7f18b53cfe0bc545e1703834450da41c7db3480dceb7ad0288f14ea3682d",
+      "new_digest": "66b6a954bddac91522a893d40ec46db491e3a710e3a1aac4c51385170a91b627"
+    },
+    {
+      "id": "15076766",
+      "old_title": "한국도로공사_고속도로 차로제어 시스템 정보",
+      "new_title": "한국도로공사_고속도로 차로제어 시스템 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fc2574d0edf079aba155e1bd588dd43e4991e7d4077aeea5fb0b9129282f4318",
+      "new_digest": "66d113398422121ab10c9421187a600adaf2b29652b313f7852a7257d0d99c7d"
+    },
+    {
+      "id": "15076767",
+      "old_title": "한국도로공사_좌표기반 LCS시행여부(콘존단위)(5분 지연)",
+      "new_title": "한국도로공사_좌표기반 LCS시행여부(콘존단위)(5분 지연)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4fd2cc1a5344e11cb7f191be9eee418f4ed464cfb9dbb4da920a9ca6857b4205",
+      "new_digest": "06a5d9d3de1f108142124163ed44788bf0b376f4997d5ef0cf5109e1ccd51a0c"
+    },
+    {
+      "id": "15076768",
+      "old_title": "한국도로공사_노선별 LCS시행유무(콘존단위)(5분 지연)",
+      "new_title": "한국도로공사_노선별 LCS시행유무(콘존단위)(5분 지연)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1773d74a00438a1a82d8493f756cd3a130e69b9617bc27a9b41723e229819b7b",
+      "new_digest": "e238ac625db645ca4a37c2a646541ed8adc7fd63989f61b1b264335be44a1a92"
+    },
+    {
+      "id": "15076770",
+      "old_title": "한국도로공사_고속도로 휴게소 기준정보 현황",
+      "new_title": "한국도로공사_고속도로 휴게소 기준정보 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "450045a3d5758e1051cc090b3a7cb2c1b0de6f5300edcad164fd78f2d4b610eb",
+      "new_digest": "c28d49da8d8c17767bb271f15b049c65870cf48121fb82afa69a82f6981f2953"
+    },
+    {
+      "id": "15076774",
+      "old_title": "한국도로공사_6대관문(서울,서서울,동서울,군자,남양주,서시흥)입출구 교통량",
+      "new_title": "한국도로공사_6대관문(서울,서서울,동서울,군자,남양주,서시흥)입출구 교통량",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ec6a96560b5f652c817ccf372ef9aff673a7989731382ea92ba06e789c16212a",
+      "new_digest": "a159f9d3e9bdb32f494f69cf3e02d8d5412e0240e0215e6092aabc617c0cfe64"
+    },
+    {
+      "id": "15076780",
+      "old_title": "한국도로공사_노선별 전체 영업소 교통량",
+      "new_title": "한국도로공사_노선별 전체 영업소 교통량",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f38abdf0a55a96930f47cee6d0e4cee61e299362b244c6b0edfa112bb1ea147b",
+      "new_digest": "353974feb51b968808c815d2719dc644f1a4f9578992d5748732035c76930924"
+    },
+    {
+      "id": "15076781",
+      "old_title": "한국도로공사_영업소별 입구, 출구 현황",
+      "new_title": "한국도로공사_영업소별 입구, 출구 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e2eddac560a17ed6f9aa7a43ad483f65b361b3125e6271a31ae311a86243bb5c",
+      "new_digest": "4e9ff1ecacf9b8d49ae02918342347ea30ac872928fccea2036cb60a95424095"
+    },
+    {
+      "id": "15076785",
+      "old_title": "한국도로공사_노선별 영업소간 구간내 소요시간 일괄조회",
+      "new_title": "한국도로공사_노선별 영업소간 구간내 소요시간 일괄조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "29be541886f0b2e44b34d63bc72d283d3a618f5cf1d80c576ec6149304b01a63",
+      "new_digest": "217b604d00e91865f4d6a11f2204a81bec3bcd9dab6fb7c0611ebd267cd30cdf"
+    },
+    {
+      "id": "15076786",
+      "old_title": "한국도로공사_도공노선과 민자노선 경계의 영업소 목록조회",
+      "new_title": "한국도로공사_도공노선과 민자노선 경계의 영업소 목록조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c5cc397896c65d47e59f807e79de8d27874a3c082ca8a08508e947be2633f7b9",
+      "new_digest": "2d91241a09cd9e395de696dacafa48e96d7cacbbf4adb5915ce98a6936639b58"
+    },
+    {
+      "id": "15076787",
+      "old_title": "한국도로공사_톨게이트간 통행시간 정보",
+      "new_title": "한국도로공사_톨게이트간 통행시간 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "19e9efafc833e9af17a90d50ee333eabde398531e08839181b3d944e0d9b6ddd",
+      "new_digest": "8e4cffe6b093708a2ea7906a71b3c3e130daf116c1ee5be3d8aeb6e90ca8627a"
+    },
+    {
+      "id": "15076788",
+      "old_title": "한국도로공사_VMS 메시지 유형별 일괄조회",
+      "new_title": "한국도로공사_VMS 메시지 유형별 일괄조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "18d8fbbf13b56ac057c26dba5a1595ad3b96a0eea709890b864e999c855aeb20",
+      "new_digest": "d127f3568dc41d699017e656cb7b8b04f51acfb732c5f41483ef1c9a79761e7b"
+    },
+    {
+      "id": "15076789",
+      "old_title": "한국도로공사_안전주행 콘텐츠 정보",
+      "new_title": "한국도로공사_안전주행 콘텐츠 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "18159b7bf635423439e5c2a25babb7c792f2138b568d5c3d72f1ac1f79e72c34",
+      "new_digest": "c552665a434cd02afe9ffbe76c9c3b0b4395fa3cdd4ec875894f85212039cefb"
+    },
+    {
+      "id": "15076790",
+      "old_title": "한국도로공사_버스전용차로구간 방향별 일별 1시간 구간통행속도",
+      "new_title": "한국도로공사_버스전용차로구간 방향별 일별 1시간 구간통행속도",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e715aa15f3669a0f594ebcb19a47dea81ac14ab87f4da34f16b21e0ef8643f7b",
+      "new_digest": "397171e8fae57ca8e9161f4b2950480d6c8c7b94b8ef4faf740f81314f992601"
+    },
+    {
+      "id": "15076792",
+      "old_title": "한국도로공사_버스전용차로  구간통행속도",
+      "new_title": "한국도로공사_버스전용차로  구간통행속도",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3cdfdc245768e309e6bdd4c046bccfaa3b82d20cd0bbcaa3a4747970c7c2ce58",
+      "new_digest": "c044913d0832989ef288e4ecdfae7e2aedd2b6e1e12cb10aba15bc7ddb6602f9"
+    },
+    {
+      "id": "15076793",
+      "old_title": "한국도로공사_실시간 영업소간 통행시간",
+      "new_title": "한국도로공사_실시간 영업소간 통행시간",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "18fd116c53b0f452397a89b5121b70f26429647c8a1243faa21400fd3d0d7d26",
+      "new_digest": "1be3b3178a143dabee115fb7ed3254800a0d97f9d19224f3e3dae7d674995590"
+    },
+    {
+      "id": "15076795",
+      "old_title": "한국도로공사_도시간 소요시간",
+      "new_title": "한국도로공사_도시간 소요시간",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ce5f46de588d6445508ff84fe2c815d300b21ed38f87c022e92595489ec5e182",
+      "new_digest": "05f6c423d4a637f5cb139fe0f9bbe8ab3e68519488e04d8c2a02d8ac159925e5"
+    },
+    {
+      "id": "15076797",
+      "old_title": "한국도로공사_시간대별 교통량 현황",
+      "new_title": "한국도로공사_시간대별 교통량 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b4632537de9f5f160ea878887a9cb3f1e74796902f7cf4fb13685997db56c5ef",
+      "new_digest": "b9e8d994ba5cbbaf0100f2c1561f83c1ec02e868af180c2f47e909e98c2ffd65"
+    },
+    {
+      "id": "15076799",
+      "old_title": "한국도로공사_LCS 운영이력",
+      "new_title": "한국도로공사_LCS 운영이력",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "59900b7557cdafecaf0e7552986d19d332801f01b524a181a152b89eb91829f5",
+      "new_digest": "0a4eec9e5bfaa40e41ffac2f25ae3829f634bf86eccabdec851449eeed4fd549"
+    },
+    {
+      "id": "15076800",
+      "old_title": "한국도로공사_LCS운영구간 교통량",
+      "new_title": "한국도로공사_LCS운영구간 교통량",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b1efb23595200e0a546a9e9faa60fd7239e2071967d3ed319c4607f561f9eeed",
+      "new_digest": "5778869688a66857123f725e0cfa145d7514dbcb75b1fdf4bc54d5929f92a473"
+    },
+    {
+      "id": "15076806",
+      "old_title": "한국도로공사_버스전용차로 구간 소통정보 및 이용률",
+      "new_title": "한국도로공사_버스전용차로 구간 소통정보 및 이용률",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "15d4970a881bca1f4f008072e442c5ceb1caa9e7944611388b66a668fb5b9155",
+      "new_digest": "2549a6254d17e90c662103f668584ae40196c732ff95d26d6419330cf735ffbe"
+    },
+    {
+      "id": "15076809",
+      "old_title": "한국도로공사_버스전용차로 운영이력",
+      "new_title": "한국도로공사_버스전용차로 운영이력",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0d79eaf33d6f5203ab22ea9a5735cca2cbf0c5f97f8639475f8e25165c108c1c",
+      "new_digest": "241cce4cbf2280714d7867bc3ed5fbfc0e2ad3cc4c6e2b6e859f64eee9ffb6dd"
+    },
+    {
+      "id": "15076810",
+      "old_title": "한국도로공사_영업소 진입조절 본선현황",
+      "new_title": "한국도로공사_영업소 진입조절 본선현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "68b2f39444633a889676e63a3a46758a1ac6832afa7517e2cbeb78f36f7b9f50",
+      "new_digest": "51007a867d4c400870bb47008f41617a0608e614b3d230f90efacd2b984456a2"
+    },
+    {
+      "id": "15076812",
+      "old_title": "한국도로공사_영업소 진입조절 영업소현황",
+      "new_title": "한국도로공사_영업소 진입조절 영업소현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "603de63177ff4c12766f0a6c5be15304eb6b26dd1a1bb07b0ad6ce5cb86727c3",
+      "new_digest": "0bce5f769ad1ae0b93180143ebb4c6e206dc7dd65ad6a3a6c2ed548969812b89"
+    },
+    {
+      "id": "15076815",
+      "old_title": "한국도로공사_차로별 차종 구성 및 위반율",
+      "new_title": "한국도로공사_차로별 차종 구성 및 위반율",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "02b71519e02de7ade9f4439e81da89139c8e20adcd989ac3819f038eeaf0ed44",
+      "new_digest": "4ce24fb52dfc2760d7200273d8d5580d2a8da2619bc3291c536d31f46e9d8e0b"
+    },
+    {
+      "id": "15076817",
+      "old_title": "한국도로공사_총 통행속도(TCS기준)",
+      "new_title": "한국도로공사_총 통행속도(TCS기준)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2fb03509a2848593c9916667defda62235990a05f90fb0acf0c61831411ee37e",
+      "new_digest": "d17dcf9ff7e39c4530e2ca057c36f25c06528c23faea25bc5c8990b6d135f470"
+    },
+    {
+      "id": "15076818",
+      "old_title": "한국도로공사_통행거리별 교통량",
+      "new_title": "한국도로공사_통행거리별 교통량",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "77a4db7cf8b863eacbd3ea702247da1e226da030386debebccae95d2da3fdcd9",
+      "new_digest": "89403ef673c70600db83df1bb460fcdbce09a862b47ef99e7ea1adbf2dc6a1e9"
+    },
+    {
+      "id": "15076819",
+      "old_title": "한국도로공사_통행속도별 교통량",
+      "new_title": "한국도로공사_통행속도별 교통량",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "96d102020d51bda7d54991dfbc8e636475d5fe760bfa6b83efeaa0333c913e8d",
+      "new_digest": "b3f526aa1d3c3f8bcaa7d7c475856a052f4a17c6b803b6edd0362f590d337cc1"
+    },
+    {
+      "id": "15076820",
+      "old_title": "한국도로공사_실시간 권역별 교통량",
+      "new_title": "한국도로공사_실시간 권역별 교통량",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "77fc5b31aad672d5ee8b9b368847c92d089c02798001c98b75762770942ac1ac",
+      "new_digest": "ef2426dc62e3c4dd015d062ebf1186fb2c80eec1cb7fa9cea6aad272b2fc3d31"
+    },
+    {
+      "id": "15076822",
+      "old_title": "한국도로공사_실시간 전국 교통량",
+      "new_title": "한국도로공사_실시간 전국 교통량",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "05a3cf749ad38ff7bbb757e07c60dc380871b67ba4508a4e257501344eab9fb2",
+      "new_digest": "2bd439f5f9ebf9a6fb06b4a8dd50a7afd17195c31996e6bb580e83903e350242"
+    },
+    {
+      "id": "15076870",
+      "old_title": "한국도로공사_실시간 영업소간 교통량 조회 서비스",
+      "new_title": "한국도로공사_실시간 영업소간 교통량 조회 서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9a4191562d124d8d9e846a49ca6b07be46d47349e488d0cf30e8bba3b8402ecc",
+      "new_digest": "a1c8bd8ee3199446cc7128144fa4f82b6a791852fdedc8ffcbf0172a7fd0d863"
+    },
+    {
+      "id": "15076872",
+      "old_title": "한국도로공사_실시간 영업소별 교통량  API 서비스",
+      "new_title": "한국도로공사_실시간 영업소별 교통량  API 서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c43b89c14734ac0c072cc2cc9d390a6387533f3de0fbc0894026938db5663fff",
+      "new_digest": "4a9d505e1ce07919b4b7f664b7f1a12af03b6142590ba80f2dc45415d5df141b"
+    },
+    {
+      "id": "15076874",
+      "old_title": "한국도로공사_고속도로 공사현황",
+      "new_title": "한국도로공사_고속도로 공사현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8d3ba578b24980fa112f9071b4f7dcd2d3814ad4d945315ab5e3694cd5be9392",
+      "new_digest": "ff7b7fb9bd700a951afc74fbc23016b594526576e9b5dc10d2863b62ac1cdc2e"
+    },
+    {
+      "id": "15111644",
+      "old_title": "한국도로공사_영업소간 통행요금 조회",
+      "new_title": "한국도로공사_영업소간 통행요금 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9c88e5805cd9a1ad6a9221c5829ff5e149564712c2d74153b643912e6aed783f",
+      "new_digest": "7de49715fc17be119c6b002179a256388d9dc166dc3ce506a96b250686fbdbb7"
+    },
+    {
+      "id": "15111645",
+      "old_title": "한국도로공사_영업소 차로 운영현황",
+      "new_title": "한국도로공사_영업소 차로 운영현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1391e2d37d4e9de9041318b62213c2972bd5ef8ecd49bac812bb6d5ef0eaf2d7",
+      "new_digest": "11900357cd302b363e9edfcef9e1834482d56c650dc4698c0b5c7567adf10316"
+    },
+    {
+      "id": "15128076",
+      "old_title": "한국도로공사_전자조달 계약공개현황",
+      "new_title": "한국도로공사_전자조달 계약공개현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ac7c759ad0a25771fe9d799d9a416ac3f17892aa76f37ccfce5a71dc72f14543",
+      "new_digest": "5547edd06b3ea030bf6c87feb070be69f34136f6a3d4e934fec73213c10f58da"
+    },
+    {
+      "id": "15155538",
+      "old_title": "한국도로공사_영업소 하이패스 차로 개폐 현황",
+      "new_title": "한국도로공사_영업소 하이패스 차로 개폐 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ff027140fc8b13ede3748ecc252d0f386a7e95b02fd1f1c30708c43ab3aa7ee5",
+      "new_digest": "00b83cfd6524fb48b2be3cb95e93c0653f0c90647e055c9e8a4cfc182c3eaa25"
     }
   ]
 }

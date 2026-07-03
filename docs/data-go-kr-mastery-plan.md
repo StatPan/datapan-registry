@@ -12,14 +12,14 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `18555`
-- callable operations: `18413` (`99.2%`)
+- operations: `18826`
+- callable operations: `18684` (`99.2%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `6945`
-- registered adapter operations: `6935`
+- external endpoint operations: `7216`
+- registered adapter operations: `7206`
 - missing adapter operations: `29`
 - external adapter coverage: `99.6%`
-- approval-required operations: `6390`
+- approval-required operations: `6661`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
@@ -504,6 +504,11 @@ readiness, not to advance verified runtime coverage.
    `2041`, registered external adapter operations to `6935`, raises API
    operation coverage to `10,226` of `12,060` APIs (`84.8%`), and leaves
    울산항만공사 as a blocked materialization/reactivation queue.
+   The following 한국도로공사 batch materializes `93` APIs and `271`
+   operations, and merges `271` verified `data.ex.co.kr`/related landing-page
+   checks. That brings checked runtime evidence to `2312`, verified checks to
+   `903`, registered external adapter operations to `7206`, and raises API
+   operation coverage to `10,319` of `12,060` APIs (`85.6%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

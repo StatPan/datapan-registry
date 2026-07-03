@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T19:14:02Z`
+- Generated at: `2026-07-03T19:22:36Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `18555`
-- Runtime evidence: `2041` (`11.0%`)
-- External endpoint operations: `6945`
-- Registered adapter operations: `6935`
+- Operations: `18826`
+- Runtime evidence: `2312` (`12.3%`)
+- External endpoint operations: `7216`
+- Registered adapter operations: `7206`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -37,7 +37,7 @@
 | 식품의약품안전처 식품의약품안전평가원 | 106 | 106 | 154 | 21 | 13.6% | 0 | 0 | 21 | 103 | 0 |
 | 울산항만공사 | 98 | 6 | 9 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 충청남도 | 96 | 96 | 142 | 65 | 45.8% | 0 | 65 | 0 | 109 | 0 |
-| 한국도로공사 | 93 | 0 | 0 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
+| 한국도로공사 | 93 | 93 | 271 | 271 | 100.0% | 271 | 0 | 0 | 271 | 0 |
 | 기상청 | 89 | 44 | 183 | 23 | 12.6% | 0 | 0 | 23 | 24 | 0 |
 | 농림축산식품부 | 87 | 1 | 2 | 2 | 100.0% | 2 | 0 | 0 | 0 | 0 |
 | 문화체육관광부 | 86 | 1 | 1 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
@@ -64,6 +64,7 @@
 | 한국산업인력공단 | 230 | 230 | 317 | 150 | 47.3% | 7 | 1 | 142 | 181 | 0 |
 | 국회 국회사무처 | 277 | 277 | 277 | 30 | 10.8% | 0 | 30 | 0 | 277 | 0 |
 | 해양수산부 | 173 | 173 | 277 | 11 | 4.0% | 0 | 1 | 10 | 117 | 0 |
+| 한국도로공사 | 93 | 93 | 271 | 271 | 100.0% | 271 | 0 | 0 | 271 | 0 |
 | 한국연구재단 | 26 | 24 | 247 | 13 | 5.3% | 4 | 3 | 6 | 234 | 0 |
 | 한국마사회 | 223 | 223 | 223 | 10 | 4.5% | 0 | 0 | 10 | 221 | 0 |
 | 한국관광공사 | 28 | 28 | 213 | 1 | 0.5% | 0 | 0 | 1 | 212 | 0 |
@@ -77,7 +78,6 @@
 | 한국수자원공사 | 84 | 79 | 148 | 0 | 0.0% | 0 | 0 | 0 | 4 | 19 |
 | 충청남도 | 96 | 96 | 142 | 65 | 45.8% | 0 | 65 | 0 | 109 | 0 |
 | 인천항만공사 | 46 | 46 | 141 | 0 | 0.0% | 0 | 0 | 0 | 3 | 0 |
-| 경상남도 | 129 | 129 | 134 | 0 | 0.0% | 0 | 0 | 0 | 116 | 0 |
 
 The full machine-readable report is `reports/data-go-kr/institution-api-overview.json`.
 The full coverage backlog is `reports/data-go-kr/coverage-backlog.json`, with
@@ -86,9 +86,9 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 ## Largest Categories
 
 - 공공행정: `2593` operations
+- 교통물류: `2016` operations
 - 문화관광: `1890` operations
 - 농축수산: `1844` operations
-- 교통물류: `1745` operations
 - 사회복지: `1439` operations
 - 산업고용: `1288` operations
 - 식품건강: `1188` operations
@@ -107,4 +107,4 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 - www.nongsaro.go.kr: `314` operations
 - open.law.go.kr: `304` operations
 - www.foodsafetykorea.go.kr: `289` operations
-- open.assembly.go.kr: `277` operations
+- data.ex.co.kr: `278` operations

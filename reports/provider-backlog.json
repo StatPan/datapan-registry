@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T19:14:02Z",
+  "generated_at": "2026-07-03T19:22:36Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -17,7 +17,7 @@
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 6390,
+    "approval_required_operations": 6661,
     "malformed_source_url_count": 643
   },
   "providers": [
@@ -309,6 +309,23 @@
         "15056532",
         "15056661",
         "15056847"
+      ]
+    },
+    {
+      "host": "data.ex.co.kr",
+      "provider": "ex",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 99,
+      "operations": 278,
+      "external_endpoint_operations": 278,
+      "approval_required_operations": 270,
+      "sample_ids": [
+        "15040463",
+        "15040465",
+        "15040468"
       ]
     },
     {
@@ -860,6 +877,22 @@
       ]
     },
     {
+      "host": "data.seoul.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 9,
+      "operations": 10,
+      "external_endpoint_operations": 10,
+      "approval_required_operations": 3,
+      "sample_ids": [
+        "15003164",
+        "15040468",
+        "15057394"
+      ]
+    },
+    {
       "host": "www.culture.go.kr",
       "kinds": [
         "external_endpoint",
@@ -890,22 +923,6 @@
       "sample_ids": [
         "15000834",
         "15000935"
-      ]
-    },
-    {
-      "host": "data.seoul.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 8,
-      "operations": 9,
-      "external_endpoint_operations": 9,
-      "approval_required_operations": 2,
-      "sample_ids": [
-        "15003164",
-        "15040468",
-        "15057394"
       ]
     },
     {
@@ -943,22 +960,6 @@
         "15001011",
         "15001018",
         "15001019"
-      ]
-    },
-    {
-      "host": "data.ex.co.kr",
-      "provider": "ex",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 6,
-      "operations": 8,
-      "external_endpoint_operations": 8,
-      "sample_ids": [
-        "15040463",
-        "15040465",
-        "15040468"
       ]
     },
     {
