@@ -1,20 +1,20 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T13:33:15Z`
+- Generated at: `2026-07-03T13:54:19Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `14514`
-- Runtime evidence: `1458` (`10.0%`)
-- External endpoint operations: `2904`
-- Registered adapter operations: `2894`
+- Operations: `14780`
+- Runtime evidence: `1481` (`10.0%`)
+- External endpoint operations: `3170`
+- Registered adapter operations: `3160`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
 
 | Institution | APIs | APIs with ops | Ops | Evidence | Evidence % | Verified | Failed | Skipped | Approval | No endpoint |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 행정안전부 | 1252 | 1252 | 1767 | 80 | 4.5% | 44 | 25 | 11 | 613 | 0 |
-| 경기도 | 840 | 499 | 1351 | 74 | 5.5% | 74 | 0 | 0 | 3 | 0 |
+| 행정안전부 | 1252 | 1252 | 1767 | 90 | 5.1% | 54 | 25 | 11 | 613 | 0 |
+| 경기도 | 840 | 599 | 1617 | 87 | 5.4% | 87 | 0 | 0 | 6 | 0 |
 | 국토교통부 | 393 | 127 | 397 | 27 | 6.8% | 0 | 0 | 27 | 6 | 0 |
 | 식품의약품안전처 | 392 | 272 | 363 | 3 | 0.8% | 0 | 0 | 3 | 275 | 0 |
 | 국회 국회사무처 | 277 | 0 | 0 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
@@ -48,8 +48,8 @@
 
 | Institution | APIs | APIs with ops | Ops | Evidence | Evidence % | Verified | Failed | Skipped | Approval | No endpoint |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 행정안전부 | 1252 | 1252 | 1767 | 80 | 4.5% | 44 | 25 | 11 | 613 | 0 |
-| 경기도 | 840 | 499 | 1351 | 74 | 5.5% | 74 | 0 | 0 | 3 | 0 |
+| 행정안전부 | 1252 | 1252 | 1767 | 90 | 5.1% | 54 | 25 | 11 | 613 | 0 |
+| 경기도 | 840 | 599 | 1617 | 87 | 5.4% | 87 | 0 | 0 | 6 | 0 |
 | 국토교통부 | 393 | 127 | 397 | 27 | 6.8% | 0 | 0 | 27 | 6 | 0 |
 | 국립암센터 | 212 | 204 | 367 | 79 | 21.5% | 0 | 0 | 79 | 175 | 1 |
 | 식품의약품안전처 | 392 | 272 | 363 | 3 | 0.8% | 0 | 0 | 3 | 275 | 0 |
@@ -85,21 +85,21 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 ## Largest Categories
 
-- 공공행정: `1645` operations
+- 공공행정: `1661` operations
+- 문화관광: `1456` operations
+- 농축수산: `1433` operations
 - 교통물류: `1429` operations
-- 농축수산: `1410` operations
-- 문화관광: `1396` operations
-- 사회복지: `1235` operations
-- 산업고용: `1113` operations
+- 사회복지: `1241` operations
+- 산업고용: `1138` operations
 - 재정금융: `960` operations
-- 환경기상: `897` operations
-- 보건의료: `810` operations
-- 재난안전: `796` operations
+- 환경기상: `901` operations
+- 보건의료: `857` operations
+- 식품건강: `811` operations
 
 ## Largest Hosts
 
 - apis.data.go.kr: `11423` operations
-- data.gg.go.kr: `1296` operations
+- data.gg.go.kr: `1549` operations
 - www.safetydata.go.kr: `370` operations
 - www.lofin365.go.kr: `343` operations
 - www.safemap.go.kr: `104` operations

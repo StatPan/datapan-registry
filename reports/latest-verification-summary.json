@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T13:33:03Z",
+  "generated_at": "2026-07-03T13:54:09Z",
   "source": "C:\\Users\\statp\\dev\\datapan-registry\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1458,
-    "verified": 183,
+    "total": 1481,
+    "verified": 206,
     "failed": 112,
     "skipped": 1163,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 183,
+        "count": 206,
         "status": "verified"
       },
       {
@@ -305,7 +305,7 @@
       },
       {
         "key": "data-gg",
-        "count": 58,
+        "count": 68,
         "provider": "data-gg"
       },
       {
@@ -322,6 +322,11 @@
         "key": "uiryeong",
         "count": 40,
         "provider": "uiryeong"
+      },
+      {
+        "key": "eshare",
+        "count": 30,
+        "provider": "eshare"
       },
       {
         "key": "oneclick-law",
@@ -342,11 +347,6 @@
         "key": "lofin365",
         "count": 25,
         "provider": "lofin365"
-      },
-      {
-        "key": "eshare",
-        "count": 20,
-        "provider": "eshare"
       },
       {
         "key": "sisul",
@@ -509,6 +509,11 @@
         "provider": "foodsafetykorea"
       },
       {
+        "key": "gimhae",
+        "count": 1,
+        "provider": "gimhae"
+      },
+      {
         "key": "i815",
         "count": 1,
         "provider": "i815"
@@ -517,6 +522,11 @@
         "key": "ins24",
         "count": 1,
         "provider": "ins24"
+      },
+      {
+        "key": "jeju-air",
+        "count": 1,
+        "provider": "jeju-air"
       },
       {
         "key": "jejudatahub",
@@ -532,6 +542,11 @@
         "key": "ncpms",
         "count": 1,
         "provider": "ncpms"
+      },
+      {
+        "key": "open-law",
+        "count": 1,
+        "provider": "open-law"
       },
       {
         "key": "seogu",
@@ -567,7 +582,7 @@
       },
       {
         "key": "data.gg.go.kr",
-        "count": 58,
+        "count": 68,
         "host": "data.gg.go.kr"
       },
       {
@@ -589,6 +604,11 @@
         "key": "data.uiryeong.go.kr",
         "count": 40,
         "host": "data.uiryeong.go.kr"
+      },
+      {
+        "key": "www.eshare.go.kr",
+        "count": 30,
+        "host": "www.eshare.go.kr"
       },
       {
         "key": "oneclick.law.go.kr:80",
@@ -614,11 +634,6 @@
         "key": "openapi.its.ulsan.kr",
         "count": 20,
         "host": "openapi.its.ulsan.kr"
-      },
-      {
-        "key": "www.eshare.go.kr",
-        "count": 20,
-        "host": "www.eshare.go.kr"
       },
       {
         "key": "www.andong.go.kr",
@@ -776,6 +791,11 @@
         "host": "www.happysd.or.kr"
       },
       {
+        "key": "air.jeju.go.kr",
+        "count": 1,
+        "host": "air.jeju.go.kr"
+      },
+      {
         "key": "data.myhome.go.kr:443",
         "count": 1,
         "host": "data.myhome.go.kr:443"
@@ -796,6 +816,11 @@
         "host": "open.api.q-net.or.kr"
       },
       {
+        "key": "open.law.go.kr",
+        "count": 1,
+        "host": "open.law.go.kr"
+      },
+      {
         "key": "openapi.seoul.go.kr:8088",
         "count": 1,
         "host": "openapi.seoul.go.kr:8088"
@@ -814,6 +839,11 @@
         "key": "www.foodsafetykorea.go.kr",
         "count": 1,
         "host": "www.foodsafetykorea.go.kr"
+      },
+      {
+        "key": "www.gimhae.go.kr",
+        "count": 1,
+        "host": "www.gimhae.go.kr"
       },
       {
         "key": "www.ins24.go.kr",
@@ -839,7 +869,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 764,
+        "count": 787,
         "kind": "external_endpoint"
       },
       {

@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-03T13:33:15Z",
+  "generated_at": "2026-07-03T13:54:19Z",
   "provider": "data.go.kr",
   "registry": "C:\\Users\\statp\\dev\\datapan-registry\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 207,
+  "filtered_count": 210,
   "summary": {
-    "hosts": 207,
+    "hosts": 210,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 67,
+    "external_endpoint_hosts": 70,
     "external_guide_hosts": 160,
-    "registered_adapter_hosts": 56,
-    "operation_hosts": 69,
+    "registered_adapter_hosts": 59,
+    "operation_hosts": 72,
     "guide_only_hosts": 138,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 146,
-    "approval_required_operations": 4723,
+    "approval_required_operations": 4726,
     "malformed_source_url_count": 627
   },
   "providers": [
@@ -177,12 +177,12 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 500,
-      "operations": 1296,
-      "external_endpoint_operations": 1296,
+      "specs": 600,
+      "operations": 1549,
+      "external_endpoint_operations": 1549,
       "external_guide_specs": 12,
       "wms_operations": 5,
-      "approval_required_operations": 9,
+      "approval_required_operations": 11,
       "sample_ids": [
         "15005231",
         "15011020",
@@ -346,6 +346,21 @@
       ]
     },
     {
+      "host": "data.gm.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 34,
+      "operations": 38,
+      "external_endpoint_operations": 38,
+      "sample_ids": [
+        "15056498",
+        "15056517",
+        "15056869"
+      ]
+    },
+    {
       "host": "www.eshare.go.kr",
       "kinds": [
         "external_endpoint",
@@ -361,21 +376,6 @@
         "15076179",
         "15076186",
         "15076189"
-      ]
-    },
-    {
-      "host": "data.gm.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 26,
-      "operations": 30,
-      "external_endpoint_operations": 30,
-      "sample_ids": [
-        "15056869",
-        "15057024",
-        "15057095"
       ]
     },
     {
@@ -906,6 +906,22 @@
       ]
     },
     {
+      "host": "www.foodsafetykorea.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 3,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15058548",
+        "15059299",
+        "15151925"
+      ]
+    },
+    {
       "host": "www.jejudatahub.net",
       "kinds": [
         "external_endpoint"
@@ -935,6 +951,20 @@
       "sample_ids": [
         "15007444",
         "15007467"
+      ]
+    },
+    {
+      "host": "air.jeju.go.kr",
+      "provider": "jeju-air",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "15058679"
       ]
     },
     {
@@ -992,6 +1022,21 @@
       ]
     },
     {
+      "host": "open.law.go.kr",
+      "provider": "open-law",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15148289"
+      ]
+    },
+    {
       "host": "openapi.seoul.go.kr:8088",
       "kinds": [
         "external_endpoint"
@@ -1033,7 +1078,8 @@
       ]
     },
     {
-      "host": "www.foodsafetykorea.go.kr",
+      "host": "www.gimhae.go.kr",
+      "provider": "gimhae",
       "kinds": [
         "external_endpoint"
       ],
@@ -1041,9 +1087,8 @@
       "specs": 1,
       "operations": 1,
       "external_endpoint_operations": 1,
-      "approval_required_operations": 1,
       "sample_ids": [
-        "15151925"
+        "15059539"
       ]
     },
     {
