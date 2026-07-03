@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T19:14:00Z",
+  "generated_at": "2026-07-03T19:22:34Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 2041,
-    "verified": 632,
+    "total": 2312,
+    "verified": 903,
     "failed": 212,
     "skipped": 1197,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 632,
+        "count": 903,
         "status": "verified"
       },
       {
@@ -334,6 +334,11 @@
         "provider": "data.go.kr"
       },
       {
+        "key": "ex",
+        "count": 277,
+        "provider": "ex"
+      },
+      {
         "key": "q-net",
         "count": 147,
         "provider": "q-net"
@@ -519,9 +524,9 @@
         "provider": "humetro"
       },
       {
-        "key": "ex",
+        "key": "seoul-open-data",
         "count": 7,
-        "provider": "ex"
+        "provider": "seoul-open-data"
       },
       {
         "key": "airport",
@@ -542,11 +547,6 @@
         "key": "lh-ebid",
         "count": 6,
         "provider": "lh-ebid"
-      },
-      {
-        "key": "seoul-open-data",
-        "count": 6,
-        "provider": "seoul-open-data"
       },
       {
         "key": "nfqs",
@@ -729,6 +729,11 @@
         "key": "apis.data.go.kr",
         "count": 705,
         "host": "apis.data.go.kr"
+      },
+      {
+        "key": "data.ex.co.kr",
+        "count": 277,
+        "host": "data.ex.co.kr"
       },
       {
         "key": "data.gg.go.kr",
@@ -931,14 +936,14 @@
         "host": "data.humetro.busan.kr"
       },
       {
-        "key": "data.ex.co.kr",
-        "count": 7,
-        "host": "data.ex.co.kr"
-      },
-      {
         "key": "openapi.tour.go.kr",
         "count": 7,
         "host": "openapi.tour.go.kr"
+      },
+      {
+        "key": "data.seoul.go.kr",
+        "count": 6,
+        "host": "data.seoul.go.kr"
       },
       {
         "key": "localfood.chungnam.go.kr",
@@ -969,11 +974,6 @@
         "key": "www.codil.or.kr",
         "count": 6,
         "host": "www.codil.or.kr"
-      },
-      {
-        "key": "data.seoul.go.kr",
-        "count": 5,
-        "host": "data.seoul.go.kr"
       },
       {
         "key": "ws.bus.go.kr",
@@ -1189,7 +1189,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 1317,
+        "count": 1588,
         "kind": "external_endpoint"
       },
       {

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T19:14:08Z",
+  "generated_at": "2026-07-03T19:22:42Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,15 +7,15 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 18555,
-    "callable_operations": 18413,
+    "operations": 18826,
+    "callable_operations": 18684,
     "callable_operation_percent": 99.2,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 6945,
-    "registered_adapter_operations": 6935,
+    "external_endpoint_operations": 7216,
+    "registered_adapter_operations": 7206,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.6,
-    "approval_required_operations": 6390,
+    "approval_required_operations": 6661,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T19:14:00Z",
-    "total": 2041,
-    "verified": 632,
+    "generated_at": "2026-07-03T19:22:34Z",
+    "total": 2312,
+    "verified": 903,
     "failed": 212,
     "skipped": 1197,
     "unknown": 0,
-    "verified_percent": 31,
-    "evidence_operation_percent": 11
+    "verified_percent": 39.1,
+    "evidence_operation_percent": 12.3
   },
   "route_evidence": {
     "present": true,
@@ -344,6 +344,23 @@
         ]
       },
       {
+        "host": "data.ex.co.kr",
+        "provider": "ex",
+        "kinds": [
+          "external_endpoint"
+        ],
+        "adapter_status": "adapter",
+        "specs": 99,
+        "operations": 278,
+        "external_endpoint_operations": 278,
+        "approval_required_operations": 270,
+        "sample_ids": [
+          "15040463",
+          "15040465",
+          "15040468"
+        ]
+      },
+      {
         "host": "open.assembly.go.kr",
         "provider": "open-assembly",
         "kinds": [
@@ -361,29 +378,11 @@
           "15125863",
           "15125866"
         ]
-      },
-      {
-        "host": "www.jejudatahub.net",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "adapter",
-        "specs": 74,
-        "operations": 177,
-        "external_endpoint_operations": 177,
-        "external_guide_specs": 7,
-        "approval_required_operations": 158,
-        "sample_ids": [
-          "15034922",
-          "15045335",
-          "15056424"
-        ]
       }
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T19:14:08Z",
+    "generated_at": "2026-07-03T19:22:42Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 84,
     "host_count": 99,
