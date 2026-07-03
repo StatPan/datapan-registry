@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-03T18:17:16Z",
+  "generated_at": "2026-07-03T18:30:56Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 18260,
-    "callable_operations": 18118,
-    "specs_without_operations": 2009,
-    "specs_without_callable_operation": 2084,
+    "operations_total": 18318,
+    "callable_operations": 18176,
+    "specs_without_operations": 1987,
+    "specs_without_callable_operation": 2062,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 5922,
-    "operations_without_response_params": 7144,
+    "operations_without_request_params": 5980,
+    "operations_without_response_params": 7202,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 3180,
-      "external_endpoint_operations": 6650,
+      "external_endpoint_specs": 3202,
+      "external_endpoint_operations": 6708,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 114,
       "dev_approval_required_operations": 208,
-      "prod_approval_required_operations": 6013,
+      "prod_approval_required_operations": 6052,
       "malformed_endpoint_url_count": 42,
       "malformed_guide_url_count": 601,
       "top_endpoint_hosts": [
@@ -53,6 +53,10 @@
           "count": 343
         },
         {
+          "host": "www.nongsaro.go.kr",
+          "count": 313
+        },
+        {
           "host": "open.law.go.kr",
           "count": 304
         },
@@ -63,10 +67,6 @@
         {
           "host": "open.assembly.go.kr",
           "count": 277
-        },
-        {
-          "host": "www.nongsaro.go.kr",
-          "count": 267
         },
         {
           "host": "www.jejudatahub.net",
@@ -131,6 +131,10 @@
           "count": 343
         },
         {
+          "host": "www.nongsaro.go.kr",
+          "count": 313
+        },
+        {
           "host": "open.law.go.kr",
           "count": 304
         },
@@ -141,10 +145,6 @@
         {
           "host": "open.assembly.go.kr",
           "count": 277
-        },
-        {
-          "host": "www.nongsaro.go.kr",
-          "count": 267
         },
         {
           "host": "www.jejudatahub.net",

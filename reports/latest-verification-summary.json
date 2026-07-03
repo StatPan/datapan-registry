@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T18:17:00Z",
+  "generated_at": "2026-07-03T18:30:46Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1900,
-    "verified": 556,
+    "total": 1925,
+    "verified": 581,
     "failed": 147,
     "skipped": 1197,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 556,
+        "count": 581,
         "status": "verified"
       },
       {
@@ -349,6 +349,11 @@
         "provider": "open-law"
       },
       {
+        "key": "nongsaro",
+        "count": 50,
+        "provider": "nongsaro"
+      },
+      {
         "key": "ekape",
         "count": 49,
         "provider": "ekape"
@@ -402,11 +407,6 @@
         "key": "lofin365",
         "count": 25,
         "provider": "lofin365"
-      },
-      {
-        "key": "nongsaro",
-        "count": 25,
-        "provider": "nongsaro"
       },
       {
         "key": "sisul",
@@ -736,6 +736,11 @@
         "host": "data.ekape.or.kr"
       },
       {
+        "key": "www.nongsaro.go.kr",
+        "count": 49,
+        "host": "www.nongsaro.go.kr"
+      },
+      {
         "key": "c.q-net.or.kr",
         "count": 42,
         "host": "c.q-net.or.kr"
@@ -784,11 +789,6 @@
         "key": "www.lofin365.go.kr",
         "count": 25,
         "host": "www.lofin365.go.kr"
-      },
-      {
-        "key": "www.nongsaro.go.kr",
-        "count": 24,
-        "host": "www.nongsaro.go.kr"
       },
       {
         "key": "openapi.epost.go.kr:80",
@@ -1144,7 +1144,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 1176,
+        "count": 1201,
         "kind": "external_endpoint"
       },
       {

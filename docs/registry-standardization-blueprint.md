@@ -94,8 +94,8 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `2,009` data.go.kr APIs
-  without operation mappings, `9,132` operation-mapped APIs without runtime
+- `reports/data-go-kr/coverage-backlog.json` tracks `1,987` data.go.kr APIs
+  without operation mappings, `9,143` operation-mapped APIs without runtime
   evidence, and `98` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
@@ -300,8 +300,14 @@ Current gaps:
   `4` skipped parameter-blocked checks. That brings runtime evidence to
   `1900`, registered external adapter operations to `6640`, and leaves
   농촌진흥청 as the first materialization queue with `22` uncovered APIs.
-- API operation coverage remains incomplete: `10,051` of `12,060` APIs have
-  operation mappings (`83.3%`), leaving `2,009` APIs to materialize and `9,132`
+- The final 농촌진흥청 batch adds NABIC adapter coverage, materializes the
+  remaining `22` APIs and `58` operations, and merges `25` verified
+  landing-page checks. That brings runtime evidence to `1925`, registered
+  external adapter operations to `6698`, completes 농촌진흥청 materialization at
+  `136` of `136` APIs, and moves the first materialization queue to
+  대전광역시 서구.
+- API operation coverage remains incomplete: `10,073` of `12,060` APIs have
+  operation mappings (`83.5%`), leaving `1,987` APIs to materialize and `9,143`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

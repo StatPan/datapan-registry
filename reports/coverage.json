@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T18:17:22Z",
+  "generated_at": "2026-07-03T18:31:02Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 18260,
-    "callable_operations": 18118,
+    "operations": 18318,
+    "callable_operations": 18176,
     "callable_operation_percent": 99.2,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 6650,
-    "registered_adapter_operations": 6640,
+    "external_endpoint_operations": 6708,
+    "registered_adapter_operations": 6698,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.6,
-    "approval_required_operations": 6119,
+    "approval_required_operations": 6158,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 90,
+    "registered_adapter_hosts": 91,
     "missing_adapter_hosts": 11,
-    "adapter_count": 81,
+    "adapter_count": 82,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T18:17:00Z",
-    "total": 1900,
-    "verified": 556,
+    "generated_at": "2026-07-03T18:30:46Z",
+    "total": 1925,
+    "verified": 581,
     "failed": 147,
     "skipped": 1197,
     "unknown": 0,
-    "verified_percent": 29.3,
-    "evidence_operation_percent": 10.4
+    "verified_percent": 30.2,
+    "evidence_operation_percent": 10.5
   },
   "route_evidence": {
     "present": true,
@@ -84,13 +84,14 @@
           "external_guide"
         ],
         "adapter_status": "missing",
-        "specs": 2,
+        "specs": 3,
         "operations": 4,
         "external_endpoint_operations": 4,
-        "external_guide_specs": 1,
+        "external_guide_specs": 2,
         "sample_ids": [
           "15002002",
-          "15002055"
+          "15002055",
+          "15123725"
         ]
       },
       {
@@ -290,6 +291,24 @@
         ]
       },
       {
+        "host": "www.nongsaro.go.kr",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "adapter",
+        "specs": 127,
+        "operations": 313,
+        "external_endpoint_operations": 313,
+        "external_guide_specs": 2,
+        "approval_required_operations": 220,
+        "sample_ids": [
+          "15002034",
+          "15005257",
+          "15015158"
+        ]
+      },
+      {
         "host": "open.law.go.kr",
         "provider": "open-law",
         "kinds": [
@@ -344,24 +363,6 @@
         ]
       },
       {
-        "host": "www.nongsaro.go.kr",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "adapter",
-        "specs": 107,
-        "operations": 267,
-        "external_endpoint_operations": 267,
-        "external_guide_specs": 1,
-        "approval_required_operations": 187,
-        "sample_ids": [
-          "15002034",
-          "15005257",
-          "15015158"
-        ]
-      },
-      {
         "host": "www.jejudatahub.net",
         "kinds": [
           "external_endpoint",
@@ -382,10 +383,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T18:17:22Z",
+    "generated_at": "2026-07-03T18:31:02Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 81,
-    "host_count": 92,
+    "adapter_count": 82,
+    "host_count": 93,
     "adapters": [
       {
         "name": "airport",
@@ -933,6 +934,16 @@
         ]
       },
       {
+        "name": "nabic",
+        "status": "registered",
+        "hosts": [
+          "nabic.rda.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "naqs",
         "status": "registered",
         "hosts": [
@@ -1235,8 +1246,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 81,
-      "verification_capable_adapters": 81,
+      "adapter_count": 82,
+      "verification_capable_adapters": 82,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

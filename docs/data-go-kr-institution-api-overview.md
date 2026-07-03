@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T18:17:16Z`
+- Generated at: `2026-07-03T18:30:56Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `18260`
-- Runtime evidence: `1900` (`10.4%`)
-- External endpoint operations: `6650`
-- Registered adapter operations: `6640`
+- Operations: `18318`
+- Runtime evidence: `1925` (`10.5%`)
+- External endpoint operations: `6708`
+- Registered adapter operations: `6698`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -28,7 +28,7 @@
 | 경기도 광명시 | 197 | 197 | 578 | 49 | 8.5% | 49 | 0 | 0 | 23 | 0 |
 | 해양수산부 | 173 | 173 | 277 | 11 | 4.0% | 0 | 1 | 10 | 117 | 0 |
 | 제주특별자치도 | 171 | 171 | 391 | 54 | 13.8% | 50 | 2 | 2 | 220 | 0 |
-| 농촌진흥청 | 136 | 114 | 305 | 33 | 10.8% | 26 | 0 | 7 | 204 | 0 |
+| 농촌진흥청 | 136 | 136 | 363 | 58 | 16.0% | 51 | 0 | 7 | 243 | 0 |
 | 경상남도 | 129 | 129 | 134 | 0 | 0.0% | 0 | 0 | 0 | 116 | 0 |
 | 대전광역시 서구 | 125 | 0 | 0 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 세종특별자치시 | 122 | 122 | 122 | 0 | 0.0% | 0 | 0 | 0 | 117 | 0 |
@@ -56,12 +56,12 @@
 | 법제처 | 203 | 203 | 403 | 88 | 21.8% | 50 | 11 | 27 | 154 | 0 |
 | 제주특별자치도 | 171 | 171 | 391 | 54 | 13.8% | 50 | 2 | 2 | 220 | 0 |
 | 국립암센터 | 212 | 212 | 375 | 87 | 23.2% | 8 | 0 | 79 | 183 | 1 |
+| 농촌진흥청 | 136 | 136 | 363 | 58 | 16.0% | 51 | 0 | 7 | 243 | 0 |
 | 공정거래위원회 | 250 | 250 | 353 | 23 | 6.5% | 23 | 0 | 0 | 301 | 0 |
 | 금융위원회 | 110 | 110 | 349 | 32 | 9.2% | 0 | 0 | 32 | 25 | 1 |
 | 성평등가족부 | 273 | 273 | 348 | 2 | 0.6% | 1 | 0 | 1 | 0 | 0 |
 | 부산광역시 | 259 | 259 | 336 | 60 | 17.9% | 0 | 0 | 60 | 74 | 1 |
 | 한국산업인력공단 | 230 | 230 | 317 | 150 | 47.3% | 7 | 1 | 142 | 181 | 0 |
-| 농촌진흥청 | 136 | 114 | 305 | 33 | 10.8% | 26 | 0 | 7 | 204 | 0 |
 | 국회 국회사무처 | 277 | 277 | 277 | 30 | 10.8% | 0 | 30 | 0 | 277 | 0 |
 | 해양수산부 | 173 | 173 | 277 | 11 | 4.0% | 0 | 1 | 10 | 117 | 0 |
 | 한국연구재단 | 26 | 24 | 247 | 13 | 5.3% | 4 | 3 | 6 | 234 | 0 |
@@ -87,7 +87,7 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 - 공공행정: `2513` operations
 - 문화관광: `1887` operations
-- 농축수산: `1759` operations
+- 농축수산: `1817` operations
 - 교통물류: `1740` operations
 - 사회복지: `1422` operations
 - 산업고용: `1277` operations
@@ -104,7 +104,7 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 - www.vworld.kr: `458` operations
 - www.safetydata.go.kr: `370` operations
 - www.lofin365.go.kr: `343` operations
+- www.nongsaro.go.kr: `313` operations
 - open.law.go.kr: `304` operations
 - www.foodsafetykorea.go.kr: `288` operations
 - open.assembly.go.kr: `277` operations
-- www.nongsaro.go.kr: `267` operations

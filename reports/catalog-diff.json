@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T18:17:16Z",
+  "generated_at": "2026-07-03T18:30:56Z",
   "provider": "data.go.kr",
   "old": ".datapan\\previous-data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,1011 +12,231 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 100,
-    "stable": 11960
+    "changed": 22,
+    "stable": 12038
   },
   "added": [],
   "removed": [],
   "changed": [
     {
-      "id": "15033498",
-      "old_title": "농촌진흥청_농작업일정 정보",
-      "new_title": "농촌진흥청_농작업일정 정보",
+      "id": "15033496",
+      "old_title": "농촌진흥청_이달의 음식 정보",
+      "new_title": "농촌진흥청_이달의 음식 정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "cbf77065acab3cbe1e885168075fd8997a8a43fd966e8983a3da03e024d9d546",
-      "new_digest": "75f38187552974b8e2bc998808e29cf510ad627ad99a815b3ec920d0a5b63062"
+      "old_digest": "d3412ac02d2e9f9e9439edff3517425297293cac7f16ab3edeb3a9a91bb06586",
+      "new_digest": "b80f0c9e56c6f22fe59637f5050cbaca893ec2f3d973cfdc42d4e027da750aa9"
     },
     {
-      "id": "15040895",
-      "old_title": "농촌진흥청_창업을 위한 식용 곤충요리",
-      "new_title": "농촌진흥청_창업을 위한 식용 곤충요리",
+      "id": "15041698",
+      "old_title": "농촌진흥청_유관기관 안내",
+      "new_title": "농촌진흥청_유관기관 안내",
       "fields": [
         "operations"
       ],
-      "old_digest": "eb6f9a40c5b5825575e10d22f6ecefbb845c8a56dc24d0e95703bd4e21ffb9f1",
-      "new_digest": "44a156ac54474ed10e1ada3a7b2ecdd411868c6bd041b5bd4f986cf2cfc3e03a"
+      "old_digest": "a1a894936f6ac30900bea3493f9e05dcb59c0668ae8dbf53722bf52cca107fb2",
+      "new_digest": "67a88ae8da0671e8340f8f77917cb08920c338c0957d165e5e59620984be397f"
     },
     {
-      "id": "15041703",
-      "old_title": "농촌진흥청_축산분뇨 처리시설업체",
-      "new_title": "농촌진흥청_축산분뇨 처리시설업체",
+      "id": "15041699",
+      "old_title": "농촌진흥청_교구와 매뉴얼",
+      "new_title": "농촌진흥청_교구와 매뉴얼",
       "fields": [
         "operations"
       ],
-      "old_digest": "78a989602494d58ec13523f0ba02c45f8e4504d4aa8dc1e0c55191cc4a2d3b62",
-      "new_digest": "12b2b2eb2604be364745a32809679b7334fb8733e5aedadec4ef6463c589fdb1"
+      "old_digest": "e2575b1b6e0f3702e2129c986bc8a91aedc35dbcc2487bfa3b3ca32c65332694",
+      "new_digest": "95095bcf627ea4b67a17f45be64af291aad1664322302570134bddb18d663560"
     },
     {
-      "id": "15041764",
-      "old_title": "농촌진흥청_6차 산업 우수사례 스토리",
-      "new_title": "농촌진흥청_6차 산업 우수사례 스토리",
+      "id": "15041700",
+      "old_title": "농촌진흥청_유기농업책자",
+      "new_title": "농촌진흥청_유기농업책자",
       "fields": [
         "operations"
       ],
-      "old_digest": "1d6fe81ddbf4573892f3be667723dda1595e38a93b90651d00d8df92419a550a",
-      "new_digest": "e8a9d7aeec92ed4031f72d7133f2f5e4f3787b4ea72a693589947968d3255156"
+      "old_digest": "a3f4a54b2c95fc1416042f56fa22965510e2e476faa3c2ac879ff04ef6da3ff2",
+      "new_digest": "98e3aaf8a3fdc02bebd549cf742964cbfbda17b7944c7a1adb41a3713e8911fa"
     },
     {
-      "id": "15041765",
-      "old_title": "농촌진흥청_축산실용기술모음",
-      "new_title": "농촌진흥청_축산실용기술모음",
+      "id": "15057994",
+      "old_title": "농촌진흥청_농약등록정보 검색서비스",
+      "new_title": "농촌진흥청_농약등록정보 검색서비스",
       "fields": [
         "operations"
       ],
-      "old_digest": "ac2f71fa9f9bdb82e2922f889e81b77e622029e09bba32c3d9e64749ce3429e7",
-      "new_digest": "e122b636b821e94c732eeedc1642fdc275e8c30fe2cd975f0896d980d756af69"
+      "old_digest": "e87e593cbdee6fc97ce50490811ec4cbd803a83ebe57708b5a374d132a9f7679",
+      "new_digest": "872f4c7729c5f3d9344c9b1e6f64cb937c14c4a30ced06ae0d3795c9fd8eb1f4"
     },
     {
-      "id": "15041766",
-      "old_title": "농촌진흥청_좋아하는 꽃",
-      "new_title": "농촌진흥청_좋아하는 꽃",
+      "id": "15058192",
+      "old_title": "농촌진흥청_병해충 예찰정보",
+      "new_title": "농촌진흥청_병해충 예찰정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "3a346c2b4129aabb1d572411fd8cd1b9e34ca5002046b56f1487332ca5d314af",
-      "new_digest": "286f5c71860ee70d0f914d4377dfda3620b297b95f2a065b1fd481ade26ecb01"
+      "old_digest": "3ad424104ce81ad4fa1d929bd7b26cc3c9cf2a2eb9f268388670cc2bee02fe54",
+      "new_digest": "90f42f1dd246f5d9c1568ef7c55cc030010e7bcd8bd14139400ef28c628bcf40"
     },
     {
-      "id": "15041768",
-      "old_title": "농촌진흥청_수출농업 종합컨설팅",
-      "new_title": "농촌진흥청_수출농업 종합컨설팅",
+      "id": "15058504",
+      "old_title": "농촌진흥청_작물 병해충 검색 서비스",
+      "new_title": "농촌진흥청_작물 병해충 검색 서비스",
       "fields": [
         "operations"
       ],
-      "old_digest": "ce4ca03104ac06d137850fb08a70e494f15a15a2c192d6438028ea8f8e529b33",
-      "new_digest": "7e6ce52e73b4d113fe636f0f2635e8a25eb28dc177b616c1a9acfdb6398d11b7"
+      "old_digest": "b2a5ac07b61e93572c93f5ed46840933af02d173e4f6a7a9687ed6400d3b0251",
+      "new_digest": "8454bc7a620392e3a6980bdd0aa85896232464cff30bc5b49e5debf5f541eb16"
     },
     {
-      "id": "15041769",
-      "old_title": "농촌진흥청_수출농업 발간도서",
-      "new_title": "농촌진흥청_수출농업 발간도서",
+      "id": "15058606",
+      "old_title": "농촌진흥청_농생명오믹스정보조회서비스",
+      "new_title": "농촌진흥청_농생명오믹스정보조회서비스",
       "fields": [
         "operations"
       ],
-      "old_digest": "f811247b56ca538382f94ed0c55da97daf9cd649f498846518005c769477a95d",
-      "new_digest": "3773bfbf4b791864dc44f12848baa9c8ead439ac644e417e4b1fae3623991bd7"
+      "old_digest": "d0b48ad763ba3158b82a70153117e83e89f0b0f4b3047c1b597b9ee5d0e5a1be",
+      "new_digest": "d75d1272a276bba611f26ec900c560a432a419dcb12eadf5191f419fe47a694a"
     },
     {
-      "id": "15041770",
-      "old_title": "농촌진흥청_학교텃밭 우수사례",
-      "new_title": "농촌진흥청_학교텃밭 우수사례",
+      "id": "15081306",
+      "old_title": "농촌진흥청_치유농장",
+      "new_title": "농촌진흥청_치유농장",
       "fields": [
         "operations"
       ],
-      "old_digest": "41630343a495c8aa5e168bee61c86d10cf9f6d7e8d214b685e99a51c004d5db7",
-      "new_digest": "3ab27b47b108c489b0bebe047fecc7da7ea313480f7d0aba8c728600491026b9"
+      "old_digest": "ac76534431b1d312fc898c5517818f53f198dd09a795da0ddc92905c21b6b83c",
+      "new_digest": "8d9c61528dc3df6831d2744e8c73dc8e91ed4c8012c87ba06f593ff19d320a28"
     },
     {
-      "id": "15041771",
-      "old_title": "농촌진흥청_사료 직거래장터",
-      "new_title": "농촌진흥청_사료 직거래장터",
+      "id": "15081308",
+      "old_title": "농촌진흥청_치유농업 연구성과",
+      "new_title": "농촌진흥청_치유농업 연구성과",
       "fields": [
         "operations"
       ],
-      "old_digest": "0c23fba0c163abb78a2ff55de4842e0ea046d305e187bf1d3f71bac7eda5fe7d",
-      "new_digest": "921e7490b1e7d0d1e67a8bdd44d5b82b5e440600d7d5f5196a798e5317f5a719"
+      "old_digest": "de91260f2dd5141bb620e41aa5550d04135343ac3a12458b2476fcfc435f4d9b",
+      "new_digest": "3407611d9a7cbb37f15024fdc48d7e928c8d8c201925f899e3cec5569ae5bade"
     },
     {
-      "id": "15041772",
-      "old_title": "농촌진흥청_축산분뇨 자원화 업체",
-      "new_title": "농촌진흥청_축산분뇨 자원화 업체",
+      "id": "15081310",
+      "old_title": "농촌진흥청_농작업 안전교육",
+      "new_title": "농촌진흥청_농작업 안전교육",
       "fields": [
         "operations"
       ],
-      "old_digest": "36455366ecb8e551df48f7f820fbfdc015de8f6d44f4a25193397ca39613bdc1",
-      "new_digest": "f53227cf590549e479fc91b02d758ac3f0d7e592d1dbd32fad1976887acf8b50"
+      "old_digest": "2183016d44ecf246c860ea4e1cf02be62c7b44912ed7c1c36b19e26da8ec05ec",
+      "new_digest": "6483cce691b257f13ff400ce87bd063f44c7cca9197dd03f7fe9e52efa2001aa"
     },
     {
-      "id": "15041773",
-      "old_title": "농촌진흥청_관련 사이트 정보",
-      "new_title": "농촌진흥청_관련 사이트 정보",
+      "id": "15081313",
+      "old_title": "농촌진흥청_농사로 이벤트",
+      "new_title": "농촌진흥청_농사로 이벤트",
       "fields": [
         "operations"
       ],
-      "old_digest": "fa4575e540e1956c2430f1412a76bbb25ada89cadc6d8329eaae4912e999485d",
-      "new_digest": "6b827b9975c8f5bce7666e102954072f1589793ee5a45acf1ce2fa73234efc59"
+      "old_digest": "0d157ac1706fb08a618b56e462aeeb966c27d3496a64f922fbaecac753cffb45",
+      "new_digest": "d82b63dc6f1f3e1b58e1e1f9dd3b45d33b0b3d9082046a9c572734ed46db3d94"
     },
     {
-      "id": "15041881",
-      "old_title": "농촌진흥청_6차산업 가공식품 우수경영체 정보",
-      "new_title": "농촌진흥청_6차산업 가공식품 우수경영체 정보",
+      "id": "15081314",
+      "old_title": "농촌진흥청_전통주 제조법",
+      "new_title": "농촌진흥청_전통주 제조법",
       "fields": [
         "operations"
       ],
-      "old_digest": "bbd2777d3d0467277268b3d17a2b3c10389d51c25b3991877df0b91279d73425",
-      "new_digest": "2a423ee67fbded77571f13decd8a3748cdb19e2d12387212dc8f6a3735e2f919"
+      "old_digest": "99f03e599021167f51a27e74bfd1b9844d69be662f891585d6b49c1afb49bb75",
+      "new_digest": "6bab4d433baa3a31f8718751d6af181777fa7db77ac1d23ed8d90a1c948847c9"
     },
     {
-      "id": "15057160",
-      "old_title": "농촌진흥청 텃밭가꾸기 정보",
-      "new_title": "농촌진흥청 텃밭가꾸기 정보",
+      "id": "15083586",
+      "old_title": "농촌진흥청_농기계 시청각자료",
+      "new_title": "농촌진흥청_농기계 시청각자료",
       "fields": [
         "operations"
       ],
-      "old_digest": "88604ddf669df485b8d508c69a78f32b2c7ae31f0a87c277045b12fc4a67991e",
-      "new_digest": "e13c6cecf1a1080ca6c187c5b4db6e21de2098ec0b6932bafa103aaf6c066e43"
+      "old_digest": "68d01f05bb75bc89eeddab77330c2c92c4554d46051c50c19738c9b162d013a8",
+      "new_digest": "151d3f19ea3448277830a03f575dcca59252b09f776aba8049c76ba533864031"
     },
     {
-      "id": "15057808",
-      "old_title": "농촌진흥청_표준사료 검색",
-      "new_title": "농촌진흥청_표준사료 검색",
+      "id": "15083592",
+      "old_title": "농촌진흥청_치유농업 참고자료",
+      "new_title": "농촌진흥청_치유농업 참고자료",
       "fields": [
         "operations"
       ],
-      "old_digest": "ce3814afee74753ed72b03ca7c302d6f16d87a562b12024b5ec97ca5c212ad35",
-      "new_digest": "2669b58e89c5215504a2341977e5c8b94f0fe084dce03fd63af815ca62f23539"
+      "old_digest": "0962b0d58ca28ba5da158f34f5f342c26ceb526e4902639aec56b7013a9134ba",
+      "new_digest": "761e66060e23a49b172f088a16b83a0969f3f3440898055c79bdc790b49dadee"
     },
     {
-      "id": "15058298",
-      "old_title": "농촌진흥청_건조에 강한 실내식물",
-      "new_title": "농촌진흥청_건조에 강한 실내식물",
+      "id": "15101361",
+      "old_title": "농촌진흥청_지역특산물",
+      "new_title": "농촌진흥청_지역특산물",
       "fields": [
         "operations"
       ],
-      "old_digest": "82d0325a9e2942786e0ba57775e22d1cae3b7c59281357ff1e8f1b0d5f062696",
-      "new_digest": "68a7f434383f34d3a8aa70aa7e67072feb0cc771e98eb3f1ce96536b6e5e66d9"
+      "old_digest": "6710b9ab7003ca5a91d33e14bfcc1fbb74cd2ec09fd5c22b8e45cbe5a4a3ae4c",
+      "new_digest": "79be61b2601dc7505cd7338b89d606b79de94649c8c63028da5a701e2d1dc300"
     },
     {
-      "id": "15058425",
-      "old_title": "농촌진흥청_진로체험활동 정보",
-      "new_title": "농촌진흥청_진로체험활동 정보",
+      "id": "15101988",
+      "old_title": "농촌진흥청_수출농업 동향자료",
+      "new_title": "농촌진흥청_수출농업 동향자료",
       "fields": [
         "operations"
       ],
-      "old_digest": "20c956dd12d84ee67ef355208d8c097d4937046d75abb31cc7085728c24a006d",
-      "new_digest": "7ae6d19d4e8101d3e4b6510b65a25c2e005ea078790f3a3f7d5f1d29960acb74"
+      "old_digest": "00ee345092955eb25d74fec4d2de817fd05ba87ff50bb5bd9d26d863ea0bc17d",
+      "new_digest": "fd69698fc5897dbe903cd7866b6c579f71447c1ec53a3c57051671840f4dbe73"
     },
     {
-      "id": "15059042",
-      "old_title": "농촌진흥청_실내정원용 식물",
-      "new_title": "농촌진흥청_실내정원용 식물",
+      "id": "15102241",
+      "old_title": "농촌진흥청_등록취소 농약정보",
+      "new_title": "농촌진흥청_등록취소 농약정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "1aebf107ceb42f6a95b5d7874de90dba81c16cfa64fef941dc04b07dd951a02d",
-      "new_digest": "65eb7d96c23afbc36fc82d6ef843135c3be0ed9d3c53b8b338534feca821a9ee"
+      "old_digest": "fdf412b34bc4dd03b82157ce51014ce5401849d3add6f999d976166dda69c2e2",
+      "new_digest": "0b7d4c14cea1f5f914a0441d9b004ded3f8af571845979bfda8623cf92ce8d39"
     },
     {
-      "id": "15059270",
-      "old_title": "농촌진흥청_반려동물 사료정보",
-      "new_title": "농촌진흥청_반려동물 사료정보",
+      "id": "15123701",
+      "old_title": "농촌진흥청_실내정원동영상강좌",
+      "new_title": "농촌진흥청_실내정원동영상강좌",
       "fields": [
         "operations"
       ],
-      "old_digest": "cdfc19e5d4491bc9703b54d4be506ee0515579c0927848ff8158b26d1e9c7b57",
-      "new_digest": "158994d34fad5a5c0cb8eacdb313878bcd214066c58a2b4cec64b515b08c23f1"
+      "old_digest": "81a9603f120b7cd34e6abb7a4e4c7d3c54753971887fe194e9463d037cc6028c",
+      "new_digest": "eab3b9823d8b620589fe8159630f9fe1ecb0a505deabb9a90e10078d1a22f41c"
     },
     {
-      "id": "15059306",
-      "old_title": "농촌진흥청_농약안전사용지침",
-      "new_title": "농촌진흥청_농약안전사용지침",
+      "id": "15123702",
+      "old_title": "농촌진흥청_농촌문화연구성과정보",
+      "new_title": "농촌진흥청_농촌문화연구성과정보",
       "fields": [
         "operations"
       ],
-      "old_digest": "b2558eff98407f5c8195815f0f6746411c798f24f6d9d3a6e936b89b6eb49fcd",
-      "new_digest": "ba28f78bbb2bd93c591c8d919ecaefb05fd340568482b9dcdf1f63b2cc0d93ef"
+      "old_digest": "e4a250f3522720790bb6c70e309ab47cbadb0f2a534a236f5a5e3c6dc4a83f95",
+      "new_digest": "f53c52b4e4e468a5da921e8f11125c5cc262ef4704c0f110dbb01705671db571"
     },
     {
-      "id": "15063836",
-      "old_title": "농촌진흥청_잡초정보",
-      "new_title": "농촌진흥청_잡초정보",
+      "id": "15123725",
+      "old_title": "농촌진흥청_월간농업기술정보목록",
+      "new_title": "농촌진흥청_월간농업기술정보목록",
       "fields": [
         "operations"
       ],
-      "old_digest": "d18499466419abd0fd3f1c3df440088c046be4c87347fceb11cf6d5ab420f857",
-      "new_digest": "310052e0d4a3d6bd5a7fee0cc99d4d3c4fbde725373ba7f6a06c677cf4424b37"
+      "old_digest": "0e53e845af5320ed2347a82a813e0f490e2bd12e1c5d0ab48614dc80ff8e99a8",
+      "new_digest": "4008c2184219000b3b0ae654bef840d86ce06339ce189d729942ad0bc6d5212d"
     },
     {
-      "id": "15064084",
-      "old_title": "농촌진흥청_축산용어사전",
-      "new_title": "농촌진흥청_축산용어사전",
+      "id": "15123788",
+      "old_title": "농촌진흥청_국가농작물병해충관리시스템 병해충 공개상담",
+      "new_title": "농촌진흥청_국가농작물병해충관리시스템 병해충 공개상담",
       "fields": [
         "operations"
       ],
-      "old_digest": "f56b1de3219887f6132abb54e7f2ee255a466ca6ef46eb7f347060dde71cb5c8",
-      "new_digest": "73317f6286a161e2b7a693301e2325f32296ea6b9d382e6913f43e496b07bd3b"
-    },
-    {
-      "id": "15064087",
-      "old_title": "농촌진흥청_학교텃밭교과학습활동프로그램",
-      "new_title": "농촌진흥청_학교텃밭교과학습활동프로그램",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "399fd17b6c5dbcca59432d4bea9e34bdfbf997a52060a90f30f5bd6ba0b1499d",
-      "new_digest": "89b080cb8373fbf04afe2cc2850d4821002b1febb878ab1b730d76e3dd972fd3"
-    },
-    {
-      "id": "15064096",
-      "old_title": "농촌진흥청_교통표지",
-      "new_title": "농촌진흥청_교통표지",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "ee0534ae30c2136947d013375a71fa879e3561a3f62195089114395bf0fe2516",
-      "new_digest": "13bfbbcd0f4edd35945b622c986e6a1d0caee47b822ad14ac002d5d5d95fc06b"
-    },
-    {
-      "id": "15064098",
-      "old_title": "농촌진흥청_농자재관련법령",
-      "new_title": "농촌진흥청_농자재관련법령",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "7ae22ee48a24c6a6f23a869f8d9f75816a5ca14e9bfeee5e1e7490662b032d59",
-      "new_digest": "94984314d4b99f914ce4bceb261477a021573299aeae84a6d6a6aadaf348247e"
-    },
-    {
-      "id": "15064106",
-      "old_title": "농촌진흥청_수출자료 Zoom-In",
-      "new_title": "농촌진흥청_수출자료 Zoom-In",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "dbb9a92a264a200e05b7bbd392a6300791fed2a5da4a7b3c2353a249a6e4dae6",
-      "new_digest": "949ab0071db206548d1b22f1d5fc04164123decee1cd78292c8f61d595f14801"
-    },
-    {
-      "id": "15064107",
-      "old_title": "농촌진흥청_시설표준설계도 설계지원프로그램 다운로드 이력",
-      "new_title": "농촌진흥청_시설표준설계도 설계지원프로그램 다운로드 이력",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "78ad405eb1add7cd887cd59eb0a09376aa7ed7fbe22e25529f9d73eef27cf10d",
-      "new_digest": "5dffdaa623128e41a8bfa09dae33632452a2658ece622dbc583a83a48ac4c212"
-    },
-    {
-      "id": "15064109",
-      "old_title": "농촌진흥청_가축분뇨 통합자료 게시판",
-      "new_title": "농촌진흥청_가축분뇨 통합자료 게시판",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "c13995b0e84f9ebfccaba94a275701899460b91ae3375374e33d353404d2545b",
-      "new_digest": "68c5da0123a75d0328b149f98cdf3f1f8e3cb9194903264ba56a3c743091b345"
-    },
-    {
-      "id": "15064141",
-      "old_title": "농촌진흥청_농기계 안전용품",
-      "new_title": "농촌진흥청_농기계 안전용품",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "a07de75e7d1e632da2651c3d10bdec96ecb0f7b4d0ffb8ada73d1d34c848f60a",
-      "new_digest": "3546e2b5855367bda923520e51a9ea04796130d1c460d8d8945027930bed21f0"
-    },
-    {
-      "id": "15064154",
-      "old_title": "농촌진흥청_농촌다움자원검색",
-      "new_title": "농촌진흥청_농촌다움자원검색",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "6036bec0c91ccf0bff3ac878aaaaa971913479e908ff481774783fac7635ecc6",
-      "new_digest": "6331a8e72bfe1dadca927057ff0e7ee3028c073db19d0a7ab9964430249bef05"
-    },
-    {
-      "id": "15064156",
-      "old_title": "농촌진흥청_농촌다움 100선",
-      "new_title": "농촌진흥청_농촌다움 100선",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "fec40507cebf0f424e831c679dc8a71b218350e36eab6dd2c9369138e3b5b76c",
-      "new_digest": "54d8fff721df9853e7889dfd492ad932cd79414314168ffd240711a06a04d0e4"
-    },
-    {
-      "id": "15064157",
-      "old_title": "농촌진흥청_주제별 짧은 기술동영상",
-      "new_title": "농촌진흥청_주제별 짧은 기술동영상",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "0497f3e58f593b2e1d78e8b742b4018b0f70a58b85eb27204989e38bc2fa9895",
-      "new_digest": "c7af6434223d00872b651b3c1a785e9a1e4677ec04311da606994e5f953fc4a5"
-    },
-    {
-      "id": "15064159",
-      "old_title": "농촌진흥청_농업과학기술 정책자료",
-      "new_title": "농촌진흥청_농업과학기술 정책자료",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "006580741303f0ef97f239b38ae08582920476d4de5da3cf2bac7c50a6ce2f0a",
-      "new_digest": "9773fd86eb7c64130859882091647badf528bb9fec4d8004d4be7400d4573a16"
-    },
-    {
-      "id": "15064160",
-      "old_title": "농촌진흥청_주제별 짧은 강의동영상",
-      "new_title": "농촌진흥청_주제별 짧은 강의동영상",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "14146f5d6fc095fcbcfb6806fac87694af2097fbf76e225f47e10f1a22efc120",
-      "new_digest": "42d90e6f33322ad12b844870072f778a22fa77bcdc9251149425c158b35d8f0e"
-    },
-    {
-      "id": "15064163",
-      "old_title": "농촌진흥청_고조리서 활용음식",
-      "new_title": "농촌진흥청_고조리서 활용음식",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "1824e6b3a5ebbc6f6844f515340f3654a58c96c973efe203e7b21c87f84f2934",
-      "new_digest": "fcc44b9c24f8540fc67268973ac4766fc19b5a7973e1c81d79786ffb681fbd13"
-    },
-    {
-      "id": "15064164",
-      "old_title": "농촌진흥청_별미 김치 30선",
-      "new_title": "농촌진흥청_별미 김치 30선",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "574fe034fe6608cb7c999f820c600e2d6914324237a45bd898bd4fde9502ce54",
-      "new_digest": "d253397faa97acfdc12dd5f353d2b0d84773a47805722394fbd063d8b2c24c73"
-    },
-    {
-      "id": "15064166",
-      "old_title": "농촌진흥청_화분매개곤충 생산자 정보",
-      "new_title": "농촌진흥청_화분매개곤충 생산자 정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "fe151ebba58115effb8dbc770c3e53d81e92b52b1a7d91a36be1855817d6e6a6",
-      "new_digest": "f84f199e375b859b35d741b26630468b03c081f35d68d3950242af0fcf648ac8"
-    },
-    {
-      "id": "15064168",
-      "old_title": "농촌진흥청_품종정보출원 등록정보",
-      "new_title": "농촌진흥청_품종정보출원 등록정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "78e22ef449a8d7383429d312a5c5d2512ad94b2436fa843c88861b97fb22ff7a",
-      "new_digest": "effb4ad228ab87f3d319028cb71f4029ef4ff8b642b8d4b8de88ab741bed3cb3"
-    },
-    {
-      "id": "15064169",
-      "old_title": "농촌진흥청_농업기술 더하기 나누기",
-      "new_title": "농촌진흥청_농업기술 더하기 나누기",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "40d1d6ac92dbfa5406e7ba570fb17373611793b49fe5636d939914e80eb7fe1f",
-      "new_digest": "e60547ae712b07e8169dbd36e093de7f8b647a8644183056633f4290aa6805b9"
-    },
-    {
-      "id": "15064170",
-      "old_title": "농촌진흥청_농업기계 안전 홍보",
-      "new_title": "농촌진흥청_농업기계 안전 홍보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "0dec910fbb53433e34c152cdf9c1ff9d20d7ee112e7e637e7163a3c531ea7dbb",
-      "new_digest": "f378ec715cc495287221c467f17631a7e3d5b4601a65990a13a71bd4e130f798"
-    },
-    {
-      "id": "15080891",
-      "old_title": "농촌진흥청_농촌문화 이슈",
-      "new_title": "농촌진흥청_농촌문화 이슈",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "839d357281d2e74ff537f0924b08e360515ef1044ac66670258b022ab9d34942",
-      "new_digest": "225e2ccb269aaa338f19b54c0e9f709cddeacf2ebe91f9c0f5a9996ab48262cf"
-    },
-    {
-      "id": "15080936",
-      "old_title": "농촌진흥청_여성농업인 알림마당",
-      "new_title": "농촌진흥청_여성농업인 알림마당",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "1423697cc5d3a770b8739ff24316f193ef8159cf591affa926f069123782fa91",
-      "new_digest": "20d2ee31e8e30ca62aba682539787dcc07fae254b8b0aca70b4bb142b37e6744"
-    },
-    {
-      "id": "15080938",
-      "old_title": "농촌진흥청_한방약술",
-      "new_title": "농촌진흥청_한방약술",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "043eea555a5021b250ce27cd2a701dec07a8ad976743bf625a347966b8a0fb1e",
-      "new_digest": "7eaa48500dee4bc4c5a825444a6aed698411dd100decefa37c911be36e7d2b71"
-    },
-    {
-      "id": "15080939",
-      "old_title": "농촌진흥청_과수 생산단지",
-      "new_title": "농촌진흥청_과수 생산단지",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "d7174e68904d9e857d3749f07cd999d69c32fa1ad179a342e36de5bd01dfbeba",
-      "new_digest": "c106be9d62a7869b33524410fadfac348a936073676e00b6cd2217fdc800e7a8"
-    },
-    {
-      "id": "15083580",
-      "old_title": "농촌진흥청_곤충표본관 공통코드",
-      "new_title": "농촌진흥청_곤충표본관 공통코드",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "7267d2a24b370937efe5783660072924657f9a1f9c3ad3e98e99a1ec94c69ba7",
-      "new_digest": "f00b7057761dad3fe120d7ba214dfaad22da2ff9f6d38056c692edbf749e9faf"
-    },
-    {
-      "id": "15083585",
-      "old_title": "농촌진흥청_농사로 공통코드",
-      "new_title": "농촌진흥청_농사로 공통코드",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "5f425f39230377201901b0f7184556dd1062ca2afecbc1cb56c60e2100b13d7e",
-      "new_digest": "62f9595435c14ac42c3535e9a118e924bad30b7df7ddc0e66883f57dca8b15e1"
-    },
-    {
-      "id": "15083591",
-      "old_title": "농촌진흥청_첨단농업기술",
-      "new_title": "농촌진흥청_첨단농업기술",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "36fa0832f12c38fd3a8f981eef321a45e20a7444842c027cd1eca985698fd77f",
-      "new_digest": "cda43369a2b690125d1414356a1e6af8e5d04a73d4d2f9a70d6a2ef7762672a6"
-    },
-    {
-      "id": "15083593",
-      "old_title": "농촌진흥청_친환경농법사례",
-      "new_title": "농촌진흥청_친환경농법사례",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "69d591d3534ec1c18763500aa2e370d136528686a426d5d4036a9bfd27c32ac4",
-      "new_digest": "e6d0ad4ff39e7d2e5a8b11ccacf9d56fa9521da241b5bdb0d05ce59f29ec827e"
-    },
-    {
-      "id": "15086334",
-      "old_title": "농촌진흥청_잔류농약기준 위반현황",
-      "new_title": "농촌진흥청_잔류농약기준 위반현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "e31adca53047cd5db95fcddef27da5b576a61f412b8775c0e382f4579df33cb4",
-      "new_digest": "be35ebd4ca0662a63ac21435383a5dd283102b316667104aa9e087551c6480ac"
-    },
-    {
-      "id": "15086337",
-      "old_title": "농촌진흥청_이달의 농업기술",
-      "new_title": "농촌진흥청_이달의 농업기술",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "f0c6238c575d3a42c77dc9d5c38b73e51c6c74611a81c5bcb91f77db7e0efd2f",
-      "new_digest": "42d8b044243891d448a7980e5b9ddcbbd1bceb27022c26eafc54135a7fb4f1da"
-    },
-    {
-      "id": "15086459",
-      "old_title": "농촌진흥청_농기계 안전이용 지침",
-      "new_title": "농촌진흥청_농기계 안전이용 지침",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "3b1de9cc68748049269351c39e5d708f697c2abe5b6bfcb01995b9ee5e0d0048",
-      "new_digest": "c6da37265a604790e245d88f8b78980fe203676c2ae54190d8eb5759f3db6c1b"
-    },
-    {
-      "id": "15086460",
-      "old_title": "농촌진흥청_꽃장식과 정원 꾸미기",
-      "new_title": "농촌진흥청_꽃장식과 정원 꾸미기",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "7f5bf77c1960c890a5ae0bc17175c5196f3a4202a5c6c252fa216fe76d2888c0",
-      "new_digest": "3d787d1265dc6aff8177431828927b2923c110f3c2386fe6f06e71e37da17f2c"
-    },
-    {
-      "id": "15086462",
-      "old_title": "농촌진흥청_실내정원만들기",
-      "new_title": "농촌진흥청_실내정원만들기",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "af4f2b705dc7539545444648a1b8fd411e806a639c42249c7b4ace45a886b208",
-      "new_digest": "cca0e4820cdb34fa1d0ef809b9651fdfc83d3e4b12b34be0b5f910d9d4cf78db"
-    },
-    {
-      "id": "15086465",
-      "old_title": "농촌진흥청_인삼레시피",
-      "new_title": "농촌진흥청_인삼레시피",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "2811f30141a37e8320fc0f36e6e95d257780bfc4726873bc4e1f7dfa7fe92722",
-      "new_digest": "b137ce34b5497a3684379970d6a871bd666aabf3b63352dd218fd7b201a3ad77"
-    },
-    {
-      "id": "15086471",
-      "old_title": "농촌진흥청_홍보서비스",
-      "new_title": "농촌진흥청_홍보서비스",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "46e47a829dcb5509a37a0386c659ecb27094faaa32e422635f07957504ec18d3",
-      "new_digest": "4fa0dd73c02858cb9108a6b13f713002ba3dcdf30eb2c6bfd05da54478940deb"
-    },
-    {
-      "id": "15086475",
-      "old_title": "농촌진흥청_건강안전정보",
-      "new_title": "농촌진흥청_건강안전정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "b17904dce923170db5bdff5bb7c3c09911c0824ca09c6003e390e9970a8818a8",
-      "new_digest": "a9349acb08ef78d2e5be43f97268cd31875ff33dfd21a073eb9eb79e850ff2e1"
-    },
-    {
-      "id": "15086484",
-      "old_title": "농촌진흥청_축산환경자가진단",
-      "new_title": "농촌진흥청_축산환경자가진단",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "57ac174dbaa1cfafbc699a684c63c2e7b92fd3bd6a6c58302847221edc8c50d0",
-      "new_digest": "02cc5e39dd11e9b53f2dd82569dcb42793d42af99d0d5c75b1c42e6ac5369c1f"
-    },
-    {
-      "id": "15086487",
-      "old_title": "농촌진흥청_토마토재배시설 평가하기",
-      "new_title": "농촌진흥청_토마토재배시설 평가하기",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "4aa2ee57d3c6713d7acec6b472d790ab629e131d1eba5ad36e44ea9f43fe4e24",
-      "new_digest": "fc9b3ef6ccad3f55d2a0fd09e3cbfb8d593c9d069fc05b75a7a28d5786a8da26"
-    },
-    {
-      "id": "15086493",
-      "old_title": "농촌진흥청_농기계 구입정보",
-      "new_title": "농촌진흥청_농기계 구입정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "d4b668db39ae06b9775746064fc25cea28db56af7daea9d4329b6b78afdba97f",
-      "new_digest": "bd6dadd1ace231ea3b2f9586d3a9564f1fc281b5b4baf60e98a73d15361d2424"
-    },
-    {
-      "id": "15086498",
-      "old_title": "농촌진흥청_치유농업 동영상",
-      "new_title": "농촌진흥청_치유농업 동영상",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "721c5dd71bb48e237039d5887dd5be6203ba59264fb4f32e02701fe21aedf11b",
-      "new_digest": "29f8b2ee56e919afb759272550f0487ebfec72bb05e1c615784ea35002b82e83"
-    },
-    {
-      "id": "15086502",
-      "old_title": "농촌진흥청_치유농업 이슈",
-      "new_title": "농촌진흥청_치유농업 이슈",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "2bde18976addc17213c16d316d382ace750c88e895e096a0f1dad04fcee25339",
-      "new_digest": "68c5e05ae2622d92e11b678a6503b622ad39443e8571c8f007bab42f5c68aceb"
-    },
-    {
-      "id": "15086519",
-      "old_title": "농촌진흥청_종가음식",
-      "new_title": "농촌진흥청_종가음식",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "b3e7ad94d2b8681bfa18593ae68579b603c1348fc3b84b647224cdb8b229e0d6",
-      "new_digest": "78e90e4a0d52f2224a11877b09f5663beb9ac26dcff6320a5bb6d1c83c58392b"
-    },
-    {
-      "id": "15086527",
-      "old_title": "농촌진흥청_음식 기본 정보",
-      "new_title": "농촌진흥청_음식 기본 정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "9a38e4e084d5e694782d0b89fb4353bbbfbc3e7662071727abaacaf8d4258e6d",
-      "new_digest": "582dd942efa1fb4a58502dcc2dc1ca9ef6548893cfbec747b5dc5fd785fe8e3d"
-    },
-    {
-      "id": "15086532",
-      "old_title": "농촌진흥청_향토음식 한영대역사전",
-      "new_title": "농촌진흥청_향토음식 한영대역사전",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "3df5b35d3daa2529e67f29e905b631cb3354877b2c36100c8d4d42ca64836ca8",
-      "new_digest": "189acba51476eca6df4bce169abdca147612e083c43c2979761b407be463ab38"
-    },
-    {
-      "id": "15086547",
-      "old_title": "농촌진흥청_곤충표본검색",
-      "new_title": "농촌진흥청_곤충표본검색",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "fe151da31c1be23f4f70373b1482c10838eb16a68a23db4936ae3bdc8e81448f",
-      "new_digest": "a0eaff16e8a11cce58a01658c767287fa9f6a56936e4822df99655e46023a2ea"
-    },
-    {
-      "id": "15086548",
-      "old_title": "농촌진흥청_고문헌 검색",
-      "new_title": "농촌진흥청_고문헌 검색",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "fba3e1651be0b4044fc25b6b1299fd040037292d1562990792cec70e920b5590",
-      "new_digest": "44bf8a762a57366c4f2449f5092c6714732f0bf529884d60f559ccd188fd0cd2"
-    },
-    {
-      "id": "15087160",
-      "old_title": "농촌진흥청_역대청차장명단",
-      "new_title": "농촌진흥청_역대청차장명단",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "b6ebd79110d6f25fd16c361e4c20d81fdbbea87926d0929f952da8ad92fb81c2",
-      "new_digest": "15d48a4215f7f9242ec65d601d052d1872b989130537d34664a252492dd570d8"
-    },
-    {
-      "id": "15087166",
-      "old_title": "농촌진흥청_청차장일정",
-      "new_title": "농촌진흥청_청차장일정",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "4fe9a275c9dd5b46d7a5adfa00252e2a92d8ab53890b9708fdc19c52081346ba",
-      "new_digest": "71fdbf16a858b0f995411890a70770cb419f55612158a23da98d25e43e32ea3e"
-    },
-    {
-      "id": "15087170",
-      "old_title": "농촌진흥청_분류군별경제곤충검색",
-      "new_title": "농촌진흥청_분류군별경제곤충검색",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "133ab75a67699e564aa0f06f8c746208d6a23ebbddaf5b88f8f6aa8ad5e08ece",
-      "new_digest": "914ffc2a71fadee6d2cc81253201b14f2207caac1fa5f076c4aed76704707487"
-    },
-    {
-      "id": "15087173",
-      "old_title": "농촌진흥청_곤충문헌검색",
-      "new_title": "농촌진흥청_곤충문헌검색",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "9733b968ed9c96d0aca18d5832a5ab808f3ae293b85d1bee7b7f972716fcc0db",
-      "new_digest": "467ff021f36a4534722d7f98af656606312be07c20c8347871f2969258d3322f"
-    },
-    {
-      "id": "15087175",
-      "old_title": "농촌진흥청_곤충표본관 FAQ",
-      "new_title": "농촌진흥청_곤충표본관 FAQ",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "507f7eedc716862c01feb8d8b64f0338ab9308a85ad501e52ededb8578c60fe2",
-      "new_digest": "eaa4b4326e5b0f05543aed5fc4b5447afd2cf001df436ddd62b84d7c5c092c12"
-    },
-    {
-      "id": "15087179",
-      "old_title": "농촌진흥청_곤충형태용어사전",
-      "new_title": "농촌진흥청_곤충형태용어사전",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "41a57439b4fe888820ee7a427823279394f64493085c9240e2a9870ec445a61d",
-      "new_digest": "137acc0ef9aa8164cb1301c817991560d50f65e0c7e0d194471cefcf3ad5664a"
-    },
-    {
-      "id": "15087188",
-      "old_title": "농촌진흥청_화분매개곤충 농약적용",
-      "new_title": "농촌진흥청_화분매개곤충 농약적용",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "9b47103bc1152503db6707159264c4568bce9509260a3fdc50eb57d5c8550f91",
-      "new_digest": "99645bc68cd973bd8851ce1103b0a3b2659b0854d3e18c73ac3bf1618ae0dc0f"
-    },
-    {
-      "id": "15087193",
-      "old_title": "농촌진흥청_공공 데이터",
-      "new_title": "농촌진흥청_공공 데이터",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "a8e482f66f8000b0e359ba82977918314061a7bfb8e9625778cfd01a1ffd69c7",
-      "new_digest": "683c21dd3dc11324500071ff85852a5b7391107ff58af115a0740491ac4238a3"
-    },
-    {
-      "id": "15101362",
-      "old_title": "농촌진흥청_지역 브랜드",
-      "new_title": "농촌진흥청_지역 브랜드",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "456f462c2ab5d90eafe4b5a2a5606d120883f9ac4c9454ac0b6aa54099612c9c",
-      "new_digest": "335907ad8b4991c0e59d9f5f4e1174c9623777c895af78c80205c0d7fc2ed6c4"
-    },
-    {
-      "id": "15101365",
-      "old_title": "농촌진흥청_농약 품질검사",
-      "new_title": "농촌진흥청_농약 품질검사",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "b76f1980b73bf8761af6b30c7cc8220a0b4629141e37e2ffdc7c455cea0695be",
-      "new_digest": "98f8ffa1325b20818fdc26eaaa46c7c7932ede860b0710b0df3c5ce69d7240d8"
-    },
-    {
-      "id": "15101370",
-      "old_title": "농촌진흥청_비료 품질검사",
-      "new_title": "농촌진흥청_비료 품질검사",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "d903955c8f1bb4621bb4fc260fa8133497b3d08924cbc78b51dc4f6b6164a4d6",
-      "new_digest": "4c46f209a111f7c9c5d738f5911e2a8e96ee025ee5ed424598126489c4147457"
-    },
-    {
-      "id": "15101371",
-      "old_title": "농촌진흥청_농업기계 사고사례",
-      "new_title": "농촌진흥청_농업기계 사고사례",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "8b0e64312137451c52ecd5ae349bab93b189d2f1e5bf0f852188571b0ac3d3cf",
-      "new_digest": "752443049ce71337f46ddd930a9fbdb9d5fcf51f0de58add442e9bb066e32e66"
-    },
-    {
-      "id": "15101372",
-      "old_title": "농촌진흥청_신기술 농업기계 지정현황",
-      "new_title": "농촌진흥청_신기술 농업기계 지정현황",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "b75c2d3b2bcefcf1eba3738770714d846fbdc2dab576747b14b62656b643d778",
-      "new_digest": "a6825a1af84d29583fba223e01eb674ef6722f511df6a63d02c20000ba0fe229"
-    },
-    {
-      "id": "15101375",
-      "old_title": "농촌진흥청_내재해형 시설규격",
-      "new_title": "농촌진흥청_내재해형 시설규격",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "d30d35fbd1ad4516d56cc7b5bc2693f8a9afb741799d7f4bba8d26d9c9848903",
-      "new_digest": "a20eeabcda6d8a64dcb539de62f1d85e2db9033ce16ed39d1333c125fe3a3288"
-    },
-    {
-      "id": "15101380",
-      "old_title": "농촌진흥청_시설설계도 참고용",
-      "new_title": "농촌진흥청_시설설계도 참고용",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "2b29aec73699565bd5282ff36deab2b44626b9d388d37571e1258c3259e4b327",
-      "new_digest": "1f5cd43fdb215fbc54f9841c176943349310b931848fca5b3010e5222ca6d814"
-    },
-    {
-      "id": "15101389",
-      "old_title": "농촌진흥청_축산분뇨 농가활용프로그램",
-      "new_title": "농촌진흥청_축산분뇨 농가활용프로그램",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "bd676036086209b894bd79522f45cdb337fae1e9c1a31b2366ab409210f19fba",
-      "new_digest": "6e227f642a362c848fe4cb565efc82cff7c9efaf0e437e0f564e189ba5bfb57b"
-    },
-    {
-      "id": "15101393",
-      "old_title": "농촌진흥청_농식품부산물영양정보",
-      "new_title": "농촌진흥청_농식품부산물영양정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "034762d0194d028811d4068609a96f8ac44865b10c9f3e2adfa9a26f856f3932",
-      "new_digest": "db5b33c40fd52bca087b58a0b8b00ebb1aeaf70629035d7a7ae630dc92f6ad89"
-    },
-    {
-      "id": "15101394",
-      "old_title": "농촌진흥청_최신 유기농업 기술",
-      "new_title": "농촌진흥청_최신 유기농업 기술",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "2a9394b37c7d703c7a53b4ec44712d34395d537fe443bda35b97e4531c72866e",
-      "new_digest": "4eb87541ed1434a1bb2c9593bb0958bf07cc97cf1aa74a176f8f37bd0fa2c308"
-    },
-    {
-      "id": "15101395",
-      "old_title": "농촌진흥청_최신 생산 경영 기술",
-      "new_title": "농촌진흥청_최신 생산 경영 기술",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "18bde9cb66a7f2c19880d911b461be0410c67165caa5b0f8e1d7b6e66ad260c6",
-      "new_digest": "14700fd1c7ceae35ebebeb700683533cac91e349d0171efcc2f7e3be54c50cf1"
-    },
-    {
-      "id": "15101439",
-      "old_title": "농촌진흥청_RDA인테러뱅",
-      "new_title": "농촌진흥청_RDA인테러뱅",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "979c67100bd09bc56650db7035ee9ebdeabf4c60cbf24d22dbb62c5e602d529b",
-      "new_digest": "e8d3a0b64dd077f66f5177246b793ef846768ef6dbda3556cd3fff680850372a"
-    },
-    {
-      "id": "15101442",
-      "old_title": "농촌진흥청_현장기술지원",
-      "new_title": "농촌진흥청_현장기술지원",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "6bee2a779f17920d6c59b9b2df2043cd9aa6d13fc0a2d453b3485e4f04dea66a",
-      "new_digest": "92dc87b3496eae273b7800d7c41a2ae9965a108c4010ac6546e3cd341d02bd5d"
-    },
-    {
-      "id": "15101443",
-      "old_title": "농촌진흥청_현장애로기술사례",
-      "new_title": "농촌진흥청_현장애로기술사례",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "8fe3d19b0aea642b1826ca17e918c3d87f299a1be37bdbe7f7c075674c0a6c41",
-      "new_digest": "c2a65d4dd950d7b2eb8a191e2dda7a10951a72e96e443bf10facc133215ea80d"
-    },
-    {
-      "id": "15101446",
-      "old_title": "농촌진흥청_농작물재해예방정보",
-      "new_title": "농촌진흥청_농작물재해예방정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "f56573773d2f4951a3b26ad7e71cacd49994845c8a4190feb667b56d789f319a",
-      "new_digest": "50362510c3c544f81a00757513647eb33ddee4c6ffcf3913e09de8eae92eaf60"
-    },
-    {
-      "id": "15101448",
-      "old_title": "농촌진흥청_해외 농업 연구",
-      "new_title": "농촌진흥청_해외 농업 연구",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "10077f0cb7b99194cbde1bd891a21f63b2da6689d3f526f5c97484683a3bae83",
-      "new_digest": "d94586958b56d4138febbc3bef22ffc01e1396d318d538c3c6238060187c2603"
-    },
-    {
-      "id": "15101449",
-      "old_title": "농촌진흥청_향토 음식",
-      "new_title": "농촌진흥청_향토 음식",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "717adbba3e24c7e2db8c4aeed1ca31d626663119b2819f9166cc433952373f58",
-      "new_digest": "96a9b60ab872de2adda39581440e1ea636a5196c23f61b44878433a53746c9b0"
-    },
-    {
-      "id": "15101989",
-      "old_title": "농촌진흥청_품목별 수출정보",
-      "new_title": "농촌진흥청_품목별 수출정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "8a99052816c6907749354fb3bd41e26263b01963985e836f361d298e768ac100",
-      "new_digest": "58a5a37132e1fb3296060bdf77ef26cba92c3c0cb92603fb15c0f651b0bdc861"
-    },
-    {
-      "id": "15101991",
-      "old_title": "농촌진흥청_유기농실천사례",
-      "new_title": "농촌진흥청_유기농실천사례",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "406fa85fb33405f3f785de032375a5bf34937a7a4c67562ffc89cbb83d58de78",
-      "new_digest": "db693e74beb0a820a015386ca4f46ea946c1baf8b9bcd017dd31639ae321ec8a"
-    },
-    {
-      "id": "15138050",
-      "old_title": "농촌진흥청_농사로 농영상 목록",
-      "new_title": "농촌진흥청_농사로 농영상 목록",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "2a915957e532d6e841229f95cdf5ff37b531391bfe0d9a77ba4bd443f126894c",
-      "new_digest": "592a826804c86fc3c80b3cb2926a5aa5b85006e36448a8c9d7d6596b68f49594"
-    },
-    {
-      "id": "3060743",
-      "old_title": "농촌진흥청_작목별농업기술정보",
-      "new_title": "농촌진흥청_작목별농업기술정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "79629c1e37495a66b1cd98b87d7af8f6e5a0928d3d5724ae3ade1e1466f48b84",
-      "new_digest": "c4e5e7c61777caf04fd56ef227dbcf65f375c5240edf7274a9e2da2590e01aa8"
-    },
-    {
-      "id": "3060744",
-      "old_title": "농촌진흥청_주간농사정보",
-      "new_title": "농촌진흥청_주간농사정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "d5db9494affaf58ac621dfe663f0bfaaeddd70885c322c65ebee702ccf3d395f",
-      "new_digest": "609b1985ad3e7d9591b86d2aa2e30ce5eb36389acca5c06ec0d6665e0542fac6"
-    },
-    {
-      "id": "3060745",
-      "old_title": "농촌진흥청_품종 정보",
-      "new_title": "농촌진흥청_품종 정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "9d930bb9695e4f1145d5b0e9f5a0d8b00abf7f12e93e6bd2b4b0b121ae21afb3",
-      "new_digest": "7e4f7523ff3fc381d8b911ed373e198c8ea233a068779cdc2359a5b37c2ef540"
-    },
-    {
-      "id": "3060747",
-      "old_title": "농촌진흥청_농업기술동영상",
-      "new_title": "농촌진흥청_농업기술동영상",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "123b05f2eb0168c19adae0fba3496a90c3db95096bd97278d910bf1c983cd3d4",
-      "new_digest": "451c11349d9a7609cc4b84f53dab080b6a9b21331d2e43bcf37a3342e8fc45e7"
-    },
-    {
-      "id": "3060748",
-      "old_title": "농촌진흥청_농축산물소득정보",
-      "new_title": "농촌진흥청_농축산물소득정보",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "883416cc7522a0c44d18e2b268a9bb32a884bd84c6c8a4c881f0d051955b2fa5",
-      "new_digest": "8ea004cffbb1f971e5a63ba77dbd161c5c9381c4ff1f6fb3a78e1a0331cb3627"
-    },
-    {
-      "id": "3061058",
-      "old_title": "농촌진흥청_농업용어사전",
-      "new_title": "농촌진흥청_농업용어사전",
-      "fields": [
-        "operations"
-      ],
-      "old_digest": "478a30b034948137b4a518511277281529e1ef1660108b32ac3a86bbe2b79d67",
-      "new_digest": "2f689e5d08878d6cdee5810b7f7431678bc814a0e748b4d13db85ba55caebebf"
+      "old_digest": "d0ee8178a217208a4e3a17a742de68dcd4b8021dbefbfe4e8ca2011e88c1e7cd",
+      "new_digest": "56dd1ae979a6e012b3fb53b75e1e0973f75f94d13079383685183f8d02f278fd"
     }
   ]
 }

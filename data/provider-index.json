@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T18:17:16Z",
+  "generated_at": "2026-07-03T18:30:56Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 81,
-  "host_count": 92,
+  "adapter_count": 82,
+  "host_count": 93,
   "adapters": [
     {
       "name": "airport",
@@ -550,6 +550,16 @@
       ]
     },
     {
+      "name": "nabic",
+      "status": "registered",
+      "hosts": [
+        "nabic.rda.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "naqs",
       "status": "registered",
       "hosts": [
@@ -852,8 +862,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 81,
-    "verification_capable_adapters": 81,
+    "adapter_count": 82,
+    "verification_capable_adapters": 82,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
