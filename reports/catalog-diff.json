@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T20:57:33Z",
+  "generated_at": "2026-07-03T21:17:58Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3465,
-    "stable": 8595
+    "changed": 3533,
+    "stable": 8527
   },
   "added": [],
   "removed": [],
@@ -2789,6 +2789,26 @@
       "new_digest": "78a7bc95459feea7ad3a7b9ecf842f839966abb96a740353f8295e19b88e1cdf"
     },
     {
+      "id": "15047383",
+      "old_title": "서울특별시 장애인콜시스템",
+      "new_title": "서울특별시 장애인콜시스템",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "42d17c93e41bea167c10dcc3414352fed969c2f2ce91ac595a5b08f0411cefad",
+      "new_digest": "a21e90f2d49d07365e3ef4d781a08102e695711c80b996ebf38381b8523f3e6f"
+    },
+    {
+      "id": "15047488",
+      "old_title": "서울특별시_일자리플러스센터 채용 정보",
+      "new_title": "서울특별시_일자리플러스센터 채용 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "01a7c6e00dbf539cf0436b526d6d90b910fd23b8368f3f756fe4cdd077581422",
+      "new_digest": "7a5e87f8c9bc4f9e9a24377aa1a52c43ce29b0e393940dd05a914093e78d2da4"
+    },
+    {
       "id": "15050553",
       "old_title": "농림축산식품부_지역별 농기계보유현황",
       "new_title": "농림축산식품부_지역별 농기계보유현황",
@@ -2807,6 +2827,26 @@
       ],
       "old_digest": "443e2bd5089f5fa1e2dcfc3563d2ce6c1bc74f7a151d10d5190b2a12d0567b39",
       "new_digest": "093be2e7ec76639053d0cb342ab34aac83b482b4d81aff42e4a0bdfa177e75c4"
+    },
+    {
+      "id": "15051731",
+      "old_title": "서울특별시_공공서비스예약 조회",
+      "new_title": "서울특별시_공공서비스예약 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3e0d9ac8c049bce486cdfb350242371c43f44418af8d035453db2c1d0720c9f8",
+      "new_digest": "6cc69462496efd57ac5542a90d167b695430bb8509ea2be15055e56be4c76ee3"
+    },
+    {
+      "id": "15051891",
+      "old_title": "서울특별시 공공자전거 실시간 대여정보",
+      "new_title": "서울특별시 공공자전거 실시간 대여정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c86296dcdf043332237e46900e68e51449187f66e290d3ec440079c57702260d",
+      "new_digest": "7ab62059a852078111bf9e3860a1778af342e0f279a844e6699ec42b2e7da0e9"
     },
     {
       "id": "15052495",
@@ -2877,6 +2917,16 @@
       ],
       "old_digest": "ad8e4f6ae2eeeee9ccfd99372a512b61acf6bcf4491f673d55d352a4369e5b44",
       "new_digest": "b7186aebdbf2e95d8cf0ca36d2dd57cc8bfbccc052daa79523be6bf94fd3da1d"
+    },
+    {
+      "id": "15056500",
+      "old_title": "서울특별시_돌발 유형 코드 정보",
+      "new_title": "서울특별시_돌발 유형 코드 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "141bb903871834be316c7831c3005a2f542aad80a0ddecb908408f17e0add27c",
+      "new_digest": "2b04d3dc5c9ba3af17e0aa8cee6a2d16cffa6f38faee1cfd8b43203f60f0ad52"
     },
     {
       "id": "15056501",
@@ -3309,6 +3359,16 @@
       "new_digest": "2e23fe5a5bd5b14b79711505dd3e5a7731cecb3aaaee41f1353f18269c0c3b22"
     },
     {
+      "id": "15056618",
+      "old_title": "서울특별시_소통 돌발 링크 정보",
+      "new_title": "서울특별시_소통 돌발 링크 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fd305f773aba0febe457018a8f5fbe25bdcfec7f5d997da145dd03f8c19adf55",
+      "new_digest": "d8f540b7ac7e0280c2244e7113b64943a3644e2ad8a6f48496a94773bf966635"
+    },
+    {
       "id": "15056619",
       "old_title": "경기도_치과의원 현황(의원급)",
       "new_title": "경기도_치과의원 현황(의원급)",
@@ -3637,6 +3697,16 @@
       ],
       "old_digest": "f5bd71009af9f1779fc5ac25deed2905604ce5d486711c51a113afe0ed554d2d",
       "new_digest": "84133a16d181b13da9a044d8de6a4c6d8ede54a5054020cdd82b7a2880cea098"
+    },
+    {
+      "id": "15056706",
+      "old_title": "서울특별시 One-PMIS 주간작업내용",
+      "new_title": "서울특별시 One-PMIS 주간작업내용",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2da6c5e133f1ce20256e82950ceaedc8ce4da3544e428869077aa9590d51b4fa",
+      "new_digest": "124b911e03d6c1007d8670819f13fded11ab61cfcb2dae766dcb4ba64232db34"
     },
     {
       "id": "15056707",
@@ -4119,6 +4189,16 @@
       "new_digest": "d3ca97ca932207c9a9853a79808e9353935bf7bfb5f9a08afcb5626656cf8539"
     },
     {
+      "id": "15056827",
+      "old_title": "서울특별시_교통량 지점 정보",
+      "new_title": "서울특별시_교통량 지점 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3a42305f0a03c040635c07c97b72dc91a77ac39b865e7d3d62a83d6e9b4be9b4",
+      "new_digest": "b1fec6c0c37cb15d091bcaf7a3280f8b84b6f43a10ec3cc07cbc187d6bff35f2"
+    },
+    {
       "id": "15056834",
       "old_title": "제주특별자치도_월간 중국인관광객 카드 사용 정보",
       "new_title": "제주특별자치도_월간 중국인관광객 카드 사용 정보",
@@ -4369,6 +4449,16 @@
       "new_digest": "4a11505314532b0d5c7b47504bc7a78fd8f68d3e1804fadc74951ece78061eac"
     },
     {
+      "id": "15056899",
+      "old_title": "서울특별시_교통량 이력 정보",
+      "new_title": "서울특별시_교통량 이력 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "636ca523187350aca5ff83ce8eb8a5df9633a74943435b0b34dcdcaac287ee06",
+      "new_digest": "9d209e815494ee802a01864a05155b439d9be7770571a96dfa2605f5f2617570"
+    },
+    {
       "id": "15056900",
       "old_title": "경기도_노동조합 현황",
       "new_title": "경기도_노동조합 현황",
@@ -4557,6 +4647,16 @@
       ],
       "old_digest": "a3b3edff2460eb31d39a6131672389d9ad54ee8c202bd29017c995b29415451a",
       "new_digest": "6882eda0f800d2c1f8fcb953e4e5b8799875b801859ccc4d535145e87d15dadc"
+    },
+    {
+      "id": "15056935",
+      "old_title": "서울특별시_돌발 세부유형 코드 정보",
+      "new_title": "서울특별시_돌발 세부유형 코드 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "65274579fdfe12c5a8c1201b7392d3d402440be0478fa7fa8b2b12e16aad5508",
+      "new_digest": "cefa3b5f3452eb709c84d4313d4fd2959264ed38454c97e1049f03fe456d3fbc"
     },
     {
       "id": "15056937",
@@ -6479,6 +6579,16 @@
       "new_digest": "81f26ccd6b86b39fc2b1c00dd8d61e74b49842b5198ea99edb8780004c498eab"
     },
     {
+      "id": "15057446",
+      "old_title": "서울특별시 One-PMIS 안전점검 조치결과",
+      "new_title": "서울특별시 One-PMIS 안전점검 조치결과",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "792da4b717862a0c8ca2a102161167da8fdbbf6333675afc86da3e9f889f92b3",
+      "new_digest": "812e26c82bb0869f8f84661c95930ce0f0d2c75b8ab1029db272ee51a44622ae"
+    },
+    {
       "id": "15057447",
       "old_title": "경기도_장애영역별 특수학교 학생수 집계현황",
       "new_title": "경기도_장애영역별 특수학교 학생수 집계현황",
@@ -7467,6 +7577,16 @@
       ],
       "old_digest": "c12f0b6b89580c4e1d597b993575dccf84a007a8bb464eba0b64e8dd36a05368",
       "new_digest": "2f033966985c2b653efd3294bf493e9d8bff3824a8afbe93b92dc499dda77d30"
+    },
+    {
+      "id": "15057649",
+      "old_title": "서울특별시_소통 돌발 교통 권역 정보",
+      "new_title": "서울특별시_소통 돌발 교통 권역 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4fbf38f3b00d6852ed3a1bdf3683f172b879819e97a3aac41c4050fcde4e57f4",
+      "new_digest": "7ec422a09672c80af9e2f06d166fa0479c78c7b21e491610da38f31cc3c71a0c"
     },
     {
       "id": "15057650",
@@ -8589,6 +8709,16 @@
       "new_digest": "b2a31a215426704d37c4ec9dceb1c6ada53becbac53b9275f473e4f34ff66bcd"
     },
     {
+      "id": "15057895",
+      "old_title": "서울특별시_소통 돌발 도로 정보",
+      "new_title": "서울특별시_소통 돌발 도로 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ef4a59f36a386003ed44a096880d36af6284be1b9c29b2f041b267023988533f",
+      "new_digest": "ebb639c2660a50624970adefd5140b6ebe368dbe9da71ebca6b66af8729c814b"
+    },
+    {
       "id": "15057898",
       "old_title": "경기도_행복카셰어 기관별 차량 집계현황",
       "new_title": "경기도_행복카셰어 기관별 차량 집계현황",
@@ -9129,6 +9259,16 @@
       "new_digest": "36b2c7dcfdadf5dfd50836ef8e8aef2468a1eef97bf090fe90f60b71f065403c"
     },
     {
+      "id": "15058052",
+      "old_title": "서울특별시_지하철 실시간 도착정보",
+      "new_title": "서울특별시_지하철 실시간 도착정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c64fc11db20740e82cee3ddb9b7dde9b3db6afd14ee93d5c6bbbc32872428773",
+      "new_digest": "ddc8df7de7a3dd3adc99b4d50e7ecd39d362c3435f3c7287c1f042bd90ae39c3"
+    },
+    {
       "id": "15058055",
       "old_title": "국토교통부_유통단지",
       "new_title": "국토교통부_유통단지",
@@ -9167,6 +9307,16 @@
       ],
       "old_digest": "d743b5c813d3aef7093f24b27fefaf6ea61161ef1f34d91299393f7606407b1c",
       "new_digest": "2c387887caf2389143340f03a379abf2216bf578ebfe64cd6f0408ae156eb998"
+    },
+    {
+      "id": "15058062",
+      "old_title": "서울특별시_소통 돌발 링크 Vertex 정보",
+      "new_title": "서울특별시_소통 돌발 링크 Vertex 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9b6c7dc805f157fb20bcc37b15f5c6cd063ed56fc1729101e7d2deadeafc7e0c",
+      "new_digest": "a06e6dd2cf85e0aa95663f35a40f40f4835787bd3e9f0341639718faeb2efd41"
     },
     {
       "id": "15058063",
@@ -9709,6 +9859,16 @@
       "new_digest": "90f42f1dd246f5d9c1568ef7c55cc030010e7bcd8bd14139400ef28c628bcf40"
     },
     {
+      "id": "15058195",
+      "old_title": "서울특별시 One-PMIS 안전점검 일정",
+      "new_title": "서울특별시 One-PMIS 안전점검 일정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "665820e5b25e90717e81df6b243164e3fa67fd831e16110bc673636dfc4a3cad",
+      "new_digest": "4bb09304d93861b59ef4cf9225ed8e965d368ec7369e1e8e012fa2ae75d1a317"
+    },
+    {
       "id": "15058196",
       "old_title": "경기도_식품소분업 현황",
       "new_title": "경기도_식품소분업 현황",
@@ -10099,6 +10259,16 @@
       "new_digest": "e5b7ab8037d51183f2ab38dc35b93c31a214a028e063dd401746ac33ea91d772"
     },
     {
+      "id": "15058289",
+      "old_title": "서울특별시_소통 돌발 도로별 링크 정보",
+      "new_title": "서울특별시_소통 돌발 도로별 링크 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "863e14ff5746e443428b52531dd961a26cee134d9442e82fbff138648eee26af",
+      "new_digest": "47c319f7036b136e65ac9fe00add01e646707a01da9b1b583ff3ef88320ec1c8"
+    },
+    {
       "id": "15058293",
       "old_title": "경기도_학생교육활동에 필요한 지원시설 현황",
       "new_title": "경기도_학생교육활동에 필요한 지원시설 현황",
@@ -10339,6 +10509,16 @@
       "new_digest": "c65e127eca71b9dd231c1d9e26bd0c7f8293c851d62894eb53746cb5717a5ac7"
     },
     {
+      "id": "15058358",
+      "old_title": "서울특별시 건설알림이 공사사진",
+      "new_title": "서울특별시 건설알림이 공사사진",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3d61b533110c0041a4d78f2bb20a8f2ac468978cbc4dcf6766e07e0919751241",
+      "new_digest": "5d1d8f4d3fdd4eb733d9c67d17e21dfe7b58fcc1b95ad3ff8e68dcab12474423"
+    },
+    {
       "id": "15058359",
       "old_title": "식품의약품안전처_건강기능식품 기능성 원료인정 현황",
       "new_title": "식품의약품안전처_건강기능식품 기능성 원료인정 현황",
@@ -10357,6 +10537,16 @@
       ],
       "old_digest": "a5f5d7607367ced53749f376b99dca62ee56cc49fde382913ddf33433f7a37b5",
       "new_digest": "a106fa65a6f0e3c8ed6ec1a3bc162ceeb0c622fe0ca847b3b90f6ab0d44b1884"
+    },
+    {
+      "id": "15058364",
+      "old_title": "서울특별시_실시간 도로 소통 정보",
+      "new_title": "서울특별시_실시간 도로 소통 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "53b4cd000c2999af64f4e2d70e0695c71fde1f05e6abd31ca8f1dcb0583b5b7e",
+      "new_digest": "94186770aa51f2a396eece126a927c502d517c0623611fc214f9aae5ded773cd"
     },
     {
       "id": "15058366",
@@ -11287,6 +11477,16 @@
       ],
       "old_digest": "443528f7f2695a7db5469e787406ecabeb18d017395ce63ed407d4d198825205",
       "new_digest": "5ad7a991c2f893bae14182be065f2daee0196e86164f74fe96911b024146d0da"
+    },
+    {
+      "id": "15058569",
+      "old_title": "서울특별시_지하철 실시간 열차 위치정보",
+      "new_title": "서울특별시_지하철 실시간 열차 위치정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9e999dfc0efd6c6df364a96ca9bdeb8522333cf3876a27eec6fe4bfe19f30f34",
+      "new_digest": "3a1e848d4316ef2c6d05837d82c90dd8c142e668ed1dd367a0d37b38ec2b60f7"
     },
     {
       "id": "15058572",
@@ -12519,6 +12719,16 @@
       "new_digest": "9271ff85857cb448ebcf41467b346727e4a76dd8062508e60301ee92b1811c2a"
     },
     {
+      "id": "15058877",
+      "old_title": "서울특별시_실시간 돌발 정보",
+      "new_title": "서울특별시_실시간 돌발 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4f9885b1ef7f963d79f7bca0d85c1758856467cca723741179ec3440487f463b",
+      "new_digest": "e19157cffff5156be7e81f7eed51256b65a3ed554fd1e7333bd21f573c411a75"
+    },
+    {
       "id": "15058878",
       "old_title": "법제처_현행법령 본문 조항호목 조회",
       "new_title": "법제처_현행법령 본문 조항호목 조회",
@@ -12797,6 +13007,16 @@
       ],
       "old_digest": "b379f9e283e1b597451dc2a3ff2d94b749bb52089bd3abaf0e180309e5dd5ae2",
       "new_digest": "cbd52b204840878e8a1d7320d2661824696f63ae968b6d81268101c9acb96e1e"
+    },
+    {
+      "id": "15058960",
+      "old_title": "서울특별시 One-PMIS 부실벌점",
+      "new_title": "서울특별시 One-PMIS 부실벌점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "896fb6fec99949103a62e2be3fb4c54cd8dfb2ed88b2885952056075448222a2",
+      "new_digest": "445d1479af6265fe325ddc9c65a3f4bc75c30aeb1617587d9f00a839e872edbf"
     },
     {
       "id": "15058961",
@@ -14369,6 +14589,16 @@
       "new_digest": "a4ed3ad98465cf4e07ee593119f90622d0696191e5ddc66abdaffa7d6abab5b3"
     },
     {
+      "id": "15059365",
+      "old_title": "서울특별시 One-PMIS 안전점검 점검결과",
+      "new_title": "서울특별시 One-PMIS 안전점검 점검결과",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3024a17e16e9cd23ad5077ec7929277590311d6defe6d663488d947cb687d5a2",
+      "new_digest": "7fed1e860061199e94b000afaede09cd8571906cac1d0c813f5715eaaf28813b"
+    },
+    {
       "id": "15059366",
       "old_title": "경기도_공유재산(토지) 현황",
       "new_title": "경기도_공유재산(토지) 현황",
@@ -14839,6 +15069,16 @@
       "new_digest": "f873e5bf6be0fe2a277dfccdd2fad6212dbb005a38f48cf230e4e208d2ea4fcc"
     },
     {
+      "id": "15059480",
+      "old_title": "서울특별시_소통 돌발 도로 분류 정보",
+      "new_title": "서울특별시_소통 돌발 도로 분류 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "864f6874c884f818a3e2f45eaf891b5833ba6e2e66dbebd6a8b107db1234e545",
+      "new_digest": "18b4947aabea9585fe7ffcd3d18d09ad418a629104ebca3c781b391047dd9f63"
+    },
+    {
       "id": "15059481",
       "old_title": "국토교통부_산지정보도(WMS/WFS)",
       "new_title": "국토교통부_산지정보도(WMS/WFS)",
@@ -14857,6 +15097,16 @@
       ],
       "old_digest": "41aa6f4fda7a34b3fbcd2bfe282df7f4cb60cf98beb3482b178e5ee14d8612fe",
       "new_digest": "64f6e158f2b8903ec5e8358d0ee3cc66671b81f0133f1daef79b9253a686b936"
+    },
+    {
+      "id": "15059493",
+      "old_title": "서울특별시 건설알림이 사업개요",
+      "new_title": "서울특별시 건설알림이 사업개요",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3f9d44ef79ff2b98cc3d070bd4ee86e86da8d734bafeb86cb74815661f5592b4",
+      "new_digest": "61cfd694acef4041e96684ec4826ac8f783756ea0f7921b59aa0cd9f4cae9f20"
     },
     {
       "id": "15059494",
@@ -15997,6 +16247,16 @@
       ],
       "old_digest": "e92f943902d685fe462427abe627b14588bb05221082f0dde52042bbfd7d058e",
       "new_digest": "8e5d0c85cb842b9473d4c929ce99543a21b744e49868ec2bed6e46f995e0822c"
+    },
+    {
+      "id": "15061409",
+      "old_title": "서울특별시_스마트서울맵",
+      "new_title": "서울특별시_스마트서울맵",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d0425169a96c2a65581a0c66ebcfe9a90082a350133473da2ec33f08522156f5",
+      "new_digest": "e3ea06bb5f027b0579dd052cbaa3b704f59295c5cd090007375cd0d57a5b62cd"
     },
     {
       "id": "15061756",
@@ -18189,6 +18449,16 @@
       "new_digest": "40b7b5fabda95808facae9bcbbfc6d203fac7f2868e6e591b995bc2f434df16e"
     },
     {
+      "id": "15077786",
+      "old_title": "서울특별시_공공자전거 따릉이 대여소 운영현황(시간대별)",
+      "new_title": "서울특별시_공공자전거 따릉이 대여소 운영현황(시간대별)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b334d0c5ddf8ab5deb6bca6a4bf24bb363ab8c257d58a55be3c8fb6d802acf62",
+      "new_digest": "50955f5f43acd1e27f1bfdaa0b48592959ef28e7ff0b1faa750fff923b81b333"
+    },
+    {
       "id": "15078191",
       "old_title": "식품의약품안전처_쇠고기(국내)이력추적 정보",
       "new_title": "식품의약품안전처_쇠고기(국내)이력추적 정보",
@@ -19097,6 +19367,16 @@
       ],
       "old_digest": "77f124ebede18e9131243675cd7dd202606b01decfc02cafce3bf7829edad62b",
       "new_digest": "a1efc0fde1a3e48a66a5ea607901577be7f57370ed6d170f44a458f856e23159"
+    },
+    {
+      "id": "15093934",
+      "old_title": "서울특별시_은행별 대출금리(시중은행협력자금) 정보",
+      "new_title": "서울특별시_은행별 대출금리(시중은행협력자금) 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3a68e5a4dc5a9aa0d249ff3ef009b2ed6db6ba01d9d68effe84d93c95d7f23bf",
+      "new_digest": "8d90ca6af290b9e23ee57fc3b01ef61eba9149f1629611c7d1109b834109d8ff"
     },
     {
       "id": "15094377",
@@ -20429,6 +20709,66 @@
       "new_digest": "fcff55285f45a1093385aa919aab3e085503d1e09f7199c9f5275cba4d8dbeaa"
     },
     {
+      "id": "15098156",
+      "old_title": "서울특별시_서울시 자치구별 도보 네트워크 공간정보",
+      "new_title": "서울특별시_서울시 자치구별 도보 네트워크 공간정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d581a2914d446a01a5d31f277913f4797a4321127899b30e6d76176c9bc92014",
+      "new_digest": "f539a2ec38b36d1143f6d9bdd0ba0aa8be646d07271ab743a54e1b1a7af11299"
+    },
+    {
+      "id": "15098157",
+      "old_title": "서울특별시_서울시 대로변 횡단보도 위치정보",
+      "new_title": "서울특별시_서울시 대로변 횡단보도 위치정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "930758dfc67bf566a5386575b5ad09db72f386915ca73cdc57dd1179e83d6dfe",
+      "new_digest": "b9f4084d8517ff38c3c430003797c5b1f92e7b3a7654b4aeed64371b1877fb54"
+    },
+    {
+      "id": "15098158",
+      "old_title": "서울특별시_서울시 지하철역 엘리베이터 위치정보",
+      "new_title": "서울특별시_서울시 지하철역 엘리베이터 위치정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7e7a45117444eae286a10e34a5bdedf5769829eef3f43cd8fbab9221fd4e57f5",
+      "new_digest": "2a34d0c9cbab18daed238e11a1e8e1f363d5d7e68958458377a260875e18ea17"
+    },
+    {
+      "id": "15098159",
+      "old_title": "서울특별시_서울시 지하철 출입구 리프트 위치정보",
+      "new_title": "서울특별시_서울시 지하철 출입구 리프트 위치정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "dda3766eaa0cb56e5293b2798e6b3d92bb9e8eb46be8813f935c85863944d849",
+      "new_digest": "ecfa7e983a637e7cf7e2fff0c439b513ad1b13bd6d1b2d73fc3e39be12e1f623"
+    },
+    {
+      "id": "15098160",
+      "old_title": "서울특별시_서울시 육교 공간정보",
+      "new_title": "서울특별시_서울시 육교 공간정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "768fbc73cd3e3b831f678769883293a43fd04e8346d1f035129fd5b5c3d8abae",
+      "new_digest": "00aeafd8ce4af00f7d5e6e2873894e31203a0ebc66d8956f9f3e06f64e242523"
+    },
+    {
+      "id": "15098161",
+      "old_title": "서울특별시_서울시 지하철역 연계 지하도 공간정보",
+      "new_title": "서울특별시_서울시 지하철역 연계 지하도 공간정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c406be762452792501c26f984fb97bb881ba8f992d6d454b772df7ef30a1c131",
+      "new_digest": "8cbc0b50109876fe614bf937e592e87571e1f544caff1da905659a138c326d54"
+    },
+    {
       "id": "15098628",
       "old_title": "경기도 광명시_생활편의시설_API",
       "new_title": "경기도 광명시_생활편의시설_API",
@@ -21607,6 +21947,226 @@
       ],
       "old_digest": "fdf412b34bc4dd03b82157ce51014ce5401849d3add6f999d976166dda69c2e2",
       "new_digest": "0b7d4c14cea1f5f914a0441d9b004ded3f8af571845979bfda8623cf92ce8d39"
+    },
+    {
+      "id": "15102618",
+      "old_title": "서울특별시_V2X 버스정류소 정차면 정보",
+      "new_title": "서울특별시_V2X 버스정류소 정차면 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "203a821a66a3fd43f051a43880b32ec1e03188732e8f41a5dffa192dadcdefbd",
+      "new_digest": "2d4550760d6389e67f2b1501e4ca4fd5093fdd0db449b622b73e0e348cc8c696"
+    },
+    {
+      "id": "15102619",
+      "old_title": "서울특별시_V2X 버스 승강장 혼잡 정보",
+      "new_title": "서울특별시_V2X 버스 승강장 혼잡 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "47151c10187832ec5a17e685414aa65fe88ce2f3f5d511507f32bcd2ab217c72",
+      "new_digest": "1825c1b0ba0f006bc5d1012c97fa50f983fcf4f40ff34b387de092a9a617b8d8"
+    },
+    {
+      "id": "15102623",
+      "old_title": "서울특별시_V2X  교차로 Map 정보",
+      "new_title": "서울특별시_V2X  교차로 Map 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6c49bad6aee9ac174be81180a5db93dda94cb8511c168555376880c8b0e561df",
+      "new_digest": "360c4234b84f1472bbf9bd0ad851ff4832ef46bee7b739d9996f6678c9dcdf09"
+    },
+    {
+      "id": "15102624",
+      "old_title": "서울특별시_V2X  교차로 위험 정보",
+      "new_title": "서울특별시_V2X  교차로 위험 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1fd133c75c09f97813a7a8f9d860bdd91fed5595659b8b22774d738d9dcb9e79",
+      "new_digest": "cdb4a84b462b4ecb27a96e287546f5b3ae03c31397e50687a5a53443a0c41b38"
+    },
+    {
+      "id": "15102625",
+      "old_title": "서울특별시_V2X 횡단 보행자 정보",
+      "new_title": "서울특별시_V2X 횡단 보행자 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9c8458cb021dd6906db81aac0348782e5e966770642dd45eed8f5ea02a49c7bf",
+      "new_digest": "3db61d8f3f817fee14150b73ecef386bb65ccd6374e556e3537c5710c01436fe"
+    },
+    {
+      "id": "15102626",
+      "old_title": "서울특별시_V2X 전방 추돌 주의 정보",
+      "new_title": "서울특별시_V2X 전방 추돌 주의 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ca89147658636bc9291c3f15c93ef2964aeafc3fe4b35701b49c13d91095e628",
+      "new_digest": "0105c1bf488efab794c7881d4261e50ecbcfbd9a5f7e04bdfef52e311532eec4"
+    },
+    {
+      "id": "15102627",
+      "old_title": "서울특별시_V2X 불법 주정차 위치 정보",
+      "new_title": "서울특별시_V2X 불법 주정차 위치 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6747adf0e6314cc24474d6d9fffe83a5bc6d103bab47cd27f421d5b831a9536b",
+      "new_digest": "47e43994350de5c54cd46e639599ca1a0dfccc0aee529d3a8ebb15c92dd68d3a"
+    },
+    {
+      "id": "15102630",
+      "old_title": "서울특별시_V2X ITIS 기본 코드 정보",
+      "new_title": "서울특별시_V2X ITIS 기본 코드 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "dff5a2174ced708c41337facc598196a99dab7658d0a1e9d04dde1f7a0b7a5ee",
+      "new_digest": "ea8ac22eff93ab1e924c12393e9d184467c3dfa7271a227456a0ba71bab4cdbd"
+    },
+    {
+      "id": "15102632",
+      "old_title": "서울특별시_V2X 차선이탈 주의 정보",
+      "new_title": "서울특별시_V2X 차선이탈 주의 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "33dd98af7a0c12e14dfa4d981be7d242db4bf89e709da60198fac0c32342beb2",
+      "new_digest": "45c0026d108ccc7ea1eb5c59f9401464a8066cbaae49e0b3c08be2fafd968509"
+    },
+    {
+      "id": "15102633",
+      "old_title": "서울특별시_V2X Map 차로 정보",
+      "new_title": "서울특별시_V2X Map 차로 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9574585ee2437ecf3ed57b685f83f90b1d4f3643e4d31ebb02cb4b88d1da62c0",
+      "new_digest": "1952772b6f5f4d59fb65a2c8050b8f828c8ae276e4ec291fa5c983e24cb488fb"
+    },
+    {
+      "id": "15102634",
+      "old_title": "서울특별시_V2X 버스 추월차로 정보",
+      "new_title": "서울특별시_V2X 버스 추월차로 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "29d735b0f1327f3def908824c4e65f98a4ebbcce4f407315da5b1a79e16c0596",
+      "new_digest": "14b212f8c56d9d53ece41f666d329445bb5e199bdedda40e6be2cba748429fd4"
+    },
+    {
+      "id": "15102636",
+      "old_title": "서울특별시_V2X 노드 Map 정보",
+      "new_title": "서울특별시_V2X 노드 Map 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a4e406fc5df6b16bc770f695af6cfcb744c5fe09f95425d6231903ef50dbe2dc",
+      "new_digest": "7fed27aa704aba115d3ea05ab010a52dc68302c8a8b2dd2c17b1a845dedc6730"
+    },
+    {
+      "id": "15102644",
+      "old_title": "서울특별시_V2X 보행자 충돌 주의 정보",
+      "new_title": "서울특별시_V2X 보행자 충돌 주의 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b12e1ac120bbb31c2399ca4966b799e0cf295d2257922fb21cabbed04e4d2d21",
+      "new_digest": "a22dacb3a670efec2874ea6b0b6a03e4ef2bc50fde1984d0ea2ab1c96ad47b38"
+    },
+    {
+      "id": "15102645",
+      "old_title": "서울특별시_V2X 휴대용 공사 정보",
+      "new_title": "서울특별시_V2X 휴대용 공사 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f114f1349d032323a7de779bc61cc99399fc4d60dc871858e7a8585430b2a090",
+      "new_digest": "9b2afa1d7221613f6626c6baaf3f09d559af6e0258ce4c8045f1f29966b796ea"
+    },
+    {
+      "id": "15102648",
+      "old_title": "서울특별시_V2X 포트홀 정보",
+      "new_title": "서울특별시_V2X 포트홀 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2eb882285b5fe3fead6ec6747417131ab5116d133fb4f5b5cfa7c202a049eb46",
+      "new_digest": "5e177b1bb98755fb12e92ecf025fa77fa0194286ba7e6351cdae984a2cfd683d"
+    },
+    {
+      "id": "15102649",
+      "old_title": "서울특별시_V2X 위험 구간 정보",
+      "new_title": "서울특별시_V2X 위험 구간 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "54a55e8aa2916ceab16e876d08e5ac1ba1a82c6f63c220bc90f6b9494eea09e0",
+      "new_digest": "8145a29de76a006fa1c19e80a8a00769b528e1432cae31d72b402579f9b000e8"
+    },
+    {
+      "id": "15102650",
+      "old_title": "서울특별시_V2X 신호연결 Map 정보",
+      "new_title": "서울특별시_V2X 신호연결 Map 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b4c7860ecd57600b1f0f4dc1e2f8630ffc3670a8de49e2e86046fec35e9469ac",
+      "new_digest": "ebe631f4b5a0338c908661728bfd1d058f6b73ffe8034ab74db65e289463cccc"
+    },
+    {
+      "id": "15102651",
+      "old_title": "서울특별시_V2X 신호제어기 신호 정보",
+      "new_title": "서울특별시_V2X 신호제어기 신호 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1837912deea2a51d756ead8d36ccf8903b257be7ce6c7fbc77ca1f45b05e8cfa",
+      "new_digest": "8cf1f85b4fdcc74ed01ea1fb61e95c9aa48bc8a0e966f806791e8b057e3b5f58"
+    },
+    {
+      "id": "15102652",
+      "old_title": "서울특별시_V2X 신호제어기 잔여시간 정보",
+      "new_title": "서울특별시_V2X 신호제어기 잔여시간 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a5c6495dafd3a38971ed829eb25068c4092004221553ab24b2f0397ab5eba20d",
+      "new_digest": "8e4ab7794da83c20e8b18b8ed794a42e30f8560ba6d3560c7b189673d84d1187"
+    },
+    {
+      "id": "15102653",
+      "old_title": "서울특별시_V2X 터널내 돌발 정보",
+      "new_title": "서울특별시_V2X 터널내 돌발 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e7313cded0eb3f0befe32eac145fc17c4783e7779bece683f6cfd5ef80f4fb5e",
+      "new_digest": "28ec484c17782a45aa9f9176dc58d86e2e3641b4add1bf894c588a3b1bbe1037"
+    },
+    {
+      "id": "15102654",
+      "old_title": "서울특별시_V2X 차량 속도 및 위치 정보",
+      "new_title": "서울특별시_V2X 차량 속도 및 위치 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "96b4a8b4585a08ac90f11a8e16005590c2611cc9dd458dd5dbc95094421cfab8",
+      "new_digest": "621a2559f8d83897be32a4c946c7cd39a336772e34c5a7a63c4698597ac67b74"
+    },
+    {
+      "id": "15102656",
+      "old_title": "서울특별시_V2X 차량 상태 정보",
+      "new_title": "서울특별시_V2X 차량 상태 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "53249c300e00b14ef2cc0a34230915f0e3f10280df2517c49ac52e70a53e33b1",
+      "new_digest": "c58592aacb0f6fda1d6049d9c5d888e3879bc572941e47a2924d36e7aea8ca5a"
     },
     {
       "id": "15102748",
@@ -24327,6 +24887,46 @@
       ],
       "old_digest": "31af1f5bbb44687f8d525d9711779f06ad8dfcee7aabe8e71d3506ca72ac736b",
       "new_digest": "0f348be415a304e72900c213fa0a4ac8267bc0d4723cdebede14e45b1683879b"
+    },
+    {
+      "id": "15125683",
+      "old_title": "서울특별시_지하철 실시간 도착정보(일괄)",
+      "new_title": "서울특별시_지하철 실시간 도착정보(일괄)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f76d83cda6d008458d1ae44d3a7630c5d05e630d028624d39dfa5b18ed81cc0c",
+      "new_digest": "a3c650098ac6664eda801d53b40bf66ec2c614cb9d242bad726fa42f0fd579d1"
+    },
+    {
+      "id": "15125786",
+      "old_title": "서울특별시_용산구 공공서비스예약 정보",
+      "new_title": "서울특별시_용산구 공공서비스예약 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2940eb2304fdffe0d7adac971097dcc9ca2076d81326e26fa6d9312a657fb6f5",
+      "new_digest": "4a6a34e4e3b36111369b77c4a88c9429988f4161eb18696e70e263afc2ff3fde"
+    },
+    {
+      "id": "15125787",
+      "old_title": "서울특별시_공공서비스예약 정보",
+      "new_title": "서울특별시_공공서비스예약 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a707fc8d494a80c09c067b4120a25da95dd34fa0cd2dbb12358c6c7540a2548e",
+      "new_digest": "38c4dbf3f61bc420d9f7bf0b0aa81bfa0c9c80fe028ce8c52a0a0eb0e70792c5"
+    },
+    {
+      "id": "15125824",
+      "old_title": "서울특별시_열린데이터광장 Open API 입출력 인자 조회",
+      "new_title": "서울특별시_열린데이터광장 Open API 입출력 인자 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "99723a225346874970d900f7a4cb05fea7fe6eec25a7487b94397311d6079a25",
+      "new_digest": "47ab1dc91cc135b5e4b57806ace00abf63e2df7a8e2f4fae2dc5656544de638a"
     },
     {
       "id": "15125830",
@@ -27789,6 +28389,16 @@
       "new_digest": "d690c65f00e95b545814ac8d5da0a4006bf9b8c0be19565546fed58cbc2c05c3"
     },
     {
+      "id": "15132379",
+      "old_title": "서울특별시_서울시 가로등 점소등 시간 현황",
+      "new_title": "서울특별시_서울시 가로등 점소등 시간 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d18835fec75fff0422d9d0a326df3708e057e8c6b14ba162da993ca015a94616",
+      "new_digest": "1a030e729adcb2ca84332dbe8e9944657b165170b44e7ced7474dcc1c0340005"
+    },
+    {
       "id": "15134001",
       "old_title": "행정안전부_긴급재난문자",
       "new_title": "행정안전부_긴급재난문자",
@@ -27797,6 +28407,26 @@
       ],
       "old_digest": "657616647821c91ea480a277e40d703090def52d534e2bea897dc4f65f495824",
       "new_digest": "43ac43b03a7b082724ae98d36a241e99b2e718e6fbb18c7e778ee77c40bcb924"
+    },
+    {
+      "id": "15134352",
+      "old_title": "서울특별시_서울시 공공서비스예약 정보",
+      "new_title": "서울특별시_서울시 공공서비스예약 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4adec82be306a766ee72d1c088df156bf59f99dca39a9ff3e50960d2fc5a8543",
+      "new_digest": "c5f6db5c50fc5cc5075d7051d2973944cf52df0e568d05dff037e71d45c31c18"
+    },
+    {
+      "id": "15134872",
+      "old_title": "서울특별시_서울시 서대문구 공지사항 정보",
+      "new_title": "서울특별시_서울시 서대문구 공지사항 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8432b75ba65abf88e78d4349b6f69c39b5124c5acc00beef0c7fb22282d02a6f",
+      "new_digest": "275155dc1cae6dba65c8be7bf99a5951171c100cac1abf944191ff3c2221d18d"
     },
     {
       "id": "15136379",
@@ -30037,6 +30667,36 @@
       ],
       "old_digest": "8b52c2e5488a33561e8990c65ec8d313f519a3176fd2926c8c1a1c6585d28f45",
       "new_digest": "4f8a15a47a0f3fba195d91d227c492e67c249bfbc88b0fdbf332f04ecc781a6a"
+    },
+    {
+      "id": "15146171",
+      "old_title": "서울특별시_실시간 인구데이터(영문)",
+      "new_title": "서울특별시_실시간 인구데이터(영문)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d4bdcd0ec8e9a47336e750ee623f8c901d1058fb127a77f6a98686537c079a98",
+      "new_digest": "b838ef0341f420fc28b4f4d0d548c77c7d989eda6bb864942a4d2dcc78d64ddf"
+    },
+    {
+      "id": "15146211",
+      "old_title": "서울특별시_실시간 도시데이터",
+      "new_title": "서울특별시_실시간 도시데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8c14150d8b339e499a73d97c29e6071e06af54b26b38f8ba3992c13dfd8e7bfa",
+      "new_digest": "706663277613657997cc2d12b65ef5faf494be6b3853dfaa98135655087b6b86"
+    },
+    {
+      "id": "15146353",
+      "old_title": "서울특별시_실시간 인구데이터",
+      "new_title": "서울특별시_실시간 인구데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ea8d97d46369ec13caa436a09366b67132e1f7419061ed6222f2204cf0d6cfe8",
+      "new_digest": "8d5b462eddc427be77c8b1f828ee3f169aafb210b731b5f123c3669e6e8ffaaa"
     },
     {
       "id": "15147982",
@@ -34177,6 +34837,26 @@
       ],
       "old_digest": "57ea0a2bd7c470544d6f3f29233b4d9131e20f8c51385291e450cbf32ce2950e",
       "new_digest": "c6ad4e570f0718b5c84fc53572c5151ae1313677b61c2a200b3acea6f07d3cd2"
+    },
+    {
+      "id": "15157266",
+      "old_title": "서울특별시_교통정보시스템 TOPIS  공지사항",
+      "new_title": "서울특별시_교통정보시스템 TOPIS  공지사항",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a019cd5e66d8170474d4d69d569f5560aae37ab5fbf7acf8485e2ebec3457772",
+      "new_digest": "e6f1be81282878cee457f5d68aa1ff558f2524fe6eda2c053f90c60da930b4b2"
+    },
+    {
+      "id": "15157504",
+      "old_title": "서울특별시_스마트서울 도시데이터 센서(S_DoT) 환경정보 (실시간)",
+      "new_title": "서울특별시_스마트서울 도시데이터 센서(S_DoT) 환경정보 (실시간)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c485913137c59250535a3aad490ae5ea8afba8b8cb7239dfbf0387f28a4b19fe",
+      "new_digest": "107467ba38827a73d275e292bc2191c7f1e9299c44cfb7165e1434ae2765a961"
     },
     {
       "id": "15157584",

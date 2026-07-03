@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `19459`
-- callable operations: `19317` (`99.3%`)
+- operations: `19595`
+- callable operations: `19453` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `7849`
-- registered adapter operations: `7839`
+- external endpoint operations: `7985`
+- registered adapter operations: `7975`
 - missing adapter operations: `29`
 - external adapter coverage: `99.6%`
-- approval-required operations: `7154`
+- approval-required operations: `7221`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `106`
+- registered adapter hosts: `110`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -544,6 +544,12 @@ readiness, not to advance verified runtime coverage.
    verified checks to `1259`, registered external adapter operations to
    `7839`, and raises API operation coverage to `10,650` of `12,060` APIs
    (`88.3%`).
+   The 서울특별시 batch registers Seoul TData, Seoul Map, Jongno, and KOSMES
+   host coverage, materializes `68` APIs and `136` operations, and merges `100`
+   bounded checks (`93` verified, `1` failed, `6` skipped). That brings checked
+   runtime evidence to `3100`, verified checks to `1352`, registered external
+   adapter operations to `7975`, and raises API operation coverage to `10,718`
+   of `12,060` APIs (`88.9%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

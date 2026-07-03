@@ -1,0 +1,177 @@
+{
+  "generated_at": "2026-07-03T21:13:36Z",
+  "source": "reports/data-go-kr/seoul-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 100,
+    "verified": 93,
+    "failed": 1,
+    "skipped": 6,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 93,
+        "status": "verified"
+      },
+      {
+        "key": "skipped",
+        "count": 6,
+        "status": "skipped"
+      },
+      {
+        "key": "failed",
+        "count": 1,
+        "status": "failed"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "missing_auth",
+        "count": 4,
+        "reason": "missing_auth"
+      },
+      {
+        "key": "external_provider_adapter_missing",
+        "count": 1,
+        "reason": "external_provider_adapter_missing"
+      },
+      {
+        "key": "kosmes_request_timeout",
+        "count": 1,
+        "reason": "kosmes_request_timeout"
+      },
+      {
+        "key": "seoul_bus_missing_required_params",
+        "count": 1,
+        "reason": "seoul_bus_missing_required_params"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "seoul-open-data",
+        "count": 80,
+        "provider": "seoul-open-data"
+      },
+      {
+        "key": "seoul-bus",
+        "count": 5,
+        "provider": "seoul-bus"
+      },
+      {
+        "key": "garak",
+        "count": 3,
+        "provider": "garak"
+      },
+      {
+        "key": "gwanak",
+        "count": 3,
+        "provider": "gwanak"
+      },
+      {
+        "key": "happysd",
+        "count": 2,
+        "provider": "happysd"
+      },
+      {
+        "key": "sisul-www",
+        "count": 2,
+        "provider": "sisul-www"
+      },
+      {
+        "key": "data-gg",
+        "count": 1,
+        "provider": "data-gg"
+      },
+      {
+        "key": "data.go.kr",
+        "count": 1,
+        "provider": "data.go.kr"
+      },
+      {
+        "key": "dongjak",
+        "count": 1,
+        "provider": "dongjak"
+      },
+      {
+        "key": "kosmes",
+        "count": 1,
+        "provider": "kosmes"
+      },
+      {
+        "key": "seoul-map",
+        "count": 1,
+        "provider": "seoul-map"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "data.seoul.go.kr",
+        "count": 80,
+        "host": "data.seoul.go.kr"
+      },
+      {
+        "key": "ws.bus.go.kr",
+        "count": 5,
+        "host": "ws.bus.go.kr"
+      },
+      {
+        "key": "data.gwanak.go.kr",
+        "count": 3,
+        "host": "data.gwanak.go.kr"
+      },
+      {
+        "key": "www.garak.co.kr",
+        "count": 3,
+        "host": "www.garak.co.kr"
+      },
+      {
+        "key": "www.happysd.or.kr",
+        "count": 2,
+        "host": "www.happysd.or.kr"
+      },
+      {
+        "key": "www.sisul.or.kr",
+        "count": 2,
+        "host": "www.sisul.or.kr"
+      },
+      {
+        "key": "data.dongjak.go.kr",
+        "count": 1,
+        "host": "data.dongjak.go.kr"
+      },
+      {
+        "key": "data.gg.go.kr",
+        "count": 1,
+        "host": "data.gg.go.kr"
+      },
+      {
+        "key": "kosmes.or.kr",
+        "count": 1,
+        "host": "kosmes.or.kr"
+      },
+      {
+        "key": "map.seoul.go.kr",
+        "count": 1,
+        "host": "map.seoul.go.kr"
+      },
+      {
+        "key": "openapi-lib.sen.go.kr",
+        "count": 1,
+        "host": "openapi-lib.sen.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 100,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

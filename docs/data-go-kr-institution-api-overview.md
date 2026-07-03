@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-03T20:57:33Z`
+- Generated at: `2026-07-03T21:17:58Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `19459`
-- Runtime evidence: `3000` (`15.4%`)
-- External endpoint operations: `7849`
-- Registered adapter operations: `7839`
+- Operations: `19595`
+- Runtime evidence: `3100` (`15.8%`)
+- External endpoint operations: `7985`
+- Registered adapter operations: `7975`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -73,11 +73,11 @@
 | 조달청 | 18 | 18 | 190 | 0 | 0.0% | 0 | 0 | 0 | 0 | 0 |
 | 전라남도 | 109 | 109 | 175 | 1 | 0.6% | 1 | 0 | 0 | 94 | 0 |
 | 대전광역시 서구 | 125 | 125 | 171 | 50 | 29.2% | 50 | 0 | 0 | 171 | 0 |
+| 서울특별시 | 79 | 79 | 167 | 91 | 54.5% | 85 | 1 | 5 | 73 | 19 |
 | 기후에너지환경부 국립환경과학원 | 48 | 47 | 156 | 8 | 5.1% | 0 | 0 | 8 | 0 | 0 |
 | 식품의약품안전처 식품의약품안전평가원 | 106 | 106 | 154 | 21 | 13.6% | 0 | 0 | 21 | 103 | 0 |
 | 농림축산식품부 | 87 | 86 | 153 | 153 | 100.0% | 151 | 2 | 0 | 47 | 0 |
 | 한국수자원공사 | 84 | 84 | 153 | 5 | 3.3% | 5 | 0 | 0 | 9 | 19 |
-| 한국환경공단 | 66 | 65 | 151 | 2 | 1.3% | 0 | 0 | 2 | 40 | 0 |
 
 The full machine-readable report is `reports/data-go-kr/institution-api-overview.json`.
 The full coverage backlog is `reports/data-go-kr/coverage-backlog.json`, with
@@ -85,21 +85,21 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 ## Largest Categories
 
-- 공공행정: `2605` operations
-- 교통물류: `2019` operations
-- 문화관광: `2007` operations
+- 공공행정: `2615` operations
+- 교통물류: `2108` operations
+- 문화관광: `2011` operations
 - 농축수산: `1993` operations
-- 사회복지: `1439` operations
+- 사회복지: `1442` operations
 - 산업고용: `1290` operations
-- 재정금융: `1272` operations
+- 재정금융: `1274` operations
 - 식품건강: `1188` operations
-- 환경기상: `1161` operations
-- 국토관리: `987` operations
+- 환경기상: `1163` operations
+- 국토관리: `1013` operations
 
 ## Largest Hosts
 
 - apis.data.go.kr: `11423` operations
-- data.gg.go.kr: `2188` operations
+- data.gg.go.kr: `2189` operations
 - data.gm.go.kr: `607` operations
 - www.vworld.kr: `460` operations
 - www.safetydata.go.kr: `370` operations
@@ -107,4 +107,4 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 - www.nongsaro.go.kr: `314` operations
 - open.law.go.kr: `304` operations
 - www.foodsafetykorea.go.kr: `289` operations
-- data.ex.co.kr: `278` operations
+- data.ex.co.kr: `279` operations

@@ -1,39 +1,39 @@
 {
-  "generated_at": "2026-07-03T20:57:26Z",
+  "generated_at": "2026-07-03T21:14:29Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3000,
-    "verified": 1259,
-    "failed": 281,
-    "skipped": 1460,
+    "total": 3100,
+    "verified": 1352,
+    "failed": 282,
+    "skipped": 1466,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 1460,
+        "count": 1466,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 1259,
+        "count": 1352,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 281,
+        "count": 282,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_auth",
-        "count": 546,
+        "count": 550,
         "reason": "missing_auth"
       },
       {
@@ -187,6 +187,11 @@
         "reason": "epost_unsupported_protocol"
       },
       {
+        "key": "external_provider_adapter_missing",
+        "count": 5,
+        "reason": "external_provider_adapter_missing"
+      },
+      {
         "key": "lh_ebid_service_key_not_registered",
         "count": 5,
         "reason": "lh_ebid_service_key_not_registered"
@@ -210,11 +215,6 @@
         "key": "epost_missing_required_params",
         "count": 4,
         "reason": "epost_missing_required_params"
-      },
-      {
-        "key": "external_provider_adapter_missing",
-        "count": 4,
-        "reason": "external_provider_adapter_missing"
       },
       {
         "key": "pqis_service_key_not_registered",
@@ -282,6 +282,11 @@
         "reason": "jeonju_http_405_method_not_allowed"
       },
       {
+        "key": "seoul_bus_missing_required_params",
+        "count": 2,
+        "reason": "seoul_bus_missing_required_params"
+      },
+      {
         "key": "car365_http_400",
         "count": 1,
         "reason": "car365_http_400"
@@ -322,6 +327,11 @@
         "reason": "jeju_method_not_allowed"
       },
       {
+        "key": "kosmes_request_timeout",
+        "count": 1,
+        "reason": "kosmes_request_timeout"
+      },
+      {
         "key": "lh_ebid_missing_required_params",
         "count": 1,
         "reason": "lh_ebid_missing_required_params"
@@ -345,17 +355,12 @@
         "key": "qnet_connection_validation_failed",
         "count": 1,
         "reason": "qnet_connection_validation_failed"
-      },
-      {
-        "key": "seoul_bus_missing_required_params",
-        "count": 1,
-        "reason": "seoul_bus_missing_required_params"
       }
     ],
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 709,
+        "count": 710,
         "provider": "data.go.kr"
       },
       {
@@ -385,8 +390,13 @@
       },
       {
         "key": "data-gg",
-        "count": 120,
+        "count": 121,
         "provider": "data-gg"
+      },
+      {
+        "key": "seoul-open-data",
+        "count": 88,
+        "provider": "seoul-open-data"
       },
       {
         "key": "seogu",
@@ -554,6 +564,11 @@
         "provider": "safetydata"
       },
       {
+        "key": "seoul-bus",
+        "count": 10,
+        "provider": "seoul-bus"
+      },
+      {
         "key": "cancer",
         "count": 8,
         "provider": "cancer"
@@ -567,11 +582,6 @@
         "key": "pqis",
         "count": 8,
         "provider": "pqis"
-      },
-      {
-        "key": "seoul-open-data",
-        "count": 8,
-        "provider": "seoul-open-data"
       },
       {
         "key": "airport",
@@ -594,6 +604,16 @@
         "provider": "folk"
       },
       {
+        "key": "garak",
+        "count": 6,
+        "provider": "garak"
+      },
+      {
+        "key": "gwanak",
+        "count": 6,
+        "provider": "gwanak"
+      },
+      {
         "key": "kpx",
         "count": 6,
         "provider": "kpx"
@@ -609,6 +629,11 @@
         "provider": "smartfarm-korea"
       },
       {
+        "key": "dongjak",
+        "count": 5,
+        "provider": "dongjak"
+      },
+      {
         "key": "gims",
         "count": 5,
         "provider": "gims"
@@ -619,19 +644,14 @@
         "provider": "nfqs"
       },
       {
-        "key": "seoul-bus",
-        "count": 5,
-        "provider": "seoul-bus"
-      },
-      {
-        "key": "dongjak",
-        "count": 4,
-        "provider": "dongjak"
-      },
-      {
         "key": "forest",
         "count": 4,
         "provider": "forest"
+      },
+      {
+        "key": "happysd",
+        "count": 4,
+        "provider": "happysd"
       },
       {
         "key": "jeju",
@@ -644,19 +664,14 @@
         "provider": "franchise-ftc"
       },
       {
-        "key": "garak",
-        "count": 3,
-        "provider": "garak"
-      },
-      {
         "key": "gblib",
         "count": 3,
         "provider": "gblib"
       },
       {
-        "key": "gwanak",
+        "key": "sisul-www",
         "count": 3,
-        "provider": "gwanak"
+        "provider": "sisul-www"
       },
       {
         "key": "vworld",
@@ -672,11 +687,6 @@
         "key": "gimhae",
         "count": 2,
         "provider": "gimhae"
-      },
-      {
-        "key": "happysd",
-        "count": 2,
-        "provider": "happysd"
       },
       {
         "key": "worldjob",
@@ -739,6 +749,11 @@
         "provider": "kofpi"
       },
       {
+        "key": "kosmes",
+        "count": 1,
+        "provider": "kosmes"
+      },
+      {
         "key": "mafra-legacy",
         "count": 1,
         "provider": "mafra-legacy"
@@ -764,14 +779,14 @@
         "provider": "ncpms"
       },
       {
+        "key": "seoul-map",
+        "count": 1,
+        "provider": "seoul-map"
+      },
+      {
         "key": "sexoffender",
         "count": 1,
         "provider": "sexoffender"
-      },
-      {
-        "key": "sisul-www",
-        "count": 1,
-        "provider": "sisul-www"
       },
       {
         "key": "stcis",
@@ -817,13 +832,18 @@
       },
       {
         "key": "data.gg.go.kr",
-        "count": 120,
+        "count": 121,
         "host": "data.gg.go.kr"
       },
       {
         "key": "openapi.q-net.or.kr",
         "count": 104,
         "host": "openapi.q-net.or.kr"
+      },
+      {
+        "key": "data.seoul.go.kr",
+        "count": 87,
+        "host": "data.seoul.go.kr"
       },
       {
         "key": "seogu.go.kr",
@@ -971,6 +991,11 @@
         "host": "www.jejudatahub.net"
       },
       {
+        "key": "ws.bus.go.kr",
+        "count": 10,
+        "host": "ws.bus.go.kr"
+      },
+      {
         "key": "www.consumer.go.kr",
         "count": 10,
         "host": "www.consumer.go.kr"
@@ -1021,14 +1046,14 @@
         "host": "openapi.pqis.go.kr"
       },
       {
-        "key": "data.seoul.go.kr",
-        "count": 7,
-        "host": "data.seoul.go.kr"
-      },
-      {
         "key": "openapi.tour.go.kr",
         "count": 7,
         "host": "openapi.tour.go.kr"
+      },
+      {
+        "key": "data.gwanak.go.kr",
+        "count": 6,
+        "host": "data.gwanak.go.kr"
       },
       {
         "key": "folkency.nfm.go.kr",
@@ -1071,14 +1096,19 @@
         "host": "www.emuseum.go.kr"
       },
       {
+        "key": "www.garak.co.kr",
+        "count": 6,
+        "host": "www.garak.co.kr"
+      },
+      {
         "key": "www.smartfarmkorea.net",
         "count": 6,
         "host": "www.smartfarmkorea.net"
       },
       {
-        "key": "ws.bus.go.kr",
+        "key": "data.dongjak.go.kr",
         "count": 5,
-        "host": "ws.bus.go.kr"
+        "host": "data.dongjak.go.kr"
       },
       {
         "key": "www.gims.go.kr",
@@ -1096,24 +1126,19 @@
         "host": "api.forest.go.kr"
       },
       {
-        "key": "data.dongjak.go.kr",
-        "count": 4,
-        "host": "data.dongjak.go.kr"
-      },
-      {
         "key": "data.jeju.go.kr",
         "count": 4,
         "host": "data.jeju.go.kr"
       },
       {
+        "key": "www.happysd.or.kr",
+        "count": 4,
+        "host": "www.happysd.or.kr"
+      },
+      {
         "key": "www.rda.go.kr",
         "count": 4,
         "host": "www.rda.go.kr"
-      },
-      {
-        "key": "data.gwanak.go.kr",
-        "count": 3,
-        "host": "data.gwanak.go.kr"
       },
       {
         "key": "franchise.ftc.go.kr",
@@ -1131,9 +1156,9 @@
         "host": "openapi.gblib.or.kr"
       },
       {
-        "key": "www.garak.co.kr",
+        "key": "www.sisul.or.kr",
         "count": 3,
-        "host": "www.garak.co.kr"
+        "host": "www.sisul.or.kr"
       },
       {
         "key": "www.vworld.kr",
@@ -1154,11 +1179,6 @@
         "key": "www.gimhae.go.kr",
         "count": 2,
         "host": "www.gimhae.go.kr"
-      },
-      {
-        "key": "www.happysd.or.kr",
-        "count": 2,
-        "host": "www.happysd.or.kr"
       },
       {
         "key": "www.worldjob.or.kr",
@@ -1211,6 +1231,16 @@
         "host": "jeonnam.openapi.redtable.global"
       },
       {
+        "key": "kosmes.or.kr",
+        "count": 1,
+        "host": "kosmes.or.kr"
+      },
+      {
+        "key": "map.seoul.go.kr",
+        "count": 1,
+        "host": "map.seoul.go.kr"
+      },
+      {
         "key": "ncpms.rda.go.kr",
         "count": 1,
         "host": "ncpms.rda.go.kr"
@@ -1224,6 +1254,11 @@
         "key": "open.api.q-net.or.kr",
         "count": 1,
         "host": "open.api.q-net.or.kr"
+      },
+      {
+        "key": "openapi-lib.sen.go.kr",
+        "count": 1,
+        "host": "openapi-lib.sen.go.kr"
       },
       {
         "key": "openapi.seoul.go.kr:8088",
@@ -1286,11 +1321,6 @@
         "host": "www.naa.go.kr"
       },
       {
-        "key": "www.sisul.or.kr",
-        "count": 1,
-        "host": "www.sisul.or.kr"
-      },
-      {
         "key": "www.wamis.go.kr:8080",
         "count": 1,
         "host": "www.wamis.go.kr:8080"
@@ -1299,7 +1329,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 2276,
+        "count": 2376,
         "kind": "external_endpoint"
       },
       {
