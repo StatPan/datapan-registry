@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T17:22:34Z",
+  "generated_at": "2026-07-03T17:30:15Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -177,9 +177,9 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 855,
-      "operations": 2156,
-      "external_endpoint_operations": 2156,
+      "specs": 869,
+      "operations": 2173,
+      "external_endpoint_operations": 2173,
       "external_guide_specs": 21,
       "wms_operations": 5,
       "approval_required_operations": 39,
@@ -187,6 +187,22 @@
         "15005231",
         "15011020",
         "15011027"
+      ]
+    },
+    {
+      "host": "data.gm.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 249,
+      "operations": 606,
+      "external_endpoint_operations": 606,
+      "approval_required_operations": 23,
+      "sample_ids": [
+        "15011425",
+        "15032576",
+        "15032578"
       ]
     },
     {
@@ -239,22 +255,6 @@
         "15038581",
         "15056593",
         "15056639"
-      ]
-    },
-    {
-      "host": "data.gm.go.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 152,
-      "operations": 335,
-      "external_endpoint_operations": 335,
-      "approval_required_operations": 23,
-      "sample_ids": [
-        "15011425",
-        "15032576",
-        "15032578"
       ]
     },
     {

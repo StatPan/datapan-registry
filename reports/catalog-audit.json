@@ -1,25 +1,25 @@
 {
-  "generated_at": "2026-07-03T17:22:34Z",
+  "generated_at": "2026-07-03T17:30:15Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 17348,
-    "callable_operations": 17206,
-    "specs_without_operations": 2360,
-    "specs_without_callable_operation": 2435,
+    "operations_total": 17636,
+    "callable_operations": 17494,
+    "specs_without_operations": 2263,
+    "specs_without_callable_operation": 2338,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 5010,
-    "operations_without_response_params": 6232,
+    "operations_without_request_params": 5298,
+    "operations_without_response_params": 6520,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 2829,
-      "external_endpoint_operations": 5738,
+      "external_endpoint_specs": 2926,
+      "external_endpoint_operations": 6026,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 114,
@@ -34,7 +34,11 @@
         },
         {
           "host": "data.gg.go.kr",
-          "count": 2156
+          "count": 2173
+        },
+        {
+          "host": "data.gm.go.kr",
+          "count": 606
         },
         {
           "host": "www.vworld.kr",
@@ -47,10 +51,6 @@
         {
           "host": "www.lofin365.go.kr",
           "count": 343
-        },
-        {
-          "host": "data.gm.go.kr",
-          "count": 335
         },
         {
           "host": "open.law.go.kr",
@@ -112,7 +112,11 @@
       "top_external_endpoint_hosts": [
         {
           "host": "data.gg.go.kr",
-          "count": 2156
+          "count": 2173
+        },
+        {
+          "host": "data.gm.go.kr",
+          "count": 606
         },
         {
           "host": "www.vworld.kr",
@@ -125,10 +129,6 @@
         {
           "host": "www.lofin365.go.kr",
           "count": 343
-        },
-        {
-          "host": "data.gm.go.kr",
-          "count": 335
         },
         {
           "host": "open.law.go.kr",

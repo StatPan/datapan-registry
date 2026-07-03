@@ -12,14 +12,14 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `17348`
-- callable operations: `17206` (`99.2%`)
+- operations: `17636`
+- callable operations: `17494` (`99.2%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `5738`
-- registered adapter operations: `5728`
+- external endpoint operations: `6026`
+- registered adapter operations: `6016`
 - missing adapter operations: `29`
 - external adapter coverage: `99.5%`
-- approval-required operations: `5543`
+- approval-required operations: `5710`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
@@ -227,8 +227,8 @@ institution:
    `scripts/validate-institution-runtime-plan.py`, and
    `scripts/validate-institution-api-overview.py`.
 
-The current operation materialization queue starts at `경기도 광명시`: `197`
-APIs, `100` APIs with operation mappings, and `97` uncovered APIs. The runtime
+The current operation materialization queue starts at `해양수산부`: `173`
+APIs, `172` APIs with operation mappings, and `1` uncovered API. The runtime
 reactivation queue starts at `행정안전부`: `1252` APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
 records, and `1202` APIs still needing runtime reactivation. Gateway calls need
@@ -445,6 +445,12 @@ readiness, not to advance verified runtime coverage.
    landing-page checks. That brings checked runtime evidence to `1799`,
    registered external adapter operations to `5728`, and raises 경기도 광명시
    operation coverage to `100` of `197` APIs.
+   The final 경기도 광명시 batch materializes the remaining `97` APIs and `288`
+   operations using existing Gwangmyeong adapter coverage, and merges `25`
+   verified landing-page checks. That brings checked runtime evidence to
+   `1824`, registered external adapter operations to `6016`, completes 경기도
+   광명시 materialization at `197` of `197` APIs, and moves the first
+   materialization queue to 해양수산부.
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,
