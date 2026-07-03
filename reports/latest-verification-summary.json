@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-03T16:56:36Z",
+  "generated_at": "2026-07-03T17:07:59Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 1724,
-    "verified": 386,
+    "total": 1749,
+    "verified": 411,
     "failed": 145,
     "skipped": 1193,
     "unknown": 0
@@ -21,7 +21,7 @@
       },
       {
         "key": "verified",
-        "count": 386,
+        "count": 411,
         "status": "verified"
       },
       {
@@ -369,6 +369,11 @@
         "provider": "epost"
       },
       {
+        "key": "open-law",
+        "count": 26,
+        "provider": "open-law"
+      },
+      {
         "key": "tour",
         "count": 26,
         "provider": "tour"
@@ -649,11 +654,6 @@
         "provider": "ncpms"
       },
       {
-        "key": "open-law",
-        "count": 1,
-        "provider": "open-law"
-      },
-      {
         "key": "seogu",
         "count": 1,
         "provider": "seogu"
@@ -836,9 +836,19 @@
         "host": "data.naqs.go.kr"
       },
       {
+        "key": "open.law.go.kr",
+        "count": 9,
+        "host": "open.law.go.kr"
+      },
+      {
         "key": "www.culture.go.kr",
         "count": 9,
         "host": "www.culture.go.kr"
+      },
+      {
+        "key": "www.law.go.kr",
+        "count": 9,
+        "host": "www.law.go.kr"
       },
       {
         "key": "cancer.go.kr",
@@ -849,6 +859,11 @@
         "key": "data.humetro.busan.kr",
         "count": 8,
         "host": "data.humetro.busan.kr"
+      },
+      {
+        "key": "www.lawmaking.go.kr",
+        "count": 8,
+        "host": "www.lawmaking.go.kr"
       },
       {
         "key": "data.ex.co.kr",
@@ -1021,11 +1036,6 @@
         "host": "open.api.q-net.or.kr"
       },
       {
-        "key": "open.law.go.kr",
-        "count": 1,
-        "host": "open.law.go.kr"
-      },
-      {
         "key": "openapi.seoul.go.kr:8088",
         "count": 1,
         "host": "openapi.seoul.go.kr:8088"
@@ -1104,7 +1114,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 1000,
+        "count": 1025,
         "kind": "external_endpoint"
       },
       {

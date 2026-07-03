@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T16:56:46Z",
+  "generated_at": "2026-07-03T17:08:09Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,19 +7,19 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 16693,
-    "callable_operations": 16551,
-    "callable_operation_percent": 99.1,
+    "operations": 16854,
+    "callable_operations": 16712,
+    "callable_operation_percent": 99.2,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 5083,
-    "registered_adapter_operations": 5073,
+    "external_endpoint_operations": 5244,
+    "registered_adapter_operations": 5234,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.4,
-    "approval_required_operations": 5551,
+    "approval_required_operations": 5621,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 81,
+    "registered_adapter_hosts": 83,
     "missing_adapter_hosts": 11,
     "adapter_count": 75,
     "call_capable_adapters": 23,
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T16:56:36Z",
-    "total": 1724,
-    "verified": 386,
+    "generated_at": "2026-07-03T17:07:59Z",
+    "total": 1749,
+    "verified": 411,
     "failed": 145,
     "skipped": 1193,
     "unknown": 0,
-    "verified_percent": 22.4,
-    "evidence_operation_percent": 10.3
+    "verified_percent": 23.5,
+    "evidence_operation_percent": 10.4
   },
   "route_evidence": {
     "present": true,
@@ -328,6 +328,25 @@
         ]
       },
       {
+        "host": "open.law.go.kr",
+        "provider": "open-law",
+        "kinds": [
+          "external_endpoint",
+          "external_guide"
+        ],
+        "adapter_status": "adapter",
+        "specs": 90,
+        "operations": 122,
+        "external_endpoint_operations": 122,
+        "external_guide_specs": 4,
+        "approval_required_operations": 71,
+        "sample_ids": [
+          "15032073",
+          "15057026",
+          "15057038"
+        ]
+      },
+      {
         "host": "openapi.q-net.or.kr",
         "provider": "q-net",
         "kinds": [
@@ -362,32 +381,14 @@
           "15101791",
           "15101794"
         ]
-      },
-      {
-        "host": "openapi.jeonju.go.kr",
-        "provider": "jeonju",
-        "kinds": [
-          "external_endpoint",
-          "external_guide"
-        ],
-        "adapter_status": "adapter",
-        "specs": 49,
-        "operations": 80,
-        "external_endpoint_operations": 80,
-        "external_guide_specs": 32,
-        "sample_ids": [
-          "15000354",
-          "15004414",
-          "15004788"
-        ]
       }
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T16:56:46Z",
+    "generated_at": "2026-07-03T17:08:09Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 75,
-    "host_count": 83,
+    "host_count": 85,
     "adapters": [
       {
         "name": "airport",
@@ -961,7 +962,9 @@
         "name": "open-law",
         "status": "registered",
         "hosts": [
-          "open.law.go.kr"
+          "open.law.go.kr",
+          "www.law.go.kr",
+          "www.lawmaking.go.kr"
         ],
         "capabilities": [
           "verification"

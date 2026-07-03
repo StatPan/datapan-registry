@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T16:56:39Z",
+  "generated_at": "2026-07-03T17:08:03Z",
   "datapan_version": "0.1.0-dev",
   "adapter_count": 75,
-  "host_count": 83,
+  "host_count": 85,
   "adapters": [
     {
       "name": "airport",
@@ -576,7 +576,9 @@
       "name": "open-law",
       "status": "registered",
       "hosts": [
-        "open.law.go.kr"
+        "open.law.go.kr",
+        "www.law.go.kr",
+        "www.lawmaking.go.kr"
       ],
       "capabilities": [
         "verification"
