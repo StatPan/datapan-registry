@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T05:16:43Z",
+  "generated_at": "2026-07-04T05:28:46Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4659,
-    "verified": 2749,
+    "total": 4699,
+    "verified": 2789,
     "failed": 367,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2749,
+        "count": 2789,
         "status": "verified"
       },
       {
@@ -537,6 +537,11 @@
         "key": "geoje",
         "count": 41,
         "provider": "geoje"
+      },
+      {
+        "key": "openfiscaldata",
+        "count": 40,
+        "provider": "openfiscaldata"
       },
       {
         "key": "sisul",
@@ -1176,6 +1181,11 @@
         "host": "www.nrich.go.kr"
       },
       {
+        "key": "www.openfiscaldata.go.kr",
+        "count": 40,
+        "host": "www.openfiscaldata.go.kr"
+      },
+      {
         "key": "www.nie-ecobank.kr",
         "count": 39,
         "host": "www.nie-ecobank.kr"
@@ -1784,7 +1794,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3935,
+        "count": 3975,
         "kind": "external_endpoint"
       },
       {

@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T05:16:58Z",
+  "generated_at": "2026-07-04T05:31:11Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 21142,
-    "runtime_evidence": 4659,
-    "runtime_evidence_percent": 22.0,
-    "callable_operations": 21000,
-    "external_endpoint_operations": 9532,
-    "registered_adapter_operations": 9522,
+    "operations": 21182,
+    "runtime_evidence": 4699,
+    "runtime_evidence_percent": 22.2,
+    "callable_operations": 21040,
+    "external_endpoint_operations": 9572,
+    "registered_adapter_operations": 9562,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 9532
+      "count": 9572
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 9522
+      "count": 9562
     },
     {
       "key": "builtin",
@@ -92,12 +92,12 @@
       "operation_count": 1395
     },
     {
-      "category": "환경기상",
-      "operation_count": 1298
+      "category": "재정금융",
+      "operation_count": 1318
     },
     {
-      "category": "재정금융",
-      "operation_count": 1278
+      "category": "환경기상",
+      "operation_count": 1298
     },
     {
       "category": "식품건강",
@@ -5113,6 +5113,61 @@
       ]
     },
     {
+      "organization": "기획예산처",
+      "api_count": 18,
+      "operation_api_count": 18,
+      "operation_count": 59,
+      "runtime_evidence_count": 40,
+      "runtime_evidence_percent": 67.8,
+      "verified": 40,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 4,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 19
+        },
+        {
+          "key": "external_endpoint",
+          "count": 40
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 40
+        },
+        {
+          "key": "builtin",
+          "count": 19
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "재정금융",
+          "operation_count": 59
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "www.openfiscaldata.go.kr",
+          "operation_count": 40,
+          "adapter": "openfiscaldata",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 19
+        }
+      ]
+    },
+    {
       "organization": "경상남도 남해군",
       "api_count": 58,
       "operation_api_count": 58,
@@ -9325,44 +9380,6 @@
       "top_categories": [
         {
           "category": "통일외교안보",
-          "operation_count": 19
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 19
-        }
-      ]
-    },
-    {
-      "organization": "기획예산처",
-      "api_count": 18,
-      "operation_api_count": 3,
-      "operation_count": 19,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 19
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 19
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "재정금융",
           "operation_count": 19
         }
       ],

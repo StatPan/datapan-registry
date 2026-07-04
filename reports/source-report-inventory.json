@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-04T05:16:58Z",
+  "generated_at": "2026-07-04T05:31:11Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 124,
+    "report_total": 126,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,7 +38,7 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 112,
+      "report_count": 114,
       "present_reports": [
         {
           "name": "anyang-egonghun-verification-summary.json",
@@ -380,6 +380,14 @@
           "path": "reports/data-go-kr/nrich-www-verification.json"
         },
         {
+          "name": "openfiscaldata-verification-summary.json",
+          "path": "reports/data-go-kr/openfiscaldata-verification-summary.json"
+        },
+        {
+          "name": "openfiscaldata-verification.json",
+          "path": "reports/data-go-kr/openfiscaldata-verification.json"
+        },
+        {
           "name": "operation-materialization-plan.json",
           "path": "reports/data-go-kr/operation-materialization-plan.json",
           "schema_version": "datapan.operation-materialization-plan.v1"
@@ -601,6 +609,8 @@
         "nrich-portal-verification.json",
         "nrich-www-verification-summary.json",
         "nrich-www-verification.json",
+        "openfiscaldata-verification-summary.json",
+        "openfiscaldata-verification.json",
         "operation-materialization-plan.json",
         "police-verification-summary.json",
         "police-verification.json",

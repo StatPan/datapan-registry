@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T05:16:58Z",
+  "generated_at": "2026-07-04T05:31:11Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4336,
-    "stable": 7724
+    "changed": 4351,
+    "stable": 7709
   },
   "added": [],
   "removed": [],
@@ -3979,6 +3979,16 @@
       "new_digest": "7a5e87f8c9bc4f9e9a24377aa1a52c43ce29b0e393940dd05a914093e78d2da4"
     },
     {
+      "id": "15050495",
+      "old_title": "기획예산처_세입/수입 예산편성현황(총액)",
+      "new_title": "기획예산처_세입/수입 예산편성현황(총액)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "905422788e5d88b0b9789e160f53322502862d1f4a102cc6b518746e3181902f",
+      "new_digest": "4ec7cd7556bc2e69453fc53ea2ff6a0c45d7bfbe778e47ed1bf03acb26d1ac1e"
+    },
+    {
       "id": "15050553",
       "old_title": "농림축산식품부_지역별 농기계보유현황",
       "new_title": "농림축산식품부_지역별 농기계보유현황",
@@ -4037,6 +4047,16 @@
       ],
       "old_digest": "dc84487b3f31e9896a96df993e80b27a47534d149ac1b79a21c980bc686f52cd",
       "new_digest": "fc3259a7f431e524fae33156330ed68709d793444ef058a5e7894bcbd4f1cac1"
+    },
+    {
+      "id": "15054319",
+      "old_title": "기획예산처_국유재산 증감 및 현재액 현황",
+      "new_title": "기획예산처_국유재산 증감 및 현재액 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1a9a409c84018de458bd0eaa0bcd503f64b12ee8741a14b279bed49fe54765ed",
+      "new_digest": "d356c4b57f08de4e59fc2d0ae6430d119a5d9da94539fa4d8f26c5290d5a1cdf"
     },
     {
       "id": "15054967",
@@ -4187,6 +4207,16 @@
       ],
       "old_digest": "1039b0ae11f270f6a1ceaeeb7ea24016fe062a7595184379a7e9498ef233b2df",
       "new_digest": "e83f8ef2a747b60cfbecce01fd324e135950045bc96b5333bf6775968a727b72"
+    },
+    {
+      "id": "15056520",
+      "old_title": "기획예산처_회계/기금별 국가채권현황",
+      "new_title": "기획예산처_회계/기금별 국가채권현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bbdad925df3150079c06f54679f9345e2b2d8a6a0e1bf9c5e200d6e5ebfffe3f",
+      "new_digest": "521a2d099e6e3127bcf9f5d4e37230dcf928891f69c1614a92cb4a7cc0451e5f"
     },
     {
       "id": "15056524",
@@ -4957,6 +4987,16 @@
       ],
       "old_digest": "f5bd71009af9f1779fc5ac25deed2905604ce5d486711c51a113afe0ed554d2d",
       "new_digest": "84133a16d181b13da9a044d8de6a4c6d8ede54a5054020cdd82b7a2880cea098"
+    },
+    {
+      "id": "15056702",
+      "old_title": "기획예산처_회계별 세입/세출결산 현황",
+      "new_title": "기획예산처_회계별 세입/세출결산 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "458aeeb7f98ee58955a048282ff40e842d67c25d6f6f7305fa8953093e137acb",
+      "new_digest": "077c79d6fd272dce1218c8a48a88854fa62373e4010bb106cc4b9aa7c82fdd8a"
     },
     {
       "id": "15056706",
@@ -6077,6 +6117,16 @@
       ],
       "old_digest": "9c34aecbc4cb947a0f575ca65559d7bd874d3033ad70b9e809af5d79f1912588",
       "new_digest": "09c2ebf79a5bed2e10db95c1be285356ff73f25b54d0d2b44f09f2c878bd8e51"
+    },
+    {
+      "id": "15056940",
+      "old_title": "기획예산처_세입 및 수입 결산 현황",
+      "new_title": "기획예산처_세입 및 수입 결산 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a9e8695fafee380c9bcb018a6e768cd514ff7972db8183dbc94bce696ef63166",
+      "new_digest": "be98ee95a429e87c232c311c2c8c01d7f5140247f2325571c40f2c093d0c3e73"
     },
     {
       "id": "15056941",
@@ -7747,6 +7797,16 @@
       ],
       "old_digest": "e285b6dd32dc300d402f55b08a503e07fdd14902e8d2d46d690ef68091fd4446",
       "new_digest": "53f6147810c29cd15f73670006152405ca7f8a78977082b0d6e4ecf08740ce70"
+    },
+    {
+      "id": "15057347",
+      "old_title": "기획예산처_회계별 세입결산 현황",
+      "new_title": "기획예산처_회계별 세입결산 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c6fc78e130105fdbc5cf2ab32c2bf1cadf958fc38a1b3a7724fdf4fe381dd2b6",
+      "new_digest": "ee42b0c7bb110d1e6af2299c7b621d91e503c05deff5b2fb5441b1b9f261e566"
     },
     {
       "id": "15057353",
@@ -9969,6 +10029,16 @@
       "new_digest": "2d464d8c94f1ca47332467962e46d2b1459b41e2a793bb2b15100c6149ea50bd"
     },
     {
+      "id": "15057783",
+      "old_title": "기획예산처_국가채권현황",
+      "new_title": "기획예산처_국가채권현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f1ddc7f88c57ca1f77ff6687ac35fac9a433114a1c70274986bf92e78fed10d5",
+      "new_digest": "0bc25f0315bf8efe865d76ef3c11744359462aa9904b8815f3c0c967ac13f10d"
+    },
+    {
       "id": "15057788",
       "old_title": "경기도_휴게음식점(전통찻집) 현황",
       "new_title": "경기도_휴게음식점(전통찻집) 현황",
@@ -10249,6 +10319,16 @@
       "new_digest": "6ad439b5ca7ff3feb6b62ef60f4054f8dcc222d688732b7f4a04860e95297711"
     },
     {
+      "id": "15057841",
+      "old_title": "기획예산처_국가채권현황",
+      "new_title": "기획예산처_국가채권현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c328a099657ba3320620afea60911898e69d9341969c679553fb9f2a6b31fde0",
+      "new_digest": "0f88893ec5c169d3f9b34f613589a811cb3df5ab63f1fc74a9e22e2de21a7f35"
+    },
+    {
       "id": "15057842",
       "old_title": "경기도_장애인출산비용지원 산모기준 집계현황",
       "new_title": "경기도_장애인출산비용지원 산모기준 집계현황",
@@ -10327,6 +10407,16 @@
       ],
       "old_digest": "0a67e90e37f590c12b75f54cf33699089393002fa5ca460ec65b242cd54881ca",
       "new_digest": "3b6713841f7b7dfc1add055b58b407c1ec86b5f24a0d4f744b60326a4df37e33"
+    },
+    {
+      "id": "15057863",
+      "old_title": "기획예산처_채권현재액명세서",
+      "new_title": "기획예산처_채권현재액명세서",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8c9ca0eb4754c326190d254073f1f3e6176625db97b9acb3332fa7cad677fbce",
+      "new_digest": "1b46e4dfb82402b88db9ca949473f7823f928f3c0e2ced46e1762e8902393455"
     },
     {
       "id": "15057864",
@@ -13139,6 +13229,16 @@
       "new_digest": "fbc780771e738d3824a858074e9d721e29a41c3d7881499a6310ea8d2a88cc1a"
     },
     {
+      "id": "15058501",
+      "old_title": "기획예산처_부담금 운용현황",
+      "new_title": "기획예산처_부담금 운용현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4e3c492fdc18b807e272324bc278fbbd7b132ed45c5ba79d01966e3e8c307234",
+      "new_digest": "be1cd177fed432c7c4058054bf459b755ecc2e78032a18ebd0f3e6f6a0ae7613"
+    },
+    {
       "id": "15058504",
       "old_title": "농촌진흥청_작물 병해충 검색 서비스",
       "new_title": "농촌진흥청_작물 병해충 검색 서비스",
@@ -14937,6 +15037,16 @@
       ],
       "old_digest": "59fdcb5ebd545b9b9d06cd5ea362b7e826978c30f99e6ebb5b2c985a14e79d51",
       "new_digest": "669bba9b3e8c3c3b073bcb18616973308f146e38c54aa47c003b799b0e0e51ca"
+    },
+    {
+      "id": "15058905",
+      "old_title": "기획예산처_세출예산 편성현황(추경포함)",
+      "new_title": "기획예산처_세출예산 편성현황(추경포함)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ee1d173545ea4862cd33b2e3e91ecf59a4d521e97605c06d4fcf705754d54266",
+      "new_digest": "f4383589b3d694fcab0ef2097772d5ec6f6e37391347ecbadf4ab55f4508de07"
     },
     {
       "id": "15058908",
@@ -23099,6 +23209,16 @@
       "new_digest": "44bf8a762a57366c4f2449f5092c6714732f0bf529884d60f559ccd188fd0cd2"
     },
     {
+      "id": "15086573",
+      "old_title": "기획예산처_재정경제부_주요관리대상사업 공공기관별 집행실적",
+      "new_title": "기획예산처_재정경제부_주요관리대상사업 공공기관별 집행실적",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2b4bc99b6fcb0c000afbf32fdc5860ed20d42f7f173eb09f6303afba4aa9ef74",
+      "new_digest": "e0f650491370767aaebb7c39b2d6507ede26cc60c5857f8896d7bdfd71c743f0"
+    },
+    {
       "id": "15087120",
       "old_title": "경찰청_교통소통정보 서비스",
       "new_title": "경찰청_교통소통정보 서비스",
@@ -23717,6 +23837,16 @@
       ],
       "old_digest": "3a68e5a4dc5a9aa0d249ff3ef009b2ed6db6ba01d9d68effe84d93c95d7f23bf",
       "new_digest": "8d90ca6af290b9e23ee57fc3b01ef61eba9149f1629611c7d1109b834109d8ff"
+    },
+    {
+      "id": "15094215",
+      "old_title": "기획예산처_세출/지출 세목 예산편성현황(총액)",
+      "new_title": "기획예산처_세출/지출 세목 예산편성현황(총액)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e8b5b9caa50222c88f4c1c5d945c7f0a9622c80c17f79565ca7ea83167dd1a29",
+      "new_digest": "be90c02bb8044280f9fe7898ecbd12f34babe3ffd2801e8d39b72ba2eb0a9a49"
     },
     {
       "id": "15094377",
@@ -43287,6 +43417,26 @@
       ],
       "old_digest": "bc1a83339301b8d2cb1e3095ce3de1e5f3f06a416352a2a2feeae9d8103322d0",
       "new_digest": "ee86379a2169b1c55fc52f18fe0753800a2bb13db2dc532a0a1db31bbbc2aa2e"
+    },
+    {
+      "id": "3073756",
+      "old_title": "기획예산처_연도별 세출 및 지출 예산현황",
+      "new_title": "기획예산처_연도별 세출 및 지출 예산현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8cb22fe7c44f7a81870040991a3c8029595037ca37865d5fc6c26c963d8c55fe",
+      "new_digest": "fbfd99b3bc5c55d7b04ca5c778daa3a851c59a41e14a3ccfc1e2a0c694123ae8"
+    },
+    {
+      "id": "3073764",
+      "old_title": "기획예산처_연도별 국가채무 총괄(결산)",
+      "new_title": "기획예산처_연도별 국가채무 총괄(결산)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5f1fdeb0bf71df40cdf353659b591d9ea173fe695eb30219a7aa4d82324b016d",
+      "new_digest": "9506a1f87042426dc1884258dce376c6801cba7002c51e2d60141869a19dfd13"
     },
     {
       "id": "3074924",

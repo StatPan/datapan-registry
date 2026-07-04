@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T05:16:58Z",
+  "generated_at": "2026-07-04T05:31:11Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 132,
-  "host_count": 165,
+  "adapter_count": 133,
+  "host_count": 166,
   "adapters": [
     {
       "name": "airport",
@@ -1025,6 +1025,16 @@
       ]
     },
     {
+      "name": "openfiscaldata",
+      "status": "registered",
+      "hosts": [
+        "www.openfiscaldata.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "pqis",
       "status": "registered",
       "hosts": [
@@ -1384,8 +1394,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 132,
-    "verification_capable_adapters": 132,
+    "adapter_count": 133,
+    "verification_capable_adapters": 133,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
