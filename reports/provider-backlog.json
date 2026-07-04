@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T06:24:47Z",
+  "generated_at": "2026-07-04T06:33:35Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 325,
+  "filtered_count": 326,
   "summary": {
-    "hosts": 325,
+    "hosts": 326,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 178,
-    "external_guide_hosts": 232,
-    "registered_adapter_hosts": 167,
-    "operation_hosts": 180,
+    "external_endpoint_hosts": 179,
+    "external_guide_hosts": 233,
+    "registered_adapter_hosts": 168,
+    "operation_hosts": 181,
     "guide_only_hosts": 145,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 158,
-    "approval_required_operations": 8191,
+    "approval_required_operations": 8195,
     "malformed_source_url_count": 724
   },
   "providers": [
@@ -1996,6 +1996,24 @@
         "15122458",
         "15122465",
         "15122466"
+      ]
+    },
+    {
+      "host": "opendata.koroad.or.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 4,
+      "operations": 4,
+      "external_endpoint_operations": 4,
+      "external_guide_specs": 4,
+      "approval_required_operations": 4,
+      "sample_ids": [
+        "15105286",
+        "15105289",
+        "15113413"
       ]
     },
     {

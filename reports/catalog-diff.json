@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T06:24:47Z",
+  "generated_at": "2026-07-04T06:33:35Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4396,
-    "stable": 7664
+    "changed": 4400,
+    "stable": 7660
   },
   "added": [],
   "removed": [],
@@ -28789,6 +28789,26 @@
       "new_digest": "fdabcd441e4369b8fbb94ee81ce9253628d302b7550be5278b49c05a30c8aafa"
     },
     {
+      "id": "15105286",
+      "old_title": "한국도로교통공단_이륜차 교통사고 다발지역",
+      "new_title": "한국도로교통공단_이륜차 교통사고 다발지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5365a86520e6e861cb316d03cf3a7974005727ac5cafed0861cf8dc6a4af68cc",
+      "new_digest": "7c74a371190f8ba3f0d5c7434253d7591cf827d525b20593e1a9c5ce730265ec"
+    },
+    {
+      "id": "15105289",
+      "old_title": "한국도로교통공단_보행자 교통사고 다발지역",
+      "new_title": "한국도로교통공단_보행자 교통사고 다발지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "27fd9b2fc7010c97266eec57e0585b6d57abb30f83b9ecd8a0f6b337f53a293a",
+      "new_digest": "83494ec34dbee7b5fa2ca6940724d8660fcc6a87a076dabab2897ef593c21634"
+    },
+    {
       "id": "15106003",
       "old_title": "한국환경공단_자원순환정보시스템_폐기물통계정보",
       "new_title": "한국환경공단_자원순환정보시스템_폐기물통계정보",
@@ -30807,6 +30827,26 @@
       ],
       "old_digest": "5dc046f18f2e29f19bd40cbe26fdb8370a56c5af030b3348bd8f83790820a39a",
       "new_digest": "5b4e282c22ada782cda63b155e878cfa998c182315fff5f73fe64d81d96b2ef4"
+    },
+    {
+      "id": "15113413",
+      "old_title": "한국도로교통공단_음주운전 교통사고 다발지역",
+      "new_title": "한국도로교통공단_음주운전 교통사고 다발지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9d9e3a3d55ec1d9d11d9c94e973d66f0bb0b918beab17dfc6c33ae1ebf393166",
+      "new_digest": "a00153fedc4d039f003b8ac31efa458d28c042e1229e74d643d55cec379541d1"
+    },
+    {
+      "id": "15113414",
+      "old_title": "한국도로교통공단_화물차 교통사고 다발지역",
+      "new_title": "한국도로교통공단_화물차 교통사고 다발지역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "07aab30fd5773951f99bd791468397afab30e822c7b9f984d3b9a0e5db781f0d",
+      "new_digest": "bc7ead129ea0a2425c273b06af4cbf851c8cd7458978ab8a5091a24091fb87c8"
     },
     {
       "id": "15113522",

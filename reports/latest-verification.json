@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T06:24:30Z",
+  "generated_at": "2026-07-04T06:33:21Z",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
-  "limit": 8517,
+  "limit": 8617,
   "truncated": true,
-  "filtered_count": 4767,
+  "filtered_count": 4771,
   "summary": {
-    "total": 4767,
-    "verified": 2835,
+    "total": 4771,
+    "verified": 2839,
     "failed": 389,
     "skipped": 1543,
     "unknown": 0
@@ -74430,6 +74430,62 @@
       "http_status": 200,
       "semantic_status": "html_landing_page",
       "url": "https://seedpedia.koagi.or.kr/seed/zboard/read.do?lmCode=APILNK\u0026pageIndex=1\u0026pd_pkid=2490\u0026searchBgnDe=\u0026searchCate1=\u0026searchCate2=\u0026searchCnd=\u0026searchEndDe=\u0026searchGroup=\u0026searchOrder=\u0026searchPageUnit=\u0026searchQnaState=\u0026searchTitle=\u0026searchWrd=\u0026sel_menu_code=\u0026ss_site_code=",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15105286",
+      "title": "한국도로교통공단_이륜차 교통사고 다발지역",
+      "operation": "한국도로교통공단_이륜차 교통사고 다발지역 정보_20211231",
+      "provider": "koroad",
+      "endpoint_host": "opendata.koroad.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T06:33:14Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://opendata.koroad.or.kr/api/selectMotorcycleDataSet.do",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15105289",
+      "title": "한국도로교통공단_보행자 교통사고 다발지역",
+      "operation": "한국도로교통공단_보행자 교통사고 다발지역 정보_20211231",
+      "provider": "koroad",
+      "endpoint_host": "opendata.koroad.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T06:33:14Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://opendata.koroad.or.kr/api/selectPedstriansDataSet.do",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15113413",
+      "title": "한국도로교통공단_음주운전 교통사고 다발지역",
+      "operation": "한국도로교통공단_음주운전 교통사고 다발지역 정보_20211231",
+      "provider": "koroad",
+      "endpoint_host": "opendata.koroad.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T06:33:14Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://opendata.koroad.or.kr/api/selectDrunkDataSet.do",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15113414",
+      "title": "한국도로교통공단_화물차 교통사고 다발지역",
+      "operation": "한국도로교통공단_화물차 교통사고 다발지역 정보_20211231",
+      "provider": "koroad",
+      "endpoint_host": "opendata.koroad.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T06:33:14Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://opendata.koroad.or.kr/api/selectTruckDataSet.do",
       "body_shape": "html"
     }
   ]

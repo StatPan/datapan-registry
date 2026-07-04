@@ -2,13 +2,13 @@
 
 This report fetches one operation-materialization batch from public data.go.kr detail pages and keeps only operations whose hosts already have registered adapters.
 
-- Generated at: `2026-07-04T06:24:05Z`
+- Generated at: `2026-07-04T06:32:54Z`
 - Batch: `institution-03`
-- Organization: `한국수목원정원관리원`
-- Input APIs: `6`
-- Details fetched: `6`
-- Patches: `6`
-- Operations to add: `8`
+- Organization: `한국도로교통공단`
+- Input APIs: `4`
+- Details fetched: `4`
+- Patches: `4`
+- Operations to add: `4`
 - Skipped: `0`
 - Failed: `0`
 
@@ -16,11 +16,9 @@ This report fetches one operation-materialization batch from public data.go.kr d
 
 | Dataset ID | Organization | Title | Operations | Hosts |
 | --- | --- | --- | ---: | --- |
-| 15150921 | 한국수목원정원관리원 | 한국수목원정원관리원_시드뱅크 도입 종자 분류학적 정보 | 1 | seedpedia.koagi.or.kr |
-| 15150918 | 한국수목원정원관리원 | 한국수목원정원관리원_시드뱅크 도입 종자 활력정보 | 1 | seedpedia.koagi.or.kr |
-| 15150916 | 한국수목원정원관리원 | 한국수목원정원관리원_시드뱅크 도입 종자 형태정보 | 1 | seedpedia.koagi.or.kr |
-| 15150913 | 한국수목원정원관리원 | 한국수목원정원관리원_시드뱅크 도입 종자 품질관리 정보 | 1 | seedpedia.koagi.or.kr |
-| 15150909 | 한국수목원정원관리원 | 한국수목원정원관리원_시드뱅크 도입 종자 채집지 정보 | 1 | seedpedia.koagi.or.kr |
-| 15149417 | 한국수목원정원관리원 | 한국수목원정원관리원_기관별 종자도입정보 | 3 | data.mafra.go.kr, seedpedia.koagi.or.kr, www.nongsaro.go.kr |
+| 15113414 | 한국도로교통공단 | 한국도로교통공단_화물차 교통사고 다발지역 | 1 | opendata.koroad.or.kr |
+| 15113413 | 한국도로교통공단 | 한국도로교통공단_음주운전 교통사고 다발지역 | 1 | opendata.koroad.or.kr |
+| 15105289 | 한국도로교통공단 | 한국도로교통공단_보행자 교통사고 다발지역 | 1 | opendata.koroad.or.kr |
+| 15105286 | 한국도로교통공단 | 한국도로교통공단_이륜차 교통사고 다발지역 | 1 | opendata.koroad.or.kr |
 
 ## Skipped Reasons

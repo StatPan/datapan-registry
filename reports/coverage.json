@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T06:24:54Z",
+  "generated_at": "2026-07-04T06:33:41Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 21250,
-    "callable_operations": 21108,
+    "operations": 21254,
+    "callable_operations": 21112,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 9640,
-    "registered_adapter_operations": 9630,
+    "external_endpoint_operations": 9644,
+    "registered_adapter_operations": 9634,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.7,
-    "approval_required_operations": 8191,
+    "approval_required_operations": 8195,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 158,
-    "registered_adapter_hosts": 167,
+    "registered_adapter_hosts": 168,
     "missing_adapter_hosts": 11,
-    "adapter_count": 137,
+    "adapter_count": 138,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,9 +41,9 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-04T06:24:30Z",
-    "total": 4767,
-    "verified": 2835,
+    "generated_at": "2026-07-04T06:33:21Z",
+    "total": 4771,
+    "verified": 2839,
     "failed": 389,
     "skipped": 1543,
     "unknown": 0,
@@ -381,10 +381,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-04T06:24:54Z",
+    "generated_at": "2026-07-04T06:33:41Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 137,
-    "host_count": 172,
+    "adapter_count": 138,
+    "host_count": 173,
     "adapters": [
       {
         "name": "airport",
@@ -1147,6 +1147,16 @@
         ]
       },
       {
+        "name": "koroad",
+        "status": "registered",
+        "hosts": [
+          "opendata.koroad.or.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "kosis",
         "status": "registered",
         "hosts": [
@@ -1818,8 +1828,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 137,
-      "verification_capable_adapters": 137,
+      "adapter_count": 138,
+      "verification_capable_adapters": 138,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T06:24:30Z",
+  "generated_at": "2026-07-04T06:33:21Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4767,
-    "verified": 2835,
+    "total": 4771,
+    "verified": 2839,
     "failed": 389,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2835,
+        "count": 2839,
         "status": "verified"
       },
       {
@@ -849,6 +849,11 @@
         "provider": "jeju"
       },
       {
+        "key": "koroad",
+        "count": 4,
+        "provider": "koroad"
+      },
+      {
         "key": "work",
         "count": 4,
         "provider": "work"
@@ -1586,6 +1591,11 @@
         "host": "openapi.work.go.kr"
       },
       {
+        "key": "opendata.koroad.or.kr",
+        "count": 4,
+        "host": "opendata.koroad.or.kr"
+      },
+      {
         "key": "www.happysd.or.kr",
         "count": 4,
         "host": "www.happysd.or.kr"
@@ -1864,7 +1874,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 4043,
+        "count": 4047,
         "kind": "external_endpoint"
       },
       {
