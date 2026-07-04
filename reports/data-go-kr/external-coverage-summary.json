@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.external-coverage.v1",
-  "generated_at": "2026-07-04T00:54:26Z",
+  "generated_at": "2026-07-04T01:09:37Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "source_profile": "sources/data_go_kr.json",
@@ -9,11 +9,11 @@
   "route_disposition_report": "reports/route-disposition.json",
   "provider_index": "data/provider-index.json",
   "summary": {
-    "external_endpoint_operations": 8667,
-    "registered_adapter_operations": 8657,
+    "external_endpoint_operations": 8697,
+    "registered_adapter_operations": 8687,
     "missing_adapter_operations": 29,
     "raw_external_adapter_coverage_percent": 99.7,
-    "registered_adapter_hosts": 131,
+    "registered_adapter_hosts": 132,
     "missing_adapter_hosts": 11,
     "route_evidence_covered_operations": 29,
     "evidence_adjusted_adapter_candidate_operations": 0

@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `20277`
-- callable operations: `20135` (`99.3%`)
+- operations: `20307`
+- callable operations: `20165` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `8667`
-- registered adapter operations: `8657`
+- external endpoint operations: `8697`
+- registered adapter operations: `8687`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
-- approval-required operations: `7620`
+- approval-required operations: `7650`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `131`
+- registered adapter hosts: `132`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -656,6 +656,11 @@ readiness, not to advance verified runtime coverage.
    landing-page checks. That brings checked runtime evidence to `3816`,
    verified checks to `1967`, registered external adapter operations to `8657`,
    and raises API operation coverage to `11,122` of `12,060` APIs (`92.2%`).
+   The 울산광역시 batch registers Ulsan WWW host coverage, materializes `10`
+   APIs and `30` operations, and merges `30` verified bounded provider checks.
+   That brings checked runtime evidence to `3846`, verified checks to `1997`,
+   registered external adapter operations to `8687`, and raises API operation
+   coverage to `11,132` of `12,060` APIs (`92.3%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

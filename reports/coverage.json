@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T00:54:32Z",
+  "generated_at": "2026-07-04T01:09:43Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 20277,
-    "callable_operations": 20135,
+    "operations": 20307,
+    "callable_operations": 20165,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 8667,
-    "registered_adapter_operations": 8657,
+    "external_endpoint_operations": 8697,
+    "registered_adapter_operations": 8687,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.7,
-    "approval_required_operations": 7620,
+    "approval_required_operations": 7650,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 131,
+    "registered_adapter_hosts": 132,
     "missing_adapter_hosts": 11,
-    "adapter_count": 112,
+    "adapter_count": 113,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-04T00:54:13Z",
-    "total": 3816,
-    "verified": 1967,
+    "generated_at": "2026-07-04T01:09:35Z",
+    "total": 3846,
+    "verified": 1997,
     "failed": 306,
     "skipped": 1543,
     "unknown": 0,
-    "verified_percent": 51.5,
-    "evidence_operation_percent": 18.8
+    "verified_percent": 51.9,
+    "evidence_operation_percent": 18.9
   },
   "route_evidence": {
     "present": true,
@@ -382,10 +382,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-04T00:54:32Z",
+    "generated_at": "2026-07-04T01:09:43Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 112,
-    "host_count": 136,
+    "adapter_count": 113,
+    "host_count": 137,
     "adapters": [
       {
         "name": "airport",
@@ -1484,6 +1484,16 @@
         ]
       },
       {
+        "name": "ulsan-www",
+        "status": "registered",
+        "hosts": [
+          "www.ulsan.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "unipass",
         "status": "registered",
         "hosts": [
@@ -1558,8 +1568,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 112,
-      "verification_capable_adapters": 112,
+      "adapter_count": 113,
+      "verification_capable_adapters": 113,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

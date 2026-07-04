@@ -11,8 +11,8 @@ re-importing the upstream data.go.kr catalog every time.
 
 - Provider: `data.go.kr`
 - Specs: `12060`
-- Operations: `20277`
-- Callable operations: `20135` (`99.3%`)
+- Operations: `20307`
+- Callable operations: `20165` (`99.3%`)
 - Latest release: `v2026.06.25.24`
 - Registered external adapters: `airport`, `andong`, `calspia`, `car`, `car365`, `childcare-info`, `chungbuk-tour`, `chungnam`, `codil`, `consumer`, `culture`, `daegu`, `daejeon`, `data-gg`,
   `dgfca`, `dongjak`, `ecvam`, `ekape`, `emuseum`, `epost`, `eshare`, `ex`, `fairdata`, `folk`, `foodsafetykorea`, `forest`,
@@ -20,20 +20,20 @@ re-importing the upstream data.go.kr catalog every time.
   `i815`, `icheon`, `ins24`, `ip-navi`, `itfind`, `its`, `iwest`, `jeju`, `jeju-air`, `jeju-www`, `jejudatahub`, `jejuits`, `jeonju`, `jeonnam-redtable`, `jongno`, `juso`,
   `kipris-plus`, `khoa`, `kistep`, `kma-apihub`, `kofpi`, `korad`, `koreapost`, `kosmes`, `kpx`, `lh-ebid`, `lofin365`, `mafra`, `mafra-legacy`, `mnd-open-data`, `much`, `myhome`, `naa`, `nabic`, `naqs`, `ncpms`, `nfqs`, `nie-ecobank`,
   `nier-nesc`, `nihc`, `nongsaro`, `nosc`, `oneclick-law`, `open-assembly`, `open-law`, `opendart`, `pqis`, `psis`, `q-net`, `recycling-info`, `safemap`, `safetydata`,
-  `seogu`, `seogwipo`, `seoul-bus`, `seoul-map`, `seoul-open-data`, `seoul-tdata`, `sexoffender`, `sisul`, `sisul-www`, `smartfarm-korea`, `stcis`, `tour`, `uiryeong`, `ulsan`, `unipass`, `vworld`,
+  `seogu`, `seogwipo`, `seoul-bus`, `seoul-map`, `seoul-open-data`, `seoul-tdata`, `sexoffender`, `sisul`, `sisul-www`, `smartfarm-korea`, `stcis`, `tour`, `uiryeong`, `ulsan`, `ulsan-www`, `unipass`, `vworld`,
   `wamis`, `work`, `work24`, `worldjob`, `youthcenter`, `cancer`
-- External adapter coverage: `8657` registered-adapter operations out of `8667`
+- External adapter coverage: `8687` registered-adapter operations out of `8697`
   external endpoint operations (`99.7%`)
 - Missing external adapter hosts: `11`
 - Provider split readiness: `ready`
-  (`112` adapters, `112` verification-capable, `23` call-capable)
-- Runtime verification evidence: `3816` bounded checks merged into
-  `reports/latest-verification.json` (`1967` verified, `306` failed, `1543`
+  (`113` adapters, `113` verification-capable, `23` call-capable)
+- Runtime verification evidence: `3846` bounded checks merged into
+  `reports/latest-verification.json` (`1997` verified, `306` failed, `1543`
   skipped)
-- Runtime evidence growth target: `18.8%` checked evidence is above the
+- Runtime evidence growth target: `18.9%` checked evidence is above the
   unrounded `10%` release target; `0` additional records are required for this
   target.
-- Institution API overview: `411` organizations, `12060` APIs, and `20277`
+- Institution API overview: `411` organizations, `12060` APIs, and `20307`
   operations in `reports/data-go-kr/institution-api-overview.json`; readable
   tables live in `docs/data-go-kr-institution-api-overview.md`.
 - Missing external host probe: `81` manifest-bound probe records remain in

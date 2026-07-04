@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T00:54:26Z",
+  "generated_at": "2026-07-04T01:09:37Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 112,
-  "host_count": 136,
+  "adapter_count": 113,
+  "host_count": 137,
   "adapters": [
     {
       "name": "airport",
@@ -1101,6 +1101,16 @@
       ]
     },
     {
+      "name": "ulsan-www",
+      "status": "registered",
+      "hosts": [
+        "www.ulsan.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "unipass",
       "status": "registered",
       "hosts": [
@@ -1175,8 +1185,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 112,
-    "verification_capable_adapters": 112,
+    "adapter_count": 113,
+    "verification_capable_adapters": 113,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
