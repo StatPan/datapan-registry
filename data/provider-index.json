@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T04:56:31Z",
+  "generated_at": "2026-07-04T05:07:28Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 128,
-  "host_count": 161,
+  "adapter_count": 130,
+  "host_count": 163,
   "adapters": [
     {
       "name": "airport",
@@ -733,6 +733,16 @@
       ]
     },
     {
+      "name": "kosis",
+      "status": "registered",
+      "hosts": [
+        "kosis.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "kosmes",
       "status": "registered",
       "hosts": [
@@ -1165,6 +1175,16 @@
       ]
     },
     {
+      "name": "sgis",
+      "status": "registered",
+      "hosts": [
+        "sgis.kostat.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "sisul",
       "status": "registered",
       "hosts": [
@@ -1344,8 +1364,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 128,
-    "verification_capable_adapters": 128,
+    "adapter_count": 130,
+    "verification_capable_adapters": 130,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

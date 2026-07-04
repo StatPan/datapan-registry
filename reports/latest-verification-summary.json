@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T04:56:14Z",
+  "generated_at": "2026-07-04T05:07:10Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4608,
-    "verified": 2698,
+    "total": 4639,
+    "verified": 2729,
     "failed": 367,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2698,
+        "count": 2729,
         "status": "verified"
       },
       {
@@ -574,6 +574,11 @@
         "provider": "open-assembly"
       },
       {
+        "key": "sgis",
+        "count": 30,
+        "provider": "sgis"
+      },
+      {
         "key": "ulsan-www",
         "count": 30,
         "provider": "ulsan-www"
@@ -914,6 +919,11 @@
         "provider": "koreapost"
       },
       {
+        "key": "kosis",
+        "count": 1,
+        "provider": "kosis"
+      },
+      {
         "key": "kosmes",
         "count": 1,
         "provider": "kosmes"
@@ -1179,6 +1189,11 @@
         "key": "open.assembly.go.kr",
         "count": 30,
         "host": "open.assembly.go.kr"
+      },
+      {
+        "key": "sgis.kostat.go.kr",
+        "count": 30,
+        "host": "sgis.kostat.go.kr"
       },
       {
         "key": "www.calspia.go.kr",
@@ -1621,6 +1636,11 @@
         "host": "koreapost.go.kr"
       },
       {
+        "key": "kosis.kr",
+        "count": 1,
+        "host": "kosis.kr"
+      },
+      {
         "key": "kosmes.or.kr",
         "count": 1,
         "host": "kosmes.or.kr"
@@ -1744,7 +1764,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3884,
+        "count": 3915,
         "kind": "external_endpoint"
       },
       {
