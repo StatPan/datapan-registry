@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T06:24:47Z",
+  "generated_at": "2026-07-04T06:33:35Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 21250,
-    "runtime_evidence": 4767,
+    "operations": 21254,
+    "runtime_evidence": 4771,
     "runtime_evidence_percent": 22.4,
-    "callable_operations": 21108,
-    "external_endpoint_operations": 9640,
-    "registered_adapter_operations": 9630,
+    "callable_operations": 21112,
+    "external_endpoint_operations": 9644,
+    "registered_adapter_operations": 9634,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 9640
+      "count": 9644
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 9630
+      "count": 9634
     },
     {
       "key": "builtin",
@@ -69,7 +69,7 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 2701
+      "operation_count": 2705
     },
     {
       "category": "문화관광",
@@ -8609,6 +8609,65 @@
       ]
     },
     {
+      "organization": "한국도로교통공단",
+      "api_count": 16,
+      "operation_api_count": 16,
+      "operation_count": 25,
+      "runtime_evidence_count": 4,
+      "runtime_evidence_percent": 16.0,
+      "verified": 4,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 8,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 21
+        },
+        {
+          "key": "external_endpoint",
+          "count": 4
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 4
+        },
+        {
+          "key": "builtin",
+          "count": 21
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "재난안전",
+          "operation_count": 21
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 4
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 21
+        },
+        {
+          "host": "opendata.koroad.or.kr",
+          "operation_count": 4,
+          "adapter": "koroad",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "국민건강보험공단",
       "api_count": 7,
       "operation_api_count": 7,
@@ -9302,44 +9361,6 @@
         {
           "category": "교통물류",
           "operation_count": 1
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 21
-        }
-      ]
-    },
-    {
-      "organization": "한국도로교통공단",
-      "api_count": 16,
-      "operation_api_count": 12,
-      "operation_count": 21,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 4,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 21
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 21
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "재난안전",
-          "operation_count": 21
         }
       ],
       "top_hosts": [

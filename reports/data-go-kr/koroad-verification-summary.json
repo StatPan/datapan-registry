@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-07-04T06:33:14Z",
+  "source": "reports/data-go-kr/koroad-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 4,
+    "verified": 4,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 4,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "koroad",
+        "count": 4,
+        "provider": "koroad"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "opendata.koroad.or.kr",
+        "count": 4,
+        "host": "opendata.koroad.or.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 4,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}
