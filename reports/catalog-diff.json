@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T00:05:46Z",
+  "generated_at": "2026-07-04T00:18:47Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3862,
-    "stable": 8198
+    "changed": 3885,
+    "stable": 8175
   },
   "added": [],
   "removed": [],
@@ -22899,6 +22899,226 @@
       "new_digest": "fc188a7970cbd9aee93b0183f789d5708200a260846273942dc86281a4324484"
     },
     {
+      "id": "15101154",
+      "old_title": "한국사회보장정보원_어린이집별 기본정보  조회",
+      "new_title": "한국사회보장정보원_어린이집별 기본정보  조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8673970d775111f70e68f4fc6fe31338ccaf2229c104a2619eea42a5ecbb5a56",
+      "new_digest": "29c031c730437eb9e3a96be79c0cfdb3e16364377c87bd06778bfa34436e0865"
+    },
+    {
+      "id": "15101155",
+      "old_title": "한국사회보장정보원_전국 어린이집 정보 조회",
+      "new_title": "한국사회보장정보원_전국 어린이집 정보 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7fd79c18e9a26179a1f8fa33e961bca5640ab0d2d6b9f4c84566dcf2570dbdd5",
+      "new_digest": "de8aa989ca568a5ac3d42e2e75263b82ffda23e09215cd5775bb3178d4e6a457"
+    },
+    {
+      "id": "15101171",
+      "old_title": "한국사회보장정보원_서울특별시 어린이집 정보조회",
+      "new_title": "한국사회보장정보원_서울특별시 어린이집 정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "de2cc914be81c7b0990b7f1aa49c8981dbdf18b4a0d5d146355bd3cc3a75702d",
+      "new_digest": "cd84026522fff7a6334bbff6c096131aac4df80a891d877675314dd5b89d5ca2"
+    },
+    {
+      "id": "15101184",
+      "old_title": "한국사회보장정보원_부산광역시 어린이집 정보조회",
+      "new_title": "한국사회보장정보원_부산광역시 어린이집 정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "95de8fec22611f38c9e248cfed95bd2a89a7eb3561b37931171e41758264644a",
+      "new_digest": "6bd86fc1c834e1c6d4f42f56e2039aa524da09375f2e2130266fd13f5de2a8af"
+    },
+    {
+      "id": "15101186",
+      "old_title": "한국사회보장정보원_대구광역시 어린이집 정보조회",
+      "new_title": "한국사회보장정보원_대구광역시 어린이집 정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "45c751f9acbc3c7b7989480052d9df31309703a89915a203c7631f02dfcd4d7b",
+      "new_digest": "a3aed9319504e93e5b91a298bffe2ebded4920d8bdaf87713a95337e912fa52d"
+    },
+    {
+      "id": "15101187",
+      "old_title": "한국사회보장정보원_인천광역시 어린이집 정보조회",
+      "new_title": "한국사회보장정보원_인천광역시 어린이집 정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8cbd190870f2a7c5d4e3f815cb61a77ebc03679c9a7cfc0bfa29df0d55d60ed3",
+      "new_digest": "5327cefcccc079ff4c4c2f8108c28d6e9ba35f3daaed4325538fe5f153ceca1a"
+    },
+    {
+      "id": "15101189",
+      "old_title": "한국사회보장정보원_광주광역시 어린이집 정보조회",
+      "new_title": "한국사회보장정보원_광주광역시 어린이집 정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d24c37362a1d7bf7c2578056602511c41e590992dc0fa5a1d17dc9add522d0d7",
+      "new_digest": "ef777e525fd3be9375c8ab129823d58f425b8e10d5d92e8eb4563205b7250bfb"
+    },
+    {
+      "id": "15101190",
+      "old_title": "한국사회보장정보원_대전광역시 어린이집 정보조회",
+      "new_title": "한국사회보장정보원_대전광역시 어린이집 정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6bae67805ef136dcf842e7a0cd5b33a99358e4b52beee0c0a7f02a2953db801d",
+      "new_digest": "e8513cec9fc4ad426e68803a5737d0b267bbea9266efa5798ec8ce9c1d4f4d44"
+    },
+    {
+      "id": "15101191",
+      "old_title": "한국사회보장정보원_울산광역시 어린이집 정보조회",
+      "new_title": "한국사회보장정보원_울산광역시 어린이집 정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "32cee070bfd3906cca2f46fe639e44d485e7cbc4acf78ea14e8bbcf51372e6de",
+      "new_digest": "f2ba1b9d091b02e8c9f87df8d5590055fa88f8d2f41d374c33634559a560b52b"
+    },
+    {
+      "id": "15101192",
+      "old_title": "한국사회보장정보원_세종특별자치시 어린이집 정보조회",
+      "new_title": "한국사회보장정보원_세종특별자치시 어린이집 정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d4a1d942d0428fe88c3631a971d2fcaf1cbaa92c19c835bac020e9ea28ed1b72",
+      "new_digest": "5ddb6aba502b5c760af449eee7dc5e4dad63c6ba358752b87a4c95682e9639aa"
+    },
+    {
+      "id": "15101193",
+      "old_title": "한국사회보장정보원_경기도 어린이집 정보조회",
+      "new_title": "한국사회보장정보원_경기도 어린이집 정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e9cf0ee12e965559ca1f6b77d1262f2f12e0a70718ed64c496f25fa31dffba9f",
+      "new_digest": "f12dcb20952447ec5b8b24ba185f821af9612a0a915b2e4996de36534043d6fb"
+    },
+    {
+      "id": "15101194",
+      "old_title": "한국사회보장정보원_강원도 어린이집 정보조회",
+      "new_title": "한국사회보장정보원_강원도 어린이집 정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "82cab84dc8f8a54933334c731a1f65d215b5ad1b3b96c1b1eb7294f49b8b1f23",
+      "new_digest": "a8551c3c2c6ea0a14ef159e08042e9f55fc6f417472c3e077db835f5d2e44dae"
+    },
+    {
+      "id": "15101195",
+      "old_title": "한국사회보장정보원_충청북도 어린이집 정보조회",
+      "new_title": "한국사회보장정보원_충청북도 어린이집 정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "536bd248e71d88212bc6bdbd82646e76f0afab4fdb98f9365890fcf996e9ed88",
+      "new_digest": "3088f801814d89265b901936e217a9b4ecf3c03a5da91913a9d9472833226d4e"
+    },
+    {
+      "id": "15101196",
+      "old_title": "한국사회보장정보원_충청남도 어린이집 정보조회",
+      "new_title": "한국사회보장정보원_충청남도 어린이집 정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f34ba0d635de72ba2e67a04d790afcd43795551d5df4684b27d822e09006086d",
+      "new_digest": "60007e6dab0814e3c807fb9adb2d4e4ace1c38b2b884b190ea9ada4b621f2266"
+    },
+    {
+      "id": "15101197",
+      "old_title": "한국사회보장정보원_전라북도 어린이집 정보조회",
+      "new_title": "한국사회보장정보원_전라북도 어린이집 정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "85015a15ff8816521810891fdd242557ba260e55ed9100f60b2dd6a566bb679a",
+      "new_digest": "6c3486b9807f64a0adcf0cfb122fd4e54abf215cb4fba1904dd4c093015117f3"
+    },
+    {
+      "id": "15101198",
+      "old_title": "한국사회보장정보원_전라남도 어린이집 정보조회",
+      "new_title": "한국사회보장정보원_전라남도 어린이집 정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "84471dafa9c4dc450a89775a0e0b87843a9aa3d7d1eb81bd7b6c7e9475040e7e",
+      "new_digest": "25ecdf4b902fad3d90aaab51dafb8bd06c0f13a612d5b838c34fcd2140072f25"
+    },
+    {
+      "id": "15101199",
+      "old_title": "한국사회보장정보원_경상북도 어린이집 정보조회",
+      "new_title": "한국사회보장정보원_경상북도 어린이집 정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8b683fdbbfbfff177614b390660bd8b7305c598da1149693d5c0479657499f5b",
+      "new_digest": "d5cff620515524269985a3fac08ac405a5fbe1cc8bba12d09dbde27a13216674"
+    },
+    {
+      "id": "15101200",
+      "old_title": "한국사회보장정보원_경상남도 어린이집 정보조회",
+      "new_title": "한국사회보장정보원_경상남도 어린이집 정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8deb4af383c12dc033e815c15041b917d3824ba9eed378935575e96387993e8b",
+      "new_digest": "114a7f4e7adfd933141e76c26573605c2b9915ecefabea48e0217ff2f7600fef"
+    },
+    {
+      "id": "15101201",
+      "old_title": "한국사회보장정보원_제주도 어린이집 정보조회",
+      "new_title": "한국사회보장정보원_제주도 어린이집 정보조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e54283b4e2990afae355d46e4ef10e5fa053e42677375b10fc1d6fb707f72d57",
+      "new_digest": "9e38994a561d69c5af75f300e855d802a9d42ab6f69f1521bf3412d678a9f0b5"
+    },
+    {
+      "id": "15101202",
+      "old_title": "한국사회보장정보원_월별 신규시설 조회",
+      "new_title": "한국사회보장정보원_월별 신규시설 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "48037c2fcb09987fc5d9846f18e91f0f649632857cc2f751bddde67d55cd981f",
+      "new_digest": "4c0346073447308dbdaa3586c6aeadd97dc47f05f468ae6ee4a6e39faff11923"
+    },
+    {
+      "id": "15101203",
+      "old_title": "한국사회보장정보원_월별 폐지시설 조회",
+      "new_title": "한국사회보장정보원_월별 폐지시설 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bdb7b931b0db35f0f69c421b0ab81305b64999057e12ff2f08802e63761b1354",
+      "new_digest": "bc2516f0ecfd84b01be149f193573be3026e2b615ebb580b3f53f171a7a131e8"
+    },
+    {
+      "id": "15101204",
+      "old_title": "한국사회보장정보원_시군구 조회",
+      "new_title": "한국사회보장정보원_시군구 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f6ca6dd259dfe5fe14c7b10fc1632f83b5ed2226f80500e04f5e974c614198c2",
+      "new_digest": "70a520576c0bac636b121da208d73482a056b9acd5dc9db06a337d38e06a616b"
+    },
+    {
       "id": "15101213",
       "old_title": "문화체육관광부_e브리핑",
       "new_title": "문화체육관광부_e브리핑",
@@ -38507,6 +38727,16 @@
       ],
       "old_digest": "478a30b034948137b4a518511277281529e1ef1660108b32ac3a86bbe2b79d67",
       "new_digest": "2f689e5d08878d6cdee5810b7f7431678bc814a0e748b4d13db85ba55caebebf"
+    },
+    {
+      "id": "3065251",
+      "old_title": "한국사회보장정보원_어린이집 정보",
+      "new_title": "한국사회보장정보원_어린이집 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2de8d5c57344445f1fc8c1b644bb1c1dfddc8a4af1345b3f42ca8e534d535d3d",
+      "new_digest": "c5ab81600f20bd744e44bdaddba02cb53c708b6d5242700764b40b057dd53a01"
     },
     {
       "id": "3068147",

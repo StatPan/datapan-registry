@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T00:05:53Z",
+  "generated_at": "2026-07-04T00:18:53Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 20140,
-    "callable_operations": 19998,
+    "operations": 20163,
+    "callable_operations": 20021,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 8530,
-    "registered_adapter_operations": 8520,
+    "external_endpoint_operations": 8553,
+    "registered_adapter_operations": 8543,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.7,
-    "approval_required_operations": 7569,
+    "approval_required_operations": 7591,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 123,
+    "registered_adapter_hosts": 124,
     "missing_adapter_hosts": 11,
-    "adapter_count": 108,
+    "adapter_count": 109,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-04T00:05:31Z",
-    "total": 3654,
-    "verified": 1809,
+    "generated_at": "2026-07-04T00:15:43Z",
+    "total": 3677,
+    "verified": 1832,
     "failed": 306,
     "skipped": 1539,
     "unknown": 0,
-    "verified_percent": 49.5,
-    "evidence_operation_percent": 18.1
+    "verified_percent": 49.8,
+    "evidence_operation_percent": 18.2
   },
   "route_evidence": {
     "present": true,
@@ -382,10 +382,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-04T00:05:53Z",
+    "generated_at": "2026-07-04T00:18:53Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 108,
-    "host_count": 128,
+    "adapter_count": 109,
+    "host_count": 129,
     "adapters": [
       {
         "name": "airport",
@@ -443,6 +443,16 @@
         "status": "registered",
         "hosts": [
           "www.car365.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "childcare-info",
+        "status": "registered",
+        "hosts": [
+          "info.childcare.go.kr"
         ],
         "capabilities": [
           "verification"
@@ -1514,8 +1524,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 108,
-      "verification_capable_adapters": 108,
+      "adapter_count": 109,
+      "verification_capable_adapters": 109,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

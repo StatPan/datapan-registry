@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T00:05:46Z",
+  "generated_at": "2026-07-04T00:18:47Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 20140,
-    "runtime_evidence": 3654,
-    "runtime_evidence_percent": 18.1,
-    "callable_operations": 19998,
-    "external_endpoint_operations": 8530,
-    "registered_adapter_operations": 8520,
+    "operations": 20163,
+    "runtime_evidence": 3677,
+    "runtime_evidence_percent": 18.2,
+    "callable_operations": 20021,
+    "external_endpoint_operations": 8553,
+    "registered_adapter_operations": 8543,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 8530
+      "count": 8553
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 8520
+      "count": 8543
     },
     {
       "key": "builtin",
@@ -85,7 +85,7 @@
     },
     {
       "category": "사회복지",
-      "operation_count": 1450
+      "operation_count": 1473
     },
     {
       "category": "산업고용",
@@ -5490,6 +5490,69 @@
       ]
     },
     {
+      "organization": "한국사회보장정보원",
+      "api_count": 32,
+      "operation_api_count": 32,
+      "operation_count": 45,
+      "runtime_evidence_count": 34,
+      "runtime_evidence_percent": 75.6,
+      "verified": 23,
+      "failed": 0,
+      "skipped": 11,
+      "unknown": 0,
+      "approval_required_operations": 22,
+      "no_endpoint_operations": 5,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 17
+        },
+        {
+          "key": "external_endpoint",
+          "count": 23
+        },
+        {
+          "key": "no_endpoint",
+          "count": 5
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 23
+        },
+        {
+          "key": "builtin",
+          "count": 17
+        },
+        {
+          "key": "not_applicable",
+          "count": 5
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "사회복지",
+          "operation_count": 45
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "info.childcare.go.kr",
+          "operation_count": 23,
+          "adapter": "childcare-info",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 17
+        }
+      ]
+    },
+    {
       "organization": "방위사업청",
       "api_count": 7,
       "operation_api_count": 7,
@@ -7592,52 +7655,6 @@
         }
       ],
       "top_hosts": []
-    },
-    {
-      "organization": "한국사회보장정보원",
-      "api_count": 32,
-      "operation_api_count": 9,
-      "operation_count": 22,
-      "runtime_evidence_count": 11,
-      "runtime_evidence_percent": 50.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 11,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 5,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 17
-        },
-        {
-          "key": "no_endpoint",
-          "count": 5
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 17
-        },
-        {
-          "key": "not_applicable",
-          "count": 5
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "사회복지",
-          "operation_count": 22
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 17
-        }
-      ]
     },
     {
       "organization": "대한석탄공사",

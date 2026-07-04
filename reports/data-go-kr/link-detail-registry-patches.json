@@ -1,72 +1,1370 @@
 {
   "schema_version": "datapan.link-detail-registry-patches.v1",
-  "generated_at": "2026-07-04T00:05:02Z",
+  "generated_at": "2026-07-04T00:15:12Z",
   "summary": {
     "batch_label": "institution-03",
-    "organization": "과학기술정보통신부 우정사업본부",
-    "input_apis": 1,
-    "details_fetched": 1,
-    "patches": 1,
-    "operations_to_add": 1,
+    "organization": "한국사회보장정보원",
+    "input_apis": 23,
+    "details_fetched": 23,
+    "patches": 23,
+    "operations_to_add": 23,
     "skipped": 0,
     "failed": 0,
-    "registered_hosts": 128
+    "registered_hosts": 129
   },
   "patches": [
     {
-      "dataset_id": "3043719",
-      "title": "과학기술정보통신부 우정사업본부_우체국위치 정보",
-      "organization": "과학기술정보통신부 우정사업본부",
+      "dataset_id": "15101204",
+      "title": "한국사회보장정보원_시군구 조회",
+      "organization": "한국사회보장정보원",
       "action": "replace_empty_operations",
       "operation_count": 1,
       "hosts": [
-        "koreapost.go.kr"
+        "info.childcare.go.kr"
       ],
       "operations": [
         {
-          "name": "우체국 시설물 정보 안내 서비스",
-          "endpoint": "http://koreapost.go.kr/extra/user/kpost/330/bbs/openApi/openApiSet/sub/ExtraUser.do",
+          "name": "한국사회보장정보원_시군구 조회_20131219",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
           "source": {
             "system": "data.go.kr",
-            "url": "https://www.data.go.kr/catalog/3043719/openapi.json",
+            "url": "https://www.data.go.kr/catalog/15101204/openapi.json",
             "raw": {
               "api_type": "LINK",
-              "category_nm": "통신 > 우정",
-              "created_at": "2017-08-18",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
               "data_format": "XML",
-              "dept_nm": "정보전략팀",
-              "desc": "우체국이나 365코너, 무인창구, 우체통 등의 운영시간 주소 위치정보등을 공개함으로써 가까운 시설물 및 정보를 안내하여 우체국을 편리하게 이용할 수 있게 함\r\n\r\n컬럼명 :  구분번호, 주소, 범위, 전화번호, 팩스번호, 국문 주소, 영문주소, 365코너유무, 우체국운영시간, 금융서비스 시간, 수집 및 서비스 시간 내용, 위도, 경도, 주변 교통, 총괄국 번호, 우체국 펀드판매 유무",
-              "end_point_url": "",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "정부가 보유하고 있는 시군구 정보에 대하여 데이터정보를 제공합니다. (시군구 별 시군구 코드, 시군구명, 시도명 등)\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n○시간 흐름에 따른 변화 분석\r\n- 시계열 분석: 행정구역 코드는 고유한 식별자이므로, 동일한 지역에 대한 과거 데이터를 결합하여 시간의 흐름에 따른 변화를 분석할 수 있습니다. 예를 들어, 지난 10년간 특정 시군구의 인구 변화 추이, 소득 수준 변화, 특정 업종 사업체 수의 증감 등을 파악하여 지역의 성장 또는 쇠퇴 과정을 분석할 수 있습니다.",
+              "end_point_url": " ",
               "guide_url": "",
-              "id": "uddi:b456e2de-cc17-4cc1-b39d-9632e6de9e81_201708180957",
+              "id": "uddi:6d7c58a6-07c3-4da6-813b-e38467780f89_202206211341",
               "is_charged": "무료",
               "is_confirmed_for_dev_nm": "자동승인",
-              "is_confirmed_for_prod_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
               "is_deleted": "N",
               "is_list_deleted": "N",
-              "keywords": "정보/통신,정보이론,정보검색",
-              "list_id": "3043719",
-              "list_title": "과학기술정보통신부 우정사업본부_우체국위치 정보",
+              "keywords": "어린이집,보육,영유아,보육정보시스템,어린이집행정동,어린이집시군구",
+              "list_id": "15101204",
+              "list_title": "한국사회보장정보원_시군구 조회",
               "list_type": "PR0027",
-              "meta_url": "https://www.data.go.kr/catalog/3043719/openapi.json",
-              "new_category_cd": "OC0013",
-              "new_category_nm": "과학기술",
-              "operation_nm": "우체국 시설물 정보 안내 서비스",
+              "meta_url": "https://www.data.go.kr/catalog/15101204/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_시군구 조회_20131219",
               "operation_seq": "",
-              "operation_url": "http://koreapost.go.kr/extra/user/kpost/330/bbs/openApi/openApiSet/sub/ExtraUser.do",
-              "org_cd": "1721301",
-              "org_nm": "과학기술정보통신부 우정사업본부",
-              "ownership_grounds": "전자정부법",
-              "register_status": "변경승인",
-              "request_cnt": 3550,
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 885,
               "request_param_nm": "",
               "request_param_nm_en": "",
               "response_param_nm": "",
               "response_param_nm_en": "",
               "share_scope_nm": "행정/공공/민간",
-              "title": "우체국 시설물 정보 안내 서비스",
-              "title_en": "Post Office Facility Information Information Service",
-              "updated_at": "2021-06-16"
+              "title": "한국사회보장정보원_시군구 조회_20131219",
+              "title_en": "Korea Social Security Information Service_ City, Gun Gu inquiry_20131219",
+              "updated_at": "2025-08-22"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101203",
+      "title": "한국사회보장정보원_월별 폐지시설 조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_월별 폐지시설 조회_20131219",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101203/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "정부가 보유하고 있는 월별 폐지시설  정보에 대하여 데이터정보를 제공합니다. (월별 폐지시설 팩스, 주소, 전화번호 정보  등)\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n○폐지 현황 및 추세 분석\r\n-시기별 폐원 추이: 월별, 분기별, 연도별로 폐원한 어린이집 수를 분석하여 폐원 속도와 추세가 어떻게 변화하고 있는지 파악할 수 있습니다. 예를 들어, 특정 시점에 폐원이 집중적으로 발생하는지, 혹은 꾸준히 증가하는 추세인지 확인할 수 있습니다.\r\n-지역별 폐원 현황: 시군구별, 읍면동별로 폐원된 어린이집 수를 분석하여 지역별 보육 인프라의 붕괴 정도를 파악할 수 있습니다. 이는 인구 감소가 심각한 지방 소멸 지역이나 특정 신도시 지역의 보육 서비스 부족 문제를 진단하는 데 유용합니다.\r\n-유형별 폐원율 비교: 국공립, 민간, 가정, 직장 어린이집 등 유형별로 폐원율을 분석하여 어떤 유형의 어린이집이 가장 큰 타격을 받고 있는지 알 수 있습니다. 특히, 가정 어린이집의 폐원율이 높다는 분석 결과는 저출생 현상이 개인 운영 시설에 더 직접적인 영향을 미치고 있음을 시사합니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:4a3d557c-a831-4513-a635-f8fa470f46f3",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,영유아보육법,보육정보시스템,어린이집폐업",
+              "list_id": "15101203",
+              "list_title": "한국사회보장정보원_월별 폐지시설 조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101203/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_월별 폐지시설 조회_20131219",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 123,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_월별 폐지시설 조회_20131219",
+              "title_en": "Korea Social Security Information Service_Monthly Abandoned Facility Inquiry_20131219",
+              "updated_at": "2025-08-22"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101202",
+      "title": "한국사회보장정보원_월별 신규시설 조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_월별 신규시설 조회_20131219",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101202/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "정부가 보유하고 있는 월별 신규시설 정보에 대하여 데이터정보를 제공합니다. (보육 시설명, 주소, 전화번호, 팩스번호 등)\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n○설립 유형별 추이: 국공립, 민간, 직장, 가정 어린이집 등 설립 유형별로 신규 시설의 비율을 분석하여 보육 시장의 흐름과 투자 동향을 파악할 수 있습니다. 예를 들어, 민간 어린이집 폐원이 늘어나는 추세 속에서 국공립 어린이집의 신규 설립이 얼마나 활발한지 분석할 수 있습니다.\r\n\r\n○시설 규모 및 특징 분석: 신규 설립된 어린이집의 정원, 보육실 수, 교사 수 등의 데이터를 분석하여 최근 설립되는 시설들의 규모나 특징(예: 소규모 가정 어린이집, 대규모 법인 시설 등)이 어떻게 변화하고 있는지 파적할 수 있습니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:c86853ee-8eb8-4cc7-bbc7-bcfee2bef51f",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,영유아보육법,어린이집신규설치,어린이집유형",
+              "list_id": "15101202",
+              "list_title": "한국사회보장정보원_월별 신규시설 조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101202/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_월별 신규시설 조회_20131219",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 77,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_월별 신규시설 조회_20131219",
+              "title_en": "Korea Social Security Information Service_Monthly new facility inquiry_20131219",
+              "updated_at": "2025-08-22"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "3065251",
+      "title": "한국사회보장정보원_어린이집 정보",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_어린이집 정보_20200801",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/3065251/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2014-04-11",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "한국사회보장정보원이 제공하는 정부 보유 어린이집의 주요 정보입니다.\r\n정부가 보유하고 있는 어린이집 주요 정보를 투명하게 공개함으로써 부모들이 보다 쉽고 편리하게 어린이집을 이용할 수 있도록 합니다. \r\n\r\n데이터 구성은 시도, 시군구, 어린이집명, 어린이집유형구분, 운영현황, 우편번호, 주소, 어린이집전화번호, 어린이집팩스번호, 보육실수, 보육실면적, 놀이터수, CCTV설치수, 보육교직원수, 정원수, 현원수, 위도, 경도, 통학차량운영여부, 홈페이지주소, 인가일자, 휴지시작일자, 휴지종료일자, 폐지일자 항목으로 구성되어 있습니다.\r\n\r\n이 데이터를 활용하여 보육교직원-아동 비율 파악, 유지 관리 및 공급 안정성 평가 등 어린이집의 공간적 분포, 시설 및 인력 자원 현황, 운영 실태 측면의 분석이 가능합니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:4cc38b42-9b9c-4665-a4c9-c313b2fb678c_202008311436",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "자동승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,영유아보육법,어린이집운영,통학차량",
+              "list_id": "3065251",
+              "list_title": "한국사회보장정보원_어린이집 정보",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/3065251/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_어린이집 정보_20200801",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "영유아보육법",
+              "register_status": "변경승인",
+              "request_cnt": 9582,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_어린이집 정보_20200801",
+              "title_en": "Korea Social Security Information Service_Childcare Center Information_20200801",
+              "updated_at": "2025-08-20"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101201",
+      "title": "한국사회보장정보원_제주도 어린이집 정보조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_제주도 어린이집 정보조회_20131219",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101201/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "한국사회보장정보원이 제공하는 제주도 어린이집에 대한 데이터정보입니다.\r\n데이터는 제주도 지역 내 보육시설명, 시설코드, 주소, 전화번호, 팩스번호, URL, 정원으로 항목이 구성되어 있습니다.\r\n※ 경로 '어린이집정보공개포털-보육정보공개API-OPEN API-검색(해당 API명)'\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n\r\n○인구통계학적 데이터와 교차 분석: 어린이집 정보를 지역별 영유아 인구수, 출생률, 맞벌이 가구 비율 등과 결합하여 분석할 수 있습니다. 예를 들어, 영유아 인구는 많은데 어린이집 수가 부족한 지역을 찾아내 정책적 지원을 우선 배정할 수 있습니다.\r\n\r\n○추이 분석: 연도별 어린이집 수와 유형별 변화를 분석하여 보육 정책의 방향성을 평가할 수 있습니다. 예를 들어, 국공립 어린이집 확충 정책이 실제로 시설 수 증가로 이어졌는지 확인할 수 있습니다.\r\n\r\n○안전 및 품질 분석: 시설 규모, 교사 수 등의 정보를 보건복지부의 평가인증 정보나 아동학대 신고 건수 등과 결합하여, 시설의 질적 수준을 다각도로 평가할 수 있습니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:7a65d9b5-5269-4a55-833c-c74c5b79cf19",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,영유아보육법,어린이집데이터,보육정보시스템",
+              "list_id": "15101201",
+              "list_title": "한국사회보장정보원_제주도 어린이집 정보조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101201/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_제주도 어린이집 정보조회_20131219",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 139,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_제주도 어린이집 정보조회_20131219",
+              "title_en": "Korea Social Security Information Service_Jeju Island Daycare Center Information Inquiry_20131219",
+              "updated_at": "2025-08-20"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101200",
+      "title": "한국사회보장정보원_경상남도 어린이집 정보조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_경상남도 어린이집 정보조회_20131219",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101200/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "한국사회보장정보원이 제공하는 경상남도 어린이집에 대한 데이터정보입니다.\r\n데이터는 경상남도 지역 내 보육시설명, 시설코드, 주소, 전화번호, 팩스번호, URL, 정원으로 항목이 구성되어 있습니다.\r\n※ 경로 '어린이집정보공개포털-보육정보공개API-OPEN API-검색(해당 API명)'\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n\r\n○인구통계학적 데이터와 교차 분석: 어린이집 정보를 지역별 영유아 인구수, 출생률, 맞벌이 가구 비율 등과 결합하여 분석할 수 있습니다. 예를 들어, 영유아 인구는 많은데 어린이집 수가 부족한 지역을 찾아내 정책적 지원을 우선 배정할 수 있습니다.\r\n\r\n○추이 분석: 연도별 어린이집 수와 유형별 변화를 분석하여 보육 정책의 방향성을 평가할 수 있습니다. 예를 들어, 국공립 어린이집 확충 정책이 실제로 시설 수 증가로 이어졌는지 확인할 수 있습니다.\r\n\r\n○안전 및 품질 분석: 시설 규모, 교사 수 등의 정보를 보건복지부의 평가인증 정보나 아동학대 신고 건수 등과 결합하여, 시설의 질적 수준을 다각도로 평가할 수 있습니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:1eddf353-bf34-4ad5-84ff-b419e8dd3085",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,영유아보육법,보육정보시스템,어린이집데이터",
+              "list_id": "15101200",
+              "list_title": "한국사회보장정보원_경상남도 어린이집 정보조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101200/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_경상남도 어린이집 정보조회_20131219",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 36,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_경상남도 어린이집 정보조회_20131219",
+              "title_en": "Korea Social Security Information Service_Kyungsangnam-do daycare center information inquiry_20131219",
+              "updated_at": "2025-08-20"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101199",
+      "title": "한국사회보장정보원_경상북도 어린이집 정보조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_경상북도 어린이집 정보조회_20131219",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101199/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "한국사회보장정보원이 제공하는 경상북도 어린이집에 대한 데이터정보입니다.\r\n데이터는 경상북도 지역 내 보육시설명, 시설코드, 주소, 전화번호, 팩스번호, URL, 정원으로 항목이 구성되어 있습니다.\r\n※ 경로 '어린이집정보공개포털-보육정보공개API-OPEN API-검색(해당 API명)'\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n\r\n○인구통계학적 데이터와 교차 분석: 어린이집 정보를 지역별 영유아 인구수, 출생률, 맞벌이 가구 비율 등과 결합하여 분석할 수 있습니다. 예를 들어, 영유아 인구는 많은데 어린이집 수가 부족한 지역을 찾아내 정책적 지원을 우선 배정할 수 있습니다.\r\n\r\n○추이 분석: 연도별 어린이집 수와 유형별 변화를 분석하여 보육 정책의 방향성을 평가할 수 있습니다. 예를 들어, 국공립 어린이집 확충 정책이 실제로 시설 수 증가로 이어졌는지 확인할 수 있습니다.\r\n\r\n○안전 및 품질 분석: 시설 규모, 교사 수 등의 정보를 보건복지부의 평가인증 정보나 아동학대 신고 건수 등과 결합하여, 시설의 질적 수준을 다각도로 평가할 수 있습니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:6031af85-3ef7-4b99-af74-81fee5b95db3",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,영유아보육법,보육정보시스템,어린이집데이터",
+              "list_id": "15101199",
+              "list_title": "한국사회보장정보원_경상북도 어린이집 정보조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101199/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_경상북도 어린이집 정보조회_20131219",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 57,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_경상북도 어린이집 정보조회_20131219",
+              "title_en": "Korea Social Security Information Service_Kyungsangbuk-do daycare center information inquiry_20131219",
+              "updated_at": "2025-08-20"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101198",
+      "title": "한국사회보장정보원_전라남도 어린이집 정보조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_전라남도 어린이집 정보조회_20131219",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101198/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "한국사회보장정보원이 제공하는 전라남도 어린이집에 대한 데이터정보입니다.\r\n데이터는 전라남도 지역 내 보육시설명, 시설코드, 주소, 전화번호, 팩스번호, URL, 정원으로 항목이 구성되어 있습니다.\r\n※ 경로 '어린이집정보공개포털-보육정보공개API-OPEN API-검색(해당 API명)'\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n\r\n○인구통계학적 데이터와 교차 분석: 어린이집 정보를 지역별 영유아 인구수, 출생률, 맞벌이 가구 비율 등과 결합하여 분석할 수 있습니다. 예를 들어, 영유아 인구는 많은데 어린이집 수가 부족한 지역을 찾아내 정책적 지원을 우선 배정할 수 있습니다.\r\n\r\n○추이 분석: 연도별 어린이집 수와 유형별 변화를 분석하여 보육 정책의 방향성을 평가할 수 있습니다. 예를 들어, 국공립 어린이집 확충 정책이 실제로 시설 수 증가로 이어졌는지 확인할 수 있습니다.\r\n\r\n○안전 및 품질 분석: 시설 규모, 교사 수 등의 정보를 보건복지부의 평가인증 정보나 아동학대 신고 건수 등과 결합하여, 시설의 질적 수준을 다각도로 평가할 수 있습니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:da96e6e5-817d-49c9-9f2b-a2fa6e0bf71c",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,영유아보육법,어린이집데이터,보육정보시스템",
+              "list_id": "15101198",
+              "list_title": "한국사회보장정보원_전라남도 어린이집 정보조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101198/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_전라남도 어린이집 정보조회_20131219",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 83,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_전라남도 어린이집 정보조회_20131219",
+              "title_en": "Korea Social Security Information Service_ Jeollanam-do daycare center information inquiry_20131219",
+              "updated_at": "2025-08-20"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101197",
+      "title": "한국사회보장정보원_전라북도 어린이집 정보조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_전라북도 어린이집 정보조회_20131219",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101197/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "한국사회보장정보원이 제공하는 전라북도 어린이집에 대한 데이터정보입니다.\r\n데이터는 전라북도 지역 내 보육시설명, 시설코드, 주소, 전화번호, 팩스번호, URL, 정원으로 항목이 구성되어 있습니다.\r\n※ 경로 '어린이집정보공개포털-보육정보공개API-OPEN API-검색(해당 API명)'\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n\r\n○인구통계학적 데이터와 교차 분석: 어린이집 정보를 지역별 영유아 인구수, 출생률, 맞벌이 가구 비율 등과 결합하여 분석할 수 있습니다. 예를 들어, 영유아 인구는 많은데 어린이집 수가 부족한 지역을 찾아내 정책적 지원을 우선 배정할 수 있습니다.\r\n\r\n○추이 분석: 연도별 어린이집 수와 유형별 변화를 분석하여 보육 정책의 방향성을 평가할 수 있습니다. 예를 들어, 국공립 어린이집 확충 정책이 실제로 시설 수 증가로 이어졌는지 확인할 수 있습니다.\r\n\r\n○안전 및 품질 분석: 시설 규모, 교사 수 등의 정보를 보건복지부의 평가인증 정보나 아동학대 신고 건수 등과 결합하여, 시설의 질적 수준을 다각도로 평가할 수 있습니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:2ec99eca-8ffa-4a89-8902-f96befd07153",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,영유아보육법,보육정보시스템,어린이집데이터",
+              "list_id": "15101197",
+              "list_title": "한국사회보장정보원_전라북도 어린이집 정보조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101197/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_전라북도 어린이집 정보조회_20131219",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 60,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_전라북도 어린이집 정보조회_20131219",
+              "title_en": "Korea Social Security Information Service_ Jeollabuk-do daycare center information inquiry_20131219",
+              "updated_at": "2025-08-20"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101196",
+      "title": "한국사회보장정보원_충청남도 어린이집 정보조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_충청남도 어린이집 정보조회_20131219",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101196/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "한국사회보장정보원이 제공하는 충청남도 어린이집에 대한 데이터정보입니다.\r\n데이터는 충청남도 지역 내 보육시설명, 시설코드, 주소, 전화번호, 팩스번호, URL, 정원으로 항목이 구성되어 있습니다.\r\n※ 경로 '어린이집정보공개포털-보육정보공개API-OPEN API-검색(해당 API명)'\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n○인구통계학적 데이터와 교차 분석: 어린이집 정보를 지역별 영유아 인구수, 출생률, 맞벌이 가구 비율 등과 결합하여 분석할 수 있습니다. 예를 들어, 영유아 인구는 많은데 어린이집 수가 부족한 지역을 찾아내 정책적 지원을 우선 배정할 수 있습니다.\r\n○추이 분석: 연도별 어린이집 수와 유형별 변화를 분석하여 보육 정책의 방향성을 평가할 수 있습니다. 예를 들어, 국공립 어린이집 확충 정책이 실제로 시설 수 증가로 이어졌는지 확인할 수 있습니다.\r\n○안전 및 품질 분석: 시설 규모, 교사 수 등의 정보를 보건복지부의 평가인증 정보나 아동학대 신고 건수 등과 결합하여, 시설의 질적 수준을 다각도로 평가할 수 있습니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:c9c98b06-8100-4eeb-af38-f1d7ac1f79da",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,영유아보육법,보육정보시스템,어린이집데이터",
+              "list_id": "15101196",
+              "list_title": "한국사회보장정보원_충청남도 어린이집 정보조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101196/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_충청남도 어린이집 정보조회_20131219",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 72,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_충청남도 어린이집 정보조회_20131219",
+              "title_en": "Korea Social Security Information Service_Chungcheongnam-do daycare center information inquiry_20131219",
+              "updated_at": "2025-08-20"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101195",
+      "title": "한국사회보장정보원_충청북도 어린이집 정보조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_충청북도 어린이집 정보조회_20131219",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101195/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "한국사회보장정보원이 제공하는 충청북도 어린이집에 대한 데이터정보입니다.\r\n데이터는 충청북도 지역 내 보육시설명, 시설코드, 주소, 전화번호, 팩스번호, URL, 정원으로 항목이 구성되어 있습니다.\r\n※ 경로 '어린이집정보공개포털-보육정보공개API-OPEN API-검색(해당 API명)'\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n○인구통계학적 데이터와 교차 분석: 어린이집 정보를 지역별 영유아 인구수, 출생률, 맞벌이 가구 비율 등과 결합하여 분석할 수 있습니다. 예를 들어, 영유아 인구는 많은데 어린이집 수가 부족한 지역을 찾아내 정책적 지원을 우선 배정할 수 있습니다.\r\n○추이 분석: 연도별 어린이집 수와 유형별 변화를 분석하여 보육 정책의 방향성을 평가할 수 있습니다. 예를 들어, 국공립 어린이집 확충 정책이 실제로 시설 수 증가로 이어졌는지 확인할 수 있습니다.\r\n○안전 및 품질 분석: 시설 규모, 교사 수 등의 정보를 보건복지부의 평가인증 정보나 아동학대 신고 건수 등과 결합하여, 시설의 질적 수준을 다각도로 평가할 수 있습니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:9b940f1a-71bd-46c0-8ad2-beefeadb5eda",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,영유아보육법,보육정보시스템,어린이집데이터",
+              "list_id": "15101195",
+              "list_title": "한국사회보장정보원_충청북도 어린이집 정보조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101195/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_충청북도 어린이집 정보조회_20131219",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 54,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_충청북도 어린이집 정보조회_20131219",
+              "title_en": "Korea Social Security Information Service_Chungcheongbuk-do daycare center information inquiry_20131219",
+              "updated_at": "2025-08-20"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101194",
+      "title": "한국사회보장정보원_강원도 어린이집 정보조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_강원도 어린이집 정보조회_20131219",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101194/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "한국사회보장정보원이 제공하는 강원도 어린이집에 대한 데이터정보입니다.\r\n데이터는 강원도 지역 내 보육시설명, 시설코드, 주소, 전화번호, 팩스번호, URL, 정원으로 항목이 구성되어 있습니다.\r\n※ 경로 '어린이집정보공개포털-보육정보공개API-OPEN API-검색(해당 API명)'\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n○인구통계학적 데이터와 교차 분석: 어린이집 정보를 지역별 영유아 인구수, 출생률, 맞벌이 가구 비율 등과 결합하여 분석할 수 있습니다. 예를 들어, 영유아 인구는 많은데 어린이집 수가 부족한 지역을 찾아내 정책적 지원을 우선 배정할 수 있습니다.\r\n○추이 분석: 연도별 어린이집 수와 유형별 변화를 분석하여 보육 정책의 방향성을 평가할 수 있습니다. 예를 들어, 국공립 어린이집 확충 정책이 실제로 시설 수 증가로 이어졌는지 확인할 수 있습니다.\r\n○안전 및 품질 분석: 시설 규모, 교사 수 등의 정보를 보건복지부의 평가인증 정보나 아동학대 신고 건수 등과 결합하여, 시설의 질적 수준을 다각도로 평가할 수 있습니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:205f21c7-79a2-40f3-8573-d08b5b16d441",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,영유아보육법,보육정보시스템,어린이집데이터",
+              "list_id": "15101194",
+              "list_title": "한국사회보장정보원_강원도 어린이집 정보조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101194/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_강원도 어린이집 정보조회_20131219",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 101,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_강원도 어린이집 정보조회_20131219",
+              "title_en": "Korea Social Security Information Service_Information inquiry of daycare center in Gangwon-do_20131219",
+              "updated_at": "2025-08-20"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101193",
+      "title": "한국사회보장정보원_경기도 어린이집 정보조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_경기도 어린이집 정보조회_20131219",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101193/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "한국사회보장정보원이 제공하는 경기도 어린이집에 대한 데이터정보입니다.\r\n데이터는 경기도 지역 내 보육시설명, 시설코드, 주소, 전화번호, 팩스번호, URL, 정원으로 항목이 구성되어 있습니다.\r\n※ 경로 '어린이집정보공개포털-보육정보공개API-OPEN API-검색(해당 API명)'\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n○인구통계학적 데이터와 교차 분석: 어린이집 정보를 지역별 영유아 인구수, 출생률, 맞벌이 가구 비율 등과 결합하여 분석할 수 있습니다. 예를 들어, 영유아 인구는 많은데 어린이집 수가 부족한 지역을 찾아내 정책적 지원을 우선 배정할 수 있습니다.\r\n○추이 분석: 연도별 어린이집 수와 유형별 변화를 분석하여 보육 정책의 방향성을 평가할 수 있습니다. 예를 들어, 국공립 어린이집 확충 정책이 실제로 시설 수 증가로 이어졌는지 확인할 수 있습니다.\r\n○안전 및 품질 분석: 시설 규모, 교사 수 등의 정보를 보건복지부의 평가인증 정보나 아동학대 신고 건수 등과 결합하여, 시설의 질적 수준을 다각도로 평가할 수 있습니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:f2911203-2b0b-4ecf-b792-d79dc15e545f",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,영유아보육법,보육정보시스템,어린이집데이터",
+              "list_id": "15101193",
+              "list_title": "한국사회보장정보원_경기도 어린이집 정보조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101193/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_경기도 어린이집 정보조회_20131219",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 240,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_경기도 어린이집 정보조회_20131219",
+              "title_en": "Korea Social Security Information Service_Gyeonggi-do Daycare Center Information Inquiry_20131219",
+              "updated_at": "2025-08-20"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101192",
+      "title": "한국사회보장정보원_세종특별자치시 어린이집 정보조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_세종특별자치시 어린이집 정보조회_20131219",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101192/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "한국사회보장정보원이 제공하는 세종특별자치시 어린이집에 대한 데이터정보입니다.\r\n데이터는 세종특별자치시 지역 내 보육시설명, 시설코드, 주소, 전화번호, 팩스번호, URL, 정원으로 항목이 구성되어 있습니다.\r\n※ 경로 '어린이집정보공개포털-보육정보공개API-OPEN API-검색(해당 API명)'\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n○인구통계학적 데이터와 교차 분석: 어린이집 정보를 지역별 영유아 인구수, 출생률, 맞벌이 가구 비율 등과 결합하여 분석할 수 있습니다. 예를 들어, 영유아 인구는 많은데 어린이집 수가 부족한 지역을 찾아내 정책적 지원을 우선 배정할 수 있습니다.\r\n○추이 분석: 연도별 어린이집 수와 유형별 변화를 분석하여 보육 정책의 방향성을 평가할 수 있습니다. 예를 들어, 국공립 어린이집 확충 정책이 실제로 시설 수 증가로 이어졌는지 확인할 수 있습니다.\r\n○안전 및 품질 분석: 시설 규모, 교사 수 등의 정보를 보건복지부의 평가인증 정보나 아동학대 신고 건수 등과 결합하여, 시설의 질적 수준을 다각도로 평가할 수 있습니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:2e8f158c-080c-4556-bb10-8c124ceb4781",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,영유아보육법,어린이집데이터,보육정보시스템",
+              "list_id": "15101192",
+              "list_title": "한국사회보장정보원_세종특별자치시 어린이집 정보조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101192/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_세종특별자치시 어린이집 정보조회_20131219",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 128,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_세종특별자치시 어린이집 정보조회_20131219",
+              "title_en": "Korea Social Security Information Service_Sejong Special Self-Governing City Daycare Center Information Inquiry_20131219",
+              "updated_at": "2025-08-20"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101191",
+      "title": "한국사회보장정보원_울산광역시 어린이집 정보조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_울산광역시 어린이집 정보조회_20131219",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101191/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "한국사회보장정보원이 제공하는 울산광역시 어린이집에 대한 데이터정보입니다.\r\n데이터는 울산광역시 지역 내 보육시설명, 시설코드, 주소, 전화번호, 팩스번호, URL, 정원으로 항목이 구성되어 있습니다.\r\n※ 경로 '어린이집정보공개포털-보육정보공개API-OPEN API-검색(해당 API명)'\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n○인구통계학적 데이터와 교차 분석: 어린이집 정보를 지역별 영유아 인구수, 출생률, 맞벌이 가구 비율 등과 결합하여 분석할 수 있습니다. 예를 들어, 영유아 인구는 많은데 어린이집 수가 부족한 지역을 찾아내 정책적 지원을 우선 배정할 수 있습니다.\r\n○추이 분석: 연도별 어린이집 수와 유형별 변화를 분석하여 보육 정책의 방향성을 평가할 수 있습니다. 예를 들어, 국공립 어린이집 확충 정책이 실제로 시설 수 증가로 이어졌는지 확인할 수 있습니다.\r\n○안전 및 품질 분석: 시설 규모, 교사 수 등의 정보를 보건복지부의 평가인증 정보나 아동학대 신고 건수 등과 결합하여, 시설의 질적 수준을 다각도로 평가할 수 있습니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:09fe72a8-5917-46cf-89d3-8b25a723bce8",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,영유아보육법,보육정보시스템,어린이집데이터",
+              "list_id": "15101191",
+              "list_title": "한국사회보장정보원_울산광역시 어린이집 정보조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101191/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_울산광역시 어린이집 정보조회_20131219",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 128,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_울산광역시 어린이집 정보조회_20131219",
+              "title_en": "Korea Social Security Information Service_Information inquiry of daycare centers in Ulsan_20131219",
+              "updated_at": "2025-08-20"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101190",
+      "title": "한국사회보장정보원_대전광역시 어린이집 정보조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_대전광역시 어린이집 정보조회_20131219",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101190/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "한국사회보장정보원이 제공하는 대전광역시 어린이집에 대한 데이터정보입니다.\r\n데이터는 대전광역시 지역 내 보육시설명, 시설코드, 주소, 전화번호, 팩스번호, URL, 정원으로 항목이 구성되어 있습니다.\r\n※ 경로 '어린이집정보공개포털-보육정보공개API-OPEN API-검색(해당 API명)'\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n○인구통계학적 데이터와 교차 분석: 어린이집 정보를 지역별 영유아 인구수, 출생률, 맞벌이 가구 비율 등과 결합하여 분석할 수 있습니다. 예를 들어, 영유아 인구는 많은데 어린이집 수가 부족한 지역을 찾아내 정책적 지원을 우선 배정할 수 있습니다.\r\n○추이 분석: 연도별 어린이집 수와 유형별 변화를 분석하여 보육 정책의 방향성을 평가할 수 있습니다. 예를 들어, 국공립 어린이집 확충 정책이 실제로 시설 수 증가로 이어졌는지 확인할 수 있습니다.\r\n○안전 및 품질 분석: 시설 규모, 교사 수 등의 정보를 보건복지부의 평가인증 정보나 아동학대 신고 건수 등과 결합하여, 시설의 질적 수준을 다각도로 평가할 수 있습니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:8eaa17d8-e45c-4c96-a481-a0e8d0a1900a",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,영유아보육법,보육정보시스템,어린이집데이터",
+              "list_id": "15101190",
+              "list_title": "한국사회보장정보원_대전광역시 어린이집 정보조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101190/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_대전광역시 어린이집 정보조회_20131219",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 93,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_대전광역시 어린이집 정보조회_20131219",
+              "title_en": "Korea Social Security Information Service_Inquiry about daycare centers in Daejeon_20131219",
+              "updated_at": "2025-08-20"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101189",
+      "title": "한국사회보장정보원_광주광역시 어린이집 정보조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_광주광역시 어린이집 정보조회_20131219",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101189/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "한국사회보장정보원이 제공하는 광주광역시 어린이집에 대한 데이터정보입니다.\r\n데이터는 광주광역시 지역 내 보육시설명, 시설코드, 주소, 전화번호, 팩스번호, URL, 정원으로 항목이 구성되어 있습니다.\r\n※ 경로 '어린이집정보공개포털-보육정보공개API-OPEN API-검색(해당 API명)'\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n○인구통계학적 데이터와 교차 분석: 어린이집 정보를 지역별 영유아 인구수, 출생률, 맞벌이 가구 비율 등과 결합하여 분석할 수 있습니다. 예를 들어, 영유아 인구는 많은데 어린이집 수가 부족한 지역을 찾아내 정책적 지원을 우선 배정할 수 있습니다.\r\n○추이 분석: 연도별 어린이집 수와 유형별 변화를 분석하여 보육 정책의 방향성을 평가할 수 있습니다. 예를 들어, 국공립 어린이집 확충 정책이 실제로 시설 수 증가로 이어졌는지 확인할 수 있습니다.\r\n○안전 및 품질 분석: 시설 규모, 교사 수 등의 정보를 보건복지부의 평가인증 정보나 아동학대 신고 건수 등과 결합하여, 시설의 질적 수준을 다각도로 평가할 수 있습니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:29be2f20-ed95-4434-84c6-9b69c40deec4",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,영유아보육법,어린이집데이터,보육정보시스템",
+              "list_id": "15101189",
+              "list_title": "한국사회보장정보원_광주광역시 어린이집 정보조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101189/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_광주광역시 어린이집 정보조회_20131219",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 180,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_광주광역시 어린이집 정보조회_20131219",
+              "title_en": "Korea Social Security Information Service_Information inquiry of daycare centers in Gwangju_20131219",
+              "updated_at": "2025-08-20"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101187",
+      "title": "한국사회보장정보원_인천광역시 어린이집 정보조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_인천광역시 어린이집 정보조회_20131219",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101187/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "한국사회보장정보원이 제공하는 인천광역시 어린이집에 대한 데이터정보입니다.\r\n데이터는 인천광역시 지역 내 보육시설명, 시설코드, 주소, 전화번호, 팩스번호, URL, 정원으로 항목이 구성되어 있습니다.\r\n※ 경로 '어린이집정보공개포털-보육정보공개API-OPEN API-검색(해당 API명)'\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n○인구통계학적 데이터와 교차 분석: 어린이집 정보를 지역별 영유아 인구수, 출생률, 맞벌이 가구 비율 등과 결합하여 분석할 수 있습니다. 예를 들어, 영유아 인구는 많은데 어린이집 수가 부족한 지역을 찾아내 정책적 지원을 우선 배정할 수 있습니다.\r\n○추이 분석: 연도별 어린이집 수와 유형별 변화를 분석하여 보육 정책의 방향성을 평가할 수 있습니다. 예를 들어, 국공립 어린이집 확충 정책이 실제로 시설 수 증가로 이어졌는지 확인할 수 있습니다.\r\n○안전 및 품질 분석: 시설 규모, 교사 수 등의 정보를 보건복지부의 평가인증 정보나 아동학대 신고 건수 등과 결합하여, 시설의 질적 수준을 다각도로 평가할 수 있습니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:0bd12a09-be25-44cf-9773-acf9237a524e",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,영유아보육법,보육정보시스템,어린이집데이터",
+              "list_id": "15101187",
+              "list_title": "한국사회보장정보원_인천광역시 어린이집 정보조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101187/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_인천광역시 어린이집 정보조회_20131219",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 158,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_인천광역시 어린이집 정보조회_20131219",
+              "title_en": "Korea Social Security Information Service_Information inquiry of daycare centers in Incheon_20131219",
+              "updated_at": "2025-08-20"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101186",
+      "title": "한국사회보장정보원_대구광역시 어린이집 정보조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_대구광역시 어린이집 정보조회_20131219",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101186/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "한국사회보장정보원이 제공하는 대구광역시 어린이집에 대한 데이터정보입니다.\r\n데이터는 대구광역시 지역 내 보육시설명, 시설코드, 주소, 전화번호, 팩스번호, URL, 정원으로 항목이 구성되어 있습니다.\r\n※ 경로 '어린이집정보공개포털-보육정보공개API-OPEN API-검색(해당 API명)'\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n○인구통계학적 데이터와 교차 분석: 어린이집 정보를 지역별 영유아 인구수, 출생률, 맞벌이 가구 비율 등과 결합하여 분석할 수 있습니다. 예를 들어, 영유아 인구는 많은데 어린이집 수가 부족한 지역을 찾아내 정책적 지원을 우선 배정할 수 있습니다.\r\n○추이 분석: 연도별 어린이집 수와 유형별 변화를 분석하여 보육 정책의 방향성을 평가할 수 있습니다. 예를 들어, 국공립 어린이집 확충 정책이 실제로 시설 수 증가로 이어졌는지 확인할 수 있습니다.\r\n○안전 및 품질 분석: 시설 규모, 교사 수 등의 정보를 보건복지부의 평가인증 정보나 아동학대 신고 건수 등과 결합하여, 시설의 질적 수준을 다각도로 평가할 수 있습니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:0dfb5092-9904-4627-b884-ddcb4ed874d0",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,영유아보육법,보육정보시스템,어린이집현황,영유아복지",
+              "list_id": "15101186",
+              "list_title": "한국사회보장정보원_대구광역시 어린이집 정보조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101186/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_대구광역시 어린이집 정보조회_20131219",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 85,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_대구광역시 어린이집 정보조회_20131219",
+              "title_en": "Korea Social Security Information Service_Information inquiry of daycare centers in Daegu_20131219",
+              "updated_at": "2025-08-20"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101184",
+      "title": "한국사회보장정보원_부산광역시 어린이집 정보조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_부산광역시 어린이집 정보조회_20131219",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101184/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "한국사회보장정보원이 제공하는 부산광역시 어린이집에 대한 데이터정보입니다.\r\n데이터는 부산광역시 지역 내 보육시설명, 시설코드, 주소, 전화번호, 팩스번호, URL, 정원으로 항목이 구성되어 있습니다.\r\n※ 경로 '어린이집정보공개포털-보육정보공개API-OPEN API-검색(해당 API명)'\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n○인구통계학적 데이터와 교차 분석: 어린이집 정보를 지역별 영유아 인구수, 출생률, 맞벌이 가구 비율 등과 결합하여 분석할 수 있습니다. 예를 들어, 영유아 인구는 많은데 어린이집 수가 부족한 지역을 찾아내 정책적 지원을 우선 배정할 수 있습니다.\r\n○추이 분석: 연도별 어린이집 수와 유형별 변화를 분석하여 보육 정책의 방향성을 평가할 수 있습니다. 예를 들어, 국공립 어린이집 확충 정책이 실제로 시설 수 증가로 이어졌는지 확인할 수 있습니다.\r\n○안전 및 품질 분석: 시설 규모, 교사 수 등의 정보를 보건복지부의 평가인증 정보나 아동학대 신고 건수 등과 결합하여, 시설의 질적 수준을 다각도로 평가할 수 있습니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:c9b7f4cb-fd9e-4230-b8d9-f1d835ae24bd",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,영유아보육법,보육정보시스템,어린이집기본정보,영유아복지",
+              "list_id": "15101184",
+              "list_title": "한국사회보장정보원_부산광역시 어린이집 정보조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101184/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_부산광역시 어린이집 정보조회_20131219",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 282,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_부산광역시 어린이집 정보조회_20131219",
+              "title_en": "Korea Social Security Information Service_Inquiry about childcare centers in Busan_20131219",
+              "updated_at": "2025-08-20"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101171",
+      "title": "한국사회보장정보원_서울특별시 어린이집 정보조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_서울특별시 어린이집 정보조회_20131219",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101171/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "한국사회보장정보원이 제공하는 서울특별시 어린이집에 대한 데이터정보입니다.\r\n데이터는 서울특별시 지역 내 보육시설명, 시설코드, 주소, 전화번호, 팩스번호, URL, 정원으로 항목이 구성되어 있습니다.\r\n※ 경로 '어린이집정보공개포털-보육정보공개API-OPEN API-검색(해당 API명)'\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n○인구통계학적 데이터와 교차 분석: 어린이집 정보를 지역별 영유아 인구수, 출생률, 맞벌이 가구 비율 등과 결합하여 분석할 수 있습니다. 예를 들어, 영유아 인구는 많은데 어린이집 수가 부족한 지역을 찾아내 정책적 지원을 우선 배정할 수 있습니다.\r\n○추이 분석: 연도별 어린이집 수와 유형별 변화를 분석하여 보육 정책의 방향성을 평가할 수 있습니다. 예를 들어, 국공립 어린이집 확충 정책이 실제로 시설 수 증가로 이어졌는지 확인할 수 있습니다.\r\n○안전 및 품질 분석: 시설 규모, 교사 수 등의 정보를 보건복지부의 평가인증 정보나 아동학대 신고 건수 등과 결합하여, 시설의 질적 수준을 다각도로 평가할 수 있습니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:1bab8e4c-1a9e-424a-88d1-9a93e9daa3d3",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,영유아보육법,어린이집현황,보육시설",
+              "list_id": "15101171",
+              "list_title": "한국사회보장정보원_서울특별시 어린이집 정보조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101171/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_서울특별시 어린이집 정보조회_20131219",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 314,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_서울특별시 어린이집 정보조회_20131219",
+              "title_en": "Korea Social Security Information Service_Inquiry about information on daycare centers in Seoul_20131219",
+              "updated_at": "2025-08-20"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101155",
+      "title": "한국사회보장정보원_전국 어린이집 정보 조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_전국 어린이집 정보 조회_20140307",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101155/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "한국사회보장정보원이 제공하는 전국 어린이집에 대한 정보입니다.\r\n데이터는 보육시설명, 시설코드, 주소, 전화번호, 팩스번호, URL, 정원으로 항목이 구성되어 있습니다.\r\n※ 경로 '어린이집정보공개포털-보육정보공개API-OPEN API-검색(해당 API명)'\r\n\r\n아울러 이러한 공공데이터를 통해 다음과 같은 데이터분석, 연구 등의 활용이 가능합니다.\r\n*단순 예시 사례이니,  참고바랍니다.\r\n\r\n○인구통계학적 데이터와 교차 분석: 어린이집 정보를 지역별 영유아 인구수, 출생률, 맞벌이 가구 비율 등과 결합하여 분석할 수 있습니다. 예를 들어, 영유아 인구는 많은데 어린이집 수가 부족한 지역을 찾아내 정책적 지원을 우선 배정할 수 있습니다.\r\n\r\n○추이 분석: 연도별 어린이집 수와 유형별 변화를 분석하여 보육 정책의 방향성을 평가할 수 있습니다. 예를 들어, 국공립 어린이집 확충 정책이 실제로 시설 수 증가로 이어졌는지 확인할 수 있습니다.\r\n\r\n○안전 및 품질 분석: 시설 규모, 교사 수 등의",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:8c61dbc2-55ef-4bf4-9f4c-9d776f76413e",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "심의승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,전국단위,보육정보시스템,영유아보육법,어린이집데이터",
+              "list_id": "15101155",
+              "list_title": "한국사회보장정보원_전국 어린이집 정보 조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101155/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_전국 어린이집 정보 조회_20140307",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 1949,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_전국 어린이집 정보 조회_20140307",
+              "title_en": "Korea Social Security Information Service_Nationwide daycare center information inquiry_20140307",
+              "updated_at": "2025-08-20"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "15101154",
+      "title": "한국사회보장정보원_어린이집별 기본정보  조회",
+      "organization": "한국사회보장정보원",
+      "action": "replace_empty_operations",
+      "operation_count": 1,
+      "hosts": [
+        "info.childcare.go.kr"
+      ],
+      "operations": [
+        {
+          "name": "한국사회보장정보원_어린이집별 기본정보  조회_20160906",
+          "endpoint": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+          "source": {
+            "system": "data.go.kr",
+            "url": "https://www.data.go.kr/catalog/15101154/openapi.json",
+            "raw": {
+              "api_type": "LINK",
+              "category_nm": "사회복지 > 보육·가족및여성",
+              "created_at": "2022-06-15",
+              "data_format": "XML",
+              "dept_nm": "보육서비스운영팀",
+              "desc": "한국사회보장정보원이 제공하는 전국의 어린이집별 기본정보에 대한 데이터정보입니다.\r\n데이터는 시도명, 시군구명, 어린이집코드, 어린이집명, 어린이집유형, 운영현황, 우편번호, 상세주소, 전화번호, 팩스번호, 홈페이지주소, 보육실수, 보육실 면적, 놀이터수, CCTV 총설치수, 보육교직원수, 정원, 현원, 시설 위도/경도, 통학차량운영여부, 인가일자, 휴지시작/종료일자, 폐지일자, 데이터기준일자, 제공서비스, 반수-만0세, 반수-만1세, 반수-만2세, 반수-만3세, 반수-만4세, 반수-만5세, 반수-영아혼합(만0~2세), 반수-유아혼합(만3~5세), 반수-특수장애, 반수-총계, 아동수-만0세, 아동수-만1세, 아동수-만2세, 아동수-만3세, 아동수-만4세, 아동수-만5세, 아동수-영아혼합(만0~2세), 아동수-유아혼합(만3~5세), 아동수-특수장애, 아동수-총계, 근속년수-1년미만, 근속년수-1년이상~2년미만, 근속년수-2년이상~4년미만, 근속년수-4년이상~6년미만, 근속년수-6년이상, 교직원현황-원장, 교직원현황-보육교사, 교직원현황-특수교사, 교직원현황-치료교사, 교직원현황-영양사, 교직원현황-간호사, 교직원현황-간호조무사, 교직원현황-조리원, 교직원현황-사무직원, 교직원현황-총계, 대표자명, 입소대기아동수 0세, 입소대기아동수 1세, 입소대기아동수 2세, 입소대기아동수 3세, 입소대기아동수 4세, 입소대기아동수 5세, 입소대기아동수 6세 이상, 입소대기아동수-총계로 항목이 구성되어 있습니다.\r\n입소대기아동수(연령별, 총계)를 통해 대기 수요가 높은 지역이나 연령대를 파악할 수 있습니다.",
+              "end_point_url": " ",
+              "guide_url": "",
+              "id": "uddi:5489ac65-27b6-4b60-bf10-91af52b71aa9",
+              "is_charged": "무료",
+              "is_confirmed_for_dev_nm": "자동승인",
+              "is_confirmed_for_prod_nm": "심의승인",
+              "is_deleted": "N",
+              "is_list_deleted": "N",
+              "keywords": "어린이집,보육,영유아,어린이집데이터,영유아보육법,보육정보시스템,입소대기아동",
+              "list_id": "15101154",
+              "list_title": "한국사회보장정보원_어린이집별 기본정보  조회",
+              "list_type": "PR0027",
+              "meta_url": "https://www.data.go.kr/catalog/15101154/openapi.json",
+              "new_category_cd": "OC0006",
+              "new_category_nm": "사회복지",
+              "operation_nm": "한국사회보장정보원_어린이집별 기본정보  조회_20160906",
+              "operation_seq": "",
+              "operation_url": "http://info.childcare.go.kr/info/oais/openapi/OpenApiSlL.jsp",
+              "org_cd": "B554287",
+              "org_nm": "한국사회보장정보원",
+              "ownership_grounds": "",
+              "register_status": "등록승인",
+              "request_cnt": 544,
+              "request_param_nm": "",
+              "request_param_nm_en": "",
+              "response_param_nm": "",
+              "response_param_nm_en": "",
+              "share_scope_nm": "행정/공공/민간",
+              "title": "한국사회보장정보원_어린이집별 기본정보  조회_20160906",
+              "title_en": "Korea Social Security Information Service_Inquiry of basic information by daycare center_20160906",
+              "updated_at": "2025-08-20"
             }
           }
         }

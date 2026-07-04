@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T00:05:31Z",
+  "generated_at": "2026-07-04T00:15:43Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3654,
-    "verified": 1809,
+    "total": 3677,
+    "verified": 1832,
     "failed": 306,
     "skipped": 1539,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 1809,
+        "count": 1832,
         "status": "verified"
       },
       {
@@ -534,6 +534,11 @@
         "provider": "lofin365"
       },
       {
+        "key": "childcare-info",
+        "count": 23,
+        "provider": "childcare-info"
+      },
+      {
         "key": "ulsan",
         "count": 20,
         "provider": "ulsan"
@@ -1041,6 +1046,11 @@
         "host": "www.lofin365.go.kr"
       },
       {
+        "key": "info.childcare.go.kr",
+        "count": 23,
+        "host": "info.childcare.go.kr"
+      },
+      {
         "key": "openapi.its.ulsan.kr",
         "count": 20,
         "host": "openapi.its.ulsan.kr"
@@ -1449,7 +1459,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 2930,
+        "count": 2953,
         "kind": "external_endpoint"
       },
       {

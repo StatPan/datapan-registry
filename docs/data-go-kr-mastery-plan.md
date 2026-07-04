@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `20140`
-- callable operations: `19998` (`99.3%`)
+- operations: `20163`
+- callable operations: `20021` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `8530`
-- registered adapter operations: `8520`
+- external endpoint operations: `8553`
+- registered adapter operations: `8543`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
-- approval-required operations: `7569`
+- approval-required operations: `7591`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `123`
+- registered adapter hosts: `124`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -233,10 +233,10 @@ APIs, `6` APIs with operation mappings, and `92` uncovered APIs. The July 2026
 portal pages and catalog JSON for that queue return error/not-found responses,
 so it should be tracked as a reactivation blocker while the next viable queue
 is processed. The latest viable queues were `국립생태원`,
-`해양수산부 국립수산물품질관리원`, `서울특별시 동작구`, `관세청`, and
-`과학기술정보통신부 우정사업본부`, now completed through `39` Ecobank, `45`
-NFQS, `95` Dongjak/Seoul Open Data, `3` UniPass, and `1` KoreaPost
-link-detail operations. The
+`해양수산부 국립수산물품질관리원`, `서울특별시 동작구`, `관세청`,
+`과학기술정보통신부 우정사업본부`, and `한국사회보장정보원`, now completed
+through `39` Ecobank, `45` NFQS, `95` Dongjak/Seoul Open Data, `3` UniPass,
+`1` KoreaPost, and `23` Childcare Info link-detail operations. The
 runtime reactivation queue starts at `행정안전부`: `1252`
 APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
@@ -631,6 +631,12 @@ readiness, not to advance verified runtime coverage.
    evidence to `3654`, verified checks to `1809`, registered external adapter
    operations to `8520`, and raises API operation coverage to `11,047` of
    `12,060` APIs (`91.6%`).
+   The 한국사회보장정보원 batch registers Childcare Info host coverage,
+   materializes `23` APIs and `23` operations, and merges `23` verified
+   landing-page checks. That brings checked runtime evidence to `3677`,
+   verified checks to `1832`, registered external adapter operations to
+   `8543`, and raises API operation coverage to `11,070` of `12,060` APIs
+   (`91.8%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

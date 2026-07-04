@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `1,013` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `990` data.go.kr APIs
   without operation mappings, `9,292` operation-mapped APIs without runtime
   evidence, and `178` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -421,8 +421,12 @@ Current gaps:
   verified and `28` existing EPost boundary skips). That brings runtime evidence
   to `3654`, verified checks to `1809`, and registered external adapter
   operations to `8520`.
-- API operation coverage remains incomplete: `11,047` of `12,060` APIs have
-  operation mappings (`91.6%`), leaving `1,013` APIs to materialize and `9,292`
+- The 한국사회보장정보원 batch registers Childcare Info host coverage,
+  materializes `23` APIs and `23` operations, and merges `23` verified
+  landing-page checks. That brings runtime evidence to `3677`, verified checks
+  to `1832`, and registered external adapter operations to `8543`.
+- API operation coverage remains incomplete: `11,070` of `12,060` APIs have
+  operation mappings (`91.8%`), leaving `990` APIs to materialize and `9,292`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

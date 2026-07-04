@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-04T00:05:46Z",
+  "generated_at": "2026-07-04T00:18:47Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 64,
+    "report_total": 66,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,8 +38,16 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 52,
+      "report_count": 54,
       "present_reports": [
+        {
+          "name": "childcare-info-verification-summary.json",
+          "path": "reports/data-go-kr/childcare-info-verification-summary.json"
+        },
+        {
+          "name": "childcare-info-verification.json",
+          "path": "reports/data-go-kr/childcare-info-verification.json"
+        },
         {
           "name": "chungbuk-verification-summary.json",
           "path": "reports/data-go-kr/chungbuk-verification-summary.json"
@@ -278,6 +286,8 @@
         "verification-plan.json"
       ],
       "extra_reports": [
+        "childcare-info-verification-summary.json",
+        "childcare-info-verification.json",
         "chungbuk-verification-summary.json",
         "chungbuk-verification.json",
         "coverage-backlog.json",
