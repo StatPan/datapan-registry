@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-07-04T05:44:09Z",
+  "source": "reports/data-go-kr/mnd-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 29,
+    "verified": 19,
+    "failed": 10,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 19,
+        "status": "verified"
+      },
+      {
+        "key": "failed",
+        "count": 10,
+        "status": "failed"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "mnd-open-data_request_failed",
+        "count": 10,
+        "reason": "mnd-open-data_request_failed"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "mnd-open-data",
+        "count": 21,
+        "provider": "mnd-open-data"
+      },
+      {
+        "key": "milipass",
+        "count": 8,
+        "provider": "milipass"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "opendata.mnd.go.kr",
+        "count": 21,
+        "host": "opendata.mnd.go.kr"
+      },
+      {
+        "key": "www.milipass.kr",
+        "count": 8,
+        "host": "www.milipass.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 29,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

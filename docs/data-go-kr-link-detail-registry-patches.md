@@ -2,13 +2,13 @@
 
 This report fetches one operation-materialization batch from public data.go.kr detail pages and keeps only operations whose hosts already have registered adapters.
 
-- Generated at: `2026-07-04T05:28:15Z`
+- Generated at: `2026-07-04T05:43:46Z`
 - Batch: `institution-03`
-- Organization: `기획예산처`
-- Input APIs: `15`
-- Details fetched: `15`
-- Patches: `15`
-- Operations to add: `40`
+- Organization: `국방부`
+- Input APIs: `17`
+- Details fetched: `17`
+- Patches: `17`
+- Operations to add: `29`
 - Skipped: `0`
 - Failed: `0`
 
@@ -16,20 +16,22 @@ This report fetches one operation-materialization batch from public data.go.kr d
 
 | Dataset ID | Organization | Title | Operations | Hosts |
 | --- | --- | --- | ---: | --- |
-| 3073764 | 기획예산처 | 기획예산처_연도별 국가채무 총괄(결산) | 3 | www.openfiscaldata.go.kr |
-| 3073756 | 기획예산처 | 기획예산처_연도별 세출 및 지출 예산현황 | 3 | www.openfiscaldata.go.kr |
-| 15094215 | 기획예산처 | 기획예산처_세출/지출 세목 예산편성현황(총액) | 2 | www.openfiscaldata.go.kr |
-| 15086573 | 기획예산처 | 기획예산처_재정경제부_주요관리대상사업 공공기관별 집행실적 | 2 | www.openfiscaldata.go.kr |
-| 15058905 | 기획예산처 | 기획예산처_세출예산 편성현황(추경포함) | 3 | www.openfiscaldata.go.kr |
-| 15058501 | 기획예산처 | 기획예산처_부담금 운용현황 | 3 | www.openfiscaldata.go.kr |
-| 15057863 | 기획예산처 | 기획예산처_채권현재액명세서 | 3 | www.openfiscaldata.go.kr |
-| 15057841 | 기획예산처 | 기획예산처_국가채권현황 | 2 | www.openfiscaldata.go.kr |
-| 15057783 | 기획예산처 | 기획예산처_국가채권현황 | 2 | www.openfiscaldata.go.kr |
-| 15057347 | 기획예산처 | 기획예산처_회계별 세입결산 현황 | 3 | www.openfiscaldata.go.kr |
-| 15056940 | 기획예산처 | 기획예산처_세입 및 수입 결산 현황 | 3 | www.openfiscaldata.go.kr |
-| 15056702 | 기획예산처 | 기획예산처_회계별 세입/세출결산 현황 | 3 | www.openfiscaldata.go.kr |
-| 15056520 | 기획예산처 | 기획예산처_회계/기금별 국가채권현황 | 2 | www.openfiscaldata.go.kr |
-| 15054319 | 기획예산처 | 기획예산처_국유재산 증감 및 현재액 현황 | 3 | www.openfiscaldata.go.kr |
-| 15050495 | 기획예산처 | 기획예산처_세입/수입 예산편성현황(총액) | 3 | www.openfiscaldata.go.kr |
+| 15013060 | 국방부 | 국방부 병사 보급기준 정보 | 3 | opendata.mnd.go.kr |
+| 15013068 | 국방부 | 군 복지시설 주변 관광지 정보 | 2 | opendata.mnd.go.kr |
+| 3034718 | 국방부 | 국방정보기술표준 목록 | 3 | opendata.mnd.go.kr |
+| 15106271 | 국방부 | 국방부_육군 출장 내역 조회 | 1 | www.milipass.kr |
+| 15106267 | 국방부 | 국방부_육군 장병가족 확인 | 1 | www.milipass.kr |
+| 15106275 | 국방부 | 국방부_육군 장병 신분증 발급 이력 | 1 | www.milipass.kr |
+| 15106273 | 국방부 | 국방부_육군 장병 휴가 내역 조회 | 1 | www.milipass.kr |
+| 15106254 | 국방부 | 국방부_육군 장병 확인 | 1 | www.milipass.kr |
+| 15106278 | 국방부 | 국방부_육군 장병 밀리패스 결제정보 내역 | 1 | www.milipass.kr |
+| 15106274 | 국방부 | 국방부_육군 장병 급여명세 내역 조회 | 1 | www.milipass.kr |
+| 15106268 | 국방부 | 국방부_육군 장병 가족 관계 | 1 | www.milipass.kr |
+| 3081235 | 국방부 | 국방부_육군 행사 정보 | 1 | opendata.mnd.go.kr |
+| 3034742 | 국방부 | 국방부 군무원 채용시험 현황 | 3 | opendata.mnd.go.kr |
+| 3061347 | 국방부 | 국방부_국가자격 | 2 | opendata.mnd.go.kr |
+| 3034733 | 국방부 | 국방부_해군 모집 정보 | 3 | opendata.mnd.go.kr |
+| 15013070 | 국방부 | 국방부_TMO(여행장병 안내소) 정보 | 1 | opendata.mnd.go.kr |
+| 3034724 | 국방부 | 국방부_군사법원 연락처 정보 | 3 | opendata.mnd.go.kr |
 
 ## Skipped Reasons
