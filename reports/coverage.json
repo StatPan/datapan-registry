@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T02:52:04Z",
+  "generated_at": "2026-07-04T03:02:07Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 20784,
-    "callable_operations": 20642,
+    "operations": 20787,
+    "callable_operations": 20645,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 9174,
-    "registered_adapter_operations": 9164,
+    "external_endpoint_operations": 9177,
+    "registered_adapter_operations": 9167,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.7,
-    "approval_required_operations": 7947,
+    "approval_required_operations": 7949,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 141,
+    "registered_adapter_hosts": 143,
     "missing_adapter_hosts": 11,
-    "adapter_count": 119,
+    "adapter_count": 120,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,9 +41,9 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-04T02:51:56Z",
-    "total": 4301,
-    "verified": 2426,
+    "generated_at": "2026-07-04T03:01:59Z",
+    "total": 4304,
+    "verified": 2429,
     "failed": 332,
     "skipped": 1543,
     "unknown": 0,
@@ -381,10 +381,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-04T02:52:04Z",
+    "generated_at": "2026-07-04T03:02:07Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 119,
-    "host_count": 146,
+    "adapter_count": 120,
+    "host_count": 148,
     "adapters": [
       {
         "name": "airport",
@@ -1257,6 +1257,17 @@
         ]
       },
       {
+        "name": "nrf",
+        "status": "registered",
+        "hosts": [
+          "www.kci.go.kr",
+          "www.krm.or.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "nrich",
         "status": "registered",
         "hosts": [
@@ -1630,8 +1641,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 119,
-      "verification_capable_adapters": 119,
+      "adapter_count": 120,
+      "verification_capable_adapters": 120,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

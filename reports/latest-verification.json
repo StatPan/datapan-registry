@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T02:51:56Z",
+  "generated_at": "2026-07-04T03:01:59Z",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
-  "limit": 6817,
+  "limit": 6917,
   "truncated": true,
-  "filtered_count": 4301,
+  "filtered_count": 4304,
   "summary": {
-    "total": 4301,
-    "verified": 2426,
+    "total": 4304,
+    "verified": 2429,
     "failed": 332,
     "skipped": 1543,
     "unknown": 0
@@ -67978,6 +67978,48 @@
       "http_status": 200,
       "semantic_status": "html_landing_page",
       "url": "https://www.culture.go.kr/data/openapi/openapiView.do?id=111",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15151982",
+      "title": "한국연구재단_기초학문연구 자료 현황",
+      "operation": "한국연구재단_기초학문연구 자료 현황_20251111 외부 링크 1",
+      "provider": "nrf",
+      "endpoint_host": "www.krm.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T03:01:31Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.krm.or.kr/notice/guide_05.jsp",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15151982",
+      "title": "한국연구재단_기초학문연구 자료 현황",
+      "operation": "한국연구재단_기초학문연구 자료 현황_20251111 외부 링크 2",
+      "provider": "nrf",
+      "endpoint_host": "www.kci.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T03:01:31Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.kci.go.kr/kciportal/po/openapi/openDataView.kci?datasetBean.dtstSeqNo=1",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "3049042",
+      "title": "한국연구재단_KCI논문정보",
+      "operation": "한국연구재단_KCI논문정보_20240405",
+      "provider": "nrf",
+      "endpoint_host": "www.kci.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T03:01:31Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.kci.go.kr/kciportal/po/openapi/openDataView.kci?datasetBean.dtstSeqNo=1",
       "body_shape": "html"
     }
   ]

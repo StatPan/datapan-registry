@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T02:51:58Z",
+  "generated_at": "2026-07-04T03:02:01Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 119,
-  "host_count": 146,
+  "adapter_count": 120,
+  "host_count": 148,
   "adapters": [
     {
       "name": "airport",
@@ -875,6 +875,17 @@
       ]
     },
     {
+      "name": "nrf",
+      "status": "registered",
+      "hosts": [
+        "www.kci.go.kr",
+        "www.krm.or.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "nrich",
       "status": "registered",
       "hosts": [
@@ -1248,8 +1259,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 119,
-    "verification_capable_adapters": 119,
+    "adapter_count": 120,
+    "verification_capable_adapters": 120,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

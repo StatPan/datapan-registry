@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T02:51:58Z",
+  "generated_at": "2026-07-04T03:02:01Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 297,
+  "filtered_count": 299,
   "summary": {
-    "hosts": 297,
+    "hosts": 299,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 152,
-    "external_guide_hosts": 213,
-    "registered_adapter_hosts": 141,
-    "operation_hosts": 154,
+    "external_endpoint_hosts": 154,
+    "external_guide_hosts": 214,
+    "registered_adapter_hosts": 143,
+    "operation_hosts": 156,
     "guide_only_hosts": 143,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7947,
+    "approval_required_operations": 7949,
     "malformed_source_url_count": 724
   },
   "providers": [
@@ -1931,6 +1931,23 @@
       ]
     },
     {
+      "host": "www.kci.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 2,
+      "operations": 2,
+      "external_endpoint_operations": 2,
+      "external_guide_specs": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15151982",
+        "3049042"
+      ]
+    },
+    {
       "host": "www.worldjob.or.kr",
       "provider": "worldjob",
       "kinds": [
@@ -2468,6 +2485,20 @@
       "external_endpoint_operations": 1,
       "sample_ids": [
         "15058699"
+      ]
+    },
+    {
+      "host": "www.krm.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15151982"
       ]
     },
     {
