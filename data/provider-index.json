@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T06:08:52Z",
+  "generated_at": "2026-07-04T06:24:47Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 136,
-  "host_count": 171,
+  "adapter_count": 137,
+  "host_count": 172,
   "adapters": [
     {
       "name": "airport",
@@ -708,6 +708,16 @@
       "status": "registered",
       "hosts": [
         "apihub.kma.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "koagi",
+      "status": "registered",
+      "hosts": [
+        "seedpedia.koagi.or.kr"
       ],
       "capabilities": [
         "verification"
@@ -1426,8 +1436,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 136,
-    "verification_capable_adapters": 136,
+    "adapter_count": 137,
+    "verification_capable_adapters": 137,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

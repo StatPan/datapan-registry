@@ -1,0 +1,65 @@
+{
+  "generated_at": "2026-07-04T06:24:22Z",
+  "source": "reports/data-go-kr/koagi-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 8,
+    "verified": 8,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 8,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "koagi",
+        "count": 6,
+        "provider": "koagi"
+      },
+      {
+        "key": "mafra",
+        "count": 1,
+        "provider": "mafra"
+      },
+      {
+        "key": "nongsaro",
+        "count": 1,
+        "provider": "nongsaro"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "seedpedia.koagi.or.kr",
+        "count": 6,
+        "host": "seedpedia.koagi.or.kr"
+      },
+      {
+        "key": "data.mafra.go.kr",
+        "count": 1,
+        "host": "data.mafra.go.kr"
+      },
+      {
+        "key": "www.nongsaro.go.kr",
+        "count": 1,
+        "host": "www.nongsaro.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 8,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

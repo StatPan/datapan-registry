@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-04T06:08:52Z",
+  "generated_at": "2026-07-04T06:24:47Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 21242,
-    "callable_operations": 21100,
-    "specs_without_operations": 485,
-    "specs_without_callable_operation": 560,
+    "operations_total": 21250,
+    "callable_operations": 21108,
+    "specs_without_operations": 479,
+    "specs_without_callable_operation": 554,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 8904,
-    "operations_without_response_params": 10126,
+    "operations_without_request_params": 8912,
+    "operations_without_response_params": 10134,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 4704,
-      "external_endpoint_operations": 9632,
+      "external_endpoint_specs": 4710,
+      "external_endpoint_operations": 9640,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 123,
       "dev_approval_required_operations": 224,
-      "prod_approval_required_operations": 8077,
+      "prod_approval_required_operations": 8085,
       "malformed_endpoint_url_count": 42,
       "malformed_guide_url_count": 682,
       "top_endpoint_hosts": [
@@ -54,11 +54,11 @@
         },
         {
           "host": "data.mafra.go.kr",
-          "count": 315
+          "count": 316
         },
         {
           "host": "www.nongsaro.go.kr",
-          "count": 314
+          "count": 315
         },
         {
           "host": "open.law.go.kr",
@@ -132,11 +132,11 @@
         },
         {
           "host": "data.mafra.go.kr",
-          "count": 315
+          "count": 316
         },
         {
           "host": "www.nongsaro.go.kr",
-          "count": 314
+          "count": 315
         },
         {
           "host": "open.law.go.kr",

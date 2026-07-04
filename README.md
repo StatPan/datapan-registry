@@ -11,29 +11,29 @@ re-importing the upstream data.go.kr catalog every time.
 
 - Provider: `data.go.kr`
 - Specs: `12060`
-- Operations: `21242`
-- Callable operations: `21100` (`99.3%`)
+- Operations: `21250`
+- Callable operations: `21108` (`99.3%`)
 - Latest release: `v2026.06.25.24`
 - Registered external adapters: `airport`, `andong`, `anyang`, `atfis`, `calspia`, `car`, `car365`, `childcare-info`, `chungbuk-tour`, `chungnam`, `codil`, `consumer`, `culture`, `daegu`, `daejeon`, `data-gg`,
   `dgfca`, `dongjak`, `ecos`, `ecvam`, `ekape`, `emuseum`, `epost`, `eshare`, `ex`, `fairdata`, `folk`, `foodsafetykorea`, `forest`,
   `franchise-ftc`, `garak`, `gblib`, `geoje`, `gicoms`, `gimhae`, `gims`, `gogung`, `gwanak`, `gwangjin`, `gwangmyeong`, `happysd`, `hrfco`, `hug`, `humetro`,
   `i815`, `icheon`, `incheon`, `ins24`, `ip-navi`, `itfind`, `its`, `iwest`, `jeju`, `jeju-air`, `jeju-www`, `jejudatahub`, `jejuits`, `jeonju`, `jeonnam-redtable`, `jongno`, `juso`,
-  `keit`, `kipris-plus`, `khoa`, `kistep`, `kisti`, `kma-apihub`, `kofpi`, `kopis`, `korad`, `koreapost`, `kosis`, `kosmes`, `kpx`, `kric`, `lh-ebid`, `lofin365`, `mafra`, `mafra-legacy`, `milipass`, `mnd-open-data`, `mpva-egonghun`, `much`, `myhome`, `naa`, `nabic`, `naqs`, `ncpms`, `nfqs`, `nie-ecobank`,
+  `keit`, `kipris-plus`, `khoa`, `kistep`, `kisti`, `kma-apihub`, `koagi`, `kofpi`, `kopis`, `korad`, `koreapost`, `kosis`, `kosmes`, `kpx`, `kric`, `lh-ebid`, `lofin365`, `mafra`, `mafra-legacy`, `milipass`, `mnd-open-data`, `mpva-egonghun`, `much`, `myhome`, `naa`, `nabic`, `naqs`, `ncpms`, `nfqs`, `nie-ecobank`,
   `nier-nesc`, `nihc`, `nrich`, `nrf`, `nongsaro`, `nosc`, `oneclick-law`, `open-assembly`, `open-law`, `openfiscaldata`, `opendart`, `pqis`, `psis`, `q-net`, `qia`, `recycling-info`, `safemap`, `safetydata`,
   `safe182`, `seogu`, `seogwipo`, `seoul-bus`, `seoul-map`, `seoul-open-data`, `seoul-tdata`, `sexoffender`, `sgis`, `sisul`, `sisul-www`, `smartfarm-korea`, `stcis`, `tashu`, `tour`, `uiryeong`, `ulsan`, `ulsan-www`, `unipass`, `utic`, `vworld`,
   `wamis`, `work`, `work24`, `worldjob`, `youthcenter`, `yuseong`, `cancer`
-- External adapter coverage: `9622` registered-adapter operations out of `9632`
+- External adapter coverage: `9630` registered-adapter operations out of `9640`
   external endpoint operations (`99.7%`)
 - Missing external adapter hosts: `11`
 - Provider split readiness: `ready`
-  (`136` adapters, `136` verification-capable, `23` call-capable)
-- Runtime verification evidence: `4759` bounded checks merged into
-  `reports/latest-verification.json` (`2827` verified, `389` failed, `1543`
+  (`137` adapters, `137` verification-capable, `23` call-capable)
+- Runtime verification evidence: `4767` bounded checks merged into
+  `reports/latest-verification.json` (`2835` verified, `389` failed, `1543`
   skipped)
 - Runtime evidence growth target: `22.4%` checked evidence is above the
   unrounded `10%` release target; `0` additional records are required for this
   target.
-- Institution API overview: `411` organizations, `12060` APIs, and `21242`
+- Institution API overview: `411` organizations, `12060` APIs, and `21250`
   operations in `reports/data-go-kr/institution-api-overview.json`; readable
   tables live in `docs/data-go-kr-institution-api-overview.md`.
 - Missing external host probe: `81` manifest-bound probe records remain in

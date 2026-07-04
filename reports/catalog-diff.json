@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T06:08:52Z",
+  "generated_at": "2026-07-04T06:24:47Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4390,
-    "stable": 7670
+    "changed": 4396,
+    "stable": 7664
   },
   "added": [],
   "removed": [],
@@ -39009,6 +39009,16 @@
       "new_digest": "8a015564ea723915d725db44198ade9c45a07954ec85c74c3c97c60b74c1b3ce"
     },
     {
+      "id": "15149417",
+      "old_title": "한국수목원정원관리원_기관별 종자도입정보",
+      "new_title": "한국수목원정원관리원_기관별 종자도입정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1bbb71b2a4fe9c97f4f8746efc648077e29617ec30ebc303be50d476a60d1c25",
+      "new_digest": "6ab87c7431735764cae58a5653cb196d181159d35cdd0930b22f94011addbe9b"
+    },
+    {
       "id": "15149434",
       "old_title": "행정안전부_생활안전지도 일일최빈호출내역",
       "new_title": "행정안전부_생활안전지도 일일최빈호출내역",
@@ -40317,6 +40327,56 @@
       ],
       "old_digest": "3b23d616429a4c559a0dd85bc568c15707e29937489be6bcd732a669913ccd6a",
       "new_digest": "746ce75e10bba7fd8a90680d25361c5511f4db62f51380cb2bd1de60008c076b"
+    },
+    {
+      "id": "15150909",
+      "old_title": "한국수목원정원관리원_시드뱅크 도입 종자 채집지 정보",
+      "new_title": "한국수목원정원관리원_시드뱅크 도입 종자 채집지 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1ef774139d94559d49558502765b06b0f600a56f2b428b1a073d8c42306154e6",
+      "new_digest": "538cc31458506bba1fc9924b61ec071de236b4370ac9f429dcb41741657835b7"
+    },
+    {
+      "id": "15150913",
+      "old_title": "한국수목원정원관리원_시드뱅크 도입 종자 품질관리 정보",
+      "new_title": "한국수목원정원관리원_시드뱅크 도입 종자 품질관리 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "11057e4256c812e7a12d9236408ee95f4a810cc917482bd5d1df5cda41a78418",
+      "new_digest": "2b67357e77d6f396a64d74d819a2b15c09e0470f97324b4d652bc75cb757f09b"
+    },
+    {
+      "id": "15150916",
+      "old_title": "한국수목원정원관리원_시드뱅크 도입 종자 형태정보",
+      "new_title": "한국수목원정원관리원_시드뱅크 도입 종자 형태정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d987548994d584f96d1dcd359b18cbb1f742632b5e0fde68cad511acf50a9223",
+      "new_digest": "b2a9239adfb1cf0b831210a83eb43f1facef2ab54d70ad1140e9d4e0e97380dc"
+    },
+    {
+      "id": "15150918",
+      "old_title": "한국수목원정원관리원_시드뱅크 도입 종자 활력정보",
+      "new_title": "한국수목원정원관리원_시드뱅크 도입 종자 활력정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "73ed1225d5cf116c0d18c91467ba02fca22e61d655fc7f7ebc5538a80253d2f4",
+      "new_digest": "2ebbe9b15a3ef5b0df3a8c90cf0957737629a0c07e3ac847a77620e186b884a4"
+    },
+    {
+      "id": "15150921",
+      "old_title": "한국수목원정원관리원_시드뱅크 도입 종자 분류학적 정보",
+      "new_title": "한국수목원정원관리원_시드뱅크 도입 종자 분류학적 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4c1a906755e905df004b2ae6167d898d7273261ce6bcd45d65ff1de2bdc60866",
+      "new_digest": "9e2d2cb2ec20b412b6bfb711e45ebf8ea9eaf25e8302127131ecc3261d59be74"
     },
     {
       "id": "15151913",
