@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T04:00:33Z",
+  "generated_at": "2026-07-04T04:09:03Z",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
-  "limit": 7417,
+  "limit": 7517,
   "truncated": true,
-  "filtered_count": 4464,
+  "filtered_count": 4467,
   "summary": {
-    "total": 4464,
-    "verified": 2587,
+    "total": 4467,
+    "verified": 2590,
     "failed": 334,
     "skipped": 1543,
     "unknown": 0
@@ -70262,6 +70262,48 @@
       "http_status": 200,
       "semantic_status": "html_landing_page",
       "url": "http://www.wamis.go.kr:8080/wamisweb/gis/radar.do",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15109103",
+      "title": "한국농수산식품유통공사_국내 식품시장규모",
+      "operation": "한국농수산식품유통공사_국내 식품시장규모_20191231",
+      "provider": "atfis",
+      "endpoint_host": "www.atfis.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T04:08:43Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.atfis.or.kr/home/openapi.do?act=detail\u0026oaurId=6",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15109104",
+      "title": "한국농수산식품유통공사_음식료품 제조업 업종별 현황 통계",
+      "operation": "한국농수산식품유통공사_음식료품 제조업 업종별 현황 통계_20191231",
+      "provider": "atfis",
+      "endpoint_host": "www.atfis.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T04:08:43Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.atfis.or.kr/home/openapi.do?act=detail\u0026oaurId=7",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15109105",
+      "title": "한국농수산식품유통공사_식품 원료별 사용량(총/국산/수입)",
+      "operation": "한국농수산식품유통공사_식품 원료별 사용량(총/국산/수입)_20201231",
+      "provider": "atfis",
+      "endpoint_host": "www.atfis.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T04:08:43Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://www.atfis.or.kr/home/openapi.do?act=detail\u0026oaurId=5",
       "body_shape": "html"
     }
   ]

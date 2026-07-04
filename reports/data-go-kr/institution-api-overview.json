@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T04:00:35Z",
+  "generated_at": "2026-07-04T04:09:05Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 20947,
-    "runtime_evidence": 4464,
+    "operations": 20950,
+    "runtime_evidence": 4467,
     "runtime_evidence_percent": 21.3,
-    "callable_operations": 20805,
-    "external_endpoint_operations": 9337,
-    "registered_adapter_operations": 9327,
+    "callable_operations": 20808,
+    "external_endpoint_operations": 9340,
+    "registered_adapter_operations": 9330,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 9337
+      "count": 9340
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 9327
+      "count": 9330
     },
     {
       "key": "builtin",
@@ -73,7 +73,7 @@
     },
     {
       "category": "농축수산",
-      "operation_count": 2268
+      "operation_count": 2271
     },
     {
       "category": "교통물류",
@@ -7114,6 +7114,65 @@
       ]
     },
     {
+      "organization": "한국농수산식품유통공사",
+      "api_count": 23,
+      "operation_api_count": 23,
+      "operation_count": 34,
+      "runtime_evidence_count": 3,
+      "runtime_evidence_percent": 8.8,
+      "verified": 3,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 3,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 31
+        },
+        {
+          "key": "external_endpoint",
+          "count": 3
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 3
+        },
+        {
+          "key": "builtin",
+          "count": 31
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "농축수산",
+          "operation_count": 29
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 5
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 31
+        },
+        {
+          "host": "www.atfis.or.kr",
+          "operation_count": 3,
+          "adapter": "atfis",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "인천광역시",
       "api_count": 16,
       "operation_api_count": 10,
@@ -7253,48 +7312,6 @@
           "capabilities": [
             "verification"
           ]
-        }
-      ]
-    },
-    {
-      "organization": "한국농수산식품유통공사",
-      "api_count": 23,
-      "operation_api_count": 20,
-      "operation_count": 31,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 31
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 31
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "농축수산",
-          "operation_count": 26
-        },
-        {
-          "category": "공공행정",
-          "operation_count": 5
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 31
         }
       ]
     },

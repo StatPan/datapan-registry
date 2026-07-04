@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T04:00:35Z",
+  "generated_at": "2026-07-04T04:09:05Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 310,
+  "filtered_count": 311,
   "summary": {
-    "hosts": 310,
+    "hosts": 311,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 163,
+    "external_endpoint_hosts": 164,
     "external_guide_hosts": 221,
-    "registered_adapter_hosts": 152,
-    "operation_hosts": 165,
+    "registered_adapter_hosts": 153,
+    "operation_hosts": 166,
     "guide_only_hosts": 145,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 158,
-    "approval_required_operations": 8045,
+    "approval_required_operations": 8048,
     "malformed_source_url_count": 724
   },
   "providers": [
@@ -1965,6 +1965,22 @@
       "approval_required_operations": 3,
       "sample_ids": [
         "15000335"
+      ]
+    },
+    {
+      "host": "www.atfis.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 3,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "approval_required_operations": 3,
+      "sample_ids": [
+        "15109103",
+        "15109104",
+        "15109105"
       ]
     },
     {
