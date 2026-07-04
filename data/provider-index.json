@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T03:33:10Z",
+  "generated_at": "2026-07-04T03:44:10Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 122,
-  "host_count": 153,
+  "adapter_count": 123,
+  "host_count": 155,
   "adapters": [
     {
       "name": "airport",
@@ -997,6 +997,17 @@
       ]
     },
     {
+      "name": "qia",
+      "status": "registered",
+      "hosts": [
+        "home.kahis.go.kr",
+        "meatwatch.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "recycling-info",
       "status": "registered",
       "hosts": [
@@ -1282,8 +1293,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 122,
-    "verification_capable_adapters": 122,
+    "adapter_count": 123,
+    "verification_capable_adapters": 123,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

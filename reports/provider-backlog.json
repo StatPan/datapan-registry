@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T03:33:10Z",
+  "generated_at": "2026-07-04T03:44:10Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 305,
+  "filtered_count": 308,
   "summary": {
-    "hosts": 305,
+    "hosts": 308,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 159,
-    "external_guide_hosts": 219,
-    "registered_adapter_hosts": 148,
-    "operation_hosts": 161,
-    "guide_only_hosts": 144,
+    "external_endpoint_hosts": 161,
+    "external_guide_hosts": 220,
+    "registered_adapter_hosts": 150,
+    "operation_hosts": 163,
+    "guide_only_hosts": 145,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 8021,
+    "approval_required_operations": 8031,
     "malformed_source_url_count": 724
   },
   "providers": [
@@ -259,6 +259,24 @@
       ]
     },
     {
+      "host": "data.mafra.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 187,
+      "operations": 315,
+      "external_endpoint_operations": 315,
+      "external_guide_specs": 48,
+      "approval_required_operations": 146,
+      "sample_ids": [
+        "15002220",
+        "15008409",
+        "15015139"
+      ]
+    },
+    {
       "host": "www.nongsaro.go.kr",
       "kinds": [
         "external_endpoint",
@@ -309,24 +327,6 @@
         "15056532",
         "15056661",
         "15056847"
-      ]
-    },
-    {
-      "host": "data.mafra.go.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 172,
-      "operations": 284,
-      "external_endpoint_operations": 284,
-      "external_guide_specs": 42,
-      "approval_required_operations": 138,
-      "sample_ids": [
-        "15002220",
-        "15008409",
-        "15015139"
       ]
     },
     {
@@ -2365,6 +2365,20 @@
       ]
     },
     {
+      "host": "home.kahis.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15102756"
+      ]
+    },
+    {
       "host": "koreapost.go.kr",
       "kinds": [
         "external_endpoint"
@@ -2389,6 +2403,20 @@
       "approval_required_operations": 1,
       "sample_ids": [
         "15093934"
+      ]
+    },
+    {
+      "host": "meatwatch.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15118023"
       ]
     },
     {
@@ -4112,6 +4140,19 @@
       "external_guide_specs": 1,
       "sample_ids": [
         "15099676"
+      ]
+    },
+    {
+      "host": "kahis.go.kr:9000",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "3055525"
       ]
     },
     {

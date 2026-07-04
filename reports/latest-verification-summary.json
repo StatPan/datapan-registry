@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T03:29:12Z",
+  "generated_at": "2026-07-04T03:44:08Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4379,
-    "verified": 2504,
+    "total": 4412,
+    "verified": 2537,
     "failed": 332,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2504,
+        "count": 2537,
         "status": "verified"
       },
       {
@@ -375,7 +375,7 @@
       },
       {
         "key": "mafra",
-        "count": 290,
+        "count": 321,
         "provider": "mafra"
       },
       {
@@ -799,6 +799,11 @@
         "provider": "mpva-egonghun"
       },
       {
+        "key": "qia",
+        "count": 2,
+        "provider": "qia"
+      },
+      {
         "key": "unipass",
         "count": 2,
         "provider": "unipass"
@@ -952,7 +957,7 @@
       },
       {
         "key": "data.mafra.go.kr",
-        "count": 290,
+        "count": 321,
         "host": "data.mafra.go.kr"
       },
       {
@@ -1526,6 +1531,11 @@
         "host": "happy.daegu.go.kr"
       },
       {
+        "key": "home.kahis.go.kr",
+        "count": 1,
+        "host": "home.kahis.go.kr"
+      },
+      {
         "key": "its.go.kr",
         "count": 1,
         "host": "its.go.kr"
@@ -1549,6 +1559,11 @@
         "key": "map.seoul.go.kr",
         "count": 1,
         "host": "map.seoul.go.kr"
+      },
+      {
+        "key": "meatwatch.go.kr",
+        "count": 1,
+        "host": "meatwatch.go.kr"
       },
       {
         "key": "ncpms.rda.go.kr",
@@ -1664,7 +1679,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3655,
+        "count": 3688,
         "kind": "external_endpoint"
       },
       {
