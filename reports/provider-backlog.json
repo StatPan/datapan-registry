@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T03:44:10Z",
+  "generated_at": "2026-07-04T03:51:01Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -17,7 +17,7 @@
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 8031,
+    "approval_required_operations": 8036,
     "malformed_source_url_count": 724
   },
   "providers": [
@@ -456,6 +456,24 @@
       ]
     },
     {
+      "host": "data.seoul.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 75,
+      "operations": 156,
+      "external_endpoint_operations": 156,
+      "external_guide_specs": 28,
+      "approval_required_operations": 53,
+      "sample_ids": [
+        "15003164",
+        "15040468",
+        "15044244"
+      ]
+    },
+    {
       "host": "seogu.go.kr",
       "kinds": [
         "external_endpoint",
@@ -487,24 +505,6 @@
         "15039347",
         "15039350",
         "15056585"
-      ]
-    },
-    {
-      "host": "data.seoul.go.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 61,
-      "operations": 121,
-      "external_endpoint_operations": 121,
-      "external_guide_specs": 28,
-      "approval_required_operations": 48,
-      "sample_ids": [
-        "15003164",
-        "15040468",
-        "15047383"
       ]
     },
     {

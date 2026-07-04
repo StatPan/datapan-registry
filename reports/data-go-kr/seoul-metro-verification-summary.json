@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-07-04T03:50:43Z",
+  "source": "reports/data-go-kr/seoul-metro-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 35,
+    "verified": 35,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 35,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "seoul-open-data",
+        "count": 35,
+        "provider": "seoul-open-data"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "data.seoul.go.kr",
+        "count": 35,
+        "host": "data.seoul.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 35,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

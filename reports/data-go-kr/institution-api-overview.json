@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T03:44:10Z",
+  "generated_at": "2026-07-04T03:51:01Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 20895,
-    "runtime_evidence": 4412,
-    "runtime_evidence_percent": 21.1,
-    "callable_operations": 20753,
-    "external_endpoint_operations": 9285,
-    "registered_adapter_operations": 9275,
+    "operations": 20930,
+    "runtime_evidence": 4447,
+    "runtime_evidence_percent": 21.2,
+    "callable_operations": 20788,
+    "external_endpoint_operations": 9320,
+    "registered_adapter_operations": 9310,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 9285
+      "count": 9320
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 9275
+      "count": 9310
     },
     {
       "key": "builtin",
@@ -76,12 +76,12 @@
       "operation_count": 2268
     },
     {
-      "category": "문화관광",
-      "operation_count": 2238
+      "category": "교통물류",
+      "operation_count": 2265
     },
     {
-      "category": "교통물류",
-      "operation_count": 2231
+      "category": "문화관광",
+      "operation_count": 2238
     },
     {
       "category": "사회복지",
@@ -93,7 +93,7 @@
     },
     {
       "category": "환경기상",
-      "operation_count": 1297
+      "operation_count": 1298
     },
     {
       "category": "재정금융",
@@ -283,6 +283,16 @@
       ]
     },
     {
+      "host": "data.seoul.go.kr",
+      "operation_count": 156,
+      "adapter": "seoul-open-data",
+      "adapter_status": "registered",
+      "capabilities": [
+        "call",
+        "verification"
+      ]
+    },
+    {
       "host": "seogu.go.kr",
       "operation_count": 154,
       "adapter": "seogu",
@@ -297,16 +307,6 @@
       "adapter": "kipris-plus",
       "adapter_status": "registered",
       "capabilities": [
-        "verification"
-      ]
-    },
-    {
-      "host": "data.seoul.go.kr",
-      "operation_count": 121,
-      "adapter": "seoul-open-data",
-      "adapter_status": "registered",
-      "capabilities": [
-        "call",
         "verification"
       ]
     }
@@ -4262,6 +4262,66 @@
       ]
     },
     {
+      "organization": "서울교통공사",
+      "api_count": 25,
+      "operation_api_count": 25,
+      "operation_count": 72,
+      "runtime_evidence_count": 37,
+      "runtime_evidence_percent": 51.4,
+      "verified": 37,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 17,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 35
+        },
+        {
+          "key": "external_endpoint",
+          "count": 37
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 37
+        },
+        {
+          "key": "builtin",
+          "count": 35
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "교통물류",
+          "operation_count": 71
+        },
+        {
+          "category": "환경기상",
+          "operation_count": 1
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "data.seoul.go.kr",
+          "operation_count": 37,
+          "adapter": "seoul-open-data",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
+        },
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 35
+        }
+      ]
+    },
+    {
       "organization": "보건복지부",
       "api_count": 71,
       "operation_api_count": 71,
@@ -6823,62 +6883,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 36
-        }
-      ]
-    },
-    {
-      "organization": "서울교통공사",
-      "api_count": 25,
-      "operation_api_count": 11,
-      "operation_count": 37,
-      "runtime_evidence_count": 2,
-      "runtime_evidence_percent": 5.4,
-      "verified": 2,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 12,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 35
-        },
-        {
-          "key": "external_endpoint",
-          "count": 2
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 2
-        },
-        {
-          "key": "builtin",
-          "count": 35
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "교통물류",
-          "operation_count": 37
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 35
-        },
-        {
-          "host": "data.seoul.go.kr",
-          "operation_count": 2,
-          "adapter": "seoul-open-data",
-          "adapter_status": "registered",
-          "capabilities": [
-            "call",
-            "verification"
-          ]
         }
       ]
     },
