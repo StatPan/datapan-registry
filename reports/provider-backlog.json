@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T04:56:31Z",
+  "generated_at": "2026-07-04T05:07:28Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 314,
+  "filtered_count": 315,
   "summary": {
-    "hosts": 314,
+    "hosts": 315,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 167,
-    "external_guide_hosts": 224,
-    "registered_adapter_hosts": 156,
-    "operation_hosts": 169,
-    "guide_only_hosts": 145,
+    "external_endpoint_hosts": 169,
+    "external_guide_hosts": 225,
+    "registered_adapter_hosts": 158,
+    "operation_hosts": 171,
+    "guide_only_hosts": 144,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 158,
-    "approval_required_operations": 8115,
+    "approval_required_operations": 8142,
     "malformed_source_url_count": 724
   },
   "providers": [
@@ -966,6 +966,24 @@
         "15056534",
         "15056747",
         "15056914"
+      ]
+    },
+    {
+      "host": "sgis.kostat.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 10,
+      "operations": 30,
+      "external_endpoint_operations": 30,
+      "external_guide_specs": 10,
+      "approval_required_operations": 27,
+      "sample_ids": [
+        "15021230",
+        "15072546",
+        "15072552"
       ]
     },
     {
@@ -2246,6 +2264,23 @@
       ]
     },
     {
+      "host": "kosis.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 5,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "external_guide_specs": 4,
+      "sample_ids": [
+        "15059039",
+        "15127752",
+        "15127755"
+      ]
+    },
+    {
       "host": "air.daegu.go.kr",
       "kinds": [
         "external_endpoint",
@@ -3470,21 +3505,6 @@
         "15129372",
         "15143456",
         "15151027"
-      ]
-    },
-    {
-      "host": "kosis.kr",
-      "kinds": [
-        "external_guide"
-      ],
-      "adapter_status": "guide_only",
-      "specs": 4,
-      "operations": 0,
-      "external_guide_specs": 4,
-      "sample_ids": [
-        "15127752",
-        "15127755",
-        "15127760"
       ]
     },
     {

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T04:56:31Z",
+  "generated_at": "2026-07-04T05:07:28Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4315,
-    "stable": 7745
+    "changed": 4326,
+    "stable": 7734
   },
   "added": [],
   "removed": [],
@@ -587,6 +587,16 @@
       ],
       "old_digest": "2d05212dc926c34638b5af98315dae3c8e4a699fe801c9cdefab879583e1959a",
       "new_digest": "d33f2749b256b6d0a595bfcdb65a847751353a37843392e8c7fb68b2f6c22832"
+    },
+    {
+      "id": "15021230",
+      "old_title": "국가데이터처_SGIS(통계지리정보)",
+      "new_title": "국가데이터처_SGIS(통계지리정보)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b42a02f8397c09e3ec19a9a1bdb399b72658c740ce9a428bdb87aa8131ad390d",
+      "new_digest": "63cc4c8e8ad7060145a0bf5fa4773cf4681c2e7115e22718653477f9bcbb7298"
     },
     {
       "id": "15021305",
@@ -15539,6 +15549,16 @@
       "new_digest": "128c63dce217697a66f59813256d335d8c603d83b979b7a4197bd9d68111325a"
     },
     {
+      "id": "15059039",
+      "old_title": "국가데이터처_KOSIS 공유서비스",
+      "new_title": "국가데이터처_KOSIS 공유서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d44f9206b6a3bc313bccea891c6af96152b4022e1c3a0a93daee3f0bb361912e",
+      "new_digest": "9f0d9bf7f4371db35918d6b828c96f5e695ffb7982cdc25c38ca8ef60f66d1ca"
+    },
+    {
       "id": "15059040",
       "old_title": "경기도_구조활동 현황",
       "new_title": "경기도_구조활동 현황",
@@ -20529,6 +20549,76 @@
       "new_digest": "14923a5befb3ba3aa9b44f8df7ee14e5d97a26a36b77049e3ce8b83b14e58d38"
     },
     {
+      "id": "15072546",
+      "old_title": "국가데이터처_단계별주소조회",
+      "new_title": "국가데이터처_단계별주소조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "53d8d7c7277c758f48b12faa8f39106865c748dad448d6808afa8b83a65bf06a",
+      "new_digest": "8b3134d6a0ea426615d2bd4c5aa9ff72b45bfbb9d6ef0da6346566ceaa759eab"
+    },
+    {
+      "id": "15072552",
+      "old_title": "국가데이터처_전개도 건물정보",
+      "new_title": "국가데이터처_전개도 건물정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "572c47d62597937931d54edf2a93c620133b2b8cbe41b522cfd3497d98bc9921",
+      "new_digest": "36983b910276fd2c5d34f8fc1e22cb91e3a74fe5c31532a6d6ee3fe70e699275"
+    },
+    {
+      "id": "15072558",
+      "old_title": "국가데이터처_도시권 목록",
+      "new_title": "국가데이터처_도시권 목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "95a2de5d815168be16383ced130dc354c950acedc54e7be2f0e40f7041017bb8",
+      "new_digest": "8b2915679dc41a157b98b210ff9fd213c61661a788a5245cd42c9d8c9881b630"
+    },
+    {
+      "id": "15072563",
+      "old_title": "국가데이터처_가구/인구 비율 목록",
+      "new_title": "국가데이터처_가구/인구 비율 목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fbb50fe874e8fca7ba0d43b0c02cad3ca3a21f175f50b7fa378589460155f0fe",
+      "new_digest": "a1ce5430ac81eb1b51d59b61fd25f3c8133479417b48cd51c35e02fc93047b82"
+    },
+    {
+      "id": "15072572",
+      "old_title": "국가데이터처_인구와 가구 목록",
+      "new_title": "국가데이터처_인구와 가구 목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c5c347153b0152eb97c18f9d868976a0aa6e2006d839e76eb0f5643720af18ce",
+      "new_digest": "df6c1d728640a0aa692d1134e3a2fec8d53862caa078be3fd307432a82a12504"
+    },
+    {
+      "id": "15072574",
+      "old_title": "국가데이터처_전국 기술업종 정보",
+      "new_title": "국가데이터처_전국 기술업종 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ef9a35edadf7f4e4f8f603d13cb5ce6417d772ff08437a83b74c1017b2a54a7f",
+      "new_digest": "6345d6194b0659e3cbd40f0494f1f38f695c5b9bdaae1c7a33119aa73cd2db78"
+    },
+    {
+      "id": "15072580",
+      "old_title": "국가데이터처_지역현안소통지도 목록",
+      "new_title": "국가데이터처_지역현안소통지도 목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "821523b0960f958bb2e16587a01bc055639412069717cbbd75c1cfdaf651ec7d",
+      "new_digest": "291fdb57737243fabc52ba41747102136e3220020ee151b83c8957211c53b88a"
+    },
+    {
       "id": "15074254",
       "old_title": "제주특별자치도_버스 노선 기본 정보",
       "new_title": "제주특별자치도_버스 노선 기본 정보",
@@ -23089,6 +23179,16 @@
       "new_digest": "683c21dd3dc11324500071ff85852a5b7391107ff58af115a0740491ac4238a3"
     },
     {
+      "id": "15087213",
+      "old_title": "국가데이터처_총조사 주요지표",
+      "new_title": "국가데이터처_총조사 주요지표",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "32667cf7985f789da7f4552d6e51f199b98423a0aed91425fa61e628eb4f98c5",
+      "new_digest": "7f9d269569a8c12df5da350347d5817581b993c8818f947ea94a3d79d9a1f838"
+    },
+    {
       "id": "15087239",
       "old_title": "식품의약품안전처_농약 등록정보",
       "new_title": "식품의약품안전처_농약 등록정보",
@@ -23317,6 +23417,16 @@
       ],
       "old_digest": "e9f6df032968ddeb35b2ae48d152ae4cbc62c138c7e4cc6bfad91639affcabc8",
       "new_digest": "d7113bf55590e9f489948b16214b707a3612e4feb42f53ec51a96e7ddb525c16"
+    },
+    {
+      "id": "15088190",
+      "old_title": "국가데이터처_SGIS오픈플랫폼_인구통계",
+      "new_title": "국가데이터처_SGIS오픈플랫폼_인구통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "15a0a34198ed1a2ec9a1ba63b3cc920898c5e4c80a77bf3bf7b3ed4ac12bad84",
+      "new_digest": "2eaba2ae1dd7b63160f239ac6dff23745047383194f777b7fe3dbeca6aa63c4f"
     },
     {
       "id": "15088848",

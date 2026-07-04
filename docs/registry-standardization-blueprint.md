@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `560` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `549` data.go.kr APIs
   without operation mappings, `9,285` operation-mapped APIs without runtime
   evidence, and `227` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -533,8 +533,13 @@ Current gaps:
   materializes the remaining `21` APIs and `55` operations, and merges `55`
   verified bounded checks. That brings runtime evidence to `4608`, verified
   checks to `2698`, and registered external adapter operations to `9471`.
-- API operation coverage remains incomplete: `11,500` of `12,060` APIs have
-  operation mappings (`95.4%`), leaving `560` APIs to materialize and `9,285`
+- The 국가데이터처 batch adds SGIS and KOSIS host coverage for
+  `sgis.kostat.go.kr` and `kosis.kr`, materializes `11` APIs and `31`
+  operations, and merges `31` verified bounded checks. That brings runtime
+  evidence to `4639`, verified checks to `2729`, and registered external
+  adapter operations to `9502`.
+- API operation coverage remains incomplete: `11,511` of `12,060` APIs have
+  operation mappings (`95.4%`), leaving `549` APIs to materialize and `9,285`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report
