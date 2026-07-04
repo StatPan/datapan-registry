@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T01:28:18Z",
+  "generated_at": "2026-07-04T01:42:18Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 20426,
-    "runtime_evidence": 3956,
-    "runtime_evidence_percent": 19.4,
-    "callable_operations": 20284,
-    "external_endpoint_operations": 8816,
-    "registered_adapter_operations": 8806,
+    "operations": 20507,
+    "runtime_evidence": 4037,
+    "runtime_evidence_percent": 19.7,
+    "callable_operations": 20365,
+    "external_endpoint_operations": 8897,
+    "registered_adapter_operations": 8887,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 8816
+      "count": 8897
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 8806
+      "count": 8887
     },
     {
       "key": "builtin",
@@ -73,7 +73,7 @@
     },
     {
       "category": "농축수산",
-      "operation_count": 2153
+      "operation_count": 2234
     },
     {
       "category": "교통물류",
@@ -3613,6 +3613,58 @@
           "host": "www.youthcenter.go.kr",
           "operation_count": 1,
           "adapter": "youthcenter",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
+      "organization": "서울특별시농수산식품공사",
+      "api_count": 28,
+      "operation_api_count": 28,
+      "operation_count": 84,
+      "runtime_evidence_count": 84,
+      "runtime_evidence_percent": 100.0,
+      "verified": 84,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 81,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "external_endpoint",
+          "count": 84
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 84
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "농축수산",
+          "operation_count": 84
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "www.garak.co.kr",
+          "operation_count": 83,
+          "adapter": "garak",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "temp.garak.co.kr",
+          "operation_count": 1,
+          "adapter": "garak",
           "adapter_status": "registered",
           "capabilities": [
             "verification"
@@ -13239,49 +13291,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 4
-        }
-      ]
-    },
-    {
-      "organization": "서울특별시농수산식품공사",
-      "api_count": 28,
-      "operation_api_count": 1,
-      "operation_count": 3,
-      "runtime_evidence_count": 3,
-      "runtime_evidence_percent": 100.0,
-      "verified": 3,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "external_endpoint",
-          "count": 3
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 3
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "농축수산",
-          "operation_count": 3
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "www.garak.co.kr",
-          "operation_count": 3,
-          "adapter": "garak",
-          "adapter_status": "registered",
-          "capabilities": [
-            "verification"
-          ]
         }
       ]
     },

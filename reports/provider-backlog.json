@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T01:28:18Z",
+  "generated_at": "2026-07-04T01:42:18Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 289,
+  "filtered_count": 290,
   "summary": {
-    "hosts": 289,
+    "hosts": 290,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 144,
+    "external_endpoint_hosts": 145,
     "external_guide_hosts": 209,
-    "registered_adapter_hosts": 133,
-    "operation_hosts": 146,
+    "registered_adapter_hosts": 134,
+    "operation_hosts": 147,
     "guide_only_hosts": 143,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7755,
+    "approval_required_operations": 7836,
     "malformed_source_url_count": 712
   },
   "providers": [
@@ -559,6 +559,24 @@
         "15003549",
         "15026112",
         "15027228"
+      ]
+    },
+    {
+      "host": "www.garak.co.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 28,
+      "operations": 83,
+      "external_endpoint_operations": 83,
+      "external_guide_specs": 25,
+      "approval_required_operations": 80,
+      "sample_ids": [
+        "15004517",
+        "15075998",
+        "15075999"
       ]
     },
     {
@@ -1682,21 +1700,6 @@
       ]
     },
     {
-      "host": "www.garak.co.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 1,
-      "operations": 3,
-      "external_endpoint_operations": 3,
-      "external_guide_specs": 1,
-      "sample_ids": [
-        "15004517"
-      ]
-    },
-    {
       "host": "dgfca.or.kr",
       "kinds": [
         "external_endpoint"
@@ -2236,6 +2239,20 @@
       "external_endpoint_operations": 1,
       "sample_ids": [
         "15006273"
+      ]
+    },
+    {
+      "host": "temp.garak.co.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15076056"
       ]
     },
     {

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T01:28:18Z",
+  "generated_at": "2026-07-04T01:42:18Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3996,
-    "stable": 8064
+    "changed": 4023,
+    "stable": 8037
   },
   "added": [],
   "removed": [],
@@ -19669,6 +19669,246 @@
       "new_digest": "f1e2d955cd33ca5cf77b2a0696e6759d5d5160d400441d4f04e74274ace97f15"
     },
     {
+      "id": "15075998",
+      "old_title": "서울특별시농수산식품공사_품목별 최근 5개년 가격",
+      "new_title": "서울특별시농수산식품공사_품목별 최근 5개년 가격",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "85905e46b2f1772265bd322ec4ca8539ff7b9896cb72c44d1ab7d940674b9751",
+      "new_digest": "03a32b47e013b6e717ebaebf8349f7dd9af12c73056066b835b09897dad37a84"
+    },
+    {
+      "id": "15075999",
+      "old_title": "서울특별시농수산식품공사_경매품목 산지별 가격",
+      "new_title": "서울특별시농수산식품공사_경매품목 산지별 가격",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "faf658b34ade4e77302499fd5973d95e97467a503fcb4d0acb78a18b3ad199e7",
+      "new_digest": "d586a96e05cfe10247374a8b454d35719579fe789c2544e77f8b03fbb9b591ba"
+    },
+    {
+      "id": "15076005",
+      "old_title": "서울특별시농수산식품공사_경매품목 물량분포",
+      "new_title": "서울특별시농수산식품공사_경매품목 물량분포",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d9f14e3ebdb8eb48e7dfabca5cfbc61a502607ecb54644b57af801100d624759",
+      "new_digest": "4e51d99d5c85fdc05866ed285e6fb549f71b5394fe41b4502881513a0806ae97"
+    },
+    {
+      "id": "15076020",
+      "old_title": "서울특별시농수산식품공사_경매결과",
+      "new_title": "서울특별시농수산식품공사_경매결과",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5ff83579ae17c6cff65086e856a0b0d9aed77423cb53296feb333bb59fcd2029",
+      "new_digest": "c020c3d5ad267abfb9f520ccecb4e10872ee667032b521e0b1679319d10af51d"
+    },
+    {
+      "id": "15076022",
+      "old_title": "서울특별시농수산식품공사_가락시장 반입물량(경매전)",
+      "new_title": "서울특별시농수산식품공사_가락시장 반입물량(경매전)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5bc5b30add345f5cc0303167b9a00dffe2eb5a9f75a3d615572e66042ad51893",
+      "new_digest": "a7f4d54037a30e65273dd6cd5284ecffaa073e9917179d43d716bbbcc57c9a6c"
+    },
+    {
+      "id": "15076023",
+      "old_title": "서울특별시농수산식품공사_가락시장 반입물량(경매후)",
+      "new_title": "서울특별시농수산식품공사_가락시장 반입물량(경매후)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "96850849d3013fe230f40d6ddd9880d75d6038f22de64dfa883047f3a075f4ac",
+      "new_digest": "4300f71e644ec65b6308e581227aa580c7d62454b07a8343d5efff3120ff5a90"
+    },
+    {
+      "id": "15076025",
+      "old_title": "서울특별시농수산식품공사_가락시장 반입물량(정산후)",
+      "new_title": "서울특별시농수산식품공사_가락시장 반입물량(정산후)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7968fc79415c68a1f2434717e73de1d2b295a4b99eba4baa25c94a6406af878d",
+      "new_digest": "4670229adca07a875f04d6ee1a4e962c10e91f16f66fdd7b97e80d614ca58843"
+    },
+    {
+      "id": "15076027",
+      "old_title": "서울특별시농수산식품공사_부류별가격정보(수입품목)",
+      "new_title": "서울특별시농수산식품공사_부류별가격정보(수입품목)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4a557fe2d9fe4cc55347043ed4f0f0c00cde70cc8db433adbf00ce9e2d2f6dfb",
+      "new_digest": "44ade1288f184a71d01a570ec3338bf8261597084ceda493d8241dedeb882908"
+    },
+    {
+      "id": "15076031",
+      "old_title": "서울특별시농수산식품공사_월간등락품목(상승한품목)",
+      "new_title": "서울특별시농수산식품공사_월간등락품목(상승한품목)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4e04720ca44fecfaf4244ac0883fc1eaa4b9afd531e446018cb22e30565e8581",
+      "new_digest": "db5923f74837477f65fe9fcec6875ca2504988c92220849fec77aa74490c6c97"
+    },
+    {
+      "id": "15076036",
+      "old_title": "서울특별시농수산식품공사_월간등락품목(월평균가격)",
+      "new_title": "서울특별시농수산식품공사_월간등락품목(월평균가격)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2ac57fff9cb1001b763f3ed97a1b057b8135e77cb134df3e50e490d75d1c09e1",
+      "new_digest": "5208cd4c5905f830873604c62375664e6b5e57214f2f2717dca47be8b6139ba3"
+    },
+    {
+      "id": "15076038",
+      "old_title": "서울특별시농수산식품공사_월별등락품목(하락한품목)",
+      "new_title": "서울특별시농수산식품공사_월별등락품목(하락한품목)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d8de9f787a0f3cef6e294eff326b20a3ab9968e704cc5d0c55ea99cea803a0e6",
+      "new_digest": "fda42e8bfba4f2ff6fa6f6f8a3818aee845e2569bc93f1de6c1f6332ef29b795"
+    },
+    {
+      "id": "15076039",
+      "old_title": "서울특별시농수산식품공사_일일등락품목(등락품목수)",
+      "new_title": "서울특별시농수산식품공사_일일등락품목(등락품목수)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7cba486aee84447f155ac20b8e87f57d1eacd29c54d4e36bc0dd050de166f882",
+      "new_digest": "a56dc13a38e9867872b0eb1a125ff94f86ece24396f3a0ebcec7724fe3110219"
+    },
+    {
+      "id": "15076040",
+      "old_title": "서울특별시농수산식품공사_일일등락품목(상승한품목)",
+      "new_title": "서울특별시농수산식품공사_일일등락품목(상승한품목)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7d3bff6224653aa1e128e2d493938dea248ffe906705f03405b69dac7501b6bc",
+      "new_digest": "6fba4483903706f2f88e3c52d4eb7d1130c63e38b40914caf66a3e62ee7bdc0d"
+    },
+    {
+      "id": "15076042",
+      "old_title": "서울특별시농수산식품공사_일일등락품목(하락한품목)",
+      "new_title": "서울특별시농수산식품공사_일일등락품목(하락한품목)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3280c5689bf4b77a0ed931160d6132bdc8b06071e4bd1614b02c36dd2681d13f",
+      "new_digest": "534836605147743f1d90982767da74ad274c98a7c2e5b7c5a0165764d0f79fd4"
+    },
+    {
+      "id": "15076044",
+      "old_title": "서울특별시농수산식품공사_주간등락품목(기간평균가격)",
+      "new_title": "서울특별시농수산식품공사_주간등락품목(기간평균가격)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5a087867b619d6114f62542e5d1007306092415ff783c6cf6e206edd7ea1e9b9",
+      "new_digest": "230d5ce2ad47a6d47bed05999919eedbf7be73823bbb95f618d41cf35831440f"
+    },
+    {
+      "id": "15076046",
+      "old_title": "서울특별시농수산식품공사_주간등락품목(상승한품목)",
+      "new_title": "서울특별시농수산식품공사_주간등락품목(상승한품목)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "01fdf76fd9ef63316471d893d536741605fd8b5198fd11c4cc80bc23010c1684",
+      "new_digest": "1bd7757c1b2166d6c7fd77ce432656aeee1b6d84fe98c1db854c8b08efcaba69"
+    },
+    {
+      "id": "15076048",
+      "old_title": "서울특별시농수산식품공사_주간등락품목(주별가격흐름)",
+      "new_title": "서울특별시농수산식품공사_주간등락품목(주별가격흐름)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "011b89f0c913aedc512bb8ba0310b175038483b527952c11483d6e46aa24e7b4",
+      "new_digest": "6673efa9f4867c1a2628e5864a18b768f9aaffc6aec96df21353ad18bbef5390"
+    },
+    {
+      "id": "15076049",
+      "old_title": "서울특별시농수산식품공사_주간등락품목(하락한품목)",
+      "new_title": "서울특별시농수산식품공사_주간등락품목(하락한품목)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9447f4f10214a6a2788b36edcdbf286d0306877ffaa3513a8a031e03cfa69eba",
+      "new_digest": "bcc993b143fde3d67dc5fef4623fa891368a633a0f6541bc2d9563577784343a"
+    },
+    {
+      "id": "15076050",
+      "old_title": "서울특별시농수산식품공사_주요품목가격(수입품목전용)",
+      "new_title": "서울특별시농수산식품공사_주요품목가격(수입품목전용)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e80edf3c1e536ad2269384df27fe4ffafa66a6e623d23e05731aef1220cc672e",
+      "new_digest": "e25ba8df57b26984a8333a880abc962e2c9c302b85f6837d36543682ce7f3041"
+    },
+    {
+      "id": "15076051",
+      "old_title": "서울특별시농수산식품공사_판매결과",
+      "new_title": "서울특별시농수산식품공사_판매결과",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4c81ff0034503ca9fe8ce4fef8a618edd7bcb0e6fbe93deb3aa80428b3721a8f",
+      "new_digest": "3cd512a66c52e086f8117ee2957ad81a6cb83be4fbb3554431304b2ebe01bef1"
+    },
+    {
+      "id": "15076053",
+      "old_title": "서울특별시농수산식품공사_품목별등급별가격(도매시장법인거래)",
+      "new_title": "서울특별시농수산식품공사_품목별등급별가격(도매시장법인거래)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3ec0bedc5477821856414beef397a7604e4089a43c8932973211449d98846aac",
+      "new_digest": "c5b3986cb9cf002ccf8368deaea9e322d4d27e63bb42798f9a127679462819fb"
+    },
+    {
+      "id": "15076054",
+      "old_title": "서울특별시농수산식품공사_품목별등급별가격(시장도매인거래)",
+      "new_title": "서울특별시농수산식품공사_품목별등급별가격(시장도매인거래)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1ca2415f8d24821a8e6dc9fe07e4a191f6023bcfd2c75c416077bcfa2eff3061",
+      "new_digest": "f10abf3d0842af45b7f343b8ff8885be8dfd3cb5befce96544ab022c4900ed90"
+    },
+    {
+      "id": "15076055",
+      "old_title": "서울특별시농수산식품공사_품목별등급별가격(중도매인거래)",
+      "new_title": "서울특별시농수산식품공사_품목별등급별가격(중도매인거래)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ff3f8f9d18d558f73c08f72dd8e1d4f4ed6033f268d795339e251fe853d6f55d",
+      "new_digest": "785c60f0209066a67155e701d184f6de2136501db34b2308e132b293e6aadc61"
+    },
+    {
+      "id": "15076056",
+      "old_title": "서울특별시농수산식품공사_유통인 정보",
+      "new_title": "서울특별시농수산식품공사_유통인 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "04c4c5769556e61ef757e367dad3e3008baa807b6c0774329aaeab8e1b464bc3",
+      "new_digest": "83f6e3b31026e75851b1bee48c9df22403fb071f3f9e4ba9bed7244e3d3c53f6"
+    },
+    {
       "id": "15076179",
       "old_title": "행정안전부_공공개방자원  상세정보",
       "new_title": "행정안전부_공공개방자원  상세정보",
@@ -28169,6 +28409,16 @@
       "new_digest": "92b41105bb0995c9985f16bafd8261d11a1b485ce5081850c8f0e9a508276062"
     },
     {
+      "id": "15120298",
+      "old_title": "서울특별시농수산식품공사_고중저가격",
+      "new_title": "서울특별시농수산식품공사_고중저가격",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b46b2446ff88bc62396a946f8c66632706c6e3cda8f9691ba161b80e7bcd0497",
+      "new_digest": "a643de46ebf060da450578d4b09af4143d6aa458f8302ba18defe2e75102720c"
+    },
+    {
       "id": "15121324",
       "old_title": "농림축산식품부_스마트팜 데이터 마트 작기별 데이터셋 제공 서비스",
       "new_title": "농림축산식품부_스마트팜 데이터 마트 작기별 데이터셋 제공 서비스",
@@ -28357,6 +28607,26 @@
       ],
       "old_digest": "c01899b2847d107ff1173e3c0f101029e1e769654faa4a141ea67d16aa87e809",
       "new_digest": "9e9d541da304b0a635983823dd2e810a1c4cdd6e43309dd32e3cb46ee8725925"
+    },
+    {
+      "id": "15121566",
+      "old_title": "서울특별시농수산식품공사_산지별물량(무,배추,양파,감자)",
+      "new_title": "서울특별시농수산식품공사_산지별물량(무,배추,양파,감자)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b963d28260d3e6c61e3e9ff8dc5d11f14daf30767d357710c601761f36a2a55b",
+      "new_digest": "e896edd46bb422eac086fc087c23eda9a47ca679163b09ad8aa6ea87b0876744"
+    },
+    {
+      "id": "15121567",
+      "old_title": "서울특별시농수산식품공사_농수산물 가격정보 자동응답서비스(ARS) 품목코드 API",
+      "new_title": "서울특별시농수산식품공사_농수산물 가격정보 자동응답서비스(ARS) 품목코드 API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2e9c921d0c9f3a64a7f10880f8b438c8a42f72ac014e7b8bb05a515e89c1c453",
+      "new_digest": "0e2d04ee43cc794a462ebd695a64b6021d856ca207823d6e106c0a9bf2734d61"
     },
     {
       "id": "15121882",
