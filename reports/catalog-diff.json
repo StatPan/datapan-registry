@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T03:02:01Z",
+  "generated_at": "2026-07-04T03:13:05Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4153,
-    "stable": 7907
+    "changed": 4178,
+    "stable": 7882
   },
   "added": [],
   "removed": [],
@@ -21419,6 +21419,26 @@
       "new_digest": "ad44cd7507b0e374cabe7add354ba49c8dfc351ec0798e9dea7387be88846da5"
     },
     {
+      "id": "15077315",
+      "old_title": "한국과학기술정보연구원_국가R\u0026D 과제검색 서비스(대국민용)",
+      "new_title": "한국과학기술정보연구원_국가R\u0026D 과제검색 서비스(대국민용)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "14768d9eb6e27c8031da43401579ea761c312e59fc9c49c56c6c8a859702793a",
+      "new_digest": "edeef81f8e5471e6bba87235b77b1c8cda21a7f28fe62b935349adbfa1df9bc0"
+    },
+    {
+      "id": "15077316",
+      "old_title": "한국과학기술정보연구원_국가R\u0026D 성과검색 서비스(대국민용)",
+      "new_title": "한국과학기술정보연구원_국가R\u0026D 성과검색 서비스(대국민용)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9daa9808d8ee78e044d0a563ec7a097e4a1a2c292b8dcd207f97a66fe9675eaf",
+      "new_digest": "98a81d307fc04a72c3788486bb29999e23accb9bc8422e9b290b5965b3815801"
+    },
+    {
       "id": "15077518",
       "old_title": "행정안전부_공공개방자원  문화숙박시설 목록",
       "new_title": "행정안전부_공공개방자원  문화숙박시설 목록",
@@ -26399,6 +26419,16 @@
       "new_digest": "1825c1b0ba0f006bc5d1012c97fa50f983fcf4f40ff34b387de092a9a617b8d8"
     },
     {
+      "id": "15102622",
+      "old_title": "한국과학기술정보연구원_국가R\u0026D 연구보고서 검색 서비스 (대국민용)",
+      "new_title": "한국과학기술정보연구원_국가R\u0026D 연구보고서 검색 서비스 (대국민용)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0a661414d5dc0bfec183b8f2ad9b5836f89e0d2462ec4b36b71aad1d169d81f4",
+      "new_digest": "a49642bf2e2d07b0188b0c7272106c7f86200c7776e0f8a71a21fa98466cf673"
+    },
+    {
       "id": "15102623",
       "old_title": "서울특별시_V2X  교차로 Map 정보",
       "new_title": "서울특별시_V2X  교차로 Map 정보",
@@ -29289,6 +29319,16 @@
       "new_digest": "c71fff146f6a97585588527655428f99fbf3fe0b7bc9a1a2bf27f076fae71bc5"
     },
     {
+      "id": "15117315",
+      "old_title": "한국과학기술정보연구원_ScienceON_논문검색",
+      "new_title": "한국과학기술정보연구원_ScienceON_논문검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "47f07a9352d19f4998ba539486ff30d9d431d17ddd9638938455827f5481ccfb",
+      "new_digest": "09af925188fdda31842eb847eeefda2f46d0b90097280e7df0b93372ed17cb18"
+    },
+    {
       "id": "15117911",
       "old_title": "경기도_공동주택관련정보",
       "new_title": "경기도_공동주택관련정보",
@@ -29317,6 +29357,136 @@
       ],
       "old_digest": "e43680b67d5f1b61f3a0f65b0c2dd26aba6d464e549a18948ef0e0051bd37482",
       "new_digest": "e9e49ae7cec39c30eb811a7c29f26b00751d1100387c929720a6f030ef936539"
+    },
+    {
+      "id": "15119189",
+      "old_title": "한국과학기술정보연구원_ScienceON_논문상세검색",
+      "new_title": "한국과학기술정보연구원_ScienceON_논문상세검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0d8520fb2468f638467e08f25d9aff9b50c5cc34b44396010f7d6691292ce6ae",
+      "new_digest": "5fb4aac8852ff5035f6ed130cb7248f201ca1cd402ae802278583a88065aeda2"
+    },
+    {
+      "id": "15119192",
+      "old_title": "한국과학기술정보연구원_ScienceON_특허검색",
+      "new_title": "한국과학기술정보연구원_ScienceON_특허검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "03b3e974176a8c9ae913dd0e24d0adc2f36d95fcac2514736ab63eae3b5a7151",
+      "new_digest": "7cf4ca408f03081b049b2b875ea45a9f7d5063288dd738b647293ba6fc4edbde"
+    },
+    {
+      "id": "15119193",
+      "old_title": "한국과학기술정보연구원_ScienceON_특허상세검색",
+      "new_title": "한국과학기술정보연구원_ScienceON_특허상세검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bdf47ac2619ae8fafd1d10a1457c19d9464b616f47ed861d67a523a97aba6a9d",
+      "new_digest": "564b77a6c2f9ab6b7723ffb4995fa54644ba4810780b1d3f675ac3ef9dad3d5b"
+    },
+    {
+      "id": "15119197",
+      "old_title": "한국과학기술정보연구원_ScienceON_보고서검색",
+      "new_title": "한국과학기술정보연구원_ScienceON_보고서검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "96fc1b1476d9cab1e49e946ccb177f4bf90a812f94bc6891e5e8278e5def8a6c",
+      "new_digest": "83ccdd2d42a955f6daa947280cd7042678bcd3d65a26a2cb94c9932917e2483e"
+    },
+    {
+      "id": "15119199",
+      "old_title": "한국과학기술정보연구원_ScienceON_보고서상세검색",
+      "new_title": "한국과학기술정보연구원_ScienceON_보고서상세검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "870ff828731bfb53aa4c56c9332230e1179e0b51268628bdabc569d8c6eb6523",
+      "new_digest": "8057a9296857ae073031f155aba2e76d52d25a4f8b21c8a5bf25e951ad9fe10b"
+    },
+    {
+      "id": "15119200",
+      "old_title": "한국과학기술정보연구원_ScienceON_동향검색",
+      "new_title": "한국과학기술정보연구원_ScienceON_동향검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "300e3b36b5cb7e6b2f688766ed71c614edadf83b85eb7bd9c9bcd0f160f77988",
+      "new_digest": "08bd1e712e332fd27a0b403bed6427d34f86f7f6803ab1443311174c74e1d771"
+    },
+    {
+      "id": "15119201",
+      "old_title": "한국과학기술정보연구원_ScienceON_동향상세검색",
+      "new_title": "한국과학기술정보연구원_ScienceON_동향상세검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5fc618a705ceeb4073cbecd13069ca6508352a5d5ea9bc8ab625c7693974ec7c",
+      "new_digest": "bb59e9f4dbe89054b47fc769874ceb8f510c0c24ecc42ed589be0125e018498d"
+    },
+    {
+      "id": "15119204",
+      "old_title": "한국과학기술정보연구원_ScienceON_과학향기검색",
+      "new_title": "한국과학기술정보연구원_ScienceON_과학향기검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "aaa03481500096efe854e6a08ae26349b2465a2a5e4b4836d9b093b2b604abb6",
+      "new_digest": "9e1fcf2f361816b13eea52d796dc219ad86e8d47c08b787e92e37fa42b5dffc1"
+    },
+    {
+      "id": "15119205",
+      "old_title": "한국과학기술정보연구원_ScienceON_과학향기상세검색",
+      "new_title": "한국과학기술정보연구원_ScienceON_과학향기상세검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9c2a96ab8cba8ebbf716091f570f0ff50c64458d56ae3ec0366c8eea1c62bb86",
+      "new_digest": "cf9beddd05d2c0ccc78bd65c8f01b3944bacacb6114bec235788d367b7247309"
+    },
+    {
+      "id": "15119209",
+      "old_title": "한국과학기술정보연구원_ScienceON_연구자검색",
+      "new_title": "한국과학기술정보연구원_ScienceON_연구자검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "840463047a7d2c389b07e6e0fab8fa8c4b7dcf91a7bed8d18a95ff4b06ded45f",
+      "new_digest": "71918c7cb1f5956ad1be0aeb9394c5ae6d2a59cf88646a34592d68850c498bd5"
+    },
+    {
+      "id": "15119210",
+      "old_title": "한국과학기술정보연구원_ScienceON_연구자상세검색",
+      "new_title": "한국과학기술정보연구원_ScienceON_연구자상세검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5d38360e634ff0968cad96863b48547f62b09c857d164638e2376fcf24a1a0b9",
+      "new_digest": "23e38a6e3d934f603b07dd4b5827c6781961aab270bf61edd2447d1e04d221d1"
+    },
+    {
+      "id": "15119212",
+      "old_title": "한국과학기술정보연구원_ScienceON_연구기관검색",
+      "new_title": "한국과학기술정보연구원_ScienceON_연구기관검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "26b3fddfc5f55a52197b99a9184733ba5407d8544f5973a49a4c2af432f2fd12",
+      "new_digest": "045f6eda02e991c7a952f77ddb82842734d1632eb9a5ea07afc58646981f1613"
+    },
+    {
+      "id": "15119213",
+      "old_title": "한국과학기술정보연구원_ScienceON_연구기관상세검색",
+      "new_title": "한국과학기술정보연구원_ScienceON_연구기관상세검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "afcd8b2f4d90744d89135e6bd7e7d216b9c3672bce7a4b295de47c0398ed3487",
+      "new_digest": "f45eea0549345aca1c2cc62069d915e1c43a392dd6ef29e2194dd790ebeb7af5"
     },
     {
       "id": "15119663",
@@ -29687,6 +29857,46 @@
       ],
       "old_digest": "ac94bd85bd4582641a3cdc9856c9544534ed2df31ba5d616ef6a313d7c943a23",
       "new_digest": "aeae087d63d5660d51264ba89d3e7a54713976ba6b54ad1bb110900cf95412e9"
+    },
+    {
+      "id": "15122458",
+      "old_title": "한국과학기술정보연구원_AIDA 연구데이터 목록 조회 서비스",
+      "new_title": "한국과학기술정보연구원_AIDA 연구데이터 목록 조회 서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "110435e626e111f6cb80d4e72f9a1cadc6349305c200a3e1d67994f797f1c1d2",
+      "new_digest": "99083cee6ea1a0b28faaa9e56cdf197f6a294aebeb4d43131f942f453c4b2270"
+    },
+    {
+      "id": "15122465",
+      "old_title": "한국과학기술정보연구원_AIDA 연구데이터 상세 조회 서비스",
+      "new_title": "한국과학기술정보연구원_AIDA 연구데이터 상세 조회 서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "25fb4616170f52d501867696ab9668620784555b07fb3a425641f7c32e43596f",
+      "new_digest": "7f45298f90847f0f88bf13de1405244c1c4c85866583025796d50fc782d429bd"
+    },
+    {
+      "id": "15122466",
+      "old_title": "한국과학기술정보연구원_AIDA 연구데이터 활용 통계 정보 조회 서비스",
+      "new_title": "한국과학기술정보연구원_AIDA 연구데이터 활용 통계 정보 조회 서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0b278137fc10ae8f6fe37a5bbe6d8eb980fe3b7e428914609723feadc5ece9a4",
+      "new_digest": "0362315060bfa40720d51d4014e16f91f92906d63e70109884f61612e907c3af"
+    },
+    {
+      "id": "15122467",
+      "old_title": "한국과학기술정보연구원_AIDA 연구데이터 파일 다운로드 서비스",
+      "new_title": "한국과학기술정보연구원_AIDA 연구데이터 파일 다운로드 서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e4facd4f431f4289ebe4734fb7b946b13b889a543b5334b53899b2962c685724",
+      "new_digest": "b4f79a89b8a4aec95e98d8f72ed3fe885c7197558e34a07b6037a2942b1d7c87"
     },
     {
       "id": "15122588",
@@ -34737,6 +34947,46 @@
       ],
       "old_digest": "df24ffb42ea6de71bee2b9130b537a54c761592f2090508d0678e77dddbc9b84",
       "new_digest": "3f12661c5bb0644c234e4ec414c4a20645a6ba08e8be9e8684e559b6e2bcc10c"
+    },
+    {
+      "id": "15138962",
+      "old_title": "한국과학기술정보연구원_국가R\u0026D 수행기관 R\u0026D현황조회 서비스(대국민용)",
+      "new_title": "한국과학기술정보연구원_국가R\u0026D 수행기관 R\u0026D현황조회 서비스(대국민용)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e3525f2a3da92c884fc874793e2e7d9e1a7bffd52f4e69c649102115f6baf32a",
+      "new_digest": "ab7187672d13aed0054fb758418d481b62cf2a340aca1c80010043fd82dc64c8"
+    },
+    {
+      "id": "15138963",
+      "old_title": "한국과학기술정보연구원_이슈로보는R\u0026D 서비스(대국민용)",
+      "new_title": "한국과학기술정보연구원_이슈로보는R\u0026D 서비스(대국민용)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "92b6886b785979a8a7e7ee7ae368233e073dc072fd0efdda8c1d398b3bb8f0d7",
+      "new_digest": "8981c7c5ce42081ff93938937c1acfd69abcff052f1bc8cd7d50bec3ea80a9a7"
+    },
+    {
+      "id": "15138985",
+      "old_title": "한국과학기술정보연구원_ScienceON_TREND검색",
+      "new_title": "한국과학기술정보연구원_ScienceON_TREND검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7960e14e9f94bb0f2b80441d8d0c14dd36175e9edd60aeabb2f35830e3e3dc88",
+      "new_digest": "e3b884723c4c1690e7902224a881c4edeaf256419d54d6b29829a88999aae877"
+    },
+    {
+      "id": "15138986",
+      "old_title": "한국과학기술정보연구원_ScienceON_금주의과학기술뉴스검색",
+      "new_title": "한국과학기술정보연구원_ScienceON_금주의과학기술뉴스검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8fd50c2fc3834c36726a29e000737054d6a469f17e035b6d9d37a9782b2c46f0",
+      "new_digest": "2aa9425a43471851dddd10baa7076f7a8157dc206a51d145b9cb555a2b0e6fb0"
     },
     {
       "id": "15139006",

@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T03:02:01Z",
+  "generated_at": "2026-07-04T03:13:05Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 20787,
-    "runtime_evidence": 4304,
-    "runtime_evidence_percent": 20.7,
-    "callable_operations": 20645,
-    "external_endpoint_operations": 9177,
-    "registered_adapter_operations": 9167,
+    "operations": 20814,
+    "runtime_evidence": 4331,
+    "runtime_evidence_percent": 20.8,
+    "callable_operations": 20672,
+    "external_endpoint_operations": 9204,
+    "registered_adapter_operations": 9194,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 9177
+      "count": 9204
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 9167
+      "count": 9194
     },
     {
       "key": "builtin",
@@ -121,7 +121,7 @@
     },
     {
       "category": "과학기술",
-      "operation_count": 727
+      "operation_count": 754
     },
     {
       "category": "통일외교안보",
@@ -7464,6 +7464,67 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 28
+        }
+      ]
+    },
+    {
+      "organization": "한국과학기술정보연구원",
+      "api_count": 25,
+      "operation_api_count": 25,
+      "operation_count": 27,
+      "runtime_evidence_count": 27,
+      "runtime_evidence_percent": 100.0,
+      "verified": 27,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 27,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "external_endpoint",
+          "count": 27
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 27
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "과학기술",
+          "operation_count": 27
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "scienceon.kisti.re.kr",
+          "operation_count": 16,
+          "adapter": "kisti",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.ntis.go.kr",
+          "operation_count": 7,
+          "adapter": "kisti",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "aida.kisti.re.kr",
+          "operation_count": 4,
+          "adapter": "kisti",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },
@@ -15986,24 +16047,6 @@
           "operation_count": 1
         }
       ]
-    },
-    {
-      "organization": "한국과학기술정보연구원",
-      "api_count": 25,
-      "operation_api_count": 0,
-      "operation_count": 0,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [],
-      "by_adapter_status": [],
-      "top_categories": [],
-      "top_hosts": []
     },
     {
       "organization": "한국산업기술기획평가원",

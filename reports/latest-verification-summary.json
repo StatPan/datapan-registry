@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T03:01:59Z",
+  "generated_at": "2026-07-04T03:13:03Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4304,
-    "verified": 2429,
+    "total": 4331,
+    "verified": 2456,
     "failed": 332,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2429,
+        "count": 2456,
         "status": "verified"
       },
       {
@@ -557,6 +557,11 @@
         "key": "khoa",
         "count": 29,
         "provider": "khoa"
+      },
+      {
+        "key": "kisti",
+        "count": 27,
+        "provider": "kisti"
       },
       {
         "key": "anyang",
@@ -1186,6 +1191,11 @@
         "host": "www.nihc.go.kr"
       },
       {
+        "key": "scienceon.kisti.re.kr",
+        "count": 16,
+        "host": "scienceon.kisti.re.kr"
+      },
+      {
         "key": "www.andong.go.kr",
         "count": 15,
         "host": "www.andong.go.kr"
@@ -1296,6 +1306,11 @@
         "host": "www.daegufood.go.kr"
       },
       {
+        "key": "www.ntis.go.kr",
+        "count": 7,
+        "host": "www.ntis.go.kr"
+      },
+      {
         "key": "www.sisul.or.kr",
         "count": 7,
         "host": "www.sisul.or.kr"
@@ -1359,6 +1374,11 @@
         "key": "www.gims.go.kr",
         "count": 5,
         "host": "www.gims.go.kr"
+      },
+      {
+        "key": "aida.kisti.re.kr",
+        "count": 4,
+        "host": "aida.kisti.re.kr"
       },
       {
         "key": "api.forest.go.kr",
@@ -1629,7 +1649,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3580,
+        "count": 3607,
         "kind": "external_endpoint"
       },
       {

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T03:02:07Z",
+  "generated_at": "2026-07-04T03:13:11Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 20787,
-    "callable_operations": 20645,
+    "operations": 20814,
+    "callable_operations": 20672,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 9177,
-    "registered_adapter_operations": 9167,
+    "external_endpoint_operations": 9204,
+    "registered_adapter_operations": 9194,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.7,
-    "approval_required_operations": 7949,
+    "approval_required_operations": 7976,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 143,
+    "registered_adapter_hosts": 146,
     "missing_adapter_hosts": 11,
-    "adapter_count": 120,
+    "adapter_count": 121,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-04T03:01:59Z",
-    "total": 4304,
-    "verified": 2429,
+    "generated_at": "2026-07-04T03:13:03Z",
+    "total": 4331,
+    "verified": 2456,
     "failed": 332,
     "skipped": 1543,
     "unknown": 0,
-    "verified_percent": 56.4,
-    "evidence_operation_percent": 20.7
+    "verified_percent": 56.7,
+    "evidence_operation_percent": 20.8
   },
   "route_evidence": {
     "present": true,
@@ -381,10 +381,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-04T03:02:07Z",
+    "generated_at": "2026-07-04T03:13:11Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 120,
-    "host_count": 148,
+    "adapter_count": 121,
+    "host_count": 151,
     "adapters": [
       {
         "name": "airport",
@@ -994,6 +994,18 @@
         "status": "registered",
         "hosts": [
           "www.kistep.re.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "kisti",
+        "status": "registered",
+        "hosts": [
+          "aida.kisti.re.kr",
+          "scienceon.kisti.re.kr",
+          "www.ntis.go.kr"
         ],
         "capabilities": [
           "verification"
@@ -1641,8 +1653,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 120,
-      "verification_capable_adapters": 120,
+      "adapter_count": 121,
+      "verification_capable_adapters": 121,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

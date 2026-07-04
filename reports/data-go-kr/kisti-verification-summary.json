@@ -1,0 +1,55 @@
+{
+  "generated_at": "2026-07-04T03:12:44Z",
+  "source": "reports/data-go-kr/kisti-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 27,
+    "verified": 27,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 27,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "kisti",
+        "count": 27,
+        "provider": "kisti"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "scienceon.kisti.re.kr",
+        "count": 16,
+        "host": "scienceon.kisti.re.kr"
+      },
+      {
+        "key": "www.ntis.go.kr",
+        "count": 7,
+        "host": "www.ntis.go.kr"
+      },
+      {
+        "key": "aida.kisti.re.kr",
+        "count": 4,
+        "host": "aida.kisti.re.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 27,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}
