@@ -12,14 +12,14 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `20356`
-- callable operations: `20214` (`99.3%`)
+- operations: `20426`
+- callable operations: `20284` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `8746`
-- registered adapter operations: `8736`
+- external endpoint operations: `8816`
+- registered adapter operations: `8806`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
-- approval-required operations: `7699`
+- approval-required operations: `7755`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
@@ -666,6 +666,12 @@ readiness, not to advance verified runtime coverage.
    That brings checked runtime evidence to `3895`, verified checks to `2046`,
    registered external adapter operations to `8736`, and raises API operation
    coverage to `11,153` of `12,060` APIs (`92.5%`).
+   The 제주특별자치도 서귀포시 batch expands Seogwipo host coverage,
+   materializes `28` APIs and `70` operations, and merges `61` verified
+   Seogwipo bounded checks. That brings checked runtime evidence to `3956`,
+   verified checks to `2107`, registered external adapter operations to
+   `8806`, and raises API operation coverage to `11,181` of `12,060` APIs
+   (`92.7%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

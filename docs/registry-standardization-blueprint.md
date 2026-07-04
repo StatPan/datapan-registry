@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `907` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `879` data.go.kr APIs
   without operation mappings, `9,285` operation-mapped APIs without runtime
   evidence, and `178` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -120,7 +120,7 @@ Current strengths:
   the same blocker, warning, and next-action inventory that CI validates.
 - `reports/source-report-inventory.json` is generated from source profiles and
   checked-in `reports/<source>/` directories, measuring `5` source report
-  directories, `76` source-scoped JSON reports, and `12.3%` recommended
+  directories, `80` source-scoped JSON reports, and `12.3%` recommended
   source-scoped report coverage.
 - `scripts/sync-release-schema-artifacts.py` checks that every checked-in
   `schemas/*.schema.json` file is represented in `schemas/index.json` and
@@ -447,8 +447,12 @@ Current gaps:
   and `49` operations, and merges `49` verified MAFRA landing-page checks.
   That brings runtime evidence to `3895`, verified checks to `2046`, and
   registered external adapter operations to `8736`.
-- API operation coverage remains incomplete: `11,153` of `12,060` APIs have
-  operation mappings (`92.5%`), leaving `907` APIs to materialize and `9,285`
+- The 제주특별자치도 서귀포시 batch expands Seogwipo host coverage,
+  materializes `28` APIs and `70` operations, and merges `61` verified
+  Seogwipo bounded checks. That brings runtime evidence to `3956`, verified
+  checks to `2107`, and registered external adapter operations to `8806`.
+- API operation coverage remains incomplete: `11,181` of `12,060` APIs have
+  operation mappings (`92.7%`), leaving `879` APIs to materialize and `9,285`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

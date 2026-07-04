@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-07-04T01:27:32Z",
+  "source": "reports/data-go-kr/seogwipo-www-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 50,
+    "verified": 50,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 50,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "seogwipo",
+        "count": 50,
+        "provider": "seogwipo"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "www.seogwipo.go.kr",
+        "count": 50,
+        "host": "www.seogwipo.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 50,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T01:17:08Z",
+  "generated_at": "2026-07-04T01:28:17Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3895,
-    "verified": 2046,
+    "total": 3956,
+    "verified": 2107,
     "failed": 306,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2046,
+        "count": 2107,
         "status": "verified"
       },
       {
@@ -442,6 +442,11 @@
         "key": "ecvam",
         "count": 65,
         "provider": "ecvam"
+      },
+      {
+        "key": "seogwipo",
+        "count": 61,
+        "provider": "seogwipo"
       },
       {
         "key": "daejeon",
@@ -976,6 +981,11 @@
         "host": "www.nfqs.go.kr"
       },
       {
+        "key": "www.seogwipo.go.kr",
+        "count": 50,
+        "host": "www.seogwipo.go.kr"
+      },
+      {
         "key": "data.ekape.or.kr",
         "count": 49,
         "host": "data.ekape.or.kr"
@@ -1139,6 +1149,11 @@
         "key": "www.jejudatahub.net",
         "count": 12,
         "host": "www.jejudatahub.net"
+      },
+      {
+        "key": "seogwipo.go.kr",
+        "count": 11,
+        "host": "seogwipo.go.kr"
       },
       {
         "key": "ws.bus.go.kr",
@@ -1524,7 +1539,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3171,
+        "count": 3232,
         "kind": "external_endpoint"
       },
       {
