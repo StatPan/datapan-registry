@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `21227`
-- callable operations: `21085` (`99.3%`)
+- operations: `21242`
+- callable operations: `21100` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `9617`
-- registered adapter operations: `9607`
+- external endpoint operations: `9632`
+- registered adapter operations: `9622`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
-- approval-required operations: `8182`
+- approval-required operations: `8183`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `158`
-- registered adapter hosts: `163`
+- registered adapter hosts: `166`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -122,7 +122,7 @@ Each external host should have:
 Registered external adapters currently cover these host families through
 `data/provider-index.json`: airport, andong, calspia, cancer, car, car365, codil, consumer, culture, data-gg, dgfca, dongjak, ecos, ekape, emuseum,
 epost, eshare, ex, fairdata, folk, foodsafetykorea, forest, franchise-ftc, garak, gblib, geoje, gicoms, gimhae, gwanak,
-gwangjin, gwangmyeong, happysd, humetro, i815, icheon, ins24, itfind, its, jeju, jeju-air, jeju-www, jejudatahub, jejuits, jeonnam-redtable, jeonju, juso,
+gwangjin, gwangmyeong, happysd, humetro, i815, icheon, incheon, ins24, itfind, its, jeju, jeju-air, jeju-www, jejudatahub, jejuits, jeonnam-redtable, jeonju, juso,
 keit, kistep, kisti, kofpi, korad, kpx, kric, lh-ebid, lofin365, mafra, milipass, mnd-open-data, myhome, nabic, naqs, ncpms, nfqs, nongsaro, nrf,
 oneclick-law, open-assembly, open-law, openfiscaldata, pqis, psis, q-net, safemap, safetydata, seogu, seoul-bus, seoul-open-data,
 seogwipo, sexoffender, sisul, sisul-www, stcis, tour, uiryeong, ulsan, vworld, wamis, work, work24, worldjob, and yuseong.
@@ -251,10 +251,10 @@ KEIS/YouthCenter, `18` NIHC, `30` Ulsan WWW, `49` NAQS, `70` Seogwipo, and
 농림축산식품부 농림축산검역본부, `35` 서울교통공사, `17` 기후에너지환경부
 한강홍수통제소, `3` 한국농수산식품유통공사, `22` 국가유산청 국립고궁박물관,
 `22` 주택도시보증공사, `21` 예술경영지원센터, `11` 국가데이터처,
-`10` 경찰청, `40` 기획예산처, `29` 국방부, and `16` 한국은행
+`10` 경찰청, `40` 기획예산처, `29` 국방부, `16` 한국은행, and `15` 인천광역시
 link-detail operations.
 The next viable materialization queue after the current upstream blockers is
-`인천광역시`.
+`한국수목원정원관리원`.
 The runtime reactivation queue starts at `행정안전부`: `1252`
 APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
@@ -817,6 +817,13 @@ readiness, not to advance verified runtime coverage.
    checks. That brings checked runtime evidence to `4744`, verified checks to
    `2824`, registered external adapter operations to `9607`, and raises API
    operation coverage to `11,569` of `12,060` APIs (`95.9%`).
+   The 인천광역시 batch adds Incheon host coverage for `ifac.or.kr`,
+   `itour.incheon.go.kr`, and `www.incheon.go.kr`, materializes `6` APIs and
+   `15` operations, and merges `15` bounded checks (`3` verified and `12`
+   failed on `ifac.or.kr` HTTP 400). That brings checked runtime evidence to
+   `4759`, verified checks to `2827`, failed checks to `389`, registered
+   external adapter operations to `9622`, and raises API operation coverage to
+   `11,575` of `12,060` APIs (`96.0%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,
