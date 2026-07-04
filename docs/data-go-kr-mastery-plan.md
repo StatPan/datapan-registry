@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `20191`
-- callable operations: `20049` (`99.3%`)
+- operations: `20259`
+- callable operations: `20117` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `8581`
-- registered adapter operations: `8571`
+- external endpoint operations: `8649`
+- registered adapter operations: `8639`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
-- approval-required operations: `7599`
+- approval-required operations: `7616`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `129`
+- registered adapter hosts: `130`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -234,9 +234,11 @@ portal pages and catalog JSON for that queue return error/not-found responses,
 so it should be tracked as a reactivation blocker while the next viable queue
 is processed. The latest viable queues were `국립생태원`,
 `해양수산부 국립수산물품질관리원`, `서울특별시 동작구`, `관세청`,
-`과학기술정보통신부 우정사업본부`, `한국사회보장정보원`, and `대구광역시`, now completed
+`과학기술정보통신부 우정사업본부`, `한국사회보장정보원`, `대구광역시`,
+and `한국고용정보원`, now completed
 through `39` Ecobank, `45` NFQS, `95` Dongjak/Seoul Open Data, `3` UniPass,
-`1` KoreaPost, `23` Childcare Info, and `28` Daegu link-detail operations. The
+`1` KoreaPost, `23` Childcare Info, `28` Daegu, and `68` KEIS/YouthCenter
+link-detail operations. The
 runtime reactivation queue starts at `행정안전부`: `1252`
 APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
@@ -643,6 +645,12 @@ readiness, not to advance verified runtime coverage.
    runtime evidence to `3709`, verified checks to `1860`, registered external
    adapter operations to `8571`, and raises API operation coverage to `11,083`
    of `12,060` APIs (`91.9%`).
+   The 한국고용정보원 batch registers YouthCenter host coverage, materializes
+   `24` APIs and `68` operations, and merges `89` verified Work24/Work/
+   YouthCenter landing-page checks. That brings checked runtime evidence to
+   `3798`, verified checks to `1949`, registered external adapter operations to
+   `8639`, and raises API operation coverage to `11,107` of `12,060` APIs
+   (`92.1%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

@@ -1,0 +1,65 @@
+{
+  "generated_at": "2026-07-04T00:42:16Z",
+  "source": "reports/data-go-kr/keis-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 89,
+    "verified": 89,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 89,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "work24",
+        "count": 85,
+        "provider": "work24"
+      },
+      {
+        "key": "work",
+        "count": 3,
+        "provider": "work"
+      },
+      {
+        "key": "youthcenter",
+        "count": 1,
+        "provider": "youthcenter"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "www.work24.go.kr",
+        "count": 85,
+        "host": "www.work24.go.kr"
+      },
+      {
+        "key": "openapi.work.go.kr",
+        "count": 3,
+        "host": "openapi.work.go.kr"
+      },
+      {
+        "key": "www.youthcenter.go.kr",
+        "count": 1,
+        "host": "www.youthcenter.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 89,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

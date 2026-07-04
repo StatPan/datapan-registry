@@ -94,8 +94,8 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `977` data.go.kr APIs
-  without operation mappings, `9,291` operation-mapped APIs without runtime
+- `reports/data-go-kr/coverage-backlog.json` tracks `953` data.go.kr APIs
+  without operation mappings, `9,285` operation-mapped APIs without runtime
   evidence, and `178` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
@@ -430,8 +430,13 @@ Current gaps:
   skipped for existing car.daegu.go.kr parameter gaps). That brings runtime
   evidence to `3709`, verified checks to `1860`, and registered external
   adapter operations to `8571`.
-- API operation coverage remains incomplete: `11,083` of `12,060` APIs have
-  operation mappings (`91.9%`), leaving `977` APIs to materialize and `9,291`
+- The 한국고용정보원 batch registers YouthCenter host coverage, materializes
+  `24` APIs and `68` operations, and merges `89` verified Work24/Work/
+  YouthCenter landing-page checks. That brings runtime evidence to `3798`,
+  verified checks to `1949`, and registered external adapter operations to
+  `8639`.
+- API operation coverage remains incomplete: `11,107` of `12,060` APIs have
+  operation mappings (`92.1%`), leaving `953` APIs to materialize and `9,285`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

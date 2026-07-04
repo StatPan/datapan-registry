@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T00:31:04Z",
+  "generated_at": "2026-07-04T00:42:51Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3709,
-    "verified": 1860,
+    "total": 3798,
+    "verified": 1949,
     "failed": 306,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 1860,
+        "count": 1949,
         "status": "verified"
       },
       {
@@ -409,6 +409,11 @@
         "provider": "kipris-plus"
       },
       {
+        "key": "work24",
+        "count": 88,
+        "provider": "work24"
+      },
+      {
         "key": "seogu",
         "count": 85,
         "provider": "seogu"
@@ -704,6 +709,11 @@
         "provider": "jeju"
       },
       {
+        "key": "work",
+        "count": 4,
+        "provider": "work"
+      },
+      {
         "key": "dgfca",
         "count": 3,
         "provider": "dgfca"
@@ -722,11 +732,6 @@
         "key": "vworld",
         "count": 3,
         "provider": "vworld"
-      },
-      {
-        "key": "work24",
-        "count": 3,
-        "provider": "work24"
       },
       {
         "key": "gimhae",
@@ -869,9 +874,9 @@
         "provider": "wamis"
       },
       {
-        "key": "work",
+        "key": "youthcenter",
         "count": 1,
-        "provider": "work"
+        "provider": "youthcenter"
       }
     ],
     "by_endpoint_host": [
@@ -919,6 +924,11 @@
         "key": "data.seoul.go.kr",
         "count": 95,
         "host": "data.seoul.go.kr"
+      },
+      {
+        "key": "www.work24.go.kr",
+        "count": 88,
+        "host": "www.work24.go.kr"
       },
       {
         "key": "seogu.go.kr",
@@ -1266,6 +1276,11 @@
         "host": "data.jeju.go.kr"
       },
       {
+        "key": "openapi.work.go.kr",
+        "count": 4,
+        "host": "openapi.work.go.kr"
+      },
+      {
         "key": "www.happysd.or.kr",
         "count": 4,
         "host": "www.happysd.or.kr"
@@ -1299,11 +1314,6 @@
         "key": "www.vworld.kr",
         "count": 3,
         "host": "www.vworld.kr"
-      },
-      {
-        "key": "www.work24.go.kr",
-        "count": 3,
-        "host": "www.work24.go.kr"
       },
       {
         "key": "gis.daejeon.go.kr",
@@ -1421,11 +1431,6 @@
         "host": "openapi-lib.sen.go.kr"
       },
       {
-        "key": "openapi.work.go.kr",
-        "count": 1,
-        "host": "openapi.work.go.kr"
-      },
-      {
         "key": "search.i815.or.kr",
         "count": 1,
         "host": "search.i815.or.kr"
@@ -1489,12 +1494,17 @@
         "key": "www.wamis.go.kr:8080",
         "count": 1,
         "host": "www.wamis.go.kr:8080"
+      },
+      {
+        "key": "www.youthcenter.go.kr",
+        "count": 1,
+        "host": "www.youthcenter.go.kr"
       }
     ],
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 2985,
+        "count": 3074,
         "kind": "external_endpoint"
       },
       {
