@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T02:17:22Z",
+  "generated_at": "2026-07-04T02:30:31Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 20625,
-    "callable_operations": 20483,
+    "operations": 20703,
+    "callable_operations": 20561,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 9015,
-    "registered_adapter_operations": 9005,
+    "external_endpoint_operations": 9093,
+    "registered_adapter_operations": 9083,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.7,
     "approval_required_operations": 7902,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 139,
+    "registered_adapter_hosts": 140,
     "missing_adapter_hosts": 11,
-    "adapter_count": 117,
+    "adapter_count": 118,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-04T02:17:14Z",
-    "total": 4142,
-    "verified": 2267,
+    "generated_at": "2026-07-04T02:30:23Z",
+    "total": 4220,
+    "verified": 2345,
     "failed": 332,
     "skipped": 1543,
     "unknown": 0,
-    "verified_percent": 54.7,
-    "evidence_operation_percent": 20.1
+    "verified_percent": 55.6,
+    "evidence_operation_percent": 20.4
   },
   "route_evidence": {
     "present": true,
@@ -381,10 +381,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-04T02:17:22Z",
+    "generated_at": "2026-07-04T02:30:31Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 117,
-    "host_count": 144,
+    "adapter_count": 118,
+    "host_count": 145,
     "adapters": [
       {
         "name": "airport",
@@ -1062,6 +1062,16 @@
         ]
       },
       {
+        "name": "kric",
+        "status": "registered",
+        "hosts": [
+          "data.kric.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "lh-ebid",
         "status": "registered",
         "hosts": [
@@ -1610,8 +1620,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 117,
-      "verification_capable_adapters": 117,
+      "adapter_count": 118,
+      "verification_capable_adapters": 118,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

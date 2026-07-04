@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-07-04T02:28:16Z",
+  "source": "reports/data-go-kr/kric-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 78,
+    "verified": 78,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 78,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "kric",
+        "count": 78,
+        "provider": "kric"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "data.kric.go.kr",
+        "count": 78,
+        "host": "data.kric.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 78,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}
