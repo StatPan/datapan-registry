@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T00:05:46Z",
+  "generated_at": "2026-07-04T00:18:47Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 108,
-  "host_count": 128,
+  "adapter_count": 109,
+  "host_count": 129,
   "adapters": [
     {
       "name": "airport",
@@ -60,6 +60,16 @@
       "status": "registered",
       "hosts": [
         "www.car365.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "childcare-info",
+      "status": "registered",
+      "hosts": [
+        "info.childcare.go.kr"
       ],
       "capabilities": [
         "verification"
@@ -1131,8 +1141,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 108,
-    "verification_capable_adapters": 108,
+    "adapter_count": 109,
+    "verification_capable_adapters": 109,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
