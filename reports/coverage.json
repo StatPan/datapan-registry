@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T01:55:24Z",
+  "generated_at": "2026-07-04T02:07:24Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 20583,
-    "callable_operations": 20441,
+    "operations": 20624,
+    "callable_operations": 20482,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 8973,
-    "registered_adapter_operations": 8963,
+    "external_endpoint_operations": 9014,
+    "registered_adapter_operations": 9004,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.7,
-    "approval_required_operations": 7860,
+    "approval_required_operations": 7901,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 136,
+    "registered_adapter_hosts": 138,
     "missing_adapter_hosts": 11,
-    "adapter_count": 114,
+    "adapter_count": 116,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-04T01:55:15Z",
-    "total": 4113,
-    "verified": 2264,
-    "failed": 306,
+    "generated_at": "2026-07-04T02:07:16Z",
+    "total": 4141,
+    "verified": 2266,
+    "failed": 332,
     "skipped": 1543,
     "unknown": 0,
-    "verified_percent": 55,
-    "evidence_operation_percent": 20
+    "verified_percent": 54.7,
+    "evidence_operation_percent": 20.1
   },
   "route_evidence": {
     "present": true,
@@ -210,12 +210,12 @@
           "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 889,
-        "operations": 2196,
-        "external_endpoint_operations": 2196,
+        "specs": 899,
+        "operations": 2206,
+        "external_endpoint_operations": 2206,
         "external_guide_specs": 21,
         "wms_operations": 5,
-        "approval_required_operations": 59,
+        "approval_required_operations": 69,
         "sample_ids": [
           "15005231",
           "15011020",
@@ -228,10 +228,10 @@
           "external_endpoint"
         ],
         "adapter_status": "adapter",
-        "specs": 250,
-        "operations": 607,
-        "external_endpoint_operations": 607,
-        "approval_required_operations": 24,
+        "specs": 251,
+        "operations": 608,
+        "external_endpoint_operations": 608,
+        "approval_required_operations": 25,
         "sample_ids": [
           "15011425",
           "15032576",
@@ -333,10 +333,10 @@
           "external_endpoint"
         ],
         "adapter_status": "adapter",
-        "specs": 125,
-        "operations": 289,
-        "external_endpoint_operations": 289,
-        "approval_required_operations": 241,
+        "specs": 126,
+        "operations": 290,
+        "external_endpoint_operations": 290,
+        "approval_required_operations": 242,
         "sample_ids": [
           "15056532",
           "15056661",
@@ -381,10 +381,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-04T01:55:24Z",
+    "generated_at": "2026-07-04T02:07:24Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 114,
-    "host_count": 141,
+    "adapter_count": 116,
+    "host_count": 143,
     "adapters": [
       {
         "name": "airport",
@@ -404,6 +404,16 @@
         ],
         "capabilities": [
           "call",
+          "verification"
+        ]
+      },
+      {
+        "name": "anyang",
+        "status": "registered",
+        "hosts": [
+          "www.anyang.go.kr"
+        ],
+        "capabilities": [
           "verification"
         ]
       },
@@ -1104,6 +1114,16 @@
         ]
       },
       {
+        "name": "mpva-egonghun",
+        "status": "registered",
+        "hosts": [
+          "e-gonghun.mpva.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "much",
         "status": "registered",
         "hosts": [
@@ -1580,8 +1600,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 114,
-      "verification_capable_adapters": 114,
+      "adapter_count": 116,
+      "verification_capable_adapters": 116,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

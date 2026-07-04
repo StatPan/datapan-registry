@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T01:55:17Z",
+  "generated_at": "2026-07-04T02:07:18Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 20583,
-    "runtime_evidence": 4113,
-    "runtime_evidence_percent": 20.0,
-    "callable_operations": 20441,
-    "external_endpoint_operations": 8973,
-    "registered_adapter_operations": 8963,
+    "operations": 20624,
+    "runtime_evidence": 4141,
+    "runtime_evidence_percent": 20.1,
+    "callable_operations": 20482,
+    "external_endpoint_operations": 9014,
+    "registered_adapter_operations": 9004,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 8973
+      "count": 9014
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 8963
+      "count": 9004
     },
     {
       "key": "builtin",
@@ -69,47 +69,47 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 2639
+      "operation_count": 2647
     },
     {
       "category": "농축수산",
-      "operation_count": 2234
+      "operation_count": 2235
     },
     {
       "category": "문화관광",
-      "operation_count": 2181
+      "operation_count": 2183
     },
     {
       "category": "교통물류",
-      "operation_count": 2144
+      "operation_count": 2151
     },
     {
       "category": "사회복지",
-      "operation_count": 1473
+      "operation_count": 1477
     },
     {
       "category": "산업고용",
-      "operation_count": 1388
+      "operation_count": 1389
     },
     {
       "category": "환경기상",
-      "operation_count": 1282
+      "operation_count": 1287
     },
     {
       "category": "재정금융",
-      "operation_count": 1274
+      "operation_count": 1275
     },
     {
       "category": "식품건강",
-      "operation_count": 1232
+      "operation_count": 1234
     },
     {
       "category": "국토관리",
-      "operation_count": 1050
+      "operation_count": 1054
     },
     {
       "category": "보건의료",
-      "operation_count": 1011
+      "operation_count": 1014
     },
     {
       "category": "재난안전",
@@ -125,7 +125,7 @@
     },
     {
       "category": "통일외교안보",
-      "operation_count": 210
+      "operation_count": 213
     },
     {
       "category": "법률",
@@ -139,7 +139,7 @@
     },
     {
       "host": "data.gg.go.kr",
-      "operation_count": 2196,
+      "operation_count": 2206,
       "adapter": "data-gg",
       "adapter_status": "registered",
       "capabilities": [
@@ -148,7 +148,7 @@
     },
     {
       "host": "data.gm.go.kr",
-      "operation_count": 607,
+      "operation_count": 608,
       "adapter": "gwangmyeong",
       "adapter_status": "registered",
       "capabilities": [
@@ -203,7 +203,7 @@
     },
     {
       "host": "www.foodsafetykorea.go.kr",
-      "operation_count": 289,
+      "operation_count": 290,
       "adapter": "foodsafetykorea",
       "adapter_status": "registered",
       "capabilities": [
@@ -257,7 +257,7 @@
     },
     {
       "host": "www.jeju.go.kr",
-      "operation_count": 170,
+      "operation_count": 171,
       "adapter": "jeju-www",
       "adapter_status": "registered",
       "capabilities": [
@@ -6076,6 +6076,109 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 42
+        }
+      ]
+    },
+    {
+      "organization": "경기도 안양시",
+      "api_count": 27,
+      "operation_api_count": 27,
+      "operation_count": 42,
+      "runtime_evidence_count": 28,
+      "runtime_evidence_percent": 66.7,
+      "verified": 2,
+      "failed": 26,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 42,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 1
+        },
+        {
+          "key": "external_endpoint",
+          "count": 41
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 41
+        },
+        {
+          "key": "builtin",
+          "count": 1
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "공공행정",
+          "operation_count": 8
+        },
+        {
+          "category": "교통물류",
+          "operation_count": 7
+        },
+        {
+          "category": "국토관리",
+          "operation_count": 5
+        },
+        {
+          "category": "환경기상",
+          "operation_count": 5
+        },
+        {
+          "category": "사회복지",
+          "operation_count": 4
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "www.anyang.go.kr",
+          "operation_count": 26,
+          "adapter": "anyang",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "data.gg.go.kr",
+          "operation_count": 10,
+          "adapter": "data-gg",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "e-gonghun.mpva.go.kr",
+          "operation_count": 2,
+          "adapter": "mpva-egonghun",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "data.gm.go.kr",
+          "operation_count": 1,
+          "adapter": "gwangmyeong",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.foodsafetykorea.go.kr",
+          "operation_count": 1,
+          "adapter": "foodsafetykorea",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },
@@ -14884,44 +14987,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 2
-        }
-      ]
-    },
-    {
-      "organization": "경기도 안양시",
-      "api_count": 27,
-      "operation_api_count": 1,
-      "operation_count": 1,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 1,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 1
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 1
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "국토관리",
-          "operation_count": 1
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 1
         }
       ]
     },

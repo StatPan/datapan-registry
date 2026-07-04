@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-04T01:55:17Z`
+- Generated at: `2026-07-04T02:07:18Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `20583`
-- Runtime evidence: `4113` (`20.0%`)
-- External endpoint operations: `8973`
-- Registered adapter operations: `8963`
+- Operations: `20624`
+- Runtime evidence: `4141` (`20.1%`)
+- External endpoint operations: `9014`
+- Registered adapter operations: `9004`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -85,26 +85,26 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 
 ## Largest Categories
 
-- 공공행정: `2639` operations
-- 농축수산: `2234` operations
-- 문화관광: `2181` operations
-- 교통물류: `2144` operations
-- 사회복지: `1473` operations
-- 산업고용: `1388` operations
-- 환경기상: `1282` operations
-- 재정금융: `1274` operations
-- 식품건강: `1232` operations
-- 국토관리: `1050` operations
+- 공공행정: `2647` operations
+- 농축수산: `2235` operations
+- 문화관광: `2183` operations
+- 교통물류: `2151` operations
+- 사회복지: `1477` operations
+- 산업고용: `1389` operations
+- 환경기상: `1287` operations
+- 재정금융: `1275` operations
+- 식품건강: `1234` operations
+- 국토관리: `1054` operations
 
 ## Largest Hosts
 
 - apis.data.go.kr: `11423` operations
-- data.gg.go.kr: `2196` operations
-- data.gm.go.kr: `607` operations
+- data.gg.go.kr: `2206` operations
+- data.gm.go.kr: `608` operations
 - www.vworld.kr: `460` operations
 - www.safetydata.go.kr: `370` operations
 - www.lofin365.go.kr: `343` operations
 - www.nongsaro.go.kr: `314` operations
 - open.law.go.kr: `304` operations
-- www.foodsafetykorea.go.kr: `289` operations
+- www.foodsafetykorea.go.kr: `290` operations
 - data.mafra.go.kr: `284` operations

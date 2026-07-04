@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T01:55:17Z",
+  "generated_at": "2026-07-04T02:07:18Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4050,
-    "stable": 8010
+    "changed": 4076,
+    "stable": 7984
   },
   "added": [],
   "removed": [],
@@ -29449,6 +29449,26 @@
       "new_digest": "49006fbba980ca59e19ee9f4b63146911a7476a0eef8cea822bc97a329950eba"
     },
     {
+      "id": "15125342",
+      "old_title": "경기도 안양시_안양사랑상품권(종이) 가맹점 현황",
+      "new_title": "경기도 안양시_안양사랑상품권(종이) 가맹점 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "131c6dd608f8e444aba5bb003bd4eee896c6aae7ca4c1ab9f50ee3938c4d5058",
+      "new_digest": "896d27d7641395963d248621c578d127d7bc5f0c15ec3707a6bf75d42323c3b0"
+    },
+    {
+      "id": "15125384",
+      "old_title": "경기도 안양시_흡연구역_현황",
+      "new_title": "경기도 안양시_흡연구역_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b10d0ae2ee18eac2384a84a56ef50cd68a9287dd1df60a45267ea678d1948604",
+      "new_digest": "68cab698530ec8a8acfb3b9076570e923b919e22d7633a9a48cd3f13fe96720d"
+    },
+    {
       "id": "15125569",
       "old_title": "공정거래위원회_가맹정보_정보공개서_목록_조회",
       "new_title": "공정거래위원회_가맹정보_정보공개서_목록_조회",
@@ -32389,6 +32409,26 @@
       "new_digest": "b034374b0f99f3742bafd15ec80b1163222d07b747533e8727b477e3ed8b8b63"
     },
     {
+      "id": "15126230",
+      "old_title": "경기도 안양시_경기도_안양시_주정차위반단속위치현황",
+      "new_title": "경기도 안양시_경기도_안양시_주정차위반단속위치현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "db1edd2b547468e69322bdbbf61613a2195d51582bfef7e6c6097dcc485e9be3",
+      "new_digest": "97cf727492e265f11babba2468cc4737cbdfd1c144e99f0eb63bb477eea28f60"
+    },
+    {
+      "id": "15126240",
+      "old_title": "경기도 안양시_경기도_안양시_건축착공신고현황건축사 사무소별",
+      "new_title": "경기도 안양시_경기도_안양시_건축착공신고현황건축사 사무소별",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e8b3d08e0f5712802682723359299ec4b7db8ffeb6af098971708f3e2917ae6a",
+      "new_digest": "70d015ee37efef0ca65296c3bd8d8e10f0cac7073b7d21314de12e5d6799fc9e"
+    },
+    {
       "id": "15126268",
       "old_title": "관세청_화물통관진행정보",
       "new_title": "관세청_화물통관진행정보",
@@ -32417,6 +32457,216 @@
       ],
       "old_digest": "af1a09a2fa4ceed350a9eb1806d5327fdc9613871a52286563a99d6853ca3c7d",
       "new_digest": "27cff5012c7452d2e9bd4c6a9c15784af1d77b3be99d3e98ab30782ac3e36fa5"
+    },
+    {
+      "id": "15126498",
+      "old_title": "경기도 안양시_소독의무시설_현황",
+      "new_title": "경기도 안양시_소독의무시설_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2a6111dc7a437efebaf215d128a9fe43d7f44136ddc29f079615f1effd4abffe",
+      "new_digest": "705cda8da8b90beb5a6321c25b4eb05f2f011c4b22c22c64afa10f278029a187"
+    },
+    {
+      "id": "15126499",
+      "old_title": "경기도 안양시_사업장 폐기물 배출 신고_현황",
+      "new_title": "경기도 안양시_사업장 폐기물 배출 신고_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "166e0e7e4e91c1e952234cba97de2417f51897677af4a93b3b37cc624632576c",
+      "new_digest": "83106e30d3125dfcc1daf0af793cbb7601290e33c4b858d1cdca6bd07f84b7e3"
+    },
+    {
+      "id": "15126500",
+      "old_title": "경기도 안양시_비료생산업등록_현황",
+      "new_title": "경기도 안양시_비료생산업등록_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "599839c46a3dece15ad18aac97bbe11bbc51e0fa08c4fc35d5f5c4d461c85e66",
+      "new_digest": "c618aa14916900018895fffa91606248ab51da0750ea44ae1e6f42f02a3ccfe3"
+    },
+    {
+      "id": "15126501",
+      "old_title": "경기도 안양시_버스차고지_현황",
+      "new_title": "경기도 안양시_버스차고지_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7cf160fe98032ed7a5e84d1c0cd26a2a9c3e70f9299461eadd2befcc81c0ded6",
+      "new_digest": "41be2c2e4879973f8fc1fc195d3b9fb63253775674c1c50e3814858f128b42bc"
+    },
+    {
+      "id": "15126503",
+      "old_title": "경기도 안양시_지식산업센터_현황",
+      "new_title": "경기도 안양시_지식산업센터_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "86d828efbce6bb5bc99ac92de8334413695a29a3f06e8850ee09085ac16a7492",
+      "new_digest": "69952b726070af2b93d0f82c51a31b8f147fe4486f1f4abce67d17cbd8b03f83"
+    },
+    {
+      "id": "15126504",
+      "old_title": "경기도 안양시_현수막지정게시대_현황",
+      "new_title": "경기도 안양시_현수막지정게시대_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "28bd27a7d4c94981c3a11f46ddd1f480ddf729f1be88116b02878b70157a7818",
+      "new_digest": "e0e7f28d6c66dced79acad269f03b2f8aa5356eba5cbb073f33d3fdc4f6f741f"
+    },
+    {
+      "id": "15126505",
+      "old_title": "경기도 안양시_공동주택시공_현황",
+      "new_title": "경기도 안양시_공동주택시공_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a0369efac1f40131c1924fac3b99edfedf0d7a59d64fe683359070e905a309aa",
+      "new_digest": "eeb0cf921b11013ee45415da33efe1c24a177063ff6848444069ca0322319cf9"
+    },
+    {
+      "id": "15126506",
+      "old_title": "경기도 안양시_그늘막 설치_현황",
+      "new_title": "경기도 안양시_그늘막 설치_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d9f27ab343deab14293e0b99c0ea868dc9a509894dc4ac07d291dee712403383",
+      "new_digest": "c21eaa261d16520a8cf87ed056d9143912201f1694088128be0c695ad55fca5b"
+    },
+    {
+      "id": "15126507",
+      "old_title": "경기도 안양시_버스안내단말기(BIT)_현황",
+      "new_title": "경기도 안양시_버스안내단말기(BIT)_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b2e05ede46226caf73d4c60694f8c5ab201020c39b363fa754db9e141a6f39a6",
+      "new_digest": "a51f2cc19aa31b0960a08c3c8cba8e208e731a5e35bd25f338baaa4828de92dd"
+    },
+    {
+      "id": "15126508",
+      "old_title": "경기도 안양시_보훈단체_현황",
+      "new_title": "경기도 안양시_보훈단체_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4d9a88422af6296a7d833a824c952fd7288a0fb172478d3459f2321a2a8821f6",
+      "new_digest": "35fd19c461d6564686ec06f7f3d546c222c933d54b65615df952f069030e3626"
+    },
+    {
+      "id": "15126509",
+      "old_title": "경기도 안양시_약수터 수질검사_현황",
+      "new_title": "경기도 안양시_약수터 수질검사_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "32618082c93b3bb94014d110d8c46c637bc1a8df3da480a5fc4815b1ecf0a44b",
+      "new_digest": "d31702ea244e83e64c26cf8a5b2a8e45ea7b979e1a8b9c374d02a86df4929947"
+    },
+    {
+      "id": "15126510",
+      "old_title": "경기도 안양시_실내공기질관리법 적용대상 이용시설_현황",
+      "new_title": "경기도 안양시_실내공기질관리법 적용대상 이용시설_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "08ce6fd80f08c606080e4d7e5dbb3fa7b28c6291577c05e395736e2df0ed2721",
+      "new_digest": "30653b89a3451e6e35708cf3467706aeb7dc29dbc84ece779f75bf32a9fa6981"
+    },
+    {
+      "id": "15126511",
+      "old_title": "경기도 안양시_관공서_현황",
+      "new_title": "경기도 안양시_관공서_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7911aba845799ef43424867c3be324a0112a83cf86f384f99b0e9ce41385c3f0",
+      "new_digest": "e3a1d8a097a22a8fc3cf2c98f6a3a13601a2ea38c7e5eaa64cfb69d9b03dfe76"
+    },
+    {
+      "id": "15126512",
+      "old_title": "경기도 안양시_장례식장_현황",
+      "new_title": "경기도 안양시_장례식장_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9ac0bf52e51747b5ef5dae4a74d38fb0731eefff4ea6faf457083eb21b277a05",
+      "new_digest": "4c0eb1d7132d7b0fff4179e829fcee1a8e05d228d70848c451d5abd3527e8d28"
+    },
+    {
+      "id": "15126513",
+      "old_title": "경기도 안양시_반려동물 등록_현황",
+      "new_title": "경기도 안양시_반려동물 등록_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c1a1c8ddc37d049ad50b547efdb0535dcf8b757558a442bb5bd1f6bfde263587",
+      "new_digest": "5d074de0738654f737b0bdba42fc00520de99a12683a38bf58581d9f9d3f1455"
+    },
+    {
+      "id": "15126516",
+      "old_title": "경기도 안양시_화물자동차운송주선 허가업체_현황",
+      "new_title": "경기도 안양시_화물자동차운송주선 허가업체_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ec1a4ab053c5e596c688c0604e7f2b0a88208e362a4826e8bc9c24993b434ef3",
+      "new_digest": "5e33904493323804c7afc64cb6ad83031b5391bfc2be9e07c7c8e81d40bab072"
+    },
+    {
+      "id": "15126517",
+      "old_title": "경기도 안양시_관용차량 중 전기자동차_현황",
+      "new_title": "경기도 안양시_관용차량 중 전기자동차_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4059d15dd4f91c0445fada7d7f548c591c098b026522b9987de985a76116c752",
+      "new_digest": "76ad7b6bf02fa7dfc9ab79902014c542d7ffa3aa178de01d59e2100ce634f0aa"
+    },
+    {
+      "id": "15126518",
+      "old_title": "경기도 안양시_장애인 복지시설_현황",
+      "new_title": "경기도 안양시_장애인 복지시설_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "565fc56d79318ce1cbb319c761c5cad297419b3be4c1e072dfc5be9569451fe9",
+      "new_digest": "a3a94460fab08c3b19c33653b43e25c6eb4afca24657a61f99ef3a2a636798de"
+    },
+    {
+      "id": "15126519",
+      "old_title": "경기도 안양시_체육시설업_현황",
+      "new_title": "경기도 안양시_체육시설업_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d770140276bf7777d2d3b258797e40012b49753dd571200f6252d070e86dada8",
+      "new_digest": "b1f1125eb103ddd0d5a99c60e78c8e722d0579c7408f37b6b212b8cf5c41bd18"
+    },
+    {
+      "id": "15126520",
+      "old_title": "경기도 안양시_지역아동센터_현황",
+      "new_title": "경기도 안양시_지역아동센터_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "939aaa9e1c853cd1c79c9d42f0fb93d6a069ece42ffd88308d1c2f2529aaa1fa",
+      "new_digest": "934f74ac04fd4dc2a218940d5b8ff1b30a9b3f65c0e2fdb61cfa3ac6d4e2a818"
+    },
+    {
+      "id": "15126522",
+      "old_title": "경기도 안양시_즉석판매제조가공업_현황",
+      "new_title": "경기도 안양시_즉석판매제조가공업_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "95fc70dfc1a926e8dd3f9fc3f6dec96ee71e725af8b8c6fcff8769c47743b61a",
+      "new_digest": "fb9b67aad73bc411b236388716a27c31bb2c8b4fa84b9e29d8b0321db8c36ff9"
     },
     {
       "id": "15126640",
@@ -32557,6 +32807,16 @@
       ],
       "old_digest": "af542730eb89b466cc8ea02a5679fc8123d54af921fbb2fd33abd9fe199df438",
       "new_digest": "f394c32061754e44f4291115b2dd43e794a5b7ce982f396ca9659c385d92ebdc"
+    },
+    {
+      "id": "15128193",
+      "old_title": "경기도 안양시_동별 전기자동차_현황",
+      "new_title": "경기도 안양시_동별 전기자동차_현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "37342fa95d0f50c1c9fdd47b91966741773b0e3d537d42cc957c54de63ca1ed4",
+      "new_digest": "85c0fb3ff281a22578ff147d50c442c10d4843b83f5d2894b5907528cd317983"
     },
     {
       "id": "15128299",

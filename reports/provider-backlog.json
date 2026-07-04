@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T01:55:17Z",
+  "generated_at": "2026-07-04T02:07:18Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 292,
+  "filtered_count": 294,
   "summary": {
-    "hosts": 292,
+    "hosts": 294,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 147,
+    "external_endpoint_hosts": 149,
     "external_guide_hosts": 211,
-    "registered_adapter_hosts": 136,
-    "operation_hosts": 149,
+    "registered_adapter_hosts": 138,
+    "operation_hosts": 151,
     "guide_only_hosts": 143,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7860,
+    "approval_required_operations": 7901,
     "malformed_source_url_count": 712
   },
   "providers": [
@@ -178,12 +178,12 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 889,
-      "operations": 2196,
-      "external_endpoint_operations": 2196,
+      "specs": 899,
+      "operations": 2206,
+      "external_endpoint_operations": 2206,
       "external_guide_specs": 21,
       "wms_operations": 5,
-      "approval_required_operations": 59,
+      "approval_required_operations": 69,
       "sample_ids": [
         "15005231",
         "15011020",
@@ -196,10 +196,10 @@
         "external_endpoint"
       ],
       "adapter_status": "adapter",
-      "specs": 250,
-      "operations": 607,
-      "external_endpoint_operations": 607,
-      "approval_required_operations": 24,
+      "specs": 251,
+      "operations": 608,
+      "external_endpoint_operations": 608,
+      "approval_required_operations": 25,
       "sample_ids": [
         "15011425",
         "15032576",
@@ -301,10 +301,10 @@
         "external_endpoint"
       ],
       "adapter_status": "adapter",
-      "specs": 125,
-      "operations": 289,
-      "external_endpoint_operations": 289,
-      "approval_required_operations": 241,
+      "specs": 126,
+      "operations": 290,
+      "external_endpoint_operations": 290,
+      "approval_required_operations": 242,
       "sample_ids": [
         "15056532",
         "15056661",
@@ -407,11 +407,11 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 86,
-      "operations": 170,
-      "external_endpoint_operations": 170,
+      "specs": 87,
+      "operations": 171,
+      "external_endpoint_operations": 171,
       "external_guide_specs": 34,
-      "approval_required_operations": 39,
+      "approval_required_operations": 40,
       "sample_ids": [
         "15045335",
         "15045467",
@@ -981,6 +981,22 @@
         "15038287",
         "15038292",
         "15038372"
+      ]
+    },
+    {
+      "host": "www.anyang.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 26,
+      "operations": 26,
+      "external_endpoint_operations": 26,
+      "approval_required_operations": 26,
+      "sample_ids": [
+        "15125342",
+        "15125384",
+        "15126230"
       ]
     },
     {
@@ -1896,6 +1912,20 @@
       "sample_ids": [
         "3038249",
         "3045136"
+      ]
+    },
+    {
+      "host": "e-gonghun.mpva.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 2,
+      "external_endpoint_operations": 2,
+      "approval_required_operations": 2,
+      "sample_ids": [
+        "15126508"
       ]
     },
     {
