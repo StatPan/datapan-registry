@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T03:44:10Z",
+  "generated_at": "2026-07-04T03:51:01Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4220,
-    "stable": 7840
+    "changed": 4234,
+    "stable": 7826
   },
   "added": [],
   "removed": [],
@@ -3649,6 +3649,16 @@
       "new_digest": "1314399a09f5cdad312417e537fc92350de7e2635fde30526269f4056d55b918"
     },
     {
+      "id": "15044244",
+      "old_title": "서울교통공사_역별 요일별 환승인원",
+      "new_title": "서울교통공사_역별 요일별 환승인원",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b0c86a848ab38c39edb1c2de3152f22a5a224d043eb1c14b3fedca5b5f4595de",
+      "new_digest": "613151c1faac2277022344e523c801d5668a541027e8bc70a5e3db2579928a88"
+    },
+    {
       "id": "15045335",
       "old_title": "제주특별자치도_제주해양수산연구자료정보",
       "new_title": "제주특별자치도_제주해양수산연구자료정보",
@@ -4439,6 +4449,16 @@
       "new_digest": "65c810a24bbaae892a46bde4b4b6974c71e4d9520048438aff97086ea15ea5de"
     },
     {
+      "id": "15056647",
+      "old_title": "서울교통공사_지하철 호선별 첫차와 막차 정보(전철역코드,외부코드)",
+      "new_title": "서울교통공사_지하철 호선별 첫차와 막차 정보(전철역코드,외부코드)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e1dd67d69b79436b6b8a6eb63312bee5c33bddf563f32dbc896d3d008026c91c",
+      "new_digest": "b7221a8fda2e95cd8fd178e375c25df85a12788cb11e5e2b4686eb6f7c9ea2eb"
+    },
+    {
       "id": "15056648",
       "old_title": "제주특별자치도_제주 역사인물 정보",
       "new_title": "제주특별자치도_제주 역사인물 정보",
@@ -5029,6 +5049,16 @@
       "new_digest": "dd0f52e741a29aa7a59a687feab0702c06e27e4b54e65d5c414afc8c7b5a2f3f"
     },
     {
+      "id": "15056777",
+      "old_title": "서울교통공사_역외부코드로 지하철 열차 시간표 검색",
+      "new_title": "서울교통공사_역외부코드로 지하철 열차 시간표 검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4da66b52e84413f15f5d212a4e34fa72a8beb85a91ef0010d918a70cb88f451b",
+      "new_digest": "250e3b1430302a7698cd51f1734f57a9d10324312bb79e99b84fcf102cf45009"
+    },
+    {
       "id": "15056781",
       "old_title": "경기도_학교시설 개방에 관한 사항 현황",
       "new_title": "경기도_학교시설 개방에 관한 사항 현황",
@@ -5287,6 +5317,16 @@
       ],
       "old_digest": "e3362ea53811f208941d9abbfff429f8386e965d6384ed6c393c78b91b13b6ff",
       "new_digest": "1f5cc112cc2de71b773e0884371a1d6ff52affbcd809b88aff0d57533a3d1829"
+    },
+    {
+      "id": "15056854",
+      "old_title": "서울교통공사_역코드로 지하철 막차 시간표 검색",
+      "new_title": "서울교통공사_역코드로 지하철 막차 시간표 검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f39cce443b795fc8a1628ec8b9f4a7fd346f1b79329377f1d75700eaa63275aa",
+      "new_digest": "3a3fe8ec7aef87415c1c82cab198e9d4dad020c87efc4a648c88c15cc9f04a08"
     },
     {
       "id": "15056857",
@@ -5977,6 +6017,16 @@
       ],
       "old_digest": "4615d543900c8d12078b56c65b563e16ec52c9fa71a5b5dc2dbcaa3d6cd9c309",
       "new_digest": "9b1395fb8309e4e4ac1f3b996ed3061e8766ddf1bbbd8ee90cee51e7ffebd490"
+    },
+    {
+      "id": "15057008",
+      "old_title": "서울교통공사_역별 주소 및 전화번호 정보",
+      "new_title": "서울교통공사_역별 주소 및 전화번호 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fd68c74f45cef4f20852a92ffa9fa629983094a42619f6d1145d6c09a7627480",
+      "new_digest": "3e55db9e563939f32f5a164efe8eb12445d9f7addf843946181ce77f4cdb7538"
     },
     {
       "id": "15057010",
@@ -9389,6 +9439,16 @@
       "new_digest": "2537a0ba96b43dee3295151d8e8729eeca350a510f02827ed4faf0982fb2b75c"
     },
     {
+      "id": "15057743",
+      "old_title": "서울교통공사_역별 지명유래 및 테마명",
+      "new_title": "서울교통공사_역별 지명유래 및 테마명",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d0389cd31739e8c1c14eb9b69874c29aa192c64fa900ae6f8f550a6ad2d9f1a3",
+      "new_digest": "05e430fcddc50e536a80972bee881e1a42bfdd6a2665554b0457231c64ced883"
+    },
+    {
       "id": "15057744",
       "old_title": "행정안전부_지방재정365_자체수입대인건비비교",
       "new_title": "행정안전부_지방재정365_자체수입대인건비비교",
@@ -9637,6 +9697,16 @@
       ],
       "old_digest": "32dc3f497dd3417740df857ed2c5e5ffdd82ec1bd97fa3ed2ab64a3ba8871cc3",
       "new_digest": "8cc1c0293171c218dcd3fe1b5d65c64bfd601f934ce384f69a3bb90fa4bc60e1"
+    },
+    {
+      "id": "15057802",
+      "old_title": "서울교통공사_역간거리 및 소요시간",
+      "new_title": "서울교통공사_역간거리 및 소요시간",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3e917a3ea9af7c9b70ee3690d9c026d39f5384689dec61cca3d17296206842bc",
+      "new_digest": "a62e1e278081d0cd44e4e7faf052a94aa5c09ec6bbe11e5111b98396ee9db001"
     },
     {
       "id": "15057803",
@@ -10407,6 +10477,16 @@
       ],
       "old_digest": "ff26a5e4bd295d71c982cec1b5e367c8af7454bf2e8ef91d654ea523cdbed0fc",
       "new_digest": "b533c668fec7541e31f95d4d949981296c5fd7ec514c419d218e5b112f630fd7"
+    },
+    {
+      "id": "15057982",
+      "old_title": "서울교통공사_역코드로 지하철 열차 시간표 검색",
+      "new_title": "서울교통공사_역코드로 지하철 열차 시간표 검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "16078c2fa3d4314ff5caec6fab7d47460beb2dbe13a18f66e76ab48dac17c6e6",
+      "new_digest": "1705eb547ea0ed78b659c4c0b0bf2665ac94e10c2240b9fa25a2402aeb2e9eb7"
     },
     {
       "id": "15057983",
@@ -12257,6 +12337,16 @@
       ],
       "old_digest": "899784200cf7966c9a3a3c0b3fa83968c8cd3c1340de83d1f380351e81a26a45",
       "new_digest": "3e6f905bbf8bcc9d19cfb56c08212e29fd7006b2a79982a45cfc18ba3a51c342"
+    },
+    {
+      "id": "15058404",
+      "old_title": "서울교통공사_노선별 지하철역 정보",
+      "new_title": "서울교통공사_노선별 지하철역 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "dd4634a2e1b1a7e608b08d676e257d6888b905109a62fdcb13fded2065194f41",
+      "new_digest": "7d270637af5b49cc25b7c83609e2576107e56fed075fb2e2d4e30896f40e4a41"
     },
     {
       "id": "15058405",
@@ -14619,6 +14709,16 @@
       "new_digest": "402e8db7bf85707aa3dc2b8a7560aeb002c5fb7c94e10f448fb3261a1f0da7fb"
     },
     {
+      "id": "15058954",
+      "old_title": "서울교통공사_역명으로 지하철역 검색",
+      "new_title": "서울교통공사_역명으로 지하철역 검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0e9ebb6d87db8cebe89c9897bcfb0b9e0aabe45d6f7ba24bf29fe3d9582b40f0",
+      "new_digest": "fc3d01e8d704a768f3e10aed6f7bb444bf12ced72fe5ee92e76d4783e888c84c"
+    },
+    {
       "id": "15058956",
       "old_title": "문화체육관광부_유물정보(국립춘천박물관)",
       "new_title": "문화체육관광부_유물정보(국립춘천박물관)",
@@ -14687,6 +14787,16 @@
       ],
       "old_digest": "f57eddffba7928864440b69ab2730617e4031507742bef5d26aa3793dcdf730e",
       "new_digest": "84329e6c48341c7b52163ee76da931308fe2c3a36d0f302f5624a6876fc0cfde"
+    },
+    {
+      "id": "15058970",
+      "old_title": "서울교통공사_역외부코드로 지하철 막차 시간표 검색",
+      "new_title": "서울교통공사_역외부코드로 지하철 막차 시간표 검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "84d5dbb7a129c214789c8ad209e53123df6da3cf659f92f316389283a368e2ee",
+      "new_digest": "54b378641869b21ed1d2e14b54f0cd0683cdee2f1e4fa3e21f1784fe66e3ee74"
     },
     {
       "id": "15058973",
@@ -19889,6 +19999,16 @@
       "new_digest": "fb09f66c52ac9d99758865d94806d5568dd7bb8ce974732a410a5ef515aadd07"
     },
     {
+      "id": "15067770",
+      "old_title": "서울교통공사_교통약자_이용시설_승강기_가동현황",
+      "new_title": "서울교통공사_교통약자_이용시설_승강기_가동현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bcc5a55682a6049e32d95be7b97d34ac1f3c00db6f425b8439ca9335be74e41b",
+      "new_digest": "9540a0ac6e10ebb9d7f437e1181ae50eaefa7310878d2533c603b5659175ac61"
+    },
+    {
       "id": "15068072",
       "old_title": "한국고용정보원_워크넷_정부지원일자리사업상세정보",
       "new_title": "한국고용정보원_워크넷_정부지원일자리사업상세정보",
@@ -21987,6 +22107,16 @@
       ],
       "old_digest": "d7174e68904d9e857d3749f07cd999d69c32fa1ad179a342e36de5bd01dfbeba",
       "new_digest": "c106be9d62a7869b33524410fadfac348a936073676e00b6cd2217fdc800e7a8"
+    },
+    {
+      "id": "15081222",
+      "old_title": "서울교통공사_지하철역사내실내공기질정보(시간단위)",
+      "new_title": "서울교통공사_지하철역사내실내공기질정보(시간단위)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d9f470a6c41724b5c4169928bbc412bc4d1e73838ee965b25a25a3cabb5a908c",
+      "new_digest": "2e133c5dc2842a89b8309980e0b0ccfdea38c6103b4a4fa0249e8b3d56c6568e"
     },
     {
       "id": "15081274",
@@ -29837,6 +29967,16 @@
       ],
       "old_digest": "b46b2446ff88bc62396a946f8c66632706c6e3cda8f9691ba161b80e7bcd0497",
       "new_digest": "a643de46ebf060da450578d4b09af4143d6aa458f8302ba18defe2e75102720c"
+    },
+    {
+      "id": "15120993",
+      "old_title": "서울교통공사_지하철 출입구 임시폐쇄 공사현황",
+      "new_title": "서울교통공사_지하철 출입구 임시폐쇄 공사현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7f3d1fc094745dc81eac5c9f0576364dd97f49d8a5afd4b074ab62a458584ffd",
+      "new_digest": "efbe12267e7d0762de89dd91e2c1822c3135c30ee1fcf3283b7b6da2b85c2058"
     },
     {
       "id": "15121324",

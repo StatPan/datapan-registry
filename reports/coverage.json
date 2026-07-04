@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T03:44:16Z",
+  "generated_at": "2026-07-04T03:51:07Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,15 +7,15 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 20895,
-    "callable_operations": 20753,
+    "operations": 20930,
+    "callable_operations": 20788,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 9285,
-    "registered_adapter_operations": 9275,
+    "external_endpoint_operations": 9320,
+    "registered_adapter_operations": 9310,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.7,
-    "approval_required_operations": 8031,
+    "approval_required_operations": 8036,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-04T03:44:08Z",
-    "total": 4412,
-    "verified": 2537,
+    "generated_at": "2026-07-04T03:50:59Z",
+    "total": 4447,
+    "verified": 2572,
     "failed": 332,
     "skipped": 1543,
     "unknown": 0,
-    "verified_percent": 57.5,
-    "evidence_operation_percent": 21.1
+    "verified_percent": 57.8,
+    "evidence_operation_percent": 21.2
   },
   "route_evidence": {
     "present": true,
@@ -381,7 +381,7 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-04T03:44:16Z",
+    "generated_at": "2026-07-04T03:51:07Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 123,
     "host_count": 155,

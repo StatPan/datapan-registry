@@ -12,14 +12,14 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `20895`
-- callable operations: `20753` (`99.3%`)
+- operations: `20930`
+- callable operations: `20788` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `9285`
-- registered adapter operations: `9275`
+- external endpoint operations: `9320`
+- registered adapter operations: `9310`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
-- approval-required operations: `8031`
+- approval-required operations: `8036`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
@@ -247,9 +247,10 @@ completed through `39` Ecobank, `45` NFQS, `95` Dongjak/Seoul Open Data,
 `3` UniPass, `1` KoreaPost, `23` Childcare Info, `28` Daegu, `68`
 KEIS/YouthCenter, `18` NIHC, `30` Ulsan WWW, `49` NAQS, `70` Seogwipo, and
 `81` Garak, `76` NRich, `41` Anyang/MPVA Egonghun, `1` Tashu, `78` KRIC,
-`26` Yuseong, `55` 한국체육산업개발, `3` NRF, `27` KISTI, `48` KEIT, and `33`
-농림축산식품부 농림축산검역본부 link-detail operations. The next viable
-materialization queue after the current upstream blockers is `서울교통공사`.
+`26` Yuseong, `55` 한국체육산업개발, `3` NRF, `27` KISTI, `48` KEIT, `33`
+농림축산식품부 농림축산검역본부, and `35` 서울교통공사 link-detail operations.
+The next viable materialization queue after the current upstream blockers is
+`기후에너지환경부 한강홍수통제소`.
 The runtime reactivation queue starts at `행정안전부`: `1252`
 APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
@@ -746,6 +747,11 @@ readiness, not to advance verified runtime coverage.
    brings checked runtime evidence to `4412`, verified checks to `2537`,
    registered external adapter operations to `9275`, and raises API operation
    coverage to `11,405` of `12,060` APIs (`94.6%`).
+   The 서울교통공사 batch reuses Seoul Open Data host coverage, materializes the
+   remaining `14` APIs and `35` operations, and merges `35` verified bounded
+   checks. That brings checked runtime evidence to `4447`, verified checks to
+   `2572`, registered external adapter operations to `9310`, and raises API
+   operation coverage to `11,419` of `12,060` APIs (`94.7%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T03:44:08Z",
+  "generated_at": "2026-07-04T03:50:59Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4412,
-    "verified": 2537,
+    "total": 4447,
+    "verified": 2572,
     "failed": 332,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2537,
+        "count": 2572,
         "status": "verified"
       },
       {
@@ -394,6 +394,11 @@
         "provider": "culture"
       },
       {
+        "key": "seoul-open-data",
+        "count": 156,
+        "provider": "seoul-open-data"
+      },
+      {
         "key": "q-net",
         "count": 147,
         "provider": "q-net"
@@ -402,11 +407,6 @@
         "key": "data-gg",
         "count": 128,
         "provider": "data-gg"
-      },
-      {
-        "key": "seoul-open-data",
-        "count": 121,
-        "provider": "seoul-open-data"
       },
       {
         "key": "kipris-plus",
@@ -976,6 +976,11 @@
         "host": "www.culture.go.kr"
       },
       {
+        "key": "data.seoul.go.kr",
+        "count": 130,
+        "host": "data.seoul.go.kr"
+      },
+      {
         "key": "data.gg.go.kr",
         "count": 128,
         "host": "data.gg.go.kr"
@@ -989,11 +994,6 @@
         "key": "plus.kipris.or.kr",
         "count": 100,
         "host": "plus.kipris.or.kr"
-      },
-      {
-        "key": "data.seoul.go.kr",
-        "count": 95,
-        "host": "data.seoul.go.kr"
       },
       {
         "key": "www.work24.go.kr",
@@ -1679,7 +1679,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3688,
+        "count": 3723,
         "kind": "external_endpoint"
       },
       {

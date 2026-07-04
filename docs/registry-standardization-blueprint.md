@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `655` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `641` data.go.kr APIs
   without operation mappings, `9,285` operation-mapped APIs without runtime
   evidence, and `204` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -504,8 +504,12 @@ Current gaps:
   APIs and `33` operations, and merges `33` verified bounded checks. That
   brings runtime evidence to `4412`, verified checks to `2537`, and registered
   external adapter operations to `9275`.
-- API operation coverage remains incomplete: `11,405` of `12,060` APIs have
-  operation mappings (`94.6%`), leaving `655` APIs to materialize and `9,285`
+- The 서울교통공사 batch reuses Seoul Open Data host coverage, materializes the
+  remaining `14` APIs and `35` operations, and merges `35` verified bounded
+  checks. That brings runtime evidence to `4447`, verified checks to `2572`,
+  and registered external adapter operations to `9310`.
+- API operation coverage remains incomplete: `11,419` of `12,060` APIs have
+  operation mappings (`94.7%`), leaving `641` APIs to materialize and `9,285`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report
