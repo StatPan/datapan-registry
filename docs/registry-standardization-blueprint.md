@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `953` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `938` data.go.kr APIs
   without operation mappings, `9,285` operation-mapped APIs without runtime
   evidence, and `178` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -435,8 +435,12 @@ Current gaps:
   YouthCenter landing-page checks. That brings runtime evidence to `3798`,
   verified checks to `1949`, and registered external adapter operations to
   `8639`.
-- API operation coverage remains incomplete: `11,107` of `12,060` APIs have
-  operation mappings (`92.1%`), leaving `953` APIs to materialize and `9,285`
+- The 국가유산청 국립무형유산원 batch registers NIHC host coverage,
+  materializes `15` APIs and `18` operations, and merges `18` verified
+  landing-page checks. That brings runtime evidence to `3816`, verified checks
+  to `1967`, and registered external adapter operations to `8657`.
+- API operation coverage remains incomplete: `11,122` of `12,060` APIs have
+  operation mappings (`92.2%`), leaving `938` APIs to materialize and `9,285`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report
