@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T00:43:04Z",
+  "generated_at": "2026-07-04T00:54:26Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 111,
-  "host_count": 135,
+  "adapter_count": 112,
+  "host_count": 136,
   "adapters": [
     {
       "name": "airport",
@@ -813,6 +813,16 @@
       ]
     },
     {
+      "name": "nihc",
+      "status": "registered",
+      "hosts": [
+        "www.nihc.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "nongsaro",
       "status": "registered",
       "hosts": [
@@ -1165,8 +1175,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 111,
-    "verification_capable_adapters": 111,
+    "adapter_count": 112,
+    "verification_capable_adapters": 112,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

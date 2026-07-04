@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T00:43:04Z",
+  "generated_at": "2026-07-04T00:54:26Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 286,
+  "filtered_count": 287,
   "summary": {
-    "hosts": 286,
+    "hosts": 287,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 141,
+    "external_endpoint_hosts": 142,
     "external_guide_hosts": 208,
-    "registered_adapter_hosts": 130,
-    "operation_hosts": 143,
+    "registered_adapter_hosts": 131,
+    "operation_hosts": 144,
     "guide_only_hosts": 143,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7616,
+    "approval_required_operations": 7620,
     "malformed_source_url_count": 712
   },
   "providers": [
@@ -1027,6 +1027,22 @@
         "15089752",
         "15089759",
         "15089762"
+      ]
+    },
+    {
+      "host": "www.nihc.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 15,
+      "operations": 18,
+      "external_endpoint_operations": 18,
+      "approval_required_operations": 4,
+      "sample_ids": [
+        "15028215",
+        "15028217",
+        "15028218"
       ]
     },
     {
