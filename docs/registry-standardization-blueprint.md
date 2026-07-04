@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `641` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `628` data.go.kr APIs
   without operation mappings, `9,285` operation-mapped APIs without runtime
   evidence, and `204` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -508,8 +508,14 @@ Current gaps:
   remaining `14` APIs and `35` operations, and merges `35` verified bounded
   checks. That brings runtime evidence to `4447`, verified checks to `2572`,
   and registered external adapter operations to `9310`.
-- API operation coverage remains incomplete: `11,419` of `12,060` APIs have
-  operation mappings (`94.7%`), leaving `641` APIs to materialize and `9,285`
+- The 기후에너지환경부 한강홍수통제소 batch adds HRFCO host coverage for
+  `data.floodmap.go.kr` and `www.hrfco.go.kr`, materializes the remaining `13`
+  APIs and `17` operations, and merges `17` bounded checks (`15` verified,
+  `2` failed on `www.hrfco.go.kr`). That brings runtime evidence to `4464`,
+  verified checks to `2587`, failed checks to `334`, and registered external
+  adapter operations to `9327`.
+- API operation coverage remains incomplete: `11,432` of `12,060` APIs have
+  operation mappings (`94.8%`), leaving `628` APIs to materialize and `9,285`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

@@ -1,0 +1,72 @@
+{
+  "generated_at": "2026-07-04T04:00:12Z",
+  "source": "reports/data-go-kr/han-river-flood-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 17,
+    "verified": 15,
+    "failed": 2,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 15,
+        "status": "verified"
+      },
+      {
+        "key": "failed",
+        "count": 2,
+        "status": "failed"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "hrfco_http_400",
+        "count": 2,
+        "reason": "hrfco_http_400"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "hrfco",
+        "count": 11,
+        "provider": "hrfco"
+      },
+      {
+        "key": "wamis",
+        "count": 6,
+        "provider": "wamis"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "data.floodmap.go.kr",
+        "count": 9,
+        "host": "data.floodmap.go.kr"
+      },
+      {
+        "key": "www.wamis.go.kr:8080",
+        "count": 6,
+        "host": "www.wamis.go.kr:8080"
+      },
+      {
+        "key": "www.hrfco.go.kr",
+        "count": 2,
+        "host": "www.hrfco.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 17,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

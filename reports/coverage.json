@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T03:51:07Z",
+  "generated_at": "2026-07-04T04:00:41Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 20930,
-    "callable_operations": 20788,
+    "operations": 20947,
+    "callable_operations": 20805,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 9320,
-    "registered_adapter_operations": 9310,
+    "external_endpoint_operations": 9337,
+    "registered_adapter_operations": 9327,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.7,
-    "approval_required_operations": 8036,
+    "approval_required_operations": 8045,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
-    "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 150,
+    "unsupported_protocol_operations": 158,
+    "registered_adapter_hosts": 152,
     "missing_adapter_hosts": 11,
-    "adapter_count": 123,
+    "adapter_count": 124,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-04T03:50:59Z",
-    "total": 4447,
-    "verified": 2572,
-    "failed": 332,
+    "generated_at": "2026-07-04T04:00:33Z",
+    "total": 4464,
+    "verified": 2587,
+    "failed": 334,
     "skipped": 1543,
     "unknown": 0,
-    "verified_percent": 57.8,
-    "evidence_operation_percent": 21.2
+    "verified_percent": 58,
+    "evidence_operation_percent": 21.3
   },
   "route_evidence": {
     "present": true,
@@ -381,10 +381,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-04T03:51:07Z",
+    "generated_at": "2026-07-04T04:00:41Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 123,
-    "host_count": 155,
+    "adapter_count": 124,
+    "host_count": 157,
     "adapters": [
       {
         "name": "airport",
@@ -788,6 +788,17 @@
         "hosts": [
           "parking.happysd.or.kr",
           "www.happysd.or.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "hrfco",
+        "status": "registered",
+        "hosts": [
+          "data.floodmap.go.kr",
+          "www.hrfco.go.kr"
         ],
         "capabilities": [
           "verification"
@@ -1675,8 +1686,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 123,
-      "verification_capable_adapters": 123,
+      "adapter_count": 124,
+      "verification_capable_adapters": 124,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

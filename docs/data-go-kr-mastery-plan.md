@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `20930`
-- callable operations: `20788` (`99.3%`)
+- operations: `20947`
+- callable operations: `20805` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `9320`
-- registered adapter operations: `9310`
+- external endpoint operations: `9337`
+- registered adapter operations: `9327`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
-- approval-required operations: `8036`
+- approval-required operations: `8045`
 - no-endpoint operations: `123`
 - service-root operations: `19`
-- unsupported-protocol operations: `149`
-- registered adapter hosts: `150`
+- unsupported-protocol operations: `158`
+- registered adapter hosts: `152`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -248,9 +248,9 @@ completed through `39` Ecobank, `45` NFQS, `95` Dongjak/Seoul Open Data,
 KEIS/YouthCenter, `18` NIHC, `30` Ulsan WWW, `49` NAQS, `70` Seogwipo, and
 `81` Garak, `76` NRich, `41` Anyang/MPVA Egonghun, `1` Tashu, `78` KRIC,
 `26` Yuseong, `55` 한국체육산업개발, `3` NRF, `27` KISTI, `48` KEIT, `33`
-농림축산식품부 농림축산검역본부, and `35` 서울교통공사 link-detail operations.
-The next viable materialization queue after the current upstream blockers is
-`기후에너지환경부 한강홍수통제소`.
+농림축산식품부 농림축산검역본부, `35` 서울교통공사, and `17` 기후에너지환경부
+한강홍수통제소 link-detail operations. The next viable materialization queue
+after the current upstream blockers is `한국농수산식품유통공사`.
 The runtime reactivation queue starts at `행정안전부`: `1252`
 APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
@@ -752,6 +752,13 @@ readiness, not to advance verified runtime coverage.
    checks. That brings checked runtime evidence to `4447`, verified checks to
    `2572`, registered external adapter operations to `9310`, and raises API
    operation coverage to `11,419` of `12,060` APIs (`94.7%`).
+   The 기후에너지환경부 한강홍수통제소 batch adds HRFCO host coverage for
+   `data.floodmap.go.kr` and `www.hrfco.go.kr`, materializes the remaining `13`
+   APIs and `17` operations, and merges `17` bounded checks (`15` verified,
+   `2` failed on `www.hrfco.go.kr`). That brings checked runtime evidence to
+   `4464`, verified checks to `2587`, failed checks to `334`, registered
+   external adapter operations to `9327`, and raises API operation coverage to
+   `11,432` of `12,060` APIs (`94.8%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

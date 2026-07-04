@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-04T03:50:59Z",
+  "generated_at": "2026-07-04T04:00:33Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4447,
-    "verified": 2572,
-    "failed": 332,
+    "total": 4464,
+    "verified": 2587,
+    "failed": 334,
     "skipped": 1543,
     "unknown": 0
   },
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2572,
+        "count": 2587,
         "status": "verified"
       },
       {
@@ -26,7 +26,7 @@
       },
       {
         "key": "failed",
-        "count": 332,
+        "count": 334,
         "status": "failed"
       }
     ],
@@ -280,6 +280,11 @@
         "key": "gblib_service_key_not_registered",
         "count": 2,
         "reason": "gblib_service_key_not_registered"
+      },
+      {
+        "key": "hrfco_http_400",
+        "count": 2,
+        "reason": "hrfco_http_400"
       },
       {
         "key": "jeju_missing_required_params",
@@ -649,6 +654,11 @@
         "provider": "jejudatahub"
       },
       {
+        "key": "hrfco",
+        "count": 11,
+        "provider": "hrfco"
+      },
+      {
         "key": "smartfarm-korea",
         "count": 11,
         "provider": "smartfarm-korea"
@@ -702,6 +712,11 @@
         "key": "sisul-www",
         "count": 7,
         "provider": "sisul-www"
+      },
+      {
+        "key": "wamis",
+        "count": 7,
+        "provider": "wamis"
       },
       {
         "key": "airport",
@@ -937,11 +952,6 @@
         "key": "tashu",
         "count": 1,
         "provider": "tashu"
-      },
-      {
-        "key": "wamis",
-        "count": 1,
-        "provider": "wamis"
       },
       {
         "key": "youthcenter",
@@ -1281,6 +1291,11 @@
         "host": "www.safetydata.go.kr"
       },
       {
+        "key": "data.floodmap.go.kr",
+        "count": 9,
+        "host": "data.floodmap.go.kr"
+      },
+      {
         "key": "thegoodnight.daegu.go.kr",
         "count": 9,
         "host": "thegoodnight.daegu.go.kr"
@@ -1334,6 +1349,11 @@
         "key": "www.sisul.or.kr",
         "count": 7,
         "host": "www.sisul.or.kr"
+      },
+      {
+        "key": "www.wamis.go.kr:8080",
+        "count": 7,
+        "host": "www.wamis.go.kr:8080"
       },
       {
         "key": "data.gwanak.go.kr",
@@ -1474,6 +1494,11 @@
         "key": "www.gimhae.go.kr",
         "count": 2,
         "host": "www.gimhae.go.kr"
+      },
+      {
+        "key": "www.hrfco.go.kr",
+        "count": 2,
+        "host": "www.hrfco.go.kr"
       },
       {
         "key": "www.kci.go.kr",
@@ -1666,11 +1691,6 @@
         "host": "www.recycling-info.or.kr"
       },
       {
-        "key": "www.wamis.go.kr:8080",
-        "count": 1,
-        "host": "www.wamis.go.kr:8080"
-      },
-      {
         "key": "www.youthcenter.go.kr",
         "count": 1,
         "host": "www.youthcenter.go.kr"
@@ -1679,7 +1699,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3723,
+        "count": 3740,
         "kind": "external_endpoint"
       },
       {

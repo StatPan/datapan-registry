@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T03:51:01Z",
+  "generated_at": "2026-07-04T04:00:35Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 20930,
-    "runtime_evidence": 4447,
-    "runtime_evidence_percent": 21.2,
-    "callable_operations": 20788,
-    "external_endpoint_operations": 9320,
-    "registered_adapter_operations": 9310,
+    "operations": 20947,
+    "runtime_evidence": 4464,
+    "runtime_evidence_percent": 21.3,
+    "callable_operations": 20805,
+    "external_endpoint_operations": 9337,
+    "registered_adapter_operations": 9327,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 9320
+      "count": 9337
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 9310
+      "count": 9327
     },
     {
       "key": "builtin",
@@ -105,7 +105,7 @@
     },
     {
       "category": "국토관리",
-      "operation_count": 1094
+      "operation_count": 1098
     },
     {
       "category": "보건의료",
@@ -113,7 +113,7 @@
     },
     {
       "category": "재난안전",
-      "operation_count": 871
+      "operation_count": 884
     },
     {
       "category": "교육",
@@ -7417,6 +7417,83 @@
       ]
     },
     {
+      "organization": "기후에너지환경부 한강홍수통제소",
+      "api_count": 25,
+      "operation_api_count": 25,
+      "operation_count": 29,
+      "runtime_evidence_count": 17,
+      "runtime_evidence_percent": 58.6,
+      "verified": 15,
+      "failed": 2,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 21,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 12
+        },
+        {
+          "key": "external_endpoint",
+          "count": 17
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 17
+        },
+        {
+          "key": "builtin",
+          "count": 12
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "재난안전",
+          "operation_count": 25
+        },
+        {
+          "category": "국토관리",
+          "operation_count": 4
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 12
+        },
+        {
+          "host": "data.floodmap.go.kr",
+          "operation_count": 9,
+          "adapter": "hrfco",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.wamis.go.kr:8080",
+          "operation_count": 6,
+          "adapter": "wamis",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.hrfco.go.kr",
+          "operation_count": 2,
+          "adapter": "hrfco",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "여수광양항만공사",
       "api_count": 22,
       "operation_api_count": 22,
@@ -10308,44 +10385,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 13
-        }
-      ]
-    },
-    {
-      "organization": "기후에너지환경부 한강홍수통제소",
-      "api_count": 25,
-      "operation_api_count": 12,
-      "operation_count": 12,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 12,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 12
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 12
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "재난안전",
-          "operation_count": 12
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 12
         }
       ]
     },

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T03:51:01Z",
+  "generated_at": "2026-07-04T04:00:35Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4234,
-    "stable": 7826
+    "changed": 4247,
+    "stable": 7813
   },
   "added": [],
   "removed": [],
@@ -577,6 +577,36 @@
       ],
       "old_digest": "ecc3d02f9924a19a3be1c3ef66cc817541c1ecfd553bcee9d00d33857f0bd7d4",
       "new_digest": "3ec960ceceb9d3cba91bc846844259749c9efbc4f75752b530c1ab3b5bec99f3"
+    },
+    {
+      "id": "15021448",
+      "old_title": "기후에너지환경부 한강홍수통제소_용수관련정보",
+      "new_title": "기후에너지환경부 한강홍수통제소_용수관련정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "18182ecf2fa9dd575573a0a2ac02d8caebd3fda6613cb4d941a3652305f667ef",
+      "new_digest": "8350dc9a385f7da92940cb29edb321dd8bf1100fd6bddbb31c498df820c92163"
+    },
+    {
+      "id": "15021450",
+      "old_title": "기후에너지환경부 한강홍수통제소_수도시설 관련정보",
+      "new_title": "기후에너지환경부 한강홍수통제소_수도시설 관련정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0fd4eca9c64aa14cdb02fbb77aaba22cac57e898f655bd67f1ecd9ef734952fa",
+      "new_digest": "c2afe18ced408f2a6f22ea3c1e80d8d69d84d06102ceadde09f6e8f103e0f08c"
+    },
+    {
+      "id": "15021451",
+      "old_title": "기후에너지환경부 한강홍수통제소_강우레이더 영상 정보",
+      "new_title": "기후에너지환경부 한강홍수통제소_강우레이더 영상 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f8c14fa933c6b39c02ea70968adeac87886bd58c666cff89223b31ba1497948b",
+      "new_digest": "9ce7e227f887a68378f8dd5587a790fb70822f7451331548ff676076fa694f18"
     },
     {
       "id": "15024888",
@@ -36939,6 +36969,96 @@
       "new_digest": "43c80828b8738fd3c45a0502883fcde41befe3d47f01d1dccc2f22ba37448540"
     },
     {
+      "id": "15141722",
+      "old_title": "기후에너지환경부 한강홍수통제소_권역별 빈도별 국가하천 하천범람지도",
+      "new_title": "기후에너지환경부 한강홍수통제소_권역별 빈도별 국가하천 하천범람지도",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a3a3833d84525e530188da55659bcd4136daaa4e08bcd76d8602d2a0a0b72a93",
+      "new_digest": "0f89fc91a1d6876591ef5dcfd7b53add6fe7ea2cd5e7eca1edd6c8efc2c8e878"
+    },
+    {
+      "id": "15141723",
+      "old_title": "기후에너지환경부 한강홍수통제소_유역별 빈도별 국가하천 하천범람지도",
+      "new_title": "기후에너지환경부 한강홍수통제소_유역별 빈도별 국가하천 하천범람지도",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d4082d0f505dca49b2995838563b531aa81a0fcb0b72d739759dbd6a0de754c8",
+      "new_digest": "6bfe3d2052644f57b15b91bc19ddb036a33edfa2822716023b8dcb3c49f7b051"
+    },
+    {
+      "id": "15141724",
+      "old_title": "기후에너지환경부 한강홍수통제소_행정구역별 빈도별 국가하천 하천범람지도",
+      "new_title": "기후에너지환경부 한강홍수통제소_행정구역별 빈도별 국가하천 하천범람지도",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "070161bc1df90cba13c7ad1c1df33928e2330c00358b8f1d31bbe9b9a042aefe",
+      "new_digest": "79342d42359fc985fc9f5ff38a0a7a0c8061744919672731fa0e490ffa43a01a"
+    },
+    {
+      "id": "15141725",
+      "old_title": "기후에너지환경부 한강홍수통제소_권역별 빈도별 지방하천 하천범람지도",
+      "new_title": "기후에너지환경부 한강홍수통제소_권역별 빈도별 지방하천 하천범람지도",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9651a897fc0a1e69b168671ad38161f7b15a9c2e081eeed08fc4c03bc93222cd",
+      "new_digest": "a8b6e621a744b3e9d19a430e07dd69687562012e27cb6b6676af7214eed7d90b"
+    },
+    {
+      "id": "15141726",
+      "old_title": "기후에너지환경부 한강홍수통제소_유역별 빈도별 지방하천 하천범람지도",
+      "new_title": "기후에너지환경부 한강홍수통제소_유역별 빈도별 지방하천 하천범람지도",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1b0ab3a20d7793265e3ebaa37c856324ea2b11ca0b4694160bdaa2d8d98a3a96",
+      "new_digest": "dc384f9aa708217a65fea65bc935494f599205700c7158c75ecf76fd06a363da"
+    },
+    {
+      "id": "15141727",
+      "old_title": "기후에너지환경부 한강홍수통제소_행정구역별 빈도별 지방하천 하천범람지도",
+      "new_title": "기후에너지환경부 한강홍수통제소_행정구역별 빈도별 지방하천 하천범람지도",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a6670550b86d9e48bf5e7857abda5afbb01bd7e00c92ef4229e5aa23551c81a1",
+      "new_digest": "93de63fe282e7cf4d40d82e2d740a5e8b5a2514ca556f24a18f0ce5376f0c196"
+    },
+    {
+      "id": "15141730",
+      "old_title": "기후에너지환경부 한강홍수통제소_유역별 빈도별 도시침수지도",
+      "new_title": "기후에너지환경부 한강홍수통제소_유역별 빈도별 도시침수지도",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8a52c575cc09217bb17004057f1cb9a6cf952e76da3f1cda26d94bc67d1cd88b",
+      "new_digest": "ec0bb20b8a853369f27779782a826e7545e9a5e4458313cf7e25a0dbd0c34ef5"
+    },
+    {
+      "id": "15141731",
+      "old_title": "기후에너지환경부 한강홍수통제소_권역별 빈도별 도시침수지도",
+      "new_title": "기후에너지환경부 한강홍수통제소_권역별 빈도별 도시침수지도",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c50ee93d535386af7bcce138bdb573f763f00b552cb59d8f652bd6a1144cfede",
+      "new_digest": "188142ce07c2db4597257f1eb47f00e171298d423e3ac42e473d310a2376ee52"
+    },
+    {
+      "id": "15141734",
+      "old_title": "기후에너지환경부 한강홍수통제소_행정구역별 빈도별 도시침수지도",
+      "new_title": "기후에너지환경부 한강홍수통제소_행정구역별 빈도별 도시침수지도",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6362189c717114c5f21e9bc100f24535525d0eedec87f89e0dbc73d18c8ceead",
+      "new_digest": "1c4d8c57fd2c0973cb83abc47e3820c81ae0204f3ff438dff07df3f7a76d3ecc"
+    },
+    {
       "id": "15142093",
       "old_title": "행정안전부_공유플랫폼_경기도_재해피해 및 복구집계 현황",
       "new_title": "행정안전부_공유플랫폼_경기도_재해피해 및 복구집계 현황",
@@ -41847,6 +41967,16 @@
       ],
       "old_digest": "5a8b7afa74242d531a2c478aa8de4c1e4f83f2d1d9391524405055d65f6c92bb",
       "new_digest": "bd62234b9c445678a1f8981cf8e8edac6d57c5d3bea28536f174ee871bf4225d"
+    },
+    {
+      "id": "3040409",
+      "old_title": "기후에너지환경부 한강홍수통제소_표준수문DB",
+      "new_title": "기후에너지환경부 한강홍수통제소_표준수문DB",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4fec1ed135b392342a4eb37611e0383631eef53cb37327c79b709adf3dbd9c34",
+      "new_digest": "27357ecc99a18c485f3dd2482fa2371541cde5de65ef09b928ef227e771fae79"
     },
     {
       "id": "3043181",

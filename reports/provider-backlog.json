@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T03:51:01Z",
+  "generated_at": "2026-07-04T04:00:35Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 308,
+  "filtered_count": 310,
   "summary": {
-    "hosts": 308,
+    "hosts": 310,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 161,
-    "external_guide_hosts": 220,
-    "registered_adapter_hosts": 150,
-    "operation_hosts": 163,
+    "external_endpoint_hosts": 163,
+    "external_guide_hosts": 221,
+    "registered_adapter_hosts": 152,
+    "operation_hosts": 165,
     "guide_only_hosts": 145,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
-    "unsupported_protocol_operations": 149,
-    "approval_required_operations": 8036,
+    "unsupported_protocol_operations": 158,
+    "approval_required_operations": 8045,
     "malformed_source_url_count": 724
   },
   "providers": [
@@ -1343,6 +1343,23 @@
       ]
     },
     {
+      "host": "data.floodmap.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 9,
+      "operations": 9,
+      "external_endpoint_operations": 9,
+      "wms_operations": 9,
+      "approval_required_operations": 9,
+      "sample_ids": [
+        "15141722",
+        "15141723",
+        "15141724"
+      ]
+    },
+    {
       "host": "data.naqs.go.kr",
       "provider": "naqs",
       "kinds": [
@@ -1513,6 +1530,21 @@
         "15047383",
         "15057337",
         "15057474"
+      ]
+    },
+    {
+      "host": "www.wamis.go.kr:8080",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 5,
+      "operations": 7,
+      "external_endpoint_operations": 7,
+      "sample_ids": [
+        "15021448",
+        "15021450",
+        "15021451"
       ]
     },
     {
@@ -2016,6 +2048,22 @@
       "sample_ids": [
         "15007444",
         "15007467"
+      ]
+    },
+    {
+      "host": "www.hrfco.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 2,
+      "operations": 2,
+      "external_endpoint_operations": 2,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15021451",
+        "3040409"
       ]
     },
     {
@@ -2643,19 +2691,6 @@
       "approval_required_operations": 1,
       "sample_ids": [
         "15121485"
-      ]
-    },
-    {
-      "host": "www.wamis.go.kr:8080",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 1,
-      "operations": 1,
-      "external_endpoint_operations": 1,
-      "sample_ids": [
-        "15058026"
       ]
     },
     {
