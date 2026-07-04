@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T05:55:34Z",
+  "generated_at": "2026-07-04T06:08:52Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 135,
-  "host_count": 168,
+  "adapter_count": 136,
+  "host_count": 171,
   "adapters": [
     {
       "name": "airport",
@@ -488,6 +488,18 @@
       "status": "registered",
       "hosts": [
         "www.icheon.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "incheon",
+      "status": "registered",
+      "hosts": [
+        "ifac.or.kr",
+        "itour.incheon.go.kr",
+        "www.incheon.go.kr"
       ],
       "capabilities": [
         "verification"
@@ -1414,8 +1426,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 135,
-    "verification_capable_adapters": 135,
+    "adapter_count": 136,
+    "verification_capable_adapters": 136,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-04T05:55:19Z",
+  "generated_at": "2026-07-04T06:08:40Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4744,
-    "verified": 2824,
-    "failed": 377,
+    "total": 4759,
+    "verified": 2827,
+    "failed": 389,
     "skipped": 1543,
     "unknown": 0
   },
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2824,
+        "count": 2827,
         "status": "verified"
       },
       {
@@ -26,7 +26,7 @@
       },
       {
         "key": "failed",
-        "count": 377,
+        "count": 389,
         "status": "failed"
       }
     ],
@@ -140,6 +140,11 @@
         "key": "ulsan_missing_required_params",
         "count": 16,
         "reason": "ulsan_missing_required_params"
+      },
+      {
+        "key": "incheon_http_400",
+        "count": 12,
+        "reason": "incheon_http_400"
       },
       {
         "key": "oneclick_connection_refused",
@@ -689,6 +694,11 @@
         "provider": "korad"
       },
       {
+        "key": "incheon",
+        "count": 14,
+        "provider": "incheon"
+      },
+      {
         "key": "itfind",
         "count": 13,
         "provider": "itfind"
@@ -859,6 +869,11 @@
         "provider": "gblib"
       },
       {
+        "key": "gimhae",
+        "count": 3,
+        "provider": "gimhae"
+      },
+      {
         "key": "nrf",
         "count": 3,
         "provider": "nrf"
@@ -867,11 +882,6 @@
         "key": "vworld",
         "count": 3,
         "provider": "vworld"
-      },
-      {
-        "key": "gimhae",
-        "count": 2,
-        "provider": "gimhae"
       },
       {
         "key": "mpva-egonghun",
@@ -1351,6 +1361,11 @@
         "host": "open.itfind.or.kr"
       },
       {
+        "key": "ifac.or.kr",
+        "count": 12,
+        "host": "ifac.or.kr"
+      },
+      {
         "key": "openapi.epost.go.kr",
         "count": 12,
         "host": "openapi.epost.go.kr"
@@ -1596,6 +1611,11 @@
         "host": "www.atfis.or.kr"
       },
       {
+        "key": "www.gimhae.go.kr",
+        "count": 3,
+        "host": "www.gimhae.go.kr"
+      },
+      {
         "key": "www.vworld.kr",
         "count": 3,
         "host": "www.vworld.kr"
@@ -1614,11 +1634,6 @@
         "key": "unipass.customs.go.kr",
         "count": 2,
         "host": "unipass.customs.go.kr"
-      },
-      {
-        "key": "www.gimhae.go.kr",
-        "count": 2,
-        "host": "www.gimhae.go.kr"
       },
       {
         "key": "www.hrfco.go.kr",
@@ -1684,6 +1699,11 @@
         "key": "home.kahis.go.kr",
         "count": 1,
         "host": "home.kahis.go.kr"
+      },
+      {
+        "key": "itour.incheon.go.kr",
+        "count": 1,
+        "host": "itour.incheon.go.kr"
       },
       {
         "key": "its.go.kr",
@@ -1786,6 +1806,11 @@
         "host": "www.icheon.go.kr"
       },
       {
+        "key": "www.incheon.go.kr",
+        "count": 1,
+        "host": "www.incheon.go.kr"
+      },
+      {
         "key": "www.ins24.go.kr",
         "count": 1,
         "host": "www.ins24.go.kr"
@@ -1829,7 +1854,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 4020,
+        "count": 4035,
         "kind": "external_endpoint"
       },
       {

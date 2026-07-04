@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T05:55:34Z",
+  "generated_at": "2026-07-04T06:08:52Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 21227,
-    "runtime_evidence": 4744,
-    "runtime_evidence_percent": 22.3,
-    "callable_operations": 21085,
-    "external_endpoint_operations": 9617,
-    "registered_adapter_operations": 9607,
+    "operations": 21242,
+    "runtime_evidence": 4759,
+    "runtime_evidence_percent": 22.4,
+    "callable_operations": 21100,
+    "external_endpoint_operations": 9632,
+    "registered_adapter_operations": 9622,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 9617
+      "count": 9632
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 9607
+      "count": 9622
     },
     {
       "key": "builtin",
@@ -69,11 +69,11 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 2700
+      "operation_count": 2701
     },
     {
       "category": "문화관광",
-      "operation_count": 2315
+      "operation_count": 2329
     },
     {
       "category": "농축수산",
@@ -6368,6 +6368,100 @@
       ]
     },
     {
+      "organization": "인천광역시",
+      "api_count": 16,
+      "operation_api_count": 16,
+      "operation_count": 48,
+      "runtime_evidence_count": 15,
+      "runtime_evidence_percent": 31.2,
+      "verified": 3,
+      "failed": 12,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 1,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 33
+        },
+        {
+          "key": "external_endpoint",
+          "count": 15
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 15
+        },
+        {
+          "key": "builtin",
+          "count": 33
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "교통물류",
+          "operation_count": 30
+        },
+        {
+          "category": "문화관광",
+          "operation_count": 14
+        },
+        {
+          "category": "재정금융",
+          "operation_count": 3
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 1
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 33
+        },
+        {
+          "host": "ifac.or.kr",
+          "operation_count": 12,
+          "adapter": "incheon",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "itour.incheon.go.kr",
+          "operation_count": 1,
+          "adapter": "incheon",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.incheon.go.kr",
+          "operation_count": 1,
+          "adapter": "incheon",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.gimhae.go.kr",
+          "operation_count": 1,
+          "adapter": "gimhae",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "전라남도 광양시",
       "api_count": 42,
       "operation_api_count": 42,
@@ -7459,48 +7553,6 @@
           "capabilities": [
             "verification"
           ]
-        }
-      ]
-    },
-    {
-      "organization": "인천광역시",
-      "api_count": 16,
-      "operation_api_count": 10,
-      "operation_count": 33,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 33
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 33
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "교통물류",
-          "operation_count": 30
-        },
-        {
-          "category": "재정금융",
-          "operation_count": 3
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 33
         }
       ]
     },

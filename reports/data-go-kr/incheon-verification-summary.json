@@ -1,0 +1,77 @@
+{
+  "generated_at": "2026-07-04T06:08:31Z",
+  "source": "reports/data-go-kr/incheon-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 15,
+    "verified": 3,
+    "failed": 12,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "failed",
+        "count": 12,
+        "status": "failed"
+      },
+      {
+        "key": "verified",
+        "count": 3,
+        "status": "verified"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "incheon_http_400",
+        "count": 12,
+        "reason": "incheon_http_400"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "incheon",
+        "count": 14,
+        "provider": "incheon"
+      },
+      {
+        "key": "gimhae",
+        "count": 1,
+        "provider": "gimhae"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "ifac.or.kr",
+        "count": 12,
+        "host": "ifac.or.kr"
+      },
+      {
+        "key": "itour.incheon.go.kr",
+        "count": 1,
+        "host": "itour.incheon.go.kr"
+      },
+      {
+        "key": "www.gimhae.go.kr",
+        "count": 1,
+        "host": "www.gimhae.go.kr"
+      },
+      {
+        "key": "www.incheon.go.kr",
+        "count": 1,
+        "host": "www.incheon.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 15,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

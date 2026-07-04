@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T05:55:40Z",
+  "generated_at": "2026-07-04T06:08:58Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 21227,
-    "callable_operations": 21085,
+    "operations": 21242,
+    "callable_operations": 21100,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 9617,
-    "registered_adapter_operations": 9607,
+    "external_endpoint_operations": 9632,
+    "registered_adapter_operations": 9622,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.7,
-    "approval_required_operations": 8182,
+    "approval_required_operations": 8183,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 158,
-    "registered_adapter_hosts": 163,
+    "registered_adapter_hosts": 166,
     "missing_adapter_hosts": 11,
-    "adapter_count": 135,
+    "adapter_count": 136,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-04T05:55:19Z",
-    "total": 4744,
-    "verified": 2824,
-    "failed": 377,
+    "generated_at": "2026-07-04T06:08:40Z",
+    "total": 4759,
+    "verified": 2827,
+    "failed": 389,
     "skipped": 1543,
     "unknown": 0,
-    "verified_percent": 59.5,
-    "evidence_operation_percent": 22.3
+    "verified_percent": 59.4,
+    "evidence_operation_percent": 22.4
   },
   "route_evidence": {
     "present": true,
@@ -381,10 +381,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-04T05:55:40Z",
+    "generated_at": "2026-07-04T06:08:58Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 135,
-    "host_count": 168,
+    "adapter_count": 136,
+    "host_count": 171,
     "adapters": [
       {
         "name": "airport",
@@ -870,6 +870,18 @@
         "status": "registered",
         "hosts": [
           "www.icheon.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "incheon",
+        "status": "registered",
+        "hosts": [
+          "ifac.or.kr",
+          "itour.incheon.go.kr",
+          "www.incheon.go.kr"
         ],
         "capabilities": [
           "verification"
@@ -1796,8 +1808,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 135,
-      "verification_capable_adapters": 135,
+      "adapter_count": 136,
+      "verification_capable_adapters": 136,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

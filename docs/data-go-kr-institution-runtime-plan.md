@@ -2,7 +2,7 @@
 
 This plan is generated from `reports/data-go-kr/coverage-backlog.json` and turns the highest-priority institution runtime gaps into bounded `datapan catalog verify --org` batches.
 
-- Generated at: `2026-07-04T05:55:34Z`
+- Generated at: `2026-07-04T06:08:52Z`
 - Planned institutions: `10`
 - Planned operations: `1000`
 - First queue: `행정안전부`

@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T05:55:34Z",
+  "generated_at": "2026-07-04T06:08:52Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 321,
+  "filtered_count": 324,
   "summary": {
-    "hosts": 321,
+    "hosts": 324,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 174,
-    "external_guide_hosts": 229,
-    "registered_adapter_hosts": 163,
-    "operation_hosts": 176,
+    "external_endpoint_hosts": 177,
+    "external_guide_hosts": 232,
+    "registered_adapter_hosts": 166,
+    "operation_hosts": 179,
     "guide_only_hosts": 145,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 158,
-    "approval_required_operations": 8182,
+    "approval_required_operations": 8183,
     "malformed_source_url_count": 724
   },
   "providers": [
@@ -1448,6 +1448,23 @@
       ]
     },
     {
+      "host": "ifac.or.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 4,
+      "operations": 12,
+      "external_endpoint_operations": 12,
+      "external_guide_specs": 4,
+      "sample_ids": [
+        "15057287",
+        "15057514",
+        "15058085"
+      ]
+    },
+    {
       "host": "www.utic.go.kr",
       "kinds": [
         "external_endpoint",
@@ -2171,6 +2188,22 @@
       ]
     },
     {
+      "host": "www.gimhae.go.kr",
+      "provider": "gimhae",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 3,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "sample_ids": [
+        "15013679",
+        "15057047",
+        "15059539"
+      ]
+    },
+    {
       "host": "unipass.customs.go.kr",
       "kinds": [
         "external_endpoint",
@@ -2319,21 +2352,6 @@
       ]
     },
     {
-      "host": "www.gimhae.go.kr",
-      "provider": "gimhae",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 2,
-      "operations": 2,
-      "external_endpoint_operations": 2,
-      "sample_ids": [
-        "15057047",
-        "15059539"
-      ]
-    },
-    {
       "host": "www.gwangjin.go.kr",
       "provider": "gwangjin",
       "kinds": [
@@ -2446,6 +2464,21 @@
       ]
     },
     {
+      "host": "itour.incheon.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15013679"
+      ]
+    },
+    {
       "host": "its.go.kr",
       "provider": "its",
       "kinds": [
@@ -2526,6 +2559,22 @@
       "approval_required_operations": 1,
       "sample_ids": [
         "15129453"
+      ]
+    },
+    {
+      "host": "www.incheon.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "external_guide_specs": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15085804"
       ]
     },
     {
