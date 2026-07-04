@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T01:42:18Z",
+  "generated_at": "2026-07-04T01:55:17Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 290,
+  "filtered_count": 292,
   "summary": {
-    "hosts": 290,
+    "hosts": 292,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 145,
-    "external_guide_hosts": 209,
-    "registered_adapter_hosts": 134,
-    "operation_hosts": 147,
+    "external_endpoint_hosts": 147,
+    "external_guide_hosts": 211,
+    "registered_adapter_hosts": 136,
+    "operation_hosts": 149,
     "guide_only_hosts": 143,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7836,
+    "approval_required_operations": 7860,
     "malformed_source_url_count": 712
   },
   "providers": [
@@ -773,6 +773,24 @@
       ]
     },
     {
+      "host": "www.nrich.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 22,
+      "operations": 40,
+      "external_endpoint_operations": 40,
+      "external_guide_specs": 3,
+      "approval_required_operations": 18,
+      "sample_ids": [
+        "15015627",
+        "15015632",
+        "15015633"
+      ]
+    },
+    {
       "host": "data.uiryeong.go.kr",
       "provider": "uiryeong",
       "kinds": [
@@ -823,6 +841,24 @@
         "15038873",
         "15056627",
         "15057092"
+      ]
+    },
+    {
+      "host": "portal.nrich.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 24,
+      "operations": 36,
+      "external_endpoint_operations": 36,
+      "external_guide_specs": 20,
+      "approval_required_operations": 6,
+      "sample_ids": [
+        "15015627",
+        "15015632",
+        "15015633"
       ]
     },
     {

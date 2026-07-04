@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T01:42:18Z",
+  "generated_at": "2026-07-04T01:55:17Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4023,
-    "stable": 8037
+    "changed": 4050,
+    "stable": 8010
   },
   "added": [],
   "removed": [],
@@ -409,6 +409,136 @@
       "new_digest": "f59f3bc2fcb624f0cae822b6a96e90036241c702d1fa8bb072847e10bd259415"
     },
     {
+      "id": "15015627",
+      "old_title": "국가유산청 국립문화유산연구원_향교건축",
+      "new_title": "국가유산청 국립문화유산연구원_향교건축",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3a3eb0114291c4a1910fed947943ea01a9d321e84d919a22ed745dc458345304",
+      "new_digest": "7200b811431d2fd108b88cf0f907e42ee3caf32313fe410c43ac3ac6f13d8f21"
+    },
+    {
+      "id": "15015632",
+      "old_title": "국가유산청 국립문화유산연구원_괘불 국가지정목록",
+      "new_title": "국가유산청 국립문화유산연구원_괘불 국가지정목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fac07bc7e192825ba54240e54c5c5c8c1b0737031e7901de1c82aa7ccb69f378",
+      "new_digest": "5eee10b3824441fc8de51cd66b5f9434b99c59badbd3211245158528d55fc850"
+    },
+    {
+      "id": "15015633",
+      "old_title": "국가유산청 국립문화유산연구원_금석문 검색",
+      "new_title": "국가유산청 국립문화유산연구원_금석문 검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "cbdbb3adc2fe6f6c88c0d9a118dcb3cbb330d3cedaa430310d53495d631dfe7c",
+      "new_digest": "84f56d3af8fcab6243c0641e8a3c0ca5d648efb9dd7598678afe9c2e0ab5556e"
+    },
+    {
+      "id": "15015634",
+      "old_title": "국가유산청 국립문화유산연구원_석탑 원형기록화 3D데이터",
+      "new_title": "국가유산청 국립문화유산연구원_석탑 원형기록화 3D데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c0466e048a9a7ea12dac0e1f121f2336df0fcf1a81eab249b49d83285c79c9bf",
+      "new_digest": "d9797578780917e8735b7a0823c195c8a2aa69b9eb2d628a8e70f99af1c1b2f0"
+    },
+    {
+      "id": "15015637",
+      "old_title": "국가유산청 국립문화유산연구원_한국고고학사전",
+      "new_title": "국가유산청 국립문화유산연구원_한국고고학사전",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e02f025b0f7cb46560e72fb9137c2d6ed23defd5b80db9e1ec38a811cad5c1ef",
+      "new_digest": "027ea8d101bfa6295c4f2ff6c98486bca0c5189ae85a456b7336b5330f3de7e0"
+    },
+    {
+      "id": "15015644",
+      "old_title": "국가유산청 국립문화유산연구원_한국의 전통문양",
+      "new_title": "국가유산청 국립문화유산연구원_한국의 전통문양",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7aed73ecd4b26270426243c664e7b121efdf5cc500fb826e5e64ee85d2e4ceec",
+      "new_digest": "0952450cc01236db3458c1d94e6a14f35379188c6e460eff955f04a69e3de1fc"
+    },
+    {
+      "id": "15015645",
+      "old_title": "국가유산청 국립문화유산연구원_고문헌(미술분야)",
+      "new_title": "국가유산청 국립문화유산연구원_고문헌(미술분야)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d53e9a7d0400a652ce5f6a515288f651bafa04c47aca8dd2d784e67f0e7fcb33",
+      "new_digest": "5b7ec3f3dcc851fc3abf6b3e279691a6b1cc3a770f9227ffe3455b8fa3df71b0"
+    },
+    {
+      "id": "15015647",
+      "old_title": "국가유산청 국립문화유산연구원_수리공사연표",
+      "new_title": "국가유산청 국립문화유산연구원_수리공사연표",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "785bb1025feabc6cae0081637f4ec9cc021b2b676982707ab7b6d920a8dd6844",
+      "new_digest": "9d5523a3b8a008b5dc6ff4d158ccbc99bd315bc754c69d062f526a272da54401"
+    },
+    {
+      "id": "15015658",
+      "old_title": "국가유산청 국립문화유산연구원_석조문화유산 보존관리",
+      "new_title": "국가유산청 국립문화유산연구원_석조문화유산 보존관리",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "81d4c770863404427df4b13e6ca6528bb0ebb94025f9acd79b2d51fd8bc1994e",
+      "new_digest": "02719e10191122b295a6257e0a11a8914de5b56f59419daf61e5a9750ab70f2d"
+    },
+    {
+      "id": "15015667",
+      "old_title": "국가유산청 국립문화유산연구원_조선고적도보",
+      "new_title": "국가유산청 국립문화유산연구원_조선고적도보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ca14427858c8b42ab44051fa0b503a74b6560c4c99409f7cf2dd495a94659d15",
+      "new_digest": "436959fe110a6283bca7076609716051fb58e0e8dd34ec6597b9083325ca930f"
+    },
+    {
+      "id": "15015669",
+      "old_title": "국가유산청 국립문화유산연구원_일제강점기(문헌목록)",
+      "new_title": "국가유산청 국립문화유산연구원_일제강점기(문헌목록)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "75ab239cf72d483993c7b3f1444afe050dc2c6481ecad90c1ce6ebfe672f966c",
+      "new_digest": "0b39b6e33c820b434c15955cc27f80b9934ccf598264e262cf3f8ba82f2e7b06"
+    },
+    {
+      "id": "15015671",
+      "old_title": "국가유산청 국립문화유산연구원_고구려 벽화고분 유적",
+      "new_title": "국가유산청 국립문화유산연구원_고구려 벽화고분 유적",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b2821ff1fe81820945c31d473d224a3ac830806036fe29ef66c0dcd0fb9e4b4f",
+      "new_digest": "f576a479421c1f6dd43b7ae412b9d04add0a7e1894923cda251ec000f20d2966"
+    },
+    {
+      "id": "15015672",
+      "old_title": "국가유산청 국립문화유산연구원_개성의 문화유적",
+      "new_title": "국가유산청 국립문화유산연구원_개성의 문화유적",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2b420f1c42f58a954f43efba85baf62551145a746d2c0bc20db37de960d64e57",
+      "new_digest": "fd9016238da4a188a47f13356e35c4c685267b13f4efbad35f459e9229705df5"
+    },
+    {
       "id": "15019666",
       "old_title": "농림축산식품부 농식품인재개발원_시설 대여 정보",
       "new_title": "농림축산식품부 농식품인재개발원_시설 대여 정보",
@@ -537,6 +667,46 @@
       ],
       "old_digest": "3b088d577a24677391f38655456ad64df3e21cf18f79da2ff2c7900985ab74ce",
       "new_digest": "9733e57e56366d74aba9c80ff265d08843f8219a34c3c3539180918719e45e69"
+    },
+    {
+      "id": "15028223",
+      "old_title": "국가유산청 국립문화유산연구원_문화유산 전통재료",
+      "new_title": "국가유산청 국립문화유산연구원_문화유산 전통재료",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "50eb0e4f661ff39f63f0fe66b8b00b600f6873e06cc5568d32621d45bc407424",
+      "new_digest": "16a1a26bbc5705664a8530f1fc769a95b1c0cc57139795607f3a2d4d25dcf2c1"
+    },
+    {
+      "id": "15028224",
+      "old_title": "국가유산청 국립문화유산연구원_보존과학연구",
+      "new_title": "국가유산청 국립문화유산연구원_보존과학연구",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8e6a7df837781d3b23dc236188bcf40777e5162429850e5df82023dac54c33d2",
+      "new_digest": "8ebbaaac63510cb379d525210606bc29bc283525a6cdaef68e648c62cded400e"
+    },
+    {
+      "id": "15028225",
+      "old_title": "국가유산청 국립문화유산연구원_제철유적 목록",
+      "new_title": "국가유산청 국립문화유산연구원_제철유적 목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "231109be603d7559b9ebde875b8ef64783127faf940d4c795499e5c3bbb161fe",
+      "new_digest": "e662e84101ee85afc5bf85072bdd7b5668807cbbc7354e1120d40ea7ff7076b6"
+    },
+    {
+      "id": "15028226",
+      "old_title": "국가유산청 국립문화유산연구원_영산강유역 지석묘",
+      "new_title": "국가유산청 국립문화유산연구원_영산강유역 지석묘",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ce35de2602c61850011a996f28e161ff9c0239092882c45598253774389f2043",
+      "new_digest": "1184dbba7af326984a5142418eb2d6eb94f6ba5f43ba7065a66a190630c606e3"
     },
     {
       "id": "15029097",
@@ -2407,6 +2577,26 @@
       ],
       "old_digest": "c909f4ee5c817954ea60b35504d1ad843ab453787ba6c373de22e233ccefed82",
       "new_digest": "da647ffe75595c30edac91dab95a91dbae840effdfcc483d80322361c6a6bbde"
+    },
+    {
+      "id": "15033482",
+      "old_title": "국가유산청 국립문화유산연구원_목간검색",
+      "new_title": "국가유산청 국립문화유산연구원_목간검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f8c67dcbbe8f3bbc16ec5b4d05bf488c0a3b5ecccd08b47fdfc69412149f008b",
+      "new_digest": "470af0024b5204d1a168998ab967fcb485fe9f8f5fe8ac852163788b0f9dd8cf"
+    },
+    {
+      "id": "15033483",
+      "old_title": "국가유산청 국립문화유산연구원_한국고고학저널(저널목록)",
+      "new_title": "국가유산청 국립문화유산연구원_한국고고학저널(저널목록)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c2f1e657cf99d910155077fafa980d3fae879d986a72a477602df439a21511e6",
+      "new_digest": "e0868bc276e4906b5f2786a730af729207180f1dbd77499c304b9dcd53ecddb4"
     },
     {
       "id": "15033496",
@@ -23489,6 +23679,36 @@
       "new_digest": "41edc2292b68949dd0efe3e5c4eb9036e3a4018e20c3b97692bb18a47f83fcdc"
     },
     {
+      "id": "15096635",
+      "old_title": "국가유산청 국립문화유산연구원_『문화재 窓』 소식지 목록",
+      "new_title": "국가유산청 국립문화유산연구원_『문화재 窓』 소식지 목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "851bf9a811ee4b219a3933415b8443853ef02381c3b4101b236e800e4a09e901",
+      "new_digest": "e9732a3c36d5447bab42ce21b873609d937a0ea1faa0e40b7d261bb84505c07a"
+    },
+    {
+      "id": "15096636",
+      "old_title": "국가유산청 국립문화유산연구원_『헤리티지:역사와 과학』 학술지 논문목록",
+      "new_title": "국가유산청 국립문화유산연구원_『헤리티지:역사와 과학』 학술지 논문목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0f3c71037e5545fefef8ae7ec9bceddf5fb7eae487e139186c54b35f0aa8f3b1",
+      "new_digest": "b2fb0a563f98f5b8d19df475d5a791811b92cc919709eb91bc8da645e8a7d71d"
+    },
+    {
+      "id": "15096637",
+      "old_title": "국가유산청 국립문화유산연구원_기증자료 목록",
+      "new_title": "국가유산청 국립문화유산연구원_기증자료 목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f274bba2f14c159c989254be91c1bcc2a3b03a794162b8b5b632a20c0a7528c1",
+      "new_digest": "29afefb6f76bb685d0257e518a023628999a7c9e4db2b450789266063723f7cc"
+    },
+    {
       "id": "15096712",
       "old_title": "행정안전부_행정안전부_실시간 상세주소정보 조회(검색API)",
       "new_title": "행정안전부_행정안전부_실시간 상세주소정보 조회(검색API)",
@@ -35097,6 +35317,56 @@
       ],
       "old_digest": "8b22751482895ddea850377eaa2e7f61e2040200519599ff10322ad28cb51da8",
       "new_digest": "db743c6031ee6331e926813f4dad2c2484318857438da95ba232386937a55ef2"
+    },
+    {
+      "id": "15142319",
+      "old_title": "국가유산청 국립문화유산연구원_발간자료",
+      "new_title": "국가유산청 국립문화유산연구원_발간자료",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "12a905352137a4a98ce2c241a8d576f884be1b4bf5de6b385bab650e08d313ad",
+      "new_digest": "d797411fcb6fbaa53207056791b11ca3748d38474b1e82c72ff15e06af9e347e"
+    },
+    {
+      "id": "15142353",
+      "old_title": "국가유산청 국립문화유산연구원_조선시대 개인일기",
+      "new_title": "국가유산청 국립문화유산연구원_조선시대 개인일기",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f6276e9f774614c0022eb8067f591ce57ef9b5a1bac4b65d1967d54bb9f806b0",
+      "new_digest": "83d3d9328c40df5a15fcde197a44eff4bab261396928d069b8d6f423bd6b02c2"
+    },
+    {
+      "id": "15142357",
+      "old_title": "국가유산청 국립문화유산연구원_한국고고학저널(유적별 목록)",
+      "new_title": "국가유산청 국립문화유산연구원_한국고고학저널(유적별 목록)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c24563f68cb7e678607e49f6e6474f7e98044e37832be47668ed2897a868b4d8",
+      "new_digest": "379ddaff3239b2abfec28f53a3d5036132ded9f2c4a3d370c22d6bf1698d7f71"
+    },
+    {
+      "id": "15142375",
+      "old_title": "국가유산청 국립문화유산연구원_공예도설",
+      "new_title": "국가유산청 국립문화유산연구원_공예도설",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "cd4c9ac24c52c86b7027c1845de24e69143915ac6511f09c569107e5aab1b04e",
+      "new_digest": "4e7e812607807be70b2905e4f8732e8a8895c23f2cf1dfb91af02082c51bd08a"
+    },
+    {
+      "id": "15142389",
+      "old_title": "국가유산청 국립문화유산연구원_초상화 국가지정목록",
+      "new_title": "국가유산청 국립문화유산연구원_초상화 국가지정목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "53773d4edab7a8b3757f67336e76c37c47046063a338d3ff905b82455841e9ef",
+      "new_digest": "76b9d29cf2e3e6572bb143b12c95f36c679eb729d764eed69f36a4dcbd12511b"
     },
     {
       "id": "15142447",

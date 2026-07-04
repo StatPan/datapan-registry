@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-04T01:42:18Z",
+  "generated_at": "2026-07-04T01:55:17Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 84,
+    "report_total": 88,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,7 +38,7 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 72,
+      "report_count": 76,
       "present_reports": [
         {
           "name": "childcare-info-verification-summary.json",
@@ -260,6 +260,22 @@
           "path": "reports/data-go-kr/nihc-verification.json"
         },
         {
+          "name": "nrich-portal-verification-summary.json",
+          "path": "reports/data-go-kr/nrich-portal-verification-summary.json"
+        },
+        {
+          "name": "nrich-portal-verification.json",
+          "path": "reports/data-go-kr/nrich-portal-verification.json"
+        },
+        {
+          "name": "nrich-www-verification-summary.json",
+          "path": "reports/data-go-kr/nrich-www-verification-summary.json"
+        },
+        {
+          "name": "nrich-www-verification.json",
+          "path": "reports/data-go-kr/nrich-www-verification.json"
+        },
+        {
           "name": "operation-materialization-plan.json",
           "path": "reports/data-go-kr/operation-materialization-plan.json",
           "schema_version": "datapan.operation-materialization-plan.v1"
@@ -411,6 +427,10 @@
         "nier-nesc-verification.json",
         "nihc-verification-summary.json",
         "nihc-verification.json",
+        "nrich-portal-verification-summary.json",
+        "nrich-portal-verification.json",
+        "nrich-www-verification-summary.json",
+        "nrich-www-verification.json",
         "operation-materialization-plan.json",
         "registry-impact-plan.json",
         "runtime-evidence-growth.json",

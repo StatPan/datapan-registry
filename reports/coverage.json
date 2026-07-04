@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T01:42:24Z",
+  "generated_at": "2026-07-04T01:55:24Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 20507,
-    "callable_operations": 20365,
+    "operations": 20583,
+    "callable_operations": 20441,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 8897,
-    "registered_adapter_operations": 8887,
+    "external_endpoint_operations": 8973,
+    "registered_adapter_operations": 8963,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.7,
-    "approval_required_operations": 7836,
+    "approval_required_operations": 7860,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 134,
+    "registered_adapter_hosts": 136,
     "missing_adapter_hosts": 11,
-    "adapter_count": 113,
+    "adapter_count": 114,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-04T01:42:16Z",
-    "total": 4037,
-    "verified": 2188,
+    "generated_at": "2026-07-04T01:55:15Z",
+    "total": 4113,
+    "verified": 2264,
     "failed": 306,
     "skipped": 1543,
     "unknown": 0,
-    "verified_percent": 54.2,
-    "evidence_operation_percent": 19.7
+    "verified_percent": 55,
+    "evidence_operation_percent": 20
   },
   "route_evidence": {
     "present": true,
@@ -381,10 +381,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-04T01:42:24Z",
+    "generated_at": "2026-07-04T01:55:24Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 113,
-    "host_count": 139,
+    "adapter_count": 114,
+    "host_count": 141,
     "adapters": [
       {
         "name": "airport",
@@ -1227,6 +1227,17 @@
         ]
       },
       {
+        "name": "nrich",
+        "status": "registered",
+        "hosts": [
+          "portal.nrich.go.kr",
+          "www.nrich.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "oneclick-law",
         "status": "registered",
         "hosts": [
@@ -1569,8 +1580,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 113,
-      "verification_capable_adapters": 113,
+      "adapter_count": 114,
+      "verification_capable_adapters": 114,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,
