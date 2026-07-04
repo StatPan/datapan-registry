@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T01:17:09Z",
+  "generated_at": "2026-07-04T01:28:18Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 20356,
-    "runtime_evidence": 3895,
-    "runtime_evidence_percent": 19.1,
-    "callable_operations": 20214,
-    "external_endpoint_operations": 8746,
-    "registered_adapter_operations": 8736,
+    "operations": 20426,
+    "runtime_evidence": 3956,
+    "runtime_evidence_percent": 19.4,
+    "callable_operations": 20284,
+    "external_endpoint_operations": 8816,
+    "registered_adapter_operations": 8806,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 8746
+      "count": 8816
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 8736
+      "count": 8806
     },
     {
       "key": "builtin",
@@ -69,7 +69,7 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 2625
+      "operation_count": 2639
     },
     {
       "category": "농축수산",
@@ -81,7 +81,7 @@
     },
     {
       "category": "문화관광",
-      "operation_count": 2064
+      "operation_count": 2105
     },
     {
       "category": "사회복지",
@@ -105,11 +105,11 @@
     },
     {
       "category": "국토관리",
-      "operation_count": 1043
+      "operation_count": 1050
     },
     {
       "category": "보건의료",
-      "operation_count": 1007
+      "operation_count": 1011
     },
     {
       "category": "재난안전",
@@ -117,7 +117,7 @@
     },
     {
       "category": "교육",
-      "operation_count": 798
+      "operation_count": 802
     },
     {
       "category": "과학기술",
@@ -139,7 +139,7 @@
     },
     {
       "host": "data.gg.go.kr",
-      "operation_count": 2195,
+      "operation_count": 2196,
       "adapter": "data-gg",
       "adapter_status": "registered",
       "capabilities": [
@@ -248,7 +248,7 @@
     },
     {
       "host": "www.jejudatahub.net",
-      "operation_count": 178,
+      "operation_count": 185,
       "adapter": "jejudatahub",
       "adapter_status": "registered",
       "capabilities": [
@@ -4311,6 +4311,101 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 69
+        }
+      ]
+    },
+    {
+      "organization": "제주특별자치도 서귀포시",
+      "api_count": 28,
+      "operation_api_count": 28,
+      "operation_count": 70,
+      "runtime_evidence_count": 61,
+      "runtime_evidence_percent": 87.1,
+      "verified": 61,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 56,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "external_endpoint",
+          "count": 70
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 70
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "문화관광",
+          "operation_count": 41
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 14
+        },
+        {
+          "category": "국토관리",
+          "operation_count": 7
+        },
+        {
+          "category": "보건의료",
+          "operation_count": 4
+        },
+        {
+          "category": "교육",
+          "operation_count": 4
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "www.seogwipo.go.kr",
+          "operation_count": 50,
+          "adapter": "seogwipo",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "seogwipo.go.kr",
+          "operation_count": 11,
+          "adapter": "seogwipo",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.jejudatahub.net",
+          "operation_count": 7,
+          "adapter": "jejudatahub",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "data.gg.go.kr",
+          "operation_count": 1,
+          "adapter": "data-gg",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.gwangjin.go.kr",
+          "operation_count": 1,
+          "adapter": "gwangjin",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },
@@ -15614,24 +15709,6 @@
           "operation_count": 1
         }
       ]
-    },
-    {
-      "organization": "제주특별자치도 서귀포시",
-      "api_count": 28,
-      "operation_api_count": 0,
-      "operation_count": 0,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [],
-      "by_adapter_status": [],
-      "top_categories": [],
-      "top_hosts": []
     },
     {
       "organization": "국가유산청 국립문화유산연구원",

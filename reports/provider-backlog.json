@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T01:17:09Z",
+  "generated_at": "2026-07-04T01:28:18Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 288,
+  "filtered_count": 289,
   "summary": {
-    "hosts": 288,
+    "hosts": 289,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 143,
-    "external_guide_hosts": 208,
-    "registered_adapter_hosts": 132,
-    "operation_hosts": 145,
+    "external_endpoint_hosts": 144,
+    "external_guide_hosts": 209,
+    "registered_adapter_hosts": 133,
+    "operation_hosts": 146,
     "guide_only_hosts": 143,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7699,
+    "approval_required_operations": 7755,
     "malformed_source_url_count": 712
   },
   "providers": [
@@ -178,9 +178,9 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 888,
-      "operations": 2195,
-      "external_endpoint_operations": 2195,
+      "specs": 889,
+      "operations": 2196,
+      "external_endpoint_operations": 2196,
       "external_guide_specs": 21,
       "wms_operations": 5,
       "approval_required_operations": 59,
@@ -388,11 +388,11 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 75,
-      "operations": 178,
-      "external_endpoint_operations": 178,
+      "specs": 80,
+      "operations": 185,
+      "external_endpoint_operations": 185,
       "external_guide_specs": 7,
-      "approval_required_operations": 159,
+      "approval_required_operations": 166,
       "sample_ids": [
         "15034922",
         "15045335",
@@ -628,6 +628,25 @@
         "15021305",
         "15098038",
         "15098055"
+      ]
+    },
+    {
+      "host": "www.seogwipo.go.kr",
+      "provider": "seogwipo",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 34,
+      "operations": 57,
+      "external_endpoint_operations": 57,
+      "external_guide_specs": 2,
+      "approval_required_operations": 46,
+      "sample_ids": [
+        "15057144",
+        "15057147",
+        "15057178"
       ]
     },
     {
@@ -1168,6 +1187,23 @@
       ]
     },
     {
+      "host": "seogwipo.go.kr",
+      "provider": "seogwipo",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 7,
+      "operations": 11,
+      "external_endpoint_operations": 11,
+      "approval_required_operations": 7,
+      "sample_ids": [
+        "15058463",
+        "15059019",
+        "15065420"
+      ]
+    },
+    {
       "host": "data.naqs.go.kr",
       "provider": "naqs",
       "kinds": [
@@ -1288,23 +1324,6 @@
         "15000017",
         "15000063",
         "15000297"
-      ]
-    },
-    {
-      "host": "www.seogwipo.go.kr",
-      "provider": "seogwipo",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 7,
-      "operations": 7,
-      "external_endpoint_operations": 7,
-      "approval_required_operations": 5,
-      "sample_ids": [
-        "15057144",
-        "15057370",
-        "15095727"
       ]
     },
     {
@@ -1887,6 +1906,22 @@
       ]
     },
     {
+      "host": "www.gwangjin.go.kr",
+      "provider": "gwangjin",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 2,
+      "operations": 2,
+      "external_endpoint_operations": 2,
+      "approval_required_operations": 2,
+      "sample_ids": [
+        "15108428",
+        "15139835"
+      ]
+    },
+    {
       "host": "air.daegu.go.kr",
       "kinds": [
         "external_endpoint",
@@ -2245,21 +2280,6 @@
       "approval_required_operations": 1,
       "sample_ids": [
         "15084033"
-      ]
-    },
-    {
-      "host": "www.gwangjin.go.kr",
-      "provider": "gwangjin",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 1,
-      "operations": 1,
-      "external_endpoint_operations": 1,
-      "approval_required_operations": 1,
-      "sample_ids": [
-        "15139835"
       ]
     },
     {

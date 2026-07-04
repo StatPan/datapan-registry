@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-04T01:17:09Z",
+  "generated_at": "2026-07-04T01:28:18Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 76,
+    "report_total": 80,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,7 +38,7 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 64,
+      "report_count": 68,
       "present_reports": [
         {
           "name": "childcare-info-verification-summary.json",
@@ -269,6 +269,22 @@
           "schema_version": "datapan.safetydata-registry-patches.v1"
         },
         {
+          "name": "seogwipo-bare-verification-summary.json",
+          "path": "reports/data-go-kr/seogwipo-bare-verification-summary.json"
+        },
+        {
+          "name": "seogwipo-bare-verification.json",
+          "path": "reports/data-go-kr/seogwipo-bare-verification.json"
+        },
+        {
+          "name": "seogwipo-www-verification-summary.json",
+          "path": "reports/data-go-kr/seogwipo-www-verification-summary.json"
+        },
+        {
+          "name": "seogwipo-www-verification.json",
+          "path": "reports/data-go-kr/seogwipo-www-verification.json"
+        },
+        {
           "name": "seoul-verification-summary.json",
           "path": "reports/data-go-kr/seoul-verification-summary.json"
         },
@@ -380,6 +396,10 @@
         "runtime-evidence-growth.json",
         "safetydata-operation-candidates.json",
         "safetydata-registry-patches.json",
+        "seogwipo-bare-verification-summary.json",
+        "seogwipo-bare-verification.json",
+        "seogwipo-www-verification-summary.json",
+        "seogwipo-www-verification.json",
         "seoul-verification-summary.json",
         "seoul-verification.json",
         "sisul-verification-summary.json",

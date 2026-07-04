@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T01:17:16Z",
+  "generated_at": "2026-07-04T01:28:24Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,19 +7,19 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 20356,
-    "callable_operations": 20214,
+    "operations": 20426,
+    "callable_operations": 20284,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 8746,
-    "registered_adapter_operations": 8736,
+    "external_endpoint_operations": 8816,
+    "registered_adapter_operations": 8806,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.7,
-    "approval_required_operations": 7699,
+    "approval_required_operations": 7755,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 132,
+    "registered_adapter_hosts": 133,
     "missing_adapter_hosts": 11,
     "adapter_count": 113,
     "call_capable_adapters": 23,
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-04T01:17:08Z",
-    "total": 3895,
-    "verified": 2046,
+    "generated_at": "2026-07-04T01:28:17Z",
+    "total": 3956,
+    "verified": 2107,
     "failed": 306,
     "skipped": 1543,
     "unknown": 0,
-    "verified_percent": 52.5,
-    "evidence_operation_percent": 19.1
+    "verified_percent": 53.3,
+    "evidence_operation_percent": 19.4
   },
   "route_evidence": {
     "present": true,
@@ -210,9 +210,9 @@
           "external_guide"
         ],
         "adapter_status": "adapter",
-        "specs": 888,
-        "operations": 2195,
-        "external_endpoint_operations": 2195,
+        "specs": 889,
+        "operations": 2196,
+        "external_endpoint_operations": 2196,
         "external_guide_specs": 21,
         "wms_operations": 5,
         "approval_required_operations": 59,
@@ -381,10 +381,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-04T01:17:16Z",
+    "generated_at": "2026-07-04T01:28:24Z",
     "datapan_version": "0.1.0-dev",
     "adapter_count": 113,
-    "host_count": 137,
+    "host_count": 138,
     "adapters": [
       {
         "name": "airport",
@@ -1347,6 +1347,7 @@
         "name": "seogwipo",
         "status": "registered",
         "hosts": [
+          "seogwipo.go.kr",
           "www.seogwipo.go.kr"
         ],
         "capabilities": [

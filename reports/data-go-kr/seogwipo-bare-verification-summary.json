@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-07-04T01:27:46Z",
+  "source": "reports/data-go-kr/seogwipo-bare-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 11,
+    "verified": 11,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 11,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "seogwipo",
+        "count": 11,
+        "provider": "seogwipo"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "seogwipo.go.kr",
+        "count": 11,
+        "host": "seogwipo.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 11,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}
