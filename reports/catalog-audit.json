@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-04T01:55:17Z",
+  "generated_at": "2026-07-04T02:07:18Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 20583,
-    "callable_operations": 20441,
-    "specs_without_operations": 825,
-    "specs_without_callable_operation": 900,
+    "operations_total": 20624,
+    "callable_operations": 20482,
+    "specs_without_operations": 799,
+    "specs_without_callable_operation": 874,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 8245,
-    "operations_without_response_params": 9467,
+    "operations_without_request_params": 8286,
+    "operations_without_response_params": 9508,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 4364,
-      "external_endpoint_operations": 8973,
+      "external_endpoint_specs": 4390,
+      "external_endpoint_operations": 9014,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 114,
       "dev_approval_required_operations": 224,
-      "prod_approval_required_operations": 7754,
+      "prod_approval_required_operations": 7795,
       "malformed_endpoint_url_count": 42,
       "malformed_guide_url_count": 670,
       "top_endpoint_hosts": [
@@ -34,11 +34,11 @@
         },
         {
           "host": "data.gg.go.kr",
-          "count": 2196
+          "count": 2206
         },
         {
           "host": "data.gm.go.kr",
-          "count": 607
+          "count": 608
         },
         {
           "host": "www.vworld.kr",
@@ -62,7 +62,7 @@
         },
         {
           "host": "www.foodsafetykorea.go.kr",
-          "count": 289
+          "count": 290
         },
         {
           "host": "data.mafra.go.kr",
@@ -86,7 +86,7 @@
         },
         {
           "host": "www.jeju.go.kr",
-          "count": 170
+          "count": 171
         },
         {
           "host": "www.calspia.go.kr",
@@ -112,11 +112,11 @@
       "top_external_endpoint_hosts": [
         {
           "host": "data.gg.go.kr",
-          "count": 2196
+          "count": 2206
         },
         {
           "host": "data.gm.go.kr",
-          "count": 607
+          "count": 608
         },
         {
           "host": "www.vworld.kr",
@@ -140,7 +140,7 @@
         },
         {
           "host": "www.foodsafetykorea.go.kr",
-          "count": 289
+          "count": 290
         },
         {
           "host": "data.mafra.go.kr",
@@ -164,7 +164,7 @@
         },
         {
           "host": "www.jeju.go.kr",
-          "count": 170
+          "count": 171
         },
         {
           "host": "www.calspia.go.kr",

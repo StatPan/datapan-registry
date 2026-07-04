@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-04T01:55:15Z",
+  "generated_at": "2026-07-04T02:07:16Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4113,
-    "verified": 2264,
-    "failed": 306,
+    "total": 4141,
+    "verified": 2266,
+    "failed": 332,
     "skipped": 1543,
     "unknown": 0
   },
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2264,
+        "count": 2266,
         "status": "verified"
       },
       {
@@ -26,7 +26,7 @@
       },
       {
         "key": "failed",
-        "count": 306,
+        "count": 332,
         "status": "failed"
       }
     ],
@@ -80,6 +80,11 @@
         "key": "ekape_missing_required_params",
         "count": 27,
         "reason": "ekape_missing_required_params"
+      },
+      {
+        "key": "anyang_request_failed",
+        "count": 26,
+        "reason": "anyang_request_failed"
       },
       {
         "key": "geoje_missing_required_params",
@@ -549,6 +554,11 @@
         "provider": "khoa"
       },
       {
+        "key": "anyang",
+        "count": 26,
+        "provider": "anyang"
+      },
+      {
         "key": "tour",
         "count": 26,
         "provider": "tour"
@@ -757,6 +767,11 @@
         "key": "gimhae",
         "count": 2,
         "provider": "gimhae"
+      },
+      {
+        "key": "mpva-egonghun",
+        "count": 2,
+        "provider": "mpva-egonghun"
       },
       {
         "key": "unipass",
@@ -1101,6 +1116,11 @@
         "host": "openapi.seoul.go.kr:8088"
       },
       {
+        "key": "www.anyang.go.kr",
+        "count": 26,
+        "host": "www.anyang.go.kr"
+      },
+      {
         "key": "www.lofin365.go.kr",
         "count": 25,
         "host": "www.lofin365.go.kr"
@@ -1366,6 +1386,11 @@
         "host": "www.vworld.kr"
       },
       {
+        "key": "e-gonghun.mpva.go.kr",
+        "count": 2,
+        "host": "e-gonghun.mpva.go.kr"
+      },
+      {
         "key": "gis.daejeon.go.kr",
         "count": 2,
         "host": "gis.daejeon.go.kr"
@@ -1559,7 +1584,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3389,
+        "count": 3417,
         "kind": "external_endpoint"
       },
       {

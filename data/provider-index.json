@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T01:55:17Z",
+  "generated_at": "2026-07-04T02:07:18Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 114,
-  "host_count": 141,
+  "adapter_count": 116,
+  "host_count": 143,
   "adapters": [
     {
       "name": "airport",
@@ -22,6 +22,16 @@
       ],
       "capabilities": [
         "call",
+        "verification"
+      ]
+    },
+    {
+      "name": "anyang",
+      "status": "registered",
+      "hosts": [
+        "www.anyang.go.kr"
+      ],
+      "capabilities": [
         "verification"
       ]
     },
@@ -722,6 +732,16 @@
       ]
     },
     {
+      "name": "mpva-egonghun",
+      "status": "registered",
+      "hosts": [
+        "e-gonghun.mpva.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "much",
       "status": "registered",
       "hosts": [
@@ -1198,8 +1218,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 114,
-    "verification_capable_adapters": 114,
+    "adapter_count": 116,
+    "verification_capable_adapters": 116,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

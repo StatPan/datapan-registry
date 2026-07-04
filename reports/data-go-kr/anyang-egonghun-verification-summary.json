@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-07-04T02:06:52Z",
+  "source": "reports/data-go-kr/anyang-egonghun-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 2,
+    "verified": 2,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 2,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "mpva-egonghun",
+        "count": 2,
+        "provider": "mpva-egonghun"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "e-gonghun.mpva.go.kr",
+        "count": 2,
+        "host": "e-gonghun.mpva.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 2,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

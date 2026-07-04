@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-04T01:55:17Z",
+  "generated_at": "2026-07-04T02:07:18Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 88,
+    "report_total": 92,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,8 +38,24 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 76,
+      "report_count": 80,
       "present_reports": [
+        {
+          "name": "anyang-egonghun-verification-summary.json",
+          "path": "reports/data-go-kr/anyang-egonghun-verification-summary.json"
+        },
+        {
+          "name": "anyang-egonghun-verification.json",
+          "path": "reports/data-go-kr/anyang-egonghun-verification.json"
+        },
+        {
+          "name": "anyang-www-verification-summary.json",
+          "path": "reports/data-go-kr/anyang-www-verification-summary.json"
+        },
+        {
+          "name": "anyang-www-verification.json",
+          "path": "reports/data-go-kr/anyang-www-verification.json"
+        },
         {
           "name": "childcare-info-verification-summary.json",
           "path": "reports/data-go-kr/childcare-info-verification-summary.json"
@@ -374,6 +390,10 @@
         "verification-plan.json"
       ],
       "extra_reports": [
+        "anyang-egonghun-verification-summary.json",
+        "anyang-egonghun-verification.json",
+        "anyang-www-verification-summary.json",
+        "anyang-www-verification.json",
         "childcare-info-verification-summary.json",
         "childcare-info-verification.json",
         "chungbuk-verification-summary.json",

@@ -1,0 +1,52 @@
+{
+  "generated_at": "2026-07-04T02:06:52Z",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "timeout": "20s",
+  "exclude_input": "reports/latest-verification.json",
+  "truncated": false,
+  "filters": {
+    "organization": "경기도 안양시",
+    "host": "e-gonghun.mpva.go.kr",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 2,
+  "summary": {
+    "total": 2,
+    "verified": 2,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15126508",
+      "title": "경기도 안양시_보훈단체_현황",
+      "operation": "경기도 안양시_보훈단체_현황_20230807 외부 링크 2",
+      "provider": "mpva-egonghun",
+      "endpoint_host": "e-gonghun.mpva.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T02:06:52Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://e-gonghun.mpva.go.kr/user/IndepCrusaderOpenAPI.do?goTocode=50004",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15126508",
+      "title": "경기도 안양시_보훈단체_현황",
+      "operation": "경기도 안양시_보훈단체_현황_20230807 외부 링크 3",
+      "provider": "mpva-egonghun",
+      "endpoint_host": "e-gonghun.mpva.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T02:06:52Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://e-gonghun.mpva.go.kr/user/ContribuMeritOpenAPI.do?goTocode=50002",
+      "body_shape": "html"
+    }
+  ]
+}
