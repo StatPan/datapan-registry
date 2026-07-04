@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-04T04:09:05Z",
+  "generated_at": "2026-07-04T04:17:10Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 114,
+    "report_total": 116,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,7 +38,7 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 102,
+      "report_count": 104,
       "present_reports": [
         {
           "name": "anyang-egonghun-verification-summary.json",
@@ -171,6 +171,14 @@
         {
           "name": "garak-corp-www-verification.json",
           "path": "reports/data-go-kr/garak-corp-www-verification.json"
+        },
+        {
+          "name": "gogung-verification-summary.json",
+          "path": "reports/data-go-kr/gogung-verification-summary.json"
+        },
+        {
+          "name": "gogung-verification.json",
+          "path": "reports/data-go-kr/gogung-verification.json"
         },
         {
           "name": "han-river-flood-verification-summary.json",
@@ -510,6 +518,8 @@
         "garak-corp-temp-verification.json",
         "garak-corp-www-verification-summary.json",
         "garak-corp-www-verification.json",
+        "gogung-verification-summary.json",
+        "gogung-verification.json",
         "han-river-flood-verification-summary.json",
         "han-river-flood-verification.json",
         "institution-api-overview.json",

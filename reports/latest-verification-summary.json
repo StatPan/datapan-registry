@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T04:09:03Z",
+  "generated_at": "2026-07-04T04:17:08Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4467,
-    "verified": 2590,
+    "total": 4489,
+    "verified": 2612,
     "failed": 334,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2590,
+        "count": 2612,
         "status": "verified"
       },
       {
@@ -602,6 +602,11 @@
         "key": "childcare-info",
         "count": 23,
         "provider": "childcare-info"
+      },
+      {
+        "key": "gogung",
+        "count": 22,
+        "provider": "gogung"
       },
       {
         "key": "ulsan",
@@ -1196,6 +1201,11 @@
         "host": "info.childcare.go.kr"
       },
       {
+        "key": "www.gogung.go.kr",
+        "count": 22,
+        "host": "www.gogung.go.kr"
+      },
+      {
         "key": "openapi.its.ulsan.kr",
         "count": 20,
         "host": "openapi.its.ulsan.kr"
@@ -1709,7 +1719,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3743,
+        "count": 3765,
         "kind": "external_endpoint"
       },
       {

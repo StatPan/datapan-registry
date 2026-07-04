@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T04:09:05Z",
+  "generated_at": "2026-07-04T04:17:10Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4250,
-    "stable": 7810
+    "changed": 4272,
+    "stable": 7788
   },
   "added": [],
   "removed": [],
@@ -2617,6 +2617,226 @@
       ],
       "old_digest": "c909f4ee5c817954ea60b35504d1ad843ab453787ba6c373de22e233ccefed82",
       "new_digest": "da647ffe75595c30edac91dab95a91dbae840effdfcc483d80322361c6a6bbde"
+    },
+    {
+      "id": "15033342",
+      "old_title": "문화재청 국립고궁박물관_교육자료 상세조회 정보",
+      "new_title": "문화재청 국립고궁박물관_교육자료 상세조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bb7a0825c23f49611b0c888aaebd80b0c602a44a4c00a1dfa1ad27e9941bbaa9",
+      "new_digest": "76aaa8b67f31920fd7feefe1a8e63119228c0b08331c32a449b94b65e9a9b66d"
+    },
+    {
+      "id": "15033344",
+      "old_title": "문화재청 국립고궁박물관_공지사항 목록조회 정보",
+      "new_title": "문화재청 국립고궁박물관_공지사항 목록조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "db1847aff06c717431ea1c7ba760597638295757f7a1a72088614726882404c1",
+      "new_digest": "9bb014cf24e9ab67a7c95b883de448c8bde08d5a9cd65c85f4797cad51970c35"
+    },
+    {
+      "id": "15033346",
+      "old_title": "문화재청 국립고궁박물관_공지사항 상세조회 정보",
+      "new_title": "문화재청 국립고궁박물관_공지사항 상세조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "083d6359dbcfa715d7445f46d811fc2b38bfcc48a510f07654cae103e13888e9",
+      "new_digest": "c994778033de8ece6fb3f1a8a4ef7c5781f371eacebed44c5a2cebb0a2eae518"
+    },
+    {
+      "id": "15033348",
+      "old_title": "문화재청 국립고궁박물관_보도자료 목록조회 정보",
+      "new_title": "문화재청 국립고궁박물관_보도자료 목록조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "31c0d7178809e95269a511763caed1716e2265780946b6a9317aaf90ce1e895c",
+      "new_digest": "160c8f29ef2835ea8a824d030229ce6dae39ca56ec625590ec44b58397458491"
+    },
+    {
+      "id": "15033349",
+      "old_title": "문화재청 국립고궁박물관_보도자료 상세조회 정보",
+      "new_title": "문화재청 국립고궁박물관_보도자료 상세조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9c63e030aa0b2744bffd221f85063802c49b3ad0235e3487c7d9621e8c833043",
+      "new_digest": "80f5ad608bb4b3dd68eec53c434512d62e44967c2cf10f54f64b7befb1830beb"
+    },
+    {
+      "id": "15033350",
+      "old_title": "문화재청 국립고궁박물관_입찰 목록조회 정보",
+      "new_title": "문화재청 국립고궁박물관_입찰 목록조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a9e76917d6d377cd8cc3ddd2c10a0ac94efe418175114d15f4dd6419a1dd0878",
+      "new_digest": "ca833f9d8503bb8bdcbe33efa8cdb09301d87be8be6ba3f25e2fd95660cbeaf2"
+    },
+    {
+      "id": "15033351",
+      "old_title": "문화재청 국립고궁박물관_입찰 상세조회 정보",
+      "new_title": "문화재청 국립고궁박물관_입찰 상세조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f8e9a4abdd22d8ea23db0414de9a2d3b427aa340b9bb92868980a0f81324ba91",
+      "new_digest": "41b8d2dcd8312d1d12efc70e46fee9bac1b74fd24d671569890bda0899af2b80"
+    },
+    {
+      "id": "15033352",
+      "old_title": "문화재청 국립고궁박물관_문화행사 목록조회 정보",
+      "new_title": "문화재청 국립고궁박물관_문화행사 목록조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "eadb9a513e1c689b7eefb27e7da491ee7720bbf870d18737fe871e2058c5b228",
+      "new_digest": "bfb86f02c3e3093b1a3e33a4c0ecbeb10dc4439407298287914812c1886f00cb"
+    },
+    {
+      "id": "15033354",
+      "old_title": "문화재청 국립고궁박물관_문화행사 상세조회 정보",
+      "new_title": "문화재청 국립고궁박물관_문화행사 상세조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8627f71065f0325df0edd5edcd7e6777452bb2444ace419691819a20db8253d8",
+      "new_digest": "a8ceef4e9000b3e71af07c2405a5a5ce5685e156b672c4a9e790f5b7d1477c55"
+    },
+    {
+      "id": "15033355",
+      "old_title": "문화재청 국립고궁박물관_자주묻는질문 목록조회 정보",
+      "new_title": "문화재청 국립고궁박물관_자주묻는질문 목록조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "90c4e19595791c727f7f2de245dbbff32f8015968fdeed074ee017bbc039b5a1",
+      "new_digest": "d11d4498841cb8dd39755255234279aee136dda894504f4aa2212f34e2a44ac7"
+    },
+    {
+      "id": "15033356",
+      "old_title": "문화재청 국립고궁박물관_자주묻는질문 상세조회 정보",
+      "new_title": "문화재청 국립고궁박물관_자주묻는질문 상세조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "68250f4ff636b4393583a58eea45847839d0ce0a1a22e1266b76d1f7e3ce337b",
+      "new_digest": "48f705ec90368084d9b8038824f4fd4ac060abd5de25332b2118389755ef5160"
+    },
+    {
+      "id": "15033357",
+      "old_title": "문화재청 국립고궁박물관_왕실유물보존처리이야기 목록조회 정보",
+      "new_title": "문화재청 국립고궁박물관_왕실유물보존처리이야기 목록조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "38ebc2de58e7920403eb17509c486dc745856ab0984a5834dbdea382ae315813",
+      "new_digest": "836252153eabd8496ccabc9269e90ae837515473f175994d2684237b9c4577b8"
+    },
+    {
+      "id": "15033358",
+      "old_title": "문화재청 국립고궁박물관_왕실유물보존처리이야기 상세조회 정보",
+      "new_title": "문화재청 국립고궁박물관_왕실유물보존처리이야기 상세조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e86973e49bf735b008ed2a5095945f2af66cee48e03d4b3a92d66fd7ea8ed922",
+      "new_digest": "053438511c6001cb9e41a512f6fa7e68b12a0e04f945d01545beffbc3c9c7563"
+    },
+    {
+      "id": "15033359",
+      "old_title": "문화재청 국립고궁박물관_수장고속왕실유물이야기 목록조회 정보",
+      "new_title": "문화재청 국립고궁박물관_수장고속왕실유물이야기 목록조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d2d457c0f852d00d13c0e55d981a8bba7d31b9efa5ec6d17ba23d47a6c34b24d",
+      "new_digest": "30e8e5f3b81e49e0cbbb820d38a0b322abb70660d7f6369886abf5ad48d62c81"
+    },
+    {
+      "id": "15033360",
+      "old_title": "문화재청 국립고궁박물관_수장고속왕실유물이야기 상세조회 정보",
+      "new_title": "문화재청 국립고궁박물관_수장고속왕실유물이야기 상세조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3e02d9ef6e3776552fa282c1b06a635eab5c4a21c15f1831e266066717dba7b4",
+      "new_digest": "9df0286df73cd72138a3ce9acc2ac7c2a14b19797304df854a3f35b7f9d4caaf"
+    },
+    {
+      "id": "15033361",
+      "old_title": "문화재청 국립고궁박물관_조선왕조기록문화유산 목록조회 정보",
+      "new_title": "문화재청 국립고궁박물관_조선왕조기록문화유산 목록조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "43c0e11b97b8d3770d72be033b650c56706a987e8f171d5f7109d0843187e387",
+      "new_digest": "9fe58061e3c8fc86eeddd8cd34a83646b79748e2c96164d32a47fa4e3eef06d6"
+    },
+    {
+      "id": "15033362",
+      "old_title": "문화재청 국립고궁박물관_조선왕조기록문화유산 상세조회 정보",
+      "new_title": "문화재청 국립고궁박물관_조선왕조기록문화유산 상세조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "989629d651338ecd200497c2525d49b91ee7fc0ebf20e426c03b0d18680f68a0",
+      "new_digest": "648af443e75d158c9eaa500251b9eba9e1f2806e2183e52c11e55d8c13944920"
+    },
+    {
+      "id": "15033363",
+      "old_title": "국가유산청 국립고궁박물관_학술정보 목록조회 정보",
+      "new_title": "국가유산청 국립고궁박물관_학술정보 목록조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "dcd479312ea45be97a8805d8f6354022401c5cdcf544048197c9c54e2b5c0456",
+      "new_digest": "d6260ad087bd551d0fa2edd3355299ac26e8653d71967b8a463239e0b605fbc3"
+    },
+    {
+      "id": "15033364",
+      "old_title": "국가유산청 국립고궁박물관_학술정보 상세조회 정보",
+      "new_title": "국가유산청 국립고궁박물관_학술정보 상세조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "626a8afaaeefc46f407eb4ed27a8a4a250fffc415c9c2daa061ad0b2a66fff31",
+      "new_digest": "ef58342b83d2b7c0da226de14728fb973361435d59ab47663d6575ebcaabae5b"
+    },
+    {
+      "id": "15033365",
+      "old_title": "국가유산청 국립고궁박물관_학술정보 통합조회 정보",
+      "new_title": "국가유산청 국립고궁박물관_학술정보 통합조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "dce311c6397326e3e6832e8625341f16ea27786979b5fb4c04c2f64d0f20bde7",
+      "new_digest": "b0b7d01a2505f7d7f4811dfd588fc1331606c76d83360668f86448d19c359f56"
+    },
+    {
+      "id": "15033366",
+      "old_title": "문화재청 국립고궁박물관_소장품 통합조회 정보",
+      "new_title": "문화재청 국립고궁박물관_소장품 통합조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "38f9903ae021ec2d9768b110d2693cf8eebd9124c5268f8fb0e698248740fd75",
+      "new_digest": "c0e923f5617b97005f787ccd6d4123b911324f81228efa38e611187af8329224"
+    },
+    {
+      "id": "15033398",
+      "old_title": "문화재청 국립고궁박물관_교육자료 목록조회 정보",
+      "new_title": "문화재청 국립고궁박물관_교육자료 목록조회 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6e28a06e2569bfaacb49615bceb443b5b956dabe50c8107a81b64f877a00602a",
+      "new_digest": "85de3dc9584d28519dea05db47c80d05439dd3bd0f6a31fd7fbe75bcc29ceff8"
     },
     {
       "id": "15033482",
