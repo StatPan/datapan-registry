@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T05:07:28Z",
+  "generated_at": "2026-07-04T05:16:58Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 315,
+  "filtered_count": 317,
   "summary": {
-    "hosts": 315,
+    "hosts": 317,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 169,
-    "external_guide_hosts": 225,
-    "registered_adapter_hosts": 158,
-    "operation_hosts": 171,
+    "external_endpoint_hosts": 171,
+    "external_guide_hosts": 226,
+    "registered_adapter_hosts": 160,
+    "operation_hosts": 173,
     "guide_only_hosts": 144,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 158,
-    "approval_required_operations": 8142,
+    "approval_required_operations": 8154,
     "malformed_source_url_count": 724
   },
   "providers": [
@@ -1397,6 +1397,24 @@
       ]
     },
     {
+      "host": "www.utic.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 7,
+      "operations": 12,
+      "external_endpoint_operations": 12,
+      "external_guide_specs": 1,
+      "approval_required_operations": 12,
+      "sample_ids": [
+        "15087120",
+        "15088841",
+        "15114684"
+      ]
+    },
+    {
       "host": "seogwipo.go.kr",
       "provider": "seogwipo",
       "kinds": [
@@ -1496,6 +1514,21 @@
         "15001011",
         "15001018",
         "15001019"
+      ]
+    },
+    {
+      "host": "www.safe182.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 3,
+      "operations": 8,
+      "external_endpoint_operations": 8,
+      "sample_ids": [
+        "3051810",
+        "3052083",
+        "3052084"
       ]
     },
     {

@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T05:07:28Z",
+  "generated_at": "2026-07-04T05:16:58Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 21122,
-    "runtime_evidence": 4639,
+    "operations": 21142,
+    "runtime_evidence": 4659,
     "runtime_evidence_percent": 22.0,
-    "callable_operations": 20980,
-    "external_endpoint_operations": 9512,
-    "registered_adapter_operations": 9502,
+    "callable_operations": 21000,
+    "external_endpoint_operations": 9532,
+    "registered_adapter_operations": 9522,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 9512
+      "count": 9532
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 9502
+      "count": 9522
     },
     {
       "key": "builtin",
@@ -81,7 +81,7 @@
     },
     {
       "category": "교통물류",
-      "operation_count": 2265
+      "operation_count": 2266
     },
     {
       "category": "사회복지",
@@ -113,7 +113,7 @@
     },
     {
       "category": "재난안전",
-      "operation_count": 884
+      "operation_count": 903
     },
     {
       "category": "교육",
@@ -6430,6 +6430,74 @@
       ]
     },
     {
+      "organization": "경찰청",
+      "api_count": 19,
+      "operation_api_count": 19,
+      "operation_count": 45,
+      "runtime_evidence_count": 27,
+      "runtime_evidence_percent": 60.0,
+      "verified": 20,
+      "failed": 0,
+      "skipped": 7,
+      "unknown": 0,
+      "approval_required_operations": 27,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 25
+        },
+        {
+          "key": "external_endpoint",
+          "count": 20
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 20
+        },
+        {
+          "key": "builtin",
+          "count": 25
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "재난안전",
+          "operation_count": 40
+        },
+        {
+          "category": "교통물류",
+          "operation_count": 5
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 25
+        },
+        {
+          "host": "www.utic.go.kr",
+          "operation_count": 12,
+          "adapter": "utic",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.safe182.go.kr",
+          "operation_count": 8,
+          "adapter": "safe182",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "방위사업청",
       "api_count": 7,
       "operation_api_count": 7,
@@ -8378,48 +8446,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 10
-        }
-      ]
-    },
-    {
-      "organization": "경찰청",
-      "api_count": 19,
-      "operation_api_count": 9,
-      "operation_count": 25,
-      "runtime_evidence_count": 7,
-      "runtime_evidence_percent": 28.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 7,
-      "unknown": 0,
-      "approval_required_operations": 15,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 25
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 25
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "재난안전",
-          "operation_count": 21
-        },
-        {
-          "category": "교통물류",
-          "operation_count": 4
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 25
         }
       ]
     },

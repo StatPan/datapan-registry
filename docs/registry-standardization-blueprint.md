@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `549` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `539` data.go.kr APIs
   without operation mappings, `9,285` operation-mapped APIs without runtime
   evidence, and `227` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -538,8 +538,13 @@ Current gaps:
   operations, and merges `31` verified bounded checks. That brings runtime
   evidence to `4639`, verified checks to `2729`, and registered external
   adapter operations to `9502`.
-- API operation coverage remains incomplete: `11,511` of `12,060` APIs have
-  operation mappings (`95.4%`), leaving `549` APIs to materialize and `9,285`
+- The 경찰청 batch adds UTIC and Safe182 host coverage for `www.utic.go.kr`
+  and `www.safe182.go.kr`, materializes `10` APIs and `20` operations, and
+  merges `20` verified bounded checks. That brings runtime evidence to `4659`,
+  verified checks to `2749`, and registered external adapter operations to
+  `9522`.
+- API operation coverage remains incomplete: `11,521` of `12,060` APIs have
+  operation mappings (`95.5%`), leaving `539` APIs to materialize and `9,285`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report
