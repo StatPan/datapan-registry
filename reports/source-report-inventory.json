@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-04T01:28:18Z",
+  "generated_at": "2026-07-04T01:42:18Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 80,
+    "report_total": 84,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,7 +38,7 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 68,
+      "report_count": 72,
       "present_reports": [
         {
           "name": "childcare-info-verification-summary.json",
@@ -131,6 +131,22 @@
         {
           "name": "fss-verification.json",
           "path": "reports/data-go-kr/fss-verification.json"
+        },
+        {
+          "name": "garak-corp-temp-verification-summary.json",
+          "path": "reports/data-go-kr/garak-corp-temp-verification-summary.json"
+        },
+        {
+          "name": "garak-corp-temp-verification.json",
+          "path": "reports/data-go-kr/garak-corp-temp-verification.json"
+        },
+        {
+          "name": "garak-corp-www-verification-summary.json",
+          "path": "reports/data-go-kr/garak-corp-www-verification-summary.json"
+        },
+        {
+          "name": "garak-corp-www-verification.json",
+          "path": "reports/data-go-kr/garak-corp-www-verification.json"
         },
         {
           "name": "institution-api-overview.json",
@@ -364,6 +380,10 @@
         "external-coverage-summary.json",
         "fss-verification-summary.json",
         "fss-verification.json",
+        "garak-corp-temp-verification-summary.json",
+        "garak-corp-temp-verification.json",
+        "garak-corp-www-verification-summary.json",
+        "garak-corp-www-verification.json",
         "institution-api-overview.json",
         "institution-runtime-plan.json",
         "keco-verification-summary.json",

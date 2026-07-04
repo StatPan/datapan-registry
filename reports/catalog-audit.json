@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-04T01:28:18Z",
+  "generated_at": "2026-07-04T01:42:18Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 20426,
-    "callable_operations": 20284,
-    "specs_without_operations": 879,
-    "specs_without_callable_operation": 954,
+    "operations_total": 20507,
+    "callable_operations": 20365,
+    "specs_without_operations": 852,
+    "specs_without_callable_operation": 927,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 8088,
-    "operations_without_response_params": 9310,
+    "operations_without_request_params": 8169,
+    "operations_without_response_params": 9391,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 4310,
-      "external_endpoint_operations": 8816,
+      "external_endpoint_specs": 4337,
+      "external_endpoint_operations": 8897,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 114,
       "dev_approval_required_operations": 224,
-      "prod_approval_required_operations": 7649,
+      "prod_approval_required_operations": 7730,
       "malformed_endpoint_url_count": 42,
       "malformed_guide_url_count": 670,
       "top_endpoint_hosts": [
@@ -233,6 +233,10 @@
           "count": 77
         },
         {
+          "host": "www.garak.co.kr",
+          "count": 75
+        },
+        {
           "host": "data.seoul.go.kr",
           "count": 73
         },
@@ -266,10 +270,6 @@
         },
         {
           "host": "www.nfqs.go.kr",
-          "count": 49
-        },
-        {
-          "host": "www.vworld.kr",
           "count": 49
         }
       ]

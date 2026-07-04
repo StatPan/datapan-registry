@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-07-04T01:37:55Z",
+  "source": "reports/data-go-kr/garak-corp-www-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 80,
+    "verified": 80,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 80,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "garak",
+        "count": 80,
+        "provider": "garak"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "www.garak.co.kr",
+        "count": 80,
+        "host": "www.garak.co.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 80,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

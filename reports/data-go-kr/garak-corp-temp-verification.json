@@ -1,0 +1,38 @@
+{
+  "generated_at": "2026-07-04T01:38:46Z",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 100,
+  "timeout": "20s",
+  "exclude_input": "reports/latest-verification.json",
+  "truncated": false,
+  "filters": {
+    "organization": "서울특별시농수산식품공사",
+    "host": "temp.garak.co.kr",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 1,
+  "summary": {
+    "total": 1,
+    "verified": 1,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15076056",
+      "title": "서울특별시농수산식품공사_유통인 정보",
+      "operation": "서울특별시농수산식품공사_유통인 정보_20210114 외부 링크 1",
+      "provider": "garak",
+      "endpoint_host": "temp.garak.co.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:38:46Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://temp.garak.co.kr/publicdata/selectPageListPublicData.do?sch_public_data_realm_code=25",
+      "body_shape": "html"
+    }
+  ]
+}

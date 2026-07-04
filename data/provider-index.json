@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T01:28:18Z",
+  "generated_at": "2026-07-04T01:42:18Z",
   "datapan_version": "0.1.0-dev",
   "adapter_count": 113,
-  "host_count": 138,
+  "host_count": 139,
   "adapters": [
     {
       "name": "airport",
@@ -301,6 +301,7 @@
       "name": "garak",
       "status": "registered",
       "hosts": [
+        "temp.garak.co.kr",
         "www.garak.co.kr"
       ],
       "capabilities": [

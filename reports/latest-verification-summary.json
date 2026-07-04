@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T01:28:17Z",
+  "generated_at": "2026-07-04T01:42:16Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3956,
-    "verified": 2107,
+    "total": 4037,
+    "verified": 2188,
     "failed": 306,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2107,
+        "count": 2188,
         "status": "verified"
       },
       {
@@ -414,6 +414,11 @@
         "provider": "work24"
       },
       {
+        "key": "garak",
+        "count": 87,
+        "provider": "garak"
+      },
+      {
         "key": "seogu",
         "count": 85,
         "provider": "seogu"
@@ -684,11 +689,6 @@
         "provider": "folk"
       },
       {
-        "key": "garak",
-        "count": 6,
-        "provider": "garak"
-      },
-      {
         "key": "gwanak",
         "count": 6,
         "provider": "gwanak"
@@ -944,6 +944,11 @@
         "key": "www.work24.go.kr",
         "count": 88,
         "host": "www.work24.go.kr"
+      },
+      {
+        "key": "www.garak.co.kr",
+        "count": 86,
+        "host": "www.garak.co.kr"
       },
       {
         "key": "seogu.go.kr",
@@ -1276,11 +1281,6 @@
         "host": "www.emuseum.go.kr"
       },
       {
-        "key": "www.garak.co.kr",
-        "count": 6,
-        "host": "www.garak.co.kr"
-      },
-      {
         "key": "www.smartfarmkorea.net",
         "count": 6,
         "host": "www.smartfarmkorea.net"
@@ -1476,6 +1476,11 @@
         "host": "stcis.go.kr"
       },
       {
+        "key": "temp.garak.co.kr",
+        "count": 1,
+        "host": "temp.garak.co.kr"
+      },
+      {
         "key": "tour.chungbuk.go.kr",
         "count": 1,
         "host": "tour.chungbuk.go.kr"
@@ -1539,7 +1544,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3232,
+        "count": 3313,
         "kind": "external_endpoint"
       },
       {
