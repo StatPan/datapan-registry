@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-04T03:33:10Z",
+  "generated_at": "2026-07-04T03:44:10Z",
   "provider": "data.go.kr",
-  "old": ".datapan\\previous\\data-go-kr.registry.json",
+  "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4203,
-    "stable": 7857
+    "changed": 4220,
+    "stable": 7840
   },
   "added": [],
   "removed": [],
@@ -7199,6 +7199,16 @@
       "new_digest": "397748e6116cc86aee46cd3ce59752124c9b94a074a738b9a961a2e7cbd9320a"
     },
     {
+      "id": "15057300",
+      "old_title": "농림축산식품부 농림축산검역본부_소 품종별 암수별 도축실적",
+      "new_title": "농림축산식품부 농림축산검역본부_소 품종별 암수별 도축실적",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3a2315d03724e92564f90bdbec16981961d53d828eec21011ae99c32ddb74e32",
+      "new_digest": "48656fcfe001040321ed6ed9e7434506e6bcbd7fb2ea5eb595de896652f6854e"
+    },
+    {
       "id": "15057301",
       "old_title": "경기도_행정기구 및 정_현원 집계 현황",
       "new_title": "경기도_행정기구 및 정_현원 집계 현황",
@@ -11829,6 +11839,16 @@
       "new_digest": "b3abc5df8dedc81dc5974adb3e55ec16e52e9be919be9d58d25f0c35dda50e56"
     },
     {
+      "id": "15058328",
+      "old_title": "농림축산식품부 농림축산검역본부_닭 품종별 도축실적",
+      "new_title": "농림축산식품부 농림축산검역본부_닭 품종별 도축실적",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d5e5acdc131a3c5803fe17458bac4c6fed1dd3059771797d39402bd05977c443",
+      "new_digest": "18bea39e8184ca03e4f32501c8903673ef587b44d70e602c04ce23b7b910e420"
+    },
+    {
       "id": "15058330",
       "old_title": "경기도_장례지도사교육기관 현황",
       "new_title": "경기도_장례지도사교육기관 현황",
@@ -12819,6 +12839,16 @@
       "new_digest": "03a7672fb87f500c5752672e8e4f046218beed8eae853aab071e0dc01ae00722"
     },
     {
+      "id": "15058538",
+      "old_title": "농림축산식품부 농림축산검역본부_축종별 생체중량",
+      "new_title": "농림축산식품부 농림축산검역본부_축종별 생체중량",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1303cebcba8014abf78bea842e9e5213ad93a061fa4cf4eaad4bfe3222fbf88c",
+      "new_digest": "933b639556890e3c6d4a5e39b2ebc470e1219ffb4c03275f25045bc2760b8c88"
+    },
+    {
       "id": "15058539",
       "old_title": "국토교통부_국가산업단지",
       "new_title": "국토교통부_국가산업단지",
@@ -12967,6 +12997,16 @@
       ],
       "old_digest": "443528f7f2695a7db5469e787406ecabeb18d017395ce63ed407d4d198825205",
       "new_digest": "5ad7a991c2f893bae14182be065f2daee0196e86164f74fe96911b024146d0da"
+    },
+    {
+      "id": "15058568",
+      "old_title": "농림축산식품부 농림축산검역본부_도축장별 축종별 도축실적",
+      "new_title": "농림축산식품부 농림축산검역본부_도축장별 축종별 도축실적",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f95d030aab760f7193858b87eb7f60eaa09b53795a36de81c4b414107c555c43",
+      "new_digest": "2629a470da84d12e1d6b33f0a70960173611208aee4730e185c0610ccd827087"
     },
     {
       "id": "15058569",
@@ -16059,6 +16099,16 @@
       "new_digest": "30d628d72f94dc2186ccbb07cf7d9a5149135f2ff24c7b4389a50ab57d36a3e3"
     },
     {
+      "id": "15059314",
+      "old_title": "농림축산식품부 농림축산검역본부_시도별 도축실적",
+      "new_title": "농림축산식품부 농림축산검역본부_시도별 도축실적",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "426e0bd8c2d67bfd8d1fb1605e532b75135fc8af7e2a50b2781f8bb1dae1af4e",
+      "new_digest": "4ace6924921500169ee1de3a1f02e16d1b94b3d6e59ed6198b679ebc66f08096"
+    },
+    {
       "id": "15059315",
       "old_title": "국토교통부_도시계획(환경기초시설)",
       "new_title": "국토교통부_도시계획(환경기초시설)",
@@ -16137,6 +16187,16 @@
       ],
       "old_digest": "5a0116c3540bc87de82af7d37293b37bd20508748ce3d4b7d24884070a6e3a7b",
       "new_digest": "f91e0065a24b94e35a39838ad2ae0b18810689ecd3b62e25e727fbe96767bc14"
+    },
+    {
+      "id": "15059332",
+      "old_title": "농림축산식품부 농림축산검역본부_축종별 암수별 도축실적",
+      "new_title": "농림축산식품부 농림축산검역본부_축종별 암수별 도축실적",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "966f4dfd1baf697c001896974dfac2711db3978999e132ad966ff6b2baffebf8",
+      "new_digest": "2d5540b771a689b7133272295c87ab571198c76f1cd129e9c2b5229734153117"
     },
     {
       "id": "15059333",
@@ -26759,6 +26819,76 @@
       "new_digest": "36b42598196000182c184cc3c3c019d88755c0c38af887f77e4e0fec39bc8862"
     },
     {
+      "id": "15102756",
+      "old_title": "농림축산식품부 농림축산검역본부_축산차량 방문정보",
+      "new_title": "농림축산식품부 농림축산검역본부_축산차량 방문정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1bfd5fdc68e16948150e859eebd5bd6e1ff38bd2845f7c43afd139c2200c9cc4",
+      "new_digest": "c7b921838b92ec2a0e373590cc6f61d5677636a45aa61ae85c18f06997b851ba"
+    },
+    {
+      "id": "15102819",
+      "old_title": "농림축산식품부 농림축산검역본부_축산관계시설등록통계",
+      "new_title": "농림축산식품부 농림축산검역본부_축산관계시설등록통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4ae7cd96d8ae30fbdbef2f3b200acb841ee7e35e7885fff3337203f6bfe351c0",
+      "new_digest": "f356aa53824bb275473fe92613e1411c83d9365df86ad4e688c0e88320f3c798"
+    },
+    {
+      "id": "15102820",
+      "old_title": "농림축산식품부 농림축산검역본부_축산차량통계",
+      "new_title": "농림축산식품부 농림축산검역본부_축산차량통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ffad1120634f88ce7d8838b38cf683d3672a90899b1932551adf3cacdfcab165",
+      "new_digest": "06e8105d78d023fd0c1b90bc14806bc121ccf298ab63aa41394dbd239041f721"
+    },
+    {
+      "id": "15102910",
+      "old_title": "농림축산식품부 농림축산검역본부_수입식물검역정보",
+      "new_title": "농림축산식품부 농림축산검역본부_수입식물검역정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5ee09710e989e4a41b5ee608d3e79656e88e1d92e1355cda75ca9b5f79370527",
+      "new_digest": "4f6ac37c9802601b9e72a98f5739b2498105c4f3ddc6fc926e1672d8159d5da4"
+    },
+    {
+      "id": "15102911",
+      "old_title": "농림축산식품부 농림축산검역본부_수출식물검역정보",
+      "new_title": "농림축산식품부 농림축산검역본부_수출식물검역정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b33c78f2e9a3bb54c175105dccf37c39e6f7fd65b2d1d72ffadaeb6cb1f0b6a6",
+      "new_digest": "091fd40c34b6eb2d15f47bee1b6695413ef6dfb2353e1cd54c616143dba648b3"
+    },
+    {
+      "id": "15103013",
+      "old_title": "농림축산식품부 농림축산검역본부_농림축산식품부_농림축산검역본부 질병발생 통계",
+      "new_title": "농림축산식품부 농림축산검역본부_농림축산식품부_농림축산검역본부 질병발생 통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f29e1b9b18fe293c06c03e49880eae28974a503107069c6dd0c05311aadd43da",
+      "new_digest": "6540f0f4605d9db0450a55f414ab553fed960b674426617883cf7779725b460f"
+    },
+    {
+      "id": "15103156",
+      "old_title": "농림축산식품부 농림축산검역본부_동물등록 현황",
+      "new_title": "농림축산식품부 농림축산검역본부_동물등록 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a2d5dd0de37d2323d95792a0e8c0eb6d5e8ee8d20d56c6edc7c75a06177e08c7",
+      "new_digest": "cf5d584cf5c022528af009de27581dcdd6fcc1d0baa0dadf797c27327ae79766"
+    },
+    {
       "id": "15103246",
       "old_title": "공정거래위원회_결정문 목록 조회",
       "new_title": "공정거래위원회_결정문 목록 조회",
@@ -29507,6 +29637,16 @@
       ],
       "old_digest": "3549090b423fea55562789406c92b4f6ffad2ad89bebb9d34250ae5b39efefbd",
       "new_digest": "4a8fb6f030b89286030f7151c7e54545d5898d6006d3586cd525fba47a1115ed"
+    },
+    {
+      "id": "15118023",
+      "old_title": "농림축산식품부 농림축산검역본부_수입축산물이력정보",
+      "new_title": "농림축산식품부 농림축산검역본부_수입축산물이력정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8c9698545ba056c0436f7ba593daf2e2752cdf414d899d3f8946224099d74e4a",
+      "new_digest": "9a54badaaf9f4523e0c5256bfbcc40fcba0b5d48667bb4fa1437de327cc4dfd6"
     },
     {
       "id": "15118599",
@@ -41519,6 +41659,16 @@
       "new_digest": "2eff641426dbd60727e0aa0f1deff35bd3070390e296062817d9bd85eda20000"
     },
     {
+      "id": "3037263",
+      "old_title": "농림축산식품부 농림축산검역본부_수입축산물 이력정보",
+      "new_title": "농림축산식품부 농림축산검역본부_수입축산물 이력정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d0796ec32e1d92bc3cd0d157bcca4c66cefa532fb598b393fcee5519da2779b8",
+      "new_digest": "2eeff9166c80a6e48ccb97affe8db5a8ff20e4f76abb20468125f9ec51655e2e"
+    },
+    {
       "id": "3037877",
       "old_title": "한국체육산업개발주식회사_올림픽공원 공연정보",
       "new_title": "한국체육산업개발주식회사_올림픽공원 공연정보",
@@ -41787,6 +41937,26 @@
       ],
       "old_digest": "dcc5d095921ed346ef9efa66192348bde3b43376a35504888148a18edd89dce9",
       "new_digest": "4a2f5898edc84b9f7d8b38769b95a6cf577f66174241a98fcbd77ee0ba96573d"
+    },
+    {
+      "id": "3055523",
+      "old_title": "농림축산식품부 농림축산검역본부_가축질병발생정보",
+      "new_title": "농림축산식품부 농림축산검역본부_가축질병발생정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "77bdda961e75f86ab69ee5051226d10066cda366e0f54180cd063157a6704617",
+      "new_digest": "81bb9a27525d0a21691c16be415c7a934440c128282445f627b580c7abf42c93"
+    },
+    {
+      "id": "3055525",
+      "old_title": "농림축산식품부 농림축산검역본부_수의생명자원정보",
+      "new_title": "농림축산식품부 농림축산검역본부_수의생명자원정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b02c180337c9fc03761430ce359621e14ff664a1690076ad56db0e6c8e19b969",
+      "new_digest": "df3d8ba0068aa0933e01c6d04c6fe4f5e4b674f3e0cf1c56a35025974dc15b4f"
     },
     {
       "id": "3056767",

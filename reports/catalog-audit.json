@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-04T03:33:10Z",
+  "generated_at": "2026-07-04T03:44:10Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 20862,
-    "callable_operations": 20720,
-    "specs_without_operations": 672,
-    "specs_without_callable_operation": 747,
+    "operations_total": 20895,
+    "callable_operations": 20753,
+    "specs_without_operations": 655,
+    "specs_without_callable_operation": 730,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 8524,
-    "operations_without_response_params": 9746,
+    "operations_without_request_params": 8557,
+    "operations_without_response_params": 9779,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 4517,
-      "external_endpoint_operations": 9252,
+      "external_endpoint_specs": 4534,
+      "external_endpoint_operations": 9285,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 114,
       "dev_approval_required_operations": 224,
-      "prod_approval_required_operations": 7915,
+      "prod_approval_required_operations": 7925,
       "malformed_endpoint_url_count": 42,
       "malformed_guide_url_count": 682,
       "top_endpoint_hosts": [
@@ -53,6 +53,10 @@
           "count": 343
         },
         {
+          "host": "data.mafra.go.kr",
+          "count": 315
+        },
+        {
           "host": "www.nongsaro.go.kr",
           "count": 314
         },
@@ -63,10 +67,6 @@
         {
           "host": "www.foodsafetykorea.go.kr",
           "count": 290
-        },
-        {
-          "host": "data.mafra.go.kr",
-          "count": 284
         },
         {
           "host": "data.ex.co.kr",
@@ -131,6 +131,10 @@
           "count": 343
         },
         {
+          "host": "data.mafra.go.kr",
+          "count": 315
+        },
+        {
           "host": "www.nongsaro.go.kr",
           "count": 314
         },
@@ -141,10 +145,6 @@
         {
           "host": "www.foodsafetykorea.go.kr",
           "count": 290
-        },
-        {
-          "host": "data.mafra.go.kr",
-          "count": 284
         },
         {
           "host": "data.ex.co.kr",
@@ -225,6 +225,10 @@
           "count": 94
         },
         {
+          "host": "data.mafra.go.kr",
+          "count": 83
+        },
+        {
           "host": "www.work24.go.kr",
           "count": 83
         },
@@ -243,10 +247,6 @@
         {
           "host": "jbdc.co.kr",
           "count": 68
-        },
-        {
-          "host": "data.mafra.go.kr",
-          "count": 65
         },
         {
           "host": "www.jeju.go.kr",

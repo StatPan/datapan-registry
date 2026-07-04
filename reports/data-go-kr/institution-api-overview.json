@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T03:33:10Z",
+  "generated_at": "2026-07-04T03:44:10Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 20862,
-    "runtime_evidence": 4379,
-    "runtime_evidence_percent": 21.0,
-    "callable_operations": 20720,
-    "external_endpoint_operations": 9252,
-    "registered_adapter_operations": 9242,
+    "operations": 20895,
+    "runtime_evidence": 4412,
+    "runtime_evidence_percent": 21.1,
+    "callable_operations": 20753,
+    "external_endpoint_operations": 9285,
+    "registered_adapter_operations": 9275,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 9252
+      "count": 9285
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 9242
+      "count": 9275
     },
     {
       "key": "builtin",
@@ -72,12 +72,12 @@
       "operation_count": 2651
     },
     {
-      "category": "문화관광",
-      "operation_count": 2238
+      "category": "농축수산",
+      "operation_count": 2268
     },
     {
-      "category": "농축수산",
-      "operation_count": 2235
+      "category": "문화관광",
+      "operation_count": 2238
     },
     {
       "category": "교통물류",
@@ -184,6 +184,15 @@
       ]
     },
     {
+      "host": "data.mafra.go.kr",
+      "operation_count": 315,
+      "adapter": "mafra",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "host": "www.nongsaro.go.kr",
       "operation_count": 314,
       "adapter": "nongsaro",
@@ -205,15 +214,6 @@
       "host": "www.foodsafetykorea.go.kr",
       "operation_count": 290,
       "adapter": "foodsafetykorea",
-      "adapter_status": "registered",
-      "capabilities": [
-        "verification"
-      ]
-    },
-    {
-      "host": "data.mafra.go.kr",
-      "operation_count": 284,
-      "adapter": "mafra",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -5083,6 +5083,89 @@
       ]
     },
     {
+      "organization": "농림축산식품부 농림축산검역본부",
+      "api_count": 25,
+      "operation_api_count": 25,
+      "operation_count": 57,
+      "runtime_evidence_count": 37,
+      "runtime_evidence_percent": 64.9,
+      "verified": 33,
+      "failed": 0,
+      "skipped": 4,
+      "unknown": 0,
+      "approval_required_operations": 10,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 20
+        },
+        {
+          "key": "external_endpoint",
+          "count": 37
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 37
+        },
+        {
+          "key": "builtin",
+          "count": 20
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "농축수산",
+          "operation_count": 57
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "data.mafra.go.kr",
+          "operation_count": 31,
+          "adapter": "mafra",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 20
+        },
+        {
+          "host": "openapi.pqis.go.kr",
+          "operation_count": 4,
+          "adapter": "pqis",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
+        },
+        {
+          "host": "home.kahis.go.kr",
+          "operation_count": 1,
+          "adapter": "qia",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "meatwatch.go.kr",
+          "operation_count": 1,
+          "adapter": "qia",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "농촌진흥청 국립원예특작과학원",
       "api_count": 22,
       "operation_api_count": 22,
@@ -8152,62 +8235,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 25
-        }
-      ]
-    },
-    {
-      "organization": "농림축산식품부 농림축산검역본부",
-      "api_count": 25,
-      "operation_api_count": 8,
-      "operation_count": 24,
-      "runtime_evidence_count": 4,
-      "runtime_evidence_percent": 16.7,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 4,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 20
-        },
-        {
-          "key": "external_endpoint",
-          "count": 4
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 4
-        },
-        {
-          "key": "builtin",
-          "count": 20
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "농축수산",
-          "operation_count": 24
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 20
-        },
-        {
-          "host": "openapi.pqis.go.kr",
-          "operation_count": 4,
-          "adapter": "pqis",
-          "adapter_status": "registered",
-          "capabilities": [
-            "call",
-            "verification"
-          ]
         }
       ]
     },
