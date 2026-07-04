@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T02:30:23Z",
+  "generated_at": "2026-07-04T02:45:01Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4220,
-    "verified": 2345,
+    "total": 4246,
+    "verified": 2371,
     "failed": 332,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2345,
+        "count": 2371,
         "status": "verified"
       },
       {
@@ -567,6 +567,11 @@
         "key": "tour",
         "count": 26,
         "provider": "tour"
+      },
+      {
+        "key": "yuseong",
+        "count": 26,
+        "provider": "yuseong"
       },
       {
         "key": "lofin365",
@@ -1136,6 +1141,11 @@
         "host": "www.anyang.go.kr"
       },
       {
+        "key": "www.yuseong.go.kr",
+        "count": 26,
+        "host": "www.yuseong.go.kr"
+      },
+      {
         "key": "www.lofin365.go.kr",
         "count": 25,
         "host": "www.lofin365.go.kr"
@@ -1604,7 +1614,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3496,
+        "count": 3522,
         "kind": "external_endpoint"
       },
       {

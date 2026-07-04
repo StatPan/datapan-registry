@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T02:30:25Z",
+  "generated_at": "2026-07-04T02:45:03Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 296,
+  "filtered_count": 297,
   "summary": {
-    "hosts": 296,
+    "hosts": 297,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 151,
+    "external_endpoint_hosts": 152,
     "external_guide_hosts": 213,
-    "registered_adapter_hosts": 140,
-    "operation_hosts": 153,
+    "registered_adapter_hosts": 141,
+    "operation_hosts": 154,
     "guide_only_hosts": 143,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7902,
+    "approval_required_operations": 7928,
     "malformed_source_url_count": 724
   },
   "providers": [
@@ -1030,6 +1030,22 @@
         "15056579",
         "15056821",
         "15057358"
+      ]
+    },
+    {
+      "host": "www.yuseong.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 26,
+      "operations": 26,
+      "external_endpoint_operations": 26,
+      "approval_required_operations": 26,
+      "sample_ids": [
+        "15108837",
+        "15108838",
+        "15108840"
       ]
     },
     {

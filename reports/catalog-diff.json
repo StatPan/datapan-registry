@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T02:30:25Z",
+  "generated_at": "2026-07-04T02:45:03Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4103,
-    "stable": 7957
+    "changed": 4129,
+    "stable": 7931
   },
   "added": [],
   "removed": [],
@@ -27519,6 +27519,246 @@
       "new_digest": "22cca7586d392908d9e79481952d3361c9c06e249fe0140d097a7f5c12add248"
     },
     {
+      "id": "15108837",
+      "old_title": "대전광역시 유성구_CCTV 설치현황",
+      "new_title": "대전광역시 유성구_CCTV 설치현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d82542426cd7ff76d6085e5ad9287d9b26edf46d36ac5125c7ed31ec99ba7ea6",
+      "new_digest": "b5687389ae12b0bc28f90cd1dabf2b1ef7a8e62216a8ffd5a980623efc2f62b7"
+    },
+    {
+      "id": "15108838",
+      "old_title": "대전광역시 유성구_개방화장실 현황",
+      "new_title": "대전광역시 유성구_개방화장실 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "517de62f4d794911a0845c40a6db203185a2194ce00aec03a53395fb80bac08e",
+      "new_digest": "2f63c0494ef1c64fa5fde1e149c72dcd2d523998fa4151f2071e5d851d14b3e2"
+    },
+    {
+      "id": "15108840",
+      "old_title": "대전광역시 유성구_공중화장실 현황",
+      "new_title": "대전광역시 유성구_공중화장실 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f50337d5107c895b64acb3f8088071026bcd06c643916da0fdb5b4a6f5720369",
+      "new_digest": "daae725085f4e7b6787e61519764c9f72f5f56501a7aa9d1054439df9aa373ab"
+    },
+    {
+      "id": "15108843",
+      "old_title": "대전광역시 유성구_대기질 측정소 현황",
+      "new_title": "대전광역시 유성구_대기질 측정소 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1afde627a2fe8b0824871fdb1bf961e33e02a565b9d010776aef0f088190359a",
+      "new_digest": "03e21154356dee84be767b4a23fe6c8101374c8aa6583e3be8788ff391b06ced"
+    },
+    {
+      "id": "15108844",
+      "old_title": "대전광역시 유성구_비상벨 설치 현황",
+      "new_title": "대전광역시 유성구_비상벨 설치 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "52a790b8db5779ace9f4aa9170ab4a79b1e57357772556e08d31bb0198f417be",
+      "new_digest": "ef49d9497633027f6d7f29abed43eb7458458428e86d40b27682393a33762988"
+    },
+    {
+      "id": "15108847",
+      "old_title": "대전광역시 유성구_사고유형별교통사고수",
+      "new_title": "대전광역시 유성구_사고유형별교통사고수",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fb3776a1e048eb0c26e4cc664bbc98a4421b5ffffba79a3fc767246c20f71add",
+      "new_digest": "ae6025e9935d31098c209fc82303614092def0c24035976a3bd3fbc19157234d"
+    },
+    {
+      "id": "15108848",
+      "old_title": "대전광역시 유성구_월간 대기질 측정소별 평균 현황",
+      "new_title": "대전광역시 유성구_월간 대기질 측정소별 평균 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2ee07c32f2518a6af6c9dd54de85dd405eb8857772b9f379a849cb4f29efd23e",
+      "new_digest": "9cccade618123ae830aa406e404c82d23e9738e8295e559affac3fff18e7312b"
+    },
+    {
+      "id": "15108849",
+      "old_title": "대전광역시 유성구_인구대비 동별 전기차 등록 대 수 비율현황",
+      "new_title": "대전광역시 유성구_인구대비 동별 전기차 등록 대 수 비율현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "cd947c2f12d6f5b42c39ffd130fd60122028c4e0d7656ca66976d6752f25223d",
+      "new_digest": "63a516fbcb5a23aae82b2fb9e8c4e01a6995a2f50a7db6e3865bfea7ee5c2b4e"
+    },
+    {
+      "id": "15108850",
+      "old_title": "대전광역시 유성구_재난 예/경보시설 현황",
+      "new_title": "대전광역시 유성구_재난 예/경보시설 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3b683f12284b6eb7bb06243bd55781381c0630e78a1efa842041bed925e2b967",
+      "new_digest": "029dc7781b60ae12dbd421b0365dfab942c581edec1c1411d85396cbf0e4cc29"
+    },
+    {
+      "id": "15108853",
+      "old_title": "대전광역시 유성구_차량 등록 대수 대비 동별 전기차 현황",
+      "new_title": "대전광역시 유성구_차량 등록 대수 대비 동별 전기차 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7bbb032628e3b0d03fe8ed929761b0bf58973aa6ebea9532c71e911b69ad5610",
+      "new_digest": "827cac50e4e19689a5cf5bbf8406268fefc79f3501784fa461b64be9d18eee3a"
+    },
+    {
+      "id": "15108855",
+      "old_title": "대전광역시 유성구_전기차 등록대수 대비 동별 충전소 비율",
+      "new_title": "대전광역시 유성구_전기차 등록대수 대비 동별 충전소 비율",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0d7a21a0d9e7f20b89192101fc275bb77423f504fa715e928fe167e8b56b905e",
+      "new_digest": "1c5bb417ef1d2bee8332bbbef754df5253ceb27fc2b3258e7d88a6b8fe7139b4"
+    },
+    {
+      "id": "15108859",
+      "old_title": "대전광역시 유성구_전기차 충전소 현황",
+      "new_title": "대전광역시 유성구_전기차 충전소 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8f49ce7ebefc012c10e48ffd61d7ab42172a02b4feb74cba576cc1512bbaff55",
+      "new_digest": "0df7c32b5da1c4ed7d4d8af75c40aadcf0e421fecc62d69d8360e93eb5da2754"
+    },
+    {
+      "id": "15108863",
+      "old_title": "대전광역시 유성구_측정소별 대기질 현황",
+      "new_title": "대전광역시 유성구_측정소별 대기질 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "323056b45e1e755376f1d3c1adc98bdb1747c7be4a9f421a843e3fed74a422cc",
+      "new_digest": "2ca4943252fbdf32997c93044ea20b7223787b7f9fa0d9ae1797c138e8d382e4"
+    },
+    {
+      "id": "15108866",
+      "old_title": "대전광역시 유성구_교통사고 현황",
+      "new_title": "대전광역시 유성구_교통사고 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "deff429e6467ff972920df27dab7c298f9bab8f2aeb2481e65d5a11fc426a1ec",
+      "new_digest": "ea8e7a1816f2c4357b13d5c915bc37907abc90b0a8f30eaabb5fd7ba91dde3dc"
+    },
+    {
+      "id": "15108867",
+      "old_title": "대전광역시 유성구_국적별 성별 외국인 등록현황",
+      "new_title": "대전광역시 유성구_국적별 성별 외국인 등록현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e0c50cd5fb9c9cad9dbe6881d159d25e63bf82e181e326c741f2d6b21e6c7f2d",
+      "new_digest": "6031ba12203b20fe587b4ef088dd3e92701cfc9330a98bc8ccc1786e0cbd7ffa"
+    },
+    {
+      "id": "15108869",
+      "old_title": "대전광역시 유성구_민방위 대피시설 현황",
+      "new_title": "대전광역시 유성구_민방위 대피시설 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e8efcd46a3690ce9594c894700c8142483b8b2f4d06761c575a7fee5f0af7a68",
+      "new_digest": "68f5dc22011ccbd9baa447b9a51b62fefee2b28d8f8a98b0a0470b62b7d6aec4"
+    },
+    {
+      "id": "15108870",
+      "old_title": "대전광역시 유성구_성별 체류자격별 외국인 등록현황",
+      "new_title": "대전광역시 유성구_성별 체류자격별 외국인 등록현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "245dcf79026fc6243472f14e9e4c4b73d982c30414b98591d214a2316e246371",
+      "new_digest": "a17e21ef64f576ae2cdd5f1dbc889de1166d995e730fe3d4cb92120a1d473bd2"
+    },
+    {
+      "id": "15108872",
+      "old_title": "대전광역시 유성구_어린이 인구수 대비 동별 어린이 피해 교통사고 현황",
+      "new_title": "대전광역시 유성구_어린이 인구수 대비 동별 어린이 피해 교통사고 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3dfd01d9e9da49062b8f5b5915e2da55d1d770534bec4c30d1eed1ffd75886b9",
+      "new_digest": "add8f035ef5b777ab0ff79dcf14e216b95786feba667e894276917493300434c"
+    },
+    {
+      "id": "15108877",
+      "old_title": "대전광역시 유성구_월간 동별 교통사고 수",
+      "new_title": "대전광역시 유성구_월간 동별 교통사고 수",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "940fed53aeff6a653ab2627261303342e8fd6f7d96e82f7a6f41e0c37711c559",
+      "new_digest": "28d025de64063b342665635f32dfa6475b28030e66a536617633d08165726e0c"
+    },
+    {
+      "id": "15108878",
+      "old_title": "대전광역시 유성구_유형별 화재 발생 수",
+      "new_title": "대전광역시 유성구_유형별 화재 발생 수",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "013d21a060df34e4fed9a905801283a329808072a5b0494838060a1dceae3513",
+      "new_digest": "4677199f6aaf01dbd211e88d10059f8ce4bf2b108b7736b3e4f660c887fc5f14"
+    },
+    {
+      "id": "15108879",
+      "old_title": "대전광역시 유성구_인구수 대비 동별 교통사고 비율",
+      "new_title": "대전광역시 유성구_인구수 대비 동별 교통사고 비율",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9a09b6125989811889f7bd00503f3fdea5cc25f7363cd80d060989d415e7cd23",
+      "new_digest": "5e069dbff143c053e8c058a663b10099dba64a38135f8d30d621d6a5c0133e6b"
+    },
+    {
+      "id": "15108880",
+      "old_title": "대전광역시 유성구_주민등록 인구 현황",
+      "new_title": "대전광역시 유성구_주민등록 인구 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d86e39501a16d5712f413ca5e67727399ee18f7a1c0696d5f7e41194d48b0fcd",
+      "new_digest": "ce80c618064a51e8e3625b3988aa3a3e68f25022dcb31e5e1d05bb242f704fd3"
+    },
+    {
+      "id": "15108881",
+      "old_title": "대전광역시 유성구_행정동별, 성연령별 주민등록 인구 현황",
+      "new_title": "대전광역시 유성구_행정동별, 성연령별 주민등록 인구 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f8901ff9e96143699b01fed5f39198e825ada239ea6768f92bf4fce4573856b1",
+      "new_digest": "fdcdaabe1e55daf6620b214f9581a67506c87f721a02b1c624eee95d2144a67b"
+    },
+    {
+      "id": "15108883",
+      "old_title": "대전광역시 유성구_성연령별 교통사고 수",
+      "new_title": "대전광역시 유성구_성연령별 교통사고 수",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "64bcf5f41416407c1419a82e5aa0aeb8aa19c52c502373ce97f3f0261fd3ab1d",
+      "new_digest": "1e30c5d5e840f3110a411ae1b37c80e5c37ac27e22e1720c885fc4ced9d034e0"
+    },
+    {
       "id": "15108957",
       "old_title": "대전광역시 서구_상권별 시간대별 유동인구 현황",
       "new_title": "대전광역시 서구_상권별 시간대별 유동인구 현황",
@@ -28267,6 +28507,26 @@
       ],
       "old_digest": "f3c775d628d8b335461ae5c6e35c639800906e4cf16ccd0d4b29610cf2a46a87",
       "new_digest": "105f3affecce95f826435d1c2e751594fc5cc354f57edaf5eb7864dff45cf018"
+    },
+    {
+      "id": "15110048",
+      "old_title": "대전광역시 유성구_유성구 생활쓰레기 정보",
+      "new_title": "대전광역시 유성구_유성구 생활쓰레기 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "614106ebf19cdd28a0e86b5acadd1fa86d8f04d81045972fac7c5f7c87ec93a4",
+      "new_digest": "fb9ce58a704fe266d3ad431fef2344bfb94684035708f144bf5011cc2fc87654"
+    },
+    {
+      "id": "15110051",
+      "old_title": "대전광역시 유성구_주차장(공영+민영) 정보",
+      "new_title": "대전광역시 유성구_주차장(공영+민영) 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d7b05088e4e85d1ca21b30f3fbc1b2145f878716b8dd1a082d5dd0d128b07247",
+      "new_digest": "cfecb79042e9bae99ade82daed80f310b2f66857143ef685a48ed3ede95345da"
     },
     {
       "id": "15110625",

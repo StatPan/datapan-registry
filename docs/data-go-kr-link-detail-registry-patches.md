@@ -2,13 +2,13 @@
 
 This report fetches one operation-materialization batch from public data.go.kr detail pages and keeps only operations whose hosts already have registered adapters.
 
-- Generated at: `2026-07-04T02:27:48Z`
+- Generated at: `2026-07-04T02:44:38Z`
 - Batch: `institution-03`
-- Organization: `국가철도공단`
+- Organization: `대전광역시 유성구`
 - Input APIs: `26`
 - Details fetched: `26`
 - Patches: `26`
-- Operations to add: `78`
+- Operations to add: `26`
 - Skipped: `0`
 - Failed: `0`
 
@@ -16,31 +16,31 @@ This report fetches one operation-materialization batch from public data.go.kr d
 
 | Dataset ID | Organization | Title | Operations | Hosts |
 | --- | --- | --- | ---: | --- |
-| 15041666 | 국가철도공단 | 국가철도공단_도시철도 전체노선정보 | 3 | data.kric.go.kr |
-| 15057421 | 국가철도공단 | 국가철도공단_역사별 소화설비 현황 | 3 | data.kric.go.kr |
-| 15056590 | 국가철도공단 | 국가철도공단_역사별 공기호흡기 현황 | 3 | data.kric.go.kr |
-| 15041692 | 국가철도공단 | 국가철도공단_역사별 장애인 화장실 위치 | 3 | data.kric.go.kr |
-| 15041691 | 국가철도공단 | 국가철도공단_역사별 인접 승강기 차량번호 | 3 | data.kric.go.kr |
-| 15041690 | 국가철도공단 | 국가철도공단_역사별 휠체어리프트 이동동선 | 3 | data.kric.go.kr |
-| 15041689 | 국가철도공단 | 국가철도공단_역사별 엘리베이터 이동동선 | 3 | data.kric.go.kr |
-| 15041688 | 국가철도공단 | 국가철도공단_역사별 안전발판 설치유무 | 3 | data.kric.go.kr |
-| 15041687 | 국가철도공단 | 국가철도공단_역사별 승강장 이격거리 | 3 | data.kric.go.kr |
-| 15041686 | 국가철도공단 | 국가철도공단_역사별 휠체어리프트 위치 | 3 | data.kric.go.kr |
-| 15041685 | 국가철도공단 | 국가철도공단_역사별 점자표시유무 | 3 | data.kric.go.kr |
-| 15041684 | 국가철도공단 | 국가철도공단_역사별 유실물센터 정보 | 3 | data.kric.go.kr |
-| 15041683 | 국가철도공단 | 국가철도공단_역사별 에스컬레이터 현황 | 3 | data.kric.go.kr |
-| 15041682 | 국가철도공단 | 국가철도공단_역사별 엘리베이터 현황 | 3 | data.kric.go.kr |
-| 15041681 | 국가철도공단 | 국가철도공단_역사별 수유실 현황 | 3 | data.kric.go.kr |
-| 15041680 | 국가철도공단 | 국가철도공단_역사별 ATM 기기위치 | 3 | data.kric.go.kr |
-| 15041679 | 국가철도공단 | 국가철도공단_역사별 화장실 현황 | 3 | data.kric.go.kr |
-| 15041678 | 국가철도공단 | 국가철도공단_역사별 물품보관함 현황 | 3 | data.kric.go.kr |
-| 15041677 | 국가철도공단 | 국가철도공단_역사별 출구정보 | 3 | data.kric.go.kr |
-| 15041676 | 국가철도공단 | 국가철도공단_역사별 정보 | 3 | data.kric.go.kr |
-| 15041674 | 국가철도공단 | 국가철도공단_역사별 운행시각표 | 3 | data.kric.go.kr |
-| 15041673 | 국가철도공단 | 국가철도공단_역사별 환승정보 | 3 | data.kric.go.kr |
-| 15041672 | 국가철도공단 | 국가철도공단_역사별 스크린도어 현황 | 3 | data.kric.go.kr |
-| 15041671 | 국가철도공단 | 국가철도공단_역사별 제세동기 현황 | 3 | data.kric.go.kr |
-| 15041667 | 국가철도공단 | 국가철도공단_역사별 비상콜폰 현황 | 3 | data.kric.go.kr |
-| 15041665 | 국가철도공단 | 국가철도공단_열차별운행시각표 | 3 | data.kric.go.kr |
+| 15108883 | 대전광역시 유성구 | 대전광역시 유성구_성연령별 교통사고 수 | 1 | www.yuseong.go.kr |
+| 15108881 | 대전광역시 유성구 | 대전광역시 유성구_행정동별, 성연령별 주민등록 인구 현황 | 1 | www.yuseong.go.kr |
+| 15108880 | 대전광역시 유성구 | 대전광역시 유성구_주민등록 인구 현황 | 1 | www.yuseong.go.kr |
+| 15108879 | 대전광역시 유성구 | 대전광역시 유성구_인구수 대비 동별 교통사고 비율 | 1 | www.yuseong.go.kr |
+| 15108878 | 대전광역시 유성구 | 대전광역시 유성구_유형별 화재 발생 수 | 1 | www.yuseong.go.kr |
+| 15108877 | 대전광역시 유성구 | 대전광역시 유성구_월간 동별 교통사고 수 | 1 | www.yuseong.go.kr |
+| 15108872 | 대전광역시 유성구 | 대전광역시 유성구_어린이 인구수 대비 동별 어린이 피해 교통사고 현황 | 1 | www.yuseong.go.kr |
+| 15108870 | 대전광역시 유성구 | 대전광역시 유성구_성별 체류자격별 외국인 등록현황 | 1 | www.yuseong.go.kr |
+| 15108869 | 대전광역시 유성구 | 대전광역시 유성구_민방위 대피시설 현황 | 1 | www.yuseong.go.kr |
+| 15108867 | 대전광역시 유성구 | 대전광역시 유성구_국적별 성별 외국인 등록현황 | 1 | www.yuseong.go.kr |
+| 15108866 | 대전광역시 유성구 | 대전광역시 유성구_교통사고 현황 | 1 | www.yuseong.go.kr |
+| 15108863 | 대전광역시 유성구 | 대전광역시 유성구_측정소별 대기질 현황 | 1 | www.yuseong.go.kr |
+| 15108859 | 대전광역시 유성구 | 대전광역시 유성구_전기차 충전소 현황 | 1 | www.yuseong.go.kr |
+| 15108855 | 대전광역시 유성구 | 대전광역시 유성구_전기차 등록대수 대비 동별 충전소 비율 | 1 | www.yuseong.go.kr |
+| 15108853 | 대전광역시 유성구 | 대전광역시 유성구_차량 등록 대수 대비 동별 전기차 현황 | 1 | www.yuseong.go.kr |
+| 15108850 | 대전광역시 유성구 | 대전광역시 유성구_재난 예/경보시설 현황 | 1 | www.yuseong.go.kr |
+| 15108849 | 대전광역시 유성구 | 대전광역시 유성구_인구대비 동별 전기차 등록 대 수 비율현황 | 1 | www.yuseong.go.kr |
+| 15108848 | 대전광역시 유성구 | 대전광역시 유성구_월간 대기질 측정소별 평균 현황 | 1 | www.yuseong.go.kr |
+| 15108847 | 대전광역시 유성구 | 대전광역시 유성구_사고유형별교통사고수 | 1 | www.yuseong.go.kr |
+| 15108844 | 대전광역시 유성구 | 대전광역시 유성구_비상벨 설치 현황 | 1 | www.yuseong.go.kr |
+| 15108843 | 대전광역시 유성구 | 대전광역시 유성구_대기질 측정소 현황 | 1 | www.yuseong.go.kr |
+| 15108840 | 대전광역시 유성구 | 대전광역시 유성구_공중화장실 현황 | 1 | www.yuseong.go.kr |
+| 15108838 | 대전광역시 유성구 | 대전광역시 유성구_개방화장실 현황 | 1 | www.yuseong.go.kr |
+| 15108837 | 대전광역시 유성구 | 대전광역시 유성구_CCTV 설치현황 | 1 | www.yuseong.go.kr |
+| 15110051 | 대전광역시 유성구 | 대전광역시 유성구_주차장(공영+민영) 정보 | 1 | www.yuseong.go.kr |
+| 15110048 | 대전광역시 유성구 | 대전광역시 유성구_유성구 생활쓰레기 정보 | 1 | www.yuseong.go.kr |
 
 ## Skipped Reasons
