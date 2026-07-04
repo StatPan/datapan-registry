@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T04:00:33Z",
+  "generated_at": "2026-07-04T04:09:03Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4464,
-    "verified": 2587,
+    "total": 4467,
+    "verified": 2590,
     "failed": 334,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2587,
+        "count": 2590,
         "status": "verified"
       },
       {
@@ -779,6 +779,11 @@
         "provider": "work"
       },
       {
+        "key": "atfis",
+        "count": 3,
+        "provider": "atfis"
+      },
+      {
         "key": "dgfca",
         "count": 3,
         "provider": "dgfca"
@@ -1471,6 +1476,11 @@
         "host": "openapi.gblib.or.kr"
       },
       {
+        "key": "www.atfis.or.kr",
+        "count": 3,
+        "host": "www.atfis.or.kr"
+      },
+      {
         "key": "www.vworld.kr",
         "count": 3,
         "host": "www.vworld.kr"
@@ -1699,7 +1709,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3740,
+        "count": 3743,
         "kind": "external_endpoint"
       },
       {

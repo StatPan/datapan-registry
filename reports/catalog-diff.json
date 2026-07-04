@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T04:00:35Z",
+  "generated_at": "2026-07-04T04:09:05Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4247,
-    "stable": 7813
+    "changed": 4250,
+    "stable": 7810
   },
   "added": [],
   "removed": [],
@@ -28907,6 +28907,36 @@
       ],
       "old_digest": "a365da27917e251e3702e865063ea237d277b533935f4a72e1d8fa171de37a14",
       "new_digest": "42c261b73c9c2d5dbfcac1a6ffe550cf4a6066515253d66e7ae0eca6941994bf"
+    },
+    {
+      "id": "15109103",
+      "old_title": "한국농수산식품유통공사_국내 식품시장규모",
+      "new_title": "한국농수산식품유통공사_국내 식품시장규모",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ed2d0e4b6ec3fa1674d41629394a778b0875e2ab37da2cd09351b70830f6c11a",
+      "new_digest": "30b3588714ae50e2daecdd3647f0122ec66cc2803feec1836a0dd3210c45ff8e"
+    },
+    {
+      "id": "15109104",
+      "old_title": "한국농수산식품유통공사_음식료품 제조업 업종별 현황 통계",
+      "new_title": "한국농수산식품유통공사_음식료품 제조업 업종별 현황 통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "73a63442b546fc530b792f585b960ba9874218b9402718f1a6f5647d447882b2",
+      "new_digest": "0b74164b67ff44238232aa3c8425e17d018c68ffc9d94d881499b72826375bc4"
+    },
+    {
+      "id": "15109105",
+      "old_title": "한국농수산식품유통공사_식품 원료별 사용량(총/국산/수입)",
+      "new_title": "한국농수산식품유통공사_식품 원료별 사용량(총/국산/수입)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b1c8b25e7c763c4b9bf621eeb390ff51171408dffad01c0b31739225a2a8cf02",
+      "new_digest": "bf8ccef5c3c2d26dbce2456e68d7c8f25af63498b428ab6d402b7d3fedb6e7bf"
     },
     {
       "id": "15109149",

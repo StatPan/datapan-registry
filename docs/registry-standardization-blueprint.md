@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `628` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `625` data.go.kr APIs
   without operation mappings, `9,285` operation-mapped APIs without runtime
   evidence, and `204` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -514,8 +514,13 @@ Current gaps:
   `2` failed on `www.hrfco.go.kr`). That brings runtime evidence to `4464`,
   verified checks to `2587`, failed checks to `334`, and registered external
   adapter operations to `9327`.
-- API operation coverage remains incomplete: `11,432` of `12,060` APIs have
-  operation mappings (`94.8%`), leaving `628` APIs to materialize and `9,285`
+- The 한국농수산식품유통공사 batch adds ATFIS host coverage for
+  `www.atfis.or.kr`, materializes the remaining `3` APIs and `3` operations,
+  and merges `3` verified bounded checks. That brings runtime evidence to
+  `4467`, verified checks to `2590`, and registered external adapter operations
+  to `9330`.
+- API operation coverage remains incomplete: `11,435` of `12,060` APIs have
+  operation mappings (`94.8%`), leaving `625` APIs to materialize and `9,285`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

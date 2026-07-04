@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T04:00:35Z",
+  "generated_at": "2026-07-04T04:09:05Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 124,
-  "host_count": 157,
+  "adapter_count": 125,
+  "host_count": 158,
   "adapters": [
     {
       "name": "airport",
@@ -30,6 +30,16 @@
       "status": "registered",
       "hosts": [
         "www.anyang.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "atfis",
+      "status": "registered",
+      "hosts": [
+        "www.atfis.or.kr"
       ],
       "capabilities": [
         "verification"
@@ -1304,8 +1314,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 124,
-    "verification_capable_adapters": 124,
+    "adapter_count": 125,
+    "verification_capable_adapters": 125,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
