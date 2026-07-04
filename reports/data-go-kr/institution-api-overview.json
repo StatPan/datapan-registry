@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T05:44:38Z",
+  "generated_at": "2026-07-04T05:55:34Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 21211,
-    "runtime_evidence": 4728,
+    "operations": 21227,
+    "runtime_evidence": 4744,
     "runtime_evidence_percent": 22.3,
-    "callable_operations": 21069,
-    "external_endpoint_operations": 9601,
-    "registered_adapter_operations": 9591,
+    "callable_operations": 21085,
+    "external_endpoint_operations": 9617,
+    "registered_adapter_operations": 9607,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 9601
+      "count": 9617
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 9591
+      "count": 9607
     },
     {
       "key": "builtin",
@@ -93,7 +93,7 @@
     },
     {
       "category": "재정금융",
-      "operation_count": 1318
+      "operation_count": 1334
     },
     {
       "category": "환경기상",
@@ -9981,6 +9981,49 @@
       ]
     },
     {
+      "organization": "한국은행",
+      "api_count": 16,
+      "operation_api_count": 16,
+      "operation_count": 16,
+      "runtime_evidence_count": 16,
+      "runtime_evidence_percent": 100.0,
+      "verified": 16,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 16,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "external_endpoint",
+          "count": 16
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 16
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "재정금융",
+          "operation_count": 16
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "ecos.bok.or.kr",
+          "operation_count": 16,
+          "adapter": "ecos",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "한국지역난방공사",
       "api_count": 16,
       "operation_api_count": 16,
@@ -16461,24 +16504,6 @@
           "operation_count": 1
         }
       ]
-    },
-    {
-      "organization": "한국은행",
-      "api_count": 16,
-      "operation_api_count": 0,
-      "operation_count": 0,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [],
-      "by_adapter_status": [],
-      "top_categories": [],
-      "top_hosts": []
     },
     {
       "organization": "서울특별시 서대문구",

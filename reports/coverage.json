@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T05:44:45Z",
+  "generated_at": "2026-07-04T05:55:40Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 21211,
-    "callable_operations": 21069,
+    "operations": 21227,
+    "callable_operations": 21085,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 9601,
-    "registered_adapter_operations": 9591,
+    "external_endpoint_operations": 9617,
+    "registered_adapter_operations": 9607,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.7,
-    "approval_required_operations": 8166,
+    "approval_required_operations": 8182,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 158,
-    "registered_adapter_hosts": 162,
+    "registered_adapter_hosts": 163,
     "missing_adapter_hosts": 11,
-    "adapter_count": 134,
+    "adapter_count": 135,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,13 +41,13 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-04T05:44:19Z",
-    "total": 4728,
-    "verified": 2808,
+    "generated_at": "2026-07-04T05:55:19Z",
+    "total": 4744,
+    "verified": 2824,
     "failed": 377,
     "skipped": 1543,
     "unknown": 0,
-    "verified_percent": 59.4,
+    "verified_percent": 59.5,
     "evidence_operation_percent": 22.3
   },
   "route_evidence": {
@@ -381,10 +381,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-04T05:44:45Z",
+    "generated_at": "2026-07-04T05:55:40Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 134,
-    "host_count": 167,
+    "adapter_count": 135,
+    "host_count": 168,
     "adapters": [
       {
         "name": "airport",
@@ -580,6 +580,16 @@
         "status": "registered",
         "hosts": [
           "data.dongjak.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "ecos",
+        "status": "registered",
+        "hosts": [
+          "ecos.bok.or.kr"
         ],
         "capabilities": [
           "verification"
@@ -1786,8 +1796,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 134,
-      "verification_capable_adapters": 134,
+      "adapter_count": 135,
+      "verification_capable_adapters": 135,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

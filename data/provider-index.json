@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T05:44:38Z",
+  "generated_at": "2026-07-04T05:55:34Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 134,
-  "host_count": 167,
+  "adapter_count": 135,
+  "host_count": 168,
   "adapters": [
     {
       "name": "airport",
@@ -198,6 +198,16 @@
       "status": "registered",
       "hosts": [
         "data.dongjak.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "ecos",
+      "status": "registered",
+      "hosts": [
+        "ecos.bok.or.kr"
       ],
       "capabilities": [
         "verification"
@@ -1404,8 +1414,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 134,
-    "verification_capable_adapters": 134,
+    "adapter_count": 135,
+    "verification_capable_adapters": 135,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
