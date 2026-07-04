@@ -1,0 +1,55 @@
+{
+  "generated_at": "2026-07-04T05:16:27Z",
+  "source": "reports/data-go-kr/police-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 20,
+    "verified": 20,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 20,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "utic",
+        "count": 12,
+        "provider": "utic"
+      },
+      {
+        "key": "safe182",
+        "count": 8,
+        "provider": "safe182"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "www.utic.go.kr",
+        "count": 12,
+        "host": "www.utic.go.kr"
+      },
+      {
+        "key": "www.safe182.go.kr",
+        "count": 8,
+        "host": "www.safe182.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 20,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

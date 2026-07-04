@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T05:07:28Z",
+  "generated_at": "2026-07-04T05:16:58Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4326,
-    "stable": 7734
+    "changed": 4336,
+    "stable": 7724
   },
   "added": [],
   "removed": [],
@@ -23099,6 +23099,16 @@
       "new_digest": "44bf8a762a57366c4f2449f5092c6714732f0bf529884d60f559ccd188fd0cd2"
     },
     {
+      "id": "15087120",
+      "old_title": "경찰청_교통소통정보 서비스",
+      "new_title": "경찰청_교통소통정보 서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e758a8798acd5775ccdd06ef7e6d55a01b46378ea50b91364764e09e8d3f9576",
+      "new_digest": "e3b61dae2fc44d7d2c6f198ec81aac50136affeab68e93bd4ccf1cdfbbeac03b"
+    },
+    {
       "id": "15087160",
       "old_title": "농촌진흥청_역대청차장명단",
       "new_title": "농촌진흥청_역대청차장명단",
@@ -23427,6 +23437,16 @@
       ],
       "old_digest": "15a0a34198ed1a2ec9a1ba63b3cc920898c5e4c80a77bf3bf7b3ed4ac12bad84",
       "new_digest": "2eaba2ae1dd7b63160f239ac6dff23745047383194f777b7fe3dbeca6aa63c4f"
+    },
+    {
+      "id": "15088841",
+      "old_title": "경찰청_교통돌발정보서비스",
+      "new_title": "경찰청_교통돌발정보서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "07463960f54d5387750ce32f6bf03770e206a708fefa2dc8509d38e4ddddadfa",
+      "new_digest": "30edf9e346fa699efc2bd7cbd225fe0c7d481f8119a1cd6b4f657ea35d8f1884"
     },
     {
       "id": "15088848",
@@ -30409,6 +30429,16 @@
       "new_digest": "254252c065d560356d3d920941b4264d0164ebede1d208b4290ddc13680d30d8"
     },
     {
+      "id": "15114684",
+      "old_title": "경찰청_도로위험상황예보",
+      "new_title": "경찰청_도로위험상황예보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4727bbea2efc1fcc5ba418c4f2d4facc1c81249dc3af2d85f80ec175c9d43b7f",
+      "new_digest": "9671996ff219477654ef91e8c8300321ce492bb363b8922c043a62b16c78510d"
+    },
+    {
       "id": "15114779",
       "old_title": "경기도 광명시_박물관 미술관",
       "new_title": "경기도 광명시_박물관 미술관",
@@ -30547,6 +30577,16 @@
       ],
       "old_digest": "e0aaf610c7e7f3dcbedd9abb4e52134903d3b7a2eddfc9dacb37735baaa4bb52",
       "new_digest": "afa41e4804c8840b0ca2ed813f6f1dd01fba79fb65117f136538e025824a1379"
+    },
+    {
+      "id": "15118616",
+      "old_title": "경찰청_전국 보호구역정보",
+      "new_title": "경찰청_전국 보호구역정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e76154c9b6469d509305212b6c56955eb6c965c758c056818b2b8b84d8421a11",
+      "new_digest": "73f27eba567ebf4435795c6ca0a418e49bc6796876515ff0e7872aa75a81bc22"
     },
     {
       "id": "15118650",
@@ -35089,6 +35129,16 @@
       "new_digest": "89ea9d9b75dfd3a1b3657cfb4c89e19832b95043fb0e54141c9647fbcc9674d0"
     },
     {
+      "id": "15128433",
+      "old_title": "경찰청_TCS 공사정보 조회 서비스",
+      "new_title": "경찰청_TCS 공사정보 조회 서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b8341d9f7166974837b3aed4cd68121bd5595494053db7bb80399da43794962f",
+      "new_digest": "74331d3a647ac443902bbd1b2516f21f09693333ba57f420061e86c3d9248671"
+    },
+    {
       "id": "15128482",
       "old_title": "대전광역시 서구_한의원 현황",
       "new_title": "대전광역시 서구_한의원 현황",
@@ -38457,6 +38507,16 @@
       ],
       "old_digest": "29701f871b4872e5923d274d9275c42536e7de252ef67f0ac29544b3b365959e",
       "new_digest": "b4a079558492af1da32bc619cd901cdb6d8012f0745583fc4150f548042ed441"
+    },
+    {
+      "id": "15148511",
+      "old_title": "경찰청_교통 CCTV 영상 정보",
+      "new_title": "경찰청_교통 CCTV 영상 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5d1f85959b9801e400f83363fd8709df173e983d0bb4c8fcc40643a2ba402ce7",
+      "new_digest": "74bc719061ea21b0143da856bc4cbdd977bb0017f44484d52159f43476de1892"
     },
     {
       "id": "15149400",
@@ -42649,6 +42709,16 @@
       "new_digest": "dabb8e46e692e26cca84f72a898f0bbe57e693ad435baaad0e58db63b81b46ef"
     },
     {
+      "id": "15159340",
+      "old_title": "경찰청_신호 개방 데이터",
+      "new_title": "경찰청_신호 개방 데이터",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "929c192ba727de5b68a3da56ec2eb93aac9ef742f0192c5ae43274e1fb52dd08",
+      "new_digest": "327b315bf006fc2487d59117ecc25705b5220fe6f6900f0c9b9e54c8b73d9128"
+    },
+    {
       "id": "3033749",
       "old_title": "해양수산부 국립수산물품질관리원_수산물수출검사통계",
       "new_title": "해양수산부 국립수산물품질관리원_수산물수출검사통계",
@@ -42897,6 +42967,36 @@
       ],
       "old_digest": "575e37409322902a0939e59dedbba133116254fa6511b3f2118fcb6f9dbd042d",
       "new_digest": "ba0f17393c3b695c026d0f0ed12a2cb46226550adbba6cff784f358af9f6760a"
+    },
+    {
+      "id": "3051810",
+      "old_title": "경찰청_실종경보정보 서비스",
+      "new_title": "경찰청_실종경보정보 서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9a816a8d0855fc0127780397dcc928fa7a0fd984a23b8ae14b18e1058d9a95ab",
+      "new_digest": "a232431eeaefad5f0e3903bf7d1586dbdf77e213f92c779d4c8457a26a4f11d7"
+    },
+    {
+      "id": "3052083",
+      "old_title": "경찰청_실종아동정보 서비스",
+      "new_title": "경찰청_실종아동정보 서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5e4af3a2f732b97907c72d620540cb3d57e17b17b252f931b05e60c1cc4200de",
+      "new_digest": "e92758147e4465f34c1e9e7164ac6a57fd8d04cd27388364bafd575afd5d7566"
+    },
+    {
+      "id": "3052084",
+      "old_title": "경찰청_아동안전지킴이집 정보 서비스",
+      "new_title": "경찰청_아동안전지킴이집 정보 서비스",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c19c0f53f2fb71ca98d73e6bc2f86b95dba14c76a6f9969137e0e26bed46b561",
+      "new_digest": "90192a7bc0beaa141e7a03c7cb82fbc94bc1dfbd2f8804922d2be56c6232b7c0"
     },
     {
       "id": "3052419",

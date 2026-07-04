@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T05:07:10Z",
+  "generated_at": "2026-07-04T05:16:43Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4639,
-    "verified": 2729,
+    "total": 4659,
+    "verified": 2749,
     "failed": 367,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2729,
+        "count": 2749,
         "status": "verified"
       },
       {
@@ -679,6 +679,11 @@
         "provider": "jejudatahub"
       },
       {
+        "key": "utic",
+        "count": 12,
+        "provider": "utic"
+      },
+      {
         "key": "hrfco",
         "count": 11,
         "provider": "hrfco"
@@ -732,6 +737,11 @@
         "key": "pqis",
         "count": 8,
         "provider": "pqis"
+      },
+      {
+        "key": "safe182",
+        "count": 8,
+        "provider": "safe182"
       },
       {
         "key": "sisul-www",
@@ -1311,6 +1321,11 @@
         "host": "www.jejudatahub.net"
       },
       {
+        "key": "www.utic.go.kr",
+        "count": 12,
+        "host": "www.utic.go.kr"
+      },
+      {
         "key": "seogwipo.go.kr",
         "count": 11,
         "host": "seogwipo.go.kr"
@@ -1379,6 +1394,11 @@
         "key": "openapi.pqis.go.kr",
         "count": 8,
         "host": "openapi.pqis.go.kr"
+      },
+      {
+        "key": "www.safe182.go.kr",
+        "count": 8,
+        "host": "www.safe182.go.kr"
       },
       {
         "key": "www.sobujang.net",
@@ -1764,7 +1784,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3915,
+        "count": 3935,
         "kind": "external_endpoint"
       },
       {

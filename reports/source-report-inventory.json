@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-04T05:07:28Z",
+  "generated_at": "2026-07-04T05:16:58Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 122,
+    "report_total": 124,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,7 +38,7 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 110,
+      "report_count": 112,
       "present_reports": [
         {
           "name": "anyang-egonghun-verification-summary.json",
@@ -385,6 +385,14 @@
           "schema_version": "datapan.operation-materialization-plan.v1"
         },
         {
+          "name": "police-verification-summary.json",
+          "path": "reports/data-go-kr/police-verification-summary.json"
+        },
+        {
+          "name": "police-verification.json",
+          "path": "reports/data-go-kr/police-verification.json"
+        },
+        {
           "name": "qia-verification-summary.json",
           "path": "reports/data-go-kr/qia-verification-summary.json"
         },
@@ -594,6 +602,8 @@
         "nrich-www-verification-summary.json",
         "nrich-www-verification.json",
         "operation-materialization-plan.json",
+        "police-verification-summary.json",
+        "police-verification.json",
         "qia-verification-summary.json",
         "qia-verification.json",
         "registry-impact-plan.json",
