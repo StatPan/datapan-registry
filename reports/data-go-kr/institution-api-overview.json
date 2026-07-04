@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T00:18:47Z",
+  "generated_at": "2026-07-04T00:31:18Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 20163,
-    "runtime_evidence": 3677,
-    "runtime_evidence_percent": 18.2,
-    "callable_operations": 20021,
-    "external_endpoint_operations": 8553,
-    "registered_adapter_operations": 8543,
+    "operations": 20191,
+    "runtime_evidence": 3709,
+    "runtime_evidence_percent": 18.4,
+    "callable_operations": 20049,
+    "external_endpoint_operations": 8581,
+    "registered_adapter_operations": 8571,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 8553
+      "count": 8581
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 8543
+      "count": 8571
     },
     {
       "key": "builtin",
@@ -69,7 +69,7 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 2620
+      "operation_count": 2625
     },
     {
       "category": "교통물류",
@@ -81,7 +81,7 @@
     },
     {
       "category": "문화관광",
-      "operation_count": 2033
+      "operation_count": 2046
     },
     {
       "category": "사회복지",
@@ -93,7 +93,7 @@
     },
     {
       "category": "환경기상",
-      "operation_count": 1281
+      "operation_count": 1282
     },
     {
       "category": "재정금융",
@@ -101,7 +101,7 @@
     },
     {
       "category": "식품건강",
-      "operation_count": 1230
+      "operation_count": 1232
     },
     {
       "category": "국토관리",
@@ -109,7 +109,7 @@
     },
     {
       "category": "보건의료",
-      "operation_count": 1000
+      "operation_count": 1007
     },
     {
       "category": "재난안전",
@@ -139,7 +139,7 @@
     },
     {
       "host": "data.gg.go.kr",
-      "operation_count": 2193,
+      "operation_count": 2195,
       "adapter": "data-gg",
       "adapter_status": "registered",
       "capabilities": [
@@ -3623,6 +3623,103 @@
       ]
     },
     {
+      "organization": "대구광역시",
+      "api_count": 32,
+      "operation_api_count": 32,
+      "operation_count": 79,
+      "runtime_evidence_count": 32,
+      "runtime_evidence_percent": 40.5,
+      "verified": 28,
+      "failed": 0,
+      "skipped": 4,
+      "unknown": 0,
+      "approval_required_operations": 19,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 47
+        },
+        {
+          "key": "external_endpoint",
+          "count": 32
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 28
+        },
+        {
+          "key": "builtin",
+          "count": 47
+        },
+        {
+          "key": "missing",
+          "count": 4
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "문화관광",
+          "operation_count": 27
+        },
+        {
+          "category": "교통물류",
+          "operation_count": 16
+        },
+        {
+          "category": "환경기상",
+          "operation_count": 8
+        },
+        {
+          "category": "사회복지",
+          "operation_count": 8
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 7
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 47
+        },
+        {
+          "host": "thegoodnight.daegu.go.kr",
+          "operation_count": 9,
+          "adapter": "daegu",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.daegufood.go.kr",
+          "operation_count": 7,
+          "adapter": "daegu",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.daegu.go.kr",
+          "operation_count": 6,
+          "adapter": "daegu",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "car.daegu.go.kr",
+          "operation_count": 4
+        }
+      ]
+    },
+    {
       "organization": "울산광역시",
       "api_count": 31,
       "operation_api_count": 21,
@@ -5219,72 +5316,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 51
-        }
-      ]
-    },
-    {
-      "organization": "대구광역시",
-      "api_count": 32,
-      "operation_api_count": 19,
-      "operation_count": 51,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 11,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 47
-        },
-        {
-          "key": "external_endpoint",
-          "count": 4
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 47
-        },
-        {
-          "key": "missing",
-          "count": 4
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "교통물류",
-          "operation_count": 16
-        },
-        {
-          "category": "문화관광",
-          "operation_count": 14
-        },
-        {
-          "category": "사회복지",
-          "operation_count": 8
-        },
-        {
-          "category": "환경기상",
-          "operation_count": 7
-        },
-        {
-          "category": "교육",
-          "operation_count": 4
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 47
-        },
-        {
-          "host": "car.daegu.go.kr",
-          "operation_count": 4
         }
       ]
     },

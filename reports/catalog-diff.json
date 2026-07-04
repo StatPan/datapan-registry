@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T00:18:47Z",
+  "generated_at": "2026-07-04T00:31:18Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3885,
-    "stable": 8175
+    "changed": 3898,
+    "stable": 8162
   },
   "added": [],
   "removed": [],
@@ -327,6 +327,16 @@
       ],
       "old_digest": "77e30fd748906e1178a9bd9e5f2f2a1eda888cada2be48bf1b1ab3ec7d446217",
       "new_digest": "6097fe79f52479b66f3052a9a5da38799c363fc0db269fce76f873431b18246b"
+    },
+    {
+      "id": "15014526",
+      "old_title": "대구광역시_기간제 및 타기관 채용정보",
+      "new_title": "대구광역시_기간제 및 타기관 채용정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7e0bad597b973d8d964ec323d1697f717572375aa6a9001a8c3f6a4b085bd93f",
+      "new_digest": "c05cf1e3a708c718fb49ecb38f018c89e01b5974e399e3204b9acfdae4a919ea"
     },
     {
       "id": "15015052",
@@ -4249,6 +4259,16 @@
       "new_digest": "be57cc8640cbb5163a5064697eb4eb794ea4cda5db5e65218a9eb00b8a96d4b8"
     },
     {
+      "id": "15056766",
+      "old_title": "대구광역시_우수 숙박시설",
+      "new_title": "대구광역시_우수 숙박시설",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e54b4a8bb491649d82a67dacb43f31fafbff949e55c9e4753cd37f24a33c0e4c",
+      "new_digest": "70254371aabbd8072875b1d186af50c5ae8f8ee5478fb8d9364b04476a1550e8"
+    },
+    {
       "id": "15056769",
       "old_title": "경기도_학교유형별 일반학급 배치 학급수 집계현황",
       "new_title": "경기도_학교유형별 일반학급 배치 학급수 집계현황",
@@ -5279,6 +5299,16 @@
       "new_digest": "4705d80fb697507b10352a5c559373fb14c7e90d949e25e35f5c86b32ce7b3cf"
     },
     {
+      "id": "15057020",
+      "old_title": "대구광역시_음식골목",
+      "new_title": "대구광역시_음식골목",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "748c7c5430b04e9c66d530a1c12bc2e0107ff060d0a2987bfeada68038e8f121",
+      "new_digest": "2668d94a8a4eb0ddf713e83e6259a5d0c82c633335c913bec154db42babda92a"
+    },
+    {
       "id": "15057023",
       "old_title": "경기도_공장등록 현황",
       "new_title": "경기도_공장등록 현황",
@@ -5447,6 +5477,16 @@
       ],
       "old_digest": "7bf9b2d98b044b39cd71a5cd5eb00357197f16fa9232e00efbadc8d703e854fb",
       "new_digest": "7b65f1b6f2d94f33bdd501811b14cb814424fd43be6736f7f58ca0b72bfc9565"
+    },
+    {
+      "id": "15057055",
+      "old_title": "대구광역시_오페라하우스 공연일정",
+      "new_title": "대구광역시_오페라하우스 공연일정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e71c5d8d6e4a7cd99323a5c75de45a9bd1366a226721ddb64decc1db21b2a1ec",
+      "new_digest": "39a22f08a41fc3aca29420cf5a6dfc0b9f6765ec53cbf5f550c89b52f0772eda"
     },
     {
       "id": "15057057",
@@ -6209,6 +6249,16 @@
       "new_digest": "e6c59738de4b3f2b5eb509d08daacfeb66f33a305a7458ab51fb26aed77dd075"
     },
     {
+      "id": "15057236",
+      "old_title": "대구광역시_맛집",
+      "new_title": "대구광역시_맛집",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e6342c69e06202895cd46707431c9793a398e5e2ce52b6931c046561c85f15e3",
+      "new_digest": "dbdb95b47d48b470da77aaf2aba02a204f90e587b829508fdf02efa80c60fca2"
+    },
+    {
       "id": "15057239",
       "old_title": "경기도_버스터미널 현황",
       "new_title": "경기도_버스터미널 현황",
@@ -6857,6 +6907,16 @@
       ],
       "old_digest": "497bf2b88bd4c848d622a6c6bf38fa2feaf3e3f912e345cc788db3d9719c34e0",
       "new_digest": "984bd520f903b021b222abb55f992879bfbce055bb6be18f4eccec121668dfdc"
+    },
+    {
+      "id": "15057417",
+      "old_title": "대구광역시_일반호텔(비즈니스 호텔) 현황",
+      "new_title": "대구광역시_일반호텔(비즈니스 호텔) 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f9672ca2ac90046073136f66d9539cad819b81c15b5f4dcebaaba308c7d4a7ea",
+      "new_digest": "2083e88934c392d18b54a15bf89ee9e36e596f1b95f39ee846d17bb94ba73508"
     },
     {
       "id": "15057419",
@@ -15579,6 +15639,16 @@
       "new_digest": "e3d4f8291b8e371015ee59d73bb212d96104aa3386a935cbd6f6c75cb7585ac6"
     },
     {
+      "id": "15059414",
+      "old_title": "대구광역시_테마별 숙박시설",
+      "new_title": "대구광역시_테마별 숙박시설",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1646a822b6fb7d912483b02c81b7abaf6a99da3ef067b1a8e60251139091a9d0",
+      "new_digest": "96a090304730e0635938e2172f783fa63317424dc95e227ab08e25a2dbc61743"
+    },
+    {
       "id": "15059418",
       "old_title": "경기도_휴게음식점(과자점) 현황",
       "new_title": "경기도_휴게음식점(과자점) 현황",
@@ -16477,6 +16547,16 @@
       ],
       "old_digest": "edbb7d25cfe13129303e9df87df39d885b502d069cef10cc09791bbeece611cc",
       "new_digest": "75570b65380ce8946d3ca41c20783241b22cb6fc9e8947b091007b13e30fa3ae"
+    },
+    {
+      "id": "15061031",
+      "old_title": "대구광역시_지능형 상담도우미 뚜봇",
+      "new_title": "대구광역시_지능형 상담도우미 뚜봇",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d74fadd5d149cbeae36877012b232b0cf0a2101fa2998041da293ac25e161138",
+      "new_digest": "9342070cd03fe2d7923a9d426dd1bd61a353667eb296028a3678ea4b3d257fa1"
     },
     {
       "id": "15061033",
@@ -20439,6 +20519,16 @@
       "new_digest": "3eb38288153998dfed516dd88e0eed9cb1e70781d0d79ebf6d9aa91a8f5228c9"
     },
     {
+      "id": "15084620",
+      "old_title": "대구광역시_공연·전시 정보",
+      "new_title": "대구광역시_공연·전시 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ba8b5c2f2cf227c0c3c48aae889af8836a4c059a7e5ba52c254a4ca589b869b9",
+      "new_digest": "640ca5f09d3744c0af94586362a76884aea2b69164654fd5230bd464b78eb85d"
+    },
+    {
       "id": "15085712",
       "old_title": "식품의약품안전처_건강기능식품 영양DB",
       "new_title": "식품의약품안전처_건강기능식품 영양DB",
@@ -20457,6 +20547,16 @@
       ],
       "old_digest": "9263ad2140305a778213deb805332b231b4990dceb98b9796bbc347f8b31e738",
       "new_digest": "3e19f7cd732853d047e28c5da1124d33a9e7129377788c390313af1742ba20f4"
+    },
+    {
+      "id": "15086132",
+      "old_title": "대구광역시_먹거리골목별 음식점",
+      "new_title": "대구광역시_먹거리골목별 음식점",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "24f9c1a8055a3569a61deb5c75aeaae0425aa57afcf36daf2088ffb043716830",
+      "new_digest": "bc2bef824954c2fc8dd1754dba8962992c1b5cf3c8bfb18706381b893a4662e3"
     },
     {
       "id": "15086334",
@@ -26937,6 +27037,16 @@
       ],
       "old_digest": "fd0a8d4215c4b1031d63a75c07e5dad97cdf9e9f2a3163e26f8b05e69682f397",
       "new_digest": "0967254b93762eb9749594978a1ad301a9c5e1c434bc4c99bdf7ad4c768ae6e1"
+    },
+    {
+      "id": "15112858",
+      "old_title": "대구광역시_대구광역시_전통시장가격동향",
+      "new_title": "대구광역시_대구광역시_전통시장가격동향",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "744d74516e41320acb71a117001f1da3fd2bd28b35105f850f29b40b1a970412",
+      "new_digest": "61d812c83a058bf5be69b42ce414f9177c4c4089d1b39dccf8113968c77964bc"
     },
     {
       "id": "15113309",
@@ -38449,6 +38559,16 @@
       "new_digest": "0d56f0e77f65c1e0f95f1436716951e6121a06e6a456c98fb687eab102efd96d"
     },
     {
+      "id": "3039741",
+      "old_title": "대구광역시_대기질 일평균농도",
+      "new_title": "대구광역시_대기질 일평균농도",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5a8b7afa74242d531a2c478aa8de4c1e4f83f2d1d9391524405055d65f6c92bb",
+      "new_digest": "bd62234b9c445678a1f8981cf8e8edac6d57c5d3bea28536f174ee871bf4225d"
+    },
+    {
       "id": "3043181",
       "old_title": "행정안전부_지방재정365_채권현황",
       "new_title": "행정안전부_지방재정365_채권현황",
@@ -38667,6 +38787,16 @@
       ],
       "old_digest": "dcc5d095921ed346ef9efa66192348bde3b43376a35504888148a18edd89dce9",
       "new_digest": "4a2f5898edc84b9f7d8b38769b95a6cf577f66174241a98fcbd77ee0ba96573d"
+    },
+    {
+      "id": "3056767",
+      "old_title": "대구광역시_채용 시험 정보",
+      "new_title": "대구광역시_채용 시험 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "715fd4382516ba752337c24db845d3cb8882532436e1826d4b7533066f276276",
+      "new_digest": "3034bb2f5b5f904f725a369fd342cd339bce315fc11e0d14c219663aeb241243"
     },
     {
       "id": "3060743",

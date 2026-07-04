@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T00:18:47Z",
+  "generated_at": "2026-07-04T00:31:18Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 109,
-  "host_count": 129,
+  "adapter_count": 110,
+  "host_count": 134,
   "adapters": [
     {
       "name": "airport",
@@ -123,6 +123,20 @@
       "status": "registered",
       "hosts": [
         "www.culture.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "daegu",
+      "status": "registered",
+      "hosts": [
+        "air.daegu.go.kr",
+        "happy.daegu.go.kr",
+        "thegoodnight.daegu.go.kr",
+        "www.daegu.go.kr",
+        "www.daegufood.go.kr"
       ],
       "capabilities": [
         "verification"
@@ -1141,8 +1155,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 109,
-    "verification_capable_adapters": 109,
+    "adapter_count": 110,
+    "verification_capable_adapters": 110,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
