@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T02:07:16Z",
+  "generated_at": "2026-07-04T02:17:14Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4141,
-    "verified": 2266,
+    "total": 4142,
+    "verified": 2267,
     "failed": 332,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2266,
+        "count": 2267,
         "status": "verified"
       },
       {
@@ -904,6 +904,11 @@
         "provider": "stcis"
       },
       {
+        "key": "tashu",
+        "count": 1,
+        "provider": "tashu"
+      },
+      {
         "key": "wamis",
         "count": 1,
         "provider": "wamis"
@@ -1436,6 +1441,11 @@
         "host": "api.sexoffender.go.kr"
       },
       {
+        "key": "bike.tashu.or.kr",
+        "count": 1,
+        "host": "bike.tashu.or.kr"
+      },
+      {
         "key": "car.go.kr",
         "count": 1,
         "host": "car.go.kr"
@@ -1584,7 +1594,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3417,
+        "count": 3418,
         "kind": "external_endpoint"
       },
       {

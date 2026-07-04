@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T02:07:18Z",
+  "generated_at": "2026-07-04T02:17:16Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 294,
+  "filtered_count": 295,
   "summary": {
-    "hosts": 294,
+    "hosts": 295,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 149,
-    "external_guide_hosts": 211,
-    "registered_adapter_hosts": 138,
-    "operation_hosts": 151,
+    "external_endpoint_hosts": 150,
+    "external_guide_hosts": 212,
+    "registered_adapter_hosts": 139,
+    "operation_hosts": 152,
     "guide_only_hosts": 143,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7901,
+    "approval_required_operations": 7902,
     "malformed_source_url_count": 712
   },
   "providers": [
@@ -2035,6 +2035,22 @@
       "external_guide_specs": 1,
       "sample_ids": [
         "3072018"
+      ]
+    },
+    {
+      "host": "bike.tashu.or.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "external_guide_specs": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15119663"
       ]
     },
     {

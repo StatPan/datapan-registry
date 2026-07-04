@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T02:07:16Z",
+  "generated_at": "2026-07-04T02:17:14Z",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
-  "limit": 6497,
+  "limit": 6517,
   "truncated": true,
-  "filtered_count": 4141,
+  "filtered_count": 4142,
   "summary": {
-    "total": 4141,
-    "verified": 2266,
+    "total": 4142,
+    "verified": 2267,
     "failed": 332,
     "skipped": 1543,
     "unknown": 0
@@ -65738,6 +65738,20 @@
       "http_status": 200,
       "semantic_status": "html_landing_page",
       "url": "http://e-gonghun.mpva.go.kr/user/ContribuMeritOpenAPI.do?goTocode=50002",
+      "body_shape": "html"
+    },
+    {
+      "dataset_id": "15119663",
+      "title": "대전교통공사_공영자전거타슈대여소현황",
+      "operation": "대전교통공사_공영자전거타슈대여소현황_20230822",
+      "provider": "tashu",
+      "endpoint_host": "bike.tashu.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T02:16:59Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://bike.tashu.or.kr/noticeDetail.do?seq=28",
       "body_shape": "html"
     }
   ]

@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T02:07:18Z",
+  "generated_at": "2026-07-04T02:17:16Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 20624,
-    "runtime_evidence": 4141,
+    "operations": 20625,
+    "runtime_evidence": 4142,
     "runtime_evidence_percent": 20.1,
-    "callable_operations": 20482,
-    "external_endpoint_operations": 9014,
-    "registered_adapter_operations": 9004,
+    "callable_operations": 20483,
+    "external_endpoint_operations": 9015,
+    "registered_adapter_operations": 9005,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 9014
+      "count": 9015
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 9004
+      "count": 9005
     },
     {
       "key": "builtin",
@@ -81,7 +81,7 @@
     },
     {
       "category": "교통물류",
-      "operation_count": 2151
+      "operation_count": 2152
     },
     {
       "category": "사회복지",
@@ -6925,6 +6925,65 @@
       ]
     },
     {
+      "organization": "대전교통공사",
+      "api_count": 27,
+      "operation_api_count": 27,
+      "operation_count": 31,
+      "runtime_evidence_count": 1,
+      "runtime_evidence_percent": 3.2,
+      "verified": 1,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 8,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 30
+        },
+        {
+          "key": "external_endpoint",
+          "count": 1
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 1
+        },
+        {
+          "key": "builtin",
+          "count": 30
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "교통물류",
+          "operation_count": 30
+        },
+        {
+          "category": "환경기상",
+          "operation_count": 1
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 30
+        },
+        {
+          "host": "bike.tashu.or.kr",
+          "operation_count": 1,
+          "adapter": "tashu",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "한국농수산식품유통공사",
       "api_count": 23,
       "operation_api_count": 20,
@@ -6995,48 +7054,6 @@
         {
           "category": "재난안전",
           "operation_count": 30
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 30
-        }
-      ]
-    },
-    {
-      "organization": "대전교통공사",
-      "api_count": 27,
-      "operation_api_count": 26,
-      "operation_count": 30,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 7,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 30
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 30
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "교통물류",
-          "operation_count": 29
-        },
-        {
-          "category": "환경기상",
-          "operation_count": 1
         }
       ],
       "top_hosts": [

@@ -1,0 +1,38 @@
+{
+  "generated_at": "2026-07-04T02:16:59Z",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "timeout": "20s",
+  "exclude_input": "reports/latest-verification.json",
+  "truncated": false,
+  "filters": {
+    "organization": "대전교통공사",
+    "host": "bike.tashu.or.kr",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 1,
+  "summary": {
+    "total": 1,
+    "verified": 1,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15119663",
+      "title": "대전교통공사_공영자전거타슈대여소현황",
+      "operation": "대전교통공사_공영자전거타슈대여소현황_20230822",
+      "provider": "tashu",
+      "endpoint_host": "bike.tashu.or.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T02:16:59Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "https://bike.tashu.or.kr/noticeDetail.do?seq=28",
+      "body_shape": "html"
+    }
+  ]
+}
