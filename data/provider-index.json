@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T03:51:01Z",
+  "generated_at": "2026-07-04T04:00:35Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 123,
-  "host_count": 155,
+  "adapter_count": 124,
+  "host_count": 157,
   "adapters": [
     {
       "name": "airport",
@@ -406,6 +406,17 @@
       "hosts": [
         "parking.happysd.or.kr",
         "www.happysd.or.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "hrfco",
+      "status": "registered",
+      "hosts": [
+        "data.floodmap.go.kr",
+        "www.hrfco.go.kr"
       ],
       "capabilities": [
         "verification"
@@ -1293,8 +1304,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 123,
-    "verification_capable_adapters": 123,
+    "adapter_count": 124,
+    "verification_capable_adapters": 124,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

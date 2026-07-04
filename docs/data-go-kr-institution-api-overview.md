@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-04T03:51:01Z`
+- Generated at: `2026-07-04T04:00:35Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `20930`
-- Runtime evidence: `4447` (`21.2%`)
-- External endpoint operations: `9320`
-- Registered adapter operations: `9310`
+- Operations: `20947`
+- Runtime evidence: `4464` (`21.3%`)
+- External endpoint operations: `9337`
+- Registered adapter operations: `9327`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -94,7 +94,7 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 - 환경기상: `1298` operations
 - 재정금융: `1277` operations
 - 식품건강: `1234` operations
-- 국토관리: `1094` operations
+- 국토관리: `1098` operations
 
 ## Largest Hosts
 
