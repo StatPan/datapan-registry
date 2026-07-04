@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-07-03T23:55:09Z",
+  "generated_at": "2026-07-04T00:05:46Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 277,
+  "filtered_count": 278,
   "summary": {
-    "hosts": 277,
+    "hosts": 278,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 133,
+    "external_endpoint_hosts": 134,
     "external_guide_hosts": 202,
-    "registered_adapter_hosts": 122,
-    "operation_hosts": 135,
+    "registered_adapter_hosts": 123,
+    "operation_hosts": 136,
     "guide_only_hosts": 142,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
@@ -1937,6 +1937,19 @@
       "external_endpoint_operations": 1,
       "sample_ids": [
         "15057574"
+      ]
+    },
+    {
+      "host": "koreapost.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "sample_ids": [
+        "3043719"
       ]
     },
     {

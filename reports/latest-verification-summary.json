@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-07-03T23:54:58Z",
+  "generated_at": "2026-07-04T00:05:31Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3625,
-    "verified": 1808,
+    "total": 3654,
+    "verified": 1809,
     "failed": 306,
-    "skipped": 1511,
+    "skipped": 1539,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "verified",
-        "count": 1808,
+        "count": 1809,
         "status": "verified"
       },
       {
         "key": "skipped",
-        "count": 1511,
+        "count": 1539,
         "status": "skipped"
       },
       {
@@ -33,7 +33,7 @@
     "by_reason": [
       {
         "key": "missing_auth",
-        "count": 581,
+        "count": 583,
         "reason": "missing_auth"
       },
       {
@@ -60,6 +60,11 @@
         "key": "chungnam_http_404",
         "count": 49,
         "reason": "chungnam_http_404"
+      },
+      {
+        "key": "epost_wadl_metadata_only",
+        "count": 34,
+        "reason": "epost_wadl_metadata_only"
       },
       {
         "key": "open-assembly_http_400",
@@ -117,11 +122,6 @@
         "reason": "uiryeong_missing_required_params"
       },
       {
-        "key": "epost_wadl_metadata_only",
-        "count": 17,
-        "reason": "epost_wadl_metadata_only"
-      },
-      {
         "key": "naqs_mutation_endpoint",
         "count": 16,
         "reason": "naqs_mutation_endpoint"
@@ -142,9 +142,19 @@
         "reason": "andong_service_not_registered"
       },
       {
+        "key": "epost_unsupported_protocol",
+        "count": 10,
+        "reason": "epost_unsupported_protocol"
+      },
+      {
         "key": "qnet_wadl_metadata_only",
         "count": 9,
         "reason": "qnet_wadl_metadata_only"
+      },
+      {
+        "key": "epost_missing_required_params",
+        "count": 8,
+        "reason": "epost_missing_required_params"
       },
       {
         "key": "korad_wadl_metadata_only",
@@ -192,11 +202,6 @@
         "reason": "culture_request_timeout"
       },
       {
-        "key": "epost_unsupported_protocol",
-        "count": 5,
-        "reason": "epost_unsupported_protocol"
-      },
-      {
         "key": "external_provider_adapter_missing",
         "count": 5,
         "reason": "external_provider_adapter_missing"
@@ -220,11 +225,6 @@
         "key": "emuseum_missing_required_params",
         "count": 4,
         "reason": "emuseum_missing_required_params"
-      },
-      {
-        "key": "epost_missing_required_params",
-        "count": 4,
-        "reason": "epost_missing_required_params"
       },
       {
         "key": "pqis_service_key_not_registered",
@@ -444,6 +444,11 @@
         "provider": "daejeon"
       },
       {
+        "key": "epost",
+        "count": 56,
+        "provider": "epost"
+      },
+      {
         "key": "nfqs",
         "count": 55,
         "provider": "nfqs"
@@ -517,11 +522,6 @@
         "key": "khoa",
         "count": 29,
         "provider": "khoa"
-      },
-      {
-        "key": "epost",
-        "count": 28,
-        "provider": "epost"
       },
       {
         "key": "tour",
@@ -789,6 +789,11 @@
         "provider": "kofpi"
       },
       {
+        "key": "koreapost",
+        "count": 1,
+        "provider": "koreapost"
+      },
+      {
         "key": "kosmes",
         "count": 1,
         "provider": "kosmes"
@@ -956,6 +961,11 @@
         "host": "apihub.kma.go.kr"
       },
       {
+        "key": "openapi.epost.go.kr:80",
+        "count": 44,
+        "host": "openapi.epost.go.kr:80"
+      },
+      {
         "key": "c.q-net.or.kr",
         "count": 42,
         "host": "c.q-net.or.kr"
@@ -1031,11 +1041,6 @@
         "host": "www.lofin365.go.kr"
       },
       {
-        "key": "openapi.epost.go.kr:80",
-        "count": 22,
-        "host": "openapi.epost.go.kr:80"
-      },
-      {
         "key": "openapi.its.ulsan.kr",
         "count": 20,
         "host": "openapi.its.ulsan.kr"
@@ -1079,6 +1084,11 @@
         "key": "open.itfind.or.kr",
         "count": 13,
         "host": "open.itfind.or.kr"
+      },
+      {
+        "key": "openapi.epost.go.kr",
+        "count": 12,
+        "host": "openapi.epost.go.kr"
       },
       {
         "key": "www.jejudatahub.net",
@@ -1174,11 +1184,6 @@
         "key": "openapi.ebid.lh.or.kr",
         "count": 6,
         "host": "openapi.ebid.lh.or.kr"
-      },
-      {
-        "key": "openapi.epost.go.kr",
-        "count": 6,
-        "host": "openapi.epost.go.kr"
       },
       {
         "key": "openapi.kpx.or.kr",
@@ -1326,6 +1331,11 @@
         "host": "jeonnam.openapi.redtable.global"
       },
       {
+        "key": "koreapost.go.kr",
+        "count": 1,
+        "host": "koreapost.go.kr"
+      },
+      {
         "key": "kosmes.or.kr",
         "count": 1,
         "host": "kosmes.or.kr"
@@ -1439,7 +1449,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 2901,
+        "count": 2930,
         "kind": "external_endpoint"
       },
       {
