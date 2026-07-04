@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `852` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `825` data.go.kr APIs
   without operation mappings, `9,285` operation-mapped APIs without runtime
   evidence, and `178` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -120,7 +120,7 @@ Current strengths:
   the same blocker, warning, and next-action inventory that CI validates.
 - `reports/source-report-inventory.json` is generated from source profiles and
   checked-in `reports/<source>/` directories, measuring `5` source report
-  directories, `84` source-scoped JSON reports, and `12.3%` recommended
+  directories, `88` source-scoped JSON reports, and `12.3%` recommended
   source-scoped report coverage.
 - `scripts/sync-release-schema-artifacts.py` checks that every checked-in
   `schemas/*.schema.json` file is represented in `schemas/index.json` and
@@ -456,8 +456,13 @@ Current gaps:
   `81` verified Garak bounded checks. That brings runtime evidence to `4037`,
   verified checks to `2188`, and registered external adapter operations to
   `8887`.
-- API operation coverage remains incomplete: `11,208` of `12,060` APIs have
-  operation mappings (`92.9%`), leaving `852` APIs to materialize and `9,285`
+- The 국가유산청 국립문화유산연구원 batch adds NRich host coverage for
+  `portal.nrich.go.kr` and `www.nrich.go.kr`, materializes `27` APIs and
+  `76` operations, and merges `76` verified NRich bounded checks. That brings
+  runtime evidence to `4113`, verified checks to `2264`, and registered
+  external adapter operations to `8963`.
+- API operation coverage remains incomplete: `11,235` of `12,060` APIs have
+  operation mappings (`93.2%`), leaving `825` APIs to materialize and `9,285`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

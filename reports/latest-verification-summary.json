@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T01:42:16Z",
+  "generated_at": "2026-07-04T01:55:15Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4037,
-    "verified": 2188,
+    "total": 4113,
+    "verified": 2264,
     "failed": 306,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2188,
+        "count": 2264,
         "status": "verified"
       },
       {
@@ -427,6 +427,11 @@
         "key": "jeonju",
         "count": 80,
         "provider": "jeonju"
+      },
+      {
+        "key": "nrich",
+        "count": 76,
+        "provider": "nrich"
       },
       {
         "key": "dongjak",
@@ -1041,9 +1046,19 @@
         "host": "data.uiryeong.go.kr"
       },
       {
+        "key": "www.nrich.go.kr",
+        "count": 40,
+        "host": "www.nrich.go.kr"
+      },
+      {
         "key": "www.nie-ecobank.kr",
         "count": 39,
         "host": "www.nie-ecobank.kr"
+      },
+      {
+        "key": "portal.nrich.go.kr",
+        "count": 36,
+        "host": "portal.nrich.go.kr"
       },
       {
         "key": "www.eshare.go.kr",
@@ -1544,7 +1559,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3313,
+        "count": 3389,
         "kind": "external_endpoint"
       },
       {

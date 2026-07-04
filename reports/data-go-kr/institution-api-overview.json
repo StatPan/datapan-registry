@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T01:42:18Z",
+  "generated_at": "2026-07-04T01:55:17Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 20507,
-    "runtime_evidence": 4037,
-    "runtime_evidence_percent": 19.7,
-    "callable_operations": 20365,
-    "external_endpoint_operations": 8897,
-    "registered_adapter_operations": 8887,
+    "operations": 20583,
+    "runtime_evidence": 4113,
+    "runtime_evidence_percent": 20.0,
+    "callable_operations": 20441,
+    "external_endpoint_operations": 8973,
+    "registered_adapter_operations": 8963,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 8897
+      "count": 8973
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 8887
+      "count": 8963
     },
     {
       "key": "builtin",
@@ -76,12 +76,12 @@
       "operation_count": 2234
     },
     {
-      "category": "교통물류",
-      "operation_count": 2144
+      "category": "문화관광",
+      "operation_count": 2181
     },
     {
-      "category": "문화관광",
-      "operation_count": 2105
+      "category": "교통물류",
+      "operation_count": 2144
     },
     {
       "category": "사회복지",
@@ -3910,6 +3910,58 @@
         {
           "host": "car.daegu.go.kr",
           "operation_count": 4
+        }
+      ]
+    },
+    {
+      "organization": "국가유산청 국립문화유산연구원",
+      "api_count": 27,
+      "operation_api_count": 27,
+      "operation_count": 76,
+      "runtime_evidence_count": 76,
+      "runtime_evidence_percent": 100.0,
+      "verified": 76,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 24,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "external_endpoint",
+          "count": 76
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 76
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "문화관광",
+          "operation_count": 76
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "www.nrich.go.kr",
+          "operation_count": 40,
+          "adapter": "nrich",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "portal.nrich.go.kr",
+          "operation_count": 36,
+          "adapter": "nrich",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },
@@ -15718,24 +15770,6 @@
           "operation_count": 1
         }
       ]
-    },
-    {
-      "organization": "국가유산청 국립문화유산연구원",
-      "api_count": 27,
-      "operation_api_count": 0,
-      "operation_count": 0,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [],
-      "by_adapter_status": [],
-      "top_categories": [],
-      "top_hosts": []
     },
     {
       "organization": "국가철도공단",

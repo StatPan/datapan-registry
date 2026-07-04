@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T01:42:18Z",
+  "generated_at": "2026-07-04T01:55:17Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 113,
-  "host_count": 139,
+  "adapter_count": 114,
+  "host_count": 141,
   "adapters": [
     {
       "name": "airport",
@@ -845,6 +845,17 @@
       ]
     },
     {
+      "name": "nrich",
+      "status": "registered",
+      "hosts": [
+        "portal.nrich.go.kr",
+        "www.nrich.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "oneclick-law",
       "status": "registered",
       "hosts": [
@@ -1187,8 +1198,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 113,
-    "verification_capable_adapters": 113,
+    "adapter_count": 114,
+    "verification_capable_adapters": 114,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

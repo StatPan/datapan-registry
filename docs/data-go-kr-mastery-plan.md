@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `20507`
-- callable operations: `20365` (`99.3%`)
+- operations: `20583`
+- callable operations: `20441` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `8897`
-- registered adapter operations: `8887`
+- external endpoint operations: `8973`
+- registered adapter operations: `8963`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
-- approval-required operations: `7836`
+- approval-required operations: `7860`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `134`
+- registered adapter hosts: `136`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -238,13 +238,14 @@ blocked by upstream data.go.kr detail errors. The latest viable queues were
 `관세청`, `과학기술정보통신부 우정사업본부`, `한국사회보장정보원`,
 `대구광역시`, `한국고용정보원`, `국가유산청 국립무형유산원`,
 `울산광역시`, `농림축산식품부 국립농산물품질관리원`,
-`제주특별자치도 서귀포시`, and `서울특별시농수산식품공사`, now
+`제주특별자치도 서귀포시`, `서울특별시농수산식품공사`, and
+`국가유산청 국립문화유산연구원`, now
 completed through `39` Ecobank, `45` NFQS, `95` Dongjak/Seoul Open Data,
 `3` UniPass, `1` KoreaPost, `23` Childcare Info, `28` Daegu, `68`
 KEIS/YouthCenter, `18` NIHC, `30` Ulsan WWW, `49` NAQS, `70` Seogwipo, and
-`81` Garak link-detail operations. The next viable materialization queue after
-the current upstream blockers is `국가유산청 국립문화유산연구원`. The
-runtime reactivation queue starts at `행정안전부`: `1252`
+`81` Garak plus `76` NRich link-detail operations. The next viable
+materialization queue after the current upstream blockers is `경기도 안양시`.
+The runtime reactivation queue starts at `행정안전부`: `1252`
 APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
 records, and `1202` APIs still needing runtime reactivation. Gateway calls need
@@ -683,6 +684,12 @@ readiness, not to advance verified runtime coverage.
    `4037`, verified checks to `2188`, registered external adapter operations to
    `8887`, and raises API operation coverage to `11,208` of `12,060` APIs
    (`92.9%`).
+   The 국가유산청 국립문화유산연구원 batch adds NRich host coverage for
+   `portal.nrich.go.kr` and `www.nrich.go.kr`, materializes `27` APIs and
+   `76` operations, and merges `76` verified NRich bounded checks. That brings
+   checked runtime evidence to `4113`, verified checks to `2264`, registered
+   external adapter operations to `8963`, and raises API operation coverage to
+   `11,235` of `12,060` APIs (`93.2%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

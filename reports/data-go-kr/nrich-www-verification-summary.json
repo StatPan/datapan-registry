@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-07-04T01:54:50Z",
+  "source": "reports/data-go-kr/nrich-www-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 40,
+    "verified": 40,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 40,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "nrich",
+        "count": 40,
+        "provider": "nrich"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "www.nrich.go.kr",
+        "count": 40,
+        "host": "www.nrich.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 40,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}
