@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T03:13:03Z",
+  "generated_at": "2026-07-04T03:29:12Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4331,
-    "verified": 2456,
+    "total": 4379,
+    "verified": 2504,
     "failed": 332,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2456,
+        "count": 2504,
         "status": "verified"
       },
       {
@@ -497,6 +497,11 @@
         "key": "ekape",
         "count": 49,
         "provider": "ekape"
+      },
+      {
+        "key": "keit",
+        "count": 48,
+        "provider": "keit"
       },
       {
         "key": "kma-apihub",
@@ -1091,6 +1096,11 @@
         "host": "data.uiryeong.go.kr"
       },
       {
+        "key": "www.nabis.go.kr",
+        "count": 40,
+        "host": "www.nabis.go.kr"
+      },
+      {
         "key": "www.nrich.go.kr",
         "count": 40,
         "host": "www.nrich.go.kr"
@@ -1294,6 +1304,11 @@
         "key": "openapi.pqis.go.kr",
         "count": 8,
         "host": "openapi.pqis.go.kr"
+      },
+      {
+        "key": "www.sobujang.net",
+        "count": 8,
+        "host": "www.sobujang.net"
       },
       {
         "key": "openapi.tour.go.kr",
@@ -1649,7 +1664,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3607,
+        "count": 3655,
         "kind": "external_endpoint"
       },
       {

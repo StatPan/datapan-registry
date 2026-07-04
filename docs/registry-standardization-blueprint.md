@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `697` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `672` data.go.kr APIs
   without operation mappings, `9,285` operation-mapped APIs without runtime
   evidence, and `204` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -120,7 +120,7 @@ Current strengths:
   the same blocker, warning, and next-action inventory that CI validates.
 - `reports/source-report-inventory.json` is generated from source profiles and
   checked-in `reports/<source>/` directories, measuring `5` source report
-  directories, `104` source-scoped JSON reports, and `12.3%` recommended
+  directories, `106` source-scoped JSON reports, and `12.3%` recommended
   source-scoped report coverage.
 - `scripts/sync-release-schema-artifacts.py` checks that every checked-in
   `schemas/*.schema.json` file is represented in `schemas/index.json` and
@@ -494,8 +494,13 @@ Current gaps:
   materializes `25` APIs and `27` operations, and merges `27` verified KISTI
   bounded checks. That brings runtime evidence to `4331`, verified checks to
   `2456`, and registered external adapter operations to `9194`.
-- API operation coverage remains incomplete: `11,363` of `12,060` APIs have
-  operation mappings (`94.2%`), leaving `697` APIs to materialize and `9,285`
+- The 한국산업기술기획평가원 batch adds KEIT host coverage for `www.nabis.go.kr`
+  and `www.sobujang.net`, materializes `25` APIs and `48` operations, and
+  merges `48` verified KEIT bounded checks. That brings runtime evidence to
+  `4379`, verified checks to `2504`, and registered external adapter operations
+  to `9242`.
+- API operation coverage remains incomplete: `11,388` of `12,060` APIs have
+  operation mappings (`94.4%`), leaving `672` APIs to materialize and `9,285`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

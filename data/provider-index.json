@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T03:13:05Z",
+  "generated_at": "2026-07-04T03:33:10Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 121,
-  "host_count": 151,
+  "adapter_count": 122,
+  "host_count": 153,
   "adapters": [
     {
       "name": "airport",
@@ -582,6 +582,17 @@
       "status": "registered",
       "hosts": [
         "www.juso.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "keit",
+      "status": "registered",
+      "hosts": [
+        "www.nabis.go.kr",
+        "www.sobujang.net"
       ],
       "capabilities": [
         "verification"
@@ -1271,8 +1282,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 121,
-    "verification_capable_adapters": 121,
+    "adapter_count": 122,
+    "verification_capable_adapters": 122,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

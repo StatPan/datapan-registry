@@ -1,0 +1,50 @@
+{
+  "generated_at": "2026-07-04T03:28:36Z",
+  "source": "reports/data-go-kr/keit-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 48,
+    "verified": 48,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 48,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "keit",
+        "count": 48,
+        "provider": "keit"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "www.nabis.go.kr",
+        "count": 40,
+        "host": "www.nabis.go.kr"
+      },
+      {
+        "key": "www.sobujang.net",
+        "count": 8,
+        "host": "www.sobujang.net"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 48,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

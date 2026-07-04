@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-04T03:13:05Z",
+  "generated_at": "2026-07-04T03:33:10Z",
   "provider": "data.go.kr",
-  "old": ".datapan/previous/data-go-kr.registry.json",
+  "old": ".datapan\\previous\\data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4178,
-    "stable": 7882
+    "changed": 4203,
+    "stable": 7857
   },
   "added": [],
   "removed": [],
@@ -337,6 +337,16 @@
       ],
       "old_digest": "7e0bad597b973d8d964ec323d1697f717572375aa6a9001a8c3f6a4b085bd93f",
       "new_digest": "c05cf1e3a708c718fb49ecb38f018c89e01b5974e399e3204b9acfdae4a919ea"
+    },
+    {
+      "id": "15014832",
+      "old_title": "한국산업기술기획평가원_지역균형발전 지원기관 정보",
+      "new_title": "한국산업기술기획평가원_지역균형발전 지원기관 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "84f6211aee24bce7769e3f4047be5da10b54d3e33f242c9dd4d6a4174848518e",
+      "new_digest": "d9f7eb2d39ec84789f5d264d7ccda584da8f9aec69a3c658dc68d856ac02e674"
     },
     {
       "id": "15015052",
@@ -19769,6 +19779,56 @@
       "new_digest": "1e233771c40b50a0a6ae07b12c91ce464dc1896e28bc6a166c10c9b102df4b8f"
     },
     {
+      "id": "15067520",
+      "old_title": "한국산업기술기획평가원_지역균형발전 이슈리포트 정보(국책연구원)",
+      "new_title": "한국산업기술기획평가원_지역균형발전 이슈리포트 정보(국책연구원)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6c8dee7115111519b097904d2bf19dcd7f96eb6e8fecde377f760d255082d372",
+      "new_digest": "c5fc1382dd50030f13ed45c7f059a596d56da4dd2cfceb97ac4803a73f03846e"
+    },
+    {
+      "id": "15067522",
+      "old_title": "한국산업기술기획평가원_지역균형발전 이슈리포트 정보(시도연구원)",
+      "new_title": "한국산업기술기획평가원_지역균형발전 이슈리포트 정보(시도연구원)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3aeb6cb499dd9af53bc3fbaf27572f38f0539bf02a179ca428c34ae2e87663f5",
+      "new_digest": "fbe0dac647e9173aad7aa73bd5133d6fdcc6df38b118884f9b6253c695207a64"
+    },
+    {
+      "id": "15067523",
+      "old_title": "한국산업기술기획평가원_지역균형발전 지역 유관기관 채용공고",
+      "new_title": "한국산업기술기획평가원_지역균형발전 지역 유관기관 채용공고",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "707490c54d3a298101014e70c00758df4ab30e289c66ff5c27c91b597a191afb",
+      "new_digest": "327080d14e326b629a6e217c7f982d2be19bfbe5cf46f41335f5b0e04566c1da"
+    },
+    {
+      "id": "15067525",
+      "old_title": "한국산업기술기획평가원_지역균형발전 지역 유관기관 사업공고",
+      "new_title": "한국산업기술기획평가원_지역균형발전 지역 유관기관 사업공고",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a9ea6e4f4d169bc1e10ba48b7aa44627ef566de85e4e94983969b6e04104955b",
+      "new_digest": "92a2b1681484e4cc922e4194b744c8a8987798002ea836505230242a6766af14"
+    },
+    {
+      "id": "15067527",
+      "old_title": "한국산업기술기획평가원_지역균형발전 지역 유관기관 행사 정보",
+      "new_title": "한국산업기술기획평가원_지역균형발전 지역 유관기관 행사 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f166cd42c3c2f7ff0b7a06013d306033822564688590bf7905e679f479cc904a",
+      "new_digest": "fb09f66c52ac9d99758865d94806d5568dd7bb8ce974732a410a5ef515aadd07"
+    },
+    {
       "id": "15068072",
       "old_title": "한국고용정보원_워크넷_정부지원일자리사업상세정보",
       "new_title": "한국고용정보원_워크넷_정부지원일자리사업상세정보",
@@ -22037,6 +22097,46 @@
       ],
       "old_digest": "09e4873056727b33f2af21676e0644189fffe031de913ce0e31dd2026fa3e79d",
       "new_digest": "3eb38288153998dfed516dd88e0eed9cb1e70781d0d79ebf6d9aa91a8f5228c9"
+    },
+    {
+      "id": "15084596",
+      "old_title": "한국산업기술기획평가원_지역균형발전 정책용어사전 정보",
+      "new_title": "한국산업기술기획평가원_지역균형발전 정책용어사전 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ecf4c212d1d95e69a240eaec05ee96c255ec731f760251ccb37117f87e298b4d",
+      "new_digest": "7c4520526e90883de0cf58cc3f29f6057761dcc503c3618cf5a99c4434cac717"
+    },
+    {
+      "id": "15084597",
+      "old_title": "한국산업기술기획평가원_지역균형발전 큐레이터 정보",
+      "new_title": "한국산업기술기획평가원_지역균형발전 큐레이터 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "25e55c8212e130f5bf8ead11f4aaa6120294dc98b48a124af9aea70fe92cb32e",
+      "new_digest": "2b0b46f5e67000727c2fbbdc67e30e46fe7350086742334c9e0752a7444f5b1a"
+    },
+    {
+      "id": "15084598",
+      "old_title": "한국산업기술기획평가원_지역균형발전 우수사례 정보",
+      "new_title": "한국산업기술기획평가원_지역균형발전 우수사례 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4a9956cb8b59dc5ee1d42492d7c765ac300e49a81bb7ded6416ca2b804a64ab8",
+      "new_digest": "732ca2adb65dbe5b739149b20afea0b2c5eda37416cf3d9aadbdfd636ff21a3e"
+    },
+    {
+      "id": "15084599",
+      "old_title": "한국산업기술기획평가원_지역균형발전 인포그래픽스 정보",
+      "new_title": "한국산업기술기획평가원_지역균형발전 인포그래픽스 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3da25075d8be2e5439805a8fa93a74b8598aa6927221870677dad4edd4ce8e14",
+      "new_digest": "6478a1b12309f3a50130d66a7cabb1260aa7fa365408e6be9e5ee961b70e4afc"
     },
     {
       "id": "15084620",
@@ -26679,6 +26779,26 @@
       "new_digest": "f0ad3fd0e25d7b5775dc9c87ba2167a177aae79c452f6cf9c0ece17a72fe837c"
     },
     {
+      "id": "15104747",
+      "old_title": "한국산업기술기획평가원_소재부품장비 으뜸기업 현황",
+      "new_title": "한국산업기술기획평가원_소재부품장비 으뜸기업 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a5c66405c97afdb145383973c0c9480404fe658e5707ea8b93332447d0024710",
+      "new_digest": "262271b9a509f50ba05f965cea2f1800b076542728000855dbbf8d7bf7ef6a35"
+    },
+    {
+      "id": "15104751",
+      "old_title": "한국산업기술기획평가원_소재부품장비 전문기업 현황",
+      "new_title": "한국산업기술기획평가원_소재부품장비 전문기업 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ad771f72bcec7196198d0090ad73843186701c052628354279daa8de7e499da3",
+      "new_digest": "bf4fa6d40175dd7e436658ad6af74fa53554c8d05f7aa859b49739b67d93791e"
+    },
+    {
       "id": "15104928",
       "old_title": "문화체육관광부_국립경주박물관 유물정보",
       "new_title": "문화체육관광부_국립경주박물관 유물정보",
@@ -27287,6 +27407,56 @@
       ],
       "old_digest": "812ea191a92e7dbe1975290a45d4a3631a7d57cefd6132c0945f0d329683b18d",
       "new_digest": "b4f78e9191d67b65289f3ebfedcb8d988fa52517617da074b044594cbae8fea9"
+    },
+    {
+      "id": "15106138",
+      "old_title": "한국산업기술기획평가원_지역균형발전 중앙부처 정책보도",
+      "new_title": "한국산업기술기획평가원_지역균형발전 중앙부처 정책보도",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2830bb2e0d8f558a01e2d8167a57448fd1096250a9740c2c87ef99d6cb165592",
+      "new_digest": "da23a0aef2c9fdc4e18eba5dfa1e8361255d688e74c311071860dd87a415531f"
+    },
+    {
+      "id": "15106142",
+      "old_title": "한국산업기술기획평가원_지역균형발전 지자체 정책보도",
+      "new_title": "한국산업기술기획평가원_지역균형발전 지자체 정책보도",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7628d51fe532c54cada6b19e3a4f0890980fd2b30c1885e42bfb2cb77a94c236",
+      "new_digest": "c065f7f02cd8d6042e944c5b9b508727878eeb71a380f644c4250aaa4703b35f"
+    },
+    {
+      "id": "15106148",
+      "old_title": "한국산업기술기획평가원_지역균형발전 중앙 유관기관 채용공고",
+      "new_title": "한국산업기술기획평가원_지역균형발전 중앙 유관기관 채용공고",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f8e7fde5bac3aa18929c7608eb6e790a0bd0e428455bf471fcd4bdc55e48cc13",
+      "new_digest": "6760edf74149b986f03d0dabb96247e285e023a336253969ae0bd6db4b06989b"
+    },
+    {
+      "id": "15106151",
+      "old_title": "한국산업기술기획평가원_지역균형발전 중앙 유관기관 행사 정보",
+      "new_title": "한국산업기술기획평가원_지역균형발전 중앙 유관기관 행사 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "de34add8ccbb27453df19fe4b0321542108834206c40ec0258af6cee296db021",
+      "new_digest": "095da4ca8d8c1bbdc18734333107584aa9673250df87ea84b38e2137ce2686d6"
+    },
+    {
+      "id": "15106158",
+      "old_title": "한국산업기술기획평가원_지역균형발전 중앙 유관기관 사업공고",
+      "new_title": "한국산업기술기획평가원_지역균형발전 중앙 유관기관 사업공고",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f0de3caaf31646026fff16467925ed75fad2c0f581ab9af804a10c8d77ff01a4",
+      "new_digest": "cdc5f910af85b1189290101b84822f3791829a1de0d29f6f335f133a69e33ad0"
     },
     {
       "id": "15106677",
@@ -34159,6 +34329,66 @@
       "new_digest": "f2a8664b09cb7ba36cf49c137c30e325296ebb71715e663a5c51e68ff3fcc500"
     },
     {
+      "id": "15128630",
+      "old_title": "한국산업기술기획평가원_소재부품장비 월별 산업동향",
+      "new_title": "한국산업기술기획평가원_소재부품장비 월별 산업동향",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7be5f9e1d6fc357eab0c1a3d6095aa3964657779ef0fb51a12cfe847763c5e8a",
+      "new_digest": "17a5c982ebda767e2c36013f0da45f887224cc4db072fb032b734f251e23a4d0"
+    },
+    {
+      "id": "15128632",
+      "old_title": "한국산업기술기획평가원_소재부품장비 연도별 산업동향(품목별)",
+      "new_title": "한국산업기술기획평가원_소재부품장비 연도별 산업동향(품목별)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d2ac7e9c817953764c2c328705f9b83962f563aa9fb8d522d613c70f954c1bac",
+      "new_digest": "cab902ba9586ae6c57fba34fceb7347b4d07ba2f859054c3cba8e6a7c22883f3"
+    },
+    {
+      "id": "15128634",
+      "old_title": "한국산업기술기획평가원_소재부품장비 연도별 산업동향(지역별)",
+      "new_title": "한국산업기술기획평가원_소재부품장비 연도별 산업동향(지역별)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e1389a55a54ebdaa7410411a05dcf011b919c546bb497cd6482a4277280a8a1e",
+      "new_digest": "33f0ff0f6e870e69afc5851e14b6f711ac8831265ec86af5f1021653d024700f"
+    },
+    {
+      "id": "15128635",
+      "old_title": "한국산업기술기획평가원_소재부품장비 연도별 산업동향(종업원 규모)",
+      "new_title": "한국산업기술기획평가원_소재부품장비 연도별 산업동향(종업원 규모)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9282ea8af6293a6804138cee87267b1442165b78e5e3cc44f81e5d7f0776e1c6",
+      "new_digest": "63de6ea94a24fed350ec598811d17ca3218a1cbec8122ad92a66f77085c8d223"
+    },
+    {
+      "id": "15128636",
+      "old_title": "한국산업기술기획평가원_소재부품장비 월별 무역동향",
+      "new_title": "한국산업기술기획평가원_소재부품장비 월별 무역동향",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "16c085a155eacbf36ec9e835fd44038344df25f7017196092ea7abee9c219557",
+      "new_digest": "da59df8733378800c5386184e9c4a04ccfb0acc0b45c8b6b6754970fc65a9ee4"
+    },
+    {
+      "id": "15128638",
+      "old_title": "한국산업기술기획평가원_소재부품장비 연간 무역동향",
+      "new_title": "한국산업기술기획평가원_소재부품장비 연간 무역동향",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2da9e1a8fd412fad2e631c6967b0fbd13489c578d407980352433c3f0ce1ed4e",
+      "new_digest": "8148da57d73c1aa69897b452051a6c4547ed3526d76f6cee6465e32daded0604"
+    },
+    {
       "id": "15129453",
       "old_title": "국토교통부_정류장 현황",
       "new_title": "국토교통부_정류장 현황",
@@ -34247,6 +34477,16 @@
       ],
       "old_digest": "5009fa4d790aa391d0e161f5e5868e20bdb568be47443d94954679c9b2c2a594",
       "new_digest": "22d6c405f1d5bc7345889bedbf5644fa1df0fb94c456b5c899ebd8e634424ac7"
+    },
+    {
+      "id": "15130257",
+      "old_title": "한국산업기술기획평가원_지역균형발전 뉴스레터 정보",
+      "new_title": "한국산업기술기획평가원_지역균형발전 뉴스레터 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "efb67405401e01cfcd9463d1d584c18c8fc0d148a014343b0f798876778b13b5",
+      "new_digest": "f4697af4f3b1c7fb4dd1d4bb0f716959c5481b8710c1f32d459d04ccbbcbcc79"
     },
     {
       "id": "15130259",
@@ -34347,6 +34587,16 @@
       ],
       "old_digest": "8432b75ba65abf88e78d4349b6f69c39b5124c5acc00beef0c7fb22282d02a6f",
       "new_digest": "275155dc1cae6dba65c8be7bf99a5951171c100cac1abf944191ff3c2221d18d"
+    },
+    {
+      "id": "15135105",
+      "old_title": "한국산업기술기획평가원_지역균형발전 커버스토리",
+      "new_title": "한국산업기술기획평가원_지역균형발전 커버스토리",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d475d2581a52d895eac8bd1db115de56f3e5545375068775701f8d849ab7d628",
+      "new_digest": "999dad8c8b1d1dce4dbf609463ba5e355bf7d625ec8443c275bbfe1f705fccf2"
     },
     {
       "id": "15135883",

@@ -2,13 +2,13 @@
 
 This report fetches one operation-materialization batch from public data.go.kr detail pages and keeps only operations whose hosts already have registered adapters.
 
-- Generated at: `2026-07-04T03:12:31Z`
+- Generated at: `2026-07-04T03:28:15Z`
 - Batch: `institution-03`
-- Organization: `한국과학기술정보연구원`
+- Organization: `한국산업기술기획평가원`
 - Input APIs: `25`
 - Details fetched: `25`
 - Patches: `25`
-- Operations to add: `27`
+- Operations to add: `48`
 - Skipped: `0`
 - Failed: `0`
 
@@ -16,30 +16,30 @@ This report fetches one operation-materialization batch from public data.go.kr d
 
 | Dataset ID | Organization | Title | Operations | Hosts |
 | --- | --- | --- | ---: | --- |
-| 15138986 | 한국과학기술정보연구원 | 한국과학기술정보연구원_ScienceON_금주의과학기술뉴스검색 | 1 | scienceon.kisti.re.kr |
-| 15138985 | 한국과학기술정보연구원 | 한국과학기술정보연구원_ScienceON_TREND검색 | 1 | scienceon.kisti.re.kr |
-| 15138963 | 한국과학기술정보연구원 | 한국과학기술정보연구원_이슈로보는R&D 서비스(대국민용) | 2 | www.ntis.go.kr |
-| 15138962 | 한국과학기술정보연구원 | 한국과학기술정보연구원_국가R&D 수행기관 R&D현황조회 서비스(대국민용) | 2 | www.ntis.go.kr |
-| 15122467 | 한국과학기술정보연구원 | 한국과학기술정보연구원_AIDA 연구데이터 파일 다운로드 서비스 | 1 | aida.kisti.re.kr |
-| 15122466 | 한국과학기술정보연구원 | 한국과학기술정보연구원_AIDA 연구데이터 활용 통계 정보 조회 서비스 | 1 | aida.kisti.re.kr |
-| 15122465 | 한국과학기술정보연구원 | 한국과학기술정보연구원_AIDA 연구데이터 상세 조회 서비스 | 1 | aida.kisti.re.kr |
-| 15122458 | 한국과학기술정보연구원 | 한국과학기술정보연구원_AIDA 연구데이터 목록 조회 서비스 | 1 | aida.kisti.re.kr |
-| 15119213 | 한국과학기술정보연구원 | 한국과학기술정보연구원_ScienceON_연구기관상세검색 | 1 | scienceon.kisti.re.kr |
-| 15119212 | 한국과학기술정보연구원 | 한국과학기술정보연구원_ScienceON_연구기관검색 | 1 | scienceon.kisti.re.kr |
-| 15119210 | 한국과학기술정보연구원 | 한국과학기술정보연구원_ScienceON_연구자상세검색 | 1 | scienceon.kisti.re.kr |
-| 15119209 | 한국과학기술정보연구원 | 한국과학기술정보연구원_ScienceON_연구자검색 | 1 | scienceon.kisti.re.kr |
-| 15119205 | 한국과학기술정보연구원 | 한국과학기술정보연구원_ScienceON_과학향기상세검색 | 1 | scienceon.kisti.re.kr |
-| 15119204 | 한국과학기술정보연구원 | 한국과학기술정보연구원_ScienceON_과학향기검색 | 1 | scienceon.kisti.re.kr |
-| 15119201 | 한국과학기술정보연구원 | 한국과학기술정보연구원_ScienceON_동향상세검색 | 1 | scienceon.kisti.re.kr |
-| 15119200 | 한국과학기술정보연구원 | 한국과학기술정보연구원_ScienceON_동향검색 | 1 | scienceon.kisti.re.kr |
-| 15119199 | 한국과학기술정보연구원 | 한국과학기술정보연구원_ScienceON_보고서상세검색 | 1 | scienceon.kisti.re.kr |
-| 15119197 | 한국과학기술정보연구원 | 한국과학기술정보연구원_ScienceON_보고서검색 | 1 | scienceon.kisti.re.kr |
-| 15119193 | 한국과학기술정보연구원 | 한국과학기술정보연구원_ScienceON_특허상세검색 | 1 | scienceon.kisti.re.kr |
-| 15119192 | 한국과학기술정보연구원 | 한국과학기술정보연구원_ScienceON_특허검색 | 1 | scienceon.kisti.re.kr |
-| 15119189 | 한국과학기술정보연구원 | 한국과학기술정보연구원_ScienceON_논문상세검색 | 1 | scienceon.kisti.re.kr |
-| 15117315 | 한국과학기술정보연구원 | 한국과학기술정보연구원_ScienceON_논문검색 | 1 | scienceon.kisti.re.kr |
-| 15102622 | 한국과학기술정보연구원 | 한국과학기술정보연구원_국가R&D 연구보고서 검색 서비스 (대국민용) | 1 | www.ntis.go.kr |
-| 15077316 | 한국과학기술정보연구원 | 한국과학기술정보연구원_국가R&D 성과검색 서비스(대국민용) | 1 | www.ntis.go.kr |
-| 15077315 | 한국과학기술정보연구원 | 한국과학기술정보연구원_국가R&D 과제검색 서비스(대국민용) | 1 | www.ntis.go.kr |
+| 15067527 | 한국산업기술기획평가원 | 한국산업기술기획평가원_지역균형발전 지역 유관기관 행사 정보 | 2 | www.nabis.go.kr |
+| 15067523 | 한국산업기술기획평가원 | 한국산업기술기획평가원_지역균형발전 지역 유관기관 채용공고 | 2 | www.nabis.go.kr |
+| 15067522 | 한국산업기술기획평가원 | 한국산업기술기획평가원_지역균형발전 이슈리포트 정보(시도연구원) | 3 | www.nabis.go.kr |
+| 15067520 | 한국산업기술기획평가원 | 한국산업기술기획평가원_지역균형발전 이슈리포트 정보(국책연구원) | 3 | www.nabis.go.kr |
+| 15128632 | 한국산업기술기획평가원 | 한국산업기술기획평가원_소재부품장비 연도별 산업동향(품목별) | 1 | www.sobujang.net |
+| 15106158 | 한국산업기술기획평가원 | 한국산업기술기획평가원_지역균형발전 중앙 유관기관 사업공고 | 2 | www.nabis.go.kr |
+| 15106151 | 한국산업기술기획평가원 | 한국산업기술기획평가원_지역균형발전 중앙 유관기관 행사 정보 | 2 | www.nabis.go.kr |
+| 15106148 | 한국산업기술기획평가원 | 한국산업기술기획평가원_지역균형발전 중앙 유관기관 채용공고 | 3 | www.nabis.go.kr |
+| 15106142 | 한국산업기술기획평가원 | 한국산업기술기획평가원_지역균형발전 지자체 정책보도 | 2 | www.nabis.go.kr |
+| 15106138 | 한국산업기술기획평가원 | 한국산업기술기획평가원_지역균형발전 중앙부처 정책보도 | 2 | www.nabis.go.kr |
+| 15084599 | 한국산업기술기획평가원 | 한국산업기술기획평가원_지역균형발전 인포그래픽스 정보 | 2 | www.nabis.go.kr |
+| 15084598 | 한국산업기술기획평가원 | 한국산업기술기획평가원_지역균형발전 우수사례 정보 | 2 | www.nabis.go.kr |
+| 15084597 | 한국산업기술기획평가원 | 한국산업기술기획평가원_지역균형발전 큐레이터 정보 | 2 | www.nabis.go.kr |
+| 15084596 | 한국산업기술기획평가원 | 한국산업기술기획평가원_지역균형발전 정책용어사전 정보 | 3 | www.nabis.go.kr |
+| 15014832 | 한국산업기술기획평가원 | 한국산업기술기획평가원_지역균형발전 지원기관 정보 | 3 | www.nabis.go.kr |
+| 15135105 | 한국산업기술기획평가원 | 한국산업기술기획평가원_지역균형발전 커버스토리 | 3 | www.nabis.go.kr |
+| 15130257 | 한국산업기술기획평가원 | 한국산업기술기획평가원_지역균형발전 뉴스레터 정보 | 2 | www.nabis.go.kr |
+| 15128638 | 한국산업기술기획평가원 | 한국산업기술기획평가원_소재부품장비 연간 무역동향 | 1 | www.sobujang.net |
+| 15128636 | 한국산업기술기획평가원 | 한국산업기술기획평가원_소재부품장비 월별 무역동향 | 1 | www.sobujang.net |
+| 15128635 | 한국산업기술기획평가원 | 한국산업기술기획평가원_소재부품장비 연도별 산업동향(종업원 규모) | 1 | www.sobujang.net |
+| 15128634 | 한국산업기술기획평가원 | 한국산업기술기획평가원_소재부품장비 연도별 산업동향(지역별) | 1 | www.sobujang.net |
+| 15128630 | 한국산업기술기획평가원 | 한국산업기술기획평가원_소재부품장비 월별 산업동향 | 1 | www.sobujang.net |
+| 15104751 | 한국산업기술기획평가원 | 한국산업기술기획평가원_소재부품장비 전문기업 현황 | 1 | www.sobujang.net |
+| 15104747 | 한국산업기술기획평가원 | 한국산업기술기획평가원_소재부품장비 으뜸기업 현황 | 1 | www.sobujang.net |
+| 15067525 | 한국산업기술기획평가원 | 한국산업기술기획평가원_지역균형발전 지역 유관기관 사업공고 | 2 | www.nabis.go.kr |
 
 ## Skipped Reasons
