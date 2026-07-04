@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T01:09:35Z",
+  "generated_at": "2026-07-04T01:17:08Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3846,
-    "verified": 1997,
+    "total": 3895,
+    "verified": 2046,
     "failed": 306,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 1997,
+        "count": 2046,
         "status": "verified"
       },
       {
@@ -369,6 +369,11 @@
         "provider": "data.go.kr"
       },
       {
+        "key": "mafra",
+        "count": 290,
+        "provider": "mafra"
+      },
+      {
         "key": "ex",
         "count": 277,
         "provider": "ex"
@@ -377,11 +382,6 @@
         "key": "opendart",
         "count": 245,
         "provider": "opendart"
-      },
-      {
-        "key": "mafra",
-        "count": 241,
-        "provider": "mafra"
       },
       {
         "key": "q-net",
@@ -896,6 +896,11 @@
         "host": "apis.data.go.kr"
       },
       {
+        "key": "data.mafra.go.kr",
+        "count": 290,
+        "host": "data.mafra.go.kr"
+      },
+      {
         "key": "data.ex.co.kr",
         "count": 277,
         "host": "data.ex.co.kr"
@@ -904,11 +909,6 @@
         "key": "opendart.fss.or.kr",
         "count": 245,
         "host": "opendart.fss.or.kr"
-      },
-      {
-        "key": "data.mafra.go.kr",
-        "count": 241,
-        "host": "data.mafra.go.kr"
       },
       {
         "key": "data.gg.go.kr",
@@ -1524,7 +1524,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3122,
+        "count": 3171,
         "kind": "external_endpoint"
       },
       {

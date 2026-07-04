@@ -12,14 +12,14 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `20307`
-- callable operations: `20165` (`99.3%`)
+- operations: `20356`
+- callable operations: `20214` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `8697`
-- registered adapter operations: `8687`
+- external endpoint operations: `8746`
+- registered adapter operations: `8736`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
-- approval-required operations: `7650`
+- approval-required operations: `7699`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
@@ -661,6 +661,11 @@ readiness, not to advance verified runtime coverage.
    That brings checked runtime evidence to `3846`, verified checks to `1997`,
    registered external adapter operations to `8687`, and raises API operation
    coverage to `11,132` of `12,060` APIs (`92.3%`).
+   The 농림축산식품부 국립농산물품질관리원 batch materializes `21` APIs
+   and `49` operations, and merges `49` verified MAFRA landing-page checks.
+   That brings checked runtime evidence to `3895`, verified checks to `2046`,
+   registered external adapter operations to `8736`, and raises API operation
+   coverage to `11,153` of `12,060` APIs (`92.5%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

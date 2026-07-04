@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-04T01:09:37Z",
+  "generated_at": "2026-07-04T01:17:09Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 20307,
-    "callable_operations": 20165,
-    "specs_without_operations": 928,
-    "specs_without_callable_operation": 1003,
+    "operations_total": 20356,
+    "callable_operations": 20214,
+    "specs_without_operations": 907,
+    "specs_without_callable_operation": 982,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 7969,
-    "operations_without_response_params": 9191,
+    "operations_without_request_params": 8018,
+    "operations_without_response_params": 9240,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 4261,
-      "external_endpoint_operations": 8697,
+      "external_endpoint_specs": 4282,
+      "external_endpoint_operations": 8746,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 114,
       "dev_approval_required_operations": 224,
-      "prod_approval_required_operations": 7544,
+      "prod_approval_required_operations": 7593,
       "malformed_endpoint_url_count": 42,
       "malformed_guide_url_count": 670,
       "top_endpoint_hosts": [
@@ -65,6 +65,10 @@
           "count": 289
         },
         {
+          "host": "data.mafra.go.kr",
+          "count": 284
+        },
+        {
           "host": "data.ex.co.kr",
           "count": 279
         },
@@ -75,10 +79,6 @@
         {
           "host": "opendart.fss.or.kr",
           "count": 245
-        },
-        {
-          "host": "data.mafra.go.kr",
-          "count": 235
         },
         {
           "host": "www.jejudatahub.net",
@@ -143,6 +143,10 @@
           "count": 289
         },
         {
+          "host": "data.mafra.go.kr",
+          "count": 284
+        },
+        {
           "host": "data.ex.co.kr",
           "count": 279
         },
@@ -153,10 +157,6 @@
         {
           "host": "opendart.fss.or.kr",
           "count": 245
-        },
-        {
-          "host": "data.mafra.go.kr",
-          "count": 235
         },
         {
           "host": "www.jejudatahub.net",

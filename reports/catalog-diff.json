@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T01:09:37Z",
+  "generated_at": "2026-07-04T01:17:09Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3947,
-    "stable": 8113
+    "changed": 3968,
+    "stable": 8092
   },
   "added": [],
   "removed": [],
@@ -20539,6 +20539,16 @@
       "new_digest": "578fb674c063a6c16a2cddfb71703e5dfc916239203976aaf67159a233501c46"
     },
     {
+      "id": "15079706",
+      "old_title": "농림축산식품부 국립농산물품질관리원_농산물우수관리(GAP) 인증정보 OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_농산물우수관리(GAP) 인증정보 OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "baa32d3eb227e4926b21ef1f93da0134a25a25a6fe1fd62a76cd7efd72e4ec34",
+      "new_digest": "3f18e780948bb40fc96cf89d30e379f4c9cbfe139c6a12898d65a35e64f18321"
+    },
+    {
       "id": "15079829",
       "old_title": "제주특별자치도_제주 C-ITS 교통정보",
       "new_title": "제주특별자치도_제주 C-ITS 교통정보",
@@ -20549,6 +20559,136 @@
       "new_digest": "f62d0ad8b607d62ee3a1145c0bbc1b05b366a736b89a23e52aebb007eb7131c0"
     },
     {
+      "id": "15080587",
+      "old_title": "농림축산식품부 국립농산물품질관리원_수입농산물검사정보 OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_수입농산물검사정보 OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1bea18e5c2d36b7537308110a58191368eca7cdb8cec4e62bbfe05b1ed3061fe",
+      "new_digest": "7c31ae22db05c7f1bb11f86e229009a705b5c1ddaaeecd27c814c6d3358feb1e"
+    },
+    {
+      "id": "15080598",
+      "old_title": "농림축산식품부 국립농산물품질관리원_우수식품 인증정보 OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_우수식품 인증정보 OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "73632b07c434ea02941d748ac450de51d99bae84bcde301b39311ef547865547",
+      "new_digest": "d161651f00aa66e22271119ca2fb5d2d86220306bd15da9b4b0e21e9f05f7808"
+    },
+    {
+      "id": "15080599",
+      "old_title": "농림축산식품부 국립농산물품질관리원_정곡검사정보 OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_정곡검사정보 OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c92e3bf435f938b2b18d63a6237a48aa19bdff7bc5c6e01ab8986832405b1616",
+      "new_digest": "0cfe351188b8edf738a06b2a911a4795cd58d8bd720db7160295b0b75b4c0402"
+    },
+    {
+      "id": "15080602",
+      "old_title": "농림축산식품부 국립농산물품질관리원_표준규격조사정보 OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_표준규격조사정보 OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7ee07af67dc37b23501e7e8b03a11cd34f7c214050dce5b9f46c6e5de2a38529",
+      "new_digest": "0aa8717faaaaa81e2223b8025ac103c1c03bcba98c37d0190f8c127e8ad0c84e"
+    },
+    {
+      "id": "15080606",
+      "old_title": "농림축산식품부 국립농산물품질관리원_농산물우수관리(GAP) 인증기관정보 OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_농산물우수관리(GAP) 인증기관정보 OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c410c8af3ad9459734fdb60167361fb66f91e449146cc1da5063d9152486d810",
+      "new_digest": "a01c28dbdaabe2f280f48b93e9de46aa6bb3142127b85f173427d9c9f136ab0f"
+    },
+    {
+      "id": "15080607",
+      "old_title": "농림축산식품부 국립농산물품질관리원_농산물우수관리(GAP) 관리시설정보 OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_농산물우수관리(GAP) 관리시설정보 OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0091dc253bf2fec066592bd8efbbe39cf3fcb4df220db84eb3d729f96c940560",
+      "new_digest": "ca7b9bd39bd773b1af95f7ab2c0d55e8165393213664e4471d40a91143134ddb"
+    },
+    {
+      "id": "15080609",
+      "old_title": "농림축산식품부 국립농산물품질관리원_술품질인증 업체정보 OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_술품질인증 업체정보 OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "764b4e27116fe773f6834da435186c2e8fa705692a3b80bb17ccf5b0156f0042",
+      "new_digest": "3659089b00a37390f2252fd69b8334a8bc4bd87ca206114e50a2e1898104bd67"
+    },
+    {
+      "id": "15080611",
+      "old_title": "농림축산식품부 국립농산물품질관리원_하추곡검사실적 OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_하추곡검사실적 OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b6202d60888eafd0440f9d2e24e2ffb2e0f4f0693584e5cfe5713660aadafd7d",
+      "new_digest": "a476c301ce4eebb52e216838ea65c53be4d3a420d170c539cb77cadad96948af"
+    },
+    {
+      "id": "15080629",
+      "old_title": "농림축산식품부 국립농산물품질관리원_지리적표시 등록정보  OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_지리적표시 등록정보  OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "33f2d0a37d8e3444a04bfdbff82959ed471a0210fa10f8721fd2924c3cc5d2f9",
+      "new_digest": "609bb5eb5e495bb9128fe6021df1b8c7031be1d992a4c1290310950ac9c2de95"
+    },
+    {
+      "id": "15080631",
+      "old_title": "농림축산식품부 국립농산물품질관리원_농축산물유통조사현황 OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_농축산물유통조사현황 OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f7918a120237103591fb7f36066b908fa943cd663b7850c86e2e1995dc34cd5b",
+      "new_digest": "1a91e375f8c6b15e6c0220e32caffce5d908b9d5f09c5c4d22505bde19a2855f"
+    },
+    {
+      "id": "15080634",
+      "old_title": "농림축산식품부 국립농산물품질관리원_원산지표시 품목별 적발현황 OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_원산지표시 품목별 적발현황 OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ad30530f753a4e5af14ef6d99e55a902bd1b129542279c146a2774a09e1b1b49",
+      "new_digest": "f2ebb92479405d37c4f397f0aec02c8cc747b8b8ed34084a8d8abb5a68494eed"
+    },
+    {
+      "id": "15080635",
+      "old_title": "농림축산식품부 국립농산물품질관리원_농산물검정정보 OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_농산물검정정보 OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e3c392855c6cba1681b5056148e22eb106d0366b4a46de3e3d133f92dbd268dc",
+      "new_digest": "398214b64b05450cefecaaa269a0a737dc777021b5e05cccef950d0f59e3242a"
+    },
+    {
+      "id": "15080637",
+      "old_title": "농림축산식품부 국립농산물품질관리원_GAP인증농가현황 OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_GAP인증농가현황 OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9969e5c49843440056044b5278a38e935c0cb74f0d1a108c5b5b94c07aacca2b",
+      "new_digest": "df6af64eef3e8b1b0b12fa623981cef2fae200d962a70a144b216e01d777ed24"
+    },
+    {
       "id": "15080688",
       "old_title": "식품의약품안전처_식품운반업 폐업정보",
       "new_title": "식품의약품안전처_식품운반업 폐업정보",
@@ -20557,6 +20697,56 @@
       ],
       "old_digest": "f2766b2807909712984c52c6caf84c2beab76e472dfd3c084bb3b348f369c89a",
       "new_digest": "395e6313a79f1177e0fdabd7af14fde347c8b2186c3f703dc3be5d8f21d009ce"
+    },
+    {
+      "id": "15080742",
+      "old_title": "농림축산식품부 국립농산물품질관리원_가공용쌀 단속현황 OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_가공용쌀 단속현황 OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "58d990c9b83fad8273e363a453da219bfa78f7d45024a209eb18bdaad2b45097",
+      "new_digest": "ab3b66a301097575c47e92c4ad9f920189c61e7ac4f52fa4eccdd8175c660d91"
+    },
+    {
+      "id": "15080743",
+      "old_title": "농림축산식품부 국립농산물품질관리원_ 농산물 잔류농약 분석결과 OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_ 농산물 잔류농약 분석결과 OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ec31bd7f171abd5c247c3d26c154d261d54b33fcb546edc7f0ccdd1016a44d5e",
+      "new_digest": "4f38820e51ad3dc8bf52871e764ac725021fa6268bc677582b597d6f3a52c906"
+    },
+    {
+      "id": "15080744",
+      "old_title": "농림축산식품부 국립농산물품질관리원_농산물 중금속 분석결과 OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_농산물 중금속 분석결과 OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "13d89d553ae85a40b5060c6ac60e230d214f6558868dceb279a38b12bb9bf851",
+      "new_digest": "bc4b01c2a0388093c44dd4e6b71c2188eb01a6d88267f029fd49a87a9640175b"
+    },
+    {
+      "id": "15080746",
+      "old_title": "농림축산식품부 국립농산물품질관리원_농산물 방사능 검사현황 OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_농산물 방사능 검사현황 OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "464f1adc9d97539678921886512f962fdeaf885c0bbd1aa5fb7b7c1666727b7c",
+      "new_digest": "5fd84a83dd46e5457d48f8bdd6a14c2cbda752d4d3cee89ab5cfe5f4ce87389d"
+    },
+    {
+      "id": "15080748",
+      "old_title": "농림축산식품부 국립농산물품질관리원_유기농업자재 공시현황 OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_유기농업자재 공시현황 OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8c7494eb2f04d832b25f322e54a37b70e486501deaa62e691e6d554dfd2cd34a",
+      "new_digest": "8d8cb24feba5c639d7537316e2fba77e592430e34987d9960bcb61f6af08f892"
     },
     {
       "id": "15080782",
@@ -23637,6 +23827,26 @@
       ],
       "old_digest": "f0867a59c76fe86b4b19ec481ac9c076b5449bee42fb524ad93782cee925355d",
       "new_digest": "19066edd9903eb24e9fd8b109a6f46231a59af8881ccaf8194af50ef4b217964"
+    },
+    {
+      "id": "15101223",
+      "old_title": "농림축산식품부 국립농산물품질관리원_농산물이력추적등록정보 OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_농산물이력추적등록정보 OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "85a498763b0e772ccce3045a826853b9ea03b3c3f6b5f58c55e1e8fd59bf5d3e",
+      "new_digest": "176a849789482a18ed11215fec630866463741c6d8e8b6c8696b8a9395b0b014"
+    },
+    {
+      "id": "15101224",
+      "old_title": "농림축산식품부 국립농산물품질관리원_친환경인증 품목별 현황 OpenAPI",
+      "new_title": "농림축산식품부 국립농산물품질관리원_친환경인증 품목별 현황 OpenAPI",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ae59926ae4d0d19b7dcceb79c95f83c19e353a0909fe8204fc2ecedd37de4ebc",
+      "new_digest": "372f24155dc06a46214dd0da42e35edda9314e905d15979c316d79a54859cbe1"
     },
     {
       "id": "15101287",

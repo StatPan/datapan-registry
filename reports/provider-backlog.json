@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T01:09:37Z",
+  "generated_at": "2026-07-04T01:17:09Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -17,7 +17,7 @@
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7650,
+    "approval_required_operations": 7699,
     "malformed_source_url_count": 712
   },
   "providers": [
@@ -312,6 +312,24 @@
       ]
     },
     {
+      "host": "data.mafra.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 172,
+      "operations": 284,
+      "external_endpoint_operations": 284,
+      "external_guide_specs": 42,
+      "approval_required_operations": 138,
+      "sample_ids": [
+        "15002220",
+        "15008409",
+        "15015139"
+      ]
+    },
+    {
       "host": "data.ex.co.kr",
       "provider": "ex",
       "kinds": [
@@ -361,24 +379,6 @@
         "15034604",
         "15060602",
         "15060603"
-      ]
-    },
-    {
-      "host": "data.mafra.go.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 151,
-      "operations": 235,
-      "external_endpoint_operations": 235,
-      "external_guide_specs": 42,
-      "approval_required_operations": 89,
-      "sample_ids": [
-        "15002220",
-        "15008409",
-        "15015139"
       ]
     },
     {
