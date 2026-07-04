@@ -12,14 +12,14 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `21254`
-- callable operations: `21112` (`99.3%`)
+- operations: `21256`
+- callable operations: `21114` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `9644`
-- registered adapter operations: `9634`
+- external endpoint operations: `9646`
+- registered adapter operations: `9636`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
-- approval-required operations: `8195`
+- approval-required operations: `8197`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `158`
@@ -252,10 +252,10 @@ KEIS/YouthCenter, `18` NIHC, `30` Ulsan WWW, `49` NAQS, `70` Seogwipo, and
 한강홍수통제소, `3` 한국농수산식품유통공사, `22` 국가유산청 국립고궁박물관,
 `22` 주택도시보증공사, `21` 예술경영지원센터, `11` 국가데이터처,
 `10` 경찰청, `40` 기획예산처, `29` 국방부, `16` 한국은행, `15` 인천광역시,
-`8` 한국수목원정원관리원, and `4` 한국도로교통공단
+`8` 한국수목원정원관리원, `4` 한국도로교통공단, and `2` 국민권익위원회
 link-detail operations.
 The next viable materialization queue after the current upstream blockers is
-`국민권익위원회`.
+`한국문화정보원`.
 The runtime reactivation queue starts at `행정안전부`: `1252`
 APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
@@ -837,6 +837,13 @@ readiness, not to advance verified runtime coverage.
    `4771`, verified checks to `2839`, registered external adapter operations
    to `9634`, and raises API operation coverage to `11,585` of `12,060` APIs
    (`96.1%`).
+   The 국민권익위원회 batch reuses Open Law host coverage for `open.law.go.kr`,
+   materializes `2` APIs and `2` operations, and merges `3` bounded checks
+   (`2` verified, `1` skipped for the existing `www.simpan.go.kr` missing
+   adapter route). That brings checked runtime evidence to `4774`, verified
+   checks to `2841`, skipped checks to `1544`, registered external adapter
+   operations to `9636`, and raises API operation coverage to `11,587` of
+   `12,060` APIs (`96.1%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

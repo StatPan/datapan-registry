@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T06:33:35Z",
+  "generated_at": "2026-07-04T06:39:24Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4400,
-    "stable": 7660
+    "changed": 4402,
+    "stable": 7658
   },
   "added": [],
   "removed": [],
@@ -28127,6 +28127,26 @@
       ],
       "old_digest": "b33c78f2e9a3bb54c175105dccf37c39e6f7fd65b2d1d72ffadaeb6cb1f0b6a6",
       "new_digest": "091fd40c34b6eb2d15f47bee1b6695413ef6dfb2353e1cd54c616143dba648b3"
+    },
+    {
+      "id": "15102917",
+      "old_title": "국민권익위원회_결정문 목록조회 국가법령정보센터API",
+      "new_title": "국민권익위원회_결정문 목록조회 국가법령정보센터API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "29b68dc621001ff1883442ef3d9777b65c3cf89ff6d1fa321bc96c2c1968b71a",
+      "new_digest": "efa7159a021ae44a9cd598186722804efc651feaa7cc569b9c51a3483ee4ee96"
+    },
+    {
+      "id": "15102919",
+      "old_title": "국민권익위원회_결정문 본문조회 국가법령정보센터API",
+      "new_title": "국민권익위원회_결정문 본문조회 국가법령정보센터API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f96ed2186a92c56b74cc97ca69eec2b32d6f54f93df6219bafe48e28d2a78086",
+      "new_digest": "bac1dbd50a86fb2af1ab1d57af68c9f8338bdf32dabc0436432efb892c3c54a0"
     },
     {
       "id": "15103013",

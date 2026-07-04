@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T06:33:35Z",
+  "generated_at": "2026-07-04T06:39:24Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 21254,
-    "runtime_evidence": 4771,
-    "runtime_evidence_percent": 22.4,
-    "callable_operations": 21112,
-    "external_endpoint_operations": 9644,
-    "registered_adapter_operations": 9634,
+    "operations": 21256,
+    "runtime_evidence": 4774,
+    "runtime_evidence_percent": 22.5,
+    "callable_operations": 21114,
+    "external_endpoint_operations": 9646,
+    "registered_adapter_operations": 9636,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 9644
+      "count": 9646
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 9634
+      "count": 9636
     },
     {
       "key": "builtin",
@@ -69,7 +69,7 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 2705
+      "operation_count": 2707
     },
     {
       "category": "문화관광",
@@ -203,7 +203,7 @@
     },
     {
       "host": "open.law.go.kr",
-      "operation_count": 304,
+      "operation_count": 306,
       "adapter": "open-law",
       "adapter_status": "registered",
       "capabilities": [
@@ -5776,6 +5776,69 @@
       ]
     },
     {
+      "organization": "국민권익위원회",
+      "api_count": 16,
+      "operation_api_count": 16,
+      "operation_count": 52,
+      "runtime_evidence_count": 5,
+      "runtime_evidence_percent": 9.6,
+      "verified": 2,
+      "failed": 0,
+      "skipped": 3,
+      "unknown": 0,
+      "approval_required_operations": 38,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 49
+        },
+        {
+          "key": "external_endpoint",
+          "count": 3
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 2
+        },
+        {
+          "key": "builtin",
+          "count": 49
+        },
+        {
+          "key": "missing",
+          "count": 1
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "공공행정",
+          "operation_count": 52
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 49
+        },
+        {
+          "host": "open.law.go.kr",
+          "operation_count": 2,
+          "adapter": "open-law",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.simpan.go.kr",
+          "operation_count": 1
+        }
+      ]
+    },
+    {
       "organization": "축산물품질평가원",
       "api_count": 10,
       "operation_api_count": 10,
@@ -6200,56 +6263,6 @@
           "capabilities": [
             "verification"
           ]
-        }
-      ]
-    },
-    {
-      "organization": "국민권익위원회",
-      "api_count": 16,
-      "operation_api_count": 14,
-      "operation_count": 50,
-      "runtime_evidence_count": 2,
-      "runtime_evidence_percent": 4.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 2,
-      "unknown": 0,
-      "approval_required_operations": 36,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 49
-        },
-        {
-          "key": "external_endpoint",
-          "count": 1
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 49
-        },
-        {
-          "key": "missing",
-          "count": 1
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "공공행정",
-          "operation_count": 50
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 49
-        },
-        {
-          "host": "www.simpan.go.kr",
-          "operation_count": 1
         }
       ]
     },
