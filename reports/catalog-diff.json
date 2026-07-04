@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T02:51:58Z",
+  "generated_at": "2026-07-04T03:02:01Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4151,
-    "stable": 7909
+    "changed": 4153,
+    "stable": 7907
   },
   "added": [],
   "removed": [],
@@ -38229,6 +38229,16 @@
       "new_digest": "bb6c94fe50dadc1cf7072087d2a0727e2418bf8688d167f144de39f4a91c0de6"
     },
     {
+      "id": "15151982",
+      "old_title": "한국연구재단_기초학문연구 자료 현황",
+      "new_title": "한국연구재단_기초학문연구 자료 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "95f0c6b4229267c139ce60ca92c99c4c5bc0c908625460f669ed514776ce7d7a",
+      "new_digest": "5abbfaada73d35afba5139f8a4f2173d19d1818092df19855fa70d2541f51fcb"
+    },
+    {
       "id": "15152402",
       "old_title": "행정안전부_교통안전정보(취약구간)-교량대교",
       "new_title": "행정안전부_교통안전정보(취약구간)-교량대교",
@@ -41167,6 +41177,16 @@
       ],
       "old_digest": "15b02e5e59fdae8697d02b4b87659711c35b9a82223aaeb5ea8e6829963d290c",
       "new_digest": "fff10bbf3cdc9e720babc068b12e66de171761955def274dcc34c3e4f4eb166a"
+    },
+    {
+      "id": "3049042",
+      "old_title": "한국연구재단_KCI논문정보",
+      "new_title": "한국연구재단_KCI논문정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "575e37409322902a0939e59dedbba133116254fa6511b3f2118fcb6f9dbd042d",
+      "new_digest": "ba0f17393c3b695c026d0f0ed12a2cb46226550adbba6cff784f358af9f6760a"
     },
     {
       "id": "3052419",

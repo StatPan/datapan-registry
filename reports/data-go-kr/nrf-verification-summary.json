@@ -1,0 +1,50 @@
+{
+  "generated_at": "2026-07-04T03:01:31Z",
+  "source": "reports/data-go-kr/nrf-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 3,
+    "verified": 3,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 3,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "nrf",
+        "count": 3,
+        "provider": "nrf"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "www.kci.go.kr",
+        "count": 2,
+        "host": "www.kci.go.kr"
+      },
+      {
+        "key": "www.krm.or.kr",
+        "count": 1,
+        "host": "www.krm.or.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 3,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

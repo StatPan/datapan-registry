@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `20784`
-- callable operations: `20642` (`99.3%`)
+- operations: `20787`
+- callable operations: `20645` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `9174`
-- registered adapter operations: `9164`
+- external endpoint operations: `9177`
+- registered adapter operations: `9167`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
-- approval-required operations: `7947`
+- approval-required operations: `7949`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `141`
+- registered adapter hosts: `143`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -123,7 +123,7 @@ Registered external adapters currently cover these host families through
 `data/provider-index.json`: airport, andong, calspia, cancer, car, car365, codil, consumer, culture, data-gg, dgfca, dongjak, ekape, emuseum,
 epost, eshare, ex, fairdata, folk, foodsafetykorea, forest, franchise-ftc, garak, gblib, geoje, gicoms, gimhae, gwanak,
 gwangjin, gwangmyeong, happysd, humetro, i815, icheon, ins24, itfind, its, jeju, jeju-air, jeju-www, jejudatahub, jejuits, jeonnam-redtable, jeonju, juso,
-kistep, kofpi, korad, kpx, kric, lh-ebid, lofin365, mafra, mnd-open-data, myhome, nabic, naqs, ncpms, nfqs, nongsaro,
+kistep, kofpi, korad, kpx, kric, lh-ebid, lofin365, mafra, mnd-open-data, myhome, nabic, naqs, ncpms, nfqs, nongsaro, nrf,
 oneclick-law, open-assembly, open-law, pqis, psis, q-net, safemap, safetydata, seogu, seoul-bus, seoul-open-data,
 seogwipo, sexoffender, sisul, sisul-www, stcis, tour, uiryeong, ulsan, vworld, wamis, work, work24, worldjob, and yuseong.
 
@@ -240,14 +240,15 @@ blocked by upstream data.go.kr detail errors. The latest viable queues were
 `울산광역시`, `농림축산식품부 국립농산물품질관리원`,
 `제주특별자치도 서귀포시`, `서울특별시농수산식품공사`,
 `국가유산청 국립문화유산연구원`, `경기도 안양시`,
-`대전교통공사`, `국가철도공단`, `대전광역시 유성구`, and
-`한국체육산업개발주식회사`, now
+`대전교통공사`, `국가철도공단`, `대전광역시 유성구`,
+`한국체육산업개발주식회사`, and `한국연구재단`, now
 completed through `39` Ecobank, `45` NFQS, `95` Dongjak/Seoul Open Data,
 `3` UniPass, `1` KoreaPost, `23` Childcare Info, `28` Daegu, `68`
 KEIS/YouthCenter, `18` NIHC, `30` Ulsan WWW, `49` NAQS, `70` Seogwipo, and
 `81` Garak, `76` NRich, `41` Anyang/MPVA Egonghun, `1` Tashu, `78` KRIC,
-`26` Yuseong, and `55` 한국체육산업개발 link-detail operations. The next viable
-materialization queue after the current upstream blockers is `한국연구재단`.
+`26` Yuseong, `55` 한국체육산업개발, and `3` NRF link-detail operations. The
+next viable materialization queue after the current upstream blockers is
+`한국과학기술정보연구원`.
 The runtime reactivation queue starts at `행정안전부`: `1252`
 APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
@@ -721,6 +722,11 @@ readiness, not to advance verified runtime coverage.
    to `4301`, verified checks to `2426`, registered external adapter
    operations to `9164`, and raises API operation coverage to `11,336` of
    `12,060` APIs (`94.0%`).
+   The 한국연구재단 batch adds NRF host coverage for `www.kci.go.kr` and
+   `www.krm.or.kr`, materializes `2` APIs and `3` operations, and merges `3`
+   verified NRF bounded checks. That brings checked runtime evidence to `4304`,
+   verified checks to `2429`, registered external adapter operations to `9167`,
+   and raises API operation coverage to `11,338` of `12,060` APIs (`94.0%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

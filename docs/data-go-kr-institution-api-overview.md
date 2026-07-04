@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-04T02:51:58Z`
+- Generated at: `2026-07-04T03:02:01Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `20784`
-- Runtime evidence: `4301` (`20.7%`)
-- External endpoint operations: `9174`
-- Registered adapter operations: `9164`
+- Operations: `20787`
+- Runtime evidence: `4304` (`20.7%`)
+- External endpoint operations: `9177`
+- Registered adapter operations: `9167`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -65,7 +65,7 @@
 | 국회 국회사무처 | 277 | 277 | 277 | 30 | 10.8% | 0 | 30 | 0 | 277 | 0 |
 | 해양수산부 | 173 | 173 | 277 | 11 | 4.0% | 0 | 1 | 10 | 117 | 0 |
 | 한국도로공사 | 93 | 93 | 271 | 271 | 100.0% | 271 | 0 | 0 | 271 | 0 |
-| 한국연구재단 | 26 | 24 | 247 | 13 | 5.3% | 4 | 3 | 6 | 234 | 0 |
+| 한국연구재단 | 26 | 26 | 250 | 16 | 6.4% | 7 | 3 | 6 | 236 | 0 |
 | 금융감독원 | 83 | 83 | 245 | 245 | 100.0% | 0 | 0 | 245 | 239 | 0 |
 | 기상청 | 89 | 89 | 228 | 68 | 29.8% | 45 | 0 | 23 | 69 | 0 |
 | 지식재산처 | 67 | 67 | 227 | 122 | 53.7% | 76 | 24 | 22 | 58 | 0 |

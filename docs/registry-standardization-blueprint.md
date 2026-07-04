@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `724` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `722` data.go.kr APIs
   without operation mappings, `9,285` operation-mapped APIs without runtime
   evidence, and `204` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -120,7 +120,7 @@ Current strengths:
   the same blocker, warning, and next-action inventory that CI validates.
 - `reports/source-report-inventory.json` is generated from source profiles and
   checked-in `reports/<source>/` directories, measuring `5` source report
-  directories, `100` source-scoped JSON reports, and `12.3%` recommended
+  directories, `102` source-scoped JSON reports, and `12.3%` recommended
   source-scoped report coverage.
 - `scripts/sync-release-schema-artifacts.py` checks that every checked-in
   `schemas/*.schema.json` file is represented in `schemas/index.json` and
@@ -484,8 +484,13 @@ Current gaps:
   merges `55` verified bounded checks. That brings runtime evidence to `4301`,
   verified checks to `2426`, and registered external adapter operations to
   `9164`.
-- API operation coverage remains incomplete: `11,336` of `12,060` APIs have
-  operation mappings (`94.0%`), leaving `724` APIs to materialize and `9,285`
+- The 한국연구재단 batch adds NRF host coverage for `www.kci.go.kr` and
+  `www.krm.or.kr`, materializes `2` APIs and `3` operations, and merges `3`
+  verified NRF bounded checks. That brings runtime evidence to `4304`,
+  verified checks to `2429`, and registered external adapter operations to
+  `9167`.
+- API operation coverage remains incomplete: `11,338` of `12,060` APIs have
+  operation mappings (`94.0%`), leaving `722` APIs to materialize and `9,285`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report
