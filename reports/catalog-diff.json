@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T02:45:03Z",
+  "generated_at": "2026-07-04T02:51:58Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4129,
-    "stable": 7931
+    "changed": 4151,
+    "stable": 7909
   },
   "added": [],
   "removed": [],
@@ -2879,6 +2879,16 @@
       "new_digest": "d292b430aa30d8a52e508a4da65f9ac11ae44cd53b1eaeb68e0084a4f34a647c"
     },
     {
+      "id": "15038496",
+      "old_title": "한국체육산업개발주식회사_올림픽공원 및 미사경정공원 유실물 정보",
+      "new_title": "한국체육산업개발주식회사_올림픽공원 및 미사경정공원 유실물 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "76b33492af870dbc3eb4e2883d51a93223c1d798360614be019774b65477c4fe",
+      "new_digest": "5b93fcaba8326eff351bcb91845e44ab462827dee324ee53daf3c1fbded21cbb"
+    },
+    {
       "id": "15038554",
       "old_title": "서울특별시 동작구_유흥주점영업 인허가 정보",
       "new_title": "서울특별시 동작구_유흥주점영업 인허가 정보",
@@ -3579,6 +3589,16 @@
       "new_digest": "0523a3fc009c142b759428d26d5bc552f5abc91ba1aeab0fcf069b7baba204cc"
     },
     {
+      "id": "15043066",
+      "old_title": "한국체육산업개발주식회사_채용정보",
+      "new_title": "한국체육산업개발주식회사_채용정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "dcb3918cb485cd181973b3f72a0269f74d85bcbcf011fa0076346254c02b71e8",
+      "new_digest": "4679ec449cfd8ba9f2988665eebc4a3c5078973cf9b54f63ce826c81396f6d59"
+    },
+    {
       "id": "15043313",
       "old_title": "충청남도_학교급식 로컬푸드 식자재 수발주내역",
       "new_title": "충청남도_학교급식 로컬푸드 식자재 수발주내역",
@@ -3839,6 +3859,16 @@
       "new_digest": "9efea2665818505171ee4645bd08bcd23781cb517c039ccc22cbb6d96c9d99c4"
     },
     {
+      "id": "15056513",
+      "old_title": "한국체육산업개발주식회사_올림픽공원 스포츠센터 정보",
+      "new_title": "한국체육산업개발주식회사_올림픽공원 스포츠센터 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5d5003d880f6fb1ee9cfe53f210c2f3f90b266d31fd5aa0896ad83cb6c404e90",
+      "new_digest": "9cfc9d0e84faf9cdd19b77d20f235cf43f08cbc674335b60b6304ed8183623b8"
+    },
+    {
       "id": "15056514",
       "old_title": "경기도_식품판매업 현황",
       "new_title": "경기도_식품판매업 현황",
@@ -4087,6 +4117,16 @@
       ],
       "old_digest": "cf602d0b4ce35d6eeed22af6ebd57a2c4b8d8a2fd55b0012e1e13814629340e5",
       "new_digest": "65c8e532e3a1c0c29b0cd05e2e258bae3b4aedc34d7d34bedc08fd1bc40549ef"
+    },
+    {
+      "id": "15056581",
+      "old_title": "한국체육산업개발주식회사_올림픽공원 생태공원 갤러리",
+      "new_title": "한국체육산업개발주식회사_올림픽공원 생태공원 갤러리",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a38cabd22928fece5e7c34a2a2b175e86f5674df280c2283a756f458f330b9e5",
+      "new_digest": "e1822867c30db78412ee4bc480b0aff91654e6ea89df4d332067e4c84d13290c"
     },
     {
       "id": "15056584",
@@ -5089,6 +5129,16 @@
       "new_digest": "aef1b37f32830979cb25d68a24854b6dfbb7c2abc44621874025cee2f88457ae"
     },
     {
+      "id": "15056810",
+      "old_title": "한국체육산업개발주식회사_올림픽공원 스케이트장 정보",
+      "new_title": "한국체육산업개발주식회사_올림픽공원 스케이트장 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6efd1c2845c1696c8f233fba412b2b584b4c996f371c7b0f297b68e919d60665",
+      "new_digest": "20c85971884321532926a9ac3965393e525dfe1b33939cfe5096db52ac5b3525"
+    },
+    {
       "id": "15056811",
       "old_title": "법제처_모바일 법령해석례 목록 조회",
       "new_title": "법제처_모바일 법령해석례 목록 조회",
@@ -5827,6 +5877,16 @@
       ],
       "old_digest": "aeb1ea2c10273bed6aaf60c38a8856a7a71f4f1adbb3d4c26f8afc3a21d3bf0c",
       "new_digest": "5e4267fe17fca19df323d4f69bab46a54dd1b84db7909371f8a7ae396c5fb192"
+    },
+    {
+      "id": "15056986",
+      "old_title": "한국체육산업개발주식회사_올림픽공원 장미광장",
+      "new_title": "한국체육산업개발주식회사_올림픽공원 장미광장",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a79883da82fa3932175a96f08822e02df428b6c8e2695f5b2e45966c87e61f60",
+      "new_digest": "161a558c402256b279aec4a7956034c6aebbbb5830a078aa3f828859e8d5cb78"
     },
     {
       "id": "15056990",
@@ -9079,6 +9139,16 @@
       "new_digest": "69e006a9093b38ba47b5444b4d727c354175ed4e3882ab911fd533cf21f115bd"
     },
     {
+      "id": "15057697",
+      "old_title": "한국체육산업개발주식회사_올팍축구장 정보",
+      "new_title": "한국체육산업개발주식회사_올팍축구장 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4d2fa8f06d9b663d3f2027547a0ce0ddd9d96f8e0858fd9d9c9dba517b1ebd72",
+      "new_digest": "00701fb2edc4a6933f351b7d217813aeb26d69a3bb45f8017d2f8e9ddff491f1"
+    },
+    {
       "id": "15057698",
       "old_title": "농림수산식품교육문화정보원_농촌마을별 인원정보",
       "new_title": "농림수산식품교육문화정보원_농촌마을별 인원정보",
@@ -11407,6 +11477,16 @@
       ],
       "old_digest": "bb403a24363d51740fe8adb6f6b0c34356d8627a232a2644cd7d0d98a8e08a64",
       "new_digest": "20f078c6bad41fda15ebd2d9126e1a9a4f0f065819d039a2b5e38f92c7b37edd"
+    },
+    {
+      "id": "15058240",
+      "old_title": "한국체육산업개발주식회사_포토 갤러리",
+      "new_title": "한국체육산업개발주식회사_포토 갤러리",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9e3ea8fd6a150a5ec865d1d3a21120bcb740d25d93bf39cad70fb68ab5e53aa5",
+      "new_digest": "2d814f64339d134bc6b70ed78ebb888ed5ffd9e0db1bf543203f265735db9ab4"
     },
     {
       "id": "15058244",
@@ -15189,6 +15269,16 @@
       "new_digest": "16ea6fdd34761d61ed02f2699b24c0e6463e0731f5140dff45475d95b7bcf885"
     },
     {
+      "id": "15059122",
+      "old_title": "한국체육산업개발주식회사_스포츠센터 월회원 이용현황",
+      "new_title": "한국체육산업개발주식회사_스포츠센터 월회원 이용현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c3c267a962877562019112ed7e5b935564e47d6d8ed73dc6751ee9c3ac72cf8f",
+      "new_digest": "556a7c7dea968eebac4519b393769d288a3f222d2aa2e94133a137f2ff27f786"
+    },
+    {
       "id": "15059124",
       "old_title": "경기도 광명시_어린이 놀이시설 현황",
       "new_title": "경기도 광명시_어린이 놀이시설 현황",
@@ -15537,6 +15627,16 @@
       ],
       "old_digest": "18255a17db17832f400f7b47a951731ec679c785db65bf5781937d1cf1700108",
       "new_digest": "2076c5bab0c51f7ef10def7276c1c5cb03efe61437d823e3bf47f17808ef1d02"
+    },
+    {
+      "id": "15059219",
+      "old_title": "한국체육산업개발주식회사_일산올림픽스포츠센터 정보",
+      "new_title": "한국체육산업개발주식회사_일산올림픽스포츠센터 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "779900f7a63bb64e372234dba75678e2e6305805698cbec11a439a5584eaf85d",
+      "new_digest": "3795ad9115525a8994187ac38ce9481005d411e98a4a07ed5386f4e24d944b55"
     },
     {
       "id": "15059220",
@@ -16659,6 +16759,16 @@
       "new_digest": "f873e5bf6be0fe2a277dfccdd2fad6212dbb005a38f48cf230e4e208d2ea4fcc"
     },
     {
+      "id": "15059479",
+      "old_title": "한국체육산업개발주식회사_분당올림픽스포츠센터 정보",
+      "new_title": "한국체육산업개발주식회사_분당올림픽스포츠센터 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "27f8b678519ce3c68f8b9e5783bcfbe5cd8c5b46740adfdb578a1116d2b1a38c",
+      "new_digest": "d57b0e6fe5660f06c961d72f2794215ba2749dded5a0f90dd8fd9f97e0d4eb14"
+    },
+    {
       "id": "15059480",
       "old_title": "서울특별시_소통 돌발 도로 분류 정보",
       "new_title": "서울특별시_소통 돌발 도로 분류 정보",
@@ -16857,6 +16967,16 @@
       ],
       "old_digest": "a6f6d4ceeedbda7e34f3640d432ac4f82fbe559ddb54097ae540f6c341d81b14",
       "new_digest": "60e5481de83a79397daa7129e7ad123eecbc0236830ecdfef2208e4061dcb951"
+    },
+    {
+      "id": "15059528",
+      "old_title": "한국체육산업개발주식회사_올림픽수영장 정보",
+      "new_title": "한국체육산업개발주식회사_올림픽수영장 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "841c2cc3ea006553157885eff4de2174f32cb72a28908f450b120fc8fb06c693",
+      "new_digest": "934eba1497dfe2234a0c36595cd098b71a6e3181280216d8ffa8f9ff76dfa59a"
     },
     {
       "id": "15059529",
@@ -18937,6 +19057,26 @@
       ],
       "old_digest": "0dec910fbb53433e34c152cdf9c1ff9d20d7ee112e7e637e7163a3c531ea7dbb",
       "new_digest": "f378ec715cc495287221c467f17631a7e3d5b4601a65990a13a71bd4e130f798"
+    },
+    {
+      "id": "15064257",
+      "old_title": "한국체육산업개발주식회사_역대수상 및 인증기록정보",
+      "new_title": "한국체육산업개발주식회사_역대수상 및 인증기록정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9e577ae486beb55ef4940acfda46090e0b4b206f20217194b7d05016e08d68d4",
+      "new_digest": "0568ec5954a3a5384c4bd7e52042f51c5acfd2aacdc224dbdd5e7ab031f63b61"
+    },
+    {
+      "id": "15064258",
+      "old_title": "한국체육산업개발주식회사_협력기관정보",
+      "new_title": "한국체육산업개발주식회사_협력기관정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fa84799b455a1b98a438865cc174dfb2eba18cff590654bba03984275e155107",
+      "new_digest": "7a6e95f1dbee65d249ee03d6009eade2b74a3fedcfdeb9f20ff8fbe6c88cce13"
     },
     {
       "id": "15064309",
@@ -24407,6 +24547,56 @@
       ],
       "old_digest": "2f778fe37848927b9a18dc02cdcfa85a16b602306163102d357ff945ede75c76",
       "new_digest": "0d9302fa1abc351e95c9df53e66eac756715e6bce564662f05c7110fc8f15705"
+    },
+    {
+      "id": "15100879",
+      "old_title": "한국체육산업개발주식회사_사회공헌",
+      "new_title": "한국체육산업개발주식회사_사회공헌",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "165c21db034c9801e11052ac3d53db187e821637d4a1c63c81763e8914a452c9",
+      "new_digest": "022d21c48ba40bbd189044cdc3241c091d0470c5bc9091b54ad255f00aa27f2c"
+    },
+    {
+      "id": "15100880",
+      "old_title": "한국체육산업개발주식회사_보도자료",
+      "new_title": "한국체육산업개발주식회사_보도자료",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1526458335134884a525b500f8f7d0e56720934ef352fda963975a608965721c",
+      "new_digest": "f51538e14a09ed25d5d7df60c3e4bf8c7e048e9c23628746c5d658887f9523d6"
+    },
+    {
+      "id": "15100882",
+      "old_title": "한국체육산업개발주식회사_공지사항",
+      "new_title": "한국체육산업개발주식회사_공지사항",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9f64fa6aea8f7e9943d27d7294d9077512430321909ade1c4bef7b2c8a79fe18",
+      "new_digest": "40391a0e15918c49d48bcfa7d910314c309e9f1111d8de7101d3439a158a6be6"
+    },
+    {
+      "id": "15100883",
+      "old_title": "한국체육산업개발주식회사_홍보동영상",
+      "new_title": "한국체육산업개발주식회사_홍보동영상",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1777672b97836fe0dc2808f6c50b55fdf6e373eaf54b1f97f90097ba15b7442d",
+      "new_digest": "33457650adadf601e02b3bf4b218d99743f7327a81795369b2bb90964b097937"
+    },
+    {
+      "id": "15100884",
+      "old_title": "한국체육산업개발주식회사_올팍소식",
+      "new_title": "한국체육산업개발주식회사_올팍소식",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e8a5fbf6bb8fb7fd97c6b1d10f9b4cc4e1c613c9df2de43ff332b15a77510cd8",
+      "new_digest": "a7caa7120d17a10d2648ef475c88803d7ffde9ca573ba9d42187ba4f62459b0e"
     },
     {
       "id": "15101051",
@@ -40739,6 +40929,16 @@
       "new_digest": "cdb8753ae4593a004105a6ca0df2b04f80cf9276fd783c7f470c13ed6967eafc"
     },
     {
+      "id": "15159093",
+      "old_title": "한국체육산업개발주식회사_올림픽공원  입출차정보(전체구역)",
+      "new_title": "한국체육산업개발주식회사_올림픽공원  입출차정보(전체구역)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d7ae7741e7b16385c539aba478c21e85cc20f367e01fa99fc38135a76b4a69e6",
+      "new_digest": "230547c587e97d5520b9b025e305eb56c3ccd1b77f19c50796707782c05be648"
+    },
+    {
       "id": "15159171",
       "old_title": "해양수산부 국립수산물품질관리원_천일염이력제 일일 출하량 집계정보 조회",
       "new_title": "해양수산부 국립수산물품질관리원_천일염이력제 일일 출하량 집계정보 조회",
@@ -40807,6 +41007,16 @@
       ],
       "old_digest": "7ea0d38fe5d33a169c183a829fe3ce56eb994f506f97bf42c166cc219cdee835",
       "new_digest": "2eff641426dbd60727e0aa0f1deff35bd3070390e296062817d9bd85eda20000"
+    },
+    {
+      "id": "3037877",
+      "old_title": "한국체육산업개발주식회사_올림픽공원 공연정보",
+      "new_title": "한국체육산업개발주식회사_올림픽공원 공연정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "02e67fcfeaa94721bd41ec1e9e0e75b1b8cd883e4f73561cdb171e4234c9e4a0",
+      "new_digest": "a5cb007923337451dec1928812b8009d0192fc043e94083020f28d3969663ee0"
     },
     {
       "id": "3038225",
@@ -41227,6 +41437,16 @@
       ],
       "old_digest": "bc1a83339301b8d2cb1e3095ce3de1e5f3f06a416352a2a2feeae9d8103322d0",
       "new_digest": "ee86379a2169b1c55fc52f18fe0753800a2bb13db2dc532a0a1db31bbbc2aa2e"
+    },
+    {
+      "id": "3074924",
+      "old_title": "한국체육산업개발주식회사_올림픽공원 운영현황",
+      "new_title": "한국체육산업개발주식회사_올림픽공원 운영현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "72f0da15c74135bae62a62e764a6886897a261e49dc6e444b56f15eee1c9689a",
+      "new_digest": "7d73ca5338490ef476949faff94d46f97dc05105afa5cd265ee63db2a4283b2c"
     },
     {
       "id": "3075133",

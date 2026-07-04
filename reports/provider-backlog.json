@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T02:45:03Z",
+  "generated_at": "2026-07-04T02:51:58Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
@@ -17,7 +17,7 @@
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7928,
+    "approval_required_operations": 7947,
     "malformed_source_url_count": 724
   },
   "providers": [
@@ -178,12 +178,12 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 899,
-      "operations": 2206,
-      "external_endpoint_operations": 2206,
+      "specs": 900,
+      "operations": 2207,
+      "external_endpoint_operations": 2207,
       "external_guide_specs": 21,
       "wms_operations": 5,
-      "approval_required_operations": 69,
+      "approval_required_operations": 70,
       "sample_ids": [
         "15005231",
         "15011020",
@@ -400,6 +400,24 @@
       ]
     },
     {
+      "host": "www.culture.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 111,
+      "operations": 177,
+      "external_endpoint_operations": 177,
+      "external_guide_specs": 79,
+      "approval_required_operations": 104,
+      "sample_ids": [
+        "15008517",
+        "15015212",
+        "15024888"
+      ]
+    },
+    {
       "host": "www.jeju.go.kr",
       "provider": "jeju-www",
       "kinds": [
@@ -469,24 +487,6 @@
         "15039347",
         "15039350",
         "15056585"
-      ]
-    },
-    {
-      "host": "www.culture.go.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 89,
-      "operations": 124,
-      "external_endpoint_operations": 124,
-      "external_guide_specs": 78,
-      "approval_required_operations": 87,
-      "sample_ids": [
-        "15008517",
-        "15015212",
-        "15024888"
       ]
     },
     {
@@ -673,11 +673,11 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 34,
-      "operations": 57,
-      "external_endpoint_operations": 57,
+      "specs": 35,
+      "operations": 58,
+      "external_endpoint_operations": 58,
       "external_guide_specs": 2,
-      "approval_required_operations": 46,
+      "approval_required_operations": 47,
       "sample_ids": [
         "15057144",
         "15057147",
