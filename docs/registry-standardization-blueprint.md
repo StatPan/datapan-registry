@@ -94,8 +94,8 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `475` data.go.kr APIs
-  without operation mappings, `9,285` operation-mapped APIs without runtime
+- `reports/data-go-kr/coverage-backlog.json` tracks `473` data.go.kr APIs
+  without operation mappings, `9,284` operation-mapped APIs without runtime
   evidence, and `237` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
@@ -574,8 +574,14 @@ Current gaps:
   merges `4` verified bounded checks. That brings runtime evidence to `4771`,
   verified checks to `2839`, and registered external adapter operations to
   `9634`.
-- API operation coverage remains incomplete: `11,585` of `12,060` APIs have
-  operation mappings (`96.1%`), leaving `475` APIs to materialize and `9,285`
+- The 국민권익위원회 batch reuses Open Law host coverage for `open.law.go.kr`,
+  materializes `2` APIs and `2` operations, and merges `3` bounded checks
+  (`2` verified and `1` skipped for the existing `www.simpan.go.kr` missing
+  adapter route). That brings runtime evidence to `4774`, verified checks to
+  `2841`, skipped checks to `1544`, and registered external adapter operations
+  to `9636`.
+- API operation coverage remains incomplete: `11,587` of `12,060` APIs have
+  operation mappings (`96.1%`), leaving `473` APIs to materialize and `9,284`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

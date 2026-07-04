@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-07-04T06:38:59Z",
+  "source": "reports/data-go-kr/acrc-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 3,
+    "verified": 2,
+    "failed": 0,
+    "skipped": 1,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 2,
+        "status": "verified"
+      },
+      {
+        "key": "skipped",
+        "count": 1,
+        "status": "skipped"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "external_provider_adapter_missing",
+        "count": 1,
+        "reason": "external_provider_adapter_missing"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "open-law",
+        "count": 2,
+        "provider": "open-law"
+      },
+      {
+        "key": "data.go.kr",
+        "count": 1,
+        "provider": "data.go.kr"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "open.law.go.kr",
+        "count": 2,
+        "host": "open.law.go.kr"
+      },
+      {
+        "key": "www.simpan.go.kr",
+        "count": 1,
+        "host": "www.simpan.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 3,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

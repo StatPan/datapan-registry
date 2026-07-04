@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-07-04T06:33:21Z",
+  "generated_at": "2026-07-04T06:39:08Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4771,
-    "verified": 2839,
+    "total": 4774,
+    "verified": 2841,
     "failed": 389,
-    "skipped": 1543,
+    "skipped": 1544,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "verified",
-        "count": 2839,
+        "count": 2841,
         "status": "verified"
       },
       {
         "key": "skipped",
-        "count": 1543,
+        "count": 1544,
         "status": "skipped"
       },
       {
@@ -162,14 +162,14 @@
         "reason": "epost_unsupported_protocol"
       },
       {
+        "key": "external_provider_adapter_missing",
+        "count": 10,
+        "reason": "external_provider_adapter_missing"
+      },
+      {
         "key": "mnd-open-data_request_failed",
         "count": 10,
         "reason": "mnd-open-data_request_failed"
-      },
-      {
-        "key": "external_provider_adapter_missing",
-        "count": 9,
-        "reason": "external_provider_adapter_missing"
       },
       {
         "key": "qnet_wadl_metadata_only",
@@ -390,7 +390,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 714,
+        "count": 715,
         "provider": "data.go.kr"
       },
       {
@@ -514,14 +514,14 @@
         "provider": "kopis"
       },
       {
+        "key": "open-law",
+        "count": 53,
+        "provider": "open-law"
+      },
+      {
         "key": "nongsaro",
         "count": 51,
         "provider": "nongsaro"
-      },
-      {
-        "key": "open-law",
-        "count": 51,
-        "provider": "open-law"
       },
       {
         "key": "ekape",
@@ -1242,7 +1242,7 @@
       },
       {
         "key": "open.law.go.kr",
-        "count": 33,
+        "count": 35,
         "host": "open.law.go.kr"
       },
       {
@@ -1866,6 +1866,11 @@
         "host": "www.recycling-info.or.kr"
       },
       {
+        "key": "www.simpan.go.kr",
+        "count": 1,
+        "host": "www.simpan.go.kr"
+      },
+      {
         "key": "www.youthcenter.go.kr",
         "count": 1,
         "host": "www.youthcenter.go.kr"
@@ -1874,7 +1879,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 4047,
+        "count": 4050,
         "kind": "external_endpoint"
       },
       {

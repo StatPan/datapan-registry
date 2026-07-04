@@ -11,8 +11,8 @@ re-importing the upstream data.go.kr catalog every time.
 
 - Provider: `data.go.kr`
 - Specs: `12060`
-- Operations: `21254`
-- Callable operations: `21112` (`99.3%`)
+- Operations: `21256`
+- Callable operations: `21114` (`99.3%`)
 - Latest release: `v2026.06.25.24`
 - Registered external adapters: `airport`, `andong`, `anyang`, `atfis`, `calspia`, `car`, `car365`, `childcare-info`, `chungbuk-tour`, `chungnam`, `codil`, `consumer`, `culture`, `daegu`, `daejeon`, `data-gg`,
   `dgfca`, `dongjak`, `ecos`, `ecvam`, `ekape`, `emuseum`, `epost`, `eshare`, `ex`, `fairdata`, `folk`, `foodsafetykorea`, `forest`,
@@ -22,18 +22,18 @@ re-importing the upstream data.go.kr catalog every time.
   `nier-nesc`, `nihc`, `nrich`, `nrf`, `nongsaro`, `nosc`, `oneclick-law`, `open-assembly`, `open-law`, `openfiscaldata`, `opendart`, `pqis`, `psis`, `q-net`, `qia`, `recycling-info`, `safemap`, `safetydata`,
   `safe182`, `seogu`, `seogwipo`, `seoul-bus`, `seoul-map`, `seoul-open-data`, `seoul-tdata`, `sexoffender`, `sgis`, `sisul`, `sisul-www`, `smartfarm-korea`, `stcis`, `tashu`, `tour`, `uiryeong`, `ulsan`, `ulsan-www`, `unipass`, `utic`, `vworld`,
   `wamis`, `work`, `work24`, `worldjob`, `youthcenter`, `yuseong`, `cancer`
-- External adapter coverage: `9634` registered-adapter operations out of `9644`
+- External adapter coverage: `9636` registered-adapter operations out of `9646`
   external endpoint operations (`99.7%`)
 - Missing external adapter hosts: `11`
 - Provider split readiness: `ready`
   (`138` adapters, `138` verification-capable, `23` call-capable)
-- Runtime verification evidence: `4771` bounded checks merged into
-  `reports/latest-verification.json` (`2839` verified, `389` failed, `1543`
+- Runtime verification evidence: `4774` bounded checks merged into
+  `reports/latest-verification.json` (`2841` verified, `389` failed, `1544`
   skipped)
-- Runtime evidence growth target: `22.4%` checked evidence is above the
+- Runtime evidence growth target: `22.5%` checked evidence is above the
   unrounded `10%` release target; `0` additional records are required for this
   target.
-- Institution API overview: `411` organizations, `12060` APIs, and `21254`
+- Institution API overview: `411` organizations, `12060` APIs, and `21256`
   operations in `reports/data-go-kr/institution-api-overview.json`; readable
   tables live in `docs/data-go-kr-institution-api-overview.md`.
 - Missing external host probe: `81` manifest-bound probe records remain in
