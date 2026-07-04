@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `20139`
-- callable operations: `19997` (`99.3%`)
+- operations: `20140`
+- callable operations: `19998` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `8529`
-- registered adapter operations: `8519`
+- external endpoint operations: `8530`
+- registered adapter operations: `8520`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
 - approval-required operations: `7569`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `122`
+- registered adapter hosts: `123`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -233,9 +233,10 @@ APIs, `6` APIs with operation mappings, and `92` uncovered APIs. The July 2026
 portal pages and catalog JSON for that queue return error/not-found responses,
 so it should be tracked as a reactivation blocker while the next viable queue
 is processed. The latest viable queues were `국립생태원`,
-`해양수산부 국립수산물품질관리원`, `서울특별시 동작구`, and `관세청`, now completed
-through `39` Ecobank, `45` NFQS, `95` Dongjak/Seoul Open Data, and `3`
-UniPass link-detail operations. The
+`해양수산부 국립수산물품질관리원`, `서울특별시 동작구`, `관세청`, and
+`과학기술정보통신부 우정사업본부`, now completed through `39` Ecobank, `45`
+NFQS, `95` Dongjak/Seoul Open Data, `3` UniPass, and `1` KoreaPost
+link-detail operations. The
 runtime reactivation queue starts at `행정안전부`: `1252`
 APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
@@ -624,6 +625,12 @@ readiness, not to advance verified runtime coverage.
    checked runtime evidence to `3625`, verified checks to `1808`, registered
    external adapter operations to `8519`, and raises API operation coverage to
    `11,046` of `12,060` APIs (`91.6%`).
+   The 과학기술정보통신부 우정사업본부 batch registers KoreaPost host coverage,
+   materializes `1` API and `1` operation, and merges `29` bounded checks (`1`
+   verified and `28` existing EPost boundary skips). That brings checked runtime
+   evidence to `3654`, verified checks to `1809`, registered external adapter
+   operations to `8520`, and raises API operation coverage to `11,047` of
+   `12,060` APIs (`91.6%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

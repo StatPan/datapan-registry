@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-03T23:55:09Z",
+  "generated_at": "2026-07-04T00:05:46Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 107,
-  "host_count": 127,
+  "adapter_count": 108,
+  "host_count": 128,
   "adapters": [
     {
       "name": "airport",
@@ -614,6 +614,16 @@
       ]
     },
     {
+      "name": "koreapost",
+      "status": "registered",
+      "hosts": [
+        "koreapost.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "kosmes",
       "status": "registered",
       "hosts": [
@@ -1121,8 +1131,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 107,
-    "verification_capable_adapters": 107,
+    "adapter_count": 108,
+    "verification_capable_adapters": 108,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

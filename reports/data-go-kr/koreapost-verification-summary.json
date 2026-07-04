@@ -1,0 +1,87 @@
+{
+  "generated_at": "2026-07-04T00:05:20Z",
+  "source": "reports/data-go-kr/koreapost-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 29,
+    "verified": 1,
+    "failed": 0,
+    "skipped": 28,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "skipped",
+        "count": 28,
+        "status": "skipped"
+      },
+      {
+        "key": "verified",
+        "count": 1,
+        "status": "verified"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "epost_wadl_metadata_only",
+        "count": 17,
+        "reason": "epost_wadl_metadata_only"
+      },
+      {
+        "key": "epost_unsupported_protocol",
+        "count": 5,
+        "reason": "epost_unsupported_protocol"
+      },
+      {
+        "key": "epost_missing_required_params",
+        "count": 4,
+        "reason": "epost_missing_required_params"
+      },
+      {
+        "key": "missing_auth",
+        "count": 2,
+        "reason": "missing_auth"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "epost",
+        "count": 28,
+        "provider": "epost"
+      },
+      {
+        "key": "koreapost",
+        "count": 1,
+        "provider": "koreapost"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "openapi.epost.go.kr:80",
+        "count": 22,
+        "host": "openapi.epost.go.kr:80"
+      },
+      {
+        "key": "openapi.epost.go.kr",
+        "count": 6,
+        "host": "openapi.epost.go.kr"
+      },
+      {
+        "key": "koreapost.go.kr",
+        "count": 1,
+        "host": "koreapost.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 29,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

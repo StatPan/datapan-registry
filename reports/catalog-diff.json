@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T23:55:09Z",
+  "generated_at": "2026-07-04T00:05:46Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3861,
-    "stable": 8199
+    "changed": 3862,
+    "stable": 8198
   },
   "added": [],
   "removed": [],
@@ -38257,6 +38257,16 @@
       ],
       "old_digest": "89f98bc9c1d6a778f88f247844aea8054c108d2e8939837b642b31d47e94ecbc",
       "new_digest": "672f5608b5e47bcc313e6a5ddc160e551fe1f554548000011bcbeba84578bce2"
+    },
+    {
+      "id": "3043719",
+      "old_title": "과학기술정보통신부 우정사업본부_우체국위치 정보",
+      "new_title": "과학기술정보통신부 우정사업본부_우체국위치 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "024ed369ed60e58e69b1d1bdbe12eb4999e2dd646c5e42e74b9ab041ae41b8d2",
+      "new_digest": "83d366552faaff88cc171b1651ca43a2cb15238d0565bbd8cd9e3a413188e359"
     },
     {
       "id": "3043821",

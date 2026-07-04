@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-03T23:55:09Z",
+  "generated_at": "2026-07-04T00:05:46Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 20139,
-    "runtime_evidence": 3625,
-    "runtime_evidence_percent": 18.0,
-    "callable_operations": 19997,
-    "external_endpoint_operations": 8529,
-    "registered_adapter_operations": 8519,
+    "operations": 20140,
+    "runtime_evidence": 3654,
+    "runtime_evidence_percent": 18.1,
+    "callable_operations": 19998,
+    "external_endpoint_operations": 8530,
+    "registered_adapter_operations": 8520,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 8529
+      "count": 8530
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 8519
+      "count": 8520
     },
     {
       "key": "builtin",
@@ -121,7 +121,7 @@
     },
     {
       "category": "과학기술",
-      "operation_count": 723
+      "operation_count": 724
     },
     {
       "category": "통일외교안보",
@@ -4421,11 +4421,11 @@
     {
       "organization": "과학기술정보통신부 우정사업본부",
       "api_count": 34,
-      "operation_api_count": 33,
-      "operation_count": 57,
-      "runtime_evidence_count": 28,
-      "runtime_evidence_percent": 49.1,
-      "verified": 0,
+      "operation_api_count": 34,
+      "operation_count": 58,
+      "runtime_evidence_count": 29,
+      "runtime_evidence_percent": 50.0,
+      "verified": 1,
       "failed": 0,
       "skipped": 28,
       "unknown": 0,
@@ -4438,7 +4438,7 @@
         },
         {
           "key": "external_endpoint",
-          "count": 28
+          "count": 29
         },
         {
           "key": "no_endpoint",
@@ -4448,7 +4448,7 @@
       "by_adapter_status": [
         {
           "key": "adapter",
-          "count": 28
+          "count": 29
         },
         {
           "key": "builtin",
@@ -4470,7 +4470,7 @@
         },
         {
           "category": "과학기술",
-          "operation_count": 8
+          "operation_count": 9
         }
       ],
       "top_hosts": [
@@ -4495,6 +4495,15 @@
           "adapter_status": "registered",
           "capabilities": [
             "call",
+            "verification"
+          ]
+        },
+        {
+          "host": "koreapost.go.kr",
+          "operation_count": 1,
+          "adapter": "koreapost",
+          "adapter_status": "registered",
+          "capabilities": [
             "verification"
           ]
         }

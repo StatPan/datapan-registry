@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T23:55:16Z",
+  "generated_at": "2026-07-04T00:05:53Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 20139,
-    "callable_operations": 19997,
+    "operations": 20140,
+    "callable_operations": 19998,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 8529,
-    "registered_adapter_operations": 8519,
+    "external_endpoint_operations": 8530,
+    "registered_adapter_operations": 8520,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.7,
     "approval_required_operations": 7569,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 122,
+    "registered_adapter_hosts": 123,
     "missing_adapter_hosts": 11,
-    "adapter_count": 107,
+    "adapter_count": 108,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-03T23:54:58Z",
-    "total": 3625,
-    "verified": 1808,
+    "generated_at": "2026-07-04T00:05:31Z",
+    "total": 3654,
+    "verified": 1809,
     "failed": 306,
-    "skipped": 1511,
+    "skipped": 1539,
     "unknown": 0,
-    "verified_percent": 49.9,
-    "evidence_operation_percent": 18
+    "verified_percent": 49.5,
+    "evidence_operation_percent": 18.1
   },
   "route_evidence": {
     "present": true,
@@ -382,10 +382,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-03T23:55:16Z",
+    "generated_at": "2026-07-04T00:05:53Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 107,
-    "host_count": 127,
+    "adapter_count": 108,
+    "host_count": 128,
     "adapters": [
       {
         "name": "airport",
@@ -997,6 +997,16 @@
         ]
       },
       {
+        "name": "koreapost",
+        "status": "registered",
+        "hosts": [
+          "koreapost.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "kosmes",
         "status": "registered",
         "hosts": [
@@ -1504,8 +1514,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 107,
-      "verification_capable_adapters": 107,
+      "adapter_count": 108,
+      "verification_capable_adapters": 108,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

@@ -1,0 +1,822 @@
+{
+  "generated_at": "2026-07-04T00:05:20Z",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 100,
+  "timeout": "20s",
+  "truncated": false,
+  "filters": {
+    "organization": "과학기술정보통신부 우정사업본부",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 29,
+  "summary": {
+    "total": 29,
+    "verified": 1,
+    "failed": 0,
+    "skipped": 28,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15000032",
+      "title": "과학기술정보통신부 우정사업본부_EMS신청 저장 서비스",
+      "operation": "EMS신청취소처리",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_unsupported_protocol",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "cancelCn": "",
+        "rceptNo 접수번호 14 1 E2010090300108 EMS 접수번호": ""
+      },
+      "missing_params": [
+        "rceptNo 접수번호 14 1 E2010090300108 EMS 접수번호",
+        "cancelCn"
+      ]
+    },
+    {
+      "dataset_id": "15000032",
+      "title": "과학기술정보통신부 우정사업본부_EMS신청 저장 서비스",
+      "operation": "건별EMS신청",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_unsupported_protocol",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "Applcnt": "",
+        "Co": "",
+        "Hscode": "",
+        "Metpay": "",
+        "Pc": "",
+        "Prdloc": "",
+        "Recptr": "",
+        "applcntAdresNm": "",
+        "applcntDetailAdresNm": "",
+        "applcntEmail": "",
+        "applcntMbtlnum1": "",
+        "applcntMbtlnum2": "",
+        "applcntMbtlnum3": "",
+        "applcntMbtlnum4": "",
+        "applcntNm": "",
+        "applcntTelno1": "",
+        "applcntTelno2": "",
+        "applcntTelno3": "",
+        "applcntTelno4": "",
+        "applcntZipNo": "",
+        "cnNm": "",
+        "pickupPartclrMatter": "",
+        "recptrAdresNm": "",
+        "recptrEmail": "",
+        "recptrNation1": "",
+        "recptrNation2": "",
+        "recptrNation3": "",
+        "recptrTelno1": "",
+        "recptrTelno2": "",
+        "recptrTelno3": "",
+        "recptrTelno4": "",
+        "recptrZipNo": "",
+        "seCd": "",
+        "seNm": "",
+        "todayRceptClosDe": "",
+        "todayRceptPlace": "",
+        "todayRceptPosblAt": "",
+        "visitHopeDe": "",
+        "visitHopeMt": "",
+        "visitHopeYy": "",
+        "wtUn": ""
+      },
+      "missing_params": [
+        "recptrTelno2",
+        "recptrTelno3",
+        "recptrTelno4",
+        "recptrNation1",
+        "recptrNation2",
+        "recptrNation3",
+        "recptrZipNo",
+        "recptrAdresNm",
+        "cnNm",
+        "Co",
+        "Pc",
+        "wtUn",
+        "Hscode",
+        "Prdloc",
+        "seCd",
+        "seNm",
+        "Applcnt",
+        "applcntNm",
+        "applcntTelno1",
+        "applcntTelno2",
+        "applcntTelno3",
+        "applcntTelno4",
+        "applcntEmail",
+        "applcntMbtlnum1",
+        "applcntMbtlnum2",
+        "applcntMbtlnum3",
+        "applcntMbtlnum4",
+        "applcntZipNo",
+        "applcntAdresNm",
+        "applcntDetailAdresNm",
+        "Metpay",
+        "visitHopeYy",
+        "visitHopeMt",
+        "visitHopeDe",
+        "pickupPartclrMatter",
+        "todayRceptPlace",
+        "todayRceptPosblAt",
+        "todayRceptClosDe",
+        "Recptr",
+        "recptrEmail",
+        "recptrTelno1"
+      ]
+    },
+    {
+      "dataset_id": "15000124",
+      "title": "과학기술정보통신부 우정사업본부_도로명주소조회서비스",
+      "operation": "새우편번호 도로명주소 조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "countPerPage": "1",
+        "currentPage": "1",
+        "searchSe": "",
+        "srchwrd": ""
+      },
+      "missing_params": [
+        "searchSe",
+        "srchwrd"
+      ]
+    },
+    {
+      "dataset_id": "15000268",
+      "title": "과학기술정보통신부 우정사업본부_지번주소조회 서비스",
+      "operation": "광역시/도",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-07-04T00:05:20Z"
+    },
+    {
+      "dataset_id": "15000268",
+      "title": "과학기술정보통신부 우정사업본부_지번주소조회 서비스",
+      "operation": "복합검색",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "areaNm": "",
+        "countPerPage": "1",
+        "currentPage": "1",
+        "searchSe": "",
+        "srchwrd": ""
+      },
+      "missing_params": [
+        "areaNm",
+        "searchSe",
+        "srchwrd"
+      ]
+    },
+    {
+      "dataset_id": "15000268",
+      "title": "과학기술정보통신부 우정사업본부_지번주소조회 서비스",
+      "operation": "상세검색",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "countPerPage": "1",
+        "currentPage": "1",
+        "searchSe": "",
+        "srchwrd": ""
+      },
+      "missing_params": [
+        "searchSe",
+        "srchwrd"
+      ]
+    },
+    {
+      "dataset_id": "15000268",
+      "title": "과학기술정보통신부 우정사업본부_지번주소조회 서비스",
+      "operation": "시/군/구",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "brtcCd": ""
+      },
+      "missing_params": [
+        "brtcCd"
+      ]
+    },
+    {
+      "dataset_id": "15000268",
+      "title": "과학기술정보통신부 우정사업본부_지번주소조회 서비스",
+      "operation": "읍/면/동 조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "brtcCd": "",
+        "signguCd": ""
+      },
+      "missing_params": [
+        "brtcCd",
+        "signguCd"
+      ]
+    },
+    {
+      "dataset_id": "15000268",
+      "title": "과학기술정보통신부 우정사업본부_지번주소조회 서비스",
+      "operation": "지번 조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "brtcCd": "",
+        "countPerPage": "1",
+        "currentPage": "1",
+        "emdCd": "",
+        "signguCd": ""
+      },
+      "missing_params": [
+        "brtcCd",
+        "signguCd",
+        "emdCd"
+      ]
+    },
+    {
+      "dataset_id": "15000302",
+      "title": "과학기술정보통신부 우정사업본부_우편번호 다운로드 서비스",
+      "operation": "우편번호 DB 다운로드 서비스",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "dwldSe": ""
+      },
+      "missing_params": [
+        "dwldSe"
+      ]
+    },
+    {
+      "dataset_id": "15000741",
+      "title": "과학기술정보통신부 우정사업본부_택배신청 저장 서비스",
+      "operation": "택배신청",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_unsupported_protocol",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "agreeYn": "",
+        "applcntAdresNm": "",
+        "applcntDetailAdresNm": "",
+        "applcntMbtlnum1": "",
+        "applcntMbtlnum2": "",
+        "applcntMbtlnum3": "",
+        "applcntNm": "",
+        "applcntTelno1": "",
+        "applcntTelno2": "",
+        "applcntTelno3": "",
+        "applcntZipNo": "",
+        "chrgeBndAt": "",
+        "cnCd": "",
+        "cnNm": "",
+        "dlvyPartclrMatter": "",
+        "ecptrZipNo": "",
+        "email": "",
+        "hopeRceptDe": "",
+        "lblAdresNm": "",
+        "lblAt": "",
+        "lblDetailAdresNm": "",
+        "lblMbtlnum1": "",
+        "lblMbtlnum2": "",
+        "lblMbtlnum3": "",
+        "lblNm": "",
+        "lblTelno1": "",
+        "lblTelno2": "",
+        "lblTelno3": "",
+        "lblZipNo": "",
+        "pickArea": "",
+        "pickMan": "",
+        "pickParty": "",
+        "rceptResultRecptnAt": "",
+        "recptr": "",
+        "recptrAdresNm": "",
+        "recptrDetailAdresNm": "",
+        "recptrMbtlnum1": "",
+        "recptrMbtlnum2": "",
+        "recptrMbtlnum3": "",
+        "recptrTelno1": "",
+        "recptrTelno2": "",
+        "recptrTelno3": "",
+        "userId": "",
+        "visitRceptDe": "",
+        "visitRceptPstofc": "",
+        "vlUn": "",
+        "wishReceiptTime": "",
+        "wishReceiptTimeInterval": "",
+        "wtUn": ""
+      },
+      "missing_params": [
+        "wishReceiptTime",
+        "applcntMbtlnum3",
+        "recptr",
+        "ecptrZipNo",
+        "recptrAdresNm",
+        "recptrDetailAdresNm",
+        "recptrTelno1",
+        "recptrTelno2",
+        "recptrTelno3",
+        "recptrMbtlnum1",
+        "recptrMbtlnum2",
+        "recptrMbtlnum3",
+        "wtUn",
+        "vlUn",
+        "cnNm",
+        "cnCd",
+        "dlvyPartclrMatter",
+        "email",
+        "visitRceptPstofc",
+        "chrgeBndAt",
+        "rceptResultRecptnAt",
+        "hopeRceptDe",
+        "visitRceptDe",
+        "lblAt",
+        "lblNm",
+        "lblZipNo",
+        "lblAdresNm",
+        "lblDetailAdresNm",
+        "lblTelno1",
+        "lblTelno2",
+        "lblTelno3",
+        "lblMbtlnum1",
+        "lblMbtlnum2",
+        "lblMbtlnum3",
+        "userId",
+        "wishReceiptTimeInterval",
+        "pickMan",
+        "pickArea",
+        "pickParty",
+        "agreeYn",
+        "applcntNm",
+        "applcntZipNo",
+        "applcntAdresNm",
+        "applcntDetailAdresNm",
+        "applcntTelno1",
+        "applcntTelno2",
+        "applcntTelno3",
+        "applcntMbtlnum1",
+        "applcntMbtlnum2"
+      ]
+    },
+    {
+      "dataset_id": "15000741",
+      "title": "과학기술정보통신부 우정사업본부_택배신청 저장 서비스",
+      "operation": "택배신청취소",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_unsupported_protocol",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "reqstNo": ""
+      },
+      "missing_params": [
+        "reqstNo"
+      ]
+    },
+    {
+      "dataset_id": "15000741",
+      "title": "과학기술정보통신부 우정사업본부_택배신청 저장 서비스",
+      "operation": "택배접수완료처리",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_unsupported_protocol",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "applcntAdresNm": "",
+        "applcntDetailAdresNm": "",
+        "applcntMbtlnum1": "",
+        "applcntMbtlnum2": "",
+        "applcntMbtlnum3": "",
+        "applcntNm": "",
+        "applcntTelno1": "",
+        "applcntTelno2": "",
+        "applcntTelno3": "",
+        "applcntZipNo": "",
+        "chrgeBndAt": "",
+        "cnCd": "",
+        "cnNm": "",
+        "dlvyPartclrMatter": "",
+        "ecptrZipNo": "",
+        "email": "",
+        "hopeRceptDe": "",
+        "lblAdresNm": "",
+        "lblAt": "",
+        "lblDetailAdresNm": "",
+        "lblMbtlnum1": "",
+        "lblMbtlnum2": "",
+        "lblMbtlnum3": "",
+        "lblNm": "",
+        "lblTelno1": "",
+        "lblTelno2": "",
+        "lblTelno3": "",
+        "lblZipNo": "",
+        "pickArea": "",
+        "pickMan": "",
+        "pickParty": "",
+        "rceptResultRecptnAt": "",
+        "recptr": "",
+        "recptrAdresNm": "",
+        "recptrDetailAdresNm": "",
+        "recptrMbtlnum1": "",
+        "recptrMbtlnum2": "",
+        "recptrMbtlnum3": "",
+        "recptrTelno1": "",
+        "recptrTelno2": "",
+        "recptrTelno3": "",
+        "userId": "",
+        "visitRceptDe": "",
+        "visitRceptPstofc": "",
+        "vlUn": "",
+        "wishReceiptTime": "",
+        "wishReceiptTimeInterval": "",
+        "wtUn": ""
+      },
+      "missing_params": [
+        "lblDetailAdresNm",
+        "lblTelno1",
+        "lblTelno2",
+        "lblTelno3",
+        "lblMbtlnum1",
+        "lblMbtlnum2",
+        "lblMbtlnum3",
+        "userId",
+        "wishReceiptTimeInterval",
+        "pickMan",
+        "pickArea",
+        "pickParty",
+        "wishReceiptTime",
+        "applcntNm",
+        "applcntZipNo",
+        "applcntAdresNm",
+        "applcntDetailAdresNm",
+        "applcntTelno1",
+        "applcntTelno2",
+        "applcntTelno3",
+        "applcntMbtlnum1",
+        "applcntMbtlnum2",
+        "applcntMbtlnum3",
+        "recptr",
+        "ecptrZipNo",
+        "recptrAdresNm",
+        "recptrDetailAdresNm",
+        "recptrTelno1",
+        "recptrTelno2",
+        "recptrTelno3",
+        "recptrMbtlnum1",
+        "recptrMbtlnum2",
+        "recptrMbtlnum3",
+        "wtUn",
+        "vlUn",
+        "cnNm",
+        "cnCd",
+        "dlvyPartclrMatter",
+        "email",
+        "visitRceptPstofc",
+        "chrgeBndAt",
+        "rceptResultRecptnAt",
+        "hopeRceptDe",
+        "visitRceptDe",
+        "lblAt",
+        "lblNm",
+        "lblZipNo",
+        "lblAdresNm"
+      ]
+    },
+    {
+      "dataset_id": "15035122",
+      "title": "과학기술정보통신부 우정사업본부_우체국 종적 조회",
+      "operation": "우체국통합배송목록조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_missing_required_params",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "rgist": ""
+      },
+      "missing_params": [
+        "rgist"
+      ]
+    },
+    {
+      "dataset_id": "15056672",
+      "title": "과학기술정보통신부 우정사업본부_우체국 배달점주소 조회 서비스",
+      "operation": "우체국 배달점주소 권역정보 조회 서비스",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_missing_required_params",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "Addr": ""
+      },
+      "missing_params": [
+        "Addr"
+      ]
+    },
+    {
+      "dataset_id": "15056971",
+      "title": "과학기술정보통신부 우정사업본부_우편번호 정보조회",
+      "operation": "새우편번호 정보",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "countPerPage": "1",
+        "currentPage": "1",
+        "srchwrd": ""
+      },
+      "missing_params": [
+        "srchwrd"
+      ]
+    },
+    {
+      "dataset_id": "15057018",
+      "title": "과학기술정보통신부 우정사업본부_집배구 구분코드 조회서비스",
+      "operation": "집배구 구분코드 조회서비스",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_missing_required_params",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "addr": "",
+        "mailDivCd": "",
+        "zip": ""
+      },
+      "missing_params": [
+        "zip",
+        "addr",
+        "mailDivCd"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "광역시/도 조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-07-04T00:05:20Z"
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "도로명목록조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "cityEngName": "",
+        "roadEngFirstName": "",
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName",
+        "cityEngName",
+        "roadEngFirstName"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "도로명주소검색",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "cityEngName": "",
+        "countPerPage": "1",
+        "currentPage": "1",
+        "keyword": "",
+        "roadEngFirstName": "",
+        "roadEngName": "",
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName",
+        "cityEngName",
+        "roadEngFirstName",
+        "roadEngName",
+        "keyword"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "도로명첫자조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "cityEngName": "",
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName",
+        "cityEngName"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "시/군/구 조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "읍면동목록조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "cityEngName": "",
+        "districtEngFirstName": "",
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName",
+        "cityEngName",
+        "districtEngFirstName"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "읍면동첫자조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "cityEngName": "",
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName",
+        "cityEngName"
+      ]
+    },
+    {
+      "dataset_id": "15059038",
+      "title": "과학기술정보통신부 우정사업본부_영문우편번호조회서비스",
+      "operation": "지번주소검색",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr:80",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_wadl_metadata_only",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "cityEngName": "",
+        "countPerPage": "1",
+        "currentPage": "1",
+        "districtEngFirstName": "",
+        "districtEngName": "",
+        "keyword": "",
+        "stateEngName": ""
+      },
+      "missing_params": [
+        "stateEngName",
+        "cityEngName",
+        "districtEngFirstName",
+        "districtEngName",
+        "keyword"
+      ]
+    },
+    {
+      "dataset_id": "15059081",
+      "title": "과학기술정보통신부 우정사업본부_우편접수용 우편번호조회",
+      "operation": "우편접수용 우편번호조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "epost_missing_required_params",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "params": {
+        "countPerPage": "1",
+        "currentPage": "1",
+        "srchwrd": ""
+      },
+      "missing_params": [
+        "srchwrd"
+      ]
+    },
+    {
+      "dataset_id": "15075270",
+      "title": "과학기술정보통신부 우정사업본부_우체국알뜰폰 요금제 조회 서비스",
+      "operation": "우체국알뜰폰 요금제 조회",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-07-04T00:05:20Z"
+    },
+    {
+      "dataset_id": "15075271",
+      "title": "과학기술정보통신부 우정사업본부_우체국알뜰폰 단말기 조회 서비스",
+      "operation": "우체국알뜰폰 단말기",
+      "provider": "epost",
+      "endpoint_host": "openapi.epost.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "skipped",
+      "reason": "missing_auth",
+      "verified_at": "2026-07-04T00:05:20Z"
+    },
+    {
+      "dataset_id": "3043719",
+      "title": "과학기술정보통신부 우정사업본부_우체국위치 정보",
+      "operation": "우체국 시설물 정보 안내 서비스",
+      "provider": "koreapost",
+      "endpoint_host": "koreapost.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T00:05:20Z",
+      "http_status": 200,
+      "semantic_status": "html_landing_page",
+      "url": "http://koreapost.go.kr/extra/user/kpost/330/bbs/openApi/openApiSet/sub/ExtraUser.do",
+      "body_shape": "html"
+    }
+  ]
+}
