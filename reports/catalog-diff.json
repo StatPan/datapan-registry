@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T02:17:16Z",
+  "generated_at": "2026-07-04T02:30:25Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4077,
-    "stable": 7983
+    "changed": 4103,
+    "stable": 7957
   },
   "added": [],
   "removed": [],
@@ -3129,6 +3129,246 @@
       "new_digest": "44a156ac54474ed10e1ada3a7b2ecdd411868c6bd041b5bd4f986cf2cfc3e03a"
     },
     {
+      "id": "15041665",
+      "old_title": "국가철도공단_열차별운행시각표",
+      "new_title": "국가철도공단_열차별운행시각표",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1551d445c954717aab5927d6c0e2e238350bec2ce5c51c1c8f37a81b5bbb67d8",
+      "new_digest": "d2f83cd2f4f3825f17b3f3539b3a624f8f05107804a3f13d05c207d774dc8343"
+    },
+    {
+      "id": "15041666",
+      "old_title": "국가철도공단_도시철도 전체노선정보",
+      "new_title": "국가철도공단_도시철도 전체노선정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "701da5fd7f6d231ffa9556ae19be1bbb05d5bfec59bb39fd3347e23023c9e600",
+      "new_digest": "7b100cb2764a58542c9d8661d202713d47ba8ba58ba0282ca0a40a23400febce"
+    },
+    {
+      "id": "15041667",
+      "old_title": "국가철도공단_역사별 비상콜폰 현황",
+      "new_title": "국가철도공단_역사별 비상콜폰 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "768ba37c00273a4f8ed1797f247ea0a6daa65b6357ee4685af0b85bfb2800f11",
+      "new_digest": "5496412819a6e255e4f461bcb5d3c91117703181c37a87f3eefc86efe23e7428"
+    },
+    {
+      "id": "15041671",
+      "old_title": "국가철도공단_역사별 제세동기 현황",
+      "new_title": "국가철도공단_역사별 제세동기 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "607240fc402a043a70f83060f289573a7f907ddb9ad8f3306132f25753456fca",
+      "new_digest": "695d31934219b9ae1c19d9ceb325dc11997c8c58aa223e52175d5d0e32015828"
+    },
+    {
+      "id": "15041672",
+      "old_title": "국가철도공단_역사별 스크린도어 현황",
+      "new_title": "국가철도공단_역사별 스크린도어 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "206d5dae1f0b22c6c6175ee25babdc5402995651304678972ed836d25b7fbd9b",
+      "new_digest": "ef49054013168a41d2a67acdda8e6f129a4fb67fa9f4064e5f2f181383e0ba57"
+    },
+    {
+      "id": "15041673",
+      "old_title": "국가철도공단_역사별 환승정보",
+      "new_title": "국가철도공단_역사별 환승정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f30a7a8c9a07e3960b92fc70bd1c8a9d01a3374cac709d3299afa15c0f96ff20",
+      "new_digest": "dbc7b826b5fb84bbf9ec4053a20b2c6f3098b803e1f31bee27b73f93801333e6"
+    },
+    {
+      "id": "15041674",
+      "old_title": "국가철도공단_역사별 운행시각표",
+      "new_title": "국가철도공단_역사별 운행시각표",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "49b1a036ec13bbb2e4621b1f54e676908afbfa3067511f44e24fb772f031ad8b",
+      "new_digest": "bd6aeadcec5439a8b9d17970b380fac63aa025a190740a0093c105ab22654128"
+    },
+    {
+      "id": "15041676",
+      "old_title": "국가철도공단_역사별 정보",
+      "new_title": "국가철도공단_역사별 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9f4c1fb63317da4ab1486a5ac81cadc3427b4f08e304a07bbf743bc6bca26b4e",
+      "new_digest": "5264e5ba4df1ff15e46ada2baed1c58d2c8b6191c2b8459560f1c99c787fc141"
+    },
+    {
+      "id": "15041677",
+      "old_title": "국가철도공단_역사별 출구정보",
+      "new_title": "국가철도공단_역사별 출구정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3287d898e00a429ee1590a604f9dcc5bb49a25be8a14fe4ff6a048338a0960aa",
+      "new_digest": "549e9cdd516450093c2397394cd9d3fcaffd40455f1b779e5c25255178d79c6c"
+    },
+    {
+      "id": "15041678",
+      "old_title": "국가철도공단_역사별 물품보관함 현황",
+      "new_title": "국가철도공단_역사별 물품보관함 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1469e2c6b7d9b4823a06a760ba99d56b532c221ab0d3a1762d62d7b4a5ba94b6",
+      "new_digest": "c6bdbf3855d1d1bc730f5d3fab199036f977443534df945f9fabfb47c141702f"
+    },
+    {
+      "id": "15041679",
+      "old_title": "국가철도공단_역사별 화장실 현황",
+      "new_title": "국가철도공단_역사별 화장실 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c24a87efe79032fc235b5bdd4002aa544db12a6922aca33b238f3f3448acbcbc",
+      "new_digest": "72e3058ea37b99243ff63f3cd2041872718a6c636f3c1c174eadd96bc236ac57"
+    },
+    {
+      "id": "15041680",
+      "old_title": "국가철도공단_역사별 ATM 기기위치",
+      "new_title": "국가철도공단_역사별 ATM 기기위치",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "189251dc19260996ad17a7bcabf949e11da161a5c56ccd5a85d1c8982e25104e",
+      "new_digest": "373534b3ddec16cb64f3dd1f6347331521fe744916d9b0349947c3c8d9d66d91"
+    },
+    {
+      "id": "15041681",
+      "old_title": "국가철도공단_역사별 수유실 현황",
+      "new_title": "국가철도공단_역사별 수유실 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f40011b8bec7a0eae3dca8a59a0ef6e85b393956fff8e8f3ae7ef5f495013b9b",
+      "new_digest": "883e4338c629dc40f5a6a3772564d30d5afb0265f470949da11525336b40a520"
+    },
+    {
+      "id": "15041682",
+      "old_title": "국가철도공단_역사별 엘리베이터 현황",
+      "new_title": "국가철도공단_역사별 엘리베이터 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f2ed39d997e03a4a41da2bb264eae6f464586e78ba724131d2b4b1a5bda8d052",
+      "new_digest": "1e2da24f93caf19e56e350697db762a253a0d28930f2bf282a5bf817098a3011"
+    },
+    {
+      "id": "15041683",
+      "old_title": "국가철도공단_역사별 에스컬레이터 현황",
+      "new_title": "국가철도공단_역사별 에스컬레이터 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "595abf6b5465f839064f4abe8fbe5c9798e7f270c8c0b32d3176d4b018fd83bc",
+      "new_digest": "7375a8b0e7274dfca04c268b714b7879acea947918f3fa8dba993bf6761a5cb3"
+    },
+    {
+      "id": "15041684",
+      "old_title": "국가철도공단_역사별 유실물센터 정보",
+      "new_title": "국가철도공단_역사별 유실물센터 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "728c14643c5049e06955310689d6b14a93ef3a7d52caaff93d0038205a5187b0",
+      "new_digest": "a51252bf9dad686c3629e9fd6f1b8c53cb2dc80d7535aeeda8016fe51ec23501"
+    },
+    {
+      "id": "15041685",
+      "old_title": "국가철도공단_역사별 점자표시유무",
+      "new_title": "국가철도공단_역사별 점자표시유무",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9c5aef8e44ca2fae05796311e5735f247ede3462b91ab11884a187d21071997b",
+      "new_digest": "0dab78750bb344e69df2e8cf4217cd4a19d6b31d03245fdb2278a57a4fe0abc6"
+    },
+    {
+      "id": "15041686",
+      "old_title": "국가철도공단_역사별 휠체어리프트 위치",
+      "new_title": "국가철도공단_역사별 휠체어리프트 위치",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e42b307d8a070f39757766a62d329504427063101a04c777c46605611d70079d",
+      "new_digest": "41b96884322955a542f9cba99dcf46361cfe797f8876f173b864b0936e4fde59"
+    },
+    {
+      "id": "15041687",
+      "old_title": "국가철도공단_역사별 승강장 이격거리",
+      "new_title": "국가철도공단_역사별 승강장 이격거리",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3c0a2a63c1e23b16399e0b0ede70363a9256ba06b3c810aa2432e4508669232a",
+      "new_digest": "2ec6d8422d26537962d829c10531c01d7c20920489d863f74818fa2f41836166"
+    },
+    {
+      "id": "15041688",
+      "old_title": "국가철도공단_역사별 안전발판 설치유무",
+      "new_title": "국가철도공단_역사별 안전발판 설치유무",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bb40764c65a966e249f8c62e21447316b1a0800497217a3dd5b16240baeb9165",
+      "new_digest": "76c10d8b295c301cb78a75781715b6e09c6e68137647294c2bc55d0cb6772c61"
+    },
+    {
+      "id": "15041689",
+      "old_title": "국가철도공단_역사별 엘리베이터 이동동선",
+      "new_title": "국가철도공단_역사별 엘리베이터 이동동선",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "97ae29d60e5e360586d43ce6dd28a7d5d567df030516394d5264be5ba59a878e",
+      "new_digest": "9f248a35a2a11798ee948cc9c83ddfc01e6d06621d2a1a87687c123b3f05a5aa"
+    },
+    {
+      "id": "15041690",
+      "old_title": "국가철도공단_역사별 휠체어리프트 이동동선",
+      "new_title": "국가철도공단_역사별 휠체어리프트 이동동선",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a48eb14b36299a949378001221722e5c933d392f95d05ace932e8b2ab601cbdc",
+      "new_digest": "27ea9a22647cfef5308a0096325ccf1d9cda4a5b59d06e70a89d92237e437365"
+    },
+    {
+      "id": "15041691",
+      "old_title": "국가철도공단_역사별 인접 승강기 차량번호",
+      "new_title": "국가철도공단_역사별 인접 승강기 차량번호",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ac22268faea9052cac7ee4ec3ed182d8aeea2524b3ff20dd699a334882805215",
+      "new_digest": "450499c1ae809cd06e9ba65f1116c362b9776887c7bee58dd6b5929d0a127dbf"
+    },
+    {
+      "id": "15041692",
+      "old_title": "국가철도공단_역사별 장애인 화장실 위치",
+      "new_title": "국가철도공단_역사별 장애인 화장실 위치",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b4210e6a6fbf94725367ebcb9c5066a15f57a84e5e03f0f3ac6d05e8769d3720",
+      "new_digest": "679595aaf7786eccbf0ee941f4b5b06bd7a20edab24f675d2e0d3720f2ebe5dc"
+    },
+    {
       "id": "15041698",
       "old_title": "농촌진흥청_유관기관 안내",
       "new_title": "농촌진흥청_유관기관 안내",
@@ -3867,6 +4107,16 @@
       ],
       "old_digest": "19d98ca94e6f127ca1cc8f604b6aab8551ad6460b81321debc68143447dece78",
       "new_digest": "aa0e89f4c5e6806612f2689bcdc5d8af7977eb7928dfec648bacce18f7cce324"
+    },
+    {
+      "id": "15056590",
+      "old_title": "국가철도공단_역사별 공기호흡기 현황",
+      "new_title": "국가철도공단_역사별 공기호흡기 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "cd955c7b918b4f7fe9cf957eb73c1670431e85a0e8fa4c0a95122896612eff79",
+      "new_digest": "bfc471633e6036b0fde3c85ac1032eb71d5c7b35661de2006c7381af2ab1da3b"
     },
     {
       "id": "15056592",
@@ -7367,6 +7617,16 @@
       ],
       "old_digest": "91d2da0c2df7b6ac3155984486609037ef317e33774203d893d251e7fac12ec4",
       "new_digest": "b0f3f9726fb92d6fcbd82ab58a17916c971912ffd6e8d456d83f02ba413a966a"
+    },
+    {
+      "id": "15057421",
+      "old_title": "국가철도공단_역사별 소화설비 현황",
+      "new_title": "국가철도공단_역사별 소화설비 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "65da9e1cbeadfb688cda49169b960cfd6b5321acba9add439b182fa6eec15f77",
+      "new_digest": "73ce949cfff75a4b35ca60ade2617d678f145b85121dd7392785321245ff1b12"
     },
     {
       "id": "15057422",

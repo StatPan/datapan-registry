@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T02:17:16Z",
+  "generated_at": "2026-07-04T02:30:25Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 117,
-  "host_count": 144,
+  "adapter_count": 118,
+  "host_count": 145,
   "adapters": [
     {
       "name": "airport",
@@ -680,6 +680,16 @@
       ]
     },
     {
+      "name": "kric",
+      "status": "registered",
+      "hosts": [
+        "data.kric.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "lh-ebid",
       "status": "registered",
       "hosts": [
@@ -1228,8 +1238,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 117,
-    "verification_capable_adapters": 117,
+    "adapter_count": 118,
+    "verification_capable_adapters": 118,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

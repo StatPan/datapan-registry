@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T02:17:14Z",
+  "generated_at": "2026-07-04T02:30:23Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4142,
-    "verified": 2267,
+    "total": 4220,
+    "verified": 2345,
     "failed": 332,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2267,
+        "count": 2345,
         "status": "verified"
       },
       {
@@ -432,6 +432,11 @@
         "key": "jeonju",
         "count": 80,
         "provider": "jeonju"
+      },
+      {
+        "key": "kric",
+        "count": 78,
+        "provider": "kric"
       },
       {
         "key": "nrich",
@@ -984,6 +989,11 @@
         "key": "openapi.jeonju.go.kr",
         "count": 80,
         "host": "openapi.jeonju.go.kr"
+      },
+      {
+        "key": "data.kric.go.kr",
+        "count": 78,
+        "host": "data.kric.go.kr"
       },
       {
         "key": "data.dongjak.go.kr",
@@ -1594,7 +1604,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3418,
+        "count": 3496,
         "kind": "external_endpoint"
       },
       {
