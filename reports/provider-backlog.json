@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T03:02:01Z",
+  "generated_at": "2026-07-04T03:13:05Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 299,
+  "filtered_count": 302,
   "summary": {
-    "hosts": 299,
+    "hosts": 302,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 154,
-    "external_guide_hosts": 214,
-    "registered_adapter_hosts": 143,
-    "operation_hosts": 156,
+    "external_endpoint_hosts": 157,
+    "external_guide_hosts": 217,
+    "registered_adapter_hosts": 146,
+    "operation_hosts": 159,
     "guide_only_hosts": 143,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7949,
+    "approval_required_operations": 7976,
     "malformed_source_url_count": 724
   },
   "providers": [
@@ -1202,6 +1202,24 @@
       ]
     },
     {
+      "host": "scienceon.kisti.re.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 16,
+      "operations": 16,
+      "external_endpoint_operations": 16,
+      "external_guide_specs": 14,
+      "approval_required_operations": 16,
+      "sample_ids": [
+        "15117315",
+        "15119189",
+        "15119192"
+      ]
+    },
+    {
       "host": "www.korad.or.kr",
       "provider": "korad",
       "kinds": [
@@ -1372,6 +1390,24 @@
         "15001011",
         "15001018",
         "15001019"
+      ]
+    },
+    {
+      "host": "www.ntis.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 5,
+      "operations": 7,
+      "external_endpoint_operations": 7,
+      "external_guide_specs": 5,
+      "approval_required_operations": 7,
+      "sample_ids": [
+        "15077315",
+        "15077316",
+        "15102622"
       ]
     },
     {
@@ -1670,6 +1706,24 @@
       "external_endpoint_operations": 5,
       "sample_ids": [
         "15000332"
+      ]
+    },
+    {
+      "host": "aida.kisti.re.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 4,
+      "operations": 4,
+      "external_endpoint_operations": 4,
+      "external_guide_specs": 4,
+      "approval_required_operations": 4,
+      "sample_ids": [
+        "15122458",
+        "15122465",
+        "15122466"
       ]
     },
     {

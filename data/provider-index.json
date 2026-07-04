@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T03:02:01Z",
+  "generated_at": "2026-07-04T03:13:05Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 120,
-  "host_count": 148,
+  "adapter_count": 121,
+  "host_count": 151,
   "adapters": [
     {
       "name": "airport",
@@ -612,6 +612,18 @@
       "status": "registered",
       "hosts": [
         "www.kistep.re.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "kisti",
+      "status": "registered",
+      "hosts": [
+        "aida.kisti.re.kr",
+        "scienceon.kisti.re.kr",
+        "www.ntis.go.kr"
       ],
       "capabilities": [
         "verification"
@@ -1259,8 +1271,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 120,
-    "verification_capable_adapters": 120,
+    "adapter_count": 121,
+    "verification_capable_adapters": 121,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,
