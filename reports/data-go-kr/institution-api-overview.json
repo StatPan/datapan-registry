@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T01:09:37Z",
+  "generated_at": "2026-07-04T01:17:09Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 20307,
-    "runtime_evidence": 3846,
-    "runtime_evidence_percent": 18.9,
-    "callable_operations": 20165,
-    "external_endpoint_operations": 8697,
-    "registered_adapter_operations": 8687,
+    "operations": 20356,
+    "runtime_evidence": 3895,
+    "runtime_evidence_percent": 19.1,
+    "callable_operations": 20214,
+    "external_endpoint_operations": 8746,
+    "registered_adapter_operations": 8736,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 8697
+      "count": 8746
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 8687
+      "count": 8736
     },
     {
       "key": "builtin",
@@ -72,12 +72,12 @@
       "operation_count": 2625
     },
     {
-      "category": "교통물류",
-      "operation_count": 2144
+      "category": "농축수산",
+      "operation_count": 2153
     },
     {
-      "category": "농축수산",
-      "operation_count": 2104
+      "category": "교통물류",
+      "operation_count": 2144
     },
     {
       "category": "문화관광",
@@ -211,6 +211,15 @@
       ]
     },
     {
+      "host": "data.mafra.go.kr",
+      "operation_count": 284,
+      "adapter": "mafra",
+      "adapter_status": "registered",
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "host": "data.ex.co.kr",
       "operation_count": 279,
       "adapter": "ex",
@@ -232,15 +241,6 @@
       "host": "opendart.fss.or.kr",
       "operation_count": 245,
       "adapter": "opendart",
-      "adapter_status": "registered",
-      "capabilities": [
-        "verification"
-      ]
-    },
-    {
-      "host": "data.mafra.go.kr",
-      "operation_count": 235,
-      "adapter": "mafra",
       "adapter_status": "registered",
       "capabilities": [
         "verification"
@@ -4016,6 +4016,87 @@
       ]
     },
     {
+      "organization": "농림축산식품부 국립농산물품질관리원",
+      "api_count": 29,
+      "operation_api_count": 29,
+      "operation_count": 72,
+      "runtime_evidence_count": 58,
+      "runtime_evidence_percent": 80.6,
+      "verified": 50,
+      "failed": 0,
+      "skipped": 8,
+      "unknown": 0,
+      "approval_required_operations": 57,
+      "no_endpoint_operations": 9,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 5
+        },
+        {
+          "key": "external_endpoint",
+          "count": 58
+        },
+        {
+          "key": "no_endpoint",
+          "count": 9
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 58
+        },
+        {
+          "key": "builtin",
+          "count": 5
+        },
+        {
+          "key": "not_applicable",
+          "count": 9
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "농축수산",
+          "operation_count": 53
+        },
+        {
+          "category": "교통물류",
+          "operation_count": 17
+        },
+        {
+          "category": "식품건강",
+          "operation_count": 2
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "data.mafra.go.kr",
+          "operation_count": 49,
+          "adapter": "mafra",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "data.naqs.go.kr",
+          "operation_count": 9,
+          "adapter": "naqs",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
+        },
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 5
+        }
+      ]
+    },
+    {
       "organization": "보건복지부",
       "api_count": 71,
       "operation_api_count": 71,
@@ -7624,78 +7705,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 24
-        }
-      ]
-    },
-    {
-      "organization": "농림축산식품부 국립농산물품질관리원",
-      "api_count": 29,
-      "operation_api_count": 8,
-      "operation_count": 23,
-      "runtime_evidence_count": 9,
-      "runtime_evidence_percent": 39.1,
-      "verified": 1,
-      "failed": 0,
-      "skipped": 8,
-      "unknown": 0,
-      "approval_required_operations": 8,
-      "no_endpoint_operations": 9,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 5
-        },
-        {
-          "key": "external_endpoint",
-          "count": 9
-        },
-        {
-          "key": "no_endpoint",
-          "count": 9
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 9
-        },
-        {
-          "key": "builtin",
-          "count": 5
-        },
-        {
-          "key": "not_applicable",
-          "count": 9
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "교통물류",
-          "operation_count": 17
-        },
-        {
-          "category": "농축수산",
-          "operation_count": 4
-        },
-        {
-          "category": "식품건강",
-          "operation_count": 2
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "data.naqs.go.kr",
-          "operation_count": 9,
-          "adapter": "naqs",
-          "adapter_status": "registered",
-          "capabilities": [
-            "call",
-            "verification"
-          ]
-        },
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 5
         }
       ]
     },

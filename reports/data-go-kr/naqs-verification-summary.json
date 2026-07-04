@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-07-04T01:16:35Z",
+  "source": "reports/data-go-kr/naqs-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 49,
+    "verified": 49,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 49,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "mafra",
+        "count": 49,
+        "provider": "mafra"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "data.mafra.go.kr",
+        "count": 49,
+        "host": "data.mafra.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 49,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

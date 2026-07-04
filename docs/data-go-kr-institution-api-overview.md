@@ -1,12 +1,12 @@
 # data.go.kr Institution API Overview
 
-- Generated at: `2026-07-04T01:09:37Z`
+- Generated at: `2026-07-04T01:17:09Z`
 - Institutions: `411`
 - APIs: `12060`
-- Operations: `20307`
-- Runtime evidence: `3846` (`18.9%`)
-- External endpoint operations: `8697`
-- Registered adapter operations: `8687`
+- Operations: `20356`
+- Runtime evidence: `3895` (`19.1%`)
+- External endpoint operations: `8746`
+- Registered adapter operations: `8736`
 - Missing adapter operations: `29`
 
 ## Largest Institutions By API Count
@@ -86,8 +86,8 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 ## Largest Categories
 
 - 공공행정: `2625` operations
+- 농축수산: `2153` operations
 - 교통물류: `2144` operations
-- 농축수산: `2104` operations
 - 문화관광: `2064` operations
 - 사회복지: `1473` operations
 - 산업고용: `1388` operations
@@ -107,4 +107,4 @@ the human-readable queue in `docs/data-go-kr-coverage-backlog.md`.
 - www.nongsaro.go.kr: `314` operations
 - open.law.go.kr: `304` operations
 - www.foodsafetykorea.go.kr: `289` operations
-- data.ex.co.kr: `279` operations
+- data.mafra.go.kr: `284` operations
