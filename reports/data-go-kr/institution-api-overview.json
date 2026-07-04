@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T00:31:18Z",
+  "generated_at": "2026-07-04T00:43:04Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 20191,
-    "runtime_evidence": 3709,
-    "runtime_evidence_percent": 18.4,
-    "callable_operations": 20049,
-    "external_endpoint_operations": 8581,
-    "registered_adapter_operations": 8571,
+    "operations": 20259,
+    "runtime_evidence": 3798,
+    "runtime_evidence_percent": 18.7,
+    "callable_operations": 20117,
+    "external_endpoint_operations": 8649,
+    "registered_adapter_operations": 8639,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 8581
+      "count": 8649
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 8571
+      "count": 8639
     },
     {
       "key": "builtin",
@@ -89,7 +89,7 @@
     },
     {
       "category": "산업고용",
-      "operation_count": 1320
+      "operation_count": 1388
     },
     {
       "category": "환경기상",
@@ -3475,6 +3475,67 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 90
+        }
+      ]
+    },
+    {
+      "organization": "한국고용정보원",
+      "api_count": 31,
+      "operation_api_count": 31,
+      "operation_count": 89,
+      "runtime_evidence_count": 89,
+      "runtime_evidence_percent": 100.0,
+      "verified": 89,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 17,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "external_endpoint",
+          "count": 89
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 89
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "산업고용",
+          "operation_count": 89
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "www.work24.go.kr",
+          "operation_count": 85,
+          "adapter": "work24",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "openapi.work.go.kr",
+          "operation_count": 3,
+          "adapter": "work",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.youthcenter.go.kr",
+          "operation_count": 1,
+          "adapter": "youthcenter",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },
@@ -7898,49 +7959,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 22
-        }
-      ]
-    },
-    {
-      "organization": "한국고용정보원",
-      "api_count": 31,
-      "operation_api_count": 7,
-      "operation_count": 21,
-      "runtime_evidence_count": 3,
-      "runtime_evidence_percent": 14.3,
-      "verified": 3,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "external_endpoint",
-          "count": 21
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 21
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "산업고용",
-          "operation_count": 21
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "www.work24.go.kr",
-          "operation_count": 21,
-          "adapter": "work24",
-          "adapter_status": "registered",
-          "capabilities": [
-            "verification"
-          ]
         }
       ]
     },

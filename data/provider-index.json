@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T00:31:18Z",
+  "generated_at": "2026-07-04T00:43:04Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 110,
-  "host_count": 134,
+  "adapter_count": 111,
+  "host_count": 135,
   "adapters": [
     {
       "name": "airport",
@@ -1150,13 +1150,23 @@
       "capabilities": [
         "verification"
       ]
+    },
+    {
+      "name": "youthcenter",
+      "status": "registered",
+      "hosts": [
+        "www.youthcenter.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
     }
   ],
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 110,
-    "verification_capable_adapters": 110,
+    "adapter_count": 111,
+    "verification_capable_adapters": 111,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

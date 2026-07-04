@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T00:31:24Z",
+  "generated_at": "2026-07-04T00:43:10Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 20191,
-    "callable_operations": 20049,
+    "operations": 20259,
+    "callable_operations": 20117,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 8581,
-    "registered_adapter_operations": 8571,
+    "external_endpoint_operations": 8649,
+    "registered_adapter_operations": 8639,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.7,
-    "approval_required_operations": 7599,
+    "approval_required_operations": 7616,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "registered_adapter_hosts": 129,
+    "registered_adapter_hosts": 130,
     "missing_adapter_hosts": 11,
-    "adapter_count": 110,
+    "adapter_count": 111,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-04T00:31:04Z",
-    "total": 3709,
-    "verified": 1860,
+    "generated_at": "2026-07-04T00:42:51Z",
+    "total": 3798,
+    "verified": 1949,
     "failed": 306,
     "skipped": 1543,
     "unknown": 0,
-    "verified_percent": 50.1,
-    "evidence_operation_percent": 18.4
+    "verified_percent": 51.3,
+    "evidence_operation_percent": 18.7
   },
   "route_evidence": {
     "present": true,
@@ -382,10 +382,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-04T00:31:24Z",
+    "generated_at": "2026-07-04T00:43:10Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 110,
-    "host_count": 134,
+    "adapter_count": 111,
+    "host_count": 135,
     "adapters": [
       {
         "name": "airport",
@@ -1533,13 +1533,23 @@
         "capabilities": [
           "verification"
         ]
+      },
+      {
+        "name": "youthcenter",
+        "status": "registered",
+        "hosts": [
+          "www.youthcenter.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
       }
     ],
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 110,
-      "verification_capable_adapters": 110,
+      "adapter_count": 111,
+      "verification_capable_adapters": 111,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

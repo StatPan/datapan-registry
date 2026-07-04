@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T00:31:18Z",
+  "generated_at": "2026-07-04T00:43:04Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 285,
+  "filtered_count": 286,
   "summary": {
-    "hosts": 285,
+    "hosts": 286,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 140,
-    "external_guide_hosts": 207,
-    "registered_adapter_hosts": 129,
-    "operation_hosts": 142,
+    "external_endpoint_hosts": 141,
+    "external_guide_hosts": 208,
+    "registered_adapter_hosts": 130,
+    "operation_hosts": 143,
     "guide_only_hosts": 143,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7599,
+    "approval_required_operations": 7616,
     "malformed_source_url_count": 712
   },
   "providers": [
@@ -544,6 +544,24 @@
       ]
     },
     {
+      "host": "www.work24.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 31,
+      "operations": 85,
+      "external_endpoint_operations": 85,
+      "external_guide_specs": 29,
+      "approval_required_operations": 16,
+      "sample_ids": [
+        "15003549",
+        "15026112",
+        "15027228"
+      ]
+    },
+    {
       "host": "openapi.jeonju.go.kr",
       "provider": "jeonju",
       "kinds": [
@@ -938,23 +956,6 @@
         "15102618",
         "15102619",
         "15102623"
-      ]
-    },
-    {
-      "host": "www.work24.go.kr",
-      "kinds": [
-        "external_endpoint",
-        "external_guide"
-      ],
-      "adapter_status": "adapter",
-      "specs": 7,
-      "operations": 21,
-      "external_endpoint_operations": 21,
-      "external_guide_specs": 7,
-      "sample_ids": [
-        "15003549",
-        "15026112",
-        "15027228"
       ]
     },
     {
@@ -1578,6 +1579,22 @@
       ]
     },
     {
+      "host": "openapi.work.go.kr",
+      "provider": "work",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 4,
+      "operations": 4,
+      "external_endpoint_operations": 4,
+      "sample_ids": [
+        "15031948",
+        "15037285",
+        "15058173"
+      ]
+    },
+    {
       "host": "psis.rda.go.kr",
       "provider": "psis",
       "kinds": [
@@ -1999,6 +2016,22 @@
       ]
     },
     {
+      "host": "www.youthcenter.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "external_guide_specs": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15143273"
+      ]
+    },
+    {
       "host": "211.237.50.150:7080",
       "kinds": [
         "external_endpoint"
@@ -2107,20 +2140,6 @@
       "approval_required_operations": 1,
       "sample_ids": [
         "15134872"
-      ]
-    },
-    {
-      "host": "openapi.work.go.kr",
-      "provider": "work",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 1,
-      "operations": 1,
-      "external_endpoint_operations": 1,
-      "sample_ids": [
-        "15058173"
       ]
     },
     {

@@ -2,7 +2,7 @@
   "manifest": "manifest.json",
   "root": ".",
   "schema_version": "datapan.release-readiness.v1",
-  "generated_at": "2026-07-04T00:33:16Z",
+  "generated_at": "2026-07-04T00:44:48Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "ready": true,
@@ -242,8 +242,8 @@
       "message": "runtime evidence coverage meets the release target",
       "artifact_kind": "runtime_evidence_growth",
       "artifact_path": "reports/data-go-kr/runtime-evidence-growth.json",
-      "expected": 2020,
-      "actual": 3709
+      "expected": 2026,
+      "actual": 3798
     }
   ]
 }

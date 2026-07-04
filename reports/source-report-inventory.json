@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-04T00:31:18Z",
+  "generated_at": "2026-07-04T00:43:04Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 68,
+    "report_total": 70,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,7 +38,7 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 56,
+      "report_count": 58,
       "present_reports": [
         {
           "name": "childcare-info-verification-summary.json",
@@ -149,6 +149,14 @@
         {
           "name": "keco-verification.json",
           "path": "reports/data-go-kr/keco-verification.json"
+        },
+        {
+          "name": "keis-verification-summary.json",
+          "path": "reports/data-go-kr/keis-verification-summary.json"
+        },
+        {
+          "name": "keis-verification.json",
+          "path": "reports/data-go-kr/keis-verification.json"
         },
         {
           "name": "khoa-verification-summary.json",
@@ -320,6 +328,8 @@
         "institution-runtime-plan.json",
         "keco-verification-summary.json",
         "keco-verification.json",
+        "keis-verification-summary.json",
+        "keis-verification.json",
         "khoa-verification-summary.json",
         "khoa-verification.json",
         "kipris-verification-summary.json",

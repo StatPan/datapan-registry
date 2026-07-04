@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T00:31:18Z",
+  "generated_at": "2026-07-04T00:43:04Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3898,
-    "stable": 8162
+    "changed": 3922,
+    "stable": 8138
   },
   "added": [],
   "removed": [],
@@ -547,6 +547,16 @@
       ],
       "old_digest": "8c2655b59e724e05abfff8dd66b25cf65daa335b875a613a31a690eacfa391cc",
       "new_digest": "3c468e2a380511e1c3e52c4072bcac27d44692ebe6221794c8c215684697d47c"
+    },
+    {
+      "id": "15031948",
+      "old_title": "한국고용정보원_워크넷 채용행사 채용행사목록 및 상세정보",
+      "new_title": "한국고용정보원_워크넷 채용행사 채용행사목록 및 상세정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "43f8f8856f61ec46a72424c7aa5c02955cb994cdea11ff997c64e6f7bc93c45c",
+      "new_digest": "0244d59e370997e4efeb8764f0597f0e86646cd4dbfe8925c1c5e5856d96166f"
     },
     {
       "id": "15031951",
@@ -2439,6 +2449,96 @@
       "new_digest": "b395329cb4029e9e34f93f92462878e369289839b20ce70d38c247286f8f021a"
     },
     {
+      "id": "15037284",
+      "old_title": "한국고용정보원_워크넷 직업사전 목록 및 상세정보",
+      "new_title": "한국고용정보원_워크넷 직업사전 목록 및 상세정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6d0a6afe7f189cfaa985bd1ed6d19b4f565667462932ea113736dc754d2ea593",
+      "new_digest": "0cce71093ac95faa15deb447447c7467743df841b9bd76410485b8d3e48db06e"
+    },
+    {
+      "id": "15037285",
+      "old_title": "한국고용정보원_워크넷 장년인턴 장년인턴구인목록",
+      "new_title": "한국고용정보원_워크넷 장년인턴 장년인턴구인목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f1eb2cc1cfdb8b351c7d68c7e3f093264907ba3457e1f58e9311209b13ec284a",
+      "new_digest": "1eb5086e16413a87b6e8b93ed8b9d323644ec0c90cd2a16f231c73ff064c94f0"
+    },
+    {
+      "id": "15037286",
+      "old_title": "한국고용정보원_워크넷 심리검사 한국고용직업분류 매핑코드",
+      "new_title": "한국고용정보원_워크넷 심리검사 한국고용직업분류 매핑코드",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5366d3d5f9b982d3ade49f818a4e9595f81686a89579d775121cb8f96df4a07c",
+      "new_digest": "ad2b62a3d9546fc9fb3c6830a17826dadb956cce489114b72025c536ee3fca7c"
+    },
+    {
+      "id": "15037287",
+      "old_title": "한국고용정보원_워크넷 공통코드 지역, 직종, 자격면허 등",
+      "new_title": "한국고용정보원_워크넷 공통코드 지역, 직종, 자격면허 등",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a75ce6657e55339284ad4e62070c42a01e9a901eb89d19da7e2ab40f9eee2579",
+      "new_digest": "877a324f904babe1160475208617ab30f2044d6c7ba342ace4c084ea1dcbb293"
+    },
+    {
+      "id": "15037362",
+      "old_title": "한국고용정보원_워크넷_정부지원일자리정보_참여자통계",
+      "new_title": "한국고용정보원_워크넷_정부지원일자리정보_참여자통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9abe5b3e42dc7b846d0c108868e93a2fba788e23b2ed26fbd0c04086dba160b8",
+      "new_digest": "6bfc0dfffe450909893aab678724fffbaeb8d44dadc3ff9a2c4b532d5cccfee9"
+    },
+    {
+      "id": "15037378",
+      "old_title": "한국고용정보원_사업주훈련 훈련과정",
+      "new_title": "한국고용정보원_사업주훈련 훈련과정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "076848767e7855cad7128e39925d994ed7f9a16e8fe8341167629df664ec9028",
+      "new_digest": "6b61528325a67c4e6d48ee86754e6301c3f5d685f812c1adb57406ffb155de96"
+    },
+    {
+      "id": "15037379",
+      "old_title": "한국고용정보원_직업훈련_일학습병행 훈련과정",
+      "new_title": "한국고용정보원_직업훈련_일학습병행 훈련과정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "415758c459b75fee58526d55679866ba26fd82b023236074cb81224c275ec919",
+      "new_digest": "db2f383ce9451271fb3ed8dd35f41999c0e8a0d8dcf1c5cbee127865cf607f9e"
+    },
+    {
+      "id": "15037380",
+      "old_title": "한국고용정보원_국가인적자원개발 컨소시엄 훈련과정",
+      "new_title": "한국고용정보원_국가인적자원개발 컨소시엄 훈련과정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "184a24ad25d515f0646d0711913eddef82fa903f39b9639a2cd40f5c56944fea",
+      "new_digest": "b240b8b8eb9d4c83eb765205f49f60b54c460e3d2991225119a900c513b322a5"
+    },
+    {
+      "id": "15037382",
+      "old_title": "한국고용정보원_공통코드-훈련(KECO,NCS,훈련종류 등)",
+      "new_title": "한국고용정보원_공통코드-훈련(KECO,NCS,훈련종류 등)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "20e0ffb2abcb7ed116afc534bb6023e03c92774a0fc506d4636d166a67707a92",
+      "new_digest": "e2fa4d4001da236f1065f1d083e8e6cbb72a2e248436d7adb7e68b7b7925700b"
+    },
+    {
       "id": "15037595",
       "old_title": "경기도_경기연구원 연구보고서 정보",
       "new_title": "경기도_경기연구원 연구보고서 정보",
@@ -4007,6 +4107,16 @@
       ],
       "old_digest": "bc3b89de28fe8e90b389cb928bb059a527ba0c4aa845da8d885f059e42479bb1",
       "new_digest": "e6405cca85638d4032678caa31f8b5ac1ad91b4f4be68eefacc70236323b7c6f"
+    },
+    {
+      "id": "15056718",
+      "old_title": "한국고용정보원_워크넷_정부지원일자리정보_참여자모집상세정보",
+      "new_title": "한국고용정보원_워크넷_정부지원일자리정보_참여자모집상세정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6d5b385823d8e8b642e3053cf5194d43d18cf4bd2693ab3a546ca27a6c3a1e1d",
+      "new_digest": "293c84dde2a6ffe11d088bd849b725eb7de8bb1853f4f6a35c302bf3f3a21500"
     },
     {
       "id": "15056719",
@@ -8129,6 +8239,16 @@
       "new_digest": "2f033966985c2b653efd3294bf493e9d8bff3824a8afbe93b92dc499dda77d30"
     },
     {
+      "id": "15057648",
+      "old_title": "한국고용정보원_워크넷_정부지원일자리정보_참여자모집정보",
+      "new_title": "한국고용정보원_워크넷_정부지원일자리정보_참여자모집정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c2bad4bb719045a8e95fbfa2306f22c3d093b49c67af830631eb598f1865e856",
+      "new_digest": "5770fa5221afaf5b7a867a81fc4b197c99e8870bd372ce5e8379043e6c608eb3"
+    },
+    {
       "id": "15057649",
       "old_title": "서울특별시_소통 돌발 교통 권역 정보",
       "new_title": "서울특별시_소통 돌발 교통 권역 정보",
@@ -11167,6 +11287,16 @@
       ],
       "old_digest": "0fd9f4aecb11592ae91c655b34ad6ba8ff50060ff88d6e2cfba165fc381aa209",
       "new_digest": "c65e127eca71b9dd231c1d9e26bd0c7f8293c851d62894eb53746cb5717a5ac7"
+    },
+    {
+      "id": "15058356",
+      "old_title": "한국고용정보원_워크넷_정부지원일자리정보_일자리사업정보",
+      "new_title": "한국고용정보원_워크넷_정부지원일자리정보_일자리사업정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2205f4283abae2ea76d5c01b64bb39bb6eaaa83abcfb69abce23825e6f5de795",
+      "new_digest": "50ae48bbe4704dac88355e3834107b55e8f8dea380635dd61f0c95479c4298f1"
     },
     {
       "id": "15058358",
@@ -18709,6 +18839,16 @@
       "new_digest": "1e233771c40b50a0a6ae07b12c91ce464dc1896e28bc6a166c10c9b102df4b8f"
     },
     {
+      "id": "15068072",
+      "old_title": "한국고용정보원_워크넷_정부지원일자리사업상세정보",
+      "new_title": "한국고용정보원_워크넷_정부지원일자리사업상세정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "80233981688d1041c8526d2374ac735e953b7fe2ed94a3e4abc6da4f6ac6ac85",
+      "new_digest": "e76fddca2541574cc29ae269315f3b80d2ac6e23f1b56caeb8a8689ba433eade"
+    },
+    {
       "id": "15068308",
       "old_title": "경기도 광명시_어린이 놀이기구 안전점검 현황",
       "new_title": "경기도 광명시_어린이 놀이기구 안전점검 현황",
@@ -21057,6 +21197,26 @@
       ],
       "old_digest": "b8d7d5ef82362b8c74769570ee206ccc0c607fa80bcca25ad5dac22b09729f67",
       "new_digest": "54dffd5434c6252e330dcd9878de5cae47bbb5744d71342db9bda24dde3bfcaa"
+    },
+    {
+      "id": "15088876",
+      "old_title": "한국고용정보원_워크넷_직무데이터_표준직무기술서",
+      "new_title": "한국고용정보원_워크넷_직무데이터_표준직무기술서",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1a38fe5d9e6a066680adaeebac206b2b26ab95967d9092c861a3ea73a540bcdc",
+      "new_digest": "c14fde2599d70a715eb07e8b58a876a76ead938640a540e9be893691a81b8950"
+    },
+    {
+      "id": "15088880",
+      "old_title": "한국고용정보원_워크넷_직무데이터사전",
+      "new_title": "한국고용정보원_워크넷_직무데이터사전",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "18feaa16ca77bf057741fbb907961f0ac7a80a7cb80860d0e450720c7650505c",
+      "new_digest": "9fa9898fa9476be2754e103f99dc1e7427deb208d03d10eba67837491a24a71a"
     },
     {
       "id": "15089289",
@@ -26097,6 +26257,16 @@
       ],
       "old_digest": "f9fada2d189220c21f5ea6145523a267d19f7e8a9d31aca983a6f03010608315",
       "new_digest": "b74f90ddc7386110ad7145aa7d885992f6a61639b4fee030ccf31a0f8c41b43d"
+    },
+    {
+      "id": "15109032",
+      "old_title": "한국고용정보원_직업훈련_국민내일배움카드 훈련과정",
+      "new_title": "한국고용정보원_직업훈련_국민내일배움카드 훈련과정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "719f8a4f622edf95e107e2eae5243bd26ce1f35944a475877a7da7d3b0e0627f",
+      "new_digest": "d1aefc34e1e8b78ee06bbb0d36a55c7145445df18ebf38bab1c9a12a1126091b"
     },
     {
       "id": "15109047",
@@ -32139,6 +32309,16 @@
       "new_digest": "ec74ff0ef6e2ea1b3eea0d4bbf239279a53c2ecfa0bf49f37e08648fa17d9c03"
     },
     {
+      "id": "15138815",
+      "old_title": "한국고용정보원_구직자취업역량 강화프로그램",
+      "new_title": "한국고용정보원_구직자취업역량 강화프로그램",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a430531637d3dccc80aaa217d8ead6b6306472f2470d4deb7b4ffe9961fc5484",
+      "new_digest": "764a5e1bfe9647fee18bdbb26428ad4282b8dd045bd2e14fd12bfba18fd5b0ef"
+    },
+    {
       "id": "15138854",
       "old_title": "행정안전부_지방재정365_도시군세 세목별 비중",
       "new_title": "행정안전부_지방재정365_도시군세 세목별 비중",
@@ -34067,6 +34247,16 @@
       ],
       "old_digest": "fb70d7482aca3a0e6db9e27be8cd8946b4cc0558b72122af348170875c96c12c",
       "new_digest": "24333e3edf07e8d69f184bbfb998cbbba7a94f7d52205a699763216f3fda5e3f"
+    },
+    {
+      "id": "15143273",
+      "old_title": "한국고용정보원_온통청년_청년정책API",
+      "new_title": "한국고용정보원_온통청년_청년정책API",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0be75d4f506934b6cacffd28689141e563ed2cfdd27172c7754c0fcecfdfd977",
+      "new_digest": "de4a5d38fd0ddf1074b5601fec83f662a9f366a5aaad8ed12bfe22547b629620"
     },
     {
       "id": "15143535",
@@ -38549,6 +38739,16 @@
       "new_digest": "2eff641426dbd60727e0aa0f1deff35bd3070390e296062817d9bd85eda20000"
     },
     {
+      "id": "3038225",
+      "old_title": "한국고용정보원_워크넷 채용정보 채용목록 및 상세정보",
+      "new_title": "한국고용정보원_워크넷 채용정보 채용목록 및 상세정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "95034cd6a3bf9a116fd5d17472b5ed976fbc8ea4f36ba2cc5a969c77d475e3c5",
+      "new_digest": "808c653785964b2211a3a24fed9ed163f3e50b55433753278632c233577e2317"
+    },
+    {
       "id": "3038249",
       "old_title": "한국산업인력공단_해외진출정보",
       "new_title": "한국산업인력공단_해외진출정보",
@@ -38897,6 +39097,46 @@
       ],
       "old_digest": "cb9dcfc158564fb3ce9860bb20c066d57bf717b347a752f4227388e408cf4698",
       "new_digest": "49ebadc9a4eed008be88b1a9f18c55de1b76231cc015919e1ccbe62a4cf0544c"
+    },
+    {
+      "id": "3071087",
+      "old_title": "한국고용정보원_워크넷_직업정보",
+      "new_title": "한국고용정보원_워크넷_직업정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "531d837a674ee0720bbc5c578abab2b8dfd16cfddf323b24c045c4fd07cb4922",
+      "new_digest": "91d3a4d05f136d6459f01e97da79b00652172ba85fe7d089087e091929dcf95e"
+    },
+    {
+      "id": "3071251",
+      "old_title": "한국고용정보원_워크넷 강소기업 검색",
+      "new_title": "한국고용정보원_워크넷 강소기업 검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "203d1c1ca2f8fd0b3f1ff488a0fc72e93c3bd569855f4ae94e79d144bc287f94",
+      "new_digest": "0914b5e5e6360c4f31bcd5c7239b4d6c02a6bef5dc2602237fb72a846748e00b"
+    },
+    {
+      "id": "3071357",
+      "old_title": "한국고용정보원_워크넷 정부지원일자리정보 참여기관기본정보",
+      "new_title": "한국고용정보원_워크넷 정부지원일자리정보 참여기관기본정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1849e480ddea8ab96120599d541a58e26e6250dbbf61096ba42401fe3fe39722",
+      "new_digest": "1810199e3bd0c9ad282a7646d1baed56ff64e245b30e195b5eab857491848caf"
+    },
+    {
+      "id": "3071367",
+      "old_title": "한국고용정보원_워크넷_직업전망목록 및 상세정보",
+      "new_title": "한국고용정보원_워크넷_직업전망목록 및 상세정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "42d6c9df626117b8d03b5c54c94f8b315d08ec21483eb13bcbee8db16a0c9eb9",
+      "new_digest": "ee3979d8fa040d2a346e2990f6b8da5bc725aa740b2fdd73c99208a0d1a2276f"
     },
     {
       "id": "3072018",
