@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T00:18:47Z",
+  "generated_at": "2026-07-04T00:31:18Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 279,
+  "filtered_count": 285,
   "summary": {
-    "hosts": 279,
+    "hosts": 285,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 135,
-    "external_guide_hosts": 202,
-    "registered_adapter_hosts": 124,
-    "operation_hosts": 137,
-    "guide_only_hosts": 142,
+    "external_endpoint_hosts": 140,
+    "external_guide_hosts": 207,
+    "registered_adapter_hosts": 129,
+    "operation_hosts": 142,
+    "guide_only_hosts": 143,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7591,
+    "approval_required_operations": 7599,
     "malformed_source_url_count": 712
   },
   "providers": [
@@ -178,12 +178,12 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 886,
-      "operations": 2193,
-      "external_endpoint_operations": 2193,
+      "specs": 888,
+      "operations": 2195,
+      "external_endpoint_operations": 2195,
       "external_guide_specs": 21,
       "wms_operations": 5,
-      "approval_required_operations": 57,
+      "approval_required_operations": 59,
       "sample_ids": [
         "15005231",
         "15011020",
@@ -1150,6 +1150,21 @@
       ]
     },
     {
+      "host": "thegoodnight.daegu.go.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 3,
+      "operations": 9,
+      "external_endpoint_operations": 9,
+      "sample_ids": [
+        "15056766",
+        "15057417",
+        "15059414"
+      ]
+    },
+    {
       "host": "cancer.go.kr",
       "provider": "cancer",
       "kinds": [
@@ -1184,6 +1199,24 @@
         "15001011",
         "15001018",
         "15001019"
+      ]
+    },
+    {
+      "host": "www.daegufood.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 4,
+      "operations": 7,
+      "external_endpoint_operations": 7,
+      "external_guide_specs": 1,
+      "approval_required_operations": 3,
+      "sample_ids": [
+        "15057020",
+        "15057236",
+        "15086132"
       ]
     },
     {
@@ -1328,6 +1361,24 @@
         "15067161",
         "15067164",
         "15131782"
+      ]
+    },
+    {
+      "host": "www.daegu.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 4,
+      "operations": 6,
+      "external_endpoint_operations": 6,
+      "external_guide_specs": 3,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15014526",
+        "15057055",
+        "15112858"
       ]
     },
     {
@@ -1577,6 +1628,22 @@
       ]
     },
     {
+      "host": "dgfca.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 3,
+      "operations": 3,
+      "external_endpoint_operations": 3,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15057055",
+        "15057574",
+        "15084620"
+      ]
+    },
+    {
       "host": "folkency.nfm.go.kr",
       "provider": "folk",
       "kinds": [
@@ -1770,6 +1837,21 @@
       ]
     },
     {
+      "host": "air.daegu.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "3039741"
+      ]
+    },
+    {
       "host": "api.ip-navi.or.kr:8000",
       "kinds": [
         "external_endpoint",
@@ -1799,6 +1881,22 @@
       "external_guide_specs": 1,
       "sample_ids": [
         "3072018"
+      ]
+    },
+    {
+      "host": "happy.daegu.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 1,
+      "operations": 1,
+      "external_endpoint_operations": 1,
+      "external_guide_specs": 1,
+      "approval_required_operations": 1,
+      "sample_ids": [
+        "15061031"
       ]
     },
     {
@@ -1940,19 +2038,6 @@
       "external_endpoint_operations": 1,
       "sample_ids": [
         "15058476"
-      ]
-    },
-    {
-      "host": "dgfca.or.kr",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 1,
-      "operations": 1,
-      "external_endpoint_operations": 1,
-      "sample_ids": [
-        "15057574"
       ]
     },
     {
@@ -3963,6 +4048,19 @@
       "external_guide_specs": 1,
       "sample_ids": [
         "15158420"
+      ]
+    },
+    {
+      "host": "www.daeguoperahouse.org",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15057055"
       ]
     },
     {

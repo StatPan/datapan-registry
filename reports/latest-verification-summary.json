@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-07-04T00:15:43Z",
+  "generated_at": "2026-07-04T00:31:04Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3677,
-    "verified": 1832,
+    "total": 3709,
+    "verified": 1860,
     "failed": 306,
-    "skipped": 1539,
+    "skipped": 1543,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "verified",
-        "count": 1832,
+        "count": 1860,
         "status": "verified"
       },
       {
         "key": "skipped",
-        "count": 1539,
+        "count": 1543,
         "status": "skipped"
       },
       {
@@ -147,6 +147,11 @@
         "reason": "epost_unsupported_protocol"
       },
       {
+        "key": "external_provider_adapter_missing",
+        "count": 9,
+        "reason": "external_provider_adapter_missing"
+      },
+      {
         "key": "qnet_wadl_metadata_only",
         "count": 9,
         "reason": "qnet_wadl_metadata_only"
@@ -200,11 +205,6 @@
         "key": "culture_request_timeout",
         "count": 5,
         "reason": "culture_request_timeout"
-      },
-      {
-        "key": "external_provider_adapter_missing",
-        "count": 5,
-        "reason": "external_provider_adapter_missing"
       },
       {
         "key": "lh_ebid_service_key_not_registered",
@@ -365,7 +365,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 710,
+        "count": 714,
         "provider": "data.go.kr"
       },
       {
@@ -390,7 +390,7 @@
       },
       {
         "key": "data-gg",
-        "count": 125,
+        "count": 127,
         "provider": "data-gg"
       },
       {
@@ -532,6 +532,11 @@
         "key": "lofin365",
         "count": 25,
         "provider": "lofin365"
+      },
+      {
+        "key": "daegu",
+        "count": 24,
+        "provider": "daegu"
       },
       {
         "key": "childcare-info",
@@ -699,6 +704,11 @@
         "provider": "jeju"
       },
       {
+        "key": "dgfca",
+        "count": 3,
+        "provider": "dgfca"
+      },
+      {
         "key": "franchise-ftc",
         "count": 3,
         "provider": "franchise-ftc"
@@ -747,11 +757,6 @@
         "key": "chungbuk-tour",
         "count": 1,
         "provider": "chungbuk-tour"
-      },
-      {
-        "key": "dgfca",
-        "count": 1,
-        "provider": "dgfca"
       },
       {
         "key": "gicoms",
@@ -892,7 +897,7 @@
       },
       {
         "key": "data.gg.go.kr",
-        "count": 125,
+        "count": 127,
         "host": "data.gg.go.kr"
       },
       {
@@ -1136,6 +1141,11 @@
         "host": "www.safetydata.go.kr"
       },
       {
+        "key": "thegoodnight.daegu.go.kr",
+        "count": 9,
+        "host": "thegoodnight.daegu.go.kr"
+      },
+      {
         "key": "www.law.go.kr",
         "count": 9,
         "host": "www.law.go.kr"
@@ -1164,6 +1174,11 @@
         "key": "openapi.tour.go.kr",
         "count": 7,
         "host": "openapi.tour.go.kr"
+      },
+      {
+        "key": "www.daegufood.go.kr",
+        "count": 7,
+        "host": "www.daegufood.go.kr"
       },
       {
         "key": "www.sisul.or.kr",
@@ -1206,6 +1221,11 @@
         "host": "www.codil.or.kr"
       },
       {
+        "key": "www.daegu.go.kr",
+        "count": 6,
+        "host": "www.daegu.go.kr"
+      },
+      {
         "key": "www.emuseum.go.kr",
         "count": 6,
         "host": "www.emuseum.go.kr"
@@ -1236,6 +1256,11 @@
         "host": "api.forest.go.kr"
       },
       {
+        "key": "car.daegu.go.kr",
+        "count": 4,
+        "host": "car.daegu.go.kr"
+      },
+      {
         "key": "data.jeju.go.kr",
         "count": 4,
         "host": "data.jeju.go.kr"
@@ -1249,6 +1274,11 @@
         "key": "www.rda.go.kr",
         "count": 4,
         "host": "www.rda.go.kr"
+      },
+      {
+        "key": "dgfca.or.kr",
+        "count": 3,
+        "host": "dgfca.or.kr"
       },
       {
         "key": "franchise.ftc.go.kr",
@@ -1301,6 +1331,11 @@
         "host": "211.237.50.150:7080"
       },
       {
+        "key": "air.daegu.go.kr",
+        "count": 1,
+        "host": "air.daegu.go.kr"
+      },
+      {
         "key": "air.jeju.go.kr",
         "count": 1,
         "host": "air.jeju.go.kr"
@@ -1326,9 +1361,9 @@
         "host": "data.myhome.go.kr:443"
       },
       {
-        "key": "dgfca.or.kr",
+        "key": "happy.daegu.go.kr",
         "count": 1,
-        "host": "dgfca.or.kr"
+        "host": "happy.daegu.go.kr"
       },
       {
         "key": "its.go.kr",
@@ -1459,7 +1494,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 2953,
+        "count": 2985,
         "kind": "external_endpoint"
       },
       {

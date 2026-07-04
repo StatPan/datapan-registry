@@ -1,0 +1,107 @@
+{
+  "generated_at": "2026-07-04T00:30:30Z",
+  "source": "reports/data-go-kr/daegu-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 32,
+    "verified": 28,
+    "failed": 0,
+    "skipped": 4,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 28,
+        "status": "verified"
+      },
+      {
+        "key": "skipped",
+        "count": 4,
+        "status": "skipped"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "external_provider_adapter_missing",
+        "count": 4,
+        "reason": "external_provider_adapter_missing"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "daegu",
+        "count": 24,
+        "provider": "daegu"
+      },
+      {
+        "key": "data.go.kr",
+        "count": 4,
+        "provider": "data.go.kr"
+      },
+      {
+        "key": "data-gg",
+        "count": 2,
+        "provider": "data-gg"
+      },
+      {
+        "key": "dgfca",
+        "count": 2,
+        "provider": "dgfca"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "thegoodnight.daegu.go.kr",
+        "count": 9,
+        "host": "thegoodnight.daegu.go.kr"
+      },
+      {
+        "key": "www.daegufood.go.kr",
+        "count": 7,
+        "host": "www.daegufood.go.kr"
+      },
+      {
+        "key": "www.daegu.go.kr",
+        "count": 6,
+        "host": "www.daegu.go.kr"
+      },
+      {
+        "key": "car.daegu.go.kr",
+        "count": 4,
+        "host": "car.daegu.go.kr"
+      },
+      {
+        "key": "data.gg.go.kr",
+        "count": 2,
+        "host": "data.gg.go.kr"
+      },
+      {
+        "key": "dgfca.or.kr",
+        "count": 2,
+        "host": "dgfca.or.kr"
+      },
+      {
+        "key": "air.daegu.go.kr",
+        "count": 1,
+        "host": "air.daegu.go.kr"
+      },
+      {
+        "key": "happy.daegu.go.kr",
+        "count": 1,
+        "host": "happy.daegu.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 32,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}
