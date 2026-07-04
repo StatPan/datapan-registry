@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-04T04:43:48Z",
+  "generated_at": "2026-07-04T04:56:31Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 21036,
-    "callable_operations": 20894,
-    "specs_without_operations": 581,
-    "specs_without_callable_operation": 656,
+    "operations_total": 21091,
+    "callable_operations": 20949,
+    "specs_without_operations": 560,
+    "specs_without_callable_operation": 635,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 8698,
-    "operations_without_response_params": 9920,
+    "operations_without_request_params": 8753,
+    "operations_without_response_params": 9975,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 4608,
-      "external_endpoint_operations": 9426,
+      "external_endpoint_specs": 4629,
+      "external_endpoint_operations": 9481,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 123,
       "dev_approval_required_operations": 224,
-      "prod_approval_required_operations": 7954,
+      "prod_approval_required_operations": 8009,
       "malformed_endpoint_url_count": 42,
       "malformed_guide_url_count": 682,
       "top_endpoint_hosts": [
@@ -86,7 +86,7 @@
         },
         {
           "host": "www.culture.go.kr",
-          "count": 177
+          "count": 178
         },
         {
           "host": "www.jeju.go.kr",
@@ -164,7 +164,7 @@
         },
         {
           "host": "www.culture.go.kr",
-          "count": 177
+          "count": 178
         },
         {
           "host": "www.jeju.go.kr",

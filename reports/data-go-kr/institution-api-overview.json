@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T04:43:48Z",
+  "generated_at": "2026-07-04T04:56:31Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 21036,
-    "runtime_evidence": 4553,
-    "runtime_evidence_percent": 21.6,
-    "callable_operations": 20894,
-    "external_endpoint_operations": 9426,
-    "registered_adapter_operations": 9416,
+    "operations": 21091,
+    "runtime_evidence": 4608,
+    "runtime_evidence_percent": 21.8,
+    "callable_operations": 20949,
+    "external_endpoint_operations": 9481,
+    "registered_adapter_operations": 9471,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 9426
+      "count": 9481
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 9416
+      "count": 9471
     },
     {
       "key": "builtin",
@@ -72,16 +72,16 @@
       "operation_count": 2669
     },
     {
+      "category": "문화관광",
+      "operation_count": 2315
+    },
+    {
       "category": "농축수산",
       "operation_count": 2271
     },
     {
       "category": "교통물류",
       "operation_count": 2265
-    },
-    {
-      "category": "문화관광",
-      "operation_count": 2260
     },
     {
       "category": "사회복지",
@@ -257,7 +257,7 @@
     },
     {
       "host": "www.culture.go.kr",
-      "operation_count": 177,
+      "operation_count": 178,
       "adapter": "culture",
       "adapter_status": "registered",
       "capabilities": [
@@ -5353,6 +5353,58 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 55
+        }
+      ]
+    },
+    {
+      "organization": "예술경영지원센터",
+      "api_count": 21,
+      "operation_api_count": 21,
+      "operation_count": 55,
+      "runtime_evidence_count": 55,
+      "runtime_evidence_percent": 100.0,
+      "verified": 55,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 55,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "external_endpoint",
+          "count": 55
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 55
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "문화관광",
+          "operation_count": 55
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "kopis.or.kr",
+          "operation_count": 54,
+          "adapter": "kopis",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.culture.go.kr",
+          "operation_count": 1,
+          "adapter": "culture",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },
@@ -16288,24 +16340,6 @@
           "operation_count": 1
         }
       ]
-    },
-    {
-      "organization": "예술경영지원센터",
-      "api_count": 21,
-      "operation_api_count": 0,
-      "operation_count": 0,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [],
-      "by_adapter_status": [],
-      "top_categories": [],
-      "top_hosts": []
     },
     {
       "organization": "국방부",

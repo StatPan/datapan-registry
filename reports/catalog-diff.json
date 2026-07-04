@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T04:43:48Z",
+  "generated_at": "2026-07-04T04:56:31Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4294,
-    "stable": 7766
+    "changed": 4315,
+    "stable": 7745
   },
   "added": [],
   "removed": [],
@@ -24949,6 +24949,166 @@
       "new_digest": "1216f316505cd74b83e5ec1629a1f948c7031187ccc21fa5cb3a5e529116af2a"
     },
     {
+      "id": "15097805",
+      "old_title": "예술경영지원센터_공연예술통합전산망_DB검색_공연목록",
+      "new_title": "예술경영지원센터_공연예술통합전산망_DB검색_공연목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "83e062b069b1ec2992a3afdee5106b8398056c0bdd577f5405ada6903a9b1450",
+      "new_digest": "8d2321b830268e26b8f178e19ff777176b443fe2be030f20bc2ab96335a6e1c0"
+    },
+    {
+      "id": "15097806",
+      "old_title": "예술경영지원센터_공연예술통합전산망_DB검색_공연시설목록",
+      "new_title": "예술경영지원센터_공연예술통합전산망_DB검색_공연시설목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e92d21c42a4043b1e3b7a1c7e70b30c7fa12a64b95ae2014c8030e6502984563",
+      "new_digest": "6c65c612fc3cf550c4d6a6d557ea1bdcd02ade0e517260101b3ce8b912b2a3e5"
+    },
+    {
+      "id": "15097807",
+      "old_title": "예술경영지원센터_공연예술통합전산망_DB검색_기획제작사목록",
+      "new_title": "예술경영지원센터_공연예술통합전산망_DB검색_기획제작사목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e592008f8ab956e427e7ba03b637436cbe0a0d77c58a7e212d51f0f206a70ad2",
+      "new_digest": "4eaba044f226d5596fcbb2e0542e1ab43a4342bb954ee5907df9f8ee56d1d474"
+    },
+    {
+      "id": "15097808",
+      "old_title": "예술경영지원센터_공연예술통합전산망_DB검색_축제목록",
+      "new_title": "예술경영지원센터_공연예술통합전산망_DB검색_축제목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "247ef42e6f198acdf190dfe53723ad34d2482db3b29601da4f5d318e78d1c4c6",
+      "new_digest": "24a4e10d9d7488c25ec11ee880e7c85b0018912006680d56565d7d1249908280"
+    },
+    {
+      "id": "15097810",
+      "old_title": "예술경영지원센터_공연예술통합전산망_DB검색_수상작목록",
+      "new_title": "예술경영지원센터_공연예술통합전산망_DB검색_수상작목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f3a6b5494847b37d6b1a574345657b8f591c7f7df12d080ba4e49786dbf1e225",
+      "new_digest": "dbc613589edf32d18cdcf3b4f70b57ad7ea4c3d5af5eb44fa0f3b579ba027cf4"
+    },
+    {
+      "id": "15097811",
+      "old_title": "예술경영지원센터_공연예술통합전산망_DB검색_극작가목록",
+      "new_title": "예술경영지원센터_공연예술통합전산망_DB검색_극작가목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5a82165ca987703c9cc09522cfb329c147434fd9cc4ad4423918f23dce9244b9",
+      "new_digest": "5024d350d57ede3dc87b515f9d71a5dd853d0413b946f962246f107fe5c17251"
+    },
+    {
+      "id": "15097812",
+      "old_title": "예술경영지원센터_공연예술통합전산망_예매통계_예매상황판",
+      "new_title": "예술경영지원센터_공연예술통합전산망_예매통계_예매상황판",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "cbb187e365f4fb200e83b1276aae273426799addfbae22a940f0147dec94a840",
+      "new_digest": "0c7ec236a24c6317d31b988d3ce649ce329f5d1662f14c1bb0c5ad3236e03b11"
+    },
+    {
+      "id": "15097814",
+      "old_title": "예술경영지원센터_공연예술통합전산망_공연통계_일별 예매수 및 매출액",
+      "new_title": "예술경영지원센터_공연예술통합전산망_공연통계_일별 예매수 및 매출액",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0d43447a8d47db0bce579f15a08cae75969d1ec666e8d89fb7262556299283fb",
+      "new_digest": "dd3afb235f976421e8f5b53054f3e3dc8e73a602f1c787008f2e787838c43ee6"
+    },
+    {
+      "id": "15097815",
+      "old_title": "예술경영지원센터_공연예술통합전산망_공연통계_월별 예매수 및 매출액",
+      "new_title": "예술경영지원센터_공연예술통합전산망_공연통계_월별 예매수 및 매출액",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "376d901fe33ad67d4df7fdacec26c65423af18bb7b13bd9cf6d2aaa72c3d3ca7",
+      "new_digest": "b34492f439b8598ae848b83948bb7c4b92198b161f06ababf8e990270bad5a94"
+    },
+    {
+      "id": "15097816",
+      "old_title": "예술경영지원센터_공연예술통합전산망_공연통계_요일별 예매수 및 매출액",
+      "new_title": "예술경영지원센터_공연예술통합전산망_공연통계_요일별 예매수 및 매출액",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6503710c5e9567d8e0ea2e7bc9b258bfab708315b114c5f06b8c13eefd57cb37",
+      "new_digest": "2a9eef9e6deb10a36a2dbdadf7ee409df63a18fff4fc804dd675a5675c76235c"
+    },
+    {
+      "id": "15097817",
+      "old_title": "예술경영지원센터_공연예술통합전산망_공연통계_장르별통계",
+      "new_title": "예술경영지원센터_공연예술통합전산망_공연통계_장르별통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "624e0882ee9ae8e84251fe39a28f0bae93dc6e38b5efdc6edd569c44d42714ab",
+      "new_digest": "6bff440928cc214e4af2676cbb72e0ea47947437c182be19a6236b4a536ad31b"
+    },
+    {
+      "id": "15097818",
+      "old_title": "예술경영지원센터_공연예술통합전산망_공연통계_지역별통계",
+      "new_title": "예술경영지원센터_공연예술통합전산망_공연통계_지역별통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f3d33eb0fed1d060f8743af0123e88e9bc7c1bf9a74f5b0e51ed1d3906caed96",
+      "new_digest": "1dfa5e3fd96d68ec455653e8c3bdcece313dce109e3035875df7699d5e7d08ea"
+    },
+    {
+      "id": "15097819",
+      "old_title": "예술경영지원센터_공연예술통합전산망_공연통계_공연시설별통계",
+      "new_title": "예술경영지원센터_공연예술통합전산망_공연통계_공연시설별통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8c33868ba2f690ff27049ab94b98a35ee2d62f8d116d6bd2d06f404e4be6ff82",
+      "new_digest": "de4b28c4013af0d841b6920f7c67b48852f012b4207ef288ee7e6673cc88dc7e"
+    },
+    {
+      "id": "15097841",
+      "old_title": "예술경영지원센터_공연예술통합전산망_DB검색_공연상세",
+      "new_title": "예술경영지원센터_공연예술통합전산망_DB검색_공연상세",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "a30824476f275715a2a93361ab4f429302bce0744c1703dd362b9a0c88ffb96e",
+      "new_digest": "a86bb7108b4068612023eec85ea439aac02856d256b28e648cecb31c5a1f225c"
+    },
+    {
+      "id": "15097844",
+      "old_title": "예술경영지원센터_공연예술통합전산망_DB검색_공연시설상세",
+      "new_title": "예술경영지원센터_공연예술통합전산망_DB검색_공연시설상세",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bb3a14660c48cd5ce922349d11907f671cc3c3454d0662ebf18ab09fe5a14997",
+      "new_digest": "13777d4f669dcf14a248bd2aaef5c0daaadfcc60833a64dfae88f73f3d1ec481"
+    },
+    {
+      "id": "15097847",
+      "old_title": "예술경영지원센터_공연예술통합전산망_공연통계_공연별통계",
+      "new_title": "예술경영지원센터_공연예술통합전산망_공연통계_공연별통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "db28d4ab6b89f94ba24df788dfb4f3f6bc9715a5d2a696ba6acc030b7b2b242d",
+      "new_digest": "dbb28ea348dda0782a29648d2d04c1a0fcde26ac1ce6922a8875fc2b0f177b21"
+    },
+    {
       "id": "15097884",
       "old_title": "식품의약품안전처_수입쇠고기 냉동전환 정보",
       "new_title": "식품의약품안전처_수입쇠고기 냉동전환 정보",
@@ -34779,6 +34939,46 @@
       "new_digest": "f0e4efdc1ce823e824c660ecf2dac705b08ed81eaf803e81ba9a11eb25ac8841"
     },
     {
+      "id": "15128319",
+      "old_title": "예술경영지원센터_공연예술통합전산망_예매통계_기간별통계",
+      "new_title": "예술경영지원센터_공연예술통합전산망_예매통계_기간별통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0ef23c9de3ca06b483b7b888e25523fa21f32b4b7d3363e1657ef79665a72dd5",
+      "new_digest": "5e0eccba5d58602912ef29bddbf1f15b0c638cff429fa33077549a56d5efc164"
+    },
+    {
+      "id": "15128320",
+      "old_title": "예술경영지원센터_공연예술통합전산망_예매통계_장르별통계",
+      "new_title": "예술경영지원센터_공연예술통합전산망_예매통계_장르별통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "9319e77ca8ea555973e479a61a6777a68dfa839179c6a218d5f8073070f7327d",
+      "new_digest": "307d65926f1d38bdf0fab0b91243b779c6e3c632c03ca2a33b7bb090df5d545c"
+    },
+    {
+      "id": "15128321",
+      "old_title": "예술경영지원센터_공연예술통합전산망_예매통계_시간별통계",
+      "new_title": "예술경영지원센터_공연예술통합전산망_예매통계_시간별통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "722e4f2b86d3645166d37bc70e424db5bf2bad42893f8427136be1a5eed5fc44",
+      "new_digest": "9f6af4fb17a68879b9c3d792756a50eb73ee94c6ea55856bccf0c6d48a47c5e7"
+    },
+    {
+      "id": "15128322",
+      "old_title": "예술경영지원센터_공연예술통합전산망_예매통계_가격대별통계",
+      "new_title": "예술경영지원센터_공연예술통합전산망_예매통계_가격대별통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3152c833fa883c5cd1082bbc2e7c917616ff4cf00e77baf469dac2c2e1bcec65",
+      "new_digest": "89ea9d9b75dfd3a1b3657cfb4c89e19832b95043fb0e54141c9647fbcc9674d0"
+    },
+    {
       "id": "15128482",
       "old_title": "대전광역시 서구_한의원 현황",
       "new_title": "대전광역시 서구_한의원 현황",
@@ -35357,6 +35557,16 @@
       ],
       "old_digest": "8432b75ba65abf88e78d4349b6f69c39b5124c5acc00beef0c7fb22282d02a6f",
       "new_digest": "275155dc1cae6dba65c8be7bf99a5951171c100cac1abf944191ff3c2221d18d"
+    },
+    {
+      "id": "15135008",
+      "old_title": "예술경영지원센터_문화예술 일자리 정보",
+      "new_title": "예술경영지원센터_문화예술 일자리 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8b814db914b93a58b229bcdb556c2c33cd85f28efded15878951823c5313e03e",
+      "new_digest": "7b05f7495e886dd5dfef4f2e4c189090e37ebc31cb5a05fc3f4928534cb28899"
     },
     {
       "id": "15135105",

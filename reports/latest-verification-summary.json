@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T04:43:29Z",
+  "generated_at": "2026-07-04T04:56:14Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4553,
-    "verified": 2643,
+    "total": 4608,
+    "verified": 2698,
     "failed": 367,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2643,
+        "count": 2698,
         "status": "verified"
       },
       {
@@ -400,7 +400,7 @@
       },
       {
         "key": "culture",
-        "count": 177,
+        "count": 178,
         "provider": "culture"
       },
       {
@@ -497,6 +497,11 @@
         "key": "nfqs",
         "count": 55,
         "provider": "nfqs"
+      },
+      {
+        "key": "kopis",
+        "count": 54,
+        "provider": "kopis"
       },
       {
         "key": "open-law",
@@ -1002,7 +1007,7 @@
       },
       {
         "key": "www.culture.go.kr",
-        "count": 177,
+        "count": 178,
         "host": "www.culture.go.kr"
       },
       {
@@ -1079,6 +1084,11 @@
         "key": "www.nfqs.go.kr",
         "count": 55,
         "host": "www.nfqs.go.kr"
+      },
+      {
+        "key": "kopis.or.kr",
+        "count": 54,
+        "host": "kopis.or.kr"
       },
       {
         "key": "www.seogwipo.go.kr",
@@ -1734,7 +1744,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3829,
+        "count": 3884,
         "kind": "external_endpoint"
       },
       {

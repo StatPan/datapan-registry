@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `21036`
-- callable operations: `20894` (`99.3%`)
+- operations: `21091`
+- callable operations: `20949` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `9426`
-- registered adapter operations: `9416`
+- external endpoint operations: `9481`
+- registered adapter operations: `9471`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
-- approval-required operations: `8060`
+- approval-required operations: `8115`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `158`
-- registered adapter hosts: `155`
+- registered adapter hosts: `156`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -250,8 +250,9 @@ KEIS/YouthCenter, `18` NIHC, `30` Ulsan WWW, `49` NAQS, `70` Seogwipo, and
 `26` Yuseong, `55` 한국체육산업개발, `3` NRF, `27` KISTI, `48` KEIT, `33`
 농림축산식품부 농림축산검역본부, `35` 서울교통공사, `17` 기후에너지환경부
 한강홍수통제소, `3` 한국농수산식품유통공사, `22` 국가유산청 국립고궁박물관,
-and `22` 주택도시보증공사 link-detail operations. The next viable
-materialization queue after the current upstream blockers is `예술경영지원센터`.
+`22` 주택도시보증공사, and `21` 예술경영지원센터 link-detail operations.
+The next viable materialization queue after the current upstream blockers is
+`국가데이터처`.
 The runtime reactivation queue starts at `행정안전부`: `1252`
 APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
@@ -778,6 +779,12 @@ readiness, not to advance verified runtime coverage.
    brings checked runtime evidence to `4553`, verified checks to `2643`,
    failed checks to `367`, registered external adapter operations to `9416`,
    and raises API operation coverage to `11,479` of `12,060` APIs (`95.2%`).
+   The 예술경영지원센터 batch adds KOPIS host coverage for `kopis.or.kr`,
+   materializes the remaining `21` APIs and `55` operations, and merges `55`
+   verified bounded checks. That brings checked runtime evidence to `4608`,
+   verified checks to `2698`, registered external adapter operations to
+   `9471`, and raises API operation coverage to `11,500` of `12,060` APIs
+   (`95.4%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,
