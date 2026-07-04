@@ -94,9 +94,9 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `524` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `507` data.go.kr APIs
   without operation mappings, `9,285` operation-mapped APIs without runtime
-  evidence, and `227` APIs with failed runtime evidence that need repair.
+  evidence, and `233` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
   `reports/open-assembly/runtime-evidence-plan.json`, and
@@ -548,8 +548,14 @@ Current gaps:
   merges `40` verified bounded checks. That brings runtime evidence to `4699`,
   verified checks to `2789`, and registered external adapter operations to
   `9562`.
-- API operation coverage remains incomplete: `11,536` of `12,060` APIs have
-  operation mappings (`95.7%`), leaving `524` APIs to materialize and `9,285`
+- The 국방부 batch adds Milipass host coverage for `www.milipass.kr`, reuses
+  MND Open Data coverage for `opendata.mnd.go.kr`, materializes `17` APIs and
+  `29` operations, and merges `29` bounded checks (`19` verified and `10`
+  failed on `mnd-open-data_request_failed`). That brings runtime evidence to
+  `4728`, verified checks to `2808`, failed checks to `377`, and registered
+  external adapter operations to `9591`.
+- API operation coverage remains incomplete: `11,553` of `12,060` APIs have
+  operation mappings (`95.8%`), leaving `507` APIs to materialize and `9,285`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

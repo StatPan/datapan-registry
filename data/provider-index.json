@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T05:31:11Z",
+  "generated_at": "2026-07-04T05:44:38Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 133,
-  "host_count": 166,
+  "adapter_count": 134,
+  "host_count": 167,
   "adapters": [
     {
       "name": "airport",
@@ -816,6 +816,16 @@
       ]
     },
     {
+      "name": "milipass",
+      "status": "registered",
+      "hosts": [
+        "www.milipass.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "mnd-open-data",
       "status": "registered",
       "hosts": [
@@ -1394,8 +1404,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 133,
-    "verification_capable_adapters": 133,
+    "adapter_count": 134,
+    "verification_capable_adapters": 134,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

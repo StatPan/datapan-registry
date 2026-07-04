@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T05:31:11Z",
+  "generated_at": "2026-07-04T05:44:38Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4351,
-    "stable": 7709
+    "changed": 4368,
+    "stable": 7692
   },
   "added": [],
   "removed": [],
@@ -347,6 +347,36 @@
       ],
       "old_digest": "ccfec2d0407f59c804816335a7bb3ea66e353bea69c7dc31494ac265fa2b11e2",
       "new_digest": "ad797ceafac88f6b15b75b3970c645f9061b3b6f69d43c32c9318bf2eaac2fb8"
+    },
+    {
+      "id": "15013060",
+      "old_title": "국방부 병사 보급기준 정보",
+      "new_title": "국방부 병사 보급기준 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ee665bd23e2eba1aa81125f14920585526b63e8d247ab6d11e5592f9015569b4",
+      "new_digest": "a5a45bb2c39a0a72745ed802df791fcc6f093ff6be5aa73001452a8095f4a636"
+    },
+    {
+      "id": "15013068",
+      "old_title": "군 복지시설 주변 관광지 정보",
+      "new_title": "군 복지시설 주변 관광지 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1c69f8a6a1e39f08a65c162969f9aeee314ea865789cfa359dab7077c98c4c09",
+      "new_digest": "5a4a8d671c086f22289053b5a304d9295fcf53660a596753ae731d4e7ebf8ecf"
+    },
+    {
+      "id": "15013070",
+      "old_title": "국방부_TMO(여행장병 안내소) 정보",
+      "new_title": "국방부_TMO(여행장병 안내소) 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b2e41c1a650b7a28a387da0540e8eb4237c4392cff3be63084ca0b14c1ad6a9e",
+      "new_digest": "8939cd82baf5efe35ebe22d98b7a7eace2fba1db54626335def00727ff091bd1"
     },
     {
       "id": "15014526",
@@ -28599,6 +28629,86 @@
       "new_digest": "cdc5f910af85b1189290101b84822f3791829a1de0d29f6f335f133a69e33ad0"
     },
     {
+      "id": "15106254",
+      "old_title": "국방부_육군 장병 확인",
+      "new_title": "국방부_육군 장병 확인",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "440a5f37c3717e3db13042f968952959ee339a3084d5ad1aad712f622550b676",
+      "new_digest": "97b96d2e16633b5f4ef8d62cf19b8e53bd97c87da9cb5f3075aa9644f4d8fb28"
+    },
+    {
+      "id": "15106267",
+      "old_title": "국방부_육군 장병가족 확인",
+      "new_title": "국방부_육군 장병가족 확인",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c1c6aedce1264c00504ca24159e92b7bd81cac73053326731f72aeef687140cb",
+      "new_digest": "ad59ac1744636b2aa391118e3642f097a3de9776cd57887caff826c48973d726"
+    },
+    {
+      "id": "15106268",
+      "old_title": "국방부_육군 장병 가족 관계",
+      "new_title": "국방부_육군 장병 가족 관계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e70481b1250bc81b8e5e1970c4bcd66e645d08f437c847a5e8722065828aadd2",
+      "new_digest": "40d253b964800a904794c6527a9898d2f91b92472448b4cf6655bb20d5e27e09"
+    },
+    {
+      "id": "15106271",
+      "old_title": "국방부_육군 출장 내역 조회",
+      "new_title": "국방부_육군 출장 내역 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "2100e006d2b6cefcd8fbaf5a5a821b453ecde9717b3f36b7b6f1086efbe64432",
+      "new_digest": "8fea2c34451d121c3a8a901578ac459e4ea7e290d248fa8b14222dca8c15307a"
+    },
+    {
+      "id": "15106273",
+      "old_title": "국방부_육군 장병 휴가 내역 조회",
+      "new_title": "국방부_육군 장병 휴가 내역 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8a4cf9c6469baa081dd7a596435cbdd9c680bda8f2f9f501898d61aaa7d271b2",
+      "new_digest": "7a6c355960efae04f241eb65fb6734f81166c7d39a8ba08dbf92a1e57dae51b9"
+    },
+    {
+      "id": "15106274",
+      "old_title": "국방부_육군 장병 급여명세 내역 조회",
+      "new_title": "국방부_육군 장병 급여명세 내역 조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "291b91f2e1f1ee1ecc956c122ffcd28ed748ce6f756b08ba1959fe4dca606747",
+      "new_digest": "df37d3bf7e92617cf618d24ebd2c5697081787313b28efb2ba4f4eb345fc89d8"
+    },
+    {
+      "id": "15106275",
+      "old_title": "국방부_육군 장병 신분증 발급 이력",
+      "new_title": "국방부_육군 장병 신분증 발급 이력",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "388f79dd4d8adab3852014bff9e4bbbecc1a30311d904014a037ae37f5f185c9",
+      "new_digest": "361f7c0e462912e62eb2a48de52b06c210d567e94a4a5be087363448a7795b73"
+    },
+    {
+      "id": "15106278",
+      "old_title": "국방부_육군 장병 밀리패스 결제정보 내역",
+      "new_title": "국방부_육군 장병 밀리패스 결제정보 내역",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "78bf388512d69964be8022c84c3b52514ba86e56415c8d853e377d2b6a44884f",
+      "new_digest": "98ee1cf87e8480d67d77e714421f015755e938aacac9ad8f4b2d5838b6385d92"
+    },
+    {
       "id": "15106677",
       "old_title": "경기도_발달 골목 상권 추정 매출 현황",
       "new_title": "경기도_발달 골목 상권 추정 매출 현황",
@@ -42889,6 +42999,46 @@
       "new_digest": "c4789e596b9bc53ddefeecf2fb4f93c6d877eb932570c45bcb2f8c07c0efd9b7"
     },
     {
+      "id": "3034718",
+      "old_title": "국방정보기술표준 목록",
+      "new_title": "국방정보기술표준 목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d2a342ca4a610831a34aeecaff5535272f61ca22bd8bd32a170185033f979980",
+      "new_digest": "4536afbcb9f6efc37f106aae23ba17be2579d1f11bc59c82327ca200effa5e2e"
+    },
+    {
+      "id": "3034724",
+      "old_title": "국방부_군사법원 연락처 정보",
+      "new_title": "국방부_군사법원 연락처 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "cdc96964471a1c1506bd4b2f9eaa0c4fdf1f3c8eacc6788aa9337865cde9a237",
+      "new_digest": "ac0fe76dd04ffd4893e0ba9b21ec2b7e0fcc31b9d8adfc490aefb474f3f313f9"
+    },
+    {
+      "id": "3034733",
+      "old_title": "국방부_해군 모집 정보",
+      "new_title": "국방부_해군 모집 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "331407fd2ab031ae52b2f1aaa6bb5b678e63763422a303bf3bd44d4faf9a0dd9",
+      "new_digest": "c1555005e571e270c6d9f9472d7f6a5413888d8320633aabbb0fc2da721e59fe"
+    },
+    {
+      "id": "3034742",
+      "old_title": "국방부 군무원 채용시험 현황",
+      "new_title": "국방부 군무원 채용시험 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "86422675fc5c09facdc0c1a44439400663bb6d69fe0791eabc8360baba53182f",
+      "new_digest": "647c622aa360e76d95a88b48e38d8eba9066c2fc5222d63a3203ff432f19f5e5"
+    },
+    {
       "id": "3034938",
       "old_title": "우유 및 유제품 생산소비현황",
       "new_title": "우유 및 유제품 생산소비현황",
@@ -43319,6 +43469,16 @@
       "new_digest": "2f689e5d08878d6cdee5810b7f7431678bc814a0e748b4d13db85ba55caebebf"
     },
     {
+      "id": "3061347",
+      "old_title": "국방부_국가자격",
+      "new_title": "국방부_국가자격",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "84bdea2a42f32b1fcf74e6be60f228265d79791e84fb2bcee653fc45ea428d04",
+      "new_digest": "8a1e9c15eeee536867bc302bcc3f5e4014a2f1eeeb0dc6948a77c2e9db753946"
+    },
+    {
       "id": "3065251",
       "old_title": "한국사회보장정보원_어린이집 정보",
       "new_title": "한국사회보장정보원_어린이집 정보",
@@ -43487,6 +43647,16 @@
       ],
       "old_digest": "881b3ef42985582cb81f18750fa8d651b002da67d46ffdb5aa759e92f80b712f",
       "new_digest": "80fe6f9e1c07dc5772a3875475d99bda9424103805b8485b31a499e067ac57e1"
+    },
+    {
+      "id": "3081235",
+      "old_title": "국방부_육군 행사 정보",
+      "new_title": "국방부_육군 행사 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f8d8dd755c544e6aca89b24d352006f1797ee137d15b7abdb963073c270c1391",
+      "new_digest": "17e25253509b3a8540b4453aa92a8640f91d16ab36249114c26de370f5a65e9b"
     },
     {
       "id": "3082721",

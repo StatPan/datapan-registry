@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-04T05:28:46Z",
+  "generated_at": "2026-07-04T05:44:19Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4699,
-    "verified": 2789,
-    "failed": 367,
+    "total": 4728,
+    "verified": 2808,
+    "failed": 377,
     "skipped": 1543,
     "unknown": 0
   },
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2789,
+        "count": 2808,
         "status": "verified"
       },
       {
@@ -26,7 +26,7 @@
       },
       {
         "key": "failed",
-        "count": 367,
+        "count": 377,
         "status": "failed"
       }
     ],
@@ -155,6 +155,11 @@
         "key": "epost_unsupported_protocol",
         "count": 10,
         "reason": "epost_unsupported_protocol"
+      },
+      {
+        "key": "mnd-open-data_request_failed",
+        "count": 10,
+        "reason": "mnd-open-data_request_failed"
       },
       {
         "key": "external_provider_adapter_missing",
@@ -634,6 +639,11 @@
         "provider": "gogung"
       },
       {
+        "key": "mnd-open-data",
+        "count": 21,
+        "provider": "mnd-open-data"
+      },
+      {
         "key": "ulsan",
         "count": 20,
         "provider": "ulsan"
@@ -737,6 +747,11 @@
         "key": "humetro",
         "count": 8,
         "provider": "humetro"
+      },
+      {
+        "key": "milipass",
+        "count": 8,
+        "provider": "milipass"
       },
       {
         "key": "pqis",
@@ -1266,6 +1281,11 @@
         "host": "www.gogung.go.kr"
       },
       {
+        "key": "opendata.mnd.go.kr",
+        "count": 21,
+        "host": "opendata.mnd.go.kr"
+      },
+      {
         "key": "openapi.its.ulsan.kr",
         "count": 20,
         "host": "openapi.its.ulsan.kr"
@@ -1404,6 +1424,11 @@
         "key": "openapi.pqis.go.kr",
         "count": 8,
         "host": "openapi.pqis.go.kr"
+      },
+      {
+        "key": "www.milipass.kr",
+        "count": 8,
+        "host": "www.milipass.kr"
       },
       {
         "key": "www.safe182.go.kr",
@@ -1794,7 +1819,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3975,
+        "count": 4004,
         "kind": "external_endpoint"
       },
       {

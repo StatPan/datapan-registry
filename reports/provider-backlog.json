@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T05:31:11Z",
+  "generated_at": "2026-07-04T05:44:38Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 318,
+  "filtered_count": 320,
   "summary": {
-    "hosts": 318,
+    "hosts": 320,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 172,
-    "external_guide_hosts": 226,
-    "registered_adapter_hosts": 161,
-    "operation_hosts": 174,
-    "guide_only_hosts": 144,
+    "external_endpoint_hosts": 173,
+    "external_guide_hosts": 228,
+    "registered_adapter_hosts": 162,
+    "operation_hosts": 175,
+    "guide_only_hosts": 145,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 158,
-    "approval_required_operations": 8158,
+    "approval_required_operations": 8166,
     "malformed_source_url_count": 724
   },
   "providers": [
@@ -1153,6 +1153,23 @@
       ]
     },
     {
+      "host": "opendata.mnd.go.kr",
+      "provider": "mnd-open-data",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 11,
+      "operations": 23,
+      "external_endpoint_operations": 23,
+      "approval_required_operations": 2,
+      "sample_ids": [
+        "15013060",
+        "15013068",
+        "15013070"
+      ]
+    },
+    {
       "host": "www.gogung.go.kr",
       "kinds": [
         "external_endpoint",
@@ -1512,6 +1529,24 @@
         "15122208",
         "15122210",
         "15122212"
+      ]
+    },
+    {
+      "host": "www.milipass.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 8,
+      "operations": 8,
+      "external_endpoint_operations": 8,
+      "external_guide_specs": 8,
+      "approval_required_operations": 8,
+      "sample_ids": [
+        "15106254",
+        "15106267",
+        "15106268"
       ]
     },
     {
@@ -2263,22 +2298,6 @@
       "sample_ids": [
         "15061409",
         "15146353"
-      ]
-    },
-    {
-      "host": "opendata.mnd.go.kr",
-      "provider": "mnd-open-data",
-      "kinds": [
-        "external_endpoint"
-      ],
-      "adapter_status": "adapter",
-      "specs": 2,
-      "operations": 2,
-      "external_endpoint_operations": 2,
-      "approval_required_operations": 2,
-      "sample_ids": [
-        "15126199",
-        "15126200"
       ]
     },
     {
@@ -3554,6 +3573,21 @@
         "15129372",
         "15143456",
         "15151027"
+      ]
+    },
+    {
+      "host": "openapi.mnd.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 4,
+      "operations": 0,
+      "external_guide_specs": 4,
+      "sample_ids": [
+        "15013060",
+        "15013068",
+        "15013070"
       ]
     },
     {

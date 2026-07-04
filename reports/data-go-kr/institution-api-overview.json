@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T05:31:11Z",
+  "generated_at": "2026-07-04T05:44:38Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 21182,
-    "runtime_evidence": 4699,
-    "runtime_evidence_percent": 22.2,
-    "callable_operations": 21040,
-    "external_endpoint_operations": 9572,
-    "registered_adapter_operations": 9562,
+    "operations": 21211,
+    "runtime_evidence": 4728,
+    "runtime_evidence_percent": 22.3,
+    "callable_operations": 21069,
+    "external_endpoint_operations": 9601,
+    "registered_adapter_operations": 9591,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 9572
+      "count": 9601
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 9562
+      "count": 9591
     },
     {
       "key": "builtin",
@@ -125,7 +125,7 @@
     },
     {
       "category": "통일외교안보",
-      "operation_count": 213
+      "operation_count": 242
     },
     {
       "category": "법률",
@@ -7835,6 +7835,58 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 29
+        }
+      ]
+    },
+    {
+      "organization": "국방부",
+      "api_count": 17,
+      "operation_api_count": 17,
+      "operation_count": 29,
+      "runtime_evidence_count": 29,
+      "runtime_evidence_percent": 100.0,
+      "verified": 19,
+      "failed": 10,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 8,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "external_endpoint",
+          "count": 29
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 29
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "통일외교안보",
+          "operation_count": 29
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "opendata.mnd.go.kr",
+          "operation_count": 21,
+          "adapter": "mnd-open-data",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.milipass.kr",
+          "operation_count": 8,
+          "adapter": "milipass",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },
@@ -16409,24 +16461,6 @@
           "operation_count": 1
         }
       ]
-    },
-    {
-      "organization": "국방부",
-      "api_count": 17,
-      "operation_api_count": 0,
-      "operation_count": 0,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [],
-      "by_adapter_status": [],
-      "top_categories": [],
-      "top_hosts": []
     },
     {
       "organization": "한국은행",

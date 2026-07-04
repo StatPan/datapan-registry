@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T05:31:18Z",
+  "generated_at": "2026-07-04T05:44:45Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 21182,
-    "callable_operations": 21040,
+    "operations": 21211,
+    "callable_operations": 21069,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 9572,
-    "registered_adapter_operations": 9562,
+    "external_endpoint_operations": 9601,
+    "registered_adapter_operations": 9591,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.7,
-    "approval_required_operations": 8158,
+    "approval_required_operations": 8166,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 158,
-    "registered_adapter_hosts": 161,
+    "registered_adapter_hosts": 162,
     "missing_adapter_hosts": 11,
-    "adapter_count": 133,
+    "adapter_count": 134,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-04T05:28:46Z",
-    "total": 4699,
-    "verified": 2789,
-    "failed": 367,
+    "generated_at": "2026-07-04T05:44:19Z",
+    "total": 4728,
+    "verified": 2808,
+    "failed": 377,
     "skipped": 1543,
     "unknown": 0,
     "verified_percent": 59.4,
-    "evidence_operation_percent": 22.2
+    "evidence_operation_percent": 22.3
   },
   "route_evidence": {
     "present": true,
@@ -381,10 +381,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-04T05:31:18Z",
+    "generated_at": "2026-07-04T05:44:45Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 133,
-    "host_count": 166,
+    "adapter_count": 134,
+    "host_count": 167,
     "adapters": [
       {
         "name": "airport",
@@ -1198,6 +1198,16 @@
         ]
       },
       {
+        "name": "milipass",
+        "status": "registered",
+        "hosts": [
+          "www.milipass.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
         "name": "mnd-open-data",
         "status": "registered",
         "hosts": [
@@ -1776,8 +1786,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 133,
-      "verification_capable_adapters": 133,
+      "adapter_count": 134,
+      "verification_capable_adapters": 134,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,
