@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T00:54:26Z",
+  "generated_at": "2026-07-04T01:09:37Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 287,
+  "filtered_count": 288,
   "summary": {
-    "hosts": 287,
+    "hosts": 288,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 142,
+    "external_endpoint_hosts": 143,
     "external_guide_hosts": 208,
-    "registered_adapter_hosts": 131,
-    "operation_hosts": 144,
+    "registered_adapter_hosts": 132,
+    "operation_hosts": 145,
     "guide_only_hosts": 143,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7620,
+    "approval_required_operations": 7650,
     "malformed_source_url_count": 712
   },
   "providers": [
@@ -838,6 +838,23 @@
         "15056663",
         "15056797",
         "15057017"
+      ]
+    },
+    {
+      "host": "www.ulsan.go.kr",
+      "provider": "ulsan-www",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 10,
+      "operations": 30,
+      "external_endpoint_operations": 30,
+      "approval_required_operations": 30,
+      "sample_ids": [
+        "15095442",
+        "15095685",
+        "15095686"
       ]
     },
     {

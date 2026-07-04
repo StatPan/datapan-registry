@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T00:54:26Z",
+  "generated_at": "2026-07-04T01:09:37Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 20277,
-    "runtime_evidence": 3816,
-    "runtime_evidence_percent": 18.8,
-    "callable_operations": 20135,
-    "external_endpoint_operations": 8667,
-    "registered_adapter_operations": 8657,
+    "operations": 20307,
+    "runtime_evidence": 3846,
+    "runtime_evidence_percent": 18.9,
+    "callable_operations": 20165,
+    "external_endpoint_operations": 8697,
+    "registered_adapter_operations": 8687,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 8667
+      "count": 8697
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 8657
+      "count": 8687
     },
     {
       "key": "builtin",
@@ -105,7 +105,7 @@
     },
     {
       "category": "국토관리",
-      "operation_count": 1013
+      "operation_count": 1043
     },
     {
       "category": "보건의료",
@@ -3148,6 +3148,87 @@
       ]
     },
     {
+      "organization": "울산광역시",
+      "api_count": 31,
+      "operation_api_count": 31,
+      "operation_count": 105,
+      "runtime_evidence_count": 50,
+      "runtime_evidence_percent": 47.6,
+      "verified": 30,
+      "failed": 3,
+      "skipped": 17,
+      "unknown": 0,
+      "approval_required_operations": 30,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 55
+        },
+        {
+          "key": "external_endpoint",
+          "count": 50
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 50
+        },
+        {
+          "key": "builtin",
+          "count": 55
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "교통물류",
+          "operation_count": 33
+        },
+        {
+          "category": "국토관리",
+          "operation_count": 30
+        },
+        {
+          "category": "문화관광",
+          "operation_count": 20
+        },
+        {
+          "category": "환경기상",
+          "operation_count": 14
+        },
+        {
+          "category": "교육",
+          "operation_count": 6
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 55
+        },
+        {
+          "host": "www.ulsan.go.kr",
+          "operation_count": 30,
+          "adapter": "ulsan-www",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "openapi.its.ulsan.kr",
+          "operation_count": 20,
+          "adapter": "ulsan",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "한국대학교육협의회",
       "api_count": 9,
       "operation_api_count": 9,
@@ -3777,78 +3858,6 @@
         {
           "host": "car.daegu.go.kr",
           "operation_count": 4
-        }
-      ]
-    },
-    {
-      "organization": "울산광역시",
-      "api_count": 31,
-      "operation_api_count": 21,
-      "operation_count": 75,
-      "runtime_evidence_count": 20,
-      "runtime_evidence_percent": 26.7,
-      "verified": 0,
-      "failed": 3,
-      "skipped": 17,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 55
-        },
-        {
-          "key": "external_endpoint",
-          "count": 20
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 20
-        },
-        {
-          "key": "builtin",
-          "count": 55
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "교통물류",
-          "operation_count": 33
-        },
-        {
-          "category": "문화관광",
-          "operation_count": 20
-        },
-        {
-          "category": "환경기상",
-          "operation_count": 14
-        },
-        {
-          "category": "교육",
-          "operation_count": 6
-        },
-        {
-          "category": "산업고용",
-          "operation_count": 1
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 55
-        },
-        {
-          "host": "openapi.its.ulsan.kr",
-          "operation_count": 20,
-          "adapter": "ulsan",
-          "adapter_status": "registered",
-          "capabilities": [
-            "call",
-            "verification"
-          ]
         }
       ]
     },

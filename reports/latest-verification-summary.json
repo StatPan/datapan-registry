@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T00:54:13Z",
+  "generated_at": "2026-07-04T01:09:35Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 3816,
-    "verified": 1967,
+    "total": 3846,
+    "verified": 1997,
     "failed": 306,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 1967,
+        "count": 1997,
         "status": "verified"
       },
       {
@@ -522,6 +522,11 @@
         "key": "open-assembly",
         "count": 30,
         "provider": "open-assembly"
+      },
+      {
+        "key": "ulsan-www",
+        "count": 30,
+        "provider": "ulsan-www"
       },
       {
         "key": "khoa",
@@ -1046,6 +1051,11 @@
         "host": "www.calspia.go.kr"
       },
       {
+        "key": "www.ulsan.go.kr",
+        "count": 30,
+        "host": "www.ulsan.go.kr"
+      },
+      {
         "key": "www.khoa.go.kr",
         "count": 29,
         "host": "www.khoa.go.kr"
@@ -1514,7 +1524,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3092,
+        "count": 3122,
         "kind": "external_endpoint"
       },
       {

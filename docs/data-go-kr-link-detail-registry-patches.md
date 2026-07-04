@@ -2,13 +2,13 @@
 
 This report fetches one operation-materialization batch from public data.go.kr detail pages and keeps only operations whose hosts already have registered adapters.
 
-- Generated at: `2026-07-04T00:53:09Z`
+- Generated at: `2026-07-04T01:08:30Z`
 - Batch: `institution-03`
-- Organization: `국가유산청 국립무형유산원`
-- Input APIs: `15`
-- Details fetched: `15`
-- Patches: `15`
-- Operations to add: `18`
+- Organization: `울산광역시`
+- Input APIs: `10`
+- Details fetched: `10`
+- Patches: `10`
+- Operations to add: `30`
 - Skipped: `0`
 - Failed: `0`
 
@@ -16,20 +16,15 @@ This report fetches one operation-materialization batch from public data.go.kr d
 
 | Dataset ID | Organization | Title | Operations | Hosts |
 | --- | --- | --- | ---: | --- |
-| 15064369 | 국가유산청 국립무형유산원 | 국가유산청 국립무형유산원_음원 디지털해설서 | 1 | www.nihc.go.kr |
-| 15064368 | 국가유산청 국립무형유산원 | 국가유산청 국립무형유산원_공연/전시/교육 디지털보고서 | 1 | www.nihc.go.kr |
-| 15064367 | 국가유산청 국립무형유산원 | 국가유산청 국립무형유산원_학술연구 디지털보고서 | 1 | www.nihc.go.kr |
-| 15064366 | 국가유산청 국립무형유산원 | 국가유산청 국립무형유산원_무형유산기록화 디지털보고서 | 1 | www.nihc.go.kr |
-| 15041867 | 국가유산청 국립무형유산원 | 국가유산청 국립무형유산원_무형문화재 기증기탁 정보 | 1 | www.nihc.go.kr |
-| 15041866 | 국가유산청 국립무형유산원 | 국가유산청 국립무형유산원_무형문화재 교육 정보 | 1 | www.nihc.go.kr |
-| 15041863 | 국가유산청 국립무형유산원 | 국가유산청 국립무형유산원_무형문화재 전시 정보 | 1 | www.nihc.go.kr |
-| 15041861 | 국가유산청 국립무형유산원 | 국가유산청 국립무형유산원_무형문화재 공연정보 | 1 | www.nihc.go.kr |
-| 15041860 | 국가유산청 국립무형유산원 | 국가유산청 국립무형유산원_전승자 구술채록 정보 | 2 | www.nihc.go.kr |
-| 15041858 | 국가유산청 국립무형유산원 | 국가유산청 국립무형유산원_무형유산 기록화 정보 | 1 | www.nihc.go.kr |
-| 15039779 | 국가유산청 국립무형유산원 | 국가유산청 국립무형유산원_음원자료 정보 | 1 | www.nihc.go.kr |
-| 15028219 | 국가유산청 국립무형유산원 | 국가유산청 국립무형유산원_학술조사자료 정보 | 2 | www.nihc.go.kr |
-| 15028218 | 국가유산청 국립무형유산원 | 국가유산청 국립무형유산원_기록영화(16mm) 정보 | 1 | www.nihc.go.kr |
-| 15028217 | 국가유산청 국립무형유산원 | 국가유산청 국립무형유산원_전수교육관 정보 | 1 | www.nihc.go.kr |
-| 15028215 | 국가유산청 국립무형유산원 | 국가유산청 국립무형유산원_국가무형문화재 현황 | 2 | www.nihc.go.kr |
+| 15095689 | 울산광역시 | 울산광역시_도시경관기록_사진상세정보 | 3 | www.ulsan.go.kr |
+| 15095693 | 울산광역시 | 울산광역시_도시경관기록_다운로드 베스트 사진목록 | 3 | www.ulsan.go.kr |
+| 15095692 | 울산광역시 | 울산광역시_도시경관기록_인기별 사진목록 | 3 | www.ulsan.go.kr |
+| 15095688 | 울산광역시 | 울산광역시_도시경관기록_사진목록 | 3 | www.ulsan.go.kr |
+| 15095687 | 울산광역시 | 울산광역시_도시경관기록_키워드 검색 | 3 | www.ulsan.go.kr |
+| 15095686 | 울산광역시 | 울산광역시_도시경관기록 표준기록점 정보 | 3 | www.ulsan.go.kr |
+| 15095685 | 울산광역시 | 울산광역시_도시경관기록 표준기록점 사진상세 정보 | 3 | www.ulsan.go.kr |
+| 15095691 | 울산광역시 | 울산광역시_도시경관기록_화보집조회 | 3 | www.ulsan.go.kr |
+| 15095690 | 울산광역시 | 울산광역시_도시경관기록_기록보고서조회 | 3 | www.ulsan.go.kr |
+| 15095442 | 울산광역시 | 울산광역시_도시경관기록 표준기록점 GPS 정보 | 3 | www.ulsan.go.kr |
 
 ## Skipped Reasons

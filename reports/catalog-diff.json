@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T00:54:26Z",
+  "generated_at": "2026-07-04T01:09:37Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 3937,
-    "stable": 8123
+    "changed": 3947,
+    "stable": 8113
   },
   "added": [],
   "removed": [],
@@ -22439,6 +22439,16 @@
       "new_digest": "9ab3ea6d5e2c5a06abf66de80c0838b20af816693b491c04cebed999c48da8a0"
     },
     {
+      "id": "15095442",
+      "old_title": "울산광역시_도시경관기록 표준기록점 GPS 정보",
+      "new_title": "울산광역시_도시경관기록 표준기록점 GPS 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "26b5113e92bf6a68d966913d017cfb355eb64987f7246d519ac86896fe8c27c7",
+      "new_digest": "85b2b7c3af4f79ba7421e0762d5b3f124fbbb9d852f1c6356646929d7f802a78"
+    },
+    {
       "id": "15095544",
       "old_title": "식품의약품안전처_축산물품목제조보고(원재료)",
       "new_title": "식품의약품안전처_축산물품목제조보고(원재료)",
@@ -22447,6 +22457,96 @@
       ],
       "old_digest": "7fcdf39d70f8ffb0bb163120763904e210e5ddf9341c62d5a83163c9572009ec",
       "new_digest": "08311ddabbaf4442ad6dd07358dda9b5b57b1bb0f70066ad1f13282d8f3e2ad8"
+    },
+    {
+      "id": "15095685",
+      "old_title": "울산광역시_도시경관기록 표준기록점 사진상세 정보",
+      "new_title": "울산광역시_도시경관기록 표준기록점 사진상세 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "338d8dd8b62922a633169e0fbbf2820d50e4bf64412268b6bc62f503aa5d6853",
+      "new_digest": "fbb924dd1bce45e31a5c55feb60ae5ae8e5780a7e5e61f9a2a4b30d65011190a"
+    },
+    {
+      "id": "15095686",
+      "old_title": "울산광역시_도시경관기록 표준기록점 정보",
+      "new_title": "울산광역시_도시경관기록 표준기록점 정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c1b7f7210d7c91530fc306671e09626cbb743fd0bb0b8e999fbc8099575854dc",
+      "new_digest": "1ab591caf6f7057721aa3a14ac07017db40f4c68368c293c2e3a244ad311daa8"
+    },
+    {
+      "id": "15095687",
+      "old_title": "울산광역시_도시경관기록_키워드 검색",
+      "new_title": "울산광역시_도시경관기록_키워드 검색",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "27a0f28abab40200183092d81ff7a0df3bc59ffa3a783eb3e9e3bb39c7d9528b",
+      "new_digest": "649defb63cda5465fd8d387583c54e10981bb29852ca438d839063a8f87a5f64"
+    },
+    {
+      "id": "15095688",
+      "old_title": "울산광역시_도시경관기록_사진목록",
+      "new_title": "울산광역시_도시경관기록_사진목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "7ad7c70ff24485d4d092b36056a6863649ae85f0c725cbd7789afb42cb2b8ac7",
+      "new_digest": "7dc62cd3a0969c412dcb93bff49f584fdb5fb9384956f2923001a90197c7a6b1"
+    },
+    {
+      "id": "15095689",
+      "old_title": "울산광역시_도시경관기록_사진상세정보",
+      "new_title": "울산광역시_도시경관기록_사진상세정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "cf8efe9aa873f47101d8ef30151a8dc5d42ebdfe371f11d63bc70c9ed7b57e2d",
+      "new_digest": "1e90dd65cac7e751ef6f19c66bb71c1be1b43b431346252d99d0eb9988b4408d"
+    },
+    {
+      "id": "15095690",
+      "old_title": "울산광역시_도시경관기록_기록보고서조회",
+      "new_title": "울산광역시_도시경관기록_기록보고서조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "d1e39e8917b5306b698f25d9558e6fdbb7f53beeadbe7e86226fa2d292e3584e",
+      "new_digest": "96702b6f8643c1cd7f9eab302727a832178f110fa33c99e92dcb2549ad5cb29f"
+    },
+    {
+      "id": "15095691",
+      "old_title": "울산광역시_도시경관기록_화보집조회",
+      "new_title": "울산광역시_도시경관기록_화보집조회",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6382b8a69d2d5d38a8af7d550172daed225236db48cc9132c0987b4d3363d640",
+      "new_digest": "d19a055b979c001fe5ab32597ec9e02f69bd65d5999b69438eb5d0d0ccf89cad"
+    },
+    {
+      "id": "15095692",
+      "old_title": "울산광역시_도시경관기록_인기별 사진목록",
+      "new_title": "울산광역시_도시경관기록_인기별 사진목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "81a2c47c1475c4501eda1dc354e5cde73188a0649070449a90e9d86f0b11ee10",
+      "new_digest": "918adb7567877cf2d20364b171d0caf26d85fd5d0f535c01a3901728eb816b0d"
+    },
+    {
+      "id": "15095693",
+      "old_title": "울산광역시_도시경관기록_다운로드 베스트 사진목록",
+      "new_title": "울산광역시_도시경관기록_다운로드 베스트 사진목록",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "027a1c7e826409893bd5ef8ac347feb7da542182bd65a82e4527fe1955fe0ec1",
+      "new_digest": "87570622ee425f62122689de9a02f52cc793b8f54dd9b825ed6093da1dbd29c8"
     },
     {
       "id": "15095714",

@@ -1,0 +1,623 @@
+{
+  "generated_at": "2026-07-04T01:09:12Z",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 100,
+  "timeout": "20s",
+  "truncated": false,
+  "filters": {
+    "organization": "울산광역시",
+    "host": "www.ulsan.go.kr",
+    "kind": "external_endpoint"
+  },
+  "filtered_count": 30,
+  "summary": {
+    "total": 30,
+    "verified": 30,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "dataset_id": "15095442",
+      "title": "울산광역시_도시경관기록 표준기록점 GPS 정보",
+      "operation": "울산광역시_도시경관기록 표준기록점 GPS 정보_20211203 외부 링크 1",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchiveGpsPoint.do?searchLat=35.54409131\u0026searchLot=129.09152067",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095442",
+      "title": "울산광역시_도시경관기록 표준기록점 GPS 정보",
+      "operation": "울산광역시_도시경관기록 표준기록점 GPS 정보_20211203 외부 링크 2",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchiveGpsPhoto.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095442",
+      "title": "울산광역시_도시경관기록 표준기록점 GPS 정보",
+      "operation": "울산광역시_도시경관기록 표준기록점 GPS 정보_20211203 외부 링크 3",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchivePoint.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095685",
+      "title": "울산광역시_도시경관기록 표준기록점 사진상세 정보",
+      "operation": "울산광역시_도시경관기록 표준기록점 사진상세 정보_20211208 외부 링크 1",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchiveGpsPhoto.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095685",
+      "title": "울산광역시_도시경관기록 표준기록점 사진상세 정보",
+      "operation": "울산광역시_도시경관기록 표준기록점 사진상세 정보_20211208 외부 링크 2",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchiveGpsPoint.do?searchLat=35.54409131\u0026searchLot=129.09152067",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095685",
+      "title": "울산광역시_도시경관기록 표준기록점 사진상세 정보",
+      "operation": "울산광역시_도시경관기록 표준기록점 사진상세 정보_20211208 외부 링크 3",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchivePoint.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095686",
+      "title": "울산광역시_도시경관기록 표준기록점 정보",
+      "operation": "울산광역시_도시경관기록 표준기록점 정보_20211208 외부 링크 1",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchivePoint.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095686",
+      "title": "울산광역시_도시경관기록 표준기록점 정보",
+      "operation": "울산광역시_도시경관기록 표준기록점 정보_20211208 외부 링크 2",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchiveGpsPoint.do?searchLat=35.54409131\u0026searchLot=129.09152067",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095686",
+      "title": "울산광역시_도시경관기록 표준기록점 정보",
+      "operation": "울산광역시_도시경관기록 표준기록점 정보_20211208 외부 링크 3",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchiveGpsPhoto.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095687",
+      "title": "울산광역시_도시경관기록_키워드 검색",
+      "operation": "울산광역시_도시경관기록_키워드 검색_20211208 외부 링크 1",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchiveKeywordSearch.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095687",
+      "title": "울산광역시_도시경관기록_키워드 검색",
+      "operation": "울산광역시_도시경관기록_키워드 검색_20211208 외부 링크 2",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchiveGpsPhoto.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095687",
+      "title": "울산광역시_도시경관기록_키워드 검색",
+      "operation": "울산광역시_도시경관기록_키워드 검색_20211208 외부 링크 3",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchivePhotoDetail.do?searchMngNo=34615",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095688",
+      "title": "울산광역시_도시경관기록_사진목록",
+      "operation": "울산광역시_도시경관기록_사진목록_20211208 외부 링크 1",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchivePhotoList.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095688",
+      "title": "울산광역시_도시경관기록_사진목록",
+      "operation": "울산광역시_도시경관기록_사진목록_20211208 외부 링크 2",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchivePopPhotoList.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095688",
+      "title": "울산광역시_도시경관기록_사진목록",
+      "operation": "울산광역시_도시경관기록_사진목록_20211208 외부 링크 3",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchiveBestPhotoList.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095689",
+      "title": "울산광역시_도시경관기록_사진상세정보",
+      "operation": "울산광역시_도시경관기록_사진상세정보_20211208 외부 링크 1",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchivePhotoDetail.do?searchMngNo=34615",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095689",
+      "title": "울산광역시_도시경관기록_사진상세정보",
+      "operation": "울산광역시_도시경관기록_사진상세정보_20211208 외부 링크 2",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchiveGpsPhoto.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095689",
+      "title": "울산광역시_도시경관기록_사진상세정보",
+      "operation": "울산광역시_도시경관기록_사진상세정보_20211208 외부 링크 3",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchiveKeywordSearch.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095690",
+      "title": "울산광역시_도시경관기록_기록보고서조회",
+      "operation": "울산광역시_도시경관기록_기록보고서조회_20211208 외부 링크 1",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchiveReportList.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095690",
+      "title": "울산광역시_도시경관기록_기록보고서조회",
+      "operation": "울산광역시_도시경관기록_기록보고서조회_20211208 외부 링크 2",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchiveGpsPhoto.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095690",
+      "title": "울산광역시_도시경관기록_기록보고서조회",
+      "operation": "울산광역시_도시경관기록_기록보고서조회_20211208 외부 링크 3",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchivePhotoDetail.do?searchMngNo=34615",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095691",
+      "title": "울산광역시_도시경관기록_화보집조회",
+      "operation": "울산광역시_도시경관기록_화보집조회_20211208 외부 링크 1",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchivePhotoBookList.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095691",
+      "title": "울산광역시_도시경관기록_화보집조회",
+      "operation": "울산광역시_도시경관기록_화보집조회_20211208 외부 링크 2",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchiveGpsPhoto.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095691",
+      "title": "울산광역시_도시경관기록_화보집조회",
+      "operation": "울산광역시_도시경관기록_화보집조회_20211208 외부 링크 3",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchivePhotoDetail.do?searchMngNo=34615",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095692",
+      "title": "울산광역시_도시경관기록_인기별 사진목록",
+      "operation": "울산광역시_도시경관기록_인기별 사진목록_20211208 외부 링크 1",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchivePopPhotoList.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095692",
+      "title": "울산광역시_도시경관기록_인기별 사진목록",
+      "operation": "울산광역시_도시경관기록_인기별 사진목록_20211208 외부 링크 2",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchivePhotoList.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095692",
+      "title": "울산광역시_도시경관기록_인기별 사진목록",
+      "operation": "울산광역시_도시경관기록_인기별 사진목록_20211208 외부 링크 3",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchiveBestPhotoList.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095693",
+      "title": "울산광역시_도시경관기록_다운로드 베스트 사진목록",
+      "operation": "울산광역시_도시경관기록_다운로드 베스트 사진목록_20211208 외부 링크 1",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchiveBestPhotoList.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095693",
+      "title": "울산광역시_도시경관기록_다운로드 베스트 사진목록",
+      "operation": "울산광역시_도시경관기록_다운로드 베스트 사진목록_20211208 외부 링크 2",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchivePhotoList.do",
+      "body_shape": "xml"
+    },
+    {
+      "dataset_id": "15095693",
+      "title": "울산광역시_도시경관기록_다운로드 베스트 사진목록",
+      "operation": "울산광역시_도시경관기록_다운로드 베스트 사진목록_20211208 외부 링크 3",
+      "provider": "ulsan-www",
+      "endpoint_host": "www.ulsan.go.kr",
+      "dependency_class": "external_endpoint",
+      "status": "verified",
+      "verified_at": "2026-07-04T01:09:12Z",
+      "http_status": 200,
+      "semantic_status": "provider_ok",
+      "provider_status": {
+        "ok": true,
+        "source": "resultCode/resultMsg",
+        "code": "00",
+        "message": "SUCCESS"
+      },
+      "url": "https://www.ulsan.go.kr/archive/us/openApi/6310000/getArchivePopPhotoList.do",
+      "body_shape": "xml"
+    }
+  ]
+}
