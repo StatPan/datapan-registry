@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `799` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `798` data.go.kr APIs
   without operation mappings, `9,285` operation-mapped APIs without runtime
   evidence, and `204` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -120,7 +120,7 @@ Current strengths:
   the same blocker, warning, and next-action inventory that CI validates.
 - `reports/source-report-inventory.json` is generated from source profiles and
   checked-in `reports/<source>/` directories, measuring `5` source report
-  directories, `92` source-scoped JSON reports, and `12.3%` recommended
+  directories, `94` source-scoped JSON reports, and `12.3%` recommended
   source-scoped report coverage.
 - `scripts/sync-release-schema-artifacts.py` checks that every checked-in
   `schemas/*.schema.json` file is represented in `schemas/index.json` and
@@ -466,8 +466,12 @@ Current gaps:
   (`2` verified and `26` failed request-boundary records). That brings runtime
   evidence to `4141`, verified checks to `2266`, and registered external
   adapter operations to `9004`.
-- API operation coverage remains incomplete: `11,261` of `12,060` APIs have
-  operation mappings (`93.4%`), leaving `799` APIs to materialize and `9,285`
+- The 대전교통공사 batch adds Tashu host coverage, materializes the remaining
+  `1` API and `1` operation, and merges `1` verified Tashu bounded check. That
+  brings runtime evidence to `4142`, verified checks to `2267`, and registered
+  external adapter operations to `9005`.
+- API operation coverage remains incomplete: `11,262` of `12,060` APIs have
+  operation mappings (`93.4%`), leaving `798` APIs to materialize and `9,285`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

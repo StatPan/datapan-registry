@@ -12,18 +12,18 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `20624`
-- callable operations: `20482` (`99.3%`)
+- operations: `20625`
+- callable operations: `20483` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `9014`
-- registered adapter operations: `9004`
+- external endpoint operations: `9015`
+- registered adapter operations: `9005`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
-- approval-required operations: `7901`
+- approval-required operations: `7902`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
-- registered adapter hosts: `138`
+- registered adapter hosts: `139`
 - missing adapter hosts: `11`
 - call-capable adapters: `23`
 
@@ -239,13 +239,14 @@ blocked by upstream data.go.kr detail errors. The latest viable queues were
 `대구광역시`, `한국고용정보원`, `국가유산청 국립무형유산원`,
 `울산광역시`, `농림축산식품부 국립농산물품질관리원`,
 `제주특별자치도 서귀포시`, `서울특별시농수산식품공사`,
-`국가유산청 국립문화유산연구원`, and `경기도 안양시`, now
+`국가유산청 국립문화유산연구원`, `경기도 안양시`, and
+`대전교통공사`, now
 completed through `39` Ecobank, `45` NFQS, `95` Dongjak/Seoul Open Data,
 `3` UniPass, `1` KoreaPost, `23` Childcare Info, `28` Daegu, `68`
 KEIS/YouthCenter, `18` NIHC, `30` Ulsan WWW, `49` NAQS, `70` Seogwipo, and
-`81` Garak, `76` NRich, and `41` Anyang/MPVA Egonghun link-detail
+`81` Garak, `76` NRich, `41` Anyang/MPVA Egonghun, and `1` Tashu link-detail
 operations. The next viable materialization queue after the current upstream
-blockers is `대전교통공사`.
+blockers is `국가철도공단`.
 The runtime reactivation queue starts at `행정안전부`: `1252`
 APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
@@ -697,6 +698,11 @@ readiness, not to advance verified runtime coverage.
    runtime evidence to `4141`, verified checks to `2266`, registered external
    adapter operations to `9004`, and raises API operation coverage to `11,261`
    of `12,060` APIs (`93.4%`).
+   The 대전교통공사 batch adds Tashu host coverage, materializes the remaining
+   `1` API and `1` operation, and merges `1` verified Tashu bounded check. That
+   brings checked runtime evidence to `4142`, verified checks to `2267`,
+   registered external adapter operations to `9005`, and raises API operation
+   coverage to `11,262` of `12,060` APIs (`93.4%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,

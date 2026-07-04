@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-07-04T02:16:59Z",
+  "source": "reports/data-go-kr/tashu-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 1,
+    "verified": 1,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 1,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "tashu",
+        "count": 1,
+        "provider": "tashu"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "bike.tashu.or.kr",
+        "count": 1,
+        "host": "bike.tashu.or.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 1,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

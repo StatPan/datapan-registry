@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T02:07:18Z",
+  "generated_at": "2026-07-04T02:17:16Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4076,
-    "stable": 7984
+    "changed": 4077,
+    "stable": 7983
   },
   "added": [],
   "removed": [],
@@ -28607,6 +28607,16 @@
       ],
       "old_digest": "e43680b67d5f1b61f3a0f65b0c2dd26aba6d464e549a18948ef0e0051bd37482",
       "new_digest": "e9e49ae7cec39c30eb811a7c29f26b00751d1100387c929720a6f030ef936539"
+    },
+    {
+      "id": "15119663",
+      "old_title": "대전교통공사_공영자전거타슈대여소현황",
+      "new_title": "대전교통공사_공영자전거타슈대여소현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1e84b35d7efcbc7c4e34cef87dd98991252c5741dfd1fdea75da932f88f223b9",
+      "new_digest": "132beae565465a90778d64e6e75d350721eaa5956093878876f44081689a489e"
     },
     {
       "id": "15119896",
