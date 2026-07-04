@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T03:13:05Z",
+  "generated_at": "2026-07-04T03:33:10Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 302,
+  "filtered_count": 305,
   "summary": {
-    "hosts": 302,
+    "hosts": 305,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 157,
-    "external_guide_hosts": 217,
-    "registered_adapter_hosts": 146,
-    "operation_hosts": 159,
-    "guide_only_hosts": 143,
+    "external_endpoint_hosts": 159,
+    "external_guide_hosts": 219,
+    "registered_adapter_hosts": 148,
+    "operation_hosts": 161,
+    "guide_only_hosts": 144,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 149,
-    "approval_required_operations": 7976,
+    "approval_required_operations": 8021,
     "malformed_source_url_count": 724
   },
   "providers": [
@@ -808,6 +808,24 @@
       ]
     },
     {
+      "host": "www.nabis.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 17,
+      "operations": 40,
+      "external_endpoint_operations": 40,
+      "external_guide_specs": 1,
+      "approval_required_operations": 37,
+      "sample_ids": [
+        "15014832",
+        "15067520",
+        "15067522"
+      ]
+    },
+    {
       "host": "data.uiryeong.go.kr",
       "provider": "uiryeong",
       "kinds": [
@@ -1390,6 +1408,22 @@
         "15001011",
         "15001018",
         "15001019"
+      ]
+    },
+    {
+      "host": "www.sobujang.net",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 8,
+      "operations": 8,
+      "external_endpoint_operations": 8,
+      "approval_required_operations": 8,
+      "sample_ids": [
+        "15104747",
+        "15104751",
+        "15128630"
       ]
     },
     {
@@ -3646,6 +3680,20 @@
       "sample_ids": [
         "15157913",
         "15157914"
+      ]
+    },
+    {
+      "host": "nabis.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 2,
+      "operations": 0,
+      "external_guide_specs": 2,
+      "sample_ids": [
+        "15067520",
+        "15067522"
       ]
     },
     {

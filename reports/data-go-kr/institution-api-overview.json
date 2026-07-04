@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T03:13:05Z",
+  "generated_at": "2026-07-04T03:33:10Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 20814,
-    "runtime_evidence": 4331,
-    "runtime_evidence_percent": 20.8,
-    "callable_operations": 20672,
-    "external_endpoint_operations": 9204,
-    "registered_adapter_operations": 9194,
+    "operations": 20862,
+    "runtime_evidence": 4379,
+    "runtime_evidence_percent": 21.0,
+    "callable_operations": 20720,
+    "external_endpoint_operations": 9252,
+    "registered_adapter_operations": 9242,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 9204
+      "count": 9252
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 9194
+      "count": 9242
     },
     {
       "key": "builtin",
@@ -89,7 +89,7 @@
     },
     {
       "category": "산업고용",
-      "operation_count": 1389
+      "operation_count": 1395
     },
     {
       "category": "환경기상",
@@ -97,7 +97,7 @@
     },
     {
       "category": "재정금융",
-      "operation_count": 1275
+      "operation_count": 1277
     },
     {
       "category": "식품건강",
@@ -105,7 +105,7 @@
     },
     {
       "category": "국토관리",
-      "operation_count": 1054
+      "operation_count": 1094
     },
     {
       "category": "보건의료",
@@ -5939,6 +5939,66 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 49
+        }
+      ]
+    },
+    {
+      "organization": "한국산업기술기획평가원",
+      "api_count": 25,
+      "operation_api_count": 25,
+      "operation_count": 48,
+      "runtime_evidence_count": 48,
+      "runtime_evidence_percent": 100.0,
+      "verified": 48,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 45,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "external_endpoint",
+          "count": 48
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 48
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "국토관리",
+          "operation_count": 40
+        },
+        {
+          "category": "산업고용",
+          "operation_count": 6
+        },
+        {
+          "category": "재정금융",
+          "operation_count": 2
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "www.nabis.go.kr",
+          "operation_count": 40,
+          "adapter": "keit",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "www.sobujang.net",
+          "operation_count": 8,
+          "adapter": "keit",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },
@@ -16047,24 +16107,6 @@
           "operation_count": 1
         }
       ]
-    },
-    {
-      "organization": "한국산업기술기획평가원",
-      "api_count": 25,
-      "operation_api_count": 0,
-      "operation_count": 0,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [],
-      "by_adapter_status": [],
-      "top_categories": [],
-      "top_hosts": []
     },
     {
       "organization": "국가유산청 국립고궁박물관",
