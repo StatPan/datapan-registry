@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T04:17:10Z",
+  "generated_at": "2026-07-04T04:43:48Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 126,
-  "host_count": 159,
+  "adapter_count": 127,
+  "host_count": 160,
   "adapters": [
     {
       "name": "airport",
@@ -437,6 +437,16 @@
       "hosts": [
         "data.floodmap.go.kr",
         "www.hrfco.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "hug",
+      "status": "registered",
+      "hosts": [
+        "www.khug.or.kr"
       ],
       "capabilities": [
         "verification"
@@ -1324,8 +1334,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 126,
-    "verification_capable_adapters": 126,
+    "adapter_count": 127,
+    "verification_capable_adapters": 127,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

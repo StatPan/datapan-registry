@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-07-04T04:37:19Z",
+  "source": "reports/data-go-kr/hug-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 64,
+    "verified": 31,
+    "failed": 33,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "failed",
+        "count": 33,
+        "status": "failed"
+      },
+      {
+        "key": "verified",
+        "count": 31,
+        "status": "verified"
+      }
+    ],
+    "by_reason": [
+      {
+        "key": "hug_request_timeout",
+        "count": 33,
+        "reason": "hug_request_timeout"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "hug",
+        "count": 64,
+        "provider": "hug"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "www.khug.or.kr",
+        "count": 64,
+        "host": "www.khug.or.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 64,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

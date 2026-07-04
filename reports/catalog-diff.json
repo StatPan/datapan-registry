@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T04:17:10Z",
+  "generated_at": "2026-07-04T04:43:48Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4272,
-    "stable": 7788
+    "changed": 4294,
+    "stable": 7766
   },
   "added": [],
   "removed": [],
@@ -327,6 +327,26 @@
       ],
       "old_digest": "77e30fd748906e1178a9bd9e5f2f2a1eda888cada2be48bf1b1ab3ec7d446217",
       "new_digest": "6097fe79f52479b66f3052a9a5da38799c363fc0db269fce76f873431b18246b"
+    },
+    {
+      "id": "15011457",
+      "old_title": "주택도시보증공사_분양보증현황(지역)",
+      "new_title": "주택도시보증공사_분양보증현황(지역)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "b820befc9df370bfcc244a19561731b658bba2d2180ee58d5d51ab4d96f720f8",
+      "new_digest": "ae784c2c803dea372b89042808ae289170db8f9046b938e7c6b430483fee8ae8"
+    },
+    {
+      "id": "15012530",
+      "old_title": "주택도시보증공사_월별 집합건물(아파트/상가) 사업장 공정율 현황",
+      "new_title": "주택도시보증공사_월별 집합건물(아파트/상가) 사업장 공정율 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ccfec2d0407f59c804816335a7bb3ea66e353bea69c7dc31494ac265fa2b11e2",
+      "new_digest": "ad797ceafac88f6b15b75b3970c645f9061b3b6f69d43c32c9318bf2eaac2fb8"
     },
     {
       "id": "15014526",
@@ -5069,6 +5089,16 @@
       "new_digest": "af11f34274d5356bfa8964a6bba01946e4be6a268a00f72724e57188dd9818ab"
     },
     {
+      "id": "15056738",
+      "old_title": "주택도시보증공사_분양보증세대수현황",
+      "new_title": "주택도시보증공사_분양보증세대수현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "899f64ddf4cbe73de5f2c8b3a14aaed22b3de9965e04eceda5f351f6f624f7e4",
+      "new_digest": "29dbaa3b0b26c14be7786f1901cc24a28c69d7aef74c2861fb98b1399a01c845"
+    },
+    {
       "id": "15056740",
       "old_title": "경기도_전화권유판매업 현황",
       "new_title": "경기도_전화권유판매업 현황",
@@ -5319,6 +5349,16 @@
       "new_digest": "871883d3ae7a681f2ec99cb91193ee7dbe766aeb08a45b73b672558b26b4c2a8"
     },
     {
+      "id": "15056783",
+      "old_title": "주택도시보증공사_임대보증금보증세대수현황",
+      "new_title": "주택도시보증공사_임대보증금보증세대수현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e616b982a31d7089fdc7003845ed93f5c8128cf0f883d635761655a10d9dd747",
+      "new_digest": "ad1947fd370c448f2614e829802c332a26283a081146dd52394cba7cd917322f"
+    },
+    {
       "id": "15056784",
       "old_title": "제주특별자치도_제주기업지원시책-경영지원 목록조회",
       "new_title": "제주특별자치도_제주기업지원시책-경영지원 목록조회",
@@ -5419,6 +5459,16 @@
       "new_digest": "aef1b37f32830979cb25d68a24854b6dfbb7c2abc44621874025cee2f88457ae"
     },
     {
+      "id": "15056807",
+      "old_title": "주택도시보증공사_신규분양세대수",
+      "new_title": "주택도시보증공사_신규분양세대수",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "607645607ea699c29a1668da4767d0b15183b2ef61e4d4bf084a02ad7c5d1ed9",
+      "new_digest": "4775bc58f7e2ff38ceae6552cc32a7e80d230b6dd4a38aa1937951642c329054"
+    },
+    {
       "id": "15056810",
       "old_title": "한국체육산업개발주식회사_올림픽공원 스케이트장 정보",
       "new_title": "한국체육산업개발주식회사_올림픽공원 스케이트장 정보",
@@ -5487,6 +5537,16 @@
       ],
       "old_digest": "3a42305f0a03c040635c07c97b72dc91a77ac39b865e7d3d62a83d6e9b4be9b4",
       "new_digest": "b1fec6c0c37cb15d091bcaf7a3280f8b84b6f43a10ec3cc07cbc187d6bff35f2"
+    },
+    {
+      "id": "15056833",
+      "old_title": "주택도시보증공사_분양보증 분양이행 현황",
+      "new_title": "주택도시보증공사_분양보증 분양이행 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1a9ad3df61e2169e761f52bf328095c67555a93ca4ede347d52f98921f6e7b3e",
+      "new_digest": "0421375b95809a165e513076a8250db960d7d291e6a3cebca2e802a62ced6556"
     },
     {
       "id": "15056834",
@@ -8649,6 +8709,16 @@
       "new_digest": "295cb28798ea679a30ef4287943f49cf58b18d443c32f6943fd8cd53c6273e15"
     },
     {
+      "id": "15057543",
+      "old_title": "주택도시보증공사_PF보증건수 현황",
+      "new_title": "주택도시보증공사_PF보증건수 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5ccc2f552c54b9f514ef9ada9816eea80f594e692791d9d5bd02d3af799d6661",
+      "new_digest": "3dbc7d890a147754bd78e5c8ae2e82e1acc7f9cdd149fac06e53eb46f62b231c"
+    },
+    {
       "id": "15057545",
       "old_title": "경기도_공공체육시설 현황(양궁장)",
       "new_title": "경기도_공공체육시설 현황(양궁장)",
@@ -9169,6 +9239,16 @@
       "new_digest": "da2f106313ef60c7d296bb92777ebbd40bf5236ff95c36aaf45f4190295994ce"
     },
     {
+      "id": "15057638",
+      "old_title": "주택도시보증공사_분양보증금액현황",
+      "new_title": "주택도시보증공사_분양보증금액현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4863a765f023f1b0b4e2ffb51cae0f6f720c659aba85c521ec121446b45d12e0",
+      "new_digest": "a16525814824e62960fd5b07cb8be4bf5080f2c0d6a1a3a4574a262306a137c0"
+    },
+    {
       "id": "15057640",
       "old_title": "경기도_장애인 관련 시설 현황",
       "new_title": "경기도_장애인 관련 시설 현황",
@@ -9437,6 +9517,16 @@
       ],
       "old_digest": "1d1f236cf24689d8485f6f2a11361748995148d2c8fd35c1ed18ee9a8e71379b",
       "new_digest": "8927ad14483015df2224de69d87dfdfe60dc1b8834e5bd41fe57d6a8f58b9f43"
+    },
+    {
+      "id": "15057686",
+      "old_title": "주택도시보증공사_분양이력정보",
+      "new_title": "주택도시보증공사_분양이력정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "0cc7b91930a2e18fc6dd35d76732be469aac56a116709d0c7ded83524fe9ad32",
+      "new_digest": "ceae2d14dabb9f284504b29356538bb09d6ba5bf5959afcaffaabdd434701fb0"
     },
     {
       "id": "15057688",
@@ -11499,6 +11589,16 @@
       "new_digest": "9ae57aa6edafda60c7dfd8a348563f716b0e69502067f4ac3c918332d2bde9c7"
     },
     {
+      "id": "15058178",
+      "old_title": "주택도시보증공사_PF대출금액 현황",
+      "new_title": "주택도시보증공사_PF대출금액 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5be1eedb836974f9357f097e5cc7321b3e897014d57308836fab5228cc95521f",
+      "new_digest": "f23bc2b33d6ea8bb35c7fa88de8f2c278745a8fd707051b95345d51c6a2ba543"
+    },
+    {
       "id": "15058180",
       "old_title": "국토교통부_도시계획(도로)",
       "new_title": "국토교통부_도시계획(도로)",
@@ -12809,6 +12909,16 @@
       "new_digest": "7b6e2d1dee53825c1220dcfd23bdf7695ee82737408a1c250721ec1b5a1486cd"
     },
     {
+      "id": "15058451",
+      "old_title": "주택도시보증공사_분양보증 사고발생 세대수 현황",
+      "new_title": "주택도시보증공사_분양보증 사고발생 세대수 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "537be83a333b9d6d0d7df1fe37901f1a4a9f6e4980bd9a7c09a297ed2b263a1c",
+      "new_digest": "270cf1fd7f9c1bc632165e9bbdf64c9e78a604ced627cf7239efb82ea298d591"
+    },
+    {
       "id": "15058454",
       "old_title": "경기도_특수학급 순회교육 학생수 집계현황",
       "new_title": "경기도_특수학급 순회교육 학생수 집계현황",
@@ -13177,6 +13287,16 @@
       ],
       "old_digest": "ce8048db09ba81b1b941a7bd395ee981bb5354d031b4f385c030b0a7c026b527",
       "new_digest": "03a7672fb87f500c5752672e8e4f046218beed8eae853aab071e0dc01ae00722"
+    },
+    {
+      "id": "15058537",
+      "old_title": "주택도시보증공사_분양보증 환급이행 현황",
+      "new_title": "주택도시보증공사_분양보증 환급이행 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "8f56ef856ebf58f437ecc8728dadae5eb3f3ed0fc0899947ceb05e008a9d21dd",
+      "new_digest": "6540d92da124514e5db767c5652412eab646d4ecd4362b4738b07ee3e2a7935d"
     },
     {
       "id": "15058538",
@@ -14409,6 +14529,16 @@
       "new_digest": "ac595c53bda8807095f7144e43a78ca9ec8afa30572aa76634f4367f2c446ec5"
     },
     {
+      "id": "15058809",
+      "old_title": "주택도시보증공사_분양보증 사고발생 금액 현황",
+      "new_title": "주택도시보증공사_분양보증 사고발생 금액 현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1930846746fe299dcc57c00803fabae66c294b8aef63918887f24e0eefda2f7c",
+      "new_digest": "562192a81d60e1a2d976d0237a40f3e01ea59034d29bab0fe6ac21bee7355beb"
+    },
+    {
       "id": "15058810",
       "old_title": "경기도_장애인 근로사업장 현황",
       "new_title": "경기도_장애인 근로사업장 현황",
@@ -14457,6 +14587,16 @@
       ],
       "old_digest": "5e33508fec3feb98d56c3bfc4c7ad9ae6434a8adb745d07a58ca1ae07e02249f",
       "new_digest": "8f30b725dcf91934c8ffdac447b1e236398e7d77ffeae361e647aeb1a1d75984"
+    },
+    {
+      "id": "15058820",
+      "old_title": "주택도시보증공사_㎡당분양가격지수",
+      "new_title": "주택도시보증공사_㎡당분양가격지수",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "eaece527c09104899f42d95899608035e672601a02538003100018e858f74f6a",
+      "new_digest": "fc321a0c28bb79687b92665cc14a878ff2c72ff485d686f641e841c52ac9b132"
     },
     {
       "id": "15058825",
@@ -14747,6 +14887,16 @@
       ],
       "old_digest": "44b7bb60aa5df9cfd608f726a6786c2467957b169afd374e73608b52b3a35dcc",
       "new_digest": "d84ae7699cf357dc34dc656f5b666f27328180baa43a78bda0da759581270f08"
+    },
+    {
+      "id": "15058898",
+      "old_title": "주택도시보증공사_임대보증금보증금액현황",
+      "new_title": "주택도시보증공사_임대보증금보증금액현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "dfbbcbc7c39caf1f10a6470081a3d5b042708bf9fed2b9a24cb3f45e0cb860be",
+      "new_digest": "5260710cec2b3e337683a66cdcf16e314e944056a4e6214ab29e0bc3cf93e6f6"
     },
     {
       "id": "15058899",
@@ -16369,6 +16519,16 @@
       "new_digest": "38d3684fe03e43d4bbdc4c71f88530c42bafbf5b2d13ad893d1e54ae49ac5696"
     },
     {
+      "id": "15059292",
+      "old_title": "주택도시보증공사_사고사업장정보",
+      "new_title": "주택도시보증공사_사고사업장정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "be5c47fc01ded762c29bd3c055c2c46c154ec5aa44792fe1cb8b159fb70370da",
+      "new_digest": "56b5272abc73479f72ab00b2fd91fb196cc16d87628169a6abed738db7ca7cd7"
+    },
+    {
       "id": "15059293",
       "old_title": "경기도_쓰레기종량제 봉투판매업체 현황",
       "new_title": "경기도_쓰레기종량제 봉투판매업체 현황",
@@ -16377,6 +16537,16 @@
       ],
       "old_digest": "d66267b31704156f3cdc8b095ddc1ba2768efda09073272ceb7de145b3d21963",
       "new_digest": "fd11e6a591b382a28915e334b0fe925aed354b233b0eea53667d9a51ee7e3dcf"
+    },
+    {
+      "id": "15059296",
+      "old_title": "주택도시보증공사_민간분양아파트 보증금액",
+      "new_title": "주택도시보증공사_민간분양아파트 보증금액",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "bdadd8d82980349dc694dff8e97e56c97abe7f2aa3bc09adc13b4956e536e4a1",
+      "new_digest": "ffaf2b8085d3dda3528d693f948bec835f77be39890d424bc53eb2a65fca1573"
     },
     {
       "id": "15059297",
@@ -20307,6 +20477,46 @@
       ],
       "old_digest": "fed019cc6d1852f411ebfc3111ad09ce308dfac63f93a3bdb0be2406dc548041",
       "new_digest": "424dd288092ee9d8c2cd6b47fcdca0dd5fd9c1a7e8ff030769e81fbbe38f1d5e"
+    },
+    {
+      "id": "15070256",
+      "old_title": "주택도시보증공사_지역별 ㎡당 분양가격(지역)",
+      "new_title": "주택도시보증공사_지역별 ㎡당 분양가격(지역)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "dd13ae22d77bfe66127e38d1424e9521530bf559f68a454ca1105ebfb21cebd6",
+      "new_digest": "76e179593da5a6dba9dfd061111c5ec63eb518abc7e778d3f90ab69c8c3c7c69"
+    },
+    {
+      "id": "15071171",
+      "old_title": "주택도시보증공사_분양보증사고현황",
+      "new_title": "주택도시보증공사_분양보증사고현황",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "3d5a0a1e91b4b0fbe87b0442c09b07ed517cf63ace342b3a777dd639af3db2e4",
+      "new_digest": "89f6ea102aec429bff176866c3772af2c8fc3b8c61f6b9f97b2c25614c77dbe0"
+    },
+    {
+      "id": "15071172",
+      "old_title": "주택도시보증공사_이행사업장정보",
+      "new_title": "주택도시보증공사_이행사업장정보",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "82e37d5b44e8b3e389cab84557a3188bd9a2091ed16ee4657ee767646a4e5baa",
+      "new_digest": "39c3e7afa70fea8123e7049d850c651cf0e267458696ccc91101bbb817dbda1c"
+    },
+    {
+      "id": "15071173",
+      "old_title": "주택도시보증공사_하자보수보증 정보공개",
+      "new_title": "주택도시보증공사_하자보수보증 정보공개",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "c116f5b8d529a384886ec4de25235bf091c4de1d96de88564accc409fa676f29",
+      "new_digest": "95e65a027270bfe2c01eb887fa5ff7e8764a54565b2b974da824587f3a3f6ffa"
     },
     {
       "id": "15071233",
@@ -37837,6 +38047,16 @@
       ],
       "old_digest": "33c3c9ff7a4a586cb29739894cb9db48a45ee2b19cbfa31148db218e8bc174b5",
       "new_digest": "cf8fc5c23c772bb5695030ce6e07a15f62e19cf6c527386022b27ab2a5f0954d"
+    },
+    {
+      "id": "15143827",
+      "old_title": "주택도시보증공사_든든전세 모집공고",
+      "new_title": "주택도시보증공사_든든전세 모집공고",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6a40a47d4e49d3156fba410296958bd403729f0bda0fcc9bfdf2d0d60f6acec6",
+      "new_digest": "4237d7f154a64f43dc6942066da45c4c9aeef5b4f733a3b68b06694e4308cdd3"
     },
     {
       "id": "15144425",

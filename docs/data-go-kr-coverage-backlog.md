@@ -2,19 +2,19 @@
 
 This backlog is generated from the checked-in registry, dependency report, and latest runtime verification evidence. It separates APIs with no operation mapping from APIs that have operations but still need runtime evidence collection.
 
-- Generated at: `2026-07-04T04:17:10Z`
+- Generated at: `2026-07-04T04:43:48Z`
 - Institutions: `411`
 - APIs: `12060`
-- APIs with operation mapping: `11457` (`95.0%`)
-- APIs without operation mapping: `603`
-- Operations: `20972`
-- Runtime evidence operations: `4489` (`21.4%`)
-- Runtime verified operations: `2612`
-- Runtime failed operations: `334`
+- APIs with operation mapping: `11479` (`95.2%`)
+- APIs without operation mapping: `581`
+- Operations: `21036`
+- Runtime evidence operations: `4553` (`21.6%`)
+- Runtime verified operations: `2643`
+- Runtime failed operations: `367`
 - Runtime skipped operations: `1543`
-- APIs with runtime evidence: `2172`
+- APIs with runtime evidence: `2194`
 - Runtime reactivation APIs: `9285`
-- Runtime repair APIs: `206`
+- Runtime repair APIs: `227`
 
 ## Highest Priority Institutions
 

@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-04T04:17:08Z",
+  "generated_at": "2026-07-04T04:43:29Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4489,
-    "verified": 2612,
-    "failed": 334,
+    "total": 4553,
+    "verified": 2643,
+    "failed": 367,
     "skipped": 1543,
     "unknown": 0
   },
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2612,
+        "count": 2643,
         "status": "verified"
       },
       {
@@ -26,7 +26,7 @@
       },
       {
         "key": "failed",
-        "count": 334,
+        "count": 367,
         "status": "failed"
       }
     ],
@@ -65,6 +65,11 @@
         "key": "epost_wadl_metadata_only",
         "count": 34,
         "reason": "epost_wadl_metadata_only"
+      },
+      {
+        "key": "hug_request_timeout",
+        "count": 33,
+        "reason": "hug_request_timeout"
       },
       {
         "key": "open-assembly_http_400",
@@ -467,6 +472,11 @@
         "key": "ecvam",
         "count": 65,
         "provider": "ecvam"
+      },
+      {
+        "key": "hug",
+        "count": 64,
+        "provider": "hug"
       },
       {
         "key": "seogwipo",
@@ -1054,6 +1064,11 @@
         "key": "ecvam.neins.go.kr",
         "count": 65,
         "host": "ecvam.neins.go.kr"
+      },
+      {
+        "key": "www.khug.or.kr",
+        "count": 64,
+        "host": "www.khug.or.kr"
       },
       {
         "key": "bigdata.daejeon.go.kr",
@@ -1719,7 +1734,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3765,
+        "count": 3829,
         "kind": "external_endpoint"
       },
       {
