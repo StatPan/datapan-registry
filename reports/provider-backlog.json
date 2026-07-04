@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T06:08:52Z",
+  "generated_at": "2026-07-04T06:24:47Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 324,
+  "filtered_count": 325,
   "summary": {
-    "hosts": 324,
+    "hosts": 325,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 177,
+    "external_endpoint_hosts": 178,
     "external_guide_hosts": 232,
-    "registered_adapter_hosts": 166,
-    "operation_hosts": 179,
+    "registered_adapter_hosts": 167,
+    "operation_hosts": 180,
     "guide_only_hosts": 145,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 158,
-    "approval_required_operations": 8183,
+    "approval_required_operations": 8191,
     "malformed_source_url_count": 724
   },
   "providers": [
@@ -265,11 +265,11 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 187,
-      "operations": 315,
-      "external_endpoint_operations": 315,
+      "specs": 188,
+      "operations": 316,
+      "external_endpoint_operations": 316,
       "external_guide_specs": 48,
-      "approval_required_operations": 146,
+      "approval_required_operations": 147,
       "sample_ids": [
         "15002220",
         "15008409",
@@ -283,11 +283,11 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 128,
-      "operations": 314,
-      "external_endpoint_operations": 314,
+      "specs": 129,
+      "operations": 315,
+      "external_endpoint_operations": 315,
       "external_guide_specs": 2,
-      "approval_required_operations": 221,
+      "approval_required_operations": 222,
       "sample_ids": [
         "15002034",
         "15005257",
@@ -1861,6 +1861,22 @@
         "15021183",
         "15021184",
         "15042795"
+      ]
+    },
+    {
+      "host": "seedpedia.koagi.or.kr",
+      "kinds": [
+        "external_endpoint"
+      ],
+      "adapter_status": "adapter",
+      "specs": 6,
+      "operations": 6,
+      "external_endpoint_operations": 6,
+      "approval_required_operations": 6,
+      "sample_ids": [
+        "15149417",
+        "15150909",
+        "15150913"
       ]
     },
     {

@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T06:08:40Z",
+  "generated_at": "2026-07-04T06:24:30Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4759,
-    "verified": 2827,
+    "total": 4767,
+    "verified": 2835,
     "failed": 389,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2827,
+        "count": 2835,
         "status": "verified"
       },
       {
@@ -395,7 +395,7 @@
       },
       {
         "key": "mafra",
-        "count": 321,
+        "count": 322,
         "provider": "mafra"
       },
       {
@@ -514,14 +514,14 @@
         "provider": "kopis"
       },
       {
+        "key": "nongsaro",
+        "count": 51,
+        "provider": "nongsaro"
+      },
+      {
         "key": "open-law",
         "count": 51,
         "provider": "open-law"
-      },
-      {
-        "key": "nongsaro",
-        "count": 50,
-        "provider": "nongsaro"
       },
       {
         "key": "ekape",
@@ -814,6 +814,11 @@
         "provider": "gwanak"
       },
       {
+        "key": "koagi",
+        "count": 6,
+        "provider": "koagi"
+      },
+      {
         "key": "kpx",
         "count": 6,
         "provider": "kpx"
@@ -1047,7 +1052,7 @@
       },
       {
         "key": "data.mafra.go.kr",
-        "count": 321,
+        "count": 322,
         "host": "data.mafra.go.kr"
       },
       {
@@ -1151,14 +1156,14 @@
         "host": "www.seogwipo.go.kr"
       },
       {
+        "key": "www.nongsaro.go.kr",
+        "count": 50,
+        "host": "www.nongsaro.go.kr"
+      },
+      {
         "key": "data.ekape.or.kr",
         "count": 49,
         "host": "data.ekape.or.kr"
-      },
-      {
-        "key": "www.nongsaro.go.kr",
-        "count": 49,
-        "host": "www.nongsaro.go.kr"
       },
       {
         "key": "apihub.kma.go.kr",
@@ -1521,6 +1526,11 @@
         "host": "openapi.kpx.or.kr"
       },
       {
+        "key": "seedpedia.koagi.or.kr",
+        "count": 6,
+        "host": "seedpedia.koagi.or.kr"
+      },
+      {
         "key": "www.codil.or.kr",
         "count": 6,
         "host": "www.codil.or.kr"
@@ -1854,7 +1864,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 4035,
+        "count": 4043,
         "kind": "external_endpoint"
       },
       {
