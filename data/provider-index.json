@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T02:30:25Z",
+  "generated_at": "2026-07-04T02:45:03Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 118,
-  "host_count": 145,
+  "adapter_count": 119,
+  "host_count": 146,
   "adapters": [
     {
       "name": "airport",
@@ -1233,13 +1233,23 @@
       "capabilities": [
         "verification"
       ]
+    },
+    {
+      "name": "yuseong",
+      "status": "registered",
+      "hosts": [
+        "www.yuseong.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
     }
   ],
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 118,
-    "verification_capable_adapters": 118,
+    "adapter_count": 119,
+    "verification_capable_adapters": 119,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

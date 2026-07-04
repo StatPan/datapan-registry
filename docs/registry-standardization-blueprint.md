@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `772` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `746` data.go.kr APIs
   without operation mappings, `9,285` operation-mapped APIs without runtime
   evidence, and `204` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -120,7 +120,7 @@ Current strengths:
   the same blocker, warning, and next-action inventory that CI validates.
 - `reports/source-report-inventory.json` is generated from source profiles and
   checked-in `reports/<source>/` directories, measuring `5` source report
-  directories, `96` source-scoped JSON reports, and `12.3%` recommended
+  directories, `98` source-scoped JSON reports, and `12.3%` recommended
   source-scoped report coverage.
 - `scripts/sync-release-schema-artifacts.py` checks that every checked-in
   `schemas/*.schema.json` file is represented in `schemas/index.json` and
@@ -474,8 +474,13 @@ Current gaps:
   materializes `26` APIs and `78` operations, and merges `78` verified KRIC
   bounded checks. That brings runtime evidence to `4220`, verified checks to
   `2345`, and registered external adapter operations to `9083`.
-- API operation coverage remains incomplete: `11,288` of `12,060` APIs have
-  operation mappings (`93.6%`), leaving `772` APIs to materialize and `9,285`
+- The 대전광역시 유성구 batch adds Yuseong host coverage for
+  `www.yuseong.go.kr`, materializes `26` APIs and `26` operations, and merges
+  `26` verified Yuseong bounded checks. That brings runtime evidence to
+  `4246`, verified checks to `2371`, and registered external adapter
+  operations to `9109`.
+- API operation coverage remains incomplete: `11,314` of `12,060` APIs have
+  operation mappings (`93.8%`), leaving `746` APIs to materialize and `9,285`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

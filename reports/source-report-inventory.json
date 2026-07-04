@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-04T02:30:25Z",
+  "generated_at": "2026-07-04T02:45:03Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 96,
+    "report_total": 98,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,7 +38,7 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 84,
+      "report_count": 86,
       "present_reports": [
         {
           "name": "anyang-egonghun-verification-summary.json",
@@ -387,6 +387,14 @@
         {
           "name": "western-power-verification.json",
           "path": "reports/data-go-kr/western-power-verification.json"
+        },
+        {
+          "name": "yuseong-verification-summary.json",
+          "path": "reports/data-go-kr/yuseong-verification-summary.json"
+        },
+        {
+          "name": "yuseong-verification.json",
+          "path": "reports/data-go-kr/yuseong-verification.json"
         }
       ],
       "present_recommended_reports": [],
@@ -489,7 +497,9 @@
         "unipass-verification-summary.json",
         "unipass-verification.json",
         "western-power-verification-summary.json",
-        "western-power-verification.json"
+        "western-power-verification.json",
+        "yuseong-verification-summary.json",
+        "yuseong-verification.json"
       ],
       "recommended_report_coverage_percent": 0.0
     },
