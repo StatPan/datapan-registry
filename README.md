@@ -11,29 +11,29 @@ re-importing the upstream data.go.kr catalog every time.
 
 - Provider: `data.go.kr`
 - Specs: `12060`
-- Operations: `21036`
-- Callable operations: `20894` (`99.3%`)
+- Operations: `21091`
+- Callable operations: `20949` (`99.3%`)
 - Latest release: `v2026.06.25.24`
 - Registered external adapters: `airport`, `andong`, `anyang`, `atfis`, `calspia`, `car`, `car365`, `childcare-info`, `chungbuk-tour`, `chungnam`, `codil`, `consumer`, `culture`, `daegu`, `daejeon`, `data-gg`,
   `dgfca`, `dongjak`, `ecvam`, `ekape`, `emuseum`, `epost`, `eshare`, `ex`, `fairdata`, `folk`, `foodsafetykorea`, `forest`,
   `franchise-ftc`, `garak`, `gblib`, `geoje`, `gicoms`, `gimhae`, `gims`, `gogung`, `gwanak`, `gwangjin`, `gwangmyeong`, `happysd`, `hrfco`, `hug`, `humetro`,
   `i815`, `icheon`, `ins24`, `ip-navi`, `itfind`, `its`, `iwest`, `jeju`, `jeju-air`, `jeju-www`, `jejudatahub`, `jejuits`, `jeonju`, `jeonnam-redtable`, `jongno`, `juso`,
-  `keit`, `kipris-plus`, `khoa`, `kistep`, `kisti`, `kma-apihub`, `kofpi`, `korad`, `koreapost`, `kosmes`, `kpx`, `kric`, `lh-ebid`, `lofin365`, `mafra`, `mafra-legacy`, `mnd-open-data`, `mpva-egonghun`, `much`, `myhome`, `naa`, `nabic`, `naqs`, `ncpms`, `nfqs`, `nie-ecobank`,
+  `keit`, `kipris-plus`, `khoa`, `kistep`, `kisti`, `kma-apihub`, `kofpi`, `kopis`, `korad`, `koreapost`, `kosmes`, `kpx`, `kric`, `lh-ebid`, `lofin365`, `mafra`, `mafra-legacy`, `mnd-open-data`, `mpva-egonghun`, `much`, `myhome`, `naa`, `nabic`, `naqs`, `ncpms`, `nfqs`, `nie-ecobank`,
   `nier-nesc`, `nihc`, `nrich`, `nrf`, `nongsaro`, `nosc`, `oneclick-law`, `open-assembly`, `open-law`, `opendart`, `pqis`, `psis`, `q-net`, `qia`, `recycling-info`, `safemap`, `safetydata`,
   `seogu`, `seogwipo`, `seoul-bus`, `seoul-map`, `seoul-open-data`, `seoul-tdata`, `sexoffender`, `sisul`, `sisul-www`, `smartfarm-korea`, `stcis`, `tashu`, `tour`, `uiryeong`, `ulsan`, `ulsan-www`, `unipass`, `vworld`,
   `wamis`, `work`, `work24`, `worldjob`, `youthcenter`, `yuseong`, `cancer`
-- External adapter coverage: `9416` registered-adapter operations out of `9426`
+- External adapter coverage: `9471` registered-adapter operations out of `9481`
   external endpoint operations (`99.7%`)
 - Missing external adapter hosts: `11`
 - Provider split readiness: `ready`
-  (`127` adapters, `127` verification-capable, `23` call-capable)
-- Runtime verification evidence: `4553` bounded checks merged into
-  `reports/latest-verification.json` (`2643` verified, `367` failed, `1543`
+  (`128` adapters, `128` verification-capable, `23` call-capable)
+- Runtime verification evidence: `4608` bounded checks merged into
+  `reports/latest-verification.json` (`2698` verified, `367` failed, `1543`
   skipped)
-- Runtime evidence growth target: `21.6%` checked evidence is above the
+- Runtime evidence growth target: `21.8%` checked evidence is above the
   unrounded `10%` release target; `0` additional records are required for this
   target.
-- Institution API overview: `411` organizations, `12060` APIs, and `21036`
+- Institution API overview: `411` organizations, `12060` APIs, and `21091`
   operations in `reports/data-go-kr/institution-api-overview.json`; readable
   tables live in `docs/data-go-kr-institution-api-overview.md`.
 - Missing external host probe: `81` manifest-bound probe records remain in

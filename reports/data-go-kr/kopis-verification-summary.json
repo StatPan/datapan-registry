@@ -1,0 +1,55 @@
+{
+  "generated_at": "2026-07-04T04:55:59Z",
+  "source": "reports/data-go-kr/kopis-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 55,
+    "verified": 55,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 55,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "kopis",
+        "count": 54,
+        "provider": "kopis"
+      },
+      {
+        "key": "culture",
+        "count": 1,
+        "provider": "culture"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "kopis.or.kr",
+        "count": 54,
+        "host": "kopis.or.kr"
+      },
+      {
+        "key": "www.culture.go.kr",
+        "count": 1,
+        "host": "www.culture.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 55,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

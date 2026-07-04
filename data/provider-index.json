@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T04:43:48Z",
+  "generated_at": "2026-07-04T04:56:31Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 127,
-  "host_count": 160,
+  "adapter_count": 128,
+  "host_count": 161,
   "adapters": [
     {
       "name": "airport",
@@ -702,6 +702,16 @@
       ]
     },
     {
+      "name": "kopis",
+      "status": "registered",
+      "hosts": [
+        "kopis.or.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
       "name": "korad",
       "status": "registered",
       "hosts": [
@@ -1334,8 +1344,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 127,
-    "verification_capable_adapters": 127,
+    "adapter_count": 128,
+    "verification_capable_adapters": 128,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

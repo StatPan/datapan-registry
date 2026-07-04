@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-04T04:43:48Z",
+  "generated_at": "2026-07-04T04:56:31Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 118,
+    "report_total": 120,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,7 +38,7 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 106,
+      "report_count": 108,
       "present_reports": [
         {
           "name": "anyang-egonghun-verification-summary.json",
@@ -253,6 +253,14 @@
         {
           "name": "kisti-verification.json",
           "path": "reports/data-go-kr/kisti-verification.json"
+        },
+        {
+          "name": "kopis-verification-summary.json",
+          "path": "reports/data-go-kr/kopis-verification-summary.json"
+        },
+        {
+          "name": "kopis-verification.json",
+          "path": "reports/data-go-kr/kopis-verification.json"
         },
         {
           "name": "koreapost-verification-summary.json",
@@ -546,6 +554,8 @@
         "kipris-verification.json",
         "kisti-verification-summary.json",
         "kisti-verification.json",
+        "kopis-verification-summary.json",
+        "kopis-verification.json",
         "koreapost-verification-summary.json",
         "koreapost-verification.json",
         "kric-verification-summary.json",
