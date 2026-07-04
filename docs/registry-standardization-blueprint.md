@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `625` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `603` data.go.kr APIs
   without operation mappings, `9,285` operation-mapped APIs without runtime
   evidence, and `204` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -519,8 +519,13 @@ Current gaps:
   and merges `3` verified bounded checks. That brings runtime evidence to
   `4467`, verified checks to `2590`, and registered external adapter operations
   to `9330`.
-- API operation coverage remains incomplete: `11,435` of `12,060` APIs have
-  operation mappings (`94.8%`), leaving `625` APIs to materialize and `9,285`
+- The 국가유산청 국립고궁박물관 batch adds Gogung host coverage for
+  `www.gogung.go.kr`, materializes the remaining `22` APIs and `22`
+  operations, and merges `22` verified bounded checks. That brings runtime
+  evidence to `4489`, verified checks to `2612`, and registered external
+  adapter operations to `9352`.
+- API operation coverage remains incomplete: `11,457` of `12,060` APIs have
+  operation mappings (`95.0%`), leaving `603` APIs to materialize and `9,285`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

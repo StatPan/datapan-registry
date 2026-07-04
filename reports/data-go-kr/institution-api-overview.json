@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T04:09:05Z",
+  "generated_at": "2026-07-04T04:17:10Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 20950,
-    "runtime_evidence": 4467,
-    "runtime_evidence_percent": 21.3,
-    "callable_operations": 20808,
-    "external_endpoint_operations": 9340,
-    "registered_adapter_operations": 9330,
+    "operations": 20972,
+    "runtime_evidence": 4489,
+    "runtime_evidence_percent": 21.4,
+    "callable_operations": 20830,
+    "external_endpoint_operations": 9362,
+    "registered_adapter_operations": 9352,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 9340
+      "count": 9362
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 9330
+      "count": 9352
     },
     {
       "key": "builtin",
@@ -81,7 +81,7 @@
     },
     {
       "category": "문화관광",
-      "operation_count": 2238
+      "operation_count": 2260
     },
     {
       "category": "사회복지",
@@ -8568,6 +8568,49 @@
       "top_hosts": []
     },
     {
+      "organization": "국가유산청 국립고궁박물관",
+      "api_count": 22,
+      "operation_api_count": 22,
+      "operation_count": 22,
+      "runtime_evidence_count": 22,
+      "runtime_evidence_percent": 100.0,
+      "verified": 22,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 0,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "external_endpoint",
+          "count": 22
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 22
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "문화관광",
+          "operation_count": 22
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "www.gogung.go.kr",
+          "operation_count": 22,
+          "adapter": "gogung",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "대한석탄공사",
       "api_count": 22,
       "operation_api_count": 22,
@@ -16194,24 +16237,6 @@
           "operation_count": 1
         }
       ]
-    },
-    {
-      "organization": "국가유산청 국립고궁박물관",
-      "api_count": 22,
-      "operation_api_count": 0,
-      "operation_count": 0,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [],
-      "by_adapter_status": [],
-      "top_categories": [],
-      "top_hosts": []
     },
     {
       "organization": "주택도시보증공사",

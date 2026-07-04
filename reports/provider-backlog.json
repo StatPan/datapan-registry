@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-07-04T04:09:05Z",
+  "generated_at": "2026-07-04T04:17:10Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 311,
+  "filtered_count": 312,
   "summary": {
-    "hosts": 311,
+    "hosts": 312,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 164,
-    "external_guide_hosts": 221,
-    "registered_adapter_hosts": 153,
-    "operation_hosts": 166,
+    "external_endpoint_hosts": 165,
+    "external_guide_hosts": 222,
+    "registered_adapter_hosts": 154,
+    "operation_hosts": 167,
     "guide_only_hosts": 145,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
@@ -1080,6 +1080,23 @@
         "15101154",
         "15101155",
         "15101171"
+      ]
+    },
+    {
+      "host": "www.gogung.go.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 22,
+      "operations": 22,
+      "external_endpoint_operations": 22,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15033342",
+        "15033344",
+        "15033346"
       ]
     },
     {

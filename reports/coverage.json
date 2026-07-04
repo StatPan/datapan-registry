@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T04:09:11Z",
+  "generated_at": "2026-07-04T04:17:16Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "source": "release",
@@ -7,21 +7,21 @@
   "route_disposition": ".\\reports\\route-disposition.json",
   "summary": {
     "specs": 12060,
-    "operations": 20950,
-    "callable_operations": 20808,
+    "operations": 20972,
+    "callable_operations": 20830,
     "callable_operation_percent": 99.3,
     "data_go_kr_gateway_operations": 11419,
-    "external_endpoint_operations": 9340,
-    "registered_adapter_operations": 9330,
+    "external_endpoint_operations": 9362,
+    "registered_adapter_operations": 9352,
     "missing_adapter_operations": 29,
     "external_adapter_coverage_percent": 99.7,
     "approval_required_operations": 8048,
     "no_endpoint_operations": 123,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 158,
-    "registered_adapter_hosts": 153,
+    "registered_adapter_hosts": 154,
     "missing_adapter_hosts": 11,
-    "adapter_count": 125,
+    "adapter_count": 126,
     "call_capable_adapters": 23,
     "provider_split_ready": true
   },
@@ -41,14 +41,14 @@
   },
   "evidence": {
     "present": true,
-    "generated_at": "2026-07-04T04:09:03Z",
-    "total": 4467,
-    "verified": 2590,
+    "generated_at": "2026-07-04T04:17:08Z",
+    "total": 4489,
+    "verified": 2612,
     "failed": 334,
     "skipped": 1543,
     "unknown": 0,
-    "verified_percent": 58,
-    "evidence_operation_percent": 21.3
+    "verified_percent": 58.2,
+    "evidence_operation_percent": 21.4
   },
   "route_evidence": {
     "present": true,
@@ -381,10 +381,10 @@
     ]
   },
   "adapters": {
-    "generated_at": "2026-07-04T04:09:11Z",
+    "generated_at": "2026-07-04T04:17:16Z",
     "datapan_version": "0.1.0-dev",
-    "adapter_count": 125,
-    "host_count": 158,
+    "adapter_count": 126,
+    "host_count": 159,
     "adapters": [
       {
         "name": "airport",
@@ -757,6 +757,16 @@
         "status": "registered",
         "hosts": [
           "www.gims.go.kr"
+        ],
+        "capabilities": [
+          "verification"
+        ]
+      },
+      {
+        "name": "gogung",
+        "status": "registered",
+        "hosts": [
+          "www.gogung.go.kr"
         ],
         "capabilities": [
           "verification"
@@ -1696,8 +1706,8 @@
     "split_readiness": {
       "ready": true,
       "status": "ready",
-      "adapter_count": 125,
-      "verification_capable_adapters": 125,
+      "adapter_count": 126,
+      "verification_capable_adapters": 126,
       "call_capable_adapters": 23,
       "required_adapters": 2,
       "required_verification_adapters": 2,

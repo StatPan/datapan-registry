@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-04T04:09:05Z",
+  "generated_at": "2026-07-04T04:17:10Z",
   "datapan_version": "0.1.0-dev",
-  "adapter_count": 125,
-  "host_count": 158,
+  "adapter_count": 126,
+  "host_count": 159,
   "adapters": [
     {
       "name": "airport",
@@ -375,6 +375,16 @@
       "status": "registered",
       "hosts": [
         "www.gims.go.kr"
+      ],
+      "capabilities": [
+        "verification"
+      ]
+    },
+    {
+      "name": "gogung",
+      "status": "registered",
+      "hosts": [
+        "www.gogung.go.kr"
       ],
       "capabilities": [
         "verification"
@@ -1314,8 +1324,8 @@
   "split_readiness": {
     "ready": true,
     "status": "ready",
-    "adapter_count": 125,
-    "verification_capable_adapters": 125,
+    "adapter_count": 126,
+    "verification_capable_adapters": 126,
     "call_capable_adapters": 23,
     "required_adapters": 2,
     "required_verification_adapters": 2,

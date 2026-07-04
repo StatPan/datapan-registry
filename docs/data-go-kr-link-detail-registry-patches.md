@@ -2,13 +2,13 @@
 
 This report fetches one operation-materialization batch from public data.go.kr detail pages and keeps only operations whose hosts already have registered adapters.
 
-- Generated at: `2026-07-04T04:08:30Z`
+- Generated at: `2026-07-04T04:16:41Z`
 - Batch: `institution-03`
-- Organization: `한국농수산식품유통공사`
-- Input APIs: `3`
-- Details fetched: `3`
-- Patches: `3`
-- Operations to add: `3`
+- Organization: `국가유산청 국립고궁박물관`
+- Input APIs: `22`
+- Details fetched: `22`
+- Patches: `22`
+- Operations to add: `22`
 - Skipped: `0`
 - Failed: `0`
 
@@ -16,8 +16,27 @@ This report fetches one operation-materialization batch from public data.go.kr d
 
 | Dataset ID | Organization | Title | Operations | Hosts |
 | --- | --- | --- | ---: | --- |
-| 15109105 | 한국농수산식품유통공사 | 한국농수산식품유통공사_식품 원료별 사용량(총/국산/수입) | 1 | www.atfis.or.kr |
-| 15109104 | 한국농수산식품유통공사 | 한국농수산식품유통공사_음식료품 제조업 업종별 현황 통계 | 1 | www.atfis.or.kr |
-| 15109103 | 한국농수산식품유통공사 | 한국농수산식품유통공사_국내 식품시장규모 | 1 | www.atfis.or.kr |
+| 15033398 | 국가유산청 국립고궁박물관 | 문화재청 국립고궁박물관_교육자료 목록조회 정보 | 1 | www.gogung.go.kr |
+| 15033366 | 국가유산청 국립고궁박물관 | 문화재청 국립고궁박물관_소장품 통합조회 정보 | 1 | www.gogung.go.kr |
+| 15033365 | 국가유산청 국립고궁박물관 | 국가유산청 국립고궁박물관_학술정보 통합조회 정보 | 1 | www.gogung.go.kr |
+| 15033364 | 국가유산청 국립고궁박물관 | 국가유산청 국립고궁박물관_학술정보 상세조회 정보 | 1 | www.gogung.go.kr |
+| 15033363 | 국가유산청 국립고궁박물관 | 국가유산청 국립고궁박물관_학술정보 목록조회 정보 | 1 | www.gogung.go.kr |
+| 15033362 | 국가유산청 국립고궁박물관 | 문화재청 국립고궁박물관_조선왕조기록문화유산 상세조회 정보 | 1 | www.gogung.go.kr |
+| 15033361 | 국가유산청 국립고궁박물관 | 문화재청 국립고궁박물관_조선왕조기록문화유산 목록조회 정보 | 1 | www.gogung.go.kr |
+| 15033360 | 국가유산청 국립고궁박물관 | 문화재청 국립고궁박물관_수장고속왕실유물이야기 상세조회 정보 | 1 | www.gogung.go.kr |
+| 15033359 | 국가유산청 국립고궁박물관 | 문화재청 국립고궁박물관_수장고속왕실유물이야기 목록조회 정보 | 1 | www.gogung.go.kr |
+| 15033358 | 국가유산청 국립고궁박물관 | 문화재청 국립고궁박물관_왕실유물보존처리이야기 상세조회 정보 | 1 | www.gogung.go.kr |
+| 15033357 | 국가유산청 국립고궁박물관 | 문화재청 국립고궁박물관_왕실유물보존처리이야기 목록조회 정보 | 1 | www.gogung.go.kr |
+| 15033356 | 국가유산청 국립고궁박물관 | 문화재청 국립고궁박물관_자주묻는질문 상세조회 정보 | 1 | www.gogung.go.kr |
+| 15033355 | 국가유산청 국립고궁박물관 | 문화재청 국립고궁박물관_자주묻는질문 목록조회 정보 | 1 | www.gogung.go.kr |
+| 15033354 | 국가유산청 국립고궁박물관 | 문화재청 국립고궁박물관_문화행사 상세조회 정보 | 1 | www.gogung.go.kr |
+| 15033352 | 국가유산청 국립고궁박물관 | 문화재청 국립고궁박물관_문화행사 목록조회 정보 | 1 | www.gogung.go.kr |
+| 15033351 | 국가유산청 국립고궁박물관 | 문화재청 국립고궁박물관_입찰 상세조회 정보 | 1 | www.gogung.go.kr |
+| 15033350 | 국가유산청 국립고궁박물관 | 문화재청 국립고궁박물관_입찰 목록조회 정보 | 1 | www.gogung.go.kr |
+| 15033349 | 국가유산청 국립고궁박물관 | 문화재청 국립고궁박물관_보도자료 상세조회 정보 | 1 | www.gogung.go.kr |
+| 15033348 | 국가유산청 국립고궁박물관 | 문화재청 국립고궁박물관_보도자료 목록조회 정보 | 1 | www.gogung.go.kr |
+| 15033346 | 국가유산청 국립고궁박물관 | 문화재청 국립고궁박물관_공지사항 상세조회 정보 | 1 | www.gogung.go.kr |
+| 15033344 | 국가유산청 국립고궁박물관 | 문화재청 국립고궁박물관_공지사항 목록조회 정보 | 1 | www.gogung.go.kr |
+| 15033342 | 국가유산청 국립고궁박물관 | 문화재청 국립고궁박물관_교육자료 상세조회 정보 | 1 | www.gogung.go.kr |
 
 ## Skipped Reasons
