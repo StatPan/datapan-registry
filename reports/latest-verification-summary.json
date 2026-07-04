@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T02:45:01Z",
+  "generated_at": "2026-07-04T02:51:56Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4246,
-    "verified": 2371,
+    "total": 4301,
+    "verified": 2426,
     "failed": 332,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2371,
+        "count": 2426,
         "status": "verified"
       },
       {
@@ -389,19 +389,19 @@
         "provider": "opendart"
       },
       {
+        "key": "culture",
+        "count": 177,
+        "provider": "culture"
+      },
+      {
         "key": "q-net",
         "count": 147,
         "provider": "q-net"
       },
       {
         "key": "data-gg",
-        "count": 127,
+        "count": 128,
         "provider": "data-gg"
-      },
-      {
-        "key": "culture",
-        "count": 124,
-        "provider": "culture"
       },
       {
         "key": "seoul-open-data",
@@ -465,7 +465,7 @@
       },
       {
         "key": "seogwipo",
-        "count": 61,
+        "count": 62,
         "provider": "seogwipo"
       },
       {
@@ -951,14 +951,14 @@
         "host": "opendart.fss.or.kr"
       },
       {
-        "key": "data.gg.go.kr",
-        "count": 127,
-        "host": "data.gg.go.kr"
+        "key": "www.culture.go.kr",
+        "count": 177,
+        "host": "www.culture.go.kr"
       },
       {
-        "key": "www.culture.go.kr",
-        "count": 124,
-        "host": "www.culture.go.kr"
+        "key": "data.gg.go.kr",
+        "count": 128,
+        "host": "data.gg.go.kr"
       },
       {
         "key": "openapi.q-net.or.kr",
@@ -1027,7 +1027,7 @@
       },
       {
         "key": "www.seogwipo.go.kr",
-        "count": 50,
+        "count": 51,
         "host": "www.seogwipo.go.kr"
       },
       {
@@ -1614,7 +1614,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 3522,
+        "count": 3577,
         "kind": "external_endpoint"
       },
       {

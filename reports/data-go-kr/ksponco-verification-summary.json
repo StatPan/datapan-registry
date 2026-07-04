@@ -1,0 +1,65 @@
+{
+  "generated_at": "2026-07-04T02:51:24Z",
+  "source": "reports/data-go-kr/ksponco-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 55,
+    "verified": 55,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 55,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "culture",
+        "count": 53,
+        "provider": "culture"
+      },
+      {
+        "key": "data-gg",
+        "count": 1,
+        "provider": "data-gg"
+      },
+      {
+        "key": "seogwipo",
+        "count": 1,
+        "provider": "seogwipo"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "www.culture.go.kr",
+        "count": 53,
+        "host": "www.culture.go.kr"
+      },
+      {
+        "key": "data.gg.go.kr",
+        "count": 1,
+        "host": "data.gg.go.kr"
+      },
+      {
+        "key": "www.seogwipo.go.kr",
+        "count": 1,
+        "host": "www.seogwipo.go.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 55,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

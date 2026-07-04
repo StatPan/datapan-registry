@@ -12,14 +12,14 @@ This plan uses the current release artifacts as the operating baseline.
 Current release metrics:
 
 - specs: `12060`
-- operations: `20729`
-- callable operations: `20587` (`99.3%`)
+- operations: `20784`
+- callable operations: `20642` (`99.3%`)
 - data.go.kr gateway operations: `11419`
-- external endpoint operations: `9119`
-- registered adapter operations: `9109`
+- external endpoint operations: `9174`
+- registered adapter operations: `9164`
 - missing adapter operations: `29`
 - external adapter coverage: `99.7%`
-- approval-required operations: `7928`
+- approval-required operations: `7947`
 - no-endpoint operations: `123`
 - service-root operations: `19`
 - unsupported-protocol operations: `149`
@@ -240,13 +240,14 @@ blocked by upstream data.go.kr detail errors. The latest viable queues were
 `울산광역시`, `농림축산식품부 국립농산물품질관리원`,
 `제주특별자치도 서귀포시`, `서울특별시농수산식품공사`,
 `국가유산청 국립문화유산연구원`, `경기도 안양시`,
-`대전교통공사`, `국가철도공단`, and `대전광역시 유성구`, now
+`대전교통공사`, `국가철도공단`, `대전광역시 유성구`, and
+`한국체육산업개발주식회사`, now
 completed through `39` Ecobank, `45` NFQS, `95` Dongjak/Seoul Open Data,
 `3` UniPass, `1` KoreaPost, `23` Childcare Info, `28` Daegu, `68`
 KEIS/YouthCenter, `18` NIHC, `30` Ulsan WWW, `49` NAQS, `70` Seogwipo, and
 `81` Garak, `76` NRich, `41` Anyang/MPVA Egonghun, `1` Tashu, `78` KRIC,
-and `26` Yuseong link-detail operations. The next viable materialization
-queue after the current upstream blockers is `한국체육산업개발주식회사`.
+`26` Yuseong, and `55` 한국체육산업개발 link-detail operations. The next viable
+materialization queue after the current upstream blockers is `한국연구재단`.
 The runtime reactivation queue starts at `행정안전부`: `1252`
 APIs, `1252` APIs with
 operation mappings, `1767` mapped operations, `96` checked runtime evidence
@@ -714,6 +715,12 @@ readiness, not to advance verified runtime coverage.
    to `4246`, verified checks to `2371`, registered external adapter
    operations to `9109`, and raises API operation coverage to `11,314` of
    `12,060` APIs (`93.8%`).
+   The 한국체육산업개발주식회사 batch reuses registered Culture, Data GG, and
+   Seogwipo host coverage, materializes `22` APIs and `55` operations, and
+   merges `55` verified bounded checks. That brings checked runtime evidence
+   to `4301`, verified checks to `2426`, registered external adapter
+   operations to `9164`, and raises API operation coverage to `11,336` of
+   `12,060` APIs (`94.0%`).
 12. Add a data.go.kr draft impact plan and validate its client/server action
    boundaries in CI. Done in PR #4.
 13. Generate future data.go.kr impact plans directly from catalog diff,
