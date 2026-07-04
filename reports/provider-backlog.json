@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T05:44:38Z",
+  "generated_at": "2026-07-04T05:55:34Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 320,
+  "filtered_count": 321,
   "summary": {
-    "hosts": 320,
+    "hosts": 321,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 173,
-    "external_guide_hosts": 228,
-    "registered_adapter_hosts": 162,
-    "operation_hosts": 175,
+    "external_endpoint_hosts": 174,
+    "external_guide_hosts": 229,
+    "registered_adapter_hosts": 163,
+    "operation_hosts": 176,
     "guide_only_hosts": 145,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 158,
-    "approval_required_operations": 8166,
+    "approval_required_operations": 8182,
     "malformed_source_url_count": 724
   },
   "providers": [
@@ -1321,6 +1321,24 @@
         "15143693",
         "15143694",
         "15143695"
+      ]
+    },
+    {
+      "host": "ecos.bok.or.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 16,
+      "operations": 16,
+      "external_endpoint_operations": 16,
+      "external_guide_specs": 16,
+      "approval_required_operations": 16,
+      "sample_ids": [
+        "15059621",
+        "15059626",
+        "15059627"
       ]
     },
     {

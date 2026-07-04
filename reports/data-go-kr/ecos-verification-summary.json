@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-07-04T05:55:10Z",
+  "source": "reports/data-go-kr/ecos-verification.json",
+  "provider": "data.go.kr",
+  "registry": "data/data-go-kr.registry.json",
+  "limit": 20,
+  "truncated": false,
+  "summary": {
+    "total": 16,
+    "verified": 16,
+    "failed": 0,
+    "skipped": 0,
+    "unknown": 0
+  },
+  "groups": {
+    "by_status": [
+      {
+        "key": "verified",
+        "count": 16,
+        "status": "verified"
+      }
+    ],
+    "by_provider": [
+      {
+        "key": "ecos",
+        "count": 16,
+        "provider": "ecos"
+      }
+    ],
+    "by_endpoint_host": [
+      {
+        "key": "ecos.bok.or.kr",
+        "count": 16,
+        "host": "ecos.bok.or.kr"
+      }
+    ],
+    "by_kind": [
+      {
+        "key": "external_endpoint",
+        "count": 16,
+        "kind": "external_endpoint"
+      }
+    ]
+  }
+}

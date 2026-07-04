@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T05:44:38Z",
+  "generated_at": "2026-07-04T05:55:34Z",
   "provider": "data.go.kr",
   "old": ".datapan/previous/data-go-kr.registry.json",
   "new": ".\\data\\data-go-kr.registry.json",
@@ -12,8 +12,8 @@
   "summary": {
     "added": 0,
     "removed": 0,
-    "changed": 4368,
-    "stable": 7692
+    "changed": 4384,
+    "stable": 7676
   },
   "added": [],
   "removed": [],
@@ -17817,6 +17817,166 @@
       ],
       "old_digest": "ed7ce5d9300a59129dcfbdad839b4d50f0e4ae50e34c97c2e98042f15002a779",
       "new_digest": "5b33e39edd5a69099cfb574a6c8b176727116db4a3a4d493c5505fa4aafc5187"
+    },
+    {
+      "id": "15059621",
+      "old_title": "한국은행_국민대차대조표",
+      "new_title": "한국은행_국민대차대조표",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "647924c937e9a548da24b349d250e669a725d94a339204eb12bb72edb849663b",
+      "new_digest": "27ee783f74ddefd4b3c01d3b689b0d12d1010682010988e00e48c3ed24c62067"
+    },
+    {
+      "id": "15059626",
+      "old_title": "한국은행_금융기관대출행태조사",
+      "new_title": "한국은행_금융기관대출행태조사",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "12c2e7105cbc823a41aeaa7b7305896dd8a81cbb3451e395bfa71aa626b60a1f",
+      "new_digest": "e1781b9604b2dc1a93c48c4b3f575e94c0060583232e8bd60940b1b1d4231fc9"
+    },
+    {
+      "id": "15059627",
+      "old_title": "한국은행_산업연관표",
+      "new_title": "한국은행_산업연관표",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "eddd140442521b8de0db410fe1a062203f7eea9751dea68f643127f153e5a644",
+      "new_digest": "32f5ef2f2fe0025f9002a2409624a285157e5c747b667fdd73e92eee7ffa20df"
+    },
+    {
+      "id": "15059628",
+      "old_title": "한국은행_자금순환표",
+      "new_title": "한국은행_자금순환표",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "4ad87bb6eca1944ed2ae4a5c15825b0b89c4939927cefd155dae8e8917efdb49",
+      "new_digest": "9de78f5e09d6b5270771ed4ad60f3f916e8abb5f76ae87fc7820f512fd627e04"
+    },
+    {
+      "id": "15059629",
+      "old_title": "한국은행_국민계정",
+      "new_title": "한국은행_국민계정",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "1c875ae0c195115b92c8f63c5719e0e7e6caff0652878aa7d4ec580e6b2f3a7c",
+      "new_digest": "49b2493b1ee63f6c538feb4eb0794f51f4868827ea449ec911c33e96aa38e544"
+    },
+    {
+      "id": "15059630",
+      "old_title": "한국은행_기업경기조사",
+      "new_title": "한국은행_기업경기조사",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e0a4e244102d8dc30f4420ba8a32d791e109c89f24f8fd17dc11e37dfa6985bd",
+      "new_digest": "0f83f9e23ac6b309ae1e1ecb40bc3558bf291c4114ad07b8403d1bfa5005eb09"
+    },
+    {
+      "id": "15059631",
+      "old_title": "한국은행_국제수지통계",
+      "new_title": "한국은행_국제수지통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "746f52d22ab8192a039bd4ac7760b0d817f10641aae01b2418129e385ad0ca5a",
+      "new_digest": "9b80b219c3a7678fe11d408dbd202799a7c64a08623cabcf02574eae836a3478"
+    },
+    {
+      "id": "15059632",
+      "old_title": "한국은행_지급결제통계",
+      "new_title": "한국은행_지급결제통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "06f8e81f763aa881b7b5d950af6938954c1742b4110f9cb00922d0ec72bd6f0d",
+      "new_digest": "dac69f768394460d4287bfd31c7773e6c574aec126f38994f574b80b0ae07041"
+    },
+    {
+      "id": "15059634",
+      "old_title": "한국은행_국제투자대조표(IIP)",
+      "new_title": "한국은행_국제투자대조표(IIP)",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "ba76593d2920b54af7ad842f6ed76c047acf1989c83945dd3e4011a3353858b1",
+      "new_digest": "a2b11c267e7a41c31ca0fb516e2763a55ce0a7d02a2c67dc36eac8a69d49c4a2"
+    },
+    {
+      "id": "15059635",
+      "old_title": "한국은행_소비자동향조사",
+      "new_title": "한국은행_소비자동향조사",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "5908553c7fb51341729905cab77dda83865f677461013c7f81e513b36e661ffc",
+      "new_digest": "9cbdb60e3c7bb12c9c8991a602ef26e69bb2e2bff38e9d04216ba97b5228b11f"
+    },
+    {
+      "id": "15059636",
+      "old_title": "한국은행_대외채권및대외채무",
+      "new_title": "한국은행_대외채권및대외채무",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "008cfc7f10f86f1cd8ef0002fbc576c1ac8ce217321b6c800b75c7a12cddf7ae",
+      "new_digest": "1c5908043fe869149fd8e4a017db3535ab188afcccf9d3562e0cf5efdbeb9400"
+    },
+    {
+      "id": "15059638",
+      "old_title": "한국은행_통화금융통계",
+      "new_title": "한국은행_통화금융통계",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "cd42a1a455347050575f48825b679af395a73e99a44e76b37e5f066507b348b4",
+      "new_digest": "2b0a68e0eb42d73becd2a559114d9b80179b0028c5c8b83bbae03ac2a9ba48b5"
+    },
+    {
+      "id": "15059639",
+      "old_title": "한국은행_경제심리지수",
+      "new_title": "한국은행_경제심리지수",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "fc8ef07387a53831255d2a2091f1577c0a548b028e8d930f92d5c8908737d18a",
+      "new_digest": "3903835eef5854ec00c9d84d852ce629f89ce3277596edbae97e18ce58e0af92"
+    },
+    {
+      "id": "15059640",
+      "old_title": "한국은행_수출입물가조사",
+      "new_title": "한국은행_수출입물가조사",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "f6ef122a4e417c7519655d3b499c735f8adf495d2c51ae812ed7dd831e2ad07d",
+      "new_digest": "e8eaca9454a1625f27f9c852d6519cd17f06c4beb762025618300d3d4efaa44e"
+    },
+    {
+      "id": "15059641",
+      "old_title": "한국은행_기업경영분석",
+      "new_title": "한국은행_기업경영분석",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "e0cc5549fe45e7cc14ded359bd5ebfacce791817a68c5455348dbdb73cdd385d",
+      "new_digest": "71f07c6756eeb64878b3ee65850507f6334a16939aff12106bd96d8672a02225"
+    },
+    {
+      "id": "15059642",
+      "old_title": "한국은행_생산자물가조사",
+      "new_title": "한국은행_생산자물가조사",
+      "fields": [
+        "operations"
+      ],
+      "old_digest": "6ae3f90436589043c5c913fd98c919503e2948b7475b86e80fc2c5403026b0d5",
+      "new_digest": "512d8b7b10bb10f715f6b00e3268551f0b70f629812bebb8be939bdd52281984"
     },
     {
       "id": "15059675",

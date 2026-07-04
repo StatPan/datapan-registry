@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-04T05:44:19Z",
+  "generated_at": "2026-07-04T05:55:19Z",
   "source": ".\\reports\\latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4728,
-    "verified": 2808,
+    "total": 4744,
+    "verified": 2824,
     "failed": 377,
     "skipped": 1543,
     "unknown": 0
@@ -16,7 +16,7 @@
     "by_status": [
       {
         "key": "verified",
-        "count": 2808,
+        "count": 2824,
         "status": "verified"
       },
       {
@@ -662,6 +662,11 @@
         "key": "nihc",
         "count": 18,
         "provider": "nihc"
+      },
+      {
+        "key": "ecos",
+        "count": 16,
+        "provider": "ecos"
       },
       {
         "key": "andong",
@@ -1311,6 +1316,11 @@
         "host": "www.nihc.go.kr"
       },
       {
+        "key": "ecos.bok.or.kr",
+        "count": 16,
+        "host": "ecos.bok.or.kr"
+      },
+      {
         "key": "scienceon.kisti.re.kr",
         "count": 16,
         "host": "scienceon.kisti.re.kr"
@@ -1819,7 +1829,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 4004,
+        "count": 4020,
         "kind": "external_endpoint"
       },
       {

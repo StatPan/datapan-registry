@@ -94,7 +94,7 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `507` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `491` data.go.kr APIs
   without operation mappings, `9,285` operation-mapped APIs without runtime
   evidence, and `233` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
@@ -554,8 +554,12 @@ Current gaps:
   failed on `mnd-open-data_request_failed`). That brings runtime evidence to
   `4728`, verified checks to `2808`, failed checks to `377`, and registered
   external adapter operations to `9591`.
-- API operation coverage remains incomplete: `11,553` of `12,060` APIs have
-  operation mappings (`95.8%`), leaving `507` APIs to materialize and `9,285`
+- The 한국은행 batch adds ECOS host coverage for `ecos.bok.or.kr`, materializes
+  `16` APIs and `16` operations, and merges `16` verified bounded checks. That
+  brings runtime evidence to `4744`, verified checks to `2824`, and registered
+  external adapter operations to `9607`.
+- API operation coverage remains incomplete: `11,569` of `12,060` APIs have
+  operation mappings (`95.9%`), leaving `491` APIs to materialize and `9,285`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report
