@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T04:17:10Z",
+  "generated_at": "2026-07-04T04:43:48Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -13,12 +13,12 @@
   "summary": {
     "institutions": 411,
     "apis": 12060,
-    "operations": 20972,
-    "runtime_evidence": 4489,
-    "runtime_evidence_percent": 21.4,
-    "callable_operations": 20830,
-    "external_endpoint_operations": 9362,
-    "registered_adapter_operations": 9352,
+    "operations": 21036,
+    "runtime_evidence": 4553,
+    "runtime_evidence_percent": 21.6,
+    "callable_operations": 20894,
+    "external_endpoint_operations": 9426,
+    "registered_adapter_operations": 9416,
     "missing_adapter_operations": 29,
     "missing_adapter_hosts": 11
   },
@@ -29,7 +29,7 @@
     },
     {
       "key": "external_endpoint",
-      "count": 9362
+      "count": 9426
     },
     {
       "key": "malformed_endpoint",
@@ -51,7 +51,7 @@
   "by_adapter_status": [
     {
       "key": "adapter",
-      "count": 9352
+      "count": 9416
     },
     {
       "key": "builtin",
@@ -69,7 +69,7 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 2651
+      "operation_count": 2669
     },
     {
       "category": "농축수산",
@@ -97,7 +97,7 @@
     },
     {
       "category": "재정금융",
-      "operation_count": 1277
+      "operation_count": 1278
     },
     {
       "category": "식품건강",
@@ -105,7 +105,7 @@
     },
     {
       "category": "국토관리",
-      "operation_count": 1098
+      "operation_count": 1143
     },
     {
       "category": "보건의료",
@@ -4869,6 +4869,57 @@
           "host": "www.seogwipo.go.kr",
           "operation_count": 1,
           "adapter": "seogwipo",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
+      "organization": "주택도시보증공사",
+      "api_count": 22,
+      "operation_api_count": 22,
+      "operation_count": 64,
+      "runtime_evidence_count": 64,
+      "runtime_evidence_percent": 100.0,
+      "verified": 31,
+      "failed": 33,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 12,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "external_endpoint",
+          "count": 64
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 64
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "국토관리",
+          "operation_count": 45
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 18
+        },
+        {
+          "category": "재정금융",
+          "operation_count": 1
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "www.khug.or.kr",
+          "operation_count": 64,
+          "adapter": "hug",
           "adapter_status": "registered",
           "capabilities": [
             "verification"
@@ -16237,24 +16288,6 @@
           "operation_count": 1
         }
       ]
-    },
-    {
-      "organization": "주택도시보증공사",
-      "api_count": 22,
-      "operation_api_count": 0,
-      "operation_count": 0,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [],
-      "by_adapter_status": [],
-      "top_categories": [],
-      "top_hosts": []
     },
     {
       "organization": "예술경영지원센터",

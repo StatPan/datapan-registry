@@ -94,9 +94,9 @@ Current strengths:
 - `reports/data-go-kr/runtime-evidence-growth.json` measures current runtime
   evidence against the 10% target and validates the next planned verification
   batches.
-- `reports/data-go-kr/coverage-backlog.json` tracks `603` data.go.kr APIs
+- `reports/data-go-kr/coverage-backlog.json` tracks `581` data.go.kr APIs
   without operation mappings, `9,285` operation-mapped APIs without runtime
-  evidence, and `204` APIs with failed runtime evidence that need repair.
+  evidence, and `227` APIs with failed runtime evidence that need repair.
 - `reports/kosis/runtime-evidence-plan.json`,
   `reports/ecos/runtime-evidence-plan.json`,
   `reports/open-assembly/runtime-evidence-plan.json`, and
@@ -524,8 +524,13 @@ Current gaps:
   operations, and merges `22` verified bounded checks. That brings runtime
   evidence to `4489`, verified checks to `2612`, and registered external
   adapter operations to `9352`.
-- API operation coverage remains incomplete: `11,457` of `12,060` APIs have
-  operation mappings (`95.0%`), leaving `603` APIs to materialize and `9,285`
+- The 주택도시보증공사 batch adds HUG host coverage for `www.khug.or.kr`,
+  materializes the remaining `22` APIs and `64` operations, and merges `64`
+  bounded checks (`31` verified, `33` failed on `hug_request_timeout`). That
+  brings runtime evidence to `4553`, verified checks to `2643`, failed checks
+  to `367`, and registered external adapter operations to `9416`.
+- API operation coverage remains incomplete: `11,479` of `12,060` APIs have
+  operation mappings (`95.2%`), leaving `581` APIs to materialize and `9,285`
   operation-mapped APIs to reactivate with runtime evidence.
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report

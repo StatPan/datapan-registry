@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-04T04:17:10Z",
+  "generated_at": "2026-07-04T04:43:48Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
     "specs_total": 12060,
-    "operations_total": 20972,
-    "callable_operations": 20830,
-    "specs_without_operations": 603,
-    "specs_without_callable_operation": 678,
+    "operations_total": 21036,
+    "callable_operations": 20894,
+    "specs_without_operations": 581,
+    "specs_without_callable_operation": 656,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 8634,
-    "operations_without_response_params": 9856,
+    "operations_without_request_params": 8698,
+    "operations_without_response_params": 9920,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
       "data_go_kr_gateway_operations": 11426,
       "gateway_with_external_guide_specs": 902,
-      "external_endpoint_specs": 4586,
-      "external_endpoint_operations": 9362,
+      "external_endpoint_specs": 4608,
+      "external_endpoint_operations": 9426,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 123,
       "dev_approval_required_operations": 224,
-      "prod_approval_required_operations": 7942,
+      "prod_approval_required_operations": 7954,
       "malformed_endpoint_url_count": 42,
       "malformed_guide_url_count": 682,
       "top_endpoint_hosts": [
@@ -277,22 +277,6 @@
     "samples": {
       "without_operations": [
         {
-          "id": "15011457",
-          "title": "주택도시보증공사_분양보증현황(지역)",
-          "organization": "주택도시보증공사",
-          "source_category": "국토관리",
-          "operations_count": 0,
-          "callable_operations": 0
-        },
-        {
-          "id": "15012530",
-          "title": "주택도시보증공사_월별 집합건물(아파트/상가) 사업장 공정율 현황",
-          "organization": "주택도시보증공사",
-          "source_category": "국토관리",
-          "operations_count": 0,
-          "callable_operations": 0
-        },
-        {
           "id": "15012716",
           "title": "한국항공우주연구원_우수기술",
           "organization": "한국항공우주연구원",
@@ -311,6 +295,22 @@
         {
           "id": "15013060",
           "title": "국방부 병사 보급기준 정보",
+          "organization": "국방부",
+          "source_category": "통일외교안보",
+          "operations_count": 0,
+          "callable_operations": 0
+        },
+        {
+          "id": "15013068",
+          "title": "군 복지시설 주변 관광지 정보",
+          "organization": "국방부",
+          "source_category": "통일외교안보",
+          "operations_count": 0,
+          "callable_operations": 0
+        },
+        {
+          "id": "15013070",
+          "title": "국방부_TMO(여행장병 안내소) 정보",
           "organization": "국방부",
           "source_category": "통일외교안보",
           "operations_count": 0,

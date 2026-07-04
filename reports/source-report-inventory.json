@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-04T04:17:10Z",
+  "generated_at": "2026-07-04T04:43:48Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -24,7 +24,7 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 116,
+    "report_total": 118,
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
@@ -38,7 +38,7 @@
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
       "report_dir_exists": true,
-      "report_count": 104,
+      "report_count": 106,
       "present_reports": [
         {
           "name": "anyang-egonghun-verification-summary.json",
@@ -187,6 +187,14 @@
         {
           "name": "han-river-flood-verification.json",
           "path": "reports/data-go-kr/han-river-flood-verification.json"
+        },
+        {
+          "name": "hug-verification-summary.json",
+          "path": "reports/data-go-kr/hug-verification-summary.json"
+        },
+        {
+          "name": "hug-verification.json",
+          "path": "reports/data-go-kr/hug-verification.json"
         },
         {
           "name": "institution-api-overview.json",
@@ -522,6 +530,8 @@
         "gogung-verification.json",
         "han-river-flood-verification-summary.json",
         "han-river-flood-verification.json",
+        "hug-verification-summary.json",
+        "hug-verification.json",
         "institution-api-overview.json",
         "institution-runtime-plan.json",
         "keco-verification-summary.json",

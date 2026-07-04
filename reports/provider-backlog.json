@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-07-04T04:17:10Z",
+  "generated_at": "2026-07-04T04:43:48Z",
   "provider": "data.go.kr",
   "registry": ".\\data\\data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 312,
+  "filtered_count": 313,
   "summary": {
-    "hosts": 312,
+    "hosts": 313,
     "data_go_kr_gateway_hosts": 2,
-    "external_endpoint_hosts": 165,
-    "external_guide_hosts": 222,
-    "registered_adapter_hosts": 154,
-    "operation_hosts": 167,
+    "external_endpoint_hosts": 166,
+    "external_guide_hosts": 223,
+    "registered_adapter_hosts": 155,
+    "operation_hosts": 168,
     "guide_only_hosts": 145,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 158,
-    "approval_required_operations": 8048,
+    "approval_required_operations": 8060,
     "malformed_source_url_count": 724
   },
   "providers": [
@@ -647,6 +647,24 @@
         "15062612",
         "15062619",
         "15062622"
+      ]
+    },
+    {
+      "host": "www.khug.or.kr",
+      "kinds": [
+        "external_endpoint",
+        "external_guide"
+      ],
+      "adapter_status": "adapter",
+      "specs": 22,
+      "operations": 64,
+      "external_endpoint_operations": 64,
+      "external_guide_specs": 2,
+      "approval_required_operations": 12,
+      "sample_ids": [
+        "15011457",
+        "15012530",
+        "15056738"
       ]
     },
     {
