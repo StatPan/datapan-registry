@@ -76,8 +76,9 @@ with `datapan catalog install datapan-registry --url ...`. The current-zip
 smoke writes `.datapan/ci/current-release-install.json`, then runs `datapan
 doctor --json` against that installed registry and saves
 `.datapan/ci/current-release-doctor.json`. The install and doctor JSON are
-validated with repository smoke checks, including a path and spec-count
-cross-check proving doctor read the same registry that install wrote. The
+validated with repository smoke checks, including a byte and sha256 cross-check
+that proves install wrote the canonical registry from the packaged zip, plus a
+path and spec-count cross-check proving doctor read the same registry. The
 workflow also smoke-tests that the latest public GitHub Release zip can be
 installed with `datapan catalog install datapan-registry`; that install smoke
 writes
