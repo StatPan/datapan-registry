@@ -35,6 +35,21 @@ REQUIRED_SHARD_INSTALL_FIELDS = [
     "shards_count",
     "shards_records",
 ]
+SHARD_RELEASE_EVIDENCE = {
+    "status": "ci_validated_optional_asset",
+    "workflow": ".github/workflows/verify-release.yml",
+    "gate_name": "Validate full registry shard release evidence",
+    "source_registry": CANONICAL_REGISTRY_PATH,
+    "generated_inventory": ".datapan/ci/full-registry-shards/registry-shards.json",
+    "generated_archive": ".datapan/ci/full-data-go-kr-shards.tar.gz",
+    "archive_check": ".datapan/ci/full-shard-archive-check.txt",
+    "required_commands": [
+        "python scripts/generate-registry-shards.py",
+        "python scripts/validate-registry-shards.py",
+        "python scripts/package-registry-shards.py",
+        "python scripts/package-registry-shards.py --check",
+    ],
+}
 REQUIRED_MANIFEST_EVIDENCE_CONTRACTS = [
     {
         "contract": "source_contracts",
@@ -356,6 +371,7 @@ def build_report(manifest: dict[str, Any], readiness: dict[str, Any]) -> dict[st
                 "downstream SDK, MCP, Studio, and API consumers keep canonical registry compatibility",
             ],
         },
+        "shard_release_evidence": SHARD_RELEASE_EVIDENCE,
         "consumers": consumers,
     }
 

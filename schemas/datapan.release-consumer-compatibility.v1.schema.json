@@ -15,6 +15,7 @@
     "release_health_evidence",
     "manifest_evidence_contracts",
     "shard_policy",
+    "shard_release_evidence",
     "consumers"
   ],
   "properties": {
@@ -50,6 +51,9 @@
     },
     "shard_policy": {
       "$ref": "#/$defs/shard_policy"
+    },
+    "shard_release_evidence": {
+      "$ref": "#/$defs/shard_release_evidence"
     },
     "consumers": {
       "type": "array",
@@ -200,6 +204,51 @@
           "items": {
             "$ref": "#/$defs/non_empty_string"
           }
+        }
+      }
+    },
+    "shard_release_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "workflow",
+        "gate_name",
+        "source_registry",
+        "generated_inventory",
+        "generated_archive",
+        "archive_check",
+        "required_commands"
+      ],
+      "properties": {
+        "status": {
+          "const": "ci_validated_optional_asset"
+        },
+        "workflow": {
+          "const": ".github/workflows/verify-release.yml"
+        },
+        "gate_name": {
+          "const": "Validate full registry shard release evidence"
+        },
+        "source_registry": {
+          "const": "data/data-go-kr.registry.json"
+        },
+        "generated_inventory": {
+          "const": ".datapan/ci/full-registry-shards/registry-shards.json"
+        },
+        "generated_archive": {
+          "const": ".datapan/ci/full-data-go-kr-shards.tar.gz"
+        },
+        "archive_check": {
+          "const": ".datapan/ci/full-shard-archive-check.txt"
+        },
+        "required_commands": {
+          "type": "array",
+          "minItems": 4,
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          },
+          "uniqueItems": true
         }
       }
     },
