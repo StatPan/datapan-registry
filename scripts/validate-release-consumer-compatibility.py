@@ -26,12 +26,14 @@ COMPATIBILITY_SCHEMA = "schemas/datapan.release-consumer-compatibility.v1.schema
 DEFAULT_SOURCE_RUNTIME_ROLLUP = pathlib.Path("reports/source-runtime-evidence-rollup.json")
 DEFAULT_SOURCE_RUNTIME_REMEDIATION = pathlib.Path("reports/source-runtime-remediation-map.json")
 DEFAULT_CREDENTIAL_RUNTIME_POLICY = pathlib.Path("reports/credential-runtime-evidence-policy.json")
+DEFAULT_CREDENTIAL_RECEIPT_QUEUE = pathlib.Path("reports/credential-runtime-receipt-collection-queue.json")
 DEFAULT_ERROR_ACTION_ROUTING_ROLLUP = pathlib.Path("reports/error-action-routing-rollup.json")
 DEFAULT_IMPACT_ROLLUP = pathlib.Path("reports/registry-impact-plan.json")
 REQUIRED_RUNTIME_RISK_CONTRACTS = [
     "source_runtime_evidence",
     "source_runtime_remediation",
     "credential_runtime_evidence_policy",
+    "credential_runtime_receipt_collection_queue",
     "error_action_routing",
     "downstream_impact",
 ]
@@ -108,6 +110,11 @@ REQUIRED_MANIFEST_EVIDENCE_CONTRACTS = {
         "path": "reports/credential-runtime-evidence-policy.json",
         "kind": "credential_runtime_evidence_policy",
         "schema": "https://schemas.datapan.dev/datapan.credential-runtime-evidence-policy.v1.schema.json",
+    },
+    "credential_runtime_receipt_collection_queue": {
+        "path": "reports/credential-runtime-receipt-collection-queue.json",
+        "kind": "credential_runtime_receipt_collection_queue",
+        "schema": "https://schemas.datapan.dev/datapan.credential-runtime-receipt-collection-queue.v1.schema.json",
     },
     "error_action_routing": {
         "path": "reports/error-action-routing-rollup.json",
@@ -510,11 +517,13 @@ def validate_runtime_risk_evidence(
     source_runtime: dict[str, Any],
     source_runtime_remediation: dict[str, Any],
     credential_runtime_policy: dict[str, Any],
+    credential_receipt_queue: dict[str, Any],
     error_action_routing: dict[str, Any],
     downstream_impact: dict[str, Any],
     source_runtime_path: pathlib.Path,
     source_runtime_remediation_path: pathlib.Path,
     credential_runtime_policy_path: pathlib.Path,
+    credential_receipt_queue_path: pathlib.Path,
     error_action_routing_path: pathlib.Path,
     impact_path: pathlib.Path,
 ) -> None:
@@ -524,6 +533,7 @@ def validate_runtime_risk_evidence(
         "source_runtime_rollup": source_runtime_path.as_posix(),
         "source_runtime_remediation_map": source_runtime_remediation_path.as_posix(),
         "credential_runtime_evidence_policy": credential_runtime_policy_path.as_posix(),
+        "credential_runtime_receipt_collection_queue": credential_receipt_queue_path.as_posix(),
         "error_action_routing_rollup": error_action_routing_path.as_posix(),
         "downstream_impact_rollup": impact_path.as_posix(),
     }
@@ -534,7 +544,7 @@ def validate_runtime_risk_evidence(
     contracts = as_list(risk.get("required_contracts"), "runtime_risk_evidence.required_contracts")
     if contracts != REQUIRED_RUNTIME_RISK_CONTRACTS:
         raise ValueError(
-            "runtime_risk_evidence.required_contracts must bind source runtime, remediation, credential policy, routing, and impact in order"
+            "runtime_risk_evidence.required_contracts must bind source runtime, remediation, credential policy, receipt queue, routing, and impact in order"
         )
     report_contracts = {
         as_dict(item, "manifest_evidence_contract").get("contract")
@@ -604,6 +614,7 @@ def validate_runtime_risk_evidence(
         raise ValueError("runtime blockers require source runtime remediation follow-up or manual-review boundary evidence")
 
     credential_summary = as_dict(credential_runtime_policy.get("summary"), "credential_runtime_policy.summary")
+    credential_queue_summary = as_dict(credential_receipt_queue.get("summary"), "credential_receipt_queue.summary")
     credential_boundary = as_dict(
         credential_runtime_policy.get("release_boundary"),
         "credential_runtime_policy.release_boundary",
@@ -633,6 +644,35 @@ def validate_runtime_risk_evidence(
     for key, value in credential_expected.items():
         if risk.get(key) != value:
             raise ValueError(f"runtime_risk_evidence.{key} expected {value}, got {risk.get(key)}")
+
+    credential_queue_expected = {
+        "credential_queue_status": credential_queue_summary.get("queue_status"),
+        "credential_queue_absent": credential_queue_summary.get("absent"),
+        "credential_queue_staged_only": credential_queue_summary.get("staged_only"),
+        "credential_queue_reviewed_rejected": credential_queue_summary.get("reviewed_rejected"),
+        "credential_queue_reviewed_accepted": credential_queue_summary.get("reviewed_accepted"),
+        "credential_queue_relief_eligible": credential_queue_summary.get("relief_eligible"),
+        "credential_queue_reviewed_receipts": credential_queue_summary.get("reviewed_receipts_checked_in"),
+        "credential_queue_manual_review_reduction_allowed": credential_queue_summary.get(
+            "manual_review_reduction_allowed"
+        ),
+        "credential_queue_default_ci_requires_credentials": credential_queue_summary.get(
+            "default_ci_requires_credentials"
+        ),
+    }
+    for key, value in credential_queue_expected.items():
+        if risk.get(key) != value:
+            raise ValueError(f"runtime_risk_evidence.{key} expected {value}, got {risk.get(key)}")
+    if credential_queue_summary.get("credential_gated_sources") != credential_summary.get("credential_gated_sources"):
+        raise ValueError("credential receipt queue source count must match credential policy gated source count")
+    if credential_queue_summary.get("manual_review_reduction_allowed") != credential_summary.get(
+        "manual_review_reduction_allowed"
+    ):
+        raise ValueError("credential receipt queue manual-review reduction state must match credential policy")
+    if risk.get("credential_queue_reviewed_receipts") != risk.get("credential_policy_reviewed_receipts"):
+        raise ValueError("credential receipt queue reviewed count must match credential policy")
+    if risk.get("credential_queue_default_ci_requires_credentials") is not False:
+        raise ValueError("credential receipt queue must remain secret-free in default CI")
     if risk.get("remediation_credential_policy_available") is not True:
         raise ValueError("source runtime remediation must expose the credential policy availability boundary")
     if risk.get("remediation_receipt_contract_available") is not True:
@@ -743,6 +783,7 @@ def validate_consistency(
     source_runtime: dict[str, Any],
     source_runtime_remediation: dict[str, Any],
     credential_runtime_policy: dict[str, Any],
+    credential_receipt_queue: dict[str, Any],
     error_action_routing: dict[str, Any],
     downstream_impact: dict[str, Any],
     manifest_path: pathlib.Path,
@@ -750,6 +791,7 @@ def validate_consistency(
     source_runtime_path: pathlib.Path,
     source_runtime_remediation_path: pathlib.Path,
     credential_runtime_policy_path: pathlib.Path,
+    credential_receipt_queue_path: pathlib.Path,
     error_action_routing_path: pathlib.Path,
     impact_path: pathlib.Path,
 ) -> None:
@@ -766,11 +808,13 @@ def validate_consistency(
         source_runtime,
         source_runtime_remediation,
         credential_runtime_policy,
+        credential_receipt_queue,
         error_action_routing,
         downstream_impact,
         source_runtime_path,
         source_runtime_remediation_path,
         credential_runtime_policy_path,
+        credential_receipt_queue_path,
         error_action_routing_path,
         impact_path,
     )
@@ -790,6 +834,7 @@ def main() -> int:
     parser.add_argument("--source-runtime-rollup", default=DEFAULT_SOURCE_RUNTIME_ROLLUP, type=pathlib.Path)
     parser.add_argument("--source-runtime-remediation", default=DEFAULT_SOURCE_RUNTIME_REMEDIATION, type=pathlib.Path)
     parser.add_argument("--credential-runtime-policy", default=DEFAULT_CREDENTIAL_RUNTIME_POLICY, type=pathlib.Path)
+    parser.add_argument("--credential-receipt-queue", default=DEFAULT_CREDENTIAL_RECEIPT_QUEUE, type=pathlib.Path)
     parser.add_argument("--error-action-routing-rollup", default=DEFAULT_ERROR_ACTION_ROUTING_ROLLUP, type=pathlib.Path)
     parser.add_argument("--impact-rollup", default=DEFAULT_IMPACT_ROLLUP, type=pathlib.Path)
     parser.add_argument("report", nargs="?", default=COMPATIBILITY_REPORT_PATH, type=pathlib.Path)
@@ -808,6 +853,10 @@ def main() -> int:
         credential_runtime_policy = as_dict(
             load_json(args.credential_runtime_policy),
             args.credential_runtime_policy.as_posix(),
+        )
+        credential_receipt_queue = as_dict(
+            load_json(args.credential_receipt_queue),
+            args.credential_receipt_queue.as_posix(),
         )
         error_action_routing = as_dict(
             load_json(args.error_action_routing_rollup),
@@ -831,6 +880,7 @@ def main() -> int:
             source_runtime,
             source_runtime_remediation,
             credential_runtime_policy,
+            credential_receipt_queue,
             error_action_routing,
             downstream_impact,
             args.manifest,
@@ -838,6 +888,7 @@ def main() -> int:
             args.source_runtime_rollup,
             args.source_runtime_remediation,
             args.credential_runtime_policy,
+            args.credential_receipt_queue,
             args.error_action_routing_rollup,
             args.impact_rollup,
         )

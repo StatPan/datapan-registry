@@ -83,6 +83,14 @@
       "credential_policy_receipt_validated": false,
       "credential_policy_receipt_reviewed": false,
       "credential_policy_receipt_relief_eligible": false,
+      "credential_queue_status": "collection_required",
+      "credential_queue_absent": 5,
+      "credential_queue_staged_only": 0,
+      "credential_queue_reviewed_rejected": 0,
+      "credential_queue_reviewed_accepted": 0,
+      "credential_queue_relief_eligible": 0,
+      "credential_queue_reviewed_receipts": 0,
+      "credential_queue_manual_review_reduction_allowed": false,
       "manual_review_reduction_allowed": false
     },
     "credential_runtime_policy": {
@@ -199,7 +207,7 @@
         },
         {
           "path": "reports/release-consumer-compatibility.json",
-          "finding": "Binds source contracts, source runtime evidence, source runtime remediation, credential runtime evidence policy, error/action routing, downstream impact, source reference drift, and source report inventory as manifest evidence contracts."
+          "finding": "Binds source contracts, source runtime evidence, source runtime remediation, credential runtime evidence policy, credential receipt collection queue, error/action routing, downstream impact, source reference drift, and source report inventory as manifest evidence contracts."
         },
         {
           "path": "reports/release-assembly-receipt.json",
@@ -271,7 +279,7 @@
         },
         {
           "path": "reports/release-consumer-compatibility.json",
-          "finding": "Reports seven consumers, two proven consumers, one blocked consumer, canonical registry requirement, optional shard assets, runtime manual-review evidence, source runtime remediation counts, credential policy receipt and review state, and the blocked receipt-backed manual-review reduction gate."
+          "finding": "Reports seven consumers, two proven consumers, one blocked consumer, canonical registry requirement, optional shard assets, runtime manual-review evidence, source runtime remediation counts, credential policy receipt and review state, credential queue absent/reviewed/relief counts, and the blocked receipt-backed manual-review reduction gate."
         },
         {
           "path": "scripts/validate-impact-plans.py",
@@ -279,7 +287,7 @@
         },
         {
           "path": "scripts/validate-release-consumer-compatibility.py",
-          "finding": "Fails if source runtime blockers remain but remediation evidence, credential runtime policy evidence, reviewed receipt intake gating, receipt-backed relief gating, error/action routing evidence, or downstream manual-review impact evidence disappears."
+          "finding": "Fails if source runtime blockers remain but remediation evidence, credential runtime policy evidence, credential receipt queue evidence, reviewed receipt intake gating, receipt-backed relief gating, error/action routing evidence, or downstream manual-review impact evidence disappears."
         },
         {
           "path": "reports/credential-runtime-evidence-policy.json",
@@ -287,7 +295,7 @@
         },
         {
           "path": "reports/credential-runtime-receipt-collection-queue.json",
-          "finding": "Turns the zero-receipt state into per-source operator queue entries so downstream compatibility relief remains blocked but the next reviewed receipt collection work is explicit."
+          "finding": "Turns the zero-receipt state into per-source operator queue entries that are now referenced by consumer compatibility evidence, so downstream compatibility relief remains blocked while the next reviewed receipt collection work is explicit."
         }
       ],
       "next_action": "Keep compatibility evidence current whenever source runtime blockers or downstream contracts change."
@@ -327,7 +335,7 @@
     {
       "id": "receipt_backed_compatibility_relief_blocked",
       "evidence": "reports/release-consumer-compatibility.json",
-      "finding": "Consumer compatibility now distinguishes receipt contract availability, reviewed intake availability, receipt validation, receipt review, and relief eligibility from receipt-backed relief; manual_review_reduction_allowed remains false until reviewed validated credential runtime receipts exist."
+      "finding": "Consumer compatibility now distinguishes receipt contract availability, reviewed intake availability, receipt validation, receipt review, queue collection state, and relief eligibility from receipt-backed relief; manual_review_reduction_allowed remains false until reviewed validated credential runtime receipts exist."
     },
     {
       "id": "consumer_compatibility_manual_review_required",
@@ -396,6 +404,11 @@
       "issue": 375,
       "title": "Publish reviewed credential receipt collection queue",
       "reason": "The zero-receipt state is now converted into deterministic per-source collection actions, but the goal remains open until reviewed live credentialed receipts exist or the manual-review boundary is explicitly accepted."
+    },
+    {
+      "issue": 377,
+      "title": "Bind credential receipt queue to consumer compatibility",
+      "reason": "Downstream compatibility now references the receipt collection queue directly, while the goal remains open because the queue still reports absent reviewed receipts and blocked manual-review reduction."
     }
   ]
 }
