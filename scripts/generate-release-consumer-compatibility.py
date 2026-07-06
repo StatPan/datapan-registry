@@ -35,6 +35,44 @@ REQUIRED_SHARD_INSTALL_FIELDS = [
     "shards_count",
     "shards_records",
 ]
+REQUIRED_MANIFEST_EVIDENCE_CONTRACTS = [
+    {
+        "contract": "source_contracts",
+        "path": "reports/source-contract-rollup.json",
+        "kind": "source_contract_rollup",
+        "schema": "https://schemas.datapan.dev/datapan.source-contract-rollup.v1.schema.json",
+    },
+    {
+        "contract": "source_runtime_evidence",
+        "path": "reports/source-runtime-evidence-rollup.json",
+        "kind": "source_runtime_evidence_rollup",
+        "schema": "https://schemas.datapan.dev/datapan.source-runtime-evidence-rollup.v1.schema.json",
+    },
+    {
+        "contract": "error_action_routing",
+        "path": "reports/error-action-routing-rollup.json",
+        "kind": "error_action_routing_rollup",
+        "schema": "https://schemas.datapan.dev/datapan.error-action-routing-rollup.v1.schema.json",
+    },
+    {
+        "contract": "downstream_impact",
+        "path": "reports/registry-impact-plan.json",
+        "kind": "registry_impact_plan",
+        "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
+    },
+    {
+        "contract": "source_reference_drift",
+        "path": "reports/source-reference-drift.json",
+        "kind": "source_reference_drift",
+        "schema": "https://schemas.datapan.dev/datapan.source-reference-drift.v1.schema.json",
+    },
+    {
+        "contract": "source_report_inventory",
+        "path": "reports/source-report-inventory.json",
+        "kind": "source_report_inventory",
+        "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
+    },
+]
 
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -245,6 +283,38 @@ def summary_for(consumers: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def manifest_evidence_contracts(manifest: dict[str, Any]) -> list[dict[str, Any]]:
+    artifacts = manifest_artifacts(manifest)
+    contracts: list[dict[str, Any]] = []
+    for expected in REQUIRED_MANIFEST_EVIDENCE_CONTRACTS:
+        artifact = artifacts.get(expected["path"])
+        if artifact is None:
+            raise ValueError(f"manifest missing required compatibility evidence: {expected['path']}")
+        for key in ("kind", "schema"):
+            if artifact.get(key) != expected[key]:
+                raise ValueError(
+                    f"manifest artifact {expected['path']} {key} expected {expected[key]}, got {artifact.get(key)}"
+                )
+        bytes_value = artifact.get("bytes")
+        sha256 = artifact.get("sha256")
+        if not isinstance(bytes_value, int) or bytes_value <= 0:
+            raise ValueError(f"manifest artifact {expected['path']} bytes must be a positive integer")
+        if not isinstance(sha256, str) or len(sha256) != 64:
+            raise ValueError(f"manifest artifact {expected['path']} sha256 must be a 64-character string")
+        contracts.append(
+            {
+                "contract": expected["contract"],
+                "path": expected["path"],
+                "kind": expected["kind"],
+                "schema": expected["schema"],
+                "bytes": bytes_value,
+                "sha256": sha256,
+                "required": True,
+            }
+        )
+    return contracts
+
+
 def build_report(manifest: dict[str, Any], readiness: dict[str, Any]) -> dict[str, Any]:
     generated_at = require_release_inputs(manifest, readiness)
     consumers = consumer_entries()
@@ -271,6 +341,7 @@ def build_report(manifest: dict[str, Any], readiness: dict[str, Any]) -> dict[st
             "required_ci_reports": REQUIRED_CI_REPORTS,
             "required_shard_install_fields": REQUIRED_SHARD_INSTALL_FIELDS,
         },
+        "manifest_evidence_contracts": manifest_evidence_contracts(manifest),
         "shard_policy": {
             "phase": "compatibility_period",
             "asset_name": "data-go-kr-shards.tar.gz",

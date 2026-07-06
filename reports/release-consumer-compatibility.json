@@ -44,6 +44,62 @@
       "shards_records"
     ]
   },
+  "manifest_evidence_contracts": [
+    {
+      "contract": "source_contracts",
+      "path": "reports/source-contract-rollup.json",
+      "kind": "source_contract_rollup",
+      "schema": "https://schemas.datapan.dev/datapan.source-contract-rollup.v1.schema.json",
+      "bytes": 15831,
+      "sha256": "06d569e4fdde6dddf07aff63ab999350e4b81c09e92119aa13a165a3556b8628",
+      "required": true
+    },
+    {
+      "contract": "source_runtime_evidence",
+      "path": "reports/source-runtime-evidence-rollup.json",
+      "kind": "source_runtime_evidence_rollup",
+      "schema": "https://schemas.datapan.dev/datapan.source-runtime-evidence-rollup.v1.schema.json",
+      "bytes": 4702,
+      "sha256": "1ae252fffd56782f979739cb51f00bf7b45a398ef82dc630cc40c978b4f66ae0",
+      "required": true
+    },
+    {
+      "contract": "error_action_routing",
+      "path": "reports/error-action-routing-rollup.json",
+      "kind": "error_action_routing_rollup",
+      "schema": "https://schemas.datapan.dev/datapan.error-action-routing-rollup.v1.schema.json",
+      "bytes": 6822,
+      "sha256": "f92c4a0f10f5b11e56173aed3e81834eb7071cbc7c5b0676a5a3e3f40c28bfd7",
+      "required": true
+    },
+    {
+      "contract": "downstream_impact",
+      "path": "reports/registry-impact-plan.json",
+      "kind": "registry_impact_plan",
+      "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
+      "bytes": 10565,
+      "sha256": "ae0f017e508977c3676737be966a188cfa941eed61acec8a54c476c9d454ffc0",
+      "required": true
+    },
+    {
+      "contract": "source_reference_drift",
+      "path": "reports/source-reference-drift.json",
+      "kind": "source_reference_drift",
+      "schema": "https://schemas.datapan.dev/datapan.source-reference-drift.v1.schema.json",
+      "bytes": 7201,
+      "sha256": "4e1bd37bc1708d5e9f4b3d87d3891ca695ff4007c971508c21f8e427e9385cfa",
+      "required": true
+    },
+    {
+      "contract": "source_report_inventory",
+      "path": "reports/source-report-inventory.json",
+      "kind": "source_report_inventory",
+      "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
+      "bytes": 32060,
+      "sha256": "b325915eab80692d5f26f62c87435a1cf1b70ea8a35117fd25b3788e800ba3c5",
+      "required": true
+    }
+  ],
   "shard_policy": {
     "phase": "compatibility_period",
     "asset_name": "data-go-kr-shards.tar.gz",

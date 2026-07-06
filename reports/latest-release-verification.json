@@ -309,10 +309,10 @@
       "path": "schemas/datapan.release-consumer-compatibility.v1.schema.json",
       "kind": "schema",
       "status": "verified",
-      "expected_bytes": 6167,
-      "actual_bytes": 6167,
-      "expected_sha256": "26bcb7a8b54a740c29d77eacd50f236f08cc8d7cd4dda81ba8b585b5cec9d2d8",
-      "actual_sha256": "26bcb7a8b54a740c29d77eacd50f236f08cc8d7cd4dda81ba8b585b5cec9d2d8"
+      "expected_bytes": 7361,
+      "actual_bytes": 7361,
+      "expected_sha256": "a66e2ed57eca08b54f5c746f7572d2499541b940781d7ccb643bbdc1dc42e96f",
+      "actual_sha256": "a66e2ed57eca08b54f5c746f7572d2499541b940781d7ccb643bbdc1dc42e96f"
     },
     {
       "path": "schemas/datapan.error-action-routing-rollup.v1.schema.json",
@@ -338,8 +338,8 @@
       "status": "verified",
       "expected_bytes": 13839,
       "actual_bytes": 13839,
-      "expected_sha256": "9d976d2432529e8998290531c111498e31d1b514e18237b6d951a6be22cd6f2a",
-      "actual_sha256": "9d976d2432529e8998290531c111498e31d1b514e18237b6d951a6be22cd6f2a"
+      "expected_sha256": "fd9a7766cdb8d47f6f78fafbf4d81da7b8c9c7e1ab36cf6f0af2e3c9038f9094",
+      "actual_sha256": "fd9a7766cdb8d47f6f78fafbf4d81da7b8c9c7e1ab36cf6f0af2e3c9038f9094"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -525,10 +525,10 @@
       "path": "reports/release-consumer-compatibility.json",
       "kind": "consumer_compatibility",
       "status": "verified",
-      "expected_bytes": 5677,
-      "actual_bytes": 5677,
-      "expected_sha256": "db4361a2556201d61a5a30d52291ca0ebbb6f48d31ada04b19ff7e0dba09483f",
-      "actual_sha256": "db4361a2556201d61a5a30d52291ca0ebbb6f48d31ada04b19ff7e0dba09483f"
+      "expected_bytes": 7970,
+      "actual_bytes": 7970,
+      "expected_sha256": "71eae9d6c9a96f0e59c0cf34241117acf2b4900236d462cc4e16d5372b35d8b8",
+      "actual_sha256": "71eae9d6c9a96f0e59c0cf34241117acf2b4900236d462cc4e16d5372b35d8b8"
     },
     {
       "path": "reports/unadapted-external-probe.json",

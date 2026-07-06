@@ -102,7 +102,11 @@ which records the canonical registry path, release-health evidence, optional
 shard asset boundary, the release-health shard install fields that distinguish
 validated shard metadata from canonical monolith fallback, and downstream
 consumer compatibility expectations as a generated and schema-validated
-artifact.
+artifact. That compatibility report also binds the manifest evidence contracts
+for source contracts, source runtime evidence, error/action routing, downstream
+impact, source reference drift, and source report inventory, so consumers can
+see which checksum-verifiable release reports are required before treating the
+registry as compatible.
 The workflow also regenerates `reports/error-action-routing-rollup.json` from
 checked-in source error-action catalogs so provider failure signatures stay
 routed to bounded release, documentation, or adapter work as manifest-bound
