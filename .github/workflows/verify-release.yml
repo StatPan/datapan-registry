@@ -159,6 +159,10 @@ jobs:
           python scripts/package-registry-release.py \
             --check .datapan/release-assets/datapan-registry-snapshot.zip \
             | tee .datapan/ci/current-release-zip-check.txt
+          python scripts/package-registry-release.py \
+            --check .datapan/release-assets/datapan-registry-snapshot.zip \
+            --shard-archive .datapan/ci/full-data-go-kr-shards.tar.gz \
+            | tee .datapan/ci/current-release-shard-consistency-check.txt
 
       - name: Check current release zip is installable
         working-directory: datapan-cli
