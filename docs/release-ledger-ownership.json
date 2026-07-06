@@ -89,6 +89,7 @@
       "artifact_kinds": [
         "runtime_evidence_growth",
         "credential_runtime_evidence_policy",
+        "credential_runtime_receipt_collection_queue",
         "source_contract_rollup",
         "source_reference_drift",
         "source_report_inventory",
@@ -100,6 +101,7 @@
         "python scripts/generate-source-contract-rollup.py",
         "python scripts/generate-source-report-inventory.py",
         "python scripts/generate-credential-runtime-evidence-policy.py",
+        "python scripts/generate-credential-runtime-receipt-collection-queue.py",
         "python scripts/generate-source-runtime-remediation-map.py",
         "python scripts/generate-source-runtime-readiness.py"
       ],
@@ -109,6 +111,7 @@
         "python scripts/validate-source-reference-drift.py",
         "python scripts/validate-source-report-inventory.py",
         "python scripts/generate-credential-runtime-evidence-policy.py --check",
+        "python scripts/generate-credential-runtime-receipt-collection-queue.py --check",
         "python scripts/validate-credential-runtime-receipts.py",
         "python scripts/generate-source-runtime-remediation-map.py --check",
         "python scripts/validate-source-runtime-evidence-rollup.py",

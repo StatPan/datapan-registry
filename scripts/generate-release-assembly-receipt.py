@@ -199,6 +199,25 @@ PHASES: list[dict[str, Any]] = [
         "evidence_artifacts": ["reports/credential-runtime-evidence-policy.json"],
     },
     {
+        "id": "credential_runtime_receipt_collection_queue",
+        "coverage": ["verification_evidence", "consumer_compatibility"],
+        "operator_commands": [
+            "python3 scripts/generate-credential-runtime-receipt-collection-queue.py",
+        ],
+        "check_commands": [
+            "python3 scripts/generate-credential-runtime-receipt-collection-queue.py --check",
+        ],
+        "workflow_fragments": {
+            ".github/workflows/verify-release.yml": [
+                "python scripts/generate-credential-runtime-receipt-collection-queue.py --check",
+            ],
+            ".github/workflows/release-draft.yml": [
+                "python scripts/generate-credential-runtime-receipt-collection-queue.py --check",
+            ],
+        },
+        "evidence_artifacts": ["reports/credential-runtime-receipt-collection-queue.json"],
+    },
+    {
         "id": "consumer_compatibility",
         "coverage": ["consumer_compatibility"],
         "operator_commands": [

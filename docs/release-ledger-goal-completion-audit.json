@@ -11,18 +11,18 @@
     "criteria_partial": 0,
     "criteria_gap": 0,
     "decision": "leave_goal_open",
-    "reason": "The release assembly path is receipt-bound and credential-safe runtime evidence is now policy-bound, but #344 remains open because reviewed live credentialed runtime receipts are not checked in, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
+    "reason": "The release assembly path is receipt-bound and credential-safe runtime evidence is now policy-bound with an operator-facing receipt collection queue, but #344 remains open because reviewed live credentialed runtime receipts are not checked in, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
   },
   "current_state_evidence": {
     "manifest": {
       "path": "manifest.json",
-      "artifact_count": 77,
-      "artifact_kinds": 30,
-      "schema_artifacts": 48
+      "artifact_count": 79,
+      "artifact_kinds": 31,
+      "schema_artifacts": 49
     },
     "schema_index": {
       "path": "schemas/index.json",
-      "schema_count": 48
+      "schema_count": 49
     },
     "release_readiness": {
       "path": "reports/latest-release-readiness.json",
@@ -101,6 +101,21 @@
       "reviewed_receipts_checked_in": 0,
       "default_ci_requires_credentials": false,
       "checked_in_secrets_allowed": false
+    },
+    "credential_runtime_receipt_collection_queue": {
+      "path": "reports/credential-runtime-receipt-collection-queue.json",
+      "queue_ticket": 375,
+      "credential_gated_sources": 5,
+      "absent": 5,
+      "staged_only": 0,
+      "reviewed_rejected": 0,
+      "reviewed_accepted": 0,
+      "relief_eligible": 0,
+      "reviewed_receipts_checked_in": 0,
+      "manual_review_reduction_allowed": false,
+      "queue_status": "collection_required",
+      "default_ci_requires_credentials": false,
+      "checked_in_secrets_allowed": false
     }
   },
   "criteria": [
@@ -111,7 +126,7 @@
       "evidence": [
         {
           "path": "reports/release-assembly-receipt.json",
-          "finding": "Records the unified assembly phases, including credential runtime evidence policy, operator commands, check commands, workflow fragments, release inputs, and current manual-review status."
+          "finding": "Records the unified assembly phases, including credential runtime evidence policy, credential receipt collection queue, operator commands, check commands, workflow fragments, release inputs, and current manual-review status."
         },
         {
           "path": "scripts/generate-release-assembly-receipt.py",
@@ -231,6 +246,10 @@
           "finding": "Defines secret-free CI behavior, per-source credential environment names, bounded candidate batches, local staged receipt paths, checked-in reviewed receipt discovery, receipt contract availability, review state, and manual-review boundaries without claiming live credentialed receipts or allowing manual-review reduction."
         },
         {
+          "path": "reports/credential-runtime-receipt-collection-queue.json",
+          "finding": "Enumerates all five credential-gated sources, their staged and reviewed receipt paths, bounded operator commands, current absent receipt states, and next collection actions without requiring credentials in default CI."
+        },
+        {
           "path": "schemas/datapan.credential-runtime-receipt.v1.schema.json",
           "finding": "Defines the redacted credentialed runtime receipt shape and optional review metadata for future operator-run and reviewed checked-in evidence without allowing secret-bearing fields."
         },
@@ -265,6 +284,10 @@
         {
           "path": "reports/credential-runtime-evidence-policy.json",
           "finding": "Keeps unresolved credential-gated source runtime checks secret-free by default, derives live and reviewed credentialed receipt counts from the checked-in intake path, currently reports zero receipts, and disallows manual-review reduction until receipts are present, validated, reviewed, and relief-eligible."
+        },
+        {
+          "path": "reports/credential-runtime-receipt-collection-queue.json",
+          "finding": "Turns the zero-receipt state into per-source operator queue entries so downstream compatibility relief remains blocked but the next reviewed receipt collection work is explicit."
         }
       ],
       "next_action": "Keep compatibility evidence current whenever source runtime blockers or downstream contracts change."
@@ -298,8 +321,8 @@
     },
     {
       "id": "credentialed_runtime_receipts_absent",
-      "evidence": "reports/credential-runtime-evidence-policy.json",
-      "finding": "Credential-gated runtime checks now have a secret-safe policy path, redacted receipt contract, reviewed checked-in intake path, and discovery-derived counts, but live credentialed receipts are still not checked in, not validated, not reviewed, and not allowed to reduce manual-review boundaries."
+      "evidence": "reports/credential-runtime-receipt-collection-queue.json",
+      "finding": "Credential-gated runtime checks now have a secret-safe policy path, redacted receipt contract, reviewed checked-in intake path, discovery-derived counts, and a per-source collection queue, but live credentialed receipts are still absent and not allowed to reduce manual-review boundaries."
     },
     {
       "id": "receipt_backed_compatibility_relief_blocked",
@@ -327,6 +350,7 @@
     "python3 scripts/generate-source-runtime-remediation-map.py --check",
     "python3 scripts/generate-credential-runtime-evidence-policy.py --check",
     "python3 scripts/validate-credential-runtime-receipts.py",
+    "python3 scripts/generate-credential-runtime-receipt-collection-queue.py --check",
     "python3 scripts/generate-release-consumer-compatibility.py --check",
     "python3 scripts/validate-release-consumer-compatibility.py",
     "python3 scripts/package-registry-release.py --manifest manifest.json --output .datapan/ci/datapan-registry-snapshot-test.zip",
@@ -367,6 +391,11 @@
       "issue": 373,
       "title": "Count reviewed credential runtime receipts in policy gates",
       "reason": "Reviewed receipt intake is now discovery-derived so future checked-in receipts affect policy, remediation, and compatibility gates only after validation and review eligibility checks."
+    },
+    {
+      "issue": 375,
+      "title": "Publish reviewed credential receipt collection queue",
+      "reason": "The zero-receipt state is now converted into deterministic per-source collection actions, but the goal remains open until reviewed live credentialed receipts exist or the manual-review boundary is explicitly accepted."
     }
   ]
 }
