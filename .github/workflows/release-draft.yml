@@ -92,6 +92,7 @@ jobs:
             scripts/release_health_rollup.py \
             scripts/validate-doctor-smoke-summaries.py \
             scripts/validate-install-smoke-summaries.py \
+            scripts/validate-release-consumer-compatibility.py \
             scripts/validate-release-health-rollups.py \
             scripts/validate-registry-shards.py
           python scripts/sync-release-schema-artifacts.py --check
@@ -114,6 +115,7 @@ jobs:
           python scripts/validate-link-detail-registry-patches.py
           python scripts/validate-institution-api-overview.py
           python scripts/validate-institution-runtime-plan.py
+          python scripts/validate-release-consumer-compatibility.py
 
       - name: Select manifest path
         run: |

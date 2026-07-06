@@ -1,0 +1,158 @@
+{
+  "schema_version": "datapan.release-consumer-compatibility.v1",
+  "generated_at": "2026-07-06T00:00:00Z",
+  "provider": "data.go.kr",
+  "source_id": "data_go_kr",
+  "summary": {
+    "consumer_count": 7,
+    "proven_consumers": 2,
+    "blocked_consumers": 1,
+    "canonical_registry_required": true,
+    "shard_assets_required": false
+  },
+  "compatibility_path": {
+    "path": "data/data-go-kr.registry.json",
+    "artifact_kind": "registry",
+    "required": true,
+    "status": "manifest_bound",
+    "proof": [
+      "manifest.json artifact kind registry",
+      "reports/latest-release-readiness.json registry_has_specs gate",
+      "Verify registry release materialized LFS check"
+    ]
+  },
+  "release_health_evidence": {
+    "artifact_bundle": "datapan-registry-release-health",
+    "required_schemas": [
+      "schemas/datapan.install-smoke-summary.v1.schema.json",
+      "schemas/datapan.doctor-smoke-summary.v1.schema.json",
+      "schemas/datapan.release-health-rollup.v1.schema.json"
+    ],
+    "required_ci_reports": [
+      ".datapan/ci/current-release-install-smoke.json",
+      ".datapan/ci/current-release-doctor-smoke.json",
+      ".datapan/ci/latest-release-install-smoke.json",
+      ".datapan/ci/latest-release-doctor-smoke.json",
+      ".datapan/ci/release-health-rollup.json"
+    ]
+  },
+  "shard_policy": {
+    "phase": "compatibility_period",
+    "asset_name": "data-go-kr-shards.tar.gz",
+    "required_for_release": false,
+    "publication_status": "optional_draft_asset",
+    "monolith_fallback_required": true,
+    "downstream_tracking": "StatPan/datapan-cli#128",
+    "blocked_until": [
+      "catalog install proves shard-preferred monolith fallback",
+      "doctor reports shard inventory health as additive metadata",
+      "release verify and readiness understand registry_shards artifacts",
+      "downstream SDK, MCP, Studio, and API consumers keep canonical registry compatibility"
+    ]
+  },
+  "consumers": [
+    {
+      "consumer": "datapan-cli",
+      "surfaces": [
+        "catalog install",
+        "doctor",
+        "catalog release verify",
+        "catalog release readiness"
+      ],
+      "compatibility_mode": "canonical_monolith",
+      "status": "proven",
+      "evidence": [
+        "reports/latest-release-verification.json",
+        "reports/latest-release-readiness.json",
+        "datapan-registry-release-health/release-health-rollup.json"
+      ],
+      "notes": "CLI release install and doctor compatibility is proven through the canonical registry path while shard support remains additive."
+    },
+    {
+      "consumer": "release-operator",
+      "surfaces": [
+        "GitHub Release zip",
+        "weekly release-health workflow",
+        "manual release draft workflow"
+      ],
+      "compatibility_mode": "canonical_monolith",
+      "status": "proven",
+      "evidence": [
+        "manifest.json",
+        "reports/latest-release-readiness.json",
+        "datapan-registry-release-health/release-health-rollup.json"
+      ],
+      "notes": "Operators must keep the canonical registry in the release zip and may attach shard archives only as optional compatibility-period assets."
+    },
+    {
+      "consumer": "datapan-api",
+      "surfaces": [
+        "served dataset contract review",
+        "registry impact plan"
+      ],
+      "compatibility_mode": "registry_metadata",
+      "status": "additive",
+      "evidence": [
+        "reports/registry-impact-plan.json",
+        "docs/registry-governance-policy.md"
+      ],
+      "notes": "Registry-only release evidence does not require API route or database changes unless an impact plan marks served datasets."
+    },
+    {
+      "consumer": "datapan-data",
+      "surfaces": [
+        "promoted dataset review",
+        "registry impact plan"
+      ],
+      "compatibility_mode": "registry_metadata",
+      "status": "additive",
+      "evidence": [
+        "reports/registry-impact-plan.json",
+        "docs/data-go-kr-mastery-plan.md"
+      ],
+      "notes": "Registry-only compatibility evidence does not create promoted data blocks."
+    },
+    {
+      "consumer": "sdk",
+      "surfaces": [
+        "served dataset SDK regeneration",
+        "registry impact plan"
+      ],
+      "compatibility_mode": "no_served_contract",
+      "status": "not_required",
+      "evidence": [
+        "reports/registry-impact-plan.json",
+        "docs/registry-governance-policy.md"
+      ],
+      "notes": "No SDK regeneration is required for registry-only release-health and compatibility artifacts."
+    },
+    {
+      "consumer": "mcp",
+      "surfaces": [
+        "tool contract review",
+        "registry impact plan"
+      ],
+      "compatibility_mode": "no_served_contract",
+      "status": "not_required",
+      "evidence": [
+        "reports/registry-impact-plan.json",
+        "docs/registry-governance-policy.md"
+      ],
+      "notes": "No MCP contract regeneration is required for registry-only release-health and compatibility artifacts."
+    },
+    {
+      "consumer": "studio",
+      "surfaces": [
+        "registry snapshot loading",
+        "future shard-preferred browsing"
+      ],
+      "compatibility_mode": "shard_preferred_with_monolith_fallback",
+      "status": "blocked",
+      "evidence": [
+        "docs/registry-shard-artifact-strategy.md",
+        "StatPan/datapan-cli#128"
+      ],
+      "notes": "Studio-facing shard preference remains blocked until the canonical registry fallback contract is implemented and proven downstream."
+    }
+  ]
+}
