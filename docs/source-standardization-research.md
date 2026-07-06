@@ -152,10 +152,12 @@ Gira #13 adds the live check path:
 `scripts/check-source-reference-drift.py` and
 `.github/workflows/source-reference-drift.yml`. This workflow is scheduled and
 manual-only, not a pull request gate. It writes
-`.datapan/ci/source-reference-drift-live.json`, uploads the report, and fails
-when a reference is missing or cannot be fetched. Redirects and content hashes
-are recorded as evidence; turning a redirect or content-hash change into a
-blocking policy should happen only after the source-specific impact is known.
+`.datapan/ci/source-reference-drift-live.json`, validates the report against
+`datapan.source-reference-drift.v1` and the checked-in source profiles, uploads
+the report, and fails when a reference is missing or cannot be fetched.
+Redirects and content hashes are recorded as schema-validated source-gate
+evidence; turning a redirect or content-hash change into a blocking policy
+should happen only after the source-specific impact is known.
 
 ## Open Questions
 
