@@ -472,6 +472,16 @@ def runtime_risk_evidence(
             raise ValueError(f"source_runtime.summary.{key} must be a non-negative integer")
 
     manual_review_required = bool(blocking_count or warning_count or sources_without_evidence)
+    manual_review_reduction_allowed = (
+        credential_policy_summary.get("manual_review_reduction_allowed") is True
+        and remediation_summary.get("receipt_backed_relief_allowed") is True
+        and credential_relief_gate.get("manual_review_reduction_allowed") is True
+    )
+    manual_review_reduction_status = (
+        "allowed_by_reviewed_validated_credential_runtime_receipts"
+        if manual_review_reduction_allowed
+        else "blocked_until_reviewed_validated_credential_runtime_receipts_exist"
+    )
     return {
         "source_runtime_rollup": source_runtime_path.as_posix(),
         "source_runtime_remediation_map": source_runtime_remediation_path.as_posix(),
@@ -515,8 +525,8 @@ def runtime_risk_evidence(
         ),
         "credential_policy_effect": credential_policy_boundary.get("compatibility_effect"),
         "credential_policy_relief_gate_status": credential_relief_gate.get("status"),
-        "manual_review_reduction_allowed": False,
-        "manual_review_reduction_status": "blocked_until_reviewed_validated_credential_runtime_receipts_exist",
+        "manual_review_reduction_allowed": manual_review_reduction_allowed,
+        "manual_review_reduction_status": manual_review_reduction_status,
         "blocker_ids": ids_from_rollup_items(source_runtime.get("blockers_by_id"), "source_runtime.blockers_by_id"),
         "warning_ids": ids_from_rollup_items(source_runtime.get("warnings_by_id"), "source_runtime.warnings_by_id"),
         "sources": runtime_source_entries(source_runtime),
