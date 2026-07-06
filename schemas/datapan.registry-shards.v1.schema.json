@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.registry-shards.v1.schema.json",
+  "title": "Datapan Registry Shards v1",
+  "description": "Inventory of deterministic registry shards derived from a canonical registry artifact.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "source_id",
+    "provider",
+    "strategy",
+    "source_registry",
+    "source_registry_sha256",
+    "generation_inputs",
+    "recomposition",
+    "summary",
+    "shards"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.registry-shards.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_id": {
+      "$ref": "#/$defs/source_id"
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "strategy": {
+      "enum": ["by_institution"]
+    },
+    "source_registry": {
+      "$ref": "#/$defs/portable_path"
+    },
+    "source_registry_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "generation_inputs": {
+      "$ref": "#/$defs/generation_inputs"
+    },
+    "recomposition": {
+      "$ref": "#/$defs/recomposition"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "indexes": {
+      "$ref": "#/$defs/indexes"
+    },
+    "shards": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/shard"
+      }
+    }
+  },
+  "$defs": {
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+    },
+    "portable_path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[^\\\\]+$"
+    },
+    "shard_key": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "generation_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_registry", "generator"],
+      "properties": {
+        "source_registry": {
+          "$ref": "#/$defs/portable_path"
+        },
+        "provider_index": {
+          "$ref": "#/$defs/portable_path"
+        },
+        "source_profile": {
+          "$ref": "#/$defs/portable_path"
+        },
+        "coverage_report": {
+          "$ref": "#/$defs/portable_path"
+        },
+        "generator": {
+          "$ref": "#/$defs/portable_path"
+        },
+        "generator_version": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "recomposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy",
+        "primary_shard_key",
+        "record_identity_fields",
+        "requires_exactly_once_records",
+        "requires_canonical_order"
+      ],
+      "properties": {
+        "policy": {
+          "enum": ["canonical_record_set"]
+        },
+        "primary_shard_key": {
+          "enum": ["institution"]
+        },
+        "record_identity_fields": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "requires_exactly_once_records": {
+          "type": "boolean",
+          "const": true
+        },
+        "requires_canonical_order": {
+          "type": "boolean",
+          "const": true
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "shards",
+        "records",
+        "bytes",
+        "providers",
+        "hosts",
+        "aggregate_sha256"
+      ],
+      "properties": {
+        "shards": {
+          "$ref": "#/$defs/count"
+        },
+        "records": {
+          "$ref": "#/$defs/count"
+        },
+        "bytes": {
+          "$ref": "#/$defs/count"
+        },
+        "providers": {
+          "$ref": "#/$defs/count"
+        },
+        "hosts": {
+          "$ref": "#/$defs/count"
+        },
+        "aggregate_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "indexes": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "provider_indexed": {
+          "type": "boolean"
+        },
+        "host_indexed": {
+          "type": "boolean"
+        },
+        "institution_indexed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "shard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "key",
+        "label",
+        "records",
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/portable_path"
+        },
+        "key": {
+          "$ref": "#/$defs/shard_key"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "records": {
+          "$ref": "#/$defs/count"
+        },
+        "bytes": {
+          "$ref": "#/$defs/count"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "providers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "hosts": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

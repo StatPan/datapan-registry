@@ -126,7 +126,10 @@ Current strengths:
   `schemas/*.schema.json` file is represented in `schemas/index.json` and
   `manifest.json`; Gira #77 raises release schema coverage from `20` to `28`
   artifacts, and Gira #85 adds the source report inventory schema as the
-  `29`th checked-in schema artifact while keeping readiness warnings at `0`.
+  `29`th checked-in schema artifact. Gira #235 adds
+  `datapan.registry-shards.v1` as the `30`th checked-in schema artifact for
+  shard-aware registry inventories while keeping the compatibility registry
+  path intact.
 - `reports/registry-impact-plan.json` now carries a
   `registry:schema-release-surface` impact entry, and
   `scripts/validate-impact-plans.py` fails if release readiness reports schema
@@ -600,7 +603,7 @@ Current gaps:
   profiles.
 - The registry release surface now includes every checked-in registry schema,
   and the current datapan-cli release readiness gate passes with
-  `schema_set_complete` reporting `expected=20` and `actual=29`. Gira #79 keeps
+  `schema_set_complete` reporting `expected=20` and `actual=30`. Gira #79 keeps
   the broader CLI-side schema-generator follow-up explicit in the impact plan
   instead of relying on a remembered PR note.
 
@@ -836,15 +839,19 @@ Use this order unless a production failure changes priority:
 26. Add a generated source report inventory. Tracked by Gira #85; this turns
     the multi-source report grouping gap into `reports/source-report-inventory.json`
     coverage metrics and validates drift in CI.
-27. Register Seoul Open Data runtime and data.go.kr external coverage.
+27. Add a registry shard inventory schema. Tracked by Gira #235; this defines
+    the `datapan.registry-shards.v1` contract for manifest-bound shard
+    inventories without generating shards or changing the canonical
+    `data/data-go-kr.registry.json` compatibility path.
+28. Register Seoul Open Data runtime and data.go.kr external coverage.
     Tracked by Gira #111; this adds the `seoul-open-data` adapter, refreshes
     data.go.kr evidence to `1272` checks, moves Seoul out of
     `source_runtime_adapter_not_registered`, and leaves the next source-runtime
     blocker on credentialed bounded runs.
-28. Add a generated data.go.kr coverage backlog. Tracked by Gira #89; this
+29. Add a generated data.go.kr coverage backlog. Tracked by Gira #89; this
     turns uncovered APIs and runtime reactivation targets into
     `reports/data-go-kr/coverage-backlog.json` work queues that validate in CI.
-29. Add a generated data.go.kr external adapter backlog. Tracked by Gira #95;
+30. Add a generated data.go.kr external adapter backlog. Tracked by Gira #95;
     this turned `47` route-disposition adapter-candidate operations into
     `12` host-scoped adapter implementation queues while keeping dead and
     transient routes out of adapter work. Gira #97 registers and verifies
