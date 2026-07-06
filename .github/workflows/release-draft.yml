@@ -100,12 +100,14 @@ jobs:
             scripts/validate-install-smoke-summaries.py \
             scripts/validate-release-consumer-compatibility.py \
             scripts/sync-release-manifest-artifacts.py \
+            scripts/validate-release-ledger-ownership.py \
             scripts/validate-release-report-artifacts.py \
             scripts/validate-release-health-rollups.py \
             scripts/validate-source-contract-rollups.py \
             scripts/validate-registry-shards.py
           python scripts/sync-release-schema-artifacts.py --check
           python scripts/sync-release-manifest-artifacts.py --check
+          python scripts/validate-release-ledger-ownership.py
           python scripts/validate-coverage-backlog.py
           python scripts/validate-external-adapter-backlog.py
           python scripts/validate-source-profiles.py

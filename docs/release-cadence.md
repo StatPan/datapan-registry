@@ -135,6 +135,10 @@ check. That workflow:
   `scripts/sync-release-manifest-artifacts.py --check`, keeping checked-in
   report digests reproducible instead of hand-maintained during release
   assembly;
+- validates `docs/release-ledger-ownership.json` with
+  `scripts/validate-release-ledger-ownership.py`, so every manifest artifact
+  kind has an explicit release owner, generator/check path, package
+  relationship, schema relationship, and exemption boundary;
 - uploads current-checkout install and doctor JSON plus latest-public-release
   install and doctor JSON reports as release-health evidence.
 
@@ -156,6 +160,7 @@ python scripts/generate-source-runtime-readiness.py
 python scripts/generate-error-action-routing-rollup.py
 python scripts/sync-release-schema-artifacts.py --write
 python scripts/sync-release-manifest-artifacts.py --write
+python scripts/validate-release-ledger-ownership.py
 ```
 
 Institution-scoped runtime reactivation batches should follow the priority
