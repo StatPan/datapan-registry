@@ -13,6 +13,8 @@ The reviewed receipt collection queue is the operator-facing next-action report.
 
 Reviewed receipt promotion is deterministic. Operators use `scripts/promote-credential-runtime-receipt.py` to attach review metadata to a local staged receipt and write the policy-defined reviewed receipt path. The command validates the staged receipt, redaction contract, source policy alignment, review decision semantics, and reviewed receipt schema before it writes output.
 
+Source runtime remediation findings link back to reviewed receipt paths. `reports/source-runtime-remediation-map.json` records the expected reviewed receipt artifact and current receipt state for each credential-related manual-review boundary so operators can see which finding is waiting for which reviewed receipt.
+
 Checked-in registry releases remain canonical-registry compatible while live credentialed receipts are absent. The remaining `credential_required`, `metadata_only_verification`, and `non_data_runtime_evidence_not_collected` findings stay manual-review boundaries until reviewed receipts are linked from source runtime remediation evidence.
 
 The receipt contract existing is not enough to reduce compatibility risk. Release

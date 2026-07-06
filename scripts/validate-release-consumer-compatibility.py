@@ -589,9 +589,18 @@ def validate_runtime_risk_evidence(
         "remediation_receipt_relief_eligible": remediation_summary.get("receipt_relief_eligible"),
         "remediation_receipt_backed_relief_allowed": remediation_summary.get("receipt_backed_relief_allowed"),
         "remediation_receipt_backed_relief_status": remediation_summary.get("receipt_backed_relief_status"),
+        "remediation_receipt_linked_findings": remediation_summary.get("receipt_linked_findings"),
+        "remediation_receipt_linked_absent": remediation_summary.get("receipt_linked_absent"),
+        "remediation_receipt_linked_relief_eligible": remediation_summary.get("receipt_linked_relief_eligible"),
     }
     for key, value in remediation_expected.items():
-        if key.endswith("_required") or key.endswith("_boundaries"):
+        if (
+            key.endswith("_required")
+            or key.endswith("_boundaries")
+            or key.endswith("_findings")
+            or key.endswith("_absent")
+            or key.endswith("_eligible")
+        ) and not isinstance(value, bool):
             if not isinstance(value, int) or value < 0:
                 raise ValueError(f"{key} source value must be a non-negative integer")
         elif (
@@ -679,6 +688,10 @@ def validate_runtime_risk_evidence(
         raise ValueError("source runtime remediation must expose the credential receipt contract boundary")
     if risk.get("remediation_reviewed_receipt_intake_available") is not True:
         raise ValueError("source runtime remediation must expose the reviewed receipt intake boundary")
+    if risk.get("remediation_receipt_linked_findings", 0) < risk.get("remediation_manual_review_boundaries", 0):
+        raise ValueError("source runtime remediation must link manual-review boundaries to reviewed receipt paths")
+    if risk.get("remediation_receipt_linked_relief_eligible", 0) > risk.get("remediation_receipt_linked_findings", 0):
+        raise ValueError("source runtime remediation relief-eligible linkage count cannot exceed linked findings")
     if risk.get("credential_policy_receipt_contract_available") is not True:
         raise ValueError("credential runtime policy must expose the receipt contract")
     if risk.get("credential_policy_reviewed_receipt_intake_available") is not True:

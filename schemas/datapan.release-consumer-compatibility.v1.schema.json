@@ -469,6 +469,9 @@
         "remediation_receipt_relief_eligible",
         "remediation_receipt_backed_relief_allowed",
         "remediation_receipt_backed_relief_status",
+        "remediation_receipt_linked_findings",
+        "remediation_receipt_linked_absent",
+        "remediation_receipt_linked_relief_eligible",
         "credential_policy_sources",
         "credential_policy_manual_review_boundaries",
         "credential_policy_receipt_contract_available",
@@ -610,6 +613,15 @@
             "blocked_until_reviewed_validated_credential_runtime_receipts_exist",
             "allowed_by_reviewed_validated_credential_runtime_receipts"
           ]
+        },
+        "remediation_receipt_linked_findings": {
+          "$ref": "#/$defs/count"
+        },
+        "remediation_receipt_linked_absent": {
+          "$ref": "#/$defs/count"
+        },
+        "remediation_receipt_linked_relief_eligible": {
+          "$ref": "#/$defs/count"
         },
         "credential_policy_sources": {
           "$ref": "#/$defs/count"
