@@ -90,6 +90,7 @@ jobs:
             scripts/generate-release-assembly-receipt.py \
             scripts/generate-release-consumer-compatibility.py \
             scripts/generate-credential-runtime-evidence-policy.py \
+            scripts/validate-credential-runtime-receipts.py \
             scripts/generate-source-runtime-remediation-map.py \
             scripts/generate-release-health-rollup.py \
             scripts/generate-source-contract-rollup.py \
@@ -142,6 +143,7 @@ jobs:
           python scripts/validate-institution-runtime-plan.py
           python scripts/generate-source-runtime-remediation-map.py --check
           python scripts/generate-credential-runtime-evidence-policy.py --check
+          python scripts/validate-credential-runtime-receipts.py
           python scripts/generate-release-consumer-compatibility.py --check
           python scripts/validate-release-consumer-compatibility.py
 

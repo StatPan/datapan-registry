@@ -109,6 +109,7 @@
         "python scripts/validate-source-reference-drift.py",
         "python scripts/validate-source-report-inventory.py",
         "python scripts/generate-credential-runtime-evidence-policy.py --check",
+        "python scripts/validate-credential-runtime-receipts.py",
         "python scripts/generate-source-runtime-remediation-map.py --check",
         "python scripts/validate-source-runtime-evidence-rollup.py",
         "python scripts/validate-runtime-evidence-growth.py",

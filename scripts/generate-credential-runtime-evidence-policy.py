@@ -22,6 +22,8 @@ DEFAULT_REMEDIATION = pathlib.Path("reports/source-runtime-remediation-map.json"
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-evidence-policy.v1.schema.json")
 DEFAULT_OUTPUT = pathlib.Path("reports/credential-runtime-evidence-policy.json")
 SCHEMA_VERSION = "datapan.credential-runtime-evidence-policy.v1"
+RECEIPT_SCHEMA = "schemas/datapan.credential-runtime-receipt.v1.schema.json"
+RECEIPT_VALIDATOR = "scripts/validate-credential-runtime-receipts.py"
 
 CREDENTIAL_ENVS: dict[str, list[str]] = {
     "data_go_kr": ["DATAPAN_DATA_GO_KR_SERVICE_KEY"],
@@ -165,6 +167,8 @@ def source_entry(source_rollup: dict[str, Any], remediation: dict[str, Any]) -> 
                 f"--output {receipt_artifact}"
             ),
             "receipt_artifact": receipt_artifact,
+            "receipt_schema": RECEIPT_SCHEMA,
+            "receipt_validator": RECEIPT_VALIDATOR,
             "promotion_gate": (
                 "Promote the source only after the credentialed receipt is reviewed, contains no secret "
                 "values or hashes, and is linked from source runtime remediation evidence."
@@ -233,6 +237,9 @@ def build_report(runtime_rollup: dict[str, Any], remediation: dict[str, Any]) ->
         "operator_contract": {
             "default_check_command": "python3 scripts/generate-credential-runtime-evidence-policy.py --check",
             "policy_check_command": "python3 scripts/generate-credential-runtime-evidence-policy.py --check",
+            "receipt_schema": RECEIPT_SCHEMA,
+            "receipt_validator": RECEIPT_VALIDATOR,
+            "receipt_validation_command": "python3 scripts/validate-credential-runtime-receipts.py",
             "credential_gated_command_template": (
                 "DATAPAN_<SOURCE>_API_KEY=<secret> datapan source runtime verify "
                 "--source <source_id> --candidates <runtime-candidates.json> --bounded --json "

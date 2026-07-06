@@ -7,13 +7,13 @@
     "manifest": {
       "path": "manifest.json",
       "generated_at": "2026-07-04T06:39:24Z",
-      "artifact_count": 76,
+      "artifact_count": 77,
       "evidence_contracts": 8
     },
     "readiness": {
       "path": "reports/latest-release-readiness.json",
       "normalization": "omit_generated_at",
-      "normalized_sha256": "76632bf032f8535d728c518c8ac6969b96148d3710727c3f5f6b92dc28248979",
+      "normalized_sha256": "a9e92a09b238348e6c2c43ba5e549731154f2e7e575b822b2719eb23bc1330ae",
       "ready": true,
       "gates_total": 23,
       "passed": 23,
@@ -112,8 +112,8 @@
       "path": "reports/credential-runtime-evidence-policy.json",
       "kind": "credential_runtime_evidence_policy",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-evidence-policy.v1.schema.json",
-      "bytes": 10842,
-      "sha256": "ae72edfc78f698bdb00195a79d829443a3fca87a3aca945c4dceecbe17dddb86",
+      "bytes": 11929,
+      "sha256": "70ca4311d924ed99b31a7efa1ded11592d99bc58b1ccaac88510836837cb3622",
       "required": true
     },
     {

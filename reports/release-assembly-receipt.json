@@ -25,7 +25,7 @@
     "manifest": {
       "path": "manifest.json",
       "generated_at": "2026-07-04T06:39:24Z",
-      "artifact_count": 76,
+      "artifact_count": 77,
       "source_registry": "data/data-go-kr.registry.json"
     },
     "readiness": {
@@ -107,8 +107,8 @@
       "evidence_artifacts": [
         {
           "path": "schemas/index.json",
-          "bytes": 18401,
-          "sha256": "929c5d0a66af0a9818d5f8ef9c9b08d75aa4842e3eca062a8394b9a4fc3719fe",
+          "bytes": 18813,
+          "sha256": "d2f46cfd293d66fa42355290c863c6bd22e3a941004a2bda021b9c7add6728b5",
           "manifest_bound": true,
           "kind": "schema_index",
           "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json"
@@ -145,8 +145,8 @@
       "evidence_artifacts": [
         {
           "path": "docs/release-ledger-ownership.json",
-          "bytes": 12545,
-          "sha256": "336622ca2dcad2bbd4dbf356554903bd9ee86514be9ee355a52b566b84cdc1cf",
+          "bytes": 12611,
+          "sha256": "da407511845e4e88b5597422ed99cd5ae35fa3c6158b0b4e98a2c074d99c747f",
           "manifest_bound": false
         }
       ]
@@ -299,22 +299,25 @@
         "python3 scripts/generate-credential-runtime-evidence-policy.py"
       ],
       "check_commands": [
-        "python3 scripts/generate-credential-runtime-evidence-policy.py --check"
+        "python3 scripts/generate-credential-runtime-evidence-policy.py --check",
+        "python3 scripts/validate-credential-runtime-receipts.py"
       ],
       "workflow_fragments": {
         ".github/workflows/verify-release.yml": [
-          "python scripts/generate-credential-runtime-evidence-policy.py --check"
+          "python scripts/generate-credential-runtime-evidence-policy.py --check",
+          "python scripts/validate-credential-runtime-receipts.py"
         ],
         ".github/workflows/release-draft.yml": [
-          "python scripts/generate-credential-runtime-evidence-policy.py --check"
+          "python scripts/generate-credential-runtime-evidence-policy.py --check",
+          "python scripts/validate-credential-runtime-receipts.py"
         ]
       },
       "status": "required",
       "evidence_artifacts": [
         {
           "path": "reports/credential-runtime-evidence-policy.json",
-          "bytes": 10842,
-          "sha256": "ae72edfc78f698bdb00195a79d829443a3fca87a3aca945c4dceecbe17dddb86",
+          "bytes": 11929,
+          "sha256": "70ca4311d924ed99b31a7efa1ded11592d99bc58b1ccaac88510836837cb3622",
           "manifest_bound": true,
           "kind": "credential_runtime_evidence_policy",
           "schema": "https://schemas.datapan.dev/datapan.credential-runtime-evidence-policy.v1.schema.json"
@@ -348,7 +351,7 @@
         {
           "path": "reports/release-consumer-compatibility.json",
           "bytes": 13677,
-          "sha256": "f0556434042ccc5cb6833a83f0a378ac660547ff8575032cf89850bac2a9d226",
+          "sha256": "9a357d38eaae1f2158a3b6532eb80d62d0e33c9fc0bf2307ac21364744a30c20",
           "manifest_bound": true,
           "kind": "consumer_compatibility",
           "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json"
@@ -384,14 +387,14 @@
       "evidence_artifacts": [
         {
           "path": "reports/latest-release-verification.json",
-          "bytes": 28697,
-          "sha256": "4b11aee45f086d268c451889bffdf5464920716f3de61946fb269010ffb6d05a",
+          "bytes": 29078,
+          "sha256": "e209cdd442115d6ab22662c84a07885b47729aefd0e7241a4c4a979fce948f42",
           "manifest_bound": false
         },
         {
           "path": "reports/latest-release-readiness.json",
           "bytes": 7612,
-          "sha256": "a20ea0f8450749eb6960049ee60b284b3bc337b73f5dd174f7613d645248f226",
+          "sha256": "2535d79f7c88c46cf1d1d47840d84968e32b7fb9eb0e1fbfefc550b7701c826e",
           "manifest_bound": false
         }
       ]
@@ -507,8 +510,8 @@
       "evidence_artifacts": [
         {
           "path": "docs/release-ledger-goal-completion-audit.json",
-          "bytes": 16067,
-          "sha256": "529b7fd9f6117bef710c24187f45d1cd5c142a3da06c4281bd620854b7cee203",
+          "bytes": 16618,
+          "sha256": "d50100ed08b21dcd71370053c6b531fce8fc3951dd395eabd95b6c23d1af5525",
           "manifest_bound": false
         }
       ]
