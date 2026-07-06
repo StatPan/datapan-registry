@@ -72,7 +72,10 @@ checks out this repository with Git LFS enabled, verifies that
 provider-specific verification summary checks, runs release verification and
 readiness through `datapan-cli`, and smoke-tests that the latest GitHub Release
 zip can be installed with
-`datapan catalog install datapan-registry`.
+`datapan catalog install datapan-registry`. The install smoke writes
+`.datapan/ci/latest-release-install.json` and records whether the release used
+validated shard metadata or the canonical monolith fallback; `datapan doctor
+--json` is saved as `.datapan/ci/latest-release-doctor.json`.
 
 The current snapshot was generated from `datapan-cli` and includes:
 
