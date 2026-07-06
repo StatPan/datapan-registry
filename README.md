@@ -132,6 +132,9 @@ Top-level schema-backed reports are guarded by
 to be manifest-bound with matching schema URI, bytes, and sha256 unless they
 are explicit release verification/readiness receipts generated from the
 manifest.
+For checked-in non-schema manifest artifacts, run
+`scripts/sync-release-manifest-artifacts.py --write` after regenerating reports
+and `--check` in release gates so artifact bytes and sha256 stay deterministic.
 
 The current snapshot was generated from `datapan-cli` and includes:
 
