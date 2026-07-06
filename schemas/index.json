@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 38,
+  "count": 39,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -345,6 +345,15 @@
       "version": "v1",
       "bytes": 6311,
       "sha256": "7fd591ee6e0607ed8ad0791a32180fd812716766af3cb24261cc78296ac99984"
+    },
+    {
+      "path": "schemas/datapan.external-adapter-backlog.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.external-adapter-backlog.v1.schema.json",
+      "title": "Datapan External Adapter Backlog v1",
+      "contract": "external-adapter-backlog",
+      "version": "v1",
+      "bytes": 8376,
+      "sha256": "0f0585e9240cef48fc9bcc44c8ca2140347ba81937b9ef27ba8fad00ba09f2f6"
     }
   ]
 }

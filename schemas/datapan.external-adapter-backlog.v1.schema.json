@@ -1,0 +1,358 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.external-adapter-backlog.v1.schema.json",
+  "title": "Datapan External Adapter Backlog v1",
+  "description": "Source-scoped external adapter action backlog derived from route disposition, coverage, and adapter target evidence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "provider",
+    "source_id",
+    "source_profile",
+    "generation_inputs",
+    "summary",
+    "policy",
+    "hosts",
+    "candidate_routes",
+    "excluded_dispositions",
+    "next"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.external-adapter-backlog.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "const": "data.go.kr"
+    },
+    "source_id": {
+      "const": "data_go_kr"
+    },
+    "source_profile": {
+      "$ref": "#/$defs/path"
+    },
+    "generation_inputs": {
+      "$ref": "#/$defs/generation_inputs"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "policy": {
+      "$ref": "#/$defs/policy"
+    },
+    "hosts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/host_backlog"
+      }
+    },
+    "candidate_routes": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/route"
+          },
+          {
+            "properties": {
+              "disposition": {
+                "const": "adapter_candidate"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "excluded_dispositions": {
+      "$ref": "#/$defs/excluded_dispositions"
+    },
+    "next": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/non_empty_string"
+      }
+    }
+  },
+  "$defs": {
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "percent": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "generation_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "route_disposition",
+        "adapter_targets",
+        "coverage"
+      ],
+      "properties": {
+        "route_disposition": {
+          "$ref": "#/$defs/path"
+        },
+        "adapter_targets": {
+          "$ref": "#/$defs/path"
+        },
+        "coverage": {
+          "$ref": "#/$defs/path"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_hosts",
+        "candidate_operations",
+        "candidate_apis",
+        "candidate_institutions",
+        "raw_missing_adapter_operations",
+        "raw_missing_adapter_hosts",
+        "route_disposition_operations",
+        "route_disposition_adapter_candidates",
+        "excluded_dead_route_candidates",
+        "excluded_transient_failures",
+        "unclassified_missing_routes",
+        "adapter_target_operations",
+        "candidate_share_of_missing_adapter_operations_percent"
+      ],
+      "properties": {
+        "candidate_hosts": {
+          "$ref": "#/$defs/count"
+        },
+        "candidate_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "candidate_apis": {
+          "$ref": "#/$defs/count"
+        },
+        "candidate_institutions": {
+          "$ref": "#/$defs/count"
+        },
+        "raw_missing_adapter_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "raw_missing_adapter_hosts": {
+          "$ref": "#/$defs/count"
+        },
+        "route_disposition_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "route_disposition_adapter_candidates": {
+          "$ref": "#/$defs/count"
+        },
+        "excluded_dead_route_candidates": {
+          "$ref": "#/$defs/count"
+        },
+        "excluded_transient_failures": {
+          "$ref": "#/$defs/count"
+        },
+        "unclassified_missing_routes": {
+          "const": 0
+        },
+        "adapter_target_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "candidate_share_of_missing_adapter_operations_percent": {
+          "$ref": "#/$defs/percent"
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_filter",
+        "excluded_policy",
+        "gate"
+      ],
+      "properties": {
+        "candidate_filter": {
+          "const": "route_disposition.disposition == adapter_candidate"
+        },
+        "excluded_policy": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "gate": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "host_backlog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "host",
+        "candidate_operations"
+      ],
+      "properties": {
+        "host": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "candidate_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "candidate_apis": {
+          "$ref": "#/$defs/count"
+        },
+        "candidate_institutions": {
+          "$ref": "#/$defs/count"
+        },
+        "sample_routes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/route"
+          }
+        }
+      }
+    },
+    "excluded_dispositions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dead_route_candidate",
+        "transient_failure"
+      ],
+      "properties": {
+        "dead_route_candidate": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/route"
+              },
+              {
+                "properties": {
+                  "disposition": {
+                    "const": "dead_route_candidate"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "transient_failure": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/route"
+              },
+              {
+                "properties": {
+                  "disposition": {
+                    "const": "transient_failure"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dataset_id",
+        "title",
+        "organization",
+        "operation",
+        "endpoint",
+        "endpoint_host",
+        "dependency_class",
+        "disposition",
+        "recommended_action"
+      ],
+      "properties": {
+        "dataset_id": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "title": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "organization": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "operation": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "endpoint": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "endpoint_host": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "dependency_class": {
+          "enum": [
+            "external_endpoint",
+            "service_root"
+          ]
+        },
+        "disposition": {
+          "enum": [
+            "adapter_candidate",
+            "dead_route_candidate",
+            "transient_failure"
+          ]
+        },
+        "probe_status": {
+          "enum": [
+            "verified",
+            "failed",
+            "skipped",
+            "unknown"
+          ]
+        },
+        "probe_reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "http_status": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 100,
+          "maximum": 599
+        },
+        "body_shape": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "missing_params": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "recommended_action": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    }
+  }
+}
