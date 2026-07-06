@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 41,
+  "count": 42,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -372,6 +372,15 @@
       "version": "v1",
       "bytes": 6393,
       "sha256": "b1cee166a864d660ceab0d5da14705fa9642714398ed957bc1295b39b18b2bc7"
+    },
+    {
+      "path": "schemas/datapan.institution-api-overview.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.institution-api-overview.v1.schema.json",
+      "title": "Datapan Institution API Overview v1",
+      "contract": "institution-api-overview",
+      "version": "v1",
+      "bytes": 7279,
+      "sha256": "3861e950a1fb56ca00ab70249c93c7f1a2b45fe4b523ede13310c940346db5b9"
     }
   ]
 }
