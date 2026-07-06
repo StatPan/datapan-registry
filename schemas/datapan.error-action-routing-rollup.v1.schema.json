@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.error-action-routing-rollup.v1.schema.json",
+  "title": "Datapan Error Action Routing Rollup v1",
+  "description": "Release-wide rollup of source error-action catalogs for routing provider failures to bounded work.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "provider",
+    "generation_inputs",
+    "summary",
+    "catalogs"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.error-action-routing-rollup.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "const": "multi-source"
+    },
+    "generation_inputs": {
+      "$ref": "#/$defs/generation_inputs"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "catalogs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/catalog"
+      }
+    }
+  },
+  "$defs": {
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+    },
+    "portable_path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[^\\\\]+$"
+    },
+    "count_map": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/count"
+      }
+    },
+    "generation_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["release_manifest", "catalog_glob", "generator"],
+      "properties": {
+        "release_manifest": {
+          "$ref": "#/$defs/portable_path"
+        },
+        "catalog_glob": {
+          "type": "string",
+          "minLength": 1
+        },
+        "generator": {
+          "$ref": "#/$defs/portable_path"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "catalogs",
+        "sources",
+        "providers",
+        "rules",
+        "actions",
+        "blocking_rules",
+        "manual_review_rules",
+        "unknown_signature_rules",
+        "classifications",
+        "action_targets",
+        "actions_by_name",
+        "automations",
+        "impact_categories"
+      ],
+      "properties": {
+        "catalogs": {
+          "$ref": "#/$defs/count"
+        },
+        "sources": {
+          "$ref": "#/$defs/count"
+        },
+        "providers": {
+          "$ref": "#/$defs/count"
+        },
+        "rules": {
+          "$ref": "#/$defs/count"
+        },
+        "actions": {
+          "$ref": "#/$defs/count"
+        },
+        "blocking_rules": {
+          "$ref": "#/$defs/count"
+        },
+        "manual_review_rules": {
+          "$ref": "#/$defs/count"
+        },
+        "unknown_signature_rules": {
+          "$ref": "#/$defs/count"
+        },
+        "classifications": {
+          "$ref": "#/$defs/count_map"
+        },
+        "action_targets": {
+          "$ref": "#/$defs/count_map"
+        },
+        "actions_by_name": {
+          "$ref": "#/$defs/count_map"
+        },
+        "automations": {
+          "$ref": "#/$defs/count_map"
+        },
+        "impact_categories": {
+          "$ref": "#/$defs/count_map"
+        }
+      }
+    },
+    "catalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "provider",
+        "catalog",
+        "source_profile",
+        "bytes",
+        "sha256",
+        "rules",
+        "actions",
+        "blocking_rules",
+        "manual_review_rules",
+        "unknown_signature_rules",
+        "classifications",
+        "action_targets",
+        "actions_by_name",
+        "automations",
+        "impact_categories"
+      ],
+      "properties": {
+        "source_id": {
+          "$ref": "#/$defs/source_id"
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "catalog": {
+          "$ref": "#/$defs/portable_path"
+        },
+        "source_profile": {
+          "$ref": "#/$defs/portable_path"
+        },
+        "bytes": {
+          "$ref": "#/$defs/count"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "rules": {
+          "$ref": "#/$defs/count"
+        },
+        "actions": {
+          "$ref": "#/$defs/count"
+        },
+        "blocking_rules": {
+          "$ref": "#/$defs/count"
+        },
+        "manual_review_rules": {
+          "$ref": "#/$defs/count"
+        },
+        "unknown_signature_rules": {
+          "$ref": "#/$defs/count"
+        },
+        "classifications": {
+          "$ref": "#/$defs/count_map"
+        },
+        "action_targets": {
+          "$ref": "#/$defs/count_map"
+        },
+        "actions_by_name": {
+          "$ref": "#/$defs/count_map"
+        },
+        "automations": {
+          "$ref": "#/$defs/count_map"
+        },
+        "impact_categories": {
+          "$ref": "#/$defs/count_map"
+        }
+      }
+    }
+  }
+}

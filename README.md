@@ -103,6 +103,10 @@ shard asset boundary, the release-health shard install fields that distinguish
 validated shard metadata from canonical monolith fallback, and downstream
 consumer compatibility expectations as a generated and schema-validated
 artifact.
+The workflow also regenerates `reports/error-action-routing-rollup.json` from
+checked-in source error-action catalogs so provider failure signatures stay
+routed to bounded release, documentation, or adapter work as manifest-bound
+evidence.
 
 The current snapshot was generated from `datapan-cli` and includes:
 
@@ -112,6 +116,7 @@ The current snapshot was generated from `datapan-cli` and includes:
 - catalog diff against the previous published registry;
 - catalog audit;
 - error catalog;
+- release-wide error/action routing rollup;
 - dependency inventory;
 - adapter target work queue;
 - route disposition evidence for missing external routes;

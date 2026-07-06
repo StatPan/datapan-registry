@@ -1,0 +1,249 @@
+{
+  "schema_version": "datapan.error-action-routing-rollup.v1",
+  "generated_at": "2026-07-04T06:39:24Z",
+  "provider": "multi-source",
+  "generation_inputs": {
+    "release_manifest": "manifest.json",
+    "catalog_glob": "reports/*/error-action-catalog.json",
+    "generator": "scripts/generate-error-action-routing-rollup.py"
+  },
+  "summary": {
+    "catalogs": 5,
+    "sources": 5,
+    "providers": 5,
+    "rules": 31,
+    "actions": 39,
+    "blocking_rules": 7,
+    "manual_review_rules": 24,
+    "unknown_signature_rules": 1,
+    "classifications": {
+      "bad_request": 5,
+      "credential": 7,
+      "not_found": 3,
+      "parser": 4,
+      "rate_limit": 5,
+      "unknown": 1,
+      "upstream_outage": 6
+    },
+    "action_targets": {
+      "documentation": 6,
+      "provider-adapter": 2,
+      "registry-release": 31
+    },
+    "actions_by_name": {
+      "investigate": 5,
+      "no_action": 1,
+      "refresh_verification": 26,
+      "update_adapter": 1,
+      "update_error_taxonomy": 6
+    },
+    "automations": {
+      "automated": 1,
+      "manual_review": 38
+    },
+    "impact_categories": {
+      "endpoint_changed": 2,
+      "provider_error_taxonomy_changed": 6,
+      "required_params_changed": 5,
+      "response_shape_changed": 5,
+      "verification_status_changed": 31
+    }
+  },
+  "catalogs": [
+    {
+      "source_id": "data_go_kr",
+      "provider": "data.go.kr",
+      "catalog": "reports/data-go-kr/error-action-catalog.json",
+      "source_profile": "sources/data_go_kr.json",
+      "bytes": 5687,
+      "sha256": "6ae96800d42f13237439def8adea75fb5c9e0bd97ae470b5f93254adc032dcf8",
+      "rules": 6,
+      "actions": 9,
+      "blocking_rules": 2,
+      "manual_review_rules": 4,
+      "unknown_signature_rules": 1,
+      "classifications": {
+        "credential": 2,
+        "not_found": 1,
+        "rate_limit": 1,
+        "unknown": 1,
+        "upstream_outage": 1
+      },
+      "action_targets": {
+        "documentation": 1,
+        "provider-adapter": 2,
+        "registry-release": 6
+      },
+      "actions_by_name": {
+        "investigate": 1,
+        "no_action": 1,
+        "refresh_verification": 5,
+        "update_adapter": 1,
+        "update_error_taxonomy": 1
+      },
+      "automations": {
+        "automated": 1,
+        "manual_review": 8
+      },
+      "impact_categories": {
+        "provider_error_taxonomy_changed": 1,
+        "response_shape_changed": 1,
+        "verification_status_changed": 6
+      }
+    },
+    {
+      "source_id": "ecos",
+      "provider": "ECOS",
+      "catalog": "reports/ecos/error-action-catalog.json",
+      "source_profile": "sources/ecos.json",
+      "bytes": 6103,
+      "sha256": "a610585382e8037b050973336ec1f258ea97f77df4f48dc66e8bd286d9f6e4a0",
+      "rules": 7,
+      "actions": 8,
+      "blocking_rules": 1,
+      "manual_review_rules": 6,
+      "unknown_signature_rules": 0,
+      "classifications": {
+        "bad_request": 3,
+        "credential": 1,
+        "parser": 1,
+        "rate_limit": 1,
+        "upstream_outage": 1
+      },
+      "action_targets": {
+        "documentation": 1,
+        "registry-release": 7
+      },
+      "actions_by_name": {
+        "investigate": 1,
+        "refresh_verification": 6,
+        "update_error_taxonomy": 1
+      },
+      "automations": {
+        "manual_review": 8
+      },
+      "impact_categories": {
+        "provider_error_taxonomy_changed": 1,
+        "required_params_changed": 3,
+        "response_shape_changed": 1,
+        "verification_status_changed": 7
+      }
+    },
+    {
+      "source_id": "kosis",
+      "provider": "KOSIS",
+      "catalog": "reports/kosis/error-action-catalog.json",
+      "source_profile": "sources/kosis.json",
+      "bytes": 5876,
+      "sha256": "624e1dcbf8ad1267b4fee4c0114d54d3049c0f1568a195b4458cbb750a98c4e5",
+      "rules": 6,
+      "actions": 8,
+      "blocking_rules": 2,
+      "manual_review_rules": 4,
+      "unknown_signature_rules": 0,
+      "classifications": {
+        "bad_request": 1,
+        "credential": 2,
+        "parser": 1,
+        "rate_limit": 1,
+        "upstream_outage": 1
+      },
+      "action_targets": {
+        "documentation": 2,
+        "registry-release": 6
+      },
+      "actions_by_name": {
+        "investigate": 1,
+        "refresh_verification": 5,
+        "update_error_taxonomy": 2
+      },
+      "automations": {
+        "manual_review": 8
+      },
+      "impact_categories": {
+        "provider_error_taxonomy_changed": 2,
+        "required_params_changed": 1,
+        "response_shape_changed": 1,
+        "verification_status_changed": 6
+      }
+    },
+    {
+      "source_id": "open_assembly",
+      "provider": "open.assembly.go.kr",
+      "catalog": "reports/open-assembly/error-action-catalog.json",
+      "source_profile": "sources/open_assembly.json",
+      "bytes": 4504,
+      "sha256": "ca7f6fa7be40991375e98f0266c3635bebd665483296f1093123d384cdfc2d7f",
+      "rules": 5,
+      "actions": 6,
+      "blocking_rules": 1,
+      "manual_review_rules": 4,
+      "unknown_signature_rules": 0,
+      "classifications": {
+        "credential": 1,
+        "not_found": 1,
+        "parser": 1,
+        "rate_limit": 1,
+        "upstream_outage": 1
+      },
+      "action_targets": {
+        "documentation": 1,
+        "registry-release": 5
+      },
+      "actions_by_name": {
+        "investigate": 1,
+        "refresh_verification": 4,
+        "update_error_taxonomy": 1
+      },
+      "automations": {
+        "manual_review": 6
+      },
+      "impact_categories": {
+        "endpoint_changed": 1,
+        "provider_error_taxonomy_changed": 1,
+        "response_shape_changed": 1,
+        "verification_status_changed": 5
+      }
+    },
+    {
+      "source_id": "seoul_open_data",
+      "provider": "data.seoul.go.kr",
+      "catalog": "reports/seoul-open-data/error-action-catalog.json",
+      "source_profile": "sources/seoul_open_data.json",
+      "bytes": 6087,
+      "sha256": "5c1322bc08278386daa3ccd6b8835c873e51e74e329a65b819193712e342c60d",
+      "rules": 7,
+      "actions": 8,
+      "blocking_rules": 1,
+      "manual_review_rules": 6,
+      "unknown_signature_rules": 0,
+      "classifications": {
+        "bad_request": 1,
+        "credential": 1,
+        "not_found": 1,
+        "parser": 1,
+        "rate_limit": 1,
+        "upstream_outage": 2
+      },
+      "action_targets": {
+        "documentation": 1,
+        "registry-release": 7
+      },
+      "actions_by_name": {
+        "investigate": 1,
+        "refresh_verification": 6,
+        "update_error_taxonomy": 1
+      },
+      "automations": {
+        "manual_review": 8
+      },
+      "impact_categories": {
+        "endpoint_changed": 1,
+        "provider_error_taxonomy_changed": 1,
+        "required_params_changed": 1,
+        "response_shape_changed": 1,
+        "verification_status_changed": 7
+      }
+    }
+  ]
+}

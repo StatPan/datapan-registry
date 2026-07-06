@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 34,
+  "count": 35,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 2460,
-      "sha256": "abf909d7c1001e44414d56ebca57f0bfb6e7f7d6d8018f5f43613a092d308514"
+      "bytes": 2503,
+      "sha256": "f4d50163123453a9fcd23b3beba53b3bddad69e739c80e5c1c04c54d380da6fb"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -309,6 +309,15 @@
       "version": "v1",
       "bytes": 6167,
       "sha256": "26bcb7a8b54a740c29d77eacd50f236f08cc8d7cd4dda81ba8b585b5cec9d2d8"
+    },
+    {
+      "path": "schemas/datapan.error-action-routing-rollup.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.error-action-routing-rollup.v1.schema.json",
+      "title": "Datapan Error Action Routing Rollup v1",
+      "contract": "error-action-routing-rollup",
+      "version": "v1",
+      "bytes": 5078,
+      "sha256": "cc1797e18e53cce41fb1b8b6c35c57a65f270caa44d7d437056d16d18d03d8fe"
     }
   ]
 }

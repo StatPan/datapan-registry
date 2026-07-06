@@ -72,6 +72,9 @@ check. That workflow:
   humetro, itfind, korad, kpx, lh-ebid, mafra, myhome, naqs, ncpms, nfqs, nongsaro,
   oneclick-law, pqis, seoul-bus, seoul-open-data, sisul, tour, uiryeong,
   ulsan, work24, and the merged latest report;
+- regenerates and validates `reports/error-action-routing-rollup.json` from
+  checked-in source error-action catalogs so provider failures remain routed to
+  bounded release, documentation, or adapter work;
 - runs `catalog release verify`;
 - runs `catalog release readiness`;
 - packages the current checkout as
@@ -120,6 +123,7 @@ python scripts/generate-institution-api-overview.py
 python scripts/generate-institution-runtime-plan.py
 python scripts/generate-source-report-inventory.py
 python scripts/generate-source-runtime-readiness.py
+python scripts/generate-error-action-routing-rollup.py
 ```
 
 Institution-scoped runtime reactivation batches should follow the priority
