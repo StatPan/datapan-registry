@@ -113,7 +113,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "85cef778259082257071d73641948f31ff404ce8056772c66040a9919c9e3ba9",
+      "sha256": "3031beb301ec652494c98ad226feb43c776ec2ccfb155ba5335f97a61c5cecbd",
       "required": true
     },
     {
@@ -131,10 +131,107 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 59095,
-      "sha256": "c73c070786c02e37286de379593ec8d515f96f18f35f06cd849a6431f50cf28a",
+      "sha256": "65027ebbdd9574e0d0f2e55703c00981d52a75da989228fbfc7bcc4a0b35c778",
       "required": true
     }
   ],
+  "runtime_risk_evidence": {
+    "source_runtime_rollup": "reports/source-runtime-evidence-rollup.json",
+    "error_action_routing_rollup": "reports/error-action-routing-rollup.json",
+    "downstream_impact_rollup": "reports/registry-impact-plan.json",
+    "manual_review_required": true,
+    "compatibility_effect": "manual_review_required_until_runtime_blockers_resolved",
+    "required_contracts": [
+      "source_runtime_evidence",
+      "error_action_routing",
+      "downstream_impact"
+    ],
+    "blocking_count": 12,
+    "warning_count": 8,
+    "sources_without_evidence": 4,
+    "blocker_ids": [
+      "adapter_not_registered",
+      "credential_required",
+      "metadata_only_verification",
+      "source_specific_error_taxonomy_pending"
+    ],
+    "warning_ids": [
+      "non_data_runtime_evidence_not_collected",
+      "source_runtime_adapter_not_registered",
+      "source_runtime_error_taxonomy_pending"
+    ],
+    "sources": [
+      {
+        "source_id": "data_go_kr",
+        "blocking_count": 1,
+        "warning_count": 1,
+        "blocker_ids": [
+          "credential_required",
+          "source_specific_error_taxonomy_pending"
+        ],
+        "warning_ids": [
+          "source_runtime_error_taxonomy_pending"
+        ]
+      },
+      {
+        "source_id": "ecos",
+        "blocking_count": 3,
+        "warning_count": 2,
+        "blocker_ids": [
+          "adapter_not_registered",
+          "credential_required",
+          "metadata_only_verification"
+        ],
+        "warning_ids": [
+          "non_data_runtime_evidence_not_collected",
+          "source_runtime_adapter_not_registered"
+        ]
+      },
+      {
+        "source_id": "kosis",
+        "blocking_count": 3,
+        "warning_count": 2,
+        "blocker_ids": [
+          "adapter_not_registered",
+          "credential_required",
+          "metadata_only_verification"
+        ],
+        "warning_ids": [
+          "non_data_runtime_evidence_not_collected",
+          "source_runtime_adapter_not_registered"
+        ]
+      },
+      {
+        "source_id": "open_assembly",
+        "blocking_count": 3,
+        "warning_count": 2,
+        "blocker_ids": [
+          "adapter_not_registered",
+          "credential_required",
+          "metadata_only_verification"
+        ],
+        "warning_ids": [
+          "non_data_runtime_evidence_not_collected",
+          "source_runtime_adapter_not_registered"
+        ]
+      },
+      {
+        "source_id": "seoul_open_data",
+        "blocking_count": 2,
+        "warning_count": 1,
+        "blocker_ids": [
+          "credential_required",
+          "metadata_only_verification"
+        ],
+        "warning_ids": [
+          "non_data_runtime_evidence_not_collected"
+        ]
+      }
+    ],
+    "error_action_blocking_rules": 7,
+    "error_action_manual_review_rules": 24,
+    "downstream_manual_review_changes": 2
+  },
   "shard_policy": {
     "phase": "compatibility_period",
     "asset_name": "data-go-kr-shards.tar.gz",

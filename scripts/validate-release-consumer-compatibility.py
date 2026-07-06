@@ -23,6 +23,14 @@ except ImportError as exc:  # pragma: no cover - environment guard
 CANONICAL_REGISTRY_PATH = "data/data-go-kr.registry.json"
 COMPATIBILITY_REPORT_PATH = "reports/release-consumer-compatibility.json"
 COMPATIBILITY_SCHEMA = "schemas/datapan.release-consumer-compatibility.v1.schema.json"
+DEFAULT_SOURCE_RUNTIME_ROLLUP = pathlib.Path("reports/source-runtime-evidence-rollup.json")
+DEFAULT_ERROR_ACTION_ROUTING_ROLLUP = pathlib.Path("reports/error-action-routing-rollup.json")
+DEFAULT_IMPACT_ROLLUP = pathlib.Path("reports/registry-impact-plan.json")
+REQUIRED_RUNTIME_RISK_CONTRACTS = [
+    "source_runtime_evidence",
+    "error_action_routing",
+    "downstream_impact",
+]
 REQUIRED_RELEASE_HEALTH_SCHEMAS = {
     "schemas/datapan.install-smoke-summary.v1.schema.json",
     "schemas/datapan.doctor-smoke-summary.v1.schema.json",
@@ -436,6 +444,135 @@ def validate_manifest_evidence_contracts(report: dict[str, Any], manifest: dict[
                 )
 
 
+def ids_from_rollup_items(items: object, label: str) -> list[str]:
+    ids: list[str] = []
+    for index, item in enumerate(as_list(items, label)):
+        entry = as_dict(item, f"{label}[{index}]")
+        item_id = entry.get("id")
+        if not isinstance(item_id, str) or not item_id:
+            raise ValueError(f"{label}[{index}].id must be a non-empty string")
+        ids.append(item_id)
+    return sorted(ids)
+
+
+def sorted_string_items(items: object, label: str) -> list[str]:
+    values: list[str] = []
+    for index, item in enumerate(as_list(items, label)):
+        if not isinstance(item, str) or not item:
+            raise ValueError(f"{label}[{index}] must be a non-empty string")
+        values.append(item)
+    return sorted(values)
+
+
+def runtime_source_entries(source_runtime: dict[str, Any]) -> list[dict[str, Any]]:
+    entries: list[dict[str, Any]] = []
+    for index, item in enumerate(as_list(source_runtime.get("sources"), "source_runtime.sources")):
+        source = as_dict(item, f"source_runtime.sources[{index}]")
+        source_id = source.get("source_id")
+        if not isinstance(source_id, str) or not source_id:
+            raise ValueError(f"source_runtime.sources[{index}].source_id must be a non-empty string")
+        blocking_count = source.get("blocking_count")
+        warning_count = source.get("warning_count")
+        if not isinstance(blocking_count, int) or blocking_count < 0:
+            raise ValueError(f"source_runtime.sources[{index}].blocking_count must be a non-negative integer")
+        if not isinstance(warning_count, int) or warning_count < 0:
+            raise ValueError(f"source_runtime.sources[{index}].warning_count must be a non-negative integer")
+        if blocking_count == 0 and warning_count == 0:
+            continue
+        entries.append(
+            {
+                "source_id": source_id,
+                "blocking_count": blocking_count,
+                "warning_count": warning_count,
+                "blocker_ids": sorted_string_items(source.get("blocker_ids"), f"{source_id}.blocker_ids"),
+                "warning_ids": sorted_string_items(source.get("warning_ids"), f"{source_id}.warning_ids"),
+            }
+        )
+    return sorted(entries, key=lambda item: str(item["source_id"]))
+
+
+def validate_runtime_risk_evidence(
+    report: dict[str, Any],
+    source_runtime: dict[str, Any],
+    error_action_routing: dict[str, Any],
+    downstream_impact: dict[str, Any],
+    source_runtime_path: pathlib.Path,
+    error_action_routing_path: pathlib.Path,
+    impact_path: pathlib.Path,
+) -> None:
+    risk = as_dict(report.get("runtime_risk_evidence"), "runtime_risk_evidence")
+
+    expected_paths = {
+        "source_runtime_rollup": source_runtime_path.as_posix(),
+        "error_action_routing_rollup": error_action_routing_path.as_posix(),
+        "downstream_impact_rollup": impact_path.as_posix(),
+    }
+    for key, value in expected_paths.items():
+        if risk.get(key) != value:
+            raise ValueError(f"runtime_risk_evidence.{key} expected {value}, got {risk.get(key)}")
+
+    contracts = as_list(risk.get("required_contracts"), "runtime_risk_evidence.required_contracts")
+    if contracts != REQUIRED_RUNTIME_RISK_CONTRACTS:
+        raise ValueError("runtime_risk_evidence.required_contracts must bind source runtime, routing, and impact in order")
+    report_contracts = {
+        as_dict(item, "manifest_evidence_contract").get("contract")
+        for item in as_list(report.get("manifest_evidence_contracts"), "manifest_evidence_contracts")
+    }
+    missing_contracts = sorted(set(REQUIRED_RUNTIME_RISK_CONTRACTS).difference(report_contracts))
+    if missing_contracts:
+        raise ValueError(f"runtime risk evidence references missing manifest contracts: {', '.join(missing_contracts)}")
+
+    runtime_summary = as_dict(source_runtime.get("summary"), "source_runtime.summary")
+    expected_counts = {
+        "blocking_count": runtime_summary.get("blocking_count"),
+        "warning_count": runtime_summary.get("warning_count"),
+        "sources_without_evidence": runtime_summary.get("sources_without_evidence"),
+    }
+    for key, value in expected_counts.items():
+        if not isinstance(value, int) or value < 0:
+            raise ValueError(f"source_runtime.summary.{key} must be a non-negative integer")
+        if risk.get(key) != value:
+            raise ValueError(f"runtime_risk_evidence.{key} expected {value}, got {risk.get(key)}")
+
+    expected_blocker_ids = ids_from_rollup_items(source_runtime.get("blockers_by_id"), "source_runtime.blockers_by_id")
+    expected_warning_ids = ids_from_rollup_items(source_runtime.get("warnings_by_id"), "source_runtime.warnings_by_id")
+    if risk.get("blocker_ids") != expected_blocker_ids:
+        raise ValueError("runtime_risk_evidence.blocker_ids must match source runtime blocker IDs")
+    if risk.get("warning_ids") != expected_warning_ids:
+        raise ValueError("runtime_risk_evidence.warning_ids must match source runtime warning IDs")
+
+    expected_sources = runtime_source_entries(source_runtime)
+    if risk.get("sources") != expected_sources:
+        raise ValueError("runtime_risk_evidence.sources must match source runtime sources with blockers or warnings")
+
+    unresolved_runtime_risk = any(expected_counts.values())
+    if unresolved_runtime_risk:
+        if risk.get("manual_review_required") is not True:
+            raise ValueError("runtime blockers or warnings require runtime_risk_evidence.manual_review_required=true")
+        if risk.get("compatibility_effect") != "manual_review_required_until_runtime_blockers_resolved":
+            raise ValueError("runtime blockers or warnings must keep manual-review compatibility effect")
+    elif risk.get("manual_review_required") is not False:
+        raise ValueError("runtime_risk_evidence.manual_review_required must be false when runtime evidence is clear")
+
+    routing_summary = as_dict(error_action_routing.get("summary"), "error_action_routing.summary")
+    impact_summary = as_dict(downstream_impact.get("summary"), "downstream_impact.summary")
+    routing_expected = {
+        "error_action_blocking_rules": routing_summary.get("blocking_rules"),
+        "error_action_manual_review_rules": routing_summary.get("manual_review_rules"),
+        "downstream_manual_review_changes": impact_summary.get("requires_manual_review"),
+    }
+    for key, value in routing_expected.items():
+        if not isinstance(value, int) or value < 0:
+            raise ValueError(f"{key} source value must be a non-negative integer")
+        if risk.get(key) != value:
+            raise ValueError(f"runtime_risk_evidence.{key} expected {value}, got {risk.get(key)}")
+
+    if unresolved_runtime_risk and risk.get("error_action_manual_review_rules") == 0:
+        raise ValueError("runtime blockers require error/action manual-review routing evidence")
+    if unresolved_runtime_risk and risk.get("downstream_manual_review_changes") == 0:
+        raise ValueError("runtime blockers require downstream impact manual-review evidence")
+
+
 def validate_consumers(report: dict[str, Any]) -> None:
     consumers = [as_dict(item, "consumer") for item in as_list(report.get("consumers"), "consumers")]
     by_name: dict[str, dict[str, Any]] = {}
@@ -472,8 +609,14 @@ def validate_consistency(
     report: dict[str, Any],
     manifest: dict[str, Any],
     readiness: dict[str, Any],
+    source_runtime: dict[str, Any],
+    error_action_routing: dict[str, Any],
+    downstream_impact: dict[str, Any],
     manifest_path: pathlib.Path,
     readiness_path: pathlib.Path,
+    source_runtime_path: pathlib.Path,
+    error_action_routing_path: pathlib.Path,
+    impact_path: pathlib.Path,
 ) -> None:
     validate_generation_inputs(report, manifest, readiness, manifest_path, readiness_path)
     validate_summary(report)
@@ -483,6 +626,15 @@ def validate_consistency(
     validate_shard_policy(report)
     validate_shard_release_evidence(report)
     validate_manifest_evidence_contracts(report, manifest)
+    validate_runtime_risk_evidence(
+        report,
+        source_runtime,
+        error_action_routing,
+        downstream_impact,
+        source_runtime_path,
+        error_action_routing_path,
+        impact_path,
+    )
     validate_consumers(report)
 
 
@@ -496,6 +648,9 @@ def main() -> int:
     )
     parser.add_argument("--manifest", default="manifest.json", type=pathlib.Path)
     parser.add_argument("--readiness", default="reports/latest-release-readiness.json", type=pathlib.Path)
+    parser.add_argument("--source-runtime-rollup", default=DEFAULT_SOURCE_RUNTIME_ROLLUP, type=pathlib.Path)
+    parser.add_argument("--error-action-routing-rollup", default=DEFAULT_ERROR_ACTION_ROUTING_ROLLUP, type=pathlib.Path)
+    parser.add_argument("--impact-rollup", default=DEFAULT_IMPACT_ROLLUP, type=pathlib.Path)
     parser.add_argument("report", nargs="?", default=COMPATIBILITY_REPORT_PATH, type=pathlib.Path)
     args = parser.parse_args()
 
@@ -504,6 +659,12 @@ def main() -> int:
         report = as_dict(load_json(args.report), args.report.as_posix())
         manifest = as_dict(load_json(args.manifest), args.manifest.as_posix())
         readiness = as_dict(load_json(args.readiness), args.readiness.as_posix())
+        source_runtime = as_dict(load_json(args.source_runtime_rollup), args.source_runtime_rollup.as_posix())
+        error_action_routing = as_dict(
+            load_json(args.error_action_routing_rollup),
+            args.error_action_routing_rollup.as_posix(),
+        )
+        downstream_impact = as_dict(load_json(args.impact_rollup), args.impact_rollup.as_posix())
 
         validator = jsonschema.Draft202012Validator(schema)
         errors = sorted(validator.iter_errors(report), key=lambda error: list(error.path))
@@ -514,7 +675,19 @@ def main() -> int:
                 print(f"  {location}: {error.message}", file=sys.stderr)
             return 1
 
-        validate_consistency(report, manifest, readiness, args.manifest, args.readiness)
+        validate_consistency(
+            report,
+            manifest,
+            readiness,
+            source_runtime,
+            error_action_routing,
+            downstream_impact,
+            args.manifest,
+            args.readiness,
+            args.source_runtime_rollup,
+            args.error_action_routing_rollup,
+            args.impact_rollup,
+        )
     except Exception as exc:  # noqa: BLE001 - release operators need the failed invariant
         print(f"FAIL {args.report}: {exc}", file=sys.stderr)
         return 1
