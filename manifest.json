@@ -5,7 +5,7 @@
   "provider": "data.go.kr",
   "source_registry": "data/data-go-kr.registry.json",
   "output_dir": ".",
-  "artifact_count": 77,
+  "artifact_count": 79,
   "artifacts": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -76,8 +76,8 @@
     {
       "path": "schemas/datapan.release-manifest.v1.schema.json",
       "kind": "schema",
-      "bytes": 2836,
-      "sha256": "15f79d7d420c30a1934f213a4d9b145d02a1137ec07d0334096da08b43885b66"
+      "bytes": 2895,
+      "sha256": "eeb23f1637f53781897198558e63c805c1dca2bf2f03952258f18ad1d693ec96"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -296,11 +296,17 @@
       "sha256": "78a262d5e79fff23b2c8aced961a691787a13ca6c5024e3f669ee5f489222e21"
     },
     {
+      "path": "schemas/datapan.credential-runtime-receipt-collection-queue.v1.schema.json",
+      "kind": "schema",
+      "bytes": 8995,
+      "sha256": "a418efeff037cf5bc66992c4f0b9be5b36513dab15921f8d7210de5dcbb19604"
+    },
+    {
       "path": "schemas/index.json",
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
-      "bytes": 18814,
-      "sha256": "91ce4f38a4d0dcd104905432a592a402c15b10131f62d4686271f09a01aa0521"
+      "bytes": 19294,
+      "sha256": "5027af6c673d928d0b49582ea6da22f46dfbda28a78407f209da63677688c478"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -363,7 +369,7 @@
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
       "bytes": 8072,
-      "sha256": "34feafd2bcdb8526868d47fbb8075ca2cfba748888236e5d5eb62fc93f43bcff"
+      "sha256": "dede949c612825e0a11211ba3c3023c26a61a4ee582574c92648140b979f9949"
     },
     {
       "path": "reports/credential-runtime-evidence-policy.json",
@@ -373,11 +379,18 @@
       "sha256": "450915ec3f052e83bc25e7aa28696f350dbf6d50fa973ec2cd9f2d281baf78ba"
     },
     {
+      "path": "reports/credential-runtime-receipt-collection-queue.json",
+      "kind": "credential_runtime_receipt_collection_queue",
+      "schema": "https://schemas.datapan.dev/datapan.credential-runtime-receipt-collection-queue.v1.schema.json",
+      "bytes": 11062,
+      "sha256": "f120007ac6844789337a45dbb3cbb86a75cb0b8198c0e7b000bdda3f546d85ec"
+    },
+    {
       "path": "reports/registry-impact-plan.json",
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "55293493e7a4948bab44bae158394477cb64b69b8ae97bd613decc488b8a250d"
+      "sha256": "96ea80b52486e0acd590fc1b7cd9f23e2f70ec725f3ba8a828c92d9065309f2f"
     },
     {
       "path": "reports/source-reference-drift.json",
@@ -391,7 +404,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 59095,
-      "sha256": "4c98ba756a8ee3df4f3486bec285e151cb748ddfb854231a7ca58eb458c55674"
+      "sha256": "46d013dd75079884aed1ad27e5d48ce228045fd001895a789b08bdb8997cff05"
     },
     {
       "path": "reports/dependencies.json",
@@ -461,14 +474,14 @@
       "kind": "consumer_compatibility",
       "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json",
       "bytes": 14812,
-      "sha256": "dd1e55fdd67ad6e9811c03a4708bf39a249e258b75f2ed6167f31b7452280c54"
+      "sha256": "fd29d9895e1cc05e7851dec240d8e9e07ff9a8eac63d0970bc3e647e3a5f04df"
     },
     {
       "path": "reports/release-assembly-receipt.json",
       "kind": "release_assembly_receipt",
       "schema": "https://schemas.datapan.dev/datapan.release-assembly-receipt.v1.schema.json",
-      "bytes": 19201,
-      "sha256": "b4657c22640cf1ca8913d29354a49dcf82b088468f13f921c0fe250da85956c1"
+      "bytes": 20448,
+      "sha256": "0f3d6bd439e6c70cfdd645ddadb5109c435176fddb469339c39228784746f867"
     },
     {
       "path": "reports/unadapted-external-probe.json",
