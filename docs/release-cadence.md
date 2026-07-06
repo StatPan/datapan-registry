@@ -72,7 +72,11 @@ check. That workflow:
   provider-index, and verification-summary artifacts;
 - installs the latest GitHub Release zip with
   `datapan catalog install datapan-registry`;
-- runs `datapan doctor --json` against that installed registry.
+- validates the install JSON with
+  `scripts/check-shard-aware-install-smoke.py`, which records either validated
+  shard metadata or canonical monolith fallback;
+- runs `datapan doctor --json` against that installed registry and uploads both
+  install and doctor JSON reports as release-health evidence.
 
 Recommended evidence before tagging:
 

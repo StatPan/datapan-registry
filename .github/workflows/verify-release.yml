@@ -143,11 +143,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
+          mkdir -p ../datapan-registry/.datapan/ci
           go run ./cmd/datapan catalog install datapan-registry \
             --registry "${RUNNER_TEMP}/datapan-installed-latest.registry.json" \
-            --json
+            --json \
+            > ../datapan-registry/.datapan/ci/latest-release-install.json
+          python3 ../datapan-registry/scripts/check-shard-aware-install-smoke.py \
+            ../datapan-registry/.datapan/ci/latest-release-install.json
           DATAPAN_REGISTRY_PATH="${RUNNER_TEMP}/datapan-installed-latest.registry.json" \
-            go run ./cmd/datapan doctor --json
+            go run ./cmd/datapan doctor --json \
+            > ../datapan-registry/.datapan/ci/latest-release-doctor.json
 
       - name: Upload release health reports
         uses: actions/upload-artifact@v7
