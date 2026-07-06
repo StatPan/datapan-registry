@@ -15,6 +15,8 @@ Reviewed receipt promotion is deterministic. Operators use `scripts/promote-cred
 
 Source runtime remediation findings link back to reviewed receipt paths. `reports/source-runtime-remediation-map.json` records the expected reviewed receipt artifact and current receipt state for each credential-related manual-review boundary so operators can see which finding is waiting for which reviewed receipt.
 
+Credential runtime collection has a local runner. `scripts/run-credential-runtime-collection.py` reads the checked-in queue, verifies candidate paths and credential environment presence without printing secret values, and can run a selected bounded source check only when the operator explicitly passes `--run`.
+
 Checked-in registry releases remain canonical-registry compatible while live credentialed receipts are absent. The remaining `credential_required`, `metadata_only_verification`, and `non_data_runtime_evidence_not_collected` findings stay manual-review boundaries until reviewed receipts are linked from source runtime remediation evidence.
 
 The receipt contract existing is not enough to reduce compatibility risk. Release
@@ -29,6 +31,8 @@ python3 scripts/generate-credential-runtime-evidence-policy.py --check
 python3 scripts/validate-credential-runtime-receipts.py
 python3 scripts/generate-credential-runtime-receipt-collection-queue.py --check
 python3 -m py_compile scripts/promote-credential-runtime-receipt.py
+python3 scripts/run-credential-runtime-collection.py --self-test
+python3 scripts/run-credential-runtime-collection.py --check
 ```
 
 Credential-gated operator pattern:
@@ -40,6 +44,14 @@ DATAPAN_<SOURCE>_API_KEY=<secret> datapan source runtime verify \
   --bounded \
   --json \
   --output .datapan/runtime-evidence/<source>-credentialed-receipt.json
+```
+
+Credential-gated runner pattern:
+
+```bash
+python3 scripts/run-credential-runtime-collection.py --source <source_id> --json
+python3 scripts/run-credential-runtime-collection.py --source <source_id> --require-env
+python3 scripts/run-credential-runtime-collection.py --source <source_id> --run
 ```
 
 Do not commit `.datapan/runtime-evidence/` receipts merely because the schema accepts them. A reviewed receipt must still be linked into source runtime remediation evidence before it can reduce a manual-review boundary.
