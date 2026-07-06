@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 42,
+  "count": 43,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -381,6 +381,15 @@
       "version": "v1",
       "bytes": 7279,
       "sha256": "3861e950a1fb56ca00ab70249c93c7f1a2b45fe4b523ede13310c940346db5b9"
+    },
+    {
+      "path": "schemas/datapan.safetydata-operation-candidates.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.safetydata-operation-candidates.v1.schema.json",
+      "title": "Datapan Safety Data Operation Candidates v1",
+      "contract": "safetydata-operation-candidates",
+      "version": "v1",
+      "bytes": 10248,
+      "sha256": "0b3fbe67bd0d237f4e34d621cc218b14fc300fc6cca26c1640a11231abfa5512"
     }
   ]
 }
