@@ -4,14 +4,17 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import pathlib
+import re
 import sys
 from typing import Any
 
 
 DEFAULT_MANIFEST = pathlib.Path("manifest.json")
 DEFAULT_REPORT_GLOB = "reports/*.json"
+SHA256_PATTERN = re.compile(r"^[a-f0-9]{64}$")
 EXEMPT_REPORTS = {
     "reports/latest-release-readiness.json": "release readiness receipt generated from the manifest",
     "reports/latest-release-verification.json": "release verification receipt generated from the manifest",
@@ -31,6 +34,11 @@ def as_dict(value: object, label: str | pathlib.Path) -> dict[str, Any]:
 
 def schema_uri(schema_version: str) -> str:
     return f"https://schemas.datapan.dev/{schema_version}.schema.json"
+
+
+def file_digest(path: pathlib.Path) -> tuple[int, str]:
+    data = path.read_bytes()
+    return len(data), hashlib.sha256(data).hexdigest()
 
 
 def manifest_artifacts(manifest_path: pathlib.Path) -> dict[str, dict[str, Any]]:
@@ -91,6 +99,26 @@ def validate_release_report_artifacts(manifest_path: pathlib.Path, report_glob: 
         if actual_schema != expected_schema:
             failures.append(
                 f"{report_path}: manifest schema expected {expected_schema}, got {actual_schema}"
+            )
+
+        actual_bytes, actual_sha256 = file_digest(path)
+        manifest_bytes = artifact.get("bytes")
+        manifest_sha256 = artifact.get("sha256")
+        if not isinstance(manifest_bytes, int) or manifest_bytes <= 0:
+            failures.append(
+                f"{report_path}: manifest bytes must be a positive integer, got {manifest_bytes}"
+            )
+        elif manifest_bytes != actual_bytes:
+            failures.append(
+                f"{report_path}: manifest bytes expected {actual_bytes}, got {manifest_bytes}"
+            )
+        if not isinstance(manifest_sha256, str) or not SHA256_PATTERN.fullmatch(manifest_sha256):
+            failures.append(
+                f"{report_path}: manifest sha256 must be a 64-character lowercase hex digest, got {manifest_sha256}"
+            )
+        elif manifest_sha256 != actual_sha256:
+            failures.append(
+                f"{report_path}: manifest sha256 expected {actual_sha256}, got {manifest_sha256}"
             )
         covered += 1
 
