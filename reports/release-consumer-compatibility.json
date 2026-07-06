@@ -34,6 +34,14 @@
       ".datapan/ci/latest-release-install-smoke.json",
       ".datapan/ci/latest-release-doctor-smoke.json",
       ".datapan/ci/release-health-rollup.json"
+    ],
+    "required_shard_install_fields": [
+      "mode",
+      "shards_asset_present",
+      "shards_validated",
+      "shards_inventory_present",
+      "shards_count",
+      "shards_records"
     ]
   },
   "shard_policy": {
