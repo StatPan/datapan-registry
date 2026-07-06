@@ -1,0 +1,53 @@
+{
+  "schema_version": "datapan.source-runtime-candidates.v1",
+  "generated_at": "2026-07-06T17:46:39Z",
+  "provider": "data.go.kr",
+  "source_id": "data_go_kr",
+  "source_profile": "sources/data_go_kr.json",
+  "references": {
+    "official_reference_urls": [
+      "https://www.data.go.kr/",
+      "https://www.data.go.kr/bbs/ntc/selectNoticeListView.do",
+      "https://www.data.go.kr/ugs/selectPublicDataUseGuideView.do"
+    ],
+    "last_reviewed_at": "2026-06-29"
+  },
+  "summary": {
+    "candidates": 1,
+    "pinned_sample_count": 1,
+    "credential_required": true,
+    "evidence_total": 0
+  },
+  "candidates": [
+    {
+      "candidate_id": "data-go-kr-open-data-list",
+      "label": "data.go.kr open data list bounded gateway query",
+      "operation_kind": "service_query",
+      "method": "GET",
+      "endpoint_template": "https://api.odcloud.kr/api/15077093/v1/open-data-list",
+      "format": "json",
+      "sample_parameters": {
+        "serviceKey": "${DATA_GO_KR_SERVICE_KEY}",
+        "page": "1",
+        "perPage": "5",
+        "returnType": "JSON"
+      },
+      "credential_policy": {
+        "required": true,
+        "key_names": [
+          "serviceKey"
+        ],
+        "injection_location": "query",
+        "placeholder": "${DATA_GO_KR_SERVICE_KEY}"
+      },
+      "expected_response": {
+        "items_path": "data",
+        "success_code": "200"
+      },
+      "evidence_status": "not_collected",
+      "promotion_status": "registry_only",
+      "reference_url": "https://www.data.go.kr/ugs/selectPublicDataUseGuideView.do",
+      "notes": "Pinned from checked-in dependency evidence for dataset 15077093. data.go.kr already has broad runtime evidence; this candidate preserves a source-scoped bounded gateway handoff for repeatable release operations."
+    }
+  ]
+}

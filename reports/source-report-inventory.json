@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-04T06:39:51Z",
+  "generated_at": "2026-07-06T17:46:39Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -25,13 +25,13 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 149,
+    "report_total": 151,
     "recommended_report_slots": 65,
-    "present_recommended_reports": 19,
-    "missing_recommended_reports": 46,
-    "source_report_coverage_percent": 29.2,
-    "schema_backed_reports": 24,
-    "schema_indexed_reports": 24,
+    "present_recommended_reports": 21,
+    "missing_recommended_reports": 44,
+    "source_report_coverage_percent": 32.3,
+    "schema_backed_reports": 26,
+    "schema_indexed_reports": 26,
     "schema_missing_reports": 0
   },
   "sources": [
@@ -55,7 +55,7 @@
         "reports/verification-plan.json"
       ],
       "report_dir_exists": true,
-      "report_count": 137,
+      "report_count": 139,
       "present_reports": [
         {
           "name": "adapter-targets.json",
@@ -736,6 +736,16 @@
           "schema_indexed": true
         },
         {
+          "name": "runtime-candidates.json",
+          "path": "reports/data-go-kr/runtime-candidates.json",
+          "bytes": 1796,
+          "sha256": "e2596134b3d79a9c3364280cac2b40ed1f3849644b215e24d7ed293bb053318e",
+          "schema_version": "datapan.source-runtime-candidates.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.source-runtime-candidates.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.source-runtime-candidates.v1.schema.json",
+          "schema_indexed": true
+        },
+        {
           "name": "runtime-evidence-growth.json",
           "path": "reports/data-go-kr/runtime-evidence-growth.json",
           "bytes": 7293,
@@ -743,6 +753,16 @@
           "schema_version": "datapan.runtime-evidence-growth.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.runtime-evidence-growth.v1.schema.json",
           "expected_schema_path": "schemas/datapan.runtime-evidence-growth.v1.schema.json",
+          "schema_indexed": true
+        },
+        {
+          "name": "runtime-evidence-plan.json",
+          "path": "reports/data-go-kr/runtime-evidence-plan.json",
+          "bytes": 3175,
+          "sha256": "97eeb46379e60650f969f8f4bdaa6f533ba89d785d43f32ca80f6902a855300a",
+          "schema_version": "datapan.source-runtime-evidence-plan.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.source-runtime-evidence-plan.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.source-runtime-evidence-plan.v1.schema.json",
           "schema_indexed": true
         },
         {
@@ -939,12 +959,11 @@
         "latest-verification.json",
         "provider-backlog.json",
         "route-disposition.json",
+        "runtime-candidates.json",
+        "runtime-evidence-plan.json",
         "verification-plan.json"
       ],
-      "missing_recommended_reports": [
-        "runtime-candidates.json",
-        "runtime-evidence-plan.json"
-      ],
+      "missing_recommended_reports": [],
       "extra_reports": [
         "acrc-verification-summary.json",
         "acrc-verification.json",
@@ -1073,7 +1092,7 @@
         "yuseong-verification-summary.json",
         "yuseong-verification.json"
       ],
-      "recommended_report_coverage_percent": 84.6
+      "recommended_report_coverage_percent": 100.0
     },
     {
       "source_id": "ecos",

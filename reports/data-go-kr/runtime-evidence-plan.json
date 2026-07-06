@@ -1,0 +1,82 @@
+{
+  "schema_version": "datapan.source-runtime-evidence-plan.v1",
+  "generated_at": "2026-07-06T17:46:39Z",
+  "provider": "data.go.kr",
+  "source_id": "data_go_kr",
+  "source_profile": "sources/data_go_kr.json",
+  "candidate_batch": "reports/data-go-kr/runtime-candidates.json",
+  "references": {
+    "official_reference_urls": [
+      "https://www.data.go.kr/",
+      "https://www.data.go.kr/bbs/ntc/selectNoticeListView.do",
+      "https://www.data.go.kr/ugs/selectPublicDataUseGuideView.do"
+    ],
+    "last_reviewed_at": "2026-06-29"
+  },
+  "summary": {
+    "evidence_total": 4774,
+    "blocking_count": 1,
+    "warning_count": 1,
+    "next_action_count": 3
+  },
+  "runtime_state": {
+    "evidence_status": "partial_runtime_evidence",
+    "evidence_total": 4774,
+    "verified": 2841,
+    "failed": 389,
+    "skipped": 1544,
+    "unknown": 0,
+    "verification_mode": "bounded_call",
+    "adapter_status": "registered",
+    "adapter_capabilities": [
+      "catalogue_import",
+      "verification",
+      "call",
+      "normalization"
+    ],
+    "auth_type": "service_key",
+    "credential_required": true,
+    "sample_param_policy": "catalogue_sample"
+  },
+  "blockers": [
+    {
+      "blocker_id": "credential_required",
+      "severity": "blocking",
+      "source_profile_field": "auth.type",
+      "expected_action": "Provide a non-secret serviceKey injection path for repeatable bounded data.go.kr runtime checks in local and CI release operations.",
+      "owner": "operator",
+      "status": "open"
+    },
+    {
+      "blocker_id": "source_specific_error_taxonomy_pending",
+      "severity": "warning",
+      "source_profile_field": "errors.taxonomy_status",
+      "expected_action": "Promote data.go.kr source error taxonomy from draft to verified once gateway, approval, missing-parameter, and provider-specific skip reasons are classified.",
+      "owner": "registry",
+      "status": "planned"
+    }
+  ],
+  "next_evidence_plan": {
+    "required_artifacts": [
+      "reports/data-go-kr/coverage-backlog.json",
+      "reports/data-go-kr/runtime-candidates.json",
+      "reports/latest-verification.json",
+      "reports/latest-verification-summary.json"
+    ],
+    "required_cli_capabilities": [
+      "source credential injection",
+      "bounded gateway verification batches",
+      "data.go.kr error taxonomy promotion"
+    ],
+    "first_batch_policy": "Use the pinned candidate batch to run a small credential-gated gateway check, while preserving the broader latest-verification evidence as the release-wide runtime baseline.",
+    "promotion_gate": "Do not treat data.go.kr runtime coverage as complete until credentialed checks are repeatable and source-specific error taxonomy is verified."
+  },
+  "warnings": [
+    {
+      "warning_id": "source_runtime_error_taxonomy_pending",
+      "expected": "data.go.kr runtime errors and skip reasons are governed by a verified source-specific taxonomy.",
+      "actual": "sources/data_go_kr.json still marks the error taxonomy as draft.",
+      "remaining": "Classify gateway, approval, missing-parameter, adapter, and provider-specific runtime reasons before closing the source runtime evidence loop."
+    }
+  ]
+}
