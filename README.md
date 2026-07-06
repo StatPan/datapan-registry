@@ -111,6 +111,10 @@ It also regenerates `reports/source-contract-rollup.json` from checked-in
 `sources/*.json` profiles, binding provider contract status, auth, request,
 response, runtime constraints, promotion state, and source profile checksums to
 the release manifest.
+The checked-in `reports/source-runtime-evidence-rollup.json` is also
+manifest-bound, so release verification proves the source runtime evidence
+plan inputs, blocker IDs, warning IDs, and zero-evidence source state that
+`docs/source-runtime-readiness.md` presents to operators.
 
 The current snapshot was generated from `datapan-cli` and includes:
 
@@ -279,6 +283,8 @@ A release is publishable when:
   as manifest-bound required artifacts;
 - schema index and provider index are present;
 - source contracts are summarized as manifest-bound release evidence;
+- source runtime evidence blockers and warnings are manifest-bound release
+  evidence;
 - registry size and LFS handling are explicit;
 - verification evidence is attached or documented;
 - generated artifacts do not contain credentials.
