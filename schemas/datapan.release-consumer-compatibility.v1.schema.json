@@ -48,8 +48,8 @@
     },
     "manifest_evidence_contracts": {
       "type": "array",
-      "minItems": 7,
-      "maxItems": 7,
+      "minItems": 8,
+      "maxItems": 8,
       "items": {
         "$ref": "#/$defs/manifest_evidence_contract"
       }
@@ -410,6 +410,7 @@
             "source_contracts",
             "source_runtime_evidence",
             "source_runtime_remediation",
+            "credential_runtime_evidence_policy",
             "error_action_routing",
             "downstream_impact",
             "source_reference_drift",
@@ -445,6 +446,7 @@
       "required": [
         "source_runtime_rollup",
         "source_runtime_remediation_map",
+        "credential_runtime_evidence_policy",
         "error_action_routing_rollup",
         "downstream_impact_rollup",
         "manual_review_required",
@@ -458,6 +460,11 @@
         "sources",
         "remediation_follow_up_required",
         "remediation_manual_review_boundaries",
+        "credential_policy_sources",
+        "credential_policy_manual_review_boundaries",
+        "credential_policy_live_receipts",
+        "credential_policy_default_ci_requires_credentials",
+        "credential_policy_effect",
         "error_action_blocking_rules",
         "error_action_manual_review_rules",
         "downstream_manual_review_changes"
@@ -468,6 +475,9 @@
         },
         "source_runtime_remediation_map": {
           "const": "reports/source-runtime-remediation-map.json"
+        },
+        "credential_runtime_evidence_policy": {
+          "const": "reports/credential-runtime-evidence-policy.json"
         },
         "error_action_routing_rollup": {
           "const": "reports/error-action-routing-rollup.json"
@@ -486,14 +496,17 @@
         },
         "required_contracts": {
           "type": "array",
-          "minItems": 4,
-          "maxItems": 4,
+          "minItems": 5,
+          "maxItems": 5,
           "prefixItems": [
             {
               "const": "source_runtime_evidence"
             },
             {
               "const": "source_runtime_remediation"
+            },
+            {
+              "const": "credential_runtime_evidence_policy"
             },
             {
               "const": "error_action_routing"
@@ -537,6 +550,23 @@
         },
         "remediation_manual_review_boundaries": {
           "$ref": "#/$defs/count"
+        },
+        "credential_policy_sources": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_policy_manual_review_boundaries": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_policy_live_receipts": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_policy_default_ci_requires_credentials": {
+          "type": "boolean"
+        },
+        "credential_policy_effect": {
+          "enum": [
+            "credential_safe_manual_review_boundary"
+          ]
         },
         "error_action_blocking_rules": {
           "$ref": "#/$defs/count"

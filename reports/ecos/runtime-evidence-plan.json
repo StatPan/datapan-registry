@@ -17,7 +17,7 @@
     "evidence_total": 0,
     "blocking_count": 2,
     "warning_count": 1,
-    "next_action_count": 3
+    "next_action_count": 4
   },
   "runtime_state": {
     "evidence_status": "no_runtime_evidence",
@@ -57,14 +57,16 @@
   "next_evidence_plan": {
     "required_artifacts": [
       "reports/ecos/coverage.json",
-      "reports/ecos/latest-verification.json",
-      "reports/ecos/latest-verification-summary.json",
-      "reports/ecos/verification-plan.json"
+    "reports/ecos/latest-verification.json",
+    "reports/ecos/latest-verification-summary.json",
+    "reports/ecos/verification-plan.json",
+    "reports/credential-runtime-evidence-policy.json"
     ],
     "required_cli_capabilities": [
-      "runtime candidate batch ingestion",
-      "source credential injection",
-      "ECOS error signature extraction"
+    "runtime candidate batch ingestion",
+    "source credential injection",
+    "credential-safe runtime receipt policy",
+    "ECOS error signature extraction"
     ],
     "first_batch_policy": "Run a credential-gated bounded sample-call batch only after ECOS statCode/cycle/date-window/itemCode parameters are pinned.",
     "promotion_gate": "Do not promote ECOS datasets beyond registry_only until runtime evidence and time-series mapping contracts exist."

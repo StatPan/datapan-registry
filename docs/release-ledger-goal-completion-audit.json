@@ -11,18 +11,18 @@
     "criteria_partial": 0,
     "criteria_gap": 0,
     "decision": "leave_goal_open",
-    "reason": "The release assembly path is now receipt-bound, but #344 remains open because source runtime blockers, warnings, manual-review compatibility gates, and follow-up remediation work still prevent the broader registry-ledger vision from being treated as complete."
+    "reason": "The release assembly path is receipt-bound and credential-safe runtime evidence is now policy-bound, but #344 remains open because live credentialed runtime receipts are not checked in and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
   },
   "current_state_evidence": {
     "manifest": {
       "path": "manifest.json",
-      "artifact_count": 74,
-      "artifact_kinds": 29,
-      "schema_artifacts": 46
+      "artifact_count": 76,
+      "artifact_kinds": 30,
+      "schema_artifacts": 47
     },
     "schema_index": {
       "path": "schemas/index.json",
-      "schema_count": 46
+      "schema_count": 47
     },
     "release_readiness": {
       "path": "reports/latest-release-readiness.json",
@@ -68,7 +68,17 @@
       "blocked_consumers": 1,
       "manual_review_required": true,
       "runtime_blocking_count": 9,
-      "runtime_warning_count": 4
+      "runtime_warning_count": 4,
+      "credential_policy_live_receipts": 0
+    },
+    "credential_runtime_policy": {
+      "path": "reports/credential-runtime-evidence-policy.json",
+      "policy_ticket": 364,
+      "credential_gated_sources": 5,
+      "manual_review_boundaries": 13,
+      "live_credentialed_receipts_checked_in": 0,
+      "default_ci_requires_credentials": false,
+      "checked_in_secrets_allowed": false
     }
   },
   "criteria": [
@@ -79,7 +89,7 @@
       "evidence": [
         {
           "path": "reports/release-assembly-receipt.json",
-          "finding": "Records the unified assembly phases, operator commands, check commands, workflow fragments, release inputs, and current manual-review status."
+          "finding": "Records the unified assembly phases, including credential runtime evidence policy, operator commands, check commands, workflow fragments, release inputs, and current manual-review status."
         },
         {
           "path": "scripts/generate-release-assembly-receipt.py",
@@ -116,7 +126,7 @@
         },
         {
           "path": ".github/workflows/verify-release.yml",
-          "finding": "Runs schema sync, manifest sync, ownership, goal audit, assembly receipt, source runtime, impact, compatibility, release receipt, package, shard, install, and doctor checks."
+          "finding": "Runs schema sync, manifest sync, ownership, goal audit, assembly receipt, source runtime, credential runtime policy, impact, compatibility, release receipt, package, shard, install, and doctor checks."
         },
         {
           "path": "scripts/sync-release-schema-artifacts.py",
@@ -140,11 +150,11 @@
       "evidence": [
         {
           "path": "manifest.json",
-          "finding": "Contains 74 manifest-bound artifacts across 29 artifact kinds, including 46 schema artifacts."
+          "finding": "Contains 76 manifest-bound artifacts across 30 artifact kinds, including 47 schema artifacts."
         },
         {
           "path": "schemas/index.json",
-          "finding": "Indexes 46 schema contracts and checks schema artifact bytes and sha256."
+          "finding": "Indexes 47 schema contracts and checks schema artifact bytes and sha256."
         },
         {
           "path": "reports/source-report-inventory.json",
@@ -152,7 +162,7 @@
         },
         {
           "path": "reports/release-consumer-compatibility.json",
-          "finding": "Binds source contracts, source runtime evidence, source runtime remediation, error/action routing, downstream impact, source reference drift, and source report inventory as manifest evidence contracts."
+          "finding": "Binds source contracts, source runtime evidence, source runtime remediation, credential runtime evidence policy, error/action routing, downstream impact, source reference drift, and source report inventory as manifest evidence contracts."
         },
         {
           "path": "reports/release-assembly-receipt.json",
@@ -193,6 +203,10 @@
         {
           "path": "scripts/validate-source-report-inventory.py",
           "finding": "Validates source report inventory coverage and schema-index linkage."
+        },
+        {
+          "path": "reports/credential-runtime-evidence-policy.json",
+          "finding": "Defines secret-free CI behavior, per-source credential environment names, bounded candidate batches, local receipt paths, and manual-review boundaries without claiming live credentialed receipts."
         }
       ],
       "next_action": "Keep expanding source runtime evidence through separate runtime evidence tickets; do not block this ledger-audit criterion on full provider coverage."
@@ -208,7 +222,7 @@
         },
         {
           "path": "reports/release-consumer-compatibility.json",
-          "finding": "Reports seven consumers, two proven consumers, one blocked consumer, canonical registry requirement, optional shard assets, runtime manual-review evidence, and source runtime remediation follow-up counts."
+          "finding": "Reports seven consumers, two proven consumers, one blocked consumer, canonical registry requirement, optional shard assets, runtime manual-review evidence, source runtime remediation counts, and credential policy receipt state."
         },
         {
           "path": "scripts/validate-impact-plans.py",
@@ -216,7 +230,11 @@
         },
         {
           "path": "scripts/validate-release-consumer-compatibility.py",
-          "finding": "Fails if source runtime blockers remain but remediation follow-up evidence, runtime manual-review evidence, error/action routing evidence, or downstream manual-review impact evidence disappears."
+          "finding": "Fails if source runtime blockers remain but remediation evidence, credential runtime policy evidence, error/action routing evidence, or downstream manual-review impact evidence disappears."
+        },
+        {
+          "path": "reports/credential-runtime-evidence-policy.json",
+          "finding": "Keeps unresolved credential-gated source runtime checks secret-free by default and marks live credentialed receipt count as zero."
         }
       ],
       "next_action": "Keep compatibility evidence current whenever source runtime blockers or downstream contracts change."
@@ -239,7 +257,7 @@
           "finding": "Records the current assembly path while preserving manual-review and not_complete goal status."
         }
       ],
-      "next_action": "Use this audit to keep #344 open until runtime manual-review risks are remediated or explicitly accepted."
+      "next_action": "Use this audit to keep #344 open until credentialed runtime receipts exist or the manual-review release boundary is explicitly accepted."
     }
   ],
   "remaining_goal_risks": [
@@ -247,6 +265,11 @@
       "id": "source_runtime_manual_review_required",
       "evidence": "reports/source-runtime-remediation-map.json",
       "finding": "The current remediation map still routes unresolved credential, metadata-only verification, and non-data runtime evidence findings to manual-review boundaries."
+    },
+    {
+      "id": "credentialed_runtime_receipts_absent",
+      "evidence": "reports/credential-runtime-evidence-policy.json",
+      "finding": "Credential-gated runtime checks now have a secret-safe policy path, but live credentialed receipts are still not checked in and default CI remains secret-free."
     },
     {
       "id": "consumer_compatibility_manual_review_required",
@@ -267,6 +290,7 @@
     "python3 scripts/validate-source-report-inventory.py",
     "python3 scripts/validate-source-runtime-evidence-rollup.py",
     "python3 scripts/generate-source-runtime-remediation-map.py --check",
+    "python3 scripts/generate-credential-runtime-evidence-policy.py --check",
     "python3 scripts/generate-release-consumer-compatibility.py --check",
     "python3 scripts/validate-release-consumer-compatibility.py",
     "python3 scripts/package-registry-release.py --manifest manifest.json --output .datapan/ci/datapan-registry-snapshot-test.zip",
@@ -287,6 +311,11 @@
       "issue": 364,
       "title": "Define credential-safe runtime evidence path",
       "reason": "The remaining runtime blockers are credential and metadata-only evidence boundaries that need a secret-safe live evidence path before #344 can be considered complete."
+    },
+    {
+      "issue": 366,
+      "title": "Define redacted credential runtime receipt contract",
+      "reason": "Credential-safe runtime paths now exist, but live evidence needs a redacted receipt schema and validator before checked-in receipts can safely reduce manual-review boundaries."
     }
   ]
 }

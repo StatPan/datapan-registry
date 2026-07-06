@@ -46,9 +46,9 @@
   ],
   "schema_index_input": {
     "path": "schemas/index.json",
-    "schemas": 46,
-    "bytes": 17957,
-    "sha256": "ca09cac02737663e424873aab1a0c29599dd6648c088a59e690ec96de73832fb"
+    "schemas": 47,
+    "bytes": 18401,
+    "sha256": "929c5d0a66af0a9818d5f8ef9c9b08d75aa4842e3eca062a8394b9a4fc3719fe"
   },
   "recommended_reports": [
     "adapter-targets.json",
@@ -801,8 +801,8 @@
         {
           "name": "runtime-evidence-plan.json",
           "path": "reports/data-go-kr/runtime-evidence-plan.json",
-          "bytes": 2290,
-          "sha256": "c05dbab550f6a7ed670295451a6a458e57b58048265f3886a35b5a95c7c99675",
+          "bytes": 2383,
+          "sha256": "a1779eb27da8155cf32ed4d9be1da6a23711726b0ca753bd6c248eb51ee0f6be",
           "schema_version": "datapan.source-runtime-evidence-plan.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.source-runtime-evidence-plan.v1.schema.json",
           "expected_schema_path": "schemas/datapan.source-runtime-evidence-plan.v1.schema.json",
@@ -1170,8 +1170,8 @@
         {
           "name": "runtime-evidence-plan.json",
           "path": "reports/ecos/runtime-evidence-plan.json",
-          "bytes": 2851,
-          "sha256": "cb5bd59022fdece129013748ea846f78bae69cfcf3811874d389b48cff0b9551",
+          "bytes": 2940,
+          "sha256": "3d4782acd6e36ae375a268ed2b4e32380adde5344e81aadf54af8ed84aa78afa",
           "schema_version": "datapan.source-runtime-evidence-plan.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.source-runtime-evidence-plan.v1.schema.json",
           "expected_schema_path": "schemas/datapan.source-runtime-evidence-plan.v1.schema.json",
@@ -1233,8 +1233,8 @@
         {
           "name": "runtime-evidence-plan.json",
           "path": "reports/kosis/runtime-evidence-plan.json",
-          "bytes": 2831,
-          "sha256": "04ba29733a8336286d9172803c8b81ff88c51921778da9a190f9bdd21eac9cb9",
+          "bytes": 2920,
+          "sha256": "1106888f1ff72ec61c17f5c5ca46a99aa927728708712e249291d84cfae3c6fa",
           "schema_version": "datapan.source-runtime-evidence-plan.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.source-runtime-evidence-plan.v1.schema.json",
           "expected_schema_path": "schemas/datapan.source-runtime-evidence-plan.v1.schema.json",
@@ -1296,8 +1296,8 @@
         {
           "name": "runtime-evidence-plan.json",
           "path": "reports/open-assembly/runtime-evidence-plan.json",
-          "bytes": 2952,
-          "sha256": "b9e20e7a078057a4ba320bda7de6f56c1a042d2d0134f61e44e30ffa5a724039",
+          "bytes": 3041,
+          "sha256": "7ea7eaff5ae96214ab3835842406c767dc416295c952a5ad3adeba2af94a7386",
           "schema_version": "datapan.source-runtime-evidence-plan.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.source-runtime-evidence-plan.v1.schema.json",
           "expected_schema_path": "schemas/datapan.source-runtime-evidence-plan.v1.schema.json",
@@ -1359,8 +1359,8 @@
         {
           "name": "runtime-evidence-plan.json",
           "path": "reports/seoul-open-data/runtime-evidence-plan.json",
-          "bytes": 3059,
-          "sha256": "720182cd188e6b6473af932e234e878cf31f3e84bdd5d28d845e1e8323709d6b",
+          "bytes": 3148,
+          "sha256": "900b5c42698a2e73d729adeede7de1565783cef102426a11f0991c258a3e274a",
           "schema_version": "datapan.source-runtime-evidence-plan.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.source-runtime-evidence-plan.v1.schema.json",
           "expected_schema_path": "schemas/datapan.source-runtime-evidence-plan.v1.schema.json",
