@@ -3,8 +3,8 @@
   "root": ".",
   "schema_version": "datapan.release-verification.v1",
   "manifest_schema_version": "datapan.release-manifest.v1",
-  "artifact_count": 54,
-  "checked": 54,
+  "artifact_count": 56,
+  "checked": 56,
   "failed": 0,
   "ok": true,
   "results": [
@@ -111,10 +111,10 @@
       "path": "schemas/datapan.release-manifest.v1.schema.json",
       "kind": "schema",
       "status": "verified",
-      "expected_bytes": 2460,
-      "actual_bytes": 2460,
-      "expected_sha256": "abf909d7c1001e44414d56ebca57f0bfb6e7f7d6d8018f5f43613a092d308514",
-      "actual_sha256": "abf909d7c1001e44414d56ebca57f0bfb6e7f7d6d8018f5f43613a092d308514"
+      "expected_bytes": 2503,
+      "actual_bytes": 2503,
+      "expected_sha256": "f4d50163123453a9fcd23b3beba53b3bddad69e739c80e5c1c04c54d380da6fb",
+      "actual_sha256": "f4d50163123453a9fcd23b3beba53b3bddad69e739c80e5c1c04c54d380da6fb"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -315,13 +315,22 @@
       "actual_sha256": "26bcb7a8b54a740c29d77eacd50f236f08cc8d7cd4dda81ba8b585b5cec9d2d8"
     },
     {
+      "path": "schemas/datapan.error-action-routing-rollup.v1.schema.json",
+      "kind": "schema",
+      "status": "verified",
+      "expected_bytes": 5078,
+      "actual_bytes": 5078,
+      "expected_sha256": "cc1797e18e53cce41fb1b8b6c35c57a65f270caa44d7d437056d16d18d03d8fe",
+      "actual_sha256": "cc1797e18e53cce41fb1b8b6c35c57a65f270caa44d7d437056d16d18d03d8fe"
+    },
+    {
       "path": "schemas/index.json",
       "kind": "schema_index",
       "status": "verified",
-      "expected_bytes": 13026,
-      "actual_bytes": 13026,
-      "expected_sha256": "54de50348425dbf5cfb990d9a23ead5aac2b6473ccf5031be2ce7239f953e3aa",
-      "actual_sha256": "54de50348425dbf5cfb990d9a23ead5aac2b6473ccf5031be2ce7239f953e3aa"
+      "expected_bytes": 13442,
+      "actual_bytes": 13442,
+      "expected_sha256": "5989e4d4e7d06c0c67bc0c2023ef39400ed16afc3e0094ae622937dc6e072a58",
+      "actual_sha256": "5989e4d4e7d06c0c67bc0c2023ef39400ed16afc3e0094ae622937dc6e072a58"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -367,6 +376,15 @@
       "actual_bytes": 3305358,
       "expected_sha256": "e3a6eefc67dd896acadc89b2a9e0b2dd85d9f9680ae1c149397d4bfcb3555ad2",
       "actual_sha256": "e3a6eefc67dd896acadc89b2a9e0b2dd85d9f9680ae1c149397d4bfcb3555ad2"
+    },
+    {
+      "path": "reports/error-action-routing-rollup.json",
+      "kind": "error_action_routing_rollup",
+      "status": "verified",
+      "expected_bytes": 6822,
+      "actual_bytes": 6822,
+      "expected_sha256": "f92c4a0f10f5b11e56173aed3e81834eb7071cbc7c5b0676a5a3e3f40c28bfd7",
+      "actual_sha256": "f92c4a0f10f5b11e56173aed3e81834eb7071cbc7c5b0676a5a3e3f40c28bfd7"
     },
     {
       "path": "reports/dependencies.json",

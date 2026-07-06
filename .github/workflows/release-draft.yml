@@ -84,6 +84,8 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install jsonschema
           python -m py_compile \
+            scripts/error_action_routing_rollup.py \
+            scripts/generate-error-action-routing-rollup.py \
             scripts/generate-impact-plan-rollup.py \
             scripts/generate-release-consumer-compatibility.py \
             scripts/generate-release-health-rollup.py \
@@ -92,6 +94,7 @@ jobs:
             scripts/package-registry-shards.py \
             scripts/release_health_rollup.py \
             scripts/validate-doctor-smoke-summaries.py \
+            scripts/validate-error-action-routing-rollups.py \
             scripts/validate-install-smoke-summaries.py \
             scripts/validate-release-consumer-compatibility.py \
             scripts/validate-release-health-rollups.py \
@@ -101,6 +104,8 @@ jobs:
           python scripts/validate-external-adapter-backlog.py
           python scripts/validate-source-profiles.py
           python scripts/validate-error-action-catalogs.py
+          python scripts/generate-error-action-routing-rollup.py --check
+          python scripts/validate-error-action-routing-rollups.py
           python scripts/validate-external-coverage.py
           python scripts/generate-impact-plan-rollup.py --check
           python scripts/validate-impact-plans.py
