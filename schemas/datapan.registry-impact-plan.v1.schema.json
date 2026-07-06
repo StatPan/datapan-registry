@@ -59,6 +59,12 @@
         "$ref": "#/$defs/source_plan_input"
       }
     },
+    "release_evidence_inputs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/release_evidence_input"
+      }
+    },
     "summary": {
       "$ref": "#/$defs/summary"
     },
@@ -96,6 +102,39 @@
         },
         "changes": {
           "$ref": "#/$defs/count"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "release_evidence_input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "path",
+        "schema",
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema": {
+          "type": "string",
+          "minLength": 1
         },
         "bytes": {
           "type": "integer",

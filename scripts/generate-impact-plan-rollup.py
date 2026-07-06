@@ -14,6 +14,10 @@ import sys
 CLIENT_SERVER_TARGETS = {"dataset-api", "sdk", "mcp"}
 RELEASE_OVERLAY_PROVIDER = "datapan-registry"
 RELEASE_OVERLAY_SOURCE_ID = "registry"
+RELEASE_EVIDENCE_KINDS = (
+    "error_action_routing_rollup",
+    "source_report_inventory",
+)
 
 
 def load_json(path: pathlib.Path) -> dict[str, object]:
@@ -27,6 +31,46 @@ def load_json(path: pathlib.Path) -> dict[str, object]:
 def file_digest(path: pathlib.Path) -> tuple[int, str]:
     data = path.read_bytes()
     return len(data), hashlib.sha256(data).hexdigest()
+
+
+def release_evidence_inputs(manifest_path: pathlib.Path) -> list[dict[str, object]]:
+    manifest = load_json(manifest_path)
+    artifacts = manifest.get("artifacts")
+    if not isinstance(artifacts, list):
+        raise ValueError(f"{manifest_path}: artifacts must be an array")
+
+    by_kind: dict[str, dict[str, object]] = {}
+    for index, artifact in enumerate(artifacts):
+        if not isinstance(artifact, dict):
+            raise ValueError(f"{manifest_path}: artifacts[{index}] must be an object")
+        kind = artifact.get("kind")
+        if isinstance(kind, str):
+            by_kind[kind] = artifact
+
+    inputs: list[dict[str, object]] = []
+    for kind in RELEASE_EVIDENCE_KINDS:
+        artifact = by_kind.get(kind)
+        if artifact is None:
+            raise ValueError(f"{manifest_path}: missing release evidence artifact kind {kind}")
+        path_value = artifact.get("path")
+        if not isinstance(path_value, str) or not path_value:
+            raise ValueError(f"{manifest_path}: artifact kind {kind} path must be a non-empty string")
+        artifact_path = pathlib.Path(path_value)
+        byte_count, sha256 = file_digest(artifact_path)
+        if artifact.get("bytes") != byte_count:
+            raise ValueError(f"{path_value}: manifest bytes expected {byte_count}, got {artifact.get('bytes')}")
+        if artifact.get("sha256") != sha256:
+            raise ValueError(f"{path_value}: manifest sha256 expected {sha256}, got {artifact.get('sha256')}")
+        inputs.append(
+            {
+                "kind": kind,
+                "path": path_value,
+                "schema": artifact.get("schema"),
+                "bytes": byte_count,
+                "sha256": sha256,
+            }
+        )
+    return inputs
 
 
 def source_plan_input(path: pathlib.Path, plan: dict[str, object]) -> dict[str, object]:
@@ -129,7 +173,11 @@ def common_value(plans: list[dict[str, object]], key: str, fallback: str) -> str
     return fallback
 
 
-def build_rollup(reports_dir: pathlib.Path, output: pathlib.Path) -> tuple[dict[str, object], int]:
+def build_rollup(
+    reports_dir: pathlib.Path,
+    output: pathlib.Path,
+    manifest_path: pathlib.Path,
+) -> tuple[dict[str, object], int]:
     paths = source_plan_paths(reports_dir, output)
     if not paths:
         raise ValueError("no source-scoped registry impact plans found")
@@ -164,6 +212,7 @@ def build_rollup(reports_dir: pathlib.Path, output: pathlib.Path) -> tuple[dict[
         "previous_registry": "reports/*/registry-impact-plan.json",
         "current_registry": str(output),
         "source_plan_inputs": source_inputs,
+        "release_evidence_inputs": release_evidence_inputs(manifest_path),
         "summary": count_entries(changes),
         "changes": changes,
     }
@@ -182,6 +231,7 @@ def main() -> int:
         type=pathlib.Path,
         default=pathlib.Path("reports/registry-impact-plan.json"),
     )
+    parser.add_argument("--manifest", type=pathlib.Path, default=pathlib.Path("manifest.json"))
     parser.add_argument(
         "--check",
         action="store_true",
@@ -190,7 +240,7 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
-        rollup, source_count = build_rollup(args.reports_dir, args.output)
+        rollup, source_count = build_rollup(args.reports_dir, args.output, args.manifest)
     except ValueError as exc:
         raise SystemExit(str(exc)) from exc
 

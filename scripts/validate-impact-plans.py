@@ -21,6 +21,11 @@ except ImportError as exc:  # pragma: no cover - environment guard
 CLIENT_SERVER_TARGETS = {"dataset-api", "sdk", "mcp"}
 REGISTRY_ONLY_NO_ACTION_TARGETS = {"datapan-data", "dataset-api", "sdk", "mcp"}
 SCHEMA_RELEASE_ENDPOINT_ID = "registry:schema-release-surface"
+RELEASE_EVIDENCE_KINDS = (
+    "error_action_routing_rollup",
+    "source_report_inventory",
+)
+CONSUMER_COMPATIBILITY_PATH = pathlib.Path("reports/release-consumer-compatibility.json")
 
 
 def load_json(path: pathlib.Path) -> object:
@@ -53,6 +58,22 @@ def source_plan_paths(release_path: pathlib.Path) -> list[pathlib.Path]:
         for path in sorted(pathlib.Path("reports").glob("*/registry-impact-plan.json"))
         if path.resolve() != release_path.resolve()
     ]
+
+
+def manifest_artifacts(manifest_path: pathlib.Path = pathlib.Path("manifest.json")) -> dict[str, dict[str, object]]:
+    manifest = as_dict(load_json(manifest_path), manifest_path)
+    artifacts = manifest.get("artifacts")
+    if not isinstance(artifacts, list):
+        raise ValueError("manifest.artifacts must be an array")
+
+    by_kind: dict[str, dict[str, object]] = {}
+    for index, artifact in enumerate(artifacts):
+        if not isinstance(artifact, dict):
+            raise ValueError(f"manifest.artifacts[{index}] must be an object")
+        kind = artifact.get("kind")
+        if isinstance(kind, str):
+            by_kind[kind] = artifact
+    return by_kind
 
 
 def count_summary(entries: object, key: str) -> dict[str, int]:
@@ -255,6 +276,83 @@ def validate_release_source_inputs(path: pathlib.Path, plan: dict[str, object]) 
         )
 
 
+def validate_release_evidence_inputs(plan: dict[str, object]) -> None:
+    if plan.get("scope", "source") != "release":
+        return
+
+    inputs = plan.get("release_evidence_inputs")
+    if not isinstance(inputs, list) or not inputs:
+        raise ValueError("release impact rollup must include non-empty release_evidence_inputs")
+
+    expected_artifacts = manifest_artifacts()
+    actual_kinds = [item.get("kind") for item in inputs if isinstance(item, dict)]
+    if actual_kinds != list(RELEASE_EVIDENCE_KINDS):
+        raise ValueError(f"release_evidence_inputs kinds expected {list(RELEASE_EVIDENCE_KINDS)}, got {actual_kinds}")
+
+    for index, raw_input in enumerate(inputs):
+        if not isinstance(raw_input, dict):
+            raise ValueError(f"release_evidence_inputs[{index}] must be an object")
+        kind = raw_input.get("kind")
+        if not isinstance(kind, str) or not kind:
+            raise ValueError(f"release_evidence_inputs[{index}].kind must be a non-empty string")
+        artifact = expected_artifacts.get(kind)
+        if artifact is None:
+            raise ValueError(f"release_evidence_inputs[{index}] references missing manifest kind {kind}")
+
+        expected_path = artifact.get("path")
+        if not isinstance(expected_path, str) or not expected_path:
+            raise ValueError(f"manifest artifact kind {kind} path must be a non-empty string")
+        input_path = pathlib.Path(expected_path)
+        if not input_path.is_file():
+            raise ValueError(f"release_evidence_inputs[{index}].path is missing: {input_path}")
+        expected_bytes, expected_sha256 = file_digest(input_path)
+        expected_values = {
+            "path": expected_path,
+            "schema": artifact.get("schema"),
+            "bytes": expected_bytes,
+            "sha256": expected_sha256,
+        }
+        for key, value in expected_values.items():
+            if raw_input.get(key) != value:
+                raise ValueError(
+                    f"release_evidence_inputs[{index}].{key} expected {value}, got {raw_input.get(key)}"
+                )
+
+
+def validate_consumer_compatibility_impact_contract(path: pathlib.Path) -> None:
+    if not CONSUMER_COMPATIBILITY_PATH.exists():
+        raise ValueError(f"consumer compatibility report is missing: {CONSUMER_COMPATIBILITY_PATH}")
+
+    compatibility = as_dict(load_json(CONSUMER_COMPATIBILITY_PATH), CONSUMER_COMPATIBILITY_PATH)
+    contracts = compatibility.get("manifest_evidence_contracts")
+    if not isinstance(contracts, list):
+        raise ValueError("consumer compatibility manifest_evidence_contracts must be an array")
+
+    matching = [
+        contract
+        for contract in contracts
+        if isinstance(contract, dict) and contract.get("contract") == "downstream_impact"
+    ]
+    if len(matching) != 1:
+        raise ValueError("consumer compatibility must include exactly one downstream_impact evidence contract")
+
+    expected_bytes, expected_sha256 = file_digest(path)
+    expected_values = {
+        "path": path.as_posix(),
+        "kind": "registry_impact_plan",
+        "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
+        "bytes": expected_bytes,
+        "sha256": expected_sha256,
+        "required": True,
+    }
+    contract = matching[0]
+    for key, value in expected_values.items():
+        if contract.get(key) != value:
+            raise ValueError(
+                f"consumer compatibility downstream_impact.{key} expected {value}, got {contract.get(key)}"
+            )
+
+
 def validate_consistency(path: pathlib.Path, plan: dict[str, object]) -> None:
     scope = plan.get("scope", "source")
     provider = plan.get("provider")
@@ -325,6 +423,9 @@ def validate_consistency(path: pathlib.Path, plan: dict[str, object]) -> None:
     validate_error_taxonomy_impact_link(path, plan)
     validate_schema_release_impact_gate(path, plan)
     validate_release_source_inputs(path, plan)
+    validate_release_evidence_inputs(plan)
+    if scope == "release":
+        validate_consumer_compatibility_impact_contract(path)
 
 
 def main() -> int:

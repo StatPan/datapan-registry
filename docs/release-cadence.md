@@ -126,7 +126,11 @@ check. That workflow:
   promotion work;
 - regenerates and validates `reports/registry-impact-plan.json`, the
   manifest-bound downstream impact rollup that preserves client/server action
-  hints, manual-review flags, and no-action boundaries for consumers;
+  hints, manual-review flags, and no-action boundaries for consumers. The
+  rollup also records release evidence inputs for error/action routing, source
+  report inventory, and the validator checks the consumer compatibility
+  downstream impact contract so impact state cannot drift away from the evidence
+  consumers use;
 - validates top-level schema-backed report manifest coverage with
   `scripts/validate-release-report-artifacts.py`, so new release reports cannot
   stay outside `manifest.json` or carry stale schema, bytes, or sha256 metadata
