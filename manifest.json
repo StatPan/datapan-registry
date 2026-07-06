@@ -142,8 +142,8 @@
     {
       "path": "schemas/datapan.source-runtime-evidence-rollup.v1.schema.json",
       "kind": "schema",
-      "bytes": 5143,
-      "sha256": "73e870fbab654935cce35a4d68427aea58e03368777fe7801a31283e6566d187"
+      "bytes": 6128,
+      "sha256": "1fbc1949f409a39f0160ace76bab70183c6b766dadf01eb017f4d19a20002f31"
     },
     {
       "path": "schemas/datapan.specs.v1.schema.json",
@@ -276,7 +276,7 @@
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
       "bytes": 17124,
-      "sha256": "bd5cc69d035270aa4b81107c2092f013c97ccb7d52eddb7b1b030ea7872e7a10"
+      "sha256": "8a91a36840f045005ddb9387250aeeaee516d885db37767118c0db19d5fe69b3"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -331,8 +331,8 @@
       "path": "reports/source-runtime-evidence-rollup.json",
       "kind": "source_runtime_evidence_rollup",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-evidence-rollup.v1.schema.json",
-      "bytes": 6016,
-      "sha256": "4c42f7be43f93e3969bc3cddea5fa9815c1b74966a1a0f8e211c1c47ecf12438"
+      "bytes": 7380,
+      "sha256": "48a15d43b4c4262a6d0b30e7f20e5f500343c65666b221affa9604bffb9c4040"
     },
     {
       "path": "reports/registry-impact-plan.json",
@@ -353,7 +353,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 59095,
-      "sha256": "a012d4bfa1c4adab065fad95b729383f69aefafb3d9e5f4a0734e9127c36fe7e"
+      "sha256": "c07131b2860a2bf1c8df4897a57f219fab37ccaab7d74cf596bd4db8e6e18c78"
     },
     {
       "path": "reports/dependencies.json",
@@ -423,7 +423,7 @@
       "kind": "consumer_compatibility",
       "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json",
       "bytes": 9186,
-      "sha256": "1507d2d9c2999a0bec09714672f3714963d15caa528330e8ea7f64e23b25deb3"
+      "sha256": "94b03249f9ba7dcf89f70ffaa11894b99a91f4e551bee3dfd7dd487839c06c15"
     },
     {
       "path": "reports/unadapted-external-probe.json",
