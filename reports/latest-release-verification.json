@@ -1,10 +1,10 @@
 {
-  "manifest": "manifest.json",
-  "root": ".",
+  "manifest": "../datapan-registry/manifest.json",
+  "root": "../datapan-registry",
   "schema_version": "datapan.release-verification.v1",
   "manifest_schema_version": "datapan.release-manifest.v1",
-  "artifact_count": 56,
-  "checked": 56,
+  "artifact_count": 58,
+  "checked": 58,
   "failed": 0,
   "ok": true,
   "results": [
@@ -111,10 +111,10 @@
       "path": "schemas/datapan.release-manifest.v1.schema.json",
       "kind": "schema",
       "status": "verified",
-      "expected_bytes": 2503,
-      "actual_bytes": 2503,
-      "expected_sha256": "f4d50163123453a9fcd23b3beba53b3bddad69e739c80e5c1c04c54d380da6fb",
-      "actual_sha256": "f4d50163123453a9fcd23b3beba53b3bddad69e739c80e5c1c04c54d380da6fb"
+      "expected_bytes": 2541,
+      "actual_bytes": 2541,
+      "expected_sha256": "cf7e1706cad9e2d29b0170cbb8e8af7ddc37183f6c1b5bc1e59a0f3d51e58cf7",
+      "actual_sha256": "cf7e1706cad9e2d29b0170cbb8e8af7ddc37183f6c1b5bc1e59a0f3d51e58cf7"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -324,13 +324,22 @@
       "actual_sha256": "cc1797e18e53cce41fb1b8b6c35c57a65f270caa44d7d437056d16d18d03d8fe"
     },
     {
+      "path": "schemas/datapan.source-contract-rollup.v1.schema.json",
+      "kind": "schema",
+      "status": "verified",
+      "expected_bytes": 12880,
+      "actual_bytes": 12880,
+      "expected_sha256": "2e10d04586a42fccdfd21058eac3584f0133afcac0704fb38cc0c5f8a36941a8",
+      "actual_sha256": "2e10d04586a42fccdfd21058eac3584f0133afcac0704fb38cc0c5f8a36941a8"
+    },
+    {
       "path": "schemas/index.json",
       "kind": "schema_index",
       "status": "verified",
-      "expected_bytes": 13442,
-      "actual_bytes": 13442,
-      "expected_sha256": "5989e4d4e7d06c0c67bc0c2023ef39400ed16afc3e0094ae622937dc6e072a58",
-      "actual_sha256": "5989e4d4e7d06c0c67bc0c2023ef39400ed16afc3e0094ae622937dc6e072a58"
+      "expected_bytes": 13839,
+      "actual_bytes": 13839,
+      "expected_sha256": "2de181dcd677dd4fa7efd06337e90612145d888982ecb5e46e32abcd06976f52",
+      "actual_sha256": "2de181dcd677dd4fa7efd06337e90612145d888982ecb5e46e32abcd06976f52"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -385,6 +394,15 @@
       "actual_bytes": 6822,
       "expected_sha256": "f92c4a0f10f5b11e56173aed3e81834eb7071cbc7c5b0676a5a3e3f40c28bfd7",
       "actual_sha256": "f92c4a0f10f5b11e56173aed3e81834eb7071cbc7c5b0676a5a3e3f40c28bfd7"
+    },
+    {
+      "path": "reports/source-contract-rollup.json",
+      "kind": "source_contract_rollup",
+      "status": "verified",
+      "expected_bytes": 15831,
+      "actual_bytes": 15831,
+      "expected_sha256": "06d569e4fdde6dddf07aff63ab999350e4b81c09e92119aa13a165a3556b8628",
+      "actual_sha256": "06d569e4fdde6dddf07aff63ab999350e4b81c09e92119aa13a165a3556b8628"
     },
     {
       "path": "reports/dependencies.json",

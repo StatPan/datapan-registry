@@ -1,0 +1,570 @@
+{
+  "schema_version": "datapan.source-contract-rollup.v1",
+  "generated_at": "2026-07-04T06:39:24Z",
+  "provider": "multi-source",
+  "generation_inputs": {
+    "release_manifest": "manifest.json",
+    "source_glob": "sources/*.json",
+    "generator": "scripts/generate-source-contract-rollup.py"
+  },
+  "summary": {
+    "profiles": 5,
+    "sources": 5,
+    "providers": 5,
+    "profile_bytes": 15274,
+    "status_counts": {
+      "active": 1,
+      "candidate": 4
+    },
+    "adapter_status_counts": {
+      "none": 3,
+      "registered": 2
+    },
+    "adapter_capability_counts": {
+      "call": 2,
+      "catalogue_import": 1,
+      "normalization": 1,
+      "verification": 2
+    },
+    "auth_type_counts": {
+      "api_key": 4,
+      "service_key": 1
+    },
+    "approval_scope_counts": {
+      "operation": 1,
+      "source": 4
+    },
+    "request_method_counts": {
+      "GET": 5
+    },
+    "parameter_model_counts": {
+      "path": 2,
+      "query": 3
+    },
+    "response_format_counts": {
+      "json": 5,
+      "sdmx": 1,
+      "xls": 1,
+      "xml": 5
+    },
+    "response_schema_policy_counts": {
+      "documented": 5
+    },
+    "error_taxonomy_status_counts": {
+      "draft": 1,
+      "verified": 4
+    },
+    "runtime_verification_mode_counts": {
+      "bounded_call": 1,
+      "metadata_only": 4
+    },
+    "runtime_retry_policy_counts": {
+      "idempotent": 5
+    },
+    "promotion_default_status_counts": {
+      "registry_only": 5
+    },
+    "references_with_api_docs": 5,
+    "references_with_key_request": 5,
+    "references_with_terms": 1,
+    "references_with_metadata_standard": 0,
+    "reviewed_sources": 5,
+    "oldest_last_reviewed_at": "2026-06-29",
+    "newest_last_reviewed_at": "2026-06-30"
+  },
+  "sources": [
+    {
+      "source_id": "data_go_kr",
+      "provider": "data.go.kr",
+      "display_name": "Public Data Portal",
+      "status": "active",
+      "source_profile": "sources/data_go_kr.json",
+      "bytes": 2816,
+      "sha256": "0163df51972ce6dfd6d714967800d9eace89536dc67e6aab11885016f6776772",
+      "profile_schema_version": "datapan.source-profile.v1",
+      "adapter": {
+        "name": "data-go-kr",
+        "status": "registered",
+        "capabilities": [
+          "call",
+          "catalogue_import",
+          "normalization",
+          "verification"
+        ],
+        "hosts": [
+          "apis.data.go.kr",
+          "data.go.kr",
+          "www.data.go.kr"
+        ]
+      },
+      "references": {
+        "homepage_url": "https://www.data.go.kr/",
+        "api_docs_url": "https://www.data.go.kr/ugs/selectPublicDataUseGuideView.do",
+        "key_request_url": "https://www.data.go.kr/ugs/selectPublicDataUseGuideView.do",
+        "notice_url": "https://www.data.go.kr/bbs/ntc/selectNoticeListView.do",
+        "last_reviewed_at": "2026-06-29"
+      },
+      "catalogue": {
+        "model": "portal",
+        "endpoints": [],
+        "update_cadence": "source-dependent",
+        "identity_fields": [
+          "endpoint_id",
+          "list_id",
+          "operation_id"
+        ]
+      },
+      "auth": {
+        "type": "service_key",
+        "key_parameter_names": [
+          "serviceKey"
+        ],
+        "key_locations": [
+          "query"
+        ],
+        "approval_scope": "operation",
+        "credential_reference_present": true
+      },
+      "request": {
+        "methods": [
+          "GET"
+        ],
+        "parameter_model": "query",
+        "paging_type": "page",
+        "date_range_params": [],
+        "required_param_policy": "operation_specific"
+      },
+      "response": {
+        "formats": [
+          "json",
+          "xml"
+        ],
+        "default_format": "unknown",
+        "encoding": "utf-8",
+        "envelope_path_present": true,
+        "items_path_present": true,
+        "schema_policy": "documented"
+      },
+      "errors": {
+        "taxonomy_status": "draft",
+        "status_code_fields": [
+          "resultCode",
+          "returnReasonCode"
+        ],
+        "message_fields": [
+          "errMsg",
+          "resultMsg",
+          "returnAuthMsg"
+        ],
+        "known_error_codes": 1,
+        "known_error_classifications": [
+          "credential"
+        ]
+      },
+      "runtime": {
+        "verification_mode": "bounded_call",
+        "timeout_seconds": 20,
+        "retry_policy": "idempotent",
+        "rate_limit_policy": "conservative",
+        "sample_param_policy": "catalogue_sample"
+      },
+      "promotion": {
+        "default_status": "registry_only",
+        "mapping_reference": "Registry additions require downstream promoted dataset mapping before datapan-api, SDK, or MCP action is required."
+      }
+    },
+    {
+      "source_id": "ecos",
+      "provider": "ECOS",
+      "display_name": "Bank of Korea Economic Statistics System",
+      "status": "candidate",
+      "source_profile": "sources/ecos.json",
+      "bytes": 3246,
+      "sha256": "6e3adf86f6db12065cde5bc0840249d602d61dba0ed692fcf902719697d5fc27",
+      "profile_schema_version": "datapan.source-profile.v1",
+      "adapter": {
+        "name": "ecos",
+        "status": "none",
+        "capabilities": [],
+        "hosts": [
+          "ecos.bok.or.kr"
+        ]
+      },
+      "references": {
+        "homepage_url": "https://ecos.bok.or.kr/api/",
+        "api_docs_url": "https://ecos.bok.or.kr/api/#/",
+        "key_request_url": "https://ecos.bok.or.kr/api/#/AuthKeyApply",
+        "last_reviewed_at": "2026-06-30"
+      },
+      "catalogue": {
+        "model": "statistics",
+        "endpoints": [
+          "detail_endpoint",
+          "list_endpoint",
+          "search_endpoint"
+        ],
+        "update_cadence": "source-dependent",
+        "identity_fields": [
+          "cycle",
+          "itemCode",
+          "statCode",
+          "time"
+        ]
+      },
+      "auth": {
+        "type": "api_key",
+        "key_parameter_names": [
+          "apiKey"
+        ],
+        "key_locations": [
+          "path"
+        ],
+        "approval_scope": "source",
+        "credential_reference_present": true
+      },
+      "request": {
+        "methods": [
+          "GET"
+        ],
+        "parameter_model": "path",
+        "paging_type": "offset",
+        "date_range_params": [
+          "end_param",
+          "format",
+          "start_param"
+        ],
+        "required_param_policy": "documented"
+      },
+      "response": {
+        "formats": [
+          "json",
+          "xml"
+        ],
+        "default_format": "json",
+        "encoding": "utf-8",
+        "envelope_path_present": true,
+        "items_path_present": true,
+        "schema_policy": "documented"
+      },
+      "errors": {
+        "taxonomy_status": "verified",
+        "status_code_fields": [
+          "RESULT.CODE"
+        ],
+        "message_fields": [
+          "RESULT.MESSAGE"
+        ],
+        "known_error_codes": 3,
+        "known_error_classifications": [
+          "bad_request",
+          "credential"
+        ]
+      },
+      "runtime": {
+        "verification_mode": "metadata_only",
+        "timeout_seconds": 20,
+        "retry_policy": "idempotent",
+        "rate_limit_policy": "documented",
+        "sample_param_policy": "static"
+      },
+      "promotion": {
+        "default_status": "registry_only",
+        "mapping_reference": "ECOS time-series tables should be promoted only after statCode, itemCode, cycle, and date-window mappings are pinned."
+      }
+    },
+    {
+      "source_id": "kosis",
+      "provider": "KOSIS",
+      "display_name": "Korean Statistical Information Service",
+      "status": "candidate",
+      "source_profile": "sources/kosis.json",
+      "bytes": 2903,
+      "sha256": "53a3d7f080592e86a52c5ee7a80ed11c7f137a2d15bed55c39025e05b5e194c0",
+      "profile_schema_version": "datapan.source-profile.v1",
+      "adapter": {
+        "name": "kosis",
+        "status": "none",
+        "capabilities": [],
+        "hosts": [
+          "kosis.kr"
+        ]
+      },
+      "references": {
+        "homepage_url": "https://kosis.kr/openapi/index/index.jsp",
+        "api_docs_url": "https://kosis.kr/openapi/devGuide/devGuide_0101List.do",
+        "key_request_url": "https://kosis.kr/openapi/index/index.jsp",
+        "last_reviewed_at": "2026-06-29"
+      },
+      "catalogue": {
+        "model": "statistics",
+        "endpoints": [
+          "detail_endpoint",
+          "list_endpoint",
+          "search_endpoint"
+        ],
+        "update_cadence": "source-dependent",
+        "identity_fields": [
+          "orgId",
+          "statId",
+          "tblId"
+        ]
+      },
+      "auth": {
+        "type": "api_key",
+        "key_parameter_names": [
+          "apiKey"
+        ],
+        "key_locations": [
+          "query"
+        ],
+        "approval_scope": "source",
+        "credential_reference_present": true
+      },
+      "request": {
+        "methods": [
+          "GET"
+        ],
+        "parameter_model": "query",
+        "paging_type": "offset",
+        "date_range_params": [],
+        "required_param_policy": "operation_specific"
+      },
+      "response": {
+        "formats": [
+          "json",
+          "sdmx",
+          "xml"
+        ],
+        "default_format": "json",
+        "encoding": "utf-8",
+        "envelope_path_present": false,
+        "items_path_present": false,
+        "schema_policy": "documented"
+      },
+      "errors": {
+        "taxonomy_status": "verified",
+        "status_code_fields": [
+          "err"
+        ],
+        "message_fields": [
+          "errMsg"
+        ],
+        "known_error_codes": 3,
+        "known_error_classifications": [
+          "bad_request",
+          "credential"
+        ]
+      },
+      "runtime": {
+        "verification_mode": "metadata_only",
+        "timeout_seconds": 20,
+        "retry_policy": "idempotent",
+        "rate_limit_policy": "documented",
+        "sample_param_policy": "static"
+      },
+      "promotion": {
+        "default_status": "registry_only",
+        "mapping_reference": "KOSIS statistics should remain registry-only until promoted table mappings define downstream dataset contracts."
+      }
+    },
+    {
+      "source_id": "open_assembly",
+      "provider": "open.assembly.go.kr",
+      "display_name": "Open National Assembly Information",
+      "status": "candidate",
+      "source_profile": "sources/open_assembly.json",
+      "bytes": 2877,
+      "sha256": "4c2a70a90c24ac770fbeab12c482f6138fd8feaa24acf4968e077ddd6e769801",
+      "profile_schema_version": "datapan.source-profile.v1",
+      "adapter": {
+        "name": "open-assembly",
+        "status": "none",
+        "capabilities": [],
+        "hosts": [
+          "open.assembly.go.kr"
+        ]
+      },
+      "references": {
+        "homepage_url": "https://open.assembly.go.kr/portal/mainPage.do",
+        "api_docs_url": "https://open.assembly.go.kr/portal/openapi/main.do",
+        "key_request_url": "https://open.assembly.go.kr/portal/mainPage.do",
+        "last_reviewed_at": "2026-06-30"
+      },
+      "catalogue": {
+        "model": "legislative",
+        "endpoints": [
+          "detail_endpoint",
+          "list_endpoint",
+          "search_endpoint"
+        ],
+        "update_cadence": "source-dependent",
+        "identity_fields": [
+          "AGE",
+          "BILL_ID",
+          "committee_id",
+          "service_id"
+        ]
+      },
+      "auth": {
+        "type": "api_key",
+        "key_parameter_names": [
+          "KEY"
+        ],
+        "key_locations": [
+          "query"
+        ],
+        "approval_scope": "source",
+        "credential_reference_present": true
+      },
+      "request": {
+        "methods": [
+          "GET"
+        ],
+        "parameter_model": "query",
+        "paging_type": "page",
+        "date_range_params": [],
+        "required_param_policy": "operation_specific"
+      },
+      "response": {
+        "formats": [
+          "json",
+          "xml"
+        ],
+        "default_format": "xml",
+        "encoding": "utf-8",
+        "envelope_path_present": true,
+        "items_path_present": true,
+        "schema_policy": "documented"
+      },
+      "errors": {
+        "taxonomy_status": "verified",
+        "status_code_fields": [
+          "RESULT.CODE"
+        ],
+        "message_fields": [
+          "RESULT.MESSAGE"
+        ],
+        "known_error_codes": 2,
+        "known_error_classifications": [
+          "credential",
+          "not_found"
+        ]
+      },
+      "runtime": {
+        "verification_mode": "metadata_only",
+        "timeout_seconds": 20,
+        "retry_policy": "idempotent",
+        "rate_limit_policy": "conservative",
+        "sample_param_policy": "static"
+      },
+      "promotion": {
+        "default_status": "registry_only",
+        "mapping_reference": "Legislative datasets should be promoted only after service IDs and assembly-term parameters are pinned."
+      }
+    },
+    {
+      "source_id": "seoul_open_data",
+      "provider": "data.seoul.go.kr",
+      "display_name": "Seoul Open Data Plaza",
+      "status": "candidate",
+      "source_profile": "sources/seoul_open_data.json",
+      "bytes": 3432,
+      "sha256": "9ae73b337e2fd44e667087f50f538d123fe00e90afd03ab221e6b90fc9aef7a8",
+      "profile_schema_version": "datapan.source-profile.v1",
+      "adapter": {
+        "name": "seoul-open-data",
+        "status": "registered",
+        "capabilities": [
+          "call",
+          "verification"
+        ],
+        "hosts": [
+          "data.seoul.go.kr",
+          "openapi.seoul.go.kr:8088"
+        ]
+      },
+      "references": {
+        "homepage_url": "https://data.seoul.go.kr/",
+        "api_docs_url": "https://data.seoul.go.kr/together/guide/useGuide.do",
+        "key_request_url": "https://data.seoul.go.kr/together/guide/useGuide.do",
+        "notice_url": "https://data.seoul.go.kr/together/notice/boardList.do",
+        "terms_url": "https://data.seoul.go.kr/etc/accessTerms.do",
+        "last_reviewed_at": "2026-06-29"
+      },
+      "catalogue": {
+        "model": "portal",
+        "endpoints": [
+          "detail_endpoint",
+          "list_endpoint",
+          "notice_endpoint",
+          "search_endpoint"
+        ],
+        "update_cadence": "source-dependent",
+        "identity_fields": [
+          "end_index",
+          "service",
+          "start_index"
+        ]
+      },
+      "auth": {
+        "type": "api_key",
+        "key_parameter_names": [
+          "KEY"
+        ],
+        "key_locations": [
+          "path"
+        ],
+        "approval_scope": "source",
+        "credential_reference_present": true
+      },
+      "request": {
+        "methods": [
+          "GET"
+        ],
+        "parameter_model": "path",
+        "paging_type": "offset",
+        "date_range_params": [],
+        "required_param_policy": "operation_specific"
+      },
+      "response": {
+        "formats": [
+          "json",
+          "xls",
+          "xml"
+        ],
+        "default_format": "xml",
+        "encoding": "utf-8",
+        "envelope_path_present": true,
+        "items_path_present": true,
+        "schema_policy": "documented"
+      },
+      "errors": {
+        "taxonomy_status": "verified",
+        "status_code_fields": [
+          "RESULT.CODE"
+        ],
+        "message_fields": [
+          "RESULT.MESSAGE"
+        ],
+        "known_error_codes": 4,
+        "known_error_classifications": [
+          "bad_request",
+          "credential",
+          "not_found",
+          "upstream_outage"
+        ]
+      },
+      "runtime": {
+        "verification_mode": "metadata_only",
+        "timeout_seconds": 20,
+        "retry_policy": "idempotent",
+        "rate_limit_policy": "documented",
+        "sample_param_policy": "static"
+      },
+      "promotion": {
+        "default_status": "registry_only",
+        "mapping_reference": "Seoul datasets should be promoted only after service-specific row schema and key scope are pinned."
+      }
+    }
+  ]
+}

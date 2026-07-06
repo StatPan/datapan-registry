@@ -1,0 +1,503 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.source-contract-rollup.v1.schema.json",
+  "title": "Datapan Source Contract Rollup v1",
+  "description": "Release-wide rollup of source profile contracts for proving upstream provider readiness in registry releases.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "provider",
+    "generation_inputs",
+    "summary",
+    "sources"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.source-contract-rollup.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "const": "multi-source"
+    },
+    "generation_inputs": {
+      "$ref": "#/$defs/generation_inputs"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    }
+  },
+  "$defs": {
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+    },
+    "portable_path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[^\\\\]+$"
+    },
+    "count_map": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/count"
+      }
+    },
+    "string_array": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "generation_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["release_manifest", "source_glob", "generator"],
+      "properties": {
+        "release_manifest": {
+          "$ref": "#/$defs/portable_path"
+        },
+        "source_glob": {
+          "type": "string",
+          "minLength": 1
+        },
+        "generator": {
+          "$ref": "#/$defs/portable_path"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profiles",
+        "sources",
+        "providers",
+        "profile_bytes",
+        "status_counts",
+        "adapter_status_counts",
+        "adapter_capability_counts",
+        "auth_type_counts",
+        "approval_scope_counts",
+        "request_method_counts",
+        "parameter_model_counts",
+        "response_format_counts",
+        "response_schema_policy_counts",
+        "error_taxonomy_status_counts",
+        "runtime_verification_mode_counts",
+        "runtime_retry_policy_counts",
+        "promotion_default_status_counts",
+        "references_with_api_docs",
+        "references_with_key_request",
+        "references_with_terms",
+        "references_with_metadata_standard",
+        "reviewed_sources",
+        "oldest_last_reviewed_at",
+        "newest_last_reviewed_at"
+      ],
+      "properties": {
+        "profiles": {
+          "$ref": "#/$defs/count"
+        },
+        "sources": {
+          "$ref": "#/$defs/count"
+        },
+        "providers": {
+          "$ref": "#/$defs/count"
+        },
+        "profile_bytes": {
+          "$ref": "#/$defs/count"
+        },
+        "status_counts": {
+          "$ref": "#/$defs/count_map"
+        },
+        "adapter_status_counts": {
+          "$ref": "#/$defs/count_map"
+        },
+        "adapter_capability_counts": {
+          "$ref": "#/$defs/count_map"
+        },
+        "auth_type_counts": {
+          "$ref": "#/$defs/count_map"
+        },
+        "approval_scope_counts": {
+          "$ref": "#/$defs/count_map"
+        },
+        "request_method_counts": {
+          "$ref": "#/$defs/count_map"
+        },
+        "parameter_model_counts": {
+          "$ref": "#/$defs/count_map"
+        },
+        "response_format_counts": {
+          "$ref": "#/$defs/count_map"
+        },
+        "response_schema_policy_counts": {
+          "$ref": "#/$defs/count_map"
+        },
+        "error_taxonomy_status_counts": {
+          "$ref": "#/$defs/count_map"
+        },
+        "runtime_verification_mode_counts": {
+          "$ref": "#/$defs/count_map"
+        },
+        "runtime_retry_policy_counts": {
+          "$ref": "#/$defs/count_map"
+        },
+        "promotion_default_status_counts": {
+          "$ref": "#/$defs/count_map"
+        },
+        "references_with_api_docs": {
+          "$ref": "#/$defs/count"
+        },
+        "references_with_key_request": {
+          "$ref": "#/$defs/count"
+        },
+        "references_with_terms": {
+          "$ref": "#/$defs/count"
+        },
+        "references_with_metadata_standard": {
+          "$ref": "#/$defs/count"
+        },
+        "reviewed_sources": {
+          "$ref": "#/$defs/count"
+        },
+        "oldest_last_reviewed_at": {
+          "type": "string",
+          "format": "date"
+        },
+        "newest_last_reviewed_at": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "provider",
+        "display_name",
+        "status",
+        "source_profile",
+        "bytes",
+        "sha256",
+        "profile_schema_version",
+        "adapter",
+        "references",
+        "catalogue",
+        "auth",
+        "request",
+        "response",
+        "errors",
+        "runtime",
+        "promotion"
+      ],
+      "properties": {
+        "source_id": {
+          "$ref": "#/$defs/source_id"
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "display_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": ["candidate", "active", "deprecated", "blocked"]
+        },
+        "source_profile": {
+          "$ref": "#/$defs/portable_path"
+        },
+        "bytes": {
+          "$ref": "#/$defs/count"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "profile_schema_version": {
+          "const": "datapan.source-profile.v1"
+        },
+        "adapter": {
+          "$ref": "#/$defs/adapter"
+        },
+        "references": {
+          "$ref": "#/$defs/references"
+        },
+        "catalogue": {
+          "$ref": "#/$defs/catalogue"
+        },
+        "auth": {
+          "$ref": "#/$defs/auth"
+        },
+        "request": {
+          "$ref": "#/$defs/request"
+        },
+        "response": {
+          "$ref": "#/$defs/response"
+        },
+        "errors": {
+          "$ref": "#/$defs/errors"
+        },
+        "runtime": {
+          "$ref": "#/$defs/runtime"
+        },
+        "promotion": {
+          "$ref": "#/$defs/promotion"
+        }
+      }
+    },
+    "adapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "capabilities", "hosts"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": ["none", "planned", "registered", "blocked"]
+        },
+        "capabilities": {
+          "$ref": "#/$defs/string_array"
+        },
+        "hosts": {
+          "$ref": "#/$defs/string_array"
+        }
+      }
+    },
+    "references": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["homepage_url", "last_reviewed_at"],
+      "properties": {
+        "homepage_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "api_docs_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "key_request_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "notice_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "terms_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "metadata_standard_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "last_reviewed_at": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "catalogue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model", "endpoints", "identity_fields"],
+      "properties": {
+        "model": {
+          "enum": ["portal", "statistics", "geospatial", "legislative", "single_api", "mixed"]
+        },
+        "endpoints": {
+          "$ref": "#/$defs/string_array"
+        },
+        "update_cadence": {
+          "type": "string"
+        },
+        "identity_fields": {
+          "$ref": "#/$defs/string_array"
+        }
+      }
+    },
+    "auth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "key_parameter_names",
+        "key_locations",
+        "approval_scope",
+        "credential_reference_present"
+      ],
+      "properties": {
+        "type": {
+          "enum": ["none", "api_key", "service_key", "oauth2", "session", "approval_required", "mixed"]
+        },
+        "key_parameter_names": {
+          "$ref": "#/$defs/string_array"
+        },
+        "key_locations": {
+          "$ref": "#/$defs/string_array"
+        },
+        "approval_scope": {
+          "enum": ["none", "source", "api_family", "operation", "unknown"]
+        },
+        "credential_reference_present": {
+          "type": "boolean"
+        }
+      }
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "methods",
+        "parameter_model",
+        "paging_type",
+        "date_range_params",
+        "required_param_policy"
+      ],
+      "properties": {
+        "methods": {
+          "$ref": "#/$defs/string_array"
+        },
+        "parameter_model": {
+          "enum": ["query", "path", "body", "form", "mixed"]
+        },
+        "paging_type": {
+          "enum": ["none", "page", "offset", "cursor", "date_window", "unknown"]
+        },
+        "date_range_params": {
+          "$ref": "#/$defs/string_array"
+        },
+        "required_param_policy": {
+          "enum": ["documented", "sample_based", "operation_specific", "unknown"]
+        }
+      }
+    },
+    "response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "formats",
+        "envelope_path_present",
+        "items_path_present",
+        "schema_policy"
+      ],
+      "properties": {
+        "formats": {
+          "$ref": "#/$defs/string_array"
+        },
+        "default_format": {
+          "enum": ["json", "xml", "csv", "xls", "xlsx", "sdmx", "html", "geojson", "wms", "binary", "unknown"]
+        },
+        "encoding": {
+          "type": "string"
+        },
+        "envelope_path_present": {
+          "type": "boolean"
+        },
+        "items_path_present": {
+          "type": "boolean"
+        },
+        "schema_policy": {
+          "enum": ["documented", "sample_inferred", "fingerprint_only", "unknown"]
+        }
+      }
+    },
+    "errors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "taxonomy_status",
+        "status_code_fields",
+        "message_fields",
+        "known_error_codes",
+        "known_error_classifications"
+      ],
+      "properties": {
+        "taxonomy_status": {
+          "enum": ["unknown", "draft", "verified", "blocked"]
+        },
+        "status_code_fields": {
+          "$ref": "#/$defs/string_array"
+        },
+        "message_fields": {
+          "$ref": "#/$defs/string_array"
+        },
+        "known_error_codes": {
+          "$ref": "#/$defs/count"
+        },
+        "known_error_classifications": {
+          "$ref": "#/$defs/string_array"
+        }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "verification_mode",
+        "retry_policy",
+        "rate_limit_policy",
+        "sample_param_policy"
+      ],
+      "properties": {
+        "verification_mode": {
+          "enum": ["none", "metadata_only", "sample_call", "bounded_call", "adapter_required"]
+        },
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "retry_policy": {
+          "enum": ["none", "idempotent", "backoff", "adapter_specific"]
+        },
+        "rate_limit_policy": {
+          "enum": ["unknown", "documented", "conservative", "adapter_specific"]
+        },
+        "sample_param_policy": {
+          "enum": ["none", "static", "generated", "catalogue_sample", "manual"]
+        }
+      }
+    },
+    "promotion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["default_status"],
+      "properties": {
+        "default_status": {
+          "enum": ["registry_only", "candidate", "promoted", "served"]
+        },
+        "mapping_reference": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
