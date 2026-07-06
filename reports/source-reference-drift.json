@@ -2,6 +2,43 @@
   "schema_version": "datapan.source-reference-drift.v1",
   "generated_at": "2026-06-29T00:00:00Z",
   "datapan_version": "v0.1.29",
+  "source_inputs": [
+    {
+      "path": "sources/data_go_kr.json",
+      "source_id": "data_go_kr",
+      "provider": "data.go.kr",
+      "bytes": 2816,
+      "sha256": "0163df51972ce6dfd6d714967800d9eace89536dc67e6aab11885016f6776772"
+    },
+    {
+      "path": "sources/ecos.json",
+      "source_id": "ecos",
+      "provider": "ECOS",
+      "bytes": 3246,
+      "sha256": "6e3adf86f6db12065cde5bc0840249d602d61dba0ed692fcf902719697d5fc27"
+    },
+    {
+      "path": "sources/kosis.json",
+      "source_id": "kosis",
+      "provider": "KOSIS",
+      "bytes": 2903,
+      "sha256": "53a3d7f080592e86a52c5ee7a80ed11c7f137a2d15bed55c39025e05b5e194c0"
+    },
+    {
+      "path": "sources/open_assembly.json",
+      "source_id": "open_assembly",
+      "provider": "open.assembly.go.kr",
+      "bytes": 2877,
+      "sha256": "4c2a70a90c24ac770fbeab12c482f6138fd8feaa24acf4968e077ddd6e769801"
+    },
+    {
+      "path": "sources/seoul_open_data.json",
+      "source_id": "seoul_open_data",
+      "provider": "data.seoul.go.kr",
+      "bytes": 3432,
+      "sha256": "9ae73b337e2fd44e667087f50f538d123fe00e90afd03ab221e6b90fc9aef7a8"
+    }
+  ],
   "summary": {
     "sources": 5,
     "references": 18,
@@ -24,7 +61,9 @@
           "reviewed_at": "2026-06-29",
           "check_mode": "manual_review",
           "drift_status": "baseline",
-          "contract_impact": ["source_identity"]
+          "contract_impact": [
+            "source_identity"
+          ]
         },
         {
           "kind": "api_docs_url",
@@ -32,7 +71,11 @@
           "reviewed_at": "2026-06-29",
           "check_mode": "manual_review",
           "drift_status": "baseline",
-          "contract_impact": ["catalogue", "auth", "runtime"]
+          "contract_impact": [
+            "catalogue",
+            "auth",
+            "runtime"
+          ]
         },
         {
           "kind": "key_request_url",
@@ -40,7 +83,9 @@
           "reviewed_at": "2026-06-29",
           "check_mode": "manual_review",
           "drift_status": "baseline",
-          "contract_impact": ["auth"]
+          "contract_impact": [
+            "auth"
+          ]
         },
         {
           "kind": "notice_url",
@@ -48,7 +93,10 @@
           "reviewed_at": "2026-06-29",
           "check_mode": "manual_review",
           "drift_status": "baseline",
-          "contract_impact": ["notice", "runtime"]
+          "contract_impact": [
+            "notice",
+            "runtime"
+          ]
         }
       ],
       "notes": "Manual baseline only; no live network drift check is performed by this report."
@@ -65,7 +113,9 @@
           "reviewed_at": "2026-06-30",
           "check_mode": "manual_review",
           "drift_status": "baseline",
-          "contract_impact": ["source_identity"]
+          "contract_impact": [
+            "source_identity"
+          ]
         },
         {
           "kind": "api_docs_url",
@@ -73,7 +123,11 @@
           "reviewed_at": "2026-06-30",
           "check_mode": "manual_review",
           "drift_status": "baseline",
-          "contract_impact": ["catalogue", "auth", "runtime"]
+          "contract_impact": [
+            "catalogue",
+            "auth",
+            "runtime"
+          ]
         },
         {
           "kind": "key_request_url",
@@ -81,7 +135,9 @@
           "reviewed_at": "2026-06-30",
           "check_mode": "manual_review",
           "drift_status": "baseline",
-          "contract_impact": ["auth"]
+          "contract_impact": [
+            "auth"
+          ]
         }
       ],
       "notes": "Manual baseline only; ECOS error taxonomy was reviewed from official RESULT.CODE/RESULT.MESSAGE responses, and runtime verification is a separate future task."
@@ -98,7 +154,9 @@
           "reviewed_at": "2026-06-29",
           "check_mode": "manual_review",
           "drift_status": "baseline",
-          "contract_impact": ["source_identity"]
+          "contract_impact": [
+            "source_identity"
+          ]
         },
         {
           "kind": "api_docs_url",
@@ -106,7 +164,11 @@
           "reviewed_at": "2026-06-29",
           "check_mode": "manual_review",
           "drift_status": "baseline",
-          "contract_impact": ["catalogue", "auth", "runtime"]
+          "contract_impact": [
+            "catalogue",
+            "auth",
+            "runtime"
+          ]
         },
         {
           "kind": "key_request_url",
@@ -114,7 +176,9 @@
           "reviewed_at": "2026-06-29",
           "check_mode": "manual_review",
           "drift_status": "baseline",
-          "contract_impact": ["auth"]
+          "contract_impact": [
+            "auth"
+          ]
         }
       ],
       "notes": "Manual baseline only; KOSIS runtime verification is a separate future task."
@@ -131,7 +195,9 @@
           "reviewed_at": "2026-06-30",
           "check_mode": "manual_review",
           "drift_status": "baseline",
-          "contract_impact": ["source_identity"]
+          "contract_impact": [
+            "source_identity"
+          ]
         },
         {
           "kind": "api_docs_url",
@@ -139,7 +205,11 @@
           "reviewed_at": "2026-06-30",
           "check_mode": "manual_review",
           "drift_status": "baseline",
-          "contract_impact": ["catalogue", "auth", "runtime"]
+          "contract_impact": [
+            "catalogue",
+            "auth",
+            "runtime"
+          ]
         },
         {
           "kind": "key_request_url",
@@ -147,7 +217,9 @@
           "reviewed_at": "2026-06-30",
           "check_mode": "manual_review",
           "drift_status": "baseline",
-          "contract_impact": ["auth"]
+          "contract_impact": [
+            "auth"
+          ]
         }
       ],
       "notes": "Manual baseline only; Open Assembly error taxonomy was reviewed from official RESULT.CODE/RESULT.MESSAGE responses, and runtime verification is a separate future task."
@@ -164,7 +236,9 @@
           "reviewed_at": "2026-06-29",
           "check_mode": "manual_review",
           "drift_status": "baseline",
-          "contract_impact": ["source_identity"]
+          "contract_impact": [
+            "source_identity"
+          ]
         },
         {
           "kind": "api_docs_url",
@@ -172,7 +246,11 @@
           "reviewed_at": "2026-06-29",
           "check_mode": "manual_review",
           "drift_status": "baseline",
-          "contract_impact": ["catalogue", "auth", "runtime"]
+          "contract_impact": [
+            "catalogue",
+            "auth",
+            "runtime"
+          ]
         },
         {
           "kind": "key_request_url",
@@ -180,7 +258,9 @@
           "reviewed_at": "2026-06-29",
           "check_mode": "manual_review",
           "drift_status": "baseline",
-          "contract_impact": ["auth"]
+          "contract_impact": [
+            "auth"
+          ]
         },
         {
           "kind": "notice_url",
@@ -188,7 +268,10 @@
           "reviewed_at": "2026-06-29",
           "check_mode": "manual_review",
           "drift_status": "baseline",
-          "contract_impact": ["notice", "runtime"]
+          "contract_impact": [
+            "notice",
+            "runtime"
+          ]
         },
         {
           "kind": "terms_url",
@@ -196,7 +279,9 @@
           "reviewed_at": "2026-06-29",
           "check_mode": "manual_review",
           "drift_status": "baseline",
-          "contract_impact": ["terms"]
+          "contract_impact": [
+            "terms"
+          ]
         }
       ],
       "notes": "Manual baseline only; Seoul Open Data runtime verification is a separate future task."

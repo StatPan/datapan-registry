@@ -46,6 +46,28 @@ def as_dict(value: object, path: pathlib.Path) -> dict[str, object]:
     return value
 
 
+def file_digest(path: pathlib.Path) -> tuple[int, str]:
+    data = path.read_bytes()
+    return len(data), hashlib.sha256(data).hexdigest()
+
+
+def source_profile_input(profile_path: pathlib.Path, profile: dict[str, object]) -> dict[str, object]:
+    source_id = profile.get("source_id")
+    provider = profile.get("provider")
+    if not isinstance(source_id, str) or not source_id:
+        raise ValueError(f"{profile_path} must include source_id")
+    if not isinstance(provider, str) or not provider:
+        raise ValueError(f"{profile_path} must include provider")
+    byte_count, sha256 = file_digest(profile_path)
+    return {
+        "path": profile_path.as_posix(),
+        "source_id": source_id,
+        "provider": provider,
+        "bytes": byte_count,
+        "sha256": sha256,
+    }
+
+
 def utc_now() -> str:
     return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
@@ -115,6 +137,7 @@ def profile_references(profile: dict[str, object], profile_path: pathlib.Path) -
 
 def build_report(profile_paths: list[pathlib.Path], timeout: float) -> tuple[dict[str, object], list[str]]:
     summary: collections.Counter[str] = collections.Counter()
+    source_inputs: list[dict[str, object]] = []
     sources: list[dict[str, object]] = []
     failures: list[str] = []
 
@@ -124,6 +147,7 @@ def build_report(profile_paths: list[pathlib.Path], timeout: float) -> tuple[dic
         provider = profile.get("provider")
         if not isinstance(source_id, str) or not isinstance(provider, str):
             raise ValueError(f"{profile_path} must include source_id and provider")
+        source_inputs.append(source_profile_input(profile_path, profile))
 
         references = profile_references(profile, profile_path)
         source_entry = {
@@ -165,6 +189,7 @@ def build_report(profile_paths: list[pathlib.Path], timeout: float) -> tuple[dic
     report = {
         "schema_version": "datapan.source-reference-drift.v1",
         "generated_at": utc_now(),
+        "source_inputs": source_inputs,
         "summary": {
             "sources": len(sources),
             "references": summary["references"],
