@@ -85,11 +85,14 @@ jobs:
           python -m pip install jsonschema
           python -m py_compile \
             scripts/generate-impact-plan-rollup.py \
+            scripts/generate-release-health-rollup.py \
             scripts/generate-registry-shards.py \
             scripts/package-registry-release.py \
             scripts/package-registry-shards.py \
+            scripts/release_health_rollup.py \
             scripts/validate-doctor-smoke-summaries.py \
             scripts/validate-install-smoke-summaries.py \
+            scripts/validate-release-health-rollups.py \
             scripts/validate-registry-shards.py
           python scripts/sync-release-schema-artifacts.py --check
           python scripts/validate-coverage-backlog.py

@@ -73,6 +73,9 @@ jobs:
           python scripts/validate-institution-runtime-plan.py
           python -m py_compile scripts/validate-doctor-smoke-summaries.py
           python -m py_compile scripts/validate-install-smoke-summaries.py
+          python -m py_compile scripts/release_health_rollup.py
+          python -m py_compile scripts/generate-release-health-rollup.py
+          python -m py_compile scripts/validate-release-health-rollups.py
 
       - name: Validate provider verification evidence
         working-directory: datapan-cli
@@ -231,6 +234,16 @@ jobs:
             ../datapan-registry/scripts/validate-doctor-smoke-summaries.py \
             --schema ../datapan-registry/schemas/datapan.doctor-smoke-summary.v1.schema.json \
             ../datapan-registry/.datapan/ci/latest-release-doctor-smoke.json
+          python3 ../datapan-registry/scripts/generate-release-health-rollup.py \
+            --current-install ../datapan-registry/.datapan/ci/current-release-install-smoke.json \
+            --current-doctor ../datapan-registry/.datapan/ci/current-release-doctor-smoke.json \
+            --latest-install ../datapan-registry/.datapan/ci/latest-release-install-smoke.json \
+            --latest-doctor ../datapan-registry/.datapan/ci/latest-release-doctor-smoke.json \
+            --output ../datapan-registry/.datapan/ci/release-health-rollup.json
+          ../datapan-registry/.datapan/ci/source-profile-venv/bin/python \
+            ../datapan-registry/scripts/validate-release-health-rollups.py \
+            --schema ../datapan-registry/schemas/datapan.release-health-rollup.v1.schema.json \
+            ../datapan-registry/.datapan/ci/release-health-rollup.json
 
       - name: Upload release health reports
         uses: actions/upload-artifact@v7

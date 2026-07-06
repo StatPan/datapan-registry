@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.release-health-rollup.v1.schema.json",
+  "title": "Datapan Release Health Rollup v1",
+  "description": "Structured release-health evidence that rolls up current/latest install and doctor smoke summaries.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "provider",
+    "generated_at",
+    "ok",
+    "summary",
+    "checks"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.release-health-rollup.v1"
+    },
+    "provider": {
+      "const": "datapan-registry"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ok": {
+      "type": "boolean"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/check"
+        },
+        {
+          "$ref": "#/$defs/check"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "positive_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checks_total",
+        "checks_passed",
+        "scopes",
+        "current_release_zip_checked",
+        "latest_release_zip_checked"
+      ],
+      "properties": {
+        "checks_total": {
+          "$ref": "#/$defs/positive_count"
+        },
+        "checks_passed": {
+          "$ref": "#/$defs/count"
+        },
+        "scopes": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "prefixItems": [
+            {
+              "const": "current"
+            },
+            {
+              "const": "latest"
+            }
+          ]
+        },
+        "current_release_zip_checked": {
+          "type": "boolean"
+        },
+        "latest_release_zip_checked": {
+          "type": "boolean"
+        }
+      }
+    },
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "ok", "install", "doctor"],
+      "properties": {
+        "scope": {
+          "enum": ["current", "latest"]
+        },
+        "ok": {
+          "type": "boolean"
+        },
+        "install": {
+          "$ref": "#/$defs/install"
+        },
+        "doctor": {
+          "$ref": "#/$defs/doctor"
+        }
+      }
+    },
+    "install": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "summary_json",
+        "mode",
+        "specs",
+        "registry_path",
+        "registry_install_bytes",
+        "registry_checksum_checked",
+        "release_zip_checked",
+        "shards_asset_present",
+        "shards_validated",
+        "shards_inventory_present",
+        "shards_count",
+        "shards_records"
+      ],
+      "properties": {
+        "summary_json": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mode": {
+          "enum": ["monolith_fallback", "shard_validated"]
+        },
+        "specs": {
+          "$ref": "#/$defs/positive_count"
+        },
+        "registry_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "registry_install_bytes": {
+          "$ref": "#/$defs/positive_count"
+        },
+        "registry_checksum_checked": {
+          "type": "boolean"
+        },
+        "registry_bytes": {
+          "$ref": "#/$defs/positive_count"
+        },
+        "registry_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "release_zip_checked": {
+          "type": "boolean"
+        },
+        "release_zip": {
+          "type": "string",
+          "minLength": 1
+        },
+        "shards_asset_present": {
+          "type": "boolean"
+        },
+        "shards_validated": {
+          "type": "boolean"
+        },
+        "shards_inventory_present": {
+          "type": "boolean"
+        },
+        "shards_count": {
+          "$ref": "#/$defs/count"
+        },
+        "shards_records": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "doctor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "summary_json",
+        "install_json",
+        "specs",
+        "operations",
+        "registry_path",
+        "source",
+        "install_cross_check_performed"
+      ],
+      "properties": {
+        "summary_json": {
+          "type": "string",
+          "minLength": 1
+        },
+        "install_json": {
+          "type": "string",
+          "minLength": 1
+        },
+        "specs": {
+          "$ref": "#/$defs/positive_count"
+        },
+        "operations": {
+          "$ref": "#/$defs/positive_count"
+        },
+        "registry_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "install_cross_check_performed": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}
