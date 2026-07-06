@@ -192,7 +192,7 @@
     "report": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name", "path"],
+      "required": ["name", "path", "bytes", "sha256"],
       "properties": {
         "name": {
           "type": "string",
@@ -201,6 +201,14 @@
         "path": {
           "type": "string",
           "minLength": 1
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
         },
         "schema_version": {
           "type": "string",

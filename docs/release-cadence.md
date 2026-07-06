@@ -118,6 +118,10 @@ check. That workflow:
   `docs/source-runtime-readiness.md` view, with the rollup manifest-bound so
   source runtime plan inputs, blockers, warnings, and zero-evidence sources are
   checksum-verifiable release evidence;
+- validates `reports/source-report-inventory.json`, the manifest-bound
+  inventory of source-scoped reports whose entries carry bytes and sha256 so
+  nested source evidence can be checked without listing every source report in
+  the top-level manifest;
 - regenerates and validates `reports/registry-impact-plan.json`, the
   manifest-bound downstream impact rollup that preserves client/server action
   hints, manual-review flags, and no-action boundaries for consumers;
