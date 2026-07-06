@@ -93,6 +93,9 @@
         "source_registry": {
           "$ref": "#/$defs/portable_path"
         },
+        "release_manifest": {
+          "$ref": "#/$defs/portable_path"
+        },
         "provider_index": {
           "$ref": "#/$defs/portable_path"
         },
