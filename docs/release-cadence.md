@@ -252,6 +252,13 @@ key registration requirements, or upstream provider HTML responses.
    relying on Git LFS.
 6. Confirm the `Verify registry release` workflow passes on the tag.
 
+Shard-aware registry artifacts, when generated, must remain additive during the
+compatibility period described in
+`docs/registry-shard-artifact-strategy.md`. Full release verification continues
+to require the canonical LFS registry until the release verifier, install path,
+doctor checks, and downstream consumers explicitly support shard-preferred
+fallback behavior.
+
 ## Cadence
 
 Start with date-based releases and keep a weekly scheduled health check running

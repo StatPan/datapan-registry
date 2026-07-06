@@ -12,6 +12,9 @@ See `docs/source-standardization-research.md` for the source survey policy and
 official reference anchors that should inform each source-specific profile.
 See `docs/registry-ops-scope.md` for the selected near-term scope and
 repository ownership boundaries.
+See `docs/registry-shard-artifact-strategy.md` for the separate strategy that
+keeps the canonical `data.go.kr` registry path while adding shard-aware
+development, review, and scoped validation artifacts.
 
 ## Goals
 
@@ -137,6 +140,11 @@ reports in the same `artifacts` array:
 The manifest should also gain a source inventory in a future schema version if
 consumers need to distinguish release-wide provider metadata from per-source
 metadata without scanning artifact paths.
+
+Large source registries may also publish a manifest-bound shard inventory. The
+source registry remains the compatibility artifact, while the shard inventory
+lists deterministic scoped registry files and their checksums for review and
+partial verification.
 
 ## Report Grouping
 
