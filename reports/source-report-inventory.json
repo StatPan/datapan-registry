@@ -31,8 +31,8 @@
     "missing_recommended_reports": 57,
     "source_report_coverage_percent": 12.3,
     "schema_backed_reports": 24,
-    "schema_indexed_reports": 20,
-    "schema_missing_reports": 4
+    "schema_indexed_reports": 21,
+    "schema_missing_reports": 3
   },
   "sources": [
     {
@@ -726,7 +726,7 @@
           "schema_version": "datapan.safetydata-registry-patches.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.safetydata-registry-patches.v1.schema.json",
           "expected_schema_path": "schemas/datapan.safetydata-registry-patches.v1.schema.json",
-          "schema_indexed": false
+          "schema_indexed": true
         },
         {
           "name": "seogwipo-bare-verification-summary.json",
