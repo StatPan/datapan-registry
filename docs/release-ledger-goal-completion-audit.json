@@ -121,6 +121,8 @@
       "queue_ticket": 375,
       "promotion_ticket": 379,
       "promotion_script": "scripts/promote-credential-runtime-receipt.py",
+      "collection_runner_ticket": 383,
+      "collection_runner_script": "scripts/run-credential-runtime-collection.py",
       "credential_gated_sources": 5,
       "absent": 5,
       "staged_only": 0,
@@ -263,7 +265,11 @@
         },
         {
           "path": "reports/credential-runtime-receipt-collection-queue.json",
-          "finding": "Enumerates all five credential-gated sources, their staged and reviewed receipt paths, bounded operator commands, promotion commands, current absent receipt states, and next collection actions without requiring credentials in default CI."
+          "finding": "Enumerates all five credential-gated sources, their staged and reviewed receipt paths, bounded operator commands, local runner commands, promotion commands, current absent receipt states, and next collection actions without requiring credentials in default CI."
+        },
+        {
+          "path": "scripts/run-credential-runtime-collection.py",
+          "finding": "Runs secret-free collection preflight from the checked-in queue, checks candidate paths and credential env presence without printing secrets, and supports explicit opt-in bounded runtime execution."
         },
         {
           "path": "reports/source-runtime-remediation-map.json",
@@ -375,6 +381,8 @@
     "python3 scripts/generate-credential-runtime-evidence-policy.py --check",
     "python3 scripts/validate-credential-runtime-receipts.py",
     "python3 scripts/generate-credential-runtime-receipt-collection-queue.py --check",
+    "python3 scripts/run-credential-runtime-collection.py --self-test",
+    "python3 scripts/run-credential-runtime-collection.py --check",
     "python3 scripts/promote-credential-runtime-receipt.py --self-test",
     "python3 scripts/generate-release-consumer-compatibility.py --check",
     "python3 scripts/validate-release-consumer-compatibility.py",
@@ -436,6 +444,11 @@
       "issue": 381,
       "title": "Bind reviewed receipts to remediation findings",
       "reason": "Remediation findings now point to expected reviewed receipt artifacts and source-level receipt state, but the goal remains open because those linked receipts are still absent."
+    },
+    {
+      "issue": 383,
+      "title": "Add credential runtime collection runner",
+      "reason": "Operators now have a secret-free preflight and opt-in runner for bounded credential runtime checks, but the goal remains open because reviewed live receipts are still absent."
     }
   ]
 }

@@ -26,6 +26,7 @@ DEFAULT_RECEIPT_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-receip
 SCHEMA_VERSION = "datapan.credential-runtime-receipt-collection-queue.v1"
 QUEUE_TICKET = 375
 PROMOTION_SCRIPT = "scripts/promote-credential-runtime-receipt.py"
+COLLECTION_RUNNER = "scripts/run-credential-runtime-collection.py"
 
 
 STATE_DEFINITIONS = [
@@ -151,6 +152,12 @@ def source_queue_entry(
             "python3 scripts/validate-credential-runtime-receipts.py --allow-unreviewed "
             f"{staged_receipt_path}"
         ),
+        "collection_preflight_command": (
+            f"python3 scripts/run-credential-runtime-collection.py --source {source_id} --json"
+        ),
+        "collection_run_command": (
+            f"python3 scripts/run-credential-runtime-collection.py --source {source_id} --run"
+        ),
         "reviewed_receipt_validation_command": "python3 scripts/validate-credential-runtime-receipts.py",
         "reviewed_receipt_promotion_command": (
             "python3 scripts/promote-credential-runtime-receipt.py "
@@ -269,6 +276,13 @@ def build_report(policy: dict[str, Any]) -> dict[str, Any]:
                 "--reviewer <reviewer> --reason <reason>"
             ),
             "receipt_promotion_script": PROMOTION_SCRIPT,
+            "collection_runner_script": COLLECTION_RUNNER,
+            "collection_preflight_command_template": (
+                "python3 scripts/run-credential-runtime-collection.py --source <source_id> --json"
+            ),
+            "collection_run_command_template": (
+                "python3 scripts/run-credential-runtime-collection.py --source <source_id> --run"
+            ),
             "staged_receipt_validation_command": operator_contract.get("staged_receipt_validation_command"),
             "staged_receipt_glob": operator_contract.get("staged_receipt_glob"),
             "reviewed_receipt_glob": operator_contract.get("reviewed_receipt_glob"),

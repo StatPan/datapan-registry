@@ -203,21 +203,29 @@ PHASES: list[dict[str, Any]] = [
         "coverage": ["verification_evidence", "consumer_compatibility"],
         "operator_commands": [
             "python3 scripts/generate-credential-runtime-receipt-collection-queue.py",
+            "python3 scripts/run-credential-runtime-collection.py --source <source_id> --json",
+            "python3 scripts/run-credential-runtime-collection.py --source <source_id> --run",
             "python3 scripts/promote-credential-runtime-receipt.py <staged-receipt> --state <reviewed_accepted|reviewed_rejected> --decision <decision> --reviewer <reviewer> --reason <reason>",
         ],
         "check_commands": [
             "python3 scripts/generate-credential-runtime-receipt-collection-queue.py --check",
+            "python3 scripts/run-credential-runtime-collection.py --self-test",
+            "python3 scripts/run-credential-runtime-collection.py --check",
             "python3 -m py_compile scripts/promote-credential-runtime-receipt.py",
             "python3 scripts/promote-credential-runtime-receipt.py --self-test",
         ],
         "workflow_fragments": {
             ".github/workflows/verify-release.yml": [
                 "python scripts/generate-credential-runtime-receipt-collection-queue.py --check",
+                "python scripts/run-credential-runtime-collection.py --self-test",
+                "python scripts/run-credential-runtime-collection.py --check",
                 "python -m py_compile scripts/promote-credential-runtime-receipt.py",
                 "python scripts/promote-credential-runtime-receipt.py --self-test",
             ],
             ".github/workflows/release-draft.yml": [
                 "python scripts/generate-credential-runtime-receipt-collection-queue.py --check",
+                "python scripts/run-credential-runtime-collection.py --self-test",
+                "python scripts/run-credential-runtime-collection.py --check",
                 "scripts/promote-credential-runtime-receipt.py",
                 "python scripts/promote-credential-runtime-receipt.py --self-test",
             ],
