@@ -117,6 +117,10 @@ check. That workflow:
 - regenerates and validates `reports/registry-impact-plan.json`, the
   manifest-bound downstream impact rollup that preserves client/server action
   hints, manual-review flags, and no-action boundaries for consumers;
+- validates top-level schema-backed report manifest coverage with
+  `scripts/validate-release-report-artifacts.py`, so new release reports cannot
+  stay outside `manifest.json` unless they are explicit manifest-derived
+  verification/readiness receipts;
 - uploads current-checkout install and doctor JSON plus latest-public-release
   install and doctor JSON reports as release-health evidence.
 
