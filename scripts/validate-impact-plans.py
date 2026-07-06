@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import hashlib
 import json
 import pathlib
 import sys
@@ -39,6 +40,19 @@ def default_reports() -> list[pathlib.Path]:
     if root_report.exists():
         reports.insert(0, root_report)
     return reports
+
+
+def file_digest(path: pathlib.Path) -> tuple[int, str]:
+    data = path.read_bytes()
+    return len(data), hashlib.sha256(data).hexdigest()
+
+
+def source_plan_paths(release_path: pathlib.Path) -> list[pathlib.Path]:
+    return [
+        path
+        for path in sorted(pathlib.Path("reports").glob("*/registry-impact-plan.json"))
+        if path.resolve() != release_path.resolve()
+    ]
 
 
 def count_summary(entries: object, key: str) -> dict[str, int]:
@@ -180,6 +194,67 @@ def validate_schema_release_impact_gate(path: pathlib.Path, plan: dict[str, obje
             raise ValueError(f"{SCHEMA_RELEASE_ENDPOINT_ID} must keep {target} at no_action")
 
 
+def validate_release_source_inputs(path: pathlib.Path, plan: dict[str, object]) -> None:
+    if plan.get("scope", "source") != "release":
+        return
+
+    inputs = plan.get("source_plan_inputs")
+    if not isinstance(inputs, list) or not inputs:
+        raise ValueError("release impact rollup must include non-empty source_plan_inputs")
+
+    expected_paths = [item.as_posix() for item in source_plan_paths(path)]
+    actual_paths = [item.get("path") for item in inputs if isinstance(item, dict)]
+    if actual_paths != expected_paths:
+        raise ValueError(f"source_plan_inputs paths expected {expected_paths}, got {actual_paths}")
+
+    input_change_total = 0
+    for index, raw_input in enumerate(inputs):
+        if not isinstance(raw_input, dict):
+            raise ValueError(f"source_plan_inputs[{index}] must be an object")
+        input_path_value = raw_input.get("path")
+        if not isinstance(input_path_value, str) or not input_path_value:
+            raise ValueError(f"source_plan_inputs[{index}].path must be a non-empty string")
+        input_path = pathlib.Path(input_path_value)
+        if not input_path.is_file():
+            raise ValueError(f"source_plan_inputs[{index}].path is missing: {input_path}")
+
+        source_plan = as_dict(load_json(input_path), input_path)
+        source_changes = source_plan.get("changes")
+        if not isinstance(source_changes, list):
+            raise ValueError(f"{input_path}: changes must be an array")
+
+        expected_bytes, expected_sha256 = file_digest(input_path)
+        expected_values = {
+            "provider": source_plan.get("provider"),
+            "source_id": source_plan.get("source_id"),
+            "changes": len(source_changes),
+            "bytes": expected_bytes,
+            "sha256": expected_sha256,
+        }
+        for key, value in expected_values.items():
+            if raw_input.get(key) != value:
+                raise ValueError(
+                    f"source_plan_inputs[{index}].{key} expected {value}, got {raw_input.get(key)}"
+                )
+        input_change_total += len(source_changes)
+
+    changes = plan.get("changes")
+    if not isinstance(changes, list):
+        raise ValueError("changes must be an array")
+    overlay_count = sum(
+        1
+        for change in changes
+        if isinstance(change, dict)
+        and isinstance(change.get("identity"), dict)
+        and change["identity"].get("provider") == "datapan-registry"
+        and change["identity"].get("source_id") == "registry"
+    )
+    if input_change_total + overlay_count != len(changes):
+        raise ValueError(
+            "source_plan_inputs change total plus release overlay count must match release changes length"
+        )
+
+
 def validate_consistency(path: pathlib.Path, plan: dict[str, object]) -> None:
     scope = plan.get("scope", "source")
     provider = plan.get("provider")
@@ -249,6 +324,7 @@ def validate_consistency(path: pathlib.Path, plan: dict[str, object]) -> None:
         raise ValueError("summary.requires_served_contract_regeneration does not match actions")
     validate_error_taxonomy_impact_link(path, plan)
     validate_schema_release_impact_gate(path, plan)
+    validate_release_source_inputs(path, plan)
 
 
 def main() -> int:

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import hashlib
 import json
 import pathlib
 import sys
@@ -21,6 +22,26 @@ def load_json(path: pathlib.Path) -> dict[str, object]:
     if not isinstance(value, dict):
         raise ValueError(f"{path} must contain a JSON object")
     return value
+
+
+def file_digest(path: pathlib.Path) -> tuple[int, str]:
+    data = path.read_bytes()
+    return len(data), hashlib.sha256(data).hexdigest()
+
+
+def source_plan_input(path: pathlib.Path, plan: dict[str, object]) -> dict[str, object]:
+    changes = plan.get("changes")
+    if not isinstance(changes, list):
+        raise ValueError(f"{path}: changes must be an array")
+    byte_count, sha256 = file_digest(path)
+    return {
+        "path": path.as_posix(),
+        "provider": plan.get("provider"),
+        "source_id": plan.get("source_id"),
+        "changes": len(changes),
+        "bytes": byte_count,
+        "sha256": sha256,
+    }
 
 
 def source_plan_paths(reports_dir: pathlib.Path, output: pathlib.Path) -> list[pathlib.Path]:
@@ -116,7 +137,8 @@ def build_rollup(reports_dir: pathlib.Path, output: pathlib.Path) -> tuple[dict[
     plans = [load_json(path) for path in paths]
     changes: list[dict[str, object]] = []
     generated_at_values: list[str] = []
-    for plan in plans:
+    source_inputs: list[dict[str, object]] = []
+    for path, plan in zip(paths, plans):
         generated_at = plan.get("generated_at")
         if isinstance(generated_at, str):
             generated_at_values.append(generated_at)
@@ -127,6 +149,7 @@ def build_rollup(reports_dir: pathlib.Path, output: pathlib.Path) -> tuple[dict[
             if not isinstance(change, dict):
                 raise ValueError("source plan changes must contain objects")
             changes.append(change)
+        source_inputs.append(source_plan_input(path, plan))
     changes.extend(release_overlay_changes(output))
 
     rollup = {
@@ -140,6 +163,7 @@ def build_rollup(reports_dir: pathlib.Path, output: pathlib.Path) -> tuple[dict[
         "registry_version_to": common_value(plans, "registry_version_to", "mixed"),
         "previous_registry": "reports/*/registry-impact-plan.json",
         "current_registry": str(output),
+        "source_plan_inputs": source_inputs,
         "summary": count_entries(changes),
         "changes": changes,
     }
