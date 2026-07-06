@@ -46,11 +46,16 @@ The workflow is manually triggered with `workflow_dispatch` and has two modes:
   registry and verification evidence, then verify that draft manifest.
 
 The workflow uploads `.datapan/draft/` and `.datapan/ci/` as workflow artifacts.
-It does not push commits, create tags, publish GitHub Releases, or capture
-provider credentials. Use local generation when updating upstream catalog data
-or when provider API credentials are required. Use the guarded GitHub draft
-when the registry artifact is already present and the release operator wants
-Actions-based verification before committing or tagging generated artifacts.
+When `include_shard_archive` is enabled, it also generates
+`.datapan/release-assets/data-go-kr-shards.tar.gz` from the materialized
+canonical registry, validates the shard inventory, checks the archive shape,
+and uploads the archive as draft release evidence. It does not push commits,
+create tags, publish GitHub Releases, attach assets, or capture provider
+credentials. Use local generation when updating upstream catalog data or when
+provider API credentials are required. Use the guarded GitHub draft when the
+registry artifact is already present and the release operator wants
+Actions-based verification before committing, tagging, or manually attaching
+release assets.
 
 The repository also runs `.github/workflows/verify-release.yml` on pushes, pull
 requests, manual dispatches, `v*` tags, and a weekly scheduled release-health
@@ -254,7 +259,10 @@ key registration requirements, or upstream provider HTML responses.
 4. Create a GitHub Release.
 5. Attach a zip archive of the release snapshot so users can consume it without
    relying on Git LFS.
-6. Confirm the `Verify registry release` workflow passes on the tag.
+6. If shard publication is desired, attach the
+   `data-go-kr-shards.tar.gz` archive produced by the `Draft registry release`
+   workflow after confirming its shard archive check report passed.
+7. Confirm the `Verify registry release` workflow passes on the tag.
 
 Shard-aware registry artifacts, when generated, must remain additive during the
 compatibility period described in
