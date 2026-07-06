@@ -100,7 +100,7 @@ cross-checks, and the current-vs-latest release zip evidence boundary. The
 release manifest also includes `reports/release-consumer-compatibility.json`,
 which records the canonical registry path, release-health evidence, optional
 shard asset boundary, and downstream consumer compatibility expectations as a
-schema-validated artifact.
+generated and schema-validated artifact.
 
 The current snapshot was generated from `datapan-cli` and includes:
 
