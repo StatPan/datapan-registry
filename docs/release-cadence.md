@@ -265,6 +265,13 @@ small fixture without Git LFS, credentials, release install, or doctor checks.
 It does not prove release readiness. The `Verify registry release` workflow
 remains the full LFS-backed release and install gate.
 
+Shard files should not be committed as ordinary Git blobs. The first
+publication mode is a compressed GitHub Release asset named
+`data-go-kr-shards.tar.gz`, generated from `data/data-go-kr.registry.json` and
+validated with `scripts/validate-registry-shards.py`. Keep the archive optional
+until downstream consumers support shard-preferred, monolith-fallback
+installation and verification.
+
 ## Cadence
 
 Start with date-based releases and keep a weekly scheduled health check running
