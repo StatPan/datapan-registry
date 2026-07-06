@@ -57,6 +57,7 @@ jobs:
           python scripts/validate-source-profiles.py
           python scripts/validate-error-action-catalogs.py
           python scripts/validate-external-coverage.py
+          python scripts/generate-impact-plan-rollup.py --check
           python scripts/validate-impact-plans.py
           python scripts/validate-source-reference-drift.py
           python scripts/validate-source-report-inventory.py
