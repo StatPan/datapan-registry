@@ -10,6 +10,7 @@
     "generated_at",
     "provider",
     "source_id",
+    "generation_inputs",
     "summary",
     "compatibility_path",
     "release_health_evidence",
@@ -31,6 +32,9 @@
     },
     "source_id": {
       "const": "data_go_kr"
+    },
+    "generation_inputs": {
+      "$ref": "#/$defs/generation_inputs"
     },
     "summary": {
       "$ref": "#/$defs/summary"
@@ -93,6 +97,78 @@
         },
         "shard_assets_required": {
           "type": "boolean"
+        }
+      }
+    },
+    "generation_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest", "readiness"],
+      "properties": {
+        "manifest": {
+          "$ref": "#/$defs/manifest_input"
+        },
+        "readiness": {
+          "$ref": "#/$defs/readiness_input"
+        }
+      }
+    },
+    "manifest_input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "generated_at", "artifact_count", "evidence_contracts"],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "artifact_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "evidence_contracts": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "readiness_input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "normalization",
+        "normalized_sha256",
+        "ready",
+        "gates_total",
+        "passed",
+        "failed"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "normalization": {
+          "const": "omit_generated_at"
+        },
+        "normalized_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "ready": {
+          "type": "boolean"
+        },
+        "gates_total": {
+          "$ref": "#/$defs/count"
+        },
+        "passed": {
+          "$ref": "#/$defs/count"
+        },
+        "failed": {
+          "$ref": "#/$defs/count"
         }
       }
     },

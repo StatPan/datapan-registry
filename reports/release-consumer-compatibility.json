@@ -3,6 +3,23 @@
   "generated_at": "2026-07-04T06:39:24Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
+  "generation_inputs": {
+    "manifest": {
+      "path": "manifest.json",
+      "generated_at": "2026-07-04T06:39:24Z",
+      "artifact_count": 70,
+      "evidence_contracts": 6
+    },
+    "readiness": {
+      "path": "reports/latest-release-readiness.json",
+      "normalization": "omit_generated_at",
+      "normalized_sha256": "4a28981796132ff35295b61e493ba47d7ed49fa5d0745467c72bd164ef220c6e",
+      "ready": true,
+      "gates_total": 23,
+      "passed": 23,
+      "failed": 0
+    }
+  },
   "summary": {
     "consumer_count": 7,
     "proven_consumers": 2,

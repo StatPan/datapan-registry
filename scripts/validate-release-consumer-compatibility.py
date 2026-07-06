@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import hashlib
 import json
 import pathlib
 import re
@@ -100,6 +101,13 @@ REQUIRED_CLI_SURFACES = {
 def load_json(path: pathlib.Path) -> object:
     with path.open("r", encoding="utf-8") as handle:
         return json.load(handle)
+
+
+def normalized_readiness_fingerprint(readiness: dict[str, Any]) -> str:
+    normalized = dict(readiness)
+    normalized.pop("generated_at", None)
+    data = json.dumps(normalized, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(data).hexdigest()
 
 
 def as_dict(value: object, label: str) -> dict[str, Any]:
@@ -202,6 +210,50 @@ def validate_manifest_links(report: dict[str, Any], manifest: dict[str, Any]) ->
     if not REQUIRED_SHARD_INSTALL_FIELDS.issubset(required_shard_fields):
         missing = sorted(REQUIRED_SHARD_INSTALL_FIELDS.difference(required_shard_fields))
         raise ValueError(f"release health evidence missing required shard install fields: {', '.join(missing)}")
+
+
+def validate_generation_inputs(
+    report: dict[str, Any],
+    manifest: dict[str, Any],
+    readiness: dict[str, Any],
+    manifest_path: pathlib.Path,
+    readiness_path: pathlib.Path,
+) -> None:
+    inputs = as_dict(report.get("generation_inputs"), "generation_inputs")
+    manifest_input = as_dict(inputs.get("manifest"), "generation_inputs.manifest")
+    readiness_input = as_dict(inputs.get("readiness"), "generation_inputs.readiness")
+
+    expected_manifest = {
+        "path": manifest_path.as_posix(),
+        "generated_at": manifest.get("generated_at"),
+        "artifact_count": manifest.get("artifact_count"),
+        "evidence_contracts": len(REQUIRED_MANIFEST_EVIDENCE_CONTRACTS),
+    }
+    for key, value in expected_manifest.items():
+        if manifest_input.get(key) != value:
+            raise ValueError(
+                f"generation_inputs.manifest.{key} expected {value}, got {manifest_input.get(key)}"
+            )
+
+    readiness_path_value = readiness_input.get("path")
+    if readiness_path_value != readiness_path.as_posix():
+        raise ValueError(
+            f"generation_inputs.readiness.path expected {readiness_path.as_posix()}, got {readiness_path_value}"
+        )
+    readiness_summary = as_dict(readiness.get("summary"), "readiness.summary")
+    expected_readiness = {
+        "normalization": "omit_generated_at",
+        "normalized_sha256": normalized_readiness_fingerprint(readiness),
+        "ready": readiness.get("ready"),
+        "gates_total": readiness_summary.get("gates_total"),
+        "passed": readiness_summary.get("passed"),
+        "failed": readiness_summary.get("failed"),
+    }
+    for key, value in expected_readiness.items():
+        if readiness_input.get(key) != value:
+            raise ValueError(
+                f"generation_inputs.readiness.{key} expected {value}, got {readiness_input.get(key)}"
+            )
 
 
 def validate_readiness(report: dict[str, Any], readiness: dict[str, Any]) -> None:
@@ -339,7 +391,14 @@ def validate_consumers(report: dict[str, Any]) -> None:
         raise ValueError("studio shard-preferred path must remain blocked until fallback is proven")
 
 
-def validate_consistency(report: dict[str, Any], manifest: dict[str, Any], readiness: dict[str, Any]) -> None:
+def validate_consistency(
+    report: dict[str, Any],
+    manifest: dict[str, Any],
+    readiness: dict[str, Any],
+    manifest_path: pathlib.Path,
+    readiness_path: pathlib.Path,
+) -> None:
+    validate_generation_inputs(report, manifest, readiness, manifest_path, readiness_path)
     validate_summary(report)
     validate_manifest_links(report, manifest)
     validate_readiness(report, readiness)
@@ -377,7 +436,7 @@ def main() -> int:
                 print(f"  {location}: {error.message}", file=sys.stderr)
             return 1
 
-        validate_consistency(report, manifest, readiness)
+        validate_consistency(report, manifest, readiness, args.manifest, args.readiness)
     except Exception as exc:  # noqa: BLE001 - release operators need the failed invariant
         print(f"FAIL {args.report}: {exc}", file=sys.stderr)
         return 1

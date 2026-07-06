@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import hashlib
 import json
 import pathlib
 import sys
@@ -105,6 +106,19 @@ def render_json(value: dict[str, Any]) -> str:
 def write_json(path: pathlib.Path, value: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(render_json(value), encoding="utf-8")
+
+
+def normalized_readiness_fingerprint(readiness: dict[str, Any]) -> str:
+    normalized = dict(readiness)
+    normalized.pop("generated_at", None)
+    data = json.dumps(normalized, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(data).hexdigest()
+
+
+def as_dict(value: object, label: str) -> dict[str, Any]:
+    if not isinstance(value, dict):
+        raise ValueError(f"{label} must be an object")
+    return value
 
 
 def as_list(value: object, label: str) -> list[Any]:
@@ -330,14 +344,63 @@ def manifest_evidence_contracts(manifest: dict[str, Any]) -> list[dict[str, Any]
     return contracts
 
 
-def build_report(manifest: dict[str, Any], readiness: dict[str, Any]) -> dict[str, Any]:
+def generation_inputs(
+    manifest_path: pathlib.Path,
+    manifest: dict[str, Any],
+    readiness_path: pathlib.Path,
+    readiness: dict[str, Any],
+    evidence_contracts: list[dict[str, Any]],
+) -> dict[str, Any]:
+    manifest_generated_at = manifest.get("generated_at")
+    artifact_count = manifest.get("artifact_count")
+    if not isinstance(manifest_generated_at, str) or not manifest_generated_at:
+        raise ValueError("manifest.generated_at must be a non-empty string")
+    if not isinstance(artifact_count, int) or artifact_count <= 0:
+        raise ValueError("manifest.artifact_count must be a positive integer")
+    if readiness.get("schema_version") != "datapan.release-readiness.v1":
+        raise ValueError("readiness.schema_version must be datapan.release-readiness.v1")
+    readiness_summary = as_dict(readiness.get("summary"), "readiness.summary")
+    return {
+        "manifest": {
+            "path": manifest_path.as_posix(),
+            "generated_at": manifest_generated_at,
+            "artifact_count": artifact_count,
+            "evidence_contracts": len(evidence_contracts),
+        },
+        "readiness": {
+            "path": readiness_path.as_posix(),
+            "normalization": "omit_generated_at",
+            "normalized_sha256": normalized_readiness_fingerprint(readiness),
+            "ready": readiness.get("ready"),
+            "gates_total": readiness_summary.get("gates_total"),
+            "passed": readiness_summary.get("passed"),
+            "failed": readiness_summary.get("failed"),
+        },
+    }
+
+
+def build_report(
+    manifest: dict[str, Any],
+    readiness: dict[str, Any],
+    *,
+    manifest_path: pathlib.Path = DEFAULT_MANIFEST,
+    readiness_path: pathlib.Path = DEFAULT_READINESS,
+) -> dict[str, Any]:
     generated_at = require_release_inputs(manifest, readiness)
     consumers = consumer_entries()
+    evidence_contracts = manifest_evidence_contracts(manifest)
     return {
         "schema_version": "datapan.release-consumer-compatibility.v1",
         "generated_at": generated_at,
         "provider": "data.go.kr",
         "source_id": "data_go_kr",
+        "generation_inputs": generation_inputs(
+            manifest_path,
+            manifest,
+            readiness_path,
+            readiness,
+            evidence_contracts,
+        ),
         "summary": summary_for(consumers),
         "compatibility_path": {
             "path": CANONICAL_REGISTRY_PATH,
@@ -356,7 +419,7 @@ def build_report(manifest: dict[str, Any], readiness: dict[str, Any]) -> dict[st
             "required_ci_reports": REQUIRED_CI_REPORTS,
             "required_shard_install_fields": REQUIRED_SHARD_INSTALL_FIELDS,
         },
-        "manifest_evidence_contracts": manifest_evidence_contracts(manifest),
+        "manifest_evidence_contracts": evidence_contracts,
         "shard_policy": {
             "phase": "compatibility_period",
             "asset_name": "data-go-kr-shards.tar.gz",
@@ -389,7 +452,12 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
-        report = build_report(load_json(args.manifest), load_json(args.readiness))
+        report = build_report(
+            load_json(args.manifest),
+            load_json(args.readiness),
+            manifest_path=args.manifest,
+            readiness_path=args.readiness,
+        )
     except Exception as exc:  # noqa: BLE001 - release operators need the failed invariant
         print(f"FAIL generate release consumer compatibility: {exc}", file=sys.stderr)
         return 1
