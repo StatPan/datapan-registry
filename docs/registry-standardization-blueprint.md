@@ -586,6 +586,11 @@ Current gaps:
 - Multi-source report grouping is measured by
   `reports/source-report-inventory.json`, but full source-scoped report
   generation remains incomplete.
+- The canonical `data/data-go-kr.registry.json` release artifact is protected
+  by Git LFS and release verification, but it is too coarse for cheap scoped
+  review and partial verification. `docs/registry-shard-artifact-strategy.md`
+  defines the additive shard-aware artifact strategy while preserving the
+  compatibility path.
 - Impact plans are specified, a data.go.kr draft plan is checked in, and a
   release-wide rollup can be generated from source-scoped plans, but full
   `datapan-cli` generation from catalog diffs, verification evidence, route
@@ -609,6 +614,7 @@ Current gaps:
 | Site behavior | adapter code and manual knowledge | source profile auth/request/response/runtime sections | profiles covering auth, paging, response, errors, runtime |
 | Error routing | `reports/error-catalog.json` | `reports/<source>/error-action-catalog.json` | known error signatures mapped to action rules |
 | Multi-source layout | root `data/` and `reports/` | source-scoped reports plus root rollups | source-scoped artifact count and release rollup coverage |
+| Registry artifact scale | monolithic LFS registry | canonical registry plus manifest-bound shard inventory | scoped shard coverage, checksum validation, and recomposition invariants |
 | Runtime confidence | `latest-verification.json` | scheduled source/provider verification matrix | evidence coverage percentage and provider pass/fail trend |
 | Downstream impact | draft data.go.kr impact plan plus human review | generated `reports/registry-impact-plan.json` rollup | changes with explicit downstream action hints |
 | Drift monitoring | manual source reference baseline | source reference drift reports plus scheduled checks | official reference URLs checked and classified |
