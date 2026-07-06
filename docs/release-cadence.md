@@ -123,8 +123,8 @@ check. That workflow:
   hints, manual-review flags, and no-action boundaries for consumers;
 - validates top-level schema-backed report manifest coverage with
   `scripts/validate-release-report-artifacts.py`, so new release reports cannot
-  stay outside `manifest.json` unless they are explicit manifest-derived
-  verification/readiness receipts;
+  stay outside `manifest.json` or carry stale schema, bytes, or sha256 metadata
+  unless they are explicit manifest-derived verification/readiness receipts;
 - uploads current-checkout install and doctor JSON plus latest-public-release
   install and doctor JSON reports as release-health evidence.
 

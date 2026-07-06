@@ -124,8 +124,9 @@ well, preserving downstream action hints and no-action boundaries as
 checksum-verifiable release evidence.
 Top-level schema-backed reports are guarded by
 `scripts/validate-release-report-artifacts.py`, which requires release reports
-to be manifest-bound unless they are explicit release verification/readiness
-receipts generated from the manifest.
+to be manifest-bound with matching schema URI, bytes, and sha256 unless they
+are explicit release verification/readiness receipts generated from the
+manifest.
 
 The current snapshot was generated from `datapan-cli` and includes:
 
