@@ -44,6 +44,9 @@ The root rollup uses `scope: "release"` so change identities can keep their
 original source-specific `provider` and `source_id` values. Source-scoped plans
 keep the stricter default `scope: "source"` validation, where every change
 identity must match the plan's top-level provider and source id.
+The generator also preserves root-level release overlays such as
+`registry:schema-release-surface`, so regenerating source rollups does not drop
+release-wide schema or readiness impact evidence.
 
 The schema is checked in at
 `schemas/datapan.registry-impact-plan.v1.schema.json`. Full `datapan-cli`
@@ -140,6 +143,13 @@ Provider errors should be classified before routing:
 - `refresh_verification` when evidence is stale.
 - `update_adapter` when a site-specific adapter can handle the failure.
 - `investigate` when the classification is `unknown`.
+
+When a checked-in source impact plan exists, it must carry a
+`provider_error_taxonomy_changed` change if the sibling
+`reports/<source>/error-action-catalog.json` declares that impact category.
+This keeps error/action routing visible to downstream review without turning
+registry-only taxonomy updates into false-positive Dataset API, SDK, MCP, or
+storage work.
 
 ## Examples
 

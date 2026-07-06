@@ -10,6 +10,8 @@ import pathlib
 
 
 CLIENT_SERVER_TARGETS = {"dataset-api", "sdk", "mcp"}
+RELEASE_OVERLAY_PROVIDER = "datapan-registry"
+RELEASE_OVERLAY_SOURCE_ID = "registry"
 
 
 def load_json(path: pathlib.Path) -> dict[str, object]:
@@ -26,6 +28,31 @@ def source_plan_paths(reports_dir: pathlib.Path, output: pathlib.Path) -> list[p
         for path in sorted(reports_dir.glob("*/registry-impact-plan.json"))
         if path.resolve() != output.resolve()
     ]
+
+
+def release_overlay_changes(output: pathlib.Path) -> list[dict[str, object]]:
+    if not output.exists():
+        return []
+    existing = load_json(output)
+    if existing.get("scope") != "release":
+        return []
+    changes = existing.get("changes")
+    if not isinstance(changes, list):
+        return []
+
+    overlays: list[dict[str, object]] = []
+    for change in changes:
+        if not isinstance(change, dict):
+            continue
+        identity = change.get("identity")
+        if not isinstance(identity, dict):
+            continue
+        if (
+            identity.get("provider") == RELEASE_OVERLAY_PROVIDER
+            and identity.get("source_id") == RELEASE_OVERLAY_SOURCE_ID
+        ):
+            overlays.append(change)
+    return overlays
 
 
 def count_entries(changes: list[dict[str, object]]) -> dict[str, object]:
@@ -108,6 +135,7 @@ def main() -> int:
             if not isinstance(change, dict):
                 raise ValueError("source plan changes must contain objects")
             changes.append(change)
+    changes.extend(release_overlay_changes(args.output))
 
     rollup = {
         "schema_version": "datapan.registry-impact-plan.v1",

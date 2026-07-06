@@ -9,40 +9,48 @@
   "previous_registry": "manifest.json",
   "current_registry": "data/data-go-kr.registry.json",
   "summary": {
-    "total": 3,
+    "total": 4,
     "by_category": [
       {
         "category": "added",
         "count": 3
+      },
+      {
+        "category": "provider_error_taxonomy_changed",
+        "count": 1
       }
     ],
     "by_target": [
       {
         "target": "datapan-cli",
-        "count": 2
+        "count": 3
       },
       {
         "target": "datapan-data",
-        "count": 3
+        "count": 4
       },
       {
         "target": "dataset-api",
-        "count": 3
+        "count": 4
+      },
+      {
+        "target": "documentation",
+        "count": 1
       },
       {
         "target": "sdk",
-        "count": 3
+        "count": 4
       },
       {
         "target": "mcp",
-        "count": 3
+        "count": 4
       },
       {
         "target": "registry-release",
-        "count": 2
+        "count": 3
       }
     ],
-    "requires_manual_review": 0,
+    "requires_manual_review": 1,
     "requires_db_migration_review": 0,
     "requires_served_contract_regeneration": 0
   },
@@ -184,6 +192,68 @@
         }
       ],
       "notes": "Adapter work remains blocked unless route disposition produces adapter_candidate evidence."
+    },
+    {
+      "identity": {
+        "provider": "data.go.kr",
+        "source_id": "data_go_kr",
+        "endpoint_id": "data_go_kr:error-action-catalog"
+      },
+      "category": "provider_error_taxonomy_changed",
+      "severity": "medium",
+      "promoted_dataset": false,
+      "served_dataset": false,
+      "error_taxonomy": {
+        "changed_fields": [
+          "reports/data-go-kr/error-action-catalog.json"
+        ],
+        "classification": "credential"
+      },
+      "actions": [
+        {
+          "target": "datapan-cli",
+          "action": "refresh_verification",
+          "automation": "automated",
+          "reason": "CLI release verification should validate the checked-in data.go.kr error action catalog before routing provider failures."
+        },
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "automated",
+          "reason": "Release impact evidence must include provider error taxonomy changes declared by the source error action catalog."
+        },
+        {
+          "target": "documentation",
+          "action": "update_error_taxonomy",
+          "automation": "manual_review",
+          "reason": "Keep the documented data.go.kr credential and approval failure taxonomy aligned with checked-in routing rules."
+        },
+        {
+          "target": "datapan-data",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "Error taxonomy routing does not create or change a promoted data block."
+        },
+        {
+          "target": "dataset-api",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "Registry-only provider error taxonomy changes do not change served dataset API contracts."
+        },
+        {
+          "target": "sdk",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "Registry-only provider error taxonomy changes do not change SDK contracts."
+        },
+        {
+          "target": "mcp",
+          "action": "no_action",
+          "automation": "automated",
+          "reason": "Registry-only provider error taxonomy changes do not change MCP tool contracts."
+        }
+      ],
+      "notes": "Derived from reports/data-go-kr/error-action-catalog.json rules that declare provider_error_taxonomy_changed impact."
     }
   ]
 }
