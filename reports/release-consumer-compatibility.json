@@ -103,8 +103,8 @@
       "path": "reports/source-runtime-remediation-map.json",
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
-      "bytes": 8072,
-      "sha256": "6752c7cb8b995cee341b1842c88208adec364cc896f1c1d0ebcd0589488811ba",
+      "bytes": 14728,
+      "sha256": "433ea8b7f4f9c11ad50d1dc92dc44c7d7c6a9b310caf363d8647030956e77a95",
       "required": true
     },
     {
@@ -140,7 +140,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "21e60c60befc44b8592820905b0ac47106c7535c0a9f77539c10518d72842e46",
+      "sha256": "2d83e429ea779516c295b96556264b946ca298e34f2c9f9ee1ac7b7ca31ac075",
       "required": true
     },
     {
@@ -158,7 +158,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 59095,
-      "sha256": "3f4904d778aeed989c5eb7cbf35712a6f5e7b7f64521f0f1a0ec8daa6343e166",
+      "sha256": "863433bc456d1a9b118a0df61a05216d6030c4c23092ad8d476c4502a876cb5c",
       "required": true
     }
   ],
@@ -191,6 +191,9 @@
     "remediation_receipt_relief_eligible": false,
     "remediation_receipt_backed_relief_allowed": false,
     "remediation_receipt_backed_relief_status": "blocked_until_reviewed_validated_credential_runtime_receipts_exist",
+    "remediation_receipt_linked_findings": 13,
+    "remediation_receipt_linked_absent": 13,
+    "remediation_receipt_linked_relief_eligible": 0,
     "credential_policy_sources": 5,
     "credential_policy_manual_review_boundaries": 13,
     "credential_policy_receipt_contract_available": true,

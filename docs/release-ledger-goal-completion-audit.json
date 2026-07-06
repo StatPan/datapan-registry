@@ -60,7 +60,10 @@
       "reviewed_receipt_intake_available": true,
       "receipt_reviewed": false,
       "receipt_relief_eligible": false,
-      "receipt_backed_relief_allowed": false
+      "receipt_backed_relief_allowed": false,
+      "receipt_linked_findings": 13,
+      "receipt_linked_absent": 13,
+      "receipt_linked_relief_eligible": 0
     },
     "downstream_impact": {
       "path": "reports/registry-impact-plan.json",
@@ -91,6 +94,9 @@
       "credential_queue_relief_eligible": 0,
       "credential_queue_reviewed_receipts": 0,
       "credential_queue_manual_review_reduction_allowed": false,
+      "remediation_receipt_linked_findings": 13,
+      "remediation_receipt_linked_absent": 13,
+      "remediation_receipt_linked_relief_eligible": 0,
       "manual_review_reduction_allowed": false
     },
     "credential_runtime_policy": {
@@ -237,7 +243,7 @@
         },
         {
           "path": "reports/source-runtime-remediation-map.json",
-          "finding": "Maps current source runtime blockers and warnings to remediation status and manual-review release boundaries; adapter and taxonomy follow-up-required findings are reduced to zero while receipt-backed relief remains disallowed without reviewed validated receipts."
+          "finding": "Maps current source runtime blockers and warnings to remediation status, manual-review release boundaries, and reviewed receipt linkage; adapter and taxonomy follow-up-required findings are reduced to zero while all 13 receipt-linked findings remain absent and receipt-backed relief remains disallowed without reviewed validated receipts."
         },
         {
           "path": "reports/source-report-inventory.json",
@@ -258,6 +264,10 @@
         {
           "path": "reports/credential-runtime-receipt-collection-queue.json",
           "finding": "Enumerates all five credential-gated sources, their staged and reviewed receipt paths, bounded operator commands, promotion commands, current absent receipt states, and next collection actions without requiring credentials in default CI."
+        },
+        {
+          "path": "reports/source-runtime-remediation-map.json",
+          "finding": "Links credential-related manual-review findings to expected reviewed receipt artifacts and records absent, reviewed-rejected, reviewed-accepted, or relief-eligible source-level receipt state."
         },
         {
           "path": "scripts/promote-credential-runtime-receipt.py",
@@ -293,7 +303,7 @@
         },
         {
           "path": "scripts/validate-release-consumer-compatibility.py",
-          "finding": "Fails if source runtime blockers remain but remediation evidence, credential runtime policy evidence, credential receipt queue evidence, reviewed receipt intake gating, receipt-backed relief gating, error/action routing evidence, or downstream manual-review impact evidence disappears."
+          "finding": "Fails if source runtime blockers remain but remediation evidence, remediation reviewed-receipt linkage, credential runtime policy evidence, credential receipt queue evidence, reviewed receipt intake gating, receipt-backed relief gating, error/action routing evidence, or downstream manual-review impact evidence disappears."
         },
         {
           "path": "reports/credential-runtime-evidence-policy.json",
@@ -336,7 +346,7 @@
     {
       "id": "credentialed_runtime_receipts_absent",
       "evidence": "reports/credential-runtime-receipt-collection-queue.json",
-      "finding": "Credential-gated runtime checks now have a secret-safe policy path, redacted receipt contract, reviewed checked-in intake path, discovery-derived counts, per-source collection queue, and deterministic promotion command, but live credentialed receipts are still absent and not allowed to reduce manual-review boundaries."
+      "finding": "Credential-gated runtime checks now have a secret-safe policy path, redacted receipt contract, reviewed checked-in intake path, discovery-derived counts, per-source collection queue, deterministic promotion command, and remediation finding linkage, but live credentialed receipts are still absent and not allowed to reduce manual-review boundaries."
     },
     {
       "id": "receipt_backed_compatibility_relief_blocked",
@@ -421,6 +431,11 @@
       "issue": 379,
       "title": "Automate reviewed credential receipt promotion",
       "reason": "Operators now have a deterministic promotion command for staged receipts, but the goal remains open until actual reviewed live receipts exist or the manual-review boundary is explicitly accepted."
+    },
+    {
+      "issue": 381,
+      "title": "Bind reviewed receipts to remediation findings",
+      "reason": "Remediation findings now point to expected reviewed receipt artifacts and source-level receipt state, but the goal remains open because those linked receipts are still absent."
     }
   ]
 }

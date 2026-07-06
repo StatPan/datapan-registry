@@ -27,6 +27,11 @@ DEFAULT_RECEIPT_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-receip
 SCHEMA_VERSION = "datapan.source-runtime-remediation-map.v1"
 FOLLOW_UP_ISSUE = 362
 REVIEWED_RECEIPT_GLOB = "reports/credential-runtime-receipts/*-credentialed-receipt.json"
+RECEIPT_LINKED_FINDING_IDS = {
+    "credential_required",
+    "metadata_only_verification",
+    "non_data_runtime_evidence_not_collected",
+}
 
 
 REMEDIATION_RULES: dict[str, dict[str, Any]] = {
@@ -127,7 +132,43 @@ def evidence_input(path: pathlib.Path, schema: str) -> dict[str, Any]:
     }
 
 
-def finding_entry(source_id: str, severity: str, finding_id: str) -> dict[str, Any]:
+def source_dir(source_id: str) -> str:
+    return source_id.replace("_", "-")
+
+
+def reviewed_receipt_path(source_id: str) -> str:
+    return f"reports/credential-runtime-receipts/{source_dir(source_id)}-credentialed-receipt.json"
+
+
+def receipt_state(record: dict[str, Any] | None) -> str:
+    if record is None:
+        return "absent"
+    if record.get("review_state") == "reviewed_rejected":
+        return "reviewed_rejected"
+    if record.get("relief_eligible") is True:
+        return "relief_eligible"
+    return "reviewed_accepted"
+
+
+def receipt_linkage(source_id: str, receipt_records: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    record = receipt_records.get(source_id)
+    return {
+        "expected_reviewed_receipt_path": reviewed_receipt_path(source_id),
+        "checked_in_receipt_present": record is not None,
+        "checked_in_receipt_path": record.get("path") if record else reviewed_receipt_path(source_id),
+        "current_receipt_state": receipt_state(record),
+        "review_state": record.get("review_state") if record else "none",
+        "receipt_outcome": record.get("outcome") if record else "none",
+        "source_relief_eligible": bool(record and record.get("relief_eligible") is True),
+    }
+
+
+def finding_entry(
+    source_id: str,
+    severity: str,
+    finding_id: str,
+    receipt_records: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
     rule = REMEDIATION_RULES.get(finding_id)
     if rule is None:
         raise ValueError(f"missing remediation rule for {severity} {finding_id} in {source_id}")
@@ -141,10 +182,15 @@ def finding_entry(source_id: str, severity: str, finding_id: str) -> dict[str, A
     }
     if "follow_up_issue" in rule:
         entry["follow_up_issue"] = rule["follow_up_issue"]
+    if finding_id in RECEIPT_LINKED_FINDING_IDS:
+        entry["reviewed_receipt_linkage"] = receipt_linkage(source_id, receipt_records)
     return entry
 
 
-def source_entries(runtime_rollup: dict[str, Any]) -> list[dict[str, Any]]:
+def source_entries(
+    runtime_rollup: dict[str, Any],
+    receipt_records: dict[str, dict[str, Any]],
+) -> list[dict[str, Any]]:
     entries: list[dict[str, Any]] = []
     for index, raw_source in enumerate(as_list(runtime_rollup.get("sources"), "runtime_rollup.sources")):
         source = as_dict(raw_source, f"runtime_rollup.sources[{index}]")
@@ -168,8 +214,8 @@ def source_entries(runtime_rollup: dict[str, Any]) -> list[dict[str, Any]]:
                 "blocking_count": source.get("blocking_count"),
                 "warning_count": source.get("warning_count"),
                 "findings": [
-                    *(finding_entry(source_id, "blocker", finding_id) for finding_id in blocker_ids),
-                    *(finding_entry(source_id, "warning", finding_id) for finding_id in warning_ids),
+                    *(finding_entry(source_id, "blocker", finding_id, receipt_records) for finding_id in blocker_ids),
+                    *(finding_entry(source_id, "warning", finding_id, receipt_records) for finding_id in warning_ids),
                 ],
             }
         )
@@ -228,17 +274,40 @@ def build_report(
     runtime_summary = as_dict(runtime_rollup.get("summary"), "runtime_rollup.summary")
     routing_summary = as_dict(routing.get("summary"), "routing.summary")
     impact_summary = as_dict(impact.get("summary"), "impact.summary")
-    sources = source_entries(runtime_rollup)
-    validate_runtime_alignment(runtime_rollup, sources)
     receipt_state = receipts.discover_reviewed_receipts(
         receipt_glob=REVIEWED_RECEIPT_GLOB,
         schema_path=DEFAULT_RECEIPT_SCHEMA,
         sources=receipt_source_entries(runtime_rollup),
     )
+    receipt_records = {
+        str(record["source_id"]): record
+        for record in as_list(receipt_state.get("receipt_records"), "receipt_state.receipt_records")
+    }
+    sources = source_entries(runtime_rollup, receipt_records)
+    validate_runtime_alignment(runtime_rollup, sources)
 
     findings = [finding for source in sources for finding in source["findings"]]
     unresolved = sum(1 for finding in findings if finding["status"] == "follow_up_required")
     manual = sum(1 for finding in findings if finding["status"] == "manual_review_boundary")
+    receipt_linked = sum(1 for finding in findings if "reviewed_receipt_linkage" in finding)
+    receipt_linked_absent = sum(
+        1
+        for finding in findings
+        if "reviewed_receipt_linkage" in finding
+        and as_dict(finding.get("reviewed_receipt_linkage"), "finding.reviewed_receipt_linkage").get(
+            "current_receipt_state"
+        )
+        == "absent"
+    )
+    receipt_linked_relief_eligible = sum(
+        1
+        for finding in findings
+        if "reviewed_receipt_linkage" in finding
+        and as_dict(finding.get("reviewed_receipt_linkage"), "finding.reviewed_receipt_linkage").get(
+            "source_relief_eligible"
+        )
+        is True
+    )
     mapped_blockers = sum(1 for finding in findings if finding["severity"] == "blocker")
     mapped_warnings = sum(1 for finding in findings if finding["severity"] == "warning")
     generated_at = runtime_rollup.get("generated_at")
@@ -276,6 +345,9 @@ def build_report(
             "receipt_relief_eligible": receipt_state["receipt_relief_eligible"],
             "receipt_backed_relief_allowed": receipt_state["manual_review_reduction_allowed"],
             "receipt_backed_relief_status": receipt_state["relief_gate_status"],
+            "receipt_linked_findings": receipt_linked,
+            "receipt_linked_absent": receipt_linked_absent,
+            "receipt_linked_relief_eligible": receipt_linked_relief_eligible,
         },
         "release_evidence_inputs": [
             evidence_input(

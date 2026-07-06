@@ -96,7 +96,10 @@
         "receipt_reviewed",
         "receipt_relief_eligible",
         "receipt_backed_relief_allowed",
-        "receipt_backed_relief_status"
+        "receipt_backed_relief_status",
+        "receipt_linked_findings",
+        "receipt_linked_absent",
+        "receipt_linked_relief_eligible"
       ],
       "properties": {
         "sources": {
@@ -156,6 +159,15 @@
             "blocked_until_reviewed_validated_credential_runtime_receipts_exist",
             "allowed_by_reviewed_validated_credential_runtime_receipts"
           ]
+        },
+        "receipt_linked_findings": {
+          "$ref": "#/$defs/count"
+        },
+        "receipt_linked_absent": {
+          "$ref": "#/$defs/count"
+        },
+        "receipt_linked_relief_eligible": {
+          "$ref": "#/$defs/count"
         }
       }
     },
@@ -285,6 +297,45 @@
         "follow_up_issue": {
           "type": "integer",
           "minimum": 1
+        },
+        "reviewed_receipt_linkage": {
+          "$ref": "#/$defs/reviewed_receipt_linkage"
+        }
+      }
+    },
+    "reviewed_receipt_linkage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expected_reviewed_receipt_path",
+        "checked_in_receipt_present",
+        "checked_in_receipt_path",
+        "current_receipt_state",
+        "review_state",
+        "receipt_outcome",
+        "source_relief_eligible"
+      ],
+      "properties": {
+        "expected_reviewed_receipt_path": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "checked_in_receipt_present": {
+          "type": "boolean"
+        },
+        "checked_in_receipt_path": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "current_receipt_state": {
+          "enum": ["absent", "reviewed_rejected", "reviewed_accepted", "relief_eligible"]
+        },
+        "review_state": {
+          "enum": ["none", "reviewed_accepted", "reviewed_rejected"]
+        },
+        "receipt_outcome": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "source_relief_eligible": {
+          "type": "boolean"
         }
       }
     }
