@@ -89,7 +89,11 @@
         "manual_review_boundaries",
         "follow_up_required",
         "compatibility_effect",
-        "manual_review_required"
+        "manual_review_required",
+        "credential_policy_available",
+        "receipt_contract_available",
+        "receipt_backed_relief_allowed",
+        "receipt_backed_relief_status"
       ],
       "properties": {
         "sources": {
@@ -124,6 +128,21 @@
         },
         "manual_review_required": {
           "type": "boolean"
+        },
+        "credential_policy_available": {
+          "const": true
+        },
+        "receipt_contract_available": {
+          "const": true
+        },
+        "receipt_backed_relief_allowed": {
+          "type": "boolean"
+        },
+        "receipt_backed_relief_status": {
+          "enum": [
+            "blocked_until_validated_credential_runtime_receipts_exist",
+            "allowed_by_validated_credential_runtime_receipts"
+          ]
         }
       }
     },

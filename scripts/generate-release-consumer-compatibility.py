@@ -453,6 +453,10 @@ def runtime_risk_evidence(
         credential_runtime_policy.get("release_boundary"),
         "credential_runtime_policy.release_boundary",
     )
+    credential_relief_gate = as_dict(
+        credential_policy_boundary.get("receipt_backed_relief_gate"),
+        "credential_runtime_policy.release_boundary.receipt_backed_relief_gate",
+    )
     routing_summary = as_dict(error_action_routing.get("summary"), "error_action_routing.summary")
     impact_summary = as_dict(downstream_impact.get("summary"), "downstream_impact.summary")
 
@@ -484,13 +488,26 @@ def runtime_risk_evidence(
         "sources_without_evidence": sources_without_evidence,
         "remediation_follow_up_required": remediation_summary.get("follow_up_required"),
         "remediation_manual_review_boundaries": remediation_summary.get("manual_review_boundaries"),
+        "remediation_credential_policy_available": remediation_summary.get("credential_policy_available"),
+        "remediation_receipt_contract_available": remediation_summary.get("receipt_contract_available"),
+        "remediation_receipt_backed_relief_allowed": remediation_summary.get("receipt_backed_relief_allowed"),
+        "remediation_receipt_backed_relief_status": remediation_summary.get("receipt_backed_relief_status"),
         "credential_policy_sources": credential_policy_summary.get("credential_gated_sources"),
         "credential_policy_manual_review_boundaries": credential_policy_summary.get("manual_review_boundaries"),
+        "credential_policy_receipt_contract_available": credential_policy_summary.get("receipt_contract_available"),
+        "credential_policy_receipt_present": credential_policy_summary.get("receipt_present"),
+        "credential_policy_receipt_validated": credential_policy_summary.get("receipt_validated"),
+        "credential_policy_manual_review_reduction_allowed": credential_policy_summary.get(
+            "manual_review_reduction_allowed"
+        ),
         "credential_policy_live_receipts": credential_policy_summary.get("live_credentialed_receipts_checked_in"),
         "credential_policy_default_ci_requires_credentials": credential_policy_summary.get(
             "default_ci_requires_credentials"
         ),
         "credential_policy_effect": credential_policy_boundary.get("compatibility_effect"),
+        "credential_policy_relief_gate_status": credential_relief_gate.get("status"),
+        "manual_review_reduction_allowed": False,
+        "manual_review_reduction_status": "blocked_until_validated_credential_runtime_receipts_exist",
         "blocker_ids": ids_from_rollup_items(source_runtime.get("blockers_by_id"), "source_runtime.blockers_by_id"),
         "warning_ids": ids_from_rollup_items(source_runtime.get("warnings_by_id"), "source_runtime.warnings_by_id"),
         "sources": runtime_source_entries(source_runtime),
