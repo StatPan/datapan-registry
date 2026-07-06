@@ -142,6 +142,8 @@ default clone or pull cost.
 During the compatibility period:
 
 - `data/data-go-kr.registry.json` remains the checked-in canonical registry.
+- `reports/release-consumer-compatibility.json` records this compatibility
+  boundary as manifest-bound release evidence for downstream consumers.
 - shard files are generated and validated from the canonical registry.
 - `data-go-kr-shards.tar.gz` is the intended first release asset name for the
   generated `data/data-go-kr/shards/` tree.

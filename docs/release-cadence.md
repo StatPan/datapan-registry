@@ -98,6 +98,10 @@ check. That workflow:
   `release-health-rollup.json`, a schema-validated top-level verdict that
   checks provider, registry path, spec count, doctor install cross-check, and
   current-vs-latest release zip evidence invariants;
+- validates `reports/release-consumer-compatibility.json`, the manifest-bound
+  downstream compatibility matrix that keeps the canonical registry path
+  required, release-health evidence named, and shard assets optional until
+  shard-preferred monolith fallback is proven downstream;
 - uploads current-checkout install and doctor JSON plus latest-public-release
   install and doctor JSON reports as release-health evidence.
 

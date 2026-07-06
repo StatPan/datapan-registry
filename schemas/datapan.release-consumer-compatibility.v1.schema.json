@@ -1,0 +1,228 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json",
+  "title": "Datapan Release Consumer Compatibility v1",
+  "description": "Machine-readable compatibility matrix for release consumers of datapan-registry artifacts.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "provider",
+    "source_id",
+    "summary",
+    "compatibility_path",
+    "release_health_evidence",
+    "shard_policy",
+    "consumers"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.release-consumer-compatibility.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "const": "data.go.kr"
+    },
+    "source_id": {
+      "const": "data_go_kr"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "compatibility_path": {
+      "$ref": "#/$defs/compatibility_path"
+    },
+    "release_health_evidence": {
+      "$ref": "#/$defs/release_health_evidence"
+    },
+    "shard_policy": {
+      "$ref": "#/$defs/shard_policy"
+    },
+    "consumers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/consumer"
+      }
+    }
+  },
+  "$defs": {
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "consumer_count",
+        "proven_consumers",
+        "blocked_consumers",
+        "canonical_registry_required",
+        "shard_assets_required"
+      ],
+      "properties": {
+        "consumer_count": {
+          "$ref": "#/$defs/count"
+        },
+        "proven_consumers": {
+          "$ref": "#/$defs/count"
+        },
+        "blocked_consumers": {
+          "$ref": "#/$defs/count"
+        },
+        "canonical_registry_required": {
+          "type": "boolean"
+        },
+        "shard_assets_required": {
+          "type": "boolean"
+        }
+      }
+    },
+    "compatibility_path": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "artifact_kind", "required", "status", "proof"],
+      "properties": {
+        "path": {
+          "const": "data/data-go-kr.registry.json"
+        },
+        "artifact_kind": {
+          "const": "registry"
+        },
+        "required": {
+          "const": true
+        },
+        "status": {
+          "enum": ["manifest_bound", "missing", "deprecated"]
+        },
+        "proof": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        }
+      }
+    },
+    "release_health_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_bundle", "required_schemas", "required_ci_reports"],
+      "properties": {
+        "artifact_bundle": {
+          "const": "datapan-registry-release-health"
+        },
+        "required_schemas": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        },
+        "required_ci_reports": {
+          "type": "array",
+          "minItems": 5,
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        }
+      }
+    },
+    "shard_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "phase",
+        "asset_name",
+        "required_for_release",
+        "publication_status",
+        "monolith_fallback_required",
+        "downstream_tracking",
+        "blocked_until"
+      ],
+      "properties": {
+        "phase": {
+          "const": "compatibility_period"
+        },
+        "asset_name": {
+          "const": "data-go-kr-shards.tar.gz"
+        },
+        "required_for_release": {
+          "const": false
+        },
+        "publication_status": {
+          "enum": ["optional_draft_asset", "required_release_asset", "blocked"]
+        },
+        "monolith_fallback_required": {
+          "const": true
+        },
+        "downstream_tracking": {
+          "type": "string",
+          "pattern": "^StatPan/datapan-cli#[0-9]+$"
+        },
+        "blocked_until": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        }
+      }
+    },
+    "consumer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["consumer", "surfaces", "compatibility_mode", "status", "evidence", "notes"],
+      "properties": {
+        "consumer": {
+          "enum": [
+            "datapan-cli",
+            "datapan-api",
+            "datapan-data",
+            "sdk",
+            "mcp",
+            "studio",
+            "release-operator"
+          ]
+        },
+        "surfaces": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        },
+        "compatibility_mode": {
+          "enum": [
+            "canonical_monolith",
+            "registry_metadata",
+            "no_served_contract",
+            "shard_preferred_with_monolith_fallback"
+          ]
+        },
+        "status": {
+          "enum": ["proven", "additive", "blocked", "not_required"]
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        },
+        "notes": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

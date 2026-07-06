@@ -96,7 +96,11 @@ install. After both current and latest install/doctor smoke summaries pass,
 the workflow writes `.datapan/ci/release-health-rollup.json` as the
 schema-validated top-level release-health verdict, proving the four smoke
 summaries agree on provider, registry path, spec count, doctor install
-cross-checks, and the current-vs-latest release zip evidence boundary.
+cross-checks, and the current-vs-latest release zip evidence boundary. The
+release manifest also includes `reports/release-consumer-compatibility.json`,
+which records the canonical registry path, release-health evidence, optional
+shard asset boundary, and downstream consumer compatibility expectations as a
+schema-validated artifact.
 
 The current snapshot was generated from `datapan-cli` and includes:
 

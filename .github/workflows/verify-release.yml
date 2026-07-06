@@ -71,8 +71,10 @@ jobs:
           python scripts/validate-link-detail-registry-patches.py
           python scripts/validate-institution-api-overview.py
           python scripts/validate-institution-runtime-plan.py
+          python scripts/validate-release-consumer-compatibility.py
           python -m py_compile scripts/validate-doctor-smoke-summaries.py
           python -m py_compile scripts/validate-install-smoke-summaries.py
+          python -m py_compile scripts/validate-release-consumer-compatibility.py
           python -m py_compile scripts/release_health_rollup.py
           python -m py_compile scripts/generate-release-health-rollup.py
           python -m py_compile scripts/validate-release-health-rollups.py
