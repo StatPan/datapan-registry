@@ -166,20 +166,32 @@ def validate_criteria(audit: dict[str, Any]) -> list[dict[str, Any]]:
 def validate_follow_up(audit: dict[str, Any], criteria: list[dict[str, Any]]) -> None:
     incomplete = [criterion for criterion in criteria if criterion["verdict"] in INCOMPLETE_VERDICTS]
     follow_up = as_list(audit.get("follow_up_children"), "follow_up_children")
+    remaining_risks = as_list(audit.get("remaining_goal_risks", []), "remaining_goal_risks")
 
     if audit.get("goal_status") == "complete":
         if incomplete:
             ids = ", ".join(str(item["id"]) for item in incomplete)
             raise ValueError(f"complete audit cannot have incomplete criteria: {ids}")
+        if remaining_risks:
+            raise ValueError("complete audit cannot have remaining_goal_risks")
         return
 
-    if not incomplete:
-        raise ValueError("non-complete audit must identify at least one incomplete criterion")
+    if not incomplete and not remaining_risks:
+        raise ValueError("non-complete audit must identify incomplete criteria or remaining goal risks")
     if not follow_up:
         raise ValueError("non-complete audit must record follow-up child work")
 
+    for index, raw_risk in enumerate(remaining_risks):
+        risk = as_dict(raw_risk, f"remaining_goal_risks[{index}]")
+        non_empty_string(risk.get("id"), f"remaining_goal_risks[{index}].id")
+        validate_existing_path(risk.get("evidence"), f"remaining_goal_risks[{index}].evidence")
+        non_empty_string(risk.get("finding"), f"remaining_goal_risks[{index}].finding")
+
     for index, raw_child in enumerate(follow_up):
         child = as_dict(raw_child, f"follow_up_children[{index}]")
+        issue = child.get("issue")
+        if not isinstance(issue, int) or issue <= 0:
+            raise ValueError(f"follow_up_children[{index}].issue must be a positive integer")
         non_empty_string(child.get("title"), f"follow_up_children[{index}].title")
         non_empty_string(child.get("reason"), f"follow_up_children[{index}].reason")
 

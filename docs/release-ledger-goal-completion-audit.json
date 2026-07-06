@@ -7,22 +7,22 @@
   "completion_guardrail": "Child tickets and merged PRs are progress evidence, not goal completion evidence by themselves.",
   "summary": {
     "criteria_total": 6,
-    "criteria_proven": 4,
-    "criteria_partial": 1,
-    "criteria_gap": 1,
+    "criteria_proven": 6,
+    "criteria_partial": 0,
+    "criteria_gap": 0,
     "decision": "leave_goal_open",
-    "reason": "The release ledger has strong validation coverage, but the full release assembly path is still distributed across release cadence documentation, CI workflows, and individual generator/check scripts. A single operator-facing assembly receipt or runner is still needed before #344 can be closed."
+    "reason": "The release assembly path is now receipt-bound, but #344 remains open because source runtime blockers, warnings, and manual-review compatibility gates still require remediation evidence before the broader registry-ledger vision can be treated as complete."
   },
   "current_state_evidence": {
     "manifest": {
       "path": "manifest.json",
-      "artifact_count": 70,
-      "artifact_kinds": 27,
-      "schema_artifacts": 44
+      "artifact_count": 72,
+      "artifact_kinds": 28,
+      "schema_artifacts": 45
     },
     "schema_index": {
       "path": "schemas/index.json",
-      "schema_count": 44
+      "schema_count": 45
     },
     "release_readiness": {
       "path": "reports/latest-release-readiness.json",
@@ -68,36 +68,48 @@
     {
       "id": "deterministic_release_assembly_path",
       "goal_acceptance": "Release assembly has one documented, deterministic path that regenerates and checks registry, schema, report, shard, compatibility, impact, and evidence artifacts.",
-      "verdict": "gap",
+      "verdict": "proven",
       "evidence": [
         {
+          "path": "reports/release-assembly-receipt.json",
+          "finding": "Records the unified assembly phases, operator commands, check commands, workflow fragments, release inputs, and current manual-review status."
+        },
+        {
+          "path": "scripts/generate-release-assembly-receipt.py",
+          "finding": "Generates the assembly receipt and --check validates schema conformance plus Verify/Draft workflow command alignment."
+        },
+        {
           "path": "docs/release-cadence.md",
-          "lines": "18-199",
-          "finding": "Documents draft, verify, recommended evidence regeneration, schema sync, manifest sync, and ledger ownership checks."
+          "lines": "29-50",
+          "finding": "Points release operators to the release assembly receipt command before release verification/readiness receipts."
         },
         {
           "path": ".github/workflows/verify-release.yml",
-          "lines": "47-167",
-          "finding": "CI checks policy artifacts, release verify/readiness, shard archive evidence, release zip packaging, and shard consistency."
+          "finding": "Runs the release assembly receipt check inside the full registry release verification workflow."
         },
         {
           "path": ".github/workflows/release-draft.yml",
-          "lines": "78-217",
-          "finding": "Manual workflow can verify or draft a selected manifest and produce release zip plus optional shard archive evidence."
+          "finding": "Runs the release assembly receipt check inside the guarded release draft workflow."
         }
       ],
-      "gap": "The path is not yet a single checked-in operator command or receipt that proves all generation/check steps were run in order from the current checkout.",
-      "next_action": "Create a bounded child ticket to consolidate release assembly into an operator-facing runner or receipt."
+      "next_action": "Keep the receipt aligned with release workflow changes."
     },
     {
       "id": "ci_matches_local_invariants",
       "goal_acceptance": "CI gates cover the same invariants that a release operator depends on locally; no manifest-bound artifact requires hand-maintained bytes, sha256, schema URI, or derived report metadata.",
-      "verdict": "partial",
+      "verdict": "proven",
       "evidence": [
         {
+          "path": "reports/release-assembly-receipt.json",
+          "finding": "Records the local check commands and workflow fragments that must stay aligned for release assembly."
+        },
+        {
+          "path": "scripts/generate-release-assembly-receipt.py",
+          "finding": "Fails --check when the checked-in receipt or workflow fragments drift from the generated contract."
+        },
+        {
           "path": ".github/workflows/verify-release.yml",
-          "lines": "47-100",
-          "finding": "CI runs schema sync check, manifest sync check, release-ledger ownership validation, report validators, source runtime checks, impact checks, and consumer compatibility checks."
+          "finding": "Runs schema sync, manifest sync, ownership, goal audit, assembly receipt, source runtime, impact, compatibility, release receipt, package, shard, install, and doctor checks."
         },
         {
           "path": "scripts/sync-release-schema-artifacts.py",
@@ -112,8 +124,7 @@
           "finding": "Maps every manifest artifact kind to owner, generator, checker, package relationship, schema relationship, and exemption boundary."
         }
       ],
-      "gap": "CI and local commands are aligned for current validators, but the repo still lacks a single local release assembly receipt that records the exact operator run and command outcomes.",
-      "next_action": "Carry this into the release assembly receipt child instead of closing #344."
+      "next_action": "Keep the assembly receipt check in release workflows."
     },
     {
       "id": "mutual_artifact_consistency",
@@ -135,6 +146,10 @@
         {
           "path": "reports/release-consumer-compatibility.json",
           "finding": "Binds source contracts, source runtime evidence, error/action routing, downstream impact, source reference drift, and source report inventory as manifest evidence contracts."
+        },
+        {
+          "path": "reports/release-assembly-receipt.json",
+          "finding": "Binds release assembly phases and workflow checks into a manifest-bound release_assembly_receipt artifact."
         },
         {
           "path": "scripts/package-registry-release.py",
@@ -207,13 +222,30 @@
         {
           "path": "scripts/validate-release-ledger-goal-audit.py",
           "finding": "Validates the audit structure, evidence paths, criteria coverage, and the rule that a non-complete goal must keep follow-up work."
+        },
+        {
+          "path": "reports/release-assembly-receipt.json",
+          "finding": "Records the current assembly path while preserving manual-review and not_complete goal status."
         }
       ],
-      "next_action": "Use this audit to keep #344 open until the release assembly gap is closed and re-audited."
+      "next_action": "Use this audit to keep #344 open until runtime manual-review risks are remediated or explicitly accepted."
+    }
+  ],
+  "remaining_goal_risks": [
+    {
+      "id": "source_runtime_manual_review_required",
+      "evidence": "reports/source-runtime-evidence-rollup.json",
+      "finding": "The current rollup still records 12 blockers, 8 warnings, and four sources without runtime evidence."
+    },
+    {
+      "id": "consumer_compatibility_manual_review_required",
+      "evidence": "reports/release-consumer-compatibility.json",
+      "finding": "Consumer compatibility remains manual_review_required_until_runtime_blockers_resolved."
     }
   ],
   "local_validation_commands": [
     "python3 scripts/validate-release-ledger-goal-audit.py",
+    "python3 scripts/generate-release-assembly-receipt.py --check",
     "python3 scripts/sync-release-schema-artifacts.py --check",
     "python3 scripts/sync-release-manifest-artifacts.py --check",
     "python3 scripts/validate-release-ledger-ownership.py",
@@ -230,9 +262,9 @@
   ],
   "follow_up_children": [
     {
-      "issue": 358,
-      "title": "Consolidate release ledger assembly receipt",
-      "reason": "Close the remaining deterministic release assembly gap by producing one operator-facing command or receipt that records the full generation/check sequence and outcomes from the current checkout."
+      "issue": 360,
+      "title": "Map source runtime blockers to remediation work",
+      "reason": "The release assembly path is receipt-bound, but source runtime blockers and manual-review compatibility gates still need remediation mapping before #344 can be considered complete."
     }
   ]
 }

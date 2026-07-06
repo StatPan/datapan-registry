@@ -31,10 +31,22 @@ When there is no previous release yet, omit `--previous-registry`.
 Every release must pass:
 
 ```bash
+python scripts/generate-release-assembly-receipt.py
+python scripts/generate-release-assembly-receipt.py --check
 datapan catalog release verify --manifest manifest.json --output reports/latest-release-verification.json --json
 datapan catalog release readiness --manifest manifest.json --output reports/latest-release-readiness.json --json
 python scripts/validate-release-receipt-boundary.py
 ```
+
+`reports/release-assembly-receipt.json` is the operator-facing assembly receipt
+for the current checkout. It binds the release assembly phases for canonical
+registry materialization, schema sync, manifest digest sync, source contracts,
+source runtime evidence, error/action routing, downstream impact, consumer
+compatibility, verification/readiness receipts, shard archive evidence, release
+zip packaging, and goal completion audit checks. The `--check` mode validates
+the receipt against `schemas/datapan.release-assembly-receipt.v1.schema.json`
+and fails if the receipt drifts from the `Verify registry release` or
+`Draft registry release` workflow command fragments.
 
 `reports/latest-release-verification.json` and
 `reports/latest-release-readiness.json` are manifest-derived receipts. Refresh

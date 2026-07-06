@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 44,
+  "count": 45,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 2700,
-      "sha256": "d7f5941e7c3ce34ccc32b91b548710f493f8384b984194f60d3c7ce483a78300"
+      "bytes": 2740,
+      "sha256": "0dce56a3a53ef90cc1f690997f7848d6b3d4d88112c8a65717f5fb648719f8a3"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -399,6 +399,15 @@
       "version": "v1",
       "bytes": 11020,
       "sha256": "5591adbe862df09a5284621a71a9ab1da786b965207f5e1670a0d084ee8067a0"
+    },
+    {
+      "path": "schemas/datapan.release-assembly-receipt.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.release-assembly-receipt.v1.schema.json",
+      "title": "Datapan Release Assembly Receipt v1",
+      "contract": "release-assembly-receipt",
+      "version": "v1",
+      "bytes": 8825,
+      "sha256": "b1cdc65c3606a1113cacfb54c5ef0e1427b39b04462c5ac9ad2cfde5a56c572e"
     }
   ]
 }

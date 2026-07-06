@@ -134,6 +134,20 @@
       "exemption_boundary": "The release impact rollup must keep release_evidence_inputs for error/action routing and source report inventory, while validation checks the consumer compatibility downstream impact contract, release-health rollup generation contract, and runtime risk evidence contract. Source runtime blockers or warnings must stay bound to source runtime evidence, error/action routing, downstream impact, and manual-review compatibility gates until resolved."
     },
     {
+      "id": "release_assembly_evidence",
+      "artifact_kinds": ["release_assembly_receipt"],
+      "owner": "release assembly maintainers",
+      "generated_by": ["python scripts/generate-release-assembly-receipt.py"],
+      "checked_by": [
+        "python scripts/generate-release-assembly-receipt.py --check",
+        "python scripts/sync-release-manifest-artifacts.py --check"
+      ],
+      "manifest_relationship": "Release assembly receipt is manifest-bound evidence for the operator command sequence and workflow alignment.",
+      "schema_relationship": "Validated against datapan.release-assembly-receipt.v1.",
+      "package_relationship": "Included in release packages through manifest.json.",
+      "exemption_boundary": "The receipt must not claim goal completion. It records the release assembly path and current manual-review boundaries so #344 remains open until a completion audit proves closure."
+    },
+    {
       "id": "verification_receipts",
       "artifact_kinds": [
         "unadapted_external_probe",

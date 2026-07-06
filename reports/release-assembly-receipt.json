@@ -1,0 +1,452 @@
+{
+  "schema_version": "datapan.release-assembly-receipt.v1",
+  "generated_at": "2026-07-04T06:39:24Z",
+  "goal_issue": 344,
+  "assembly_ticket": 358,
+  "provider": "datapan-registry",
+  "operator_command": "python3 scripts/generate-release-assembly-receipt.py --check",
+  "receipt_contract": {
+    "generator": "scripts/generate-release-assembly-receipt.py",
+    "schema": "schemas/datapan.release-assembly-receipt.v1.schema.json",
+    "output": "reports/release-assembly-receipt.json",
+    "validator": "python3 scripts/generate-release-assembly-receipt.py --check"
+  },
+  "summary": {
+    "phase_count": 11,
+    "release_ready": true,
+    "readiness_failed": 0,
+    "manual_review_required": true,
+    "assembly_status": "manual_review_required",
+    "goal_status": "not_complete",
+    "goal_criteria_proven": 6,
+    "goal_criteria_gap": 0
+  },
+  "release_inputs": {
+    "manifest": {
+      "path": "manifest.json",
+      "generated_at": "2026-07-04T06:39:24Z",
+      "artifact_count": 72,
+      "source_registry": "data/data-go-kr.registry.json"
+    },
+    "readiness": {
+      "path": "reports/latest-release-readiness.json",
+      "ready": true,
+      "gates_total": 23,
+      "passed": 23,
+      "failed": 0
+    },
+    "consumer_compatibility": {
+      "path": "reports/release-consumer-compatibility.json",
+      "consumer_count": 7,
+      "blocked_consumers": 1,
+      "manual_review_required": true,
+      "runtime_blocking_count": 12,
+      "runtime_warning_count": 8
+    },
+    "goal_audit": {
+      "path": "docs/release-ledger-goal-completion-audit.json",
+      "goal_status": "not_complete",
+      "decision": "leave_goal_open"
+    }
+  },
+  "phases": [
+    {
+      "id": "materialize_canonical_registry",
+      "coverage": [
+        "registry"
+      ],
+      "operator_commands": [
+        "git lfs pull --include data/data-go-kr.registry.json"
+      ],
+      "check_commands": [
+        "test $(wc -c < data/data-go-kr.registry.json) -gt 100000000",
+        "datapan catalog release verify --manifest manifest.json"
+      ],
+      "workflow_fragments": {
+        ".github/workflows/verify-release.yml": [
+          "Confirm registry LFS file is materialized",
+          "test \"${bytes}\" -gt 100000000"
+        ],
+        ".github/workflows/release-draft.yml": [
+          "Confirm registry LFS file is materialized",
+          "test \"${bytes}\" -gt"
+        ]
+      },
+      "status": "required",
+      "evidence_artifacts": [
+        {
+          "path": "data/data-go-kr.registry.json",
+          "bytes": 137735169,
+          "sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644",
+          "manifest_bound": true,
+          "kind": "registry",
+          "schema": "https://schemas.datapan.dev/datapan.specs.v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sync_schema_artifacts",
+      "coverage": [
+        "schema"
+      ],
+      "operator_commands": [
+        "python3 scripts/sync-release-schema-artifacts.py --write"
+      ],
+      "check_commands": [
+        "python3 scripts/sync-release-schema-artifacts.py --check"
+      ],
+      "workflow_fragments": {
+        ".github/workflows/verify-release.yml": [
+          "python scripts/sync-release-schema-artifacts.py --check"
+        ],
+        ".github/workflows/release-draft.yml": [
+          "python scripts/sync-release-schema-artifacts.py --check"
+        ]
+      },
+      "status": "required",
+      "evidence_artifacts": [
+        {
+          "path": "schemas/index.json",
+          "bytes": 17529,
+          "sha256": "177b1201d301de630f5e5186750c32d6120295b20feb0ea0ede86e17bdec1020",
+          "manifest_bound": true,
+          "kind": "schema_index",
+          "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sync_manifest_artifacts",
+      "coverage": [
+        "registry_artifacts",
+        "evidence"
+      ],
+      "operator_commands": [
+        "python3 scripts/sync-release-manifest-artifacts.py --write"
+      ],
+      "check_commands": [
+        "python3 scripts/sync-release-manifest-artifacts.py --check",
+        "python3 scripts/validate-release-ledger-ownership.py",
+        "python3 scripts/validate-release-report-artifacts.py"
+      ],
+      "workflow_fragments": {
+        ".github/workflows/verify-release.yml": [
+          "python scripts/sync-release-manifest-artifacts.py --check",
+          "python scripts/validate-release-ledger-ownership.py",
+          "python scripts/validate-release-report-artifacts.py"
+        ],
+        ".github/workflows/release-draft.yml": [
+          "python scripts/sync-release-manifest-artifacts.py --check",
+          "python scripts/validate-release-ledger-ownership.py",
+          "python scripts/validate-release-report-artifacts.py"
+        ]
+      },
+      "status": "required",
+      "evidence_artifacts": [
+        {
+          "path": "docs/release-ledger-ownership.json",
+          "bytes": 12157,
+          "sha256": "25ccd4ad0490aa7b2e60b84e224ff52f4432d05eb8f29962de6d818cfe16f8b1",
+          "manifest_bound": false
+        }
+      ]
+    },
+    {
+      "id": "source_contract_and_runtime_evidence",
+      "coverage": [
+        "source_contracts",
+        "verification_evidence"
+      ],
+      "operator_commands": [
+        "python3 scripts/generate-source-contract-rollup.py",
+        "python3 scripts/generate-source-report-inventory.py",
+        "python3 scripts/generate-source-runtime-readiness.py"
+      ],
+      "check_commands": [
+        "python3 scripts/generate-source-contract-rollup.py --check",
+        "python3 scripts/validate-source-contract-rollups.py",
+        "python3 scripts/validate-source-report-inventory.py",
+        "python3 scripts/validate-source-runtime-evidence-rollup.py"
+      ],
+      "workflow_fragments": {
+        ".github/workflows/verify-release.yml": [
+          "python scripts/generate-source-contract-rollup.py --check",
+          "python scripts/validate-source-report-inventory.py",
+          "python scripts/validate-source-runtime-evidence-rollup.py"
+        ],
+        ".github/workflows/release-draft.yml": [
+          "python scripts/generate-source-contract-rollup.py --check",
+          "python scripts/validate-source-report-inventory.py",
+          "python scripts/validate-source-runtime-evidence-rollup.py"
+        ]
+      },
+      "status": "required",
+      "evidence_artifacts": [
+        {
+          "path": "reports/source-contract-rollup.json",
+          "bytes": 16969,
+          "sha256": "041961dbf1a774604dd904910c018fd2f004a47e16026843df13e86323632111",
+          "manifest_bound": true,
+          "kind": "source_contract_rollup",
+          "schema": "https://schemas.datapan.dev/datapan.source-contract-rollup.v1.schema.json"
+        },
+        {
+          "path": "reports/source-report-inventory.json",
+          "bytes": 59095,
+          "sha256": "7548f39cee30205b2f0dc06acc86b2be8a973326b68dab1f9bb6759abd395dec",
+          "manifest_bound": true,
+          "kind": "source_report_inventory",
+          "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json"
+        },
+        {
+          "path": "reports/source-runtime-evidence-rollup.json",
+          "bytes": 7380,
+          "sha256": "48a15d43b4c4262a6d0b30e7f20e5f500343c65666b221affa9604bffb9c4040",
+          "manifest_bound": true,
+          "kind": "source_runtime_evidence_rollup",
+          "schema": "https://schemas.datapan.dev/datapan.source-runtime-evidence-rollup.v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "error_action_and_downstream_impact",
+      "coverage": [
+        "error_action_routing",
+        "downstream_impact"
+      ],
+      "operator_commands": [
+        "python3 scripts/generate-error-action-routing-rollup.py",
+        "python3 scripts/generate-impact-plan-rollup.py"
+      ],
+      "check_commands": [
+        "python3 scripts/generate-error-action-routing-rollup.py --check",
+        "python3 scripts/validate-error-action-routing-rollups.py",
+        "python3 scripts/generate-impact-plan-rollup.py --check",
+        "python3 scripts/validate-impact-plans.py"
+      ],
+      "workflow_fragments": {
+        ".github/workflows/verify-release.yml": [
+          "python scripts/generate-error-action-routing-rollup.py --check",
+          "python scripts/generate-impact-plan-rollup.py --check",
+          "python scripts/validate-impact-plans.py"
+        ],
+        ".github/workflows/release-draft.yml": [
+          "python scripts/generate-error-action-routing-rollup.py --check",
+          "python scripts/generate-impact-plan-rollup.py --check",
+          "python scripts/validate-impact-plans.py"
+        ]
+      },
+      "status": "required",
+      "evidence_artifacts": [
+        {
+          "path": "reports/error-action-routing-rollup.json",
+          "bytes": 8255,
+          "sha256": "3f1fa789bf4dc42ac631c060d10d38fec73dbb037f5b88dee186fc0fb3c328ff",
+          "manifest_bound": true,
+          "kind": "error_action_routing_rollup",
+          "schema": "https://schemas.datapan.dev/datapan.error-action-routing-rollup.v1.schema.json"
+        },
+        {
+          "path": "reports/registry-impact-plan.json",
+          "bytes": 11519,
+          "sha256": "cbc4d84e97fb211c5ac5acd8e064f4647ba62bf23bca5c98020d1006e181d9f9",
+          "manifest_bound": true,
+          "kind": "registry_impact_plan",
+          "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "consumer_compatibility",
+      "coverage": [
+        "consumer_compatibility"
+      ],
+      "operator_commands": [
+        "python3 scripts/generate-release-consumer-compatibility.py"
+      ],
+      "check_commands": [
+        "python3 scripts/generate-release-consumer-compatibility.py --check",
+        "python3 scripts/validate-release-consumer-compatibility.py"
+      ],
+      "workflow_fragments": {
+        ".github/workflows/verify-release.yml": [
+          "python scripts/generate-release-consumer-compatibility.py --check",
+          "python scripts/validate-release-consumer-compatibility.py"
+        ],
+        ".github/workflows/release-draft.yml": [
+          "python scripts/generate-release-consumer-compatibility.py --check",
+          "python scripts/validate-release-consumer-compatibility.py"
+        ]
+      },
+      "status": "required",
+      "evidence_artifacts": [
+        {
+          "path": "reports/release-consumer-compatibility.json",
+          "bytes": 12788,
+          "sha256": "93782b9239f44a92384f7777bcbaea786f7cdc49edfa6549517405cc463d43f6",
+          "manifest_bound": true,
+          "kind": "consumer_compatibility",
+          "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "release_verification_and_readiness",
+      "coverage": [
+        "verification_evidence",
+        "registry_artifacts"
+      ],
+      "operator_commands": [
+        "datapan catalog release verify --manifest manifest.json --output reports/latest-release-verification.json --json",
+        "datapan catalog release readiness --manifest manifest.json --output reports/latest-release-readiness.json --json"
+      ],
+      "check_commands": [
+        "python3 scripts/validate-release-receipt-boundary.py"
+      ],
+      "workflow_fragments": {
+        ".github/workflows/verify-release.yml": [
+          "go run ./cmd/datapan catalog release verify",
+          "go run ./cmd/datapan catalog release readiness",
+          "python scripts/validate-release-receipt-boundary.py"
+        ],
+        ".github/workflows/release-draft.yml": [
+          "go run ./cmd/datapan catalog release verify",
+          "go run ./cmd/datapan catalog release readiness",
+          "python scripts/validate-release-receipt-boundary.py"
+        ]
+      },
+      "status": "required",
+      "evidence_artifacts": [
+        {
+          "path": "reports/latest-release-verification.json",
+          "bytes": 27131,
+          "sha256": "8475a0c5a5e1106ec946cff6c02bf7c6a9c6e04aeb7ec8265a5c0523979d71ae",
+          "manifest_bound": false
+        },
+        {
+          "path": "reports/latest-release-readiness.json",
+          "bytes": 7612,
+          "sha256": "130fbc1935862f7e75ed561eedde33ab3527b06a3ac0930bd3db844c275469e1",
+          "manifest_bound": false
+        }
+      ]
+    },
+    {
+      "id": "shard_release_distribution",
+      "coverage": [
+        "shard_release_distribution"
+      ],
+      "operator_commands": [
+        "python3 scripts/generate-registry-shards.py",
+        "python3 scripts/package-registry-shards.py"
+      ],
+      "check_commands": [
+        "python3 scripts/validate-registry-shards.py",
+        "python3 scripts/package-registry-shards.py --check"
+      ],
+      "workflow_fragments": {
+        ".github/workflows/verify-release.yml": [
+          "Validate full registry shard release evidence",
+          "python scripts/generate-registry-shards.py",
+          "python scripts/validate-registry-shards.py",
+          "python scripts/package-registry-shards.py",
+          "python scripts/package-registry-shards.py"
+        ],
+        ".github/workflows/release-draft.yml": [
+          "Generate shard archive release evidence",
+          "python scripts/generate-registry-shards.py",
+          "python scripts/validate-registry-shards.py",
+          "python scripts/package-registry-shards.py",
+          "python scripts/package-registry-release.py"
+        ]
+      },
+      "status": "required",
+      "ci_outputs": [
+        ".datapan/ci/full-registry-shards/registry-shards.json",
+        ".datapan/ci/full-data-go-kr-shards.tar.gz",
+        ".datapan/ci/full-shard-archive-check.txt"
+      ]
+    },
+    {
+      "id": "release_package_distribution",
+      "coverage": [
+        "release_distribution"
+      ],
+      "operator_commands": [
+        "python3 scripts/package-registry-release.py --manifest manifest.json --output .datapan/release-assets/datapan-registry-snapshot.zip"
+      ],
+      "check_commands": [
+        "python3 scripts/package-registry-release.py --check .datapan/release-assets/datapan-registry-snapshot.zip",
+        "python3 scripts/package-registry-release.py --check .datapan/release-assets/datapan-registry-snapshot.zip --shard-archive .datapan/ci/full-data-go-kr-shards.tar.gz"
+      ],
+      "workflow_fragments": {
+        ".github/workflows/verify-release.yml": [
+          "Package current release zip",
+          "python scripts/package-registry-release.py",
+          "--shard-archive .datapan/ci/full-data-go-kr-shards.tar.gz"
+        ],
+        ".github/workflows/release-draft.yml": [
+          "Package release zip asset evidence",
+          "python scripts/package-registry-release.py",
+          "--shard-archive .datapan/release-assets/data-go-kr-shards.tar.gz"
+        ]
+      },
+      "status": "required",
+      "ci_outputs": [
+        ".datapan/release-assets/datapan-registry-snapshot.zip",
+        ".datapan/ci/current-release-zip-check.txt",
+        ".datapan/ci/current-release-shard-consistency-check.txt"
+      ]
+    },
+    {
+      "id": "release_assembly_receipt",
+      "coverage": [
+        "evidence"
+      ],
+      "operator_commands": [
+        "python3 scripts/generate-release-assembly-receipt.py"
+      ],
+      "check_commands": [
+        "python3 scripts/generate-release-assembly-receipt.py --check"
+      ],
+      "workflow_fragments": {
+        ".github/workflows/verify-release.yml": [
+          "python scripts/generate-release-assembly-receipt.py --check"
+        ],
+        ".github/workflows/release-draft.yml": [
+          "python scripts/generate-release-assembly-receipt.py --check"
+        ]
+      },
+      "status": "required"
+    },
+    {
+      "id": "goal_completion_audit",
+      "coverage": [
+        "evidence"
+      ],
+      "operator_commands": [
+        "python3 scripts/validate-release-ledger-goal-audit.py"
+      ],
+      "check_commands": [
+        "python3 scripts/validate-release-ledger-goal-audit.py"
+      ],
+      "workflow_fragments": {
+        ".github/workflows/verify-release.yml": [
+          "python scripts/validate-release-ledger-goal-audit.py"
+        ],
+        ".github/workflows/release-draft.yml": [
+          "python scripts/validate-release-ledger-goal-audit.py"
+        ]
+      },
+      "status": "required",
+      "evidence_artifacts": [
+        {
+          "path": "docs/release-ledger-goal-completion-audit.json",
+          "bytes": 12912,
+          "sha256": "560c8d35c9d1ac7d7a456d2b1924ffb6eba52c40d139593d4e028be3de1a4953",
+          "manifest_bound": false
+        }
+      ]
+    }
+  ]
+}
