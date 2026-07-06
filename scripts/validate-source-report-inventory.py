@@ -70,6 +70,74 @@ def indexed_schema_ids(schema_index_path: pathlib.Path) -> set[str]:
     return ids
 
 
+def source_profile_paths() -> list[pathlib.Path]:
+    return sorted(pathlib.Path("sources").glob("*.json"))
+
+
+def validate_source_profile_inputs(report: dict[str, Any]) -> None:
+    inputs = report.get("source_profile_inputs")
+    if not isinstance(inputs, list) or not inputs:
+        raise ValueError("source_profile_inputs must be a non-empty array")
+
+    expected_paths = [path.as_posix() for path in source_profile_paths()]
+    actual_paths = [item.get("path") for item in inputs if isinstance(item, dict)]
+    if actual_paths != expected_paths:
+        raise ValueError(f"source_profile_inputs paths expected {expected_paths}, got {actual_paths}")
+
+    failures: list[str] = []
+    for index, raw_input in enumerate(inputs):
+        if not isinstance(raw_input, dict):
+            failures.append(f"source_profile_inputs[{index}] must be an object")
+            continue
+        path_value = raw_input.get("path")
+        if not isinstance(path_value, str) or not path_value:
+            failures.append(f"source_profile_inputs[{index}].path must be a non-empty string")
+            continue
+        profile_path = pathlib.Path(path_value)
+        if not profile_path.is_file():
+            failures.append(f"source_profile_inputs[{index}].path is missing: {path_value}")
+            continue
+        profile = as_dict(load_json(profile_path), profile_path)
+        expected_bytes, expected_sha256 = file_digest(profile_path)
+        expected_values = {
+            "source_id": profile.get("source_id"),
+            "provider": profile.get("provider"),
+            "bytes": expected_bytes,
+            "sha256": expected_sha256,
+        }
+        for key, value in expected_values.items():
+            if raw_input.get(key) != value:
+                failures.append(
+                    f"source_profile_inputs[{index}].{key} expected {value}, got {raw_input.get(key)}"
+                )
+
+    if failures:
+        raise ValueError("; ".join(failures))
+
+
+def validate_schema_index_input(report: dict[str, Any], schema_index_path: pathlib.Path) -> None:
+    raw_input = report.get("schema_index_input")
+    if not isinstance(raw_input, dict):
+        raise ValueError("schema_index_input must be an object")
+    if raw_input.get("path") != schema_index_path.as_posix():
+        raise ValueError(
+            f"schema_index_input.path expected {schema_index_path.as_posix()}, got {raw_input.get('path')}"
+        )
+    schema_index = as_dict(load_json(schema_index_path), schema_index_path)
+    schemas = schema_index.get("schemas")
+    if not isinstance(schemas, list):
+        raise ValueError("schemas/index.json schemas must be an array")
+    expected_bytes, expected_sha256 = file_digest(schema_index_path)
+    expected_values = {
+        "schemas": len(schemas),
+        "bytes": expected_bytes,
+        "sha256": expected_sha256,
+    }
+    for key, value in expected_values.items():
+        if raw_input.get(key) != value:
+            raise ValueError(f"schema_index_input.{key} expected {value}, got {raw_input.get(key)}")
+
+
 def validate_report_digests(report: dict[str, Any]) -> None:
     sources = report.get("sources")
     if not isinstance(sources, list):
@@ -186,6 +254,8 @@ def validate_report(
         raise ValueError("; ".join(messages))
 
     validate_report_digests(report)
+    validate_source_profile_inputs(report)
+    validate_schema_index_input(report, schema_index_path)
     validate_schema_index_coverage(report, schema_index_path)
 
     with tempfile.TemporaryDirectory() as temp_dir:
