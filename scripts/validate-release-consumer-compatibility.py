@@ -41,6 +41,38 @@ REQUIRED_SHARD_INSTALL_FIELDS = {
     "shards_count",
     "shards_records",
 }
+REQUIRED_MANIFEST_EVIDENCE_CONTRACTS = {
+    "source_contracts": {
+        "path": "reports/source-contract-rollup.json",
+        "kind": "source_contract_rollup",
+        "schema": "https://schemas.datapan.dev/datapan.source-contract-rollup.v1.schema.json",
+    },
+    "source_runtime_evidence": {
+        "path": "reports/source-runtime-evidence-rollup.json",
+        "kind": "source_runtime_evidence_rollup",
+        "schema": "https://schemas.datapan.dev/datapan.source-runtime-evidence-rollup.v1.schema.json",
+    },
+    "error_action_routing": {
+        "path": "reports/error-action-routing-rollup.json",
+        "kind": "error_action_routing_rollup",
+        "schema": "https://schemas.datapan.dev/datapan.error-action-routing-rollup.v1.schema.json",
+    },
+    "downstream_impact": {
+        "path": "reports/registry-impact-plan.json",
+        "kind": "registry_impact_plan",
+        "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
+    },
+    "source_reference_drift": {
+        "path": "reports/source-reference-drift.json",
+        "kind": "source_reference_drift",
+        "schema": "https://schemas.datapan.dev/datapan.source-reference-drift.v1.schema.json",
+    },
+    "source_report_inventory": {
+        "path": "reports/source-report-inventory.json",
+        "kind": "source_report_inventory",
+        "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
+    },
+}
 REQUIRED_CLI_SURFACES = {
     "catalog install",
     "doctor",
@@ -189,6 +221,43 @@ def validate_shard_policy(report: dict[str, Any]) -> None:
         raise ValueError("shard policy must be blocked on proven monolith fallback")
 
 
+def validate_manifest_evidence_contracts(report: dict[str, Any], manifest: dict[str, Any]) -> None:
+    artifacts = manifest_artifacts(manifest)
+    contracts = [
+        as_dict(item, "manifest_evidence_contract")
+        for item in as_list(report.get("manifest_evidence_contracts"), "manifest_evidence_contracts")
+    ]
+    by_contract: dict[str, dict[str, Any]] = {}
+    for item in contracts:
+        contract = item.get("contract")
+        if not isinstance(contract, str) or not contract:
+            raise ValueError("manifest_evidence_contract.contract must be a non-empty string")
+        if contract in by_contract:
+            raise ValueError(f"duplicate manifest evidence contract: {contract}")
+        by_contract[contract] = item
+
+    missing_contracts = sorted(set(REQUIRED_MANIFEST_EVIDENCE_CONTRACTS).difference(by_contract))
+    if missing_contracts:
+        raise ValueError(f"missing manifest evidence contracts: {', '.join(missing_contracts)}")
+
+    for contract, expected in REQUIRED_MANIFEST_EVIDENCE_CONTRACTS.items():
+        item = by_contract[contract]
+        for key, value in expected.items():
+            if item.get(key) != value:
+                raise ValueError(f"manifest_evidence_contracts.{contract}.{key} expected {value}, got {item.get(key)}")
+        if item.get("required") is not True:
+            raise ValueError(f"manifest_evidence_contracts.{contract}.required must be true")
+
+        artifact = artifacts.get(expected["path"])
+        if artifact is None:
+            raise ValueError(f"manifest missing required evidence artifact: {expected['path']}")
+        for key in ("kind", "schema", "bytes", "sha256"):
+            if item.get(key) != artifact.get(key):
+                raise ValueError(
+                    f"manifest_evidence_contracts.{contract}.{key} must match manifest artifact {expected['path']}"
+                )
+
+
 def validate_consumers(report: dict[str, Any]) -> None:
     consumers = [as_dict(item, "consumer") for item in as_list(report.get("consumers"), "consumers")]
     by_name: dict[str, dict[str, Any]] = {}
@@ -226,6 +295,7 @@ def validate_consistency(report: dict[str, Any], manifest: dict[str, Any], readi
     validate_manifest_links(report, manifest)
     validate_readiness(report, readiness)
     validate_shard_policy(report)
+    validate_manifest_evidence_contracts(report, manifest)
     validate_consumers(report)
 
 

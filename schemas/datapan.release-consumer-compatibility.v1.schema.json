@@ -13,6 +13,7 @@
     "summary",
     "compatibility_path",
     "release_health_evidence",
+    "manifest_evidence_contracts",
     "shard_policy",
     "consumers"
   ],
@@ -38,6 +39,14 @@
     },
     "release_health_evidence": {
       "$ref": "#/$defs/release_health_evidence"
+    },
+    "manifest_evidence_contracts": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {
+        "$ref": "#/$defs/manifest_evidence_contract"
+      }
     },
     "shard_policy": {
       "$ref": "#/$defs/shard_policy"
@@ -191,6 +200,44 @@
           "items": {
             "$ref": "#/$defs/non_empty_string"
           }
+        }
+      }
+    },
+    "manifest_evidence_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract", "path", "kind", "schema", "bytes", "sha256", "required"],
+      "properties": {
+        "contract": {
+          "enum": [
+            "source_contracts",
+            "source_runtime_evidence",
+            "error_action_routing",
+            "downstream_impact",
+            "source_reference_drift",
+            "source_report_inventory"
+          ]
+        },
+        "path": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "kind": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "schema": {
+          "type": "string",
+          "format": "uri"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "required": {
+          "const": true
         }
       }
     },

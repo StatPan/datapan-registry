@@ -105,7 +105,11 @@ check. That workflow:
   manifest-bound downstream compatibility matrix that keeps the canonical
   registry path required, release-health evidence named, shard install fields
   tied to the rollup, and shard assets optional until shard-preferred monolith
-  fallback is proven downstream;
+  fallback is proven downstream. The report also names the required manifest
+  evidence contracts for source contracts, source runtime evidence,
+  error/action routing, downstream impact, source reference drift, and source
+  report inventory, and validation checks their bytes and sha256 values against
+  `manifest.json`;
 - regenerates and validates `reports/source-contract-rollup.json`, the
   manifest-bound upstream contract rollup that records checked-in source
   profile checksums plus provider status, auth, request, response, runtime, and
