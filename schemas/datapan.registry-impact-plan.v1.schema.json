@@ -53,6 +53,12 @@
     "current_registry": {
       "type": "string"
     },
+    "source_plan_inputs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source_plan_input"
+      }
+    },
     "summary": {
       "$ref": "#/$defs/summary"
     },
@@ -64,6 +70,43 @@
     }
   },
   "$defs": {
+    "source_plan_input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "provider",
+        "source_id",
+        "changes",
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+        },
+        "changes": {
+          "$ref": "#/$defs/count"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
     "summary": {
       "type": "object",
       "additionalProperties": false,

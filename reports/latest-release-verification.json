@@ -102,10 +102,10 @@
       "path": "schemas/datapan.registry-impact-plan.v1.schema.json",
       "kind": "schema",
       "status": "verified",
-      "expected_bytes": 8444,
-      "actual_bytes": 8444,
-      "expected_sha256": "830517bcda01cad7143c02dd13f861aa0b442d3d81e6b0f398c51e30eb14137a",
-      "actual_sha256": "830517bcda01cad7143c02dd13f861aa0b442d3d81e6b0f398c51e30eb14137a"
+      "expected_bytes": 9359,
+      "actual_bytes": 9359,
+      "expected_sha256": "e7d66071585719e7d938d5510900389d0f1812e5d9278541fa0037e0983e60a2",
+      "actual_sha256": "e7d66071585719e7d938d5510900389d0f1812e5d9278541fa0037e0983e60a2"
     },
     {
       "path": "schemas/datapan.release-manifest.v1.schema.json",
@@ -410,8 +410,8 @@
       "status": "verified",
       "expected_bytes": 17123,
       "actual_bytes": 17123,
-      "expected_sha256": "7335fd35d3854ead65c1081d3f031f7c27554331cae96eec222eb89c33918f75",
-      "actual_sha256": "7335fd35d3854ead65c1081d3f031f7c27554331cae96eec222eb89c33918f75"
+      "expected_sha256": "e240caf21056799dce1a55119b3a187655e0cc08726c9884e09afb670b2526fb",
+      "actual_sha256": "e240caf21056799dce1a55119b3a187655e0cc08726c9884e09afb670b2526fb"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -489,10 +489,10 @@
       "path": "reports/registry-impact-plan.json",
       "kind": "registry_impact_plan",
       "status": "verified",
-      "expected_bytes": 10565,
-      "actual_bytes": 10565,
-      "expected_sha256": "ae0f017e508977c3676737be966a188cfa941eed61acec8a54c476c9d454ffc0",
-      "actual_sha256": "ae0f017e508977c3676737be966a188cfa941eed61acec8a54c476c9d454ffc0"
+      "expected_bytes": 10859,
+      "actual_bytes": 10859,
+      "expected_sha256": "a7fc3b684c48a4ac68b11f131d11bd6f59fa9b0e6e008d7b5bb2ed2d2de1324c",
+      "actual_sha256": "a7fc3b684c48a4ac68b11f131d11bd6f59fa9b0e6e008d7b5bb2ed2d2de1324c"
     },
     {
       "path": "reports/source-reference-drift.json",
@@ -599,8 +599,8 @@
       "status": "verified",
       "expected_bytes": 8693,
       "actual_bytes": 8693,
-      "expected_sha256": "1af575e4af4c30875b0fc8074ecb2ffd92943716c777884b391836aae4ec8174",
-      "actual_sha256": "1af575e4af4c30875b0fc8074ecb2ffd92943716c777884b391836aae4ec8174"
+      "expected_sha256": "05413391111a7826cb3fc60afaa2db9f4dd76237f631843b04b9f87ddd7db39a",
+      "actual_sha256": "05413391111a7826cb3fc60afaa2db9f4dd76237f631843b04b9f87ddd7db39a"
     },
     {
       "path": "reports/unadapted-external-probe.json",

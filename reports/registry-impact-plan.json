@@ -9,6 +9,16 @@
   "registry_version_to": "pr-4-draft",
   "previous_registry": "reports/*/registry-impact-plan.json",
   "current_registry": "reports/registry-impact-plan.json",
+  "source_plan_inputs": [
+    {
+      "path": "reports/data-go-kr/registry-impact-plan.json",
+      "provider": "data.go.kr",
+      "source_id": "data_go_kr",
+      "changes": 4,
+      "bytes": 8327,
+      "sha256": "ac7a86d0a347f3c35b5283b641f8bc84eddaf1f349c257edaf4d725d4d818772"
+    }
+  ],
   "summary": {
     "total": 5,
     "by_category": [
