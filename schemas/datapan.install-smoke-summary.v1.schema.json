@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.install-smoke-summary.v1.schema.json",
+  "title": "Datapan Install Smoke Summary v1",
+  "description": "Structured release-health evidence emitted by the datapan-registry install smoke validator.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "install_json",
+    "provider",
+    "mode",
+    "specs",
+    "registry",
+    "release"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.install-smoke-summary.v1"
+    },
+    "install_json": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider": {
+      "const": "datapan-registry"
+    },
+    "mode": {
+      "enum": ["monolith_fallback", "shard_validated"]
+    },
+    "specs": {
+      "$ref": "#/$defs/positive_count"
+    },
+    "registry": {
+      "$ref": "#/$defs/registry"
+    },
+    "release": {
+      "$ref": "#/$defs/release"
+    }
+  },
+  "$defs": {
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "positive_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "registry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "install_bytes", "checksum_checked"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "install_bytes": {
+          "$ref": "#/$defs/positive_count"
+        },
+        "checksum_checked": {
+          "type": "boolean"
+        },
+        "canonical_archive_path": {
+          "const": "data/data-go-kr.registry.json"
+        },
+        "bytes": {
+          "$ref": "#/$defs/positive_count"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "release": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "release_zip_checked",
+        "release_zip",
+        "shards_asset_present",
+        "shards_validated",
+        "shards_inventory_present",
+        "shards_count",
+        "shards_records"
+      ],
+      "properties": {
+        "release_zip_checked": {
+          "type": "boolean"
+        },
+        "release_zip": {
+          "type": ["string", "null"],
+          "minLength": 1
+        },
+        "shards_asset_present": {
+          "type": "boolean"
+        },
+        "shards_validated": {
+          "type": "boolean"
+        },
+        "shards_inventory_present": {
+          "type": "boolean"
+        },
+        "shards_count": {
+          "$ref": "#/$defs/count"
+        },
+        "shards_records": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    }
+  }
+}

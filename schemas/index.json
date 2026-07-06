@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 30,
+  "count": 31,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -273,6 +273,15 @@
       "version": "v1",
       "bytes": 5597,
       "sha256": "4fd5e6cc4554ff610bdf285506a1c60d3f2805e022b37d5a531025fc1c6986ca"
+    },
+    {
+      "path": "schemas/datapan.install-smoke-summary.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.install-smoke-summary.v1.schema.json",
+      "title": "Datapan Install Smoke Summary v1",
+      "contract": "install-smoke-summary",
+      "version": "v1",
+      "bytes": 2746,
+      "sha256": "20abc86e79fb527f1d5c9cab15f68d6d68444e492546404c51aee624c5e98428"
     }
   ]
 }

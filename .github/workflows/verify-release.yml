@@ -71,6 +71,7 @@ jobs:
           python scripts/validate-link-detail-registry-patches.py
           python scripts/validate-institution-api-overview.py
           python scripts/validate-institution-runtime-plan.py
+          python -m py_compile scripts/validate-install-smoke-summaries.py
 
       - name: Validate provider verification evidence
         working-directory: datapan-cli
@@ -150,6 +151,10 @@ jobs:
             --release-zip ../datapan-registry/.datapan/release-assets/datapan-registry-snapshot.zip \
             --summary-json ../datapan-registry/.datapan/ci/current-release-install-smoke.json \
             ../datapan-registry/.datapan/ci/current-release-install.json
+          ../datapan-registry/.datapan/ci/source-profile-venv/bin/python \
+            ../datapan-registry/scripts/validate-install-smoke-summaries.py \
+            --schema ../datapan-registry/schemas/datapan.install-smoke-summary.v1.schema.json \
+            ../datapan-registry/.datapan/ci/current-release-install-smoke.json
           DATAPAN_REGISTRY_PATH="${RUNNER_TEMP}/datapan-installed-current.registry.json" \
             go run ./cmd/datapan doctor --json \
             > ../datapan-registry/.datapan/ci/current-release-doctor.json
@@ -205,6 +210,10 @@ jobs:
           python3 ../datapan-registry/scripts/check-shard-aware-install-smoke.py \
             --summary-json ../datapan-registry/.datapan/ci/latest-release-install-smoke.json \
             ../datapan-registry/.datapan/ci/latest-release-install.json
+          ../datapan-registry/.datapan/ci/source-profile-venv/bin/python \
+            ../datapan-registry/scripts/validate-install-smoke-summaries.py \
+            --schema ../datapan-registry/schemas/datapan.install-smoke-summary.v1.schema.json \
+            ../datapan-registry/.datapan/ci/latest-release-install-smoke.json
           DATAPAN_REGISTRY_PATH="${RUNNER_TEMP}/datapan-installed-latest.registry.json" \
             go run ./cmd/datapan doctor --json \
             > ../datapan-registry/.datapan/ci/latest-release-doctor.json
