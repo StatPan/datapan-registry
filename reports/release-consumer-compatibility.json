@@ -7,13 +7,13 @@
     "manifest": {
       "path": "manifest.json",
       "generated_at": "2026-07-04T06:39:24Z",
-      "artifact_count": 72,
-      "evidence_contracts": 6
+      "artifact_count": 74,
+      "evidence_contracts": 7
     },
     "readiness": {
       "path": "reports/latest-release-readiness.json",
       "normalization": "omit_generated_at",
-      "normalized_sha256": "dc265cade43576ffcf2580630d58ddd307dbbf19d4cc660b3477a3907d3dd866",
+      "normalized_sha256": "fdd279ad4c95f90cace959a92f71cb61e17c5e46e4a3a277f88fa5b8d06b722b",
       "ready": true,
       "gates_total": 23,
       "passed": 23,
@@ -99,6 +99,15 @@
       "required": true
     },
     {
+      "contract": "source_runtime_remediation",
+      "path": "reports/source-runtime-remediation-map.json",
+      "kind": "source_runtime_remediation_map",
+      "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
+      "bytes": 10394,
+      "sha256": "dfdaa7b5446f1475bf7f365500d945c9a3da16f64dc65571e7513f31086054ed",
+      "required": true
+    },
+    {
       "contract": "error_action_routing",
       "path": "reports/error-action-routing-rollup.json",
       "kind": "error_action_routing_rollup",
@@ -113,7 +122,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "cbc4d84e97fb211c5ac5acd8e064f4647ba62bf23bca5c98020d1006e181d9f9",
+      "sha256": "b5b87504fc8d49fda77f4a57b6aa1caa4886aaa11e28c1e9ebb4faf5bac5a5a1",
       "required": true
     },
     {
@@ -131,24 +140,28 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 59095,
-      "sha256": "7548f39cee30205b2f0dc06acc86b2be8a973326b68dab1f9bb6759abd395dec",
+      "sha256": "1a1daa844dff824ea9f60c96b85257058fe8ba2b1409f50e9f42d46c2a429737",
       "required": true
     }
   ],
   "runtime_risk_evidence": {
     "source_runtime_rollup": "reports/source-runtime-evidence-rollup.json",
+    "source_runtime_remediation_map": "reports/source-runtime-remediation-map.json",
     "error_action_routing_rollup": "reports/error-action-routing-rollup.json",
     "downstream_impact_rollup": "reports/registry-impact-plan.json",
     "manual_review_required": true,
     "compatibility_effect": "manual_review_required_until_runtime_blockers_resolved",
     "required_contracts": [
       "source_runtime_evidence",
+      "source_runtime_remediation",
       "error_action_routing",
       "downstream_impact"
     ],
     "blocking_count": 12,
     "warning_count": 8,
     "sources_without_evidence": 4,
+    "remediation_follow_up_required": 8,
+    "remediation_manual_review_boundaries": 13,
     "blocker_ids": [
       "adapter_not_registered",
       "credential_required",

@@ -1,0 +1,316 @@
+#!/usr/bin/env python3
+"""Generate or check the source runtime remediation map."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import pathlib
+import sys
+from typing import Any
+
+try:
+    import jsonschema
+except ImportError as exc:  # pragma: no cover - environment guard
+    raise SystemExit("missing dependency: install jsonschema before generating source runtime remediation maps") from exc
+
+
+DEFAULT_RUNTIME_ROLLUP = pathlib.Path("reports/source-runtime-evidence-rollup.json")
+DEFAULT_ROUTING = pathlib.Path("reports/error-action-routing-rollup.json")
+DEFAULT_IMPACT = pathlib.Path("reports/registry-impact-plan.json")
+DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.source-runtime-remediation-map.v1.schema.json")
+DEFAULT_OUTPUT = pathlib.Path("reports/source-runtime-remediation-map.json")
+SCHEMA_VERSION = "datapan.source-runtime-remediation-map.v1"
+FOLLOW_UP_ISSUE = 362
+
+
+REMEDIATION_RULES: dict[str, dict[str, Any]] = {
+    "adapter_not_registered": {
+        "status": "follow_up_required",
+        "action": "register_runtime_adapter",
+        "owner": "provider-adapter",
+        "follow_up_issue": FOLLOW_UP_ISSUE,
+        "release_boundary": "manual_review_required",
+    },
+    "source_runtime_adapter_not_registered": {
+        "status": "follow_up_required",
+        "action": "register_runtime_adapter",
+        "owner": "provider-adapter",
+        "follow_up_issue": FOLLOW_UP_ISSUE,
+        "release_boundary": "manual_review_required",
+    },
+    "credential_required": {
+        "status": "manual_review_boundary",
+        "action": "provide_runtime_credentials_or_accept_metadata_only_boundary",
+        "owner": "release-operator",
+        "release_boundary": "credentialed_runtime_evidence_not_required_for_canonical_registry_release",
+    },
+    "metadata_only_verification": {
+        "status": "manual_review_boundary",
+        "action": "collect_live_runtime_evidence_when_credentials_and_adapter_are_available",
+        "owner": "source-evidence",
+        "release_boundary": "metadata_only_source_remains_manual_review",
+    },
+    "non_data_runtime_evidence_not_collected": {
+        "status": "manual_review_boundary",
+        "action": "collect_non_data_runtime_evidence_after_adapter_and_credentials_are_available",
+        "owner": "source-evidence",
+        "release_boundary": "non_data_runtime_evidence_gap_documented",
+    },
+    "source_specific_error_taxonomy_pending": {
+        "status": "follow_up_required",
+        "action": "update_source_specific_error_taxonomy",
+        "owner": "error-action-routing",
+        "follow_up_issue": FOLLOW_UP_ISSUE,
+        "release_boundary": "manual_review_required",
+    },
+    "source_runtime_error_taxonomy_pending": {
+        "status": "follow_up_required",
+        "action": "update_source_specific_error_taxonomy",
+        "owner": "error-action-routing",
+        "follow_up_issue": FOLLOW_UP_ISSUE,
+        "release_boundary": "manual_review_required",
+    },
+}
+
+
+def load_json(path: pathlib.Path) -> dict[str, Any]:
+    with path.open("r", encoding="utf-8") as handle:
+        value = json.load(handle)
+    if not isinstance(value, dict):
+        raise ValueError(f"{path} must contain a JSON object")
+    return value
+
+
+def render_json(value: dict[str, Any]) -> str:
+    return json.dumps(value, ensure_ascii=False, indent=2) + "\n"
+
+
+def file_digest(path: pathlib.Path) -> tuple[int, str]:
+    data = path.read_bytes()
+    return len(data), hashlib.sha256(data).hexdigest()
+
+
+def as_dict(value: object, label: str) -> dict[str, Any]:
+    if not isinstance(value, dict):
+        raise ValueError(f"{label} must be an object")
+    return value
+
+
+def as_list(value: object, label: str) -> list[Any]:
+    if not isinstance(value, list):
+        raise ValueError(f"{label} must be an array")
+    return value
+
+
+def string_list(value: object, label: str) -> list[str]:
+    result: list[str] = []
+    for index, item in enumerate(as_list(value, label)):
+        if not isinstance(item, str) or not item:
+            raise ValueError(f"{label}[{index}] must be a non-empty string")
+        result.append(item)
+    return sorted(result)
+
+
+def evidence_input(path: pathlib.Path, schema: str) -> dict[str, Any]:
+    bytes_value, sha256 = file_digest(path)
+    return {
+        "path": path.as_posix(),
+        "schema": schema,
+        "bytes": bytes_value,
+        "sha256": sha256,
+    }
+
+
+def finding_entry(source_id: str, severity: str, finding_id: str) -> dict[str, Any]:
+    rule = REMEDIATION_RULES.get(finding_id)
+    if rule is None:
+        raise ValueError(f"missing remediation rule for {severity} {finding_id} in {source_id}")
+    entry = {
+        "id": finding_id,
+        "severity": severity,
+        "status": rule["status"],
+        "action": rule["action"],
+        "owner": rule["owner"],
+        "release_boundary": rule["release_boundary"],
+    }
+    if "follow_up_issue" in rule:
+        entry["follow_up_issue"] = rule["follow_up_issue"]
+    return entry
+
+
+def source_entries(runtime_rollup: dict[str, Any]) -> list[dict[str, Any]]:
+    entries: list[dict[str, Any]] = []
+    for index, raw_source in enumerate(as_list(runtime_rollup.get("sources"), "runtime_rollup.sources")):
+        source = as_dict(raw_source, f"runtime_rollup.sources[{index}]")
+        source_id = source.get("source_id")
+        provider = source.get("provider")
+        plan = source.get("runtime_evidence_plan")
+        if not isinstance(source_id, str) or not source_id:
+            raise ValueError(f"runtime_rollup.sources[{index}].source_id must be a non-empty string")
+        if not isinstance(provider, str) or not provider:
+            raise ValueError(f"{source_id}.provider must be a non-empty string")
+        if not isinstance(plan, str) or not plan:
+            raise ValueError(f"{source_id}.runtime_evidence_plan must be a non-empty string")
+        blocker_ids = string_list(source.get("blocker_ids"), f"{source_id}.blocker_ids")
+        warning_ids = string_list(source.get("warning_ids"), f"{source_id}.warning_ids")
+        entries.append(
+            {
+                "source_id": source_id,
+                "provider": provider,
+                "runtime_evidence_plan": plan,
+                "evidence_total": source.get("evidence_total"),
+                "blocking_count": source.get("blocking_count"),
+                "warning_count": source.get("warning_count"),
+                "findings": [
+                    *(finding_entry(source_id, "blocker", finding_id) for finding_id in blocker_ids),
+                    *(finding_entry(source_id, "warning", finding_id) for finding_id in warning_ids),
+                ],
+            }
+        )
+    return entries
+
+
+def validate_runtime_alignment(runtime_rollup: dict[str, Any], sources: list[dict[str, Any]]) -> None:
+    for source in sources:
+        blockers = [item for item in source["findings"] if item["severity"] == "blocker"]
+        warnings = [item for item in source["findings"] if item["severity"] == "warning"]
+        if not blockers and not warnings:
+            raise ValueError(f"{source['source_id']} must have blocker or warning remediation findings")
+
+    summary = as_dict(runtime_rollup.get("summary"), "runtime_rollup.summary")
+    for key in ("blocking_count", "warning_count"):
+        if not isinstance(summary.get(key), int) or summary[key] < 0:
+            raise ValueError(f"runtime_rollup.summary.{key} must be a non-negative integer")
+
+
+def build_report(
+    runtime_rollup: dict[str, Any],
+    routing: dict[str, Any],
+    impact: dict[str, Any],
+) -> dict[str, Any]:
+    runtime_summary = as_dict(runtime_rollup.get("summary"), "runtime_rollup.summary")
+    routing_summary = as_dict(routing.get("summary"), "routing.summary")
+    impact_summary = as_dict(impact.get("summary"), "impact.summary")
+    sources = source_entries(runtime_rollup)
+    validate_runtime_alignment(runtime_rollup, sources)
+
+    findings = [finding for source in sources for finding in source["findings"]]
+    unresolved = sum(1 for finding in findings if finding["status"] == "follow_up_required")
+    manual = sum(1 for finding in findings if finding["status"] == "manual_review_boundary")
+    mapped_blockers = sum(1 for finding in findings if finding["severity"] == "blocker")
+    mapped_warnings = sum(1 for finding in findings if finding["severity"] == "warning")
+    generated_at = runtime_rollup.get("generated_at")
+    if not isinstance(generated_at, str) or not generated_at:
+        raise ValueError("runtime rollup must provide generated_at")
+    manual_review_required = bool(unresolved or manual or runtime_summary.get("blocking_count") or runtime_summary.get("warning_count"))
+    compatibility_effect = (
+        "manual_review_required_until_runtime_blockers_resolved"
+        if manual_review_required
+        else "runtime_evidence_clear"
+    )
+
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "generated_at": generated_at,
+        "goal_issue": 344,
+        "mapping_ticket": 360,
+        "follow_up_issue": FOLLOW_UP_ISSUE,
+        "provider": "datapan-registry",
+        "summary": {
+            "sources": runtime_summary.get("sources"),
+            "blocking_count": runtime_summary.get("blocking_count"),
+            "warning_count": runtime_summary.get("warning_count"),
+            "mapped_blocker_findings": mapped_blockers,
+            "mapped_warning_findings": mapped_warnings,
+            "sources_without_evidence": runtime_summary.get("sources_without_evidence"),
+            "manual_review_boundaries": manual,
+            "follow_up_required": unresolved,
+            "compatibility_effect": compatibility_effect,
+            "manual_review_required": manual_review_required,
+        },
+        "release_evidence_inputs": [
+            evidence_input(
+                DEFAULT_RUNTIME_ROLLUP,
+                "https://schemas.datapan.dev/datapan.source-runtime-evidence-rollup.v1.schema.json",
+            ),
+            evidence_input(
+                DEFAULT_ROUTING,
+                "https://schemas.datapan.dev/datapan.error-action-routing-rollup.v1.schema.json",
+            ),
+            evidence_input(
+                DEFAULT_IMPACT,
+                "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
+            ),
+        ],
+        "routing_evidence": {
+            "blocking_rules": routing_summary.get("blocking_rules"),
+            "manual_review_rules": routing_summary.get("manual_review_rules"),
+        },
+        "downstream_impact_evidence": {
+            "requires_manual_review": impact_summary.get("requires_manual_review"),
+            "requires_db_migration_review": impact_summary.get("requires_db_migration_review"),
+            "requires_served_contract_regeneration": impact_summary.get("requires_served_contract_regeneration"),
+        },
+        "sources": sources,
+    }
+
+
+def validate_schema(report: dict[str, Any], schema_path: pathlib.Path) -> None:
+    schema = load_json(schema_path)
+    validator = jsonschema.Draft202012Validator(schema)
+    errors = sorted(validator.iter_errors(report), key=lambda error: list(error.path))
+    if errors:
+        rendered = []
+        for error in errors:
+            location = ".".join(str(part) for part in error.path) or "<root>"
+            rendered.append(f"{location}: {error.message}")
+        raise ValueError("; ".join(rendered))
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--runtime-rollup", default=DEFAULT_RUNTIME_ROLLUP, type=pathlib.Path)
+    parser.add_argument("--routing", default=DEFAULT_ROUTING, type=pathlib.Path)
+    parser.add_argument("--impact", default=DEFAULT_IMPACT, type=pathlib.Path)
+    parser.add_argument("--schema", default=DEFAULT_SCHEMA, type=pathlib.Path)
+    parser.add_argument("--output", default=DEFAULT_OUTPUT, type=pathlib.Path)
+    parser.add_argument("--check", action="store_true", help="fail when the checked-in remediation map is stale")
+    args = parser.parse_args()
+
+    try:
+        report = build_report(
+            load_json(args.runtime_rollup),
+            load_json(args.routing),
+            load_json(args.impact),
+        )
+        validate_schema(report, args.schema)
+    except Exception as exc:  # noqa: BLE001 - release operators need the failed invariant
+        print(f"FAIL generate source runtime remediation map: {exc}", file=sys.stderr)
+        return 1
+
+    rendered = render_json(report)
+    if args.check:
+        if not args.output.exists():
+            print(f"FAIL {args.output}: missing source runtime remediation map", file=sys.stderr)
+            return 1
+        current = args.output.read_text(encoding="utf-8")
+        if current != rendered:
+            print(
+                f"FAIL {args.output}: stale source runtime remediation map; "
+                "run `python3 scripts/generate-source-runtime-remediation-map.py`",
+                file=sys.stderr,
+            )
+            return 1
+        print(f"ok {args.output} (sources={report['summary']['sources']})")
+        return 0
+
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(rendered, encoding="utf-8")
+    print(f"wrote {args.output} (sources={report['summary']['sources']})")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

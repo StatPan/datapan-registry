@@ -1,0 +1,277 @@
+{
+  "schema_version": "datapan.source-runtime-remediation-map.v1",
+  "generated_at": "2026-07-06T17:46:39Z",
+  "goal_issue": 344,
+  "mapping_ticket": 360,
+  "follow_up_issue": 362,
+  "provider": "datapan-registry",
+  "summary": {
+    "sources": 5,
+    "blocking_count": 12,
+    "warning_count": 8,
+    "mapped_blocker_findings": 13,
+    "mapped_warning_findings": 8,
+    "sources_without_evidence": 4,
+    "manual_review_boundaries": 13,
+    "follow_up_required": 8,
+    "compatibility_effect": "manual_review_required_until_runtime_blockers_resolved",
+    "manual_review_required": true
+  },
+  "release_evidence_inputs": [
+    {
+      "path": "reports/source-runtime-evidence-rollup.json",
+      "schema": "https://schemas.datapan.dev/datapan.source-runtime-evidence-rollup.v1.schema.json",
+      "bytes": 7380,
+      "sha256": "48a15d43b4c4262a6d0b30e7f20e5f500343c65666b221affa9604bffb9c4040"
+    },
+    {
+      "path": "reports/error-action-routing-rollup.json",
+      "schema": "https://schemas.datapan.dev/datapan.error-action-routing-rollup.v1.schema.json",
+      "bytes": 8255,
+      "sha256": "3f1fa789bf4dc42ac631c060d10d38fec73dbb037f5b88dee186fc0fb3c328ff"
+    },
+    {
+      "path": "reports/registry-impact-plan.json",
+      "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
+      "bytes": 11519,
+      "sha256": "b5b87504fc8d49fda77f4a57b6aa1caa4886aaa11e28c1e9ebb4faf5bac5a5a1"
+    }
+  ],
+  "routing_evidence": {
+    "blocking_rules": 7,
+    "manual_review_rules": 24
+  },
+  "downstream_impact_evidence": {
+    "requires_manual_review": 2,
+    "requires_db_migration_review": 0,
+    "requires_served_contract_regeneration": 0
+  },
+  "sources": [
+    {
+      "source_id": "data_go_kr",
+      "provider": "data.go.kr",
+      "runtime_evidence_plan": "reports/data-go-kr/runtime-evidence-plan.json",
+      "evidence_total": 4774,
+      "blocking_count": 1,
+      "warning_count": 1,
+      "findings": [
+        {
+          "id": "credential_required",
+          "severity": "blocker",
+          "status": "manual_review_boundary",
+          "action": "provide_runtime_credentials_or_accept_metadata_only_boundary",
+          "owner": "release-operator",
+          "release_boundary": "credentialed_runtime_evidence_not_required_for_canonical_registry_release"
+        },
+        {
+          "id": "source_specific_error_taxonomy_pending",
+          "severity": "blocker",
+          "status": "follow_up_required",
+          "action": "update_source_specific_error_taxonomy",
+          "owner": "error-action-routing",
+          "release_boundary": "manual_review_required",
+          "follow_up_issue": 362
+        },
+        {
+          "id": "source_runtime_error_taxonomy_pending",
+          "severity": "warning",
+          "status": "follow_up_required",
+          "action": "update_source_specific_error_taxonomy",
+          "owner": "error-action-routing",
+          "release_boundary": "manual_review_required",
+          "follow_up_issue": 362
+        }
+      ]
+    },
+    {
+      "source_id": "ecos",
+      "provider": "ECOS",
+      "runtime_evidence_plan": "reports/ecos/runtime-evidence-plan.json",
+      "evidence_total": 0,
+      "blocking_count": 3,
+      "warning_count": 2,
+      "findings": [
+        {
+          "id": "adapter_not_registered",
+          "severity": "blocker",
+          "status": "follow_up_required",
+          "action": "register_runtime_adapter",
+          "owner": "provider-adapter",
+          "release_boundary": "manual_review_required",
+          "follow_up_issue": 362
+        },
+        {
+          "id": "credential_required",
+          "severity": "blocker",
+          "status": "manual_review_boundary",
+          "action": "provide_runtime_credentials_or_accept_metadata_only_boundary",
+          "owner": "release-operator",
+          "release_boundary": "credentialed_runtime_evidence_not_required_for_canonical_registry_release"
+        },
+        {
+          "id": "metadata_only_verification",
+          "severity": "blocker",
+          "status": "manual_review_boundary",
+          "action": "collect_live_runtime_evidence_when_credentials_and_adapter_are_available",
+          "owner": "source-evidence",
+          "release_boundary": "metadata_only_source_remains_manual_review"
+        },
+        {
+          "id": "non_data_runtime_evidence_not_collected",
+          "severity": "warning",
+          "status": "manual_review_boundary",
+          "action": "collect_non_data_runtime_evidence_after_adapter_and_credentials_are_available",
+          "owner": "source-evidence",
+          "release_boundary": "non_data_runtime_evidence_gap_documented"
+        },
+        {
+          "id": "source_runtime_adapter_not_registered",
+          "severity": "warning",
+          "status": "follow_up_required",
+          "action": "register_runtime_adapter",
+          "owner": "provider-adapter",
+          "release_boundary": "manual_review_required",
+          "follow_up_issue": 362
+        }
+      ]
+    },
+    {
+      "source_id": "kosis",
+      "provider": "KOSIS",
+      "runtime_evidence_plan": "reports/kosis/runtime-evidence-plan.json",
+      "evidence_total": 0,
+      "blocking_count": 3,
+      "warning_count": 2,
+      "findings": [
+        {
+          "id": "adapter_not_registered",
+          "severity": "blocker",
+          "status": "follow_up_required",
+          "action": "register_runtime_adapter",
+          "owner": "provider-adapter",
+          "release_boundary": "manual_review_required",
+          "follow_up_issue": 362
+        },
+        {
+          "id": "credential_required",
+          "severity": "blocker",
+          "status": "manual_review_boundary",
+          "action": "provide_runtime_credentials_or_accept_metadata_only_boundary",
+          "owner": "release-operator",
+          "release_boundary": "credentialed_runtime_evidence_not_required_for_canonical_registry_release"
+        },
+        {
+          "id": "metadata_only_verification",
+          "severity": "blocker",
+          "status": "manual_review_boundary",
+          "action": "collect_live_runtime_evidence_when_credentials_and_adapter_are_available",
+          "owner": "source-evidence",
+          "release_boundary": "metadata_only_source_remains_manual_review"
+        },
+        {
+          "id": "non_data_runtime_evidence_not_collected",
+          "severity": "warning",
+          "status": "manual_review_boundary",
+          "action": "collect_non_data_runtime_evidence_after_adapter_and_credentials_are_available",
+          "owner": "source-evidence",
+          "release_boundary": "non_data_runtime_evidence_gap_documented"
+        },
+        {
+          "id": "source_runtime_adapter_not_registered",
+          "severity": "warning",
+          "status": "follow_up_required",
+          "action": "register_runtime_adapter",
+          "owner": "provider-adapter",
+          "release_boundary": "manual_review_required",
+          "follow_up_issue": 362
+        }
+      ]
+    },
+    {
+      "source_id": "open_assembly",
+      "provider": "open.assembly.go.kr",
+      "runtime_evidence_plan": "reports/open-assembly/runtime-evidence-plan.json",
+      "evidence_total": 0,
+      "blocking_count": 3,
+      "warning_count": 2,
+      "findings": [
+        {
+          "id": "adapter_not_registered",
+          "severity": "blocker",
+          "status": "follow_up_required",
+          "action": "register_runtime_adapter",
+          "owner": "provider-adapter",
+          "release_boundary": "manual_review_required",
+          "follow_up_issue": 362
+        },
+        {
+          "id": "credential_required",
+          "severity": "blocker",
+          "status": "manual_review_boundary",
+          "action": "provide_runtime_credentials_or_accept_metadata_only_boundary",
+          "owner": "release-operator",
+          "release_boundary": "credentialed_runtime_evidence_not_required_for_canonical_registry_release"
+        },
+        {
+          "id": "metadata_only_verification",
+          "severity": "blocker",
+          "status": "manual_review_boundary",
+          "action": "collect_live_runtime_evidence_when_credentials_and_adapter_are_available",
+          "owner": "source-evidence",
+          "release_boundary": "metadata_only_source_remains_manual_review"
+        },
+        {
+          "id": "non_data_runtime_evidence_not_collected",
+          "severity": "warning",
+          "status": "manual_review_boundary",
+          "action": "collect_non_data_runtime_evidence_after_adapter_and_credentials_are_available",
+          "owner": "source-evidence",
+          "release_boundary": "non_data_runtime_evidence_gap_documented"
+        },
+        {
+          "id": "source_runtime_adapter_not_registered",
+          "severity": "warning",
+          "status": "follow_up_required",
+          "action": "register_runtime_adapter",
+          "owner": "provider-adapter",
+          "release_boundary": "manual_review_required",
+          "follow_up_issue": 362
+        }
+      ]
+    },
+    {
+      "source_id": "seoul_open_data",
+      "provider": "data.seoul.go.kr",
+      "runtime_evidence_plan": "reports/seoul-open-data/runtime-evidence-plan.json",
+      "evidence_total": 0,
+      "blocking_count": 2,
+      "warning_count": 1,
+      "findings": [
+        {
+          "id": "credential_required",
+          "severity": "blocker",
+          "status": "manual_review_boundary",
+          "action": "provide_runtime_credentials_or_accept_metadata_only_boundary",
+          "owner": "release-operator",
+          "release_boundary": "credentialed_runtime_evidence_not_required_for_canonical_registry_release"
+        },
+        {
+          "id": "metadata_only_verification",
+          "severity": "blocker",
+          "status": "manual_review_boundary",
+          "action": "collect_live_runtime_evidence_when_credentials_and_adapter_are_available",
+          "owner": "source-evidence",
+          "release_boundary": "metadata_only_source_remains_manual_review"
+        },
+        {
+          "id": "non_data_runtime_evidence_not_collected",
+          "severity": "warning",
+          "status": "manual_review_boundary",
+          "action": "collect_non_data_runtime_evidence_after_adapter_and_credentials_are_available",
+          "owner": "source-evidence",
+          "release_boundary": "non_data_runtime_evidence_gap_documented"
+        }
+      ]
+    }
+  ]
+}

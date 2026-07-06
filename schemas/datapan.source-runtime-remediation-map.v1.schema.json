@@ -1,0 +1,260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
+  "title": "Datapan Source Runtime Remediation Map v1",
+  "description": "Source-by-source remediation map for runtime blockers and warnings that affect release compatibility.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "goal_issue",
+    "mapping_ticket",
+    "follow_up_issue",
+    "provider",
+    "summary",
+    "release_evidence_inputs",
+    "routing_evidence",
+    "downstream_impact_evidence",
+    "sources"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.source-runtime-remediation-map.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "goal_issue": {
+      "const": 344
+    },
+    "mapping_ticket": {
+      "const": 360
+    },
+    "follow_up_issue": {
+      "const": 362
+    },
+    "provider": {
+      "const": "datapan-registry"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "release_evidence_inputs": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "$ref": "#/$defs/evidence_input"
+      }
+    },
+    "routing_evidence": {
+      "$ref": "#/$defs/routing_evidence"
+    },
+    "downstream_impact_evidence": {
+      "$ref": "#/$defs/downstream_impact_evidence"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    }
+  },
+  "$defs": {
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sources",
+        "blocking_count",
+        "warning_count",
+        "mapped_blocker_findings",
+        "mapped_warning_findings",
+        "sources_without_evidence",
+        "manual_review_boundaries",
+        "follow_up_required",
+        "compatibility_effect",
+        "manual_review_required"
+      ],
+      "properties": {
+        "sources": {
+          "$ref": "#/$defs/count"
+        },
+        "blocking_count": {
+          "$ref": "#/$defs/count"
+        },
+        "warning_count": {
+          "$ref": "#/$defs/count"
+        },
+        "mapped_blocker_findings": {
+          "$ref": "#/$defs/count"
+        },
+        "mapped_warning_findings": {
+          "$ref": "#/$defs/count"
+        },
+        "sources_without_evidence": {
+          "$ref": "#/$defs/count"
+        },
+        "manual_review_boundaries": {
+          "$ref": "#/$defs/count"
+        },
+        "follow_up_required": {
+          "$ref": "#/$defs/count"
+        },
+        "compatibility_effect": {
+          "enum": [
+            "manual_review_required_until_runtime_blockers_resolved",
+            "runtime_evidence_clear"
+          ]
+        },
+        "manual_review_required": {
+          "type": "boolean"
+        }
+      }
+    },
+    "evidence_input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "schema", "bytes", "sha256"],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "schema": {
+          "type": "string",
+          "format": "uri"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "routing_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["blocking_rules", "manual_review_rules"],
+      "properties": {
+        "blocking_rules": {
+          "$ref": "#/$defs/count"
+        },
+        "manual_review_rules": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "downstream_impact_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requires_manual_review",
+        "requires_db_migration_review",
+        "requires_served_contract_regeneration"
+      ],
+      "properties": {
+        "requires_manual_review": {
+          "$ref": "#/$defs/count"
+        },
+        "requires_db_migration_review": {
+          "$ref": "#/$defs/count"
+        },
+        "requires_served_contract_regeneration": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "provider",
+        "runtime_evidence_plan",
+        "evidence_total",
+        "blocking_count",
+        "warning_count",
+        "findings"
+      ],
+      "properties": {
+        "source_id": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "provider": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "runtime_evidence_plan": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "evidence_total": {
+          "$ref": "#/$defs/count"
+        },
+        "blocking_count": {
+          "$ref": "#/$defs/count"
+        },
+        "warning_count": {
+          "$ref": "#/$defs/count"
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/finding"
+          }
+        }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "severity",
+        "status",
+        "action",
+        "owner",
+        "release_boundary"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "severity": {
+          "enum": ["blocker", "warning"]
+        },
+        "status": {
+          "enum": ["resolved", "manual_review_boundary", "follow_up_required"]
+        },
+        "action": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "owner": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "release_boundary": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "follow_up_issue": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}

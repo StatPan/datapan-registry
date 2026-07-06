@@ -5,7 +5,7 @@
   "provider": "data.go.kr",
   "source_registry": "data/data-go-kr.registry.json",
   "output_dir": ".",
-  "artifact_count": 72,
+  "artifact_count": 74,
   "artifacts": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -76,8 +76,8 @@
     {
       "path": "schemas/datapan.release-manifest.v1.schema.json",
       "kind": "schema",
-      "bytes": 2740,
-      "sha256": "0dce56a3a53ef90cc1f690997f7848d6b3d4d88112c8a65717f5fb648719f8a3"
+      "bytes": 2786,
+      "sha256": "51c4827fee72c828c8ec4550830c17f6e9e3ae788ef11fde4a066e05f58e9e4a"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -208,8 +208,8 @@
     {
       "path": "schemas/datapan.release-consumer-compatibility.v1.schema.json",
       "kind": "schema",
-      "bytes": 16059,
-      "sha256": "7c33f2cf0effea882cecfbf1a42fd45cee95515f052a1cf8d8e96b6558b06a1f"
+      "bytes": 16618,
+      "sha256": "2e79b57351fad5200262b0c980b169a358979c392c06d7e73fc639379c940b20"
     },
     {
       "path": "schemas/datapan.error-action-routing-rollup.v1.schema.json",
@@ -278,11 +278,17 @@
       "sha256": "b1cdc65c3606a1113cacfb54c5ef0e1427b39b04462c5ac9ad2cfde5a56c572e"
     },
     {
+      "path": "schemas/datapan.source-runtime-remediation-map.v1.schema.json",
+      "kind": "schema",
+      "bytes": 6257,
+      "sha256": "861913eaedf953757085175fe59eb4569ea77a9259d69464567b18776b1d9fb1"
+    },
+    {
       "path": "schemas/index.json",
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
-      "bytes": 17529,
-      "sha256": "177b1201d301de630f5e5186750c32d6120295b20feb0ea0ede86e17bdec1020"
+      "bytes": 17957,
+      "sha256": "ca09cac02737663e424873aab1a0c29599dd6648c088a59e690ec96de73832fb"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -341,11 +347,18 @@
       "sha256": "48a15d43b4c4262a6d0b30e7f20e5f500343c65666b221affa9604bffb9c4040"
     },
     {
+      "path": "reports/source-runtime-remediation-map.json",
+      "kind": "source_runtime_remediation_map",
+      "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
+      "bytes": 10394,
+      "sha256": "dfdaa7b5446f1475bf7f365500d945c9a3da16f64dc65571e7513f31086054ed"
+    },
+    {
       "path": "reports/registry-impact-plan.json",
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "cbc4d84e97fb211c5ac5acd8e064f4647ba62bf23bca5c98020d1006e181d9f9"
+      "sha256": "b5b87504fc8d49fda77f4a57b6aa1caa4886aaa11e28c1e9ebb4faf5bac5a5a1"
     },
     {
       "path": "reports/source-reference-drift.json",
@@ -359,7 +372,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 59095,
-      "sha256": "7548f39cee30205b2f0dc06acc86b2be8a973326b68dab1f9bb6759abd395dec"
+      "sha256": "1a1daa844dff824ea9f60c96b85257058fe8ba2b1409f50e9f42d46c2a429737"
     },
     {
       "path": "reports/dependencies.json",
@@ -428,15 +441,15 @@
       "path": "reports/release-consumer-compatibility.json",
       "kind": "consumer_compatibility",
       "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json",
-      "bytes": 12788,
-      "sha256": "93782b9239f44a92384f7777bcbaea786f7cdc49edfa6549517405cc463d43f6"
+      "bytes": 13398,
+      "sha256": "bec7ad20dc59f44b154290bce59696a4b7b305d232e520e16f76d0f35d0b8e73"
     },
     {
       "path": "reports/release-assembly-receipt.json",
       "kind": "release_assembly_receipt",
       "schema": "https://schemas.datapan.dev/datapan.release-assembly-receipt.v1.schema.json",
-      "bytes": 16654,
-      "sha256": "efc43fcd218df0703cbf3e98e7c642fea3e533df5643f6b3ce8eb24a7ce35abb"
+      "bytes": 17825,
+      "sha256": "71505578e616ca2c1ad032077d89082b3f88ff0e086548831a1c1e16968e00b0"
     },
     {
       "path": "reports/unadapted-external-probe.json",

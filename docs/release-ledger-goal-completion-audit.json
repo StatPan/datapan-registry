@@ -11,18 +11,18 @@
     "criteria_partial": 0,
     "criteria_gap": 0,
     "decision": "leave_goal_open",
-    "reason": "The release assembly path is now receipt-bound, but #344 remains open because source runtime blockers, warnings, and manual-review compatibility gates still require remediation evidence before the broader registry-ledger vision can be treated as complete."
+    "reason": "The release assembly path is now receipt-bound, but #344 remains open because source runtime blockers, warnings, manual-review compatibility gates, and follow-up remediation work still prevent the broader registry-ledger vision from being treated as complete."
   },
   "current_state_evidence": {
     "manifest": {
       "path": "manifest.json",
-      "artifact_count": 72,
-      "artifact_kinds": 28,
-      "schema_artifacts": 45
+      "artifact_count": 74,
+      "artifact_kinds": 29,
+      "schema_artifacts": 46
     },
     "schema_index": {
       "path": "schemas/index.json",
-      "schema_count": 45
+      "schema_count": 46
     },
     "release_readiness": {
       "path": "reports/latest-release-readiness.json",
@@ -48,6 +48,13 @@
       "evidence_total": 4774,
       "blocking_count": 12,
       "warning_count": 8
+    },
+    "source_runtime_remediation": {
+      "path": "reports/source-runtime-remediation-map.json",
+      "mapping_ticket": 360,
+      "follow_up_issue": 362,
+      "follow_up_required": 8,
+      "manual_review_boundaries": 13
     },
     "downstream_impact": {
       "path": "reports/registry-impact-plan.json",
@@ -133,11 +140,11 @@
       "evidence": [
         {
           "path": "manifest.json",
-          "finding": "Contains 70 manifest-bound artifacts across 27 artifact kinds, including 44 schema artifacts."
+          "finding": "Contains 74 manifest-bound artifacts across 29 artifact kinds, including 46 schema artifacts."
         },
         {
           "path": "schemas/index.json",
-          "finding": "Indexes 44 schema contracts and checks schema artifact bytes and sha256."
+          "finding": "Indexes 46 schema contracts and checks schema artifact bytes and sha256."
         },
         {
           "path": "reports/source-report-inventory.json",
@@ -145,7 +152,7 @@
         },
         {
           "path": "reports/release-consumer-compatibility.json",
-          "finding": "Binds source contracts, source runtime evidence, error/action routing, downstream impact, source reference drift, and source report inventory as manifest evidence contracts."
+          "finding": "Binds source contracts, source runtime evidence, source runtime remediation, error/action routing, downstream impact, source reference drift, and source report inventory as manifest evidence contracts."
         },
         {
           "path": "reports/release-assembly-receipt.json",
@@ -170,6 +177,10 @@
         {
           "path": "reports/source-runtime-evidence-rollup.json",
           "finding": "Summarizes five sources, 4774 evidence items, 12 blockers, 8 warnings, and four sources without runtime evidence."
+        },
+        {
+          "path": "reports/source-runtime-remediation-map.json",
+          "finding": "Maps current source runtime blockers and warnings to remediation status, manual-review release boundaries, or follow-up issue #362."
         },
         {
           "path": "reports/source-report-inventory.json",
@@ -197,7 +208,7 @@
         },
         {
           "path": "reports/release-consumer-compatibility.json",
-          "finding": "Reports seven consumers, two proven consumers, one blocked consumer, canonical registry requirement, optional shard assets, and runtime manual-review evidence."
+          "finding": "Reports seven consumers, two proven consumers, one blocked consumer, canonical registry requirement, optional shard assets, runtime manual-review evidence, and source runtime remediation follow-up counts."
         },
         {
           "path": "scripts/validate-impact-plans.py",
@@ -205,7 +216,7 @@
         },
         {
           "path": "scripts/validate-release-consumer-compatibility.py",
-          "finding": "Fails if source runtime blockers remain but runtime manual-review evidence, error/action routing evidence, or downstream manual-review impact evidence disappears."
+          "finding": "Fails if source runtime blockers remain but remediation follow-up evidence, runtime manual-review evidence, error/action routing evidence, or downstream manual-review impact evidence disappears."
         }
       ],
       "next_action": "Keep compatibility evidence current whenever source runtime blockers or downstream contracts change."
@@ -234,8 +245,8 @@
   "remaining_goal_risks": [
     {
       "id": "source_runtime_manual_review_required",
-      "evidence": "reports/source-runtime-evidence-rollup.json",
-      "finding": "The current rollup still records 12 blockers, 8 warnings, and four sources without runtime evidence."
+      "evidence": "reports/source-runtime-remediation-map.json",
+      "finding": "The current remediation map still routes unresolved runtime findings to manual-review boundaries and follow-up issue #362."
     },
     {
       "id": "consumer_compatibility_manual_review_required",
@@ -255,6 +266,7 @@
     "python3 scripts/validate-impact-plans.py",
     "python3 scripts/validate-source-report-inventory.py",
     "python3 scripts/validate-source-runtime-evidence-rollup.py",
+    "python3 scripts/generate-source-runtime-remediation-map.py --check",
     "python3 scripts/generate-release-consumer-compatibility.py --check",
     "python3 scripts/validate-release-consumer-compatibility.py",
     "python3 scripts/package-registry-release.py --manifest manifest.json --output .datapan/ci/datapan-registry-snapshot-test.zip",
@@ -264,7 +276,12 @@
     {
       "issue": 360,
       "title": "Map source runtime blockers to remediation work",
-      "reason": "The release assembly path is receipt-bound, but source runtime blockers and manual-review compatibility gates still need remediation mapping before #344 can be considered complete."
+      "reason": "The release assembly path is receipt-bound, and current source runtime blockers now need an explicit remediation map before #344 can be considered complete."
+    },
+    {
+      "issue": 362,
+      "title": "Reduce source runtime adapter and taxonomy blockers",
+      "reason": "The remediation map routes adapter registration and source-specific error taxonomy work to bounded follow-up before #344 can be considered complete."
     }
   ]
 }
