@@ -88,7 +88,8 @@ check. That workflow:
   zip and the latest public release, recording either validated shard metadata
   or canonical monolith fallback;
 - validates the doctor JSON with `scripts/check-release-doctor-smoke.py` for
-  both current checkout and latest public release installs;
+  both current checkout and latest public release installs, including matching
+  doctor registry path and spec count against the install JSON;
 - uploads current-checkout install and doctor JSON plus latest-public-release
   install and doctor JSON reports as release-health evidence.
 
