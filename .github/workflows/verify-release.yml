@@ -148,6 +148,9 @@ jobs:
             > ../datapan-registry/.datapan/ci/current-release-install.json
           python3 ../datapan-registry/scripts/check-shard-aware-install-smoke.py \
             ../datapan-registry/.datapan/ci/current-release-install.json
+          DATAPAN_REGISTRY_PATH="${RUNNER_TEMP}/datapan-installed-current.registry.json" \
+            go run ./cmd/datapan doctor --json \
+            > ../datapan-registry/.datapan/ci/current-release-doctor.json
 
       - name: Check README current snapshot
         run: |

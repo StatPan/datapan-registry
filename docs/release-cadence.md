@@ -78,6 +78,7 @@ check. That workflow:
   `.datapan/release-assets/datapan-registry-snapshot.zip`, checks the zip
   inventory and checksums, serves it locally, and installs it with
   `datapan catalog install datapan-registry --url ...`;
+- runs `datapan doctor --json` against the installed current checkout registry;
 - checks that the README Current Snapshot matches the generated coverage,
   provider-index, and verification-summary artifacts;
 - installs the latest GitHub Release zip with
@@ -86,9 +87,8 @@ check. That workflow:
   `scripts/check-shard-aware-install-smoke.py` for both the current checkout
   zip and the latest public release, recording either validated shard metadata
   or canonical monolith fallback;
-- runs `datapan doctor --json` against that installed registry and uploads both
-  latest-public-release install and doctor JSON reports as release-health
-  evidence.
+- uploads current-checkout install and doctor JSON plus latest-public-release
+  install and doctor JSON reports as release-health evidence.
 
 Recommended evidence before tagging:
 
