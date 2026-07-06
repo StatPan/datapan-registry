@@ -2,7 +2,7 @@
   "manifest": "../datapan-registry/manifest.json",
   "root": "../datapan-registry",
   "schema_version": "datapan.release-readiness.v1",
-  "generated_at": "2026-07-06T15:48:30Z",
+  "generated_at": "2026-07-06T15:54:19Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "ready": true,
@@ -24,8 +24,8 @@
       "status": "pass",
       "severity": "required",
       "message": "release manifest checksums and schema-bound artifacts verified",
-      "expected": 59,
-      "actual": 59
+      "expected": 60,
+      "actual": 60
     },
     {
       "id": "required_artifact_schema_index",

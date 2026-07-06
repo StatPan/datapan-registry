@@ -115,6 +115,9 @@ The checked-in `reports/source-runtime-evidence-rollup.json` is also
 manifest-bound, so release verification proves the source runtime evidence
 plan inputs, blocker IDs, warning IDs, and zero-evidence source state that
 `docs/source-runtime-readiness.md` presents to operators.
+The release-wide `reports/registry-impact-plan.json` is manifest-bound as
+well, preserving downstream action hints and no-action boundaries as
+checksum-verifiable release evidence.
 
 The current snapshot was generated from `datapan-cli` and includes:
 
@@ -285,6 +288,7 @@ A release is publishable when:
 - source contracts are summarized as manifest-bound release evidence;
 - source runtime evidence blockers and warnings are manifest-bound release
   evidence;
+- downstream impact action hints are manifest-bound release evidence;
 - registry size and LFS handling are explicit;
 - verification evidence is attached or documented;
 - generated artifacts do not contain credentials.

@@ -114,6 +114,9 @@ check. That workflow:
   `docs/source-runtime-readiness.md` view, with the rollup manifest-bound so
   source runtime plan inputs, blockers, warnings, and zero-evidence sources are
   checksum-verifiable release evidence;
+- regenerates and validates `reports/registry-impact-plan.json`, the
+  manifest-bound downstream impact rollup that preserves client/server action
+  hints, manual-review flags, and no-action boundaries for consumers;
 - uploads current-checkout install and doctor JSON plus latest-public-release
   install and doctor JSON reports as release-health evidence.
 
