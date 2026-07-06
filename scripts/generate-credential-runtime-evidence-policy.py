@@ -9,6 +9,8 @@ import pathlib
 import sys
 from typing import Any
 
+import credential_runtime_receipts as receipts
+
 try:
     import jsonschema
 except ImportError as exc:  # pragma: no cover - environment guard
@@ -21,21 +23,14 @@ DEFAULT_RUNTIME_ROLLUP = pathlib.Path("reports/source-runtime-evidence-rollup.js
 DEFAULT_REMEDIATION = pathlib.Path("reports/source-runtime-remediation-map.json")
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-evidence-policy.v1.schema.json")
 DEFAULT_OUTPUT = pathlib.Path("reports/credential-runtime-evidence-policy.json")
+DEFAULT_RECEIPT_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-receipt.v1.schema.json")
 SCHEMA_VERSION = "datapan.credential-runtime-evidence-policy.v1"
 RECEIPT_SCHEMA = "schemas/datapan.credential-runtime-receipt.v1.schema.json"
 RECEIPT_VALIDATOR = "scripts/validate-credential-runtime-receipts.py"
 STAGED_RECEIPT_GLOB = ".datapan/runtime-evidence/*-credentialed-receipt.json"
 REVIEWED_RECEIPT_GLOB = "reports/credential-runtime-receipts/*-credentialed-receipt.json"
-REVIEW_STATES = ["reviewed_accepted", "reviewed_rejected"]
-RELIEF_ELIGIBLE_REVIEW_STATES = ["reviewed_accepted"]
-
-CREDENTIAL_ENVS: dict[str, list[str]] = {
-    "data_go_kr": ["DATAPAN_DATA_GO_KR_SERVICE_KEY"],
-    "ecos": ["DATAPAN_ECOS_API_KEY"],
-    "kosis": ["DATAPAN_KOSIS_API_KEY"],
-    "open_assembly": ["DATAPAN_OPEN_ASSEMBLY_API_KEY"],
-    "seoul_open_data": ["DATAPAN_SEOUL_OPEN_DATA_API_KEY"],
-}
+REVIEW_STATES = sorted(receipts.REVIEW_STATES)
+RELIEF_ELIGIBLE_REVIEW_STATES = sorted(receipts.RELIEF_ELIGIBLE_REVIEW_STATES)
 
 BOUNDARY_BY_ID: dict[str, str] = {
     "credential_required": "credentialed_runtime_evidence_not_required_for_canonical_registry_release",
@@ -133,7 +128,7 @@ def source_entry(source_rollup: dict[str, Any], remediation: dict[str, Any]) -> 
 
     if plan.get("source_id") != source_id:
         raise ValueError(f"{plan_path} source_id does not match runtime rollup")
-    if source_id not in CREDENTIAL_ENVS:
+    if source_id not in receipts.CREDENTIAL_ENVS:
         raise ValueError(f"missing credential env contract for {source_id}")
     if state.get("credential_required") is not True:
         raise ValueError(f"{source_id} must be credential-gated for this policy")
@@ -149,7 +144,7 @@ def source_entry(source_rollup: dict[str, Any], remediation: dict[str, Any]) -> 
     if not any(item["id"] == "credential_required" for item in boundaries):
         raise ValueError(f"{source_id} credential_required must remain a manual-review boundary")
 
-    envs = CREDENTIAL_ENVS[source_id]
+    envs = receipts.CREDENTIAL_ENVS[source_id]
     env_exports = " ".join(f"{name}=<secret>" for name in envs)
     receipt_artifact = f".datapan/runtime-evidence/{source_dir(source_id)}-credentialed-receipt.json"
     return {
@@ -213,6 +208,11 @@ def build_report(runtime_rollup: dict[str, Any], remediation: dict[str, Any]) ->
         if boundary["id"] == "non_data_runtime_evidence_not_collected"
     )
     manual_boundaries = sum(len(source["manual_review_boundaries"]) for source in sources)
+    receipt_state = receipts.discover_reviewed_receipts(
+        receipt_glob=REVIEWED_RECEIPT_GLOB,
+        schema_path=DEFAULT_RECEIPT_SCHEMA,
+        sources=sources,
+    )
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -229,13 +229,13 @@ def build_report(runtime_rollup: dict[str, Any], remediation: dict[str, Any]) ->
             "manual_review_boundaries": manual_boundaries,
             "receipt_contract_available": True,
             "reviewed_receipt_intake_available": True,
-            "receipt_present": False,
-            "receipt_validated": False,
-            "receipt_reviewed": False,
-            "receipt_relief_eligible": False,
-            "manual_review_reduction_allowed": False,
-            "live_credentialed_receipts_checked_in": 0,
-            "reviewed_receipts_checked_in": 0,
+            "receipt_present": receipt_state["receipt_present"],
+            "receipt_validated": receipt_state["receipt_validated"],
+            "receipt_reviewed": receipt_state["receipt_reviewed"],
+            "receipt_relief_eligible": receipt_state["receipt_relief_eligible"],
+            "manual_review_reduction_allowed": receipt_state["manual_review_reduction_allowed"],
+            "live_credentialed_receipts_checked_in": receipt_state["receipt_count"],
+            "reviewed_receipts_checked_in": receipt_state["receipt_count"],
             "default_ci_requires_credentials": False,
             "checked_in_secrets_allowed": False,
         },
@@ -290,7 +290,7 @@ def build_report(runtime_rollup: dict[str, Any], remediation: dict[str, Any]) ->
             "manual_review_required": True,
             "live_evidence_claim": "not_claimed_until_credentialed_receipts_exist",
             "reviewed_receipt_intake": {
-                "status": "defined_no_reviewed_receipts",
+                "status": receipt_state["intake_status"],
                 "staged_receipt_glob": STAGED_RECEIPT_GLOB,
                 "checked_in_receipt_glob": REVIEWED_RECEIPT_GLOB,
                 "review_required_for_checked_in_receipts": True,
@@ -301,12 +301,12 @@ def build_report(runtime_rollup: dict[str, Any], remediation: dict[str, Any]) ->
             "receipt_backed_relief_gate": {
                 "receipt_contract_available": True,
                 "reviewed_receipt_intake_available": True,
-                "receipt_present": False,
-                "receipt_validated": False,
-                "receipt_reviewed": False,
-                "receipt_relief_eligible": False,
-                "manual_review_reduction_allowed": False,
-                "status": "blocked_until_reviewed_validated_credential_runtime_receipts_exist",
+                "receipt_present": receipt_state["receipt_present"],
+                "receipt_validated": receipt_state["receipt_validated"],
+                "receipt_reviewed": receipt_state["receipt_reviewed"],
+                "receipt_relief_eligible": receipt_state["receipt_relief_eligible"],
+                "manual_review_reduction_allowed": receipt_state["manual_review_reduction_allowed"],
+                "status": receipt_state["relief_gate_status"],
             },
         },
         "sources": sources,

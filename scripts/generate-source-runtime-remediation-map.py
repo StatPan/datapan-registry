@@ -10,6 +10,8 @@ import pathlib
 import sys
 from typing import Any
 
+import credential_runtime_receipts as receipts
+
 try:
     import jsonschema
 except ImportError as exc:  # pragma: no cover - environment guard
@@ -21,8 +23,10 @@ DEFAULT_ROUTING = pathlib.Path("reports/error-action-routing-rollup.json")
 DEFAULT_IMPACT = pathlib.Path("reports/registry-impact-plan.json")
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.source-runtime-remediation-map.v1.schema.json")
 DEFAULT_OUTPUT = pathlib.Path("reports/source-runtime-remediation-map.json")
+DEFAULT_RECEIPT_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-receipt.v1.schema.json")
 SCHEMA_VERSION = "datapan.source-runtime-remediation-map.v1"
 FOLLOW_UP_ISSUE = 362
+REVIEWED_RECEIPT_GLOB = "reports/credential-runtime-receipts/*-credentialed-receipt.json"
 
 
 REMEDIATION_RULES: dict[str, dict[str, Any]] = {
@@ -172,6 +176,37 @@ def source_entries(runtime_rollup: dict[str, Any]) -> list[dict[str, Any]]:
     return entries
 
 
+def receipt_source_entries(runtime_rollup: dict[str, Any]) -> list[dict[str, Any]]:
+    entries: list[dict[str, Any]] = []
+    for index, raw_source in enumerate(as_list(runtime_rollup.get("sources"), "runtime_rollup.sources")):
+        source = as_dict(raw_source, f"runtime_rollup.sources[{index}]")
+        source_id = source.get("source_id")
+        provider = source.get("provider")
+        plan_path_value = source.get("runtime_evidence_plan")
+        if not isinstance(source_id, str) or not source_id:
+            raise ValueError(f"runtime_rollup.sources[{index}].source_id must be a non-empty string")
+        if not isinstance(provider, str) or not provider:
+            raise ValueError(f"{source_id}.provider must be a non-empty string")
+        if not isinstance(plan_path_value, str) or not plan_path_value:
+            raise ValueError(f"{source_id}.runtime_evidence_plan must be a non-empty string")
+        if source_id not in receipts.CREDENTIAL_ENVS:
+            raise ValueError(f"missing credential env contract for {source_id}")
+        plan = load_json(pathlib.Path(plan_path_value))
+        candidate_batch = plan.get("candidate_batch")
+        if not isinstance(candidate_batch, str) or not candidate_batch:
+            raise ValueError(f"{source_id} runtime plan missing candidate_batch")
+        entries.append(
+            {
+                "source_id": source_id,
+                "provider": provider,
+                "runtime_evidence_plan": plan_path_value,
+                "candidate_batch": candidate_batch,
+                "credential_envs": receipts.CREDENTIAL_ENVS[source_id],
+            }
+        )
+    return entries
+
+
 def validate_runtime_alignment(runtime_rollup: dict[str, Any], sources: list[dict[str, Any]]) -> None:
     for source in sources:
         blockers = [item for item in source["findings"] if item["severity"] == "blocker"]
@@ -195,6 +230,11 @@ def build_report(
     impact_summary = as_dict(impact.get("summary"), "impact.summary")
     sources = source_entries(runtime_rollup)
     validate_runtime_alignment(runtime_rollup, sources)
+    receipt_state = receipts.discover_reviewed_receipts(
+        receipt_glob=REVIEWED_RECEIPT_GLOB,
+        schema_path=DEFAULT_RECEIPT_SCHEMA,
+        sources=receipt_source_entries(runtime_rollup),
+    )
 
     findings = [finding for source in sources for finding in source["findings"]]
     unresolved = sum(1 for finding in findings if finding["status"] == "follow_up_required")
@@ -232,10 +272,10 @@ def build_report(
             "credential_policy_available": True,
             "receipt_contract_available": True,
             "reviewed_receipt_intake_available": True,
-            "receipt_reviewed": False,
-            "receipt_relief_eligible": False,
-            "receipt_backed_relief_allowed": False,
-            "receipt_backed_relief_status": "blocked_until_reviewed_validated_credential_runtime_receipts_exist",
+            "receipt_reviewed": receipt_state["receipt_reviewed"],
+            "receipt_relief_eligible": receipt_state["receipt_relief_eligible"],
+            "receipt_backed_relief_allowed": receipt_state["manual_review_reduction_allowed"],
+            "receipt_backed_relief_status": receipt_state["relief_gate_status"],
         },
         "release_evidence_inputs": [
             evidence_input(

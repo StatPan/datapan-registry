@@ -228,7 +228,7 @@
         },
         {
           "path": "reports/credential-runtime-evidence-policy.json",
-          "finding": "Defines secret-free CI behavior, per-source credential environment names, bounded candidate batches, local staged receipt paths, checked-in reviewed receipt intake paths, receipt contract availability, review state, and manual-review boundaries without claiming live credentialed receipts or allowing manual-review reduction."
+          "finding": "Defines secret-free CI behavior, per-source credential environment names, bounded candidate batches, local staged receipt paths, checked-in reviewed receipt discovery, receipt contract availability, review state, and manual-review boundaries without claiming live credentialed receipts or allowing manual-review reduction."
         },
         {
           "path": "schemas/datapan.credential-runtime-receipt.v1.schema.json",
@@ -236,7 +236,7 @@
         },
         {
           "path": "scripts/validate-credential-runtime-receipts.py",
-          "finding": "Validates optional reviewed checked-in credentialed receipts, allows explicit unreviewed local staging checks, and runs secret-redaction plus review-state self-tests without requiring credentials in default CI."
+          "finding": "Validates optional reviewed checked-in credentialed receipts through shared discovery helpers, allows explicit unreviewed local staging checks, and runs secret-redaction plus review-state self-tests without requiring credentials in default CI."
         }
       ],
       "next_action": "Keep expanding source runtime evidence through separate runtime evidence tickets; do not block this ledger-audit criterion on full provider coverage."
@@ -264,7 +264,7 @@
         },
         {
           "path": "reports/credential-runtime-evidence-policy.json",
-          "finding": "Keeps unresolved credential-gated source runtime checks secret-free by default, marks live and reviewed credentialed receipt counts as zero, and disallows manual-review reduction until receipts are present, validated, reviewed, and relief-eligible."
+          "finding": "Keeps unresolved credential-gated source runtime checks secret-free by default, derives live and reviewed credentialed receipt counts from the checked-in intake path, currently reports zero receipts, and disallows manual-review reduction until receipts are present, validated, reviewed, and relief-eligible."
         }
       ],
       "next_action": "Keep compatibility evidence current whenever source runtime blockers or downstream contracts change."
@@ -299,7 +299,7 @@
     {
       "id": "credentialed_runtime_receipts_absent",
       "evidence": "reports/credential-runtime-evidence-policy.json",
-      "finding": "Credential-gated runtime checks now have a secret-safe policy path, redacted receipt contract, and reviewed checked-in intake path, but live credentialed receipts are still not checked in, not validated, not reviewed, and not allowed to reduce manual-review boundaries."
+      "finding": "Credential-gated runtime checks now have a secret-safe policy path, redacted receipt contract, reviewed checked-in intake path, and discovery-derived counts, but live credentialed receipts are still not checked in, not validated, not reviewed, and not allowed to reduce manual-review boundaries."
     },
     {
       "id": "receipt_backed_compatibility_relief_blocked",
@@ -362,6 +362,11 @@
       "issue": 371,
       "title": "Define reviewed credential runtime receipt intake path",
       "reason": "The compatibility relief gate now needs a reviewed checked-in receipt intake path so future live evidence can be validated, reviewed, and linked without weakening canonical registry compatibility."
+    },
+    {
+      "issue": 373,
+      "title": "Count reviewed credential runtime receipts in policy gates",
+      "reason": "Reviewed receipt intake is now discovery-derived so future checked-in receipts affect policy, remediation, and compatibility gates only after validation and review eligibility checks."
     }
   ]
 }
