@@ -121,7 +121,9 @@ check. That workflow:
 - validates `reports/source-report-inventory.json`, the manifest-bound
   inventory of source-scoped reports whose entries carry bytes and sha256 so
   nested source evidence can be checked without listing every source report in
-  the top-level manifest;
+  the top-level manifest. The inventory also reports which schema-backed source
+  reports are indexed in `schemas/index.json` and which still need schema
+  promotion work;
 - regenerates and validates `reports/registry-impact-plan.json`, the
   manifest-bound downstream impact rollup that preserves client/server action
   hints, manual-review flags, and no-action boundaries for consumers;

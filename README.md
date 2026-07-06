@@ -123,9 +123,10 @@ The release-wide `reports/registry-impact-plan.json` is manifest-bound as
 well, preserving downstream action hints and no-action boundaries as
 checksum-verifiable release evidence.
 `reports/source-report-inventory.json` is also manifest-bound and records bytes
-and sha256 for each listed source-scoped report, so nested source evidence can
-be checked through the release ledger without adding every source report to the
-top-level manifest.
+and sha256 for each listed source-scoped report, plus whether schema-backed
+source reports are present in `schemas/index.json`, so nested source evidence
+can be checked through the release ledger without adding every source report to
+the top-level manifest.
 Top-level schema-backed reports are guarded by
 `scripts/validate-release-report-artifacts.py`, which requires release reports
 to be manifest-bound with matching schema URI, bytes, and sha256 unless they
