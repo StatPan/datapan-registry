@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import pathlib
 from typing import Any
@@ -64,9 +65,12 @@ def report_dir_name(source_id: str) -> str:
 
 
 def report_entry(path: pathlib.Path) -> dict[str, Any]:
+    data = path.read_bytes()
     entry: dict[str, Any] = {
         "name": path.name,
         "path": portable_path(path),
+        "bytes": len(data),
+        "sha256": hashlib.sha256(data).hexdigest(),
     }
     try:
         payload = load_json(path)
