@@ -10,6 +10,7 @@ on:
       - "docs/registry-shard-artifact-strategy.md"
       - "schemas/datapan.registry-shards.v1.schema.json"
       - "scripts/generate-registry-shards.py"
+      - "scripts/package-registry-shards.py"
       - "scripts/validate-registry-shards.py"
       - "tests/fixtures/registry-shards/**"
   workflow_dispatch:
@@ -32,7 +33,10 @@ jobs:
           . .datapan/ci/registry-shards-venv/bin/activate
           python -m pip install --upgrade pip
           python -m pip install jsonschema
-          python -m py_compile scripts/generate-registry-shards.py scripts/validate-registry-shards.py
+          python -m py_compile \
+            scripts/generate-registry-shards.py \
+            scripts/package-registry-shards.py \
+            scripts/validate-registry-shards.py
           python scripts/generate-registry-shards.py \
             --source-registry tests/fixtures/registry-shards/source.registry.json \
             --output-dir .datapan/ci/registry-shards \
@@ -40,10 +44,21 @@ jobs:
             --clean
           python scripts/validate-registry-shards.py \
             .datapan/ci/registry-shards/registry-shards.json
+          python scripts/package-registry-shards.py \
+            --shard-dir .datapan/ci/registry-shards \
+            --output .datapan/ci/data-go-kr-shards.tar.gz
+          python scripts/package-registry-shards.py \
+            --shard-dir .datapan/ci/registry-shards \
+            --output .datapan/ci/data-go-kr-shards.repeat.tar.gz
+          cmp .datapan/ci/data-go-kr-shards.tar.gz .datapan/ci/data-go-kr-shards.repeat.tar.gz
+          python scripts/package-registry-shards.py \
+            --check .datapan/ci/data-go-kr-shards.tar.gz
 
       - name: Upload shard validation fixture output
         uses: actions/upload-artifact@v7
         with:
           name: registry-shard-validation-fixture
-          path: .datapan/ci/registry-shards/
+          path: |
+            .datapan/ci/registry-shards/
+            .datapan/ci/data-go-kr-shards.tar.gz
           if-no-files-found: error
