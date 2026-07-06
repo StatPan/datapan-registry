@@ -125,6 +125,26 @@ jobs:
             --output ../datapan-registry/.datapan/ci/latest-release-readiness.json \
             --json
 
+      - name: Validate full registry shard release evidence
+        working-directory: datapan-registry
+        run: |
+          . .datapan/ci/source-profile-venv/bin/activate
+          mkdir -p .datapan/ci
+          python scripts/generate-registry-shards.py \
+            --source-registry data/data-go-kr.registry.json \
+            --output-dir .datapan/ci/full-registry-shards \
+            --manifest manifest.json \
+            --generated-at "$(jq -r '.generated_at' manifest.json)" \
+            --clean
+          python scripts/validate-registry-shards.py \
+            .datapan/ci/full-registry-shards/registry-shards.json
+          python scripts/package-registry-shards.py \
+            --shard-dir .datapan/ci/full-registry-shards \
+            --output .datapan/ci/full-data-go-kr-shards.tar.gz
+          python scripts/package-registry-shards.py \
+            --check .datapan/ci/full-data-go-kr-shards.tar.gz \
+            | tee .datapan/ci/full-shard-archive-check.txt
+
       - name: Package current release zip
         working-directory: datapan-registry
         run: |
