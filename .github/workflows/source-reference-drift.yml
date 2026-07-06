@@ -21,17 +21,48 @@ jobs:
       - name: Checkout registry
         uses: actions/checkout@v7
 
+      - name: Install drift validation dependencies
+        run: |
+          python3 -m venv .datapan/ci/source-drift-venv
+          . .datapan/ci/source-drift-venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install jsonschema
+
       - name: Run live source reference drift check
+        id: live_drift
         run: |
           mkdir -p .datapan/ci
+          set +e
           python scripts/check-source-reference-drift.py \
             --timeout "${{ github.event.inputs.timeout_seconds || '20' }}" \
             --output .datapan/ci/source-reference-drift-live.json
+          status="$?"
+          set -e
+          echo "${status}" > .datapan/ci/source-reference-drift-exit-code.txt
+          echo "exit_code=${status}" >> "${GITHUB_OUTPUT}"
+
+      - name: Validate live source reference drift report
+        run: |
+          . .datapan/ci/source-drift-venv/bin/activate
+          python scripts/validate-source-reference-drift.py \
+            .datapan/ci/source-reference-drift-live.json
 
       - name: Upload source reference drift report
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: source-reference-drift-live
-          path: .datapan/ci/source-reference-drift-live.json
+          path: |
+            .datapan/ci/source-reference-drift-live.json
+            .datapan/ci/source-reference-drift-exit-code.txt
           if-no-files-found: error
+
+      - name: Fail on live source reference drift errors
+        if: always()
+        run: |
+          status="${{ steps.live_drift.outputs.exit_code }}"
+          if [ -z "${status}" ]; then
+            echo "live source reference drift check did not record an exit code" >&2
+            exit 1
+          fi
+          exit "${status}"

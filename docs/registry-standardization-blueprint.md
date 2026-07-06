@@ -598,9 +598,9 @@ Current gaps:
   release-wide rollup can be generated from source-scoped plans, but full
   `datapan-cli` generation from catalog diffs, verification evidence, route
   disposition, and promoted dataset mappings is not implemented.
-- Live drift checks for official source documentation are not implemented, but
-  checked-in source reference baselines are now validated against source
-  profiles.
+- Live drift checks for official source documentation run as scheduled/manual
+  source-health evidence, and both checked-in baselines and live reports are
+  validated against source profiles.
 - The registry release surface now includes every checked-in registry schema,
   and the current datapan-cli release readiness gate passes with
   `schema_set_complete` reporting `expected=20` and `actual=30`. Gira #79 keeps
