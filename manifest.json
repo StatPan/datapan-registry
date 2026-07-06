@@ -70,8 +70,8 @@
     {
       "path": "schemas/datapan.registry-impact-plan.v1.schema.json",
       "kind": "schema",
-      "bytes": 9359,
-      "sha256": "e7d66071585719e7d938d5510900389d0f1812e5d9278541fa0037e0983e60a2"
+      "bytes": 10165,
+      "sha256": "a165eb3356e2e73923371ca4f29c0a544331ffdf38c2ae4bbc61744f17b8e57f"
     },
     {
       "path": "schemas/datapan.release-manifest.v1.schema.json",
@@ -275,8 +275,8 @@
       "path": "schemas/index.json",
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
-      "bytes": 17124,
-      "sha256": "8a91a36840f045005ddb9387250aeeaee516d885db37767118c0db19d5fe69b3"
+      "bytes": 17125,
+      "sha256": "d32f8a061c7584f42ba800934842512d50816fbbb2189d88e4a626a0beabe1ef"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -338,8 +338,8 @@
       "path": "reports/registry-impact-plan.json",
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
-      "bytes": 10859,
-      "sha256": "a7fc3b684c48a4ac68b11f131d11bd6f59fa9b0e6e008d7b5bb2ed2d2de1324c"
+      "bytes": 11519,
+      "sha256": "bee39aa2e8fba3b041ce7e50ae22ed431d59b6e6278186facda14faf42160613"
     },
     {
       "path": "reports/source-reference-drift.json",
@@ -353,7 +353,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 59095,
-      "sha256": "c07131b2860a2bf1c8df4897a57f219fab37ccaab7d74cf596bd4db8e6e18c78"
+      "sha256": "9347a95886254259679618a0203b54dc4e93ba9587bb1d68765a379ed72051f8"
     },
     {
       "path": "reports/dependencies.json",
@@ -423,7 +423,7 @@
       "kind": "consumer_compatibility",
       "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json",
       "bytes": 9186,
-      "sha256": "94b03249f9ba7dcf89f70ffaa11894b99a91f4e551bee3dfd7dd487839c06c15"
+      "sha256": "df6d106991f13afce907a794a60b0b5beaa9fa356f368b99631fd01f5b91949c"
     },
     {
       "path": "reports/unadapted-external-probe.json",

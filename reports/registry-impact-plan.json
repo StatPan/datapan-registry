@@ -19,6 +19,22 @@
       "sha256": "ac7a86d0a347f3c35b5283b641f8bc84eddaf1f349c257edaf4d725d4d818772"
     }
   ],
+  "release_evidence_inputs": [
+    {
+      "kind": "error_action_routing_rollup",
+      "path": "reports/error-action-routing-rollup.json",
+      "schema": "https://schemas.datapan.dev/datapan.error-action-routing-rollup.v1.schema.json",
+      "bytes": 8255,
+      "sha256": "3f1fa789bf4dc42ac631c060d10d38fec73dbb037f5b88dee186fc0fb3c328ff"
+    },
+    {
+      "kind": "source_report_inventory",
+      "path": "reports/source-report-inventory.json",
+      "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
+      "bytes": 59095,
+      "sha256": "9347a95886254259679618a0203b54dc4e93ba9587bb1d68765a379ed72051f8"
+    }
+  ],
   "summary": {
     "total": 5,
     "by_category": [
