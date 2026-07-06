@@ -136,6 +136,7 @@
         "display_name",
         "source_profile",
         "report_dir",
+        "report_alias_paths",
         "report_dir_exists",
         "report_count",
         "present_reports",
@@ -163,6 +164,14 @@
         "report_dir": {
           "type": "string",
           "minLength": 1
+        },
+        "report_alias_paths": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
         },
         "report_dir_exists": {
           "type": "boolean"
