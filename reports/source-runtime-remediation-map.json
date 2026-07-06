@@ -22,7 +22,7 @@
       "path": "reports/source-runtime-evidence-rollup.json",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-evidence-rollup.v1.schema.json",
       "bytes": 5490,
-      "sha256": "204c18ec52a2daf6395271f5ca79cfe93ba6589a9791aba79824d60cc22e482d"
+      "sha256": "774d3350451a71d7066e436fa3e41d2b4a0cfdc9b739d6fa4e91ff858ca792c7"
     },
     {
       "path": "reports/error-action-routing-rollup.json",
@@ -34,7 +34,7 @@
       "path": "reports/registry-impact-plan.json",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "1d9b3051557c43406750c76795179ed5d22197c018d713b3fae8e4a011f276b7"
+      "sha256": "327a74d661b72816be0874e9a74d2f6e910af7b2c4e063c96ec3f3ae75beccad"
     }
   ],
   "routing_evidence": {
@@ -59,7 +59,7 @@
           "id": "credential_required",
           "severity": "blocker",
           "status": "manual_review_boundary",
-          "action": "provide_runtime_credentials_or_accept_metadata_only_boundary",
+          "action": "use_credential_runtime_evidence_policy_or_accept_manual_review_boundary",
           "owner": "release-operator",
           "release_boundary": "credentialed_runtime_evidence_not_required_for_canonical_registry_release"
         }
@@ -77,7 +77,7 @@
           "id": "credential_required",
           "severity": "blocker",
           "status": "manual_review_boundary",
-          "action": "provide_runtime_credentials_or_accept_metadata_only_boundary",
+          "action": "use_credential_runtime_evidence_policy_or_accept_manual_review_boundary",
           "owner": "release-operator",
           "release_boundary": "credentialed_runtime_evidence_not_required_for_canonical_registry_release"
         },
@@ -85,7 +85,7 @@
           "id": "metadata_only_verification",
           "severity": "blocker",
           "status": "manual_review_boundary",
-          "action": "collect_live_runtime_evidence_when_credentials_and_adapter_are_available",
+          "action": "collect_live_runtime_evidence_through_credential_safe_policy",
           "owner": "source-evidence",
           "release_boundary": "metadata_only_source_remains_manual_review"
         },
@@ -93,7 +93,7 @@
           "id": "non_data_runtime_evidence_not_collected",
           "severity": "warning",
           "status": "manual_review_boundary",
-          "action": "collect_non_data_runtime_evidence_after_adapter_and_credentials_are_available",
+          "action": "collect_non_data_runtime_evidence_through_credential_safe_policy",
           "owner": "source-evidence",
           "release_boundary": "non_data_runtime_evidence_gap_documented"
         }
@@ -111,7 +111,7 @@
           "id": "credential_required",
           "severity": "blocker",
           "status": "manual_review_boundary",
-          "action": "provide_runtime_credentials_or_accept_metadata_only_boundary",
+          "action": "use_credential_runtime_evidence_policy_or_accept_manual_review_boundary",
           "owner": "release-operator",
           "release_boundary": "credentialed_runtime_evidence_not_required_for_canonical_registry_release"
         },
@@ -119,7 +119,7 @@
           "id": "metadata_only_verification",
           "severity": "blocker",
           "status": "manual_review_boundary",
-          "action": "collect_live_runtime_evidence_when_credentials_and_adapter_are_available",
+          "action": "collect_live_runtime_evidence_through_credential_safe_policy",
           "owner": "source-evidence",
           "release_boundary": "metadata_only_source_remains_manual_review"
         },
@@ -127,7 +127,7 @@
           "id": "non_data_runtime_evidence_not_collected",
           "severity": "warning",
           "status": "manual_review_boundary",
-          "action": "collect_non_data_runtime_evidence_after_adapter_and_credentials_are_available",
+          "action": "collect_non_data_runtime_evidence_through_credential_safe_policy",
           "owner": "source-evidence",
           "release_boundary": "non_data_runtime_evidence_gap_documented"
         }
@@ -145,7 +145,7 @@
           "id": "credential_required",
           "severity": "blocker",
           "status": "manual_review_boundary",
-          "action": "provide_runtime_credentials_or_accept_metadata_only_boundary",
+          "action": "use_credential_runtime_evidence_policy_or_accept_manual_review_boundary",
           "owner": "release-operator",
           "release_boundary": "credentialed_runtime_evidence_not_required_for_canonical_registry_release"
         },
@@ -153,7 +153,7 @@
           "id": "metadata_only_verification",
           "severity": "blocker",
           "status": "manual_review_boundary",
-          "action": "collect_live_runtime_evidence_when_credentials_and_adapter_are_available",
+          "action": "collect_live_runtime_evidence_through_credential_safe_policy",
           "owner": "source-evidence",
           "release_boundary": "metadata_only_source_remains_manual_review"
         },
@@ -161,7 +161,7 @@
           "id": "non_data_runtime_evidence_not_collected",
           "severity": "warning",
           "status": "manual_review_boundary",
-          "action": "collect_non_data_runtime_evidence_after_adapter_and_credentials_are_available",
+          "action": "collect_non_data_runtime_evidence_through_credential_safe_policy",
           "owner": "source-evidence",
           "release_boundary": "non_data_runtime_evidence_gap_documented"
         }
@@ -179,7 +179,7 @@
           "id": "credential_required",
           "severity": "blocker",
           "status": "manual_review_boundary",
-          "action": "provide_runtime_credentials_or_accept_metadata_only_boundary",
+          "action": "use_credential_runtime_evidence_policy_or_accept_manual_review_boundary",
           "owner": "release-operator",
           "release_boundary": "credentialed_runtime_evidence_not_required_for_canonical_registry_release"
         },
@@ -187,7 +187,7 @@
           "id": "metadata_only_verification",
           "severity": "blocker",
           "status": "manual_review_boundary",
-          "action": "collect_live_runtime_evidence_when_credentials_and_adapter_are_available",
+          "action": "collect_live_runtime_evidence_through_credential_safe_policy",
           "owner": "source-evidence",
           "release_boundary": "metadata_only_source_remains_manual_review"
         },
@@ -195,7 +195,7 @@
           "id": "non_data_runtime_evidence_not_collected",
           "severity": "warning",
           "status": "manual_review_boundary",
-          "action": "collect_non_data_runtime_evidence_after_adapter_and_credentials_are_available",
+          "action": "collect_non_data_runtime_evidence_through_credential_safe_policy",
           "owner": "source-evidence",
           "release_boundary": "non_data_runtime_evidence_gap_documented"
         }

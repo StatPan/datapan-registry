@@ -16,7 +16,7 @@
     "evidence_total": 0,
     "blocking_count": 2,
     "warning_count": 1,
-    "next_action_count": 3
+    "next_action_count": 4
   },
   "runtime_state": {
     "evidence_status": "no_runtime_evidence",
@@ -56,14 +56,16 @@
   "next_evidence_plan": {
     "required_artifacts": [
       "reports/kosis/coverage.json",
-      "reports/kosis/latest-verification.json",
-      "reports/kosis/latest-verification-summary.json",
-      "reports/kosis/verification-plan.json"
+    "reports/kosis/latest-verification.json",
+    "reports/kosis/latest-verification-summary.json",
+    "reports/kosis/verification-plan.json",
+    "reports/credential-runtime-evidence-policy.json"
     ],
     "required_cli_capabilities": [
-      "runtime candidate batch ingestion",
-      "source credential injection",
-      "KOSIS error signature extraction"
+    "runtime candidate batch ingestion",
+    "source credential injection",
+    "credential-safe runtime receipt policy",
+    "KOSIS error signature extraction"
     ],
     "first_batch_policy": "Run a credential-gated bounded sample-call batch only after sample orgId/tblId/statId/period parameters are pinned.",
     "promotion_gate": "Do not promote KOSIS datasets beyond registry_only until runtime evidence and table mapping contracts exist."

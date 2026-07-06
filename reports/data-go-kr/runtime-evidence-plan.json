@@ -17,7 +17,7 @@
     "evidence_total": 4774,
     "blocking_count": 1,
     "warning_count": 0,
-    "next_action_count": 2
+    "next_action_count": 3
   },
   "runtime_state": {
     "evidence_status": "partial_runtime_evidence",
@@ -51,13 +51,15 @@
   "next_evidence_plan": {
     "required_artifacts": [
       "reports/data-go-kr/coverage-backlog.json",
-      "reports/data-go-kr/runtime-candidates.json",
-      "reports/latest-verification.json",
+    "reports/data-go-kr/runtime-candidates.json",
+    "reports/credential-runtime-evidence-policy.json",
+    "reports/latest-verification.json",
       "reports/latest-verification-summary.json"
     ],
     "required_cli_capabilities": [
-      "source credential injection",
-      "bounded gateway verification batches"
+    "source credential injection",
+    "credential-safe runtime receipt policy",
+    "bounded gateway verification batches"
     ],
     "first_batch_policy": "Use the pinned candidate batch to run a small credential-gated gateway check, while preserving the broader latest-verification evidence as the release-wide runtime baseline.",
     "promotion_gate": "Do not treat data.go.kr runtime coverage as complete until credentialed checks are repeatable and source-specific error taxonomy is verified."

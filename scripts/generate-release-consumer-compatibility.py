@@ -17,12 +17,14 @@ DEFAULT_MANIFEST = pathlib.Path("manifest.json")
 DEFAULT_READINESS = pathlib.Path("reports/latest-release-readiness.json")
 DEFAULT_SOURCE_RUNTIME_ROLLUP = pathlib.Path("reports/source-runtime-evidence-rollup.json")
 DEFAULT_SOURCE_RUNTIME_REMEDIATION = pathlib.Path("reports/source-runtime-remediation-map.json")
+DEFAULT_CREDENTIAL_RUNTIME_POLICY = pathlib.Path("reports/credential-runtime-evidence-policy.json")
 DEFAULT_ERROR_ACTION_ROUTING_ROLLUP = pathlib.Path("reports/error-action-routing-rollup.json")
 DEFAULT_IMPACT_ROLLUP = pathlib.Path("reports/registry-impact-plan.json")
 DEFAULT_OUTPUT = pathlib.Path("reports/release-consumer-compatibility.json")
 REQUIRED_RUNTIME_RISK_CONTRACTS = [
     "source_runtime_evidence",
     "source_runtime_remediation",
+    "credential_runtime_evidence_policy",
     "error_action_routing",
     "downstream_impact",
 ]
@@ -97,6 +99,12 @@ REQUIRED_MANIFEST_EVIDENCE_CONTRACTS = [
         "path": "reports/source-runtime-remediation-map.json",
         "kind": "source_runtime_remediation_map",
         "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
+    },
+    {
+        "contract": "credential_runtime_evidence_policy",
+        "path": "reports/credential-runtime-evidence-policy.json",
+        "kind": "credential_runtime_evidence_policy",
+        "schema": "https://schemas.datapan.dev/datapan.credential-runtime-evidence-policy.v1.schema.json",
     },
     {
         "contract": "error_action_routing",
@@ -428,16 +436,23 @@ def runtime_source_entries(source_runtime: dict[str, Any]) -> list[dict[str, Any
 def runtime_risk_evidence(
     source_runtime: dict[str, Any],
     source_runtime_remediation: dict[str, Any],
+    credential_runtime_policy: dict[str, Any],
     error_action_routing: dict[str, Any],
     downstream_impact: dict[str, Any],
     *,
     source_runtime_path: pathlib.Path,
     source_runtime_remediation_path: pathlib.Path,
+    credential_runtime_policy_path: pathlib.Path,
     error_action_routing_path: pathlib.Path,
     impact_path: pathlib.Path,
 ) -> dict[str, Any]:
     runtime_summary = as_dict(source_runtime.get("summary"), "source_runtime.summary")
     remediation_summary = as_dict(source_runtime_remediation.get("summary"), "source_runtime_remediation.summary")
+    credential_policy_summary = as_dict(credential_runtime_policy.get("summary"), "credential_runtime_policy.summary")
+    credential_policy_boundary = as_dict(
+        credential_runtime_policy.get("release_boundary"),
+        "credential_runtime_policy.release_boundary",
+    )
     routing_summary = as_dict(error_action_routing.get("summary"), "error_action_routing.summary")
     impact_summary = as_dict(downstream_impact.get("summary"), "downstream_impact.summary")
 
@@ -456,6 +471,7 @@ def runtime_risk_evidence(
     return {
         "source_runtime_rollup": source_runtime_path.as_posix(),
         "source_runtime_remediation_map": source_runtime_remediation_path.as_posix(),
+        "credential_runtime_evidence_policy": credential_runtime_policy_path.as_posix(),
         "error_action_routing_rollup": error_action_routing_path.as_posix(),
         "downstream_impact_rollup": impact_path.as_posix(),
         "manual_review_required": manual_review_required,
@@ -468,6 +484,13 @@ def runtime_risk_evidence(
         "sources_without_evidence": sources_without_evidence,
         "remediation_follow_up_required": remediation_summary.get("follow_up_required"),
         "remediation_manual_review_boundaries": remediation_summary.get("manual_review_boundaries"),
+        "credential_policy_sources": credential_policy_summary.get("credential_gated_sources"),
+        "credential_policy_manual_review_boundaries": credential_policy_summary.get("manual_review_boundaries"),
+        "credential_policy_live_receipts": credential_policy_summary.get("live_credentialed_receipts_checked_in"),
+        "credential_policy_default_ci_requires_credentials": credential_policy_summary.get(
+            "default_ci_requires_credentials"
+        ),
+        "credential_policy_effect": credential_policy_boundary.get("compatibility_effect"),
         "blocker_ids": ids_from_rollup_items(source_runtime.get("blockers_by_id"), "source_runtime.blockers_by_id"),
         "warning_ids": ids_from_rollup_items(source_runtime.get("warnings_by_id"), "source_runtime.warnings_by_id"),
         "sources": runtime_source_entries(source_runtime),
@@ -517,6 +540,7 @@ def build_report(
     readiness: dict[str, Any],
     source_runtime: dict[str, Any],
     source_runtime_remediation: dict[str, Any],
+    credential_runtime_policy: dict[str, Any],
     error_action_routing: dict[str, Any],
     downstream_impact: dict[str, Any],
     *,
@@ -524,6 +548,7 @@ def build_report(
     readiness_path: pathlib.Path = DEFAULT_READINESS,
     source_runtime_path: pathlib.Path = DEFAULT_SOURCE_RUNTIME_ROLLUP,
     source_runtime_remediation_path: pathlib.Path = DEFAULT_SOURCE_RUNTIME_REMEDIATION,
+    credential_runtime_policy_path: pathlib.Path = DEFAULT_CREDENTIAL_RUNTIME_POLICY,
     error_action_routing_path: pathlib.Path = DEFAULT_ERROR_ACTION_ROUTING_ROLLUP,
     impact_path: pathlib.Path = DEFAULT_IMPACT_ROLLUP,
 ) -> dict[str, Any]:
@@ -565,10 +590,12 @@ def build_report(
         "runtime_risk_evidence": runtime_risk_evidence(
             source_runtime,
             source_runtime_remediation,
+            credential_runtime_policy,
             error_action_routing,
             downstream_impact,
             source_runtime_path=source_runtime_path,
             source_runtime_remediation_path=source_runtime_remediation_path,
+            credential_runtime_policy_path=credential_runtime_policy_path,
             error_action_routing_path=error_action_routing_path,
             impact_path=impact_path,
         ),
@@ -597,6 +624,7 @@ def main() -> int:
     parser.add_argument("--readiness", default=DEFAULT_READINESS, type=pathlib.Path)
     parser.add_argument("--source-runtime-rollup", default=DEFAULT_SOURCE_RUNTIME_ROLLUP, type=pathlib.Path)
     parser.add_argument("--source-runtime-remediation", default=DEFAULT_SOURCE_RUNTIME_REMEDIATION, type=pathlib.Path)
+    parser.add_argument("--credential-runtime-policy", default=DEFAULT_CREDENTIAL_RUNTIME_POLICY, type=pathlib.Path)
     parser.add_argument("--error-action-routing-rollup", default=DEFAULT_ERROR_ACTION_ROUTING_ROLLUP, type=pathlib.Path)
     parser.add_argument("--impact-rollup", default=DEFAULT_IMPACT_ROLLUP, type=pathlib.Path)
     parser.add_argument("--output", default=DEFAULT_OUTPUT, type=pathlib.Path)
@@ -613,12 +641,14 @@ def main() -> int:
             load_json(args.readiness),
             load_json(args.source_runtime_rollup),
             load_json(args.source_runtime_remediation),
+            load_json(args.credential_runtime_policy),
             load_json(args.error_action_routing_rollup),
             load_json(args.impact_rollup),
             manifest_path=args.manifest,
             readiness_path=args.readiness,
             source_runtime_path=args.source_runtime_rollup,
             source_runtime_remediation_path=args.source_runtime_remediation,
+            credential_runtime_policy_path=args.credential_runtime_policy,
             error_action_routing_path=args.error_action_routing_rollup,
             impact_path=args.impact_rollup,
         )

@@ -7,13 +7,13 @@
     "manifest": {
       "path": "manifest.json",
       "generated_at": "2026-07-04T06:39:24Z",
-      "artifact_count": 74,
-      "evidence_contracts": 7
+      "artifact_count": 76,
+      "evidence_contracts": 8
     },
     "readiness": {
       "path": "reports/latest-release-readiness.json",
       "normalization": "omit_generated_at",
-      "normalized_sha256": "fdd279ad4c95f90cace959a92f71cb61e17c5e46e4a3a277f88fa5b8d06b722b",
+      "normalized_sha256": "76632bf032f8535d728c518c8ac6969b96148d3710727c3f5f6b92dc28248979",
       "ready": true,
       "gates_total": 23,
       "passed": 23,
@@ -95,7 +95,7 @@
       "kind": "source_runtime_evidence_rollup",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-evidence-rollup.v1.schema.json",
       "bytes": 5490,
-      "sha256": "204c18ec52a2daf6395271f5ca79cfe93ba6589a9791aba79824d60cc22e482d",
+      "sha256": "774d3350451a71d7066e436fa3e41d2b4a0cfdc9b739d6fa4e91ff858ca792c7",
       "required": true
     },
     {
@@ -103,8 +103,17 @@
       "path": "reports/source-runtime-remediation-map.json",
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
-      "bytes": 7770,
-      "sha256": "c455ba8e486ff4867c5daebf85d6faa6e33d7ebcea78be590885e7244764f37c",
+      "bytes": 7725,
+      "sha256": "41fd36f539d6f51038df0a82ba803a254ea4c25c18194ddb0a7888d8fb9aa72d",
+      "required": true
+    },
+    {
+      "contract": "credential_runtime_evidence_policy",
+      "path": "reports/credential-runtime-evidence-policy.json",
+      "kind": "credential_runtime_evidence_policy",
+      "schema": "https://schemas.datapan.dev/datapan.credential-runtime-evidence-policy.v1.schema.json",
+      "bytes": 10842,
+      "sha256": "ae72edfc78f698bdb00195a79d829443a3fca87a3aca945c4dceecbe17dddb86",
       "required": true
     },
     {
@@ -122,7 +131,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "1d9b3051557c43406750c76795179ed5d22197c018d713b3fae8e4a011f276b7",
+      "sha256": "327a74d661b72816be0874e9a74d2f6e910af7b2c4e063c96ec3f3ae75beccad",
       "required": true
     },
     {
@@ -140,13 +149,14 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 59095,
-      "sha256": "d800ce7c206559fde4f0f79718b156ab9b53e5e8f1bb11ddd9755d676eff1085",
+      "sha256": "f9eefc46660fd63c4e10bb2c484264731c44d3d3f95d6d542e4ddff161bfe7da",
       "required": true
     }
   ],
   "runtime_risk_evidence": {
     "source_runtime_rollup": "reports/source-runtime-evidence-rollup.json",
     "source_runtime_remediation_map": "reports/source-runtime-remediation-map.json",
+    "credential_runtime_evidence_policy": "reports/credential-runtime-evidence-policy.json",
     "error_action_routing_rollup": "reports/error-action-routing-rollup.json",
     "downstream_impact_rollup": "reports/registry-impact-plan.json",
     "manual_review_required": true,
@@ -154,6 +164,7 @@
     "required_contracts": [
       "source_runtime_evidence",
       "source_runtime_remediation",
+      "credential_runtime_evidence_policy",
       "error_action_routing",
       "downstream_impact"
     ],
@@ -162,6 +173,11 @@
     "sources_without_evidence": 4,
     "remediation_follow_up_required": 0,
     "remediation_manual_review_boundaries": 13,
+    "credential_policy_sources": 5,
+    "credential_policy_manual_review_boundaries": 13,
+    "credential_policy_live_receipts": 0,
+    "credential_policy_default_ci_requires_credentials": false,
+    "credential_policy_effect": "credential_safe_manual_review_boundary",
     "blocker_ids": [
       "credential_required",
       "metadata_only_verification"

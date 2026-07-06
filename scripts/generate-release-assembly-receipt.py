@@ -177,6 +177,25 @@ PHASES: list[dict[str, Any]] = [
         "evidence_artifacts": ["reports/source-runtime-remediation-map.json"],
     },
     {
+        "id": "credential_runtime_evidence_policy",
+        "coverage": ["verification_evidence", "consumer_compatibility"],
+        "operator_commands": [
+            "python3 scripts/generate-credential-runtime-evidence-policy.py",
+        ],
+        "check_commands": [
+            "python3 scripts/generate-credential-runtime-evidence-policy.py --check",
+        ],
+        "workflow_fragments": {
+            ".github/workflows/verify-release.yml": [
+                "python scripts/generate-credential-runtime-evidence-policy.py --check",
+            ],
+            ".github/workflows/release-draft.yml": [
+                "python scripts/generate-credential-runtime-evidence-policy.py --check",
+            ],
+        },
+        "evidence_artifacts": ["reports/credential-runtime-evidence-policy.json"],
+    },
+    {
         "id": "consumer_compatibility",
         "coverage": ["consumer_compatibility"],
         "operator_commands": [

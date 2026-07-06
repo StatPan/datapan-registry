@@ -51,12 +51,14 @@ This overview is generated from `reports/source-runtime-evidence-rollup.json` an
 Required CLI capabilities:
 
 - `source credential injection`
+- `credential-safe runtime receipt policy`
 - `bounded gateway verification batches`
 
 Required source reports:
 
 - `reports/data-go-kr/coverage-backlog.json`
 - `reports/data-go-kr/runtime-candidates.json`
+- `reports/credential-runtime-evidence-policy.json`
 - `reports/latest-verification.json`
 - `reports/latest-verification-summary.json`
 
@@ -83,6 +85,7 @@ Required CLI capabilities:
 
 - `runtime candidate batch ingestion`
 - `source credential injection`
+- `credential-safe runtime receipt policy`
 - `ECOS error signature extraction`
 
 Required source reports:
@@ -91,6 +94,7 @@ Required source reports:
 - `reports/ecos/latest-verification.json`
 - `reports/ecos/latest-verification-summary.json`
 - `reports/ecos/verification-plan.json`
+- `reports/credential-runtime-evidence-policy.json`
 
 Open blockers:
 
@@ -116,6 +120,7 @@ Required CLI capabilities:
 
 - `runtime candidate batch ingestion`
 - `source credential injection`
+- `credential-safe runtime receipt policy`
 - `KOSIS error signature extraction`
 
 Required source reports:
@@ -124,6 +129,7 @@ Required source reports:
 - `reports/kosis/latest-verification.json`
 - `reports/kosis/latest-verification-summary.json`
 - `reports/kosis/verification-plan.json`
+- `reports/credential-runtime-evidence-policy.json`
 
 Open blockers:
 
@@ -149,6 +155,7 @@ Required CLI capabilities:
 
 - `runtime candidate batch ingestion`
 - `source credential injection`
+- `credential-safe runtime receipt policy`
 - `Open Assembly RESULT code extraction`
 
 Required source reports:
@@ -157,6 +164,7 @@ Required source reports:
 - `reports/open-assembly/latest-verification.json`
 - `reports/open-assembly/latest-verification-summary.json`
 - `reports/open-assembly/verification-plan.json`
+- `reports/credential-runtime-evidence-policy.json`
 
 Open blockers:
 
@@ -182,6 +190,7 @@ Required CLI capabilities:
 
 - `runtime candidate batch ingestion`
 - `source credential injection`
+- `credential-safe runtime receipt policy`
 - `Seoul RESULT code extraction`
 
 Required source reports:
@@ -190,6 +199,7 @@ Required source reports:
 - `reports/seoul-open-data/latest-verification.json`
 - `reports/seoul-open-data/latest-verification-summary.json`
 - `reports/seoul-open-data/verification-plan.json`
+- `reports/credential-runtime-evidence-policy.json`
 
 Open blockers:
 

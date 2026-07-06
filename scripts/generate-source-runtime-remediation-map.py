@@ -42,19 +42,19 @@ REMEDIATION_RULES: dict[str, dict[str, Any]] = {
     },
     "credential_required": {
         "status": "manual_review_boundary",
-        "action": "provide_runtime_credentials_or_accept_metadata_only_boundary",
+        "action": "use_credential_runtime_evidence_policy_or_accept_manual_review_boundary",
         "owner": "release-operator",
         "release_boundary": "credentialed_runtime_evidence_not_required_for_canonical_registry_release",
     },
     "metadata_only_verification": {
         "status": "manual_review_boundary",
-        "action": "collect_live_runtime_evidence_when_credentials_and_adapter_are_available",
+        "action": "collect_live_runtime_evidence_through_credential_safe_policy",
         "owner": "source-evidence",
         "release_boundary": "metadata_only_source_remains_manual_review",
     },
     "non_data_runtime_evidence_not_collected": {
         "status": "manual_review_boundary",
-        "action": "collect_non_data_runtime_evidence_after_adapter_and_credentials_are_available",
+        "action": "collect_non_data_runtime_evidence_through_credential_safe_policy",
         "owner": "source-evidence",
         "release_boundary": "non_data_runtime_evidence_gap_documented",
     },

@@ -18,7 +18,7 @@
     "evidence_total": 0,
     "blocking_count": 2,
     "warning_count": 1,
-    "next_action_count": 3
+    "next_action_count": 4
   },
   "runtime_state": {
     "evidence_status": "no_runtime_evidence",
@@ -58,14 +58,16 @@
   "next_evidence_plan": {
     "required_artifacts": [
       "reports/seoul-open-data/coverage.json",
-      "reports/seoul-open-data/latest-verification.json",
-      "reports/seoul-open-data/latest-verification-summary.json",
-      "reports/seoul-open-data/verification-plan.json"
+    "reports/seoul-open-data/latest-verification.json",
+    "reports/seoul-open-data/latest-verification-summary.json",
+    "reports/seoul-open-data/verification-plan.json",
+    "reports/credential-runtime-evidence-policy.json"
     ],
     "required_cli_capabilities": [
-      "runtime candidate batch ingestion",
-      "source credential injection",
-      "Seoul RESULT code extraction"
+    "runtime candidate batch ingestion",
+    "source credential injection",
+    "credential-safe runtime receipt policy",
+    "Seoul RESULT code extraction"
     ],
     "first_batch_policy": "Run a credential-gated bounded sample-call batch only after service/start_index/end_index/format parameters are pinned.",
     "promotion_gate": "Do not promote Seoul Open Data datasets beyond registry_only until runtime evidence and service-specific row schema contracts exist."
