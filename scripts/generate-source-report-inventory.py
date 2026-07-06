@@ -73,6 +73,11 @@ def portable_path(path: pathlib.Path) -> str:
     return path.as_posix()
 
 
+def file_digest(path: pathlib.Path) -> tuple[int, str]:
+    data = path.read_bytes()
+    return len(data), hashlib.sha256(data).hexdigest()
+
+
 def percent(part: int, whole: int) -> float:
     if whole <= 0:
         return 0.0
@@ -110,13 +115,44 @@ def indexed_schema_ids(schema_index_path: pathlib.Path = SCHEMA_INDEX) -> set[st
     return ids
 
 
+def schema_index_input(schema_index_path: pathlib.Path = SCHEMA_INDEX) -> dict[str, Any]:
+    schema_index = as_dict(load_json(schema_index_path), str(schema_index_path))
+    schemas = schema_index.get("schemas")
+    if not isinstance(schemas, list):
+        raise ValueError("schemas/index.json schemas must be an array")
+    byte_count, sha256 = file_digest(schema_index_path)
+    return {
+        "path": portable_path(schema_index_path),
+        "schemas": len(schemas),
+        "bytes": byte_count,
+        "sha256": sha256,
+    }
+
+
+def source_profile_input(profile_path: pathlib.Path, profile: dict[str, Any]) -> dict[str, Any]:
+    source_id = profile.get("source_id")
+    provider = profile.get("provider")
+    if not isinstance(source_id, str) or not source_id:
+        raise ValueError(f"{profile_path}.source_id must be a non-empty string")
+    if not isinstance(provider, str) or not provider:
+        raise ValueError(f"{profile_path}.provider must be a non-empty string")
+    byte_count, sha256 = file_digest(profile_path)
+    return {
+        "path": portable_path(profile_path),
+        "source_id": source_id,
+        "provider": provider,
+        "bytes": byte_count,
+        "sha256": sha256,
+    }
+
+
 def report_entry(path: pathlib.Path, schema_ids: set[str]) -> dict[str, Any]:
-    data = path.read_bytes()
+    byte_count, sha256 = file_digest(path)
     entry: dict[str, Any] = {
         "name": path.name,
         "path": portable_path(path),
-        "bytes": len(data),
-        "sha256": hashlib.sha256(data).hexdigest(),
+        "bytes": byte_count,
+        "sha256": sha256,
     }
     try:
         payload = load_json(path)
@@ -169,6 +205,8 @@ def source_profiles() -> list[tuple[pathlib.Path, dict[str, Any]]]:
 def build_report() -> dict[str, Any]:
     recommended = sorted(RECOMMENDED_REPORTS)
     schema_ids = indexed_schema_ids()
+    profiles = source_profiles()
+    source_inputs = [source_profile_input(path, profile) for path, profile in profiles]
     sources: list[dict[str, Any]] = []
     all_report_paths: list[pathlib.Path] = []
     present_recommended_total = 0
@@ -177,7 +215,7 @@ def build_report() -> dict[str, Any]:
     schema_backed_total = 0
     schema_indexed_total = 0
 
-    for profile_path, profile in source_profiles():
+    for profile_path, profile in profiles:
         source_id = str(profile.get("source_id"))
         report_dir = REPORTS_ROOT / report_dir_name(source_id)
         report_paths, alias_paths = source_report_paths(source_id, report_dir)
@@ -223,6 +261,8 @@ def build_report() -> dict[str, Any]:
             "reports_root": portable_path(REPORTS_ROOT),
             "schema_index": portable_path(SCHEMA_INDEX),
         },
+        "source_profile_inputs": source_inputs,
+        "schema_index_input": schema_index_input(),
         "recommended_reports": recommended,
         "summary": {
             "sources": len(sources),
