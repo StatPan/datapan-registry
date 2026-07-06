@@ -104,6 +104,51 @@ jobs:
             --output ../datapan-registry/.datapan/ci/latest-release-readiness.json \
             --json
 
+      - name: Package current release zip
+        working-directory: datapan-registry
+        run: |
+          mkdir -p .datapan/ci .datapan/release-assets
+          python scripts/package-registry-release.py \
+            --manifest manifest.json \
+            --output .datapan/release-assets/datapan-registry-snapshot.zip
+          python scripts/package-registry-release.py \
+            --check .datapan/release-assets/datapan-registry-snapshot.zip \
+            | tee .datapan/ci/current-release-zip-check.txt
+
+      - name: Check current release zip is installable
+        working-directory: datapan-cli
+        run: |
+          mkdir -p ../datapan-registry/.datapan/ci
+          port="$(
+            python3 -c 'import socket; sock = socket.socket(); sock.bind(("127.0.0.1", 0)); print(sock.getsockname()[1]); sock.close()'
+          )"
+          python3 -m http.server "${port}" \
+            --bind 127.0.0.1 \
+            --directory ../datapan-registry/.datapan/release-assets \
+            > ../datapan-registry/.datapan/ci/current-release-http.log 2>&1 &
+          server_pid="$!"
+          trap 'kill "${server_pid}" >/dev/null 2>&1 || true' EXIT
+
+          url="http://127.0.0.1:${port}/datapan-registry-snapshot.zip"
+          for attempt in $(seq 1 30); do
+            if curl -fsSI "${url}" >/dev/null 2>&1; then
+              break
+            fi
+            if [ "${attempt}" -eq 30 ]; then
+              echo "current release zip HTTP server did not become ready" >&2
+              exit 1
+            fi
+            sleep 1
+          done
+
+          go run ./cmd/datapan catalog install datapan-registry \
+            --registry "${RUNNER_TEMP}/datapan-installed-current.registry.json" \
+            --url "${url}" \
+            --json \
+            > ../datapan-registry/.datapan/ci/current-release-install.json
+          python3 ../datapan-registry/scripts/check-shard-aware-install-smoke.py \
+            ../datapan-registry/.datapan/ci/current-release-install.json
+
       - name: Check README current snapshot
         run: |
           readme="datapan-registry/README.md"

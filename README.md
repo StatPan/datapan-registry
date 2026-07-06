@@ -70,12 +70,16 @@ manual dispatches, and a weekly scheduled release-health check. The workflow
 checks out this repository with Git LFS enabled, verifies that
 `data/data-go-kr.registry.json` is materialized as the full registry file, runs
 provider-specific verification summary checks, runs release verification and
-readiness through `datapan-cli`, and smoke-tests that the latest GitHub Release
-zip can be installed with
-`datapan catalog install datapan-registry`. The install smoke writes
+readiness through `datapan-cli`, packages the current checkout as
+`.datapan/release-assets/datapan-registry-snapshot.zip`, and installs that zip
+with `datapan catalog install datapan-registry --url ...`. The current-zip
+smoke writes `.datapan/ci/current-release-install.json`. The workflow also
+smoke-tests that the latest public GitHub Release zip can be installed with
+`datapan catalog install datapan-registry`; that install smoke writes
 `.datapan/ci/latest-release-install.json` and records whether the release used
-validated shard metadata or the canonical monolith fallback; `datapan doctor
---json` is saved as `.datapan/ci/latest-release-doctor.json`.
+validated shard metadata or the canonical monolith fallback. `datapan doctor
+--json` is saved as `.datapan/ci/latest-release-doctor.json` for the latest
+public release install.
 
 The current snapshot was generated from `datapan-cli` and includes:
 
