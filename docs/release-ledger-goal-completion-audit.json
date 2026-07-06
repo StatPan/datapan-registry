@@ -11,7 +11,7 @@
     "criteria_partial": 0,
     "criteria_gap": 0,
     "decision": "leave_goal_open",
-    "reason": "The release assembly path is receipt-bound and credential-safe runtime evidence is now policy-bound, but #344 remains open because live credentialed runtime receipts are not checked in, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
+    "reason": "The release assembly path is receipt-bound and credential-safe runtime evidence is now policy-bound, but #344 remains open because reviewed live credentialed runtime receipts are not checked in, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
   },
   "current_state_evidence": {
     "manifest": {
@@ -57,6 +57,9 @@
       "manual_review_boundaries": 13,
       "credential_policy_available": true,
       "receipt_contract_available": true,
+      "reviewed_receipt_intake_available": true,
+      "receipt_reviewed": false,
+      "receipt_relief_eligible": false,
       "receipt_backed_relief_allowed": false
     },
     "downstream_impact": {
@@ -73,9 +76,13 @@
       "runtime_blocking_count": 9,
       "runtime_warning_count": 4,
       "credential_policy_live_receipts": 0,
+      "credential_policy_reviewed_receipts": 0,
       "credential_policy_receipt_contract_available": true,
+      "credential_policy_reviewed_receipt_intake_available": true,
       "credential_policy_receipt_present": false,
       "credential_policy_receipt_validated": false,
+      "credential_policy_receipt_reviewed": false,
+      "credential_policy_receipt_relief_eligible": false,
       "manual_review_reduction_allowed": false
     },
     "credential_runtime_policy": {
@@ -84,10 +91,14 @@
       "credential_gated_sources": 5,
       "manual_review_boundaries": 13,
       "receipt_contract_available": true,
+      "reviewed_receipt_intake_available": true,
       "receipt_present": false,
       "receipt_validated": false,
+      "receipt_reviewed": false,
+      "receipt_relief_eligible": false,
       "manual_review_reduction_allowed": false,
       "live_credentialed_receipts_checked_in": 0,
+      "reviewed_receipts_checked_in": 0,
       "default_ci_requires_credentials": false,
       "checked_in_secrets_allowed": false
     }
@@ -201,7 +212,7 @@
         },
         {
           "path": "reports/source-runtime-remediation-map.json",
-          "finding": "Maps current source runtime blockers and warnings to remediation status and manual-review release boundaries; adapter and taxonomy follow-up-required findings are reduced to zero while receipt-backed relief remains disallowed without validated receipts."
+          "finding": "Maps current source runtime blockers and warnings to remediation status and manual-review release boundaries; adapter and taxonomy follow-up-required findings are reduced to zero while receipt-backed relief remains disallowed without reviewed validated receipts."
         },
         {
           "path": "reports/source-report-inventory.json",
@@ -217,15 +228,15 @@
         },
         {
           "path": "reports/credential-runtime-evidence-policy.json",
-          "finding": "Defines secret-free CI behavior, per-source credential environment names, bounded candidate batches, local receipt paths, receipt contract availability, and manual-review boundaries without claiming live credentialed receipts or allowing manual-review reduction."
+          "finding": "Defines secret-free CI behavior, per-source credential environment names, bounded candidate batches, local staged receipt paths, checked-in reviewed receipt intake paths, receipt contract availability, review state, and manual-review boundaries without claiming live credentialed receipts or allowing manual-review reduction."
         },
         {
           "path": "schemas/datapan.credential-runtime-receipt.v1.schema.json",
-          "finding": "Defines the redacted credentialed runtime receipt shape for future operator-run evidence without allowing secret-bearing fields."
+          "finding": "Defines the redacted credentialed runtime receipt shape and optional review metadata for future operator-run and reviewed checked-in evidence without allowing secret-bearing fields."
         },
         {
           "path": "scripts/validate-credential-runtime-receipts.py",
-          "finding": "Validates optional credentialed receipts and runs secret-redaction self-tests without requiring credentials in default CI."
+          "finding": "Validates optional reviewed checked-in credentialed receipts, allows explicit unreviewed local staging checks, and runs secret-redaction plus review-state self-tests without requiring credentials in default CI."
         }
       ],
       "next_action": "Keep expanding source runtime evidence through separate runtime evidence tickets; do not block this ledger-audit criterion on full provider coverage."
@@ -241,7 +252,7 @@
         },
         {
           "path": "reports/release-consumer-compatibility.json",
-          "finding": "Reports seven consumers, two proven consumers, one blocked consumer, canonical registry requirement, optional shard assets, runtime manual-review evidence, source runtime remediation counts, credential policy receipt state, and the blocked receipt-backed manual-review reduction gate."
+          "finding": "Reports seven consumers, two proven consumers, one blocked consumer, canonical registry requirement, optional shard assets, runtime manual-review evidence, source runtime remediation counts, credential policy receipt and review state, and the blocked receipt-backed manual-review reduction gate."
         },
         {
           "path": "scripts/validate-impact-plans.py",
@@ -249,11 +260,11 @@
         },
         {
           "path": "scripts/validate-release-consumer-compatibility.py",
-          "finding": "Fails if source runtime blockers remain but remediation evidence, credential runtime policy evidence, receipt-backed relief gating, error/action routing evidence, or downstream manual-review impact evidence disappears."
+          "finding": "Fails if source runtime blockers remain but remediation evidence, credential runtime policy evidence, reviewed receipt intake gating, receipt-backed relief gating, error/action routing evidence, or downstream manual-review impact evidence disappears."
         },
         {
           "path": "reports/credential-runtime-evidence-policy.json",
-          "finding": "Keeps unresolved credential-gated source runtime checks secret-free by default, marks live credentialed receipt count as zero, and disallows manual-review reduction until receipts are present and validated."
+          "finding": "Keeps unresolved credential-gated source runtime checks secret-free by default, marks live and reviewed credentialed receipt counts as zero, and disallows manual-review reduction until receipts are present, validated, reviewed, and relief-eligible."
         }
       ],
       "next_action": "Keep compatibility evidence current whenever source runtime blockers or downstream contracts change."
@@ -276,7 +287,7 @@
           "finding": "Records the current assembly path while preserving manual-review and not_complete goal status."
         }
       ],
-      "next_action": "Use this audit to keep #344 open until credentialed runtime receipts exist or the manual-review release boundary is explicitly accepted."
+      "next_action": "Use this audit to keep #344 open until reviewed credentialed runtime receipts exist or the manual-review release boundary is explicitly accepted."
     }
   ],
   "remaining_goal_risks": [
@@ -288,12 +299,12 @@
     {
       "id": "credentialed_runtime_receipts_absent",
       "evidence": "reports/credential-runtime-evidence-policy.json",
-      "finding": "Credential-gated runtime checks now have a secret-safe policy path and redacted receipt contract, but live credentialed receipts are still not checked in, not validated, and not allowed to reduce manual-review boundaries."
+      "finding": "Credential-gated runtime checks now have a secret-safe policy path, redacted receipt contract, and reviewed checked-in intake path, but live credentialed receipts are still not checked in, not validated, not reviewed, and not allowed to reduce manual-review boundaries."
     },
     {
       "id": "receipt_backed_compatibility_relief_blocked",
       "evidence": "reports/release-consumer-compatibility.json",
-      "finding": "Consumer compatibility now distinguishes receipt contract availability from receipt-backed relief; manual_review_reduction_allowed remains false until validated credential runtime receipts exist."
+      "finding": "Consumer compatibility now distinguishes receipt contract availability, reviewed intake availability, receipt validation, receipt review, and relief eligibility from receipt-backed relief; manual_review_reduction_allowed remains false until reviewed validated credential runtime receipts exist."
     },
     {
       "id": "consumer_compatibility_manual_review_required",
@@ -346,6 +357,11 @@
       "issue": 369,
       "title": "Gate compatibility relief on credential runtime receipts",
       "reason": "The receipt contract exists, but compatibility relief must remain blocked unless validated redacted credential runtime receipts are present and linked through remediation evidence."
+    },
+    {
+      "issue": 371,
+      "title": "Define reviewed credential runtime receipt intake path",
+      "reason": "The compatibility relief gate now needs a reviewed checked-in receipt intake path so future live evidence can be validated, reviewed, and linked without weakening canonical registry compatibility."
     }
   ]
 }

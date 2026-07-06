@@ -24,6 +24,10 @@ DEFAULT_OUTPUT = pathlib.Path("reports/credential-runtime-evidence-policy.json")
 SCHEMA_VERSION = "datapan.credential-runtime-evidence-policy.v1"
 RECEIPT_SCHEMA = "schemas/datapan.credential-runtime-receipt.v1.schema.json"
 RECEIPT_VALIDATOR = "scripts/validate-credential-runtime-receipts.py"
+STAGED_RECEIPT_GLOB = ".datapan/runtime-evidence/*-credentialed-receipt.json"
+REVIEWED_RECEIPT_GLOB = "reports/credential-runtime-receipts/*-credentialed-receipt.json"
+REVIEW_STATES = ["reviewed_accepted", "reviewed_rejected"]
+RELIEF_ELIGIBLE_REVIEW_STATES = ["reviewed_accepted"]
 
 CREDENTIAL_ENVS: dict[str, list[str]] = {
     "data_go_kr": ["DATAPAN_DATA_GO_KR_SERVICE_KEY"],
@@ -167,6 +171,7 @@ def source_entry(source_rollup: dict[str, Any], remediation: dict[str, Any]) -> 
                 f"--output {receipt_artifact}"
             ),
             "receipt_artifact": receipt_artifact,
+            "reviewed_receipt_artifact": f"reports/credential-runtime-receipts/{source_dir(source_id)}-credentialed-receipt.json",
             "receipt_schema": RECEIPT_SCHEMA,
             "receipt_validator": RECEIPT_VALIDATOR,
             "promotion_gate": (
@@ -223,10 +228,14 @@ def build_report(runtime_rollup: dict[str, Any], remediation: dict[str, Any]) ->
             "credential_required_blockers": credential_required,
             "manual_review_boundaries": manual_boundaries,
             "receipt_contract_available": True,
+            "reviewed_receipt_intake_available": True,
             "receipt_present": False,
             "receipt_validated": False,
+            "receipt_reviewed": False,
+            "receipt_relief_eligible": False,
             "manual_review_reduction_allowed": False,
             "live_credentialed_receipts_checked_in": 0,
+            "reviewed_receipts_checked_in": 0,
             "default_ci_requires_credentials": False,
             "checked_in_secrets_allowed": False,
         },
@@ -244,6 +253,15 @@ def build_report(runtime_rollup: dict[str, Any], remediation: dict[str, Any]) ->
             "receipt_schema": RECEIPT_SCHEMA,
             "receipt_validator": RECEIPT_VALIDATOR,
             "receipt_validation_command": "python3 scripts/validate-credential-runtime-receipts.py",
+            "staged_receipt_glob": STAGED_RECEIPT_GLOB,
+            "reviewed_receipt_glob": REVIEWED_RECEIPT_GLOB,
+            "staged_receipt_validation_command": (
+                "python3 scripts/validate-credential-runtime-receipts.py --allow-unreviewed "
+                ".datapan/runtime-evidence/<source>-credentialed-receipt.json"
+            ),
+            "review_required_for_checked_in_receipts": True,
+            "allowed_checked_in_review_states": REVIEW_STATES,
+            "relief_eligible_review_states": RELIEF_ELIGIBLE_REVIEW_STATES,
             "credential_gated_command_template": (
                 "DATAPAN_<SOURCE>_API_KEY=<secret> datapan source runtime verify "
                 "--source <source_id> --candidates <runtime-candidates.json> --bounded --json "
@@ -257,6 +275,7 @@ def build_report(runtime_rollup: dict[str, Any], remediation: dict[str, Any]) ->
                 "candidate_batch",
                 "outcome",
                 "error_class",
+                "review",
             ],
             "forbidden_receipt_fields": [
                 "credential_value",
@@ -270,12 +289,24 @@ def build_report(runtime_rollup: dict[str, Any], remediation: dict[str, Any]) ->
             "compatibility_effect": "credential_safe_manual_review_boundary",
             "manual_review_required": True,
             "live_evidence_claim": "not_claimed_until_credentialed_receipts_exist",
+            "reviewed_receipt_intake": {
+                "status": "defined_no_reviewed_receipts",
+                "staged_receipt_glob": STAGED_RECEIPT_GLOB,
+                "checked_in_receipt_glob": REVIEWED_RECEIPT_GLOB,
+                "review_required_for_checked_in_receipts": True,
+                "allowed_checked_in_review_states": REVIEW_STATES,
+                "relief_eligible_review_states": RELIEF_ELIGIBLE_REVIEW_STATES,
+                "default_ci_requires_credentials": False,
+            },
             "receipt_backed_relief_gate": {
                 "receipt_contract_available": True,
+                "reviewed_receipt_intake_available": True,
                 "receipt_present": False,
                 "receipt_validated": False,
+                "receipt_reviewed": False,
+                "receipt_relief_eligible": False,
                 "manual_review_reduction_allowed": False,
-                "status": "blocked_until_validated_credential_runtime_receipts_exist",
+                "status": "blocked_until_reviewed_validated_credential_runtime_receipts_exist",
             },
         },
         "sources": sources,
