@@ -259,6 +259,12 @@ to require the canonical LFS registry until the release verifier, install path,
 doctor checks, and downstream consumers explicitly support shard-preferred
 fallback behavior.
 
+The `Registry shard validation` workflow is intentionally separate from the
+full release gate. It checks shard generator and validator behavior against a
+small fixture without Git LFS, credentials, release install, or doctor checks.
+It does not prove release readiness. The `Verify registry release` workflow
+remains the full LFS-backed release and install gate.
+
 ## Cadence
 
 Start with date-based releases and keep a weekly scheduled health check running
