@@ -87,8 +87,7 @@ duplicating registry records into multiple primary shard sets.
 ## Shard Inventory
 
 The first generated contract should be a shard inventory, not a hand-maintained
-directory convention. A future `datapan.registry-shards.v1` schema should
-record:
+directory convention. `datapan.registry-shards.v1` records:
 
 - `schema_version`
 - `generated_at`
@@ -104,7 +103,8 @@ record:
 - recomposition policy
 
 The inventory should be included in the release manifest as a required
-artifact once it exists. Shard files can be protected in either of two ways:
+`registry_shards` artifact once it exists. Shard files can be protected in
+either of two ways:
 
 1. Include every shard file directly in `manifest.json`.
 2. Include a manifest-bound shard inventory whose entries carry every shard
