@@ -2,21 +2,22 @@
 
 This overview is generated from `reports/source-runtime-evidence-rollup.json` and its checked-in source runtime evidence plans. Regenerate it with `python scripts/generate-source-runtime-readiness.py` after updating a source runtime plan or rollup.
 
-- Generated at: `2026-06-30T09:16:13Z`
-- Sources: `4`
+- Generated at: `2026-07-06T17:46:39Z`
+- Sources: `5`
 - Sources without runtime evidence: `4`
-- Runtime evidence total: `0`
-- Verified: `0`
-- Failed: `0`
-- Skipped: `0`
+- Runtime evidence total: `4774`
+- Verified: `2841`
+- Failed: `389`
+- Skipped: `1544`
 - Unknown: `0`
-- Blocking blocker instances: `11`
-- Warning instances: `7`
+- Blocking blocker instances: `12`
+- Warning instances: `8`
 
 ## Source Summary
 
 | Source | Source ID | Evidence | Blockers | Warnings | Blocker IDs | Warning IDs |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| data.go.kr | `data_go_kr` | 4774 | 1 | 1 | `credential_required`, `source_specific_error_taxonomy_pending` | `source_runtime_error_taxonomy_pending` |
 | ECOS | `ecos` | 0 | 3 | 2 | `adapter_not_registered`, `credential_required`, `metadata_only_verification` | `non_data_runtime_evidence_not_collected`, `source_runtime_adapter_not_registered` |
 | KOSIS | `kosis` | 0 | 3 | 2 | `adapter_not_registered`, `credential_required`, `metadata_only_verification` | `non_data_runtime_evidence_not_collected`, `source_runtime_adapter_not_registered` |
 | open.assembly.go.kr | `open_assembly` | 0 | 3 | 2 | `adapter_not_registered`, `credential_required`, `metadata_only_verification` | `non_data_runtime_evidence_not_collected`, `source_runtime_adapter_not_registered` |
@@ -27,8 +28,9 @@ This overview is generated from `reports/source-runtime-evidence-rollup.json` an
 | Blocker ID | Count | Sources |
 | --- | ---: | ---: |
 | adapter_not_registered | 3 | `ecos`, `kosis`, `open_assembly` |
-| credential_required | 4 | `ecos`, `kosis`, `open_assembly`, `seoul_open_data` |
+| credential_required | 5 | `data_go_kr`, `ecos`, `kosis`, `open_assembly`, `seoul_open_data` |
 | metadata_only_verification | 4 | `ecos`, `kosis`, `open_assembly`, `seoul_open_data` |
+| source_specific_error_taxonomy_pending | 1 | `data_go_kr` |
 
 ## Warnings By ID
 
@@ -36,8 +38,42 @@ This overview is generated from `reports/source-runtime-evidence-rollup.json` an
 | --- | ---: | ---: |
 | non_data_runtime_evidence_not_collected | 4 | `ecos`, `kosis`, `open_assembly`, `seoul_open_data` |
 | source_runtime_adapter_not_registered | 3 | `ecos`, `kosis`, `open_assembly` |
+| source_runtime_error_taxonomy_pending | 1 | `data_go_kr` |
 
 ## Source Next Actions
+
+### data.go.kr (`data_go_kr`)
+
+- Runtime evidence: `4774`
+- Verification mode: `bounded_call`
+- Adapter status: `registered`
+- Credential required: `true`
+- Candidate batch: `reports/data-go-kr/runtime-candidates.json`
+- First batch policy: Use the pinned candidate batch to run a small credential-gated gateway check, while preserving the broader latest-verification evidence as the release-wide runtime baseline.
+- Promotion gate: Do not treat data.go.kr runtime coverage as complete until credentialed checks are repeatable and source-specific error taxonomy is verified.
+
+Required CLI capabilities:
+
+- `source credential injection`
+- `bounded gateway verification batches`
+- `data.go.kr error taxonomy promotion`
+
+Required source reports:
+
+- `reports/data-go-kr/coverage-backlog.json`
+- `reports/data-go-kr/runtime-candidates.json`
+- `reports/latest-verification.json`
+- `reports/latest-verification-summary.json`
+
+Open blockers:
+
+- `credential_required` (operator): Provide a non-secret serviceKey injection path for repeatable bounded data.go.kr runtime checks in local and CI release operations.
+- `source_specific_error_taxonomy_pending` (registry): Promote data.go.kr source error taxonomy from draft to verified once gateway, approval, missing-parameter, and provider-specific skip reasons are classified.
+
+Warnings:
+
+- `source_runtime_error_taxonomy_pending`: Classify gateway, approval, missing-parameter, adapter, and provider-specific runtime reasons before closing the source runtime evidence loop.
+
 
 ### ECOS (`ecos`)
 

@@ -1,25 +1,42 @@
 {
   "schema_version": "datapan.source-runtime-evidence-rollup.v1",
-  "generated_at": "2026-06-30T09:16:13Z",
+  "generated_at": "2026-07-06T17:46:39Z",
   "provider": "multi-source",
   "source_plan_inputs": [
+    "reports/data-go-kr/runtime-evidence-plan.json",
     "reports/ecos/runtime-evidence-plan.json",
     "reports/kosis/runtime-evidence-plan.json",
     "reports/open-assembly/runtime-evidence-plan.json",
     "reports/seoul-open-data/runtime-evidence-plan.json"
   ],
   "summary": {
-    "sources": 4,
+    "sources": 5,
     "sources_without_evidence": 4,
-    "evidence_total": 0,
-    "verified": 0,
-    "failed": 0,
-    "skipped": 0,
+    "evidence_total": 4774,
+    "verified": 2841,
+    "failed": 389,
+    "skipped": 1544,
     "unknown": 0,
-    "blocking_count": 11,
-    "warning_count": 7
+    "blocking_count": 12,
+    "warning_count": 8
   },
   "sources": [
+    {
+      "source_id": "data_go_kr",
+      "provider": "data.go.kr",
+      "runtime_evidence_plan": "reports/data-go-kr/runtime-evidence-plan.json",
+      "evidence_total": 4774,
+      "blocking_count": 1,
+      "warning_count": 1,
+      "blocker_ids": [
+        "credential_required",
+        "source_specific_error_taxonomy_pending"
+      ],
+      "warning_ids": [
+        "source_runtime_error_taxonomy_pending"
+      ],
+      "next_action_count": 3
+    },
     {
       "source_id": "ecos",
       "provider": "ECOS",
@@ -103,8 +120,9 @@
     },
     {
       "id": "credential_required",
-      "count": 4,
+      "count": 5,
       "source_ids": [
+        "data_go_kr",
         "ecos",
         "kosis",
         "open_assembly",
@@ -119,6 +137,13 @@
         "kosis",
         "open_assembly",
         "seoul_open_data"
+      ]
+    },
+    {
+      "id": "source_specific_error_taxonomy_pending",
+      "count": 1,
+      "source_ids": [
+        "data_go_kr"
       ]
     }
   ],
@@ -141,6 +166,13 @@
         "kosis",
         "open_assembly"
       ]
+    },
+    {
+      "id": "source_runtime_error_taxonomy_pending",
+      "count": 1,
+      "source_ids": [
+        "data_go_kr"
+      ]
     }
   ],
   "warnings": [
@@ -153,7 +185,7 @@
         "seoul_open_data"
       ],
       "expected": "Every checked-in non-data.go.kr source has source-scoped runtime evidence after pinned candidate batches, adapters, and credential injection are available.",
-      "actual": "4 of 4 non-data.go.kr sources have 0 runtime checks.",
+      "actual": "4 of 5 checked-in sources have 0 runtime checks.",
       "remaining": "Use the checked-in runtime-candidates.json batches, register adapters, inject credentials, and run bounded first batches."
     },
     {
@@ -163,9 +195,18 @@
         "kosis",
         "open_assembly"
       ],
-      "expected": "Every checked-in non-data.go.kr source has verification and call adapter capabilities before runtime evidence collection.",
-      "actual": "3 of 4 non-data.go.kr sources have no registered runtime adapter.",
+      "expected": "Every checked-in source has verification and call adapter capabilities before runtime evidence collection.",
+      "actual": "3 of 5 checked-in sources have no registered runtime adapter.",
       "remaining": "Register source-specific adapters for ECOS, KOSIS, and Open Assembly."
+    },
+    {
+      "warning_id": "source_runtime_error_taxonomy_pending",
+      "affected_sources": [
+        "data_go_kr"
+      ],
+      "expected": "Every checked-in source has a verified source-specific runtime error taxonomy before its runtime evidence loop is complete.",
+      "actual": "1 of 5 checked-in sources still have source runtime taxonomy work open.",
+      "remaining": "Promote the data.go.kr error taxonomy from draft to verified after gateway and provider-specific runtime reasons are classified."
     }
   ]
 }
