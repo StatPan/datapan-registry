@@ -265,6 +265,39 @@ Update `datapan-cli` and downstream consumers outside this repository to prefer
 the shard inventory where useful and fall back to
 `data/data-go-kr.registry.json` for compatibility.
 
+The downstream compatibility contract is:
+
+- `datapan catalog install datapan-registry` continues to install a usable
+  canonical registry when only `data/data-go-kr.registry.json` is present.
+- release install may optionally download `data-go-kr-shards.tar.gz` after the
+  canonical registry is available, but shard download failure must not break
+  existing monolith installs during the compatibility period.
+- `datapan doctor --json` continues to validate the canonical registry path and
+  may report shard inventory health only as additive metadata until shard
+  consumption is required by a future release policy.
+- `datapan catalog release verify` keeps validating the full manifest and
+  canonical registry. Shard inventory validation may be added as an extra check
+  only after the verifier understands `registry_shards` artifacts.
+- scoped commands such as institution verification planning, source-scoped
+  report validation, provider or host planning, and pull request summaries may
+  prefer shard inventories because they benefit from partial reads.
+- every shard-preferred path must fall back to the canonical registry when
+  shard archives or inventories are missing, stale, or unsupported.
+
+Affected `datapan-cli` surfaces:
+
+- `catalog install`
+- `doctor`
+- `catalog release verify`
+- `catalog release readiness`
+- `catalog verify --org`
+- `catalog verify --provider`
+- catalog diff/audit/report commands that only need scoped registry slices
+
+Shard-first release assets are blocked until these surfaces have tests proving
+monolith fallback and no regression in existing install behavior. The
+downstream implementation work is tracked in `StatPan/datapan-cli#128`.
+
 ### Stage 6: Release Asset Policy
 
 Publish release assets that include the canonical registry and shard inventory.

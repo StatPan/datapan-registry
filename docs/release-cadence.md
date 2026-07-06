@@ -272,6 +272,10 @@ validated with `scripts/validate-registry-shards.py`. Keep the archive optional
 until downstream consumers support shard-preferred, monolith-fallback
 installation and verification.
 
+Do not make a shard archive required for install, doctor, release verification,
+or readiness until `datapan-cli` proves fallback behavior for the commands
+listed in `docs/registry-shard-artifact-strategy.md`.
+
 ## Cadence
 
 Start with date-based releases and keep a weekly scheduled health check running
