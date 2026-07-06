@@ -92,7 +92,11 @@ fallback. A separate
 `datapan doctor --json` run is saved as
 `.datapan/ci/latest-release-doctor.json` plus
 `.datapan/ci/latest-release-doctor-smoke.json` for the latest public release
-install.
+install. After both current and latest install/doctor smoke summaries pass,
+the workflow writes `.datapan/ci/release-health-rollup.json` as the
+schema-validated top-level release-health verdict, proving the four smoke
+summaries agree on provider, registry path, spec count, doctor install
+cross-checks, and the current-vs-latest release zip evidence boundary.
 
 The current snapshot was generated from `datapan-cli` and includes:
 

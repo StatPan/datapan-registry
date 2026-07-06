@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 32,
+  "count": 33,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -291,6 +291,15 @@
       "version": "v1",
       "bytes": 1919,
       "sha256": "d7fe699c16a0f1f779b166aaa56d732ae52bb5a34a478eabd4a82b136852d811"
+    },
+    {
+      "path": "schemas/datapan.release-health-rollup.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.release-health-rollup.v1.schema.json",
+      "title": "Datapan Release Health Rollup v1",
+      "contract": "release-health-rollup",
+      "version": "v1",
+      "bytes": 5151,
+      "sha256": "cfe01311911c8465970c84b3d5d20a3b541e988a0b4d6ef619b0d10e9af9d50e"
     }
   ]
 }

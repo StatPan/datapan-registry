@@ -94,6 +94,10 @@ check. That workflow:
   both current checkout and latest public release installs, including matching
   doctor registry path and spec count against the install JSON in
   `current-release-doctor-smoke.json` and `latest-release-doctor-smoke.json`;
+- rolls those four install/doctor smoke summaries into
+  `release-health-rollup.json`, a schema-validated top-level verdict that
+  checks provider, registry path, spec count, doctor install cross-check, and
+  current-vs-latest release zip evidence invariants;
 - uploads current-checkout install and doctor JSON plus latest-public-release
   install and doctor JSON reports as release-health evidence.
 

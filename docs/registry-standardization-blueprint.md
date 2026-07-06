@@ -133,7 +133,9 @@ Current strengths:
   for release-health install evidence. Gira #276 adds
   `datapan.doctor-smoke-summary.v1` as the `32`nd checked-in schema artifact
   for release-health doctor evidence while keeping the compatibility registry
-  path intact.
+  path intact. Gira #278 adds `datapan.release-health-rollup.v1` as the `33`rd
+  checked-in schema artifact, giving current/latest install and doctor smoke
+  evidence one schema-backed release-health verdict.
 - `reports/registry-impact-plan.json` now carries a
   `registry:schema-release-surface` impact entry, and
   `scripts/validate-impact-plans.py` fails if release readiness reports schema
@@ -607,7 +609,7 @@ Current gaps:
   validated against source profiles.
 - The registry release surface now includes every checked-in registry schema,
   and the current datapan-cli release readiness gate passes with
-  `schema_set_complete` reporting `expected=20` and `actual=32`. Gira #79 keeps
+  `schema_set_complete` reporting `expected=20` and `actual=33`. Gira #79 keeps
   the broader CLI-side schema-generator follow-up explicit in the impact plan
   instead of relying on a remembered PR note.
 
