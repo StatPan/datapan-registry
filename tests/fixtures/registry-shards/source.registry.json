@@ -1,0 +1,101 @@
+[
+  {
+    "id": "fixture-001",
+    "provider": "data.go.kr",
+    "organization": "Fixture Ministry",
+    "title": "Fixture Ministry Sample API",
+    "description": "Small registry fixture for shard validation CI.",
+    "source_category": "fixture",
+    "source_keywords": ["fixture"],
+    "priority": 0,
+    "source": {
+      "system": "data.go.kr",
+      "url": "https://www.data.go.kr/catalog/fixture-001/openapi.json",
+      "raw": {
+        "end_point_url": "https://apis.data.go.kr/fixture/sample",
+        "org_nm": "Fixture Ministry"
+      }
+    },
+    "operations": [
+      {
+        "name": "sample",
+        "source": {
+          "system": "data.go.kr",
+          "url": "https://www.data.go.kr/catalog/fixture-001/openapi.json",
+          "raw": {
+            "end_point_url": "https://apis.data.go.kr/fixture/sample",
+            "org_nm": "Fixture Ministry"
+          }
+        },
+        "request_params": [],
+        "response_params": []
+      }
+    ]
+  },
+  {
+    "id": "fixture-002",
+    "provider": "data.go.kr",
+    "organization": "Fixture City",
+    "title": "Fixture City Sample API",
+    "description": "Second small registry fixture for shard validation CI.",
+    "source_category": "fixture",
+    "source_keywords": ["fixture"],
+    "priority": 0,
+    "source": {
+      "system": "data.go.kr",
+      "url": "https://www.data.go.kr/catalog/fixture-002/openapi.json",
+      "raw": {
+        "end_point_url": "https://fixture.example.gov/api",
+        "org_nm": "Fixture City"
+      }
+    },
+    "operations": [
+      {
+        "name": "sample",
+        "source": {
+          "system": "data.go.kr",
+          "url": "https://www.data.go.kr/catalog/fixture-002/openapi.json",
+          "raw": {
+            "end_point_url": "https://fixture.example.gov/api",
+            "org_nm": "Fixture City"
+          }
+        },
+        "request_params": [],
+        "response_params": []
+      }
+    ]
+  },
+  {
+    "id": "fixture-003",
+    "provider": "data.go.kr",
+    "organization": "Fixture City",
+    "title": "Fixture City Second API",
+    "description": "Third small registry fixture for shard validation CI.",
+    "source_category": "fixture",
+    "source_keywords": ["fixture"],
+    "priority": 0,
+    "source": {
+      "system": "data.go.kr",
+      "url": "https://www.data.go.kr/catalog/fixture-003/openapi.json",
+      "raw": {
+        "end_point_url": "https://fixture.example.gov/api/second",
+        "org_nm": "Fixture City"
+      }
+    },
+    "operations": [
+      {
+        "name": "sample",
+        "source": {
+          "system": "data.go.kr",
+          "url": "https://www.data.go.kr/catalog/fixture-003/openapi.json",
+          "raw": {
+            "end_point_url": "https://fixture.example.gov/api/second",
+            "org_nm": "Fixture City"
+          }
+        },
+        "request_params": [],
+        "response_params": []
+      }
+    ]
+  }
+]

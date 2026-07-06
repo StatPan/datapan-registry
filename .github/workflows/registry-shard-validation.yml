@@ -1,0 +1,49 @@
+name: Registry shard validation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    paths:
+      - ".github/workflows/registry-shard-validation.yml"
+      - "docs/registry-shard-artifact-strategy.md"
+      - "schemas/datapan.registry-shards.v1.schema.json"
+      - "scripts/generate-registry-shards.py"
+      - "scripts/validate-registry-shards.py"
+      - "tests/fixtures/registry-shards/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-fixture:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout registry without LFS
+        uses: actions/checkout@v7
+        with:
+          lfs: false
+
+      - name: Validate shard tooling on fixture
+        run: |
+          python3 -m venv .datapan/ci/registry-shards-venv
+          . .datapan/ci/registry-shards-venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install jsonschema
+          python -m py_compile scripts/generate-registry-shards.py scripts/validate-registry-shards.py
+          python scripts/generate-registry-shards.py \
+            --source-registry tests/fixtures/registry-shards/source.registry.json \
+            --output-dir .datapan/ci/registry-shards \
+            --generated-at 2026-07-06T00:00:00Z \
+            --clean
+          python scripts/validate-registry-shards.py \
+            .datapan/ci/registry-shards/registry-shards.json
+
+      - name: Upload shard validation fixture output
+        uses: actions/upload-artifact@v7
+        with:
+          name: registry-shard-validation-fixture
+          path: .datapan/ci/registry-shards/
+          if-no-files-found: error
