@@ -84,6 +84,55 @@ def actions_by_target(change: dict[str, object]) -> dict[str, dict[str, object]]
     return result
 
 
+def error_action_catalog_path(plan_path: pathlib.Path) -> pathlib.Path:
+    return plan_path.parent / "error-action-catalog.json"
+
+
+def catalog_has_provider_error_taxonomy_change(catalog_path: pathlib.Path) -> bool:
+    if not catalog_path.exists():
+        return False
+    catalog = as_dict(load_json(catalog_path), catalog_path)
+    rules = catalog.get("rules")
+    if not isinstance(rules, list):
+        return False
+    for rule in rules:
+        if not isinstance(rule, dict):
+            continue
+        categories = rule.get("impact_categories")
+        if isinstance(categories, list) and "provider_error_taxonomy_changed" in categories:
+            return True
+    return False
+
+
+def validate_error_taxonomy_impact_link(path: pathlib.Path, plan: dict[str, object]) -> None:
+    if plan.get("scope", "source") != "source":
+        return
+    catalog_path = error_action_catalog_path(path)
+    if not catalog_has_provider_error_taxonomy_change(catalog_path):
+        return
+
+    provider = plan.get("provider")
+    source_id = plan.get("source_id")
+    changes = plan.get("changes")
+    if not isinstance(changes, list):
+        raise ValueError("changes must be an array")
+    matching = [
+        change
+        for change in changes
+        if isinstance(change, dict)
+        and change.get("category") == "provider_error_taxonomy_changed"
+        and isinstance(change.get("identity"), dict)
+        and change["identity"].get("provider") == provider
+        and change["identity"].get("source_id") == source_id
+    ]
+    if not matching:
+        raise ValueError(
+            f"missing provider_error_taxonomy_changed impact change for {catalog_path}"
+        )
+    if len(matching) > 1:
+        raise ValueError("duplicate provider_error_taxonomy_changed impact changes")
+
+
 def validate_schema_release_impact_gate(path: pathlib.Path, plan: dict[str, object]) -> None:
     if plan.get("scope", "source") != "release":
         return
@@ -198,6 +247,7 @@ def validate_consistency(path: pathlib.Path, plan: dict[str, object]) -> None:
         raise ValueError("summary.requires_db_migration_review does not match actions")
     if summary.get("requires_served_contract_regeneration") != served_contract_regeneration:
         raise ValueError("summary.requires_served_contract_regeneration does not match actions")
+    validate_error_taxonomy_impact_link(path, plan)
     validate_schema_release_impact_gate(path, plan)
 
 
