@@ -113,6 +113,8 @@
     "credential_runtime_receipt_collection_queue": {
       "path": "reports/credential-runtime-receipt-collection-queue.json",
       "queue_ticket": 375,
+      "promotion_ticket": 379,
+      "promotion_script": "scripts/promote-credential-runtime-receipt.py",
       "credential_gated_sources": 5,
       "absent": 5,
       "staged_only": 0,
@@ -255,7 +257,11 @@
         },
         {
           "path": "reports/credential-runtime-receipt-collection-queue.json",
-          "finding": "Enumerates all five credential-gated sources, their staged and reviewed receipt paths, bounded operator commands, current absent receipt states, and next collection actions without requiring credentials in default CI."
+          "finding": "Enumerates all five credential-gated sources, their staged and reviewed receipt paths, bounded operator commands, promotion commands, current absent receipt states, and next collection actions without requiring credentials in default CI."
+        },
+        {
+          "path": "scripts/promote-credential-runtime-receipt.py",
+          "finding": "Promotes local staged receipts into policy-defined reviewed receipt paths only after validating source alignment, redaction, review metadata, and relief decision semantics."
         },
         {
           "path": "schemas/datapan.credential-runtime-receipt.v1.schema.json",
@@ -330,7 +336,7 @@
     {
       "id": "credentialed_runtime_receipts_absent",
       "evidence": "reports/credential-runtime-receipt-collection-queue.json",
-      "finding": "Credential-gated runtime checks now have a secret-safe policy path, redacted receipt contract, reviewed checked-in intake path, discovery-derived counts, and a per-source collection queue, but live credentialed receipts are still absent and not allowed to reduce manual-review boundaries."
+      "finding": "Credential-gated runtime checks now have a secret-safe policy path, redacted receipt contract, reviewed checked-in intake path, discovery-derived counts, per-source collection queue, and deterministic promotion command, but live credentialed receipts are still absent and not allowed to reduce manual-review boundaries."
     },
     {
       "id": "receipt_backed_compatibility_relief_blocked",
@@ -359,6 +365,7 @@
     "python3 scripts/generate-credential-runtime-evidence-policy.py --check",
     "python3 scripts/validate-credential-runtime-receipts.py",
     "python3 scripts/generate-credential-runtime-receipt-collection-queue.py --check",
+    "python3 scripts/promote-credential-runtime-receipt.py --self-test",
     "python3 scripts/generate-release-consumer-compatibility.py --check",
     "python3 scripts/validate-release-consumer-compatibility.py",
     "python3 scripts/package-registry-release.py --manifest manifest.json --output .datapan/ci/datapan-registry-snapshot-test.zip",
@@ -409,6 +416,11 @@
       "issue": 377,
       "title": "Bind credential receipt queue to consumer compatibility",
       "reason": "Downstream compatibility now references the receipt collection queue directly, while the goal remains open because the queue still reports absent reviewed receipts and blocked manual-review reduction."
+    },
+    {
+      "issue": 379,
+      "title": "Automate reviewed credential receipt promotion",
+      "reason": "Operators now have a deterministic promotion command for staged receipts, but the goal remains open until actual reviewed live receipts exist or the manual-review boundary is explicitly accepted."
     }
   ]
 }

@@ -91,6 +91,7 @@ jobs:
             scripts/generate-release-consumer-compatibility.py \
             scripts/generate-credential-runtime-evidence-policy.py \
             scripts/generate-credential-runtime-receipt-collection-queue.py \
+            scripts/promote-credential-runtime-receipt.py \
             scripts/validate-credential-runtime-receipts.py \
             scripts/generate-source-runtime-remediation-map.py \
             scripts/generate-release-health-rollup.py \
@@ -146,6 +147,7 @@ jobs:
           python scripts/generate-credential-runtime-evidence-policy.py --check
           python scripts/validate-credential-runtime-receipts.py
           python scripts/generate-credential-runtime-receipt-collection-queue.py --check
+          python scripts/promote-credential-runtime-receipt.py --self-test
           python scripts/generate-release-consumer-compatibility.py --check
           python scripts/validate-release-consumer-compatibility.py
 
