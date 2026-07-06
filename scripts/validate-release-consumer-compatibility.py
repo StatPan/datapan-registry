@@ -572,10 +572,20 @@ def validate_runtime_risk_evidence(
     remediation_expected = {
         "remediation_follow_up_required": remediation_summary.get("follow_up_required"),
         "remediation_manual_review_boundaries": remediation_summary.get("manual_review_boundaries"),
+        "remediation_credential_policy_available": remediation_summary.get("credential_policy_available"),
+        "remediation_receipt_contract_available": remediation_summary.get("receipt_contract_available"),
+        "remediation_receipt_backed_relief_allowed": remediation_summary.get("receipt_backed_relief_allowed"),
+        "remediation_receipt_backed_relief_status": remediation_summary.get("receipt_backed_relief_status"),
     }
     for key, value in remediation_expected.items():
-        if not isinstance(value, int) or value < 0:
-            raise ValueError(f"{key} source value must be a non-negative integer")
+        if key.endswith("_required") or key.endswith("_boundaries"):
+            if not isinstance(value, int) or value < 0:
+                raise ValueError(f"{key} source value must be a non-negative integer")
+        elif key.endswith("_available") or key.endswith("_allowed"):
+            if not isinstance(value, bool):
+                raise ValueError(f"{key} source value must be a boolean")
+        elif not isinstance(value, str) or not value:
+            raise ValueError(f"{key} source value must be a non-empty string")
         if risk.get(key) != value:
             raise ValueError(f"runtime_risk_evidence.{key} expected {value}, got {risk.get(key)}")
     if (
@@ -590,28 +600,62 @@ def validate_runtime_risk_evidence(
         credential_runtime_policy.get("release_boundary"),
         "credential_runtime_policy.release_boundary",
     )
+    credential_relief_gate = as_dict(
+        credential_boundary.get("receipt_backed_relief_gate"),
+        "credential_runtime_policy.release_boundary.receipt_backed_relief_gate",
+    )
     credential_expected = {
         "credential_policy_sources": credential_summary.get("credential_gated_sources"),
         "credential_policy_manual_review_boundaries": credential_summary.get("manual_review_boundaries"),
+        "credential_policy_receipt_contract_available": credential_summary.get("receipt_contract_available"),
+        "credential_policy_receipt_present": credential_summary.get("receipt_present"),
+        "credential_policy_receipt_validated": credential_summary.get("receipt_validated"),
+        "credential_policy_manual_review_reduction_allowed": credential_summary.get("manual_review_reduction_allowed"),
         "credential_policy_live_receipts": credential_summary.get("live_credentialed_receipts_checked_in"),
         "credential_policy_default_ci_requires_credentials": credential_summary.get("default_ci_requires_credentials"),
         "credential_policy_effect": credential_boundary.get("compatibility_effect"),
+        "credential_policy_relief_gate_status": credential_relief_gate.get("status"),
     }
     for key, value in credential_expected.items():
         if risk.get(key) != value:
             raise ValueError(f"runtime_risk_evidence.{key} expected {value}, got {risk.get(key)}")
+    if risk.get("remediation_credential_policy_available") is not True:
+        raise ValueError("source runtime remediation must expose the credential policy availability boundary")
+    if risk.get("remediation_receipt_contract_available") is not True:
+        raise ValueError("source runtime remediation must expose the credential receipt contract boundary")
+    if risk.get("credential_policy_receipt_contract_available") is not True:
+        raise ValueError("credential runtime policy must expose the receipt contract")
     if unresolved_runtime_risk and risk.get("credential_policy_default_ci_requires_credentials") is not False:
         raise ValueError("default CI must remain secret-free while runtime blockers are credential-gated")
     if unresolved_runtime_risk and risk.get("credential_policy_live_receipts") != 0:
         raise ValueError("credential policy must not claim live receipts before checked-in receipts exist")
     if unresolved_runtime_risk and risk.get("credential_policy_manual_review_boundaries") == 0:
         raise ValueError("credential policy must preserve manual-review boundaries for unresolved runtime risk")
+    if risk.get("credential_policy_manual_review_reduction_allowed") is True and (
+        risk.get("credential_policy_live_receipts", 0) <= 0
+        or risk.get("credential_policy_receipt_present") is not True
+        or risk.get("credential_policy_receipt_validated") is not True
+    ):
+        raise ValueError("credential runtime relief requires present and validated checked-in receipts")
+    if risk.get("remediation_receipt_backed_relief_allowed") is True and (
+        risk.get("credential_policy_manual_review_reduction_allowed") is not True
+    ):
+        raise ValueError("remediation relief cannot be allowed before credential policy relief is allowed")
+    if risk.get("manual_review_reduction_allowed") is True and (
+        risk.get("credential_policy_manual_review_reduction_allowed") is not True
+        or risk.get("remediation_receipt_backed_relief_allowed") is not True
+    ):
+        raise ValueError("compatibility relief cannot be allowed without validated receipt-backed policy and remediation gates")
 
     if unresolved_runtime_risk:
         if risk.get("manual_review_required") is not True:
             raise ValueError("runtime blockers or warnings require runtime_risk_evidence.manual_review_required=true")
         if risk.get("compatibility_effect") != "manual_review_required_until_runtime_blockers_resolved":
             raise ValueError("runtime blockers or warnings must keep manual-review compatibility effect")
+        if risk.get("manual_review_reduction_allowed") is not False:
+            raise ValueError("manual-review reduction must remain disallowed while receipt-backed runtime relief is absent")
+        if risk.get("manual_review_reduction_status") != "blocked_until_validated_credential_runtime_receipts_exist":
+            raise ValueError("manual-review reduction status must point at validated credential runtime receipts")
     elif risk.get("manual_review_required") is not False:
         raise ValueError("runtime_risk_evidence.manual_review_required must be false when runtime evidence is clear")
 

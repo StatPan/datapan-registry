@@ -103,8 +103,8 @@
       "path": "reports/source-runtime-remediation-map.json",
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
-      "bytes": 7725,
-      "sha256": "a6e55c941f1bfe135ee64a9f3e6e76044593af571a3f35984f530161cd09e809",
+      "bytes": 7947,
+      "sha256": "e0536abe4ca545aa9304554ff9a599e595110d3f528f79182d10b8e408defde6",
       "required": true
     },
     {
@@ -112,8 +112,8 @@
       "path": "reports/credential-runtime-evidence-policy.json",
       "kind": "credential_runtime_evidence_policy",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-evidence-policy.v1.schema.json",
-      "bytes": 11929,
-      "sha256": "70ca4311d924ed99b31a7efa1ded11592d99bc58b1ccaac88510836837cb3622",
+      "bytes": 12352,
+      "sha256": "225bff0b882684f3b1d5e4af85c1f1c18ebe0866bf07309d42c03f18650d2229",
       "required": true
     },
     {
@@ -131,7 +131,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "fef1e460a43330c5efedfba2a50c93c67c7327f133922bfde88b467a24e53662",
+      "sha256": "739990cf25bd1eb0d87ae6b92fcefa497b04464007d41a94758f2e6e986c35fe",
       "required": true
     },
     {
@@ -149,7 +149,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 59095,
-      "sha256": "1447ada724e8f92b622fc35bc84f6e894a1e83c7e2ee36d3911e9bf216cbaad2",
+      "sha256": "3c3939162a1cd2c4735e8bdcbd4962e8e370b45fe0c22b9e55a4adc066cc6013",
       "required": true
     }
   ],
@@ -173,11 +173,22 @@
     "sources_without_evidence": 4,
     "remediation_follow_up_required": 0,
     "remediation_manual_review_boundaries": 13,
+    "remediation_credential_policy_available": true,
+    "remediation_receipt_contract_available": true,
+    "remediation_receipt_backed_relief_allowed": false,
+    "remediation_receipt_backed_relief_status": "blocked_until_validated_credential_runtime_receipts_exist",
     "credential_policy_sources": 5,
     "credential_policy_manual_review_boundaries": 13,
+    "credential_policy_receipt_contract_available": true,
+    "credential_policy_receipt_present": false,
+    "credential_policy_receipt_validated": false,
+    "credential_policy_manual_review_reduction_allowed": false,
     "credential_policy_live_receipts": 0,
     "credential_policy_default_ci_requires_credentials": false,
     "credential_policy_effect": "credential_safe_manual_review_boundary",
+    "credential_policy_relief_gate_status": "blocked_until_validated_credential_runtime_receipts_exist",
+    "manual_review_reduction_allowed": false,
+    "manual_review_reduction_status": "blocked_until_validated_credential_runtime_receipts_exist",
     "blocker_ids": [
       "credential_required",
       "metadata_only_verification"

@@ -229,6 +229,10 @@ def build_report(
             "follow_up_required": unresolved,
             "compatibility_effect": compatibility_effect,
             "manual_review_required": manual_review_required,
+            "credential_policy_available": True,
+            "receipt_contract_available": True,
+            "receipt_backed_relief_allowed": False,
+            "receipt_backed_relief_status": "blocked_until_validated_credential_runtime_receipts_exist",
         },
         "release_evidence_inputs": [
             evidence_input(
