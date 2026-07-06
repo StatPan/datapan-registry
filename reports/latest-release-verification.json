@@ -309,10 +309,10 @@
       "path": "schemas/datapan.release-consumer-compatibility.v1.schema.json",
       "kind": "schema",
       "status": "verified",
-      "expected_bytes": 7361,
-      "actual_bytes": 7361,
-      "expected_sha256": "a66e2ed57eca08b54f5c746f7572d2499541b940781d7ccb643bbdc1dc42e96f",
-      "actual_sha256": "a66e2ed57eca08b54f5c746f7572d2499541b940781d7ccb643bbdc1dc42e96f"
+      "expected_bytes": 8726,
+      "actual_bytes": 8726,
+      "expected_sha256": "ff3e99fb98d0373053769f8dc95c4b9b21845f46a90563e33d60a9a78502aa7a",
+      "actual_sha256": "ff3e99fb98d0373053769f8dc95c4b9b21845f46a90563e33d60a9a78502aa7a"
     },
     {
       "path": "schemas/datapan.error-action-routing-rollup.v1.schema.json",
@@ -410,8 +410,8 @@
       "status": "verified",
       "expected_bytes": 17123,
       "actual_bytes": 17123,
-      "expected_sha256": "189ad9af09bae5033f251ca8a6d752d0bc8592773576d1fdc4d39fea34ce6655",
-      "actual_sha256": "189ad9af09bae5033f251ca8a6d752d0bc8592773576d1fdc4d39fea34ce6655"
+      "expected_sha256": "7335fd35d3854ead65c1081d3f031f7c27554331cae96eec222eb89c33918f75",
+      "actual_sha256": "7335fd35d3854ead65c1081d3f031f7c27554331cae96eec222eb89c33918f75"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -597,10 +597,10 @@
       "path": "reports/release-consumer-compatibility.json",
       "kind": "consumer_compatibility",
       "status": "verified",
-      "expected_bytes": 7970,
-      "actual_bytes": 7970,
-      "expected_sha256": "cf8f51fd5a3d7496071c2139d02f8603d64718d99b0aa47a06956b16838db310",
-      "actual_sha256": "cf8f51fd5a3d7496071c2139d02f8603d64718d99b0aa47a06956b16838db310"
+      "expected_bytes": 8693,
+      "actual_bytes": 8693,
+      "expected_sha256": "1af575e4af4c30875b0fc8074ecb2ffd92943716c777884b391836aae4ec8174",
+      "actual_sha256": "1af575e4af4c30875b0fc8074ecb2ffd92943716c777884b391836aae4ec8174"
     },
     {
       "path": "reports/unadapted-external-probe.json",

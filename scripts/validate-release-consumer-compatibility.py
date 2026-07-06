@@ -7,6 +7,7 @@ import argparse
 import collections
 import json
 import pathlib
+import re
 import sys
 from typing import Any
 
@@ -40,6 +41,21 @@ REQUIRED_SHARD_INSTALL_FIELDS = {
     "shards_inventory_present",
     "shards_count",
     "shards_records",
+}
+REQUIRED_SHARD_RELEASE_EVIDENCE = {
+    "status": "ci_validated_optional_asset",
+    "workflow": ".github/workflows/verify-release.yml",
+    "gate_name": "Validate full registry shard release evidence",
+    "source_registry": CANONICAL_REGISTRY_PATH,
+    "generated_inventory": ".datapan/ci/full-registry-shards/registry-shards.json",
+    "generated_archive": ".datapan/ci/full-data-go-kr-shards.tar.gz",
+    "archive_check": ".datapan/ci/full-shard-archive-check.txt",
+}
+REQUIRED_SHARD_RELEASE_COMMANDS = {
+    "python scripts/generate-registry-shards.py",
+    "python scripts/validate-registry-shards.py",
+    "python scripts/package-registry-shards.py",
+    "python scripts/package-registry-shards.py --check",
 }
 REQUIRED_MANIFEST_EVIDENCE_CONTRACTS = {
     "source_contracts": {
@@ -221,6 +237,39 @@ def validate_shard_policy(report: dict[str, Any]) -> None:
         raise ValueError("shard policy must be blocked on proven monolith fallback")
 
 
+def validate_shard_release_evidence(report: dict[str, Any]) -> None:
+    evidence = as_dict(report.get("shard_release_evidence"), "shard_release_evidence")
+    for key, value in REQUIRED_SHARD_RELEASE_EVIDENCE.items():
+        if evidence.get(key) != value:
+            raise ValueError(f"shard_release_evidence.{key} expected {value}, got {evidence.get(key)}")
+
+    commands = set(as_list(evidence.get("required_commands"), "shard_release_evidence.required_commands"))
+    missing_commands = sorted(REQUIRED_SHARD_RELEASE_COMMANDS.difference(commands))
+    if missing_commands:
+        raise ValueError(f"shard release evidence missing required commands: {', '.join(missing_commands)}")
+
+    workflow_path = pathlib.Path(str(evidence.get("workflow")))
+    if not workflow_path.is_file():
+        raise ValueError(f"shard release evidence workflow is missing: {workflow_path}")
+    workflow = workflow_path.read_text(encoding="utf-8")
+    normalized_workflow = re.sub(r"\\\n\s*", " ", workflow)
+    normalized_workflow = re.sub(r"\s+", " ", normalized_workflow)
+    required_fragments = {
+        str(evidence["gate_name"]),
+        "--source-registry data/data-go-kr.registry.json",
+        "--output-dir .datapan/ci/full-registry-shards",
+        str(evidence["generated_inventory"]),
+        str(evidence["generated_archive"]),
+        str(evidence["archive_check"]),
+    }.union(commands)
+    missing_fragments = sorted(fragment for fragment in required_fragments if fragment not in normalized_workflow)
+    if missing_fragments:
+        raise ValueError(
+            "shard release evidence workflow is missing required fragments: "
+            + ", ".join(missing_fragments)
+        )
+
+
 def validate_manifest_evidence_contracts(report: dict[str, Any], manifest: dict[str, Any]) -> None:
     artifacts = manifest_artifacts(manifest)
     contracts = [
@@ -295,6 +344,7 @@ def validate_consistency(report: dict[str, Any], manifest: dict[str, Any], readi
     validate_manifest_links(report, manifest)
     validate_readiness(report, readiness)
     validate_shard_policy(report)
+    validate_shard_release_evidence(report)
     validate_manifest_evidence_contracts(report, manifest)
     validate_consumers(report)
 

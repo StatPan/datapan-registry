@@ -114,6 +114,21 @@
       "downstream SDK, MCP, Studio, and API consumers keep canonical registry compatibility"
     ]
   },
+  "shard_release_evidence": {
+    "status": "ci_validated_optional_asset",
+    "workflow": ".github/workflows/verify-release.yml",
+    "gate_name": "Validate full registry shard release evidence",
+    "source_registry": "data/data-go-kr.registry.json",
+    "generated_inventory": ".datapan/ci/full-registry-shards/registry-shards.json",
+    "generated_archive": ".datapan/ci/full-data-go-kr-shards.tar.gz",
+    "archive_check": ".datapan/ci/full-shard-archive-check.txt",
+    "required_commands": [
+      "python scripts/generate-registry-shards.py",
+      "python scripts/validate-registry-shards.py",
+      "python scripts/package-registry-shards.py",
+      "python scripts/package-registry-shards.py --check"
+    ]
+  },
   "consumers": [
     {
       "consumer": "datapan-cli",
