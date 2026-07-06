@@ -107,6 +107,10 @@ The workflow also regenerates `reports/error-action-routing-rollup.json` from
 checked-in source error-action catalogs so provider failure signatures stay
 routed to bounded release, documentation, or adapter work as manifest-bound
 evidence.
+It also regenerates `reports/source-contract-rollup.json` from checked-in
+`sources/*.json` profiles, binding provider contract status, auth, request,
+response, runtime constraints, promotion state, and source profile checksums to
+the release manifest.
 
 The current snapshot was generated from `datapan-cli` and includes:
 
@@ -274,6 +278,7 @@ A release is publishable when:
   unadapted external probe evidence and route disposition evidence are present
   as manifest-bound required artifacts;
 - schema index and provider index are present;
+- source contracts are summarized as manifest-bound release evidence;
 - registry size and LFS handling are explicit;
 - verification evidence is attached or documented;
 - generated artifacts do not contain credentials.

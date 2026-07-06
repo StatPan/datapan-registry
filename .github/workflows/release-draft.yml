@@ -89,20 +89,25 @@ jobs:
             scripts/generate-impact-plan-rollup.py \
             scripts/generate-release-consumer-compatibility.py \
             scripts/generate-release-health-rollup.py \
+            scripts/generate-source-contract-rollup.py \
             scripts/generate-registry-shards.py \
             scripts/package-registry-release.py \
             scripts/package-registry-shards.py \
             scripts/release_health_rollup.py \
+            scripts/source_contract_rollup.py \
             scripts/validate-doctor-smoke-summaries.py \
             scripts/validate-error-action-routing-rollups.py \
             scripts/validate-install-smoke-summaries.py \
             scripts/validate-release-consumer-compatibility.py \
             scripts/validate-release-health-rollups.py \
+            scripts/validate-source-contract-rollups.py \
             scripts/validate-registry-shards.py
           python scripts/sync-release-schema-artifacts.py --check
           python scripts/validate-coverage-backlog.py
           python scripts/validate-external-adapter-backlog.py
           python scripts/validate-source-profiles.py
+          python scripts/generate-source-contract-rollup.py --check
+          python scripts/validate-source-contract-rollups.py
           python scripts/validate-error-action-catalogs.py
           python scripts/generate-error-action-routing-rollup.py --check
           python scripts/validate-error-action-routing-rollups.py

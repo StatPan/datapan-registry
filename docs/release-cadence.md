@@ -106,6 +106,10 @@ check. That workflow:
   registry path required, release-health evidence named, shard install fields
   tied to the rollup, and shard assets optional until shard-preferred monolith
   fallback is proven downstream;
+- regenerates and validates `reports/source-contract-rollup.json`, the
+  manifest-bound upstream contract rollup that records checked-in source
+  profile checksums plus provider status, auth, request, response, runtime, and
+  promotion constraints;
 - uploads current-checkout install and doctor JSON plus latest-public-release
   install and doctor JSON reports as release-health evidence.
 
@@ -122,6 +126,7 @@ python scripts/generate-safetydata-registry-patches.py
 python scripts/generate-institution-api-overview.py
 python scripts/generate-institution-runtime-plan.py
 python scripts/generate-source-report-inventory.py
+python scripts/generate-source-contract-rollup.py
 python scripts/generate-source-runtime-readiness.py
 python scripts/generate-error-action-routing-rollup.py
 ```

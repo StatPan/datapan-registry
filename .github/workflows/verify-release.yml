@@ -55,6 +55,8 @@ jobs:
           python scripts/validate-coverage-backlog.py
           python scripts/validate-external-adapter-backlog.py
           python scripts/validate-source-profiles.py
+          python scripts/generate-source-contract-rollup.py --check
+          python scripts/validate-source-contract-rollups.py
           python scripts/validate-error-action-catalogs.py
           python scripts/generate-error-action-routing-rollup.py --check
           python scripts/validate-error-action-routing-rollups.py
@@ -77,8 +79,11 @@ jobs:
           python scripts/validate-release-consumer-compatibility.py
           python -m py_compile scripts/error_action_routing_rollup.py
           python -m py_compile scripts/generate-error-action-routing-rollup.py
+          python -m py_compile scripts/generate-source-contract-rollup.py
           python -m py_compile scripts/generate-release-consumer-compatibility.py
+          python -m py_compile scripts/source_contract_rollup.py
           python -m py_compile scripts/validate-error-action-routing-rollups.py
+          python -m py_compile scripts/validate-source-contract-rollups.py
           python -m py_compile scripts/validate-doctor-smoke-summaries.py
           python -m py_compile scripts/validate-install-smoke-summaries.py
           python -m py_compile scripts/validate-release-consumer-compatibility.py
