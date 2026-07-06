@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 31,
+  "count": 32,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -282,6 +282,15 @@
       "version": "v1",
       "bytes": 2746,
       "sha256": "20abc86e79fb527f1d5c9cab15f68d6d68444e492546404c51aee624c5e98428"
+    },
+    {
+      "path": "schemas/datapan.doctor-smoke-summary.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.doctor-smoke-summary.v1.schema.json",
+      "title": "Datapan Doctor Smoke Summary v1",
+      "contract": "doctor-smoke-summary",
+      "version": "v1",
+      "bytes": 1919,
+      "sha256": "d7fe699c16a0f1f779b166aaa56d732ae52bb5a34a478eabd4a82b136852d811"
     }
   ]
 }

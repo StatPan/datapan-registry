@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.doctor-smoke-summary.v1.schema.json",
+  "title": "Datapan Doctor Smoke Summary v1",
+  "description": "Structured release-health evidence emitted by the datapan-registry doctor smoke validator.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "doctor_json",
+    "install_json",
+    "provider",
+    "registry",
+    "install_cross_check"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.doctor-smoke-summary.v1"
+    },
+    "doctor_json": {
+      "type": "string",
+      "minLength": 1
+    },
+    "install_json": {
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "provider": {
+      "const": "datapan-registry"
+    },
+    "registry": {
+      "$ref": "#/$defs/registry"
+    },
+    "install_cross_check": {
+      "$ref": "#/$defs/install_cross_check"
+    }
+  },
+  "$defs": {
+    "positive_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "registry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "specs", "operations", "source"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "specs": {
+          "$ref": "#/$defs/positive_count"
+        },
+        "operations": {
+          "$ref": "#/$defs/positive_count"
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "install_cross_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["performed"],
+      "properties": {
+        "performed": {
+          "type": "boolean"
+        },
+        "registry": {
+          "type": "string",
+          "minLength": 1
+        },
+        "specs": {
+          "$ref": "#/$defs/positive_count"
+        }
+      }
+    }
+  }
+}
