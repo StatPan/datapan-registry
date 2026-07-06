@@ -31,8 +31,8 @@
     "missing_recommended_reports": 57,
     "source_report_coverage_percent": 12.3,
     "schema_backed_reports": 24,
-    "schema_indexed_reports": 16,
-    "schema_missing_reports": 8
+    "schema_indexed_reports": 17,
+    "schema_missing_reports": 7
   },
   "sources": [
     {
@@ -508,7 +508,7 @@
           "schema_version": "datapan.link-detail-registry-patches.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.link-detail-registry-patches.v1.schema.json",
           "expected_schema_path": "schemas/datapan.link-detail-registry-patches.v1.schema.json",
-          "schema_indexed": false
+          "schema_indexed": true
         },
         {
           "name": "mafra-ministry-verification-summary.json",

@@ -8,9 +8,15 @@ import pathlib
 from typing import Any
 from urllib.parse import urlparse
 
+try:
+    import jsonschema
+except ImportError as exc:  # pragma: no cover - environment guard
+    raise SystemExit("missing dependency: install jsonschema before validating link-detail registry patches") from exc
+
 
 EXPECTED_SCHEMA_VERSION = "datapan.link-detail-registry-patches.v1"
 REPORT = pathlib.Path("reports/data-go-kr/link-detail-registry-patches.json")
+SCHEMA = pathlib.Path("schemas/datapan.link-detail-registry-patches.v1.schema.json")
 MARKDOWN = pathlib.Path("docs/data-go-kr-link-detail-registry-patches.md")
 PROVIDER_INDEX = pathlib.Path("data/provider-index.json")
 
@@ -31,8 +37,21 @@ def registered_hosts() -> set[str]:
     return hosts
 
 
+def validate_schema(report: dict[str, Any]) -> None:
+    schema = load_json(SCHEMA)
+    validator = jsonschema.Draft202012Validator(schema)
+    errors = sorted(validator.iter_errors(report), key=lambda error: list(error.path))
+    if errors:
+        messages = []
+        for error in errors:
+            location = ".".join(str(part) for part in error.path) or "<root>"
+            messages.append(f"{location}: {error.message}")
+        raise ValueError("; ".join(messages))
+
+
 def main() -> int:
     report = load_json(REPORT)
+    validate_schema(report)
     if report.get("schema_version") != EXPECTED_SCHEMA_VERSION:
         raise ValueError(f"schema_version must be {EXPECTED_SCHEMA_VERSION}")
     if not MARKDOWN.exists():
