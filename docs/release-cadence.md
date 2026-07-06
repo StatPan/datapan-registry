@@ -349,6 +349,10 @@ publication mode is a compressed GitHub Release asset named
 validated with `scripts/validate-registry-shards.py`. Keep the archive optional
 until downstream consumers support shard-preferred, monolith-fallback
 installation and verification.
+When the shard archive is attached to a release draft, the release package check
+must run with `--shard-archive` so `package-registry-release.py` proves the
+archive's `source_registry_sha256` matches the canonical registry artifact in
+the selected release manifest.
 
 Do not make a shard archive required for install, doctor, release verification,
 or readiness until `datapan-cli` proves fallback behavior for the commands

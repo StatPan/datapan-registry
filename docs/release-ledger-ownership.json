@@ -175,14 +175,21 @@
       "id": "release_zip",
       "owner": "release packaging tooling",
       "generated_by": ["python scripts/package-registry-release.py --manifest manifest.json --output .datapan/release-assets/datapan-registry-snapshot.zip"],
-      "checked_by": ["python scripts/package-registry-release.py --check .datapan/release-assets/datapan-registry-snapshot.zip"],
-      "relationship": "Release zip entries must match manifest.json plus every manifest artifact path."
+      "checked_by": [
+        "python scripts/package-registry-release.py --check .datapan/release-assets/datapan-registry-snapshot.zip",
+        "python scripts/package-registry-release.py --check .datapan/release-assets/datapan-registry-snapshot.zip --shard-archive .datapan/ci/full-data-go-kr-shards.tar.gz"
+      ],
+      "relationship": "Release zip entries must match manifest.json plus every manifest artifact path. When a shard archive is present, the release zip check must also prove that the shard archive source registry sha matches the selected release manifest registry artifact."
     },
     {
       "id": "shard_archive",
       "owner": "shard packaging tooling",
       "generated_by": ["python scripts/generate-registry-shards.py", "python scripts/package-registry-shards.py"],
-      "checked_by": ["python scripts/validate-registry-shards.py", "python scripts/package-registry-shards.py --check"],
+      "checked_by": [
+        "python scripts/validate-registry-shards.py",
+        "python scripts/package-registry-shards.py --check",
+        "python scripts/package-registry-release.py --check .datapan/release-assets/datapan-registry-snapshot.zip --shard-archive .datapan/ci/full-data-go-kr-shards.tar.gz"
+      ],
       "relationship": "Optional shard archive evidence must match the same canonical registry as the selected release manifest when attached."
     }
   ]
