@@ -6,8 +6,11 @@
   "status": "candidate",
   "adapter": {
     "name": "open-assembly",
-    "status": "none",
-    "capabilities": [],
+    "status": "registered",
+    "capabilities": [
+      "verification",
+      "call"
+    ],
     "hosts": [
       "open.assembly.go.kr"
     ]

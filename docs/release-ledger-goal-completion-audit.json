@@ -46,14 +46,14 @@
       "sources": 5,
       "sources_without_evidence": 4,
       "evidence_total": 4774,
-      "blocking_count": 12,
-      "warning_count": 8
+      "blocking_count": 9,
+      "warning_count": 4
     },
     "source_runtime_remediation": {
       "path": "reports/source-runtime-remediation-map.json",
       "mapping_ticket": 360,
       "follow_up_issue": 362,
-      "follow_up_required": 8,
+      "follow_up_required": 0,
       "manual_review_boundaries": 13
     },
     "downstream_impact": {
@@ -67,8 +67,8 @@
       "proven_consumers": 2,
       "blocked_consumers": 1,
       "manual_review_required": true,
-      "runtime_blocking_count": 12,
-      "runtime_warning_count": 8
+      "runtime_blocking_count": 9,
+      "runtime_warning_count": 4
     }
   },
   "criteria": [
@@ -176,11 +176,11 @@
       "evidence": [
         {
           "path": "reports/source-runtime-evidence-rollup.json",
-          "finding": "Summarizes five sources, 4774 evidence items, 12 blockers, 8 warnings, and four sources without runtime evidence."
+          "finding": "Summarizes five sources, 4774 evidence items, 9 blockers, 4 warnings, and four sources without runtime evidence."
         },
         {
           "path": "reports/source-runtime-remediation-map.json",
-          "finding": "Maps current source runtime blockers and warnings to remediation status, manual-review release boundaries, or follow-up issue #362."
+          "finding": "Maps current source runtime blockers and warnings to remediation status and manual-review release boundaries; adapter and taxonomy follow-up-required findings are reduced to zero."
         },
         {
           "path": "reports/source-report-inventory.json",
@@ -246,7 +246,7 @@
     {
       "id": "source_runtime_manual_review_required",
       "evidence": "reports/source-runtime-remediation-map.json",
-      "finding": "The current remediation map still routes unresolved runtime findings to manual-review boundaries and follow-up issue #362."
+      "finding": "The current remediation map still routes unresolved credential, metadata-only verification, and non-data runtime evidence findings to manual-review boundaries."
     },
     {
       "id": "consumer_compatibility_manual_review_required",
@@ -281,7 +281,12 @@
     {
       "issue": 362,
       "title": "Reduce source runtime adapter and taxonomy blockers",
-      "reason": "The remediation map routes adapter registration and source-specific error taxonomy work to bounded follow-up before #344 can be considered complete."
+      "reason": "Adapter registration and source-specific error taxonomy blockers are being reduced; credential-safe live runtime evidence remains outside the current completion proof."
+    },
+    {
+      "issue": 364,
+      "title": "Define credential-safe runtime evidence path",
+      "reason": "The remaining runtime blockers are credential and metadata-only evidence boundaries that need a secret-safe live evidence path before #344 can be considered complete."
     }
   ]
 }

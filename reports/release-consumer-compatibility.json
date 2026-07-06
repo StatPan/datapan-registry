@@ -85,8 +85,8 @@
       "path": "reports/source-contract-rollup.json",
       "kind": "source_contract_rollup",
       "schema": "https://schemas.datapan.dev/datapan.source-contract-rollup.v1.schema.json",
-      "bytes": 16969,
-      "sha256": "041961dbf1a774604dd904910c018fd2f004a47e16026843df13e86323632111",
+      "bytes": 17111,
+      "sha256": "15e263f4885f67bf6ab144edd3df5f35ea6fb09fc4b77381e40242e62db7a576",
       "required": true
     },
     {
@@ -94,8 +94,8 @@
       "path": "reports/source-runtime-evidence-rollup.json",
       "kind": "source_runtime_evidence_rollup",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-evidence-rollup.v1.schema.json",
-      "bytes": 7380,
-      "sha256": "48a15d43b4c4262a6d0b30e7f20e5f500343c65666b221affa9604bffb9c4040",
+      "bytes": 5490,
+      "sha256": "204c18ec52a2daf6395271f5ca79cfe93ba6589a9791aba79824d60cc22e482d",
       "required": true
     },
     {
@@ -103,8 +103,8 @@
       "path": "reports/source-runtime-remediation-map.json",
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
-      "bytes": 10394,
-      "sha256": "dfdaa7b5446f1475bf7f365500d945c9a3da16f64dc65571e7513f31086054ed",
+      "bytes": 7770,
+      "sha256": "c455ba8e486ff4867c5daebf85d6faa6e33d7ebcea78be590885e7244764f37c",
       "required": true
     },
     {
@@ -112,8 +112,8 @@
       "path": "reports/error-action-routing-rollup.json",
       "kind": "error_action_routing_rollup",
       "schema": "https://schemas.datapan.dev/datapan.error-action-routing-rollup.v1.schema.json",
-      "bytes": 8255,
-      "sha256": "3f1fa789bf4dc42ac631c060d10d38fec73dbb037f5b88dee186fc0fb3c328ff",
+      "bytes": 8234,
+      "sha256": "4c9a99a9b231e77fee4dd660642df71007fab840aeaf3f3bc9b0cf20340beedd",
       "required": true
     },
     {
@@ -122,7 +122,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "b5b87504fc8d49fda77f4a57b6aa1caa4886aaa11e28c1e9ebb4faf5bac5a5a1",
+      "sha256": "1d9b3051557c43406750c76795179ed5d22197c018d713b3fae8e4a011f276b7",
       "required": true
     },
     {
@@ -131,7 +131,7 @@
       "kind": "source_reference_drift",
       "schema": "https://schemas.datapan.dev/datapan.source-reference-drift.v1.schema.json",
       "bytes": 8915,
-      "sha256": "fad565493adc226ca48c87b40cecb85930e6cd7fcf065cc507b394a9e83aaad5",
+      "sha256": "974cf944245517478c438c6bfe0d7e79409ca23d0c6fc3f8ffc0e1b913662ff0",
       "required": true
     },
     {
@@ -140,7 +140,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 59095,
-      "sha256": "1a1daa844dff824ea9f60c96b85257058fe8ba2b1409f50e9f42d46c2a429737",
+      "sha256": "d800ce7c206559fde4f0f79718b156ab9b53e5e8f1bb11ddd9755d676eff1085",
       "required": true
     }
   ],
@@ -157,75 +157,62 @@
       "error_action_routing",
       "downstream_impact"
     ],
-    "blocking_count": 12,
-    "warning_count": 8,
+    "blocking_count": 9,
+    "warning_count": 4,
     "sources_without_evidence": 4,
-    "remediation_follow_up_required": 8,
+    "remediation_follow_up_required": 0,
     "remediation_manual_review_boundaries": 13,
     "blocker_ids": [
-      "adapter_not_registered",
       "credential_required",
-      "metadata_only_verification",
-      "source_specific_error_taxonomy_pending"
+      "metadata_only_verification"
     ],
     "warning_ids": [
-      "non_data_runtime_evidence_not_collected",
-      "source_runtime_adapter_not_registered",
-      "source_runtime_error_taxonomy_pending"
+      "non_data_runtime_evidence_not_collected"
     ],
     "sources": [
       {
         "source_id": "data_go_kr",
         "blocking_count": 1,
-        "warning_count": 1,
+        "warning_count": 0,
         "blocker_ids": [
-          "credential_required",
-          "source_specific_error_taxonomy_pending"
+          "credential_required"
         ],
-        "warning_ids": [
-          "source_runtime_error_taxonomy_pending"
-        ]
+        "warning_ids": []
       },
       {
         "source_id": "ecos",
-        "blocking_count": 3,
-        "warning_count": 2,
+        "blocking_count": 2,
+        "warning_count": 1,
         "blocker_ids": [
-          "adapter_not_registered",
           "credential_required",
           "metadata_only_verification"
         ],
         "warning_ids": [
-          "non_data_runtime_evidence_not_collected",
-          "source_runtime_adapter_not_registered"
+          "non_data_runtime_evidence_not_collected"
         ]
       },
       {
         "source_id": "kosis",
-        "blocking_count": 3,
-        "warning_count": 2,
+        "blocking_count": 2,
+        "warning_count": 1,
         "blocker_ids": [
-          "adapter_not_registered",
           "credential_required",
           "metadata_only_verification"
         ],
         "warning_ids": [
-          "non_data_runtime_evidence_not_collected",
-          "source_runtime_adapter_not_registered"
+          "non_data_runtime_evidence_not_collected"
         ]
       },
       {
         "source_id": "open_assembly",
-        "blocking_count": 3,
-        "warning_count": 2,
+        "blocking_count": 2,
+        "warning_count": 1,
         "blocker_ids": [
-          "adapter_not_registered",
           "credential_required",
           "metadata_only_verification"
         ],
         "warning_ids": [
-          "non_data_runtime_evidence_not_collected",
-          "source_runtime_adapter_not_registered"
+          "non_data_runtime_evidence_not_collected"
         ]
       },
       {

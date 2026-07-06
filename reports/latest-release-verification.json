@@ -480,37 +480,37 @@
       "path": "reports/error-action-routing-rollup.json",
       "kind": "error_action_routing_rollup",
       "status": "verified",
-      "expected_bytes": 8255,
-      "actual_bytes": 8255,
-      "expected_sha256": "3f1fa789bf4dc42ac631c060d10d38fec73dbb037f5b88dee186fc0fb3c328ff",
-      "actual_sha256": "3f1fa789bf4dc42ac631c060d10d38fec73dbb037f5b88dee186fc0fb3c328ff"
+      "expected_bytes": 8234,
+      "actual_bytes": 8234,
+      "expected_sha256": "4c9a99a9b231e77fee4dd660642df71007fab840aeaf3f3bc9b0cf20340beedd",
+      "actual_sha256": "4c9a99a9b231e77fee4dd660642df71007fab840aeaf3f3bc9b0cf20340beedd"
     },
     {
       "path": "reports/source-contract-rollup.json",
       "kind": "source_contract_rollup",
       "status": "verified",
-      "expected_bytes": 16969,
-      "actual_bytes": 16969,
-      "expected_sha256": "041961dbf1a774604dd904910c018fd2f004a47e16026843df13e86323632111",
-      "actual_sha256": "041961dbf1a774604dd904910c018fd2f004a47e16026843df13e86323632111"
+      "expected_bytes": 17111,
+      "actual_bytes": 17111,
+      "expected_sha256": "15e263f4885f67bf6ab144edd3df5f35ea6fb09fc4b77381e40242e62db7a576",
+      "actual_sha256": "15e263f4885f67bf6ab144edd3df5f35ea6fb09fc4b77381e40242e62db7a576"
     },
     {
       "path": "reports/source-runtime-evidence-rollup.json",
       "kind": "source_runtime_evidence_rollup",
       "status": "verified",
-      "expected_bytes": 7380,
-      "actual_bytes": 7380,
-      "expected_sha256": "48a15d43b4c4262a6d0b30e7f20e5f500343c65666b221affa9604bffb9c4040",
-      "actual_sha256": "48a15d43b4c4262a6d0b30e7f20e5f500343c65666b221affa9604bffb9c4040"
+      "expected_bytes": 5490,
+      "actual_bytes": 5490,
+      "expected_sha256": "204c18ec52a2daf6395271f5ca79cfe93ba6589a9791aba79824d60cc22e482d",
+      "actual_sha256": "204c18ec52a2daf6395271f5ca79cfe93ba6589a9791aba79824d60cc22e482d"
     },
     {
       "path": "reports/source-runtime-remediation-map.json",
       "kind": "source_runtime_remediation_map",
       "status": "verified",
-      "expected_bytes": 10394,
-      "actual_bytes": 10394,
-      "expected_sha256": "dfdaa7b5446f1475bf7f365500d945c9a3da16f64dc65571e7513f31086054ed",
-      "actual_sha256": "dfdaa7b5446f1475bf7f365500d945c9a3da16f64dc65571e7513f31086054ed"
+      "expected_bytes": 7770,
+      "actual_bytes": 7770,
+      "expected_sha256": "c455ba8e486ff4867c5daebf85d6faa6e33d7ebcea78be590885e7244764f37c",
+      "actual_sha256": "c455ba8e486ff4867c5daebf85d6faa6e33d7ebcea78be590885e7244764f37c"
     },
     {
       "path": "reports/registry-impact-plan.json",
@@ -518,8 +518,8 @@
       "status": "verified",
       "expected_bytes": 11519,
       "actual_bytes": 11519,
-      "expected_sha256": "b5b87504fc8d49fda77f4a57b6aa1caa4886aaa11e28c1e9ebb4faf5bac5a5a1",
-      "actual_sha256": "b5b87504fc8d49fda77f4a57b6aa1caa4886aaa11e28c1e9ebb4faf5bac5a5a1"
+      "expected_sha256": "1d9b3051557c43406750c76795179ed5d22197c018d713b3fae8e4a011f276b7",
+      "actual_sha256": "1d9b3051557c43406750c76795179ed5d22197c018d713b3fae8e4a011f276b7"
     },
     {
       "path": "reports/source-reference-drift.json",
@@ -536,8 +536,8 @@
       "status": "verified",
       "expected_bytes": 59095,
       "actual_bytes": 59095,
-      "expected_sha256": "1a1daa844dff824ea9f60c96b85257058fe8ba2b1409f50e9f42d46c2a429737",
-      "actual_sha256": "1a1daa844dff824ea9f60c96b85257058fe8ba2b1409f50e9f42d46c2a429737"
+      "expected_sha256": "d800ce7c206559fde4f0f79718b156ab9b53e5e8f1bb11ddd9755d676eff1085",
+      "actual_sha256": "d800ce7c206559fde4f0f79718b156ab9b53e5e8f1bb11ddd9755d676eff1085"
     },
     {
       "path": "reports/dependencies.json",
@@ -624,19 +624,19 @@
       "path": "reports/release-consumer-compatibility.json",
       "kind": "consumer_compatibility",
       "status": "verified",
-      "expected_bytes": 13398,
-      "actual_bytes": 13398,
-      "expected_sha256": "22c1748bb843605acd022ae4da7feb66790ee9670bb09228ee9296ba8b6edc3b",
-      "actual_sha256": "22c1748bb843605acd022ae4da7feb66790ee9670bb09228ee9296ba8b6edc3b"
+      "expected_bytes": 12850,
+      "actual_bytes": 12850,
+      "expected_sha256": "3c637e3fe4957c5f84a295990bd00c15a44b1fe5097fc590e04a61488a62ee03",
+      "actual_sha256": "3c637e3fe4957c5f84a295990bd00c15a44b1fe5097fc590e04a61488a62ee03"
     },
     {
       "path": "reports/release-assembly-receipt.json",
       "kind": "release_assembly_receipt",
       "status": "verified",
-      "expected_bytes": 17825,
-      "actual_bytes": 17825,
-      "expected_sha256": "04e597d8c4f103c3087bb9bdbdf542470839db5b6022ea77178f9766ab3b3e3b",
-      "actual_sha256": "04e597d8c4f103c3087bb9bdbdf542470839db5b6022ea77178f9766ab3b3e3b"
+      "expected_bytes": 17823,
+      "actual_bytes": 17823,
+      "expected_sha256": "075e0a4a0486873b20bc23d40b695b032ee9f556a7c558bd68a41894c91ee8d9",
+      "actual_sha256": "075e0a4a0486873b20bc23d40b695b032ee9f556a7c558bd68a41894c91ee8d9"
     },
     {
       "path": "reports/unadapted-external-probe.json",
