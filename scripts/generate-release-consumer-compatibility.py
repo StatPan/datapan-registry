@@ -28,6 +28,24 @@ REQUIRED_CI_REPORTS = [
     ".datapan/ci/latest-release-doctor-smoke.json",
     ".datapan/ci/release-health-rollup.json",
 ]
+ROLLUP_GENERATION_CONTRACT = {
+    "generator": "scripts/generate-release-health-rollup.py",
+    "validator": "scripts/validate-release-health-rollups.py",
+    "schema": "schemas/datapan.release-health-rollup.v1.schema.json",
+    "output": ".datapan/ci/release-health-rollup.json",
+    "inputs": [
+        {
+            "scope": "current",
+            "install_summary": ".datapan/ci/current-release-install-smoke.json",
+            "doctor_summary": ".datapan/ci/current-release-doctor-smoke.json",
+        },
+        {
+            "scope": "latest",
+            "install_summary": ".datapan/ci/latest-release-install-smoke.json",
+            "doctor_summary": ".datapan/ci/latest-release-doctor-smoke.json",
+        },
+    ],
+}
 REQUIRED_SHARD_INSTALL_FIELDS = [
     "mode",
     "shards_asset_present",
@@ -417,6 +435,7 @@ def build_report(
             "artifact_bundle": "datapan-registry-release-health",
             "required_schemas": REQUIRED_RELEASE_HEALTH_SCHEMAS,
             "required_ci_reports": REQUIRED_CI_REPORTS,
+            "rollup_generation_contract": ROLLUP_GENERATION_CONTRACT,
             "required_shard_install_fields": REQUIRED_SHARD_INSTALL_FIELDS,
         },
         "manifest_evidence_contracts": evidence_contracts,

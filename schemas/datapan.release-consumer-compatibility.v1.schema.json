@@ -205,6 +205,7 @@
         "artifact_bundle",
         "required_schemas",
         "required_ci_reports",
+        "rollup_generation_contract",
         "required_shard_install_fields"
       ],
       "properties": {
@@ -225,6 +226,9 @@
             "$ref": "#/$defs/non_empty_string"
           }
         },
+        "rollup_generation_contract": {
+          "$ref": "#/$defs/rollup_generation_contract"
+        },
         "required_shard_install_fields": {
           "type": "array",
           "minItems": 6,
@@ -239,6 +243,70 @@
             ]
           },
           "uniqueItems": true
+        }
+      }
+    },
+    "rollup_generation_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["generator", "validator", "schema", "output", "inputs"],
+      "properties": {
+        "generator": {
+          "const": "scripts/generate-release-health-rollup.py"
+        },
+        "validator": {
+          "const": "scripts/validate-release-health-rollups.py"
+        },
+        "schema": {
+          "const": "schemas/datapan.release-health-rollup.v1.schema.json"
+        },
+        "output": {
+          "const": ".datapan/ci/release-health-rollup.json"
+        },
+        "inputs": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "prefixItems": [
+            {
+              "$ref": "#/$defs/current_rollup_input"
+            },
+            {
+              "$ref": "#/$defs/latest_rollup_input"
+            }
+          ]
+        }
+      }
+    },
+    "current_rollup_input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "install_summary", "doctor_summary"],
+      "properties": {
+        "scope": {
+          "const": "current"
+        },
+        "install_summary": {
+          "const": ".datapan/ci/current-release-install-smoke.json"
+        },
+        "doctor_summary": {
+          "const": ".datapan/ci/current-release-doctor-smoke.json"
+        }
+      }
+    },
+    "latest_rollup_input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "install_summary", "doctor_summary"],
+      "properties": {
+        "scope": {
+          "const": "latest"
+        },
+        "install_summary": {
+          "const": ".datapan/ci/latest-release-install-smoke.json"
+        },
+        "doctor_summary": {
+          "const": ".datapan/ci/latest-release-doctor-smoke.json"
         }
       }
     },

@@ -131,7 +131,7 @@
       "manifest_relationship": "Downstream impact and compatibility evidence are manifest-bound.",
       "schema_relationship": "Validated against registry-impact-plan and release-consumer-compatibility schemas.",
       "package_relationship": "Included in release packages through manifest.json.",
-      "exemption_boundary": "The release impact rollup must keep release_evidence_inputs for error/action routing and source report inventory, while validation checks the consumer compatibility downstream impact contract. Compatibility blockers and manual-review boundaries must not be silently removed."
+      "exemption_boundary": "The release impact rollup must keep release_evidence_inputs for error/action routing and source report inventory, while validation checks the consumer compatibility downstream impact contract and release-health rollup generation contract. Compatibility blockers and manual-review boundaries must not be silently removed."
     },
     {
       "id": "verification_receipts",
