@@ -53,6 +53,7 @@ jobs:
           python -m pip install jsonschema
           python scripts/sync-release-schema-artifacts.py --check
           python scripts/sync-release-manifest-artifacts.py --check
+          python scripts/validate-release-ledger-ownership.py
           python scripts/validate-coverage-backlog.py
           python scripts/validate-external-adapter-backlog.py
           python scripts/validate-source-profiles.py
@@ -90,6 +91,7 @@ jobs:
           python -m py_compile scripts/validate-doctor-smoke-summaries.py
           python -m py_compile scripts/validate-install-smoke-summaries.py
           python -m py_compile scripts/validate-release-consumer-compatibility.py
+          python -m py_compile scripts/validate-release-ledger-ownership.py
           python -m py_compile scripts/validate-release-report-artifacts.py
           python -m py_compile scripts/release_health_rollup.py
           python -m py_compile scripts/generate-release-health-rollup.py

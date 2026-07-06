@@ -1,0 +1,189 @@
+{
+  "schema_version": "datapan.release-ledger-ownership.v1",
+  "goal_issue": 344,
+  "description": "Ownership map for release-ledger artifact classes. Every manifest artifact kind must be represented here so release operators can identify the generator, checker, manifest relationship, schema relationship, package relationship, and exemption boundary for each checked-in release artifact class.",
+  "entries": [
+    {
+      "id": "schema_artifacts",
+      "artifact_kinds": ["schema"],
+      "owner": "schema registry tooling",
+      "generated_by": ["python scripts/sync-release-schema-artifacts.py --write"],
+      "checked_by": ["python scripts/sync-release-schema-artifacts.py --check"],
+      "manifest_relationship": "Manifest-bound schema artifacts; bytes and sha256 are owned by sync-release-schema-artifacts.py.",
+      "schema_relationship": "Each schema artifact is indexed by schemas/index.json.",
+      "package_relationship": "Included in release packages through manifest.json.",
+      "exemption_boundary": "Not owned by sync-release-manifest-artifacts.py."
+    },
+    {
+      "id": "schema_index",
+      "artifact_kinds": ["schema_index"],
+      "owner": "schema registry tooling",
+      "generated_by": ["python scripts/sync-release-schema-artifacts.py --write"],
+      "checked_by": ["python scripts/sync-release-schema-artifacts.py --check"],
+      "manifest_relationship": "Manifest-bound schema index; bytes and sha256 are owned by sync-release-schema-artifacts.py.",
+      "schema_relationship": "Validated against datapan.schema-index.v1.",
+      "package_relationship": "Included in release packages through manifest.json.",
+      "exemption_boundary": "Not owned by sync-release-manifest-artifacts.py."
+    },
+    {
+      "id": "canonical_registry",
+      "artifact_kinds": ["registry"],
+      "owner": "canonical registry maintainers",
+      "generated_by": ["manual registry updates and source-specific patch scripts"],
+      "checked_by": [
+        "datapan catalog release verify --manifest manifest.json",
+        "python scripts/sync-release-manifest-artifacts.py --check",
+        "python scripts/package-registry-release.py --check .datapan/release-assets/datapan-registry-snapshot.zip"
+      ],
+      "manifest_relationship": "Canonical registry artifact is manifest-bound and checksum-verifiable.",
+      "schema_relationship": "Declared against datapan.specs.v1.",
+      "package_relationship": "Primary artifact in release packages and shard generation.",
+      "exemption_boundary": "Canonical data changes require their own bounded ticket and compatibility evidence."
+    },
+    {
+      "id": "catalog_and_provider_reports",
+      "artifact_kinds": [
+        "adapter_targets",
+        "catalog_audit",
+        "catalog_diff",
+        "coverage",
+        "dependencies",
+        "provider_backlog",
+        "provider_index",
+        "route_disposition",
+        "verification_plan"
+      ],
+      "owner": "catalog evidence maintainers",
+      "generated_by": [
+        "datapan-cli catalog/report commands",
+        "python scripts/generate-coverage-backlog.py",
+        "python scripts/generate-external-adapter-backlog.py"
+      ],
+      "checked_by": [
+        "python scripts/sync-release-manifest-artifacts.py --check",
+        "datapan catalog release verify --manifest manifest.json"
+      ],
+      "manifest_relationship": "Top-level catalog and provider evidence artifacts are manifest-bound.",
+      "schema_relationship": "Each JSON report declares a schema URI when a schema exists.",
+      "package_relationship": "Included in release packages through manifest.json.",
+      "exemption_boundary": "Manual report edits must be followed by generator/check ownership or explicit release documentation."
+    },
+    {
+      "id": "error_action_evidence",
+      "artifact_kinds": ["error_action_routing_rollup", "error_catalog"],
+      "owner": "error/action routing maintainers",
+      "generated_by": ["python scripts/generate-error-action-routing-rollup.py"],
+      "checked_by": [
+        "python scripts/validate-error-action-catalogs.py",
+        "python scripts/generate-error-action-routing-rollup.py --check",
+        "python scripts/validate-error-action-routing-rollups.py",
+        "python scripts/sync-release-manifest-artifacts.py --check"
+      ],
+      "manifest_relationship": "Error catalog and routing rollup are manifest-bound release evidence.",
+      "schema_relationship": "Validated against error catalog and error-action-routing schemas.",
+      "package_relationship": "Included in release packages through manifest.json.",
+      "exemption_boundary": "Routing changes should preserve bounded action IDs and manual-review boundaries."
+    },
+    {
+      "id": "source_contract_runtime_evidence",
+      "artifact_kinds": [
+        "runtime_evidence_growth",
+        "source_contract_rollup",
+        "source_reference_drift",
+        "source_report_inventory",
+        "source_runtime_evidence_rollup"
+      ],
+      "owner": "source evidence maintainers",
+      "generated_by": [
+        "python scripts/generate-source-contract-rollup.py",
+        "python scripts/generate-source-report-inventory.py",
+        "python scripts/generate-source-runtime-readiness.py"
+      ],
+      "checked_by": [
+        "python scripts/generate-source-contract-rollup.py --check",
+        "python scripts/validate-source-contract-rollups.py",
+        "python scripts/validate-source-reference-drift.py",
+        "python scripts/validate-source-report-inventory.py",
+        "python scripts/validate-source-runtime-evidence-rollup.py",
+        "python scripts/validate-runtime-evidence-growth.py",
+        "python scripts/sync-release-manifest-artifacts.py --check"
+      ],
+      "manifest_relationship": "Source rollups and inventories are top-level manifest evidence for nested source reports.",
+      "schema_relationship": "Schema-backed source reports are indexed through schemas/index.json and source-report-inventory.json.",
+      "package_relationship": "Included in release packages through manifest.json.",
+      "exemption_boundary": "Nested source reports stay out of the top-level manifest when covered by source-report-inventory.json."
+    },
+    {
+      "id": "downstream_release_evidence",
+      "artifact_kinds": ["consumer_compatibility", "registry_impact_plan"],
+      "owner": "downstream release maintainers",
+      "generated_by": [
+        "python scripts/generate-impact-plan-rollup.py",
+        "python scripts/generate-release-consumer-compatibility.py"
+      ],
+      "checked_by": [
+        "python scripts/generate-impact-plan-rollup.py --check",
+        "python scripts/validate-impact-plans.py",
+        "python scripts/generate-release-consumer-compatibility.py --check",
+        "python scripts/validate-release-consumer-compatibility.py",
+        "python scripts/sync-release-manifest-artifacts.py --check"
+      ],
+      "manifest_relationship": "Downstream impact and compatibility evidence are manifest-bound.",
+      "schema_relationship": "Validated against registry-impact-plan and release-consumer-compatibility schemas.",
+      "package_relationship": "Included in release packages through manifest.json.",
+      "exemption_boundary": "Compatibility blockers and manual-review boundaries must not be silently removed."
+    },
+    {
+      "id": "verification_receipts",
+      "artifact_kinds": [
+        "unadapted_external_probe",
+        "unadapted_external_probe_summary",
+        "verification",
+        "verification_summary"
+      ],
+      "owner": "release verification maintainers",
+      "generated_by": [
+        "datapan catalog verify --registry data/data-go-kr.registry.json",
+        "datapan catalog verify summary --input reports/latest-verification.json"
+      ],
+      "checked_by": [
+        "datapan catalog release verify --manifest manifest.json",
+        "python scripts/sync-release-manifest-artifacts.py --check"
+      ],
+      "manifest_relationship": "Latest verification receipts and external probe receipts are manifest-bound evidence.",
+      "schema_relationship": "Validated through verification and verification-summary schemas.",
+      "package_relationship": "Included in release packages through manifest.json.",
+      "exemption_boundary": "Release verification/readiness receipts generated from a selected manifest are explicit manifest-derived receipts."
+    },
+    {
+      "id": "human_release_context",
+      "artifact_kinds": ["provenance", "release_notes"],
+      "owner": "release documentation maintainers",
+      "generated_by": ["manual release documentation updates"],
+      "checked_by": [
+        "python scripts/sync-release-manifest-artifacts.py --check",
+        "datapan catalog release verify --manifest manifest.json"
+      ],
+      "manifest_relationship": "Human-readable release context files are manifest-bound for checksum verification.",
+      "schema_relationship": "No JSON schema applies.",
+      "package_relationship": "Included in release packages through manifest.json.",
+      "exemption_boundary": "Manual edits are allowed, but manifest bytes and sha256 must be refreshed deterministically."
+    }
+  ],
+  "distribution_artifacts": [
+    {
+      "id": "release_zip",
+      "owner": "release packaging tooling",
+      "generated_by": ["python scripts/package-registry-release.py --manifest manifest.json --output .datapan/release-assets/datapan-registry-snapshot.zip"],
+      "checked_by": ["python scripts/package-registry-release.py --check .datapan/release-assets/datapan-registry-snapshot.zip"],
+      "relationship": "Release zip entries must match manifest.json plus every manifest artifact path."
+    },
+    {
+      "id": "shard_archive",
+      "owner": "shard packaging tooling",
+      "generated_by": ["python scripts/generate-registry-shards.py", "python scripts/package-registry-shards.py"],
+      "checked_by": ["python scripts/validate-registry-shards.py", "python scripts/package-registry-shards.py --check"],
+      "relationship": "Optional shard archive evidence must match the same canonical registry as the selected release manifest when attached."
+    }
+  ]
+}
