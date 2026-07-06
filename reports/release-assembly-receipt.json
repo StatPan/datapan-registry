@@ -25,7 +25,7 @@
     "manifest": {
       "path": "manifest.json",
       "generated_at": "2026-07-04T06:39:24Z",
-      "artifact_count": 79,
+      "artifact_count": 81,
       "source_registry": "data/data-go-kr.registry.json"
     },
     "readiness": {
@@ -107,8 +107,8 @@
       "evidence_artifacts": [
         {
           "path": "schemas/index.json",
-          "bytes": 19295,
-          "sha256": "b4497523f8fbf0cf3db9a4e932806acc814183b63df09ee3b52f080b46744ac4",
+          "bytes": 19736,
+          "sha256": "f717b3e9fa94ab5f7e6d7e32a5a2282294d8bd8fa084c5465068fc1d0e72c327",
           "manifest_bound": true,
           "kind": "schema_index",
           "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json"
@@ -145,8 +145,8 @@
       "evidence_artifacts": [
         {
           "path": "docs/release-ledger-ownership.json",
-          "bytes": 12838,
-          "sha256": "45ed58216ec8b08784218708a05745cdc9d545723c75c22ebc40fb62733d2a05",
+          "bytes": 13035,
+          "sha256": "363eef2f48ef6aae5573b9506e0369c107f711a260eae12db968abc54dae9d9f",
           "manifest_bound": false
         }
       ]
@@ -193,7 +193,7 @@
         {
           "path": "reports/source-report-inventory.json",
           "bytes": 59095,
-          "sha256": "7f02000d80c2f419905ede49b428c567179ab13b29021865685194c96a00b9e5",
+          "sha256": "1923c80983a5ad7184186e023e3b213f2c59d269a297c2554fa7b3606c5aaf98",
           "manifest_bound": true,
           "kind": "source_report_inventory",
           "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json"
@@ -249,7 +249,7 @@
         {
           "path": "reports/registry-impact-plan.json",
           "bytes": 11519,
-          "sha256": "29c71f053d8695a60f2461427fd74b5de8125845ffa9056b02e73345d622db5f",
+          "sha256": "2cd30466a37a48f561636fbc95a705a809823b93867e7e8f4790952a20534e23",
           "manifest_bound": true,
           "kind": "registry_impact_plan",
           "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json"
@@ -282,7 +282,7 @@
         {
           "path": "reports/source-runtime-remediation-map.json",
           "bytes": 14728,
-          "sha256": "55dc01243391a71821ae04f038b94edf45471d75858a8a47ef0dc27a17bc017e",
+          "sha256": "ebab4fc2b6410d7c49603017119093ae54871c189e6dee6803d80531df2b961e",
           "manifest_bound": true,
           "kind": "source_runtime_remediation_map",
           "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json"
@@ -332,12 +332,14 @@
       ],
       "operator_commands": [
         "python3 scripts/generate-credential-runtime-receipt-collection-queue.py",
+        "python3 scripts/generate-credential-runtime-review-handoff.py",
         "python3 scripts/run-credential-runtime-collection.py --source <source_id> --json",
         "python3 scripts/run-credential-runtime-collection.py --source <source_id> --run",
         "python3 scripts/promote-credential-runtime-receipt.py <staged-receipt> --state <reviewed_accepted|reviewed_rejected> --decision <decision> --reviewer <reviewer> --reason <reason>"
       ],
       "check_commands": [
         "python3 scripts/generate-credential-runtime-receipt-collection-queue.py --check",
+        "python3 scripts/generate-credential-runtime-review-handoff.py --check",
         "python3 scripts/run-credential-runtime-collection.py --self-test",
         "python3 scripts/run-credential-runtime-collection.py --check",
         "python3 -m py_compile scripts/promote-credential-runtime-receipt.py",
@@ -346,6 +348,7 @@
       "workflow_fragments": {
         ".github/workflows/verify-release.yml": [
           "python scripts/generate-credential-runtime-receipt-collection-queue.py --check",
+          "python scripts/generate-credential-runtime-review-handoff.py --check",
           "python scripts/run-credential-runtime-collection.py --self-test",
           "python scripts/run-credential-runtime-collection.py --check",
           "python -m py_compile scripts/promote-credential-runtime-receipt.py",
@@ -353,6 +356,7 @@
         ],
         ".github/workflows/release-draft.yml": [
           "python scripts/generate-credential-runtime-receipt-collection-queue.py --check",
+          "python scripts/generate-credential-runtime-review-handoff.py --check",
           "python scripts/run-credential-runtime-collection.py --self-test",
           "python scripts/run-credential-runtime-collection.py --check",
           "scripts/promote-credential-runtime-receipt.py",
@@ -368,6 +372,14 @@
           "manifest_bound": true,
           "kind": "credential_runtime_receipt_collection_queue",
           "schema": "https://schemas.datapan.dev/datapan.credential-runtime-receipt-collection-queue.v1.schema.json"
+        },
+        {
+          "path": "reports/credential-runtime-review-handoff.json",
+          "bytes": 12223,
+          "sha256": "959713fbf79e1a8d72401ae2b48605f7585dcbfd9b05e7822d941e58063a3439",
+          "manifest_bound": true,
+          "kind": "credential_runtime_review_handoff",
+          "schema": "https://schemas.datapan.dev/datapan.credential-runtime-review-handoff.v1.schema.json"
         }
       ]
     },
@@ -398,7 +410,7 @@
         {
           "path": "reports/release-consumer-compatibility.json",
           "bytes": 16009,
-          "sha256": "bc793e02d94f497bd09658fcebffcd349d783d859f6b84893ceca95b57d092f4",
+          "sha256": "f3871bdbc9630c1c46b144b2ee88fe8209c7740e6a0b3ff679d7115007ca683d",
           "manifest_bound": true,
           "kind": "consumer_compatibility",
           "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json"
@@ -557,8 +569,8 @@
       "evidence_artifacts": [
         {
           "path": "docs/release-ledger-goal-completion-audit.json",
-          "bytes": 25242,
-          "sha256": "4b22281f12a60360b1a04a171edce67e7e9f72db6fd376acdd802c324560f389",
+          "bytes": 27198,
+          "sha256": "b80ddd702ca99cb0b2da0c6d5bbc617d0e657334fefc4b3a570b3e75f050b7ef",
           "manifest_bound": false
         }
       ]

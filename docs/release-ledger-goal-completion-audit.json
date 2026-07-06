@@ -11,18 +11,18 @@
     "criteria_partial": 0,
     "criteria_gap": 0,
     "decision": "leave_goal_open",
-    "reason": "The release assembly path is receipt-bound and credential-safe runtime evidence is now policy-bound with an operator-facing receipt collection queue, but #344 remains open because reviewed live credentialed runtime receipts are not checked in, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
+    "reason": "The release assembly path is receipt-bound and credential-safe runtime evidence is now policy-bound with an operator-facing receipt collection queue and reviewer-facing handoff, but #344 remains open because reviewed live credentialed runtime receipts are not checked in, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
   },
   "current_state_evidence": {
     "manifest": {
       "path": "manifest.json",
-      "artifact_count": 79,
-      "artifact_kinds": 31,
-      "schema_artifacts": 49
+      "artifact_count": 81,
+      "artifact_kinds": 32,
+      "schema_artifacts": 50
     },
     "schema_index": {
       "path": "schemas/index.json",
-      "schema_count": 49
+      "schema_count": 50
     },
     "release_readiness": {
       "path": "reports/latest-release-readiness.json",
@@ -134,6 +134,18 @@
       "queue_status": "collection_required",
       "default_ci_requires_credentials": false,
       "checked_in_secrets_allowed": false
+    },
+    "credential_runtime_review_handoff": {
+      "path": "reports/credential-runtime-review-handoff.json",
+      "handoff_ticket": 385,
+      "pending_review_sources": 5,
+      "reviewed_receipts_checked_in": 0,
+      "relief_eligible_sources": 0,
+      "global_manual_review_relief_allowed": false,
+      "manual_review_required": true,
+      "handoff_status": "review_required",
+      "default_ci_requires_credentials": false,
+      "checked_in_secrets_allowed": false
     }
   },
   "criteria": [
@@ -144,7 +156,7 @@
       "evidence": [
         {
           "path": "reports/release-assembly-receipt.json",
-          "finding": "Records the unified assembly phases, including credential runtime evidence policy, credential receipt collection queue, operator commands, check commands, workflow fragments, release inputs, and current manual-review status."
+          "finding": "Records the unified assembly phases, including credential runtime evidence policy, credential receipt collection queue, credential review handoff, operator commands, check commands, workflow fragments, release inputs, and current manual-review status."
         },
         {
           "path": "scripts/generate-release-assembly-receipt.py",
@@ -205,11 +217,11 @@
       "evidence": [
         {
           "path": "manifest.json",
-          "finding": "Contains 77 manifest-bound artifacts across 30 artifact kinds, including 48 schema artifacts."
+          "finding": "Contains 81 manifest-bound artifacts across 32 artifact kinds, including 50 schema artifacts."
         },
         {
           "path": "schemas/index.json",
-          "finding": "Indexes 48 schema contracts and checks schema artifact bytes and sha256."
+          "finding": "Indexes 50 schema contracts and checks schema artifact bytes and sha256."
         },
         {
           "path": "reports/source-report-inventory.json",
@@ -217,7 +229,7 @@
         },
         {
           "path": "reports/release-consumer-compatibility.json",
-          "finding": "Binds source contracts, source runtime evidence, source runtime remediation, credential runtime evidence policy, credential receipt collection queue, error/action routing, downstream impact, source reference drift, and source report inventory as manifest evidence contracts."
+          "finding": "Binds source contracts, source runtime evidence, source runtime remediation, credential runtime evidence policy, credential receipt collection queue, credential review handoff, error/action routing, downstream impact, source reference drift, and source report inventory as manifest evidence contracts."
         },
         {
           "path": "reports/release-assembly-receipt.json",
@@ -266,6 +278,14 @@
         {
           "path": "reports/credential-runtime-receipt-collection-queue.json",
           "finding": "Enumerates all five credential-gated sources, their staged and reviewed receipt paths, bounded operator commands, local runner commands, promotion commands, current absent receipt states, and next collection actions without requiring credentials in default CI."
+        },
+        {
+          "path": "reports/credential-runtime-review-handoff.json",
+          "finding": "Converts the collection queue into reviewer-facing per-source evidence packets, required validation and promotion commands, review packet requirements, relief blockers, and a global review_required status without claiming live credentialed receipts."
+        },
+        {
+          "path": "scripts/generate-credential-runtime-review-handoff.py",
+          "finding": "Generates and checks the reviewer handoff from the checked-in collection queue, preserves secret-free CI behavior, and blocks global manual-review relief until every credential-gated source is relief-eligible."
         },
         {
           "path": "scripts/run-credential-runtime-collection.py",
@@ -318,6 +338,10 @@
         {
           "path": "reports/credential-runtime-receipt-collection-queue.json",
           "finding": "Turns the zero-receipt state into per-source operator queue entries that are now referenced by consumer compatibility evidence, so downstream compatibility relief remains blocked while the next reviewed receipt collection work is explicit."
+        },
+        {
+          "path": "reports/credential-runtime-review-handoff.json",
+          "finding": "Keeps manual-review relief blocked behind an explicit reviewer handoff status, five pending review sources, zero reviewed receipts, zero relief-eligible sources, and a secret-free validation contract."
         }
       ],
       "next_action": "Keep compatibility evidence current whenever source runtime blockers or downstream contracts change."
@@ -352,7 +376,7 @@
     {
       "id": "credentialed_runtime_receipts_absent",
       "evidence": "reports/credential-runtime-receipt-collection-queue.json",
-      "finding": "Credential-gated runtime checks now have a secret-safe policy path, redacted receipt contract, reviewed checked-in intake path, discovery-derived counts, per-source collection queue, deterministic promotion command, and remediation finding linkage, but live credentialed receipts are still absent and not allowed to reduce manual-review boundaries."
+      "finding": "Credential-gated runtime checks now have a secret-safe policy path, redacted receipt contract, reviewed checked-in intake path, discovery-derived counts, per-source collection queue, deterministic promotion command, reviewer handoff, and remediation finding linkage, but live credentialed receipts are still absent and not allowed to reduce manual-review boundaries."
     },
     {
       "id": "receipt_backed_compatibility_relief_blocked",
@@ -381,6 +405,7 @@
     "python3 scripts/generate-credential-runtime-evidence-policy.py --check",
     "python3 scripts/validate-credential-runtime-receipts.py",
     "python3 scripts/generate-credential-runtime-receipt-collection-queue.py --check",
+    "python3 scripts/generate-credential-runtime-review-handoff.py --check",
     "python3 scripts/run-credential-runtime-collection.py --self-test",
     "python3 scripts/run-credential-runtime-collection.py --check",
     "python3 scripts/promote-credential-runtime-receipt.py --self-test",
@@ -449,6 +474,11 @@
       "issue": 383,
       "title": "Add credential runtime collection runner",
       "reason": "Operators now have a secret-free preflight and opt-in runner for bounded credential runtime checks, but the goal remains open because reviewed live receipts are still absent."
+    },
+    {
+      "issue": 385,
+      "title": "Codify credential receipt review handoff",
+      "reason": "Reviewers now have a checked-in handoff for per-source credential receipt evidence packets and relief blockers, but the goal remains open because reviewed live receipts are still absent."
     }
   ]
 }

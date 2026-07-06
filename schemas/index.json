@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 49,
+  "count": 50,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 2895,
-      "sha256": "eeb23f1637f53781897198558e63c805c1dca2bf2f03952258f18ad1d693ec96"
+      "bytes": 2944,
+      "sha256": "3bf8ec088b46c345385066088a48c8afe060a2a4ab82c237c1cf2d49cf97dfc2"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -444,6 +444,15 @@
       "version": "v1",
       "bytes": 10162,
       "sha256": "cf7ac0fc32b8a6ea124620355a005cb740d759bdf4a735a6a1be68a6706be7b2"
+    },
+    {
+      "path": "schemas/datapan.credential-runtime-review-handoff.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.credential-runtime-review-handoff.v1.schema.json",
+      "title": "Datapan Credential Runtime Review Handoff v1",
+      "contract": "credential-runtime-review-handoff",
+      "version": "v1",
+      "bytes": 10057,
+      "sha256": "cc11fb18a23b0ea4efd4eca6ff109baab0a644b3664dfefa61cd92e78ba32f0a"
     }
   ]
 }
