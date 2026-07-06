@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 40,
+  "count": 41,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -363,6 +363,15 @@
       "version": "v1",
       "bytes": 7308,
       "sha256": "d4eb239ab8bda07f0a69fe9e06a34757d00b16e1a4eabd48c0c90428a1520f90"
+    },
+    {
+      "path": "schemas/datapan.safetydata-registry-patches.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.safetydata-registry-patches.v1.schema.json",
+      "title": "Datapan Safety Data Registry Patches v1",
+      "contract": "safetydata-registry-patches",
+      "version": "v1",
+      "bytes": 6393,
+      "sha256": "b1cee166a864d660ceab0d5da14705fa9642714398ed957bc1295b39b18b2bc7"
     }
   ]
 }
