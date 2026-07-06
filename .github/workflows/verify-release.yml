@@ -151,6 +151,8 @@ jobs:
           DATAPAN_REGISTRY_PATH="${RUNNER_TEMP}/datapan-installed-current.registry.json" \
             go run ./cmd/datapan doctor --json \
             > ../datapan-registry/.datapan/ci/current-release-doctor.json
+          python3 ../datapan-registry/scripts/check-release-doctor-smoke.py \
+            ../datapan-registry/.datapan/ci/current-release-doctor.json
 
       - name: Check README current snapshot
         run: |
@@ -202,6 +204,8 @@ jobs:
           DATAPAN_REGISTRY_PATH="${RUNNER_TEMP}/datapan-installed-latest.registry.json" \
             go run ./cmd/datapan doctor --json \
             > ../datapan-registry/.datapan/ci/latest-release-doctor.json
+          python3 ../datapan-registry/scripts/check-release-doctor-smoke.py \
+            ../datapan-registry/.datapan/ci/latest-release-doctor.json
 
       - name: Upload release health reports
         uses: actions/upload-artifact@v7
