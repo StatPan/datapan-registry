@@ -131,6 +131,10 @@ check. That workflow:
   `scripts/validate-release-report-artifacts.py`, so new release reports cannot
   stay outside `manifest.json` or carry stale schema, bytes, or sha256 metadata
   unless they are explicit manifest-derived verification/readiness receipts;
+- checks non-schema manifest artifact bytes and sha256 with
+  `scripts/sync-release-manifest-artifacts.py --check`, keeping checked-in
+  report digests reproducible instead of hand-maintained during release
+  assembly;
 - uploads current-checkout install and doctor JSON plus latest-public-release
   install and doctor JSON reports as release-health evidence.
 
@@ -150,6 +154,8 @@ python scripts/generate-source-report-inventory.py
 python scripts/generate-source-contract-rollup.py
 python scripts/generate-source-runtime-readiness.py
 python scripts/generate-error-action-routing-rollup.py
+python scripts/sync-release-schema-artifacts.py --write
+python scripts/sync-release-manifest-artifacts.py --write
 ```
 
 Institution-scoped runtime reactivation batches should follow the priority
