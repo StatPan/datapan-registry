@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 43,
+  "count": 44,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -390,6 +390,15 @@
       "version": "v1",
       "bytes": 10248,
       "sha256": "0b3fbe67bd0d237f4e34d621cc218b14fc300fc6cca26c1640a11231abfa5512"
+    },
+    {
+      "path": "schemas/datapan.coverage-backlog.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.coverage-backlog.v1.schema.json",
+      "title": "Datapan Coverage Backlog v1",
+      "contract": "coverage-backlog",
+      "version": "v1",
+      "bytes": 11020,
+      "sha256": "5591adbe862df09a5284621a71a9ab1da786b965207f5e1670a0d084ee8067a0"
     }
   ]
 }
