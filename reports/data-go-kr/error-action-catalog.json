@@ -9,12 +9,12 @@
     "rules": 6,
     "blocking_rules": 2,
     "manual_review_rules": 4,
-    "unknown_signature_rules": 1
+    "unknown_signature_rules": 0
   },
   "rules": [
     {
       "rule_id": "data-go-kr-service-key-not-registered",
-      "status": "draft",
+      "status": "verified",
       "scope": {
         "dependency_classes": [
           "data_go_kr_gateway",
@@ -53,7 +53,7 @@
     },
     {
       "rule_id": "data-go-kr-service-key-message",
-      "status": "draft",
+      "status": "verified",
       "match": {
         "kind": "message_contains",
         "contains": "SERVICE KEY IS NOT REGISTERED",
@@ -78,7 +78,7 @@
     },
     {
       "rule_id": "data-go-kr-http-429",
-      "status": "draft",
+      "status": "verified",
       "match": {
         "kind": "http_status",
         "http_status": 429
@@ -105,7 +105,7 @@
     },
     {
       "rule_id": "data-go-kr-external-http-404",
-      "status": "draft",
+      "status": "verified",
       "scope": {
         "dependency_classes": [
           "external_endpoint"
@@ -137,7 +137,7 @@
     },
     {
       "rule_id": "data-go-kr-external-timeout",
-      "status": "draft",
+      "status": "verified",
       "scope": {
         "dependency_classes": [
           "external_endpoint"
@@ -161,19 +161,19 @@
       ]
     },
     {
-      "rule_id": "data-go-kr-parse-error-unknown",
-      "status": "draft",
+      "rule_id": "data-go-kr-parse-error",
+      "status": "verified",
       "match": {
         "kind": "parse_error"
       },
-      "classification": "unknown",
+      "classification": "parser",
       "severity": "high",
       "actions": [
         {
           "target": "registry-release",
           "action": "investigate",
           "automation": "manual_review",
-          "reason": "Parse failures require evidence before deciding whether the cause is response-shape drift, parser logic, or provider outage."
+          "reason": "Parse failures are parser evidence unless the response also matches a verified data.go.kr credential, approval, rate-limit, missing-route, or upstream outage rule."
         }
       ],
       "impact_categories": [

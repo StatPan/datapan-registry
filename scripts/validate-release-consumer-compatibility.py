@@ -568,8 +568,12 @@ def validate_runtime_risk_evidence(
             raise ValueError(f"{key} source value must be a non-negative integer")
         if risk.get(key) != value:
             raise ValueError(f"runtime_risk_evidence.{key} expected {value}, got {risk.get(key)}")
-    if unresolved_runtime_risk and risk.get("remediation_follow_up_required") == 0:
-        raise ValueError("runtime blockers require source runtime remediation follow-up evidence")
+    if (
+        unresolved_runtime_risk
+        and risk.get("remediation_follow_up_required") == 0
+        and risk.get("remediation_manual_review_boundaries") == 0
+    ):
+        raise ValueError("runtime blockers require source runtime remediation follow-up or manual-review boundary evidence")
 
     if unresolved_runtime_risk:
         if risk.get("manual_review_required") is not True:

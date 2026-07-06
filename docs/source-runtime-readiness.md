@@ -10,35 +10,31 @@ This overview is generated from `reports/source-runtime-evidence-rollup.json` an
 - Failed: `389`
 - Skipped: `1544`
 - Unknown: `0`
-- Blocking blocker instances: `12`
-- Warning instances: `8`
+- Blocking blocker instances: `9`
+- Warning instances: `4`
 
 ## Source Summary
 
 | Source | Source ID | Evidence | Blockers | Warnings | Blocker IDs | Warning IDs |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| data.go.kr | `data_go_kr` | 4774 | 1 | 1 | `credential_required`, `source_specific_error_taxonomy_pending` | `source_runtime_error_taxonomy_pending` |
-| ECOS | `ecos` | 0 | 3 | 2 | `adapter_not_registered`, `credential_required`, `metadata_only_verification` | `non_data_runtime_evidence_not_collected`, `source_runtime_adapter_not_registered` |
-| KOSIS | `kosis` | 0 | 3 | 2 | `adapter_not_registered`, `credential_required`, `metadata_only_verification` | `non_data_runtime_evidence_not_collected`, `source_runtime_adapter_not_registered` |
-| open.assembly.go.kr | `open_assembly` | 0 | 3 | 2 | `adapter_not_registered`, `credential_required`, `metadata_only_verification` | `non_data_runtime_evidence_not_collected`, `source_runtime_adapter_not_registered` |
+| data.go.kr | `data_go_kr` | 4774 | 1 | 0 | `credential_required` |  |
+| ECOS | `ecos` | 0 | 2 | 1 | `credential_required`, `metadata_only_verification` | `non_data_runtime_evidence_not_collected` |
+| KOSIS | `kosis` | 0 | 2 | 1 | `credential_required`, `metadata_only_verification` | `non_data_runtime_evidence_not_collected` |
+| open.assembly.go.kr | `open_assembly` | 0 | 2 | 1 | `credential_required`, `metadata_only_verification` | `non_data_runtime_evidence_not_collected` |
 | data.seoul.go.kr | `seoul_open_data` | 0 | 2 | 1 | `credential_required`, `metadata_only_verification` | `non_data_runtime_evidence_not_collected` |
 
 ## Blockers By ID
 
 | Blocker ID | Count | Sources |
 | --- | ---: | ---: |
-| adapter_not_registered | 3 | `ecos`, `kosis`, `open_assembly` |
 | credential_required | 5 | `data_go_kr`, `ecos`, `kosis`, `open_assembly`, `seoul_open_data` |
 | metadata_only_verification | 4 | `ecos`, `kosis`, `open_assembly`, `seoul_open_data` |
-| source_specific_error_taxonomy_pending | 1 | `data_go_kr` |
 
 ## Warnings By ID
 
 | Warning ID | Count | Sources |
 | --- | ---: | ---: |
 | non_data_runtime_evidence_not_collected | 4 | `ecos`, `kosis`, `open_assembly`, `seoul_open_data` |
-| source_runtime_adapter_not_registered | 3 | `ecos`, `kosis`, `open_assembly` |
-| source_runtime_error_taxonomy_pending | 1 | `data_go_kr` |
 
 ## Source Next Actions
 
@@ -56,7 +52,6 @@ Required CLI capabilities:
 
 - `source credential injection`
 - `bounded gateway verification batches`
-- `data.go.kr error taxonomy promotion`
 
 Required source reports:
 
@@ -68,18 +63,17 @@ Required source reports:
 Open blockers:
 
 - `credential_required` (operator): Provide a non-secret serviceKey injection path for repeatable bounded data.go.kr runtime checks in local and CI release operations.
-- `source_specific_error_taxonomy_pending` (registry): Promote data.go.kr source error taxonomy from draft to verified once gateway, approval, missing-parameter, and provider-specific skip reasons are classified.
 
 Warnings:
 
-- `source_runtime_error_taxonomy_pending`: Classify gateway, approval, missing-parameter, adapter, and provider-specific runtime reasons before closing the source runtime evidence loop.
+- None recorded
 
 
 ### ECOS (`ecos`)
 
 - Runtime evidence: `0`
 - Verification mode: `metadata_only`
-- Adapter status: `none`
+- Adapter status: `registered`
 - Credential required: `true`
 - Candidate batch: `reports/ecos/runtime-candidates.json`
 - First batch policy: Run a credential-gated bounded sample-call batch only after ECOS statCode/cycle/date-window/itemCode parameters are pinned.
@@ -88,7 +82,6 @@ Warnings:
 Required CLI capabilities:
 
 - `runtime candidate batch ingestion`
-- `ECOS bounded sample-call adapter`
 - `source credential injection`
 - `ECOS error signature extraction`
 
@@ -102,20 +95,18 @@ Required source reports:
 Open blockers:
 
 - `metadata_only_verification` (datapan_cli): Promote ECOS from metadata-only to bounded sample-call verification after statCode, cycle, date-window, and item samples are pinned.
-- `adapter_not_registered` (datapan_cli): Register an ECOS adapter with verification and call capabilities before runtime evidence can be generated.
 - `credential_required` (operator): Define a non-secret API key injection path for source-scoped CI and local bounded checks.
 
 Warnings:
 
 - `non_data_runtime_evidence_not_collected`: Use reports/ecos/runtime-candidates.json with a registered adapter and credentials to run the first bounded verification batch.
-- `source_runtime_adapter_not_registered`: Register the ECOS adapter before evidence collection.
 
 
 ### KOSIS (`kosis`)
 
 - Runtime evidence: `0`
 - Verification mode: `metadata_only`
-- Adapter status: `none`
+- Adapter status: `registered`
 - Credential required: `true`
 - Candidate batch: `reports/kosis/runtime-candidates.json`
 - First batch policy: Run a credential-gated bounded sample-call batch only after sample orgId/tblId/statId/period parameters are pinned.
@@ -124,7 +115,6 @@ Warnings:
 Required CLI capabilities:
 
 - `runtime candidate batch ingestion`
-- `KOSIS bounded sample-call adapter`
 - `source credential injection`
 - `KOSIS error signature extraction`
 
@@ -138,20 +128,18 @@ Required source reports:
 Open blockers:
 
 - `metadata_only_verification` (datapan_cli): Promote KOSIS from metadata-only to bounded sample-call verification after sample parameters and credential policy are pinned.
-- `adapter_not_registered` (datapan_cli): Register a KOSIS adapter with verification and call capabilities before runtime evidence can be generated.
 - `credential_required` (operator): Define a non-secret API key injection path for source-scoped CI and local bounded checks.
 
 Warnings:
 
 - `non_data_runtime_evidence_not_collected`: Use reports/kosis/runtime-candidates.json with a registered adapter and credentials to run the first bounded verification batch.
-- `source_runtime_adapter_not_registered`: Register the KOSIS adapter before evidence collection.
 
 
 ### open.assembly.go.kr (`open_assembly`)
 
 - Runtime evidence: `0`
 - Verification mode: `metadata_only`
-- Adapter status: `none`
+- Adapter status: `registered`
 - Credential required: `true`
 - Candidate batch: `reports/open-assembly/runtime-candidates.json`
 - First batch policy: Run a credential-gated bounded sample-call batch only after service IDs and required legislative parameters are pinned.
@@ -160,7 +148,6 @@ Warnings:
 Required CLI capabilities:
 
 - `runtime candidate batch ingestion`
-- `Open Assembly bounded sample-call adapter`
 - `source credential injection`
 - `Open Assembly RESULT code extraction`
 
@@ -174,13 +161,11 @@ Required source reports:
 Open blockers:
 
 - `metadata_only_verification` (datapan_cli): Promote Open Assembly from metadata-only to bounded sample-call verification after service IDs and legislative parameters are pinned.
-- `adapter_not_registered` (datapan_cli): Register an Open Assembly adapter with verification and call capabilities before runtime evidence can be generated.
 - `credential_required` (operator): Define a non-secret KEY injection path for source-scoped CI and local bounded checks.
 
 Warnings:
 
 - `non_data_runtime_evidence_not_collected`: Use reports/open-assembly/runtime-candidates.json with a registered adapter and credentials to run the first bounded verification batch.
-- `source_runtime_adapter_not_registered`: Register the Open Assembly adapter before evidence collection.
 
 
 ### data.seoul.go.kr (`seoul_open_data`)

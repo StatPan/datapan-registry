@@ -12,8 +12,8 @@
       "path": "reports/data-go-kr/error-action-catalog.json",
       "source_id": "data_go_kr",
       "provider": "data.go.kr",
-      "bytes": 5687,
-      "sha256": "6ae96800d42f13237439def8adea75fb5c9e0bd97ae470b5f93254adc032dcf8",
+      "bytes": 5735,
+      "sha256": "63563ed147a169c202384888cf90ba3338f05f20408396b90205e4628905292f",
       "rules": 6,
       "actions": 9
     },
@@ -62,14 +62,13 @@
     "actions": 39,
     "blocking_rules": 7,
     "manual_review_rules": 24,
-    "unknown_signature_rules": 1,
+    "unknown_signature_rules": 0,
     "classifications": {
       "bad_request": 5,
       "credential": 7,
       "not_found": 3,
-      "parser": 4,
+      "parser": 5,
       "rate_limit": 5,
-      "unknown": 1,
       "upstream_outage": 6
     },
     "action_targets": {
@@ -102,18 +101,18 @@
       "provider": "data.go.kr",
       "catalog": "reports/data-go-kr/error-action-catalog.json",
       "source_profile": "sources/data_go_kr.json",
-      "bytes": 5687,
-      "sha256": "6ae96800d42f13237439def8adea75fb5c9e0bd97ae470b5f93254adc032dcf8",
+      "bytes": 5735,
+      "sha256": "63563ed147a169c202384888cf90ba3338f05f20408396b90205e4628905292f",
       "rules": 6,
       "actions": 9,
       "blocking_rules": 2,
       "manual_review_rules": 4,
-      "unknown_signature_rules": 1,
+      "unknown_signature_rules": 0,
       "classifications": {
         "credential": 2,
         "not_found": 1,
+        "parser": 1,
         "rate_limit": 1,
-        "unknown": 1,
         "upstream_outage": 1
       },
       "action_targets": {

@@ -12,29 +12,29 @@
       "path": "sources/data_go_kr.json",
       "source_id": "data_go_kr",
       "provider": "data.go.kr",
-      "bytes": 2816,
-      "sha256": "0163df51972ce6dfd6d714967800d9eace89536dc67e6aab11885016f6776772"
+      "bytes": 2819,
+      "sha256": "ab6f6b24f7556e16deac864ad0b349021023ef40a374f3555ca54e37c22ccbc6"
     },
     {
       "path": "sources/ecos.json",
       "source_id": "ecos",
       "provider": "ECOS",
-      "bytes": 3246,
-      "sha256": "6e3adf86f6db12065cde5bc0840249d602d61dba0ed692fcf902719697d5fc27"
+      "bytes": 3292,
+      "sha256": "2f4202ee24201e821666cdc7c55b724e979d94024b3f8289120e6c39c6584750"
     },
     {
       "path": "sources/kosis.json",
       "source_id": "kosis",
       "provider": "KOSIS",
-      "bytes": 2903,
-      "sha256": "53a3d7f080592e86a52c5ee7a80ed11c7f137a2d15bed55c39025e05b5e194c0"
+      "bytes": 2949,
+      "sha256": "2fcff2cd1e5e7968473d0ecfc8a35ee90f0bafa4b5f2d82005f4ed00e3d1d344"
     },
     {
       "path": "sources/open_assembly.json",
       "source_id": "open_assembly",
       "provider": "open.assembly.go.kr",
-      "bytes": 2877,
-      "sha256": "4c2a70a90c24ac770fbeab12c482f6138fd8feaa24acf4968e077ddd6e769801"
+      "bytes": 2923,
+      "sha256": "f8459b47e6642d5350377ca8f3e6608021808614602de48e2cb6090525e1aaae"
     },
     {
       "path": "sources/seoul_open_data.json",
@@ -48,20 +48,19 @@
     "profiles": 5,
     "sources": 5,
     "providers": 5,
-    "profile_bytes": 15274,
+    "profile_bytes": 15415,
     "status_counts": {
       "active": 1,
       "candidate": 4
     },
     "adapter_status_counts": {
-      "none": 3,
-      "registered": 2
+      "registered": 5
     },
     "adapter_capability_counts": {
-      "call": 2,
+      "call": 5,
       "catalogue_import": 1,
       "normalization": 1,
-      "verification": 2
+      "verification": 5
     },
     "auth_type_counts": {
       "api_key": 4,
@@ -88,8 +87,7 @@
       "documented": 5
     },
     "error_taxonomy_status_counts": {
-      "draft": 1,
-      "verified": 4
+      "verified": 5
     },
     "runtime_verification_mode_counts": {
       "bounded_call": 1,
@@ -116,8 +114,8 @@
       "display_name": "Public Data Portal",
       "status": "active",
       "source_profile": "sources/data_go_kr.json",
-      "bytes": 2816,
-      "sha256": "0163df51972ce6dfd6d714967800d9eace89536dc67e6aab11885016f6776772",
+      "bytes": 2819,
+      "sha256": "ab6f6b24f7556e16deac864ad0b349021023ef40a374f3555ca54e37c22ccbc6",
       "profile_schema_version": "datapan.source-profile.v1",
       "adapter": {
         "name": "data-go-kr",
@@ -183,7 +181,7 @@
         "schema_policy": "documented"
       },
       "errors": {
-        "taxonomy_status": "draft",
+        "taxonomy_status": "verified",
         "status_code_fields": [
           "resultCode",
           "returnReasonCode"
@@ -216,13 +214,16 @@
       "display_name": "Bank of Korea Economic Statistics System",
       "status": "candidate",
       "source_profile": "sources/ecos.json",
-      "bytes": 3246,
-      "sha256": "6e3adf86f6db12065cde5bc0840249d602d61dba0ed692fcf902719697d5fc27",
+      "bytes": 3292,
+      "sha256": "2f4202ee24201e821666cdc7c55b724e979d94024b3f8289120e6c39c6584750",
       "profile_schema_version": "datapan.source-profile.v1",
       "adapter": {
         "name": "ecos",
-        "status": "none",
-        "capabilities": [],
+        "status": "registered",
+        "capabilities": [
+          "call",
+          "verification"
+        ],
         "hosts": [
           "ecos.bok.or.kr"
         ]
@@ -315,13 +316,16 @@
       "display_name": "Korean Statistical Information Service",
       "status": "candidate",
       "source_profile": "sources/kosis.json",
-      "bytes": 2903,
-      "sha256": "53a3d7f080592e86a52c5ee7a80ed11c7f137a2d15bed55c39025e05b5e194c0",
+      "bytes": 2949,
+      "sha256": "2fcff2cd1e5e7968473d0ecfc8a35ee90f0bafa4b5f2d82005f4ed00e3d1d344",
       "profile_schema_version": "datapan.source-profile.v1",
       "adapter": {
         "name": "kosis",
-        "status": "none",
-        "capabilities": [],
+        "status": "registered",
+        "capabilities": [
+          "call",
+          "verification"
+        ],
         "hosts": [
           "kosis.kr"
         ]
@@ -410,13 +414,16 @@
       "display_name": "Open National Assembly Information",
       "status": "candidate",
       "source_profile": "sources/open_assembly.json",
-      "bytes": 2877,
-      "sha256": "4c2a70a90c24ac770fbeab12c482f6138fd8feaa24acf4968e077ddd6e769801",
+      "bytes": 2923,
+      "sha256": "f8459b47e6642d5350377ca8f3e6608021808614602de48e2cb6090525e1aaae",
       "profile_schema_version": "datapan.source-profile.v1",
       "adapter": {
         "name": "open-assembly",
-        "status": "none",
-        "capabilities": [],
+        "status": "registered",
+        "capabilities": [
+          "call",
+          "verification"
+        ],
         "hosts": [
           "open.assembly.go.kr"
         ]

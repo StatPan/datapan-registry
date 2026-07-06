@@ -6,8 +6,11 @@
   "status": "candidate",
   "adapter": {
     "name": "kosis",
-    "status": "none",
-    "capabilities": [],
+    "status": "registered",
+    "capabilities": [
+      "verification",
+      "call"
+    ],
     "hosts": [
       "kosis.kr"
     ]

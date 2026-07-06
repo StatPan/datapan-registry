@@ -15,9 +15,9 @@
   },
   "summary": {
     "evidence_total": 0,
-    "blocking_count": 3,
-    "warning_count": 2,
-    "next_action_count": 4
+    "blocking_count": 2,
+    "warning_count": 1,
+    "next_action_count": 3
   },
   "runtime_state": {
     "evidence_status": "no_runtime_evidence",
@@ -27,8 +27,11 @@
     "skipped": 0,
     "unknown": 0,
     "verification_mode": "metadata_only",
-    "adapter_status": "none",
-    "adapter_capabilities": [],
+    "adapter_status": "registered",
+    "adapter_capabilities": [
+      "verification",
+      "call"
+    ],
     "auth_type": "api_key",
     "credential_required": true,
     "sample_param_policy": "static"
@@ -39,14 +42,6 @@
       "severity": "blocking",
       "source_profile_field": "runtime.verification_mode",
       "expected_action": "Promote ECOS from metadata-only to bounded sample-call verification after statCode, cycle, date-window, and item samples are pinned.",
-      "owner": "datapan_cli",
-      "status": "open"
-    },
-    {
-      "blocker_id": "adapter_not_registered",
-      "severity": "blocking",
-      "source_profile_field": "adapter.status",
-      "expected_action": "Register an ECOS adapter with verification and call capabilities before runtime evidence can be generated.",
       "owner": "datapan_cli",
       "status": "open"
     },
@@ -68,7 +63,6 @@
     ],
     "required_cli_capabilities": [
       "runtime candidate batch ingestion",
-      "ECOS bounded sample-call adapter",
       "source credential injection",
       "ECOS error signature extraction"
     ],
@@ -81,12 +75,6 @@
       "expected": "ECOS has source-scoped runtime evidence after the pinned candidate batch, adapter, and credential injection are available.",
       "actual": "0 runtime checks are collected for ECOS.",
       "remaining": "Use reports/ecos/runtime-candidates.json with a registered adapter and credentials to run the first bounded verification batch."
-    },
-    {
-      "warning_id": "source_runtime_adapter_not_registered",
-      "expected": "ECOS adapter has verification and call capabilities.",
-      "actual": "adapter.status is none and adapter_capabilities is empty.",
-      "remaining": "Register the ECOS adapter before evidence collection."
     }
   ]
 }

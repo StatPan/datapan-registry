@@ -9,39 +9,39 @@
       "provider": "data.go.kr",
       "evidence_total": 4774,
       "blocking_count": 1,
-      "warning_count": 1,
-      "bytes": 3175,
-      "sha256": "97eeb46379e60650f969f8f4bdaa6f533ba89d785d43f32ca80f6902a855300a"
+      "warning_count": 0,
+      "bytes": 2290,
+      "sha256": "c05dbab550f6a7ed670295451a6a458e57b58048265f3886a35b5a95c7c99675"
     },
     {
       "path": "reports/ecos/runtime-evidence-plan.json",
       "source_id": "ecos",
       "provider": "ECOS",
       "evidence_total": 0,
-      "blocking_count": 3,
-      "warning_count": 2,
-      "bytes": 3472,
-      "sha256": "8c695ae4e41557876dbe0e8fd2e27e91fe0e043bc3c0bccf4f3faef1cdee6104"
+      "blocking_count": 2,
+      "warning_count": 1,
+      "bytes": 2851,
+      "sha256": "cb5bd59022fdece129013748ea846f78bae69cfcf3811874d389b48cff0b9551"
     },
     {
       "path": "reports/kosis/runtime-evidence-plan.json",
       "source_id": "kosis",
       "provider": "KOSIS",
       "evidence_total": 0,
-      "blocking_count": 3,
-      "warning_count": 2,
-      "bytes": 3455,
-      "sha256": "f72cc37bf59eab3d19d1edc5e592254672464c972ccd33ed632dd4dec14a6606"
+      "blocking_count": 2,
+      "warning_count": 1,
+      "bytes": 2831,
+      "sha256": "04ba29733a8336286d9172803c8b81ff88c51921778da9a190f9bdd21eac9cb9"
     },
     {
       "path": "reports/open-assembly/runtime-evidence-plan.json",
       "source_id": "open_assembly",
       "provider": "open.assembly.go.kr",
       "evidence_total": 0,
-      "blocking_count": 3,
-      "warning_count": 2,
-      "bytes": 3609,
-      "sha256": "0fc576d7dc7839d9047ddb00bf5e05a3807c010dc016d8210c69219c5df2da5f"
+      "blocking_count": 2,
+      "warning_count": 1,
+      "bytes": 2952,
+      "sha256": "b9e20e7a078057a4ba320bda7de6f56c1a042d2d0134f61e44e30ffa5a724039"
     },
     {
       "path": "reports/seoul-open-data/runtime-evidence-plan.json",
@@ -62,8 +62,8 @@
     "failed": 389,
     "skipped": 1544,
     "unknown": 0,
-    "blocking_count": 12,
-    "warning_count": 8
+    "blocking_count": 9,
+    "warning_count": 4
   },
   "sources": [
     {
@@ -72,69 +72,60 @@
       "runtime_evidence_plan": "reports/data-go-kr/runtime-evidence-plan.json",
       "evidence_total": 4774,
       "blocking_count": 1,
-      "warning_count": 1,
+      "warning_count": 0,
       "blocker_ids": [
-        "credential_required",
-        "source_specific_error_taxonomy_pending"
+        "credential_required"
       ],
-      "warning_ids": [
-        "source_runtime_error_taxonomy_pending"
-      ],
-      "next_action_count": 3
+      "warning_ids": [],
+      "next_action_count": 2
     },
     {
       "source_id": "ecos",
       "provider": "ECOS",
       "runtime_evidence_plan": "reports/ecos/runtime-evidence-plan.json",
       "evidence_total": 0,
-      "blocking_count": 3,
-      "warning_count": 2,
+      "blocking_count": 2,
+      "warning_count": 1,
       "blocker_ids": [
-        "adapter_not_registered",
         "credential_required",
         "metadata_only_verification"
       ],
       "warning_ids": [
-        "non_data_runtime_evidence_not_collected",
-        "source_runtime_adapter_not_registered"
+        "non_data_runtime_evidence_not_collected"
       ],
-      "next_action_count": 4
+      "next_action_count": 3
     },
     {
       "source_id": "kosis",
       "provider": "KOSIS",
       "runtime_evidence_plan": "reports/kosis/runtime-evidence-plan.json",
       "evidence_total": 0,
-      "blocking_count": 3,
-      "warning_count": 2,
+      "blocking_count": 2,
+      "warning_count": 1,
       "blocker_ids": [
-        "adapter_not_registered",
         "credential_required",
         "metadata_only_verification"
       ],
       "warning_ids": [
-        "non_data_runtime_evidence_not_collected",
-        "source_runtime_adapter_not_registered"
+        "non_data_runtime_evidence_not_collected"
       ],
-      "next_action_count": 4
+      "next_action_count": 3
     },
     {
       "source_id": "open_assembly",
       "provider": "open.assembly.go.kr",
       "runtime_evidence_plan": "reports/open-assembly/runtime-evidence-plan.json",
       "evidence_total": 0,
-      "blocking_count": 3,
-      "warning_count": 2,
+      "blocking_count": 2,
+      "warning_count": 1,
       "blocker_ids": [
-        "adapter_not_registered",
         "credential_required",
         "metadata_only_verification"
       ],
       "warning_ids": [
-        "non_data_runtime_evidence_not_collected",
-        "source_runtime_adapter_not_registered"
+        "non_data_runtime_evidence_not_collected"
       ],
-      "next_action_count": 4
+      "next_action_count": 3
     },
     {
       "source_id": "seoul_open_data",
@@ -155,15 +146,6 @@
   ],
   "blockers_by_id": [
     {
-      "id": "adapter_not_registered",
-      "count": 3,
-      "source_ids": [
-        "ecos",
-        "kosis",
-        "open_assembly"
-      ]
-    },
-    {
       "id": "credential_required",
       "count": 5,
       "source_ids": [
@@ -183,13 +165,6 @@
         "open_assembly",
         "seoul_open_data"
       ]
-    },
-    {
-      "id": "source_specific_error_taxonomy_pending",
-      "count": 1,
-      "source_ids": [
-        "data_go_kr"
-      ]
     }
   ],
   "warnings_by_id": [
@@ -202,22 +177,6 @@
         "open_assembly",
         "seoul_open_data"
       ]
-    },
-    {
-      "id": "source_runtime_adapter_not_registered",
-      "count": 3,
-      "source_ids": [
-        "ecos",
-        "kosis",
-        "open_assembly"
-      ]
-    },
-    {
-      "id": "source_runtime_error_taxonomy_pending",
-      "count": 1,
-      "source_ids": [
-        "data_go_kr"
-      ]
     }
   ],
   "warnings": [
@@ -229,29 +188,9 @@
         "open_assembly",
         "seoul_open_data"
       ],
-      "expected": "Every checked-in non-data.go.kr source has source-scoped runtime evidence after pinned candidate batches, adapters, and credential injection are available.",
+      "expected": "Every checked-in non-data.go.kr source has source-scoped runtime evidence after pinned candidate batches, registered adapter contracts, and credential injection are available.",
       "actual": "4 of 5 checked-in sources have 0 runtime checks.",
-      "remaining": "Use the checked-in runtime-candidates.json batches, register adapters, inject credentials, and run bounded first batches."
-    },
-    {
-      "warning_id": "source_runtime_adapter_not_registered",
-      "affected_sources": [
-        "ecos",
-        "kosis",
-        "open_assembly"
-      ],
-      "expected": "Every checked-in source has verification and call adapter capabilities before runtime evidence collection.",
-      "actual": "3 of 5 checked-in sources have no registered runtime adapter.",
-      "remaining": "Register source-specific adapters for ECOS, KOSIS, and Open Assembly."
-    },
-    {
-      "warning_id": "source_runtime_error_taxonomy_pending",
-      "affected_sources": [
-        "data_go_kr"
-      ],
-      "expected": "Every checked-in source has a verified source-specific runtime error taxonomy before its runtime evidence loop is complete.",
-      "actual": "1 of 5 checked-in sources still have source runtime taxonomy work open.",
-      "remaining": "Promote the data.go.kr error taxonomy from draft to verified after gateway and provider-specific runtime reasons are classified."
+      "remaining": "Use the checked-in runtime-candidates.json batches, inject credentials, and run bounded first batches through the registered source adapter contracts."
     }
   ]
 }
