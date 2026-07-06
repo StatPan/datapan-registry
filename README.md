@@ -118,6 +118,10 @@ plan inputs, blocker IDs, warning IDs, and zero-evidence source state that
 The release-wide `reports/registry-impact-plan.json` is manifest-bound as
 well, preserving downstream action hints and no-action boundaries as
 checksum-verifiable release evidence.
+Top-level schema-backed reports are guarded by
+`scripts/validate-release-report-artifacts.py`, which requires release reports
+to be manifest-bound unless they are explicit release verification/readiness
+receipts generated from the manifest.
 
 The current snapshot was generated from `datapan-cli` and includes:
 
@@ -289,6 +293,8 @@ A release is publishable when:
 - source runtime evidence blockers and warnings are manifest-bound release
   evidence;
 - downstream impact action hints are manifest-bound release evidence;
+- top-level schema-backed release reports are either manifest-bound or explicit
+  manifest-derived receipts;
 - registry size and LFS handling are explicit;
 - verification evidence is attached or documented;
 - generated artifacts do not contain credentials.

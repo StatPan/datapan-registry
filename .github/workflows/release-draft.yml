@@ -99,6 +99,7 @@ jobs:
             scripts/validate-error-action-routing-rollups.py \
             scripts/validate-install-smoke-summaries.py \
             scripts/validate-release-consumer-compatibility.py \
+            scripts/validate-release-report-artifacts.py \
             scripts/validate-release-health-rollups.py \
             scripts/validate-source-contract-rollups.py \
             scripts/validate-registry-shards.py
@@ -116,6 +117,7 @@ jobs:
           python scripts/validate-impact-plans.py
           python scripts/validate-source-reference-drift.py
           python scripts/validate-source-report-inventory.py
+          python scripts/validate-release-report-artifacts.py
           python scripts/validate-source-runtime-candidates.py
           python scripts/validate-source-runtime-evidence-plans.py
           python scripts/validate-source-runtime-evidence-rollup.py
