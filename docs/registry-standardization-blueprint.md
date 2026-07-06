@@ -128,7 +128,9 @@ Current strengths:
   artifacts, and Gira #85 adds the source report inventory schema as the
   `29`th checked-in schema artifact. Gira #235 adds
   `datapan.registry-shards.v1` as the `30`th checked-in schema artifact for
-  shard-aware registry inventories while keeping the compatibility registry
+  shard-aware registry inventories, and Gira #274 adds
+  `datapan.install-smoke-summary.v1` as the `31`st checked-in schema artifact
+  for release-health install evidence while keeping the compatibility registry
   path intact.
 - `reports/registry-impact-plan.json` now carries a
   `registry:schema-release-surface` impact entry, and
@@ -603,7 +605,7 @@ Current gaps:
   validated against source profiles.
 - The registry release surface now includes every checked-in registry schema,
   and the current datapan-cli release readiness gate passes with
-  `schema_set_complete` reporting `expected=20` and `actual=30`. Gira #79 keeps
+  `schema_set_complete` reporting `expected=20` and `actual=31`. Gira #79 keeps
   the broader CLI-side schema-generator follow-up explicit in the impact plan
   instead of relying on a remembered PR note.
 

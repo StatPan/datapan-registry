@@ -5,7 +5,7 @@
   "provider": "data.go.kr",
   "source_registry": "data/data-go-kr.registry.json",
   "output_dir": ".",
-  "artifact_count": 49,
+  "artifact_count": 50,
   "artifacts": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -188,11 +188,17 @@
       "sha256": "4fd5e6cc4554ff610bdf285506a1c60d3f2805e022b37d5a531025fc1c6986ca"
     },
     {
+      "path": "schemas/datapan.install-smoke-summary.v1.schema.json",
+      "kind": "schema",
+      "bytes": 2746,
+      "sha256": "20abc86e79fb527f1d5c9cab15f68d6d68444e492546404c51aee624c5e98428"
+    },
+    {
       "path": "schemas/index.json",
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
-      "bytes": 11426,
-      "sha256": "643fbaf034232ce726063896786be325e9426f83fb1f9f6283c9ff20c3dd8748"
+      "bytes": 11818,
+      "sha256": "f4bb365cad83d72c03c40894b2a85097e458952b94181bce3940650d550ef580"
     },
     {
       "path": "data/data-go-kr.registry.json",
