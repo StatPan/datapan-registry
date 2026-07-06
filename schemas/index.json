@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 37,
+  "count": 38,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -336,6 +336,15 @@
       "version": "v1",
       "bytes": 4061,
       "sha256": "ffe74a26fda304d79bd810ef7f4992b3990f868fd0e27d62b235bdfefd0bc4ed"
+    },
+    {
+      "path": "schemas/datapan.institution-runtime-plan.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.institution-runtime-plan.v1.schema.json",
+      "title": "Datapan Institution Runtime Plan v1",
+      "contract": "institution-runtime-plan",
+      "version": "v1",
+      "bytes": 6311,
+      "sha256": "7fd591ee6e0607ed8ad0791a32180fd812716766af3cb24261cc78296ac99984"
     }
   ]
 }
