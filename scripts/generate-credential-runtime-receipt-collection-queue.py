@@ -25,6 +25,7 @@ DEFAULT_OUTPUT = pathlib.Path("reports/credential-runtime-receipt-collection-que
 DEFAULT_RECEIPT_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-receipt.v1.schema.json")
 SCHEMA_VERSION = "datapan.credential-runtime-receipt-collection-queue.v1"
 QUEUE_TICKET = 375
+PROMOTION_SCRIPT = "scripts/promote-credential-runtime-receipt.py"
 
 
 STATE_DEFINITIONS = [
@@ -151,6 +152,12 @@ def source_queue_entry(
             f"{staged_receipt_path}"
         ),
         "reviewed_receipt_validation_command": "python3 scripts/validate-credential-runtime-receipts.py",
+        "reviewed_receipt_promotion_command": (
+            "python3 scripts/promote-credential-runtime-receipt.py "
+            f"{staged_receipt_path} --state <reviewed_accepted|reviewed_rejected> "
+            "--decision <allows_manual_review_reduction|keeps_manual_review_boundary> "
+            "--reviewer <reviewer> --reason <reason>"
+        ),
         "review_required": True,
         "promotion_gate": string_value(
             bounded_path.get("promotion_gate"),
@@ -254,6 +261,14 @@ def build_report(policy: dict[str, Any]) -> dict[str, Any]:
             "queue_check_command": "python3 scripts/generate-credential-runtime-receipt-collection-queue.py --check",
             "policy_check_command": operator_contract.get("policy_check_command"),
             "receipt_validation_command": operator_contract.get("receipt_validation_command"),
+            "receipt_promotion_command_template": (
+                "python3 scripts/promote-credential-runtime-receipt.py "
+                ".datapan/runtime-evidence/<source>-credentialed-receipt.json "
+                "--state <reviewed_accepted|reviewed_rejected> "
+                "--decision <allows_manual_review_reduction|keeps_manual_review_boundary> "
+                "--reviewer <reviewer> --reason <reason>"
+            ),
+            "receipt_promotion_script": PROMOTION_SCRIPT,
             "staged_receipt_validation_command": operator_contract.get("staged_receipt_validation_command"),
             "staged_receipt_glob": operator_contract.get("staged_receipt_glob"),
             "reviewed_receipt_glob": operator_contract.get("reviewed_receipt_glob"),

@@ -85,6 +85,7 @@ jobs:
           python scripts/generate-credential-runtime-evidence-policy.py --check
           python scripts/validate-credential-runtime-receipts.py
           python scripts/generate-credential-runtime-receipt-collection-queue.py --check
+          python scripts/promote-credential-runtime-receipt.py --self-test
           python scripts/generate-release-consumer-compatibility.py --check
           python scripts/validate-release-consumer-compatibility.py
           python -m py_compile scripts/error_action_routing_rollup.py
@@ -95,6 +96,7 @@ jobs:
           python -m py_compile scripts/generate-release-assembly-receipt.py
           python -m py_compile scripts/generate-credential-runtime-evidence-policy.py
           python -m py_compile scripts/generate-credential-runtime-receipt-collection-queue.py
+          python -m py_compile scripts/promote-credential-runtime-receipt.py
           python -m py_compile scripts/validate-credential-runtime-receipts.py
           python -m py_compile scripts/generate-source-runtime-remediation-map.py
           python -m py_compile scripts/source_contract_rollup.py
