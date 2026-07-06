@@ -1,0 +1,238 @@
+{
+  "schema_version": "datapan.release-ledger-goal-completion-audit.v1",
+  "goal_issue": 344,
+  "audit_ticket": 357,
+  "audited_at": "2026-07-07T00:00:00+09:00",
+  "goal_status": "not_complete",
+  "completion_guardrail": "Child tickets and merged PRs are progress evidence, not goal completion evidence by themselves.",
+  "summary": {
+    "criteria_total": 6,
+    "criteria_proven": 4,
+    "criteria_partial": 1,
+    "criteria_gap": 1,
+    "decision": "leave_goal_open",
+    "reason": "The release ledger has strong validation coverage, but the full release assembly path is still distributed across release cadence documentation, CI workflows, and individual generator/check scripts. A single operator-facing assembly receipt or runner is still needed before #344 can be closed."
+  },
+  "current_state_evidence": {
+    "manifest": {
+      "path": "manifest.json",
+      "artifact_count": 70,
+      "artifact_kinds": 27,
+      "schema_artifacts": 44
+    },
+    "schema_index": {
+      "path": "schemas/index.json",
+      "schema_count": 44
+    },
+    "release_readiness": {
+      "path": "reports/latest-release-readiness.json",
+      "ready": true,
+      "gates_total": 23,
+      "passed": 23,
+      "failed": 0,
+      "registry_specs": 12060
+    },
+    "source_report_inventory": {
+      "path": "reports/source-report-inventory.json",
+      "sources": 5,
+      "report_total": 151,
+      "schema_backed_reports": 26,
+      "schema_indexed_reports": 26,
+      "schema_missing_reports": 0,
+      "source_report_coverage_percent": 32.3
+    },
+    "source_runtime": {
+      "path": "reports/source-runtime-evidence-rollup.json",
+      "sources": 5,
+      "sources_without_evidence": 4,
+      "evidence_total": 4774,
+      "blocking_count": 12,
+      "warning_count": 8
+    },
+    "downstream_impact": {
+      "path": "reports/registry-impact-plan.json",
+      "changes": 5,
+      "requires_manual_review": 2
+    },
+    "consumer_compatibility": {
+      "path": "reports/release-consumer-compatibility.json",
+      "consumer_count": 7,
+      "proven_consumers": 2,
+      "blocked_consumers": 1,
+      "manual_review_required": true,
+      "runtime_blocking_count": 12,
+      "runtime_warning_count": 8
+    }
+  },
+  "criteria": [
+    {
+      "id": "deterministic_release_assembly_path",
+      "goal_acceptance": "Release assembly has one documented, deterministic path that regenerates and checks registry, schema, report, shard, compatibility, impact, and evidence artifacts.",
+      "verdict": "gap",
+      "evidence": [
+        {
+          "path": "docs/release-cadence.md",
+          "lines": "18-199",
+          "finding": "Documents draft, verify, recommended evidence regeneration, schema sync, manifest sync, and ledger ownership checks."
+        },
+        {
+          "path": ".github/workflows/verify-release.yml",
+          "lines": "47-167",
+          "finding": "CI checks policy artifacts, release verify/readiness, shard archive evidence, release zip packaging, and shard consistency."
+        },
+        {
+          "path": ".github/workflows/release-draft.yml",
+          "lines": "78-217",
+          "finding": "Manual workflow can verify or draft a selected manifest and produce release zip plus optional shard archive evidence."
+        }
+      ],
+      "gap": "The path is not yet a single checked-in operator command or receipt that proves all generation/check steps were run in order from the current checkout.",
+      "next_action": "Create a bounded child ticket to consolidate release assembly into an operator-facing runner or receipt."
+    },
+    {
+      "id": "ci_matches_local_invariants",
+      "goal_acceptance": "CI gates cover the same invariants that a release operator depends on locally; no manifest-bound artifact requires hand-maintained bytes, sha256, schema URI, or derived report metadata.",
+      "verdict": "partial",
+      "evidence": [
+        {
+          "path": ".github/workflows/verify-release.yml",
+          "lines": "47-100",
+          "finding": "CI runs schema sync check, manifest sync check, release-ledger ownership validation, report validators, source runtime checks, impact checks, and consumer compatibility checks."
+        },
+        {
+          "path": "scripts/sync-release-schema-artifacts.py",
+          "finding": "Owns schema index and schema artifact digest synchronization."
+        },
+        {
+          "path": "scripts/sync-release-manifest-artifacts.py",
+          "finding": "Owns non-schema manifest artifact bytes and sha256 synchronization."
+        },
+        {
+          "path": "docs/release-ledger-ownership.json",
+          "finding": "Maps every manifest artifact kind to owner, generator, checker, package relationship, schema relationship, and exemption boundary."
+        }
+      ],
+      "gap": "CI and local commands are aligned for current validators, but the repo still lacks a single local release assembly receipt that records the exact operator run and command outcomes.",
+      "next_action": "Carry this into the release assembly receipt child instead of closing #344."
+    },
+    {
+      "id": "mutual_artifact_consistency",
+      "goal_acceptance": "The manifest, schema index, source report inventory, release package, shard package, and consumer compatibility report are mutually consistent and independently checkable.",
+      "verdict": "proven",
+      "evidence": [
+        {
+          "path": "manifest.json",
+          "finding": "Contains 70 manifest-bound artifacts across 27 artifact kinds, including 44 schema artifacts."
+        },
+        {
+          "path": "schemas/index.json",
+          "finding": "Indexes 44 schema contracts and checks schema artifact bytes and sha256."
+        },
+        {
+          "path": "reports/source-report-inventory.json",
+          "finding": "Inventories 151 source-scoped reports and confirms all 26 schema-backed reports are schema-indexed."
+        },
+        {
+          "path": "reports/release-consumer-compatibility.json",
+          "finding": "Binds source contracts, source runtime evidence, error/action routing, downstream impact, source reference drift, and source report inventory as manifest evidence contracts."
+        },
+        {
+          "path": "scripts/package-registry-release.py",
+          "finding": "Checks release zip entries and optional shard archive source registry identity against the selected manifest."
+        },
+        {
+          "path": "scripts/package-registry-shards.py",
+          "finding": "Packages and checks registry shard archives from a generated shard inventory."
+        }
+      ],
+      "next_action": "Keep existing checks in CI and release cadence."
+    },
+    {
+      "id": "source_level_readiness_auditable",
+      "goal_acceptance": "Source runtime evidence and report inventories make source-level readiness auditable without listing every nested report in the top-level manifest.",
+      "verdict": "proven",
+      "evidence": [
+        {
+          "path": "reports/source-runtime-evidence-rollup.json",
+          "finding": "Summarizes five sources, 4774 evidence items, 12 blockers, 8 warnings, and four sources without runtime evidence."
+        },
+        {
+          "path": "reports/source-report-inventory.json",
+          "finding": "Records source-scoped report paths, bytes, sha256, schema URIs, and schema-index status without requiring every nested report in the top-level manifest."
+        },
+        {
+          "path": "scripts/validate-source-runtime-evidence-rollup.py",
+          "finding": "Validates source runtime rollup data and generated markdown readiness view."
+        },
+        {
+          "path": "scripts/validate-source-report-inventory.py",
+          "finding": "Validates source report inventory coverage and schema-index linkage."
+        }
+      ],
+      "next_action": "Keep expanding source runtime evidence through separate runtime evidence tickets; do not block this ledger-audit criterion on full provider coverage."
+    },
+    {
+      "id": "downstream_compatibility_connected",
+      "goal_acceptance": "Downstream impact and consumer compatibility are connected to release evidence strongly enough to answer whether a release is safe to consume, blocked, or needs manual review.",
+      "verdict": "proven",
+      "evidence": [
+        {
+          "path": "reports/registry-impact-plan.json",
+          "finding": "Records five release changes, target-specific actions, and two manual-review changes, with release evidence inputs for error/action routing and source report inventory."
+        },
+        {
+          "path": "reports/release-consumer-compatibility.json",
+          "finding": "Reports seven consumers, two proven consumers, one blocked consumer, canonical registry requirement, optional shard assets, and runtime manual-review evidence."
+        },
+        {
+          "path": "scripts/validate-impact-plans.py",
+          "finding": "Validates registry impact rollup inputs and the downstream impact contract in consumer compatibility evidence."
+        },
+        {
+          "path": "scripts/validate-release-consumer-compatibility.py",
+          "finding": "Fails if source runtime blockers remain but runtime manual-review evidence, error/action routing evidence, or downstream manual-review impact evidence disappears."
+        }
+      ],
+      "next_action": "Keep compatibility evidence current whenever source runtime blockers or downstream contracts change."
+    },
+    {
+      "id": "completion_audit_exists",
+      "goal_acceptance": "A requirement-by-requirement completion audit proves the above from current files, commands, CI state, and linked PR evidence.",
+      "verdict": "proven_for_current_state",
+      "evidence": [
+        {
+          "path": "docs/release-ledger-goal-completion-audit.json",
+          "finding": "This audit maps every #344 acceptance criterion to evidence, verdict, gap, and next action."
+        },
+        {
+          "path": "scripts/validate-release-ledger-goal-audit.py",
+          "finding": "Validates the audit structure, evidence paths, criteria coverage, and the rule that a non-complete goal must keep follow-up work."
+        }
+      ],
+      "next_action": "Use this audit to keep #344 open until the release assembly gap is closed and re-audited."
+    }
+  ],
+  "local_validation_commands": [
+    "python3 scripts/validate-release-ledger-goal-audit.py",
+    "python3 scripts/sync-release-schema-artifacts.py --check",
+    "python3 scripts/sync-release-manifest-artifacts.py --check",
+    "python3 scripts/validate-release-ledger-ownership.py",
+    "python3 scripts/validate-release-report-artifacts.py",
+    "python3 scripts/validate-release-receipt-boundary.py",
+    "python3 scripts/generate-impact-plan-rollup.py --check",
+    "python3 scripts/validate-impact-plans.py",
+    "python3 scripts/validate-source-report-inventory.py",
+    "python3 scripts/validate-source-runtime-evidence-rollup.py",
+    "python3 scripts/generate-release-consumer-compatibility.py --check",
+    "python3 scripts/validate-release-consumer-compatibility.py",
+    "python3 scripts/package-registry-release.py --manifest manifest.json --output .datapan/ci/datapan-registry-snapshot-test.zip",
+    "python3 scripts/package-registry-release.py --check .datapan/ci/datapan-registry-snapshot-test.zip"
+  ],
+  "follow_up_children": [
+    {
+      "issue": 358,
+      "title": "Consolidate release ledger assembly receipt",
+      "reason": "Close the remaining deterministic release assembly gap by producing one operator-facing command or receipt that records the full generation/check sequence and outcomes from the current checkout."
+    }
+  ]
+}
