@@ -3,8 +3,8 @@
   "root": "../datapan-registry",
   "schema_version": "datapan.release-verification.v1",
   "manifest_schema_version": "datapan.release-manifest.v1",
-  "artifact_count": 58,
-  "checked": 58,
+  "artifact_count": 59,
+  "checked": 59,
   "failed": 0,
   "ok": true,
   "results": [
@@ -111,10 +111,10 @@
       "path": "schemas/datapan.release-manifest.v1.schema.json",
       "kind": "schema",
       "status": "verified",
-      "expected_bytes": 2541,
-      "actual_bytes": 2541,
-      "expected_sha256": "cf7e1706cad9e2d29b0170cbb8e8af7ddc37183f6c1b5bc1e59a0f3d51e58cf7",
-      "actual_sha256": "cf7e1706cad9e2d29b0170cbb8e8af7ddc37183f6c1b5bc1e59a0f3d51e58cf7"
+      "expected_bytes": 2587,
+      "actual_bytes": 2587,
+      "expected_sha256": "d939ee6db0190bc097c7d29da2863d61776afd8b402824f91cfa1c4003857558",
+      "actual_sha256": "d939ee6db0190bc097c7d29da2863d61776afd8b402824f91cfa1c4003857558"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -338,8 +338,8 @@
       "status": "verified",
       "expected_bytes": 13839,
       "actual_bytes": 13839,
-      "expected_sha256": "2de181dcd677dd4fa7efd06337e90612145d888982ecb5e46e32abcd06976f52",
-      "actual_sha256": "2de181dcd677dd4fa7efd06337e90612145d888982ecb5e46e32abcd06976f52"
+      "expected_sha256": "945df8cae39cbcff3723e70a38a7beb63bc083d372b873d2af89112a2a546aba",
+      "actual_sha256": "945df8cae39cbcff3723e70a38a7beb63bc083d372b873d2af89112a2a546aba"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -403,6 +403,15 @@
       "actual_bytes": 15831,
       "expected_sha256": "06d569e4fdde6dddf07aff63ab999350e4b81c09e92119aa13a165a3556b8628",
       "actual_sha256": "06d569e4fdde6dddf07aff63ab999350e4b81c09e92119aa13a165a3556b8628"
+    },
+    {
+      "path": "reports/source-runtime-evidence-rollup.json",
+      "kind": "source_runtime_evidence_rollup",
+      "status": "verified",
+      "expected_bytes": 4702,
+      "actual_bytes": 4702,
+      "expected_sha256": "1ae252fffd56782f979739cb51f00bf7b45a398ef82dc630cc40c978b4f66ae0",
+      "actual_sha256": "1ae252fffd56782f979739cb51f00bf7b45a398ef82dc630cc40c978b4f66ae0"
     },
     {
       "path": "reports/dependencies.json",

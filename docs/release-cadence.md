@@ -110,6 +110,10 @@ check. That workflow:
   manifest-bound upstream contract rollup that records checked-in source
   profile checksums plus provider status, auth, request, response, runtime, and
   promotion constraints;
+- validates `reports/source-runtime-evidence-rollup.json` and its generated
+  `docs/source-runtime-readiness.md` view, with the rollup manifest-bound so
+  source runtime plan inputs, blockers, warnings, and zero-evidence sources are
+  checksum-verifiable release evidence;
 - uploads current-checkout install and doctor JSON plus latest-public-release
   install and doctor JSON reports as release-health evidence.
 
