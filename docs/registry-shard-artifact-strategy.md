@@ -117,6 +117,49 @@ Until that verifier exists, implementation tickets should either keep shards
 outside the release gate or list shard files directly in the generated
 manifest.
 
+## Publication Policy
+
+The first shard publication mode is a GitHub Release asset, not checked-in Git
+files. The canonical LFS registry remains the checked-in compatibility artifact.
+
+Measured on the current `data.go.kr` registry:
+
+| Artifact | Size |
+| --- | ---: |
+| canonical `data/data-go-kr.registry.json` | 137,735,169 bytes |
+| generated institution shard JSON files | 137,736,399 bytes |
+| generated shard directory on disk | 137,937,097 bytes |
+| generated shard tar.gz archive | 8,416,413 bytes |
+| canonical registry gzip archive | 9,415,820 bytes |
+
+These measurements rule out committing shard JSON files as ordinary Git blobs:
+that would add another registry-sized payload to every checkout. Git LFS shards
+would avoid normal Git blobs, but they would still multiply LFS pointer churn
+and require a policy for hundreds of generated files. A compressed GitHub
+Release asset gives consumers a smaller optional download without increasing
+default clone or pull cost.
+
+During the compatibility period:
+
+- `data/data-go-kr.registry.json` remains the checked-in canonical registry.
+- shard files are generated and validated from the canonical registry.
+- `data-go-kr-shards.tar.gz` is the intended first release asset name for the
+  generated `data/data-go-kr/shards/` tree.
+- `registry-shards.json` inside that archive is the shard checksum inventory.
+- root `manifest.json` must not require shard files until release verification
+  can validate manifest-bound shard inventories and downstream consumers support
+  monolith fallback.
+- shard publication is blocked on the consumer fallback work tracked by #245.
+
+Before publishing shard archives in a release, CI must prove:
+
+- full `Verify registry release` still passes with the canonical LFS registry;
+- `scripts/generate-registry-shards.py` can generate the shard tree from the
+  materialized canonical registry;
+- `scripts/validate-registry-shards.py` passes on the generated inventory;
+- release install and doctor checks remain green through the canonical path;
+- downstream consumers have a shard-preferred, monolith-fallback path.
+
 ## Recomposition Invariant
 
 Shards are a derived representation of the canonical registry. Validation must
