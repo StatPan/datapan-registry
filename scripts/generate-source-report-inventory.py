@@ -13,6 +13,7 @@ from typing import Any
 SCHEMA_VERSION = "datapan.source-report-inventory.v1"
 SOURCE_PROFILES_GLOB = "sources/*.json"
 REPORTS_ROOT = pathlib.Path("reports")
+SCHEMA_INDEX = pathlib.Path("schemas/index.json")
 DEFAULT_OUTPUT = REPORTS_ROOT / "source-report-inventory.json"
 
 RECOMMENDED_REPORTS = [
@@ -64,7 +65,34 @@ def report_dir_name(source_id: str) -> str:
     return source_id.replace("_", "-")
 
 
-def report_entry(path: pathlib.Path) -> dict[str, Any]:
+def schema_uri(schema_version: str) -> str:
+    return f"https://schemas.datapan.dev/{schema_version}.schema.json"
+
+
+def schema_path(schema_version: str) -> str:
+    return f"schemas/{schema_version}.schema.json"
+
+
+def indexed_schema_ids(schema_index_path: pathlib.Path = SCHEMA_INDEX) -> set[str]:
+    schema_index = as_dict(load_json(schema_index_path), str(schema_index_path))
+    schemas = schema_index.get("schemas")
+    if not isinstance(schemas, list):
+        raise ValueError("schemas/index.json schemas must be an array")
+    ids: set[str] = set()
+    for item in schemas:
+        if not isinstance(item, dict):
+            continue
+        schema_id = item.get("id")
+        if isinstance(schema_id, str) and schema_id:
+            ids.add(schema_id)
+        path = item.get("path")
+        if isinstance(path, str) and path.startswith("schemas/") and path.endswith(".schema.json"):
+            version = path.removeprefix("schemas/").removesuffix(".schema.json")
+            ids.add(schema_uri(version))
+    return ids
+
+
+def report_entry(path: pathlib.Path, schema_ids: set[str]) -> dict[str, Any]:
     data = path.read_bytes()
     entry: dict[str, Any] = {
         "name": path.name,
@@ -77,7 +105,12 @@ def report_entry(path: pathlib.Path) -> dict[str, Any]:
     except json.JSONDecodeError:
         return entry
     if isinstance(payload, dict) and isinstance(payload.get("schema_version"), str):
-        entry["schema_version"] = payload["schema_version"]
+        schema_version = payload["schema_version"]
+        expected_schema_id = schema_uri(schema_version)
+        entry["schema_version"] = schema_version
+        entry["expected_schema_id"] = expected_schema_id
+        entry["expected_schema_path"] = schema_path(schema_version)
+        entry["schema_indexed"] = expected_schema_id in schema_ids
     return entry
 
 
@@ -105,11 +138,14 @@ def source_profiles() -> list[tuple[pathlib.Path, dict[str, Any]]]:
 
 def build_report() -> dict[str, Any]:
     recommended = sorted(RECOMMENDED_REPORTS)
+    schema_ids = indexed_schema_ids()
     sources: list[dict[str, Any]] = []
     all_report_paths: list[pathlib.Path] = []
     present_recommended_total = 0
     missing_recommended_total = 0
     source_report_dirs = 0
+    schema_backed_total = 0
+    schema_indexed_total = 0
 
     for profile_path, profile in source_profiles():
         source_id = str(profile.get("source_id"))
@@ -120,6 +156,9 @@ def build_report() -> dict[str, Any]:
             source_report_dirs += 1
 
         present_names = sorted(path.name for path in report_paths)
+        present_reports = [report_entry(path, schema_ids) for path in report_paths]
+        schema_backed_total += sum(1 for entry in present_reports if "schema_version" in entry)
+        schema_indexed_total += sum(1 for entry in present_reports if entry.get("schema_indexed") is True)
         present_recommended = [name for name in recommended if name in present_names]
         missing_recommended = [name for name in recommended if name not in present_names]
         extra_reports = [name for name in present_names if name not in recommended]
@@ -135,7 +174,7 @@ def build_report() -> dict[str, Any]:
                 "report_dir": portable_path(report_dir),
                 "report_dir_exists": report_dir.exists(),
                 "report_count": len(report_paths),
-                "present_reports": [report_entry(path) for path in report_paths],
+                "present_reports": present_reports,
                 "present_recommended_reports": present_recommended,
                 "missing_recommended_reports": missing_recommended,
                 "extra_reports": extra_reports,
@@ -151,6 +190,7 @@ def build_report() -> dict[str, Any]:
         "generation_inputs": {
             "source_profiles_glob": SOURCE_PROFILES_GLOB,
             "reports_root": portable_path(REPORTS_ROOT),
+            "schema_index": portable_path(SCHEMA_INDEX),
         },
         "recommended_reports": recommended,
         "summary": {
@@ -161,6 +201,9 @@ def build_report() -> dict[str, Any]:
             "present_recommended_reports": present_recommended_total,
             "missing_recommended_reports": missing_recommended_total,
             "source_report_coverage_percent": percent(present_recommended_total, recommended_slots),
+            "schema_backed_reports": schema_backed_total,
+            "schema_indexed_reports": schema_indexed_total,
+            "schema_missing_reports": schema_backed_total - schema_indexed_total,
         },
         "sources": sources,
     }

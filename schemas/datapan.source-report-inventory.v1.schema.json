@@ -29,13 +29,17 @@
     "generation_inputs": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["source_profiles_glob", "reports_root"],
+      "required": ["source_profiles_glob", "reports_root", "schema_index"],
       "properties": {
         "source_profiles_glob": {
           "type": "string",
           "minLength": 1
         },
         "reports_root": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_index": {
           "type": "string",
           "minLength": 1
         }
@@ -85,7 +89,10 @@
         "recommended_report_slots",
         "present_recommended_reports",
         "missing_recommended_reports",
-        "source_report_coverage_percent"
+        "source_report_coverage_percent",
+        "schema_backed_reports",
+        "schema_indexed_reports",
+        "schema_missing_reports"
       ],
       "properties": {
         "sources": {
@@ -108,6 +115,15 @@
         },
         "source_report_coverage_percent": {
           "$ref": "#/$defs/percent"
+        },
+        "schema_backed_reports": {
+          "$ref": "#/$defs/count"
+        },
+        "schema_indexed_reports": {
+          "$ref": "#/$defs/count"
+        },
+        "schema_missing_reports": {
+          "$ref": "#/$defs/count"
         }
       }
     },
@@ -213,8 +229,29 @@
         "schema_version": {
           "type": "string",
           "minLength": 1
+        },
+        "expected_schema_id": {
+          "type": "string",
+          "format": "uri"
+        },
+        "expected_schema_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_indexed": {
+          "type": "boolean"
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["schema_version"]
+          },
+          "then": {
+            "required": ["expected_schema_id", "expected_schema_path", "schema_indexed"]
+          }
+        }
+      ]
     }
   }
 }

@@ -4,7 +4,8 @@
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
-    "reports_root": "reports"
+    "reports_root": "reports",
+    "schema_index": "schemas/index.json"
   },
   "recommended_reports": [
     "adapter-targets.json",
@@ -28,7 +29,10 @@
     "recommended_report_slots": 65,
     "present_recommended_reports": 8,
     "missing_recommended_reports": 57,
-    "source_report_coverage_percent": 12.3
+    "source_report_coverage_percent": 12.3,
+    "schema_backed_reports": 24,
+    "schema_indexed_reports": 16,
+    "schema_missing_reports": 8
   },
   "sources": [
     {
@@ -117,7 +121,10 @@
           "path": "reports/data-go-kr/coverage-backlog.json",
           "bytes": 11314718,
           "sha256": "d825423b778ea7be7c356949f26150861b9739bc87e87ce5e26e4f753d2e0833",
-          "schema_version": "datapan.coverage-backlog.v1"
+          "schema_version": "datapan.coverage-backlog.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.coverage-backlog.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.coverage-backlog.v1.schema.json",
+          "schema_indexed": false
         },
         {
           "name": "culture-ministry-verification-summary.json",
@@ -208,21 +215,30 @@
           "path": "reports/data-go-kr/error-action-catalog.json",
           "bytes": 5687,
           "sha256": "6ae96800d42f13237439def8adea75fb5c9e0bd97ae470b5f93254adc032dcf8",
-          "schema_version": "datapan.error-action-catalog.v1"
+          "schema_version": "datapan.error-action-catalog.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.error-action-catalog.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.error-action-catalog.v1.schema.json",
+          "schema_indexed": true
         },
         {
           "name": "external-adapter-backlog.json",
           "path": "reports/data-go-kr/external-adapter-backlog.json",
           "bytes": 22958,
           "sha256": "d997bdcb4e51b1e82b31dc1e0719bc72b5ba5fb1c6cbdc24df64b97a2c2886f6",
-          "schema_version": "datapan.external-adapter-backlog.v1"
+          "schema_version": "datapan.external-adapter-backlog.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.external-adapter-backlog.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.external-adapter-backlog.v1.schema.json",
+          "schema_indexed": false
         },
         {
           "name": "external-coverage-summary.json",
           "path": "reports/data-go-kr/external-coverage-summary.json",
           "bytes": 3952,
           "sha256": "5f0ae73d4c85ce510349af5f3e4effb62c2e86dcc0a60a13ce920ef7bdd524e9",
-          "schema_version": "datapan.external-coverage.v1"
+          "schema_version": "datapan.external-coverage.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.external-coverage.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.external-coverage.v1.schema.json",
+          "schema_indexed": true
         },
         {
           "name": "fss-verification-summary.json",
@@ -313,14 +329,20 @@
           "path": "reports/data-go-kr/institution-api-overview.json",
           "bytes": 412950,
           "sha256": "516dc98c6e4ccb485256a54a1d23c173162a25800e5b685415010dceccc66c5d",
-          "schema_version": "datapan.institution-api-overview.v1"
+          "schema_version": "datapan.institution-api-overview.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.institution-api-overview.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.institution-api-overview.v1.schema.json",
+          "schema_indexed": false
         },
         {
           "name": "institution-runtime-plan.json",
           "path": "reports/data-go-kr/institution-runtime-plan.json",
           "bytes": 10521,
           "sha256": "0ff8344ccf858a32a494a86586a1aca6def591ea7027bc5e1f0424dd3ea15096",
-          "schema_version": "datapan.institution-runtime-plan.v1"
+          "schema_version": "datapan.institution-runtime-plan.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.institution-runtime-plan.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.institution-runtime-plan.v1.schema.json",
+          "schema_indexed": false
         },
         {
           "name": "keco-verification-summary.json",
@@ -483,7 +505,10 @@
           "path": "reports/data-go-kr/link-detail-registry-patches.json",
           "bytes": 7622,
           "sha256": "de82a84d4d8d2b08ea0535b35201761a5708e2034bac5f7c8526d38ff24903bb",
-          "schema_version": "datapan.link-detail-registry-patches.v1"
+          "schema_version": "datapan.link-detail-registry-patches.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.link-detail-registry-patches.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.link-detail-registry-patches.v1.schema.json",
+          "schema_indexed": false
         },
         {
           "name": "mafra-ministry-verification-summary.json",
@@ -634,7 +659,10 @@
           "path": "reports/data-go-kr/operation-materialization-plan.json",
           "bytes": 165207,
           "sha256": "8f6da58a56d9027238ff50979cd5f04fc654faaad65613c13f9ae4e7a25f414d",
-          "schema_version": "datapan.operation-materialization-plan.v1"
+          "schema_version": "datapan.operation-materialization-plan.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.operation-materialization-plan.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.operation-materialization-plan.v1.schema.json",
+          "schema_indexed": false
         },
         {
           "name": "police-verification-summary.json",
@@ -665,28 +693,40 @@
           "path": "reports/data-go-kr/registry-impact-plan.json",
           "bytes": 8327,
           "sha256": "ac7a86d0a347f3c35b5283b641f8bc84eddaf1f349c257edaf4d725d4d818772",
-          "schema_version": "datapan.registry-impact-plan.v1"
+          "schema_version": "datapan.registry-impact-plan.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.registry-impact-plan.v1.schema.json",
+          "schema_indexed": true
         },
         {
           "name": "runtime-evidence-growth.json",
           "path": "reports/data-go-kr/runtime-evidence-growth.json",
           "bytes": 7293,
           "sha256": "01c3df84af818d9b0fef059ac93807e0cd6c4cf8bea8639f11cc04c3bf936e5b",
-          "schema_version": "datapan.runtime-evidence-growth.v1"
+          "schema_version": "datapan.runtime-evidence-growth.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.runtime-evidence-growth.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.runtime-evidence-growth.v1.schema.json",
+          "schema_indexed": true
         },
         {
           "name": "safetydata-operation-candidates.json",
           "path": "reports/data-go-kr/safetydata-operation-candidates.json",
           "bytes": 751187,
           "sha256": "9ff38223c6c9c2151f133eae949650b6038e1aacc4ddc45924685ca9aa1971c1",
-          "schema_version": "datapan.safetydata-operation-candidates.v1"
+          "schema_version": "datapan.safetydata-operation-candidates.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.safetydata-operation-candidates.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.safetydata-operation-candidates.v1.schema.json",
+          "schema_indexed": false
         },
         {
           "name": "safetydata-registry-patches.json",
           "path": "reports/data-go-kr/safetydata-registry-patches.json",
           "bytes": 244717,
           "sha256": "c8c48f84d5d35b802012139960eb36eaa8475608da8174c2e95369975bfcf77b",
-          "schema_version": "datapan.safetydata-registry-patches.v1"
+          "schema_version": "datapan.safetydata-registry-patches.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.safetydata-registry-patches.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.safetydata-registry-patches.v1.schema.json",
+          "schema_indexed": false
         },
         {
           "name": "seogwipo-bare-verification-summary.json",
@@ -969,21 +1009,30 @@
           "path": "reports/ecos/error-action-catalog.json",
           "bytes": 6103,
           "sha256": "a610585382e8037b050973336ec1f258ea97f77df4f48dc66e8bd286d9f6e4a0",
-          "schema_version": "datapan.error-action-catalog.v1"
+          "schema_version": "datapan.error-action-catalog.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.error-action-catalog.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.error-action-catalog.v1.schema.json",
+          "schema_indexed": true
         },
         {
           "name": "runtime-candidates.json",
           "path": "reports/ecos/runtime-candidates.json",
           "bytes": 1874,
           "sha256": "0b77325d9f715047765f0fe2a546529165cc59e9008347ea6befb46c5af9198a",
-          "schema_version": "datapan.source-runtime-candidates.v1"
+          "schema_version": "datapan.source-runtime-candidates.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.source-runtime-candidates.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.source-runtime-candidates.v1.schema.json",
+          "schema_indexed": true
         },
         {
           "name": "runtime-evidence-plan.json",
           "path": "reports/ecos/runtime-evidence-plan.json",
           "bytes": 3472,
           "sha256": "8c695ae4e41557876dbe0e8fd2e27e91fe0e043bc3c0bccf4f3faef1cdee6104",
-          "schema_version": "datapan.source-runtime-evidence-plan.v1"
+          "schema_version": "datapan.source-runtime-evidence-plan.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.source-runtime-evidence-plan.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.source-runtime-evidence-plan.v1.schema.json",
+          "schema_indexed": true
         }
       ],
       "present_recommended_reports": [
@@ -1022,21 +1071,30 @@
           "path": "reports/kosis/error-action-catalog.json",
           "bytes": 5876,
           "sha256": "624e1dcbf8ad1267b4fee4c0114d54d3049c0f1568a195b4458cbb750a98c4e5",
-          "schema_version": "datapan.error-action-catalog.v1"
+          "schema_version": "datapan.error-action-catalog.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.error-action-catalog.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.error-action-catalog.v1.schema.json",
+          "schema_indexed": true
         },
         {
           "name": "runtime-candidates.json",
           "path": "reports/kosis/runtime-candidates.json",
           "bytes": 1723,
           "sha256": "bed108fd2daa0ca021e56eca1baa1294d89945732c09167dd5f3c0d8e8c3d7d0",
-          "schema_version": "datapan.source-runtime-candidates.v1"
+          "schema_version": "datapan.source-runtime-candidates.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.source-runtime-candidates.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.source-runtime-candidates.v1.schema.json",
+          "schema_indexed": true
         },
         {
           "name": "runtime-evidence-plan.json",
           "path": "reports/kosis/runtime-evidence-plan.json",
           "bytes": 3455,
           "sha256": "f72cc37bf59eab3d19d1edc5e592254672464c972ccd33ed632dd4dec14a6606",
-          "schema_version": "datapan.source-runtime-evidence-plan.v1"
+          "schema_version": "datapan.source-runtime-evidence-plan.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.source-runtime-evidence-plan.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.source-runtime-evidence-plan.v1.schema.json",
+          "schema_indexed": true
         }
       ],
       "present_recommended_reports": [
@@ -1075,21 +1133,30 @@
           "path": "reports/open-assembly/error-action-catalog.json",
           "bytes": 4504,
           "sha256": "ca7f6fa7be40991375e98f0266c3635bebd665483296f1093123d384cdfc2d7f",
-          "schema_version": "datapan.error-action-catalog.v1"
+          "schema_version": "datapan.error-action-catalog.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.error-action-catalog.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.error-action-catalog.v1.schema.json",
+          "schema_indexed": true
         },
         {
           "name": "runtime-candidates.json",
           "path": "reports/open-assembly/runtime-candidates.json",
           "bytes": 1729,
           "sha256": "73c17cfac358c7969244c2d67e8ea9548f8fefdd31b8ff1f366856c0d291b0a0",
-          "schema_version": "datapan.source-runtime-candidates.v1"
+          "schema_version": "datapan.source-runtime-candidates.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.source-runtime-candidates.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.source-runtime-candidates.v1.schema.json",
+          "schema_indexed": true
         },
         {
           "name": "runtime-evidence-plan.json",
           "path": "reports/open-assembly/runtime-evidence-plan.json",
           "bytes": 3609,
           "sha256": "0fc576d7dc7839d9047ddb00bf5e05a3807c010dc016d8210c69219c5df2da5f",
-          "schema_version": "datapan.source-runtime-evidence-plan.v1"
+          "schema_version": "datapan.source-runtime-evidence-plan.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.source-runtime-evidence-plan.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.source-runtime-evidence-plan.v1.schema.json",
+          "schema_indexed": true
         }
       ],
       "present_recommended_reports": [
@@ -1128,21 +1195,30 @@
           "path": "reports/seoul-open-data/error-action-catalog.json",
           "bytes": 6087,
           "sha256": "5c1322bc08278386daa3ccd6b8835c873e51e74e329a65b819193712e342c60d",
-          "schema_version": "datapan.error-action-catalog.v1"
+          "schema_version": "datapan.error-action-catalog.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.error-action-catalog.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.error-action-catalog.v1.schema.json",
+          "schema_indexed": true
         },
         {
           "name": "runtime-candidates.json",
           "path": "reports/seoul-open-data/runtime-candidates.json",
           "bytes": 1934,
           "sha256": "0f4eef8c36ca85b230a3963d9f46da201a60278ce838a26872187d2734531eba",
-          "schema_version": "datapan.source-runtime-candidates.v1"
+          "schema_version": "datapan.source-runtime-candidates.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.source-runtime-candidates.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.source-runtime-candidates.v1.schema.json",
+          "schema_indexed": true
         },
         {
           "name": "runtime-evidence-plan.json",
           "path": "reports/seoul-open-data/runtime-evidence-plan.json",
           "bytes": 3059,
           "sha256": "720182cd188e6b6473af932e234e878cf31f3e84bdd5d28d845e1e8323709d6b",
-          "schema_version": "datapan.source-runtime-evidence-plan.v1"
+          "schema_version": "datapan.source-runtime-evidence-plan.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.source-runtime-evidence-plan.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.source-runtime-evidence-plan.v1.schema.json",
+          "schema_indexed": true
         }
       ],
       "present_recommended_reports": [

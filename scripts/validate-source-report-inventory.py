@@ -20,6 +20,7 @@ except ImportError as exc:  # pragma: no cover - environment guard
 
 EXPECTED_SCHEMA_VERSION = "datapan.source-report-inventory.v1"
 DEFAULT_REPORT = pathlib.Path("reports/source-report-inventory.json")
+DEFAULT_SCHEMA_INDEX = pathlib.Path("schemas/index.json")
 
 
 def load_json(path: pathlib.Path) -> Any:
@@ -40,6 +41,33 @@ def normalize_json(value: Any) -> str:
 def file_digest(path: pathlib.Path) -> tuple[int, str]:
     data = path.read_bytes()
     return len(data), hashlib.sha256(data).hexdigest()
+
+
+def schema_uri(schema_version: str) -> str:
+    return f"https://schemas.datapan.dev/{schema_version}.schema.json"
+
+
+def schema_path(schema_version: str) -> str:
+    return f"schemas/{schema_version}.schema.json"
+
+
+def indexed_schema_ids(schema_index_path: pathlib.Path) -> set[str]:
+    schema_index = as_dict(load_json(schema_index_path), schema_index_path)
+    schemas = schema_index.get("schemas")
+    if not isinstance(schemas, list):
+        raise ValueError("schemas/index.json schemas must be an array")
+    ids: set[str] = set()
+    for index, value in enumerate(schemas):
+        if not isinstance(value, dict):
+            raise ValueError(f"schemas[{index}] must be an object")
+        schema_id = value.get("id")
+        if isinstance(schema_id, str) and schema_id:
+            ids.add(schema_id)
+        path = value.get("path")
+        if isinstance(path, str) and path.startswith("schemas/") and path.endswith(".schema.json"):
+            version = path.removeprefix("schemas/").removesuffix(".schema.json")
+            ids.add(schema_uri(version))
+    return ids
 
 
 def validate_report_digests(report: dict[str, Any]) -> None:
@@ -79,7 +107,68 @@ def validate_report_digests(report: dict[str, Any]) -> None:
         raise ValueError("; ".join(failures))
 
 
-def validate_report(report_path: pathlib.Path, schema_path: pathlib.Path, generator: pathlib.Path) -> None:
+def validate_schema_index_coverage(report: dict[str, Any], schema_index_path: pathlib.Path) -> None:
+    schema_ids = indexed_schema_ids(schema_index_path)
+    sources = report.get("sources")
+    if not isinstance(sources, list):
+        raise ValueError("sources must be an array")
+
+    failures: list[str] = []
+    schema_backed = 0
+    schema_indexed = 0
+    for source_index, source in enumerate(sources):
+        if not isinstance(source, dict):
+            failures.append(f"sources[{source_index}] must be an object")
+            continue
+        source_id = source.get("source_id", f"#{source_index}")
+        present_reports = source.get("present_reports")
+        if not isinstance(present_reports, list):
+            failures.append(f"{source_id}.present_reports must be an array")
+            continue
+        for report_index, entry in enumerate(present_reports):
+            if not isinstance(entry, dict):
+                failures.append(f"{source_id}.present_reports[{report_index}] must be an object")
+                continue
+            schema_version = entry.get("schema_version")
+            if schema_version is None:
+                continue
+            if not isinstance(schema_version, str) or not schema_version:
+                failures.append(f"{source_id}.present_reports[{report_index}].schema_version must be a string")
+                continue
+            schema_backed += 1
+            expected_id = schema_uri(schema_version)
+            expected_path = schema_path(schema_version)
+            expected_indexed = expected_id in schema_ids
+            if expected_indexed:
+                schema_indexed += 1
+            report_path = entry.get("path", f"{source_id}.present_reports[{report_index}]")
+            if entry.get("expected_schema_id") != expected_id:
+                failures.append(f"{report_path}: expected_schema_id expected {expected_id}, got {entry.get('expected_schema_id')}")
+            if entry.get("expected_schema_path") != expected_path:
+                failures.append(f"{report_path}: expected_schema_path expected {expected_path}, got {entry.get('expected_schema_path')}")
+            if entry.get("schema_indexed") is not expected_indexed:
+                failures.append(f"{report_path}: schema_indexed expected {expected_indexed}, got {entry.get('schema_indexed')}")
+
+    summary = as_dict(report.get("summary"), pathlib.Path("summary"))
+    expected_summary = {
+        "schema_backed_reports": schema_backed,
+        "schema_indexed_reports": schema_indexed,
+        "schema_missing_reports": schema_backed - schema_indexed,
+    }
+    for key, value in expected_summary.items():
+        if summary.get(key) != value:
+            failures.append(f"summary.{key} expected {value}, got {summary.get(key)}")
+
+    if failures:
+        raise ValueError("; ".join(failures))
+
+
+def validate_report(
+    report_path: pathlib.Path,
+    schema_path: pathlib.Path,
+    generator: pathlib.Path,
+    schema_index_path: pathlib.Path,
+) -> None:
     report = as_dict(load_json(report_path), report_path)
     if report.get("schema_version") != EXPECTED_SCHEMA_VERSION:
         raise ValueError(
@@ -97,6 +186,7 @@ def validate_report(report_path: pathlib.Path, schema_path: pathlib.Path, genera
         raise ValueError("; ".join(messages))
 
     validate_report_digests(report)
+    validate_schema_index_coverage(report, schema_index_path)
 
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_report = pathlib.Path(temp_dir) / "source-report-inventory.json"
@@ -149,6 +239,12 @@ def main() -> int:
         help="source report inventory generator path",
     )
     parser.add_argument(
+        "--schema-index",
+        default=DEFAULT_SCHEMA_INDEX,
+        type=pathlib.Path,
+        help="schema index path used to verify source report schema coverage",
+    )
+    parser.add_argument(
         "report",
         nargs="?",
         default=DEFAULT_REPORT,
@@ -158,7 +254,7 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
-        validate_report(args.report, args.schema, args.generator)
+        validate_report(args.report, args.schema, args.generator, args.schema_index)
     except Exception as exc:  # noqa: BLE001 - report all validation blockers
         print(f"FAIL {args.report}: {exc}", file=sys.stderr)
         return 1
@@ -168,7 +264,9 @@ def main() -> int:
     print(
         f"ok {args.report} "
         f"(sources={summary.get('sources')}, reports={summary.get('report_total')}, "
-        f"coverage={summary.get('source_report_coverage_percent')}%)"
+        f"coverage={summary.get('source_report_coverage_percent')}%, "
+        f"schema_indexed={summary.get('schema_indexed_reports')}, "
+        f"schema_missing={summary.get('schema_missing_reports')})"
     )
     return 0
 
