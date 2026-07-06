@@ -55,6 +55,7 @@ jobs:
           python scripts/sync-release-manifest-artifacts.py --check
           python scripts/validate-release-ledger-ownership.py
           python scripts/validate-release-ledger-goal-audit.py
+          python scripts/generate-release-assembly-receipt.py --check
           python scripts/validate-coverage-backlog.py
           python scripts/validate-external-adapter-backlog.py
           python scripts/validate-source-profiles.py
@@ -87,6 +88,7 @@ jobs:
           python -m py_compile scripts/generate-source-contract-rollup.py
           python -m py_compile scripts/sync-release-manifest-artifacts.py
           python -m py_compile scripts/generate-release-consumer-compatibility.py
+          python -m py_compile scripts/generate-release-assembly-receipt.py
           python -m py_compile scripts/source_contract_rollup.py
           python -m py_compile scripts/validate-error-action-routing-rollups.py
           python -m py_compile scripts/validate-source-contract-rollups.py

@@ -87,6 +87,7 @@ jobs:
             scripts/error_action_routing_rollup.py \
             scripts/generate-error-action-routing-rollup.py \
             scripts/generate-impact-plan-rollup.py \
+            scripts/generate-release-assembly-receipt.py \
             scripts/generate-release-consumer-compatibility.py \
             scripts/generate-release-health-rollup.py \
             scripts/generate-source-contract-rollup.py \
@@ -111,6 +112,7 @@ jobs:
           python scripts/sync-release-manifest-artifacts.py --check
           python scripts/validate-release-ledger-ownership.py
           python scripts/validate-release-ledger-goal-audit.py
+          python scripts/generate-release-assembly-receipt.py --check
           python scripts/validate-coverage-backlog.py
           python scripts/validate-external-adapter-backlog.py
           python scripts/validate-source-profiles.py
