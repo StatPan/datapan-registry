@@ -73,13 +73,15 @@ provider-specific verification summary checks, runs release verification and
 readiness through `datapan-cli`, packages the current checkout as
 `.datapan/release-assets/datapan-registry-snapshot.zip`, and installs that zip
 with `datapan catalog install datapan-registry --url ...`. The current-zip
-smoke writes `.datapan/ci/current-release-install.json`. The workflow also
-smoke-tests that the latest public GitHub Release zip can be installed with
-`datapan catalog install datapan-registry`; that install smoke writes
+smoke writes `.datapan/ci/current-release-install.json`, then runs `datapan
+doctor --json` against that installed registry and saves
+`.datapan/ci/current-release-doctor.json`. The workflow also smoke-tests that
+the latest public GitHub Release zip can be installed with `datapan catalog
+install datapan-registry`; that install smoke writes
 `.datapan/ci/latest-release-install.json` and records whether the release used
-validated shard metadata or the canonical monolith fallback. `datapan doctor
---json` is saved as `.datapan/ci/latest-release-doctor.json` for the latest
-public release install.
+validated shard metadata or the canonical monolith fallback. A separate
+`datapan doctor --json` run is saved as
+`.datapan/ci/latest-release-doctor.json` for the latest public release install.
 
 The current snapshot was generated from `datapan-cli` and includes:
 
