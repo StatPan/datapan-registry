@@ -1,0 +1,273 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.institution-runtime-plan.v1.schema.json",
+  "title": "Datapan Institution Runtime Plan v1",
+  "description": "Source-scoped plan for converting data.go.kr institution coverage backlog into bounded runtime verification batches.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "provider",
+    "source_id",
+    "generation_inputs",
+    "policy",
+    "summary",
+    "batches",
+    "next"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.institution-runtime-plan.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "const": "data.go.kr"
+    },
+    "source_id": {
+      "const": "data_go_kr"
+    },
+    "generation_inputs": {
+      "$ref": "#/$defs/generation_inputs"
+    },
+    "policy": {
+      "$ref": "#/$defs/policy"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "batches": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/batch"
+      }
+    },
+    "next": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/next_step"
+      }
+    }
+  },
+  "$defs": {
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "positive_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generation_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "coverage_backlog",
+        "registry",
+        "latest_verification"
+      ],
+      "properties": {
+        "coverage_backlog": {
+          "$ref": "#/$defs/path"
+        },
+        "registry": {
+          "$ref": "#/$defs/path"
+        },
+        "latest_verification": {
+          "$ref": "#/$defs/path"
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selection",
+        "kind",
+        "batch_size",
+        "institution_limit",
+        "timeout",
+        "credential_required",
+        "credential_note"
+      ],
+      "properties": {
+        "selection": {
+          "const": "highest_priority_runtime_reactivation_institutions"
+        },
+        "kind": {
+          "const": "data_go_kr_gateway"
+        },
+        "batch_size": {
+          "$ref": "#/$defs/positive_count"
+        },
+        "institution_limit": {
+          "$ref": "#/$defs/positive_count"
+        },
+        "timeout": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "credential_required": {
+          "type": "boolean"
+        },
+        "credential_note": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "institutions",
+        "planned_institutions",
+        "planned_operations",
+        "runtime_reactivation_api_count",
+        "uncovered_api_count",
+        "first_queue"
+      ],
+      "properties": {
+        "institutions": {
+          "$ref": "#/$defs/count"
+        },
+        "planned_institutions": {
+          "$ref": "#/$defs/count"
+        },
+        "planned_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "runtime_reactivation_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "uncovered_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "first_queue": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "batch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rank",
+        "label",
+        "organization",
+        "kind",
+        "api_count",
+        "covered_api_count",
+        "uncovered_api_count",
+        "operation_count",
+        "runtime_evidence_api_count",
+        "runtime_reactivation_api_count",
+        "runtime_missing_evidence_count",
+        "approval_required_operations",
+        "priority_score",
+        "planned_operations",
+        "credential_required",
+        "command",
+        "output"
+      ],
+      "properties": {
+        "rank": {
+          "$ref": "#/$defs/positive_count"
+        },
+        "label": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "organization": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "kind": {
+          "const": "data_go_kr_gateway"
+        },
+        "api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "covered_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "uncovered_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "operation_count": {
+          "$ref": "#/$defs/count"
+        },
+        "runtime_evidence_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "runtime_reactivation_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "runtime_missing_evidence_count": {
+          "$ref": "#/$defs/count"
+        },
+        "approval_required_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "priority_score": {
+          "$ref": "#/$defs/count"
+        },
+        "planned_operations": {
+          "$ref": "#/$defs/positive_count"
+        },
+        "credential_required": {
+          "type": "boolean"
+        },
+        "command": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "output": {
+          "$ref": "#/$defs/path"
+        }
+      }
+    },
+    "next_step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label"
+      ],
+      "properties": {
+        "label": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "command": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "commands": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "command"
+          ]
+        },
+        {
+          "required": [
+            "commands"
+          ]
+        }
+      ]
+    }
+  }
+}
