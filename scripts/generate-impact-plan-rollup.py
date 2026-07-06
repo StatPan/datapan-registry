@@ -7,6 +7,7 @@ import argparse
 import collections
 import json
 import pathlib
+import sys
 
 
 CLIENT_SERVER_TARGETS = {"dataset-api", "sdk", "mcp"}
@@ -107,19 +108,10 @@ def common_value(plans: list[dict[str, object]], key: str, fallback: str) -> str
     return fallback
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--reports-dir", type=pathlib.Path, default=pathlib.Path("reports"))
-    parser.add_argument(
-        "--output",
-        type=pathlib.Path,
-        default=pathlib.Path("reports/registry-impact-plan.json"),
-    )
-    args = parser.parse_args()
-
-    paths = source_plan_paths(args.reports_dir, args.output)
+def build_rollup(reports_dir: pathlib.Path, output: pathlib.Path) -> tuple[dict[str, object], int]:
+    paths = source_plan_paths(reports_dir, output)
     if not paths:
-        raise SystemExit("no source-scoped registry impact plans found")
+        raise ValueError("no source-scoped registry impact plans found")
 
     plans = [load_json(path) for path in paths]
     changes: list[dict[str, object]] = []
@@ -135,7 +127,7 @@ def main() -> int:
             if not isinstance(change, dict):
                 raise ValueError("source plan changes must contain objects")
             changes.append(change)
-    changes.extend(release_overlay_changes(args.output))
+    changes.extend(release_overlay_changes(output))
 
     rollup = {
         "schema_version": "datapan.registry-impact-plan.v1",
@@ -147,16 +139,57 @@ def main() -> int:
         "registry_version_from": common_value(plans, "registry_version_from", "mixed"),
         "registry_version_to": common_value(plans, "registry_version_to", "mixed"),
         "previous_registry": "reports/*/registry-impact-plan.json",
-        "current_registry": str(args.output),
+        "current_registry": str(output),
         "summary": count_entries(changes),
         "changes": changes,
     }
+    return rollup, len(paths)
+
+
+def render_json(value: dict[str, object]) -> str:
+    return json.dumps(value, ensure_ascii=False, indent=2) + "\n"
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--reports-dir", type=pathlib.Path, default=pathlib.Path("reports"))
+    parser.add_argument(
+        "--output",
+        type=pathlib.Path,
+        default=pathlib.Path("reports/registry-impact-plan.json"),
+    )
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="validate that the checked-in rollup matches generated output without writing",
+    )
+    args = parser.parse_args()
+
+    try:
+        rollup, source_count = build_rollup(args.reports_dir, args.output)
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
+
+    rendered = render_json(rollup)
+    if args.check:
+        if not args.output.exists():
+            print(f"FAIL {args.output}: missing generated rollup", file=sys.stderr)
+            return 1
+        current = args.output.read_text(encoding="utf-8")
+        if current != rendered:
+            print(
+                f"FAIL {args.output}: stale impact plan rollup; "
+                "run `python3 scripts/generate-impact-plan-rollup.py`",
+                file=sys.stderr,
+            )
+            return 1
+        print(f"ok {args.output} ({len(rollup['changes'])} changes from {source_count} source plans)")
+        return 0
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("w", encoding="utf-8") as handle:
-        json.dump(rollup, handle, ensure_ascii=False, indent=2)
-        handle.write("\n")
-    print(f"wrote {args.output} ({len(changes)} changes from {len(paths)} source plans)")
+        handle.write(rendered)
+    print(f"wrote {args.output} ({len(rollup['changes'])} changes from {source_count} source plans)")
     return 0
 
 

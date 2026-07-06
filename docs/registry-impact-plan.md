@@ -47,6 +47,9 @@ identity must match the plan's top-level provider and source id.
 The generator also preserves root-level release overlays such as
 `registry:schema-release-surface`, so regenerating source rollups does not drop
 release-wide schema or readiness impact evidence.
+CI runs `python scripts/generate-impact-plan-rollup.py --check` before
+`scripts/validate-impact-plans.py` so the checked-in rollup cannot drift from
+source-scoped impact plans and preserved release overlays.
 
 The schema is checked in at
 `schemas/datapan.registry-impact-plan.v1.schema.json`. Full `datapan-cli`
