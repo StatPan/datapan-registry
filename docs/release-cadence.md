@@ -33,7 +33,18 @@ Every release must pass:
 ```bash
 datapan catalog release verify --manifest manifest.json --output reports/latest-release-verification.json --json
 datapan catalog release readiness --manifest manifest.json --output reports/latest-release-readiness.json --json
+python scripts/validate-release-receipt-boundary.py
 ```
+
+`reports/latest-release-verification.json` and
+`reports/latest-release-readiness.json` are manifest-derived receipts. Refresh
+them from the selected `manifest.json` with the two `datapan catalog release`
+commands above, after manifest-bound release evidence has been regenerated and
+`manifest.json` has been updated. They are not listed in `manifest.json`
+because they are receipts produced by validating that manifest, not independent
+source artifacts that the manifest must checksum. CI writes the current-checkout
+or selected-manifest equivalents under `.datapan/ci/` so workflow evidence can
+verify the same command path without rewriting the checked-in receipt files.
 
 ## Guarded GitHub Draft
 

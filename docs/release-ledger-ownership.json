@@ -148,12 +148,13 @@
       ],
       "checked_by": [
         "datapan catalog release verify --manifest manifest.json",
+        "python scripts/validate-release-receipt-boundary.py",
         "python scripts/sync-release-manifest-artifacts.py --check"
       ],
       "manifest_relationship": "Latest verification receipts and external probe receipts are manifest-bound evidence.",
       "schema_relationship": "Validated through verification and verification-summary schemas.",
       "package_relationship": "Included in release packages through manifest.json.",
-      "exemption_boundary": "Release verification/readiness receipts generated from a selected manifest are explicit manifest-derived receipts."
+      "exemption_boundary": "Release verification/readiness receipts generated from a selected manifest are explicit manifest-derived receipts. They stay outside manifest.json because the manifest is the source artifact they validate."
     },
     {
       "id": "human_release_context",

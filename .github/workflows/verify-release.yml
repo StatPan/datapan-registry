@@ -68,6 +68,7 @@ jobs:
           python scripts/validate-source-reference-drift.py
           python scripts/validate-source-report-inventory.py
           python scripts/validate-release-report-artifacts.py
+          python scripts/validate-release-receipt-boundary.py
           python scripts/validate-source-runtime-candidates.py
           python scripts/validate-source-runtime-evidence-plans.py
           python scripts/validate-source-runtime-evidence-rollup.py
@@ -93,6 +94,7 @@ jobs:
           python -m py_compile scripts/validate-release-consumer-compatibility.py
           python -m py_compile scripts/validate-release-ledger-ownership.py
           python -m py_compile scripts/validate-release-report-artifacts.py
+          python -m py_compile scripts/validate-release-receipt-boundary.py
           python -m py_compile scripts/release_health_rollup.py
           python -m py_compile scripts/generate-release-health-rollup.py
           python -m py_compile scripts/validate-release-health-rollups.py
