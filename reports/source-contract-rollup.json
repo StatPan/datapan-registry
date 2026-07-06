@@ -7,6 +7,43 @@
     "source_glob": "sources/*.json",
     "generator": "scripts/generate-source-contract-rollup.py"
   },
+  "source_inputs": [
+    {
+      "path": "sources/data_go_kr.json",
+      "source_id": "data_go_kr",
+      "provider": "data.go.kr",
+      "bytes": 2816,
+      "sha256": "0163df51972ce6dfd6d714967800d9eace89536dc67e6aab11885016f6776772"
+    },
+    {
+      "path": "sources/ecos.json",
+      "source_id": "ecos",
+      "provider": "ECOS",
+      "bytes": 3246,
+      "sha256": "6e3adf86f6db12065cde5bc0840249d602d61dba0ed692fcf902719697d5fc27"
+    },
+    {
+      "path": "sources/kosis.json",
+      "source_id": "kosis",
+      "provider": "KOSIS",
+      "bytes": 2903,
+      "sha256": "53a3d7f080592e86a52c5ee7a80ed11c7f137a2d15bed55c39025e05b5e194c0"
+    },
+    {
+      "path": "sources/open_assembly.json",
+      "source_id": "open_assembly",
+      "provider": "open.assembly.go.kr",
+      "bytes": 2877,
+      "sha256": "4c2a70a90c24ac770fbeab12c482f6138fd8feaa24acf4968e077ddd6e769801"
+    },
+    {
+      "path": "sources/seoul_open_data.json",
+      "source_id": "seoul_open_data",
+      "provider": "data.seoul.go.kr",
+      "bytes": 3432,
+      "sha256": "9ae73b337e2fd44e667087f50f538d123fe00e90afd03ab221e6b90fc9aef7a8"
+    }
+  ],
   "summary": {
     "profiles": 5,
     "sources": 5,

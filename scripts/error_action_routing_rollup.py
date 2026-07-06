@@ -191,6 +191,18 @@ def build_rollup(
     blocking_rules = sum(int(catalog["blocking_rules"]) for catalog in catalogs)
     manual_review_rules = sum(int(catalog["manual_review_rules"]) for catalog in catalogs)
     unknown_signature_rules = sum(int(catalog["unknown_signature_rules"]) for catalog in catalogs)
+    source_inputs = [
+        {
+            "path": str(catalog["catalog"]),
+            "source_id": str(catalog["source_id"]),
+            "provider": str(catalog["provider"]),
+            "bytes": int(catalog["bytes"]),
+            "sha256": str(catalog["sha256"]),
+            "rules": int(catalog["rules"]),
+            "actions": int(catalog["actions"]),
+        }
+        for catalog in catalogs
+    ]
 
     return {
         "schema_version": ROLLUP_SCHEMA_VERSION,
@@ -201,6 +213,7 @@ def build_rollup(
             "catalog_glob": catalog_glob,
             "generator": "scripts/generate-error-action-routing-rollup.py",
         },
+        "source_inputs": source_inputs,
         "summary": {
             "catalogs": len(catalogs),
             "sources": len(source_ids),

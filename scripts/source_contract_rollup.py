@@ -293,6 +293,16 @@ def build_rollup(
         "reviewed_sources": count_present(sources, ("references", "last_reviewed_at")),
     }
     summary.update(reviewed_bounds(sources))
+    source_inputs = [
+        {
+            "path": str(source["source_profile"]),
+            "source_id": str(source["source_id"]),
+            "provider": str(source["provider"]),
+            "bytes": int(source["bytes"]),
+            "sha256": str(source["sha256"]),
+        }
+        for source in sources
+    ]
 
     return {
         "schema_version": ROLLUP_SCHEMA_VERSION,
@@ -303,6 +313,7 @@ def build_rollup(
             "source_glob": source_glob,
             "generator": "scripts/generate-source-contract-rollup.py",
         },
+        "source_inputs": source_inputs,
         "summary": summary,
         "sources": sources,
     }
