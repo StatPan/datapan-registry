@@ -71,6 +71,7 @@ jobs:
           python scripts/validate-link-detail-registry-patches.py
           python scripts/validate-institution-api-overview.py
           python scripts/validate-institution-runtime-plan.py
+          python -m py_compile scripts/validate-doctor-smoke-summaries.py
           python -m py_compile scripts/validate-install-smoke-summaries.py
 
       - name: Validate provider verification evidence
@@ -160,7 +161,12 @@ jobs:
             > ../datapan-registry/.datapan/ci/current-release-doctor.json
           python3 ../datapan-registry/scripts/check-release-doctor-smoke.py \
             --install-json ../datapan-registry/.datapan/ci/current-release-install.json \
+            --summary-json ../datapan-registry/.datapan/ci/current-release-doctor-smoke.json \
             ../datapan-registry/.datapan/ci/current-release-doctor.json
+          ../datapan-registry/.datapan/ci/source-profile-venv/bin/python \
+            ../datapan-registry/scripts/validate-doctor-smoke-summaries.py \
+            --schema ../datapan-registry/schemas/datapan.doctor-smoke-summary.v1.schema.json \
+            ../datapan-registry/.datapan/ci/current-release-doctor-smoke.json
 
       - name: Check README current snapshot
         run: |
@@ -219,7 +225,12 @@ jobs:
             > ../datapan-registry/.datapan/ci/latest-release-doctor.json
           python3 ../datapan-registry/scripts/check-release-doctor-smoke.py \
             --install-json ../datapan-registry/.datapan/ci/latest-release-install.json \
+            --summary-json ../datapan-registry/.datapan/ci/latest-release-doctor-smoke.json \
             ../datapan-registry/.datapan/ci/latest-release-doctor.json
+          ../datapan-registry/.datapan/ci/source-profile-venv/bin/python \
+            ../datapan-registry/scripts/validate-doctor-smoke-summaries.py \
+            --schema ../datapan-registry/schemas/datapan.doctor-smoke-summary.v1.schema.json \
+            ../datapan-registry/.datapan/ci/latest-release-doctor-smoke.json
 
       - name: Upload release health reports
         uses: actions/upload-artifact@v7

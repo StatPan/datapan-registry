@@ -92,7 +92,8 @@ check. That workflow:
   `current-release-install-smoke.json` and `latest-release-install-smoke.json`;
 - validates the doctor JSON with `scripts/check-release-doctor-smoke.py` for
   both current checkout and latest public release installs, including matching
-  doctor registry path and spec count against the install JSON;
+  doctor registry path and spec count against the install JSON in
+  `current-release-doctor-smoke.json` and `latest-release-doctor-smoke.json`;
 - uploads current-checkout install and doctor JSON plus latest-public-release
   install and doctor JSON reports as release-health evidence.
 

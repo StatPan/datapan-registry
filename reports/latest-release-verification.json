@@ -3,8 +3,8 @@
   "root": ".",
   "schema_version": "datapan.release-verification.v1",
   "manifest_schema_version": "datapan.release-manifest.v1",
-  "artifact_count": 50,
-  "checked": 50,
+  "artifact_count": 51,
+  "checked": 51,
   "failed": 0,
   "ok": true,
   "results": [
@@ -288,13 +288,22 @@
       "actual_sha256": "20abc86e79fb527f1d5c9cab15f68d6d68444e492546404c51aee624c5e98428"
     },
     {
+      "path": "schemas/datapan.doctor-smoke-summary.v1.schema.json",
+      "kind": "schema",
+      "status": "verified",
+      "expected_bytes": 1919,
+      "actual_bytes": 1919,
+      "expected_sha256": "d7fe699c16a0f1f779b166aaa56d732ae52bb5a34a478eabd4a82b136852d811",
+      "actual_sha256": "d7fe699c16a0f1f779b166aaa56d732ae52bb5a34a478eabd4a82b136852d811"
+    },
+    {
       "path": "schemas/index.json",
       "kind": "schema_index",
       "status": "verified",
-      "expected_bytes": 11818,
-      "actual_bytes": 11818,
-      "expected_sha256": "f4bb365cad83d72c03c40894b2a85097e458952b94181bce3940650d550ef580",
-      "actual_sha256": "f4bb365cad83d72c03c40894b2a85097e458952b94181bce3940650d550ef580"
+      "expected_bytes": 12206,
+      "actual_bytes": 12206,
+      "expected_sha256": "93ff872cb216003bb86f03771eae48e43719c4a6d440613d6d4dac78a0da126e",
+      "actual_sha256": "93ff872cb216003bb86f03771eae48e43719c4a6d440613d6d4dac78a0da126e"
     },
     {
       "path": "data/data-go-kr.registry.json",
