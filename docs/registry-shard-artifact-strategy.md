@@ -129,7 +129,7 @@ Measured on the current `data.go.kr` registry:
 | canonical `data/data-go-kr.registry.json` | 137,735,169 bytes |
 | generated institution shard JSON files | 137,736,399 bytes |
 | generated shard directory on disk | 137,937,097 bytes |
-| generated shard tar.gz archive | 7,989,469 bytes |
+| generated shard tar.gz archive | 7,989,462 bytes |
 | canonical registry gzip archive | 9,415,820 bytes |
 
 These measurements rule out committing shard JSON files as ordinary Git blobs:
@@ -176,6 +176,12 @@ The archive root contains `registry-shards.json` plus shard paths exactly as
 listed in the inventory, for example `by-institution/<key>.registry.json`.
 Packaging remains optional during the compatibility period and does not make
 shard artifacts required by `manifest.json` or release readiness.
+
+The manual `Draft registry release` workflow can generate the same archive from
+the materialized canonical registry and upload it under
+`.datapan/release-assets/data-go-kr-shards.tar.gz` as publish-prep evidence.
+That workflow still does not publish a GitHub Release or make shard artifacts
+required; a human release operator must attach the archive deliberately.
 
 ## Recomposition Invariant
 
