@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 39,
+  "count": 40,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -354,6 +354,15 @@
       "version": "v1",
       "bytes": 8376,
       "sha256": "0f0585e9240cef48fc9bcc44c8ca2140347ba81937b9ef27ba8fad00ba09f2f6"
+    },
+    {
+      "path": "schemas/datapan.operation-materialization-plan.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.operation-materialization-plan.v1.schema.json",
+      "title": "Datapan Operation Materialization Plan v1",
+      "contract": "operation-materialization-plan",
+      "version": "v1",
+      "bytes": 7308,
+      "sha256": "d4eb239ab8bda07f0a69fe9e06a34757d00b16e1a4eabd48c0c90428a1520f90"
     }
   ]
 }

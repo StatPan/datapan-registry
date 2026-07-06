@@ -1,0 +1,325 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.operation-materialization-plan.v1.schema.json",
+  "title": "Datapan Operation Materialization Plan v1",
+  "description": "Source-scoped plan for converting uncovered data.go.kr APIs into operation mapping materialization batches.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "provider",
+    "source_id",
+    "generation_inputs",
+    "policy",
+    "summary",
+    "batches",
+    "next"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.operation-materialization-plan.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "const": "data.go.kr"
+    },
+    "source_id": {
+      "const": "data_go_kr"
+    },
+    "generation_inputs": {
+      "$ref": "#/$defs/generation_inputs"
+    },
+    "policy": {
+      "$ref": "#/$defs/policy"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "batches": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/batch"
+      }
+    },
+    "next": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/next_step"
+      }
+    }
+  },
+  "$defs": {
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "positive_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "percent": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "generation_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "coverage_backlog"
+      ],
+      "properties": {
+        "coverage_backlog": {
+          "$ref": "#/$defs/path"
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selection",
+        "institution_limit",
+        "batch_size",
+        "sample_limit"
+      ],
+      "properties": {
+        "selection": {
+          "const": "largest_institutions_with_uncovered_operation_mappings"
+        },
+        "institution_limit": {
+          "$ref": "#/$defs/positive_count"
+        },
+        "batch_size": {
+          "$ref": "#/$defs/positive_count"
+        },
+        "sample_limit": {
+          "$ref": "#/$defs/positive_count"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "institutions",
+        "api_total",
+        "covered_api_count",
+        "uncovered_api_count",
+        "api_operation_coverage_percent",
+        "planned_institutions",
+        "planned_api_count",
+        "first_queue"
+      ],
+      "properties": {
+        "institutions": {
+          "$ref": "#/$defs/count"
+        },
+        "api_total": {
+          "$ref": "#/$defs/count"
+        },
+        "covered_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "uncovered_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "api_operation_coverage_percent": {
+          "$ref": "#/$defs/percent"
+        },
+        "planned_institutions": {
+          "$ref": "#/$defs/count"
+        },
+        "planned_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "first_queue": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "batch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "rank",
+        "organization",
+        "api_count",
+        "covered_api_count",
+        "uncovered_api_count",
+        "api_operation_coverage_percent",
+        "planned_api_count",
+        "remaining_after_batch",
+        "action",
+        "reason",
+        "output",
+        "apis",
+        "sample_apis"
+      ],
+      "properties": {
+        "label": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "rank": {
+          "$ref": "#/$defs/positive_count"
+        },
+        "organization": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "covered_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "uncovered_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "api_operation_coverage_percent": {
+          "$ref": "#/$defs/percent"
+        },
+        "planned_api_count": {
+          "$ref": "#/$defs/positive_count"
+        },
+        "remaining_after_batch": {
+          "$ref": "#/$defs/count"
+        },
+        "action": {
+          "const": "materialize_operation_mapping"
+        },
+        "reason": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "output": {
+          "$ref": "#/$defs/path"
+        },
+        "apis": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/api"
+          }
+        },
+        "sample_apis": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/api"
+          }
+        }
+      }
+    },
+    "api": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dataset_id",
+        "title",
+        "organization",
+        "source_category",
+        "api_type",
+        "data_format",
+        "register_status",
+        "dev_approval",
+        "prod_approval",
+        "created_at",
+        "updated_at",
+        "meta_url",
+        "action",
+        "reason"
+      ],
+      "properties": {
+        "dataset_id": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "title": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "organization": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "source_category": {
+          "type": "string"
+        },
+        "api_type": {
+          "type": "string"
+        },
+        "data_format": {
+          "type": "string"
+        },
+        "register_status": {
+          "type": "string"
+        },
+        "dev_approval": {
+          "type": "string"
+        },
+        "prod_approval": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        },
+        "meta_url": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "action": {
+          "const": "materialize_operation_mapping"
+        },
+        "reason": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "next_step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label"
+      ],
+      "properties": {
+        "label": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "action": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "commands": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "action"
+          ]
+        },
+        {
+          "required": [
+            "commands"
+          ]
+        }
+      ]
+    }
+  }
+}
