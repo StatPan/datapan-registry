@@ -5,7 +5,7 @@
   "provider": "data.go.kr",
   "source_registry": "data/data-go-kr.registry.json",
   "output_dir": ".",
-  "artifact_count": 65,
+  "artifact_count": 66,
   "artifacts": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -242,11 +242,17 @@
       "sha256": "0f0585e9240cef48fc9bcc44c8ca2140347ba81937b9ef27ba8fad00ba09f2f6"
     },
     {
+      "path": "schemas/datapan.operation-materialization-plan.v1.schema.json",
+      "kind": "schema",
+      "bytes": 7308,
+      "sha256": "d4eb239ab8bda07f0a69fe9e06a34757d00b16e1a4eabd48c0c90428a1520f90"
+    },
+    {
       "path": "schemas/index.json",
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
-      "bytes": 15067,
-      "sha256": "fa12e91ff50244a0f6fe425f5c7321102f2d3fa884dff5ad4a426f8ab70a0e81"
+      "bytes": 15495,
+      "sha256": "6218aced49766ac9e6cb43c75ff15308a7e05ec377f30d0ffe895a8b0ec69c31"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -322,8 +328,8 @@
       "path": "reports/source-report-inventory.json",
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
-      "bytes": 53537,
-      "sha256": "0089a4ce8befef49db44c0ae45b8401ad7d48d10c3387ef4a84a35198110918c"
+      "bytes": 53536,
+      "sha256": "f7223b7495c6ca01ba73d410a17a63303b026be2ad1a5315c6a785f91dd1e547"
     },
     {
       "path": "reports/dependencies.json",
@@ -393,7 +399,7 @@
       "kind": "consumer_compatibility",
       "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json",
       "bytes": 7970,
-      "sha256": "e28c44924f6952db3eec62c82b39beff3959fb80f703d024a93f3a3f60b12c19"
+      "sha256": "1553de0f535a402b0e234b18d03ee286297e93bf7d7d53cf7aa2bfcdfde26bc0"
     },
     {
       "path": "reports/unadapted-external-probe.json",

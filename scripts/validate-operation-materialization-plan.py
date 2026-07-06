@@ -11,9 +11,15 @@ import sys
 import tempfile
 from typing import Any
 
+try:
+    import jsonschema
+except ImportError as exc:  # pragma: no cover - environment guard
+    raise SystemExit("missing dependency: install jsonschema before validating operation materialization plan") from exc
+
 
 EXPECTED_SCHEMA_VERSION = "datapan.operation-materialization-plan.v1"
 EXPECTED_BATCH_SCHEMA_VERSION = "datapan.operation-materialization-batch.v1"
+DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.operation-materialization-plan.v1.schema.json")
 
 
 def load_json(path: pathlib.Path) -> Any:
@@ -63,12 +69,30 @@ def batch_file_payload(report: dict[str, Any], batch: dict[str, Any], plan_path:
     }
 
 
-def validate_report(report_path: pathlib.Path, markdown_path: pathlib.Path, generator: pathlib.Path) -> None:
+def validate_schema(report: dict[str, Any], schema_path: pathlib.Path) -> None:
+    schema = load_json(schema_path)
+    validator = jsonschema.Draft202012Validator(schema)
+    errors = sorted(validator.iter_errors(report), key=lambda error: list(error.path))
+    if errors:
+        messages = []
+        for error in errors:
+            location = ".".join(str(part) for part in error.path) or "<root>"
+            messages.append(f"{location}: {error.message}")
+        raise ValueError("; ".join(messages))
+
+
+def validate_report(
+    report_path: pathlib.Path,
+    markdown_path: pathlib.Path,
+    generator: pathlib.Path,
+    schema_path: pathlib.Path,
+) -> None:
     report = as_dict(load_json(report_path), report_path)
     if report.get("schema_version") != EXPECTED_SCHEMA_VERSION:
         raise ValueError(
             f"schema_version expected {EXPECTED_SCHEMA_VERSION}, got {report.get('schema_version')}"
         )
+    validate_schema(report, schema_path)
 
     generation_inputs = as_dict(report.get("generation_inputs"), report_path)
     coverage_backlog = generation_inputs.get("coverage_backlog")
@@ -186,6 +210,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--generator", default="scripts/generate-operation-materialization-plan.py", type=pathlib.Path)
     parser.add_argument("--markdown", default="docs/data-go-kr-operation-materialization-plan.md", type=pathlib.Path)
+    parser.add_argument("--schema", default=DEFAULT_SCHEMA, type=pathlib.Path)
     parser.add_argument(
         "report",
         nargs="?",
@@ -195,7 +220,7 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
-        validate_report(args.report, args.markdown, args.generator)
+        validate_report(args.report, args.markdown, args.generator, args.schema)
     except Exception as exc:  # noqa: BLE001 - report all validation blockers
         print(f"FAIL {args.report}: {exc}", file=sys.stderr)
         return 1
