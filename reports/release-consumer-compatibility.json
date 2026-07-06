@@ -7,7 +7,7 @@
     "manifest": {
       "path": "manifest.json",
       "generated_at": "2026-07-04T06:39:24Z",
-      "artifact_count": 79,
+      "artifact_count": 81,
       "evidence_contracts": 9
     },
     "readiness": {
@@ -104,7 +104,7 @@
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
       "bytes": 14728,
-      "sha256": "55dc01243391a71821ae04f038b94edf45471d75858a8a47ef0dc27a17bc017e",
+      "sha256": "ebab4fc2b6410d7c49603017119093ae54871c189e6dee6803d80531df2b961e",
       "required": true
     },
     {
@@ -140,7 +140,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "29c71f053d8695a60f2461427fd74b5de8125845ffa9056b02e73345d622db5f",
+      "sha256": "2cd30466a37a48f561636fbc95a705a809823b93867e7e8f4790952a20534e23",
       "required": true
     },
     {
@@ -158,7 +158,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 59095,
-      "sha256": "7f02000d80c2f419905ede49b428c567179ab13b29021865685194c96a00b9e5",
+      "sha256": "1923c80983a5ad7184186e023e3b213f2c59d269a297c2554fa7b3606c5aaf98",
       "required": true
     }
   ],
