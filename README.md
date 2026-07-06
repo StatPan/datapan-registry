@@ -77,13 +77,16 @@ smoke writes `.datapan/ci/current-release-install.json`, then runs `datapan
 doctor --json` against that installed registry and saves
 `.datapan/ci/current-release-doctor.json`. The install and doctor JSON are
 validated with repository smoke checks, including a byte and sha256 cross-check
-that proves install wrote the canonical registry from the packaged zip, plus a
-path and spec-count cross-check proving doctor read the same registry. The
+that proves install wrote the canonical registry from the packaged zip. The
+install check also writes `.datapan/ci/current-release-install-smoke.json` as
+structured release-health evidence before the doctor path and spec-count
+cross-check proves doctor read the same registry. The
 workflow also smoke-tests that the latest public GitHub Release zip can be
 installed with `datapan catalog install datapan-registry`; that install smoke
 writes
-`.datapan/ci/latest-release-install.json` and records whether the release used
-validated shard metadata or the canonical monolith fallback. A separate
+`.datapan/ci/latest-release-install.json` plus
+`.datapan/ci/latest-release-install-smoke.json`, recording whether the release
+used validated shard metadata or the canonical monolith fallback. A separate
 `datapan doctor --json` run is saved as
 `.datapan/ci/latest-release-doctor.json` for the latest public release install.
 
