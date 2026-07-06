@@ -33,6 +33,14 @@ REQUIRED_CI_REPORTS = {
     ".datapan/ci/latest-release-doctor-smoke.json",
     ".datapan/ci/release-health-rollup.json",
 }
+REQUIRED_SHARD_INSTALL_FIELDS = {
+    "mode",
+    "shards_asset_present",
+    "shards_validated",
+    "shards_inventory_present",
+    "shards_count",
+    "shards_records",
+}
 REQUIRED_CLI_SURFACES = {
     "catalog install",
     "doctor",
@@ -139,6 +147,13 @@ def validate_manifest_links(report: dict[str, Any], manifest: dict[str, Any]) ->
     if not REQUIRED_CI_REPORTS.issubset(required_ci_reports):
         missing = sorted(REQUIRED_CI_REPORTS.difference(required_ci_reports))
         raise ValueError(f"release health evidence missing required CI reports: {', '.join(missing)}")
+
+    required_shard_fields = set(
+        as_list(evidence.get("required_shard_install_fields"), "release_health_evidence.required_shard_install_fields")
+    )
+    if not REQUIRED_SHARD_INSTALL_FIELDS.issubset(required_shard_fields):
+        missing = sorted(REQUIRED_SHARD_INSTALL_FIELDS.difference(required_shard_fields))
+        raise ValueError(f"release health evidence missing required shard install fields: {', '.join(missing)}")
 
 
 def validate_readiness(report: dict[str, Any], readiness: dict[str, Any]) -> None:

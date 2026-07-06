@@ -112,7 +112,12 @@
     "release_health_evidence": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["artifact_bundle", "required_schemas", "required_ci_reports"],
+      "required": [
+        "artifact_bundle",
+        "required_schemas",
+        "required_ci_reports",
+        "required_shard_install_fields"
+      ],
       "properties": {
         "artifact_bundle": {
           "const": "datapan-registry-release-health"
@@ -130,6 +135,21 @@
           "items": {
             "$ref": "#/$defs/non_empty_string"
           }
+        },
+        "required_shard_install_fields": {
+          "type": "array",
+          "minItems": 6,
+          "items": {
+            "enum": [
+              "mode",
+              "shards_asset_present",
+              "shards_validated",
+              "shards_inventory_present",
+              "shards_count",
+              "shards_records"
+            ]
+          },
+          "uniqueItems": true
         }
       }
     },

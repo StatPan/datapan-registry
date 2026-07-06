@@ -27,6 +27,14 @@ REQUIRED_CI_REPORTS = [
     ".datapan/ci/latest-release-doctor-smoke.json",
     ".datapan/ci/release-health-rollup.json",
 ]
+REQUIRED_SHARD_INSTALL_FIELDS = [
+    "mode",
+    "shards_asset_present",
+    "shards_validated",
+    "shards_inventory_present",
+    "shards_count",
+    "shards_records",
+]
 
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -261,6 +269,7 @@ def build_report(manifest: dict[str, Any], readiness: dict[str, Any]) -> dict[st
             "artifact_bundle": "datapan-registry-release-health",
             "required_schemas": REQUIRED_RELEASE_HEALTH_SCHEMAS,
             "required_ci_reports": REQUIRED_CI_REPORTS,
+            "required_shard_install_fields": REQUIRED_SHARD_INSTALL_FIELDS,
         },
         "shard_policy": {
             "phase": "compatibility_period",
