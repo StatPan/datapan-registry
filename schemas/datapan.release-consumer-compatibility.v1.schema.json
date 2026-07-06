@@ -48,8 +48,8 @@
     },
     "manifest_evidence_contracts": {
       "type": "array",
-      "minItems": 8,
-      "maxItems": 8,
+      "minItems": 9,
+      "maxItems": 9,
       "items": {
         "$ref": "#/$defs/manifest_evidence_contract"
       }
@@ -411,6 +411,7 @@
             "source_runtime_evidence",
             "source_runtime_remediation",
             "credential_runtime_evidence_policy",
+            "credential_runtime_receipt_collection_queue",
             "error_action_routing",
             "downstream_impact",
             "source_reference_drift",
@@ -447,6 +448,7 @@
         "source_runtime_rollup",
         "source_runtime_remediation_map",
         "credential_runtime_evidence_policy",
+        "credential_runtime_receipt_collection_queue",
         "error_action_routing_rollup",
         "downstream_impact_rollup",
         "manual_review_required",
@@ -481,6 +483,15 @@
         "credential_policy_default_ci_requires_credentials",
         "credential_policy_effect",
         "credential_policy_relief_gate_status",
+        "credential_queue_status",
+        "credential_queue_absent",
+        "credential_queue_staged_only",
+        "credential_queue_reviewed_rejected",
+        "credential_queue_reviewed_accepted",
+        "credential_queue_relief_eligible",
+        "credential_queue_reviewed_receipts",
+        "credential_queue_manual_review_reduction_allowed",
+        "credential_queue_default_ci_requires_credentials",
         "manual_review_reduction_allowed",
         "manual_review_reduction_status",
         "error_action_blocking_rules",
@@ -496,6 +507,9 @@
         },
         "credential_runtime_evidence_policy": {
           "const": "reports/credential-runtime-evidence-policy.json"
+        },
+        "credential_runtime_receipt_collection_queue": {
+          "const": "reports/credential-runtime-receipt-collection-queue.json"
         },
         "error_action_routing_rollup": {
           "const": "reports/error-action-routing-rollup.json"
@@ -514,8 +528,8 @@
         },
         "required_contracts": {
           "type": "array",
-          "minItems": 5,
-          "maxItems": 5,
+          "minItems": 6,
+          "maxItems": 6,
           "prefixItems": [
             {
               "const": "source_runtime_evidence"
@@ -525,6 +539,9 @@
             },
             {
               "const": "credential_runtime_evidence_policy"
+            },
+            {
+              "const": "credential_runtime_receipt_collection_queue"
             },
             {
               "const": "error_action_routing"
@@ -641,6 +658,33 @@
             "blocked_until_reviewed_validated_credential_runtime_receipts_exist",
             "allowed_by_reviewed_validated_credential_runtime_receipts"
           ]
+        },
+        "credential_queue_status": {
+          "enum": ["collection_required", "complete_relief_eligible"]
+        },
+        "credential_queue_absent": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_queue_staged_only": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_queue_reviewed_rejected": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_queue_reviewed_accepted": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_queue_relief_eligible": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_queue_reviewed_receipts": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_queue_manual_review_reduction_allowed": {
+          "type": "boolean"
+        },
+        "credential_queue_default_ci_requires_credentials": {
+          "const": false
         },
         "manual_review_reduction_allowed": {
           "type": "boolean"
