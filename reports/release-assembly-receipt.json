@@ -193,7 +193,7 @@
         {
           "path": "reports/source-report-inventory.json",
           "bytes": 59095,
-          "sha256": "f9eefc46660fd63c4e10bb2c484264731c44d3d3f95d6d542e4ddff161bfe7da",
+          "sha256": "1447ada724e8f92b622fc35bc84f6e894a1e83c7e2ee36d3911e9bf216cbaad2",
           "manifest_bound": true,
           "kind": "source_report_inventory",
           "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json"
@@ -249,7 +249,7 @@
         {
           "path": "reports/registry-impact-plan.json",
           "bytes": 11519,
-          "sha256": "327a74d661b72816be0874e9a74d2f6e910af7b2c4e063c96ec3f3ae75beccad",
+          "sha256": "fef1e460a43330c5efedfba2a50c93c67c7327f133922bfde88b467a24e53662",
           "manifest_bound": true,
           "kind": "registry_impact_plan",
           "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json"
@@ -282,7 +282,7 @@
         {
           "path": "reports/source-runtime-remediation-map.json",
           "bytes": 7725,
-          "sha256": "41fd36f539d6f51038df0a82ba803a254ea4c25c18194ddb0a7888d8fb9aa72d",
+          "sha256": "a6e55c941f1bfe135ee64a9f3e6e76044593af571a3f35984f530161cd09e809",
           "manifest_bound": true,
           "kind": "source_runtime_remediation_map",
           "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json"
@@ -351,7 +351,7 @@
         {
           "path": "reports/release-consumer-compatibility.json",
           "bytes": 13677,
-          "sha256": "9a357d38eaae1f2158a3b6532eb80d62d0e33c9fc0bf2307ac21364744a30c20",
+          "sha256": "7878a0a9b320c2e68643832ca06191a36681166c73a2fe2c384f2f14714f2b52",
           "manifest_bound": true,
           "kind": "consumer_compatibility",
           "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json"
@@ -388,13 +388,13 @@
         {
           "path": "reports/latest-release-verification.json",
           "bytes": 29078,
-          "sha256": "e209cdd442115d6ab22662c84a07885b47729aefd0e7241a4c4a979fce948f42",
+          "sha256": "dd23f5d95fa9faa93ac14a3fb83fd84d0efe7f207a2aaa78b26da94c8565ab19",
           "manifest_bound": false
         },
         {
           "path": "reports/latest-release-readiness.json",
           "bytes": 7612,
-          "sha256": "2535d79f7c88c46cf1d1d47840d84968e32b7fb9eb0e1fbfefc550b7701c826e",
+          "sha256": "2963fd04ec03911e6b84fdc5fd8569730dc9f124924be9f5e6ab8aa4d3d16a54",
           "manifest_bound": false
         }
       ]
