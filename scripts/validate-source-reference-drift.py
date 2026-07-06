@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import hashlib
 import json
 import pathlib
 import sys
@@ -38,6 +39,11 @@ def as_dict(value: object, path: pathlib.Path) -> dict[str, object]:
     return value
 
 
+def file_digest(path: pathlib.Path) -> tuple[int, str]:
+    data = path.read_bytes()
+    return len(data), hashlib.sha256(data).hexdigest()
+
+
 def load_profiles(paths: list[pathlib.Path]) -> dict[str, dict[str, object]]:
     profiles: dict[str, dict[str, object]] = {}
     for profile_path in paths:
@@ -58,6 +64,47 @@ def profile_reference_map(profile: dict[str, object]) -> dict[str, str]:
         if key in REFERENCE_FIELDS and isinstance(value, str):
             result[key] = value
     return result
+
+
+def validate_source_inputs(
+    report_path: pathlib.Path,
+    report: dict[str, object],
+    profile_paths: list[pathlib.Path],
+    profiles: dict[str, dict[str, object]],
+) -> None:
+    inputs = report.get("source_inputs")
+    if not isinstance(inputs, list) or not inputs:
+        raise ValueError("source_inputs must be a non-empty array")
+
+    expected_paths = [path.as_posix() for path in profile_paths]
+    actual_paths = [item.get("path") for item in inputs if isinstance(item, dict)]
+    if actual_paths != expected_paths:
+        raise ValueError(f"source_inputs paths expected {expected_paths}, got {actual_paths}")
+
+    for index, raw_input in enumerate(inputs):
+        source_input = as_dict(raw_input, report_path)
+        path_value = source_input.get("path")
+        if not isinstance(path_value, str) or not path_value:
+            raise ValueError(f"source_inputs[{index}].path must be a non-empty string")
+        profile_path = pathlib.Path(path_value)
+        if not profile_path.is_file():
+            raise ValueError(f"source_inputs[{index}].path is missing: {path_value}")
+
+        if str(source_input.get("source_id")) not in profiles:
+            raise ValueError(f"source_inputs[{index}].source_id has no matching source profile")
+        profile = as_dict(load_json(profile_path), profile_path)
+        expected_bytes, expected_sha256 = file_digest(profile_path)
+        expected_values = {
+            "source_id": profile.get("source_id"),
+            "provider": profile.get("provider"),
+            "bytes": expected_bytes,
+            "sha256": expected_sha256,
+        }
+        for key, value in expected_values.items():
+            if source_input.get(key) != value:
+                raise ValueError(
+                    f"source_inputs[{index}].{key} expected {value}, got {source_input.get(key)}"
+                )
 
 
 def validate_consistency(
@@ -204,7 +251,8 @@ def main() -> int:
     args = parser.parse_args()
 
     reports = args.reports or [pathlib.Path("reports/source-reference-drift.json")]
-    profiles = load_profiles(args.profiles or sorted(pathlib.Path("sources").glob("*.json")))
+    profile_paths = args.profiles or sorted(pathlib.Path("sources").glob("*.json"))
+    profiles = load_profiles(profile_paths)
     schema = load_json(args.schema)
     validator = jsonschema.Draft202012Validator(schema)
     failures = 0
@@ -214,6 +262,7 @@ def main() -> int:
             instance = as_dict(load_json(report_path), report_path)
             errors = sorted(validator.iter_errors(instance), key=lambda error: list(error.path))
             if not errors:
+                validate_source_inputs(report_path, instance, profile_paths, profiles)
                 validate_consistency(report_path, instance, profiles)
         except Exception as exc:  # noqa: BLE001 - report all validation blockers
             print(f"FAIL {report_path}: {exc}", file=sys.stderr)
