@@ -318,19 +318,19 @@
       "path": "schemas/datapan.error-action-routing-rollup.v1.schema.json",
       "kind": "schema",
       "status": "verified",
-      "expected_bytes": 5078,
-      "actual_bytes": 5078,
-      "expected_sha256": "cc1797e18e53cce41fb1b8b6c35c57a65f270caa44d7d437056d16d18d03d8fe",
-      "actual_sha256": "cc1797e18e53cce41fb1b8b6c35c57a65f270caa44d7d437056d16d18d03d8fe"
+      "expected_bytes": 5937,
+      "actual_bytes": 5937,
+      "expected_sha256": "03b0ab634b276b1ee1ca68aafba742a96c3df8eecc95a62ef8fda21e8d4a717b",
+      "actual_sha256": "03b0ab634b276b1ee1ca68aafba742a96c3df8eecc95a62ef8fda21e8d4a717b"
     },
     {
       "path": "schemas/datapan.source-contract-rollup.v1.schema.json",
       "kind": "schema",
       "status": "verified",
-      "expected_bytes": 12880,
-      "actual_bytes": 12880,
-      "expected_sha256": "2e10d04586a42fccdfd21058eac3584f0133afcac0704fb38cc0c5f8a36941a8",
-      "actual_sha256": "2e10d04586a42fccdfd21058eac3584f0133afcac0704fb38cc0c5f8a36941a8"
+      "expected_bytes": 13589,
+      "actual_bytes": 13589,
+      "expected_sha256": "d5c1507a0a731e9c6f6bb4eceb90d0f0bc0e57e5649172693052d1e3c92108f8",
+      "actual_sha256": "d5c1507a0a731e9c6f6bb4eceb90d0f0bc0e57e5649172693052d1e3c92108f8"
     },
     {
       "path": "schemas/datapan.link-detail-registry-patches.v1.schema.json",
@@ -410,8 +410,8 @@
       "status": "verified",
       "expected_bytes": 17123,
       "actual_bytes": 17123,
-      "expected_sha256": "e240caf21056799dce1a55119b3a187655e0cc08726c9884e09afb670b2526fb",
-      "actual_sha256": "e240caf21056799dce1a55119b3a187655e0cc08726c9884e09afb670b2526fb"
+      "expected_sha256": "afbcf2f6ad5df7a1d5a19f2a2ad60a4903a12aadb3a80c9b8a1d9a282cc7d8f9",
+      "actual_sha256": "afbcf2f6ad5df7a1d5a19f2a2ad60a4903a12aadb3a80c9b8a1d9a282cc7d8f9"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -462,19 +462,19 @@
       "path": "reports/error-action-routing-rollup.json",
       "kind": "error_action_routing_rollup",
       "status": "verified",
-      "expected_bytes": 6822,
-      "actual_bytes": 6822,
-      "expected_sha256": "f92c4a0f10f5b11e56173aed3e81834eb7071cbc7c5b0676a5a3e3f40c28bfd7",
-      "actual_sha256": "f92c4a0f10f5b11e56173aed3e81834eb7071cbc7c5b0676a5a3e3f40c28bfd7"
+      "expected_bytes": 8255,
+      "actual_bytes": 8255,
+      "expected_sha256": "3f1fa789bf4dc42ac631c060d10d38fec73dbb037f5b88dee186fc0fb3c328ff",
+      "actual_sha256": "3f1fa789bf4dc42ac631c060d10d38fec73dbb037f5b88dee186fc0fb3c328ff"
     },
     {
       "path": "reports/source-contract-rollup.json",
       "kind": "source_contract_rollup",
       "status": "verified",
-      "expected_bytes": 15831,
-      "actual_bytes": 15831,
-      "expected_sha256": "06d569e4fdde6dddf07aff63ab999350e4b81c09e92119aa13a165a3556b8628",
-      "actual_sha256": "06d569e4fdde6dddf07aff63ab999350e4b81c09e92119aa13a165a3556b8628"
+      "expected_bytes": 16969,
+      "actual_bytes": 16969,
+      "expected_sha256": "041961dbf1a774604dd904910c018fd2f004a47e16026843df13e86323632111",
+      "actual_sha256": "041961dbf1a774604dd904910c018fd2f004a47e16026843df13e86323632111"
     },
     {
       "path": "reports/source-runtime-evidence-rollup.json",
@@ -599,8 +599,8 @@
       "status": "verified",
       "expected_bytes": 8693,
       "actual_bytes": 8693,
-      "expected_sha256": "05413391111a7826cb3fc60afaa2db9f4dd76237f631843b04b9f87ddd7db39a",
-      "actual_sha256": "05413391111a7826cb3fc60afaa2db9f4dd76237f631843b04b9f87ddd7db39a"
+      "expected_sha256": "59a020e61224d0927642c9ed2b5e365e7aab24da686aadd344b06767d3f7dbdd",
+      "actual_sha256": "59a020e61224d0927642c9ed2b5e365e7aab24da686aadd344b06767d3f7dbdd"
     },
     {
       "path": "reports/unadapted-external-probe.json",

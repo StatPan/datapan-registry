@@ -10,6 +10,7 @@
     "generated_at",
     "provider",
     "generation_inputs",
+    "source_inputs",
     "summary",
     "catalogs"
   ],
@@ -26,6 +27,13 @@
     },
     "generation_inputs": {
       "$ref": "#/$defs/generation_inputs"
+    },
+    "source_inputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source_input"
+      }
     },
     "summary": {
       "$ref": "#/$defs/summary"
@@ -76,6 +84,35 @@
         },
         "generator": {
           "$ref": "#/$defs/portable_path"
+        }
+      }
+    },
+    "source_input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "source_id", "provider", "bytes", "sha256", "rules", "actions"],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/portable_path"
+        },
+        "source_id": {
+          "$ref": "#/$defs/source_id"
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bytes": {
+          "$ref": "#/$defs/count"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "rules": {
+          "$ref": "#/$defs/count"
+        },
+        "actions": {
+          "$ref": "#/$defs/count"
         }
       }
     },
