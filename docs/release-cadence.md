@@ -157,6 +157,26 @@ check. That workflow:
 - uploads current-checkout install and doctor JSON plus latest-public-release
   install and doctor JSON reports as release-health evidence.
 
+The release-health rollup is generated only after all four smoke summaries are
+present and schema-valid:
+
+```bash
+python scripts/generate-release-health-rollup.py \
+  --current-install .datapan/ci/current-release-install-smoke.json \
+  --current-doctor .datapan/ci/current-release-doctor-smoke.json \
+  --latest-install .datapan/ci/latest-release-install-smoke.json \
+  --latest-doctor .datapan/ci/latest-release-doctor-smoke.json \
+  --output .datapan/ci/release-health-rollup.json
+python scripts/validate-release-health-rollups.py \
+  --schema schemas/datapan.release-health-rollup.v1.schema.json \
+  .datapan/ci/release-health-rollup.json
+```
+
+`reports/release-consumer-compatibility.json` records that same rollup generation
+contract under `release_health_evidence.rollup_generation_contract`, and
+`scripts/validate-release-consumer-compatibility.py` checks the report, schema,
+and `.github/workflows/verify-release.yml` stay aligned with those inputs.
+
 Recommended evidence before tagging:
 
 ```bash

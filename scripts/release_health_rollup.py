@@ -13,6 +13,16 @@ INSTALL_SCHEMA_VERSION = "datapan.install-smoke-summary.v1"
 DOCTOR_SCHEMA_VERSION = "datapan.doctor-smoke-summary.v1"
 ROLLUP_SCHEMA_VERSION = "datapan.release-health-rollup.v1"
 PROVIDER = "datapan-registry"
+EXPECTED_SUMMARY_INPUTS = {
+    "current": {
+        "install": ".datapan/ci/current-release-install-smoke.json",
+        "doctor": ".datapan/ci/current-release-doctor-smoke.json",
+    },
+    "latest": {
+        "install": ".datapan/ci/latest-release-install-smoke.json",
+        "doctor": ".datapan/ci/latest-release-doctor-smoke.json",
+    },
+}
 
 
 def load_json(path: pathlib.Path) -> object:
@@ -66,6 +76,15 @@ def require_schema(summary: dict[str, Any], expected: str, label: str) -> None:
         raise ValueError(f"{label}.provider must be {PROVIDER}, got {provider!r}")
 
 
+def path_has_expected_suffix(actual: object, expected_suffix: str, label: str) -> str:
+    actual_path = require_string(actual, label)
+    normalized_actual = actual_path.replace("\\", "/")
+    normalized_expected = expected_suffix.replace("\\", "/")
+    if normalized_actual != normalized_expected and not normalized_actual.endswith(f"/{normalized_expected}"):
+        raise ValueError(f"{label} must reference {expected_suffix}, got {actual_path}")
+    return actual_path
+
+
 def build_check(scope: str, install_path: pathlib.Path, doctor_path: pathlib.Path) -> dict[str, Any]:
     if scope not in {"current", "latest"}:
         raise ValueError(f"unsupported release-health scope: {scope}")
@@ -74,6 +93,9 @@ def build_check(scope: str, install_path: pathlib.Path, doctor_path: pathlib.Pat
     doctor = as_dict(load_json(doctor_path), doctor_path.as_posix())
     require_schema(install, INSTALL_SCHEMA_VERSION, install_path.as_posix())
     require_schema(doctor, DOCTOR_SCHEMA_VERSION, doctor_path.as_posix())
+    expected_inputs = EXPECTED_SUMMARY_INPUTS[scope]
+    path_has_expected_suffix(install_path.as_posix(), expected_inputs["install"], f"{scope}.install_summary")
+    path_has_expected_suffix(doctor_path.as_posix(), expected_inputs["doctor"], f"{scope}.doctor_summary")
 
     install_registry = as_dict(install.get("registry"), f"{install_path}.registry")
     install_release = as_dict(install.get("release"), f"{install_path}.release")
@@ -230,6 +252,17 @@ def validate_rollup_consistency(rollup: dict[str, Any]) -> None:
             raise ValueError(f"{scope} rollup check must be ok")
         install = as_dict(check.get("install"), f"{scope}.install")
         doctor = as_dict(check.get("doctor"), f"{scope}.doctor")
+        expected_inputs = EXPECTED_SUMMARY_INPUTS[scope]
+        path_has_expected_suffix(
+            install.get("summary_json"),
+            expected_inputs["install"],
+            f"{scope}.install.summary_json",
+        )
+        path_has_expected_suffix(
+            doctor.get("summary_json"),
+            expected_inputs["doctor"],
+            f"{scope}.doctor.summary_json",
+        )
         install_specs = require_positive_int(install.get("specs"), f"{scope}.install.specs")
         doctor_specs = require_positive_int(doctor.get("specs"), f"{scope}.doctor.specs")
         if install_specs != doctor_specs:

@@ -35,6 +35,24 @@ REQUIRED_CI_REPORTS = {
     ".datapan/ci/latest-release-doctor-smoke.json",
     ".datapan/ci/release-health-rollup.json",
 }
+EXPECTED_ROLLUP_GENERATION_CONTRACT = {
+    "generator": "scripts/generate-release-health-rollup.py",
+    "validator": "scripts/validate-release-health-rollups.py",
+    "schema": "schemas/datapan.release-health-rollup.v1.schema.json",
+    "output": ".datapan/ci/release-health-rollup.json",
+    "inputs": [
+        {
+            "scope": "current",
+            "install_summary": ".datapan/ci/current-release-install-smoke.json",
+            "doctor_summary": ".datapan/ci/current-release-doctor-smoke.json",
+        },
+        {
+            "scope": "latest",
+            "install_summary": ".datapan/ci/latest-release-install-smoke.json",
+            "doctor_summary": ".datapan/ci/latest-release-doctor-smoke.json",
+        },
+    ],
+}
 REQUIRED_SHARD_INSTALL_FIELDS = {
     "mode",
     "shards_asset_present",
@@ -210,6 +228,65 @@ def validate_manifest_links(report: dict[str, Any], manifest: dict[str, Any]) ->
     if not REQUIRED_SHARD_INSTALL_FIELDS.issubset(required_shard_fields):
         missing = sorted(REQUIRED_SHARD_INSTALL_FIELDS.difference(required_shard_fields))
         raise ValueError(f"release health evidence missing required shard install fields: {', '.join(missing)}")
+
+
+def workflow_fragment(path: str) -> str:
+    return f"../datapan-registry/{path}"
+
+
+def validate_rollup_generation_contract(report: dict[str, Any]) -> None:
+    evidence = as_dict(report.get("release_health_evidence"), "release_health_evidence")
+    contract = as_dict(
+        evidence.get("rollup_generation_contract"),
+        "release_health_evidence.rollup_generation_contract",
+    )
+
+    for key in ("generator", "validator", "schema", "output"):
+        expected = EXPECTED_ROLLUP_GENERATION_CONTRACT[key]
+        if contract.get(key) != expected:
+            raise ValueError(
+                f"release_health_evidence.rollup_generation_contract.{key} "
+                f"expected {expected}, got {contract.get(key)}"
+            )
+
+    inputs = [
+        as_dict(item, "rollup_generation_contract.input")
+        for item in as_list(contract.get("inputs"), "rollup_generation_contract.inputs")
+    ]
+    if inputs != EXPECTED_ROLLUP_GENERATION_CONTRACT["inputs"]:
+        raise ValueError(
+            "release_health_evidence.rollup_generation_contract.inputs must match "
+            "expected current/latest smoke summaries"
+        )
+
+    workflow_path = pathlib.Path(".github/workflows/verify-release.yml")
+    if not workflow_path.is_file():
+        raise ValueError(f"release-health workflow is missing: {workflow_path}")
+    workflow = workflow_path.read_text(encoding="utf-8")
+    normalized_workflow = re.sub(r"\\\n\s*", " ", workflow)
+    normalized_workflow = re.sub(r"\s+", " ", normalized_workflow)
+
+    required_fragments = {
+        contract["generator"],
+        contract["validator"],
+        workflow_fragment(str(contract["schema"])),
+        workflow_fragment(str(contract["output"])),
+        "--output " + workflow_fragment(str(contract["output"])),
+    }
+    for item in inputs:
+        required_fragments.update(
+            {
+                "--" + item["scope"] + "-install " + workflow_fragment(str(item["install_summary"])),
+                "--" + item["scope"] + "-doctor " + workflow_fragment(str(item["doctor_summary"])),
+            }
+        )
+
+    missing_fragments = sorted(fragment for fragment in required_fragments if fragment not in normalized_workflow)
+    if missing_fragments:
+        raise ValueError(
+            "release-health rollup workflow is missing required fragments: "
+            + ", ".join(missing_fragments)
+        )
 
 
 def validate_generation_inputs(
@@ -401,6 +478,7 @@ def validate_consistency(
     validate_generation_inputs(report, manifest, readiness, manifest_path, readiness_path)
     validate_summary(report)
     validate_manifest_links(report, manifest)
+    validate_rollup_generation_contract(report)
     validate_readiness(report, readiness)
     validate_shard_policy(report)
     validate_shard_release_evidence(report)
