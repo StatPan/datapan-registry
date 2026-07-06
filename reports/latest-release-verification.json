@@ -309,10 +309,10 @@
       "path": "schemas/datapan.release-consumer-compatibility.v1.schema.json",
       "kind": "schema",
       "status": "verified",
-      "expected_bytes": 12506,
-      "actual_bytes": 12506,
-      "expected_sha256": "0e67a8eea83e6a42a5b722fac718c622423e3d3ed1afde9dc913e7b1a2dbb392",
-      "actual_sha256": "0e67a8eea83e6a42a5b722fac718c622423e3d3ed1afde9dc913e7b1a2dbb392"
+      "expected_bytes": 16059,
+      "actual_bytes": 16059,
+      "expected_sha256": "7c33f2cf0effea882cecfbf1a42fd45cee95515f052a1cf8d8e96b6558b06a1f",
+      "actual_sha256": "7c33f2cf0effea882cecfbf1a42fd45cee95515f052a1cf8d8e96b6558b06a1f"
     },
     {
       "path": "schemas/datapan.error-action-routing-rollup.v1.schema.json",
@@ -410,8 +410,8 @@
       "status": "verified",
       "expected_bytes": 17125,
       "actual_bytes": 17125,
-      "expected_sha256": "f39a3ae0f0846b70db81867a192a8056ccb5537f9410c65f02c423122d202630",
-      "actual_sha256": "f39a3ae0f0846b70db81867a192a8056ccb5537f9410c65f02c423122d202630"
+      "expected_sha256": "6202d51d7155a10785cf0ead655d94db087371b82741db8c743a50686f902278",
+      "actual_sha256": "6202d51d7155a10785cf0ead655d94db087371b82741db8c743a50686f902278"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -491,8 +491,8 @@
       "status": "verified",
       "expected_bytes": 11519,
       "actual_bytes": 11519,
-      "expected_sha256": "85cef778259082257071d73641948f31ff404ce8056772c66040a9919c9e3ba9",
-      "actual_sha256": "85cef778259082257071d73641948f31ff404ce8056772c66040a9919c9e3ba9"
+      "expected_sha256": "3031beb301ec652494c98ad226feb43c776ec2ccfb155ba5335f97a61c5cecbd",
+      "actual_sha256": "3031beb301ec652494c98ad226feb43c776ec2ccfb155ba5335f97a61c5cecbd"
     },
     {
       "path": "reports/source-reference-drift.json",
@@ -509,8 +509,8 @@
       "status": "verified",
       "expected_bytes": 59095,
       "actual_bytes": 59095,
-      "expected_sha256": "c73c070786c02e37286de379593ec8d515f96f18f35f06cd849a6431f50cf28a",
-      "actual_sha256": "c73c070786c02e37286de379593ec8d515f96f18f35f06cd849a6431f50cf28a"
+      "expected_sha256": "65027ebbdd9574e0d0f2e55703c00981d52a75da989228fbfc7bcc4a0b35c778",
+      "actual_sha256": "65027ebbdd9574e0d0f2e55703c00981d52a75da989228fbfc7bcc4a0b35c778"
     },
     {
       "path": "reports/dependencies.json",
@@ -597,10 +597,10 @@
       "path": "reports/release-consumer-compatibility.json",
       "kind": "consumer_compatibility",
       "status": "verified",
-      "expected_bytes": 9922,
-      "actual_bytes": 9922,
-      "expected_sha256": "a1717ebc854bd40859203605127bceaecb45ed7a4db1f54b7e05050641c65854",
-      "actual_sha256": "a1717ebc854bd40859203605127bceaecb45ed7a4db1f54b7e05050641c65854"
+      "expected_bytes": 12788,
+      "actual_bytes": 12788,
+      "expected_sha256": "80b94791090436e70a01fc374b91b46b11982dcca4d90eb4ac2c20c6e424bed4",
+      "actual_sha256": "80b94791090436e70a01fc374b91b46b11982dcca4d90eb4ac2c20c6e424bed4"
     },
     {
       "path": "reports/unadapted-external-probe.json",

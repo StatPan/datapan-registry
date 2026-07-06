@@ -15,6 +15,7 @@
     "compatibility_path",
     "release_health_evidence",
     "manifest_evidence_contracts",
+    "runtime_risk_evidence",
     "shard_policy",
     "shard_release_evidence",
     "consumers"
@@ -52,6 +53,9 @@
       "items": {
         "$ref": "#/$defs/manifest_evidence_contract"
       }
+    },
+    "runtime_risk_evidence": {
+      "$ref": "#/$defs/runtime_risk_evidence"
     },
     "shard_policy": {
       "$ref": "#/$defs/shard_policy"
@@ -431,6 +435,137 @@
         },
         "required": {
           "const": true
+        }
+      }
+    },
+    "runtime_risk_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_runtime_rollup",
+        "error_action_routing_rollup",
+        "downstream_impact_rollup",
+        "manual_review_required",
+        "compatibility_effect",
+        "required_contracts",
+        "blocking_count",
+        "warning_count",
+        "sources_without_evidence",
+        "blocker_ids",
+        "warning_ids",
+        "sources",
+        "error_action_blocking_rules",
+        "error_action_manual_review_rules",
+        "downstream_manual_review_changes"
+      ],
+      "properties": {
+        "source_runtime_rollup": {
+          "const": "reports/source-runtime-evidence-rollup.json"
+        },
+        "error_action_routing_rollup": {
+          "const": "reports/error-action-routing-rollup.json"
+        },
+        "downstream_impact_rollup": {
+          "const": "reports/registry-impact-plan.json"
+        },
+        "manual_review_required": {
+          "type": "boolean"
+        },
+        "compatibility_effect": {
+          "enum": [
+            "manual_review_required_until_runtime_blockers_resolved",
+            "runtime_evidence_clear"
+          ]
+        },
+        "required_contracts": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "prefixItems": [
+            {
+              "const": "source_runtime_evidence"
+            },
+            {
+              "const": "error_action_routing"
+            },
+            {
+              "const": "downstream_impact"
+            }
+          ]
+        },
+        "blocking_count": {
+          "$ref": "#/$defs/count"
+        },
+        "warning_count": {
+          "$ref": "#/$defs/count"
+        },
+        "sources_without_evidence": {
+          "$ref": "#/$defs/count"
+        },
+        "blocker_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          },
+          "uniqueItems": true
+        },
+        "warning_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          },
+          "uniqueItems": true
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/runtime_risk_source"
+          }
+        },
+        "error_action_blocking_rules": {
+          "$ref": "#/$defs/count"
+        },
+        "error_action_manual_review_rules": {
+          "$ref": "#/$defs/count"
+        },
+        "downstream_manual_review_changes": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "runtime_risk_source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "blocking_count",
+        "warning_count",
+        "blocker_ids",
+        "warning_ids"
+      ],
+      "properties": {
+        "source_id": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "blocking_count": {
+          "$ref": "#/$defs/count"
+        },
+        "warning_count": {
+          "$ref": "#/$defs/count"
+        },
+        "blocker_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          },
+          "uniqueItems": true
+        },
+        "warning_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          },
+          "uniqueItems": true
         }
       }
     },
