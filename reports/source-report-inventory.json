@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-04T06:39:24Z",
+  "generated_at": "2026-07-04T06:39:51Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -25,11 +25,11 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 138,
+    "report_total": 149,
     "recommended_report_slots": 65,
-    "present_recommended_reports": 8,
-    "missing_recommended_reports": 57,
-    "source_report_coverage_percent": 12.3,
+    "present_recommended_reports": 19,
+    "missing_recommended_reports": 46,
+    "source_report_coverage_percent": 29.2,
     "schema_backed_reports": 24,
     "schema_indexed_reports": 24,
     "schema_missing_reports": 0
@@ -41,9 +41,46 @@
       "display_name": "Public Data Portal",
       "source_profile": "sources/data_go_kr.json",
       "report_dir": "reports/data-go-kr",
+      "report_alias_paths": [
+        "reports/adapter-targets.json",
+        "reports/catalog-audit.json",
+        "reports/catalog-diff.json",
+        "reports/coverage.json",
+        "reports/dependencies.json",
+        "reports/error-catalog.json",
+        "reports/latest-verification-summary.json",
+        "reports/latest-verification.json",
+        "reports/provider-backlog.json",
+        "reports/route-disposition.json",
+        "reports/verification-plan.json"
+      ],
       "report_dir_exists": true,
-      "report_count": 126,
+      "report_count": 137,
       "present_reports": [
+        {
+          "name": "adapter-targets.json",
+          "path": "reports/adapter-targets.json",
+          "bytes": 15979,
+          "sha256": "505a951c4da108cd4ec1a17713aed6f7562e86d35922faa78138b1ded9730edb"
+        },
+        {
+          "name": "catalog-audit.json",
+          "path": "reports/catalog-audit.json",
+          "bytes": 16184,
+          "sha256": "842b0c712c1140fbc1fa4217ebac9bfdf3f5f11609e1499df697f89f7e6ea2cf"
+        },
+        {
+          "name": "catalog-diff.json",
+          "path": "reports/catalog-diff.json",
+          "bytes": 1821869,
+          "sha256": "df39f44a48af218174d3e814fbdd77b8cb7818ee5c5c864e39a224652a8fb693"
+        },
+        {
+          "name": "coverage.json",
+          "path": "reports/coverage.json",
+          "bytes": 39684,
+          "sha256": "31a9477f192bc0ab4d8ae1ad41cc8407f3b1e05e3648af8ccdfe962c6a9732f5"
+        },
         {
           "name": "acrc-verification-summary.json",
           "path": "reports/data-go-kr/acrc-verification-summary.json",
@@ -847,10 +884,51 @@
           "path": "reports/data-go-kr/yuseong-verification.json",
           "bytes": 15860,
           "sha256": "735c7aa59b6e5f30e16cb8ff2fd7b0d9f7ee4738c534a60bc289601120ad6872"
+        },
+        {
+          "name": "dependencies.json",
+          "path": "reports/dependencies.json",
+          "bytes": 18948589,
+          "sha256": "670be7d2914573bc034fab5b248a75b177996541a4b7efdc7116ad2c5af4a0ae"
+        },
+        {
+          "name": "error-catalog.json",
+          "path": "reports/error-catalog.json",
+          "bytes": 3305358,
+          "sha256": "e3a6eefc67dd896acadc89b2a9e0b2dd85d9f9680ae1c149397d4bfcb3555ad2"
+        },
+        {
+          "name": "latest-verification-summary.json",
+          "path": "reports/latest-verification-summary.json",
+          "bytes": 40559,
+          "sha256": "4cc38806231bd9df299b41ad0d4d1583adca4f8db130e38f1325427c5651af12"
+        },
+        {
+          "name": "latest-verification.json",
+          "path": "reports/latest-verification.json",
+          "bytes": 2914653,
+          "sha256": "c88bcd011da16a56c451950ffc8555125e32b866e2d357e8feaef8eb1e2a2c86"
+        },
+        {
+          "name": "provider-backlog.json",
+          "path": "reports/provider-backlog.json",
+          "bytes": 107684,
+          "sha256": "95b86282fba7743bf65d61604a44ac26f35390e602bf00555729afc87eda8d66"
+        },
+        {
+          "name": "route-disposition.json",
+          "path": "reports/route-disposition.json",
+          "bytes": 22918,
+          "sha256": "f1a2cb64b22527bed340613e2c81b5a21cc56a9277c70facb5f205cfa80b87c6"
+        },
+        {
+          "name": "verification-plan.json",
+          "path": "reports/verification-plan.json",
+          "bytes": 14236,
+          "sha256": "e4b7b27b960e3f352bbf235c2566736bff278a15751aab1e83249d02de575dbb"
         }
       ],
-      "present_recommended_reports": [],
-      "missing_recommended_reports": [
+      "present_recommended_reports": [
         "adapter-targets.json",
         "catalog-audit.json",
         "catalog-diff.json",
@@ -861,9 +939,11 @@
         "latest-verification.json",
         "provider-backlog.json",
         "route-disposition.json",
-        "runtime-candidates.json",
-        "runtime-evidence-plan.json",
         "verification-plan.json"
+      ],
+      "missing_recommended_reports": [
+        "runtime-candidates.json",
+        "runtime-evidence-plan.json"
       ],
       "extra_reports": [
         "acrc-verification-summary.json",
@@ -993,7 +1073,7 @@
         "yuseong-verification-summary.json",
         "yuseong-verification.json"
       ],
-      "recommended_report_coverage_percent": 0.0
+      "recommended_report_coverage_percent": 84.6
     },
     {
       "source_id": "ecos",
@@ -1001,6 +1081,7 @@
       "display_name": "Bank of Korea Economic Statistics System",
       "source_profile": "sources/ecos.json",
       "report_dir": "reports/ecos",
+      "report_alias_paths": [],
       "report_dir_exists": true,
       "report_count": 3,
       "present_reports": [
@@ -1063,6 +1144,7 @@
       "display_name": "Korean Statistical Information Service",
       "source_profile": "sources/kosis.json",
       "report_dir": "reports/kosis",
+      "report_alias_paths": [],
       "report_dir_exists": true,
       "report_count": 3,
       "present_reports": [
@@ -1125,6 +1207,7 @@
       "display_name": "Open National Assembly Information",
       "source_profile": "sources/open_assembly.json",
       "report_dir": "reports/open-assembly",
+      "report_alias_paths": [],
       "report_dir_exists": true,
       "report_count": 3,
       "present_reports": [
@@ -1187,6 +1270,7 @@
       "display_name": "Seoul Open Data Plaza",
       "source_profile": "sources/seoul_open_data.json",
       "report_dir": "reports/seoul-open-data",
+      "report_alias_paths": [],
       "report_dir_exists": true,
       "report_count": 3,
       "present_reports": [

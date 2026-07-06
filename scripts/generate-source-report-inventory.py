@@ -32,6 +32,24 @@ RECOMMENDED_REPORTS = [
     "verification-plan.json",
 ]
 
+SOURCE_REPORT_ALIASES = {
+    # These data.go.kr reports are still served from legacy top-level paths for
+    # compatibility, but they are source-owned release evidence.
+    "data_go_kr": [
+        "adapter-targets.json",
+        "catalog-audit.json",
+        "catalog-diff.json",
+        "coverage.json",
+        "dependencies.json",
+        "error-catalog.json",
+        "latest-verification-summary.json",
+        "latest-verification.json",
+        "provider-backlog.json",
+        "route-disposition.json",
+        "verification-plan.json",
+    ],
+}
+
 
 def load_json(path: pathlib.Path) -> Any:
     with path.open("r", encoding="utf-8") as handle:
@@ -114,6 +132,18 @@ def report_entry(path: pathlib.Path, schema_ids: set[str]) -> dict[str, Any]:
     return entry
 
 
+def source_report_paths(source_id: str, report_dir: pathlib.Path) -> tuple[list[pathlib.Path], list[pathlib.Path]]:
+    report_paths = sorted(report_dir.glob("*.json")) if report_dir.exists() else []
+    alias_paths = [
+        REPORTS_ROOT / name
+        for name in SOURCE_REPORT_ALIASES.get(source_id, [])
+        if (REPORTS_ROOT / name).is_file()
+    ]
+    existing = {path.as_posix() for path in report_paths}
+    alias_paths = [path for path in alias_paths if path.as_posix() not in existing]
+    return sorted(report_paths + alias_paths), sorted(alias_paths)
+
+
 def generated_at_from_reports(report_paths: list[pathlib.Path]) -> str:
     values: list[str] = []
     for path in report_paths:
@@ -150,7 +180,7 @@ def build_report() -> dict[str, Any]:
     for profile_path, profile in source_profiles():
         source_id = str(profile.get("source_id"))
         report_dir = REPORTS_ROOT / report_dir_name(source_id)
-        report_paths = sorted(report_dir.glob("*.json")) if report_dir.exists() else []
+        report_paths, alias_paths = source_report_paths(source_id, report_dir)
         all_report_paths.extend(report_paths)
         if report_dir.exists():
             source_report_dirs += 1
@@ -172,6 +202,7 @@ def build_report() -> dict[str, Any]:
                 "display_name": profile.get("display_name"),
                 "source_profile": portable_path(profile_path),
                 "report_dir": portable_path(report_dir),
+                "report_alias_paths": [portable_path(path) for path in alias_paths],
                 "report_dir_exists": report_dir.exists(),
                 "report_count": len(report_paths),
                 "present_reports": present_reports,
