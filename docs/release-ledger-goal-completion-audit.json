@@ -94,6 +94,12 @@
       "credential_queue_relief_eligible": 0,
       "credential_queue_reviewed_receipts": 0,
       "credential_queue_manual_review_reduction_allowed": false,
+      "credential_handoff_status": "review_required",
+      "credential_handoff_pending_review_sources": 5,
+      "credential_handoff_reviewed_receipts": 0,
+      "credential_handoff_relief_eligible_sources": 0,
+      "credential_handoff_global_manual_review_relief_allowed": false,
+      "credential_handoff_relief_decision": "blocked_until_all_sources_relief_eligible",
       "remediation_receipt_linked_findings": 13,
       "remediation_receipt_linked_absent": 13,
       "remediation_receipt_linked_relief_eligible": 0,
@@ -138,6 +144,7 @@
     "credential_runtime_review_handoff": {
       "path": "reports/credential-runtime-review-handoff.json",
       "handoff_ticket": 385,
+      "consumer_compatibility_ticket": 387,
       "pending_review_sources": 5,
       "reviewed_receipts_checked_in": 0,
       "relief_eligible_sources": 0,
@@ -321,7 +328,7 @@
         },
         {
           "path": "reports/release-consumer-compatibility.json",
-          "finding": "Reports seven consumers, two proven consumers, one blocked consumer, canonical registry requirement, optional shard assets, runtime manual-review evidence, source runtime remediation counts, credential policy receipt and review state, credential queue absent/reviewed/relief counts, and the blocked receipt-backed manual-review reduction gate."
+          "finding": "Reports seven consumers, two proven consumers, one blocked consumer, canonical registry requirement, optional shard assets, runtime manual-review evidence, source runtime remediation counts, credential policy receipt and review state, credential queue absent/reviewed/relief counts, credential review handoff status, and the blocked receipt-backed manual-review reduction gate."
         },
         {
           "path": "scripts/validate-impact-plans.py",
@@ -329,7 +336,7 @@
         },
         {
           "path": "scripts/validate-release-consumer-compatibility.py",
-          "finding": "Fails if source runtime blockers remain but remediation evidence, remediation reviewed-receipt linkage, credential runtime policy evidence, credential receipt queue evidence, reviewed receipt intake gating, receipt-backed relief gating, error/action routing evidence, or downstream manual-review impact evidence disappears."
+          "finding": "Fails if source runtime blockers remain but remediation evidence, remediation reviewed-receipt linkage, credential runtime policy evidence, credential receipt queue evidence, credential review handoff evidence, reviewed receipt intake gating, receipt-backed relief gating, error/action routing evidence, or downstream manual-review impact evidence disappears."
         },
         {
           "path": "reports/credential-runtime-evidence-policy.json",
@@ -337,11 +344,11 @@
         },
         {
           "path": "reports/credential-runtime-receipt-collection-queue.json",
-          "finding": "Turns the zero-receipt state into per-source operator queue entries that are now referenced by consumer compatibility evidence, so downstream compatibility relief remains blocked while the next reviewed receipt collection work is explicit."
+          "finding": "Turns the zero-receipt state into per-source operator queue entries referenced by consumer compatibility evidence and the reviewer handoff, so downstream compatibility relief remains blocked while the next reviewed receipt collection work is explicit."
         },
         {
           "path": "reports/credential-runtime-review-handoff.json",
-          "finding": "Keeps manual-review relief blocked behind an explicit reviewer handoff status, five pending review sources, zero reviewed receipts, zero relief-eligible sources, and a secret-free validation contract."
+          "finding": "Keeps manual-review relief blocked behind an explicit reviewer handoff status, five pending review sources, zero reviewed receipts, zero relief-eligible sources, a secret-free validation contract, and consumer compatibility fields that mirror those blocker semantics."
         }
       ],
       "next_action": "Keep compatibility evidence current whenever source runtime blockers or downstream contracts change."
@@ -376,12 +383,12 @@
     {
       "id": "credentialed_runtime_receipts_absent",
       "evidence": "reports/credential-runtime-receipt-collection-queue.json",
-      "finding": "Credential-gated runtime checks now have a secret-safe policy path, redacted receipt contract, reviewed checked-in intake path, discovery-derived counts, per-source collection queue, deterministic promotion command, reviewer handoff, and remediation finding linkage, but live credentialed receipts are still absent and not allowed to reduce manual-review boundaries."
+      "finding": "Credential-gated runtime checks now have a secret-safe policy path, redacted receipt contract, reviewed checked-in intake path, discovery-derived counts, per-source collection queue, deterministic promotion command, reviewer handoff, remediation finding linkage, and consumer compatibility linkage, but live credentialed receipts are still absent and not allowed to reduce manual-review boundaries."
     },
     {
       "id": "receipt_backed_compatibility_relief_blocked",
       "evidence": "reports/release-consumer-compatibility.json",
-      "finding": "Consumer compatibility now distinguishes receipt contract availability, reviewed intake availability, receipt validation, receipt review, queue collection state, and relief eligibility from receipt-backed relief; manual_review_reduction_allowed remains false until reviewed validated credential runtime receipts exist."
+      "finding": "Consumer compatibility now distinguishes receipt contract availability, reviewed intake availability, receipt validation, receipt review, queue collection state, review handoff state, and relief eligibility from receipt-backed relief; manual_review_reduction_allowed remains false until reviewed validated credential runtime receipts exist."
     },
     {
       "id": "consumer_compatibility_manual_review_required",
@@ -479,6 +486,11 @@
       "issue": 385,
       "title": "Codify credential receipt review handoff",
       "reason": "Reviewers now have a checked-in handoff for per-source credential receipt evidence packets and relief blockers, but the goal remains open because reviewed live receipts are still absent."
+    },
+    {
+      "issue": 387,
+      "title": "Bind credential review handoff to consumer compatibility",
+      "reason": "Downstream compatibility now mirrors credential review handoff status, pending sources, reviewed receipt counts, relief eligibility, and relief decisions, but the goal remains open because reviewed live receipts are still absent."
     }
   ]
 }

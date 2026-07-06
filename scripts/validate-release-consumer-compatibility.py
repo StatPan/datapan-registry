@@ -27,6 +27,7 @@ DEFAULT_SOURCE_RUNTIME_ROLLUP = pathlib.Path("reports/source-runtime-evidence-ro
 DEFAULT_SOURCE_RUNTIME_REMEDIATION = pathlib.Path("reports/source-runtime-remediation-map.json")
 DEFAULT_CREDENTIAL_RUNTIME_POLICY = pathlib.Path("reports/credential-runtime-evidence-policy.json")
 DEFAULT_CREDENTIAL_RECEIPT_QUEUE = pathlib.Path("reports/credential-runtime-receipt-collection-queue.json")
+DEFAULT_CREDENTIAL_REVIEW_HANDOFF = pathlib.Path("reports/credential-runtime-review-handoff.json")
 DEFAULT_ERROR_ACTION_ROUTING_ROLLUP = pathlib.Path("reports/error-action-routing-rollup.json")
 DEFAULT_IMPACT_ROLLUP = pathlib.Path("reports/registry-impact-plan.json")
 REQUIRED_RUNTIME_RISK_CONTRACTS = [
@@ -34,6 +35,7 @@ REQUIRED_RUNTIME_RISK_CONTRACTS = [
     "source_runtime_remediation",
     "credential_runtime_evidence_policy",
     "credential_runtime_receipt_collection_queue",
+    "credential_runtime_review_handoff",
     "error_action_routing",
     "downstream_impact",
 ]
@@ -115,6 +117,11 @@ REQUIRED_MANIFEST_EVIDENCE_CONTRACTS = {
         "path": "reports/credential-runtime-receipt-collection-queue.json",
         "kind": "credential_runtime_receipt_collection_queue",
         "schema": "https://schemas.datapan.dev/datapan.credential-runtime-receipt-collection-queue.v1.schema.json",
+    },
+    "credential_runtime_review_handoff": {
+        "path": "reports/credential-runtime-review-handoff.json",
+        "kind": "credential_runtime_review_handoff",
+        "schema": "https://schemas.datapan.dev/datapan.credential-runtime-review-handoff.v1.schema.json",
     },
     "error_action_routing": {
         "path": "reports/error-action-routing-rollup.json",
@@ -518,12 +525,14 @@ def validate_runtime_risk_evidence(
     source_runtime_remediation: dict[str, Any],
     credential_runtime_policy: dict[str, Any],
     credential_receipt_queue: dict[str, Any],
+    credential_review_handoff: dict[str, Any],
     error_action_routing: dict[str, Any],
     downstream_impact: dict[str, Any],
     source_runtime_path: pathlib.Path,
     source_runtime_remediation_path: pathlib.Path,
     credential_runtime_policy_path: pathlib.Path,
     credential_receipt_queue_path: pathlib.Path,
+    credential_review_handoff_path: pathlib.Path,
     error_action_routing_path: pathlib.Path,
     impact_path: pathlib.Path,
 ) -> None:
@@ -534,6 +543,7 @@ def validate_runtime_risk_evidence(
         "source_runtime_remediation_map": source_runtime_remediation_path.as_posix(),
         "credential_runtime_evidence_policy": credential_runtime_policy_path.as_posix(),
         "credential_runtime_receipt_collection_queue": credential_receipt_queue_path.as_posix(),
+        "credential_runtime_review_handoff": credential_review_handoff_path.as_posix(),
         "error_action_routing_rollup": error_action_routing_path.as_posix(),
         "downstream_impact_rollup": impact_path.as_posix(),
     }
@@ -544,7 +554,7 @@ def validate_runtime_risk_evidence(
     contracts = as_list(risk.get("required_contracts"), "runtime_risk_evidence.required_contracts")
     if contracts != REQUIRED_RUNTIME_RISK_CONTRACTS:
         raise ValueError(
-            "runtime_risk_evidence.required_contracts must bind source runtime, remediation, credential policy, receipt queue, routing, and impact in order"
+            "runtime_risk_evidence.required_contracts must bind source runtime, remediation, credential policy, receipt queue, review handoff, routing, and impact in order"
         )
     report_contracts = {
         as_dict(item, "manifest_evidence_contract").get("contract")
@@ -624,6 +634,11 @@ def validate_runtime_risk_evidence(
 
     credential_summary = as_dict(credential_runtime_policy.get("summary"), "credential_runtime_policy.summary")
     credential_queue_summary = as_dict(credential_receipt_queue.get("summary"), "credential_receipt_queue.summary")
+    credential_handoff_summary = as_dict(credential_review_handoff.get("summary"), "credential_review_handoff.summary")
+    credential_handoff_boundary = as_dict(
+        credential_review_handoff.get("release_boundary"),
+        "credential_review_handoff.release_boundary",
+    )
     credential_boundary = as_dict(
         credential_runtime_policy.get("release_boundary"),
         "credential_runtime_policy.release_boundary",
@@ -682,6 +697,47 @@ def validate_runtime_risk_evidence(
         raise ValueError("credential receipt queue reviewed count must match credential policy")
     if risk.get("credential_queue_default_ci_requires_credentials") is not False:
         raise ValueError("credential receipt queue must remain secret-free in default CI")
+
+    credential_handoff_expected = {
+        "credential_handoff_status": credential_handoff_summary.get("handoff_status"),
+        "credential_handoff_pending_review_sources": credential_handoff_summary.get("pending_review_sources"),
+        "credential_handoff_reviewed_receipts": credential_handoff_summary.get("reviewed_receipts_checked_in"),
+        "credential_handoff_relief_eligible_sources": credential_handoff_summary.get("relief_eligible_sources"),
+        "credential_handoff_global_manual_review_relief_allowed": credential_handoff_summary.get(
+            "global_manual_review_relief_allowed"
+        ),
+        "credential_handoff_manual_review_required": credential_handoff_summary.get("manual_review_required"),
+        "credential_handoff_default_ci_requires_credentials": credential_handoff_summary.get(
+            "default_ci_requires_credentials"
+        ),
+        "credential_handoff_relief_decision": credential_handoff_boundary.get("relief_decision"),
+    }
+    for key, value in credential_handoff_expected.items():
+        if risk.get(key) != value:
+            raise ValueError(f"runtime_risk_evidence.{key} expected {value}, got {risk.get(key)}")
+    if credential_handoff_summary.get("credential_gated_sources") != credential_queue_summary.get(
+        "credential_gated_sources"
+    ):
+        raise ValueError("credential handoff source count must match credential queue source count")
+    if credential_handoff_summary.get("reviewed_receipts_checked_in") != credential_queue_summary.get(
+        "reviewed_receipts_checked_in"
+    ):
+        raise ValueError("credential handoff reviewed receipt count must match credential queue")
+    if credential_handoff_summary.get("relief_eligible_sources") != credential_queue_summary.get("relief_eligible"):
+        raise ValueError("credential handoff relief-eligible count must match credential queue")
+    if credential_handoff_summary.get("global_manual_review_relief_allowed") != credential_queue_summary.get(
+        "manual_review_reduction_allowed"
+    ):
+        raise ValueError("credential handoff global relief state must match credential queue")
+    if credential_handoff_summary.get("default_ci_requires_credentials") is not False:
+        raise ValueError("credential review handoff must remain secret-free in default CI")
+    if risk.get("credential_handoff_global_manual_review_relief_allowed") is True and (
+        risk.get("credential_handoff_reviewed_receipts", 0) <= 0
+        or risk.get("credential_handoff_relief_eligible_sources", 0) <= 0
+        or risk.get("credential_handoff_status") != "relief_ready"
+        or risk.get("credential_handoff_relief_decision") != "allowed_by_all_reviewed_validated_receipts"
+    ):
+        raise ValueError("credential handoff relief requires reviewed relief-eligible receipts and relief_ready status")
     if risk.get("remediation_credential_policy_available") is not True:
         raise ValueError("source runtime remediation must expose the credential policy availability boundary")
     if risk.get("remediation_receipt_contract_available") is not True:
@@ -720,6 +776,7 @@ def validate_runtime_risk_evidence(
     if risk.get("manual_review_reduction_allowed") is True and (
         risk.get("credential_policy_manual_review_reduction_allowed") is not True
         or risk.get("remediation_receipt_backed_relief_allowed") is not True
+        or risk.get("credential_handoff_global_manual_review_relief_allowed") is not True
     ):
         raise ValueError("compatibility relief cannot be allowed without validated receipt-backed policy and remediation gates")
 
@@ -730,6 +787,10 @@ def validate_runtime_risk_evidence(
             raise ValueError("runtime blockers or warnings must keep manual-review compatibility effect")
         if risk.get("manual_review_reduction_allowed") is not False:
             raise ValueError("manual-review reduction must remain disallowed while receipt-backed runtime relief is absent")
+        if risk.get("credential_handoff_status") != "review_required":
+            raise ValueError("runtime blockers require credential handoff status review_required")
+        if risk.get("credential_handoff_pending_review_sources", 0) <= 0:
+            raise ValueError("runtime blockers require pending credential review sources in the handoff")
         if (
             risk.get("manual_review_reduction_status")
             != "blocked_until_reviewed_validated_credential_runtime_receipts_exist"
@@ -797,6 +858,7 @@ def validate_consistency(
     source_runtime_remediation: dict[str, Any],
     credential_runtime_policy: dict[str, Any],
     credential_receipt_queue: dict[str, Any],
+    credential_review_handoff: dict[str, Any],
     error_action_routing: dict[str, Any],
     downstream_impact: dict[str, Any],
     manifest_path: pathlib.Path,
@@ -805,6 +867,7 @@ def validate_consistency(
     source_runtime_remediation_path: pathlib.Path,
     credential_runtime_policy_path: pathlib.Path,
     credential_receipt_queue_path: pathlib.Path,
+    credential_review_handoff_path: pathlib.Path,
     error_action_routing_path: pathlib.Path,
     impact_path: pathlib.Path,
 ) -> None:
@@ -822,12 +885,14 @@ def validate_consistency(
         source_runtime_remediation,
         credential_runtime_policy,
         credential_receipt_queue,
+        credential_review_handoff,
         error_action_routing,
         downstream_impact,
         source_runtime_path,
         source_runtime_remediation_path,
         credential_runtime_policy_path,
         credential_receipt_queue_path,
+        credential_review_handoff_path,
         error_action_routing_path,
         impact_path,
     )
@@ -848,6 +913,7 @@ def main() -> int:
     parser.add_argument("--source-runtime-remediation", default=DEFAULT_SOURCE_RUNTIME_REMEDIATION, type=pathlib.Path)
     parser.add_argument("--credential-runtime-policy", default=DEFAULT_CREDENTIAL_RUNTIME_POLICY, type=pathlib.Path)
     parser.add_argument("--credential-receipt-queue", default=DEFAULT_CREDENTIAL_RECEIPT_QUEUE, type=pathlib.Path)
+    parser.add_argument("--credential-review-handoff", default=DEFAULT_CREDENTIAL_REVIEW_HANDOFF, type=pathlib.Path)
     parser.add_argument("--error-action-routing-rollup", default=DEFAULT_ERROR_ACTION_ROUTING_ROLLUP, type=pathlib.Path)
     parser.add_argument("--impact-rollup", default=DEFAULT_IMPACT_ROLLUP, type=pathlib.Path)
     parser.add_argument("report", nargs="?", default=COMPATIBILITY_REPORT_PATH, type=pathlib.Path)
@@ -870,6 +936,10 @@ def main() -> int:
         credential_receipt_queue = as_dict(
             load_json(args.credential_receipt_queue),
             args.credential_receipt_queue.as_posix(),
+        )
+        credential_review_handoff = as_dict(
+            load_json(args.credential_review_handoff),
+            args.credential_review_handoff.as_posix(),
         )
         error_action_routing = as_dict(
             load_json(args.error_action_routing_rollup),
@@ -894,6 +964,7 @@ def main() -> int:
             source_runtime_remediation,
             credential_runtime_policy,
             credential_receipt_queue,
+            credential_review_handoff,
             error_action_routing,
             downstream_impact,
             args.manifest,
@@ -902,6 +973,7 @@ def main() -> int:
             args.source_runtime_remediation,
             args.credential_runtime_policy,
             args.credential_receipt_queue,
+            args.credential_review_handoff,
             args.error_action_routing_rollup,
             args.impact_rollup,
         )
