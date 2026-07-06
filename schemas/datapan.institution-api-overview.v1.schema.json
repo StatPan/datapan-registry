@@ -1,0 +1,318 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.institution-api-overview.v1.schema.json",
+  "title": "Datapan Institution API Overview v1",
+  "description": "Source-scoped institution overview for data.go.kr API, runtime evidence, dependency, and adapter coverage signals.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "provider",
+    "source_id",
+    "generation_inputs",
+    "summary",
+    "by_dependency_class",
+    "by_adapter_status",
+    "top_source_categories",
+    "top_hosts",
+    "institutions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.institution-api-overview.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "const": "data.go.kr"
+    },
+    "source_id": {
+      "const": "data_go_kr"
+    },
+    "generation_inputs": {
+      "$ref": "#/$defs/generation_inputs"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "by_dependency_class": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/key_count"
+      }
+    },
+    "by_adapter_status": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/key_count"
+      }
+    },
+    "top_source_categories": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/category_count"
+      }
+    },
+    "top_hosts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/host_count"
+      }
+    },
+    "institutions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/institution"
+      }
+    }
+  },
+  "$defs": {
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "percent": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "generation_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registry",
+        "dependencies",
+        "latest_verification",
+        "coverage",
+        "provider_index"
+      ],
+      "properties": {
+        "registry": {
+          "$ref": "#/$defs/path"
+        },
+        "dependencies": {
+          "$ref": "#/$defs/path"
+        },
+        "latest_verification": {
+          "$ref": "#/$defs/path"
+        },
+        "coverage": {
+          "$ref": "#/$defs/path"
+        },
+        "provider_index": {
+          "$ref": "#/$defs/path"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "institutions",
+        "apis",
+        "operations",
+        "runtime_evidence",
+        "runtime_evidence_percent",
+        "callable_operations",
+        "external_endpoint_operations",
+        "registered_adapter_operations",
+        "missing_adapter_operations",
+        "missing_adapter_hosts"
+      ],
+      "properties": {
+        "institutions": {
+          "$ref": "#/$defs/count"
+        },
+        "apis": {
+          "$ref": "#/$defs/count"
+        },
+        "operations": {
+          "$ref": "#/$defs/count"
+        },
+        "runtime_evidence": {
+          "$ref": "#/$defs/count"
+        },
+        "runtime_evidence_percent": {
+          "$ref": "#/$defs/percent"
+        },
+        "callable_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "external_endpoint_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "registered_adapter_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "missing_adapter_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "missing_adapter_hosts": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "key_count": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "count"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "count": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "category_count": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "category",
+        "operation_count"
+      ],
+      "properties": {
+        "category": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "operation_count": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "host_count": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "host",
+        "operation_count"
+      ],
+      "properties": {
+        "host": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "operation_count": {
+          "$ref": "#/$defs/count"
+        },
+        "adapter": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "adapter_status": {
+          "enum": [
+            "registered"
+          ]
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "call",
+              "verification"
+            ]
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "institution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization",
+        "api_count",
+        "operation_api_count",
+        "operation_count",
+        "runtime_evidence_count",
+        "runtime_evidence_percent",
+        "verified",
+        "failed",
+        "skipped",
+        "unknown",
+        "approval_required_operations",
+        "no_endpoint_operations",
+        "by_dependency_class",
+        "by_adapter_status",
+        "top_categories",
+        "top_hosts"
+      ],
+      "properties": {
+        "organization": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "operation_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "operation_count": {
+          "$ref": "#/$defs/count"
+        },
+        "runtime_evidence_count": {
+          "$ref": "#/$defs/count"
+        },
+        "runtime_evidence_percent": {
+          "$ref": "#/$defs/percent"
+        },
+        "verified": {
+          "$ref": "#/$defs/count"
+        },
+        "failed": {
+          "$ref": "#/$defs/count"
+        },
+        "skipped": {
+          "$ref": "#/$defs/count"
+        },
+        "unknown": {
+          "$ref": "#/$defs/count"
+        },
+        "approval_required_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "no_endpoint_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "by_dependency_class": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/key_count"
+          }
+        },
+        "by_adapter_status": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/key_count"
+          }
+        },
+        "top_categories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/category_count"
+          }
+        },
+        "top_hosts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/host_count"
+          }
+        }
+      }
+    }
+  }
+}
