@@ -152,6 +152,7 @@ jobs:
             go run ./cmd/datapan doctor --json \
             > ../datapan-registry/.datapan/ci/current-release-doctor.json
           python3 ../datapan-registry/scripts/check-release-doctor-smoke.py \
+            --install-json ../datapan-registry/.datapan/ci/current-release-install.json \
             ../datapan-registry/.datapan/ci/current-release-doctor.json
 
       - name: Check README current snapshot
@@ -205,6 +206,7 @@ jobs:
             go run ./cmd/datapan doctor --json \
             > ../datapan-registry/.datapan/ci/latest-release-doctor.json
           python3 ../datapan-registry/scripts/check-release-doctor-smoke.py \
+            --install-json ../datapan-registry/.datapan/ci/latest-release-install.json \
             ../datapan-registry/.datapan/ci/latest-release-doctor.json
 
       - name: Upload release health reports

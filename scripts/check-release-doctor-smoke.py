@@ -47,13 +47,41 @@ def validate_doctor(payload: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def validate_against_install(summary: dict[str, Any], install_payload: dict[str, Any]) -> None:
+    install_path = install_payload.get("registry")
+    if not isinstance(install_path, str) or not install_path:
+        raise ValueError("install registry path is required for doctor cross-check")
+    install_specs = positive_int(install_payload.get("specs"), "install specs")
+
+    if summary["path"] != install_path:
+        raise ValueError(
+            "doctor registry.path does not match install registry: "
+            f"{summary['path']} != {install_path}"
+        )
+    if summary["specs"] != install_specs:
+        raise ValueError(
+            "doctor registry.specs does not match install specs: "
+            f"{summary['specs']} != {install_specs}"
+        )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--install-json",
+        type=pathlib.Path,
+        help="optional install smoke JSON to cross-check registry path and specs",
+    )
     parser.add_argument("doctor_json", type=pathlib.Path)
     args = parser.parse_args()
 
     try:
         summary = validate_doctor(as_dict(load_json(args.doctor_json), args.doctor_json.as_posix()))
+        if args.install_json is not None:
+            validate_against_install(
+                summary,
+                as_dict(load_json(args.install_json), args.install_json.as_posix()),
+            )
     except Exception as exc:  # noqa: BLE001 - CI should show the failed invariant
         print(f"FAIL {args.doctor_json}: {exc}")
         return 1
