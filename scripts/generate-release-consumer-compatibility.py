@@ -490,24 +490,33 @@ def runtime_risk_evidence(
         "remediation_manual_review_boundaries": remediation_summary.get("manual_review_boundaries"),
         "remediation_credential_policy_available": remediation_summary.get("credential_policy_available"),
         "remediation_receipt_contract_available": remediation_summary.get("receipt_contract_available"),
+        "remediation_reviewed_receipt_intake_available": remediation_summary.get("reviewed_receipt_intake_available"),
+        "remediation_receipt_reviewed": remediation_summary.get("receipt_reviewed"),
+        "remediation_receipt_relief_eligible": remediation_summary.get("receipt_relief_eligible"),
         "remediation_receipt_backed_relief_allowed": remediation_summary.get("receipt_backed_relief_allowed"),
         "remediation_receipt_backed_relief_status": remediation_summary.get("receipt_backed_relief_status"),
         "credential_policy_sources": credential_policy_summary.get("credential_gated_sources"),
         "credential_policy_manual_review_boundaries": credential_policy_summary.get("manual_review_boundaries"),
         "credential_policy_receipt_contract_available": credential_policy_summary.get("receipt_contract_available"),
+        "credential_policy_reviewed_receipt_intake_available": credential_policy_summary.get(
+            "reviewed_receipt_intake_available"
+        ),
         "credential_policy_receipt_present": credential_policy_summary.get("receipt_present"),
         "credential_policy_receipt_validated": credential_policy_summary.get("receipt_validated"),
+        "credential_policy_receipt_reviewed": credential_policy_summary.get("receipt_reviewed"),
+        "credential_policy_receipt_relief_eligible": credential_policy_summary.get("receipt_relief_eligible"),
         "credential_policy_manual_review_reduction_allowed": credential_policy_summary.get(
             "manual_review_reduction_allowed"
         ),
         "credential_policy_live_receipts": credential_policy_summary.get("live_credentialed_receipts_checked_in"),
+        "credential_policy_reviewed_receipts": credential_policy_summary.get("reviewed_receipts_checked_in"),
         "credential_policy_default_ci_requires_credentials": credential_policy_summary.get(
             "default_ci_requires_credentials"
         ),
         "credential_policy_effect": credential_policy_boundary.get("compatibility_effect"),
         "credential_policy_relief_gate_status": credential_relief_gate.get("status"),
         "manual_review_reduction_allowed": False,
-        "manual_review_reduction_status": "blocked_until_validated_credential_runtime_receipts_exist",
+        "manual_review_reduction_status": "blocked_until_reviewed_validated_credential_runtime_receipts_exist",
         "blocker_ids": ids_from_rollup_items(source_runtime.get("blockers_by_id"), "source_runtime.blockers_by_id"),
         "warning_ids": ids_from_rollup_items(source_runtime.get("warnings_by_id"), "source_runtime.warnings_by_id"),
         "sources": runtime_source_entries(source_runtime),

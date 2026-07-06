@@ -108,7 +108,7 @@
         {
           "path": "schemas/index.json",
           "bytes": 18814,
-          "sha256": "5adace5c60a0c8fe031bc97f03f52b0a4aa68c6c1ece98c879c00f25560979a4",
+          "sha256": "56f880945353c288cfe92c2a957eac22de919b80b52dd8f477ae7fc8ce613e8d",
           "manifest_bound": true,
           "kind": "schema_index",
           "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json"
@@ -193,7 +193,7 @@
         {
           "path": "reports/source-report-inventory.json",
           "bytes": 59095,
-          "sha256": "3c3939162a1cd2c4735e8bdcbd4962e8e370b45fe0c22b9e55a4adc066cc6013",
+          "sha256": "167ec4ffb26b4e42f47bb3ed6f1bd0b3c4b6b2371ad192bce3b06ead8b9146fc",
           "manifest_bound": true,
           "kind": "source_report_inventory",
           "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json"
@@ -249,7 +249,7 @@
         {
           "path": "reports/registry-impact-plan.json",
           "bytes": 11519,
-          "sha256": "739990cf25bd1eb0d87ae6b92fcefa497b04464007d41a94758f2e6e986c35fe",
+          "sha256": "337728b7089c4eea2d852949fdcff0fffab9d4eef1a2732a0687e1e073bd0bd5",
           "manifest_bound": true,
           "kind": "registry_impact_plan",
           "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json"
@@ -281,8 +281,8 @@
       "evidence_artifacts": [
         {
           "path": "reports/source-runtime-remediation-map.json",
-          "bytes": 7947,
-          "sha256": "e0536abe4ca545aa9304554ff9a599e595110d3f528f79182d10b8e408defde6",
+          "bytes": 8072,
+          "sha256": "0b8b84a960c578016802e885d7ce23b47172cca623280b63ad1fb23e59e9e9f1",
           "manifest_bound": true,
           "kind": "source_runtime_remediation_map",
           "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json"
@@ -316,8 +316,8 @@
       "evidence_artifacts": [
         {
           "path": "reports/credential-runtime-evidence-policy.json",
-          "bytes": 12352,
-          "sha256": "225bff0b882684f3b1d5e4af85c1f1c18ebe0866bf07309d42c03f18650d2229",
+          "bytes": 14367,
+          "sha256": "450915ec3f052e83bc25e7aa28696f350dbf6d50fa973ec2cd9f2d281baf78ba",
           "manifest_bound": true,
           "kind": "credential_runtime_evidence_policy",
           "schema": "https://schemas.datapan.dev/datapan.credential-runtime-evidence-policy.v1.schema.json"
@@ -350,8 +350,8 @@
       "evidence_artifacts": [
         {
           "path": "reports/release-consumer-compatibility.json",
-          "bytes": 14417,
-          "sha256": "ffa3ce663cc11c6bacc6f0e7a7106db2fcfb9ca9071177c2a1157feb24fcaa06",
+          "bytes": 14812,
+          "sha256": "ea66c3e424f8b95316a494cb5730ac287d6b83fdec224ed8e8bc2fd32f8163d8",
           "manifest_bound": true,
           "kind": "consumer_compatibility",
           "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json"
@@ -388,13 +388,13 @@
         {
           "path": "reports/latest-release-verification.json",
           "bytes": 29080,
-          "sha256": "50902dd50babdc3dea69dab1f477f5d3c157c30f389d9b0fa18d09153bdc2ff3",
+          "sha256": "e39f837c922f68fb7f33d3fb3fde8338cadf7cfbcbd20369a440298cf185ea1a",
           "manifest_bound": false
         },
         {
           "path": "reports/latest-release-readiness.json",
           "bytes": 7612,
-          "sha256": "44656a6c373a5c18130537feddb28503dd0e9cf0b17021b98ef39415a25a9f5b",
+          "sha256": "311d54864fd430a8287711efc66fe1215b354d4ac98fba689ab5430fe1bf58d1",
           "manifest_bound": false
         }
       ]
@@ -510,8 +510,8 @@
       "evidence_artifacts": [
         {
           "path": "docs/release-ledger-goal-completion-audit.json",
-          "bytes": 18193,
-          "sha256": "f1ace02dc9a9f78939d378ff799126847acdb11b9f05d0f63c639c2e0a0d01bb",
+          "bytes": 19486,
+          "sha256": "44fc90af580d17eb9bd4f4f1e38b5f12b8f4f27b75c13998ed3d42f47b76729d",
           "manifest_bound": false
         }
       ]

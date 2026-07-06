@@ -92,6 +92,9 @@
         "manual_review_required",
         "credential_policy_available",
         "receipt_contract_available",
+        "reviewed_receipt_intake_available",
+        "receipt_reviewed",
+        "receipt_relief_eligible",
         "receipt_backed_relief_allowed",
         "receipt_backed_relief_status"
       ],
@@ -135,13 +138,23 @@
         "receipt_contract_available": {
           "const": true
         },
+        "reviewed_receipt_intake_available": {
+          "const": true
+        },
+        "receipt_reviewed": {
+          "type": "boolean"
+        },
+        "receipt_relief_eligible": {
+          "type": "boolean"
+        },
         "receipt_backed_relief_allowed": {
           "type": "boolean"
         },
         "receipt_backed_relief_status": {
           "enum": [
             "blocked_until_validated_credential_runtime_receipts_exist",
-            "allowed_by_validated_credential_runtime_receipts"
+            "blocked_until_reviewed_validated_credential_runtime_receipts_exist",
+            "allowed_by_reviewed_validated_credential_runtime_receipts"
           ]
         }
       }

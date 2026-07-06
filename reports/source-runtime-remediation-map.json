@@ -18,8 +18,11 @@
     "manual_review_required": true,
     "credential_policy_available": true,
     "receipt_contract_available": true,
+    "reviewed_receipt_intake_available": true,
+    "receipt_reviewed": false,
+    "receipt_relief_eligible": false,
     "receipt_backed_relief_allowed": false,
-    "receipt_backed_relief_status": "blocked_until_validated_credential_runtime_receipts_exist"
+    "receipt_backed_relief_status": "blocked_until_reviewed_validated_credential_runtime_receipts_exist"
   },
   "release_evidence_inputs": [
     {
@@ -38,7 +41,7 @@
       "path": "reports/registry-impact-plan.json",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "739990cf25bd1eb0d87ae6b92fcefa497b04464007d41a94758f2e6e986c35fe"
+      "sha256": "337728b7089c4eea2d852949fdcff0fffab9d4eef1a2732a0687e1e073bd0bd5"
     }
   ],
   "routing_evidence": {
