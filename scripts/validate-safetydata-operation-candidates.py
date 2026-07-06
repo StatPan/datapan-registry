@@ -8,8 +8,14 @@ import json
 import pathlib
 from typing import Any
 
+try:
+    import jsonschema
+except ImportError as exc:  # pragma: no cover - environment guard
+    raise SystemExit("missing dependency: install jsonschema before validating Safety Data operation candidates") from exc
+
 
 EXPECTED_SCHEMA_VERSION = "datapan.safetydata-operation-candidates.v1"
+DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.safetydata-operation-candidates.v1.schema.json")
 
 
 def load_json(path: pathlib.Path) -> Any:
@@ -29,12 +35,25 @@ def as_list(value: Any, label: str) -> list[Any]:
     return value
 
 
-def validate_report(report_path: pathlib.Path, markdown_path: pathlib.Path) -> None:
+def validate_schema(report: dict[str, Any], schema_path: pathlib.Path) -> None:
+    schema = load_json(schema_path)
+    validator = jsonschema.Draft202012Validator(schema)
+    errors = sorted(validator.iter_errors(report), key=lambda error: list(error.path))
+    if errors:
+        messages = []
+        for error in errors:
+            location = ".".join(str(part) for part in error.path) or "<root>"
+            messages.append(f"{location}: {error.message}")
+        raise ValueError("; ".join(messages))
+
+
+def validate_report(report_path: pathlib.Path, markdown_path: pathlib.Path, schema_path: pathlib.Path) -> None:
     report = as_dict(load_json(report_path), report_path)
     if report.get("schema_version") != EXPECTED_SCHEMA_VERSION:
         raise ValueError(
             f"schema_version expected {EXPECTED_SCHEMA_VERSION}, got {report.get('schema_version')}"
         )
+    validate_schema(report, schema_path)
     if report.get("discovery_source") != "safetydata.go.kr":
         raise ValueError("discovery_source must be safetydata.go.kr")
 
@@ -89,10 +108,11 @@ def main() -> int:
         type=pathlib.Path,
     )
     parser.add_argument("--markdown", default="docs/data-go-kr-safetydata-operation-candidates.md", type=pathlib.Path)
+    parser.add_argument("--schema", default=DEFAULT_SCHEMA, type=pathlib.Path)
     args = parser.parse_args()
 
     try:
-        validate_report(args.report, args.markdown)
+        validate_report(args.report, args.markdown, args.schema)
     except Exception as exc:  # noqa: BLE001 - report all validation blockers
         print(f"FAIL {args.report}: {exc}")
         return 1

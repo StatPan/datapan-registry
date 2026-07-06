@@ -1,0 +1,431 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.safetydata-operation-candidates.v1.schema.json",
+  "title": "Datapan Safety Data Operation Candidates v1",
+  "description": "Source-scoped discovery evidence for Safety Data operation mapping candidates derived from data.go.kr APIs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "provider",
+    "source_id",
+    "discovery_source",
+    "generation_inputs",
+    "policy",
+    "summary",
+    "results"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.safetydata-operation-candidates.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "const": "data.go.kr"
+    },
+    "source_id": {
+      "const": "data_go_kr"
+    },
+    "discovery_source": {
+      "const": "safetydata.go.kr"
+    },
+    "generation_inputs": {
+      "$ref": "#/$defs/generation_inputs"
+    },
+    "policy": {
+      "$ref": "#/$defs/policy"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "results": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/candidate_result"
+          },
+          {
+            "$ref": "#/$defs/skipped_result"
+          },
+          {
+            "$ref": "#/$defs/failed_result"
+          }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "generation_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "batch"
+      ],
+      "properties": {
+        "batch": {
+          "$ref": "#/$defs/path"
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "limit",
+        "timeout_seconds",
+        "delay_seconds"
+      ],
+      "properties": {
+        "limit": {
+          "$ref": "#/$defs/count"
+        },
+        "timeout_seconds": {
+          "$ref": "#/$defs/count"
+        },
+        "delay_seconds": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "batch_label",
+        "organization",
+        "input_apis",
+        "candidates",
+        "skipped",
+        "failed"
+      ],
+      "properties": {
+        "batch_label": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "organization": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "input_apis": {
+          "$ref": "#/$defs/count"
+        },
+        "candidates": {
+          "$ref": "#/$defs/count"
+        },
+        "skipped": {
+          "$ref": "#/$defs/count"
+        },
+        "failed": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "base_result": {
+      "type": "object",
+      "required": [
+        "dataset_id",
+        "title",
+        "organization",
+        "meta_url",
+        "status",
+        "reason",
+        "data_go_kr_url"
+      ],
+      "properties": {
+        "dataset_id": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "title": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "organization": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "meta_url": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "status": {
+          "enum": [
+            "candidate",
+            "skipped",
+            "failed"
+          ]
+        },
+        "reason": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "data_go_kr_url": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "candidate_result": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base_result"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "dataset_id",
+            "title",
+            "organization",
+            "meta_url",
+            "status",
+            "reason",
+            "data_go_kr_url",
+            "safetydata_url",
+            "data_sn",
+            "api_view_url",
+            "api_table_url",
+            "source_api_name",
+            "source_api_type",
+            "source_data_format",
+            "source_interface_id",
+            "method",
+            "endpoint",
+            "request_params",
+            "response_fields",
+            "required_params",
+            "optional_params",
+            "operation_mapping_candidate"
+          ],
+          "properties": {
+            "dataset_id": {
+              "$ref": "#/$defs/non_empty_string"
+            },
+            "title": {
+              "$ref": "#/$defs/non_empty_string"
+            },
+            "organization": {
+              "$ref": "#/$defs/non_empty_string"
+            },
+            "meta_url": {
+              "$ref": "#/$defs/non_empty_string"
+            },
+            "status": {
+              "const": "candidate"
+            },
+            "reason": {
+              "const": "safetydata_open_api_metadata_extracted"
+            },
+            "data_go_kr_url": {
+              "$ref": "#/$defs/non_empty_string"
+            },
+            "safetydata_url": {
+              "type": "string",
+              "pattern": "^https://www\\.safetydata\\.go\\.kr/disaster-data/view\\?dataSn="
+            },
+            "data_sn": {
+              "$ref": "#/$defs/non_empty_string"
+            },
+            "api_view_url": {
+              "$ref": "#/$defs/non_empty_string"
+            },
+            "api_table_url": {
+              "$ref": "#/$defs/non_empty_string"
+            },
+            "source_api_name": {
+              "$ref": "#/$defs/non_empty_string"
+            },
+            "source_api_type": {
+              "$ref": "#/$defs/non_empty_string"
+            },
+            "source_data_format": {
+              "$ref": "#/$defs/non_empty_string"
+            },
+            "source_interface_id": {
+              "$ref": "#/$defs/non_empty_string"
+            },
+            "method": {
+              "const": "GET"
+            },
+            "endpoint": {
+              "$ref": "#/$defs/safetydata_endpoint"
+            },
+            "request_params": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/param"
+              }
+            },
+            "response_fields": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/param"
+              }
+            },
+            "required_params": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/non_empty_string"
+              }
+            },
+            "optional_params": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/non_empty_string"
+              }
+            },
+            "operation_mapping_candidate": {
+              "$ref": "#/$defs/operation_mapping_candidate"
+            }
+          }
+        }
+      ]
+    },
+    "skipped_result": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base_result"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "dataset_id",
+            "title",
+            "organization",
+            "meta_url",
+            "status",
+            "reason",
+            "data_go_kr_url"
+          ],
+          "properties": {
+            "dataset_id": {
+              "$ref": "#/$defs/non_empty_string"
+            },
+            "title": {
+              "$ref": "#/$defs/non_empty_string"
+            },
+            "organization": {
+              "$ref": "#/$defs/non_empty_string"
+            },
+            "meta_url": {
+              "$ref": "#/$defs/non_empty_string"
+            },
+            "status": {
+              "const": "skipped"
+            },
+            "reason": {
+              "const": "missing_safetydata_link"
+            },
+            "data_go_kr_url": {
+              "$ref": "#/$defs/non_empty_string"
+            }
+          }
+        }
+      ]
+    },
+    "failed_result": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base_result"
+        },
+        {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "const": "failed"
+            }
+          }
+        }
+      ]
+    },
+    "param": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name_ko",
+        "name",
+        "type",
+        "size",
+        "required",
+        "description"
+      ],
+      "properties": {
+        "name_ko": {
+          "type": "string"
+        },
+        "name": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "size": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "operation_mapping_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "endpoint",
+        "method",
+        "request_params",
+        "response_fields"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "endpoint": {
+          "$ref": "#/$defs/safetydata_endpoint"
+        },
+        "method": {
+          "const": "GET"
+        },
+        "request_params": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/param"
+          }
+        },
+        "response_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/param"
+          }
+        }
+      }
+    },
+    "safetydata_endpoint": {
+      "type": "string",
+      "pattern": "^https://www\\.safetydata\\.go\\.kr/V2/api/"
+    }
+  }
+}
