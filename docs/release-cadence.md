@@ -78,6 +78,8 @@ check. That workflow:
   `.datapan/release-assets/datapan-registry-snapshot.zip`, checks the zip
   inventory and checksums, serves it locally, and installs it with
   `datapan catalog install datapan-registry --url ...`;
+- checks that the installed current checkout registry has the same byte count
+  and sha256 as the canonical registry artifact inside the packaged zip;
 - runs `datapan doctor --json` against the installed current checkout registry;
 - checks that the README Current Snapshot matches the generated coverage,
   provider-index, and verification-summary artifacts;
