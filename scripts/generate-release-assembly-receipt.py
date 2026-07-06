@@ -158,6 +158,25 @@ PHASES: list[dict[str, Any]] = [
         ],
     },
     {
+        "id": "source_runtime_remediation_map",
+        "coverage": ["source_contracts", "verification_evidence", "consumer_compatibility"],
+        "operator_commands": [
+            "python3 scripts/generate-source-runtime-remediation-map.py",
+        ],
+        "check_commands": [
+            "python3 scripts/generate-source-runtime-remediation-map.py --check",
+        ],
+        "workflow_fragments": {
+            ".github/workflows/verify-release.yml": [
+                "python scripts/generate-source-runtime-remediation-map.py --check",
+            ],
+            ".github/workflows/release-draft.yml": [
+                "python scripts/generate-source-runtime-remediation-map.py --check",
+            ],
+        },
+        "evidence_artifacts": ["reports/source-runtime-remediation-map.json"],
+    },
+    {
         "id": "consumer_compatibility",
         "coverage": ["consumer_compatibility"],
         "operator_commands": [

@@ -91,12 +91,14 @@
         "source_contract_rollup",
         "source_reference_drift",
         "source_report_inventory",
+        "source_runtime_remediation_map",
         "source_runtime_evidence_rollup"
       ],
       "owner": "source evidence maintainers",
       "generated_by": [
         "python scripts/generate-source-contract-rollup.py",
         "python scripts/generate-source-report-inventory.py",
+        "python scripts/generate-source-runtime-remediation-map.py",
         "python scripts/generate-source-runtime-readiness.py"
       ],
       "checked_by": [
@@ -104,6 +106,7 @@
         "python scripts/validate-source-contract-rollups.py",
         "python scripts/validate-source-reference-drift.py",
         "python scripts/validate-source-report-inventory.py",
+        "python scripts/generate-source-runtime-remediation-map.py --check",
         "python scripts/validate-source-runtime-evidence-rollup.py",
         "python scripts/validate-runtime-evidence-growth.py",
         "python scripts/sync-release-manifest-artifacts.py --check"

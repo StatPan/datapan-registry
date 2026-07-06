@@ -48,8 +48,8 @@
     },
     "manifest_evidence_contracts": {
       "type": "array",
-      "minItems": 6,
-      "maxItems": 6,
+      "minItems": 7,
+      "maxItems": 7,
       "items": {
         "$ref": "#/$defs/manifest_evidence_contract"
       }
@@ -409,6 +409,7 @@
           "enum": [
             "source_contracts",
             "source_runtime_evidence",
+            "source_runtime_remediation",
             "error_action_routing",
             "downstream_impact",
             "source_reference_drift",
@@ -443,6 +444,7 @@
       "additionalProperties": false,
       "required": [
         "source_runtime_rollup",
+        "source_runtime_remediation_map",
         "error_action_routing_rollup",
         "downstream_impact_rollup",
         "manual_review_required",
@@ -454,6 +456,8 @@
         "blocker_ids",
         "warning_ids",
         "sources",
+        "remediation_follow_up_required",
+        "remediation_manual_review_boundaries",
         "error_action_blocking_rules",
         "error_action_manual_review_rules",
         "downstream_manual_review_changes"
@@ -461,6 +465,9 @@
       "properties": {
         "source_runtime_rollup": {
           "const": "reports/source-runtime-evidence-rollup.json"
+        },
+        "source_runtime_remediation_map": {
+          "const": "reports/source-runtime-remediation-map.json"
         },
         "error_action_routing_rollup": {
           "const": "reports/error-action-routing-rollup.json"
@@ -479,11 +486,14 @@
         },
         "required_contracts": {
           "type": "array",
-          "minItems": 3,
-          "maxItems": 3,
+          "minItems": 4,
+          "maxItems": 4,
           "prefixItems": [
             {
               "const": "source_runtime_evidence"
+            },
+            {
+              "const": "source_runtime_remediation"
             },
             {
               "const": "error_action_routing"
@@ -521,6 +531,12 @@
           "items": {
             "$ref": "#/$defs/runtime_risk_source"
           }
+        },
+        "remediation_follow_up_required": {
+          "$ref": "#/$defs/count"
+        },
+        "remediation_manual_review_boundaries": {
+          "$ref": "#/$defs/count"
         },
         "error_action_blocking_rules": {
           "$ref": "#/$defs/count"

@@ -16,11 +16,13 @@ CANONICAL_REGISTRY_PATH = "data/data-go-kr.registry.json"
 DEFAULT_MANIFEST = pathlib.Path("manifest.json")
 DEFAULT_READINESS = pathlib.Path("reports/latest-release-readiness.json")
 DEFAULT_SOURCE_RUNTIME_ROLLUP = pathlib.Path("reports/source-runtime-evidence-rollup.json")
+DEFAULT_SOURCE_RUNTIME_REMEDIATION = pathlib.Path("reports/source-runtime-remediation-map.json")
 DEFAULT_ERROR_ACTION_ROUTING_ROLLUP = pathlib.Path("reports/error-action-routing-rollup.json")
 DEFAULT_IMPACT_ROLLUP = pathlib.Path("reports/registry-impact-plan.json")
 DEFAULT_OUTPUT = pathlib.Path("reports/release-consumer-compatibility.json")
 REQUIRED_RUNTIME_RISK_CONTRACTS = [
     "source_runtime_evidence",
+    "source_runtime_remediation",
     "error_action_routing",
     "downstream_impact",
 ]
@@ -89,6 +91,12 @@ REQUIRED_MANIFEST_EVIDENCE_CONTRACTS = [
         "path": "reports/source-runtime-evidence-rollup.json",
         "kind": "source_runtime_evidence_rollup",
         "schema": "https://schemas.datapan.dev/datapan.source-runtime-evidence-rollup.v1.schema.json",
+    },
+    {
+        "contract": "source_runtime_remediation",
+        "path": "reports/source-runtime-remediation-map.json",
+        "kind": "source_runtime_remediation_map",
+        "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
     },
     {
         "contract": "error_action_routing",
@@ -419,14 +427,17 @@ def runtime_source_entries(source_runtime: dict[str, Any]) -> list[dict[str, Any
 
 def runtime_risk_evidence(
     source_runtime: dict[str, Any],
+    source_runtime_remediation: dict[str, Any],
     error_action_routing: dict[str, Any],
     downstream_impact: dict[str, Any],
     *,
     source_runtime_path: pathlib.Path,
+    source_runtime_remediation_path: pathlib.Path,
     error_action_routing_path: pathlib.Path,
     impact_path: pathlib.Path,
 ) -> dict[str, Any]:
     runtime_summary = as_dict(source_runtime.get("summary"), "source_runtime.summary")
+    remediation_summary = as_dict(source_runtime_remediation.get("summary"), "source_runtime_remediation.summary")
     routing_summary = as_dict(error_action_routing.get("summary"), "error_action_routing.summary")
     impact_summary = as_dict(downstream_impact.get("summary"), "downstream_impact.summary")
 
@@ -444,6 +455,7 @@ def runtime_risk_evidence(
     manual_review_required = bool(blocking_count or warning_count or sources_without_evidence)
     return {
         "source_runtime_rollup": source_runtime_path.as_posix(),
+        "source_runtime_remediation_map": source_runtime_remediation_path.as_posix(),
         "error_action_routing_rollup": error_action_routing_path.as_posix(),
         "downstream_impact_rollup": impact_path.as_posix(),
         "manual_review_required": manual_review_required,
@@ -454,6 +466,8 @@ def runtime_risk_evidence(
         "blocking_count": blocking_count,
         "warning_count": warning_count,
         "sources_without_evidence": sources_without_evidence,
+        "remediation_follow_up_required": remediation_summary.get("follow_up_required"),
+        "remediation_manual_review_boundaries": remediation_summary.get("manual_review_boundaries"),
         "blocker_ids": ids_from_rollup_items(source_runtime.get("blockers_by_id"), "source_runtime.blockers_by_id"),
         "warning_ids": ids_from_rollup_items(source_runtime.get("warnings_by_id"), "source_runtime.warnings_by_id"),
         "sources": runtime_source_entries(source_runtime),
@@ -502,12 +516,14 @@ def build_report(
     manifest: dict[str, Any],
     readiness: dict[str, Any],
     source_runtime: dict[str, Any],
+    source_runtime_remediation: dict[str, Any],
     error_action_routing: dict[str, Any],
     downstream_impact: dict[str, Any],
     *,
     manifest_path: pathlib.Path = DEFAULT_MANIFEST,
     readiness_path: pathlib.Path = DEFAULT_READINESS,
     source_runtime_path: pathlib.Path = DEFAULT_SOURCE_RUNTIME_ROLLUP,
+    source_runtime_remediation_path: pathlib.Path = DEFAULT_SOURCE_RUNTIME_REMEDIATION,
     error_action_routing_path: pathlib.Path = DEFAULT_ERROR_ACTION_ROUTING_ROLLUP,
     impact_path: pathlib.Path = DEFAULT_IMPACT_ROLLUP,
 ) -> dict[str, Any]:
@@ -548,9 +564,11 @@ def build_report(
         "manifest_evidence_contracts": evidence_contracts,
         "runtime_risk_evidence": runtime_risk_evidence(
             source_runtime,
+            source_runtime_remediation,
             error_action_routing,
             downstream_impact,
             source_runtime_path=source_runtime_path,
+            source_runtime_remediation_path=source_runtime_remediation_path,
             error_action_routing_path=error_action_routing_path,
             impact_path=impact_path,
         ),
@@ -578,6 +596,7 @@ def main() -> int:
     parser.add_argument("--manifest", default=DEFAULT_MANIFEST, type=pathlib.Path)
     parser.add_argument("--readiness", default=DEFAULT_READINESS, type=pathlib.Path)
     parser.add_argument("--source-runtime-rollup", default=DEFAULT_SOURCE_RUNTIME_ROLLUP, type=pathlib.Path)
+    parser.add_argument("--source-runtime-remediation", default=DEFAULT_SOURCE_RUNTIME_REMEDIATION, type=pathlib.Path)
     parser.add_argument("--error-action-routing-rollup", default=DEFAULT_ERROR_ACTION_ROUTING_ROLLUP, type=pathlib.Path)
     parser.add_argument("--impact-rollup", default=DEFAULT_IMPACT_ROLLUP, type=pathlib.Path)
     parser.add_argument("--output", default=DEFAULT_OUTPUT, type=pathlib.Path)
@@ -593,11 +612,13 @@ def main() -> int:
             load_json(args.manifest),
             load_json(args.readiness),
             load_json(args.source_runtime_rollup),
+            load_json(args.source_runtime_remediation),
             load_json(args.error_action_routing_rollup),
             load_json(args.impact_rollup),
             manifest_path=args.manifest,
             readiness_path=args.readiness,
             source_runtime_path=args.source_runtime_rollup,
+            source_runtime_remediation_path=args.source_runtime_remediation,
             error_action_routing_path=args.error_action_routing_rollup,
             impact_path=args.impact_rollup,
         )

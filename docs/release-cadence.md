@@ -41,9 +41,10 @@ python scripts/validate-release-receipt-boundary.py
 `reports/release-assembly-receipt.json` is the operator-facing assembly receipt
 for the current checkout. It binds the release assembly phases for canonical
 registry materialization, schema sync, manifest digest sync, source contracts,
-source runtime evidence, error/action routing, downstream impact, consumer
-compatibility, verification/readiness receipts, shard archive evidence, release
-zip packaging, and goal completion audit checks. The `--check` mode validates
+source runtime evidence, source runtime remediation mapping, error/action
+routing, downstream impact, consumer compatibility, verification/readiness
+receipts, shard archive evidence, release zip packaging, and goal completion
+audit checks. The `--check` mode validates
 the receipt against `schemas/datapan.release-assembly-receipt.v1.schema.json`
 and fails if the receipt drifts from the `Verify registry release` or
 `Draft registry release` workflow command fragments.
@@ -129,10 +130,10 @@ check. That workflow:
   registry path required, release-health evidence named, shard install fields
   tied to the rollup, and shard assets optional until shard-preferred monolith
   fallback is proven downstream. The report also names the required manifest
-  evidence contracts for source contracts, source runtime evidence,
-  error/action routing, downstream impact, source reference drift, and source
-  report inventory, and validation checks their bytes and sha256 values against
-  `manifest.json`;
+  evidence contracts for source contracts, source runtime evidence, source
+  runtime remediation, error/action routing, downstream impact, source reference
+  drift, and source report inventory, and validation checks their bytes and
+  sha256 values against `manifest.json`;
 - regenerates and validates `reports/source-contract-rollup.json`, the
   manifest-bound upstream contract rollup that records checked-in source
   profile checksums plus provider status, auth, request, response, runtime, and
@@ -141,6 +142,10 @@ check. That workflow:
   `docs/source-runtime-readiness.md` view, with the rollup manifest-bound so
   source runtime plan inputs, blockers, warnings, and zero-evidence sources are
   checksum-verifiable release evidence;
+- regenerates and validates `reports/source-runtime-remediation-map.json`, the
+  manifest-bound source-by-source map that routes runtime blockers and warnings
+  to resolved status, manual-review release boundaries, or follow-up work before
+  consumer compatibility can consume the risk state;
 - validates `reports/source-report-inventory.json`, the manifest-bound
   inventory of source-scoped reports whose entries carry bytes and sha256 so
   nested source evidence can be checked without listing every source report in
@@ -187,7 +192,8 @@ python scripts/validate-release-health-rollups.py \
 `reports/release-consumer-compatibility.json` records that same rollup generation
 contract under `release_health_evidence.rollup_generation_contract`, and
 `scripts/validate-release-consumer-compatibility.py` checks the report, schema,
-and `.github/workflows/verify-release.yml` stay aligned with those inputs.
+source runtime remediation map, and `.github/workflows/verify-release.yml` stay
+aligned with those inputs.
 
 Recommended evidence before tagging:
 
