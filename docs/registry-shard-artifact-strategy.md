@@ -129,7 +129,7 @@ Measured on the current `data.go.kr` registry:
 | canonical `data/data-go-kr.registry.json` | 137,735,169 bytes |
 | generated institution shard JSON files | 137,736,399 bytes |
 | generated shard directory on disk | 137,937,097 bytes |
-| generated shard tar.gz archive | 8,416,413 bytes |
+| generated shard tar.gz archive | 7,989,469 bytes |
 | canonical registry gzip archive | 9,415,820 bytes |
 
 These measurements rule out committing shard JSON files as ordinary Git blobs:
@@ -157,8 +157,25 @@ Before publishing shard archives in a release, CI must prove:
 - `scripts/generate-registry-shards.py` can generate the shard tree from the
   materialized canonical registry;
 - `scripts/validate-registry-shards.py` passes on the generated inventory;
+- `scripts/package-registry-shards.py` can package the generated shard tree as
+  `data-go-kr-shards.tar.gz` and inspect the archive shape;
 - release install and doctor checks remain green through the canonical path;
 - downstream consumers have a shard-preferred, monolith-fallback path.
+
+The repeatable packaging command is:
+
+```bash
+python scripts/package-registry-shards.py \
+  --shard-dir data/data-go-kr/shards \
+  --output .datapan/release-assets/data-go-kr-shards.tar.gz
+python scripts/package-registry-shards.py \
+  --check .datapan/release-assets/data-go-kr-shards.tar.gz
+```
+
+The archive root contains `registry-shards.json` plus shard paths exactly as
+listed in the inventory, for example `by-institution/<key>.registry.json`.
+Packaging remains optional during the compatibility period and does not make
+shard artifacts required by `manifest.json` or release readiness.
 
 ## Recomposition Invariant
 
