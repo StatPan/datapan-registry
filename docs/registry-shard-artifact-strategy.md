@@ -193,6 +193,17 @@ Generate deterministic institution shards from the canonical registry. Keep
 the monolith as the source of truth. Validate inventory, checksums, and
 recomposition.
 
+The generator entrypoint is:
+
+```bash
+python scripts/generate-registry-shards.py --output-dir data/data-go-kr/shards --clean
+```
+
+During the initial rollout, use a temporary output directory such as
+`.datapan/shard-check` for validation runs. Check in shard artifacts only after
+the shard inventory, recomposition validator, and CI policy agree on whether
+the generated shard files are release artifacts, review artifacts, or both.
+
 ### Stage 4: CI Split
 
 Keep full release verification on LFS. Add scoped checks that can use shard
