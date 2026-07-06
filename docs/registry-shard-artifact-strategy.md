@@ -180,8 +180,11 @@ shard artifacts required by `manifest.json` or release readiness.
 The manual `Draft registry release` workflow can generate the same archive from
 the materialized canonical registry and upload it under
 `.datapan/release-assets/data-go-kr-shards.tar.gz` as publish-prep evidence.
-That workflow still does not publish a GitHub Release or make shard artifacts
-required; a human release operator must attach the archive deliberately.
+It also packages `.datapan/release-assets/datapan-registry-snapshot.zip` and
+checks that the shard archive's `source_registry_sha256` matches the registry
+inside that installable zip. That workflow still does not publish a GitHub
+Release or make shard artifacts required; a human release operator must attach
+the matching assets deliberately.
 
 ## Recomposition Invariant
 
