@@ -59,8 +59,9 @@ def table(headers: list[str], rows: list[list[object]]) -> str:
 
 def load_plans(rollup: dict[str, Any]) -> dict[str, dict[str, Any]]:
     plans: dict[str, dict[str, Any]] = {}
-    for raw_path in as_list(rollup.get("source_plan_inputs"), "source_plan_inputs"):
-        plan_path = pathlib.Path(str(raw_path))
+    for raw_input in as_list(rollup.get("source_plan_inputs"), "source_plan_inputs"):
+        source_input = as_dict(raw_input, "source_plan_inputs[]")
+        plan_path = pathlib.Path(str(source_input.get("path")))
         plan = as_dict(load_json(plan_path), str(plan_path))
         source_id = str(plan.get("source_id"))
         if source_id in plans:

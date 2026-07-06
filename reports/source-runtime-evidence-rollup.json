@@ -3,11 +3,56 @@
   "generated_at": "2026-07-06T17:46:39Z",
   "provider": "multi-source",
   "source_plan_inputs": [
-    "reports/data-go-kr/runtime-evidence-plan.json",
-    "reports/ecos/runtime-evidence-plan.json",
-    "reports/kosis/runtime-evidence-plan.json",
-    "reports/open-assembly/runtime-evidence-plan.json",
-    "reports/seoul-open-data/runtime-evidence-plan.json"
+    {
+      "path": "reports/data-go-kr/runtime-evidence-plan.json",
+      "source_id": "data_go_kr",
+      "provider": "data.go.kr",
+      "evidence_total": 4774,
+      "blocking_count": 1,
+      "warning_count": 1,
+      "bytes": 3175,
+      "sha256": "97eeb46379e60650f969f8f4bdaa6f533ba89d785d43f32ca80f6902a855300a"
+    },
+    {
+      "path": "reports/ecos/runtime-evidence-plan.json",
+      "source_id": "ecos",
+      "provider": "ECOS",
+      "evidence_total": 0,
+      "blocking_count": 3,
+      "warning_count": 2,
+      "bytes": 3472,
+      "sha256": "8c695ae4e41557876dbe0e8fd2e27e91fe0e043bc3c0bccf4f3faef1cdee6104"
+    },
+    {
+      "path": "reports/kosis/runtime-evidence-plan.json",
+      "source_id": "kosis",
+      "provider": "KOSIS",
+      "evidence_total": 0,
+      "blocking_count": 3,
+      "warning_count": 2,
+      "bytes": 3455,
+      "sha256": "f72cc37bf59eab3d19d1edc5e592254672464c972ccd33ed632dd4dec14a6606"
+    },
+    {
+      "path": "reports/open-assembly/runtime-evidence-plan.json",
+      "source_id": "open_assembly",
+      "provider": "open.assembly.go.kr",
+      "evidence_total": 0,
+      "blocking_count": 3,
+      "warning_count": 2,
+      "bytes": 3609,
+      "sha256": "0fc576d7dc7839d9047ddb00bf5e05a3807c010dc016d8210c69219c5df2da5f"
+    },
+    {
+      "path": "reports/seoul-open-data/runtime-evidence-plan.json",
+      "source_id": "seoul_open_data",
+      "provider": "data.seoul.go.kr",
+      "evidence_total": 0,
+      "blocking_count": 2,
+      "warning_count": 1,
+      "bytes": 3059,
+      "sha256": "720182cd188e6b6473af932e234e878cf31f3e84bdd5d28d845e1e8323709d6b"
+    }
   ],
   "summary": {
     "sources": 5,

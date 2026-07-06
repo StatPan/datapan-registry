@@ -32,8 +32,7 @@
       "type": "array",
       "minItems": 1,
       "items": {
-        "type": "string",
-        "minLength": 1
+        "$ref": "#/$defs/source_plan_input"
       },
       "uniqueItems": true
     },
@@ -74,6 +73,52 @@
     "source_id": {
       "type": "string",
       "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "source_plan_input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "source_id",
+        "provider",
+        "evidence_total",
+        "blocking_count",
+        "warning_count",
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_id": {
+          "$ref": "#/$defs/source_id"
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_total": {
+          "$ref": "#/$defs/count"
+        },
+        "blocking_count": {
+          "$ref": "#/$defs/count"
+        },
+        "warning_count": {
+          "$ref": "#/$defs/count"
+        },
+        "bytes": {
+          "$ref": "#/$defs/count"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
     },
     "summary": {
       "type": "object",

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import hashlib
 import json
 import pathlib
 import subprocess
@@ -38,6 +39,11 @@ def as_dict(value: object, path: pathlib.Path) -> dict[str, object]:
     return value
 
 
+def file_digest(path: pathlib.Path) -> tuple[int, str]:
+    data = path.read_bytes()
+    return len(data), hashlib.sha256(data).hexdigest()
+
+
 def key_counts(counter: dict[str, list[str]]) -> list[dict[str, object]]:
     return [
         {"id": key, "count": len(counter[key]), "source_ids": sorted(counter[key])}
@@ -50,7 +56,11 @@ def validate_rollup(path: pathlib.Path, rollup: dict[str, object]) -> None:
     if not isinstance(source_plan_inputs, list) or not source_plan_inputs:
         raise ValueError("source_plan_inputs must be a non-empty array")
 
-    plan_paths = [pathlib.Path(str(item)) for item in source_plan_inputs]
+    for index, raw_input in enumerate(source_plan_inputs):
+        if not isinstance(raw_input, dict):
+            raise ValueError(f"source_plan_inputs[{index}] must be an object")
+
+    plan_paths = [pathlib.Path(str(item["path"])) for item in source_plan_inputs if isinstance(item, dict)]
     expected_inputs = [
         portable_path(item)
         for item in sorted(pathlib.Path("reports").glob("*/runtime-evidence-plan.json"))
@@ -59,6 +69,27 @@ def validate_rollup(path: pathlib.Path, rollup: dict[str, object]) -> None:
         raise ValueError("source_plan_inputs must list all checked-in source runtime evidence plans")
 
     plans = [as_dict(load_json(plan_path), plan_path) for plan_path in plan_paths]
+    for index, raw_input in enumerate(source_plan_inputs):
+        source_input = as_dict(raw_input, path)
+        plan_path = plan_paths[index]
+        plan = plans[index]
+        plan_summary = as_dict(plan.get("summary"), plan_path)
+        expected_bytes, expected_sha256 = file_digest(plan_path)
+        expected_values = {
+            "source_id": plan.get("source_id"),
+            "provider": plan.get("provider"),
+            "evidence_total": plan_summary.get("evidence_total"),
+            "blocking_count": plan_summary.get("blocking_count"),
+            "warning_count": plan_summary.get("warning_count"),
+            "bytes": expected_bytes,
+            "sha256": expected_sha256,
+        }
+        for key, value in expected_values.items():
+            if source_input.get(key) != value:
+                raise ValueError(
+                    f"source_plan_inputs[{index}].{key} expected {value}, got {source_input.get(key)}"
+                )
+
     plans_by_source = {str(plan.get("source_id")): plan for plan in plans}
     if len(plans_by_source) != len(plans):
         raise ValueError("duplicate source_id values in source runtime evidence plans")
