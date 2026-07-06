@@ -85,6 +85,7 @@ jobs:
           python -m pip install jsonschema
           python -m py_compile \
             scripts/generate-impact-plan-rollup.py \
+            scripts/generate-release-consumer-compatibility.py \
             scripts/generate-release-health-rollup.py \
             scripts/generate-registry-shards.py \
             scripts/package-registry-release.py \
@@ -115,6 +116,7 @@ jobs:
           python scripts/validate-link-detail-registry-patches.py
           python scripts/validate-institution-api-overview.py
           python scripts/validate-institution-runtime-plan.py
+          python scripts/generate-release-consumer-compatibility.py --check
           python scripts/validate-release-consumer-compatibility.py
 
       - name: Select manifest path
