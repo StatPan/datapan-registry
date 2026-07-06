@@ -18,6 +18,13 @@ def load_json(path: pathlib.Path) -> Any:
         return json.load(handle)
 
 
+def write_json(path: pathlib.Path, payload: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as handle:
+        json.dump(payload, handle, ensure_ascii=False, indent=2, sort_keys=True)
+        handle.write("\n")
+
+
 def load_json_bytes(data: bytes, label: str) -> Any:
     try:
         return json.loads(data.decode("utf-8"))
@@ -117,7 +124,7 @@ def validate_install(payload: dict[str, Any]) -> dict[str, Any]:
     if payload.get("installed") is not True:
         raise ValueError("install must write a registry file")
     specs = positive_int(payload.get("specs"), "install specs")
-    positive_int(payload.get("bytes"), "install bytes")
+    install_bytes = positive_int(payload.get("bytes"), "install bytes")
 
     release = as_dict(payload.get("release"), "release")
     shards_present = as_bool(release.get("shards_asset_present"), "release.shards_asset_present")
@@ -132,20 +139,26 @@ def validate_install(payload: dict[str, Any]) -> dict[str, Any]:
             raise ValueError("shard asset is present but shards_validated is not true")
         if not shards_inventory_present:
             raise ValueError("shard asset is present but inventory is not present")
-        positive_int(release.get("shards_count"), "release.shards_count")
-        positive_int(release.get("shards_records"), "release.shards_records")
+        shards_count = positive_int(release.get("shards_count"), "release.shards_count")
+        shards_records = positive_int(release.get("shards_records"), "release.shards_records")
         mode = "shard_validated"
     else:
         if shards_validated or shards_inventory_present:
             raise ValueError("shard validation metadata is inconsistent when no shard asset is present")
+        shards_count = 0
+        shards_records = 0
         mode = "monolith_fallback"
 
     return {
         "mode": mode,
         "specs": specs,
+        "install_bytes": install_bytes,
         "registry": payload["registry"],
         "shards_asset_present": shards_present,
         "shards_validated": shards_validated,
+        "shards_inventory_present": shards_inventory_present,
+        "shards_count": shards_count,
+        "shards_records": shards_records,
     }
 
 
@@ -177,12 +190,56 @@ def validate_installed_registry(summary: dict[str, Any], release_zip: pathlib.Pa
     return summary
 
 
+def build_summary_json(
+    summary: dict[str, Any],
+    install_json: pathlib.Path,
+    release_zip: pathlib.Path | None,
+) -> dict[str, Any]:
+    checksum_checked = release_zip is not None
+    registry: dict[str, Any] = {
+        "path": summary["registry"],
+        "install_bytes": summary["install_bytes"],
+        "checksum_checked": checksum_checked,
+    }
+    if checksum_checked:
+        registry.update(
+            {
+                "canonical_archive_path": REGISTRY_PATH,
+                "bytes": summary["registry_bytes"],
+                "sha256": summary["registry_sha256"],
+            }
+        )
+
+    return {
+        "schema_version": "datapan.install-smoke-summary.v1",
+        "install_json": install_json.as_posix(),
+        "provider": "datapan-registry",
+        "mode": summary["mode"],
+        "specs": summary["specs"],
+        "registry": registry,
+        "release": {
+            "release_zip_checked": checksum_checked,
+            "release_zip": release_zip.as_posix() if release_zip is not None else None,
+            "shards_asset_present": summary["shards_asset_present"],
+            "shards_validated": summary["shards_validated"],
+            "shards_inventory_present": summary["shards_inventory_present"],
+            "shards_count": summary["shards_count"],
+            "shards_records": summary["shards_records"],
+        },
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--release-zip",
         type=pathlib.Path,
         help="optional release zip whose canonical registry must match the installed registry file",
+    )
+    parser.add_argument(
+        "--summary-json",
+        type=pathlib.Path,
+        help="optional path for a structured install smoke summary JSON artifact",
     )
     parser.add_argument("install_json", type=pathlib.Path)
     args = parser.parse_args()
@@ -191,6 +248,11 @@ def main() -> int:
         summary = validate_install(as_dict(load_json(args.install_json), args.install_json.as_posix()))
         if args.release_zip is not None:
             summary = validate_installed_registry(summary, args.release_zip)
+        if args.summary_json is not None:
+            write_json(
+                args.summary_json,
+                build_summary_json(summary, args.install_json, args.release_zip),
+            )
     except Exception as exc:  # noqa: BLE001 - CI should show the failed invariant
         print(f"FAIL {args.install_json}: {exc}")
         return 1

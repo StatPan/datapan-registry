@@ -88,7 +88,8 @@ check. That workflow:
 - validates the install JSON with
   `scripts/check-shard-aware-install-smoke.py` for both the current checkout
   zip and the latest public release, recording either validated shard metadata
-  or canonical monolith fallback;
+  or canonical monolith fallback in `current-release-install-smoke.json` and
+  `latest-release-install-smoke.json`;
 - validates the doctor JSON with `scripts/check-release-doctor-smoke.py` for
   both current checkout and latest public release installs, including matching
   doctor registry path and spec count against the install JSON;
