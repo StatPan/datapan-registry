@@ -11,8 +11,14 @@ import sys
 import tempfile
 from typing import Any
 
+try:
+    import jsonschema
+except ImportError as exc:  # pragma: no cover - environment guard
+    raise SystemExit("missing dependency: install jsonschema before validating coverage backlog") from exc
+
 
 EXPECTED_SCHEMA_VERSION = "datapan.coverage-backlog.v1"
+DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.coverage-backlog.v1.schema.json")
 
 
 def load_json(path: pathlib.Path) -> Any:
@@ -30,12 +36,28 @@ def normalize_json(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
 
 
-def validate_report(report_path: pathlib.Path, markdown_path: pathlib.Path, generator: pathlib.Path) -> None:
+def validate_schema(report: dict[str, Any], schema_path: pathlib.Path) -> None:
+    schema = as_dict(load_json(schema_path), schema_path)
+    validator = jsonschema.Draft202012Validator(schema)
+    errors = sorted(validator.iter_errors(report), key=lambda error: list(error.path))
+    if errors:
+        error = errors[0]
+        path = ".".join(str(part) for part in error.path) or "<root>"
+        raise ValueError(f"schema validation failed at {path}: {error.message}")
+
+
+def validate_report(
+    report_path: pathlib.Path,
+    markdown_path: pathlib.Path,
+    generator: pathlib.Path,
+    schema_path: pathlib.Path,
+) -> None:
     report = as_dict(load_json(report_path), report_path)
     if report.get("schema_version") != EXPECTED_SCHEMA_VERSION:
         raise ValueError(
             f"schema_version expected {EXPECTED_SCHEMA_VERSION}, got {report.get('schema_version')}"
         )
+    validate_schema(report, schema_path)
 
     required_arrays = ["institutions", "uncovered_apis", "runtime_reactivation_apis", "runtime_repair_apis"]
     for key in required_arrays:
@@ -106,6 +128,12 @@ def main() -> int:
         help="generated coverage backlog markdown path",
     )
     parser.add_argument(
+        "--schema",
+        default=DEFAULT_SCHEMA,
+        type=pathlib.Path,
+        help="coverage backlog schema path",
+    )
+    parser.add_argument(
         "report",
         nargs="?",
         default=pathlib.Path("reports/data-go-kr/coverage-backlog.json"),
@@ -115,7 +143,7 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
-        validate_report(args.report, args.markdown, args.generator)
+        validate_report(args.report, args.markdown, args.generator, args.schema)
     except Exception as exc:  # noqa: BLE001 - report all validation blockers
         print(f"FAIL {args.report}: {exc}", file=sys.stderr)
         return 1

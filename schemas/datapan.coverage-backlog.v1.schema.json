@@ -1,0 +1,441 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.coverage-backlog.v1.schema.json",
+  "title": "Datapan Coverage Backlog v1",
+  "description": "data.go.kr source coverage backlog and runtime evidence action report.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "provider",
+    "source_id",
+    "generation_inputs",
+    "summary",
+    "institutions",
+    "uncovered_apis",
+    "runtime_reactivation_apis",
+    "runtime_repair_apis"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.coverage-backlog.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provider": {
+      "const": "data.go.kr"
+    },
+    "source_id": {
+      "const": "data_go_kr"
+    },
+    "generation_inputs": {
+      "$ref": "#/$defs/generation_inputs"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "institutions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/institution"
+      }
+    },
+    "uncovered_apis": {
+      "type": "array",
+      "items": {
+        "unevaluatedProperties": false,
+        "allOf": [
+          {
+            "$ref": "#/$defs/api"
+          },
+          {
+            "required": ["action", "reason"],
+            "properties": {
+              "action": {
+                "const": "materialize_operation_mapping"
+              },
+              "reason": {
+                "const": "no_dependency_rows"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "runtime_reactivation_apis": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/runtime_api"
+          },
+          {
+            "properties": {
+              "action": {
+                "const": "collect_runtime_evidence"
+              },
+              "reason": {
+                "const": "operation_mapped_without_runtime_evidence"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "runtime_repair_apis": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/runtime_api"
+          },
+          {
+            "properties": {
+              "action": {
+                "const": "repair_failed_runtime_evidence"
+              },
+              "reason": {
+                "const": "latest_runtime_evidence_failed"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "string": {
+      "type": "string"
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "percent": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "generation_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registry",
+        "dependencies",
+        "latest_verification"
+      ],
+      "properties": {
+        "registry": {
+          "$ref": "#/$defs/path"
+        },
+        "dependencies": {
+          "$ref": "#/$defs/path"
+        },
+        "latest_verification": {
+          "$ref": "#/$defs/path"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "institutions",
+        "api_total",
+        "covered_api_count",
+        "uncovered_api_count",
+        "api_operation_coverage_percent",
+        "operation_total",
+        "runtime_evidence_operation_count",
+        "runtime_evidence_operation_percent",
+        "runtime_verified_operation_count",
+        "runtime_failed_operation_count",
+        "runtime_skipped_operation_count",
+        "runtime_evidence_api_count",
+        "runtime_reactivation_api_count",
+        "runtime_repair_api_count"
+      ],
+      "properties": {
+        "institutions": {
+          "$ref": "#/$defs/count"
+        },
+        "api_total": {
+          "$ref": "#/$defs/count"
+        },
+        "covered_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "uncovered_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "api_operation_coverage_percent": {
+          "$ref": "#/$defs/percent"
+        },
+        "operation_total": {
+          "$ref": "#/$defs/count"
+        },
+        "runtime_evidence_operation_count": {
+          "$ref": "#/$defs/count"
+        },
+        "runtime_evidence_operation_percent": {
+          "$ref": "#/$defs/percent"
+        },
+        "runtime_verified_operation_count": {
+          "$ref": "#/$defs/count"
+        },
+        "runtime_failed_operation_count": {
+          "$ref": "#/$defs/count"
+        },
+        "runtime_skipped_operation_count": {
+          "$ref": "#/$defs/count"
+        },
+        "runtime_evidence_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "runtime_reactivation_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "runtime_repair_api_count": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "institution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization",
+        "api_count",
+        "covered_api_count",
+        "uncovered_api_count",
+        "operation_count",
+        "runtime_evidence_api_count",
+        "runtime_reactivation_api_count",
+        "runtime_repair_api_count",
+        "runtime_evidence_count",
+        "runtime_missing_evidence_count",
+        "verified",
+        "failed",
+        "skipped",
+        "unknown",
+        "approval_required_operations",
+        "missing_adapter_operations",
+        "no_endpoint_operations",
+        "api_operation_coverage_percent",
+        "runtime_evidence_percent",
+        "priority_score"
+      ],
+      "properties": {
+        "organization": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "covered_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "uncovered_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "operation_count": {
+          "$ref": "#/$defs/count"
+        },
+        "runtime_evidence_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "runtime_reactivation_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "runtime_repair_api_count": {
+          "$ref": "#/$defs/count"
+        },
+        "runtime_evidence_count": {
+          "$ref": "#/$defs/count"
+        },
+        "runtime_missing_evidence_count": {
+          "$ref": "#/$defs/count"
+        },
+        "verified": {
+          "$ref": "#/$defs/count"
+        },
+        "failed": {
+          "$ref": "#/$defs/count"
+        },
+        "skipped": {
+          "$ref": "#/$defs/count"
+        },
+        "unknown": {
+          "$ref": "#/$defs/count"
+        },
+        "approval_required_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "missing_adapter_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "no_endpoint_operations": {
+          "$ref": "#/$defs/count"
+        },
+        "api_operation_coverage_percent": {
+          "$ref": "#/$defs/percent"
+        },
+        "runtime_evidence_percent": {
+          "$ref": "#/$defs/percent"
+        },
+        "priority_score": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "api": {
+      "type": "object",
+      "required": [
+        "dataset_id",
+        "title",
+        "organization",
+        "source_category",
+        "api_type",
+        "data_format",
+        "register_status",
+        "dev_approval",
+        "prod_approval",
+        "created_at",
+        "updated_at",
+        "meta_url"
+      ],
+      "properties": {
+        "dataset_id": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "title": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "organization": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "source_category": {
+          "$ref": "#/$defs/string"
+        },
+        "api_type": {
+          "$ref": "#/$defs/string"
+        },
+        "data_format": {
+          "$ref": "#/$defs/string"
+        },
+        "register_status": {
+          "$ref": "#/$defs/string"
+        },
+        "dev_approval": {
+          "$ref": "#/$defs/string"
+        },
+        "prod_approval": {
+          "$ref": "#/$defs/string"
+        },
+        "created_at": {
+          "$ref": "#/$defs/string"
+        },
+        "updated_at": {
+          "$ref": "#/$defs/string"
+        },
+        "meta_url": {
+          "$ref": "#/$defs/string"
+        },
+        "action": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "reason": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "runtime_api": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/api"
+        },
+        {
+          "required": [
+            "action",
+            "reason",
+            "operation_count",
+            "runtime_evidence_count",
+            "runtime_missing_evidence_count",
+            "verified",
+            "failed",
+            "skipped",
+            "unknown",
+            "approval_required_operations",
+            "missing_adapter_operations",
+            "no_endpoint_operations",
+            "primary_dependency_class",
+            "primary_adapter_status",
+            "primary_endpoint_host",
+            "skip_reasons"
+          ],
+          "properties": {
+            "operation_count": {
+              "$ref": "#/$defs/count"
+            },
+            "runtime_evidence_count": {
+              "$ref": "#/$defs/count"
+            },
+            "runtime_missing_evidence_count": {
+              "$ref": "#/$defs/count"
+            },
+            "verified": {
+              "$ref": "#/$defs/count"
+            },
+            "failed": {
+              "$ref": "#/$defs/count"
+            },
+            "skipped": {
+              "$ref": "#/$defs/count"
+            },
+            "unknown": {
+              "$ref": "#/$defs/count"
+            },
+            "approval_required_operations": {
+              "$ref": "#/$defs/count"
+            },
+            "missing_adapter_operations": {
+              "$ref": "#/$defs/count"
+            },
+            "no_endpoint_operations": {
+              "$ref": "#/$defs/count"
+            },
+            "primary_dependency_class": {
+              "$ref": "#/$defs/string"
+            },
+            "primary_adapter_status": {
+              "$ref": "#/$defs/string"
+            },
+            "primary_endpoint_host": {
+              "$ref": "#/$defs/string"
+            },
+            "skip_reasons": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/non_empty_string"
+              },
+              "uniqueItems": true
+            }
+          }
+        }
+      ]
+    }
+  }
+}
