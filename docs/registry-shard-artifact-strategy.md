@@ -204,6 +204,12 @@ During the initial rollout, use a temporary output directory such as
 the shard inventory, recomposition validator, and CI policy agree on whether
 the generated shard files are release artifacts, review artifacts, or both.
 
+Validate a generated inventory and its shards with:
+
+```bash
+python scripts/validate-registry-shards.py .datapan/shard-check/registry-shards.json
+```
+
 ### Stage 4: CI Split
 
 Keep full release verification on LFS. Add scoped checks that can use shard
