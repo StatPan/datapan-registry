@@ -37,23 +37,13 @@ SESSION_REVIEW_PLAN_VALIDATION_COMMAND = (
     "python3 scripts/validate-credential-runtime-session-review-plan.py "
     f"{DEFAULT_SESSION_REVIEW_PLAN_OUTPUT} --queue {DEFAULT_QUEUE.as_posix()}"
 )
+RELEASE_EVIDENCE_REFRESH_COMMAND = "python3 scripts/refresh-release-ledger-evidence.py --write --max-iterations 5"
+RELEASE_EVIDENCE_CHECK_COMMAND = "python3 scripts/refresh-release-ledger-evidence.py --check"
 
 
 POST_PROMOTION_CHECKS = [
-    "python3 scripts/generate-credential-runtime-evidence-policy.py",
-    "python3 scripts/generate-credential-runtime-collection-preflight.py",
-    "python3 scripts/generate-credential-runtime-receipt-collection-queue.py",
-    "python3 scripts/generate-credential-runtime-review-handoff.py",
-    "python3 scripts/generate-source-runtime-remediation-map.py",
-    "python3 scripts/generate-release-consumer-compatibility.py",
-    "python3 scripts/generate-release-consumer-decision.py",
-    "python3 scripts/generate-release-goal-finish-preflight.py",
-    "python3 scripts/generate-release-goal-continuation-queue.py",
-    "python3 scripts/generate-release-goal-operating-contract.py",
-    "python3 scripts/generate-release-assembly-receipt.py",
-    "python3 scripts/sync-release-manifest-artifacts.py --write",
-    "python3 scripts/validate-credential-runtime-receipts.py",
-    "python3 scripts/validate-release-consumer-compatibility.py",
+    RELEASE_EVIDENCE_REFRESH_COMMAND,
+    RELEASE_EVIDENCE_CHECK_COMMAND,
 ]
 
 DOWNSTREAM_EVIDENCE = [
@@ -257,6 +247,8 @@ def build_report(queue: dict[str, Any], handoff: dict[str, Any], decision: dict[
         },
         "post_promotion_contract": {
             "commands": POST_PROMOTION_CHECKS,
+            "release_evidence_refresh_command": RELEASE_EVIDENCE_REFRESH_COMMAND,
+            "release_evidence_check_command": RELEASE_EVIDENCE_CHECK_COMMAND,
             "downstream_evidence_affected": DOWNSTREAM_EVIDENCE,
             "goal_closure_effect": "no_goal_closure_without_reviewed_receipts_or_explicit_manual_review_acceptance",
         },
@@ -296,6 +288,13 @@ def validate_invariants(report: dict[str, Any]) -> None:
         raise ValueError("operator packets must not allow checked-in secrets")
     if summary.get("manual_review_accepted") is not False:
         raise ValueError("operator packets cannot assert manual-review acceptance")
+    post_promotion_contract = as_dict(report.get("post_promotion_contract"), "post_promotion_contract")
+    if post_promotion_contract.get("release_evidence_refresh_command") != RELEASE_EVIDENCE_REFRESH_COMMAND:
+        raise ValueError("post-promotion contract must expose the fixed-point refresh command")
+    if post_promotion_contract.get("release_evidence_check_command") != RELEASE_EVIDENCE_CHECK_COMMAND:
+        raise ValueError("post-promotion contract must expose the fixed-point check command")
+    if as_list(post_promotion_contract.get("commands"), "post_promotion_contract.commands") != POST_PROMOTION_CHECKS:
+        raise ValueError("post-promotion contract commands must refresh and check release evidence")
     batch_contract = as_dict(report.get("batch_collection_contract"), "batch_collection_contract")
     batch_commands = as_dict(batch_contract.get("commands"), "batch_collection_contract.commands")
     for key, command in batch_commands.items():
@@ -319,7 +318,10 @@ def validate_invariants(report: dict[str, Any]) -> None:
         commands = as_dict(packet.get("commands"), f"{source_id}.commands")
         for key, value in commands.items():
             if key == "post_promotion_checks":
-                for command in as_list(value, f"{source_id}.commands.post_promotion_checks"):
+                post_promotion_checks = as_list(value, f"{source_id}.commands.post_promotion_checks")
+                if post_promotion_checks != POST_PROMOTION_CHECKS:
+                    raise ValueError(f"{source_id}: post-promotion checks must refresh and check release evidence")
+                for command in post_promotion_checks:
                     if "<secret>" in string_value(command, f"{source_id}.post_promotion_checks[]"):
                         raise ValueError(f"{source_id}: post-promotion command includes a secret placeholder")
                 continue

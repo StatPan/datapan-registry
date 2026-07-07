@@ -23,6 +23,12 @@ DEFAULT_CREDENTIAL_REVIEW_HANDOFF = pathlib.Path("reports/credential-runtime-rev
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.release-goal-continuation-queue.v1.schema.json")
 DEFAULT_OUTPUT = pathlib.Path("reports/release-goal-continuation-queue.json")
 SCHEMA_VERSION = "datapan.release-goal-continuation-queue.v1"
+RELEASE_EVIDENCE_REFRESH_COMMAND = "python3 scripts/refresh-release-ledger-evidence.py --write --max-iterations 5"
+RELEASE_EVIDENCE_CHECK_COMMAND = "python3 scripts/refresh-release-ledger-evidence.py --check"
+POST_CHILD_REFRESH_COMMANDS = [
+    RELEASE_EVIDENCE_REFRESH_COMMAND,
+    RELEASE_EVIDENCE_CHECK_COMMAND,
+]
 
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -87,6 +93,7 @@ def candidate_receipt_collection(
             "Promotion uses scripts/promote-credential-runtime-receipt.py and keeps reviewed states explicit.",
             "Consumer compatibility continues to report manual-review status unless relief gates are fully satisfied.",
         ],
+        "post_completion_commands": POST_CHILD_REFRESH_COMMANDS,
         "goal_closure_allowed": False,
         "rationale": "Reviewed credential runtime receipts are the strongest evidence path for reducing current manual-review compatibility gates.",
     }
@@ -125,6 +132,7 @@ def candidate_manual_review_acceptance() -> dict[str, Any]:
             "Release consumer decision explains manual-review-only adoption for affected consumers.",
             "Goal audit remains not_complete unless it explicitly proves the completion contract.",
         ],
+        "post_completion_commands": POST_CHILD_REFRESH_COMMANDS,
         "goal_closure_allowed": False,
         "rationale": "Explicit manual-review acceptance is the alternative release boundary when reviewed live receipt evidence is not yet available.",
     }
@@ -206,6 +214,17 @@ def build_report(
             "next_action": finish_summary.get("next_action"),
             "blocking_evidence_count": finish_summary.get("blocking_evidence_count"),
         },
+        "release_evidence_refresh": {
+            "refresh_command": RELEASE_EVIDENCE_REFRESH_COMMAND,
+            "check_command": RELEASE_EVIDENCE_CHECK_COMMAND,
+            "max_iterations": 5,
+            "applies_after": [
+                "reviewed_credential_receipt_collection",
+                "reviewed_credential_receipt_promotion",
+                "manual_review_acceptance_decision",
+            ],
+            "goal_closure_effect": "refresh_may_update_evidence_but_does_not_close_goal_without_goal_finish_preflight",
+        },
         "blocking_evidence": blocking,
         "candidates": candidates,
     }
@@ -236,6 +255,16 @@ def validate_invariants(report: dict[str, Any]) -> None:
     orders = [as_dict(item, "candidate").get("order") for item in candidates]
     if orders != list(range(1, len(candidates) + 1)):
         raise ValueError("candidate.order values must be consecutive from 1")
+    refresh = as_dict(report.get("release_evidence_refresh"), "release_evidence_refresh")
+    expected_commands = [RELEASE_EVIDENCE_REFRESH_COMMAND, RELEASE_EVIDENCE_CHECK_COMMAND]
+    if refresh.get("refresh_command") != RELEASE_EVIDENCE_REFRESH_COMMAND:
+        raise ValueError("release evidence refresh command must use the fixed-point refresh command")
+    if refresh.get("check_command") != RELEASE_EVIDENCE_CHECK_COMMAND:
+        raise ValueError("release evidence check command must use the fixed-point check command")
+    for candidate in candidates:
+        commands = as_list(as_dict(candidate, "candidate").get("post_completion_commands"), "candidate.post_completion_commands")
+        if commands != expected_commands:
+            raise ValueError("candidate post-completion commands must refresh and check release evidence")
 
 
 def validate_schema(report: dict[str, Any], schema_path: pathlib.Path) -> None:

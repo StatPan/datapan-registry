@@ -14,6 +14,7 @@
     "inputs",
     "summary",
     "finish_boundary",
+    "release_evidence_refresh",
     "blocking_evidence",
     "candidates"
   ],
@@ -42,6 +43,9 @@
     },
     "finish_boundary": {
       "$ref": "#/$defs/finish_boundary"
+    },
+    "release_evidence_refresh": {
+      "$ref": "#/$defs/release_evidence_refresh"
     },
     "blocking_evidence": {
       "type": "array",
@@ -177,6 +181,43 @@
         }
       }
     },
+    "release_evidence_refresh": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "refresh_command",
+        "check_command",
+        "max_iterations",
+        "applies_after",
+        "goal_closure_effect"
+      ],
+      "properties": {
+        "refresh_command": {
+          "const": "python3 scripts/refresh-release-ledger-evidence.py --write --max-iterations 5"
+        },
+        "check_command": {
+          "const": "python3 scripts/refresh-release-ledger-evidence.py --check"
+        },
+        "max_iterations": {
+          "const": 5
+        },
+        "applies_after": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "reviewed_credential_receipt_collection",
+              "reviewed_credential_receipt_promotion",
+              "manual_review_acceptance_decision"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "goal_closure_effect": {
+          "const": "refresh_may_update_evidence_but_does_not_close_goal_without_goal_finish_preflight"
+        }
+      }
+    },
     "blocking_evidence": {
       "type": "object",
       "additionalProperties": false,
@@ -205,6 +246,7 @@
         "safe_start_conditions",
         "blocked_finish_conditions",
         "proposed_acceptance_criteria",
+        "post_completion_commands",
         "goal_closure_allowed",
         "rationale"
       ],
@@ -255,6 +297,18 @@
           "items": {
             "$ref": "#/$defs/non_empty_string"
           }
+        },
+        "post_completion_commands": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "python3 scripts/refresh-release-ledger-evidence.py --write --max-iterations 5"
+            },
+            {
+              "const": "python3 scripts/refresh-release-ledger-evidence.py --check"
+            }
+          ],
+          "items": false
         },
         "goal_closure_allowed": {
           "const": false
