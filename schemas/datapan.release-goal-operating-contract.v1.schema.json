@@ -217,7 +217,8 @@
         "gira_child_graph_finish_signal",
         "completion_proof_source",
         "finish_command_precondition",
-        "operator_rule"
+        "operator_rule",
+        "external_finish_signal_boundary"
       ],
       "properties": {
         "gira_child_graph_finish_signal": {
@@ -231,6 +232,63 @@
         },
         "operator_rule": {
           "$ref": "#/$defs/non_empty_string"
+        },
+        "external_finish_signal_boundary": {
+          "$ref": "#/$defs/external_finish_signal_boundary"
+        }
+      }
+    },
+    "external_finish_signal_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observed_child_graph_signal",
+        "signal_authority",
+        "repo_finish_allowed",
+        "repo_goal_closure_allowed",
+        "divergence_status",
+        "required_operator_action",
+        "guard_command",
+        "continuation_next_action",
+        "primary_continuation_candidate",
+        "blocking_evidence_count"
+      ],
+      "properties": {
+        "observed_child_graph_signal": {
+          "const": "finish_goal_when_child_graph_exhausted"
+        },
+        "signal_authority": {
+          "const": "lifecycle_progress_only"
+        },
+        "repo_finish_allowed": {
+          "type": "boolean"
+        },
+        "repo_goal_closure_allowed": {
+          "type": "boolean"
+        },
+        "divergence_status": {
+          "enum": [
+            "repo_blocks_lifecycle_finish_signal",
+            "repo_and_lifecycle_finish_aligned"
+          ]
+        },
+        "required_operator_action": {
+          "enum": [
+            "create_child_ticket_or_collect_required_evidence",
+            "gira_goal_finish_allowed_after_guard"
+          ]
+        },
+        "guard_command": {
+          "const": "python3 scripts/guard-release-goal-finish.py"
+        },
+        "continuation_next_action": {
+          "enum": ["create_child_ticket", "goal_finish_allowed"]
+        },
+        "primary_continuation_candidate": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "blocking_evidence_count": {
+          "$ref": "#/$defs/count"
         }
       }
     },

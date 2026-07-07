@@ -17,6 +17,8 @@ except ImportError as exc:  # pragma: no cover - environment guard
 
 DEFAULT_PREFLIGHT = pathlib.Path("reports/release-goal-finish-preflight.json")
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.release-goal-finish-preflight.v1.schema.json")
+DEFAULT_OPERATING_CONTRACT = pathlib.Path("reports/release-goal-operating-contract.json")
+DEFAULT_OPERATING_CONTRACT_SCHEMA = pathlib.Path("schemas/datapan.release-goal-operating-contract.v1.schema.json")
 
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -74,6 +76,56 @@ def guard_result(report: dict[str, Any]) -> tuple[bool, list[str]]:
     return False, lines
 
 
+def validate_operating_contract_alignment(preflight: dict[str, Any], contract: dict[str, Any]) -> list[str]:
+    preflight_summary = as_dict(preflight.get("summary"), "preflight.summary")
+    contract_summary = as_dict(contract.get("operating_summary"), "operating_contract.operating_summary")
+    lifecycle = as_dict(
+        contract.get("external_lifecycle_signal_policy"),
+        "operating_contract.external_lifecycle_signal_policy",
+    )
+    finish_boundary = as_dict(
+        lifecycle.get("external_finish_signal_boundary"),
+        "operating_contract.external_lifecycle_signal_policy.external_finish_signal_boundary",
+    )
+    preflight_finish_allowed = preflight_summary.get("finish_allowed") is True
+    contract_finish_allowed = contract_summary.get("finish_allowed") is True
+    lines = [
+        f"operating_contract_finish_allowed={contract_summary.get('finish_allowed')}",
+        f"operating_contract_goal_closure_allowed={contract_summary.get('goal_closure_allowed')}",
+        f"external_finish_signal_boundary={finish_boundary.get('divergence_status')}",
+        f"external_finish_required_operator_action={finish_boundary.get('required_operator_action')}",
+    ]
+    if lifecycle.get("gira_child_graph_finish_signal") != "lifecycle_signal_only":
+        raise ValueError("operating contract must classify Gira child graph finish as lifecycle_signal_only")
+    if lifecycle.get("completion_proof_source") != "checked_in_release_evidence_and_completion_audit":
+        raise ValueError("operating contract must require checked-in release evidence and completion audit")
+    if lifecycle.get("finish_command_precondition") != "python3 scripts/guard-release-goal-finish.py":
+        raise ValueError("operating contract must name guard-release-goal-finish.py as finish precondition")
+    if finish_boundary.get("guard_command") != lifecycle.get("finish_command_precondition"):
+        raise ValueError("external finish boundary guard command must match lifecycle precondition")
+    if contract_finish_allowed != preflight_finish_allowed:
+        raise ValueError("operating contract finish_allowed does not match finish preflight")
+    if finish_boundary.get("repo_finish_allowed") is not preflight_finish_allowed:
+        raise ValueError("external finish boundary repo_finish_allowed does not match finish preflight")
+    if finish_boundary.get("repo_goal_closure_allowed") != contract_summary.get("goal_closure_allowed"):
+        raise ValueError("external finish boundary closure allowance does not match operating summary")
+    if preflight_finish_allowed:
+        if finish_boundary.get("divergence_status") != "repo_and_lifecycle_finish_aligned":
+            raise ValueError("finish-allowed evidence must align repo and lifecycle finish signals")
+        if finish_boundary.get("required_operator_action") != "gira_goal_finish_allowed_after_guard":
+            raise ValueError("finish-allowed evidence must route to guarded Gira goal finish")
+    else:
+        if finish_boundary.get("divergence_status") != "repo_blocks_lifecycle_finish_signal":
+            raise ValueError("blocked evidence must record repo_blocks_lifecycle_finish_signal")
+        if finish_boundary.get("required_operator_action") != "create_child_ticket_or_collect_required_evidence":
+            raise ValueError("blocked evidence must route to continuation or missing evidence collection")
+        if finish_boundary.get("continuation_next_action") != "create_child_ticket":
+            raise ValueError("blocked evidence must preserve continuation_next_action=create_child_ticket")
+        if finish_boundary.get("blocking_evidence_count") != preflight_summary.get("blocking_evidence_count"):
+            raise ValueError("external finish boundary blocking evidence count must match finish preflight")
+    return lines
+
+
 def run_self_test() -> None:
     blocked = {
         "summary": {
@@ -103,16 +155,67 @@ def run_self_test() -> None:
         },
         "blocking_evidence": [],
     }
+    blocked_contract = {
+        "operating_summary": {
+            "finish_allowed": False,
+            "goal_closure_allowed": False,
+        },
+        "external_lifecycle_signal_policy": {
+            "gira_child_graph_finish_signal": "lifecycle_signal_only",
+            "completion_proof_source": "checked_in_release_evidence_and_completion_audit",
+            "finish_command_precondition": "python3 scripts/guard-release-goal-finish.py",
+            "external_finish_signal_boundary": {
+                "repo_finish_allowed": False,
+                "repo_goal_closure_allowed": False,
+                "divergence_status": "repo_blocks_lifecycle_finish_signal",
+                "required_operator_action": "create_child_ticket_or_collect_required_evidence",
+                "guard_command": "python3 scripts/guard-release-goal-finish.py",
+                "continuation_next_action": "create_child_ticket",
+                "blocking_evidence_count": 1,
+            },
+        },
+    }
+    allowed_contract = {
+        "operating_summary": {
+            "finish_allowed": True,
+            "goal_closure_allowed": True,
+        },
+        "external_lifecycle_signal_policy": {
+            "gira_child_graph_finish_signal": "lifecycle_signal_only",
+            "completion_proof_source": "checked_in_release_evidence_and_completion_audit",
+            "finish_command_precondition": "python3 scripts/guard-release-goal-finish.py",
+            "external_finish_signal_boundary": {
+                "repo_finish_allowed": True,
+                "repo_goal_closure_allowed": True,
+                "divergence_status": "repo_and_lifecycle_finish_aligned",
+                "required_operator_action": "gira_goal_finish_allowed_after_guard",
+                "guard_command": "python3 scripts/guard-release-goal-finish.py",
+                "continuation_next_action": "goal_finish_allowed",
+                "blocking_evidence_count": 0,
+            },
+        },
+    }
     if guard_result(blocked)[0] is not False:
         raise ValueError("self-test expected blocked preflight to fail the guard")
     if guard_result(allowed)[0] is not True:
         raise ValueError("self-test expected allowed preflight to pass the guard")
+    validate_operating_contract_alignment(blocked, blocked_contract)
+    validate_operating_contract_alignment(allowed, allowed_contract)
+    mismatched_contract = dict(blocked_contract)
+    mismatched_contract["operating_summary"] = {"finish_allowed": True, "goal_closure_allowed": True}
+    try:
+        validate_operating_contract_alignment(blocked, mismatched_contract)
+    except ValueError:
+        return
+    raise ValueError("self-test expected preflight/operating-contract mismatch to fail")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--preflight", default=DEFAULT_PREFLIGHT, type=pathlib.Path)
     parser.add_argument("--schema", default=DEFAULT_SCHEMA, type=pathlib.Path)
+    parser.add_argument("--operating-contract", default=DEFAULT_OPERATING_CONTRACT, type=pathlib.Path)
+    parser.add_argument("--operating-contract-schema", default=DEFAULT_OPERATING_CONTRACT_SCHEMA, type=pathlib.Path)
     parser.add_argument("--self-test", action="store_true", help="validate guard pass/fail semantics without reading repo state")
     args = parser.parse_args()
 
@@ -123,8 +226,11 @@ def main() -> int:
             return 0
 
         report = load_json(args.preflight)
+        operating_contract = load_json(args.operating_contract)
         validate_schema(report, load_json(args.schema))
+        validate_schema(operating_contract, load_json(args.operating_contract_schema))
         allowed, lines = guard_result(report)
+        lines.extend(validate_operating_contract_alignment(report, operating_contract))
     except Exception as exc:  # noqa: BLE001 - release operators need the failed invariant
         print(f"FAIL release goal finish guard: {exc}", file=sys.stderr)
         return 1
