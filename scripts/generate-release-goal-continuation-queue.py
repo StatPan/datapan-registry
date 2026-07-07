@@ -123,6 +123,10 @@ def attach_ticket_packet(candidate: dict[str, Any]) -> dict[str, Any]:
     body = render_ticket_body(candidate)
     command_prefix = f"gira ticket new {shell_quote(title)} {GIRA_TICKET_BODY_STDIN}"
     runner_prefix = f"{TICKET_PACKET_RUNNER} --candidate {candidate_id}"
+    duplicate_check_command = (
+        "gh issue list --repo StatPan/datapan-registry --state open "
+        f"--search {shell_quote(f'{title} in:title')} --json number,title,state,url"
+    )
     return {
         **candidate,
         "ticket_packet": {
@@ -133,6 +137,7 @@ def attach_ticket_packet(candidate: dict[str, Any]) -> dict[str, Any]:
             "body_input": "stdin",
             "dry_run_command": f"{command_prefix} --dry-run",
             "apply_command": f"{command_prefix} --apply",
+            "duplicate_check_command": duplicate_check_command,
             "runner_json_command": f"{runner_prefix} --json",
             "runner_body_command": f"{runner_prefix} --body",
             "runner_command_command": f"{runner_prefix} --command",
@@ -495,6 +500,13 @@ def validate_invariants(report: dict[str, Any]) -> None:
         )
         if ticket_packet.get("apply_command") != expected_apply:
             raise ValueError("candidate ticket packet apply command must match the candidate title")
+        candidate_title = str(candidate_obj["title"])
+        expected_duplicate_check = (
+            "gh issue list --repo StatPan/datapan-registry --state open "
+            f"--search {shell_quote(f'{candidate_title} in:title')} --json number,title,state,url"
+        )
+        if ticket_packet.get("duplicate_check_command") != expected_duplicate_check:
+            raise ValueError("candidate ticket packet duplicate check command must match the candidate title")
         expected_runner_prefix = f"{TICKET_PACKET_RUNNER} --candidate {candidate_obj['id']}"
         for key, suffix in {
             "runner_json_command": "--json",
