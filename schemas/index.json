@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 65,
+  "count": 66,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 3597,
-      "sha256": "bfcaf2ddd90d139784611a32a4eb80e3a41792fc7f7ccb2852534e481ec76166"
+      "bytes": 3657,
+      "sha256": "cbe3b5da52d9155b04da203ae0b22f2ca3161688907f0aa6e354005acbd13aec"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -514,8 +514,8 @@
       "title": "Datapan Release Goal Continuation Queue v1",
       "contract": "release-goal-continuation-queue",
       "version": "v1",
-      "bytes": 9507,
-      "sha256": "9df3fbe82e9b84746cf329f0d8df6587623dfa158c7e7e11301491d53805e487"
+      "bytes": 9695,
+      "sha256": "9845564f28f4d7709a1cd81f42decac99e5836543e9476796623f74c00a84ce2"
     },
     {
       "path": "schemas/datapan.credential-runtime-operator-packets.v1.schema.json",
@@ -577,8 +577,8 @@
       "title": "Datapan Release Operational Pressure v1",
       "contract": "release-operational-pressure",
       "version": "v1",
-      "bytes": 9311,
-      "sha256": "7148611cd95378f760a34c621938394943d5a2def260532f206ed6ce61c6d249"
+      "bytes": 10711,
+      "sha256": "65673126ddbab3fe5cfed4d8a79916f6c833bedc03f047e8e31ed09a3bddb283"
     },
     {
       "path": "schemas/datapan.release-shard-consumer-proof.v1.schema.json",
@@ -588,6 +588,15 @@
       "version": "v1",
       "bytes": 6678,
       "sha256": "93e85e75235192e688bf132f213c80c53091dfd978f7cb4ec605f2ad0d73c796"
+    },
+    {
+      "path": "schemas/datapan.credential-runtime-collection-execution-plan.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.credential-runtime-collection-execution-plan.v1.schema.json",
+      "title": "Datapan Credential Runtime Collection Execution Plan v1",
+      "contract": "credential-runtime-collection-execution-plan",
+      "version": "v1",
+      "bytes": 12537,
+      "sha256": "ad863ac141364822e760539e8af151ceb3a5a53b55c1d5f1306a3ddc3bb41fb3"
     }
   ]
 }

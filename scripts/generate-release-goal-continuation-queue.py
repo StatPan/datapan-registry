@@ -21,6 +21,7 @@ DEFAULT_CONSUMER_DECISION = pathlib.Path("reports/release-consumer-decision.json
 DEFAULT_CREDENTIAL_COLLECTION_PREFLIGHT = pathlib.Path("reports/credential-runtime-collection-preflight.json")
 DEFAULT_CREDENTIAL_RUNNER_READINESS = pathlib.Path("reports/credential-runtime-runner-readiness.json")
 DEFAULT_CREDENTIAL_REVIEW_HANDOFF = pathlib.Path("reports/credential-runtime-review-handoff.json")
+DEFAULT_CREDENTIAL_EXECUTION_PLAN = pathlib.Path("reports/credential-runtime-collection-execution-plan.json")
 DEFAULT_OPERATIONAL_PRESSURE = pathlib.Path("reports/release-operational-pressure.json")
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.release-goal-continuation-queue.v1.schema.json")
 DEFAULT_OUTPUT = pathlib.Path("reports/release-goal-continuation-queue.json")
@@ -59,6 +60,7 @@ def as_list(value: object, label: str) -> list[Any]:
 
 def candidate_receipt_collection(
     credential_preflight_summary: dict[str, Any],
+    execution_plan_summary: dict[str, Any],
     handoff_summary: dict[str, Any],
 ) -> dict[str, Any]:
     reviewed_missing = credential_preflight_summary.get("reviewed_receipts_missing")
@@ -78,10 +80,14 @@ def candidate_receipt_collection(
             DEFAULT_CREDENTIAL_RUNNER_READINESS.as_posix(),
             "reports/credential-runtime-receipt-collection-queue.json",
             DEFAULT_CREDENTIAL_REVIEW_HANDOFF.as_posix(),
+            DEFAULT_CREDENTIAL_EXECUTION_PLAN.as_posix(),
         ],
         "safe_start_conditions": [
             f"candidate batches present: {candidate_batches}",
             f"operator environment required sources: {operator_required}",
+            f"batch ready for operator credentials: {execution_plan_summary.get('batch_ready_for_operator_credentials')}",
+            f"execution plan status: {execution_plan_summary.get('session_plan_status')}",
+            f"execution plan next action: {execution_plan_summary.get('next_action')}",
             "run credentialed collection only from an operator environment with provider credentials",
             "do not check in credentials, hashes, headers, or secret-derived values",
         ],
@@ -202,6 +208,7 @@ def build_candidates(
     finish_summary: dict[str, Any],
     decision_summary: dict[str, Any],
     credential_preflight_summary: dict[str, Any],
+    execution_plan_summary: dict[str, Any],
     handoff_summary: dict[str, Any],
     pressure_summary: dict[str, Any],
     pressure_distribution: dict[str, Any],
@@ -212,7 +219,7 @@ def build_candidates(
 
     candidates: list[dict[str, Any]] = []
     if credential_preflight_summary.get("reviewed_receipts_missing", 0) > 0:
-        candidates.append(candidate_receipt_collection(credential_preflight_summary, handoff_summary))
+        candidates.append(candidate_receipt_collection(credential_preflight_summary, execution_plan_summary, handoff_summary))
     if decision_summary.get("manual_review_required") is True and decision_summary.get("manual_review_accepted") is not True:
         next_order = len(candidates) + 1
         acceptance = candidate_manual_review_acceptance()
@@ -242,6 +249,7 @@ def build_report(
     credential_preflight: dict[str, Any],
     credential_runner_readiness: dict[str, Any],
     credential_handoff: dict[str, Any],
+    credential_execution_plan: dict[str, Any],
     operational_pressure: dict[str, Any],
 ) -> dict[str, Any]:
     generated_at = consumer_decision.get("generated_at")
@@ -253,6 +261,7 @@ def build_report(
     decision_summary = as_dict(consumer_decision.get("summary"), "consumer_decision.summary")
     credential_preflight_summary = as_dict(credential_preflight.get("summary"), "credential_preflight.summary")
     as_dict(credential_runner_readiness.get("summary"), "credential_runner_readiness.summary")
+    execution_plan_summary = as_dict(credential_execution_plan.get("summary"), "credential_execution_plan.summary")
     handoff_summary = as_dict(credential_handoff.get("summary"), "credential_handoff.summary")
     pressure_summary = as_dict(operational_pressure.get("summary"), "operational_pressure.summary")
     pressure_distribution = as_dict(
@@ -271,6 +280,7 @@ def build_report(
         finish_summary,
         decision_summary,
         credential_preflight_summary,
+        execution_plan_summary,
         handoff_summary,
         pressure_summary,
         pressure_distribution,
@@ -290,6 +300,7 @@ def build_report(
             "credential_collection_preflight": DEFAULT_CREDENTIAL_COLLECTION_PREFLIGHT.as_posix(),
             "credential_runner_readiness": DEFAULT_CREDENTIAL_RUNNER_READINESS.as_posix(),
             "credential_review_handoff": DEFAULT_CREDENTIAL_REVIEW_HANDOFF.as_posix(),
+            "credential_collection_execution_plan": DEFAULT_CREDENTIAL_EXECUTION_PLAN.as_posix(),
             "release_operational_pressure": DEFAULT_OPERATIONAL_PRESSURE.as_posix(),
         },
         "summary": {
@@ -397,6 +408,7 @@ def main() -> int:
     parser.add_argument("--credential-preflight", default=DEFAULT_CREDENTIAL_COLLECTION_PREFLIGHT, type=pathlib.Path)
     parser.add_argument("--credential-runner-readiness", default=DEFAULT_CREDENTIAL_RUNNER_READINESS, type=pathlib.Path)
     parser.add_argument("--credential-handoff", default=DEFAULT_CREDENTIAL_REVIEW_HANDOFF, type=pathlib.Path)
+    parser.add_argument("--credential-execution-plan", default=DEFAULT_CREDENTIAL_EXECUTION_PLAN, type=pathlib.Path)
     parser.add_argument("--operational-pressure", default=DEFAULT_OPERATIONAL_PRESSURE, type=pathlib.Path)
     parser.add_argument("--schema", default=DEFAULT_SCHEMA, type=pathlib.Path)
     parser.add_argument("--output", default=DEFAULT_OUTPUT, type=pathlib.Path)
@@ -411,6 +423,7 @@ def main() -> int:
             load_json(args.credential_preflight),
             load_json(args.credential_runner_readiness),
             load_json(args.credential_handoff),
+            load_json(args.credential_execution_plan),
             load_json(args.operational_pressure),
         )
         validate_invariants(report)

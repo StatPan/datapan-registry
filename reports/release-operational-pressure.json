@@ -10,6 +10,7 @@
     "release_consumer_compatibility": "reports/release-consumer-compatibility.json",
     "release_shard_consumer_proof": "reports/release-shard-consumer-proof.json",
     "credential_runtime_runner_readiness": "reports/credential-runtime-runner-readiness.json",
+    "credential_runtime_collection_execution_plan": "reports/credential-runtime-collection-execution-plan.json",
     "release_goal_finish_preflight": "reports/release-goal-finish-preflight.json",
     "release_goal_operating_contract": "reports/release-goal-operating-contract.json"
   },
@@ -49,6 +50,12 @@
     "default_ci_requires_credentials": false,
     "manual_review_reduction_allowed": false,
     "checked_in_secrets_allowed": false,
+    "credential_collection_execution_plan": "reports/credential-runtime-collection-execution-plan.json",
+    "session_plan_status": "operator_credentials_required",
+    "batch_ready_for_operator_credentials": true,
+    "operator_sources_ready": 5,
+    "execution_plan_next_action": "run_batch_collection_session_in_operator_env",
+    "session_output_path": ".datapan/runtime-evidence/credential-runtime-collection-session.json",
     "runtime_compatibility_effect": "manual_review_required_until_runtime_blockers_resolved",
     "credential_queue_status": "collection_required"
   },
