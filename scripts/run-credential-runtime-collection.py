@@ -13,8 +13,14 @@ import sys
 import tempfile
 from typing import Any
 
+try:
+    import jsonschema
+except ImportError:  # pragma: no cover - operator environments may validate elsewhere
+    jsonschema = None  # type: ignore[assignment]
+
 
 DEFAULT_QUEUE = pathlib.Path("reports/credential-runtime-receipt-collection-queue.json")
+DEFAULT_SESSION_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-collection-session.v1.schema.json")
 
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -219,10 +225,36 @@ def build_session(results: list[dict[str, Any]], *, queue_path: pathlib.Path) ->
     }
 
 
+def validate_session_schema(session: dict[str, Any], schema_path: pathlib.Path, *, required: bool = False) -> None:
+    if jsonschema is None:
+        if required:
+            raise ValueError("jsonschema is required to validate credential runtime collection sessions")
+        return
+    schema = load_json(schema_path)
+    validator = jsonschema.Draft202012Validator(schema)
+    errors = sorted(validator.iter_errors(session), key=lambda error: list(error.path))
+    if errors:
+        rendered = []
+        for error in errors:
+            location = ".".join(str(part) for part in error.path) or "<root>"
+            rendered.append(f"{location}: {error.message}")
+        raise ValueError("; ".join(rendered))
+
+
+def redact_known_env_values(message: str, entry: dict[str, Any]) -> str:
+    redacted = message
+    for name in env_names(entry):
+        value = os.environ.get(name)
+        if value:
+            redacted = redacted.replace(value, "<redacted>")
+    return redacted.replace("<secret>", "<redacted>")
+
+
 def run_sources(
     entries: list[dict[str, Any]],
     *,
     queue_path: pathlib.Path,
+    session_schema: pathlib.Path,
     force: bool,
     skip_not_ready: bool,
     continue_on_error: bool,
@@ -241,8 +273,10 @@ def run_sources(
         except Exception as exc:  # noqa: BLE001 - batch sessions must preserve per-source failure state
             if not continue_on_error:
                 raise
-            results.append(failed_result(entry, exc))
-    return build_session(results, queue_path=queue_path)
+            results.append(failed_result(entry, RuntimeError(redact_known_env_values(str(exc), entry))))
+    session = build_session(results, queue_path=queue_path)
+    validate_session_schema(session, session_schema)
+    return session
 
 
 def sample_queue(root: pathlib.Path) -> dict[str, Any]:
@@ -308,10 +342,12 @@ def run_self_test(queue: dict[str, Any]) -> None:
             session = run_sources(
                 queue_sources(synthetic_queue),
                 queue_path=pathlib.Path("synthetic-queue.json"),
+                session_schema=DEFAULT_SESSION_SCHEMA,
                 force=False,
                 skip_not_ready=True,
                 continue_on_error=True,
             )
+            validate_session_schema(session, DEFAULT_SESSION_SCHEMA, required=True)
             summary = as_dict(session.get("summary"), "session.summary")
             if summary.get("succeeded") != 1:
                 raise ValueError("self-test failed: expected one succeeded batch source")
@@ -337,6 +373,7 @@ def run_self_test(queue: dict[str, Any]) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--queue", default=DEFAULT_QUEUE, type=pathlib.Path)
+    parser.add_argument("--session-schema", default=DEFAULT_SESSION_SCHEMA, type=pathlib.Path)
     parser.add_argument("--source", action="append", default=[])
     parser.add_argument("--all", action="store_true", help="select all queue sources")
     parser.add_argument("--require-env", action="store_true", help="fail preflight when credential env vars are absent")
@@ -365,6 +402,7 @@ def main() -> int:
             session = run_sources(
                 selected,
                 queue_path=args.queue,
+                session_schema=args.session_schema,
                 force=args.force,
                 skip_not_ready=args.skip_not_ready,
                 continue_on_error=args.continue_on_error,
