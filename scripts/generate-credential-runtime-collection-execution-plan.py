@@ -23,6 +23,7 @@ DEFAULT_OPERATOR_PACKETS = pathlib.Path("reports/credential-runtime-operator-pac
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-collection-execution-plan.v1.schema.json")
 DEFAULT_OUTPUT = pathlib.Path("reports/credential-runtime-collection-execution-plan.json")
 SCHEMA_VERSION = "datapan.credential-runtime-collection-execution-plan.v1"
+OPERATOR_WORKFLOW_SCRIPT = pathlib.Path("scripts/run-credential-runtime-operator-workflow.py")
 
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -313,6 +314,30 @@ def build_report(
                 "batch.default_ci_requires_credentials",
             ),
         },
+        "operator_workflow": {
+            "script": OPERATOR_WORKFLOW_SCRIPT.as_posix(),
+            "plan_command": f"python3 {OPERATOR_WORKFLOW_SCRIPT.as_posix()} --json",
+            "run_command": f"python3 {OPERATOR_WORKFLOW_SCRIPT.as_posix()} --run --json",
+            "check_command": f"python3 {OPERATOR_WORKFLOW_SCRIPT.as_posix()} --check",
+            "self_test_command": f"python3 {OPERATOR_WORKFLOW_SCRIPT.as_posix()} --self-test",
+            "workflow_status": summary["session_plan_status"],
+            "next_action": summary["next_action"],
+            "session_output_path": string_value(
+                batch_contract.get("session_output_path"),
+                "batch.session_output_path",
+            ),
+            "session_review_plan_output_path": string_value(
+                batch_contract.get("session_review_plan_output_path"),
+                "batch.session_review_plan_output_path",
+            ),
+            "requires_explicit_run": True,
+            "requires_operator_credentials": True,
+            "default_ci_requires_credentials": False,
+            "checked_in_session_output_allowed": False,
+            "checked_in_review_plan_allowed": False,
+            "checked_in_secrets_allowed": False,
+            "goal_closure_allowed": False,
+        },
         "operator_environment": {
             "required_credential_envs": credential_envs,
             "required_credential_env_count": len(credential_envs),
@@ -362,6 +387,7 @@ def build_report(
 def validate_invariants(report: dict[str, Any]) -> None:
     summary = as_dict(report.get("summary"), "summary")
     batch = as_dict(report.get("batch_execution"), "batch_execution")
+    workflow = as_dict(report.get("operator_workflow"), "operator_workflow")
     environment = as_dict(report.get("operator_environment"), "operator_environment")
     review = as_dict(report.get("post_collection_review"), "post_collection_review")
     sources = [as_dict(item, "sources[]") for item in as_list(report.get("sources"), "sources")]
@@ -385,6 +411,26 @@ def validate_invariants(report: dict[str, Any]) -> None:
             raise ValueError(f"batch_execution.{key} must remain false")
     if batch.get("checked_in_review_plan_allowed") is not False:
         raise ValueError("batch_execution.checked_in_review_plan_allowed must remain false")
+    for key in (
+        "default_ci_requires_credentials",
+        "checked_in_secrets_allowed",
+        "checked_in_session_output_allowed",
+        "checked_in_review_plan_allowed",
+        "goal_closure_allowed",
+    ):
+        if workflow.get(key) is not False:
+            raise ValueError(f"operator_workflow.{key} must remain false")
+    for key in ("requires_explicit_run", "requires_operator_credentials"):
+        if workflow.get(key) is not True:
+            raise ValueError(f"operator_workflow.{key} must remain true")
+    if workflow.get("workflow_status") != summary.get("session_plan_status"):
+        raise ValueError("operator_workflow.workflow_status must match summary.session_plan_status")
+    if workflow.get("next_action") != summary.get("next_action"):
+        raise ValueError("operator_workflow.next_action must match summary.next_action")
+    if workflow.get("session_output_path") != batch.get("session_output_path"):
+        raise ValueError("operator_workflow.session_output_path must match batch_execution")
+    if workflow.get("session_review_plan_output_path") != batch.get("session_review_plan_output_path"):
+        raise ValueError("operator_workflow.session_review_plan_output_path must match batch_execution")
     if environment.get("checked_in_credentials_allowed") is not False:
         raise ValueError("operator_environment.checked_in_credentials_allowed must remain false")
     if environment.get("required_credential_env_count") != len(environment.get("required_credential_envs", [])):

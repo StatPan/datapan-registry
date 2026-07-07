@@ -106,6 +106,7 @@ jobs:
             scripts/validate-credential-runtime-manual-review-decision.py \
             scripts/generate-credential-runtime-manual-review-acceptance.py \
             scripts/run-credential-runtime-collection.py \
+            scripts/run-credential-runtime-operator-workflow.py \
             scripts/validate-credential-runtime-collection-session.py \
             scripts/generate-credential-runtime-session-review-plan.py \
             scripts/validate-credential-runtime-session-review-plan.py \
@@ -180,6 +181,8 @@ jobs:
           python scripts/generate-credential-runtime-manual-review-acceptance-packet.py --check
           python scripts/run-credential-runtime-collection.py --self-test
           python scripts/run-credential-runtime-collection.py --check
+          python scripts/run-credential-runtime-operator-workflow.py --self-test
+          python scripts/run-credential-runtime-operator-workflow.py --check
           python scripts/validate-credential-runtime-collection-session.py --self-test
           python scripts/generate-credential-runtime-session-review-plan.py --self-test
           python scripts/validate-credential-runtime-session-review-plan.py --self-test

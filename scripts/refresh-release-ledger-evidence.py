@@ -70,6 +70,8 @@ CHECK_COMMANDS: tuple[Command, ...] = (
     Command(("python3", "scripts/generate-credential-runtime-review-handoff.py", "--check")),
     Command(("python3", "scripts/generate-credential-runtime-operator-packets.py", "--check")),
     Command(("python3", "scripts/generate-credential-runtime-collection-execution-plan.py", "--check")),
+    Command(("python3", "scripts/run-credential-runtime-operator-workflow.py", "--self-test")),
+    Command(("python3", "scripts/run-credential-runtime-operator-workflow.py", "--check")),
     Command(("python3", "scripts/validate-credential-runtime-manual-review-decision.py")),
     Command(("python3", "scripts/generate-credential-runtime-manual-review-acceptance.py", "--check")),
     Command(("python3", "scripts/generate-credential-runtime-manual-review-acceptance-packet.py", "--check")),
