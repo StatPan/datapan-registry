@@ -11,18 +11,18 @@
     "criteria_partial": 0,
     "criteria_gap": 0,
     "decision": "leave_goal_open",
-    "reason": "The release assembly path is receipt-bound, release distribution footprint evidence records the large canonical registry and shard/fallback boundary, release consumer decision evidence now records the current manual-review-required consumption decision, and credential-safe runtime evidence is policy-bound with an operator-facing receipt collection queue, reviewer-facing handoff, manual-review decision intake, and manual-review acceptance boundary, but #344 remains open because reviewed live credentialed runtime receipts are not checked in, explicit manual-review release acceptance is not asserted, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
+    "reason": "The release assembly path is receipt-bound, release distribution footprint evidence records the large canonical registry and shard/fallback boundary, release consumer decision evidence records the current manual-review-required consumption decision, goal finish preflight evidence now blocks goal finish from checked-in release evidence, and credential-safe runtime evidence is policy-bound with an operator-facing receipt collection queue, reviewer-facing handoff, manual-review decision intake, and manual-review acceptance boundary, but #344 remains open because reviewed live credentialed runtime receipts are not checked in, explicit manual-review release acceptance is not asserted, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
   },
   "current_state_evidence": {
     "manifest": {
       "path": "manifest.json",
-      "artifact_count": 89,
-      "artifact_kinds": 36,
-      "schema_artifacts": 54
+      "artifact_count": 91,
+      "artifact_kinds": 37,
+      "schema_artifacts": 55
     },
     "schema_index": {
       "path": "schemas/index.json",
-      "schema_count": 54
+      "schema_count": 55
     },
     "release_readiness": {
       "path": "reports/latest-release-readiness.json",
@@ -118,7 +118,7 @@
     "release_distribution_footprint": {
       "path": "reports/release-distribution-footprint.json",
       "canonical_registry_bytes": 137735169,
-      "manifest_bound_bytes_excluding_self": 165657574,
+      "manifest_bound_bytes_excluding_self": 165674103,
       "large_monolith_threshold_bytes": 100000000,
       "registry_footprint_status": "large_monolith_shard_additive",
       "canonical_registry_required": true,
@@ -136,6 +136,19 @@
       "reviewed_credential_receipts": 0,
       "goal_completion_allowed": false,
       "goal_status": "not_complete"
+    },
+    "release_goal_finish_preflight": {
+      "path": "reports/release-goal-finish-preflight.json",
+      "finish_allowed": false,
+      "goal_status": "not_complete",
+      "goal_audit_decision": "leave_goal_open",
+      "release_decision": "manual_review_required",
+      "goal_completion_allowed": false,
+      "manual_review_required": true,
+      "manual_review_accepted": false,
+      "reviewed_credential_receipts": 0,
+      "blocking_evidence_count": 5,
+      "next_action": "do_not_finish_goal"
     },
     "credential_runtime_policy": {
       "path": "reports/credential-runtime-evidence-policy.json",
@@ -497,6 +510,7 @@
     "python3 scripts/generate-release-consumer-compatibility.py --check",
     "python3 scripts/validate-release-consumer-compatibility.py",
     "python3 scripts/generate-release-consumer-decision.py --check",
+    "python3 scripts/generate-release-goal-finish-preflight.py --check",
     "python3 scripts/package-registry-release.py --manifest manifest.json --output .datapan/ci/datapan-registry-snapshot-test.zip",
     "python3 scripts/package-registry-release.py --check .datapan/ci/datapan-registry-snapshot-test.zip"
   ],
@@ -590,6 +604,11 @@
       "issue": 395,
       "title": "Publish release consumer decision evidence",
       "reason": "Release consumer decision evidence now records manual_review_required, canonical registry compatibility, optional shard status, and goal_completion_allowed=false, but the goal remains open because reviewed live receipts or explicit manual-review release acceptance are still absent."
+    },
+    {
+      "issue": 397,
+      "title": "Publish goal finish preflight evidence",
+      "reason": "Goal finish preflight evidence now records finish_allowed=false from the goal audit and release consumer decision report, but the goal remains open because reviewed live receipts or explicit manual-review release acceptance are still absent."
     }
   ]
 }

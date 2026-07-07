@@ -394,19 +394,26 @@ PHASES: list[dict[str, Any]] = [
         "coverage": ["evidence"],
         "operator_commands": [
             "python3 scripts/validate-release-ledger-goal-audit.py",
+            "python3 scripts/generate-release-goal-finish-preflight.py",
         ],
         "check_commands": [
             "python3 scripts/validate-release-ledger-goal-audit.py",
+            "python3 scripts/generate-release-goal-finish-preflight.py --check",
         ],
         "workflow_fragments": {
             ".github/workflows/verify-release.yml": [
                 "python scripts/validate-release-ledger-goal-audit.py",
+                "python scripts/generate-release-goal-finish-preflight.py --check",
             ],
             ".github/workflows/release-draft.yml": [
                 "python scripts/validate-release-ledger-goal-audit.py",
+                "python scripts/generate-release-goal-finish-preflight.py --check",
             ],
         },
-        "evidence_artifacts": ["docs/release-ledger-goal-completion-audit.json"],
+        "evidence_artifacts": [
+            "docs/release-ledger-goal-completion-audit.json",
+            "reports/release-goal-finish-preflight.json",
+        ],
     },
 ]
 

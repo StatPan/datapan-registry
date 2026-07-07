@@ -163,17 +163,21 @@
     },
     {
       "id": "release_assembly_evidence",
-      "artifact_kinds": ["release_assembly_receipt"],
+      "artifact_kinds": ["release_assembly_receipt", "release_goal_finish_preflight"],
       "owner": "release assembly maintainers",
-      "generated_by": ["python scripts/generate-release-assembly-receipt.py"],
+      "generated_by": [
+        "python scripts/generate-release-assembly-receipt.py",
+        "python scripts/generate-release-goal-finish-preflight.py"
+      ],
       "checked_by": [
         "python scripts/generate-release-assembly-receipt.py --check",
+        "python scripts/generate-release-goal-finish-preflight.py --check",
         "python scripts/sync-release-manifest-artifacts.py --check"
       ],
-      "manifest_relationship": "Release assembly receipt is manifest-bound evidence for the operator command sequence and workflow alignment.",
-      "schema_relationship": "Validated against datapan.release-assembly-receipt.v1.",
+      "manifest_relationship": "Release assembly receipt and goal finish preflight are manifest-bound evidence for the operator command sequence, workflow alignment, and goal finish boundary.",
+      "schema_relationship": "Validated against datapan.release-assembly-receipt.v1 and datapan.release-goal-finish-preflight.v1.",
       "package_relationship": "Included in release packages through manifest.json.",
-      "exemption_boundary": "The receipt must not claim goal completion. It records the release assembly path and current manual-review boundaries so #344 remains open until a completion audit proves closure."
+      "exemption_boundary": "The receipt and preflight must not claim goal completion. They record the release assembly path, current manual-review boundaries, release consumer decision, and goal finish allowance so #344 remains open until a completion audit proves closure."
     },
     {
       "id": "verification_receipts",

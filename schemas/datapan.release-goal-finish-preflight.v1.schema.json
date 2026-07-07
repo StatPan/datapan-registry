@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.release-goal-finish-preflight.v1.schema.json",
+  "title": "Datapan Release Goal Finish Preflight v1",
+  "description": "Machine-readable preflight that binds goal finish readiness to checked-in release consumer decision and completion audit evidence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "goal_issue",
+    "preflight_ticket",
+    "provider",
+    "inputs",
+    "summary",
+    "blocking_evidence"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.release-goal-finish-preflight.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "goal_issue": {
+      "const": 344
+    },
+    "preflight_ticket": {
+      "const": 397
+    },
+    "provider": {
+      "const": "datapan-registry"
+    },
+    "inputs": {
+      "$ref": "#/$defs/inputs"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "blocking_evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/blocking_evidence"
+      }
+    }
+  },
+  "$defs": {
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["goal_completion_audit", "release_consumer_decision"],
+      "properties": {
+        "goal_completion_audit": {
+          "const": "docs/release-ledger-goal-completion-audit.json"
+        },
+        "release_consumer_decision": {
+          "const": "reports/release-consumer-decision.json"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "finish_allowed",
+        "goal_status",
+        "goal_audit_decision",
+        "release_decision",
+        "goal_completion_allowed",
+        "manual_review_required",
+        "manual_review_accepted",
+        "reviewed_credential_receipts",
+        "blocking_evidence_count",
+        "next_action"
+      ],
+      "properties": {
+        "finish_allowed": {
+          "type": "boolean"
+        },
+        "goal_status": {
+          "enum": ["complete", "not_complete"]
+        },
+        "goal_audit_decision": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "release_decision": {
+          "enum": ["safe_to_consume", "manual_review_required", "blocked"]
+        },
+        "goal_completion_allowed": {
+          "type": "boolean"
+        },
+        "manual_review_required": {
+          "type": "boolean"
+        },
+        "manual_review_accepted": {
+          "type": "boolean"
+        },
+        "reviewed_credential_receipts": {
+          "$ref": "#/$defs/count"
+        },
+        "blocking_evidence_count": {
+          "$ref": "#/$defs/count"
+        },
+        "next_action": {
+          "enum": ["do_not_finish_goal", "goal_finish_allowed"]
+        }
+      }
+    },
+    "blocking_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "path", "finding"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "path": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "finding": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    }
+  }
+}
