@@ -94,6 +94,7 @@ jobs:
             scripts/generate-release-operational-pressure.py \
             scripts/generate-release-consumer-decision.py \
             scripts/generate-release-goal-finish-preflight.py \
+            scripts/validate-release-goal-pr-boundary.py \
             scripts/generate-release-goal-continuation-queue.py \
             scripts/run-release-goal-continuation-ticket-packet.py \
             scripts/generate-release-goal-operating-contract.py \
@@ -140,6 +141,8 @@ jobs:
           python scripts/validate-release-ledger-ownership.py
           python scripts/validate-release-ledger-goal-audit.py
           python scripts/generate-release-goal-finish-preflight.py --check
+          python scripts/validate-release-goal-pr-boundary.py --self-test
+          python scripts/validate-release-goal-pr-boundary.py --check
           python scripts/generate-release-goal-continuation-queue.py --check
           python scripts/run-release-goal-continuation-ticket-packet.py --self-test
           python scripts/generate-release-goal-operating-contract.py --check
