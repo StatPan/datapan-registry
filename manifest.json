@@ -400,8 +400,8 @@
     {
       "path": "schemas/datapan.credential-runtime-collection-execution-plan.v1.schema.json",
       "kind": "schema",
-      "bytes": 19948,
-      "sha256": "db87cbba2f332e1ba723bbdc8df2483d03c3b767abbcb085538b5e60dcc6b98e"
+      "bytes": 23953,
+      "sha256": "223ccc6af441525843cf93805e327191176de9cc7918d3cce2b258273c3df593"
     },
     {
       "path": "schemas/datapan.credential-runtime-session-review-decisions.v1.schema.json",
@@ -414,7 +414,7 @@
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
       "bytes": 27405,
-      "sha256": "9ae77ff23a38826c828bc6c5d7a4cbcd1d8793eee40c9a2aec7b28647277bcec"
+      "sha256": "aea0c2dafd8fa2fdc5255f973188a875b651f602c474d5e4bfe945ab1fdb69ed"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -477,7 +477,7 @@
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
       "bytes": 14728,
-      "sha256": "519112868cb3d826bf9ba72e3080dad6dd6a51a86cb7d5c7fa5d9c02e2d30a55"
+      "sha256": "f225962f45cb6e091c40c2f5a0b22260b9155b88a037a84fb70964aa10fb10b1"
     },
     {
       "path": "reports/credential-runtime-evidence-policy.json",
@@ -525,8 +525,8 @@
       "path": "reports/credential-runtime-collection-execution-plan.json",
       "kind": "credential_runtime_collection_execution_plan",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-collection-execution-plan.v1.schema.json",
-      "bytes": 15536,
-      "sha256": "dbc4a1e32c88c06b39a538166f9384e742d55b4d4f096ebddb227e9fa110d617"
+      "bytes": 18279,
+      "sha256": "8c2368d0fe1977e3a2df90c8c65d4d68029697d84d5786edd024b44922d53505"
     },
     {
       "path": "reports/credential-runtime-manual-review-decision.json",
@@ -547,14 +547,14 @@
       "kind": "credential_runtime_manual_review_acceptance_packet",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-acceptance-packet.v1.schema.json",
       "bytes": 3998,
-      "sha256": "ac3e2af0dd4f02cfe3748692deed7307360ce0f57e30d749b1ddfbc26227ba47"
+      "sha256": "12e124cd5c510b075c417295c04807dc17a8fc589e0dfe891d1b051b9a09d25a"
     },
     {
       "path": "reports/registry-impact-plan.json",
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "69e272074ecfc42ac11aeb0f5b399af3e0d88349b089ded8cfdcc6c56e662ec0"
+      "sha256": "176bde3ad6aac68ec2df6b82f14f43fcb4fc0ce5a8d934b9f4e9d9be7b3d429e"
     },
     {
       "path": "reports/source-reference-drift.json",
@@ -568,7 +568,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 59095,
-      "sha256": "7f6b06250c8d8d3e4ca8975948bbe0b283bd7b7466f7f8dbb68edea3d6c55636"
+      "sha256": "71b074d2e7c8990d957b2be42d12dddd2c77308238f09cd7527e3dbf536938c3"
     },
     {
       "path": "reports/dependencies.json",
@@ -638,14 +638,14 @@
       "kind": "consumer_compatibility",
       "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json",
       "bytes": 26966,
-      "sha256": "9a350287ebe675f30aa8887162a9d018483b040b8c601e9abddf5cfc9318734b"
+      "sha256": "32840a25dfef06913660d4e889bbe26f4630fd29085a38176d3faa519c9b0678"
     },
     {
       "path": "reports/release-distribution-footprint.json",
       "kind": "release_distribution_footprint",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
       "bytes": 2119,
-      "sha256": "8b020a734b84c7e4ccd07aea6817a7dce2b9b3381dab62625635440214390ef4"
+      "sha256": "e6e4e0876891e66d4e4f5d51fb51818dc704b8edc9911a270a8ece55f21a2d8e"
     },
     {
       "path": "reports/release-shard-consumer-proof.json",
@@ -694,7 +694,7 @@
       "kind": "release_assembly_receipt",
       "schema": "https://schemas.datapan.dev/datapan.release-assembly-receipt.v1.schema.json",
       "bytes": 34991,
-      "sha256": "3bc0c6cc1d02961fecf14cf71899a6bb2b79ed2545c7c2f7be9905f863cb3cc1"
+      "sha256": "11bfbf91e39a963ab5bc5ef81809c854ae2041566fceb156d0649ab64fe9f9ad"
     },
     {
       "path": "reports/unadapted-external-probe.json",
