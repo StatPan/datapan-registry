@@ -7,8 +7,8 @@
     "manifest": {
       "path": "manifest.json",
       "generated_at": "2026-07-04T06:39:24Z",
-      "artifact_count": 107,
-      "evidence_contracts": 16
+      "artifact_count": 109,
+      "evidence_contracts": 17
     },
     "readiness": {
       "path": "reports/latest-release-readiness.json",
@@ -104,7 +104,7 @@
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
       "bytes": 14728,
-      "sha256": "ab86c2b5f1da8af32e7607eaabac68dd4e6542ad16a94441ed88571858e7c2b7",
+      "sha256": "06f2a99e2d37bf3964faceec62b868591938dfd0a93b142030a69dde287406f2",
       "required": true
     },
     {
@@ -185,7 +185,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "5e2d489c7397e813f9d4315d33f6f5d87940944d1f99a7278f203e6d0c9ef0d6",
+      "sha256": "45c9c698ce1831bff663a765f76da156ac26b757e4dc2898456daf781c2e1c42",
       "required": true
     },
     {
@@ -203,7 +203,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 59095,
-      "sha256": "7cf138aa0530f771cc0f0ba4f53f8f56791319a4640493a8d26487e418b6195a",
+      "sha256": "503477b97a5e4043fbf041be6405dec11cec2d6e8402e1d29e48f9aa3f29fa98",
       "required": true
     },
     {
@@ -212,7 +212,16 @@
       "kind": "release_distribution_footprint",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
       "bytes": 2119,
-      "sha256": "b1ef035e273c66fb01a4a978e0b5a427ff32c38ad402b0a12cd88d797a865e4c",
+      "sha256": "68636a1da57edcf5ee9fee8810ccc614c15dee2b2f58ffbb0de6b51b7ce8ecb1",
+      "required": true
+    },
+    {
+      "contract": "release_shard_consumer_proof",
+      "path": "reports/release-shard-consumer-proof.json",
+      "kind": "release_shard_consumer_proof",
+      "schema": "https://schemas.datapan.dev/datapan.release-shard-consumer-proof.v1.schema.json",
+      "bytes": 3864,
+      "sha256": "ab6d066186f357224581154b248b6687e4677cc12a0bfd6510b2b311067f2e16",
       "required": true
     },
     {
@@ -412,6 +421,21 @@
       "downstream SDK, MCP, Studio, and API consumers keep canonical registry compatibility"
     ]
   },
+  "shard_consumer_proof": {
+    "path": "reports/release-shard-consumer-proof.json",
+    "proof_status": "shard_preferred_fallback_proven",
+    "shard_preferred_ready": true,
+    "monolith_fallback_proven": true,
+    "distribution_action_resolved": true,
+    "canonical_registry_required": true,
+    "shard_assets_required": false,
+    "checked_in_large_shards": false,
+    "canonical_registry_bytes": 137735169,
+    "shard_archive_publication": "optional_release_asset",
+    "workflow_contract_present": true,
+    "consumer_effect": "shard_preferred_supported_with_canonical_fallback",
+    "goal_completion_effect": "distribution_pressure_evidence_only_goal_still_requires_credential_and_manual_review_gates"
+  },
   "shard_release_evidence": {
     "status": "ci_validated_optional_asset",
     "workflow": ".github/workflows/verify-release.yml",
@@ -428,7 +452,7 @@
     ],
     "release_distribution_footprint": "reports/release-distribution-footprint.json",
     "canonical_registry_bytes": 137735169,
-    "manifest_bound_bytes_excluding_self": 165846983,
+    "manifest_bound_bytes_excluding_self": 165859680,
     "large_monolith_threshold_bytes": 100000000,
     "registry_footprint_status": "large_monolith_shard_additive",
     "canonical_registry_required": true,
@@ -445,14 +469,15 @@
         "catalog release verify",
         "catalog release readiness"
       ],
-      "compatibility_mode": "canonical_monolith",
+      "compatibility_mode": "shard_preferred_with_monolith_fallback",
       "status": "proven",
       "evidence": [
         "reports/latest-release-verification.json",
         "reports/latest-release-readiness.json",
-        "datapan-registry-release-health/release-health-rollup.json"
+        "datapan-registry-release-health/release-health-rollup.json",
+        "reports/release-shard-consumer-proof.json"
       ],
-      "notes": "CLI release install and doctor compatibility is proven through the canonical registry path while shard support remains additive."
+      "notes": "CLI release install, doctor, release verify, and readiness compatibility are proven with shard-preferred support and canonical monolith fallback while shard assets remain optional."
     },
     {
       "consumer": "release-operator",
@@ -466,9 +491,10 @@
       "evidence": [
         "manifest.json",
         "reports/latest-release-readiness.json",
-        "datapan-registry-release-health/release-health-rollup.json"
+        "datapan-registry-release-health/release-health-rollup.json",
+        "reports/release-shard-consumer-proof.json"
       ],
-      "notes": "Operators must keep the canonical registry in the release zip and may attach shard archives only as optional compatibility-period assets."
+      "notes": "Operators must keep the canonical registry in the release zip and may attach shard archives only as optional compatibility-period assets; current shard consumer effect is shard_preferred_supported_with_canonical_fallback."
     },
     {
       "consumer": "datapan-api",

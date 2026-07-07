@@ -17,6 +17,7 @@
     "manifest_evidence_contracts",
     "runtime_risk_evidence",
     "shard_policy",
+    "shard_consumer_proof",
     "shard_release_evidence",
     "consumers"
   ],
@@ -48,8 +49,8 @@
     },
     "manifest_evidence_contracts": {
       "type": "array",
-      "minItems": 16,
-      "maxItems": 16,
+      "minItems": 17,
+      "maxItems": 17,
       "items": {
         "$ref": "#/$defs/manifest_evidence_contract"
       }
@@ -59,6 +60,9 @@
     },
     "shard_policy": {
       "$ref": "#/$defs/shard_policy"
+    },
+    "shard_consumer_proof": {
+      "$ref": "#/$defs/shard_consumer_proof"
     },
     "shard_release_evidence": {
       "$ref": "#/$defs/shard_release_evidence"
@@ -355,6 +359,70 @@
         }
       }
     },
+    "shard_consumer_proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "proof_status",
+        "shard_preferred_ready",
+        "monolith_fallback_proven",
+        "distribution_action_resolved",
+        "canonical_registry_required",
+        "shard_assets_required",
+        "checked_in_large_shards",
+        "canonical_registry_bytes",
+        "shard_archive_publication",
+        "workflow_contract_present",
+        "consumer_effect",
+        "goal_completion_effect"
+      ],
+      "properties": {
+        "path": {
+          "const": "reports/release-shard-consumer-proof.json"
+        },
+        "proof_status": {
+          "enum": ["shard_preferred_fallback_proven", "shard_preferred_fallback_unproven"]
+        },
+        "shard_preferred_ready": {
+          "type": "boolean"
+        },
+        "monolith_fallback_proven": {
+          "type": "boolean"
+        },
+        "distribution_action_resolved": {
+          "type": "boolean"
+        },
+        "canonical_registry_required": {
+          "const": true
+        },
+        "shard_assets_required": {
+          "const": false
+        },
+        "checked_in_large_shards": {
+          "const": false
+        },
+        "canonical_registry_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "shard_archive_publication": {
+          "enum": ["optional_release_asset", "required_release_asset"]
+        },
+        "workflow_contract_present": {
+          "type": "boolean"
+        },
+        "consumer_effect": {
+          "enum": [
+            "canonical_registry_required_shards_optional",
+            "shard_preferred_supported_with_canonical_fallback"
+          ]
+        },
+        "goal_completion_effect": {
+          "const": "distribution_pressure_evidence_only_goal_still_requires_credential_and_manual_review_gates"
+        }
+      }
+    },
     "shard_release_evidence": {
       "type": "object",
       "additionalProperties": false,
@@ -460,6 +528,7 @@
             "source_reference_drift",
             "source_report_inventory",
             "release_distribution_footprint",
+            "release_shard_consumer_proof",
             "release_consumer_decision"
           ]
         },

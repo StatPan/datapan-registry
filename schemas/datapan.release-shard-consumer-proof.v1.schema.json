@@ -1,0 +1,254 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.release-shard-consumer-proof.v1.schema.json",
+  "title": "Datapan Release Shard Consumer Proof v1",
+  "description": "Machine-readable evidence that shard-preferred release consumption is proven with canonical monolith fallback and without checking in large shard files.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "goal_issue",
+    "proof_ticket",
+    "provider",
+    "inputs",
+    "summary",
+    "registry_boundary",
+    "workflow_proof",
+    "consumer_proof_scope",
+    "release_policy"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.release-shard-consumer-proof.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "goal_issue": {
+      "const": 344
+    },
+    "proof_ticket": {
+      "const": 441
+    },
+    "provider": {
+      "const": "datapan-registry"
+    },
+    "inputs": {
+      "$ref": "#/$defs/inputs"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "registry_boundary": {
+      "$ref": "#/$defs/registry_boundary"
+    },
+    "workflow_proof": {
+      "$ref": "#/$defs/workflow_proof"
+    },
+    "consumer_proof_scope": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "$ref": "#/$defs/consumer_proof"
+      }
+    },
+    "release_policy": {
+      "$ref": "#/$defs/release_policy"
+    }
+  },
+  "$defs": {
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest", "release_distribution_footprint", "verify_workflow", "ci_summaries"],
+      "properties": {
+        "manifest": {
+          "const": "manifest.json"
+        },
+        "release_distribution_footprint": {
+          "const": "reports/release-distribution-footprint.json"
+        },
+        "verify_workflow": {
+          "const": ".github/workflows/verify-release.yml"
+        },
+        "ci_summaries": {
+          "type": "array",
+          "minItems": 5,
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proof_status",
+        "shard_preferred_ready",
+        "monolith_fallback_proven",
+        "distribution_action_resolved",
+        "canonical_registry_required",
+        "shard_assets_required",
+        "checked_in_large_shards"
+      ],
+      "properties": {
+        "proof_status": {
+          "enum": ["shard_preferred_fallback_proven", "shard_preferred_fallback_unproven"]
+        },
+        "shard_preferred_ready": {
+          "type": "boolean"
+        },
+        "monolith_fallback_proven": {
+          "type": "boolean"
+        },
+        "distribution_action_resolved": {
+          "type": "boolean"
+        },
+        "canonical_registry_required": {
+          "const": true
+        },
+        "shard_assets_required": {
+          "const": false
+        },
+        "checked_in_large_shards": {
+          "const": false
+        }
+      }
+    },
+    "registry_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical_registry_path",
+        "canonical_registry_bytes",
+        "large_monolith_threshold_bytes",
+        "canonical_registry_sha256",
+        "release_package_includes_monolith",
+        "monolith_fallback_required",
+        "shard_archive_name",
+        "shard_archive_publication"
+      ],
+      "properties": {
+        "canonical_registry_path": {
+          "const": "data/data-go-kr.registry.json"
+        },
+        "canonical_registry_bytes": {
+          "$ref": "#/$defs/count"
+        },
+        "large_monolith_threshold_bytes": {
+          "const": 100000000
+        },
+        "canonical_registry_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "release_package_includes_monolith": {
+          "const": true
+        },
+        "monolith_fallback_required": {
+          "const": true
+        },
+        "shard_archive_name": {
+          "const": "data-go-kr-shards.tar.gz"
+        },
+        "shard_archive_publication": {
+          "enum": ["optional_release_asset", "required_release_asset"]
+        }
+      }
+    },
+    "workflow_proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workflow",
+        "required_fragments",
+        "missing_fragments",
+        "workflow_contract_present"
+      ],
+      "properties": {
+        "workflow": {
+          "const": ".github/workflows/verify-release.yml"
+        },
+        "required_fragments": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        },
+        "missing_fragments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        },
+        "workflow_contract_present": {
+          "type": "boolean"
+        }
+      }
+    },
+    "consumer_proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["surface", "summary_artifact", "required_mode", "fallback_required", "checked_by"],
+      "properties": {
+        "surface": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "summary_artifact": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "required_mode": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "fallback_required": {
+          "const": true
+        },
+        "checked_by": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "release_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "consumer_effect",
+        "required_for_release",
+        "require_shards_next",
+        "goal_completion_effect"
+      ],
+      "properties": {
+        "consumer_effect": {
+          "enum": [
+            "canonical_registry_required_shards_optional",
+            "shard_preferred_supported_with_canonical_fallback"
+          ]
+        },
+        "required_for_release": {
+          "const": false
+        },
+        "require_shards_next": {
+          "const": false
+        },
+        "goal_completion_effect": {
+          "const": "distribution_pressure_evidence_only_goal_still_requires_credential_and_manual_review_gates"
+        }
+      }
+    }
+  }
+}

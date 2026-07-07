@@ -37,6 +37,7 @@ DEFAULT_CREDENTIAL_MANUAL_REVIEW_ACCEPTANCE = pathlib.Path(
 DEFAULT_ERROR_ACTION_ROUTING_ROLLUP = pathlib.Path("reports/error-action-routing-rollup.json")
 DEFAULT_IMPACT_ROLLUP = pathlib.Path("reports/registry-impact-plan.json")
 DEFAULT_RELEASE_DISTRIBUTION_FOOTPRINT = pathlib.Path("reports/release-distribution-footprint.json")
+DEFAULT_SHARD_CONSUMER_PROOF = pathlib.Path("reports/release-shard-consumer-proof.json")
 REQUIRED_RUNTIME_RISK_CONTRACTS = [
     "source_runtime_evidence",
     "source_runtime_remediation",
@@ -178,6 +179,11 @@ REQUIRED_MANIFEST_EVIDENCE_CONTRACTS = {
         "path": "reports/release-distribution-footprint.json",
         "kind": "release_distribution_footprint",
         "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
+    },
+    "release_shard_consumer_proof": {
+        "path": "reports/release-shard-consumer-proof.json",
+        "kind": "release_shard_consumer_proof",
+        "schema": "https://schemas.datapan.dev/datapan.release-shard-consumer-proof.v1.schema.json",
     },
     "release_consumer_decision": {
         "path": "reports/release-consumer-decision.json",
@@ -441,6 +447,51 @@ def validate_shard_policy(report: dict[str, Any]) -> None:
     blocked_until = set(as_list(shard_policy.get("blocked_until"), "shard_policy.blocked_until"))
     if not any("monolith fallback" in str(item) for item in blocked_until):
         raise ValueError("shard policy must be blocked on proven monolith fallback")
+
+
+def validate_shard_consumer_proof(report: dict[str, Any], proof: dict[str, Any]) -> None:
+    shard_proof = as_dict(report.get("shard_consumer_proof"), "shard_consumer_proof")
+    proof_summary = as_dict(proof.get("summary"), "proof.summary")
+    proof_boundary = as_dict(proof.get("registry_boundary"), "proof.registry_boundary")
+    proof_workflow = as_dict(proof.get("workflow_proof"), "proof.workflow_proof")
+    proof_policy = as_dict(proof.get("release_policy"), "proof.release_policy")
+
+    expected = {
+        "path": DEFAULT_SHARD_CONSUMER_PROOF.as_posix(),
+        "proof_status": proof_summary.get("proof_status"),
+        "shard_preferred_ready": proof_summary.get("shard_preferred_ready"),
+        "monolith_fallback_proven": proof_summary.get("monolith_fallback_proven"),
+        "distribution_action_resolved": proof_summary.get("distribution_action_resolved"),
+        "canonical_registry_required": True,
+        "shard_assets_required": False,
+        "checked_in_large_shards": False,
+        "canonical_registry_bytes": proof_boundary.get("canonical_registry_bytes"),
+        "shard_archive_publication": proof_boundary.get("shard_archive_publication"),
+        "workflow_contract_present": proof_workflow.get("workflow_contract_present"),
+        "consumer_effect": proof_policy.get("consumer_effect"),
+        "goal_completion_effect": proof_policy.get("goal_completion_effect"),
+    }
+    for key, value in expected.items():
+        if shard_proof.get(key) != value:
+            raise ValueError(f"shard_consumer_proof.{key} expected {value}, got {shard_proof.get(key)}")
+
+    if shard_proof.get("distribution_action_resolved") is True:
+        if shard_proof.get("consumer_effect") != "shard_preferred_supported_with_canonical_fallback":
+            raise ValueError("resolved shard consumer proof must expose shard-preferred fallback effect")
+        cli = next(
+            (
+                as_dict(item, "consumer")
+                for item in as_list(report.get("consumers"), "consumers")
+                if isinstance(item, dict) and item.get("consumer") == "datapan-cli"
+            ),
+            None,
+        )
+        if cli is None:
+            raise ValueError("missing datapan-cli consumer")
+        if cli.get("compatibility_mode") != "shard_preferred_with_monolith_fallback":
+            raise ValueError("datapan-cli must expose shard-preferred fallback compatibility when proof is resolved")
+        if DEFAULT_SHARD_CONSUMER_PROOF.as_posix() not in as_list(cli.get("evidence"), "datapan-cli.evidence"):
+            raise ValueError("datapan-cli evidence must include release shard consumer proof")
 
 
 def validate_shard_release_evidence(report: dict[str, Any]) -> None:
@@ -1093,8 +1144,16 @@ def validate_consumers(report: dict[str, Any]) -> None:
     if not REQUIRED_CLI_SURFACES.issubset(surfaces):
         missing = sorted(REQUIRED_CLI_SURFACES.difference(surfaces))
         raise ValueError(f"datapan-cli entry missing surfaces: {', '.join(missing)}")
-    if cli.get("compatibility_mode") != "canonical_monolith" or cli.get("status") != "proven":
-        raise ValueError("datapan-cli must remain proven through canonical_monolith compatibility")
+    shard_proof = as_dict(report.get("shard_consumer_proof"), "shard_consumer_proof")
+    expected_cli_mode = (
+        "shard_preferred_with_monolith_fallback"
+        if shard_proof.get("distribution_action_resolved") is True
+        else "canonical_monolith"
+    )
+    if cli.get("compatibility_mode") != expected_cli_mode or cli.get("status") != "proven":
+        raise ValueError(f"datapan-cli must remain proven through {expected_cli_mode} compatibility")
+    if shard_proof.get("canonical_registry_required") is not True:
+        raise ValueError("datapan-cli compatibility must preserve canonical registry fallback")
 
     studio = by_name.get("studio")
     if studio is None:
@@ -1121,6 +1180,7 @@ def validate_consistency(
     error_action_routing: dict[str, Any],
     downstream_impact: dict[str, Any],
     release_distribution_footprint: dict[str, Any],
+    shard_proof: dict[str, Any],
     manifest_path: pathlib.Path,
     readiness_path: pathlib.Path,
     source_runtime_path: pathlib.Path,
@@ -1141,6 +1201,7 @@ def validate_consistency(
     validate_rollup_generation_contract(report)
     validate_readiness(report, readiness)
     validate_shard_policy(report)
+    validate_shard_consumer_proof(report, shard_proof)
     validate_shard_release_evidence(report)
     validate_manifest_evidence_contracts(report, manifest)
     validate_distribution_footprint(report, release_distribution_footprint)
@@ -1238,6 +1299,7 @@ def main() -> int:
         default=DEFAULT_RELEASE_DISTRIBUTION_FOOTPRINT,
         type=pathlib.Path,
     )
+    parser.add_argument("--shard-consumer-proof", default=DEFAULT_SHARD_CONSUMER_PROOF, type=pathlib.Path)
     parser.add_argument("report", nargs="?", default=COMPATIBILITY_REPORT_PATH, type=pathlib.Path)
     args = parser.parse_args()
 
@@ -1288,6 +1350,7 @@ def main() -> int:
             load_json(args.release_distribution_footprint),
             args.release_distribution_footprint.as_posix(),
         )
+        shard_proof = as_dict(load_json(args.shard_consumer_proof), args.shard_consumer_proof.as_posix())
 
         validator = jsonschema.Draft202012Validator(schema)
         errors = sorted(validator.iter_errors(report), key=lambda error: list(error.path))
@@ -1314,6 +1377,7 @@ def main() -> int:
             error_action_routing,
             downstream_impact,
             release_distribution_footprint,
+            shard_proof,
             args.manifest,
             args.readiness,
             args.source_runtime_rollup,

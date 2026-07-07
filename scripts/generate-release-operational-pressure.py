@@ -18,6 +18,7 @@ except ImportError as exc:  # pragma: no cover - environment guard
 DEFAULT_MANIFEST = pathlib.Path("manifest.json")
 DEFAULT_FOOTPRINT = pathlib.Path("reports/release-distribution-footprint.json")
 DEFAULT_COMPATIBILITY = pathlib.Path("reports/release-consumer-compatibility.json")
+DEFAULT_SHARD_CONSUMER_PROOF = pathlib.Path("reports/release-shard-consumer-proof.json")
 DEFAULT_RUNNER_READINESS = pathlib.Path("reports/credential-runtime-runner-readiness.json")
 DEFAULT_GOAL_PREFLIGHT = pathlib.Path("reports/release-goal-finish-preflight.json")
 DEFAULT_OPERATING_CONTRACT = pathlib.Path("reports/release-goal-operating-contract.json")
@@ -66,6 +67,7 @@ def build_report(
     manifest: dict[str, Any],
     footprint: dict[str, Any],
     compatibility: dict[str, Any],
+    shard_proof: dict[str, Any],
     runner_readiness: dict[str, Any],
     goal_preflight: dict[str, Any],
     operating_contract: dict[str, Any],
@@ -76,7 +78,10 @@ def build_report(
 
     footprint_summary = as_dict(footprint.get("summary"), "footprint.summary")
     shard_policy = as_dict(compatibility.get("shard_policy"), "compatibility.shard_policy")
+    shard_consumer_proof = as_dict(compatibility.get("shard_consumer_proof"), "compatibility.shard_consumer_proof")
     shard_evidence = as_dict(compatibility.get("shard_release_evidence"), "compatibility.shard_release_evidence")
+    proof_summary = as_dict(shard_proof.get("summary"), "shard_proof.summary")
+    proof_policy = as_dict(shard_proof.get("release_policy"), "shard_proof.release_policy")
     runtime_risk = as_dict(compatibility.get("runtime_risk_evidence"), "compatibility.runtime_risk_evidence")
     runner_summary = as_dict(runner_readiness.get("summary"), "runner_readiness.summary")
     preflight_summary = as_dict(goal_preflight.get("summary"), "goal_preflight.summary")
@@ -93,7 +98,12 @@ def build_report(
         "runner.summary.blocked_on_operator_env",
     )
 
-    distribution_pressure = registry_bytes > threshold_bytes
+    distribution_action_resolved = (
+        proof_summary.get("distribution_action_resolved") is True
+        and shard_consumer_proof.get("distribution_action_resolved") is True
+        and proof_policy.get("consumer_effect") == "shard_preferred_supported_with_canonical_fallback"
+    )
+    distribution_pressure = registry_bytes > threshold_bytes and not distribution_action_resolved
     credential_pressure = reviewed_missing > 0 or blocked_on_operator_env > 0
     finish_allowed = preflight_summary.get("finish_allowed") is True
     goal_completion_allowed = operating_summary.get("goal_completion_allowed") is True
@@ -130,6 +140,7 @@ def build_report(
             "manifest": DEFAULT_MANIFEST.as_posix(),
             "release_distribution_footprint": DEFAULT_FOOTPRINT.as_posix(),
             "release_consumer_compatibility": DEFAULT_COMPATIBILITY.as_posix(),
+            "release_shard_consumer_proof": DEFAULT_SHARD_CONSUMER_PROOF.as_posix(),
             "credential_runtime_runner_readiness": DEFAULT_RUNNER_READINESS.as_posix(),
             "release_goal_finish_preflight": DEFAULT_GOAL_PREFLIGHT.as_posix(),
             "release_goal_operating_contract": DEFAULT_OPERATING_CONTRACT.as_posix(),
@@ -155,6 +166,10 @@ def build_report(
             "shard_policy_phase": shard_policy.get("phase"),
             "shard_archive_status": shard_evidence.get("status"),
             "consumer_effect": shard_evidence.get("footprint_consumer_effect"),
+            "shard_consumer_proof": DEFAULT_SHARD_CONSUMER_PROOF.as_posix(),
+            "shard_preferred_ready": proof_summary.get("shard_preferred_ready"),
+            "distribution_action_resolved": distribution_action_resolved,
+            "proof_consumer_effect": proof_policy.get("consumer_effect"),
         },
         "credential_pressure": {
             "runner_status": runner_summary.get("runner_status"),
@@ -200,6 +215,11 @@ def validate_invariants(report: dict[str, Any]) -> None:
             raise ValueError("distribution pressure must preserve monolith fallback")
         if distribution.get("shard_distribution_required") is not False:
             raise ValueError("distribution pressure must keep shard distribution additive until migration is proven")
+    if distribution.get("distribution_action_resolved") is True:
+        if distribution.get("proof_consumer_effect") != "shard_preferred_supported_with_canonical_fallback":
+            raise ValueError("resolved distribution action must cite shard-preferred fallback proof")
+        if distribution.get("shard_distribution_required") is not False:
+            raise ValueError("resolved distribution action must still keep shard distribution optional")
     if summary.get("credential_pressure_present") is True:
         if credential.get("reviewed_receipts_missing", 0) <= 0:
             raise ValueError("credential pressure must expose missing reviewed receipts")
@@ -234,6 +254,7 @@ def main() -> int:
     parser.add_argument("--manifest", default=DEFAULT_MANIFEST, type=pathlib.Path)
     parser.add_argument("--footprint", default=DEFAULT_FOOTPRINT, type=pathlib.Path)
     parser.add_argument("--compatibility", default=DEFAULT_COMPATIBILITY, type=pathlib.Path)
+    parser.add_argument("--shard-consumer-proof", default=DEFAULT_SHARD_CONSUMER_PROOF, type=pathlib.Path)
     parser.add_argument("--runner-readiness", default=DEFAULT_RUNNER_READINESS, type=pathlib.Path)
     parser.add_argument("--goal-preflight", default=DEFAULT_GOAL_PREFLIGHT, type=pathlib.Path)
     parser.add_argument("--operating-contract", default=DEFAULT_OPERATING_CONTRACT, type=pathlib.Path)
@@ -247,6 +268,7 @@ def main() -> int:
             load_json(args.manifest),
             load_json(args.footprint),
             load_json(args.compatibility),
+            load_json(args.shard_consumer_proof),
             load_json(args.runner_readiness),
             load_json(args.goal_preflight),
             load_json(args.operating_contract),

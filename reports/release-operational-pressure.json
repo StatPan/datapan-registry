@@ -8,18 +8,19 @@
     "manifest": "manifest.json",
     "release_distribution_footprint": "reports/release-distribution-footprint.json",
     "release_consumer_compatibility": "reports/release-consumer-compatibility.json",
+    "release_shard_consumer_proof": "reports/release-shard-consumer-proof.json",
     "credential_runtime_runner_readiness": "reports/credential-runtime-runner-readiness.json",
     "release_goal_finish_preflight": "reports/release-goal-finish-preflight.json",
     "release_goal_operating_contract": "reports/release-goal-operating-contract.json"
   },
   "summary": {
-    "operational_pressure_decision": "distribution_and_credential_pressure",
-    "distribution_pressure_present": true,
+    "operational_pressure_decision": "credential_runtime_pressure",
+    "distribution_pressure_present": false,
     "credential_pressure_present": true,
     "finish_allowed": false,
     "goal_completion_allowed": false,
     "goal_closure_allowed": false,
-    "next_action_count": 3
+    "next_action_count": 2
   },
   "distribution_pressure": {
     "canonical_registry_path": "data/data-go-kr.registry.json",
@@ -32,7 +33,11 @@
     "shard_publication_status": "optional_draft_asset",
     "shard_policy_phase": "compatibility_period",
     "shard_archive_status": "ci_validated_optional_asset",
-    "consumer_effect": "canonical_registry_required_shards_optional"
+    "consumer_effect": "canonical_registry_required_shards_optional",
+    "shard_consumer_proof": "reports/release-shard-consumer-proof.json",
+    "shard_preferred_ready": true,
+    "distribution_action_resolved": true,
+    "proof_consumer_effect": "shard_preferred_supported_with_canonical_fallback"
   },
   "credential_pressure": {
     "runner_status": "operator_credentials_required",
@@ -60,7 +65,7 @@
     {
       "id": "prove_shard_preferred_consumer_compatibility",
       "capability_plane": "shard_release_distribution",
-      "required": true,
+      "required": false,
       "reason": "Large canonical registry remains above threshold while shards are still optional additive assets."
     },
     {

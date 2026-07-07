@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 64,
+  "count": 65,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 3553,
-      "sha256": "68bebb5268671493def9882964b6f24f7bab99b0d07146ebdaebb8daddda733f"
+      "bytes": 3597,
+      "sha256": "bfcaf2ddd90d139784611a32a4eb80e3a41792fc7f7ccb2852534e481ec76166"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -307,8 +307,8 @@
       "title": "Datapan Release Consumer Compatibility v1",
       "contract": "release-consumer-compatibility",
       "version": "v1",
-      "bytes": 32256,
-      "sha256": "57f7142114d71cda7dbb538243b8beab7f0643ef7cb9e9d9faae73a7bdbbe52c"
+      "bytes": 34318,
+      "sha256": "8e5ec53ece994871d47fa7acf618629d07b83920a031d4e89967bf1545430e73"
     },
     {
       "path": "schemas/datapan.error-action-routing-rollup.v1.schema.json",
@@ -577,8 +577,17 @@
       "title": "Datapan Release Operational Pressure v1",
       "contract": "release-operational-pressure",
       "version": "v1",
-      "bytes": 8663,
-      "sha256": "8d647001d1cd6fabb99b176221c1f96cd2281f1322184d4c430bddc5aa073846"
+      "bytes": 9311,
+      "sha256": "7148611cd95378f760a34c621938394943d5a2def260532f206ed6ce61c6d249"
+    },
+    {
+      "path": "schemas/datapan.release-shard-consumer-proof.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.release-shard-consumer-proof.v1.schema.json",
+      "title": "Datapan Release Shard Consumer Proof v1",
+      "contract": "release-shard-consumer-proof",
+      "version": "v1",
+      "bytes": 6678,
+      "sha256": "93e85e75235192e688bf132f213c80c53091dfd978f7cb4ec605f2ad0d73c796"
     }
   ]
 }
