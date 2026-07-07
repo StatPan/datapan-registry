@@ -7,8 +7,8 @@
     "manifest": {
       "path": "manifest.json",
       "generated_at": "2026-07-04T06:39:24Z",
-      "artifact_count": 83,
-      "evidence_contracts": 11
+      "artifact_count": 85,
+      "evidence_contracts": 12
     },
     "readiness": {
       "path": "reports/latest-release-readiness.json",
@@ -104,7 +104,7 @@
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
       "bytes": 14728,
-      "sha256": "2530a3fce1261f5d22c7911d57f4062595ba47696a7ca7a8116225d92a7100c6",
+      "sha256": "224888e8838b6f524df3fa260956e43e252adb9e89e8196f254d3cc4dde461cb",
       "required": true
     },
     {
@@ -135,12 +135,21 @@
       "required": true
     },
     {
+      "contract": "credential_runtime_manual_review_decision",
+      "path": "reports/credential-runtime-manual-review-decision.json",
+      "kind": "credential_runtime_manual_review_decision",
+      "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-decision.v1.schema.json",
+      "bytes": 1211,
+      "sha256": "5a382605f68124af6093f9a99bb8a44ed1e3abebd223d05d8cc9e67ac46c9403",
+      "required": true
+    },
+    {
       "contract": "credential_runtime_manual_review_acceptance",
       "path": "reports/credential-runtime-manual-review-acceptance.json",
       "kind": "credential_runtime_manual_review_acceptance",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-acceptance.v1.schema.json",
-      "bytes": 2451,
-      "sha256": "5f9e9c50c7fc68c6a32395624b5607ddb8838be0438aac369e95b3e7347d1f77",
+      "bytes": 2687,
+      "sha256": "1bb2d0e26c02e2060b429bfaff8e7e5134092f4d49a8d4cb86958e3103531902",
       "required": true
     },
     {
@@ -158,7 +167,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "3945f4f1b28c277b3e7f97356423198ba78f776b28e7f30b11f0c0d582c3985c",
+      "sha256": "0db87fa73efd6bf044ec2283a19f67d6a8db860c8b08809ed34fcf29a6f0dbb0",
       "required": true
     },
     {
@@ -176,7 +185,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 59095,
-      "sha256": "1d62928cbced4d97aa19fcc47f8005c9ad9372561df81332d379bb09d3a4be0f",
+      "sha256": "9b2719d9d50e5d79a5e7aa1f8cdaddbbe3b2436fcf0dd2d9b0861be70a014c00",
       "required": true
     }
   ],
@@ -186,6 +195,7 @@
     "credential_runtime_evidence_policy": "reports/credential-runtime-evidence-policy.json",
     "credential_runtime_receipt_collection_queue": "reports/credential-runtime-receipt-collection-queue.json",
     "credential_runtime_review_handoff": "reports/credential-runtime-review-handoff.json",
+    "credential_runtime_manual_review_decision": "reports/credential-runtime-manual-review-decision.json",
     "credential_runtime_manual_review_acceptance": "reports/credential-runtime-manual-review-acceptance.json",
     "error_action_routing_rollup": "reports/error-action-routing-rollup.json",
     "downstream_impact_rollup": "reports/registry-impact-plan.json",
@@ -197,6 +207,7 @@
       "credential_runtime_evidence_policy",
       "credential_runtime_receipt_collection_queue",
       "credential_runtime_review_handoff",
+      "credential_runtime_manual_review_decision",
       "credential_runtime_manual_review_acceptance",
       "error_action_routing",
       "downstream_impact"
@@ -247,6 +258,10 @@
     "credential_handoff_manual_review_required": true,
     "credential_handoff_default_ci_requires_credentials": false,
     "credential_handoff_relief_decision": "blocked_until_all_sources_relief_eligible",
+    "manual_review_decision_status": "not_asserted",
+    "manual_review_decision_accepted": false,
+    "manual_review_decision_reason": "manual_review_acceptance_not_asserted",
+    "manual_review_decision_boundary_accepted": false,
     "manual_review_acceptance_status": "not_accepted",
     "manual_review_acceptance_accepted": false,
     "manual_review_acceptance_decision": "blocked_until_explicit_manual_review_acceptance",

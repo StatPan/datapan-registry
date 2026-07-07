@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 51,
+  "count": 52,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 3003,
-      "sha256": "ad0becb5a035c2bb5656b88e416fad2ab54a48e77631ecc078053bbf850f4a39"
+      "bytes": 3060,
+      "sha256": "e7254cb2ddadebd9ac19374492c08c81ec1e66638c0cff69472a3faa53fba522"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -307,8 +307,8 @@
       "title": "Datapan Release Consumer Compatibility v1",
       "contract": "release-consumer-compatibility",
       "version": "v1",
-      "bytes": 26078,
-      "sha256": "62a98d39dfaba798d69b84b04501acd697099c0cb1eaee64b193a394b98f3d67"
+      "bytes": 26980,
+      "sha256": "9f5167e3493e10c0624d071b71d1b4c2cea5f4899c0774d10498b93eacb6be79"
     },
     {
       "path": "schemas/datapan.error-action-routing-rollup.v1.schema.json",
@@ -460,8 +460,17 @@
       "title": "Datapan Credential Runtime Manual-Review Acceptance v1",
       "contract": "credential-runtime-manual-review-acceptance",
       "version": "v1",
-      "bytes": 5681,
-      "sha256": "40b96e9eca13d1e959b576c727f6002b79ba8fe62b39dbfda82a15be69f8957c"
+      "bytes": 6176,
+      "sha256": "fb05f4e49602ad8f30717a63d06e4cf2d02eecd1d2e4379bf96a19b0c5cd35cd"
+    },
+    {
+      "path": "schemas/datapan.credential-runtime-manual-review-decision.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-decision.v1.schema.json",
+      "title": "Datapan Credential Runtime Manual-Review Decision v1",
+      "contract": "credential-runtime-manual-review-decision",
+      "version": "v1",
+      "bytes": 4751,
+      "sha256": "f6b43ed1954e25ebb385649a00717c45105b9a121cd3cd1fb54355458afa922d"
     }
   ]
 }

@@ -11,18 +11,18 @@
     "criteria_partial": 0,
     "criteria_gap": 0,
     "decision": "leave_goal_open",
-    "reason": "The release assembly path is receipt-bound and credential-safe runtime evidence is now policy-bound with an operator-facing receipt collection queue, reviewer-facing handoff, and manual-review acceptance boundary, but #344 remains open because reviewed live credentialed runtime receipts are not checked in, explicit manual-review release acceptance is not asserted, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
+    "reason": "The release assembly path is receipt-bound and credential-safe runtime evidence is now policy-bound with an operator-facing receipt collection queue, reviewer-facing handoff, manual-review decision intake, and manual-review acceptance boundary, but #344 remains open because reviewed live credentialed runtime receipts are not checked in, explicit manual-review release acceptance is not asserted, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
   },
   "current_state_evidence": {
     "manifest": {
       "path": "manifest.json",
-      "artifact_count": 83,
-      "artifact_kinds": 33,
-      "schema_artifacts": 51
+      "artifact_count": 85,
+      "artifact_kinds": 34,
+      "schema_artifacts": 52
     },
     "schema_index": {
       "path": "schemas/index.json",
-      "schema_count": 51
+      "schema_count": 52
     },
     "release_readiness": {
       "path": "reports/latest-release-readiness.json",
@@ -100,6 +100,10 @@
       "credential_handoff_relief_eligible_sources": 0,
       "credential_handoff_global_manual_review_relief_allowed": false,
       "credential_handoff_relief_decision": "blocked_until_all_sources_relief_eligible",
+      "manual_review_decision_status": "not_asserted",
+      "manual_review_decision_accepted": false,
+      "manual_review_decision_reason": "manual_review_acceptance_not_asserted",
+      "manual_review_decision_boundary_accepted": false,
       "manual_review_acceptance_status": "not_accepted",
       "manual_review_acceptance_accepted": false,
       "manual_review_acceptance_decision": "blocked_until_explicit_manual_review_acceptance",
@@ -160,6 +164,16 @@
       "default_ci_requires_credentials": false,
       "checked_in_secrets_allowed": false
     },
+    "credential_runtime_manual_review_decision": {
+      "path": "reports/credential-runtime-manual-review-decision.json",
+      "decision_ticket": 391,
+      "accepted": false,
+      "decision_status": "not_asserted",
+      "decision_reason": "manual_review_acceptance_not_asserted",
+      "manual_review_release_boundary_accepted": false,
+      "default_ci_requires_credentials": false,
+      "checked_in_secrets_allowed": false
+    },
     "credential_runtime_manual_review_acceptance": {
       "path": "reports/credential-runtime-manual-review-acceptance.json",
       "acceptance_ticket": 389,
@@ -181,7 +195,7 @@
       "evidence": [
         {
           "path": "reports/release-assembly-receipt.json",
-          "finding": "Records the unified assembly phases, including credential runtime evidence policy, credential receipt collection queue, credential review handoff, manual-review acceptance boundary, operator commands, check commands, workflow fragments, release inputs, and current manual-review status."
+          "finding": "Records the unified assembly phases, including credential runtime evidence policy, credential receipt collection queue, credential review handoff, manual-review decision intake, manual-review acceptance boundary, operator commands, check commands, workflow fragments, release inputs, and current manual-review status."
         },
         {
           "path": "scripts/generate-release-assembly-receipt.py",
@@ -242,11 +256,11 @@
       "evidence": [
         {
           "path": "manifest.json",
-          "finding": "Contains 81 manifest-bound artifacts across 32 artifact kinds, including 50 schema artifacts."
+          "finding": "Contains 85 manifest-bound artifacts across 34 artifact kinds, including 52 schema artifacts."
         },
         {
           "path": "schemas/index.json",
-          "finding": "Indexes 51 schema contracts and checks schema artifact bytes and sha256."
+          "finding": "Indexes 52 schema contracts and checks schema artifact bytes and sha256."
         },
         {
           "path": "reports/source-report-inventory.json",
@@ -254,7 +268,7 @@
         },
         {
           "path": "reports/release-consumer-compatibility.json",
-          "finding": "Binds source contracts, source runtime evidence, source runtime remediation, credential runtime evidence policy, credential receipt collection queue, credential review handoff, credential manual-review acceptance, error/action routing, downstream impact, source reference drift, and source report inventory as manifest evidence contracts."
+          "finding": "Binds source contracts, source runtime evidence, source runtime remediation, credential runtime evidence policy, credential receipt collection queue, credential review handoff, credential manual-review decision, credential manual-review acceptance, error/action routing, downstream impact, source reference drift, and source report inventory as manifest evidence contracts."
         },
         {
           "path": "reports/release-assembly-receipt.json",
@@ -309,8 +323,12 @@
           "finding": "Converts the collection queue into reviewer-facing per-source evidence packets, required validation and promotion commands, review packet requirements, relief blockers, and a global review_required status without claiming live credentialed receipts."
         },
         {
+          "path": "reports/credential-runtime-manual-review-decision.json",
+          "finding": "Provides a checked-in decision intake record that currently keeps manual-review acceptance not asserted, while future accepted decisions must provide reviewer, current handoff and compatibility digests, reason, expiry, revalidation triggers, and secret-free validation."
+        },
+        {
           "path": "reports/credential-runtime-manual-review-acceptance.json",
-          "finding": "Records that the current manual-review release boundary is not accepted, preserves canonical registry compatibility and secret-free CI, and enumerates the required evidence for a future explicit manual-review acceptance."
+          "finding": "Derives the current not_accepted manual-review release boundary from the checked-in decision record, preserves canonical registry compatibility and secret-free CI, and enumerates the required evidence for a future explicit manual-review acceptance."
         },
         {
           "path": "scripts/generate-credential-runtime-review-handoff.py",
@@ -350,7 +368,7 @@
         },
         {
           "path": "reports/release-consumer-compatibility.json",
-          "finding": "Reports seven consumers, two proven consumers, one blocked consumer, canonical registry requirement, optional shard assets, runtime manual-review evidence, source runtime remediation counts, credential policy receipt and review state, credential queue absent/reviewed/relief counts, credential review handoff status, manual-review acceptance status, and the blocked receipt-backed manual-review reduction gate."
+          "finding": "Reports seven consumers, two proven consumers, one blocked consumer, canonical registry requirement, optional shard assets, runtime manual-review evidence, source runtime remediation counts, credential policy receipt and review state, credential queue absent/reviewed/relief counts, credential review handoff status, manual-review decision and acceptance status, and the blocked receipt-backed manual-review reduction gate."
         },
         {
           "path": "scripts/validate-impact-plans.py",
@@ -358,7 +376,7 @@
         },
         {
           "path": "scripts/validate-release-consumer-compatibility.py",
-          "finding": "Fails if source runtime blockers remain but remediation evidence, remediation reviewed-receipt linkage, credential runtime policy evidence, credential receipt queue evidence, credential review handoff evidence, credential manual-review acceptance evidence, reviewed receipt intake gating, receipt-backed relief gating, error/action routing evidence, or downstream manual-review impact evidence disappears."
+          "finding": "Fails if source runtime blockers remain but remediation evidence, remediation reviewed-receipt linkage, credential runtime policy evidence, credential receipt queue evidence, credential review handoff evidence, credential manual-review decision and acceptance evidence, reviewed receipt intake gating, receipt-backed relief gating, error/action routing evidence, or downstream manual-review impact evidence disappears."
         },
         {
           "path": "reports/credential-runtime-evidence-policy.json",
@@ -373,8 +391,12 @@
           "finding": "Keeps manual-review relief blocked behind an explicit reviewer handoff status, five pending review sources, zero reviewed receipts, zero relief-eligible sources, a secret-free validation contract, and consumer compatibility fields that mirror those blocker semantics."
         },
         {
+          "path": "reports/credential-runtime-manual-review-decision.json",
+          "finding": "Keeps manual-review release acceptance not asserted while exposing the exact future decision intake fields needed before a release can be accepted as manual-review only."
+        },
+        {
           "path": "reports/credential-runtime-manual-review-acceptance.json",
-          "finding": "Keeps manual-review release acceptance explicitly unaccepted with five required acceptance evidence items and consumer compatibility fields that mirror the not_accepted boundary."
+          "finding": "Keeps manual-review release acceptance explicitly unaccepted with five required acceptance evidence items and consumer compatibility fields that mirror the decision-backed not_accepted boundary."
         }
       ],
       "next_action": "Keep compatibility evidence current whenever source runtime blockers or downstream contracts change."
@@ -409,17 +431,17 @@
     {
       "id": "credentialed_runtime_receipts_absent",
       "evidence": "reports/credential-runtime-receipt-collection-queue.json",
-      "finding": "Credential-gated runtime checks now have a secret-safe policy path, redacted receipt contract, reviewed checked-in intake path, discovery-derived counts, per-source collection queue, deterministic promotion command, reviewer handoff, manual-review acceptance boundary, remediation finding linkage, and consumer compatibility linkage, but live credentialed receipts are still absent and not allowed to reduce manual-review boundaries."
+      "finding": "Credential-gated runtime checks now have a secret-safe policy path, redacted receipt contract, reviewed checked-in intake path, discovery-derived counts, per-source collection queue, deterministic promotion command, reviewer handoff, manual-review decision intake, manual-review acceptance boundary, remediation finding linkage, and consumer compatibility linkage, but live credentialed receipts are still absent and not allowed to reduce manual-review boundaries."
     },
     {
       "id": "manual_review_acceptance_not_asserted",
-      "evidence": "reports/credential-runtime-manual-review-acceptance.json",
-      "finding": "The manual-review acceptance boundary is schema-backed, manifest-bound, and reflected in consumer compatibility, but it currently records accepted=false and cannot be used to claim #344 completion."
+      "evidence": "reports/credential-runtime-manual-review-decision.json",
+      "finding": "The manual-review decision intake and acceptance boundary are schema-backed, manifest-bound, and reflected in consumer compatibility, but they currently record accepted=false and cannot be used to claim #344 completion."
     },
     {
       "id": "receipt_backed_compatibility_relief_blocked",
       "evidence": "reports/release-consumer-compatibility.json",
-      "finding": "Consumer compatibility now distinguishes receipt contract availability, reviewed intake availability, receipt validation, receipt review, queue collection state, review handoff state, manual-review acceptance state, and relief eligibility from receipt-backed relief; manual_review_reduction_allowed remains false until reviewed validated credential runtime receipts exist."
+      "finding": "Consumer compatibility now distinguishes receipt contract availability, reviewed intake availability, receipt validation, receipt review, queue collection state, review handoff state, manual-review decision and acceptance state, and relief eligibility from receipt-backed relief; manual_review_reduction_allowed remains false until reviewed validated credential runtime receipts exist."
     },
     {
       "id": "consumer_compatibility_manual_review_required",
@@ -444,6 +466,7 @@
     "python3 scripts/validate-credential-runtime-receipts.py",
     "python3 scripts/generate-credential-runtime-receipt-collection-queue.py --check",
     "python3 scripts/generate-credential-runtime-review-handoff.py --check",
+    "python3 scripts/validate-credential-runtime-manual-review-decision.py",
     "python3 scripts/generate-credential-runtime-manual-review-acceptance.py --check",
     "python3 scripts/run-credential-runtime-collection.py --self-test",
     "python3 scripts/run-credential-runtime-collection.py --check",
@@ -528,6 +551,11 @@
       "issue": 389,
       "title": "Bind manual-review acceptance boundary to release evidence",
       "reason": "Manual-review release acceptance is now schema-backed, manifest-bound, checked in release assembly, and mirrored in consumer compatibility, but the goal remains open because the boundary is explicitly not accepted and reviewed live receipts are still absent."
+    },
+    {
+      "issue": 391,
+      "title": "Define manual-review acceptance decision intake",
+      "reason": "Manual-review acceptance now has a checked-in decision record and validator for future explicit acceptance, but the goal remains open because the decision is not_asserted and reviewed live receipts are still absent."
     }
   ]
 }
