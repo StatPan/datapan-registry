@@ -78,7 +78,8 @@
         "release_consumer_decision",
         "credential_collection_preflight",
         "credential_runner_readiness",
-        "credential_review_handoff"
+        "credential_review_handoff",
+        "release_operational_pressure"
       ],
       "properties": {
         "goal_completion_audit": {
@@ -98,6 +99,9 @@
         },
         "credential_review_handoff": {
           "const": "reports/credential-runtime-review-handoff.json"
+        },
+        "release_operational_pressure": {
+          "const": "reports/release-operational-pressure.json"
         }
       }
     },
@@ -108,6 +112,9 @@
         "finish_allowed",
         "goal_status",
         "release_decision",
+        "operational_pressure_decision",
+        "distribution_pressure_present",
+        "credential_pressure_present",
         "goal_completion_allowed",
         "reviewed_credential_receipts",
         "reviewed_receipts_missing",
@@ -127,6 +134,21 @@
         },
         "release_decision": {
           "enum": ["safe_to_consume", "manual_review_required", "blocked"]
+        },
+        "operational_pressure_decision": {
+          "enum": [
+            "distribution_and_credential_pressure",
+            "distribution_latency_pressure",
+            "credential_runtime_pressure",
+            "goal_boundary_pressure",
+            "operational_pressure_resolved"
+          ]
+        },
+        "distribution_pressure_present": {
+          "type": "boolean"
+        },
+        "credential_pressure_present": {
+          "type": "boolean"
         },
         "goal_completion_allowed": {
           "type": "boolean"
@@ -212,7 +234,8 @@
             "enum": [
               "reviewed_credential_receipt_collection",
               "reviewed_credential_receipt_promotion",
-              "manual_review_acceptance_decision"
+              "manual_review_acceptance_decision",
+              "shard_preferred_consumer_compatibility"
             ]
           },
           "uniqueItems": true

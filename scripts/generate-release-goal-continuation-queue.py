@@ -21,6 +21,7 @@ DEFAULT_CONSUMER_DECISION = pathlib.Path("reports/release-consumer-decision.json
 DEFAULT_CREDENTIAL_COLLECTION_PREFLIGHT = pathlib.Path("reports/credential-runtime-collection-preflight.json")
 DEFAULT_CREDENTIAL_RUNNER_READINESS = pathlib.Path("reports/credential-runtime-runner-readiness.json")
 DEFAULT_CREDENTIAL_REVIEW_HANDOFF = pathlib.Path("reports/credential-runtime-review-handoff.json")
+DEFAULT_OPERATIONAL_PRESSURE = pathlib.Path("reports/release-operational-pressure.json")
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.release-goal-continuation-queue.v1.schema.json")
 DEFAULT_OUTPUT = pathlib.Path("reports/release-goal-continuation-queue.json")
 SCHEMA_VERSION = "datapan.release-goal-continuation-queue.v1"
@@ -140,11 +141,71 @@ def candidate_manual_review_acceptance() -> dict[str, Any]:
     }
 
 
+def candidate_shard_preferred_compatibility(
+    pressure_summary: dict[str, Any],
+    pressure_distribution: dict[str, Any],
+    pressure_actions: list[dict[str, Any]],
+) -> dict[str, Any]:
+    required_action = next(
+        (
+            action
+            for action in pressure_actions
+            if action.get("id") == "prove_shard_preferred_consumer_compatibility"
+            and action.get("required") is True
+        ),
+        {},
+    )
+    return {
+        "order": 1,
+        "id": "prove_shard_preferred_consumer_compatibility",
+        "title": "Prove shard-preferred consumer compatibility",
+        "capability_planes": [
+            "shard/release distribution",
+            "consumer compatibility",
+            "downstream impact",
+        ],
+        "evidence_inputs": [
+            DEFAULT_OPERATIONAL_PRESSURE.as_posix(),
+            "reports/release-distribution-footprint.json",
+            "reports/release-consumer-compatibility.json",
+            "reports/release-consumer-decision.json",
+        ],
+        "safe_start_conditions": [
+            f"operational pressure decision: {pressure_summary.get('operational_pressure_decision')}",
+            f"canonical registry bytes: {pressure_distribution.get('canonical_registry_bytes')}",
+            f"large monolith threshold bytes: {pressure_distribution.get('large_monolith_threshold_bytes')}",
+            "keep canonical registry fallback required while proving shard-preferred consumption",
+            "treat shard archives as additive assets until downstream compatibility proves migration safety",
+        ],
+        "blocked_finish_conditions": [
+            f"shard publication status: {pressure_distribution.get('shard_publication_status')}",
+            f"consumer effect: {pressure_distribution.get('consumer_effect')}",
+            "release consumer compatibility still records shard_assets_required=false",
+            "goal completion remains blocked by credential/runtime or manual-review evidence even if shard compatibility improves",
+        ],
+        "proposed_acceptance_criteria": [
+            "Consumer compatibility evidence proves shard-preferred install/readiness with canonical monolith fallback.",
+            "Release operational pressure no longer reports an unresolved distribution-pressure next action.",
+            "Release manifest, shard package evidence, and downstream impact evidence remain mutually consistent.",
+            "Goal continuation queue still preserves credential/manual-review blockers until those gates are resolved.",
+        ],
+        "post_completion_commands": POST_CHILD_REFRESH_COMMANDS,
+        "goal_closure_allowed": False,
+        "rationale": required_action.get(
+            "reason",
+            "Large canonical registry pressure needs shard-preferred compatibility evidence without breaking canonical consumers.",
+        ),
+    }
+
+
 def build_candidates(
     finish_summary: dict[str, Any],
     decision_summary: dict[str, Any],
     credential_preflight_summary: dict[str, Any],
     handoff_summary: dict[str, Any],
+    pressure_summary: dict[str, Any],
+    pressure_distribution: dict[str, Any],
+    pressure_actions: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
     if finish_summary.get("finish_allowed") is True:
         return []
@@ -157,6 +218,20 @@ def build_candidates(
         acceptance = candidate_manual_review_acceptance()
         acceptance["order"] = next_order
         candidates.append(acceptance)
+    if pressure_summary.get("distribution_pressure_present") is True:
+        if any(
+            action.get("id") == "prove_shard_preferred_consumer_compatibility"
+            and action.get("required") is True
+            for action in pressure_actions
+        ):
+            next_order = len(candidates) + 1
+            shard_candidate = candidate_shard_preferred_compatibility(
+                pressure_summary,
+                pressure_distribution,
+                pressure_actions,
+            )
+            shard_candidate["order"] = next_order
+            candidates.append(shard_candidate)
     return candidates
 
 
@@ -167,6 +242,7 @@ def build_report(
     credential_preflight: dict[str, Any],
     credential_runner_readiness: dict[str, Any],
     credential_handoff: dict[str, Any],
+    operational_pressure: dict[str, Any],
 ) -> dict[str, Any]:
     generated_at = consumer_decision.get("generated_at")
     if not isinstance(generated_at, str) or not generated_at:
@@ -178,11 +254,28 @@ def build_report(
     credential_preflight_summary = as_dict(credential_preflight.get("summary"), "credential_preflight.summary")
     as_dict(credential_runner_readiness.get("summary"), "credential_runner_readiness.summary")
     handoff_summary = as_dict(credential_handoff.get("summary"), "credential_handoff.summary")
+    pressure_summary = as_dict(operational_pressure.get("summary"), "operational_pressure.summary")
+    pressure_distribution = as_dict(
+        operational_pressure.get("distribution_pressure"),
+        "operational_pressure.distribution_pressure",
+    )
+    pressure_actions = [
+        as_dict(item, "operational_pressure.next_actions[]")
+        for item in as_list(operational_pressure.get("next_actions"), "operational_pressure.next_actions")
+    ]
     blocking = [
         as_dict(item, "finish_preflight.blocking_evidence[]")
         for item in as_list(finish_preflight.get("blocking_evidence"), "finish_preflight.blocking_evidence")
     ]
-    candidates = build_candidates(finish_summary, decision_summary, credential_preflight_summary, handoff_summary)
+    candidates = build_candidates(
+        finish_summary,
+        decision_summary,
+        credential_preflight_summary,
+        handoff_summary,
+        pressure_summary,
+        pressure_distribution,
+        pressure_actions,
+    )
     finish_allowed = finish_summary.get("finish_allowed") is True
     return {
         "schema_version": SCHEMA_VERSION,
@@ -197,11 +290,15 @@ def build_report(
             "credential_collection_preflight": DEFAULT_CREDENTIAL_COLLECTION_PREFLIGHT.as_posix(),
             "credential_runner_readiness": DEFAULT_CREDENTIAL_RUNNER_READINESS.as_posix(),
             "credential_review_handoff": DEFAULT_CREDENTIAL_REVIEW_HANDOFF.as_posix(),
+            "release_operational_pressure": DEFAULT_OPERATIONAL_PRESSURE.as_posix(),
         },
         "summary": {
             "finish_allowed": finish_allowed,
             "goal_status": goal_audit.get("goal_status"),
             "release_decision": decision_summary.get("release_decision"),
+            "operational_pressure_decision": pressure_summary.get("operational_pressure_decision"),
+            "distribution_pressure_present": pressure_summary.get("distribution_pressure_present"),
+            "credential_pressure_present": pressure_summary.get("credential_pressure_present"),
             "goal_completion_allowed": decision_summary.get("goal_completion_allowed"),
             "reviewed_credential_receipts": decision_summary.get("reviewed_credential_receipts"),
             "reviewed_receipts_missing": credential_preflight_summary.get("reviewed_receipts_missing"),
@@ -227,6 +324,7 @@ def build_report(
                 "reviewed_credential_receipt_collection",
                 "reviewed_credential_receipt_promotion",
                 "manual_review_acceptance_decision",
+                "shard_preferred_consumer_compatibility",
             ],
             "goal_closure_effect": "refresh_may_update_evidence_but_does_not_close_goal_without_goal_finish_preflight",
         },
@@ -260,6 +358,13 @@ def validate_invariants(report: dict[str, Any]) -> None:
     orders = [as_dict(item, "candidate").get("order") for item in candidates]
     if orders != list(range(1, len(candidates) + 1)):
         raise ValueError("candidate.order values must be consecutive from 1")
+    candidate_ids = {as_dict(item, "candidate").get("id") for item in candidates}
+    if summary.get("distribution_pressure_present") is True:
+        if "prove_shard_preferred_consumer_compatibility" not in candidate_ids:
+            raise ValueError("distribution pressure must emit a shard-preferred compatibility candidate")
+    if summary.get("credential_pressure_present") is True:
+        if "collect_reviewed_credential_runtime_receipts" not in candidate_ids:
+            raise ValueError("credential pressure must preserve the reviewed receipt collection candidate")
     refresh = as_dict(report.get("release_evidence_refresh"), "release_evidence_refresh")
     expected_commands = [RELEASE_EVIDENCE_REFRESH_COMMAND, RELEASE_EVIDENCE_CHECK_COMMAND]
     if refresh.get("refresh_command") != RELEASE_EVIDENCE_REFRESH_COMMAND:
@@ -292,6 +397,7 @@ def main() -> int:
     parser.add_argument("--credential-preflight", default=DEFAULT_CREDENTIAL_COLLECTION_PREFLIGHT, type=pathlib.Path)
     parser.add_argument("--credential-runner-readiness", default=DEFAULT_CREDENTIAL_RUNNER_READINESS, type=pathlib.Path)
     parser.add_argument("--credential-handoff", default=DEFAULT_CREDENTIAL_REVIEW_HANDOFF, type=pathlib.Path)
+    parser.add_argument("--operational-pressure", default=DEFAULT_OPERATIONAL_PRESSURE, type=pathlib.Path)
     parser.add_argument("--schema", default=DEFAULT_SCHEMA, type=pathlib.Path)
     parser.add_argument("--output", default=DEFAULT_OUTPUT, type=pathlib.Path)
     parser.add_argument("--check", action="store_true", help="fail when checked-in continuation queue is stale")
@@ -305,6 +411,7 @@ def main() -> int:
             load_json(args.credential_preflight),
             load_json(args.credential_runner_readiness),
             load_json(args.credential_handoff),
+            load_json(args.operational_pressure),
         )
         validate_invariants(report)
         validate_schema(report, args.schema)
