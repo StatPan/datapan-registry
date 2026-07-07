@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import pathlib
 import shlex
 import subprocess
@@ -158,6 +159,73 @@ def build_steps(
     ]
 
 
+def credential_env_names(execution_plan: dict[str, Any]) -> list[str]:
+    environment = as_dict(execution_plan.get("operator_environment"), "execution_plan.operator_environment")
+    return [
+        str(item)
+        for item in execution_plan_envs(environment)
+    ]
+
+
+def execution_plan_envs(environment: dict[str, Any]) -> list[str]:
+    envs = environment.get("required_credential_envs")
+    if not isinstance(envs, list) or not envs:
+        raise ValueError("execution_plan.operator_environment.required_credential_envs must be a non-empty array")
+    result = []
+    for index, item in enumerate(envs):
+        if not isinstance(item, str) or not item:
+            raise ValueError(f"required_credential_envs[{index}] must be a non-empty string")
+        result.append(item)
+    return result
+
+
+def credential_environment_status(
+    execution_plan: dict[str, Any],
+    *,
+    environment: Any,
+) -> dict[str, Any]:
+    required_envs = credential_env_names(execution_plan)
+    present_envs = [name for name in required_envs if bool(environment.get(name))]
+    missing_envs = [name for name in required_envs if name not in present_envs]
+    sources = []
+    for raw_source in execution_plan.get("sources", []):
+        source = as_dict(raw_source, "execution_plan.sources[]")
+        source_id = source.get("source_id")
+        if not isinstance(source_id, str) or not source_id:
+            raise ValueError("execution_plan.sources[].source_id must be a non-empty string")
+        source_envs = source.get("credential_envs")
+        if not isinstance(source_envs, list) or not source_envs:
+            raise ValueError(f"{source_id}.credential_envs must be a non-empty array")
+        source_required = []
+        for index, item in enumerate(source_envs):
+            if not isinstance(item, str) or not item:
+                raise ValueError(f"{source_id}.credential_envs[{index}] must be a non-empty string")
+            source_required.append(item)
+        source_present = [name for name in source_required if name in present_envs]
+        source_missing = [name for name in source_required if name not in present_envs]
+        sources.append(
+            {
+                "source_id": source_id,
+                "required_credential_envs": source_required,
+                "present_credential_envs": source_present,
+                "missing_credential_envs": source_missing,
+                "credential_env_ready": not source_missing,
+            }
+        )
+    return {
+        "required_credential_envs": required_envs,
+        "required_credential_env_count": len(required_envs),
+        "present_credential_envs": present_envs,
+        "present_credential_env_count": len(present_envs),
+        "missing_credential_envs": missing_envs,
+        "missing_credential_env_count": len(missing_envs),
+        "current_operator_env_ready": not missing_envs,
+        "checked_in_credentials_allowed": False,
+        "secret_values_included": False,
+        "sources": sources,
+    }
+
+
 def build_workflow(
     *,
     execution_plan: dict[str, Any],
@@ -166,9 +234,14 @@ def build_workflow(
     review_plan_output: pathlib.Path,
     queue_path: pathlib.Path,
     run: bool,
+    environment: Any | None = None,
 ) -> dict[str, Any]:
     plan_summary = as_dict(execution_plan.get("summary"), "execution_plan.summary")
     batch = as_dict(execution_plan.get("batch_execution"), "execution_plan.batch_execution")
+    env_status = credential_environment_status(
+        execution_plan,
+        environment=os.environ if environment is None else environment,
+    )
     steps = build_steps(
         session_output=session_output,
         review_plan_output=review_plan_output,
@@ -193,6 +266,10 @@ def build_workflow(
                 plan_summary.get("reviewed_receipts_missing"),
                 "execution_plan.summary.reviewed_receipts_missing",
             ),
+            "required_credential_env_count": env_status["required_credential_env_count"],
+            "present_credential_env_count": env_status["present_credential_env_count"],
+            "missing_credential_env_count": env_status["missing_credential_env_count"],
+            "current_operator_env_ready": env_status["current_operator_env_ready"],
             "requires_operator_credentials": True,
             "workflow_run_requires_explicit_run": True,
             "default_ci_requires_credentials": False,
@@ -216,6 +293,7 @@ def build_workflow(
             "checked_in_session_output_allowed": False,
             "checked_in_review_plan_allowed": False,
         },
+        "operator_environment": env_status,
         "steps": steps,
         "execution": {
             "executed": False,
@@ -227,6 +305,7 @@ def build_workflow(
 def validate_workflow(report: dict[str, Any]) -> None:
     summary = as_dict(report.get("summary"), "summary")
     artifacts = as_dict(report.get("local_artifacts"), "local_artifacts")
+    environment = as_dict(report.get("operator_environment"), "operator_environment")
     steps = report.get("steps")
     if not isinstance(steps, list) or not steps:
         raise ValueError("steps must be a non-empty array")
@@ -259,6 +338,43 @@ def validate_workflow(report: dict[str, Any]) -> None:
     for key in ("checked_in_session_output_allowed", "checked_in_review_plan_allowed"):
         if artifacts.get(key) is not False:
             raise ValueError(f"local_artifacts.{key} must remain false")
+    if environment.get("checked_in_credentials_allowed") is not False:
+        raise ValueError("operator_environment.checked_in_credentials_allowed must remain false")
+    if environment.get("secret_values_included") is not False:
+        raise ValueError("operator_environment.secret_values_included must remain false")
+    for key in (
+        "required_credential_env_count",
+        "present_credential_env_count",
+        "missing_credential_env_count",
+    ):
+        count_value(environment.get(key), f"operator_environment.{key}")
+        if summary.get(key) != environment.get(key):
+            raise ValueError(f"summary.{key} must match operator_environment.{key}")
+    required_envs = environment.get("required_credential_envs")
+    present_envs = environment.get("present_credential_envs")
+    missing_envs = environment.get("missing_credential_envs")
+    if not isinstance(required_envs, list) or not isinstance(present_envs, list) or not isinstance(missing_envs, list):
+        raise ValueError("operator_environment env lists must be arrays")
+    if len(required_envs) != environment["required_credential_env_count"]:
+        raise ValueError("required credential env count must match required env list")
+    if len(present_envs) != environment["present_credential_env_count"]:
+        raise ValueError("present credential env count must match present env list")
+    if len(missing_envs) != environment["missing_credential_env_count"]:
+        raise ValueError("missing credential env count must match missing env list")
+    if summary.get("current_operator_env_ready") != environment.get("current_operator_env_ready"):
+        raise ValueError("summary.current_operator_env_ready must match operator_environment")
+    if environment.get("current_operator_env_ready") != (environment["missing_credential_env_count"] == 0):
+        raise ValueError("operator environment readiness must be derived from missing env count")
+    sources = environment.get("sources")
+    if not isinstance(sources, list) or not sources:
+        raise ValueError("operator_environment.sources must be a non-empty array")
+    for raw_source in sources:
+        source = as_dict(raw_source, "operator_environment.sources[]")
+        source_missing = source.get("missing_credential_envs")
+        if not isinstance(source_missing, list):
+            raise ValueError("operator environment source missing envs must be an array")
+        if source.get("credential_env_ready") != (len(source_missing) == 0):
+            raise ValueError("source credential_env_ready must be derived from missing envs")
     batch_step = as_dict(steps[2], "steps[2]")
     if "--run" not in batch_step.get("argv", []):
         raise ValueError("batch collection step must require --run")
@@ -313,8 +429,28 @@ def self_test(plan_path: pathlib.Path) -> None:
         review_plan_output=DEFAULT_REVIEW_PLAN_OUTPUT,
         queue_path=DEFAULT_QUEUE,
         run=False,
+        environment={},
     )
     validate_workflow(report)
+    if report["summary"]["current_operator_env_ready"] is not False:
+        raise ValueError("self-test expected empty env to be not ready")
+    if report["summary"]["missing_credential_env_count"] != report["summary"]["required_credential_env_count"]:
+        raise ValueError("self-test expected every credential env to be missing")
+    sample_env = {report["operator_environment"]["required_credential_envs"][0]: "redacted-value"}
+    partial_report = build_workflow(
+        execution_plan=plan,
+        execution_plan_path=plan_path,
+        session_output=DEFAULT_SESSION_OUTPUT,
+        review_plan_output=DEFAULT_REVIEW_PLAN_OUTPUT,
+        queue_path=DEFAULT_QUEUE,
+        run=False,
+        environment=sample_env,
+    )
+    validate_workflow(partial_report)
+    if partial_report["summary"]["present_credential_env_count"] != 1:
+        raise ValueError("self-test expected one present credential env name")
+    if "redacted-value" in render_json(partial_report):
+        raise ValueError("self-test leaked an env value into the workflow plan")
     run_report = build_workflow(
         execution_plan=plan,
         execution_plan_path=plan_path,
@@ -322,6 +458,7 @@ def self_test(plan_path: pathlib.Path) -> None:
         review_plan_output=DEFAULT_REVIEW_PLAN_OUTPUT,
         queue_path=DEFAULT_QUEUE,
         run=True,
+        environment={},
     )
     validate_workflow(run_report)
     if run_report["run_mode"] != "run":
@@ -335,6 +472,10 @@ def print_human(report: dict[str, Any]) -> None:
         f"(mode={report['run_mode']}, status={summary['session_plan_status']}, "
         f"missing_receipts={summary['reviewed_receipts_missing']})"
     )
+    environment = as_dict(report.get("operator_environment"), "operator_environment")
+    missing_envs = environment.get("missing_credential_envs")
+    if isinstance(missing_envs, list) and missing_envs:
+        print(f"missing credential envs: {', '.join(str(item) for item in missing_envs)}")
     print(f"run command: {report['workflow_run_command']}")
     for step in report["steps"]:
         entry = as_dict(step, "steps[]")
