@@ -20,6 +20,8 @@ DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-review-handoff
 DEFAULT_OUTPUT = pathlib.Path("reports/credential-runtime-review-handoff.json")
 SCHEMA_VERSION = "datapan.credential-runtime-review-handoff.v1"
 HANDOFF_TICKET = 385
+RELEASE_EVIDENCE_REFRESH_COMMAND = "python3 scripts/refresh-release-ledger-evidence.py --write --max-iterations 5"
+RELEASE_EVIDENCE_CHECK_COMMAND = "python3 scripts/refresh-release-ledger-evidence.py --check"
 
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -204,6 +206,12 @@ def build_report(queue: dict[str, Any]) -> dict[str, Any]:
         for source in sorted(sources, key=lambda item: str(item.get("source_id")))
     ]
     pending_review = sum(1 for entry in entries if entry["relief_blockers"])
+    pending_source_ids = [entry["source_id"] for entry in entries if entry["relief_blockers"]]
+    first_reviewer_action = (
+        "collect_validate_review_and_promote_redacted_receipts"
+        if pending_source_ids
+        else "maintain_reviewed_receipt_evidence"
+    )
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -249,6 +257,42 @@ def build_report(queue: dict[str, Any]) -> dict[str, Any]:
             ),
             "default_ci_mode": "secret_free_review_handoff_validation",
         },
+        "reviewer_routing": {
+            "goal_issue": 344,
+            "handoff_status": "relief_ready" if global_relief_allowed else "review_required",
+            "first_reviewer_action": first_reviewer_action,
+            "pending_source_ids": pending_source_ids,
+            "pending_review_sources": pending_review,
+            "reviewed_receipts_checked_in": summary.get("reviewed_receipts_checked_in"),
+            "relief_eligible_sources": summary.get("relief_eligible"),
+            "global_manual_review_relief_allowed": global_relief_allowed,
+            "manual_review_required": release_boundary.get("manual_review_required"),
+            "receipt_validation_command": string_value(
+                operator_contract.get("receipt_validation_command"),
+                "operator_contract.receipt_validation_command",
+            ),
+            "receipt_promotion_script": string_value(
+                operator_contract.get("receipt_promotion_script"),
+                "operator_contract.receipt_promotion_script",
+            ),
+            "handoff_check_command": "python3 scripts/generate-credential-runtime-review-handoff.py --check",
+            "queue_check_command": string_value(
+                operator_contract.get("queue_check_command"),
+                "operator_contract.queue_check_command",
+            ),
+            "post_review_commands": [
+                RELEASE_EVIDENCE_REFRESH_COMMAND,
+                RELEASE_EVIDENCE_CHECK_COMMAND,
+            ],
+            "default_ci_requires_credentials": False,
+            "checked_in_secrets_allowed": False,
+            "goal_closure_allowed": False,
+            "routing_note": (
+                "Review every pending source receipt, promote only redacted reviewed receipts, then refresh "
+                "release evidence. Keep the persistent goal open until reviewed receipts or explicit "
+                "manual-review acceptance satisfy release gates."
+            ),
+        },
         "release_boundary": {
             "canonical_registry_compatible": True,
             "manual_review_required": release_boundary.get("manual_review_required"),
@@ -270,6 +314,51 @@ def build_report(queue: dict[str, Any]) -> dict[str, Any]:
         ],
         "sources": entries,
     }
+
+
+def validate_invariants(report: dict[str, Any]) -> None:
+    summary = as_dict(report.get("summary"), "summary")
+    operator_contract = as_dict(report.get("operator_contract"), "operator_contract")
+    routing = as_dict(report.get("reviewer_routing"), "reviewer_routing")
+    release_boundary = as_dict(report.get("release_boundary"), "release_boundary")
+    sources = [as_dict(source, "sources[]") for source in as_list(report.get("sources"), "sources")]
+    pending_sources = [source["source_id"] for source in sources if as_list(source.get("relief_blockers"), "source.relief_blockers")]
+    if routing.get("goal_issue") != 344:
+        raise ValueError("reviewer_routing.goal_issue must preserve #344")
+    if routing.get("handoff_status") != summary.get("handoff_status"):
+        raise ValueError("reviewer_routing.handoff_status must mirror summary.handoff_status")
+    if routing.get("pending_source_ids") != pending_sources:
+        raise ValueError("reviewer_routing.pending_source_ids must match sources with relief blockers")
+    if routing.get("pending_review_sources") != summary.get("pending_review_sources"):
+        raise ValueError("reviewer_routing.pending_review_sources must mirror summary")
+    if routing.get("reviewed_receipts_checked_in") != summary.get("reviewed_receipts_checked_in"):
+        raise ValueError("reviewer_routing.reviewed_receipts_checked_in must mirror summary")
+    if routing.get("relief_eligible_sources") != summary.get("relief_eligible_sources"):
+        raise ValueError("reviewer_routing.relief_eligible_sources must mirror summary")
+    if routing.get("global_manual_review_relief_allowed") != summary.get("global_manual_review_relief_allowed"):
+        raise ValueError("reviewer_routing.global_manual_review_relief_allowed must mirror summary")
+    if routing.get("manual_review_required") != release_boundary.get("manual_review_required"):
+        raise ValueError("reviewer_routing.manual_review_required must mirror release boundary")
+    if routing.get("receipt_validation_command") != operator_contract.get("receipt_validation_command"):
+        raise ValueError("reviewer_routing.receipt_validation_command must mirror operator contract")
+    if routing.get("receipt_promotion_script") != operator_contract.get("receipt_promotion_script"):
+        raise ValueError("reviewer_routing.receipt_promotion_script must mirror operator contract")
+    if routing.get("handoff_check_command") != operator_contract.get("handoff_check_command"):
+        raise ValueError("reviewer_routing.handoff_check_command must mirror operator contract")
+    if routing.get("queue_check_command") != operator_contract.get("queue_check_command"):
+        raise ValueError("reviewer_routing.queue_check_command must mirror operator contract")
+    if routing.get("post_review_commands") != [RELEASE_EVIDENCE_REFRESH_COMMAND, RELEASE_EVIDENCE_CHECK_COMMAND]:
+        raise ValueError("reviewer_routing.post_review_commands must refresh and check release evidence")
+    if routing.get("default_ci_requires_credentials") is not False:
+        raise ValueError("reviewer_routing.default_ci_requires_credentials must remain false")
+    if routing.get("checked_in_secrets_allowed") is not False:
+        raise ValueError("reviewer_routing.checked_in_secrets_allowed must remain false")
+    if routing.get("goal_closure_allowed") is not False:
+        raise ValueError("reviewer_routing.goal_closure_allowed must remain false")
+    if pending_sources and routing.get("first_reviewer_action") != "collect_validate_review_and_promote_redacted_receipts":
+        raise ValueError("pending sources must route to collect/validate/review/promote action")
+    if not pending_sources and routing.get("first_reviewer_action") != "maintain_reviewed_receipt_evidence":
+        raise ValueError("relief-ready handoff must route to maintaining reviewed evidence")
 
 
 def validate_schema(report: dict[str, Any], schema_path: pathlib.Path) -> None:
@@ -294,6 +383,7 @@ def main() -> int:
 
     try:
         report = build_report(load_json(args.queue))
+        validate_invariants(report)
         validate_schema(report, args.schema)
     except Exception as exc:  # noqa: BLE001 - release operators need the failed invariant
         print(f"FAIL generate credential runtime review handoff: {exc}", file=sys.stderr)
