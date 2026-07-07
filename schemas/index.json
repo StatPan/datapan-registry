@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 63,
+  "count": 64,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 3509,
-      "sha256": "a3b0802599d316ef653b4285091eaa358c08ce8c730537f5551ce34dbada87af"
+      "bytes": 3553,
+      "sha256": "68bebb5268671493def9882964b6f24f7bab99b0d07146ebdaebb8daddda733f"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -541,8 +541,8 @@
       "title": "Datapan Release Goal Operating Contract v1",
       "contract": "release-goal-operating-contract",
       "version": "v1",
-      "bytes": 14631,
-      "sha256": "809d06a8d47442a8852416234a0c5ce88e17f13fec0d5a1ad677cdf236c32c56"
+      "bytes": 15378,
+      "sha256": "1b25b84a2743c8f6a1ffda51f053ad7ed289f1d3b38e8de14d8750a8ee3c0253"
     },
     {
       "path": "schemas/datapan.credential-runtime-collection-session.v1.schema.json",
@@ -570,6 +570,15 @@
       "version": "v1",
       "bytes": 7470,
       "sha256": "ce5fb44af8a18a7cb4e679f7d73665026d83a3be3918efcce6b5c2acc187a91f"
+    },
+    {
+      "path": "schemas/datapan.release-operational-pressure.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.release-operational-pressure.v1.schema.json",
+      "title": "Datapan Release Operational Pressure v1",
+      "contract": "release-operational-pressure",
+      "version": "v1",
+      "bytes": 8663,
+      "sha256": "8d647001d1cd6fabb99b176221c1f96cd2281f1322184d4c430bddc5aa073846"
     }
   ]
 }

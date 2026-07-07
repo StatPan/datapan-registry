@@ -98,7 +98,8 @@
         "release_goal_finish_preflight",
         "release_goal_continuation_queue",
         "release_consumer_decision",
-        "credential_runtime_evidence_policy"
+        "credential_runtime_evidence_policy",
+        "release_operational_pressure"
       ],
       "properties": {
         "goal_completion_audit": {
@@ -115,6 +116,9 @@
         },
         "credential_runtime_evidence_policy": {
           "const": "reports/credential-runtime-evidence-policy.json"
+        },
+        "release_operational_pressure": {
+          "const": "reports/release-operational-pressure.json"
         }
       }
     },
@@ -163,6 +167,9 @@
         "manual_review_accepted",
         "reviewed_credential_receipts",
         "manual_review_reduction_allowed",
+        "operational_pressure_decision",
+        "distribution_pressure_present",
+        "credential_pressure_present",
         "continuation_next_action",
         "primary_continuation_candidate",
         "candidate_count",
@@ -194,6 +201,21 @@
           "$ref": "#/$defs/count"
         },
         "manual_review_reduction_allowed": {
+          "type": "boolean"
+        },
+        "operational_pressure_decision": {
+          "enum": [
+            "distribution_and_credential_pressure",
+            "distribution_latency_pressure",
+            "credential_runtime_pressure",
+            "goal_boundary_pressure",
+            "operational_pressure_resolved"
+          ]
+        },
+        "distribution_pressure_present": {
+          "type": "boolean"
+        },
+        "credential_pressure_present": {
           "type": "boolean"
         },
         "continuation_next_action": {
