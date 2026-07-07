@@ -24,6 +24,7 @@ DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-collection-exe
 DEFAULT_OUTPUT = pathlib.Path("reports/credential-runtime-collection-execution-plan.json")
 SCHEMA_VERSION = "datapan.credential-runtime-collection-execution-plan.v1"
 OPERATOR_WORKFLOW_SCRIPT = pathlib.Path("scripts/run-credential-runtime-operator-workflow.py")
+GITHUB_SECRET_READINESS_SCRIPT = pathlib.Path("scripts/check-credential-runtime-github-secrets.py")
 GITHUB_DISPATCH_WORKFLOW = pathlib.Path(".github/workflows/credential-runtime-collection.yml")
 SESSION_REVIEW_PROMOTION_SCRIPT = pathlib.Path("scripts/promote-credential-runtime-session-review.py")
 SESSION_REVIEW_DECISIONS_PATH = pathlib.Path(
@@ -334,6 +335,11 @@ def build_report(
                 "gh workflow run credential-runtime-collection.yml "
                 "--repo StatPan/datapan-registry -f mode=collect"
             ),
+            "github_secret_readiness_command": (
+                f"python3 {GITHUB_SECRET_READINESS_SCRIPT.as_posix()} "
+                "--repo StatPan/datapan-registry --json"
+            ),
+            "github_secret_readiness_check_command": f"python3 {GITHUB_SECRET_READINESS_SCRIPT.as_posix()} --check",
             "github_actions_secret_readiness_schema": "datapan.credential-runtime-github-secret-readiness.v1",
             "github_actions_secret_readiness_artifact": "credential-runtime-secret-readiness",
             "check_command": f"python3 {OPERATOR_WORKFLOW_SCRIPT.as_posix()} --check",
@@ -483,6 +489,12 @@ def validate_invariants(report: dict[str, Any]) -> None:
         command = string_value(workflow.get(key), f"operator_workflow.{key}")
         if "credential-runtime-collection.yml" not in command:
             raise ValueError(f"operator_workflow.{key} must dispatch the credential runtime workflow")
+    if workflow.get("github_secret_readiness_command") != (
+        f"python3 {GITHUB_SECRET_READINESS_SCRIPT.as_posix()} --repo StatPan/datapan-registry --json"
+    ):
+        raise ValueError("operator_workflow.github_secret_readiness_command must match checked-in checker command")
+    if workflow.get("github_secret_readiness_check_command") != f"python3 {GITHUB_SECRET_READINESS_SCRIPT.as_posix()} --check":
+        raise ValueError("operator_workflow.github_secret_readiness_check_command must match checked-in checker check command")
     if workflow.get("workflow_status") != summary.get("session_plan_status"):
         raise ValueError("operator_workflow.workflow_status must match summary.session_plan_status")
     if workflow.get("next_action") != summary.get("next_action"):
