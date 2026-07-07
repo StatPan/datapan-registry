@@ -86,6 +86,7 @@ CHECK_COMMANDS: tuple[Command, ...] = (
     Command(("python3", "scripts/generate-release-consumer-decision.py", "--check")),
     Command(("python3", "scripts/generate-release-goal-finish-preflight.py", "--check")),
     Command(("python3", "scripts/generate-release-goal-continuation-queue.py", "--check")),
+    Command(("python3", "scripts/run-release-goal-continuation-ticket-packet.py", "--self-test")),
     Command(("python3", "scripts/generate-release-goal-operating-contract.py", "--check")),
     Command(("python3", "scripts/guard-release-goal-finish.py", "--self-test")),
     Command(("python3", "scripts/generate-release-assembly-receipt.py", "--check")),
