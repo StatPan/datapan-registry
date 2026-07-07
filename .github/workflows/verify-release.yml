@@ -93,6 +93,7 @@ jobs:
           python scripts/generate-credential-runtime-operator-packets.py --check
           python scripts/validate-credential-runtime-manual-review-decision.py
           python scripts/generate-credential-runtime-manual-review-acceptance.py --check
+          python scripts/generate-credential-runtime-manual-review-acceptance-packet.py --check
           python scripts/run-credential-runtime-collection.py --self-test
           python scripts/run-credential-runtime-collection.py --check
           python scripts/promote-credential-runtime-receipt.py --self-test
@@ -118,6 +119,7 @@ jobs:
           python -m py_compile scripts/generate-credential-runtime-operator-packets.py
           python -m py_compile scripts/validate-credential-runtime-manual-review-decision.py
           python -m py_compile scripts/generate-credential-runtime-manual-review-acceptance.py
+          python -m py_compile scripts/generate-credential-runtime-manual-review-acceptance-packet.py
           python -m py_compile scripts/run-credential-runtime-collection.py
           python -m py_compile scripts/promote-credential-runtime-receipt.py
           python -m py_compile scripts/validate-credential-runtime-receipts.py
