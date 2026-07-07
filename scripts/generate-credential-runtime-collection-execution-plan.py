@@ -322,6 +322,8 @@ def build_report(
             "script": OPERATOR_WORKFLOW_SCRIPT.as_posix(),
             "plan_command": f"python3 {OPERATOR_WORKFLOW_SCRIPT.as_posix()} --json",
             "run_command": f"python3 {OPERATOR_WORKFLOW_SCRIPT.as_posix()} --run --json",
+            "require_env_command": f"python3 {OPERATOR_WORKFLOW_SCRIPT.as_posix()} --require-env",
+            "require_env_json_command": f"python3 {OPERATOR_WORKFLOW_SCRIPT.as_posix()} --require-env --json",
             "check_command": f"python3 {OPERATOR_WORKFLOW_SCRIPT.as_posix()} --check",
             "self_test_command": f"python3 {OPERATOR_WORKFLOW_SCRIPT.as_posix()} --self-test",
             "workflow_status": summary["session_plan_status"],

@@ -420,6 +420,41 @@ def run_steps(report: dict[str, Any], *, json_mode: bool) -> dict[str, Any]:
     return execution
 
 
+def require_operator_env(report: dict[str, Any], *, json_mode: bool, emit: bool = True) -> int:
+    environment = as_dict(report.get("operator_environment"), "operator_environment")
+    missing_envs = environment.get("missing_credential_envs")
+    if not isinstance(missing_envs, list):
+        raise ValueError("operator_environment.missing_credential_envs must be an array")
+    result = {
+        "schema_version": "datapan.credential-runtime-operator-env-gate.v1",
+        "required_credential_envs": environment.get("required_credential_envs", []),
+        "present_credential_envs": environment.get("present_credential_envs", []),
+        "missing_credential_envs": missing_envs,
+        "required_credential_env_count": environment.get("required_credential_env_count"),
+        "present_credential_env_count": environment.get("present_credential_env_count"),
+        "missing_credential_env_count": environment.get("missing_credential_env_count"),
+        "current_operator_env_ready": environment.get("current_operator_env_ready"),
+        "secret_values_included": False,
+    }
+    if not missing_envs:
+        if emit:
+            if json_mode:
+                print(render_json(result), end="")
+            else:
+                print("ok credential runtime operator env gate")
+        return 0
+    if emit:
+        if json_mode:
+            print(render_json(result), end="")
+        else:
+            print(
+                "FAIL credential runtime operator env gate: missing "
+                + ", ".join(str(item) for item in missing_envs),
+                file=sys.stderr,
+            )
+    return 1
+
+
 def self_test(plan_path: pathlib.Path) -> None:
     plan = load_json(plan_path)
     report = build_workflow(
@@ -451,6 +486,23 @@ def self_test(plan_path: pathlib.Path) -> None:
         raise ValueError("self-test expected one present credential env name")
     if "redacted-value" in render_json(partial_report):
         raise ValueError("self-test leaked an env value into the workflow plan")
+    if require_operator_env(report, json_mode=True, emit=False) != 1:
+        raise ValueError("self-test expected empty env gate to fail")
+    complete_env = {name: "redacted-value" for name in report["operator_environment"]["required_credential_envs"]}
+    complete_report = build_workflow(
+        execution_plan=plan,
+        execution_plan_path=plan_path,
+        session_output=DEFAULT_SESSION_OUTPUT,
+        review_plan_output=DEFAULT_REVIEW_PLAN_OUTPUT,
+        queue_path=DEFAULT_QUEUE,
+        run=False,
+        environment=complete_env,
+    )
+    validate_workflow(complete_report)
+    if require_operator_env(complete_report, json_mode=True, emit=False) != 0:
+        raise ValueError("self-test expected complete env gate to pass")
+    if "redacted-value" in render_json(complete_report):
+        raise ValueError("self-test leaked a complete env value into the workflow plan")
     run_report = build_workflow(
         execution_plan=plan,
         execution_plan_path=plan_path,
@@ -491,6 +543,7 @@ def main() -> int:
     parser.add_argument("--run", action="store_true", help="execute the operator workflow")
     parser.add_argument("--json", action="store_true", help="print JSON output")
     parser.add_argument("--check", action="store_true", help="validate the workflow plan without credentials")
+    parser.add_argument("--require-env", action="store_true", help="fail unless all required credential env vars are present")
     parser.add_argument("--self-test", action="store_true", help="run credential-free workflow self-tests")
     args = parser.parse_args()
 
@@ -514,6 +567,8 @@ def main() -> int:
                 f"(status={report['summary']['session_plan_status']})"
             )
             return 0
+        if args.require_env:
+            return require_operator_env(report, json_mode=args.json)
         if args.run:
             report["execution"] = run_steps(report, json_mode=args.json)
     except Exception as exc:  # noqa: BLE001 - operators need the failed invariant
