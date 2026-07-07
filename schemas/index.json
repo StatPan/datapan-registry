@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 62,
+  "count": 63,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -307,8 +307,8 @@
       "title": "Datapan Release Consumer Compatibility v1",
       "contract": "release-consumer-compatibility",
       "version": "v1",
-      "bytes": 30254,
-      "sha256": "bea34434b70fbcb04a5eb2e0367835a09514f5b38996b700333540ca3c39533e"
+      "bytes": 32256,
+      "sha256": "57f7142114d71cda7dbb538243b8beab7f0643ef7cb9e9d9faae73a7bdbbe52c"
     },
     {
       "path": "schemas/datapan.error-action-routing-rollup.v1.schema.json",
@@ -514,8 +514,8 @@
       "title": "Datapan Release Goal Continuation Queue v1",
       "contract": "release-goal-continuation-queue",
       "version": "v1",
-      "bytes": 8543,
-      "sha256": "e8241ed8f217ed6e099d057a100186f908db9ec24cd9630dd4be236b2ceb192c"
+      "bytes": 8704,
+      "sha256": "bd475aebc5c857258d2cb945f58f5fbca606e2bbd53f81470bd24dea3dfcbdab"
     },
     {
       "path": "schemas/datapan.credential-runtime-operator-packets.v1.schema.json",
@@ -561,6 +561,15 @@
       "version": "v1",
       "bytes": 8189,
       "sha256": "b4d85b39a92c11218b7b6c54c39ecc63e9520017b56275e58f486e39f4b7a16f"
+    },
+    {
+      "path": "schemas/datapan.credential-runtime-runner-readiness.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.credential-runtime-runner-readiness.v1.schema.json",
+      "title": "Datapan Credential Runtime Runner Readiness v1",
+      "contract": "credential-runtime-runner-readiness",
+      "version": "v1",
+      "bytes": 7470,
+      "sha256": "ce5fb44af8a18a7cb4e679f7d73665026d83a3be3918efcce6b5c2acc187a91f"
     }
   ]
 }

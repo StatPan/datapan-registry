@@ -182,27 +182,32 @@ PHASES: list[dict[str, Any]] = [
         "operator_commands": [
             "python3 scripts/generate-credential-runtime-evidence-policy.py",
             "python3 scripts/generate-credential-runtime-collection-preflight.py",
+            "python3 scripts/generate-credential-runtime-runner-readiness.py",
         ],
         "check_commands": [
             "python3 scripts/generate-credential-runtime-evidence-policy.py --check",
             "python3 scripts/generate-credential-runtime-collection-preflight.py --check",
+            "python3 scripts/generate-credential-runtime-runner-readiness.py --check",
             "python3 scripts/validate-credential-runtime-receipts.py",
         ],
         "workflow_fragments": {
             ".github/workflows/verify-release.yml": [
                 "python scripts/generate-credential-runtime-evidence-policy.py --check",
                 "python scripts/generate-credential-runtime-collection-preflight.py --check",
+                "python scripts/generate-credential-runtime-runner-readiness.py --check",
                 "python scripts/validate-credential-runtime-receipts.py",
             ],
             ".github/workflows/release-draft.yml": [
                 "python scripts/generate-credential-runtime-evidence-policy.py --check",
                 "python scripts/generate-credential-runtime-collection-preflight.py --check",
+                "python scripts/generate-credential-runtime-runner-readiness.py --check",
                 "python scripts/validate-credential-runtime-receipts.py",
             ],
         },
         "evidence_artifacts": [
             "reports/credential-runtime-evidence-policy.json",
             "reports/credential-runtime-collection-preflight.json",
+            "reports/credential-runtime-runner-readiness.json",
         ],
     },
     {
