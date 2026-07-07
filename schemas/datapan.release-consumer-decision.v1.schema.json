@@ -149,6 +149,9 @@
         "manual_review_boundary_accepted",
         "manual_review_goal_completion_effect",
         "credential_handoff_status",
+        "credential_collection_preflight_status",
+        "credential_collection_preflight_reviewed_receipts_missing",
+        "credential_collection_preflight_operator_environment_required_sources",
         "credential_queue_status",
         "manual_review_reduction_allowed",
         "goal_audit_decision"
@@ -183,6 +186,19 @@
         },
         "credential_handoff_status": {
           "$ref": "#/$defs/non_empty_string"
+        },
+        "credential_collection_preflight_status": {
+          "enum": [
+            "collection_required_operator_environment_needed",
+            "collection_inputs_ready_operator_environment_needed",
+            "reviewed_receipts_complete"
+          ]
+        },
+        "credential_collection_preflight_reviewed_receipts_missing": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_collection_preflight_operator_environment_required_sources": {
+          "$ref": "#/$defs/count"
         },
         "credential_queue_status": {
           "$ref": "#/$defs/non_empty_string"

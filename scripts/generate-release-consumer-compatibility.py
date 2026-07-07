@@ -18,6 +18,7 @@ DEFAULT_READINESS = pathlib.Path("reports/latest-release-readiness.json")
 DEFAULT_SOURCE_RUNTIME_ROLLUP = pathlib.Path("reports/source-runtime-evidence-rollup.json")
 DEFAULT_SOURCE_RUNTIME_REMEDIATION = pathlib.Path("reports/source-runtime-remediation-map.json")
 DEFAULT_CREDENTIAL_RUNTIME_POLICY = pathlib.Path("reports/credential-runtime-evidence-policy.json")
+DEFAULT_CREDENTIAL_COLLECTION_PREFLIGHT = pathlib.Path("reports/credential-runtime-collection-preflight.json")
 DEFAULT_CREDENTIAL_RECEIPT_QUEUE = pathlib.Path("reports/credential-runtime-receipt-collection-queue.json")
 DEFAULT_CREDENTIAL_REVIEW_HANDOFF = pathlib.Path("reports/credential-runtime-review-handoff.json")
 DEFAULT_CREDENTIAL_MANUAL_REVIEW_DECISION = pathlib.Path("reports/credential-runtime-manual-review-decision.json")
@@ -32,6 +33,7 @@ REQUIRED_RUNTIME_RISK_CONTRACTS = [
     "source_runtime_evidence",
     "source_runtime_remediation",
     "credential_runtime_evidence_policy",
+    "credential_runtime_collection_preflight",
     "credential_runtime_receipt_collection_queue",
     "credential_runtime_review_handoff",
     "credential_runtime_manual_review_decision",
@@ -116,6 +118,12 @@ REQUIRED_MANIFEST_EVIDENCE_CONTRACTS = [
         "path": "reports/credential-runtime-evidence-policy.json",
         "kind": "credential_runtime_evidence_policy",
         "schema": "https://schemas.datapan.dev/datapan.credential-runtime-evidence-policy.v1.schema.json",
+    },
+    {
+        "contract": "credential_runtime_collection_preflight",
+        "path": "reports/credential-runtime-collection-preflight.json",
+        "kind": "credential_runtime_collection_preflight",
+        "schema": "https://schemas.datapan.dev/datapan.credential-runtime-collection-preflight.v1.schema.json",
     },
     {
         "contract": "credential_runtime_receipt_collection_queue",
@@ -484,6 +492,7 @@ def runtime_risk_evidence(
     source_runtime: dict[str, Any],
     source_runtime_remediation: dict[str, Any],
     credential_runtime_policy: dict[str, Any],
+    credential_collection_preflight: dict[str, Any],
     credential_receipt_queue: dict[str, Any],
     credential_review_handoff: dict[str, Any],
     credential_manual_review_decision: dict[str, Any],
@@ -494,6 +503,7 @@ def runtime_risk_evidence(
     source_runtime_path: pathlib.Path,
     source_runtime_remediation_path: pathlib.Path,
     credential_runtime_policy_path: pathlib.Path,
+    credential_collection_preflight_path: pathlib.Path,
     credential_receipt_queue_path: pathlib.Path,
     credential_review_handoff_path: pathlib.Path,
     credential_manual_review_decision_path: pathlib.Path,
@@ -504,6 +514,10 @@ def runtime_risk_evidence(
     runtime_summary = as_dict(source_runtime.get("summary"), "source_runtime.summary")
     remediation_summary = as_dict(source_runtime_remediation.get("summary"), "source_runtime_remediation.summary")
     credential_policy_summary = as_dict(credential_runtime_policy.get("summary"), "credential_runtime_policy.summary")
+    credential_preflight_summary = as_dict(
+        credential_collection_preflight.get("summary"),
+        "credential_collection_preflight.summary",
+    )
     credential_queue_summary = as_dict(credential_receipt_queue.get("summary"), "credential_receipt_queue.summary")
     credential_handoff_summary = as_dict(credential_review_handoff.get("summary"), "credential_review_handoff.summary")
     credential_handoff_boundary = as_dict(
@@ -567,6 +581,7 @@ def runtime_risk_evidence(
         "source_runtime_rollup": source_runtime_path.as_posix(),
         "source_runtime_remediation_map": source_runtime_remediation_path.as_posix(),
         "credential_runtime_evidence_policy": credential_runtime_policy_path.as_posix(),
+        "credential_runtime_collection_preflight": credential_collection_preflight_path.as_posix(),
         "credential_runtime_receipt_collection_queue": credential_receipt_queue_path.as_posix(),
         "credential_runtime_review_handoff": credential_review_handoff_path.as_posix(),
         "credential_runtime_manual_review_decision": credential_manual_review_decision_path.as_posix(),
@@ -610,6 +625,28 @@ def runtime_risk_evidence(
         "credential_policy_reviewed_receipts": credential_policy_summary.get("reviewed_receipts_checked_in"),
         "credential_policy_default_ci_requires_credentials": credential_policy_summary.get(
             "default_ci_requires_credentials"
+        ),
+        "credential_collection_preflight_status": credential_preflight_summary.get("preflight_status"),
+        "credential_collection_preflight_candidate_batches_present": credential_preflight_summary.get(
+            "candidate_batches_present"
+        ),
+        "credential_collection_preflight_candidate_batches_missing": credential_preflight_summary.get(
+            "candidate_batches_missing"
+        ),
+        "credential_collection_preflight_reviewed_receipts_present": credential_preflight_summary.get(
+            "reviewed_receipts_present"
+        ),
+        "credential_collection_preflight_reviewed_receipts_missing": credential_preflight_summary.get(
+            "reviewed_receipts_missing"
+        ),
+        "credential_collection_preflight_default_ci_runnable_sources": credential_preflight_summary.get(
+            "default_ci_runnable_sources"
+        ),
+        "credential_collection_preflight_operator_environment_required_sources": credential_preflight_summary.get(
+            "operator_environment_required_sources"
+        ),
+        "credential_collection_preflight_manual_review_reduction_allowed": credential_preflight_summary.get(
+            "manual_review_reduction_allowed"
         ),
         "credential_policy_effect": credential_policy_boundary.get("compatibility_effect"),
         "credential_policy_relief_gate_status": credential_relief_gate.get("status"),
@@ -706,6 +743,7 @@ def build_report(
     source_runtime: dict[str, Any],
     source_runtime_remediation: dict[str, Any],
     credential_runtime_policy: dict[str, Any],
+    credential_collection_preflight: dict[str, Any],
     credential_receipt_queue: dict[str, Any],
     credential_review_handoff: dict[str, Any],
     credential_manual_review_decision: dict[str, Any],
@@ -719,6 +757,7 @@ def build_report(
     source_runtime_path: pathlib.Path = DEFAULT_SOURCE_RUNTIME_ROLLUP,
     source_runtime_remediation_path: pathlib.Path = DEFAULT_SOURCE_RUNTIME_REMEDIATION,
     credential_runtime_policy_path: pathlib.Path = DEFAULT_CREDENTIAL_RUNTIME_POLICY,
+    credential_collection_preflight_path: pathlib.Path = DEFAULT_CREDENTIAL_COLLECTION_PREFLIGHT,
     credential_receipt_queue_path: pathlib.Path = DEFAULT_CREDENTIAL_RECEIPT_QUEUE,
     credential_review_handoff_path: pathlib.Path = DEFAULT_CREDENTIAL_REVIEW_HANDOFF,
     credential_manual_review_decision_path: pathlib.Path = DEFAULT_CREDENTIAL_MANUAL_REVIEW_DECISION,
@@ -771,6 +810,7 @@ def build_report(
             source_runtime,
             source_runtime_remediation,
             credential_runtime_policy,
+            credential_collection_preflight,
             credential_receipt_queue,
             credential_review_handoff,
             credential_manual_review_decision,
@@ -780,6 +820,7 @@ def build_report(
             source_runtime_path=source_runtime_path,
             source_runtime_remediation_path=source_runtime_remediation_path,
             credential_runtime_policy_path=credential_runtime_policy_path,
+            credential_collection_preflight_path=credential_collection_preflight_path,
             credential_receipt_queue_path=credential_receipt_queue_path,
             credential_review_handoff_path=credential_review_handoff_path,
             credential_manual_review_decision_path=credential_manual_review_decision_path,
@@ -824,6 +865,11 @@ def main() -> int:
     parser.add_argument("--source-runtime-rollup", default=DEFAULT_SOURCE_RUNTIME_ROLLUP, type=pathlib.Path)
     parser.add_argument("--source-runtime-remediation", default=DEFAULT_SOURCE_RUNTIME_REMEDIATION, type=pathlib.Path)
     parser.add_argument("--credential-runtime-policy", default=DEFAULT_CREDENTIAL_RUNTIME_POLICY, type=pathlib.Path)
+    parser.add_argument(
+        "--credential-collection-preflight",
+        default=DEFAULT_CREDENTIAL_COLLECTION_PREFLIGHT,
+        type=pathlib.Path,
+    )
     parser.add_argument("--credential-receipt-queue", default=DEFAULT_CREDENTIAL_RECEIPT_QUEUE, type=pathlib.Path)
     parser.add_argument("--credential-review-handoff", default=DEFAULT_CREDENTIAL_REVIEW_HANDOFF, type=pathlib.Path)
     parser.add_argument(
@@ -858,6 +904,7 @@ def main() -> int:
             load_json(args.source_runtime_rollup),
             load_json(args.source_runtime_remediation),
             load_json(args.credential_runtime_policy),
+            load_json(args.credential_collection_preflight),
             load_json(args.credential_receipt_queue),
             load_json(args.credential_review_handoff),
             load_json(args.credential_manual_review_decision),
@@ -870,6 +917,7 @@ def main() -> int:
             source_runtime_path=args.source_runtime_rollup,
             source_runtime_remediation_path=args.source_runtime_remediation,
             credential_runtime_policy_path=args.credential_runtime_policy,
+            credential_collection_preflight_path=args.credential_collection_preflight,
             credential_receipt_queue_path=args.credential_receipt_queue,
             credential_review_handoff_path=args.credential_review_handoff,
             credential_manual_review_decision_path=args.credential_manual_review_decision,

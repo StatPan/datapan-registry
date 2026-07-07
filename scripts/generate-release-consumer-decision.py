@@ -114,6 +114,13 @@ def build_report(
             "manual_review_boundary_accepted": acceptance_boundary.get("manual_review_release_boundary_accepted"),
             "manual_review_goal_completion_effect": acceptance_boundary.get("goal_completion_effect"),
             "credential_handoff_status": runtime_risk.get("credential_handoff_status"),
+            "credential_collection_preflight_status": runtime_risk.get("credential_collection_preflight_status"),
+            "credential_collection_preflight_reviewed_receipts_missing": runtime_risk.get(
+                "credential_collection_preflight_reviewed_receipts_missing"
+            ),
+            "credential_collection_preflight_operator_environment_required_sources": runtime_risk.get(
+                "credential_collection_preflight_operator_environment_required_sources"
+            ),
             "credential_queue_status": runtime_risk.get("credential_queue_status"),
             "manual_review_reduction_allowed": manual_review_reduction_allowed,
             "goal_audit_decision": goal_summary.get("decision"),
@@ -155,6 +162,11 @@ def validate_invariants(report: dict[str, Any]) -> None:
         raise ValueError("release decision must preserve canonical registry requirement")
     if factors.get("monolith_fallback_required") is not True:
         raise ValueError("release decision must preserve monolith fallback")
+    if summary.get("manual_review_required") is True:
+        if factors.get("credential_collection_preflight_reviewed_receipts_missing") == 0:
+            raise ValueError("manual-review-required decisions must expose missing reviewed credential receipts")
+        if factors.get("credential_collection_preflight_operator_environment_required_sources") == 0:
+            raise ValueError("manual-review-required decisions must expose credential operator environment needs")
 
 
 def validate_schema(report: dict[str, Any], schema_path: pathlib.Path) -> None:

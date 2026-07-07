@@ -89,6 +89,7 @@
       "artifact_kinds": [
         "runtime_evidence_growth",
         "credential_runtime_evidence_policy",
+        "credential_runtime_collection_preflight",
         "credential_runtime_receipt_collection_queue",
         "credential_runtime_review_handoff",
         "credential_runtime_manual_review_decision",
@@ -104,6 +105,7 @@
         "python scripts/generate-source-contract-rollup.py",
         "python scripts/generate-source-report-inventory.py",
         "python scripts/generate-credential-runtime-evidence-policy.py",
+        "python scripts/generate-credential-runtime-collection-preflight.py",
         "python scripts/generate-credential-runtime-receipt-collection-queue.py",
         "python scripts/generate-credential-runtime-review-handoff.py",
         "manual checked-in decision record plus python scripts/validate-credential-runtime-manual-review-decision.py",
@@ -117,6 +119,7 @@
         "python scripts/validate-source-reference-drift.py",
         "python scripts/validate-source-report-inventory.py",
         "python scripts/generate-credential-runtime-evidence-policy.py --check",
+        "python scripts/generate-credential-runtime-collection-preflight.py --check",
         "python scripts/generate-credential-runtime-receipt-collection-queue.py --check",
         "python scripts/generate-credential-runtime-review-handoff.py --check",
         "python scripts/validate-credential-runtime-manual-review-decision.py",
