@@ -14,6 +14,20 @@
     "credential_collection_execution_plan": "reports/credential-runtime-collection-execution-plan.json",
     "release_operational_pressure": "reports/release-operational-pressure.json"
   },
+  "goal_routing": {
+    "parent_goal_issue": 344,
+    "goal_status": "not_complete",
+    "finish_allowed": false,
+    "goal_completion_allowed": false,
+    "goal_closure_allowed": false,
+    "active_non_completion_reason": "credential_runtime_pressure",
+    "primary_candidate": "collect_reviewed_credential_runtime_receipts",
+    "primary_candidate_title": "Collect reviewed credential runtime receipts",
+    "primary_candidate_duplicate_check_command": "gh issue list --repo StatPan/datapan-registry --state open --search 'Collect reviewed credential runtime receipts in:title' --json number,title,state,url",
+    "next_safe_action": "use_existing_or_create_primary_child_ticket_after_duplicate_check",
+    "blocked_by_external_evidence": true,
+    "routing_note": "Use the primary candidate packet only after duplicate detection; keep #344 open until finish preflight and completion audit allow closure."
+  },
   "summary": {
     "finish_allowed": false,
     "goal_status": "not_complete",

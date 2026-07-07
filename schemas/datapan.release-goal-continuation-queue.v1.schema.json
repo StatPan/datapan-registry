@@ -12,6 +12,7 @@
     "continuation_ticket",
     "provider",
     "inputs",
+    "goal_routing",
     "summary",
     "finish_boundary",
     "release_evidence_refresh",
@@ -37,6 +38,9 @@
     },
     "inputs": {
       "$ref": "#/$defs/inputs"
+    },
+    "goal_routing": {
+      "$ref": "#/$defs/goal_routing"
     },
     "summary": {
       "$ref": "#/$defs/summary"
@@ -106,6 +110,65 @@
         },
         "release_operational_pressure": {
           "const": "reports/release-operational-pressure.json"
+        }
+      }
+    },
+    "goal_routing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent_goal_issue",
+        "goal_status",
+        "finish_allowed",
+        "goal_completion_allowed",
+        "goal_closure_allowed",
+        "active_non_completion_reason",
+        "primary_candidate",
+        "primary_candidate_title",
+        "primary_candidate_duplicate_check_command",
+        "next_safe_action",
+        "blocked_by_external_evidence",
+        "routing_note"
+      ],
+      "properties": {
+        "parent_goal_issue": {
+          "const": 344
+        },
+        "goal_status": {
+          "enum": ["complete", "not_complete"]
+        },
+        "finish_allowed": {
+          "type": "boolean"
+        },
+        "goal_completion_allowed": {
+          "type": "boolean"
+        },
+        "goal_closure_allowed": {
+          "type": "boolean"
+        },
+        "active_non_completion_reason": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "primary_candidate": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "primary_candidate_title": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "primary_candidate_duplicate_check_command": {
+          "type": "string"
+        },
+        "next_safe_action": {
+          "enum": [
+            "use_existing_or_create_primary_child_ticket_after_duplicate_check",
+            "finish_goal"
+          ]
+        },
+        "blocked_by_external_evidence": {
+          "type": "boolean"
+        },
+        "routing_note": {
+          "$ref": "#/$defs/non_empty_string"
         }
       }
     },
