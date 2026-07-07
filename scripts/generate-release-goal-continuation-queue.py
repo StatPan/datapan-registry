@@ -378,6 +378,18 @@ def build_report(
         pressure_actions,
     )
     finish_allowed = finish_summary.get("finish_allowed") is True
+    goal_closure_allowed = finish_allowed and audit_summary.get("decision") == "prepare_goal_finish"
+    primary_candidate = candidates[0] if candidates else None
+    active_non_completion_reason = (
+        str(pressure_summary.get("operational_pressure_decision") or "finish_preflight_blocked")
+        if not finish_allowed
+        else "goal_finish_allowed"
+    )
+    next_safe_action = (
+        "finish_goal"
+        if finish_allowed
+        else "use_existing_or_create_primary_child_ticket_after_duplicate_check"
+    )
     return {
         "schema_version": SCHEMA_VERSION,
         "generated_at": generated_at,
@@ -394,6 +406,33 @@ def build_report(
             "credential_collection_execution_plan": DEFAULT_CREDENTIAL_EXECUTION_PLAN.as_posix(),
             "release_operational_pressure": DEFAULT_OPERATIONAL_PRESSURE.as_posix(),
         },
+        "goal_routing": {
+            "parent_goal_issue": 344,
+            "goal_status": goal_audit.get("goal_status"),
+            "finish_allowed": finish_allowed,
+            "goal_completion_allowed": decision_summary.get("goal_completion_allowed"),
+            "goal_closure_allowed": goal_closure_allowed,
+            "active_non_completion_reason": active_non_completion_reason,
+            "primary_candidate": primary_candidate.get("id") if primary_candidate else "goal_finish_allowed",
+            "primary_candidate_title": primary_candidate.get("title") if primary_candidate else "Goal finish allowed",
+            "primary_candidate_duplicate_check_command": (
+                as_dict(primary_candidate.get("ticket_packet"), "primary_candidate.ticket_packet").get(
+                    "duplicate_check_command"
+                )
+                if primary_candidate
+                else ""
+            ),
+            "next_safe_action": next_safe_action,
+            "blocked_by_external_evidence": not finish_allowed
+            and (
+                credential_preflight_summary.get("reviewed_receipts_missing", 0) > 0
+                or decision_summary.get("manual_review_required") is True
+            ),
+            "routing_note": (
+                "Use the primary candidate packet only after duplicate detection; keep #344 open until "
+                "finish preflight and completion audit allow closure."
+            ),
+        },
         "summary": {
             "finish_allowed": finish_allowed,
             "goal_status": goal_audit.get("goal_status"),
@@ -409,7 +448,7 @@ def build_report(
             "candidate_count": len(candidates),
             "primary_candidate": candidates[0]["id"] if candidates else "goal_finish_allowed",
             "next_action": "goal_finish_allowed" if finish_allowed else "create_child_ticket",
-            "goal_closure_allowed": finish_allowed and audit_summary.get("decision") == "prepare_goal_finish",
+            "goal_closure_allowed": goal_closure_allowed,
         },
         "finish_boundary": {
             "finish_guard_command": "python3 scripts/guard-release-goal-finish.py",
@@ -437,8 +476,23 @@ def build_report(
 
 def validate_invariants(report: dict[str, Any]) -> None:
     summary = as_dict(report.get("summary"), "summary")
+    goal_routing = as_dict(report.get("goal_routing"), "goal_routing")
     candidates = as_list(report.get("candidates"), "candidates")
     blocking = as_list(report.get("blocking_evidence"), "blocking_evidence")
+    if goal_routing.get("parent_goal_issue") != 344:
+        raise ValueError("goal_routing.parent_goal_issue must preserve #344")
+    if goal_routing.get("goal_status") != summary.get("goal_status"):
+        raise ValueError("goal_routing.goal_status must mirror summary.goal_status")
+    if goal_routing.get("finish_allowed") != summary.get("finish_allowed"):
+        raise ValueError("goal_routing.finish_allowed must mirror summary.finish_allowed")
+    if goal_routing.get("goal_completion_allowed") != summary.get("goal_completion_allowed"):
+        raise ValueError("goal_routing.goal_completion_allowed must mirror summary.goal_completion_allowed")
+    if goal_routing.get("goal_closure_allowed") != summary.get("goal_closure_allowed"):
+        raise ValueError("goal_routing.goal_closure_allowed must mirror summary.goal_closure_allowed")
+    if goal_routing.get("primary_candidate") != summary.get("primary_candidate"):
+        raise ValueError("goal_routing.primary_candidate must mirror summary.primary_candidate")
+    if summary.get("goal_closure_allowed") is False and goal_routing.get("next_safe_action") == "finish_goal":
+        raise ValueError("goal routing must not route to finish while closure is disallowed")
     if summary.get("candidate_count") != len(candidates):
         raise ValueError("summary.candidate_count must match candidates length")
     if summary.get("finish_allowed") is True:
@@ -457,6 +511,11 @@ def validate_invariants(report: dict[str, Any]) -> None:
             raise ValueError("blocked goal continuation reports must set next_action=create_child_ticket")
         if summary.get("goal_closure_allowed") is not False:
             raise ValueError("blocked goal continuation reports must not allow goal closure")
+        if goal_routing.get("blocked_by_external_evidence") is not True:
+            raise ValueError("blocked reports must expose goal_routing.blocked_by_external_evidence=true")
+        duplicate_command = goal_routing.get("primary_candidate_duplicate_check_command")
+        if not isinstance(duplicate_command, str) or "gh issue list" not in duplicate_command:
+            raise ValueError("blocked reports must expose the primary candidate duplicate check command")
     orders = [as_dict(item, "candidate").get("order") for item in candidates]
     if orders != list(range(1, len(candidates) + 1)):
         raise ValueError("candidate.order values must be consecutive from 1")
