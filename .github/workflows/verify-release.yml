@@ -56,6 +56,9 @@ jobs:
           python scripts/validate-release-ledger-ownership.py
           python scripts/validate-release-ledger-goal-audit.py
           python scripts/generate-release-goal-finish-preflight.py --check
+          python scripts/validate-release-goal-pr-boundary.py --self-test
+          python scripts/validate-release-goal-pr-boundary.py --check
+          python scripts/validate-release-goal-pr-boundary.py --event-path "${GITHUB_EVENT_PATH}"
           python scripts/generate-release-goal-continuation-queue.py --check
           python scripts/run-release-goal-continuation-ticket-packet.py --self-test
           python scripts/generate-release-goal-operating-contract.py --check
@@ -127,6 +130,7 @@ jobs:
           python -m py_compile scripts/generate-release-operational-pressure.py
           python -m py_compile scripts/generate-release-consumer-decision.py
           python -m py_compile scripts/generate-release-goal-finish-preflight.py
+          python -m py_compile scripts/validate-release-goal-pr-boundary.py
           python -m py_compile scripts/generate-release-goal-continuation-queue.py
           python -m py_compile scripts/run-release-goal-continuation-ticket-packet.py
           python -m py_compile scripts/generate-release-goal-operating-contract.py
