@@ -11,7 +11,7 @@
     "criteria_partial": 0,
     "criteria_gap": 0,
     "decision": "leave_goal_open",
-    "reason": "The release assembly path is receipt-bound, release distribution footprint evidence records the large canonical registry and shard/fallback boundary, release consumer decision evidence records the current manual-review-required consumption decision, goal finish preflight evidence blocks goal finish from checked-in release evidence, credential collection preflight evidence identifies runnable inputs and missing reviewed receipts, and credential-safe runtime evidence is policy-bound with an operator-facing receipt collection queue, reviewer-facing handoff, manual-review decision intake, and manual-review acceptance boundary, but #344 remains open because reviewed live credentialed runtime receipts are not checked in, explicit manual-review release acceptance is not asserted, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
+    "reason": "The release assembly path is receipt-bound, release distribution footprint evidence records the large canonical registry and shard/fallback boundary, release consumer decision evidence records the current manual-review-required consumption decision, goal finish preflight evidence and the goal-finish guard block goal finish from checked-in release evidence, credential collection preflight evidence identifies runnable inputs and missing reviewed receipts, and credential-safe runtime evidence is policy-bound with an operator-facing receipt collection queue, reviewer-facing handoff, manual-review decision intake, and manual-review acceptance boundary, but #344 remains open because reviewed live credentialed runtime receipts are not checked in, explicit manual-review release acceptance is not asserted, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
   },
   "current_state_evidence": {
     "manifest": {
@@ -148,7 +148,10 @@
       "manual_review_accepted": false,
       "reviewed_credential_receipts": 0,
       "blocking_evidence_count": 5,
-      "next_action": "do_not_finish_goal"
+      "next_action": "do_not_finish_goal",
+      "guard_command": "python3 scripts/guard-release-goal-finish.py",
+      "guard_self_test_command": "python3 scripts/guard-release-goal-finish.py --self-test",
+      "guard_current_result": "blocks_goal_finish"
     },
     "credential_runtime_policy": {
       "path": "reports/credential-runtime-evidence-policy.json",
@@ -465,6 +468,10 @@
         {
           "path": "reports/release-assembly-receipt.json",
           "finding": "Records the current assembly path while preserving manual-review and not_complete goal status."
+        },
+        {
+          "path": "scripts/guard-release-goal-finish.py",
+          "finding": "Fails closed before gira goal finish when release-goal-finish-preflight records finish_allowed=false."
         }
       ],
       "next_action": "Use this audit to keep #344 open until reviewed credentialed runtime receipts exist or the manual-review release boundary is explicitly accepted."
@@ -525,6 +532,7 @@
     "python3 scripts/validate-release-consumer-compatibility.py",
     "python3 scripts/generate-release-consumer-decision.py --check",
     "python3 scripts/generate-release-goal-finish-preflight.py --check",
+    "python3 scripts/guard-release-goal-finish.py --self-test",
     "python3 scripts/package-registry-release.py --manifest manifest.json --output .datapan/ci/datapan-registry-snapshot-test.zip",
     "python3 scripts/package-registry-release.py --check .datapan/ci/datapan-registry-snapshot-test.zip"
   ],
@@ -628,6 +636,11 @@
       "issue": 399,
       "title": "Publish credential collection preflight evidence",
       "reason": "Credential collection preflight evidence now records candidate batches present, operator environment required, reviewed receipts missing, and default CI not runnable for credentialed collection, but the goal remains open because reviewed live receipts or explicit manual-review release acceptance are still absent."
+    },
+    {
+      "issue": 401,
+      "title": "Guard goal finish on release preflight evidence",
+      "reason": "Goal finish guard evidence blocks accidental gira goal finish when checked-in release goal preflight records finish_allowed=false, but the goal remains open because reviewed live receipts or explicit manual-review release acceptance are still absent."
     }
   ]
 }

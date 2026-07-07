@@ -170,17 +170,19 @@
       "owner": "release assembly maintainers",
       "generated_by": [
         "python scripts/generate-release-assembly-receipt.py",
-        "python scripts/generate-release-goal-finish-preflight.py"
+        "python scripts/generate-release-goal-finish-preflight.py",
+        "python scripts/guard-release-goal-finish.py"
       ],
       "checked_by": [
         "python scripts/generate-release-assembly-receipt.py --check",
         "python scripts/generate-release-goal-finish-preflight.py --check",
+        "python scripts/guard-release-goal-finish.py --self-test",
         "python scripts/sync-release-manifest-artifacts.py --check"
       ],
       "manifest_relationship": "Release assembly receipt and goal finish preflight are manifest-bound evidence for the operator command sequence, workflow alignment, and goal finish boundary.",
       "schema_relationship": "Validated against datapan.release-assembly-receipt.v1 and datapan.release-goal-finish-preflight.v1.",
       "package_relationship": "Included in release packages through manifest.json.",
-      "exemption_boundary": "The receipt and preflight must not claim goal completion. They record the release assembly path, current manual-review boundaries, release consumer decision, and goal finish allowance so #344 remains open until a completion audit proves closure."
+      "exemption_boundary": "The receipt, preflight, and guard must not claim goal completion. They record the release assembly path, current manual-review boundaries, release consumer decision, and goal finish allowance so #344 remains open until a completion audit proves closure; the guard is the operator precondition before running gira goal finish."
     },
     {
       "id": "verification_receipts",

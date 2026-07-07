@@ -92,6 +92,7 @@ jobs:
             scripts/generate-release-consumer-compatibility.py \
             scripts/generate-release-consumer-decision.py \
             scripts/generate-release-goal-finish-preflight.py \
+            scripts/guard-release-goal-finish.py \
             scripts/generate-credential-runtime-evidence-policy.py \
             scripts/generate-credential-runtime-collection-preflight.py \
             scripts/generate-credential-runtime-receipt-collection-queue.py \
@@ -126,6 +127,7 @@ jobs:
           python scripts/validate-release-ledger-ownership.py
           python scripts/validate-release-ledger-goal-audit.py
           python scripts/generate-release-goal-finish-preflight.py --check
+          python scripts/guard-release-goal-finish.py --self-test
           python scripts/generate-release-assembly-receipt.py --check
           python scripts/validate-coverage-backlog.py
           python scripts/validate-external-adapter-backlog.py

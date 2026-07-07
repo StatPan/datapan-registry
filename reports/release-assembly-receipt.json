@@ -145,8 +145,8 @@
       "evidence_artifacts": [
         {
           "path": "docs/release-ledger-ownership.json",
-          "bytes": 14715,
-          "sha256": "12c2bd6c1671f3e361d699a0f09a6020517bba13c840604c1738e347ffef7e4f",
+          "bytes": 14917,
+          "sha256": "93925e84b863428514ca18ed4916484a66583881e4f7cd246e7f691715b25b97",
           "manifest_bound": false
         }
       ]
@@ -455,7 +455,7 @@
         {
           "path": "reports/release-distribution-footprint.json",
           "bytes": 2118,
-          "sha256": "09eda6c4676f54e2e6b95b0952d47bbb1dc2ed0fcd50682dc07d1b189aba739e",
+          "sha256": "7c978d1b024c1dfb9871f45982ef34c533b710da57f4521b84404fbe049d6b1f",
           "manifest_bound": true,
           "kind": "release_distribution_footprint",
           "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json"
@@ -463,7 +463,7 @@
         {
           "path": "reports/release-consumer-compatibility.json",
           "bytes": 21403,
-          "sha256": "7d1d3f3ac8b2f549909865697d41e5eb190f13a95f59fb3be482555c9f413ce4",
+          "sha256": "d6b964197f90f0427ef0eaafff69f9dbf98e4c272da54ef51e858b8c0e9b65ea",
           "manifest_bound": true,
           "kind": "consumer_compatibility",
           "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json"
@@ -614,28 +614,32 @@
       ],
       "operator_commands": [
         "python3 scripts/validate-release-ledger-goal-audit.py",
-        "python3 scripts/generate-release-goal-finish-preflight.py"
+        "python3 scripts/generate-release-goal-finish-preflight.py",
+        "python3 scripts/guard-release-goal-finish.py"
       ],
       "check_commands": [
         "python3 scripts/validate-release-ledger-goal-audit.py",
-        "python3 scripts/generate-release-goal-finish-preflight.py --check"
+        "python3 scripts/generate-release-goal-finish-preflight.py --check",
+        "python3 scripts/guard-release-goal-finish.py --self-test"
       ],
       "workflow_fragments": {
         ".github/workflows/verify-release.yml": [
           "python scripts/validate-release-ledger-goal-audit.py",
-          "python scripts/generate-release-goal-finish-preflight.py --check"
+          "python scripts/generate-release-goal-finish-preflight.py --check",
+          "python scripts/guard-release-goal-finish.py --self-test"
         ],
         ".github/workflows/release-draft.yml": [
           "python scripts/validate-release-ledger-goal-audit.py",
-          "python scripts/generate-release-goal-finish-preflight.py --check"
+          "python scripts/generate-release-goal-finish-preflight.py --check",
+          "python scripts/guard-release-goal-finish.py --self-test"
         ]
       },
       "status": "required",
       "evidence_artifacts": [
         {
           "path": "docs/release-ledger-goal-completion-audit.json",
-          "bytes": 37299,
-          "sha256": "680e6b8e2572c7f3cc2d7d4861964c85c4973378aa00d7878ec9e1a09c21e6c5",
+          "bytes": 38176,
+          "sha256": "dbcaa9c42d926e95f1e2c638e418485ec4f82f1ded0248921fbe52621c1f8127",
           "manifest_bound": false
         },
         {
