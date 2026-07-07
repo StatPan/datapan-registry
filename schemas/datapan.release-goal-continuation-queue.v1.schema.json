@@ -364,6 +364,11 @@
         "body_input",
         "dry_run_command",
         "apply_command",
+        "runner_json_command",
+        "runner_body_command",
+        "runner_command_command",
+        "runner_dry_run_command",
+        "runner_apply_command",
         "start_after_create",
         "goal_closure_allowed"
       ],
@@ -389,6 +394,26 @@
         },
         "apply_command": {
           "pattern": "^gira ticket new .+ --body-file - --apply$",
+          "type": "string"
+        },
+        "runner_json_command": {
+          "pattern": "^python3 scripts/run-release-goal-continuation-ticket-packet\\.py --candidate .+ --json$",
+          "type": "string"
+        },
+        "runner_body_command": {
+          "pattern": "^python3 scripts/run-release-goal-continuation-ticket-packet\\.py --candidate .+ --body$",
+          "type": "string"
+        },
+        "runner_command_command": {
+          "pattern": "^python3 scripts/run-release-goal-continuation-ticket-packet\\.py --candidate .+ --command$",
+          "type": "string"
+        },
+        "runner_dry_run_command": {
+          "pattern": "^python3 scripts/run-release-goal-continuation-ticket-packet\\.py --candidate .+ --dry-run$",
+          "type": "string"
+        },
+        "runner_apply_command": {
+          "pattern": "^python3 scripts/run-release-goal-continuation-ticket-packet\\.py --candidate .+ --apply$",
           "type": "string"
         },
         "start_after_create": {

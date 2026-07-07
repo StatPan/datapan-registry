@@ -33,6 +33,7 @@ POST_CHILD_REFRESH_COMMANDS = [
     RELEASE_EVIDENCE_CHECK_COMMAND,
 ]
 GIRA_TICKET_BODY_STDIN = "--body-file -"
+TICKET_PACKET_RUNNER = "python3 scripts/run-release-goal-continuation-ticket-packet.py"
 
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -106,25 +107,37 @@ def render_ticket_body(candidate: dict[str, Any]) -> str:
         f"{acceptance}\n\n"
         "## Post Completion Commands\n"
         f"{post_completion}\n\n"
+        "## Doctor Impact\n"
+        "No user-facing doctor behavior change unless this child explicitly updates release verification evidence. "
+        "Any workflow, status, readiness, or compatibility changes must remain reflected in checked-in release evidence.\n\n"
         "## Goal Boundary\n"
         "goal_closure_allowed=false. Leave #344 open unless repo-owned finish preflight and completion audit allow closure.\n"
+        "\n## Notes\n"
+        "This ticket is generated from reports/release-goal-continuation-queue.json. It is progress evidence only.\n"
     )
 
 
 def attach_ticket_packet(candidate: dict[str, Any]) -> dict[str, Any]:
     title = str(candidate["title"])
+    candidate_id = str(candidate["id"])
     body = render_ticket_body(candidate)
     command_prefix = f"gira ticket new {shell_quote(title)} {GIRA_TICKET_BODY_STDIN}"
+    runner_prefix = f"{TICKET_PACKET_RUNNER} --candidate {candidate_id}"
     return {
         **candidate,
         "ticket_packet": {
             "parent_goal_issue": 344,
             "title": title,
-            "goal": f"Advance #344 by executing continuation candidate {candidate['id']}.",
+            "goal": f"Advance #344 by executing continuation candidate {candidate_id}.",
             "body": body,
             "body_input": "stdin",
             "dry_run_command": f"{command_prefix} --dry-run",
             "apply_command": f"{command_prefix} --apply",
+            "runner_json_command": f"{runner_prefix} --json",
+            "runner_body_command": f"{runner_prefix} --body",
+            "runner_command_command": f"{runner_prefix} --command",
+            "runner_dry_run_command": f"{runner_prefix} --dry-run",
+            "runner_apply_command": f"{runner_prefix} --apply",
             "start_after_create": True,
             "goal_closure_allowed": False,
         },
@@ -482,6 +495,16 @@ def validate_invariants(report: dict[str, Any]) -> None:
         )
         if ticket_packet.get("apply_command") != expected_apply:
             raise ValueError("candidate ticket packet apply command must match the candidate title")
+        expected_runner_prefix = f"{TICKET_PACKET_RUNNER} --candidate {candidate_obj['id']}"
+        for key, suffix in {
+            "runner_json_command": "--json",
+            "runner_body_command": "--body",
+            "runner_command_command": "--command",
+            "runner_dry_run_command": "--dry-run",
+            "runner_apply_command": "--apply",
+        }.items():
+            if ticket_packet.get(key) != f"{expected_runner_prefix} {suffix}":
+                raise ValueError(f"candidate ticket packet {key} must target the candidate runner")
 
 
 def validate_schema(report: dict[str, Any], schema_path: pathlib.Path) -> None:
