@@ -406,16 +406,23 @@ PHASES: list[dict[str, Any]] = [
         "id": "release_assembly_receipt",
         "coverage": ["evidence"],
         "operator_commands": [
+            "python3 scripts/refresh-release-ledger-evidence.py --write",
             "python3 scripts/generate-release-assembly-receipt.py",
         ],
         "check_commands": [
+            "python3 scripts/refresh-release-ledger-evidence.py --self-test",
+            "python3 scripts/refresh-release-ledger-evidence.py --check",
             "python3 scripts/generate-release-assembly-receipt.py --check",
         ],
         "workflow_fragments": {
             ".github/workflows/verify-release.yml": [
+                "python scripts/refresh-release-ledger-evidence.py --self-test",
+                "python scripts/refresh-release-ledger-evidence.py --check",
                 "python scripts/generate-release-assembly-receipt.py --check",
             ],
             ".github/workflows/release-draft.yml": [
+                "python scripts/refresh-release-ledger-evidence.py --self-test",
+                "python scripts/refresh-release-ledger-evidence.py --check",
                 "python scripts/generate-release-assembly-receipt.py --check",
             ],
         },

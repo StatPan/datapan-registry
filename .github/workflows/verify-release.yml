@@ -59,6 +59,8 @@ jobs:
           python scripts/generate-release-goal-continuation-queue.py --check
           python scripts/generate-release-goal-operating-contract.py --check
           python scripts/guard-release-goal-finish.py --self-test
+          python scripts/refresh-release-ledger-evidence.py --self-test
+          python scripts/refresh-release-ledger-evidence.py --check
           python scripts/generate-release-assembly-receipt.py --check
           python scripts/validate-coverage-backlog.py
           python scripts/validate-external-adapter-backlog.py
@@ -116,6 +118,7 @@ jobs:
           python -m py_compile scripts/generate-release-goal-continuation-queue.py
           python -m py_compile scripts/generate-release-goal-operating-contract.py
           python -m py_compile scripts/guard-release-goal-finish.py
+          python -m py_compile scripts/refresh-release-ledger-evidence.py
           python -m py_compile scripts/generate-release-assembly-receipt.py
           python -m py_compile scripts/generate-credential-runtime-evidence-policy.py
           python -m py_compile scripts/generate-credential-runtime-collection-preflight.py

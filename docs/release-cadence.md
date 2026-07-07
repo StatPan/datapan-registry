@@ -31,12 +31,22 @@ When there is no previous release yet, omit `--previous-registry`.
 Every release must pass:
 
 ```bash
+python scripts/refresh-release-ledger-evidence.py --write
+python scripts/refresh-release-ledger-evidence.py --check
 python scripts/generate-release-assembly-receipt.py
 python scripts/generate-release-assembly-receipt.py --check
 datapan catalog release verify --manifest manifest.json --output reports/latest-release-verification.json --json
 datapan catalog release readiness --manifest manifest.json --output reports/latest-release-readiness.json --json
 python scripts/validate-release-receipt-boundary.py
 ```
+
+`scripts/refresh-release-ledger-evidence.py --write` is the default local
+refresh command for checked-in release-ledger evidence. It reruns the existing
+schema, manifest, source, credential-boundary, impact, compatibility, goal, and
+assembly generators until their check commands converge or a bounded iteration
+limit fails with the stale command that still needs attention. The command is
+secret-free: it does not run credentialed collection and does not check in local
+runtime session or review-plan handoff files.
 
 `reports/release-assembly-receipt.json` is the operator-facing assembly receipt
 for the current checkout. It binds the release assembly phases for canonical
