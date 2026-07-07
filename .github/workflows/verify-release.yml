@@ -99,6 +99,7 @@ jobs:
           python scripts/run-credential-runtime-collection.py --check
           python scripts/validate-credential-runtime-collection-session.py --self-test
           python scripts/generate-credential-runtime-session-review-plan.py --self-test
+          python scripts/validate-credential-runtime-session-review-plan.py --self-test
           python scripts/promote-credential-runtime-receipt.py --self-test
           python scripts/generate-release-distribution-footprint.py --check
           python scripts/generate-release-consumer-compatibility.py --check
@@ -127,6 +128,7 @@ jobs:
           python -m py_compile scripts/run-credential-runtime-collection.py
           python -m py_compile scripts/validate-credential-runtime-collection-session.py
           python -m py_compile scripts/generate-credential-runtime-session-review-plan.py
+          python -m py_compile scripts/validate-credential-runtime-session-review-plan.py
           python -m py_compile scripts/promote-credential-runtime-receipt.py
           python -m py_compile scripts/validate-credential-runtime-receipts.py
           python -m py_compile scripts/generate-source-runtime-remediation-map.py

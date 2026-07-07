@@ -33,6 +33,10 @@ SESSION_REVIEW_PLAN_COMMAND = (
     "python3 scripts/generate-credential-runtime-session-review-plan.py "
     f"{DEFAULT_SESSION_OUTPUT} --output {DEFAULT_SESSION_REVIEW_PLAN_OUTPUT}"
 )
+SESSION_REVIEW_PLAN_VALIDATION_COMMAND = (
+    "python3 scripts/validate-credential-runtime-session-review-plan.py "
+    f"{DEFAULT_SESSION_REVIEW_PLAN_OUTPUT}"
+)
 
 
 POST_PROMOTION_CHECKS = [
@@ -81,6 +85,7 @@ BATCH_COLLECTION_COMMANDS = {
     ),
     "session_output_validation": SESSION_VALIDATION_COMMAND,
     "session_review_plan_generation": SESSION_REVIEW_PLAN_COMMAND,
+    "session_review_plan_validation": SESSION_REVIEW_PLAN_VALIDATION_COMMAND,
     "batch_runner_self_test": "python3 scripts/run-credential-runtime-collection.py --self-test",
 }
 
@@ -267,6 +272,7 @@ def build_report(queue: dict[str, Any], handoff: dict[str, Any], decision: dict[
             "session_review_plan_schema_path": "schemas/datapan.credential-runtime-session-review-plan.v1.schema.json",
             "session_review_plan_output_path": DEFAULT_SESSION_REVIEW_PLAN_OUTPUT,
             "session_review_plan_command": SESSION_REVIEW_PLAN_COMMAND,
+            "session_review_plan_validation_command": SESSION_REVIEW_PLAN_VALIDATION_COMMAND,
             "reviewer_handoff_command": SESSION_VALIDATION_COMMAND,
             "checked_in_session_output_allowed": False,
             "checked_in_review_plan_allowed": False,
