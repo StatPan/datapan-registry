@@ -91,6 +91,7 @@
         "credential_runtime_evidence_policy",
         "credential_runtime_receipt_collection_queue",
         "credential_runtime_review_handoff",
+        "credential_runtime_manual_review_decision",
         "credential_runtime_manual_review_acceptance",
         "source_contract_rollup",
         "source_reference_drift",
@@ -105,6 +106,7 @@
         "python scripts/generate-credential-runtime-evidence-policy.py",
         "python scripts/generate-credential-runtime-receipt-collection-queue.py",
         "python scripts/generate-credential-runtime-review-handoff.py",
+        "manual checked-in decision record plus python scripts/validate-credential-runtime-manual-review-decision.py",
         "python scripts/generate-credential-runtime-manual-review-acceptance.py",
         "python scripts/generate-source-runtime-remediation-map.py",
         "python scripts/generate-source-runtime-readiness.py"
@@ -117,6 +119,7 @@
         "python scripts/generate-credential-runtime-evidence-policy.py --check",
         "python scripts/generate-credential-runtime-receipt-collection-queue.py --check",
         "python scripts/generate-credential-runtime-review-handoff.py --check",
+        "python scripts/validate-credential-runtime-manual-review-decision.py",
         "python scripts/generate-credential-runtime-manual-review-acceptance.py --check",
         "python scripts/validate-credential-runtime-receipts.py",
         "python scripts/generate-source-runtime-remediation-map.py --check",

@@ -1,7 +1,7 @@
 # Credential Runtime Evidence Policy
 
 This document defines the secret-safe runtime evidence boundary for #344, #364,
-#366, #369, #371, #373, #375, and #379.
+#366, #369, #371, #373, #375, #379, #389, and #391.
 
 Default registry CI is secret-free. It validates source profiles, runtime plans, remediation evidence, `reports/credential-runtime-evidence-policy.json`, `reports/credential-runtime-receipt-collection-queue.json`, and the redacted receipt contract without requiring API keys. CI must not fail because a data.go.kr, ECOS, KOSIS, Open Assembly, or Seoul Open Data credential is absent.
 
@@ -17,6 +17,8 @@ Source runtime remediation findings link back to reviewed receipt paths. `report
 
 Credential runtime collection has a local runner. `scripts/run-credential-runtime-collection.py` reads the checked-in queue, verifies candidate paths and credential environment presence without printing secret values, and can run a selected bounded source check only when the operator explicitly passes `--run`.
 
+Manual-review release acceptance has a checked-in decision intake. `reports/credential-runtime-manual-review-decision.json` currently records `accepted=false` / `not_asserted`; `scripts/validate-credential-runtime-manual-review-decision.py` rejects accepted decisions unless they include reviewer identity, the current credential review handoff digest, the current consumer compatibility digest, a reason, expiry or revalidation triggers, and no secret-like values. `reports/credential-runtime-manual-review-acceptance.json` is generated from that decision record and remains `not_accepted` until the decision intake is explicitly updated and validated.
+
 Checked-in registry releases remain canonical-registry compatible while live credentialed receipts are absent. The remaining `credential_required`, `metadata_only_verification`, and `non_data_runtime_evidence_not_collected` findings stay manual-review boundaries until reviewed receipts are linked from source runtime remediation evidence.
 
 The receipt contract existing is not enough to reduce compatibility risk. Release
@@ -30,6 +32,9 @@ Local secret-free check:
 python3 scripts/generate-credential-runtime-evidence-policy.py --check
 python3 scripts/validate-credential-runtime-receipts.py
 python3 scripts/generate-credential-runtime-receipt-collection-queue.py --check
+python3 scripts/generate-credential-runtime-review-handoff.py --check
+python3 scripts/validate-credential-runtime-manual-review-decision.py
+python3 scripts/generate-credential-runtime-manual-review-acceptance.py --check
 python3 -m py_compile scripts/promote-credential-runtime-receipt.py
 python3 scripts/run-credential-runtime-collection.py --self-test
 python3 scripts/run-credential-runtime-collection.py --check
