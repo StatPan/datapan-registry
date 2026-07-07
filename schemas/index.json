@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 66,
+  "count": 67,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -595,8 +595,17 @@
       "title": "Datapan Credential Runtime Collection Execution Plan v1",
       "contract": "credential-runtime-collection-execution-plan",
       "version": "v1",
-      "bytes": 15250,
-      "sha256": "3499a510a69e9224c11d510382cae7b1518a8c4e114b15c98b4716fa318e9861"
+      "bytes": 17765,
+      "sha256": "35f8219b976ee6f55c59b77133627788368fa3eda69b2c00f2d1978620ed3785"
+    },
+    {
+      "path": "schemas/datapan.credential-runtime-session-review-decisions.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.credential-runtime-session-review-decisions.v1.schema.json",
+      "title": "Datapan Credential Runtime Session Review Decisions v1",
+      "contract": "credential-runtime-session-review-decisions",
+      "version": "v1",
+      "bytes": 5090,
+      "sha256": "75738736bae3f5b572de0f6d1620333f8d27829aa645e297d3cd525ae37aa3d2"
     }
   ]
 }
