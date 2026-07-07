@@ -204,6 +204,7 @@ PHASES: list[dict[str, Any]] = [
         "operator_commands": [
             "python3 scripts/generate-credential-runtime-receipt-collection-queue.py",
             "python3 scripts/generate-credential-runtime-review-handoff.py",
+            "python3 scripts/generate-credential-runtime-manual-review-acceptance.py",
             "python3 scripts/run-credential-runtime-collection.py --source <source_id> --json",
             "python3 scripts/run-credential-runtime-collection.py --source <source_id> --run",
             "python3 scripts/promote-credential-runtime-receipt.py <staged-receipt> --state <reviewed_accepted|reviewed_rejected> --decision <decision> --reviewer <reviewer> --reason <reason>",
@@ -211,6 +212,7 @@ PHASES: list[dict[str, Any]] = [
         "check_commands": [
             "python3 scripts/generate-credential-runtime-receipt-collection-queue.py --check",
             "python3 scripts/generate-credential-runtime-review-handoff.py --check",
+            "python3 scripts/generate-credential-runtime-manual-review-acceptance.py --check",
             "python3 scripts/run-credential-runtime-collection.py --self-test",
             "python3 scripts/run-credential-runtime-collection.py --check",
             "python3 -m py_compile scripts/promote-credential-runtime-receipt.py",
@@ -220,6 +222,7 @@ PHASES: list[dict[str, Any]] = [
             ".github/workflows/verify-release.yml": [
                 "python scripts/generate-credential-runtime-receipt-collection-queue.py --check",
                 "python scripts/generate-credential-runtime-review-handoff.py --check",
+                "python scripts/generate-credential-runtime-manual-review-acceptance.py --check",
                 "python scripts/run-credential-runtime-collection.py --self-test",
                 "python scripts/run-credential-runtime-collection.py --check",
                 "python -m py_compile scripts/promote-credential-runtime-receipt.py",
@@ -228,6 +231,7 @@ PHASES: list[dict[str, Any]] = [
             ".github/workflows/release-draft.yml": [
                 "python scripts/generate-credential-runtime-receipt-collection-queue.py --check",
                 "python scripts/generate-credential-runtime-review-handoff.py --check",
+                "python scripts/generate-credential-runtime-manual-review-acceptance.py --check",
                 "python scripts/run-credential-runtime-collection.py --self-test",
                 "python scripts/run-credential-runtime-collection.py --check",
                 "scripts/promote-credential-runtime-receipt.py",
@@ -237,6 +241,7 @@ PHASES: list[dict[str, Any]] = [
         "evidence_artifacts": [
             "reports/credential-runtime-receipt-collection-queue.json",
             "reports/credential-runtime-review-handoff.json",
+            "reports/credential-runtime-manual-review-acceptance.json",
         ],
     },
     {
