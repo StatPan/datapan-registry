@@ -21,6 +21,7 @@ except ImportError:  # pragma: no cover - operator environments may validate els
 
 DEFAULT_QUEUE = pathlib.Path("reports/credential-runtime-receipt-collection-queue.json")
 DEFAULT_SESSION_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-collection-session.v1.schema.json")
+DEFAULT_SESSION_OUTPUT = pathlib.Path(".datapan/runtime-evidence/credential-runtime-collection-session.json")
 
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -33,6 +34,11 @@ def load_json(path: pathlib.Path) -> dict[str, Any]:
 
 def render_json(value: object) -> str:
     return json.dumps(value, ensure_ascii=False, indent=2) + "\n"
+
+
+def write_json(path: pathlib.Path, value: object) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(render_json(value), encoding="utf-8")
 
 
 def as_dict(value: object, label: str) -> dict[str, Any]:
@@ -358,6 +364,10 @@ def run_self_test(queue: dict[str, Any]) -> None:
             rendered = render_json(session)
             if "self-test-secret" in rendered or "<secret>" in rendered:
                 raise ValueError("self-test failed: batch session leaked credential material")
+            output_path = root / "session-output.json"
+            write_json(output_path, session)
+            reloaded = load_json(output_path)
+            validate_session_schema(reloaded, DEFAULT_SESSION_SCHEMA, required=True)
         finally:
             os.environ["PATH"] = old_path
             if old_ready is None:
@@ -381,6 +391,11 @@ def main() -> int:
     parser.add_argument("--force", action="store_true", help="allow run mode even when reviewed receipts already exist")
     parser.add_argument("--skip-not-ready", action="store_true", help="skip selected sources that are not ready to run")
     parser.add_argument("--continue-on-error", action="store_true", help="preserve per-source failures and continue a batch run")
+    parser.add_argument(
+        "--session-output",
+        type=pathlib.Path,
+        help=f"write batch session JSON to a local handoff path such as {DEFAULT_SESSION_OUTPUT.as_posix()}",
+    )
     parser.add_argument("--json", action="store_true", help="print JSON output")
     parser.add_argument("--check", action="store_true", help="validate queue-derived runner plan without requiring env vars")
     parser.add_argument("--self-test", action="store_true", help="run secret-free runner self-tests")
@@ -407,9 +422,13 @@ def main() -> int:
                 skip_not_ready=args.skip_not_ready,
                 continue_on_error=args.continue_on_error,
             )
+            if args.session_output:
+                write_json(args.session_output, session)
             if args.json:
                 print(render_json(session), end="")
             else:
+                if args.session_output:
+                    print(f"wrote batch session: {args.session_output.as_posix()}")
                 for result in as_list(session.get("results"), "session.results"):
                     entry = as_dict(result, "session.results[]")
                     if entry["status"] == "succeeded":

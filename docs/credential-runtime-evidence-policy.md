@@ -1,7 +1,7 @@
 # Credential Runtime Evidence Policy
 
 This document defines the secret-safe runtime evidence boundary for #344, #364,
-#366, #369, #371, #373, #375, #379, #389, #391, #411, and #413.
+#366, #369, #371, #373, #375, #379, #389, #391, #411, #413, and #417.
 
 Default registry CI is secret-free. It validates source profiles, runtime plans, remediation evidence, `reports/credential-runtime-evidence-policy.json`, `reports/credential-runtime-receipt-collection-queue.json`, and the redacted receipt contract without requiring API keys. CI must not fail because a data.go.kr, ECOS, KOSIS, Open Assembly, or Seoul Open Data credential is absent.
 
@@ -15,7 +15,7 @@ Reviewed receipt promotion is deterministic. Operators use `scripts/promote-cred
 
 Source runtime remediation findings link back to reviewed receipt paths. `reports/source-runtime-remediation-map.json` records the expected reviewed receipt artifact and current receipt state for each credential-related manual-review boundary so operators can see which finding is waiting for which reviewed receipt.
 
-Credential runtime collection has a local runner. `scripts/run-credential-runtime-collection.py` reads the checked-in queue, verifies candidate paths and credential environment presence without printing secret values, and can run selected bounded source checks only when the operator explicitly passes `--run`. Batch runs emit `datapan.credential-runtime-collection-session.v1` JSON, validated against `schemas/datapan.credential-runtime-collection-session.v1.schema.json`, so skipped, failed, and succeeded source results can be reviewed without exposing credential values.
+Credential runtime collection has a local runner. `scripts/run-credential-runtime-collection.py` reads the checked-in queue, verifies candidate paths and credential environment presence without printing secret values, and can run selected bounded source checks only when the operator explicitly passes `--run`. Batch runs emit `datapan.credential-runtime-collection-session.v1` JSON, validated against `schemas/datapan.credential-runtime-collection-session.v1.schema.json`, so skipped, failed, and succeeded source results can be reviewed without exposing credential values. Operators can also pass `--session-output .datapan/runtime-evidence/credential-runtime-collection-session.json` to save the same secret-free batch session as a local reviewer handoff artifact. Reviewers validate that attachment with `scripts/validate-credential-runtime-collection-session.py` before inspecting staged receipts or promotion decisions.
 
 Manual-review release acceptance has a checked-in decision intake. `reports/credential-runtime-manual-review-decision.json` currently records `accepted=false` / `not_asserted`; `scripts/validate-credential-runtime-manual-review-decision.py` rejects accepted decisions unless they include reviewer identity, the current credential review handoff digest, the current consumer compatibility digest, a reason, expiry or revalidation triggers, and no secret-like values. `reports/credential-runtime-manual-review-acceptance.json` is generated from that decision record and remains `not_accepted` until the decision intake is explicitly updated and validated.
 
@@ -38,6 +38,7 @@ python3 scripts/generate-credential-runtime-manual-review-acceptance.py --check
 python3 -m py_compile scripts/promote-credential-runtime-receipt.py
 python3 scripts/run-credential-runtime-collection.py --self-test
 python3 scripts/run-credential-runtime-collection.py --check
+python3 scripts/validate-credential-runtime-collection-session.py --self-test
 python3 scripts/run-credential-runtime-collection.py --all --run --skip-not-ready --continue-on-error --json
 ```
 
@@ -66,8 +67,10 @@ Credential-gated batch runner pattern:
 python3 scripts/run-credential-runtime-collection.py --all --json
 python3 scripts/run-credential-runtime-collection.py --all --require-env
 python3 scripts/run-credential-runtime-collection.py --all --run --skip-not-ready --continue-on-error --json
+python3 scripts/run-credential-runtime-collection.py --all --run --skip-not-ready --continue-on-error --session-output .datapan/runtime-evidence/credential-runtime-collection-session.json --json
+python3 scripts/validate-credential-runtime-collection-session.py .datapan/runtime-evidence/credential-runtime-collection-session.json --require-complete-source-set
 ```
 
-The batch session output is a review handoff artifact, not a reviewed receipt. Do not commit it as release evidence unless a later ticket explicitly adds a checked-in session report path and redaction review boundary.
+The batch session output is a local review handoff artifact, not a reviewed receipt. Do not commit `.datapan/runtime-evidence/credential-runtime-collection-session.json` as release evidence unless a later ticket explicitly adds a checked-in session report path and redaction review boundary.
 
 Do not commit `.datapan/runtime-evidence/` receipts merely because the schema accepts them. A reviewed receipt must still be linked into source runtime remediation evidence before it can reduce a manual-review boundary.
