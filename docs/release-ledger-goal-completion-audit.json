@@ -11,18 +11,18 @@
     "criteria_partial": 0,
     "criteria_gap": 0,
     "decision": "leave_goal_open",
-    "reason": "The release assembly path is receipt-bound, release distribution footprint evidence records the large canonical registry and shard/fallback boundary, release consumer decision evidence records the current manual-review-required consumption decision, goal finish preflight evidence and the goal-finish guard block goal finish from checked-in release evidence, goal continuation queue evidence maps finish blockers to next safe child candidates, credential collection preflight evidence identifies runnable inputs and missing reviewed receipts, and credential-safe runtime evidence is policy-bound with an operator-facing receipt collection queue, reviewer-facing handoff, manual-review decision intake, and manual-review acceptance boundary, but #344 remains open because reviewed live credentialed runtime receipts are not checked in, explicit manual-review release acceptance is not asserted, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
+    "reason": "The release assembly path is receipt-bound, release distribution footprint evidence records the large canonical registry and shard/fallback boundary, release consumer decision evidence records the current manual-review-required consumption decision, goal finish preflight evidence and the goal-finish guard block goal finish from checked-in release evidence, goal continuation queue evidence maps finish blockers to next safe child candidates, credential collection preflight evidence identifies runnable inputs and missing reviewed receipts, and credential-safe runtime evidence is policy-bound with an operator-facing receipt collection queue, source-by-source operator packets, reviewer-facing handoff, manual-review decision intake, and manual-review acceptance boundary, but #344 remains open because reviewed live credentialed runtime receipts are not checked in, explicit manual-review release acceptance is not asserted, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
   },
   "current_state_evidence": {
     "manifest": {
       "path": "manifest.json",
-      "artifact_count": 95,
-      "artifact_kinds": 39,
-      "schema_artifacts": 57
+      "artifact_count": 97,
+      "artifact_kinds": 40,
+      "schema_artifacts": 58
     },
     "schema_index": {
       "path": "schemas/index.json",
-      "schema_count": 57
+      "schema_count": 58
     },
     "release_readiness": {
       "path": "reports/latest-release-readiness.json",
@@ -229,6 +229,20 @@
       "handoff_status": "review_required",
       "default_ci_requires_credentials": false,
       "checked_in_secrets_allowed": false
+    },
+    "credential_runtime_operator_packets": {
+      "path": "reports/credential-runtime-operator-packets.json",
+      "operator_packet_ticket": 405,
+      "operator_packets": 5,
+      "packets_ready_for_operator_credentials": 5,
+      "packets_waiting_for_review": 5,
+      "reviewed_receipts_checked_in": 0,
+      "reviewed_receipts_missing": 5,
+      "manual_review_required": true,
+      "manual_review_accepted": false,
+      "default_ci_requires_credentials": false,
+      "checked_in_secrets_allowed": false,
+      "packet_status": "operator_collection_required"
     },
     "credential_runtime_manual_review_decision": {
       "path": "reports/credential-runtime-manual-review-decision.json",
@@ -537,6 +551,7 @@
     "python3 scripts/validate-credential-runtime-receipts.py",
     "python3 scripts/generate-credential-runtime-receipt-collection-queue.py --check",
     "python3 scripts/generate-credential-runtime-review-handoff.py --check",
+    "python3 scripts/generate-credential-runtime-operator-packets.py --check",
     "python3 scripts/validate-credential-runtime-manual-review-decision.py",
     "python3 scripts/generate-credential-runtime-manual-review-acceptance.py --check",
     "python3 scripts/run-credential-runtime-collection.py --self-test",
@@ -662,6 +677,11 @@
       "issue": 403,
       "title": "Publish goal continuation queue evidence",
       "reason": "Goal continuation queue evidence maps finish_allowed=false and manual_review_required evidence to next safe child candidates, but the goal remains open because reviewed live receipts or explicit manual-review release acceptance are still absent."
+    },
+    {
+      "issue": 405,
+      "title": "Publish credential receipt operator packets",
+      "reason": "Credential receipt operator packets now provide source-by-source secret-free preflight, credential env names, bounded run commands, staged validation, reviewed promotion, and post-promotion downstream checks, but the goal remains open because reviewed live receipts or explicit manual-review release acceptance are still absent."
     }
   ]
 }

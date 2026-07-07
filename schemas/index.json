@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 57,
+  "count": 58,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 3294,
-      "sha256": "88b1dd0be545d8693ff2e12d655087cb942ed41c00b3833441a48e29cebb3c51"
+      "bytes": 3345,
+      "sha256": "b8ad4645e9af5bcae82f42ca32d95f09933cf7434969fc26a6a52a820975053b"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -516,6 +516,15 @@
       "version": "v1",
       "bytes": 6892,
       "sha256": "dcf39f2270cdba92e555e3c91a8c62e31961508dea437926d82e72bda3513604"
+    },
+    {
+      "path": "schemas/datapan.credential-runtime-operator-packets.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.credential-runtime-operator-packets.v1.schema.json",
+      "title": "Datapan Credential Runtime Operator Packets v1",
+      "contract": "credential-runtime-operator-packets",
+      "version": "v1",
+      "bytes": 8034,
+      "sha256": "ec9c643157b3083b910abe3942a44a2f9a5bfc7c777165680968b657d52447a9"
     }
   ]
 }
