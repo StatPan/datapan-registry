@@ -25,7 +25,7 @@
     "manifest": {
       "path": "manifest.json",
       "generated_at": "2026-07-04T06:39:24Z",
-      "artifact_count": 93,
+      "artifact_count": 95,
       "source_registry": "data/data-go-kr.registry.json"
     },
     "readiness": {
@@ -107,8 +107,8 @@
       "evidence_artifacts": [
         {
           "path": "schemas/index.json",
-          "bytes": 22412,
-          "sha256": "2e6ee2e879ae8efb792bb4e48adc87f5dc30ddf486986d093d5c256885d9f735",
+          "bytes": 22844,
+          "sha256": "fb181cd706f47a9604cf34e8c3722f24cc2ac7f8d3003f20aa8e10225f8d7396",
           "manifest_bound": true,
           "kind": "schema_index",
           "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json"
@@ -145,8 +145,8 @@
       "evidence_artifacts": [
         {
           "path": "docs/release-ledger-ownership.json",
-          "bytes": 14917,
-          "sha256": "93925e84b863428514ca18ed4916484a66583881e4f7cd246e7f691715b25b97",
+          "bytes": 15273,
+          "sha256": "97b581fff55bfbb85e329a22bd825fd32d8ee5cee661e9d5220e11b12b04d1c1",
           "manifest_bound": false
         }
       ]
@@ -193,7 +193,7 @@
         {
           "path": "reports/source-report-inventory.json",
           "bytes": 59095,
-          "sha256": "5e84750517f0c62d178120266a9a72fdd60b9d2250ba521b963cbaf85dd4b8d3",
+          "sha256": "99c303362bdca2d0d790adc7c01fcdf36970bb7e679ddce4b9ca873db9180937",
           "manifest_bound": true,
           "kind": "source_report_inventory",
           "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json"
@@ -249,7 +249,7 @@
         {
           "path": "reports/registry-impact-plan.json",
           "bytes": 11519,
-          "sha256": "f2ad65b776caa9382f0ab9f53d758da87b80103769596cbe2f4bad0dad121afc",
+          "sha256": "3effd2bb7a400755078d3a6e6cec89a636ac1385a634a70a9860aad9c65fe652",
           "manifest_bound": true,
           "kind": "registry_impact_plan",
           "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json"
@@ -282,7 +282,7 @@
         {
           "path": "reports/source-runtime-remediation-map.json",
           "bytes": 14728,
-          "sha256": "cee399688d5b3fbdd6c714b6e801e808b369b294cc896a2f7d052ce6f50a3cd2",
+          "sha256": "3a9e49fd41dde202f0352d93651a9a987ab0c3073041c6fadc80ae6eaa5f727d",
           "manifest_bound": true,
           "kind": "source_runtime_remediation_map",
           "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json"
@@ -455,7 +455,7 @@
         {
           "path": "reports/release-distribution-footprint.json",
           "bytes": 2118,
-          "sha256": "7c978d1b024c1dfb9871f45982ef34c533b710da57f4521b84404fbe049d6b1f",
+          "sha256": "0c0766462a6aea26fdd17f8606522f2cb23286fe2d35f3741a8ff298329bf25e",
           "manifest_bound": true,
           "kind": "release_distribution_footprint",
           "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json"
@@ -463,7 +463,7 @@
         {
           "path": "reports/release-consumer-compatibility.json",
           "bytes": 21403,
-          "sha256": "d6b964197f90f0427ef0eaafff69f9dbf98e4c272da54ef51e858b8c0e9b65ea",
+          "sha256": "22f1a1bb9490143deb3db1171d2d13eb46762b56c05ec3ff0f07f08f65db8d36",
           "manifest_bound": true,
           "kind": "consumer_compatibility",
           "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json"
@@ -615,22 +615,26 @@
       "operator_commands": [
         "python3 scripts/validate-release-ledger-goal-audit.py",
         "python3 scripts/generate-release-goal-finish-preflight.py",
+        "python3 scripts/generate-release-goal-continuation-queue.py",
         "python3 scripts/guard-release-goal-finish.py"
       ],
       "check_commands": [
         "python3 scripts/validate-release-ledger-goal-audit.py",
         "python3 scripts/generate-release-goal-finish-preflight.py --check",
+        "python3 scripts/generate-release-goal-continuation-queue.py --check",
         "python3 scripts/guard-release-goal-finish.py --self-test"
       ],
       "workflow_fragments": {
         ".github/workflows/verify-release.yml": [
           "python scripts/validate-release-ledger-goal-audit.py",
           "python scripts/generate-release-goal-finish-preflight.py --check",
+          "python scripts/generate-release-goal-continuation-queue.py --check",
           "python scripts/guard-release-goal-finish.py --self-test"
         ],
         ".github/workflows/release-draft.yml": [
           "python scripts/validate-release-ledger-goal-audit.py",
           "python scripts/generate-release-goal-finish-preflight.py --check",
+          "python scripts/generate-release-goal-continuation-queue.py --check",
           "python scripts/guard-release-goal-finish.py --self-test"
         ]
       },
@@ -638,8 +642,8 @@
       "evidence_artifacts": [
         {
           "path": "docs/release-ledger-goal-completion-audit.json",
-          "bytes": 38176,
-          "sha256": "dbcaa9c42d926e95f1e2c638e418485ec4f82f1ded0248921fbe52621c1f8127",
+          "bytes": 39301,
+          "sha256": "ce9148e93ceb0ed8cb0bbbb3689178f6f4d54c4d4fdf28600715d45b2a4cbc3a",
           "manifest_bound": false
         },
         {
@@ -649,6 +653,14 @@
           "manifest_bound": true,
           "kind": "release_goal_finish_preflight",
           "schema": "https://schemas.datapan.dev/datapan.release-goal-finish-preflight.v1.schema.json"
+        },
+        {
+          "path": "reports/release-goal-continuation-queue.json",
+          "bytes": 5964,
+          "sha256": "208c052114dad8152678d61ae92014c65ca56652afef7a20a05130a00e1db752",
+          "manifest_bound": true,
+          "kind": "release_goal_continuation_queue",
+          "schema": "https://schemas.datapan.dev/datapan.release-goal-continuation-queue.v1.schema.json"
         }
       ]
     }
