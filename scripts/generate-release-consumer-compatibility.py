@@ -29,6 +29,7 @@ DEFAULT_CREDENTIAL_MANUAL_REVIEW_ACCEPTANCE = pathlib.Path(
 DEFAULT_ERROR_ACTION_ROUTING_ROLLUP = pathlib.Path("reports/error-action-routing-rollup.json")
 DEFAULT_IMPACT_ROLLUP = pathlib.Path("reports/registry-impact-plan.json")
 DEFAULT_RELEASE_DISTRIBUTION_FOOTPRINT = pathlib.Path("reports/release-distribution-footprint.json")
+DEFAULT_SHARD_CONSUMER_PROOF = pathlib.Path("reports/release-shard-consumer-proof.json")
 DEFAULT_OUTPUT = pathlib.Path("reports/release-consumer-compatibility.json")
 REQUIRED_RUNTIME_RISK_CONTRACTS = [
     "source_runtime_evidence",
@@ -188,6 +189,12 @@ REQUIRED_MANIFEST_EVIDENCE_CONTRACTS = [
         "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
     },
     {
+        "contract": "release_shard_consumer_proof",
+        "path": "reports/release-shard-consumer-proof.json",
+        "kind": "release_shard_consumer_proof",
+        "schema": "https://schemas.datapan.dev/datapan.release-shard-consumer-proof.v1.schema.json",
+    },
+    {
         "contract": "release_consumer_decision",
         "path": "reports/release-consumer-decision.json",
         "kind": "release_consumer_decision",
@@ -282,7 +289,20 @@ def require_release_inputs(manifest: dict[str, Any], readiness: dict[str, Any]) 
     return generated_at
 
 
-def consumer_entries() -> list[dict[str, Any]]:
+def consumer_entries(shard_proof: dict[str, Any]) -> list[dict[str, Any]]:
+    proof_summary = as_dict(shard_proof.get("summary"), "shard_proof.summary")
+    proof_policy = as_dict(shard_proof.get("release_policy"), "shard_proof.release_policy")
+    shard_preferred_ready = proof_summary.get("shard_preferred_ready") is True
+    cli_mode = "shard_preferred_with_monolith_fallback" if shard_preferred_ready else "canonical_monolith"
+    cli_notes = (
+        "CLI release install, doctor, release verify, and readiness compatibility are proven with "
+        "shard-preferred support and canonical monolith fallback while shard assets remain optional."
+        if shard_preferred_ready
+        else (
+            "CLI release install and doctor compatibility is proven through the canonical registry path "
+            "while shard support remains additive."
+        )
+    )
     return [
         {
             "consumer": "datapan-cli",
@@ -292,17 +312,15 @@ def consumer_entries() -> list[dict[str, Any]]:
                 "catalog release verify",
                 "catalog release readiness",
             ],
-            "compatibility_mode": "canonical_monolith",
+            "compatibility_mode": cli_mode,
             "status": "proven",
             "evidence": [
                 "reports/latest-release-verification.json",
                 "reports/latest-release-readiness.json",
                 "datapan-registry-release-health/release-health-rollup.json",
+                "reports/release-shard-consumer-proof.json",
             ],
-            "notes": (
-                "CLI release install and doctor compatibility is proven through the canonical registry path "
-                "while shard support remains additive."
-            ),
+            "notes": cli_notes,
         },
         {
             "consumer": "release-operator",
@@ -317,10 +335,12 @@ def consumer_entries() -> list[dict[str, Any]]:
                 "manifest.json",
                 "reports/latest-release-readiness.json",
                 "datapan-registry-release-health/release-health-rollup.json",
+                "reports/release-shard-consumer-proof.json",
             ],
             "notes": (
                 "Operators must keep the canonical registry in the release zip and may attach shard archives "
-                "only as optional compatibility-period assets."
+                "only as optional compatibility-period assets; current shard consumer effect is "
+                f"{proof_policy.get('consumer_effect')}."
             ),
         },
         {
@@ -772,6 +792,28 @@ def generation_inputs(
     }
 
 
+def shard_consumer_proof(proof: dict[str, Any]) -> dict[str, Any]:
+    summary = as_dict(proof.get("summary"), "shard_proof.summary")
+    boundary = as_dict(proof.get("registry_boundary"), "shard_proof.registry_boundary")
+    workflow = as_dict(proof.get("workflow_proof"), "shard_proof.workflow_proof")
+    policy = as_dict(proof.get("release_policy"), "shard_proof.release_policy")
+    return {
+        "path": DEFAULT_SHARD_CONSUMER_PROOF.as_posix(),
+        "proof_status": summary.get("proof_status"),
+        "shard_preferred_ready": summary.get("shard_preferred_ready"),
+        "monolith_fallback_proven": summary.get("monolith_fallback_proven"),
+        "distribution_action_resolved": summary.get("distribution_action_resolved"),
+        "canonical_registry_required": summary.get("canonical_registry_required"),
+        "shard_assets_required": summary.get("shard_assets_required"),
+        "checked_in_large_shards": summary.get("checked_in_large_shards"),
+        "canonical_registry_bytes": boundary.get("canonical_registry_bytes"),
+        "shard_archive_publication": boundary.get("shard_archive_publication"),
+        "workflow_contract_present": workflow.get("workflow_contract_present"),
+        "consumer_effect": policy.get("consumer_effect"),
+        "goal_completion_effect": policy.get("goal_completion_effect"),
+    }
+
+
 def build_report(
     manifest: dict[str, Any],
     readiness: dict[str, Any],
@@ -787,6 +829,7 @@ def build_report(
     error_action_routing: dict[str, Any],
     downstream_impact: dict[str, Any],
     release_distribution_footprint: dict[str, Any],
+    shard_proof: dict[str, Any],
     *,
     manifest_path: pathlib.Path = DEFAULT_MANIFEST,
     readiness_path: pathlib.Path = DEFAULT_READINESS,
@@ -804,7 +847,7 @@ def build_report(
     release_distribution_footprint_path: pathlib.Path = DEFAULT_RELEASE_DISTRIBUTION_FOOTPRINT,
 ) -> dict[str, Any]:
     generated_at = require_release_inputs(manifest, readiness)
-    consumers = consumer_entries()
+    consumers = consumer_entries(shard_proof)
     evidence_contracts = manifest_evidence_contracts(manifest)
     footprint_summary = as_dict(release_distribution_footprint.get("summary"), "release_distribution_footprint.summary")
     footprint_boundary = as_dict(
@@ -881,6 +924,7 @@ def build_report(
                 "downstream SDK, MCP, Studio, and API consumers keep canonical registry compatibility",
             ],
         },
+        "shard_consumer_proof": shard_consumer_proof(shard_proof),
         "shard_release_evidence": {
             **SHARD_RELEASE_EVIDENCE,
             "release_distribution_footprint": release_distribution_footprint_path.as_posix(),
@@ -933,6 +977,7 @@ def main() -> int:
         default=DEFAULT_RELEASE_DISTRIBUTION_FOOTPRINT,
         type=pathlib.Path,
     )
+    parser.add_argument("--shard-consumer-proof", default=DEFAULT_SHARD_CONSUMER_PROOF, type=pathlib.Path)
     parser.add_argument("--output", default=DEFAULT_OUTPUT, type=pathlib.Path)
     parser.add_argument(
         "--check",
@@ -957,6 +1002,7 @@ def main() -> int:
             load_json(args.error_action_routing_rollup),
             load_json(args.impact_rollup),
             load_json(args.release_distribution_footprint),
+            load_json(args.shard_consumer_proof),
             manifest_path=args.manifest,
             readiness_path=args.readiness,
             source_runtime_path=args.source_runtime_rollup,

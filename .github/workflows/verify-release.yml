@@ -105,6 +105,7 @@ jobs:
           python scripts/validate-credential-runtime-session-review-plan.py --self-test
           python scripts/promote-credential-runtime-receipt.py --self-test
           python scripts/generate-release-distribution-footprint.py --check
+          python scripts/generate-release-shard-consumer-proof.py --check
           python scripts/generate-release-consumer-compatibility.py --check
           python scripts/validate-release-consumer-compatibility.py
           python scripts/generate-release-operational-pressure.py --check
@@ -114,6 +115,7 @@ jobs:
           python -m py_compile scripts/generate-source-contract-rollup.py
           python -m py_compile scripts/sync-release-manifest-artifacts.py
           python -m py_compile scripts/generate-release-distribution-footprint.py
+          python -m py_compile scripts/generate-release-shard-consumer-proof.py
           python -m py_compile scripts/generate-release-consumer-compatibility.py
           python -m py_compile scripts/generate-release-operational-pressure.py
           python -m py_compile scripts/generate-release-consumer-decision.py

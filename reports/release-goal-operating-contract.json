@@ -30,12 +30,12 @@
     "manual_review_accepted": false,
     "reviewed_credential_receipts": 0,
     "manual_review_reduction_allowed": false,
-    "operational_pressure_decision": "distribution_and_credential_pressure",
-    "distribution_pressure_present": true,
+    "operational_pressure_decision": "credential_runtime_pressure",
+    "distribution_pressure_present": false,
     "credential_pressure_present": true,
     "continuation_next_action": "create_child_ticket",
     "primary_continuation_candidate": "collect_reviewed_credential_runtime_receipts",
-    "candidate_count": 3,
+    "candidate_count": 2,
     "goal_closure_allowed": false
   },
   "external_lifecycle_signal_policy": {
@@ -234,18 +234,6 @@
         ],
         "goal_closure_allowed": false,
         "rationale": "Explicit manual-review acceptance is the alternative release boundary when reviewed live receipt evidence is not yet available."
-      },
-      {
-        "order": 3,
-        "id": "prove_shard_preferred_consumer_compatibility",
-        "title": "Prove shard-preferred consumer compatibility",
-        "capability_planes": [
-          "shard/release distribution",
-          "consumer compatibility",
-          "downstream impact"
-        ],
-        "goal_closure_allowed": false,
-        "rationale": "Large canonical registry remains above threshold while shards are still optional additive assets."
       }
     ]
   },

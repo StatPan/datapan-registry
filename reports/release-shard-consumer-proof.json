@@ -1,0 +1,97 @@
+{
+  "schema_version": "datapan.release-shard-consumer-proof.v1",
+  "generated_at": "2026-07-04T06:39:24Z",
+  "goal_issue": 344,
+  "proof_ticket": 441,
+  "provider": "datapan-registry",
+  "inputs": {
+    "manifest": "manifest.json",
+    "release_distribution_footprint": "reports/release-distribution-footprint.json",
+    "verify_workflow": ".github/workflows/verify-release.yml",
+    "ci_summaries": [
+      ".datapan/ci/current-release-install-smoke.json",
+      ".datapan/ci/current-release-doctor-smoke.json",
+      ".datapan/ci/latest-release-install-smoke.json",
+      ".datapan/ci/latest-release-doctor-smoke.json",
+      ".datapan/ci/release-health-rollup.json"
+    ]
+  },
+  "summary": {
+    "proof_status": "shard_preferred_fallback_proven",
+    "shard_preferred_ready": true,
+    "monolith_fallback_proven": true,
+    "distribution_action_resolved": true,
+    "canonical_registry_required": true,
+    "shard_assets_required": false,
+    "checked_in_large_shards": false
+  },
+  "registry_boundary": {
+    "canonical_registry_path": "data/data-go-kr.registry.json",
+    "canonical_registry_bytes": 137735169,
+    "large_monolith_threshold_bytes": 100000000,
+    "canonical_registry_sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644",
+    "release_package_includes_monolith": true,
+    "monolith_fallback_required": true,
+    "shard_archive_name": "data-go-kr-shards.tar.gz",
+    "shard_archive_publication": "optional_release_asset"
+  },
+  "workflow_proof": {
+    "workflow": ".github/workflows/verify-release.yml",
+    "required_fragments": [
+      "python scripts/generate-registry-shards.py",
+      "python scripts/validate-registry-shards.py",
+      "python scripts/package-registry-shards.py",
+      "scripts/check-shard-aware-install-smoke.py",
+      "scripts/check-release-doctor-smoke.py",
+      "scripts/generate-release-health-rollup.py",
+      "scripts/validate-release-health-rollups.py",
+      "catalog install datapan-registry",
+      "go run ./cmd/datapan doctor --json"
+    ],
+    "missing_fragments": [],
+    "workflow_contract_present": true
+  },
+  "consumer_proof_scope": [
+    {
+      "surface": "current_release_install",
+      "summary_artifact": ".datapan/ci/current-release-install-smoke.json",
+      "required_mode": "monolith_fallback_or_shard_validated",
+      "fallback_required": true,
+      "checked_by": "scripts/check-shard-aware-install-smoke.py"
+    },
+    {
+      "surface": "current_release_doctor",
+      "summary_artifact": ".datapan/ci/current-release-doctor-smoke.json",
+      "required_mode": "doctor_matches_installed_registry",
+      "fallback_required": true,
+      "checked_by": "scripts/check-release-doctor-smoke.py"
+    },
+    {
+      "surface": "latest_release_install",
+      "summary_artifact": ".datapan/ci/latest-release-install-smoke.json",
+      "required_mode": "monolith_fallback_or_shard_validated",
+      "fallback_required": true,
+      "checked_by": "scripts/check-shard-aware-install-smoke.py"
+    },
+    {
+      "surface": "latest_release_doctor",
+      "summary_artifact": ".datapan/ci/latest-release-doctor-smoke.json",
+      "required_mode": "doctor_matches_installed_registry",
+      "fallback_required": true,
+      "checked_by": "scripts/check-release-doctor-smoke.py"
+    },
+    {
+      "surface": "release_health_rollup",
+      "summary_artifact": ".datapan/ci/release-health-rollup.json",
+      "required_mode": "current_and_latest_smoke_summaries_pass",
+      "fallback_required": true,
+      "checked_by": "scripts/validate-release-health-rollups.py"
+    }
+  ],
+  "release_policy": {
+    "consumer_effect": "shard_preferred_supported_with_canonical_fallback",
+    "required_for_release": false,
+    "require_shards_next": false,
+    "goal_completion_effect": "distribution_pressure_evidence_only_goal_still_requires_credential_and_manual_review_gates"
+  }
+}

@@ -74,6 +74,7 @@
         "manifest",
         "release_distribution_footprint",
         "release_consumer_compatibility",
+        "release_shard_consumer_proof",
         "credential_runtime_runner_readiness",
         "release_goal_finish_preflight",
         "release_goal_operating_contract"
@@ -87,6 +88,9 @@
         },
         "release_consumer_compatibility": {
           "const": "reports/release-consumer-compatibility.json"
+        },
+        "release_shard_consumer_proof": {
+          "const": "reports/release-shard-consumer-proof.json"
         },
         "credential_runtime_runner_readiness": {
           "const": "reports/credential-runtime-runner-readiness.json"
@@ -155,7 +159,11 @@
         "shard_publication_status",
         "shard_policy_phase",
         "shard_archive_status",
-        "consumer_effect"
+        "consumer_effect",
+        "shard_consumer_proof",
+        "shard_preferred_ready",
+        "distribution_action_resolved",
+        "proof_consumer_effect"
       ],
       "properties": {
         "canonical_registry_path": {
@@ -189,6 +197,18 @@
           "$ref": "#/$defs/non_empty_string"
         },
         "consumer_effect": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "shard_consumer_proof": {
+          "const": "reports/release-shard-consumer-proof.json"
+        },
+        "shard_preferred_ready": {
+          "type": "boolean"
+        },
+        "distribution_action_resolved": {
+          "type": "boolean"
+        },
+        "proof_consumer_effect": {
           "$ref": "#/$defs/non_empty_string"
         }
       }
