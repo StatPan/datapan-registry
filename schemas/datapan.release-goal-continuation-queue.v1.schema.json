@@ -79,6 +79,7 @@
         "credential_collection_preflight",
         "credential_runner_readiness",
         "credential_review_handoff",
+        "credential_collection_execution_plan",
         "release_operational_pressure"
       ],
       "properties": {
@@ -99,6 +100,9 @@
         },
         "credential_review_handoff": {
           "const": "reports/credential-runtime-review-handoff.json"
+        },
+        "credential_collection_execution_plan": {
+          "const": "reports/credential-runtime-collection-execution-plan.json"
         },
         "release_operational_pressure": {
           "const": "reports/release-operational-pressure.json"

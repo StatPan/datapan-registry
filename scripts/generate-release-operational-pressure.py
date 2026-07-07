@@ -20,6 +20,7 @@ DEFAULT_FOOTPRINT = pathlib.Path("reports/release-distribution-footprint.json")
 DEFAULT_COMPATIBILITY = pathlib.Path("reports/release-consumer-compatibility.json")
 DEFAULT_SHARD_CONSUMER_PROOF = pathlib.Path("reports/release-shard-consumer-proof.json")
 DEFAULT_RUNNER_READINESS = pathlib.Path("reports/credential-runtime-runner-readiness.json")
+DEFAULT_COLLECTION_EXECUTION_PLAN = pathlib.Path("reports/credential-runtime-collection-execution-plan.json")
 DEFAULT_GOAL_PREFLIGHT = pathlib.Path("reports/release-goal-finish-preflight.json")
 DEFAULT_OPERATING_CONTRACT = pathlib.Path("reports/release-goal-operating-contract.json")
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.release-operational-pressure.v1.schema.json")
@@ -69,6 +70,7 @@ def build_report(
     compatibility: dict[str, Any],
     shard_proof: dict[str, Any],
     runner_readiness: dict[str, Any],
+    collection_execution_plan: dict[str, Any],
     goal_preflight: dict[str, Any],
     operating_contract: dict[str, Any],
 ) -> dict[str, Any]:
@@ -84,6 +86,8 @@ def build_report(
     proof_policy = as_dict(shard_proof.get("release_policy"), "shard_proof.release_policy")
     runtime_risk = as_dict(compatibility.get("runtime_risk_evidence"), "compatibility.runtime_risk_evidence")
     runner_summary = as_dict(runner_readiness.get("summary"), "runner_readiness.summary")
+    execution_summary = as_dict(collection_execution_plan.get("summary"), "collection_execution_plan.summary")
+    execution_batch = as_dict(collection_execution_plan.get("batch_execution"), "collection_execution_plan.batch_execution")
     preflight_summary = as_dict(goal_preflight.get("summary"), "goal_preflight.summary")
     operating_summary = as_dict(operating_contract.get("operating_summary"), "operating_contract.operating_summary")
 
@@ -142,6 +146,7 @@ def build_report(
             "release_consumer_compatibility": DEFAULT_COMPATIBILITY.as_posix(),
             "release_shard_consumer_proof": DEFAULT_SHARD_CONSUMER_PROOF.as_posix(),
             "credential_runtime_runner_readiness": DEFAULT_RUNNER_READINESS.as_posix(),
+            "credential_runtime_collection_execution_plan": DEFAULT_COLLECTION_EXECUTION_PLAN.as_posix(),
             "release_goal_finish_preflight": DEFAULT_GOAL_PREFLIGHT.as_posix(),
             "release_goal_operating_contract": DEFAULT_OPERATING_CONTRACT.as_posix(),
         },
@@ -181,6 +186,12 @@ def build_report(
             "default_ci_requires_credentials": runner_summary.get("default_ci_requires_credentials"),
             "manual_review_reduction_allowed": runner_summary.get("manual_review_reduction_allowed"),
             "checked_in_secrets_allowed": runner_summary.get("checked_in_secrets_allowed"),
+            "credential_collection_execution_plan": DEFAULT_COLLECTION_EXECUTION_PLAN.as_posix(),
+            "session_plan_status": execution_summary.get("session_plan_status"),
+            "batch_ready_for_operator_credentials": execution_summary.get("batch_ready_for_operator_credentials"),
+            "operator_sources_ready": execution_summary.get("operator_sources_ready"),
+            "execution_plan_next_action": execution_summary.get("next_action"),
+            "session_output_path": execution_batch.get("session_output_path"),
             "runtime_compatibility_effect": runtime_risk.get("compatibility_effect"),
             "credential_queue_status": runtime_risk.get("credential_queue_status"),
         },
@@ -227,6 +238,12 @@ def validate_invariants(report: dict[str, Any]) -> None:
             raise ValueError("credential pressure must not allow checked-in secrets")
         if credential.get("manual_review_reduction_allowed") is not False:
             raise ValueError("credential pressure must not allow manual review reduction without receipts")
+        if credential.get("credential_collection_execution_plan") != DEFAULT_COLLECTION_EXECUTION_PLAN.as_posix():
+            raise ValueError("credential pressure must cite the collection execution plan")
+        if credential.get("batch_ready_for_operator_credentials") is not True:
+            raise ValueError("credential pressure must preserve batch-ready operator execution evidence")
+        if credential.get("session_output_path") != ".datapan/runtime-evidence/credential-runtime-collection-session.json":
+            raise ValueError("credential pressure must preserve local session output path")
     if boundary.get("manual_review_required") is True and boundary.get("manual_review_accepted") is not True:
         if summary.get("goal_completion_allowed") is not False:
             raise ValueError("unaccepted manual review must keep goal completion disallowed")
@@ -256,6 +273,7 @@ def main() -> int:
     parser.add_argument("--compatibility", default=DEFAULT_COMPATIBILITY, type=pathlib.Path)
     parser.add_argument("--shard-consumer-proof", default=DEFAULT_SHARD_CONSUMER_PROOF, type=pathlib.Path)
     parser.add_argument("--runner-readiness", default=DEFAULT_RUNNER_READINESS, type=pathlib.Path)
+    parser.add_argument("--collection-execution-plan", default=DEFAULT_COLLECTION_EXECUTION_PLAN, type=pathlib.Path)
     parser.add_argument("--goal-preflight", default=DEFAULT_GOAL_PREFLIGHT, type=pathlib.Path)
     parser.add_argument("--operating-contract", default=DEFAULT_OPERATING_CONTRACT, type=pathlib.Path)
     parser.add_argument("--schema", default=DEFAULT_SCHEMA, type=pathlib.Path)
@@ -270,6 +288,7 @@ def main() -> int:
             load_json(args.compatibility),
             load_json(args.shard_consumer_proof),
             load_json(args.runner_readiness),
+            load_json(args.collection_execution_plan),
             load_json(args.goal_preflight),
             load_json(args.operating_contract),
         )

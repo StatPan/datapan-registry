@@ -11,6 +11,7 @@
     "credential_collection_preflight": "reports/credential-runtime-collection-preflight.json",
     "credential_runner_readiness": "reports/credential-runtime-runner-readiness.json",
     "credential_review_handoff": "reports/credential-runtime-review-handoff.json",
+    "credential_collection_execution_plan": "reports/credential-runtime-collection-execution-plan.json",
     "release_operational_pressure": "reports/release-operational-pressure.json"
   },
   "summary": {
@@ -90,11 +91,15 @@
         "reports/credential-runtime-collection-preflight.json",
         "reports/credential-runtime-runner-readiness.json",
         "reports/credential-runtime-receipt-collection-queue.json",
-        "reports/credential-runtime-review-handoff.json"
+        "reports/credential-runtime-review-handoff.json",
+        "reports/credential-runtime-collection-execution-plan.json"
       ],
       "safe_start_conditions": [
         "candidate batches present: 5",
         "operator environment required sources: 5",
+        "batch ready for operator credentials: True",
+        "execution plan status: operator_credentials_required",
+        "execution plan next action: run_batch_collection_session_in_operator_env",
         "run credentialed collection only from an operator environment with provider credentials",
         "do not check in credentials, hashes, headers, or secret-derived values"
       ],

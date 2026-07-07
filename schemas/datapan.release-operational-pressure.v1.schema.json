@@ -76,6 +76,7 @@
         "release_consumer_compatibility",
         "release_shard_consumer_proof",
         "credential_runtime_runner_readiness",
+        "credential_runtime_collection_execution_plan",
         "release_goal_finish_preflight",
         "release_goal_operating_contract"
       ],
@@ -94,6 +95,9 @@
         },
         "credential_runtime_runner_readiness": {
           "const": "reports/credential-runtime-runner-readiness.json"
+        },
+        "credential_runtime_collection_execution_plan": {
+          "const": "reports/credential-runtime-collection-execution-plan.json"
         },
         "release_goal_finish_preflight": {
           "const": "reports/release-goal-finish-preflight.json"
@@ -226,6 +230,12 @@
         "default_ci_requires_credentials",
         "manual_review_reduction_allowed",
         "checked_in_secrets_allowed",
+        "credential_collection_execution_plan",
+        "session_plan_status",
+        "batch_ready_for_operator_credentials",
+        "operator_sources_ready",
+        "execution_plan_next_action",
+        "session_output_path",
         "runtime_compatibility_effect",
         "credential_queue_status"
       ],
@@ -256,6 +266,33 @@
         },
         "checked_in_secrets_allowed": {
           "type": "boolean"
+        },
+        "credential_collection_execution_plan": {
+          "const": "reports/credential-runtime-collection-execution-plan.json"
+        },
+        "session_plan_status": {
+          "enum": [
+            "operator_credentials_required",
+            "candidate_batches_missing",
+            "ready_for_operator_collection",
+            "reviewed_receipts_complete"
+          ]
+        },
+        "batch_ready_for_operator_credentials": {
+          "type": "boolean"
+        },
+        "operator_sources_ready": {
+          "$ref": "#/$defs/count"
+        },
+        "execution_plan_next_action": {
+          "enum": [
+            "run_batch_collection_session_in_operator_env",
+            "restore_candidate_batches_before_operator_collection",
+            "refresh_release_evidence_after_reviewed_receipts"
+          ]
+        },
+        "session_output_path": {
+          "const": ".datapan/runtime-evidence/credential-runtime-collection-session.json"
         },
         "runtime_compatibility_effect": {
           "$ref": "#/$defs/non_empty_string"
