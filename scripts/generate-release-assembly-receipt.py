@@ -219,7 +219,7 @@ PHASES: list[dict[str, Any]] = [
             "python3 scripts/run-credential-runtime-collection.py --all --run --skip-not-ready --continue-on-error --session-output .datapan/runtime-evidence/credential-runtime-collection-session.json --json",
             "python3 scripts/validate-credential-runtime-collection-session.py .datapan/runtime-evidence/credential-runtime-collection-session.json --require-complete-source-set",
             "python3 scripts/generate-credential-runtime-session-review-plan.py .datapan/runtime-evidence/credential-runtime-collection-session.json --output .datapan/runtime-evidence/credential-runtime-session-review-plan.json",
-            "python3 scripts/validate-credential-runtime-session-review-plan.py .datapan/runtime-evidence/credential-runtime-session-review-plan.json",
+            "python3 scripts/validate-credential-runtime-session-review-plan.py .datapan/runtime-evidence/credential-runtime-session-review-plan.json --queue reports/credential-runtime-receipt-collection-queue.json",
             "python3 scripts/run-credential-runtime-collection.py --source <source_id> --json",
             "python3 scripts/run-credential-runtime-collection.py --source <source_id> --run",
             "python3 scripts/promote-credential-runtime-receipt.py <staged-receipt> --state <reviewed_accepted|reviewed_rejected> --decision <decision> --reviewer <reviewer> --reason <reason>",
