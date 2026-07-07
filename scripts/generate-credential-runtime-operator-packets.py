@@ -243,6 +243,7 @@ def build_report(queue: dict[str, Any], handoff: dict[str, Any], decision: dict[
             "skip_not_ready_allowed": True,
             "continue_on_error_allowed": True,
             "session_output_schema": "datapan.credential-runtime-collection-session.v1",
+            "session_output_schema_path": "schemas/datapan.credential-runtime-collection-session.v1.schema.json",
             "checked_in_secrets_allowed": False,
             "default_ci_requires_credentials": False,
         },
