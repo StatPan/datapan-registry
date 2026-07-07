@@ -15,6 +15,7 @@
     "identity",
     "operating_summary",
     "external_lifecycle_signal_policy",
+    "persistent_goal_prompt",
     "capability_planes",
     "completion_contract",
     "child_planning_model",
@@ -48,6 +49,9 @@
     },
     "external_lifecycle_signal_policy": {
       "$ref": "#/$defs/external_lifecycle_signal_policy"
+    },
+    "persistent_goal_prompt": {
+      "$ref": "#/$defs/persistent_goal_prompt"
     },
     "capability_planes": {
       "type": "array",
@@ -227,6 +231,114 @@
         },
         "operator_rule": {
           "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "persistent_goal_prompt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "prompt_ticket",
+        "prompt_mode",
+        "vision_statement",
+        "north_star_question",
+        "framing",
+        "operating_loop",
+        "next_child_selection_basis",
+        "next_child_selection_questions",
+        "anti_completion_rules",
+        "current_prompt_boundary"
+      ],
+      "properties": {
+        "prompt_ticket": {
+          "const": 415
+        },
+        "prompt_mode": {
+          "const": "persistent_goal_based_development"
+        },
+        "vision_statement": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "north_star_question": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "framing": {
+          "$ref": "#/$defs/persistent_goal_framing"
+        },
+        "operating_loop": {
+          "$ref": "#/$defs/string_list"
+        },
+        "next_child_selection_basis": {
+          "const": "weakest_remaining_registry_ledger_capability_boundary"
+        },
+        "next_child_selection_questions": {
+          "$ref": "#/$defs/string_list"
+        },
+        "anti_completion_rules": {
+          "$ref": "#/$defs/string_list"
+        },
+        "current_prompt_boundary": {
+          "$ref": "#/$defs/current_prompt_boundary"
+        }
+      }
+    },
+    "persistent_goal_framing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "one_off_task",
+        "task_title_only",
+        "child_ticket_checklist_only",
+        "prompt_update_is_completion_evidence",
+        "child_graph_exhaustion_is_completion_evidence",
+        "completion_requires_current_repo_evidence"
+      ],
+      "properties": {
+        "one_off_task": {
+          "const": false
+        },
+        "task_title_only": {
+          "const": false
+        },
+        "child_ticket_checklist_only": {
+          "const": false
+        },
+        "prompt_update_is_completion_evidence": {
+          "const": false
+        },
+        "child_graph_exhaustion_is_completion_evidence": {
+          "const": false
+        },
+        "completion_requires_current_repo_evidence": {
+          "const": true
+        }
+      }
+    },
+    "current_prompt_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gira_next_action",
+        "gira_child_graph_signal_interpretation",
+        "repo_evidence_status",
+        "goal_closure_allowed",
+        "required_before_goal_finish"
+      ],
+      "properties": {
+        "gira_next_action": {
+          "enum": ["create_child_ticket", "goal_finish_allowed"]
+        },
+        "gira_child_graph_signal_interpretation": {
+          "const": "lifecycle_signal_only"
+        },
+        "repo_evidence_status": {
+          "enum": ["not_complete", "finish_preflight_allowed"]
+        },
+        "goal_closure_allowed": {
+          "type": "boolean"
+        },
+        "required_before_goal_finish": {
+          "$ref": "#/$defs/string_list"
         }
       }
     },
