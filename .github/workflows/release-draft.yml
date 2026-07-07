@@ -88,6 +88,7 @@ jobs:
             scripts/generate-error-action-routing-rollup.py \
             scripts/generate-impact-plan-rollup.py \
             scripts/generate-release-assembly-receipt.py \
+            scripts/generate-release-distribution-footprint.py \
             scripts/generate-release-consumer-compatibility.py \
             scripts/generate-credential-runtime-evidence-policy.py \
             scripts/generate-credential-runtime-receipt-collection-queue.py \
@@ -157,6 +158,7 @@ jobs:
           python scripts/run-credential-runtime-collection.py --self-test
           python scripts/run-credential-runtime-collection.py --check
           python scripts/promote-credential-runtime-receipt.py --self-test
+          python scripts/generate-release-distribution-footprint.py --check
           python scripts/generate-release-consumer-compatibility.py --check
           python scripts/validate-release-consumer-compatibility.py
 
