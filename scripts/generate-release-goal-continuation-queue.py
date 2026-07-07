@@ -32,6 +32,7 @@ POST_CHILD_REFRESH_COMMANDS = [
     RELEASE_EVIDENCE_REFRESH_COMMAND,
     RELEASE_EVIDENCE_CHECK_COMMAND,
 ]
+GIRA_TICKET_BODY_STDIN = "--body-file -"
 
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -58,6 +59,78 @@ def as_list(value: object, label: str) -> list[Any]:
     return value
 
 
+def shell_quote(value: str) -> str:
+    return "'" + value.replace("'", "'\"'\"'") + "'"
+
+
+def render_ticket_body(candidate: dict[str, Any]) -> str:
+    acceptance = "\n".join(
+        f"- {item}"
+        for item in as_list(
+            candidate.get("proposed_acceptance_criteria"),
+            "candidate.proposed_acceptance_criteria",
+        )
+    )
+    evidence_inputs = "\n".join(
+        f"- {item}"
+        for item in as_list(candidate.get("evidence_inputs"), "candidate.evidence_inputs")
+    )
+    safe_start = "\n".join(
+        f"- {item}"
+        for item in as_list(candidate.get("safe_start_conditions"), "candidate.safe_start_conditions")
+    )
+    blocked_finish = "\n".join(
+        f"- {item}"
+        for item in as_list(
+            candidate.get("blocked_finish_conditions"),
+            "candidate.blocked_finish_conditions",
+        )
+    )
+    post_completion = "\n".join(
+        f"- {item}"
+        for item in as_list(candidate.get("post_completion_commands"), "candidate.post_completion_commands")
+    )
+    return (
+        "## Goal\n"
+        f"Advance #344 by executing continuation candidate `{candidate['id']}`: {candidate['title']}.\n\n"
+        "## Scope\n"
+        f"{candidate['rationale']} Keep the work bounded to the evidence inputs below and preserve "
+        "canonical registry compatibility. This child ticket is progress evidence only and must not mark #344 complete.\n\n"
+        "## Evidence Inputs\n"
+        f"{evidence_inputs}\n\n"
+        "## Safe Start Conditions\n"
+        f"{safe_start}\n\n"
+        "## Blocked Finish Conditions\n"
+        f"{blocked_finish}\n\n"
+        "## Acceptance Criteria\n"
+        f"{acceptance}\n\n"
+        "## Post Completion Commands\n"
+        f"{post_completion}\n\n"
+        "## Goal Boundary\n"
+        "goal_closure_allowed=false. Leave #344 open unless repo-owned finish preflight and completion audit allow closure.\n"
+    )
+
+
+def attach_ticket_packet(candidate: dict[str, Any]) -> dict[str, Any]:
+    title = str(candidate["title"])
+    body = render_ticket_body(candidate)
+    command_prefix = f"gira ticket new {shell_quote(title)} {GIRA_TICKET_BODY_STDIN}"
+    return {
+        **candidate,
+        "ticket_packet": {
+            "parent_goal_issue": 344,
+            "title": title,
+            "goal": f"Advance #344 by executing continuation candidate {candidate['id']}.",
+            "body": body,
+            "body_input": "stdin",
+            "dry_run_command": f"{command_prefix} --dry-run",
+            "apply_command": f"{command_prefix} --apply",
+            "start_after_create": True,
+            "goal_closure_allowed": False,
+        },
+    }
+
+
 def candidate_receipt_collection(
     credential_preflight_summary: dict[str, Any],
     execution_plan_summary: dict[str, Any],
@@ -66,7 +139,7 @@ def candidate_receipt_collection(
     reviewed_missing = credential_preflight_summary.get("reviewed_receipts_missing")
     operator_required = credential_preflight_summary.get("operator_environment_required_sources")
     candidate_batches = credential_preflight_summary.get("candidate_batches_present")
-    return {
+    return attach_ticket_packet({
         "order": 1,
         "id": "collect_reviewed_credential_runtime_receipts",
         "title": "Collect reviewed credential runtime receipts",
@@ -105,11 +178,11 @@ def candidate_receipt_collection(
         "post_completion_commands": POST_CHILD_REFRESH_COMMANDS,
         "goal_closure_allowed": False,
         "rationale": "Reviewed credential runtime receipts are the strongest evidence path for reducing current manual-review compatibility gates.",
-    }
+    })
 
 
 def candidate_manual_review_acceptance() -> dict[str, Any]:
-    return {
+    return attach_ticket_packet({
         "order": 2,
         "id": "assert_explicit_manual_review_release_acceptance",
         "title": "Assert explicit manual-review release acceptance",
@@ -144,7 +217,7 @@ def candidate_manual_review_acceptance() -> dict[str, Any]:
         "post_completion_commands": POST_CHILD_REFRESH_COMMANDS,
         "goal_closure_allowed": False,
         "rationale": "Explicit manual-review acceptance is the alternative release boundary when reviewed live receipt evidence is not yet available.",
-    }
+    })
 
 
 def candidate_shard_preferred_compatibility(
@@ -161,7 +234,7 @@ def candidate_shard_preferred_compatibility(
         ),
         {},
     )
-    return {
+    return attach_ticket_packet({
         "order": 1,
         "id": "prove_shard_preferred_consumer_compatibility",
         "title": "Prove shard-preferred consumer compatibility",
@@ -201,7 +274,7 @@ def candidate_shard_preferred_compatibility(
             "reason",
             "Large canonical registry pressure needs shard-preferred compatibility evidence without breaking canonical consumers.",
         ),
-    }
+    })
 
 
 def build_candidates(
@@ -383,9 +456,32 @@ def validate_invariants(report: dict[str, Any]) -> None:
     if refresh.get("check_command") != RELEASE_EVIDENCE_CHECK_COMMAND:
         raise ValueError("release evidence check command must use the fixed-point check command")
     for candidate in candidates:
-        commands = as_list(as_dict(candidate, "candidate").get("post_completion_commands"), "candidate.post_completion_commands")
+        candidate_obj = as_dict(candidate, "candidate")
+        commands = as_list(candidate_obj.get("post_completion_commands"), "candidate.post_completion_commands")
         if commands != expected_commands:
             raise ValueError("candidate post-completion commands must refresh and check release evidence")
+        ticket_packet = as_dict(candidate_obj.get("ticket_packet"), "candidate.ticket_packet")
+        if ticket_packet.get("parent_goal_issue") != 344:
+            raise ValueError("candidate ticket packets must target parent goal #344")
+        if ticket_packet.get("title") != candidate_obj.get("title"):
+            raise ValueError("candidate ticket packet title must match candidate title")
+        if ticket_packet.get("goal_closure_allowed") is not False:
+            raise ValueError("candidate ticket packets must not allow goal closure")
+        body = ticket_packet.get("body")
+        if not isinstance(body, str) or "#344" not in body or "goal_closure_allowed=false" not in body:
+            raise ValueError("candidate ticket packet body must preserve #344 and the non-closure boundary")
+        expected_dry_run = (
+            f"gira ticket new {shell_quote(str(candidate_obj['title']))} "
+            f"{GIRA_TICKET_BODY_STDIN} --dry-run"
+        )
+        if ticket_packet.get("dry_run_command") != expected_dry_run:
+            raise ValueError("candidate ticket packet dry-run command must match the candidate title")
+        expected_apply = (
+            f"gira ticket new {shell_quote(str(candidate_obj['title']))} "
+            f"{GIRA_TICKET_BODY_STDIN} --apply"
+        )
+        if ticket_packet.get("apply_command") != expected_apply:
+            raise ValueError("candidate ticket packet apply command must match the candidate title")
 
 
 def validate_schema(report: dict[str, Any], schema_path: pathlib.Path) -> None:
