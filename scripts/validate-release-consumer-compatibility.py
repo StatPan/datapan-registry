@@ -780,6 +780,10 @@ def validate_runtime_risk_evidence(
         credential_execution_plan.get("batch_execution"),
         "credential_execution_plan.batch_execution",
     )
+    credential_execution_review_promotion = as_dict(
+        credential_execution_plan.get("session_review_promotion_workflow"),
+        "credential_execution_plan.session_review_promotion_workflow",
+    )
     credential_queue_summary = as_dict(credential_receipt_queue.get("summary"), "credential_receipt_queue.summary")
     credential_handoff_summary = as_dict(credential_review_handoff.get("summary"), "credential_review_handoff.summary")
     credential_handoff_boundary = as_dict(
@@ -975,6 +979,77 @@ def validate_runtime_risk_evidence(
         or credential_execution_summary.get("next_action") != "run_batch_collection_session_in_operator_env"
     ):
         raise ValueError("missing reviewed receipts must preserve batch operator execution next action")
+
+    credential_review_promotion_expected = {
+        "credential_execution_review_promotion_script": credential_execution_review_promotion.get("script"),
+        "credential_execution_review_promotion_decision_template_path": credential_execution_review_promotion.get(
+            "decision_template_path"
+        ),
+        "credential_execution_review_promotion_init_decisions_command": credential_execution_review_promotion.get(
+            "init_decisions_command"
+        ),
+        "credential_execution_review_promotion_check_command": credential_execution_review_promotion.get(
+            "check_command"
+        ),
+        "credential_execution_review_promotion_run_command": credential_execution_review_promotion.get("run_command"),
+        "credential_execution_review_promotion_self_test_command": credential_execution_review_promotion.get(
+            "self_test_command"
+        ),
+        "credential_execution_review_promotion_session_review_plan_output_path": credential_execution_review_promotion.get(
+            "session_review_plan_output_path"
+        ),
+        "credential_execution_review_promotion_requires_session_review_plan": credential_execution_review_promotion.get(
+            "requires_session_review_plan"
+        ),
+        "credential_execution_review_promotion_requires_finalized_reviewer_decisions": credential_execution_review_promotion.get(
+            "requires_finalized_reviewer_decisions"
+        ),
+        "credential_execution_review_promotion_requires_explicit_run": credential_execution_review_promotion.get(
+            "requires_explicit_run"
+        ),
+        "credential_execution_review_promotion_default_ci_requires_credentials": credential_execution_review_promotion.get(
+            "default_ci_requires_credentials"
+        ),
+        "credential_execution_review_promotion_checked_in_session_output_allowed": credential_execution_review_promotion.get(
+            "checked_in_session_output_allowed"
+        ),
+        "credential_execution_review_promotion_checked_in_review_plan_allowed": credential_execution_review_promotion.get(
+            "checked_in_review_plan_allowed"
+        ),
+        "credential_execution_review_promotion_checked_in_decisions_allowed": credential_execution_review_promotion.get(
+            "checked_in_decisions_allowed"
+        ),
+        "credential_execution_review_promotion_checked_in_secrets_allowed": credential_execution_review_promotion.get(
+            "checked_in_secrets_allowed"
+        ),
+        "credential_execution_review_promotion_goal_closure_allowed": credential_execution_review_promotion.get(
+            "goal_closure_allowed"
+        ),
+    }
+    for key, value in credential_review_promotion_expected.items():
+        if risk.get(key) != value:
+            raise ValueError(f"runtime_risk_evidence.{key} expected {value}, got {risk.get(key)}")
+    if credential_execution_review_promotion.get("session_review_plan_output_path") != credential_execution_batch.get(
+        "session_review_plan_output_path"
+    ):
+        raise ValueError("credential review promotion workflow must consume the execution plan review output path")
+    for key in (
+        "requires_session_review_plan",
+        "requires_finalized_reviewer_decisions",
+        "requires_explicit_run",
+    ):
+        if credential_execution_review_promotion.get(key) is not True:
+            raise ValueError(f"credential review promotion workflow must require {key}")
+    for key in (
+        "default_ci_requires_credentials",
+        "checked_in_session_output_allowed",
+        "checked_in_review_plan_allowed",
+        "checked_in_decisions_allowed",
+        "checked_in_secrets_allowed",
+        "goal_closure_allowed",
+    ):
+        if credential_execution_review_promotion.get(key) is not False:
+            raise ValueError(f"credential review promotion workflow must keep {key} false")
 
     credential_queue_expected = {
         "credential_queue_status": credential_queue_summary.get("queue_status"),
