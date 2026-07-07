@@ -24,6 +24,7 @@ DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-collection-exe
 DEFAULT_OUTPUT = pathlib.Path("reports/credential-runtime-collection-execution-plan.json")
 SCHEMA_VERSION = "datapan.credential-runtime-collection-execution-plan.v1"
 OPERATOR_WORKFLOW_SCRIPT = pathlib.Path("scripts/run-credential-runtime-operator-workflow.py")
+GITHUB_DISPATCH_WORKFLOW = pathlib.Path(".github/workflows/credential-runtime-collection.yml")
 SESSION_REVIEW_PROMOTION_SCRIPT = pathlib.Path("scripts/promote-credential-runtime-session-review.py")
 SESSION_REVIEW_DECISIONS_PATH = pathlib.Path(
     ".datapan/runtime-evidence/credential-runtime-session-review-decisions.json"
@@ -324,6 +325,15 @@ def build_report(
             "run_command": f"python3 {OPERATOR_WORKFLOW_SCRIPT.as_posix()} --run --json",
             "require_env_command": f"python3 {OPERATOR_WORKFLOW_SCRIPT.as_posix()} --require-env",
             "require_env_json_command": f"python3 {OPERATOR_WORKFLOW_SCRIPT.as_posix()} --require-env --json",
+            "github_actions_dispatch_workflow": GITHUB_DISPATCH_WORKFLOW.as_posix(),
+            "github_actions_preflight_command": (
+                "gh workflow run credential-runtime-collection.yml "
+                "--repo StatPan/datapan-registry -f mode=preflight"
+            ),
+            "github_actions_collect_command": (
+                "gh workflow run credential-runtime-collection.yml "
+                "--repo StatPan/datapan-registry -f mode=collect"
+            ),
             "check_command": f"python3 {OPERATOR_WORKFLOW_SCRIPT.as_posix()} --check",
             "self_test_command": f"python3 {OPERATOR_WORKFLOW_SCRIPT.as_posix()} --self-test",
             "workflow_status": summary["session_plan_status"],
@@ -338,6 +348,8 @@ def build_report(
             ),
             "requires_explicit_run": True,
             "requires_operator_credentials": True,
+            "github_actions_uses_repository_secrets": True,
+            "github_actions_uploads_local_artifacts": True,
             "default_ci_requires_credentials": False,
             "checked_in_session_output_allowed": False,
             "checked_in_review_plan_allowed": False,
@@ -451,6 +463,15 @@ def validate_invariants(report: dict[str, Any]) -> None:
     for key in ("requires_explicit_run", "requires_operator_credentials"):
         if workflow.get(key) is not True:
             raise ValueError(f"operator_workflow.{key} must remain true")
+    for key in ("github_actions_uses_repository_secrets", "github_actions_uploads_local_artifacts"):
+        if workflow.get(key) is not True:
+            raise ValueError(f"operator_workflow.{key} must remain true")
+    if workflow.get("github_actions_dispatch_workflow") != GITHUB_DISPATCH_WORKFLOW.as_posix():
+        raise ValueError("operator_workflow.github_actions_dispatch_workflow must match checked-in workflow path")
+    for key in ("github_actions_preflight_command", "github_actions_collect_command"):
+        command = string_value(workflow.get(key), f"operator_workflow.{key}")
+        if "credential-runtime-collection.yml" not in command:
+            raise ValueError(f"operator_workflow.{key} must dispatch the credential runtime workflow")
     if workflow.get("workflow_status") != summary.get("session_plan_status"):
         raise ValueError("operator_workflow.workflow_status must match summary.session_plan_status")
     if workflow.get("next_action") != summary.get("next_action"):
