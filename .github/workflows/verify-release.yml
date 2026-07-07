@@ -84,6 +84,7 @@ jobs:
           python scripts/validate-institution-runtime-plan.py
           python scripts/generate-source-runtime-remediation-map.py --check
           python scripts/generate-credential-runtime-evidence-policy.py --check
+          python scripts/generate-credential-runtime-collection-preflight.py --check
           python scripts/validate-credential-runtime-receipts.py
           python scripts/generate-credential-runtime-receipt-collection-queue.py --check
           python scripts/generate-credential-runtime-review-handoff.py --check
@@ -106,6 +107,7 @@ jobs:
           python -m py_compile scripts/generate-release-goal-finish-preflight.py
           python -m py_compile scripts/generate-release-assembly-receipt.py
           python -m py_compile scripts/generate-credential-runtime-evidence-policy.py
+          python -m py_compile scripts/generate-credential-runtime-collection-preflight.py
           python -m py_compile scripts/generate-credential-runtime-receipt-collection-queue.py
           python -m py_compile scripts/generate-credential-runtime-review-handoff.py
           python -m py_compile scripts/validate-credential-runtime-manual-review-decision.py

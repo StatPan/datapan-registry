@@ -11,18 +11,18 @@
     "criteria_partial": 0,
     "criteria_gap": 0,
     "decision": "leave_goal_open",
-    "reason": "The release assembly path is receipt-bound, release distribution footprint evidence records the large canonical registry and shard/fallback boundary, release consumer decision evidence records the current manual-review-required consumption decision, goal finish preflight evidence now blocks goal finish from checked-in release evidence, and credential-safe runtime evidence is policy-bound with an operator-facing receipt collection queue, reviewer-facing handoff, manual-review decision intake, and manual-review acceptance boundary, but #344 remains open because reviewed live credentialed runtime receipts are not checked in, explicit manual-review release acceptance is not asserted, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
+    "reason": "The release assembly path is receipt-bound, release distribution footprint evidence records the large canonical registry and shard/fallback boundary, release consumer decision evidence records the current manual-review-required consumption decision, goal finish preflight evidence blocks goal finish from checked-in release evidence, credential collection preflight evidence identifies runnable inputs and missing reviewed receipts, and credential-safe runtime evidence is policy-bound with an operator-facing receipt collection queue, reviewer-facing handoff, manual-review decision intake, and manual-review acceptance boundary, but #344 remains open because reviewed live credentialed runtime receipts are not checked in, explicit manual-review release acceptance is not asserted, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
   },
   "current_state_evidence": {
     "manifest": {
       "path": "manifest.json",
-      "artifact_count": 91,
-      "artifact_kinds": 37,
-      "schema_artifacts": 55
+      "artifact_count": 93,
+      "artifact_kinds": 38,
+      "schema_artifacts": 56
     },
     "schema_index": {
       "path": "schemas/index.json",
-      "schema_count": 55
+      "schema_count": 56
     },
     "release_readiness": {
       "path": "reports/latest-release-readiness.json",
@@ -166,6 +166,19 @@
       "reviewed_receipts_checked_in": 0,
       "default_ci_requires_credentials": false,
       "checked_in_secrets_allowed": false
+    },
+    "credential_collection_preflight": {
+      "path": "reports/credential-runtime-collection-preflight.json",
+      "sources": 5,
+      "credential_gated_sources": 5,
+      "candidate_batches_present": 5,
+      "candidate_batches_missing": 0,
+      "reviewed_receipts_present": 0,
+      "reviewed_receipts_missing": 5,
+      "default_ci_runnable_sources": 0,
+      "operator_environment_required_sources": 5,
+      "manual_review_reduction_allowed": false,
+      "preflight_status": "collection_inputs_ready_operator_environment_needed"
     },
     "credential_runtime_receipt_collection_queue": {
       "path": "reports/credential-runtime-receipt-collection-queue.json",
@@ -498,6 +511,7 @@
     "python3 scripts/validate-source-runtime-evidence-rollup.py",
     "python3 scripts/generate-source-runtime-remediation-map.py --check",
     "python3 scripts/generate-credential-runtime-evidence-policy.py --check",
+    "python3 scripts/generate-credential-runtime-collection-preflight.py --check",
     "python3 scripts/validate-credential-runtime-receipts.py",
     "python3 scripts/generate-credential-runtime-receipt-collection-queue.py --check",
     "python3 scripts/generate-credential-runtime-review-handoff.py --check",
@@ -609,6 +623,11 @@
       "issue": 397,
       "title": "Publish goal finish preflight evidence",
       "reason": "Goal finish preflight evidence now records finish_allowed=false from the goal audit and release consumer decision report, but the goal remains open because reviewed live receipts or explicit manual-review release acceptance are still absent."
+    },
+    {
+      "issue": 399,
+      "title": "Publish credential collection preflight evidence",
+      "reason": "Credential collection preflight evidence now records candidate batches present, operator environment required, reviewed receipts missing, and default CI not runnable for credentialed collection, but the goal remains open because reviewed live receipts or explicit manual-review release acceptance are still absent."
     }
   ]
 }

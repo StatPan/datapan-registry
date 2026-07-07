@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 55,
+  "count": 56,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 3192,
-      "sha256": "5499c8253e7c8bb49c1aea3fffbae2c66102b9bd67950197976ce7ec2b55e5c6"
+      "bytes": 3247,
+      "sha256": "856b3547288d95c0e5364183c4ddf2fcb0f6d99141e5fef454314c2601618b0d"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -307,8 +307,8 @@
       "title": "Datapan Release Consumer Compatibility v1",
       "contract": "release-consumer-compatibility",
       "version": "v1",
-      "bytes": 28285,
-      "sha256": "bc7155a295c3e2fb51905a6174167b2acd404f2952b4ee8723605ca91f75fbd9"
+      "bytes": 30254,
+      "sha256": "bea34434b70fbcb04a5eb2e0367835a09514f5b38996b700333540ca3c39533e"
     },
     {
       "path": "schemas/datapan.error-action-routing-rollup.v1.schema.json",
@@ -487,8 +487,8 @@
       "title": "Datapan Release Consumer Decision v1",
       "contract": "release-consumer-decision",
       "version": "v1",
-      "bytes": 5980,
-      "sha256": "10358a4a2b95a1e80341a08b13b909cf5db15f9cc921b4739db138cd66574057"
+      "bytes": 6690,
+      "sha256": "4a6271898fa0551a8e9845d349214f5282d9a402d31abbb8f31dc5cc0edda967"
     },
     {
       "path": "schemas/datapan.release-goal-finish-preflight.v1.schema.json",
@@ -498,6 +498,15 @@
       "version": "v1",
       "bytes": 3440,
       "sha256": "1cf11824d4d90c70ca00bb257e6ca2c7cb8f2c02a2d668c6f4cbb4ec0fbb0653"
+    },
+    {
+      "path": "schemas/datapan.credential-runtime-collection-preflight.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.credential-runtime-collection-preflight.v1.schema.json",
+      "title": "Datapan Credential Runtime Collection Preflight v1",
+      "contract": "credential-runtime-collection-preflight",
+      "version": "v1",
+      "bytes": 6047,
+      "sha256": "04e01b1159e6fe7e77b5a49737531708b7ae4bdd62f5469cbb04634bff467b43"
     }
   ]
 }

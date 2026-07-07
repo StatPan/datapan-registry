@@ -48,8 +48,8 @@
     },
     "manifest_evidence_contracts": {
       "type": "array",
-      "minItems": 14,
-      "maxItems": 14,
+      "minItems": 15,
+      "maxItems": 15,
       "items": {
         "$ref": "#/$defs/manifest_evidence_contract"
       }
@@ -449,6 +449,7 @@
             "source_runtime_evidence",
             "source_runtime_remediation",
             "credential_runtime_evidence_policy",
+            "credential_runtime_collection_preflight",
             "credential_runtime_receipt_collection_queue",
             "credential_runtime_review_handoff",
             "credential_runtime_manual_review_decision",
@@ -491,6 +492,7 @@
         "source_runtime_rollup",
         "source_runtime_remediation_map",
         "credential_runtime_evidence_policy",
+        "credential_runtime_collection_preflight",
         "credential_runtime_receipt_collection_queue",
         "credential_runtime_review_handoff",
         "credential_runtime_manual_review_decision",
@@ -530,6 +532,14 @@
         "credential_policy_live_receipts",
         "credential_policy_reviewed_receipts",
         "credential_policy_default_ci_requires_credentials",
+        "credential_collection_preflight_status",
+        "credential_collection_preflight_candidate_batches_present",
+        "credential_collection_preflight_candidate_batches_missing",
+        "credential_collection_preflight_reviewed_receipts_present",
+        "credential_collection_preflight_reviewed_receipts_missing",
+        "credential_collection_preflight_default_ci_runnable_sources",
+        "credential_collection_preflight_operator_environment_required_sources",
+        "credential_collection_preflight_manual_review_reduction_allowed",
         "credential_policy_effect",
         "credential_policy_relief_gate_status",
         "credential_queue_status",
@@ -575,6 +585,9 @@
         "credential_runtime_evidence_policy": {
           "const": "reports/credential-runtime-evidence-policy.json"
         },
+        "credential_runtime_collection_preflight": {
+          "const": "reports/credential-runtime-collection-preflight.json"
+        },
         "credential_runtime_receipt_collection_queue": {
           "const": "reports/credential-runtime-receipt-collection-queue.json"
         },
@@ -604,8 +617,8 @@
         },
         "required_contracts": {
           "type": "array",
-          "minItems": 9,
-          "maxItems": 9,
+          "minItems": 10,
+          "maxItems": 10,
           "prefixItems": [
             {
               "const": "source_runtime_evidence"
@@ -615,6 +628,9 @@
             },
             {
               "const": "credential_runtime_evidence_policy"
+            },
+            {
+              "const": "credential_runtime_collection_preflight"
             },
             {
               "const": "credential_runtime_receipt_collection_queue"
@@ -740,6 +756,34 @@
         },
         "credential_policy_default_ci_requires_credentials": {
           "type": "boolean"
+        },
+        "credential_collection_preflight_status": {
+          "enum": [
+            "collection_required_operator_environment_needed",
+            "collection_inputs_ready_operator_environment_needed",
+            "reviewed_receipts_complete"
+          ]
+        },
+        "credential_collection_preflight_candidate_batches_present": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_collection_preflight_candidate_batches_missing": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_collection_preflight_reviewed_receipts_present": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_collection_preflight_reviewed_receipts_missing": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_collection_preflight_default_ci_runnable_sources": {
+          "const": 0
+        },
+        "credential_collection_preflight_operator_environment_required_sources": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_collection_preflight_manual_review_reduction_allowed": {
+          "const": false
         },
         "credential_policy_effect": {
           "enum": [
