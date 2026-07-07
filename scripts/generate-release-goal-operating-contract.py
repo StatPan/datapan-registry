@@ -214,6 +214,26 @@ def build_report(
             "completion_proof_source": "checked_in_release_evidence_and_completion_audit",
             "finish_command_precondition": "python3 scripts/guard-release-goal-finish.py",
             "operator_rule": "Do not run gira goal finish unless repo-owned finish preflight allows completion.",
+            "external_finish_signal_boundary": {
+                "observed_child_graph_signal": "finish_goal_when_child_graph_exhausted",
+                "signal_authority": "lifecycle_progress_only",
+                "repo_finish_allowed": finish_allowed,
+                "repo_goal_closure_allowed": finish_allowed and audit_summary.get("decision") == "prepare_goal_finish",
+                "divergence_status": (
+                    "repo_and_lifecycle_finish_aligned"
+                    if finish_allowed
+                    else "repo_blocks_lifecycle_finish_signal"
+                ),
+                "required_operator_action": (
+                    "gira_goal_finish_allowed_after_guard"
+                    if finish_allowed
+                    else "create_child_ticket_or_collect_required_evidence"
+                ),
+                "guard_command": "python3 scripts/guard-release-goal-finish.py",
+                "continuation_next_action": continuation_summary.get("next_action"),
+                "primary_continuation_candidate": continuation_summary.get("primary_candidate"),
+                "blocking_evidence_count": finish_summary.get("blocking_evidence_count"),
+            },
         },
         "persistent_goal_prompt": {
             "prompt_ticket": 415,
@@ -305,6 +325,18 @@ def validate_invariants(report: dict[str, Any]) -> None:
         raise ValueError("goal contract must state that #344 is not a child-ticket checklist")
     if lifecycle.get("gira_child_graph_finish_signal") != "lifecycle_signal_only":
         raise ValueError("Gira finish signal must be lifecycle_signal_only")
+    finish_boundary = as_dict(
+        lifecycle.get("external_finish_signal_boundary"),
+        "external_lifecycle_signal_policy.external_finish_signal_boundary",
+    )
+    if lifecycle.get("finish_command_precondition") != "python3 scripts/guard-release-goal-finish.py":
+        raise ValueError("Gira goal finish must be guarded by guard-release-goal-finish.py")
+    if finish_boundary.get("guard_command") != lifecycle.get("finish_command_precondition"):
+        raise ValueError("external finish boundary guard must match finish_command_precondition")
+    if finish_boundary.get("repo_finish_allowed") != summary.get("finish_allowed"):
+        raise ValueError("external finish boundary must mirror operating_summary.finish_allowed")
+    if finish_boundary.get("repo_goal_closure_allowed") != summary.get("goal_closure_allowed"):
+        raise ValueError("external finish boundary must mirror operating_summary.goal_closure_allowed")
     if prompt.get("prompt_mode") != "persistent_goal_based_development":
         raise ValueError("goal prompt must be persistent goal-based development")
     if prompt_framing.get("one_off_task") is not False:
@@ -328,6 +360,19 @@ def validate_invariants(report: dict[str, Any]) -> None:
             raise ValueError("blocked goal prompt must preserve not_complete evidence status")
         if prompt_boundary.get("goal_closure_allowed") is not False:
             raise ValueError("blocked goal prompt must not allow goal closure")
+        if finish_boundary.get("divergence_status") != "repo_blocks_lifecycle_finish_signal":
+            raise ValueError("blocked operating contract must record repo_blocks_lifecycle_finish_signal")
+        if finish_boundary.get("required_operator_action") != "create_child_ticket_or_collect_required_evidence":
+            raise ValueError("blocked operating contract must route to continuation evidence")
+        if finish_boundary.get("continuation_next_action") != "create_child_ticket":
+            raise ValueError("blocked operating contract must preserve continuation_next_action=create_child_ticket")
+        if finish_boundary.get("blocking_evidence_count", 0) <= 0:
+            raise ValueError("blocked operating contract must preserve blocking evidence count")
+    if summary.get("finish_allowed") is True:
+        if finish_boundary.get("divergence_status") != "repo_and_lifecycle_finish_aligned":
+            raise ValueError("finish-allowed operating contract must align lifecycle and repo finish signals")
+        if finish_boundary.get("required_operator_action") != "gira_goal_finish_allowed_after_guard":
+            raise ValueError("finish-allowed operating contract must allow guarded goal finish")
     if summary.get("manual_review_required") is True and summary.get("manual_review_accepted") is not True:
         if summary.get("goal_completion_allowed") is not False:
             raise ValueError("unaccepted manual-review boundary must not allow goal completion")
