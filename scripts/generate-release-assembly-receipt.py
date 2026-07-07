@@ -215,6 +215,7 @@ PHASES: list[dict[str, Any]] = [
             "python3 scripts/validate-credential-runtime-manual-review-decision.py",
             "python3 scripts/generate-credential-runtime-manual-review-acceptance.py",
             "python3 scripts/generate-credential-runtime-manual-review-acceptance-packet.py",
+            "python3 scripts/run-credential-runtime-collection.py --all --run --skip-not-ready --continue-on-error --json",
             "python3 scripts/run-credential-runtime-collection.py --source <source_id> --json",
             "python3 scripts/run-credential-runtime-collection.py --source <source_id> --run",
             "python3 scripts/promote-credential-runtime-receipt.py <staged-receipt> --state <reviewed_accepted|reviewed_rejected> --decision <decision> --reviewer <reviewer> --reason <reason>",

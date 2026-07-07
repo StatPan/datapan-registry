@@ -10,6 +10,7 @@ import pathlib
 import shlex
 import subprocess
 import sys
+import tempfile
 from typing import Any
 
 
@@ -160,9 +161,115 @@ def run_source(entry: dict[str, Any], *, force: bool) -> dict[str, Any]:
     subprocess.run(shlex.split(plan["staged_receipt_validation_command"]), check=True)
     return {
         "source_id": source_id,
+        "status": "succeeded",
         "staged_receipt_path": plan["staged_receipt_path"],
         "next_action": "review_and_promote_staged_receipt",
         "reviewed_receipt_promotion_command": plan["reviewed_receipt_promotion_command"],
+    }
+
+
+def readiness_blockers(plan: dict[str, Any], *, force: bool) -> list[str]:
+    blockers: list[str] = []
+    if plan["missing_credential_envs"]:
+        blockers.append("missing_credential_env")
+    if not plan["candidate_batch_present"]:
+        blockers.append("missing_candidate_batch")
+    if plan["reviewed_receipt_present"] and not force:
+        blockers.append("reviewed_receipt_present")
+    return blockers
+
+
+def skipped_result(plan: dict[str, Any], blockers: list[str]) -> dict[str, Any]:
+    return {
+        "source_id": plan["source_id"],
+        "status": "skipped_not_ready",
+        "reasons": blockers,
+        "missing_credential_envs": plan["missing_credential_envs"],
+        "candidate_batch": plan["candidate_batch"],
+        "candidate_batch_present": plan["candidate_batch_present"],
+        "reviewed_receipt_path": plan["reviewed_receipt_path"],
+        "reviewed_receipt_present": plan["reviewed_receipt_present"],
+        "next_action": "resolve_readiness_then_rerun_batch",
+    }
+
+
+def failed_result(entry: dict[str, Any], exc: Exception) -> dict[str, Any]:
+    source_id = string_value(entry.get("source_id"), "source.source_id")
+    return {
+        "source_id": source_id,
+        "status": "failed",
+        "error": str(exc),
+        "next_action": "inspect_source_error_then_rerun_or_keep_manual_review_boundary",
+    }
+
+
+def build_session(results: list[dict[str, Any]], *, queue_path: pathlib.Path) -> dict[str, Any]:
+    return {
+        "schema_version": "datapan.credential-runtime-collection-session.v1",
+        "queue": queue_path.as_posix(),
+        "summary": {
+            "sources": len(results),
+            "succeeded": sum(1 for result in results if result["status"] == "succeeded"),
+            "skipped_not_ready": sum(1 for result in results if result["status"] == "skipped_not_ready"),
+            "failed": sum(1 for result in results if result["status"] == "failed"),
+            "checked_in_secrets_allowed": False,
+            "next_action": "review_and_promote_staged_receipts",
+        },
+        "results": results,
+    }
+
+
+def run_sources(
+    entries: list[dict[str, Any]],
+    *,
+    queue_path: pathlib.Path,
+    force: bool,
+    skip_not_ready: bool,
+    continue_on_error: bool,
+) -> dict[str, Any]:
+    results: list[dict[str, Any]] = []
+    for entry in entries:
+        plan = source_plan(entry)
+        blockers = readiness_blockers(plan, force=force)
+        if blockers:
+            if skip_not_ready:
+                results.append(skipped_result(plan, blockers))
+                continue
+            raise ValueError(f"{plan['source_id']}: not ready ({', '.join(blockers)})")
+        try:
+            results.append(run_source(entry, force=force))
+        except Exception as exc:  # noqa: BLE001 - batch sessions must preserve per-source failure state
+            if not continue_on_error:
+                raise
+            results.append(failed_result(entry, exc))
+    return build_session(results, queue_path=queue_path)
+
+
+def sample_queue(root: pathlib.Path) -> dict[str, Any]:
+    candidate = root / "candidate.json"
+    candidate.write_text("{}", encoding="utf-8")
+    missing_candidate = root / "missing-candidate.json"
+
+    def source(source_id: str, command_arg: str, env_name: str, candidate_path: pathlib.Path) -> dict[str, str]:
+        staged = root / f"{source_id}-staged.json"
+        reviewed = root / f"{source_id}-reviewed.json"
+        return {
+            "source_id": source_id,
+            "operator_command": f"datapan {command_arg} {env_name}=<secret>",
+            "candidate_batch": candidate_path.as_posix(),
+            "staged_receipt_path": staged.as_posix(),
+            "reviewed_receipt_path": reviewed.as_posix(),
+            "staged_receipt_validation_command": "python3 -c 'pass'",
+            "reviewed_receipt_promotion_command": f"promote {staged.as_posix()}",
+        }
+
+    return {
+        "sources": [
+            source("ready", "ok", "READY_TOKEN", candidate),
+            source("missing_env", "ok", "MISSING_TOKEN", candidate),
+            source("missing_candidate", "ok", "READY_TOKEN", missing_candidate),
+            source("failing", "fail", "READY_TOKEN", candidate),
+        ]
     }
 
 
@@ -178,6 +285,54 @@ def run_self_test(queue: dict[str, Any]) -> None:
         if not source["credential_envs"]:
             raise ValueError("self-test failed: source missing credential envs")
 
+    with tempfile.TemporaryDirectory() as temp_dir:
+        root = pathlib.Path(temp_dir)
+        bin_dir = root / "bin"
+        bin_dir.mkdir()
+        fake_datapan = bin_dir / "datapan"
+        fake_datapan.write_text(
+            "#!/bin/sh\n"
+            "if [ \"$1\" = \"fail\" ]; then exit 7; fi\n"
+            "exit 0\n",
+            encoding="utf-8",
+        )
+        fake_datapan.chmod(0o755)
+        old_path = os.environ.get("PATH", "")
+        old_ready = os.environ.get("READY_TOKEN")
+        old_missing = os.environ.get("MISSING_TOKEN")
+        try:
+            os.environ["PATH"] = f"{bin_dir}{os.pathsep}{old_path}"
+            os.environ["READY_TOKEN"] = "self-test-secret"
+            os.environ.pop("MISSING_TOKEN", None)
+            synthetic_queue = sample_queue(root)
+            session = run_sources(
+                queue_sources(synthetic_queue),
+                queue_path=pathlib.Path("synthetic-queue.json"),
+                force=False,
+                skip_not_ready=True,
+                continue_on_error=True,
+            )
+            summary = as_dict(session.get("summary"), "session.summary")
+            if summary.get("succeeded") != 1:
+                raise ValueError("self-test failed: expected one succeeded batch source")
+            if summary.get("skipped_not_ready") != 2:
+                raise ValueError("self-test failed: expected two skipped batch sources")
+            if summary.get("failed") != 1:
+                raise ValueError("self-test failed: expected one failed batch source")
+            rendered = render_json(session)
+            if "self-test-secret" in rendered or "<secret>" in rendered:
+                raise ValueError("self-test failed: batch session leaked credential material")
+        finally:
+            os.environ["PATH"] = old_path
+            if old_ready is None:
+                os.environ.pop("READY_TOKEN", None)
+            else:
+                os.environ["READY_TOKEN"] = old_ready
+            if old_missing is None:
+                os.environ.pop("MISSING_TOKEN", None)
+            else:
+                os.environ["MISSING_TOKEN"] = old_missing
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -187,6 +342,8 @@ def main() -> int:
     parser.add_argument("--require-env", action="store_true", help="fail preflight when credential env vars are absent")
     parser.add_argument("--run", action="store_true", help="execute selected credential runtime checks")
     parser.add_argument("--force", action="store_true", help="allow run mode even when reviewed receipts already exist")
+    parser.add_argument("--skip-not-ready", action="store_true", help="skip selected sources that are not ready to run")
+    parser.add_argument("--continue-on-error", action="store_true", help="preserve per-source failures and continue a batch run")
     parser.add_argument("--json", action="store_true", help="print JSON output")
     parser.add_argument("--check", action="store_true", help="validate queue-derived runner plan without requiring env vars")
     parser.add_argument("--self-test", action="store_true", help="run secret-free runner self-tests")
@@ -205,13 +362,25 @@ def main() -> int:
             return 0
         if args.run:
             selected = selected_sources(queue, args.source, args.all)
-            results = [run_source(source, force=args.force) for source in selected]
+            session = run_sources(
+                selected,
+                queue_path=args.queue,
+                force=args.force,
+                skip_not_ready=args.skip_not_ready,
+                continue_on_error=args.continue_on_error,
+            )
             if args.json:
-                print(render_json({"results": results}), end="")
+                print(render_json(session), end="")
             else:
-                for result in results:
-                    print(f"wrote staged receipt: {result['staged_receipt_path']}")
-                    print(f"next: {result['reviewed_receipt_promotion_command']}")
+                for result in as_list(session.get("results"), "session.results"):
+                    entry = as_dict(result, "session.results[]")
+                    if entry["status"] == "succeeded":
+                        print(f"wrote staged receipt: {entry['staged_receipt_path']}")
+                        print(f"next: {entry['reviewed_receipt_promotion_command']}")
+                    elif entry["status"] == "skipped_not_ready":
+                        print(f"skipped {entry['source_id']}: {', '.join(entry['reasons'])}")
+                    else:
+                        print(f"failed {entry['source_id']}: {entry['error']}", file=sys.stderr)
             return 0
         plan = build_plan(queue, args.source, args.all)
         validate_plan(plan, require_env=args.require_env)
