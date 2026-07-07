@@ -92,9 +92,10 @@ CHILD_PLANNING_RULES = [
 
 
 OPERATING_LOOP = [
-    "Read the current goal state, completion audit, release evidence, and credential/manual-review boundary before planning new work.",
-    "Identify the weakest remaining registry-ledger capability boundary in the Datapan public-data standardization ledger vision.",
+    "Read the current goal state, completion audit, release evidence, release distribution footprint, consumer compatibility, and credential/manual-review boundary before planning new work.",
+    "Identify the weakest remaining registry-ledger capability boundary and the strongest operational latency pressure in the Datapan public-data standardization ledger vision.",
     "Create or select a child ticket only when the work is bounded, reviewable, and able to produce durable checked-in evidence.",
+    "Prefer programming changes that reduce repeated operator delay, large-registry transfer pressure, hidden manual state, or consumer uncertainty.",
     "Preserve canonical registry compatibility unless migration, compatibility evidence, and downstream impact handling are explicit.",
     "After each child merges, record progress evidence and re-evaluate the current non-completion boundary.",
     "Keep the goal open when checked-in evidence still reports finish_allowed=false, goal_completion_allowed=false, or manual_review_required without acceptance.",
@@ -113,9 +114,20 @@ ANTI_COMPLETION_RULES = [
 
 NEXT_CHILD_SELECTION_QUESTIONS = [
     "Which registry-ledger capability boundary is weakest in the current evidence?",
+    "Which large-registry, shard distribution, LFS/setup, CI, or operator runtime delay is now large enough to require a programming change?",
     "Which checked-in artifact, schema, receipt, report, workflow, or validator will prove improvement?",
     "How does the work preserve canonical registry compatibility and downstream consumer safety?",
+    "How does the work keep shard distribution additive until consumer compatibility proves a safe migration path?",
     "Which non-completion boundary will still prevent the full registry-ledger vision from being considered achieved?",
+]
+
+
+OPERATIONAL_PRESSURE_CHECKS = [
+    "Quantify canonical registry size, manifest-bound bytes, shard package status, setup/LFS requirements, CI runtime, and operator runtime before treating delay as acceptable.",
+    "Treat large monolith transfer, repeated local setup, credential collection wait time, and release verification delay as engineering pressure, not only monetary cost.",
+    "Prefer generated shard, compatibility, receipt, and validation evidence over prose-only instructions when delay or manual review repeats.",
+    "Keep shard distribution additive until canonical fallback, downstream compatibility, and migration impact are explicit.",
+    "Separate credential-gated runtime gaps from distribution latency gaps; either class can independently keep the goal open.",
 ]
 
 
@@ -240,13 +252,15 @@ def build_report(
             "prompt_mode": "persistent_goal_based_development",
             "vision_statement": (
                 "Use #344 to mature datapan-registry into Datapan's durable public-data "
-                "standardization ledger, not to complete a single task title."
+                "standardization ledger for repeatable release operations, not to complete "
+                "a single task title."
             ),
             "north_star_question": (
                 "Can a release operator and downstream consumer rebuild, verify, package, "
                 "understand, and safely consume the registry from checked-in evidence without "
                 "ad hoc repair, hidden credential state, or memory-only release decisions?"
             ),
+            "vision_planes": [plane["id"] for plane in CAPABILITY_PLANES],
             "framing": {
                 "one_off_task": False,
                 "task_title_only": False,
@@ -258,6 +272,7 @@ def build_report(
             "operating_loop": OPERATING_LOOP,
             "next_child_selection_basis": "weakest_remaining_registry_ledger_capability_boundary",
             "next_child_selection_questions": NEXT_CHILD_SELECTION_QUESTIONS,
+            "operational_pressure_checks": OPERATIONAL_PRESSURE_CHECKS,
             "anti_completion_rules": ANTI_COMPLETION_RULES,
             "current_prompt_boundary": {
                 "gira_next_action": continuation_summary.get("next_action"),
@@ -314,6 +329,11 @@ def validate_invariants(report: dict[str, Any]) -> None:
     non_completion = as_dict(report.get("current_non_completion_boundary"), "current_non_completion_boundary")
     prompt = as_dict(report.get("persistent_goal_prompt"), "persistent_goal_prompt")
     prompt_framing = as_dict(prompt.get("framing"), "persistent_goal_prompt.framing")
+    prompt_vision_planes = as_list(prompt.get("vision_planes"), "persistent_goal_prompt.vision_planes")
+    pressure_checks = as_list(
+        prompt.get("operational_pressure_checks"),
+        "persistent_goal_prompt.operational_pressure_checks",
+    )
     prompt_boundary = as_dict(
         prompt.get("current_prompt_boundary"),
         "persistent_goal_prompt.current_prompt_boundary",
@@ -339,6 +359,20 @@ def validate_invariants(report: dict[str, Any]) -> None:
         raise ValueError("external finish boundary must mirror operating_summary.goal_closure_allowed")
     if prompt.get("prompt_mode") != "persistent_goal_based_development":
         raise ValueError("goal prompt must be persistent goal-based development")
+    expected_planes = {str(plane["id"]) for plane in CAPABILITY_PLANES}
+    if set(prompt_vision_planes) != expected_planes:
+        raise ValueError("goal prompt must cover every registry-ledger capability plane")
+    pressure_text = " ".join(str(item).lower() for item in pressure_checks)
+    for required_text in [
+        "canonical registry",
+        "shard",
+        "lfs",
+        "ci runtime",
+        "operator runtime",
+        "credential",
+    ]:
+        if required_text not in pressure_text:
+            raise ValueError(f"goal prompt operational pressure checks must mention {required_text}")
     if prompt_framing.get("one_off_task") is not False:
         raise ValueError("goal prompt must reject one-off task framing")
     if prompt_framing.get("prompt_update_is_completion_evidence") is not False:

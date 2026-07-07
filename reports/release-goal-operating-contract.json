@@ -55,8 +55,18 @@
   "persistent_goal_prompt": {
     "prompt_ticket": 415,
     "prompt_mode": "persistent_goal_based_development",
-    "vision_statement": "Use #344 to mature datapan-registry into Datapan's durable public-data standardization ledger, not to complete a single task title.",
+    "vision_statement": "Use #344 to mature datapan-registry into Datapan's durable public-data standardization ledger for repeatable release operations, not to complete a single task title.",
     "north_star_question": "Can a release operator and downstream consumer rebuild, verify, package, understand, and safely consume the registry from checked-in evidence without ad hoc repair, hidden credential state, or memory-only release decisions?",
+    "vision_planes": [
+      "source_contracts",
+      "registry_artifacts",
+      "shard_release_distribution",
+      "verification_evidence",
+      "error_action_routing",
+      "downstream_impact",
+      "consumer_compatibility",
+      "credential_safe_evidence"
+    ],
     "framing": {
       "one_off_task": false,
       "task_title_only": false,
@@ -66,9 +76,10 @@
       "completion_requires_current_repo_evidence": true
     },
     "operating_loop": [
-      "Read the current goal state, completion audit, release evidence, and credential/manual-review boundary before planning new work.",
-      "Identify the weakest remaining registry-ledger capability boundary in the Datapan public-data standardization ledger vision.",
+      "Read the current goal state, completion audit, release evidence, release distribution footprint, consumer compatibility, and credential/manual-review boundary before planning new work.",
+      "Identify the weakest remaining registry-ledger capability boundary and the strongest operational latency pressure in the Datapan public-data standardization ledger vision.",
       "Create or select a child ticket only when the work is bounded, reviewable, and able to produce durable checked-in evidence.",
+      "Prefer programming changes that reduce repeated operator delay, large-registry transfer pressure, hidden manual state, or consumer uncertainty.",
       "Preserve canonical registry compatibility unless migration, compatibility evidence, and downstream impact handling are explicit.",
       "After each child merges, record progress evidence and re-evaluate the current non-completion boundary.",
       "Keep the goal open when checked-in evidence still reports finish_allowed=false, goal_completion_allowed=false, or manual_review_required without acceptance."
@@ -76,9 +87,18 @@
     "next_child_selection_basis": "weakest_remaining_registry_ledger_capability_boundary",
     "next_child_selection_questions": [
       "Which registry-ledger capability boundary is weakest in the current evidence?",
+      "Which large-registry, shard distribution, LFS/setup, CI, or operator runtime delay is now large enough to require a programming change?",
       "Which checked-in artifact, schema, receipt, report, workflow, or validator will prove improvement?",
       "How does the work preserve canonical registry compatibility and downstream consumer safety?",
+      "How does the work keep shard distribution additive until consumer compatibility proves a safe migration path?",
       "Which non-completion boundary will still prevent the full registry-ledger vision from being considered achieved?"
+    ],
+    "operational_pressure_checks": [
+      "Quantify canonical registry size, manifest-bound bytes, shard package status, setup/LFS requirements, CI runtime, and operator runtime before treating delay as acceptable.",
+      "Treat large monolith transfer, repeated local setup, credential collection wait time, and release verification delay as engineering pressure, not only monetary cost.",
+      "Prefer generated shard, compatibility, receipt, and validation evidence over prose-only instructions when delay or manual review repeats.",
+      "Keep shard distribution additive until canonical fallback, downstream compatibility, and migration impact are explicit.",
+      "Separate credential-gated runtime gaps from distribution latency gaps; either class can independently keep the goal open."
     ],
     "anti_completion_rules": [
       "Do not treat a prompt update as goal completion.",
