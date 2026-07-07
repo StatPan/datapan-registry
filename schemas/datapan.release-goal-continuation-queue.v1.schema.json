@@ -278,6 +278,7 @@
         "blocked_finish_conditions",
         "proposed_acceptance_criteria",
         "post_completion_commands",
+        "ticket_packet",
         "goal_closure_allowed",
         "rationale"
       ],
@@ -341,11 +342,60 @@
           ],
           "items": false
         },
+        "ticket_packet": {
+          "$ref": "#/$defs/ticket_packet"
+        },
         "goal_closure_allowed": {
           "const": false
         },
         "rationale": {
           "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "ticket_packet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent_goal_issue",
+        "title",
+        "goal",
+        "body",
+        "body_input",
+        "dry_run_command",
+        "apply_command",
+        "start_after_create",
+        "goal_closure_allowed"
+      ],
+      "properties": {
+        "parent_goal_issue": {
+          "const": 344
+        },
+        "title": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "goal": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "body": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "body_input": {
+          "const": "stdin"
+        },
+        "dry_run_command": {
+          "pattern": "^gira ticket new .+ --body-file - --dry-run$",
+          "type": "string"
+        },
+        "apply_command": {
+          "pattern": "^gira ticket new .+ --body-file - --apply$",
+          "type": "string"
+        },
+        "start_after_create": {
+          "const": true
+        },
+        "goal_closure_allowed": {
+          "const": false
         }
       }
     }

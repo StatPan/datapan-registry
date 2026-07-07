@@ -119,7 +119,18 @@
         "python3 scripts/refresh-release-ledger-evidence.py --check"
       ],
       "goal_closure_allowed": false,
-      "rationale": "Reviewed credential runtime receipts are the strongest evidence path for reducing current manual-review compatibility gates."
+      "rationale": "Reviewed credential runtime receipts are the strongest evidence path for reducing current manual-review compatibility gates.",
+      "ticket_packet": {
+        "parent_goal_issue": 344,
+        "title": "Collect reviewed credential runtime receipts",
+        "goal": "Advance #344 by executing continuation candidate collect_reviewed_credential_runtime_receipts.",
+        "body": "## Goal\nAdvance #344 by executing continuation candidate `collect_reviewed_credential_runtime_receipts`: Collect reviewed credential runtime receipts.\n\n## Scope\nReviewed credential runtime receipts are the strongest evidence path for reducing current manual-review compatibility gates. Keep the work bounded to the evidence inputs below and preserve canonical registry compatibility. This child ticket is progress evidence only and must not mark #344 complete.\n\n## Evidence Inputs\n- reports/credential-runtime-collection-preflight.json\n- reports/credential-runtime-runner-readiness.json\n- reports/credential-runtime-receipt-collection-queue.json\n- reports/credential-runtime-review-handoff.json\n- reports/credential-runtime-collection-execution-plan.json\n\n## Safe Start Conditions\n- candidate batches present: 5\n- operator environment required sources: 5\n- batch ready for operator credentials: True\n- execution plan status: operator_credentials_required\n- execution plan next action: run_batch_collection_session_in_operator_env\n- run credentialed collection only from an operator environment with provider credentials\n- do not check in credentials, hashes, headers, or secret-derived values\n\n## Blocked Finish Conditions\n- reviewed receipts missing: 5\n- pending review sources: 5\n- manual-review reduction remains disallowed until reviewed validated receipts are checked in\n\n## Acceptance Criteria\n- Staged credential runtime receipts are generated without secret material.\n- Reviewed receipts validate with python3 scripts/validate-credential-runtime-receipts.py.\n- Promotion uses scripts/promote-credential-runtime-receipt.py and keeps reviewed states explicit.\n- Consumer compatibility continues to report manual-review status unless relief gates are fully satisfied.\n\n## Post Completion Commands\n- python3 scripts/refresh-release-ledger-evidence.py --write --max-iterations 5\n- python3 scripts/refresh-release-ledger-evidence.py --check\n\n## Goal Boundary\ngoal_closure_allowed=false. Leave #344 open unless repo-owned finish preflight and completion audit allow closure.\n",
+        "body_input": "stdin",
+        "dry_run_command": "gira ticket new 'Collect reviewed credential runtime receipts' --body-file - --dry-run",
+        "apply_command": "gira ticket new 'Collect reviewed credential runtime receipts' --body-file - --apply",
+        "start_after_create": true,
+        "goal_closure_allowed": false
+      }
     },
     {
       "order": 2,
@@ -158,7 +169,18 @@
         "python3 scripts/refresh-release-ledger-evidence.py --check"
       ],
       "goal_closure_allowed": false,
-      "rationale": "Explicit manual-review acceptance is the alternative release boundary when reviewed live receipt evidence is not yet available."
+      "rationale": "Explicit manual-review acceptance is the alternative release boundary when reviewed live receipt evidence is not yet available.",
+      "ticket_packet": {
+        "parent_goal_issue": 344,
+        "title": "Assert explicit manual-review release acceptance",
+        "goal": "Advance #344 by executing continuation candidate assert_explicit_manual_review_release_acceptance.",
+        "body": "## Goal\nAdvance #344 by executing continuation candidate `assert_explicit_manual_review_release_acceptance`: Assert explicit manual-review release acceptance.\n\n## Scope\nExplicit manual-review acceptance is the alternative release boundary when reviewed live receipt evidence is not yet available. Keep the work bounded to the evidence inputs below and preserve canonical registry compatibility. This child ticket is progress evidence only and must not mark #344 complete.\n\n## Evidence Inputs\n- reports/credential-runtime-manual-review-decision.json\n- reports/credential-runtime-manual-review-acceptance.json\n- reports/release-consumer-decision.json\n- docs/release-ledger-goal-completion-audit.json\n\n## Safe Start Conditions\n- manual-review acceptance must be asserted by an accountable reviewer or release owner\n- acceptance must state affected consumers remain manual-review only\n- acceptance must define expiry or revalidation trigger\n- acceptance must not include credentials, hashes, headers, or secret-derived values\n\n## Blocked Finish Conditions\n- manual_review_accepted is false in current release consumer decision\n- goal_completion_allowed is false in current release consumer decision\n- reviewed credential receipts are still absent\n\n## Acceptance Criteria\n- Manual-review decision intake records accepted=true with required evidence.\n- Manual-review acceptance report validates and remains manifest-bound.\n- Release consumer decision explains manual-review-only adoption for affected consumers.\n- Goal audit remains not_complete unless it explicitly proves the completion contract.\n\n## Post Completion Commands\n- python3 scripts/refresh-release-ledger-evidence.py --write --max-iterations 5\n- python3 scripts/refresh-release-ledger-evidence.py --check\n\n## Goal Boundary\ngoal_closure_allowed=false. Leave #344 open unless repo-owned finish preflight and completion audit allow closure.\n",
+        "body_input": "stdin",
+        "dry_run_command": "gira ticket new 'Assert explicit manual-review release acceptance' --body-file - --dry-run",
+        "apply_command": "gira ticket new 'Assert explicit manual-review release acceptance' --body-file - --apply",
+        "start_after_create": true,
+        "goal_closure_allowed": false
+      }
     }
   ]
 }
