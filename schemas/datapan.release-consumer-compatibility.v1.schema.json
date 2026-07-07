@@ -48,8 +48,8 @@
     },
     "manifest_evidence_contracts": {
       "type": "array",
-      "minItems": 12,
-      "maxItems": 12,
+      "minItems": 13,
+      "maxItems": 13,
       "items": {
         "$ref": "#/$defs/manifest_evidence_contract"
       }
@@ -366,7 +366,16 @@
         "generated_inventory",
         "generated_archive",
         "archive_check",
-        "required_commands"
+        "required_commands",
+        "release_distribution_footprint",
+        "canonical_registry_bytes",
+        "manifest_bound_bytes_excluding_self",
+        "large_monolith_threshold_bytes",
+        "registry_footprint_status",
+        "canonical_registry_required",
+        "shard_distribution_required",
+        "monolith_fallback_required",
+        "footprint_consumer_effect"
       ],
       "properties": {
         "status": {
@@ -397,6 +406,35 @@
             "$ref": "#/$defs/non_empty_string"
           },
           "uniqueItems": true
+        },
+        "release_distribution_footprint": {
+          "const": "reports/release-distribution-footprint.json"
+        },
+        "canonical_registry_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "manifest_bound_bytes_excluding_self": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "large_monolith_threshold_bytes": {
+          "const": 100000000
+        },
+        "registry_footprint_status": {
+          "const": "large_monolith_shard_additive"
+        },
+        "canonical_registry_required": {
+          "const": true
+        },
+        "shard_distribution_required": {
+          "const": false
+        },
+        "monolith_fallback_required": {
+          "const": true
+        },
+        "footprint_consumer_effect": {
+          "const": "canonical_registry_required_shards_optional"
         }
       }
     },
@@ -418,7 +456,8 @@
             "error_action_routing",
             "downstream_impact",
             "source_reference_drift",
-            "source_report_inventory"
+            "source_report_inventory",
+            "release_distribution_footprint"
           ]
         },
         "path": {

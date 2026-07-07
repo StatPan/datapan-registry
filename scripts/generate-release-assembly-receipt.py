@@ -251,25 +251,32 @@ PHASES: list[dict[str, Any]] = [
     },
     {
         "id": "consumer_compatibility",
-        "coverage": ["consumer_compatibility"],
+        "coverage": ["consumer_compatibility", "release_distribution"],
         "operator_commands": [
+            "python3 scripts/generate-release-distribution-footprint.py",
             "python3 scripts/generate-release-consumer-compatibility.py",
         ],
         "check_commands": [
+            "python3 scripts/generate-release-distribution-footprint.py --check",
             "python3 scripts/generate-release-consumer-compatibility.py --check",
             "python3 scripts/validate-release-consumer-compatibility.py",
         ],
         "workflow_fragments": {
             ".github/workflows/verify-release.yml": [
+                "python scripts/generate-release-distribution-footprint.py --check",
                 "python scripts/generate-release-consumer-compatibility.py --check",
                 "python scripts/validate-release-consumer-compatibility.py",
             ],
             ".github/workflows/release-draft.yml": [
+                "python scripts/generate-release-distribution-footprint.py --check",
                 "python scripts/generate-release-consumer-compatibility.py --check",
                 "python scripts/validate-release-consumer-compatibility.py",
             ],
         },
-        "evidence_artifacts": ["reports/release-consumer-compatibility.json"],
+        "evidence_artifacts": [
+            "reports/release-distribution-footprint.json",
+            "reports/release-consumer-compatibility.json",
+        ],
     },
     {
         "id": "release_verification_and_readiness",

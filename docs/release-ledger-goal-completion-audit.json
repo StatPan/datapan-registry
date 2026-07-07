@@ -11,18 +11,18 @@
     "criteria_partial": 0,
     "criteria_gap": 0,
     "decision": "leave_goal_open",
-    "reason": "The release assembly path is receipt-bound and credential-safe runtime evidence is now policy-bound with an operator-facing receipt collection queue, reviewer-facing handoff, manual-review decision intake, and manual-review acceptance boundary, but #344 remains open because reviewed live credentialed runtime receipts are not checked in, explicit manual-review release acceptance is not asserted, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
+    "reason": "The release assembly path is receipt-bound, release distribution footprint evidence now records the large canonical registry and shard/fallback boundary, and credential-safe runtime evidence is policy-bound with an operator-facing receipt collection queue, reviewer-facing handoff, manual-review decision intake, and manual-review acceptance boundary, but #344 remains open because reviewed live credentialed runtime receipts are not checked in, explicit manual-review release acceptance is not asserted, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
   },
   "current_state_evidence": {
     "manifest": {
       "path": "manifest.json",
-      "artifact_count": 85,
-      "artifact_kinds": 34,
-      "schema_artifacts": 52
+      "artifact_count": 87,
+      "artifact_kinds": 35,
+      "schema_artifacts": 53
     },
     "schema_index": {
       "path": "schemas/index.json",
-      "schema_count": 52
+      "schema_count": 53
     },
     "release_readiness": {
       "path": "reports/latest-release-readiness.json",
@@ -114,6 +114,17 @@
       "remediation_receipt_linked_absent": 13,
       "remediation_receipt_linked_relief_eligible": 0,
       "manual_review_reduction_allowed": false
+    },
+    "release_distribution_footprint": {
+      "path": "reports/release-distribution-footprint.json",
+      "canonical_registry_bytes": 137735169,
+      "manifest_bound_bytes_excluding_self": 165657574,
+      "large_monolith_threshold_bytes": 100000000,
+      "registry_footprint_status": "large_monolith_shard_additive",
+      "canonical_registry_required": true,
+      "shard_distribution_required": false,
+      "monolith_fallback_required": true,
+      "consumer_effect": "canonical_registry_required_shards_optional"
     },
     "credential_runtime_policy": {
       "path": "reports/credential-runtime-evidence-policy.json",
@@ -471,6 +482,7 @@
     "python3 scripts/run-credential-runtime-collection.py --self-test",
     "python3 scripts/run-credential-runtime-collection.py --check",
     "python3 scripts/promote-credential-runtime-receipt.py --self-test",
+    "python3 scripts/generate-release-distribution-footprint.py --check",
     "python3 scripts/generate-release-consumer-compatibility.py --check",
     "python3 scripts/validate-release-consumer-compatibility.py",
     "python3 scripts/package-registry-release.py --manifest manifest.json --output .datapan/ci/datapan-registry-snapshot-test.zip",
@@ -556,6 +568,11 @@
       "issue": 391,
       "title": "Define manual-review acceptance decision intake",
       "reason": "Manual-review acceptance now has a checked-in decision record and validator for future explicit acceptance, but the goal remains open because the decision is not_asserted and reviewed live receipts are still absent."
+    },
+    {
+      "issue": 393,
+      "title": "Publish release distribution footprint evidence",
+      "reason": "Release distribution footprint evidence now records canonical registry bytes, manifest-bound footprint, largest artifacts, and the shard optional/canonical fallback boundary, but the goal remains open because reviewed live receipts or explicit manual-review release acceptance are still absent."
     }
   ]
 }

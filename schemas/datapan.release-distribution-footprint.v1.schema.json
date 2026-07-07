@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
+  "title": "Datapan Release Distribution Footprint v1",
+  "description": "Release footprint evidence for manifest-bound artifact sizes, canonical registry size, and shard/fallback distribution boundaries.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "goal_issue",
+    "footprint_ticket",
+    "provider",
+    "inputs",
+    "summary",
+    "distribution_boundary",
+    "largest_artifacts"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.release-distribution-footprint.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "goal_issue": {
+      "const": 344
+    },
+    "footprint_ticket": {
+      "const": 393
+    },
+    "provider": {
+      "const": "datapan-registry"
+    },
+    "inputs": {
+      "$ref": "#/$defs/inputs"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "distribution_boundary": {
+      "$ref": "#/$defs/distribution_boundary"
+    },
+    "largest_artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10,
+      "items": {
+        "$ref": "#/$defs/artifact"
+      }
+    }
+  },
+  "$defs": {
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest", "self_artifact_excluded"],
+      "properties": {
+        "manifest": {
+          "const": "manifest.json"
+        },
+        "self_artifact_excluded": {
+          "const": true
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_count",
+        "schema_artifacts",
+        "manifest_bound_bytes_excluding_self",
+        "canonical_registry_path",
+        "canonical_registry_bytes",
+        "large_monolith_threshold_bytes",
+        "registry_footprint_status",
+        "canonical_registry_required",
+        "shard_distribution_required",
+        "monolith_fallback_required"
+      ],
+      "properties": {
+        "artifact_count": {
+          "$ref": "#/$defs/count"
+        },
+        "schema_artifacts": {
+          "$ref": "#/$defs/count"
+        },
+        "manifest_bound_bytes_excluding_self": {
+          "$ref": "#/$defs/bytes"
+        },
+        "canonical_registry_path": {
+          "const": "data/data-go-kr.registry.json"
+        },
+        "canonical_registry_bytes": {
+          "$ref": "#/$defs/bytes"
+        },
+        "large_monolith_threshold_bytes": {
+          "const": 100000000
+        },
+        "registry_footprint_status": {
+          "enum": ["large_monolith_shard_additive", "within_monolith_budget"]
+        },
+        "canonical_registry_required": {
+          "const": true
+        },
+        "shard_distribution_required": {
+          "const": false
+        },
+        "monolith_fallback_required": {
+          "const": true
+        }
+      }
+    },
+    "distribution_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical_registry_compatible",
+        "release_package_includes_monolith",
+        "shard_archive_status",
+        "consumer_effect",
+        "next_distribution_action"
+      ],
+      "properties": {
+        "canonical_registry_compatible": {
+          "const": true
+        },
+        "release_package_includes_monolith": {
+          "const": true
+        },
+        "shard_archive_status": {
+          "const": "optional_additive_asset"
+        },
+        "consumer_effect": {
+          "const": "canonical_registry_required_shards_optional"
+        },
+        "next_distribution_action": {
+          "const": "prove_shard_preferred_install_with_canonical_fallback_before_requiring_shards"
+        }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "kind", "bytes", "sha256"],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "kind": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "bytes": {
+          "$ref": "#/$defs/bytes"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  }
+}

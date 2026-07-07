@@ -34,6 +34,7 @@ DEFAULT_CREDENTIAL_MANUAL_REVIEW_ACCEPTANCE = pathlib.Path(
 )
 DEFAULT_ERROR_ACTION_ROUTING_ROLLUP = pathlib.Path("reports/error-action-routing-rollup.json")
 DEFAULT_IMPACT_ROLLUP = pathlib.Path("reports/registry-impact-plan.json")
+DEFAULT_RELEASE_DISTRIBUTION_FOOTPRINT = pathlib.Path("reports/release-distribution-footprint.json")
 REQUIRED_RUNTIME_RISK_CONTRACTS = [
     "source_runtime_evidence",
     "source_runtime_remediation",
@@ -158,6 +159,11 @@ REQUIRED_MANIFEST_EVIDENCE_CONTRACTS = {
         "path": "reports/source-report-inventory.json",
         "kind": "source_report_inventory",
         "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
+    },
+    "release_distribution_footprint": {
+        "path": "reports/release-distribution-footprint.json",
+        "kind": "release_distribution_footprint",
+        "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
     },
 }
 REQUIRED_CLI_SURFACES = {
@@ -428,6 +434,23 @@ def validate_shard_release_evidence(report: dict[str, Any]) -> None:
     missing_commands = sorted(REQUIRED_SHARD_RELEASE_COMMANDS.difference(commands))
     if missing_commands:
         raise ValueError(f"shard release evidence missing required commands: {', '.join(missing_commands)}")
+
+    expected_footprint_values = {
+        "release_distribution_footprint": DEFAULT_RELEASE_DISTRIBUTION_FOOTPRINT.as_posix(),
+        "large_monolith_threshold_bytes": 100000000,
+        "registry_footprint_status": "large_monolith_shard_additive",
+        "canonical_registry_required": True,
+        "shard_distribution_required": False,
+        "monolith_fallback_required": True,
+        "footprint_consumer_effect": "canonical_registry_required_shards_optional",
+    }
+    for key, value in expected_footprint_values.items():
+        if evidence.get(key) != value:
+            raise ValueError(f"shard_release_evidence.{key} expected {value}, got {evidence.get(key)}")
+    for key in ("canonical_registry_bytes", "manifest_bound_bytes_excluding_self"):
+        value = evidence.get(key)
+        if not isinstance(value, int) or value <= 0:
+            raise ValueError(f"shard_release_evidence.{key} must be a positive integer")
 
     workflow_path = pathlib.Path(str(evidence.get("workflow")))
     if not workflow_path.is_file():
@@ -973,6 +996,7 @@ def validate_consistency(
     credential_manual_review_acceptance: dict[str, Any],
     error_action_routing: dict[str, Any],
     downstream_impact: dict[str, Any],
+    release_distribution_footprint: dict[str, Any],
     manifest_path: pathlib.Path,
     readiness_path: pathlib.Path,
     source_runtime_path: pathlib.Path,
@@ -993,6 +1017,7 @@ def validate_consistency(
     validate_shard_policy(report)
     validate_shard_release_evidence(report)
     validate_manifest_evidence_contracts(report, manifest)
+    validate_distribution_footprint(report, release_distribution_footprint)
     validate_runtime_risk_evidence(
         report,
         source_runtime,
@@ -1015,6 +1040,30 @@ def validate_consistency(
         impact_path,
     )
     validate_consumers(report)
+
+
+def validate_distribution_footprint(report: dict[str, Any], footprint: dict[str, Any]) -> None:
+    summary = as_dict(footprint.get("summary"), "release_distribution_footprint.summary")
+    boundary = as_dict(footprint.get("distribution_boundary"), "release_distribution_footprint.distribution_boundary")
+    evidence = as_dict(report.get("shard_release_evidence"), "shard_release_evidence")
+    expected = {
+        "release_distribution_footprint": DEFAULT_RELEASE_DISTRIBUTION_FOOTPRINT.as_posix(),
+        "canonical_registry_bytes": summary.get("canonical_registry_bytes"),
+        "manifest_bound_bytes_excluding_self": summary.get("manifest_bound_bytes_excluding_self"),
+        "large_monolith_threshold_bytes": summary.get("large_monolith_threshold_bytes"),
+        "registry_footprint_status": summary.get("registry_footprint_status"),
+        "canonical_registry_required": summary.get("canonical_registry_required"),
+        "shard_distribution_required": summary.get("shard_distribution_required"),
+        "monolith_fallback_required": summary.get("monolith_fallback_required"),
+        "footprint_consumer_effect": boundary.get("consumer_effect"),
+    }
+    for key, value in expected.items():
+        if evidence.get(key) != value:
+            raise ValueError(f"shard_release_evidence.{key} must match release distribution footprint")
+    if summary.get("canonical_registry_path") != CANONICAL_REGISTRY_PATH:
+        raise ValueError("release distribution footprint must describe the canonical registry")
+    if boundary.get("canonical_registry_compatible") is not True:
+        raise ValueError("release distribution footprint must preserve canonical registry compatibility")
 
 
 def main() -> int:
@@ -1044,6 +1093,11 @@ def main() -> int:
     )
     parser.add_argument("--error-action-routing-rollup", default=DEFAULT_ERROR_ACTION_ROUTING_ROLLUP, type=pathlib.Path)
     parser.add_argument("--impact-rollup", default=DEFAULT_IMPACT_ROLLUP, type=pathlib.Path)
+    parser.add_argument(
+        "--release-distribution-footprint",
+        default=DEFAULT_RELEASE_DISTRIBUTION_FOOTPRINT,
+        type=pathlib.Path,
+    )
     parser.add_argument("report", nargs="?", default=COMPATIBILITY_REPORT_PATH, type=pathlib.Path)
     args = parser.parse_args()
 
@@ -1082,6 +1136,10 @@ def main() -> int:
             args.error_action_routing_rollup.as_posix(),
         )
         downstream_impact = as_dict(load_json(args.impact_rollup), args.impact_rollup.as_posix())
+        release_distribution_footprint = as_dict(
+            load_json(args.release_distribution_footprint),
+            args.release_distribution_footprint.as_posix(),
+        )
 
         validator = jsonschema.Draft202012Validator(schema)
         errors = sorted(validator.iter_errors(report), key=lambda error: list(error.path))
@@ -1105,6 +1163,7 @@ def main() -> int:
             credential_manual_review_acceptance,
             error_action_routing,
             downstream_impact,
+            release_distribution_footprint,
             args.manifest,
             args.readiness,
             args.source_runtime_rollup,

@@ -26,6 +26,7 @@ DEFAULT_CREDENTIAL_MANUAL_REVIEW_ACCEPTANCE = pathlib.Path(
 )
 DEFAULT_ERROR_ACTION_ROUTING_ROLLUP = pathlib.Path("reports/error-action-routing-rollup.json")
 DEFAULT_IMPACT_ROLLUP = pathlib.Path("reports/registry-impact-plan.json")
+DEFAULT_RELEASE_DISTRIBUTION_FOOTPRINT = pathlib.Path("reports/release-distribution-footprint.json")
 DEFAULT_OUTPUT = pathlib.Path("reports/release-consumer-compatibility.json")
 REQUIRED_RUNTIME_RISK_CONTRACTS = [
     "source_runtime_evidence",
@@ -163,6 +164,12 @@ REQUIRED_MANIFEST_EVIDENCE_CONTRACTS = [
         "path": "reports/source-report-inventory.json",
         "kind": "source_report_inventory",
         "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
+    },
+    {
+        "contract": "release_distribution_footprint",
+        "path": "reports/release-distribution-footprint.json",
+        "kind": "release_distribution_footprint",
+        "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
     },
 ]
 
@@ -699,6 +706,7 @@ def build_report(
     credential_manual_review_acceptance: dict[str, Any],
     error_action_routing: dict[str, Any],
     downstream_impact: dict[str, Any],
+    release_distribution_footprint: dict[str, Any],
     *,
     manifest_path: pathlib.Path = DEFAULT_MANIFEST,
     readiness_path: pathlib.Path = DEFAULT_READINESS,
@@ -711,10 +719,16 @@ def build_report(
     credential_manual_review_acceptance_path: pathlib.Path = DEFAULT_CREDENTIAL_MANUAL_REVIEW_ACCEPTANCE,
     error_action_routing_path: pathlib.Path = DEFAULT_ERROR_ACTION_ROUTING_ROLLUP,
     impact_path: pathlib.Path = DEFAULT_IMPACT_ROLLUP,
+    release_distribution_footprint_path: pathlib.Path = DEFAULT_RELEASE_DISTRIBUTION_FOOTPRINT,
 ) -> dict[str, Any]:
     generated_at = require_release_inputs(manifest, readiness)
     consumers = consumer_entries()
     evidence_contracts = manifest_evidence_contracts(manifest)
+    footprint_summary = as_dict(release_distribution_footprint.get("summary"), "release_distribution_footprint.summary")
+    footprint_boundary = as_dict(
+        release_distribution_footprint.get("distribution_boundary"),
+        "release_distribution_footprint.distribution_boundary",
+    )
     return {
         "schema_version": "datapan.release-consumer-compatibility.v1",
         "generated_at": generated_at,
@@ -781,7 +795,18 @@ def build_report(
                 "downstream SDK, MCP, Studio, and API consumers keep canonical registry compatibility",
             ],
         },
-        "shard_release_evidence": SHARD_RELEASE_EVIDENCE,
+        "shard_release_evidence": {
+            **SHARD_RELEASE_EVIDENCE,
+            "release_distribution_footprint": release_distribution_footprint_path.as_posix(),
+            "canonical_registry_bytes": footprint_summary.get("canonical_registry_bytes"),
+            "manifest_bound_bytes_excluding_self": footprint_summary.get("manifest_bound_bytes_excluding_self"),
+            "large_monolith_threshold_bytes": footprint_summary.get("large_monolith_threshold_bytes"),
+            "registry_footprint_status": footprint_summary.get("registry_footprint_status"),
+            "canonical_registry_required": footprint_summary.get("canonical_registry_required"),
+            "shard_distribution_required": footprint_summary.get("shard_distribution_required"),
+            "monolith_fallback_required": footprint_summary.get("monolith_fallback_required"),
+            "footprint_consumer_effect": footprint_boundary.get("consumer_effect"),
+        },
         "consumers": consumers,
     }
 
@@ -807,6 +832,11 @@ def main() -> int:
     )
     parser.add_argument("--error-action-routing-rollup", default=DEFAULT_ERROR_ACTION_ROUTING_ROLLUP, type=pathlib.Path)
     parser.add_argument("--impact-rollup", default=DEFAULT_IMPACT_ROLLUP, type=pathlib.Path)
+    parser.add_argument(
+        "--release-distribution-footprint",
+        default=DEFAULT_RELEASE_DISTRIBUTION_FOOTPRINT,
+        type=pathlib.Path,
+    )
     parser.add_argument("--output", default=DEFAULT_OUTPUT, type=pathlib.Path)
     parser.add_argument(
         "--check",
@@ -828,6 +858,7 @@ def main() -> int:
             load_json(args.credential_manual_review_acceptance),
             load_json(args.error_action_routing_rollup),
             load_json(args.impact_rollup),
+            load_json(args.release_distribution_footprint),
             manifest_path=args.manifest,
             readiness_path=args.readiness,
             source_runtime_path=args.source_runtime_rollup,
@@ -839,6 +870,7 @@ def main() -> int:
             credential_manual_review_acceptance_path=args.credential_manual_review_acceptance,
             error_action_routing_path=args.error_action_routing_rollup,
             impact_path=args.impact_rollup,
+            release_distribution_footprint_path=args.release_distribution_footprint,
         )
     except Exception as exc:  # noqa: BLE001 - release operators need the failed invariant
         print(f"FAIL generate release consumer compatibility: {exc}", file=sys.stderr)
