@@ -237,6 +237,7 @@ def build_workflow(
     environment: Any | None = None,
 ) -> dict[str, Any]:
     plan_summary = as_dict(execution_plan.get("summary"), "execution_plan.summary")
+    operator_routing = as_dict(execution_plan.get("operator_routing"), "execution_plan.operator_routing")
     batch = as_dict(execution_plan.get("batch_execution"), "execution_plan.batch_execution")
     env_status = credential_environment_status(
         execution_plan,
@@ -287,6 +288,7 @@ def build_workflow(
                 "execution_plan.summary.goal_closure_allowed",
             ),
         },
+        "operator_routing": operator_routing,
         "local_artifacts": {
             "session_output_path": session_output.as_posix(),
             "session_review_plan_output_path": review_plan_output.as_posix(),
@@ -304,6 +306,7 @@ def build_workflow(
 
 def validate_workflow(report: dict[str, Any]) -> None:
     summary = as_dict(report.get("summary"), "summary")
+    routing = as_dict(report.get("operator_routing"), "operator_routing")
     artifacts = as_dict(report.get("local_artifacts"), "local_artifacts")
     environment = as_dict(report.get("operator_environment"), "operator_environment")
     steps = report.get("steps")
@@ -320,6 +323,21 @@ def validate_workflow(report: dict[str, Any]) -> None:
     ]
     if step_ids != expected:
         raise ValueError("workflow steps are not in the required operator order")
+    if routing.get("goal_issue") != 344:
+        raise ValueError("operator_routing.goal_issue must preserve #344")
+    if routing.get("plan_status") != summary.get("session_plan_status"):
+        raise ValueError("operator_routing.plan_status must match summary.session_plan_status")
+    if routing.get("next_action") != summary.get("next_action"):
+        raise ValueError("operator_routing.next_action must match summary.next_action")
+    if routing.get("goal_closure_allowed") is not False:
+        raise ValueError("operator_routing.goal_closure_allowed must remain false")
+    for key in (
+        "checked_in_secrets_allowed",
+        "checked_in_session_output_allowed",
+        "checked_in_review_plan_allowed",
+    ):
+        if routing.get(key) is not False:
+            raise ValueError(f"operator_routing.{key} must remain false")
     for key in (
         "workflow_run_requires_explicit_run",
         "requires_operator_credentials",
@@ -365,6 +383,24 @@ def validate_workflow(report: dict[str, Any]) -> None:
         raise ValueError("summary.current_operator_env_ready must match operator_environment")
     if environment.get("current_operator_env_ready") != (environment["missing_credential_env_count"] == 0):
         raise ValueError("operator environment readiness must be derived from missing env count")
+    if routing.get("required_credential_envs") != environment.get("required_credential_envs"):
+        raise ValueError("operator_routing required envs must match operator_environment")
+    if routing.get("required_credential_env_count") != environment.get("required_credential_env_count"):
+        raise ValueError("operator_routing required env count must match operator_environment")
+    if routing.get("session_output_path") != artifacts.get("session_output_path"):
+        raise ValueError("operator_routing session output path must match local_artifacts")
+    if routing.get("local_require_env_preflight_command") != f"python3 {WORKFLOW_SCRIPT.as_posix()} --require-env":
+        raise ValueError("operator_routing local env preflight command must target this workflow")
+    expected_route_steps = {
+        "local_batch_collection_run_command": "batch_collection_session",
+        "session_validation_command": "session_validation",
+        "review_plan_generation_command": "review_plan_generation",
+        "review_plan_validation_command": "review_plan_validation",
+    }
+    step_commands = {as_dict(step, "steps[]").get("id"): as_dict(step, "steps[]").get("command") for step in steps}
+    for routing_key, step_id in expected_route_steps.items():
+        if routing.get(routing_key) != step_commands.get(step_id):
+            raise ValueError(f"operator_routing.{routing_key} must match workflow step {step_id}")
     sources = environment.get("sources")
     if not isinstance(sources, list) or not sources:
         raise ValueError("operator_environment.sources must be a non-empty array")
@@ -519,11 +555,16 @@ def self_test(plan_path: pathlib.Path) -> None:
 
 def print_human(report: dict[str, Any]) -> None:
     summary = as_dict(report.get("summary"), "summary")
+    routing = as_dict(report.get("operator_routing"), "operator_routing")
     print(
         "credential runtime operator workflow "
         f"(mode={report['run_mode']}, status={summary['session_plan_status']}, "
         f"missing_receipts={summary['reviewed_receipts_missing']})"
     )
+    print(f"first operator step: {routing['first_operator_step']}")
+    print(f"secret readiness: {routing['github_secret_readiness_command']}")
+    print(f"local env preflight: {routing['local_require_env_preflight_command']}")
+    print(f"collect dispatch: {routing['github_actions_collect_command']}")
     environment = as_dict(report.get("operator_environment"), "operator_environment")
     missing_envs = environment.get("missing_credential_envs")
     if isinstance(missing_envs, list) and missing_envs:
