@@ -1,0 +1,334 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.release-goal-operating-contract.v1.schema.json",
+  "title": "Datapan Release Goal Operating Contract v1",
+  "description": "Machine-readable operating contract for keeping the long-running registry-ledger goal aligned to the Datapan public-data standardization ledger vision.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "goal_issue",
+    "contract_ticket",
+    "provider",
+    "inputs",
+    "identity",
+    "operating_summary",
+    "external_lifecycle_signal_policy",
+    "capability_planes",
+    "completion_contract",
+    "child_planning_model",
+    "current_non_completion_boundary"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.release-goal-operating-contract.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "goal_issue": {
+      "const": 344
+    },
+    "contract_ticket": {
+      "const": 409
+    },
+    "provider": {
+      "const": "datapan-registry"
+    },
+    "inputs": {
+      "$ref": "#/$defs/inputs"
+    },
+    "identity": {
+      "$ref": "#/$defs/identity"
+    },
+    "operating_summary": {
+      "$ref": "#/$defs/operating_summary"
+    },
+    "external_lifecycle_signal_policy": {
+      "$ref": "#/$defs/external_lifecycle_signal_policy"
+    },
+    "capability_planes": {
+      "type": "array",
+      "minItems": 8,
+      "items": {
+        "$ref": "#/$defs/capability_plane"
+      }
+    },
+    "completion_contract": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/ordered_requirement"
+      }
+    },
+    "child_planning_model": {
+      "$ref": "#/$defs/child_planning_model"
+    },
+    "current_non_completion_boundary": {
+      "$ref": "#/$defs/current_non_completion_boundary"
+    }
+  },
+  "$defs": {
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "string_list": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/non_empty_string"
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "goal_completion_audit",
+        "release_goal_finish_preflight",
+        "release_goal_continuation_queue",
+        "release_consumer_decision",
+        "credential_runtime_evidence_policy"
+      ],
+      "properties": {
+        "goal_completion_audit": {
+          "const": "docs/release-ledger-goal-completion-audit.json"
+        },
+        "release_goal_finish_preflight": {
+          "const": "reports/release-goal-finish-preflight.json"
+        },
+        "release_goal_continuation_queue": {
+          "const": "reports/release-goal-continuation-queue.json"
+        },
+        "release_consumer_decision": {
+          "const": "reports/release-consumer-decision.json"
+        },
+        "credential_runtime_evidence_policy": {
+          "const": "reports/credential-runtime-evidence-policy.json"
+        }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "goal_type",
+        "not_a_task_title",
+        "not_a_child_ticket_checklist",
+        "one_off_prompt",
+        "vision",
+        "north_star"
+      ],
+      "properties": {
+        "goal_type": {
+          "const": "persistent_registry_ledger_goal"
+        },
+        "not_a_task_title": {
+          "const": true
+        },
+        "not_a_child_ticket_checklist": {
+          "const": true
+        },
+        "one_off_prompt": {
+          "const": false
+        },
+        "vision": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "north_star": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "operating_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "goal_status",
+        "goal_audit_decision",
+        "release_decision",
+        "finish_allowed",
+        "goal_completion_allowed",
+        "manual_review_required",
+        "manual_review_accepted",
+        "reviewed_credential_receipts",
+        "manual_review_reduction_allowed",
+        "continuation_next_action",
+        "primary_continuation_candidate",
+        "candidate_count",
+        "goal_closure_allowed"
+      ],
+      "properties": {
+        "goal_status": {
+          "enum": ["complete", "not_complete"]
+        },
+        "goal_audit_decision": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "release_decision": {
+          "enum": ["safe_to_consume", "manual_review_required", "blocked"]
+        },
+        "finish_allowed": {
+          "type": "boolean"
+        },
+        "goal_completion_allowed": {
+          "type": "boolean"
+        },
+        "manual_review_required": {
+          "type": "boolean"
+        },
+        "manual_review_accepted": {
+          "type": "boolean"
+        },
+        "reviewed_credential_receipts": {
+          "$ref": "#/$defs/count"
+        },
+        "manual_review_reduction_allowed": {
+          "type": "boolean"
+        },
+        "continuation_next_action": {
+          "enum": ["create_child_ticket", "goal_finish_allowed"]
+        },
+        "primary_continuation_candidate": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "candidate_count": {
+          "$ref": "#/$defs/count"
+        },
+        "goal_closure_allowed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "external_lifecycle_signal_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gira_child_graph_finish_signal",
+        "completion_proof_source",
+        "finish_command_precondition",
+        "operator_rule"
+      ],
+      "properties": {
+        "gira_child_graph_finish_signal": {
+          "const": "lifecycle_signal_only"
+        },
+        "completion_proof_source": {
+          "const": "checked_in_release_evidence_and_completion_audit"
+        },
+        "finish_command_precondition": {
+          "const": "python3 scripts/guard-release-goal-finish.py"
+        },
+        "operator_rule": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "capability_plane": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "purpose"],
+      "properties": {
+        "id": {
+          "enum": [
+            "source_contracts",
+            "registry_artifacts",
+            "shard_release_distribution",
+            "verification_evidence",
+            "error_action_routing",
+            "downstream_impact",
+            "consumer_compatibility",
+            "credential_safe_evidence"
+          ]
+        },
+        "label": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "purpose": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "ordered_requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["order", "requirement"],
+      "properties": {
+        "order": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "requirement": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "child_planning_model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selection_basis", "rules", "current_candidates"],
+      "properties": {
+        "selection_basis": {
+          "const": "weakest_remaining_registry_ledger_capability_boundary"
+        },
+        "rules": {
+          "$ref": "#/$defs/string_list"
+        },
+        "current_candidates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/current_candidate"
+          }
+        }
+      }
+    },
+    "current_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["order", "id", "title", "capability_planes", "goal_closure_allowed", "rationale"],
+      "properties": {
+        "order": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "id": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "title": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "capability_planes": {
+          "$ref": "#/$defs/string_list"
+        },
+        "goal_closure_allowed": {
+          "type": "boolean"
+        },
+        "rationale": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "current_non_completion_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reasons", "allowed_paths_to_completion"],
+      "properties": {
+        "status": {
+          "enum": ["not_complete", "finish_preflight_allowed"]
+        },
+        "reasons": {
+          "$ref": "#/$defs/string_list"
+        },
+        "allowed_paths_to_completion": {
+          "$ref": "#/$defs/string_list"
+        }
+      }
+    }
+  }
+}

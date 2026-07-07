@@ -1,0 +1,169 @@
+{
+  "schema_version": "datapan.release-goal-operating-contract.v1",
+  "generated_at": "2026-07-04T06:39:24Z",
+  "goal_issue": 344,
+  "contract_ticket": 409,
+  "provider": "datapan-registry",
+  "inputs": {
+    "goal_completion_audit": "docs/release-ledger-goal-completion-audit.json",
+    "release_goal_finish_preflight": "reports/release-goal-finish-preflight.json",
+    "release_goal_continuation_queue": "reports/release-goal-continuation-queue.json",
+    "release_consumer_decision": "reports/release-consumer-decision.json",
+    "credential_runtime_evidence_policy": "reports/credential-runtime-evidence-policy.json"
+  },
+  "identity": {
+    "goal_type": "persistent_registry_ledger_goal",
+    "not_a_task_title": true,
+    "not_a_child_ticket_checklist": true,
+    "one_off_prompt": false,
+    "vision": "Mature datapan-registry into Datapan's durable public-data standardization ledger while preserving canonical registry compatibility.",
+    "north_star": "Connect source contracts, registry artifacts, shard and release distribution, verification evidence, error/action routing, downstream impact, consumer compatibility, and credential-safe evidence into repeatable release operations."
+  },
+  "operating_summary": {
+    "goal_status": "not_complete",
+    "goal_audit_decision": "leave_goal_open",
+    "release_decision": "manual_review_required",
+    "finish_allowed": false,
+    "goal_completion_allowed": false,
+    "manual_review_required": true,
+    "manual_review_accepted": false,
+    "reviewed_credential_receipts": 0,
+    "manual_review_reduction_allowed": false,
+    "continuation_next_action": "create_child_ticket",
+    "primary_continuation_candidate": "collect_reviewed_credential_runtime_receipts",
+    "candidate_count": 2,
+    "goal_closure_allowed": false
+  },
+  "external_lifecycle_signal_policy": {
+    "gira_child_graph_finish_signal": "lifecycle_signal_only",
+    "completion_proof_source": "checked_in_release_evidence_and_completion_audit",
+    "finish_command_precondition": "python3 scripts/guard-release-goal-finish.py",
+    "operator_rule": "Do not run gira goal finish unless repo-owned finish preflight allows completion."
+  },
+  "capability_planes": [
+    {
+      "id": "source_contracts",
+      "label": "Source contracts",
+      "purpose": "Provider, auth, request, response, runtime, and report boundaries are explicit and verifiable."
+    },
+    {
+      "id": "registry_artifacts",
+      "label": "Registry artifacts",
+      "purpose": "Canonical registry data, schemas, reports, rollups, and manifest metadata are deterministic."
+    },
+    {
+      "id": "shard_release_distribution",
+      "label": "Shard and release distribution",
+      "purpose": "Release archives and shard packages are reproducible, manifest-bound, and compatible with canonical consumers."
+    },
+    {
+      "id": "verification_evidence",
+      "label": "Verification evidence",
+      "purpose": "Release verification, readiness, runtime evidence, health receipts, and assembly receipts explain current registry health."
+    },
+    {
+      "id": "error_action_routing",
+      "label": "Error/action routing",
+      "purpose": "Failures and required actions are classified as blocking, manual-review, follow-up, or safe no-action regions."
+    },
+    {
+      "id": "downstream_impact",
+      "label": "Downstream impact",
+      "purpose": "Release changes carry client/server action hints, manual-review boundaries, and consumer-facing impact evidence."
+    },
+    {
+      "id": "consumer_compatibility",
+      "label": "Consumer compatibility",
+      "purpose": "Documented consumers have compatibility evidence, blockers, and release gates that prevent silent breakage."
+    },
+    {
+      "id": "credential_safe_evidence",
+      "label": "Credential-safe evidence",
+      "purpose": "Credentialed runtime checks have redacted receipt contracts, reviewed intake paths, deterministic promotion, and explicit relief rules."
+    }
+  ],
+  "completion_contract": [
+    {
+      "order": 1,
+      "requirement": "Release assembly has one documented, deterministic path that regenerates and checks registry, schema, report, shard, compatibility, impact, and evidence artifacts."
+    },
+    {
+      "order": 2,
+      "requirement": "CI gates cover the same invariants that a release operator depends on locally."
+    },
+    {
+      "order": 3,
+      "requirement": "No manifest-bound artifact requires hand-maintained bytes, sha256, schema URI, or derived report metadata."
+    },
+    {
+      "order": 4,
+      "requirement": "Manifest, schema index, source report inventory, release package, shard package, and consumer compatibility report are mutually consistent and independently checkable."
+    },
+    {
+      "order": 5,
+      "requirement": "Source runtime evidence and report inventories make source-level readiness auditable without listing every nested report in the top-level manifest."
+    },
+    {
+      "order": 6,
+      "requirement": "Downstream impact and consumer compatibility can answer whether a release is safe to consume, blocked, or needs manual review."
+    },
+    {
+      "order": 7,
+      "requirement": "Credentialed runtime evidence is backed by reviewed, validated, redacted live receipts or preserved behind an explicit accepted manual-review release boundary."
+    },
+    {
+      "order": 8,
+      "requirement": "A requirement-by-requirement completion audit proves the contract from current files, commands, CI state, and linked PR evidence."
+    }
+  ],
+  "child_planning_model": {
+    "selection_basis": "weakest_remaining_registry_ledger_capability_boundary",
+    "rules": [
+      "Select child tickets by the weakest remaining registry-ledger capability boundary, not by ticket count.",
+      "Each child ticket must be bounded, reviewable, and able to produce durable checked-in evidence.",
+      "Prefer generated reports, schemas, validators, receipts, CI gates, and checked-in evidence over prose-only instructions.",
+      "Preserve canonical registry compatibility unless migration, compatibility evidence, and downstream impact handling are explicit.",
+      "Treat merged child PRs as progress evidence only; do not treat an exhausted child graph as goal completion.",
+      "Keep the goal open while finish_allowed=false, goal_completion_allowed=false, or manual_review_required remains unaccepted."
+    ],
+    "current_candidates": [
+      {
+        "order": 1,
+        "id": "collect_reviewed_credential_runtime_receipts",
+        "title": "Collect reviewed credential runtime receipts",
+        "capability_planes": [
+          "credential-safe evidence",
+          "verification evidence",
+          "consumer compatibility"
+        ],
+        "goal_closure_allowed": false,
+        "rationale": "Reviewed credential runtime receipts are the strongest evidence path for reducing current manual-review compatibility gates."
+      },
+      {
+        "order": 2,
+        "id": "assert_explicit_manual_review_release_acceptance",
+        "title": "Assert explicit manual-review release acceptance",
+        "capability_planes": [
+          "error/action routing",
+          "downstream impact",
+          "consumer compatibility"
+        ],
+        "goal_closure_allowed": false,
+        "rationale": "Explicit manual-review acceptance is the alternative release boundary when reviewed live receipt evidence is not yet available."
+      }
+    ]
+  },
+  "current_non_completion_boundary": {
+    "status": "not_complete",
+    "reasons": [
+      "live credentialed runtime receipts are not checked in",
+      "credentialed source runtime evidence remains manual-review only by default",
+      "manual-review release boundary has not been explicitly accepted",
+      "consumer compatibility still disallows goal completion"
+    ],
+    "allowed_paths_to_completion": [
+      "reviewed_validated_redacted_live_credential_runtime_receipts",
+      "explicit_accepted_manual_review_release_boundary"
+    ]
+  }
+}

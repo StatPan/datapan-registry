@@ -413,12 +413,14 @@ PHASES: list[dict[str, Any]] = [
             "python3 scripts/validate-release-ledger-goal-audit.py",
             "python3 scripts/generate-release-goal-finish-preflight.py",
             "python3 scripts/generate-release-goal-continuation-queue.py",
+            "python3 scripts/generate-release-goal-operating-contract.py",
             "python3 scripts/guard-release-goal-finish.py",
         ],
         "check_commands": [
             "python3 scripts/validate-release-ledger-goal-audit.py",
             "python3 scripts/generate-release-goal-finish-preflight.py --check",
             "python3 scripts/generate-release-goal-continuation-queue.py --check",
+            "python3 scripts/generate-release-goal-operating-contract.py --check",
             "python3 scripts/guard-release-goal-finish.py --self-test",
         ],
         "workflow_fragments": {
@@ -426,12 +428,14 @@ PHASES: list[dict[str, Any]] = [
                 "python scripts/validate-release-ledger-goal-audit.py",
                 "python scripts/generate-release-goal-finish-preflight.py --check",
                 "python scripts/generate-release-goal-continuation-queue.py --check",
+                "python scripts/generate-release-goal-operating-contract.py --check",
                 "python scripts/guard-release-goal-finish.py --self-test",
             ],
             ".github/workflows/release-draft.yml": [
                 "python scripts/validate-release-ledger-goal-audit.py",
                 "python scripts/generate-release-goal-finish-preflight.py --check",
                 "python scripts/generate-release-goal-continuation-queue.py --check",
+                "python scripts/generate-release-goal-operating-contract.py --check",
                 "python scripts/guard-release-goal-finish.py --self-test",
             ],
         },
@@ -439,6 +443,7 @@ PHASES: list[dict[str, Any]] = [
             "docs/release-ledger-goal-completion-audit.json",
             "reports/release-goal-finish-preflight.json",
             "reports/release-goal-continuation-queue.json",
+            "reports/release-goal-operating-contract.json",
         ],
     },
 ]
