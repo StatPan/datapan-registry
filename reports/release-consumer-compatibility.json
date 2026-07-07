@@ -104,7 +104,7 @@
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
       "bytes": 14728,
-      "sha256": "25d298b81ecedd27cb36f3e67b5b949c158908b619279b94e638c8bc7116ded1",
+      "sha256": "a026b2c243d6cf3a4441268c76dbc1d72ea99ef29e321fa571e5880222633911",
       "required": true
     },
     {
@@ -194,7 +194,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "475c98eab0bfa7c97f7ae642eb9d46a3925b89045b044ce38bed01cba3cbbcb8",
+      "sha256": "30e3a6a036eb5bded5921e66c24b03a10a1b64a602d6775152a5637cbf30db22",
       "required": true
     },
     {
@@ -212,7 +212,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 59095,
-      "sha256": "a67db0c79b34268291e5649ddcd49e3ffd6ce5b7a7fa17325bd08c1f3576fdb7",
+      "sha256": "c875dd6e869d343062c7f3c2c26425e742339df661ce9ea21f9b0a99f098e20b",
       "required": true
     },
     {
@@ -221,7 +221,7 @@
       "kind": "release_distribution_footprint",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
       "bytes": 2119,
-      "sha256": "a81ed9026f91a631c946ef985449c0d7473dd192c52ec907796fdf267c8f2f0a",
+      "sha256": "c9a41ff9e6666bc0c02e32dec8dac808a5a2708003b6ff13be9d6222ebfb47e8",
       "required": true
     },
     {
@@ -327,6 +327,22 @@
     "credential_execution_checked_in_secrets_allowed": false,
     "credential_execution_checked_in_session_output_allowed": false,
     "credential_execution_goal_closure_allowed": false,
+    "credential_execution_review_promotion_script": "scripts/promote-credential-runtime-session-review.py",
+    "credential_execution_review_promotion_decision_template_path": ".datapan/runtime-evidence/credential-runtime-session-review-decisions.json",
+    "credential_execution_review_promotion_init_decisions_command": "python3 scripts/promote-credential-runtime-session-review.py --init-decisions",
+    "credential_execution_review_promotion_check_command": "python3 scripts/promote-credential-runtime-session-review.py --check",
+    "credential_execution_review_promotion_run_command": "python3 scripts/promote-credential-runtime-session-review.py --run",
+    "credential_execution_review_promotion_self_test_command": "python3 scripts/promote-credential-runtime-session-review.py --self-test",
+    "credential_execution_review_promotion_session_review_plan_output_path": ".datapan/runtime-evidence/credential-runtime-session-review-plan.json",
+    "credential_execution_review_promotion_requires_session_review_plan": true,
+    "credential_execution_review_promotion_requires_finalized_reviewer_decisions": true,
+    "credential_execution_review_promotion_requires_explicit_run": true,
+    "credential_execution_review_promotion_default_ci_requires_credentials": false,
+    "credential_execution_review_promotion_checked_in_session_output_allowed": false,
+    "credential_execution_review_promotion_checked_in_review_plan_allowed": false,
+    "credential_execution_review_promotion_checked_in_decisions_allowed": false,
+    "credential_execution_review_promotion_checked_in_secrets_allowed": false,
+    "credential_execution_review_promotion_goal_closure_allowed": false,
     "credential_policy_effect": "credential_safe_manual_review_boundary",
     "credential_policy_relief_gate_status": "blocked_until_reviewed_validated_credential_runtime_receipts_exist",
     "credential_queue_status": "collection_required",
@@ -473,7 +489,7 @@
     ],
     "release_distribution_footprint": "reports/release-distribution-footprint.json",
     "canonical_registry_bytes": 137735169,
-    "manifest_bound_bytes_excluding_self": 165905690,
+    "manifest_bound_bytes_excluding_self": 165910782,
     "large_monolith_threshold_bytes": 100000000,
     "registry_footprint_status": "large_monolith_shard_additive",
     "canonical_registry_required": true,
