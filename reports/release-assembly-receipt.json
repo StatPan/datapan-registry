@@ -25,7 +25,7 @@
     "manifest": {
       "path": "manifest.json",
       "generated_at": "2026-07-04T06:39:24Z",
-      "artifact_count": 99,
+      "artifact_count": 101,
       "source_registry": "data/data-go-kr.registry.json"
     },
     "readiness": {
@@ -107,8 +107,8 @@
       "evidence_artifacts": [
         {
           "path": "schemas/index.json",
-          "bytes": 23800,
-          "sha256": "ba63e22092c304e2c7ab82cb6814c75c3a5f63a1510fc2bd6b455aac3046c0f6",
+          "bytes": 24232,
+          "sha256": "8c0e7f0cd9bf32cc75f019e426c257c126f30bdc26f35d03ef9da6175ffc5f85",
           "manifest_bound": true,
           "kind": "schema_index",
           "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json"
@@ -145,8 +145,8 @@
       "evidence_artifacts": [
         {
           "path": "docs/release-ledger-ownership.json",
-          "bytes": 15928,
-          "sha256": "3332c5e6a6b1326f79eb4fab8f4f4a61ad40b7ccdd5fc2790bac1718e574fc28",
+          "bytes": 16261,
+          "sha256": "5baac5acb76e8c4a5fc5118a1e1ff884eec6d6f7dad5f1eba95d3cc91da6fddb",
           "manifest_bound": false
         }
       ]
@@ -193,7 +193,7 @@
         {
           "path": "reports/source-report-inventory.json",
           "bytes": 59095,
-          "sha256": "423a622008352e63c68a910b80093debbc6ab758a15d1f9c5c675c667615e6f4",
+          "sha256": "828458ecd3456890ac939bcbc6660c76f6a48e79d0288dc52535212f7935c5d8",
           "manifest_bound": true,
           "kind": "source_report_inventory",
           "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json"
@@ -249,7 +249,7 @@
         {
           "path": "reports/registry-impact-plan.json",
           "bytes": 11519,
-          "sha256": "bbdef8a2443c6377ce3c0e65582f763edd78a53aa5a646003062be09a78cf283",
+          "sha256": "74b055522f79c4aeadb4b1a5f67436f8a055dbd7874706fb6d27a8f8335bc562",
           "manifest_bound": true,
           "kind": "registry_impact_plan",
           "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json"
@@ -282,7 +282,7 @@
         {
           "path": "reports/source-runtime-remediation-map.json",
           "bytes": 14728,
-          "sha256": "6a7b32faad6574e8d8534290d00d3826ed4cc1cb012804d27245f9dd34a6d753",
+          "sha256": "8557ea3f6ff1e5c93590f4735499fbe5099d49580d48fc535e2b1c65f0da1174",
           "manifest_bound": true,
           "kind": "source_runtime_remediation_map",
           "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json"
@@ -436,7 +436,7 @@
         {
           "path": "reports/credential-runtime-manual-review-acceptance-packet.json",
           "bytes": 4310,
-          "sha256": "ce1015d70f9819837873a361d94f0270417566a42baa077b368b03921e3a8d1b",
+          "sha256": "e811a004854258760214c1ac739e0a8ddf871d242bd71e3268f50a14a8cb93a6",
           "manifest_bound": true,
           "kind": "credential_runtime_manual_review_acceptance_packet",
           "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-acceptance-packet.v1.schema.json"
@@ -478,16 +478,16 @@
       "evidence_artifacts": [
         {
           "path": "reports/release-distribution-footprint.json",
-          "bytes": 2118,
-          "sha256": "061e0c3dbbda018fe038f1e10f19a07e8cb664931bf97fda5fa48d2decd55294",
+          "bytes": 2119,
+          "sha256": "7733a10d48cbd4e13da1dfed7a2995a81d94ba4209235caf5e8bc960d4e9c913",
           "manifest_bound": true,
           "kind": "release_distribution_footprint",
           "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json"
         },
         {
           "path": "reports/release-consumer-compatibility.json",
-          "bytes": 21403,
-          "sha256": "0fda3e309cd59d46d81c72d60b71f213d92cc13c10809ea0ae4aafc00f38e1d3",
+          "bytes": 21404,
+          "sha256": "1ddd4bcbc7fd12f12c5294de74dcaccddc12d330fa3a4f24f8cc1e5ffb7e0a87",
           "manifest_bound": true,
           "kind": "consumer_compatibility",
           "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json"
@@ -640,12 +640,14 @@
         "python3 scripts/validate-release-ledger-goal-audit.py",
         "python3 scripts/generate-release-goal-finish-preflight.py",
         "python3 scripts/generate-release-goal-continuation-queue.py",
+        "python3 scripts/generate-release-goal-operating-contract.py",
         "python3 scripts/guard-release-goal-finish.py"
       ],
       "check_commands": [
         "python3 scripts/validate-release-ledger-goal-audit.py",
         "python3 scripts/generate-release-goal-finish-preflight.py --check",
         "python3 scripts/generate-release-goal-continuation-queue.py --check",
+        "python3 scripts/generate-release-goal-operating-contract.py --check",
         "python3 scripts/guard-release-goal-finish.py --self-test"
       ],
       "workflow_fragments": {
@@ -653,12 +655,14 @@
           "python scripts/validate-release-ledger-goal-audit.py",
           "python scripts/generate-release-goal-finish-preflight.py --check",
           "python scripts/generate-release-goal-continuation-queue.py --check",
+          "python scripts/generate-release-goal-operating-contract.py --check",
           "python scripts/guard-release-goal-finish.py --self-test"
         ],
         ".github/workflows/release-draft.yml": [
           "python scripts/validate-release-ledger-goal-audit.py",
           "python scripts/generate-release-goal-finish-preflight.py --check",
           "python scripts/generate-release-goal-continuation-queue.py --check",
+          "python scripts/generate-release-goal-operating-contract.py --check",
           "python scripts/guard-release-goal-finish.py --self-test"
         ]
       },
@@ -685,6 +689,14 @@
           "manifest_bound": true,
           "kind": "release_goal_continuation_queue",
           "schema": "https://schemas.datapan.dev/datapan.release-goal-continuation-queue.v1.schema.json"
+        },
+        {
+          "path": "reports/release-goal-operating-contract.json",
+          "bytes": 7960,
+          "sha256": "79d0847b4e2f8a2685a818ea8bd18d0081b65c719a63f5023261c48e1433adb6",
+          "manifest_bound": true,
+          "kind": "release_goal_operating_contract",
+          "schema": "https://schemas.datapan.dev/datapan.release-goal-operating-contract.v1.schema.json"
         }
       ]
     }
