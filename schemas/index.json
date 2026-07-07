@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 61,
+  "count": 62,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -523,8 +523,8 @@
       "title": "Datapan Credential Runtime Operator Packets v1",
       "contract": "credential-runtime-operator-packets",
       "version": "v1",
-      "bytes": 11496,
-      "sha256": "11b0cf9b079f55aaf5f2b67a3cd767c159789424e48d979191097b3ed851249f"
+      "bytes": 12834,
+      "sha256": "781060225f981156027972fad2c50c0f8bbc929a5dbc4a45ea64589c68a11333"
     },
     {
       "path": "schemas/datapan.credential-runtime-manual-review-acceptance-packet.v1.schema.json",
@@ -552,6 +552,15 @@
       "version": "v1",
       "bytes": 4999,
       "sha256": "5459c98680fa6a430e96d67e918ec4363c85e4da09bed6eb50b9e7be62a83c98"
+    },
+    {
+      "path": "schemas/datapan.credential-runtime-session-review-plan.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.credential-runtime-session-review-plan.v1.schema.json",
+      "title": "Datapan Credential Runtime Session Review Plan v1",
+      "contract": "credential-runtime-session-review-plan",
+      "version": "v1",
+      "bytes": 8189,
+      "sha256": "b4d85b39a92c11218b7b6c54c39ecc63e9520017b56275e58f486e39f4b7a16f"
     }
   ]
 }

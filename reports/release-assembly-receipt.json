@@ -25,7 +25,7 @@
     "manifest": {
       "path": "manifest.json",
       "generated_at": "2026-07-04T06:39:24Z",
-      "artifact_count": 102,
+      "artifact_count": 103,
       "source_registry": "data/data-go-kr.registry.json"
     },
     "readiness": {
@@ -107,8 +107,8 @@
       "evidence_artifacts": [
         {
           "path": "schemas/index.json",
-          "bytes": 24690,
-          "sha256": "c46d1617fb890d7f2f1223cbdaa00730795a733b9f693565356ca44c24286edb",
+          "bytes": 25150,
+          "sha256": "ad40d67414d6fc93dd479c45836c746d41390771a5c972dfdfb955ee1a5fca15",
           "manifest_bound": true,
           "kind": "schema_index",
           "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json"
@@ -145,8 +145,8 @@
       "evidence_artifacts": [
         {
           "path": "docs/release-ledger-ownership.json",
-          "bytes": 16349,
-          "sha256": "4718433b7674cd623763d6be1906413b92dc1a4ab54edb1841e9119eb16ea777",
+          "bytes": 16438,
+          "sha256": "717c33eff933dc550664b78d933bceef87d1853607e56878c19704f82c35b79b",
           "manifest_bound": false
         }
       ]
@@ -193,7 +193,7 @@
         {
           "path": "reports/source-report-inventory.json",
           "bytes": 59095,
-          "sha256": "8e1c2e6f2c3f448d616e31b5b827818351398cd1b659a0bc5c84cddd343298f6",
+          "sha256": "2f0f30eae3b658642ad1a7f7467c6c914b559de410f6f8d3ecf4389bffcd7bff",
           "manifest_bound": true,
           "kind": "source_report_inventory",
           "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json"
@@ -249,7 +249,7 @@
         {
           "path": "reports/registry-impact-plan.json",
           "bytes": 11519,
-          "sha256": "d0d0407c16631971670bf4f727d8376b111b37111f24ed505a4c0f95e6a431af",
+          "sha256": "c64bafb02790a278cf252a95642bd2f2cf15f6af1316655176c22edfb91370d9",
           "manifest_bound": true,
           "kind": "registry_impact_plan",
           "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json"
@@ -282,7 +282,7 @@
         {
           "path": "reports/source-runtime-remediation-map.json",
           "bytes": 14728,
-          "sha256": "39a7bbf981861451ab0002218719713af6d0d3d08ebdf2a23ae7851eda626915",
+          "sha256": "1eea735c72db464fa6915bf063b2e563a27cf874a79a66d4a35222bbed5b068b",
           "manifest_bound": true,
           "kind": "source_runtime_remediation_map",
           "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json"
@@ -352,6 +352,7 @@
         "python3 scripts/run-credential-runtime-collection.py --all --run --skip-not-ready --continue-on-error --json",
         "python3 scripts/run-credential-runtime-collection.py --all --run --skip-not-ready --continue-on-error --session-output .datapan/runtime-evidence/credential-runtime-collection-session.json --json",
         "python3 scripts/validate-credential-runtime-collection-session.py .datapan/runtime-evidence/credential-runtime-collection-session.json --require-complete-source-set",
+        "python3 scripts/generate-credential-runtime-session-review-plan.py .datapan/runtime-evidence/credential-runtime-collection-session.json --output .datapan/runtime-evidence/credential-runtime-session-review-plan.json",
         "python3 scripts/run-credential-runtime-collection.py --source <source_id> --json",
         "python3 scripts/run-credential-runtime-collection.py --source <source_id> --run",
         "python3 scripts/promote-credential-runtime-receipt.py <staged-receipt> --state <reviewed_accepted|reviewed_rejected> --decision <decision> --reviewer <reviewer> --reason <reason>"
@@ -366,6 +367,7 @@
         "python3 scripts/run-credential-runtime-collection.py --self-test",
         "python3 scripts/run-credential-runtime-collection.py --check",
         "python3 scripts/validate-credential-runtime-collection-session.py --self-test",
+        "python3 scripts/generate-credential-runtime-session-review-plan.py --self-test",
         "python3 -m py_compile scripts/promote-credential-runtime-receipt.py",
         "python3 scripts/promote-credential-runtime-receipt.py --self-test"
       ],
@@ -380,6 +382,7 @@
           "python scripts/run-credential-runtime-collection.py --self-test",
           "python scripts/run-credential-runtime-collection.py --check",
           "python scripts/validate-credential-runtime-collection-session.py --self-test",
+          "python scripts/generate-credential-runtime-session-review-plan.py --self-test",
           "python -m py_compile scripts/promote-credential-runtime-receipt.py",
           "python scripts/promote-credential-runtime-receipt.py --self-test"
         ],
@@ -393,6 +396,7 @@
           "python scripts/run-credential-runtime-collection.py --self-test",
           "python scripts/run-credential-runtime-collection.py --check",
           "python scripts/validate-credential-runtime-collection-session.py --self-test",
+          "python scripts/generate-credential-runtime-session-review-plan.py --self-test",
           "scripts/promote-credential-runtime-receipt.py",
           "python scripts/promote-credential-runtime-receipt.py --self-test"
         ]
@@ -417,8 +421,8 @@
         },
         {
           "path": "reports/credential-runtime-operator-packets.json",
-          "bytes": 23697,
-          "sha256": "8f0f2b06e4b0a03d5cbf20014e92455425612209f5c87b38ff04e7e93131ea26",
+          "bytes": 24564,
+          "sha256": "fb3292fd543da1624e74d2192d67bba8a23f783a9dd6ea72257d37815ce3124f",
           "manifest_bound": true,
           "kind": "credential_runtime_operator_packets",
           "schema": "https://schemas.datapan.dev/datapan.credential-runtime-operator-packets.v1.schema.json"
@@ -442,7 +446,7 @@
         {
           "path": "reports/credential-runtime-manual-review-acceptance-packet.json",
           "bytes": 4310,
-          "sha256": "ef19effe436982fbc2f484f30295ef146a3d9cdebee9799574a28fc1a55180fe",
+          "sha256": "a8ab84089f72ab9fb85ebfa2b3e26c49777faa2a25972ca6f04a7a7067b5751b",
           "manifest_bound": true,
           "kind": "credential_runtime_manual_review_acceptance_packet",
           "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-acceptance-packet.v1.schema.json"
@@ -485,7 +489,7 @@
         {
           "path": "reports/release-distribution-footprint.json",
           "bytes": 2119,
-          "sha256": "538b738bfff98a4ba5fcd45af79d9533f530e3570c4a0699f32e71572b248c32",
+          "sha256": "b8891f91e6e2f6b7fbb0d7a54785c5134b53ece46f1f1f1f2e544f8e3f56bc52",
           "manifest_bound": true,
           "kind": "release_distribution_footprint",
           "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json"
@@ -493,7 +497,7 @@
         {
           "path": "reports/release-consumer-compatibility.json",
           "bytes": 21404,
-          "sha256": "b1cd3d691c7e890c09110db9fa4ee4670c69de93d1ed08082eafaef9ce7c215a",
+          "sha256": "79708b82baa72106a7e8b0a85e31858b803cf01980d67aa4b0a2394c33e3a680",
           "manifest_bound": true,
           "kind": "consumer_compatibility",
           "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json"
