@@ -91,6 +91,34 @@ CHILD_PLANNING_RULES = [
 ]
 
 
+OPERATING_LOOP = [
+    "Read the current goal state, completion audit, release evidence, and credential/manual-review boundary before planning new work.",
+    "Identify the weakest remaining registry-ledger capability boundary in the Datapan public-data standardization ledger vision.",
+    "Create or select a child ticket only when the work is bounded, reviewable, and able to produce durable checked-in evidence.",
+    "Preserve canonical registry compatibility unless migration, compatibility evidence, and downstream impact handling are explicit.",
+    "After each child merges, record progress evidence and re-evaluate the current non-completion boundary.",
+    "Keep the goal open when checked-in evidence still reports finish_allowed=false, goal_completion_allowed=false, or manual_review_required without acceptance.",
+]
+
+
+ANTI_COMPLETION_RULES = [
+    "Do not treat a prompt update as goal completion.",
+    "Do not treat a generated report as goal completion by itself.",
+    "Do not treat a green workflow as goal completion by itself.",
+    "Do not treat a merged child PR as goal completion by itself.",
+    "Do not treat an exhausted child graph or Gira finish_goal signal as goal completion by itself.",
+    "Do not run gira goal finish unless repo-owned finish preflight and completion audit both allow it.",
+]
+
+
+NEXT_CHILD_SELECTION_QUESTIONS = [
+    "Which registry-ledger capability boundary is weakest in the current evidence?",
+    "Which checked-in artifact, schema, receipt, report, workflow, or validator will prove improvement?",
+    "How does the work preserve canonical registry compatibility and downstream consumer safety?",
+    "Which non-completion boundary will still prevent the full registry-ledger vision from being considered achieved?",
+]
+
+
 def load_json(path: pathlib.Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as handle:
         value = json.load(handle)
@@ -187,6 +215,42 @@ def build_report(
             "finish_command_precondition": "python3 scripts/guard-release-goal-finish.py",
             "operator_rule": "Do not run gira goal finish unless repo-owned finish preflight allows completion.",
         },
+        "persistent_goal_prompt": {
+            "prompt_ticket": 415,
+            "prompt_mode": "persistent_goal_based_development",
+            "vision_statement": (
+                "Use #344 to mature datapan-registry into Datapan's durable public-data "
+                "standardization ledger, not to complete a single task title."
+            ),
+            "north_star_question": (
+                "Can a release operator and downstream consumer rebuild, verify, package, "
+                "understand, and safely consume the registry from checked-in evidence without "
+                "ad hoc repair, hidden credential state, or memory-only release decisions?"
+            ),
+            "framing": {
+                "one_off_task": False,
+                "task_title_only": False,
+                "child_ticket_checklist_only": False,
+                "prompt_update_is_completion_evidence": False,
+                "child_graph_exhaustion_is_completion_evidence": False,
+                "completion_requires_current_repo_evidence": True,
+            },
+            "operating_loop": OPERATING_LOOP,
+            "next_child_selection_basis": "weakest_remaining_registry_ledger_capability_boundary",
+            "next_child_selection_questions": NEXT_CHILD_SELECTION_QUESTIONS,
+            "anti_completion_rules": ANTI_COMPLETION_RULES,
+            "current_prompt_boundary": {
+                "gira_next_action": continuation_summary.get("next_action"),
+                "gira_child_graph_signal_interpretation": "lifecycle_signal_only",
+                "repo_evidence_status": "not_complete" if not finish_allowed else "finish_preflight_allowed",
+                "goal_closure_allowed": finish_allowed and audit_summary.get("decision") == "prepare_goal_finish",
+                "required_before_goal_finish": [
+                    "repo-owned finish preflight allows completion",
+                    "completion audit proves the full completion contract",
+                    "release consumer decision allows goal completion",
+                ],
+            },
+        },
         "capability_planes": CAPABILITY_PLANES,
         "completion_contract": [
             {"order": index + 1, "requirement": requirement}
@@ -228,6 +292,12 @@ def validate_invariants(report: dict[str, Any]) -> None:
     summary = as_dict(report.get("operating_summary"), "operating_summary")
     lifecycle = as_dict(report.get("external_lifecycle_signal_policy"), "external_lifecycle_signal_policy")
     non_completion = as_dict(report.get("current_non_completion_boundary"), "current_non_completion_boundary")
+    prompt = as_dict(report.get("persistent_goal_prompt"), "persistent_goal_prompt")
+    prompt_framing = as_dict(prompt.get("framing"), "persistent_goal_prompt.framing")
+    prompt_boundary = as_dict(
+        prompt.get("current_prompt_boundary"),
+        "persistent_goal_prompt.current_prompt_boundary",
+    )
 
     if identity.get("not_a_task_title") is not True:
         raise ValueError("goal contract must state that #344 is not a task title")
@@ -235,11 +305,29 @@ def validate_invariants(report: dict[str, Any]) -> None:
         raise ValueError("goal contract must state that #344 is not a child-ticket checklist")
     if lifecycle.get("gira_child_graph_finish_signal") != "lifecycle_signal_only":
         raise ValueError("Gira finish signal must be lifecycle_signal_only")
+    if prompt.get("prompt_mode") != "persistent_goal_based_development":
+        raise ValueError("goal prompt must be persistent goal-based development")
+    if prompt_framing.get("one_off_task") is not False:
+        raise ValueError("goal prompt must reject one-off task framing")
+    if prompt_framing.get("prompt_update_is_completion_evidence") is not False:
+        raise ValueError("prompt updates must not be completion evidence")
+    if prompt_framing.get("child_graph_exhaustion_is_completion_evidence") is not False:
+        raise ValueError("child graph exhaustion must not be completion evidence")
+    if prompt_framing.get("completion_requires_current_repo_evidence") is not True:
+        raise ValueError("goal completion must require current repo evidence")
+    if prompt.get("next_child_selection_basis") != "weakest_remaining_registry_ledger_capability_boundary":
+        raise ValueError("goal prompt must select children by weakest capability boundary")
+    if prompt_boundary.get("gira_child_graph_signal_interpretation") != "lifecycle_signal_only":
+        raise ValueError("goal prompt must interpret Gira finish signals as lifecycle-only")
     if summary.get("finish_allowed") is False:
         if summary.get("goal_closure_allowed") is not False:
             raise ValueError("finish_allowed=false must keep goal_closure_allowed=false")
         if non_completion.get("status") != "not_complete":
             raise ValueError("blocked operating contract must preserve not_complete status")
+        if prompt_boundary.get("repo_evidence_status") != "not_complete":
+            raise ValueError("blocked goal prompt must preserve not_complete evidence status")
+        if prompt_boundary.get("goal_closure_allowed") is not False:
+            raise ValueError("blocked goal prompt must not allow goal closure")
     if summary.get("manual_review_required") is True and summary.get("manual_review_accepted") is not True:
         if summary.get("goal_completion_allowed") is not False:
             raise ValueError("unaccepted manual-review boundary must not allow goal completion")

@@ -40,6 +40,54 @@
     "finish_command_precondition": "python3 scripts/guard-release-goal-finish.py",
     "operator_rule": "Do not run gira goal finish unless repo-owned finish preflight allows completion."
   },
+  "persistent_goal_prompt": {
+    "prompt_ticket": 415,
+    "prompt_mode": "persistent_goal_based_development",
+    "vision_statement": "Use #344 to mature datapan-registry into Datapan's durable public-data standardization ledger, not to complete a single task title.",
+    "north_star_question": "Can a release operator and downstream consumer rebuild, verify, package, understand, and safely consume the registry from checked-in evidence without ad hoc repair, hidden credential state, or memory-only release decisions?",
+    "framing": {
+      "one_off_task": false,
+      "task_title_only": false,
+      "child_ticket_checklist_only": false,
+      "prompt_update_is_completion_evidence": false,
+      "child_graph_exhaustion_is_completion_evidence": false,
+      "completion_requires_current_repo_evidence": true
+    },
+    "operating_loop": [
+      "Read the current goal state, completion audit, release evidence, and credential/manual-review boundary before planning new work.",
+      "Identify the weakest remaining registry-ledger capability boundary in the Datapan public-data standardization ledger vision.",
+      "Create or select a child ticket only when the work is bounded, reviewable, and able to produce durable checked-in evidence.",
+      "Preserve canonical registry compatibility unless migration, compatibility evidence, and downstream impact handling are explicit.",
+      "After each child merges, record progress evidence and re-evaluate the current non-completion boundary.",
+      "Keep the goal open when checked-in evidence still reports finish_allowed=false, goal_completion_allowed=false, or manual_review_required without acceptance."
+    ],
+    "next_child_selection_basis": "weakest_remaining_registry_ledger_capability_boundary",
+    "next_child_selection_questions": [
+      "Which registry-ledger capability boundary is weakest in the current evidence?",
+      "Which checked-in artifact, schema, receipt, report, workflow, or validator will prove improvement?",
+      "How does the work preserve canonical registry compatibility and downstream consumer safety?",
+      "Which non-completion boundary will still prevent the full registry-ledger vision from being considered achieved?"
+    ],
+    "anti_completion_rules": [
+      "Do not treat a prompt update as goal completion.",
+      "Do not treat a generated report as goal completion by itself.",
+      "Do not treat a green workflow as goal completion by itself.",
+      "Do not treat a merged child PR as goal completion by itself.",
+      "Do not treat an exhausted child graph or Gira finish_goal signal as goal completion by itself.",
+      "Do not run gira goal finish unless repo-owned finish preflight and completion audit both allow it."
+    ],
+    "current_prompt_boundary": {
+      "gira_next_action": "create_child_ticket",
+      "gira_child_graph_signal_interpretation": "lifecycle_signal_only",
+      "repo_evidence_status": "not_complete",
+      "goal_closure_allowed": false,
+      "required_before_goal_finish": [
+        "repo-owned finish preflight allows completion",
+        "completion audit proves the full completion contract",
+        "release consumer decision allows goal completion"
+      ]
+    }
+  },
   "capability_planes": [
     {
       "id": "source_contracts",
