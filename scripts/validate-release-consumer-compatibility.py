@@ -28,6 +28,7 @@ DEFAULT_SOURCE_RUNTIME_REMEDIATION = pathlib.Path("reports/source-runtime-remedi
 DEFAULT_CREDENTIAL_RUNTIME_POLICY = pathlib.Path("reports/credential-runtime-evidence-policy.json")
 DEFAULT_CREDENTIAL_COLLECTION_PREFLIGHT = pathlib.Path("reports/credential-runtime-collection-preflight.json")
 DEFAULT_CREDENTIAL_RUNNER_READINESS = pathlib.Path("reports/credential-runtime-runner-readiness.json")
+DEFAULT_CREDENTIAL_EXECUTION_PLAN = pathlib.Path("reports/credential-runtime-collection-execution-plan.json")
 DEFAULT_CREDENTIAL_RECEIPT_QUEUE = pathlib.Path("reports/credential-runtime-receipt-collection-queue.json")
 DEFAULT_CREDENTIAL_REVIEW_HANDOFF = pathlib.Path("reports/credential-runtime-review-handoff.json")
 DEFAULT_CREDENTIAL_MANUAL_REVIEW_DECISION = pathlib.Path("reports/credential-runtime-manual-review-decision.json")
@@ -44,6 +45,7 @@ REQUIRED_RUNTIME_RISK_CONTRACTS = [
     "credential_runtime_evidence_policy",
     "credential_runtime_collection_preflight",
     "credential_runtime_runner_readiness",
+    "credential_runtime_collection_execution_plan",
     "credential_runtime_receipt_collection_queue",
     "credential_runtime_review_handoff",
     "credential_runtime_manual_review_decision",
@@ -134,6 +136,11 @@ REQUIRED_MANIFEST_EVIDENCE_CONTRACTS = {
         "path": "reports/credential-runtime-runner-readiness.json",
         "kind": "credential_runtime_runner_readiness",
         "schema": "https://schemas.datapan.dev/datapan.credential-runtime-runner-readiness.v1.schema.json",
+    },
+    "credential_runtime_collection_execution_plan": {
+        "path": "reports/credential-runtime-collection-execution-plan.json",
+        "kind": "credential_runtime_collection_execution_plan",
+        "schema": "https://schemas.datapan.dev/datapan.credential-runtime-collection-execution-plan.v1.schema.json",
     },
     "credential_runtime_receipt_collection_queue": {
         "path": "reports/credential-runtime-receipt-collection-queue.json",
@@ -635,6 +642,7 @@ def validate_runtime_risk_evidence(
     credential_runtime_policy: dict[str, Any],
     credential_collection_preflight: dict[str, Any],
     credential_runner_readiness: dict[str, Any],
+    credential_execution_plan: dict[str, Any],
     credential_receipt_queue: dict[str, Any],
     credential_review_handoff: dict[str, Any],
     credential_manual_review_decision: dict[str, Any],
@@ -646,6 +654,7 @@ def validate_runtime_risk_evidence(
     credential_runtime_policy_path: pathlib.Path,
     credential_collection_preflight_path: pathlib.Path,
     credential_runner_readiness_path: pathlib.Path,
+    credential_execution_plan_path: pathlib.Path,
     credential_receipt_queue_path: pathlib.Path,
     credential_review_handoff_path: pathlib.Path,
     credential_manual_review_decision_path: pathlib.Path,
@@ -661,6 +670,7 @@ def validate_runtime_risk_evidence(
         "credential_runtime_evidence_policy": credential_runtime_policy_path.as_posix(),
         "credential_runtime_collection_preflight": credential_collection_preflight_path.as_posix(),
         "credential_runtime_runner_readiness": credential_runner_readiness_path.as_posix(),
+        "credential_runtime_collection_execution_plan": credential_execution_plan_path.as_posix(),
         "credential_runtime_receipt_collection_queue": credential_receipt_queue_path.as_posix(),
         "credential_runtime_review_handoff": credential_review_handoff_path.as_posix(),
         "credential_runtime_manual_review_decision": credential_manual_review_decision_path.as_posix(),
@@ -761,6 +771,14 @@ def validate_runtime_risk_evidence(
     credential_runner_summary = as_dict(
         credential_runner_readiness.get("summary"),
         "credential_runner_readiness.summary",
+    )
+    credential_execution_summary = as_dict(
+        credential_execution_plan.get("summary"),
+        "credential_execution_plan.summary",
+    )
+    credential_execution_batch = as_dict(
+        credential_execution_plan.get("batch_execution"),
+        "credential_execution_plan.batch_execution",
     )
     credential_queue_summary = as_dict(credential_receipt_queue.get("summary"), "credential_receipt_queue.summary")
     credential_handoff_summary = as_dict(credential_review_handoff.get("summary"), "credential_review_handoff.summary")
@@ -906,6 +924,57 @@ def validate_runtime_risk_evidence(
         "manual_review_reduction_allowed"
     ):
         raise ValueError("credential runner readiness relief state must match collection queue")
+
+    credential_execution_expected = {
+        "credential_execution_plan_status": credential_execution_summary.get("session_plan_status"),
+        "credential_execution_operator_sources_ready": credential_execution_summary.get("operator_sources_ready"),
+        "credential_execution_reviewed_receipts_missing": credential_execution_summary.get("reviewed_receipts_missing"),
+        "credential_execution_batch_ready_for_operator_credentials": credential_execution_summary.get(
+            "batch_ready_for_operator_credentials"
+        ),
+        "credential_execution_next_action": credential_execution_summary.get("next_action"),
+        "credential_execution_session_output_path": credential_execution_batch.get("session_output_path"),
+        "credential_execution_default_ci_requires_credentials": credential_execution_summary.get(
+            "default_ci_requires_credentials"
+        ),
+        "credential_execution_checked_in_secrets_allowed": credential_execution_summary.get(
+            "checked_in_secrets_allowed"
+        ),
+        "credential_execution_checked_in_session_output_allowed": credential_execution_summary.get(
+            "checked_in_session_output_allowed"
+        ),
+        "credential_execution_goal_closure_allowed": credential_execution_summary.get("goal_closure_allowed"),
+    }
+    for key, value in credential_execution_expected.items():
+        if risk.get(key) != value:
+            raise ValueError(f"runtime_risk_evidence.{key} expected {value}, got {risk.get(key)}")
+    if credential_execution_summary.get("credential_gated_sources") != credential_summary.get("credential_gated_sources"):
+        raise ValueError("credential execution plan source count must match credential policy gated source count")
+    if credential_execution_summary.get("operator_sources_ready") != credential_runner_summary.get(
+        "candidate_batches_present"
+    ):
+        raise ValueError("credential execution plan operator-ready count must match runner candidate batches")
+    if credential_execution_summary.get("reviewed_receipts_missing") != credential_runner_summary.get(
+        "reviewed_receipts_missing"
+    ):
+        raise ValueError("credential execution plan missing reviewed receipts must match runner readiness")
+    if credential_execution_summary.get("default_ci_requires_credentials") is not False:
+        raise ValueError("credential execution plan must keep default CI credential-free")
+    if credential_execution_summary.get("checked_in_secrets_allowed") is not False:
+        raise ValueError("credential execution plan must not allow checked-in secrets")
+    if credential_execution_summary.get("checked_in_session_output_allowed") is not False:
+        raise ValueError("credential execution plan must not allow checked-in session output")
+    if credential_execution_summary.get("goal_closure_allowed") is not False:
+        raise ValueError("credential execution plan must not claim goal closure")
+    if credential_execution_summary.get("manual_review_reduction_allowed") != credential_queue_summary.get(
+        "manual_review_reduction_allowed"
+    ):
+        raise ValueError("credential execution plan relief state must match collection queue")
+    if credential_execution_summary.get("reviewed_receipts_missing", 0) > 0 and (
+        credential_execution_summary.get("batch_ready_for_operator_credentials") is not True
+        or credential_execution_summary.get("next_action") != "run_batch_collection_session_in_operator_env"
+    ):
+        raise ValueError("missing reviewed receipts must preserve batch operator execution next action")
 
     credential_queue_expected = {
         "credential_queue_status": credential_queue_summary.get("queue_status"),
@@ -1173,6 +1242,7 @@ def validate_consistency(
     credential_runtime_policy: dict[str, Any],
     credential_collection_preflight: dict[str, Any],
     credential_runner_readiness: dict[str, Any],
+    credential_execution_plan: dict[str, Any],
     credential_receipt_queue: dict[str, Any],
     credential_review_handoff: dict[str, Any],
     credential_manual_review_decision: dict[str, Any],
@@ -1188,6 +1258,7 @@ def validate_consistency(
     credential_runtime_policy_path: pathlib.Path,
     credential_collection_preflight_path: pathlib.Path,
     credential_runner_readiness_path: pathlib.Path,
+    credential_execution_plan_path: pathlib.Path,
     credential_receipt_queue_path: pathlib.Path,
     credential_review_handoff_path: pathlib.Path,
     credential_manual_review_decision_path: pathlib.Path,
@@ -1212,6 +1283,7 @@ def validate_consistency(
         credential_runtime_policy,
         credential_collection_preflight,
         credential_runner_readiness,
+        credential_execution_plan,
         credential_receipt_queue,
         credential_review_handoff,
         credential_manual_review_decision,
@@ -1223,6 +1295,7 @@ def validate_consistency(
         credential_runtime_policy_path,
         credential_collection_preflight_path,
         credential_runner_readiness_path,
+        credential_execution_plan_path,
         credential_receipt_queue_path,
         credential_review_handoff_path,
         credential_manual_review_decision_path,
@@ -1280,6 +1353,11 @@ def main() -> int:
         default=DEFAULT_CREDENTIAL_RUNNER_READINESS,
         type=pathlib.Path,
     )
+    parser.add_argument(
+        "--credential-execution-plan",
+        default=DEFAULT_CREDENTIAL_EXECUTION_PLAN,
+        type=pathlib.Path,
+    )
     parser.add_argument("--credential-receipt-queue", default=DEFAULT_CREDENTIAL_RECEIPT_QUEUE, type=pathlib.Path)
     parser.add_argument("--credential-review-handoff", default=DEFAULT_CREDENTIAL_REVIEW_HANDOFF, type=pathlib.Path)
     parser.add_argument(
@@ -1324,6 +1402,10 @@ def main() -> int:
         credential_runner_readiness = as_dict(
             load_json(args.credential_runner_readiness),
             args.credential_runner_readiness.as_posix(),
+        )
+        credential_execution_plan = as_dict(
+            load_json(args.credential_execution_plan),
+            args.credential_execution_plan.as_posix(),
         )
         credential_receipt_queue = as_dict(
             load_json(args.credential_receipt_queue),
@@ -1370,6 +1452,7 @@ def main() -> int:
             credential_runtime_policy,
             credential_collection_preflight,
             credential_runner_readiness,
+            credential_execution_plan,
             credential_receipt_queue,
             credential_review_handoff,
             credential_manual_review_decision,
@@ -1385,6 +1468,7 @@ def main() -> int:
             args.credential_runtime_policy,
             args.credential_collection_preflight,
             args.credential_runner_readiness,
+            args.credential_execution_plan,
             args.credential_receipt_queue,
             args.credential_review_handoff,
             args.credential_manual_review_decision,
