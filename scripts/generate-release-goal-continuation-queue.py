@@ -19,6 +19,7 @@ DEFAULT_GOAL_AUDIT = pathlib.Path("docs/release-ledger-goal-completion-audit.jso
 DEFAULT_FINISH_PREFLIGHT = pathlib.Path("reports/release-goal-finish-preflight.json")
 DEFAULT_CONSUMER_DECISION = pathlib.Path("reports/release-consumer-decision.json")
 DEFAULT_CREDENTIAL_COLLECTION_PREFLIGHT = pathlib.Path("reports/credential-runtime-collection-preflight.json")
+DEFAULT_CREDENTIAL_RUNNER_READINESS = pathlib.Path("reports/credential-runtime-runner-readiness.json")
 DEFAULT_CREDENTIAL_REVIEW_HANDOFF = pathlib.Path("reports/credential-runtime-review-handoff.json")
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.release-goal-continuation-queue.v1.schema.json")
 DEFAULT_OUTPUT = pathlib.Path("reports/release-goal-continuation-queue.json")
@@ -73,6 +74,7 @@ def candidate_receipt_collection(
         ],
         "evidence_inputs": [
             DEFAULT_CREDENTIAL_COLLECTION_PREFLIGHT.as_posix(),
+            DEFAULT_CREDENTIAL_RUNNER_READINESS.as_posix(),
             "reports/credential-runtime-receipt-collection-queue.json",
             DEFAULT_CREDENTIAL_REVIEW_HANDOFF.as_posix(),
         ],
@@ -163,6 +165,7 @@ def build_report(
     finish_preflight: dict[str, Any],
     consumer_decision: dict[str, Any],
     credential_preflight: dict[str, Any],
+    credential_runner_readiness: dict[str, Any],
     credential_handoff: dict[str, Any],
 ) -> dict[str, Any]:
     generated_at = consumer_decision.get("generated_at")
@@ -173,6 +176,7 @@ def build_report(
     finish_summary = as_dict(finish_preflight.get("summary"), "finish_preflight.summary")
     decision_summary = as_dict(consumer_decision.get("summary"), "consumer_decision.summary")
     credential_preflight_summary = as_dict(credential_preflight.get("summary"), "credential_preflight.summary")
+    as_dict(credential_runner_readiness.get("summary"), "credential_runner_readiness.summary")
     handoff_summary = as_dict(credential_handoff.get("summary"), "credential_handoff.summary")
     blocking = [
         as_dict(item, "finish_preflight.blocking_evidence[]")
@@ -191,6 +195,7 @@ def build_report(
             "release_goal_finish_preflight": DEFAULT_FINISH_PREFLIGHT.as_posix(),
             "release_consumer_decision": DEFAULT_CONSUMER_DECISION.as_posix(),
             "credential_collection_preflight": DEFAULT_CREDENTIAL_COLLECTION_PREFLIGHT.as_posix(),
+            "credential_runner_readiness": DEFAULT_CREDENTIAL_RUNNER_READINESS.as_posix(),
             "credential_review_handoff": DEFAULT_CREDENTIAL_REVIEW_HANDOFF.as_posix(),
         },
         "summary": {
@@ -285,6 +290,7 @@ def main() -> int:
     parser.add_argument("--finish-preflight", default=DEFAULT_FINISH_PREFLIGHT, type=pathlib.Path)
     parser.add_argument("--consumer-decision", default=DEFAULT_CONSUMER_DECISION, type=pathlib.Path)
     parser.add_argument("--credential-preflight", default=DEFAULT_CREDENTIAL_COLLECTION_PREFLIGHT, type=pathlib.Path)
+    parser.add_argument("--credential-runner-readiness", default=DEFAULT_CREDENTIAL_RUNNER_READINESS, type=pathlib.Path)
     parser.add_argument("--credential-handoff", default=DEFAULT_CREDENTIAL_REVIEW_HANDOFF, type=pathlib.Path)
     parser.add_argument("--schema", default=DEFAULT_SCHEMA, type=pathlib.Path)
     parser.add_argument("--output", default=DEFAULT_OUTPUT, type=pathlib.Path)
@@ -297,6 +303,7 @@ def main() -> int:
             load_json(args.finish_preflight),
             load_json(args.consumer_decision),
             load_json(args.credential_preflight),
+            load_json(args.credential_runner_readiness),
             load_json(args.credential_handoff),
         )
         validate_invariants(report)

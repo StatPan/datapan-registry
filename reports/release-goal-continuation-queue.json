@@ -9,6 +9,7 @@
     "release_goal_finish_preflight": "reports/release-goal-finish-preflight.json",
     "release_consumer_decision": "reports/release-consumer-decision.json",
     "credential_collection_preflight": "reports/credential-runtime-collection-preflight.json",
+    "credential_runner_readiness": "reports/credential-runtime-runner-readiness.json",
     "credential_review_handoff": "reports/credential-runtime-review-handoff.json"
   },
   "summary": {
@@ -82,6 +83,7 @@
       ],
       "evidence_inputs": [
         "reports/credential-runtime-collection-preflight.json",
+        "reports/credential-runtime-runner-readiness.json",
         "reports/credential-runtime-receipt-collection-queue.json",
         "reports/credential-runtime-review-handoff.json"
       ],

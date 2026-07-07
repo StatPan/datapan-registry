@@ -90,6 +90,7 @@
         "runtime_evidence_growth",
         "credential_runtime_evidence_policy",
         "credential_runtime_collection_preflight",
+        "credential_runtime_runner_readiness",
         "credential_runtime_receipt_collection_queue",
         "credential_runtime_review_handoff",
         "credential_runtime_operator_packets",
@@ -108,6 +109,7 @@
         "python scripts/generate-source-report-inventory.py",
         "python scripts/generate-credential-runtime-evidence-policy.py",
         "python scripts/generate-credential-runtime-collection-preflight.py",
+        "python scripts/generate-credential-runtime-runner-readiness.py",
         "python scripts/generate-credential-runtime-receipt-collection-queue.py",
         "python scripts/generate-credential-runtime-review-handoff.py",
         "python scripts/generate-credential-runtime-operator-packets.py",
@@ -124,6 +126,7 @@
         "python scripts/validate-source-report-inventory.py",
         "python scripts/generate-credential-runtime-evidence-policy.py --check",
         "python scripts/generate-credential-runtime-collection-preflight.py --check",
+        "python scripts/generate-credential-runtime-runner-readiness.py --check",
         "python scripts/generate-credential-runtime-receipt-collection-queue.py --check",
         "python scripts/generate-credential-runtime-review-handoff.py --check",
         "python scripts/generate-credential-runtime-operator-packets.py --check",
@@ -139,7 +142,7 @@
         "python scripts/validate-runtime-evidence-growth.py",
         "python scripts/sync-release-manifest-artifacts.py --check"
       ],
-      "manifest_relationship": "Source rollups, credential runtime evidence, operator packets, manual-review acceptance packets, and inventories are top-level manifest evidence for nested source reports, reviewed receipt collection actions, and explicit manual-review release boundary actions.",
+      "manifest_relationship": "Source rollups, credential runtime evidence, runner readiness, operator packets, manual-review acceptance packets, and inventories are top-level manifest evidence for nested source reports, reviewed receipt collection actions, and explicit manual-review release boundary actions.",
       "schema_relationship": "Schema-backed source and credential reports are indexed through schemas/index.json and source-report-inventory.json where applicable.",
       "package_relationship": "Included in release packages through manifest.json.",
       "exemption_boundary": "Nested source reports stay out of the top-level manifest when covered by source-report-inventory.json."

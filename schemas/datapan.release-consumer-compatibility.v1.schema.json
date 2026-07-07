@@ -48,8 +48,8 @@
     },
     "manifest_evidence_contracts": {
       "type": "array",
-      "minItems": 15,
-      "maxItems": 15,
+      "minItems": 16,
+      "maxItems": 16,
       "items": {
         "$ref": "#/$defs/manifest_evidence_contract"
       }
@@ -450,6 +450,7 @@
             "source_runtime_remediation",
             "credential_runtime_evidence_policy",
             "credential_runtime_collection_preflight",
+            "credential_runtime_runner_readiness",
             "credential_runtime_receipt_collection_queue",
             "credential_runtime_review_handoff",
             "credential_runtime_manual_review_decision",
@@ -493,6 +494,7 @@
         "source_runtime_remediation_map",
         "credential_runtime_evidence_policy",
         "credential_runtime_collection_preflight",
+        "credential_runtime_runner_readiness",
         "credential_runtime_receipt_collection_queue",
         "credential_runtime_review_handoff",
         "credential_runtime_manual_review_decision",
@@ -540,6 +542,16 @@
         "credential_collection_preflight_default_ci_runnable_sources",
         "credential_collection_preflight_operator_environment_required_sources",
         "credential_collection_preflight_manual_review_reduction_allowed",
+        "credential_runner_readiness_status",
+        "credential_runner_ready_to_run_without_credentials",
+        "credential_runner_blocked_on_operator_env",
+        "credential_runner_blocked_on_candidate_batch",
+        "credential_runner_reviewed_receipts_present",
+        "credential_runner_reviewed_receipts_missing",
+        "credential_runner_default_ci_requires_credentials",
+        "credential_runner_checked_in_secrets_allowed",
+        "credential_runner_manual_review_reduction_allowed",
+        "credential_runner_local_session_artifacts_checked_in",
         "credential_policy_effect",
         "credential_policy_relief_gate_status",
         "credential_queue_status",
@@ -588,6 +600,9 @@
         "credential_runtime_collection_preflight": {
           "const": "reports/credential-runtime-collection-preflight.json"
         },
+        "credential_runtime_runner_readiness": {
+          "const": "reports/credential-runtime-runner-readiness.json"
+        },
         "credential_runtime_receipt_collection_queue": {
           "const": "reports/credential-runtime-receipt-collection-queue.json"
         },
@@ -617,8 +632,8 @@
         },
         "required_contracts": {
           "type": "array",
-          "minItems": 10,
-          "maxItems": 10,
+          "minItems": 11,
+          "maxItems": 11,
           "prefixItems": [
             {
               "const": "source_runtime_evidence"
@@ -631,6 +646,9 @@
             },
             {
               "const": "credential_runtime_collection_preflight"
+            },
+            {
+              "const": "credential_runtime_runner_readiness"
             },
             {
               "const": "credential_runtime_receipt_collection_queue"
@@ -783,6 +801,40 @@
           "$ref": "#/$defs/count"
         },
         "credential_collection_preflight_manual_review_reduction_allowed": {
+          "const": false
+        },
+        "credential_runner_readiness_status": {
+          "enum": [
+            "operator_credentials_required",
+            "candidate_batches_missing",
+            "reviewed_receipts_complete"
+          ]
+        },
+        "credential_runner_ready_to_run_without_credentials": {
+          "const": 0
+        },
+        "credential_runner_blocked_on_operator_env": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_runner_blocked_on_candidate_batch": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_runner_reviewed_receipts_present": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_runner_reviewed_receipts_missing": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_runner_default_ci_requires_credentials": {
+          "const": false
+        },
+        "credential_runner_checked_in_secrets_allowed": {
+          "const": false
+        },
+        "credential_runner_manual_review_reduction_allowed": {
+          "const": false
+        },
+        "credential_runner_local_session_artifacts_checked_in": {
           "const": false
         },
         "credential_policy_effect": {
