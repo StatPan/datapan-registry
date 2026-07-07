@@ -107,6 +107,7 @@ jobs:
           python scripts/generate-release-distribution-footprint.py --check
           python scripts/generate-release-consumer-compatibility.py --check
           python scripts/validate-release-consumer-compatibility.py
+          python scripts/generate-release-operational-pressure.py --check
           python scripts/generate-release-consumer-decision.py --check
           python -m py_compile scripts/error_action_routing_rollup.py
           python -m py_compile scripts/generate-error-action-routing-rollup.py
@@ -114,6 +115,7 @@ jobs:
           python -m py_compile scripts/sync-release-manifest-artifacts.py
           python -m py_compile scripts/generate-release-distribution-footprint.py
           python -m py_compile scripts/generate-release-consumer-compatibility.py
+          python -m py_compile scripts/generate-release-operational-pressure.py
           python -m py_compile scripts/generate-release-consumer-decision.py
           python -m py_compile scripts/generate-release-goal-finish-preflight.py
           python -m py_compile scripts/generate-release-goal-continuation-queue.py

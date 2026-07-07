@@ -1,0 +1,79 @@
+{
+  "schema_version": "datapan.release-operational-pressure.v1",
+  "generated_at": "2026-07-04T06:39:24Z",
+  "goal_issue": 344,
+  "pressure_ticket": 437,
+  "provider": "datapan-registry",
+  "inputs": {
+    "manifest": "manifest.json",
+    "release_distribution_footprint": "reports/release-distribution-footprint.json",
+    "release_consumer_compatibility": "reports/release-consumer-compatibility.json",
+    "credential_runtime_runner_readiness": "reports/credential-runtime-runner-readiness.json",
+    "release_goal_finish_preflight": "reports/release-goal-finish-preflight.json",
+    "release_goal_operating_contract": "reports/release-goal-operating-contract.json"
+  },
+  "summary": {
+    "operational_pressure_decision": "distribution_and_credential_pressure",
+    "distribution_pressure_present": true,
+    "credential_pressure_present": true,
+    "finish_allowed": false,
+    "goal_completion_allowed": false,
+    "goal_closure_allowed": false,
+    "next_action_count": 3
+  },
+  "distribution_pressure": {
+    "canonical_registry_path": "data/data-go-kr.registry.json",
+    "canonical_registry_bytes": 137735169,
+    "large_monolith_threshold_bytes": 100000000,
+    "registry_footprint_status": "large_monolith_shard_additive",
+    "canonical_registry_required": true,
+    "monolith_fallback_required": true,
+    "shard_distribution_required": false,
+    "shard_publication_status": "optional_draft_asset",
+    "shard_policy_phase": "compatibility_period",
+    "shard_archive_status": "ci_validated_optional_asset",
+    "consumer_effect": "canonical_registry_required_shards_optional"
+  },
+  "credential_pressure": {
+    "runner_status": "operator_credentials_required",
+    "ready_to_run_without_credentials": 0,
+    "blocked_on_operator_env": 5,
+    "blocked_on_candidate_batch": 0,
+    "reviewed_receipts_present": 0,
+    "reviewed_receipts_missing": 5,
+    "default_ci_requires_credentials": false,
+    "manual_review_reduction_allowed": false,
+    "checked_in_secrets_allowed": false,
+    "runtime_compatibility_effect": "manual_review_required_until_runtime_blockers_resolved",
+    "credential_queue_status": "collection_required"
+  },
+  "goal_boundary": {
+    "goal_status": "not_complete",
+    "release_decision": "manual_review_required",
+    "manual_review_required": true,
+    "manual_review_accepted": false,
+    "reviewed_credential_receipts": 0,
+    "preflight_next_action": "do_not_finish_goal",
+    "primary_continuation_candidate": "collect_reviewed_credential_runtime_receipts"
+  },
+  "next_actions": [
+    {
+      "id": "prove_shard_preferred_consumer_compatibility",
+      "capability_plane": "shard_release_distribution",
+      "required": true,
+      "reason": "Large canonical registry remains above threshold while shards are still optional additive assets."
+    },
+    {
+      "id": "collect_reviewed_credential_runtime_receipts",
+      "capability_plane": "credential_safe_evidence",
+      "required": true,
+      "reason": "Credential-gated runtime checks still need reviewed redacted receipts before compatibility relief."
+    },
+    {
+      "id": "do_not_finish_goal",
+      "capability_plane": "verification_evidence",
+      "required": true,
+      "reason": "Repo-owned preflight and operating contract still disallow #344 closure."
+    }
+  ]
+}

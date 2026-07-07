@@ -20,6 +20,7 @@ DEFAULT_FINISH_PREFLIGHT = pathlib.Path("reports/release-goal-finish-preflight.j
 DEFAULT_CONTINUATION_QUEUE = pathlib.Path("reports/release-goal-continuation-queue.json")
 DEFAULT_CONSUMER_DECISION = pathlib.Path("reports/release-consumer-decision.json")
 DEFAULT_CREDENTIAL_POLICY = pathlib.Path("reports/credential-runtime-evidence-policy.json")
+DEFAULT_OPERATIONAL_PRESSURE = pathlib.Path("reports/release-operational-pressure.json")
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.release-goal-operating-contract.v1.schema.json")
 DEFAULT_OUTPUT = pathlib.Path("reports/release-goal-operating-contract.json")
 SCHEMA_VERSION = "datapan.release-goal-operating-contract.v1"
@@ -161,6 +162,7 @@ def build_report(
     continuation_queue: dict[str, Any],
     consumer_decision: dict[str, Any],
     credential_policy: dict[str, Any],
+    operational_pressure: dict[str, Any],
 ) -> dict[str, Any]:
     generated_at = consumer_decision.get("generated_at")
     if not isinstance(generated_at, str) or not generated_at:
@@ -171,6 +173,7 @@ def build_report(
     continuation_summary = as_dict(continuation_queue.get("summary"), "continuation_queue.summary")
     decision_summary = as_dict(consumer_decision.get("summary"), "consumer_decision.summary")
     policy_summary = as_dict(credential_policy.get("summary"), "credential_policy.summary")
+    pressure_summary = as_dict(operational_pressure.get("summary"), "operational_pressure.summary")
     candidates = [
         as_dict(item, "continuation_queue.candidates[]")
         for item in as_list(continuation_queue.get("candidates"), "continuation_queue.candidates")
@@ -193,6 +196,7 @@ def build_report(
             "release_goal_continuation_queue": DEFAULT_CONTINUATION_QUEUE.as_posix(),
             "release_consumer_decision": DEFAULT_CONSUMER_DECISION.as_posix(),
             "credential_runtime_evidence_policy": DEFAULT_CREDENTIAL_POLICY.as_posix(),
+            "release_operational_pressure": DEFAULT_OPERATIONAL_PRESSURE.as_posix(),
         },
         "identity": {
             "goal_type": "persistent_registry_ledger_goal",
@@ -216,6 +220,9 @@ def build_report(
             "manual_review_accepted": manual_review_accepted,
             "reviewed_credential_receipts": decision_summary.get("reviewed_credential_receipts"),
             "manual_review_reduction_allowed": policy_summary.get("manual_review_reduction_allowed"),
+            "operational_pressure_decision": pressure_summary.get("operational_pressure_decision"),
+            "distribution_pressure_present": pressure_summary.get("distribution_pressure_present"),
+            "credential_pressure_present": pressure_summary.get("credential_pressure_present"),
             "continuation_next_action": continuation_summary.get("next_action"),
             "primary_continuation_candidate": continuation_summary.get("primary_candidate"),
             "candidate_count": continuation_summary.get("candidate_count"),
@@ -410,6 +417,13 @@ def validate_invariants(report: dict[str, Any]) -> None:
     if summary.get("manual_review_required") is True and summary.get("manual_review_accepted") is not True:
         if summary.get("goal_completion_allowed") is not False:
             raise ValueError("unaccepted manual-review boundary must not allow goal completion")
+    if summary.get("goal_completion_allowed") is False:
+        if summary.get("operational_pressure_decision") == "operational_pressure_resolved":
+            raise ValueError("goal_completion_allowed=false cannot report resolved operational pressure")
+    if not isinstance(summary.get("distribution_pressure_present"), bool):
+        raise ValueError("operating contract must preserve distribution pressure as a boolean signal")
+    if not isinstance(summary.get("credential_pressure_present"), bool):
+        raise ValueError("operating contract must preserve credential pressure as a boolean signal")
     if summary.get("candidate_count", 0) > 0 and summary.get("continuation_next_action") != "create_child_ticket":
         raise ValueError("continuation candidates require continuation_next_action=create_child_ticket")
 
@@ -433,6 +447,7 @@ def main() -> int:
     parser.add_argument("--continuation-queue", default=DEFAULT_CONTINUATION_QUEUE, type=pathlib.Path)
     parser.add_argument("--consumer-decision", default=DEFAULT_CONSUMER_DECISION, type=pathlib.Path)
     parser.add_argument("--credential-policy", default=DEFAULT_CREDENTIAL_POLICY, type=pathlib.Path)
+    parser.add_argument("--operational-pressure", default=DEFAULT_OPERATIONAL_PRESSURE, type=pathlib.Path)
     parser.add_argument("--schema", default=DEFAULT_SCHEMA, type=pathlib.Path)
     parser.add_argument("--output", default=DEFAULT_OUTPUT, type=pathlib.Path)
     parser.add_argument("--check", action="store_true", help="fail when checked-in operating contract is stale")
@@ -445,6 +460,7 @@ def main() -> int:
             load_json(args.continuation_queue),
             load_json(args.consumer_decision),
             load_json(args.credential_policy),
+            load_json(args.operational_pressure),
         )
         validate_invariants(report)
         validate_schema(report, args.schema)

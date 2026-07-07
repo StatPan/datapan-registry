@@ -90,6 +90,7 @@ jobs:
             scripts/generate-release-assembly-receipt.py \
             scripts/generate-release-distribution-footprint.py \
             scripts/generate-release-consumer-compatibility.py \
+            scripts/generate-release-operational-pressure.py \
             scripts/generate-release-consumer-decision.py \
             scripts/generate-release-goal-finish-preflight.py \
             scripts/generate-release-goal-continuation-queue.py \
@@ -185,6 +186,7 @@ jobs:
           python scripts/generate-release-distribution-footprint.py --check
           python scripts/generate-release-consumer-compatibility.py --check
           python scripts/validate-release-consumer-compatibility.py
+          python scripts/generate-release-operational-pressure.py --check
           python scripts/generate-release-consumer-decision.py --check
 
       - name: Select manifest path

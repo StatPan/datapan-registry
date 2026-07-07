@@ -1,0 +1,312 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.release-operational-pressure.v1.schema.json",
+  "title": "Datapan Release Operational Pressure v1",
+  "description": "Machine-readable evidence that separates large-registry distribution pressure, credential runtime pressure, and goal finish boundaries for registry-ledger release operations.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "goal_issue",
+    "pressure_ticket",
+    "provider",
+    "inputs",
+    "summary",
+    "distribution_pressure",
+    "credential_pressure",
+    "goal_boundary",
+    "next_actions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.release-operational-pressure.v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "goal_issue": {
+      "const": 344
+    },
+    "pressure_ticket": {
+      "const": 437
+    },
+    "provider": {
+      "const": "datapan-registry"
+    },
+    "inputs": {
+      "$ref": "#/$defs/inputs"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "distribution_pressure": {
+      "$ref": "#/$defs/distribution_pressure"
+    },
+    "credential_pressure": {
+      "$ref": "#/$defs/credential_pressure"
+    },
+    "goal_boundary": {
+      "$ref": "#/$defs/goal_boundary"
+    },
+    "next_actions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/next_action"
+      }
+    }
+  },
+  "$defs": {
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest",
+        "release_distribution_footprint",
+        "release_consumer_compatibility",
+        "credential_runtime_runner_readiness",
+        "release_goal_finish_preflight",
+        "release_goal_operating_contract"
+      ],
+      "properties": {
+        "manifest": {
+          "const": "manifest.json"
+        },
+        "release_distribution_footprint": {
+          "const": "reports/release-distribution-footprint.json"
+        },
+        "release_consumer_compatibility": {
+          "const": "reports/release-consumer-compatibility.json"
+        },
+        "credential_runtime_runner_readiness": {
+          "const": "reports/credential-runtime-runner-readiness.json"
+        },
+        "release_goal_finish_preflight": {
+          "const": "reports/release-goal-finish-preflight.json"
+        },
+        "release_goal_operating_contract": {
+          "const": "reports/release-goal-operating-contract.json"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operational_pressure_decision",
+        "distribution_pressure_present",
+        "credential_pressure_present",
+        "finish_allowed",
+        "goal_completion_allowed",
+        "goal_closure_allowed",
+        "next_action_count"
+      ],
+      "properties": {
+        "operational_pressure_decision": {
+          "enum": [
+            "distribution_and_credential_pressure",
+            "distribution_latency_pressure",
+            "credential_runtime_pressure",
+            "goal_boundary_pressure",
+            "operational_pressure_resolved"
+          ]
+        },
+        "distribution_pressure_present": {
+          "type": "boolean"
+        },
+        "credential_pressure_present": {
+          "type": "boolean"
+        },
+        "finish_allowed": {
+          "type": "boolean"
+        },
+        "goal_completion_allowed": {
+          "type": "boolean"
+        },
+        "goal_closure_allowed": {
+          "type": "boolean"
+        },
+        "next_action_count": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "distribution_pressure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical_registry_path",
+        "canonical_registry_bytes",
+        "large_monolith_threshold_bytes",
+        "registry_footprint_status",
+        "canonical_registry_required",
+        "monolith_fallback_required",
+        "shard_distribution_required",
+        "shard_publication_status",
+        "shard_policy_phase",
+        "shard_archive_status",
+        "consumer_effect"
+      ],
+      "properties": {
+        "canonical_registry_path": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "canonical_registry_bytes": {
+          "$ref": "#/$defs/count"
+        },
+        "large_monolith_threshold_bytes": {
+          "$ref": "#/$defs/count"
+        },
+        "registry_footprint_status": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "canonical_registry_required": {
+          "type": "boolean"
+        },
+        "monolith_fallback_required": {
+          "type": "boolean"
+        },
+        "shard_distribution_required": {
+          "type": "boolean"
+        },
+        "shard_publication_status": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "shard_policy_phase": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "shard_archive_status": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "consumer_effect": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "credential_pressure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runner_status",
+        "ready_to_run_without_credentials",
+        "blocked_on_operator_env",
+        "blocked_on_candidate_batch",
+        "reviewed_receipts_present",
+        "reviewed_receipts_missing",
+        "default_ci_requires_credentials",
+        "manual_review_reduction_allowed",
+        "checked_in_secrets_allowed",
+        "runtime_compatibility_effect",
+        "credential_queue_status"
+      ],
+      "properties": {
+        "runner_status": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "ready_to_run_without_credentials": {
+          "$ref": "#/$defs/count"
+        },
+        "blocked_on_operator_env": {
+          "$ref": "#/$defs/count"
+        },
+        "blocked_on_candidate_batch": {
+          "$ref": "#/$defs/count"
+        },
+        "reviewed_receipts_present": {
+          "$ref": "#/$defs/count"
+        },
+        "reviewed_receipts_missing": {
+          "$ref": "#/$defs/count"
+        },
+        "default_ci_requires_credentials": {
+          "type": "boolean"
+        },
+        "manual_review_reduction_allowed": {
+          "type": "boolean"
+        },
+        "checked_in_secrets_allowed": {
+          "type": "boolean"
+        },
+        "runtime_compatibility_effect": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "credential_queue_status": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "goal_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "goal_status",
+        "release_decision",
+        "manual_review_required",
+        "manual_review_accepted",
+        "reviewed_credential_receipts",
+        "preflight_next_action",
+        "primary_continuation_candidate"
+      ],
+      "properties": {
+        "goal_status": {
+          "enum": ["complete", "not_complete"]
+        },
+        "release_decision": {
+          "enum": ["safe_to_consume", "manual_review_required", "blocked"]
+        },
+        "manual_review_required": {
+          "type": "boolean"
+        },
+        "manual_review_accepted": {
+          "type": "boolean"
+        },
+        "reviewed_credential_receipts": {
+          "$ref": "#/$defs/count"
+        },
+        "preflight_next_action": {
+          "enum": ["do_not_finish_goal", "goal_finish_allowed"]
+        },
+        "primary_continuation_candidate": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "next_action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "capability_plane", "required", "reason"],
+      "properties": {
+        "id": {
+          "enum": [
+            "prove_shard_preferred_consumer_compatibility",
+            "collect_reviewed_credential_runtime_receipts",
+            "do_not_finish_goal"
+          ]
+        },
+        "capability_plane": {
+          "enum": [
+            "shard_release_distribution",
+            "credential_safe_evidence",
+            "verification_evidence"
+          ]
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "reason": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    }
+  }
+}
