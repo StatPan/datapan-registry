@@ -35,6 +35,7 @@ POST_PROMOTION_CHECKS = [
     "python3 scripts/generate-release-consumer-decision.py",
     "python3 scripts/generate-release-goal-finish-preflight.py",
     "python3 scripts/generate-release-goal-continuation-queue.py",
+    "python3 scripts/generate-release-goal-operating-contract.py",
     "python3 scripts/generate-release-assembly-receipt.py",
     "python3 scripts/sync-release-manifest-artifacts.py --write",
     "python3 scripts/validate-credential-runtime-receipts.py",
@@ -51,9 +52,20 @@ DOWNSTREAM_EVIDENCE = [
     "reports/release-consumer-decision.json",
     "reports/release-goal-finish-preflight.json",
     "reports/release-goal-continuation-queue.json",
+    "reports/release-goal-operating-contract.json",
     "reports/release-assembly-receipt.json",
     "manifest.json",
 ]
+
+BATCH_COLLECTION_COMMANDS = {
+    "secret_free_batch_preflight": "python3 scripts/run-credential-runtime-collection.py --all --json",
+    "require_env_batch_preflight": "python3 scripts/run-credential-runtime-collection.py --all --require-env",
+    "batch_collection_run": (
+        "python3 scripts/run-credential-runtime-collection.py "
+        "--all --run --skip-not-ready --continue-on-error --json"
+    ),
+    "batch_runner_self_test": "python3 scripts/run-credential-runtime-collection.py --self-test",
+}
 
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -226,6 +238,14 @@ def build_report(queue: dict[str, Any], handoff: dict[str, Any], decision: dict[
             "downstream_evidence_affected": DOWNSTREAM_EVIDENCE,
             "goal_closure_effect": "no_goal_closure_without_reviewed_receipts_or_explicit_manual_review_acceptance",
         },
+        "batch_collection_contract": {
+            "commands": BATCH_COLLECTION_COMMANDS,
+            "skip_not_ready_allowed": True,
+            "continue_on_error_allowed": True,
+            "session_output_schema": "datapan.credential-runtime-collection-session.v1",
+            "checked_in_secrets_allowed": False,
+            "default_ci_requires_credentials": False,
+        },
         "packets": packets,
     }
 
@@ -243,6 +263,16 @@ def validate_invariants(report: dict[str, Any]) -> None:
         raise ValueError("operator packets must not allow checked-in secrets")
     if summary.get("manual_review_accepted") is not False:
         raise ValueError("operator packets cannot assert manual-review acceptance")
+    batch_contract = as_dict(report.get("batch_collection_contract"), "batch_collection_contract")
+    batch_commands = as_dict(batch_contract.get("commands"), "batch_collection_contract.commands")
+    for key, command in batch_commands.items():
+        value = string_value(command, f"batch_collection_contract.commands.{key}")
+        if "<secret>" in value:
+            raise ValueError(f"batch command {key} includes a secret placeholder")
+    if batch_contract.get("checked_in_secrets_allowed") is not False:
+        raise ValueError("batch collection contract must not allow checked-in secrets")
+    if batch_contract.get("default_ci_requires_credentials") is not False:
+        raise ValueError("batch collection contract must preserve secret-free default CI")
     seen: set[str] = set()
     for packet in packets:
         source_id = string_value(packet.get("source_id"), "packet.source_id")
