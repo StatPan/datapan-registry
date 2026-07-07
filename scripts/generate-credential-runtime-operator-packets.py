@@ -35,7 +35,7 @@ SESSION_REVIEW_PLAN_COMMAND = (
 )
 SESSION_REVIEW_PLAN_VALIDATION_COMMAND = (
     "python3 scripts/validate-credential-runtime-session-review-plan.py "
-    f"{DEFAULT_SESSION_REVIEW_PLAN_OUTPUT}"
+    f"{DEFAULT_SESSION_REVIEW_PLAN_OUTPUT} --queue {DEFAULT_QUEUE.as_posix()}"
 )
 
 

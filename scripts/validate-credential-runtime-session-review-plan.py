@@ -20,6 +20,7 @@ except ImportError as exc:  # pragma: no cover - environment guard
 SCHEMA_VERSION = "datapan.credential-runtime-session-review-plan.v1"
 DEFAULT_PLAN = pathlib.Path(".datapan/runtime-evidence/credential-runtime-session-review-plan.json")
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-session-review-plan.v1.schema.json")
+DEFAULT_QUEUE = pathlib.Path("reports/credential-runtime-receipt-collection-queue.json")
 SECRET_MARKER_RE = re.compile(
     r"(<secret>|credential_value|authorization:|bearer\s+|api[_-]?secret|service[_-]?key=)",
     re.IGNORECASE,
@@ -90,9 +91,47 @@ def validate_generated_from(report: dict[str, Any]) -> None:
         raise ValueError(f"session validation command missing required fragment(s): {', '.join(missing)}")
 
 
-def validate_succeeded_item(item: dict[str, Any]) -> None:
+def queue_sources(queue: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    result: dict[str, dict[str, Any]] = {}
+    for raw_source in as_list(queue.get("sources"), "queue.sources"):
+        source = as_dict(raw_source, "queue.sources[]")
+        source_id = string_value(source.get("source_id"), "queue.source_id")
+        result[source_id] = source
+    return result
+
+
+def validate_queue_binding(report: dict[str, Any], queue: dict[str, Any], queue_path: pathlib.Path) -> None:
+    generated_from = as_dict(report.get("generated_from"), "generated_from")
+    generated_queue = string_value(generated_from.get("queue"), "generated_from.queue")
+    if generated_queue != queue_path.as_posix():
+        raise ValueError(f"generated_from.queue must match queue path {queue_path.as_posix()}")
+    queue_by_source = queue_sources(queue)
+    items = [as_dict(item, "review_plan[]") for item in as_list(report.get("review_plan"), "review_plan")]
+    plan_source_ids = {string_value(item.get("source_id"), "review_plan[].source_id") for item in items}
+    queue_source_ids = set(queue_by_source)
+    if plan_source_ids != queue_source_ids:
+        missing = sorted(queue_source_ids - plan_source_ids)
+        extra = sorted(plan_source_ids - queue_source_ids)
+        parts = []
+        if missing:
+            parts.append(f"missing queue source(s): {', '.join(missing)}")
+        if extra:
+            parts.append(f"unknown review-plan source(s): {', '.join(extra)}")
+        raise ValueError("review plan source set does not match queue: " + "; ".join(parts))
+    for item in items:
+        source_id = string_value(item.get("source_id"), "review_plan[].source_id")
+        queue_source = queue_by_source[source_id]
+        status = string_value(item.get("status"), f"{source_id}.status")
+        if status == "succeeded":
+            validate_succeeded_item(item, queue_source)
+        elif status == "skipped_not_ready":
+            validate_skipped_item(item, queue_source)
+
+
+def validate_succeeded_item(item: dict[str, Any], queue_source: dict[str, Any] | None = None) -> None:
     source_id = string_value(item.get("source_id"), "review_plan[].source_id")
     staged_path = string_value(item.get("staged_receipt_path"), f"{source_id}.staged_receipt_path")
+    reviewed_path = string_value(item.get("reviewed_receipt_path"), f"{source_id}.reviewed_receipt_path")
     staged_command = string_value(
         item.get("staged_receipt_validation_command"),
         f"{source_id}.staged_receipt_validation_command",
@@ -114,6 +153,19 @@ def validate_succeeded_item(item: dict[str, Any]) -> None:
         raise ValueError(f"{source_id}: staged receipt validation command must allow unreviewed staged receipts")
     if staged_path not in staged_command:
         raise ValueError(f"{source_id}: staged receipt validation command must reference staged receipt path")
+    if queue_source is not None:
+        expected_staged_path = string_value(queue_source.get("staged_receipt_path"), f"{source_id}.queue.staged_path")
+        expected_reviewed_path = string_value(queue_source.get("reviewed_receipt_path"), f"{source_id}.queue.reviewed_path")
+        expected_validation = string_value(
+            queue_source.get("staged_receipt_validation_command"),
+            f"{source_id}.queue.staged_receipt_validation_command",
+        )
+        if staged_path != expected_staged_path:
+            raise ValueError(f"{source_id}: staged receipt path does not match queue")
+        if reviewed_path != expected_reviewed_path:
+            raise ValueError(f"{source_id}: reviewed receipt path does not match queue")
+        if staged_command != expected_validation:
+            raise ValueError(f"{source_id}: staged receipt validation command does not match queue")
     required_promotion_fragments = [
         "scripts/promote-credential-runtime-receipt.py",
         staged_path,
@@ -127,7 +179,19 @@ def validate_succeeded_item(item: dict[str, Any]) -> None:
         raise ValueError(f"{source_id}: reviewed receipt promotion command missing: {', '.join(missing)}")
 
 
-def validate_invariants(report: dict[str, Any]) -> None:
+def validate_skipped_item(item: dict[str, Any], queue_source: dict[str, Any]) -> None:
+    source_id = string_value(item.get("source_id"), "review_plan[].source_id")
+    expected_candidate = string_value(queue_source.get("candidate_batch"), f"{source_id}.queue.candidate_batch")
+    expected_reviewed = string_value(queue_source.get("reviewed_receipt_path"), f"{source_id}.queue.reviewed_receipt_path")
+    candidate = string_value(item.get("candidate_batch"), f"{source_id}.candidate_batch")
+    reviewed = string_value(item.get("reviewed_receipt_path"), f"{source_id}.reviewed_receipt_path")
+    if candidate != expected_candidate:
+        raise ValueError(f"{source_id}: skipped candidate batch does not match queue")
+    if reviewed != expected_reviewed:
+        raise ValueError(f"{source_id}: skipped reviewed receipt path does not match queue")
+
+
+def validate_invariants(report: dict[str, Any], queue: dict[str, Any] | None = None, queue_path: pathlib.Path | None = None) -> None:
     if report.get("schema_version") != SCHEMA_VERSION:
         raise ValueError(f"review plan must use {SCHEMA_VERSION}")
     boundaries = as_dict(report.get("checked_in_boundaries"), "checked_in_boundaries")
@@ -174,22 +238,147 @@ def validate_invariants(report: dict[str, Any]) -> None:
             validate_succeeded_item(item)
         elif status not in {"skipped_not_ready", "failed"}:
             raise ValueError(f"{source_id}: unsupported review plan status {status}")
+    if queue is not None and queue_path is not None:
+        validate_queue_binding(report, queue, queue_path)
     validate_redaction(report)
 
 
-def validate_plan(path: pathlib.Path, schema_path: pathlib.Path) -> dict[str, Any]:
+def validate_plan(path: pathlib.Path, schema_path: pathlib.Path, queue_path: pathlib.Path | None = DEFAULT_QUEUE) -> dict[str, Any]:
     report = load_json(path)
     validate_schema(report, schema_path)
-    validate_invariants(report)
+    queue = load_json(queue_path) if queue_path is not None else None
+    validate_invariants(report, queue=queue, queue_path=queue_path)
     return report
 
 
-def valid_plan() -> dict[str, Any]:
+def valid_queue(queue_path: pathlib.Path) -> dict[str, Any]:
+    return {
+        "schema_version": "datapan.credential-runtime-receipt-collection-queue.v1",
+        "generated_at": "2026-07-04T06:39:24Z",
+        "summary": {
+            "sources": 3,
+            "credential_gated_sources": 3,
+            "absent": 3,
+            "staged_only": 0,
+            "reviewed_rejected": 0,
+            "reviewed_accepted": 0,
+            "relief_eligible": 0,
+            "reviewed_receipts_checked_in": 0,
+            "manual_review_reduction_allowed": False,
+            "default_ci_requires_credentials": False,
+            "checked_in_secrets_allowed": False,
+            "queue_status": "collection_required",
+        },
+        "sources": [
+            {
+                "source_id": "ready",
+                "provider": "Ready",
+                "candidate_batch": "reports/ready/runtime-candidates.json",
+                "runtime_evidence_plan": "reports/ready/runtime-evidence-plan.json",
+                "staged_receipt_path": ".datapan/runtime-evidence/ready-credentialed-receipt.json",
+                "reviewed_receipt_path": "reports/credential-runtime-receipts/ready-credentialed-receipt.json",
+                "operator_command": "READY_TOKEN=<secret> datapan source runtime verify --source ready",
+                "staged_receipt_validation_command": (
+                    "python3 scripts/validate-credential-runtime-receipts.py --allow-unreviewed "
+                    ".datapan/runtime-evidence/ready-credentialed-receipt.json"
+                ),
+                "reviewed_receipt_promotion_command": (
+                    "python3 scripts/promote-credential-runtime-receipt.py "
+                    ".datapan/runtime-evidence/ready-credentialed-receipt.json "
+                    "--state <reviewed_accepted|reviewed_rejected> "
+                    "--decision <allows_manual_review_reduction|keeps_manual_review_boundary> "
+                    "--reviewer <reviewer> --reason <reason>"
+                ),
+                "collection_preflight_command": "python3 scripts/run-credential-runtime-collection.py --source ready --json",
+                "collection_run_command": "python3 scripts/run-credential-runtime-collection.py --source ready --run",
+                "reviewed_receipt_validation_command": "python3 scripts/validate-credential-runtime-receipts.py",
+                "review_required": True,
+                "promotion_gate": "Promote only after redaction review.",
+                "current_receipt_state": "absent",
+                "checked_in_review_state": "none",
+                "checked_in_receipt_present": False,
+                "checked_in_receipt_path": "reports/credential-runtime-receipts/ready-credentialed-receipt.json",
+                "receipt_outcome": "none",
+                "receipt_relief_eligible": False,
+                "default_ci_requires_credentials": False,
+                "next_action": "run_bounded_credentialed_runtime_check_then_review_and_promote_receipt",
+            },
+            {
+                "source_id": "skipped",
+                "provider": "Skipped",
+                "candidate_batch": "reports/skipped/runtime-candidates.json",
+                "runtime_evidence_plan": "reports/skipped/runtime-evidence-plan.json",
+                "staged_receipt_path": ".datapan/runtime-evidence/skipped-credentialed-receipt.json",
+                "reviewed_receipt_path": "reports/credential-runtime-receipts/skipped-credentialed-receipt.json",
+                "operator_command": "SKIPPED_TOKEN=<secret> datapan source runtime verify --source skipped",
+                "staged_receipt_validation_command": (
+                    "python3 scripts/validate-credential-runtime-receipts.py --allow-unreviewed "
+                    ".datapan/runtime-evidence/skipped-credentialed-receipt.json"
+                ),
+                "reviewed_receipt_promotion_command": (
+                    "python3 scripts/promote-credential-runtime-receipt.py "
+                    ".datapan/runtime-evidence/skipped-credentialed-receipt.json "
+                    "--state <reviewed_accepted|reviewed_rejected> "
+                    "--decision <allows_manual_review_reduction|keeps_manual_review_boundary> "
+                    "--reviewer <reviewer> --reason <reason>"
+                ),
+                "collection_preflight_command": "python3 scripts/run-credential-runtime-collection.py --source skipped --json",
+                "collection_run_command": "python3 scripts/run-credential-runtime-collection.py --source skipped --run",
+                "reviewed_receipt_validation_command": "python3 scripts/validate-credential-runtime-receipts.py",
+                "review_required": True,
+                "promotion_gate": "Promote only after redaction review.",
+                "current_receipt_state": "absent",
+                "checked_in_review_state": "none",
+                "checked_in_receipt_present": False,
+                "checked_in_receipt_path": "reports/credential-runtime-receipts/skipped-credentialed-receipt.json",
+                "receipt_outcome": "none",
+                "receipt_relief_eligible": False,
+                "default_ci_requires_credentials": False,
+                "next_action": "run_bounded_credentialed_runtime_check_then_review_and_promote_receipt",
+            },
+            {
+                "source_id": "failed",
+                "provider": "Failed",
+                "candidate_batch": "reports/failed/runtime-candidates.json",
+                "runtime_evidence_plan": "reports/failed/runtime-evidence-plan.json",
+                "staged_receipt_path": ".datapan/runtime-evidence/failed-credentialed-receipt.json",
+                "reviewed_receipt_path": "reports/credential-runtime-receipts/failed-credentialed-receipt.json",
+                "operator_command": "FAILED_TOKEN=<secret> datapan source runtime verify --source failed",
+                "staged_receipt_validation_command": (
+                    "python3 scripts/validate-credential-runtime-receipts.py --allow-unreviewed "
+                    ".datapan/runtime-evidence/failed-credentialed-receipt.json"
+                ),
+                "reviewed_receipt_promotion_command": (
+                    "python3 scripts/promote-credential-runtime-receipt.py "
+                    ".datapan/runtime-evidence/failed-credentialed-receipt.json "
+                    "--state <reviewed_accepted|reviewed_rejected> "
+                    "--decision <allows_manual_review_reduction|keeps_manual_review_boundary> "
+                    "--reviewer <reviewer> --reason <reason>"
+                ),
+                "collection_preflight_command": "python3 scripts/run-credential-runtime-collection.py --source failed --json",
+                "collection_run_command": "python3 scripts/run-credential-runtime-collection.py --source failed --run",
+                "reviewed_receipt_validation_command": "python3 scripts/validate-credential-runtime-receipts.py",
+                "review_required": True,
+                "promotion_gate": "Promote only after redaction review.",
+                "current_receipt_state": "absent",
+                "checked_in_review_state": "none",
+                "checked_in_receipt_present": False,
+                "checked_in_receipt_path": "reports/credential-runtime-receipts/failed-credentialed-receipt.json",
+                "receipt_outcome": "none",
+                "receipt_relief_eligible": False,
+                "default_ci_requires_credentials": False,
+                "next_action": "run_bounded_credentialed_runtime_check_then_review_and_promote_receipt",
+            },
+        ],
+    }
+
+
+def valid_plan(queue_path: pathlib.Path = DEFAULT_QUEUE) -> dict[str, Any]:
     return {
         "schema_version": SCHEMA_VERSION,
         "generated_from": {
             "session": ".datapan/runtime-evidence/credential-runtime-collection-session.json",
-            "queue": "reports/credential-runtime-receipt-collection-queue.json",
+            "queue": queue_path.as_posix(),
             "session_schema": "schemas/datapan.credential-runtime-collection-session.v1.schema.json",
             "session_validation_command": (
                 "python3 scripts/validate-credential-runtime-collection-session.py "
@@ -259,12 +448,12 @@ def valid_plan() -> dict[str, Any]:
     }
 
 
-def expect_invalid(plan: dict[str, Any], schema_path: pathlib.Path, label: str) -> None:
+def expect_invalid(plan: dict[str, Any], schema_path: pathlib.Path, queue_path: pathlib.Path, label: str) -> None:
     with tempfile.TemporaryDirectory() as temp_dir:
         path = pathlib.Path(temp_dir) / "review-plan.json"
         path.write_text(render_json(plan), encoding="utf-8")
         try:
-            validate_plan(path, schema_path)
+            validate_plan(path, schema_path, queue_path=queue_path)
         except ValueError:
             return
         raise ValueError(f"self-test failed: invalid review plan accepted ({label})")
@@ -272,34 +461,52 @@ def expect_invalid(plan: dict[str, Any], schema_path: pathlib.Path, label: str) 
 
 def self_test(schema_path: pathlib.Path) -> None:
     with tempfile.TemporaryDirectory() as temp_dir:
+        queue_path = pathlib.Path(temp_dir) / "queue.json"
         path = pathlib.Path(temp_dir) / "review-plan.json"
-        plan = valid_plan()
+        queue_path.write_text(render_json(valid_queue(queue_path)), encoding="utf-8")
+        plan = valid_plan(queue_path)
         path.write_text(render_json(plan), encoding="utf-8")
-        report = validate_plan(path, schema_path)
+        report = validate_plan(path, schema_path, queue_path=queue_path)
         if report["summary"]["staged_receipts_to_review"] != 1:
             raise ValueError("self-test failed: expected one staged receipt to review")
 
-    plan = valid_plan()
-    plan["checked_in_boundaries"]["checked_in_review_plan_allowed"] = True
-    expect_invalid(plan, schema_path, "checked-in review plan allowed")
+        plan = valid_plan(queue_path)
+        plan["checked_in_boundaries"]["checked_in_review_plan_allowed"] = True
+        expect_invalid(plan, schema_path, queue_path, "checked-in review plan allowed")
 
-    plan = valid_plan()
-    plan["summary"]["succeeded"] = 2
-    expect_invalid(plan, schema_path, "summary mismatch")
+        plan = valid_plan(queue_path)
+        plan["summary"]["succeeded"] = 2
+        expect_invalid(plan, schema_path, queue_path, "summary mismatch")
 
-    plan = valid_plan()
-    plan["review_plan"][0]["reviewed_receipt_promotion_command"] = "authorization: bearer secret"
-    expect_invalid(plan, schema_path, "secret marker")
+        plan = valid_plan(queue_path)
+        plan["review_plan"][0]["reviewed_receipt_promotion_command"] = "authorization: bearer secret"
+        expect_invalid(plan, schema_path, queue_path, "secret marker")
 
-    plan = valid_plan()
-    plan["review_plan"][0]["reviewed_receipt_promotion_command"] = "python3 scripts/validate-credential-runtime-receipts.py"
-    expect_invalid(plan, schema_path, "unsafe promotion command")
+        plan = valid_plan(queue_path)
+        plan["review_plan"][0]["reviewed_receipt_promotion_command"] = "python3 scripts/validate-credential-runtime-receipts.py"
+        expect_invalid(plan, schema_path, queue_path, "unsafe promotion command")
+
+        plan = valid_plan(queue_path)
+        plan["generated_from"]["queue"] = "reports/old-queue.json"
+        expect_invalid(plan, schema_path, queue_path, "stale queue path")
+
+        plan = valid_plan(queue_path)
+        plan["review_plan"][0]["staged_receipt_path"] = ".datapan/runtime-evidence/foreign-receipt.json"
+        expect_invalid(plan, schema_path, queue_path, "foreign staged receipt path")
+
+        plan = valid_plan(queue_path)
+        plan["review_plan"] = plan["review_plan"][:-1]
+        plan["summary"]["sources"] = 2
+        plan["summary"]["failed"] = 0
+        expect_invalid(plan, schema_path, queue_path, "missing queue source")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("plan", nargs="?", default=DEFAULT_PLAN, type=pathlib.Path)
     parser.add_argument("--schema", default=DEFAULT_SCHEMA, type=pathlib.Path)
+    parser.add_argument("--queue", default=DEFAULT_QUEUE, type=pathlib.Path)
+    parser.add_argument("--no-queue-check", action="store_true")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
 
@@ -308,7 +515,8 @@ def main() -> int:
             self_test(args.schema)
             print("ok credential runtime session review plan validator self-test")
             return 0
-        report = validate_plan(args.plan, args.schema)
+        queue_path = None if args.no_queue_check else args.queue
+        report = validate_plan(args.plan, args.schema, queue_path=queue_path)
     except Exception as exc:  # noqa: BLE001 - operators need the failed invariant
         print(f"FAIL credential runtime session review plan validation: {exc}", file=sys.stderr)
         return 1
