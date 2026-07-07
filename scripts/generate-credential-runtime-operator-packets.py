@@ -23,6 +23,11 @@ DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-operator-packe
 DEFAULT_OUTPUT = pathlib.Path("reports/credential-runtime-operator-packets.json")
 SCHEMA_VERSION = "datapan.credential-runtime-operator-packets.v1"
 PACKET_TICKET = 405
+DEFAULT_SESSION_OUTPUT = ".datapan/runtime-evidence/credential-runtime-collection-session.json"
+SESSION_VALIDATION_COMMAND = (
+    "python3 scripts/validate-credential-runtime-collection-session.py "
+    f"{DEFAULT_SESSION_OUTPUT} --require-complete-source-set"
+)
 
 
 POST_PROMOTION_CHECKS = [
@@ -64,6 +69,12 @@ BATCH_COLLECTION_COMMANDS = {
         "python3 scripts/run-credential-runtime-collection.py "
         "--all --run --skip-not-ready --continue-on-error --json"
     ),
+    "batch_collection_run_with_session_output": (
+        "python3 scripts/run-credential-runtime-collection.py "
+        "--all --run --skip-not-ready --continue-on-error "
+        f"--session-output {DEFAULT_SESSION_OUTPUT} --json"
+    ),
+    "session_output_validation": SESSION_VALIDATION_COMMAND,
     "batch_runner_self_test": "python3 scripts/run-credential-runtime-collection.py --self-test",
 }
 
@@ -244,6 +255,10 @@ def build_report(queue: dict[str, Any], handoff: dict[str, Any], decision: dict[
             "continue_on_error_allowed": True,
             "session_output_schema": "datapan.credential-runtime-collection-session.v1",
             "session_output_schema_path": "schemas/datapan.credential-runtime-collection-session.v1.schema.json",
+            "session_output_path": DEFAULT_SESSION_OUTPUT,
+            "session_output_validation_command": SESSION_VALIDATION_COMMAND,
+            "reviewer_handoff_command": SESSION_VALIDATION_COMMAND,
+            "checked_in_session_output_allowed": False,
             "checked_in_secrets_allowed": False,
             "default_ci_requires_credentials": False,
         },
@@ -272,6 +287,8 @@ def validate_invariants(report: dict[str, Any]) -> None:
             raise ValueError(f"batch command {key} includes a secret placeholder")
     if batch_contract.get("checked_in_secrets_allowed") is not False:
         raise ValueError("batch collection contract must not allow checked-in secrets")
+    if batch_contract.get("checked_in_session_output_allowed") is not False:
+        raise ValueError("batch collection contract must not allow checked-in live session output")
     if batch_contract.get("default_ci_requires_credentials") is not False:
         raise ValueError("batch collection contract must preserve secret-free default CI")
     seen: set[str] = set()
