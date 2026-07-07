@@ -11,18 +11,18 @@
     "criteria_partial": 0,
     "criteria_gap": 0,
     "decision": "leave_goal_open",
-    "reason": "The release assembly path is receipt-bound, release distribution footprint evidence records the large canonical registry and shard/fallback boundary, release consumer decision evidence records the current manual-review-required consumption decision, goal finish preflight evidence and the goal-finish guard block goal finish from checked-in release evidence, credential collection preflight evidence identifies runnable inputs and missing reviewed receipts, and credential-safe runtime evidence is policy-bound with an operator-facing receipt collection queue, reviewer-facing handoff, manual-review decision intake, and manual-review acceptance boundary, but #344 remains open because reviewed live credentialed runtime receipts are not checked in, explicit manual-review release acceptance is not asserted, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
+    "reason": "The release assembly path is receipt-bound, release distribution footprint evidence records the large canonical registry and shard/fallback boundary, release consumer decision evidence records the current manual-review-required consumption decision, goal finish preflight evidence and the goal-finish guard block goal finish from checked-in release evidence, goal continuation queue evidence maps finish blockers to next safe child candidates, credential collection preflight evidence identifies runnable inputs and missing reviewed receipts, and credential-safe runtime evidence is policy-bound with an operator-facing receipt collection queue, reviewer-facing handoff, manual-review decision intake, and manual-review acceptance boundary, but #344 remains open because reviewed live credentialed runtime receipts are not checked in, explicit manual-review release acceptance is not asserted, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
   },
   "current_state_evidence": {
     "manifest": {
       "path": "manifest.json",
-      "artifact_count": 93,
-      "artifact_kinds": 38,
-      "schema_artifacts": 56
+      "artifact_count": 95,
+      "artifact_kinds": 39,
+      "schema_artifacts": 57
     },
     "schema_index": {
       "path": "schemas/index.json",
-      "schema_count": 56
+      "schema_count": 57
     },
     "release_readiness": {
       "path": "reports/latest-release-readiness.json",
@@ -152,6 +152,21 @@
       "guard_command": "python3 scripts/guard-release-goal-finish.py",
       "guard_self_test_command": "python3 scripts/guard-release-goal-finish.py --self-test",
       "guard_current_result": "blocks_goal_finish"
+    },
+    "release_goal_continuation_queue": {
+      "path": "reports/release-goal-continuation-queue.json",
+      "finish_allowed": false,
+      "goal_status": "not_complete",
+      "release_decision": "manual_review_required",
+      "goal_completion_allowed": false,
+      "reviewed_credential_receipts": 0,
+      "reviewed_receipts_missing": 5,
+      "manual_review_required": true,
+      "manual_review_accepted": false,
+      "candidate_count": 2,
+      "primary_candidate": "collect_reviewed_credential_runtime_receipts",
+      "next_action": "create_child_ticket",
+      "goal_closure_allowed": false
     },
     "credential_runtime_policy": {
       "path": "reports/credential-runtime-evidence-policy.json",
@@ -532,6 +547,7 @@
     "python3 scripts/validate-release-consumer-compatibility.py",
     "python3 scripts/generate-release-consumer-decision.py --check",
     "python3 scripts/generate-release-goal-finish-preflight.py --check",
+    "python3 scripts/generate-release-goal-continuation-queue.py --check",
     "python3 scripts/guard-release-goal-finish.py --self-test",
     "python3 scripts/package-registry-release.py --manifest manifest.json --output .datapan/ci/datapan-registry-snapshot-test.zip",
     "python3 scripts/package-registry-release.py --check .datapan/ci/datapan-registry-snapshot-test.zip"
@@ -641,6 +657,11 @@
       "issue": 401,
       "title": "Guard goal finish on release preflight evidence",
       "reason": "Goal finish guard evidence blocks accidental gira goal finish when checked-in release goal preflight records finish_allowed=false, but the goal remains open because reviewed live receipts or explicit manual-review release acceptance are still absent."
+    },
+    {
+      "issue": 403,
+      "title": "Publish goal continuation queue evidence",
+      "reason": "Goal continuation queue evidence maps finish_allowed=false and manual_review_required evidence to next safe child candidates, but the goal remains open because reviewed live receipts or explicit manual-review release acceptance are still absent."
     }
   ]
 }
