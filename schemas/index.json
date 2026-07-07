@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 53,
+  "count": 54,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 3106,
-      "sha256": "5ac1c6d0892f97d2fdbcf67b502285b34b9a385ed1148465060ce111d170d817"
+      "bytes": 3147,
+      "sha256": "8e067ce54dad612b505c2dde9897f6140abfeeaf863597afaafe035b9210891a"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -307,8 +307,8 @@
       "title": "Datapan Release Consumer Compatibility v1",
       "contract": "release-consumer-compatibility",
       "version": "v1",
-      "bytes": 28244,
-      "sha256": "c4d8e9b214eb3404e4ec6517449a89f9bbeb8ff350eb5003fdcafbd98606a70d"
+      "bytes": 28285,
+      "sha256": "bc7155a295c3e2fb51905a6174167b2acd404f2952b4ee8723605ca91f75fbd9"
     },
     {
       "path": "schemas/datapan.error-action-routing-rollup.v1.schema.json",
@@ -480,6 +480,15 @@
       "version": "v1",
       "bytes": 4554,
       "sha256": "5805df79f70a317bfb39c06e6df6e12a079828ad4566697d360d455f1afd381d"
+    },
+    {
+      "path": "schemas/datapan.release-consumer-decision.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.release-consumer-decision.v1.schema.json",
+      "title": "Datapan Release Consumer Decision v1",
+      "contract": "release-consumer-decision",
+      "version": "v1",
+      "bytes": 5980,
+      "sha256": "10358a4a2b95a1e80341a08b13b909cf5db15f9cc921b4739db138cd66574057"
     }
   ]
 }

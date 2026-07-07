@@ -255,27 +255,32 @@ PHASES: list[dict[str, Any]] = [
         "operator_commands": [
             "python3 scripts/generate-release-distribution-footprint.py",
             "python3 scripts/generate-release-consumer-compatibility.py",
+            "python3 scripts/generate-release-consumer-decision.py",
         ],
         "check_commands": [
             "python3 scripts/generate-release-distribution-footprint.py --check",
             "python3 scripts/generate-release-consumer-compatibility.py --check",
             "python3 scripts/validate-release-consumer-compatibility.py",
+            "python3 scripts/generate-release-consumer-decision.py --check",
         ],
         "workflow_fragments": {
             ".github/workflows/verify-release.yml": [
                 "python scripts/generate-release-distribution-footprint.py --check",
                 "python scripts/generate-release-consumer-compatibility.py --check",
                 "python scripts/validate-release-consumer-compatibility.py",
+                "python scripts/generate-release-consumer-decision.py --check",
             ],
             ".github/workflows/release-draft.yml": [
                 "python scripts/generate-release-distribution-footprint.py --check",
                 "python scripts/generate-release-consumer-compatibility.py --check",
                 "python scripts/validate-release-consumer-compatibility.py",
+                "python scripts/generate-release-consumer-decision.py --check",
             ],
         },
         "evidence_artifacts": [
             "reports/release-distribution-footprint.json",
             "reports/release-consumer-compatibility.json",
+            "reports/release-consumer-decision.json",
         ],
     },
     {

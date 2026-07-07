@@ -94,12 +94,14 @@ jobs:
           python scripts/generate-release-distribution-footprint.py --check
           python scripts/generate-release-consumer-compatibility.py --check
           python scripts/validate-release-consumer-compatibility.py
+          python scripts/generate-release-consumer-decision.py --check
           python -m py_compile scripts/error_action_routing_rollup.py
           python -m py_compile scripts/generate-error-action-routing-rollup.py
           python -m py_compile scripts/generate-source-contract-rollup.py
           python -m py_compile scripts/sync-release-manifest-artifacts.py
           python -m py_compile scripts/generate-release-distribution-footprint.py
           python -m py_compile scripts/generate-release-consumer-compatibility.py
+          python -m py_compile scripts/generate-release-consumer-decision.py
           python -m py_compile scripts/generate-release-assembly-receipt.py
           python -m py_compile scripts/generate-credential-runtime-evidence-policy.py
           python -m py_compile scripts/generate-credential-runtime-receipt-collection-queue.py
