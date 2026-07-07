@@ -24,9 +24,14 @@ DEFAULT_OUTPUT = pathlib.Path("reports/credential-runtime-operator-packets.json"
 SCHEMA_VERSION = "datapan.credential-runtime-operator-packets.v1"
 PACKET_TICKET = 405
 DEFAULT_SESSION_OUTPUT = ".datapan/runtime-evidence/credential-runtime-collection-session.json"
+DEFAULT_SESSION_REVIEW_PLAN_OUTPUT = ".datapan/runtime-evidence/credential-runtime-session-review-plan.json"
 SESSION_VALIDATION_COMMAND = (
     "python3 scripts/validate-credential-runtime-collection-session.py "
     f"{DEFAULT_SESSION_OUTPUT} --require-complete-source-set"
+)
+SESSION_REVIEW_PLAN_COMMAND = (
+    "python3 scripts/generate-credential-runtime-session-review-plan.py "
+    f"{DEFAULT_SESSION_OUTPUT} --output {DEFAULT_SESSION_REVIEW_PLAN_OUTPUT}"
 )
 
 
@@ -75,6 +80,7 @@ BATCH_COLLECTION_COMMANDS = {
         f"--session-output {DEFAULT_SESSION_OUTPUT} --json"
     ),
     "session_output_validation": SESSION_VALIDATION_COMMAND,
+    "session_review_plan_generation": SESSION_REVIEW_PLAN_COMMAND,
     "batch_runner_self_test": "python3 scripts/run-credential-runtime-collection.py --self-test",
 }
 
@@ -257,8 +263,13 @@ def build_report(queue: dict[str, Any], handoff: dict[str, Any], decision: dict[
             "session_output_schema_path": "schemas/datapan.credential-runtime-collection-session.v1.schema.json",
             "session_output_path": DEFAULT_SESSION_OUTPUT,
             "session_output_validation_command": SESSION_VALIDATION_COMMAND,
+            "session_review_plan_schema": "datapan.credential-runtime-session-review-plan.v1",
+            "session_review_plan_schema_path": "schemas/datapan.credential-runtime-session-review-plan.v1.schema.json",
+            "session_review_plan_output_path": DEFAULT_SESSION_REVIEW_PLAN_OUTPUT,
+            "session_review_plan_command": SESSION_REVIEW_PLAN_COMMAND,
             "reviewer_handoff_command": SESSION_VALIDATION_COMMAND,
             "checked_in_session_output_allowed": False,
+            "checked_in_review_plan_allowed": False,
             "checked_in_secrets_allowed": False,
             "default_ci_requires_credentials": False,
         },
@@ -289,6 +300,8 @@ def validate_invariants(report: dict[str, Any]) -> None:
         raise ValueError("batch collection contract must not allow checked-in secrets")
     if batch_contract.get("checked_in_session_output_allowed") is not False:
         raise ValueError("batch collection contract must not allow checked-in live session output")
+    if batch_contract.get("checked_in_review_plan_allowed") is not False:
+        raise ValueError("batch collection contract must not allow checked-in live review plans")
     if batch_contract.get("default_ci_requires_credentials") is not False:
         raise ValueError("batch collection contract must preserve secret-free default CI")
     seen: set[str] = set()
