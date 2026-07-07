@@ -183,6 +183,7 @@
       ],
       "owner": "release assembly maintainers",
       "generated_by": [
+        "python scripts/refresh-release-ledger-evidence.py --write",
         "python scripts/generate-release-assembly-receipt.py",
         "python scripts/generate-release-goal-finish-preflight.py",
         "python scripts/generate-release-goal-continuation-queue.py",
@@ -190,6 +191,8 @@
         "python scripts/guard-release-goal-finish.py"
       ],
       "checked_by": [
+        "python scripts/refresh-release-ledger-evidence.py --self-test",
+        "python scripts/refresh-release-ledger-evidence.py --check",
         "python scripts/generate-release-assembly-receipt.py --check",
         "python scripts/generate-release-goal-finish-preflight.py --check",
         "python scripts/generate-release-goal-continuation-queue.py --check",
