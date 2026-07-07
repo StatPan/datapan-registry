@@ -20,6 +20,9 @@ DEFAULT_SOURCE_RUNTIME_REMEDIATION = pathlib.Path("reports/source-runtime-remedi
 DEFAULT_CREDENTIAL_RUNTIME_POLICY = pathlib.Path("reports/credential-runtime-evidence-policy.json")
 DEFAULT_CREDENTIAL_RECEIPT_QUEUE = pathlib.Path("reports/credential-runtime-receipt-collection-queue.json")
 DEFAULT_CREDENTIAL_REVIEW_HANDOFF = pathlib.Path("reports/credential-runtime-review-handoff.json")
+DEFAULT_CREDENTIAL_MANUAL_REVIEW_ACCEPTANCE = pathlib.Path(
+    "reports/credential-runtime-manual-review-acceptance.json"
+)
 DEFAULT_ERROR_ACTION_ROUTING_ROLLUP = pathlib.Path("reports/error-action-routing-rollup.json")
 DEFAULT_IMPACT_ROLLUP = pathlib.Path("reports/registry-impact-plan.json")
 DEFAULT_OUTPUT = pathlib.Path("reports/release-consumer-compatibility.json")
@@ -29,6 +32,7 @@ REQUIRED_RUNTIME_RISK_CONTRACTS = [
     "credential_runtime_evidence_policy",
     "credential_runtime_receipt_collection_queue",
     "credential_runtime_review_handoff",
+    "credential_runtime_manual_review_acceptance",
     "error_action_routing",
     "downstream_impact",
 ]
@@ -121,6 +125,12 @@ REQUIRED_MANIFEST_EVIDENCE_CONTRACTS = [
         "path": "reports/credential-runtime-review-handoff.json",
         "kind": "credential_runtime_review_handoff",
         "schema": "https://schemas.datapan.dev/datapan.credential-runtime-review-handoff.v1.schema.json",
+    },
+    {
+        "contract": "credential_runtime_manual_review_acceptance",
+        "path": "reports/credential-runtime-manual-review-acceptance.json",
+        "kind": "credential_runtime_manual_review_acceptance",
+        "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-acceptance.v1.schema.json",
     },
     {
         "contract": "error_action_routing",
@@ -455,6 +465,7 @@ def runtime_risk_evidence(
     credential_runtime_policy: dict[str, Any],
     credential_receipt_queue: dict[str, Any],
     credential_review_handoff: dict[str, Any],
+    credential_manual_review_acceptance: dict[str, Any],
     error_action_routing: dict[str, Any],
     downstream_impact: dict[str, Any],
     *,
@@ -463,6 +474,7 @@ def runtime_risk_evidence(
     credential_runtime_policy_path: pathlib.Path,
     credential_receipt_queue_path: pathlib.Path,
     credential_review_handoff_path: pathlib.Path,
+    credential_manual_review_acceptance_path: pathlib.Path,
     error_action_routing_path: pathlib.Path,
     impact_path: pathlib.Path,
 ) -> dict[str, Any]:
@@ -474,6 +486,18 @@ def runtime_risk_evidence(
     credential_handoff_boundary = as_dict(
         credential_review_handoff.get("release_boundary"),
         "credential_review_handoff.release_boundary",
+    )
+    credential_acceptance_summary = as_dict(
+        credential_manual_review_acceptance.get("summary"),
+        "credential_manual_review_acceptance.summary",
+    )
+    credential_acceptance_boundary = as_dict(
+        credential_manual_review_acceptance.get("release_boundary"),
+        "credential_manual_review_acceptance.release_boundary",
+    )
+    credential_acceptance_required_evidence = as_list(
+        credential_manual_review_acceptance.get("required_acceptance_evidence"),
+        "credential_manual_review_acceptance.required_acceptance_evidence",
     )
     credential_policy_boundary = as_dict(
         credential_runtime_policy.get("release_boundary"),
@@ -514,6 +538,7 @@ def runtime_risk_evidence(
         "credential_runtime_evidence_policy": credential_runtime_policy_path.as_posix(),
         "credential_runtime_receipt_collection_queue": credential_receipt_queue_path.as_posix(),
         "credential_runtime_review_handoff": credential_review_handoff_path.as_posix(),
+        "credential_runtime_manual_review_acceptance": credential_manual_review_acceptance_path.as_posix(),
         "error_action_routing_rollup": error_action_routing_path.as_posix(),
         "downstream_impact_rollup": impact_path.as_posix(),
         "manual_review_required": manual_review_required,
@@ -581,6 +606,16 @@ def runtime_risk_evidence(
             "default_ci_requires_credentials"
         ),
         "credential_handoff_relief_decision": credential_handoff_boundary.get("relief_decision"),
+        "manual_review_acceptance_status": credential_acceptance_summary.get("acceptance_status"),
+        "manual_review_acceptance_accepted": credential_acceptance_summary.get("accepted"),
+        "manual_review_acceptance_decision": credential_acceptance_summary.get("acceptance_decision"),
+        "manual_review_acceptance_required_evidence": len(credential_acceptance_required_evidence),
+        "manual_review_acceptance_boundary_accepted": credential_acceptance_boundary.get(
+            "manual_review_release_boundary_accepted"
+        ),
+        "manual_review_acceptance_goal_completion_effect": credential_acceptance_boundary.get(
+            "goal_completion_effect"
+        ),
         "manual_review_reduction_allowed": manual_review_reduction_allowed,
         "manual_review_reduction_status": manual_review_reduction_status,
         "blocker_ids": ids_from_rollup_items(source_runtime.get("blockers_by_id"), "source_runtime.blockers_by_id"),
@@ -635,6 +670,7 @@ def build_report(
     credential_runtime_policy: dict[str, Any],
     credential_receipt_queue: dict[str, Any],
     credential_review_handoff: dict[str, Any],
+    credential_manual_review_acceptance: dict[str, Any],
     error_action_routing: dict[str, Any],
     downstream_impact: dict[str, Any],
     *,
@@ -645,6 +681,7 @@ def build_report(
     credential_runtime_policy_path: pathlib.Path = DEFAULT_CREDENTIAL_RUNTIME_POLICY,
     credential_receipt_queue_path: pathlib.Path = DEFAULT_CREDENTIAL_RECEIPT_QUEUE,
     credential_review_handoff_path: pathlib.Path = DEFAULT_CREDENTIAL_REVIEW_HANDOFF,
+    credential_manual_review_acceptance_path: pathlib.Path = DEFAULT_CREDENTIAL_MANUAL_REVIEW_ACCEPTANCE,
     error_action_routing_path: pathlib.Path = DEFAULT_ERROR_ACTION_ROUTING_ROLLUP,
     impact_path: pathlib.Path = DEFAULT_IMPACT_ROLLUP,
 ) -> dict[str, Any]:
@@ -689,6 +726,7 @@ def build_report(
             credential_runtime_policy,
             credential_receipt_queue,
             credential_review_handoff,
+            credential_manual_review_acceptance,
             error_action_routing,
             downstream_impact,
             source_runtime_path=source_runtime_path,
@@ -696,6 +734,7 @@ def build_report(
             credential_runtime_policy_path=credential_runtime_policy_path,
             credential_receipt_queue_path=credential_receipt_queue_path,
             credential_review_handoff_path=credential_review_handoff_path,
+            credential_manual_review_acceptance_path=credential_manual_review_acceptance_path,
             error_action_routing_path=error_action_routing_path,
             impact_path=impact_path,
         ),
@@ -727,6 +766,11 @@ def main() -> int:
     parser.add_argument("--credential-runtime-policy", default=DEFAULT_CREDENTIAL_RUNTIME_POLICY, type=pathlib.Path)
     parser.add_argument("--credential-receipt-queue", default=DEFAULT_CREDENTIAL_RECEIPT_QUEUE, type=pathlib.Path)
     parser.add_argument("--credential-review-handoff", default=DEFAULT_CREDENTIAL_REVIEW_HANDOFF, type=pathlib.Path)
+    parser.add_argument(
+        "--credential-manual-review-acceptance",
+        default=DEFAULT_CREDENTIAL_MANUAL_REVIEW_ACCEPTANCE,
+        type=pathlib.Path,
+    )
     parser.add_argument("--error-action-routing-rollup", default=DEFAULT_ERROR_ACTION_ROUTING_ROLLUP, type=pathlib.Path)
     parser.add_argument("--impact-rollup", default=DEFAULT_IMPACT_ROLLUP, type=pathlib.Path)
     parser.add_argument("--output", default=DEFAULT_OUTPUT, type=pathlib.Path)
@@ -746,6 +790,7 @@ def main() -> int:
             load_json(args.credential_runtime_policy),
             load_json(args.credential_receipt_queue),
             load_json(args.credential_review_handoff),
+            load_json(args.credential_manual_review_acceptance),
             load_json(args.error_action_routing_rollup),
             load_json(args.impact_rollup),
             manifest_path=args.manifest,
@@ -755,6 +800,7 @@ def main() -> int:
             credential_runtime_policy_path=args.credential_runtime_policy,
             credential_receipt_queue_path=args.credential_receipt_queue,
             credential_review_handoff_path=args.credential_review_handoff,
+            credential_manual_review_acceptance_path=args.credential_manual_review_acceptance,
             error_action_routing_path=args.error_action_routing_rollup,
             impact_path=args.impact_rollup,
         )

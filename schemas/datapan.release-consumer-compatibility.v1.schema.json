@@ -48,8 +48,8 @@
     },
     "manifest_evidence_contracts": {
       "type": "array",
-      "minItems": 10,
-      "maxItems": 10,
+      "minItems": 11,
+      "maxItems": 11,
       "items": {
         "$ref": "#/$defs/manifest_evidence_contract"
       }
@@ -413,6 +413,7 @@
             "credential_runtime_evidence_policy",
             "credential_runtime_receipt_collection_queue",
             "credential_runtime_review_handoff",
+            "credential_runtime_manual_review_acceptance",
             "error_action_routing",
             "downstream_impact",
             "source_reference_drift",
@@ -451,6 +452,7 @@
         "credential_runtime_evidence_policy",
         "credential_runtime_receipt_collection_queue",
         "credential_runtime_review_handoff",
+        "credential_runtime_manual_review_acceptance",
         "error_action_routing_rollup",
         "downstream_impact_rollup",
         "manual_review_required",
@@ -505,6 +507,12 @@
         "credential_handoff_manual_review_required",
         "credential_handoff_default_ci_requires_credentials",
         "credential_handoff_relief_decision",
+        "manual_review_acceptance_status",
+        "manual_review_acceptance_accepted",
+        "manual_review_acceptance_decision",
+        "manual_review_acceptance_required_evidence",
+        "manual_review_acceptance_boundary_accepted",
+        "manual_review_acceptance_goal_completion_effect",
         "manual_review_reduction_allowed",
         "manual_review_reduction_status",
         "error_action_blocking_rules",
@@ -527,6 +535,9 @@
         "credential_runtime_review_handoff": {
           "const": "reports/credential-runtime-review-handoff.json"
         },
+        "credential_runtime_manual_review_acceptance": {
+          "const": "reports/credential-runtime-manual-review-acceptance.json"
+        },
         "error_action_routing_rollup": {
           "const": "reports/error-action-routing-rollup.json"
         },
@@ -544,8 +555,8 @@
         },
         "required_contracts": {
           "type": "array",
-          "minItems": 7,
-          "maxItems": 7,
+          "minItems": 8,
+          "maxItems": 8,
           "prefixItems": [
             {
               "const": "source_runtime_evidence"
@@ -561,6 +572,9 @@
             },
             {
               "const": "credential_runtime_review_handoff"
+            },
+            {
+              "const": "credential_runtime_manual_review_acceptance"
             },
             {
               "const": "error_action_routing"
@@ -739,6 +753,30 @@
           "enum": [
             "blocked_until_all_sources_relief_eligible",
             "allowed_by_all_reviewed_validated_receipts"
+          ]
+        },
+        "manual_review_acceptance_status": {
+          "enum": ["not_accepted", "accepted"]
+        },
+        "manual_review_acceptance_accepted": {
+          "type": "boolean"
+        },
+        "manual_review_acceptance_decision": {
+          "enum": [
+            "blocked_until_explicit_manual_review_acceptance",
+            "accepted_manual_review_release_boundary"
+          ]
+        },
+        "manual_review_acceptance_required_evidence": {
+          "$ref": "#/$defs/count"
+        },
+        "manual_review_acceptance_boundary_accepted": {
+          "type": "boolean"
+        },
+        "manual_review_acceptance_goal_completion_effect": {
+          "enum": [
+            "goal_remains_open_until_reviewed_receipts_or_explicit_acceptance",
+            "manual_review_boundary_accepted_for_release"
           ]
         },
         "manual_review_reduction_allowed": {
