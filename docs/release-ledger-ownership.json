@@ -134,12 +134,18 @@
     },
     {
       "id": "downstream_release_evidence",
-      "artifact_kinds": ["consumer_compatibility", "registry_impact_plan", "release_distribution_footprint"],
+      "artifact_kinds": [
+        "consumer_compatibility",
+        "registry_impact_plan",
+        "release_distribution_footprint",
+        "release_consumer_decision"
+      ],
       "owner": "downstream release maintainers",
       "generated_by": [
         "python scripts/generate-impact-plan-rollup.py",
         "python scripts/generate-release-distribution-footprint.py",
-        "python scripts/generate-release-consumer-compatibility.py"
+        "python scripts/generate-release-consumer-compatibility.py",
+        "python scripts/generate-release-consumer-decision.py"
       ],
       "checked_by": [
         "python scripts/generate-impact-plan-rollup.py --check",
@@ -147,12 +153,13 @@
         "python scripts/generate-release-distribution-footprint.py --check",
         "python scripts/generate-release-consumer-compatibility.py --check",
         "python scripts/validate-release-consumer-compatibility.py",
+        "python scripts/generate-release-consumer-decision.py --check",
         "python scripts/sync-release-manifest-artifacts.py --check"
       ],
       "manifest_relationship": "Downstream impact and compatibility evidence are manifest-bound.",
-      "schema_relationship": "Validated against registry-impact-plan, release-distribution-footprint, and release-consumer-compatibility schemas.",
+      "schema_relationship": "Validated against registry-impact-plan, release-distribution-footprint, release-consumer-compatibility, and release-consumer-decision schemas.",
       "package_relationship": "Included in release packages through manifest.json.",
-      "exemption_boundary": "The release impact rollup must keep release_evidence_inputs for error/action routing and source report inventory, while validation checks the consumer compatibility downstream impact contract, release distribution footprint, release-health rollup generation contract, and runtime risk evidence contract. The footprint excludes its own manifest artifact bytes to avoid self-referential digest drift. Source runtime blockers or warnings must stay bound to source runtime evidence, error/action routing, downstream impact, and manual-review compatibility gates until resolved."
+      "exemption_boundary": "The release impact rollup must keep release_evidence_inputs for error/action routing and source report inventory, while validation checks the consumer compatibility downstream impact contract, release distribution footprint, release-health rollup generation contract, runtime risk evidence contract, and consumer decision report. The footprint and decision reports exclude their own manifest artifact bytes or decision inputs to avoid self-referential drift. Source runtime blockers or warnings must stay bound to source runtime evidence, error/action routing, downstream impact, and manual-review compatibility gates until resolved."
     },
     {
       "id": "release_assembly_evidence",

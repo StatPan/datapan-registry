@@ -171,6 +171,12 @@ REQUIRED_MANIFEST_EVIDENCE_CONTRACTS = [
         "kind": "release_distribution_footprint",
         "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
     },
+    {
+        "contract": "release_consumer_decision",
+        "path": "reports/release-consumer-decision.json",
+        "kind": "release_consumer_decision",
+        "schema": "https://schemas.datapan.dev/datapan.release-consumer-decision.v1.schema.json",
+    },
 ]
 
 

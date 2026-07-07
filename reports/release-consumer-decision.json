@@ -1,0 +1,62 @@
+{
+  "schema_version": "datapan.release-consumer-decision.v1",
+  "generated_at": "2026-07-04T06:39:24Z",
+  "goal_issue": 344,
+  "decision_ticket": 395,
+  "provider": "datapan-registry",
+  "inputs": {
+    "manifest": "manifest.json",
+    "release_consumer_compatibility": "reports/release-consumer-compatibility.json",
+    "release_distribution_footprint": "reports/release-distribution-footprint.json",
+    "manual_review_acceptance": "reports/credential-runtime-manual-review-acceptance.json",
+    "goal_completion_audit": "docs/release-ledger-goal-completion-audit.json",
+    "self_artifact_excluded": true
+  },
+  "summary": {
+    "release_decision": "manual_review_required",
+    "canonical_registry_consumption": "compatible",
+    "shard_assets_required": false,
+    "manual_review_required": true,
+    "manual_review_accepted": false,
+    "reviewed_credential_receipts": 0,
+    "goal_completion_allowed": false,
+    "goal_status": "not_complete"
+  },
+  "decision_factors": {
+    "canonical_registry_path": "data/data-go-kr.registry.json",
+    "canonical_registry_bytes": 137735169,
+    "registry_footprint_status": "large_monolith_shard_additive",
+    "canonical_registry_required": true,
+    "monolith_fallback_required": true,
+    "compatibility_effect": "manual_review_required_until_runtime_blockers_resolved",
+    "manual_review_acceptance_status": "not_accepted",
+    "manual_review_boundary_accepted": false,
+    "manual_review_goal_completion_effect": "goal_remains_open_until_reviewed_receipts_or_explicit_acceptance",
+    "credential_handoff_status": "review_required",
+    "credential_queue_status": "collection_required",
+    "manual_review_reduction_allowed": false,
+    "goal_audit_decision": "leave_goal_open"
+  },
+  "consumer_actions": [
+    {
+      "consumer": "datapan-cli",
+      "action": "consume_canonical_registry",
+      "reason": "Canonical registry compatibility remains required and manifest-bound."
+    },
+    {
+      "consumer": "release-operator",
+      "action": "manual_review_before_release_adoption",
+      "reason": "Runtime risk evidence still requires manual review and manual-review acceptance is not asserted."
+    },
+    {
+      "consumer": "release-operator",
+      "action": "keep_shards_optional",
+      "reason": "Shard assets are additive while canonical registry fallback remains required."
+    },
+    {
+      "consumer": "goal-operator",
+      "action": "do_not_finish_goal",
+      "reason": "Goal completion remains disallowed until reviewed receipts or explicit accepted manual-review boundary evidence exists and the completion audit is complete."
+    }
+  ]
+}
