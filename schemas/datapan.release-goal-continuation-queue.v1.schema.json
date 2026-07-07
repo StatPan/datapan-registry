@@ -364,6 +364,7 @@
         "body_input",
         "dry_run_command",
         "apply_command",
+        "duplicate_check_command",
         "runner_json_command",
         "runner_body_command",
         "runner_command_command",
@@ -394,6 +395,10 @@
         },
         "apply_command": {
           "pattern": "^gira ticket new .+ --body-file - --apply$",
+          "type": "string"
+        },
+        "duplicate_check_command": {
+          "pattern": "^gh issue list --repo StatPan/datapan-registry --state open --search .+ --json number,title,state,url$",
           "type": "string"
         },
         "runner_json_command": {

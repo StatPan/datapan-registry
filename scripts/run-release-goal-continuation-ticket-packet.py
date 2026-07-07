@@ -13,6 +13,7 @@ from typing import Any
 
 
 DEFAULT_QUEUE = pathlib.Path("reports/release-goal-continuation-queue.json")
+DEFAULT_REPO = "StatPan/datapan-registry"
 
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -79,11 +80,63 @@ def command_argv(packet: dict[str, Any], *, apply: bool) -> list[str]:
     return ["gira", "ticket", "new", str(packet["title"]), "--body-file", "-", mode]
 
 
-def plan_for_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
+def duplicate_check_argv(packet: dict[str, Any], *, repo: str = DEFAULT_REPO) -> list[str]:
+    return [
+        "gh",
+        "issue",
+        "list",
+        "--repo",
+        repo,
+        "--state",
+        "open",
+        "--search",
+        f"{packet['title']} in:title",
+        "--json",
+        "number,title,state,url",
+    ]
+
+
+def normalize_state(value: object) -> str:
+    return str(value or "").strip().lower()
+
+
+def matching_open_issue(packet: dict[str, Any], records: list[Any]) -> dict[str, Any] | None:
+    title = str(packet["title"])
+    matches = []
+    for raw_record in records:
+        if not isinstance(raw_record, dict):
+            continue
+        if raw_record.get("title") == title and normalize_state(raw_record.get("state")) == "open":
+            matches.append(raw_record)
+    if not matches:
+        return None
+    matches.sort(key=lambda record: int(record.get("number") or 0))
+    return matches[0]
+
+
+def find_existing_open_issue(packet: dict[str, Any], *, repo: str = DEFAULT_REPO) -> dict[str, Any] | None:
+    argv = duplicate_check_argv(packet, repo=repo)
+    result = subprocess.run(argv, text=True, capture_output=True, check=False)
+    if result.returncode != 0:
+        stderr = result.stderr.strip()
+        detail = f": {stderr}" if stderr else ""
+        raise ValueError(f"duplicate ticket check failed{detail}")
+    records = json.loads(result.stdout or "[]")
+    if not isinstance(records, list):
+        raise ValueError("duplicate ticket check must return a JSON array")
+    return matching_open_issue(packet, records)
+
+
+def plan_for_candidate(
+    candidate: dict[str, Any],
+    *,
+    existing_issue: dict[str, Any] | None = None,
+    duplicate_check_status: str = "not_checked",
+) -> dict[str, Any]:
     packet = validate_ticket_packet(candidate)
     dry_run_argv = command_argv(packet, apply=False)
     apply_argv = command_argv(packet, apply=True)
-    return {
+    plan = {
         "schema_version": "datapan.release-goal-continuation-ticket-runner.v1",
         "candidate_id": candidate.get("id"),
         "title": packet.get("title"),
@@ -91,13 +144,38 @@ def plan_for_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
         "goal_closure_allowed": packet.get("goal_closure_allowed"),
         "dry_run_command": shlex.join(dry_run_argv),
         "apply_command": shlex.join(apply_argv),
+        "duplicate_check_command": shlex.join(duplicate_check_argv(packet)),
+        "duplicate_check_status": duplicate_check_status,
         "body_input": packet.get("body_input"),
         "next_safe_action": "run_dry_run_before_apply",
     }
+    if existing_issue is not None:
+        plan["existing_issue"] = {
+            "number": existing_issue.get("number"),
+            "title": existing_issue.get("title"),
+            "state": existing_issue.get("state"),
+            "url": existing_issue.get("url"),
+        }
+        plan["next_safe_action"] = "use_existing_ticket"
+    return plan
 
 
-def run_packet(candidate: dict[str, Any], *, apply: bool) -> int:
+def run_packet(candidate: dict[str, Any], *, apply: bool, repo: str = DEFAULT_REPO) -> int:
     packet = validate_ticket_packet(candidate)
+    if apply:
+        existing_issue = find_existing_open_issue(packet, repo=repo)
+        if existing_issue is not None:
+            print(
+                render_json(
+                    plan_for_candidate(
+                        candidate,
+                        existing_issue=existing_issue,
+                        duplicate_check_status="existing_open_issue",
+                    )
+                ),
+                end="",
+            )
+            return 0
     argv = command_argv(packet, apply=apply)
     return subprocess.run(argv, input=str(packet["body"]), text=True, check=False).returncode
 
@@ -136,6 +214,30 @@ def run_self_test() -> None:
         raise ValueError("self-test apply command missing --apply")
     if plan["goal_closure_allowed"] is not False:
         raise ValueError("self-test plan must keep goal closure disallowed")
+    duplicate_records = [
+        {
+            "number": 457,
+            "title": "Collect reviewed credential runtime receipts",
+            "state": "OPEN",
+            "url": "https://github.com/StatPan/datapan-registry/issues/457",
+        },
+        {
+            "number": 999,
+            "title": "Collect reviewed credential runtime receipts follow-up",
+            "state": "OPEN",
+            "url": "https://github.com/StatPan/datapan-registry/issues/999",
+        },
+    ]
+    existing_issue = matching_open_issue(packet, duplicate_records)
+    if existing_issue is None or existing_issue.get("number") != 457:
+        raise ValueError("self-test duplicate detection did not find the exact open issue")
+    duplicate_plan = plan_for_candidate(
+        candidate,
+        existing_issue=existing_issue,
+        duplicate_check_status="existing_open_issue",
+    )
+    if duplicate_plan["next_safe_action"] != "use_existing_ticket":
+        raise ValueError("self-test duplicate plan must route to the existing ticket")
 
 
 def main() -> int:
@@ -147,6 +249,8 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true", help="run gira ticket new --dry-run with packet body")
     parser.add_argument("--apply", action="store_true", help="run gira ticket new --apply with packet body")
     parser.add_argument("--json", action="store_true", help="print the selected runner plan as JSON")
+    parser.add_argument("--detect-existing", action="store_true", help="check GitHub for an existing open issue")
+    parser.add_argument("--repo", default=DEFAULT_REPO, help="GitHub repository for duplicate detection")
     parser.add_argument("--self-test", action="store_true", help="run offline runner invariants")
     args = parser.parse_args()
 
@@ -166,9 +270,23 @@ def main() -> int:
             print(shlex.join(command_argv(packet, apply=False)))
             return 0
         if args.json or not (args.dry_run or args.apply):
-            print(render_json(plan_for_candidate(candidate)), end="")
+            existing_issue = None
+            duplicate_check_status = "not_checked"
+            if args.detect_existing:
+                existing_issue = find_existing_open_issue(packet, repo=args.repo)
+                duplicate_check_status = "existing_open_issue" if existing_issue else "not_found"
+            print(
+                render_json(
+                    plan_for_candidate(
+                        candidate,
+                        existing_issue=existing_issue,
+                        duplicate_check_status=duplicate_check_status,
+                    )
+                ),
+                end="",
+            )
             return 0
-        return run_packet(candidate, apply=args.apply)
+        return run_packet(candidate, apply=args.apply, repo=args.repo)
     except Exception as exc:  # noqa: BLE001 - release operators need the failed invariant
         print(f"FAIL release goal continuation ticket packet runner: {exc}", file=sys.stderr)
         return 1
