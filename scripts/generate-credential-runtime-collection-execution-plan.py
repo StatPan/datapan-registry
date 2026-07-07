@@ -334,6 +334,8 @@ def build_report(
                 "gh workflow run credential-runtime-collection.yml "
                 "--repo StatPan/datapan-registry -f mode=collect"
             ),
+            "github_actions_secret_readiness_schema": "datapan.credential-runtime-github-secret-readiness.v1",
+            "github_actions_secret_readiness_artifact": "credential-runtime-secret-readiness",
             "check_command": f"python3 {OPERATOR_WORKFLOW_SCRIPT.as_posix()} --check",
             "self_test_command": f"python3 {OPERATOR_WORKFLOW_SCRIPT.as_posix()} --self-test",
             "workflow_status": summary["session_plan_status"],
@@ -350,6 +352,7 @@ def build_report(
             "requires_operator_credentials": True,
             "github_actions_uses_repository_secrets": True,
             "github_actions_uploads_local_artifacts": True,
+            "github_actions_collect_skips_setup_without_secrets": True,
             "default_ci_requires_credentials": False,
             "checked_in_session_output_allowed": False,
             "checked_in_review_plan_allowed": False,
@@ -463,11 +466,19 @@ def validate_invariants(report: dict[str, Any]) -> None:
     for key in ("requires_explicit_run", "requires_operator_credentials"):
         if workflow.get(key) is not True:
             raise ValueError(f"operator_workflow.{key} must remain true")
-    for key in ("github_actions_uses_repository_secrets", "github_actions_uploads_local_artifacts"):
+    for key in (
+        "github_actions_uses_repository_secrets",
+        "github_actions_uploads_local_artifacts",
+        "github_actions_collect_skips_setup_without_secrets",
+    ):
         if workflow.get(key) is not True:
             raise ValueError(f"operator_workflow.{key} must remain true")
     if workflow.get("github_actions_dispatch_workflow") != GITHUB_DISPATCH_WORKFLOW.as_posix():
         raise ValueError("operator_workflow.github_actions_dispatch_workflow must match checked-in workflow path")
+    if workflow.get("github_actions_secret_readiness_schema") != "datapan.credential-runtime-github-secret-readiness.v1":
+        raise ValueError("operator_workflow.github_actions_secret_readiness_schema must match early gate schema")
+    if workflow.get("github_actions_secret_readiness_artifact") != "credential-runtime-secret-readiness":
+        raise ValueError("operator_workflow.github_actions_secret_readiness_artifact must match uploaded artifact name")
     for key in ("github_actions_preflight_command", "github_actions_collect_command"):
         command = string_value(workflow.get(key), f"operator_workflow.{key}")
         if "credential-runtime-collection.yml" not in command:
