@@ -27,6 +27,8 @@ SCHEMA_VERSION = "datapan.credential-runtime-manual-review-acceptance-packet.v1"
 PACKET_TICKET = 407
 DECISION_TICKET = 391
 ACCEPTANCE_TICKET = 389
+RELEASE_EVIDENCE_REFRESH_COMMAND = "python3 scripts/refresh-release-ledger-evidence.py --write --max-iterations 5"
+RELEASE_EVIDENCE_CHECK_COMMAND = "python3 scripts/refresh-release-ledger-evidence.py --check"
 
 SECRET_VALUE_PATTERNS = [
     re.compile(r"(?i)(service[_-]?key|authorization|bearer\\s+[a-z0-9._~+/=-]{16,})"),
@@ -41,16 +43,8 @@ REQUIRED_REVALIDATION_TRIGGERS = [
 ]
 
 POST_DECISION_COMMANDS = [
-    "python3 scripts/validate-credential-runtime-manual-review-decision.py",
-    "python3 scripts/generate-credential-runtime-manual-review-acceptance.py",
-    "python3 scripts/generate-release-consumer-compatibility.py",
-    "python3 scripts/generate-release-consumer-decision.py",
-    "python3 scripts/generate-release-goal-finish-preflight.py",
-    "python3 scripts/generate-release-goal-continuation-queue.py",
-    "python3 scripts/generate-release-assembly-receipt.py",
-    "python3 scripts/sync-release-manifest-artifacts.py --write",
-    "python3 scripts/validate-release-consumer-compatibility.py",
-    "python3 scripts/validate-release-ledger-goal-audit.py",
+    RELEASE_EVIDENCE_REFRESH_COMMAND,
+    RELEASE_EVIDENCE_CHECK_COMMAND,
 ]
 
 
@@ -239,6 +233,8 @@ def build_report(
         "operator_commands": {
             "validate_current_decision": "python3 scripts/validate-credential-runtime-manual-review-decision.py",
             "generate_acceptance_boundary": "python3 scripts/generate-credential-runtime-manual-review-acceptance.py",
+            "release_evidence_refresh_command": RELEASE_EVIDENCE_REFRESH_COMMAND,
+            "release_evidence_check_command": RELEASE_EVIDENCE_CHECK_COMMAND,
             "post_decision_regeneration": POST_DECISION_COMMANDS,
         },
         "release_boundary": {
@@ -265,6 +261,13 @@ def validate_invariants(report: dict[str, Any]) -> None:
         raise ValueError("unaccepted manual-review packet cannot allow goal closure")
     if summary.get("accepted") is False and summary.get("packet_status") != "acceptance_not_asserted":
         raise ValueError("unaccepted manual-review packet must use acceptance_not_asserted status")
+    operator_commands = as_dict(report.get("operator_commands"), "operator_commands")
+    if operator_commands.get("release_evidence_refresh_command") != RELEASE_EVIDENCE_REFRESH_COMMAND:
+        raise ValueError("manual-review packet must expose the fixed-point refresh command")
+    if operator_commands.get("release_evidence_check_command") != RELEASE_EVIDENCE_CHECK_COMMAND:
+        raise ValueError("manual-review packet must expose the fixed-point check command")
+    if as_list(operator_commands.get("post_decision_regeneration"), "operator_commands.post_decision_regeneration") != POST_DECISION_COMMANDS:
+        raise ValueError("post-decision regeneration must refresh and check release evidence")
     template = as_dict(report.get("accepted_decision_template"), "accepted_decision_template")
     digests = as_dict(report.get("current_digests"), "current_digests")
     if template.get("handoff_sha256") != digests.get("handoff_sha256"):

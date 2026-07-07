@@ -32,6 +32,17 @@
     "next_action": "do_not_finish_goal",
     "blocking_evidence_count": 5
   },
+  "release_evidence_refresh": {
+    "refresh_command": "python3 scripts/refresh-release-ledger-evidence.py --write --max-iterations 5",
+    "check_command": "python3 scripts/refresh-release-ledger-evidence.py --check",
+    "max_iterations": 5,
+    "applies_after": [
+      "reviewed_credential_receipt_collection",
+      "reviewed_credential_receipt_promotion",
+      "manual_review_acceptance_decision"
+    ],
+    "goal_closure_effect": "refresh_may_update_evidence_but_does_not_close_goal_without_goal_finish_preflight"
+  },
   "blocking_evidence": [
     {
       "id": "goal_audit_not_complete",
@@ -91,6 +102,10 @@
         "Promotion uses scripts/promote-credential-runtime-receipt.py and keeps reviewed states explicit.",
         "Consumer compatibility continues to report manual-review status unless relief gates are fully satisfied."
       ],
+      "post_completion_commands": [
+        "python3 scripts/refresh-release-ledger-evidence.py --write --max-iterations 5",
+        "python3 scripts/refresh-release-ledger-evidence.py --check"
+      ],
       "goal_closure_allowed": false,
       "rationale": "Reviewed credential runtime receipts are the strongest evidence path for reducing current manual-review compatibility gates."
     },
@@ -125,6 +140,10 @@
         "Manual-review acceptance report validates and remains manifest-bound.",
         "Release consumer decision explains manual-review-only adoption for affected consumers.",
         "Goal audit remains not_complete unless it explicitly proves the completion contract."
+      ],
+      "post_completion_commands": [
+        "python3 scripts/refresh-release-ledger-evidence.py --write --max-iterations 5",
+        "python3 scripts/refresh-release-ledger-evidence.py --check"
       ],
       "goal_closure_allowed": false,
       "rationale": "Explicit manual-review acceptance is the alternative release boundary when reviewed live receipt evidence is not yet available."
