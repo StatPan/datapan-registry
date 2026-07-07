@@ -103,6 +103,8 @@ jobs:
           python scripts/run-credential-runtime-collection.py --check
           python scripts/run-credential-runtime-operator-workflow.py --self-test
           python scripts/run-credential-runtime-operator-workflow.py --check
+          python scripts/check-credential-runtime-github-secrets.py --self-test
+          python scripts/check-credential-runtime-github-secrets.py --check
           python scripts/promote-credential-runtime-session-review.py --self-test
           python scripts/promote-credential-runtime-session-review.py --check
           python scripts/validate-credential-runtime-collection-session.py --self-test
@@ -142,6 +144,7 @@ jobs:
           python -m py_compile scripts/generate-credential-runtime-manual-review-acceptance-packet.py
           python -m py_compile scripts/run-credential-runtime-collection.py
           python -m py_compile scripts/run-credential-runtime-operator-workflow.py
+          python -m py_compile scripts/check-credential-runtime-github-secrets.py
           python -m py_compile scripts/promote-credential-runtime-session-review.py
           python -m py_compile scripts/validate-credential-runtime-collection-session.py
           python -m py_compile scripts/generate-credential-runtime-session-review-plan.py
