@@ -300,10 +300,12 @@
         "prompt_mode",
         "vision_statement",
         "north_star_question",
+        "vision_planes",
         "framing",
         "operating_loop",
         "next_child_selection_basis",
         "next_child_selection_questions",
+        "operational_pressure_checks",
         "anti_completion_rules",
         "current_prompt_boundary"
       ],
@@ -320,6 +322,9 @@
         "north_star_question": {
           "$ref": "#/$defs/non_empty_string"
         },
+        "vision_planes": {
+          "$ref": "#/$defs/capability_plane_ids"
+        },
         "framing": {
           "$ref": "#/$defs/persistent_goal_framing"
         },
@@ -330,6 +335,9 @@
           "const": "weakest_remaining_registry_ledger_capability_boundary"
         },
         "next_child_selection_questions": {
+          "$ref": "#/$defs/string_list"
+        },
+        "operational_pressure_checks": {
           "$ref": "#/$defs/string_list"
         },
         "anti_completion_rules": {
@@ -398,6 +406,23 @@
         "required_before_goal_finish": {
           "$ref": "#/$defs/string_list"
         }
+      }
+    },
+    "capability_plane_ids": {
+      "type": "array",
+      "minItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "source_contracts",
+          "registry_artifacts",
+          "shard_release_distribution",
+          "verification_evidence",
+          "error_action_routing",
+          "downstream_impact",
+          "consumer_compatibility",
+          "credential_safe_evidence"
+        ]
       }
     },
     "capability_plane": {
