@@ -108,7 +108,7 @@
         {
           "path": "schemas/index.json",
           "bytes": 27405,
-          "sha256": "cda2bba81e837f2e96819fc52afd4acc708660ff0c9f651995d1d05b413a7798",
+          "sha256": "eca4c4354f688bcad5003f27af5413ea412c3b948673e608c12cc39cbae4c445",
           "manifest_bound": true,
           "kind": "schema_index",
           "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json"
@@ -193,7 +193,7 @@
         {
           "path": "reports/source-report-inventory.json",
           "bytes": 59095,
-          "sha256": "ca2c1c86d9d8a79b61597f0f57965d76dfac9891efd098fa40b81afea9ebba81",
+          "sha256": "b26a7de73b62b9264e1c6af8176a59c1e16dbfa57abcf990a90475c10889f438",
           "manifest_bound": true,
           "kind": "source_report_inventory",
           "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json"
@@ -249,7 +249,7 @@
         {
           "path": "reports/registry-impact-plan.json",
           "bytes": 11519,
-          "sha256": "5fdf7bfea72e6839b45d7a48453e04b66a7e39650ffc9944d764397e3e428614",
+          "sha256": "28d41594cc4b4d139a9c604a4a18b7d7adda4535103f31299a1abd4f430248bb",
           "manifest_bound": true,
           "kind": "registry_impact_plan",
           "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json"
@@ -282,7 +282,7 @@
         {
           "path": "reports/source-runtime-remediation-map.json",
           "bytes": 14728,
-          "sha256": "f103a52f849ca321b75c2c358fbcc0123c270c4e9aba4b77efba163d187c0027",
+          "sha256": "86514f91d7c56a3615fba6b75b79dcccf1ded69dc8f0c5e8260ef359e9c1b840",
           "manifest_bound": true,
           "kind": "source_runtime_remediation_map",
           "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json"
@@ -482,7 +482,7 @@
         {
           "path": "reports/credential-runtime-manual-review-acceptance-packet.json",
           "bytes": 3998,
-          "sha256": "d2f8cf7d7196f359aa029cb24481b1581cdaeb17bf65aba3581997c33e2bca82",
+          "sha256": "af8065c614ada63fd056760fce64e938939c871563de5406402e5ae6743c0b2e",
           "manifest_bound": true,
           "kind": "credential_runtime_manual_review_acceptance_packet",
           "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-acceptance-packet.v1.schema.json"
@@ -525,7 +525,7 @@
         {
           "path": "reports/release-distribution-footprint.json",
           "bytes": 2119,
-          "sha256": "c1123b8ffb94459de5ad55e2789ba5d21d7dded49a4450b01f4c4ec85dfe9d4c",
+          "sha256": "a5873ddf94e01aa107408eec1f671893e025a9028fa3dce32b41e36287454aa5",
           "manifest_bound": true,
           "kind": "release_distribution_footprint",
           "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json"
@@ -533,7 +533,7 @@
         {
           "path": "reports/release-consumer-compatibility.json",
           "bytes": 26966,
-          "sha256": "e190a57548d2b03cee6182b54fe6477840d3c6f0a63086cbe011bef0ea67e587",
+          "sha256": "766c8d37863f991add69b9d850af7379d7c0c69edd5fd4346f3fd08fdc6c95f6",
           "manifest_bound": true,
           "kind": "consumer_compatibility",
           "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json"
