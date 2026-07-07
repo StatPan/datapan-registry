@@ -259,6 +259,62 @@ def build_report(
             "operator_packets": DEFAULT_OPERATOR_PACKETS.as_posix(),
         },
         "summary": summary,
+        "operator_routing": {
+            "goal_issue": 344,
+            "plan_status": summary["session_plan_status"],
+            "next_action": summary["next_action"],
+            "operator_blocker": (
+                "repository_or_operator_credentials_required"
+                if summary["session_plan_status"] == "operator_credentials_required"
+                else summary["session_plan_status"]
+            ),
+            "first_operator_step": "check_github_or_local_secret_readiness_before_collect",
+            "github_secret_readiness_command": (
+                f"python3 {GITHUB_SECRET_READINESS_SCRIPT.as_posix()} "
+                "--repo StatPan/datapan-registry --json"
+            ),
+            "github_secret_readiness_check_command": f"python3 {GITHUB_SECRET_READINESS_SCRIPT.as_posix()} --check",
+            "local_require_env_preflight_command": f"python3 {OPERATOR_WORKFLOW_SCRIPT.as_posix()} --require-env",
+            "github_actions_collect_command": (
+                "gh workflow run credential-runtime-collection.yml "
+                "--repo StatPan/datapan-registry -f mode=collect"
+            ),
+            "local_batch_collection_run_command": string_value(
+                batch_commands.get("batch_collection_run_with_session_output"),
+                "batch.batch_collection_run_with_session_output",
+            ),
+            "session_output_path": string_value(
+                batch_contract.get("session_output_path"),
+                "batch.session_output_path",
+            ),
+            "session_validation_command": string_value(
+                batch_contract.get("session_output_validation_command"),
+                "batch.session_output_validation_command",
+            ),
+            "review_plan_generation_command": string_value(
+                batch_contract.get("session_review_plan_command"),
+                "batch.session_review_plan_command",
+            ),
+            "review_plan_validation_command": string_value(
+                batch_contract.get("session_review_plan_validation_command"),
+                "batch.session_review_plan_validation_command",
+            ),
+            "required_credential_env_count": len(credential_envs),
+            "required_credential_envs": credential_envs,
+            "post_promotion_commands": [
+                string_value(item, "post_promotion.commands[]")
+                for item in as_list(post_promotion.get("commands"), "post_promotion.commands")
+            ],
+            "checked_in_secrets_allowed": False,
+            "checked_in_session_output_allowed": False,
+            "checked_in_review_plan_allowed": False,
+            "goal_closure_allowed": False,
+            "routing_note": (
+                "Check repository or local secret readiness before collection, then validate the session, "
+                "generate a review plan, promote reviewed receipts, and refresh release evidence. "
+                "Do not check in secrets or raw session output."
+            ),
+        },
         "batch_execution": {
             "secret_free_batch_preflight_command": string_value(
                 batch_commands.get("secret_free_batch_preflight"),
@@ -434,6 +490,7 @@ def build_report(
 
 def validate_invariants(report: dict[str, Any]) -> None:
     summary = as_dict(report.get("summary"), "summary")
+    routing = as_dict(report.get("operator_routing"), "operator_routing")
     batch = as_dict(report.get("batch_execution"), "batch_execution")
     workflow = as_dict(report.get("operator_workflow"), "operator_workflow")
     promotion_workflow = as_dict(report.get("session_review_promotion_workflow"), "session_review_promotion_workflow")
@@ -442,6 +499,40 @@ def validate_invariants(report: dict[str, Any]) -> None:
     sources = [as_dict(item, "sources[]") for item in as_list(report.get("sources"), "sources")]
     if summary.get("sources") != len(sources):
         raise ValueError("summary.sources must match sources length")
+    if routing.get("goal_issue") != 344:
+        raise ValueError("operator_routing.goal_issue must preserve #344")
+    if routing.get("plan_status") != summary.get("session_plan_status"):
+        raise ValueError("operator_routing.plan_status must mirror summary.session_plan_status")
+    if routing.get("next_action") != summary.get("next_action"):
+        raise ValueError("operator_routing.next_action must mirror summary.next_action")
+    if routing.get("goal_closure_allowed") is not False:
+        raise ValueError("operator_routing.goal_closure_allowed must remain false")
+    if routing.get("checked_in_secrets_allowed") is not False:
+        raise ValueError("operator_routing.checked_in_secrets_allowed must remain false")
+    if routing.get("checked_in_session_output_allowed") is not False:
+        raise ValueError("operator_routing.checked_in_session_output_allowed must remain false")
+    if routing.get("checked_in_review_plan_allowed") is not False:
+        raise ValueError("operator_routing.checked_in_review_plan_allowed must remain false")
+    if routing.get("required_credential_env_count") != len(routing.get("required_credential_envs", [])):
+        raise ValueError("operator_routing required credential count must match env list")
+    if routing.get("required_credential_envs") != environment.get("required_credential_envs"):
+        raise ValueError("operator_routing required credential envs must mirror operator_environment")
+    if routing.get("github_secret_readiness_command") != workflow.get("github_secret_readiness_command"):
+        raise ValueError("operator_routing GitHub secret readiness command must mirror operator_workflow")
+    if routing.get("github_secret_readiness_check_command") != workflow.get("github_secret_readiness_check_command"):
+        raise ValueError("operator_routing GitHub secret readiness check command must mirror operator_workflow")
+    if routing.get("github_actions_collect_command") != workflow.get("github_actions_collect_command"):
+        raise ValueError("operator_routing GitHub collect command must mirror operator_workflow")
+    if routing.get("session_output_path") != batch.get("session_output_path"):
+        raise ValueError("operator_routing session output path must mirror batch_execution")
+    if routing.get("session_validation_command") != batch.get("session_output_validation_command"):
+        raise ValueError("operator_routing session validation command must mirror batch_execution")
+    if routing.get("review_plan_generation_command") != batch.get("session_review_plan_command"):
+        raise ValueError("operator_routing review plan command must mirror batch_execution")
+    if routing.get("review_plan_validation_command") != batch.get("session_review_plan_validation_command"):
+        raise ValueError("operator_routing review plan validation command must mirror batch_execution")
+    if routing.get("post_promotion_commands") != review.get("post_promotion_commands"):
+        raise ValueError("operator_routing post-promotion commands must mirror post_collection_review")
     if summary.get("credential_gated_sources") != len(sources):
         raise ValueError("execution plan must cover every credential-gated source")
     if summary.get("candidate_batches_missing") == 0 and summary.get("reviewed_receipts_missing", 0) > 0:
