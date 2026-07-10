@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.sustainable-coverage-policy.v1.schema.json",
+  "title": "Datapan Sustainable Coverage Policy v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "policy_id", "effective_at", "supported_sources", "required_consumers", "freshness", "targets"],
+  "properties": {
+    "schema_version": {"const": "datapan.sustainable-coverage-policy.v1"},
+    "policy_id": {"type": "string", "minLength": 1},
+    "effective_at": {"type": "string", "format": "date-time"},
+    "supported_sources": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["source_id", "profile", "catalog_scope"],
+        "properties": {
+          "source_id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+          "profile": {"type": "string", "pattern": "^sources/.+\\.json$"},
+          "catalog_scope": {"enum": ["operation_denominator", "contract_only"]},
+          "coverage_report": {"type": "string", "pattern": "^reports/.+\\.json$"}
+        },
+        "allOf": [
+          {"if": {"properties": {"catalog_scope": {"const": "operation_denominator"}}}, "then": {"required": ["coverage_report"]}},
+          {"if": {"properties": {"catalog_scope": {"const": "contract_only"}}}, "then": {"not": {"required": ["coverage_report"]}}}
+        ]
+      }
+    },
+    "required_consumers": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "freshness": {
+      "type": "object", "additionalProperties": false,
+      "required": ["fresh_days", "expire_days", "missing_timestamp_classification", "evaluation_time_source"],
+      "properties": {
+        "fresh_days": {"type": "integer", "minimum": 1},
+        "expire_days": {"type": "integer", "minimum": 2},
+        "missing_timestamp_classification": {"const": "unknown_timestamp"},
+        "evaluation_time_source": {"const": "manifest.generated_at"}
+      }
+    },
+    "targets": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_contract_percent", "catalog_denominator_percent", "operation_routable_percent", "source_call_capability_percent", "reviewed_runtime_receipt_source_percent", "runtime_evidence_source_percent", "runtime_evidence_operation_percent", "fresh_verified_operation_percent", "required_consumer_proven_percent"],
+      "properties": {
+        "source_contract_percent": {"$ref": "#/$defs/percent"},
+        "catalog_denominator_percent": {"$ref": "#/$defs/percent"},
+        "operation_routable_percent": {"$ref": "#/$defs/percent"},
+        "source_call_capability_percent": {"$ref": "#/$defs/percent"},
+        "reviewed_runtime_receipt_source_percent": {"$ref": "#/$defs/percent"},
+        "runtime_evidence_source_percent": {"$ref": "#/$defs/percent"},
+        "runtime_evidence_operation_percent": {"$ref": "#/$defs/percent"},
+        "fresh_verified_operation_percent": {"$ref": "#/$defs/percent"},
+        "required_consumer_proven_percent": {"$ref": "#/$defs/percent"}
+      }
+    }
+  },
+  "$defs": {"percent": {"type": "number", "minimum": 0, "maximum": 100}}
+}

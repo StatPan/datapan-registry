@@ -1,0 +1,30 @@
+{
+  "schema_version": "datapan.sustainable-coverage-policy.v1",
+  "policy_id": "datapan-registry-supported-sources",
+  "effective_at": "2026-07-04T06:39:24Z",
+  "supported_sources": [
+    {"source_id": "data_go_kr", "profile": "sources/data_go_kr.json", "catalog_scope": "operation_denominator", "coverage_report": "reports/coverage.json"},
+    {"source_id": "ecos", "profile": "sources/ecos.json", "catalog_scope": "contract_only"},
+    {"source_id": "kosis", "profile": "sources/kosis.json", "catalog_scope": "contract_only"},
+    {"source_id": "open_assembly", "profile": "sources/open_assembly.json", "catalog_scope": "contract_only"},
+    {"source_id": "seoul_open_data", "profile": "sources/seoul_open_data.json", "catalog_scope": "contract_only"}
+  ],
+  "required_consumers": ["datapan-cli", "release-operator", "studio"],
+  "freshness": {
+    "fresh_days": 30,
+    "expire_days": 90,
+    "missing_timestamp_classification": "unknown_timestamp",
+    "evaluation_time_source": "manifest.generated_at"
+  },
+  "targets": {
+    "source_contract_percent": 100.0,
+    "catalog_denominator_percent": 100.0,
+    "operation_routable_percent": 98.0,
+    "source_call_capability_percent": 100.0,
+    "reviewed_runtime_receipt_source_percent": 100.0,
+    "runtime_evidence_source_percent": 100.0,
+    "runtime_evidence_operation_percent": 80.0,
+    "fresh_verified_operation_percent": 80.0,
+    "required_consumer_proven_percent": 100.0
+  }
+}

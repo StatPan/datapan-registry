@@ -1,0 +1,184 @@
+{
+  "schema_version": "datapan.sustainable-coverage.v1",
+  "generated_at": "2026-07-04T06:39:24Z",
+  "policy": {
+    "path": "policy/sustainable-coverage.json",
+    "policy_id": "datapan-registry-supported-sources",
+    "supported_source_count": 5,
+    "required_consumer_count": 3
+  },
+  "inputs": {
+    "manifest": "manifest.json",
+    "source_contract_rollup": "reports/source-contract-rollup.json",
+    "source_runtime_evidence_rollup": "reports/source-runtime-evidence-rollup.json",
+    "latest_verification": "reports/latest-verification.json",
+    "credential_runtime_runner_readiness": "reports/credential-runtime-runner-readiness.json",
+    "release_consumer_compatibility": "reports/release-consumer-compatibility.json"
+  },
+  "summary": {
+    "decision": "coverage_gaps",
+    "layers_total": 9,
+    "layers_meeting_target": 3,
+    "layers_below_target": 6,
+    "unknown_timestamp_records": 715,
+    "stale_records": 0,
+    "expired_records": 0
+  },
+  "layers": [
+    {
+      "id": "source_contract",
+      "numerator": 5,
+      "denominator": 5,
+      "percent": 100.0,
+      "target_percent": 100.0,
+      "meets_target": true,
+      "scope": "supported_sources",
+      "meaning": "Supported sources with a checked-in validated profile."
+    },
+    {
+      "id": "catalog_denominator",
+      "numerator": 1,
+      "denominator": 5,
+      "percent": 20.0,
+      "target_percent": 100.0,
+      "meets_target": false,
+      "scope": "supported_sources",
+      "meaning": "Supported sources with an explicit operation denominator; contract-only sources remain uncovered."
+    },
+    {
+      "id": "operation_routable",
+      "numerator": 21114,
+      "denominator": 21256,
+      "percent": 99.3,
+      "target_percent": 98.0,
+      "meets_target": true,
+      "scope": "operation_denominator_sources",
+      "meaning": "Operations statically marked callable; this is not runtime success."
+    },
+    {
+      "id": "source_call_capability",
+      "numerator": 5,
+      "denominator": 5,
+      "percent": 100.0,
+      "target_percent": 100.0,
+      "meets_target": true,
+      "scope": "supported_sources",
+      "meaning": "Sources whose registered adapter declares call capability."
+    },
+    {
+      "id": "reviewed_runtime_receipt_source",
+      "numerator": 0,
+      "denominator": 5,
+      "percent": 0.0,
+      "target_percent": 100.0,
+      "meets_target": false,
+      "scope": "supported_sources",
+      "meaning": "Sources with a reviewed, redacted credential runtime receipt; secret presence itself is never persisted as coverage."
+    },
+    {
+      "id": "runtime_evidence_source",
+      "numerator": 1,
+      "denominator": 5,
+      "percent": 20.0,
+      "target_percent": 100.0,
+      "meets_target": false,
+      "scope": "supported_sources",
+      "meaning": "Sources with at least one runtime evidence record."
+    },
+    {
+      "id": "runtime_evidence_operation",
+      "numerator": 4637,
+      "denominator": 21256,
+      "percent": 21.8,
+      "target_percent": 80.0,
+      "meets_target": false,
+      "scope": "operation_denominator_sources",
+      "meaning": "Unique operation identities with evidence, regardless of result or age."
+    },
+    {
+      "id": "fresh_verified_operation",
+      "numerator": 2775,
+      "denominator": 21256,
+      "percent": 13.1,
+      "target_percent": 80.0,
+      "meets_target": false,
+      "scope": "operation_denominator_sources",
+      "meaning": "Unique operation identities with a successful result inside the fresh window."
+    },
+    {
+      "id": "required_consumer_proven",
+      "numerator": 2,
+      "denominator": 3,
+      "percent": 66.7,
+      "target_percent": 100.0,
+      "meets_target": false,
+      "scope": "required_consumers",
+      "meaning": "Required consumers with proven compatibility evidence."
+    }
+  ],
+  "freshness": {
+    "as_of": "2026-07-04T06:39:24Z",
+    "fresh_days": 30,
+    "expire_days": 90,
+    "fresh": 4059,
+    "stale": 0,
+    "expired": 0,
+    "unknown_timestamp": 715,
+    "fresh_verified": 2841
+  },
+  "source_status": [
+    {
+      "source_id": "data_go_kr",
+      "profile_present": true,
+      "catalog_denominator": true,
+      "call_capability": true,
+      "reviewed_runtime_receipt": false,
+      "runtime_evidence": 4774
+    },
+    {
+      "source_id": "ecos",
+      "profile_present": true,
+      "catalog_denominator": false,
+      "call_capability": true,
+      "reviewed_runtime_receipt": false,
+      "runtime_evidence": 0
+    },
+    {
+      "source_id": "kosis",
+      "profile_present": true,
+      "catalog_denominator": false,
+      "call_capability": true,
+      "reviewed_runtime_receipt": false,
+      "runtime_evidence": 0
+    },
+    {
+      "source_id": "open_assembly",
+      "profile_present": true,
+      "catalog_denominator": false,
+      "call_capability": true,
+      "reviewed_runtime_receipt": false,
+      "runtime_evidence": 0
+    },
+    {
+      "source_id": "seoul_open_data",
+      "profile_present": true,
+      "catalog_denominator": false,
+      "call_capability": true,
+      "reviewed_runtime_receipt": false,
+      "runtime_evidence": 0
+    }
+  ],
+  "maintenance_boundary": {
+    "routable_is_not_runtime_verified": true,
+    "missing_denominators_are_uncovered": true,
+    "missing_timestamps_are_not_fresh": true,
+    "next_actions": [
+      "catalog_denominator",
+      "reviewed_runtime_receipt_source",
+      "runtime_evidence_source",
+      "runtime_evidence_operation",
+      "fresh_verified_operation",
+      "required_consumer_proven"
+    ]
+  }
+}

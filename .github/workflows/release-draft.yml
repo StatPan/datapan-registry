@@ -119,6 +119,7 @@ jobs:
             scripts/generate-source-runtime-remediation-map.py \
             scripts/generate-release-health-rollup.py \
             scripts/generate-source-contract-rollup.py \
+            scripts/generate-sustainable-coverage.py \
             scripts/generate-registry-shards.py \
             scripts/package-registry-release.py \
             scripts/package-registry-shards.py \
@@ -169,6 +170,8 @@ jobs:
           python scripts/validate-source-runtime-evidence-plans.py
           python scripts/validate-source-runtime-evidence-rollup.py
           python scripts/validate-runtime-evidence-growth.py
+          python scripts/generate-sustainable-coverage.py --self-test
+          python scripts/generate-sustainable-coverage.py --check
           python scripts/validate-operation-materialization-plan.py
           python scripts/validate-safetydata-operation-candidates.py
           python scripts/validate-safetydata-registry-patches.py

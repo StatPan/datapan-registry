@@ -85,6 +85,8 @@ jobs:
           python scripts/validate-source-runtime-evidence-plans.py
           python scripts/validate-source-runtime-evidence-rollup.py
           python scripts/validate-runtime-evidence-growth.py
+          python scripts/generate-sustainable-coverage.py --self-test
+          python scripts/generate-sustainable-coverage.py --check
           python scripts/validate-operation-materialization-plan.py
           python scripts/validate-safetydata-operation-candidates.py
           python scripts/validate-safetydata-registry-patches.py
@@ -123,6 +125,7 @@ jobs:
           python -m py_compile scripts/error_action_routing_rollup.py
           python -m py_compile scripts/generate-error-action-routing-rollup.py
           python -m py_compile scripts/generate-source-contract-rollup.py
+          python -m py_compile scripts/generate-sustainable-coverage.py
           python -m py_compile scripts/sync-release-manifest-artifacts.py
           python -m py_compile scripts/generate-release-distribution-footprint.py
           python -m py_compile scripts/generate-release-shard-consumer-proof.py

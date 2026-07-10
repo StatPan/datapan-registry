@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 67,
+  "count": 69,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 3657,
-      "sha256": "cbe3b5da52d9155b04da203ae0b22f2ca3161688907f0aa6e354005acbd13aec"
+      "bytes": 3736,
+      "sha256": "d2b7db378b5e5da945e20ca4853ddf20c9ba91cbe9d0874bea22fbc879d7246b"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -606,6 +606,24 @@
       "version": "v1",
       "bytes": 5090,
       "sha256": "75738736bae3f5b572de0f6d1620333f8d27829aa645e297d3cd525ae37aa3d2"
+    },
+    {
+      "path": "schemas/datapan.sustainable-coverage-policy.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.sustainable-coverage-policy.v1.schema.json",
+      "title": "Datapan Sustainable Coverage Policy v1",
+      "contract": "sustainable-coverage-policy",
+      "version": "v1",
+      "bytes": 3220,
+      "sha256": "60d77ccda50aed4ce17c29f4a0da0075993608726c01508a1b4da0686f4de514"
+    },
+    {
+      "path": "schemas/datapan.sustainable-coverage.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.sustainable-coverage.v1.schema.json",
+      "title": "Datapan Sustainable Coverage Report v1",
+      "contract": "sustainable-coverage",
+      "version": "v1",
+      "bytes": 4073,
+      "sha256": "4382d6f39f293fe73c726a3f6701b47d928b9d4c00b2eab09a9a208aeb332bc1"
     }
   ]
 }
