@@ -12,10 +12,10 @@
       "path": "reports/data-go-kr/error-action-catalog.json",
       "source_id": "data_go_kr",
       "provider": "data.go.kr",
-      "bytes": 5735,
-      "sha256": "63563ed147a169c202384888cf90ba3338f05f20408396b90205e4628905292f",
-      "rules": 6,
-      "actions": 9
+      "bytes": 7314,
+      "sha256": "6ebc5df47d73192e08727c4d4669c80b76a7b493a27574bf897e863307a1bb45",
+      "rules": 8,
+      "actions": 11
     },
     {
       "path": "reports/ecos/error-action-catalog.json",
@@ -58,14 +58,14 @@
     "catalogs": 5,
     "sources": 5,
     "providers": 5,
-    "rules": 31,
-    "actions": 39,
-    "blocking_rules": 7,
-    "manual_review_rules": 24,
+    "rules": 33,
+    "actions": 41,
+    "blocking_rules": 8,
+    "manual_review_rules": 25,
     "unknown_signature_rules": 0,
     "classifications": {
-      "bad_request": 5,
-      "credential": 7,
+      "bad_request": 6,
+      "credential": 8,
       "not_found": 3,
       "parser": 5,
       "rate_limit": 5,
@@ -74,25 +74,26 @@
     "action_targets": {
       "documentation": 6,
       "provider-adapter": 2,
-      "registry-release": 31
+      "registry-release": 33
     },
     "actions_by_name": {
       "investigate": 5,
       "no_action": 1,
-      "refresh_verification": 26,
+      "refresh_verification": 27,
+      "review_collector": 1,
       "update_adapter": 1,
       "update_error_taxonomy": 6
     },
     "automations": {
       "automated": 1,
-      "manual_review": 38
+      "manual_review": 40
     },
     "impact_categories": {
       "endpoint_changed": 2,
       "provider_error_taxonomy_changed": 6,
       "required_params_changed": 5,
       "response_shape_changed": 5,
-      "verification_status_changed": 31
+      "verification_status_changed": 33
     }
   },
   "catalogs": [
@@ -101,15 +102,16 @@
       "provider": "data.go.kr",
       "catalog": "reports/data-go-kr/error-action-catalog.json",
       "source_profile": "sources/data_go_kr.json",
-      "bytes": 5735,
-      "sha256": "63563ed147a169c202384888cf90ba3338f05f20408396b90205e4628905292f",
-      "rules": 6,
-      "actions": 9,
-      "blocking_rules": 2,
-      "manual_review_rules": 4,
+      "bytes": 7314,
+      "sha256": "6ebc5df47d73192e08727c4d4669c80b76a7b493a27574bf897e863307a1bb45",
+      "rules": 8,
+      "actions": 11,
+      "blocking_rules": 3,
+      "manual_review_rules": 5,
       "unknown_signature_rules": 0,
       "classifications": {
-        "credential": 2,
+        "bad_request": 1,
+        "credential": 3,
         "not_found": 1,
         "parser": 1,
         "rate_limit": 1,
@@ -118,23 +120,24 @@
       "action_targets": {
         "documentation": 1,
         "provider-adapter": 2,
-        "registry-release": 6
+        "registry-release": 8
       },
       "actions_by_name": {
         "investigate": 1,
         "no_action": 1,
-        "refresh_verification": 5,
+        "refresh_verification": 6,
+        "review_collector": 1,
         "update_adapter": 1,
         "update_error_taxonomy": 1
       },
       "automations": {
         "automated": 1,
-        "manual_review": 8
+        "manual_review": 10
       },
       "impact_categories": {
         "provider_error_taxonomy_changed": 1,
         "response_shape_changed": 1,
-        "verification_status_changed": 6
+        "verification_status_changed": 8
       }
     },
     {

@@ -1,15 +1,15 @@
 {
   "schema_version": "datapan.failure-recovery-rollup.v1",
-  "generated_at": "2026-07-11T01:42:00Z",
+  "generated_at": "2026-07-11T10:26:28.476548Z",
   "policy": "policy/failure-recovery.json",
   "observations": "reports/failure-observations.json",
   "summary": {
-    "identities": 6,
-    "active": 5,
-    "transient": 0,
-    "persistent": 5,
+    "identities": 10,
+    "active": 9,
+    "transient": 2,
+    "persistent": 7,
     "recovered": 1,
-    "owned": 5,
+    "owned": 9,
     "unowned": 0,
     "overdue": 0,
     "durable_work_items": 1
@@ -60,6 +60,52 @@
       "recovery_action": "collect_reviewed_runtime_receipt",
       "evidence": [
         "reports/credential-runtime-runner-readiness.json"
+      ]
+    },
+    {
+      "failure_id": "failure:credential:data_go_kr:a20f68c9392c159d",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:33f31fd775cb4f0b",
+      "status": "persistent",
+      "severity": "blocking",
+      "owner": "operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 1,
+      "first_observed_at": "2026-07-11T10:26:28.476548Z",
+      "last_observed_at": "2026-07-11T10:26:28.476548Z",
+      "due_at": "2026-08-10T10:26:28Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 1,
+        "backoff": "none"
+      },
+      "recovery_action": "collect_reviewed_runtime_receipt",
+      "evidence": [
+        "reports/runtime-freshness-imports/29149282659.json"
+      ]
+    },
+    {
+      "failure_id": "failure:credential:data_go_kr:cc5f6dd9072fd8fa",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:7fdc39dd70aabb31",
+      "status": "persistent",
+      "severity": "blocking",
+      "owner": "operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 1,
+      "first_observed_at": "2026-07-11T10:26:28.476548Z",
+      "last_observed_at": "2026-07-11T10:26:28.476548Z",
+      "due_at": "2026-08-10T10:26:28Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 1,
+        "backoff": "none"
+      },
+      "recovery_action": "collect_reviewed_runtime_receipt",
+      "evidence": [
+        "reports/runtime-freshness-imports/29149282659.json"
       ]
     },
     {
@@ -153,6 +199,52 @@
       "evidence": [
         "reports/credential-runtime-runner-readiness.json"
       ]
+    },
+    {
+      "failure_id": "failure:parameter:data_go_kr:1df0ce8962c812d0",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:33ea3784f5b9df98",
+      "status": "transient",
+      "severity": "high",
+      "owner": "source-evidence",
+      "recurrence_count": 1,
+      "recurrence_threshold": 2,
+      "first_observed_at": "2026-07-11T10:26:28.476548Z",
+      "last_observed_at": "2026-07-11T10:26:28.476548Z",
+      "due_at": "2026-07-25T10:26:28Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 1,
+        "backoff": "none"
+      },
+      "recovery_action": "update_required_parameter_evidence",
+      "evidence": [
+        "reports/runtime-freshness-imports/29149282659.json"
+      ]
+    },
+    {
+      "failure_id": "failure:parameter:data_go_kr:6ca25567e1ec9f29",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:23e4b9755e73e695",
+      "status": "transient",
+      "severity": "high",
+      "owner": "source-evidence",
+      "recurrence_count": 1,
+      "recurrence_threshold": 2,
+      "first_observed_at": "2026-07-11T10:26:28.476548Z",
+      "last_observed_at": "2026-07-11T10:26:28.476548Z",
+      "due_at": "2026-07-25T10:26:28Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 1,
+        "backoff": "none"
+      },
+      "recovery_action": "update_required_parameter_evidence",
+      "evidence": [
+        "reports/runtime-freshness-imports/29149282659.json"
+      ]
     }
   ],
   "work_items": [
@@ -163,13 +255,16 @@
       "owner": "operator",
       "failure_ids": [
         "failure:credential:data_go_kr:2784c226cd835b9e",
+        "failure:credential:data_go_kr:a20f68c9392c159d",
+        "failure:credential:data_go_kr:cc5f6dd9072fd8fa",
         "failure:credential:ecos:20892c16968fc71c",
         "failure:credential:kosis:0b50aa5ee00e074a",
         "failure:credential:open_assembly:511c0aaa3cea4a4f",
         "failure:credential:seoul_open_data:be990ba6ac378013"
       ],
       "evidence": [
-        "reports/credential-runtime-runner-readiness.json"
+        "reports/credential-runtime-runner-readiness.json",
+        "reports/runtime-freshness-imports/29149282659.json"
       ],
       "next_action": "collect_reviewed_runtime_receipt"
     }

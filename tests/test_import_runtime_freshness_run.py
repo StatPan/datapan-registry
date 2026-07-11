@@ -75,11 +75,12 @@ class ImportRuntimeFreshnessRunTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             report, receipt, current, summary = self.fixture(pathlib.Path(directory))
             current.write_bytes(report.read_bytes())
+            self.write_json(summary, {"summary": {"total": 1}})
             with mock.patch.object(MODULE, "run", side_effect=self.fake_datapan) as runner:
                 proposal = MODULE.import_run(report_path=report, receipt_path=receipt, current_path=current, summary_path=summary, datapan_command=["datapan"], apply=False)
             self.assertEqual(proposal["selected_new_results"], 0)
             self.assertEqual(proposal["delta"]["total"], 0)
-            self.assertEqual(runner.call_count, 1)  # summary only; merge is skipped
+            self.assertEqual(runner.call_count, 0)  # exact replay preserves both checked-in artifacts
 
     def test_digest_mismatch_fails_before_datapan(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
