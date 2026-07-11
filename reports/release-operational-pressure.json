@@ -15,13 +15,13 @@
     "release_goal_operating_contract": "reports/release-goal-operating-contract.json"
   },
   "summary": {
-    "operational_pressure_decision": "credential_runtime_pressure",
+    "operational_pressure_decision": "goal_boundary_pressure",
     "distribution_pressure_present": false,
-    "credential_pressure_present": true,
+    "credential_pressure_present": false,
     "finish_allowed": false,
     "goal_completion_allowed": false,
     "goal_closure_allowed": false,
-    "next_action_count": 2
+    "next_action_count": 1
   },
   "distribution_pressure": {
     "canonical_registry_path": "data/data-go-kr.registry.json",
@@ -41,20 +41,20 @@
     "proof_consumer_effect": "shard_preferred_supported_with_canonical_fallback"
   },
   "credential_pressure": {
-    "runner_status": "operator_credentials_required",
+    "runner_status": "reviewed_receipts_complete",
     "ready_to_run_without_credentials": 0,
-    "blocked_on_operator_env": 5,
+    "blocked_on_operator_env": 0,
     "blocked_on_candidate_batch": 0,
-    "reviewed_receipts_present": 0,
-    "reviewed_receipts_missing": 5,
+    "reviewed_receipts_present": 5,
+    "reviewed_receipts_missing": 0,
     "default_ci_requires_credentials": false,
     "manual_review_reduction_allowed": false,
     "checked_in_secrets_allowed": false,
     "credential_collection_execution_plan": "reports/credential-runtime-collection-execution-plan.json",
-    "session_plan_status": "operator_credentials_required",
-    "batch_ready_for_operator_credentials": true,
-    "operator_sources_ready": 5,
-    "execution_plan_next_action": "run_batch_collection_session_in_operator_env",
+    "session_plan_status": "reviewed_receipts_complete",
+    "batch_ready_for_operator_credentials": false,
+    "operator_sources_ready": 0,
+    "execution_plan_next_action": "refresh_release_evidence_after_reviewed_receipts",
     "session_output_path": ".datapan/runtime-evidence/credential-runtime-collection-session.json",
     "runtime_compatibility_effect": "manual_review_required_until_runtime_blockers_resolved",
     "credential_queue_status": "collection_required"
@@ -64,9 +64,9 @@
     "release_decision": "manual_review_required",
     "manual_review_required": true,
     "manual_review_accepted": false,
-    "reviewed_credential_receipts": 0,
+    "reviewed_credential_receipts": 5,
     "preflight_next_action": "do_not_finish_goal",
-    "primary_continuation_candidate": "collect_reviewed_credential_runtime_receipts"
+    "primary_continuation_candidate": "assert_explicit_manual_review_release_acceptance"
   },
   "next_actions": [
     {
@@ -78,7 +78,7 @@
     {
       "id": "collect_reviewed_credential_runtime_receipts",
       "capability_plane": "credential_safe_evidence",
-      "required": true,
+      "required": false,
       "reason": "Credential-gated runtime checks still need reviewed redacted receipts before compatibility relief."
     },
     {

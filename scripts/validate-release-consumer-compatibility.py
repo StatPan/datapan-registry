@@ -954,9 +954,9 @@ def validate_runtime_risk_evidence(
             raise ValueError(f"runtime_risk_evidence.{key} expected {value}, got {risk.get(key)}")
     if credential_execution_summary.get("credential_gated_sources") != credential_summary.get("credential_gated_sources"):
         raise ValueError("credential execution plan source count must match credential policy gated source count")
-    if credential_execution_summary.get("operator_sources_ready") != credential_runner_summary.get(
-        "candidate_batches_present"
-    ):
+    if credential_execution_summary.get("reviewed_receipts_missing", 0) > 0 and credential_execution_summary.get(
+        "operator_sources_ready"
+    ) != credential_runner_summary.get("candidate_batches_present"):
         raise ValueError("credential execution plan operator-ready count must match runner candidate batches")
     if credential_execution_summary.get("reviewed_receipts_missing") != credential_runner_summary.get(
         "reviewed_receipts_missing"
@@ -1201,8 +1201,10 @@ def validate_runtime_risk_evidence(
         raise ValueError("credential runtime policy must expose the reviewed receipt intake path")
     if unresolved_runtime_risk and risk.get("credential_policy_default_ci_requires_credentials") is not False:
         raise ValueError("default CI must remain secret-free while runtime blockers are credential-gated")
-    if unresolved_runtime_risk and risk.get("credential_policy_live_receipts") != 0:
-        raise ValueError("credential policy must not claim live receipts before checked-in receipts exist")
+    if unresolved_runtime_risk and risk.get("credential_policy_live_receipts") != risk.get(
+        "credential_queue_reviewed_receipts"
+    ):
+        raise ValueError("credential policy live receipts must match checked-in reviewed receipts")
     if unresolved_runtime_risk and risk.get("credential_policy_manual_review_boundaries") == 0:
         raise ValueError("credential policy must preserve manual-review boundaries for unresolved runtime risk")
     if risk.get("credential_policy_manual_review_reduction_allowed") is True and (

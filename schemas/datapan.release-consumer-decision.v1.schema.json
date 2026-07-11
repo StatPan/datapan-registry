@@ -153,6 +153,8 @@
         "credential_collection_preflight_reviewed_receipts_missing",
         "credential_collection_preflight_operator_environment_required_sources",
         "credential_queue_status",
+        "credential_handoff_relief_eligible_sources",
+        "credential_handoff_global_manual_review_relief_allowed",
         "manual_review_reduction_allowed",
         "goal_audit_decision"
       ],
@@ -202,6 +204,12 @@
         },
         "credential_queue_status": {
           "$ref": "#/$defs/non_empty_string"
+        },
+        "credential_handoff_relief_eligible_sources": {
+          "$ref": "#/$defs/count"
+        },
+        "credential_handoff_global_manual_review_relief_allowed": {
+          "type": "boolean"
         },
         "manual_review_reduction_allowed": {
           "type": "boolean"

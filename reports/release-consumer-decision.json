@@ -18,7 +18,7 @@
     "shard_assets_required": false,
     "manual_review_required": true,
     "manual_review_accepted": false,
-    "reviewed_credential_receipts": 0,
+    "reviewed_credential_receipts": 5,
     "goal_completion_allowed": false,
     "goal_status": "not_complete"
   },
@@ -33,10 +33,12 @@
     "manual_review_boundary_accepted": false,
     "manual_review_goal_completion_effect": "goal_remains_open_until_reviewed_receipts_or_explicit_acceptance",
     "credential_handoff_status": "review_required",
-    "credential_collection_preflight_status": "collection_inputs_ready_operator_environment_needed",
-    "credential_collection_preflight_reviewed_receipts_missing": 5,
+    "credential_collection_preflight_status": "reviewed_receipts_complete",
+    "credential_collection_preflight_reviewed_receipts_missing": 0,
     "credential_collection_preflight_operator_environment_required_sources": 5,
     "credential_queue_status": "collection_required",
+    "credential_handoff_relief_eligible_sources": 4,
+    "credential_handoff_global_manual_review_relief_allowed": false,
     "manual_review_reduction_allowed": false,
     "goal_audit_decision": "leave_goal_open"
   },

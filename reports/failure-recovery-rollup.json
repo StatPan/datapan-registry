@@ -1,15 +1,15 @@
 {
   "schema_version": "datapan.failure-recovery-rollup.v1",
-  "generated_at": "2026-07-11T10:26:28.476548Z",
+  "generated_at": "2026-07-11T15:55:24Z",
   "policy": "policy/failure-recovery.json",
   "observations": "reports/failure-observations.json",
   "summary": {
     "identities": 10,
-    "active": 9,
+    "active": 4,
     "transient": 2,
-    "persistent": 7,
-    "recovered": 1,
-    "owned": 9,
+    "persistent": 2,
+    "recovered": 6,
+    "owned": 4,
     "unowned": 0,
     "overdue": 0,
     "durable_work_items": 1
@@ -44,13 +44,13 @@
       "source_id": "data_go_kr",
       "failure_class": "credential",
       "subject_id": "reviewed-runtime-receipt",
-      "status": "persistent",
+      "status": "recovered",
       "severity": "blocking",
       "owner": "operator",
-      "recurrence_count": 1,
+      "recurrence_count": 0,
       "recurrence_threshold": 1,
       "first_observed_at": "2026-07-04T06:39:24Z",
-      "last_observed_at": "2026-07-04T06:39:24Z",
+      "last_observed_at": "2026-07-11T15:55:24Z",
       "due_at": "2026-08-03T06:39:24Z",
       "overdue": false,
       "retry": {
@@ -113,13 +113,13 @@
       "source_id": "ecos",
       "failure_class": "credential",
       "subject_id": "reviewed-runtime-receipt",
-      "status": "persistent",
+      "status": "recovered",
       "severity": "blocking",
       "owner": "operator",
-      "recurrence_count": 1,
+      "recurrence_count": 0,
       "recurrence_threshold": 1,
       "first_observed_at": "2026-07-04T06:39:24Z",
-      "last_observed_at": "2026-07-04T06:39:24Z",
+      "last_observed_at": "2026-07-11T15:55:24Z",
       "due_at": "2026-08-03T06:39:24Z",
       "overdue": false,
       "retry": {
@@ -136,13 +136,13 @@
       "source_id": "kosis",
       "failure_class": "credential",
       "subject_id": "reviewed-runtime-receipt",
-      "status": "persistent",
+      "status": "recovered",
       "severity": "blocking",
       "owner": "operator",
-      "recurrence_count": 1,
+      "recurrence_count": 0,
       "recurrence_threshold": 1,
       "first_observed_at": "2026-07-04T06:39:24Z",
-      "last_observed_at": "2026-07-04T06:39:24Z",
+      "last_observed_at": "2026-07-11T15:55:24Z",
       "due_at": "2026-08-03T06:39:24Z",
       "overdue": false,
       "retry": {
@@ -159,13 +159,13 @@
       "source_id": "open_assembly",
       "failure_class": "credential",
       "subject_id": "reviewed-runtime-receipt",
-      "status": "persistent",
+      "status": "recovered",
       "severity": "blocking",
       "owner": "operator",
-      "recurrence_count": 1,
+      "recurrence_count": 0,
       "recurrence_threshold": 1,
       "first_observed_at": "2026-07-04T06:39:24Z",
-      "last_observed_at": "2026-07-04T06:39:24Z",
+      "last_observed_at": "2026-07-11T15:55:24Z",
       "due_at": "2026-08-03T06:39:24Z",
       "overdue": false,
       "retry": {
@@ -182,13 +182,13 @@
       "source_id": "seoul_open_data",
       "failure_class": "credential",
       "subject_id": "reviewed-runtime-receipt",
-      "status": "persistent",
+      "status": "recovered",
       "severity": "blocking",
       "owner": "operator",
-      "recurrence_count": 1,
+      "recurrence_count": 0,
       "recurrence_threshold": 1,
       "first_observed_at": "2026-07-04T06:39:24Z",
-      "last_observed_at": "2026-07-04T06:39:24Z",
+      "last_observed_at": "2026-07-11T15:55:24Z",
       "due_at": "2026-08-03T06:39:24Z",
       "overdue": false,
       "retry": {
@@ -254,16 +254,10 @@
       "ticket": 457,
       "owner": "operator",
       "failure_ids": [
-        "failure:credential:data_go_kr:2784c226cd835b9e",
         "failure:credential:data_go_kr:a20f68c9392c159d",
-        "failure:credential:data_go_kr:cc5f6dd9072fd8fa",
-        "failure:credential:ecos:20892c16968fc71c",
-        "failure:credential:kosis:0b50aa5ee00e074a",
-        "failure:credential:open_assembly:511c0aaa3cea4a4f",
-        "failure:credential:seoul_open_data:be990ba6ac378013"
+        "failure:credential:data_go_kr:cc5f6dd9072fd8fa"
       ],
       "evidence": [
-        "reports/credential-runtime-runner-readiness.json",
         "reports/runtime-freshness-imports/29149282659.json"
       ],
       "next_action": "collect_reviewed_runtime_receipt"
@@ -274,6 +268,36 @@
       "failure_id": "failure:consumer:multi_source:bb185ca8c0e4a127",
       "recovered_at": "2026-07-11T01:42:00Z",
       "evidence": "reports/release-shard-consumer-proof.json",
+      "coverage_update_required": true
+    },
+    {
+      "failure_id": "failure:credential:data_go_kr:2784c226cd835b9e",
+      "recovered_at": "2026-07-11T15:55:24Z",
+      "evidence": "reports/credential-runtime-runner-readiness.json",
+      "coverage_update_required": true
+    },
+    {
+      "failure_id": "failure:credential:ecos:20892c16968fc71c",
+      "recovered_at": "2026-07-11T15:55:24Z",
+      "evidence": "reports/credential-runtime-runner-readiness.json",
+      "coverage_update_required": true
+    },
+    {
+      "failure_id": "failure:credential:kosis:0b50aa5ee00e074a",
+      "recovered_at": "2026-07-11T15:55:24Z",
+      "evidence": "reports/credential-runtime-runner-readiness.json",
+      "coverage_update_required": true
+    },
+    {
+      "failure_id": "failure:credential:open_assembly:511c0aaa3cea4a4f",
+      "recovered_at": "2026-07-11T15:55:24Z",
+      "evidence": "reports/credential-runtime-runner-readiness.json",
+      "coverage_update_required": true
+    },
+    {
+      "failure_id": "failure:credential:seoul_open_data:be990ba6ac378013",
+      "recovered_at": "2026-07-11T15:55:24Z",
+      "evidence": "reports/credential-runtime-runner-readiness.json",
       "coverage_update_required": true
     }
   ]

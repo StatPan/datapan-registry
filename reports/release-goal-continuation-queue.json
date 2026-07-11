@@ -20,10 +20,10 @@
     "finish_allowed": false,
     "goal_completion_allowed": false,
     "goal_closure_allowed": false,
-    "active_non_completion_reason": "credential_runtime_pressure",
-    "primary_candidate": "collect_reviewed_credential_runtime_receipts",
-    "primary_candidate_title": "Collect reviewed credential runtime receipts",
-    "primary_candidate_duplicate_check_command": "gh issue list --repo StatPan/datapan-registry --state open --search 'Collect reviewed credential runtime receipts in:title' --json number,title,state,url",
+    "active_non_completion_reason": "goal_boundary_pressure",
+    "primary_candidate": "assert_explicit_manual_review_release_acceptance",
+    "primary_candidate_title": "Assert explicit manual-review release acceptance",
+    "primary_candidate_duplicate_check_command": "gh issue list --repo StatPan/datapan-registry --state open --search 'Assert explicit manual-review release acceptance in:title' --json number,title,state,url",
     "next_safe_action": "use_existing_or_create_primary_child_ticket_after_duplicate_check",
     "blocked_by_external_evidence": true,
     "routing_note": "Use the primary candidate packet only after duplicate detection; keep #344 open until finish preflight and completion audit allow closure."
@@ -32,16 +32,16 @@
     "finish_allowed": false,
     "goal_status": "not_complete",
     "release_decision": "manual_review_required",
-    "operational_pressure_decision": "credential_runtime_pressure",
+    "operational_pressure_decision": "goal_boundary_pressure",
     "distribution_pressure_present": false,
-    "credential_pressure_present": true,
+    "credential_pressure_present": false,
     "goal_completion_allowed": false,
-    "reviewed_credential_receipts": 0,
-    "reviewed_receipts_missing": 5,
+    "reviewed_credential_receipts": 5,
+    "reviewed_receipts_missing": 0,
     "manual_review_required": true,
     "manual_review_accepted": false,
-    "candidate_count": 2,
-    "primary_candidate": "collect_reviewed_credential_runtime_receipts",
+    "candidate_count": 1,
+    "primary_candidate": "assert_explicit_manual_review_release_acceptance",
     "next_action": "create_child_ticket",
     "goal_closure_allowed": false
   },
@@ -94,66 +94,6 @@
   "candidates": [
     {
       "order": 1,
-      "id": "collect_reviewed_credential_runtime_receipts",
-      "title": "Collect reviewed credential runtime receipts",
-      "capability_planes": [
-        "credential-safe evidence",
-        "verification evidence",
-        "consumer compatibility"
-      ],
-      "evidence_inputs": [
-        "reports/credential-runtime-collection-preflight.json",
-        "reports/credential-runtime-runner-readiness.json",
-        "reports/credential-runtime-receipt-collection-queue.json",
-        "reports/credential-runtime-review-handoff.json",
-        "reports/credential-runtime-collection-execution-plan.json"
-      ],
-      "safe_start_conditions": [
-        "candidate batches present: 5",
-        "operator environment required sources: 5",
-        "batch ready for operator credentials: True",
-        "execution plan status: operator_credentials_required",
-        "execution plan next action: run_batch_collection_session_in_operator_env",
-        "run credentialed collection only from an operator environment with provider credentials",
-        "do not check in credentials, hashes, headers, or secret-derived values"
-      ],
-      "blocked_finish_conditions": [
-        "reviewed receipts missing: 5",
-        "pending review sources: 5",
-        "manual-review reduction remains disallowed until reviewed validated receipts are checked in"
-      ],
-      "proposed_acceptance_criteria": [
-        "Staged credential runtime receipts are generated without secret material.",
-        "Reviewed receipts validate with python3 scripts/validate-credential-runtime-receipts.py.",
-        "Promotion uses scripts/promote-credential-runtime-receipt.py and keeps reviewed states explicit.",
-        "Consumer compatibility continues to report manual-review status unless relief gates are fully satisfied."
-      ],
-      "post_completion_commands": [
-        "python3 scripts/refresh-release-ledger-evidence.py --write --max-iterations 5",
-        "python3 scripts/refresh-release-ledger-evidence.py --check"
-      ],
-      "goal_closure_allowed": false,
-      "rationale": "Reviewed credential runtime receipts are the strongest evidence path for reducing current manual-review compatibility gates.",
-      "ticket_packet": {
-        "parent_goal_issue": 344,
-        "title": "Collect reviewed credential runtime receipts",
-        "goal": "Advance #344 by executing continuation candidate collect_reviewed_credential_runtime_receipts.",
-        "body": "## Goal\nAdvance #344 by executing continuation candidate `collect_reviewed_credential_runtime_receipts`: Collect reviewed credential runtime receipts.\n\n## Scope\nReviewed credential runtime receipts are the strongest evidence path for reducing current manual-review compatibility gates. Keep the work bounded to the evidence inputs below and preserve canonical registry compatibility. This child ticket is progress evidence only and must not mark #344 complete.\n\n## Evidence Inputs\n- reports/credential-runtime-collection-preflight.json\n- reports/credential-runtime-runner-readiness.json\n- reports/credential-runtime-receipt-collection-queue.json\n- reports/credential-runtime-review-handoff.json\n- reports/credential-runtime-collection-execution-plan.json\n\n## Safe Start Conditions\n- candidate batches present: 5\n- operator environment required sources: 5\n- batch ready for operator credentials: True\n- execution plan status: operator_credentials_required\n- execution plan next action: run_batch_collection_session_in_operator_env\n- run credentialed collection only from an operator environment with provider credentials\n- do not check in credentials, hashes, headers, or secret-derived values\n\n## Blocked Finish Conditions\n- reviewed receipts missing: 5\n- pending review sources: 5\n- manual-review reduction remains disallowed until reviewed validated receipts are checked in\n\n## Acceptance Criteria\n- Staged credential runtime receipts are generated without secret material.\n- Reviewed receipts validate with python3 scripts/validate-credential-runtime-receipts.py.\n- Promotion uses scripts/promote-credential-runtime-receipt.py and keeps reviewed states explicit.\n- Consumer compatibility continues to report manual-review status unless relief gates are fully satisfied.\n\n## Post Completion Commands\n- python3 scripts/refresh-release-ledger-evidence.py --write --max-iterations 5\n- python3 scripts/refresh-release-ledger-evidence.py --check\n\n## Doctor Impact\nNo user-facing doctor behavior change unless this child explicitly updates release verification evidence. Any workflow, status, readiness, or compatibility changes must remain reflected in checked-in release evidence.\n\n## Goal Boundary\ngoal_closure_allowed=false. Leave #344 open unless repo-owned finish preflight and completion audit allow closure.\n\n## Notes\nThis ticket is generated from reports/release-goal-continuation-queue.json. It is progress evidence only.\n",
-        "body_input": "stdin",
-        "dry_run_command": "gira ticket new 'Collect reviewed credential runtime receipts' --body-file - --dry-run",
-        "apply_command": "gira ticket new 'Collect reviewed credential runtime receipts' --body-file - --apply",
-        "duplicate_check_command": "gh issue list --repo StatPan/datapan-registry --state open --search 'Collect reviewed credential runtime receipts in:title' --json number,title,state,url",
-        "runner_json_command": "python3 scripts/run-release-goal-continuation-ticket-packet.py --candidate collect_reviewed_credential_runtime_receipts --json",
-        "runner_body_command": "python3 scripts/run-release-goal-continuation-ticket-packet.py --candidate collect_reviewed_credential_runtime_receipts --body",
-        "runner_command_command": "python3 scripts/run-release-goal-continuation-ticket-packet.py --candidate collect_reviewed_credential_runtime_receipts --command",
-        "runner_dry_run_command": "python3 scripts/run-release-goal-continuation-ticket-packet.py --candidate collect_reviewed_credential_runtime_receipts --dry-run",
-        "runner_apply_command": "python3 scripts/run-release-goal-continuation-ticket-packet.py --candidate collect_reviewed_credential_runtime_receipts --apply",
-        "start_after_create": true,
-        "goal_closure_allowed": false
-      }
-    },
-    {
-      "order": 2,
       "id": "assert_explicit_manual_review_release_acceptance",
       "title": "Assert explicit manual-review release acceptance",
       "capability_planes": [

@@ -122,6 +122,12 @@ def build_report(
                 "credential_collection_preflight_operator_environment_required_sources"
             ),
             "credential_queue_status": runtime_risk.get("credential_queue_status"),
+            "credential_handoff_relief_eligible_sources": runtime_risk.get(
+                "credential_handoff_relief_eligible_sources"
+            ),
+            "credential_handoff_global_manual_review_relief_allowed": runtime_risk.get(
+                "credential_handoff_global_manual_review_relief_allowed"
+            ),
             "manual_review_reduction_allowed": manual_review_reduction_allowed,
             "goal_audit_decision": goal_summary.get("decision"),
         },
@@ -163,10 +169,16 @@ def validate_invariants(report: dict[str, Any]) -> None:
     if factors.get("monolith_fallback_required") is not True:
         raise ValueError("release decision must preserve monolith fallback")
     if summary.get("manual_review_required") is True:
-        if factors.get("credential_collection_preflight_reviewed_receipts_missing") == 0:
-            raise ValueError("manual-review-required decisions must expose missing reviewed credential receipts")
-        if factors.get("credential_collection_preflight_operator_environment_required_sources") == 0:
-            raise ValueError("manual-review-required decisions must expose credential operator environment needs")
+        missing = factors.get("credential_collection_preflight_reviewed_receipts_missing")
+        relief_eligible = factors.get("credential_handoff_relief_eligible_sources")
+        reviewed = summary.get("reviewed_credential_receipts")
+        global_relief_allowed = factors.get("credential_handoff_global_manual_review_relief_allowed")
+        if missing == 0 and global_relief_allowed is True:
+            raise ValueError("manual-review-required decisions cannot report global manual-review relief")
+        if missing == 0 and isinstance(relief_eligible, int) and isinstance(reviewed, int) and relief_eligible >= reviewed:
+            raise ValueError("manual-review-required decisions must expose non-relief-eligible reviewed receipts")
+        if missing != 0 and factors.get("credential_collection_preflight_operator_environment_required_sources") == 0:
+            raise ValueError("manual-review-required missing-receipt decisions must expose credential operator environment needs")
 
 
 def validate_schema(report: dict[str, Any], schema_path: pathlib.Path) -> None:

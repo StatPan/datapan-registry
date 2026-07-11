@@ -13,7 +13,7 @@ re-importing the upstream data.go.kr catalog every time.
 - Specs: `12060`
 - Operations: `21256`
 - Callable operations: `21114` (`99.3%`)
-- Sustainable coverage decision: `coverage_gaps` (`5` of `9` layers meet
+- Sustainable coverage decision: `coverage_gaps` (`6` of `9` layers meet
   policy targets). Routable coverage is not treated as total usability.
 - Supported-source denominator coverage: `5` of `5` sources have an explicit
   operation denominator (`100.0%`), covering `21260` operations in total.

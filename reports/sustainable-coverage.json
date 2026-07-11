@@ -21,8 +21,8 @@
   "summary": {
     "decision": "coverage_gaps",
     "layers_total": 9,
-    "layers_meeting_target": 5,
-    "layers_below_target": 4,
+    "layers_meeting_target": 6,
+    "layers_below_target": 3,
     "unknown_timestamp_records": 712,
     "stale_records": 0,
     "expired_records": 0
@@ -70,11 +70,11 @@
     },
     {
       "id": "reviewed_runtime_receipt_source",
-      "numerator": 0,
+      "numerator": 5,
       "denominator": 5,
-      "percent": 0.0,
+      "percent": 100.0,
       "target_percent": 100.0,
-      "meets_target": false,
+      "meets_target": true,
       "scope": "supported_sources",
       "meaning": "Sources with a reviewed, redacted credential runtime receipt; secret presence itself is never persisted as coverage."
     },
@@ -130,9 +130,9 @@
     "fresh_verified": 2773
   },
   "failure_recovery": {
-    "active": 9,
-    "persistent": 7,
-    "recovered": 1,
+    "active": 4,
+    "persistent": 2,
+    "recovered": 6,
     "unowned": 0,
     "overdue": 0,
     "durable_work_items": 1
@@ -143,50 +143,50 @@
       "profile_present": true,
       "catalog_denominator": true,
       "call_capability": true,
-      "reviewed_runtime_receipt": false,
+      "reviewed_runtime_receipt": true,
       "runtime_evidence": 4774,
-      "active_recovery_failures": 5,
-      "recovered_failures": 0
+      "active_recovery_failures": 4,
+      "recovered_failures": 1
     },
     {
       "source_id": "ecos",
       "profile_present": true,
       "catalog_denominator": true,
       "call_capability": true,
-      "reviewed_runtime_receipt": false,
+      "reviewed_runtime_receipt": true,
       "runtime_evidence": 0,
-      "active_recovery_failures": 1,
-      "recovered_failures": 0
+      "active_recovery_failures": 0,
+      "recovered_failures": 1
     },
     {
       "source_id": "kosis",
       "profile_present": true,
       "catalog_denominator": true,
       "call_capability": true,
-      "reviewed_runtime_receipt": false,
+      "reviewed_runtime_receipt": true,
       "runtime_evidence": 0,
-      "active_recovery_failures": 1,
-      "recovered_failures": 0
+      "active_recovery_failures": 0,
+      "recovered_failures": 1
     },
     {
       "source_id": "open_assembly",
       "profile_present": true,
       "catalog_denominator": true,
       "call_capability": true,
-      "reviewed_runtime_receipt": false,
+      "reviewed_runtime_receipt": true,
       "runtime_evidence": 0,
-      "active_recovery_failures": 1,
-      "recovered_failures": 0
+      "active_recovery_failures": 0,
+      "recovered_failures": 1
     },
     {
       "source_id": "seoul_open_data",
       "profile_present": true,
       "catalog_denominator": true,
       "call_capability": true,
-      "reviewed_runtime_receipt": false,
+      "reviewed_runtime_receipt": true,
       "runtime_evidence": 0,
-      "active_recovery_failures": 1,
-      "recovered_failures": 0
+      "active_recovery_failures": 0,
+      "recovered_failures": 1
     }
   ],
   "maintenance_boundary": {
@@ -195,7 +195,6 @@
     "missing_timestamps_are_not_fresh": true,
     "recovery_updates_coverage": true,
     "next_actions": [
-      "reviewed_runtime_receipt_source",
       "runtime_evidence_source",
       "runtime_evidence_operation",
       "fresh_verified_operation"
