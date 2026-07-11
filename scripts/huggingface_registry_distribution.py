@@ -106,6 +106,8 @@ def stage(manifest_path: pathlib.Path, output: pathlib.Path, extras: list[str]) 
         if remote in seen or remote == release_manifest_remote:
             raise DistributionError(f"duplicate distribution path: {remote}")
         source = pathlib.Path(local)
+        if not source.is_file():
+            raise DistributionError(f"artifact is missing: {source}")
         destination = output / pathlib.Path(remote)
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source, destination)
