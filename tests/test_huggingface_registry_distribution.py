@@ -63,6 +63,17 @@ class HuggingFaceRegistryDistributionTest(unittest.TestCase):
             with self.assertRaisesRegex(MODULE.DistributionError, "byte mismatch|SHA-256 mismatch"):
                 MODULE.stage(manifest, root / "stage", [])
 
+    def test_stage_rejects_missing_extra_receipt(self):
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            manifest = self.fixture(root)
+            with self.assertRaisesRegex(MODULE.DistributionError, "artifact is missing"):
+                MODULE.stage(
+                    manifest,
+                    root / "stage",
+                    ["reports/latest-release-readiness.json=missing-readiness.json"],
+                )
+
     def test_finalize_rejects_missing_immutable_revision(self):
         with tempfile.TemporaryDirectory() as raw:
             root = pathlib.Path(raw)

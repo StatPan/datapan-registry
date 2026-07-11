@@ -32,6 +32,17 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Check out current datapan-cli consumer
+        uses: actions/checkout@v4
+        with:
+          repository: StatPan/datapan-cli
+          path: datapan-cli
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: datapan-cli/go.mod
+          cache-dependency-path: datapan-cli/go.sum
+
       - name: Install validation and publication clients
         run: python -m pip install --disable-pip-version-check jsonschema huggingface_hub
 
@@ -57,13 +68,27 @@ jobs:
           python scripts/package-registry-shards.py \
             --check .datapan/hf-assets/data-go-kr-shards.tar.gz
 
+      - name: Generate exact-manifest verification and readiness receipts
+        working-directory: datapan-cli
+        run: |
+          go run ./cmd/datapan catalog release verify \
+            --manifest ../manifest.json \
+            --output ../.datapan/hf-assets/latest-release-verification.json \
+            --json
+          go run ./cmd/datapan catalog release readiness \
+            --manifest ../manifest.json \
+            --output ../.datapan/hf-assets/latest-release-readiness.json \
+            --json
+
       - name: Stage complete manifest-bound distribution
         run: |
           python scripts/huggingface_registry_distribution.py stage \
             --manifest manifest.json \
             --output .datapan/hf-stage \
             --extra release/registry-shards.json=.datapan/hf-shards/registry-shards.json \
-            --extra release/data-go-kr-shards.tar.gz=.datapan/hf-assets/data-go-kr-shards.tar.gz
+            --extra release/data-go-kr-shards.tar.gz=.datapan/hf-assets/data-go-kr-shards.tar.gz \
+            --extra reports/latest-release-verification.json=.datapan/hf-assets/latest-release-verification.json \
+            --extra reports/latest-release-readiness.json=.datapan/hf-assets/latest-release-readiness.json
           python scripts/huggingface_registry_distribution.py finalize \
             --stage .datapan/hf-stage \
             --revision 0000000000000000000000000000000000000000
