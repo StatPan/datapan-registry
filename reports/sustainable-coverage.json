@@ -130,8 +130,8 @@
     "fresh_verified": 2773
   },
   "failure_recovery": {
-    "active": 5,
-    "persistent": 5,
+    "active": 9,
+    "persistent": 7,
     "recovered": 1,
     "unowned": 0,
     "overdue": 0,
@@ -145,7 +145,7 @@
       "call_capability": true,
       "reviewed_runtime_receipt": false,
       "runtime_evidence": 4774,
-      "active_recovery_failures": 1,
+      "active_recovery_failures": 5,
       "recovered_failures": 0
     },
     {

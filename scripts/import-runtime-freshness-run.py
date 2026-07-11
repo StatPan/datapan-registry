@@ -123,9 +123,13 @@ def import_run(
         selected.write_text(json.dumps({**report, "results": selected_results}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         if selected_results:
             run(datapan_command + ["catalog", "verify", "merge", "--input", str(current_path), "--input", str(selected), "--output", str(merged), "--json"])
+            run(datapan_command + ["catalog", "verify", "summary", "--input", str(merged), "--output", str(summary), "--limit", "0", "--json"])
+            summary_value = load(summary)
+            summary_value["source"] = current_path.as_posix()
+            summary.write_text(json.dumps(summary_value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         else:
             merged.write_bytes(current_path.read_bytes())
-        run(datapan_command + ["catalog", "verify", "summary", "--input", str(merged), "--output", str(summary), "--limit", "0", "--json"])
+            summary.write_bytes(summary_path.read_bytes())
         after = counts(load(merged))
         proposal = {
             "status": "applied" if apply else "dry_run",

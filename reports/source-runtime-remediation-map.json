@@ -37,19 +37,19 @@
     {
       "path": "reports/error-action-routing-rollup.json",
       "schema": "https://schemas.datapan.dev/datapan.error-action-routing-rollup.v1.schema.json",
-      "bytes": 8234,
-      "sha256": "badc113b7d85bc7d02e9a8e035a6d2e3be4cdb33c0a78bdd01cea491b7904927"
+      "bytes": 8323,
+      "sha256": "d66a5d68ecab483354d1c48c9ce4f443eff77e84cf747ca1bb25c452ca5d8cf1"
     },
     {
       "path": "reports/registry-impact-plan.json",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "af441fa01a1f40d69849dfcacadfd652134c526d04a4dee6f43c0557f6c360fc"
+      "sha256": "0a7de571bc4cd982c0ab33d9ff1b5cd64452fade1dfe996a25aa24a216eaaaac"
     }
   ],
   "routing_evidence": {
-    "blocking_rules": 7,
-    "manual_review_rules": 24
+    "blocking_rules": 8,
+    "manual_review_rules": 25
   },
   "downstream_impact_evidence": {
     "requires_manual_review": 2,

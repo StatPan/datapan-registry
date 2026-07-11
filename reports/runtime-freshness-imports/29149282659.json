@@ -1,0 +1,96 @@
+{
+  "schema_version": "datapan.runtime-freshness-import-receipt.v1",
+  "generated_at": "2026-07-11T10:26:28.476548Z",
+  "run_id": "29149282659",
+  "source_id": "data_go_kr",
+  "inputs": {
+    "sanitized_report_sha256": "78e812a1834437df655ae46d84f031dcd60352125dca4950235862a0170abcbc",
+    "run_receipt_sha256": "29cd11b8c8605f2f2dfb08f75f840ef0b18723d5b073a31894036fb3af6be7c1",
+    "error_action_catalog": "reports/data-go-kr/error-action-catalog.json"
+  },
+  "summary": {
+    "reported_results": 8,
+    "classified_failures": 4,
+    "unclassified_failures": 4,
+    "healthy_recoveries": 0,
+    "observations_projected": 4
+  },
+  "results": [
+    {
+      "subject_id": "operation:c7f2999da1ce99fc",
+      "dataset_id": "15000445",
+      "operation": "코드마스터 정보 조회",
+      "status": "failed",
+      "reason": "HTTP 403",
+      "disposition": "unclassified_failure"
+    },
+    {
+      "subject_id": "operation:7fdc39dd70aabb31",
+      "dataset_id": "15000467",
+      "operation": "대전광역시청 행사안내 조회",
+      "status": "skipped",
+      "reason": "approval_required",
+      "disposition": "classified_failure",
+      "failure_class": "credential",
+      "rule_id": "data-go-kr-approval-required",
+      "observed_at": "2026-07-11T10:26:28.476548Z"
+    },
+    {
+      "subject_id": "operation:33f31fd775cb4f0b",
+      "dataset_id": "15000467",
+      "operation": "행사안내 상세화면 조회",
+      "status": "skipped",
+      "reason": "approval_required",
+      "disposition": "classified_failure",
+      "failure_class": "credential",
+      "rule_id": "data-go-kr-approval-required",
+      "observed_at": "2026-07-11T10:26:28.476548Z"
+    },
+    {
+      "subject_id": "operation:33ea3784f5b9df98",
+      "dataset_id": "15000480",
+      "operation": "명절 진료 가능한 기관 목록정보 조회",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "disposition": "classified_failure",
+      "failure_class": "parameter",
+      "rule_id": "data-go-kr-missing-required-params",
+      "observed_at": "2026-07-11T10:26:28.476548Z"
+    },
+    {
+      "subject_id": "operation:b65edb923248113b",
+      "dataset_id": "15000480",
+      "operation": "명절 진료 가능한 기관 상세정보 조회",
+      "status": "failed",
+      "reason": "HTTP 403",
+      "disposition": "unclassified_failure"
+    },
+    {
+      "subject_id": "operation:4edc41543c8c6457",
+      "dataset_id": "15000480",
+      "operation": "명절 진료 가능한 기관 위치정보 조회",
+      "status": "failed",
+      "reason": "HTTP 403",
+      "disposition": "unclassified_failure"
+    },
+    {
+      "subject_id": "operation:2668e5639ea429ea",
+      "dataset_id": "15000480",
+      "operation": "명절 비상진료기관 FullData 내려받기목록정보 조회",
+      "status": "failed",
+      "reason": "HTTP 403",
+      "disposition": "unclassified_failure"
+    },
+    {
+      "subject_id": "operation:23e4b9755e73e695",
+      "dataset_id": "15000504",
+      "operation": "여행금지제도 목록조회",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "disposition": "classified_failure",
+      "failure_class": "parameter",
+      "rule_id": "data-go-kr-missing-required-params",
+      "observed_at": "2026-07-11T10:26:28.476548Z"
+    }
+  ]
+}

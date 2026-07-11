@@ -46,9 +46,9 @@
   ],
   "schema_index_input": {
     "path": "schemas/index.json",
-    "schemas": 82,
-    "bytes": 33499,
-    "sha256": "1291bce69214bdb0f8542599f05c730b75202d7b43e2486f68cd9ac6f1c95988"
+    "schemas": 83,
+    "bytes": 33932,
+    "sha256": "1897861652d9bc712739a8b5d736602170c795dc0195ada0e052ff727b9368ee"
   },
   "recommended_reports": [
     "adapter-targets.json",
@@ -293,8 +293,8 @@
         {
           "name": "error-action-catalog.json",
           "path": "reports/data-go-kr/error-action-catalog.json",
-          "bytes": 5735,
-          "sha256": "63563ed147a169c202384888cf90ba3338f05f20408396b90205e4628905292f",
+          "bytes": 7314,
+          "sha256": "6ebc5df47d73192e08727c4d4669c80b76a7b493a27574bf897e863307a1bb45",
           "schema_version": "datapan.error-action-catalog.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.error-action-catalog.v1.schema.json",
           "expected_schema_path": "schemas/datapan.error-action-catalog.v1.schema.json",

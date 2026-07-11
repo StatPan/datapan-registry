@@ -1,13 +1,94 @@
 {
   "schema_version": "datapan.failure-observations.v1",
-  "generated_at": "2026-07-11T01:42:00Z",
+  "generated_at": "2026-07-11T10:26:28.476548Z",
   "observations": [
-    {"observed_at": "2026-07-04T06:39:24Z", "source_id": "data_go_kr", "failure_class": "credential", "subject_id": "reviewed-runtime-receipt", "healthy": false, "evidence": "reports/credential-runtime-runner-readiness.json"},
-    {"observed_at": "2026-07-04T06:39:24Z", "source_id": "ecos", "failure_class": "credential", "subject_id": "reviewed-runtime-receipt", "healthy": false, "evidence": "reports/credential-runtime-runner-readiness.json"},
-    {"observed_at": "2026-07-04T06:39:24Z", "source_id": "kosis", "failure_class": "credential", "subject_id": "reviewed-runtime-receipt", "healthy": false, "evidence": "reports/credential-runtime-runner-readiness.json"},
-    {"observed_at": "2026-07-04T06:39:24Z", "source_id": "open_assembly", "failure_class": "credential", "subject_id": "reviewed-runtime-receipt", "healthy": false, "evidence": "reports/credential-runtime-runner-readiness.json"},
-    {"observed_at": "2026-07-04T06:39:24Z", "source_id": "seoul_open_data", "failure_class": "credential", "subject_id": "reviewed-runtime-receipt", "healthy": false, "evidence": "reports/credential-runtime-runner-readiness.json"},
-    {"observed_at": "2026-07-04T06:39:24Z", "source_id": "multi_source", "failure_class": "consumer", "subject_id": "studio", "healthy": false, "evidence": "reports/release-consumer-compatibility.json"},
-    {"observed_at": "2026-07-11T01:42:00Z", "source_id": "multi_source", "failure_class": "consumer", "subject_id": "studio", "healthy": true, "evidence": "reports/release-shard-consumer-proof.json"}
+    {
+      "observed_at": "2026-07-04T06:39:24Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "reviewed-runtime-receipt",
+      "healthy": false,
+      "evidence": "reports/credential-runtime-runner-readiness.json"
+    },
+    {
+      "observed_at": "2026-07-04T06:39:24Z",
+      "source_id": "ecos",
+      "failure_class": "credential",
+      "subject_id": "reviewed-runtime-receipt",
+      "healthy": false,
+      "evidence": "reports/credential-runtime-runner-readiness.json"
+    },
+    {
+      "observed_at": "2026-07-04T06:39:24Z",
+      "source_id": "kosis",
+      "failure_class": "credential",
+      "subject_id": "reviewed-runtime-receipt",
+      "healthy": false,
+      "evidence": "reports/credential-runtime-runner-readiness.json"
+    },
+    {
+      "observed_at": "2026-07-04T06:39:24Z",
+      "source_id": "open_assembly",
+      "failure_class": "credential",
+      "subject_id": "reviewed-runtime-receipt",
+      "healthy": false,
+      "evidence": "reports/credential-runtime-runner-readiness.json"
+    },
+    {
+      "observed_at": "2026-07-04T06:39:24Z",
+      "source_id": "seoul_open_data",
+      "failure_class": "credential",
+      "subject_id": "reviewed-runtime-receipt",
+      "healthy": false,
+      "evidence": "reports/credential-runtime-runner-readiness.json"
+    },
+    {
+      "observed_at": "2026-07-04T06:39:24Z",
+      "source_id": "multi_source",
+      "failure_class": "consumer",
+      "subject_id": "studio",
+      "healthy": false,
+      "evidence": "reports/release-consumer-compatibility.json"
+    },
+    {
+      "observed_at": "2026-07-11T01:42:00Z",
+      "source_id": "multi_source",
+      "failure_class": "consumer",
+      "subject_id": "studio",
+      "healthy": true,
+      "evidence": "reports/release-shard-consumer-proof.json"
+    },
+    {
+      "observed_at": "2026-07-11T10:26:28.476548Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:7fdc39dd70aabb31",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/29149282659.json"
+    },
+    {
+      "observed_at": "2026-07-11T10:26:28.476548Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:33f31fd775cb4f0b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/29149282659.json"
+    },
+    {
+      "observed_at": "2026-07-11T10:26:28.476548Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:33ea3784f5b9df98",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/29149282659.json"
+    },
+    {
+      "observed_at": "2026-07-11T10:26:28.476548Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:23e4b9755e73e695",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/29149282659.json"
+    }
   ]
 }
