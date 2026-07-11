@@ -13,19 +13,18 @@ re-importing the upstream data.go.kr catalog every time.
 - Specs: `12060`
 - Operations: `21256`
 - Callable operations: `21114` (`99.3%`)
-- Sustainable coverage decision: `coverage_gaps` (`3` of `9` layers meet
+- Sustainable coverage decision: `coverage_gaps` (`5` of `9` layers meet
   policy targets). Routable coverage is not treated as total usability.
-- Supported-source denominator coverage: `1` of `5` sources has an explicit
-  operation denominator (`20.0%`); the remaining source profiles are
-  contract-only until source catalog imports exist.
-- Runtime operation evidence: `4637` unique operation identities out of
-  `21256` (`21.8%`); fresh successful evidence covers `2775` unique operations
-  (`13.1%`) as of `2026-07-04T06:39:24Z`.
-- Runtime freshness: `4059` evidence records are within the `30` day fresh
-  window, `0` are stale, `0` are expired, and `715` missing timestamps are
+- Supported-source denominator coverage: `5` of `5` sources have an explicit
+  operation denominator (`100.0%`), covering `21260` operations in total.
+- Runtime operation evidence: `4638` unique operation identities out of
+  `21260` (`21.8%`); fresh successful evidence covers `2773` unique operations
+  (`13.0%`) as of `2026-07-11T10:28:35Z`.
+- Runtime freshness: `4070` evidence records are within the `30` day fresh
+  window, `0` are stale, `0` are expired, and `712` missing timestamps are
   explicitly excluded from fresh coverage.
-- Required consumer proof: `2` of `3` required consumers (`datapan-cli`,
-  `release-operator`, `studio`) are proven (`66.7%`).
+- Required consumer proof: `3` of `3` required consumers (`datapan-cli`,
+  `release-operator`, `studio`) are proven (`100.0%`).
 - Latest release: `v2026.06.25.24`
 - Registered external adapters: `airport`, `andong`, `anyang`, `atfis`, `calspia`, `car`, `car365`, `childcare-info`, `chungbuk-tour`, `chungnam`, `codil`, `consumer`, `culture`, `daegu`, `daejeon`, `data-gg`,
   `dgfca`, `dongjak`, `ecos`, `ecvam`, `ekape`, `emuseum`, `epost`, `eshare`, `ex`, `fairdata`, `folk`, `foodsafetykorea`, `forest`,
@@ -40,8 +39,8 @@ re-importing the upstream data.go.kr catalog every time.
 - Missing external adapter hosts: `11`
 - Provider split readiness: `ready`
   (`138` adapters, `138` verification-capable, `23` call-capable)
-- Runtime verification evidence: `4774` bounded checks merged into
-  `reports/latest-verification.json` (`2841` verified, `389` failed, `1544`
+- Runtime verification evidence: `4782` bounded checks merged into
+  `reports/latest-verification.json` (`2841` verified, `393` failed, `1548`
   skipped)
 - Runtime evidence growth target: `22.5%` checked evidence is above the
   unrounded `10%` release target; `0` additional records are required for this
