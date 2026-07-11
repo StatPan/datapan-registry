@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 76,
+  "count": 77,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -424,8 +424,8 @@
       "title": "Datapan Credential Runtime Evidence Policy v1",
       "contract": "credential-runtime-evidence-policy",
       "version": "v1",
-      "bytes": 14218,
-      "sha256": "5f0794e489f2d1c1b7af8fcd4716e5a65d2d7945c8d64c49f18f8791e0a87873"
+      "bytes": 14358,
+      "sha256": "85f7f6b57401eb92dad659900de115344f3748677e7865fbc805d288439e4bad"
     },
     {
       "path": "schemas/datapan.credential-runtime-receipt.v1.schema.json",
@@ -442,8 +442,8 @@
       "title": "Datapan Credential Runtime Receipt Collection Queue v1",
       "contract": "credential-runtime-receipt-collection-queue",
       "version": "v1",
-      "bytes": 10162,
-      "sha256": "cf7ac0fc32b8a6ea124620355a005cb740d759bdf4a735a6a1be68a6706be7b2"
+      "bytes": 10302,
+      "sha256": "a1b8617302c11e9aa79b905fac04e25ab6c805a1441ce3b17a813064c97b9a06"
     },
     {
       "path": "schemas/datapan.credential-runtime-review-handoff.v1.schema.json",
@@ -687,6 +687,15 @@
       "version": "v1",
       "bytes": 1468,
       "sha256": "f0ecfcdaeee6d4fae1f4d7d4b919c2a8dda0902f7a6bb2ed62ae5b61a11af215"
+    },
+    {
+      "path": "schemas/datapan.source-candidate-verification.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.source-candidate-verification.v1.schema.json",
+      "title": "Datapan Source Candidate Verification v1",
+      "contract": "source-candidate-verification",
+      "version": "v1",
+      "bytes": 2731,
+      "sha256": "ff2959fc7945c0809dc2018d293eb6be15a428dc824ca8894bb5e4bd63e25064"
     }
   ]
 }

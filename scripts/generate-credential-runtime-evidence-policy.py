@@ -147,6 +147,7 @@ def source_entry(source_rollup: dict[str, Any], remediation: dict[str, Any]) -> 
     envs = receipts.CREDENTIAL_ENVS[source_id]
     env_exports = " ".join(f"{name}=<secret>" for name in envs)
     receipt_artifact = f".datapan/runtime-evidence/{source_dir(source_id)}-credentialed-receipt.json"
+    verification_artifact = f".datapan/runtime-evidence/{source_dir(source_id)}-source-verification.json"
     return {
         "source_id": source_id,
         "provider": str(plan.get("provider")),
@@ -161,10 +162,11 @@ def source_entry(source_rollup: dict[str, Any], remediation: dict[str, Any]) -> 
             "status": "defined_not_collected",
             "input_batch": candidate_batch,
             "operator_command": (
-                f"{env_exports} datapan source runtime verify "
-                f"--source {source_id} --candidates {candidate_batch} --bounded --json "
-                f"--output {receipt_artifact}"
+                f"{env_exports} datapan verify --source-profile {profile_path.as_posix()} "
+                f"--candidates {candidate_batch} --credential-env {envs[0]} --limit 1 --json "
+                f"--output {verification_artifact}"
             ),
+            "generic_verification_artifact": verification_artifact,
             "receipt_artifact": receipt_artifact,
             "reviewed_receipt_artifact": f"reports/credential-runtime-receipts/{source_dir(source_id)}-credentialed-receipt.json",
             "receipt_schema": RECEIPT_SCHEMA,

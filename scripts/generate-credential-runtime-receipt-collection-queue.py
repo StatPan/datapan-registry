@@ -148,6 +148,10 @@ def source_queue_entry(
             bounded_path.get("operator_command"),
             f"{source_id}.bounded_live_evidence_path.operator_command",
         ),
+        "generic_verification_artifact": string_value(
+            bounded_path.get("generic_verification_artifact"),
+            f"{source_id}.bounded_live_evidence_path.generic_verification_artifact",
+        ),
         "staged_receipt_validation_command": (
             "python3 scripts/validate-credential-runtime-receipts.py --allow-unreviewed "
             f"{staged_receipt_path}"

@@ -7,7 +7,7 @@
     "manifest": {
       "path": "manifest.json",
       "generated_at": "2026-07-04T06:39:24Z",
-      "artifact_count": 127,
+      "artifact_count": 128,
       "evidence_contracts": 18
     },
     "readiness": {
@@ -104,7 +104,7 @@
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
       "bytes": 14728,
-      "sha256": "94cacde84571a86ad4e95d3d9b17a512e3d063bcfce218a2e9b2c37770d288db",
+      "sha256": "be1c15d91956574a4d00182c579fc6f9c04af549ebaff5adec460d8c6845ff68",
       "required": true
     },
     {
@@ -112,8 +112,8 @@
       "path": "reports/credential-runtime-evidence-policy.json",
       "kind": "credential_runtime_evidence_policy",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-evidence-policy.v1.schema.json",
-      "bytes": 14367,
-      "sha256": "450915ec3f052e83bc25e7aa28696f350dbf6d50fa973ec2cd9f2d281baf78ba",
+      "bytes": 15140,
+      "sha256": "16a5e1e12ae4fb70476353eeadcc6d1612edf94dc15cb4e5580b9ea7d31ce2cc",
       "required": true
     },
     {
@@ -121,8 +121,8 @@
       "path": "reports/credential-runtime-collection-preflight.json",
       "kind": "credential_runtime_collection_preflight",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-collection-preflight.v1.schema.json",
-      "bytes": 10567,
-      "sha256": "d889417d29995b9144549acaf1ee5ce09156579ad524050f1b590459ddd59682",
+      "bytes": 10813,
+      "sha256": "3aebc7cc44a430a1395a3c769ffde04efcecd0a961f4c1eb81f25d322dfe5efd",
       "required": true
     },
     {
@@ -130,8 +130,8 @@
       "path": "reports/credential-runtime-runner-readiness.json",
       "kind": "credential_runtime_runner_readiness",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-runner-readiness.v1.schema.json",
-      "bytes": 9368,
-      "sha256": "bab89b66d163eb525b75566adaa3d4b310d37d71e4f771cf94ce3fa0863a925b",
+      "bytes": 9614,
+      "sha256": "fcbba8a1bc921b52bf8dbb4432eceac561f1c13d7a2354e135b6ab241f965a4e",
       "required": true
     },
     {
@@ -148,8 +148,8 @@
       "path": "reports/credential-runtime-receipt-collection-queue.json",
       "kind": "credential_runtime_receipt_collection_queue",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-receipt-collection-queue.v1.schema.json",
-      "bytes": 14574,
-      "sha256": "ce509d82f64419c4c7313a034e0edef4b78d5a4fe2e3580129562881904f4591",
+      "bytes": 15337,
+      "sha256": "3f16a821cee946c63aa5396570d22bc2e31437bbcbad89a2fc189aa74a4648a2",
       "required": true
     },
     {
@@ -194,7 +194,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "977aac66119d58f482f75508bc7c1f95ceade085c919826a7270e76dfc59993a",
+      "sha256": "92a6ae4f0d038763ea0d9cf97fcd33d5076a95b184bd8cb507c8162167d953ce",
       "required": true
     },
     {
@@ -212,7 +212,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 59095,
-      "sha256": "1ebb1629cc0f88f06e09aa8217f48f4fc471143e2224170b4772c94976df168c",
+      "sha256": "3b79f48d09b0268c2126264eb269a2770b210a42e5c1bc8e4f7f4870fac82d1b",
       "required": true
     },
     {
@@ -221,7 +221,7 @@
       "kind": "release_distribution_footprint",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
       "bytes": 2119,
-      "sha256": "94b583fe8f58278b8b52ab32cba8bf71743f1fef38c4f746f924628c4249208f",
+      "sha256": "38004882d4e18f8a0064f20e338c2c91984e83993be69f9f6ced85587ff0f675",
       "required": true
     },
     {
@@ -489,7 +489,7 @@
     ],
     "release_distribution_footprint": "reports/release-distribution-footprint.json",
     "canonical_registry_bytes": 137735169,
-    "manifest_bound_bytes_excluding_self": 165985059,
+    "manifest_bound_bytes_excluding_self": 165990522,
     "large_monolith_threshold_bytes": 100000000,
     "registry_footprint_status": "large_monolith_shard_additive",
     "canonical_registry_required": true,
