@@ -1,18 +1,18 @@
 {
   "schema_version": "datapan.failure-recovery-rollup.v1",
-  "generated_at": "2026-07-04T06:39:24Z",
+  "generated_at": "2026-07-11T01:42:00Z",
   "policy": "policy/failure-recovery.json",
   "observations": "reports/failure-observations.json",
   "summary": {
     "identities": 6,
-    "active": 6,
+    "active": 5,
     "transient": 0,
-    "persistent": 6,
-    "recovered": 0,
-    "owned": 6,
+    "persistent": 5,
+    "recovered": 1,
+    "owned": 5,
     "unowned": 0,
     "overdue": 0,
-    "durable_work_items": 2
+    "durable_work_items": 1
   },
   "failures": [
     {
@@ -20,13 +20,13 @@
       "source_id": "multi_source",
       "failure_class": "consumer",
       "subject_id": "studio",
-      "status": "persistent",
+      "status": "recovered",
       "severity": "blocking",
       "owner": "downstream-release",
-      "recurrence_count": 1,
+      "recurrence_count": 0,
       "recurrence_threshold": 1,
       "first_observed_at": "2026-07-04T06:39:24Z",
-      "last_observed_at": "2026-07-04T06:39:24Z",
+      "last_observed_at": "2026-07-11T01:42:00Z",
       "due_at": "2026-08-03T06:39:24Z",
       "overdue": false,
       "retry": {
@@ -35,7 +35,8 @@
       },
       "recovery_action": "restore_consumer_compatibility",
       "evidence": [
-        "reports/release-consumer-compatibility.json"
+        "reports/release-consumer-compatibility.json",
+        "reports/release-shard-consumer-proof.json"
       ]
     },
     {
@@ -171,20 +172,14 @@
         "reports/credential-runtime-runner-readiness.json"
       ],
       "next_action": "collect_reviewed_runtime_receipt"
-    },
-    {
-      "work_key": "failure-work:ticket:488",
-      "status": "existing",
-      "ticket": 488,
-      "owner": "downstream-release",
-      "failure_ids": [
-        "failure:consumer:multi_source:bb185ca8c0e4a127"
-      ],
-      "evidence": [
-        "reports/release-consumer-compatibility.json"
-      ],
-      "next_action": "restore_consumer_compatibility"
     }
   ],
-  "recovery_receipts": []
+  "recovery_receipts": [
+    {
+      "failure_id": "failure:consumer:multi_source:bb185ca8c0e4a127",
+      "recovered_at": "2026-07-11T01:42:00Z",
+      "evidence": "reports/release-shard-consumer-proof.json",
+      "coverage_update_required": true
+    }
+  ]
 }

@@ -322,9 +322,11 @@ Affected `datapan-cli` surfaces:
 - `catalog verify --provider`
 - catalog diff/audit/report commands that only need scoped registry slices
 
-Shard-first release assets are blocked until these surfaces have tests proving
-monolith fallback and no regression in existing install behavior. The
-downstream implementation work is tracked in `StatPan/datapan-cli#128`.
+Shard-preferred release consumption is proven with monolith fallback and no
+regression in existing install behavior by completed downstream work
+`StatPan/datapan-cli#128` and merged PR `StatPan/datapan-cli#129`. Shards remain
+optional and the canonical registry remains required during the compatibility
+period.
 
 ### Stage 6: Release Asset Policy
 

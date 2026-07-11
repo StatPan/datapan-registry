@@ -19,8 +19,8 @@
   "summary": {
     "decision": "coverage_gaps",
     "layers_total": 9,
-    "layers_meeting_target": 3,
-    "layers_below_target": 6,
+    "layers_meeting_target": 4,
+    "layers_below_target": 5,
     "unknown_timestamp_records": 715,
     "stale_records": 0,
     "expired_records": 0
@@ -108,11 +108,11 @@
     },
     {
       "id": "required_consumer_proven",
-      "numerator": 2,
+      "numerator": 3,
       "denominator": 3,
-      "percent": 66.7,
+      "percent": 100.0,
       "target_percent": 100.0,
-      "meets_target": false,
+      "meets_target": true,
       "scope": "required_consumers",
       "meaning": "Required consumers with proven compatibility evidence."
     }
@@ -128,12 +128,12 @@
     "fresh_verified": 2841
   },
   "failure_recovery": {
-    "active": 6,
-    "persistent": 6,
-    "recovered": 0,
+    "active": 5,
+    "persistent": 5,
+    "recovered": 1,
     "unowned": 0,
     "overdue": 0,
-    "durable_work_items": 2
+    "durable_work_items": 1
   },
   "source_status": [
     {
@@ -197,8 +197,7 @@
       "reviewed_runtime_receipt_source",
       "runtime_evidence_source",
       "runtime_evidence_operation",
-      "fresh_verified_operation",
-      "required_consumer_proven"
+      "fresh_verified_operation"
     ]
   }
 }

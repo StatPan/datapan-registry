@@ -22,8 +22,8 @@
   },
   "summary": {
     "consumer_count": 7,
-    "proven_consumers": 2,
-    "blocked_consumers": 1,
+    "proven_consumers": 3,
+    "blocked_consumers": 0,
     "canonical_registry_required": true,
     "shard_assets_required": false
   },
@@ -221,7 +221,7 @@
       "kind": "release_distribution_footprint",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
       "bytes": 2119,
-      "sha256": "cbbf69c6742a443b80130143c92b4cbfb91172ca8a152c91993536bc2312c5f4",
+      "sha256": "23a5d9d6a7044fd2718bc102f46cf67e5059a7e64339b87fd388f6ee92cdae5a",
       "required": true
     },
     {
@@ -489,7 +489,7 @@
     ],
     "release_distribution_footprint": "reports/release-distribution-footprint.json",
     "canonical_registry_bytes": 137735169,
-    "manifest_bound_bytes_excluding_self": 165983051,
+    "manifest_bound_bytes_excluding_self": 165983186,
     "large_monolith_threshold_bytes": 100000000,
     "registry_footprint_status": "large_monolith_shard_additive",
     "canonical_registry_required": true,
@@ -596,12 +596,13 @@
         "future shard-preferred browsing"
       ],
       "compatibility_mode": "shard_preferred_with_monolith_fallback",
-      "status": "blocked",
+      "status": "proven",
       "evidence": [
-        "docs/registry-shard-artifact-strategy.md",
-        "StatPan/datapan-cli#128"
+        "reports/release-shard-consumer-proof.json",
+        "StatPan/datapan-cli#128",
+        "StatPan/datapan-cli#129"
       ],
-      "notes": "Studio-facing shard preference remains blocked until the canonical registry fallback contract is implemented and proven downstream."
+      "notes": "Studio-facing snapshot loading may prefer validated shards and retains the proven canonical registry fallback implemented by the shared CLI consumer."
     }
   ]
 }
