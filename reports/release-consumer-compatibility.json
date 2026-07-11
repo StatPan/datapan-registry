@@ -7,7 +7,7 @@
     "manifest": {
       "path": "manifest.json",
       "generated_at": "2026-07-04T06:39:24Z",
-      "artifact_count": 130,
+      "artifact_count": 131,
       "evidence_contracts": 18
     },
     "readiness": {
@@ -221,7 +221,7 @@
       "kind": "release_distribution_footprint",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
       "bytes": 2119,
-      "sha256": "7ca764112a6ce5a86267711a591d7d1a42d79682f48a67660502bb6a7a17ac6d",
+      "sha256": "52d439fb6a6d3f571d52f636a93e4b7b3ee954df813e76de455e653fdffbf777",
       "required": true
     },
     {
@@ -489,7 +489,7 @@
     ],
     "release_distribution_footprint": "reports/release-distribution-footprint.json",
     "canonical_registry_bytes": 137735169,
-    "manifest_bound_bytes_excluding_self": 165998721,
+    "manifest_bound_bytes_excluding_self": 166000032,
     "large_monolith_threshold_bytes": 100000000,
     "registry_footprint_status": "large_monolith_shard_additive",
     "canonical_registry_required": true,
