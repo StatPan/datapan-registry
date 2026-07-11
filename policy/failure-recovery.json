@@ -1,0 +1,15 @@
+{
+  "schema_version": "datapan.failure-recovery-policy.v1",
+  "policy_id": "datapan-registry-failure-recovery",
+  "classes": [
+    {"failure_class": "credential", "owner": "operator", "severity": "blocking", "retry": {"max_attempts": 1, "backoff": "none"}, "recurrence_threshold": 1, "due_days": 30, "recovery_action": "collect_reviewed_runtime_receipt", "existing_ticket": 457},
+    {"failure_class": "parameter", "owner": "source-evidence", "severity": "high", "retry": {"max_attempts": 1, "backoff": "none"}, "recurrence_threshold": 2, "due_days": 14, "recovery_action": "update_required_parameter_evidence"},
+    {"failure_class": "adapter", "owner": "provider-adapter", "severity": "high", "retry": {"max_attempts": 1, "backoff": "none"}, "recurrence_threshold": 2, "due_days": 14, "recovery_action": "repair_provider_adapter"},
+    {"failure_class": "parser", "owner": "provider-adapter", "severity": "high", "retry": {"max_attempts": 1, "backoff": "none"}, "recurrence_threshold": 2, "due_days": 14, "recovery_action": "repair_response_parser"},
+    {"failure_class": "rate_limit", "owner": "release-operator", "severity": "medium", "retry": {"max_attempts": 3, "backoff": "exponential"}, "recurrence_threshold": 3, "due_days": 7, "recovery_action": "adjust_bounded_collection_cadence"},
+    {"failure_class": "upstream", "owner": "release-operator", "severity": "medium", "retry": {"max_attempts": 3, "backoff": "exponential"}, "recurrence_threshold": 3, "due_days": 7, "recovery_action": "reobserve_upstream_health"},
+    {"failure_class": "reference_drift", "owner": "source-evidence", "severity": "high", "retry": {"max_attempts": 2, "backoff": "fixed"}, "recurrence_threshold": 2, "due_days": 14, "recovery_action": "refresh_source_reference"},
+    {"failure_class": "catalog_drift", "owner": "release-operator", "severity": "high", "retry": {"max_attempts": 1, "backoff": "none"}, "recurrence_threshold": 1, "due_days": 14, "recovery_action": "review_release_candidate_diff"},
+    {"failure_class": "consumer", "owner": "downstream-release", "severity": "blocking", "retry": {"max_attempts": 1, "backoff": "none"}, "recurrence_threshold": 1, "due_days": 30, "recovery_action": "restore_consumer_compatibility", "existing_ticket": 488}
+  ]
+}

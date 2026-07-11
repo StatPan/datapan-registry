@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.failure-observations.v1.schema.json",
+  "title": "Datapan Failure Observations v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "observations"],
+  "properties": {
+    "schema_version": {"const": "datapan.failure-observations.v1"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "observations": {"type": "array", "items": {"$ref": "#/$defs/observation"}}
+  },
+  "$defs": {
+    "observation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["observed_at", "source_id", "failure_class", "subject_id", "healthy", "evidence"],
+      "properties": {
+        "observed_at": {"type": "string", "format": "date-time"},
+        "source_id": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
+        "failure_class": {"enum": ["credential", "parameter", "adapter", "parser", "rate_limit", "upstream", "reference_drift", "catalog_drift", "consumer"]},
+        "subject_id": {"type": "string", "minLength": 1},
+        "healthy": {"type": "boolean"},
+        "evidence": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

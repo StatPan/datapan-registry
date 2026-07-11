@@ -61,6 +61,18 @@ re-importing the upstream data.go.kr catalog every time.
 - Release manifest: `manifest.json`
 - Sustainable coverage policy: `policy/sustainable-coverage.json`
 - Sustainable coverage report: `reports/sustainable-coverage.json`
+- Failure recovery policy: `policy/failure-recovery.json`
+- Failure observations and rollup: `reports/failure-observations.json` and
+  `reports/failure-recovery-rollup.json`
+
+Recurring failures use stable identities across credential, parameter,
+adapter, parser, rate-limit, upstream, reference-drift, catalog-drift, and
+consumer classes. Transient observations remain retry evidence; repeated
+observations become one owner-bound durable work item, so scheduled runs do not
+create duplicate tickets. A healthy observation removes active work and emits a
+recovery receipt. The generator also compares credential and Studio observations
+with their current release evidence, preventing a ticket-only recovery from
+leaving sustainable coverage stale.
 - Registry data: `data/data-go-kr.registry.json`
 - Provider index: `data/provider-index.json`
 - Schema index: `schemas/index.json`

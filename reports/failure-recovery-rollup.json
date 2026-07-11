@@ -1,0 +1,190 @@
+{
+  "schema_version": "datapan.failure-recovery-rollup.v1",
+  "generated_at": "2026-07-04T06:39:24Z",
+  "policy": "policy/failure-recovery.json",
+  "observations": "reports/failure-observations.json",
+  "summary": {
+    "identities": 6,
+    "active": 6,
+    "transient": 0,
+    "persistent": 6,
+    "recovered": 0,
+    "owned": 6,
+    "unowned": 0,
+    "overdue": 0,
+    "durable_work_items": 2
+  },
+  "failures": [
+    {
+      "failure_id": "failure:consumer:multi_source:bb185ca8c0e4a127",
+      "source_id": "multi_source",
+      "failure_class": "consumer",
+      "subject_id": "studio",
+      "status": "persistent",
+      "severity": "blocking",
+      "owner": "downstream-release",
+      "recurrence_count": 1,
+      "recurrence_threshold": 1,
+      "first_observed_at": "2026-07-04T06:39:24Z",
+      "last_observed_at": "2026-07-04T06:39:24Z",
+      "due_at": "2026-08-03T06:39:24Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 1,
+        "backoff": "none"
+      },
+      "recovery_action": "restore_consumer_compatibility",
+      "evidence": [
+        "reports/release-consumer-compatibility.json"
+      ]
+    },
+    {
+      "failure_id": "failure:credential:data_go_kr:2784c226cd835b9e",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "reviewed-runtime-receipt",
+      "status": "persistent",
+      "severity": "blocking",
+      "owner": "operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 1,
+      "first_observed_at": "2026-07-04T06:39:24Z",
+      "last_observed_at": "2026-07-04T06:39:24Z",
+      "due_at": "2026-08-03T06:39:24Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 1,
+        "backoff": "none"
+      },
+      "recovery_action": "collect_reviewed_runtime_receipt",
+      "evidence": [
+        "reports/credential-runtime-runner-readiness.json"
+      ]
+    },
+    {
+      "failure_id": "failure:credential:ecos:20892c16968fc71c",
+      "source_id": "ecos",
+      "failure_class": "credential",
+      "subject_id": "reviewed-runtime-receipt",
+      "status": "persistent",
+      "severity": "blocking",
+      "owner": "operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 1,
+      "first_observed_at": "2026-07-04T06:39:24Z",
+      "last_observed_at": "2026-07-04T06:39:24Z",
+      "due_at": "2026-08-03T06:39:24Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 1,
+        "backoff": "none"
+      },
+      "recovery_action": "collect_reviewed_runtime_receipt",
+      "evidence": [
+        "reports/credential-runtime-runner-readiness.json"
+      ]
+    },
+    {
+      "failure_id": "failure:credential:kosis:0b50aa5ee00e074a",
+      "source_id": "kosis",
+      "failure_class": "credential",
+      "subject_id": "reviewed-runtime-receipt",
+      "status": "persistent",
+      "severity": "blocking",
+      "owner": "operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 1,
+      "first_observed_at": "2026-07-04T06:39:24Z",
+      "last_observed_at": "2026-07-04T06:39:24Z",
+      "due_at": "2026-08-03T06:39:24Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 1,
+        "backoff": "none"
+      },
+      "recovery_action": "collect_reviewed_runtime_receipt",
+      "evidence": [
+        "reports/credential-runtime-runner-readiness.json"
+      ]
+    },
+    {
+      "failure_id": "failure:credential:open_assembly:511c0aaa3cea4a4f",
+      "source_id": "open_assembly",
+      "failure_class": "credential",
+      "subject_id": "reviewed-runtime-receipt",
+      "status": "persistent",
+      "severity": "blocking",
+      "owner": "operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 1,
+      "first_observed_at": "2026-07-04T06:39:24Z",
+      "last_observed_at": "2026-07-04T06:39:24Z",
+      "due_at": "2026-08-03T06:39:24Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 1,
+        "backoff": "none"
+      },
+      "recovery_action": "collect_reviewed_runtime_receipt",
+      "evidence": [
+        "reports/credential-runtime-runner-readiness.json"
+      ]
+    },
+    {
+      "failure_id": "failure:credential:seoul_open_data:be990ba6ac378013",
+      "source_id": "seoul_open_data",
+      "failure_class": "credential",
+      "subject_id": "reviewed-runtime-receipt",
+      "status": "persistent",
+      "severity": "blocking",
+      "owner": "operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 1,
+      "first_observed_at": "2026-07-04T06:39:24Z",
+      "last_observed_at": "2026-07-04T06:39:24Z",
+      "due_at": "2026-08-03T06:39:24Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 1,
+        "backoff": "none"
+      },
+      "recovery_action": "collect_reviewed_runtime_receipt",
+      "evidence": [
+        "reports/credential-runtime-runner-readiness.json"
+      ]
+    }
+  ],
+  "work_items": [
+    {
+      "work_key": "failure-work:ticket:457",
+      "status": "existing",
+      "ticket": 457,
+      "owner": "operator",
+      "failure_ids": [
+        "failure:credential:data_go_kr:2784c226cd835b9e",
+        "failure:credential:ecos:20892c16968fc71c",
+        "failure:credential:kosis:0b50aa5ee00e074a",
+        "failure:credential:open_assembly:511c0aaa3cea4a4f",
+        "failure:credential:seoul_open_data:be990ba6ac378013"
+      ],
+      "evidence": [
+        "reports/credential-runtime-runner-readiness.json"
+      ],
+      "next_action": "collect_reviewed_runtime_receipt"
+    },
+    {
+      "work_key": "failure-work:ticket:488",
+      "status": "existing",
+      "ticket": 488,
+      "owner": "downstream-release",
+      "failure_ids": [
+        "failure:consumer:multi_source:bb185ca8c0e4a127"
+      ],
+      "evidence": [
+        "reports/release-consumer-compatibility.json"
+      ],
+      "next_action": "restore_consumer_compatibility"
+    }
+  ],
+  "recovery_receipts": []
+}

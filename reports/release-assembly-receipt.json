@@ -25,7 +25,7 @@
     "manifest": {
       "path": "manifest.json",
       "generated_at": "2026-07-04T06:39:24Z",
-      "artifact_count": 120,
+      "artifact_count": 126,
       "source_registry": "data/data-go-kr.registry.json"
     },
     "readiness": {
@@ -107,8 +107,8 @@
       "evidence_artifacts": [
         {
           "path": "schemas/index.json",
-          "bytes": 29436,
-          "sha256": "08ed52b04a75919b5b977355180a681ee065c1c9bcef243670713b91a2abaf3f",
+          "bytes": 30624,
+          "sha256": "17e6dc4e84b92133c3f5d95eb328c815d9db57c73a50ff186126400ed2b60470",
           "manifest_bound": true,
           "kind": "schema_index",
           "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json"
@@ -145,8 +145,8 @@
       "evidence_artifacts": [
         {
           "path": "docs/release-ledger-ownership.json",
-          "bytes": 18252,
-          "sha256": "efb6bcb2601c605d3032faba5b0b4e639d0609d7197ed1b7a9244e5c99e07fb7",
+          "bytes": 18660,
+          "sha256": "06b8f9e61dd0d2babce7c7ea5169818173bc0b7e556d13ac1df14daaa3e55e05",
           "manifest_bound": false
         }
       ]
@@ -193,7 +193,7 @@
         {
           "path": "reports/source-report-inventory.json",
           "bytes": 59095,
-          "sha256": "34459b325a134f49bb9c4a9b83deb53835690386649444e1299b490d7654b8b6",
+          "sha256": "81bc4e69f5ce2bc257a61e0cf00a346d793f7d01800744857f0508bb70e3874a",
           "manifest_bound": true,
           "kind": "source_report_inventory",
           "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json"
@@ -249,7 +249,7 @@
         {
           "path": "reports/registry-impact-plan.json",
           "bytes": 11519,
-          "sha256": "99f6492100f47035fe1b70d60d899ee7925b79ac2c3ad985be7d4965c70cf1bf",
+          "sha256": "d4bf659ff0ead728371f1566ba9416b49594c8b2efa2d015177590efbcf0a669",
           "manifest_bound": true,
           "kind": "registry_impact_plan",
           "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json"
@@ -282,7 +282,7 @@
         {
           "path": "reports/source-runtime-remediation-map.json",
           "bytes": 14728,
-          "sha256": "6a0d6698db8aead6e977ebfbf7f64835306e473a61ede22aa69ed8f26d514f88",
+          "sha256": "38467aa08b70c084bd45de1e5a5c143c1e2e8043154674d21ce118d893ad1320",
           "manifest_bound": true,
           "kind": "source_runtime_remediation_map",
           "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json"
@@ -482,7 +482,7 @@
         {
           "path": "reports/credential-runtime-manual-review-acceptance-packet.json",
           "bytes": 3998,
-          "sha256": "cd3eb22f6e606b7ab28bf081050a913398e6a46113c212ae50ecfa841c0deb1b",
+          "sha256": "cf3ec863ffebbe44497e287ae2122beb473d9c9d9da12b30895720c9ff831420",
           "manifest_bound": true,
           "kind": "credential_runtime_manual_review_acceptance_packet",
           "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-acceptance-packet.v1.schema.json"
@@ -525,7 +525,7 @@
         {
           "path": "reports/release-distribution-footprint.json",
           "bytes": 2119,
-          "sha256": "dac3375fc3cdbb94a08feeac23b0e377807da724a3129395679dd88c786200c6",
+          "sha256": "cbbf69c6742a443b80130143c92b4cbfb91172ca8a152c91993536bc2312c5f4",
           "manifest_bound": true,
           "kind": "release_distribution_footprint",
           "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json"
@@ -533,7 +533,7 @@
         {
           "path": "reports/release-consumer-compatibility.json",
           "bytes": 26966,
-          "sha256": "46f96df7985425ff3cd46886a7602093db1c3493d2ea46e42aad56a3a6e2f81f",
+          "sha256": "042eb845c852d33fc401c15b39eef5b2d44642932b335e5836da1a9e5badba07",
           "manifest_bound": true,
           "kind": "consumer_compatibility",
           "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json"

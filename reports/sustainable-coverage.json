@@ -13,7 +13,8 @@
     "source_runtime_evidence_rollup": "reports/source-runtime-evidence-rollup.json",
     "latest_verification": "reports/latest-verification.json",
     "credential_runtime_runner_readiness": "reports/credential-runtime-runner-readiness.json",
-    "release_consumer_compatibility": "reports/release-consumer-compatibility.json"
+    "release_consumer_compatibility": "reports/release-consumer-compatibility.json",
+    "failure_recovery_rollup": "reports/failure-recovery-rollup.json"
   },
   "summary": {
     "decision": "coverage_gaps",
@@ -126,6 +127,14 @@
     "unknown_timestamp": 715,
     "fresh_verified": 2841
   },
+  "failure_recovery": {
+    "active": 6,
+    "persistent": 6,
+    "recovered": 0,
+    "unowned": 0,
+    "overdue": 0,
+    "durable_work_items": 2
+  },
   "source_status": [
     {
       "source_id": "data_go_kr",
@@ -133,7 +142,9 @@
       "catalog_denominator": true,
       "call_capability": true,
       "reviewed_runtime_receipt": false,
-      "runtime_evidence": 4774
+      "runtime_evidence": 4774,
+      "active_recovery_failures": 1,
+      "recovered_failures": 0
     },
     {
       "source_id": "ecos",
@@ -141,7 +152,9 @@
       "catalog_denominator": false,
       "call_capability": true,
       "reviewed_runtime_receipt": false,
-      "runtime_evidence": 0
+      "runtime_evidence": 0,
+      "active_recovery_failures": 1,
+      "recovered_failures": 0
     },
     {
       "source_id": "kosis",
@@ -149,7 +162,9 @@
       "catalog_denominator": false,
       "call_capability": true,
       "reviewed_runtime_receipt": false,
-      "runtime_evidence": 0
+      "runtime_evidence": 0,
+      "active_recovery_failures": 1,
+      "recovered_failures": 0
     },
     {
       "source_id": "open_assembly",
@@ -157,7 +172,9 @@
       "catalog_denominator": false,
       "call_capability": true,
       "reviewed_runtime_receipt": false,
-      "runtime_evidence": 0
+      "runtime_evidence": 0,
+      "active_recovery_failures": 1,
+      "recovered_failures": 0
     },
     {
       "source_id": "seoul_open_data",
@@ -165,13 +182,16 @@
       "catalog_denominator": false,
       "call_capability": true,
       "reviewed_runtime_receipt": false,
-      "runtime_evidence": 0
+      "runtime_evidence": 0,
+      "active_recovery_failures": 1,
+      "recovered_failures": 0
     }
   ],
   "maintenance_boundary": {
     "routable_is_not_runtime_verified": true,
     "missing_denominators_are_uncovered": true,
     "missing_timestamps_are_not_fresh": true,
+    "recovery_updates_coverage": true,
     "next_actions": [
       "catalog_denominator",
       "reviewed_runtime_receipt_source",
