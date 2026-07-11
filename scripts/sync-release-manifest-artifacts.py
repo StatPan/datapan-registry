@@ -13,7 +13,7 @@ from typing import Any
 
 
 DEFAULT_MANIFEST = pathlib.Path("manifest.json")
-SCHEMA_OWNED_KINDS = {"schema", "schema_index"}
+EXTERNALLY_MATERIALIZED_KINDS = {"schema", "schema_index", "registry"}
 
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -46,7 +46,7 @@ def synced_manifest(manifest: dict[str, Any]) -> tuple[dict[str, Any], list[str]
         path_value = artifact.get("path")
         if not isinstance(path_value, str) or not path_value:
             raise ValueError(f"manifest.artifacts[{index}].path must be a non-empty string")
-        if artifact.get("kind") in SCHEMA_OWNED_KINDS:
+        if artifact.get("kind") in EXTERNALLY_MATERIALIZED_KINDS:
             continue
 
         path = pathlib.Path(path_value)

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.upstream-refresh-work-packet.v1.schema.json",
+  "title": "Datapan Upstream Refresh Work Packet v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "source_id", "observed_at", "status", "owner", "work_key", "action", "evidence", "snapshot", "diff", "automatic_publication"],
+  "properties": {
+    "schema_version": {"const": "datapan.upstream-refresh-work-packet.v1"},
+    "source_id": {"type": "string", "minLength": 1},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["no_change", "material_change", "collection_failure"]},
+    "owner": {"type": "string", "minLength": 1},
+    "work_key": {"type": "string", "pattern": "^upstream-refresh:[a-z0-9_]+:[a-f0-9]{16}$"},
+    "action": {"enum": ["none", "review_catalog_drift", "investigate_collection_failure"]},
+    "evidence": {"type": "string", "minLength": 1},
+    "snapshot": {"type": ["string", "null"]},
+    "diff": {"type": ["string", "null"]},
+    "automatic_publication": {"const": false}
+  }
+}

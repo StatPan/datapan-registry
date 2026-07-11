@@ -104,7 +104,8 @@
         "source_runtime_remediation_map",
         "source_runtime_evidence_rollup",
         "sustainable_coverage_policy",
-        "sustainable_coverage"
+        "sustainable_coverage",
+        "source_refresh_policy"
       ],
       "owner": "source evidence maintainers",
       "generated_by": [
@@ -122,7 +123,8 @@
         "python scripts/generate-credential-runtime-manual-review-acceptance-packet.py",
         "python scripts/generate-source-runtime-remediation-map.py",
         "python scripts/generate-source-runtime-readiness.py",
-        "python scripts/generate-sustainable-coverage.py"
+        "python scripts/generate-sustainable-coverage.py",
+        "manual policy updates validated by python scripts/validate-source-refresh-policy.py"
       ],
       "checked_by": [
         "python scripts/generate-source-contract-rollup.py --check",
@@ -147,9 +149,10 @@
         "python scripts/validate-runtime-evidence-growth.py",
         "python scripts/generate-sustainable-coverage.py --self-test",
         "python scripts/generate-sustainable-coverage.py --check",
+        "python scripts/validate-source-refresh-policy.py",
         "python scripts/sync-release-manifest-artifacts.py --check"
       ],
-      "manifest_relationship": "Source rollups, sustainable coverage policy and report, credential runtime evidence, runner readiness, operator packets, collection execution plans, manual-review acceptance packets, and inventories are top-level manifest evidence for supported-source denominators, freshness-aware coverage, nested source reports, reviewed receipt collection actions, and explicit manual-review release boundary actions.",
+  "manifest_relationship": "Source rollups, sustainable coverage and source refresh policies, credential runtime evidence, runner readiness, operator packets, collection execution plans, manual-review acceptance packets, and inventories are top-level manifest evidence for supported-source denominators, freshness-aware coverage, scheduled upstream observation, nested source reports, reviewed receipt collection actions, and explicit manual-review release boundary actions.",
       "schema_relationship": "Schema-backed source, sustainable coverage, and credential reports are indexed through schemas/index.json and source-report-inventory.json where applicable.",
       "package_relationship": "Included in release packages through manifest.json.",
       "exemption_boundary": "Nested source reports stay out of the top-level manifest when covered by source-report-inventory.json."

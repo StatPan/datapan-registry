@@ -1,0 +1,100 @@
+name: Upstream catalog refresh
+
+on:
+  schedule:
+    # Weekly data.go.kr catalogue observation, Wednesday 05:17 KST.
+    - cron: "17 20 * * 2"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    env:
+      DATA_GO_KR_SERVICE_KEY: ${{ secrets.DATA_GO_KR_SERVICE_KEY }}
+    steps:
+      - name: Checkout registry without LFS
+        uses: actions/checkout@v7
+        with:
+          path: datapan-registry
+          lfs: false
+
+      - name: Materialize manifest-bound canonical registry
+        working-directory: datapan-registry
+        run: python3 scripts/materialize-canonical-registry.py
+
+      - name: Checkout CLI
+        uses: actions/checkout@v7
+        with:
+          repository: StatPan/datapan-cli
+          path: datapan-cli
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: datapan-cli/go.mod
+          check-latest: true
+          cache-dependency-path: datapan-cli/go.sum
+
+      - name: Build Datapan CLI
+        working-directory: datapan-cli
+        run: |
+          mkdir -p ../datapan-registry/.datapan/ci/bin
+          go build -o ../datapan-registry/.datapan/ci/bin/datapan ./cmd/datapan
+
+      - name: Validate refresh contracts
+        working-directory: datapan-registry
+        run: |
+          python3 -m venv .datapan/ci/upstream-refresh-venv
+          . .datapan/ci/upstream-refresh-venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install jsonschema
+          python scripts/validate-source-refresh-policy.py
+          python -m unittest tests/test_run_upstream_refresh.py
+
+      - name: Observe upstream catalogue without publishing
+        id: refresh
+        working-directory: datapan-registry
+        run: |
+          . .datapan/ci/upstream-refresh-venv/bin/activate
+          set +e
+          python scripts/run-upstream-refresh.py \
+            --datapan .datapan/ci/bin/datapan \
+            --output-dir .datapan/ci/upstream-refresh
+          status="$?"
+          set -e
+          echo "exit_code=${status}" >> "${GITHUB_OUTPUT}"
+
+      - name: Upload snapshot, diff, evidence, and work packet
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: upstream-catalog-refresh-${{ github.run_id }}
+          path: datapan-registry/.datapan/ci/upstream-refresh/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Summarize review action
+        if: always()
+        working-directory: datapan-registry
+        run: |
+          evidence=.datapan/ci/upstream-refresh/upstream-refresh-evidence.json
+          if [ -f "${evidence}" ]; then
+            {
+              echo "## Upstream catalogue refresh"
+              echo
+              echo "- status: \`$(jq -r .status "${evidence}")\`"
+              echo "- work key: \`$(jq -r .review.work_key "${evidence}")\`"
+              echo "- review action: \`$(jq -r .review.action "${evidence}")\`"
+              echo "- automatic publication: \`false\`"
+            } >> "${GITHUB_STEP_SUMMARY}"
+          fi
+
+      - name: Preserve collection failure as a failed observation
+        if: always()
+        run: |
+          status="${{ steps.refresh.outputs.exit_code }}"
+          test -n "${status}"
+          exit "${status}"

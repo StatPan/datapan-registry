@@ -74,6 +74,17 @@ class MaterializeCanonicalRegistryTest(unittest.TestCase):
                     MODULE.materialize(policy, manifest, output)
             download.assert_not_called()
 
+    def test_lfs_pointer_never_matches_canonical_identity(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            manifest, _policy, output = self.fixture(root)
+            output.parent.mkdir(parents=True)
+            output.write_text("version https://git-lfs.github.com/spec/v1\noid sha256:deadbeef\nsize 10\n")
+            value = MODULE.load_object(manifest)
+            _path, size, digest = MODULE.registry_identity(value)
+            with self.assertRaises(MODULE.IntegrityError):
+                MODULE.validate(output, size, digest)
+
 
 if __name__ == "__main__":
     unittest.main()
