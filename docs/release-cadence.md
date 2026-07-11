@@ -92,6 +92,30 @@ GitHub draft when the registry artifact is already present and the release
 operator wants Actions-based verification before committing, tagging, or
 manually attaching release assets.
 
+## Canonical Hugging Face Distribution
+
+GitHub source and Release assets remain explicit compatibility surfaces, but
+the canonical large Registry distribution is
+`StatPan/datapan-registry` on Hugging Face. Publication is two phase:
+
+1. Materialize and validate the Registry against `manifest.json`.
+2. Stage every manifest-bound artifact plus the validated shard inventory and
+   archive.
+3. Upload that payload without Git or Git LFS and retain the returned commit
+   SHA.
+4. Generate `release/distribution-manifest.json` naming that immutable payload
+   commit and binding every path by bytes and SHA-256.
+5. Upload the pointer manifest in a second commit.
+6. Clear `HF_TOKEN` and anonymously download every artifact from the payload
+   commit to verify the public receipt.
+
+The manual `Publish Hugging Face Registry distribution` workflow implements
+this sequence. A missing token stops before publication. A missing artifact,
+mutable or malformed revision, byte mismatch, checksum mismatch, upload
+failure, or anonymous verification failure prevents a successful publication
+receipt. Registry readiness and goal completion must not treat a staged-only
+run as public distribution evidence.
+
 The repository also runs `.github/workflows/verify-release.yml` on pushes, pull
 requests, manual dispatches, `v*` tags, and a weekly scheduled release-health
 check. That workflow:

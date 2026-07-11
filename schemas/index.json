@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 75,
+  "count": 76,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -678,6 +678,15 @@
       "version": "v1",
       "bytes": 3894,
       "sha256": "9db6849a1bab611d6fa13f8f2ff56ded597b8e7a59509ce6803480efe3e99fa1"
+    },
+    {
+      "path": "schemas/datapan.huggingface-distribution.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.huggingface-distribution.v1.schema.json",
+      "title": "Datapan Hugging Face Distribution v1",
+      "contract": "huggingface-distribution",
+      "version": "v1",
+      "bytes": 1468,
+      "sha256": "f0ecfcdaeee6d4fae1f4d7d4b919c2a8dda0902f7a6bb2ed62ae5b61a11af215"
     }
   ]
 }

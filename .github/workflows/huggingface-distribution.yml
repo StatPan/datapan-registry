@@ -1,0 +1,110 @@
+name: Publish Hugging Face Registry distribution
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/huggingface-distribution.yml"
+      - "manifest.json"
+      - "policy/registry-distribution.json"
+      - "scripts/huggingface_registry_distribution.py"
+      - "schemas/datapan.huggingface-distribution.v1.schema.json"
+      - "tests/test_huggingface_registry_distribution.py"
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish the verified payload and immutable pointer to Hugging Face"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install validation and publication clients
+        run: python -m pip install --disable-pip-version-check jsonschema huggingface_hub
+
+      - name: Test distribution contract
+        run: python -m unittest tests/test_huggingface_registry_distribution.py
+
+      - name: Materialize canonical Registry from the immutable public mirror
+        run: python scripts/materialize-canonical-registry.py
+
+      - name: Generate and validate shards
+        run: |
+          mkdir -p .datapan/hf-shards .datapan/hf-assets
+          python scripts/generate-registry-shards.py \
+            --source-registry data/data-go-kr.registry.json \
+            --output-dir .datapan/hf-shards \
+            --manifest manifest.json \
+            --generated-at "$(jq -r '.generated_at' manifest.json)" \
+            --clean
+          python scripts/validate-registry-shards.py .datapan/hf-shards/registry-shards.json
+          python scripts/package-registry-shards.py \
+            --shard-dir .datapan/hf-shards \
+            --output .datapan/hf-assets/data-go-kr-shards.tar.gz
+          python scripts/package-registry-shards.py \
+            --check .datapan/hf-assets/data-go-kr-shards.tar.gz
+
+      - name: Stage complete manifest-bound distribution
+        run: |
+          python scripts/huggingface_registry_distribution.py stage \
+            --manifest manifest.json \
+            --output .datapan/hf-stage \
+            --extra release/registry-shards.json=.datapan/hf-shards/registry-shards.json \
+            --extra release/data-go-kr-shards.tar.gz=.datapan/hf-assets/data-go-kr-shards.tar.gz
+          python scripts/huggingface_registry_distribution.py finalize \
+            --stage .datapan/hf-stage \
+            --revision 0000000000000000000000000000000000000000
+          python -m json.tool .datapan/hf-stage/release/distribution-manifest.json >/dev/null
+
+      - name: Upload staged evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: huggingface-registry-distribution-stage
+          path: |
+            .datapan/hf-stage/.datapan-hf-artifacts.json
+            .datapan/hf-stage/release/distribution-manifest.json
+          retention-days: 14
+
+      - name: Publish two-phase immutable distribution
+        if: github.event_name == 'workflow_dispatch' && inputs.publish
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          test -n "${HF_TOKEN}"
+          python scripts/huggingface_registry_distribution.py publish \
+            --stage .datapan/hf-stage \
+            --dataset StatPan/datapan-registry \
+            | tee .datapan/hf-publication.json
+
+      - name: Verify published pointer anonymously
+        if: github.event_name == 'workflow_dispatch' && inputs.publish
+        env:
+          HF_TOKEN: ""
+        run: |
+          python scripts/huggingface_registry_distribution.py verify-remote \
+            --pointer-url https://huggingface.co/datasets/StatPan/datapan-registry/resolve/main/release/distribution-manifest.json \
+            | tee .datapan/hf-public-verification.json
+
+      - name: Upload publication receipts
+        if: always() && github.event_name == 'workflow_dispatch' && inputs.publish
+        uses: actions/upload-artifact@v4
+        with:
+          name: huggingface-registry-publication-receipts
+          path: |
+            .datapan/hf-publication.json
+            .datapan/hf-public-verification.json
+          if-no-files-found: warn
+          retention-days: 30
