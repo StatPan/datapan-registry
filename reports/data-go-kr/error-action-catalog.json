@@ -6,9 +6,9 @@
   "source_profile": "sources/data_go_kr.json",
   "error_catalog": "reports/error-catalog.json",
   "summary": {
-    "rules": 6,
-    "blocking_rules": 2,
-    "manual_review_rules": 4,
+    "rules": 8,
+    "blocking_rules": 3,
+    "manual_review_rules": 5,
     "unknown_signature_rules": 0
   },
   "rules": [
@@ -154,6 +154,57 @@
           "action": "refresh_verification",
           "automation": "manual_review",
           "reason": "Timeouts on missing external routes should remain transient route evidence until repeated checks prove a stable adapter target."
+        }
+      ],
+      "impact_categories": [
+        "verification_status_changed"
+      ]
+    },
+    {
+      "rule_id": "data-go-kr-approval-required",
+      "status": "verified",
+      "scope": {
+        "dependency_classes": [
+          "data_go_kr_gateway"
+        ]
+      },
+      "match": {
+        "kind": "field_equals",
+        "field": "reason",
+        "value": "approval_required",
+        "case_sensitive": false
+      },
+      "classification": "credential",
+      "severity": "blocking",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "review_collector",
+          "automation": "manual_review",
+          "reason": "The operation is not approved for the active data.go.kr credential. Preserve this as credential/approval evidence rather than claiming runtime coverage."
+        }
+      ],
+      "impact_categories": [
+        "verification_status_changed"
+      ]
+    },
+    {
+      "rule_id": "data-go-kr-missing-required-params",
+      "status": "verified",
+      "match": {
+        "kind": "field_equals",
+        "field": "reason",
+        "value": "missing_required_params",
+        "case_sensitive": false
+      },
+      "classification": "bad_request",
+      "severity": "high",
+      "actions": [
+        {
+          "target": "registry-release",
+          "action": "refresh_verification",
+          "automation": "manual_review",
+          "reason": "A bounded verification skipped the call because required public input values were unavailable; route it to parameter evidence, not credentials or adapters."
         }
       ],
       "impact_categories": [

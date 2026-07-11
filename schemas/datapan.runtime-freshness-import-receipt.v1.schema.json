@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.runtime-freshness-import-receipt.v1.schema.json",
+  "title": "Datapan runtime freshness import receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "run_id", "source_id", "inputs", "summary", "results"],
+  "properties": {
+    "schema_version": {"const": "datapan.runtime-freshness-import-receipt.v1"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "run_id": {"type": "string", "minLength": 1},
+    "source_id": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sanitized_report_sha256", "run_receipt_sha256", "error_action_catalog"],
+      "properties": {
+        "sanitized_report_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "run_receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "error_action_catalog": {"type": "string", "minLength": 1}
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reported_results", "classified_failures", "unclassified_failures", "healthy_recoveries", "observations_projected"],
+      "properties": {
+        "reported_results": {"type": "integer", "minimum": 0},
+        "classified_failures": {"type": "integer", "minimum": 0},
+        "unclassified_failures": {"type": "integer", "minimum": 0},
+        "healthy_recoveries": {"type": "integer", "minimum": 0},
+        "observations_projected": {"type": "integer", "minimum": 0}
+      }
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["subject_id", "dataset_id", "operation", "status", "reason", "disposition"],
+        "properties": {
+          "subject_id": {"type": "string", "pattern": "^operation:[a-f0-9]{16}$"},
+          "dataset_id": {"type": "string", "minLength": 1},
+          "operation": {"type": "string", "minLength": 1},
+          "status": {"enum": ["verified", "failed", "skipped", "unknown"]},
+          "reason": {"type": "string"},
+          "disposition": {"enum": ["classified_failure", "unclassified_failure", "healthy_recovery", "no_active_failure"]},
+          "failure_class": {"enum": ["credential", "parameter", "adapter", "parser", "rate_limit", "upstream", "reference_drift", "catalog_drift", "consumer"]},
+          "rule_id": {"type": "string", "minLength": 1},
+          "observed_at": {"type": "string", "format": "date-time"}
+        }
+      }
+    }
+  }
+}
