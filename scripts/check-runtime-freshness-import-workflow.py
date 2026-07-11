@@ -25,6 +25,8 @@ def main() -> int:
             "raw report exclusion": "test ! -e .datapan/runtime-freshness/import/raw-combined",
             "transaction": "scripts/apply-runtime-freshness-import.py",
             "no-change gate": "steps.transaction.outputs.changed == 'true'",
+            "bytecode disabled": "PYTHONDONTWRITEBYTECODE: \"1\"",
+            "cache cleanup": "-name __pycache__ -prune -exec rm -rf {} +",
             "auto merge": "gh pr merge \"${pr}\"",
         }
         missing = [label for label, marker in required.items() if marker not in text]
