@@ -7,6 +7,12 @@
     "path": "data/data-go-kr.registry.json",
     "manifest_sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644"
   },
+  "distribution_manifest": {
+    "schema_version": "datapan.huggingface-distribution.v1",
+    "path": "release/distribution-manifest.json",
+    "publication": "two_phase_immutable_payload",
+    "consumer_rule": "resolve_pointer_then_fetch_only_from_payload_revision"
+  },
   "shard_archive": {
     "path": "release/data-go-kr-shards.tar.gz",
     "inventory_path": "release/registry-shards.json",

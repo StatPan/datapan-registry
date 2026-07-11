@@ -80,14 +80,29 @@ leaving sustainable coverage stale.
   `datapan.studio-bundle.v1`
 - Catalog diff: `reports/catalog-diff.json`
 
-`data/data-go-kr.registry.json` is tracked with Git LFS, but CI and release
-operators do not depend on LFS availability. `scripts/materialize-canonical-registry.py`
+`data/data-go-kr.registry.json` is tracked with Git LFS only as a source-tree
+compatibility pointer. The canonical consumer distribution is the public
+[`StatPan/datapan-registry` Hugging Face Dataset](https://huggingface.co/datasets/StatPan/datapan-registry),
+and CI and release operators do not depend on Git LFS availability.
+`scripts/materialize-canonical-registry.py`
 downloads the public Hugging Face Dataset object at the immutable commit pinned
 in `policy/registry-distribution.json`, then requires its bytes and SHA-256 to
 match `manifest.json` before replacing the LFS pointer. Availability failures
 exit with code `20`; manifest, policy, size, or checksum failures exit with code
 `21`, so an unavailable mirror cannot be mistaken for corrupt registry bytes.
 The normalized registry is larger than GitHub's normal blob limit.
+
+Hugging Face publication uses a two-commit trust boundary. The first commit
+contains the canonical Registry plus every manifest-bound release artifact and
+the validated shard archive. The second commit publishes
+`release/distribution-manifest.json`, which names the first immutable commit
+and binds each path by byte size and SHA-256. This avoids a self-referential
+commit hash while ensuring consumers never fetch Registry data from mutable
+`main`. `scripts/huggingface_registry_distribution.py` stages, publishes, and
+anonymously re-verifies that contract. The guarded `Publish Hugging Face
+Registry distribution` workflow performs publication only when manually
+dispatched with `publish=true` and `HF_TOKEN`; pull requests execute the same
+staging and validation without credentials.
 
 Upstream catalogue freshness is observed separately from publication. The
 weekly `Upstream catalog refresh` workflow follows `policy/source-refresh.json`,
