@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-07-04T06:39:08Z",
+  "generated_at": "2026-07-11T10:28:35Z",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
-  "limit": 8717,
+  "limit": 8725,
   "truncated": true,
-  "filtered_count": 4774,
+  "filtered_count": 4782,
   "summary": {
-    "total": 4774,
+    "total": 4782,
     "verified": 2841,
-    "failed": 389,
-    "skipped": 1544,
+    "failed": 393,
+    "skipped": 1548,
     "unknown": 0
   },
   "results": [
@@ -74535,6 +74535,152 @@
         "Init",
         "reqDate",
         "row"
+      ]
+    },
+    {
+      "dataset_id": "15000445",
+      "title": "국립중앙의료원_코드마스터 정보 조회 서비스",
+      "operation": "코드마스터 정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "failed",
+      "reason": "HTTP 403",
+      "verified_at": "2026-07-11T10:24:27Z",
+      "http_status": 403,
+      "semantic_status": "http_error",
+      "body_shape": "raw"
+    },
+    {
+      "dataset_id": "15000467",
+      "title": "대전광역시 공연행사정보",
+      "operation": "대전광역시청 행사안내 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required"
+    },
+    {
+      "dataset_id": "15000467",
+      "title": "대전광역시 공연행사정보",
+      "operation": "행사안내 상세화면 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "approval_required"
+    },
+    {
+      "dataset_id": "15000480",
+      "title": "국립중앙의료원_전국 명절 비상 진료기관 정보 조회 서비스",
+      "operation": "명절 진료 가능한 기관 목록정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "ORD": "",
+        "Q0": "",
+        "Q1": "",
+        "QD": "",
+        "QT": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "Q0",
+        "Q1",
+        "QD",
+        "QT",
+        "ORD"
+      ]
+    },
+    {
+      "dataset_id": "15000480",
+      "title": "국립중앙의료원_전국 명절 비상 진료기관 정보 조회 서비스",
+      "operation": "명절 진료 가능한 기관 상세정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "failed",
+      "reason": "HTTP 403",
+      "verified_at": "2026-07-11T10:25:23Z",
+      "http_status": 403,
+      "semantic_status": "http_error",
+      "body_shape": "raw"
+    },
+    {
+      "dataset_id": "15000480",
+      "title": "국립중앙의료원_전국 명절 비상 진료기관 정보 조회 서비스",
+      "operation": "명절 진료 가능한 기관 위치정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "failed",
+      "reason": "HTTP 403",
+      "verified_at": "2026-07-11T10:25:30Z",
+      "http_status": 403,
+      "semantic_status": "http_error",
+      "body_shape": "raw"
+    },
+    {
+      "dataset_id": "15000480",
+      "title": "국립중앙의료원_전국 명절 비상 진료기관 정보 조회 서비스",
+      "operation": "명절 비상진료기관 FullData 내려받기목록정보 조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "failed",
+      "reason": "HTTP 403",
+      "verified_at": "2026-07-11T10:25:54Z",
+      "http_status": 403,
+      "semantic_status": "http_error",
+      "params": {
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "body_shape": "raw"
+    },
+    {
+      "dataset_id": "15000504",
+      "title": "외교부_여행금지제도",
+      "operation": "여행금지제도 목록조회",
+      "provider": "data.go.kr",
+      "endpoint_host": "apis.data.go.kr",
+      "dependency_class": "data_go_kr_gateway",
+      "status": "skipped",
+      "reason": "missing_required_params",
+      "params": {
+        "countryEnName": "",
+        "countryName": "",
+        "isoCode1": "",
+        "isoCode10": "",
+        "isoCode2": "",
+        "isoCode3": "",
+        "isoCode4": "",
+        "isoCode5": "",
+        "isoCode6": "",
+        "isoCode7": "",
+        "isoCode8": "",
+        "isoCode9": "",
+        "numOfRows": "1",
+        "pageNo": "1"
+      },
+      "missing_params": [
+        "countryName",
+        "countryEnName",
+        "isoCode1",
+        "isoCode2",
+        "isoCode3",
+        "isoCode4",
+        "isoCode5",
+        "isoCode6",
+        "isoCode7",
+        "isoCode8",
+        "isoCode9",
+        "isoCode10"
       ]
     }
   ]

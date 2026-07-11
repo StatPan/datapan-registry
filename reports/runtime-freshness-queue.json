@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-freshness-queue.v1",
-  "generated_at": "2026-07-04T06:39:24Z",
+  "generated_at": "2026-07-11T10:28:35Z",
   "inputs": {
     "canonical_registry": "data/data-go-kr.registry.json",
     "operation_denominator_rollup": "reports/operation-denominator-rollup.json",
@@ -8,7 +8,7 @@
     "coverage_policy": "policy/sustainable-coverage.json"
   },
   "freshness": {
-    "as_of": "2026-07-04T06:39:24Z",
+    "as_of": "2026-07-11T10:28:35Z",
     "fresh_days": 30,
     "expire_days": 90
   },
@@ -17,10 +17,10 @@
     "fresh_verified": 2773,
     "queued": 18487,
     "never_evidenced": 16622,
-    "unknown_timestamp": 716,
+    "unknown_timestamp": 712,
     "stale": 0,
     "expired": 0,
-    "recent_non_verified": 1149
+    "recent_non_verified": 1153
   },
   "queue": [
     {
@@ -313,18 +313,6 @@
     },
     {
       "source_id": "data_go_kr",
-      "dataset_id": "15000445",
-      "operation": "코드마스터 정보 조회",
-      "operation_seq": "17248",
-      "identity_key": "data_go_kr:15000445:17248",
-      "classification": "unknown_timestamp",
-      "priority": 1,
-      "action": "repair_evidence_timestamp",
-      "last_status": "skipped",
-      "last_verified_at": null
-    },
-    {
-      "source_id": "data_go_kr",
       "dataset_id": "15000467",
       "operation": "대전광역시청 행사안내 조회",
       "operation_seq": "22081",
@@ -353,42 +341,6 @@
       "operation": "명절 진료 가능한 기관 목록정보 조회",
       "operation_seq": "17439",
       "identity_key": "data_go_kr:15000480:17439",
-      "classification": "unknown_timestamp",
-      "priority": 1,
-      "action": "repair_evidence_timestamp",
-      "last_status": "skipped",
-      "last_verified_at": null
-    },
-    {
-      "source_id": "data_go_kr",
-      "dataset_id": "15000480",
-      "operation": "명절 진료 가능한 기관 상세정보 조회",
-      "operation_seq": "17440",
-      "identity_key": "data_go_kr:15000480:17440",
-      "classification": "unknown_timestamp",
-      "priority": 1,
-      "action": "repair_evidence_timestamp",
-      "last_status": "skipped",
-      "last_verified_at": null
-    },
-    {
-      "source_id": "data_go_kr",
-      "dataset_id": "15000480",
-      "operation": "명절 진료 가능한 기관 위치정보 조회",
-      "operation_seq": "17441",
-      "identity_key": "data_go_kr:15000480:17441",
-      "classification": "unknown_timestamp",
-      "priority": 1,
-      "action": "repair_evidence_timestamp",
-      "last_status": "skipped",
-      "last_verified_at": null
-    },
-    {
-      "source_id": "data_go_kr",
-      "dataset_id": "15000480",
-      "operation": "명절 비상진료기관 FullData 내려받기목록정보 조회",
-      "operation_seq": "17442",
-      "identity_key": "data_go_kr:15000480:17442",
       "classification": "unknown_timestamp",
       "priority": 1,
       "action": "repair_evidence_timestamp",
@@ -9898,6 +9850,54 @@
       "action": "collect_initial_evidence",
       "last_status": null,
       "last_verified_at": null
+    },
+    {
+      "source_id": "data_go_kr",
+      "dataset_id": "15000445",
+      "operation": "코드마스터 정보 조회",
+      "operation_seq": "17248",
+      "identity_key": "data_go_kr:15000445:17248",
+      "classification": "recent_non_verified",
+      "priority": 2,
+      "action": "retry_or_route_failure",
+      "last_status": "failed",
+      "last_verified_at": "2026-07-11T10:24:27Z"
+    },
+    {
+      "source_id": "data_go_kr",
+      "dataset_id": "15000480",
+      "operation": "명절 진료 가능한 기관 상세정보 조회",
+      "operation_seq": "17440",
+      "identity_key": "data_go_kr:15000480:17440",
+      "classification": "recent_non_verified",
+      "priority": 2,
+      "action": "retry_or_route_failure",
+      "last_status": "failed",
+      "last_verified_at": "2026-07-11T10:25:23Z"
+    },
+    {
+      "source_id": "data_go_kr",
+      "dataset_id": "15000480",
+      "operation": "명절 진료 가능한 기관 위치정보 조회",
+      "operation_seq": "17441",
+      "identity_key": "data_go_kr:15000480:17441",
+      "classification": "recent_non_verified",
+      "priority": 2,
+      "action": "retry_or_route_failure",
+      "last_status": "failed",
+      "last_verified_at": "2026-07-11T10:25:30Z"
+    },
+    {
+      "source_id": "data_go_kr",
+      "dataset_id": "15000480",
+      "operation": "명절 비상진료기관 FullData 내려받기목록정보 조회",
+      "operation_seq": "17442",
+      "identity_key": "data_go_kr:15000480:17442",
+      "classification": "recent_non_verified",
+      "priority": 2,
+      "action": "retry_or_route_failure",
+      "last_status": "failed",
+      "last_verified_at": "2026-07-11T10:25:54Z"
     },
     {
       "source_id": "data_go_kr",

@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-07-06T17:46:39Z",
+  "generated_at": "2026-07-11T10:28:35Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -973,14 +973,14 @@
         {
           "name": "latest-verification-summary.json",
           "path": "reports/latest-verification-summary.json",
-          "bytes": 40559,
-          "sha256": "4cc38806231bd9df299b41ad0d4d1583adca4f8db130e38f1325427c5651af12"
+          "bytes": 40648,
+          "sha256": "d79e425b41583949b05b45122cb413481e9dd99de11bb06502c373ac6ef8baf5"
         },
         {
           "name": "latest-verification.json",
           "path": "reports/latest-verification.json",
-          "bytes": 2914653,
-          "sha256": "c88bcd011da16a56c451950ffc8555125e32b866e2d357e8feaef8eb1e2a2c86"
+          "bytes": 2919169,
+          "sha256": "c0db192b31d0a3d65aa6eb1d81b082ce3e811e67747fafb9e36013b8cf5558c1"
         },
         {
           "name": "provider-backlog.json",
