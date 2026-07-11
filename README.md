@@ -68,8 +68,14 @@ re-importing the upstream data.go.kr catalog every time.
   `datapan.studio-bundle.v1`
 - Catalog diff: `reports/catalog-diff.json`
 
-`data/data-go-kr.registry.json` is stored with Git LFS because the normalized
-registry is larger than GitHub's normal blob limit.
+`data/data-go-kr.registry.json` is tracked with Git LFS, but CI and release
+operators do not depend on LFS availability. `scripts/materialize-canonical-registry.py`
+downloads the public Hugging Face Dataset object at the immutable commit pinned
+in `policy/registry-distribution.json`, then requires its bytes and SHA-256 to
+match `manifest.json` before replacing the LFS pointer. Availability failures
+exit with code `20`; manifest, policy, size, or checksum failures exit with code
+`21`, so an unavailable mirror cannot be mistaken for corrupt registry bytes.
+The normalized registry is larger than GitHub's normal blob limit.
 
 ## Verify
 
