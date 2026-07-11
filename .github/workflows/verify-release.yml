@@ -96,6 +96,7 @@ jobs:
           python scripts/generate-runtime-evidence-growth.py --check
           python scripts/generate-readme-runtime-snapshot.py --check
           python scripts/check-runtime-freshness-workflow.py
+          python scripts/check-runtime-freshness-import-workflow.py
           python -m py_compile scripts/consolidate-runtime-freshness-run.py
           python -m py_compile scripts/import-runtime-freshness-run.py
           python -m unittest tests/test_generate_failure_recovery_rollup.py
@@ -154,7 +155,7 @@ jobs:
           python -m py_compile scripts/generate-failure-recovery-rollup.py
           python -m py_compile scripts/generate-operation-denominator-rollup.py
           python -m py_compile scripts/generate-runtime-freshness-queue.py
-          python -m py_compile scripts/generate-runtime-freshness-batch.py scripts/check-runtime-freshness-workflow.py scripts/consolidate-runtime-freshness-run.py scripts/import-runtime-freshness-run.py scripts/project-runtime-freshness-recovery.py scripts/apply-runtime-freshness-import.py scripts/generate-runtime-evidence-growth.py scripts/generate-readme-runtime-snapshot.py
+          python -m py_compile scripts/generate-runtime-freshness-batch.py scripts/check-runtime-freshness-workflow.py scripts/check-runtime-freshness-import-workflow.py scripts/consolidate-runtime-freshness-run.py scripts/import-runtime-freshness-run.py scripts/project-runtime-freshness-recovery.py scripts/apply-runtime-freshness-import.py scripts/generate-runtime-evidence-growth.py scripts/generate-readme-runtime-snapshot.py
           python -m py_compile scripts/convert-source-verification-to-credential-receipt.py
           python -m py_compile scripts/generate-source-contract-rollup.py
           python -m py_compile scripts/generate-sustainable-coverage.py

@@ -1,0 +1,121 @@
+name: Import runtime freshness evidence
+
+on:
+  workflow_run:
+    workflows:
+      - Runtime freshness verification
+    types:
+      - completed
+
+permissions:
+  actions: read
+  contents: write
+  pull-requests: write
+
+jobs:
+  import:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      github.event.workflow_run.head_branch == github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    concurrency:
+      group: runtime-freshness-import-${{ github.event.workflow_run.id }}
+      cancel-in-progress: false
+    env:
+      PRODUCER_RUN_ID: ${{ github.event.workflow_run.id }}
+      PRODUCER_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+      IMPORT_BRANCH: automation/runtime-freshness-${{ github.event.workflow_run.id }}
+      ARTIFACT_NAME: runtime-freshness-${{ github.event.workflow_run.id }}-consolidated
+    steps:
+      - name: Checkout the exact producer revision
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ env.PRODUCER_HEAD_SHA }}
+          lfs: false
+          fetch-depth: 0
+
+      - name: Download only the sanitized consolidated artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: .datapan/runtime-freshness/import
+          run-id: ${{ env.PRODUCER_RUN_ID }}
+          github-token: ${{ github.token }}
+
+      - name: Assert the import boundary
+        run: |
+          test "$(find .datapan/runtime-freshness/import -maxdepth 1 -type f | wc -l)" -eq 2
+          test -f .datapan/runtime-freshness/import/verification.json
+          test -f .datapan/runtime-freshness/import/run-receipt.json
+          test ! -e .datapan/runtime-freshness/import/raw-combined
+          python3 scripts/project-runtime-freshness-recovery.py \
+            --report .datapan/runtime-freshness/import/verification.json \
+            --run-receipt .datapan/runtime-freshness/import/run-receipt.json \
+            --receipt-output .datapan/runtime-freshness/import/import-receipt-preview.json \
+            --observations-output .datapan/runtime-freshness/import/failure-observations-preview.json
+          rm .datapan/runtime-freshness/import/import-receipt-preview.json \
+            .datapan/runtime-freshness/import/failure-observations-preview.json
+
+      - name: Checkout and build datapan-cli
+        uses: actions/checkout@v7
+        with:
+          repository: StatPan/datapan-cli
+          path: .datapan/ci/datapan-cli
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: .datapan/ci/datapan-cli/go.mod
+          check-latest: true
+          cache-dependency-path: .datapan/ci/datapan-cli/go.sum
+
+      - name: Build datapan-cli
+        working-directory: .datapan/ci/datapan-cli
+        run: go build -o "${GITHUB_WORKSPACE}/.datapan/ci/datapan" ./cmd/datapan
+
+      - name: Setup Python receipt validation
+        run: python3 -m pip install jsonschema
+
+      - name: Apply the isolated freshness transaction
+        id: transaction
+        run: |
+          git switch -c "${IMPORT_BRANCH}"
+          python3 scripts/apply-runtime-freshness-import.py \
+            --report .datapan/runtime-freshness/import/verification.json \
+            --run-receipt .datapan/runtime-freshness/import/run-receipt.json \
+            --datapan-command "${GITHUB_WORKSPACE}/.datapan/ci/datapan" \
+            | tee .datapan/runtime-freshness/import-transaction.json
+          changed="$(git status --porcelain --untracked-files=all | grep -v '^?? .datapan/' || true)"
+          if [ -z "${changed}" ]; then
+            echo "changed=false" >> "${GITHUB_OUTPUT}"
+          else
+            echo "changed=true" >> "${GITHUB_OUTPUT}"
+          fi
+
+      - name: Commit the run-bound evidence update
+        if: steps.transaction.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md docs manifest.json reports schemas
+          git commit -m "chore: import runtime freshness run ${PRODUCER_RUN_ID}"
+          git push --force-with-lease origin "HEAD:refs/heads/${IMPORT_BRANCH}"
+
+      - name: Create or update the checked import PR
+        if: steps.transaction.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          pr="$(gh pr list --repo "${GITHUB_REPOSITORY}" --head "${IMPORT_BRANCH}" --state open --json number --jq '.[0].number // empty')"
+          if [ -z "${pr}" ]; then
+            url="$(gh pr create --repo "${GITHUB_REPOSITORY}" --base main --head "${IMPORT_BRANCH}" \
+              --title "Import runtime freshness run ${PRODUCER_RUN_ID}" \
+              --body "Automated secret-safe freshness import from workflow run ${PRODUCER_RUN_ID}. The PR contains only sanitized receipt-derived registry evidence and is gated by Verify and Hugging Face distribution checks. Relates #344.")"
+            pr="${url##*/}"
+          fi
+          gh pr merge "${pr}" --repo "${GITHUB_REPOSITORY}" --auto --squash
+
+      - name: Record idempotent no-change outcome
+        if: steps.transaction.outputs.changed != 'true'
+        run: echo "Run ${PRODUCER_RUN_ID} was already imported; no branch or PR was created." >> "${GITHUB_STEP_SUMMARY}"
