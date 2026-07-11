@@ -104,7 +104,7 @@
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
       "bytes": 14728,
-      "sha256": "ae53c771c5c1c4aafb8b167b080162f1c84ce00c7cc1f0f7940574d79bf77315",
+      "sha256": "94cacde84571a86ad4e95d3d9b17a512e3d063bcfce218a2e9b2c37770d288db",
       "required": true
     },
     {
@@ -194,7 +194,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "79dcf8102c1c76b5269c00ec7e43e0380f62d444fb91de801febce93c4e51cc2",
+      "sha256": "977aac66119d58f482f75508bc7c1f95ceade085c919826a7270e76dfc59993a",
       "required": true
     },
     {
@@ -212,7 +212,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 59095,
-      "sha256": "a6d9339de7b26db2be662a83035373b9ca77cd4ffc72300dde7d060a71e195e7",
+      "sha256": "1ebb1629cc0f88f06e09aa8217f48f4fc471143e2224170b4772c94976df168c",
       "required": true
     },
     {
@@ -221,7 +221,7 @@
       "kind": "release_distribution_footprint",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
       "bytes": 2119,
-      "sha256": "6098cd6d5d3aa48a2d21041f862b31654e556cb6aa88f63e5937fb2280d0fbba",
+      "sha256": "94b583fe8f58278b8b52ab32cba8bf71743f1fef38c4f746f924628c4249208f",
       "required": true
     },
     {
@@ -489,7 +489,7 @@
     ],
     "release_distribution_footprint": "reports/release-distribution-footprint.json",
     "canonical_registry_bytes": 137735169,
-    "manifest_bound_bytes_excluding_self": 165985090,
+    "manifest_bound_bytes_excluding_self": 165985059,
     "large_monolith_threshold_bytes": 100000000,
     "registry_footprint_status": "large_monolith_shard_additive",
     "canonical_registry_required": true,

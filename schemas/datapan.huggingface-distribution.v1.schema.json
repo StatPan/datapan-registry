@@ -31,7 +31,7 @@
       "additionalProperties": false,
       "required": ["path", "kind", "bytes", "sha256"],
       "properties": {
-        "path": {"type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\\\]+$"},
+        "path": {"type": "string", "minLength": 1, "pattern": "^[^\\\\]+$"},
         "kind": {"type": "string", "minLength": 1},
         "bytes": {"type": "integer", "minimum": 1},
         "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
