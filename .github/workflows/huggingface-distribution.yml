@@ -88,7 +88,8 @@ jobs:
             --extra release/registry-shards.json=.datapan/hf-shards/registry-shards.json \
             --extra release/data-go-kr-shards.tar.gz=.datapan/hf-assets/data-go-kr-shards.tar.gz \
             --extra reports/latest-release-verification.json=.datapan/hf-assets/latest-release-verification.json \
-            --extra reports/latest-release-readiness.json=.datapan/hf-assets/latest-release-readiness.json
+            --extra reports/latest-release-readiness.json=.datapan/hf-assets/latest-release-readiness.json \
+            --extra reports/data-go-kr/error-action-catalog.json=reports/data-go-kr/error-action-catalog.json
           python scripts/huggingface_registry_distribution.py finalize \
             --stage .datapan/hf-stage \
             --revision 0000000000000000000000000000000000000000
