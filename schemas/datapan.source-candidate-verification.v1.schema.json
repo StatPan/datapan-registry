@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.source-candidate-verification.v1.schema.json",
+  "title": "Datapan Source Candidate Verification v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "source_id", "provider", "source_profile", "candidate_batch", "bounded", "credential_configured", "credential_env_names", "summary", "results", "redaction"],
+  "properties": {
+    "schema_version": {"const": "datapan.source-candidate-verification.v1"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "source_id": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
+    "provider": {"type": "string", "minLength": 1},
+    "source_profile": {"type": "string", "minLength": 1},
+    "candidate_batch": {"type": "string", "minLength": 1},
+    "bounded": {"const": true},
+    "credential_configured": {"type": "boolean"},
+    "credential_env_names": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidates", "verified", "failed", "skipped"],
+      "properties": {
+        "candidates": {"type": "integer", "minimum": 0},
+        "verified": {"type": "integer", "minimum": 0},
+        "failed": {"type": "integer", "minimum": 0},
+        "skipped": {"type": "integer", "minimum": 0}
+      }
+    },
+    "results": {"type": "array", "items": {"$ref": "#/$defs/result"}},
+    "redaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["secret_values_present", "secret_hashes_present", "request_urls_present", "response_bodies_present"],
+      "properties": {
+        "secret_values_present": {"const": false},
+        "secret_hashes_present": {"const": false},
+        "request_urls_present": {"const": false},
+        "response_bodies_present": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidate_id", "outcome", "error_class", "duration_ms"],
+      "properties": {
+        "candidate_id": {"type": "string", "minLength": 1},
+        "outcome": {"enum": ["verified", "failed", "skipped"]},
+        "error_class": {"enum": ["none", "credential", "rate_limit", "provider", "parser", "network", "timeout", "parameter", "bad_request", "unknown"]},
+        "http_status": {"type": "integer", "minimum": 100, "maximum": 599},
+        "response_bytes": {"type": "integer", "minimum": 0},
+        "content_type": {"type": "string", "maxLength": 256},
+        "duration_ms": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

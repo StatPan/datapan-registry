@@ -170,6 +170,15 @@ def run_source(entry: dict[str, Any], *, force: bool) -> dict[str, Any]:
         raise ValueError(f"{source_id}: reviewed receipt already exists; pass --force to run anyway")
     pathlib.Path(plan["staged_receipt_path"]).parent.mkdir(parents=True, exist_ok=True)
     subprocess.run(command_args(entry), check=True)
+    if entry.get("generic_verification_artifact") is not None:
+        verification_path = pathlib.Path(string_value(
+            entry.get("generic_verification_artifact"), f"{source_id}.generic_verification_artifact"
+        ))
+        subprocess.run([
+            sys.executable, "scripts/convert-source-verification-to-credential-receipt.py",
+            "--verification", verification_path.as_posix(), "--source", source_id,
+            "--output", plan["staged_receipt_path"],
+        ], check=True)
     subprocess.run(shlex.split(plan["staged_receipt_validation_command"]), check=True)
     return {
         "source_id": source_id,

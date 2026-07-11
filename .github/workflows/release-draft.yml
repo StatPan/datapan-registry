@@ -90,6 +90,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install jsonschema
           python -m py_compile \
+            scripts/convert-source-verification-to-credential-receipt.py \
             scripts/error_action_routing_rollup.py \
             scripts/generate-error-action-routing-rollup.py \
             scripts/generate-failure-recovery-rollup.py \
@@ -173,6 +174,7 @@ jobs:
           python scripts/validate-error-action-routing-rollups.py
           python scripts/generate-failure-recovery-rollup.py --check
           python -m unittest tests/test_generate_failure_recovery_rollup.py
+          python -m unittest tests/test_convert_source_verification_receipt.py
           python scripts/validate-external-coverage.py
           python scripts/generate-impact-plan-rollup.py --check
           python scripts/validate-impact-plans.py
