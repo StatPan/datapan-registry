@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-07-04T06:39:08Z",
-  "source": ".\\reports\\latest-verification.json",
+  "generated_at": "2026-07-11T10:28:35Z",
+  "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4774,
+    "total": 4782,
     "verified": 2841,
-    "failed": 389,
-    "skipped": 1544,
+    "failed": 393,
+    "skipped": 1548,
     "unknown": 0
   },
   "groups": {
@@ -21,12 +21,12 @@
       },
       {
         "key": "skipped",
-        "count": 1544,
+        "count": 1548,
         "status": "skipped"
       },
       {
         "key": "failed",
-        "count": 389,
+        "count": 393,
         "status": "failed"
       }
     ],
@@ -38,12 +38,12 @@
       },
       {
         "key": "missing_required_params",
-        "count": 468,
+        "count": 470,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 128,
+        "count": 130,
         "reason": "approval_required"
       },
       {
@@ -232,6 +232,11 @@
         "reason": "lh_ebid_service_key_not_registered"
       },
       {
+        "key": "HTTP 403",
+        "count": 4,
+        "reason": "HTTP 403"
+      },
+      {
         "key": "airport_service_key_not_registered",
         "count": 4,
         "reason": "airport_service_key_not_registered"
@@ -390,7 +395,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 715,
+        "count": 723,
         "provider": "data.go.kr"
       },
       {
@@ -1052,7 +1057,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 705,
+        "count": 713,
         "host": "apis.data.go.kr"
       },
       {
@@ -1884,7 +1889,7 @@
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 705,
+        "count": 713,
         "kind": "data_go_kr_gateway"
       },
       {

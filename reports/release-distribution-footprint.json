@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.release-distribution-footprint.v1",
-  "generated_at": "2026-07-04T06:39:24Z",
+  "generated_at": "2026-07-11T10:28:35Z",
   "goal_issue": 344,
   "footprint_ticket": 393,
   "provider": "datapan-registry",
@@ -11,7 +11,7 @@
   "summary": {
     "artifact_count": 135,
     "schema_artifacts": 82,
-    "manifest_bound_bytes_excluding_self": 173747620,
+    "manifest_bound_bytes_excluding_self": 173752289,
     "canonical_registry_path": "data/data-go-kr.registry.json",
     "canonical_registry_bytes": 137735169,
     "large_monolith_threshold_bytes": 100000000,
@@ -43,8 +43,8 @@
     {
       "path": "reports/runtime-freshness-queue.json",
       "kind": "runtime_freshness_queue",
-      "bytes": 7738337,
-      "sha256": "0d329c673b233fe434fe39161745bae89b66d781d1727c3e785496121e875b1b"
+      "bytes": 7738401,
+      "sha256": "622f1b3458eae54d503cece17cb046dea17bcf381ad79ce8e7fac856d790b44b"
     },
     {
       "path": "reports/error-catalog.json",
@@ -55,8 +55,8 @@
     {
       "path": "reports/latest-verification.json",
       "kind": "verification",
-      "bytes": 2914653,
-      "sha256": "c88bcd011da16a56c451950ffc8555125e32b866e2d357e8feaef8eb1e2a2c86"
+      "bytes": 2919169,
+      "sha256": "c0db192b31d0a3d65aa6eb1d81b082ce3e811e67747fafb9e36013b8cf5558c1"
     }
   ]
 }

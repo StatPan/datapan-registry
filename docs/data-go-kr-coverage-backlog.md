@@ -8,13 +8,13 @@ This backlog is generated from the checked-in registry, dependency report, and l
 - APIs with operation mapping: `11587` (`96.1%`)
 - APIs without operation mapping: `473`
 - Operations: `21256`
-- Runtime evidence operations: `4774` (`22.5%`)
+- Runtime evidence operations: `4782` (`22.5%`)
 - Runtime verified operations: `2841`
-- Runtime failed operations: `389`
-- Runtime skipped operations: `1544`
+- Runtime failed operations: `393`
+- Runtime skipped operations: `1548`
 - APIs with runtime evidence: `2303`
 - Runtime reactivation APIs: `9284`
-- Runtime repair APIs: `237`
+- Runtime repair APIs: `239`
 
 ## Highest Priority Institutions
 

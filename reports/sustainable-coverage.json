@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.sustainable-coverage.v1",
-  "generated_at": "2026-07-04T06:39:24Z",
+  "generated_at": "2026-07-11T10:28:35Z",
   "policy": {
     "path": "policy/sustainable-coverage.json",
     "policy_id": "datapan-registry-supported-sources",
@@ -23,7 +23,7 @@
     "layers_total": 9,
     "layers_meeting_target": 5,
     "layers_below_target": 4,
-    "unknown_timestamp_records": 716,
+    "unknown_timestamp_records": 712,
     "stale_records": 0,
     "expired_records": 0
   },
@@ -120,13 +120,13 @@
     }
   ],
   "freshness": {
-    "as_of": "2026-07-04T06:39:24Z",
+    "as_of": "2026-07-11T10:28:35Z",
     "fresh_days": 30,
     "expire_days": 90,
-    "fresh": 3922,
+    "fresh": 3926,
     "stale": 0,
     "expired": 0,
-    "unknown_timestamp": 716,
+    "unknown_timestamp": 712,
     "fresh_verified": 2773
   },
   "failure_recovery": {
