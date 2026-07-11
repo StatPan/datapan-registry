@@ -25,6 +25,8 @@ DEFAULT_OUTPUT = pathlib.Path("reports/credential-runtime-manual-review-acceptan
 SCHEMA_VERSION = "datapan.credential-runtime-manual-review-acceptance.v1"
 ACCEPTANCE_TICKET = 389
 DECISION_TICKET = 391
+RELEASE_EVIDENCE_REFRESH_COMMAND = "python3 scripts/refresh-release-ledger-evidence.py --write --max-iterations 5"
+RELEASE_EVIDENCE_CHECK_COMMAND = "python3 scripts/refresh-release-ledger-evidence.py --check"
 SECRET_VALUE_PATTERNS = [
     re.compile(r"(?i)(service[_-]?key|authorization|bearer\s+[a-z0-9._~+/=-]{16,})"),
     re.compile(r"(?i)(api[_-]?key|access[_-]?token|refresh[_-]?token|client[_-]?secret)"),
@@ -151,6 +153,54 @@ def validate_decision_state(
         raise ValueError("accepted manual-review decision requires revalidation triggers")
 
 
+def build_acceptance_routing(
+    *,
+    accepted: bool,
+    acceptance_status: str,
+    manual_review_required: bool,
+    required_acceptance_evidence: list[dict[str, Any]],
+    compatibility_effect: object,
+    goal_completion_effect: str,
+    decision_path: pathlib.Path,
+) -> dict[str, Any]:
+    first_safe_action = (
+        "refresh_release_evidence_after_manual_review_acceptance"
+        if accepted
+        else "assert_manual_review_decision_with_required_evidence"
+    )
+    return {
+        "parent_goal_issue": 344,
+        "accepted": accepted,
+        "acceptance_status": acceptance_status,
+        "manual_review_required": manual_review_required,
+        "manual_review_release_boundary_accepted": accepted,
+        "first_safe_action": first_safe_action,
+        "requires_accountable_reviewer": True,
+        "required_acceptance_evidence_ids": [
+            str(item["id"]) for item in required_acceptance_evidence
+        ],
+        "decision_intake_path": decision_path.as_posix(),
+        "decision_validation_command": "python3 scripts/validate-credential-runtime-manual-review-decision.py",
+        "acceptance_generation_command": "python3 scripts/generate-credential-runtime-manual-review-acceptance.py",
+        "acceptance_check_command": "python3 scripts/generate-credential-runtime-manual-review-acceptance.py --check",
+        "acceptance_packet_check_command": "python3 scripts/generate-credential-runtime-manual-review-acceptance-packet.py --check",
+        "post_decision_refresh_commands": [
+            RELEASE_EVIDENCE_REFRESH_COMMAND,
+            RELEASE_EVIDENCE_CHECK_COMMAND,
+        ],
+        "consumer_compatibility_effect": compatibility_effect,
+        "goal_completion_effect": goal_completion_effect,
+        "goal_closure_allowed": False,
+        "default_ci_requires_credentials": False,
+        "checked_in_secrets_allowed": False,
+        "routing_note": (
+            "Manual-review acceptance can route release evidence only after an accountable "
+            "reviewer asserts the required evidence; #344 remains open until finish "
+            "preflight and completion audit allow closure."
+        ),
+    }
+
+
 def build_report(
     handoff: dict[str, Any],
     compatibility: dict[str, Any],
@@ -183,6 +233,33 @@ def build_report(
         if accepted
         else "goal_remains_open_until_reviewed_receipts_or_explicit_acceptance"
     )
+    required_acceptance_evidence = [
+        {
+            "id": "reviewer_identity",
+            "required": True,
+            "description": "A named accountable reviewer or release owner must accept the manual-review boundary.",
+        },
+        {
+            "id": "reviewed_handoff_packet",
+            "required": True,
+            "description": "The reviewer must inspect the current credential runtime review handoff and pending source list.",
+        },
+        {
+            "id": "consumer_compatibility_decision",
+            "required": True,
+            "description": "The acceptance must state the release is manual-review only for affected consumers.",
+        },
+        {
+            "id": "expiry_or_revalidation_trigger",
+            "required": True,
+            "description": "The acceptance must define when it expires or must be revalidated.",
+        },
+        {
+            "id": "no_secret_material",
+            "required": True,
+            "description": "The acceptance record must not include credentials, hashes, headers, or secret-derived values.",
+        },
+    ]
     return {
         "schema_version": SCHEMA_VERSION,
         "generated_at": handoff.get("generated_at"),
@@ -221,33 +298,16 @@ def build_report(
             "consumer_compatibility_effect": compatibility_risk.get("compatibility_effect"),
             "goal_completion_effect": goal_completion_effect,
         },
-        "required_acceptance_evidence": [
-            {
-                "id": "reviewer_identity",
-                "required": True,
-                "description": "A named accountable reviewer or release owner must accept the manual-review boundary.",
-            },
-            {
-                "id": "reviewed_handoff_packet",
-                "required": True,
-                "description": "The reviewer must inspect the current credential runtime review handoff and pending source list.",
-            },
-            {
-                "id": "consumer_compatibility_decision",
-                "required": True,
-                "description": "The acceptance must state the release is manual-review only for affected consumers.",
-            },
-            {
-                "id": "expiry_or_revalidation_trigger",
-                "required": True,
-                "description": "The acceptance must define when it expires or must be revalidated.",
-            },
-            {
-                "id": "no_secret_material",
-                "required": True,
-                "description": "The acceptance record must not include credentials, hashes, headers, or secret-derived values.",
-            },
-        ],
+        "acceptance_routing": build_acceptance_routing(
+            accepted=accepted,
+            acceptance_status=acceptance_status,
+            manual_review_required=manual_review_required,
+            required_acceptance_evidence=required_acceptance_evidence,
+            compatibility_effect=compatibility_risk.get("compatibility_effect"),
+            goal_completion_effect=goal_completion_effect,
+            decision_path=decision_path,
+        ),
+        "required_acceptance_evidence": required_acceptance_evidence,
     }
 
 
