@@ -1,0 +1,116 @@
+name: Runtime freshness verification
+
+on:
+  schedule:
+    # Daily rotating queue consumption, 21:17 UTC / 06:17 KST.
+    - cron: "17 21 * * *"
+  workflow_dispatch:
+    inputs:
+      batch_size:
+        description: "Operations per shard."
+        required: true
+        default: "100"
+      timeout:
+        description: "Per-operation timeout."
+        required: true
+        default: "20s"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7]
+    env:
+      BATCH_SIZE: ${{ inputs.batch_size || '100' }}
+      VERIFY_TIMEOUT: ${{ inputs.timeout || '20s' }}
+      SHARD_COUNT: "8"
+      DATA_GO_KR_SERVICE_KEY: ${{ secrets.DATAPAN_DATA_GO_KR_SERVICE_KEY || secrets.DATA_GO_KR_SERVICE_KEY }}
+      OUTPUT_DIR: datapan-registry/.datapan/runtime-freshness/shard-${{ matrix.shard }}
+    steps:
+      - name: Checkout registry without LFS
+        uses: actions/checkout@v7
+        with:
+          path: datapan-registry
+          lfs: false
+
+      - name: Materialize immutable canonical registry
+        working-directory: datapan-registry
+        run: |
+          python3 scripts/materialize-canonical-registry.py
+          test "$(wc -c < data/data-go-kr.registry.json)" -gt 100000000
+
+      - name: Checkout CLI
+        uses: actions/checkout@v7
+        with:
+          repository: StatPan/datapan-cli
+          path: datapan-cli
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: datapan-cli/go.mod
+          check-latest: true
+          cache-dependency-path: datapan-cli/go.sum
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install batch validation dependency
+        run: python -m pip install jsonschema
+
+      - name: Require configured runtime credential
+        run: |
+          mkdir -p "${OUTPUT_DIR}"
+          if [ -z "${DATA_GO_KR_SERVICE_KEY}" ]; then
+            echo "configured data.go.kr credential is required" >&2
+            exit 1
+          fi
+
+      - name: Generate rotating queue batch
+        working-directory: datapan-registry
+        run: |
+          python scripts/generate-runtime-freshness-batch.py \
+            --rotation-seed "${GITHUB_RUN_NUMBER}" \
+            --shard-index "${{ matrix.shard }}" \
+            --shard-count "${SHARD_COUNT}" \
+            --batch-size "${BATCH_SIZE}" \
+            --output-registry ".datapan/runtime-freshness/shard-${{ matrix.shard }}/registry.json" \
+            --output-plan ".datapan/runtime-freshness/shard-${{ matrix.shard }}/batch-plan.json"
+
+      - name: Run bounded verification and preserve outcome
+        working-directory: datapan-cli
+        run: |
+          set +e
+          go run ./cmd/datapan catalog verify \
+            --registry "../${OUTPUT_DIR}/registry.json" \
+            --limit "${BATCH_SIZE}" \
+            --timeout "${VERIFY_TIMEOUT}" \
+            --output "../${OUTPUT_DIR}/verification.json" \
+            --json | tee "../${OUTPUT_DIR}/stdout.json"
+          status="${PIPESTATUS[0]}"
+          set -e
+          echo "${status}" > "../${OUTPUT_DIR}/exit-code.txt"
+          if [ -f "../${OUTPUT_DIR}/verification.json" ]; then
+            go run ./cmd/datapan catalog verify summary \
+              --input "../${OUTPUT_DIR}/verification.json" \
+              --output "../${OUTPUT_DIR}/verification-summary.json" \
+              --json || true
+          fi
+          echo "verification_exit_code=${status}" >> "${GITHUB_STEP_SUMMARY}"
+
+      - name: Upload staged runtime evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: runtime-freshness-${{ github.run_id }}-shard-${{ matrix.shard }}
+          path: datapan-registry/.datapan/runtime-freshness/shard-${{ matrix.shard }}/
+          if-no-files-found: warn
+          retention-days: 30

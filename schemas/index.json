@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 80,
+  "count": 81,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -723,6 +723,15 @@
       "version": "v1",
       "bytes": 3202,
       "sha256": "2b14276c49c4651602e0f0e2ff53d020b396a5857d862cd1b1bee38fd88945ea"
+    },
+    {
+      "path": "schemas/datapan.runtime-freshness-batch.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.runtime-freshness-batch.v1.schema.json",
+      "title": "Datapan runtime freshness batch v1",
+      "contract": "runtime-freshness-batch",
+      "version": "v1",
+      "bytes": 1969,
+      "sha256": "068d9c201a58197196977b120dc456e2b53b3f7938d2e22b9ac7f8e9a7093720"
     }
   ]
 }
