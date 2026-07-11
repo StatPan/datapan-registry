@@ -53,7 +53,13 @@ jobs:
         uses: actions/checkout@v7
         with:
           path: datapan-registry
-          lfs: true
+          lfs: false
+
+      - name: Materialize manifest-bound canonical registry
+        working-directory: datapan-registry
+        run: |
+          python3 -m unittest tests/test_materialize_canonical_registry.py
+          python3 scripts/materialize-canonical-registry.py
 
       - name: Checkout CLI
         uses: actions/checkout@v7
