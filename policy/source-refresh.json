@@ -1,0 +1,38 @@
+{
+  "schema_version": "datapan.source-refresh-policy.v1",
+  "policy_id": "datapan-registry-upstream-refresh",
+  "sources": [
+    {
+      "source_id": "data_go_kr",
+      "owner": "release-operator",
+      "cadence": {
+        "cron": "17 20 * * 2",
+        "timezone": "UTC"
+      },
+      "last_successful_observation": "2026-07-04T06:39:24Z",
+      "canonical_registry": "data/data-go-kr.registry.json",
+      "credential_env": "DATA_GO_KR_SERVICE_KEY",
+      "importer": {
+        "capability": "catalogue_import",
+        "arguments": [
+          "catalog", "import", "data-go-kr",
+          "--output", "{candidate_registry}",
+          "--all", "--per-page", "100", "--max-pages", "1000",
+          "--retries", "3", "--retry-delay-ms", "500", "--json"
+        ]
+      },
+      "diff": {
+        "limit": 0,
+        "material_change_fields": ["added", "removed", "changed"]
+      },
+      "publication": {
+        "automatic": false,
+        "required_gates": [
+          "release_manifest_verification",
+          "release_readiness",
+          "consumer_compatibility"
+        ]
+      }
+    }
+  ]
+}

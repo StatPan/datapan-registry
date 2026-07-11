@@ -77,6 +77,12 @@ exit with code `20`; manifest, policy, size, or checksum failures exit with code
 `21`, so an unavailable mirror cannot be mistaken for corrupt registry bytes.
 The normalized registry is larger than GitHub's normal blob limit.
 
+Upstream catalogue freshness is observed separately from publication. The
+weekly `Upstream catalog refresh` workflow follows `policy/source-refresh.json`,
+imports an ephemeral candidate, and emits schema-validated `no_change`,
+`material_change`, or `collection_failure` evidence plus a review work packet.
+It never publishes the candidate automatically.
+
 ## Verify
 
 Coverage is intentionally layered. `operation_routable` describes static

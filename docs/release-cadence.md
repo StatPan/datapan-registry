@@ -96,7 +96,8 @@ The repository also runs `.github/workflows/verify-release.yml` on pushes, pull
 requests, manual dispatches, `v*` tags, and a weekly scheduled release-health
 check. That workflow:
 
-- checks out `datapan-registry` with Git LFS enabled;
+- checks out `datapan-registry` without fetching Git LFS and materializes the
+  manifest-bound canonical registry from the immutable public mirror;
 - checks that `data/data-go-kr.registry.json` is the full materialized file,
   not an LFS pointer;
 - checks out `StatPan/datapan-cli`;
@@ -135,6 +136,24 @@ check. That workflow:
   `release-health-rollup.json`, a schema-validated top-level verdict that
   checks provider, registry path, spec count, doctor install cross-check, and
   current-vs-latest release zip evidence invariants;
+
+## Scheduled upstream observation
+
+`.github/workflows/upstream-catalog-refresh.yml` runs the operation-denominator
+source importer on the cadence declared in `policy/source-refresh.json`. It
+always operates as a dry run: the current manifest-bound registry is the
+baseline, the imported registry is an ephemeral candidate, and no tag, release,
+registry commit, or public asset is written. Successful observations produce a
+schema-validated deterministic full diff and classify the result as
+`no_change` or `material_change`. Import, credential, and upstream failures
+produce `collection_failure` evidence with no diff summary, so a failed
+observation can never masquerade as zero drift.
+
+Every run uploads the candidate snapshot when available, catalog diff,
+`upstream-refresh-evidence.json`, and a stable-key
+`upstream-refresh-work-packet.json`. Material drift is routed to human review;
+publication remains false until release manifest verification, readiness, and
+consumer compatibility gates run through the existing release workflow.
 - regenerates and validates `reports/release-consumer-compatibility.json`, the
   manifest-bound downstream compatibility matrix that keeps the canonical
   registry path required, release-health evidence named, shard install fields

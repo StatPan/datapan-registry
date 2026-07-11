@@ -75,6 +75,9 @@ jobs:
           python scripts/validate-coverage-backlog.py
           python scripts/validate-external-adapter-backlog.py
           python scripts/validate-source-profiles.py
+          python scripts/validate-source-refresh-policy.py
+          python -m unittest tests/test_run_upstream_refresh.py
+          python -m unittest tests/test_sync_release_manifest_artifacts.py
           python scripts/generate-source-contract-rollup.py --check
           python scripts/validate-source-contract-rollups.py
           python scripts/validate-error-action-catalogs.py
@@ -132,6 +135,8 @@ jobs:
           python -m py_compile scripts/generate-error-action-routing-rollup.py
           python -m py_compile scripts/generate-source-contract-rollup.py
           python -m py_compile scripts/generate-sustainable-coverage.py
+          python -m py_compile scripts/run-upstream-refresh.py
+          python -m py_compile scripts/validate-source-refresh-policy.py
           python -m py_compile scripts/sync-release-manifest-artifacts.py
           python -m py_compile scripts/generate-release-distribution-footprint.py
           python -m py_compile scripts/generate-release-shard-consumer-proof.py

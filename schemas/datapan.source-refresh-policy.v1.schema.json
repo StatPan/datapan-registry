@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.source-refresh-policy.v1.schema.json",
+  "title": "Datapan Source Refresh Policy v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "policy_id", "sources"],
+  "properties": {
+    "schema_version": {"const": "datapan.source-refresh-policy.v1"},
+    "policy_id": {"type": "string", "minLength": 1},
+    "sources": {
+      "type": "array", "minItems": 1,
+      "items": {"$ref": "#/$defs/source"}
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "owner", "cadence", "last_successful_observation", "canonical_registry", "credential_env", "importer", "diff", "publication"],
+      "properties": {
+        "source_id": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
+        "owner": {"type": "string", "minLength": 1},
+        "cadence": {
+          "type": "object", "additionalProperties": false,
+          "required": ["cron", "timezone"],
+          "properties": {
+            "cron": {"type": "string", "pattern": "^\\S+ \\S+ \\S+ \\S+ \\S+$"},
+            "timezone": {"const": "UTC"}
+          }
+        },
+        "last_successful_observation": {"type": "string", "format": "date-time"},
+        "canonical_registry": {"type": "string", "minLength": 1},
+        "credential_env": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"},
+        "importer": {
+          "type": "object", "additionalProperties": false,
+          "required": ["capability", "arguments"],
+          "properties": {
+            "capability": {"const": "catalogue_import"},
+            "arguments": {"type": "array", "minItems": 2, "items": {"type": "string", "minLength": 1}}
+          }
+        },
+        "diff": {
+          "type": "object", "additionalProperties": false,
+          "required": ["limit", "material_change_fields"],
+          "properties": {
+            "limit": {"const": 0},
+            "material_change_fields": {
+              "type": "array", "items": {"enum": ["added", "removed", "changed"]},
+              "minItems": 3, "maxItems": 3, "uniqueItems": true
+            }
+          }
+        },
+        "publication": {
+          "type": "object", "additionalProperties": false,
+          "required": ["automatic", "required_gates"],
+          "properties": {
+            "automatic": {"const": false},
+            "required_gates": {
+              "type": "array", "uniqueItems": true, "minItems": 3,
+              "items": {"enum": ["release_manifest_verification", "release_readiness", "consumer_compatibility"]}
+            }
+          }
+        }
+      }
+    }
+  }
+}

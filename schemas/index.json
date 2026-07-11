@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 69,
+  "count": 72,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 3736,
-      "sha256": "d2b7db378b5e5da945e20ca4853ddf20c9ba91cbe9d0874bea22fbc879d7246b"
+      "bytes": 3765,
+      "sha256": "2e5ee3daa48c89d957f62286dc85d31a13530207b73eb0087efc3dc3c29cfc16"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -624,6 +624,33 @@
       "version": "v1",
       "bytes": 4073,
       "sha256": "4382d6f39f293fe73c726a3f6701b47d928b9d4c00b2eab09a9a208aeb332bc1"
+    },
+    {
+      "path": "schemas/datapan.source-refresh-policy.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.source-refresh-policy.v1.schema.json",
+      "title": "Datapan Source Refresh Policy v1",
+      "contract": "source-refresh-policy",
+      "version": "v1",
+      "bytes": 2714,
+      "sha256": "4f906885ccaa4c010dd900052be2d13f62c7384cfe8ae188d25a2e828c18704c"
+    },
+    {
+      "path": "schemas/datapan.upstream-refresh-evidence.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.upstream-refresh-evidence.v1.schema.json",
+      "title": "Datapan Upstream Refresh Evidence v1",
+      "contract": "upstream-refresh-evidence",
+      "version": "v1",
+      "bytes": 3866,
+      "sha256": "81eb66ec3bbcd1a0687b5b8cc0cace6936a8b4fef6414a760bd50f9c8d23b917"
+    },
+    {
+      "path": "schemas/datapan.upstream-refresh-work-packet.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.upstream-refresh-work-packet.v1.schema.json",
+      "title": "Datapan Upstream Refresh Work Packet v1",
+      "contract": "upstream-refresh-work-packet",
+      "version": "v1",
+      "bytes": 1137,
+      "sha256": "5acd12db547051582cb2fde99264d3d4a50b9e88e8b508c58acba0100a066e99"
     }
   ]
 }

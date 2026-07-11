@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.upstream-refresh-evidence.v1.schema.json",
+  "title": "Datapan Upstream Refresh Evidence v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "observed_at", "source_id", "owner", "status", "collection", "baseline", "snapshot", "diff", "review", "publication"],
+  "properties": {
+    "schema_version": {"const": "datapan.upstream-refresh-evidence.v1"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "source_id": {"type": "string", "minLength": 1},
+    "owner": {"type": "string", "minLength": 1},
+    "status": {"enum": ["no_change", "material_change", "collection_failure"]},
+    "collection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["attempted", "succeeded", "exit_code", "error_class"],
+      "properties": {
+        "attempted": {"const": true}, "succeeded": {"type": "boolean"},
+        "exit_code": {"type": "integer", "minimum": 0},
+        "error_class": {"type": ["string", "null"]},
+        "message": {"type": "string"}
+      }
+    },
+    "baseline": {"$ref": "#/$defs/asset"},
+    "snapshot": {"oneOf": [{"$ref": "#/$defs/asset"}, {"type": "null"}]},
+    "diff": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["path", "sha256", "summary"],
+          "properties": {
+            "path": {"type": "string", "minLength": 1},
+            "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+            "summary": {
+              "type": "object", "additionalProperties": false,
+              "required": ["added", "removed", "changed", "stable"],
+              "properties": {
+                "added": {"type": "integer", "minimum": 0}, "removed": {"type": "integer", "minimum": 0},
+                "changed": {"type": "integer", "minimum": 0}, "stable": {"type": "integer", "minimum": 0}
+              }
+            }
+          }
+        }
+      ]
+    },
+    "review": {
+      "type": "object", "additionalProperties": false,
+      "required": ["action", "work_key"],
+      "properties": {
+        "action": {"enum": ["none", "review_catalog_drift", "investigate_collection_failure"]},
+        "work_key": {"type": "string", "pattern": "^upstream-refresh:[a-z0-9_]+:[a-f0-9]{16}$"}
+      }
+    },
+    "publication": {
+      "type": "object", "additionalProperties": false,
+      "required": ["automatic", "release_allowed", "required_gates"],
+      "properties": {
+        "automatic": {"const": false}, "release_allowed": {"const": false},
+        "required_gates": {"type": "array", "minItems": 3, "uniqueItems": true, "items": {"type": "string"}}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "collection_failure"}}},
+      "then": {
+        "properties": {
+          "collection": {"properties": {"succeeded": {"const": false}, "exit_code": {"minimum": 1}}},
+          "snapshot": {"type": "null"}, "diff": {"type": "null"},
+          "review": {"properties": {"action": {"const": "investigate_collection_failure"}}}
+        }
+      },
+      "else": {
+        "properties": {
+          "collection": {"properties": {"succeeded": {"const": true}, "exit_code": {"const": 0}, "error_class": {"type": "null"}}},
+          "snapshot": {"$ref": "#/$defs/asset"},
+          "diff": {"type": "object"}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "asset": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "bytes", "sha256", "records"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1}, "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "records": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}
