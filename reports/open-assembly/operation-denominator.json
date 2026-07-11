@@ -1,0 +1,8 @@
+{
+  "schema_version": "datapan.operation-denominator.v1", "generated_at": "2026-07-04T06:39:24Z", "source_id": "open_assembly", "provider": "open.assembly.go.kr",
+  "scope": {"kind": "enumerated_supported_operations", "definition": "Operations explicitly registered and bounded by the Open Assembly runtime candidate catalog.", "unknown_upstream_operations_covered": false},
+  "provenance": {"source_profile": "sources/open_assembly.json", "catalog_artifact": "reports/open-assembly/runtime-candidates.json", "reviewed_at": "2026-07-04"},
+  "identity_fields": ["operation_id"], "summary": {"operations": 1, "callable_operations": 1},
+  "operations": [{"operation_id": "open-assembly-opensrvapi-list", "method": "GET", "endpoint_template": "https://open.assembly.go.kr/portal/openapi/OPENSRVAPI", "callable": true}],
+  "maintenance": {"refresh_owner": "datapan-registry", "refresh_trigger": "source_profile_or_candidate_change"}
+}

@@ -1,0 +1,8 @@
+{
+  "schema_version": "datapan.operation-denominator.v1", "generated_at": "2026-07-04T06:39:24Z", "source_id": "kosis", "provider": "KOSIS",
+  "scope": {"kind": "enumerated_supported_operations", "definition": "Operations explicitly registered and bounded by the KOSIS runtime candidate catalog.", "unknown_upstream_operations_covered": false},
+  "provenance": {"source_profile": "sources/kosis.json", "catalog_artifact": "reports/kosis/runtime-candidates.json", "reviewed_at": "2026-07-04"},
+  "identity_fields": ["operation_id"], "summary": {"operations": 1, "callable_operations": 1},
+  "operations": [{"operation_id": "kosis-statistics-data-dt-1b41", "method": "GET", "endpoint_template": "https://kosis.kr/openapi/statisticsData.do?method=getList", "callable": true}],
+  "maintenance": {"refresh_owner": "datapan-registry", "refresh_trigger": "source_profile_or_candidate_change"}
+}

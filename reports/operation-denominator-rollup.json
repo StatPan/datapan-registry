@@ -1,0 +1,46 @@
+{
+  "schema_version": "datapan.operation-denominator-rollup.v1",
+  "generated_at": "2026-07-04T06:39:24Z",
+  "summary": {
+    "sources": 5,
+    "operations": 21260,
+    "callable_operations": 21118
+  },
+  "sources": [
+    {
+      "source_id": "data_go_kr",
+      "path": "reports/data-go-kr/operation-denominator.json",
+      "scope_kind": "aggregate_supported_catalog",
+      "operations": 21256,
+      "callable_operations": 21114
+    },
+    {
+      "source_id": "ecos",
+      "path": "reports/ecos/operation-denominator.json",
+      "scope_kind": "enumerated_supported_operations",
+      "operations": 1,
+      "callable_operations": 1
+    },
+    {
+      "source_id": "kosis",
+      "path": "reports/kosis/operation-denominator.json",
+      "scope_kind": "enumerated_supported_operations",
+      "operations": 1,
+      "callable_operations": 1
+    },
+    {
+      "source_id": "open_assembly",
+      "path": "reports/open-assembly/operation-denominator.json",
+      "scope_kind": "enumerated_supported_operations",
+      "operations": 1,
+      "callable_operations": 1
+    },
+    {
+      "source_id": "seoul_open_data",
+      "path": "reports/seoul-open-data/operation-denominator.json",
+      "scope_kind": "enumerated_supported_operations",
+      "operations": 1,
+      "callable_operations": 1
+    }
+  ]
+}
