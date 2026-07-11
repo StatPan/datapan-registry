@@ -12,6 +12,7 @@ from typing import Any
 
 
 DEFAULT_EXECUTION_PLAN = pathlib.Path("reports/credential-runtime-collection-execution-plan.json")
+DEFAULT_WORKFLOW = pathlib.Path(".github/workflows/credential-runtime-collection.yml")
 DEFAULT_REPO = "StatPan/datapan-registry"
 SCHEMA_VERSION = "datapan.credential-runtime-github-secret-readiness.v1"
 
@@ -145,6 +146,23 @@ def run_self_test() -> None:
         raise ValueError("self-test expected complete readiness")
 
 
+def validate_workflow(path: pathlib.Path) -> None:
+    text = path.read_text(encoding="utf-8")
+    required = (
+        '- cron: "17 19 * * 3"',
+        "COLLECTION_MODE: ${{ github.event_name == 'schedule' && 'collect' || inputs.mode }}",
+        "mode: ${{ steps.gate.outputs.mode }}",
+        "needs.secret-readiness.outputs.mode != 'collect'",
+        "if: env.COLLECTION_MODE == 'collect'",
+        "--skip-not-ready --continue-on-error",
+        "checked-in receipt promotion: disabled",
+        "secret values in artifacts: disabled",
+    )
+    missing = [fragment for fragment in required if fragment not in text]
+    if missing:
+        raise ValueError(f"credential workflow missing scheduled collection invariant(s): {missing}")
+
+
 def print_human(report: dict[str, Any]) -> None:
     print(
         "credential runtime GitHub secret readiness "
@@ -160,6 +178,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--execution-plan", default=DEFAULT_EXECUTION_PLAN, type=pathlib.Path)
     parser.add_argument("--repo", default=DEFAULT_REPO)
+    parser.add_argument("--workflow", default=DEFAULT_WORKFLOW, type=pathlib.Path)
     parser.add_argument("--secret-list-json", type=pathlib.Path, help="read gh secret list JSON from a file")
     parser.add_argument("--json", action="store_true", help="print JSON output")
     parser.add_argument("--check", action="store_true", help="validate required env configuration without querying GitHub")
@@ -175,6 +194,7 @@ def main() -> int:
         if args.check:
             if len(set(required)) != len(required):
                 raise ValueError("required credential env names must be unique")
+            validate_workflow(args.workflow)
             print(f"ok credential runtime GitHub secret readiness config (required={len(required)})")
             return 0
         if args.secret_list_json:

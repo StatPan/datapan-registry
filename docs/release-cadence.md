@@ -163,6 +163,16 @@ check. That workflow:
 
 ## Scheduled upstream observation
 
+`.github/workflows/credential-runtime-collection.yml` runs a separate bounded
+credential observation every Wednesday at 19:17 UTC (Thursday 04:17 KST).
+Scheduled events resolve explicitly to `collect`; manual dispatch keeps the
+`preflight`/`collect` choice. The run collects only sources whose repository
+secret is present, skips missing sources such as Seoul without suppressing the
+other receipts, and uploads staged redacted evidence for 14 days. It never
+promotes a receipt or writes reviewed evidence; promotion remains an explicit
+human-review operation. These observations are the recurring input to the
+freshness and recovery cycle in #483.
+
 `.github/workflows/upstream-catalog-refresh.yml` runs the operation-denominator
 source importer on the cadence declared in `policy/source-refresh.json`. It
 always operates as a dry run: the current manifest-bound registry is the
