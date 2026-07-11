@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import pathlib
+import re
 import sys
 from datetime import datetime, timezone
 from typing import Any
@@ -15,6 +16,8 @@ import jsonschema
 
 
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.runtime-freshness-run-receipt.v1.schema.json")
+FORBIDDEN_KEYS = {"url", "request_url", "request_urls", "response_body", "response_bodies", "body", "credential_value", "credential_hash", "authorization", "authorization_header", "servicekey", "service_key", "apikey", "api_key", "secret", "token"}
+SECRET_PATTERNS = tuple(re.compile(pattern, re.IGNORECASE) for pattern in (r"authorization:\s*bearer", r"bearer\s+[a-z0-9._~+/=-]{16,}", r"servicekey=", r"api[_-]?key=", r"secret=", r"token="))
 
 
 def load(path: pathlib.Path) -> dict[str, Any]:
@@ -29,11 +32,35 @@ def file_record(path: pathlib.Path, root: pathlib.Path) -> dict[str, Any]:
     return {"path": path.relative_to(root).as_posix(), "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
 
 
+def sanitize(value: object) -> object:
+    if isinstance(value, dict):
+        return {key: sanitize(child) for key, child in value.items() if key.lower() not in FORBIDDEN_KEYS}
+    if isinstance(value, list):
+        return [sanitize(child) for child in value]
+    return value
+
+
+def scan_boundary(value: object, label: str = "report") -> None:
+    if isinstance(value, dict):
+        for key, child in value.items():
+            if key.lower() in FORBIDDEN_KEYS:
+                raise ValueError(f"{label}: forbidden field {key}")
+            scan_boundary(child, f"{label}.{key}")
+    elif isinstance(value, list):
+        for index, child in enumerate(value):
+            scan_boundary(child, f"{label}[{index}]")
+    elif isinstance(value, str):
+        for pattern in SECRET_PATTERNS:
+            if pattern.search(value):
+                raise ValueError(f"{label}: secret-like string matches {pattern.pattern}")
+
+
 def build(root: pathlib.Path, combined_path: pathlib.Path, *, expected_shards: int, run_id: str) -> dict[str, Any]:
     plans = sorted(root.rglob("batch-plan.json"))
     if len(plans) != expected_shards:
         raise ValueError(f"expected {expected_shards} shard plans, got {len(plans)}")
     combined = load(combined_path)
+    scan_boundary(combined, "combined verification")
     combined_results = combined.get("results")
     if not isinstance(combined_results, list):
         raise ValueError("combined verification results must be an array")
@@ -87,13 +114,19 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", type=pathlib.Path, required=True)
     parser.add_argument("--combined", type=pathlib.Path, required=True)
+    parser.add_argument("--sanitized-output", type=pathlib.Path, required=True)
     parser.add_argument("--expected-shards", type=int, default=8)
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--schema", type=pathlib.Path, default=DEFAULT_SCHEMA)
     parser.add_argument("--output", type=pathlib.Path, required=True)
     args = parser.parse_args()
     try:
-        report = build(args.root, args.combined, expected_shards=args.expected_shards, run_id=args.run_id)
+        raw = load(args.combined)
+        sanitized = sanitize(raw)
+        scan_boundary(sanitized, "sanitized combined verification")
+        args.sanitized_output.parent.mkdir(parents=True, exist_ok=True)
+        args.sanitized_output.write_text(json.dumps(sanitized, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        report = build(args.root, args.sanitized_output, expected_shards=args.expected_shards, run_id=args.run_id)
         errors = list(jsonschema.Draft202012Validator(load(args.schema), format_checker=jsonschema.FormatChecker()).iter_errors(report))
         if errors:
             raise ValueError("; ".join(error.message for error in errors))
