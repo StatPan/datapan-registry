@@ -27,6 +27,11 @@ def main() -> int:
             'echo "${status}" >',
             "if: always()",
             "retention-days: 30",
+            "consolidate:",
+            "actions/download-artifact@v8",
+            "catalog verify merge",
+            "consolidate-runtime-freshness-run.py",
+            "runtime-freshness-${{ github.run_id }}-consolidated",
         )
         missing = [fragment for fragment in required if fragment not in text]
         if missing:
