@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.failure-recovery-policy.v1.schema.json",
+  "title": "Datapan Failure Recovery Policy v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "policy_id", "classes"],
+  "properties": {
+    "schema_version": {"const": "datapan.failure-recovery-policy.v1"},
+    "policy_id": {"type": "string", "minLength": 1},
+    "classes": {"type": "array", "minItems": 9, "items": {"$ref": "#/$defs/class"}}
+  },
+  "$defs": {
+    "class": {
+      "type": "object", "additionalProperties": false,
+      "required": ["failure_class", "owner", "severity", "retry", "recurrence_threshold", "due_days", "recovery_action"],
+      "properties": {
+        "failure_class": {"enum": ["credential", "parameter", "adapter", "parser", "rate_limit", "upstream", "reference_drift", "catalog_drift", "consumer"]},
+        "owner": {"type": "string", "minLength": 1},
+        "severity": {"enum": ["low", "medium", "high", "blocking"]},
+        "retry": {
+          "type": "object", "additionalProperties": false, "required": ["max_attempts", "backoff"],
+          "properties": {"max_attempts": {"type": "integer", "minimum": 1}, "backoff": {"enum": ["none", "fixed", "exponential"]}}
+        },
+        "recurrence_threshold": {"type": "integer", "minimum": 1},
+        "due_days": {"type": "integer", "minimum": 1},
+        "recovery_action": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
+        "existing_ticket": {"type": "integer", "minimum": 1}
+      }
+    }
+  }
+}

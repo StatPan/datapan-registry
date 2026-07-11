@@ -92,6 +92,7 @@ jobs:
           python -m py_compile \
             scripts/error_action_routing_rollup.py \
             scripts/generate-error-action-routing-rollup.py \
+            scripts/generate-failure-recovery-rollup.py \
             scripts/generate-impact-plan-rollup.py \
             scripts/generate-release-assembly-receipt.py \
             scripts/generate-release-distribution-footprint.py \
@@ -170,6 +171,8 @@ jobs:
           python scripts/validate-error-action-catalogs.py
           python scripts/generate-error-action-routing-rollup.py --check
           python scripts/validate-error-action-routing-rollups.py
+          python scripts/generate-failure-recovery-rollup.py --check
+          python -m unittest tests/test_generate_failure_recovery_rollup.py
           python scripts/validate-external-coverage.py
           python scripts/generate-impact-plan-rollup.py --check
           python scripts/validate-impact-plans.py

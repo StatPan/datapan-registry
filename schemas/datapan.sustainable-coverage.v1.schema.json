@@ -4,14 +4,14 @@
   "title": "Datapan Sustainable Coverage Report v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "generated_at", "policy", "inputs", "summary", "layers", "freshness", "source_status", "maintenance_boundary"],
+  "required": ["schema_version", "generated_at", "policy", "inputs", "summary", "layers", "freshness", "failure_recovery", "source_status", "maintenance_boundary"],
   "properties": {
     "schema_version": {"const": "datapan.sustainable-coverage.v1"},
     "generated_at": {"type": "string", "format": "date-time"},
     "policy": {"type": "object", "required": ["path", "policy_id", "supported_source_count", "required_consumer_count"], "additionalProperties": false, "properties": {
       "path": {"const": "policy/sustainable-coverage.json"}, "policy_id": {"type": "string"}, "supported_source_count": {"$ref": "#/$defs/count"}, "required_consumer_count": {"$ref": "#/$defs/count"}
     }},
-    "inputs": {"type": "object", "additionalProperties": {"type": "string"}, "required": ["manifest", "source_contract_rollup", "source_runtime_evidence_rollup", "latest_verification", "credential_runtime_runner_readiness", "release_consumer_compatibility"]},
+    "inputs": {"type": "object", "additionalProperties": {"type": "string"}, "required": ["manifest", "source_contract_rollup", "source_runtime_evidence_rollup", "latest_verification", "credential_runtime_runner_readiness", "release_consumer_compatibility", "failure_recovery_rollup"]},
     "summary": {"type": "object", "additionalProperties": false, "required": ["decision", "layers_total", "layers_meeting_target", "layers_below_target", "unknown_timestamp_records", "stale_records", "expired_records"], "properties": {
       "decision": {"enum": ["sustainable", "coverage_gaps"]}, "layers_total": {"$ref": "#/$defs/count"}, "layers_meeting_target": {"$ref": "#/$defs/count"}, "layers_below_target": {"$ref": "#/$defs/count"}, "unknown_timestamp_records": {"$ref": "#/$defs/count"}, "stale_records": {"$ref": "#/$defs/count"}, "expired_records": {"$ref": "#/$defs/count"}
     }},
@@ -19,11 +19,14 @@
     "freshness": {"type": "object", "additionalProperties": false, "required": ["as_of", "fresh_days", "expire_days", "fresh", "stale", "expired", "unknown_timestamp", "fresh_verified"], "properties": {
       "as_of": {"type": "string", "format": "date-time"}, "fresh_days": {"type": "integer"}, "expire_days": {"type": "integer"}, "fresh": {"$ref": "#/$defs/count"}, "stale": {"$ref": "#/$defs/count"}, "expired": {"$ref": "#/$defs/count"}, "unknown_timestamp": {"$ref": "#/$defs/count"}, "fresh_verified": {"$ref": "#/$defs/count"}
     }},
-    "source_status": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["source_id", "profile_present", "catalog_denominator", "call_capability", "reviewed_runtime_receipt", "runtime_evidence"], "properties": {
-      "source_id": {"type": "string"}, "profile_present": {"type": "boolean"}, "catalog_denominator": {"type": "boolean"}, "call_capability": {"type": "boolean"}, "reviewed_runtime_receipt": {"type": "boolean"}, "runtime_evidence": {"type": "integer", "minimum": 0}
+    "failure_recovery": {"type": "object", "additionalProperties": false, "required": ["active", "persistent", "recovered", "unowned", "overdue", "durable_work_items"], "properties": {
+      "active": {"$ref": "#/$defs/count"}, "persistent": {"$ref": "#/$defs/count"}, "recovered": {"$ref": "#/$defs/count"}, "unowned": {"$ref": "#/$defs/count"}, "overdue": {"$ref": "#/$defs/count"}, "durable_work_items": {"$ref": "#/$defs/count"}
+    }},
+    "source_status": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["source_id", "profile_present", "catalog_denominator", "call_capability", "reviewed_runtime_receipt", "runtime_evidence", "active_recovery_failures", "recovered_failures"], "properties": {
+      "source_id": {"type": "string"}, "profile_present": {"type": "boolean"}, "catalog_denominator": {"type": "boolean"}, "call_capability": {"type": "boolean"}, "reviewed_runtime_receipt": {"type": "boolean"}, "runtime_evidence": {"type": "integer", "minimum": 0}, "active_recovery_failures": {"$ref": "#/$defs/count"}, "recovered_failures": {"$ref": "#/$defs/count"}
     } }},
-    "maintenance_boundary": {"type": "object", "additionalProperties": false, "required": ["routable_is_not_runtime_verified", "missing_denominators_are_uncovered", "missing_timestamps_are_not_fresh", "next_actions"], "properties": {
-      "routable_is_not_runtime_verified": {"const": true}, "missing_denominators_are_uncovered": {"const": true}, "missing_timestamps_are_not_fresh": {"const": true}, "next_actions": {"type": "array", "items": {"type": "string"}}
+    "maintenance_boundary": {"type": "object", "additionalProperties": false, "required": ["routable_is_not_runtime_verified", "missing_denominators_are_uncovered", "missing_timestamps_are_not_fresh", "recovery_updates_coverage", "next_actions"], "properties": {
+      "routable_is_not_runtime_verified": {"const": true}, "missing_denominators_are_uncovered": {"const": true}, "missing_timestamps_are_not_fresh": {"const": true}, "recovery_updates_coverage": {"const": true}, "next_actions": {"type": "array", "items": {"type": "string"}}
     }}
   },
   "$defs": {

@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 72,
+  "count": 75,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 3765,
-      "sha256": "2e5ee3daa48c89d957f62286dc85d31a13530207b73eb0087efc3dc3c29cfc16"
+      "bytes": 3863,
+      "sha256": "ffc90e1fb5b5c379ad476f6437a8d2d0f721c16e3cd31eeb6703897a3ad7e508"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -622,8 +622,8 @@
       "title": "Datapan Sustainable Coverage Report v1",
       "contract": "sustainable-coverage",
       "version": "v1",
-      "bytes": 4073,
-      "sha256": "4382d6f39f293fe73c726a3f6701b47d928b9d4c00b2eab09a9a208aeb332bc1"
+      "bytes": 4790,
+      "sha256": "81b94273a27b28fc76c7c8c630c015ebb5797b4bce07a4f31e76baa6aac60c9b"
     },
     {
       "path": "schemas/datapan.source-refresh-policy.v1.schema.json",
@@ -651,6 +651,33 @@
       "version": "v1",
       "bytes": 1137,
       "sha256": "5acd12db547051582cb2fde99264d3d4a50b9e88e8b508c58acba0100a066e99"
+    },
+    {
+      "path": "schemas/datapan.failure-observations.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.failure-observations.v1.schema.json",
+      "title": "Datapan Failure Observations v1",
+      "contract": "failure-observations",
+      "version": "v1",
+      "bytes": 1237,
+      "sha256": "1593c6b4e79657961020354e89683064ba2125f8aa65f944271366030f8fd50a"
+    },
+    {
+      "path": "schemas/datapan.failure-recovery-policy.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.failure-recovery-policy.v1.schema.json",
+      "title": "Datapan Failure Recovery Policy v1",
+      "contract": "failure-recovery-policy",
+      "version": "v1",
+      "bytes": 1599,
+      "sha256": "1b6402321ba6df73b804169488e4d0bf7f22c9b17570c93171bafd375af8cd53"
+    },
+    {
+      "path": "schemas/datapan.failure-recovery-rollup.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.failure-recovery-rollup.v1.schema.json",
+      "title": "Datapan Failure Recovery Rollup v1",
+      "contract": "failure-recovery-rollup",
+      "version": "v1",
+      "bytes": 3894,
+      "sha256": "9db6849a1bab611d6fa13f8f2ff56ded597b8e7a59509ce6803480efe3e99fa1"
     }
   ]
 }

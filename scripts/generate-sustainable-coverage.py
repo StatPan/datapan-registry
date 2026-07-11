@@ -27,6 +27,7 @@ INPUT_PATHS = {
     "latest_verification": pathlib.Path("reports/latest-verification.json"),
     "credential_runtime_runner_readiness": pathlib.Path("reports/credential-runtime-runner-readiness.json"),
     "release_consumer_compatibility": pathlib.Path("reports/release-consumer-compatibility.json"),
+    "failure_recovery_rollup": pathlib.Path("reports/failure-recovery-rollup.json"),
 }
 
 
@@ -160,6 +161,19 @@ def build_report(policy: dict[str, Any], inputs: dict[str, dict[str, Any]]) -> d
     runner_sources = objects(inputs["credential_runtime_runner_readiness"].get("sources"), "runner sources")
     runner_by_id = {str(item.get("source_id")): item for item in runner_sources}
     require_exact_ids("credential runner readiness", set(supported_ids), set(runner_by_id))
+    recovery = inputs["failure_recovery_rollup"]
+    recovery_summary = recovery.get("summary")
+    if not isinstance(recovery_summary, dict):
+        raise ValueError("failure recovery rollup summary must be an object")
+    recovery_failures = objects(recovery.get("failures"), "failure recovery failures")
+    active_recovery_by_source = {
+        source_id: sum(row.get("source_id") == source_id and row.get("status") != "recovered" for row in recovery_failures)
+        for source_id in supported_ids
+    }
+    recovered_by_source = {
+        source_id: sum(row.get("source_id") == source_id and row.get("status") == "recovered" for row in recovery_failures)
+        for source_id in supported_ids
+    }
 
     operation_sources = [item for item in supported if item.get("catalog_scope") == "operation_denominator"]
     operations = callable_operations = 0
@@ -205,6 +219,8 @@ def build_report(policy: dict[str, Any], inputs: dict[str, dict[str, Any]]) -> d
             "call_capability": isinstance(capabilities, list) and "call" in capabilities,
             "reviewed_runtime_receipt": bool(runner.get("reviewed_receipt_present")),
             "runtime_evidence": int(runtime.get("evidence_total", 0)),
+            "active_recovery_failures": active_recovery_by_source[source_id],
+            "recovered_failures": recovered_by_source[source_id],
         })
 
     layers = [
@@ -230,8 +246,9 @@ def build_report(policy: dict[str, Any], inputs: dict[str, dict[str, Any]]) -> d
         "summary": {"decision": "sustainable" if met == len(layers) else "coverage_gaps", "layers_total": len(layers), "layers_meeting_target": met, "layers_below_target": len(layers) - met, "unknown_timestamp_records": freshness["unknown_timestamp"], "stale_records": freshness["stale"], "expired_records": freshness["expired"]},
         "layers": layers,
         "freshness": {"as_of": as_of_text, "fresh_days": freshness_policy["fresh_days"], "expire_days": freshness_policy["expire_days"], **freshness},
+        "failure_recovery": {key: int(recovery_summary.get(key, 0)) for key in ("active", "persistent", "recovered", "unowned", "overdue", "durable_work_items")},
         "source_status": source_status,
-        "maintenance_boundary": {"routable_is_not_runtime_verified": True, "missing_denominators_are_uncovered": True, "missing_timestamps_are_not_fresh": True, "next_actions": next_actions},
+        "maintenance_boundary": {"routable_is_not_runtime_verified": True, "missing_denominators_are_uncovered": True, "missing_timestamps_are_not_fresh": True, "recovery_updates_coverage": True, "next_actions": next_actions},
     }
 
 
