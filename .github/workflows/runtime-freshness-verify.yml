@@ -161,9 +161,9 @@ jobs:
             inputs+=(--input "${report}")
           done < <(find ../datapan-registry/.datapan/runtime-freshness/collected -name verification.json -print0 | sort -z)
           test "${#inputs[@]}" -eq 16
-          mkdir -p ../datapan-registry/.datapan/runtime-freshness/consolidated
+          mkdir -p ../datapan-registry/.datapan/runtime-freshness/raw-combined
           go run ./cmd/datapan catalog verify merge "${inputs[@]}" \
-            --output ../datapan-registry/.datapan/runtime-freshness/consolidated/verification.json \
+            --output ../datapan-registry/.datapan/runtime-freshness/raw-combined/verification.json \
             --json
 
       - name: Validate and receipt the complete run
@@ -171,7 +171,8 @@ jobs:
         run: |
           python scripts/consolidate-runtime-freshness-run.py \
             --root .datapan/runtime-freshness \
-            --combined .datapan/runtime-freshness/consolidated/verification.json \
+            --combined .datapan/runtime-freshness/raw-combined/verification.json \
+            --sanitized-output .datapan/runtime-freshness/consolidated/verification.json \
             --expected-shards 8 \
             --run-id "${GITHUB_RUN_ID}" \
             --output .datapan/runtime-freshness/consolidated/run-receipt.json

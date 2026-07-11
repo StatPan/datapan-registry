@@ -48,6 +48,16 @@ class ConsolidateRuntimeFreshnessRunTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "duplicate"):
                 MODULE.build(root, self.fixture(root, duplicate=True), expected_shards=2, run_id="run")
 
+    def test_sanitize_removes_request_and_secret_bearing_fields(self) -> None:
+        value = {"results": [{"url": "https://example.test?serviceKey=REDACTED", "body": "hidden", "params": {"apiKey": "hidden", "safe": "yes"}}]}
+        sanitized = MODULE.sanitize(value)
+        MODULE.scan_boundary(sanitized)
+        self.assertEqual(sanitized, {"results": [{"params": {"safe": "yes"}}]})
+
+    def test_secret_like_string_is_rejected(self) -> None:
+        with self.assertRaisesRegex(ValueError, "secret-like"):
+            MODULE.scan_boundary({"note": "serviceKey=actual-value"})
+
 
 if __name__ == "__main__":
     unittest.main()

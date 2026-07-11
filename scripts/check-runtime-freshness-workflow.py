@@ -31,6 +31,7 @@ def main() -> int:
             "actions/download-artifact@v8",
             "catalog verify merge",
             "consolidate-runtime-freshness-run.py",
+            "--sanitized-output .datapan/runtime-freshness/consolidated/verification.json",
             "runtime-freshness-${{ github.run_id }}-consolidated",
         )
         missing = [fragment for fragment in required if fragment not in text]
