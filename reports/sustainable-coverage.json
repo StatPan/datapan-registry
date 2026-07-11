@@ -14,13 +14,14 @@
     "latest_verification": "reports/latest-verification.json",
     "credential_runtime_runner_readiness": "reports/credential-runtime-runner-readiness.json",
     "release_consumer_compatibility": "reports/release-consumer-compatibility.json",
-    "failure_recovery_rollup": "reports/failure-recovery-rollup.json"
+    "failure_recovery_rollup": "reports/failure-recovery-rollup.json",
+    "operation_denominator_rollup": "reports/operation-denominator-rollup.json"
   },
   "summary": {
     "decision": "coverage_gaps",
     "layers_total": 9,
-    "layers_meeting_target": 4,
-    "layers_below_target": 5,
+    "layers_meeting_target": 5,
+    "layers_below_target": 4,
     "unknown_timestamp_records": 715,
     "stale_records": 0,
     "expired_records": 0
@@ -38,18 +39,18 @@
     },
     {
       "id": "catalog_denominator",
-      "numerator": 1,
+      "numerator": 5,
       "denominator": 5,
-      "percent": 20.0,
+      "percent": 100.0,
       "target_percent": 100.0,
-      "meets_target": false,
+      "meets_target": true,
       "scope": "supported_sources",
       "meaning": "Supported sources with an explicit operation denominator; contract-only sources remain uncovered."
     },
     {
       "id": "operation_routable",
-      "numerator": 21114,
-      "denominator": 21256,
+      "numerator": 21118,
+      "denominator": 21260,
       "percent": 99.3,
       "target_percent": 98.0,
       "meets_target": true,
@@ -89,7 +90,7 @@
     {
       "id": "runtime_evidence_operation",
       "numerator": 4637,
-      "denominator": 21256,
+      "denominator": 21260,
       "percent": 21.8,
       "target_percent": 80.0,
       "meets_target": false,
@@ -99,7 +100,7 @@
     {
       "id": "fresh_verified_operation",
       "numerator": 2775,
-      "denominator": 21256,
+      "denominator": 21260,
       "percent": 13.1,
       "target_percent": 80.0,
       "meets_target": false,
@@ -149,7 +150,7 @@
     {
       "source_id": "ecos",
       "profile_present": true,
-      "catalog_denominator": false,
+      "catalog_denominator": true,
       "call_capability": true,
       "reviewed_runtime_receipt": false,
       "runtime_evidence": 0,
@@ -159,7 +160,7 @@
     {
       "source_id": "kosis",
       "profile_present": true,
-      "catalog_denominator": false,
+      "catalog_denominator": true,
       "call_capability": true,
       "reviewed_runtime_receipt": false,
       "runtime_evidence": 0,
@@ -169,7 +170,7 @@
     {
       "source_id": "open_assembly",
       "profile_present": true,
-      "catalog_denominator": false,
+      "catalog_denominator": true,
       "call_capability": true,
       "reviewed_runtime_receipt": false,
       "runtime_evidence": 0,
@@ -179,7 +180,7 @@
     {
       "source_id": "seoul_open_data",
       "profile_present": true,
-      "catalog_denominator": false,
+      "catalog_denominator": true,
       "call_capability": true,
       "reviewed_runtime_receipt": false,
       "runtime_evidence": 0,
@@ -193,7 +194,6 @@
     "missing_timestamps_are_not_fresh": true,
     "recovery_updates_coverage": true,
     "next_actions": [
-      "catalog_denominator",
       "reviewed_runtime_receipt_source",
       "runtime_evidence_source",
       "runtime_evidence_operation",

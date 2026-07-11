@@ -3,11 +3,11 @@
   "policy_id": "datapan-registry-supported-sources",
   "effective_at": "2026-07-04T06:39:24Z",
   "supported_sources": [
-    {"source_id": "data_go_kr", "profile": "sources/data_go_kr.json", "catalog_scope": "operation_denominator", "coverage_report": "reports/coverage.json"},
-    {"source_id": "ecos", "profile": "sources/ecos.json", "catalog_scope": "contract_only"},
-    {"source_id": "kosis", "profile": "sources/kosis.json", "catalog_scope": "contract_only"},
-    {"source_id": "open_assembly", "profile": "sources/open_assembly.json", "catalog_scope": "contract_only"},
-    {"source_id": "seoul_open_data", "profile": "sources/seoul_open_data.json", "catalog_scope": "contract_only"}
+    {"source_id": "data_go_kr", "profile": "sources/data_go_kr.json", "catalog_scope": "operation_denominator", "coverage_report": "reports/data-go-kr/operation-denominator.json"},
+    {"source_id": "ecos", "profile": "sources/ecos.json", "catalog_scope": "operation_denominator", "coverage_report": "reports/ecos/operation-denominator.json"},
+    {"source_id": "kosis", "profile": "sources/kosis.json", "catalog_scope": "operation_denominator", "coverage_report": "reports/kosis/operation-denominator.json"},
+    {"source_id": "open_assembly", "profile": "sources/open_assembly.json", "catalog_scope": "operation_denominator", "coverage_report": "reports/open-assembly/operation-denominator.json"},
+    {"source_id": "seoul_open_data", "profile": "sources/seoul_open_data.json", "catalog_scope": "operation_denominator", "coverage_report": "reports/seoul-open-data/operation-denominator.json"}
   ],
   "required_consumers": ["datapan-cli", "release-operator", "studio"],
   "freshness": {

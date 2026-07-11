@@ -35,14 +35,20 @@ def main() -> int:
         ids = [item["source_id"] for item in sources]
         if len(ids) != len(set(ids)):
             raise ValueError("refresh source_id values must be unique")
-        denominators = {
-            item["source_id"] for item in coverage.get("supported_sources", [])
+        denominator_sources = [
+            item for item in coverage.get("supported_sources", [])
             if item.get("catalog_scope") == "operation_denominator"
+        ]
+        denominators = {item["source_id"] for item in denominator_sources}
+        aggregate_catalogs = {
+            item["source_id"] for item in denominator_sources
+            if load(pathlib.Path(item["coverage_report"]))["scope"]["kind"] == "aggregate_supported_catalog"
         }
         configured = set(ids)
-        if configured != denominators:
+        if configured != aggregate_catalogs:
             raise ValueError(
-                f"refresh sources must exactly match operation denominators; missing={sorted(denominators-configured)} extra={sorted(configured-denominators)}"
+                "scheduled catalogue refresh sources must exactly match aggregate operation denominators; "
+                f"missing={sorted(aggregate_catalogs-configured)} extra={sorted(configured-aggregate_catalogs)}"
             )
         for item in sources:
             profile = next(row["profile"] for row in coverage["supported_sources"] if row["source_id"] == item["source_id"])
@@ -60,7 +66,7 @@ def main() -> int:
         for fragment in ("run-upstream-refresh.py", "if: always()", "automatic publication:"):
             if fragment not in workflow_text:
                 raise ValueError(f"refresh workflow missing required fragment: {fragment}")
-        print(f"ok {args.policy} (sources={len(sources)}, operation_denominators={len(denominators)})")
+        print(f"ok {args.policy} (scheduled_catalogs={len(sources)}, operation_denominators={len(denominators)})")
         return 0
     except Exception as exc:  # noqa: BLE001
         print(f"FAIL source refresh policy: {exc}", file=sys.stderr)

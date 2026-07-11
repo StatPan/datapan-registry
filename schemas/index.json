@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 77,
+  "count": 79,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 3863,
-      "sha256": "ffc90e1fb5b5c379ad476f6437a8d2d0f721c16e3cd31eeb6703897a3ad7e508"
+      "bytes": 3907,
+      "sha256": "92101a271af34065fa3fc3d6d83911e7e00a4f71c4f6e2db069b562678e3e2fa"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -696,6 +696,24 @@
       "version": "v1",
       "bytes": 2731,
       "sha256": "ff2959fc7945c0809dc2018d293eb6be15a428dc824ca8894bb5e4bd63e25064"
+    },
+    {
+      "path": "schemas/datapan.operation-denominator-rollup.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.operation-denominator-rollup.v1.schema.json",
+      "title": "Datapan operation denominator rollup v1",
+      "contract": "operation-denominator-rollup",
+      "version": "v1",
+      "bytes": 1414,
+      "sha256": "b133c4774cf957fff9f823ddfc8c71dcc094b922897a722ec15033aa6a5ad6f1"
+    },
+    {
+      "path": "schemas/datapan.operation-denominator.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.operation-denominator.v1.schema.json",
+      "title": "Datapan supported operation denominator v1",
+      "contract": "operation-denominator",
+      "version": "v1",
+      "bytes": 2688,
+      "sha256": "341f07a99633101ad544a7bd1b01e3a9b6f59557ae7b08afb8d6efdd21691c6f"
     }
   ]
 }

@@ -46,9 +46,9 @@
   ],
   "schema_index_input": {
     "path": "schemas/index.json",
-    "schemas": 77,
-    "bytes": 31453,
-    "sha256": "4d5df0f01ee8bb58157435dcec950b8ab172f89560871ef4ad3ab623f6027045"
+    "schemas": 79,
+    "bytes": 32275,
+    "sha256": "f082ff85e51ad7523770202b368fb166b3cc46977b5830eec2c83d4925081158"
   },
   "recommended_reports": [
     "adapter-targets.json",
@@ -68,13 +68,13 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 151,
+    "report_total": 156,
     "recommended_report_slots": 65,
     "present_recommended_reports": 21,
     "missing_recommended_reports": 44,
     "source_report_coverage_percent": 32.3,
-    "schema_backed_reports": 26,
-    "schema_indexed_reports": 26,
+    "schema_backed_reports": 31,
+    "schema_indexed_reports": 31,
     "schema_missing_reports": 0
   },
   "sources": [
@@ -98,7 +98,7 @@
         "reports/verification-plan.json"
       ],
       "report_dir_exists": true,
-      "report_count": 139,
+      "report_count": 140,
       "present_reports": [
         {
           "name": "adapter-targets.json",
@@ -735,6 +735,16 @@
           "sha256": "7a1010a78c369dd94be73bb9c6b1012483c5131753bca195827b0b6d4151d631"
         },
         {
+          "name": "operation-denominator.json",
+          "path": "reports/data-go-kr/operation-denominator.json",
+          "bytes": 744,
+          "sha256": "8268b62a6562cbaffeb19d6e4f3c6a67622fe73addd8b546057d5dc3551ef494",
+          "schema_version": "datapan.operation-denominator.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.operation-denominator.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.operation-denominator.v1.schema.json",
+          "schema_indexed": true
+        },
+        {
           "name": "operation-materialization-plan.json",
           "path": "reports/data-go-kr/operation-materialization-plan.json",
           "bytes": 165207,
@@ -1105,6 +1115,7 @@
         "nrich-www-verification.json",
         "openfiscaldata-verification-summary.json",
         "openfiscaldata-verification.json",
+        "operation-denominator.json",
         "operation-materialization-plan.json",
         "police-verification-summary.json",
         "police-verification.json",
@@ -1145,7 +1156,7 @@
       "report_dir": "reports/ecos",
       "report_alias_paths": [],
       "report_dir_exists": true,
-      "report_count": 3,
+      "report_count": 4,
       "present_reports": [
         {
           "name": "error-action-catalog.json",
@@ -1155,6 +1166,16 @@
           "schema_version": "datapan.error-action-catalog.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.error-action-catalog.v1.schema.json",
           "expected_schema_path": "schemas/datapan.error-action-catalog.v1.schema.json",
+          "schema_indexed": true
+        },
+        {
+          "name": "operation-denominator.json",
+          "path": "reports/ecos/operation-denominator.json",
+          "bytes": 961,
+          "sha256": "d8619c61c2a718547ad5867b0125b74c21cf46d8cc3b74f369062e087387c62b",
+          "schema_version": "datapan.operation-denominator.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.operation-denominator.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.operation-denominator.v1.schema.json",
           "schema_indexed": true
         },
         {
@@ -1196,7 +1217,8 @@
         "verification-plan.json"
       ],
       "extra_reports": [
-        "error-action-catalog.json"
+        "error-action-catalog.json",
+        "operation-denominator.json"
       ],
       "recommended_report_coverage_percent": 15.4
     },
@@ -1208,7 +1230,7 @@
       "report_dir": "reports/kosis",
       "report_alias_paths": [],
       "report_dir_exists": true,
-      "report_count": 3,
+      "report_count": 4,
       "present_reports": [
         {
           "name": "error-action-catalog.json",
@@ -1218,6 +1240,16 @@
           "schema_version": "datapan.error-action-catalog.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.error-action-catalog.v1.schema.json",
           "expected_schema_path": "schemas/datapan.error-action-catalog.v1.schema.json",
+          "schema_indexed": true
+        },
+        {
+          "name": "operation-denominator.json",
+          "path": "reports/kosis/operation-denominator.json",
+          "bytes": 888,
+          "sha256": "5e03008ac38a5c4a98f235c91a92b6b1a147fcb930e8e6c681240e984a10c081",
+          "schema_version": "datapan.operation-denominator.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.operation-denominator.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.operation-denominator.v1.schema.json",
           "schema_indexed": true
         },
         {
@@ -1259,7 +1291,8 @@
         "verification-plan.json"
       ],
       "extra_reports": [
-        "error-action-catalog.json"
+        "error-action-catalog.json",
+        "operation-denominator.json"
       ],
       "recommended_report_coverage_percent": 15.4
     },
@@ -1271,7 +1304,7 @@
       "report_dir": "reports/open-assembly",
       "report_alias_paths": [],
       "report_dir_exists": true,
-      "report_count": 3,
+      "report_count": 4,
       "present_reports": [
         {
           "name": "error-action-catalog.json",
@@ -1281,6 +1314,16 @@
           "schema_version": "datapan.error-action-catalog.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.error-action-catalog.v1.schema.json",
           "expected_schema_path": "schemas/datapan.error-action-catalog.v1.schema.json",
+          "schema_indexed": true
+        },
+        {
+          "name": "operation-denominator.json",
+          "path": "reports/open-assembly/operation-denominator.json",
+          "bytes": 930,
+          "sha256": "d14aab4e423b66f5bb7539c87d1ec34634ac85a06d10c2dcbc9369dba4df7e52",
+          "schema_version": "datapan.operation-denominator.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.operation-denominator.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.operation-denominator.v1.schema.json",
           "schema_indexed": true
         },
         {
@@ -1322,7 +1365,8 @@
         "verification-plan.json"
       ],
       "extra_reports": [
-        "error-action-catalog.json"
+        "error-action-catalog.json",
+        "operation-denominator.json"
       ],
       "recommended_report_coverage_percent": 15.4
     },
@@ -1334,7 +1378,7 @@
       "report_dir": "reports/seoul-open-data",
       "report_alias_paths": [],
       "report_dir_exists": true,
-      "report_count": 3,
+      "report_count": 4,
       "present_reports": [
         {
           "name": "error-action-catalog.json",
@@ -1344,6 +1388,16 @@
           "schema_version": "datapan.error-action-catalog.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.error-action-catalog.v1.schema.json",
           "expected_schema_path": "schemas/datapan.error-action-catalog.v1.schema.json",
+          "schema_indexed": true
+        },
+        {
+          "name": "operation-denominator.json",
+          "path": "reports/seoul-open-data/operation-denominator.json",
+          "bytes": 970,
+          "sha256": "7c44a8357903f223df195e6e48165b5fe058e4372bdcfe7c3022af80b5266b54",
+          "schema_version": "datapan.operation-denominator.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.operation-denominator.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.operation-denominator.v1.schema.json",
           "schema_indexed": true
         },
         {
@@ -1385,7 +1439,8 @@
         "verification-plan.json"
       ],
       "extra_reports": [
-        "error-action-catalog.json"
+        "error-action-catalog.json",
+        "operation-denominator.json"
       ],
       "recommended_report_coverage_percent": 15.4
     }

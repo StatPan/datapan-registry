@@ -28,6 +28,7 @@ INPUT_PATHS = {
     "credential_runtime_runner_readiness": pathlib.Path("reports/credential-runtime-runner-readiness.json"),
     "release_consumer_compatibility": pathlib.Path("reports/release-consumer-compatibility.json"),
     "failure_recovery_rollup": pathlib.Path("reports/failure-recovery-rollup.json"),
+    "operation_denominator_rollup": pathlib.Path("reports/operation-denominator-rollup.json"),
 }
 
 
@@ -176,15 +177,14 @@ def build_report(policy: dict[str, Any], inputs: dict[str, dict[str, Any]]) -> d
     }
 
     operation_sources = [item for item in supported if item.get("catalog_scope") == "operation_denominator"]
-    operations = callable_operations = 0
-    for item in operation_sources:
-        path = pathlib.Path(str(item["coverage_report"]))
-        coverage = load_json(path)
-        summary = coverage.get("summary")
-        if not isinstance(summary, dict):
-            raise ValueError(f"{path}.summary must be an object")
-        operations += int(summary.get("operations", 0))
-        callable_operations += int(summary.get("callable_operations", 0))
+    denominator_rollup = inputs["operation_denominator_rollup"]
+    denominator_sources = objects(denominator_rollup.get("sources"), "operation denominator sources")
+    require_exact_ids("operation denominator rollup", set(supported_ids), {str(item.get("source_id")) for item in denominator_sources})
+    denominator_summary = denominator_rollup.get("summary")
+    if not isinstance(denominator_summary, dict):
+        raise ValueError("operation denominator rollup summary must be an object")
+    operations = int(denominator_summary.get("operations", 0))
+    callable_operations = int(denominator_summary.get("callable_operations", 0))
     if operations <= 0:
         raise ValueError("at least one operation denominator with operations is required")
 
