@@ -87,7 +87,9 @@ def source_entry(source: dict[str, Any], runner: ModuleType) -> dict[str, Any]:
         "candidate_batch": candidate_batch.as_posix(),
         "candidate_batch_present": candidate_batch.is_file(),
         "staged_receipt_path": staged_receipt_path.as_posix(),
-        "staged_receipt_present": staged_receipt_path.is_file(),
+        # This checked-in report models clean default CI. Operator-local staged
+        # receipts must not make its content depend on ignored workspace state.
+        "staged_receipt_present": False,
         "reviewed_receipt_path": reviewed_receipt_path.as_posix(),
         "reviewed_receipt_present": reviewed_receipt_path.is_file(),
         "can_run": False,

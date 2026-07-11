@@ -89,7 +89,10 @@ def source_entry(source: dict[str, Any]) -> dict[str, Any]:
         "candidate_batch_present": candidate_batch.is_file(),
         "runtime_evidence_plan": string_value(source.get("runtime_evidence_plan"), f"{source_id}.runtime_evidence_plan"),
         "staged_receipt_path": staged_receipt_path.as_posix(),
-        "staged_receipt_present": staged_receipt_path.is_file(),
+        # Staged receipts are ignored, operator-local evidence. Checked-in
+        # preflight must be reproducible in a clean checkout regardless of an
+        # operator's current .datapan/runtime-evidence directory.
+        "staged_receipt_present": False,
         "reviewed_receipt_path": reviewed_receipt_path.as_posix(),
         "reviewed_receipt_present": reviewed_receipt_path.is_file(),
         "current_receipt_state": string_value(source.get("current_receipt_state"), f"{source_id}.current_receipt_state"),
