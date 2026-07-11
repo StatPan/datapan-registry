@@ -23,6 +23,7 @@ jobs:
       group: runtime-freshness-import-${{ github.event.workflow_run.id }}
       cancel-in-progress: false
     env:
+      PYTHONDONTWRITEBYTECODE: "1"
       PRODUCER_RUN_ID: ${{ github.event.workflow_run.id }}
       PRODUCER_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
       IMPORT_BRANCH: automation/runtime-freshness-${{ github.event.workflow_run.id }}
@@ -86,6 +87,7 @@ jobs:
             --run-receipt .datapan/runtime-freshness/import/run-receipt.json \
             --datapan-command "${GITHUB_WORKSPACE}/.datapan/ci/datapan" \
             | tee .datapan/runtime-freshness/import-transaction.json
+          find scripts tests -type d -name __pycache__ -prune -exec rm -rf {} +
           changed="$(git status --porcelain --untracked-files=all | grep -v '^?? .datapan/' || true)"
           if [ -z "${changed}" ]; then
             echo "changed=false" >> "${GITHUB_OUTPUT}"
