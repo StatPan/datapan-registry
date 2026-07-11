@@ -88,6 +88,8 @@ jobs:
           python -m unittest tests/test_generate_operation_denominator_rollup.py
           python scripts/generate-runtime-freshness-queue.py --check
           python -m unittest tests/test_generate_runtime_freshness_queue.py
+          python -m unittest tests/test_generate_runtime_freshness_batch.py
+          python scripts/check-runtime-freshness-workflow.py
           python -m unittest tests/test_generate_failure_recovery_rollup.py
           python -m unittest tests/test_convert_source_verification_receipt.py
           python scripts/validate-external-coverage.py
@@ -144,6 +146,7 @@ jobs:
           python -m py_compile scripts/generate-failure-recovery-rollup.py
           python -m py_compile scripts/generate-operation-denominator-rollup.py
           python -m py_compile scripts/generate-runtime-freshness-queue.py
+          python -m py_compile scripts/generate-runtime-freshness-batch.py scripts/check-runtime-freshness-workflow.py
           python -m py_compile scripts/convert-source-verification-to-credential-receipt.py
           python -m py_compile scripts/generate-source-contract-rollup.py
           python -m py_compile scripts/generate-sustainable-coverage.py

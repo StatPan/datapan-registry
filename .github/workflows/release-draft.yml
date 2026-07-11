@@ -96,6 +96,8 @@ jobs:
             scripts/generate-failure-recovery-rollup.py \
             scripts/generate-operation-denominator-rollup.py \
             scripts/generate-runtime-freshness-queue.py \
+            scripts/generate-runtime-freshness-batch.py \
+            scripts/check-runtime-freshness-workflow.py \
             scripts/generate-impact-plan-rollup.py \
             scripts/generate-release-assembly-receipt.py \
             scripts/generate-release-distribution-footprint.py \
@@ -179,6 +181,8 @@ jobs:
           python -m unittest tests/test_generate_operation_denominator_rollup.py
           python scripts/generate-runtime-freshness-queue.py --check
           python -m unittest tests/test_generate_runtime_freshness_queue.py
+          python -m unittest tests/test_generate_runtime_freshness_batch.py
+          python scripts/check-runtime-freshness-workflow.py
           python -m unittest tests/test_generate_failure_recovery_rollup.py
           python -m unittest tests/test_convert_source_verification_receipt.py
           python scripts/validate-external-coverage.py

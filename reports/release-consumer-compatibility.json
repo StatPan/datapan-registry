@@ -7,7 +7,7 @@
     "manifest": {
       "path": "manifest.json",
       "generated_at": "2026-07-04T06:39:24Z",
-      "artifact_count": 133,
+      "artifact_count": 134,
       "evidence_contracts": 18
     },
     "readiness": {
@@ -104,7 +104,7 @@
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
       "bytes": 14728,
-      "sha256": "56281a94fa04a71ce9a217df1935ea808fced1a83bd716602699b38c936bba5e",
+      "sha256": "526bb5fbc49929c38f926bee27f05778dbe6d08800b3adff430337c23c2a9bdf",
       "required": true
     },
     {
@@ -194,7 +194,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "235512e98ba524da88e0278d052b1e5f0d465d8fd6ce112f49a37cee55cd7f43",
+      "sha256": "5b291c93e78aa179293950e55f15958f9dfdd29eed725321a6d3f40344e515b2",
       "required": true
     },
     {
@@ -212,7 +212,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 61997,
-      "sha256": "dc0de145db32413ef4cb334815a5a92673425be4699f3ccd592ee90c23154951",
+      "sha256": "57d845b880be18ae67babbd2aaa2dcf9cbaf823d065cbd1a875e89addc954563",
       "required": true
     },
     {
@@ -221,7 +221,7 @@
       "kind": "release_distribution_footprint",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
       "bytes": 2141,
-      "sha256": "aa47c37a6f37dad341f66c29786387ba8b51ce875643106e4e94431d8c16e1f5",
+      "sha256": "ddc35e6ada54da86d96a59d1c7ae82e7b4f9d0acf286e9082ec5ea5bbbe57a45",
       "required": true
     },
     {
@@ -489,7 +489,7 @@
     ],
     "release_distribution_footprint": "reports/release-distribution-footprint.json",
     "canonical_registry_bytes": 137735169,
-    "manifest_bound_bytes_excluding_self": 173742145,
+    "manifest_bound_bytes_excluding_self": 173744514,
     "large_monolith_threshold_bytes": 100000000,
     "registry_footprint_status": "large_monolith_shard_additive",
     "canonical_registry_required": true,

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.runtime-freshness-batch.v1.schema.json",
+  "title": "Datapan runtime freshness batch v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "queue", "registry", "selection", "operations"],
+  "properties": {
+    "schema_version": {"const": "datapan.runtime-freshness-batch.v1"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "queue": {"type": "string", "minLength": 1},
+    "registry": {"type": "string", "minLength": 1},
+    "selection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["rotation_seed", "shard_index", "shard_count", "batch_size", "eligible_operations", "offset", "selected_operations", "wrapped"],
+      "properties": {
+        "rotation_seed": {"type": "integer", "minimum": 0},
+        "shard_index": {"type": "integer", "minimum": 0},
+        "shard_count": {"type": "integer", "minimum": 1},
+        "batch_size": {"type": "integer", "minimum": 1},
+        "eligible_operations": {"type": "integer", "minimum": 1},
+        "offset": {"type": "integer", "minimum": 0},
+        "selected_operations": {"type": "integer", "minimum": 1},
+        "wrapped": {"type": "boolean"}
+      }
+    },
+    "operations": {
+      "type": "array", "minItems": 1, "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["identity_key", "dataset_id", "operation", "operation_seq", "classification", "priority"],
+        "properties": {
+          "identity_key": {"type": "string", "minLength": 1},
+          "dataset_id": {"type": "string", "minLength": 1},
+          "operation": {"type": "string", "minLength": 1},
+          "operation_seq": {"type": ["string", "null"]},
+          "classification": {"type": "string", "minLength": 1},
+          "priority": {"type": "integer", "minimum": 0}
+        }
+      }
+    }
+  }
+}
