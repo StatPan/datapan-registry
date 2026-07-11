@@ -24,6 +24,7 @@ def main() -> int:
             "run receipt": ".datapan/runtime-freshness/import/run-receipt.json",
             "raw report exclusion": "test ! -e .datapan/runtime-freshness/import/raw-combined",
             "transaction": "scripts/apply-runtime-freshness-import.py",
+            "transaction pipefail": "set -o pipefail",
             "no-change gate": "steps.transaction.outputs.changed == 'true'",
             "bytecode disabled": "PYTHONDONTWRITEBYTECODE: \"1\"",
             "cache cleanup": "-name __pycache__ -prune -exec rm -rf {} +",

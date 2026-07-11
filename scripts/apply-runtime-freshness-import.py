@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import pathlib
 import shlex
 import shutil
@@ -21,8 +22,11 @@ def load(path: pathlib.Path) -> dict[str, Any]:
     return value
 
 
-def execute(command: list[str], *, cwd: pathlib.Path, capture: bool = False) -> str:
-    result = subprocess.run(command, cwd=cwd, check=True, text=True, stdout=subprocess.PIPE if capture else None)
+def execute(command: list[str], *, cwd: pathlib.Path, capture: bool = False, env: dict[str, str] | None = None) -> str:
+    environment = os.environ.copy()
+    if env:
+        environment.update(env)
+    result = subprocess.run(command, cwd=cwd, check=True, text=True, stdout=subprocess.PIPE if capture else None, env=environment)
     return result.stdout if capture else ""
 
 
@@ -68,7 +72,11 @@ def apply_transaction(
     report, run_receipt = report.resolve(), run_receipt.resolve()
     with tempfile.TemporaryDirectory(prefix="datapan-runtime-import-") as directory:
         worktree = pathlib.Path(directory) / "worktree"
-        execute(["git", "-c", "core.hooksPath=/dev/null", "worktree", "add", "--detach", str(worktree), "HEAD"], cwd=root)
+        execute(
+            ["git", "-c", "core.hooksPath=/dev/null", "worktree", "add", "--detach", str(worktree), "HEAD"],
+            cwd=root,
+            env={"GIT_LFS_SKIP_SMUDGE": "1"},
+        )
         try:
             run_pipeline(worktree, report, run_receipt, datapan_command, import_receipt)
             execute(["git", "add", "-N", "."], cwd=worktree)
