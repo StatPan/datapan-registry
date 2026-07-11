@@ -44,7 +44,7 @@ jobs:
           check-latest: true
           cache-dependency-path: datapan-cli/go.sum
 
-      - name: Confirm canonical registry is materialized
+      - name: Confirm registry LFS file is materialized
         run: |
           bytes="$(wc -c < datapan-registry/data/data-go-kr.registry.json)"
           echo "data-go-kr.registry.json bytes=${bytes}"
