@@ -1,0 +1,21 @@
+{
+  "schema_version": "datapan.registry-distribution.v1",
+  "canonical_registry": {
+    "provider": "huggingface-dataset",
+    "repository": "StatPan/datapan-registry",
+    "revision": "7b5d3d37973308ba8ff3558809c1ff4ed217768d",
+    "path": "data/data-go-kr.registry.json",
+    "manifest_sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644"
+  },
+  "shard_archive": {
+    "path": "release/data-go-kr-shards.tar.gz",
+    "inventory_path": "release/registry-shards.json",
+    "bytes": 7989442,
+    "sha256": "c1c51ed193cb6e43937403fc7ba54226ac00a711381554b7f98c6c27e342ce57"
+  },
+  "consumer_contract": {
+    "preferred": "validated_shards",
+    "fallback": "canonical_registry",
+    "identity": "manifest_sha256"
+  }
+}

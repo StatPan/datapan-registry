@@ -13,6 +13,19 @@ re-importing the upstream data.go.kr catalog every time.
 - Specs: `12060`
 - Operations: `21256`
 - Callable operations: `21114` (`99.3%`)
+- Sustainable coverage decision: `coverage_gaps` (`3` of `9` layers meet
+  policy targets). Routable coverage is not treated as total usability.
+- Supported-source denominator coverage: `1` of `5` sources has an explicit
+  operation denominator (`20.0%`); the remaining source profiles are
+  contract-only until source catalog imports exist.
+- Runtime operation evidence: `4637` unique operation identities out of
+  `21256` (`21.8%`); fresh successful evidence covers `2775` unique operations
+  (`13.1%`) as of `2026-07-04T06:39:24Z`.
+- Runtime freshness: `4059` evidence records are within the `30` day fresh
+  window, `0` are stale, `0` are expired, and `715` missing timestamps are
+  explicitly excluded from fresh coverage.
+- Required consumer proof: `2` of `3` required consumers (`datapan-cli`,
+  `release-operator`, `studio`) are proven (`66.7%`).
 - Latest release: `v2026.06.25.24`
 - Registered external adapters: `airport`, `andong`, `anyang`, `atfis`, `calspia`, `car`, `car365`, `childcare-info`, `chungbuk-tour`, `chungnam`, `codil`, `consumer`, `culture`, `daegu`, `daejeon`, `data-gg`,
   `dgfca`, `dongjak`, `ecos`, `ecvam`, `ekape`, `emuseum`, `epost`, `eshare`, `ex`, `fairdata`, `folk`, `foodsafetykorea`, `forest`,
@@ -46,6 +59,8 @@ re-importing the upstream data.go.kr catalog every time.
 - Coverage route evidence: `reports/coverage.json` now carries the same route
   evidence and reports `0` evidence-adjusted adapter candidates
 - Release manifest: `manifest.json`
+- Sustainable coverage policy: `policy/sustainable-coverage.json`
+- Sustainable coverage report: `reports/sustainable-coverage.json`
 - Registry data: `data/data-go-kr.registry.json`
 - Provider index: `data/provider-index.json`
 - Schema index: `schemas/index.json`
@@ -53,10 +68,27 @@ re-importing the upstream data.go.kr catalog every time.
   `datapan.studio-bundle.v1`
 - Catalog diff: `reports/catalog-diff.json`
 
-`data/data-go-kr.registry.json` is stored with Git LFS because the normalized
-registry is larger than GitHub's normal blob limit.
+`data/data-go-kr.registry.json` is tracked with Git LFS, but CI and release
+operators do not depend on LFS availability. `scripts/materialize-canonical-registry.py`
+downloads the public Hugging Face Dataset object at the immutable commit pinned
+in `policy/registry-distribution.json`, then requires its bytes and SHA-256 to
+match `manifest.json` before replacing the LFS pointer. Availability failures
+exit with code `20`; manifest, policy, size, or checksum failures exit with code
+`21`, so an unavailable mirror cannot be mistaken for corrupt registry bytes.
+The normalized registry is larger than GitHub's normal blob limit.
 
 ## Verify
+
+Coverage is intentionally layered. `operation_routable` describes static
+registry routing, while `fresh_verified_operation` requires a successful,
+timestamped runtime result within the policy freshness window. Missing source
+catalog denominators and missing evidence timestamps count as uncovered. Check
+the deterministic contract with:
+
+```bash
+python3 scripts/generate-sustainable-coverage.py --self-test
+python3 scripts/generate-sustainable-coverage.py --check
+```
 
 From a checkout of `datapan-cli`, verify this snapshot with:
 
