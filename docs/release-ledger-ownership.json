@@ -106,6 +106,7 @@
         "source_runtime_remediation_map",
         "source_runtime_evidence_rollup",
         "operation_denominator_rollup",
+        "runtime_freshness_queue",
         "sustainable_coverage_policy",
         "sustainable_coverage",
         "source_refresh_policy"
@@ -127,6 +128,7 @@
         "python scripts/generate-source-runtime-remediation-map.py",
         "python scripts/generate-source-runtime-readiness.py",
         "python scripts/generate-operation-denominator-rollup.py",
+        "python scripts/generate-runtime-freshness-queue.py",
         "python scripts/generate-sustainable-coverage.py",
         "manual policy updates validated by python scripts/validate-source-refresh-policy.py"
       ],
@@ -152,6 +154,7 @@
         "python scripts/validate-source-runtime-evidence-rollup.py",
         "python scripts/validate-runtime-evidence-growth.py",
         "python scripts/generate-operation-denominator-rollup.py --check",
+        "python scripts/generate-runtime-freshness-queue.py --check",
         "python scripts/generate-sustainable-coverage.py --self-test",
         "python scripts/generate-sustainable-coverage.py --check",
         "python scripts/validate-source-refresh-policy.py",
