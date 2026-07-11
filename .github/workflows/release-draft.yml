@@ -219,6 +219,7 @@ jobs:
           python scripts/generate-release-shard-consumer-proof.py --check
           python scripts/generate-release-consumer-compatibility.py --check
           python scripts/validate-release-consumer-compatibility.py
+          python -m unittest tests/test_studio_consumer_compatibility.py
           python scripts/generate-release-operational-pressure.py --check
           python scripts/generate-release-consumer-decision.py --check
 

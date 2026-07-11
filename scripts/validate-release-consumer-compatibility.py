@@ -1304,8 +1304,20 @@ def validate_consumers(report: dict[str, Any]) -> None:
         raise ValueError("missing studio consumer entry")
     if studio.get("compatibility_mode") != "shard_preferred_with_monolith_fallback":
         raise ValueError("studio entry must represent the future shard-preferred fallback path")
-    if studio.get("status") != "blocked":
-        raise ValueError("studio shard-preferred path must remain blocked until fallback is proven")
+    expected_studio_status = (
+        "proven" if shard_proof.get("distribution_action_resolved") is True else "blocked"
+    )
+    if studio.get("status") != expected_studio_status:
+        raise ValueError(
+            f"studio shard-preferred path must be {expected_studio_status} from fallback proof"
+        )
+    studio_evidence = set(as_list(studio.get("evidence"), "studio.evidence"))
+    if expected_studio_status == "proven" and not {
+        "reports/release-shard-consumer-proof.json",
+        "StatPan/datapan-cli#128",
+        "StatPan/datapan-cli#129",
+    }.issubset(studio_evidence):
+        raise ValueError("proven studio compatibility must cite registry and downstream fallback evidence")
 
 
 def validate_consistency(

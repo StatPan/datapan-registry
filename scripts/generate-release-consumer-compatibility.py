@@ -301,6 +301,12 @@ def consumer_entries(shard_proof: dict[str, Any]) -> list[dict[str, Any]]:
     proof_summary = as_dict(shard_proof.get("summary"), "shard_proof.summary")
     proof_policy = as_dict(shard_proof.get("release_policy"), "shard_proof.release_policy")
     shard_preferred_ready = proof_summary.get("shard_preferred_ready") is True
+    studio_fallback_proven = (
+        shard_preferred_ready
+        and proof_summary.get("monolith_fallback_proven") is True
+        and proof_summary.get("distribution_action_resolved") is True
+        and proof_policy.get("consumer_effect") == "shard_preferred_supported_with_canonical_fallback"
+    )
     cli_mode = "shard_preferred_with_monolith_fallback" if shard_preferred_ready else "canonical_monolith"
     cli_notes = (
         "CLI release install, doctor, release verify, and readiness compatibility are proven with "
@@ -417,14 +423,18 @@ def consumer_entries(shard_proof: dict[str, Any]) -> list[dict[str, Any]]:
                 "future shard-preferred browsing",
             ],
             "compatibility_mode": "shard_preferred_with_monolith_fallback",
-            "status": "blocked",
+            "status": "proven" if studio_fallback_proven else "blocked",
             "evidence": [
-                "docs/registry-shard-artifact-strategy.md",
+                "reports/release-shard-consumer-proof.json",
                 "StatPan/datapan-cli#128",
+                "StatPan/datapan-cli#129",
             ],
             "notes": (
-                "Studio-facing shard preference remains blocked until the canonical registry fallback contract "
-                "is implemented and proven downstream."
+                "Studio-facing snapshot loading may prefer validated shards and retains the proven canonical "
+                "registry fallback implemented by the shared CLI consumer."
+                if studio_fallback_proven
+                else "Studio-facing shard preference remains blocked until the canonical registry fallback "
+                "contract is implemented and proven downstream."
             ),
         },
     ]
