@@ -29,6 +29,7 @@ INPUT_PATHS = {
     "release_consumer_compatibility": pathlib.Path("reports/release-consumer-compatibility.json"),
     "failure_recovery_rollup": pathlib.Path("reports/failure-recovery-rollup.json"),
     "operation_denominator_rollup": pathlib.Path("reports/operation-denominator-rollup.json"),
+    "runtime_freshness_queue": pathlib.Path("reports/runtime-freshness-queue.json"),
 }
 
 
@@ -189,12 +190,21 @@ def build_report(policy: dict[str, Any], inputs: dict[str, dict[str, Any]]) -> d
         raise ValueError("at least one operation denominator with operations is required")
 
     freshness_policy = policy["freshness"]
-    results = objects(inputs["latest_verification"].get("results"), "latest verification results")
-    freshness, evidenced_operations, fresh_verified_operations = freshness_counts(
-        results, as_of, int(freshness_policy["fresh_days"]), int(freshness_policy["expire_days"])
-    )
-    if len(evidenced_operations) > operations:
-        raise ValueError("unique evidenced operations exceed the declared operation denominator")
+    freshness_queue = inputs["runtime_freshness_queue"]
+    freshness_summary = freshness_queue.get("summary")
+    if not isinstance(freshness_summary, dict):
+        raise ValueError("runtime freshness queue summary must be an object")
+    if int(freshness_summary.get("supported_operations", 0)) != operations:
+        raise ValueError("runtime freshness queue denominator does not match operation denominator")
+    evidenced_operation_count = operations - int(freshness_summary.get("never_evidenced", 0))
+    fresh_verified_operation_count = int(freshness_summary.get("fresh_verified", 0))
+    freshness = {
+        "fresh": fresh_verified_operation_count + int(freshness_summary.get("recent_non_verified", 0)),
+        "stale": int(freshness_summary.get("stale", 0)),
+        "expired": int(freshness_summary.get("expired", 0)),
+        "unknown_timestamp": int(freshness_summary.get("unknown_timestamp", 0)),
+        "fresh_verified": fresh_verified_operation_count,
+    }
 
     required_consumers = list(policy["required_consumers"])
     consumers = objects(inputs["release_consumer_compatibility"].get("consumers"), "consumers")
@@ -230,8 +240,8 @@ def build_report(policy: dict[str, Any], inputs: dict[str, dict[str, Any]]) -> d
         layer("source_call_capability", sum(row["call_capability"] for row in source_status), source_count, target["source_call_capability_percent"], "supported_sources", "Sources whose registered adapter declares call capability."),
         layer("reviewed_runtime_receipt_source", sum(row["reviewed_runtime_receipt"] for row in source_status), source_count, target["reviewed_runtime_receipt_source_percent"], "supported_sources", "Sources with a reviewed, redacted credential runtime receipt; secret presence itself is never persisted as coverage."),
         layer("runtime_evidence_source", sum(row["runtime_evidence"] > 0 for row in source_status), source_count, target["runtime_evidence_source_percent"], "supported_sources", "Sources with at least one runtime evidence record."),
-        layer("runtime_evidence_operation", len(evidenced_operations), operations, target["runtime_evidence_operation_percent"], "operation_denominator_sources", "Unique operation identities with evidence, regardless of result or age."),
-        layer("fresh_verified_operation", len(fresh_verified_operations), operations, target["fresh_verified_operation_percent"], "operation_denominator_sources", "Unique operation identities with a successful result inside the fresh window."),
+        layer("runtime_evidence_operation", evidenced_operation_count, operations, target["runtime_evidence_operation_percent"], "operation_denominator_sources", "Unique supported operation identities with evidence, regardless of result or age."),
+        layer("fresh_verified_operation", fresh_verified_operation_count, operations, target["fresh_verified_operation_percent"], "operation_denominator_sources", "Unique supported operation identities with a successful result inside the fresh window."),
         layer("required_consumer_proven", sum(consumer_by_id[name].get("status") == "proven" for name in required_consumers), len(required_consumers), target["required_consumer_proven_percent"], "required_consumers", "Required consumers with proven compatibility evidence."),
     ]
     met = sum(item["meets_target"] for item in layers)

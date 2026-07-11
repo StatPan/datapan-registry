@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.runtime-freshness-queue.v1.schema.json",
+  "title": "Datapan runtime freshness queue v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "inputs", "freshness", "summary", "queue"],
+  "properties": {
+    "schema_version": {"const": "datapan.runtime-freshness-queue.v1"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "inputs": {
+      "type": "object", "additionalProperties": false,
+      "required": ["canonical_registry", "operation_denominator_rollup", "latest_verification", "coverage_policy"],
+      "properties": {
+        "canonical_registry": {"type": "string", "minLength": 1},
+        "operation_denominator_rollup": {"type": "string", "minLength": 1},
+        "latest_verification": {"type": "string", "minLength": 1},
+        "coverage_policy": {"type": "string", "minLength": 1}
+      }
+    },
+    "freshness": {
+      "type": "object", "additionalProperties": false,
+      "required": ["as_of", "fresh_days", "expire_days"],
+      "properties": {
+        "as_of": {"type": "string", "format": "date-time"},
+        "fresh_days": {"type": "integer", "minimum": 1},
+        "expire_days": {"type": "integer", "minimum": 2}
+      }
+    },
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["supported_operations", "fresh_verified", "queued", "never_evidenced", "unknown_timestamp", "stale", "expired", "recent_non_verified"],
+      "properties": {
+        "supported_operations": {"type": "integer", "minimum": 1},
+        "fresh_verified": {"type": "integer", "minimum": 0},
+        "queued": {"type": "integer", "minimum": 0},
+        "never_evidenced": {"type": "integer", "minimum": 0},
+        "unknown_timestamp": {"type": "integer", "minimum": 0},
+        "stale": {"type": "integer", "minimum": 0},
+        "expired": {"type": "integer", "minimum": 0},
+        "recent_non_verified": {"type": "integer", "minimum": 0}
+      }
+    },
+    "queue": {
+      "type": "array", "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["source_id", "identity_key", "dataset_id", "operation", "operation_seq", "classification", "priority", "action", "last_status", "last_verified_at"],
+        "properties": {
+          "source_id": {"type": "string", "minLength": 1},
+          "identity_key": {"type": "string", "minLength": 1},
+          "dataset_id": {"type": ["string", "null"]},
+          "operation": {"type": "string", "minLength": 1},
+          "operation_seq": {"type": ["string", "null"]},
+          "classification": {"enum": ["never_evidenced", "unknown_timestamp", "stale", "expired", "recent_non_verified"]},
+          "priority": {"type": "integer", "minimum": 0, "maximum": 4},
+          "action": {"enum": ["collect_initial_evidence", "repair_evidence_timestamp", "reverify_stale_operation", "reverify_expired_operation", "retry_or_route_failure"]},
+          "last_status": {"type": ["string", "null"]},
+          "last_verified_at": {"type": ["string", "null"], "format": "date-time"}
+        }
+      }
+    }
+  }
+}

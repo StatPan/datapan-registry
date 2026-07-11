@@ -15,14 +15,15 @@
     "credential_runtime_runner_readiness": "reports/credential-runtime-runner-readiness.json",
     "release_consumer_compatibility": "reports/release-consumer-compatibility.json",
     "failure_recovery_rollup": "reports/failure-recovery-rollup.json",
-    "operation_denominator_rollup": "reports/operation-denominator-rollup.json"
+    "operation_denominator_rollup": "reports/operation-denominator-rollup.json",
+    "runtime_freshness_queue": "reports/runtime-freshness-queue.json"
   },
   "summary": {
     "decision": "coverage_gaps",
     "layers_total": 9,
     "layers_meeting_target": 5,
     "layers_below_target": 4,
-    "unknown_timestamp_records": 715,
+    "unknown_timestamp_records": 716,
     "stale_records": 0,
     "expired_records": 0
   },
@@ -89,23 +90,23 @@
     },
     {
       "id": "runtime_evidence_operation",
-      "numerator": 4637,
+      "numerator": 4638,
       "denominator": 21260,
       "percent": 21.8,
       "target_percent": 80.0,
       "meets_target": false,
       "scope": "operation_denominator_sources",
-      "meaning": "Unique operation identities with evidence, regardless of result or age."
+      "meaning": "Unique supported operation identities with evidence, regardless of result or age."
     },
     {
       "id": "fresh_verified_operation",
-      "numerator": 2775,
+      "numerator": 2773,
       "denominator": 21260,
-      "percent": 13.1,
+      "percent": 13.0,
       "target_percent": 80.0,
       "meets_target": false,
       "scope": "operation_denominator_sources",
-      "meaning": "Unique operation identities with a successful result inside the fresh window."
+      "meaning": "Unique supported operation identities with a successful result inside the fresh window."
     },
     {
       "id": "required_consumer_proven",
@@ -122,11 +123,11 @@
     "as_of": "2026-07-04T06:39:24Z",
     "fresh_days": 30,
     "expire_days": 90,
-    "fresh": 4059,
+    "fresh": 3922,
     "stale": 0,
     "expired": 0,
-    "unknown_timestamp": 715,
-    "fresh_verified": 2841
+    "unknown_timestamp": 716,
+    "fresh_verified": 2773
   },
   "failure_recovery": {
     "active": 5,
