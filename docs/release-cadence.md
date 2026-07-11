@@ -279,6 +279,27 @@ python scripts/sync-release-manifest-artifacts.py --write
 python scripts/validate-release-ledger-ownership.py
 ```
 
+Scheduled runtime-freshness artifacts must cross the sanitized receipt
+boundary before they can update checked-in evidence. Preview the exact status
+delta first; the command verifies the receipt byte count and SHA-256, rejects
+request/credential-shaped fields, and skips results already present verbatim:
+
+```bash
+python3 scripts/import-runtime-freshness-run.py \
+  --report /path/to/consolidated/verification.json \
+  --receipt /path/to/consolidated/run-receipt.json \
+  --datapan-command datapan \
+  --dry-run
+```
+
+After reviewing that bounded proposal, replace `--dry-run` with `--apply`.
+Apply mode writes `reports/latest-verification.json` and the untruncated
+`reports/latest-verification-summary.json` only after sanitization, digest,
+count reconciliation, merge, and summary generation all succeed. Regenerate
+runtime-evidence growth, freshness/recovery outputs, README snapshot, and the
+release-ledger fixed point in the same ticket before publishing. Re-running an
+already imported artifact is a zero-delta operation.
+
 Institution-scoped runtime reactivation batches should follow the priority
 order in `docs/data-go-kr-coverage-backlog.md` and
 `docs/data-go-kr-institution-api-overview.md`. Start with the largest
