@@ -97,10 +97,11 @@ def build_report(
         "footprint.summary.large_monolith_threshold_bytes",
     )
     reviewed_missing = count(runner_summary.get("reviewed_receipts_missing"), "runner.summary.reviewed_receipts_missing")
-    blocked_on_operator_env = count(
+    raw_blocked_on_operator_env = count(
         runner_summary.get("blocked_on_operator_env"),
         "runner.summary.blocked_on_operator_env",
     )
+    blocked_on_operator_env = raw_blocked_on_operator_env if reviewed_missing > 0 else 0
 
     distribution_action_resolved = (
         proof_summary.get("distribution_action_resolved") is True
@@ -232,8 +233,8 @@ def validate_invariants(report: dict[str, Any]) -> None:
         if distribution.get("shard_distribution_required") is not False:
             raise ValueError("resolved distribution action must still keep shard distribution optional")
     if summary.get("credential_pressure_present") is True:
-        if credential.get("reviewed_receipts_missing", 0) <= 0:
-            raise ValueError("credential pressure must expose missing reviewed receipts")
+        if credential.get("reviewed_receipts_missing", 0) <= 0 and credential.get("blocked_on_operator_env", 0) <= 0:
+            raise ValueError("credential pressure must expose missing receipts or effective operator-env blockers")
         if credential.get("checked_in_secrets_allowed") is not False:
             raise ValueError("credential pressure must not allow checked-in secrets")
         if credential.get("manual_review_reduction_allowed") is not False:

@@ -28,14 +28,14 @@
     "goal_completion_allowed": false,
     "manual_review_required": true,
     "manual_review_accepted": false,
-    "reviewed_credential_receipts": 0,
+    "reviewed_credential_receipts": 5,
     "manual_review_reduction_allowed": false,
-    "operational_pressure_decision": "credential_runtime_pressure",
+    "operational_pressure_decision": "goal_boundary_pressure",
     "distribution_pressure_present": false,
-    "credential_pressure_present": true,
+    "credential_pressure_present": false,
     "continuation_next_action": "create_child_ticket",
-    "primary_continuation_candidate": "collect_reviewed_credential_runtime_receipts",
-    "candidate_count": 2,
+    "primary_continuation_candidate": "assert_explicit_manual_review_release_acceptance",
+    "candidate_count": 1,
     "goal_closure_allowed": false
   },
   "external_lifecycle_signal_policy": {
@@ -52,7 +52,7 @@
       "required_operator_action": "create_child_ticket_or_collect_required_evidence",
       "guard_command": "python3 scripts/guard-release-goal-finish.py",
       "continuation_next_action": "create_child_ticket",
-      "primary_continuation_candidate": "collect_reviewed_credential_runtime_receipts",
+      "primary_continuation_candidate": "assert_explicit_manual_review_release_acceptance",
       "blocking_evidence_count": 5
     }
   },
@@ -213,18 +213,6 @@
     "current_candidates": [
       {
         "order": 1,
-        "id": "collect_reviewed_credential_runtime_receipts",
-        "title": "Collect reviewed credential runtime receipts",
-        "capability_planes": [
-          "credential-safe evidence",
-          "verification evidence",
-          "consumer compatibility"
-        ],
-        "goal_closure_allowed": false,
-        "rationale": "Reviewed credential runtime receipts are the strongest evidence path for reducing current manual-review compatibility gates."
-      },
-      {
-        "order": 2,
         "id": "assert_explicit_manual_review_release_acceptance",
         "title": "Assert explicit manual-review release acceptance",
         "capability_planes": [
