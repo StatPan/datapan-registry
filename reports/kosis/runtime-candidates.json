@@ -23,7 +23,7 @@
       "label": "KOSIS population table bounded data query",
       "operation_kind": "data_query",
       "method": "GET",
-      "endpoint_template": "https://kosis.kr/openapi/statisticsData.do?method=getList",
+      "endpoint_template": "https://kosis.kr/openapi/Param/statisticsParameterData.do?method=getList",
       "format": "json",
       "sample_parameters": {
         "apiKey": "${KOSIS_API_KEY}",
@@ -50,7 +50,7 @@
       "evidence_status": "not_collected",
       "promotion_status": "registry_only",
       "reference_url": "https://kosis.kr/openapi/devGuide/devGuide_0201List.do",
-      "notes": "Pinned from official KOSIS statistics data parameter shape; credentialed runtime execution remains blocked until key injection is available."
+      "notes": "Uses the documented statistics-table selection endpoint: orgId, tblId, itmId, and objL1 are selection parameters for Param/statisticsParameterData.do; statisticsData.do instead requires a registered userStatsId."
     }
   ]
 }
