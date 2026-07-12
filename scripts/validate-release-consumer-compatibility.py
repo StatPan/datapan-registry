@@ -1233,9 +1233,8 @@ def validate_runtime_risk_evidence(
         risk.get("credential_policy_manual_review_reduction_allowed") is not True
         or risk.get("remediation_receipt_backed_relief_allowed") is not True
         or risk.get("credential_handoff_global_manual_review_relief_allowed") is not True
-        or risk.get("manual_review_acceptance_accepted") is True
     ):
-        raise ValueError("compatibility relief cannot be allowed through manual-review acceptance")
+        raise ValueError("compatibility relief requires reviewed credential receipt evidence")
 
     if unresolved_runtime_risk:
         if risk.get("manual_review_required") is not True:

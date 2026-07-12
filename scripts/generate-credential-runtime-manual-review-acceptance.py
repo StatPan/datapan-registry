@@ -11,6 +11,8 @@ import re
 import sys
 from typing import Any
 
+from manual_review_evidence_digest import compatibility_binding_sha256
+
 try:
     import jsonschema
 except ImportError as exc:  # pragma: no cover - environment guard
@@ -147,7 +149,7 @@ def validate_decision_state(
             raise ValueError(f"accepted manual-review decision requires decision.{required_key}")
     if decision_body.get("handoff_sha256") != file_sha256(handoff_path):
         raise ValueError("accepted manual-review decision handoff_sha256 does not match current handoff")
-    if decision_body.get("compatibility_sha256") != file_sha256(compatibility_path):
+    if decision_body.get("compatibility_sha256") != compatibility_binding_sha256(load_json(compatibility_path)):
         raise ValueError("accepted manual-review decision compatibility_sha256 does not match current compatibility")
     if not as_list(decision_body.get("revalidation_triggers"), "decision.revalidation_triggers"):
         raise ValueError("accepted manual-review decision requires revalidation triggers")

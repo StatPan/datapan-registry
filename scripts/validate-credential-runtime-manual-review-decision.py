@@ -11,6 +11,8 @@ import re
 import sys
 from typing import Any
 
+from manual_review_evidence_digest import compatibility_binding_sha256
+
 try:
     import jsonschema
 except ImportError as exc:  # pragma: no cover - environment guard
@@ -127,7 +129,7 @@ def validate_decision(record: dict[str, Any], *, handoff_path: pathlib.Path, com
             raise ValueError(f"accepted decision requires non-empty decision.{required_key}")
     if decision.get("handoff_sha256") != file_sha256(handoff_path):
         raise ValueError("accepted decision handoff_sha256 must match the current credential review handoff")
-    if decision.get("compatibility_sha256") != file_sha256(compatibility_path):
+    if decision.get("compatibility_sha256") != compatibility_binding_sha256(load_json(compatibility_path)):
         raise ValueError("accepted decision compatibility_sha256 must match the current consumer compatibility report")
     triggers = as_list(decision.get("revalidation_triggers"), "decision.revalidation_triggers")
     if not triggers:

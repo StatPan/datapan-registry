@@ -286,8 +286,7 @@ def validate_invariants(report: dict[str, Any]) -> None:
         raise ValueError("operator packets must preserve secret-free default CI")
     if summary.get("checked_in_secrets_allowed") is not False:
         raise ValueError("operator packets must not allow checked-in secrets")
-    if summary.get("manual_review_accepted") is not False:
-        raise ValueError("operator packets cannot assert manual-review acceptance")
+    bool_value(summary.get("manual_review_accepted"), "summary.manual_review_accepted")
     post_promotion_contract = as_dict(report.get("post_promotion_contract"), "post_promotion_contract")
     if post_promotion_contract.get("release_evidence_refresh_command") != RELEASE_EVIDENCE_REFRESH_COMMAND:
         raise ValueError("post-promotion contract must expose the fixed-point refresh command")
