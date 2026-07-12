@@ -1,11 +1,25 @@
 name: Publish Hugging Face Registry distribution
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/huggingface-distribution.yml"
+      - "data/**"
+      - "manifest.json"
+      - "policy/registry-distribution.json"
+      - "reports/**"
+      - "scripts/huggingface_registry_distribution.py"
+      - "schemas/datapan.huggingface-distribution.v1.schema.json"
+      - "tests/test_huggingface_registry_distribution.py"
   pull_request:
     paths:
       - ".github/workflows/huggingface-distribution.yml"
+      - "data/**"
       - "manifest.json"
       - "policy/registry-distribution.json"
+      - "reports/**"
       - "scripts/huggingface_registry_distribution.py"
       - "schemas/datapan.huggingface-distribution.v1.schema.json"
       - "tests/test_huggingface_registry_distribution.py"
@@ -19,6 +33,10 @@ on:
 
 permissions:
   contents: read
+
+concurrency:
+  group: huggingface-registry-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'publication' }}
+  cancel-in-progress: false
 
 jobs:
   validate:
@@ -105,7 +123,7 @@ jobs:
           retention-days: 14
 
       - name: Publish two-phase immutable distribution
-        if: github.event_name == 'workflow_dispatch' && inputs.publish
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.publish)
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
@@ -116,7 +134,7 @@ jobs:
             | tee .datapan/hf-publication.json
 
       - name: Verify published pointer anonymously
-        if: github.event_name == 'workflow_dispatch' && inputs.publish
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.publish)
         env:
           HF_TOKEN: ""
         run: |
@@ -125,7 +143,7 @@ jobs:
             | tee .datapan/hf-public-verification.json
 
       - name: Upload publication receipts
-        if: always() && github.event_name == 'workflow_dispatch' && inputs.publish
+        if: always() && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.publish))
         uses: actions/upload-artifact@v4
         with:
           name: huggingface-registry-publication-receipts
