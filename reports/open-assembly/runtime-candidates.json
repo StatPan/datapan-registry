@@ -47,7 +47,7 @@
       "evidence_status": "not_collected",
       "promotion_status": "registry_only",
       "reference_url": "https://open.assembly.go.kr/portal/openapi/main.do",
-      "notes": "Pinned from the official OPENSRVAPI catalogue endpoint; runtime execution remains separate from the already observed unauthenticated catalogue response."
+      "notes": "Pinned from the official OPENSRVAPI catalogue endpoint; runtime execution remains separate from the already observed unauthenticated catalogue response. The provider returns HTTP 400 to default Go/Python user agents, so source-candidate verification must send an explicit Datapan User-Agent."
     }
   ]
 }

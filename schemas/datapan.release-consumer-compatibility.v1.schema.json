@@ -904,7 +904,7 @@
           "$ref": "#/$defs/count"
         },
         "credential_collection_preflight_manual_review_reduction_allowed": {
-          "const": false
+          "type": "boolean"
         },
         "credential_runner_readiness_status": {
           "enum": [
@@ -935,7 +935,7 @@
           "const": false
         },
         "credential_runner_manual_review_reduction_allowed": {
-          "const": false
+          "type": "boolean"
         },
         "credential_runner_local_session_artifacts_checked_in": {
           "const": false

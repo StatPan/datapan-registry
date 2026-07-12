@@ -42,6 +42,7 @@ WRITE_COMMANDS: tuple[Command, ...] = (
     Command(("python3", "scripts/generate-credential-runtime-review-handoff.py")),
     Command(("python3", "scripts/generate-credential-runtime-operator-packets.py")),
     Command(("python3", "scripts/generate-credential-runtime-collection-execution-plan.py")),
+    Command(("python3", "scripts/generate-release-consumer-compatibility.py")),
     Command(("python3", "scripts/generate-credential-runtime-manual-review-acceptance.py")),
     Command(("python3", "scripts/generate-credential-runtime-manual-review-acceptance-packet.py")),
     Command(("python3", "scripts/generate-impact-plan-rollup.py"), transient=True),

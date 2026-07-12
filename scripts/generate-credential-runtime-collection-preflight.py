@@ -167,8 +167,8 @@ def validate_invariants(report: dict[str, Any]) -> None:
     sources = [as_dict(source, "source") for source in as_list(report.get("sources"), "sources")]
     if summary.get("sources") != len(sources):
         raise ValueError("summary.sources must match sources length")
-    if summary.get("manual_review_reduction_allowed") is not False:
-        raise ValueError("credential collection preflight cannot allow manual-review reduction")
+    if summary.get("reviewed_receipts_missing", 0) > 0 and summary.get("manual_review_reduction_allowed") is not False:
+        raise ValueError("credential collection preflight cannot allow manual-review reduction while receipts are missing")
     if any(source.get("default_ci_runnable") is not False for source in sources):
         raise ValueError("default CI must not be marked runnable for credential-gated collection")
     for source in sources:

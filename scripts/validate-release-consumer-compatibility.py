@@ -1235,19 +1235,28 @@ def validate_runtime_risk_evidence(
             raise ValueError("runtime blockers or warnings require runtime_risk_evidence.manual_review_required=true")
         if risk.get("compatibility_effect") != "manual_review_required_until_runtime_blockers_resolved":
             raise ValueError("runtime blockers or warnings must keep manual-review compatibility effect")
-        if risk.get("manual_review_reduction_allowed") is not False:
-            raise ValueError("manual-review reduction must remain disallowed while receipt-backed runtime relief is absent")
-        if risk.get("credential_handoff_status") != "review_required":
-            raise ValueError("runtime blockers require credential handoff status review_required")
-        if risk.get("credential_handoff_pending_review_sources", 0) <= 0:
-            raise ValueError("runtime blockers require pending credential review sources in the handoff")
         if risk.get("manual_review_acceptance_accepted") is not False:
             raise ValueError("runtime blockers must keep manual-review acceptance unaccepted by default")
-        if (
-            risk.get("manual_review_reduction_status")
-            != "blocked_until_reviewed_validated_credential_runtime_receipts_exist"
-        ):
-            raise ValueError("manual-review reduction status must point at reviewed validated credential runtime receipts")
+        if risk.get("manual_review_reduction_allowed") is True:
+            if risk.get("credential_handoff_status") != "relief_ready":
+                raise ValueError("receipt-backed runtime relief requires credential handoff status relief_ready")
+            if risk.get("credential_handoff_pending_review_sources") != 0:
+                raise ValueError("receipt-backed runtime relief requires no pending credential handoff sources")
+            if (
+                risk.get("manual_review_reduction_status")
+                != "allowed_by_reviewed_validated_credential_runtime_receipts"
+            ):
+                raise ValueError("manual-review reduction status must cite reviewed validated credential runtime receipts")
+        else:
+            if risk.get("credential_handoff_status") != "review_required":
+                raise ValueError("runtime blockers without receipt relief require credential handoff status review_required")
+            if risk.get("credential_handoff_pending_review_sources", 0) <= 0:
+                raise ValueError("runtime blockers without receipt relief require pending credential review sources")
+            if (
+                risk.get("manual_review_reduction_status")
+                != "blocked_until_reviewed_validated_credential_runtime_receipts_exist"
+            ):
+                raise ValueError("manual-review reduction status must point at reviewed validated credential runtime receipts")
     elif risk.get("manual_review_required") is not False:
         raise ValueError("runtime_risk_evidence.manual_review_required must be false when runtime evidence is clear")
 

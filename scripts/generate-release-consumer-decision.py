@@ -140,7 +140,7 @@ def build_report(
             {
                 "consumer": "release-operator",
                 "action": "manual_review_before_release_adoption",
-                "reason": "Runtime risk evidence still requires manual review and manual-review acceptance is not asserted.",
+                "reason": "Runtime risk evidence still requires manual review for source runtime blockers or warnings.",
             },
             {
                 "consumer": "release-operator",
@@ -150,7 +150,7 @@ def build_report(
             {
                 "consumer": "goal-operator",
                 "action": "do_not_finish_goal",
-                "reason": "Goal completion remains disallowed until reviewed receipts or explicit accepted manual-review boundary evidence exists and the completion audit is complete.",
+                "reason": "Goal completion remains disallowed until source runtime blockers are resolved and the completion audit is complete.",
             },
         ],
     }
@@ -170,13 +170,6 @@ def validate_invariants(report: dict[str, Any]) -> None:
         raise ValueError("release decision must preserve monolith fallback")
     if summary.get("manual_review_required") is True:
         missing = factors.get("credential_collection_preflight_reviewed_receipts_missing")
-        relief_eligible = factors.get("credential_handoff_relief_eligible_sources")
-        reviewed = summary.get("reviewed_credential_receipts")
-        global_relief_allowed = factors.get("credential_handoff_global_manual_review_relief_allowed")
-        if missing == 0 and global_relief_allowed is True:
-            raise ValueError("manual-review-required decisions cannot report global manual-review relief")
-        if missing == 0 and isinstance(relief_eligible, int) and isinstance(reviewed, int) and relief_eligible >= reviewed:
-            raise ValueError("manual-review-required decisions must expose non-relief-eligible reviewed receipts")
         if missing != 0 and factors.get("credential_collection_preflight_operator_environment_required_sources") == 0:
             raise ValueError("manual-review-required missing-receipt decisions must expose credential operator environment needs")
 

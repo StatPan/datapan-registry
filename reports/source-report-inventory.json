@@ -48,7 +48,7 @@
     "path": "schemas/index.json",
     "schemas": 83,
     "bytes": 33933,
-    "sha256": "e9d332f7803a7bf9dd3c5faab4c1ca35879127fe1bd7a5ef078d051ec10a3992"
+    "sha256": "a0759443132bbe76ea7d8f9469444a0ce55314ec308d8625157613c39b20727c"
   },
   "recommended_reports": [
     "adapter-targets.json",
@@ -1329,8 +1329,8 @@
         {
           "name": "runtime-candidates.json",
           "path": "reports/open-assembly/runtime-candidates.json",
-          "bytes": 1729,
-          "sha256": "73c17cfac358c7969244c2d67e8ea9548f8fefdd31b8ff1f366856c0d291b0a0",
+          "bytes": 1868,
+          "sha256": "318c77f1e028d3c11810690f723c1be4164bb12af38901fd1e5432fa3df0d5f9",
           "schema_version": "datapan.source-runtime-candidates.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.source-runtime-candidates.v1.schema.json",
           "expected_schema_path": "schemas/datapan.source-runtime-candidates.v1.schema.json",

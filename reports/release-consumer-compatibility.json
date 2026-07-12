@@ -103,8 +103,8 @@
       "path": "reports/source-runtime-remediation-map.json",
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
-      "bytes": 15042,
-      "sha256": "67287e735369f6ee55655ec4a2811200507489038696ea8819b6083981411760",
+      "bytes": 15028,
+      "sha256": "f2c60c06e5deb313cec78900ee7ce0abb344ca2f0b8de1e57d02c45fd13bdbc8",
       "required": true
     },
     {
@@ -112,8 +112,8 @@
       "path": "reports/credential-runtime-evidence-policy.json",
       "kind": "credential_runtime_evidence_policy",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-evidence-policy.v1.schema.json",
-      "bytes": 15131,
-      "sha256": "38925100823f1f37faf6993a525df0b7b3a234444af578ec2ac8c77025e2b315",
+      "bytes": 15126,
+      "sha256": "28468e10701797f9e93d5bcf8727276e9d3990b803e7b331d4a86a2bd9b205da",
       "required": true
     },
     {
@@ -121,8 +121,8 @@
       "path": "reports/credential-runtime-collection-preflight.json",
       "kind": "credential_runtime_collection_preflight",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-collection-preflight.v1.schema.json",
-      "bytes": 10771,
-      "sha256": "e9059b8f9bb1ada132e3e3e092510524de33362bd821f1c58c270676deaa3c4f",
+      "bytes": 10737,
+      "sha256": "104700685baa8f1f33a8e9db020ba1ef7da187ac7eefb59992f2d03ae47c340e",
       "required": true
     },
     {
@@ -130,8 +130,8 @@
       "path": "reports/credential-runtime-runner-readiness.json",
       "kind": "credential_runtime_runner_readiness",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-runner-readiness.v1.schema.json",
-      "bytes": 9706,
-      "sha256": "bd01f284bccc14d01621bdcc9f00c512b381ce4fb2b2434cd57dae03a3469de0",
+      "bytes": 9705,
+      "sha256": "d4be7f62bf4f79b9e14be7f7942f67182f65bea3ad4aba65c37fc08334777ba8",
       "required": true
     },
     {
@@ -139,8 +139,8 @@
       "path": "reports/credential-runtime-collection-execution-plan.json",
       "kind": "credential_runtime_collection_execution_plan",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-collection-execution-plan.v1.schema.json",
-      "bytes": 18386,
-      "sha256": "526db2b3154d1cd2c613fdd3ce197d1e2f312cf89cf8bd650e4e017405cac7ec",
+      "bytes": 18360,
+      "sha256": "93c6fdbd7a4e47e23c304e624f7d6ab50c550261e67602a1d9c1fbdb8f452f7a",
       "required": true
     },
     {
@@ -148,8 +148,8 @@
       "path": "reports/credential-runtime-receipt-collection-queue.json",
       "kind": "credential_runtime_receipt_collection_queue",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-receipt-collection-queue.v1.schema.json",
-      "bytes": 15403,
-      "sha256": "a5f2846036699f47c58bf162fabe6b514cbd6e055ea8be38e6951705ce98a40e",
+      "bytes": 15368,
+      "sha256": "36672af81d64a4333a4f3bc0a94bae3c4d84f71394a77f2309d2215c0b4f8a58",
       "required": true
     },
     {
@@ -157,8 +157,8 @@
       "path": "reports/credential-runtime-review-handoff.json",
       "kind": "credential_runtime_review_handoff",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-review-handoff.v1.schema.json",
-      "bytes": 13408,
-      "sha256": "0847970ebf100db875533cf1305f7c3178d36fd9c548bccf2c26454e36d67255",
+      "bytes": 12845,
+      "sha256": "7d8e645a0f58469fabe3f9289e20ea6835c81e088dd363519d015d1d0f501beb",
       "required": true
     },
     {
@@ -175,8 +175,8 @@
       "path": "reports/credential-runtime-manual-review-acceptance.json",
       "kind": "credential_runtime_manual_review_acceptance",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-acceptance.v1.schema.json",
-      "bytes": 4526,
-      "sha256": "ef144c08c3f1c10d55fd74e888248185c826e7eb88d2f2c266984e56612d1878",
+      "bytes": 4522,
+      "sha256": "7860a1a03e0459c0693648e894ba9ca01fed3d876fb09f9bfb143fff8b02601f",
       "required": true
     },
     {
@@ -194,7 +194,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "d0d57baa4cc9c77a100108f040c37fc9b1e2de8dc3c1d6062676d15d9596e93f",
+      "sha256": "0ef5a348daf2dbc9638ff8bf5a367396eb3e64f33158f2095cb8fb0720f52cc3",
       "required": true
     },
     {
@@ -212,7 +212,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 61997,
-      "sha256": "8a41d49d3f8d78343ad4bfd270858fe02a541541249dba03613666efa8b684b3",
+      "sha256": "ed79b22e55112562f7297785f105192078c0a0371f84bdd971d6fcff0591edd9",
       "required": true
     },
     {
@@ -221,7 +221,7 @@
       "kind": "release_distribution_footprint",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
       "bytes": 2141,
-      "sha256": "5e407cc0d166249a08db20180f23c72a7e36041967cf0337b0bc753bcaf92cef",
+      "sha256": "d47256d30bdb9af2444fa27fe26de55256eecf718442b9dd045677f2f255fb01",
       "required": true
     },
     {
@@ -238,8 +238,8 @@
       "path": "reports/release-consumer-decision.json",
       "kind": "release_consumer_decision",
       "schema": "https://schemas.datapan.dev/datapan.release-consumer-decision.v1.schema.json",
-      "bytes": 2960,
-      "sha256": "282e7e6eb9db93478f749f09881e130f299d39ccda29aef05fb753e296b73054",
+      "bytes": 2914,
+      "sha256": "ac68e0581a1a2da9b037a42fa0e0a7c08cfb3f7a1509e7e6bdbf9ffc565fde92",
       "required": true
     }
   ],
@@ -281,12 +281,12 @@
     "remediation_receipt_contract_available": true,
     "remediation_reviewed_receipt_intake_available": true,
     "remediation_receipt_reviewed": true,
-    "remediation_receipt_relief_eligible": false,
-    "remediation_receipt_backed_relief_allowed": false,
-    "remediation_receipt_backed_relief_status": "blocked_until_reviewed_validated_credential_runtime_receipts_exist",
+    "remediation_receipt_relief_eligible": true,
+    "remediation_receipt_backed_relief_allowed": true,
+    "remediation_receipt_backed_relief_status": "allowed_by_reviewed_validated_credential_runtime_receipts",
     "remediation_receipt_linked_findings": 13,
     "remediation_receipt_linked_absent": 0,
-    "remediation_receipt_linked_relief_eligible": 10,
+    "remediation_receipt_linked_relief_eligible": 13,
     "credential_policy_sources": 5,
     "credential_policy_manual_review_boundaries": 13,
     "credential_policy_receipt_contract_available": true,
@@ -294,8 +294,8 @@
     "credential_policy_receipt_present": true,
     "credential_policy_receipt_validated": true,
     "credential_policy_receipt_reviewed": true,
-    "credential_policy_receipt_relief_eligible": false,
-    "credential_policy_manual_review_reduction_allowed": false,
+    "credential_policy_receipt_relief_eligible": true,
+    "credential_policy_manual_review_reduction_allowed": true,
     "credential_policy_live_receipts": 5,
     "credential_policy_reviewed_receipts": 5,
     "credential_policy_default_ci_requires_credentials": false,
@@ -306,7 +306,7 @@
     "credential_collection_preflight_reviewed_receipts_missing": 0,
     "credential_collection_preflight_default_ci_runnable_sources": 0,
     "credential_collection_preflight_operator_environment_required_sources": 5,
-    "credential_collection_preflight_manual_review_reduction_allowed": false,
+    "credential_collection_preflight_manual_review_reduction_allowed": true,
     "credential_runner_readiness_status": "reviewed_receipts_complete",
     "credential_runner_ready_to_run_without_credentials": 0,
     "credential_runner_blocked_on_operator_env": 5,
@@ -315,7 +315,7 @@
     "credential_runner_reviewed_receipts_missing": 0,
     "credential_runner_default_ci_requires_credentials": false,
     "credential_runner_checked_in_secrets_allowed": false,
-    "credential_runner_manual_review_reduction_allowed": false,
+    "credential_runner_manual_review_reduction_allowed": true,
     "credential_runner_local_session_artifacts_checked_in": false,
     "credential_execution_plan_status": "reviewed_receipts_complete",
     "credential_execution_operator_sources_ready": 0,
@@ -344,24 +344,24 @@
     "credential_execution_review_promotion_checked_in_secrets_allowed": false,
     "credential_execution_review_promotion_goal_closure_allowed": false,
     "credential_policy_effect": "credential_safe_manual_review_boundary",
-    "credential_policy_relief_gate_status": "blocked_until_reviewed_validated_credential_runtime_receipts_exist",
-    "credential_queue_status": "collection_required",
+    "credential_policy_relief_gate_status": "allowed_by_reviewed_validated_credential_runtime_receipts",
+    "credential_queue_status": "complete_relief_eligible",
     "credential_queue_absent": 0,
     "credential_queue_staged_only": 0,
-    "credential_queue_reviewed_rejected": 1,
+    "credential_queue_reviewed_rejected": 0,
     "credential_queue_reviewed_accepted": 0,
-    "credential_queue_relief_eligible": 4,
+    "credential_queue_relief_eligible": 5,
     "credential_queue_reviewed_receipts": 5,
-    "credential_queue_manual_review_reduction_allowed": false,
+    "credential_queue_manual_review_reduction_allowed": true,
     "credential_queue_default_ci_requires_credentials": false,
-    "credential_handoff_status": "review_required",
-    "credential_handoff_pending_review_sources": 5,
+    "credential_handoff_status": "relief_ready",
+    "credential_handoff_pending_review_sources": 0,
     "credential_handoff_reviewed_receipts": 5,
-    "credential_handoff_relief_eligible_sources": 4,
-    "credential_handoff_global_manual_review_relief_allowed": false,
-    "credential_handoff_manual_review_required": true,
+    "credential_handoff_relief_eligible_sources": 5,
+    "credential_handoff_global_manual_review_relief_allowed": true,
+    "credential_handoff_manual_review_required": false,
     "credential_handoff_default_ci_requires_credentials": false,
-    "credential_handoff_relief_decision": "blocked_until_all_sources_relief_eligible",
+    "credential_handoff_relief_decision": "allowed_by_all_reviewed_validated_receipts",
     "manual_review_decision_status": "not_asserted",
     "manual_review_decision_accepted": false,
     "manual_review_decision_reason": "manual_review_acceptance_not_asserted",
@@ -372,8 +372,8 @@
     "manual_review_acceptance_required_evidence": 5,
     "manual_review_acceptance_boundary_accepted": false,
     "manual_review_acceptance_goal_completion_effect": "goal_remains_open_until_reviewed_receipts_or_explicit_acceptance",
-    "manual_review_reduction_allowed": false,
-    "manual_review_reduction_status": "blocked_until_reviewed_validated_credential_runtime_receipts_exist",
+    "manual_review_reduction_allowed": true,
+    "manual_review_reduction_status": "allowed_by_reviewed_validated_credential_runtime_receipts",
     "blocker_ids": [
       "credential_required",
       "metadata_only_verification"
@@ -489,7 +489,7 @@
     ],
     "release_distribution_footprint": "reports/release-distribution-footprint.json",
     "canonical_registry_bytes": 137735169,
-    "manifest_bound_bytes_excluding_self": 173761411,
+    "manifest_bound_bytes_excluding_self": 173760342,
     "large_monolith_threshold_bytes": 100000000,
     "registry_footprint_status": "large_monolith_shard_additive",
     "canonical_registry_required": true,
