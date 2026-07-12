@@ -158,6 +158,7 @@ jobs:
           python -m py_compile scripts/generate-runtime-freshness-batch.py scripts/check-runtime-freshness-workflow.py scripts/check-runtime-freshness-import-workflow.py scripts/consolidate-runtime-freshness-run.py scripts/import-runtime-freshness-run.py scripts/project-runtime-freshness-recovery.py scripts/apply-runtime-freshness-import.py scripts/generate-runtime-evidence-growth.py scripts/generate-readme-runtime-snapshot.py
           python -m py_compile scripts/convert-source-verification-to-credential-receipt.py
           python -m py_compile scripts/generate-source-contract-rollup.py
+          python -m py_compile scripts/generate-source-runtime-evidence-rollup.py
           python -m py_compile scripts/generate-sustainable-coverage.py
           python -m py_compile scripts/run-upstream-refresh.py
           python -m py_compile scripts/validate-source-refresh-policy.py

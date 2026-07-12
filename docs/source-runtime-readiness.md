@@ -4,37 +4,35 @@ This overview is generated from `reports/source-runtime-evidence-rollup.json` an
 
 - Generated at: `2026-07-06T17:46:39Z`
 - Sources: `5`
-- Sources without runtime evidence: `4`
-- Runtime evidence total: `4774`
-- Verified: `2841`
+- Sources without runtime evidence: `0`
+- Runtime evidence total: `4778`
+- Verified: `2845`
 - Failed: `389`
 - Skipped: `1544`
 - Unknown: `0`
-- Blocking blocker instances: `9`
-- Warning instances: `4`
+- Blocking blocker instances: `5`
+- Warning instances: `0`
 
 ## Source Summary
 
 | Source | Source ID | Evidence | Blockers | Warnings | Blocker IDs | Warning IDs |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | data.go.kr | `data_go_kr` | 4774 | 1 | 0 | `credential_required` |  |
-| ECOS | `ecos` | 0 | 2 | 1 | `credential_required`, `metadata_only_verification` | `non_data_runtime_evidence_not_collected` |
-| KOSIS | `kosis` | 0 | 2 | 1 | `credential_required`, `metadata_only_verification` | `non_data_runtime_evidence_not_collected` |
-| open.assembly.go.kr | `open_assembly` | 0 | 2 | 1 | `credential_required`, `metadata_only_verification` | `non_data_runtime_evidence_not_collected` |
-| data.seoul.go.kr | `seoul_open_data` | 0 | 2 | 1 | `credential_required`, `metadata_only_verification` | `non_data_runtime_evidence_not_collected` |
+| ECOS | `ecos` | 1 | 1 | 0 | `credential_required` |  |
+| KOSIS | `kosis` | 1 | 1 | 0 | `credential_required` |  |
+| open.assembly.go.kr | `open_assembly` | 1 | 1 | 0 | `credential_required` |  |
+| data.seoul.go.kr | `seoul_open_data` | 1 | 1 | 0 | `credential_required` |  |
 
 ## Blockers By ID
 
 | Blocker ID | Count | Sources |
 | --- | ---: | ---: |
 | credential_required | 5 | `data_go_kr`, `ecos`, `kosis`, `open_assembly`, `seoul_open_data` |
-| metadata_only_verification | 4 | `ecos`, `kosis`, `open_assembly`, `seoul_open_data` |
 
 ## Warnings By ID
 
 | Warning ID | Count | Sources |
 | --- | ---: | ---: |
-| non_data_runtime_evidence_not_collected | 4 | `ecos`, `kosis`, `open_assembly`, `seoul_open_data` |
 
 ## Source Next Actions
 
@@ -73,12 +71,12 @@ Warnings:
 
 ### ECOS (`ecos`)
 
-- Runtime evidence: `0`
-- Verification mode: `metadata_only`
+- Runtime evidence: `1`
+- Verification mode: `bounded_call`
 - Adapter status: `registered`
 - Credential required: `true`
 - Candidate batch: `reports/ecos/runtime-candidates.json`
-- First batch policy: Run a credential-gated bounded sample-call batch only after ECOS statCode/cycle/date-window/itemCode parameters are pinned.
+- First batch policy: Maintain the reviewed bounded ECOS sample-call receipt and revalidate it when pinned statCode, cycle, date-window, or item parameters change.
 - Promotion gate: Do not promote ECOS datasets beyond registry_only until runtime evidence and time-series mapping contracts exist.
 
 Required CLI capabilities:
@@ -98,22 +96,21 @@ Required source reports:
 
 Open blockers:
 
-- `metadata_only_verification` (datapan_cli): Promote ECOS from metadata-only to bounded sample-call verification after statCode, cycle, date-window, and item samples are pinned.
 - `credential_required` (operator): Define a non-secret API key injection path for source-scoped CI and local bounded checks.
 
 Warnings:
 
-- `non_data_runtime_evidence_not_collected`: Use reports/ecos/runtime-candidates.json with a registered adapter and credentials to run the first bounded verification batch.
+- None recorded
 
 
 ### KOSIS (`kosis`)
 
-- Runtime evidence: `0`
-- Verification mode: `metadata_only`
+- Runtime evidence: `1`
+- Verification mode: `bounded_call`
 - Adapter status: `registered`
 - Credential required: `true`
 - Candidate batch: `reports/kosis/runtime-candidates.json`
-- First batch policy: Run a credential-gated bounded sample-call batch only after sample orgId/tblId/statId/period parameters are pinned.
+- First batch policy: Maintain the reviewed bounded KOSIS sample-call receipt and revalidate it when pinned orgId, tblId, statId, or period parameters change.
 - Promotion gate: Do not promote KOSIS datasets beyond registry_only until runtime evidence and table mapping contracts exist.
 
 Required CLI capabilities:
@@ -133,22 +130,21 @@ Required source reports:
 
 Open blockers:
 
-- `metadata_only_verification` (datapan_cli): Promote KOSIS from metadata-only to bounded sample-call verification after sample parameters and credential policy are pinned.
 - `credential_required` (operator): Define a non-secret API key injection path for source-scoped CI and local bounded checks.
 
 Warnings:
 
-- `non_data_runtime_evidence_not_collected`: Use reports/kosis/runtime-candidates.json with a registered adapter and credentials to run the first bounded verification batch.
+- None recorded
 
 
 ### open.assembly.go.kr (`open_assembly`)
 
-- Runtime evidence: `0`
-- Verification mode: `metadata_only`
+- Runtime evidence: `1`
+- Verification mode: `bounded_call`
 - Adapter status: `registered`
 - Credential required: `true`
 - Candidate batch: `reports/open-assembly/runtime-candidates.json`
-- First batch policy: Run a credential-gated bounded sample-call batch only after service IDs and required legislative parameters are pinned.
+- First batch policy: Maintain the reviewed bounded Open Assembly sample-call receipt and revalidate it when the service ID or legislative parameters change.
 - Promotion gate: Do not promote Open Assembly datasets beyond registry_only until runtime evidence and legislative identity mappings exist.
 
 Required CLI capabilities:
@@ -168,22 +164,21 @@ Required source reports:
 
 Open blockers:
 
-- `metadata_only_verification` (datapan_cli): Promote Open Assembly from metadata-only to bounded sample-call verification after service IDs and legislative parameters are pinned.
 - `credential_required` (operator): Define a non-secret KEY injection path for source-scoped CI and local bounded checks.
 
 Warnings:
 
-- `non_data_runtime_evidence_not_collected`: Use reports/open-assembly/runtime-candidates.json with a registered adapter and credentials to run the first bounded verification batch.
+- None recorded
 
 
 ### data.seoul.go.kr (`seoul_open_data`)
 
-- Runtime evidence: `0`
-- Verification mode: `metadata_only`
+- Runtime evidence: `1`
+- Verification mode: `bounded_call`
 - Adapter status: `registered`
 - Credential required: `true`
 - Candidate batch: `reports/seoul-open-data/runtime-candidates.json`
-- First batch policy: Run a credential-gated bounded sample-call batch only after service/start_index/end_index/format parameters are pinned.
+- First batch policy: Maintain the reviewed bounded Seoul Open Data sample-call receipt and revalidate it when service or index parameters change.
 - Promotion gate: Do not promote Seoul Open Data datasets beyond registry_only until runtime evidence and service-specific row schema contracts exist.
 
 Required CLI capabilities:
@@ -203,10 +198,9 @@ Required source reports:
 
 Open blockers:
 
-- `metadata_only_verification` (datapan_cli): Promote Seoul Open Data from metadata-only to bounded sample-call verification after service and index parameters are pinned.
 - `credential_required` (operator): Define a non-secret KEY injection path for source-scoped CI and local bounded checks.
 
 Warnings:
 
-- `non_data_runtime_evidence_not_collected`: Use reports/seoul-open-data/runtime-candidates.json with a registered adapter and credentials to run the first bounded verification batch.
+- None recorded
 

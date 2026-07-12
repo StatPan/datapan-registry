@@ -41,6 +41,14 @@
       "type": "string",
       "minLength": 1
     },
+    "credential_runtime_receipts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
     "references": {
       "$ref": "#/$defs/references"
     },

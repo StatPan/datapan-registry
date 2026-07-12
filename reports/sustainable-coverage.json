@@ -21,8 +21,8 @@
   "summary": {
     "decision": "coverage_gaps",
     "layers_total": 9,
-    "layers_meeting_target": 6,
-    "layers_below_target": 3,
+    "layers_meeting_target": 7,
+    "layers_below_target": 2,
     "unknown_timestamp_records": 712,
     "stale_records": 0,
     "expired_records": 0
@@ -80,11 +80,11 @@
     },
     {
       "id": "runtime_evidence_source",
-      "numerator": 1,
+      "numerator": 5,
       "denominator": 5,
-      "percent": 20.0,
+      "percent": 100.0,
       "target_percent": 100.0,
-      "meets_target": false,
+      "meets_target": true,
       "scope": "supported_sources",
       "meaning": "Sources with at least one runtime evidence record."
     },
@@ -154,7 +154,7 @@
       "catalog_denominator": true,
       "call_capability": true,
       "reviewed_runtime_receipt": true,
-      "runtime_evidence": 0,
+      "runtime_evidence": 1,
       "active_recovery_failures": 0,
       "recovered_failures": 1
     },
@@ -164,7 +164,7 @@
       "catalog_denominator": true,
       "call_capability": true,
       "reviewed_runtime_receipt": true,
-      "runtime_evidence": 0,
+      "runtime_evidence": 1,
       "active_recovery_failures": 0,
       "recovered_failures": 1
     },
@@ -174,7 +174,7 @@
       "catalog_denominator": true,
       "call_capability": true,
       "reviewed_runtime_receipt": true,
-      "runtime_evidence": 0,
+      "runtime_evidence": 1,
       "active_recovery_failures": 0,
       "recovered_failures": 1
     },
@@ -184,7 +184,7 @@
       "catalog_denominator": true,
       "call_capability": true,
       "reviewed_runtime_receipt": true,
-      "runtime_evidence": 0,
+      "runtime_evidence": 1,
       "active_recovery_failures": 0,
       "recovered_failures": 1
     }
@@ -195,7 +195,6 @@
     "missing_timestamps_are_not_fresh": true,
     "recovery_updates_coverage": true,
     "next_actions": [
-      "runtime_evidence_source",
       "runtime_evidence_operation",
       "fresh_verified_operation"
     ]

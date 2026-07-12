@@ -96,6 +96,7 @@ jobs:
             scripts/generate-failure-recovery-rollup.py \
             scripts/generate-operation-denominator-rollup.py \
             scripts/generate-runtime-freshness-queue.py \
+            scripts/generate-source-runtime-evidence-rollup.py \
             scripts/generate-runtime-freshness-batch.py \
             scripts/check-runtime-freshness-workflow.py \
             scripts/consolidate-runtime-freshness-run.py \

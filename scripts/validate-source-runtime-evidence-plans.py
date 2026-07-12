@@ -103,6 +103,42 @@ def candidate_batch_materialized(
     return int(summary.get("candidates", 0)) > 0 and int(summary.get("evidence_total", 0)) == 0
 
 
+def reviewed_runtime_receipt_count(plan_path: pathlib.Path, plan: dict[str, object]) -> int:
+    raw_paths = plan.get("credential_runtime_receipts", [])
+    if not isinstance(raw_paths, list):
+        raise ValueError("credential_runtime_receipts must be an array")
+    seen: set[str] = set()
+    for raw_path in raw_paths:
+        if not isinstance(raw_path, str) or not raw_path:
+            raise ValueError("credential_runtime_receipts entries must be non-empty strings")
+        if raw_path in seen:
+            raise ValueError(f"duplicate credential runtime receipt: {raw_path}")
+        seen.add(raw_path)
+        receipt_path = pathlib.Path(raw_path)
+        if not receipt_path.exists():
+            raise ValueError(f"credential runtime receipt does not exist: {raw_path}")
+        receipt = as_dict(load_json(receipt_path), receipt_path)
+        if receipt.get("source_id") != plan.get("source_id"):
+            raise ValueError(f"{raw_path}: source_id does not match runtime evidence plan")
+        if receipt.get("provider") != plan.get("provider"):
+            raise ValueError(f"{raw_path}: provider does not match runtime evidence plan")
+        if receipt.get("candidate_batch") != plan.get("candidate_batch"):
+            raise ValueError(f"{raw_path}: candidate_batch does not match runtime evidence plan")
+        if receipt.get("runtime_evidence_plan") != plan_path.as_posix():
+            raise ValueError(f"{raw_path}: runtime_evidence_plan does not match plan path")
+        if receipt.get("bounded") is not True or receipt.get("outcome") != "verified":
+            raise ValueError(f"{raw_path}: receipt must be a verified bounded runtime check")
+        response_metadata = as_dict(receipt.get("response_metadata"), receipt_path)
+        if int(response_metadata.get("verified_count", 0)) < 1:
+            raise ValueError(f"{raw_path}: receipt must record at least one verified candidate")
+        review = as_dict(receipt.get("review"), receipt_path)
+        if review.get("state") != "reviewed_accepted":
+            raise ValueError(f"{raw_path}: receipt must be reviewed_accepted")
+        if review.get("decision") != "allows_manual_review_reduction":
+            raise ValueError(f"{raw_path}: receipt must allow manual-review reduction")
+    return len(raw_paths)
+
+
 def validate_consistency(plan_path: pathlib.Path, plan: dict[str, object]) -> None:
     profile_path = pathlib.Path(str(plan.get("source_profile")))
     if not profile_path.exists():
@@ -125,8 +161,9 @@ def validate_consistency(plan_path: pathlib.Path, plan: dict[str, object]) -> No
     profile_references = as_dict(profile.get("references"), profile_path)
 
     state = as_dict(plan.get("runtime_state"), plan_path)
+    receipt_count = reviewed_runtime_receipt_count(plan_path, plan)
     expected_state = {
-        "verification_mode": profile_runtime.get("verification_mode"),
+        "verification_mode": "bounded_call" if receipt_count else profile_runtime.get("verification_mode"),
         "adapter_status": profile_adapter.get("status"),
         "adapter_capabilities": profile_adapter.get("capabilities"),
         "auth_type": profile_auth.get("type"),
@@ -143,6 +180,13 @@ def validate_consistency(plan_path: pathlib.Path, plan: dict[str, object]) -> No
     expected_status = "no_runtime_evidence" if evidence_total == 0 else "partial_runtime_evidence"
     if state.get("evidence_status") != expected_status:
         raise ValueError(f"runtime_state.evidence_status expected {expected_status}")
+    if receipt_count:
+        if evidence_total != receipt_count:
+            raise ValueError("runtime_state.evidence_total must equal reviewed credential runtime receipt count")
+        expected_counts = {"verified": receipt_count, "failed": 0, "skipped": 0, "unknown": 0}
+        for key, value in expected_counts.items():
+            if state.get(key) != value:
+                raise ValueError(f"runtime_state.{key} expected {value} from reviewed receipts")
 
     plan_references = as_dict(plan.get("references"), plan_path)
     expected_urls = official_urls(profile)
@@ -159,7 +203,10 @@ def validate_consistency(plan_path: pathlib.Path, plan: dict[str, object]) -> No
     if duplicates:
         raise ValueError(f"duplicate blocker_id values: {', '.join(str(item) for item in duplicates)}")
     has_candidate_batch = candidate_batch_materialized(plan_path, plan, profile)
-    missing_blockers = sorted(required_blockers(profile, state, has_candidate_batch).difference(blocker_ids))
+    required = required_blockers(profile, state, has_candidate_batch)
+    if receipt_count:
+        required.discard("metadata_only_verification")
+    missing_blockers = sorted(required.difference(blocker_ids))
     if missing_blockers:
         raise ValueError(f"missing required blocker_id values: {', '.join(missing_blockers)}")
 

@@ -5,6 +5,9 @@
   "source_id": "kosis",
   "source_profile": "sources/kosis.json",
   "candidate_batch": "reports/kosis/runtime-candidates.json",
+  "credential_runtime_receipts": [
+    "reports/credential-runtime-receipts/kosis-credentialed-receipt.json"
+  ],
   "references": {
     "official_reference_urls": [
       "https://kosis.kr/openapi/devGuide/devGuide_0101List.do",
@@ -13,19 +16,19 @@
     "last_reviewed_at": "2026-06-29"
   },
   "summary": {
-    "evidence_total": 0,
-    "blocking_count": 2,
-    "warning_count": 1,
+    "evidence_total": 1,
+    "blocking_count": 1,
+    "warning_count": 0,
     "next_action_count": 4
   },
   "runtime_state": {
-    "evidence_status": "no_runtime_evidence",
-    "evidence_total": 0,
-    "verified": 0,
+    "evidence_status": "partial_runtime_evidence",
+    "evidence_total": 1,
+    "verified": 1,
     "failed": 0,
     "skipped": 0,
     "unknown": 0,
-    "verification_mode": "metadata_only",
+    "verification_mode": "bounded_call",
     "adapter_status": "registered",
     "adapter_capabilities": [
       "verification",
@@ -36,14 +39,6 @@
     "sample_param_policy": "static"
   },
   "blockers": [
-    {
-      "blocker_id": "metadata_only_verification",
-      "severity": "blocking",
-      "source_profile_field": "runtime.verification_mode",
-      "expected_action": "Promote KOSIS from metadata-only to bounded sample-call verification after sample parameters and credential policy are pinned.",
-      "owner": "datapan_cli",
-      "status": "open"
-    },
     {
       "blocker_id": "credential_required",
       "severity": "blocking",
@@ -67,15 +62,8 @@
     "credential-safe runtime receipt policy",
     "KOSIS error signature extraction"
     ],
-    "first_batch_policy": "Run a credential-gated bounded sample-call batch only after sample orgId/tblId/statId/period parameters are pinned.",
+    "first_batch_policy": "Maintain the reviewed bounded KOSIS sample-call receipt and revalidate it when pinned orgId, tblId, statId, or period parameters change.",
     "promotion_gate": "Do not promote KOSIS datasets beyond registry_only until runtime evidence and table mapping contracts exist."
   },
-  "warnings": [
-    {
-      "warning_id": "non_data_runtime_evidence_not_collected",
-      "expected": "KOSIS has source-scoped runtime evidence after the pinned candidate batch, adapter, and credential injection are available.",
-      "actual": "0 runtime checks are collected for KOSIS.",
-      "remaining": "Use reports/kosis/runtime-candidates.json with a registered adapter and credentials to run the first bounded verification batch."
-    }
-  ]
+  "warnings": []
 }

@@ -94,8 +94,8 @@
       "path": "reports/source-runtime-evidence-rollup.json",
       "kind": "source_runtime_evidence_rollup",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-evidence-rollup.v1.schema.json",
-      "bytes": 5490,
-      "sha256": "774d3350451a71d7066e436fa3e41d2b4a0cfdc9b739d6fa4e91ff858ca792c7",
+      "bytes": 4085,
+      "sha256": "f9b162809c885e63544f31132bc0cf2cdd817ac4aafe78fbc9ed50b7b4ed5d49",
       "required": true
     },
     {
@@ -103,8 +103,8 @@
       "path": "reports/source-runtime-remediation-map.json",
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
-      "bytes": 15028,
-      "sha256": "f2c60c06e5deb313cec78900ee7ce0abb344ca2f0b8de1e57d02c45fd13bdbc8",
+      "bytes": 8001,
+      "sha256": "c94c75a6f60d6d50f81c867769ce0b1db6541afeb1a895a5d87f238cffe40969",
       "required": true
     },
     {
@@ -112,8 +112,8 @@
       "path": "reports/credential-runtime-evidence-policy.json",
       "kind": "credential_runtime_evidence_policy",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-evidence-policy.v1.schema.json",
-      "bytes": 15126,
-      "sha256": "28468e10701797f9e93d5bcf8727276e9d3990b803e7b331d4a86a2bd9b205da",
+      "bytes": 13577,
+      "sha256": "51918322dcffba3ee263d4539c466fbff916305a76138a063560f1d28e610c55",
       "required": true
     },
     {
@@ -194,7 +194,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "0ef5a348daf2dbc9638ff8bf5a367396eb3e64f33158f2095cb8fb0720f52cc3",
+      "sha256": "58877f2fa6ebac7ae1a220a85a94b963f9ecd56ea91131ddd9afa8cf3b28b311",
       "required": true
     },
     {
@@ -212,7 +212,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 61997,
-      "sha256": "ed79b22e55112562f7297785f105192078c0a0371f84bdd971d6fcff0591edd9",
+      "sha256": "a0132432aa58f25ada3d87ac73437215bf4a19503fe2191563059d137fdeed6d",
       "required": true
     },
     {
@@ -221,7 +221,7 @@
       "kind": "release_distribution_footprint",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
       "bytes": 2141,
-      "sha256": "31afbe92bc0915fc5a2ecd9501a3c154846861fdaa8777cda1ab49c1e0c56d45",
+      "sha256": "fe25c96b6d92b502157e6b57813fd2a35a15d429fe4d6210c24819709d858594",
       "required": true
     },
     {
@@ -272,11 +272,11 @@
       "error_action_routing",
       "downstream_impact"
     ],
-    "blocking_count": 9,
-    "warning_count": 4,
-    "sources_without_evidence": 4,
+    "blocking_count": 5,
+    "warning_count": 0,
+    "sources_without_evidence": 0,
     "remediation_follow_up_required": 0,
-    "remediation_manual_review_boundaries": 13,
+    "remediation_manual_review_boundaries": 5,
     "remediation_credential_policy_available": true,
     "remediation_receipt_contract_available": true,
     "remediation_reviewed_receipt_intake_available": true,
@@ -284,11 +284,11 @@
     "remediation_receipt_relief_eligible": true,
     "remediation_receipt_backed_relief_allowed": true,
     "remediation_receipt_backed_relief_status": "allowed_by_reviewed_validated_credential_runtime_receipts",
-    "remediation_receipt_linked_findings": 13,
+    "remediation_receipt_linked_findings": 5,
     "remediation_receipt_linked_absent": 0,
-    "remediation_receipt_linked_relief_eligible": 13,
+    "remediation_receipt_linked_relief_eligible": 5,
     "credential_policy_sources": 5,
-    "credential_policy_manual_review_boundaries": 13,
+    "credential_policy_manual_review_boundaries": 5,
     "credential_policy_receipt_contract_available": true,
     "credential_policy_reviewed_receipt_intake_available": true,
     "credential_policy_receipt_present": true,
@@ -375,12 +375,9 @@
     "manual_review_reduction_allowed": true,
     "manual_review_reduction_status": "allowed_by_reviewed_validated_credential_runtime_receipts",
     "blocker_ids": [
-      "credential_required",
-      "metadata_only_verification"
+      "credential_required"
     ],
-    "warning_ids": [
-      "non_data_runtime_evidence_not_collected"
-    ],
+    "warning_ids": [],
     "sources": [
       {
         "source_id": "data_go_kr",
@@ -393,51 +390,39 @@
       },
       {
         "source_id": "ecos",
-        "blocking_count": 2,
-        "warning_count": 1,
+        "blocking_count": 1,
+        "warning_count": 0,
         "blocker_ids": [
-          "credential_required",
-          "metadata_only_verification"
+          "credential_required"
         ],
-        "warning_ids": [
-          "non_data_runtime_evidence_not_collected"
-        ]
+        "warning_ids": []
       },
       {
         "source_id": "kosis",
-        "blocking_count": 2,
-        "warning_count": 1,
+        "blocking_count": 1,
+        "warning_count": 0,
         "blocker_ids": [
-          "credential_required",
-          "metadata_only_verification"
+          "credential_required"
         ],
-        "warning_ids": [
-          "non_data_runtime_evidence_not_collected"
-        ]
+        "warning_ids": []
       },
       {
         "source_id": "open_assembly",
-        "blocking_count": 2,
-        "warning_count": 1,
+        "blocking_count": 1,
+        "warning_count": 0,
         "blocker_ids": [
-          "credential_required",
-          "metadata_only_verification"
+          "credential_required"
         ],
-        "warning_ids": [
-          "non_data_runtime_evidence_not_collected"
-        ]
+        "warning_ids": []
       },
       {
         "source_id": "seoul_open_data",
-        "blocking_count": 2,
-        "warning_count": 1,
+        "blocking_count": 1,
+        "warning_count": 0,
         "blocker_ids": [
-          "credential_required",
-          "metadata_only_verification"
+          "credential_required"
         ],
-        "warning_ids": [
-          "non_data_runtime_evidence_not_collected"
-        ]
+        "warning_ids": []
       }
     ],
     "error_action_blocking_rules": 8,
@@ -489,7 +474,7 @@
     ],
     "release_distribution_footprint": "reports/release-distribution-footprint.json",
     "canonical_registry_bytes": 137735169,
-    "manifest_bound_bytes_excluding_self": 173760294,
+    "manifest_bound_bytes_excluding_self": 173749906,
     "large_monolith_threshold_bytes": 100000000,
     "registry_footprint_status": "large_monolith_shard_additive",
     "canonical_registry_required": true,
