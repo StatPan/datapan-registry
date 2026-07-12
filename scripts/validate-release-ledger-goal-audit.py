@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import pathlib
+import subprocess
 import sys
 from typing import Any
 
@@ -244,6 +245,21 @@ def validate_audit(audit: dict[str, Any]) -> tuple[int, int, str]:
     return len(criteria), proven, goal_status
 
 
+def validate_freshness(audit_path: pathlib.Path) -> None:
+    result = subprocess.run(
+        [
+            "python3",
+            "scripts/generate-release-ledger-goal-completion-audit.py",
+            "--audit",
+            str(audit_path),
+            "--check",
+        ],
+        check=False,
+    )
+    if result.returncode != 0:
+        raise ValueError("goal completion audit is stale against current release evidence")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("audit", nargs="?", default=DEFAULT_AUDIT, type=pathlib.Path)
@@ -251,6 +267,7 @@ def main() -> int:
 
     try:
         criteria_count, proven_count, goal_status = validate_audit(load_json(args.audit))
+        validate_freshness(args.audit)
     except Exception as exc:  # noqa: BLE001 - release operators need the failed invariant
         print(f"FAIL release ledger goal audit: {exc}", file=sys.stderr)
         return 1

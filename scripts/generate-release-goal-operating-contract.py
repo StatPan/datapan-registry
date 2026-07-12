@@ -183,6 +183,41 @@ def build_report(
     goal_completion_allowed = decision_summary.get("goal_completion_allowed") is True
     manual_review_required = decision_summary.get("manual_review_required") is True
     manual_review_accepted = decision_summary.get("manual_review_accepted") is True
+    audit_evidence = as_dict(goal_audit.get("current_state_evidence"), "goal_audit.current_state_evidence")
+    runtime_evidence = as_dict(audit_evidence.get("source_runtime"), "goal_audit.source_runtime")
+    credential_policy_evidence = as_dict(
+        audit_evidence.get("credential_runtime_policy"),
+        "goal_audit.credential_runtime_policy",
+    )
+    non_completion_reasons: list[str] = []
+    runtime_blocking_count = runtime_evidence.get("blocking_count")
+    sources_without_evidence = runtime_evidence.get("sources_without_evidence")
+    if isinstance(runtime_blocking_count, int) and runtime_blocking_count > 0:
+        non_completion_reasons.append(
+            f"source runtime evidence has {runtime_blocking_count} unresolved blockers"
+        )
+    if isinstance(sources_without_evidence, int) and sources_without_evidence > 0:
+        non_completion_reasons.append(
+            f"{sources_without_evidence} source(s) lack runtime evidence"
+        )
+    if manual_review_required and not manual_review_accepted:
+        non_completion_reasons.append(
+            "manual-review release boundary has not been explicitly accepted"
+        )
+    if decision_summary.get("goal_completion_allowed") is not True:
+        non_completion_reasons.append("consumer compatibility still disallows goal completion")
+    if not finish_allowed and not non_completion_reasons:
+        non_completion_reasons.append("repository-owned finish preflight remains blocked")
+
+    allowed_paths_to_completion = [
+        "resolve_source_runtime_blockers_and_runtime_evidence_gaps",
+        "explicit_accepted_manual_review_release_boundary",
+    ]
+    if credential_policy_evidence.get("receipt_relief_eligible") is not True:
+        allowed_paths_to_completion.insert(
+            0,
+            "reviewed_validated_redacted_live_credential_runtime_receipts",
+        )
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -315,16 +350,8 @@ def build_report(
         },
         "current_non_completion_boundary": {
             "status": "not_complete" if not finish_allowed else "finish_preflight_allowed",
-            "reasons": [
-                "live credentialed runtime receipts are not checked in",
-                "credentialed source runtime evidence remains manual-review only by default",
-                "manual-review release boundary has not been explicitly accepted",
-                "consumer compatibility still disallows goal completion",
-            ],
-            "allowed_paths_to_completion": [
-                "reviewed_validated_redacted_live_credential_runtime_receipts",
-                "explicit_accepted_manual_review_release_boundary",
-            ],
+            "reasons": non_completion_reasons,
+            "allowed_paths_to_completion": allowed_paths_to_completion,
         },
     }
 
@@ -409,6 +436,8 @@ def validate_invariants(report: dict[str, Any]) -> None:
             raise ValueError("blocked operating contract must preserve continuation_next_action=create_child_ticket")
         if finish_boundary.get("blocking_evidence_count", 0) <= 0:
             raise ValueError("blocked operating contract must preserve blocking evidence count")
+        if not as_list(non_completion.get("reasons"), "current_non_completion_boundary.reasons"):
+            raise ValueError("blocked operating contract must identify a current non-completion reason")
     if summary.get("finish_allowed") is True:
         if finish_boundary.get("divergence_status") != "repo_and_lifecycle_finish_aligned":
             raise ValueError("finish-allowed operating contract must align lifecycle and repo finish signals")
