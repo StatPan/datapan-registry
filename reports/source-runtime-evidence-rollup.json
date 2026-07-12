@@ -4,9 +4,9 @@
   "provider": "multi-source",
   "source_plan_inputs": [
     {
+      "path": "reports/data-go-kr/runtime-evidence-plan.json",
       "source_id": "data_go_kr",
       "provider": "data.go.kr",
-      "path": "reports/data-go-kr/runtime-evidence-plan.json",
       "evidence_total": 4774,
       "blocking_count": 1,
       "warning_count": 0,
@@ -14,56 +14,56 @@
       "sha256": "a1779eb27da8155cf32ed4d9be1da6a23711726b0ca753bd6c248eb51ee0f6be"
     },
     {
+      "path": "reports/ecos/runtime-evidence-plan.json",
       "source_id": "ecos",
       "provider": "ECOS",
-      "path": "reports/ecos/runtime-evidence-plan.json",
-      "evidence_total": 0,
-      "blocking_count": 2,
-      "warning_count": 1,
-      "bytes": 2940,
-      "sha256": "3d4782acd6e36ae375a268ed2b4e32380adde5344e81aadf54af8ed84aa78afa"
+      "evidence_total": 1,
+      "blocking_count": 1,
+      "warning_count": 0,
+      "bytes": 2278,
+      "sha256": "45a1200384ed2896cc862f7ff5faae434dcb3d101ef3d440e37e907ee8d79c89"
     },
     {
+      "path": "reports/kosis/runtime-evidence-plan.json",
       "source_id": "kosis",
       "provider": "KOSIS",
-      "path": "reports/kosis/runtime-evidence-plan.json",
-      "evidence_total": 0,
-      "blocking_count": 2,
-      "warning_count": 1,
-      "bytes": 2920,
-      "sha256": "1106888f1ff72ec61c17f5c5ca46a99aa927728708712e249291d84cfae3c6fa"
+      "evidence_total": 1,
+      "blocking_count": 1,
+      "warning_count": 0,
+      "bytes": 2265,
+      "sha256": "a3dfdd6da8af934732834c6202db54a59c0c35885e01f7213d62bbdd9d324f3b"
     },
     {
+      "path": "reports/open-assembly/runtime-evidence-plan.json",
       "source_id": "open_assembly",
       "provider": "open.assembly.go.kr",
-      "path": "reports/open-assembly/runtime-evidence-plan.json",
-      "evidence_total": 0,
-      "blocking_count": 2,
-      "warning_count": 1,
-      "bytes": 3041,
-      "sha256": "7ea7eaff5ae96214ab3835842406c767dc416295c952a5ad3adeba2af94a7386"
+      "evidence_total": 1,
+      "blocking_count": 1,
+      "warning_count": 0,
+      "bytes": 2358,
+      "sha256": "3e62738e5f9beabadf9805f8145c9d6f3d75dc50b10c2b43e82317a02e362c94"
     },
     {
+      "path": "reports/seoul-open-data/runtime-evidence-plan.json",
       "source_id": "seoul_open_data",
       "provider": "data.seoul.go.kr",
-      "path": "reports/seoul-open-data/runtime-evidence-plan.json",
-      "evidence_total": 0,
-      "blocking_count": 2,
-      "warning_count": 1,
-      "bytes": 3148,
-      "sha256": "900b5c42698a2e73d729adeede7de1565783cef102426a11f0991c258a3e274a"
+      "evidence_total": 1,
+      "blocking_count": 1,
+      "warning_count": 0,
+      "bytes": 2458,
+      "sha256": "d0484e6ee183afd7a1fc363d0ec3c62d8a30e1bcfc6b8f9b39e1c596266370c5"
     }
   ],
   "summary": {
     "sources": 5,
-    "sources_without_evidence": 4,
-    "evidence_total": 4774,
-    "verified": 2841,
+    "sources_without_evidence": 0,
+    "evidence_total": 4778,
+    "verified": 2845,
     "failed": 389,
     "skipped": 1544,
     "unknown": 0,
-    "blocking_count": 9,
-    "warning_count": 4
+    "blocking_count": 5,
+    "warning_count": 0
   },
   "sources": [
     {
@@ -83,64 +83,52 @@
       "source_id": "ecos",
       "provider": "ECOS",
       "runtime_evidence_plan": "reports/ecos/runtime-evidence-plan.json",
-      "evidence_total": 0,
-      "blocking_count": 2,
-      "warning_count": 1,
+      "evidence_total": 1,
+      "blocking_count": 1,
+      "warning_count": 0,
       "blocker_ids": [
-        "credential_required",
-        "metadata_only_verification"
+        "credential_required"
       ],
-      "warning_ids": [
-        "non_data_runtime_evidence_not_collected"
-      ],
+      "warning_ids": [],
       "next_action_count": 4
     },
     {
       "source_id": "kosis",
       "provider": "KOSIS",
       "runtime_evidence_plan": "reports/kosis/runtime-evidence-plan.json",
-      "evidence_total": 0,
-      "blocking_count": 2,
-      "warning_count": 1,
+      "evidence_total": 1,
+      "blocking_count": 1,
+      "warning_count": 0,
       "blocker_ids": [
-        "credential_required",
-        "metadata_only_verification"
+        "credential_required"
       ],
-      "warning_ids": [
-        "non_data_runtime_evidence_not_collected"
-      ],
+      "warning_ids": [],
       "next_action_count": 4
     },
     {
       "source_id": "open_assembly",
       "provider": "open.assembly.go.kr",
       "runtime_evidence_plan": "reports/open-assembly/runtime-evidence-plan.json",
-      "evidence_total": 0,
-      "blocking_count": 2,
-      "warning_count": 1,
+      "evidence_total": 1,
+      "blocking_count": 1,
+      "warning_count": 0,
       "blocker_ids": [
-        "credential_required",
-        "metadata_only_verification"
+        "credential_required"
       ],
-      "warning_ids": [
-        "non_data_runtime_evidence_not_collected"
-      ],
+      "warning_ids": [],
       "next_action_count": 4
     },
     {
       "source_id": "seoul_open_data",
       "provider": "data.seoul.go.kr",
       "runtime_evidence_plan": "reports/seoul-open-data/runtime-evidence-plan.json",
-      "evidence_total": 0,
-      "blocking_count": 2,
-      "warning_count": 1,
+      "evidence_total": 1,
+      "blocking_count": 1,
+      "warning_count": 0,
       "blocker_ids": [
-        "credential_required",
-        "metadata_only_verification"
+        "credential_required"
       ],
-      "warning_ids": [
-        "non_data_runtime_evidence_not_collected"
-      ],
+      "warning_ids": [],
       "next_action_count": 4
     }
   ],
@@ -155,42 +143,8 @@
         "open_assembly",
         "seoul_open_data"
       ]
-    },
-    {
-      "id": "metadata_only_verification",
-      "count": 4,
-      "source_ids": [
-        "ecos",
-        "kosis",
-        "open_assembly",
-        "seoul_open_data"
-      ]
     }
   ],
-  "warnings_by_id": [
-    {
-      "id": "non_data_runtime_evidence_not_collected",
-      "count": 4,
-      "source_ids": [
-        "ecos",
-        "kosis",
-        "open_assembly",
-        "seoul_open_data"
-      ]
-    }
-  ],
-  "warnings": [
-    {
-      "warning_id": "non_data_runtime_evidence_not_collected",
-      "affected_sources": [
-        "ecos",
-        "kosis",
-        "open_assembly",
-        "seoul_open_data"
-      ],
-      "expected": "Every checked-in non-data.go.kr source has source-scoped runtime evidence after pinned candidate batches, registered adapter contracts, and credential injection are available.",
-      "actual": "4 of 5 checked-in sources have 0 runtime checks.",
-      "remaining": "Use the checked-in runtime-candidates.json batches, inject credentials, and run bounded first batches through the registered source adapter contracts."
-    }
-  ]
+  "warnings_by_id": [],
+  "warnings": []
 }

@@ -11,7 +11,7 @@
     "criteria_partial": 0,
     "criteria_gap": 0,
     "decision": "leave_goal_open",
-    "reason": "The deterministic release path and its checks are proven for the current state, but #344 remains open because source runtime evidence has 9 blockers across 4 sources without runtime evidence, consumer adoption remains manual-review-required, and no accountable manual-review release acceptance is asserted. Credential receipt collection is relief-ready (5 reviewed receipts; handoff=relief_ready); it is no longer the active boundary."
+    "reason": "The deterministic release path and its checks are proven for the current state, but #344 remains open because source runtime evidence has 5 blockers, consumer adoption remains manual-review-required, and no accountable manual-review release acceptance is asserted. Credential receipt collection is relief-ready (5 reviewed receipts; handoff=relief_ready); it is no longer the active boundary."
   },
   "current_state_evidence": {
     "manifest": {
@@ -52,24 +52,24 @@
     "source_runtime": {
       "path": "reports/source-runtime-evidence-rollup.json",
       "sources": 5,
-      "sources_without_evidence": 4,
-      "evidence_total": 4774,
-      "verified": 2841,
+      "sources_without_evidence": 0,
+      "evidence_total": 4778,
+      "verified": 2845,
       "failed": 389,
       "skipped": 1544,
       "unknown": 0,
-      "blocking_count": 9,
-      "warning_count": 4
+      "blocking_count": 5,
+      "warning_count": 0
     },
     "source_runtime_remediation": {
       "path": "reports/source-runtime-remediation-map.json",
       "sources": 5,
-      "blocking_count": 9,
-      "warning_count": 4,
-      "mapped_blocker_findings": 9,
-      "mapped_warning_findings": 4,
-      "sources_without_evidence": 4,
-      "manual_review_boundaries": 13,
+      "blocking_count": 5,
+      "warning_count": 0,
+      "mapped_blocker_findings": 5,
+      "mapped_warning_findings": 0,
+      "sources_without_evidence": 0,
+      "manual_review_boundaries": 5,
       "follow_up_required": 0,
       "compatibility_effect": "manual_review_required_until_runtime_blockers_resolved",
       "manual_review_required": true,
@@ -80,9 +80,9 @@
       "receipt_relief_eligible": true,
       "receipt_backed_relief_allowed": true,
       "receipt_backed_relief_status": "allowed_by_reviewed_validated_credential_runtime_receipts",
-      "receipt_linked_findings": 13,
+      "receipt_linked_findings": 5,
       "receipt_linked_absent": 0,
-      "receipt_linked_relief_eligible": 13
+      "receipt_linked_relief_eligible": 5
     },
     "downstream_impact": {
       "path": "reports/registry-impact-plan.json",
@@ -143,14 +143,14 @@
       "canonical_registry_required": true,
       "shard_assets_required": false,
       "manual_review_required": true,
-      "runtime_blocking_count": 9,
-      "runtime_warning_count": 4
+      "runtime_blocking_count": 5,
+      "runtime_warning_count": 0
     },
     "release_distribution_footprint": {
       "path": "reports/release-distribution-footprint.json",
       "artifact_count": 136,
       "schema_artifacts": 83,
-      "manifest_bound_bytes_excluding_self": 173760294,
+      "manifest_bound_bytes_excluding_self": 173749906,
       "canonical_registry_path": "data/data-go-kr.registry.json",
       "canonical_registry_bytes": 137735169,
       "large_monolith_threshold_bytes": 100000000,
@@ -163,10 +163,10 @@
       "path": "reports/credential-runtime-evidence-policy.json",
       "sources": 5,
       "credential_gated_sources": 5,
-      "metadata_only_sources": 4,
-      "non_data_runtime_evidence_gaps": 4,
+      "metadata_only_sources": 0,
+      "non_data_runtime_evidence_gaps": 0,
       "credential_required_blockers": 5,
-      "manual_review_boundaries": 13,
+      "manual_review_boundaries": 5,
       "receipt_contract_available": true,
       "reviewed_receipt_intake_available": true,
       "receipt_present": true,
@@ -345,7 +345,7 @@
         },
         {
           "path": "reports/source-runtime-remediation-map.json",
-          "finding": "Maps 9 runtime blockers and 13 receipt-linked findings; all linked receipts are relief-eligible, but runtime risk still requires manual-review adoption."
+          "finding": "Maps 5 runtime blockers and 5 receipt-linked findings; all linked receipts are relief-eligible, but runtime risk still requires manual-review adoption."
         },
         {
           "path": "reports/source-report-inventory.json",
@@ -389,7 +389,7 @@
         },
         {
           "path": "reports/source-runtime-remediation-map.json",
-          "finding": "Maps 9 runtime blockers and 13 receipt-linked findings; all linked receipts are relief-eligible, but runtime risk still requires manual-review adoption."
+          "finding": "Maps 5 runtime blockers and 5 receipt-linked findings; all linked receipts are relief-eligible, but runtime risk still requires manual-review adoption."
         },
         {
           "path": "scripts/promote-credential-runtime-receipt.py",
@@ -479,12 +479,7 @@
     {
       "id": "source_runtime_manual_review_required",
       "evidence": "reports/source-runtime-remediation-map.json",
-      "finding": "The remediation map records 9 runtime blockers and keeps consumer adoption manual-review-required until they are resolved."
-    },
-    {
-      "id": "runtime_evidence_coverage_gap",
-      "evidence": "reports/source-runtime-evidence-rollup.json",
-      "finding": "4 source(s) still lack runtime evidence; metadata-only and non-data runtime boundaries remain explicit release risk."
+      "finding": "The remediation map records 5 runtime blockers and keeps consumer adoption manual-review-required until they are resolved."
     },
     {
       "id": "manual_review_acceptance_not_asserted",

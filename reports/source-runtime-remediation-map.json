@@ -7,12 +7,12 @@
   "provider": "datapan-registry",
   "summary": {
     "sources": 5,
-    "blocking_count": 9,
-    "warning_count": 4,
-    "mapped_blocker_findings": 9,
-    "mapped_warning_findings": 4,
-    "sources_without_evidence": 4,
-    "manual_review_boundaries": 13,
+    "blocking_count": 5,
+    "warning_count": 0,
+    "mapped_blocker_findings": 5,
+    "mapped_warning_findings": 0,
+    "sources_without_evidence": 0,
+    "manual_review_boundaries": 5,
     "follow_up_required": 0,
     "compatibility_effect": "manual_review_required_until_runtime_blockers_resolved",
     "manual_review_required": true,
@@ -23,16 +23,16 @@
     "receipt_relief_eligible": true,
     "receipt_backed_relief_allowed": true,
     "receipt_backed_relief_status": "allowed_by_reviewed_validated_credential_runtime_receipts",
-    "receipt_linked_findings": 13,
+    "receipt_linked_findings": 5,
     "receipt_linked_absent": 0,
-    "receipt_linked_relief_eligible": 13
+    "receipt_linked_relief_eligible": 5
   },
   "release_evidence_inputs": [
     {
       "path": "reports/source-runtime-evidence-rollup.json",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-evidence-rollup.v1.schema.json",
-      "bytes": 5490,
-      "sha256": "774d3350451a71d7066e436fa3e41d2b4a0cfdc9b739d6fa4e91ff858ca792c7"
+      "bytes": 4085,
+      "sha256": "f9b162809c885e63544f31132bc0cf2cdd817ac4aafe78fbc9ed50b7b4ed5d49"
     },
     {
       "path": "reports/error-action-routing-rollup.json",
@@ -44,7 +44,7 @@
       "path": "reports/registry-impact-plan.json",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "0ef5a348daf2dbc9638ff8bf5a367396eb3e64f33158f2095cb8fb0720f52cc3"
+      "sha256": "58877f2fa6ebac7ae1a220a85a94b963f9ecd56ea91131ddd9afa8cf3b28b311"
     }
   ],
   "routing_evidence": {
@@ -88,9 +88,9 @@
       "source_id": "ecos",
       "provider": "ECOS",
       "runtime_evidence_plan": "reports/ecos/runtime-evidence-plan.json",
-      "evidence_total": 0,
-      "blocking_count": 2,
-      "warning_count": 1,
+      "evidence_total": 1,
+      "blocking_count": 1,
+      "warning_count": 0,
       "findings": [
         {
           "id": "credential_required",
@@ -99,40 +99,6 @@
           "action": "use_credential_runtime_evidence_policy_or_accept_manual_review_boundary",
           "owner": "release-operator",
           "release_boundary": "credentialed_runtime_evidence_not_required_for_canonical_registry_release",
-          "reviewed_receipt_linkage": {
-            "expected_reviewed_receipt_path": "reports/credential-runtime-receipts/ecos-credentialed-receipt.json",
-            "checked_in_receipt_present": true,
-            "checked_in_receipt_path": "reports/credential-runtime-receipts/ecos-credentialed-receipt.json",
-            "current_receipt_state": "relief_eligible",
-            "review_state": "reviewed_accepted",
-            "receipt_outcome": "verified",
-            "source_relief_eligible": true
-          }
-        },
-        {
-          "id": "metadata_only_verification",
-          "severity": "blocker",
-          "status": "manual_review_boundary",
-          "action": "collect_live_runtime_evidence_through_credential_safe_policy",
-          "owner": "source-evidence",
-          "release_boundary": "metadata_only_source_remains_manual_review",
-          "reviewed_receipt_linkage": {
-            "expected_reviewed_receipt_path": "reports/credential-runtime-receipts/ecos-credentialed-receipt.json",
-            "checked_in_receipt_present": true,
-            "checked_in_receipt_path": "reports/credential-runtime-receipts/ecos-credentialed-receipt.json",
-            "current_receipt_state": "relief_eligible",
-            "review_state": "reviewed_accepted",
-            "receipt_outcome": "verified",
-            "source_relief_eligible": true
-          }
-        },
-        {
-          "id": "non_data_runtime_evidence_not_collected",
-          "severity": "warning",
-          "status": "manual_review_boundary",
-          "action": "collect_non_data_runtime_evidence_through_credential_safe_policy",
-          "owner": "source-evidence",
-          "release_boundary": "non_data_runtime_evidence_gap_documented",
           "reviewed_receipt_linkage": {
             "expected_reviewed_receipt_path": "reports/credential-runtime-receipts/ecos-credentialed-receipt.json",
             "checked_in_receipt_present": true,
@@ -149,9 +115,9 @@
       "source_id": "kosis",
       "provider": "KOSIS",
       "runtime_evidence_plan": "reports/kosis/runtime-evidence-plan.json",
-      "evidence_total": 0,
-      "blocking_count": 2,
-      "warning_count": 1,
+      "evidence_total": 1,
+      "blocking_count": 1,
+      "warning_count": 0,
       "findings": [
         {
           "id": "credential_required",
@@ -160,40 +126,6 @@
           "action": "use_credential_runtime_evidence_policy_or_accept_manual_review_boundary",
           "owner": "release-operator",
           "release_boundary": "credentialed_runtime_evidence_not_required_for_canonical_registry_release",
-          "reviewed_receipt_linkage": {
-            "expected_reviewed_receipt_path": "reports/credential-runtime-receipts/kosis-credentialed-receipt.json",
-            "checked_in_receipt_present": true,
-            "checked_in_receipt_path": "reports/credential-runtime-receipts/kosis-credentialed-receipt.json",
-            "current_receipt_state": "relief_eligible",
-            "review_state": "reviewed_accepted",
-            "receipt_outcome": "verified",
-            "source_relief_eligible": true
-          }
-        },
-        {
-          "id": "metadata_only_verification",
-          "severity": "blocker",
-          "status": "manual_review_boundary",
-          "action": "collect_live_runtime_evidence_through_credential_safe_policy",
-          "owner": "source-evidence",
-          "release_boundary": "metadata_only_source_remains_manual_review",
-          "reviewed_receipt_linkage": {
-            "expected_reviewed_receipt_path": "reports/credential-runtime-receipts/kosis-credentialed-receipt.json",
-            "checked_in_receipt_present": true,
-            "checked_in_receipt_path": "reports/credential-runtime-receipts/kosis-credentialed-receipt.json",
-            "current_receipt_state": "relief_eligible",
-            "review_state": "reviewed_accepted",
-            "receipt_outcome": "verified",
-            "source_relief_eligible": true
-          }
-        },
-        {
-          "id": "non_data_runtime_evidence_not_collected",
-          "severity": "warning",
-          "status": "manual_review_boundary",
-          "action": "collect_non_data_runtime_evidence_through_credential_safe_policy",
-          "owner": "source-evidence",
-          "release_boundary": "non_data_runtime_evidence_gap_documented",
           "reviewed_receipt_linkage": {
             "expected_reviewed_receipt_path": "reports/credential-runtime-receipts/kosis-credentialed-receipt.json",
             "checked_in_receipt_present": true,
@@ -210,9 +142,9 @@
       "source_id": "open_assembly",
       "provider": "open.assembly.go.kr",
       "runtime_evidence_plan": "reports/open-assembly/runtime-evidence-plan.json",
-      "evidence_total": 0,
-      "blocking_count": 2,
-      "warning_count": 1,
+      "evidence_total": 1,
+      "blocking_count": 1,
+      "warning_count": 0,
       "findings": [
         {
           "id": "credential_required",
@@ -221,40 +153,6 @@
           "action": "use_credential_runtime_evidence_policy_or_accept_manual_review_boundary",
           "owner": "release-operator",
           "release_boundary": "credentialed_runtime_evidence_not_required_for_canonical_registry_release",
-          "reviewed_receipt_linkage": {
-            "expected_reviewed_receipt_path": "reports/credential-runtime-receipts/open-assembly-credentialed-receipt.json",
-            "checked_in_receipt_present": true,
-            "checked_in_receipt_path": "reports/credential-runtime-receipts/open-assembly-credentialed-receipt.json",
-            "current_receipt_state": "relief_eligible",
-            "review_state": "reviewed_accepted",
-            "receipt_outcome": "verified",
-            "source_relief_eligible": true
-          }
-        },
-        {
-          "id": "metadata_only_verification",
-          "severity": "blocker",
-          "status": "manual_review_boundary",
-          "action": "collect_live_runtime_evidence_through_credential_safe_policy",
-          "owner": "source-evidence",
-          "release_boundary": "metadata_only_source_remains_manual_review",
-          "reviewed_receipt_linkage": {
-            "expected_reviewed_receipt_path": "reports/credential-runtime-receipts/open-assembly-credentialed-receipt.json",
-            "checked_in_receipt_present": true,
-            "checked_in_receipt_path": "reports/credential-runtime-receipts/open-assembly-credentialed-receipt.json",
-            "current_receipt_state": "relief_eligible",
-            "review_state": "reviewed_accepted",
-            "receipt_outcome": "verified",
-            "source_relief_eligible": true
-          }
-        },
-        {
-          "id": "non_data_runtime_evidence_not_collected",
-          "severity": "warning",
-          "status": "manual_review_boundary",
-          "action": "collect_non_data_runtime_evidence_through_credential_safe_policy",
-          "owner": "source-evidence",
-          "release_boundary": "non_data_runtime_evidence_gap_documented",
           "reviewed_receipt_linkage": {
             "expected_reviewed_receipt_path": "reports/credential-runtime-receipts/open-assembly-credentialed-receipt.json",
             "checked_in_receipt_present": true,
@@ -271,9 +169,9 @@
       "source_id": "seoul_open_data",
       "provider": "data.seoul.go.kr",
       "runtime_evidence_plan": "reports/seoul-open-data/runtime-evidence-plan.json",
-      "evidence_total": 0,
-      "blocking_count": 2,
-      "warning_count": 1,
+      "evidence_total": 1,
+      "blocking_count": 1,
+      "warning_count": 0,
       "findings": [
         {
           "id": "credential_required",
@@ -282,40 +180,6 @@
           "action": "use_credential_runtime_evidence_policy_or_accept_manual_review_boundary",
           "owner": "release-operator",
           "release_boundary": "credentialed_runtime_evidence_not_required_for_canonical_registry_release",
-          "reviewed_receipt_linkage": {
-            "expected_reviewed_receipt_path": "reports/credential-runtime-receipts/seoul-open-data-credentialed-receipt.json",
-            "checked_in_receipt_present": true,
-            "checked_in_receipt_path": "reports/credential-runtime-receipts/seoul-open-data-credentialed-receipt.json",
-            "current_receipt_state": "relief_eligible",
-            "review_state": "reviewed_accepted",
-            "receipt_outcome": "verified",
-            "source_relief_eligible": true
-          }
-        },
-        {
-          "id": "metadata_only_verification",
-          "severity": "blocker",
-          "status": "manual_review_boundary",
-          "action": "collect_live_runtime_evidence_through_credential_safe_policy",
-          "owner": "source-evidence",
-          "release_boundary": "metadata_only_source_remains_manual_review",
-          "reviewed_receipt_linkage": {
-            "expected_reviewed_receipt_path": "reports/credential-runtime-receipts/seoul-open-data-credentialed-receipt.json",
-            "checked_in_receipt_present": true,
-            "checked_in_receipt_path": "reports/credential-runtime-receipts/seoul-open-data-credentialed-receipt.json",
-            "current_receipt_state": "relief_eligible",
-            "review_state": "reviewed_accepted",
-            "receipt_outcome": "verified",
-            "source_relief_eligible": true
-          }
-        },
-        {
-          "id": "non_data_runtime_evidence_not_collected",
-          "severity": "warning",
-          "status": "manual_review_boundary",
-          "action": "collect_non_data_runtime_evidence_through_credential_safe_policy",
-          "owner": "source-evidence",
-          "release_boundary": "non_data_runtime_evidence_gap_documented",
           "reviewed_receipt_linkage": {
             "expected_reviewed_receipt_path": "reports/credential-runtime-receipts/seoul-open-data-credentialed-receipt.json",
             "checked_in_receipt_present": true,

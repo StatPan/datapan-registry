@@ -124,31 +124,27 @@ def build_audit(template: dict[str, Any]) -> dict[str, Any]:
 
     audit["audited_at"] = generated_at
     audit["current_state_evidence"] = evidence
+    sources_without_evidence = runtime.get("sources_without_evidence")
+    runtime_boundary = f"{runtime.get('blocking_count')} blockers"
+    if sources_without_evidence:
+        runtime_boundary += f" across {sources_without_evidence} sources without runtime evidence"
+
     audit["summary"]["reason"] = (
         "The deterministic release path and its checks are proven for the current state, "
         "but #344 remains open because source runtime evidence has "
-        f"{runtime.get('blocking_count')} blockers across "
-        f"{runtime.get('sources_without_evidence')} sources without runtime evidence, "
+        f"{runtime_boundary}, "
         "consumer adoption remains manual-review-required, and no accountable "
         "manual-review release acceptance is asserted. Credential receipt collection is "
         f"relief-ready ({queue.get('reviewed_receipts_checked_in')} reviewed receipts; "
         f"handoff={handoff.get('handoff_status')}); it is no longer the active boundary."
     )
-    audit["remaining_goal_risks"] = [
+    remaining_goal_risks = [
         {
             "id": "source_runtime_manual_review_required",
             "evidence": DEFAULT_REMEDIATION.as_posix(),
             "finding": (
                 f"The remediation map records {remediation.get('blocking_count')} runtime blockers "
                 "and keeps consumer adoption manual-review-required until they are resolved."
-            ),
-        },
-        {
-            "id": "runtime_evidence_coverage_gap",
-            "evidence": DEFAULT_RUNTIME.as_posix(),
-            "finding": (
-                f"{runtime.get('sources_without_evidence')} source(s) still lack runtime evidence; "
-                "metadata-only and non-data runtime boundaries remain explicit release risk."
             ),
         },
         {
@@ -160,6 +156,19 @@ def build_audit(template: dict[str, Any]) -> dict[str, Any]:
             ),
         },
     ]
+    if sources_without_evidence:
+        remaining_goal_risks.insert(
+            1,
+            {
+                "id": "runtime_evidence_coverage_gap",
+                "evidence": DEFAULT_RUNTIME.as_posix(),
+                "finding": (
+                    f"{sources_without_evidence} source(s) still lack runtime evidence; "
+                    "metadata-only and non-data runtime boundaries remain explicit release risk."
+                ),
+            },
+        )
+    audit["remaining_goal_risks"] = remaining_goal_risks
     commands = audit.get("local_validation_commands")
     if isinstance(commands, list) and not any(
         "generate-release-ledger-goal-completion-audit.py --check" in str(command)
