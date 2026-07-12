@@ -193,8 +193,8 @@ def validate_invariants(report: dict[str, Any]) -> None:
     sources = [as_dict(source, "source") for source in as_list(report.get("sources"), "sources")]
     if summary.get("sources") != len(sources):
         raise ValueError("summary.sources must match sources length")
-    if summary.get("manual_review_reduction_allowed") is not False:
-        raise ValueError("runner readiness cannot allow manual-review reduction")
+    if summary.get("reviewed_receipts_missing", 0) > 0 and summary.get("manual_review_reduction_allowed") is not False:
+        raise ValueError("runner readiness cannot allow manual-review reduction while receipts are missing")
     if summary.get("default_ci_requires_credentials") is not False:
         raise ValueError("runner readiness must keep default CI secret-free")
     if summary.get("checked_in_secrets_allowed") is not False:

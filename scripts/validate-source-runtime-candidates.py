@@ -122,6 +122,23 @@ def validate_consistency(batch_path: pathlib.Path, batch: dict[str, object]) -> 
             raise ValueError(
                 f"candidates[{index}].credential_policy.injection_location does not match source profile"
             )
+        placeholder = credential_policy.get("placeholder")
+        if expected_credential_required:
+            if not isinstance(placeholder, str) or not placeholder:
+                raise ValueError(f"candidates[{index}].credential_policy.placeholder must be a non-empty string")
+            if expected_injection_location in {"query", "header", "body"}:
+                if not isinstance(sample_parameters, dict):
+                    raise ValueError(
+                        f"candidates[{index}].sample_parameters must contain credential placeholders"
+                    )
+                missing_or_mismatched = sorted(
+                    key for key in expected_key_names if sample_parameters.get(key) != placeholder
+                )
+                if missing_or_mismatched:
+                    raise ValueError(
+                        f"candidates[{index}].sample_parameters credential placeholder drift: "
+                        f"{', '.join(missing_or_mismatched)}"
+                    )
         if expected_injection_location == "path":
             placeholders = endpoint_placeholders(candidate.get("endpoint_template"))
             missing_key_placeholders = sorted(set(expected_key_names).difference(placeholders))

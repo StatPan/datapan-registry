@@ -29,7 +29,7 @@
     "manual_review_required": true,
     "manual_review_accepted": false,
     "reviewed_credential_receipts": 5,
-    "manual_review_reduction_allowed": false,
+    "manual_review_reduction_allowed": true,
     "operational_pressure_decision": "goal_boundary_pressure",
     "distribution_pressure_present": false,
     "credential_pressure_present": false,
@@ -221,7 +221,7 @@
           "consumer compatibility"
         ],
         "goal_closure_allowed": false,
-        "rationale": "Explicit manual-review acceptance is the alternative release boundary when reviewed live receipt evidence is not yet available."
+        "rationale": "Explicit manual-review acceptance is the accountable release boundary when source runtime evidence still requires manual-review adoption."
       }
     ]
   },

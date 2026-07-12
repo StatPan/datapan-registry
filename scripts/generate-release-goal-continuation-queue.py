@@ -224,7 +224,7 @@ def candidate_manual_review_acceptance() -> dict[str, Any]:
         "blocked_finish_conditions": [
             "manual_review_accepted is false in current release consumer decision",
             "goal_completion_allowed is false in current release consumer decision",
-            "reviewed credential receipts are still absent",
+            "source runtime blockers still require manual-review release adoption",
         ],
         "proposed_acceptance_criteria": [
             "Manual-review decision intake records accepted=true with required evidence.",
@@ -234,7 +234,7 @@ def candidate_manual_review_acceptance() -> dict[str, Any]:
         ],
         "post_completion_commands": POST_CHILD_REFRESH_COMMANDS,
         "goal_closure_allowed": False,
-        "rationale": "Explicit manual-review acceptance is the alternative release boundary when reviewed live receipt evidence is not yet available.",
+        "rationale": "Explicit manual-review acceptance is the accountable release boundary when source runtime evidence still requires manual-review adoption.",
     })
 
 
