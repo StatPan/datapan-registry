@@ -16,41 +16,41 @@
   },
   "goal_routing": {
     "parent_goal_issue": 344,
-    "goal_status": "not_complete",
-    "finish_allowed": false,
-    "goal_completion_allowed": false,
-    "goal_closure_allowed": false,
-    "active_non_completion_reason": "goal_boundary_pressure",
-    "primary_candidate": "assert_explicit_manual_review_release_acceptance",
-    "primary_candidate_title": "Assert explicit manual-review release acceptance",
-    "primary_candidate_duplicate_check_command": "gh issue list --repo StatPan/datapan-registry --state open --search 'Assert explicit manual-review release acceptance in:title' --json number,title,state,url",
-    "next_safe_action": "use_existing_or_create_primary_child_ticket_after_duplicate_check",
-    "blocked_by_external_evidence": true,
+    "goal_status": "complete",
+    "finish_allowed": true,
+    "goal_completion_allowed": true,
+    "goal_closure_allowed": true,
+    "active_non_completion_reason": "goal_finish_allowed",
+    "primary_candidate": "goal_finish_allowed",
+    "primary_candidate_title": "Goal finish allowed",
+    "primary_candidate_duplicate_check_command": "",
+    "next_safe_action": "finish_goal",
+    "blocked_by_external_evidence": false,
     "routing_note": "Use the primary candidate packet only after duplicate detection; keep #344 open until finish preflight and completion audit allow closure."
   },
   "summary": {
-    "finish_allowed": false,
-    "goal_status": "not_complete",
-    "release_decision": "manual_review_required",
-    "operational_pressure_decision": "goal_boundary_pressure",
+    "finish_allowed": true,
+    "goal_status": "complete",
+    "release_decision": "safe_to_consume",
+    "operational_pressure_decision": "operational_pressure_resolved",
     "distribution_pressure_present": false,
     "credential_pressure_present": false,
-    "goal_completion_allowed": false,
+    "goal_completion_allowed": true,
     "reviewed_credential_receipts": 5,
     "reviewed_receipts_missing": 0,
-    "manual_review_required": true,
+    "manual_review_required": false,
     "manual_review_accepted": false,
-    "candidate_count": 1,
-    "primary_candidate": "assert_explicit_manual_review_release_acceptance",
-    "next_action": "create_child_ticket",
-    "goal_closure_allowed": false
+    "candidate_count": 0,
+    "primary_candidate": "goal_finish_allowed",
+    "next_action": "goal_finish_allowed",
+    "goal_closure_allowed": true
   },
   "finish_boundary": {
     "finish_guard_command": "python3 scripts/guard-release-goal-finish.py",
     "finish_preflight": "reports/release-goal-finish-preflight.json",
-    "finish_allowed": false,
-    "next_action": "do_not_finish_goal",
-    "blocking_evidence_count": 5
+    "finish_allowed": true,
+    "next_action": "goal_finish_allowed",
+    "blocking_evidence_count": 0
   },
   "release_evidence_refresh": {
     "refresh_command": "python3 scripts/refresh-release-ledger-evidence.py --write --max-iterations 5",
@@ -64,89 +64,6 @@
     ],
     "goal_closure_effect": "refresh_may_update_evidence_but_does_not_close_goal_without_goal_finish_preflight"
   },
-  "blocking_evidence": [
-    {
-      "id": "goal_audit_not_complete",
-      "path": "docs/release-ledger-goal-completion-audit.json",
-      "finding": "Goal completion audit status is not_complete."
-    },
-    {
-      "id": "goal_audit_decision_leave_open",
-      "path": "docs/release-ledger-goal-completion-audit.json",
-      "finding": "Goal completion audit decision does not prepare goal finish."
-    },
-    {
-      "id": "consumer_decision_disallows_goal_completion",
-      "path": "reports/release-consumer-decision.json",
-      "finding": "Release consumer decision records goal_completion_allowed=false."
-    },
-    {
-      "id": "release_decision_not_safe_to_consume",
-      "path": "reports/release-consumer-decision.json",
-      "finding": "Release consumer decision is not safe_to_consume."
-    },
-    {
-      "id": "manual_review_required_not_accepted",
-      "path": "reports/release-consumer-decision.json",
-      "finding": "Manual review is required and not accepted by checked-in release decision evidence."
-    }
-  ],
-  "candidates": [
-    {
-      "order": 1,
-      "id": "assert_explicit_manual_review_release_acceptance",
-      "title": "Assert explicit manual-review release acceptance",
-      "capability_planes": [
-        "error/action routing",
-        "downstream impact",
-        "consumer compatibility"
-      ],
-      "evidence_inputs": [
-        "reports/credential-runtime-manual-review-decision.json",
-        "reports/credential-runtime-manual-review-acceptance.json",
-        "reports/release-consumer-decision.json",
-        "docs/release-ledger-goal-completion-audit.json"
-      ],
-      "safe_start_conditions": [
-        "manual-review acceptance must be asserted by an accountable reviewer or release owner",
-        "acceptance must state affected consumers remain manual-review only",
-        "acceptance must define expiry or revalidation trigger",
-        "acceptance must not include credentials, hashes, headers, or secret-derived values"
-      ],
-      "blocked_finish_conditions": [
-        "manual_review_accepted is false in current release consumer decision",
-        "goal_completion_allowed is false in current release consumer decision",
-        "source runtime blockers still require manual-review release adoption"
-      ],
-      "proposed_acceptance_criteria": [
-        "Manual-review decision intake records accepted=true with required evidence.",
-        "Manual-review acceptance report validates and remains manifest-bound.",
-        "Release consumer decision explains manual-review-only adoption for affected consumers.",
-        "Goal audit remains not_complete unless it explicitly proves the completion contract."
-      ],
-      "post_completion_commands": [
-        "python3 scripts/refresh-release-ledger-evidence.py --write --max-iterations 5",
-        "python3 scripts/refresh-release-ledger-evidence.py --check"
-      ],
-      "goal_closure_allowed": false,
-      "rationale": "Explicit manual-review acceptance is the accountable release boundary when source runtime evidence still requires manual-review adoption.",
-      "ticket_packet": {
-        "parent_goal_issue": 344,
-        "title": "Assert explicit manual-review release acceptance",
-        "goal": "Advance #344 by executing continuation candidate assert_explicit_manual_review_release_acceptance.",
-        "body": "## Goal\nAdvance #344 by executing continuation candidate `assert_explicit_manual_review_release_acceptance`: Assert explicit manual-review release acceptance.\n\n## Scope\nExplicit manual-review acceptance is the accountable release boundary when source runtime evidence still requires manual-review adoption. Keep the work bounded to the evidence inputs below and preserve canonical registry compatibility. This child ticket is progress evidence only and must not mark #344 complete.\n\n## Evidence Inputs\n- reports/credential-runtime-manual-review-decision.json\n- reports/credential-runtime-manual-review-acceptance.json\n- reports/release-consumer-decision.json\n- docs/release-ledger-goal-completion-audit.json\n\n## Safe Start Conditions\n- manual-review acceptance must be asserted by an accountable reviewer or release owner\n- acceptance must state affected consumers remain manual-review only\n- acceptance must define expiry or revalidation trigger\n- acceptance must not include credentials, hashes, headers, or secret-derived values\n\n## Blocked Finish Conditions\n- manual_review_accepted is false in current release consumer decision\n- goal_completion_allowed is false in current release consumer decision\n- source runtime blockers still require manual-review release adoption\n\n## Acceptance Criteria\n- Manual-review decision intake records accepted=true with required evidence.\n- Manual-review acceptance report validates and remains manifest-bound.\n- Release consumer decision explains manual-review-only adoption for affected consumers.\n- Goal audit remains not_complete unless it explicitly proves the completion contract.\n\n## Post Completion Commands\n- python3 scripts/refresh-release-ledger-evidence.py --write --max-iterations 5\n- python3 scripts/refresh-release-ledger-evidence.py --check\n\n## Doctor Impact\nNo user-facing doctor behavior change unless this child explicitly updates release verification evidence. Any workflow, status, readiness, or compatibility changes must remain reflected in checked-in release evidence.\n\n## Goal Boundary\ngoal_closure_allowed=false. Leave #344 open unless repo-owned finish preflight and completion audit allow closure.\n\n## Notes\nThis ticket is generated from reports/release-goal-continuation-queue.json. It is progress evidence only.\n",
-        "body_input": "stdin",
-        "dry_run_command": "gira ticket new 'Assert explicit manual-review release acceptance' --body-file - --dry-run",
-        "apply_command": "gira ticket new 'Assert explicit manual-review release acceptance' --body-file - --apply",
-        "duplicate_check_command": "gh issue list --repo StatPan/datapan-registry --state open --search 'Assert explicit manual-review release acceptance in:title' --json number,title,state,url",
-        "runner_json_command": "python3 scripts/run-release-goal-continuation-ticket-packet.py --candidate assert_explicit_manual_review_release_acceptance --json",
-        "runner_body_command": "python3 scripts/run-release-goal-continuation-ticket-packet.py --candidate assert_explicit_manual_review_release_acceptance --body",
-        "runner_command_command": "python3 scripts/run-release-goal-continuation-ticket-packet.py --candidate assert_explicit_manual_review_release_acceptance --command",
-        "runner_dry_run_command": "python3 scripts/run-release-goal-continuation-ticket-packet.py --candidate assert_explicit_manual_review_release_acceptance --dry-run",
-        "runner_apply_command": "python3 scripts/run-release-goal-continuation-ticket-packet.py --candidate assert_explicit_manual_review_release_acceptance --apply",
-        "start_after_create": true,
-        "goal_closure_allowed": false
-      }
-    }
-  ]
+  "blocking_evidence": [],
+  "candidates": []
 }

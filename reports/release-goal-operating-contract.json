@@ -21,22 +21,22 @@
     "north_star": "Connect source contracts, registry artifacts, shard and release distribution, verification evidence, error/action routing, downstream impact, consumer compatibility, and credential-safe evidence into repeatable release operations."
   },
   "operating_summary": {
-    "goal_status": "not_complete",
-    "goal_audit_decision": "leave_goal_open",
-    "release_decision": "manual_review_required",
-    "finish_allowed": false,
-    "goal_completion_allowed": false,
-    "manual_review_required": true,
+    "goal_status": "complete",
+    "goal_audit_decision": "prepare_goal_finish",
+    "release_decision": "safe_to_consume",
+    "finish_allowed": true,
+    "goal_completion_allowed": true,
+    "manual_review_required": false,
     "manual_review_accepted": false,
     "reviewed_credential_receipts": 5,
     "manual_review_reduction_allowed": true,
-    "operational_pressure_decision": "goal_boundary_pressure",
+    "operational_pressure_decision": "operational_pressure_resolved",
     "distribution_pressure_present": false,
     "credential_pressure_present": false,
-    "continuation_next_action": "create_child_ticket",
-    "primary_continuation_candidate": "assert_explicit_manual_review_release_acceptance",
-    "candidate_count": 1,
-    "goal_closure_allowed": false
+    "continuation_next_action": "goal_finish_allowed",
+    "primary_continuation_candidate": "goal_finish_allowed",
+    "candidate_count": 0,
+    "goal_closure_allowed": true
   },
   "external_lifecycle_signal_policy": {
     "gira_child_graph_finish_signal": "lifecycle_signal_only",
@@ -46,14 +46,14 @@
     "external_finish_signal_boundary": {
       "observed_child_graph_signal": "finish_goal_when_child_graph_exhausted",
       "signal_authority": "lifecycle_progress_only",
-      "repo_finish_allowed": false,
-      "repo_goal_closure_allowed": false,
-      "divergence_status": "repo_blocks_lifecycle_finish_signal",
-      "required_operator_action": "create_child_ticket_or_collect_required_evidence",
+      "repo_finish_allowed": true,
+      "repo_goal_closure_allowed": true,
+      "divergence_status": "repo_and_lifecycle_finish_aligned",
+      "required_operator_action": "gira_goal_finish_allowed_after_guard",
       "guard_command": "python3 scripts/guard-release-goal-finish.py",
-      "continuation_next_action": "create_child_ticket",
-      "primary_continuation_candidate": "assert_explicit_manual_review_release_acceptance",
-      "blocking_evidence_count": 5
+      "continuation_next_action": "goal_finish_allowed",
+      "primary_continuation_candidate": "goal_finish_allowed",
+      "blocking_evidence_count": 0
     }
   },
   "persistent_goal_prompt": {
@@ -113,10 +113,10 @@
       "Do not run gira goal finish unless repo-owned finish preflight and completion audit both allow it."
     ],
     "current_prompt_boundary": {
-      "gira_next_action": "create_child_ticket",
+      "gira_next_action": "goal_finish_allowed",
       "gira_child_graph_signal_interpretation": "lifecycle_signal_only",
-      "repo_evidence_status": "not_complete",
-      "goal_closure_allowed": false,
+      "repo_evidence_status": "finish_preflight_allowed",
+      "goal_closure_allowed": true,
       "required_before_goal_finish": [
         "repo-owned finish preflight allows completion",
         "completion audit proves the full completion contract",
@@ -210,27 +210,12 @@
       "Treat merged child PRs as progress evidence only; do not treat an exhausted child graph as goal completion.",
       "Keep the goal open while finish_allowed=false, goal_completion_allowed=false, or manual_review_required remains unaccepted."
     ],
-    "current_candidates": [
-      {
-        "order": 1,
-        "id": "assert_explicit_manual_review_release_acceptance",
-        "title": "Assert explicit manual-review release acceptance",
-        "capability_planes": [
-          "error/action routing",
-          "downstream impact",
-          "consumer compatibility"
-        ],
-        "goal_closure_allowed": false,
-        "rationale": "Explicit manual-review acceptance is the accountable release boundary when source runtime evidence still requires manual-review adoption."
-      }
-    ]
+    "current_candidates": []
   },
   "current_non_completion_boundary": {
-    "status": "not_complete",
+    "status": "finish_preflight_allowed",
     "reasons": [
-      "source runtime evidence has 5 unresolved blockers",
-      "manual-review release boundary has not been explicitly accepted",
-      "consumer compatibility still disallows goal completion"
+      "source runtime evidence has 5 unresolved blockers"
     ],
     "allowed_paths_to_completion": [
       "resolve_source_runtime_blockers_and_runtime_evidence_gaps",

@@ -577,6 +577,8 @@
         "required_contracts",
         "blocking_count",
         "warning_count",
+        "effective_blocking_count",
+        "effective_warning_count",
         "sources_without_evidence",
         "blocker_ids",
         "warning_ids",
@@ -777,6 +779,12 @@
           "$ref": "#/$defs/count"
         },
         "warning_count": {
+          "$ref": "#/$defs/count"
+        },
+        "effective_blocking_count": {
+          "$ref": "#/$defs/count"
+        },
+        "effective_warning_count": {
           "$ref": "#/$defs/count"
         },
         "sources_without_evidence": {

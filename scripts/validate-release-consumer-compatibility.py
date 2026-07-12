@@ -718,9 +718,10 @@ def validate_runtime_risk_evidence(
     if risk.get("sources") != expected_sources:
         raise ValueError("runtime_risk_evidence.sources must match source runtime sources with blockers or warnings")
 
-    unresolved_runtime_risk = any(expected_counts.values())
     remediation_summary = as_dict(source_runtime_remediation.get("summary"), "source_runtime_remediation.summary")
     remediation_expected = {
+        "effective_blocking_count": remediation_summary.get("effective_blocking_count"),
+        "effective_warning_count": remediation_summary.get("effective_warning_count"),
         "remediation_follow_up_required": remediation_summary.get("follow_up_required"),
         "remediation_manual_review_boundaries": remediation_summary.get("manual_review_boundaries"),
         "remediation_credential_policy_available": remediation_summary.get("credential_policy_available"),
@@ -741,6 +742,7 @@ def validate_runtime_risk_evidence(
             or key.endswith("_findings")
             or key.endswith("_absent")
             or key.endswith("_eligible")
+            or key.endswith("_count")
         ) and not isinstance(value, bool):
             if not isinstance(value, int) or value < 0:
                 raise ValueError(f"{key} source value must be a non-negative integer")
@@ -756,6 +758,11 @@ def validate_runtime_risk_evidence(
             raise ValueError(f"{key} source value must be a non-empty string")
         if risk.get(key) != value:
             raise ValueError(f"runtime_risk_evidence.{key} expected {value}, got {risk.get(key)}")
+    unresolved_runtime_risk = bool(
+        remediation_summary.get("effective_blocking_count")
+        or remediation_summary.get("effective_warning_count")
+        or expected_counts["sources_without_evidence"]
+    )
     if (
         unresolved_runtime_risk
         and risk.get("remediation_follow_up_required") == 0

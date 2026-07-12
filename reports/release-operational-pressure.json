@@ -15,13 +15,13 @@
     "release_goal_operating_contract": "reports/release-goal-operating-contract.json"
   },
   "summary": {
-    "operational_pressure_decision": "goal_boundary_pressure",
+    "operational_pressure_decision": "operational_pressure_resolved",
     "distribution_pressure_present": false,
     "credential_pressure_present": false,
-    "finish_allowed": false,
-    "goal_completion_allowed": false,
-    "goal_closure_allowed": false,
-    "next_action_count": 1
+    "finish_allowed": true,
+    "goal_completion_allowed": true,
+    "goal_closure_allowed": true,
+    "next_action_count": 0
   },
   "distribution_pressure": {
     "canonical_registry_path": "data/data-go-kr.registry.json",
@@ -56,17 +56,17 @@
     "operator_sources_ready": 0,
     "execution_plan_next_action": "refresh_release_evidence_after_reviewed_receipts",
     "session_output_path": ".datapan/runtime-evidence/credential-runtime-collection-session.json",
-    "runtime_compatibility_effect": "manual_review_required_until_runtime_blockers_resolved",
+    "runtime_compatibility_effect": "runtime_evidence_clear",
     "credential_queue_status": "complete_relief_eligible"
   },
   "goal_boundary": {
-    "goal_status": "not_complete",
-    "release_decision": "manual_review_required",
-    "manual_review_required": true,
+    "goal_status": "complete",
+    "release_decision": "safe_to_consume",
+    "manual_review_required": false,
     "manual_review_accepted": false,
     "reviewed_credential_receipts": 5,
-    "preflight_next_action": "do_not_finish_goal",
-    "primary_continuation_candidate": "assert_explicit_manual_review_release_acceptance"
+    "preflight_next_action": "goal_finish_allowed",
+    "primary_continuation_candidate": "goal_finish_allowed"
   },
   "next_actions": [
     {
@@ -84,7 +84,7 @@
     {
       "id": "do_not_finish_goal",
       "capability_plane": "verification_evidence",
-      "required": true,
+      "required": false,
       "reason": "Repo-owned preflight and operating contract still disallow #344 closure."
     }
   ]

@@ -189,6 +189,7 @@ jobs:
           python scripts/check-runtime-freshness-workflow.py
           python -m unittest tests/test_generate_failure_recovery_rollup.py
           python -m unittest tests/test_convert_source_verification_receipt.py
+          python -m unittest tests/test_generate_source_runtime_remediation_map.py
           python scripts/validate-external-coverage.py
           python scripts/generate-impact-plan-rollup.py --check
           python scripts/validate-impact-plans.py

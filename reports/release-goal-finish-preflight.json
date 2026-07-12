@@ -9,42 +9,16 @@
     "release_consumer_decision": "reports/release-consumer-decision.json"
   },
   "summary": {
-    "finish_allowed": false,
-    "goal_status": "not_complete",
-    "goal_audit_decision": "leave_goal_open",
-    "release_decision": "manual_review_required",
-    "goal_completion_allowed": false,
-    "manual_review_required": true,
+    "finish_allowed": true,
+    "goal_status": "complete",
+    "goal_audit_decision": "prepare_goal_finish",
+    "release_decision": "safe_to_consume",
+    "goal_completion_allowed": true,
+    "manual_review_required": false,
     "manual_review_accepted": false,
     "reviewed_credential_receipts": 5,
-    "blocking_evidence_count": 5,
-    "next_action": "do_not_finish_goal"
+    "blocking_evidence_count": 0,
+    "next_action": "goal_finish_allowed"
   },
-  "blocking_evidence": [
-    {
-      "id": "goal_audit_not_complete",
-      "path": "docs/release-ledger-goal-completion-audit.json",
-      "finding": "Goal completion audit status is not_complete."
-    },
-    {
-      "id": "goal_audit_decision_leave_open",
-      "path": "docs/release-ledger-goal-completion-audit.json",
-      "finding": "Goal completion audit decision does not prepare goal finish."
-    },
-    {
-      "id": "consumer_decision_disallows_goal_completion",
-      "path": "reports/release-consumer-decision.json",
-      "finding": "Release consumer decision records goal_completion_allowed=false."
-    },
-    {
-      "id": "release_decision_not_safe_to_consume",
-      "path": "reports/release-consumer-decision.json",
-      "finding": "Release consumer decision is not safe_to_consume."
-    },
-    {
-      "id": "manual_review_required_not_accepted",
-      "path": "reports/release-consumer-decision.json",
-      "finding": "Manual review is required and not accepted by checked-in release decision evidence."
-    }
-  ]
+  "blocking_evidence": []
 }

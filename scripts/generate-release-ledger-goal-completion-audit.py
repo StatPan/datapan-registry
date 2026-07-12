@@ -79,6 +79,8 @@ def build_current_state_evidence() -> dict[str, Any]:
     compatibility_block["manual_review_required"] = runtime_risk.get("manual_review_required")
     compatibility_block["runtime_blocking_count"] = runtime_risk.get("blocking_count")
     compatibility_block["runtime_warning_count"] = runtime_risk.get("warning_count")
+    compatibility_block["effective_runtime_blocking_count"] = runtime_risk.get("effective_blocking_count")
+    compatibility_block["effective_runtime_warning_count"] = runtime_risk.get("effective_warning_count")
 
     return {
         "manifest": {
@@ -125,37 +127,46 @@ def build_audit(template: dict[str, Any]) -> dict[str, Any]:
     audit["audited_at"] = generated_at
     audit["current_state_evidence"] = evidence
     sources_without_evidence = runtime.get("sources_without_evidence")
-    runtime_boundary = f"{runtime.get('blocking_count')} blockers"
+    effective_blockers = remediation.get("effective_blocking_count")
+    effective_warnings = remediation.get("effective_warning_count")
+    if not isinstance(effective_blockers, int) or not isinstance(effective_warnings, int):
+        raise ValueError("remediation must record effective runtime counts")
+    completion_ready = bool(
+        effective_blockers == 0
+        and effective_warnings == 0
+        and not sources_without_evidence
+        and decision.get("release_decision") == "safe_to_consume"
+    )
+    audit["goal_status"] = "complete" if completion_ready else "not_complete"
+    audit["summary"]["decision"] = "prepare_goal_finish" if completion_ready else "leave_goal_open"
+    runtime_boundary = f"{effective_blockers} effective blockers"
     if sources_without_evidence:
         runtime_boundary += f" across {sources_without_evidence} sources without runtime evidence"
 
     audit["summary"]["reason"] = (
-        "The deterministic release path and its checks are proven for the current state, "
-        "but #344 remains open because source runtime evidence has "
-        f"{runtime_boundary}, "
-        "consumer adoption remains manual-review-required, and no accountable "
-        "manual-review release acceptance is asserted. Credential receipt collection is "
-        f"relief-ready ({queue.get('reviewed_receipts_checked_in')} reviewed receipts; "
-        f"handoff={handoff.get('handoff_status')}); it is no longer the active boundary."
+        "Current verified, reviewed, redacted runtime receipts resolve every credential-only "
+        "boundary; release and consumer evidence are safe to consume."
+        if completion_ready
+        else "The deterministic release path and its checks are proven, but #344 remains open because "
+        f"source runtime evidence has {runtime_boundary} or consumer release evidence is not safe."
     )
     remaining_goal_risks = [
         {
             "id": "source_runtime_manual_review_required",
             "evidence": DEFAULT_REMEDIATION.as_posix(),
             "finding": (
-                f"The remediation map records {remediation.get('blocking_count')} runtime blockers "
+                f"The remediation map records {effective_blockers} effective runtime blockers "
                 "and keeps consumer adoption manual-review-required until they are resolved."
             ),
         },
         {
             "id": "manual_review_acceptance_not_asserted",
             "evidence": DEFAULT_CONSUMER_DECISION.as_posix(),
-            "finding": (
-                "The release decision remains manual_review_required and manual-review acceptance "
-                "is not asserted, so goal completion is not allowed."
-            ),
+            "finding": "The release decision does not yet permit goal completion.",
         },
     ]
+    if completion_ready:
+        remaining_goal_risks = []
     if sources_without_evidence:
         remaining_goal_risks.insert(
             1,

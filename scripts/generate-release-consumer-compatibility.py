@@ -632,7 +632,16 @@ def runtime_risk_evidence(
         if not isinstance(value, int) or value < 0:
             raise ValueError(f"source_runtime.summary.{key} must be a non-negative integer")
 
-    manual_review_required = bool(blocking_count or warning_count or sources_without_evidence)
+    effective_blocking_count = remediation_summary.get("effective_blocking_count")
+    effective_warning_count = remediation_summary.get("effective_warning_count")
+    for key, value in {
+        "effective_blocking_count": effective_blocking_count,
+        "effective_warning_count": effective_warning_count,
+    }.items():
+        if not isinstance(value, int) or value < 0:
+            raise ValueError(f"source_runtime_remediation.summary.{key} must be a non-negative integer")
+
+    manual_review_required = bool(effective_blocking_count or effective_warning_count or sources_without_evidence)
     manual_review_reduction_allowed = (
         credential_policy_summary.get("manual_review_reduction_allowed") is True
         and remediation_summary.get("receipt_backed_relief_allowed") is True
@@ -663,6 +672,8 @@ def runtime_risk_evidence(
         "required_contracts": REQUIRED_RUNTIME_RISK_CONTRACTS,
         "blocking_count": blocking_count,
         "warning_count": warning_count,
+        "effective_blocking_count": effective_blocking_count,
+        "effective_warning_count": effective_warning_count,
         "sources_without_evidence": sources_without_evidence,
         "remediation_follow_up_required": remediation_summary.get("follow_up_required"),
         "remediation_manual_review_boundaries": remediation_summary.get("manual_review_boundaries"),

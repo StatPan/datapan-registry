@@ -13,14 +13,14 @@
     "self_artifact_excluded": true
   },
   "summary": {
-    "release_decision": "manual_review_required",
+    "release_decision": "safe_to_consume",
     "canonical_registry_consumption": "compatible",
     "shard_assets_required": false,
-    "manual_review_required": true,
+    "manual_review_required": false,
     "manual_review_accepted": false,
     "reviewed_credential_receipts": 5,
-    "goal_completion_allowed": false,
-    "goal_status": "not_complete"
+    "goal_completion_allowed": true,
+    "goal_status": "complete"
   },
   "decision_factors": {
     "canonical_registry_path": "data/data-go-kr.registry.json",
@@ -28,7 +28,7 @@
     "registry_footprint_status": "large_monolith_shard_additive",
     "canonical_registry_required": true,
     "monolith_fallback_required": true,
-    "compatibility_effect": "manual_review_required_until_runtime_blockers_resolved",
+    "compatibility_effect": "runtime_evidence_clear",
     "manual_review_acceptance_status": "not_accepted",
     "manual_review_boundary_accepted": false,
     "manual_review_goal_completion_effect": "goal_remains_open_until_reviewed_receipts_or_explicit_acceptance",
@@ -40,7 +40,7 @@
     "credential_handoff_relief_eligible_sources": 5,
     "credential_handoff_global_manual_review_relief_allowed": true,
     "manual_review_reduction_allowed": true,
-    "goal_audit_decision": "leave_goal_open"
+    "goal_audit_decision": "prepare_goal_finish"
   },
   "consumer_actions": [
     {

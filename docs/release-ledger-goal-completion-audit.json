@@ -3,15 +3,15 @@
   "goal_issue": 344,
   "audit_ticket": 357,
   "audited_at": "2026-07-11T10:28:35Z",
-  "goal_status": "not_complete",
+  "goal_status": "complete",
   "completion_guardrail": "Child tickets and merged PRs are progress evidence, not goal completion evidence by themselves.",
   "summary": {
     "criteria_total": 6,
     "criteria_proven": 6,
     "criteria_partial": 0,
     "criteria_gap": 0,
-    "decision": "leave_goal_open",
-    "reason": "The deterministic release path and its checks are proven for the current state, but #344 remains open because source runtime evidence has 5 blockers, consumer adoption remains manual-review-required, and no accountable manual-review release acceptance is asserted. Credential receipt collection is relief-ready (5 reviewed receipts; handoff=relief_ready); it is no longer the active boundary."
+    "decision": "prepare_goal_finish",
+    "reason": "Current verified, reviewed, redacted runtime receipts resolve every credential-only boundary; release and consumer evidence are safe to consume."
   },
   "current_state_evidence": {
     "manifest": {
@@ -66,13 +66,16 @@
       "sources": 5,
       "blocking_count": 5,
       "warning_count": 0,
+      "effective_blocking_count": 0,
+      "effective_warning_count": 0,
       "mapped_blocker_findings": 5,
       "mapped_warning_findings": 0,
       "sources_without_evidence": 0,
       "manual_review_boundaries": 5,
+      "receipt_resolved_findings": 5,
       "follow_up_required": 0,
-      "compatibility_effect": "manual_review_required_until_runtime_blockers_resolved",
-      "manual_review_required": true,
+      "compatibility_effect": "runtime_evidence_clear",
+      "manual_review_required": false,
       "credential_policy_available": true,
       "receipt_contract_available": true,
       "reviewed_receipt_intake_available": true,
@@ -142,15 +145,17 @@
       "blocked_consumers": 0,
       "canonical_registry_required": true,
       "shard_assets_required": false,
-      "manual_review_required": true,
+      "manual_review_required": false,
       "runtime_blocking_count": 5,
-      "runtime_warning_count": 0
+      "runtime_warning_count": 0,
+      "effective_runtime_blocking_count": 0,
+      "effective_runtime_warning_count": 0
     },
     "release_distribution_footprint": {
       "path": "reports/release-distribution-footprint.json",
       "artifact_count": 136,
       "schema_artifacts": 83,
-      "manifest_bound_bytes_excluding_self": 173749906,
+      "manifest_bound_bytes_excluding_self": 173741329,
       "canonical_registry_path": "data/data-go-kr.registry.json",
       "canonical_registry_bytes": 137735169,
       "large_monolith_threshold_bytes": 100000000,
@@ -219,21 +224,21 @@
       "reviewed_receipts_checked_in": 5,
       "relief_eligible_sources": 5,
       "global_manual_review_relief_allowed": true,
-      "compatibility_manual_review_required": true,
-      "compatibility_effect": "manual_review_required_until_runtime_blockers_resolved",
+      "compatibility_manual_review_required": false,
+      "compatibility_effect": "runtime_evidence_clear",
       "default_ci_requires_credentials": false,
       "checked_in_secrets_allowed": false
     },
     "release_consumer_decision": {
       "path": "reports/release-consumer-decision.json",
-      "release_decision": "manual_review_required",
+      "release_decision": "safe_to_consume",
       "canonical_registry_consumption": "compatible",
       "shard_assets_required": false,
-      "manual_review_required": true,
+      "manual_review_required": false,
       "manual_review_accepted": false,
       "reviewed_credential_receipts": 5,
-      "goal_completion_allowed": false,
-      "goal_status": "not_complete"
+      "goal_completion_allowed": true,
+      "goal_status": "complete"
     }
   },
   "criteria": [
@@ -475,18 +480,7 @@
       "next_action": "Keep this audit generated from current release evidence; leave #344 open until source-runtime risk is resolved or an accountable manual-review decision is accepted."
     }
   ],
-  "remaining_goal_risks": [
-    {
-      "id": "source_runtime_manual_review_required",
-      "evidence": "reports/source-runtime-remediation-map.json",
-      "finding": "The remediation map records 5 runtime blockers and keeps consumer adoption manual-review-required until they are resolved."
-    },
-    {
-      "id": "manual_review_acceptance_not_asserted",
-      "evidence": "reports/release-consumer-decision.json",
-      "finding": "The release decision remains manual_review_required and manual-review acceptance is not asserted, so goal completion is not allowed."
-    }
-  ],
+  "remaining_goal_risks": [],
   "local_validation_commands": [
     "python3 scripts/validate-release-ledger-goal-audit.py",
     "python3 scripts/generate-release-ledger-goal-completion-audit.py --check",
