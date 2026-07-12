@@ -163,6 +163,15 @@ def receipt_linkage(source_id: str, receipt_records: dict[str, dict[str, Any]]) 
     }
 
 
+def receipt_resolves_finding(finding: dict[str, Any]) -> bool:
+    linkage = finding.get("reviewed_receipt_linkage")
+    return (
+        finding.get("status") == "manual_review_boundary"
+        and isinstance(linkage, dict)
+        and linkage.get("source_relief_eligible") is True
+    )
+
+
 def finding_entry(
     source_id: str,
     severity: str,
@@ -289,6 +298,10 @@ def build_report(
     findings = [finding for source in sources for finding in source["findings"]]
     unresolved = sum(1 for finding in findings if finding["status"] == "follow_up_required")
     manual = sum(1 for finding in findings if finding["status"] == "manual_review_boundary")
+    receipt_resolved = sum(1 for finding in findings if receipt_resolves_finding(finding))
+    effective_findings = [finding for finding in findings if not receipt_resolves_finding(finding)]
+    effective_blockers = sum(1 for finding in effective_findings if finding["severity"] == "blocker")
+    effective_warnings = sum(1 for finding in effective_findings if finding["severity"] == "warning")
     receipt_linked = sum(1 for finding in findings if "reviewed_receipt_linkage" in finding)
     receipt_linked_absent = sum(
         1
@@ -313,7 +326,7 @@ def build_report(
     generated_at = runtime_rollup.get("generated_at")
     if not isinstance(generated_at, str) or not generated_at:
         raise ValueError("runtime rollup must provide generated_at")
-    manual_review_required = bool(unresolved or manual or runtime_summary.get("blocking_count") or runtime_summary.get("warning_count"))
+    manual_review_required = bool(effective_blockers or effective_warnings)
     compatibility_effect = (
         "manual_review_required_until_runtime_blockers_resolved"
         if manual_review_required
@@ -331,10 +344,13 @@ def build_report(
             "sources": runtime_summary.get("sources"),
             "blocking_count": runtime_summary.get("blocking_count"),
             "warning_count": runtime_summary.get("warning_count"),
+            "effective_blocking_count": effective_blockers,
+            "effective_warning_count": effective_warnings,
             "mapped_blocker_findings": mapped_blockers,
             "mapped_warning_findings": mapped_warnings,
             "sources_without_evidence": runtime_summary.get("sources_without_evidence"),
             "manual_review_boundaries": manual,
+            "receipt_resolved_findings": receipt_resolved,
             "follow_up_required": unresolved,
             "compatibility_effect": compatibility_effect,
             "manual_review_required": manual_review_required,

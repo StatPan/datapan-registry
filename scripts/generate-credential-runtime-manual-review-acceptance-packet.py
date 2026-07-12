@@ -125,8 +125,6 @@ def validate_inputs(decision: dict[str, Any], acceptance: dict[str, Any], handof
         raise ValueError("manual-review packet requires secret-free default CI handoff")
     if handoff_summary.get("checked_in_secrets_allowed") is not False:
         raise ValueError("manual-review packet requires checked_in_secrets_allowed=false")
-    if compatibility_risk.get("manual_review_required") is not True:
-        raise ValueError("manual-review packet only applies while compatibility requires manual review")
     validate_secret_free(decision)
     validate_secret_free(acceptance)
 

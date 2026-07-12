@@ -83,10 +83,13 @@
         "sources",
         "blocking_count",
         "warning_count",
+        "effective_blocking_count",
+        "effective_warning_count",
         "mapped_blocker_findings",
         "mapped_warning_findings",
         "sources_without_evidence",
         "manual_review_boundaries",
+        "receipt_resolved_findings",
         "follow_up_required",
         "compatibility_effect",
         "manual_review_required",
@@ -111,6 +114,12 @@
         "warning_count": {
           "$ref": "#/$defs/count"
         },
+        "effective_blocking_count": {
+          "$ref": "#/$defs/count"
+        },
+        "effective_warning_count": {
+          "$ref": "#/$defs/count"
+        },
         "mapped_blocker_findings": {
           "$ref": "#/$defs/count"
         },
@@ -121,6 +130,9 @@
           "$ref": "#/$defs/count"
         },
         "manual_review_boundaries": {
+          "$ref": "#/$defs/count"
+        },
+        "receipt_resolved_findings": {
           "$ref": "#/$defs/count"
         },
         "follow_up_required": {

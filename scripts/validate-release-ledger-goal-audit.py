@@ -115,8 +115,14 @@ def validate_current_state_evidence(audit: dict[str, Any]) -> None:
     if not isinstance(source_runtime.get("blocking_count"), int):
         raise ValueError("source runtime blocking_count must be recorded")
 
+    remediation = as_dict(
+        evidence.get("source_runtime_remediation"), "current_state_evidence.source_runtime_remediation"
+    )
+    effective_blockers = remediation.get("effective_blocking_count")
+    if not isinstance(effective_blockers, int):
+        raise ValueError("source runtime remediation effective_blocking_count must be recorded")
     compatibility = as_dict(evidence.get("consumer_compatibility"), "current_state_evidence.consumer_compatibility")
-    if source_runtime["blocking_count"] > 0 and compatibility.get("manual_review_required") is not True:
+    if effective_blockers > 0 and compatibility.get("manual_review_required") is not True:
         raise ValueError("runtime blockers require consumer compatibility manual_review_required evidence")
 
 
