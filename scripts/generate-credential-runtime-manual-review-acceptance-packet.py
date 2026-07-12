@@ -11,6 +11,8 @@ import re
 import sys
 from typing import Any
 
+from manual_review_evidence_digest import compatibility_binding_sha256
+
 try:
     import jsonschema
 except ImportError as exc:  # pragma: no cover - environment guard
@@ -161,7 +163,7 @@ def build_report(
     compatibility_risk = as_dict(compatibility.get("runtime_risk_evidence"), "compatibility.runtime_risk_evidence")
     accepted = bool_value(decision_summary.get("accepted"), "decision.summary.accepted")
     handoff_digest = file_sha256(handoff_path)
-    compatibility_digest = file_sha256(compatibility_path)
+    compatibility_digest = compatibility_binding_sha256(compatibility)
     goal_closure_allowed = bool(
         accepted
         and acceptance_summary.get("accepted") is True
