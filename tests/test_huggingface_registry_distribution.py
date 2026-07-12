@@ -15,6 +15,27 @@ SPEC.loader.exec_module(MODULE)
 
 
 class HuggingFaceRegistryDistributionTest(unittest.TestCase):
+    def test_workflow_publishes_main_dataset_changes_but_not_pull_requests(self):
+        workflow_path = (
+            pathlib.Path(__file__).parents[1]
+            / ".github"
+            / "workflows"
+            / "huggingface-distribution.yml"
+        )
+        workflow = workflow_path.read_text(encoding="utf-8")
+        self.assertIn("  push:\n    branches:\n      - main\n    paths:", workflow)
+        self.assertIn('      - "data/**"', workflow)
+        self.assertIn('      - "manifest.json"', workflow)
+        self.assertIn('      - "reports/**"', workflow)
+        self.assertIn("|| 'publication' }}", workflow)
+        self.assertIn("  cancel-in-progress: false", workflow)
+        publish_condition = (
+            "if: github.event_name == 'push' || "
+            "(github.event_name == 'workflow_dispatch' && inputs.publish)"
+        )
+        self.assertEqual(workflow.count(publish_condition), 2)
+        self.assertNotIn("github.event_name == 'pull_request' && inputs.publish", workflow)
+
     def fixture(self, root: pathlib.Path) -> pathlib.Path:
         data = root / "data" / "registry.json"
         report = root / "reports" / "readiness.json"
