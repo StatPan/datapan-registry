@@ -167,6 +167,7 @@ jobs:
           python -m py_compile scripts/generate-release-consumer-compatibility.py
           python -m py_compile scripts/generate-release-operational-pressure.py
           python -m py_compile scripts/generate-release-consumer-decision.py
+          python -m py_compile scripts/generate-release-ledger-goal-completion-audit.py
           python -m py_compile scripts/generate-release-goal-finish-preflight.py
           python -m py_compile scripts/validate-release-goal-pr-boundary.py
           python -m py_compile scripts/generate-release-goal-continuation-queue.py

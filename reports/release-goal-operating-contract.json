@@ -228,13 +228,13 @@
   "current_non_completion_boundary": {
     "status": "not_complete",
     "reasons": [
-      "live credentialed runtime receipts are not checked in",
-      "credentialed source runtime evidence remains manual-review only by default",
+      "source runtime evidence has 9 unresolved blockers",
+      "4 source(s) lack runtime evidence",
       "manual-review release boundary has not been explicitly accepted",
       "consumer compatibility still disallows goal completion"
     ],
     "allowed_paths_to_completion": [
-      "reviewed_validated_redacted_live_credential_runtime_receipts",
+      "resolve_source_runtime_blockers_and_runtime_evidence_gaps",
       "explicit_accepted_manual_review_release_boundary"
     ]
   }

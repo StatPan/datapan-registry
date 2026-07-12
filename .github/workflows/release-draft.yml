@@ -106,6 +106,7 @@ jobs:
             scripts/generate-release-consumer-compatibility.py \
             scripts/generate-release-operational-pressure.py \
             scripts/generate-release-consumer-decision.py \
+            scripts/generate-release-ledger-goal-completion-audit.py \
             scripts/generate-release-goal-finish-preflight.py \
             scripts/validate-release-goal-pr-boundary.py \
             scripts/generate-release-goal-continuation-queue.py \

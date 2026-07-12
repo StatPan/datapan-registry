@@ -482,7 +482,7 @@
         {
           "path": "reports/credential-runtime-manual-review-acceptance-packet.json",
           "bytes": 3998,
-          "sha256": "147d61ecae01dcd72a915c0147b55d34d65ec19cbe2737264d00f760c86f565d",
+          "sha256": "999974ccc348db9a7fe96728a47c519cd5795f0b6e61523f19f7be54c17f1172",
           "manifest_bound": true,
           "kind": "credential_runtime_manual_review_acceptance_packet",
           "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-acceptance-packet.v1.schema.json"
@@ -525,7 +525,7 @@
         {
           "path": "reports/release-distribution-footprint.json",
           "bytes": 2141,
-          "sha256": "d47256d30bdb9af2444fa27fe26de55256eecf718442b9dd045677f2f255fb01",
+          "sha256": "31afbe92bc0915fc5a2ecd9501a3c154846861fdaa8777cda1ab49c1e0c56d45",
           "manifest_bound": true,
           "kind": "release_distribution_footprint",
           "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json"
@@ -533,7 +533,7 @@
         {
           "path": "reports/release-consumer-compatibility.json",
           "bytes": 26957,
-          "sha256": "291d412effae0d31ebf9a25720f895345c411eccc0927701aa6a271fc946a87a",
+          "sha256": "63ea38cff06c868d3a7118c77a985e618e40accd70f284e7d24b86a33bd2b2e8",
           "manifest_bound": true,
           "kind": "consumer_compatibility",
           "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json"
@@ -727,8 +727,8 @@
       "evidence_artifacts": [
         {
           "path": "docs/release-ledger-goal-completion-audit.json",
-          "bytes": 41709,
-          "sha256": "22047a761314e22bc5ccf3962f964622956217b4eae21a74b59bdcf19a0bbc37",
+          "bytes": 26396,
+          "sha256": "ac55b82203fc23c8c132fac40ce89a9ed62d7f0afd244c059f57b5f9fd911880",
           "manifest_bound": false
         },
         {
@@ -749,8 +749,8 @@
         },
         {
           "path": "reports/release-goal-operating-contract.json",
-          "bytes": 13224,
-          "sha256": "9be704098107b733d51ea6208f63030de9a3b0dc0327a4fb24119072857ce2a6",
+          "bytes": 13176,
+          "sha256": "2d69b24c31b7ed192e2bdfce43550628f599c672410d9a612a322b7753a1c193",
           "manifest_bound": true,
           "kind": "release_goal_operating_contract",
           "schema": "https://schemas.datapan.dev/datapan.release-goal-operating-contract.v1.schema.json"

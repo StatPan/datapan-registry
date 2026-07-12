@@ -2,7 +2,7 @@
   "schema_version": "datapan.release-ledger-goal-completion-audit.v1",
   "goal_issue": 344,
   "audit_ticket": 357,
-  "audited_at": "2026-07-07T00:00:00+09:00",
+  "audited_at": "2026-07-11T10:28:35Z",
   "goal_status": "not_complete",
   "completion_guardrail": "Child tickets and merged PRs are progress evidence, not goal completion evidence by themselves.",
   "summary": {
@@ -11,120 +11,218 @@
     "criteria_partial": 0,
     "criteria_gap": 0,
     "decision": "leave_goal_open",
-    "reason": "The release assembly path is receipt-bound, release distribution footprint evidence records the large canonical registry and shard/fallback boundary, release consumer decision evidence records the current manual-review-required consumption decision, goal finish preflight evidence and the goal-finish guard block goal finish from checked-in release evidence, goal continuation queue evidence maps finish blockers to next safe child candidates, credential collection preflight evidence identifies runnable inputs and missing reviewed receipts, and credential-safe runtime evidence is policy-bound with an operator-facing receipt collection queue, source-by-source operator packets, reviewer-facing handoff, manual-review decision intake, manual-review acceptance boundary, and digest-bound manual-review acceptance packet, but #344 remains open because reviewed live credentialed runtime receipts are not checked in, explicit manual-review release acceptance is not asserted, receipt-backed compatibility relief is disallowed, and source runtime manual-review compatibility gates still prevent the broader registry-ledger vision from being treated as complete."
+    "reason": "The deterministic release path and its checks are proven for the current state, but #344 remains open because source runtime evidence has 9 blockers across 4 sources without runtime evidence, consumer adoption remains manual-review-required, and no accountable manual-review release acceptance is asserted. Credential receipt collection is relief-ready (5 reviewed receipts; handoff=relief_ready); it is no longer the active boundary."
   },
   "current_state_evidence": {
     "manifest": {
       "path": "manifest.json",
-      "artifact_count": 99,
-      "artifact_kinds": 41,
-      "schema_artifacts": 59
+      "artifact_count": 136
     },
     "schema_index": {
       "path": "schemas/index.json",
-      "schema_count": 59
+      "schema_count": 83
     },
     "release_readiness": {
       "path": "reports/latest-release-readiness.json",
-      "ready": true,
       "gates_total": 23,
       "passed": 23,
+      "warned": 0,
       "failed": 0,
-      "registry_specs": 12060
+      "required_artifacts": 16,
+      "missing_required_artifacts": 0,
+      "recommended_artifacts": 3,
+      "missing_recommended_artifacts": 0,
+      "schema_artifacts": 48,
+      "registry_specs": 12060,
+      "ready": true
     },
     "source_report_inventory": {
       "path": "reports/source-report-inventory.json",
       "sources": 5,
-      "report_total": 151,
-      "schema_backed_reports": 26,
-      "schema_indexed_reports": 26,
-      "schema_missing_reports": 0,
-      "source_report_coverage_percent": 32.3
+      "source_report_dirs": 5,
+      "report_total": 156,
+      "recommended_report_slots": 65,
+      "present_recommended_reports": 21,
+      "missing_recommended_reports": 44,
+      "source_report_coverage_percent": 32.3,
+      "schema_backed_reports": 31,
+      "schema_indexed_reports": 31,
+      "schema_missing_reports": 0
     },
     "source_runtime": {
       "path": "reports/source-runtime-evidence-rollup.json",
       "sources": 5,
       "sources_without_evidence": 4,
       "evidence_total": 4774,
+      "verified": 2841,
+      "failed": 389,
+      "skipped": 1544,
+      "unknown": 0,
       "blocking_count": 9,
       "warning_count": 4
     },
     "source_runtime_remediation": {
       "path": "reports/source-runtime-remediation-map.json",
-      "mapping_ticket": 360,
-      "follow_up_issue": 362,
-      "follow_up_required": 0,
+      "sources": 5,
+      "blocking_count": 9,
+      "warning_count": 4,
+      "mapped_blocker_findings": 9,
+      "mapped_warning_findings": 4,
+      "sources_without_evidence": 4,
       "manual_review_boundaries": 13,
+      "follow_up_required": 0,
+      "compatibility_effect": "manual_review_required_until_runtime_blockers_resolved",
+      "manual_review_required": true,
       "credential_policy_available": true,
       "receipt_contract_available": true,
       "reviewed_receipt_intake_available": true,
-      "receipt_reviewed": false,
-      "receipt_relief_eligible": false,
-      "receipt_backed_relief_allowed": false,
+      "receipt_reviewed": true,
+      "receipt_relief_eligible": true,
+      "receipt_backed_relief_allowed": true,
+      "receipt_backed_relief_status": "allowed_by_reviewed_validated_credential_runtime_receipts",
       "receipt_linked_findings": 13,
-      "receipt_linked_absent": 13,
-      "receipt_linked_relief_eligible": 0
+      "receipt_linked_absent": 0,
+      "receipt_linked_relief_eligible": 13
     },
     "downstream_impact": {
       "path": "reports/registry-impact-plan.json",
-      "changes": 5,
-      "requires_manual_review": 2
+      "total": 5,
+      "by_category": [
+        {
+          "category": "added",
+          "count": 3
+        },
+        {
+          "category": "provider_error_taxonomy_changed",
+          "count": 1
+        },
+        {
+          "category": "release_schema_changed",
+          "count": 1
+        }
+      ],
+      "by_target": [
+        {
+          "target": "datapan-cli",
+          "count": 4
+        },
+        {
+          "target": "datapan-data",
+          "count": 5
+        },
+        {
+          "target": "dataset-api",
+          "count": 5
+        },
+        {
+          "target": "documentation",
+          "count": 1
+        },
+        {
+          "target": "mcp",
+          "count": 5
+        },
+        {
+          "target": "registry-release",
+          "count": 4
+        },
+        {
+          "target": "sdk",
+          "count": 5
+        }
+      ],
+      "requires_manual_review": 2,
+      "requires_db_migration_review": 0,
+      "requires_served_contract_regeneration": 0
     },
     "consumer_compatibility": {
       "path": "reports/release-consumer-compatibility.json",
       "consumer_count": 7,
-      "proven_consumers": 2,
-      "blocked_consumers": 1,
+      "proven_consumers": 3,
+      "blocked_consumers": 0,
+      "canonical_registry_required": true,
+      "shard_assets_required": false,
       "manual_review_required": true,
       "runtime_blocking_count": 9,
-      "runtime_warning_count": 4,
-      "credential_policy_live_receipts": 0,
-      "credential_policy_reviewed_receipts": 0,
-      "credential_policy_receipt_contract_available": true,
-      "credential_policy_reviewed_receipt_intake_available": true,
-      "credential_policy_receipt_present": false,
-      "credential_policy_receipt_validated": false,
-      "credential_policy_receipt_reviewed": false,
-      "credential_policy_receipt_relief_eligible": false,
-      "credential_queue_status": "collection_required",
-      "credential_queue_absent": 5,
-      "credential_queue_staged_only": 0,
-      "credential_queue_reviewed_rejected": 0,
-      "credential_queue_reviewed_accepted": 0,
-      "credential_queue_relief_eligible": 0,
-      "credential_queue_reviewed_receipts": 0,
-      "credential_queue_manual_review_reduction_allowed": false,
-      "credential_handoff_status": "review_required",
-      "credential_handoff_pending_review_sources": 5,
-      "credential_handoff_reviewed_receipts": 0,
-      "credential_handoff_relief_eligible_sources": 0,
-      "credential_handoff_global_manual_review_relief_allowed": false,
-      "credential_handoff_relief_decision": "blocked_until_all_sources_relief_eligible",
-      "manual_review_decision_status": "not_asserted",
-      "manual_review_decision_accepted": false,
-      "manual_review_decision_reason": "manual_review_acceptance_not_asserted",
-      "manual_review_decision_boundary_accepted": false,
-      "manual_review_acceptance_status": "not_accepted",
-      "manual_review_acceptance_accepted": false,
-      "manual_review_acceptance_decision": "blocked_until_explicit_manual_review_acceptance",
-      "manual_review_acceptance_required_evidence": 5,
-      "manual_review_acceptance_boundary_accepted": false,
-      "manual_review_acceptance_goal_completion_effect": "goal_remains_open_until_reviewed_receipts_or_explicit_acceptance",
-      "remediation_receipt_linked_findings": 13,
-      "remediation_receipt_linked_absent": 13,
-      "remediation_receipt_linked_relief_eligible": 0,
-      "manual_review_reduction_allowed": false
+      "runtime_warning_count": 4
     },
     "release_distribution_footprint": {
       "path": "reports/release-distribution-footprint.json",
+      "artifact_count": 136,
+      "schema_artifacts": 83,
+      "manifest_bound_bytes_excluding_self": 173760294,
+      "canonical_registry_path": "data/data-go-kr.registry.json",
       "canonical_registry_bytes": 137735169,
-      "manifest_bound_bytes_excluding_self": 165674103,
       "large_monolith_threshold_bytes": 100000000,
       "registry_footprint_status": "large_monolith_shard_additive",
       "canonical_registry_required": true,
       "shard_distribution_required": false,
-      "monolith_fallback_required": true,
-      "consumer_effect": "canonical_registry_required_shards_optional"
+      "monolith_fallback_required": true
+    },
+    "credential_runtime_policy": {
+      "path": "reports/credential-runtime-evidence-policy.json",
+      "sources": 5,
+      "credential_gated_sources": 5,
+      "metadata_only_sources": 4,
+      "non_data_runtime_evidence_gaps": 4,
+      "credential_required_blockers": 5,
+      "manual_review_boundaries": 13,
+      "receipt_contract_available": true,
+      "reviewed_receipt_intake_available": true,
+      "receipt_present": true,
+      "receipt_validated": true,
+      "receipt_reviewed": true,
+      "receipt_relief_eligible": true,
+      "manual_review_reduction_allowed": true,
+      "live_credentialed_receipts_checked_in": 5,
+      "reviewed_receipts_checked_in": 5,
+      "default_ci_requires_credentials": false,
+      "checked_in_secrets_allowed": false
+    },
+    "credential_runtime_receipt_collection_queue": {
+      "path": "reports/credential-runtime-receipt-collection-queue.json",
+      "sources": 5,
+      "credential_gated_sources": 5,
+      "absent": 0,
+      "staged_only": 0,
+      "reviewed_rejected": 0,
+      "reviewed_accepted": 0,
+      "relief_eligible": 5,
+      "reviewed_receipts_checked_in": 5,
+      "manual_review_reduction_allowed": true,
+      "default_ci_requires_credentials": false,
+      "checked_in_secrets_allowed": false,
+      "queue_status": "complete_relief_eligible"
+    },
+    "credential_runtime_review_handoff": {
+      "path": "reports/credential-runtime-review-handoff.json",
+      "sources": 5,
+      "credential_gated_sources": 5,
+      "pending_review_sources": 0,
+      "reviewed_receipts_checked_in": 5,
+      "relief_eligible_sources": 5,
+      "global_manual_review_relief_allowed": true,
+      "manual_review_required": false,
+      "default_ci_requires_credentials": false,
+      "checked_in_secrets_allowed": false,
+      "handoff_status": "relief_ready"
+    },
+    "manual_review_acceptance": {
+      "path": "reports/credential-runtime-manual-review-acceptance.json",
+      "accepted": false,
+      "acceptance_status": "not_accepted",
+      "acceptance_decision": "blocked_until_explicit_manual_review_acceptance",
+      "decision_status": "not_asserted",
+      "decision_reason": "manual_review_acceptance_not_asserted",
+      "credential_handoff_status": "relief_ready",
+      "pending_review_sources": 0,
+      "reviewed_receipts_checked_in": 5,
+      "relief_eligible_sources": 5,
+      "global_manual_review_relief_allowed": true,
+      "compatibility_manual_review_required": true,
+      "compatibility_effect": "manual_review_required_until_runtime_blockers_resolved",
+      "default_ci_requires_credentials": false,
+      "checked_in_secrets_allowed": false
     },
     "release_consumer_decision": {
       "path": "reports/release-consumer-decision.json",
@@ -133,154 +231,9 @@
       "shard_assets_required": false,
       "manual_review_required": true,
       "manual_review_accepted": false,
-      "reviewed_credential_receipts": 0,
+      "reviewed_credential_receipts": 5,
       "goal_completion_allowed": false,
       "goal_status": "not_complete"
-    },
-    "release_goal_finish_preflight": {
-      "path": "reports/release-goal-finish-preflight.json",
-      "finish_allowed": false,
-      "goal_status": "not_complete",
-      "goal_audit_decision": "leave_goal_open",
-      "release_decision": "manual_review_required",
-      "goal_completion_allowed": false,
-      "manual_review_required": true,
-      "manual_review_accepted": false,
-      "reviewed_credential_receipts": 0,
-      "blocking_evidence_count": 5,
-      "next_action": "do_not_finish_goal",
-      "guard_command": "python3 scripts/guard-release-goal-finish.py",
-      "guard_self_test_command": "python3 scripts/guard-release-goal-finish.py --self-test",
-      "guard_current_result": "blocks_goal_finish"
-    },
-    "release_goal_continuation_queue": {
-      "path": "reports/release-goal-continuation-queue.json",
-      "finish_allowed": false,
-      "goal_status": "not_complete",
-      "release_decision": "manual_review_required",
-      "goal_completion_allowed": false,
-      "reviewed_credential_receipts": 0,
-      "reviewed_receipts_missing": 5,
-      "manual_review_required": true,
-      "manual_review_accepted": false,
-      "candidate_count": 2,
-      "primary_candidate": "collect_reviewed_credential_runtime_receipts",
-      "next_action": "create_child_ticket",
-      "goal_closure_allowed": false
-    },
-    "credential_runtime_policy": {
-      "path": "reports/credential-runtime-evidence-policy.json",
-      "policy_ticket": 364,
-      "credential_gated_sources": 5,
-      "manual_review_boundaries": 13,
-      "receipt_contract_available": true,
-      "reviewed_receipt_intake_available": true,
-      "receipt_present": false,
-      "receipt_validated": false,
-      "receipt_reviewed": false,
-      "receipt_relief_eligible": false,
-      "manual_review_reduction_allowed": false,
-      "live_credentialed_receipts_checked_in": 0,
-      "reviewed_receipts_checked_in": 0,
-      "default_ci_requires_credentials": false,
-      "checked_in_secrets_allowed": false
-    },
-    "credential_collection_preflight": {
-      "path": "reports/credential-runtime-collection-preflight.json",
-      "sources": 5,
-      "credential_gated_sources": 5,
-      "candidate_batches_present": 5,
-      "candidate_batches_missing": 0,
-      "reviewed_receipts_present": 0,
-      "reviewed_receipts_missing": 5,
-      "default_ci_runnable_sources": 0,
-      "operator_environment_required_sources": 5,
-      "manual_review_reduction_allowed": false,
-      "preflight_status": "collection_inputs_ready_operator_environment_needed"
-    },
-    "credential_runtime_receipt_collection_queue": {
-      "path": "reports/credential-runtime-receipt-collection-queue.json",
-      "queue_ticket": 375,
-      "promotion_ticket": 379,
-      "promotion_script": "scripts/promote-credential-runtime-receipt.py",
-      "collection_runner_ticket": 383,
-      "collection_runner_script": "scripts/run-credential-runtime-collection.py",
-      "credential_gated_sources": 5,
-      "absent": 5,
-      "staged_only": 0,
-      "reviewed_rejected": 0,
-      "reviewed_accepted": 0,
-      "relief_eligible": 0,
-      "reviewed_receipts_checked_in": 0,
-      "manual_review_reduction_allowed": false,
-      "queue_status": "collection_required",
-      "default_ci_requires_credentials": false,
-      "checked_in_secrets_allowed": false
-    },
-    "credential_runtime_review_handoff": {
-      "path": "reports/credential-runtime-review-handoff.json",
-      "handoff_ticket": 385,
-      "consumer_compatibility_ticket": 387,
-      "pending_review_sources": 5,
-      "reviewed_receipts_checked_in": 0,
-      "relief_eligible_sources": 0,
-      "global_manual_review_relief_allowed": false,
-      "manual_review_required": true,
-      "handoff_status": "review_required",
-      "default_ci_requires_credentials": false,
-      "checked_in_secrets_allowed": false
-    },
-    "credential_runtime_operator_packets": {
-      "path": "reports/credential-runtime-operator-packets.json",
-      "operator_packet_ticket": 405,
-      "operator_packets": 5,
-      "packets_ready_for_operator_credentials": 5,
-      "packets_waiting_for_review": 5,
-      "reviewed_receipts_checked_in": 0,
-      "reviewed_receipts_missing": 5,
-      "manual_review_required": true,
-      "manual_review_accepted": false,
-      "default_ci_requires_credentials": false,
-      "checked_in_secrets_allowed": false,
-      "packet_status": "operator_collection_required"
-    },
-    "credential_runtime_manual_review_decision": {
-      "path": "reports/credential-runtime-manual-review-decision.json",
-      "decision_ticket": 391,
-      "accepted": false,
-      "decision_status": "not_asserted",
-      "decision_reason": "manual_review_acceptance_not_asserted",
-      "manual_review_release_boundary_accepted": false,
-      "default_ci_requires_credentials": false,
-      "checked_in_secrets_allowed": false
-    },
-    "credential_runtime_manual_review_acceptance": {
-      "path": "reports/credential-runtime-manual-review-acceptance.json",
-      "acceptance_ticket": 389,
-      "accepted": false,
-      "acceptance_status": "not_accepted",
-      "acceptance_decision": "blocked_until_explicit_manual_review_acceptance",
-      "required_acceptance_evidence": 5,
-      "manual_review_release_boundary_accepted": false,
-      "goal_completion_effect": "goal_remains_open_until_reviewed_receipts_or_explicit_acceptance",
-      "default_ci_requires_credentials": false,
-      "checked_in_secrets_allowed": false
-    },
-    "credential_runtime_manual_review_acceptance_packet": {
-      "path": "reports/credential-runtime-manual-review-acceptance-packet.json",
-      "acceptance_packet_ticket": 407,
-      "accepted": false,
-      "decision_status": "not_asserted",
-      "acceptance_status": "not_accepted",
-      "manual_review_required": true,
-      "pending_review_sources": 5,
-      "reviewed_receipts_checked_in": 0,
-      "relief_eligible_sources": 0,
-      "manual_review_accepted": false,
-      "goal_closure_allowed": false,
-      "default_ci_requires_credentials": false,
-      "checked_in_secrets_allowed": false,
-      "packet_status": "acceptance_not_asserted"
     }
   },
   "criteria": [
@@ -364,7 +317,7 @@
         },
         {
           "path": "reports/release-consumer-compatibility.json",
-          "finding": "Binds source contracts, source runtime evidence, source runtime remediation, credential runtime evidence policy, credential receipt collection queue, credential review handoff, credential manual-review decision, credential manual-review acceptance, error/action routing, downstream impact, source reference drift, and source report inventory as manifest evidence contracts."
+          "finding": "Reports 7 consumers, 3 proven consumers, and 0 blocked consumers with canonical registry compatibility, optional shard assets, and runtime risk evidence that still requires manual review."
         },
         {
           "path": "reports/release-assembly-receipt.json",
@@ -392,7 +345,7 @@
         },
         {
           "path": "reports/source-runtime-remediation-map.json",
-          "finding": "Maps current source runtime blockers and warnings to remediation status, manual-review release boundaries, and reviewed receipt linkage; adapter and taxonomy follow-up-required findings are reduced to zero while all 13 receipt-linked findings remain absent and receipt-backed relief remains disallowed without reviewed validated receipts."
+          "finding": "Maps 9 runtime blockers and 13 receipt-linked findings; all linked receipts are relief-eligible, but runtime risk still requires manual-review adoption."
         },
         {
           "path": "reports/source-report-inventory.json",
@@ -408,15 +361,15 @@
         },
         {
           "path": "reports/credential-runtime-evidence-policy.json",
-          "finding": "Defines secret-free CI behavior, per-source credential environment names, bounded candidate batches, local staged receipt paths, checked-in reviewed receipt discovery, receipt contract availability, review state, and manual-review boundaries without claiming live credentialed receipts or allowing manual-review reduction."
+          "finding": "Derives 5 reviewed, validated, relief-eligible credential receipts from the checked-in intake path while keeping unresolved runtime risk explicit."
         },
         {
           "path": "reports/credential-runtime-receipt-collection-queue.json",
-          "finding": "Enumerates all five credential-gated sources, their staged and reviewed receipt paths, bounded operator commands, local runner commands, promotion commands, current absent receipt states, and next collection actions without requiring credentials in default CI."
+          "finding": "Records a complete_relief_eligible receipt queue with 0 absent and 0 rejected reviewed receipts."
         },
         {
           "path": "reports/credential-runtime-review-handoff.json",
-          "finding": "Converts the collection queue into reviewer-facing per-source evidence packets, required validation and promotion commands, review packet requirements, relief blockers, and a global review_required status without claiming live credentialed receipts."
+          "finding": "Records relief_ready review handoff status with 0 pending sources and 5 relief-eligible reviewed receipts."
         },
         {
           "path": "reports/credential-runtime-manual-review-decision.json",
@@ -436,7 +389,7 @@
         },
         {
           "path": "reports/source-runtime-remediation-map.json",
-          "finding": "Links credential-related manual-review findings to expected reviewed receipt artifacts and records absent, reviewed-rejected, reviewed-accepted, or relief-eligible source-level receipt state."
+          "finding": "Maps 9 runtime blockers and 13 receipt-linked findings; all linked receipts are relief-eligible, but runtime risk still requires manual-review adoption."
         },
         {
           "path": "scripts/promote-credential-runtime-receipt.py",
@@ -464,7 +417,7 @@
         },
         {
           "path": "reports/release-consumer-compatibility.json",
-          "finding": "Reports seven consumers, two proven consumers, one blocked consumer, canonical registry requirement, optional shard assets, runtime manual-review evidence, source runtime remediation counts, credential policy receipt and review state, credential queue absent/reviewed/relief counts, credential review handoff status, manual-review decision and acceptance status, and the blocked receipt-backed manual-review reduction gate."
+          "finding": "Reports 7 consumers, 3 proven consumers, and 0 blocked consumers with canonical registry compatibility, optional shard assets, and runtime risk evidence that still requires manual review."
         },
         {
           "path": "scripts/validate-impact-plans.py",
@@ -476,15 +429,15 @@
         },
         {
           "path": "reports/credential-runtime-evidence-policy.json",
-          "finding": "Keeps unresolved credential-gated source runtime checks secret-free by default, derives live and reviewed credentialed receipt counts from the checked-in intake path, currently reports zero receipts, and disallows manual-review reduction until receipts are present, validated, reviewed, and relief-eligible."
+          "finding": "Derives 5 reviewed, validated, relief-eligible credential receipts from the checked-in intake path while keeping unresolved runtime risk explicit."
         },
         {
           "path": "reports/credential-runtime-receipt-collection-queue.json",
-          "finding": "Turns the zero-receipt state into per-source operator queue entries referenced by consumer compatibility evidence and the reviewer handoff, so downstream compatibility relief remains blocked while the next reviewed receipt collection work is explicit."
+          "finding": "Records a complete_relief_eligible receipt queue with 0 absent and 0 rejected reviewed receipts."
         },
         {
           "path": "reports/credential-runtime-review-handoff.json",
-          "finding": "Keeps manual-review relief blocked behind an explicit reviewer handoff status, five pending review sources, zero reviewed receipts, zero relief-eligible sources, a secret-free validation contract, and consumer compatibility fields that mirror those blocker semantics."
+          "finding": "Records relief_ready review handoff status with 0 pending sources and 5 relief-eligible reviewed receipts."
         },
         {
           "path": "reports/credential-runtime-manual-review-decision.json",
@@ -508,7 +461,7 @@
         },
         {
           "path": "scripts/validate-release-ledger-goal-audit.py",
-          "finding": "Validates the audit structure, evidence paths, criteria coverage, and the rule that a non-complete goal must keep follow-up work."
+          "finding": "Validates audit structure, completion boundaries, and freshness against current release evidence."
         },
         {
           "path": "reports/release-assembly-receipt.json",
@@ -519,38 +472,29 @@
           "finding": "Fails closed before gira goal finish when release-goal-finish-preflight records finish_allowed=false."
         }
       ],
-      "next_action": "Use this audit to keep #344 open until reviewed credentialed runtime receipts exist or the manual-review release boundary is explicitly accepted."
+      "next_action": "Keep this audit generated from current release evidence; leave #344 open until source-runtime risk is resolved or an accountable manual-review decision is accepted."
     }
   ],
   "remaining_goal_risks": [
     {
       "id": "source_runtime_manual_review_required",
       "evidence": "reports/source-runtime-remediation-map.json",
-      "finding": "The current remediation map still routes unresolved credential, metadata-only verification, and non-data runtime evidence findings to manual-review boundaries."
+      "finding": "The remediation map records 9 runtime blockers and keeps consumer adoption manual-review-required until they are resolved."
     },
     {
-      "id": "credentialed_runtime_receipts_absent",
-      "evidence": "reports/credential-runtime-receipt-collection-queue.json",
-      "finding": "Credential-gated runtime checks now have a secret-safe policy path, redacted receipt contract, reviewed checked-in intake path, discovery-derived counts, per-source collection queue, deterministic promotion command, reviewer handoff, manual-review decision intake, manual-review acceptance boundary, remediation finding linkage, and consumer compatibility linkage, but live credentialed receipts are still absent and not allowed to reduce manual-review boundaries."
+      "id": "runtime_evidence_coverage_gap",
+      "evidence": "reports/source-runtime-evidence-rollup.json",
+      "finding": "4 source(s) still lack runtime evidence; metadata-only and non-data runtime boundaries remain explicit release risk."
     },
     {
       "id": "manual_review_acceptance_not_asserted",
-      "evidence": "reports/credential-runtime-manual-review-decision.json",
-      "finding": "The manual-review decision intake and acceptance boundary are schema-backed, manifest-bound, and reflected in consumer compatibility, but they currently record accepted=false and cannot be used to claim #344 completion."
-    },
-    {
-      "id": "receipt_backed_compatibility_relief_blocked",
-      "evidence": "reports/release-consumer-compatibility.json",
-      "finding": "Consumer compatibility now distinguishes receipt contract availability, reviewed intake availability, receipt validation, receipt review, queue collection state, review handoff state, manual-review decision and acceptance state, and relief eligibility from receipt-backed relief; manual_review_reduction_allowed remains false until reviewed validated credential runtime receipts exist."
-    },
-    {
-      "id": "consumer_compatibility_manual_review_required",
-      "evidence": "reports/release-consumer-compatibility.json",
-      "finding": "Consumer compatibility remains manual_review_required_until_runtime_blockers_resolved."
+      "evidence": "reports/release-consumer-decision.json",
+      "finding": "The release decision remains manual_review_required and manual-review acceptance is not asserted, so goal completion is not allowed."
     }
   ],
   "local_validation_commands": [
     "python3 scripts/validate-release-ledger-goal-audit.py",
+    "python3 scripts/generate-release-ledger-goal-completion-audit.py --check",
     "python3 scripts/generate-release-assembly-receipt.py --check",
     "python3 scripts/sync-release-schema-artifacts.py --check",
     "python3 scripts/sync-release-manifest-artifacts.py --check",
@@ -586,124 +530,9 @@
   ],
   "follow_up_children": [
     {
-      "issue": 360,
-      "title": "Map source runtime blockers to remediation work",
-      "reason": "The release assembly path is receipt-bound, and current source runtime blockers now need an explicit remediation map before #344 can be considered complete."
-    },
-    {
-      "issue": 362,
-      "title": "Reduce source runtime adapter and taxonomy blockers",
-      "reason": "Adapter registration and source-specific error taxonomy blockers are being reduced; credential-safe live runtime evidence remains outside the current completion proof."
-    },
-    {
-      "issue": 364,
-      "title": "Define credential-safe runtime evidence path",
-      "reason": "The remaining runtime blockers are credential and metadata-only evidence boundaries that need a secret-safe live evidence path before #344 can be considered complete."
-    },
-    {
-      "issue": 366,
-      "title": "Define redacted credential runtime receipt contract",
-      "reason": "Credential-safe runtime paths now exist, but live evidence needs a redacted receipt schema and validator before checked-in receipts can safely reduce manual-review boundaries."
-    },
-    {
-      "issue": 369,
-      "title": "Gate compatibility relief on credential runtime receipts",
-      "reason": "The receipt contract exists, but compatibility relief must remain blocked unless validated redacted credential runtime receipts are present and linked through remediation evidence."
-    },
-    {
-      "issue": 371,
-      "title": "Define reviewed credential runtime receipt intake path",
-      "reason": "The compatibility relief gate now needs a reviewed checked-in receipt intake path so future live evidence can be validated, reviewed, and linked without weakening canonical registry compatibility."
-    },
-    {
-      "issue": 373,
-      "title": "Count reviewed credential runtime receipts in policy gates",
-      "reason": "Reviewed receipt intake is now discovery-derived so future checked-in receipts affect policy, remediation, and compatibility gates only after validation and review eligibility checks."
-    },
-    {
-      "issue": 375,
-      "title": "Publish reviewed credential receipt collection queue",
-      "reason": "The zero-receipt state is now converted into deterministic per-source collection actions, but the goal remains open until reviewed live credentialed receipts exist or the manual-review boundary is explicitly accepted."
-    },
-    {
-      "issue": 377,
-      "title": "Bind credential receipt queue to consumer compatibility",
-      "reason": "Downstream compatibility now references the receipt collection queue directly, while the goal remains open because the queue still reports absent reviewed receipts and blocked manual-review reduction."
-    },
-    {
-      "issue": 379,
-      "title": "Automate reviewed credential receipt promotion",
-      "reason": "Operators now have a deterministic promotion command for staged receipts, but the goal remains open until actual reviewed live receipts exist or the manual-review boundary is explicitly accepted."
-    },
-    {
-      "issue": 381,
-      "title": "Bind reviewed receipts to remediation findings",
-      "reason": "Remediation findings now point to expected reviewed receipt artifacts and source-level receipt state, but the goal remains open because those linked receipts are still absent."
-    },
-    {
-      "issue": 383,
-      "title": "Add credential runtime collection runner",
-      "reason": "Operators now have a secret-free preflight and opt-in runner for bounded credential runtime checks, but the goal remains open because reviewed live receipts are still absent."
-    },
-    {
-      "issue": 385,
-      "title": "Codify credential receipt review handoff",
-      "reason": "Reviewers now have a checked-in handoff for per-source credential receipt evidence packets and relief blockers, but the goal remains open because reviewed live receipts are still absent."
-    },
-    {
-      "issue": 387,
-      "title": "Bind credential review handoff to consumer compatibility",
-      "reason": "Downstream compatibility now mirrors credential review handoff status, pending sources, reviewed receipt counts, relief eligibility, and relief decisions, but the goal remains open because reviewed live receipts are still absent."
-    },
-    {
-      "issue": 389,
-      "title": "Bind manual-review acceptance boundary to release evidence",
-      "reason": "Manual-review release acceptance is now schema-backed, manifest-bound, checked in release assembly, and mirrored in consumer compatibility, but the goal remains open because the boundary is explicitly not accepted and reviewed live receipts are still absent."
-    },
-    {
-      "issue": 391,
-      "title": "Define manual-review acceptance decision intake",
-      "reason": "Manual-review acceptance now has a checked-in decision record and validator for future explicit acceptance, but the goal remains open because the decision is not_asserted and reviewed live receipts are still absent."
-    },
-    {
-      "issue": 393,
-      "title": "Publish release distribution footprint evidence",
-      "reason": "Release distribution footprint evidence now records canonical registry bytes, manifest-bound footprint, largest artifacts, and the shard optional/canonical fallback boundary, but the goal remains open because reviewed live receipts or explicit manual-review release acceptance are still absent."
-    },
-    {
-      "issue": 395,
-      "title": "Publish release consumer decision evidence",
-      "reason": "Release consumer decision evidence now records manual_review_required, canonical registry compatibility, optional shard status, and goal_completion_allowed=false, but the goal remains open because reviewed live receipts or explicit manual-review release acceptance are still absent."
-    },
-    {
-      "issue": 397,
-      "title": "Publish goal finish preflight evidence",
-      "reason": "Goal finish preflight evidence now records finish_allowed=false from the goal audit and release consumer decision report, but the goal remains open because reviewed live receipts or explicit manual-review release acceptance are still absent."
-    },
-    {
-      "issue": 399,
-      "title": "Publish credential collection preflight evidence",
-      "reason": "Credential collection preflight evidence now records candidate batches present, operator environment required, reviewed receipts missing, and default CI not runnable for credentialed collection, but the goal remains open because reviewed live receipts or explicit manual-review release acceptance are still absent."
-    },
-    {
-      "issue": 401,
-      "title": "Guard goal finish on release preflight evidence",
-      "reason": "Goal finish guard evidence blocks accidental gira goal finish when checked-in release goal preflight records finish_allowed=false, but the goal remains open because reviewed live receipts or explicit manual-review release acceptance are still absent."
-    },
-    {
-      "issue": 403,
-      "title": "Publish goal continuation queue evidence",
-      "reason": "Goal continuation queue evidence maps finish_allowed=false and manual_review_required evidence to next safe child candidates, but the goal remains open because reviewed live receipts or explicit manual-review release acceptance are still absent."
-    },
-    {
-      "issue": 405,
-      "title": "Publish credential receipt operator packets",
-      "reason": "Credential receipt operator packets now provide source-by-source secret-free preflight, credential env names, bounded run commands, staged validation, reviewed promotion, and post-promotion downstream checks, but the goal remains open because reviewed live receipts or explicit manual-review release acceptance are still absent."
-    },
-    {
-      "issue": 407,
-      "title": "Publish manual-review acceptance operator packet",
-      "reason": "Manual-review acceptance packet evidence now records the current handoff and consumer compatibility digests, required reviewer inputs, revalidation triggers, validation commands, and post-decision regeneration path, but the goal remains open because accepted manual-review release evidence is still not asserted and reviewed live receipts are still absent."
+      "issue": 530,
+      "title": "Make goal completion evidence freshness-checked",
+      "reason": "Keep the goal audit mechanically current before using it to select the next source-runtime or consumer-compatibility boundary."
     }
   ]
 }
