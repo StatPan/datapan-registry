@@ -93,6 +93,31 @@ def env_names(entry: dict[str, Any]) -> list[str]:
     return names
 
 
+def validate_datapan_verify_command(
+    command: list[str], *, source_id: str, candidate_batch: pathlib.Path, credential_envs: list[str],
+    verification_artifact: pathlib.Path,
+) -> None:
+    """Reject queue/CLI drift before a credentialed subprocess can run."""
+    if command[:2] != ["datapan", "verify"]:
+        raise ValueError(f"{source_id} collection command must start with 'datapan verify'")
+
+    expected_values = {
+        "--source-profile": f"sources/{source_id}.json",
+        "--candidates": candidate_batch.as_posix(),
+        "--credential-env": credential_envs[0],
+        "--limit": "1",
+        "--output": verification_artifact.as_posix(),
+    }
+    for option, expected in expected_values.items():
+        positions = [index for index, value in enumerate(command) if value == option]
+        if len(positions) != 1 or positions[0] + 1 >= len(command):
+            raise ValueError(f"{source_id} collection command must provide {option}")
+        if command[positions[0] + 1] != expected:
+            raise ValueError(f"{source_id} collection command {option} does not match registry contract")
+    if command.count("--json") != 1:
+        raise ValueError(f"{source_id} collection command must provide --json exactly once")
+
+
 def source_plan(entry: dict[str, Any]) -> dict[str, Any]:
     source_id = string_value(entry.get("source_id"), "source.source_id")
     candidate_batch = pathlib.Path(string_value(entry.get("candidate_batch"), f"{source_id}.candidate_batch"))
@@ -101,8 +126,16 @@ def source_plan(entry: dict[str, Any]) -> dict[str, Any]:
     envs = env_names(entry)
     missing_envs = [name for name in envs if not os.environ.get(name)]
     command = command_args(entry)
-    if not command or command[0] != "datapan":
-        raise ValueError(f"{source_id} collection command must start with datapan")
+    verification_artifact = pathlib.Path(string_value(
+        entry.get("generic_verification_artifact"), f"{source_id}.generic_verification_artifact"
+    ))
+    validate_datapan_verify_command(
+        command,
+        source_id=source_id,
+        candidate_batch=candidate_batch,
+        credential_envs=envs,
+        verification_artifact=verification_artifact,
+    )
     candidate_exists = candidate_batch.is_file()
     reviewed_exists = reviewed_path.is_file()
     return {
@@ -295,17 +328,21 @@ def run_sources(
 
 
 def sample_queue(root: pathlib.Path) -> dict[str, Any]:
-    candidate = root / "candidate.json"
-    candidate.write_text("{}", encoding="utf-8")
     missing_candidate = root / "missing-candidate.json"
 
-    def source(source_id: str, command_arg: str, env_name: str, candidate_path: pathlib.Path) -> dict[str, str]:
+    def source(source_id: str, env_name: str, candidate_path: pathlib.Path) -> dict[str, str]:
         staged = root / f"{source_id}-staged.json"
         reviewed = root / f"{source_id}-reviewed.json"
+        verification = root / f"{source_id}-verification.json"
         return {
             "source_id": source_id,
-            "operator_command": f"datapan {command_arg} {env_name}=<secret>",
+            "operator_command": (
+                f"{env_name}=<secret> datapan verify --source-profile sources/{source_id}.json "
+                f"--candidates {candidate_path.as_posix()} --credential-env {env_name} --limit 1 --json "
+                f"--output {verification.as_posix()}"
+            ),
             "candidate_batch": candidate_path.as_posix(),
+            "generic_verification_artifact": verification.as_posix(),
             "staged_receipt_path": staged.as_posix(),
             "reviewed_receipt_path": reviewed.as_posix(),
             "staged_receipt_validation_command": "python3 -c 'pass'",
@@ -314,10 +351,10 @@ def sample_queue(root: pathlib.Path) -> dict[str, Any]:
 
     return {
         "sources": [
-            source("ready", "ok", "READY_TOKEN", candidate),
-            source("missing_env", "ok", "MISSING_TOKEN", candidate),
-            source("missing_candidate", "ok", "READY_TOKEN", missing_candidate),
-            source("failing", "fail", "READY_TOKEN", candidate),
+            source("open_assembly", "READY_TOKEN", pathlib.Path("reports/open-assembly/runtime-candidates.json")),
+            source("ecos", "MISSING_TOKEN", pathlib.Path("reports/ecos/runtime-candidates.json")),
+            source("seoul_open_data", "READY_TOKEN", missing_candidate),
+            source("kosis", "READY_TOKEN", pathlib.Path("reports/kosis/runtime-candidates.json")),
         ]
     }
 
@@ -340,9 +377,24 @@ def run_self_test(queue: dict[str, Any]) -> None:
         bin_dir.mkdir()
         fake_datapan = bin_dir / "datapan"
         fake_datapan.write_text(
-            "#!/bin/sh\n"
-            "if [ \"$1\" = \"fail\" ]; then exit 7; fi\n"
-            "exit 0\n",
+            "#!/usr/bin/env python3\n"
+            "import json, pathlib, sys\n"
+            "args = sys.argv[1:]\n"
+            "profile = args[args.index('--source-profile') + 1]\n"
+            "if profile == 'sources/kosis.json': sys.exit(7)\n"
+            "output = pathlib.Path(args[args.index('--output') + 1])\n"
+            "source_id = pathlib.Path(profile).stem\n"
+            "output.write_text(json.dumps({\n"
+            "  'schema_version': 'datapan.source-candidate-verification.v1',\n"
+            "  'generated_at': '2026-01-01T00:00:00Z',\n"
+            "  'source_id': source_id, 'provider': 'self-test', 'source_profile': profile,\n"
+            "  'candidate_batch': args[args.index('--candidates') + 1], 'bounded': True,\n"
+            "  'credential_configured': True,\n"
+            "  'credential_env_names': [args[args.index('--credential-env') + 1]],\n"
+            "  'summary': {'candidates': 1, 'verified': 1, 'failed': 0, 'skipped': 0},\n"
+            "  'results': [{'candidate_id': 'self-test', 'outcome': 'verified', 'error_class': 'none', 'http_status': 200, 'duration_ms': 1}],\n"
+            "  'redaction': {'secret_values_present': False, 'secret_hashes_present': False, 'request_urls_present': False, 'response_bodies_present': False}\n"
+            "}), encoding='utf-8')\n",
             encoding="utf-8",
         )
         fake_datapan.chmod(0o755)
@@ -354,6 +406,21 @@ def run_self_test(queue: dict[str, Any]) -> None:
             os.environ["READY_TOKEN"] = "self-test-secret"
             os.environ.pop("MISSING_TOKEN", None)
             synthetic_queue = sample_queue(root)
+            contract_failures = {
+                "missing_json": (" --json", "", "--json"),
+                "wrong_candidates": ("reports/open-assembly/runtime-candidates.json", "wrong.json", "--candidates"),
+                "wrong_credential_env": ("--credential-env READY_TOKEN", "--credential-env WRONG_TOKEN", "--credential-env"),
+            }
+            for label, (old, new, expected) in contract_failures.items():
+                invalid = dict(synthetic_queue["sources"][0])
+                invalid["operator_command"] = invalid["operator_command"].replace(old, new, 1)
+                try:
+                    source_plan(invalid)
+                except ValueError as exc:
+                    if expected not in str(exc):
+                        raise
+                else:
+                    raise ValueError(f"self-test failed: accepted {label} CLI contract drift")
             session = run_sources(
                 queue_sources(synthetic_queue),
                 queue_path=pathlib.Path("synthetic-queue.json"),
