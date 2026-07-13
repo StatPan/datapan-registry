@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 83,
+  "count": 84,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 3946,
-      "sha256": "060bfbc538549486b2af7da55c679f84c92ead4f84a844692e7f0869fa3ad81d"
+      "bytes": 3982,
+      "sha256": "106aa527de927e68591bf6541a2159c957cf40b9dffde5c78d9ae17fd6fb52f9"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -750,6 +750,15 @@
       "version": "v1",
       "bytes": 2680,
       "sha256": "2b22fc812e7f21ba5b3656c0aa64eb63351d67b7c48a3699c57eb781f05ba84f"
+    },
+    {
+      "path": "schemas/datapan.health-probe-catalog.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.health-probe-catalog.v1.schema.json",
+      "title": "Datapan Health Probe Catalog v1",
+      "contract": "health-probe-catalog",
+      "version": "v1",
+      "bytes": 7262,
+      "sha256": "683fad9adc80d7b126265d67688964fdb9cedecaffd7f54f381045f0653aeefb"
     }
   ]
 }
