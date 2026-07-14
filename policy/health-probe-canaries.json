@@ -1,0 +1,18 @@
+{
+  "schema_version": "datapan.health-probe-canary-selection.v1",
+  "generated_at": "2026-07-14T10:05:00Z",
+  "selection_rationale": "One bounded credential-required probe per reviewed Registry selector; five data.go.kr gateway routes and five registered external-adapter routes provide a small public-health representative set without asserting entitlement or data freshness.",
+  "not_asserted_reason": "upstream_timestamp_contract_not_reviewed",
+  "canaries": [
+    {"operation_id": "dpr-op-00000001", "dataset_id": "15000480", "operation_name": "명절 비상진료기관 FullData 내려받기목록정보 조회", "safe_parameters": [{"name": "pageNo", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}, {"name": "numOfRows", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}]},
+    {"operation_id": "dpr-op-00000002", "dataset_id": "15000897", "operation_name": "선거코드", "safe_parameters": [{"name": "pageNo", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}, {"name": "numOfRows", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}]},
+    {"operation_id": "dpr-op-00000003", "dataset_id": "15001697", "operation_name": "의료기관종별코드조회", "safe_parameters": [{"name": "pageNo", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}, {"name": "numOfRows", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}]},
+    {"operation_id": "dpr-op-00000004", "dataset_id": "15001839", "operation_name": "민간 자원별 제공서비스 정보 조회", "safe_parameters": [{"name": "numOfRows", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}, {"name": "pageNo", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}]},
+    {"operation_id": "dpr-op-00000005", "dataset_id": "15000863", "operation_name": "문화시설 식당 상세 정보를 조회", "safe_parameters": [{"name": "pageNo", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}, {"name": "numOfRows", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}]},
+    {"operation_id": "dpr-op-00000006", "dataset_id": "15025329", "operation_name": "연도별 등급별 실기 합격률 조회", "safe_parameters": [{"name": "baseYY", "strategy": "relative_year", "offset_years": -3, "minimum_year": 2020, "maximum_year": 2100}]},
+    {"operation_id": "dpr-op-00000007", "dataset_id": "15004206", "operation_name": "주변지역 기상정보 실시간 데이터 조회", "safe_parameters": [{"name": "pageNo", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}, {"name": "numOfRows", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}]},
+    {"operation_id": "dpr-op-00000008", "dataset_id": "15052669", "operation_name": "교통카드충전소정보 조회", "safe_parameters": [{"name": "pageNo", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}, {"name": "numOfRows", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}]},
+    {"operation_id": "dpr-op-00000009", "dataset_id": "15109030", "operation_name": "버스 차고지 현황 정보", "safe_parameters": [{"name": "pageNo", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}, {"name": "numOfRows", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}]},
+    {"operation_id": "dpr-op-00000010", "dataset_id": "15029006", "operation_name": "대학별 학과정보 조회", "safe_parameters": [{"name": "pageNo", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}, {"name": "numOfRows", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}]}
+  ]
+}

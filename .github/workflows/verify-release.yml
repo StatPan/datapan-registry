@@ -59,6 +59,7 @@ jobs:
           python -m pip install jsonschema
           python scripts/sync-release-schema-artifacts.py --check
           python scripts/sync-release-manifest-artifacts.py --check
+          python scripts/generate-health-probe-catalog.py --check
           python scripts/validate-health-probe-catalog.py
           python -m unittest tests/test_validate_health_probe_catalog.py
           python scripts/validate-release-ledger-ownership.py

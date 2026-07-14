@@ -114,7 +114,7 @@
       ],
       "owner": "source evidence maintainers",
       "generated_by": [
-        "manually curated reports/health-probe-catalog.json plus python scripts/validate-health-probe-catalog.py",
+        "policy/health-probe-canaries.json plus python scripts/generate-health-probe-catalog.py",
         "python scripts/generate-source-contract-rollup.py",
         "python scripts/generate-source-report-inventory.py",
         "python scripts/generate-credential-runtime-evidence-policy.py",
@@ -135,6 +135,7 @@
         "manual policy updates validated by python scripts/validate-source-refresh-policy.py"
       ],
       "checked_by": [
+        "python scripts/generate-health-probe-catalog.py --check",
         "python scripts/validate-health-probe-catalog.py",
         "python scripts/generate-source-contract-rollup.py --check",
         "python scripts/validate-source-contract-rollups.py",

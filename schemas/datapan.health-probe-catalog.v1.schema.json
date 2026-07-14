@@ -168,8 +168,16 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "required": ["mode"],
-          "properties": {"mode": {"const": "not_asserted"}}
+          "required": ["mode", "not_asserted_reason"],
+          "properties": {
+            "mode": {"const": "not_asserted"},
+            "not_asserted_reason": {
+              "enum": [
+                "upstream_timestamp_contract_not_reviewed",
+                "upstream_response_has_no_stable_timestamp"
+              ]
+            }
+          }
         },
         {
           "type": "object",
