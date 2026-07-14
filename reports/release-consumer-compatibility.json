@@ -104,7 +104,7 @@
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
       "bytes": 8075,
-      "sha256": "823ba31aeb34f1616284f81dba1469d20c6619b4dc2ed1cda2d20afcbe21f66b",
+      "sha256": "81871749e9d1160054fc73d4673ad6bcaba46f7889e9eef14e7825b4367e8f98",
       "required": true
     },
     {
@@ -166,8 +166,8 @@
       "path": "reports/credential-runtime-manual-review-decision.json",
       "kind": "credential_runtime_manual_review_decision",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-decision.v1.schema.json",
-      "bytes": 1703,
-      "sha256": "3db3bcf21989c1afc9b9911ed3f73fd8f39624e295770a6792c53b0225849379",
+      "bytes": 1769,
+      "sha256": "aaab16daddcdfd137999faf314a76d436b817b2781cef4faa88024ebad406011",
       "required": true
     },
     {
@@ -175,8 +175,8 @@
       "path": "reports/credential-runtime-manual-review-acceptance.json",
       "kind": "credential_runtime_manual_review_acceptance",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-acceptance.v1.schema.json",
-      "bytes": 4517,
-      "sha256": "c2b93141f7413cdaa9cc7f5b27538e96a8642a8c61ad708160c5b7afe35bde13",
+      "bytes": 4583,
+      "sha256": "ca6d139904b85755315d17790b6c5d43676918295b903fce777f4d351572a41f",
       "required": true
     },
     {
@@ -194,7 +194,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "1b2e369b4f44ae1b7c552ac44538dba26c7ea4c3df82e3975400805fce3f11d8",
+      "sha256": "a6f109500629224b33f4852bf7e69cf9bc11e3b379b8d81e2c09e81b2d5daccb",
       "required": true
     },
     {
@@ -212,7 +212,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 61997,
-      "sha256": "5104839d2d98abac254d96bd27ff929f83a502ee8bc9a2d21e6081d351f21211",
+      "sha256": "a5020896a05982f063b51873fa7b984a8a66365255d2c5786823454f05915a9d",
       "required": true
     },
     {
@@ -221,7 +221,7 @@
       "kind": "release_distribution_footprint",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
       "bytes": 2141,
-      "sha256": "f6230fa379e57418d805c164e4fe2336642be145964b7a289a59ed748e99c93e",
+      "sha256": "8423fa34256fb3a8dc3697e1b5c2166ccc20048273eb761ff7846c9e1ea9ed9a",
       "required": true
     },
     {
@@ -366,7 +366,7 @@
     "credential_handoff_relief_decision": "allowed_by_all_reviewed_validated_receipts",
     "manual_review_decision_status": "accepted",
     "manual_review_decision_accepted": true,
-    "manual_review_decision_reason": "The accountable release owner accepts the current manual-review release boundary; affected consumers remain manual-review only where runtime blockers or warnings require operator adoption.",
+    "manual_review_decision_reason": "The accountable release owner re-accepts the current manual-review release boundary after a manifest-bound health-probe catalog expansion. Credential and runtime policy are unchanged; the compatibility revalidation is limited to release footprint growth.",
     "manual_review_decision_boundary_accepted": true,
     "manual_review_acceptance_status": "accepted",
     "manual_review_acceptance_accepted": true,
@@ -476,7 +476,7 @@
     ],
     "release_distribution_footprint": "reports/release-distribution-footprint.json",
     "canonical_registry_bytes": 137735169,
-    "manifest_bound_bytes_excluding_self": 173753039,
+    "manifest_bound_bytes_excluding_self": 173766470,
     "large_monolith_threshold_bytes": 100000000,
     "registry_footprint_status": "large_monolith_shard_additive",
     "canonical_registry_required": true,
