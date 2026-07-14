@@ -5,21 +5,160 @@
   "cases": [
     {
       "operation_id": "dpr-op-00000001",
-      "selector": {"ref": "15000480", "operation": "명절 비상진료기관 FullData 내려받기목록정보 조회"},
+      "selector": {
+        "ref": "15000480",
+        "operation": "명절 비상진료기관 FullData 내려받기목록정보 조회"
+      },
       "expected": {
         "operation_key": "472283c645233f09e0285a651fecc659dcbc70d09095e7c20fe590389df5af4d",
         "dependency_class": "data_go_kr_gateway",
-        "safe_parameter_names": ["numOfRows", "pageNo"],
+        "safe_parameter_names": [
+          "numOfRows",
+          "pageNo"
+        ],
         "request_budget": 1
       }
     },
     {
       "operation_id": "dpr-op-00000002",
-      "selector": {"ref": "15025329", "operation": "연도별 등급별 실기 합격률 조회"},
+      "selector": {
+        "ref": "15000897",
+        "operation": "선거코드"
+      },
+      "expected": {
+        "operation_key": "2be6b4603c85e8717ae6ece5a27520cec75ca8ff6ea955df3d2f339011746ffd",
+        "dependency_class": "data_go_kr_gateway",
+        "safe_parameter_names": [
+          "numOfRows",
+          "pageNo"
+        ],
+        "request_budget": 1
+      }
+    },
+    {
+      "operation_id": "dpr-op-00000003",
+      "selector": {
+        "ref": "15001697",
+        "operation": "의료기관종별코드조회"
+      },
+      "expected": {
+        "operation_key": "1a48855aef8468b90bb04c5f1acdd247c8b13f64e6e7a4a72c1e4f818d0acc8b",
+        "dependency_class": "data_go_kr_gateway",
+        "safe_parameter_names": [
+          "numOfRows",
+          "pageNo"
+        ],
+        "request_budget": 1
+      }
+    },
+    {
+      "operation_id": "dpr-op-00000004",
+      "selector": {
+        "ref": "15001839",
+        "operation": "민간 자원별 제공서비스 정보 조회"
+      },
+      "expected": {
+        "operation_key": "7bf9c6e3212e1efe3de0d042860ea33c3b756348d93a2f9e632a9c3fd75ad754",
+        "dependency_class": "data_go_kr_gateway",
+        "safe_parameter_names": [
+          "numOfRows",
+          "pageNo"
+        ],
+        "request_budget": 1
+      }
+    },
+    {
+      "operation_id": "dpr-op-00000005",
+      "selector": {
+        "ref": "15000863",
+        "operation": "문화시설 식당 상세 정보를 조회"
+      },
+      "expected": {
+        "operation_key": "84f641723b50bc2b1b23a4418e18236d842c7fe604fe998ee072d80e25ab1a99",
+        "dependency_class": "data_go_kr_gateway",
+        "safe_parameter_names": [
+          "numOfRows",
+          "pageNo"
+        ],
+        "request_budget": 1
+      }
+    },
+    {
+      "operation_id": "dpr-op-00000006",
+      "selector": {
+        "ref": "15025329",
+        "operation": "연도별 등급별 실기 합격률 조회"
+      },
       "expected": {
         "operation_key": "1f7d7e7d276754b82b45c58ccb5e2277380ffe6954030cbbe4443e5f511615a9",
         "dependency_class": "external_endpoint",
-        "safe_parameter_names": ["baseYY"],
+        "safe_parameter_names": [
+          "baseYY"
+        ],
+        "request_budget": 1
+      }
+    },
+    {
+      "operation_id": "dpr-op-00000007",
+      "selector": {
+        "ref": "15004206",
+        "operation": "주변지역 기상정보 실시간 데이터 조회"
+      },
+      "expected": {
+        "operation_key": "c42a347c1c1970a581081f7969cd7c9afec452b9f68390b945a58acdecf93431",
+        "dependency_class": "external_endpoint",
+        "safe_parameter_names": [
+          "numOfRows",
+          "pageNo"
+        ],
+        "request_budget": 1
+      }
+    },
+    {
+      "operation_id": "dpr-op-00000008",
+      "selector": {
+        "ref": "15052669",
+        "operation": "교통카드충전소정보 조회"
+      },
+      "expected": {
+        "operation_key": "624a1ff97bdca905c13d062d684a69e350da7c474d4eb2ffbd013160762527f1",
+        "dependency_class": "external_endpoint",
+        "safe_parameter_names": [
+          "numOfRows",
+          "pageNo"
+        ],
+        "request_budget": 1
+      }
+    },
+    {
+      "operation_id": "dpr-op-00000009",
+      "selector": {
+        "ref": "15109030",
+        "operation": "버스 차고지 현황 정보"
+      },
+      "expected": {
+        "operation_key": "ea622246361f2f3efb93274772e327c1026ae0dc6c2cda6cd7af4426c771a5d7",
+        "dependency_class": "external_endpoint",
+        "safe_parameter_names": [
+          "numOfRows",
+          "pageNo"
+        ],
+        "request_budget": 1
+      }
+    },
+    {
+      "operation_id": "dpr-op-00000010",
+      "selector": {
+        "ref": "15029006",
+        "operation": "대학별 학과정보 조회"
+      },
+      "expected": {
+        "operation_key": "12fadcfb158d844fa5c0c09bb4384c1b90c2347896175c515548eb06acdcedda",
+        "dependency_class": "external_endpoint",
+        "safe_parameter_names": [
+          "numOfRows",
+          "pageNo"
+        ],
         "request_budget": 1
       }
     }

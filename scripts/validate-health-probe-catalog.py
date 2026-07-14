@@ -21,7 +21,19 @@ REGISTRY = pathlib.Path("data/data-go-kr.registry.json")
 MANIFEST = pathlib.Path("manifest.json")
 FIXTURE = pathlib.Path("fixtures/health-probe-catalog/cli-health-probe-v1.json")
 AUTH_NAMES = {"servicekey", "service_key", "apikey", "api_key", "authorization"}
-FORBIDDEN_KEYS = {"credential_value", "query_value", "response_rows", "live_status", "receipt"}
+FORBIDDEN_KEYS = {
+    "credential",
+    "credentials",
+    "credential_value",
+    "query_value",
+    "query_values",
+    "response_row",
+    "response_rows",
+    "live_status",
+    "live_health_status",
+    "receipt",
+    "mutable_receipt",
+}
 
 
 def load(path: pathlib.Path) -> Any:
@@ -146,7 +158,12 @@ def main() -> int:
     except Exception as exc:  # noqa: BLE001 - emit one release-gate failure
         print(f"FAIL health probe catalog: {exc}", file=sys.stderr)
         return 1
-    print("ok health probe catalog (entries=2, gateway=1, external_adapter=1)")
+    summary = load(CATALOG)["summary"]
+    print(
+        "ok health probe catalog "
+        f"(entries={summary['entries']}, gateway={summary['gateway_canaries']}, "
+        f"external_adapter={summary['external_adapter_canaries']})"
+    )
     return 0
 
 

@@ -1,6 +1,8 @@
 import copy
 import importlib.util
 import pathlib
+import subprocess
+import sys
 import unittest
 
 
@@ -26,6 +28,15 @@ class HealthProbeCatalogTest(unittest.TestCase):
     def test_checked_in_catalog(self):
         self.validate()
 
+    def test_generated_catalog_and_fixture_are_in_sync(self):
+        result = subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / "generate-health-probe-catalog.py"), "--check"],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+
     def test_duplicate_operation_identity_rejected(self):
         value = copy.deepcopy(self.catalog)
         value["entries"][1]["operation_id"] = value["entries"][0]["operation_id"]
@@ -50,6 +61,12 @@ class HealthProbeCatalogTest(unittest.TestCase):
         with self.assertRaises(Exception):
             self.validate(value)
 
+    def test_not_asserted_freshness_requires_documented_reason(self):
+        value = copy.deepcopy(self.catalog)
+        value["entries"][0]["response_freshness"] = {"mode": "not_asserted"}
+        with self.assertRaises(Exception):
+            self.validate(value)
+
     def test_unsafe_status_cannot_retain_execution_policy(self):
         value = copy.deepcopy(self.catalog)
         value["entries"][0]["eligibility"] = {"status": "unsupported", "reason_code": "unsafe_parameters"}
@@ -61,6 +78,12 @@ class HealthProbeCatalogTest(unittest.TestCase):
         value["entries"][0]["receipt"] = {}
         with self.assertRaises(Exception):
             self.validate(value)
+
+    def test_mutable_execution_data_keys_are_rejected(self):
+        for key in ("credentials", "query_value", "response_rows", "receipt", "live_status"):
+            with self.subTest(key=key):
+                with self.assertRaisesRegex(ValueError, "forbidden mutable field"):
+                    MODULE.reject_mutable_keys({key: "not-release-data"})
 
 
 if __name__ == "__main__":

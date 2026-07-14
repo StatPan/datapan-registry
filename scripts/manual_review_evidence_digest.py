@@ -19,5 +19,12 @@ def compatibility_binding_sha256(record: dict[str, Any]) -> str:
             raise ValueError("compatibility manifest evidence contract must be an object")
         contract.pop("bytes", None)
         contract.pop("sha256", None)
+    shard_release_evidence = normalized.get("shard_release_evidence")
+    if isinstance(shard_release_evidence, dict):
+        # This aggregate is a release-artifact footprint, not a consumer-policy
+        # decision. Including it makes a reviewed decision self-referential:
+        # changing the decision changes the manifest footprint and therefore its
+        # own required compatibility binding.
+        shard_release_evidence.pop("manifest_bound_bytes_excluding_self", None)
     encoded = json.dumps(normalized, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()
