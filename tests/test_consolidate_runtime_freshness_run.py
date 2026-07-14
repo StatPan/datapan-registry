@@ -3,6 +3,8 @@ from __future__ import annotations
 import importlib.util
 import json
 import pathlib
+import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -53,6 +55,60 @@ class ConsolidateRuntimeFreshnessRunTest(unittest.TestCase):
         sanitized = MODULE.sanitize(value)
         MODULE.scan_boundary(sanitized)
         self.assertEqual(sanitized, {"results": [{"params": {"safe": "yes"}}]})
+
+    def test_sanitize_redacts_credential_assignment_in_reason(self) -> None:
+        value = {"results": [{"reason": "upstream rejected serviceKey=actual-value; retry later"}]}
+        sanitized = MODULE.sanitize(value)
+        MODULE.scan_boundary(sanitized)
+        self.assertEqual(
+            sanitized,
+            {"results": [{"reason": "upstream rejected [redacted credential assignment]; retry later"}]},
+        )
+
+    def test_sanitize_redacts_other_secret_like_diagnostics(self) -> None:
+        value = {
+            "reason": "authorization: bearer abcdefghijklmnopqrstuvwxyz token=actual-token api_key=actual-key",
+        }
+        sanitized = MODULE.sanitize(value)
+        MODULE.scan_boundary(sanitized)
+        self.assertEqual(
+            sanitized,
+            {"reason": "[redacted authorization] [redacted credential assignment] [redacted credential assignment]"},
+        )
+
+    def test_cli_consolidates_reason_with_credential_assignment(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            combined = self.fixture(root)
+            payload = json.loads(combined.read_text(encoding="utf-8"))
+            payload["results"][0]["reason"] = "upstream rejected servicekey=actual-value"
+            self.write_json(combined, payload)
+            sanitized = root / "output" / "verification.json"
+            receipt = root / "output" / "run-receipt.json"
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--root",
+                    str(root),
+                    "--combined",
+                    str(combined),
+                    "--sanitized-output",
+                    str(sanitized),
+                    "--expected-shards",
+                    "2",
+                    "--run-id",
+                    "test-run",
+                    "--output",
+                    str(receipt),
+                ],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            MODULE.scan_boundary(json.loads(sanitized.read_text(encoding="utf-8")))
+            self.assertTrue(receipt.is_file())
 
     def test_secret_like_string_is_rejected(self) -> None:
         with self.assertRaisesRegex(ValueError, "secret-like"):

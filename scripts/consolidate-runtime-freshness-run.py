@@ -18,6 +18,14 @@ import jsonschema
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.runtime-freshness-run-receipt.v1.schema.json")
 FORBIDDEN_KEYS = {"url", "request_url", "request_urls", "response_body", "response_bodies", "body", "credential_value", "credential_hash", "authorization", "authorization_header", "servicekey", "service_key", "apikey", "api_key", "secret", "token"}
 SECRET_PATTERNS = tuple(re.compile(pattern, re.IGNORECASE) for pattern in (r"authorization:\s*bearer", r"bearer\s+[a-z0-9._~+/=-]{16,}", r"servicekey=", r"api[_-]?key=", r"secret=", r"token="))
+SECRET_VALUE_REPLACEMENTS = (
+    (re.compile(r"authorization:\s*bearer\s+[^\s,;\]\)}]+", re.IGNORECASE), "[redacted authorization]"),
+    (re.compile(r"bearer\s+[a-z0-9._~+/=-]{16,}", re.IGNORECASE), "[redacted bearer credential]"),
+    (
+        re.compile(r"(?:service[_-]?key|api[_-]?key|secret|token)\s*=\s*[^\s&,;\]\)}]+", re.IGNORECASE),
+        "[redacted credential assignment]",
+    ),
+)
 
 
 def load(path: pathlib.Path) -> dict[str, Any]:
@@ -37,6 +45,10 @@ def sanitize(value: object) -> object:
         return {key: sanitize(child) for key, child in value.items() if key.lower() not in FORBIDDEN_KEYS}
     if isinstance(value, list):
         return [sanitize(child) for child in value]
+    if isinstance(value, str):
+        for pattern, replacement in SECRET_VALUE_REPLACEMENTS:
+            value = pattern.sub(replacement, value)
+        return value
     return value
 
 
