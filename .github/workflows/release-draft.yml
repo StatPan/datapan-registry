@@ -159,6 +159,9 @@ jobs:
           python scripts/generate-health-probe-catalog.py --check
           python scripts/validate-health-probe-catalog.py
           python -m unittest tests/test_validate_health_probe_catalog.py
+          python scripts/generate-regional-baseline-source-provenance.py --check
+          python scripts/validate-regional-baseline-source-provenance.py
+          python -m unittest tests/test_validate_regional_baseline_source_provenance.py
           python scripts/validate-release-ledger-ownership.py
           python scripts/validate-release-ledger-goal-audit.py
           python scripts/generate-release-goal-finish-preflight.py --check

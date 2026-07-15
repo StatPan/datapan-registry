@@ -170,6 +170,24 @@
       "exemption_boundary": "Nested source reports stay out of the top-level manifest when covered by source-report-inventory.json."
     },
     {
+      "id": "source_provenance",
+      "artifact_kinds": ["source_provenance"],
+      "owner": "source evidence maintainers",
+      "generated_by": [
+        "policy/kosis-regional-baseline-v0-provenance.json plus python scripts/generate-regional-baseline-source-provenance.py"
+      ],
+      "checked_by": [
+        "python scripts/generate-regional-baseline-source-provenance.py --check",
+        "python scripts/validate-regional-baseline-source-provenance.py",
+        "python -m unittest tests/test_validate_regional_baseline_source_provenance.py",
+        "python scripts/sync-release-manifest-artifacts.py --check"
+      ],
+      "manifest_relationship": "The reviewed KOSIS source identity, conditional usage boundary, and freshness non-assertion are bound to immutable release bytes and sha256.",
+      "schema_relationship": "Validated against datapan.source-provenance.v1 and pinned to the checked-in KOSIS source profile digest.",
+      "package_relationship": "Included in release packages through manifest.json; consumer fixtures demonstrate tag, manifest, and artifact digest pinning without publishing data artifacts.",
+      "exemption_boundary": "Does not own downstream current pointers, data artifacts, health observations, credentials, response rows, CLI runtime, or dataset APIs."
+    },
+    {
       "id": "downstream_release_evidence",
       "artifact_kinds": [
         "consumer_compatibility",

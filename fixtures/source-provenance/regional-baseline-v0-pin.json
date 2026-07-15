@@ -1,0 +1,30 @@
+{
+  "schema_version": "datapan.source-provenance-consumer-pin-fixture.v1",
+  "publication_status": "fixture_only_unreleased",
+  "registry_tag": "issue-559-unreleased-fixture",
+  "registry_manifest": {
+    "path": "manifest.json",
+    "sha256": "b1b1d18c958fc2fffb5396ade2d1ef13e67c77e5645a289ccdbb11e73e552999"
+  },
+  "provenance_artifact": {
+    "path": "reports/regional-baseline-source-provenance.json",
+    "sha256": "e0436c05d0eaba44bfca1f31b11f4a6bd69273dc76ff72a381863c2184cc9553"
+  },
+  "expected_inputs": [
+    {
+      "source_id": "kosis",
+      "indicator_id": "816",
+      "table_id": "DT_1YL20651E"
+    },
+    {
+      "source_id": "kosis",
+      "indicator_id": "1157",
+      "table_id": "DT_1YL21161"
+    },
+    {
+      "source_id": "kosis",
+      "indicator_id": "949",
+      "table_id": "DT_1YL20832"
+    }
+  ]
+}

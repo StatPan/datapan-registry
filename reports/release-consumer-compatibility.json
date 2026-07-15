@@ -7,7 +7,7 @@
     "manifest": {
       "path": "manifest.json",
       "generated_at": "2026-07-11T10:28:35Z",
-      "artifact_count": 138,
+      "artifact_count": 140,
       "evidence_contracts": 18
     },
     "readiness": {
@@ -104,7 +104,7 @@
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
       "bytes": 8075,
-      "sha256": "81871749e9d1160054fc73d4673ad6bcaba46f7889e9eef14e7825b4367e8f98",
+      "sha256": "6b96a84d9868c2728f6b59b33b2bcf2d172a74dce96c8d4fe318d6ed24a35200",
       "required": true
     },
     {
@@ -166,8 +166,8 @@
       "path": "reports/credential-runtime-manual-review-decision.json",
       "kind": "credential_runtime_manual_review_decision",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-decision.v1.schema.json",
-      "bytes": 1769,
-      "sha256": "aaab16daddcdfd137999faf314a76d436b817b2781cef4faa88024ebad406011",
+      "bytes": 1711,
+      "sha256": "a220ab52b0aa224540d83d7096328f4aa3fa76ad74ce8acaec858567a94a2a2a",
       "required": true
     },
     {
@@ -175,8 +175,8 @@
       "path": "reports/credential-runtime-manual-review-acceptance.json",
       "kind": "credential_runtime_manual_review_acceptance",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-acceptance.v1.schema.json",
-      "bytes": 4583,
-      "sha256": "ca6d139904b85755315d17790b6c5d43676918295b903fce777f4d351572a41f",
+      "bytes": 4525,
+      "sha256": "56746df6379708e6b97099bdd200d195862d85415237b51bdd822c641efe954e",
       "required": true
     },
     {
@@ -194,7 +194,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "a6f109500629224b33f4852bf7e69cf9bc11e3b379b8d81e2c09e81b2d5daccb",
+      "sha256": "27c82ee32828acd041ac39930789c0248b7e59da15ddcde73f838083dbb60c92",
       "required": true
     },
     {
@@ -212,7 +212,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 61997,
-      "sha256": "a5020896a05982f063b51873fa7b984a8a66365255d2c5786823454f05915a9d",
+      "sha256": "422bfb849a784367c55cc17a0a4b3b856d0a4bedea77d3480ffa1984c5dea649",
       "required": true
     },
     {
@@ -221,7 +221,7 @@
       "kind": "release_distribution_footprint",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
       "bytes": 2141,
-      "sha256": "8423fa34256fb3a8dc3697e1b5c2166ccc20048273eb761ff7846c9e1ea9ed9a",
+      "sha256": "a3a6126a9b6f580c635548402c977a055f7e9671c11185c54e260dadf952728a",
       "required": true
     },
     {
@@ -366,7 +366,7 @@
     "credential_handoff_relief_decision": "allowed_by_all_reviewed_validated_receipts",
     "manual_review_decision_status": "accepted",
     "manual_review_decision_accepted": true,
-    "manual_review_decision_reason": "The accountable release owner re-accepts the current manual-review release boundary after a manifest-bound health-probe catalog expansion. Credential and runtime policy are unchanged; the compatibility revalidation is limited to release footprint growth.",
+    "manual_review_decision_reason": "The accountable release owner re-accepts the current manual-review release boundary for additive manifest-bound KOSIS source provenance; no existing consumer or credential/runtime boundary change.",
     "manual_review_decision_boundary_accepted": true,
     "manual_review_acceptance_status": "accepted",
     "manual_review_acceptance_accepted": true,
@@ -476,7 +476,7 @@
     ],
     "release_distribution_footprint": "reports/release-distribution-footprint.json",
     "canonical_registry_bytes": 137735169,
-    "manifest_bound_bytes_excluding_self": 173766470,
+    "manifest_bound_bytes_excluding_self": 173774585,
     "large_monolith_threshold_bytes": 100000000,
     "registry_footprint_status": "large_monolith_shard_additive",
     "canonical_registry_required": true,
