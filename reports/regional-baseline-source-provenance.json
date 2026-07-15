@@ -1,0 +1,87 @@
+{
+  "schema_version": "datapan.source-provenance.v1",
+  "generated_at": "2026-07-15T00:00:00Z",
+  "authority": "datapan-registry",
+  "pack_contract": {
+    "id": "korea.regional_baseline.v0",
+    "version": "regional-baseline-v0.1"
+  },
+  "source": {
+    "source_id": "kosis",
+    "provider": "KOSIS",
+    "endpoint_family": {
+      "id": "kosis_e_region_index",
+      "url": "https://kosis.kr/visual/eRegionIndex/selectAllRegionDataList.do",
+      "method": "POST",
+      "authentication": "none"
+    },
+    "source_profile": {
+      "path": "sources/kosis.json",
+      "sha256": "2fcff2cd1e5e7968473d0ecfc8a35ee90f0bafa4b5f2d82005f4ed00e3d1d344"
+    }
+  },
+  "inputs": [
+    {
+      "metric_id": "registered_population",
+      "indicator_id": "816",
+      "table_id": "DT_1YL20651E",
+      "table_title": "Resident registration population status",
+      "publisher": "Ministry of the Interior and Safety"
+    },
+    {
+      "metric_id": "one_person_household_rate",
+      "indicator_id": "1157",
+      "table_id": "DT_1YL21161",
+      "table_title": "One-person household rate",
+      "publisher": "National Data Agency Population Census Division"
+    },
+    {
+      "metric_id": "registered_business_count",
+      "indicator_id": "949",
+      "table_id": "DT_1YL20832",
+      "table_title": "Registered business count by sido, city, county, and district",
+      "publisher": "National Data Agency Economic Census Division"
+    }
+  ],
+  "rights": {
+    "assessment": "conditional_domestic_statistics_reuse",
+    "reviewed_at": "2026-07-15",
+    "usage_guide_url": "https://kosis.kr/nsistN/kosisUseGuide.do",
+    "terms_url": "https://kosis.kr/openapi/introduce/introduce_02List.do",
+    "attribution_required": true,
+    "scope": "configured_domestic_statistics_only",
+    "usage_surface": "kosis_web_parsing_domestic_statistics",
+    "credential_scope": "no_openapi_credential_or_entitlement_asserted",
+    "prohibited_uses": [
+      {
+        "code": "unchanged_raw_paid_redistribution",
+        "description": "Do not provide or share the received information unchanged to third parties for a fee without a service platform or added product value."
+      }
+    ],
+    "exclusions": [
+      "International and North Korea statistics are outside this assessment.",
+      "Table-specific notices and current KOSIS terms must be checked before public release."
+    ],
+    "revalidation_triggers": [
+      "usage_guide_changed",
+      "terms_changed",
+      "table_notice_changed",
+      "publisher_or_table_identity_changed",
+      "new_public_release"
+    ]
+  },
+  "freshness": {
+    "mode": "not_asserted",
+    "reason": "Registry has not reviewed an upstream timestamp or update SLA for the configured eRegion tables.",
+    "source_cadence": "source-dependent",
+    "pack_currentness_authority": "datapan-data"
+  },
+  "consumer_pin": {
+    "artifact_path": "reports/regional-baseline-source-provenance.json",
+    "required_release_fields": [
+      "registry_tag",
+      "registry_manifest_sha256",
+      "provenance_artifact_sha256"
+    ]
+  }
+}
