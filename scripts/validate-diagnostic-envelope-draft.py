@@ -118,9 +118,14 @@ def validate_contract(contract: dict[str, Any], schema: dict[str, Any]) -> None:
         raise ValueError("ready level ordering must remain portable in the JSON Schema")
     if validation_contract.get("evidence_payload_is_kind_exclusive") is not True:
         raise ValueError("evidence payloads must remain kind-exclusive")
+    for key in ("scope_binding", "time_binding", "identifier_profile", "action_binding"):
+        if not validation_contract.get(key):
+            raise ValueError(f"consumer validation contract is missing {key}")
     evidence_kinds = schema["$defs"]["evidence_ref"]["properties"]["kind"]["enum"]
     if list(contract.get("evidence_variants", {})) != evidence_kinds:
         raise ValueError("consumer evidence variants must cover schema kinds in order")
+    if any(not item.get("allowed_scope_level") for item in contract["evidence_variants"].values()):
+        raise ValueError("every consumer evidence variant must declare its allowed scope level")
     catalog_codes = [item["code"] for item in contract.get("cause_catalog", [])]
     schema_codes = schema["$defs"]["cause"]["properties"]["code"]["enum"]
     if catalog_codes != schema_codes:

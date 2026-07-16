@@ -17,10 +17,15 @@ categories, safe action identifiers, avoidance identifiers, redaction rules,
 and deterministic examples. A consumer owns the actual observation, inference,
 mutable receipt or history, credential access, telemetry, and UI copy.
 
-An envelope never contains a credential or secret-derived hash, authorization
+An envelope has no field for a credential or secret-derived hash, authorization
 header, credential-bearing request URL, raw provider text or URL, request or
-response body, response rows, or user identity. `evidence_refs` carry bounded
-identifiers and typed metadata instead of raw evidence.
+response body, response rows, or user identity. Identifier fields accept only
+bounded lowercase slugs or colon-separated authority identifiers: slash paths,
+URLs, whitespace, and credential-labelled segments are invalid. A schema cannot
+recognize whether an otherwise valid opaque slug is secretly sensitive, so
+producers still must mint non-secret identifiers and attest the redaction flags
+truthfully. `evidence_refs` carry those identifiers and typed metadata instead
+of raw evidence.
 
 ## Minimum envelope
 
@@ -42,8 +47,8 @@ turn `inferred` into a probability.
 `assessed_at` records the conclusion time. Evidence does not duplicate an
 absolute observation timestamp or subject identifier. Instead, its
 `timing.observed_age_seconds` is a non-negative offset from `assessed_at`, its
-validity state and remaining validity are bounded by a versioned policy, and its
-scope uses the constant `subject_ref=envelope_subject`. This makes “not after
+validity state and positive remaining validity are bounded by a versioned
+policy, and its scope uses the constant `subject_ref=envelope_subject`. This makes “not after
 assessment” and subject binding structural JSON Schema facts instead of
 cross-field comparisons that different validators could implement differently.
 Every evidence reference also names its authority and a safe version identifier
@@ -58,6 +63,8 @@ cause or justify advice. Evidence carrying those supports must be
 seven-day contract maximum, with tighter limits of five minutes for a provider
 response, fifteen minutes for Health correlation, and one day for a provider
 notice. Approval propagation is also operation-bound and current at assessment.
+`remaining_validity_seconds=0` means expired and is invalid for
+`current_at_assessment`; the minimum accepted value is one second.
 
 Evidence kinds bind both authority and one mutually exclusive bounded result
 payload. Provider responses carry an HTTP status, a provider result class, and
@@ -65,8 +72,14 @@ the classification policy version; request validation carries its result,
 failure class, and policy version. Contract and quality assertions carry
 explicit pass/fail-like results and policy versions. Health observations carry
 a correlated state and probe policy, while provider notices carry their direct
-state and notice version. A `ref_id` or a generic version string never establishes a cause by
-itself.
+state and notice version. Each evidence kind has a fixed operation, request,
+response, or data-quality scope level; source-level substitutions are invalid.
+A `ref_id` or a generic version string never establishes a cause by itself.
+
+Action arrays are also fail-closed. Every cause has one exact recommended action
+object and a bounded optional or required avoid action object, including the
+actor and rationale identifier. Consumers cannot append `continue_to_reuse` to
+an error, advise key reissue for rate limiting, or substitute another actor.
 
 ## Same symptom, different action
 
@@ -75,13 +88,16 @@ Three examples deliberately reference the same bounded symptom,
 
 | Corroborating evidence | Cause | Recommended action | Avoid |
 | --- | --- | --- | --- |
-| authoritative operation approval is `approved_pending_sync` | `approval_propagating` | `wait_for_approval_sync` | `reissue_credential` |
+| authoritative operation approval is `approved_pending_sync` and the same operation has a current unclassified 401/403 response | `approval_propagating` | `wait_for_approval_sync` | `reissue_credential` |
 | provider explicitly rejects the configured credential | `credential_invalid` | `verify_credential_configuration` | `assume_provider_outage` |
 | Healthcheck and a provider notice corroborate unavailability | `provider_outage` | `check_provider_status` | `reissue_credential` |
 
 An HTTP status alone cannot choose among these causes. In particular, the
 generic data.go.kr service-key rule remains ambiguous until another evidence
 authority narrows it.
+Likewise, an approval record alone cannot establish propagation: the envelope
+must also contain the current same-subject failure symptom before advising the
+user to wait and avoid key reissue.
 
 Kind-specific authority rules are fail-closed: provider responses originate
 from the provider or CLI adapter, request validation from CLI, Registry rules
@@ -148,13 +164,15 @@ fail-closed with `additionalProperties=false`.
 Consumers validate the exact `schema_version` with the Draft 2020-12 JSON
 Schema. The schema is the only required validation artifact: subject binding,
 relative time validity, evidence support, kind-exclusive payloads, outage
-determination authority, and the complete ready-level ordering are all encoded
+determination authority, evidence-kind scope, exact cause/action/actor binding,
+safe identifier profiles, and the complete ready-level ordering are all encoded
 there. No consumer-specific Python or hidden semantic validator is required.
 The schema validates typed authority attestations and their safe composition; it
-does not independently prove that an upstream authority reported a true fact.
-Consumers render explanation and
-action identifiers using consumer-owned copy. If evidence does not satisfy a
-specific cause, consumers emit `unknown` plus `gather_more_evidence`; they do
+does not independently prove that an upstream authority reported a true fact or
+detect arbitrary secrets disguised as syntactically safe opaque IDs. Consumers
+render explanation and action identifiers using consumer-owned copy. If
+evidence does not satisfy a specific cause, consumers emit `unknown` plus
+`gather_more_evidence`; they do
 not guess a provider outage, approval state, or credential state.
 
 Run the focused contract gate with:

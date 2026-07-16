@@ -86,12 +86,31 @@ class DiagnosticEnvelopeDraftTest(unittest.TestCase):
         approval = next(item for item in value["evidence_refs"] if item["kind"] == "approval_record")
         approval["timing"]["observed_age_seconds"] = 604801
         self.assert_schema_rejects(value)
+        value = copy.deepcopy(self.fixtures["approval-propagating"])
+        approval = next(item for item in value["evidence_refs"] if item["kind"] == "approval_record")
+        approval["timing"]["remaining_validity_seconds"] = 0
+        self.assert_schema_rejects(value)
         for support in ("cause", "action", "determination"):
             with self.subTest(support=support):
                 value = copy.deepcopy(self.fixtures["approval-propagating"])
                 approval = next(item for item in value["evidence_refs"] if item["kind"] == "approval_record")
                 approval["supports"].remove(support)
                 self.assert_schema_rejects(value)
+
+    def test_approval_propagation_requires_current_failure_symptom(self):
+        value = copy.deepcopy(self.fixtures["approval-propagating"])
+        value["evidence_refs"] = [
+            item for item in value["evidence_refs"] if item["kind"] != "provider_response"
+        ]
+        self.assert_schema_rejects(value)
+        value = copy.deepcopy(self.fixtures["approval-propagating"])
+        response = next(item for item in value["evidence_refs"] if item["kind"] == "provider_response")
+        response["response"]["http_status"] = 500
+        self.assert_schema_rejects(value)
+        value = copy.deepcopy(self.fixtures["approval-propagating"])
+        response = next(item for item in value["evidence_refs"] if item["kind"] == "provider_response")
+        response["timing"]["remaining_validity_seconds"] = 0
+        self.assert_schema_rejects(value)
 
     def test_credential_rejection_does_not_need_approval_state(self):
         value = self.fixtures["credential-invalid"]
@@ -146,6 +165,12 @@ class DiagnosticEnvelopeDraftTest(unittest.TestCase):
         health = next(item for item in value["evidence_refs"] if item["kind"] == "health_observation")
         health["timing"]["remaining_validity_seconds"] = 901
         self.assert_schema_rejects(value)
+        for kind in ("health_observation", "provider_notice", "provider_response"):
+            with self.subTest(kind=kind, remaining_validity_seconds=0):
+                value = copy.deepcopy(self.fixtures["provider-outage"])
+                evidence = next(item for item in value["evidence_refs"] if item["kind"] == kind)
+                evidence["timing"]["remaining_validity_seconds"] = 0
+                self.assert_schema_rejects(value)
 
     def test_contract_and_quality_causes_require_failed_typed_assertions(self):
         value = copy.deepcopy(self.fixtures["contract-drift"])
@@ -193,6 +218,37 @@ class DiagnosticEnvelopeDraftTest(unittest.TestCase):
         value["evidence_refs"][0]["validation"]["achieved_level"] = "L1"
         self.assert_schema_rejects(value)
 
+    def test_cause_actions_are_exact_and_actor_bound(self):
+        value = copy.deepcopy(self.fixtures["invalid-input"])
+        value["actions"]["recommended"].append(
+            {
+                "action_id": "continue_to_reuse",
+                "actor": "user",
+                "rationale_id": "action.continue_to_reuse",
+            }
+        )
+        self.assert_schema_rejects(value)
+        value = copy.deepcopy(self.fixtures["rate-limited"])
+        value["actions"]["avoid"] = [
+            {
+                "action_id": "reissue_credential",
+                "actor": "user",
+                "rationale_id": "avoid.outage_not_fixed_by_key",
+            }
+        ]
+        self.assert_schema_rejects(value)
+        value = copy.deepcopy(self.fixtures["invalid-input"])
+        value["actions"]["recommended"][0]["actor"] = "datapan_cli"
+        self.assert_schema_rejects(value)
+
+    def test_evidence_kind_scope_levels_reject_source_scope(self):
+        for fixture_name, fixture in self.fixtures.items():
+            for index in range(len(fixture["evidence_refs"])):
+                with self.subTest(fixture=fixture_name, evidence=index):
+                    value = copy.deepcopy(fixture)
+                    value["evidence_refs"][index]["scope"]["level"] = "source"
+                    self.assert_schema_rejects(value)
+
     def test_evidence_payload_is_kind_exclusive(self):
         value = copy.deepcopy(self.fixtures["rate-limited"])
         value["evidence_refs"][0]["notice"] = {
@@ -210,6 +266,22 @@ class DiagnosticEnvelopeDraftTest(unittest.TestCase):
             with self.subTest(provider_id=provider_id):
                 value = copy.deepcopy(self.fixtures["unknown"])
                 value["subject"]["provider_id"] = provider_id
+                self.assert_schema_rejects(value)
+
+    def test_all_identifier_surfaces_reject_urls_and_sensitive_labels(self):
+        mutations = (
+            ("ref_id", lambda value: value["evidence_refs"][0].__setitem__("ref_id", "https://provider.test/failure")),
+            ("operation_id_url", lambda value: value["subject"].__setitem__("operation_id", "https://provider.test/op")),
+            ("operation_id_sensitive", lambda value: value["subject"].__setitem__("operation_id", "operation:api-key:value")),
+            ("operation_id_bearer_like", lambda value: value["subject"].__setitem__("operation_id", "operation:bearertoken")),
+            ("version", lambda value: value["evidence_refs"][0].__setitem__("version", "api-key-value")),
+            ("rationale_id", lambda value: value["actions"]["recommended"][0].__setitem__("rationale_id", "action.api-key.value")),
+            ("explanation_id", lambda value: value["cause"].__setitem__("explanation_id", "https://provider.test/text")),
+        )
+        for name, mutate in mutations:
+            with self.subTest(name=name):
+                value = copy.deepcopy(self.fixtures["invalid-input"])
+                mutate(value)
                 self.assert_schema_rejects(value)
 
     def test_consumers_need_only_the_portable_schema(self):
