@@ -31,3 +31,11 @@ revision and all diagnostic artifact identities. Web owns presentation and
 mutable history; Registry owns stable facts, vocabulary, and immutable artifact
 identity. No provider response body, credentials, secret hashes, authorization
 headers, live status history, or user telemetry belongs in either handoff.
+
+The workflow's automatic post-publish receipt is only the baseline distribution
+integrity proof: it pins the payload revision returned by that publication and
+verifies every artifact declared by the downloaded pointer. It does not pass the
+checked-in `--require-artifact PATH=SHA256` set, so it does not by itself satisfy
+or replace the Datapan Web adoption gate. A later credential-free operator proof
+must require `manifest.json` plus every exact artifact identity in
+`reports/diagnostic-publication-readiness.json` before Web adoption is unblocked.

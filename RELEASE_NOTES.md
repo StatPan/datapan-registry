@@ -95,3 +95,8 @@ separate post-merge gates. After an explicit publication, operators must run
 anonymous `verify-remote` with the full nonzero payload revision and require
 the exact manifest-bound diagnostic paths and SHA-256 values. Datapan Web may
 adopt the immutable artifacts only after that proof succeeds.
+
+The workflow's automatic expected-revision receipt verifies baseline immutable
+distribution integrity but does not supply the checked-in required PATH/SHA-256
+set. It therefore does not replace or satisfy the separate post-public Web
+adoption gate.

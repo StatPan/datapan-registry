@@ -241,7 +241,13 @@ def verify_remote(
             target = directory / f"artifact-{index}"
             download(resolve_url(dataset_id, revision, remote), target)
             verify_local(target, record)
-    return {"status": "verified", "dataset": dataset_id, "revision": revision, "artifacts": len(records)}
+    return {
+        "status": "verified",
+        "dataset": dataset_id,
+        "revision": revision,
+        "artifacts": len(all_records) - 1,
+        "release_manifest": "verified",
+    }
 
 
 def publish(stage_dir: pathlib.Path, dataset: str, token: str) -> dict[str, Any]:

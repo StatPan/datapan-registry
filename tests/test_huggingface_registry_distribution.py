@@ -3,6 +3,7 @@ import json
 import pathlib
 import tempfile
 import unittest
+from unittest import mock
 
 import jsonschema
 
@@ -151,6 +152,106 @@ class HuggingFaceRegistryDistributionTest(unittest.TestCase):
         }
         with self.assertRaisesRegex(MODULE.DistributionError, "required distribution artifact is missing"):
             MODULE.validate_remote_pointer(pointer, None, [f"schemas/diagnostic.json={'c' * 64}"])
+
+    def test_verify_remote_downloads_and_verifies_manifest_required_artifact_and_revision(self):
+        manifest_bytes = b'{"schema_version":"datapan.release-manifest.v1"}\n'
+        diagnostic_bytes = b'{"schema_version":"datapan.diagnostic-envelope.v1"}\n'
+        manifest_sha = MODULE.hashlib.sha256(manifest_bytes).hexdigest()
+        diagnostic_sha = MODULE.hashlib.sha256(diagnostic_bytes).hexdigest()
+        revision = "d" * 40
+        pointer_url = "https://example.test/release/distribution-manifest.json"
+        pointer = {
+            "schema_version": MODULE.SCHEMA_VERSION,
+            "dataset": {"id": "StatPan/datapan-registry", "revision": revision},
+            "release_manifest": {
+                "path": "manifest.json",
+                "kind": "release_manifest",
+                "bytes": len(manifest_bytes),
+                "sha256": manifest_sha,
+            },
+            "artifact_count": 1,
+            "artifacts": [
+                {
+                    "path": "schemas/datapan.diagnostic-envelope.v1.schema.json",
+                    "kind": "schema",
+                    "bytes": len(diagnostic_bytes),
+                    "sha256": diagnostic_sha,
+                }
+            ],
+        }
+        downloaded = []
+
+        def fake_download(url, destination):
+            downloaded.append(url)
+            if url == pointer_url:
+                destination.write_text(json.dumps(pointer), encoding="utf-8")
+            elif url == MODULE.resolve_url("StatPan/datapan-registry", revision, "manifest.json"):
+                destination.write_bytes(manifest_bytes)
+            elif url == MODULE.resolve_url(
+                "StatPan/datapan-registry",
+                revision,
+                "schemas/datapan.diagnostic-envelope.v1.schema.json",
+            ):
+                destination.write_bytes(diagnostic_bytes)
+            else:
+                self.fail(f"unexpected download: {url}")
+
+        required = [
+            f"manifest.json={manifest_sha}",
+            f"schemas/datapan.diagnostic-envelope.v1.schema.json={diagnostic_sha}",
+        ]
+        with mock.patch.object(MODULE, "download", side_effect=fake_download):
+            receipt = MODULE.verify_remote(pointer_url, revision, required)
+
+        self.assertEqual(
+            receipt,
+            {
+                "status": "verified",
+                "dataset": "StatPan/datapan-registry",
+                "revision": revision,
+                "artifacts": 1,
+                "release_manifest": "verified",
+            },
+        )
+        self.assertEqual(
+            downloaded,
+            [
+                pointer_url,
+                MODULE.resolve_url("StatPan/datapan-registry", revision, "manifest.json"),
+                MODULE.resolve_url(
+                    "StatPan/datapan-registry",
+                    revision,
+                    "schemas/datapan.diagnostic-envelope.v1.schema.json",
+                ),
+            ],
+        )
+
+    def test_verify_remote_rejects_tampered_release_manifest_download(self):
+        manifest_bytes = b"expected manifest\n"
+        revision = "e" * 40
+        pointer_url = "https://example.test/release/distribution-manifest.json"
+        pointer = {
+            "schema_version": MODULE.SCHEMA_VERSION,
+            "dataset": {"id": "StatPan/datapan-registry", "revision": revision},
+            "release_manifest": {
+                "path": "manifest.json",
+                "kind": "release_manifest",
+                "bytes": len(manifest_bytes),
+                "sha256": MODULE.hashlib.sha256(manifest_bytes).hexdigest(),
+            },
+            "artifact_count": 0,
+            "artifacts": [],
+        }
+
+        def fake_download(url, destination):
+            if url == pointer_url:
+                destination.write_text(json.dumps(pointer), encoding="utf-8")
+            else:
+                destination.write_bytes(b"tampered\n")
+
+        with mock.patch.object(MODULE, "download", side_effect=fake_download):
+            with self.assertRaisesRegex(MODULE.DistributionError, "byte mismatch|SHA-256 mismatch"):
+                MODULE.verify_remote(pointer_url, revision, [])
 
 
 if __name__ == "__main__":
