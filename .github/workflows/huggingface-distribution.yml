@@ -11,8 +11,10 @@ on:
       - "policy/registry-distribution.json"
       - "reports/**"
       - "scripts/huggingface_registry_distribution.py"
+      - "scripts/bind_registry_publication_source.py"
       - "schemas/datapan.huggingface-distribution.v1.schema.json"
       - "tests/test_huggingface_registry_distribution.py"
+      - "tests/test_registry_publication_source_binding.py"
   pull_request:
     paths:
       - ".github/workflows/huggingface-distribution.yml"
@@ -21,10 +23,20 @@ on:
       - "policy/registry-distribution.json"
       - "reports/**"
       - "scripts/huggingface_registry_distribution.py"
+      - "scripts/bind_registry_publication_source.py"
       - "schemas/datapan.huggingface-distribution.v1.schema.json"
       - "tests/test_huggingface_registry_distribution.py"
+      - "tests/test_registry_publication_source_binding.py"
   workflow_dispatch:
     inputs:
+      workflow_sha:
+        description: "Exact approved publication workflow commit (40 lowercase hex characters)"
+        required: true
+        type: string
+      source_sha:
+        description: "Exact approved Registry source commit (40 lowercase hex characters)"
+        required: true
+        type: string
       publish:
         description: "Publish the verified payload and immutable pointer to Hugging Face"
         required: true
@@ -45,10 +57,31 @@ jobs:
       - uses: actions/checkout@v4
         with:
           lfs: false
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Bind and check out the exact publication source
+        env:
+          SOURCE_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.source_sha || github.sha }}
+          WORKFLOW_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.workflow_sha || github.sha }}
+          WORKFLOW_EVENT: ${{ github.event_name }}
+          WORKFLOW_REF: ${{ github.ref }}
+          WORKFLOW_REPOSITORY: ${{ github.repository }}
+        run: |
+          python scripts/bind_registry_publication_source.py \
+            --source-sha "$SOURCE_SHA" \
+            --workflow-sha "$WORKFLOW_SHA" \
+            --event-name "$WORKFLOW_EVENT" \
+            --git-ref "$WORKFLOW_REF" \
+            --repository "$WORKFLOW_REPOSITORY" \
+            --output .datapan/hf-source-binding.json
+          test "$WORKFLOW_SHA" = "${GITHUB_SHA}"
+          git checkout --detach "$SOURCE_SHA"
+          test "$(git rev-parse HEAD)" = "$(jq -r '.source_sha' .datapan/hf-source-binding.json)"
+          test "$(sha256sum manifest.json | cut -d ' ' -f1)" = "$(jq -r '.manifest_sha256' .datapan/hf-source-binding.json)"
 
       - name: Check out current datapan-cli consumer
         uses: actions/checkout@v4
@@ -121,6 +154,7 @@ jobs:
         with:
           name: huggingface-registry-distribution-stage
           path: |
+            .datapan/hf-source-binding.json
             .datapan/hf-stage/.datapan-hf-artifacts.json
             .datapan/hf-stage/release/distribution-manifest.json
           retention-days: 14
@@ -130,6 +164,8 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
+          test "$(git rev-parse HEAD)" = "$(jq -r '.source_sha' .datapan/hf-source-binding.json)"
+          test "$(sha256sum manifest.json | cut -d ' ' -f1)" = "$(jq -r '.manifest_sha256' .datapan/hf-source-binding.json)"
           test -n "${HF_TOKEN}"
           python scripts/huggingface_registry_distribution.py publish \
             --stage .datapan/hf-stage \
@@ -146,13 +182,31 @@ jobs:
             --expected-revision "$(jq -r '.payload_revision' .datapan/hf-publication.json)" \
             | tee .datapan/hf-public-verification.json
 
+      - name: Compose source-bound publication receipt
+        if: always() && github.event_name == 'workflow_dispatch' && inputs.publish
+        run: |
+          test -f .datapan/hf-publication.json || echo '{}' > .datapan/hf-publication.json
+          test -f .datapan/hf-public-verification.json || echo '{}' > .datapan/hf-public-verification.json
+          jq -n \
+            --slurpfile source .datapan/hf-source-binding.json \
+            --slurpfile publication .datapan/hf-publication.json \
+            --slurpfile verification .datapan/hf-public-verification.json \
+            '{
+              schema_version: "datapan.registry-publication-receipt.v1",
+              status: (if $publication[0].status == "published" and $verification[0].status == "verified" then "verified" else "failed" end),
+              source_binding: $source[0],
+              publication: $publication[0],
+              anonymous_verification: $verification[0]
+            }' > .datapan/hf-publication-receipt.json
+          python -m json.tool .datapan/hf-publication-receipt.json >/dev/null
+
       - name: Upload publication receipts
         if: always() && github.event_name == 'workflow_dispatch' && inputs.publish
         uses: actions/upload-artifact@v4
         with:
           name: huggingface-registry-publication-receipts
           path: |
-            .datapan/hf-publication.json
-            .datapan/hf-public-verification.json
+            .datapan/hf-source-binding.json
+            .datapan/hf-publication-receipt.json
           if-no-files-found: warn
           retention-days: 30
