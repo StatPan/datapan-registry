@@ -1,0 +1,132 @@
+{
+  "schema_version": "datapan.diagnostic-release-candidate.v1",
+  "status": "blocked",
+  "captured_at": "2026-07-16T08:02:30Z",
+  "authority": {
+    "release_authority": false,
+    "runtime_authority": false,
+    "fixture_runtime_authority": false,
+    "manifest_inclusion": false,
+    "publishing_allowed": false
+  },
+  "binding_sha256": "25855b1cf435d951447ee99f5d63c5f43112398ea63758d3477a588bec587ced",
+  "binding": {
+    "registry": {
+      "repository": "StatPan/datapan-registry",
+      "issue": 568,
+      "contract_pull_requests": [
+        569,
+        570
+      ],
+      "contract_commit": "8c5d397f13929ec2b85e63e4ca600887f37929b8"
+    },
+    "contracts": [
+      {
+        "path": "drafts/diagnostic-envelope/datapan.diagnostic-envelope.v1.schema.json",
+        "sha256": "da254b40947462347fcda90fdd7686b6632c76943b438f2046a28f079f33e403"
+      },
+      {
+        "path": "drafts/diagnostic-envelope/consumer-contract.v1.json",
+        "sha256": "02146e5cbc84a4f7e9b6883ff049c62b7f188cccd731c300e762395b486483a5"
+      },
+      {
+        "path": "drafts/diagnostic-envelope/data-go-kr-evidence-mapping.v1.json",
+        "sha256": "da55d52d2ee1f197969ac63a1d5ab5b98e3b88fd65f90d6a48800d2e3c522d33"
+      },
+      {
+        "path": "drafts/diagnostic-envelope/consumer-compatibility/datapan-cli.v1.json",
+        "sha256": "b1487e736c8b853ae950e70fa8845754ae5722c9dc3d215d50b3a8e767f38068"
+      },
+      {
+        "path": "drafts/diagnostic-envelope/consumer-compatibility/datapan-health.v1.json",
+        "sha256": "e831df46e50107c116132f423525af5b1ea8c9743c014956a2fc3732077db70c"
+      },
+      {
+        "path": "drafts/diagnostic-envelope/consumer-compatibility/datapan-web.v1.json",
+        "sha256": "6dcdb0b7404a43e0a58fbd1b2cbd43ebeded4778d67f1cb3f85015f391cd673c"
+      }
+    ],
+    "consumer_proofs": [
+      {
+        "consumer": "datapan-health",
+        "repository": "StatPan/datapan-health",
+        "issue": 19,
+        "pull_request": 23,
+        "head_commit": "4e8e1fc1c2af3ef63a59abde8c3fc52387355bb8",
+        "proof_state": "accepted",
+        "review_state": "independent_approved",
+        "ci_state": "passed",
+        "ci_run": 29481036102,
+        "receipt_sha256": "23fe6cf7fbb63268dab889ed516a494a915877f15664821f445656fae36b18e8",
+        "scope": "offline_contract_compatibility",
+        "missing_proofs": []
+      },
+      {
+        "consumer": "datapan-web",
+        "repository": "StatPan/datapan",
+        "issue": 8,
+        "pull_request": 12,
+        "head_commit": "d591b732575ffc9972f959219baa1a5d5a058980",
+        "proof_state": "partial",
+        "review_state": "dependency_independent_slice_approved",
+        "ci_state": "local_41_tests_and_build_passed_no_github_checks",
+        "scope": "dependency_independent_diagnostic_experience",
+        "missing_proofs": [
+          "immutable_registry_release_manifest_consumption",
+          "health_public_identity_composition",
+          "final_exact_head_review"
+        ]
+      },
+      {
+        "consumer": "datapan-cli",
+        "repository": "StatPan/datapan-cli",
+        "issue": 160,
+        "pull_request": 162,
+        "head_commit": "f6b4a62df8b8c537a38ca8adc0d9ea3a66a0cfaf",
+        "proof_state": "blocked",
+        "review_state": "independent_review_missing",
+        "ci_state": "standard_3_passed_registry_journey_3_in_progress",
+        "ci_run": 29481907297,
+        "scope": "draft_diagnostic_commands",
+        "missing_proofs": [
+          "registry_journey_ci_pass",
+          "independent_exact_head_approval"
+        ]
+      }
+    ]
+  },
+  "decision": {
+    "required_consumers": [
+      "datapan-cli",
+      "datapan-health",
+      "datapan-web"
+    ],
+    "accepted_consumers": [
+      "datapan-health"
+    ],
+    "all_consumers_accepted": false,
+    "missing_proofs": [
+      {
+        "consumer": "datapan-web",
+        "proof": "immutable_registry_release_manifest_consumption"
+      },
+      {
+        "consumer": "datapan-web",
+        "proof": "health_public_identity_composition"
+      },
+      {
+        "consumer": "datapan-web",
+        "proof": "final_exact_head_review"
+      },
+      {
+        "consumer": "datapan-cli",
+        "proof": "registry_journey_ci_pass"
+      },
+      {
+        "consumer": "datapan-cli",
+        "proof": "independent_exact_head_approval"
+      }
+    ],
+    "next_gate": "collect_missing_consumer_proofs"
+  }
+}
