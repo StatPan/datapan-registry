@@ -8,9 +8,9 @@
   },
   "subject": {
     "source_id": "data_go_kr",
-    "provider": "data.go.kr",
     "dataset_id": "fixture-dataset-propagating",
-    "operation_id": "fixture-operation-propagating"
+    "operation_id": "fixture-operation-propagating",
+    "provider_id": "data_go_kr"
   },
   "cause": {
     "code": "approval_propagating",
@@ -43,17 +43,16 @@
       "kind": "approval_record",
       "ref_id": "approval:fixture-operation-propagating:pending-sync",
       "authority": "data_go_kr_portal",
-      "observed_at": "2026-07-16T00:04:00Z",
       "scope": {
         "level": "operation",
-        "scope_id": "fixture-operation-propagating"
+        "subject_ref": "envelope_subject"
       },
       "version": "portal-snapshot-v1",
       "approval": {
         "state": "approved_pending_sync",
         "effective_scope": {
           "level": "operation",
-          "scope_id": "fixture-operation-propagating"
+          "subject_ref": "envelope_subject"
         }
       },
       "supports": [
@@ -62,16 +61,22 @@
         "determination",
         "ownership",
         "action"
-      ]
+      ],
+      "timing": {
+        "basis": "relative_to_assessed_at",
+        "observed_age_seconds": 60,
+        "validity": "current_at_assessment",
+        "validity_policy_version": "portal-snapshot-v1",
+        "remaining_validity_seconds": 604800
+      }
     },
     {
       "kind": "provider_response",
       "ref_id": "provider-response:http-401",
       "authority": "provider",
-      "observed_at": "2026-07-16T00:05:00Z",
       "scope": {
         "level": "operation",
-        "scope_id": "fixture-operation-propagating"
+        "subject_ref": "envelope_subject"
       },
       "version": "error-taxonomy-v1",
       "response": {
@@ -82,7 +87,14 @@
       "supports": [
         "cause",
         "determination"
-      ]
+      ],
+      "timing": {
+        "basis": "relative_to_assessed_at",
+        "observed_age_seconds": 0,
+        "validity": "current_at_assessment",
+        "validity_policy_version": "error-taxonomy-v1",
+        "remaining_validity_seconds": 300
+      }
     }
   ],
   "redaction": {

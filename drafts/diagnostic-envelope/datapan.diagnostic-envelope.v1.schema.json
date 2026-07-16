@@ -39,7 +39,23 @@
       "then": {
         "properties": {
           "actions": {"properties": {"recommended": {"contains": {"properties": {"action_id": {"const": "apply_for_operation"}}, "required": ["action_id"]}}}},
-          "evidence_refs": {"contains": {"properties": {"kind": {"const": "approval_record"}, "approval": {"properties": {"state": {"const": "not_applied"}}, "required": ["state"]}}, "required": ["kind", "approval"]}}
+          "evidence_refs": {
+            "contains": {
+              "properties": {
+                "kind": {"const": "approval_record"},
+                "scope": {"properties": {"level": {"const": "operation"}, "subject_ref": {"const": "envelope_subject"}}},
+                "approval": {
+                  "properties": {
+                    "state": {"const": "not_applied"},
+                    "effective_scope": {"properties": {"level": {"const": "operation"}, "subject_ref": {"const": "envelope_subject"}}}
+                  },
+                  "required": ["state", "effective_scope"]
+                },
+                "supports": {"allOf": [{"contains": {"const": "cause"}}, {"contains": {"const": "action"}}, {"contains": {"const": "determination"}}]}
+              },
+              "required": ["kind", "scope", "approval", "supports"]
+            }
+          }
         }
       }
     },
@@ -58,9 +74,12 @@
               "properties": {
                 "kind": {"const": "approval_record"},
                 "authority": {"enum": ["data_go_kr_portal", "provider_portal"]},
-                "approval": {"properties": {"state": {"const": "approved_pending_sync"}}, "required": ["state", "effective_scope"]}
+                "approval": {"properties": {"state": {"const": "approved_pending_sync"}, "effective_scope": {"properties": {"level": {"const": "operation"}, "subject_ref": {"const": "envelope_subject"}}, "required": ["level", "subject_ref"]}}, "required": ["state", "effective_scope"]},
+                "scope": {"properties": {"level": {"const": "operation"}, "subject_ref": {"const": "envelope_subject"}}, "required": ["level", "subject_ref"]},
+                "timing": {"properties": {"validity": {"const": "current_at_assessment"}}},
+                "supports": {"allOf": [{"contains": {"const": "cause"}}, {"contains": {"const": "action"}}, {"contains": {"const": "determination"}}]}
               },
-              "required": ["kind", "authority", "observed_at", "scope", "approval"]
+              "required": ["kind", "authority", "timing", "scope", "approval", "supports"]
             }
           }
         }
@@ -101,9 +120,10 @@
             "contains": {
               "properties": {
                 "kind": {"const": "request_validation"},
-                "request_validation": {"properties": {"result": {"const": "failed"}, "failure_class": {"const": "invalid_input"}}, "required": ["result", "failure_class", "policy_version"]}
+                "request_validation": {"properties": {"result": {"const": "failed"}, "failure_class": {"const": "invalid_input"}}, "required": ["result", "failure_class", "policy_version"]},
+                "supports": {"allOf": [{"contains": {"const": "cause"}}, {"contains": {"const": "action"}}, {"contains": {"const": "determination"}}]}
               },
-              "required": ["kind", "request_validation"]
+              "required": ["kind", "request_validation", "supports"]
             }
           }
         }
@@ -116,8 +136,8 @@
           "actions": {"properties": {"recommended": {"contains": {"properties": {"action_id": {"const": "retry_with_backoff"}}, "required": ["action_id"]}}}},
           "evidence_refs": {
             "contains": {
-              "properties": {"kind": {"const": "provider_response"}, "response": {"properties": {"provider_class": {"const": "rate_limited"}}, "required": ["provider_class", "policy_version"]}},
-              "required": ["kind", "response"]
+              "properties": {"kind": {"const": "provider_response"}, "response": {"properties": {"provider_class": {"const": "rate_limited"}}, "required": ["provider_class", "policy_version"]}, "supports": {"allOf": [{"contains": {"const": "cause"}}, {"contains": {"const": "action"}}, {"contains": {"const": "determination"}}]}},
+              "required": ["kind", "response", "supports"]
             }
           }
         }
@@ -184,8 +204,8 @@
           "actions": {"properties": {"recommended": {"contains": {"properties": {"action_id": {"const": "refresh_contract"}}, "required": ["action_id"]}}}},
           "evidence_refs": {
             "contains": {
-              "properties": {"kind": {"const": "response_contract"}, "contract_assertion": {"properties": {"result": {"const": "mismatch"}}, "required": ["result", "policy_version"]}},
-              "required": ["kind", "contract_assertion"]
+              "properties": {"kind": {"const": "response_contract"}, "contract_assertion": {"properties": {"result": {"const": "mismatch"}}, "required": ["result", "policy_version"]}, "supports": {"allOf": [{"contains": {"const": "cause"}}, {"contains": {"const": "action"}}, {"contains": {"const": "determination"}}]}},
+              "required": ["kind", "contract_assertion", "supports"]
             }
           }
         }
@@ -196,14 +216,15 @@
       "then": {
         "properties": {
           "cause": {"properties": {"layer": {"const": "data_quality"}}},
-          "actions": {"properties": {"avoid": {"contains": {"properties": {"action_id": {"const": "treat_transport_success_as_data_success"}}, "required": ["action_id"]}}}},
+          "actions": {"properties": {"recommended": {"contains": {"properties": {"action_id": {"const": "inspect_data_quality"}}, "required": ["action_id"]}}, "avoid": {"contains": {"properties": {"action_id": {"const": "treat_transport_success_as_data_success"}}, "required": ["action_id"]}}}},
           "evidence_refs": {
             "contains": {
               "properties": {
                 "kind": {"const": "data_quality_assertion"},
-                "quality_assertion": {"properties": {"kind": {"enum": ["missing_expected_entity", "empty_result", "other"]}, "result": {"const": "failed"}}, "required": ["kind", "result", "policy_version"]}
+                "quality_assertion": {"properties": {"kind": {"enum": ["missing_expected_entity", "empty_result", "other"]}, "result": {"const": "failed"}}, "required": ["kind", "result", "policy_version"]},
+                "supports": {"allOf": [{"contains": {"const": "cause"}}, {"contains": {"const": "action"}}, {"contains": {"const": "determination"}}]}
               },
-              "required": ["kind", "quality_assertion"]
+              "required": ["kind", "quality_assertion", "supports"]
             }
           }
         }
@@ -214,14 +235,16 @@
       "then": {
         "properties": {
           "cause": {"properties": {"layer": {"const": "data_quality"}}},
+          "actions": {"properties": {"recommended": {"contains": {"properties": {"action_id": {"const": "inspect_data_quality"}}, "required": ["action_id"]}}}},
           "evidence_refs": {
             "contains": {
               "properties": {
                 "kind": {"const": "data_quality_assertion"},
                 "quality_assertion": {"properties": {"kind": {"const": "freshness"}, "result": {"const": "failed"}}, "required": ["kind", "result", "policy_version"]},
-                "freshness": {"properties": {"state": {"const": "stale"}}, "required": ["policy_version", "reference_time", "actual_time", "maximum_age_seconds", "state"]}
+                "freshness": {"properties": {"state": {"const": "stale"}}, "required": ["policy_version", "reference_time", "actual_time", "maximum_age_seconds", "state"]},
+                "supports": {"allOf": [{"contains": {"const": "cause"}}, {"contains": {"const": "action"}}, {"contains": {"const": "determination"}}]}
               },
-              "required": ["kind", "quality_assertion", "freshness"]
+              "required": ["kind", "quality_assertion", "freshness", "supports"]
             }
           }
         }
@@ -237,10 +260,126 @@
             "contains": {
               "properties": {
                 "kind": {"const": "validation_result"},
-                "scope": {"properties": {"level": {"const": "operation"}}, "required": ["level", "scope_id"]},
-                "validation": {"properties": {"result": {"const": "passed"}}, "required": ["required_level", "achieved_level", "policy_version", "result"]}
+                "scope": {"properties": {"level": {"const": "operation"}, "subject_ref": {"const": "envelope_subject"}}, "required": ["level", "subject_ref"]},
+                "validation": {"properties": {"result": {"const": "passed"}}, "required": ["required_level", "achieved_level", "policy_version", "result"]},
+                "supports": {"allOf": [{"contains": {"const": "cause"}}, {"contains": {"const": "action"}}, {"contains": {"const": "determination"}}]}
               },
-              "required": ["kind", "scope", "validation"]
+              "required": ["kind", "scope", "validation", "supports"]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"cause": {"properties": {"code": {"not": {"const": "unknown"}}}, "required": ["code"]}}, "required": ["cause"]},
+      "then": {"properties": {"subject": {"required": ["operation_id"]}}}
+    },
+    {
+      "if": {"properties": {"cause": {"properties": {"code": {"const": "credential_invalid"}}, "required": ["code"]}}},
+      "then": {
+        "properties": {
+          "evidence_refs": {
+            "contains": {
+              "allOf": [
+                {
+                  "anyOf": [
+                    {"properties": {"kind": {"const": "provider_response"}, "response": {"properties": {"provider_class": {"const": "credential_rejected"}}}}, "required": ["kind", "response"]},
+                    {"properties": {"kind": {"const": "request_validation"}, "request_validation": {"properties": {"result": {"const": "failed"}, "failure_class": {"const": "credential_configuration"}}}}, "required": ["kind", "request_validation"]}
+                  ]
+                },
+                {"properties": {"supports": {"allOf": [{"contains": {"const": "cause"}}, {"contains": {"const": "action"}}, {"contains": {"const": "determination"}}]}}, "required": ["supports"]}
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"cause": {"properties": {"code": {"const": "provider_outage"}}, "required": ["code"]}}},
+      "then": {
+        "properties": {
+          "actions": {"properties": {"recommended": {"contains": {"properties": {"action_id": {"const": "check_provider_status"}}, "required": ["action_id"]}}}},
+          "evidence_refs": {
+            "contains": {
+              "allOf": [
+                {
+                  "anyOf": [
+                    {"properties": {"kind": {"const": "health_observation"}, "health_correlation": {"properties": {"state": {"enum": ["unavailable", "degraded"]}}}, "timing": {"properties": {"observed_age_seconds": {"maximum": 900}, "remaining_validity_seconds": {"maximum": 900}}}}, "required": ["kind", "health_correlation", "timing"]},
+                    {"properties": {"kind": {"const": "provider_notice"}, "notice": {"properties": {"state": {"enum": ["service_suspended", "degraded"]}}}, "timing": {"properties": {"observed_age_seconds": {"maximum": 86400}, "remaining_validity_seconds": {"maximum": 86400}}}}, "required": ["kind", "notice", "timing"]},
+                    {"properties": {"kind": {"const": "provider_response"}, "response": {"properties": {"provider_class": {"const": "service_unavailable"}}}, "timing": {"properties": {"observed_age_seconds": {"maximum": 300}, "remaining_validity_seconds": {"maximum": 300}}}}, "required": ["kind", "response", "timing"]}
+                  ]
+                },
+                {"properties": {"supports": {"allOf": [{"contains": {"const": "cause"}}, {"contains": {"const": "action"}}, {"contains": {"const": "determination"}}]}}, "required": ["supports"]}
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"cause": {"properties": {"code": {"const": "provider_outage"}, "determination": {"const": "observed"}}, "required": ["code", "determination"]}}},
+      "then": {
+        "properties": {
+          "evidence_refs": {
+            "contains": {
+              "properties": {
+                "kind": {"const": "provider_notice"},
+                "authority": {"enum": ["provider", "provider_portal"]},
+                "notice": {"properties": {"state": {"enum": ["service_suspended", "degraded"]}}},
+                "timing": {"properties": {"validity": {"const": "current_at_assessment"}, "observed_age_seconds": {"maximum": 86400}, "remaining_validity_seconds": {"maximum": 86400}}},
+                "supports": {"allOf": [{"contains": {"const": "cause"}}, {"contains": {"const": "determination"}}]}
+              },
+              "required": ["kind", "authority", "notice", "timing", "supports"]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "cause": {"properties": {"code": {"const": "provider_outage"}}, "required": ["code"]},
+          "actions": {"properties": {"avoid": {"contains": {"properties": {"action_id": {"const": "reissue_credential"}}, "required": ["action_id"]}}}}
+        }
+      },
+      "then": {
+        "properties": {
+          "evidence_refs": {
+            "contains": {
+              "allOf": [
+                {
+                  "anyOf": [
+                    {"properties": {"kind": {"const": "health_observation"}, "health_correlation": {"properties": {"state": {"enum": ["unavailable", "degraded"]}}}, "timing": {"properties": {"observed_age_seconds": {"maximum": 900}, "remaining_validity_seconds": {"maximum": 900}}}}, "required": ["kind", "health_correlation", "timing"]},
+                    {"properties": {"kind": {"const": "provider_notice"}, "notice": {"properties": {"state": {"enum": ["service_suspended", "degraded"]}}}, "timing": {"properties": {"observed_age_seconds": {"maximum": 86400}, "remaining_validity_seconds": {"maximum": 86400}}}}, "required": ["kind", "notice", "timing"]}
+                  ]
+                },
+                {"properties": {"supports": {"contains": {"const": "action"}}}, "required": ["supports"]}
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"cause": {"properties": {"code": {"const": "ready"}}, "required": ["code"]}}},
+      "then": {
+        "properties": {
+          "evidence_refs": {
+            "contains": {
+              "properties": {
+                "kind": {"const": "validation_result"},
+                "validation": {
+                  "properties": {"result": {"const": "passed"}},
+                  "anyOf": [
+                    {"properties": {"required_level": {"const": "L1"}, "achieved_level": {"enum": ["L1", "L2", "L3", "L4"]}}},
+                    {"properties": {"required_level": {"const": "L2"}, "achieved_level": {"enum": ["L2", "L3", "L4"]}}},
+                    {"properties": {"required_level": {"const": "L3"}, "achieved_level": {"enum": ["L3", "L4"]}}},
+                    {"properties": {"required_level": {"const": "L4"}, "achieved_level": {"const": "L4"}}}
+                  ]
+                },
+                "supports": {"allOf": [{"contains": {"const": "cause"}}, {"contains": {"const": "action"}}, {"contains": {"const": "determination"}}]}
+              },
+              "required": ["kind", "validation", "supports"]
             }
           }
         }
@@ -262,10 +401,10 @@
     "subject": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["source_id", "provider"],
+      "required": ["source_id", "provider_id", "dataset_id", "operation_id"],
       "properties": {
         "source_id": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
-        "provider": {"type": "string", "minLength": 1, "maxLength": 100},
+        "provider_id": {"type": "string", "pattern": "^[a-z][a-z0-9_]{1,63}$"},
         "dataset_id": {"$ref": "#/$defs/identifier"},
         "operation_id": {"$ref": "#/$defs/identifier"}
       }
@@ -323,12 +462,12 @@
     "evidence_ref": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["kind", "ref_id", "authority", "observed_at", "scope", "supports"],
+      "required": ["kind", "ref_id", "authority", "timing", "scope", "supports"],
       "properties": {
         "kind": {"enum": ["registry_rule", "registry_operation", "approval_record", "request_validation", "provider_response", "health_observation", "provider_notice", "response_contract", "data_quality_assertion", "validation_result"]},
         "ref_id": {"$ref": "#/$defs/identifier"},
         "authority": {"enum": ["registry", "data_go_kr_portal", "provider_portal", "provider", "datapan_health", "datapan_cli", "datapan_web", "consumer_validation"]},
-        "observed_at": {"type": "string", "format": "date-time"},
+        "timing": {"$ref": "#/$defs/evidence_timing"},
         "scope": {"$ref": "#/$defs/evidence_scope"},
         "version": {"$ref": "#/$defs/identifier"},
         "approval": {"$ref": "#/$defs/approval_evidence"},
@@ -341,6 +480,17 @@
         "freshness": {"$ref": "#/$defs/freshness_evidence"},
         "validation": {"$ref": "#/$defs/validation_evidence"},
         "supports": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["cause", "scope", "determination", "ownership", "action"]}}
+      },
+      "dependentSchemas": {
+        "approval": {"properties": {"kind": {"const": "approval_record"}}},
+        "response": {"properties": {"kind": {"const": "provider_response"}}},
+        "request_validation": {"properties": {"kind": {"const": "request_validation"}}},
+        "contract_assertion": {"properties": {"kind": {"const": "response_contract"}}},
+        "quality_assertion": {"properties": {"kind": {"const": "data_quality_assertion"}}},
+        "health_correlation": {"properties": {"kind": {"const": "health_observation"}}},
+        "notice": {"properties": {"kind": {"const": "provider_notice"}}},
+        "freshness": {"properties": {"kind": {"const": "data_quality_assertion"}}, "required": ["quality_assertion"]},
+        "validation": {"properties": {"kind": {"const": "validation_result"}}}
       },
       "allOf": [
         {"if": {"properties": {"kind": {"enum": ["registry_rule", "registry_operation"]}}, "required": ["kind"]}, "then": {"properties": {"authority": {"const": "registry"}}}},
@@ -375,17 +525,53 @@
         {
           "if": {"properties": {"kind": {"const": "validation_result"}}, "required": ["kind"]},
           "then": {"required": ["validation"], "properties": {"authority": {"enum": ["datapan_cli", "datapan_health", "consumer_validation"]}}}
+        },
+        {
+          "if": {"properties": {"supports": {"contains": {"enum": ["cause", "action", "determination"]}}}, "required": ["supports"]},
+          "then": {"properties": {"timing": {"properties": {"validity": {"const": "current_at_assessment"}}}}}
+        },
+        {
+          "if": {"properties": {"kind": {"const": "provider_response"}, "supports": {"contains": {"const": "cause"}}}, "required": ["kind", "supports"]},
+          "then": {"properties": {"timing": {"properties": {"observed_age_seconds": {"maximum": 300}, "remaining_validity_seconds": {"maximum": 300}}}}}
+        },
+        {
+          "if": {"properties": {"kind": {"const": "health_observation"}, "supports": {"contains": {"const": "cause"}}}, "required": ["kind", "supports"]},
+          "then": {"properties": {"timing": {"properties": {"observed_age_seconds": {"maximum": 900}, "remaining_validity_seconds": {"maximum": 900}}}}}
+        },
+        {
+          "if": {"properties": {"kind": {"const": "provider_notice"}, "supports": {"contains": {"const": "cause"}}}, "required": ["kind", "supports"]},
+          "then": {"properties": {"timing": {"properties": {"observed_age_seconds": {"maximum": 86400}, "remaining_validity_seconds": {"maximum": 86400}}}}}
         }
       ]
     },
     "evidence_scope": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["level", "scope_id"],
+      "required": ["level", "subject_ref"],
       "properties": {
         "level": {"enum": ["source", "dataset", "operation", "request", "response", "data_quality"]},
-        "scope_id": {"$ref": "#/$defs/identifier"}
+        "subject_ref": {"const": "envelope_subject"},
+        "detail_id": {"$ref": "#/$defs/identifier"}
       }
+    },
+    "evidence_timing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["basis", "observed_age_seconds", "validity", "validity_policy_version"],
+      "properties": {
+        "basis": {"const": "relative_to_assessed_at"},
+        "observed_age_seconds": {"type": "integer", "minimum": 0},
+        "validity": {"enum": ["current_at_assessment", "immutable"]},
+        "validity_policy_version": {"$ref": "#/$defs/identifier"},
+        "remaining_validity_seconds": {"type": "integer", "minimum": 0, "maximum": 604800}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"validity": {"const": "current_at_assessment"}}, "required": ["validity"]},
+          "then": {"required": ["remaining_validity_seconds"], "properties": {"observed_age_seconds": {"maximum": 604800}}},
+          "else": {"not": {"required": ["remaining_validity_seconds"]}}
+        }
+      ]
     },
     "approval_evidence": {
       "type": "object",

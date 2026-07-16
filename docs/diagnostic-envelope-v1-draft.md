@@ -25,9 +25,9 @@ identifiers and typed metadata instead of raw evidence.
 ## Minimum envelope
 
 Every instance identifies when the assessment was made, the source and bounded
-subject, one cause and determination, the accountable party, recommended and
-avoided actions, typed evidence references, and a fail-closed redaction
-attestation.
+subject through stable `source_id` and `provider_id` values, one cause and
+determination, the accountable party, recommended and avoided actions, typed
+evidence references, and a fail-closed redaction attestation.
 
 There is one certainty axis:
 
@@ -39,19 +39,33 @@ There is one certainty axis:
 There is no numeric or probability-like confidence field. Consumers must not
 turn `inferred` into a probability.
 
-`assessed_at` records the conclusion time. Every evidence reference also names
-its authority, observation time, exact scope, and a safe version identifier
+`assessed_at` records the conclusion time. Evidence does not duplicate an
+absolute observation timestamp or subject identifier. Instead, its
+`timing.observed_age_seconds` is a non-negative offset from `assessed_at`, its
+validity state and remaining validity are bounded by a versioned policy, and its
+scope uses the constant `subject_ref=envelope_subject`. This makes “not after
+assessment” and subject binding structural JSON Schema facts instead of
+cross-field comparisons that different validators could implement differently.
+Every evidence reference also names its authority and a safe version identifier
 when the conclusion depends on a policy or contract. Checked-in examples use
 fictional fixture identities and declare `fixture.status=deterministic_example`;
 they are not claims about current upstream state.
 
-Evidence kinds bind both authority and bounded result metadata. Provider
-responses carry an HTTP status, a provider result class, and the classification
-policy version; request validation carries its result, failure class, and
-policy version. Contract and quality assertions carry explicit pass/fail-like
-results and policy versions. Health observations carry a correlated state and
-probe policy, while provider notices carry their direct state and notice
-version. A `ref_id` or a generic version string never establishes a cause by
+Cause and action evidence must explicitly list `cause`, `determination`, and
+`action` in `supports`; a typed payload that only supports scope cannot select a
+cause or justify advice. Evidence carrying those supports must be
+`current_at_assessment`, never immutable. Runtime observations are capped at a
+seven-day contract maximum, with tighter limits of five minutes for a provider
+response, fifteen minutes for Health correlation, and one day for a provider
+notice. Approval propagation is also operation-bound and current at assessment.
+
+Evidence kinds bind both authority and one mutually exclusive bounded result
+payload. Provider responses carry an HTTP status, a provider result class, and
+the classification policy version; request validation carries its result,
+failure class, and policy version. Contract and quality assertions carry
+explicit pass/fail-like results and policy versions. Health observations carry
+a correlated state and probe policy, while provider notices carry their direct
+state and notice version. A `ref_id` or a generic version string never establishes a cause by
 itself.
 
 ## Same symptom, different action
@@ -99,10 +113,13 @@ the required level.
 versioned freshness assertion containing reference time, actual time, maximum
 age, and a `stale` result.
 
-A single response classified as `service_unavailable` may support an inferred
-outage and `check_provider_status`, but it cannot justify
+A single current response classified as `service_unavailable` may support only
+an inferred outage and `check_provider_status`, but it cannot justify
 `avoid=reissue_credential`. That stronger advice requires a versioned Health
 correlation or a direct provider notice independent of the credential path.
+A provider outage may be `observed` only when a current direct provider notice
+states suspension or degradation; Health correlation and classified responses
+remain inferred evidence.
 
 ## Relationship to existing Registry contracts
 
@@ -128,7 +145,14 @@ enum values, action meanings, and evidence semantics are immutable. Shape or
 enum additions require a new schema version because the contract is
 fail-closed with `additionalProperties=false`.
 
-Consumers validate the exact `schema_version`. They render explanation and
+Consumers validate the exact `schema_version` with the Draft 2020-12 JSON
+Schema. The schema is the only required validation artifact: subject binding,
+relative time validity, evidence support, kind-exclusive payloads, outage
+determination authority, and the complete ready-level ordering are all encoded
+there. No consumer-specific Python or hidden semantic validator is required.
+The schema validates typed authority attestations and their safe composition; it
+does not independently prove that an upstream authority reported a true fact.
+Consumers render explanation and
 action identifiers using consumer-owned copy. If evidence does not satisfy a
 specific cause, consumers emit `unknown` plus `gather_more_evidence`; they do
 not guess a provider outage, approval state, or credential state.

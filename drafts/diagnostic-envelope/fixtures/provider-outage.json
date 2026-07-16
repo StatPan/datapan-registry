@@ -8,9 +8,9 @@
   },
   "subject": {
     "source_id": "data_go_kr",
-    "provider": "data.go.kr",
     "dataset_id": "fixture-dataset-outage",
-    "operation_id": "fixture-operation-outage"
+    "operation_id": "fixture-operation-outage",
+    "provider_id": "data_go_kr"
   },
   "cause": {
     "code": "provider_outage",
@@ -43,10 +43,9 @@
       "kind": "provider_response",
       "ref_id": "provider-response:http-401",
       "authority": "provider",
-      "observed_at": "2026-07-16T00:25:00Z",
       "scope": {
         "level": "operation",
-        "scope_id": "fixture-operation-outage"
+        "subject_ref": "envelope_subject"
       },
       "version": "error-taxonomy-v1",
       "response": {
@@ -56,16 +55,22 @@
       },
       "supports": [
         "scope"
-      ]
+      ],
+      "timing": {
+        "basis": "relative_to_assessed_at",
+        "observed_age_seconds": 0,
+        "validity": "current_at_assessment",
+        "validity_policy_version": "error-taxonomy-v1",
+        "remaining_validity_seconds": 300
+      }
     },
     {
       "kind": "health_observation",
       "ref_id": "health:fixture-operation-outage:unavailable",
       "authority": "datapan_health",
-      "observed_at": "2026-07-16T00:24:00Z",
       "scope": {
         "level": "operation",
-        "scope_id": "fixture-operation-outage"
+        "subject_ref": "envelope_subject"
       },
       "version": "health-probe-v1",
       "health_correlation": {
@@ -77,16 +82,22 @@
         "determination",
         "ownership",
         "action"
-      ]
+      ],
+      "timing": {
+        "basis": "relative_to_assessed_at",
+        "observed_age_seconds": 60,
+        "validity": "current_at_assessment",
+        "validity_policy_version": "health-probe-v1",
+        "remaining_validity_seconds": 900
+      }
     },
     {
       "kind": "provider_notice",
       "ref_id": "provider-notice:fixture-service-suspension",
       "authority": "provider",
-      "observed_at": "2026-07-16T00:23:00Z",
       "scope": {
         "level": "operation",
-        "scope_id": "fixture-operation-outage"
+        "subject_ref": "envelope_subject"
       },
       "version": "notice-snapshot-v1",
       "notice": {
@@ -97,7 +108,14 @@
         "cause",
         "determination",
         "ownership"
-      ]
+      ],
+      "timing": {
+        "basis": "relative_to_assessed_at",
+        "observed_age_seconds": 120,
+        "validity": "current_at_assessment",
+        "validity_policy_version": "notice-snapshot-v1",
+        "remaining_validity_seconds": 86400
+      }
     }
   ],
   "redaction": {

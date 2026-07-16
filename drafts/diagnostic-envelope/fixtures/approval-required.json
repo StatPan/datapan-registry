@@ -8,9 +8,9 @@
   },
   "subject": {
     "source_id": "data_go_kr",
-    "provider": "data.go.kr",
     "dataset_id": "fixture-dataset-approval",
-    "operation_id": "fixture-operation-approval"
+    "operation_id": "fixture-operation-approval",
+    "provider_id": "data_go_kr"
   },
   "cause": {
     "code": "approval_required",
@@ -43,17 +43,16 @@
       "kind": "approval_record",
       "ref_id": "approval:fixture-operation-approval:not-applied",
       "authority": "data_go_kr_portal",
-      "observed_at": "2026-07-16T00:00:00Z",
       "scope": {
         "level": "operation",
-        "scope_id": "fixture-operation-approval"
+        "subject_ref": "envelope_subject"
       },
       "version": "portal-snapshot-v1",
       "approval": {
         "state": "not_applied",
         "effective_scope": {
           "level": "operation",
-          "scope_id": "fixture-operation-approval"
+          "subject_ref": "envelope_subject"
         }
       },
       "supports": [
@@ -62,7 +61,14 @@
         "determination",
         "ownership",
         "action"
-      ]
+      ],
+      "timing": {
+        "basis": "relative_to_assessed_at",
+        "observed_age_seconds": 0,
+        "validity": "current_at_assessment",
+        "validity_policy_version": "portal-snapshot-v1",
+        "remaining_validity_seconds": 604800
+      }
     }
   ],
   "redaction": {

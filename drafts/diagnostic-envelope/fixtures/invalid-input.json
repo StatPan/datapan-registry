@@ -8,9 +8,9 @@
   },
   "subject": {
     "source_id": "data_go_kr",
-    "provider": "data.go.kr",
     "dataset_id": "fixture-dataset-input",
-    "operation_id": "fixture-operation-input"
+    "operation_id": "fixture-operation-input",
+    "provider_id": "data_go_kr"
   },
   "cause": {
     "code": "invalid_input",
@@ -42,10 +42,10 @@
       "kind": "request_validation",
       "ref_id": "request-validation:missing-required-params",
       "authority": "datapan_cli",
-      "observed_at": "2026-07-16T00:15:00Z",
       "scope": {
         "level": "request",
-        "scope_id": "fixture-request-input"
+        "subject_ref": "envelope_subject",
+        "detail_id": "fixture-request-input"
       },
       "version": "registry-required-params-v1",
       "request_validation": {
@@ -58,7 +58,14 @@
         "determination",
         "ownership",
         "action"
-      ]
+      ],
+      "timing": {
+        "basis": "relative_to_assessed_at",
+        "observed_age_seconds": 0,
+        "validity": "current_at_assessment",
+        "validity_policy_version": "registry-required-params-v1",
+        "remaining_validity_seconds": 3600
+      }
     }
   ],
   "redaction": {

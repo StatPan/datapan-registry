@@ -8,9 +8,9 @@
   },
   "subject": {
     "source_id": "data_go_kr",
-    "provider": "data.go.kr",
     "dataset_id": "fixture-dataset-contract",
-    "operation_id": "fixture-operation-contract"
+    "operation_id": "fixture-operation-contract",
+    "provider_id": "data_go_kr"
   },
   "cause": {
     "code": "contract_drift",
@@ -42,10 +42,10 @@
       "kind": "response_contract",
       "ref_id": "contract:fixture-operation-contract:shape-mismatch",
       "authority": "consumer_validation",
-      "observed_at": "2026-07-16T00:30:00Z",
       "scope": {
         "level": "response",
-        "scope_id": "fixture-operation-contract"
+        "subject_ref": "envelope_subject",
+        "detail_id": "fixture-operation-contract"
       },
       "version": "response-contract-v1",
       "contract_assertion": {
@@ -58,7 +58,14 @@
         "determination",
         "ownership",
         "action"
-      ]
+      ],
+      "timing": {
+        "basis": "relative_to_assessed_at",
+        "observed_age_seconds": 0,
+        "validity": "current_at_assessment",
+        "validity_policy_version": "response-contract-v1",
+        "remaining_validity_seconds": 3600
+      }
     }
   ],
   "redaction": {

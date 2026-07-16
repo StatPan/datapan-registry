@@ -57,7 +57,6 @@ FORBIDDEN_TEXT = (
     re.compile(r"(?i)\bbearer\s+[a-z0-9._~-]+"),
     re.compile(r"https?://"),
 )
-VALIDATION_LEVEL_RANK = {"L1": 1, "L2": 2, "L3": 3, "L4": 4}
 
 
 def load(path: pathlib.Path) -> Any:
@@ -108,6 +107,20 @@ def validate_contract(contract: dict[str, Any], schema: dict[str, Any]) -> None:
         raise ValueError("certainty axis must be observed/inferred/unknown")
     if compatibility.get("numeric_or_probability_confidence_allowed") is not False:
         raise ValueError("numeric or probability-like confidence is not allowed")
+    validation_contract = contract.get("validation_contract", {})
+    if validation_contract.get("validator") != "json-schema-draft-2020-12":
+        raise ValueError("consumers must use the portable JSON Schema validation contract")
+    if validation_contract.get("single_required_artifact") != contract.get("envelope_schema"):
+        raise ValueError("consumer validation artifact must be the envelope schema")
+    if validation_contract.get("additional_semantic_validator_required") is not False:
+        raise ValueError("hidden or implementation-specific semantic validators are not allowed")
+    if validation_contract.get("ready_level_order_encoded_in_schema") is not True:
+        raise ValueError("ready level ordering must remain portable in the JSON Schema")
+    if validation_contract.get("evidence_payload_is_kind_exclusive") is not True:
+        raise ValueError("evidence payloads must remain kind-exclusive")
+    evidence_kinds = schema["$defs"]["evidence_ref"]["properties"]["kind"]["enum"]
+    if list(contract.get("evidence_variants", {})) != evidence_kinds:
+        raise ValueError("consumer evidence variants must cover schema kinds in order")
     catalog_codes = [item["code"] for item in contract.get("cause_catalog", [])]
     schema_codes = schema["$defs"]["cause"]["properties"]["code"]["enum"]
     if catalog_codes != schema_codes:
@@ -115,26 +128,8 @@ def validate_contract(contract: dict[str, Any], schema: dict[str, Any]) -> None:
     reject_sensitive(contract, "consumer_contract")
 
 
-def validate_semantics(value: dict[str, Any]) -> None:
-    if value.get("cause", {}).get("code") != "ready":
-        return
-    validations = [
-        item["validation"]
-        for item in value.get("evidence_refs", [])
-        if item.get("kind") == "validation_result"
-        and item.get("validation", {}).get("result") == "passed"
-    ]
-    if not any(
-        VALIDATION_LEVEL_RANK[item["achieved_level"]]
-        >= VALIDATION_LEVEL_RANK[item["required_level"]]
-        for item in validations
-    ):
-        raise ValueError("ready requires achieved validation level to meet or exceed required level")
-
-
 def validate_fixture(path: pathlib.Path, value: dict[str, Any], validator: jsonschema.Draft202012Validator) -> None:
     validator.validate(value)
-    validate_semantics(value)
     if value.get("fixture", {}).get("status") != "deterministic_example":
         raise ValueError(f"{path.name}: fixture status must be deterministic_example")
     if value["fixture"]["scenario_id"] != path.stem:

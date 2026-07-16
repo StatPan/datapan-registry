@@ -8,9 +8,9 @@
   },
   "subject": {
     "source_id": "data_go_kr",
-    "provider": "data.go.kr",
     "dataset_id": "fixture-dataset-quality",
-    "operation_id": "fixture-operation-quality"
+    "operation_id": "fixture-operation-quality",
+    "provider_id": "data_go_kr"
   },
   "cause": {
     "code": "semantic_quality",
@@ -42,10 +42,9 @@
       "kind": "provider_response",
       "ref_id": "provider-response:http-200-empty",
       "authority": "provider",
-      "observed_at": "2026-07-16T00:35:00Z",
       "scope": {
         "level": "operation",
-        "scope_id": "fixture-operation-quality"
+        "subject_ref": "envelope_subject"
       },
       "version": "response-envelope-v1",
       "response": {
@@ -55,16 +54,23 @@
       },
       "supports": [
         "scope"
-      ]
+      ],
+      "timing": {
+        "basis": "relative_to_assessed_at",
+        "observed_age_seconds": 0,
+        "validity": "current_at_assessment",
+        "validity_policy_version": "response-envelope-v1",
+        "remaining_validity_seconds": 300
+      }
     },
     {
       "kind": "data_quality_assertion",
       "ref_id": "quality:expected-entity-missing",
       "authority": "consumer_validation",
-      "observed_at": "2026-07-16T00:35:00Z",
       "scope": {
         "level": "data_quality",
-        "scope_id": "fixture-operation-quality:expected-entity"
+        "subject_ref": "envelope_subject",
+        "detail_id": "fixture-operation-quality:expected-entity"
       },
       "version": "quality-policy-v1",
       "quality_assertion": {
@@ -77,7 +83,14 @@
         "determination",
         "ownership",
         "action"
-      ]
+      ],
+      "timing": {
+        "basis": "relative_to_assessed_at",
+        "observed_age_seconds": 0,
+        "validity": "current_at_assessment",
+        "validity_policy_version": "quality-policy-v1",
+        "remaining_validity_seconds": 3600
+      }
     }
   ],
   "redaction": {

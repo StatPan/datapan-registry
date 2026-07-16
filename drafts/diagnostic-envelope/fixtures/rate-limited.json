@@ -8,9 +8,9 @@
   },
   "subject": {
     "source_id": "data_go_kr",
-    "provider": "data.go.kr",
     "dataset_id": "fixture-dataset-limit",
-    "operation_id": "fixture-operation-limit"
+    "operation_id": "fixture-operation-limit",
+    "provider_id": "data_go_kr"
   },
   "cause": {
     "code": "rate_limited",
@@ -42,10 +42,9 @@
       "kind": "provider_response",
       "ref_id": "provider-response:http-429",
       "authority": "provider",
-      "observed_at": "2026-07-16T00:20:00Z",
       "scope": {
         "level": "operation",
-        "scope_id": "fixture-operation-limit"
+        "subject_ref": "envelope_subject"
       },
       "version": "error-taxonomy-v1",
       "response": {
@@ -58,7 +57,14 @@
         "determination",
         "ownership",
         "action"
-      ]
+      ],
+      "timing": {
+        "basis": "relative_to_assessed_at",
+        "observed_age_seconds": 0,
+        "validity": "current_at_assessment",
+        "validity_policy_version": "error-taxonomy-v1",
+        "remaining_validity_seconds": 300
+      }
     }
   ],
   "redaction": {

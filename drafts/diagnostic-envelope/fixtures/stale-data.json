@@ -8,9 +8,9 @@
   },
   "subject": {
     "source_id": "data_go_kr",
-    "provider": "data.go.kr",
     "dataset_id": "fixture-dataset-stale",
-    "operation_id": "fixture-operation-stale"
+    "operation_id": "fixture-operation-stale",
+    "provider_id": "data_go_kr"
   },
   "cause": {
     "code": "stale_data",
@@ -42,10 +42,10 @@
       "kind": "data_quality_assertion",
       "ref_id": "quality:fixture-operation-stale:freshness",
       "authority": "consumer_validation",
-      "observed_at": "2026-07-16T00:40:00Z",
       "scope": {
         "level": "data_quality",
-        "scope_id": "fixture-operation-stale:reference-time"
+        "subject_ref": "envelope_subject",
+        "detail_id": "fixture-operation-stale:reference-time"
       },
       "version": "freshness-assertion-v1",
       "quality_assertion": {
@@ -65,7 +65,14 @@
         "determination",
         "ownership",
         "action"
-      ]
+      ],
+      "timing": {
+        "basis": "relative_to_assessed_at",
+        "observed_age_seconds": 0,
+        "validity": "current_at_assessment",
+        "validity_policy_version": "freshness-assertion-v1",
+        "remaining_validity_seconds": 3600
+      }
     }
   ],
   "redaction": {

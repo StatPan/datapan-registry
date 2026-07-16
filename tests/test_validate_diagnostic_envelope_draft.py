@@ -56,12 +56,42 @@ class DiagnosticEnvelopeDraftTest(unittest.TestCase):
     def test_approval_propagation_requires_authoritative_timed_scope(self):
         value = copy.deepcopy(self.fixtures["approval-propagating"])
         approval = next(item for item in value["evidence_refs"] if item["kind"] == "approval_record")
-        approval.pop("observed_at")
+        approval.pop("timing")
         self.assert_schema_rejects(value)
         value = copy.deepcopy(self.fixtures["approval-propagating"])
         approval = next(item for item in value["evidence_refs"] if item["kind"] == "approval_record")
         approval["authority"] = "datapan_cli"
         self.assert_schema_rejects(value)
+
+    def test_scope_is_structurally_bound_to_the_envelope_subject(self):
+        value = copy.deepcopy(self.fixtures["approval-propagating"])
+        value["subject"].pop("operation_id")
+        self.assert_schema_rejects(value)
+        value = copy.deepcopy(self.fixtures["approval-propagating"])
+        approval = next(item for item in value["evidence_refs"] if item["kind"] == "approval_record")
+        approval["scope"]["subject_ref"] = "another_subject"
+        self.assert_schema_rejects(value)
+        value = copy.deepcopy(self.fixtures["approval-propagating"])
+        approval = next(item for item in value["evidence_refs"] if item["kind"] == "approval_record")
+        approval["approval"]["effective_scope"]["subject_ref"] = "another_subject"
+        self.assert_schema_rejects(value)
+
+    def test_supporting_evidence_is_current_bounded_and_explicit(self):
+        value = copy.deepcopy(self.fixtures["approval-propagating"])
+        approval = next(item for item in value["evidence_refs"] if item["kind"] == "approval_record")
+        approval["timing"]["validity"] = "immutable"
+        approval["timing"].pop("remaining_validity_seconds")
+        self.assert_schema_rejects(value)
+        value = copy.deepcopy(self.fixtures["approval-propagating"])
+        approval = next(item for item in value["evidence_refs"] if item["kind"] == "approval_record")
+        approval["timing"]["observed_age_seconds"] = 604801
+        self.assert_schema_rejects(value)
+        for support in ("cause", "action", "determination"):
+            with self.subTest(support=support):
+                value = copy.deepcopy(self.fixtures["approval-propagating"])
+                approval = next(item for item in value["evidence_refs"] if item["kind"] == "approval_record")
+                approval["supports"].remove(support)
+                self.assert_schema_rejects(value)
 
     def test_credential_rejection_does_not_need_approval_state(self):
         value = self.fixtures["credential-invalid"]
@@ -93,7 +123,29 @@ class DiagnosticEnvelopeDraftTest(unittest.TestCase):
         value["evidence_refs"] = [response]
         self.assert_schema_rejects(value)
         value["actions"]["avoid"] = []
+        response["supports"] = ["cause", "determination", "action"]
         self.validator.validate(value)
+
+    def test_provider_outage_determination_and_correlation_are_bounded(self):
+        value = copy.deepcopy(self.fixtures["provider-outage"])
+        response = value["evidence_refs"][0]
+        response["response"]["provider_class"] = "service_unavailable"
+        response["supports"] = ["cause", "determination", "action"]
+        value["evidence_refs"] = [response]
+        value["actions"]["avoid"] = []
+        value["cause"]["determination"] = "observed"
+        self.assert_schema_rejects(value)
+        value = copy.deepcopy(self.fixtures["provider-outage"])
+        value["cause"]["determination"] = "observed"
+        self.validator.validate(value)
+        value = copy.deepcopy(self.fixtures["provider-outage"])
+        health = next(item for item in value["evidence_refs"] if item["kind"] == "health_observation")
+        health["timing"]["observed_age_seconds"] = 901
+        self.assert_schema_rejects(value)
+        value = copy.deepcopy(self.fixtures["provider-outage"])
+        health = next(item for item in value["evidence_refs"] if item["kind"] == "health_observation")
+        health["timing"]["remaining_validity_seconds"] = 901
+        self.assert_schema_rejects(value)
 
     def test_contract_and_quality_causes_require_failed_typed_assertions(self):
         value = copy.deepcopy(self.fixtures["contract-drift"])
@@ -139,9 +191,34 @@ class DiagnosticEnvelopeDraftTest(unittest.TestCase):
         value = copy.deepcopy(self.fixtures["ready"])
         value["evidence_refs"][0]["validation"]["required_level"] = "L4"
         value["evidence_refs"][0]["validation"]["achieved_level"] = "L1"
-        self.validator.validate(value)
-        with self.assertRaisesRegex(ValueError, "meet or exceed"):
-            MODULE.validate_semantics(value)
+        self.assert_schema_rejects(value)
+
+    def test_evidence_payload_is_kind_exclusive(self):
+        value = copy.deepcopy(self.fixtures["rate-limited"])
+        value["evidence_refs"][0]["notice"] = {
+            "state": "service_suspended",
+            "notice_version": "notice-v1",
+        }
+        self.assert_schema_rejects(value)
+
+    def test_provider_identity_is_a_bounded_identifier_not_free_text(self):
+        for provider_id in (
+            "upstream rejected the supplied credential",
+            "serviceKey=example-secret",
+            "https://provider.test/status",
+        ):
+            with self.subTest(provider_id=provider_id):
+                value = copy.deepcopy(self.fixtures["unknown"])
+                value["subject"]["provider_id"] = provider_id
+                self.assert_schema_rejects(value)
+
+    def test_consumers_need_only_the_portable_schema(self):
+        contract = MODULE.load(MODULE.CONSUMER_CONTRACT)
+        validation = contract["validation_contract"]
+        self.assertEqual(validation["validator"], "json-schema-draft-2020-12")
+        self.assertEqual(validation["single_required_artifact"], contract["envelope_schema"])
+        self.assertFalse(validation["additional_semantic_validator_required"])
+        self.assertTrue(validation["ready_level_order_encoded_in_schema"])
 
     def test_raw_provider_text_url_and_credentials_fail_closed(self):
         for key, content in (
