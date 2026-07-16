@@ -4,9 +4,11 @@
 from __future__ import annotations
 
 import copy
+import functools
 import hashlib
 import json
 import pathlib
+import re
 import sys
 from typing import Any
 
@@ -21,11 +23,20 @@ FIXTURES = DRAFT / "fixtures"
 PACKETS = DRAFT / "consumer-compatibility"
 EXPECTED_CONSUMERS = ["datapan-cli", "datapan-health", "datapan-web"]
 OBLIGATIONS = {"action", "scope", "timing", "redaction", "unknown_fallback"}
-SOURCE_BASIS_TYPES = {"registry_rule", "registry_fact", "consumer_evidence", "resolution_policy"}
+SOURCE_BASIS_TYPES = {"registry_rule", "registry_fact", "registry_dataset_identity", "consumer_evidence", "resolution_policy"}
+SELECTOR_SUPPORTS = {"cause", "determination", "action"}
+INTRINSIC_CANDIDATE_RULE_REFS = {
+    "registry-rule:data-go-kr-service-key-not-registered",
+    "registry-rule:data-go-kr-service-key-message",
+    "registry-rule:data-go-kr-external-timeout",
+    "registry-rule:data-go-kr-external-http-404",
+    "registry-rule:data-go-kr-parse-error",
+}
+SENSITIVE_KEYS = {"authorization", "credential", "credentials", "service_key", "api_key", "secret", "request_headers", "response_body", "response_rows", "user_id"}
 EXPECTED_OBLIGATIONS = {"action": "exact_mapping_result", "scope": "exact_bound_subject", "timing": "current_positive_validity", "redaction": "envelope_redaction_contract", "unknown_fallback": "unknown_gather_more_evidence"}
 EXPECTED_DEPENDENCIES = {
     "datapan-cli": ["StatPan/datapan-cli#160"],
-    "datapan-health": ["StatPan/datapan-health#19", "StatPan/datapan-health#21", "StatPan/datapan-health#22"],
+    "datapan-health": ["StatPan/datapan-health#19", "StatPan/datapan-health#20", "StatPan/datapan-health#21", "StatPan/datapan-health#22"],
     "datapan-web": ["StatPan/datapan#7", "StatPan/datapan#8", "StatPan/datapan#9", "StatPan/datapan#10", "StatPan/datapan#11"],
 }
 EXPECTED_PRODUCERS = {
@@ -38,6 +49,11 @@ EXPECTED_PRODUCERS = {
 def load(path: pathlib.Path) -> Any:
     with path.open(encoding="utf-8") as handle:
         return json.load(handle)
+
+
+@functools.lru_cache(maxsize=2)
+def registry_dataset_ids(path: str) -> frozenset[str]:
+    return frozenset(item["id"] for item in load(pathlib.Path(path)) if re.fullmatch(r"[0-9]{8}", item.get("id", "")) and any(operation.get("source", {}).get("system") == "data.go.kr" for operation in item.get("operations", [])))
 
 
 def pointer_get(value: Any, pointer: str) -> Any:
@@ -77,7 +93,10 @@ def validate_inputs(mapping: dict[str, Any]) -> None:
         if not path.is_file():
             raise ValueError(f"missing authoritative input: {item['path']}")
         value = load(path)
-        if item["schema_version"] != "json-schema-draft-2020-12" and value.get("schema_version") != item["schema_version"]:
+        if item["schema_version"] == "datapan.data-go-kr-registry-array.v1":
+            if not isinstance(value, list) or not value:
+                raise ValueError(f"Registry dataset array drift: {item['path']}")
+        elif item["schema_version"] != "json-schema-draft-2020-12" and value.get("schema_version") != item["schema_version"]:
             raise ValueError(f"schema version drift: {item['path']}")
         if hashlib.sha256(path.read_bytes()).hexdigest() != item["sha256"]:
             raise ValueError(f"authoritative input digest drift: {item['path']}")
@@ -167,6 +186,9 @@ def validate_source_basis(mapping: dict[str, Any]) -> None:
             if basis.get("type") not in SOURCE_BASIS_TYPES:
                 raise ValueError(f"{item['cause']}: invalid source basis type")
             if basis["type"] in {"registry_rule", "registry_fact"}:
+                required_keys = {"type", "artifact", "json_pointer", "expected"} if basis["type"] == "registry_rule" else {"type", "artifact", "json_pointer", "equals"}
+                if set(basis) != required_keys:
+                    raise ValueError(f"{item['cause']}: source basis shape drift")
                 if basis.get("artifact") not in allowed_artifacts:
                     raise ValueError(f"{item['cause']}: unpinned Registry source basis")
                 artifact = ROOT / basis.get("artifact", "")
@@ -174,14 +196,35 @@ def validate_source_basis(mapping: dict[str, Any]) -> None:
                     actual = pointer_get(load(artifact), basis["json_pointer"])
                 except (OSError, KeyError, IndexError, ValueError, TypeError) as exc:
                     raise ValueError(f"{item['cause']}: unresolved Registry source basis") from exc
-                if "expected" in basis and any(actual.get(key) != expected for key, expected in basis["expected"].items()):
-                    raise ValueError(f"{item['cause']}: Registry rule basis mismatch")
-                if "equals" in basis and actual != basis["equals"]:
+                if basis["type"] == "registry_rule":
+                    if not isinstance(basis["expected"], dict) or set(basis["expected"]) != {"rule_id"} or actual.get("rule_id") != basis["expected"]["rule_id"]:
+                        raise ValueError(f"{item['cause']}: Registry rule basis mismatch")
+                elif actual != basis["equals"]:
                     raise ValueError(f"{item['cause']}: Registry fact basis mismatch")
-            elif basis["type"] == "consumer_evidence" and basis.get("kind") not in evidence_kinds:
-                raise ValueError(f"{item['cause']}: invalid consumer evidence basis")
-            elif basis["type"] == "resolution_policy" and basis.get("ref") != "no_or_conflicting_specific_cause":
-                raise ValueError(f"{item['cause']}: invalid resolution policy basis")
+            elif basis["type"] == "consumer_evidence":
+                if set(basis) != {"type", "kind"} or basis.get("kind") not in evidence_kinds:
+                    raise ValueError(f"{item['cause']}: invalid consumer evidence basis")
+            elif basis["type"] == "resolution_policy":
+                if set(basis) != {"type", "ref"} or basis.get("ref") != "no_or_conflicting_specific_cause":
+                    raise ValueError(f"{item['cause']}: invalid resolution policy basis")
+            elif basis["type"] == "registry_dataset_identity":
+                expected = {"type", "artifact", "dataset_id_field", "source_system_field", "source_system_equals"}
+                if set(basis) != expected or basis["artifact"] not in allowed_artifacts or basis["dataset_id_field"] != "/id" or basis["source_system_field"] != "/operations/*/source/system" or basis["source_system_equals"] != "data.go.kr":
+                    raise ValueError(f"{item['cause']}: Registry dataset identity basis drift")
+                if not registry_dataset_ids(str(ROOT / basis["artifact"])):
+                    raise ValueError(f"{item['cause']}: Registry dataset identity basis has no valid facts")
+
+
+def intrinsically_candidate(predicate: dict[str, Any]) -> bool:
+    if not SELECTOR_SUPPORTS.issubset(predicate.get("supports", [])):
+        return True
+    if predicate.get("kind") == "registry_rule" and predicate.get("matches", {}).get("/ref_id") in INTRINSIC_CANDIDATE_RULE_REFS:
+        return True
+    if predicate.get("kind") == "provider_response":
+        matches = predicate.get("matches", {})
+        if matches.get("/response/provider_class") == "unclassified" and matches.get("/response/http_status") in {401, 403, 404}:
+            return True
+    return False
 
 
 def predicate_matches(predicate: dict[str, Any], instance: dict[str, Any], subject: dict[str, Any], validator: jsonschema.Draft202012Validator) -> bool:
@@ -225,12 +268,14 @@ def matching_predicates(mapping: dict[str, Any], instances: list[dict[str, Any]]
 
 def resolve(mapping: dict[str, Any], subject: dict[str, Any], instances: list[dict[str, Any]]) -> dict[str, Any]:
     matched = matching_predicates(mapping, instances, subject)
-    candidate_only = set(mapping["candidate_only_predicates"])
+    selectable = {predicate_id for predicate_id, predicate in mapping["evidence_predicates"].items() if not intrinsically_candidate(predicate)}
     eligible = []
     for item in mapping["cause_mappings"]:
         if item["cause"] == "unknown":
             continue
-        selectors_ok = all(any(pid in matched and pid not in candidate_only for pid in group) for group in item["selector_groups"])
+        if item["cause"] == "approval_required" and application_entry(mapping, subject) is None:
+            continue
+        selectors_ok = all(any(pid in matched and pid in selectable for pid in group) for group in item["selector_groups"])
         corroborators_ok = all(any(pid in matched for pid in group) for group in item["corroborator_groups"])
         if selectors_ok and corroborators_ok:
             eligible.append(item)
@@ -238,6 +283,8 @@ def resolve(mapping: dict[str, Any], subject: dict[str, Any], instances: list[di
         return next(item["result"] | {"cause": "unknown"} for item in mapping["cause_mappings"] if item["cause"] == "unknown")
     item = eligible[0]
     result = copy.deepcopy(item["result"] | {"cause": item["cause"]})
+    if item["cause"] == "approval_required":
+        result["application_entry"] = application_entry(mapping, subject)
     for variant in item.get("result_variants", []):
         if any(predicate_id in matched for predicate_id in variant["when_any"]):
             result.update({key: value for key, value in variant.items() if key != "when_any"})
@@ -245,9 +292,26 @@ def resolve(mapping: dict[str, Any], subject: dict[str, Any], instances: list[di
     return result
 
 
+def application_entry(mapping: dict[str, Any], subject: dict[str, Any]) -> dict[str, Any] | None:
+    contract = mapping["operation_application_path_contract"]
+    required = contract["required_subject"]
+    dataset_id = subject.get("dataset_id", "")
+    if subject.get("source_id") != required["source_id"] or subject.get("provider_id") != required["provider_id"] or re.fullmatch(required["dataset_id_pattern"], dataset_id) is None:
+        return None
+    identity = contract["registry_identity"]
+    if dataset_id not in registry_dataset_ids(str(ROOT / identity["artifact"])):
+        return None
+    url = contract["template"].replace("{dataset_id}", dataset_id)
+    if re.fullmatch(r"https://www\.data\.go\.kr/data/[0-9]{8}/openapi\.do", url) is None:
+        return None
+    return {"kind": contract["route_kind"], "url": url, "direct_submission_url": contract["direct_submission_url"]}
+
+
 def proof_instances(case: dict[str, Any]) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     fixture = load(FIXTURES / case["fixture"])
     subject = fixture["subject"]
+    subject = copy.deepcopy(subject)
+    subject.update(case.get("subject_overrides", {}))
     binding_subject = copy.deepcopy(subject)
     if "binding_operation_override" in case:
         binding_subject["operation_id"] = case["binding_operation_override"]
@@ -278,12 +342,20 @@ def validate_mapping(mapping: dict[str, Any], contract: dict[str, Any]) -> None:
         "unknown_action": "gather_more_evidence",
     }:
         raise ValueError("resolution policy drift")
+    if mapping.get("operation_application_path_contract") != {
+        "status": "dataset_application_entry_available",
+        "route_kind": "dataset_application_entry",
+        "direct_submission_url": False,
+        "template": "https://www.data.go.kr/data/{dataset_id}/openapi.do",
+        "required_subject": {"source_id": "data_go_kr", "provider_id": "data_go_kr", "dataset_id_pattern": "^[0-9]{8}$"},
+        "registry_identity": {"artifact": "data/data-go-kr.registry.json", "dataset_id_field": "/id", "source_system_field": "/operations/*/source/system", "source_system_equals": "data.go.kr"},
+        "generic_reference_rejected": "sources/data_go_kr.json#/references/key_request_url",
+        "invalid_subject_result": {"cause": "unknown", "determination": "unknown", "recommended_action": "gather_more_evidence", "avoid_actions": ["assume_provider_outage"]},
+    }:
+        raise ValueError("operation application path must fail closed while exact Registry fact is unavailable")
     validate_predicates(mapping)
     validate_source_basis(mapping)
     predicate_ids = set(mapping["evidence_predicates"])
-    candidates = set(mapping["candidate_only_predicates"])
-    if not candidates or not candidates.issubset(predicate_ids):
-        raise ValueError("candidate-only predicate set drift")
     catalog = {item["code"]: item for item in contract["cause_catalog"]}
     mappings = {item["cause"]: item for item in mapping["cause_mappings"]}
     if list(mappings) != list(catalog):
@@ -304,8 +376,8 @@ def validate_mapping(mapping: dict[str, Any], contract: dict[str, Any]) -> None:
         referenced = {pid for group in item["selector_groups"] + item["corroborator_groups"] for pid in group}
         if not referenced.issubset(predicate_ids):
             raise ValueError(f"{cause}: unknown predicate reference")
-        if any(candidates & set(group) for group in item["selector_groups"]):
-            raise ValueError(f"{cause}: candidate-only predicate used as selector")
+        if any(intrinsically_candidate(mapping["evidence_predicates"][pid]) for group in item["selector_groups"] for pid in group):
+            raise ValueError(f"{cause}: intrinsically non-selecting predicate used as selector")
         if item["result"] != fixture_results[cause]:
             if cause != "provider_outage":
                 raise ValueError(f"{cause}: result contract drift")
@@ -336,7 +408,8 @@ def validate_packets(mapping_digest: str) -> None:
     action_variants = ["approval_propagating:wait_for_approval_sync:avoid_reissue_credential", "provider_outage:health_or_notice:avoid_reissue_credential", "provider_outage:response_only:no_avoid_reissue_credential", "unknown:gather_more_evidence"]
     for consumer, path in zip(EXPECTED_CONSUMERS, sorted(PACKETS.glob("*.v1.json")), strict=True):
         packet = load(path)
-        if packet.get("consumer") != consumer or packet.get("status") != "draft":
+        expected_keys = {"schema_version", "status", "consumer", "schema_contract", "mapping_contract", "production_status", "producer_evidence", "accepted_causes", "accepted_action_variants", "fixture_contracts", "operation_application_path", "obligations"}
+        if set(packet) != expected_keys or packet.get("schema_version") != "datapan.diagnostic-consumer-compatibility.v1" or packet.get("consumer") != consumer or packet.get("status") != "draft":
             raise ValueError("consumer packet identity drift")
         if packet.get("schema_contract") != {"path": "drafts/diagnostic-envelope/datapan.diagnostic-envelope.v1.schema.json", "sha256": schema_digest}:
             raise ValueError(f"{consumer}: schema contract pin missing")
@@ -350,10 +423,20 @@ def validate_packets(mapping_digest: str) -> None:
         if packet.get("producer_evidence") != EXPECTED_PRODUCERS[consumer] or packet.get("accepted_causes") != causes or packet.get("accepted_action_variants") != action_variants or packet.get("fixture_contracts") != fixtures:
             raise ValueError(f"{consumer}: exact compatibility enumerations required")
         application = packet.get("operation_application_path", {})
-        if application != {"source_profile": "sources/data_go_kr.json", "json_pointer": "/references/key_request_url", "required_for_cause": "approval_required"}:
+        if application != {"status": "dataset_application_entry_available", "route_kind": "dataset_application_entry", "direct_submission_url": False, "template": "https://www.data.go.kr/data/{dataset_id}/openapi.do", "subject_requirements": "data_go_kr_exact_numeric_registry_dataset", "generic_reference_rejected": "sources/data_go_kr.json#/references/key_request_url", "on_invalid_subject": "unknown_gather_more_evidence"}:
             raise ValueError(f"{consumer}: operation application path contract drift")
-        if not pointer_get(load(ROOT / application["source_profile"]), application["json_pointer"]):
-            raise ValueError(f"{consumer}: operation application path unresolved")
+        reject_sensitive(packet, consumer)
+
+
+def reject_sensitive(value: Any, path: str) -> None:
+    if isinstance(value, dict):
+        for key, child in value.items():
+            if key.lower() in SENSITIVE_KEYS:
+                raise ValueError(f"{path}: sensitive key rejected: {key}")
+            reject_sensitive(child, f"{path}.{key}")
+    elif isinstance(value, list):
+        for index, child in enumerate(value):
+            reject_sensitive(child, f"{path}[{index}]")
 
 
 def validate_draft_boundary() -> None:

@@ -22,6 +22,16 @@ receive live receipts or select runtime causes. CLI, Health, and Web producer, s
 redaction, action, and unknown-fallback obligations are recorded under
 `drafts/diagnostic-envelope/consumer-compatibility/`.
 
+The source profile's `key_request_url` is a generic usage guide and is explicitly
+rejected as an `approval_required` action target. For an exact `data_go_kr`
+subject whose eight-digit dataset ID exists in the pinned canonical Registry,
+the mapping derives the exact-host HTTPS dataset detail URL
+`https://www.data.go.kr/data/{dataset_id}/openapi.do` as a
+`dataset_application_entry`. This is an entry page containing the application
+flow, not a direct submission URL. Another source, malformed or absent ID, or an
+ID missing from the canonical Registry fails closed to
+`unknown/gather_more_evidence`.
+
 Run `python3 scripts/validate-diagnostic-evidence-mapping-draft.py` to verify
 pinned inputs, false-positive fallbacks, cause/action compatibility, all three
 consumer packets, and the unpublished draft boundary.

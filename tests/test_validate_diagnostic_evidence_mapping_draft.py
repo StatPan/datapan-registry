@@ -45,16 +45,18 @@ class DiagnosticEvidenceMappingDraftTest(unittest.TestCase):
         return {"subject": copy.deepcopy(subject), "evidence": evidence}
 
     def test_checked_in_typed_mapping_packets_and_proofs(self):
-        self.assertEqual(MODULE.validate_all(), {"predicates": 25, "causes": 11, "proof_cases": 8, "consumers": 3})
+        self.assertEqual(MODULE.validate_all(), {"predicates": 25, "causes": 11, "proof_cases": 9, "consumers": 3})
 
     def test_cli_entrypoint(self):
         result = subprocess.run([sys.executable, str(ROOT / "scripts/validate-diagnostic-evidence-mapping-draft.py")], capture_output=True, text=True, check=False)
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("proof_cases=8", result.stdout)
+        self.assertIn("proof_cases=9", result.stdout)
 
     def test_every_candidate_is_structurally_denied_as_selector(self):
         subject, _ = self.fixture_instances("unknown")
-        for predicate_id in self.mapping["candidate_only_predicates"]:
+        candidate_ids = [predicate_id for predicate_id, predicate in self.mapping["evidence_predicates"].items() if MODULE.intrinsically_candidate(predicate)]
+        self.assertEqual(set(candidate_ids), {"rule_code30", "rule_service_key_message", "generic_http_401", "generic_http_403", "generic_http_404", "rule_timeout", "rule_404", "rule_parse"})
+        for predicate_id in candidate_ids:
             with self.subTest(predicate_id=predicate_id):
                 value = copy.deepcopy(self.mapping)
                 target = next(item for item in value["cause_mappings"] if item["cause"] == "credential_invalid")
@@ -62,7 +64,27 @@ class DiagnosticEvidenceMappingDraftTest(unittest.TestCase):
                 target["corroborator_groups"] = []
                 result = MODULE.resolve(value, subject, [self.candidate_instance(predicate_id, subject)])
                 self.assertEqual(result["cause"], "unknown")
-                with self.assertRaisesRegex(ValueError, "candidate-only predicate used as selector"):
+                with self.assertRaisesRegex(ValueError, "intrinsically non-selecting predicate used as selector"):
+                    MODULE.validate_mapping(value, self.contract)
+
+    def test_rule_parse_remains_non_selecting_without_a_mutable_declaration_list(self):
+        value = copy.deepcopy(self.mapping)
+        self.assertNotIn("candidate_only_predicates", value)
+        target = next(item for item in value["cause_mappings"] if item["cause"] == "provider_outage")
+        target["selector_groups"] = [["rule_parse"]]
+        subject, _ = self.fixture_instances("unknown")
+        instance = self.candidate_instance("rule_parse", subject)
+        self.assertEqual(MODULE.resolve(value, subject, [instance])["cause"], "unknown")
+        with self.assertRaisesRegex(ValueError, "intrinsically non-selecting"):
+            MODULE.validate_mapping(value, self.contract)
+
+    def test_empty_or_scope_only_support_can_never_select(self):
+        for supports in ([], ["scope"]):
+            with self.subTest(supports=supports):
+                value = copy.deepcopy(self.mapping)
+                value["evidence_predicates"]["health_unavailable"]["supports"] = supports
+                self.assertTrue(MODULE.intrinsically_candidate(value["evidence_predicates"]["health_unavailable"]))
+                with self.assertRaisesRegex(ValueError, "intrinsically non-selecting"):
                     MODULE.validate_mapping(value, self.contract)
 
     def test_same_operation_current_approval_resolves_but_cross_operation_does_not(self):
@@ -72,6 +94,31 @@ class DiagnosticEvidenceMappingDraftTest(unittest.TestCase):
         instances[0]["subject"]["operation_id"] = "another-operation"
         instances[1]["subject"]["operation_id"] = "another-operation"
         self.assertEqual(MODULE.resolve(self.mapping, subject, instances)["cause"], "unknown")
+
+    def test_approval_required_routes_only_for_exact_registry_dataset(self):
+        subject, instances = self.fixture_instances("approval-required")
+        result = MODULE.resolve(self.mapping, subject, instances)
+        self.assertEqual(result["cause"], "unknown")
+        self.assertEqual(result["recommended_action"], "gather_more_evidence")
+        subject["dataset_id"] = "15000017"
+        for instance in instances:
+            instance["subject"] = copy.deepcopy(subject)
+        result = MODULE.resolve(self.mapping, subject, instances)
+        self.assertEqual(result["cause"], "approval_required")
+        self.assertEqual(result["application_entry"], {"kind": "dataset_application_entry", "url": "https://www.data.go.kr/data/15000017/openapi.do", "direct_submission_url": False})
+        other_source = copy.deepcopy(subject)
+        other_source["source_id"] = "other_source"
+        other_instances = copy.deepcopy(instances)
+        for instance in other_instances:
+            instance["subject"] = copy.deepcopy(other_source)
+        self.assertEqual(MODULE.resolve(self.mapping, other_source, other_instances)["cause"], "unknown")
+        for invalid in ("../../etc", "15000018x"):
+            bad_subject = copy.deepcopy(subject)
+            bad_subject["dataset_id"] = invalid
+            bad_instances = copy.deepcopy(instances)
+            for instance in bad_instances:
+                instance["subject"] = copy.deepcopy(bad_subject)
+            self.assertEqual(MODULE.resolve(self.mapping, bad_subject, bad_instances)["cause"], "unknown")
 
     def test_stale_expired_and_wrong_authority_evidence_are_excluded(self):
         subject, instances = self.fixture_instances("provider-outage", {"health_observation"})
@@ -144,6 +191,19 @@ class DiagnosticEvidenceMappingDraftTest(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     MODULE.validate_source_basis(mapping)
 
+    def test_source_basis_required_values_cannot_be_removed_or_changed(self):
+        approval = next(item for item in self.mapping["cause_mappings"] if item["cause"] == "approval_required")
+        for index, field, replacement in ((0, "expected", None), (0, "expected", {"rule_id": "wrong"}), (1, "equals", None), (1, "equals", "source")):
+            with self.subTest(index=index, field=field, replacement=replacement):
+                mapping = copy.deepcopy(self.mapping)
+                basis = next(item for item in mapping["cause_mappings"] if item["cause"] == "approval_required")["source_basis"][index]
+                if replacement is None:
+                    basis.pop(field)
+                else:
+                    basis[field] = replacement
+                with self.assertRaises(ValueError):
+                    MODULE.validate_source_basis(mapping)
+
     def test_packets_reject_digest_dependency_and_obligation_drift(self):
         digest = hashlib.sha256(MODULE.MAPPING.read_bytes()).hexdigest()
         path = MODULE.PACKETS / "datapan-cli.v1.json"
@@ -156,6 +216,24 @@ class DiagnosticEvidenceMappingDraftTest(unittest.TestCase):
                 packet["production_status"]["required_after_dependencies"] = ["arbitrary"]
             else:
                 packet["obligations"]["action"] = "arbitrary text"
+            real_load = MODULE.load
+            with mock.patch.object(MODULE, "load", side_effect=lambda candidate, packet=packet: packet if candidate == path else real_load(candidate)):
+                with self.assertRaises(ValueError):
+                    MODULE.validate_packets(digest)
+
+    def test_packets_reject_schema_top_level_and_sensitive_key_drift(self):
+        digest = hashlib.sha256(MODULE.MAPPING.read_bytes()).hexdigest()
+        path = MODULE.PACKETS / "datapan-health.v1.json"
+        original = MODULE.load(path)
+        self.assertIn("StatPan/datapan-health#20", original["production_status"]["required_after_dependencies"])
+        for mutation in ("schema", "top_level", "sensitive"):
+            packet = copy.deepcopy(original)
+            if mutation == "schema":
+                packet["schema_version"] = "made-up"
+            elif mutation == "top_level":
+                packet["extra"] = True
+            else:
+                packet["obligations"]["credential"] = "fixture"
             real_load = MODULE.load
             with mock.patch.object(MODULE, "load", side_effect=lambda candidate, packet=packet: packet if candidate == path else real_load(candidate)):
                 with self.assertRaises(ValueError):
