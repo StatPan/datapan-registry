@@ -30,6 +30,14 @@ class HuggingFaceRegistryDistributionTest(unittest.TestCase):
         self.assertIn('      - "reports/**"', workflow)
         self.assertIn("|| 'publication' }}", workflow)
         self.assertIn("  cancel-in-progress: false", workflow)
+        self.assertIn("workflow_sha:\n        description:", workflow)
+        self.assertIn("source_sha:\n        description:", workflow)
+        self.assertIn('test "$WORKFLOW_SHA" = "${GITHUB_SHA}"', workflow)
+        self.assertIn("--source-sha \"$SOURCE_SHA\"", workflow)
+        self.assertIn("git checkout --detach \"$SOURCE_SHA\"", workflow)
+        self.assertIn(".datapan/hf-source-binding.json", workflow)
+        self.assertIn("datapan.registry-publication-receipt.v1", workflow)
+        self.assertNotIn(".datapan/hf-publication.json\n            .datapan/hf-public-verification.json", workflow)
         publish_condition = "if: github.event_name == 'workflow_dispatch' && inputs.publish"
         self.assertEqual(workflow.count(publish_condition), 2)
         self.assertIn(
