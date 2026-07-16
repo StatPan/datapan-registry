@@ -1,6 +1,7 @@
 # Operation assertion policies
 
-`reports/operation-assertion-policies.v1.json` is the Registry-owned, immutable
+`drafts/operation-assertion-policies/operation-assertion-policies.v1.json` is
+the Registry-owned, immutable release-candidate
 expectation set for the ten Health canaries. It is not a live health receipt and
 does not authorize a probe, alert, deployment, or publication.
 

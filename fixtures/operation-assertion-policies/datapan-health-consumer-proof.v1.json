@@ -2,7 +2,7 @@
   "schema_version": "datapan.health-assertion-policy-consumer-proof.v1",
   "consumer": "datapan-health",
   "policy_binding": {
-    "path": "reports/operation-assertion-policies.v1.json",
+    "path": "drafts/operation-assertion-policies/operation-assertion-policies.v1.json",
     "artifact_sha256": "de3723c5ab39f6f0d21155e8cc070aedf761a369f5632c6c658f24be5ff89f50",
     "policy_set_version": 1,
     "diagnostic_vocabulary_sha256": "aa03c42960a59725b829b934ad07548dacb8f149c7a920a35a9e32c0459b49fc"
