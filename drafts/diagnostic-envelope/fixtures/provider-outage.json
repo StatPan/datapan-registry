@@ -1,0 +1,101 @@
+{
+  "schema_version": "datapan.diagnostic-envelope.v1",
+  "assessed_at": "2026-07-16T00:25:00Z",
+  "fixture": {
+    "status": "deterministic_example",
+    "scenario_id": "provider-outage",
+    "snapshot_at": "2026-07-16T00:25:00Z"
+  },
+  "subject": {
+    "source_id": "data_go_kr",
+    "provider": "data.go.kr",
+    "dataset_id": "fixture-dataset-outage",
+    "operation_id": "fixture-operation-outage"
+  },
+  "cause": {
+    "code": "provider_outage",
+    "determination": "inferred",
+    "layer": "provider",
+    "explanation_id": "diagnosis.provider_outage"
+  },
+  "ownership": {
+    "accountable_party": "provider",
+    "support_reference_id": "provider:service-operator"
+  },
+  "actions": {
+    "recommended": [
+      {
+        "action_id": "check_provider_status",
+        "actor": "user",
+        "rationale_id": "action.check_provider_status"
+      }
+    ],
+    "avoid": [
+      {
+        "action_id": "reissue_credential",
+        "actor": "user",
+        "rationale_id": "avoid.outage_not_fixed_by_key"
+      }
+    ]
+  },
+  "evidence_refs": [
+    {
+      "kind": "provider_response",
+      "ref_id": "provider-response:http-401",
+      "authority": "provider",
+      "observed_at": "2026-07-16T00:25:00Z",
+      "scope": {
+        "level": "operation",
+        "scope_id": "fixture-operation-outage"
+      },
+      "version": "error-taxonomy-v1",
+      "credential_state": "unknown",
+      "supports": [
+        "scope"
+      ]
+    },
+    {
+      "kind": "health_observation",
+      "ref_id": "health:fixture-operation-outage:unavailable",
+      "authority": "datapan_health",
+      "observed_at": "2026-07-16T00:24:00Z",
+      "scope": {
+        "level": "operation",
+        "scope_id": "fixture-operation-outage"
+      },
+      "version": "health-probe-v1",
+      "supports": [
+        "cause",
+        "determination",
+        "ownership",
+        "action"
+      ]
+    },
+    {
+      "kind": "provider_notice",
+      "ref_id": "provider-notice:fixture-service-suspension",
+      "authority": "provider",
+      "observed_at": "2026-07-16T00:23:00Z",
+      "scope": {
+        "level": "operation",
+        "scope_id": "fixture-operation-outage"
+      },
+      "version": "notice-snapshot-v1",
+      "supports": [
+        "cause",
+        "determination",
+        "ownership"
+      ]
+    }
+  ],
+  "redaction": {
+    "secret_values_present": false,
+    "secret_hashes_present": false,
+    "authorization_headers_present": false,
+    "credential_bearing_urls_present": false,
+    "raw_provider_text_present": false,
+    "raw_provider_urls_present": false,
+    "response_bodies_present": false,
+    "user_identity_present": false
+  }
+}

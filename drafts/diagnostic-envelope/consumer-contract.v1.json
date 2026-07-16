@@ -1,0 +1,30 @@
+{
+  "schema_version": "datapan.diagnostic-envelope-consumer-contract.v1",
+  "status": "draft",
+  "envelope_schema": "drafts/diagnostic-envelope/datapan.diagnostic-envelope.v1.schema.json",
+  "required_consumers": ["datapan-cli", "datapan-health", "datapan-web"],
+  "required_fields": ["schema_version", "assessed_at", "subject.source_id", "subject.provider", "cause.code", "cause.determination", "cause.layer", "cause.explanation_id", "ownership.accountable_party", "actions.recommended", "actions.avoid", "evidence_refs", "redaction"],
+  "optional_fields": ["fixture", "subject.dataset_id", "subject.operation_id", "ownership.support_reference_id"],
+  "compatibility": {
+    "certainty_axis": ["observed", "inferred", "unknown"],
+    "numeric_or_probability_confidence_allowed": false,
+    "unknown_cause_representation": "unknown",
+    "same_version_shape_changes_allowed_after_publication": false,
+    "same_version_enum_additions_allowed_after_publication": false,
+    "draft_instances_are_runtime_authority": false,
+    "registry_owns_live_inference": false
+  },
+  "cause_catalog": [
+    {"code": "approval_required", "minimum_evidence": "authoritative approval_record state=not_applied", "required_action": "apply_for_operation"},
+    {"code": "approval_propagating", "minimum_evidence": "authoritative approval_record state=approved_pending_sync with observed_at and effective_scope", "required_action": "wait_for_approval_sync", "required_avoid_action": "reissue_credential"},
+    {"code": "credential_invalid", "minimum_evidence": "provider rejection or local configuration validation independent of approval state", "required_action": "verify_credential_configuration"},
+    {"code": "invalid_input", "minimum_evidence": "versioned request validation", "required_action": "verify_request_parameters"},
+    {"code": "rate_limited", "minimum_evidence": "bounded provider response reference", "required_action": "retry_with_backoff"},
+    {"code": "provider_outage", "minimum_evidence": "health observation, provider notice, or provider response reference", "required_action": "check_provider_status"},
+    {"code": "contract_drift", "minimum_evidence": "versioned response contract assertion", "required_action": "refresh_contract"},
+    {"code": "semantic_quality", "minimum_evidence": "versioned data quality assertion", "required_action": "inspect_data_quality", "required_avoid_action": "treat_transport_success_as_data_success"},
+    {"code": "stale_data", "minimum_evidence": "versioned freshness assertion with reference_time, actual_time, maximum_age_seconds, and stale state", "required_action": "inspect_data_quality"},
+    {"code": "ready", "minimum_evidence": "operation-scoped versioned validation_result passed at required level", "required_action": "continue_to_reuse"},
+    {"code": "unknown", "minimum_evidence": "bounded evidence that does not support a more specific cause", "required_action": "gather_more_evidence"}
+  ]
+}

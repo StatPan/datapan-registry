@@ -1,0 +1,94 @@
+{
+  "schema_version": "datapan.diagnostic-envelope.v1",
+  "assessed_at": "2026-07-16T00:05:00Z",
+  "fixture": {
+    "status": "deterministic_example",
+    "scenario_id": "approval-propagating",
+    "snapshot_at": "2026-07-16T00:05:00Z"
+  },
+  "subject": {
+    "source_id": "data_go_kr",
+    "provider": "data.go.kr",
+    "dataset_id": "fixture-dataset-propagating",
+    "operation_id": "fixture-operation-propagating"
+  },
+  "cause": {
+    "code": "approval_propagating",
+    "determination": "inferred",
+    "layer": "access",
+    "explanation_id": "diagnosis.approval_propagating"
+  },
+  "ownership": {
+    "accountable_party": "data_go_kr",
+    "support_reference_id": "data-go-kr:approval-sync"
+  },
+  "actions": {
+    "recommended": [
+      {
+        "action_id": "wait_for_approval_sync",
+        "actor": "user",
+        "rationale_id": "action.wait_for_approval_sync"
+      }
+    ],
+    "avoid": [
+      {
+        "action_id": "reissue_credential",
+        "actor": "user",
+        "rationale_id": "avoid.reissue_restarts_sync"
+      }
+    ]
+  },
+  "evidence_refs": [
+    {
+      "kind": "approval_record",
+      "ref_id": "approval:fixture-operation-propagating:pending-sync",
+      "authority": "data_go_kr_portal",
+      "observed_at": "2026-07-16T00:04:00Z",
+      "scope": {
+        "level": "operation",
+        "scope_id": "fixture-operation-propagating"
+      },
+      "version": "portal-snapshot-v1",
+      "approval": {
+        "state": "approved_pending_sync",
+        "effective_scope": {
+          "level": "operation",
+          "scope_id": "fixture-operation-propagating"
+        }
+      },
+      "supports": [
+        "cause",
+        "scope",
+        "determination",
+        "ownership",
+        "action"
+      ]
+    },
+    {
+      "kind": "provider_response",
+      "ref_id": "provider-response:http-401",
+      "authority": "provider",
+      "observed_at": "2026-07-16T00:05:00Z",
+      "scope": {
+        "level": "operation",
+        "scope_id": "fixture-operation-propagating"
+      },
+      "version": "error-taxonomy-v1",
+      "credential_state": "unknown",
+      "supports": [
+        "cause",
+        "determination"
+      ]
+    }
+  ],
+  "redaction": {
+    "secret_values_present": false,
+    "secret_hashes_present": false,
+    "authorization_headers_present": false,
+    "credential_bearing_urls_present": false,
+    "raw_provider_text_present": false,
+    "raw_provider_urls_present": false,
+    "response_bodies_present": false,
+    "user_identity_present": false
+  }
+}

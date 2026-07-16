@@ -1,0 +1,69 @@
+{
+  "schema_version": "datapan.diagnostic-envelope.v1",
+  "assessed_at": "2026-07-16T00:15:00Z",
+  "fixture": {
+    "status": "deterministic_example",
+    "scenario_id": "invalid-input",
+    "snapshot_at": "2026-07-16T00:15:00Z"
+  },
+  "subject": {
+    "source_id": "data_go_kr",
+    "provider": "data.go.kr",
+    "dataset_id": "fixture-dataset-input",
+    "operation_id": "fixture-operation-input"
+  },
+  "cause": {
+    "code": "invalid_input",
+    "determination": "observed",
+    "layer": "request",
+    "explanation_id": "diagnosis.invalid_input"
+  },
+  "ownership": {
+    "accountable_party": "user"
+  },
+  "actions": {
+    "recommended": [
+      {
+        "action_id": "verify_request_parameters",
+        "actor": "user",
+        "rationale_id": "action.verify_request_parameters"
+      }
+    ],
+    "avoid": [
+      {
+        "action_id": "assume_provider_outage",
+        "actor": "user",
+        "rationale_id": "avoid.input_error_is_not_outage"
+      }
+    ]
+  },
+  "evidence_refs": [
+    {
+      "kind": "request_validation",
+      "ref_id": "request-validation:missing-required-params",
+      "authority": "datapan_cli",
+      "observed_at": "2026-07-16T00:15:00Z",
+      "scope": {
+        "level": "request",
+        "scope_id": "fixture-request-input"
+      },
+      "version": "registry-required-params-v1",
+      "supports": [
+        "cause",
+        "determination",
+        "ownership",
+        "action"
+      ]
+    }
+  ],
+  "redaction": {
+    "secret_values_present": false,
+    "secret_hashes_present": false,
+    "authorization_headers_present": false,
+    "credential_bearing_urls_present": false,
+    "raw_provider_text_present": false,
+    "raw_provider_urls_present": false,
+    "response_bodies_present": false,
+    "user_identity_present": false
+  }
+}

@@ -153,12 +153,15 @@ jobs:
             scripts/validate-release-receipt-boundary.py \
             scripts/validate-release-health-rollups.py \
             scripts/validate-source-contract-rollups.py \
-            scripts/validate-registry-shards.py
+            scripts/validate-registry-shards.py \
+            scripts/validate-diagnostic-envelope-draft.py
           python scripts/sync-release-schema-artifacts.py --check
           python scripts/sync-release-manifest-artifacts.py --check
           python scripts/generate-health-probe-catalog.py --check
           python scripts/validate-health-probe-catalog.py
           python -m unittest tests/test_validate_health_probe_catalog.py
+          python scripts/validate-diagnostic-envelope-draft.py
+          python -m unittest tests/test_validate_diagnostic_envelope_draft.py
           python scripts/generate-regional-baseline-source-provenance.py --check
           python scripts/validate-regional-baseline-source-provenance.py
           python -m unittest tests/test_validate_regional_baseline_source_provenance.py

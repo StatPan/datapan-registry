@@ -1,0 +1,70 @@
+{
+  "schema_version": "datapan.diagnostic-envelope.v1",
+  "assessed_at": "2026-07-16T00:30:00Z",
+  "fixture": {
+    "status": "deterministic_example",
+    "scenario_id": "contract-drift",
+    "snapshot_at": "2026-07-16T00:30:00Z"
+  },
+  "subject": {
+    "source_id": "data_go_kr",
+    "provider": "data.go.kr",
+    "dataset_id": "fixture-dataset-contract",
+    "operation_id": "fixture-operation-contract"
+  },
+  "cause": {
+    "code": "contract_drift",
+    "determination": "inferred",
+    "layer": "response_contract",
+    "explanation_id": "diagnosis.contract_drift"
+  },
+  "ownership": {
+    "accountable_party": "shared"
+  },
+  "actions": {
+    "recommended": [
+      {
+        "action_id": "refresh_contract",
+        "actor": "datapan_cli",
+        "rationale_id": "action.refresh_response_contract"
+      }
+    ],
+    "avoid": [
+      {
+        "action_id": "reissue_credential",
+        "actor": "user",
+        "rationale_id": "avoid.contract_drift_not_credential"
+      }
+    ]
+  },
+  "evidence_refs": [
+    {
+      "kind": "response_contract",
+      "ref_id": "contract:fixture-operation-contract:shape-mismatch",
+      "authority": "consumer_validation",
+      "observed_at": "2026-07-16T00:30:00Z",
+      "scope": {
+        "level": "response",
+        "scope_id": "fixture-operation-contract"
+      },
+      "version": "response-contract-v1",
+      "supports": [
+        "cause",
+        "scope",
+        "determination",
+        "ownership",
+        "action"
+      ]
+    }
+  ],
+  "redaction": {
+    "secret_values_present": false,
+    "secret_hashes_present": false,
+    "authorization_headers_present": false,
+    "credential_bearing_urls_present": false,
+    "raw_provider_text_present": false,
+    "raw_provider_urls_present": false,
+    "response_bodies_present": false,
+    "user_identity_present": false
+  }
+}

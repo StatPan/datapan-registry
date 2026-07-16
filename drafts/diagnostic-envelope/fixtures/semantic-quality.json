@@ -1,0 +1,83 @@
+{
+  "schema_version": "datapan.diagnostic-envelope.v1",
+  "assessed_at": "2026-07-16T00:35:00Z",
+  "fixture": {
+    "status": "deterministic_example",
+    "scenario_id": "semantic-quality",
+    "snapshot_at": "2026-07-16T00:35:00Z"
+  },
+  "subject": {
+    "source_id": "data_go_kr",
+    "provider": "data.go.kr",
+    "dataset_id": "fixture-dataset-quality",
+    "operation_id": "fixture-operation-quality"
+  },
+  "cause": {
+    "code": "semantic_quality",
+    "determination": "inferred",
+    "layer": "data_quality",
+    "explanation_id": "diagnosis.semantic_quality"
+  },
+  "ownership": {
+    "accountable_party": "provider"
+  },
+  "actions": {
+    "recommended": [
+      {
+        "action_id": "inspect_data_quality",
+        "actor": "user",
+        "rationale_id": "action.inspect_zero_or_missing_data"
+      }
+    ],
+    "avoid": [
+      {
+        "action_id": "treat_transport_success_as_data_success",
+        "actor": "user",
+        "rationale_id": "avoid.http-200_does_not_prove_semantic_quality"
+      }
+    ]
+  },
+  "evidence_refs": [
+    {
+      "kind": "provider_response",
+      "ref_id": "provider-response:http-200-empty",
+      "authority": "provider",
+      "observed_at": "2026-07-16T00:35:00Z",
+      "scope": {
+        "level": "operation",
+        "scope_id": "fixture-operation-quality"
+      },
+      "version": "response-envelope-v1",
+      "supports": [
+        "scope"
+      ]
+    },
+    {
+      "kind": "data_quality_assertion",
+      "ref_id": "quality:expected-entity-missing",
+      "authority": "consumer_validation",
+      "observed_at": "2026-07-16T00:35:00Z",
+      "scope": {
+        "level": "data_quality",
+        "scope_id": "fixture-operation-quality:expected-entity"
+      },
+      "version": "quality-policy-v1",
+      "supports": [
+        "cause",
+        "determination",
+        "ownership",
+        "action"
+      ]
+    }
+  ],
+  "redaction": {
+    "secret_values_present": false,
+    "secret_hashes_present": false,
+    "authorization_headers_present": false,
+    "credential_bearing_urls_present": false,
+    "raw_provider_text_present": false,
+    "raw_provider_urls_present": false,
+    "response_bodies_present": false,
+    "user_identity_present": false
+  }
+}

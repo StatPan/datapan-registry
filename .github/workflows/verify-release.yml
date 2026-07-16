@@ -62,6 +62,8 @@ jobs:
           python scripts/generate-health-probe-catalog.py --check
           python scripts/validate-health-probe-catalog.py
           python -m unittest tests/test_validate_health_probe_catalog.py
+          python scripts/validate-diagnostic-envelope-draft.py
+          python -m unittest tests/test_validate_diagnostic_envelope_draft.py
           python scripts/generate-regional-baseline-source-provenance.py --check
           python scripts/validate-regional-baseline-source-provenance.py
           python -m unittest tests/test_validate_regional_baseline_source_provenance.py
@@ -164,6 +166,7 @@ jobs:
           python -m py_compile scripts/generate-runtime-freshness-queue.py
           python -m py_compile scripts/generate-runtime-freshness-batch.py scripts/check-runtime-freshness-workflow.py scripts/check-runtime-freshness-import-workflow.py scripts/consolidate-runtime-freshness-run.py scripts/import-runtime-freshness-run.py scripts/project-runtime-freshness-recovery.py scripts/apply-runtime-freshness-import.py scripts/generate-runtime-evidence-growth.py scripts/generate-readme-runtime-snapshot.py
           python -m py_compile scripts/convert-source-verification-to-credential-receipt.py
+          python -m py_compile scripts/validate-diagnostic-envelope-draft.py
           python -m py_compile scripts/generate-source-contract-rollup.py
           python -m py_compile scripts/generate-source-runtime-evidence-rollup.py
           python -m py_compile scripts/generate-sustainable-coverage.py
