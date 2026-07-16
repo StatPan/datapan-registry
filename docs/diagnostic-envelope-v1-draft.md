@@ -10,6 +10,32 @@ listed in `schemas/index.json`, bound by `manifest.json`, staged for public
 distribution, or authorized as runtime truth. Publication is a separate goal
 step after all three consumers provide compatibility evidence.
 
+The data.go.kr proof is
+`drafts/diagnostic-envelope/data-go-kr-evidence-mapping.v1.json`. It binds
+existing error rules, source-profile facts, and health policy to the typed
+consumer evidence required for each cause. Its deterministic proof engine
+validates evidence against the envelope `$defs`, binds it to an exact source,
+provider, dataset, and operation subject, excludes stale, expired, or
+wrong-authority evidence, and fails conflicts closed to `unknown`. Candidate
+signals are structurally prohibited from selecting a cause. Registry does not
+receive live receipts or select runtime causes. CLI, Health, and Web producer, scope, timing,
+redaction, action, and unknown-fallback obligations are recorded under
+`drafts/diagnostic-envelope/consumer-compatibility/`.
+
+The source profile's `key_request_url` is a generic usage guide and is explicitly
+rejected as an `approval_required` action target. For an exact `data_go_kr`
+subject whose eight-digit dataset ID exists in the pinned canonical Registry,
+the mapping derives the exact-host HTTPS dataset detail URL
+`https://www.data.go.kr/data/{dataset_id}/openapi.do` as a
+`dataset_application_entry`. This is an entry page containing the application
+flow, not a direct submission URL. Another source, malformed or absent ID, or an
+ID missing from the canonical Registry fails closed to
+`unknown/gather_more_evidence`.
+
+Run `python3 scripts/validate-diagnostic-evidence-mapping-draft.py` to verify
+pinned inputs, false-positive fallbacks, cause/action compatibility, all three
+consumer packets, and the unpublished draft boundary.
+
 ## Boundary
 
 Registry owns the stable vocabulary, required evidence shape, responsibility
