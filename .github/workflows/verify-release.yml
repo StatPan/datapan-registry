@@ -42,6 +42,8 @@ jobs:
           python -m unittest tests/test_validate_diagnostic_envelope_draft.py
           python -m unittest tests/test_validate_diagnostic_evidence_mapping_draft.py
           python -m unittest tests/test_diagnostic_release_candidate.py
+          python scripts/generate-diagnostic-publication.py --check
+          python -m unittest tests/test_diagnostic_publication.py
 
   verify:
     runs-on: ubuntu-latest
@@ -105,6 +107,8 @@ jobs:
           python scripts/generate-diagnostic-release-candidate.py --check
           python scripts/validate-diagnostic-release-candidate.py
           python -m unittest tests/test_diagnostic_release_candidate.py
+          python scripts/generate-diagnostic-publication.py --check
+          python -m unittest tests/test_diagnostic_publication.py
           python scripts/generate-regional-baseline-source-provenance.py --check
           python scripts/validate-regional-baseline-source-provenance.py
           python -m unittest tests/test_validate_regional_baseline_source_provenance.py
@@ -211,6 +215,7 @@ jobs:
           python -m py_compile scripts/validate-diagnostic-evidence-mapping-draft.py
           python -m py_compile scripts/generate-diagnostic-release-candidate.py
           python -m py_compile scripts/validate-diagnostic-release-candidate.py
+          python -m py_compile scripts/generate-diagnostic-publication.py
           python -m py_compile scripts/generate-source-contract-rollup.py
           python -m py_compile scripts/generate-source-runtime-evidence-rollup.py
           python -m py_compile scripts/generate-sustainable-coverage.py

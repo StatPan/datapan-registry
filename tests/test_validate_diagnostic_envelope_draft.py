@@ -311,8 +311,12 @@ class DiagnosticEnvelopeDraftTest(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "forbidden raw or credential-like text"):
                     MODULE.reject_sensitive({"safe_name": text})
 
-    def test_draft_is_not_release_indexed_or_manifest_bound(self):
+    def test_draft_paths_are_not_published_and_public_schema_requires_accepted_readiness(self):
         MODULE.validate_draft_boundary()
+        index_paths = {item["path"] for item in MODULE.load(MODULE.SCHEMA_INDEX).get("schemas", [])}
+        manifest_paths = {item["path"] for item in MODULE.load(MODULE.MANIFEST).get("artifacts", [])}
+        self.assertFalse(any(path.startswith("drafts/diagnostic-envelope/") for path in index_paths | manifest_paths))
+        self.assertIn("schemas/datapan.diagnostic-envelope.v1.schema.json", index_paths & manifest_paths)
 
 
 if __name__ == "__main__":

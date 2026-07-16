@@ -157,7 +157,8 @@ jobs:
             scripts/validate-diagnostic-envelope-draft.py \
             scripts/validate-diagnostic-evidence-mapping-draft.py \
             scripts/generate-diagnostic-release-candidate.py \
-            scripts/validate-diagnostic-release-candidate.py
+            scripts/validate-diagnostic-release-candidate.py \
+            scripts/generate-diagnostic-publication.py
           python scripts/sync-release-schema-artifacts.py --check
           python scripts/sync-release-manifest-artifacts.py --check
           python scripts/generate-health-probe-catalog.py --check
@@ -170,6 +171,8 @@ jobs:
           python scripts/generate-diagnostic-release-candidate.py --check
           python scripts/validate-diagnostic-release-candidate.py
           python -m unittest tests/test_diagnostic_release_candidate.py
+          python scripts/generate-diagnostic-publication.py --check
+          python -m unittest tests/test_diagnostic_publication.py
           python scripts/generate-regional-baseline-source-provenance.py --check
           python scripts/validate-regional-baseline-source-provenance.py
           python -m unittest tests/test_validate_regional_baseline_source_provenance.py

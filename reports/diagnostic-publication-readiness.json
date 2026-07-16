@@ -1,0 +1,172 @@
+{
+  "schema_version": "datapan.diagnostic-publication-readiness.v1",
+  "generated_at": "2026-07-16T10:30:00Z",
+  "status": "prepared_for_exact_head_review",
+  "candidate": {
+    "source_head": "5343ebc4477640409d76cac5bee71e0824e48d59",
+    "merge_commit": "114c4e4a043bc495ada04e5c85fe8bed4eaf1fc3",
+    "binding_sha256": "ac847cb158eb432e72e78d194a94542db5860062b9b869c42f6d736e4f649016",
+    "source": {
+      "path": "drafts/diagnostic-envelope/release-candidate/diagnostic-release-candidate.v1.json",
+      "bytes": 6116,
+      "sha256": "9af6d9a339139ef10cdca50f6a2502b63940d74eb33b1bf9297beac97cbf2dd6"
+    }
+  },
+  "artifacts": [
+    {
+      "path": "examples/diagnostic-envelope/approval-propagating.json",
+      "kind": "diagnostic_example",
+      "bytes": 3004,
+      "sha256": "fe000f4082f948d6a96f045d7fae91c6bdf7288c6746196a8c7b0868d6416099"
+    },
+    {
+      "path": "examples/diagnostic-envelope/approval-required.json",
+      "kind": "diagnostic_example",
+      "bytes": 2247,
+      "sha256": "d11fc4e18aee6fe1a7f5c9c0a94a1e6e1bae0177447f2f6bcc0dddbe6961e7d3"
+    },
+    {
+      "path": "examples/diagnostic-envelope/contract-drift.json",
+      "kind": "diagnostic_example",
+      "bytes": 2205,
+      "sha256": "13bc8af8c6b1540ef91a49f60ed9aab5514fabee3316868dc9f946adbe1da470"
+    },
+    {
+      "path": "examples/diagnostic-envelope/credential-invalid.json",
+      "kind": "diagnostic_example",
+      "bytes": 2164,
+      "sha256": "c5796d7bf59c6f282f9f75b14717a51ff716859e06f6325e784c48d507816497"
+    },
+    {
+      "path": "examples/diagnostic-envelope/invalid-input.json",
+      "kind": "diagnostic_example",
+      "bytes": 2209,
+      "sha256": "80adb4fce6ede5c34223468bf26b69e90c20c92d74661777c458a5238ad6ab07"
+    },
+    {
+      "path": "examples/diagnostic-envelope/provider-outage.json",
+      "kind": "diagnostic_example",
+      "bytes": 3588,
+      "sha256": "33c0160c4cf136b34dc3befa1ff5803c71f3c37d7946fa2b56e70c69d4be6200"
+    },
+    {
+      "path": "examples/diagnostic-envelope/rate-limited.json",
+      "kind": "diagnostic_example",
+      "bytes": 2108,
+      "sha256": "8be4fb69e91ae42c2a03510458b9b9fd23cf4780d551ea1ddaa505c8bc40d318"
+    },
+    {
+      "path": "examples/diagnostic-envelope/ready.json",
+      "kind": "diagnostic_example",
+      "bytes": 1967,
+      "sha256": "7ae2306176bdd007ca2a4ca822240e4e515c76967b2af0c816584463aee420fc"
+    },
+    {
+      "path": "examples/diagnostic-envelope/semantic-quality.json",
+      "kind": "diagnostic_example",
+      "bytes": 2966,
+      "sha256": "06fcc308aa039861b38f6da2fee8f23150ea7d2cac998b5d9e05b011ca1ca9b0"
+    },
+    {
+      "path": "examples/diagnostic-envelope/stale-data.json",
+      "kind": "diagnostic_example",
+      "bytes": 2465,
+      "sha256": "f4cc2d0f34bdfb74bbed9a3bcb5cad7b0f5444fa5ded6ca1742c916799aecf92"
+    },
+    {
+      "path": "examples/diagnostic-envelope/unknown.json",
+      "kind": "diagnostic_example",
+      "bytes": 2035,
+      "sha256": "e0635cf4980438141007607c66eca821383f605393a69bdb03522b3873c1dcf0"
+    },
+    {
+      "path": "policy/data-go-kr-diagnostic-evidence-mapping.v1.json",
+      "kind": "diagnostic_evidence_mapping",
+      "bytes": 27117,
+      "sha256": "c79d9a5afe2702b22cf49fff97178b4f79ffc16eaa4624b68f826fb8c9509273"
+    },
+    {
+      "path": "policy/diagnostic-cause-action-vocabulary.v1.json",
+      "kind": "diagnostic_vocabulary",
+      "bytes": 3081,
+      "sha256": "aa03c42960a59725b829b934ad07548dacb8f149c7a920a35a9e32c0459b49fc"
+    },
+    {
+      "path": "policy/diagnostic-envelope-consumer-contract.v1.json",
+      "kind": "diagnostic_consumer_contract",
+      "bytes": 6994,
+      "sha256": "39357f2b154bba54487acce5a5707c71755ce01abb0478e8bf0fff41a35dab91"
+    },
+    {
+      "path": "reports/diagnostic-consumer-compatibility/datapan-cli.v1.json",
+      "kind": "diagnostic_consumer_compatibility",
+      "bytes": 2601,
+      "sha256": "56bd0403c8f8cb5148c534e19c00d627b23dc9c2fb83a8c026fa5c717dea695e"
+    },
+    {
+      "path": "reports/diagnostic-consumer-compatibility/datapan-health.v1.json",
+      "kind": "diagnostic_consumer_compatibility",
+      "bytes": 2686,
+      "sha256": "8b159c7978b7e1209b1eba35dd8b3943f007b554b0814e9c6d14ecc740df4b3e"
+    },
+    {
+      "path": "reports/diagnostic-consumer-compatibility/datapan-web.v1.json",
+      "kind": "diagnostic_consumer_compatibility",
+      "bytes": 2654,
+      "sha256": "747e9c8adbe3e46204d40055e6fca19aad4d8389d2db58fd302630503929834f"
+    },
+    {
+      "path": "schemas/datapan.diagnostic-envelope.v1.schema.json",
+      "kind": "schema",
+      "bytes": 93289,
+      "sha256": "0782ed2150a31471645d3cf79a4ac0e63c1ba85ea31eb7b06cf39e7de9fb96fc"
+    },
+    {
+      "path": "schemas/datapan.diagnostic-publication-readiness.v1.schema.json",
+      "kind": "schema",
+      "bytes": 3183,
+      "sha256": "cf08ea3e578edc2530f0e29e2900e157e2c5dd0615c02efe51b3f552220fe836"
+    }
+  ],
+  "exclusion_policy": {
+    "status": "passed",
+    "forbidden": [
+      "credentials_or_secret_hashes",
+      "authorization_headers",
+      "credential_bearing_urls",
+      "raw_provider_response_bodies",
+      "live_status_history",
+      "user_telemetry"
+    ]
+  },
+  "gates": {
+    "exact_head_independent_review": "pending",
+    "hosted_ci": "pending",
+    "tag_or_github_release": "not_authorized",
+    "immutable_distribution_publication": "not_authorized",
+    "anonymous_immutable_fetch": "blocked_until_publication",
+    "datapan_web_adoption": "blocked_until_anonymous_immutable_fetch"
+  },
+  "authority": {
+    "publishing_allowed": false,
+    "runtime_authority": false,
+    "live_history_authority": false,
+    "consumer_deployment_allowed": false
+  },
+  "anonymous_fetch_handoff": {
+    "tool": "scripts/huggingface_registry_distribution.py verify-remote",
+    "requirements": [
+      "anonymous_http",
+      "full_nonzero_immutable_payload_revision",
+      "release_manifest_identity_match",
+      "all_diagnostic_artifact_bytes_and_sha256_match"
+    ]
+  },
+  "web_adoption_handoff": {
+    "repository": "StatPan/datapan",
+    "consumer": "datapan-web",
+    "state": "post_publication_blocked",
+    "unblock_on": "anonymous_immutable_fetch_verified_for_every_artifact",
+    "ownership": "Web owns presentation and mutable history; Registry owns facts, vocabulary, and immutable artifact identity."
+  }
+}

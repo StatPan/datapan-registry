@@ -15,7 +15,7 @@ SPEC.loader.exec_module(MODULE)
 
 
 class HuggingFaceRegistryDistributionTest(unittest.TestCase):
-    def test_workflow_publishes_main_dataset_changes_but_not_pull_requests(self):
+    def test_workflow_validates_main_changes_but_publishes_only_by_explicit_dispatch(self):
         workflow_path = (
             pathlib.Path(__file__).parents[1]
             / ".github"
@@ -29,11 +29,15 @@ class HuggingFaceRegistryDistributionTest(unittest.TestCase):
         self.assertIn('      - "reports/**"', workflow)
         self.assertIn("|| 'publication' }}", workflow)
         self.assertIn("  cancel-in-progress: false", workflow)
-        publish_condition = (
-            "if: github.event_name == 'push' || "
-            "(github.event_name == 'workflow_dispatch' && inputs.publish)"
-        )
+        publish_condition = "if: github.event_name == 'workflow_dispatch' && inputs.publish"
         self.assertEqual(workflow.count(publish_condition), 2)
+        self.assertIn(
+            "if: always() && github.event_name == 'workflow_dispatch' && inputs.publish",
+            workflow,
+        )
+        self.assertIn("--expected-revision", workflow)
+        self.assertIn(".datapan/hf-publication.json", workflow)
+        self.assertNotIn("if: github.event_name == 'push' ||", workflow)
         self.assertNotIn("github.event_name == 'pull_request' && inputs.publish", workflow)
 
     def fixture(self, root: pathlib.Path) -> pathlib.Path:
@@ -115,6 +119,38 @@ class HuggingFaceRegistryDistributionTest(unittest.TestCase):
     def test_publish_requires_token_before_importing_client(self):
         with self.assertRaisesRegex(MODULE.DistributionError, "HF_TOKEN"):
             MODULE.publish(pathlib.Path("unused"), "StatPan/datapan-registry", "")
+
+    def test_remote_pointer_requires_real_immutable_revision_and_exact_artifacts(self):
+        pointer = {
+            "schema_version": MODULE.SCHEMA_VERSION,
+            "dataset": {"id": "StatPan/datapan-registry", "revision": "a" * 40},
+            "release_manifest": {"path": "manifest.json", "bytes": 1, "sha256": "b" * 64},
+            "artifact_count": 1,
+            "artifacts": [
+                {"path": "schemas/diagnostic.json", "kind": "schema", "bytes": 1, "sha256": "c" * 64}
+            ],
+        }
+        dataset, revision, records = MODULE.validate_remote_pointer(
+            pointer, "a" * 40, [f"schemas/diagnostic.json={'c' * 64}"]
+        )
+        self.assertEqual(dataset, "StatPan/datapan-registry")
+        self.assertEqual(revision, "a" * 40)
+        self.assertEqual(len(records), 2)
+
+        pointer["dataset"]["revision"] = "0" * 40
+        with self.assertRaisesRegex(MODULE.DistributionError, "nonzero immutable revision"):
+            MODULE.validate_remote_pointer(pointer, None, [])
+
+    def test_remote_pointer_rejects_missing_or_changed_required_artifact(self):
+        pointer = {
+            "schema_version": MODULE.SCHEMA_VERSION,
+            "dataset": {"id": "StatPan/datapan-registry", "revision": "a" * 40},
+            "release_manifest": {"path": "manifest.json", "bytes": 1, "sha256": "b" * 64},
+            "artifact_count": 0,
+            "artifacts": [],
+        }
+        with self.assertRaisesRegex(MODULE.DistributionError, "required distribution artifact is missing"):
+            MODULE.validate_remote_pointer(pointer, None, [f"schemas/diagnostic.json={'c' * 64}"])
 
 
 if __name__ == "__main__":

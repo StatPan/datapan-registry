@@ -1,0 +1,74 @@
+{
+  "schema_version": "datapan.diagnostic-cause-action-vocabulary.v1",
+  "status": "stable",
+  "generated_at": "2026-07-16T10:30:00Z",
+  "source_contract": {
+    "path": "policy/diagnostic-envelope-consumer-contract.v1.json",
+    "bytes": 6994,
+    "sha256": "39357f2b154bba54487acce5a5707c71755ce01abb0478e8bf0fff41a35dab91"
+  },
+  "causes": [
+    {
+      "code": "approval_required",
+      "minimum_evidence": "authoritative approval_record state=not_applied",
+      "required_action": "apply_for_operation"
+    },
+    {
+      "code": "approval_propagating",
+      "minimum_evidence": "current authoritative operation-bound approval_record state=approved_pending_sync plus a current same-subject unclassified HTTP 401/403 provider response",
+      "required_action": "wait_for_approval_sync",
+      "required_avoid_action": "reissue_credential"
+    },
+    {
+      "code": "credential_invalid",
+      "minimum_evidence": "typed provider response class=credential_rejected or failed CLI request validation class=credential_configuration",
+      "required_action": "verify_credential_configuration"
+    },
+    {
+      "code": "invalid_input",
+      "minimum_evidence": "failed CLI request validation class=invalid_input with policy version",
+      "required_action": "verify_request_parameters"
+    },
+    {
+      "code": "rate_limited",
+      "minimum_evidence": "typed provider response class=rate_limited with policy version",
+      "required_action": "retry_with_backoff"
+    },
+    {
+      "code": "provider_outage",
+      "minimum_evidence": "current bounded unavailable/degraded Health correlation, direct provider notice, or typed provider response class=service_unavailable; observed determination requires the direct notice",
+      "required_action": "check_provider_status"
+    },
+    {
+      "code": "contract_drift",
+      "minimum_evidence": "response contract assertion result=mismatch with policy version",
+      "required_action": "refresh_contract"
+    },
+    {
+      "code": "semantic_quality",
+      "minimum_evidence": "data quality assertion result=failed with semantic assertion kind and policy version",
+      "required_action": "inspect_data_quality",
+      "required_avoid_action": "treat_transport_success_as_data_success"
+    },
+    {
+      "code": "stale_data",
+      "minimum_evidence": "quality assertion kind=freshness result=failed plus reference_time, actual_time, maximum_age_seconds, and stale state",
+      "required_action": "inspect_data_quality"
+    },
+    {
+      "code": "ready",
+      "minimum_evidence": "operation-scoped versioned validation_result passed at required level",
+      "required_action": "continue_to_reuse"
+    },
+    {
+      "code": "unknown",
+      "minimum_evidence": "bounded evidence that does not support a more specific cause",
+      "required_action": "gather_more_evidence"
+    }
+  ],
+  "compatibility": {
+    "unknown_code_behavior": "map_to_unknown_and_gather_more_evidence",
+    "same_version_enum_additions_allowed": false,
+    "deprecation": "publish_a_new_version_before_removing_or_redefining_any_id"
+  }
+}

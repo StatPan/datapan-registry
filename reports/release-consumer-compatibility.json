@@ -7,7 +7,7 @@
     "manifest": {
       "path": "manifest.json",
       "generated_at": "2026-07-11T10:28:35Z",
-      "artifact_count": 140,
+      "artifact_count": 160,
       "evidence_contracts": 18
     },
     "readiness": {
@@ -104,7 +104,7 @@
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
       "bytes": 8075,
-      "sha256": "6b96a84d9868c2728f6b59b33b2bcf2d172a74dce96c8d4fe318d6ed24a35200",
+      "sha256": "7b65d98286bb0ab686d8bf396bb1d107ae939d197973237d0954f304284aafdc",
       "required": true
     },
     {
@@ -166,8 +166,8 @@
       "path": "reports/credential-runtime-manual-review-decision.json",
       "kind": "credential_runtime_manual_review_decision",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-decision.v1.schema.json",
-      "bytes": 1711,
-      "sha256": "a220ab52b0aa224540d83d7096328f4aa3fa76ad74ce8acaec858567a94a2a2a",
+      "bytes": 1782,
+      "sha256": "9157b32d246db0b504d108be55c2291625053e7268b5080f44e250d1429d6435",
       "required": true
     },
     {
@@ -175,8 +175,8 @@
       "path": "reports/credential-runtime-manual-review-acceptance.json",
       "kind": "credential_runtime_manual_review_acceptance",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-acceptance.v1.schema.json",
-      "bytes": 4525,
-      "sha256": "56746df6379708e6b97099bdd200d195862d85415237b51bdd822c641efe954e",
+      "bytes": 4596,
+      "sha256": "86e85bf62b4617013b587746f116bd433b4002e9ec8359f27a88a67b73ea452a",
       "required": true
     },
     {
@@ -194,7 +194,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "27c82ee32828acd041ac39930789c0248b7e59da15ddcde73f838083dbb60c92",
+      "sha256": "a2e0609209a8e1b0b2c15100b05d501b76243d17975e8d8d2a2590954fc1c1f3",
       "required": true
     },
     {
@@ -212,7 +212,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 61997,
-      "sha256": "422bfb849a784367c55cc17a0a4b3b856d0a4bedea77d3480ffa1984c5dea649",
+      "sha256": "64e595911dde126b3e7885d805a588ec547b0d924380ca8a12db0e233fd39c38",
       "required": true
     },
     {
@@ -221,7 +221,7 @@
       "kind": "release_distribution_footprint",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
       "bytes": 2141,
-      "sha256": "a3a6126a9b6f580c635548402c977a055f7e9671c11185c54e260dadf952728a",
+      "sha256": "cdb58ca17ee161055eb92046731cf5d234fc80a7ef07bd72e70db46d220276e1",
       "required": true
     },
     {
@@ -366,7 +366,7 @@
     "credential_handoff_relief_decision": "allowed_by_all_reviewed_validated_receipts",
     "manual_review_decision_status": "accepted",
     "manual_review_decision_accepted": true,
-    "manual_review_decision_reason": "The accountable release owner re-accepts the current manual-review release boundary for additive manifest-bound KOSIS source provenance; no existing consumer or credential/runtime boundary change.",
+    "manual_review_decision_reason": "The accountable release owner re-accepts the current manual-review release boundary for additive, pre-publication diagnostic artifacts. Credential and runtime policy are unchanged; tag, publication, anonymous fetch, and consumer rollout remain separate blocked gates.",
     "manual_review_decision_boundary_accepted": true,
     "manual_review_acceptance_status": "accepted",
     "manual_review_acceptance_accepted": true,
@@ -476,7 +476,7 @@
     ],
     "release_distribution_footprint": "reports/release-distribution-footprint.json",
     "canonical_registry_bytes": 137735169,
-    "manifest_bound_bytes_excluding_self": 173774585,
+    "manifest_bound_bytes_excluding_self": 173952067,
     "large_monolith_threshold_bytes": 100000000,
     "registry_footprint_status": "large_monolith_shard_additive",
     "canonical_registry_required": true,

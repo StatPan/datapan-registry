@@ -16,11 +16,11 @@
   "current_state_evidence": {
     "manifest": {
       "path": "manifest.json",
-      "artifact_count": 140
+      "artifact_count": 160
     },
     "schema_index": {
       "path": "schemas/index.json",
-      "schema_count": 85
+      "schema_count": 87
     },
     "release_readiness": {
       "path": "reports/latest-release-readiness.json",
@@ -153,9 +153,9 @@
     },
     "release_distribution_footprint": {
       "path": "reports/release-distribution-footprint.json",
-      "artifact_count": 140,
-      "schema_artifacts": 85,
-      "manifest_bound_bytes_excluding_self": 173774585,
+      "artifact_count": 160,
+      "schema_artifacts": 87,
+      "manifest_bound_bytes_excluding_self": 173952067,
       "canonical_registry_path": "data/data-go-kr.registry.json",
       "canonical_registry_bytes": 137735169,
       "large_monolith_threshold_bytes": 100000000,
@@ -218,7 +218,7 @@
       "acceptance_status": "accepted",
       "acceptance_decision": "accepted_manual_review_release_boundary",
       "decision_status": "accepted",
-      "decision_reason": "The accountable release owner re-accepts the current manual-review release boundary for additive manifest-bound KOSIS source provenance; no existing consumer or credential/runtime boundary change.",
+      "decision_reason": "The accountable release owner re-accepts the current manual-review release boundary for additive, pre-publication diagnostic artifacts. Credential and runtime policy are unchanged; tag, publication, anonymous fetch, and consumer rollout remain separate blocked gates.",
       "credential_handoff_status": "relief_ready",
       "pending_review_sources": 0,
       "reviewed_receipts_checked_in": 5,
