@@ -1,0 +1,89 @@
+{
+  "schema_version": "datapan.health-assertion-policy-consumer-proof.v1",
+  "consumer": "datapan-health",
+  "policy_binding": {
+    "path": "reports/operation-assertion-policies.v1.json",
+    "artifact_sha256": "de3723c5ab39f6f0d21155e8cc070aedf761a369f5632c6c658f24be5ff89f50",
+    "policy_set_version": 1,
+    "diagnostic_vocabulary_sha256": "aa03c42960a59725b829b934ad07548dacb8f149c7a920a35a9e32c0459b49fc"
+  },
+  "projection_contract": {
+    "asserted_match": "pass",
+    "asserted_mismatch": "fail",
+    "not_asserted": "not_observed",
+    "invalid_or_stale_binding": "unknown"
+  },
+  "cases": [
+    {
+      "name": "evidence_backed_contract_match",
+      "operation_id": "dpr-op-00000001",
+      "dimension": "contract",
+      "observation": {
+        "response_fields": [
+          "dutyAddr"
+        ]
+      },
+      "expected": "pass"
+    },
+    {
+      "name": "evidence_backed_contract_mismatch",
+      "operation_id": "dpr-op-00000001",
+      "dimension": "contract",
+      "observation": {
+        "response_fields": [
+          "__undeclared_field__"
+        ]
+      },
+      "expected": "fail"
+    },
+    {
+      "name": "semantic_has_no_registry_expectation",
+      "operation_id": "dpr-op-00000001",
+      "dimension": "semantic",
+      "observation": {},
+      "expected": "not_observed"
+    },
+    {
+      "name": "stale_policy_binding_is_not_a_health_failure",
+      "operation_id": "dpr-op-00000001",
+      "dimension": "contract",
+      "policy_binding_override": {
+        "artifact_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      },
+      "observation": {
+        "response_fields": [
+          "dutyAddr"
+        ]
+      },
+      "expected": "unknown"
+    },
+    {
+      "name": "unsupported_policy_version_is_not_a_health_failure",
+      "operation_id": "dpr-op-00000001",
+      "dimension": "contract",
+      "policy_binding_override": {
+        "policy_set_version": 2
+      },
+      "observation": {
+        "response_fields": [
+          "dutyAddr"
+        ]
+      },
+      "expected": "unknown"
+    },
+    {
+      "name": "diagnostic_vocabulary_mismatch_is_not_a_health_failure",
+      "operation_id": "dpr-op-00000001",
+      "dimension": "contract",
+      "policy_binding_override": {
+        "diagnostic_vocabulary_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      },
+      "observation": {
+        "response_fields": [
+          "dutyAddr"
+        ]
+      },
+      "expected": "unknown"
+    }
+  ]
+}

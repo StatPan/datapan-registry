@@ -1,0 +1,39 @@
+{
+  "schema_version": "datapan.operation-assertion-policy-release-candidate.v1",
+  "status": "ready_for_consumer_review",
+  "authority": {
+    "release": false,
+    "runtime": false,
+    "publishing": false
+  },
+  "policy_set": {
+    "id": "datapan-health-canary-assertions",
+    "version": 1,
+    "supersedes_sha256": null
+  },
+  "artifact_sha256": "de3723c5ab39f6f0d21155e8cc070aedf761a369f5632c6c658f24be5ff89f50",
+  "bindings": [
+    {
+      "path": "drafts/operation-assertion-policies/datapan.operation-assertion-policies.v1.schema.json",
+      "sha256": "0382dee34c3c2076b6ba287ddd4f40fe409365cbfb4b86cd2a7b4f66418b5d5e"
+    },
+    {
+      "path": "reports/operation-assertion-policies.v1.json",
+      "sha256": "8a91f372dbac4badc77f31e3312d768a75107ec627741c05cf0d9eda7df06f48"
+    },
+    {
+      "path": "fixtures/operation-assertion-policies/datapan-health-consumer-proof.v1.json",
+      "sha256": "c8c9b22fd40a9c51451c41f42bb35901ef65eb557d022d99e2ec3c8b43ee3aa2"
+    },
+    {
+      "path": "drafts/operation-assertion-policies/release-manifest.v1.json",
+      "sha256": "30597b854fb9c4a70defd1fea42f62f3cf9541d5e725cacf4e6e885285f90174"
+    }
+  ],
+  "consumer_proof": {
+    "consumer": "datapan-health",
+    "schema_version": "datapan.health-assertion-policy-consumer-proof.v1",
+    "cases": 6
+  },
+  "next_gate": "independent_consumer_review"
+}
