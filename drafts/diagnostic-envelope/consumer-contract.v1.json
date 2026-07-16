@@ -1,0 +1,53 @@
+{
+  "schema_version": "datapan.diagnostic-envelope-consumer-contract.v1",
+  "status": "draft",
+  "envelope_schema": "drafts/diagnostic-envelope/datapan.diagnostic-envelope.v1.schema.json",
+  "required_consumers": ["datapan-cli", "datapan-health", "datapan-web"],
+  "required_fields": ["schema_version", "assessed_at", "subject.source_id", "subject.provider_id", "subject.dataset_id", "subject.operation_id", "cause.code", "cause.determination", "cause.layer", "cause.explanation_id", "ownership.accountable_party", "actions.recommended", "actions.avoid", "evidence_refs[].kind", "evidence_refs[].ref_id", "evidence_refs[].authority", "evidence_refs[].timing", "evidence_refs[].scope", "evidence_refs[].supports", "redaction"],
+  "optional_fields": ["fixture", "ownership.support_reference_id", "evidence_refs[].version", "evidence_refs[].scope.detail_id"],
+  "validation_contract": {
+    "validator": "json-schema-draft-2020-12",
+    "single_required_artifact": "drafts/diagnostic-envelope/datapan.diagnostic-envelope.v1.schema.json",
+    "additional_semantic_validator_required": false,
+    "scope_binding": "evidence scope subject_ref=envelope_subject; each evidence kind has one allowed non-source level and no duplicated subject identity is accepted",
+    "time_binding": "non-negative observed_age_seconds relative to assessed_at plus current_at_assessment validity and remaining_validity_seconds greater than zero",
+    "identifier_profile": "bounded lowercase authority IDs with colon-separated segments; URLs, slash paths, free text, and credential-labeled segments are invalid",
+    "action_binding": "cause-specific exact action objects bind action_id, actor, and rationale_id; contradictory extra actions are invalid",
+    "ready_level_order_encoded_in_schema": true,
+    "evidence_payload_is_kind_exclusive": true
+  },
+  "evidence_variants": {
+    "registry_rule": {"required_payload": null, "allowed_authorities": ["registry"], "allowed_scope_level": "operation"},
+    "registry_operation": {"required_payload": null, "allowed_authorities": ["registry"], "allowed_scope_level": "operation"},
+    "approval_record": {"required_payload": "approval", "allowed_authorities": ["data_go_kr_portal", "provider_portal"], "allowed_scope_level": "operation"},
+    "request_validation": {"required_payload": "request_validation", "allowed_authorities": ["datapan_cli"], "allowed_scope_level": "request"},
+    "provider_response": {"required_payload": "response", "allowed_authorities": ["provider", "datapan_cli"], "allowed_scope_level": "operation"},
+    "health_observation": {"required_payload": "health_correlation", "allowed_authorities": ["datapan_health"], "allowed_scope_level": "operation"},
+    "provider_notice": {"required_payload": "notice", "allowed_authorities": ["provider", "provider_portal"], "allowed_scope_level": "operation"},
+    "response_contract": {"required_payload": "contract_assertion", "allowed_authorities": ["consumer_validation", "datapan_cli", "datapan_web"], "allowed_scope_level": "response"},
+    "data_quality_assertion": {"required_payload": "quality_assertion", "optional_payload": "freshness", "allowed_authorities": ["consumer_validation", "datapan_cli", "datapan_health", "datapan_web"], "allowed_scope_level": "data_quality"},
+    "validation_result": {"required_payload": "validation", "allowed_authorities": ["datapan_cli", "datapan_health", "consumer_validation"], "allowed_scope_level": "operation"}
+  },
+  "compatibility": {
+    "certainty_axis": ["observed", "inferred", "unknown"],
+    "numeric_or_probability_confidence_allowed": false,
+    "unknown_cause_representation": "unknown",
+    "same_version_shape_changes_allowed_after_publication": false,
+    "same_version_enum_additions_allowed_after_publication": false,
+    "draft_instances_are_runtime_authority": false,
+    "registry_owns_live_inference": false
+  },
+  "cause_catalog": [
+    {"code": "approval_required", "minimum_evidence": "authoritative approval_record state=not_applied", "required_action": "apply_for_operation"},
+    {"code": "approval_propagating", "minimum_evidence": "current authoritative operation-bound approval_record state=approved_pending_sync plus a current same-subject unclassified HTTP 401/403 provider response", "required_action": "wait_for_approval_sync", "required_avoid_action": "reissue_credential"},
+    {"code": "credential_invalid", "minimum_evidence": "typed provider response class=credential_rejected or failed CLI request validation class=credential_configuration", "required_action": "verify_credential_configuration"},
+    {"code": "invalid_input", "minimum_evidence": "failed CLI request validation class=invalid_input with policy version", "required_action": "verify_request_parameters"},
+    {"code": "rate_limited", "minimum_evidence": "typed provider response class=rate_limited with policy version", "required_action": "retry_with_backoff"},
+    {"code": "provider_outage", "minimum_evidence": "current bounded unavailable/degraded Health correlation, direct provider notice, or typed provider response class=service_unavailable; observed determination requires the direct notice", "required_action": "check_provider_status"},
+    {"code": "contract_drift", "minimum_evidence": "response contract assertion result=mismatch with policy version", "required_action": "refresh_contract"},
+    {"code": "semantic_quality", "minimum_evidence": "data quality assertion result=failed with semantic assertion kind and policy version", "required_action": "inspect_data_quality", "required_avoid_action": "treat_transport_success_as_data_success"},
+    {"code": "stale_data", "minimum_evidence": "quality assertion kind=freshness result=failed plus reference_time, actual_time, maximum_age_seconds, and stale state", "required_action": "inspect_data_quality"},
+    {"code": "ready", "minimum_evidence": "operation-scoped versioned validation_result passed at required level", "required_action": "continue_to_reuse"},
+    {"code": "unknown", "minimum_evidence": "bounded evidence that does not support a more specific cause", "required_action": "gather_more_evidence"}
+  ]
+}
