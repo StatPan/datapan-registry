@@ -10,7 +10,8 @@
       "workflow": ".github/workflows/credential-runtime-collection.yml",
       "checkouts": [
         {
-          "line": 121,
+          "job": "credential-runtime-collection",
+          "step": 2,
           "action": "actions/checkout@v7",
           "repository": "StatPan/datapan-cli",
           "ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",
@@ -22,7 +23,8 @@
       "workflow": ".github/workflows/huggingface-distribution.yml",
       "checkouts": [
         {
-          "line": 86,
+          "job": "validate",
+          "step": 3,
           "action": "actions/checkout@v4",
           "repository": "StatPan/datapan-cli",
           "ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",
@@ -34,7 +36,8 @@
       "workflow": ".github/workflows/institution-runtime-verify.yml",
       "checkouts": [
         {
-          "line": 52,
+          "job": "verify",
+          "step": 1,
           "action": "actions/checkout@v7",
           "repository": "StatPan/datapan-cli",
           "ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",
@@ -46,7 +49,8 @@
       "workflow": ".github/workflows/release-draft.yml",
       "checkouts": [
         {
-          "line": 64,
+          "job": "draft",
+          "step": 2,
           "action": "actions/checkout@v7",
           "repository": "StatPan/datapan-cli",
           "ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",
@@ -58,7 +62,8 @@
       "workflow": ".github/workflows/runtime-freshness-import.yml",
       "checkouts": [
         {
-          "line": 61,
+          "job": "import",
+          "step": 3,
           "action": "actions/checkout@v7",
           "repository": "StatPan/datapan-cli",
           "ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",
@@ -70,14 +75,16 @@
       "workflow": ".github/workflows/runtime-freshness-verify.yml",
       "checkouts": [
         {
-          "line": 48,
+          "job": "verify",
+          "step": 2,
           "action": "actions/checkout@v7",
           "repository": "StatPan/datapan-cli",
           "ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",
           "path": "datapan-cli"
         },
         {
-          "line": 130,
+          "job": "consolidate",
+          "step": 1,
           "action": "actions/checkout@v7",
           "repository": "StatPan/datapan-cli",
           "ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",
@@ -89,7 +96,8 @@
       "workflow": ".github/workflows/upstream-catalog-refresh.yml",
       "checkouts": [
         {
-          "line": 28,
+          "job": "observe",
+          "step": 2,
           "action": "actions/checkout@v7",
           "repository": "StatPan/datapan-cli",
           "ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",
@@ -101,7 +109,8 @@
       "workflow": ".github/workflows/verify-release.yml",
       "checkouts": [
         {
-          "line": 69,
+          "job": "verify",
+          "step": 3,
           "action": "actions/checkout@v7",
           "repository": "StatPan/datapan-cli",
           "ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",

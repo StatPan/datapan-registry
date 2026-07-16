@@ -16,11 +16,19 @@ updates all checkout sites together, and regenerates
 Run the guard with:
 
 ```sh
+python3 -m pip install 'PyYAML==6.0.2'
 python3 scripts/validate-external-checkout-refs.py --check
 python3 -m unittest tests/test_validate_external_checkout_refs.py
 ```
 
-The committed report is the review inventory. CI fails when an external CLI
-checkout omits `ref`, selects a different identity, or the workflow inventory
-changes without regeneration. The guard prints the selected SHA and checkout
-count so hosted logs retain the identity used for the run.
+The committed report is the review inventory. The guard parses every `.yml` and
+`.yaml` workflow through PyYAML's `SafeLoader`, rejects duplicate mapping keys,
+and deliberately rejects YAML anchors, aliases, and merge keys. Quoted scalars,
+unnamed `uses` steps, block mappings, and flow mappings are normal AST forms and
+remain discoverable. Dynamic action, repository, ref, and path expressions fail
+closed where they could make checkout identity ambiguous.
+
+CI also fails when an external CLI checkout omits `ref`, selects a different
+identity, changes the reviewed 8-workflow/9-checkout expectation, or changes the
+generated inventory without regeneration. The guard prints the selected SHA and
+checkout count so hosted logs retain the identity used for the run.

@@ -57,6 +57,7 @@ jobs:
       - name: Validate external CLI checkout identity
         working-directory: datapan-registry
         run: |
+          python3 -m pip install --disable-pip-version-check 'PyYAML==6.0.2'
           python3 scripts/validate-external-checkout-refs.py --check
           python3 -m unittest tests/test_validate_external_checkout_refs.py
 
