@@ -14,7 +14,7 @@
     "requirements": [
       "select an immutable 40-character commit SHA",
       "prove Registry release and runtime workflow compatibility",
-      "regenerate reports/external-checkout-refs.json",
+      "regenerate .github/external-checkout-refs.inventory.json",
       "review every checkout occurrence in the same change"
     ],
     "mutable_refs_allowed": false,

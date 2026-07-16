@@ -11,7 +11,7 @@ branch discovery, but a previously reviewed Registry workflow could then execute
 new CLI code without a Registry change or compatibility review. The selected SHA
 is updated only by a pull request that proves Registry workflow compatibility,
 updates all checkout sites together, and regenerates
-`reports/external-checkout-refs.json`.
+`.github/external-checkout-refs.inventory.json`.
 
 Run the guard with:
 

@@ -14,7 +14,7 @@ from typing import Any
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DEFAULT_CONTRACT = ROOT / "policy/external-checkout-refs.json"
 DEFAULT_WORKFLOWS = ROOT / ".github/workflows"
-DEFAULT_REPORT = ROOT / "reports/external-checkout-refs.json"
+DEFAULT_REPORT = ROOT / ".github/external-checkout-refs.inventory.json"
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 STEP_RE = re.compile(r"^(?P<indent>\s*)-\s+(?:name|uses):")
 CHECKOUT_RE = re.compile(r"^\s*uses:\s*actions/checkout@(?P<version>[^\s#]+)")
