@@ -1,0 +1,22 @@
+{
+  "schema_version": "datapan.operation-assertion-policy-candidate-manifest.v1",
+  "publication_status": "unreleased_candidate",
+  "artifact_count": 3,
+  "artifacts": [
+    {
+      "path": "drafts/operation-assertion-policies/datapan.operation-assertion-policies.v1.schema.json",
+      "kind": "schema",
+      "sha256": "a934fe244eeedbed23914ba1230d612b68656f9dc97803c747cf9f29c46c0446"
+    },
+    {
+      "path": "drafts/operation-assertion-policies/operation-assertion-policies.v1.json",
+      "kind": "operation_assertion_policy",
+      "sha256": "62d54df23a55dc529b60947c944bebef82f6697f44472ae0f20c2a06781704e6"
+    },
+    {
+      "path": "fixtures/operation-assertion-policies/datapan-health-consumer-proof.v1.json",
+      "kind": "registry_reference_model",
+      "sha256": "edd7ab5c63c39c30801bd145e5dfc521f9910542da2f3b766ef2928e1a5841d2"
+    }
+  ]
+}

@@ -158,12 +158,17 @@ jobs:
             scripts/validate-diagnostic-evidence-mapping-draft.py \
             scripts/generate-diagnostic-release-candidate.py \
             scripts/validate-diagnostic-release-candidate.py \
+            scripts/generate-operation-assertion-policies.py \
+            scripts/validate-operation-assertion-policies.py \
             scripts/generate-diagnostic-publication.py
           python scripts/sync-release-schema-artifacts.py --check
           python scripts/sync-release-manifest-artifacts.py --check
           python scripts/generate-health-probe-catalog.py --check
           python scripts/validate-health-probe-catalog.py
           python -m unittest tests/test_validate_health_probe_catalog.py
+          python scripts/generate-operation-assertion-policies.py --check
+          python scripts/validate-operation-assertion-policies.py
+          python -m unittest tests/test_validate_operation_assertion_policies.py
           python scripts/validate-diagnostic-envelope-draft.py
           python -m unittest tests/test_validate_diagnostic_envelope_draft.py
           python scripts/validate-diagnostic-evidence-mapping-draft.py
