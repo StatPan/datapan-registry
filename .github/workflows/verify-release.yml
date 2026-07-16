@@ -17,13 +17,15 @@ permissions:
 
 jobs:
   diagnostic-candidate:
-    name: Diagnostic candidate (offline)
+    name: Diagnostic candidate (pre-distribution)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout registry
         uses: actions/checkout@v7
         with:
-          lfs: false
+          # Mapping semantics bind exact Registry dataset identities. Fetch the
+          # GitHub LFS object here without depending on the public HF mirror.
+          lfs: true
 
       - name: Validate diagnostic candidate before public distribution
         run: |
