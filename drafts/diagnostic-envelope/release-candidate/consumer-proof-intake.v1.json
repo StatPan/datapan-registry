@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.diagnostic-consumer-proof-intake.v1",
-  "captured_at": "2026-07-16T08:19:00Z",
+  "captured_at": "2026-07-16T09:10:00Z",
   "registry": {
     "repository": "StatPan/datapan-registry",
     "issue": 568,
@@ -34,34 +34,56 @@
       "issue": 8,
       "pull_request": 12,
       "head_commit": "79da6545df44b8d3933e482bb86895028522de73",
-      "proof_state": "partial",
-      "review_state": "remediated_awaiting_independent_exact_head_review",
-      "ci_state": "local_55_tests_build_and_audit_passed_no_github_checks",
-      "acceptance": {"completed": 7, "total": 8, "health_identity_composition": "complete"},
-      "scope": "dependency_independent_diagnostic_experience_with_health_identity_composition",
-      "missing_proofs": [
-        "immutable_registry_release_manifest_consumption",
-        "final_exact_head_approval"
-      ]
+      "proof_state": "accepted",
+      "review_state": "independent_approved",
+      "ci_state": "machine_receipt_local_passed_no_hosted_ci",
+      "receipt_sha256": "b032daa09fbb8d01508dac7ad76ce55754ba977492972c85917906468e86d180",
+      "machine_proof": {
+        "path": "drafts/diagnostic-envelope/release-candidate/proofs/datapan-web.compatibility-receipt.v1.json",
+        "sha256": "b032daa09fbb8d01508dac7ad76ce55754ba977492972c85917906468e86d180",
+        "bytes": 5182,
+        "schema_version": "datapan.web-diagnostic-compatibility-receipt.v1"
+      },
+      "acceptance": {
+        "completed": 7,
+        "total": 8,
+        "health_identity_composition": "complete",
+        "prepublication_compatibility": "accepted",
+        "immutable_registry_release_manifest_consumption": "post_publication_rollout"
+      },
+      "scope": "prepublication_diagnostic_compatibility_with_health_identity_composition",
+      "missing_proofs": []
     },
     {
       "consumer": "datapan-cli",
       "repository": "StatPan/datapan-cli",
       "issue": 160,
       "pull_request": 162,
-      "head_commit": "f6b4a62df8b8c537a38ca8adc0d9ea3a66a0cfaf",
-      "proof_state": "blocked",
-      "review_state": "independent_changes_requested",
-      "ci_state": "standard_3_passed_registry_journey_3_failed",
-      "ci_run": 29481907297,
-      "scope": "draft_diagnostic_commands",
-      "missing_proofs": [
-        "registry_journey_ci_pass",
-        "product_metrics_production_binding",
-        "executable_failure_to_success_export_journey",
-        "exact_consumed_ignored_field_handoff",
-        "independent_exact_head_approval"
-      ]
+      "head_commit": "1800bef05c62c918b34a430d8d703ce2ed1afc1f",
+      "proof_state": "accepted",
+      "review_state": "independent_approved",
+      "ci_state": "passed",
+      "ci_run": 29483717200,
+      "receipt_sha256": "102e83fac041d249990cfad4fc00d98a2d7c3585bfb72ddda9310a30ab9612b5",
+      "machine_proof": {
+        "path": "drafts/diagnostic-envelope/release-candidate/proofs/datapan-cli.compatibility-receipt.v1.json",
+        "sha256": "102e83fac041d249990cfad4fc00d98a2d7c3585bfb72ddda9310a30ab9612b5",
+        "bytes": 4685,
+        "schema_version": "datapan.cli-diagnostic-compatibility-receipt.v1"
+      },
+      "scope": "prepublication_diagnostic_command_compatibility",
+      "missing_proofs": []
     }
-  ]
+  ],
+  "publication_gates": {
+    "anonymous_registry_distribution": {
+      "status": "blocked_external",
+      "provider": "hugging_face",
+      "ci_run": 29483717293,
+      "error": "registry_distribution_failed",
+      "category": "distribution_timeout",
+      "runtime_authority": false,
+      "publishing_allowed": false
+    }
+  }
 }

@@ -1,0 +1,150 @@
+{
+  "schema_version": "datapan.web-diagnostic-compatibility-receipt.v1",
+  "status": "consumer_compatible_prepublication",
+  "web_head": "79da6545df44b8d3933e482bb86895028522de73",
+  "registry_revision": "8c5d397f13929ec2b85e63e4ca600887f37929b8",
+  "contracts": {
+    "schema": {
+      "path": "src/diagnostics/contracts/datapan.diagnostic-envelope.v1.schema.json",
+      "sha256": "da254b40947462347fcda90fdd7686b6632c76943b438f2046a28f079f33e403"
+    },
+    "consumer": {
+      "path": "tests/fixtures/diagnostic-envelope/consumer-contract.v1.json",
+      "sha256": "02146e5cbc84a4f7e9b6883ff049c62b7f188cccd731c300e762395b486483a5"
+    }
+  },
+  "fixtures": [
+    {
+      "name": "approval-propagating.json",
+      "sha256": "fe000f4082f948d6a96f045d7fae91c6bdf7288c6746196a8c7b0868d6416099",
+      "cause": "approval_propagating",
+      "determination": "inferred"
+    },
+    {
+      "name": "approval-required.json",
+      "sha256": "d11fc4e18aee6fe1a7f5c9c0a94a1e6e1bae0177447f2f6bcc0dddbe6961e7d3",
+      "cause": "approval_required",
+      "determination": "observed"
+    },
+    {
+      "name": "contract-drift.json",
+      "sha256": "13bc8af8c6b1540ef91a49f60ed9aab5514fabee3316868dc9f946adbe1da470",
+      "cause": "contract_drift",
+      "determination": "inferred"
+    },
+    {
+      "name": "credential-invalid.json",
+      "sha256": "c5796d7bf59c6f282f9f75b14717a51ff716859e06f6325e784c48d507816497",
+      "cause": "credential_invalid",
+      "determination": "observed"
+    },
+    {
+      "name": "invalid-input.json",
+      "sha256": "80adb4fce6ede5c34223468bf26b69e90c20c92d74661777c458a5238ad6ab07",
+      "cause": "invalid_input",
+      "determination": "observed"
+    },
+    {
+      "name": "provider-outage.json",
+      "sha256": "33c0160c4cf136b34dc3befa1ff5803c71f3c37d7946fa2b56e70c69d4be6200",
+      "cause": "provider_outage",
+      "determination": "inferred"
+    },
+    {
+      "name": "rate-limited.json",
+      "sha256": "8be4fb69e91ae42c2a03510458b9b9fd23cf4780d551ea1ddaa505c8bc40d318",
+      "cause": "rate_limited",
+      "determination": "observed"
+    },
+    {
+      "name": "ready.json",
+      "sha256": "7ae2306176bdd007ca2a4ca822240e4e515c76967b2af0c816584463aee420fc",
+      "cause": "ready",
+      "determination": "observed"
+    },
+    {
+      "name": "semantic-quality.json",
+      "sha256": "06fcc308aa039861b38f6da2fee8f23150ea7d2cac998b5d9e05b011ca1ca9b0",
+      "cause": "semantic_quality",
+      "determination": "inferred"
+    },
+    {
+      "name": "stale-data.json",
+      "sha256": "f4cc2d0f34bdfb74bbed9a3bcb5cad7b0f5444fa5ded6ca1742c916799aecf92",
+      "cause": "stale_data",
+      "determination": "observed"
+    },
+    {
+      "name": "unknown.json",
+      "sha256": "e0635cf4980438141007607c66eca821383f605393a69bdb03522b3873c1dcf0",
+      "cause": "unknown",
+      "determination": "unknown"
+    }
+  ],
+  "verification": {
+    "diagnosis_codes": 11,
+    "fixture_cause_action_redaction": "exact",
+    "journeys": [
+      "approval_entry",
+      "approval_propagation",
+      "credential_repair",
+      "input_repair",
+      "rate_limit_recovery",
+      "provider_outage_evidence",
+      "http_success_quality"
+    ],
+    "journey_count": 7,
+    "test_command": "npm run check",
+    "tests_passed": 55,
+    "production_build": "passed",
+    "audit_command": "npm audit --audit-level=high",
+    "audit_vulnerabilities": 0
+  },
+  "sources": [
+    {
+      "path": "src/diagnostics/decoder.test.ts",
+      "sha256": "961b0fd04885dfb102ecde6a8bf411987539625ff28b99ec104a4f0e52322626"
+    },
+    {
+      "path": "src/diagnostics/decoder.ts",
+      "sha256": "aa6885905019c272a60e619f347a3846bd09d608007d177f0adf28e4ddb45bfa"
+    },
+    {
+      "path": "src/diagnostics/domain.ts",
+      "sha256": "6665578c9a0e01911633ccd175b515d18adfe8dcd22c1cece4bbd6e87c35c35d"
+    },
+    {
+      "path": "src/diagnostics/healthEvidenceAdapter.test.ts",
+      "sha256": "0d1667bc8573d7e4d36567b18adb7d36f7a225afa05c26ca9e56380957847bba"
+    },
+    {
+      "path": "src/diagnostics/healthEvidenceAdapter.ts",
+      "sha256": "28b2aedc31b80b8b4a64f21d7e214fe6c3a0bfbbfd8accdf3110e2b117e3e101"
+    },
+    {
+      "path": "src/diagnostics/journeyContract.test.ts",
+      "sha256": "dc96a29bca81eae8af329cb540a7dede80dee4feb39b7dd836003a091d271814"
+    },
+    {
+      "path": "src/diagnostics/journeyContract.ts",
+      "sha256": "5583b9fe01175132c317f3ec206569e5caa6112b7f070af21ad021b3550cfc11"
+    },
+    {
+      "path": "src/diagnostics/operationEvidenceAdapter.test.ts",
+      "sha256": "a8bc940a887b6754a3f5e0023054a88d0277d9b49bb101d42abcb23f60801d97"
+    },
+    {
+      "path": "src/diagnostics/operationEvidenceAdapter.ts",
+      "sha256": "a9e17d510dd72670b7fa37977b3c39cd41edf7dac15c6d0654fdba77f436c1ba"
+    }
+  ],
+  "package_identity": {
+    "package_json_sha256": "7200e707c8449ac791179ffe7f824ab879b2b2e80ba45ac30d27a0fbd4916566",
+    "package_lock_sha256": "a596c00dd6de8aeab7b2f1979537e65678505922846f99df4628f33e4a23a234"
+  },
+  "rollout": {
+    "prepublication_compatibility": "accepted",
+    "immutable_registry_release_manifest_consumption": "post_publication_required",
+    "runtime_authority_before_publication": false
+  }
+}

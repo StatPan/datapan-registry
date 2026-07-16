@@ -1,0 +1,140 @@
+{
+  "schema_version": "datapan.cli-diagnostic-compatibility-receipt.v1",
+  "status": "consumer_compatible_prepublication",
+  "cli_head": "1800bef05c62c918b34a430d8d703ce2ed1afc1f",
+  "registry_revision": "8c5d397f13929ec2b85e63e4ca600887f37929b8",
+  "contracts": {
+    "schema": {
+      "path": "internal/cli/testdata/diagnostic-envelope/schema.json",
+      "sha256": "da254b40947462347fcda90fdd7686b6632c76943b438f2046a28f079f33e403"
+    },
+    "mapping": {
+      "path": "internal/cli/testdata/diagnostic-envelope/mapping.json",
+      "sha256": "da55d52d2ee1f197969ac63a1d5ab5b98e3b88fd65f90d6a48800d2e3c522d33"
+    }
+  },
+  "fixtures": [
+    {
+      "name": "approval-propagating.json",
+      "sha256": "fe000f4082f948d6a96f045d7fae91c6bdf7288c6746196a8c7b0868d6416099",
+      "cause": "approval_propagating",
+      "determination": "inferred"
+    },
+    {
+      "name": "approval-required.json",
+      "sha256": "d11fc4e18aee6fe1a7f5c9c0a94a1e6e1bae0177447f2f6bcc0dddbe6961e7d3",
+      "cause": "approval_required",
+      "determination": "observed"
+    },
+    {
+      "name": "contract-drift.json",
+      "sha256": "13bc8af8c6b1540ef91a49f60ed9aab5514fabee3316868dc9f946adbe1da470",
+      "cause": "contract_drift",
+      "determination": "inferred"
+    },
+    {
+      "name": "credential-invalid.json",
+      "sha256": "c5796d7bf59c6f282f9f75b14717a51ff716859e06f6325e784c48d507816497",
+      "cause": "credential_invalid",
+      "determination": "observed"
+    },
+    {
+      "name": "invalid-input.json",
+      "sha256": "80adb4fce6ede5c34223468bf26b69e90c20c92d74661777c458a5238ad6ab07",
+      "cause": "invalid_input",
+      "determination": "observed"
+    },
+    {
+      "name": "provider-outage.json",
+      "sha256": "33c0160c4cf136b34dc3befa1ff5803c71f3c37d7946fa2b56e70c69d4be6200",
+      "cause": "provider_outage",
+      "determination": "inferred"
+    },
+    {
+      "name": "rate-limited.json",
+      "sha256": "8be4fb69e91ae42c2a03510458b9b9fd23cf4780d551ea1ddaa505c8bc40d318",
+      "cause": "rate_limited",
+      "determination": "observed"
+    },
+    {
+      "name": "ready.json",
+      "sha256": "7ae2306176bdd007ca2a4ca822240e4e515c76967b2af0c816584463aee420fc",
+      "cause": "ready",
+      "determination": "observed"
+    },
+    {
+      "name": "semantic-quality.json",
+      "sha256": "06fcc308aa039861b38f6da2fee8f23150ea7d2cac998b5d9e05b011ca1ca9b0",
+      "cause": "semantic_quality",
+      "determination": "inferred"
+    },
+    {
+      "name": "stale-data.json",
+      "sha256": "f4cc2d0f34bdfb74bbed9a3bcb5cad7b0f5444fa5ded6ca1742c916799aecf92",
+      "cause": "stale_data",
+      "determination": "observed"
+    },
+    {
+      "name": "unknown.json",
+      "sha256": "e0635cf4980438141007607c66eca821383f605393a69bdb03522b3873c1dcf0",
+      "cause": "unknown",
+      "determination": "unknown"
+    }
+  ],
+  "verification": {
+    "real_run_journeys": 7,
+    "runtime_owned_failure_metrics": true,
+    "time_to_diagnosis_serialized": true,
+    "time_to_first_success_serialized": true,
+    "json_export": "passed",
+    "csv_write_boundary": "writeCSV_exact_value_newline_1_newline",
+    "consumed_ignored_unsupported_fields": "documented_exact",
+    "mapping_and_redaction": "passed",
+    "local_commands": [
+      "go test -count=1 ./...",
+      "go vet ./...",
+      "go build ./cmd/datapan ./cmd/dp",
+      "git diff --check"
+    ],
+    "ordinary_ci_operating_systems": [
+      "ubuntu",
+      "macos",
+      "windows"
+    ]
+  },
+  "sources": [
+    {
+      "path": "internal/cli/diagnostic_contract.go",
+      "sha256": "f4b192424def2a4024990558fb3235159055063e9fed0ac5a41251455027af2c"
+    },
+    {
+      "path": "internal/cli/diagnostic_contract_test.go",
+      "sha256": "9ab4695f93e96621e3bbcb62f5ecdeb0d4c550afe320c1ce1d4c33959a2a056f"
+    },
+    {
+      "path": "internal/cli/diagnostic.go",
+      "sha256": "dafbdfe868f9fdd87e64743e3cdeee927b687fafb8bbc214c1208f8a21661c24"
+    },
+    {
+      "path": "internal/cli/diagnostic_test.go",
+      "sha256": "de2aa13c189aa0baff147803f28c2368b891d2d053b62b19c3f236de12d9da1a"
+    },
+    {
+      "path": "internal/cli/cli.go",
+      "sha256": "36227e506ef06290d223a015e381d4d656edab06f7f3ad0de0b1b879bd14c0da"
+    },
+    {
+      "path": "docs/diagnostic-consumer-handoff.md",
+      "sha256": "6dbff4c9a0a6414a3b8a9341e5f887f888b0ec50f3c3661cf35b44e3e6fdfeed"
+    },
+    {
+      "path": "docs/cli-contract.md",
+      "sha256": "8b02f285172601d9b687735225ccbeb1790930f4f4a1f86db726708bdc595356"
+    }
+  ],
+  "rollout": {
+    "prepublication_compatibility": "accepted",
+    "anonymous_registry_distribution": "external_publication_gate_blocked",
+    "runtime_authority_before_publication": false
+  }
+}

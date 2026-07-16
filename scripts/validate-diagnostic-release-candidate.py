@@ -33,13 +33,18 @@ def validate_all() -> dict[str, int | str]:
         raise ValueError("draft candidate must have no release, runtime, manifest, or publishing authority")
     decision = candidate.get("decision", {})
     all_accepted = decision.get("all_consumers_accepted") is True
-    expected_status = "ready_for_publication_review" if all_accepted else "blocked"
+    all_publication_gates_passed = decision.get("all_publication_gates_passed") is True
+    expected_status = "ready_for_publication_review" if all_accepted and all_publication_gates_passed else "blocked"
     if candidate.get("status") != expected_status:
         raise ValueError("candidate status does not match consumer proof completeness")
-    if not all_accepted and not decision.get("missing_proofs"):
-        raise ValueError("blocked candidate must expose missing proofs")
+    if candidate.get("status") == "blocked" and not (
+        decision.get("missing_proofs") or decision.get("missing_publication_gates")
+    ):
+        raise ValueError("blocked candidate must expose missing consumer proofs or publication gates")
     if all_accepted and decision.get("missing_proofs"):
         raise ValueError("complete candidate cannot retain missing proofs")
+    if all_publication_gates_passed and decision.get("missing_publication_gates"):
+        raise ValueError("complete publication gates cannot retain blockers")
     forbidden_prefix = "drafts/diagnostic-envelope/"
     for owner, path in (("manifest", MANIFEST), ("schema index", SCHEMA_INDEX)):
         value = GENERATOR.load(path)
@@ -49,6 +54,7 @@ def validate_all() -> dict[str, int | str]:
     return {
         "consumers": len(candidate["binding"]["consumer_proofs"]),
         "missing_proofs": len(candidate["decision"]["missing_proofs"]),
+        "missing_publication_gates": len(candidate["decision"]["missing_publication_gates"]),
         "binding_sha256": candidate["binding_sha256"],
     }
 
@@ -61,7 +67,8 @@ def main() -> int:
         return 1
     print(
         "ok diagnostic release candidate boundary "
-        f"(consumers={result['consumers']}, missing={result['missing_proofs']}, binding={result['binding_sha256']})"
+        f"(consumers={result['consumers']}, missing={result['missing_proofs']}, "
+        f"publication_gates={result['missing_publication_gates']}, binding={result['binding_sha256']})"
     )
     return 0
 
