@@ -17,13 +17,13 @@
   "cause_catalog": [
     {"code": "approval_required", "minimum_evidence": "authoritative approval_record state=not_applied", "required_action": "apply_for_operation"},
     {"code": "approval_propagating", "minimum_evidence": "authoritative approval_record state=approved_pending_sync with observed_at and effective_scope", "required_action": "wait_for_approval_sync", "required_avoid_action": "reissue_credential"},
-    {"code": "credential_invalid", "minimum_evidence": "provider rejection or local configuration validation independent of approval state", "required_action": "verify_credential_configuration"},
-    {"code": "invalid_input", "minimum_evidence": "versioned request validation", "required_action": "verify_request_parameters"},
-    {"code": "rate_limited", "minimum_evidence": "bounded provider response reference", "required_action": "retry_with_backoff"},
-    {"code": "provider_outage", "minimum_evidence": "health observation, provider notice, or provider response reference", "required_action": "check_provider_status"},
-    {"code": "contract_drift", "minimum_evidence": "versioned response contract assertion", "required_action": "refresh_contract"},
-    {"code": "semantic_quality", "minimum_evidence": "versioned data quality assertion", "required_action": "inspect_data_quality", "required_avoid_action": "treat_transport_success_as_data_success"},
-    {"code": "stale_data", "minimum_evidence": "versioned freshness assertion with reference_time, actual_time, maximum_age_seconds, and stale state", "required_action": "inspect_data_quality"},
+    {"code": "credential_invalid", "minimum_evidence": "typed provider response class=credential_rejected or failed CLI request validation class=credential_configuration", "required_action": "verify_credential_configuration"},
+    {"code": "invalid_input", "minimum_evidence": "failed CLI request validation class=invalid_input with policy version", "required_action": "verify_request_parameters"},
+    {"code": "rate_limited", "minimum_evidence": "typed provider response class=rate_limited with policy version", "required_action": "retry_with_backoff"},
+    {"code": "provider_outage", "minimum_evidence": "unavailable/degraded Health correlation, direct provider notice, or typed provider response class=service_unavailable", "required_action": "check_provider_status"},
+    {"code": "contract_drift", "minimum_evidence": "response contract assertion result=mismatch with policy version", "required_action": "refresh_contract"},
+    {"code": "semantic_quality", "minimum_evidence": "data quality assertion result=failed with semantic assertion kind and policy version", "required_action": "inspect_data_quality", "required_avoid_action": "treat_transport_success_as_data_success"},
+    {"code": "stale_data", "minimum_evidence": "quality assertion kind=freshness result=failed plus reference_time, actual_time, maximum_age_seconds, and stale state", "required_action": "inspect_data_quality"},
     {"code": "ready", "minimum_evidence": "operation-scoped versioned validation_result passed at required level", "required_action": "continue_to_reuse"},
     {"code": "unknown", "minimum_evidence": "bounded evidence that does not support a more specific cause", "required_action": "gather_more_evidence"}
   ]

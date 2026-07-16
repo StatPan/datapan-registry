@@ -48,6 +48,11 @@
         "scope_id": "fixture-operation-quality"
       },
       "version": "response-envelope-v1",
+      "response": {
+        "http_status": 200,
+        "provider_class": "success",
+        "policy_version": "response-envelope-v1"
+      },
       "supports": [
         "scope"
       ]
@@ -62,6 +67,11 @@
         "scope_id": "fixture-operation-quality:expected-entity"
       },
       "version": "quality-policy-v1",
+      "quality_assertion": {
+        "kind": "missing_expected_entity",
+        "result": "failed",
+        "policy_version": "quality-policy-v1"
+      },
       "supports": [
         "cause",
         "determination",

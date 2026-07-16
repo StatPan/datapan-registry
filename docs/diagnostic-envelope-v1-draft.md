@@ -45,6 +45,15 @@ when the conclusion depends on a policy or contract. Checked-in examples use
 fictional fixture identities and declare `fixture.status=deterministic_example`;
 they are not claims about current upstream state.
 
+Evidence kinds bind both authority and bounded result metadata. Provider
+responses carry an HTTP status, a provider result class, and the classification
+policy version; request validation carries its result, failure class, and
+policy version. Contract and quality assertions carry explicit pass/fail-like
+results and policy versions. Health observations carry a correlated state and
+probe policy, while provider notices carry their direct state and notice
+version. A `ref_id` or a generic version string never establishes a cause by
+itself.
+
 ## Same symptom, different action
 
 Three examples deliberately reference the same bounded symptom,
@@ -59,6 +68,12 @@ Three examples deliberately reference the same bounded symptom,
 An HTTP status alone cannot choose among these causes. In particular, the
 generic data.go.kr service-key rule remains ambiguous until another evidence
 authority narrows it.
+
+Kind-specific authority rules are fail-closed: provider responses originate
+from the provider or CLI adapter, request validation from CLI, Registry rules
+from Registry, Health observations from Healthcheck, and provider notices from
+the provider or its portal. Consumer-owned contract and quality assertions use
+the explicitly allowed consumer authority set.
 
 ## Scenario coverage
 

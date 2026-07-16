@@ -48,6 +48,11 @@
         "scope_id": "fixture-operation-stale:reference-time"
       },
       "version": "freshness-assertion-v1",
+      "quality_assertion": {
+        "kind": "freshness",
+        "result": "failed",
+        "policy_version": "freshness-assertion-v1"
+      },
       "freshness": {
         "policy_version": "daily-update-v1",
         "reference_time": "2026-07-16T00:40:00Z",

@@ -74,7 +74,11 @@
         "scope_id": "fixture-operation-propagating"
       },
       "version": "error-taxonomy-v1",
-      "credential_state": "unknown",
+      "response": {
+        "http_status": 401,
+        "provider_class": "unclassified",
+        "policy_version": "error-taxonomy-v1"
+      },
       "supports": [
         "cause",
         "determination"

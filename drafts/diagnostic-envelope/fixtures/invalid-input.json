@@ -48,6 +48,11 @@
         "scope_id": "fixture-request-input"
       },
       "version": "registry-required-params-v1",
+      "request_validation": {
+        "result": "failed",
+        "failure_class": "invalid_input",
+        "policy_version": "registry-required-params-v1"
+      },
       "supports": [
         "cause",
         "determination",

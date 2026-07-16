@@ -66,7 +66,39 @@ class DiagnosticEnvelopeDraftTest(unittest.TestCase):
     def test_credential_rejection_does_not_need_approval_state(self):
         value = self.fixtures["credential-invalid"]
         self.assertFalse(any(item["kind"] == "approval_record" for item in value["evidence_refs"]))
-        self.assertEqual(value["evidence_refs"][0]["credential_state"], "rejected_by_provider")
+        self.assertEqual(value["evidence_refs"][0]["response"]["provider_class"], "credential_rejected")
+
+    def test_invalid_input_requires_failed_typed_request_validation(self):
+        value = copy.deepcopy(self.fixtures["invalid-input"])
+        value["evidence_refs"][0].pop("request_validation")
+        self.assert_schema_rejects(value)
+        value = copy.deepcopy(self.fixtures["invalid-input"])
+        value["evidence_refs"][0]["request_validation"]["failure_class"] = "credential_configuration"
+        self.assert_schema_rejects(value)
+
+    def test_rate_limit_requires_typed_provider_class(self):
+        value = copy.deepcopy(self.fixtures["rate-limited"])
+        value["evidence_refs"][0]["response"]["provider_class"] = "unclassified"
+        self.assert_schema_rejects(value)
+
+    def test_provider_outage_requires_correlated_or_direct_outage_evidence(self):
+        value = copy.deepcopy(self.fixtures["provider-outage"])
+        value["evidence_refs"] = [value["evidence_refs"][0]]
+        self.assert_schema_rejects(value)
+
+    def test_contract_and_quality_causes_require_failed_typed_assertions(self):
+        value = copy.deepcopy(self.fixtures["contract-drift"])
+        value["evidence_refs"][0]["contract_assertion"]["result"] = "match"
+        self.assert_schema_rejects(value)
+        value = copy.deepcopy(self.fixtures["semantic-quality"])
+        evidence = next(item for item in value["evidence_refs"] if item["kind"] == "data_quality_assertion")
+        evidence["quality_assertion"]["result"] = "passed"
+        self.assert_schema_rejects(value)
+
+    def test_evidence_kind_restricts_authority(self):
+        value = copy.deepcopy(self.fixtures["rate-limited"])
+        value["evidence_refs"][0]["authority"] = "registry"
+        self.assert_schema_rejects(value)
 
     def test_same_http_symptom_has_different_evidence_and_actions(self):
         cases = [self.fixtures[name] for name in ("approval-propagating", "credential-invalid", "provider-outage")]

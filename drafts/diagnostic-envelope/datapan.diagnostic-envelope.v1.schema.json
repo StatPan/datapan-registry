@@ -74,11 +74,19 @@
           "actions": {"properties": {"recommended": {"contains": {"properties": {"action_id": {"const": "verify_credential_configuration"}}, "required": ["action_id"]}}}},
           "evidence_refs": {
             "contains": {
-              "properties": {
-                "kind": {"enum": ["provider_response", "request_validation"]},
-                "credential_state": {"enum": ["rejected_by_provider", "local_configuration_invalid"]}
-              },
-              "required": ["kind", "credential_state"]
+              "anyOf": [
+                {
+                  "properties": {"kind": {"const": "provider_response"}, "response": {"properties": {"provider_class": {"const": "credential_rejected"}}, "required": ["provider_class"]}},
+                  "required": ["kind", "response"]
+                },
+                {
+                  "properties": {
+                    "kind": {"const": "request_validation"},
+                    "request_validation": {"properties": {"result": {"const": "failed"}, "failure_class": {"const": "credential_configuration"}}, "required": ["result", "failure_class", "policy_version"]}
+                  },
+                  "required": ["kind", "request_validation"]
+                }
+              ]
             }
           }
         }
@@ -86,18 +94,58 @@
     },
     {
       "if": {"properties": {"cause": {"properties": {"code": {"const": "invalid_input"}}, "required": ["code"]}}},
-      "then": {"properties": {"actions": {"properties": {"recommended": {"contains": {"properties": {"action_id": {"const": "verify_request_parameters"}}, "required": ["action_id"]}}}}}}
+      "then": {
+        "properties": {
+          "actions": {"properties": {"recommended": {"contains": {"properties": {"action_id": {"const": "verify_request_parameters"}}, "required": ["action_id"]}}}},
+          "evidence_refs": {
+            "contains": {
+              "properties": {
+                "kind": {"const": "request_validation"},
+                "request_validation": {"properties": {"result": {"const": "failed"}, "failure_class": {"const": "invalid_input"}}, "required": ["result", "failure_class", "policy_version"]}
+              },
+              "required": ["kind", "request_validation"]
+            }
+          }
+        }
+      }
     },
     {
       "if": {"properties": {"cause": {"properties": {"code": {"const": "rate_limited"}}, "required": ["code"]}}},
-      "then": {"properties": {"actions": {"properties": {"recommended": {"contains": {"properties": {"action_id": {"const": "retry_with_backoff"}}, "required": ["action_id"]}}}}}}
+      "then": {
+        "properties": {
+          "actions": {"properties": {"recommended": {"contains": {"properties": {"action_id": {"const": "retry_with_backoff"}}, "required": ["action_id"]}}}},
+          "evidence_refs": {
+            "contains": {
+              "properties": {"kind": {"const": "provider_response"}, "response": {"properties": {"provider_class": {"const": "rate_limited"}}, "required": ["provider_class", "policy_version"]}},
+              "required": ["kind", "response"]
+            }
+          }
+        }
+      }
     },
     {
       "if": {"properties": {"cause": {"properties": {"code": {"const": "provider_outage"}}, "required": ["code"]}}},
       "then": {
         "properties": {
           "ownership": {"properties": {"accountable_party": {"enum": ["data_go_kr", "provider", "shared"]}}},
-          "evidence_refs": {"contains": {"properties": {"kind": {"enum": ["health_observation", "provider_notice", "provider_response"]}}, "required": ["kind", "authority", "observed_at", "scope"]}}
+          "evidence_refs": {
+            "contains": {
+              "anyOf": [
+                {
+                  "properties": {"kind": {"const": "health_observation"}, "health_correlation": {"properties": {"state": {"enum": ["unavailable", "degraded"]}}, "required": ["state", "probe_policy_version"]}},
+                  "required": ["kind", "health_correlation"]
+                },
+                {
+                  "properties": {"kind": {"const": "provider_notice"}, "notice": {"properties": {"state": {"enum": ["service_suspended", "degraded"]}}, "required": ["state", "notice_version"]}},
+                  "required": ["kind", "notice"]
+                },
+                {
+                  "properties": {"kind": {"const": "provider_response"}, "response": {"properties": {"provider_class": {"const": "service_unavailable"}}, "required": ["provider_class", "policy_version"]}},
+                  "required": ["kind", "response"]
+                }
+              ]
+            }
+          }
         }
       }
     },
@@ -107,7 +155,12 @@
         "properties": {
           "cause": {"properties": {"layer": {"const": "response_contract"}}},
           "actions": {"properties": {"recommended": {"contains": {"properties": {"action_id": {"const": "refresh_contract"}}, "required": ["action_id"]}}}},
-          "evidence_refs": {"contains": {"properties": {"kind": {"const": "response_contract"}}, "required": ["kind", "version"]}}
+          "evidence_refs": {
+            "contains": {
+              "properties": {"kind": {"const": "response_contract"}, "contract_assertion": {"properties": {"result": {"const": "mismatch"}}, "required": ["result", "policy_version"]}},
+              "required": ["kind", "contract_assertion"]
+            }
+          }
         }
       }
     },
@@ -117,7 +170,15 @@
         "properties": {
           "cause": {"properties": {"layer": {"const": "data_quality"}}},
           "actions": {"properties": {"avoid": {"contains": {"properties": {"action_id": {"const": "treat_transport_success_as_data_success"}}, "required": ["action_id"]}}}},
-          "evidence_refs": {"contains": {"properties": {"kind": {"const": "data_quality_assertion"}}, "required": ["kind", "version"]}}
+          "evidence_refs": {
+            "contains": {
+              "properties": {
+                "kind": {"const": "data_quality_assertion"},
+                "quality_assertion": {"properties": {"kind": {"enum": ["missing_expected_entity", "empty_result", "other"]}, "result": {"const": "failed"}}, "required": ["kind", "result", "policy_version"]}
+              },
+              "required": ["kind", "quality_assertion"]
+            }
+          }
         }
       }
     },
@@ -130,9 +191,10 @@
             "contains": {
               "properties": {
                 "kind": {"const": "data_quality_assertion"},
+                "quality_assertion": {"properties": {"kind": {"const": "freshness"}, "result": {"const": "failed"}}, "required": ["kind", "result", "policy_version"]},
                 "freshness": {"properties": {"state": {"const": "stale"}}, "required": ["policy_version", "reference_time", "actual_time", "maximum_age_seconds", "state"]}
               },
-              "required": ["kind", "version", "freshness"]
+              "required": ["kind", "quality_assertion", "freshness"]
             }
           }
         }
@@ -243,15 +305,49 @@
         "scope": {"$ref": "#/$defs/evidence_scope"},
         "version": {"$ref": "#/$defs/identifier"},
         "approval": {"$ref": "#/$defs/approval_evidence"},
-        "credential_state": {"enum": ["rejected_by_provider", "local_configuration_invalid", "accepted", "unknown"]},
+        "response": {"$ref": "#/$defs/response_evidence"},
+        "request_validation": {"$ref": "#/$defs/request_validation_evidence"},
+        "contract_assertion": {"$ref": "#/$defs/contract_assertion_evidence"},
+        "quality_assertion": {"$ref": "#/$defs/quality_assertion_evidence"},
+        "health_correlation": {"$ref": "#/$defs/health_correlation_evidence"},
+        "notice": {"$ref": "#/$defs/notice_evidence"},
         "freshness": {"$ref": "#/$defs/freshness_evidence"},
         "validation": {"$ref": "#/$defs/validation_evidence"},
         "supports": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["cause", "scope", "determination", "ownership", "action"]}}
       },
       "allOf": [
+        {"if": {"properties": {"kind": {"enum": ["registry_rule", "registry_operation"]}}, "required": ["kind"]}, "then": {"properties": {"authority": {"const": "registry"}}}},
         {
           "if": {"properties": {"kind": {"const": "approval_record"}}, "required": ["kind"]},
           "then": {"required": ["approval"], "properties": {"authority": {"enum": ["data_go_kr_portal", "provider_portal"]}}}
+        },
+        {
+          "if": {"properties": {"kind": {"const": "request_validation"}}, "required": ["kind"]},
+          "then": {"required": ["request_validation"], "properties": {"authority": {"const": "datapan_cli"}}}
+        },
+        {
+          "if": {"properties": {"kind": {"const": "provider_response"}}, "required": ["kind"]},
+          "then": {"required": ["response"], "properties": {"authority": {"enum": ["provider", "datapan_cli"]}}}
+        },
+        {
+          "if": {"properties": {"kind": {"const": "health_observation"}}, "required": ["kind"]},
+          "then": {"required": ["health_correlation"], "properties": {"authority": {"const": "datapan_health"}}}
+        },
+        {
+          "if": {"properties": {"kind": {"const": "provider_notice"}}, "required": ["kind"]},
+          "then": {"required": ["notice"], "properties": {"authority": {"enum": ["provider", "provider_portal"]}}}
+        },
+        {
+          "if": {"properties": {"kind": {"const": "response_contract"}}, "required": ["kind"]},
+          "then": {"required": ["contract_assertion"], "properties": {"authority": {"enum": ["consumer_validation", "datapan_cli", "datapan_web"]}}}
+        },
+        {
+          "if": {"properties": {"kind": {"const": "data_quality_assertion"}}, "required": ["kind"]},
+          "then": {"required": ["quality_assertion"], "properties": {"authority": {"enum": ["consumer_validation", "datapan_cli", "datapan_health", "datapan_web"]}}}
+        },
+        {
+          "if": {"properties": {"kind": {"const": "validation_result"}}, "required": ["kind"]},
+          "then": {"required": ["validation"], "properties": {"authority": {"enum": ["datapan_cli", "datapan_health", "consumer_validation"]}}}
         }
       ]
     },
@@ -272,6 +368,54 @@
         "state": {"enum": ["not_applied", "approved_pending_sync", "active", "rejected", "unknown"]},
         "effective_scope": {"$ref": "#/$defs/evidence_scope"}
       }
+    },
+    "response_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["http_status", "provider_class", "policy_version"],
+      "properties": {
+        "http_status": {"type": "integer", "minimum": 100, "maximum": 599},
+        "provider_class": {"enum": ["credential_rejected", "rate_limited", "service_unavailable", "success", "unclassified"]},
+        "policy_version": {"$ref": "#/$defs/identifier"}
+      }
+    },
+    "request_validation_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["result", "failure_class", "policy_version"],
+      "properties": {
+        "result": {"enum": ["failed", "passed", "unknown"]},
+        "failure_class": {"enum": ["invalid_input", "credential_configuration", "none", "unknown"]},
+        "policy_version": {"$ref": "#/$defs/identifier"}
+      }
+    },
+    "contract_assertion_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["result", "policy_version"],
+      "properties": {"result": {"enum": ["mismatch", "match", "unknown"]}, "policy_version": {"$ref": "#/$defs/identifier"}}
+    },
+    "quality_assertion_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "result", "policy_version"],
+      "properties": {
+        "kind": {"enum": ["missing_expected_entity", "empty_result", "freshness", "other"]},
+        "result": {"enum": ["failed", "passed", "unknown"]},
+        "policy_version": {"$ref": "#/$defs/identifier"}
+      }
+    },
+    "health_correlation_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "probe_policy_version"],
+      "properties": {"state": {"enum": ["unavailable", "degraded", "operational", "unknown"]}, "probe_policy_version": {"$ref": "#/$defs/identifier"}}
+    },
+    "notice_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "notice_version"],
+      "properties": {"state": {"enum": ["service_suspended", "degraded", "operational", "unknown"]}, "notice_version": {"$ref": "#/$defs/identifier"}}
     },
     "freshness_evidence": {
       "type": "object",

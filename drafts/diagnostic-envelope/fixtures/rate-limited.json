@@ -48,6 +48,11 @@
         "scope_id": "fixture-operation-limit"
       },
       "version": "error-taxonomy-v1",
+      "response": {
+        "http_status": 429,
+        "provider_class": "rate_limited",
+        "policy_version": "error-taxonomy-v1"
+      },
       "supports": [
         "cause",
         "determination",

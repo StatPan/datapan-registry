@@ -48,6 +48,10 @@
         "scope_id": "fixture-operation-contract"
       },
       "version": "response-contract-v1",
+      "contract_assertion": {
+        "result": "mismatch",
+        "policy_version": "response-contract-v1"
+      },
       "supports": [
         "cause",
         "scope",
