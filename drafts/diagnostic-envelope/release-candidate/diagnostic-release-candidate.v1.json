@@ -1,0 +1,167 @@
+{
+  "schema_version": "datapan.diagnostic-release-candidate.v1",
+  "status": "ready_for_publication_review",
+  "captured_at": "2026-07-16T09:10:00Z",
+  "authority": {
+    "release_authority": false,
+    "runtime_authority": false,
+    "fixture_runtime_authority": false,
+    "manifest_inclusion": false,
+    "publishing_allowed": false
+  },
+  "binding_sha256": "ac847cb158eb432e72e78d194a94542db5860062b9b869c42f6d736e4f649016",
+  "binding": {
+    "registry": {
+      "repository": "StatPan/datapan-registry",
+      "issue": 568,
+      "contract_pull_requests": [
+        569,
+        570
+      ],
+      "contract_commit": "8c5d397f13929ec2b85e63e4ca600887f37929b8"
+    },
+    "contracts": [
+      {
+        "path": "drafts/diagnostic-envelope/datapan.diagnostic-envelope.v1.schema.json",
+        "sha256": "da254b40947462347fcda90fdd7686b6632c76943b438f2046a28f079f33e403"
+      },
+      {
+        "path": "drafts/diagnostic-envelope/consumer-contract.v1.json",
+        "sha256": "02146e5cbc84a4f7e9b6883ff049c62b7f188cccd731c300e762395b486483a5"
+      },
+      {
+        "path": "drafts/diagnostic-envelope/data-go-kr-evidence-mapping.v1.json",
+        "sha256": "da55d52d2ee1f197969ac63a1d5ab5b98e3b88fd65f90d6a48800d2e3c522d33"
+      },
+      {
+        "path": "drafts/diagnostic-envelope/consumer-compatibility/datapan-cli.v1.json",
+        "sha256": "b1487e736c8b853ae950e70fa8845754ae5722c9dc3d215d50b3a8e767f38068"
+      },
+      {
+        "path": "drafts/diagnostic-envelope/consumer-compatibility/datapan-health.v1.json",
+        "sha256": "e831df46e50107c116132f423525af5b1ea8c9743c014956a2fc3732077db70c"
+      },
+      {
+        "path": "drafts/diagnostic-envelope/consumer-compatibility/datapan-web.v1.json",
+        "sha256": "6dcdb0b7404a43e0a58fbd1b2cbd43ebeded4778d67f1cb3f85015f391cd673c"
+      }
+    ],
+    "consumer_proofs": [
+      {
+        "consumer": "datapan-health",
+        "repository": "StatPan/datapan-health",
+        "issue": 19,
+        "pull_request": 23,
+        "head_commit": "4e8e1fc1c2af3ef63a59abde8c3fc52387355bb8",
+        "proof_state": "accepted",
+        "review_state": "independent_approved",
+        "ci_state": "passed",
+        "ci_run": 29481036102,
+        "receipt_sha256": "23fe6cf7fbb63268dab889ed516a494a915877f15664821f445656fae36b18e8",
+        "machine_proof": {
+          "path": "drafts/diagnostic-envelope/release-candidate/proofs/datapan-health.compatibility-receipt.v1.json",
+          "sha256": "23fe6cf7fbb63268dab889ed516a494a915877f15664821f445656fae36b18e8",
+          "bytes": 7968,
+          "schema_version": "datapan.health-diagnostic-compatibility-receipt.v1"
+        },
+        "scope": "offline_contract_compatibility",
+        "missing_proofs": []
+      },
+      {
+        "consumer": "datapan-web",
+        "repository": "StatPan/datapan",
+        "issue": 8,
+        "pull_request": 12,
+        "head_commit": "79da6545df44b8d3933e482bb86895028522de73",
+        "proof_state": "accepted",
+        "review_state": "independent_approved",
+        "ci_state": "machine_receipt_local_passed_no_hosted_ci",
+        "receipt_sha256": "b032daa09fbb8d01508dac7ad76ce55754ba977492972c85917906468e86d180",
+        "machine_proof": {
+          "path": "drafts/diagnostic-envelope/release-candidate/proofs/datapan-web.compatibility-receipt.v1.json",
+          "sha256": "b032daa09fbb8d01508dac7ad76ce55754ba977492972c85917906468e86d180",
+          "bytes": 5182,
+          "schema_version": "datapan.web-diagnostic-compatibility-receipt.v1"
+        },
+        "acceptance": {
+          "completed": 7,
+          "total": 8,
+          "health_identity_composition": "complete",
+          "prepublication_compatibility": "accepted",
+          "immutable_registry_release_manifest_consumption": "post_publication_rollout"
+        },
+        "scope": "prepublication_diagnostic_compatibility_with_health_identity_composition",
+        "missing_proofs": []
+      },
+      {
+        "consumer": "datapan-cli",
+        "repository": "StatPan/datapan-cli",
+        "issue": 160,
+        "pull_request": 162,
+        "head_commit": "1800bef05c62c918b34a430d8d703ce2ed1afc1f",
+        "proof_state": "accepted",
+        "review_state": "independent_approved",
+        "ci_state": "passed",
+        "ci_run": 29483717200,
+        "receipt_sha256": "b2256d7030bacaa640d964439de6292042d3821e0ce756187856f1d3f547220b",
+        "machine_proof": {
+          "path": "drafts/diagnostic-envelope/release-candidate/proofs/datapan-cli.compatibility-receipt.v1.json",
+          "sha256": "b2256d7030bacaa640d964439de6292042d3821e0ce756187856f1d3f547220b",
+          "bytes": 5149,
+          "schema_version": "datapan.cli-diagnostic-compatibility-receipt.v1"
+        },
+        "scope": "prepublication_diagnostic_command_compatibility",
+        "missing_proofs": []
+      }
+    ],
+    "publication_gates": {
+      "anonymous_registry_distribution": {
+        "status": "passed",
+        "provider": "hugging_face",
+        "ci_run": 29483717293,
+        "result": "registry_journey_passed_exact_head_3os",
+        "attempt": 2,
+        "operating_systems": [
+          "ubuntu",
+          "macos",
+          "windows"
+        ],
+        "runtime_authority": false,
+        "publishing_allowed": false
+      }
+    }
+  },
+  "decision": {
+    "required_consumers": [
+      "datapan-cli",
+      "datapan-health",
+      "datapan-web"
+    ],
+    "accepted_consumers": [
+      "datapan-cli",
+      "datapan-health",
+      "datapan-web"
+    ],
+    "all_consumers_accepted": true,
+    "missing_proofs": [],
+    "publication_gates": {
+      "anonymous_registry_distribution": {
+        "status": "passed",
+        "provider": "hugging_face",
+        "ci_run": 29483717293,
+        "result": "registry_journey_passed_exact_head_3os",
+        "attempt": 2,
+        "operating_systems": [
+          "ubuntu",
+          "macos",
+          "windows"
+        ],
+        "runtime_authority": false,
+        "publishing_allowed": false
+      }
+    },
+    "all_publication_gates_passed": true,
+    "missing_publication_gates": [],
+    "next_gate": "independent_publication_review"
+  }
+}

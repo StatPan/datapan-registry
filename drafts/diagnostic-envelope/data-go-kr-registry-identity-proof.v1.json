@@ -1,0 +1,99 @@
+{
+  "schema_version": "datapan.diagnostic-registry-identity-proof.v1",
+  "source_registry": {
+    "path": "data/data-go-kr.registry.json",
+    "bytes": 137735169,
+    "sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644"
+  },
+  "identity_contract": {
+    "artifact": "data/data-go-kr.registry.json",
+    "dataset_id_field": "/id",
+    "source_system_field": "/operations/*/source/system",
+    "source_system_equals": "data.go.kr"
+  },
+  "datasets": [
+    {
+      "dataset_id": "15000017",
+      "dataset_sha256": "450fff02f56dee24c021f6349ee3e25c6fdf5cb1a5d5b7399e7e3f1d687b26aa",
+      "operations": [
+        {
+          "operation_name": "국민여행총량조회",
+          "source_operation_seq": "2366",
+          "source_system": "data.go.kr",
+          "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+          "source_sha256": "a229e555645af3138c77ff26d423929bd21dbc3218c854db9944328a96f20da5"
+        },
+        {
+          "operation_name": "국민여행경험률조회",
+          "source_operation_seq": "2367",
+          "source_system": "data.go.kr",
+          "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+          "source_sha256": "e31218bd3d6bf4295a6eeae34b563e692746dfbdfaf9477263b4979fb8d095f8"
+        },
+        {
+          "operation_name": "국민여행횟수조회",
+          "source_operation_seq": "2368",
+          "source_system": "data.go.kr",
+          "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+          "source_sha256": "313d4cf3b3bba1906f9547abfab3a0cf3d3011cd1103a3b94d16260740562a75"
+        },
+        {
+          "operation_name": "국민여행일수조회",
+          "source_operation_seq": "2369",
+          "source_system": "data.go.kr",
+          "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+          "source_sha256": "90a27ec58331376f603667126a08257586a3e0eb5582da9b7be0a8c986becde6"
+        },
+        {
+          "operation_name": "국민여행지출조회",
+          "source_operation_seq": "2370",
+          "source_system": "data.go.kr",
+          "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+          "source_sha256": "3239418e12ad9b955f9e17e4cf7c191a2264356c7d347f4b113b59593eec5c72"
+        },
+        {
+          "operation_name": "외래관광객지역비율조회",
+          "source_operation_seq": "2371",
+          "source_system": "data.go.kr",
+          "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+          "source_sha256": "b3f65c03b247a2398cfe333e1fba4eabe7dfedc8d04c7a3568ee8110fecdf031"
+        },
+        {
+          "operation_name": "외래관광객방한활동비율조회",
+          "source_operation_seq": "2372",
+          "source_system": "data.go.kr",
+          "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+          "source_sha256": "0d4e4d686b54a2322a93b3c31509aa6f57edb1bd2387ec1c77bdf55cab1f0bfa"
+        },
+        {
+          "operation_name": "외래관광객지출조회",
+          "source_operation_seq": "2373",
+          "source_system": "data.go.kr",
+          "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+          "source_sha256": "98870a312d33657091b58276bc52c8cb894f03f65f2d5390f3d0a8c4a5c8dd14"
+        },
+        {
+          "operation_name": "관광사업체수조회",
+          "source_operation_seq": "2374",
+          "source_system": "data.go.kr",
+          "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+          "source_sha256": "4560bf04607122c6ede90cc152a0330fb8e2452a0c029ad94ad76b7f2bac820d"
+        },
+        {
+          "operation_name": "관광사업체종사자수조회",
+          "source_operation_seq": "2375",
+          "source_system": "data.go.kr",
+          "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+          "source_sha256": "47c1a39a587ee12d0cf86d2b736a84b29909f319b5202d3278ca8c707c2b8f3d"
+        },
+        {
+          "operation_name": "관광사업체매출액조회",
+          "source_operation_seq": "2376",
+          "source_system": "data.go.kr",
+          "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+          "source_sha256": "7840a893fbc889c8df13a9b17afb66b1a3c664a9dacfbc8bdcb7fddd976e61fb"
+        }
+      ]
+    }
+  ]
+}

@@ -16,6 +16,33 @@ permissions:
   contents: read
 
 jobs:
+  diagnostic-candidate:
+    name: Diagnostic candidate (pre-distribution)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout registry
+        uses: actions/checkout@v7
+        with:
+          # This job validates the checked-in minimized identity proof. The
+          # full verify job independently cross-checks it against Registry.
+          lfs: false
+
+      - name: Validate diagnostic candidate before public distribution
+        run: |
+          python3 -m venv .datapan/ci/diagnostic-candidate-venv
+          . .datapan/ci/diagnostic-candidate-venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install jsonschema
+          python scripts/sync-release-schema-artifacts.py --check
+          python scripts/sync-release-manifest-artifacts.py --check
+          python scripts/validate-diagnostic-envelope-draft.py
+          python scripts/validate-diagnostic-evidence-mapping-draft.py
+          python scripts/generate-diagnostic-release-candidate.py --check
+          python scripts/validate-diagnostic-release-candidate.py
+          python -m unittest tests/test_validate_diagnostic_envelope_draft.py
+          python -m unittest tests/test_validate_diagnostic_evidence_mapping_draft.py
+          python -m unittest tests/test_diagnostic_release_candidate.py
+
   verify:
     runs-on: ubuntu-latest
     steps:
@@ -49,6 +76,14 @@ jobs:
           bytes="$(wc -c < datapan-registry/data/data-go-kr.registry.json)"
           echo "data-go-kr.registry.json bytes=${bytes}"
           test "${bytes}" -gt 100000000
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          registry = Path("datapan-registry/data/data-go-kr.registry.json")
+          value = json.loads(registry.read_bytes())
+          assert isinstance(value, list) and value
+          PY
 
       - name: Validate registry policy artifacts
         working-directory: datapan-registry
@@ -64,8 +99,12 @@ jobs:
           python -m unittest tests/test_validate_health_probe_catalog.py
           python scripts/validate-diagnostic-envelope-draft.py
           python -m unittest tests/test_validate_diagnostic_envelope_draft.py
+          python scripts/generate-diagnostic-registry-identity-proof.py --check
           python scripts/validate-diagnostic-evidence-mapping-draft.py
           python -m unittest tests/test_validate_diagnostic_evidence_mapping_draft.py
+          python scripts/generate-diagnostic-release-candidate.py --check
+          python scripts/validate-diagnostic-release-candidate.py
+          python -m unittest tests/test_diagnostic_release_candidate.py
           python scripts/generate-regional-baseline-source-provenance.py --check
           python scripts/validate-regional-baseline-source-provenance.py
           python -m unittest tests/test_validate_regional_baseline_source_provenance.py
@@ -170,6 +209,8 @@ jobs:
           python -m py_compile scripts/convert-source-verification-to-credential-receipt.py
           python -m py_compile scripts/validate-diagnostic-envelope-draft.py
           python -m py_compile scripts/validate-diagnostic-evidence-mapping-draft.py
+          python -m py_compile scripts/generate-diagnostic-release-candidate.py
+          python -m py_compile scripts/validate-diagnostic-release-candidate.py
           python -m py_compile scripts/generate-source-contract-rollup.py
           python -m py_compile scripts/generate-source-runtime-evidence-rollup.py
           python -m py_compile scripts/generate-sustainable-coverage.py
