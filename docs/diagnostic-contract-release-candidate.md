@@ -23,10 +23,11 @@ Current interpretation:
 - `datapan-health` has an accepted 7,968-byte offline compatibility receipt. Its
   exact contracts, 11 fixtures, 10 one-to-one operation bindings, 12-test proof,
   and non-public runtime boundaries are revalidated locally.
-- `datapan-web` at `2420e6abef0a0b9b9271114cbb362f4e03ffad11` has 50 passing
-  local tests and completed Health identity composition (AC3, 7/8 overall). It
-  remains partial because immutable Registry release consumption is absent and
-  independent review found an invalid-clock freshness fail-open defect.
+- `datapan-web` at `79da6545df44b8d3933e482bb86895028522de73` has 55 passing
+  local tests, a passing production build and audit, and completed Health identity
+  composition (AC3, 7/8 overall). The invalid-clock freshness defect is remediated.
+  It remains partial because immutable Registry release consumption and final
+  independent exact-head approval are absent.
 - `datapan-cli` remains blocked. Standard CI and local Go gates pass, but Registry
   Journey is externally unavailable and independent review found that product
   metrics and the executable failure-to-success export journey are not connected
