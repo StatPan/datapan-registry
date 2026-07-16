@@ -1,0 +1,113 @@
+{
+  "schema_version": "datapan.external-checkout-ref-inventory.v1",
+  "contract": "policy/external-checkout-refs.json",
+  "repository": "StatPan/datapan-cli",
+  "selected_ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",
+  "ref_kind": "commit_sha",
+  "checkout_count": 9,
+  "workflows": [
+    {
+      "workflow": ".github/workflows/credential-runtime-collection.yml",
+      "checkouts": [
+        {
+          "line": 121,
+          "action": "actions/checkout@v7",
+          "repository": "StatPan/datapan-cli",
+          "ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",
+          "path": "datapan-cli"
+        }
+      ]
+    },
+    {
+      "workflow": ".github/workflows/huggingface-distribution.yml",
+      "checkouts": [
+        {
+          "line": 86,
+          "action": "actions/checkout@v4",
+          "repository": "StatPan/datapan-cli",
+          "ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",
+          "path": "datapan-cli"
+        }
+      ]
+    },
+    {
+      "workflow": ".github/workflows/institution-runtime-verify.yml",
+      "checkouts": [
+        {
+          "line": 52,
+          "action": "actions/checkout@v7",
+          "repository": "StatPan/datapan-cli",
+          "ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",
+          "path": "datapan-cli"
+        }
+      ]
+    },
+    {
+      "workflow": ".github/workflows/release-draft.yml",
+      "checkouts": [
+        {
+          "line": 64,
+          "action": "actions/checkout@v7",
+          "repository": "StatPan/datapan-cli",
+          "ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",
+          "path": "datapan-cli"
+        }
+      ]
+    },
+    {
+      "workflow": ".github/workflows/runtime-freshness-import.yml",
+      "checkouts": [
+        {
+          "line": 61,
+          "action": "actions/checkout@v7",
+          "repository": "StatPan/datapan-cli",
+          "ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",
+          "path": ".datapan/ci/datapan-cli"
+        }
+      ]
+    },
+    {
+      "workflow": ".github/workflows/runtime-freshness-verify.yml",
+      "checkouts": [
+        {
+          "line": 48,
+          "action": "actions/checkout@v7",
+          "repository": "StatPan/datapan-cli",
+          "ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",
+          "path": "datapan-cli"
+        },
+        {
+          "line": 130,
+          "action": "actions/checkout@v7",
+          "repository": "StatPan/datapan-cli",
+          "ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",
+          "path": "datapan-cli"
+        }
+      ]
+    },
+    {
+      "workflow": ".github/workflows/upstream-catalog-refresh.yml",
+      "checkouts": [
+        {
+          "line": 28,
+          "action": "actions/checkout@v7",
+          "repository": "StatPan/datapan-cli",
+          "ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",
+          "path": "datapan-cli"
+        }
+      ]
+    },
+    {
+      "workflow": ".github/workflows/verify-release.yml",
+      "checkouts": [
+        {
+          "line": 69,
+          "action": "actions/checkout@v7",
+          "repository": "StatPan/datapan-cli",
+          "ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",
+          "path": "datapan-cli"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": "datapan.external-checkout-refs.v1",
+  "repository": "StatPan/datapan-cli",
+  "ref_kind": "commit_sha",
+  "ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",
+  "selection": {
+    "basis": "reviewed_and_merged_consumer_identity",
+    "source_issue": "StatPan/datapan-cli#160",
+    "source_pull_request": "StatPan/datapan-cli#162",
+    "notes": "This commit is the accepted CLI consumer identity for the diagnostic contract and is reachable from the reviewed datapan-cli main history."
+  },
+  "update_policy": {
+    "mode": "reviewed_pull_request",
+    "requirements": [
+      "select an immutable 40-character commit SHA",
+      "prove Registry release and runtime workflow compatibility",
+      "regenerate reports/external-checkout-refs.json",
+      "review every checkout occurrence in the same change"
+    ],
+    "mutable_refs_allowed": false,
+    "reason": "A mutable branch avoids default-branch discovery but cannot bind Registry evidence to the CLI source that produced it."
+  }
+}

@@ -54,6 +54,12 @@ jobs:
           path: datapan-registry
           lfs: false
 
+      - name: Validate external CLI checkout identity
+        working-directory: datapan-registry
+        run: |
+          python3 scripts/validate-external-checkout-refs.py --check
+          python3 -m unittest tests/test_validate_external_checkout_refs.py
+
       - name: Materialize manifest-bound canonical registry
         working-directory: datapan-registry
         run: |
@@ -64,6 +70,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: StatPan/datapan-cli
+          ref: 416d568bc21632c4305666ea9f6ef2327b5f627b
           path: datapan-cli
 
       - name: Setup Go
