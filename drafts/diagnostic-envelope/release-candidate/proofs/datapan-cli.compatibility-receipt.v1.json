@@ -2,6 +2,20 @@
   "schema_version": "datapan.cli-diagnostic-compatibility-receipt.v1",
   "status": "consumer_compatible_prepublication",
   "cli_head": "1800bef05c62c918b34a430d8d703ce2ed1afc1f",
+  "lifecycle": {
+    "approved_source_head": "1800bef05c62c918b34a430d8d703ce2ed1afc1f",
+    "merged_main_commit": "416d568bc21632c4305666ea9f6ef2327b5f627b",
+    "issue_state": "closed_done",
+    "gira_finish_receipt_comment": 4989994299,
+    "ordinary_ci_run": 29483717200,
+    "registry_journey_run": 29483717293,
+    "registry_journey_attempt": 2,
+    "registry_journey_operating_systems": [
+      "ubuntu",
+      "macos",
+      "windows"
+    ]
+  },
   "registry_revision": "8c5d397f13929ec2b85e63e4ca600887f37929b8",
   "contracts": {
     "schema": {
@@ -134,7 +148,7 @@
   ],
   "rollout": {
     "prepublication_compatibility": "accepted",
-    "anonymous_registry_distribution": "external_publication_gate_blocked",
+    "anonymous_registry_distribution": "verified_by_exact_head_3os_ci_separate_gate",
     "runtime_authority_before_publication": false
   }
 }

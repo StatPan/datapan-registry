@@ -20,6 +20,12 @@ diagnostic draft paths in the public manifest or schema index.
 
 Current interpretation:
 
+- Diagnostic mapping validation uses a 4,364-byte checked-in Registry identity
+  proof for deterministic pre-distribution CI. It pins the canonical Registry's
+  137,735,169-byte artifact identity and the exact dataset, operation, source URL,
+  source sequence and source digests used by the mapping. The full `verify` job
+  materializes the canonical Registry, performs a JSON preflight, and regenerates
+  the minimized proof to prevent it from drifting away from the 137 MB source.
 - `datapan-health` has an accepted 7,968-byte offline compatibility receipt. Its
   exact contracts, 11 fixtures, 10 one-to-one operation bindings, 12-test proof,
   and non-public runtime boundaries are revalidated locally. The Registry
@@ -43,12 +49,13 @@ Current interpretation:
   sources, seven real `Run` journeys, runtime-owned diagnosis and first-success
   metrics, JSON reuse and the actual `writeCSV` byte boundary. Local test, vet,
   both command builds and diff checks pass; ordinary CI run `29483717200` is
-  green on Ubuntu, macOS and Windows.
-- Anonymous Registry distribution remains a separate blocked publication gate.
-  Registry Journey run `29483717293` built the exact CLI on all three operating
-  systems but timed out awaiting Hugging Face response headers during bounded
-  `init`. This external result does not revoke CLI compatibility and also cannot
-  be relabeled as a passing public distribution proof.
+  green on Ubuntu, macOS and Windows. The approved source head is kept distinct
+  from squash merge commit `416d568bc21632c4305666ea9f6ef2327b5f627b` and Gira
+  finish receipt comment `4989994299`.
+- Anonymous Registry distribution is a separate, now-passing publication gate.
+  Registry Journey run `29483717293` attempt 2 exercised the exact approved CLI
+  head successfully on Ubuntu, macOS and Windows. This permits publication review
+  but grants neither publishing nor runtime authority.
 
 Regenerate after an exact consumer proof changes:
 
@@ -59,9 +66,8 @@ python -m unittest tests/test_diagnostic_release_candidate.py
 ```
 
 Every consumer now has a machine proof and consumer-specific semantic validator,
-but the candidate remains `blocked` while anonymous Registry distribution is
-unavailable. Only all consumer proofs plus all publication gates may change the
-state to `ready_for_publication_review`; even then the generator never grants
+and the recovered anonymous Registry journey moves the candidate to
+`ready_for_publication_review`. Even in that state the generator never grants
 publishing authority. Public schema indexing, root manifest changes, tagging, and
 distribution require a separate, independently reviewed release change. Web's
 immutable public manifest fetch is verified only after that release exists and is

@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import copy
 import functools
 import hashlib
@@ -21,6 +22,8 @@ CONTRACT = DRAFT / "consumer-contract.v1.json"
 ENVELOPE_SCHEMA = DRAFT / "datapan.diagnostic-envelope.v1.schema.json"
 FIXTURES = DRAFT / "fixtures"
 PACKETS = DRAFT / "consumer-compatibility"
+REGISTRY_IDENTITY_PROOF = DRAFT / "data-go-kr-registry-identity-proof.v1.json"
+EXPECTED_REGISTRY_IDENTITY_PROOF_SHA256 = "b4b8fac3de722db5cf3a55ad195be90c8b57a16f11791213542fd67cbc8c4df0"
 EXPECTED_CONSUMERS = ["datapan-cli", "datapan-health", "datapan-web"]
 OBLIGATIONS = {"action", "scope", "timing", "redaction", "unknown_fallback"}
 SOURCE_BASIS_TYPES = {"registry_rule", "registry_fact", "registry_dataset_identity", "consumer_evidence", "resolution_policy"}
@@ -87,11 +90,58 @@ def evidence_validator() -> jsonschema.Draft202012Validator:
     return jsonschema.Draft202012Validator(wrapper, format_checker=jsonschema.FormatChecker())
 
 
-def validate_inputs(mapping: dict[str, Any]) -> None:
+def validate_registry_identity_proof(mapping: dict[str, Any], path: pathlib.Path) -> frozenset[str]:
+    if path != REGISTRY_IDENTITY_PROOF or hashlib.sha256(path.read_bytes()).hexdigest() != EXPECTED_REGISTRY_IDENTITY_PROOF_SHA256:
+        raise ValueError("Registry identity proof digest drift")
+    proof = load(path)
+    if set(proof) != {"schema_version", "source_registry", "identity_contract", "datasets"} or proof.get("schema_version") != "datapan.diagnostic-registry-identity-proof.v1":
+        raise ValueError("Registry identity proof shape drift")
+    registry_input = next(item for item in mapping["authoritative_inputs"] if item["schema_version"] == "datapan.data-go-kr-registry-array.v1")
+    registry_manifest = next(item for item in load(ROOT / "manifest.json")["artifacts"] if item["path"] == registry_input["path"])
+    expected_source = {"path": registry_input["path"], "bytes": registry_manifest["bytes"], "sha256": registry_input["sha256"]}
+    if proof["source_registry"] != expected_source or registry_manifest["sha256"] != registry_input["sha256"]:
+        raise ValueError("Registry identity proof source artifact drift")
+    if proof["identity_contract"] != mapping["operation_application_path_contract"]["registry_identity"]:
+        raise ValueError("Registry identity proof contract drift")
+    expected_dataset_ids = {
+        case.get("subject_overrides", {}).get("dataset_id")
+        for case in mapping["proof_cases"]
+        if re.fullmatch(r"[0-9]{8}", str(case.get("subject_overrides", {}).get("dataset_id", "")))
+    }
+    datasets = proof["datasets"]
+    if not isinstance(datasets, list) or {item.get("dataset_id") for item in datasets} != expected_dataset_ids:
+        raise ValueError("Registry identity proof dataset coverage drift")
+    digest_pattern = re.compile(r"[0-9a-f]{64}")
+    for dataset in datasets:
+        if set(dataset) != {"dataset_id", "dataset_sha256", "operations"} or not digest_pattern.fullmatch(dataset.get("dataset_sha256", "")):
+            raise ValueError("Registry identity proof dataset shape drift")
+        operations = dataset["operations"]
+        identities = set()
+        if not isinstance(operations, list) or not operations:
+            raise ValueError("Registry identity proof requires exact operations")
+        for operation in operations:
+            if set(operation) != {"operation_name", "source_operation_seq", "source_system", "source_url", "source_sha256"}:
+                raise ValueError("Registry identity proof operation shape drift")
+            identity = (operation["operation_name"], operation["source_operation_seq"], operation["source_url"])
+            if identity in identities or not all(isinstance(value, str) and value for value in identity):
+                raise ValueError("Registry identity proof operation identity drift")
+            identities.add(identity)
+            if operation["source_system"] != "data.go.kr" or operation["source_url"] != f"https://www.data.go.kr/catalog/{dataset['dataset_id']}/openapi.json" or not operation["source_operation_seq"].isdigit() or not digest_pattern.fullmatch(operation["source_sha256"]):
+                raise ValueError("Registry identity proof source semantics drift")
+    return frozenset(expected_dataset_ids)
+
+
+def effective_registry_ids(mapping: dict[str, Any], registry_ids: frozenset[str] | None) -> frozenset[str]:
+    return registry_ids if registry_ids is not None else validate_registry_identity_proof(mapping, REGISTRY_IDENTITY_PROOF)
+
+
+def validate_inputs(mapping: dict[str, Any], registry_identity_proof: pathlib.Path | None = None) -> frozenset[str] | None:
     for item in mapping["authoritative_inputs"]:
         path = ROOT / item["path"]
         if not path.is_file():
             raise ValueError(f"missing authoritative input: {item['path']}")
+        if item["schema_version"] == "datapan.data-go-kr-registry-array.v1" and registry_identity_proof is not None:
+            continue
         value = load(path)
         if item["schema_version"] == "datapan.data-go-kr-registry-array.v1":
             if not isinstance(value, list) or not value:
@@ -100,6 +150,9 @@ def validate_inputs(mapping: dict[str, Any]) -> None:
             raise ValueError(f"schema version drift: {item['path']}")
         if hashlib.sha256(path.read_bytes()).hexdigest() != item["sha256"]:
             raise ValueError(f"authoritative input digest drift: {item['path']}")
+    if registry_identity_proof is not None:
+        return validate_registry_identity_proof(mapping, registry_identity_proof)
+    return None
 
 
 def schema_contract() -> dict[str, dict[str, Any]]:
@@ -176,7 +229,7 @@ def validate_predicates(mapping: dict[str, Any]) -> None:
                 raise ValueError(f"{predicate_id}: HTTP status vocabulary drift")
 
 
-def validate_source_basis(mapping: dict[str, Any]) -> None:
+def validate_source_basis(mapping: dict[str, Any], registry_ids: frozenset[str] | None = None) -> None:
     evidence_kinds = set(load(CONTRACT)["evidence_variants"])
     allowed_artifacts = {item["path"] for item in mapping["authoritative_inputs"]}
     for item in mapping["cause_mappings"]:
@@ -211,7 +264,7 @@ def validate_source_basis(mapping: dict[str, Any]) -> None:
                 expected = {"type", "artifact", "dataset_id_field", "source_system_field", "source_system_equals"}
                 if set(basis) != expected or basis["artifact"] not in allowed_artifacts or basis["dataset_id_field"] != "/id" or basis["source_system_field"] != "/operations/*/source/system" or basis["source_system_equals"] != "data.go.kr":
                     raise ValueError(f"{item['cause']}: Registry dataset identity basis drift")
-                if not registry_dataset_ids(str(ROOT / basis["artifact"])):
+                if not effective_registry_ids(mapping, registry_ids):
                     raise ValueError(f"{item['cause']}: Registry dataset identity basis has no valid facts")
 
 
@@ -266,14 +319,14 @@ def matching_predicates(mapping: dict[str, Any], instances: list[dict[str, Any]]
     }
 
 
-def resolve(mapping: dict[str, Any], subject: dict[str, Any], instances: list[dict[str, Any]]) -> dict[str, Any]:
+def resolve(mapping: dict[str, Any], subject: dict[str, Any], instances: list[dict[str, Any]], registry_ids: frozenset[str] | None = None) -> dict[str, Any]:
     matched = matching_predicates(mapping, instances, subject)
     selectable = {predicate_id for predicate_id, predicate in mapping["evidence_predicates"].items() if not intrinsically_candidate(predicate)}
     eligible = []
     for item in mapping["cause_mappings"]:
         if item["cause"] == "unknown":
             continue
-        if item["cause"] == "approval_required" and application_entry(mapping, subject) is None:
+        if item["cause"] == "approval_required" and application_entry(mapping, subject, registry_ids) is None:
             continue
         selectors_ok = all(any(pid in matched and pid in selectable for pid in group) for group in item["selector_groups"])
         corroborators_ok = all(any(pid in matched for pid in group) for group in item["corroborator_groups"])
@@ -284,7 +337,7 @@ def resolve(mapping: dict[str, Any], subject: dict[str, Any], instances: list[di
     item = eligible[0]
     result = copy.deepcopy(item["result"] | {"cause": item["cause"]})
     if item["cause"] == "approval_required":
-        result["application_entry"] = application_entry(mapping, subject)
+        result["application_entry"] = application_entry(mapping, subject, registry_ids)
     for variant in item.get("result_variants", []):
         if any(predicate_id in matched for predicate_id in variant["when_any"]):
             result.update({key: value for key, value in variant.items() if key != "when_any"})
@@ -292,14 +345,15 @@ def resolve(mapping: dict[str, Any], subject: dict[str, Any], instances: list[di
     return result
 
 
-def application_entry(mapping: dict[str, Any], subject: dict[str, Any]) -> dict[str, Any] | None:
+def application_entry(mapping: dict[str, Any], subject: dict[str, Any], registry_ids: frozenset[str] | None = None) -> dict[str, Any] | None:
     contract = mapping["operation_application_path_contract"]
     required = contract["required_subject"]
     dataset_id = subject.get("dataset_id", "")
     if subject.get("source_id") != required["source_id"] or subject.get("provider_id") != required["provider_id"] or re.fullmatch(required["dataset_id_pattern"], dataset_id) is None:
         return None
     identity = contract["registry_identity"]
-    if dataset_id not in registry_dataset_ids(str(ROOT / identity["artifact"])):
+    valid_dataset_ids = effective_registry_ids(mapping, registry_ids)
+    if dataset_id not in valid_dataset_ids:
         return None
     url = contract["template"].replace("{dataset_id}", dataset_id)
     if re.fullmatch(r"https://www\.data\.go\.kr/data/[0-9]{8}/openapi\.do", url) is None:
@@ -323,7 +377,7 @@ def proof_instances(case: dict[str, Any]) -> tuple[dict[str, Any], list[dict[str
     return subject, [{"subject": copy.deepcopy(binding_subject), "evidence": item} for item in evidence]
 
 
-def validate_mapping(mapping: dict[str, Any], contract: dict[str, Any]) -> None:
+def validate_mapping(mapping: dict[str, Any], contract: dict[str, Any], registry_ids: frozenset[str] | None = None) -> None:
     boundary = mapping.get("authority_boundary", {})
     if mapping.get("status") != "draft" or boundary != {
         "registry_role": "static_contract_and_deterministic_proof_only",
@@ -354,7 +408,7 @@ def validate_mapping(mapping: dict[str, Any], contract: dict[str, Any]) -> None:
     }:
         raise ValueError("operation application path must fail closed while exact Registry fact is unavailable")
     validate_predicates(mapping)
-    validate_source_basis(mapping)
+    validate_source_basis(mapping, registry_ids)
     predicate_ids = set(mapping["evidence_predicates"])
     catalog = {item["code"]: item for item in contract["cause_catalog"]}
     mappings = {item["cause"]: item for item in mapping["cause_mappings"]}
@@ -395,7 +449,7 @@ def validate_mapping(mapping: dict[str, Any], contract: dict[str, Any]) -> None:
         raise ValueError("provider_outage result variant drift")
     for case in mapping["proof_cases"]:
         subject, instances = proof_instances(case)
-        actual = resolve(mapping, subject, instances)
+        actual = resolve(mapping, subject, instances, registry_ids)
         if any(actual.get(key) != value for key, value in case["expected"].items()):
             raise ValueError(f"{case['case_id']}: executable proof drift")
 
@@ -446,18 +500,21 @@ def validate_draft_boundary() -> None:
         raise ValueError("draft mapping must not be released")
 
 
-def validate_all() -> dict[str, int]:
+def validate_all(registry_identity_proof: pathlib.Path | None = REGISTRY_IDENTITY_PROOF) -> dict[str, int]:
     mapping, contract = load(MAPPING), load(CONTRACT)
-    validate_inputs(mapping)
-    validate_mapping(mapping, contract)
+    registry_ids = validate_inputs(mapping, registry_identity_proof)
+    validate_mapping(mapping, contract, registry_ids)
     validate_packets(hashlib.sha256(MAPPING.read_bytes()).hexdigest())
     validate_draft_boundary()
     return {"predicates": len(mapping["evidence_predicates"]), "causes": len(mapping["cause_mappings"]), "proof_cases": len(mapping["proof_cases"]), "consumers": len(EXPECTED_CONSUMERS)}
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--full-registry-cross-check", action="store_true")
+    args = parser.parse_args()
     try:
-        summary = validate_all()
+        summary = validate_all(None if args.full_registry_cross_check else REGISTRY_IDENTITY_PROOF)
     except Exception as exc:  # noqa: BLE001
         print(f"FAIL diagnostic evidence mapping draft: {exc}", file=sys.stderr)
         return 1

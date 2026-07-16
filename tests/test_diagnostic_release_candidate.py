@@ -18,11 +18,11 @@ SPEC.loader.exec_module(MODULE)
 
 
 class DiagnosticReleaseCandidateTest(unittest.TestCase):
-    def test_checked_in_candidate_is_bound_and_blocked(self):
+    def test_checked_in_candidate_is_bound_and_ready_for_review(self):
         result = MODULE.validate_all()
         self.assertEqual(result["consumers"], 3)
         self.assertEqual(result["missing_proofs"], 0)
-        self.assertEqual(result["missing_publication_gates"], 1)
+        self.assertEqual(result["missing_publication_gates"], 0)
 
     def test_generator_check_entrypoint(self):
         result = subprocess.run(
@@ -33,15 +33,15 @@ class DiagnosticReleaseCandidateTest(unittest.TestCase):
             check=False,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("blocked", result.stdout)
+        self.assertIn("ready_for_publication_review", result.stdout)
 
-    def test_incomplete_consumer_proofs_never_enable_publication(self):
+    def test_complete_proofs_enable_review_but_never_publication_authority(self):
         intake = MODULE.GENERATOR.load(MODULE.GENERATOR.DEFAULT_INTAKE)
         candidate = MODULE.GENERATOR.build(intake)
         self.assertFalse(candidate["authority"]["publishing_allowed"])
         self.assertTrue(candidate["decision"]["all_consumers_accepted"])
-        self.assertFalse(candidate["decision"]["all_publication_gates_passed"])
-        self.assertEqual(candidate["status"], "blocked")
+        self.assertTrue(candidate["decision"]["all_publication_gates_passed"])
+        self.assertEqual(candidate["status"], "ready_for_publication_review")
 
     def test_accepted_health_proof_has_exact_bytes_schema_and_semantics(self):
         intake = MODULE.GENERATOR.load(MODULE.GENERATOR.DEFAULT_INTAKE)
@@ -59,13 +59,15 @@ class DiagnosticReleaseCandidateTest(unittest.TestCase):
         )
         self.assertFalse(proof["rollout"]["runtime_authority_before_publication"])
 
-    def test_accepted_cli_prepublication_proof_is_separate_from_distribution(self):
+    def test_accepted_cli_source_merge_and_distribution_identities_are_separate(self):
         intake = MODULE.GENERATOR.load(MODULE.GENERATOR.DEFAULT_INTAKE)
         cli = next(item for item in intake["consumers"] if item["consumer"] == "datapan-cli")
         MODULE.GENERATOR.validate_machine_proof(cli, intake["registry"])
         proof = MODULE.GENERATOR.load(ROOT / cli["machine_proof"]["path"])
         self.assertEqual(proof["rollout"]["prepublication_compatibility"], "accepted")
-        self.assertEqual(proof["rollout"]["anonymous_registry_distribution"], "external_publication_gate_blocked")
+        self.assertEqual(proof["lifecycle"]["approved_source_head"], "1800bef05c62c918b34a430d8d703ce2ed1afc1f")
+        self.assertEqual(proof["lifecycle"]["merged_main_commit"], "416d568bc21632c4305666ea9f6ef2327b5f627b")
+        self.assertEqual(proof["rollout"]["anonymous_registry_distribution"], "verified_by_exact_head_3os_ci_separate_gate")
         self.assertFalse(proof["rollout"]["runtime_authority_before_publication"])
 
     def test_string_flips_cannot_create_a_ready_candidate(self):

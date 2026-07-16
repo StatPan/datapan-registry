@@ -23,9 +23,9 @@ jobs:
       - name: Checkout registry
         uses: actions/checkout@v7
         with:
-          # Mapping semantics bind exact Registry dataset identities. Fetch the
-          # GitHub LFS object here without depending on the public HF mirror.
-          lfs: true
+          # This job validates the checked-in minimized identity proof. The
+          # full verify job independently cross-checks it against Registry.
+          lfs: false
 
       - name: Validate diagnostic candidate before public distribution
         run: |
@@ -42,7 +42,6 @@ jobs:
           python -m unittest tests/test_validate_diagnostic_envelope_draft.py
           python -m unittest tests/test_validate_diagnostic_evidence_mapping_draft.py
           python -m unittest tests/test_diagnostic_release_candidate.py
-          python -m unittest discover -s tests
 
   verify:
     runs-on: ubuntu-latest
@@ -72,11 +71,19 @@ jobs:
           check-latest: true
           cache-dependency-path: datapan-cli/go.sum
 
-      - name: Confirm registry LFS file is materialized
+      - name: Preflight materialized canonical registry
         run: |
           bytes="$(wc -c < datapan-registry/data/data-go-kr.registry.json)"
           echo "data-go-kr.registry.json bytes=${bytes}"
           test "${bytes}" -gt 100000000
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          registry = Path("datapan-registry/data/data-go-kr.registry.json")
+          value = json.loads(registry.read_bytes())
+          assert isinstance(value, list) and value
+          PY
 
       - name: Validate registry policy artifacts
         working-directory: datapan-registry
@@ -92,6 +99,7 @@ jobs:
           python -m unittest tests/test_validate_health_probe_catalog.py
           python scripts/validate-diagnostic-envelope-draft.py
           python -m unittest tests/test_validate_diagnostic_envelope_draft.py
+          python scripts/generate-diagnostic-registry-identity-proof.py --check
           python scripts/validate-diagnostic-evidence-mapping-draft.py
           python -m unittest tests/test_validate_diagnostic_evidence_mapping_draft.py
           python scripts/generate-diagnostic-release-candidate.py --check

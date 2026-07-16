@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.diagnostic-release-candidate.v1",
-  "status": "blocked",
+  "status": "ready_for_publication_review",
   "captured_at": "2026-07-16T09:10:00Z",
   "authority": {
     "release_authority": false,
@@ -9,7 +9,7 @@
     "manifest_inclusion": false,
     "publishing_allowed": false
   },
-  "binding_sha256": "9735bac1db667d222d9d58bca1fd92f7ebb2fcb5ce9094a0a0f369a8264b86c2",
+  "binding_sha256": "ac847cb158eb432e72e78d194a94542db5860062b9b869c42f6d736e4f649016",
   "binding": {
     "registry": {
       "repository": "StatPan/datapan-registry",
@@ -103,17 +103,33 @@
         "review_state": "independent_approved",
         "ci_state": "passed",
         "ci_run": 29483717200,
-        "receipt_sha256": "102e83fac041d249990cfad4fc00d98a2d7c3585bfb72ddda9310a30ab9612b5",
+        "receipt_sha256": "b2256d7030bacaa640d964439de6292042d3821e0ce756187856f1d3f547220b",
         "machine_proof": {
           "path": "drafts/diagnostic-envelope/release-candidate/proofs/datapan-cli.compatibility-receipt.v1.json",
-          "sha256": "102e83fac041d249990cfad4fc00d98a2d7c3585bfb72ddda9310a30ab9612b5",
-          "bytes": 4685,
+          "sha256": "b2256d7030bacaa640d964439de6292042d3821e0ce756187856f1d3f547220b",
+          "bytes": 5149,
           "schema_version": "datapan.cli-diagnostic-compatibility-receipt.v1"
         },
         "scope": "prepublication_diagnostic_command_compatibility",
         "missing_proofs": []
       }
-    ]
+    ],
+    "publication_gates": {
+      "anonymous_registry_distribution": {
+        "status": "passed",
+        "provider": "hugging_face",
+        "ci_run": 29483717293,
+        "result": "registry_journey_passed_exact_head_3os",
+        "attempt": 2,
+        "operating_systems": [
+          "ubuntu",
+          "macos",
+          "windows"
+        ],
+        "runtime_authority": false,
+        "publishing_allowed": false
+      }
+    }
   },
   "decision": {
     "required_consumers": [
@@ -130,22 +146,22 @@
     "missing_proofs": [],
     "publication_gates": {
       "anonymous_registry_distribution": {
-        "status": "blocked_external",
+        "status": "passed",
         "provider": "hugging_face",
         "ci_run": 29483717293,
-        "error": "registry_distribution_failed",
-        "category": "distribution_timeout",
+        "result": "registry_journey_passed_exact_head_3os",
+        "attempt": 2,
+        "operating_systems": [
+          "ubuntu",
+          "macos",
+          "windows"
+        ],
         "runtime_authority": false,
         "publishing_allowed": false
       }
     },
-    "all_publication_gates_passed": false,
-    "missing_publication_gates": [
-      {
-        "gate": "anonymous_registry_distribution",
-        "reason": "external_distribution_timeout"
-      }
-    ],
-    "next_gate": "restore_anonymous_registry_distribution"
+    "all_publication_gates_passed": true,
+    "missing_publication_gates": [],
+    "next_gate": "independent_publication_review"
   }
 }

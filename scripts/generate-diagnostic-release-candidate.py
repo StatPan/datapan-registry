@@ -88,7 +88,10 @@ EXPECTED_WEB_SOURCES = (
 )
 EXPECTED_CLI_IDENTITY = {
     "head_commit": "1800bef05c62c918b34a430d8d703ce2ed1afc1f",
+    "merged_main_commit": "416d568bc21632c4305666ea9f6ef2327b5f627b",
     "ci_run": 29483717200,
+    "registry_journey_run": 29483717293,
+    "gira_finish_receipt_comment": 4989994299,
     "schema_sha256": "da254b40947462347fcda90fdd7686b6632c76943b438f2046a28f079f33e403",
     "mapping_sha256": "da55d52d2ee1f197969ac63a1d5ab5b98e3b88fd65f90d6a48800d2e3c522d33",
 }
@@ -306,6 +309,17 @@ def validate_cli_proof(proof: dict[str, Any], item: dict[str, Any], registry: di
         "mapping": {"path": "internal/cli/testdata/diagnostic-envelope/mapping.json", "sha256": EXPECTED_CLI_IDENTITY["mapping_sha256"]},
     } or proof.get("fixtures") != expected_fixtures():
         raise ValueError("datapan-cli: exact contract or 11-fixture identity mismatch")
+    if proof.get("lifecycle") != {
+        "approved_source_head": EXPECTED_CLI_IDENTITY["head_commit"],
+        "merged_main_commit": EXPECTED_CLI_IDENTITY["merged_main_commit"],
+        "issue_state": "closed_done",
+        "gira_finish_receipt_comment": EXPECTED_CLI_IDENTITY["gira_finish_receipt_comment"],
+        "ordinary_ci_run": EXPECTED_CLI_IDENTITY["ci_run"],
+        "registry_journey_run": EXPECTED_CLI_IDENTITY["registry_journey_run"],
+        "registry_journey_attempt": 2,
+        "registry_journey_operating_systems": ["ubuntu", "macos", "windows"],
+    }:
+        raise ValueError("datapan-cli: approved source, merged main, or Gira lifecycle identity mismatch")
     if proof.get("verification") != {
         "real_run_journeys": 7,
         "runtime_owned_failure_metrics": True,
@@ -325,7 +339,7 @@ def validate_cli_proof(proof: dict[str, Any], item: dict[str, Any], registry: di
         raise ValueError("datapan-cli: exact source and handoff identity mismatch")
     if proof.get("rollout") != {
         "prepublication_compatibility": "accepted",
-        "anonymous_registry_distribution": "external_publication_gate_blocked",
+        "anonymous_registry_distribution": "verified_by_exact_head_3os_ci_separate_gate",
         "runtime_authority_before_publication": False,
     }:
         raise ValueError("datapan-cli: compatibility and anonymous distribution gates are not separated")
@@ -397,17 +411,18 @@ def validate_publication_gates(gates: Any) -> list[dict[str, str]]:
         raise ValueError("intake must define the anonymous Registry distribution publication gate")
     distribution = gates["anonymous_registry_distribution"]
     expected = {
-        "status": "blocked_external",
+        "status": "passed",
         "provider": "hugging_face",
         "ci_run": 29483717293,
-        "error": "registry_distribution_failed",
-        "category": "distribution_timeout",
+        "result": "registry_journey_passed_exact_head_3os",
+        "attempt": 2,
+        "operating_systems": ["ubuntu", "macos", "windows"],
         "runtime_authority": False,
         "publishing_allowed": False,
     }
     if distribution != expected:
         raise ValueError("anonymous Registry distribution gate identity mismatch")
-    return [{"gate": "anonymous_registry_distribution", "reason": "external_distribution_timeout"}]
+    return []
 
 
 def build(intake: dict[str, Any]) -> dict[str, Any]:
@@ -436,6 +451,7 @@ def build(intake: dict[str, Any]) -> dict[str, Any]:
         "registry": registry,
         "contracts": [artifact(path) for path in CONTRACTS],
         "consumer_proofs": consumers,
+        "publication_gates": intake["publication_gates"],
     }
     binding_sha256 = sha256_bytes(render(binding).encode())
     return {

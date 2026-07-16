@@ -1,9 +1,11 @@
 import copy
 import hashlib
 import importlib.util
+import json
 import pathlib
 import subprocess
 import sys
+import tempfile
 import unittest
 from unittest import mock
 
@@ -46,6 +48,22 @@ class DiagnosticEvidenceMappingDraftTest(unittest.TestCase):
 
     def test_checked_in_typed_mapping_packets_and_proofs(self):
         self.assertEqual(MODULE.validate_all(), {"predicates": 25, "causes": 11, "proof_cases": 9, "consumers": 3})
+
+    def test_registry_identity_proof_digest_is_pinned(self):
+        with mock.patch.object(MODULE, "EXPECTED_REGISTRY_IDENTITY_PROOF_SHA256", "0" * 64):
+            with self.assertRaisesRegex(ValueError, "identity proof digest drift"):
+                MODULE.validate_registry_identity_proof(self.mapping, MODULE.REGISTRY_IDENTITY_PROOF)
+
+    def test_registry_identity_proof_rejects_synchronized_source_semantic_drift(self):
+        proof = MODULE.load(MODULE.REGISTRY_IDENTITY_PROOF)
+        proof["datasets"][0]["operations"][0]["source_system"] = "forged.example"
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "proof.json"
+            path.write_text(json.dumps(proof), encoding="utf-8")
+            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            with mock.patch.object(MODULE, "REGISTRY_IDENTITY_PROOF", path), mock.patch.object(MODULE, "EXPECTED_REGISTRY_IDENTITY_PROOF_SHA256", digest):
+                with self.assertRaisesRegex(ValueError, "source semantics drift"):
+                    MODULE.validate_registry_identity_proof(self.mapping, path)
 
     def test_cli_entrypoint(self):
         result = subprocess.run([sys.executable, str(ROOT / "scripts/validate-diagnostic-evidence-mapping-draft.py")], capture_output=True, text=True, check=False)

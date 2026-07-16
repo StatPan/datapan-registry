@@ -64,11 +64,11 @@
       "review_state": "independent_approved",
       "ci_state": "passed",
       "ci_run": 29483717200,
-      "receipt_sha256": "102e83fac041d249990cfad4fc00d98a2d7c3585bfb72ddda9310a30ab9612b5",
+      "receipt_sha256": "b2256d7030bacaa640d964439de6292042d3821e0ce756187856f1d3f547220b",
       "machine_proof": {
         "path": "drafts/diagnostic-envelope/release-candidate/proofs/datapan-cli.compatibility-receipt.v1.json",
-        "sha256": "102e83fac041d249990cfad4fc00d98a2d7c3585bfb72ddda9310a30ab9612b5",
-        "bytes": 4685,
+        "sha256": "b2256d7030bacaa640d964439de6292042d3821e0ce756187856f1d3f547220b",
+        "bytes": 5149,
         "schema_version": "datapan.cli-diagnostic-compatibility-receipt.v1"
       },
       "scope": "prepublication_diagnostic_command_compatibility",
@@ -77,11 +77,12 @@
   ],
   "publication_gates": {
     "anonymous_registry_distribution": {
-      "status": "blocked_external",
+      "status": "passed",
       "provider": "hugging_face",
       "ci_run": 29483717293,
-      "error": "registry_distribution_failed",
-      "category": "distribution_timeout",
+      "result": "registry_journey_passed_exact_head_3os",
+      "attempt": 2,
+      "operating_systems": ["ubuntu", "macos", "windows"],
       "runtime_authority": false,
       "publishing_allowed": false
     }
