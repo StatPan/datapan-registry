@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.diagnostic-consumer-proof-intake.v1",
-  "captured_at": "2026-07-16T08:02:30Z",
+  "captured_at": "2026-07-16T08:04:00Z",
   "registry": {
     "repository": "StatPan/datapan-registry",
     "issue": 568,
@@ -46,7 +46,7 @@
       "head_commit": "f6b4a62df8b8c537a38ca8adc0d9ea3a66a0cfaf",
       "proof_state": "blocked",
       "review_state": "independent_review_missing",
-      "ci_state": "standard_3_passed_registry_journey_3_in_progress",
+      "ci_state": "standard_3_passed_registry_journey_3_failed",
       "ci_run": 29481907297,
       "scope": "draft_diagnostic_commands",
       "missing_proofs": [
