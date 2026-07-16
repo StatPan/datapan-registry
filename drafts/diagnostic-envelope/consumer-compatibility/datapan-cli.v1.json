@@ -1,0 +1,19 @@
+{
+  "schema_version": "datapan.diagnostic-consumer-compatibility.v1",
+  "status": "draft",
+  "consumer": "datapan-cli",
+  "role": "local evidence producer and diagnostic envelope renderer",
+  "production_status": {
+    "currently_proven": [],
+    "required_after_dependencies": ["request_validation", "provider_response", "validation_result", "data_quality_assertion"]
+  },
+  "consumes": ["registry_rule", "registry_operation", "approval_record", "health_observation", "provider_notice"],
+  "obligations": {
+    "action": "Render the exact cause-bound recommended and avoid actions; never convert candidate signals into advice.",
+    "scope": "Bind request, operation, dataset, provider, and source identifiers to the envelope subject; reject cross-operation evidence.",
+    "timing": "Record assessed_at, observed_age_seconds, validity, and remaining validity; reject expired evidence.",
+    "redaction": "Emit typed summaries and stable opaque refs only; never emit keys, headers, URLs, bodies, rows, or user identity.",
+    "unknown_fallback": "When corroboration is absent or specific causes conflict, emit unknown/gather_more_evidence."
+  },
+  "forbidden": ["publish_draft_schema", "persist_runtime_receipts_in_registry", "reissue_credential_for_approval_propagating"]
+}

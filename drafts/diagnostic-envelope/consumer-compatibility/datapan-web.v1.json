@@ -1,0 +1,19 @@
+{
+  "schema_version": "datapan.diagnostic-consumer-compatibility.v1",
+  "status": "draft",
+  "consumer": "datapan-web",
+  "role": "public diagnostic explanation and next-action renderer",
+  "production_status": {
+    "currently_proven": [],
+    "required_after_dependencies": ["response_contract", "data_quality_assertion"]
+  },
+  "consumes": ["diagnostic_envelope"],
+  "obligations": {
+    "action": "Render action_id and rationale_id from the envelope without inventing stronger advice or hiding avoid actions.",
+    "scope": "Show the diagnosed operation/dataset scope and never reuse a result for another subject.",
+    "timing": "Show assessment recency and treat expired supporting evidence as unavailable.",
+    "redaction": "Render only schema-allowed fields; do not fetch or expose evidence payloads behind opaque refs.",
+    "unknown_fallback": "Present unknown as a valid provisional result with gather-more-evidence guidance, not as product failure."
+  },
+  "forbidden": ["publish_draft_schema", "infer_cause_from_http_status", "display_credentials_or_raw_provider_material"]
+}

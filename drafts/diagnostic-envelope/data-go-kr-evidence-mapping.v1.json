@@ -1,0 +1,228 @@
+{
+  "schema_version": "datapan.data-go-kr-diagnostic-evidence-mapping.v1",
+  "status": "draft",
+  "provider": "data.go.kr",
+  "envelope_schema": "drafts/diagnostic-envelope/datapan.diagnostic-envelope.v1.schema.json",
+  "authority_boundary": {
+    "registry_role": "Declare static facts, candidate signals, corroboration requirements, and precedence only.",
+    "runtime_inference_owner": "consumer",
+    "publishing_allowed": false
+  },
+  "authoritative_inputs": [
+    {
+      "path": "reports/data-go-kr/error-action-catalog.json",
+      "schema_version": "datapan.error-action-catalog.v1",
+      "sha256": "6ebc5df47d73192e08727c4d4669c80b76a7b493a27574bf897e863307a1bb45"
+    },
+    {
+      "path": "reports/error-action-routing-rollup.json",
+      "schema_version": "datapan.error-action-routing-rollup.v1",
+      "sha256": "d66a5d68ecab483354d1c48c9ce4f443eff77e84cf747ca1bb25c452ca5d8cf1"
+    },
+    {
+      "path": "reports/health-probe-catalog.json",
+      "schema_version": "datapan.health-probe-catalog.v1",
+      "sha256": "e84f0da2f532a32833def1118a4610bf2322f370783d120b84cf85306d244840"
+    },
+    {
+      "path": "sources/data_go_kr.json",
+      "schema_version": "datapan.source-profile.v1",
+      "sha256": "ab6f6b24f7556e16deac864ad0b349021023ef40a374f3555ca54e37c22ccbc6"
+    },
+    {
+      "path": "schemas/datapan.source-profile.v1.schema.json",
+      "schema_version": "json-schema-draft-2020-12",
+      "sha256": "ce01786b97680a16d0e58fdee8377502d5888deb72e03fee50344fcd5b89a2cf"
+    }
+  ],
+  "candidate_only_signals": [
+    "registry_rule:data-go-kr-service-key-not-registered",
+    "registry_rule:data-go-kr-service-key-message",
+    "registry_rule:data-go-kr-external-http-404",
+    "registry_rule:data-go-kr-external-timeout",
+    "registry_rule:data-go-kr-parse-error",
+    "provider_response:http-401",
+    "provider_response:http-403"
+  ],
+  "resolution_policy": {
+    "specific_cause_requires_all_groups": true,
+    "candidate_only_signal_can_select_cause": false,
+    "multiple_eligible_specific_causes": "unknown",
+    "no_eligible_specific_cause": "unknown",
+    "unknown_determination": "unknown",
+    "unknown_action": "gather_more_evidence",
+    "evidence_must_match_subject_operation": true,
+    "evidence_must_be_current_at_assessment": true,
+    "raw_or_secret_material_allowed": false
+  },
+  "cause_mappings": [
+    {
+      "cause": "approval_required",
+      "source_basis": [
+        "registry_rule:data-go-kr-approval-required",
+        "registry_fact:sources/data_go_kr.json#/auth/approval_scope=operation"
+      ],
+      "required_evidence_groups": [
+        ["approval_record:state=not_applied"],
+        ["registry_operation:approval_scope=operation"]
+      ],
+      "action": "apply_for_operation",
+      "accountable_party": "user",
+      "avoid": []
+    },
+    {
+      "cause": "approval_propagating",
+      "source_basis": [
+        "registry_fact:sources/data_go_kr.json#/auth/approval_scope=operation"
+      ],
+      "required_evidence_groups": [
+        ["approval_record:state=approved_pending_sync"],
+        ["provider_response:http_status=401,class=unclassified,policy_version=present", "provider_response:http_status=403,class=unclassified,policy_version=present"]
+      ],
+      "action": "wait_for_approval_sync",
+      "accountable_party": "data_go_kr",
+      "avoid": ["reissue_credential"]
+    },
+    {
+      "cause": "credential_invalid",
+      "source_basis": [
+        "registry_rule:data-go-kr-service-key-not-registered",
+        "registry_rule:data-go-kr-service-key-message",
+        "registry_fact:sources/data_go_kr.json#/auth/type=service_key"
+      ],
+      "required_evidence_groups": [
+        ["provider_response:class=credential_rejected,policy_version=present", "request_validation:failure_class=credential_configuration,policy_version=present"]
+      ],
+      "action": "verify_credential_configuration",
+      "accountable_party": "user",
+      "avoid": []
+    },
+    {
+      "cause": "invalid_input",
+      "source_basis": [
+        "registry_rule:data-go-kr-missing-required-params",
+        "registry_fact:sources/data_go_kr.json#/request/required_param_policy=operation_specific"
+      ],
+      "required_evidence_groups": [
+        ["request_validation:failure_class=invalid_input,policy_version=present"]
+      ],
+      "action": "verify_request_parameters",
+      "accountable_party": "user",
+      "avoid": []
+    },
+    {
+      "cause": "rate_limited",
+      "source_basis": [
+        "registry_rule:data-go-kr-http-429",
+        "registry_fact:sources/data_go_kr.json#/runtime/rate_limit_policy=conservative"
+      ],
+      "required_evidence_groups": [
+        ["provider_response:class=rate_limited,policy_version=present"]
+      ],
+      "action": "retry_with_backoff",
+      "accountable_party": "shared",
+      "avoid": []
+    },
+    {
+      "cause": "provider_outage",
+      "source_basis": [
+        "registry_rule:data-go-kr-external-timeout",
+        "registry_fact:reports/health-probe-catalog.json#/receipt_contract/policy_authority=datapan-registry"
+      ],
+      "required_evidence_groups": [
+        ["health_observation:state=unavailable,probe_policy_version=present", "health_observation:state=degraded,probe_policy_version=present", "provider_notice:state=service_suspended,notice_version=present", "provider_notice:state=degraded,notice_version=present", "provider_response:class=service_unavailable,policy_version=present"]
+      ],
+      "action": "check_provider_status",
+      "accountable_party": "provider",
+      "avoid": [],
+      "action_variants": [
+        {
+          "when_any": ["health_observation:state=unavailable,probe_policy_version=present", "health_observation:state=degraded,probe_policy_version=present", "provider_notice:state=service_suspended,notice_version=present", "provider_notice:state=degraded,notice_version=present"],
+          "action": "check_provider_status",
+          "avoid": ["reissue_credential"]
+        },
+        {
+          "when_all": ["provider_response:class=service_unavailable,policy_version=present"],
+          "when_none": ["health_observation:state=unavailable,probe_policy_version=present", "health_observation:state=degraded,probe_policy_version=present", "provider_notice:state=service_suspended,notice_version=present", "provider_notice:state=degraded,notice_version=present"],
+          "action": "check_provider_status",
+          "avoid": []
+        }
+      ]
+    },
+    {
+      "cause": "contract_drift",
+      "source_basis": ["consumer_evidence:response_contract"],
+      "required_evidence_groups": [["response_contract:result=mismatch,policy_version=present"]],
+      "action": "refresh_contract",
+      "accountable_party": "shared",
+      "avoid": []
+    },
+    {
+      "cause": "semantic_quality",
+      "source_basis": ["consumer_evidence:data_quality_assertion"],
+      "required_evidence_groups": [["data_quality_assertion:kind=missing_expected_entity,result=failed,policy_version=present", "data_quality_assertion:kind=empty_result,result=failed,policy_version=present", "data_quality_assertion:kind=other,result=failed,policy_version=present"]],
+      "action": "inspect_data_quality",
+      "accountable_party": "provider",
+      "avoid": ["treat_transport_success_as_data_success"]
+    },
+    {
+      "cause": "stale_data",
+      "source_basis": ["consumer_evidence:data_quality_assertion"],
+      "required_evidence_groups": [
+        ["data_quality_assertion:kind=freshness,result=failed,policy_version=present"],
+        ["freshness:state=stale,policy_version=present,reference_time=present,actual_time=present,maximum_age_seconds=present"]
+      ],
+      "action": "inspect_data_quality",
+      "accountable_party": "provider",
+      "avoid": []
+    },
+    {
+      "cause": "ready",
+      "source_basis": ["registry_fact:reports/health-probe-catalog.json#/entries/*/policy/authority=datapan-registry"],
+      "required_evidence_groups": [["validation_result:result=passed,required_level_satisfied=true,policy_version=present"]],
+      "action": "continue_to_reuse",
+      "accountable_party": "shared",
+      "avoid": []
+    },
+    {
+      "cause": "unknown",
+      "source_basis": ["resolution_policy:fallback"],
+      "required_evidence_groups": [["bounded_evidence:insufficient_or_conflicting=true"]],
+      "action": "gather_more_evidence",
+      "accountable_party": "unknown",
+      "avoid": []
+    }
+  ],
+  "proof_cases": [
+    {
+      "case_id": "code30-alone-remains-unknown",
+      "signals": ["registry_rule:data-go-kr-service-key-not-registered"],
+      "expected_eligible_causes": [],
+      "expected_result": "unknown"
+    },
+    {
+      "case_id": "http401-alone-remains-unknown",
+      "signals": ["provider_response:http-401"],
+      "expected_eligible_causes": [],
+      "expected_result": "unknown"
+    },
+    {
+      "case_id": "operation-not-applied-routes-to-application",
+      "signals": ["approval_record:state=not_applied", "registry_operation:approval_scope=operation"],
+      "expected_eligible_causes": ["approval_required"],
+      "expected_result": "approval_required"
+    },
+    {
+      "case_id": "approved-pending-sync-has-bounded-wait",
+      "signals": ["approval_record:state=approved_pending_sync", "provider_response:http_status=403,class=unclassified,policy_version=present"],
+      "expected_eligible_causes": ["approval_propagating"],
+      "expected_result": "approval_propagating"
+    },
+    {
+      "case_id": "conflicting-specific-causes-fall-back",
+      "signals": ["provider_response:class=credential_rejected,policy_version=present", "provider_response:class=rate_limited,policy_version=present"],
+      "expected_eligible_causes": ["credential_invalid", "rate_limited"],
+      "expected_result": "unknown"
+    }
+  ]
+}

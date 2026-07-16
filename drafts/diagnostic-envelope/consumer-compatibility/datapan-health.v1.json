@@ -1,0 +1,19 @@
+{
+  "schema_version": "datapan.diagnostic-consumer-compatibility.v1",
+  "status": "draft",
+  "consumer": "datapan-health",
+  "role": "bounded provider and operation health evidence producer",
+  "production_status": {
+    "currently_proven": [],
+    "required_after_dependencies": ["health_observation", "validation_result", "data_quality_assertion"]
+  },
+  "consumes": ["registry_operation", "provider_response", "provider_notice"],
+  "obligations": {
+    "action": "Support provider_outage advice only with current correlated health evidence; a timeout alone remains a candidate signal.",
+    "scope": "Use Registry operation policy keys and preserve gateway versus external dependency class.",
+    "timing": "Enforce probe policy windows and report bounded current-at-assessment validity.",
+    "redaction": "Return state, class, policy version, and opaque reference only; exclude probe credentials, requests, responses, and sampled rows.",
+    "unknown_fallback": "Uncorrelated, stale, or contradictory observations cannot select outage and must remain unknown."
+  },
+  "forbidden": ["publish_draft_schema", "store_probe_receipts_in_registry", "declare_outage_from_single_timeout"]
+}

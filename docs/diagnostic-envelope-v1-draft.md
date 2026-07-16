@@ -10,6 +10,18 @@ listed in `schemas/index.json`, bound by `manifest.json`, staged for public
 distribution, or authorized as runtime truth. Publication is a separate goal
 step after all three consumers provide compatibility evidence.
 
+The data.go.kr proof is
+`drafts/diagnostic-envelope/data-go-kr-evidence-mapping.v1.json`. It binds
+existing error rules, source-profile facts, and health policy to the typed
+consumer evidence required for each cause. Registry does not receive live
+receipts or select runtime causes. CLI, Health, and Web producer, scope, timing,
+redaction, action, and unknown-fallback obligations are recorded under
+`drafts/diagnostic-envelope/consumer-compatibility/`.
+
+Run `python3 scripts/validate-diagnostic-evidence-mapping-draft.py` to verify
+pinned inputs, false-positive fallbacks, cause/action compatibility, all three
+consumer packets, and the unpublished draft boundary.
+
 ## Boundary
 
 Registry owns the stable vocabulary, required evidence shape, responsibility
