@@ -8,17 +8,29 @@ it is not a public release manifest and has no runtime authority.
 `consumer-proof-intake.v1.json` records the exact repository, pull request, head
 commit, CI, and review state observed for each consumer. The generator binds that
 intake to the exact bytes of the schema, consumer contract, evidence mapping, and
-three compatibility packets. The validator rejects stale output, missing blockers,
-any authority flag set to true, or accidental inclusion of diagnostic draft paths
-in the public manifest or schema index.
+three compatibility packets. An accepted consumer must additionally reference a
+checked-in machine proof by path, byte length, SHA-256, and schema version. The
+generator validates consumer-specific semantics instead of trusting free-form CI
+or review labels. It also requires exactly three unique consumer records. Consumers
+without an implemented semantic proof validator cannot become accepted.
+
+The validator rejects stale output, missing blockers, proof byte or semantic drift,
+duplicate consumers, any authority flag set to true, or accidental inclusion of
+diagnostic draft paths in the public manifest or schema index.
 
 Current interpretation:
 
-- `datapan-health` has accepted offline contract compatibility proof.
-- `datapan-web` has an approved dependency-independent slice, but still lacks the
-  immutable Registry manifest and public Health identity composition.
-- `datapan-cli` remains blocked while Registry Journey CI and independent exact-head
-  approval are missing.
+- `datapan-health` has an accepted 7,968-byte offline compatibility receipt. Its
+  exact contracts, 11 fixtures, 10 one-to-one operation bindings, 12-test proof,
+  and non-public runtime boundaries are revalidated locally.
+- `datapan-web` at `2420e6abef0a0b9b9271114cbb362f4e03ffad11` has 50 passing
+  local tests and completed Health identity composition (AC3, 7/8 overall). It
+  remains partial because immutable Registry release consumption is absent and
+  independent review found an invalid-clock freshness fail-open defect.
+- `datapan-cli` remains blocked. Standard CI and local Go gates pass, but Registry
+  Journey is externally unavailable and independent review found that product
+  metrics and the executable failure-to-success export journey are not connected
+  to production CLI output.
 
 Regenerate after an exact consumer proof changes:
 
@@ -28,7 +40,7 @@ python scripts/validate-diagnostic-release-candidate.py
 python -m unittest tests/test_diagnostic_release_candidate.py
 ```
 
-Even when every consumer becomes accepted, the generator only changes the state to
-`ready_for_publication_review`; it never grants publishing authority. Public schema
-indexing, root manifest changes, tagging, and distribution require a separate,
-independently reviewed release change.
+After every consumer has a machine proof and consumer-specific semantic validator,
+the generator may change the state to `ready_for_publication_review`; it still never
+grants publishing authority. Public schema indexing, root manifest changes, tagging,
+and distribution require a separate, independently reviewed release change.

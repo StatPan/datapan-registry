@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import pathlib
+import re
 import sys
 from typing import Any
 
@@ -23,6 +24,9 @@ CONTRACTS = (
     "drafts/diagnostic-envelope/consumer-compatibility/datapan-health.v1.json",
     "drafts/diagnostic-envelope/consumer-compatibility/datapan-web.v1.json",
 )
+PROOF_ROOT = DRAFT / "release-candidate/proofs"
+SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
+COMMIT_PATTERN = re.compile(r"^[0-9a-f]{40}$")
 
 
 def load(path: pathlib.Path) -> dict[str, Any]:
@@ -46,7 +50,111 @@ def artifact(path: str) -> dict[str, str]:
     return {"path": path, "sha256": sha256_bytes(absolute.read_bytes())}
 
 
-def validate_intake(consumers: list[dict[str, Any]]) -> None:
+def validate_health_proof(proof: dict[str, Any], item: dict[str, Any], registry: dict[str, Any]) -> None:
+    if proof.get("schema_version") != "datapan.health-diagnostic-compatibility-receipt.v1":
+        raise ValueError("datapan-health: unsupported machine proof schema")
+    if proof.get("status") != "consumer_compatible" or proof.get("health_head") != item.get("head_commit"):
+        raise ValueError("datapan-health: receipt status or exact head mismatch")
+    if not COMMIT_PATTERN.fullmatch(str(proof.get("tested_revision", ""))):
+        raise ValueError("datapan-health: tested_revision must be an exact commit")
+    if proof.get("registry_revision") != registry.get("contract_commit"):
+        raise ValueError("datapan-health: receipt is not bound to the candidate Registry revision")
+    contracts = proof.get("contracts", {})
+    expected_contracts = {
+        "schema": ("diagnostic/datapan.diagnostic-envelope.v1.schema.json", artifact(CONTRACTS[0])["sha256"]),
+        "mapping": ("diagnostic/data-go-kr-evidence-mapping.v1.json", artifact(CONTRACTS[2])["sha256"]),
+        "consumer": ("diagnostic/datapan-health.v1.json", artifact(CONTRACTS[4])["sha256"]),
+    }
+    for name, (path, digest) in expected_contracts.items():
+        if contracts.get(name) != {"path": path, "sha256": digest}:
+            raise ValueError(f"datapan-health: {name} contract identity mismatch")
+
+    expected_fixtures = []
+    for path in sorted((DRAFT / "fixtures").glob("*.json")):
+        fixture = load(path)
+        expected_fixtures.append({
+            "name": path.name,
+            "sha256": sha256_bytes(path.read_bytes()),
+            "cause": fixture["cause"]["code"],
+            "determination": fixture["cause"]["determination"],
+        })
+    if proof.get("fixtures") != expected_fixtures or len(expected_fixtures) != 11:
+        raise ValueError("datapan-health: fixture proof is not the exact 11-artifact contract")
+
+    bindings = proof.get("bindings")
+    if not isinstance(bindings, list) or len(bindings) != 10:
+        raise ValueError("datapan-health: exact ten operation bindings are required")
+    operation_ids, dataset_ids, service_ids = set(), set(), set()
+    for binding in bindings:
+        operation_id = binding.get("operation_id")
+        dataset_id = binding.get("dataset_id")
+        service_id = binding.get("service_id")
+        if (
+            not re.fullmatch(r"dpr-op-[0-9]{8}", str(operation_id))
+            or not re.fullmatch(r"[0-9]{8}", str(dataset_id))
+            or not re.fullmatch(r"public-data_[a-z0-9-]+", str(service_id))
+            or binding.get("registry_revision") != registry.get("contract_commit")
+        ):
+            raise ValueError("datapan-health: invalid operation binding semantics")
+        operation_ids.add(operation_id)
+        dataset_ids.add(dataset_id)
+        service_ids.add(service_id)
+    if len(operation_ids) != 10 or len(dataset_ids) != 10 or len(service_ids) != 10:
+        raise ValueError("datapan-health: operation bindings must be one-to-one")
+    encoded_bindings = json.dumps(bindings, ensure_ascii=False, separators=(",", ":")).encode()
+    if proof.get("bindings_sha256") != sha256_bytes(encoded_bindings):
+        raise ValueError("datapan-health: bindings digest mismatch")
+    test_proof = proof.get("test_proof", {})
+    tests = test_proof.get("tests")
+    if test_proof.get("count") != 12 or not isinstance(tests, list) or len(tests) != 12:
+        raise ValueError("datapan-health: exact test proof is required")
+    if len({test.get("name") for test in tests}) != 12:
+        raise ValueError("datapan-health: test proof names must be unique")
+    boundaries = proof.get("boundaries")
+    if boundaries != {
+        "existing_health_probe_v1": "preserved",
+        "gatus_projection": "unchanged_enum_only",
+        "sensitive_evidence": "rejected_before_normalization",
+        "public_api": "not_implemented",
+        "deployment": "not_performed",
+    }:
+        raise ValueError("datapan-health: compatibility boundaries mismatch")
+
+
+def validate_machine_proof(item: dict[str, Any], registry: dict[str, Any]) -> None:
+    consumer = item["consumer"]
+    reference = item.get("machine_proof")
+    if not isinstance(reference, dict):
+        raise ValueError(f"{consumer}: accepted proof requires a machine proof artifact")
+    relative = reference.get("path")
+    if not isinstance(relative, str):
+        raise ValueError(f"{consumer}: machine proof path is required")
+    path = (ROOT / relative).resolve()
+    proof_root = PROOF_ROOT.resolve()
+    if proof_root not in path.parents or path.suffix != ".json" or not path.is_file():
+        raise ValueError(f"{consumer}: machine proof must be a checked-in JSON artifact under {PROOF_ROOT.relative_to(ROOT)}")
+    data = path.read_bytes()
+    if (
+        not isinstance(reference.get("bytes"), int)
+        or reference["bytes"] <= 0
+        or not SHA256_PATTERN.fullmatch(str(reference.get("sha256", "")))
+        or reference.get("bytes") != len(data)
+        or reference.get("sha256") != sha256_bytes(data)
+    ):
+        raise ValueError(f"{consumer}: machine proof byte identity mismatch")
+    if item.get("receipt_sha256") is not None and item.get("receipt_sha256") != reference.get("sha256"):
+        raise ValueError(f"{consumer}: receipt and machine proof digest mismatch")
+    proof = load(path)
+    if reference.get("schema_version") != proof.get("schema_version"):
+        raise ValueError(f"{consumer}: machine proof schema identity mismatch")
+    validators = {"datapan-health": validate_health_proof}
+    validator = validators.get(consumer)
+    if validator is None:
+        raise ValueError(f"{consumer}: accepted proof has no consumer-specific semantic validator")
+    validator(proof, item, registry)
+
+
+def validate_intake(consumers: list[dict[str, Any]], registry: dict[str, Any]) -> None:
     for item in consumers:
         consumer = item.get("consumer", "<unknown>")
         head = item.get("head_commit")
@@ -65,6 +173,7 @@ def validate_intake(consumers: list[dict[str, Any]]) -> None:
                 raise ValueError(f"{consumer}: accepted proof requires passed exact-head CI")
             if item.get("review_state") != "independent_approved":
                 raise ValueError(f"{consumer}: accepted proof requires independent exact-head approval")
+            validate_machine_proof(item, registry)
         elif not missing:
             raise ValueError(f"{consumer}: incomplete proof must name its missing proofs")
 
@@ -73,10 +182,15 @@ def build(intake: dict[str, Any]) -> dict[str, Any]:
     consumers = intake.get("consumers")
     if not isinstance(consumers, list):
         raise ValueError("intake.consumers must be a list")
+    if len(consumers) != 3:
+        raise ValueError("intake must contain exactly three consumer records")
     states = {item.get("consumer"): item.get("proof_state") for item in consumers}
-    if set(states) != {"datapan-cli", "datapan-health", "datapan-web"}:
+    if len(states) != 3 or set(states) != {"datapan-cli", "datapan-health", "datapan-web"}:
         raise ValueError("intake must contain exactly the three required consumers")
-    validate_intake(consumers)
+    registry = intake.get("registry")
+    if not isinstance(registry, dict) or not COMMIT_PATTERN.fullmatch(str(registry.get("contract_commit", ""))):
+        raise ValueError("intake.registry must bind an exact contract commit")
+    validate_intake(consumers, registry)
     missing = [
         {"consumer": item["consumer"], "proof": proof}
         for item in consumers
@@ -84,7 +198,7 @@ def build(intake: dict[str, Any]) -> dict[str, Any]:
     ]
     all_accepted = all(state == "accepted" for state in states.values())
     binding = {
-        "registry": intake.get("registry"),
+        "registry": registry,
         "contracts": [artifact(path) for path in CONTRACTS],
         "consumer_proofs": consumers,
     }

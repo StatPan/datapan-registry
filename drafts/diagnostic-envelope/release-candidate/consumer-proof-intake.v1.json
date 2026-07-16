@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.diagnostic-consumer-proof-intake.v1",
-  "captured_at": "2026-07-16T08:04:00Z",
+  "captured_at": "2026-07-16T08:15:00Z",
   "registry": {
     "repository": "StatPan/datapan-registry",
     "issue": 568,
@@ -19,6 +19,12 @@
       "ci_state": "passed",
       "ci_run": 29481036102,
       "receipt_sha256": "23fe6cf7fbb63268dab889ed516a494a915877f15664821f445656fae36b18e8",
+      "machine_proof": {
+        "path": "drafts/diagnostic-envelope/release-candidate/proofs/datapan-health.compatibility-receipt.v1.json",
+        "sha256": "23fe6cf7fbb63268dab889ed516a494a915877f15664821f445656fae36b18e8",
+        "bytes": 7968,
+        "schema_version": "datapan.health-diagnostic-compatibility-receipt.v1"
+      },
       "scope": "offline_contract_compatibility",
       "missing_proofs": []
     },
@@ -27,15 +33,16 @@
       "repository": "StatPan/datapan",
       "issue": 8,
       "pull_request": 12,
-      "head_commit": "d591b732575ffc9972f959219baa1a5d5a058980",
+      "head_commit": "2420e6abef0a0b9b9271114cbb362f4e03ffad11",
       "proof_state": "partial",
-      "review_state": "dependency_independent_slice_approved",
-      "ci_state": "local_41_tests_and_build_passed_no_github_checks",
-      "scope": "dependency_independent_diagnostic_experience",
+      "review_state": "independent_changes_requested_invalid_clock",
+      "ci_state": "local_50_tests_and_build_passed_no_github_checks",
+      "acceptance": {"completed": 7, "total": 8, "health_identity_composition": "complete"},
+      "scope": "dependency_independent_diagnostic_experience_with_health_identity_composition",
       "missing_proofs": [
         "immutable_registry_release_manifest_consumption",
-        "health_public_identity_composition",
-        "final_exact_head_review"
+        "finite_review_clock_fail_closed_remediation",
+        "final_exact_head_approval"
       ]
     },
     {
@@ -45,12 +52,15 @@
       "pull_request": 162,
       "head_commit": "f6b4a62df8b8c537a38ca8adc0d9ea3a66a0cfaf",
       "proof_state": "blocked",
-      "review_state": "independent_review_missing",
+      "review_state": "independent_changes_requested",
       "ci_state": "standard_3_passed_registry_journey_3_failed",
       "ci_run": 29481907297,
       "scope": "draft_diagnostic_commands",
       "missing_proofs": [
         "registry_journey_ci_pass",
+        "product_metrics_production_binding",
+        "executable_failure_to_success_export_journey",
+        "exact_consumed_ignored_field_handoff",
         "independent_exact_head_approval"
       ]
     }

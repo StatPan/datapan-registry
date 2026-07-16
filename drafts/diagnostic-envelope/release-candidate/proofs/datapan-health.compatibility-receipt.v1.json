@@ -1,0 +1,226 @@
+{
+  "schema_version": "datapan.health-diagnostic-compatibility-receipt.v1",
+  "status": "consumer_compatible",
+  "health_head": "4e8e1fc1c2af3ef63a59abde8c3fc52387355bb8",
+  "tested_revision": "c51a3442f6438272c58f02756ed0af40f939f9bc",
+  "registry_revision": "8c5d397f13929ec2b85e63e4ca600887f37929b8",
+  "contracts": {
+    "schema": {
+      "path": "diagnostic/datapan.diagnostic-envelope.v1.schema.json",
+      "sha256": "da254b40947462347fcda90fdd7686b6632c76943b438f2046a28f079f33e403"
+    },
+    "mapping": {
+      "path": "diagnostic/data-go-kr-evidence-mapping.v1.json",
+      "sha256": "da55d52d2ee1f197969ac63a1d5ab5b98e3b88fd65f90d6a48800d2e3c522d33"
+    },
+    "consumer": {
+      "path": "diagnostic/datapan-health.v1.json",
+      "sha256": "e831df46e50107c116132f423525af5b1ea8c9743c014956a2fc3732077db70c"
+    }
+  },
+  "fixtures": [
+    {
+      "name": "approval-propagating.json",
+      "sha256": "fe000f4082f948d6a96f045d7fae91c6bdf7288c6746196a8c7b0868d6416099",
+      "cause": "approval_propagating",
+      "determination": "inferred"
+    },
+    {
+      "name": "approval-required.json",
+      "sha256": "d11fc4e18aee6fe1a7f5c9c0a94a1e6e1bae0177447f2f6bcc0dddbe6961e7d3",
+      "cause": "approval_required",
+      "determination": "observed"
+    },
+    {
+      "name": "contract-drift.json",
+      "sha256": "13bc8af8c6b1540ef91a49f60ed9aab5514fabee3316868dc9f946adbe1da470",
+      "cause": "contract_drift",
+      "determination": "inferred"
+    },
+    {
+      "name": "credential-invalid.json",
+      "sha256": "c5796d7bf59c6f282f9f75b14717a51ff716859e06f6325e784c48d507816497",
+      "cause": "credential_invalid",
+      "determination": "observed"
+    },
+    {
+      "name": "invalid-input.json",
+      "sha256": "80adb4fce6ede5c34223468bf26b69e90c20c92d74661777c458a5238ad6ab07",
+      "cause": "invalid_input",
+      "determination": "observed"
+    },
+    {
+      "name": "provider-outage.json",
+      "sha256": "33c0160c4cf136b34dc3befa1ff5803c71f3c37d7946fa2b56e70c69d4be6200",
+      "cause": "provider_outage",
+      "determination": "inferred"
+    },
+    {
+      "name": "rate-limited.json",
+      "sha256": "8be4fb69e91ae42c2a03510458b9b9fd23cf4780d551ea1ddaa505c8bc40d318",
+      "cause": "rate_limited",
+      "determination": "observed"
+    },
+    {
+      "name": "ready.json",
+      "sha256": "7ae2306176bdd007ca2a4ca822240e4e515c76967b2af0c816584463aee420fc",
+      "cause": "ready",
+      "determination": "observed"
+    },
+    {
+      "name": "semantic-quality.json",
+      "sha256": "06fcc308aa039861b38f6da2fee8f23150ea7d2cac998b5d9e05b011ca1ca9b0",
+      "cause": "semantic_quality",
+      "determination": "inferred"
+    },
+    {
+      "name": "stale-data.json",
+      "sha256": "f4cc2d0f34bdfb74bbed9a3bcb5cad7b0f5444fa5ded6ca1742c916799aecf92",
+      "cause": "stale_data",
+      "determination": "observed"
+    },
+    {
+      "name": "unknown.json",
+      "sha256": "e0635cf4980438141007607c66eca821383f605393a69bdb03522b3873c1dcf0",
+      "cause": "unknown",
+      "determination": "unknown"
+    }
+  ],
+  "bindings": [
+    {
+      "operation_id": "dpr-op-00000001",
+      "dataset_id": "15000480",
+      "service_id": "public-data_holiday-emergency-clinics",
+      "registry_revision": "8c5d397f13929ec2b85e63e4ca600887f37929b8"
+    },
+    {
+      "operation_id": "dpr-op-00000002",
+      "dataset_id": "15000897",
+      "service_id": "public-data_election-codes",
+      "registry_revision": "8c5d397f13929ec2b85e63e4ca600887f37929b8"
+    },
+    {
+      "operation_id": "dpr-op-00000003",
+      "dataset_id": "15001697",
+      "service_id": "public-data_medical-institution-codes",
+      "registry_revision": "8c5d397f13929ec2b85e63e4ca600887f37929b8"
+    },
+    {
+      "operation_id": "dpr-op-00000004",
+      "dataset_id": "15001839",
+      "service_id": "public-data_private-resource-services",
+      "registry_revision": "8c5d397f13929ec2b85e63e4ca600887f37929b8"
+    },
+    {
+      "operation_id": "dpr-op-00000005",
+      "dataset_id": "15000863",
+      "service_id": "public-data_culture-facility-restaurants",
+      "registry_revision": "8c5d397f13929ec2b85e63e4ca600887f37929b8"
+    },
+    {
+      "operation_id": "dpr-op-00000006",
+      "dataset_id": "15025329",
+      "service_id": "public-data_qnet-practical-pass-rate",
+      "registry_revision": "8c5d397f13929ec2b85e63e4ca600887f37929b8"
+    },
+    {
+      "operation_id": "dpr-op-00000007",
+      "dataset_id": "15004206",
+      "service_id": "public-data_weather-nearby-realtime",
+      "registry_revision": "8c5d397f13929ec2b85e63e4ca600887f37929b8"
+    },
+    {
+      "operation_id": "dpr-op-00000008",
+      "dataset_id": "15052669",
+      "service_id": "public-data_transit-card-chargers",
+      "registry_revision": "8c5d397f13929ec2b85e63e4ca600887f37929b8"
+    },
+    {
+      "operation_id": "dpr-op-00000009",
+      "dataset_id": "15109030",
+      "service_id": "public-data_bus-depot-status",
+      "registry_revision": "8c5d397f13929ec2b85e63e4ca600887f37929b8"
+    },
+    {
+      "operation_id": "dpr-op-00000010",
+      "dataset_id": "15029006",
+      "service_id": "public-data_university-majors",
+      "registry_revision": "8c5d397f13929ec2b85e63e4ca600887f37929b8"
+    }
+  ],
+  "bindings_sha256": "2ca4039da73c61dcb2aceab305c98154ec30363f261f638d2a6e79a9fa8c79b0",
+  "test_proof": {
+    "manifest": {
+      "path": "diagnostic-test-manifest.json",
+      "sha256": "274d394133eb90fe5553bb47947644d45f338ad2e193345e13759f7bb9e2619b"
+    },
+    "sources": [
+      {
+        "path": "internal/health/diagnostic_test.go",
+        "sha256": "328612400e99fb8cf1989738eb073c809ae1f7b425a002ad7ddf75e4bead499f"
+      },
+      {
+        "path": "internal/health/health_test.go",
+        "sha256": "895fb5c3dd531dca8288d047e9029b26c01d7c1dba1027df5ce813dfa3c2a387"
+      }
+    ],
+    "tests": [
+      {
+        "name": "TestAcceptedDiagnosticFixturesMatchExactRegistryContract",
+        "source_path": "internal/health/diagnostic_test.go"
+      },
+      {
+        "name": "TestDiagnosticCauseCannotChangeGatusProjection",
+        "source_path": "internal/health/diagnostic_test.go"
+      },
+      {
+        "name": "TestDiagnosticCompatibilityCLIRejectsNonBijectiveCanaryFiles",
+        "source_path": "internal/health/diagnostic_test.go"
+      },
+      {
+        "name": "TestDiagnosticCompatibilityReceiptBindsHeadContractsFixturesAndServices",
+        "source_path": "internal/health/diagnostic_test.go"
+      },
+      {
+        "name": "TestDiagnosticCompatibilityRejectsNonBijectiveOrIncompleteServiceMap",
+        "source_path": "internal/health/diagnostic_test.go"
+      },
+      {
+        "name": "TestDiagnosticDecoderFailsClosedForUnknownVersionEnumAndExtraField",
+        "source_path": "internal/health/diagnostic_test.go"
+      },
+      {
+        "name": "TestDiagnosticPinRejectsRevisionAndArtifactDrift",
+        "source_path": "internal/health/diagnostic_test.go"
+      },
+      {
+        "name": "TestDiagnosticProducerBoundaryRejectsEveryRedactionLeakClass",
+        "source_path": "internal/health/diagnostic_test.go"
+      },
+      {
+        "name": "TestDiagnosticSubjectBindsExactlyOnceToConfiguredService",
+        "source_path": "internal/health/diagnostic_test.go"
+      },
+      {
+        "name": "TestDiagnosticSubjectRejectsUnknownCrossOperationDuplicateAndStaleRevision",
+        "source_path": "internal/health/diagnostic_test.go"
+      },
+      {
+        "name": "TestDiagnosticTestManifestRejectsSourceDriftAndReceiptIsReproducible",
+        "source_path": "internal/health/diagnostic_test.go"
+      },
+      {
+        "name": "TestPinnedSchemaAndCLIStyleFixturesAreCompatible",
+        "source_path": "internal/health/health_test.go"
+      }
+    ],
+    "count": 12
+  },
+  "boundaries": {
+    "existing_health_probe_v1": "preserved",
+    "gatus_projection": "unchanged_enum_only",
+    "sensitive_evidence": "rejected_before_normalization",
+    "public_api": "not_implemented",
+    "deployment": "not_performed"
+  }
+}
