@@ -150,6 +150,33 @@
       }
     },
     {
+      "if": {
+        "properties": {
+          "cause": {"properties": {"code": {"const": "provider_outage"}}, "required": ["code"]},
+          "actions": {"properties": {"avoid": {"contains": {"properties": {"action_id": {"const": "reissue_credential"}}, "required": ["action_id"]}}}, "required": ["avoid"]}
+        },
+        "required": ["cause", "actions"]
+      },
+      "then": {
+        "properties": {
+          "evidence_refs": {
+            "contains": {
+              "anyOf": [
+                {
+                  "properties": {"kind": {"const": "health_observation"}, "health_correlation": {"properties": {"state": {"enum": ["unavailable", "degraded"]}}, "required": ["state", "probe_policy_version"]}},
+                  "required": ["kind", "health_correlation"]
+                },
+                {
+                  "properties": {"kind": {"const": "provider_notice"}, "notice": {"properties": {"state": {"enum": ["service_suspended", "degraded"]}}, "required": ["state", "notice_version"]}},
+                  "required": ["kind", "notice"]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
       "if": {"properties": {"cause": {"properties": {"code": {"const": "contract_drift"}}, "required": ["code"]}}},
       "then": {
         "properties": {

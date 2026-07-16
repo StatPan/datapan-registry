@@ -57,6 +57,7 @@ FORBIDDEN_TEXT = (
     re.compile(r"(?i)\bbearer\s+[a-z0-9._~-]+"),
     re.compile(r"https?://"),
 )
+VALIDATION_LEVEL_RANK = {"L1": 1, "L2": 2, "L3": 3, "L4": 4}
 
 
 def load(path: pathlib.Path) -> Any:
@@ -114,8 +115,26 @@ def validate_contract(contract: dict[str, Any], schema: dict[str, Any]) -> None:
     reject_sensitive(contract, "consumer_contract")
 
 
+def validate_semantics(value: dict[str, Any]) -> None:
+    if value.get("cause", {}).get("code") != "ready":
+        return
+    validations = [
+        item["validation"]
+        for item in value.get("evidence_refs", [])
+        if item.get("kind") == "validation_result"
+        and item.get("validation", {}).get("result") == "passed"
+    ]
+    if not any(
+        VALIDATION_LEVEL_RANK[item["achieved_level"]]
+        >= VALIDATION_LEVEL_RANK[item["required_level"]]
+        for item in validations
+    ):
+        raise ValueError("ready requires achieved validation level to meet or exceed required level")
+
+
 def validate_fixture(path: pathlib.Path, value: dict[str, Any], validator: jsonschema.Draft202012Validator) -> None:
     validator.validate(value)
+    validate_semantics(value)
     if value.get("fixture", {}).get("status") != "deterministic_example":
         raise ValueError(f"{path.name}: fixture status must be deterministic_example")
     if value["fixture"]["scenario_id"] != path.stem:

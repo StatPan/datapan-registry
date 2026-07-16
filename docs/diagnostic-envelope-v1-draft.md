@@ -93,10 +93,16 @@ additional contract, credential, success, and unknown boundaries:
 11. `unknown`
 
 `ready` is not transport success. It requires a versioned validation result
-whose scope is the exact operation and whose required level passed.
+whose scope is the exact operation and whose achieved level meets or exceeds
+the required level.
 `stale_data` is not inferred from HTTP age or a display label; it requires a
 versioned freshness assertion containing reference time, actual time, maximum
 age, and a `stale` result.
+
+A single response classified as `service_unavailable` may support an inferred
+outage and `check_provider_status`, but it cannot justify
+`avoid=reissue_credential`. That stronger advice requires a versioned Health
+correlation or a direct provider notice independent of the credential path.
 
 ## Relationship to existing Registry contracts
 

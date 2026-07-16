@@ -86,6 +86,15 @@ class DiagnosticEnvelopeDraftTest(unittest.TestCase):
         value["evidence_refs"] = [value["evidence_refs"][0]]
         self.assert_schema_rejects(value)
 
+    def test_provider_outage_key_advice_requires_credential_independent_evidence(self):
+        value = copy.deepcopy(self.fixtures["provider-outage"])
+        response = value["evidence_refs"][0]
+        response["response"]["provider_class"] = "service_unavailable"
+        value["evidence_refs"] = [response]
+        self.assert_schema_rejects(value)
+        value["actions"]["avoid"] = []
+        self.validator.validate(value)
+
     def test_contract_and_quality_causes_require_failed_typed_assertions(self):
         value = copy.deepcopy(self.fixtures["contract-drift"])
         value["evidence_refs"][0]["contract_assertion"]["result"] = "match"
@@ -125,6 +134,14 @@ class DiagnosticEnvelopeDraftTest(unittest.TestCase):
         value = copy.deepcopy(self.fixtures["ready"])
         value["evidence_refs"][0]["validation"].pop("required_level")
         self.assert_schema_rejects(value)
+
+    def test_ready_requires_achieved_level_to_meet_required_level(self):
+        value = copy.deepcopy(self.fixtures["ready"])
+        value["evidence_refs"][0]["validation"]["required_level"] = "L4"
+        value["evidence_refs"][0]["validation"]["achieved_level"] = "L1"
+        self.validator.validate(value)
+        with self.assertRaisesRegex(ValueError, "meet or exceed"):
+            MODULE.validate_semantics(value)
 
     def test_raw_provider_text_url_and_credentials_fail_closed(self):
         for key, content in (
