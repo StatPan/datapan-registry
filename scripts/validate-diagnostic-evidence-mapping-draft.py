@@ -1,28 +1,38 @@
 #!/usr/bin/env python3
-"""Validate the draft data.go.kr diagnostic mapping and consumer packets."""
+"""Validate and execute the static draft diagnostic mapping proof."""
 
 from __future__ import annotations
 
+import copy
 import hashlib
 import json
 import pathlib
-import re
 import sys
 from typing import Any
+
+import jsonschema
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DRAFT = ROOT / "drafts/diagnostic-envelope"
 MAPPING = DRAFT / "data-go-kr-evidence-mapping.v1.json"
 CONTRACT = DRAFT / "consumer-contract.v1.json"
 ENVELOPE_SCHEMA = DRAFT / "datapan.diagnostic-envelope.v1.schema.json"
+FIXTURES = DRAFT / "fixtures"
 PACKETS = DRAFT / "consumer-compatibility"
 EXPECTED_CONSUMERS = ["datapan-cli", "datapan-health", "datapan-web"]
 OBLIGATIONS = {"action", "scope", "timing", "redaction", "unknown_fallback"}
-FORBIDDEN_KEYS = {"credential", "credentials", "headers", "request_body", "response_body", "rows", "secret", "user_id"}
-FORBIDDEN_TEXT = (
-    re.compile(r"(?i)\b(?:authorization|service[_-]?key|api[_-]?key)\s*[:=]"),
-    re.compile(r"(?i)\bbearer\s+[a-z0-9._~-]+"),
-)
+SOURCE_BASIS_TYPES = {"registry_rule", "registry_fact", "consumer_evidence", "resolution_policy"}
+EXPECTED_OBLIGATIONS = {"action": "exact_mapping_result", "scope": "exact_bound_subject", "timing": "current_positive_validity", "redaction": "envelope_redaction_contract", "unknown_fallback": "unknown_gather_more_evidence"}
+EXPECTED_DEPENDENCIES = {
+    "datapan-cli": ["StatPan/datapan-cli#160"],
+    "datapan-health": ["StatPan/datapan-health#19", "StatPan/datapan-health#21", "StatPan/datapan-health#22"],
+    "datapan-web": ["StatPan/datapan#7", "StatPan/datapan#8", "StatPan/datapan#9", "StatPan/datapan#10", "StatPan/datapan#11"],
+}
+EXPECTED_PRODUCERS = {
+    "datapan-cli": ["request_validation", "provider_response", "validation_result", "data_quality_assertion"],
+    "datapan-health": ["health_observation", "validation_result", "data_quality_assertion"],
+    "datapan-web": ["response_contract", "data_quality_assertion"],
+}
 
 
 def load(path: pathlib.Path) -> Any:
@@ -30,66 +40,35 @@ def load(path: pathlib.Path) -> Any:
         return json.load(handle)
 
 
-def reject_sensitive(value: Any, path: str) -> None:
-    if isinstance(value, dict):
-        for key, child in value.items():
-            if key.lower() in FORBIDDEN_KEYS:
-                raise ValueError(f"{path}: forbidden sensitive field {key!r}")
-            reject_sensitive(child, f"{path}.{key}")
-    elif isinstance(value, list):
-        for index, child in enumerate(value):
-            reject_sensitive(child, f"{path}[{index}]")
-    elif isinstance(value, str) and any(pattern.search(value) for pattern in FORBIDDEN_TEXT):
-        raise ValueError(f"{path}: credential-like material is forbidden")
+def pointer_get(value: Any, pointer: str) -> Any:
+    if pointer == "":
+        return value
+    if not pointer.startswith("/"):
+        raise ValueError(f"invalid JSON pointer: {pointer}")
+    current = value
+    for raw in pointer[1:].split("/"):
+        token = raw.replace("~1", "/").replace("~0", "~")
+        current = current[int(token)] if isinstance(current, list) else current[token]
+    return current
 
 
-def eligible_causes(mapping: dict[str, Any], signals: set[str]) -> list[str]:
-    return [
-        item["cause"]
-        for item in mapping["cause_mappings"]
-        if item["cause"] != "unknown"
-        and all(any(choice in signals for choice in group) for group in item["required_evidence_groups"])
-    ]
+def pointer_set(value: Any, pointer: str, replacement: Any) -> None:
+    tokens = pointer[1:].split("/")
+    current = value
+    for raw in tokens[:-1]:
+        token = raw.replace("~1", "/").replace("~0", "~")
+        current = current[int(token)] if isinstance(current, list) else current[token]
+    token = tokens[-1].replace("~1", "/").replace("~0", "~")
+    if isinstance(current, list):
+        current[int(token)] = replacement
+    else:
+        current[token] = replacement
 
 
-def validate_mapping_vocabulary(mapping: dict[str, Any]) -> None:
-    defs = load(ENVELOPE_SCHEMA)["$defs"]
-    vocabularies = {
-        ("approval_record", "state"): set(defs["approval_evidence"]["properties"]["state"]["enum"]),
-        ("request_validation", "failure_class"): set(defs["request_validation_evidence"]["properties"]["failure_class"]["enum"]),
-        ("provider_response", "class"): set(defs["response_evidence"]["properties"]["provider_class"]["enum"]),
-        ("health_observation", "state"): set(defs["health_correlation_evidence"]["properties"]["state"]["enum"]),
-        ("provider_notice", "state"): set(defs["notice_evidence"]["properties"]["state"]["enum"]),
-        ("response_contract", "result"): set(defs["contract_assertion_evidence"]["properties"]["result"]["enum"]),
-        ("data_quality_assertion", "kind"): set(defs["quality_assertion_evidence"]["properties"]["kind"]["enum"]),
-        ("data_quality_assertion", "result"): set(defs["quality_assertion_evidence"]["properties"]["result"]["enum"]),
-        ("freshness", "state"): set(defs["freshness_evidence"]["properties"]["state"]["enum"]),
-        ("validation_result", "result"): set(defs["validation_evidence"]["properties"]["result"]["enum"]),
-    }
-    signals = {
-        signal
-        for item in mapping["cause_mappings"]
-        for group in item["required_evidence_groups"]
-        for signal in group
-    }
-    signals |= {
-        signal
-        for item in mapping["cause_mappings"]
-        for variant in item.get("action_variants", [])
-        for field in ("when_any", "when_all", "when_none")
-        for signal in variant.get(field, [])
-    }
-    for signal in signals:
-        if ":" not in signal:
-            continue
-        kind, conditions = signal.split(":", 1)
-        for condition in conditions.split(","):
-            if "=" not in condition:
-                continue
-            field, value = condition.split("=", 1)
-            allowed = vocabularies.get((kind, field))
-            if allowed is not None and value not in allowed:
-                raise ValueError(f"mapping vocabulary drift: {kind}.{field}={value}")
+def evidence_validator() -> jsonschema.Draft202012Validator:
+    schema = load(ENVELOPE_SCHEMA)
+    wrapper = {"$schema": schema["$schema"], "$ref": "#/$defs/evidence_ref", "$defs": schema["$defs"]}
+    return jsonschema.Draft202012Validator(wrapper, format_checker=jsonschema.FormatChecker())
 
 
 def validate_inputs(mapping: dict[str, Any]) -> None:
@@ -104,123 +83,293 @@ def validate_inputs(mapping: dict[str, Any]) -> None:
             raise ValueError(f"authoritative input digest drift: {item['path']}")
 
 
+def schema_contract() -> dict[str, dict[str, Any]]:
+    defs = load(ENVELOPE_SCHEMA)["$defs"]
+    variants = load(CONTRACT)["evidence_variants"]
+    payloads = {
+        "approval_record": ("approval", "approval_evidence"),
+        "request_validation": ("request_validation", "request_validation_evidence"),
+        "provider_response": ("response", "response_evidence"),
+        "health_observation": ("health_correlation", "health_correlation_evidence"),
+        "provider_notice": ("notice", "notice_evidence"),
+        "response_contract": ("contract_assertion", "contract_assertion_evidence"),
+        "data_quality_assertion": ("quality_assertion", "quality_assertion_evidence"),
+        "validation_result": ("validation", "validation_evidence"),
+    }
+    result = {}
+    for kind, variant in variants.items():
+        allowed = {"/ref_id"}
+        if kind in payloads:
+            field, definition = payloads[kind]
+            allowed |= {f"/{field}/{name}" for name in defs[definition]["properties"]}
+            if kind == "data_quality_assertion":
+                allowed |= {f"/freshness/{name}" for name in defs["freshness_evidence"]["properties"]}
+            if kind == "approval_record":
+                allowed |= {"/approval/effective_scope/level", "/approval/effective_scope/subject_ref", "/approval/effective_scope/detail_id"}
+        result[kind] = {
+            "authorities": set(variant["allowed_authorities"]),
+            "scope": variant["allowed_scope_level"],
+            "allowed_match_paths": allowed,
+            "enums": {},
+        }
+    enum_bindings = {
+        ("approval_record", "/approval/state"): ("approval_evidence", "state"),
+        ("request_validation", "/request_validation/result"): ("request_validation_evidence", "result"),
+        ("request_validation", "/request_validation/failure_class"): ("request_validation_evidence", "failure_class"),
+        ("provider_response", "/response/provider_class"): ("response_evidence", "provider_class"),
+        ("health_observation", "/health_correlation/state"): ("health_correlation_evidence", "state"),
+        ("provider_notice", "/notice/state"): ("notice_evidence", "state"),
+        ("response_contract", "/contract_assertion/result"): ("contract_assertion_evidence", "result"),
+        ("data_quality_assertion", "/quality_assertion/kind"): ("quality_assertion_evidence", "kind"),
+        ("data_quality_assertion", "/quality_assertion/result"): ("quality_assertion_evidence", "result"),
+        ("data_quality_assertion", "/freshness/state"): ("freshness_evidence", "state"),
+        ("validation_result", "/validation/result"): ("validation_evidence", "result"),
+    }
+    for (kind, path), (definition, field) in enum_bindings.items():
+        result[kind]["enums"][path] = set(defs[definition]["properties"][field]["enum"])
+    return result
+
+
+def validate_predicates(mapping: dict[str, Any]) -> None:
+    contract = schema_contract()
+    for predicate_id, predicate in mapping["evidence_predicates"].items():
+        if set(predicate) != {"kind", "authorities", "scope_level", "max_age_seconds", "supports", "matches"}:
+            raise ValueError(f"{predicate_id}: predicate shape drift")
+        kind = predicate.get("kind")
+        if kind not in contract:
+            raise ValueError(f"{predicate_id}: unknown evidence kind")
+        if not predicate.get("authorities") or not set(predicate["authorities"]).issubset(contract[kind]["authorities"]):
+            raise ValueError(f"{predicate_id}: authority vocabulary drift")
+        if predicate.get("scope_level") != contract[kind]["scope"]:
+            raise ValueError(f"{predicate_id}: scope vocabulary drift")
+        if not isinstance(predicate.get("max_age_seconds"), int) or predicate["max_age_seconds"] < 0:
+            raise ValueError(f"{predicate_id}: bounded timing required")
+        if not isinstance(predicate.get("supports"), list) or not isinstance(predicate.get("matches"), dict) or not predicate["matches"]:
+            raise ValueError(f"{predicate_id}: typed supports and matches required")
+        unknown = set(predicate["matches"]) - contract[kind]["allowed_match_paths"]
+        if unknown:
+            raise ValueError(f"{predicate_id}: unknown payload field {sorted(unknown)}")
+        for path, expected in predicate["matches"].items():
+            allowed_values = contract[kind]["enums"].get(path)
+            if allowed_values is not None and expected not in allowed_values:
+                raise ValueError(f"{predicate_id}: payload enum drift at {path}")
+            if path == "/response/http_status" and (not isinstance(expected, int) or not 100 <= expected <= 599):
+                raise ValueError(f"{predicate_id}: HTTP status vocabulary drift")
+
+
+def validate_source_basis(mapping: dict[str, Any]) -> None:
+    evidence_kinds = set(load(CONTRACT)["evidence_variants"])
+    allowed_artifacts = {item["path"] for item in mapping["authoritative_inputs"]}
+    for item in mapping["cause_mappings"]:
+        if not item.get("source_basis"):
+            raise ValueError(f"{item['cause']}: empty source basis")
+        for basis in item["source_basis"]:
+            if basis.get("type") not in SOURCE_BASIS_TYPES:
+                raise ValueError(f"{item['cause']}: invalid source basis type")
+            if basis["type"] in {"registry_rule", "registry_fact"}:
+                if basis.get("artifact") not in allowed_artifacts:
+                    raise ValueError(f"{item['cause']}: unpinned Registry source basis")
+                artifact = ROOT / basis.get("artifact", "")
+                try:
+                    actual = pointer_get(load(artifact), basis["json_pointer"])
+                except (OSError, KeyError, IndexError, ValueError, TypeError) as exc:
+                    raise ValueError(f"{item['cause']}: unresolved Registry source basis") from exc
+                if "expected" in basis and any(actual.get(key) != expected for key, expected in basis["expected"].items()):
+                    raise ValueError(f"{item['cause']}: Registry rule basis mismatch")
+                if "equals" in basis and actual != basis["equals"]:
+                    raise ValueError(f"{item['cause']}: Registry fact basis mismatch")
+            elif basis["type"] == "consumer_evidence" and basis.get("kind") not in evidence_kinds:
+                raise ValueError(f"{item['cause']}: invalid consumer evidence basis")
+            elif basis["type"] == "resolution_policy" and basis.get("ref") != "no_or_conflicting_specific_cause":
+                raise ValueError(f"{item['cause']}: invalid resolution policy basis")
+
+
+def predicate_matches(predicate: dict[str, Any], instance: dict[str, Any], subject: dict[str, Any], validator: jsonschema.Draft202012Validator) -> bool:
+    if instance.get("subject") != subject:
+        return False
+    evidence = instance.get("evidence")
+    if not isinstance(evidence, dict) or not validator.is_valid(evidence):
+        return False
+    timing, scope = evidence["timing"], evidence["scope"]
+    if timing.get("validity") != "current_at_assessment" or timing.get("remaining_validity_seconds", 0) <= 0:
+        return False
+    if timing["observed_age_seconds"] > predicate["max_age_seconds"]:
+        return False
+    if evidence["kind"] != predicate["kind"] or evidence["authority"] not in predicate["authorities"]:
+        return False
+    if scope.get("level") != predicate["scope_level"] or scope.get("subject_ref") != "envelope_subject":
+        return False
+    if not set(predicate["supports"]).issubset(evidence["supports"]):
+        return False
+    try:
+        matched = all(pointer_get(evidence, path) == expected for path, expected in predicate["matches"].items())
+    except (KeyError, IndexError, ValueError, TypeError):
+        return False
+    if not matched:
+        return False
+    if predicate["kind"] == "validation_result" and predicate["matches"].get("/validation/result") == "passed":
+        levels = {"L1": 1, "L2": 2, "L3": 3, "L4": 4}
+        validation = evidence["validation"]
+        return levels[validation["achieved_level"]] >= levels[validation["required_level"]]
+    return True
+
+
+def matching_predicates(mapping: dict[str, Any], instances: list[dict[str, Any]], subject: dict[str, Any]) -> set[str]:
+    validator = evidence_validator()
+    return {
+        predicate_id
+        for predicate_id, predicate in mapping["evidence_predicates"].items()
+        if any(predicate_matches(predicate, instance, subject, validator) for instance in instances)
+    }
+
+
+def resolve(mapping: dict[str, Any], subject: dict[str, Any], instances: list[dict[str, Any]]) -> dict[str, Any]:
+    matched = matching_predicates(mapping, instances, subject)
+    candidate_only = set(mapping["candidate_only_predicates"])
+    eligible = []
+    for item in mapping["cause_mappings"]:
+        if item["cause"] == "unknown":
+            continue
+        selectors_ok = all(any(pid in matched and pid not in candidate_only for pid in group) for group in item["selector_groups"])
+        corroborators_ok = all(any(pid in matched for pid in group) for group in item["corroborator_groups"])
+        if selectors_ok and corroborators_ok:
+            eligible.append(item)
+    if len(eligible) != 1:
+        return next(item["result"] | {"cause": "unknown"} for item in mapping["cause_mappings"] if item["cause"] == "unknown")
+    item = eligible[0]
+    result = copy.deepcopy(item["result"] | {"cause": item["cause"]})
+    for variant in item.get("result_variants", []):
+        if any(predicate_id in matched for predicate_id in variant["when_any"]):
+            result.update({key: value for key, value in variant.items() if key != "when_any"})
+            break
+    return result
+
+
+def proof_instances(case: dict[str, Any]) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    fixture = load(FIXTURES / case["fixture"])
+    subject = fixture["subject"]
+    binding_subject = copy.deepcopy(subject)
+    if "binding_operation_override" in case:
+        binding_subject["operation_id"] = case["binding_operation_override"]
+    evidence = [copy.deepcopy(item) for item in fixture["evidence_refs"] if item["kind"] in case["include_kinds"]]
+    evidence.extend(copy.deepcopy(case.get("synthetic_evidence", [])))
+    for mutation in case.get("mutations", []):
+        target = next(item for item in evidence if item["kind"] == mutation["kind"])
+        pointer_set(target, mutation["json_pointer"], mutation["value"])
+    return subject, [{"subject": copy.deepcopy(binding_subject), "evidence": item} for item in evidence]
+
+
 def validate_mapping(mapping: dict[str, Any], contract: dict[str, Any]) -> None:
     boundary = mapping.get("authority_boundary", {})
-    if mapping.get("status") != "draft" or boundary.get("publishing_allowed") is not False:
-        raise ValueError("mapping must remain an unpublished draft")
-    if boundary.get("runtime_inference_owner") != "consumer":
-        raise ValueError("Registry must not own live inference")
-    required_policy = {
-        "specific_cause_requires_all_groups": True,
-        "candidate_only_signal_can_select_cause": False,
+    if mapping.get("status") != "draft" or boundary != {
+        "registry_role": "static_contract_and_deterministic_proof_only",
+        "runtime_inference_owner": "consumer",
+        "publishing_allowed": False,
+        "runtime_evidence_storage_allowed": False,
+    }:
+        raise ValueError("static unpublished Registry boundary drift")
+    if mapping.get("resolution_policy") != {
+        "subject_binding": "exact_source_provider_dataset_operation_match",
+        "invalid_evidence": "exclude",
+        "candidate_only_selector": "forbidden",
         "multiple_eligible_specific_causes": "unknown",
         "no_eligible_specific_cause": "unknown",
         "unknown_determination": "unknown",
         "unknown_action": "gather_more_evidence",
-        "evidence_must_match_subject_operation": True,
-        "evidence_must_be_current_at_assessment": True,
-        "raw_or_secret_material_allowed": False,
-    }
-    if mapping.get("resolution_policy") != required_policy:
-        raise ValueError("safe resolution policy drift")
-
+    }:
+        raise ValueError("resolution policy drift")
+    validate_predicates(mapping)
+    validate_source_basis(mapping)
+    predicate_ids = set(mapping["evidence_predicates"])
+    candidates = set(mapping["candidate_only_predicates"])
+    if not candidates or not candidates.issubset(predicate_ids):
+        raise ValueError("candidate-only predicate set drift")
     catalog = {item["code"]: item for item in contract["cause_catalog"]}
     mappings = {item["cause"]: item for item in mapping["cause_mappings"]}
     if list(mappings) != list(catalog):
-        raise ValueError("mapping must cover envelope causes in contract order")
-    fixture_owners = {
-        fixture["cause"]["code"]: fixture["ownership"]["accountable_party"]
-        for path in (DRAFT / "fixtures").glob("*.json")
-        for fixture in [load(path)]
+        raise ValueError("cause coverage/order drift")
+    fixture_results = {
+        value["cause"]["code"]: {
+            "determination": value["cause"]["determination"],
+            "accountable_party": value["ownership"]["accountable_party"],
+            "recommended_action": value["actions"]["recommended"][0]["action_id"],
+            "avoid_actions": [item["action_id"] for item in value["actions"]["avoid"]],
+        }
+        for path in FIXTURES.glob("*.json")
+        for value in [load(path)]
     }
     for cause, item in mappings.items():
-        if item["action"] != catalog[cause]["required_action"]:
+        if cause != "unknown" and not item["selector_groups"]:
+            raise ValueError(f"{cause}: at least one typed selector group is required")
+        referenced = {pid for group in item["selector_groups"] + item["corroborator_groups"] for pid in group}
+        if not referenced.issubset(predicate_ids):
+            raise ValueError(f"{cause}: unknown predicate reference")
+        if any(candidates & set(group) for group in item["selector_groups"]):
+            raise ValueError(f"{cause}: candidate-only predicate used as selector")
+        if item["result"] != fixture_results[cause]:
+            if cause != "provider_outage":
+                raise ValueError(f"{cause}: result contract drift")
+            expected = fixture_results[cause] | {"avoid_actions": []}
+            if item["result"] != expected:
+                raise ValueError(f"{cause}: result contract drift")
+        if item["result"]["recommended_action"] != catalog[cause]["required_action"]:
             raise ValueError(f"{cause}: action drift")
-        if item.get("accountable_party") != fixture_owners[cause]:
-            raise ValueError(f"{cause}: accountable party drift")
-        required_avoid = catalog[cause].get("required_avoid_action")
-        if required_avoid and required_avoid not in item["avoid"]:
-            raise ValueError(f"{cause}: missing required avoid action")
-        if not item["source_basis"] or not item["required_evidence_groups"]:
-            raise ValueError(f"{cause}: source basis and corroboration are required")
-
-    rule_ids = {item["rule_id"] for item in load(ROOT / "reports/data-go-kr/error-action-catalog.json")["rules"]}
-    referenced_rules = {
-        ref.removeprefix("registry_rule:")
-        for item in mappings.values()
-        for ref in item["source_basis"]
-        if ref.startswith("registry_rule:")
-    }
-    if referenced_rules - rule_ids:
-        raise ValueError(f"unknown Registry rule refs: {sorted(referenced_rules - rule_ids)}")
-    dangerous = {
-        "registry_rule:data-go-kr-service-key-not-registered",
-        "provider_response:http-401",
-        "provider_response:http-403",
-    }
-    if not dangerous.issubset(mapping["candidate_only_signals"]):
-        raise ValueError("generic credential/approval symptoms must be candidate-only")
-    outage = mappings["provider_outage"]
-    expected_variants = [
-        {
-            "when_any": ["health_observation:state=unavailable,probe_policy_version=present", "health_observation:state=degraded,probe_policy_version=present", "provider_notice:state=service_suspended,notice_version=present", "provider_notice:state=degraded,notice_version=present"],
-            "action": "check_provider_status",
-            "avoid": ["reissue_credential"],
-        },
-        {
-            "when_all": ["provider_response:class=service_unavailable,policy_version=present"],
-            "when_none": ["health_observation:state=unavailable,probe_policy_version=present", "health_observation:state=degraded,probe_policy_version=present", "provider_notice:state=service_suspended,notice_version=present", "provider_notice:state=degraded,notice_version=present"],
-            "action": "check_provider_status",
-            "avoid": [],
-        },
+    expected_outage_variants = [
+        {"when_any": ["notice_suspended", "notice_degraded"], "determination": "observed", "avoid_actions": ["reissue_credential"]},
+        {"when_any": ["health_unavailable", "health_degraded"], "determination": "inferred", "avoid_actions": ["reissue_credential"]},
+        {"when_any": ["service_unavailable"], "determination": "inferred", "avoid_actions": []},
     ]
-    if outage.get("action_variants") != expected_variants:
-        raise ValueError("provider_outage evidence-dependent action variants drift")
-    validate_mapping_vocabulary(mapping)
+    if mappings["provider_outage"].get("result_variants") != expected_outage_variants:
+        raise ValueError("provider_outage result variant drift")
     for case in mapping["proof_cases"]:
-        eligible = eligible_causes(mapping, set(case["signals"]))
-        if eligible != case["expected_eligible_causes"]:
-            raise ValueError(f"{case['case_id']}: eligible cause proof drift")
-        selected = eligible[0] if len(eligible) == 1 else "unknown"
-        if selected != case["expected_result"]:
-            raise ValueError(f"{case['case_id']}: selected result proof drift")
-    reject_sensitive(mapping, "mapping")
+        subject, instances = proof_instances(case)
+        actual = resolve(mapping, subject, instances)
+        if any(actual.get(key) != value for key, value in case["expected"].items()):
+            raise ValueError(f"{case['case_id']}: executable proof drift")
 
 
-def validate_packets() -> None:
-    paths = sorted(PACKETS.glob("*.v1.json"))
-    packets = [load(path) for path in paths]
-    if [item["consumer"] for item in packets] != EXPECTED_CONSUMERS:
-        raise ValueError("consumer compatibility packet set drift")
-    for path, packet in zip(paths, packets, strict=True):
-        if packet.get("schema_version") != "datapan.diagnostic-consumer-compatibility.v1" or packet.get("status") != "draft":
-            raise ValueError(f"{path.name}: packet version/status drift")
-        if set(packet.get("obligations", {})) != OBLIGATIONS:
-            raise ValueError(f"{path.name}: action/scope/timing/redaction/unknown obligations required")
+def validate_packets(mapping_digest: str) -> None:
+    schema_digest = hashlib.sha256(ENVELOPE_SCHEMA.read_bytes()).hexdigest()
+    mapping = load(MAPPING)
+    causes = [item["cause"] for item in mapping["cause_mappings"]]
+    fixtures = [f"{cause.replace('_', '-')}.json" for cause in causes]
+    action_variants = ["approval_propagating:wait_for_approval_sync:avoid_reissue_credential", "provider_outage:health_or_notice:avoid_reissue_credential", "provider_outage:response_only:no_avoid_reissue_credential", "unknown:gather_more_evidence"]
+    for consumer, path in zip(EXPECTED_CONSUMERS, sorted(PACKETS.glob("*.v1.json")), strict=True):
+        packet = load(path)
+        if packet.get("consumer") != consumer or packet.get("status") != "draft":
+            raise ValueError("consumer packet identity drift")
+        if packet.get("schema_contract") != {"path": "drafts/diagnostic-envelope/datapan.diagnostic-envelope.v1.schema.json", "sha256": schema_digest}:
+            raise ValueError(f"{consumer}: schema contract pin missing")
+        if packet.get("mapping_contract") != {"path": "drafts/diagnostic-envelope/data-go-kr-evidence-mapping.v1.json", "sha256": mapping_digest}:
+            raise ValueError(f"{consumer}: mapping digest pin drift")
+        if set(packet.get("obligations", {})) != OBLIGATIONS or packet["obligations"] != EXPECTED_OBLIGATIONS:
+            raise ValueError(f"{consumer}: exact obligation keys required")
         production = packet.get("production_status", {})
-        if set(production) != {"currently_proven", "required_after_dependencies"}:
-            raise ValueError(f"{path.name}: production proof status must separate current and dependency-gated evidence")
-        if set(production["currently_proven"]) & set(production["required_after_dependencies"]):
-            raise ValueError(f"{path.name}: production proof status overlaps")
-        if not production["required_after_dependencies"] or not packet.get("consumes") or not packet.get("forbidden"):
-            raise ValueError(f"{path.name}: incomplete producer/consumer boundary")
-        reject_sensitive(packet, path.name)
+        if production != {"currently_proven": [], "required_after_dependencies": EXPECTED_DEPENDENCIES[consumer]}:
+            raise ValueError(f"{consumer}: production proof honesty drift")
+        if packet.get("producer_evidence") != EXPECTED_PRODUCERS[consumer] or packet.get("accepted_causes") != causes or packet.get("accepted_action_variants") != action_variants or packet.get("fixture_contracts") != fixtures:
+            raise ValueError(f"{consumer}: exact compatibility enumerations required")
+        application = packet.get("operation_application_path", {})
+        if application != {"source_profile": "sources/data_go_kr.json", "json_pointer": "/references/key_request_url", "required_for_cause": "approval_required"}:
+            raise ValueError(f"{consumer}: operation application path contract drift")
+        if not pointer_get(load(ROOT / application["source_profile"]), application["json_pointer"]):
+            raise ValueError(f"{consumer}: operation application path unresolved")
 
 
 def validate_draft_boundary() -> None:
-    public_paths = {item["path"] for item in load(ROOT / "schemas/index.json").get("schemas", [])}
-    public_paths |= {item["path"] for item in load(ROOT / "manifest.json").get("artifacts", [])}
-    if any(path.startswith("drafts/diagnostic-envelope/") for path in public_paths):
-        raise ValueError("draft mapping or packets must not be public release artifacts")
+    paths = {item["path"] for item in load(ROOT / "schemas/index.json").get("schemas", [])}
+    paths |= {item["path"] for item in load(ROOT / "manifest.json").get("artifacts", [])}
+    if any(path.startswith("drafts/diagnostic-envelope/") for path in paths):
+        raise ValueError("draft mapping must not be released")
 
 
 def validate_all() -> dict[str, int]:
     mapping, contract = load(MAPPING), load(CONTRACT)
     validate_inputs(mapping)
     validate_mapping(mapping, contract)
-    validate_packets()
+    validate_packets(hashlib.sha256(MAPPING.read_bytes()).hexdigest())
     validate_draft_boundary()
-    return {"inputs": len(mapping["authoritative_inputs"]), "causes": len(mapping["cause_mappings"]), "proof_cases": len(mapping["proof_cases"]), "consumers": len(EXPECTED_CONSUMERS)}
+    return {"predicates": len(mapping["evidence_predicates"]), "causes": len(mapping["cause_mappings"]), "proof_cases": len(mapping["proof_cases"]), "consumers": len(EXPECTED_CONSUMERS)}
 
 
 def main() -> int:

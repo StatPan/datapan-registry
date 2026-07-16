@@ -13,8 +13,12 @@ step after all three consumers provide compatibility evidence.
 The data.go.kr proof is
 `drafts/diagnostic-envelope/data-go-kr-evidence-mapping.v1.json`. It binds
 existing error rules, source-profile facts, and health policy to the typed
-consumer evidence required for each cause. Registry does not receive live
-receipts or select runtime causes. CLI, Health, and Web producer, scope, timing,
+consumer evidence required for each cause. Its deterministic proof engine
+validates evidence against the envelope `$defs`, binds it to an exact source,
+provider, dataset, and operation subject, excludes stale, expired, or
+wrong-authority evidence, and fails conflicts closed to `unknown`. Candidate
+signals are structurally prohibited from selecting a cause. Registry does not
+receive live receipts or select runtime causes. CLI, Health, and Web producer, scope, timing,
 redaction, action, and unknown-fallback obligations are recorded under
 `drafts/diagnostic-envelope/consumer-compatibility/`.
 

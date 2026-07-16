@@ -2,18 +2,13 @@
   "schema_version": "datapan.diagnostic-consumer-compatibility.v1",
   "status": "draft",
   "consumer": "datapan-cli",
-  "role": "local evidence producer and diagnostic envelope renderer",
-  "production_status": {
-    "currently_proven": [],
-    "required_after_dependencies": ["request_validation", "provider_response", "validation_result", "data_quality_assertion"]
-  },
-  "consumes": ["registry_rule", "registry_operation", "approval_record", "health_observation", "provider_notice"],
-  "obligations": {
-    "action": "Render the exact cause-bound recommended and avoid actions; never convert candidate signals into advice.",
-    "scope": "Bind request, operation, dataset, provider, and source identifiers to the envelope subject; reject cross-operation evidence.",
-    "timing": "Record assessed_at, observed_age_seconds, validity, and remaining validity; reject expired evidence.",
-    "redaction": "Emit typed summaries and stable opaque refs only; never emit keys, headers, URLs, bodies, rows, or user identity.",
-    "unknown_fallback": "When corroboration is absent or specific causes conflict, emit unknown/gather_more_evidence."
-  },
-  "forbidden": ["publish_draft_schema", "persist_runtime_receipts_in_registry", "reissue_credential_for_approval_propagating"]
+  "schema_contract": {"path": "drafts/diagnostic-envelope/datapan.diagnostic-envelope.v1.schema.json", "sha256": "da254b40947462347fcda90fdd7686b6632c76943b438f2046a28f079f33e403"},
+  "mapping_contract": {"path": "drafts/diagnostic-envelope/data-go-kr-evidence-mapping.v1.json", "sha256": "1567221d8dc1a19519a1fc3edff416a6bb4ac4dfcf7f1b1b032a7417aab0c2ff"},
+  "production_status": {"currently_proven": [], "required_after_dependencies": ["StatPan/datapan-cli#160"]},
+  "producer_evidence": ["request_validation", "provider_response", "validation_result", "data_quality_assertion"],
+  "accepted_causes": ["approval_required", "approval_propagating", "credential_invalid", "invalid_input", "rate_limited", "provider_outage", "contract_drift", "semantic_quality", "stale_data", "ready", "unknown"],
+  "accepted_action_variants": ["approval_propagating:wait_for_approval_sync:avoid_reissue_credential", "provider_outage:health_or_notice:avoid_reissue_credential", "provider_outage:response_only:no_avoid_reissue_credential", "unknown:gather_more_evidence"],
+  "fixture_contracts": ["approval-required.json", "approval-propagating.json", "credential-invalid.json", "invalid-input.json", "rate-limited.json", "provider-outage.json", "contract-drift.json", "semantic-quality.json", "stale-data.json", "ready.json", "unknown.json"],
+  "operation_application_path": {"source_profile": "sources/data_go_kr.json", "json_pointer": "/references/key_request_url", "required_for_cause": "approval_required"},
+  "obligations": {"action": "exact_mapping_result", "scope": "exact_bound_subject", "timing": "current_positive_validity", "redaction": "envelope_redaction_contract", "unknown_fallback": "unknown_gather_more_evidence"}
 }

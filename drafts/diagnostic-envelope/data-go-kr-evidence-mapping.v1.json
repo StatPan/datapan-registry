@@ -4,225 +4,76 @@
   "provider": "data.go.kr",
   "envelope_schema": "drafts/diagnostic-envelope/datapan.diagnostic-envelope.v1.schema.json",
   "authority_boundary": {
-    "registry_role": "Declare static facts, candidate signals, corroboration requirements, and precedence only.",
+    "registry_role": "static_contract_and_deterministic_proof_only",
     "runtime_inference_owner": "consumer",
-    "publishing_allowed": false
+    "publishing_allowed": false,
+    "runtime_evidence_storage_allowed": false
   },
   "authoritative_inputs": [
-    {
-      "path": "reports/data-go-kr/error-action-catalog.json",
-      "schema_version": "datapan.error-action-catalog.v1",
-      "sha256": "6ebc5df47d73192e08727c4d4669c80b76a7b493a27574bf897e863307a1bb45"
-    },
-    {
-      "path": "reports/error-action-routing-rollup.json",
-      "schema_version": "datapan.error-action-routing-rollup.v1",
-      "sha256": "d66a5d68ecab483354d1c48c9ce4f443eff77e84cf747ca1bb25c452ca5d8cf1"
-    },
-    {
-      "path": "reports/health-probe-catalog.json",
-      "schema_version": "datapan.health-probe-catalog.v1",
-      "sha256": "e84f0da2f532a32833def1118a4610bf2322f370783d120b84cf85306d244840"
-    },
-    {
-      "path": "sources/data_go_kr.json",
-      "schema_version": "datapan.source-profile.v1",
-      "sha256": "ab6f6b24f7556e16deac864ad0b349021023ef40a374f3555ca54e37c22ccbc6"
-    },
-    {
-      "path": "schemas/datapan.source-profile.v1.schema.json",
-      "schema_version": "json-schema-draft-2020-12",
-      "sha256": "ce01786b97680a16d0e58fdee8377502d5888deb72e03fee50344fcd5b89a2cf"
-    }
-  ],
-  "candidate_only_signals": [
-    "registry_rule:data-go-kr-service-key-not-registered",
-    "registry_rule:data-go-kr-service-key-message",
-    "registry_rule:data-go-kr-external-http-404",
-    "registry_rule:data-go-kr-external-timeout",
-    "registry_rule:data-go-kr-parse-error",
-    "provider_response:http-401",
-    "provider_response:http-403"
+    {"path": "reports/data-go-kr/error-action-catalog.json", "schema_version": "datapan.error-action-catalog.v1", "sha256": "6ebc5df47d73192e08727c4d4669c80b76a7b493a27574bf897e863307a1bb45"},
+    {"path": "reports/error-action-routing-rollup.json", "schema_version": "datapan.error-action-routing-rollup.v1", "sha256": "d66a5d68ecab483354d1c48c9ce4f443eff77e84cf747ca1bb25c452ca5d8cf1"},
+    {"path": "reports/health-probe-catalog.json", "schema_version": "datapan.health-probe-catalog.v1", "sha256": "e84f0da2f532a32833def1118a4610bf2322f370783d120b84cf85306d244840"},
+    {"path": "sources/data_go_kr.json", "schema_version": "datapan.source-profile.v1", "sha256": "ab6f6b24f7556e16deac864ad0b349021023ef40a374f3555ca54e37c22ccbc6"},
+    {"path": "schemas/datapan.source-profile.v1.schema.json", "schema_version": "json-schema-draft-2020-12", "sha256": "ce01786b97680a16d0e58fdee8377502d5888deb72e03fee50344fcd5b89a2cf"}
   ],
   "resolution_policy": {
-    "specific_cause_requires_all_groups": true,
-    "candidate_only_signal_can_select_cause": false,
+    "subject_binding": "exact_source_provider_dataset_operation_match",
+    "invalid_evidence": "exclude",
+    "candidate_only_selector": "forbidden",
     "multiple_eligible_specific_causes": "unknown",
     "no_eligible_specific_cause": "unknown",
     "unknown_determination": "unknown",
-    "unknown_action": "gather_more_evidence",
-    "evidence_must_match_subject_operation": true,
-    "evidence_must_be_current_at_assessment": true,
-    "raw_or_secret_material_allowed": false
+    "unknown_action": "gather_more_evidence"
   },
+  "evidence_predicates": {
+    "approval_not_applied": {"kind": "approval_record", "authorities": ["data_go_kr_portal", "provider_portal"], "scope_level": "operation", "max_age_seconds": 604800, "supports": ["cause", "determination", "ownership", "action"], "matches": {"/approval/state": "not_applied", "/approval/effective_scope/level": "operation", "/approval/effective_scope/subject_ref": "envelope_subject"}},
+    "approval_pending_sync": {"kind": "approval_record", "authorities": ["data_go_kr_portal", "provider_portal"], "scope_level": "operation", "max_age_seconds": 604800, "supports": ["cause", "determination", "ownership", "action"], "matches": {"/approval/state": "approved_pending_sync", "/approval/effective_scope/level": "operation", "/approval/effective_scope/subject_ref": "envelope_subject"}},
+    "credential_rejected": {"kind": "provider_response", "authorities": ["provider", "datapan_cli"], "scope_level": "operation", "max_age_seconds": 300, "supports": ["cause", "determination", "action"], "matches": {"/response/provider_class": "credential_rejected"}},
+    "credential_configuration_failed": {"kind": "request_validation", "authorities": ["datapan_cli"], "scope_level": "request", "max_age_seconds": 300, "supports": ["cause", "determination", "action"], "matches": {"/request_validation/result": "failed", "/request_validation/failure_class": "credential_configuration"}},
+    "invalid_input_failed": {"kind": "request_validation", "authorities": ["datapan_cli"], "scope_level": "request", "max_age_seconds": 300, "supports": ["cause", "determination", "action"], "matches": {"/request_validation/result": "failed", "/request_validation/failure_class": "invalid_input"}},
+    "rate_limited": {"kind": "provider_response", "authorities": ["provider", "datapan_cli"], "scope_level": "operation", "max_age_seconds": 300, "supports": ["cause", "determination", "action"], "matches": {"/response/provider_class": "rate_limited"}},
+    "health_unavailable": {"kind": "health_observation", "authorities": ["datapan_health"], "scope_level": "operation", "max_age_seconds": 900, "supports": ["cause", "determination", "ownership", "action"], "matches": {"/health_correlation/state": "unavailable"}},
+    "health_degraded": {"kind": "health_observation", "authorities": ["datapan_health"], "scope_level": "operation", "max_age_seconds": 900, "supports": ["cause", "determination", "ownership", "action"], "matches": {"/health_correlation/state": "degraded"}},
+    "notice_suspended": {"kind": "provider_notice", "authorities": ["provider", "provider_portal"], "scope_level": "operation", "max_age_seconds": 86400, "supports": ["cause", "determination", "ownership"], "matches": {"/notice/state": "service_suspended"}},
+    "notice_degraded": {"kind": "provider_notice", "authorities": ["provider", "provider_portal"], "scope_level": "operation", "max_age_seconds": 86400, "supports": ["cause", "determination", "ownership"], "matches": {"/notice/state": "degraded"}},
+    "service_unavailable": {"kind": "provider_response", "authorities": ["provider", "datapan_cli"], "scope_level": "operation", "max_age_seconds": 300, "supports": ["cause", "determination", "action"], "matches": {"/response/provider_class": "service_unavailable"}},
+    "contract_mismatch": {"kind": "response_contract", "authorities": ["consumer_validation", "datapan_cli", "datapan_web"], "scope_level": "response", "max_age_seconds": 604800, "supports": ["cause", "determination", "action"], "matches": {"/contract_assertion/result": "mismatch"}},
+    "quality_missing_entity": {"kind": "data_quality_assertion", "authorities": ["consumer_validation", "datapan_cli", "datapan_health", "datapan_web"], "scope_level": "data_quality", "max_age_seconds": 604800, "supports": ["cause", "determination", "action"], "matches": {"/quality_assertion/kind": "missing_expected_entity", "/quality_assertion/result": "failed"}},
+    "quality_empty_result": {"kind": "data_quality_assertion", "authorities": ["consumer_validation", "datapan_cli", "datapan_health", "datapan_web"], "scope_level": "data_quality", "max_age_seconds": 604800, "supports": ["cause", "determination", "action"], "matches": {"/quality_assertion/kind": "empty_result", "/quality_assertion/result": "failed"}},
+    "quality_other": {"kind": "data_quality_assertion", "authorities": ["consumer_validation", "datapan_cli", "datapan_health", "datapan_web"], "scope_level": "data_quality", "max_age_seconds": 604800, "supports": ["cause", "determination", "action"], "matches": {"/quality_assertion/kind": "other", "/quality_assertion/result": "failed"}},
+    "quality_stale": {"kind": "data_quality_assertion", "authorities": ["consumer_validation", "datapan_cli", "datapan_health", "datapan_web"], "scope_level": "data_quality", "max_age_seconds": 604800, "supports": ["cause", "determination", "action"], "matches": {"/quality_assertion/kind": "freshness", "/quality_assertion/result": "failed", "/freshness/state": "stale"}},
+    "validation_passed": {"kind": "validation_result", "authorities": ["datapan_cli", "datapan_health", "consumer_validation"], "scope_level": "operation", "max_age_seconds": 604800, "supports": ["cause", "determination", "action"], "matches": {"/validation/result": "passed"}},
+    "generic_http_401": {"kind": "provider_response", "authorities": ["provider", "datapan_cli"], "scope_level": "operation", "max_age_seconds": 300, "supports": [], "matches": {"/response/http_status": 401, "/response/provider_class": "unclassified"}},
+    "generic_http_403": {"kind": "provider_response", "authorities": ["provider", "datapan_cli"], "scope_level": "operation", "max_age_seconds": 300, "supports": [], "matches": {"/response/http_status": 403, "/response/provider_class": "unclassified"}},
+    "generic_http_404": {"kind": "provider_response", "authorities": ["provider", "datapan_cli"], "scope_level": "operation", "max_age_seconds": 300, "supports": [], "matches": {"/response/http_status": 404, "/response/provider_class": "unclassified"}},
+    "rule_code30": {"kind": "registry_rule", "authorities": ["registry"], "scope_level": "operation", "max_age_seconds": 604800, "supports": [], "matches": {"/ref_id": "registry-rule:data-go-kr-service-key-not-registered"}},
+    "rule_service_key_message": {"kind": "registry_rule", "authorities": ["registry"], "scope_level": "operation", "max_age_seconds": 604800, "supports": [], "matches": {"/ref_id": "registry-rule:data-go-kr-service-key-message"}},
+    "rule_timeout": {"kind": "registry_rule", "authorities": ["registry"], "scope_level": "operation", "max_age_seconds": 604800, "supports": [], "matches": {"/ref_id": "registry-rule:data-go-kr-external-timeout"}},
+    "rule_404": {"kind": "registry_rule", "authorities": ["registry"], "scope_level": "operation", "max_age_seconds": 604800, "supports": [], "matches": {"/ref_id": "registry-rule:data-go-kr-external-http-404"}},
+    "rule_parse": {"kind": "registry_rule", "authorities": ["registry"], "scope_level": "operation", "max_age_seconds": 604800, "supports": [], "matches": {"/ref_id": "registry-rule:data-go-kr-parse-error"}}
+  },
+  "candidate_only_predicates": ["rule_code30", "rule_service_key_message", "generic_http_401", "generic_http_403", "rule_timeout", "generic_http_404", "rule_404", "rule_parse"],
   "cause_mappings": [
-    {
-      "cause": "approval_required",
-      "source_basis": [
-        "registry_rule:data-go-kr-approval-required",
-        "registry_fact:sources/data_go_kr.json#/auth/approval_scope=operation"
-      ],
-      "required_evidence_groups": [
-        ["approval_record:state=not_applied"],
-        ["registry_operation:approval_scope=operation"]
-      ],
-      "action": "apply_for_operation",
-      "accountable_party": "user",
-      "avoid": []
-    },
-    {
-      "cause": "approval_propagating",
-      "source_basis": [
-        "registry_fact:sources/data_go_kr.json#/auth/approval_scope=operation"
-      ],
-      "required_evidence_groups": [
-        ["approval_record:state=approved_pending_sync"],
-        ["provider_response:http_status=401,class=unclassified,policy_version=present", "provider_response:http_status=403,class=unclassified,policy_version=present"]
-      ],
-      "action": "wait_for_approval_sync",
-      "accountable_party": "data_go_kr",
-      "avoid": ["reissue_credential"]
-    },
-    {
-      "cause": "credential_invalid",
-      "source_basis": [
-        "registry_rule:data-go-kr-service-key-not-registered",
-        "registry_rule:data-go-kr-service-key-message",
-        "registry_fact:sources/data_go_kr.json#/auth/type=service_key"
-      ],
-      "required_evidence_groups": [
-        ["provider_response:class=credential_rejected,policy_version=present", "request_validation:failure_class=credential_configuration,policy_version=present"]
-      ],
-      "action": "verify_credential_configuration",
-      "accountable_party": "user",
-      "avoid": []
-    },
-    {
-      "cause": "invalid_input",
-      "source_basis": [
-        "registry_rule:data-go-kr-missing-required-params",
-        "registry_fact:sources/data_go_kr.json#/request/required_param_policy=operation_specific"
-      ],
-      "required_evidence_groups": [
-        ["request_validation:failure_class=invalid_input,policy_version=present"]
-      ],
-      "action": "verify_request_parameters",
-      "accountable_party": "user",
-      "avoid": []
-    },
-    {
-      "cause": "rate_limited",
-      "source_basis": [
-        "registry_rule:data-go-kr-http-429",
-        "registry_fact:sources/data_go_kr.json#/runtime/rate_limit_policy=conservative"
-      ],
-      "required_evidence_groups": [
-        ["provider_response:class=rate_limited,policy_version=present"]
-      ],
-      "action": "retry_with_backoff",
-      "accountable_party": "shared",
-      "avoid": []
-    },
-    {
-      "cause": "provider_outage",
-      "source_basis": [
-        "registry_rule:data-go-kr-external-timeout",
-        "registry_fact:reports/health-probe-catalog.json#/receipt_contract/policy_authority=datapan-registry"
-      ],
-      "required_evidence_groups": [
-        ["health_observation:state=unavailable,probe_policy_version=present", "health_observation:state=degraded,probe_policy_version=present", "provider_notice:state=service_suspended,notice_version=present", "provider_notice:state=degraded,notice_version=present", "provider_response:class=service_unavailable,policy_version=present"]
-      ],
-      "action": "check_provider_status",
-      "accountable_party": "provider",
-      "avoid": [],
-      "action_variants": [
-        {
-          "when_any": ["health_observation:state=unavailable,probe_policy_version=present", "health_observation:state=degraded,probe_policy_version=present", "provider_notice:state=service_suspended,notice_version=present", "provider_notice:state=degraded,notice_version=present"],
-          "action": "check_provider_status",
-          "avoid": ["reissue_credential"]
-        },
-        {
-          "when_all": ["provider_response:class=service_unavailable,policy_version=present"],
-          "when_none": ["health_observation:state=unavailable,probe_policy_version=present", "health_observation:state=degraded,probe_policy_version=present", "provider_notice:state=service_suspended,notice_version=present", "provider_notice:state=degraded,notice_version=present"],
-          "action": "check_provider_status",
-          "avoid": []
-        }
-      ]
-    },
-    {
-      "cause": "contract_drift",
-      "source_basis": ["consumer_evidence:response_contract"],
-      "required_evidence_groups": [["response_contract:result=mismatch,policy_version=present"]],
-      "action": "refresh_contract",
-      "accountable_party": "shared",
-      "avoid": []
-    },
-    {
-      "cause": "semantic_quality",
-      "source_basis": ["consumer_evidence:data_quality_assertion"],
-      "required_evidence_groups": [["data_quality_assertion:kind=missing_expected_entity,result=failed,policy_version=present", "data_quality_assertion:kind=empty_result,result=failed,policy_version=present", "data_quality_assertion:kind=other,result=failed,policy_version=present"]],
-      "action": "inspect_data_quality",
-      "accountable_party": "provider",
-      "avoid": ["treat_transport_success_as_data_success"]
-    },
-    {
-      "cause": "stale_data",
-      "source_basis": ["consumer_evidence:data_quality_assertion"],
-      "required_evidence_groups": [
-        ["data_quality_assertion:kind=freshness,result=failed,policy_version=present"],
-        ["freshness:state=stale,policy_version=present,reference_time=present,actual_time=present,maximum_age_seconds=present"]
-      ],
-      "action": "inspect_data_quality",
-      "accountable_party": "provider",
-      "avoid": []
-    },
-    {
-      "cause": "ready",
-      "source_basis": ["registry_fact:reports/health-probe-catalog.json#/entries/*/policy/authority=datapan-registry"],
-      "required_evidence_groups": [["validation_result:result=passed,required_level_satisfied=true,policy_version=present"]],
-      "action": "continue_to_reuse",
-      "accountable_party": "shared",
-      "avoid": []
-    },
-    {
-      "cause": "unknown",
-      "source_basis": ["resolution_policy:fallback"],
-      "required_evidence_groups": [["bounded_evidence:insufficient_or_conflicting=true"]],
-      "action": "gather_more_evidence",
-      "accountable_party": "unknown",
-      "avoid": []
-    }
+    {"cause": "approval_required", "source_basis": [{"type": "registry_rule", "artifact": "reports/data-go-kr/error-action-catalog.json", "json_pointer": "/rules/5", "expected": {"rule_id": "data-go-kr-approval-required"}}, {"type": "registry_fact", "artifact": "sources/data_go_kr.json", "json_pointer": "/auth/approval_scope", "equals": "operation"}], "selector_groups": [["approval_not_applied"]], "corroborator_groups": [], "result": {"determination": "observed", "accountable_party": "user", "recommended_action": "apply_for_operation", "avoid_actions": ["reissue_credential"]}},
+    {"cause": "approval_propagating", "source_basis": [{"type": "registry_fact", "artifact": "sources/data_go_kr.json", "json_pointer": "/auth/approval_scope", "equals": "operation"}], "selector_groups": [["approval_pending_sync"]], "corroborator_groups": [["generic_http_401", "generic_http_403"]], "result": {"determination": "inferred", "accountable_party": "data_go_kr", "recommended_action": "wait_for_approval_sync", "avoid_actions": ["reissue_credential"]}},
+    {"cause": "credential_invalid", "source_basis": [{"type": "registry_rule", "artifact": "reports/data-go-kr/error-action-catalog.json", "json_pointer": "/rules/0", "expected": {"rule_id": "data-go-kr-service-key-not-registered"}}, {"type": "consumer_evidence", "kind": "provider_response"}, {"type": "consumer_evidence", "kind": "request_validation"}], "selector_groups": [["credential_rejected", "credential_configuration_failed"]], "corroborator_groups": [], "result": {"determination": "observed", "accountable_party": "user", "recommended_action": "verify_credential_configuration", "avoid_actions": ["assume_provider_outage"]}},
+    {"cause": "invalid_input", "source_basis": [{"type": "registry_rule", "artifact": "reports/data-go-kr/error-action-catalog.json", "json_pointer": "/rules/6", "expected": {"rule_id": "data-go-kr-missing-required-params"}}, {"type": "consumer_evidence", "kind": "request_validation"}], "selector_groups": [["invalid_input_failed"]], "corroborator_groups": [], "result": {"determination": "observed", "accountable_party": "user", "recommended_action": "verify_request_parameters", "avoid_actions": ["assume_provider_outage"]}},
+    {"cause": "rate_limited", "source_basis": [{"type": "registry_rule", "artifact": "reports/data-go-kr/error-action-catalog.json", "json_pointer": "/rules/2", "expected": {"rule_id": "data-go-kr-http-429"}}, {"type": "consumer_evidence", "kind": "provider_response"}], "selector_groups": [["rate_limited"]], "corroborator_groups": [], "result": {"determination": "observed", "accountable_party": "shared", "recommended_action": "retry_with_backoff", "avoid_actions": ["retry_immediately"]}},
+    {"cause": "provider_outage", "source_basis": [{"type": "registry_fact", "artifact": "reports/health-probe-catalog.json", "json_pointer": "/receipt_contract/policy_authority", "equals": "datapan-registry"}, {"type": "consumer_evidence", "kind": "health_observation"}, {"type": "consumer_evidence", "kind": "provider_notice"}, {"type": "consumer_evidence", "kind": "provider_response"}], "selector_groups": [["health_unavailable", "health_degraded", "notice_suspended", "notice_degraded", "service_unavailable"]], "corroborator_groups": [], "result": {"determination": "inferred", "accountable_party": "provider", "recommended_action": "check_provider_status", "avoid_actions": []}, "result_variants": [{"when_any": ["notice_suspended", "notice_degraded"], "determination": "observed", "avoid_actions": ["reissue_credential"]}, {"when_any": ["health_unavailable", "health_degraded"], "determination": "inferred", "avoid_actions": ["reissue_credential"]}, {"when_any": ["service_unavailable"], "determination": "inferred", "avoid_actions": []}]},
+    {"cause": "contract_drift", "source_basis": [{"type": "consumer_evidence", "kind": "response_contract"}], "selector_groups": [["contract_mismatch"]], "corroborator_groups": [], "result": {"determination": "inferred", "accountable_party": "shared", "recommended_action": "refresh_contract", "avoid_actions": ["reissue_credential"]}},
+    {"cause": "semantic_quality", "source_basis": [{"type": "consumer_evidence", "kind": "data_quality_assertion"}], "selector_groups": [["quality_missing_entity", "quality_empty_result", "quality_other"]], "corroborator_groups": [], "result": {"determination": "inferred", "accountable_party": "provider", "recommended_action": "inspect_data_quality", "avoid_actions": ["treat_transport_success_as_data_success"]}},
+    {"cause": "stale_data", "source_basis": [{"type": "consumer_evidence", "kind": "data_quality_assertion"}], "selector_groups": [["quality_stale"]], "corroborator_groups": [], "result": {"determination": "observed", "accountable_party": "provider", "recommended_action": "inspect_data_quality", "avoid_actions": ["treat_transport_success_as_data_success"]}},
+    {"cause": "ready", "source_basis": [{"type": "registry_fact", "artifact": "reports/health-probe-catalog.json", "json_pointer": "/receipt_contract/policy_authority", "equals": "datapan-registry"}, {"type": "consumer_evidence", "kind": "validation_result"}], "selector_groups": [["validation_passed"]], "corroborator_groups": [], "result": {"determination": "observed", "accountable_party": "shared", "recommended_action": "continue_to_reuse", "avoid_actions": []}},
+    {"cause": "unknown", "source_basis": [{"type": "resolution_policy", "ref": "no_or_conflicting_specific_cause"}], "selector_groups": [], "corroborator_groups": [], "result": {"determination": "unknown", "accountable_party": "unknown", "recommended_action": "gather_more_evidence", "avoid_actions": ["assume_provider_outage"]}}
   ],
   "proof_cases": [
-    {
-      "case_id": "code30-alone-remains-unknown",
-      "signals": ["registry_rule:data-go-kr-service-key-not-registered"],
-      "expected_eligible_causes": [],
-      "expected_result": "unknown"
-    },
-    {
-      "case_id": "http401-alone-remains-unknown",
-      "signals": ["provider_response:http-401"],
-      "expected_eligible_causes": [],
-      "expected_result": "unknown"
-    },
-    {
-      "case_id": "operation-not-applied-routes-to-application",
-      "signals": ["approval_record:state=not_applied", "registry_operation:approval_scope=operation"],
-      "expected_eligible_causes": ["approval_required"],
-      "expected_result": "approval_required"
-    },
-    {
-      "case_id": "approved-pending-sync-has-bounded-wait",
-      "signals": ["approval_record:state=approved_pending_sync", "provider_response:http_status=403,class=unclassified,policy_version=present"],
-      "expected_eligible_causes": ["approval_propagating"],
-      "expected_result": "approval_propagating"
-    },
-    {
-      "case_id": "conflicting-specific-causes-fall-back",
-      "signals": ["provider_response:class=credential_rejected,policy_version=present", "provider_response:class=rate_limited,policy_version=present"],
-      "expected_eligible_causes": ["credential_invalid", "rate_limited"],
-      "expected_result": "unknown"
-    }
+    {"case_id": "approval-same-operation-current", "fixture": "approval-propagating.json", "include_kinds": ["approval_record", "provider_response"], "expected": {"cause": "approval_propagating", "determination": "inferred", "recommended_action": "wait_for_approval_sync", "avoid_actions": ["reissue_credential"]}},
+    {"case_id": "approval-cross-operation", "fixture": "approval-propagating.json", "include_kinds": ["approval_record", "provider_response"], "binding_operation_override": "another-operation", "expected": {"cause": "unknown", "determination": "unknown", "recommended_action": "gather_more_evidence", "avoid_actions": ["assume_provider_outage"]}},
+    {"case_id": "health-outage", "fixture": "provider-outage.json", "include_kinds": ["health_observation"], "expected": {"cause": "provider_outage", "determination": "inferred", "recommended_action": "check_provider_status", "avoid_actions": ["reissue_credential"]}},
+    {"case_id": "notice-outage", "fixture": "provider-outage.json", "include_kinds": ["provider_notice"], "expected": {"cause": "provider_outage", "determination": "observed", "recommended_action": "check_provider_status", "avoid_actions": ["reissue_credential"]}},
+    {"case_id": "response-only-outage", "fixture": "provider-outage.json", "include_kinds": ["provider_response"], "mutations": [{"kind": "provider_response", "json_pointer": "/response/provider_class", "value": "service_unavailable"}, {"kind": "provider_response", "json_pointer": "/supports", "value": ["cause", "determination", "action"]}], "expected": {"cause": "provider_outage", "determination": "inferred", "recommended_action": "check_provider_status", "avoid_actions": []}},
+    {"case_id": "stale-health", "fixture": "provider-outage.json", "include_kinds": ["health_observation"], "mutations": [{"kind": "health_observation", "json_pointer": "/timing/observed_age_seconds", "value": 901}], "expected": {"cause": "unknown", "determination": "unknown", "recommended_action": "gather_more_evidence", "avoid_actions": ["assume_provider_outage"]}},
+    {"case_id": "expired-health", "fixture": "provider-outage.json", "include_kinds": ["health_observation"], "mutations": [{"kind": "health_observation", "json_pointer": "/timing/remaining_validity_seconds", "value": 0}], "expected": {"cause": "unknown", "determination": "unknown", "recommended_action": "gather_more_evidence", "avoid_actions": ["assume_provider_outage"]}},
+    {"case_id": "single-timeout", "fixture": "unknown.json", "include_kinds": [], "synthetic_evidence": [{"kind": "registry_rule", "ref_id": "registry-rule:data-go-kr-external-timeout", "authority": "registry", "timing": {"basis": "relative_to_assessed_at", "observed_age_seconds": 0, "validity": "current_at_assessment", "validity_policy_version": "fixture-v1", "remaining_validity_seconds": 60}, "scope": {"level": "operation", "subject_ref": "envelope_subject"}, "supports": ["scope"]}], "expected": {"cause": "unknown", "determination": "unknown", "recommended_action": "gather_more_evidence", "avoid_actions": ["assume_provider_outage"]}}
   ]
 }
