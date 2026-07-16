@@ -3,7 +3,7 @@
   "policy_set": {
     "id": "datapan-health-canary-assertions",
     "version": 1,
-    "supersedes_sha256": null
+    "supersedes": null
   },
   "generated_at": "2026-07-14T10:05:00Z",
   "authority": "datapan-registry",
@@ -22,7 +22,7 @@
       "sha256": "e84f0da2f532a32833def1118a4610bf2322f370783d120b84cf85306d244840"
     }
   },
-  "artifact_sha256": "de3723c5ab39f6f0d21155e8cc070aedf761a369f5632c6c658f24be5ff89f50",
+  "artifact_sha256": "d9b39f40e2068180cf46ebf8eca2037aeff19523b76f648bb06666758ed8c1d3",
   "operations": [
     {
       "operation_id": "dpr-op-00000001",

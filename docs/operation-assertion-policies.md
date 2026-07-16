@@ -23,9 +23,10 @@ single current response is not evidence for adding them.
 
 Published policy history is append-only. A changed operation rule creates a
 new artifact and increments `policy_set.version`; it does not rewrite an older
-artifact. Version 1 has `supersedes_sha256: null`. Every later version must put
-the previous artifact's canonical SHA-256 in `supersedes_sha256`, retain a new
-canonical digest of its own, and receive a new manifest and consumer-proof
+artifact. Version 1 has `supersedes: null`. Every later version must put the
+immediately previous policy-set version and its canonical SHA-256 in the
+structured `supersedes` binding, retain a new canonical digest of its own, and
+receive a new manifest and compatibility-model
 binding. Consumers that do not support the exact version, artifact digest,
 Registry revision, or diagnostic vocabulary digest return `unknown`.
 
@@ -37,6 +38,11 @@ reviewed, freshness remains `not_asserted`.
 
 The private release manifest and candidate under
 `drafts/operation-assertion-policies/` bind the schema, artifact, and offline
-Datapan Health proof without adding them to the public Registry manifest. Its release,
-runtime, and publishing authorities are all false. Hugging Face publication
+Registry reference model without adding them to the public Registry manifest.
+The model is `reference_model_only`: it proves the producer's deterministic
+expected projection, not that Datapan Health implements or has tested the
+contract. A genuine Health compatibility proof must bind an exact Health
+revision, source/test hashes, test names, and hosted CI receipt in the consumer
+repository. The candidate's release, runtime, and publishing authorities are
+all false. Hugging Face publication
 and Datapan Health rollout remain separate decisions.

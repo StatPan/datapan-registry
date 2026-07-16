@@ -9,6 +9,7 @@ import json
 import pathlib
 import re
 import sys
+from collections.abc import Mapping
 from datetime import datetime, timezone
 from typing import Any
 from urllib.parse import urlsplit
@@ -54,7 +55,65 @@ def reject_leaks(value: Any, path: str = "artifact") -> None:
     elif isinstance(value, str):
         fail(SECRET_VALUE.search(value) is None, f"{path}: secret-shaped value")
         parsed = urlsplit(value)
-        fail(not (parsed.scheme and parsed.query), f"{path}: URL query values are forbidden")
+        fail(not parsed.query, f"{path}: URL query values are forbidden")
+
+
+def valid_policy_binding_shape(binding: Any) -> bool:
+    if not isinstance(binding, Mapping):
+        return False
+    required = {
+        "path",
+        "policy_set_id",
+        "artifact_sha256",
+        "policy_set_version",
+        "diagnostic_vocabulary_sha256",
+    }
+    if set(binding) != required:
+        return False
+    if not isinstance(binding.get("path"), str) or not binding["path"]:
+        return False
+    if not isinstance(binding.get("policy_set_id"), str) or not binding["policy_set_id"]:
+        return False
+    version = binding.get("policy_set_version")
+    if not isinstance(version, int) or isinstance(version, bool) or version < 1:
+        return False
+    for key in ("artifact_sha256", "diagnostic_vocabulary_sha256"):
+        value = binding.get(key)
+        if not isinstance(value, str) or re.fullmatch(r"[0-9a-f]{64}", value) is None:
+            return False
+    return True
+
+
+def current_policy_binding(artifact: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "path": GENERATOR.ARTIFACT.as_posix(),
+        "policy_set_id": artifact["policy_set"]["id"],
+        "artifact_sha256": artifact["artifact_sha256"],
+        "policy_set_version": artifact["policy_set"]["version"],
+        "diagnostic_vocabulary_sha256": artifact["diagnostic_vocabulary"]["sha256"],
+    }
+
+
+def valid_policy_binding(binding: Any, artifact: dict[str, Any]) -> bool:
+    return valid_policy_binding_shape(binding) and dict(binding) == current_policy_binding(artifact)
+
+
+def validate_supersession(policy_set: dict[str, Any]) -> None:
+    version = policy_set["version"]
+    supersedes = policy_set["supersedes"]
+    if version == 1:
+        fail(supersedes is None, "first policy set version must not supersede another artifact")
+        return
+    fail(isinstance(supersedes, dict), "later policy set version must bind its predecessor")
+    fail(
+        supersedes.get("policy_set_version") == version - 1,
+        "superseded policy version must be the immediate predecessor",
+    )
+    digest = supersedes.get("artifact_sha256")
+    fail(
+        isinstance(digest, str) and re.fullmatch(r"[0-9a-f]{64}", digest) is not None,
+        "superseded artifact digest is malformed",
+    )
 
 
 def freshness_result(assertion: dict[str, Any], observed: str | None, now: datetime) -> str:
@@ -85,13 +144,22 @@ def freshness_result(assertion: dict[str, Any], observed: str | None, now: datet
 
 
 def project_case(artifact: dict[str, Any], proof: dict[str, Any], case: dict[str, Any]) -> str:
-    binding = dict(proof["policy_binding"])
-    binding.update(case.get("policy_binding_override", {}))
-    if (
-        binding.get("artifact_sha256") != artifact["artifact_sha256"]
-        or binding.get("policy_set_version") != artifact["policy_set"]["version"]
-        or binding.get("diagnostic_vocabulary_sha256") != artifact["diagnostic_vocabulary"]["sha256"]
-    ):
+    binding: Any = case.get("policy_binding", proof.get("policy_binding"))
+    override = case.get("policy_binding_override")
+    if override is not None:
+        if not isinstance(binding, Mapping) or not isinstance(override, Mapping):
+            return "unknown"
+        binding = dict(binding)
+        binding.update(override)
+    active_binding = case.get("active_policy_binding")
+    if active_binding is not None:
+        if (
+            not valid_policy_binding_shape(binding)
+            or not valid_policy_binding_shape(active_binding)
+            or dict(binding) != dict(active_binding)
+        ):
+            return "unknown"
+    elif not valid_policy_binding(binding, artifact):
         return "unknown"
     entries = [item for item in artifact["operations"] if item["operation_id"] == case["operation_id"]]
     if len(entries) != 1 or case["dimension"] not in entries[0]["dimensions"]:
@@ -120,9 +188,8 @@ def validate_all(
     reject_leaks(artifact)
 
     version = artifact["policy_set"]["version"]
-    supersedes = artifact["policy_set"]["supersedes_sha256"]
     fail(version == 1, f"unsupported policy set version: {version}")
-    fail(supersedes is None, "first policy set version must not supersede another artifact")
+    validate_supersession(artifact["policy_set"])
     digest_input = dict(artifact)
     claimed_digest = digest_input.pop("artifact_sha256")
     fail(GENERATOR.value_sha256(digest_input) == claimed_digest, "artifact canonical digest mismatch")
@@ -157,7 +224,29 @@ def validate_all(
             fail(dimensions[dimension]["reason_code"] == reason, f"{entry['operation_id']}: {dimension} not_asserted reason mismatch")
 
     reject_leaks(proof, "proof")
-    fail(proof == GENERATOR.build_proof(artifact), "Health consumer proof is stale")
+    fail(proof == GENERATOR.build_proof(artifact), "Registry reference model is stale")
+    fail(proof["proof_kind"] == "reference_model_only", "reference model must not claim consumer execution")
+    fail(
+        proof["consumer_status"] == "not_executed_by_datapan_health",
+        "reference model overstates Health evidence",
+    )
+    transition = proof["supersession_transition_model"]
+    fail(transition["from"] == proof["policy_binding"], "supersession model source pin mismatch")
+    fail(valid_policy_binding_shape(transition["to"]), "supersession model target pin is malformed")
+    fail(
+        transition["to"]["policy_set_version"] == transition["from"]["policy_set_version"] + 1,
+        "supersession model must advance exactly one version",
+    )
+    fail(
+        transition["to_policy_set"]["version"] == transition["to"]["policy_set_version"],
+        "supersession model target version mismatch",
+    )
+    validate_supersession(transition["to_policy_set"])
+    fail(
+        transition["to_policy_set"]["supersedes"]["artifact_sha256"]
+        == transition["from"]["artifact_sha256"],
+        "supersession model predecessor digest mismatch",
+    )
     for case in proof["cases"]:
         fail(project_case(artifact, proof, case) == case["expected"], f"Health projection mismatch: {case['name']}")
 
@@ -168,7 +257,10 @@ def validate_all(
         fail(file_sha256(ROOT / item["path"]) == item["sha256"], f"candidate manifest digest mismatch: {item['path']}")
 
     fail(candidate == GENERATOR.build_candidate(artifact, proof, bundle_manifest), "release candidate binding is stale")
-    fail(candidate["status"] == "ready_for_consumer_review", "release candidate is not ready for review")
+    fail(
+        candidate["status"] == "ready_for_health_implementation_review",
+        "release candidate status overstates consumer proof",
+    )
     fail(not any(candidate["authority"].values()), "release candidate must not grant release, runtime, or publishing authority")
     candidate_bindings = {item["path"]: item["sha256"] for item in candidate["bindings"]}
     for path in (GENERATOR.SCHEMA, GENERATOR.ARTIFACT, GENERATOR.PROOF, GENERATOR.BUNDLE_MANIFEST):
@@ -189,7 +281,7 @@ def main() -> int:
     except Exception as exc:  # noqa: BLE001
         print(f"FAIL operation assertion policies: {exc}", file=sys.stderr)
         return 1
-    print("ok operation assertion policies (operations=10, asserted=10, intentional_not_asserted=40, missing=0, health_projection=6, publishing=false)")
+    print("ok operation assertion policies (operations=10, asserted=10, intentional_not_asserted=40, missing=0, reference_model=7, health_execution_proof=false, publishing=false)")
     return 0
 
 

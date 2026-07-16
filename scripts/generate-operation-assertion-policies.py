@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate immutable operation assertions and an offline Health consumer proof."""
+"""Generate immutable operation assertions and a Registry reference model."""
 
 from __future__ import annotations
 
@@ -103,7 +103,11 @@ def build_artifact() -> dict[str, Any]:
         })
     artifact: dict[str, Any] = {
         "schema_version": "datapan.operation-assertion-policies.v1",
-        "policy_set": {"id": "datapan-health-canary-assertions", "version": 1, "supersedes_sha256": None},
+        "policy_set": {
+            "id": "datapan-health-canary-assertions",
+            "version": 1,
+            "supersedes": None,
+        },
         "generated_at": catalog["generated_at"],
         "authority": "datapan-registry",
         "diagnostic_vocabulary": {
@@ -127,14 +131,36 @@ def build_artifact() -> dict[str, Any]:
 def build_proof(artifact: dict[str, Any]) -> dict[str, Any]:
     first = artifact["operations"][0]
     fields = first["dimensions"]["contract"]["declared_response_fields"]
+    current_binding = {
+        "path": ARTIFACT.as_posix(),
+        "policy_set_id": artifact["policy_set"]["id"],
+        "artifact_sha256": artifact["artifact_sha256"],
+        "policy_set_version": artifact["policy_set"]["version"],
+        "diagnostic_vocabulary_sha256": artifact["diagnostic_vocabulary"]["sha256"],
+    }
+    next_binding = {
+        "path": "drafts/operation-assertion-policies/operation-assertion-policies.v2.json",
+        "policy_set_id": artifact["policy_set"]["id"],
+        "artifact_sha256": "b" * 64,
+        "policy_set_version": 2,
+        "diagnostic_vocabulary_sha256": artifact["diagnostic_vocabulary"]["sha256"],
+    }
     return {
-        "schema_version": "datapan.health-assertion-policy-consumer-proof.v1",
-        "consumer": "datapan-health",
-        "policy_binding": {
-            "path": ARTIFACT.as_posix(),
-            "artifact_sha256": artifact["artifact_sha256"],
-            "policy_set_version": artifact["policy_set"]["version"],
-            "diagnostic_vocabulary_sha256": artifact["diagnostic_vocabulary"]["sha256"],
+        "schema_version": "datapan.operation-assertion-policy-reference-model.v1",
+        "proof_kind": "reference_model_only",
+        "producer": "datapan-registry",
+        "consumer_status": "not_executed_by_datapan_health",
+        "policy_binding": current_binding,
+        "supersession_transition_model": {
+            "from": current_binding,
+            "to": next_binding,
+            "to_policy_set": {
+                "version": 2,
+                "supersedes": {
+                    "policy_set_version": current_binding["policy_set_version"],
+                    "artifact_sha256": current_binding["artifact_sha256"],
+                },
+            },
         },
         "projection_contract": {
             "asserted_match": "pass",
@@ -181,6 +207,15 @@ def build_proof(artifact: dict[str, Any]) -> dict[str, Any]:
                 "expected": "unknown",
             },
             {
+                "name": "superseded_old_policy_pin_is_unknown",
+                "operation_id": first["operation_id"],
+                "dimension": "contract",
+                "policy_binding": current_binding,
+                "active_policy_binding": next_binding,
+                "observation": {"response_fields": [fields[0]]},
+                "expected": "unknown",
+            },
+            {
                 "name": "diagnostic_vocabulary_mismatch_is_not_a_health_failure",
                 "operation_id": first["operation_id"],
                 "dimension": "contract",
@@ -204,7 +239,7 @@ def build_bundle_manifest(artifact: dict[str, Any], proof: dict[str, Any]) -> di
         "artifacts": [
             {"path": SCHEMA.as_posix(), "kind": "schema", "sha256": file_sha256(SCHEMA)},
             {"path": ARTIFACT.as_posix(), "kind": "operation_assertion_policy", "sha256": rendered_sha256(artifact)},
-            {"path": PROOF.as_posix(), "kind": "health_consumer_proof", "sha256": rendered_sha256(proof)},
+            {"path": PROOF.as_posix(), "kind": "registry_reference_model", "sha256": rendered_sha256(proof)},
         ],
     }
 
@@ -223,17 +258,18 @@ def build_candidate(artifact: dict[str, Any], proof: dict[str, Any], bundle_mani
         bindings.append({"path": path.as_posix(), "sha256": sha})
     return {
         "schema_version": "datapan.operation-assertion-policy-release-candidate.v1",
-        "status": "ready_for_consumer_review",
+        "status": "ready_for_health_implementation_review",
         "authority": {"release": False, "runtime": False, "publishing": False},
         "policy_set": artifact["policy_set"],
         "artifact_sha256": artifact["artifact_sha256"],
         "bindings": bindings,
-        "consumer_proof": {
-            "consumer": "datapan-health",
+        "reference_model": {
+            "kind": proof["proof_kind"],
+            "producer": proof["producer"],
             "schema_version": proof["schema_version"],
             "cases": len(proof["cases"]),
         },
-        "next_gate": "independent_consumer_review",
+        "next_gate": "datapan_health_exact_revision_compatibility_proof",
     }
 
 

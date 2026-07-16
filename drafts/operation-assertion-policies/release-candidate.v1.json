@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.operation-assertion-policy-release-candidate.v1",
-  "status": "ready_for_consumer_review",
+  "status": "ready_for_health_implementation_review",
   "authority": {
     "release": false,
     "runtime": false,
@@ -9,31 +9,32 @@
   "policy_set": {
     "id": "datapan-health-canary-assertions",
     "version": 1,
-    "supersedes_sha256": null
+    "supersedes": null
   },
-  "artifact_sha256": "de3723c5ab39f6f0d21155e8cc070aedf761a369f5632c6c658f24be5ff89f50",
+  "artifact_sha256": "d9b39f40e2068180cf46ebf8eca2037aeff19523b76f648bb06666758ed8c1d3",
   "bindings": [
     {
       "path": "drafts/operation-assertion-policies/datapan.operation-assertion-policies.v1.schema.json",
-      "sha256": "0382dee34c3c2076b6ba287ddd4f40fe409365cbfb4b86cd2a7b4f66418b5d5e"
+      "sha256": "a934fe244eeedbed23914ba1230d612b68656f9dc97803c747cf9f29c46c0446"
     },
     {
       "path": "drafts/operation-assertion-policies/operation-assertion-policies.v1.json",
-      "sha256": "8a91f372dbac4badc77f31e3312d768a75107ec627741c05cf0d9eda7df06f48"
+      "sha256": "62d54df23a55dc529b60947c944bebef82f6697f44472ae0f20c2a06781704e6"
     },
     {
       "path": "fixtures/operation-assertion-policies/datapan-health-consumer-proof.v1.json",
-      "sha256": "be65e0fff9fffddef993e9b8afbfca4e8c48494b3796c6d583bade1b06059964"
+      "sha256": "edd7ab5c63c39c30801bd145e5dfc521f9910542da2f3b766ef2928e1a5841d2"
     },
     {
       "path": "drafts/operation-assertion-policies/release-manifest.v1.json",
-      "sha256": "412c0a2044944f4e4200600363c11d984291cfbb5772fd384dc9b4a52923865f"
+      "sha256": "282b17459c91c9c3a921eaed3eebf85c59bfca02057e44f36269ba3c59545338"
     }
   ],
-  "consumer_proof": {
-    "consumer": "datapan-health",
-    "schema_version": "datapan.health-assertion-policy-consumer-proof.v1",
-    "cases": 6
+  "reference_model": {
+    "kind": "reference_model_only",
+    "producer": "datapan-registry",
+    "schema_version": "datapan.operation-assertion-policy-reference-model.v1",
+    "cases": 7
   },
-  "next_gate": "independent_consumer_review"
+  "next_gate": "datapan_health_exact_revision_compatibility_proof"
 }
