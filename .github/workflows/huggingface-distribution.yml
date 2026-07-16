@@ -65,7 +65,10 @@ jobs:
         run: python -m pip install --disable-pip-version-check jsonschema huggingface_hub
 
       - name: Test distribution contract
-        run: python -m unittest tests/test_huggingface_registry_distribution.py
+        run: |
+          python scripts/generate-diagnostic-publication.py --check
+          python -m unittest tests/test_diagnostic_publication.py
+          python -m unittest tests/test_huggingface_registry_distribution.py
 
       - name: Materialize canonical Registry from the immutable public mirror
         run: python scripts/materialize-canonical-registry.py
@@ -123,7 +126,7 @@ jobs:
           retention-days: 14
 
       - name: Publish two-phase immutable distribution
-        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.publish)
+        if: github.event_name == 'workflow_dispatch' && inputs.publish
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
@@ -134,16 +137,17 @@ jobs:
             | tee .datapan/hf-publication.json
 
       - name: Verify published pointer anonymously
-        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.publish)
+        if: github.event_name == 'workflow_dispatch' && inputs.publish
         env:
           HF_TOKEN: ""
         run: |
           python scripts/huggingface_registry_distribution.py verify-remote \
             --pointer-url https://huggingface.co/datasets/StatPan/datapan-registry/resolve/main/release/distribution-manifest.json \
+            --expected-revision "$(jq -r '.payload_revision' .datapan/hf-publication.json)" \
             | tee .datapan/hf-public-verification.json
 
       - name: Upload publication receipts
-        if: always() && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.publish))
+        if: always() && github.event_name == 'workflow_dispatch' && inputs.publish
         uses: actions/upload-artifact@v4
         with:
           name: huggingface-registry-publication-receipts

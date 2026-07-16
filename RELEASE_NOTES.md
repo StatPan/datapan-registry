@@ -73,3 +73,30 @@ Unadapted external probe reasons:
 datapan catalog release verify --manifest manifest.json --output reports/latest-release-verification.json --json
 datapan catalog release readiness --manifest manifest.json --output reports/latest-release-readiness.json --json
 ```
+
+## Diagnostic contract v1 (prepared, not yet published)
+
+This release change prepares the stable diagnostic envelope schema, bounded
+cause/action vocabulary, data.go.kr evidence mapping, deterministic examples,
+and compatibility evidence for Datapan CLI, Healthcheck, and Web. Every public
+artifact is bound by `manifest.json`; the schema is additionally bound by
+`schemas/index.json`. `reports/diagnostic-publication-readiness.json` pins the
+accepted candidate binding and #571 merge commit while explicitly denying
+publishing, runtime, live-history, and consumer-deployment authority.
+
+Registry owns immutable diagnostic facts, vocabulary, evidence shapes, and
+artifact identity. Consumers own live inference, presentation, user-specific
+state, and mutable history. Unknown cause/action IDs must fall back to
+`unknown` / `gather_more_evidence`; existing v1 identifiers cannot be removed,
+redefined, or extended in place.
+
+Tagging, GitHub Release creation, Hugging Face publication, and Web rollout are
+separate post-merge gates. After an explicit publication, operators must run
+anonymous `verify-remote` with the full nonzero payload revision and require
+the exact manifest-bound diagnostic paths and SHA-256 values. Datapan Web may
+adopt the immutable artifacts only after that proof succeeds.
+
+The workflow's automatic expected-revision receipt verifies baseline immutable
+distribution integrity but does not supply the checked-in required PATH/SHA-256
+set. It therefore does not replace or satisfy the separate post-public Web
+adoption gate.

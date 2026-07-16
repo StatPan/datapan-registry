@@ -3,6 +3,7 @@ import json
 import pathlib
 import tempfile
 import unittest
+from unittest import mock
 
 import jsonschema
 
@@ -15,7 +16,7 @@ SPEC.loader.exec_module(MODULE)
 
 
 class HuggingFaceRegistryDistributionTest(unittest.TestCase):
-    def test_workflow_publishes_main_dataset_changes_but_not_pull_requests(self):
+    def test_workflow_validates_main_changes_but_publishes_only_by_explicit_dispatch(self):
         workflow_path = (
             pathlib.Path(__file__).parents[1]
             / ".github"
@@ -29,11 +30,15 @@ class HuggingFaceRegistryDistributionTest(unittest.TestCase):
         self.assertIn('      - "reports/**"', workflow)
         self.assertIn("|| 'publication' }}", workflow)
         self.assertIn("  cancel-in-progress: false", workflow)
-        publish_condition = (
-            "if: github.event_name == 'push' || "
-            "(github.event_name == 'workflow_dispatch' && inputs.publish)"
-        )
+        publish_condition = "if: github.event_name == 'workflow_dispatch' && inputs.publish"
         self.assertEqual(workflow.count(publish_condition), 2)
+        self.assertIn(
+            "if: always() && github.event_name == 'workflow_dispatch' && inputs.publish",
+            workflow,
+        )
+        self.assertIn("--expected-revision", workflow)
+        self.assertIn(".datapan/hf-publication.json", workflow)
+        self.assertNotIn("if: github.event_name == 'push' ||", workflow)
         self.assertNotIn("github.event_name == 'pull_request' && inputs.publish", workflow)
 
     def fixture(self, root: pathlib.Path) -> pathlib.Path:
@@ -115,6 +120,138 @@ class HuggingFaceRegistryDistributionTest(unittest.TestCase):
     def test_publish_requires_token_before_importing_client(self):
         with self.assertRaisesRegex(MODULE.DistributionError, "HF_TOKEN"):
             MODULE.publish(pathlib.Path("unused"), "StatPan/datapan-registry", "")
+
+    def test_remote_pointer_requires_real_immutable_revision_and_exact_artifacts(self):
+        pointer = {
+            "schema_version": MODULE.SCHEMA_VERSION,
+            "dataset": {"id": "StatPan/datapan-registry", "revision": "a" * 40},
+            "release_manifest": {"path": "manifest.json", "bytes": 1, "sha256": "b" * 64},
+            "artifact_count": 1,
+            "artifacts": [
+                {"path": "schemas/diagnostic.json", "kind": "schema", "bytes": 1, "sha256": "c" * 64}
+            ],
+        }
+        dataset, revision, records = MODULE.validate_remote_pointer(
+            pointer, "a" * 40, [f"schemas/diagnostic.json={'c' * 64}"]
+        )
+        self.assertEqual(dataset, "StatPan/datapan-registry")
+        self.assertEqual(revision, "a" * 40)
+        self.assertEqual(len(records), 2)
+
+        pointer["dataset"]["revision"] = "0" * 40
+        with self.assertRaisesRegex(MODULE.DistributionError, "nonzero immutable revision"):
+            MODULE.validate_remote_pointer(pointer, None, [])
+
+    def test_remote_pointer_rejects_missing_or_changed_required_artifact(self):
+        pointer = {
+            "schema_version": MODULE.SCHEMA_VERSION,
+            "dataset": {"id": "StatPan/datapan-registry", "revision": "a" * 40},
+            "release_manifest": {"path": "manifest.json", "bytes": 1, "sha256": "b" * 64},
+            "artifact_count": 0,
+            "artifacts": [],
+        }
+        with self.assertRaisesRegex(MODULE.DistributionError, "required distribution artifact is missing"):
+            MODULE.validate_remote_pointer(pointer, None, [f"schemas/diagnostic.json={'c' * 64}"])
+
+    def test_verify_remote_downloads_and_verifies_manifest_required_artifact_and_revision(self):
+        manifest_bytes = b'{"schema_version":"datapan.release-manifest.v1"}\n'
+        diagnostic_bytes = b'{"schema_version":"datapan.diagnostic-envelope.v1"}\n'
+        manifest_sha = MODULE.hashlib.sha256(manifest_bytes).hexdigest()
+        diagnostic_sha = MODULE.hashlib.sha256(diagnostic_bytes).hexdigest()
+        revision = "d" * 40
+        pointer_url = "https://example.test/release/distribution-manifest.json"
+        pointer = {
+            "schema_version": MODULE.SCHEMA_VERSION,
+            "dataset": {"id": "StatPan/datapan-registry", "revision": revision},
+            "release_manifest": {
+                "path": "manifest.json",
+                "kind": "release_manifest",
+                "bytes": len(manifest_bytes),
+                "sha256": manifest_sha,
+            },
+            "artifact_count": 1,
+            "artifacts": [
+                {
+                    "path": "schemas/datapan.diagnostic-envelope.v1.schema.json",
+                    "kind": "schema",
+                    "bytes": len(diagnostic_bytes),
+                    "sha256": diagnostic_sha,
+                }
+            ],
+        }
+        downloaded = []
+
+        def fake_download(url, destination):
+            downloaded.append(url)
+            if url == pointer_url:
+                destination.write_text(json.dumps(pointer), encoding="utf-8")
+            elif url == MODULE.resolve_url("StatPan/datapan-registry", revision, "manifest.json"):
+                destination.write_bytes(manifest_bytes)
+            elif url == MODULE.resolve_url(
+                "StatPan/datapan-registry",
+                revision,
+                "schemas/datapan.diagnostic-envelope.v1.schema.json",
+            ):
+                destination.write_bytes(diagnostic_bytes)
+            else:
+                self.fail(f"unexpected download: {url}")
+
+        required = [
+            f"manifest.json={manifest_sha}",
+            f"schemas/datapan.diagnostic-envelope.v1.schema.json={diagnostic_sha}",
+        ]
+        with mock.patch.object(MODULE, "download", side_effect=fake_download):
+            receipt = MODULE.verify_remote(pointer_url, revision, required)
+
+        self.assertEqual(
+            receipt,
+            {
+                "status": "verified",
+                "dataset": "StatPan/datapan-registry",
+                "revision": revision,
+                "artifacts": 1,
+                "release_manifest": "verified",
+            },
+        )
+        self.assertEqual(
+            downloaded,
+            [
+                pointer_url,
+                MODULE.resolve_url("StatPan/datapan-registry", revision, "manifest.json"),
+                MODULE.resolve_url(
+                    "StatPan/datapan-registry",
+                    revision,
+                    "schemas/datapan.diagnostic-envelope.v1.schema.json",
+                ),
+            ],
+        )
+
+    def test_verify_remote_rejects_tampered_release_manifest_download(self):
+        manifest_bytes = b"expected manifest\n"
+        revision = "e" * 40
+        pointer_url = "https://example.test/release/distribution-manifest.json"
+        pointer = {
+            "schema_version": MODULE.SCHEMA_VERSION,
+            "dataset": {"id": "StatPan/datapan-registry", "revision": revision},
+            "release_manifest": {
+                "path": "manifest.json",
+                "kind": "release_manifest",
+                "bytes": len(manifest_bytes),
+                "sha256": MODULE.hashlib.sha256(manifest_bytes).hexdigest(),
+            },
+            "artifact_count": 0,
+            "artifacts": [],
+        }
+
+        def fake_download(url, destination):
+            if url == pointer_url:
+                destination.write_text(json.dumps(pointer), encoding="utf-8")
+            else:
+                destination.write_bytes(b"tampered\n")
+
+        with mock.patch.object(MODULE, "download", side_effect=fake_download):
+            with self.assertRaisesRegex(MODULE.DistributionError, "byte mismatch|SHA-256 mismatch"):
+                MODULE.verify_remote(pointer_url, revision, [])
 
 
 if __name__ == "__main__":

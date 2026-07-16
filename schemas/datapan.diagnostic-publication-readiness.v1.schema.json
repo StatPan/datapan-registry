@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.diagnostic-publication-readiness.v1.schema.json",
+  "title": "Datapan Diagnostic Publication Readiness v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "status",
+    "candidate",
+    "artifacts",
+    "exclusion_policy",
+    "gates",
+    "authority",
+    "anonymous_fetch_handoff",
+    "web_adoption_handoff"
+  ],
+  "properties": {
+    "schema_version": {"const": "datapan.diagnostic-publication-readiness.v1"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "prepared_for_exact_head_review"},
+    "candidate": {
+      "type": "object",
+      "required": ["source_head", "merge_commit", "binding_sha256", "source"],
+      "properties": {
+        "source_head": {"$ref": "#/$defs/sha40"},
+        "merge_commit": {"$ref": "#/$defs/sha40"},
+        "binding_sha256": {"$ref": "#/$defs/sha256"},
+        "source": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/artifact"}
+    },
+    "exclusion_policy": {
+      "type": "object",
+      "required": ["status", "forbidden"],
+      "properties": {
+        "status": {"const": "passed"},
+        "forbidden": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}
+      }
+    },
+    "gates": {
+      "type": "object",
+      "required": [
+        "exact_head_independent_review",
+        "hosted_ci",
+        "tag_or_github_release",
+        "immutable_distribution_publication",
+        "anonymous_immutable_fetch",
+        "datapan_web_adoption"
+      ],
+      "properties": {
+        "exact_head_independent_review": {"const": "pending"},
+        "hosted_ci": {"const": "pending"},
+        "tag_or_github_release": {"const": "not_authorized"},
+        "immutable_distribution_publication": {"const": "not_authorized"},
+        "anonymous_immutable_fetch": {"const": "blocked_until_publication"},
+        "datapan_web_adoption": {"const": "blocked_until_anonymous_immutable_fetch"}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "required": ["publishing_allowed", "runtime_authority", "live_history_authority", "consumer_deployment_allowed"],
+      "properties": {
+        "publishing_allowed": {"const": false},
+        "runtime_authority": {"const": false},
+        "live_history_authority": {"const": false},
+        "consumer_deployment_allowed": {"const": false}
+      }
+    },
+    "anonymous_fetch_handoff": {"type": "object"},
+    "web_adoption_handoff": {"type": "object"}
+  },
+  "$defs": {
+    "sha40": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "artifact": {
+      "type": "object",
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "kind": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

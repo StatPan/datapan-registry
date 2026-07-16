@@ -19,6 +19,9 @@ CONSUMER_CONTRACT = DRAFT / "consumer-contract.v1.json"
 FIXTURES = DRAFT / "fixtures"
 SCHEMA_INDEX = ROOT / "schemas/index.json"
 MANIFEST = ROOT / "manifest.json"
+PUBLICATION_READINESS = ROOT / "reports/diagnostic-publication-readiness.json"
+ACCEPTED_BINDING = "ac847cb158eb432e72e78d194a94542db5860062b9b869c42f6d736e4f649016"
+ACCEPTED_MERGE = "114c4e4a043bc495ada04e5c85fe8bed4eaf1fc3"
 
 EXPECTED = {
     "approval-propagating.json": "approval_propagating",
@@ -91,8 +94,23 @@ def validate_draft_boundary() -> None:
     manifest_paths = {item["path"] for item in load(MANIFEST).get("artifacts", [])}
     if any(path.startswith(draft_prefix) for path in index_paths | manifest_paths):
         raise ValueError("draft diagnostic contract must not be schema-indexed or manifest-bound before release review")
-    if "schemas/datapan.diagnostic-envelope.v1.schema.json" in index_paths | manifest_paths:
-        raise ValueError("public diagnostic schema is present before consumer compatibility review")
+    public_schema = "schemas/datapan.diagnostic-envelope.v1.schema.json"
+    if public_schema in index_paths | manifest_paths:
+        if public_schema not in index_paths or public_schema not in manifest_paths:
+            raise ValueError("public diagnostic schema must be bound by both schema index and manifest")
+        if not PUBLICATION_READINESS.is_file():
+            raise ValueError("public diagnostic schema requires publication readiness evidence")
+        readiness = load(PUBLICATION_READINESS)
+        candidate = readiness.get("candidate", {})
+        authority = readiness.get("authority", {})
+        if (
+            readiness.get("status") != "prepared_for_exact_head_review"
+            or candidate.get("binding_sha256") != ACCEPTED_BINDING
+            or candidate.get("merge_commit") != ACCEPTED_MERGE
+        ):
+            raise ValueError("public diagnostic schema is not bound to the accepted candidate")
+        if not isinstance(authority, dict) or any(value is not False for value in authority.values()):
+            raise ValueError("publication readiness must not grant publishing or runtime authority")
 
 
 def validate_contract(contract: dict[str, Any], schema: dict[str, Any]) -> None:

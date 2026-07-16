@@ -161,33 +161,93 @@ def download(url: str, destination: pathlib.Path) -> None:
         raise DistributionError(f"download failed for {url}: {exc}") from exc
 
 
-def verify_remote(pointer_url: str) -> dict[str, Any]:
+def required_artifact(value: str) -> tuple[str, str]:
+    if "=" not in value:
+        raise DistributionError("--require-artifact must use PATH=SHA256")
+    path, expected_sha256 = value.split("=", 1)
+    path = safe_relative(path).as_posix()
+    if len(expected_sha256) != 64 or any(char not in "0123456789abcdef" for char in expected_sha256):
+        raise DistributionError("required artifact SHA-256 must be 64 lowercase hexadecimal characters")
+    return path, expected_sha256
+
+
+def validate_remote_pointer(
+    pointer: dict[str, Any],
+    expected_revision: str | None,
+    required: list[str],
+) -> tuple[str, str, list[dict[str, Any]]]:
+    if pointer.get("schema_version") != SCHEMA_VERSION:
+        raise DistributionError("unsupported Hugging Face distribution manifest")
+    dataset = pointer.get("dataset")
+    records = pointer.get("artifacts")
+    if not isinstance(dataset, dict) or not isinstance(records, list):
+        raise DistributionError("distribution manifest is missing dataset or artifacts")
+    revision, dataset_id = dataset.get("revision"), dataset.get("id")
+    if (
+        not isinstance(revision, str)
+        or len(revision) != 40
+        or any(char not in "0123456789abcdef" for char in revision)
+        or revision == "0" * 40
+    ):
+        raise DistributionError("distribution manifest is missing a nonzero immutable revision")
+    if expected_revision is not None:
+        if (
+            len(expected_revision) != 40
+            or any(char not in "0123456789abcdef" for char in expected_revision)
+            or expected_revision == "0" * 40
+        ):
+            raise DistributionError("expected revision must be a full nonzero immutable commit SHA")
+        if revision != expected_revision:
+            raise DistributionError(f"payload revision mismatch: {revision} != {expected_revision}")
+    if not isinstance(dataset_id, str) or len(dataset_id.split("/")) != 2:
+        raise DistributionError("distribution manifest dataset ID is invalid")
+    if pointer.get("artifact_count") != len(records):
+        raise DistributionError("distribution manifest artifact count mismatch")
+    release_manifest = pointer.get("release_manifest")
+    all_records = [release_manifest, *records]
+    by_path: dict[str, dict[str, Any]] = {}
+    for record in all_records:
+        if not isinstance(record, dict):
+            raise DistributionError("distribution artifact must be an object")
+        remote = safe_relative(record.get("path", "")).as_posix()
+        if remote in by_path:
+            raise DistributionError(f"duplicate distribution artifact: {remote}")
+        by_path[remote] = record
+    for requirement in required:
+        path, expected_sha256 = required_artifact(requirement)
+        record = by_path.get(path)
+        if record is None:
+            raise DistributionError(f"required distribution artifact is missing: {path}")
+        if record.get("sha256") != expected_sha256:
+            raise DistributionError(f"required distribution artifact identity mismatch: {path}")
+    return dataset_id, revision, all_records
+
+
+def verify_remote(
+    pointer_url: str,
+    expected_revision: str | None = None,
+    required: list[str] | None = None,
+) -> dict[str, Any]:
     with tempfile.TemporaryDirectory() as raw:
         directory = pathlib.Path(raw)
         pointer_path = directory / "pointer.json"
         download(pointer_url, pointer_path)
         pointer = load_object(pointer_path)
-        if pointer.get("schema_version") != SCHEMA_VERSION:
-            raise DistributionError("unsupported Hugging Face distribution manifest")
-        dataset = pointer.get("dataset")
-        records = pointer.get("artifacts")
-        if not isinstance(dataset, dict) or not isinstance(records, list):
-            raise DistributionError("distribution manifest is missing dataset or artifacts")
-        revision, dataset_id = dataset.get("revision"), dataset.get("id")
-        if not isinstance(revision, str) or len(revision) != 40:
-            raise DistributionError("distribution manifest is missing immutable revision")
-        if pointer.get("artifact_count") != len(records):
-            raise DistributionError("distribution manifest artifact count mismatch")
-        release_manifest = pointer.get("release_manifest")
-        all_records = [release_manifest, *records]
+        dataset_id, revision, all_records = validate_remote_pointer(
+            pointer, expected_revision, required or []
+        )
         for index, record in enumerate(all_records):
-            if not isinstance(record, dict):
-                raise DistributionError("distribution artifact must be an object")
             remote = safe_relative(record.get("path", "")).as_posix()
             target = directory / f"artifact-{index}"
             download(resolve_url(dataset_id, revision, remote), target)
             verify_local(target, record)
-    return {"status": "verified", "dataset": dataset_id, "revision": revision, "artifacts": len(records)}
+    return {
+        "status": "verified",
+        "dataset": dataset_id,
+        "revision": revision,
+        "artifacts": len(all_records) - 1,
+        "release_manifest": "verified",
+    }
 
 
 def publish(stage_dir: pathlib.Path, dataset: str, token: str) -> dict[str, Any]:
@@ -231,6 +291,8 @@ def main() -> int:
     finalize_parser.add_argument("--revision", required=True)
     verify_parser = sub.add_parser("verify-remote")
     verify_parser.add_argument("--pointer-url", default=f"https://huggingface.co/datasets/{DEFAULT_DATASET}/resolve/main/{POINTER_PATH}")
+    verify_parser.add_argument("--expected-revision")
+    verify_parser.add_argument("--require-artifact", action="append", default=[])
     publish_parser = sub.add_parser("publish")
     publish_parser.add_argument("--stage", type=pathlib.Path, required=True)
     publish_parser.add_argument("--dataset", default=DEFAULT_DATASET)
@@ -241,7 +303,7 @@ def main() -> int:
         elif args.command == "finalize":
             result = finalize(args.stage, args.dataset, args.revision)
         elif args.command == "verify-remote":
-            result = verify_remote(args.pointer_url)
+            result = verify_remote(args.pointer_url, args.expected_revision, args.require_artifact)
         else:
             result = publish(args.stage, args.dataset, os.environ.get("HF_TOKEN", ""))
     except DistributionError as exc:

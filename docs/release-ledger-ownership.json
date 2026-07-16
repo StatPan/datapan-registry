@@ -188,6 +188,32 @@
       "exemption_boundary": "Does not own downstream current pointers, data artifacts, health observations, credentials, response rows, CLI runtime, or dataset APIs."
     },
     {
+      "id": "diagnostic_publication_artifacts",
+      "artifact_kinds": [
+        "diagnostic_consumer_contract",
+        "diagnostic_vocabulary",
+        "diagnostic_evidence_mapping",
+        "diagnostic_consumer_compatibility",
+        "diagnostic_example",
+        "diagnostic_publication_readiness"
+      ],
+      "owner": "diagnostic contract maintainers",
+      "generated_by": [
+        "python scripts/generate-diagnostic-publication.py --write"
+      ],
+      "checked_by": [
+        "python scripts/generate-diagnostic-publication.py --check",
+        "python -m unittest tests/test_diagnostic_publication.py",
+        "python scripts/sync-release-schema-artifacts.py --check",
+        "python scripts/sync-release-manifest-artifacts.py --check",
+        "python -m unittest tests/test_huggingface_registry_distribution.py"
+      ],
+      "manifest_relationship": "Stable diagnostic contract, vocabulary, mapping, deterministic examples, consumer evidence, and pre-publication readiness are bound to exact manifest bytes and SHA-256 values.",
+      "schema_relationship": "The diagnostic envelope and publication readiness schemas are indexed by schemas/index.json; generator tests validate the remaining bounded policy and evidence shapes.",
+      "package_relationship": "Included in release packages and Hugging Face distribution staging through manifest.json, without granting publication authority.",
+      "exemption_boundary": "Tagging, GitHub Release creation, immutable distribution publication, anonymous fetch proof, live inference, mutable history, telemetry, and consumer deployment remain outside this generated artifact class."
+    },
+    {
       "id": "downstream_release_evidence",
       "artifact_kinds": [
         "consumer_compatibility",

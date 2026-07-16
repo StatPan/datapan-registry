@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 85,
+  "count": 87,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 4015,
-      "sha256": "ec9139be5c9563a4766bf1f2f02c25353f07bb5153f48087a5544237133eac6a"
+      "bytes": 4270,
+      "sha256": "f0dd62db932f61f6ee9348e0a1f59d6ea94a2a0f7fe9cb1bbb6b76242a120b03"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -768,6 +768,24 @@
       "version": "v1",
       "bytes": 4831,
       "sha256": "ceeca44135f8abd510dc0e1ded45ab4f0bbc02d0b75484cbccc7f01745f1e0f0"
+    },
+    {
+      "path": "schemas/datapan.diagnostic-envelope.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.diagnostic-envelope.v1.schema.json",
+      "title": "Datapan Diagnostic Envelope v1",
+      "contract": "diagnostic-envelope",
+      "version": "v1",
+      "bytes": 93289,
+      "sha256": "0782ed2150a31471645d3cf79a4ac0e63c1ba85ea31eb7b06cf39e7de9fb96fc"
+    },
+    {
+      "path": "schemas/datapan.diagnostic-publication-readiness.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.diagnostic-publication-readiness.v1.schema.json",
+      "title": "Datapan Diagnostic Publication Readiness v1",
+      "contract": "diagnostic-publication-readiness",
+      "version": "v1",
+      "bytes": 3183,
+      "sha256": "cf08ea3e578edc2530f0e29e2900e157e2c5dd0615c02efe51b3f552220fe836"
     }
   ]
 }
