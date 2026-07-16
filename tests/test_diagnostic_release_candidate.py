@@ -19,7 +19,7 @@ class DiagnosticReleaseCandidateTest(unittest.TestCase):
     def test_checked_in_candidate_is_bound_and_blocked(self):
         result = MODULE.validate_all()
         self.assertEqual(result["consumers"], 3)
-        self.assertEqual(result["missing_proofs"], 8)
+        self.assertEqual(result["missing_proofs"], 7)
 
     def test_generator_check_entrypoint(self):
         result = subprocess.run(
