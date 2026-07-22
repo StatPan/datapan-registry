@@ -25,20 +25,21 @@ class ManualReviewTechnicalRebindingTest(unittest.TestCase):
             "approver_scope": "approved artifact-only technical rebinding",
             "decision_path": decision_path.as_posix(),
             "decision_sha256": MODULE.digest_bytes(decision_path.read_bytes()),
-            "baseline": {"artifact_count": len(baseline), "artifact_inventory_sha256": MODULE.inventory_digest(baseline)},
+            "baseline": {"artifact_count": len(baseline), "artifact_contract_sha256": MODULE.artifact_contract_digest(baseline)},
             "allowed_additions": [
                 {"path": "schemas/health.schema.json", "kind": "schema"},
                 {"path": "reports/health.json", "kind": "verification_plan", "schema": "https://schemas.example/health"},
             ],
         }
 
-    def test_only_the_exact_two_health_artifacts_can_rebind(self):
+    def test_only_the_exact_two_health_artifacts_can_rebind_after_canonical_regeneration(self):
         with tempfile.TemporaryDirectory() as raw:
             root = pathlib.Path(raw)
             decision_path = root / "decision.json"
             decision_path.write_text(json.dumps({"decision": {"compatibility_sha256": "a" * 64}}), encoding="utf-8")
             baseline = [{"path": "data/registry.json", "kind": "registry", "bytes": 1, "sha256": "b" * 64}]
-            artifacts = baseline + [
+            regenerated_baseline = [{"path": "data/registry.json", "kind": "registry", "bytes": 99, "sha256": "e" * 64}]
+            artifacts = regenerated_baseline + [
                 {"path": "schemas/health.schema.json", "kind": "schema", "bytes": 2, "sha256": "c" * 64},
                 {"path": "reports/health.json", "kind": "verification_plan", "schema": "https://schemas.example/health", "bytes": 3, "sha256": "d" * 64},
             ]
@@ -48,6 +49,19 @@ class ManualReviewTechnicalRebindingTest(unittest.TestCase):
             self.assertEqual(value["manifest_delta"]["added_paths"], ["reports/health.json", "schemas/health.schema.json"])
             with self.assertRaisesRegex(ValueError, "allowlist"):
                 MODULE.expected(self.policy(decision_path, baseline), {"artifacts": artifacts + [{"path": "reports/extra.json"}]}, {"summary": {}}, decision_path)
+
+    def test_preexisting_artifact_contract_change_rejects_rebinding(self):
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            decision_path = root / "decision.json"
+            decision_path.write_text(json.dumps({"decision": {"compatibility_sha256": "a" * 64}}), encoding="utf-8")
+            baseline = [{"path": "data/registry.json", "kind": "registry", "bytes": 1, "sha256": "b" * 64}]
+            artifacts = [{"path": "data/registry.json", "kind": "different_kind", "bytes": 1, "sha256": "b" * 64}] + [
+                {"path": "schemas/health.schema.json", "kind": "schema"},
+                {"path": "reports/health.json", "kind": "verification_plan", "schema": "https://schemas.example/health"},
+            ]
+            with self.assertRaisesRegex(ValueError, "allowlist"):
+                MODULE.expected(self.policy(decision_path, baseline), {"artifacts": artifacts}, {"summary": {}}, decision_path)
 
     def test_tampering_the_human_decision_rejects_rebinding(self):
         with tempfile.TemporaryDirectory() as raw:
