@@ -61,12 +61,20 @@ WRITE_COMMANDS: tuple[Command, ...] = (
     Command(("python3", "scripts/generate-release-goal-operating-contract.py")),
     Command(("python3", "scripts/generate-release-assembly-receipt.py"), transient=True),
     Command(("python3", "scripts/sync-release-manifest-artifacts.py", "--write")),
+    # The plan binds every manifest artifact except its own mutable digest entry,
+    # so generate it only after all other manifest-owned release evidence.
+    Command(("python3", "scripts/generate-health-runtime-observation-plan.py")),
+    Command(("python3", "scripts/sync-release-manifest-artifacts.py", "--write")),
+    # This fixture pins the finalized manifest but is not itself a manifest artifact.
+    Command(("python3", "scripts/generate-regional-baseline-source-provenance.py")),
 )
 
 
 CHECK_COMMANDS: tuple[Command, ...] = (
     Command(("python3", "scripts/sync-release-schema-artifacts.py", "--check")),
     Command(("python3", "scripts/sync-release-manifest-artifacts.py", "--check")),
+    Command(("python3", "scripts/validate-health-runtime-observation-plan.py")),
+    Command(("python3", "scripts/validate-regional-baseline-source-provenance.py")),
     Command(("python3", "scripts/validate-release-ledger-ownership.py")),
     Command(("python3", "scripts/validate-release-ledger-goal-audit.py")),
     Command(("python3", "scripts/generate-source-contract-rollup.py", "--check")),
