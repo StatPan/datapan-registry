@@ -18,7 +18,7 @@
           "catalog", "import", "data-go-kr",
           "--output", "{candidate_registry}",
           "--all", "--per-page", "100", "--max-pages", "1000",
-          "--retries", "3", "--retry-delay-ms", "500", "--json"
+          "--retries", "3", "--retry-delay-ms", "500", "--timeout", "10m", "--json"
         ]
       },
       "diff": {

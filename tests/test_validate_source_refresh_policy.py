@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import pathlib
 import subprocess
 import sys
@@ -17,12 +18,12 @@ CANONICAL_SECRET_MAPPING = "DATA_GO_KR_SERVICE_KEY: ${{ secrets.DATAPAN_DATA_GO_
 
 
 class ValidateSourceRefreshPolicyTest(unittest.TestCase):
-    def run_validator(self, workflow: pathlib.Path) -> subprocess.CompletedProcess[str]:
+    def run_validator(self, workflow: pathlib.Path, policy: pathlib.Path = POLICY) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
             [
                 sys.executable,
                 str(SCRIPT),
-                "--policy", str(POLICY),
+                "--policy", str(policy),
                 "--schema", str(SCHEMA),
                 "--coverage-policy", str(COVERAGE),
                 "--workflow", str(workflow),
@@ -50,6 +51,18 @@ class ValidateSourceRefreshPolicyTest(unittest.TestCase):
             result = self.run_validator(workflow)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("DATAPAN_DATA_GO_KR_SERVICE_KEY", result.stderr)
+
+    def test_rejects_missing_full_import_timeout(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            policy = pathlib.Path(directory) / "source-refresh.json"
+            value = json.loads(POLICY.read_text(encoding="utf-8"))
+            arguments = value["sources"][0]["importer"]["arguments"]
+            timeout_index = arguments.index("--timeout")
+            del arguments[timeout_index : timeout_index + 2]
+            policy.write_text(json.dumps(value), encoding="utf-8")
+            result = self.run_validator(WORKFLOW, policy)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("full-import --timeout", result.stderr)
 
 
 if __name__ == "__main__":

@@ -2,12 +2,12 @@
   "schema_version": "datapan.external-checkout-refs.v1",
   "repository": "StatPan/datapan-cli",
   "ref_kind": "commit_sha",
-  "ref": "416d568bc21632c4305666ea9f6ef2327b5f627b",
+  "ref": "e3b2fa44cb0f68d7e58e003fbd71ecde505878de",
   "selection": {
     "basis": "reviewed_and_merged_consumer_identity",
-    "source_issue": "StatPan/datapan-cli#160",
-    "source_pull_request": "StatPan/datapan-cli#162",
-    "notes": "This commit is the accepted CLI consumer identity for the diagnostic contract and is reachable from the reviewed datapan-cli main history."
+    "source_issue": "StatPan/datapan-cli#163",
+    "source_pull_request": "StatPan/datapan-cli#164",
+    "notes": "This commit is the reviewed CLI consumer identity containing the opt-in bounded full-catalog import timeout contract and is reachable from datapan-cli main history."
   },
   "inventory_expectations": {
     "checkout_count": 9,
