@@ -30,8 +30,30 @@ def digest_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def inventory_digest(artifacts: list[dict[str, Any]]) -> str:
-    return digest_bytes(json.dumps(artifacts, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode())
+def artifact_contract(artifacts: list[dict[str, Any]]) -> list[dict[str, str]]:
+    """Return the stable, non-content contract for a manifest artifact set."""
+    contracts: list[dict[str, str]] = []
+    paths: set[str] = set()
+    for item in artifacts:
+        path = item.get("path")
+        kind = item.get("kind")
+        if not isinstance(path, str) or not path or not isinstance(kind, str) or not kind:
+            raise ValueError("manifest artifacts require non-empty path and kind")
+        if path in paths:
+            raise ValueError(f"manifest artifacts contain duplicate path: {path}")
+        paths.add(path)
+        contract = {"path": path, "kind": kind}
+        if "schema" in item:
+            schema = item["schema"]
+            if not isinstance(schema, str) or not schema:
+                raise ValueError(f"manifest artifact schema must be a non-empty string: {path}")
+            contract["schema"] = schema
+        contracts.append(contract)
+    return sorted(contracts, key=lambda item: item["path"])
+
+
+def artifact_contract_digest(artifacts: list[dict[str, Any]]) -> str:
+    return digest_bytes(json.dumps(artifact_contract(artifacts), ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode())
 
 
 def render(value: dict[str, Any]) -> str:
@@ -61,7 +83,7 @@ def expected(policy: dict[str, Any], manifest: dict[str, Any], compatibility: di
     if set(present) != set(allowed):
         raise ValueError("Health technical rebinding requires every allowed addition")
     stripped = [item for item in artifacts if str(item.get("path")) not in allowed]
-    if len(stripped) != baseline.get("artifact_count") or inventory_digest(stripped) != baseline.get("artifact_inventory_sha256"):
+    if len(stripped) != baseline.get("artifact_count") or artifact_contract_digest(stripped) != baseline.get("artifact_contract_sha256"):
         raise ValueError("manifest delta exceeds the approved Health plan/schema allowlist")
     if len(artifacts) != int(baseline["artifact_count"]) + len(allowed):
         raise ValueError("manifest artifact count is outside the approved technical rebinding scope")
