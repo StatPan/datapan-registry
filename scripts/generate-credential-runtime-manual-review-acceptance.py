@@ -24,6 +24,7 @@ DEFAULT_COMPATIBILITY = pathlib.Path("reports/release-consumer-compatibility.jso
 DEFAULT_DECISION = pathlib.Path("reports/credential-runtime-manual-review-decision.json")
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-manual-review-acceptance.v1.schema.json")
 DEFAULT_OUTPUT = pathlib.Path("reports/credential-runtime-manual-review-acceptance.json")
+DEFAULT_TECHNICAL_REBINDING = pathlib.Path("reports/credential-runtime-manual-review-technical-rebinding.json")
 SCHEMA_VERSION = "datapan.credential-runtime-manual-review-acceptance.v1"
 ACCEPTANCE_TICKET = 389
 DECISION_TICKET = 391
@@ -126,6 +127,7 @@ def validate_decision_state(
     *,
     handoff_path: pathlib.Path,
     compatibility_path: pathlib.Path,
+    technical_rebinding_path: pathlib.Path,
 ) -> None:
     decision_body = as_dict(decision.get("decision"), "decision.decision")
     accepted = bool_value(decision_body.get("accepted"), "decision.accepted")
@@ -149,8 +151,11 @@ def validate_decision_state(
             raise ValueError(f"accepted manual-review decision requires decision.{required_key}")
     if decision_body.get("handoff_sha256") != file_sha256(handoff_path):
         raise ValueError("accepted manual-review decision handoff_sha256 does not match current handoff")
-    if decision_body.get("compatibility_sha256") != compatibility_binding_sha256(load_json(compatibility_path)):
-        raise ValueError("accepted manual-review decision compatibility_sha256 does not match current compatibility")
+    current_compatibility = compatibility_binding_sha256(load_json(compatibility_path))
+    if decision_body.get("compatibility_sha256") != current_compatibility:
+        rebinding = load_json(technical_rebinding_path)
+        if rebinding.get("status") != "approved_artifact_only_rebinding" or rebinding.get("old_compatibility_sha256") != decision_body.get("compatibility_sha256") or rebinding.get("new_compatibility_sha256") != current_compatibility or rebinding.get("decision_sha256") != file_sha256(decision_path):
+            raise ValueError("accepted manual-review decision compatibility_sha256 does not match current compatibility")
     if not as_list(decision_body.get("revalidation_triggers"), "decision.revalidation_triggers"):
         raise ValueError("accepted manual-review decision requires revalidation triggers")
 
@@ -211,9 +216,10 @@ def build_report(
     handoff_path: pathlib.Path = DEFAULT_HANDOFF,
     compatibility_path: pathlib.Path = DEFAULT_COMPATIBILITY,
     decision_path: pathlib.Path = DEFAULT_DECISION,
+    technical_rebinding_path: pathlib.Path = DEFAULT_TECHNICAL_REBINDING,
 ) -> dict[str, Any]:
     validate_input_invariants(handoff, compatibility, decision)
-    validate_decision_state(decision, handoff_path=handoff_path, compatibility_path=compatibility_path)
+    validate_decision_state(decision, handoff_path=handoff_path, compatibility_path=compatibility_path, technical_rebinding_path=technical_rebinding_path)
     handoff_summary = as_dict(handoff.get("summary"), "handoff.summary")
     handoff_boundary = as_dict(handoff.get("release_boundary"), "handoff.release_boundary")
     compatibility_risk = as_dict(compatibility.get("runtime_risk_evidence"), "compatibility.runtime_risk_evidence")
@@ -330,6 +336,7 @@ def main() -> int:
     parser.add_argument("--handoff", default=DEFAULT_HANDOFF, type=pathlib.Path)
     parser.add_argument("--compatibility", default=DEFAULT_COMPATIBILITY, type=pathlib.Path)
     parser.add_argument("--decision", default=DEFAULT_DECISION, type=pathlib.Path)
+    parser.add_argument("--technical-rebinding", default=DEFAULT_TECHNICAL_REBINDING, type=pathlib.Path)
     parser.add_argument("--schema", default=DEFAULT_SCHEMA, type=pathlib.Path)
     parser.add_argument("--output", default=DEFAULT_OUTPUT, type=pathlib.Path)
     parser.add_argument("--check", action="store_true", help="fail when the checked-in acceptance boundary is stale")
@@ -343,6 +350,7 @@ def main() -> int:
             handoff_path=args.handoff,
             compatibility_path=args.compatibility,
             decision_path=args.decision,
+            technical_rebinding_path=args.technical_rebinding,
         )
         validate_schema(report, args.schema)
     except Exception as exc:  # noqa: BLE001 - release operators need the failed invariant
