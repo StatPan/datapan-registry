@@ -23,6 +23,7 @@ DEFAULT_DECISION = pathlib.Path("reports/credential-runtime-manual-review-decisi
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-manual-review-decision.v1.schema.json")
 DEFAULT_HANDOFF = pathlib.Path("reports/credential-runtime-review-handoff.json")
 DEFAULT_COMPATIBILITY = pathlib.Path("reports/release-consumer-compatibility.json")
+DEFAULT_TECHNICAL_REBINDING = pathlib.Path("reports/credential-runtime-manual-review-technical-rebinding.json")
 SECRET_VALUE_PATTERNS = [
     re.compile(r"(?i)(service[_-]?key|authorization|bearer\s+[a-z0-9._~+/=-]{16,})"),
     re.compile(r"(?i)(api[_-]?key|access[_-]?token|refresh[_-]?token|client[_-]?secret)"),
@@ -88,7 +89,7 @@ def validate_secret_free(record: dict[str, Any]) -> None:
                 raise ValueError("manual-review decision must not contain secret-like values")
 
 
-def validate_decision(record: dict[str, Any], *, handoff_path: pathlib.Path, compatibility_path: pathlib.Path) -> None:
+def validate_decision(record: dict[str, Any], *, decision_path: pathlib.Path, handoff_path: pathlib.Path, compatibility_path: pathlib.Path, technical_rebinding_path: pathlib.Path) -> None:
     summary = as_dict(record.get("summary"), "summary")
     decision = as_dict(record.get("decision"), "decision")
     inputs = as_dict(record.get("inputs"), "inputs")
@@ -129,8 +130,11 @@ def validate_decision(record: dict[str, Any], *, handoff_path: pathlib.Path, com
             raise ValueError(f"accepted decision requires non-empty decision.{required_key}")
     if decision.get("handoff_sha256") != file_sha256(handoff_path):
         raise ValueError("accepted decision handoff_sha256 must match the current credential review handoff")
-    if decision.get("compatibility_sha256") != compatibility_binding_sha256(load_json(compatibility_path)):
-        raise ValueError("accepted decision compatibility_sha256 must match the current consumer compatibility report")
+    current_compatibility = compatibility_binding_sha256(load_json(compatibility_path))
+    if decision.get("compatibility_sha256") != current_compatibility:
+        rebinding = load_json(technical_rebinding_path)
+        if rebinding.get("status") != "approved_artifact_only_rebinding" or rebinding.get("old_compatibility_sha256") != decision.get("compatibility_sha256") or rebinding.get("new_compatibility_sha256") != current_compatibility or rebinding.get("decision_sha256") != file_sha256(decision_path):
+            raise ValueError("accepted decision compatibility_sha256 must match the current consumer compatibility report")
     triggers = as_list(decision.get("revalidation_triggers"), "decision.revalidation_triggers")
     if not triggers:
         raise ValueError("accepted decision requires at least one revalidation trigger")
@@ -142,13 +146,14 @@ def main() -> int:
     parser.add_argument("--schema", default=DEFAULT_SCHEMA, type=pathlib.Path)
     parser.add_argument("--handoff", default=DEFAULT_HANDOFF, type=pathlib.Path)
     parser.add_argument("--compatibility", default=DEFAULT_COMPATIBILITY, type=pathlib.Path)
+    parser.add_argument("--technical-rebinding", default=DEFAULT_TECHNICAL_REBINDING, type=pathlib.Path)
     args = parser.parse_args()
 
     try:
         record = load_json(args.decision)
         validate_schema(record, args.schema)
         validate_secret_free(record)
-        validate_decision(record, handoff_path=args.handoff, compatibility_path=args.compatibility)
+        validate_decision(record, decision_path=args.decision, handoff_path=args.handoff, compatibility_path=args.compatibility, technical_rebinding_path=args.technical_rebinding)
     except Exception as exc:  # noqa: BLE001 - release operators need the failed invariant
         print(f"FAIL {args.decision}: {exc}", file=sys.stderr)
         return 1
