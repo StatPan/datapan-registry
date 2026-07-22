@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.release-receipt-admission.v1.schema.json",
+  "title": "Datapan Release Receipt Admission v1",
+  "description": "Redacted immutable producer receipt admitted by the Registry release control plane.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "receipt_kind", "producer", "registry", "outcome", "scope", "redaction", "receipt_digest"],
+  "properties": {
+    "schema_version": {"const": "datapan.release-receipt-admission.v1"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "receipt_kind": {"enum": ["catalog_observation", "runtime_freshness_shard", "cli_consumer_smoke"]},
+    "producer": {"$ref": "#/$defs/producer"},
+    "registry": {"$ref": "#/$defs/registry"},
+    "outcome": {"enum": ["no_change", "material_change", "collection_failure", "verified", "failed", "skipped", "unknown"]},
+    "scope": {"$ref": "#/$defs/scope"},
+    "execution": {"$ref": "#/$defs/execution"},
+    "redaction": {"$ref": "#/$defs/redaction"},
+    "receipt_digest": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "revision", "receipt_path", "receipt_sha256"],
+      "properties": {
+        "repository": {"type": "string", "pattern": "^StatPan/[A-Za-z0-9_.-]+$"},
+        "revision": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "receipt_path": {"type": "string", "pattern": "^[A-Za-z0-9_./-]+\\.json$"},
+        "receipt_sha256": {"$ref": "#/$defs/digest"},
+        "aggregate_path": {"type": "string", "pattern": "^[A-Za-z0-9_./-]+\\.json$"},
+        "aggregate_sha256": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "registry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest_path", "manifest_sha256", "source_path", "source_sha256", "policy_path", "policy_sha256"],
+      "properties": {
+        "manifest_path": {"type": "string", "minLength": 1},
+        "manifest_sha256": {"$ref": "#/$defs/digest"},
+        "source_path": {"type": "string", "minLength": 1},
+        "source_sha256": {"$ref": "#/$defs/digest"},
+        "policy_path": {"type": "string", "minLength": 1},
+        "policy_sha256": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "subject"],
+      "properties": {
+        "provider": {"type": "string", "minLength": 1},
+        "subject": {"type": "string", "minLength": 1}
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["run_id", "shard_count", "shard_index", "shard_digest", "batch_size", "max_parallelism", "per_operation_timeout_seconds", "terminal_state"],
+      "properties": {
+        "run_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "shard_count": {"const": 8},
+        "shard_index": {"type": "integer", "minimum": 0, "maximum": 7},
+        "shard_digest": {"$ref": "#/$defs/digest"},
+        "batch_size": {"type": "integer", "minimum": 1, "maximum": 100},
+        "max_parallelism": {"type": "integer", "minimum": 1, "maximum": 2},
+        "per_operation_timeout_seconds": {"type": "integer", "minimum": 1, "maximum": 20},
+        "terminal_state": {"enum": ["verified", "failed", "skipped", "unknown"]}
+      }
+    },
+    "redaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["secret_values_present", "secret_hashes_present", "request_urls_present", "response_bodies_present", "forbidden_fields_checked"],
+      "properties": {
+        "secret_values_present": {"const": false},
+        "secret_hashes_present": {"const": false},
+        "request_urls_present": {"const": false},
+        "response_bodies_present": {"const": false},
+        "forbidden_fields_checked": {"type": "array", "minItems": 5, "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+      }
+    }
+  },
+  "allOf": [
+    {"if": {"properties": {"receipt_kind": {"const": "runtime_freshness_shard"}}}, "then": {"required": ["execution"], "properties": {"producer": {"required": ["aggregate_path", "aggregate_sha256"]}}}},
+    {"if": {"properties": {"receipt_kind": {"enum": ["catalog_observation", "cli_consumer_smoke"]}}}, "then": {"not": {"required": ["execution"]}}}
+  ]
+}

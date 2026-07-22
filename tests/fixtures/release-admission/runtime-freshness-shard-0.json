@@ -1,0 +1,12 @@
+{
+  "schema_version": "datapan.release-receipt-admission.v1",
+  "generated_at": "2026-07-22T00:00:00Z",
+  "receipt_kind": "runtime_freshness_shard",
+  "producer": {"repository": "StatPan/datapan-health", "revision": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "receipt_path": "receipts/runtime-freshness-shard-0.json", "receipt_sha256": "cc85419e2072f5866c9c4f25c4d82e96abfeedb1b1f4ea1260a671d477004eab", "aggregate_path": "runs/fixture-run-42.json", "aggregate_sha256": "b1d3c006fef0fde0c7ccbf2b47b9bbe6ff9b58c74b19c8b33c35ebfe912fb486"},
+  "registry": {"manifest_path": "tests/fixtures/release-admission/manifest.json", "manifest_sha256": "3fe8191ae44e11fef8aa27f931fa2d86687a74f868f1615b4dae187a1c1a51c9", "source_path": "data/registry.json", "source_sha256": "97c8d6f5771e426b0782c19107d2007637eb7ee452cabb48b1c5d1627a71c8f7", "policy_path": "policy/release-receipt-admission.json", "policy_sha256": "1fa2600c4aa6cf09ca123dfc8a9381d5cffc4c57aa0a0ce50adb3b7bd80bc00c"},
+  "outcome": "verified",
+  "scope": {"provider": "data_go_kr", "subject": "runtime_freshness_rotating_shard"},
+  "execution": {"run_id": "fixture-run-42", "shard_count": 8, "shard_index": 0, "shard_digest": "0000000000000000000000000000000000000000000000000000000000000001", "batch_size": 100, "max_parallelism": 2, "per_operation_timeout_seconds": 20, "terminal_state": "verified"},
+  "redaction": {"secret_values_present": false, "secret_hashes_present": false, "request_urls_present": false, "response_bodies_present": false, "forbidden_fields_checked": ["credential_value", "credential_hash", "authorization_header", "service_key", "api_key"]},
+  "receipt_digest": "97d3b276a7a52b3f73834a719ed6469cd0c6530be312136a5ce63f3a8fb5d666"
+}
