@@ -22,7 +22,7 @@ def main():
   spec=importlib.util.spec_from_file_location("plan_generator",ROOT/"scripts/generate-health-runtime-observation-plan.py"); mod=importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
   fail(plan==mod.build(),"generated plan drift")
   entries=[x for x in manifest["artifacts"] if x.get("path")==PLAN.as_posix()]
-  fail(len(entries)==1 and entries[0].get("kind")=="health_runtime_observation_plan" and entries[0].get("schema")==schema["$id"],"plan manifest entry mismatch")
+  fail(len(entries)==1 and entries[0].get("kind")=="verification_plan" and entries[0].get("schema")==schema["$id"],"plan manifest entry mismatch")
   fail(entries[0].get("sha256")==sha(PLAN) and entries[0].get("bytes")==PLAN.stat().st_size,"full manifest does not bind exact plan bytes")
   fail(plan["manifest_binding"]["sha256"]==mod.manifest_binding(manifest),"manifest binding digest mismatch")
   shards=plan["shards"]; fail([x["index"] for x in shards]==list(range(8)),"shards must be canonical indexes")

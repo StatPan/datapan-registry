@@ -30,7 +30,7 @@ class ReleaseAdmissionReceiptTest(unittest.TestCase):
             "artifact_count": 2,
             "artifacts": [
                 {"path": "data/registry.json", "sha256": admission.file_digest(artifact)},
-                {"path": "reports/health-runtime-observation-plan.v1.json", "kind": "health_runtime_observation_plan", "schema": "https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json", "bytes": 0, "sha256": "0" * 64},
+                {"path": "reports/health-runtime-observation-plan.v1.json", "kind": "verification_plan", "schema": "https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json", "bytes": 0, "sha256": "0" * 64},
             ],
         }
         self.manifest_path = self.root / "manifest.json"

@@ -261,7 +261,7 @@ def validate_execution_plan(execution_plan: dict[str, Any], manifest_path: pathl
         raise ValueError(f"{label}: Health execution plan is not manifest-bound")
     projection = copy.deepcopy(manifest)
     bound = [item for item in projection["artifacts"] if item.get("path") == expected_path]
-    if len(bound) != 1 or bound[0].get("kind") != "health_runtime_observation_plan" or bound[0].get("schema") != "https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json":
+    if len(bound) != 1 or bound[0].get("kind") != "verification_plan" or bound[0].get("schema") != "https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json":
         raise ValueError(f"{label}: Health execution plan manifest identity does not match")
     bound[0].pop("bytes", None); bound[0].pop("sha256", None)
     digest = hashlib.sha256(json.dumps(projection, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")).hexdigest()

@@ -12,7 +12,7 @@ def key(fields):
  return sha(bytes(b))
 def manifest_binding(manifest):
  v=copy.deepcopy(manifest); matches=[a for a in v["artifacts"] if a.get("path")==OUTPUT.as_posix()]
- if len(matches)!=1 or matches[0].get("kind")!="health_runtime_observation_plan" or matches[0].get("schema")!="https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json": raise ValueError("plan manifest entry must be unique with expected path/kind/schema")
+ if len(matches)!=1 or matches[0].get("kind")!="verification_plan" or matches[0].get("schema")!="https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json": raise ValueError("plan manifest entry must be unique with expected path/kind/schema")
  for f in ("bytes","sha256"):
   if f not in matches[0]: raise ValueError("plan manifest entry missing excluded field")
   matches[0].pop(f)

@@ -2,6 +2,9 @@
 
 `reports/health-runtime-observation-plan.v1.json` is static Registry policy, not
 a command or a live receipt. It contains exactly eight immutable memberships.
+Its manifest kind is the existing `verification_plan`, preserving the current
+release-manifest v1 consumer contract; the plan's distinct schema URI carries
+its Health-specific identity.
 The plan's `manifest_binding.sha256` is SHA-256 of canonical UTF-8 JSON with
 sorted keys and compact separators after removing only `bytes` and `sha256`
 from its own manifest artifact entry. Its path, kind, schema, and every other
