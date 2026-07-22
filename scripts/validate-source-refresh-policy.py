@@ -63,6 +63,14 @@ def main() -> int:
             observed = dt.datetime.fromisoformat(item["last_successful_observation"].replace("Z", "+00:00"))
             if observed > dt.datetime.now(dt.timezone.utc):
                 raise ValueError(f"{item['source_id']} last_successful_observation is in the future")
+            arguments = item["importer"]["arguments"]
+            try:
+                timeout_index = arguments.index("--timeout")
+                timeout = arguments[timeout_index + 1]
+            except (ValueError, IndexError) as exc:
+                raise ValueError(f"{item['source_id']} must declare a bounded full-import --timeout") from exc
+            if timeout != "10m":
+                raise ValueError(f"{item['source_id']} full-import timeout must be the reviewed 10m budget, got {timeout!r}")
         required_workflow_fragments = (
             "run-upstream-refresh.py",
             "if: always()",
