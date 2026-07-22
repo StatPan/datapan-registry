@@ -13,7 +13,7 @@ jobs:
   observe:
     runs-on: ubuntu-latest
     env:
-      DATA_GO_KR_SERVICE_KEY: ${{ secrets.DATA_GO_KR_SERVICE_KEY }}
+      DATA_GO_KR_SERVICE_KEY: ${{ secrets.DATAPAN_DATA_GO_KR_SERVICE_KEY }}
     steps:
       - name: Checkout registry without LFS
         uses: actions/checkout@v7

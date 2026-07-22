@@ -63,7 +63,13 @@ def main() -> int:
             observed = dt.datetime.fromisoformat(item["last_successful_observation"].replace("Z", "+00:00"))
             if observed > dt.datetime.now(dt.timezone.utc):
                 raise ValueError(f"{item['source_id']} last_successful_observation is in the future")
-        for fragment in ("run-upstream-refresh.py", "if: always()", "automatic publication:"):
+        required_workflow_fragments = (
+            "run-upstream-refresh.py",
+            "if: always()",
+            "automatic publication:",
+            "DATA_GO_KR_SERVICE_KEY: ${{ secrets.DATAPAN_DATA_GO_KR_SERVICE_KEY }}",
+        )
+        for fragment in required_workflow_fragments:
             if fragment not in workflow_text:
                 raise ValueError(f"refresh workflow missing required fragment: {fragment}")
         print(f"ok {args.policy} (scheduled_catalogs={len(sources)}, operation_denominators={len(denominators)})")
