@@ -125,6 +125,7 @@ def validate_input_invariants(handoff: dict[str, Any], compatibility: dict[str, 
 def validate_decision_state(
     decision: dict[str, Any],
     *,
+    decision_path: pathlib.Path,
     handoff_path: pathlib.Path,
     compatibility_path: pathlib.Path,
     technical_rebinding_path: pathlib.Path,
@@ -219,7 +220,13 @@ def build_report(
     technical_rebinding_path: pathlib.Path = DEFAULT_TECHNICAL_REBINDING,
 ) -> dict[str, Any]:
     validate_input_invariants(handoff, compatibility, decision)
-    validate_decision_state(decision, handoff_path=handoff_path, compatibility_path=compatibility_path, technical_rebinding_path=technical_rebinding_path)
+    validate_decision_state(
+        decision,
+        decision_path=decision_path,
+        handoff_path=handoff_path,
+        compatibility_path=compatibility_path,
+        technical_rebinding_path=technical_rebinding_path,
+    )
     handoff_summary = as_dict(handoff.get("summary"), "handoff.summary")
     handoff_boundary = as_dict(handoff.get("release_boundary"), "handoff.release_boundary")
     compatibility_risk = as_dict(compatibility.get("runtime_risk_evidence"), "compatibility.runtime_risk_evidence")
