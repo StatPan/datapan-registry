@@ -69,6 +69,46 @@ source artifacts that the manifest must checksum. CI writes the current-checkout
 or selected-manifest equivalents under `.datapan/ci/` so workflow evidence can
 verify the same command path without rewriting the checked-in receipt files.
 
+## Immutable Receipt Admission Foundation
+
+`schemas/datapan.release-receipt-admission.v1.schema.json` defines the
+Registry-side, offline admission boundary for immutable producer receipts. A
+receipt is bound to a producer commit and producer-receipt digest plus the
+selected Registry manifest, source-registry, and admission-policy digests. Its
+`receipt_digest` is SHA-256 over canonical JSON with that field omitted, so it
+does not self-reference. The separately supplied producer artifact root is
+required at admission: aggregate and shard files are resolved below that root,
+byte-checked against declared SHA-256 values, and cannot escape via path
+traversal or symlinks. The explicit admission time applies producer-kind
+freshness limits and rejects future receipts.
+
+Validate local contract fixtures without a provider call, Registry publication,
+or Datapan CLI checkout:
+
+```bash
+python3 scripts/validate-release-admission-receipts.py \
+  --manifest tests/fixtures/release-admission/manifest.json \
+  --check-manifest-artifacts \
+  --admission-time 2026-07-22T01:00:00Z \
+  --producer-artifact-root StatPan/datapan-data=tests/fixtures/release-admission/producer-artifacts/datapan-data \
+  --producer-artifact-root StatPan/datapan-health=tests/fixtures/release-admission/producer-artifacts/datapan-health \
+  --producer-artifact-root StatPan/datapan-cli=tests/fixtures/release-admission/producer-artifacts/datapan-cli \
+  tests/fixtures/release-admission/catalog-observation.json \
+  tests/fixtures/release-admission/cli-consumer-smoke.json \
+  tests/fixtures/release-admission/runtime-freshness-shard-0.json
+```
+
+The `runtime_freshness_shard` kind is exclusively for the rotating eight-shard
+freshness run. It requires one immutable producer revision, one Registry
+manifest/source/policy binding, all shard indexes 0 through 7, batch size at
+most 100, parallelism at most 2, and per-operation timeout at most 20 seconds.
+Its Health aggregate and selected shard artifact are byte-bound to the outer
+Registry envelope. A partial aggregate (`receipt_available=false` for any
+shard) cannot synthesize an outer receipt and fails completeness. It does not
+admit or replace Health canary observations. This is a contract foundation
+only; the current external-checkout guard remains in force until later
+producer, workflow-cutover, and rollback evidence is proven.
+
 ## Guarded GitHub Draft
 
 Maintainers may use the `Draft registry release` GitHub Actions workflow when

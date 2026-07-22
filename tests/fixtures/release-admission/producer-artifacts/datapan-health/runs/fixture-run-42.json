@@ -1,0 +1,18 @@
+{
+  "schema_version": "datapan.health-bounded-observation-run.v1",
+  "producer": {"repository": "StatPan/datapan-health", "revision": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"},
+  "registry": {"manifest_sha256": "3fe8191ae44e11fef8aa27f931fa2d86687a74f868f1615b4dae187a1c1a51c9", "source_sha256": "97c8d6f5771e426b0782c19107d2007637eb7ee452cabb48b1c5d1627a71c8f7", "policy_sha256": "1fa2600c4aa6cf09ca123dfc8a9381d5cffc4c57aa0a0ce50adb3b7bd80bc00c"},
+  "run": {"run_id": "fixture-run-42", "shard_count": 8, "batch_size": 100, "max_parallel": 2, "timeout_ms": 20000},
+  "shards": [
+    {"index": 0, "receipt_available": true, "completed": true, "manifest_sha256": "3fe8191ae44e11fef8aa27f931fa2d86687a74f868f1615b4dae187a1c1a51c9", "policy_sha256": "1fa2600c4aa6cf09ca123dfc8a9381d5cffc4c57aa0a0ce50adb3b7bd80bc00c", "receipt_path": "receipts/runtime-freshness-shard-0.json", "receipt_sha256": "cc85419e2072f5866c9c4f25c4d82e96abfeedb1b1f4ea1260a671d477004eab", "shard_digest": "0000000000000000000000000000000000000000000000000000000000000001", "scope": {"provider": "data_go_kr", "subject": "runtime_freshness_rotating_shard"}, "terminal_state": "verified", "redaction": {"secret_values_removed": true, "secret_hashes_removed": true, "authorization_headers_removed": true, "credential_bearing_urls_removed": true, "raw_provider_text_removed": true, "raw_provider_urls_removed": true, "response_bodies_removed": true, "response_rows_removed": true, "user_identity_removed": true}},
+    {"index": 1, "receipt_available": true, "completed": true, "manifest_sha256": "3fe8191ae44e11fef8aa27f931fa2d86687a74f868f1615b4dae187a1c1a51c9", "policy_sha256": "1fa2600c4aa6cf09ca123dfc8a9381d5cffc4c57aa0a0ce50adb3b7bd80bc00c"},
+    {"index": 2, "receipt_available": true, "completed": true, "manifest_sha256": "3fe8191ae44e11fef8aa27f931fa2d86687a74f868f1615b4dae187a1c1a51c9", "policy_sha256": "1fa2600c4aa6cf09ca123dfc8a9381d5cffc4c57aa0a0ce50adb3b7bd80bc00c"},
+    {"index": 3, "receipt_available": true, "completed": true, "manifest_sha256": "3fe8191ae44e11fef8aa27f931fa2d86687a74f868f1615b4dae187a1c1a51c9", "policy_sha256": "1fa2600c4aa6cf09ca123dfc8a9381d5cffc4c57aa0a0ce50adb3b7bd80bc00c"},
+    {"index": 4, "receipt_available": true, "completed": true, "manifest_sha256": "3fe8191ae44e11fef8aa27f931fa2d86687a74f868f1615b4dae187a1c1a51c9", "policy_sha256": "1fa2600c4aa6cf09ca123dfc8a9381d5cffc4c57aa0a0ce50adb3b7bd80bc00c"},
+    {"index": 5, "receipt_available": true, "completed": true, "manifest_sha256": "3fe8191ae44e11fef8aa27f931fa2d86687a74f868f1615b4dae187a1c1a51c9", "policy_sha256": "1fa2600c4aa6cf09ca123dfc8a9381d5cffc4c57aa0a0ce50adb3b7bd80bc00c"},
+    {"index": 6, "receipt_available": true, "completed": true, "manifest_sha256": "3fe8191ae44e11fef8aa27f931fa2d86687a74f868f1615b4dae187a1c1a51c9", "policy_sha256": "1fa2600c4aa6cf09ca123dfc8a9381d5cffc4c57aa0a0ce50adb3b7bd80bc00c"},
+    {"index": 7, "receipt_available": true, "completed": true, "manifest_sha256": "3fe8191ae44e11fef8aa27f931fa2d86687a74f868f1615b4dae187a1c1a51c9", "policy_sha256": "1fa2600c4aa6cf09ca123dfc8a9381d5cffc4c57aa0a0ce50adb3b7bd80bc00c"}
+  ],
+  "aggregate": {"terminal_state": "verified", "completeness": "complete", "timed_out": false},
+  "redaction": {"secret_values_removed": true, "secret_hashes_removed": true, "authorization_headers_removed": true, "credential_bearing_urls_removed": true, "raw_provider_text_removed": true, "raw_provider_urls_removed": true, "response_bodies_removed": true, "response_rows_removed": true, "user_identity_removed": true}
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": "datapan.release-receipt-admission.v1",
+  "generated_at": "2026-07-22T00:00:00Z",
+  "receipt_kind": "cli_consumer_smoke",
+  "producer": {"repository": "StatPan/datapan-cli", "revision": "cccccccccccccccccccccccccccccccccccccccc", "receipt_path": "receipts/cli-consumer-smoke.json", "receipt_sha256": "7480e7bb6a897dab6885afb77d47226acb85e91f1cefef70c22d3f296e577c49"},
+  "registry": {"manifest_path": "tests/fixtures/release-admission/manifest.json", "manifest_sha256": "3fe8191ae44e11fef8aa27f931fa2d86687a74f868f1615b4dae187a1c1a51c9", "source_path": "data/registry.json", "source_sha256": "97c8d6f5771e426b0782c19107d2007637eb7ee452cabb48b1c5d1627a71c8f7", "policy_path": "policy/release-receipt-admission.json", "policy_sha256": "1fa2600c4aa6cf09ca123dfc8a9381d5cffc4c57aa0a0ce50adb3b7bd80bc00c"},
+  "outcome": "verified",
+  "scope": {"provider": "data.go.kr", "subject": "published_registry_consumer_smoke"},
+  "redaction": {"secret_values_present": false, "secret_hashes_present": false, "request_urls_present": false, "response_bodies_present": false, "forbidden_fields_checked": ["credential_value", "credential_hash", "authorization_header", "service_key", "api_key"]},
+  "receipt_digest": "8adc6c450cd9b30e4fe4304d6f142d508c31eb1e50d4693e5f33f0becb3499a8"
+}
