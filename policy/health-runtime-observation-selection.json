@@ -1,0 +1,18 @@
+{
+  "schema_version": "datapan.health-runtime-observation-selection.v1",
+  "generated_at": "2026-07-23T00:00:00Z",
+  "authority": "datapan-registry",
+  "registry_revision": "4458003e1490e70d2efc538df93aeaa3addc90ef",
+  "selection_id": "data-go-kr-gateway-eight-shard-v1",
+  "members": [
+    {"operation_id":"hrop-00000001","dataset_id":"15000480","operation_name":"명절 비상진료기관 FullData 내려받기목록정보 조회"},
+    {"operation_id":"hrop-00000002","dataset_id":"15000576","operation_name":"약국 FullData 내려받기"},
+    {"operation_id":"hrop-00000003","dataset_id":"15000652","operation_name":"자동제세동기 FullData 내려받기"},
+    {"operation_id":"hrop-00000004","dataset_id":"15000736","operation_name":"병/의원 FullData 내려받기"},
+    {"operation_id":"hrop-00000005","dataset_id":"15000863","operation_name":"문화시설 식당 상세 정보를 조회"},
+    {"operation_id":"hrop-00000006","dataset_id":"15000897","operation_name":"선거코드"},
+    {"operation_id":"hrop-00000007","dataset_id":"15001697","operation_name":"의료기관종별코드조회"},
+    {"operation_id":"hrop-00000008","dataset_id":"15001839","operation_name":"민간 자원별 제공서비스 정보 조회"}
+  ],
+  "execution": {"request_budget":1,"timeout_ceiling_ms":10000,"safe_parameters":[{"name":"pageNo","strategy":"bounded_integer","minimum":1,"maximum":1},{"name":"numOfRows","strategy":"bounded_integer","minimum":1,"maximum":1}]}
+}

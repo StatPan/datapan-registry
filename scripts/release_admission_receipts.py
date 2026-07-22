@@ -248,6 +248,28 @@ def validate_health_aggregate(
         raise ValueError(f"{label}: outer redaction mapping is not safe")
 
 
+def validate_execution_plan(execution_plan: dict[str, Any], manifest_path: pathlib.Path, label: str) -> None:
+    expected_path = "reports/health-runtime-observation-plan.v1.json"
+    if execution_plan.get("path") != expected_path:
+        raise ValueError(f"{label}: Health execution plan path is not authorized")
+    plan_path = rooted_file(manifest_path.parent, expected_path, f"{label}.execution_plan.path")
+    if execution_plan.get("sha256") != file_digest(plan_path):
+        raise ValueError(f"{label}: Health execution plan digest does not match")
+    manifest = load_json(manifest_path)
+    entries = [item for item in as_list(manifest.get("artifacts"), "manifest.artifacts") if isinstance(item, dict) and item.get("path") == expected_path]
+    if len(entries) != 1 or entries[0].get("sha256") != execution_plan.get("sha256"):
+        raise ValueError(f"{label}: Health execution plan is not manifest-bound")
+    projection = copy.deepcopy(manifest)
+    bound = [item for item in projection["artifacts"] if item.get("path") == expected_path]
+    if len(bound) != 1 or bound[0].get("kind") != "verification_plan" or bound[0].get("schema") != "https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json":
+        raise ValueError(f"{label}: Health execution plan manifest identity does not match")
+    bound[0].pop("bytes", None); bound[0].pop("sha256", None)
+    digest = hashlib.sha256(json.dumps(projection, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")).hexdigest()
+    plan = load_json(plan_path)
+    if execution_plan.get("manifest_binding_sha256") != digest or plan.get("manifest_binding", {}).get("sha256") != digest:
+        raise ValueError(f"{label}: Health execution plan manifest binding does not match")
+
+
 def validate_receipt(receipt: dict[str, Any], *, schema: dict[str, Any], policy: dict[str, Any], policy_path: pathlib.Path, manifest_path: pathlib.Path, manifest_sha256: str, source_sha256: str, artifact_roots: dict[str, pathlib.Path], admitted_at: datetime, label: str) -> None:
     validate_schema(receipt, schema, label)
     scan_redaction(receipt, policy, label)
@@ -289,6 +311,7 @@ def validate_receipt(receipt: dict[str, Any], *, schema: dict[str, Any], policy:
         raise ValueError(f"{label}: registry admission policy binding does not match")
     if kind == RUNTIME_KIND:
         execution = as_dict(receipt.get("execution"), f"{label}.execution")
+        validate_execution_plan(as_dict(receipt.get("execution_plan"), f"{label}.execution_plan"), manifest_path, label)
         for field, policy_field in (("shard_count", "shard_count"), ("batch_size", "batch_size_max"), ("max_parallelism", "max_parallelism_max"), ("per_operation_timeout_seconds", "per_operation_timeout_seconds_max")):
             if field == "shard_count":
                 if execution.get(field) != contract.get(policy_field):

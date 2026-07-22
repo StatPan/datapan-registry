@@ -15,6 +15,7 @@
     "outcome": {"enum": ["no_change", "material_change", "collection_failure", "verified", "failed", "skipped", "unknown"]},
     "scope": {"$ref": "#/$defs/scope"},
     "execution": {"$ref": "#/$defs/execution"},
+    "execution_plan": {"$ref": "#/$defs/execution_plan"},
     "redaction": {"$ref": "#/$defs/redaction"},
     "receipt_digest": {"$ref": "#/$defs/digest"}
   },
@@ -70,6 +71,15 @@
         "terminal_state": {"enum": ["verified", "failed", "skipped", "unknown"]}
       }
     },
+    "execution_plan": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "sha256", "manifest_binding_sha256"],
+      "properties": {
+        "path": {"const": "reports/health-runtime-observation-plan.v1.json"},
+        "sha256": {"$ref": "#/$defs/digest"},
+        "manifest_binding_sha256": {"$ref": "#/$defs/digest"}
+      }
+    },
     "redaction": {
       "type": "object",
       "additionalProperties": false,
@@ -84,7 +94,7 @@
     }
   },
   "allOf": [
-    {"if": {"properties": {"receipt_kind": {"const": "runtime_freshness_shard"}}}, "then": {"required": ["execution"], "properties": {"producer": {"required": ["aggregate_path", "aggregate_sha256"]}}}},
+    {"if": {"properties": {"receipt_kind": {"const": "runtime_freshness_shard"}}}, "then": {"required": ["execution", "execution_plan"], "properties": {"producer": {"required": ["aggregate_path", "aggregate_sha256"]}}}},
     {"if": {"properties": {"receipt_kind": {"enum": ["catalog_observation", "cli_consumer_smoke"]}}}, "then": {"not": {"required": ["execution"]}}}
   ]
 }

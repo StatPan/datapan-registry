@@ -1,0 +1,18 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json",
+  "title":"Datapan Health Runtime Observation Plan v1",
+  "description":"Registry-owned static eight-shard membership. It excludes credential values, query values, command fields, response data, and live observations.",
+  "type":"object","additionalProperties":false,
+  "required":["schema_version","generated_at","authority","source_registry","registry_revision","manifest_binding","selection_policy","summary","shards"],
+  "properties":{
+    "schema_version":{"const":"datapan.health-runtime-observation-plan.v1"},"generated_at":{"type":"string","format":"date-time"},"authority":{"const":"datapan-registry"},
+    "registry_revision":{"type":"string","pattern":"^[a-f0-9]{40}$"},
+    "source_registry":{"type":"object","additionalProperties":false,"required":["path","sha256"],"properties":{"path":{"const":"data/data-go-kr.registry.json"},"sha256":{"$ref":"#/$defs/sha"}}},
+    "manifest_binding":{"type":"object","additionalProperties":false,"required":["path","sha256","excluded_fields"],"properties":{"path":{"const":"manifest.json"},"sha256":{"$ref":"#/$defs/sha"},"excluded_fields":{"const":["bytes","sha256"]}}},
+    "selection_policy":{"type":"object","additionalProperties":false,"required":["path","sha256","selection_id"],"properties":{"path":{"const":"policy/health-runtime-observation-selection.json"},"sha256":{"$ref":"#/$defs/sha"},"selection_id":{"type":"string"}}},
+    "summary":{"type":"object","additionalProperties":false,"required":["shards","members"],"properties":{"shards":{"const":8},"members":{"const":8}}},
+    "shards":{"type":"array","minItems":8,"maxItems":8,"items":{"$ref":"#/$defs/shard"}}
+  },
+  "$defs":{"sha":{"type":"string","pattern":"^[a-f0-9]{64}$"},"execution":{"type":"object","additionalProperties":false,"required":["request_budget","timeout_ceiling_ms","safe_parameters"],"properties":{"request_budget":{"const":1},"timeout_ceiling_ms":{"type":"integer","minimum":1000,"maximum":20000},"safe_parameters":{"type":"array","minItems":2,"maxItems":2}}},"member":{"type":"object","additionalProperties":false,"required":["operation_id","dataset_id","operation_name","upstream_operation_seq","cli_operation_key","endpoint","credential_requirement","execution"],"properties":{"operation_id":{"type":"string","pattern":"^hrop-[0-9]{8}$"},"dataset_id":{"type":"string"},"operation_name":{"type":"string"},"upstream_operation_seq":{"type":"string"},"cli_operation_key":{"$ref":"#/$defs/sha"},"endpoint":{"type":"object","additionalProperties":false,"required":["host","path"],"properties":{"host":{"const":"apis.data.go.kr"},"path":{"type":"string","pattern":"^/"}}},"credential_requirement":{"const":{"required":true,"type":"service_key","scope":"operation"}},"execution":{"$ref":"#/$defs/execution"}}},"shard":{"type":"object","additionalProperties":false,"required":["index","operation_count","membership_digest","members"],"properties":{"index":{"type":"integer","minimum":0,"maximum":7},"operation_count":{"const":1},"membership_digest":{"$ref":"#/$defs/sha"},"members":{"type":"array","minItems":1,"maxItems":1,"items":{"$ref":"#/$defs/member"}}}}}
+}
