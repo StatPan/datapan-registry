@@ -1,0 +1,357 @@
+{
+  "schema_version": "datapan.health-runtime-observation-plan.v1",
+  "generated_at": "2026-07-23T00:00:00Z",
+  "authority": "datapan-registry",
+  "registry_revision": "4458003e1490e70d2efc538df93aeaa3addc90ef",
+  "source_registry": {
+    "path": "data/data-go-kr.registry.json",
+    "sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644"
+  },
+  "manifest_binding": {
+    "path": "manifest.json",
+    "sha256": "244f056cfc28a0826d948e7d535cc0bb2d57c3fd83dd27ac8fa9957c654d2b15",
+    "excluded_fields": [
+      "bytes",
+      "sha256"
+    ]
+  },
+  "selection_policy": {
+    "path": "policy/health-runtime-observation-selection.json",
+    "sha256": "a072096f8cd68e354e18bf410a3042f50b8f3282446e2fabf5cbcb3efe93957a",
+    "selection_id": "data-go-kr-gateway-eight-shard-v1"
+  },
+  "summary": {
+    "shards": 8,
+    "members": 8
+  },
+  "shards": [
+    {
+      "index": 0,
+      "operation_count": 1,
+      "membership_digest": "5de65711fc8e137fa61aa094f359df5c7a7a504ea2a46e78a753e831004fbaf1",
+      "members": [
+        {
+          "operation_id": "hrop-00000001",
+          "dataset_id": "15000480",
+          "operation_name": "명절 비상진료기관 FullData 내려받기목록정보 조회",
+          "upstream_operation_seq": "17442",
+          "cli_operation_key": "472283c645233f09e0285a651fecc659dcbc70d09095e7c20fe590389df5af4d",
+          "endpoint": {
+            "host": "apis.data.go.kr",
+            "path": "/B552657/HolidyEmgncClnicInsttInfoInqireService/getHolidyClnicPosblEgytFullDown"
+          },
+          "credential_requirement": {
+            "required": true,
+            "type": "service_key",
+            "scope": "operation"
+          },
+          "execution": {
+            "request_budget": 1,
+            "timeout_ceiling_ms": 10000,
+            "safe_parameters": [
+              {
+                "name": "pageNo",
+                "strategy": "bounded_integer",
+                "minimum": 1,
+                "maximum": 1
+              },
+              {
+                "name": "numOfRows",
+                "strategy": "bounded_integer",
+                "minimum": 1,
+                "maximum": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "operation_count": 1,
+      "membership_digest": "9d5cef28735d662472a39ad1fbf6399ba93ddc6d542bab3998d63229e6061a36",
+      "members": [
+        {
+          "operation_id": "hrop-00000002",
+          "dataset_id": "15000576",
+          "operation_name": "약국 FullData 내려받기",
+          "upstream_operation_seq": "17429",
+          "cli_operation_key": "49135cc0a0f4cd7888d9895c7b05fb66f323f8b5b2192c4f04770db648560ba7",
+          "endpoint": {
+            "host": "apis.data.go.kr",
+            "path": "/B552657/ErmctInsttInfoInqireService/getParmacyFullDown"
+          },
+          "credential_requirement": {
+            "required": true,
+            "type": "service_key",
+            "scope": "operation"
+          },
+          "execution": {
+            "request_budget": 1,
+            "timeout_ceiling_ms": 10000,
+            "safe_parameters": [
+              {
+                "name": "pageNo",
+                "strategy": "bounded_integer",
+                "minimum": 1,
+                "maximum": 1
+              },
+              {
+                "name": "numOfRows",
+                "strategy": "bounded_integer",
+                "minimum": 1,
+                "maximum": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "operation_count": 1,
+      "membership_digest": "ca79bece32667328f1aa7d56a07af3e97f892a417c6c4d6741c272e72073d569",
+      "members": [
+        {
+          "operation_id": "hrop-00000003",
+          "dataset_id": "15000652",
+          "operation_name": "자동제세동기 FullData 내려받기",
+          "upstream_operation_seq": "17438",
+          "cli_operation_key": "6029588b5bb858defda785d7aaf5697f8fbd98170e555ea56737d98ae8f3d7cc",
+          "endpoint": {
+            "host": "apis.data.go.kr",
+            "path": "/B552657/AEDInfoInqireService/getAedFullDown"
+          },
+          "credential_requirement": {
+            "required": true,
+            "type": "service_key",
+            "scope": "operation"
+          },
+          "execution": {
+            "request_budget": 1,
+            "timeout_ceiling_ms": 10000,
+            "safe_parameters": [
+              {
+                "name": "pageNo",
+                "strategy": "bounded_integer",
+                "minimum": 1,
+                "maximum": 1
+              },
+              {
+                "name": "numOfRows",
+                "strategy": "bounded_integer",
+                "minimum": 1,
+                "maximum": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "operation_count": 1,
+      "membership_digest": "c9549c3a18b5533e4e793ba852362eb4663e9e1593898d407f7104e52614ad05",
+      "members": [
+        {
+          "operation_id": "hrop-00000004",
+          "dataset_id": "15000736",
+          "operation_name": "병/의원 FullData 내려받기",
+          "upstream_operation_seq": "17581",
+          "cli_operation_key": "63aef3afcb3db1938a819fbacdc03ad4f027570f845f574b382576c31d0a9905",
+          "endpoint": {
+            "host": "apis.data.go.kr",
+            "path": "/B552657/HsptlAsembySearchService/getHsptlMdcncFullDown"
+          },
+          "credential_requirement": {
+            "required": true,
+            "type": "service_key",
+            "scope": "operation"
+          },
+          "execution": {
+            "request_budget": 1,
+            "timeout_ceiling_ms": 10000,
+            "safe_parameters": [
+              {
+                "name": "pageNo",
+                "strategy": "bounded_integer",
+                "minimum": 1,
+                "maximum": 1
+              },
+              {
+                "name": "numOfRows",
+                "strategy": "bounded_integer",
+                "minimum": 1,
+                "maximum": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "operation_count": 1,
+      "membership_digest": "e3864d184a163892eeb286217b389807593dac122de012cc7ac42d841ad96195",
+      "members": [
+        {
+          "operation_id": "hrop-00000005",
+          "dataset_id": "15000863",
+          "operation_name": "문화시설 식당 상세 정보를 조회",
+          "upstream_operation_seq": "51077",
+          "cli_operation_key": "84f641723b50bc2b1b23a4418e18236d842c7fe604fe998ee072d80e25ab1a99",
+          "endpoint": {
+            "host": "apis.data.go.kr",
+            "path": "/6300000/openapi2022/restrnt/getrestrnt"
+          },
+          "credential_requirement": {
+            "required": true,
+            "type": "service_key",
+            "scope": "operation"
+          },
+          "execution": {
+            "request_budget": 1,
+            "timeout_ceiling_ms": 10000,
+            "safe_parameters": [
+              {
+                "name": "pageNo",
+                "strategy": "bounded_integer",
+                "minimum": 1,
+                "maximum": 1
+              },
+              {
+                "name": "numOfRows",
+                "strategy": "bounded_integer",
+                "minimum": 1,
+                "maximum": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "operation_count": 1,
+      "membership_digest": "c50208f8dfcd5410c8955b760e3bf73a9707a77b108f90b49de4e0c114f555d5",
+      "members": [
+        {
+          "operation_id": "hrop-00000006",
+          "dataset_id": "15000897",
+          "operation_name": "선거코드",
+          "upstream_operation_seq": "20139",
+          "cli_operation_key": "2be6b4603c85e8717ae6ece5a27520cec75ca8ff6ea955df3d2f339011746ffd",
+          "endpoint": {
+            "host": "apis.data.go.kr",
+            "path": "/9760000/CommonCodeService/getCommonSgCodeList"
+          },
+          "credential_requirement": {
+            "required": true,
+            "type": "service_key",
+            "scope": "operation"
+          },
+          "execution": {
+            "request_budget": 1,
+            "timeout_ceiling_ms": 10000,
+            "safe_parameters": [
+              {
+                "name": "pageNo",
+                "strategy": "bounded_integer",
+                "minimum": 1,
+                "maximum": 1
+              },
+              {
+                "name": "numOfRows",
+                "strategy": "bounded_integer",
+                "minimum": 1,
+                "maximum": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "operation_count": 1,
+      "membership_digest": "ff8da00e0f9175a066d207377a00e83d4f1a9c5572122f87e0cc6de843915db7",
+      "members": [
+        {
+          "operation_id": "hrop-00000007",
+          "dataset_id": "15001697",
+          "operation_name": "의료기관종별코드조회",
+          "upstream_operation_seq": "24807",
+          "cli_operation_key": "1a48855aef8468b90bb04c5f1acdd247c8b13f64e6e7a4a72c1e4f818d0acc8b",
+          "endpoint": {
+            "host": "apis.data.go.kr",
+            "path": "/B551182/codeInfoService/getMedicInsttClassesCodeList"
+          },
+          "credential_requirement": {
+            "required": true,
+            "type": "service_key",
+            "scope": "operation"
+          },
+          "execution": {
+            "request_budget": 1,
+            "timeout_ceiling_ms": 10000,
+            "safe_parameters": [
+              {
+                "name": "pageNo",
+                "strategy": "bounded_integer",
+                "minimum": 1,
+                "maximum": 1
+              },
+              {
+                "name": "numOfRows",
+                "strategy": "bounded_integer",
+                "minimum": 1,
+                "maximum": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "operation_count": 1,
+      "membership_digest": "b52086de2f28d11e4dc252ed48e40c67fe31ab5c3ccc6c175b1d4931d5f2354d",
+      "members": [
+        {
+          "operation_id": "hrop-00000008",
+          "dataset_id": "15001839",
+          "operation_name": "민간 자원별 제공서비스 정보 조회",
+          "upstream_operation_seq": "26193",
+          "cli_operation_key": "7bf9c6e3212e1efe3de0d042860ea33c3b756348d93a2f9e632a9c3fd75ad754",
+          "endpoint": {
+            "host": "apis.data.go.kr",
+            "path": "/B554287/resrceInfoInqireService/getPrvateResrcByProvdServiceInfoInqire"
+          },
+          "credential_requirement": {
+            "required": true,
+            "type": "service_key",
+            "scope": "operation"
+          },
+          "execution": {
+            "request_budget": 1,
+            "timeout_ceiling_ms": 10000,
+            "safe_parameters": [
+              {
+                "name": "pageNo",
+                "strategy": "bounded_integer",
+                "minimum": 1,
+                "maximum": 1
+              },
+              {
+                "name": "numOfRows",
+                "strategy": "bounded_integer",
+                "minimum": 1,
+                "maximum": 1
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

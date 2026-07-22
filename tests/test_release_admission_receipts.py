@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import copy
+import hashlib
 import json
 import pathlib
 import sys
@@ -25,10 +27,22 @@ class ReleaseAdmissionReceiptTest(unittest.TestCase):
             "datapan_version": "0.1.0-test",
             "provider": "data.go.kr",
             "source_registry": "data/registry.json",
-            "artifact_count": 1,
-            "artifacts": [{"path": "data/registry.json", "sha256": admission.file_digest(artifact)}],
+            "artifact_count": 2,
+            "artifacts": [
+                {"path": "data/registry.json", "sha256": admission.file_digest(artifact)},
+                {"path": "reports/health-runtime-observation-plan.v1.json", "kind": "health_runtime_observation_plan", "schema": "https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json", "bytes": 0, "sha256": "0" * 64},
+            ],
         }
         self.manifest_path = self.root / "manifest.json"
+        self.plan_path = self.root / "reports" / "health-runtime-observation-plan.v1.json"
+        self.plan_path.parent.mkdir(parents=True)
+        projection = copy.deepcopy(manifest)
+        projection["artifacts"][1].pop("bytes")
+        projection["artifacts"][1].pop("sha256")
+        self.plan_binding = hashlib.sha256(json.dumps(projection, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()
+        self.plan_path.write_text(json.dumps({"manifest_binding": {"sha256": self.plan_binding}}), encoding="utf-8")
+        manifest["artifacts"][1]["bytes"] = self.plan_path.stat().st_size
+        manifest["artifacts"][1]["sha256"] = admission.file_digest(self.plan_path)
         self.manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
         self.schema = admission.load_json(ROOT / "schemas/datapan.release-receipt-admission.v1.schema.json")
         self.policy = admission.load_json(ROOT / "policy/release-receipt-admission.json")
@@ -62,6 +76,7 @@ class ReleaseAdmissionReceiptTest(unittest.TestCase):
         if kind == admission.RUNTIME_KIND:
             value["outcome"] = "verified"
             value["execution"] = {"run_id": "run-42", "shard_count": 8, "shard_index": shard, "shard_digest": f"{shard:064x}", "batch_size": 100, "max_parallelism": 2, "per_operation_timeout_seconds": 20, "terminal_state": "verified"}
+            value["execution_plan"] = {"path": "reports/health-runtime-observation-plan.v1.json", "sha256": admission.file_digest(self.plan_path), "manifest_binding_sha256": self.plan_binding}
             value["producer"]["aggregate_path"] = "runs/fixture-run-42.json"
             value["producer"]["aggregate_sha256"] = "0" * 64
             source_redaction = {"secret_values_removed": True, "secret_hashes_removed": True, "authorization_headers_removed": True, "credential_bearing_urls_removed": True, "raw_provider_text_removed": True, "raw_provider_urls_removed": True, "response_bodies_removed": True, "response_rows_removed": True, "user_identity_removed": True}
@@ -144,6 +159,7 @@ class ReleaseAdmissionReceiptTest(unittest.TestCase):
         manifest = json.loads(self.manifest_path.read_text(encoding="utf-8"))
         manifest["source_registry"] = "../outside-registry.json"
         manifest["artifacts"] = [{"path": "../outside-registry.json", "sha256": admission.file_digest(outside)}]
+        manifest["artifact_count"] = 1
         self.manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "escapes"):
             admission.validate_manifest(self.manifest_path, check_artifacts=True)
@@ -226,6 +242,19 @@ class ReleaseAdmissionReceiptTest(unittest.TestCase):
         receipt["scope"]["provider"] = "data.go.kr"
         receipt["receipt_digest"] = admission.canonical_digest(receipt)
         with self.assertRaisesRegex(ValueError, "scope.provider"):
+            self.validate(receipt)
+
+    def test_runtime_plan_digest_and_manifest_binding_fail_closed(self) -> None:
+        receipt = self.receipt(admission.RUNTIME_KIND, shard=0)
+        receipt["execution_plan"]["sha256"] = "0" * 64
+        receipt["receipt_digest"] = admission.canonical_digest(receipt)
+        with self.assertRaisesRegex(ValueError, "execution plan digest"):
+            self.validate(receipt)
+        receipt = self.receipt(admission.RUNTIME_KIND, shard=0)
+        manifest = json.loads(self.manifest_path.read_text(encoding="utf-8"))
+        manifest["provider"] = "other"
+        self.manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "manifest binding"):
             self.validate(receipt)
 
 

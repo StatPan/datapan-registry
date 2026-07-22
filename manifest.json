@@ -5,7 +5,7 @@
   "provider": "data.go.kr",
   "source_registry": "data/data-go-kr.registry.json",
   "output_dir": ".",
-  "artifact_count": 161,
+  "artifact_count": 163,
   "artifacts": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -532,15 +532,21 @@
     {
       "path": "schemas/datapan.release-receipt-admission.v1.schema.json",
       "kind": "schema",
-      "bytes": 4520,
-      "sha256": "0d9ea5cc7e94136a82579931b391e332df04e35b1ed1eb2de18ed0502c15a666"
+      "bytes": 4963,
+      "sha256": "a9f6d43d8893d71b6476407cf980ada8d8e031a19ccc82ec7d62eebd266dbe18"
+    },
+    {
+      "path": "schemas/datapan.health-runtime-observation-plan.v1.schema.json",
+      "kind": "schema",
+      "bytes": 3251,
+      "sha256": "aace55eb79feb701a6e5ee04d1ce6dc2a03b9f0a162e9ef9c10bed1f844a6abc"
     },
     {
       "path": "schemas/index.json",
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
-      "bytes": 35926,
-      "sha256": "e7a41b0c7c374a2d54448e523690769bba4b7a4c8398f7ef6038d01d1d855c9a"
+      "bytes": 36358,
+      "sha256": "8c9193b87e0f367e31ba30244b619e2c607dd80d96478382b5b6608a2fbba737"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -1026,6 +1032,13 @@
       "schema": "https://schemas.datapan.dev/datapan.diagnostic-publication-readiness.v1.schema.json",
       "bytes": 6331,
       "sha256": "43d58d995f0bd05ecd5785073922f9bf7e6655cfb9498501f625f35842d50ebf"
+    },
+    {
+      "path": "reports/health-runtime-observation-plan.v1.json",
+      "kind": "health_runtime_observation_plan",
+      "schema": "https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json",
+      "bytes": 11290,
+      "sha256": "4afcf82b973378b7c5778dc3b3acfecd16d52d93856d4fff6185eefc21f609fb"
     }
   ]
 }

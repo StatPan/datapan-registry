@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 88,
+  "count": 89,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -793,8 +793,17 @@
       "title": "Datapan Release Receipt Admission v1",
       "contract": "release-receipt-admission",
       "version": "v1",
-      "bytes": 4520,
-      "sha256": "0d9ea5cc7e94136a82579931b391e332df04e35b1ed1eb2de18ed0502c15a666"
+      "bytes": 4963,
+      "sha256": "a9f6d43d8893d71b6476407cf980ada8d8e031a19ccc82ec7d62eebd266dbe18"
+    },
+    {
+      "path": "schemas/datapan.health-runtime-observation-plan.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json",
+      "title": "Datapan Health Runtime Observation Plan v1",
+      "contract": "health-runtime-observation-plan",
+      "version": "v1",
+      "bytes": 3251,
+      "sha256": "aace55eb79feb701a6e5ee04d1ce6dc2a03b9f0a162e9ef9c10bed1f844a6abc"
     }
   ]
 }
