@@ -1,0 +1,43 @@
+{
+  "schema_version": "datapan.release-version-decision.v1",
+  "goal_issue": 604,
+  "versioning_ticket": 598,
+  "policy": "policy/release-versioning.json",
+  "allocation_authority": "Registry release operator allocates the semantic version; this policy only validates the requested candidate against immutable inputs.",
+  "self_artifact_excluded": true,
+  "baseline": {
+    "datapan_version": "0.1.0-dev",
+    "input": {
+      "source_revision": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644",
+      "manifest_digest": "9ab5844c7835b7d25723b5dc832967df2f68ca399bcfe8de2bcb232f2f389d83",
+      "ordered_artifact_inventory_digest": "965df24db86919619389452bde0577d96d62993d48c5f9114cef6a41b49a87a1",
+      "artifact_count_excluding_decision": 163
+    }
+  },
+  "candidate": {
+    "datapan_version": "0.1.1-dev",
+    "input": {
+      "source_revision": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644",
+      "manifest_digest": "eb6df8aee524cd5d368a96ef8890c410d1b6e0073390897810a93fb3c64bd7e8",
+      "ordered_artifact_inventory_digest": "41396208f6c1cc70297bb0b4a22b75793d7c2a2a625148d6f47ff2f2cbe5567d",
+      "artifact_count_excluding_decision": 166
+    }
+  },
+  "decision": "changed_input_version_bumped",
+  "change_required": true,
+  "publication": {
+    "tagged": false,
+    "huggingface_published": false,
+    "external_mutation": false
+  },
+  "consumer_compatibility": {
+    "manifest_bound": true,
+    "package_required_paths": [
+      "reports/data-go-kr/operation-manifest.json",
+      "schemas/datapan.data-go-kr-operation-manifest.v1.schema.json",
+      "reports/release-version-decision.json",
+      "schemas/datapan.release-version-decision.v1.schema.json"
+    ],
+    "proof": "package archive validation checks every manifest artifact path and checksum"
+  }
+}

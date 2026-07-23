@@ -67,6 +67,10 @@ WRITE_COMMANDS: tuple[Command, ...] = (
     Command(("python3", "scripts/sync-release-manifest-artifacts.py", "--write")),
     # This fixture pins the finalized manifest but is not itself a manifest artifact.
     Command(("python3", "scripts/generate-regional-baseline-source-provenance.py")),
+    # Generate version evidence last: it excludes only itself and must bind every
+    # other finalized manifest artifact digest.
+    Command(("python3", "scripts/generate-release-version-decision.py")),
+    Command(("python3", "scripts/sync-release-manifest-artifacts.py", "--write")),
 )
 
 
@@ -104,6 +108,7 @@ CHECK_COMMANDS: tuple[Command, ...] = (
     Command(("python3", "scripts/generate-credential-runtime-manual-review-acceptance-packet.py", "--check")),
     Command(("python3", "scripts/generate-impact-plan-rollup.py", "--check")),
     Command(("python3", "scripts/generate-release-distribution-footprint.py", "--check")),
+    Command(("python3", "scripts/generate-release-version-decision.py", "--check")),
     Command(("python3", "scripts/generate-release-shard-consumer-proof.py", "--check")),
     Command(("python3", "scripts/generate-release-consumer-compatibility.py", "--check")),
     Command(("python3", "scripts/validate-release-consumer-compatibility.py")),

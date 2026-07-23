@@ -3,7 +3,7 @@
 import copy, hashlib, json, pathlib, sys
 from urllib.parse import urlsplit
 
-ROOT=pathlib.Path("."); POLICY=ROOT/"policy/health-runtime-observation-selection.json"; REGISTRY=ROOT/"data/data-go-kr.registry.json"; MANIFEST=ROOT/"manifest.json"; OUTPUT=ROOT/"reports/health-runtime-observation-plan.v1.json"
+ROOT=pathlib.Path("."); POLICY=ROOT/"policy/health-runtime-observation-selection.json"; REGISTRY=ROOT/"data/data-go-kr.registry.json"; MANIFEST=ROOT/"manifest.json"; OUTPUT=ROOT/"reports/health-runtime-observation-plan.v1.json"; VERSION_DECISION="reports/release-version-decision.json"
 def dump(v): return json.dumps(v,ensure_ascii=False,indent=2)+"\n"
 def sha(b): return hashlib.sha256(b).hexdigest()
 def key(fields):
@@ -11,7 +11,10 @@ def key(fields):
  for f in fields: x=f.encode(); b.extend(f"{len(x)}:".encode()); b.extend(x)
  return sha(bytes(b))
 def manifest_binding(manifest):
- v=copy.deepcopy(manifest); matches=[a for a in v["artifacts"] if a.get("path")==OUTPUT.as_posix()]
+ # Version evidence is release metadata, not Health execution input. Excluding
+ # its complete self-referential artifact prevents a version-decision/plan
+ # digest loop while every plan-relevant manifest artifact remains bound.
+ v=copy.deepcopy(manifest); v["artifacts"]=[a for a in v["artifacts"] if a.get("path")!=VERSION_DECISION]; v["artifact_count"]=len(v["artifacts"]); matches=[a for a in v["artifacts"] if a.get("path")==OUTPUT.as_posix()]
  if len(matches)!=1 or matches[0].get("kind")!="verification_plan" or matches[0].get("schema")!="https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json": raise ValueError("plan manifest entry must be unique with expected path/kind/schema")
  for f in ("bytes","sha256"):
   if f not in matches[0]: raise ValueError("plan manifest entry missing excluded field")
