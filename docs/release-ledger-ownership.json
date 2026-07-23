@@ -90,6 +90,7 @@
       "id": "source_contract_runtime_evidence",
       "artifact_kinds": [
         "health_probe_catalog",
+        "data_go_kr_operation_manifest",
         "runtime_evidence_growth",
         "credential_runtime_evidence_policy",
         "credential_runtime_collection_preflight",
@@ -115,6 +116,7 @@
       "owner": "source evidence maintainers",
       "generated_by": [
         "policy/health-probe-canaries.json plus python scripts/generate-health-probe-catalog.py",
+        "python scripts/generate-data-go-kr-operation-manifest.py",
         "python scripts/generate-source-contract-rollup.py",
         "python scripts/generate-source-report-inventory.py",
         "python scripts/generate-credential-runtime-evidence-policy.py",
@@ -137,6 +139,9 @@
       "checked_by": [
         "python scripts/generate-health-probe-catalog.py --check",
         "python scripts/validate-health-probe-catalog.py",
+        "python scripts/generate-data-go-kr-operation-manifest.py --check",
+        "python scripts/validate-data-go-kr-operation-manifest.py",
+        "python -m unittest tests/test_validate_data_go_kr_operation_manifest.py",
         "python scripts/generate-source-contract-rollup.py --check",
         "python scripts/validate-source-contract-rollups.py",
         "python scripts/validate-source-reference-drift.py",

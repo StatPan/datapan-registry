@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.data-go-kr-operation-manifest.v1.schema.json",
+  "title": "Datapan data.go.kr operation manifest v1",
+  "description": "Immutable Registry facts for API-operation observation. This artifact contains no credential values, request values, response values, mutable Health receipts, or provider calls.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "authority", "source_snapshot", "identity_contract", "summary", "operations"],
+  "properties": {
+    "schema_version": {"const": "datapan.data-go-kr-operation-manifest.v1"},
+    "authority": {"const": "datapan-registry"},
+    "source_snapshot": {"$ref": "#/$defs/source_snapshot"},
+    "identity_contract": {"$ref": "#/$defs/identity_contract"},
+    "summary": {"$ref": "#/$defs/summary"},
+    "operations": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/operation"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "source_snapshot": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {"path": {"const": "data/data-go-kr.registry.json"}, "bytes": {"type": "integer", "minimum": 1}, "sha256": {"$ref": "#/$defs/sha256"}}
+    },
+    "identity_contract": {
+      "type": "object", "additionalProperties": false,
+      "required": ["algorithm", "fields"],
+      "properties": {"algorithm": {"const": "sha256-length-prefixed-utf8-v1"}, "fields": {"type": "array", "minItems": 7, "uniqueItems": true, "items": {"type": "string"}}}
+    },
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["api_operations", "protocols", "eligibility", "exclusions", "identity_collisions", "identity_omissions"],
+      "properties": {
+        "api_operations": {"const": 12385},
+        "protocols": {"type": "object", "additionalProperties": false, "required": ["REST", "SOAP"], "properties": {"REST": {"const": 12350}, "SOAP": {"const": 35}}},
+        "eligibility": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "exclusions": {"type": "object", "additionalProperties": false, "required": ["link_operations", "operationless_catalog_entries", "filedata_catalog_entries"], "properties": {"link_operations": {"const": 8871}, "operationless_catalog_entries": {"const": 473}, "filedata_catalog_entries": {"const": 0}}},
+        "identity_collisions": {"const": 0},
+        "identity_omissions": {"const": 0}
+      }
+    },
+    "parameter": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "label"],
+      "properties": {"name": {"type": "string", "minLength": 1}, "label": {"type": "string"}}
+    },
+    "operation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["operation_id", "protocol", "provenance", "transport", "call_readiness", "requirements", "eligibility"],
+      "properties": {
+        "operation_id": {"$ref": "#/$defs/sha256"},
+        "protocol": {"enum": ["REST", "SOAP"]},
+        "provenance": {"$ref": "#/$defs/provenance"},
+        "transport": {"$ref": "#/$defs/transport"},
+        "call_readiness": {"$ref": "#/$defs/call_readiness"},
+        "requirements": {"$ref": "#/$defs/requirements"},
+        "eligibility": {"$ref": "#/$defs/eligibility"}
+      }
+    },
+    "provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["provider", "dataset_id", "operation_name", "source_system", "source_url", "upstream_operation_key"],
+      "properties": {"provider": {"const": "data.go.kr"}, "dataset_id": {"type": "string", "minLength": 1}, "operation_name": {"type": "string", "minLength": 1}, "source_system": {"enum": ["data.go.kr", "safetydata.go.kr"]}, "source_url": {"type": "string", "format": "uri"}, "upstream_operation_key": {"type": "string", "minLength": 1}}
+    },
+    "transport": {
+      "type": "object", "additionalProperties": false,
+      "required": ["endpoint", "method", "action", "method_evidence"],
+      "properties": {"endpoint": {"type": ["string", "null"], "format": "uri"}, "method": {"type": ["string", "null"], "enum": ["GET", null]}, "action": {"type": ["string", "null"], "minLength": 1}, "method_evidence": {"enum": ["registry_default_get", "soap_action"]}}
+    },
+    "call_readiness": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "reason"],
+      "properties": {"status": {"enum": ["call_ready", "endpoint_missing", "approval_required"]}, "reason": {"type": "string", "minLength": 1}}
+    },
+    "requirements": {
+      "type": "object", "additionalProperties": false,
+      "required": ["auth_parameter_names", "approval_parameter_names", "all_request_parameters"],
+      "properties": {"auth_parameter_names": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}, "approval_parameter_names": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}, "all_request_parameters": {"type": "array", "items": {"$ref": "#/$defs/parameter"}}}
+    },
+    "eligibility": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "excluded_reason"],
+      "properties": {"status": {"enum": ["eligible", "credential_required", "approval_required", "excluded"]}, "excluded_reason": {"type": ["string", "null"], "enum": ["endpoint_missing", "required_parameter_approval", null]}}
+    }
+  }
+}

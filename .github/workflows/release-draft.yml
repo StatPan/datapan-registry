@@ -164,6 +164,9 @@ jobs:
             scripts/generate-diagnostic-publication.py
           python scripts/sync-release-schema-artifacts.py --check
           python scripts/sync-release-manifest-artifacts.py --check
+          python scripts/generate-data-go-kr-operation-manifest.py --check
+          python scripts/validate-data-go-kr-operation-manifest.py
+          python -m unittest tests/test_validate_data_go_kr_operation_manifest.py
           python scripts/generate-health-probe-catalog.py --check
           python scripts/validate-health-probe-catalog.py
           python -m unittest tests/test_validate_health_probe_catalog.py

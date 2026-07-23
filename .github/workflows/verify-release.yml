@@ -104,6 +104,9 @@ jobs:
           python -m pip install jsonschema
           python scripts/sync-release-schema-artifacts.py --check
           python scripts/sync-release-manifest-artifacts.py --check
+          python scripts/generate-data-go-kr-operation-manifest.py --check
+          python scripts/validate-data-go-kr-operation-manifest.py
+          python -m unittest tests/test_validate_data_go_kr_operation_manifest.py
           python scripts/generate-health-probe-catalog.py --check
           python scripts/validate-health-probe-catalog.py
           python -m unittest tests/test_validate_health_probe_catalog.py
@@ -235,6 +238,8 @@ jobs:
           python -m py_compile scripts/run-upstream-refresh.py
           python -m py_compile scripts/validate-source-refresh-policy.py
           python -m py_compile scripts/sync-release-manifest-artifacts.py
+          python -m py_compile scripts/generate-data-go-kr-operation-manifest.py
+          python -m py_compile scripts/validate-data-go-kr-operation-manifest.py
           python -m py_compile scripts/generate-release-distribution-footprint.py
           python -m py_compile scripts/generate-release-shard-consumer-proof.py
           python -m py_compile scripts/generate-release-consumer-compatibility.py
