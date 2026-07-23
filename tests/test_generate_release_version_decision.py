@@ -71,6 +71,23 @@ class ReleaseVersionDecisionTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "must not bump"):
             MODULE.build_report(manifest, self.policy(baseline, "1.2.3"))
 
+    def test_request_only_profile_digest_is_excluded_but_its_contract_is_versioned(self) -> None:
+        baseline = self.manifest()
+        baseline["artifacts"].append({  # type: ignore[union-attr]
+            "path": "reports/data-go-kr/request-only-client-profile.json",
+            "kind": "request_only_client_profile",
+            "schema": "https://schemas.datapan.dev/datapan.request-only-client-profile.v1.schema.json",
+            "bytes": 10,
+            "sha256": "d" * 64,
+        })
+        baseline["artifact_count"] = 3
+        changed = copy.deepcopy(baseline)
+        changed["artifacts"][2]["bytes"] = 11  # type: ignore[index]
+        changed["artifacts"][2]["sha256"] = "e" * 64  # type: ignore[index]
+        self.assertEqual(MODULE.version_input(baseline), MODULE.version_input(changed))
+        changed["artifacts"][2]["schema"] = "https://schemas.datapan.dev/other.schema.json"  # type: ignore[index]
+        self.assertNotEqual(MODULE.version_input(baseline), MODULE.version_input(changed))
+
     def test_release_archive_contains_version_receipt_and_operation_manifest_contract(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             archive_path = pathlib.Path(directory) / "datapan-registry.zip"
@@ -82,6 +99,8 @@ class ReleaseVersionDecisionTest(unittest.TestCase):
                     "schemas/datapan.release-version-decision.v1.schema.json",
                     "reports/data-go-kr/operation-manifest.json",
                     "schemas/datapan.data-go-kr-operation-manifest.v1.schema.json",
+                    "reports/data-go-kr/request-only-client-profile.json",
+                    "schemas/datapan.request-only-client-profile.v1.schema.json",
                 }.issubset(members))
                 decision = json.loads(archive.read("reports/release-version-decision.json"))
             self.assertEqual(decision["decision"], "changed_input_version_bumped")

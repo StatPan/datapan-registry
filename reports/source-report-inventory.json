@@ -46,9 +46,9 @@
   ],
   "schema_index_input": {
     "path": "schemas/index.json",
-    "schemas": 91,
-    "bytes": 37186,
-    "sha256": "342915a506871add4c02853eb2c444eb74c4908f064f115aa7fb5722218b07cc"
+    "schemas": 92,
+    "bytes": 37602,
+    "sha256": "c1ee19bb19b8b27723b4c2571d05c2b91b3c9ed1669c83872af9ec9a09dab1d7"
   },
   "recommended_reports": [
     "adapter-targets.json",
@@ -68,13 +68,13 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 157,
+    "report_total": 158,
     "recommended_report_slots": 65,
     "present_recommended_reports": 21,
     "missing_recommended_reports": 44,
     "source_report_coverage_percent": 32.3,
-    "schema_backed_reports": 32,
-    "schema_indexed_reports": 32,
+    "schema_backed_reports": 33,
+    "schema_indexed_reports": 33,
     "schema_missing_reports": 0
   },
   "sources": [
@@ -98,7 +98,7 @@
         "reports/verification-plan.json"
       ],
       "report_dir_exists": true,
-      "report_count": 141,
+      "report_count": 142,
       "present_reports": [
         {
           "name": "adapter-targets.json",
@@ -799,6 +799,16 @@
           "schema_indexed": true
         },
         {
+          "name": "request-only-client-profile.json",
+          "path": "reports/data-go-kr/request-only-client-profile.json",
+          "bytes": 21138291,
+          "sha256": "ea1ae2127fe630615e28a4bbaaff16f7b9b6c0a7a3c5169783ac84000b3632d0",
+          "schema_version": "datapan.request-only-client-profile.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.request-only-client-profile.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.request-only-client-profile.v1.schema.json",
+          "schema_indexed": true
+        },
+        {
           "name": "runtime-candidates.json",
           "path": "reports/data-go-kr/runtime-candidates.json",
           "bytes": 1796,
@@ -1133,6 +1143,7 @@
         "qia-verification-summary.json",
         "qia-verification.json",
         "registry-impact-plan.json",
+        "request-only-client-profile.json",
         "runtime-evidence-growth.json",
         "safetydata-operation-candidates.json",
         "safetydata-registry-patches.json",

@@ -91,6 +91,7 @@
       "artifact_kinds": [
         "health_probe_catalog",
         "data_go_kr_operation_manifest",
+        "request_only_client_profile",
         "runtime_evidence_growth",
         "credential_runtime_evidence_policy",
         "credential_runtime_collection_preflight",
@@ -117,6 +118,7 @@
       "generated_by": [
         "policy/health-probe-canaries.json plus python scripts/generate-health-probe-catalog.py",
         "python scripts/generate-data-go-kr-operation-manifest.py",
+        "python scripts/generate-data-go-kr-request-only-client-profile.py",
         "python scripts/generate-source-contract-rollup.py",
         "python scripts/generate-source-report-inventory.py",
         "python scripts/generate-credential-runtime-evidence-policy.py",
@@ -142,6 +144,9 @@
         "python scripts/generate-data-go-kr-operation-manifest.py --check",
         "python scripts/validate-data-go-kr-operation-manifest.py",
         "python -m unittest tests/test_validate_data_go_kr_operation_manifest.py",
+        "python scripts/generate-data-go-kr-request-only-client-profile.py --check",
+        "python scripts/validate-data-go-kr-request-only-client-profile.py",
+        "python -m unittest tests/test_validate_data_go_kr_request_only_client_profile.py",
         "python scripts/generate-source-contract-rollup.py --check",
         "python scripts/validate-source-contract-rollups.py",
         "python scripts/validate-source-reference-drift.py",

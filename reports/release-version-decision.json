@@ -18,9 +18,9 @@
     "datapan_version": "0.1.1-dev",
     "input": {
       "source_revision": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644",
-      "manifest_digest": "eb6df8aee524cd5d368a96ef8890c410d1b6e0073390897810a93fb3c64bd7e8",
-      "ordered_artifact_inventory_digest": "41396208f6c1cc70297bb0b4a22b75793d7c2a2a625148d6f47ff2f2cbe5567d",
-      "artifact_count_excluding_decision": 166
+      "manifest_digest": "2f8a7690df181f59509ec204207a2a94c066094b993f7a913d0ec6f007ea8065",
+      "ordered_artifact_inventory_digest": "8be954df83c56c8a6f97ac5d5888c52a664dd56fc9166bbf6a6b45e47b954ae5",
+      "artifact_count_excluding_decision": 168
     }
   },
   "decision": "changed_input_version_bumped",
@@ -35,6 +35,8 @@
     "package_required_paths": [
       "reports/data-go-kr/operation-manifest.json",
       "schemas/datapan.data-go-kr-operation-manifest.v1.schema.json",
+      "reports/data-go-kr/request-only-client-profile.json",
+      "schemas/datapan.request-only-client-profile.v1.schema.json",
       "reports/release-version-decision.json",
       "schemas/datapan.release-version-decision.v1.schema.json"
     ],

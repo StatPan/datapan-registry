@@ -45,9 +45,6 @@ WRITE_COMMANDS: tuple[Command, ...] = (
     Command(("python3", "scripts/generate-credential-runtime-operator-packets.py")),
     Command(("python3", "scripts/generate-credential-runtime-collection-execution-plan.py")),
     Command(("python3", "scripts/generate-release-consumer-compatibility.py")),
-    Command(("python3", "scripts/generate-credential-runtime-manual-review-technical-rebinding.py")),
-    Command(("python3", "scripts/generate-credential-runtime-manual-review-acceptance.py")),
-    Command(("python3", "scripts/generate-credential-runtime-manual-review-acceptance-packet.py")),
     Command(("python3", "scripts/generate-impact-plan-rollup.py"), transient=True),
     Command(("python3", "scripts/sync-release-manifest-artifacts.py", "--write")),
     Command(("python3", "scripts/generate-release-distribution-footprint.py")),
@@ -65,12 +62,22 @@ WRITE_COMMANDS: tuple[Command, ...] = (
     # so generate it only after all other manifest-owned release evidence.
     Command(("python3", "scripts/generate-health-runtime-observation-plan.py")),
     Command(("python3", "scripts/sync-release-manifest-artifacts.py", "--write")),
-    # This fixture pins the finalized manifest but is not itself a manifest artifact.
-    Command(("python3", "scripts/generate-regional-baseline-source-provenance.py")),
-    # Generate version evidence last: it excludes only itself and must bind every
-    # other finalized manifest artifact digest.
+    # Generate version evidence after the finalized Health plan; it excludes
+    # itself and the derived request-only profile digest.
     Command(("python3", "scripts/generate-release-version-decision.py")),
     Command(("python3", "scripts/sync-release-manifest-artifacts.py", "--write")),
+    # The request-only profile binds the finalized release manifest and is not
+    # an input to Health execution or release-version allocation.
+    Command(("python3", "scripts/generate-data-go-kr-request-only-client-profile.py")),
+    Command(("python3", "scripts/sync-release-manifest-artifacts.py", "--write")),
+    # This fixture pins the finalized manifest but is not itself a manifest artifact.
+    Command(("python3", "scripts/generate-regional-baseline-source-provenance.py")),
+    # Preserve the manual-review gate after every deterministic release artifact
+    # has converged; the gate still fails closed for an unauthorized manifest
+    # delta and does not block evidence regeneration needed to inspect it.
+    Command(("python3", "scripts/generate-credential-runtime-manual-review-technical-rebinding.py")),
+    Command(("python3", "scripts/generate-credential-runtime-manual-review-acceptance.py")),
+    Command(("python3", "scripts/generate-credential-runtime-manual-review-acceptance-packet.py")),
 )
 
 

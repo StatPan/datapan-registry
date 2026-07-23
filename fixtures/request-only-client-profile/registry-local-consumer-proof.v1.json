@@ -1,0 +1,30 @@
+{
+  "schema_version": "datapan.request-only-client-profile-consumer-proof.v1",
+  "consumer": "registry-local-static-proof",
+  "verification_mode": "offline_pin_validation_only",
+  "pins": {
+    "manifest_release_identity": {
+      "path": "manifest.json",
+      "algorithm": "sha256-canonical-release-manifest-excluding-profile-artifact-v1",
+      "sha256": "e02358e74b4a9289411fc01523758b90f5c4d49b0102fd3b6419f9922576ff2a",
+      "excluded_artifact_path": "reports/data-go-kr/request-only-client-profile.json"
+    },
+    "profile": {
+      "path": "reports/data-go-kr/request-only-client-profile.json",
+      "sha256": "c8a804ceaac37a69541727cd4aeaaeda240f5b4c0c8c6a76cb849359e08eacd2"
+    },
+    "profile_schema": {
+      "path": "schemas/datapan.request-only-client-profile.v1.schema.json",
+      "sha256": "a54d8421b465e06e3894c1b879e872e6373dc998b4adee215c95b0a6548431b6"
+    },
+    "source_operation_manifest": {
+      "path": "reports/data-go-kr/operation-manifest.json",
+      "sha256": "931be9cfcc4aa2ce0b444221de2044b624e6dbdcff8af1288be295b7d202f04a"
+    }
+  },
+  "unsupported_outcomes": [
+    "unsupported_missing_endpoint",
+    "unsupported_requires_approved_parameters"
+  ],
+  "consumer_rule": "After every pin validates, retain the request descriptor only when present and surface the explicit unsupported outcome without attempting a provider request."
+}

@@ -107,6 +107,9 @@ jobs:
           python scripts/generate-data-go-kr-operation-manifest.py --check
           python scripts/validate-data-go-kr-operation-manifest.py
           python -m unittest tests/test_validate_data_go_kr_operation_manifest.py
+          python scripts/generate-data-go-kr-request-only-client-profile.py --check
+          python scripts/validate-data-go-kr-request-only-client-profile.py
+          python -m unittest tests/test_validate_data_go_kr_request_only_client_profile.py
           python scripts/generate-release-version-decision.py --check
           python -m unittest tests/test_generate_release_version_decision.py
           python scripts/generate-health-probe-catalog.py --check
@@ -243,6 +246,8 @@ jobs:
           python -m py_compile scripts/sync-release-manifest-artifacts.py
           python -m py_compile scripts/generate-data-go-kr-operation-manifest.py
           python -m py_compile scripts/validate-data-go-kr-operation-manifest.py
+          python -m py_compile scripts/generate-data-go-kr-request-only-client-profile.py
+          python -m py_compile scripts/validate-data-go-kr-request-only-client-profile.py
           python -m py_compile scripts/generate-release-distribution-footprint.py
           python -m py_compile scripts/generate-release-version-decision.py
           python -m py_compile scripts/generate-release-shard-consumer-proof.py

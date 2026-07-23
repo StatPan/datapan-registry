@@ -28,6 +28,7 @@ DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.release-version-decision.v1.schem
 DEFAULT_OUTPUT = pathlib.Path("reports/release-version-decision.json")
 OUTPUT_PATH = DEFAULT_OUTPUT.as_posix()
 REGISTRY_PATH = "data/data-go-kr.registry.json"
+REQUEST_ONLY_PROFILE_PATH = "reports/data-go-kr/request-only-client-profile.json"
 SCHEMA_VERSION = "datapan.release-version-decision.v1"
 SEMVER = re.compile(r"^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?$")
 
@@ -75,9 +76,22 @@ def artifacts(manifest: dict[str, Any]) -> list[dict[str, Any]]:
     return result
 
 
+def version_artifact(artifact: dict[str, Any]) -> dict[str, Any]:
+    """Normalize an artifact for version input without a derived-digest cycle.
+
+    The request-only profile's existence, kind, and schema are versioned. Its
+    bytes and digest are derived from this manifest and from this decision, so
+    including those two fields would make the two generated release artifacts
+    continually invalidate one another.
+    """
+    if artifact.get("path") != REQUEST_ONLY_PROFILE_PATH:
+        return artifact
+    return {key: value for key, value in artifact.items() if key not in {"bytes", "sha256"}}
+
+
 def version_input(manifest: dict[str, Any]) -> dict[str, Any]:
     all_artifacts = artifacts(manifest)
-    included = [artifact for artifact in all_artifacts if artifact.get("path") != OUTPUT_PATH]
+    included = [version_artifact(artifact) for artifact in all_artifacts if artifact.get("path") != OUTPUT_PATH]
     registry = next((artifact for artifact in included if artifact.get("path") == REGISTRY_PATH), None)
     if registry is None or not isinstance(registry.get("sha256"), str):
         raise ValueError(f"manifest must contain {REGISTRY_PATH} with sha256")
@@ -158,6 +172,8 @@ def build_report(manifest: dict[str, Any], policy: dict[str, Any]) -> dict[str, 
             "package_required_paths": [
                 "reports/data-go-kr/operation-manifest.json",
                 "schemas/datapan.data-go-kr-operation-manifest.v1.schema.json",
+                REQUEST_ONLY_PROFILE_PATH,
+                "schemas/datapan.request-only-client-profile.v1.schema.json",
                 OUTPUT_PATH,
                 DEFAULT_SCHEMA.as_posix(),
             ],

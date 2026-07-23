@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.request-only-client-profile.v1.schema.json",
+  "title": "Datapan Request-Only Client Profile v1",
+  "description": "Immutable Registry metadata for request preparation only; it does not authorize provider invocation or describe a typed executable client.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "authority", "capabilities", "release_binding", "summary", "operations"],
+  "properties": {
+    "schema_version": {"const": "datapan.request-only-client-profile.v1"},
+    "authority": {"const": "datapan-registry"},
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["request_preparation", "provider_invocation", "typed_response", "all_operations_executable"],
+      "properties": {
+        "request_preparation": {"const": true},
+        "provider_invocation": {"const": false},
+        "typed_response": {"const": false},
+        "all_operations_executable": {"const": false}
+      }
+    },
+    "release_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["release_manifest", "profile_schema", "source_operation_manifest"],
+      "properties": {
+        "release_manifest": {"$ref": "#/$defs/release_manifest_binding"},
+        "profile_schema": {"$ref": "#/$defs/digest_binding"},
+        "source_operation_manifest": {"$ref": "#/$defs/digest_binding"}
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operations", "request_descriptors", "unsupported_requires_approved_parameters", "unsupported_missing_endpoint"],
+      "properties": {
+        "operations": {"type": "integer", "minimum": 0},
+        "request_descriptors": {"type": "integer", "minimum": 0},
+        "unsupported_requires_approved_parameters": {"type": "integer", "minimum": 0},
+        "unsupported_missing_endpoint": {"type": "integer", "minimum": 0}
+      }
+    },
+    "operations": {"type": "array", "items": {"$ref": "#/$defs/operation"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "digest_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "release_manifest_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "algorithm", "sha256", "excluded_artifact_path"],
+      "properties": {
+        "path": {"const": "manifest.json"},
+        "algorithm": {"const": "sha256-canonical-release-manifest-excluding-profile-artifact-v1"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "excluded_artifact_path": {"const": "reports/data-go-kr/request-only-client-profile.json"}
+      }
+    },
+    "parameter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "label"],
+      "properties": {"name": {"type": "string", "minLength": 1}, "label": {"type": "string"}}
+    },
+    "transport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["endpoint", "method", "action", "method_evidence"],
+      "properties": {
+        "endpoint": {"type": "string", "minLength": 1},
+        "method": {"type": ["string", "null"]},
+        "action": {"type": ["string", "null"]},
+        "method_evidence": {"type": "string", "minLength": 1}
+      }
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation_id", "protocol", "provenance", "transport", "outcome", "requirements"],
+      "properties": {
+        "operation_id": {"$ref": "#/$defs/sha256"},
+        "protocol": {"enum": ["REST", "SOAP"]},
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["provider", "dataset_id", "operation_name", "source_system", "source_url", "upstream_operation_key"],
+          "properties": {
+            "provider": {"const": "data.go.kr"},
+            "dataset_id": {"type": "string", "minLength": 1},
+            "operation_name": {"type": "string", "minLength": 1},
+            "source_system": {"type": "string", "minLength": 1},
+            "source_url": {"type": "string", "minLength": 1},
+            "upstream_operation_key": {"type": "string", "minLength": 1}
+          }
+        },
+        "transport": {"oneOf": [{"$ref": "#/$defs/transport"}, {"type": "null"}]},
+        "outcome": {"enum": ["unsupported_requires_approved_parameters", "unsupported_missing_endpoint"]},
+        "requirements": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["auth_parameter_names", "approval_parameter_names", "all_request_parameters"],
+          "properties": {
+            "auth_parameter_names": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+            "approval_parameter_names": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+            "all_request_parameters": {"type": "array", "items": {"$ref": "#/$defs/parameter"}}
+          }
+        }
+      }
+    }
+  }
+}
