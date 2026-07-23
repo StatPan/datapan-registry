@@ -1,7 +1,7 @@
 {
   "record_type": "datapan.manual-review-technical-rebinding-policy.v1",
   "generated_at": "2026-07-23T00:00:00Z",
-  "approver_scope": "StatPan #391 accepted manual-review decision; Health observation plan/schema artifact-only technical rebinding",
+  "approver_scope": "StatPan #391 accepted manual-review decision for Health plan/schema rebinding; Goal #604 separately authorizes the static data.go.kr operation manifest and schema, with no credential, provider-call, or Health-runtime change",
   "decision_path": "reports/credential-runtime-manual-review-decision.json",
   "decision_sha256": "4d0bee81a67d4b49a1ccb022ab6be7a28a76b9613cbd7c2211d5f22ce9d69151",
   "baseline": {
@@ -17,6 +17,15 @@
       "path": "reports/health-runtime-observation-plan.v1.json",
       "kind": "verification_plan",
       "schema": "https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json"
+    },
+    {
+      "path": "schemas/datapan.data-go-kr-operation-manifest.v1.schema.json",
+      "kind": "schema"
+    },
+    {
+      "path": "reports/data-go-kr/operation-manifest.json",
+      "kind": "data_go_kr_operation_manifest",
+      "schema": "https://schemas.datapan.dev/datapan.data-go-kr-operation-manifest.v1.schema.json"
     }
   ]
 }

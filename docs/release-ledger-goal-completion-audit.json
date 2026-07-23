@@ -16,11 +16,11 @@
   "current_state_evidence": {
     "manifest": {
       "path": "manifest.json",
-      "artifact_count": 163
+      "artifact_count": 165
     },
     "schema_index": {
       "path": "schemas/index.json",
-      "schema_count": 89
+      "schema_count": 90
     },
     "release_readiness": {
       "path": "reports/latest-release-readiness.json",
@@ -40,13 +40,13 @@
       "path": "reports/source-report-inventory.json",
       "sources": 5,
       "source_report_dirs": 5,
-      "report_total": 156,
+      "report_total": 157,
       "recommended_report_slots": 65,
       "present_recommended_reports": 21,
       "missing_recommended_reports": 44,
       "source_report_coverage_percent": 32.3,
-      "schema_backed_reports": 31,
-      "schema_indexed_reports": 31,
+      "schema_backed_reports": 32,
+      "schema_indexed_reports": 32,
       "schema_missing_reports": 0
     },
     "source_runtime": {
@@ -153,9 +153,9 @@
     },
     "release_distribution_footprint": {
       "path": "reports/release-distribution-footprint.json",
-      "artifact_count": 163,
-      "schema_artifacts": 89,
-      "manifest_bound_bytes_excluding_self": 173972648,
+      "artifact_count": 165,
+      "schema_artifacts": 90,
+      "manifest_bound_bytes_excluding_self": 197866216,
       "canonical_registry_path": "data/data-go-kr.registry.json",
       "canonical_registry_bytes": 137735169,
       "large_monolith_threshold_bytes": 100000000,

@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 89,
+  "count": 90,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 4270,
-      "sha256": "f0dd62db932f61f6ee9348e0a1f59d6ea94a2a0f7fe9cb1bbb6b76242a120b03"
+      "bytes": 4315,
+      "sha256": "ac1bf4f575609c4304be45a5fdce5f174981f71a2ad5b0cd00cace9edd6ca5c5"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -804,6 +804,15 @@
       "version": "v1",
       "bytes": 3251,
       "sha256": "aace55eb79feb701a6e5ee04d1ce6dc2a03b9f0a162e9ef9c10bed1f844a6abc"
+    },
+    {
+      "path": "schemas/datapan.data-go-kr-operation-manifest.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.data-go-kr-operation-manifest.v1.schema.json",
+      "title": "Datapan data.go.kr operation manifest v1",
+      "contract": "data-go-kr-operation-manifest",
+      "version": "v1",
+      "bytes": 5498,
+      "sha256": "40d749d7c45ee9e9a9ab38f3022aaab3f5d8a0f74bedea5aa2144f5722b65e94"
     }
   ]
 }

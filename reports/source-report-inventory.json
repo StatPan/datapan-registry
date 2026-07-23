@@ -46,9 +46,9 @@
   ],
   "schema_index_input": {
     "path": "schemas/index.json",
-    "schemas": 89,
-    "bytes": 36358,
-    "sha256": "8c9193b87e0f367e31ba30244b619e2c607dd80d96478382b5b6608a2fbba737"
+    "schemas": 90,
+    "bytes": 36782,
+    "sha256": "1841d8b7d17ca7a49a6bf27dfb09d5eef0ad312d9aaa653c99a5b21378fc5c1f"
   },
   "recommended_reports": [
     "adapter-targets.json",
@@ -68,13 +68,13 @@
   "summary": {
     "sources": 5,
     "source_report_dirs": 5,
-    "report_total": 156,
+    "report_total": 157,
     "recommended_report_slots": 65,
     "present_recommended_reports": 21,
     "missing_recommended_reports": 44,
     "source_report_coverage_percent": 32.3,
-    "schema_backed_reports": 31,
-    "schema_indexed_reports": 31,
+    "schema_backed_reports": 32,
+    "schema_indexed_reports": 32,
     "schema_missing_reports": 0
   },
   "sources": [
@@ -98,7 +98,7 @@
         "reports/verification-plan.json"
       ],
       "report_dir_exists": true,
-      "report_count": 140,
+      "report_count": 141,
       "present_reports": [
         {
           "name": "adapter-targets.json",
@@ -745,6 +745,16 @@
           "schema_indexed": true
         },
         {
+          "name": "operation-manifest.json",
+          "path": "reports/data-go-kr/operation-manifest.json",
+          "bytes": 23887000,
+          "sha256": "931be9cfcc4aa2ce0b444221de2044b624e6dbdcff8af1288be295b7d202f04a",
+          "schema_version": "datapan.data-go-kr-operation-manifest.v1",
+          "expected_schema_id": "https://schemas.datapan.dev/datapan.data-go-kr-operation-manifest.v1.schema.json",
+          "expected_schema_path": "schemas/datapan.data-go-kr-operation-manifest.v1.schema.json",
+          "schema_indexed": true
+        },
+        {
           "name": "operation-materialization-plan.json",
           "path": "reports/data-go-kr/operation-materialization-plan.json",
           "bytes": 165207,
@@ -1116,6 +1126,7 @@
         "openfiscaldata-verification-summary.json",
         "openfiscaldata-verification.json",
         "operation-denominator.json",
+        "operation-manifest.json",
         "operation-materialization-plan.json",
         "police-verification-summary.json",
         "police-verification.json",
