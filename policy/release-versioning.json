@@ -1,0 +1,18 @@
+{
+  "schema_version": "datapan.release-version-policy.v1",
+  "allocation_authority": "Registry release operator allocates the semantic version; this policy only validates the requested candidate against immutable inputs.",
+  "baseline": {
+    "datapan_version": "0.1.0-dev",
+    "input": {
+      "source_revision": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644",
+      "manifest_digest": "9ab5844c7835b7d25723b5dc832967df2f68ca399bcfe8de2bcb232f2f389d83",
+      "ordered_artifact_inventory_digest": "965df24db86919619389452bde0577d96d62993d48c5f9114cef6a41b49a87a1",
+      "artifact_count_excluding_decision": 163
+    }
+  },
+  "rules": {
+    "changed_input": "candidate numeric semantic version must be greater than baseline",
+    "unchanged_input": "candidate version must equal baseline exactly",
+    "publication": "separate authorized release action; this policy does not tag or publish"
+  }
+}

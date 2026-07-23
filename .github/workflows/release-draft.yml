@@ -104,6 +104,7 @@ jobs:
             scripts/generate-impact-plan-rollup.py \
             scripts/generate-release-assembly-receipt.py \
             scripts/generate-release-distribution-footprint.py \
+            scripts/generate-release-version-decision.py \
             scripts/generate-release-shard-consumer-proof.py \
             scripts/generate-release-consumer-compatibility.py \
             scripts/generate-release-operational-pressure.py \
@@ -262,6 +263,7 @@ jobs:
           python scripts/validate-credential-runtime-session-review-plan.py --self-test
           python scripts/promote-credential-runtime-receipt.py --self-test
           python scripts/generate-release-distribution-footprint.py --check
+          python scripts/generate-release-version-decision.py --check
           python scripts/generate-release-shard-consumer-proof.py --check
           python scripts/generate-release-consumer-compatibility.py --check
           python scripts/validate-release-consumer-compatibility.py
