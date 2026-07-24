@@ -16,6 +16,12 @@ SPEC.loader.exec_module(MODULE)
 
 
 class ApplyRuntimeFreshnessImportTest(unittest.TestCase):
+    def test_execute_can_force_lfs_smudge_off(self) -> None:
+        with mock.patch.object(MODULE.subprocess, "run") as runner:
+            runner.return_value.stdout = ""
+            MODULE.execute(["git", "status"], cwd=pathlib.Path.cwd(), env={"GIT_LFS_SKIP_SMUDGE": "1"})
+        self.assertEqual(runner.call_args.kwargs["env"]["GIT_LFS_SKIP_SMUDGE"], "1")
+
     def fixture(self, root: pathlib.Path) -> tuple[pathlib.Path, pathlib.Path]:
         report, receipt = root / "report.json", root / "receipt.json"
         report.write_text('{"results": []}\n', encoding="utf-8")

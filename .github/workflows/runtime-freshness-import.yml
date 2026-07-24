@@ -82,6 +82,7 @@ jobs:
       - name: Apply the isolated freshness transaction
         id: transaction
         run: |
+          set -o pipefail
           git switch -c "${IMPORT_BRANCH}"
           python3 scripts/apply-runtime-freshness-import.py \
             --report .datapan/runtime-freshness/import/verification.json \
