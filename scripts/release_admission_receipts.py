@@ -200,7 +200,7 @@ def validate_health_aggregate(
     redaction: dict[str, Any],
     artifact_roots: dict[str, pathlib.Path],
     label: str,
-) -> None:
+) -> dict[str, Any]:
     aggregate_path = producer_artifact_path(producer, artifact_roots, "aggregate_path", label)
     if producer.get("aggregate_sha256") != file_digest(aggregate_path):
         raise ValueError(f"{label}: producer aggregate digest does not match artifact bytes")
@@ -272,6 +272,34 @@ def validate_health_aggregate(
         raise ValueError(f"{label}: producer aggregate redaction assertions do not prove a fully redacted shard")
     if redaction.get("secret_values_present") is not False or redaction.get("secret_hashes_present") is not False or redaction.get("request_urls_present") is not False or redaction.get("response_bodies_present") is not False:
         raise ValueError(f"{label}: outer redaction mapping is not safe")
+    return aggregate
+
+
+def validate_live_health_freshness(
+    aggregate: dict[str, Any], *, generated_at: datetime, admitted_at: datetime, max_age_seconds: int, label: str
+) -> None:
+    """Bind live-release freshness to Health's own aggregate and shard clocks.
+
+    The outer envelope is intentionally not a freshness proxy: it is produced
+    after the Health run and can otherwise rewrap stale evidence. Every shard
+    is complete at this boundary, so every observed timestamp is mandatory.
+    """
+    run = as_dict(aggregate.get("run"), f"{label}.producer_aggregate.run")
+    started_at = parse_time(run.get("started_at"), f"{label}.producer_aggregate.run.started_at")
+    completed_at = parse_time(run.get("completed_at"), f"{label}.producer_aggregate.run.completed_at")
+    if started_at > completed_at:
+        raise ValueError(f"{label}: producer aggregate run timestamps are out of order")
+    if completed_at > generated_at or completed_at > admitted_at:
+        raise ValueError(f"{label}: producer aggregate completion is in the future")
+    if (admitted_at - completed_at).total_seconds() > max_age_seconds:
+        raise ValueError(f"{label}: producer aggregate completion is stale")
+    for item in as_list(aggregate.get("shards"), f"{label}.producer_aggregate.shards"):
+        shard = as_dict(item, f"{label}.producer_aggregate.shards[]")
+        observed_at = parse_time(shard.get("observed_at"), f"{label}.producer_aggregate.shard.observed_at")
+        if observed_at < started_at or observed_at > completed_at or observed_at > generated_at or observed_at > admitted_at:
+            raise ValueError(f"{label}: producer aggregate shard observation is in the future or outside the run")
+        if (admitted_at - observed_at).total_seconds() > max_age_seconds:
+            raise ValueError(f"{label}: producer aggregate shard observation is stale")
 
 
 def validate_execution_plan(execution_plan: dict[str, Any], manifest_path: pathlib.Path, label: str) -> None:
@@ -344,7 +372,7 @@ def validate_receipt(receipt: dict[str, Any], *, schema: dict[str, Any], policy:
         if execution.get("terminal_state") != receipt.get("outcome"):
             raise ValueError(f"{label}: execution.terminal_state must equal outcome")
         aggregate_scope = scope if kind == RUNTIME_KIND else RUNTIME_SCOPE
-        validate_health_aggregate(
+        aggregate = validate_health_aggregate(
             producer,
             execution,
             aggregate_scope,
@@ -353,6 +381,14 @@ def validate_receipt(receipt: dict[str, Any], *, schema: dict[str, Any], policy:
             artifact_roots,
             label,
         )
+        if kind == LIVE_KIND:
+            validate_live_health_freshness(
+                aggregate,
+                generated_at=generated_at,
+                admitted_at=admitted_at,
+                max_age_seconds=max_age_seconds,
+                label=label,
+            )
 
 
 def validate_required_live_release(receipts: list[dict[str, Any]]) -> dict[str, Any]:
