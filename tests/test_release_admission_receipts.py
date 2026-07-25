@@ -91,13 +91,14 @@ class ReleaseAdmissionReceiptTest(unittest.TestCase):
                     "policy_sha256": value["registry"]["policy_sha256"],
                     "scope": admission.RUNTIME_SCOPE,
                     "terminal_state": "verified",
+                    "observed_at": "2026-07-22T00:00:00Z",
                     "redaction": source_redaction,
                 }
                 for index in range(8)
             ]
             if kind == admission.RUNTIME_KIND:
                 aggregate_shards[shard].update({"receipt_path": value["producer"]["receipt_path"], "receipt_sha256": value["producer"]["receipt_sha256"], "shard_digest": value["execution"]["shard_digest"]})
-            aggregate = {"schema_version": "datapan.health-bounded-observation-run.v1", "producer": {"repository": "StatPan/datapan-health", "revision": "a" * 40}, "registry": {"manifest_sha256": value["registry"]["manifest_sha256"], "source_sha256": value["registry"]["source_sha256"], "policy_sha256": value["registry"]["policy_sha256"]}, "run": {"run_id": "run-42", "shard_count": 8, "batch_size": 100, "max_parallel": 2, "timeout_ms": 20000}, "shards": aggregate_shards, "aggregate": {"terminal_state": "verified", "completeness": "complete", "timed_out": False}, "redaction": source_redaction}
+            aggregate = {"schema_version": "datapan.health-bounded-observation-run.v1", "producer": {"repository": "StatPan/datapan-health", "revision": "a" * 40}, "registry": {"manifest_sha256": value["registry"]["manifest_sha256"], "source_sha256": value["registry"]["source_sha256"], "policy_sha256": value["registry"]["policy_sha256"]}, "run": {"run_id": "run-42", "started_at": "2026-07-21T23:59:00Z", "completed_at": "2026-07-22T00:00:00Z", "shard_count": 8, "batch_size": 100, "max_parallel": 2, "timeout_ms": 20000}, "shards": aggregate_shards, "aggregate": {"terminal_state": "verified", "completeness": "complete", "timed_out": False}, "redaction": source_redaction}
             self.aggregate_path.write_text(json.dumps(aggregate), encoding="utf-8")
             value["producer"]["aggregate_sha256"] = admission.file_digest(self.aggregate_path)
             if kind == admission.LIVE_KIND:
@@ -301,6 +302,57 @@ class ReleaseAdmissionReceiptTest(unittest.TestCase):
         live["receipt_digest"] = admission.canonical_digest(live)
         with self.assertRaisesRegex(ValueError, "schema validation"):
             self.validate(live)
+
+    def test_fresh_outer_envelope_cannot_rewrap_stale_health_aggregate_or_shards(self) -> None:
+        live = self.receipt(admission.LIVE_KIND)
+        stale_fixture = ROOT / "tests" / "fixtures" / "release-admission" / "producer-artifacts" / "datapan-health" / "runs" / "stale-live-rewrap.json"
+        aggregate = json.loads(stale_fixture.read_text(encoding="utf-8"))
+        aggregate["registry"].update({"manifest_sha256": live["registry"]["manifest_sha256"], "source_sha256": live["registry"]["source_sha256"], "policy_sha256": live["registry"]["policy_sha256"]})
+        for shard in aggregate["shards"]:
+            shard["manifest_sha256"] = live["registry"]["manifest_sha256"]
+            shard["policy_sha256"] = live["registry"]["policy_sha256"]
+        self.aggregate_path.write_text(json.dumps(aggregate), encoding="utf-8")
+        fresh_outer = "2026-07-22T00:04:59Z"
+        live["generated_at"] = fresh_outer
+        live["live_execution"]["run_id"] = aggregate["run"]["run_id"]
+        live["producer"]["aggregate_sha256"] = admission.file_digest(self.aggregate_path)
+        live["producer"]["receipt_sha256"] = live["producer"]["aggregate_sha256"]
+        live["receipt_digest"] = admission.canonical_digest(live)
+        with self.assertRaisesRegex(ValueError, "aggregate completion is stale"):
+            self.validate(live, admission_time="2026-07-22T00:05:00Z")
+
+    def test_live_release_rejects_future_and_stale_shard_observation_times(self) -> None:
+        live = self.receipt(admission.LIVE_KIND)
+        aggregate = json.loads(self.aggregate_path.read_text(encoding="utf-8"))
+        aggregate["shards"][0]["observed_at"] = "2026-07-22T00:06:00Z"
+        self.aggregate_path.write_text(json.dumps(aggregate), encoding="utf-8")
+        live["producer"]["aggregate_sha256"] = admission.file_digest(self.aggregate_path)
+        live["producer"]["receipt_sha256"] = live["producer"]["aggregate_sha256"]
+        live["receipt_digest"] = admission.canonical_digest(live)
+        with self.assertRaisesRegex(ValueError, "shard observation is in the future"):
+            self.validate(live)
+        live = self.receipt(admission.LIVE_KIND)
+        aggregate = json.loads(self.aggregate_path.read_text(encoding="utf-8"))
+        aggregate["run"]["started_at"] = "2026-07-21T23:40:00Z"
+        aggregate["shards"][0]["observed_at"] = "2026-07-21T23:49:59Z"
+        self.aggregate_path.write_text(json.dumps(aggregate), encoding="utf-8")
+        live["producer"]["aggregate_sha256"] = admission.file_digest(self.aggregate_path)
+        live["producer"]["receipt_sha256"] = live["producer"]["aggregate_sha256"]
+        live["receipt_digest"] = admission.canonical_digest(live)
+        with self.assertRaisesRegex(ValueError, "shard observation is stale"):
+            self.validate(live)
+
+    def test_generic_runtime_shard_does_not_gain_live_timestamp_requirement(self) -> None:
+        runtime = self.receipt(admission.RUNTIME_KIND, shard=0)
+        aggregate = json.loads(self.aggregate_path.read_text(encoding="utf-8"))
+        aggregate["run"].pop("started_at")
+        aggregate["run"].pop("completed_at")
+        for shard in aggregate["shards"]:
+            shard.pop("observed_at")
+        self.aggregate_path.write_text(json.dumps(aggregate), encoding="utf-8")
+        runtime["producer"]["aggregate_sha256"] = admission.file_digest(self.aggregate_path)
+        runtime["receipt_digest"] = admission.canonical_digest(runtime)
+        self.validate(runtime)
 
 
 if __name__ == "__main__":

@@ -112,7 +112,10 @@ producer, workflow-cutover, and rollback evidence is proven.
 `health_live_observation` is a separate pre-publication release input. It
 binds one complete, redacted Health bounded-observation aggregate as both the
 primary producer artifact and aggregate artifact, and is fresh for at most 600
-seconds at the caller-owned admission time. It retains the same eight-shard
+seconds at the caller-owned admission time. Admission independently checks the
+aggregate completion and every complete shard's `observed_at` against that same
+clock; a freshly stamped outer envelope cannot rewrap stale or future Health
+evidence. It retains the same eight-shard
 bounded execution limits but is not interchangeable with a
 `runtime_freshness_shard`; a cutover caller must explicitly require this kind.
 No receipt of either kind authorizes publication by itself.
