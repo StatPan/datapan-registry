@@ -24,7 +24,7 @@ def main():
   entries=[x for x in manifest["artifacts"] if x.get("path")==PLAN.as_posix()]
   fail(len(entries)==1 and entries[0].get("kind")=="verification_plan" and entries[0].get("schema")==schema["$id"],"plan manifest entry mismatch")
   fail(entries[0].get("sha256")==sha(PLAN) and entries[0].get("bytes")==PLAN.stat().st_size,"full manifest does not bind exact plan bytes")
-  fail(plan["manifest_binding"]["sha256"]==mod.manifest_binding(manifest),"manifest binding digest mismatch")
+  fail(plan["manifest_binding"]["sha256"]==mod.health_plan_manifest_binding(manifest),"manifest binding digest mismatch")
   shards=plan["shards"]; fail([x["index"] for x in shards]==list(range(8)),"shards must be canonical indexes")
   members=[x["members"][0] for x in shards]; fail(len({x["operation_id"] for x in members})==8,"membership overlaps")
   for shard,member in zip(shards,members,strict=True): fail(shard["membership_digest"]==hashlib.sha256(json.dumps([member],sort_keys=True,separators=(",",":"),ensure_ascii=False).encode()).hexdigest(),"membership digest mismatch")
