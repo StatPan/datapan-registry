@@ -4,8 +4,9 @@
   "datapan_version": "0.1.0-test",
   "provider": "data.go.kr",
   "source_registry": "data/registry.json",
-  "artifact_count": 1,
+  "artifact_count": 2,
   "artifacts": [
-    {"path": "data/registry.json", "sha256": "97c8d6f5771e426b0782c19107d2007637eb7ee452cabb48b1c5d1627a71c8f7"}
+    {"path": "data/registry.json", "sha256": "97c8d6f5771e426b0782c19107d2007637eb7ee452cabb48b1c5d1627a71c8f7"},
+    {"path": "reports/health-runtime-observation-plan.v1.json", "kind": "verification_plan", "schema": "https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json", "bytes": 113, "sha256": "0306b5e7d9a3ac3d654276a88e477f88964170da80c3134cd4ab5fc4cc80f4a8"}
   ]
 }

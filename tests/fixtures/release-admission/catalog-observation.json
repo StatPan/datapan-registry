@@ -3,9 +3,9 @@
   "generated_at": "2026-07-22T00:00:00Z",
   "receipt_kind": "catalog_observation",
   "producer": {"repository": "StatPan/datapan-data", "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "receipt_path": "receipts/catalog-observation.json", "receipt_sha256": "25d7ed511fe3cf6671851573070e77b9b9bc7e2ab1d5b48ebbc434c4738ba848"},
-  "registry": {"manifest_path": "tests/fixtures/release-admission/manifest.json", "manifest_sha256": "3fe8191ae44e11fef8aa27f931fa2d86687a74f868f1615b4dae187a1c1a51c9", "source_path": "data/registry.json", "source_sha256": "97c8d6f5771e426b0782c19107d2007637eb7ee452cabb48b1c5d1627a71c8f7", "policy_path": "policy/release-receipt-admission.json", "policy_sha256": "1fa2600c4aa6cf09ca123dfc8a9381d5cffc4c57aa0a0ce50adb3b7bd80bc00c"},
+  "registry": {"manifest_path": "tests/fixtures/release-admission/manifest.json", "manifest_sha256": "30619c423a820441dc6af60cfb8f5d454858f91b3c5c40f57b1ca8b83db8b6b1", "source_path": "data/registry.json", "source_sha256": "97c8d6f5771e426b0782c19107d2007637eb7ee452cabb48b1c5d1627a71c8f7", "policy_path": "policy/release-receipt-admission.json", "policy_sha256": "58ae8690e5c3a4f6a444dc98d822663eeffab300c1c9f6975c91b8d5451f935a"},
   "outcome": "no_change",
   "scope": {"provider": "data.go.kr", "subject": "upstream_catalog"},
   "redaction": {"secret_values_present": false, "secret_hashes_present": false, "request_urls_present": false, "response_bodies_present": false, "forbidden_fields_checked": ["credential_value", "credential_hash", "authorization_header", "service_key", "api_key"]},
-  "receipt_digest": "c6444f0beb153601f9d07e40ea07421f88bce101d5f018004a083b280aa6fafd"
+  "receipt_digest": "31a371d768cd00279ecb513cd00b30d1c90c2689b003b4149843dce406aa2af1"
 }
