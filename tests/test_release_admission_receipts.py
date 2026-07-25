@@ -50,11 +50,10 @@ class ReleaseAdmissionReceiptTest(unittest.TestCase):
         _, self.manifest_digest, self.source_digest = admission.validate_manifest(self.manifest_path, check_artifacts=True)
         self.artifact_roots: dict[str, pathlib.Path] = {}
         for kind, contract in self.policy["producer_contracts"].items():
-            root = self.root / "producer-artifacts" / kind
+            root = self.artifact_roots.setdefault(contract["repository"], self.root / "producer-artifacts" / contract["repository"].split("/")[1])
             receipt_path = root / "receipts" / f"{kind}.json"
             receipt_path.parent.mkdir(parents=True, exist_ok=True)
             receipt_path.write_text(json.dumps({"producer_fixture": kind}) + "\n", encoding="utf-8")
-            self.artifact_roots[contract["repository"]] = root
         self.aggregate_path = self.artifact_roots["StatPan/datapan-health"] / "runs" / "fixture-run-42.json"
         self.aggregate_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -73,9 +72,12 @@ class ReleaseAdmissionReceiptTest(unittest.TestCase):
             "scope": {"provider": contract.get("provider", "data.go.kr"), "subject": contract["subject"]},
             "redaction": {"secret_values_present": False, "secret_hashes_present": False, "request_urls_present": False, "response_bodies_present": False, "forbidden_fields_checked": ["credential_value", "credential_hash", "authorization_header", "service_key", "api_key"]},
         }
-        if kind == admission.RUNTIME_KIND:
+        if kind in {admission.RUNTIME_KIND, admission.LIVE_KIND}:
             value["outcome"] = "verified"
-            value["execution"] = {"run_id": "run-42", "shard_count": 8, "shard_index": shard, "shard_digest": f"{shard:064x}", "batch_size": 100, "max_parallelism": 2, "per_operation_timeout_seconds": 20, "terminal_state": "verified"}
+            if kind == admission.RUNTIME_KIND:
+                value["execution"] = {"run_id": "run-42", "shard_count": 8, "shard_index": shard, "shard_digest": f"{shard:064x}", "batch_size": 100, "max_parallelism": 2, "per_operation_timeout_seconds": 20, "terminal_state": "verified"}
+            else:
+                value["live_execution"] = {"run_id": "run-42", "shard_count": 8, "batch_size": 100, "max_parallelism": 2, "per_operation_timeout_seconds": 20, "terminal_state": "verified"}
             value["execution_plan"] = {"path": "reports/health-runtime-observation-plan.v1.json", "sha256": admission.file_digest(self.plan_path), "manifest_binding_sha256": self.plan_binding}
             value["producer"]["aggregate_path"] = "runs/fixture-run-42.json"
             value["producer"]["aggregate_sha256"] = "0" * 64
@@ -87,18 +89,25 @@ class ReleaseAdmissionReceiptTest(unittest.TestCase):
                     "completed": True,
                     "manifest_sha256": value["registry"]["manifest_sha256"],
                     "policy_sha256": value["registry"]["policy_sha256"],
+                    "scope": admission.RUNTIME_SCOPE,
+                    "terminal_state": "verified",
+                    "redaction": source_redaction,
                 }
                 for index in range(8)
             ]
-            aggregate_shards[shard].update({"receipt_path": value["producer"]["receipt_path"], "receipt_sha256": value["producer"]["receipt_sha256"], "shard_digest": value["execution"]["shard_digest"], "scope": value["scope"], "terminal_state": "verified", "redaction": source_redaction})
+            if kind == admission.RUNTIME_KIND:
+                aggregate_shards[shard].update({"receipt_path": value["producer"]["receipt_path"], "receipt_sha256": value["producer"]["receipt_sha256"], "shard_digest": value["execution"]["shard_digest"]})
             aggregate = {"schema_version": "datapan.health-bounded-observation-run.v1", "producer": {"repository": "StatPan/datapan-health", "revision": "a" * 40}, "registry": {"manifest_sha256": value["registry"]["manifest_sha256"], "source_sha256": value["registry"]["source_sha256"], "policy_sha256": value["registry"]["policy_sha256"]}, "run": {"run_id": "run-42", "shard_count": 8, "batch_size": 100, "max_parallel": 2, "timeout_ms": 20000}, "shards": aggregate_shards, "aggregate": {"terminal_state": "verified", "completeness": "complete", "timed_out": False}, "redaction": source_redaction}
             self.aggregate_path.write_text(json.dumps(aggregate), encoding="utf-8")
             value["producer"]["aggregate_sha256"] = admission.file_digest(self.aggregate_path)
+            if kind == admission.LIVE_KIND:
+                value["producer"]["receipt_path"] = value["producer"]["aggregate_path"]
+                value["producer"]["receipt_sha256"] = value["producer"]["aggregate_sha256"]
         value["receipt_digest"] = admission.canonical_digest(value)
         return value
 
-    def validate(self, receipt: dict) -> None:
-        admission.validate_receipt(receipt, schema=self.schema, policy=self.policy, policy_path=self.policy_path, manifest_path=self.manifest_path, manifest_sha256=self.manifest_digest, source_sha256=self.source_digest, artifact_roots=self.artifact_roots, admitted_at=admission.parse_time("2026-07-22T01:00:00Z", "test admission time"), label="fixture")
+    def validate(self, receipt: dict, *, admission_time: str = "2026-07-22T00:05:00Z") -> None:
+        admission.validate_receipt(receipt, schema=self.schema, policy=self.policy, policy_path=self.policy_path, manifest_path=self.manifest_path, manifest_sha256=self.manifest_digest, source_sha256=self.source_digest, artifact_roots=self.artifact_roots, admitted_at=admission.parse_time(admission_time, "test admission time"), label="fixture")
 
     def test_all_producer_kinds_are_admitted_with_immutable_bindings(self) -> None:
         for kind in self.policy["producer_contracts"]:
@@ -256,6 +265,42 @@ class ReleaseAdmissionReceiptTest(unittest.TestCase):
         self.manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "manifest binding"):
             self.validate(receipt)
+
+    def test_live_release_is_a_distinct_600_second_complete_aggregate_gate(self) -> None:
+        live = self.receipt(admission.LIVE_KIND)
+        self.validate(live, admission_time="2026-07-22T00:09:59Z")
+        with self.assertRaisesRegex(ValueError, "stale"):
+            self.validate(live, admission_time="2026-07-22T00:10:01Z")
+        future = self.receipt(admission.LIVE_KIND)
+        future["generated_at"] = "2026-07-22T00:05:01Z"
+        future["receipt_digest"] = admission.canonical_digest(future)
+        with self.assertRaisesRegex(ValueError, "future"):
+            self.validate(future, admission_time="2026-07-22T00:05:00Z")
+        self.assertEqual(admission.validate_required_live_release([live]), live)
+        with self.assertRaisesRegex(ValueError, "health_live_observation"):
+            admission.validate_required_live_release([self.receipt(admission.RUNTIME_KIND, shard=0)])
+
+    def test_live_release_rejects_partial_mismatched_or_unsafe_evidence(self) -> None:
+        live = self.receipt(admission.LIVE_KIND)
+        aggregate = json.loads(self.aggregate_path.read_text(encoding="utf-8"))
+        aggregate["shards"][2]["receipt_available"] = False
+        self.aggregate_path.write_text(json.dumps(aggregate), encoding="utf-8")
+        live["producer"]["aggregate_sha256"] = admission.file_digest(self.aggregate_path)
+        live["producer"]["receipt_sha256"] = live["producer"]["aggregate_sha256"]
+        live["receipt_digest"] = admission.canonical_digest(live)
+        with self.assertRaisesRegex(ValueError, "unavailable or incomplete"):
+            self.validate(live)
+        live = self.receipt(admission.LIVE_KIND)
+        live["producer"]["receipt_path"] = "receipts/health_live_observation.json"
+        live["producer"]["receipt_sha256"] = admission.file_digest(self.artifact_roots["StatPan/datapan-health"] / "receipts" / "health_live_observation.json")
+        live["receipt_digest"] = admission.canonical_digest(live)
+        with self.assertRaisesRegex(ValueError, "complete aggregate"):
+            self.validate(live)
+        live = self.receipt(admission.LIVE_KIND)
+        live["redaction"]["secret_values_present"] = True
+        live["receipt_digest"] = admission.canonical_digest(live)
+        with self.assertRaisesRegex(ValueError, "schema validation"):
+            self.validate(live)
 
 
 if __name__ == "__main__":

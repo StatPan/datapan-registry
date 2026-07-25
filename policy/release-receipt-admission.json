@@ -7,6 +7,7 @@
   "producer_contracts": {
     "catalog_observation": {"repository": "StatPan/datapan-data", "outcomes": ["no_change", "material_change", "collection_failure"], "subject": "upstream_catalog", "max_age_seconds": 86400},
     "runtime_freshness_shard": {"repository": "StatPan/datapan-health", "outcomes": ["verified", "failed", "skipped", "unknown"], "provider": "data_go_kr", "subject": "runtime_freshness_rotating_shard", "max_age_seconds": 3600, "shard_count": 8, "batch_size_max": 100, "max_parallelism_max": 2, "per_operation_timeout_seconds_max": 20},
+    "health_live_observation": {"repository": "StatPan/datapan-health", "outcomes": ["verified", "failed", "skipped", "unknown"], "provider": "data_go_kr", "subject": "m003_release_live_observation", "max_age_seconds": 600, "shard_count": 8, "batch_size_max": 100, "max_parallelism_max": 2, "per_operation_timeout_seconds_max": 20},
     "cli_consumer_smoke": {"repository": "StatPan/datapan-cli", "outcomes": ["verified", "failed", "skipped", "unknown"], "subject": "published_registry_consumer_smoke", "max_age_seconds": 86400}
   },
   "redaction": {"forbidden_field_names": ["credential_value", "credential_hash", "authorization_header", "service_key", "api_key", "secret", "request_url", "request_urls", "response_body", "response_bodies", "raw_response", "identity", "user_id", "email"], "forbidden_value_patterns": ["authorization:\\s*bearer\\s+", "bearer\\s+[a-z0-9._~+/=-]{16,}", "serviceKey=", "api[_-]?key=", "https?://", "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"]}

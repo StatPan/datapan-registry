@@ -15,6 +15,9 @@ import jsonschema
 
 SCHEMA_VERSION = "datapan.release-receipt-admission.v1"
 RUNTIME_KIND = "runtime_freshness_shard"
+LIVE_KIND = "health_live_observation"
+RUNTIME_SCOPE = {"provider": "data_go_kr", "subject": "runtime_freshness_rotating_shard"}
+HEALTH_PLAN_VERSION_DECISION = "reports/release-version-decision.json"
 
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -61,6 +64,25 @@ def canonical_digest(receipt: dict[str, Any]) -> str:
     value.pop("receipt_digest", None)
     encoded = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()
+
+
+def health_plan_manifest_binding(manifest: dict[str, Any]) -> str:
+    """Canonical Health-plan binding shared by its generator and admission gate.
+
+    The plan excludes its own mutable digest entry and the release-version
+    decision, which is intentionally generated after the plan.  All other
+    manifest facts remain part of the immutable execution-policy binding.
+    """
+    projection = copy.deepcopy(manifest)
+    artifacts = as_list(projection.get("artifacts"), "manifest.artifacts")
+    projection["artifacts"] = [item for item in artifacts if item.get("path") != HEALTH_PLAN_VERSION_DECISION]
+    projection["artifact_count"] = len(projection["artifacts"])
+    bound = [item for item in projection["artifacts"] if item.get("path") == "reports/health-runtime-observation-plan.v1.json"]
+    if len(bound) != 1 or bound[0].get("kind") != "verification_plan" or bound[0].get("schema") != "https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json":
+        raise ValueError("Health execution plan manifest identity does not match")
+    bound[0].pop("bytes", None)
+    bound[0].pop("sha256", None)
+    return hashlib.sha256(json.dumps(projection, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")).hexdigest()
 
 
 def parse_time(value: object, label: str) -> datetime:
@@ -219,6 +241,7 @@ def validate_health_aggregate(
         if (
             item.get("manifest_sha256") != registry.get("manifest_sha256")
             or item.get("policy_sha256") != registry.get("policy_sha256")
+            or item.get("scope") != scope
         ):
             raise ValueError(f"{label}: producer aggregate shard Registry policy binding does not match")
     matches = [
@@ -226,23 +249,26 @@ def validate_health_aggregate(
         for item in shards
         if isinstance(item, dict) and item.get("index") == execution.get("shard_index")
     ]
-    if len(matches) != 1:
-        raise ValueError(f"{label}: producer aggregate must contain exactly one matching shard")
-    shard = matches[0]
-    expected = {
-        "receipt_path": producer.get("receipt_path"),
-        "receipt_sha256": producer.get("receipt_sha256"),
-        "shard_digest": execution.get("shard_digest"),
-        "scope": scope,
-        "terminal_state": execution.get("terminal_state"),
-    }
-    for key, expected_value in expected.items():
-        if shard.get(key) != expected_value:
-            raise ValueError(f"{label}: producer aggregate shard mapping does not match outer admission envelope")
-    if shard.get("receipt_available") is not True or shard.get("completed") is not True:
-        raise ValueError(f"{label}: producer aggregate shard is not an available completed receipt")
+    if execution.get("shard_index") is not None:
+        if len(matches) != 1:
+            raise ValueError(f"{label}: producer aggregate must contain exactly one matching shard")
+        shard = matches[0]
+        expected = {
+            "receipt_path": producer.get("receipt_path"),
+            "receipt_sha256": producer.get("receipt_sha256"),
+            "shard_digest": execution.get("shard_digest"),
+            "scope": scope,
+            "terminal_state": execution.get("terminal_state"),
+        }
+        for key, expected_value in expected.items():
+            if shard.get(key) != expected_value:
+                raise ValueError(f"{label}: producer aggregate shard mapping does not match outer admission envelope")
+        if shard.get("receipt_available") is not True or shard.get("completed") is not True:
+            raise ValueError(f"{label}: producer aggregate shard is not an available completed receipt")
+    elif producer.get("receipt_path") != producer.get("aggregate_path") or producer.get("receipt_sha256") != producer.get("aggregate_sha256"):
+        raise ValueError(f"{label}: live Health receipt must be the complete aggregate artifact")
     aggregate_redaction = as_dict(aggregate.get("redaction"), f"{label}.producer_aggregate.redaction")
-    if shard.get("redaction") != aggregate_redaction or not all(value is True for value in aggregate_redaction.values()):
+    if any(as_dict(item, f"{label}.producer_aggregate.shards[]").get("redaction") != aggregate_redaction for item in shards) or not all(value is True for value in aggregate_redaction.values()):
         raise ValueError(f"{label}: producer aggregate redaction assertions do not prove a fully redacted shard")
     if redaction.get("secret_values_present") is not False or redaction.get("secret_hashes_present") is not False or redaction.get("request_urls_present") is not False or redaction.get("response_bodies_present") is not False:
         raise ValueError(f"{label}: outer redaction mapping is not safe")
@@ -259,13 +285,9 @@ def validate_execution_plan(execution_plan: dict[str, Any], manifest_path: pathl
     entries = [item for item in as_list(manifest.get("artifacts"), "manifest.artifacts") if isinstance(item, dict) and item.get("path") == expected_path]
     if len(entries) != 1 or entries[0].get("sha256") != execution_plan.get("sha256"):
         raise ValueError(f"{label}: Health execution plan is not manifest-bound")
-    projection = copy.deepcopy(manifest)
-    bound = [item for item in projection["artifacts"] if item.get("path") == expected_path]
-    if len(bound) != 1 or bound[0].get("kind") != "verification_plan" or bound[0].get("schema") != "https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json":
-        raise ValueError(f"{label}: Health execution plan manifest identity does not match")
-    bound[0].pop("bytes", None); bound[0].pop("sha256", None)
-    digest = hashlib.sha256(json.dumps(projection, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")).hexdigest()
+    # Keep this projection exactly aligned with the static-plan generator.
     plan = load_json(plan_path)
+    digest = health_plan_manifest_binding(manifest)
     if execution_plan.get("manifest_binding_sha256") != digest or plan.get("manifest_binding", {}).get("sha256") != digest:
         raise ValueError(f"{label}: Health execution plan manifest binding does not match")
 
@@ -309,8 +331,9 @@ def validate_receipt(receipt: dict[str, Any], *, schema: dict[str, Any], policy:
         raise ValueError(f"{label}: registry source digest does not match the admitted manifest source")
     if registry.get("policy_path") != policy_path.as_posix() or registry.get("policy_sha256") != file_digest(policy_path):
         raise ValueError(f"{label}: registry admission policy binding does not match")
-    if kind == RUNTIME_KIND:
-        execution = as_dict(receipt.get("execution"), f"{label}.execution")
+    if kind in {RUNTIME_KIND, LIVE_KIND}:
+        field = "execution" if kind == RUNTIME_KIND else "live_execution"
+        execution = as_dict(receipt.get(field), f"{label}.{field}")
         validate_execution_plan(as_dict(receipt.get("execution_plan"), f"{label}.execution_plan"), manifest_path, label)
         for field, policy_field in (("shard_count", "shard_count"), ("batch_size", "batch_size_max"), ("max_parallelism", "max_parallelism_max"), ("per_operation_timeout_seconds", "per_operation_timeout_seconds_max")):
             if field == "shard_count":
@@ -320,15 +343,23 @@ def validate_receipt(receipt: dict[str, Any], *, schema: dict[str, Any], policy:
                 raise ValueError(f"{label}: execution.{field} exceeds policy")
         if execution.get("terminal_state") != receipt.get("outcome"):
             raise ValueError(f"{label}: execution.terminal_state must equal outcome")
+        aggregate_scope = scope if kind == RUNTIME_KIND else RUNTIME_SCOPE
         validate_health_aggregate(
             producer,
             execution,
-            scope,
+            aggregate_scope,
             registry,
             as_dict(receipt.get("redaction"), f"{label}.redaction"),
             artifact_roots,
             label,
         )
+
+
+def validate_required_live_release(receipts: list[dict[str, Any]]) -> dict[str, Any]:
+    live = [receipt for receipt in receipts if receipt.get("receipt_kind") == LIVE_KIND]
+    if len(live) != 1:
+        raise ValueError("pre-publication admission requires exactly one health_live_observation receipt")
+    return live[0]
 
 
 def validate_runtime_completeness(receipts: list[dict[str, Any]]) -> str:

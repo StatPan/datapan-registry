@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Generate the static, manifest-bound eight-shard Health execution plan."""
-import copy, hashlib, json, pathlib, sys
+import hashlib, json, pathlib, sys
 from urllib.parse import urlsplit
+from release_admission_receipts import health_plan_manifest_binding
 
 ROOT=pathlib.Path("."); POLICY=ROOT/"policy/health-runtime-observation-selection.json"; REGISTRY=ROOT/"data/data-go-kr.registry.json"; MANIFEST=ROOT/"manifest.json"; OUTPUT=ROOT/"reports/health-runtime-observation-plan.v1.json"; VERSION_DECISION="reports/release-version-decision.json"
 def dump(v): return json.dumps(v,ensure_ascii=False,indent=2)+"\n"
@@ -10,16 +11,6 @@ def key(fields):
  b=bytearray()
  for f in fields: x=f.encode(); b.extend(f"{len(x)}:".encode()); b.extend(x)
  return sha(bytes(b))
-def manifest_binding(manifest):
- # Version evidence is release metadata, not Health execution input. Excluding
- # its complete self-referential artifact prevents a version-decision/plan
- # digest loop while every plan-relevant manifest artifact remains bound.
- v=copy.deepcopy(manifest); v["artifacts"]=[a for a in v["artifacts"] if a.get("path")!=VERSION_DECISION]; v["artifact_count"]=len(v["artifacts"]); matches=[a for a in v["artifacts"] if a.get("path")==OUTPUT.as_posix()]
- if len(matches)!=1 or matches[0].get("kind")!="verification_plan" or matches[0].get("schema")!="https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json": raise ValueError("plan manifest entry must be unique with expected path/kind/schema")
- for f in ("bytes","sha256"):
-  if f not in matches[0]: raise ValueError("plan manifest entry missing excluded field")
-  matches[0].pop(f)
- return sha(json.dumps(v,sort_keys=True,separators=(",",":"),ensure_ascii=False).encode())
 def build():
  p=json.loads(POLICY.read_text()); r=json.loads(REGISTRY.read_text()); m=json.loads(MANIFEST.read_text()); by={(d["id"],o["name"]):(d,o) for d in r for o in d.get("operations",[]) }
  members=[]
@@ -36,7 +27,7 @@ def build():
  shards=[]
  for i,x in enumerate(members):
   digest=sha(json.dumps([x],sort_keys=True,separators=(",",":"),ensure_ascii=False).encode()); shards.append({"index":i,"operation_count":1,"membership_digest":digest,"members":[x]})
- return {"schema_version":"datapan.health-runtime-observation-plan.v1","generated_at":p["generated_at"],"authority":"datapan-registry","registry_revision":p["registry_revision"],"source_registry":{"path":REGISTRY.as_posix(),"sha256":sha(REGISTRY.read_bytes())},"manifest_binding":{"path":MANIFEST.as_posix(),"sha256":manifest_binding(m),"excluded_fields":["bytes","sha256"]},"selection_policy":{"path":POLICY.as_posix(),"sha256":sha(POLICY.read_bytes()),"selection_id":p["selection_id"]},"summary":{"shards":8,"members":8},"shards":shards}
+ return {"schema_version":"datapan.health-runtime-observation-plan.v1","generated_at":p["generated_at"],"authority":"datapan-registry","registry_revision":p["registry_revision"],"source_registry":{"path":REGISTRY.as_posix(),"sha256":sha(REGISTRY.read_bytes())},"manifest_binding":{"path":MANIFEST.as_posix(),"sha256":health_plan_manifest_binding(m),"excluded_fields":["bytes","sha256"]},"selection_policy":{"path":POLICY.as_posix(),"sha256":sha(POLICY.read_bytes()),"selection_id":p["selection_id"]},"summary":{"shards":8,"members":8},"shards":shards}
 def main():
  try:
   expected=dump(build())
