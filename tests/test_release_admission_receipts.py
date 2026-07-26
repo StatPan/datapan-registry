@@ -4,6 +4,7 @@ import copy
 import hashlib
 import json
 import pathlib
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -113,6 +114,35 @@ class ReleaseAdmissionReceiptTest(unittest.TestCase):
     def test_all_producer_kinds_are_admitted_with_immutable_bindings(self) -> None:
         for kind in self.policy["producer_contracts"]:
             self.validate(self.receipt(kind, shard=0 if kind == admission.RUNTIME_KIND else None))
+
+    def test_checked_in_fixtures_follow_documented_local_admission_command(self) -> None:
+        fixture_root = pathlib.Path("tests/fixtures/release-admission")
+        result = subprocess.run(
+            [
+                sys.executable,
+                "scripts/validate-release-admission-receipts.py",
+                "--manifest",
+                str(fixture_root / "manifest.json"),
+                "--check-manifest-artifacts",
+                "--admission-time",
+                "2026-07-22T01:00:00Z",
+                "--producer-artifact-root",
+                f"StatPan/datapan-data={fixture_root / 'producer-artifacts' / 'datapan-data'}",
+                "--producer-artifact-root",
+                f"StatPan/datapan-health={fixture_root / 'producer-artifacts' / 'datapan-health'}",
+                "--producer-artifact-root",
+                f"StatPan/datapan-cli={fixture_root / 'producer-artifacts' / 'datapan-cli'}",
+                str(fixture_root / "catalog-observation.json"),
+                str(fixture_root / "cli-consumer-smoke.json"),
+                str(fixture_root / "runtime-freshness-shard-0.json"),
+            ],
+            cwd=ROOT,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("receipts=3", result.stdout)
 
     def test_secret_bearing_receipt_is_rejected(self) -> None:
         receipt = self.receipt("catalog_observation")

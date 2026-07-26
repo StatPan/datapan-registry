@@ -2,11 +2,12 @@
   "schema_version": "datapan.release-receipt-admission.v1",
   "generated_at": "2026-07-22T00:00:00Z",
   "receipt_kind": "runtime_freshness_shard",
-  "producer": {"repository": "StatPan/datapan-health", "revision": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "receipt_path": "receipts/runtime-freshness-shard-0.json", "receipt_sha256": "cc85419e2072f5866c9c4f25c4d82e96abfeedb1b1f4ea1260a671d477004eab", "aggregate_path": "runs/fixture-run-42.json", "aggregate_sha256": "b1d3c006fef0fde0c7ccbf2b47b9bbe6ff9b58c74b19c8b33c35ebfe912fb486"},
-  "registry": {"manifest_path": "tests/fixtures/release-admission/manifest.json", "manifest_sha256": "3fe8191ae44e11fef8aa27f931fa2d86687a74f868f1615b4dae187a1c1a51c9", "source_path": "data/registry.json", "source_sha256": "97c8d6f5771e426b0782c19107d2007637eb7ee452cabb48b1c5d1627a71c8f7", "policy_path": "policy/release-receipt-admission.json", "policy_sha256": "1fa2600c4aa6cf09ca123dfc8a9381d5cffc4c57aa0a0ce50adb3b7bd80bc00c"},
+  "producer": {"repository": "StatPan/datapan-health", "revision": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "receipt_path": "receipts/runtime-freshness-shard-0.json", "receipt_sha256": "cc85419e2072f5866c9c4f25c4d82e96abfeedb1b1f4ea1260a671d477004eab", "aggregate_path": "runs/fixture-run-42.json", "aggregate_sha256": "3c5ca657fc14af7af6949724e9e636ed52e6e4d08e73e418c73f096901c55285"},
+  "registry": {"manifest_path": "tests/fixtures/release-admission/manifest.json", "manifest_sha256": "30619c423a820441dc6af60cfb8f5d454858f91b3c5c40f57b1ca8b83db8b6b1", "source_path": "data/registry.json", "source_sha256": "97c8d6f5771e426b0782c19107d2007637eb7ee452cabb48b1c5d1627a71c8f7", "policy_path": "policy/release-receipt-admission.json", "policy_sha256": "58ae8690e5c3a4f6a444dc98d822663eeffab300c1c9f6975c91b8d5451f935a"},
   "outcome": "verified",
   "scope": {"provider": "data_go_kr", "subject": "runtime_freshness_rotating_shard"},
   "execution": {"run_id": "fixture-run-42", "shard_count": 8, "shard_index": 0, "shard_digest": "0000000000000000000000000000000000000000000000000000000000000001", "batch_size": 100, "max_parallelism": 2, "per_operation_timeout_seconds": 20, "terminal_state": "verified"},
+  "execution_plan": {"path": "reports/health-runtime-observation-plan.v1.json", "sha256": "0306b5e7d9a3ac3d654276a88e477f88964170da80c3134cd4ab5fc4cc80f4a8", "manifest_binding_sha256": "25deee5c57f56a8e19711a716bec269490a89c0d7877a9548bd523452c12fd57"},
   "redaction": {"secret_values_present": false, "secret_hashes_present": false, "request_urls_present": false, "response_bodies_present": false, "forbidden_fields_checked": ["credential_value", "credential_hash", "authorization_header", "service_key", "api_key"]},
-  "receipt_digest": "97d3b276a7a52b3f73834a719ed6469cd0c6530be312136a5ce63f3a8fb5d666"
+  "receipt_digest": "817652086700cc6a7a27984625e23348bc88fb9e47f21c026be4ff8e7bbce65f"
 }
