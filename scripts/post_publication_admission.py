@@ -13,7 +13,7 @@ import copy
 import hashlib
 import json
 from datetime import datetime, timezone
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 import jsonschema
@@ -39,6 +39,10 @@ def canonical_digest(value: dict[str, Any]) -> str:
     projected.pop("admission_digest", None)
     encoded = json.dumps(projected, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()
+
+
+def file_digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def parse_time(value: object, label: str) -> datetime:
@@ -78,8 +82,8 @@ def validate_schema(value: dict[str, Any], schema: dict[str, Any]) -> None:
 
 
 def require_current(when: datetime, *, earlier: datetime | None, admitted_at: datetime, label: str) -> None:
-    if earlier is not None and when < earlier:
-        raise ValueError(f"{label} is out of order")
+    if earlier is not None and when <= earlier:
+        raise ValueError(f"{label} must be strictly later than the preceding observed event")
     if when > admitted_at:
         raise ValueError(f"{label} is in the future of caller admission time")
     if (admitted_at - when).total_seconds() > MAX_AGE_SECONDS:
@@ -97,6 +101,45 @@ def require_equal_binding(actual: object, expected: object, label: str) -> None:
         raise ValueError(f"{label} does not match the anonymously verified immutable binding")
 
 
+def validate_anonymous_verification(
+    value: object, *, schema: dict[str, Any], earlier: datetime | None, admitted_at: datetime, label: str
+) -> tuple[datetime, dict[str, Any]]:
+    fragment = {"$defs": schema["$defs"], "$ref": "#/$defs/anonymousVerification"}
+    errors = list(jsonschema.Draft202012Validator(fragment, format_checker=FORMAT_CHECKER).iter_errors(value))
+    if errors:
+        raise ValueError(f"{label} does not match the redacted anonymous-verification contract")
+    if not isinstance(value, dict):
+        raise ValueError(f"{label} is missing")
+    when = parse_time(value.get("verified_at"), f"{label}.verified_at")
+    require_current(when, earlier=earlier, admitted_at=admitted_at, label=f"{label}.verified_at")
+    return when, binding(value.get("binding"), label)
+
+
+def load_prior_anonymous_verification(reference: object, *, evidence_root: Path | None) -> dict[str, Any]:
+    if evidence_root is None:
+        raise ValueError("rollback requires a separately supplied anonymous-verification evidence root")
+    if not isinstance(reference, dict):
+        raise ValueError("rollback prior anonymous-verification reference is missing")
+    path = reference.get("path")
+    if not isinstance(path, str):
+        raise ValueError("rollback prior anonymous-verification path is invalid")
+    relative = PurePosixPath(path)
+    if relative.is_absolute() or ".." in relative.parts:
+        raise ValueError("rollback prior anonymous-verification path escapes its evidence root")
+    root = evidence_root.resolve()
+    candidate = (root / Path(*relative.parts)).resolve()
+    try:
+        candidate.relative_to(root)
+    except ValueError as exc:
+        raise ValueError("rollback prior anonymous-verification path escapes its evidence root") from exc
+    if not candidate.is_file():
+        raise ValueError("rollback prior anonymous-verification artifact is missing")
+    if reference.get("sha256") != file_digest(candidate):
+        raise ValueError("rollback prior anonymous-verification digest does not match supplied evidence bytes")
+    value = load_json(candidate)
+    return value
+
+
 def validate_cli_observation(value: object, *, verified_binding: dict[str, Any], earlier: datetime, admitted_at: datetime, label: str) -> datetime:
     if not isinstance(value, dict):
         raise ValueError(f"{label} is missing")
@@ -111,15 +154,18 @@ def validate_cli_observation(value: object, *, verified_binding: dict[str, Any],
     return when
 
 
-def validate_admission(value: dict[str, Any], *, schema: dict[str, Any], admitted_at: datetime) -> str:
+def validate_admission(value: dict[str, Any], *, schema: dict[str, Any], admitted_at: datetime, evidence_root: Path | None = None) -> str:
     validate_schema(value, schema)
     if value.get("admission_digest") != canonical_digest(value):
         raise ValueError("post-publication admission digest does not match canonical bytes")
 
-    anonymous = value["anonymous_verification"]
-    anonymous_time = parse_time(anonymous["verified_at"], "anonymous_verification.verified_at")
-    require_current(anonymous_time, earlier=None, admitted_at=admitted_at, label="anonymous_verification.verified_at")
-    public_binding = binding(anonymous["binding"], "anonymous_verification")
+    anonymous_time, public_binding = validate_anonymous_verification(
+        value["anonymous_verification"],
+        schema=schema,
+        earlier=None,
+        admitted_at=admitted_at,
+        label="anonymous_verification",
+    )
 
     cli = value["cli_observation"]
     cli_time = parse_time(cli["observed_at"], "cli_observation.observed_at")
@@ -141,13 +187,23 @@ def validate_admission(value: dict[str, Any], *, schema: dict[str, Any], admitte
     rollback = resolution["rollback"]
     rollback_time = parse_time(rollback["observed_at"], "resolution.rollback.observed_at")
     require_current(rollback_time, earlier=cli_time, admitted_at=admitted_at, label="resolution.rollback.observed_at")
-    prior_binding = binding(rollback["prior_binding"], "resolution.rollback.prior")
+    prior_anonymous = load_prior_anonymous_verification(
+        rollback["prior_anonymous_receipt"],
+        evidence_root=evidence_root,
+    )
+    prior_time, prior_binding = validate_anonymous_verification(
+        prior_anonymous,
+        schema=schema,
+        earlier=rollback_time,
+        admitted_at=admitted_at,
+        label="resolution.rollback.prior_anonymous_verification",
+    )
     if prior_binding["pointer_sha256"] == public_binding["pointer_sha256"] or prior_binding["payload_revision"] == public_binding["payload_revision"]:
         raise ValueError("rollback must observe a distinct prior pointer and payload revision")
     validate_cli_observation(
         resolution["recovery_cli_observation"],
         verified_binding=prior_binding,
-        earlier=rollback_time,
+        earlier=prior_time,
         admitted_at=admitted_at,
         label="resolution.recovery_cli_observation",
     )

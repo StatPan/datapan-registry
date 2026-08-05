@@ -136,17 +136,22 @@ python3 scripts/validate-post-publication-admission.py \
 This Registry-only command does not publish, fetch a public endpoint, install
 the CLI, execute a provider call, or access credentials. It proves only that
 already-observed redacted evidence is coherent at the caller-owned time. The
-anonymous verification must precede the CLI observation and both must be no
-older than 600 seconds. They must bind exactly the same pointer digest,
+anonymous verification must be strictly earlier than the CLI observation and
+both must be no older than 600 seconds. They must bind exactly the same pointer digest,
 payload revision, payload-manifest digest, and Registry revision, manifest,
 source, and policy digests. A verified observation requires install, doctor,
 and journey receipts from one immutable CLI revision.
 
 If that CLI observation fails, the package is valid only as either an observed
-rollback to a distinct prior pointer and payload followed by a verified
-recovery CLI observation, or an explicit `manual_hold`. The validator returns
-status 2 for `manual_hold`; it is an honest terminal record, not a successful
-consumer gate or an unlock for later publication work.
+rollback to a distinct prior pointer and payload, followed by a separately
+supplied anonymous-verification receipt for that prior pointer and then a
+verified recovery CLI observation, or an explicit `manual_hold`. Supply that
+receipt root with `--evidence-root`; its referenced bytes and redacted contract
+are verified before they bind recovery. Every transition is strictly ordered;
+equal timestamps are rejected. The prior binding cannot be a self-asserted
+hash in the rollback record. The validator returns status 2 for
+`manual_hold`; it is an honest terminal record, not a successful consumer gate
+or an unlock for later publication work.
 
 ## Guarded GitHub Draft
 

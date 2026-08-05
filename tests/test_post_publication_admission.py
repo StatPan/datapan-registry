@@ -5,6 +5,7 @@ import json
 import pathlib
 import subprocess
 import sys
+import tempfile
 import unittest
 
 
@@ -17,6 +18,7 @@ class PostPublicationAdmissionTest(unittest.TestCase):
     def setUp(self) -> None:
         self.schema = admission.load_json(ROOT / "schemas/datapan.post-publication-admission.v1.schema.json")
         self.fixture_path = ROOT / "tests/fixtures/post-publication-admission/accepted.json"
+        self.evidence_root = ROOT / "tests/fixtures/post-publication-admission/evidence"
         self.value = admission.load_json(self.fixture_path)
         self.seal(self.value)
 
@@ -24,8 +26,8 @@ class PostPublicationAdmissionTest(unittest.TestCase):
     def seal(value: dict) -> None:
         value["admission_digest"] = admission.canonical_digest(value)
 
-    def validate(self, value: dict, *, when: str = "2026-08-05T00:10:00Z") -> str:
-        return admission.validate_admission(value, schema=self.schema, admitted_at=admission.parse_time(when, "test admission time"))
+    def validate(self, value: dict, *, when: str = "2026-08-05T00:10:00Z", evidence_root: pathlib.Path | None = None) -> str:
+        return admission.validate_admission(value, schema=self.schema, admitted_at=admission.parse_time(when, "test admission time"), evidence_root=evidence_root)
 
     def test_checked_in_fixture_passes_the_documented_offline_command(self) -> None:
         result = subprocess.run(
@@ -59,8 +61,13 @@ class PostPublicationAdmissionTest(unittest.TestCase):
         reordered = copy.deepcopy(self.value)
         reordered["cli_observation"]["observed_at"] = "2026-08-04T23:59:59Z"
         self.seal(reordered)
-        with self.assertRaisesRegex(ValueError, "out of order"):
+        with self.assertRaisesRegex(ValueError, "strictly later"):
             self.validate(reordered)
+        equal = copy.deepcopy(self.value)
+        equal["cli_observation"]["observed_at"] = equal["anonymous_verification"]["verified_at"]
+        self.seal(equal)
+        with self.assertRaisesRegex(ValueError, "strictly later"):
+            self.validate(equal)
 
     def test_accepted_requires_all_three_cli_checks(self) -> None:
         mutated = copy.deepcopy(self.value)
@@ -79,23 +86,67 @@ class PostPublicationAdmissionTest(unittest.TestCase):
 
         rolled_back = copy.deepcopy(self.value)
         rolled_back["cli_observation"]["outcome"] = "failed"
-        prior = copy.deepcopy(rolled_back["anonymous_verification"]["binding"])
-        prior["pointer_sha256"] = "8" * 64
-        prior["payload_revision"] = "e" * 40
-        prior["payload_manifest_sha256"] = "9" * 64
-        rollback = {"observed_at": "2026-08-05T00:06:00Z", "prior_binding": prior, "receipt_sha256": "a" * 64}
+        prior_receipt = admission.load_json(self.evidence_root / "prior-anonymous-verification.json")
+        prior = prior_receipt["binding"]
+        rollback = {
+            "observed_at": "2026-08-05T00:06:00Z",
+            "prior_anonymous_receipt": {"path": "prior-anonymous-verification.json", "sha256": admission.file_digest(self.evidence_root / "prior-anonymous-verification.json")},
+            "receipt_sha256": "a" * 64,
+        }
         recovery = copy.deepcopy(rolled_back["cli_observation"])
         recovery.update({"observed_at": "2026-08-05T00:07:00Z", "outcome": "verified", "binding": prior, "receipt_sha256": "b" * 64})
         rolled_back["resolution"] = {"outcome": "rolled_back", "rollback": rollback, "recovery_cli_observation": recovery}
         self.seal(rolled_back)
-        self.assertEqual(self.validate(rolled_back), "rolled_back")
+        self.assertEqual(self.validate(rolled_back, evidence_root=self.evidence_root), "rolled_back")
+        with self.assertRaisesRegex(ValueError, "evidence root"):
+            self.validate(rolled_back)
 
         non_rollback = copy.deepcopy(rolled_back)
-        non_rollback["resolution"]["rollback"]["prior_binding"] = copy.deepcopy(self.value["anonymous_verification"]["binding"])
-        non_rollback["resolution"]["recovery_cli_observation"]["binding"] = copy.deepcopy(self.value["anonymous_verification"]["binding"])
+        initial_binding = copy.deepcopy(self.value["anonymous_verification"]["binding"])
+        non_rollback["resolution"]["recovery_cli_observation"]["binding"] = initial_binding
         self.seal(non_rollback)
-        with self.assertRaisesRegex(ValueError, "distinct prior pointer"):
-            self.validate(non_rollback)
+        with self.assertRaisesRegex(ValueError, "binding"):
+            self.validate(non_rollback, evidence_root=self.evidence_root)
+
+        self_asserted = copy.deepcopy(rolled_back)
+        self_asserted["resolution"]["rollback"].pop("prior_anonymous_receipt")
+        self_asserted["resolution"]["rollback"]["prior_binding"] = prior
+        self.seal(self_asserted)
+        with self.assertRaisesRegex(ValueError, "schema"):
+            self.validate(self_asserted, evidence_root=self.evidence_root)
+
+        fabricated = copy.deepcopy(rolled_back)
+        fabricated["resolution"]["rollback"]["prior_anonymous_receipt"]["sha256"] = "f" * 64
+        self.seal(fabricated)
+        with self.assertRaisesRegex(ValueError, "digest"):
+            self.validate(fabricated, evidence_root=self.evidence_root)
+
+        for path in (
+            ("resolution", "rollback", "observed_at"),
+            ("resolution", "recovery_cli_observation", "observed_at"),
+        ):
+            with self.subTest(path=path):
+                equal = copy.deepcopy(rolled_back)
+                if path[-1] == "observed_at" and path[-2] == "rollback":
+                    equal["resolution"]["rollback"]["observed_at"] = equal["cli_observation"]["observed_at"]
+                else:
+                    equal["resolution"]["recovery_cli_observation"]["observed_at"] = prior_receipt["verified_at"]
+                self.seal(equal)
+                with self.assertRaisesRegex(ValueError, "strictly later"):
+                    self.validate(equal, evidence_root=self.evidence_root)
+
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            prior_equal = copy.deepcopy(prior_receipt)
+            prior_equal["verified_at"] = rolled_back["resolution"]["rollback"]["observed_at"]
+            prior_path = root / "prior.json"
+            prior_path.write_text(json.dumps(prior_equal), encoding="utf-8")
+            equal = copy.deepcopy(rolled_back)
+            equal["resolution"]["rollback"]["prior_anonymous_receipt"] = {"path": "prior.json", "sha256": admission.file_digest(prior_path)}
+            equal["resolution"]["recovery_cli_observation"]["binding"] = prior_equal["binding"]
+            self.seal(equal)
+            with self.assertRaisesRegex(ValueError, "strictly later"):
+                self.validate(equal, evidence_root=root)
 
         held = copy.deepcopy(self.value)
         held["cli_observation"]["outcome"] = "failed"

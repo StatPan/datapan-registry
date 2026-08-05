@@ -59,10 +59,18 @@
     "rollback": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["observed_at", "prior_binding", "receipt_sha256"],
+      "required": ["observed_at", "prior_anonymous_receipt", "receipt_sha256"],
       "properties": {
         "observed_at": {"type": "string", "format": "date-time"},
-        "prior_binding": {"$ref": "#/$defs/binding"},
+        "prior_anonymous_receipt": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "sha256"],
+          "properties": {
+            "path": {"type": "string", "pattern": "^[A-Za-z0-9_./-]+\\.json$"},
+            "sha256": {"$ref": "#/$defs/digest"}
+          }
+        },
         "receipt_sha256": {"$ref": "#/$defs/digest"}
       }
     },
