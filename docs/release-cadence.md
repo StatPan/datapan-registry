@@ -89,13 +89,12 @@ or Datapan CLI checkout:
 python3 scripts/validate-release-admission-receipts.py \
   --manifest tests/fixtures/release-admission/manifest.json \
   --check-manifest-artifacts \
-  --admission-time 2026-07-22T01:00:00Z \
+  --require-pre-publication \
+  --admission-time 2026-07-22T00:05:00Z \
   --producer-artifact-root StatPan/datapan-data=tests/fixtures/release-admission/producer-artifacts/datapan-data \
   --producer-artifact-root StatPan/datapan-health=tests/fixtures/release-admission/producer-artifacts/datapan-health \
-  --producer-artifact-root StatPan/datapan-cli=tests/fixtures/release-admission/producer-artifacts/datapan-cli \
   tests/fixtures/release-admission/catalog-observation.json \
-  tests/fixtures/release-admission/cli-consumer-smoke.json \
-  tests/fixtures/release-admission/runtime-freshness-shard-0.json
+  tests/fixtures/release-admission/health-live-observation.json
 ```
 
 The `runtime_freshness_shard` kind is exclusively for the rotating eight-shard
@@ -117,8 +116,10 @@ aggregate completion and every complete shard's `observed_at` against that same
 clock; a freshly stamped outer envelope cannot rewrap stale or future Health
 evidence. It retains the same eight-shard
 bounded execution limits but is not interchangeable with a
-`runtime_freshness_shard`; a cutover caller must explicitly require this kind.
-No receipt of either kind authorizes publication by itself.
+`runtime_freshness_shard`. A pre-publication caller must use
+`--require-pre-publication`, which admits exactly one Data catalog observation
+and one Health live observation, and rejects generic rotating-shard and CLI
+consumer receipts. No receipt packet authorizes publication by itself.
 
 ## Guarded GitHub Draft
 

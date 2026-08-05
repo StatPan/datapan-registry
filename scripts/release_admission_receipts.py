@@ -398,6 +398,30 @@ def validate_required_live_release(receipts: list[dict[str, Any]]) -> dict[str, 
     return live[0]
 
 
+def validate_required_pre_publication(receipts: list[dict[str, Any]]) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Require the only two receipt kinds eligible before publication.
+
+    A rotating freshness shard is valuable supplementary evidence, but it is
+    not the bounded live-release observation.  Likewise, a consumer receipt
+    is necessarily post-publication evidence.  Keeping this check separate
+    from per-receipt validation makes the caller opt into an explicit sealed
+    two-producer boundary rather than accidentally admitting one good input.
+    """
+    allowed_kinds = {"catalog_observation", LIVE_KIND}
+    kinds = [receipt.get("receipt_kind") for receipt in receipts]
+    if len(receipts) != 2 or any(kind not in allowed_kinds for kind in kinds):
+        raise ValueError(
+            "pre-publication admission requires only one catalog_observation and one health_live_observation receipt"
+        )
+    catalog = [receipt for receipt in receipts if receipt.get("receipt_kind") == "catalog_observation"]
+    live = [receipt for receipt in receipts if receipt.get("receipt_kind") == LIVE_KIND]
+    if len(catalog) != 1 or len(live) != 1:
+        raise ValueError(
+            "pre-publication admission requires exactly one catalog_observation and one health_live_observation receipt"
+        )
+    return catalog[0], live[0]
+
+
 def validate_runtime_completeness(receipts: list[dict[str, Any]]) -> str:
     runtime = [receipt for receipt in receipts if receipt.get("receipt_kind") == RUNTIME_KIND]
     if len(runtime) != 8:
