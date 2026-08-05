@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.post-publication-admission.v1.schema.json",
+  "title": "Datapan Post-publication Admission v1",
+  "description": "Redacted offline evidence that an anonymously verified immutable Registry publication was observed by the CLI, or was safely rolled back or manually held.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "anonymous_verification", "cli_observation", "resolution", "admission_digest"],
+  "properties": {
+    "schema_version": {"const": "datapan.post-publication-admission.v1"},
+    "anonymous_verification": {"$ref": "#/$defs/anonymousVerification"},
+    "cli_observation": {"$ref": "#/$defs/cliObservation"},
+    "resolution": {"$ref": "#/$defs/resolution"},
+    "admission_digest": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "revision": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataset", "pointer_path", "pointer_sha256", "payload_revision", "payload_manifest_sha256", "registry_revision", "registry_manifest_sha256", "registry_source_sha256", "registry_policy_sha256"],
+      "properties": {
+        "dataset": {"const": "StatPan/datapan-registry"},
+        "pointer_path": {"const": "release/distribution-manifest.json"},
+        "pointer_sha256": {"$ref": "#/$defs/digest"},
+        "payload_revision": {"$ref": "#/$defs/revision"},
+        "payload_manifest_sha256": {"$ref": "#/$defs/digest"},
+        "registry_revision": {"$ref": "#/$defs/revision"},
+        "registry_manifest_sha256": {"$ref": "#/$defs/digest"},
+        "registry_source_sha256": {"$ref": "#/$defs/digest"},
+        "registry_policy_sha256": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "anonymousVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verified_at", "binding", "receipt_sha256"],
+      "properties": {
+        "verified_at": {"type": "string", "format": "date-time"},
+        "binding": {"$ref": "#/$defs/binding"},
+        "receipt_sha256": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "cliObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "revision", "observed_at", "outcome", "binding", "receipt_sha256", "checks"],
+      "properties": {
+        "repository": {"const": "StatPan/datapan-cli"},
+        "revision": {"$ref": "#/$defs/revision"},
+        "observed_at": {"type": "string", "format": "date-time"},
+        "outcome": {"enum": ["verified", "failed", "unknown"]},
+        "binding": {"$ref": "#/$defs/binding"},
+        "receipt_sha256": {"$ref": "#/$defs/digest"},
+        "checks": {"type": "array", "items": {"enum": ["install", "doctor", "journey"]}, "uniqueItems": true, "minItems": 1, "maxItems": 3}
+      }
+    },
+    "rollback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observed_at", "prior_anonymous_receipt", "receipt_sha256"],
+      "properties": {
+        "observed_at": {"type": "string", "format": "date-time"},
+        "prior_anonymous_receipt": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "sha256"],
+          "properties": {
+            "path": {"type": "string", "pattern": "^[A-Za-z0-9_./-]+\\.json$"},
+            "sha256": {"$ref": "#/$defs/digest"}
+          }
+        },
+        "receipt_sha256": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "resolution": {
+      "oneOf": [
+        {"type": "object", "additionalProperties": false, "required": ["outcome"], "properties": {"outcome": {"const": "accepted"}}},
+        {"type": "object", "additionalProperties": false, "required": ["outcome", "hold_reason"], "properties": {"outcome": {"const": "manual_hold"}, "hold_reason": {"enum": ["cli_observation_failed", "cli_observation_incomplete", "operator_hold"]}}},
+        {"type": "object", "additionalProperties": false, "required": ["outcome", "rollback", "recovery_cli_observation"], "properties": {"outcome": {"const": "rolled_back"}, "rollback": {"$ref": "#/$defs/rollback"}, "recovery_cli_observation": {"$ref": "#/$defs/cliObservation"}}}
+      ]
+    }
+  }
+}

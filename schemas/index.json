@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 91,
+  "count": 92,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -822,6 +822,15 @@
       "version": "v1",
       "bytes": 2459,
       "sha256": "730694caead983417b295b94244cf1a5eaab7281864d9ac794ab76147b606ed7"
+    },
+    {
+      "path": "schemas/datapan.post-publication-admission.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.post-publication-admission.v1.schema.json",
+      "title": "Datapan Post-publication Admission v1",
+      "contract": "post-publication-admission",
+      "version": "v1",
+      "bytes": 4334,
+      "sha256": "4de9ccc1d8284c97bbaf420fabde13135a2801cbbc4a46b000cd36624cf886cd"
     }
   ]
 }

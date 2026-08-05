@@ -10,6 +10,10 @@
   },
   "allowed_additions": [
     {
+      "path": "schemas/datapan.post-publication-admission.v1.schema.json",
+      "kind": "schema"
+    },
+    {
       "path": "schemas/datapan.health-runtime-observation-plan.v1.schema.json",
       "kind": "schema"
     },
