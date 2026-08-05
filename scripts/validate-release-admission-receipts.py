@@ -30,6 +30,11 @@ def main() -> int:
     parser.add_argument("--check-manifest-artifacts", action="store_true")
     parser.add_argument("--require-runtime-completeness", action="store_true")
     parser.add_argument("--require-health-live-release", action="store_true", help="require exactly one distinct 600-second Health live-release receipt")
+    parser.add_argument(
+        "--require-pre-publication",
+        action="store_true",
+        help="require exactly one Data catalog receipt and one distinct 600-second Health live-release receipt",
+    )
     parser.add_argument("--producer-artifact-root", action="append", default=[], metavar="REPOSITORY=PATH")
     parser.add_argument("--admission-time", default=datetime.now(timezone.utc).isoformat(), help="RFC3339 admission time; defaults to current UTC time")
     args = parser.parse_args()
@@ -44,7 +49,10 @@ def main() -> int:
         for path, receipt in zip(args.receipts, receipts, strict=True):
             admission.validate_receipt(receipt, schema=schema, policy=policy, policy_path=args.policy, manifest_path=args.manifest, manifest_sha256=manifest_sha256, source_sha256=source_sha256, artifact_roots=artifact_roots, admitted_at=admitted_at, label=path.as_posix())
         run_id = admission.validate_runtime_completeness(receipts) if args.require_runtime_completeness else "not_required"
-        admission.validate_required_live_release(receipts) if args.require_health_live_release else None
+        if args.require_pre_publication:
+            admission.validate_required_pre_publication(receipts)
+        elif args.require_health_live_release:
+            admission.validate_required_live_release(receipts)
     except Exception as exc:  # noqa: BLE001
         print(f"FAIL release receipt admission: {exc}", file=sys.stderr)
         return 1

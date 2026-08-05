@@ -311,6 +311,61 @@ class ReleaseAdmissionReceiptTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "health_live_observation"):
             admission.validate_required_live_release([self.receipt(admission.RUNTIME_KIND, shard=0)])
 
+    def test_pre_publication_requires_exactly_data_and_live_health_receipts(self) -> None:
+        catalog = self.receipt("catalog_observation")
+        live = self.receipt(admission.LIVE_KIND)
+        self.assertEqual(admission.validate_required_pre_publication([catalog, live]), (catalog, live))
+        invalid_packets = [
+            [catalog],
+            [live],
+            [catalog, catalog],
+            [catalog, live, live],
+            [catalog, self.receipt(admission.RUNTIME_KIND, shard=0)],
+            [catalog, self.receipt("cli_consumer_smoke")],
+        ]
+        for packet in invalid_packets:
+            with self.subTest(kinds=[receipt["receipt_kind"] for receipt in packet]):
+                with self.assertRaisesRegex(ValueError, "catalog_observation.*health_live_observation"):
+                    admission.validate_required_pre_publication(packet)
+
+    def test_checked_in_pre_publication_fixture_packet_is_sealed_and_guarded(self) -> None:
+        fixture_root = pathlib.Path("tests/fixtures/release-admission")
+        command = [
+            sys.executable,
+            str(ROOT / "scripts" / "validate-release-admission-receipts.py"),
+            "--manifest",
+            str(fixture_root / "manifest.json"),
+            "--check-manifest-artifacts",
+            "--require-pre-publication",
+            "--admission-time",
+            "2026-07-22T00:05:00Z",
+            "--producer-artifact-root",
+            f"StatPan/datapan-data={fixture_root / 'producer-artifacts' / 'datapan-data'}",
+            "--producer-artifact-root",
+            f"StatPan/datapan-health={fixture_root / 'producer-artifacts' / 'datapan-health'}",
+            str(fixture_root / "catalog-observation.json"),
+        ]
+        successful = subprocess.run(
+            [*command, str(fixture_root / "health-live-observation.json")],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        self.assertEqual(successful.returncode, 0, successful.stderr)
+        self.assertIn("receipts=2", successful.stdout)
+
+        generic_substitution = subprocess.run(
+            [*command, str(fixture_root / "runtime-freshness-shard-0.json")],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        self.assertEqual(generic_substitution.returncode, 1)
+        self.assertIn("catalog_observation", generic_substitution.stderr)
+        self.assertIn("health_live_observation", generic_substitution.stderr)
+
     def test_live_release_rejects_partial_mismatched_or_unsafe_evidence(self) -> None:
         live = self.receipt(admission.LIVE_KIND)
         aggregate = json.loads(self.aggregate_path.read_text(encoding="utf-8"))
