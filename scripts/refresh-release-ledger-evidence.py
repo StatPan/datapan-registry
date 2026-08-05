@@ -65,12 +65,13 @@ WRITE_COMMANDS: tuple[Command, ...] = (
     # so generate it only after all other manifest-owned release evidence.
     Command(("python3", "scripts/generate-health-runtime-observation-plan.py")),
     Command(("python3", "scripts/sync-release-manifest-artifacts.py", "--write")),
-    # This fixture pins the finalized manifest but is not itself a manifest artifact.
-    Command(("python3", "scripts/generate-regional-baseline-source-provenance.py")),
     # Generate version evidence last: it excludes only itself and must bind every
     # other finalized manifest artifact digest.
     Command(("python3", "scripts/generate-release-version-decision.py")),
     Command(("python3", "scripts/sync-release-manifest-artifacts.py", "--write")),
+    # This fixture pins the final manifest but is not itself a manifest artifact,
+    # so it must be generated after every manifest-owned release artifact.
+    Command(("python3", "scripts/generate-regional-baseline-source-provenance.py")),
 )
 
 
@@ -188,6 +189,16 @@ def check() -> None:
 
 
 def self_test() -> None:
+    labels = [command.label for command in WRITE_COMMANDS]
+    manifest_sync_indices = [
+        index
+        for index, label in enumerate(labels)
+        if label == "python3 scripts/sync-release-manifest-artifacts.py --write"
+    ]
+    regional_pin = "python3 scripts/generate-regional-baseline-source-provenance.py"
+    if not manifest_sync_indices or labels.index(regional_pin) < max(manifest_sync_indices):
+        raise ValueError("self-test failed: regional consumer pin must follow the final manifest sync")
+
     calls: list[str] = []
 
     def refresh_once(iteration: int) -> bool:
