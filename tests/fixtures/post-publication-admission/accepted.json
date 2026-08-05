@@ -1,0 +1,39 @@
+{
+  "schema_version": "datapan.post-publication-admission.v1",
+  "anonymous_verification": {
+    "verified_at": "2026-08-05T00:00:00Z",
+    "binding": {
+      "dataset": "StatPan/datapan-registry",
+      "pointer_path": "release/distribution-manifest.json",
+      "pointer_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "payload_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "payload_manifest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "registry_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "registry_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "registry_source_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "registry_policy_sha256": "5555555555555555555555555555555555555555555555555555555555555555"
+    },
+    "receipt_sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  "cli_observation": {
+    "repository": "StatPan/datapan-cli",
+    "revision": "cccccccccccccccccccccccccccccccccccccccc",
+    "observed_at": "2026-08-05T00:05:00Z",
+    "outcome": "verified",
+    "binding": {
+      "dataset": "StatPan/datapan-registry",
+      "pointer_path": "release/distribution-manifest.json",
+      "pointer_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "payload_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "payload_manifest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "registry_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "registry_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "registry_source_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "registry_policy_sha256": "5555555555555555555555555555555555555555555555555555555555555555"
+    },
+    "receipt_sha256": "7777777777777777777777777777777777777777777777777777777777777777",
+    "checks": ["install", "doctor", "journey"]
+  },
+  "resolution": {"outcome": "accepted"},
+  "admission_digest": "c0e2d7ebd562cc03c0af185a0b971da3eb43762723c3758710009a98a01e83e6"
+}

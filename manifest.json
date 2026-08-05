@@ -5,7 +5,7 @@
   "provider": "data.go.kr",
   "source_registry": "data/data-go-kr.registry.json",
   "output_dir": ".",
-  "artifact_count": 167,
+  "artifact_count": 168,
   "artifacts": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -554,11 +554,17 @@
       "sha256": "730694caead983417b295b94244cf1a5eaab7281864d9ac794ab76147b606ed7"
     },
     {
+      "path": "schemas/datapan.post-publication-admission.v1.schema.json",
+      "kind": "schema",
+      "bytes": 4052,
+      "sha256": "4da54856876177d823369cce82f4cc0e520c2e390b668c658fd9f6b1a7e6920d"
+    },
+    {
       "path": "schemas/index.json",
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
-      "bytes": 37186,
-      "sha256": "fad632abe2f82457a687e07e17915c889bbb9fa090f7d97adee39ec80919e0e8"
+      "bytes": 37598,
+      "sha256": "66125214887eb05f0f7aac92fc18bd943e340031db90f627d84d2fb4b7cb06e7"
     },
     {
       "path": "data/data-go-kr.registry.json",

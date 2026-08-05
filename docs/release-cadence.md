@@ -121,6 +121,33 @@ bounded execution limits but is not interchangeable with a
 and one Health live observation, and rejects generic rotating-shard and CLI
 consumer receipts. No receipt packet authorizes publication by itself.
 
+## Post-publication CLI Receipt Admission
+
+Publication is separate from pre-publication producer admission. Once the
+Registry operator has independently and anonymously verified an immutable
+public pointer, a caller may validate a redacted CLI observation package with:
+
+```bash
+python3 scripts/validate-post-publication-admission.py \
+  --admission-time 2026-08-05T00:10:00Z \
+  tests/fixtures/post-publication-admission/accepted.json
+```
+
+This Registry-only command does not publish, fetch a public endpoint, install
+the CLI, execute a provider call, or access credentials. It proves only that
+already-observed redacted evidence is coherent at the caller-owned time. The
+anonymous verification must precede the CLI observation and both must be no
+older than 600 seconds. They must bind exactly the same pointer digest,
+payload revision, payload-manifest digest, and Registry revision, manifest,
+source, and policy digests. A verified observation requires install, doctor,
+and journey receipts from one immutable CLI revision.
+
+If that CLI observation fails, the package is valid only as either an observed
+rollback to a distinct prior pointer and payload followed by a verified
+recovery CLI observation, or an explicit `manual_hold`. The validator returns
+status 2 for `manual_hold`; it is an honest terminal record, not a successful
+consumer gate or an unlock for later publication work.
+
 ## Guarded GitHub Draft
 
 Maintainers may use the `Draft registry release` GitHub Actions workflow when
