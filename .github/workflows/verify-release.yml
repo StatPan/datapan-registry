@@ -33,6 +33,8 @@ jobs:
           . .datapan/ci/diagnostic-candidate-venv/bin/activate
           python -m pip install --upgrade pip
           python -m pip install jsonschema
+          python scripts/validate-oss-governance.py
+          python -m unittest tests/test_validate_oss_governance.py
           python scripts/sync-release-schema-artifacts.py --check
           python scripts/sync-release-manifest-artifacts.py --check
           python scripts/validate-diagnostic-envelope-draft.py

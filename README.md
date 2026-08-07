@@ -7,6 +7,19 @@ This repository is the portable registry side of Datapan. It lets CLI, SDK,
 agent, Studio, and downstream tooling consume a released registry without
 re-importing the upstream data.go.kr catalog every time.
 
+## Open-source and source rights
+
+Original Datapan-authored code, scripts, documentation, schemas, and examples
+are available under [Apache-2.0](LICENSE); see the full [License](LICENSE).
+That license does not cover
+upstream datasets, APIs, provider documentation, credentials, or provider
+marks. Their current terms, attribution requirements, access conditions, and
+redistribution limits remain controlling; see [Source rights](docs/source-rights.md).
+
+Please read the [NOTICE](NOTICE), [Contributing](CONTRIBUTING.md),
+[Security](SECURITY.md), and [Trademark guidance](TRADEMARKS.md) before
+redistributing, contributing, or reporting a vulnerability.
+
 ## Current Snapshot
 
 - Provider: `data.go.kr`
