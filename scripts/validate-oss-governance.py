@@ -26,7 +26,11 @@ REQUIRED_TEXT = {
         "docs/source-rights.md",
     ),
     "CONTRIBUTING.md": ("Apache License 2.0", "no separate contributor license agreement"),
-    "SECURITY.md": ("No verified private vulnerability-reporting path", "Stop condition:"),
+    "SECURITY.md": (
+        "GitHub private vulnerability reporting is enabled",
+        "https://github.com/StatPan/datapan-registry/security/advisories/new",
+        "Do not post exploit details",
+    ),
     "TRADEMARKS.md": ("does not grant permission", "does not assert"),
     "docs/source-rights.md": (
         "not an\nupstream-data sublicense",

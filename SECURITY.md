@@ -2,14 +2,11 @@
 
 ## Reporting a vulnerability
 
-No verified private vulnerability-reporting path is currently published for
-this repository. Do not post exploit details, credentials, access tokens, or
-other sensitive material in a public issue.
-
-**Stop condition:** maintainers must publish and verify a private reporting
-path, then update this file, before the project can claim to accept private
-security disclosures. Until then, report only non-sensitive defects through
-the public issue tracker and remove sensitive details.
+GitHub private vulnerability reporting is enabled for this repository. Submit
+sensitive reports through GitHub's private
+[Report a vulnerability](https://github.com/StatPan/datapan-registry/security/advisories/new)
+form. Do not post exploit details, credentials, access tokens, or other
+sensitive material in a public issue.
 
 ## Scope
 
