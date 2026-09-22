@@ -34,7 +34,7 @@
         "fresh_days": {"type": "integer", "minimum": 1},
         "expire_days": {"type": "integer", "minimum": 2},
         "missing_timestamp_classification": {"const": "unknown_timestamp"},
-        "evaluation_time_source": {"const": "manifest.generated_at"}
+        "evaluation_time_source": {"const": "latest_verification.generated_at"}
       }
     },
     "targets": {

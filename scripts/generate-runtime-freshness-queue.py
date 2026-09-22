@@ -100,7 +100,12 @@ def build() -> dict[str, Any]:
     policy = load(POLICY)
     if not isinstance(registry, list) or not isinstance(latest, dict):
         raise ValueError("invalid registry or latest verification input")
-    as_of_text = denominator_rollup["generated_at"]
+    freshness_policy = policy["freshness"]
+    if freshness_policy.get("evaluation_time_source") != "latest_verification.generated_at":
+        raise ValueError("freshness evaluation time source must be latest_verification.generated_at")
+    as_of_text = latest.get("generated_at")
+    if not isinstance(as_of_text, str) or not as_of_text:
+        raise ValueError("latest verification generated_at must be a date-time string")
     as_of = parse_time(as_of_text)
     fresh_days = int(policy["freshness"]["fresh_days"])
     expire_days = int(policy["freshness"]["expire_days"])

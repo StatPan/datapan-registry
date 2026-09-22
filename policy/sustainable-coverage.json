@@ -1,7 +1,7 @@
 {
   "schema_version": "datapan.sustainable-coverage-policy.v1",
   "policy_id": "datapan-registry-supported-sources",
-  "effective_at": "2026-07-04T06:39:24Z",
+  "effective_at": "2026-09-22T05:21:28Z",
   "supported_sources": [
     {"source_id": "data_go_kr", "profile": "sources/data_go_kr.json", "catalog_scope": "operation_denominator", "coverage_report": "reports/data-go-kr/operation-denominator.json"},
     {"source_id": "ecos", "profile": "sources/ecos.json", "catalog_scope": "operation_denominator", "coverage_report": "reports/ecos/operation-denominator.json"},
@@ -14,7 +14,7 @@
     "fresh_days": 30,
     "expire_days": 90,
     "missing_timestamp_classification": "unknown_timestamp",
-    "evaluation_time_source": "manifest.generated_at"
+    "evaluation_time_source": "latest_verification.generated_at"
   },
   "targets": {
     "source_contract_percent": 100.0,

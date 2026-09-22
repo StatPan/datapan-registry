@@ -146,9 +146,12 @@ def layer(
 
 
 def build_report(policy: dict[str, Any], inputs: dict[str, dict[str, Any]]) -> dict[str, Any]:
-    manifest = inputs["manifest"]
-    as_of_text = manifest.get("generated_at")
-    as_of = parse_time(as_of_text, "manifest.generated_at")
+    freshness_policy = policy["freshness"]
+    if freshness_policy.get("evaluation_time_source") != "latest_verification.generated_at":
+        raise ValueError("freshness evaluation time source must be latest_verification.generated_at")
+    latest_verification = inputs["latest_verification"]
+    as_of_text = latest_verification.get("generated_at")
+    as_of = parse_time(as_of_text, "latest_verification.generated_at")
     supported = objects(policy.get("supported_sources"), "policy.supported_sources")
     supported_ids = [str(item.get("source_id")) for item in supported]
     if len(supported_ids) != len(set(supported_ids)):
@@ -189,8 +192,12 @@ def build_report(policy: dict[str, Any], inputs: dict[str, dict[str, Any]]) -> d
     if operations <= 0:
         raise ValueError("at least one operation denominator with operations is required")
 
-    freshness_policy = policy["freshness"]
     freshness_queue = inputs["runtime_freshness_queue"]
+    freshness_metadata = freshness_queue.get("freshness")
+    if not isinstance(freshness_metadata, dict):
+        raise ValueError("runtime freshness queue freshness must be an object")
+    if freshness_metadata.get("as_of") != as_of_text:
+        raise ValueError("runtime freshness queue and latest verification evaluation times differ")
     freshness_summary = freshness_queue.get("summary")
     if not isinstance(freshness_summary, dict):
         raise ValueError("runtime freshness queue summary must be an object")
