@@ -63,7 +63,7 @@
       "checkouts": [
         {
           "job": "import",
-          "step": 3,
+          "step": 5,
           "action": "actions/checkout@v7",
           "repository": "StatPan/datapan-cli",
           "ref": "e3b2fa44cb0f68d7e58e003fbd71ecde505878de",
