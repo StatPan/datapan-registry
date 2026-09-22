@@ -18,6 +18,8 @@ import jsonschema
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.runtime-freshness-run-receipt.v1.schema.json")
 FORBIDDEN_KEYS = {"url", "request_url", "request_urls", "response_body", "response_bodies", "body", "credential_value", "credential_hash", "authorization", "authorization_header", "servicekey", "service_key", "apikey", "api_key", "secret", "token"}
 SECRET_PATTERNS = tuple(re.compile(pattern, re.IGNORECASE) for pattern in (r"authorization:\s*bearer", r"bearer\s+[a-z0-9._~+/=-]{16,}", r"servicekey=", r"api[_-]?key=", r"secret=", r"token="))
+IDENTITY_ALGORITHM = "data_go_kr.batch-plan-identity-key.v1"
+IDENTITY_DIGEST_ALGORITHM = "sha256-canonical-json-array.v1"
 SECRET_VALUE_REPLACEMENTS = (
     (re.compile(r"authorization:\s*bearer\s+[^\s,;\]\)}]+", re.IGNORECASE), "[redacted authorization]"),
     (re.compile(r"bearer\s+[a-z0-9._~+/=-]{16,}", re.IGNORECASE), "[redacted bearer credential]"),
@@ -67,6 +69,38 @@ def scan_boundary(value: object, label: str = "report") -> None:
                 raise ValueError(f"{label}: secret-like string matches {pattern.pattern}")
 
 
+def identity_set_digest(identities: set[str]) -> str:
+    encoded = json.dumps(sorted(identities), ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def result_key(value: dict[str, Any], *, label: str) -> tuple[str, str]:
+    dataset_id, operation = value.get("dataset_id"), value.get("operation")
+    if not isinstance(dataset_id, str) or not dataset_id:
+        raise ValueError(f"{label}: empty dataset_id")
+    if not isinstance(operation, str) or not operation:
+        raise ValueError(f"{label}: empty operation")
+    return dataset_id, operation
+
+
+def mapped_result_identity(
+    result: object,
+    *,
+    label: str,
+    planned_by_result_key: dict[tuple[str, str], str],
+) -> str:
+    if not isinstance(result, dict):
+        raise ValueError(f"{label}: result must be an object")
+    key = result_key(result, label=label)
+    identity = planned_by_result_key.get(key)
+    if identity is None:
+        raise ValueError(f"{label}: unplanned result identity dataset_id={key[0]!r} operation={key[1]!r}")
+    supplied = result.get("identity_key")
+    if supplied is not None and supplied != identity:
+        raise ValueError(f"{label}: result identity_key does not match its batch plan")
+    return identity
+
+
 def build(root: pathlib.Path, combined_path: pathlib.Path, *, expected_shards: int, run_id: str) -> dict[str, Any]:
     plans = sorted(root.rglob("batch-plan.json"))
     if len(plans) != expected_shards:
@@ -76,10 +110,11 @@ def build(root: pathlib.Path, combined_path: pathlib.Path, *, expected_shards: i
     combined_results = combined.get("results")
     if not isinstance(combined_results, list):
         raise ValueError("combined verification results must be an array")
-    all_identities: set[str] = set()
-    allowed_pairs: set[tuple[str, str]] = set()
-    shards: list[dict[str, Any]] = []
-    total_results = 0
+
+    planned_identities: set[str] = set()
+    planned_by_result_key: dict[tuple[str, str], str] = {}
+    shard_inputs: list[tuple[pathlib.Path, pathlib.Path, int, set[str], list[Any]]] = []
+    shard_indices: list[int] = []
     for plan_path in plans:
         directory = plan_path.parent
         verification_path = directory / "verification.json"
@@ -90,35 +125,132 @@ def build(root: pathlib.Path, combined_path: pathlib.Path, *, expected_shards: i
         operations, results = plan.get("operations"), verification.get("results")
         if not isinstance(operations, list) or not operations or not isinstance(results, list):
             raise ValueError(f"{directory}: invalid plan or verification results")
-        shard_index = plan.get("selection", {}).get("shard_index")
-        if not isinstance(shard_index, int):
+        selection = plan.get("selection")
+        shard_index = selection.get("shard_index") if isinstance(selection, dict) else None
+        if type(shard_index) is not int:
             raise ValueError(f"{plan_path}: missing shard index")
-        for operation in operations:
+        shard_count = selection.get("shard_count") if isinstance(selection, dict) else None
+        if shard_count is not None and shard_count != expected_shards:
+            raise ValueError(f"{plan_path}: shard_count expected {expected_shards}, got {shard_count}")
+        shard_indices.append(shard_index)
+        shard_planned: set[str] = set()
+        for index, operation in enumerate(operations):
+            label = f"{plan_path}: operation[{index}]"
             if not isinstance(operation, dict):
-                raise ValueError(f"{plan_path}: invalid operation")
-            identity = str(operation.get("identity_key", ""))
-            if not identity or identity in all_identities:
-                raise ValueError(f"duplicate or empty cross-shard identity: {identity}")
-            all_identities.add(identity)
-            allowed_pairs.add((str(operation.get("dataset_id", "")), str(operation.get("operation", ""))))
-        for result in results:
-            if not isinstance(result, dict) or (str(result.get("dataset_id", "")), str(result.get("operation", ""))) not in allowed_pairs:
-                raise ValueError(f"{verification_path}: result is outside batch plans")
+                raise ValueError(f"{label}: operation must be an object")
+            identity = operation.get("identity_key")
+            if not isinstance(identity, str) or not identity:
+                raise ValueError(f"{label}: empty planned identity")
+            if identity in planned_identities:
+                raise ValueError(f"{label}: duplicate planned identity {identity!r}")
+            key = result_key(operation, label=label)
+            prior = planned_by_result_key.get(key)
+            if prior is not None:
+                raise ValueError(
+                    f"{label}: ambiguous result identity mapping for dataset_id={key[0]!r} "
+                    f"operation={key[1]!r}: {prior!r} and {identity!r}"
+                )
+            planned_identities.add(identity)
+            planned_by_result_key[key] = identity
+            shard_planned.add(identity)
+        shard_inputs.append((verification_path, exit_path, shard_index, shard_planned, results))
+
+    expected_indices = list(range(expected_shards))
+    if sorted(shard_indices) != expected_indices:
+        raise ValueError(f"shard indices must equal {expected_indices}, got {sorted(shard_indices)}")
+
+    shards: list[dict[str, Any]] = []
+    shard_reported_identities: set[str] = set()
+    total_results = 0
+    for verification_path, exit_path, shard_index, shard_planned, results in shard_inputs:
+        shard_reported: set[str] = set()
+        for index, result in enumerate(results):
+            label = f"{verification_path}: result[{index}]"
+            identity = mapped_result_identity(result, label=label, planned_by_result_key=planned_by_result_key)
+            if identity not in shard_planned:
+                raise ValueError(f"{label}: result belongs to a different shard plan: {identity!r}")
+            if identity in shard_reported_identities:
+                raise ValueError(f"{label}: duplicate reported identity {identity!r}")
+            shard_reported.add(identity)
+            shard_reported_identities.add(identity)
+        missing = sorted(shard_planned - shard_reported)
+        if missing:
+            raise ValueError(f"{verification_path}: planned identities missing results: {missing[:5]}")
         raw_exit = exit_path.read_text(encoding="utf-8").strip()
         if not raw_exit.isdigit():
             raise ValueError(f"{exit_path}: malformed exit code")
         total_results += len(results)
-        shards.append({"shard_index": shard_index, "operation_count": len(operations), "exit_code": int(raw_exit), "batch_plan": file_record(plan_path, root), "verification": file_record(verification_path, root)})
-    if len({row["shard_index"] for row in shards}) != expected_shards:
-        raise ValueError("shard indices are not unique")
+        shards.append({
+            "shard_index": shard_index,
+            "operation_count": len(shard_planned),
+            "exit_code": int(raw_exit),
+            "batch_plan": file_record(plan_path, root),
+            "verification": file_record(verification_path, root),
+        })
+
+    combined_identities: set[str] = set()
+    enriched_results: list[dict[str, Any]] = []
+    for index, result in enumerate(combined_results):
+        label = f"{combined_path}: result[{index}]"
+        identity = mapped_result_identity(result, label=label, planned_by_result_key=planned_by_result_key)
+        if identity in combined_identities:
+            raise ValueError(f"{label}: duplicate reported identity {identity!r}")
+        combined_identities.add(identity)
+        assert isinstance(result, dict)
+        enriched_results.append({**result, "identity_key": identity})
+    missing = sorted(planned_identities - combined_identities)
+    if missing:
+        raise ValueError(f"{combined_path}: planned identities missing results: {missing[:5]}")
+    if shard_reported_identities != combined_identities:
+        raise ValueError("combined verification identities do not match shard verification identities")
     if total_results != len(combined_results):
         raise ValueError(f"combined result count expected {total_results}, got {len(combined_results)}")
+
     statuses = {name: 0 for name in ("verified", "failed", "skipped", "unknown")}
     for result in combined_results:
         status = result.get("status") if isinstance(result, dict) else None
         statuses[status if status in statuses else "unknown"] += 1
+    reported_results = len(combined_identities)
+    planned_operations = len(planned_identities)
+    if planned_operations != reported_results or reported_results != sum(statuses.values()):
+        raise ValueError(
+            "planned_operations, reported_results, and status counts must reconcile exactly"
+        )
+
+    combined["results"] = enriched_results
+    combined_path.write_text(json.dumps(combined, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    planned_digest = identity_set_digest(planned_identities)
+    reported_digest = identity_set_digest(combined_identities)
     shards.sort(key=lambda row: row["shard_index"])
-    report = {"schema_version": "datapan.runtime-freshness-run-receipt.v1", "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"), "run_id": run_id, "summary": {"expected_shards": expected_shards, "shards": len(shards), "planned_operations": len(all_identities), "reported_results": len(combined_results), **statuses}, "combined_verification": file_record(combined_path, root), "shards": shards, "redaction": {"secret_values_present": False, "secret_hashes_present": False, "request_urls_present": False, "response_bodies_present": False}}
+    report = {
+        "schema_version": "datapan.runtime-freshness-run-receipt.v1",
+        "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "run_id": run_id,
+        "summary": {
+            "expected_shards": expected_shards,
+            "shards": len(shards),
+            "planned_operations": planned_operations,
+            "reported_results": reported_results,
+            **statuses,
+        },
+        "identity_equality": {
+            "identity_algorithm": IDENTITY_ALGORITHM,
+            "result_identity_field": "identity_key",
+            "result_mapping_fields": ["dataset_id", "operation"],
+            "digest_algorithm": IDENTITY_DIGEST_ALGORITHM,
+            "planned": {"count": planned_operations, "sha256": planned_digest},
+            "reported": {"count": reported_results, "sha256": reported_digest},
+            "equal": planned_digest == reported_digest,
+        },
+        "combined_verification": file_record(combined_path, root),
+        "shards": shards,
+        "redaction": {
+            "secret_values_present": False,
+            "secret_hashes_present": False,
+            "request_urls_present": False,
+            "response_bodies_present": False,
+        },
+    }
     return report
 
 

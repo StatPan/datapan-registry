@@ -29,6 +29,8 @@ SECRET_PATTERNS = tuple(
         r"servicekey=", r"api[_-]?key=", r"secret=", r"token=",
     )
 )
+IDENTITY_ALGORITHM = "data_go_kr.batch-plan-identity-key.v1"
+IDENTITY_DIGEST_ALGORITHM = "sha256-canonical-json-array.v1"
 
 
 def load(path: pathlib.Path) -> dict[str, Any]:
@@ -51,6 +53,32 @@ def scan_boundary(value: object, label: str = "report") -> None:
         for pattern in SECRET_PATTERNS:
             if pattern.search(value):
                 raise ValueError(f"{label}: secret-like string matches {pattern.pattern}")
+
+
+def identity_set_digest(identities: set[str]) -> str:
+    encoded = json.dumps(sorted(identities), ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def reported_identities(report: dict[str, Any]) -> set[str]:
+    results = report.get("results")
+    if not isinstance(results, list):
+        raise ValueError("verification report results must be an array")
+    identities: set[str] = set()
+    for index, result in enumerate(results):
+        if not isinstance(result, dict):
+            raise ValueError("verification results must contain objects")
+        identity = result.get("identity_key")
+        if not isinstance(identity, str) or not identity:
+            raise ValueError(f"verification result[{index}] has an empty identity_key")
+        if identity in identities:
+            raise ValueError(f"verification result[{index}] duplicates identity_key {identity!r}")
+        identities.add(identity)
+    return identities
+
+
+def importable_result(result: dict[str, Any]) -> dict[str, Any]:
+    return {key: value for key, value in result.items() if key != "identity_key"}
 
 
 def counts(report: dict[str, Any]) -> dict[str, int]:
@@ -93,6 +121,38 @@ def validate_receipt(report_path: pathlib.Path, report: dict[str, Any], receipt:
     }
     if observed != expected:
         raise ValueError(f"receipt result counts do not reconcile: expected {expected}, got {observed}")
+
+    equality = receipt.get("identity_equality")
+    if not isinstance(equality, dict):
+        raise ValueError("receipt is missing identity_equality")
+    if equality.get("identity_algorithm") != IDENTITY_ALGORITHM:
+        raise ValueError("receipt identity algorithm is unsupported")
+    if equality.get("result_identity_field") != "identity_key":
+        raise ValueError("receipt result identity field is unsupported")
+    if equality.get("result_mapping_fields") != ["dataset_id", "operation"]:
+        raise ValueError("receipt result identity mapping fields are unsupported")
+    if equality.get("digest_algorithm") != IDENTITY_DIGEST_ALGORITHM:
+        raise ValueError("receipt identity digest algorithm is unsupported")
+    planned, reported = equality.get("planned"), equality.get("reported")
+    if not isinstance(planned, dict) or not isinstance(reported, dict):
+        raise ValueError("receipt identity sets are missing")
+    identities = reported_identities(report)
+    reported_digest = identity_set_digest(identities)
+    reported_count = len(identities)
+    if reported.get("count") != reported_count or reported.get("sha256") != reported_digest:
+        raise ValueError("reported identity count or digest disagrees with sanitized verification")
+    if planned.get("count") != summary.get("planned_operations"):
+        raise ValueError("planned identity count disagrees with receipt summary")
+    if reported.get("count") != summary.get("reported_results"):
+        raise ValueError("reported identity count disagrees with receipt summary")
+    if (
+        equality.get("equal") is not True
+        or planned.get("count") != reported.get("count")
+        or planned.get("sha256") != reported.get("sha256")
+    ):
+        raise ValueError("planned and reported identity sets are not exactly equal")
+    if summary.get("planned_operations") != observed["total"]:
+        raise ValueError("planned_operations and reported status counts do not reconcile")
     return observed
 
 
@@ -110,11 +170,18 @@ def import_run(
     current_results = current.get("results")
     incoming_results = report.get("results")
     assert isinstance(current_results, list) and isinstance(incoming_results, list)
-    existing = {json.dumps(result, ensure_ascii=False, sort_keys=True, separators=(",", ":")) for result in current_results}
-    selected_results = [
-        result for result in incoming_results
-        if json.dumps(result, ensure_ascii=False, sort_keys=True, separators=(",", ":")) not in existing
-    ]
+    existing = {
+        json.dumps(importable_result(result), ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        for result in current_results
+        if isinstance(result, dict)
+    }
+    selected_results = []
+    for result in incoming_results:
+        assert isinstance(result, dict)
+        importable = importable_result(result)
+        serialized = json.dumps(importable, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        if serialized not in existing:
+            selected_results.append(importable)
     with tempfile.TemporaryDirectory(prefix="datapan-freshness-import-") as directory:
         root = pathlib.Path(directory)
         selected = root / "selected.json"

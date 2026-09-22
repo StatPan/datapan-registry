@@ -4,7 +4,7 @@
   "title": "Datapan runtime freshness run receipt v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "generated_at", "run_id", "summary", "combined_verification", "shards", "redaction"],
+  "required": ["schema_version", "generated_at", "run_id", "summary", "identity_equality", "combined_verification", "shards", "redaction"],
   "properties": {
     "schema_version": {"const": "datapan.runtime-freshness-run-receipt.v1"},
     "generated_at": {"type": "string", "format": "date-time"},
@@ -21,6 +21,26 @@
         "failed": {"type": "integer", "minimum": 0},
         "skipped": {"type": "integer", "minimum": 0},
         "unknown": {"type": "integer", "minimum": 0}
+      }
+    },
+    "identity_equality": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity_algorithm", "result_identity_field", "result_mapping_fields", "digest_algorithm", "planned", "reported", "equal"],
+      "properties": {
+        "identity_algorithm": {"const": "data_go_kr.batch-plan-identity-key.v1"},
+        "result_identity_field": {"const": "identity_key"},
+        "result_mapping_fields": {
+          "type": "array",
+          "prefixItems": [{"const": "dataset_id"}, {"const": "operation"}],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "digest_algorithm": {"const": "sha256-canonical-json-array.v1"},
+        "planned": {"$ref": "#/$defs/identity_set"},
+        "reported": {"$ref": "#/$defs/identity_set"},
+        "equal": {"const": true}
       }
     },
     "combined_verification": {"$ref": "#/$defs/file"},
@@ -49,6 +69,15 @@
     }
   },
   "$defs": {
+    "identity_set": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["count", "sha256"],
+      "properties": {
+        "count": {"type": "integer", "minimum": 1},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
     "file": {
       "type": "object", "additionalProperties": false,
       "required": ["path", "bytes", "sha256"],
