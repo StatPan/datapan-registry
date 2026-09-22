@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.completeness-proof-policy.v1.schema.json",
+  "title": "Datapan Completeness Proof Policy v1",
+  "description": "Registry-owned policy for completeness, currentness, and update-delivery proofs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "policy_id",
+    "effective_at",
+    "scope_kinds",
+    "claim_rules",
+    "non_complete_states",
+    "reusable_dependencies"
+  ],
+  "properties": {
+    "schema_version": {"const": "datapan.completeness-proof-policy.v1"},
+    "policy_id": {"type": "string", "minLength": 1},
+    "effective_at": {"type": "string", "format": "date-time"},
+    "scope_kinds": {
+      "type": "array",
+      "minItems": 5,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "denominator_type", "identity_owner", "evidence_owner", "max_age_seconds"],
+        "properties": {
+          "kind": {
+            "enum": [
+              "api_catalog_metadata",
+              "api_operation_manifest",
+              "file_dataset",
+              "curated_payload_snapshot",
+              "payload_rows"
+            ]
+          },
+          "denominator_type": {
+            "enum": [
+              "authoritative_catalog_identity_set",
+              "authoritative_operation_identity_set",
+              "authoritative_file_dataset_identity_set",
+              "declared_snapshot_identity_set",
+              "authoritative_row_identity_set"
+            ]
+          },
+          "identity_owner": {"$ref": "#/$defs/owner"},
+          "evidence_owner": {"$ref": "#/$defs/owner"},
+          "max_age_seconds": {"type": "integer", "minimum": 1}
+        }
+      }
+    },
+    "claim_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["complete", "current", "updated"],
+      "properties": {
+        "complete": {"$ref": "#/$defs/predicates"},
+        "current": {"$ref": "#/$defs/predicates"},
+        "updated": {"$ref": "#/$defs/predicates"}
+      }
+    },
+    "non_complete_states": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["states", "require_missing_evidence", "require_owner", "require_ticket", "percentage_promotion_allowed"],
+      "properties": {
+        "states": {
+          "type": "array",
+          "minItems": 3,
+          "uniqueItems": true,
+          "items": {"enum": ["partial", "unknown", "blocked"]}
+        },
+        "require_missing_evidence": {"const": true},
+        "require_owner": {"const": true},
+        "require_ticket": {"const": true},
+        "percentage_promotion_allowed": {"const": false}
+      }
+    },
+    "reusable_dependencies": {
+      "type": "array",
+      "minItems": 7,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["capability", "owner", "ticket", "evidence_paths"],
+        "properties": {
+          "capability": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+          "owner": {"$ref": "#/$defs/owner"},
+          "ticket": {"$ref": "#/$defs/ticket"},
+          "evidence_paths": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "owner": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+    "ticket": {"type": "string", "pattern": "^(#[1-9][0-9]*|[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+#[1-9][0-9]*)$"},
+    "predicates": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[a-z0-9_]+$"}
+    }
+  }
+}

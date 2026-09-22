@@ -186,6 +186,9 @@ jobs:
           python scripts/validate-runtime-evidence-growth.py
           python scripts/generate-sustainable-coverage.py --self-test
           python scripts/generate-sustainable-coverage.py --check
+          python scripts/validate-completeness-proof.py --check
+          python scripts/validate-completeness-proof.py --self-test
+          python -m unittest tests/test_validate_completeness_proof.py
           python scripts/validate-operation-materialization-plan.py
           python scripts/validate-safetydata-operation-candidates.py
           python scripts/validate-safetydata-registry-patches.py
@@ -240,6 +243,7 @@ jobs:
           python -m py_compile scripts/generate-source-contract-rollup.py
           python -m py_compile scripts/generate-source-runtime-evidence-rollup.py
           python -m py_compile scripts/generate-sustainable-coverage.py
+          python -m py_compile scripts/validate-completeness-proof.py
           python -m py_compile scripts/run-upstream-refresh.py
           python -m py_compile scripts/validate-source-refresh-policy.py
           python -m py_compile scripts/sync-release-manifest-artifacts.py

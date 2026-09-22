@@ -137,6 +137,7 @@ jobs:
             scripts/generate-release-health-rollup.py \
             scripts/generate-source-contract-rollup.py \
             scripts/generate-sustainable-coverage.py \
+            scripts/validate-completeness-proof.py \
             scripts/run-upstream-refresh.py \
             scripts/validate-source-refresh-policy.py \
             scripts/generate-registry-shards.py \
@@ -233,6 +234,9 @@ jobs:
           python scripts/validate-runtime-evidence-growth.py
           python scripts/generate-sustainable-coverage.py --self-test
           python scripts/generate-sustainable-coverage.py --check
+          python scripts/validate-completeness-proof.py --check
+          python scripts/validate-completeness-proof.py --self-test
+          python -m unittest tests/test_validate_completeness_proof.py
           python scripts/validate-operation-materialization-plan.py
           python scripts/validate-safetydata-operation-candidates.py
           python scripts/validate-safetydata-registry-patches.py

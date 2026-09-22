@@ -30,6 +30,7 @@ class ManualReviewTechnicalRebindingTest(unittest.TestCase):
                 {"path": "schemas/health.schema.json", "kind": "schema"},
                 {"path": "reports/health.json", "kind": "verification_plan", "schema": "https://schemas.example/health"},
             ],
+            "independent_additions": [],
         }
 
     def test_only_the_exact_two_health_artifacts_can_rebind_after_canonical_regeneration(self):
@@ -49,6 +50,42 @@ class ManualReviewTechnicalRebindingTest(unittest.TestCase):
             self.assertEqual(value["manifest_delta"]["added_paths"], ["reports/health.json", "schemas/health.schema.json"])
             with self.assertRaisesRegex(ValueError, "allowlist"):
                 MODULE.expected(self.policy(decision_path, baseline), {"artifacts": artifacts + [{"path": "reports/extra.json"}]}, {"summary": {}}, decision_path)
+
+    def test_exact_independent_ticket_artifacts_do_not_expand_health_approval(self):
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            decision_path = root / "decision.json"
+            decision_path.write_text(json.dumps({"decision": {"compatibility_sha256": "a" * 64}}), encoding="utf-8")
+            baseline = [{"path": "data/registry.json", "kind": "registry"}]
+            policy = self.policy(decision_path, baseline)
+            policy["independent_additions"] = [
+                {
+                    "path": "schemas/completeness.schema.json",
+                    "kind": "schema",
+                    "authority_ticket": "StatPan/datapan-registry#631",
+                }
+            ]
+            artifacts = baseline + policy["allowed_additions"] + [
+                {"path": "schemas/completeness.schema.json", "kind": "schema"}
+            ]
+
+            value = MODULE.expected(policy, {"artifacts": artifacts}, {"summary": {}}, decision_path)
+
+            self.assertEqual(
+                value["manifest_delta"]["independent_paths"],
+                ["schemas/completeness.schema.json"],
+            )
+            self.assertEqual(
+                value["independent_additions"][0]["authority_ticket"],
+                "StatPan/datapan-registry#631",
+            )
+            with self.assertRaisesRegex(ValueError, "allowlist"):
+                MODULE.expected(
+                    policy,
+                    {"artifacts": artifacts + [{"path": "reports/unowned.json", "kind": "coverage"}]},
+                    {"summary": {}},
+                    decision_path,
+                )
 
     def test_preexisting_artifact_contract_change_rejects_rebinding(self):
         with tempfile.TemporaryDirectory() as raw:

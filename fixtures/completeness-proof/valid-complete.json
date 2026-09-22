@@ -1,0 +1,100 @@
+{
+  "schema_version": "datapan.completeness-proof.v1",
+  "proof_id": "data-go-kr-api-operation-manifest-complete",
+  "generated_at": "2026-09-22T00:00:00Z",
+  "policy": {
+    "id": "datapan-registry-public-data-completeness",
+    "schema_version": "datapan.completeness-proof-policy.v1",
+    "sha256": "f1199f36335bf0eb16a59279c30d03b819acfa8e1f833431d9a0c674adf896b6"
+  },
+  "scope": {
+    "scope_id": "data-go-kr-api-operation-manifest",
+    "source_id": "data_go_kr",
+    "provider": "data.go.kr",
+    "resource_kind": "api_operation_manifest",
+    "selector": {
+      "kind": "manifest",
+      "value": "reports/data-go-kr/operation-manifest.json"
+    },
+    "authority": {
+      "state": "available",
+      "owner": "StatPan/datapan-registry",
+      "evidence": {
+        "path": "reports/data-go-kr/operation-manifest.json",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    "identity_algorithm": "data-go-kr-operation-key-v1"
+  },
+  "source_snapshot": {
+    "observed_at": "2026-09-21T00:00:00Z",
+    "revision": "fixture-operation-manifest-r1",
+    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "denominator": {
+    "type": "authoritative_operation_identity_set",
+    "value": 2,
+    "bound_source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "identity_algorithm": "data-go-kr-operation-key-v1"
+  },
+  "reconciliation": {
+    "expected": 2,
+    "accepted": 2,
+    "missing": 0,
+    "extra": 0,
+    "duplicate": 0,
+    "rejected": 0
+  },
+  "freshness": {
+    "as_of": "2026-09-22T00:00:00Z",
+    "evidence_observed_at": "2026-09-21T00:00:00Z",
+    "max_age_seconds": 2592000,
+    "state": "current"
+  },
+  "import_durability": {
+    "state": "proven",
+    "receipt": {
+      "path": "receipts/import/fixture-operation-manifest-r1.json",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    }
+  },
+  "publication": {
+    "state": "published",
+    "artifact": {
+      "path": "releases/fixture-operation-manifest-r1.json",
+      "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    }
+  },
+  "consumer_read_back": {
+    "state": "proven",
+    "observed_at": "2026-09-22T00:00:00Z",
+    "artifact_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "proof_state": "complete",
+  "claims": {
+    "complete": true,
+    "current": true,
+    "updated": true
+  },
+  "missing_evidence": [],
+  "dependencies": [
+    {
+      "capability": "api_operation_manifest",
+      "owner": "StatPan/datapan-registry",
+      "ticket": "#605",
+      "evidence_paths": ["reports/data-go-kr/operation-manifest.json"]
+    },
+    {
+      "capability": "terminal_execution_coverage",
+      "owner": "StatPan/datapan-registry",
+      "ticket": "#597",
+      "evidence_paths": ["reports/runtime-freshness-queue.json"]
+    },
+    {
+      "capability": "producer_receipt_admission",
+      "owner": "StatPan/datapan-registry",
+      "ticket": "#592",
+      "evidence_paths": ["policy/release-receipt-admission.json"]
+    }
+  ]
+}

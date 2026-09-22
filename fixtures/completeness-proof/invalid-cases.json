@@ -1,0 +1,52 @@
+[
+  {
+    "case_id": "unknown-authority-cannot-complete",
+    "mutations": [
+      {"path": "/scope/authority/state", "value": "unavailable"}
+    ],
+    "expected_error": "complete proof does not satisfy fail-closed predicates"
+  },
+  {
+    "case_id": "local-denominator-cannot-complete",
+    "mutations": [
+      {"path": "/denominator/type", "value": "local_observed_identity_set"}
+    ],
+    "expected_error": "scope kind and denominator type are conflated"
+  },
+  {
+    "case_id": "stale-evidence-cannot-complete",
+    "mutations": [
+      {"path": "/freshness/as_of", "value": "2026-11-22T00:00:00Z"},
+      {"path": "/freshness/state", "value": "stale"}
+    ],
+    "expected_error": "complete proof does not satisfy fail-closed predicates"
+  },
+  {
+    "case_id": "source-digest-mismatch",
+    "mutations": [
+      {"path": "/denominator/bound_source_sha256", "value": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"}
+    ],
+    "expected_error": "denominator source digest does not match the source snapshot"
+  },
+  {
+    "case_id": "identity-algorithm-mismatch",
+    "mutations": [
+      {"path": "/denominator/identity_algorithm", "value": "different-identity-v1"}
+    ],
+    "expected_error": "denominator identity algorithm does not match the declared scope"
+  },
+  {
+    "case_id": "scope-kind-conflation",
+    "mutations": [
+      {"path": "/scope/resource_kind", "value": "file_dataset"}
+    ],
+    "expected_error": "scope kind and denominator type are conflated"
+  },
+  {
+    "case_id": "published-without-consumer-read-back",
+    "mutations": [
+      {"path": "/consumer_read_back/state", "value": "missing"}
+    ],
+    "expected_error": "published proof requires consumer read-back"
+  }
+]
