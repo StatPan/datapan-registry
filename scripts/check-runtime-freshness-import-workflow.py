@@ -20,21 +20,33 @@ def main() -> int:
             "default branch guard": "head_branch == github.event.repository.default_branch",
             "run-bound artifact": "runtime-freshness-${{ github.event.workflow_run.id }}-consolidated",
             "run-bound download": "run-id: ${{ env.PRODUCER_RUN_ID }}",
+            "current main checkout": "ref: main",
+            "producer ancestor guard": "git merge-base --is-ancestor \"${PRODUCER_HEAD_SHA}\" HEAD",
+            "serialized imports": "group: runtime-freshness-import",
             "sanitized verification": ".datapan/runtime-freshness/import/verification.json",
             "run receipt": ".datapan/runtime-freshness/import/run-receipt.json",
             "raw report exclusion": "test ! -e .datapan/runtime-freshness/import/raw-combined",
             "transaction": "scripts/apply-runtime-freshness-import.py",
+            "producer repository binding": "--producer-repository \"${PRODUCER_REPOSITORY}\"",
+            "producer revision binding": "--producer-revision \"${PRODUCER_HEAD_SHA}\"",
+            "producer run URL binding": "--producer-run-url \"${PRODUCER_RUN_URL}\"",
+            "durable admission": "reports/runtime-freshness-import-admissions",
             "transaction pipefail": "set -o pipefail",
             "no-change gate": "steps.transaction.outputs.changed == 'true'",
             "bytecode disabled": "PYTHONDONTWRITEBYTECODE: \"1\"",
             "cache cleanup": "-name __pycache__ -prune -exec rm -rf {} +",
             "auto merge": "gh pr merge \"${pr}\"",
+            "actual merge wait": "for _ in $(seq 1 180)",
+            "merge completion gate": "test \"${state}\" = \"MERGED\"",
+            "post-merge dispatch": "runtime-freshness-import-attest",
         }
         missing = [label for label, marker in required.items() if marker not in text]
         if missing:
             raise ValueError(f"missing workflow contract markers: {', '.join(missing)}")
         if "secrets." in text:
             raise ValueError("freshness import workflow must not consume repository credential secrets")
+        if "ref: ${{ env.PRODUCER_HEAD_SHA }}" in text:
+            raise ValueError("freshness import must mutate current main, not a stale producer checkout")
         permissions = text.split("permissions:", 1)[1].split("jobs:", 1)[0]
         expected_permissions = {"actions: read", "contents: write", "pull-requests: write"}
         actual_permissions = {line.strip() for line in permissions.splitlines() if line.strip()}

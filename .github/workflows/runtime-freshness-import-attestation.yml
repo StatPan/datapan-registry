@@ -1,0 +1,129 @@
+name: Attest runtime freshness import
+
+on:
+  repository_dispatch:
+    types:
+      - runtime-freshness-import-attest
+      - runtime-freshness-import-attestation-verify
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: runtime-freshness-import-attestation
+  cancel-in-progress: false
+
+jobs:
+  attest:
+    if: github.event.action == 'runtime-freshness-import-attest'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      RUN_ID: ${{ github.event.client_payload.run_id }}
+      IMPORT_PR: ${{ github.event.client_payload.pr_number }}
+      ATTESTATION_BRANCH: automation/runtime-freshness-attestation-${{ github.event.client_payload.run_id }}
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+          lfs: false
+
+      - name: Validate dispatch identity
+        run: |
+          case "${RUN_ID}" in ''|*[!0-9]*) exit 1 ;; esac
+          case "${IMPORT_PR}" in ''|*[!0-9]*) exit 1 ;; esac
+          test -f "reports/runtime-freshness-import-admissions/${RUN_ID}.json"
+          test -f "reports/runtime-freshness-imports/${RUN_ID}.json"
+
+      - name: Setup receipt validation
+        run: python3 -m pip install jsonschema
+
+      - name: Read the import PR and generate its main attestation
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .datapan/runtime-freshness
+          gh api "repos/${GITHUB_REPOSITORY}/pulls/${IMPORT_PR}" > .datapan/runtime-freshness/import-pr.json
+          git switch -c "${ATTESTATION_BRANCH}"
+          python3 scripts/attest-runtime-freshness-import.py attest \
+            --event .datapan/runtime-freshness/import-pr.json \
+            --admission "reports/runtime-freshness-import-admissions/${RUN_ID}.json" \
+            --output "reports/runtime-freshness-import-attestations/${RUN_ID}.json"
+
+      - name: Commit, merge, and dispatch final main verification
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          path="reports/runtime-freshness-import-attestations/${RUN_ID}.json"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain -- "${path}")" ]; then
+            git add "${path}"
+            git commit -m "chore: attest runtime freshness run ${RUN_ID}"
+            git push --force-with-lease origin "HEAD:refs/heads/${ATTESTATION_BRANCH}"
+          fi
+          pr="$(gh pr list --repo "${GITHUB_REPOSITORY}" --head "${ATTESTATION_BRANCH}" --state open --json number --jq '.[0].number // empty')"
+          if [ -z "${pr}" ]; then
+            existing="$(gh pr list --repo "${GITHUB_REPOSITORY}" --head "${ATTESTATION_BRANCH}" --state merged --json number --jq '.[0].number // empty')"
+            if [ -n "${existing}" ]; then
+              pr="${existing}"
+            else
+              url="$(gh pr create --repo "${GITHUB_REPOSITORY}" --base main --head "${ATTESTATION_BRANCH}" \
+                --title "Attest runtime freshness run ${RUN_ID}" \
+                --body "Post-merge attestation for runtime freshness import PR #${IMPORT_PR}. This binds the producer artifact, exact import arithmetic, import merge commit, Registry manifest, and release ledger. Relates #344.")"
+              pr="${url##*/}"
+            fi
+          fi
+          state="$(gh pr view "${pr}" --repo "${GITHUB_REPOSITORY}" --json state --jq .state)"
+          if [ "${state}" = "OPEN" ]; then
+            gh pr merge "${pr}" --repo "${GITHUB_REPOSITORY}" --auto --squash
+            for _ in $(seq 1 180); do
+              state="$(gh pr view "${pr}" --repo "${GITHUB_REPOSITORY}" --json state --jq .state)"
+              if [ "${state}" = "MERGED" ] || [ "${state}" = "CLOSED" ]; then
+                break
+              fi
+              sleep 10
+            done
+          fi
+          jq -n \
+            --arg run_id "${RUN_ID}" \
+            --arg pr_number "${pr}" \
+            '{event_type:"runtime-freshness-import-attestation-verify",client_payload:{run_id:$run_id,pr_number:$pr_number}}' \
+            > .datapan/runtime-freshness/verify-dispatch.json
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/dispatches" \
+            --input .datapan/runtime-freshness/verify-dispatch.json
+          test "${state}" = "MERGED"
+
+  verify:
+    if: github.event.action == 'runtime-freshness-import-attestation-verify'
+    runs-on: ubuntu-latest
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      RUN_ID: ${{ github.event.client_payload.run_id }}
+      ATTESTATION_PR: ${{ github.event.client_payload.pr_number }}
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+          lfs: false
+
+      - name: Setup receipt validation
+        run: python3 -m pip install jsonschema
+
+      - name: Verify the durable attestation from main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          case "${RUN_ID}" in ''|*[!0-9]*) exit 1 ;; esac
+          case "${ATTESTATION_PR}" in ''|*[!0-9]*) exit 1 ;; esac
+          mkdir -p .datapan/runtime-freshness
+          gh api "repos/${GITHUB_REPOSITORY}/pulls/${ATTESTATION_PR}" > .datapan/runtime-freshness/attestation-pr.json
+          python3 scripts/attest-runtime-freshness-import.py verify \
+            --event .datapan/runtime-freshness/attestation-pr.json \
+            --run-id "${RUN_ID}"

@@ -166,6 +166,9 @@ def import_run(
 ) -> dict[str, Any]:
     report, receipt, current = load(report_path), load(receipt_path), load(current_path)
     imported = validate_receipt(report_path, report, receipt)
+    generated_at = receipt.get("generated_at")
+    if not isinstance(generated_at, str) or not generated_at.endswith("Z"):
+        raise ValueError("receipt generated_at is missing or invalid")
     before = counts(current)
     current_results = current.get("results")
     incoming_results = report.get("results")
@@ -176,20 +179,29 @@ def import_run(
         if isinstance(result, dict)
     }
     selected_results = []
+    selected_identities: set[str] = set()
     for result in incoming_results:
         assert isinstance(result, dict)
         importable = importable_result(result)
         serialized = json.dumps(importable, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
         if serialized not in existing:
             selected_results.append(importable)
+            selected_identities.add(result["identity_key"])
+    selected_counts = counts({"results": selected_results})
     with tempfile.TemporaryDirectory(prefix="datapan-freshness-import-") as directory:
         root = pathlib.Path(directory)
-        selected = root / "selected.json"
+        selected_path = root / "selected.json"
         merged = root / "verification.json"
         summary = root / "summary.json"
-        selected.write_text(json.dumps({**report, "results": selected_results}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        selected_path.write_text(
+            json.dumps({**report, "results": selected_results}, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
         if selected_results:
-            run(datapan_command + ["catalog", "verify", "merge", "--input", str(current_path), "--input", str(selected), "--output", str(merged), "--json"])
+            run(datapan_command + ["catalog", "verify", "merge", "--input", str(current_path), "--input", str(selected_path), "--output", str(merged), "--json"])
+            merged_value = load(merged)
+            merged_value["generated_at"] = generated_at
+            merged.write_text(json.dumps(merged_value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
             run(datapan_command + ["catalog", "verify", "summary", "--input", str(merged), "--output", str(summary), "--limit", "0", "--json"])
             summary_value = load(summary)
             summary_value["source"] = current_path.as_posix()
@@ -198,16 +210,24 @@ def import_run(
             merged.write_bytes(current_path.read_bytes())
             summary.write_bytes(summary_path.read_bytes())
         after = counts(load(merged))
+        delta = {key: after[key] - before[key] for key in before}
+        if delta != selected_counts:
+            raise ValueError("post-import status arithmetic does not equal selected result counts")
         proposal = {
             "status": "applied" if apply else "dry_run",
             "run_id": receipt.get("run_id"),
             "receipt_sha256": hashlib.sha256(receipt_path.read_bytes()).hexdigest(),
             "sanitized_report_sha256": hashlib.sha256(report_path.read_bytes()).hexdigest(),
             "imported": imported,
+            "selected": selected_counts,
+            "selected_identity_set": {
+                "count": len(selected_identities),
+                "sha256": identity_set_digest(selected_identities),
+            },
             "selected_new_results": len(selected_results),
             "before": before,
             "after": after,
-            "delta": {key: after[key] - before[key] for key in before},
+            "delta": delta,
         }
         if apply:
             current_path.write_bytes(merged.read_bytes())
@@ -222,6 +242,7 @@ def main() -> int:
     parser.add_argument("--current", type=pathlib.Path, default=pathlib.Path("reports/latest-verification.json"))
     parser.add_argument("--summary", type=pathlib.Path, default=pathlib.Path("reports/latest-verification-summary.json"))
     parser.add_argument("--datapan-command", default="datapan")
+    parser.add_argument("--proposal-output", type=pathlib.Path)
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--dry-run", action="store_true")
     mode.add_argument("--apply", action="store_true")
@@ -231,7 +252,11 @@ def main() -> int:
             report_path=args.report, receipt_path=args.receipt, current_path=args.current,
             summary_path=args.summary, datapan_command=shlex.split(args.datapan_command), apply=args.apply,
         )
-        print(json.dumps(proposal, ensure_ascii=False, sort_keys=True))
+        rendered = json.dumps(proposal, ensure_ascii=False, sort_keys=True)
+        if args.proposal_output:
+            args.proposal_output.parent.mkdir(parents=True, exist_ok=True)
+            args.proposal_output.write_text(rendered + "\n", encoding="utf-8")
+        print(rendered)
         return 0
     except Exception as exc:  # noqa: BLE001
         print(f"FAIL import runtime freshness run: {exc}", file=sys.stderr)

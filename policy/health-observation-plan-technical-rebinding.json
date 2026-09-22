@@ -57,6 +57,16 @@
       "kind": "completeness_proof_policy",
       "schema": "https://schemas.datapan.dev/datapan.completeness-proof-policy.v1.schema.json",
       "authority_ticket": "StatPan/datapan-registry#631"
+    },
+    {
+      "path": "schemas/datapan.runtime-freshness-import-admission.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#633"
+    },
+    {
+      "path": "schemas/datapan.runtime-freshness-import-attestation.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#633"
     }
   ]
 }

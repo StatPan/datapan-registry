@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.runtime-freshness-import-admission.v1.schema.json",
+  "title": "Datapan Runtime Freshness Import Admission v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "admitted_at",
+    "run_id",
+    "producer",
+    "inputs",
+    "outcome",
+    "arithmetic",
+    "selected_identity_set"
+  ],
+  "properties": {
+    "schema_version": {"const": "datapan.runtime-freshness-import-admission.v1"},
+    "admitted_at": {"type": "string", "format": "date-time"},
+    "run_id": {"type": "string", "minLength": 1},
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "revision", "run_id", "run_url"],
+      "properties": {
+        "repository": {"type": "string", "pattern": "^[^/]+/[^/]+$"},
+        "revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "run_id": {"type": "string", "minLength": 1},
+        "run_url": {"type": "string", "format": "uri", "pattern": "^https://github\\.com/"}
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sanitized_report_sha256", "run_receipt_sha256", "import_receipt", "planned_identity_set"],
+      "properties": {
+        "sanitized_report_sha256": {"$ref": "#/$defs/sha256"},
+        "run_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "import_receipt": {"$ref": "#/$defs/path_digest"},
+        "planned_identity_set": {"$ref": "#/$defs/identity_set"}
+      }
+    },
+    "outcome": {"enum": ["imported", "no_change"]},
+    "arithmetic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["before", "selected", "after", "selected_new_results"],
+      "properties": {
+        "before": {"$ref": "#/$defs/counts"},
+        "selected": {"$ref": "#/$defs/counts"},
+        "after": {"$ref": "#/$defs/counts"},
+        "selected_new_results": {"type": "integer", "minimum": 0}
+      }
+    },
+    "selected_identity_set": {"$ref": "#/$defs/identity_set"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "path_digest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "identity_set": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["count", "sha256"],
+      "properties": {
+        "count": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total", "verified", "failed", "skipped", "unknown"],
+      "properties": {
+        "total": {"type": "integer", "minimum": 0},
+        "verified": {"type": "integer", "minimum": 0},
+        "failed": {"type": "integer", "minimum": 0},
+        "skipped": {"type": "integer", "minimum": 0},
+        "unknown": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

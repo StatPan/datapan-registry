@@ -27,6 +27,7 @@ class ImportRuntimeFreshnessRunTest(unittest.TestCase):
         summary = root / "summary.json"
         identity = "data_go_kr:d:o"
         incoming = {
+            "generated_at": "2026-07-11T00:01:00Z",
             "results": [{
                 "identity_key": identity,
                 "dataset_id": "d",
@@ -40,6 +41,7 @@ class ImportRuntimeFreshnessRunTest(unittest.TestCase):
         identity_set = {"count": 1, "sha256": MODULE.identity_set_digest({identity})}
         self.write_json(receipt, {
             "run_id": "run-1",
+            "generated_at": "2026-07-11T00:02:00Z",
             "summary": {
                 "planned_operations": 1,
                 "reported_results": 1,
@@ -60,7 +62,10 @@ class ImportRuntimeFreshnessRunTest(unittest.TestCase):
             "combined_verification": {"bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()},
             "redaction": {"secret_values_present": False, "secret_hashes_present": False, "request_urls_present": False, "response_bodies_present": False},
         })
-        self.write_json(current, {"results": [{"dataset_id": "old", "operation": "o", "status": "verified"}]})
+        self.write_json(current, {
+            "generated_at": "2026-07-10T00:00:00Z",
+            "results": [{"dataset_id": "old", "operation": "o", "status": "verified"}],
+        })
         return report, receipt, current, summary
 
     @staticmethod
@@ -97,6 +102,18 @@ class ImportRuntimeFreshnessRunTest(unittest.TestCase):
             self.assertEqual(len(json.loads(current.read_text(encoding="utf-8"))["results"]), 2)
             imported_results = json.loads(current.read_text(encoding="utf-8"))["results"]
             self.assertNotIn("identity_key", imported_results[-1])
+            self.assertEqual(
+                json.loads(current.read_text(encoding="utf-8"))["generated_at"],
+                "2026-07-11T00:02:00Z",
+            )
+            self.assertEqual(proposal["selected"], {
+                "total": 1,
+                "verified": 0,
+                "failed": 1,
+                "skipped": 0,
+                "unknown": 0,
+            })
+            self.assertEqual(proposal["selected_identity_set"]["count"], 1)
             self.assertTrue(summary.is_file())
 
     def test_reimport_of_exact_results_is_idempotent(self) -> None:
@@ -109,6 +126,31 @@ class ImportRuntimeFreshnessRunTest(unittest.TestCase):
             self.assertEqual(proposal["selected_new_results"], 0)
             self.assertEqual(proposal["delta"]["total"], 0)
             self.assertEqual(runner.call_count, 0)  # exact replay preserves both checked-in artifacts
+
+    def test_incorrect_merge_arithmetic_fails_before_mutation(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            report, receipt, current, summary = self.fixture(pathlib.Path(directory))
+            original = current.read_bytes()
+
+            def drop_incoming(command: list[str]) -> None:
+                output = pathlib.Path(command[command.index("--output") + 1])
+                if "merge" in command:
+                    output.write_text(current.read_text(encoding="utf-8"), encoding="utf-8")
+                else:
+                    output.write_text('{"summary":{"total":1}}\n', encoding="utf-8")
+
+            with mock.patch.object(MODULE, "run", side_effect=drop_incoming), self.assertRaisesRegex(
+                ValueError, "arithmetic"
+            ):
+                MODULE.import_run(
+                    report_path=report,
+                    receipt_path=receipt,
+                    current_path=current,
+                    summary_path=summary,
+                    datapan_command=["datapan"],
+                    apply=True,
+                )
+            self.assertEqual(current.read_bytes(), original)
 
     def test_digest_mismatch_fails_before_datapan(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
