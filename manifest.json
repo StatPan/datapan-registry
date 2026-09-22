@@ -496,8 +496,8 @@
     {
       "path": "schemas/datapan.runtime-freshness-run-receipt.v1.schema.json",
       "kind": "schema",
-      "bytes": 2682,
-      "sha256": "308717663ef432c9c6ce90ce10a7814ef09d87bff078a7cb6c6a5ff6adf6fde2"
+      "bytes": 3828,
+      "sha256": "b5032c7a12e8fed4d2c4013a9817464fae8967de9ca5eec4e1649a80ab1ad994"
     },
     {
       "path": "schemas/datapan.runtime-freshness-import-receipt.v1.schema.json",
@@ -576,7 +576,7 @@
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
       "bytes": 38386,
-      "sha256": "38369048688e4458c438e970aa2e491087e0feb4bb7849376be2f7136a421b33"
+      "sha256": "a535741e659f90abcdaa8ab8be2824d6638085e3dd1d91d978f89c460ae7551c"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -653,7 +653,7 @@
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
       "bytes": 8075,
-      "sha256": "a717ffb78796ff42ecacb172562107661914d9f5d73599d381a63b907b89bec3"
+      "sha256": "b13817bf7e9ab546c6c711c252727a07766742939137d1926d97926de7e8cca7"
     },
     {
       "path": "reports/operation-denominator-rollup.json",
@@ -765,7 +765,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "df0297fa112dd4316a8e63b2e4ccb3b805fcc1de0fc992fc948165feeeb9c2c7"
+      "sha256": "039f3b1175c376f8cd1b75760ca8096fee7b9ee505d9cb18cff589a47f33eb29"
     },
     {
       "path": "reports/source-reference-drift.json",
@@ -779,7 +779,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 62598,
-      "sha256": "30f8ba48bf84e36011af64d1682c19e6068f4a233870334992eaf450991aa902"
+      "sha256": "dbd85a059cfef99db02a9ab7887309f83aead5a3f8323427d69cbdc5395ae907"
     },
     {
       "path": "reports/data-go-kr/operation-manifest.json",
@@ -856,21 +856,21 @@
       "kind": "consumer_compatibility",
       "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json",
       "bytes": 26675,
-      "sha256": "ca1ad111f3b4bd602456d2cb10f99fec9ccd3feb8cf576975ede04fd990747e3"
+      "sha256": "2805a9a3f5e35c72109d326c4480a0be77b2bffc58a775ad6ae356864c61b1cd"
     },
     {
       "path": "reports/release-version-decision.json",
       "kind": "release_version_decision",
       "schema": "https://schemas.datapan.dev/datapan.release-version-decision.v1.schema.json",
       "bytes": 1811,
-      "sha256": "98aefe9a8261b0976ac3e1a69bef80d9c0ffaeee9947651e13fff58ac2c74aa2"
+      "sha256": "a95b1a54ccdedfa9c41b4dd51781b4e04b1a3497e935b34289b71b68e9ef6789"
     },
     {
       "path": "reports/release-distribution-footprint.json",
       "kind": "release_distribution_footprint",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
       "bytes": 2169,
-      "sha256": "d54ebc2cafdb13eaf42b02b7d631dc91d5f3408e031508ec17c771641d90ab65"
+      "sha256": "2cb86a088667275684ad0bdeda897bb2010aba7e264270183076506805a459a7"
     },
     {
       "path": "reports/release-shard-consumer-proof.json",
@@ -919,7 +919,7 @@
       "kind": "release_assembly_receipt",
       "schema": "https://schemas.datapan.dev/datapan.release-assembly-receipt.v1.schema.json",
       "bytes": 34969,
-      "sha256": "438b4f07b32c9ba5cab1a5fc2265624440ee099cb2f819b89a8849c0141d2f67"
+      "sha256": "3de76bd029a744f1f97daabaf861aa0fa8d625dc26d4e3448f86a613721be772"
     },
     {
       "path": "reports/unadapted-external-probe.json",
@@ -1089,7 +1089,7 @@
       "kind": "verification_plan",
       "schema": "https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json",
       "bytes": 11290,
-      "sha256": "58e05f56828db04c97642a9e10b80f9a065f7097b8382aadc41ffa6397b61e06"
+      "sha256": "604b5006a5b40024d2cc26a6b7abfb8643d367b9d78b8e07f4ebf426331024dd"
     }
   ]
 }

@@ -23,14 +23,30 @@ class ProjectRuntimeFreshnessRecoveryTest(unittest.TestCase):
         report, run_receipt = root / f"{run_id}-report.json", root / f"{run_id}-run-receipt.json"
         catalog, observation_path = root / "catalog.json", root / f"{run_id}-observations.json"
         output = root / f"{run_id}-import-receipt.json"
-        self.write(report, {"results": [result]})
+        identity = f"data_go_kr:{result['dataset_id']}:{result['operation']}"
+        bound_result = {**result, "identity_key": identity}
+        self.write(report, {"results": [bound_result]})
         data = report.read_bytes()
         statuses = {"verified": 0, "failed": 0, "skipped": 0, "unknown": 0}
         status = str(result.get("status", "unknown"))
         statuses[status if status in statuses else "unknown"] += 1
+        identity_digest = hashlib.sha256(
+            json.dumps([identity], ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+        ).hexdigest()
+        identity_set = {"count": 1, "sha256": identity_digest}
         self.write(run_receipt, {
-            "generated_at": "2026-07-11T12:00:00Z", "run_id": run_id,
-            "summary": {"reported_results": 1, **statuses},
+            "generated_at": "2026-07-11T12:00:00Z",
+            "run_id": run_id,
+            "summary": {"planned_operations": 1, "reported_results": 1, **statuses},
+            "identity_equality": {
+                "identity_algorithm": "data_go_kr.batch-plan-identity-key.v1",
+                "result_identity_field": "identity_key",
+                "result_mapping_fields": ["dataset_id", "operation"],
+                "digest_algorithm": "sha256-canonical-json-array.v1",
+                "planned": identity_set,
+                "reported": identity_set,
+                "equal": True,
+            },
             "combined_verification": {"bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()},
             "redaction": {"secret_values_present": False, "secret_hashes_present": False, "request_urls_present": False, "response_bodies_present": False},
         })

@@ -25,12 +25,38 @@ class ImportRuntimeFreshnessRunTest(unittest.TestCase):
         receipt = root / "receipt.json"
         current = root / "current.json"
         summary = root / "summary.json"
-        incoming = {"results": [{"dataset_id": "d", "operation": "o", "status": "failed", "checked_at": "2026-07-11T00:00:00Z"}]}
+        identity = "data_go_kr:d:o"
+        incoming = {
+            "results": [{
+                "identity_key": identity,
+                "dataset_id": "d",
+                "operation": "o",
+                "status": "failed",
+                "checked_at": "2026-07-11T00:00:00Z",
+            }],
+        }
         self.write_json(report, incoming)
         data = report.read_bytes()
+        identity_set = {"count": 1, "sha256": MODULE.identity_set_digest({identity})}
         self.write_json(receipt, {
             "run_id": "run-1",
-            "summary": {"reported_results": 1, "verified": 0, "failed": 1, "skipped": 0, "unknown": 0},
+            "summary": {
+                "planned_operations": 1,
+                "reported_results": 1,
+                "verified": 0,
+                "failed": 1,
+                "skipped": 0,
+                "unknown": 0,
+            },
+            "identity_equality": {
+                "identity_algorithm": MODULE.IDENTITY_ALGORITHM,
+                "result_identity_field": "identity_key",
+                "result_mapping_fields": ["dataset_id", "operation"],
+                "digest_algorithm": MODULE.IDENTITY_DIGEST_ALGORITHM,
+                "planned": identity_set,
+                "reported": identity_set,
+                "equal": True,
+            },
             "combined_verification": {"bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()},
             "redaction": {"secret_values_present": False, "secret_hashes_present": False, "request_urls_present": False, "response_bodies_present": False},
         })
@@ -69,6 +95,8 @@ class ImportRuntimeFreshnessRunTest(unittest.TestCase):
                 proposal = MODULE.import_run(report_path=report, receipt_path=receipt, current_path=current, summary_path=summary, datapan_command=["datapan"], apply=True)
             self.assertEqual(proposal["status"], "applied")
             self.assertEqual(len(json.loads(current.read_text(encoding="utf-8"))["results"]), 2)
+            imported_results = json.loads(current.read_text(encoding="utf-8"))["results"]
+            self.assertNotIn("identity_key", imported_results[-1])
             self.assertTrue(summary.is_file())
 
     def test_reimport_of_exact_results_is_idempotent(self) -> None:
@@ -89,6 +117,51 @@ class ImportRuntimeFreshnessRunTest(unittest.TestCase):
             with mock.patch.object(MODULE, "run") as runner, self.assertRaisesRegex(ValueError, "digest"):
                 MODULE.import_run(report_path=report, receipt_path=receipt, current_path=current, summary_path=summary, datapan_command=["datapan"], apply=True)
             runner.assert_not_called()
+
+    def test_reported_identity_digest_mismatch_fails_before_datapan(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            report, receipt, current, summary = self.fixture(pathlib.Path(directory))
+            payload = json.loads(report.read_text(encoding="utf-8"))
+            payload["results"][0]["identity_key"] = "data_go_kr:d:different"
+            self.write_json(report, payload)
+            receipt_value = json.loads(receipt.read_text(encoding="utf-8"))
+            data = report.read_bytes()
+            receipt_value["combined_verification"] = {
+                "bytes": len(data),
+                "sha256": hashlib.sha256(data).hexdigest(),
+            }
+            self.write_json(receipt, receipt_value)
+            original = current.read_bytes()
+            with mock.patch.object(MODULE, "run") as runner, self.assertRaisesRegex(ValueError, "reported identity"):
+                MODULE.import_run(
+                    report_path=report,
+                    receipt_path=receipt,
+                    current_path=current,
+                    summary_path=summary,
+                    datapan_command=["datapan"],
+                    apply=True,
+                )
+            runner.assert_not_called()
+            self.assertEqual(current.read_bytes(), original)
+
+    def test_planned_reported_identity_digest_disagreement_fails_before_datapan(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            report, receipt, current, summary = self.fixture(pathlib.Path(directory))
+            receipt_value = json.loads(receipt.read_text(encoding="utf-8"))
+            receipt_value["identity_equality"]["planned"]["sha256"] = "0" * 64
+            self.write_json(receipt, receipt_value)
+            original = current.read_bytes()
+            with mock.patch.object(MODULE, "run") as runner, self.assertRaisesRegex(ValueError, "not exactly equal"):
+                MODULE.import_run(
+                    report_path=report,
+                    receipt_path=receipt,
+                    current_path=current,
+                    summary_path=summary,
+                    datapan_command=["datapan"],
+                    apply=True,
+                )
+            runner.assert_not_called()
+            self.assertEqual(current.read_bytes(), original)
 
     def test_unsafe_field_fails_before_datapan(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
