@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 92,
+  "count": 94,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 4355,
-      "sha256": "0d706156afc7bdbd6d5993f0882a6cdc1b7697e70b381715bba2d8017a3fe6fd"
+      "bytes": 4396,
+      "sha256": "3debf0a0b6fb03930f21d4a66e43581d283b37bc70f7fb898256925b6cd24eda"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -831,6 +831,24 @@
       "version": "v1",
       "bytes": 4334,
       "sha256": "4de9ccc1d8284c97bbaf420fabde13135a2801cbbc4a46b000cd36624cf886cd"
+    },
+    {
+      "path": "schemas/datapan.completeness-proof-policy.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.completeness-proof-policy.v1.schema.json",
+      "title": "Datapan Completeness Proof Policy v1",
+      "contract": "completeness-proof-policy",
+      "version": "v1",
+      "bytes": 3777,
+      "sha256": "cc6e567d33d053bf890e2a6649a985105e157126aeebfe88ed627271f2b693be"
+    },
+    {
+      "path": "schemas/datapan.completeness-proof.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.completeness-proof.v1.schema.json",
+      "title": "Datapan Completeness Proof v1",
+      "contract": "completeness-proof",
+      "version": "v1",
+      "bytes": 8636,
+      "sha256": "76af50e09a1d33142673f0232c038ff59811f73149f7bccc9e5b19f1bd69a9e4"
     }
   ]
 }

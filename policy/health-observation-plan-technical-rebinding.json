@@ -40,5 +40,23 @@
       "kind": "release_version_decision",
       "schema": "https://schemas.datapan.dev/datapan.release-version-decision.v1.schema.json"
     }
+  ],
+  "independent_additions": [
+    {
+      "path": "schemas/datapan.completeness-proof-policy.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#631"
+    },
+    {
+      "path": "schemas/datapan.completeness-proof.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#631"
+    },
+    {
+      "path": "policy/completeness-proof.json",
+      "kind": "completeness_proof_policy",
+      "schema": "https://schemas.datapan.dev/datapan.completeness-proof-policy.v1.schema.json",
+      "authority_ticket": "StatPan/datapan-registry#631"
+    }
   ]
 }

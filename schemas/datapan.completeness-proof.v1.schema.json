@@ -1,0 +1,253 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.completeness-proof.v1.schema.json",
+  "title": "Datapan Completeness Proof v1",
+  "description": "Fail-closed proof for one declared public-data scope. Scope completeness, currentness, and update delivery are separate claims.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "proof_id",
+    "generated_at",
+    "policy",
+    "scope",
+    "source_snapshot",
+    "denominator",
+    "reconciliation",
+    "freshness",
+    "import_durability",
+    "publication",
+    "consumer_read_back",
+    "proof_state",
+    "claims",
+    "missing_evidence",
+    "dependencies"
+  ],
+  "properties": {
+    "schema_version": {"const": "datapan.completeness-proof.v1"},
+    "proof_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "schema_version", "sha256"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "schema_version": {"const": "datapan.completeness-proof-policy.v1"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope_id", "source_id", "provider", "resource_kind", "selector", "authority", "identity_algorithm"],
+      "properties": {
+        "scope_id": {"type": "string", "minLength": 1},
+        "source_id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+        "provider": {"type": "string", "minLength": 1},
+        "resource_kind": {
+          "enum": [
+            "api_catalog_metadata",
+            "api_operation_manifest",
+            "file_dataset",
+            "curated_payload_snapshot",
+            "payload_rows"
+          ]
+        },
+        "selector": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "value"],
+          "properties": {
+            "kind": {"enum": ["catalog", "query", "manifest", "snapshot"]},
+            "value": {"type": "string", "minLength": 1}
+          }
+        },
+        "authority": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "owner"],
+          "properties": {
+            "state": {"enum": ["available", "unavailable", "unknown"]},
+            "owner": {"$ref": "#/$defs/owner"},
+            "evidence": {"$ref": "#/$defs/artifact"}
+          },
+          "allOf": [
+            {
+              "if": {"properties": {"state": {"const": "available"}}, "required": ["state"]},
+              "then": {"required": ["evidence"]}
+            }
+          ]
+        },
+        "identity_algorithm": {"type": "string", "minLength": 1}
+      }
+    },
+    "source_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observed_at", "revision", "sha256"],
+      "properties": {
+        "observed_at": {"type": "string", "format": "date-time"},
+        "revision": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "denominator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "value", "bound_source_sha256", "identity_algorithm"],
+      "properties": {
+        "type": {
+          "enum": [
+            "authoritative_catalog_identity_set",
+            "authoritative_operation_identity_set",
+            "authoritative_file_dataset_identity_set",
+            "declared_snapshot_identity_set",
+            "authoritative_row_identity_set",
+            "local_observed_identity_set",
+            "unknown"
+          ]
+        },
+        "value": {"type": ["integer", "null"], "minimum": 1},
+        "bound_source_sha256": {"$ref": "#/$defs/sha256"},
+        "identity_algorithm": {"type": "string", "minLength": 1}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"type": {"const": "unknown"}}, "required": ["type"]},
+          "then": {"properties": {"value": {"type": "null"}}},
+          "else": {"properties": {"value": {"type": "integer", "minimum": 1}}}
+        }
+      ]
+    },
+    "reconciliation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expected", "accepted", "missing", "extra", "duplicate", "rejected"],
+      "properties": {
+        "expected": {"type": "integer", "minimum": 0},
+        "accepted": {"type": "integer", "minimum": 0},
+        "missing": {"type": "integer", "minimum": 0},
+        "extra": {"type": "integer", "minimum": 0},
+        "duplicate": {"type": "integer", "minimum": 0},
+        "rejected": {"type": "integer", "minimum": 0}
+      }
+    },
+    "freshness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["as_of", "evidence_observed_at", "max_age_seconds", "state"],
+      "properties": {
+        "as_of": {"type": "string", "format": "date-time"},
+        "evidence_observed_at": {"type": "string", "format": "date-time"},
+        "max_age_seconds": {"type": "integer", "minimum": 1},
+        "state": {"enum": ["current", "stale", "unknown"]}
+      }
+    },
+    "import_durability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state"],
+      "properties": {
+        "state": {"enum": ["proven", "missing", "not_applicable"]},
+        "receipt": {"$ref": "#/$defs/artifact"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"state": {"const": "proven"}}, "required": ["state"]},
+          "then": {"required": ["receipt"]}
+        }
+      ]
+    },
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state"],
+      "properties": {
+        "state": {"enum": ["published", "not_published", "not_applicable"]},
+        "artifact": {"$ref": "#/$defs/artifact"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"state": {"const": "published"}}, "required": ["state"]},
+          "then": {"required": ["artifact"]}
+        }
+      ]
+    },
+    "consumer_read_back": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state"],
+      "properties": {
+        "state": {"enum": ["proven", "missing", "not_applicable"]},
+        "observed_at": {"type": "string", "format": "date-time"},
+        "artifact_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"state": {"const": "proven"}}, "required": ["state"]},
+          "then": {"required": ["observed_at", "artifact_sha256"]}
+        }
+      ]
+    },
+    "proof_state": {"enum": ["complete", "partial", "unknown", "blocked"]},
+    "claims": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["complete", "current", "updated"],
+      "properties": {
+        "complete": {"type": "boolean"},
+        "current": {"type": "boolean"},
+        "updated": {"type": "boolean"}
+      }
+    },
+    "missing_evidence": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/missing_evidence"}
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/dependency"}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "owner": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+    "ticket": {"type": "string", "pattern": "^(#[1-9][0-9]*|[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+#[1-9][0-9]*)$"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "missing_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "owner", "ticket"],
+      "properties": {
+        "code": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+        "owner": {"$ref": "#/$defs/owner"},
+        "ticket": {"$ref": "#/$defs/ticket"}
+      }
+    },
+    "dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["capability", "owner", "ticket", "evidence_paths"],
+      "properties": {
+        "capability": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+        "owner": {"$ref": "#/$defs/owner"},
+        "ticket": {"$ref": "#/$defs/ticket"},
+        "evidence_paths": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}

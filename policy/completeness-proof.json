@@ -1,0 +1,132 @@
+{
+  "schema_version": "datapan.completeness-proof-policy.v1",
+  "policy_id": "datapan-registry-public-data-completeness",
+  "effective_at": "2026-09-22T00:00:00Z",
+  "scope_kinds": [
+    {
+      "kind": "api_catalog_metadata",
+      "denominator_type": "authoritative_catalog_identity_set",
+      "identity_owner": "StatPan/datapan-data",
+      "evidence_owner": "StatPan/datapan-registry",
+      "max_age_seconds": 2592000
+    },
+    {
+      "kind": "api_operation_manifest",
+      "denominator_type": "authoritative_operation_identity_set",
+      "identity_owner": "StatPan/datapan-registry",
+      "evidence_owner": "StatPan/datapan-registry",
+      "max_age_seconds": 2592000
+    },
+    {
+      "kind": "file_dataset",
+      "denominator_type": "authoritative_file_dataset_identity_set",
+      "identity_owner": "StatPan/datapan-data",
+      "evidence_owner": "StatPan/datapan-registry",
+      "max_age_seconds": 2592000
+    },
+    {
+      "kind": "curated_payload_snapshot",
+      "denominator_type": "declared_snapshot_identity_set",
+      "identity_owner": "StatPan/datapan-data",
+      "evidence_owner": "StatPan/datapan-data",
+      "max_age_seconds": 7776000
+    },
+    {
+      "kind": "payload_rows",
+      "denominator_type": "authoritative_row_identity_set",
+      "identity_owner": "StatPan/datapan-data",
+      "evidence_owner": "StatPan/datapan-data",
+      "max_age_seconds": 2592000
+    }
+  ],
+  "claim_rules": {
+    "complete": [
+      "authority_available",
+      "authoritative_denominator",
+      "source_digest_bound",
+      "identity_algorithm_bound",
+      "exact_reconciliation",
+      "freshness_current",
+      "publication_read_back_when_published"
+    ],
+    "current": [
+      "complete",
+      "freshness_current"
+    ],
+    "updated": [
+      "current",
+      "import_durability_proven",
+      "immutable_publication_bound",
+      "consumer_read_back_proven"
+    ]
+  },
+  "non_complete_states": {
+    "states": ["partial", "unknown", "blocked"],
+    "require_missing_evidence": true,
+    "require_owner": true,
+    "require_ticket": true,
+    "percentage_promotion_allowed": false
+  },
+  "reusable_dependencies": [
+    {
+      "capability": "api_operation_manifest",
+      "owner": "StatPan/datapan-registry",
+      "ticket": "#605",
+      "evidence_paths": [
+        "reports/data-go-kr/operation-manifest.json",
+        "schemas/datapan.data-go-kr-operation-manifest.v1.schema.json"
+      ]
+    },
+    {
+      "capability": "api_operation_manifest_foundation",
+      "owner": "StatPan/datapan-registry",
+      "ticket": "#604",
+      "evidence_paths": ["data/data-go-kr.registry.json"]
+    },
+    {
+      "capability": "file_dataset_authority",
+      "owner": "StatPan/datapan-registry",
+      "ticket": "#609",
+      "evidence_paths": ["sources/data_go_kr.json"]
+    },
+    {
+      "capability": "file_dataset_model",
+      "owner": "StatPan/datapan-registry",
+      "ticket": "#545",
+      "evidence_paths": ["sources/data_go_kr.json"]
+    },
+    {
+      "capability": "terminal_execution_coverage",
+      "owner": "StatPan/datapan-registry",
+      "ticket": "#597",
+      "evidence_paths": ["reports/runtime-freshness-queue.json"]
+    },
+    {
+      "capability": "producer_receipt_admission",
+      "owner": "StatPan/datapan-registry",
+      "ticket": "#592",
+      "evidence_paths": [
+        "policy/release-receipt-admission.json",
+        "schemas/datapan.release-receipt-admission.v1.schema.json"
+      ]
+    },
+    {
+      "capability": "release_control_decoupling",
+      "owner": "StatPan/datapan-registry",
+      "ticket": "#589",
+      "evidence_paths": ["policy/release-receipt-admission.json"]
+    },
+    {
+      "capability": "catalog_producer_receipt",
+      "owner": "StatPan/datapan-data",
+      "ticket": "StatPan/datapan-data#1190",
+      "evidence_paths": ["producer-receipt://datapan-data/catalog-observation"]
+    },
+    {
+      "capability": "runtime_observation_receipt",
+      "owner": "StatPan/datapan-health",
+      "ticket": "StatPan/datapan-health#33",
+      "evidence_paths": ["producer-receipt://datapan-health/runtime-observation"]
+    }
+  ]
+}

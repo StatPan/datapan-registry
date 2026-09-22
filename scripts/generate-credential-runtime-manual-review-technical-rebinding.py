@@ -63,14 +63,22 @@ def render(value: dict[str, Any]) -> str:
 def expected(policy: dict[str, Any], manifest: dict[str, Any], compatibility: dict[str, Any], decision_path: pathlib.Path) -> dict[str, Any]:
     artifacts = manifest.get("artifacts")
     additions = policy.get("allowed_additions")
+    independent_additions = policy.get("independent_additions", [])
     baseline = policy.get("baseline")
     if not isinstance(artifacts, list) or not all(isinstance(item, dict) for item in artifacts):
         raise ValueError("manifest artifacts must be objects")
     if not isinstance(additions, list) or not all(isinstance(item, dict) for item in additions):
         raise ValueError("policy allowed_additions must be objects")
+    if not isinstance(independent_additions, list) or not all(
+        isinstance(item, dict) for item in independent_additions
+    ):
+        raise ValueError("policy independent_additions must be objects")
     if not isinstance(baseline, dict):
         raise ValueError("policy baseline must be an object")
     allowed = {str(item.get("path")): item for item in additions}
+    independent = {str(item.get("path")): item for item in independent_additions}
+    if set(allowed).intersection(independent):
+        raise ValueError("Health additions and independently authorized additions must not overlap")
     actual = {str(item.get("path")): item for item in artifacts}
     present = [path for path in allowed if path in actual]
     if not present:
@@ -79,18 +87,26 @@ def expected(policy: dict[str, Any], manifest: dict[str, Any], compatibility: di
             "generated_at": policy["generated_at"], "status": "not_applicable",
             "approver_scope": policy["approver_scope"], "decision_path": policy["decision_path"],
             "decision_sha256": policy["decision_sha256"], "allowed_additions": additions,
+            "independent_additions": independent_additions,
         }
     if set(present) != set(allowed):
         raise ValueError("Health technical rebinding requires every allowed addition")
-    stripped = [item for item in artifacts if str(item.get("path")) not in allowed]
+    present_independent = [path for path in independent if path in actual]
+    if set(present_independent) != set(independent):
+        raise ValueError("technical rebinding requires every independently authorized addition")
+    excluded_paths = set(allowed) | set(independent)
+    stripped = [item for item in artifacts if str(item.get("path")) not in excluded_paths]
     if len(stripped) != baseline.get("artifact_count") or artifact_contract_digest(stripped) != baseline.get("artifact_contract_sha256"):
         raise ValueError("manifest delta exceeds the approved Health plan/schema allowlist")
-    if len(artifacts) != int(baseline["artifact_count"]) + len(allowed):
+    if len(artifacts) != int(baseline["artifact_count"]) + len(excluded_paths):
         raise ValueError("manifest artifact count is outside the approved technical rebinding scope")
-    for path, rule in allowed.items():
-        for key, value in rule.items():
-            if actual[path].get(key) != value:
-                raise ValueError(f"approved addition mismatch: {path}.{key}")
+    for rules, metadata_keys in ((allowed, set()), (independent, {"authority_ticket"})):
+        for path, rule in rules.items():
+            for key, value in rule.items():
+                if key in metadata_keys:
+                    continue
+                if actual[path].get(key) != value:
+                    raise ValueError(f"approved addition mismatch: {path}.{key}")
     decision_sha = digest_bytes(decision_path.read_bytes())
     if decision_sha != policy.get("decision_sha256"):
         raise ValueError("existing human decision must remain byte-for-byte unchanged")
@@ -105,7 +121,13 @@ def expected(policy: dict[str, Any], manifest: dict[str, Any], compatibility: di
         "decision_sha256": decision_sha, "old_compatibility_sha256": old,
         "new_compatibility_sha256": compatibility_binding_sha256(compatibility),
         "baseline": baseline, "allowed_additions": additions,
-        "manifest_delta": {"added_paths": sorted(allowed), "artifact_count_before": baseline["artifact_count"], "artifact_count_after": len(artifacts)},
+        "independent_additions": independent_additions,
+        "manifest_delta": {
+            "added_paths": sorted(allowed),
+            "independent_paths": sorted(independent),
+            "artifact_count_before": baseline["artifact_count"],
+            "artifact_count_after": len(artifacts),
+        },
     }
 
 
