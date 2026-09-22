@@ -20,21 +20,29 @@ jobs:
       github.event.workflow_run.head_branch == github.event.repository.default_branch
     runs-on: ubuntu-latest
     concurrency:
-      group: runtime-freshness-import-${{ github.event.workflow_run.id }}
+      group: runtime-freshness-import
       cancel-in-progress: false
     env:
       PYTHONDONTWRITEBYTECODE: "1"
       PRODUCER_RUN_ID: ${{ github.event.workflow_run.id }}
       PRODUCER_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+      PRODUCER_REPOSITORY: ${{ github.event.workflow_run.head_repository.full_name }}
+      PRODUCER_RUN_URL: ${{ github.event.workflow_run.html_url }}
       IMPORT_BRANCH: automation/runtime-freshness-${{ github.event.workflow_run.id }}
       ARTIFACT_NAME: runtime-freshness-${{ github.event.workflow_run.id }}-consolidated
     steps:
-      - name: Checkout the exact producer revision
+      - name: Checkout current main
         uses: actions/checkout@v7
         with:
-          ref: ${{ env.PRODUCER_HEAD_SHA }}
+          ref: main
           lfs: false
           fetch-depth: 0
+
+      - name: Verify producer lineage
+        run: git merge-base --is-ancestor "${PRODUCER_HEAD_SHA}" HEAD
+
+      - name: Setup Python receipt validation
+        run: python3 -m pip install jsonschema
 
       - name: Download only the sanitized consolidated artifact
         uses: actions/download-artifact@v8
@@ -76,8 +84,8 @@ jobs:
         working-directory: .datapan/ci/datapan-cli
         run: go build -o "${GITHUB_WORKSPACE}/.datapan/ci/datapan" ./cmd/datapan
 
-      - name: Setup Python receipt validation
-        run: python3 -m pip install jsonschema
+      - name: Confirm current main remains checked out
+        run: test "$(git branch --show-current)" = "main"
 
       - name: Apply the isolated freshness transaction
         id: transaction
@@ -88,6 +96,11 @@ jobs:
             --report .datapan/runtime-freshness/import/verification.json \
             --run-receipt .datapan/runtime-freshness/import/run-receipt.json \
             --datapan-command "${GITHUB_WORKSPACE}/.datapan/ci/datapan" \
+            --import-receipt "reports/runtime-freshness-imports/${PRODUCER_RUN_ID}.json" \
+            --admission "reports/runtime-freshness-import-admissions/${PRODUCER_RUN_ID}.json" \
+            --producer-repository "${PRODUCER_REPOSITORY}" \
+            --producer-revision "${PRODUCER_HEAD_SHA}" \
+            --producer-run-url "${PRODUCER_RUN_URL}" \
             | tee .datapan/runtime-freshness/import-transaction.json
           find scripts tests -type d -name __pycache__ -prune -exec rm -rf {} +
           changed="$(git status --porcelain --untracked-files=all | grep -v '^?? .datapan/' || true)"
@@ -108,6 +121,7 @@ jobs:
 
       - name: Create or update the checked import PR
         if: steps.transaction.outputs.changed == 'true'
+        timeout-minutes: 45
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -115,11 +129,27 @@ jobs:
           if [ -z "${pr}" ]; then
             url="$(gh pr create --repo "${GITHUB_REPOSITORY}" --base main --head "${IMPORT_BRANCH}" \
               --title "Import runtime freshness run ${PRODUCER_RUN_ID}" \
-              --body "Automated secret-safe freshness import from workflow run ${PRODUCER_RUN_ID}. The PR contains only sanitized receipt-derived registry evidence and is gated by Verify and Hugging Face distribution checks. Relates #344.")"
+              --body "Automated secret-safe freshness import from workflow run ${PRODUCER_RUN_ID}. The PR contains the deterministic run admission, exact import arithmetic, and only sanitized receipt-derived registry evidence. A separate post-merge workflow must place the final attestation on main before the run is complete. Relates #344.")"
             pr="${url##*/}"
           fi
           gh pr merge "${pr}" --repo "${GITHUB_REPOSITORY}" --auto --squash
+          state=OPEN
+          for _ in $(seq 1 180); do
+            state="$(gh pr view "${pr}" --repo "${GITHUB_REPOSITORY}" --json state --jq .state)"
+            if [ "${state}" = "MERGED" ] || [ "${state}" = "CLOSED" ]; then
+              break
+            fi
+            sleep 10
+          done
+          jq -n \
+            --arg run_id "${PRODUCER_RUN_ID}" \
+            --arg pr_number "${pr}" \
+            '{event_type:"runtime-freshness-import-attest",client_payload:{run_id:$run_id,pr_number:$pr_number}}' \
+            > .datapan/runtime-freshness/import-attestation-dispatch.json
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/dispatches" \
+            --input .datapan/runtime-freshness/import-attestation-dispatch.json
+          test "${state}" = "MERGED"
 
       - name: Record idempotent no-change outcome
         if: steps.transaction.outputs.changed != 'true'
-        run: echo "Run ${PRODUCER_RUN_ID} was already imported; no branch or PR was created." >> "${GITHUB_STEP_SUMMARY}"
+        run: echo "Run ${PRODUCER_RUN_ID} already has a byte-identical durable admission; no branch or PR was created." >> "${GITHUB_STEP_SUMMARY}"

@@ -164,12 +164,18 @@ jobs:
           python -m unittest tests/test_import_runtime_freshness_run.py
           python -m unittest tests/test_project_runtime_freshness_recovery.py
           python -m unittest tests/test_apply_runtime_freshness_import.py
+          python -m unittest tests/test_generate_runtime_freshness_import_admission.py
+          python -m unittest tests/test_attest_runtime_freshness_import.py
           python scripts/generate-runtime-evidence-growth.py --check
           python scripts/generate-readme-runtime-snapshot.py --check
           python scripts/check-runtime-freshness-workflow.py
           python scripts/check-runtime-freshness-import-workflow.py
+          python scripts/check-runtime-freshness-import-attestation-workflow.py
           python -m py_compile scripts/consolidate-runtime-freshness-run.py
           python -m py_compile scripts/import-runtime-freshness-run.py
+          python -m py_compile scripts/apply-runtime-freshness-import.py
+          python -m py_compile scripts/generate-runtime-freshness-import-admission.py
+          python -m py_compile scripts/attest-runtime-freshness-import.py
           python -m unittest tests/test_generate_failure_recovery_rollup.py
           python -m unittest tests/test_convert_source_verification_receipt.py
           python -m unittest tests/test_generate_source_runtime_remediation_map.py

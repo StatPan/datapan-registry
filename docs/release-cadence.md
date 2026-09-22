@@ -390,8 +390,26 @@ reconciliation, merge, and summary generation all succeed. Batch-plan files,
 raw request URLs, response bodies, and credentials never cross the sanitized
 two-file import boundary. Regenerate runtime-evidence growth,
 freshness/recovery outputs, README snapshot, and the release-ledger fixed point
-in the same ticket before publishing. Re-running an already imported artifact
-is a zero-delta operation.
+in the same ticket before publishing. The scheduled importer writes a
+run-indexed admission under `reports/runtime-freshness-import-admissions/` for
+both `imported` and first-observed `no_change` outcomes. That admission binds
+the producer repository, revision, workflow run, sanitized artifact and run
+receipt digests, recovery receipt, selected identity-set digest, and exact
+before/selected/after status arithmetic.
+
+An import run is not complete when auto-merge is merely requested. The import
+workflow waits for the import PR to reach `MERGED`, then uses an explicit
+non-recursive repository dispatch to generate
+`reports/runtime-freshness-import-attestations/<run_id>.json` from current
+`main`. The attestation binds the actual import PR and merge commit, the
+admission and recovery receipt digests, `manifest.json`, and
+`reports/release-assembly-receipt.json`. A second merged PR places that
+attestation on `main`; final verification reads it back from `main`, proves both
+merge commits are reachable and contain the expected files, and rechecks the
+release-ledger fixed point. A closed-unmerged PR, missing or changed receipt,
+stale manifest or release ledger, and a merely requested auto-merge all fail.
+Replaying the same run and artifact returns the byte-identical prior admission
+without a new branch or PR; reusing a run ID with different bytes fails.
 
 Institution-scoped runtime reactivation batches should follow the priority
 order in `docs/data-go-kr-coverage-backlog.md` and

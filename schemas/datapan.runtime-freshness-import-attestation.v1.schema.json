@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.runtime-freshness-import-attestation.v1.schema.json",
+  "title": "Datapan Runtime Freshness Import Attestation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "attested_at", "run_id", "outcome", "producer", "lineage", "import", "registry", "verification"],
+  "properties": {
+    "schema_version": {"const": "datapan.runtime-freshness-import-attestation.v1"},
+    "attested_at": {"type": "string", "format": "date-time"},
+    "run_id": {"type": "string", "minLength": 1},
+    "outcome": {"enum": ["imported", "no_change"]},
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "revision", "run_id", "run_url"],
+      "properties": {
+        "repository": {"type": "string", "pattern": "^[^/]+/[^/]+$"},
+        "revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "run_id": {"type": "string", "minLength": 1},
+        "run_url": {"type": "string", "format": "uri"}
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["admission", "sanitized_report_sha256", "run_receipt_sha256", "import_receipt", "selected_identity_set"],
+      "properties": {
+        "admission": {"$ref": "#/$defs/path_digest"},
+        "sanitized_report_sha256": {"$ref": "#/$defs/sha256"},
+        "run_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "import_receipt": {"$ref": "#/$defs/path_digest"},
+        "selected_identity_set": {"$ref": "#/$defs/identity_set"}
+      }
+    },
+    "import": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pull_request", "pull_request_url", "merge_commit", "merged_at", "arithmetic"],
+      "properties": {
+        "pull_request": {"type": "integer", "minimum": 1},
+        "pull_request_url": {"type": "string", "format": "uri"},
+        "merge_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "merged_at": {"type": "string", "format": "date-time"},
+        "arithmetic": {"$ref": "#/$defs/arithmetic"}
+      }
+    },
+    "registry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest", "release_ledger"],
+      "properties": {
+        "manifest": {"$ref": "#/$defs/path_digest"},
+        "release_ledger": {"$ref": "#/$defs/path_digest"}
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["main_ref", "merge_commit_reachable", "admission_matches_merge", "release_ledger_fixed_point"],
+      "properties": {
+        "main_ref": {"const": "refs/heads/main"},
+        "merge_commit_reachable": {"const": true},
+        "admission_matches_merge": {"const": true},
+        "release_ledger_fixed_point": {"const": true}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "path_digest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "identity_set": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["count", "sha256"],
+      "properties": {
+        "count": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total", "verified", "failed", "skipped", "unknown"],
+      "properties": {
+        "total": {"type": "integer", "minimum": 0},
+        "verified": {"type": "integer", "minimum": 0},
+        "failed": {"type": "integer", "minimum": 0},
+        "skipped": {"type": "integer", "minimum": 0},
+        "unknown": {"type": "integer", "minimum": 0}
+      }
+    },
+    "arithmetic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["before", "selected", "after", "selected_new_results"],
+      "properties": {
+        "before": {"$ref": "#/$defs/counts"},
+        "selected": {"$ref": "#/$defs/counts"},
+        "after": {"$ref": "#/$defs/counts"},
+        "selected_new_results": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 94,
+  "count": 96,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -849,6 +849,24 @@
       "version": "v1",
       "bytes": 8636,
       "sha256": "76af50e09a1d33142673f0232c038ff59811f73149f7bccc9e5b19f1bd69a9e4"
+    },
+    {
+      "path": "schemas/datapan.runtime-freshness-import-admission.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.runtime-freshness-import-admission.v1.schema.json",
+      "title": "Datapan Runtime Freshness Import Admission v1",
+      "contract": "runtime-freshness-import-admission",
+      "version": "v1",
+      "bytes": 3153,
+      "sha256": "7a79adec3da250c0e23e260aaa8f226e6573544cec5777b64c439e94471e5639"
+    },
+    {
+      "path": "schemas/datapan.runtime-freshness-import-attestation.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.runtime-freshness-import-attestation.v1.schema.json",
+      "title": "Datapan Runtime Freshness Import Attestation v1",
+      "contract": "runtime-freshness-import-attestation",
+      "version": "v1",
+      "bytes": 4339,
+      "sha256": "ac55a4b88c0e0ad6639ca97403e2c83e9d61f574315785f122e4279cf74b17e2"
     }
   ]
 }
