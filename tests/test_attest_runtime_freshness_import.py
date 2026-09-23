@@ -7,6 +7,7 @@ import json
 import pathlib
 import tempfile
 import unittest
+from unittest import mock
 
 
 SCRIPT = pathlib.Path(__file__).parents[1] / "scripts" / "attest-runtime-freshness-import.py"
@@ -86,6 +87,21 @@ class AttestRuntimeFreshnessImportTest(unittest.TestCase):
             )
         finally:
             MODULE.git_is_ancestor, MODULE.git_blob = old_ancestor, old_blob
+
+    def test_fixed_point_materializes_lfs_registry_before_ledger_check(self) -> None:
+        with mock.patch.object(MODULE.subprocess, "run") as run:
+            MODULE.run_fixed_point(pathlib.Path("/repo"))
+        commands = [call.args[0] for call in run.call_args_list]
+        self.assertEqual(
+            commands,
+            [
+                [MODULE.sys.executable, "scripts/materialize-canonical-registry.py"],
+                [MODULE.sys.executable, "scripts/refresh-release-ledger-evidence.py", "--check"],
+            ],
+        )
+        for call in run.call_args_list:
+            self.assertEqual(call.kwargs["cwd"], pathlib.Path("/repo"))
+            self.assertTrue(call.kwargs["check"])
 
     def test_attestation_binds_merged_pr_and_fixed_point_artifacts(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
