@@ -115,7 +115,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add README.md docs manifest.json reports schemas
+          git add README.md docs fixtures manifest.json reports schemas
           git commit -m "chore: import runtime freshness run ${PRODUCER_RUN_ID}"
           git push --force-with-lease origin "HEAD:refs/heads/${IMPORT_BRANCH}"
 
