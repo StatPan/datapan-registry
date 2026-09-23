@@ -88,6 +88,31 @@ class AttestRuntimeFreshnessImportTest(unittest.TestCase):
         finally:
             MODULE.git_is_ancestor, MODULE.git_blob = old_ancestor, old_blob
 
+    def test_pulls_api_payload_matches_webhook_event(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            webhook = self.build(root)
+            admission, manifest, ledger = self.fixture(root)
+            original = admission.read_bytes()
+            old_ancestor, old_blob = MODULE.git_is_ancestor, MODULE.git_blob
+            MODULE.git_is_ancestor = lambda _root, _commit: True
+            MODULE.git_blob = lambda _root, _commit, _path: original
+            try:
+                rest = MODULE.build(
+                    root=root,
+                    admission_path=admission,
+                    event=self.event()["pull_request"],
+                    manifest_path=manifest,
+                    release_ledger_path=ledger,
+                )
+            finally:
+                MODULE.git_is_ancestor, MODULE.git_blob = old_ancestor, old_blob
+        self.assertEqual(rest["import"], webhook["import"])
+        pull = self.event()["pull_request"]
+        self.assertEqual(MODULE.repository_name(pull, pull), "StatPan/datapan-registry")
+        with self.assertRaisesRegex(ValueError, "does not contain a pull request"):
+            MODULE.pull_object({})
+
     def test_fixed_point_materializes_lfs_registry_before_ledger_check(self) -> None:
         with mock.patch.object(MODULE.subprocess, "run") as run:
             MODULE.run_fixed_point(pathlib.Path("/repo"))

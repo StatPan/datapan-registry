@@ -43,10 +43,30 @@ def relative_path(root: pathlib.Path, path: pathlib.Path) -> str:
         raise ValueError(f"{path} must be inside repository root {root}") from exc
 
 
-def pull_request(event: dict[str, Any], *, expected_head: str, repository: str) -> dict[str, Any]:
+def pull_object(event: dict[str, Any]) -> dict[str, Any]:
     pull = event.get("pull_request")
-    if not isinstance(pull, dict):
-        raise ValueError("event does not contain a pull request")
+    if isinstance(pull, dict):
+        return pull
+    # The workflow records the pulls API resource, which is the pull object itself.
+    if isinstance(event.get("head"), dict) and isinstance(event.get("base"), dict):
+        return event
+    raise ValueError("event does not contain a pull request")
+
+
+def repository_name(event: dict[str, Any], pull: dict[str, Any]) -> str:
+    repository = event.get("repository")
+    if isinstance(repository, dict) and isinstance(repository.get("full_name"), str):
+        return repository["full_name"]
+    for side in ("base", "head"):
+        side_value = pull.get(side)
+        repo = side_value.get("repo") if isinstance(side_value, dict) else None
+        if isinstance(repo, dict) and isinstance(repo.get("full_name"), str):
+            return repo["full_name"]
+    raise ValueError("event repository is missing")
+
+
+def pull_request(event: dict[str, Any], *, expected_head: str, repository: str) -> dict[str, Any]:
+    pull = pull_object(event)
     head = pull.get("head")
     base = pull.get("base")
     if not isinstance(head, dict) or not isinstance(base, dict):
@@ -340,9 +360,7 @@ def verify(args: argparse.Namespace) -> dict[str, Any]:
     root = args.root.resolve()
     run_id = args.run_id
     event = load(args.event)
-    repository = event.get("repository", {}).get("full_name")
-    if not isinstance(repository, str):
-        raise ValueError("event repository is missing")
+    repository = repository_name(event, pull_object(event))
     details = pull_request(
         event,
         expected_head=f"{ATTESTATION_HEAD_PREFIX}{run_id}",
