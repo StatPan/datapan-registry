@@ -16,16 +16,16 @@ data.go.kr gateway verification requires a service key; no-key runs only prove p
 
 | Rank | Institution | APIs | Covered APIs | Uncovered APIs | Ops | Runtime Reactivation APIs | Missing Evidence Ops | Planned Ops |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 행정안전부 | 1252 | 1252 | 0 | 1767 | 1202 | 1671 | 100 |
+| 1 | 행정안전부 | 1252 | 1252 | 0 | 1767 | 1198 | 1659 | 100 |
 | 2 | 경기도 | 840 | 840 | 0 | 2241 | 754 | 2080 | 100 |
-| 3 | 식품의약품안전처 | 392 | 392 | 0 | 648 | 371 | 607 | 100 |
-| 4 | 국토교통부 | 393 | 393 | 0 | 1055 | 358 | 968 | 100 |
+| 3 | 식품의약품안전처 | 392 | 392 | 0 | 648 | 358 | 583 | 100 |
+| 4 | 국토교통부 | 393 | 393 | 0 | 1055 | 345 | 916 | 100 |
 | 5 | 성평등가족부 | 273 | 273 | 0 | 348 | 271 | 346 | 100 |
 | 6 | 국회 국회사무처 | 277 | 277 | 0 | 277 | 247 | 247 | 100 |
 | 7 | 공정거래위원회 | 250 | 250 | 0 | 353 | 233 | 330 | 100 |
 | 8 | 한국마사회 | 223 | 223 | 0 | 223 | 213 | 213 | 100 |
 | 9 | 부산광역시 | 259 | 259 | 0 | 336 | 201 | 276 | 100 |
-| 10 | 국립암센터 | 212 | 212 | 0 | 375 | 198 | 288 | 100 |
+| 10 | 법제처 | 203 | 203 | 0 | 403 | 180 | 315 | 100 |
 
 ## Batch Outputs
 
@@ -40,7 +40,7 @@ data.go.kr gateway verification requires a service key; no-key runs only prove p
 | 7 | 공정거래위원회 | `reports/data-go-kr/institution-batches/institution-07.json` |
 | 8 | 한국마사회 | `reports/data-go-kr/institution-batches/institution-08.json` |
 | 9 | 부산광역시 | `reports/data-go-kr/institution-batches/institution-09.json` |
-| 10 | 국립암센터 | `reports/data-go-kr/institution-batches/institution-10.json` |
+| 10 | 법제처 | `reports/data-go-kr/institution-batches/institution-10.json` |
 
 ## First Commands
 

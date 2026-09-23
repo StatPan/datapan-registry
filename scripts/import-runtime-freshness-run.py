@@ -77,8 +77,24 @@ def reported_identities(report: dict[str, Any]) -> set[str]:
     return identities
 
 
+RESULT_SCHEMA = pathlib.Path(__file__).resolve().parents[1] / "schemas/datapan.verification.v1.schema.json"
+_RESULT_FIELDS: set[str] | None = None
+
+
+def verification_result_fields() -> set[str]:
+    global _RESULT_FIELDS
+    if _RESULT_FIELDS is None:
+        schema = json.loads(RESULT_SCHEMA.read_text(encoding="utf-8"))
+        properties = schema.get("$defs", {}).get("result", {}).get("properties")
+        if not isinstance(properties, dict) or not properties:
+            raise ValueError("verification result schema properties are missing")
+        _RESULT_FIELDS = set(properties)
+    return _RESULT_FIELDS
+
+
 def importable_result(result: dict[str, Any]) -> dict[str, Any]:
-    return {key: value for key, value in result.items() if key != "identity_key"}
+    allowed = verification_result_fields()
+    return {key: value for key, value in result.items() if key in allowed}
 
 
 def counts(report: dict[str, Any]) -> dict[str, int]:

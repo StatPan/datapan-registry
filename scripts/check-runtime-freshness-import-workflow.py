@@ -31,6 +31,7 @@ def main() -> int:
             "producer revision binding": "--producer-revision \"${PRODUCER_HEAD_SHA}\"",
             "producer run URL binding": "--producer-run-url \"${PRODUCER_RUN_URL}\"",
             "durable admission": "reports/runtime-freshness-import-admissions",
+            "provenance pin commit": "git add README.md docs fixtures manifest.json reports schemas",
             "transaction pipefail": "set -o pipefail",
             "no-change gate": "steps.transaction.outputs.changed == 'true'",
             "bytecode disabled": "PYTHONDONTWRITEBYTECODE: \"1\"",

@@ -1,50 +1,60 @@
 {
-  "generated_at": "2026-07-11T10:28:35Z",
+  "generated_at": "2026-09-22T23:50:50.428978Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 4782,
-    "verified": 2841,
-    "failed": 393,
-    "skipped": 1548,
+    "total": 5582,
+    "verified": 2900,
+    "failed": 486,
+    "skipped": 2196,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "verified",
-        "count": 2841,
+        "count": 2900,
         "status": "verified"
       },
       {
         "key": "skipped",
-        "count": 1548,
+        "count": 2196,
         "status": "skipped"
       },
       {
         "key": "failed",
-        "count": 393,
+        "count": 486,
         "status": "failed"
       }
     ],
     "by_reason": [
+      {
+        "key": "missing_required_params",
+        "count": 695,
+        "reason": "missing_required_params"
+      },
       {
         "key": "missing_auth",
         "count": 583,
         "reason": "missing_auth"
       },
       {
-        "key": "missing_required_params",
-        "count": 470,
-        "reason": "missing_required_params"
+        "key": "approval_required",
+        "count": 539,
+        "reason": "approval_required"
       },
       {
-        "key": "approval_required",
-        "count": 130,
-        "reason": "approval_required"
+        "key": "NORMAL SERVICE",
+        "count": 73,
+        "reason": "NORMAL SERVICE"
+      },
+      {
+        "key": "chungnam_http_404",
+        "count": 70,
+        "reason": "chungnam_http_404"
       },
       {
         "key": "jeonju_missing_required_params",
@@ -52,14 +62,9 @@
         "reason": "jeonju_missing_required_params"
       },
       {
-        "key": "NORMAL SERVICE",
-        "count": 56,
-        "reason": "NORMAL SERVICE"
-      },
-      {
-        "key": "chungnam_http_404",
-        "count": 49,
-        "reason": "chungnam_http_404"
+        "key": "daejeon_request_timeout",
+        "count": 38,
+        "reason": "daejeon_request_timeout"
       },
       {
         "key": "epost_wadl_metadata_only",
@@ -140,6 +145,11 @@
         "key": "ulsan_missing_required_params",
         "count": 16,
         "reason": "ulsan_missing_required_params"
+      },
+      {
+        "key": "malformed_endpoint",
+        "count": 14,
+        "reason": "malformed_endpoint"
       },
       {
         "key": "incheon_http_400",
@@ -322,6 +332,91 @@
         "reason": "seoul_bus_missing_required_params"
       },
       {
+        "key": "Get \"http://apis.data.go.kr/1613000/ArvlInfoInqireService/getCtyCodeList?_type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/1613000/ArvlInfoInqireService/getCtyCodeList?_type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/1613000/BusLcInfoInqireService/getCtyCodeList?_type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/1613000/BusLcInfoInqireService/getCtyCodeList?_type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/1613000/BusRouteInfoInqireService/getCtyCodeList?_type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/1613000/BusRouteInfoInqireService/getCtyCodeList?_type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/1613000/BusSttnInfoInqireService/getCtyCodeList?_type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/1613000/BusSttnInfoInqireService/getCtyCodeList?_type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/1613000/DmstcFlightNvgInfo/GetAirmanList?_type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/1613000/DmstcFlightNvgInfo/GetAirmanList?_type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/1613000/DmstcFlightNvgInfo/GetArprtList?_type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/1613000/DmstcFlightNvgInfo/GetArprtList?_type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/1613000/DmstcShipNvgInfo/GetPsnshipTrminlList?_type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/1613000/DmstcShipNvgInfo/GetPsnshipTrminlList?_type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/1613000/DmstcShipNvgInfo/GetShipKndList?_type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/1613000/DmstcShipNvgInfo/GetShipKndList?_type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/1613000/ExpBusInfo/GetCtyCodeList?_type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/1613000/ExpBusInfo/GetCtyCodeList?_type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/1613000/ExpBusInfo/GetExpBusGradList?_type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/1613000/ExpBusInfo/GetExpBusGradList?_type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/1613000/SuburbsBusInfo/GetCtyCodeList?_type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/1613000/SuburbsBusInfo/GetCtyCodeList?_type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/1613000/SuburbsBusInfo/GetSuberbsBusGradList?_type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/1613000/SuburbsBusInfo/GetSuberbsBusGradList?_type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/1613000/TrainInfo/GetCtyCodeList?_type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/1613000/TrainInfo/GetCtyCodeList?_type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/1613000/TrainInfo/GetVhcleKndList?_type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/1613000/TrainInfo/GetVhcleKndList?_type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/6280000/incheon-road-hazard/hazard-list?pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/6280000/incheon-road-hazard/hazard-list?pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/6310000/roadinformation/RoadInfo?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/6310000/roadinformation/RoadInfo?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/6310000/ulsanair/getUlsanairList?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/6310000/ulsanair/getUlsanairList?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
         "key": "car365_http_400",
         "count": 1,
         "reason": "car365_http_400"
@@ -395,7 +490,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 723,
+        "count": 1396,
         "provider": "data.go.kr"
       },
       {
@@ -420,7 +515,7 @@
       },
       {
         "key": "seoul-open-data",
-        "count": 156,
+        "count": 161,
         "provider": "seoul-open-data"
       },
       {
@@ -430,13 +525,23 @@
       },
       {
         "key": "data-gg",
-        "count": 128,
+        "count": 129,
         "provider": "data-gg"
       },
       {
+        "key": "daejeon",
+        "count": 114,
+        "provider": "daejeon"
+      },
+      {
         "key": "kipris-plus",
-        "count": 100,
+        "count": 103,
         "provider": "kipris-plus"
+      },
+      {
+        "key": "chungnam",
+        "count": 89,
+        "provider": "chungnam"
       },
       {
         "key": "work24",
@@ -452,6 +557,11 @@
         "key": "seogu",
         "count": 85,
         "provider": "seogu"
+      },
+      {
+        "key": "gwangmyeong",
+        "count": 83,
+        "provider": "gwangmyeong"
       },
       {
         "key": "jeonju",
@@ -474,16 +584,6 @@
         "provider": "dongjak"
       },
       {
-        "key": "gwangmyeong",
-        "count": 70,
-        "provider": "gwangmyeong"
-      },
-      {
-        "key": "chungnam",
-        "count": 68,
-        "provider": "chungnam"
-      },
-      {
         "key": "ecvam",
         "count": 65,
         "provider": "ecvam"
@@ -497,11 +597,6 @@
         "key": "seogwipo",
         "count": 62,
         "provider": "seogwipo"
-      },
-      {
-        "key": "daejeon",
-        "count": 59,
-        "provider": "daejeon"
       },
       {
         "key": "epost",
@@ -579,6 +674,11 @@
         "provider": "eshare"
       },
       {
+        "key": "foodsafetykorea",
+        "count": 32,
+        "provider": "foodsafetykorea"
+      },
+      {
         "key": "calspia",
         "count": 30,
         "provider": "calspia"
@@ -649,6 +749,11 @@
         "provider": "gogung"
       },
       {
+        "key": "juso",
+        "count": 22,
+        "provider": "juso"
+      },
+      {
         "key": "mnd-open-data",
         "count": 21,
         "provider": "mnd-open-data"
@@ -682,11 +787,6 @@
         "key": "andong",
         "count": 15,
         "provider": "andong"
-      },
-      {
-        "key": "foodsafetykorea",
-        "count": 15,
-        "provider": "foodsafetykorea"
       },
       {
         "key": "its",
@@ -737,11 +837,6 @@
         "key": "fairdata",
         "count": 10,
         "provider": "fairdata"
-      },
-      {
-        "key": "juso",
-        "count": 10,
-        "provider": "juso"
       },
       {
         "key": "safemap",
@@ -1057,7 +1152,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 713,
+        "count": 1372,
         "host": "apis.data.go.kr"
       },
       {
@@ -1082,13 +1177,18 @@
       },
       {
         "key": "data.seoul.go.kr",
-        "count": 130,
+        "count": 135,
         "host": "data.seoul.go.kr"
       },
       {
         "key": "data.gg.go.kr",
-        "count": 128,
+        "count": 129,
         "host": "data.gg.go.kr"
+      },
+      {
+        "key": "bigdata.daejeon.go.kr",
+        "count": 112,
+        "host": "bigdata.daejeon.go.kr"
       },
       {
         "key": "openapi.q-net.or.kr",
@@ -1097,7 +1197,7 @@
       },
       {
         "key": "plus.kipris.or.kr",
-        "count": 100,
+        "count": 103,
         "host": "plus.kipris.or.kr"
       },
       {
@@ -1116,6 +1216,11 @@
         "host": "seogu.go.kr"
       },
       {
+        "key": "data.gm.go.kr",
+        "count": 83,
+        "host": "data.gm.go.kr"
+      },
+      {
         "key": "openapi.jeonju.go.kr",
         "count": 80,
         "host": "openapi.jeonju.go.kr"
@@ -1131,11 +1236,6 @@
         "host": "data.dongjak.go.kr"
       },
       {
-        "key": "data.gm.go.kr",
-        "count": 70,
-        "host": "data.gm.go.kr"
-      },
-      {
         "key": "ecvam.neins.go.kr",
         "count": 65,
         "host": "ecvam.neins.go.kr"
@@ -1146,9 +1246,9 @@
         "host": "www.khug.or.kr"
       },
       {
-        "key": "bigdata.daejeon.go.kr",
-        "count": 57,
-        "host": "bigdata.daejeon.go.kr"
+        "key": "www.chungnam.go.kr",
+        "count": 62,
+        "host": "www.chungnam.go.kr"
       },
       {
         "key": "www.nfqs.go.kr",
@@ -1189,11 +1289,6 @@
         "key": "c.q-net.or.kr",
         "count": 42,
         "host": "c.q-net.or.kr"
-      },
-      {
-        "key": "www.chungnam.go.kr",
-        "count": 42,
-        "host": "www.chungnam.go.kr"
       },
       {
         "key": "www.jeju.go.kr",
@@ -1249,6 +1344,11 @@
         "key": "open.law.go.kr",
         "count": 35,
         "host": "open.law.go.kr"
+      },
+      {
+        "key": "www.foodsafetykorea.go.kr",
+        "count": 32,
+        "host": "www.foodsafetykorea.go.kr"
       },
       {
         "key": "open.assembly.go.kr",
@@ -1311,6 +1411,11 @@
         "host": "www.gogung.go.kr"
       },
       {
+        "key": "www.juso.go.kr",
+        "count": 22,
+        "host": "www.juso.go.kr"
+      },
+      {
         "key": "opendata.mnd.go.kr",
         "count": 21,
         "host": "opendata.mnd.go.kr"
@@ -1354,11 +1459,6 @@
         "key": "www.andong.go.kr",
         "count": 15,
         "host": "www.andong.go.kr"
-      },
-      {
-        "key": "www.foodsafetykorea.go.kr",
-        "count": 15,
-        "host": "www.foodsafetykorea.go.kr"
       },
       {
         "key": "www.korad.or.kr",
@@ -1414,11 +1514,6 @@
         "key": "www.fairdata.go.kr",
         "count": 10,
         "host": "www.fairdata.go.kr"
-      },
-      {
-        "key": "www.juso.go.kr",
-        "count": 10,
-        "host": "www.juso.go.kr"
       },
       {
         "key": "www.safemap.go.kr",
@@ -1481,6 +1576,11 @@
         "host": "www.sobujang.net"
       },
       {
+        "key": "localfood.chungnam.go.kr",
+        "count": 7,
+        "host": "localfood.chungnam.go.kr"
+      },
+      {
         "key": "openapi.tour.go.kr",
         "count": 7,
         "host": "openapi.tour.go.kr"
@@ -1514,11 +1614,6 @@
         "key": "folkency.nfm.go.kr",
         "count": 6,
         "host": "folkency.nfm.go.kr"
-      },
-      {
-        "key": "localfood.chungnam.go.kr",
-        "count": 6,
-        "host": "localfood.chungnam.go.kr"
       },
       {
         "key": "openapi.airport.co.kr",
@@ -1884,18 +1979,23 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 4050,
+        "count": 4177,
         "kind": "external_endpoint"
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 713,
+        "count": 1372,
         "kind": "data_go_kr_gateway"
       },
       {
         "key": "service_root",
         "count": 19,
         "kind": "service_root"
+      },
+      {
+        "key": "malformed_endpoint",
+        "count": 14,
+        "kind": "malformed_endpoint"
       }
     ]
   }

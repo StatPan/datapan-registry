@@ -34,6 +34,7 @@ class ImportRuntimeFreshnessRunTest(unittest.TestCase):
                 "operation": "o",
                 "status": "failed",
                 "checked_at": "2026-07-11T00:00:00Z",
+                "duration_ms": 17,
             }],
         }
         self.write_json(report, incoming)
@@ -102,6 +103,9 @@ class ImportRuntimeFreshnessRunTest(unittest.TestCase):
             self.assertEqual(len(json.loads(current.read_text(encoding="utf-8"))["results"]), 2)
             imported_results = json.loads(current.read_text(encoding="utf-8"))["results"]
             self.assertNotIn("identity_key", imported_results[-1])
+            self.assertNotIn("checked_at", imported_results[-1])
+            self.assertNotIn("duration_ms", imported_results[-1])
+            self.assertTrue(set(imported_results[-1]).issubset(MODULE.verification_result_fields()))
             self.assertEqual(
                 json.loads(current.read_text(encoding="utf-8"))["generated_at"],
                 "2026-07-11T00:02:00Z",
@@ -115,6 +119,29 @@ class ImportRuntimeFreshnessRunTest(unittest.TestCase):
             })
             self.assertEqual(proposal["selected_identity_set"]["count"], 1)
             self.assertTrue(summary.is_file())
+
+    def test_importable_result_drops_fields_outside_verification_schema(self) -> None:
+        imported = MODULE.importable_result({
+            "dataset_id": "d",
+            "title": "t",
+            "operation": "o",
+            "provider": "p",
+            "dependency_class": "data_go_kr_gateway",
+            "status": "verified",
+            "identity_key": "data_go_kr:d:o",
+            "duration_ms": 17,
+        })
+        self.assertEqual(
+            imported,
+            {
+                "dataset_id": "d",
+                "title": "t",
+                "operation": "o",
+                "provider": "p",
+                "dependency_class": "data_go_kr_gateway",
+                "status": "verified",
+            },
+        )
 
     def test_reimport_of_exact_results_is_idempotent(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
