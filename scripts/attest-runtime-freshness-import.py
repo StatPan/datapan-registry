@@ -122,6 +122,13 @@ def require_merge_lineage(
 
 
 def run_fixed_point(root: pathlib.Path) -> None:
+    # The committed registry is a Git LFS pointer. Ledger checks rebuild the
+    # health observation plan from the manifest-bound canonical bytes.
+    subprocess.run(
+        [sys.executable, "scripts/materialize-canonical-registry.py"],
+        cwd=root,
+        check=True,
+    )
     subprocess.run(
         [sys.executable, "scripts/refresh-release-ledger-evidence.py", "--check"],
         cwd=root,
