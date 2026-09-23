@@ -30,11 +30,11 @@ redistributing, contributing, or reporting a vulnerability.
   policy targets). Routable coverage is not treated as total usability.
 - Supported-source denominator coverage: `5` of `5` sources have an explicit
   operation denominator (`100.0%`), covering `21260` operations in total.
-- Runtime operation evidence: `4638` unique operation identities out of
-  `21260` (`21.8%`); fresh successful evidence covers `2773` unique operations
-  (`13.0%`) as of `2026-07-11T10:28:35Z`.
-- Runtime freshness: `4070` evidence records are within the `30` day fresh
-  window, `0` are stale, `0` are expired, and `712` missing timestamps are
+- Runtime operation evidence: `5362` unique operation identities out of
+  `21260` (`25.2%`); fresh successful evidence covers `59` unique operations
+  (`0.3%`) as of `2026-09-22T23:50:50.428978Z`.
+- Runtime freshness: `372` evidence records are within the `30` day fresh
+  window, `3793` are stale, `57` are expired, and `1360` missing timestamps are
   explicitly excluded from fresh coverage.
 - Required consumer proof: `3` of `3` required consumers (`datapan-cli`,
   `release-operator`, `studio`) are proven (`100.0%`).
@@ -52,10 +52,10 @@ redistributing, contributing, or reporting a vulnerability.
 - Missing external adapter hosts: `11`
 - Provider split readiness: `ready`
   (`138` adapters, `138` verification-capable, `23` call-capable)
-- Runtime verification evidence: `4782` bounded checks merged into
-  `reports/latest-verification.json` (`2841` verified, `393` failed, `1548`
+- Runtime verification evidence: `5582` bounded checks merged into
+  `reports/latest-verification.json` (`2900` verified, `486` failed, `2196`
   skipped)
-- Runtime evidence growth target: `22.5%` checked evidence is above the
+- Runtime evidence growth target: `26.3%` checked evidence is above the
   unrounded `10%` release target; `0` additional records are required for this
   target.
 - Institution API overview: `411` organizations, `12060` APIs, and `21256`
