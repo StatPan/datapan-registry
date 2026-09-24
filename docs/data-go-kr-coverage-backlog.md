@@ -8,22 +8,22 @@ This backlog is generated from the checked-in registry, dependency report, and l
 - APIs with operation mapping: `11587` (`96.1%`)
 - APIs without operation mapping: `473`
 - Operations: `21256`
-- Runtime evidence operations: `5582` (`26.3%`)
-- Runtime verified operations: `2900`
-- Runtime failed operations: `486`
-- Runtime skipped operations: `2196`
+- Runtime evidence operations: `6382` (`30.0%`)
+- Runtime verified operations: `3432`
+- Runtime failed operations: `682`
+- Runtime skipped operations: `2268`
 - APIs with runtime evidence: `2873`
 - Runtime reactivation APIs: `8714`
-- Runtime repair APIs: `251`
+- Runtime repair APIs: `314`
 
 ## Highest Priority Institutions
 
 | Institution | APIs | Covered APIs | Uncovered APIs | API Coverage | Ops | Runtime APIs | Runtime Reactivation APIs | Runtime Repair APIs | Priority |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 행정안전부 | 1252 | 1252 | 0 | 100.0% | 1767 | 54 | 1198 | 9 | 1198 |
-| 경기도 | 840 | 840 | 0 | 100.0% | 2241 | 86 | 754 | 1 | 754 |
+| 경기도 | 840 | 840 | 0 | 100.0% | 2241 | 86 | 754 | 3 | 754 |
 | 식품의약품안전처 | 392 | 392 | 0 | 100.0% | 648 | 34 | 358 | 0 | 358 |
-| 국토교통부 | 393 | 393 | 0 | 100.0% | 1055 | 48 | 345 | 11 | 345 |
+| 국토교통부 | 393 | 393 | 0 | 100.0% | 1055 | 48 | 345 | 15 | 345 |
 | 성평등가족부 | 273 | 273 | 0 | 100.0% | 348 | 2 | 271 | 0 | 271 |
 | 국회 국회사무처 | 277 | 277 | 0 | 100.0% | 277 | 30 | 247 | 30 | 247 |
 | 공정거래위원회 | 250 | 250 | 0 | 100.0% | 353 | 17 | 233 | 0 | 233 |
@@ -33,7 +33,7 @@ This backlog is generated from the checked-in registry, dependency report, and l
 | 경기도 광명시 | 197 | 197 | 0 | 100.0% | 578 | 24 | 173 | 0 | 173 |
 | 해양수산부 | 173 | 173 | 0 | 100.0% | 277 | 19 | 154 | 1 | 154 |
 | 제주특별자치도 | 171 | 171 | 0 | 100.0% | 391 | 21 | 150 | 2 | 150 |
-| 한국산업인력공단 | 230 | 230 | 0 | 100.0% | 317 | 95 | 135 | 1 | 135 |
+| 한국산업인력공단 | 230 | 230 | 0 | 100.0% | 317 | 95 | 135 | 4 | 135 |
 | 경상남도 | 129 | 129 | 0 | 100.0% | 134 | 0 | 129 | 0 | 129 |
 | 농촌진흥청 | 136 | 136 | 0 | 100.0% | 363 | 23 | 113 | 0 | 113 |
 | 전라남도 | 109 | 109 | 0 | 100.0% | 175 | 1 | 108 | 0 | 108 |
