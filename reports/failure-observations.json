@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.failure-observations.v1",
-  "generated_at": "2026-09-22T23:50:50.428978Z",
+  "generated_at": "2026-09-25T00:24:13.633312Z",
   "observations": [
     {
       "observed_at": "2026-07-04T06:39:24Z",
@@ -5505,6 +5505,694 @@
       "subject_id": "operation:aabe71a311cb11c8",
       "healthy": false,
       "evidence": "reports/runtime-freshness-imports/35798122454.json"
+    },
+    {
+      "observed_at": "2026-09-24T23:52:16Z",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:30336dafcdfd75f1",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-24T23:52:16Z",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:fdc3115e60c8fb25",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-24T23:52:16Z",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:79172fa908522abb",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-24T23:52:16Z",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:a89338d1429d3047",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-24T23:52:16Z",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:103611863c5c852e",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-24T23:56:51Z",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:caf400b83cd732c1",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-24T23:56:51Z",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:f0a3901065f233f3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-24T23:56:51Z",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:d1e73250d108e692",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:dc2297743bbd9ab3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:af95435224ca8774",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6a2c778942324b90",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d67d163268dd2509",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:20ddc8f8900d0f66",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:300868adbae80611",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:45e84cf931cc8187",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f0735ad3e2f32bab",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:7cab1639b4a40aaf",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:cc62f6a49671e469",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:7c05dbc315c27d2a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d4a0a8ea3ac0c114",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6dc21da4c51123ab",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c8cfa5fa190f8ad7",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:97200d89ce0de261",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2fd1c50c9838f5d1",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:92356f3d16d8320a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:dc96db9fae905557",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:1800e91ed73c0ad2",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:1fc0158f1cd242e4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:cf707c7d9d8d56a6",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4c59cc036a696afd",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:5bd498cdcf4f8716",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:5e07bae2c63fd0d5",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:3bd37a494a65a298",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e403f6b330dc05fd",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f40208c33ca1e62e",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:57f2350a76c58587",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a747171ec1c3db5c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:eca60cc6a84d9e9d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:165dd771c421f709",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:3dd3abcb1934e967",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:90309b61f17c4a07",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9ddf01f87934060a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:7d52c1fcf9ca47f2",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:75a39deb2cafbcdc",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:81b1bea299ebf4e4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b36f81ce553661d3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4cafe8ee4ed88bcd",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e91f7768e78181a8",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c0da0ff4152ea314",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:db96dcd53703e483",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:af4f1063c07ca39f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e6457a416265ead4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:8b030d7a34d30a56",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:52d2949e0d4383fc",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d785156abcc12f04",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4d4df19030044081",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:35fa7dec4169221b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f87eeed3045e0fb3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a7c2da3bacc9ea78",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b8d798080614751d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0b7c280caf4ced7b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:02f2ceb1e553c03a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0b2a5cc6677160ac",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:3c97ce700729f280",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e1459f7d7aad34fa",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a363b469980630fc",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:8b170d3f54419e8e",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:78720b3b7a7988f9",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:cee031c43028e38e",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:14990269f80342ce",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:002975d6b3661c78",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:3056c1d25864d980",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:7507f89ed5c64e7e",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a2ba7c4ea4f60ff9",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a5143d0524d68a9a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e1ed10a7bf8e6109",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a83418e9bdcf438f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:54bd8181d28bcacf",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:5ed51053a2e6a689",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:5e45680f5e6d7f18",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:732609735c456e7a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:bb66c0d9b46b23b3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:111b1717e53b23b3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:e533954125f70ea4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:49426e85441998cc",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
+    },
+    {
+      "observed_at": "2026-09-25T00:24:13.633312Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:f339071744c7a4c3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/36074831711.json"
     }
   ]
 }

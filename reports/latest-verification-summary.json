@@ -1,32 +1,32 @@
 {
-  "generated_at": "2026-09-22T23:50:50.428978Z",
+  "generated_at": "2026-09-25T00:24:13.633312Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 5582,
-    "verified": 2900,
-    "failed": 486,
-    "skipped": 2196,
+    "total": 6304,
+    "verified": 3413,
+    "failed": 672,
+    "skipped": 2219,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "verified",
-        "count": 2900,
+        "count": 3413,
         "status": "verified"
       },
       {
         "key": "skipped",
-        "count": 2196,
+        "count": 2219,
         "status": "skipped"
       },
       {
         "key": "failed",
-        "count": 486,
+        "count": 672,
         "status": "failed"
       }
     ],
@@ -43,7 +43,7 @@
       },
       {
         "key": "approval_required",
-        "count": 539,
+        "count": 559,
         "reason": "approval_required"
       },
       {
@@ -53,7 +53,7 @@
       },
       {
         "key": "chungnam_http_404",
-        "count": 70,
+        "count": 73,
         "reason": "chungnam_http_404"
       },
       {
@@ -83,7 +83,7 @@
       },
       {
         "key": "qnet_separate_service_key_required",
-        "count": 28,
+        "count": 30,
         "reason": "qnet_separate_service_key_required"
       },
       {
@@ -112,6 +112,11 @@
         "reason": "kipris-plus_http_404"
       },
       {
+        "key": "qnet_missing_required_params",
+        "count": 20,
+        "reason": "qnet_missing_required_params"
+      },
+      {
         "key": "sisul_wadl_metadata_only",
         "count": 20,
         "reason": "sisul_wadl_metadata_only"
@@ -120,11 +125,6 @@
         "key": "chungnam_http_403",
         "count": 19,
         "reason": "chungnam_http_403"
-      },
-      {
-        "key": "qnet_missing_required_params",
-        "count": 19,
-        "reason": "qnet_missing_required_params"
       },
       {
         "key": "tour_service_root_missing_operation_path",
@@ -145,6 +145,11 @@
         "key": "ulsan_missing_required_params",
         "count": 16,
         "reason": "ulsan_missing_required_params"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020026&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 14,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020026&crtfc_key=REDACTED\": context deadline exceeded"
       },
       {
         "key": "malformed_endpoint",
@@ -187,6 +192,11 @@
         "reason": "qnet_wadl_metadata_only"
       },
       {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2019011&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 8,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2019011&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
         "key": "epost_missing_required_params",
         "count": 8,
         "reason": "epost_missing_required_params"
@@ -205,6 +215,16 @@
         "key": "tour_service_key_not_registered",
         "count": 7,
         "reason": "tour_service_key_not_registered"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS006&apiId=2020057&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 6,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS006&apiId=2020057&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS006&apiId=2020059&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 6,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS006&apiId=2020059&crtfc_key=REDACTED\": remote error: tls: handshake failure"
       },
       {
         "key": "itfind_missing_required_params",
@@ -227,6 +247,11 @@
         "reason": "uiryeong_service_key_not_registered"
       },
       {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020006&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 5,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020006&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
         "key": "andong_missing_required_params",
         "count": 5,
         "reason": "andong_missing_required_params"
@@ -237,9 +262,44 @@
         "reason": "culture_request_timeout"
       },
       {
+        "key": "garak_request_timeout",
+        "count": 5,
+        "reason": "garak_request_timeout"
+      },
+      {
         "key": "lh_ebid_service_key_not_registered",
         "count": 5,
         "reason": "lh_ebid_service_key_not_registered"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020002&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 4,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020002&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020028&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 4,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020028&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020033&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 4,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020033&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020035&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 4,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020035&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020038&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 4,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020038&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS006&apiId=2020055&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 4,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS006&apiId=2020055&crtfc_key=REDACTED\": remote error: tls: handshake failure"
       },
       {
         "key": "HTTP 403",
@@ -272,6 +332,96 @@
         "reason": "seoul_bus_service_key_not_registered"
       },
       {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2019013&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 3,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2019013&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020004&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 3,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020004&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020008&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 3,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020008&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020023&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 3,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020023&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020024&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 3,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020024&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020025&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 3,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020025&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020026&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 3,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020026&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020027&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 3,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020027&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020029&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 3,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020029&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020030&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 3,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020030&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020031&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 3,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020031&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020032&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 3,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020032&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020042&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 3,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020042&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020042&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 3,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020042&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020043&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 3,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020043&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020045&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 3,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020045&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020052&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 3,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020052&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "daejeon_http_404",
+        "count": 3,
+        "reason": "daejeon_http_404"
+      },
+      {
         "key": "itfind_endpoint_not_found",
         "count": 3,
         "reason": "itfind_endpoint_not_found"
@@ -292,14 +442,114 @@
         "reason": "ulsan_service_key_not_registered"
       },
       {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2019010&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2019010&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020005&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020005&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020007&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020007&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020010&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020010&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020014&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020014&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020015&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020015&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020016&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020016&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020017&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020017&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020020&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020020&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020036&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020036&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020039&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020039&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020040&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020040&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020041&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020041&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020044&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020044&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020044&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020044&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020046&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020046&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020047&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020047&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020048&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020048&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020049&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020049&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020050&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020050&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020051&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 2,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020051&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
         "key": "airport_missing_required_params",
         "count": 2,
         "reason": "airport_missing_required_params"
-      },
-      {
-        "key": "daejeon_http_404",
-        "count": 2,
-        "reason": "daejeon_http_404"
       },
       {
         "key": "folk_missing_required_params",
@@ -327,9 +577,19 @@
         "reason": "jeonju_http_405_method_not_allowed"
       },
       {
+        "key": "kosmes_request_timeout",
+        "count": 2,
+        "reason": "kosmes_request_timeout"
+      },
+      {
         "key": "seoul_bus_missing_required_params",
         "count": 2,
         "reason": "seoul_bus_missing_required_params"
+      },
+      {
+        "key": "vworld_request_timeout",
+        "count": 2,
+        "reason": "vworld_request_timeout"
       },
       {
         "key": "Get \"http://apis.data.go.kr/1613000/ArvlInfoInqireService/getCtyCodeList?_type=json&[redacted credential assignment] context deadline exceeded",
@@ -417,6 +677,96 @@
         "reason": "Get \"http://apis.data.go.kr/6310000/ulsanair/getUlsanairList?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
       },
       {
+        "key": "Get \"http://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2019007&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2019007&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020003&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 1,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020003&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020009&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 1,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020009&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020011&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 1,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020011&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020012&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 1,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020012&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020013&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 1,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020013&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020018&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020018&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020019&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020019&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020021&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020021&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020022&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020022&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020034&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020034&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020037&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020037&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020039&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 1,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020039&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020043&crtfc_key=REDACTED\": context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020043&crtfc_key=REDACTED\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020053&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 1,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS005&apiId=2020053&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS006&apiId=2020054&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 1,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS006&apiId=2020054&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS006&apiId=2020056&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 1,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS006&apiId=2020056&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
+        "key": "Get \"https://opendart.fss.or.kr/guide/main.do?apiGrpCd=DS006&crtfc_key=REDACTED\": remote error: tls: handshake failure",
+        "count": 1,
+        "reason": "Get \"https://opendart.fss.or.kr/guide/main.do?apiGrpCd=DS006&crtfc_key=REDACTED\": remote error: tls: handshake failure"
+      },
+      {
         "key": "car365_http_400",
         "count": 1,
         "reason": "car365_http_400"
@@ -457,11 +807,6 @@
         "reason": "jeju_method_not_allowed"
       },
       {
-        "key": "kosmes_request_timeout",
-        "count": 1,
-        "reason": "kosmes_request_timeout"
-      },
-      {
         "key": "lh_ebid_missing_required_params",
         "count": 1,
         "reason": "lh_ebid_missing_required_params"
@@ -494,19 +839,24 @@
         "provider": "data.go.kr"
       },
       {
-        "key": "mafra",
-        "count": 322,
-        "provider": "mafra"
-      },
-      {
         "key": "ex",
-        "count": 277,
+        "count": 525,
         "provider": "ex"
       },
       {
         "key": "opendart",
-        "count": 245,
+        "count": 419,
         "provider": "opendart"
+      },
+      {
+        "key": "mafra",
+        "count": 367,
+        "provider": "mafra"
+      },
+      {
+        "key": "seoul-open-data",
+        "count": 185,
+        "provider": "seoul-open-data"
       },
       {
         "key": "culture",
@@ -514,24 +864,29 @@
         "provider": "culture"
       },
       {
-        "key": "seoul-open-data",
-        "count": 161,
-        "provider": "seoul-open-data"
-      },
-      {
         "key": "q-net",
-        "count": 147,
+        "count": 169,
         "provider": "q-net"
       },
       {
         "key": "data-gg",
-        "count": 129,
+        "count": 133,
         "provider": "data-gg"
       },
       {
+        "key": "seogu",
+        "count": 119,
+        "provider": "seogu"
+      },
+      {
         "key": "daejeon",
-        "count": 114,
+        "count": 115,
         "provider": "daejeon"
+      },
+      {
+        "key": "garak",
+        "count": 114,
+        "provider": "garak"
       },
       {
         "key": "kipris-plus",
@@ -539,24 +894,14 @@
         "provider": "kipris-plus"
       },
       {
-        "key": "chungnam",
-        "count": 89,
-        "provider": "chungnam"
-      },
-      {
         "key": "work24",
-        "count": 88,
+        "count": 94,
         "provider": "work24"
       },
       {
-        "key": "garak",
-        "count": 87,
-        "provider": "garak"
-      },
-      {
-        "key": "seogu",
-        "count": 85,
-        "provider": "seogu"
+        "key": "chungnam",
+        "count": 92,
+        "provider": "chungnam"
       },
       {
         "key": "gwangmyeong",
@@ -580,8 +925,18 @@
       },
       {
         "key": "dongjak",
-        "count": 70,
+        "count": 75,
         "provider": "dongjak"
+      },
+      {
+        "key": "eshare",
+        "count": 72,
+        "provider": "eshare"
+      },
+      {
+        "key": "seogwipo",
+        "count": 69,
+        "provider": "seogwipo"
       },
       {
         "key": "ecvam",
@@ -594,9 +949,14 @@
         "provider": "hug"
       },
       {
-        "key": "seogwipo",
-        "count": 62,
-        "provider": "seogwipo"
+        "key": "ulsan-www",
+        "count": 60,
+        "provider": "ulsan-www"
+      },
+      {
+        "key": "keit",
+        "count": 57,
+        "provider": "keit"
       },
       {
         "key": "epost",
@@ -629,14 +989,14 @@
         "provider": "ekape"
       },
       {
-        "key": "keit",
-        "count": 48,
-        "provider": "keit"
-      },
-      {
         "key": "kma-apihub",
         "count": 45,
         "provider": "kma-apihub"
+      },
+      {
+        "key": "openfiscaldata",
+        "count": 44,
+        "provider": "openfiscaldata"
       },
       {
         "key": "jeju-www",
@@ -647,11 +1007,6 @@
         "key": "geoje",
         "count": 41,
         "provider": "geoje"
-      },
-      {
-        "key": "openfiscaldata",
-        "count": 40,
-        "provider": "openfiscaldata"
       },
       {
         "key": "sisul",
@@ -669,14 +1024,24 @@
         "provider": "nie-ecobank"
       },
       {
-        "key": "eshare",
+        "key": "iwest",
         "count": 36,
-        "provider": "eshare"
+        "provider": "iwest"
+      },
+      {
+        "key": "sgis",
+        "count": 36,
+        "provider": "sgis"
       },
       {
         "key": "foodsafetykorea",
         "count": 32,
         "provider": "foodsafetykorea"
+      },
+      {
+        "key": "khoa",
+        "count": 31,
+        "provider": "khoa"
       },
       {
         "key": "calspia",
@@ -694,23 +1059,8 @@
         "provider": "open-assembly"
       },
       {
-        "key": "sgis",
-        "count": 30,
-        "provider": "sgis"
-      },
-      {
-        "key": "ulsan-www",
-        "count": 30,
-        "provider": "ulsan-www"
-      },
-      {
-        "key": "khoa",
-        "count": 29,
-        "provider": "khoa"
-      },
-      {
         "key": "kisti",
-        "count": 27,
+        "count": 29,
         "provider": "kisti"
       },
       {
@@ -729,14 +1079,14 @@
         "provider": "yuseong"
       },
       {
+        "key": "daegu",
+        "count": 25,
+        "provider": "daegu"
+      },
+      {
         "key": "lofin365",
         "count": 25,
         "provider": "lofin365"
-      },
-      {
-        "key": "daegu",
-        "count": 24,
-        "provider": "daegu"
       },
       {
         "key": "childcare-info",
@@ -764,11 +1114,6 @@
         "provider": "ulsan"
       },
       {
-        "key": "iwest",
-        "count": 18,
-        "provider": "iwest"
-      },
-      {
         "key": "naqs",
         "count": 18,
         "provider": "naqs"
@@ -784,24 +1129,29 @@
         "provider": "ecos"
       },
       {
+        "key": "korad",
+        "count": 16,
+        "provider": "korad"
+      },
+      {
+        "key": "utic",
+        "count": 16,
+        "provider": "utic"
+      },
+      {
         "key": "andong",
         "count": 15,
         "provider": "andong"
       },
       {
+        "key": "incheon",
+        "count": 15,
+        "provider": "incheon"
+      },
+      {
         "key": "its",
         "count": 15,
         "provider": "its"
-      },
-      {
-        "key": "korad",
-        "count": 15,
-        "provider": "korad"
-      },
-      {
-        "key": "incheon",
-        "count": 14,
-        "provider": "incheon"
       },
       {
         "key": "itfind",
@@ -810,13 +1160,8 @@
       },
       {
         "key": "jejudatahub",
-        "count": 12,
+        "count": 13,
         "provider": "jejudatahub"
-      },
-      {
-        "key": "utic",
-        "count": 12,
-        "provider": "utic"
       },
       {
         "key": "hrfco",
@@ -879,6 +1224,11 @@
         "provider": "safe182"
       },
       {
+        "key": "kpx",
+        "count": 7,
+        "provider": "kpx"
+      },
+      {
         "key": "sisul-www",
         "count": 7,
         "provider": "sisul-www"
@@ -919,11 +1269,6 @@
         "provider": "koagi"
       },
       {
-        "key": "kpx",
-        "count": 6,
-        "provider": "kpx"
-      },
-      {
         "key": "lh-ebid",
         "count": 6,
         "provider": "lh-ebid"
@@ -932,6 +1277,16 @@
         "key": "gims",
         "count": 5,
         "provider": "gims"
+      },
+      {
+        "key": "vworld",
+        "count": 5,
+        "provider": "vworld"
+      },
+      {
+        "key": "dgfca",
+        "count": 4,
+        "provider": "dgfca"
       },
       {
         "key": "forest",
@@ -964,11 +1319,6 @@
         "provider": "atfis"
       },
       {
-        "key": "dgfca",
-        "count": 3,
-        "provider": "dgfca"
-      },
-      {
         "key": "franchise-ftc",
         "count": 3,
         "provider": "franchise-ftc"
@@ -989,9 +1339,19 @@
         "provider": "nrf"
       },
       {
-        "key": "vworld",
-        "count": 3,
-        "provider": "vworld"
+        "key": "chungbuk-tour",
+        "count": 2,
+        "provider": "chungbuk-tour"
+      },
+      {
+        "key": "gicoms",
+        "count": 2,
+        "provider": "gicoms"
+      },
+      {
+        "key": "kosmes",
+        "count": 2,
+        "provider": "kosmes"
       },
       {
         "key": "mpva-egonghun",
@@ -1022,16 +1382,6 @@
         "key": "car365",
         "count": 1,
         "provider": "car365"
-      },
-      {
-        "key": "chungbuk-tour",
-        "count": 1,
-        "provider": "chungbuk-tour"
-      },
-      {
-        "key": "gicoms",
-        "count": 1,
-        "provider": "gicoms"
       },
       {
         "key": "i815",
@@ -1077,11 +1427,6 @@
         "key": "kosis",
         "count": 1,
         "provider": "kosis"
-      },
-      {
-        "key": "kosmes",
-        "count": 1,
-        "provider": "kosmes"
       },
       {
         "key": "mafra-legacy",
@@ -1156,19 +1501,19 @@
         "host": "apis.data.go.kr"
       },
       {
-        "key": "data.mafra.go.kr",
-        "count": 322,
-        "host": "data.mafra.go.kr"
-      },
-      {
         "key": "data.ex.co.kr",
-        "count": 277,
+        "count": 525,
         "host": "data.ex.co.kr"
       },
       {
         "key": "opendart.fss.or.kr",
-        "count": 245,
+        "count": 419,
         "host": "opendart.fss.or.kr"
+      },
+      {
+        "key": "data.mafra.go.kr",
+        "count": 367,
+        "host": "data.mafra.go.kr"
       },
       {
         "key": "www.culture.go.kr",
@@ -1177,13 +1522,23 @@
       },
       {
         "key": "data.seoul.go.kr",
-        "count": 135,
+        "count": 142,
         "host": "data.seoul.go.kr"
       },
       {
         "key": "data.gg.go.kr",
-        "count": 129,
+        "count": 133,
         "host": "data.gg.go.kr"
+      },
+      {
+        "key": "openapi.q-net.or.kr",
+        "count": 122,
+        "host": "openapi.q-net.or.kr"
+      },
+      {
+        "key": "seogu.go.kr",
+        "count": 119,
+        "host": "seogu.go.kr"
       },
       {
         "key": "bigdata.daejeon.go.kr",
@@ -1191,9 +1546,9 @@
         "host": "bigdata.daejeon.go.kr"
       },
       {
-        "key": "openapi.q-net.or.kr",
-        "count": 104,
-        "host": "openapi.q-net.or.kr"
+        "key": "www.garak.co.kr",
+        "count": 112,
+        "host": "www.garak.co.kr"
       },
       {
         "key": "plus.kipris.or.kr",
@@ -1202,18 +1557,8 @@
       },
       {
         "key": "www.work24.go.kr",
-        "count": 88,
+        "count": 94,
         "host": "www.work24.go.kr"
-      },
-      {
-        "key": "www.garak.co.kr",
-        "count": 86,
-        "host": "www.garak.co.kr"
-      },
-      {
-        "key": "seogu.go.kr",
-        "count": 85,
-        "host": "seogu.go.kr"
       },
       {
         "key": "data.gm.go.kr",
@@ -1232,8 +1577,13 @@
       },
       {
         "key": "data.dongjak.go.kr",
-        "count": 70,
+        "count": 75,
         "host": "data.dongjak.go.kr"
+      },
+      {
+        "key": "www.eshare.go.kr",
+        "count": 72,
+        "host": "www.eshare.go.kr"
       },
       {
         "key": "ecvam.neins.go.kr",
@@ -1241,14 +1591,24 @@
         "host": "ecvam.neins.go.kr"
       },
       {
+        "key": "www.chungnam.go.kr",
+        "count": 65,
+        "host": "www.chungnam.go.kr"
+      },
+      {
         "key": "www.khug.or.kr",
         "count": 64,
         "host": "www.khug.or.kr"
       },
       {
-        "key": "www.chungnam.go.kr",
-        "count": 62,
-        "host": "www.chungnam.go.kr"
+        "key": "www.ulsan.go.kr",
+        "count": 60,
+        "host": "www.ulsan.go.kr"
+      },
+      {
+        "key": "www.seogwipo.go.kr",
+        "count": 57,
+        "host": "www.seogwipo.go.kr"
       },
       {
         "key": "www.nfqs.go.kr",
@@ -1261,11 +1621,6 @@
         "host": "kopis.or.kr"
       },
       {
-        "key": "www.seogwipo.go.kr",
-        "count": 51,
-        "host": "www.seogwipo.go.kr"
-      },
-      {
         "key": "www.nongsaro.go.kr",
         "count": 50,
         "host": "www.nongsaro.go.kr"
@@ -1274,6 +1629,16 @@
         "key": "data.ekape.or.kr",
         "count": 49,
         "host": "data.ekape.or.kr"
+      },
+      {
+        "key": "www.nabis.go.kr",
+        "count": 49,
+        "host": "www.nabis.go.kr"
+      },
+      {
+        "key": "c.q-net.or.kr",
+        "count": 46,
+        "host": "c.q-net.or.kr"
       },
       {
         "key": "apihub.kma.go.kr",
@@ -1286,9 +1651,14 @@
         "host": "openapi.epost.go.kr:80"
       },
       {
-        "key": "c.q-net.or.kr",
-        "count": 42,
-        "host": "c.q-net.or.kr"
+        "key": "www.openfiscaldata.go.kr",
+        "count": 44,
+        "host": "www.openfiscaldata.go.kr"
+      },
+      {
+        "key": "openapi.seoul.go.kr:8088",
+        "count": 43,
+        "host": "openapi.seoul.go.kr:8088"
       },
       {
         "key": "www.jeju.go.kr",
@@ -1311,19 +1681,9 @@
         "host": "data.uiryeong.go.kr"
       },
       {
-        "key": "www.nabis.go.kr",
-        "count": 40,
-        "host": "www.nabis.go.kr"
-      },
-      {
         "key": "www.nrich.go.kr",
         "count": 40,
         "host": "www.nrich.go.kr"
-      },
-      {
-        "key": "www.openfiscaldata.go.kr",
-        "count": 40,
-        "host": "www.openfiscaldata.go.kr"
       },
       {
         "key": "www.nie-ecobank.kr",
@@ -1336,9 +1696,14 @@
         "host": "portal.nrich.go.kr"
       },
       {
-        "key": "www.eshare.go.kr",
+        "key": "sgis.kostat.go.kr",
         "count": 36,
-        "host": "www.eshare.go.kr"
+        "host": "sgis.kostat.go.kr"
+      },
+      {
+        "key": "www.iwest.co.kr",
+        "count": 36,
+        "host": "www.iwest.co.kr"
       },
       {
         "key": "open.law.go.kr",
@@ -1351,14 +1716,14 @@
         "host": "www.foodsafetykorea.go.kr"
       },
       {
+        "key": "www.khoa.go.kr",
+        "count": 31,
+        "host": "www.khoa.go.kr"
+      },
+      {
         "key": "open.assembly.go.kr",
         "count": 30,
         "host": "open.assembly.go.kr"
-      },
-      {
-        "key": "sgis.kostat.go.kr",
-        "count": 30,
-        "host": "sgis.kostat.go.kr"
       },
       {
         "key": "www.calspia.go.kr",
@@ -1366,24 +1731,9 @@
         "host": "www.calspia.go.kr"
       },
       {
-        "key": "www.ulsan.go.kr",
-        "count": 30,
-        "host": "www.ulsan.go.kr"
-      },
-      {
-        "key": "www.khoa.go.kr",
-        "count": 29,
-        "host": "www.khoa.go.kr"
-      },
-      {
         "key": "oneclick.law.go.kr:80",
         "count": 27,
         "host": "oneclick.law.go.kr:80"
-      },
-      {
-        "key": "openapi.seoul.go.kr:8088",
-        "count": 26,
-        "host": "openapi.seoul.go.kr:8088"
       },
       {
         "key": "www.anyang.go.kr",
@@ -1436,11 +1786,6 @@
         "host": "data.naqs.go.kr"
       },
       {
-        "key": "www.iwest.co.kr",
-        "count": 18,
-        "host": "www.iwest.co.kr"
-      },
-      {
         "key": "www.nihc.go.kr",
         "count": 18,
         "host": "www.nihc.go.kr"
@@ -1456,14 +1801,19 @@
         "host": "scienceon.kisti.re.kr"
       },
       {
+        "key": "www.korad.or.kr",
+        "count": 16,
+        "host": "www.korad.or.kr"
+      },
+      {
+        "key": "www.utic.go.kr",
+        "count": 16,
+        "host": "www.utic.go.kr"
+      },
+      {
         "key": "www.andong.go.kr",
         "count": 15,
         "host": "www.andong.go.kr"
-      },
-      {
-        "key": "www.korad.or.kr",
-        "count": 15,
-        "host": "www.korad.or.kr"
       },
       {
         "key": "www.its.go.kr",
@@ -1476,6 +1826,11 @@
         "host": "open.itfind.or.kr"
       },
       {
+        "key": "www.jejudatahub.net",
+        "count": 13,
+        "host": "www.jejudatahub.net"
+      },
+      {
         "key": "ifac.or.kr",
         "count": 12,
         "host": "ifac.or.kr"
@@ -1486,18 +1841,8 @@
         "host": "openapi.epost.go.kr"
       },
       {
-        "key": "www.jejudatahub.net",
-        "count": 12,
-        "host": "www.jejudatahub.net"
-      },
-      {
-        "key": "www.utic.go.kr",
-        "count": 12,
-        "host": "www.utic.go.kr"
-      },
-      {
         "key": "seogwipo.go.kr",
-        "count": 11,
+        "count": 12,
         "host": "seogwipo.go.kr"
       },
       {
@@ -1546,6 +1891,11 @@
         "host": "www.lawmaking.go.kr"
       },
       {
+        "key": "www.ntis.go.kr",
+        "count": 9,
+        "host": "www.ntis.go.kr"
+      },
+      {
         "key": "cancer.go.kr",
         "count": 8,
         "host": "cancer.go.kr"
@@ -1559,6 +1909,11 @@
         "key": "openapi.pqis.go.kr",
         "count": 8,
         "host": "openapi.pqis.go.kr"
+      },
+      {
+        "key": "www.daegufood.go.kr",
+        "count": 8,
+        "host": "www.daegufood.go.kr"
       },
       {
         "key": "www.milipass.kr",
@@ -1581,19 +1936,14 @@
         "host": "localfood.chungnam.go.kr"
       },
       {
+        "key": "openapi.kpx.or.kr",
+        "count": 7,
+        "host": "openapi.kpx.or.kr"
+      },
+      {
         "key": "openapi.tour.go.kr",
         "count": 7,
         "host": "openapi.tour.go.kr"
-      },
-      {
-        "key": "www.daegufood.go.kr",
-        "count": 7,
-        "host": "www.daegufood.go.kr"
-      },
-      {
-        "key": "www.ntis.go.kr",
-        "count": 7,
-        "host": "www.ntis.go.kr"
       },
       {
         "key": "www.sisul.or.kr",
@@ -1624,11 +1974,6 @@
         "key": "openapi.ebid.lh.or.kr",
         "count": 6,
         "host": "openapi.ebid.lh.or.kr"
-      },
-      {
-        "key": "openapi.kpx.or.kr",
-        "count": 6,
-        "host": "openapi.kpx.or.kr"
       },
       {
         "key": "seedpedia.koagi.or.kr",
@@ -1666,6 +2011,11 @@
         "host": "www.gims.go.kr"
       },
       {
+        "key": "www.vworld.kr",
+        "count": 5,
+        "host": "www.vworld.kr"
+      },
+      {
         "key": "aida.kisti.re.kr",
         "count": 4,
         "host": "aida.kisti.re.kr"
@@ -1684,6 +2034,11 @@
         "key": "data.jeju.go.kr",
         "count": 4,
         "host": "data.jeju.go.kr"
+      },
+      {
+        "key": "dgfca.or.kr",
+        "count": 4,
+        "host": "dgfca.or.kr"
       },
       {
         "key": "openapi.work.go.kr",
@@ -1706,14 +2061,14 @@
         "host": "www.rda.go.kr"
       },
       {
-        "key": "dgfca.or.kr",
-        "count": 3,
-        "host": "dgfca.or.kr"
-      },
-      {
         "key": "franchise.ftc.go.kr",
         "count": 3,
         "host": "franchise.ftc.go.kr"
+      },
+      {
+        "key": "gis.daejeon.go.kr",
+        "count": 3,
+        "host": "gis.daejeon.go.kr"
       },
       {
         "key": "oneclick.law.go.kr",
@@ -1736,19 +2091,24 @@
         "host": "www.gimhae.go.kr"
       },
       {
-        "key": "www.vworld.kr",
-        "count": 3,
-        "host": "www.vworld.kr"
-      },
-      {
         "key": "e-gonghun.mpva.go.kr",
         "count": 2,
         "host": "e-gonghun.mpva.go.kr"
       },
       {
-        "key": "gis.daejeon.go.kr",
+        "key": "kosmes.or.kr",
         "count": 2,
-        "host": "gis.daejeon.go.kr"
+        "host": "kosmes.or.kr"
+      },
+      {
+        "key": "temp.garak.co.kr",
+        "count": 2,
+        "host": "temp.garak.co.kr"
+      },
+      {
+        "key": "tour.chungbuk.go.kr",
+        "count": 2,
+        "host": "tour.chungbuk.go.kr"
       },
       {
         "key": "unipass.customs.go.kr",
@@ -1756,9 +2116,19 @@
         "host": "unipass.customs.go.kr"
       },
       {
+        "key": "www.gicoms.go.kr",
+        "count": 2,
+        "host": "www.gicoms.go.kr"
+      },
+      {
         "key": "www.hrfco.go.kr",
         "count": 2,
         "host": "www.hrfco.go.kr"
+      },
+      {
+        "key": "www.incheon.go.kr",
+        "count": 2,
+        "host": "www.incheon.go.kr"
       },
       {
         "key": "www.kci.go.kr",
@@ -1846,11 +2216,6 @@
         "host": "kosis.kr"
       },
       {
-        "key": "kosmes.or.kr",
-        "count": 1,
-        "host": "kosmes.or.kr"
-      },
-      {
         "key": "map.seoul.go.kr",
         "count": 1,
         "host": "map.seoul.go.kr"
@@ -1901,34 +2266,14 @@
         "host": "stcis.go.kr"
       },
       {
-        "key": "temp.garak.co.kr",
-        "count": 1,
-        "host": "temp.garak.co.kr"
-      },
-      {
-        "key": "tour.chungbuk.go.kr",
-        "count": 1,
-        "host": "tour.chungbuk.go.kr"
-      },
-      {
         "key": "www.car365.go.kr",
         "count": 1,
         "host": "www.car365.go.kr"
       },
       {
-        "key": "www.gicoms.go.kr",
-        "count": 1,
-        "host": "www.gicoms.go.kr"
-      },
-      {
         "key": "www.icheon.go.kr",
         "count": 1,
         "host": "www.icheon.go.kr"
-      },
-      {
-        "key": "www.incheon.go.kr",
-        "count": 1,
-        "host": "www.incheon.go.kr"
       },
       {
         "key": "www.ins24.go.kr",
@@ -1979,7 +2324,7 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 4177,
+        "count": 4899,
         "kind": "external_endpoint"
       },
       {
