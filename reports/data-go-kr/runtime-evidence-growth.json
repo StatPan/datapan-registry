@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-09-22T23:50:50.428978Z",
+  "generated_at": "2026-09-26T00:07:49.236924Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -21,12 +21,12 @@
     "call_capable_adapters": 23
   },
   "evidence": {
-    "total": 5582,
-    "verified": 2900,
-    "failed": 486,
-    "skipped": 2196,
+    "total": 5808,
+    "verified": 3054,
+    "failed": 557,
+    "skipped": 2197,
     "unknown": 0,
-    "coverage_percent": 26.3,
+    "coverage_percent": 27.3,
     "by_kind": [
       {
         "key": "data_go_kr_gateway",
@@ -34,7 +34,7 @@
       },
       {
         "key": "external_endpoint",
-        "count": 4177
+        "count": 4403
       },
       {
         "key": "malformed_endpoint",
