@@ -1,15 +1,15 @@
 {
   "schema_version": "datapan.failure-recovery-rollup.v1",
-  "generated_at": "2026-09-22T23:50:50.428978Z",
+  "generated_at": "2026-09-27T00:02:28.780744Z",
   "policy": "policy/failure-recovery.json",
   "observations": "reports/failure-observations.json",
   "summary": {
-    "identities": 682,
-    "active": 676,
-    "transient": 265,
+    "identities": 779,
+    "active": 773,
+    "transient": 362,
     "persistent": 411,
     "recovered": 6,
-    "owned": 676,
+    "owned": 773,
     "unowned": 0,
     "overdue": 2,
     "durable_work_items": 1
@@ -14829,6 +14829,144 @@
       ]
     },
     {
+      "failure_id": "failure:upstream:data_go_kr:006a4121f579870b",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:9cc892f01365aa8b",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:016428a5c8852753",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:b61350ee0aa5a60b",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:48:46Z",
+      "last_observed_at": "2026-09-26T23:48:46Z",
+      "due_at": "2026-10-03T23:48:46Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:04a5586cd518c0f7",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:a833f5b454842d2a",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:36:01Z",
+      "last_observed_at": "2026-09-26T23:36:01Z",
+      "due_at": "2026-10-03T23:36:01Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:06fce3a88160f7aa",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:52414c8ae748ee4f",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:07d52cec534cda7e",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:6a53e999f8e78451",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:42:33Z",
+      "last_observed_at": "2026-09-26T23:42:33Z",
+      "due_at": "2026-10-03T23:42:33Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:0a11ce0cc42453c7",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:36a8f4a237e38154",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:42:33Z",
+      "last_observed_at": "2026-09-26T23:42:33Z",
+      "due_at": "2026-10-03T23:42:33Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
       "failure_id": "failure:upstream:data_go_kr:0e723671bcd5176b",
       "source_id": "data_go_kr",
       "failure_class": "upstream",
@@ -14849,6 +14987,29 @@
       "recovery_action": "reobserve_upstream_health",
       "evidence": [
         "reports/runtime-freshness-imports/35798122454.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:128d1fa4dda29252",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:f63b7e70c047d95f",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:48:46Z",
+      "last_observed_at": "2026-09-26T23:48:46Z",
+      "due_at": "2026-10-03T23:48:46Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
       ]
     },
     {
@@ -14898,6 +15059,121 @@
       ]
     },
     {
+      "failure_id": "failure:upstream:data_go_kr:179114d452f55271",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:3274791c6d4b4115",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:1928bb36ee61f8ee",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:631181d450bfddc9",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:1befdcb340ef7581",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:e14c6a6276874c5e",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:36:01Z",
+      "last_observed_at": "2026-09-26T23:36:01Z",
+      "due_at": "2026-10-03T23:36:01Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:233782e8adf46ec3",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:9e4131d15daf4481",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:48:46Z",
+      "last_observed_at": "2026-09-26T23:48:46Z",
+      "due_at": "2026-10-03T23:48:46Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:26325e58705cc857",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:577bbfd0db13437d",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:36:03Z",
+      "last_observed_at": "2026-09-26T23:36:03Z",
+      "due_at": "2026-10-03T23:36:03Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
       "failure_id": "failure:upstream:data_go_kr:2783fc78acfc2075",
       "source_id": "data_go_kr",
       "failure_class": "upstream",
@@ -14944,6 +15220,29 @@
       ]
     },
     {
+      "failure_id": "failure:upstream:data_go_kr:29c90b12bc1a11c6",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:efbcc9b74ecb4fcd",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
       "failure_id": "failure:upstream:data_go_kr:2bd03beb7935184b",
       "source_id": "data_go_kr",
       "failure_class": "upstream",
@@ -14964,6 +15263,397 @@
       "recovery_action": "reobserve_upstream_health",
       "evidence": [
         "reports/runtime-freshness-imports/35798122454.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:2cbcb6963ce51ddb",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:0e7cc0783668d005",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:2efe3a9936dbb701",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:dc18a76dc0751a96",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:3022c03bee082fa0",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:7fdd7d9ffb78cbeb",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:3325aea180b24697",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:3f93886cc7ee6f64",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:36:01Z",
+      "last_observed_at": "2026-09-26T23:36:01Z",
+      "due_at": "2026-10-03T23:36:01Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:33634d95dc856fc6",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:5fbb2fa5db5c9f80",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:343d80104dfd1e9d",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:e87b69df78918c13",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:346112738b80324e",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:e135d9963d262576",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:42:33Z",
+      "last_observed_at": "2026-09-26T23:42:33Z",
+      "due_at": "2026-10-03T23:42:33Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:364bcc7d6cdf34f6",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:7b6f2bf78f68d937",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:3701da2ff7f046d1",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:3fa734a47451a2ef",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:3b305e82caabd3cd",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:851ad7db27a94d80",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:3ba5ac9ffdce116a",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:2ce00a0796970a37",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:3cbb8ec90e4c5082",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:c15efda2e5dc69c9",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:36:01Z",
+      "last_observed_at": "2026-09-26T23:36:01Z",
+      "due_at": "2026-10-03T23:36:01Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:3ede520d5a033d22",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:2c2aee97ae3cdce7",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:36:01Z",
+      "last_observed_at": "2026-09-26T23:36:01Z",
+      "due_at": "2026-10-03T23:36:01Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:405099a257bca07d",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:1cfe9d62da080c52",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:4495d5d0f07827fe",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:349948c4335f91d8",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:4780e0a94bb68139",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:713e7795434dc13d",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:39:38Z",
+      "last_observed_at": "2026-09-26T23:39:38Z",
+      "due_at": "2026-10-03T23:39:38Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:490162946260699c",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:cbf8b18937f55595",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:42:33Z",
+      "last_observed_at": "2026-09-26T23:42:33Z",
+      "due_at": "2026-10-03T23:42:33Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
       ]
     },
     {
@@ -15013,6 +15703,29 @@
       ]
     },
     {
+      "failure_id": "failure:upstream:data_go_kr:511168ae760c8e62",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:a3c480e5b92419f1",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:54Z",
+      "last_observed_at": "2026-09-26T23:52:54Z",
+      "due_at": "2026-10-03T23:52:54Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
       "failure_id": "failure:upstream:data_go_kr:530caf322263c47a",
       "source_id": "data_go_kr",
       "failure_class": "upstream",
@@ -15033,6 +15746,52 @@
       "recovery_action": "reobserve_upstream_health",
       "evidence": [
         "reports/runtime-freshness-imports/35798122454.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:54eae2fea674d262",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:065e93da829c07cc",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:42:33Z",
+      "last_observed_at": "2026-09-26T23:42:33Z",
+      "due_at": "2026-10-03T23:42:33Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:562bdd851f6d28aa",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:f91c1cf242d64a19",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
       ]
     },
     {
@@ -15082,6 +15841,167 @@
       ]
     },
     {
+      "failure_id": "failure:upstream:data_go_kr:59f879f9e2e6271d",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:c1bf88da8cc841c4",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:5a84270398427445",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:b87b90aca2d19389",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:5aa6cc41d5a16c5b",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:0cb09fb7599f0859",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:36:01Z",
+      "last_observed_at": "2026-09-26T23:36:01Z",
+      "due_at": "2026-10-03T23:36:01Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:5c348d23de2ec3b4",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:078d36fa8ced7de0",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:5e90c4330bd082e3",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:7215f18bee363b60",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:60add597d809e5db",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:9a671ad884c831a7",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:63663cbb674aec44",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:ca394cc189b6fac6",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
       "failure_id": "failure:upstream:data_go_kr:66f70183eeec68aa",
       "source_id": "data_go_kr",
       "failure_class": "upstream",
@@ -15128,6 +16048,52 @@
       ]
     },
     {
+      "failure_id": "failure:upstream:data_go_kr:6a6f7d14d4d9ae9c",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:aaa95dd1e1f11323",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:36:01Z",
+      "last_observed_at": "2026-09-26T23:36:01Z",
+      "due_at": "2026-10-03T23:36:01Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:6c078d1987d033bd",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:6803ccab028765cd",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:42:33Z",
+      "last_observed_at": "2026-09-26T23:42:33Z",
+      "due_at": "2026-10-03T23:42:33Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
       "failure_id": "failure:upstream:data_go_kr:6c60e3a86a654435",
       "source_id": "data_go_kr",
       "failure_class": "upstream",
@@ -15151,6 +16117,98 @@
       ]
     },
     {
+      "failure_id": "failure:upstream:data_go_kr:6c8452a10dc28ea4",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:54c5575cd4944d7e",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:6c9573d9c52eba6e",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:9218e92fa4601850",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:42:33Z",
+      "last_observed_at": "2026-09-26T23:42:33Z",
+      "due_at": "2026-10-03T23:42:33Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:6d5ebde4796122c1",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:86c650a09f4b7fc8",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:720254a61ce60559",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:e4b67918037c021c",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
       "failure_id": "failure:upstream:data_go_kr:77b25ed79a672ca5",
       "source_id": "data_go_kr",
       "failure_class": "upstream",
@@ -15171,6 +16229,236 @@
       "recovery_action": "reobserve_upstream_health",
       "evidence": [
         "reports/runtime-freshness-imports/35798122454.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:7964bedc30244b66",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:8104cc9ed19e86cf",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:7ac34eb1b0acaadf",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:fcf9fc609896d6c9",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:54Z",
+      "last_observed_at": "2026-09-26T23:52:54Z",
+      "due_at": "2026-10-03T23:52:54Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:7b2ba303f89e7325",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:2bb12947fe946ff2",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:36:01Z",
+      "last_observed_at": "2026-09-26T23:36:01Z",
+      "due_at": "2026-10-03T23:36:01Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:7b30cdcf9bd3b12c",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:18c3998e1c61d9ee",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:7b92cc38fcd9355f",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:0429370dfb401d82",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:48:46Z",
+      "last_observed_at": "2026-09-26T23:48:46Z",
+      "due_at": "2026-10-03T23:48:46Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:7be95473ace30b1d",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:7226f5183334d1ec",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:42:33Z",
+      "last_observed_at": "2026-09-26T23:42:33Z",
+      "due_at": "2026-10-03T23:42:33Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:7d6c73e3032eb9ef",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:ed2803489e66b0a6",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:7eb624a7ec0987f2",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:8a7cf68688847391",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:7f66a5485f2965b8",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:1c2d0e7a27470238",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:36:01Z",
+      "last_observed_at": "2026-09-26T23:36:01Z",
+      "due_at": "2026-10-03T23:36:01Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:7f7ac2ba07eef1a5",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:6c556eed67be7232",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
       ]
     },
     {
@@ -15220,6 +16508,98 @@
       ]
     },
     {
+      "failure_id": "failure:upstream:data_go_kr:87638a36176d83eb",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:accac6f75d93f30b",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:42:33Z",
+      "last_observed_at": "2026-09-26T23:42:33Z",
+      "due_at": "2026-10-03T23:42:33Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:87ba7203d43d292f",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:63e56b1487d131af",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:42:33Z",
+      "last_observed_at": "2026-09-26T23:42:33Z",
+      "due_at": "2026-10-03T23:42:33Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:881b06b0c623696a",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:8a08e48740aa3a04",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:89fd54ce45ff5d4f",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:a46a5675eba694bb",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:36:03Z",
+      "last_observed_at": "2026-09-26T23:36:03Z",
+      "due_at": "2026-10-03T23:36:03Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
       "failure_id": "failure:upstream:data_go_kr:8a1c1b67555e0e85",
       "source_id": "data_go_kr",
       "failure_class": "upstream",
@@ -15243,6 +16623,75 @@
       ]
     },
     {
+      "failure_id": "failure:upstream:data_go_kr:8a75e5a7279135fc",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:69401ef8872e6f73",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:8e933737f5b5776b",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:2363c146ebd7e1d4",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:36:01Z",
+      "last_observed_at": "2026-09-26T23:36:01Z",
+      "due_at": "2026-10-03T23:36:01Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:8f3b721ec437ea82",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:3ed1101811889ec1",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:48:46Z",
+      "last_observed_at": "2026-09-26T23:48:46Z",
+      "due_at": "2026-10-03T23:48:46Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
       "failure_id": "failure:upstream:data_go_kr:9117ea121c90e215",
       "source_id": "data_go_kr",
       "failure_class": "upstream",
@@ -15263,6 +16712,121 @@
       "recovery_action": "reobserve_upstream_health",
       "evidence": [
         "reports/runtime-freshness-imports/35798122454.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:92b6b1f3241c7992",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:f19c64fb90c1659d",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:9571ba178b8ce1d3",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:fc8c8d8327e229e9",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:9aaeba885be9206c",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:af38091a94f06cc3",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:42:33Z",
+      "last_observed_at": "2026-09-26T23:42:33Z",
+      "due_at": "2026-10-03T23:42:33Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:9d4a26b0c9711d73",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:ef6ca662e729d954",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:36:03Z",
+      "last_observed_at": "2026-09-26T23:36:03Z",
+      "due_at": "2026-10-03T23:36:03Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:9efb0103f1b82506",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:115de95786aca702",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:42:33Z",
+      "last_observed_at": "2026-09-26T23:42:33Z",
+      "due_at": "2026-10-03T23:42:33Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
       ]
     },
     {
@@ -15335,6 +16899,75 @@
       ]
     },
     {
+      "failure_id": "failure:upstream:data_go_kr:a57095a448f7c322",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:21929ac3ba908afe",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:a5ca956eda27c553",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:1aa3839f1d3723da",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:a9770d6868c54b44",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:93f00db25d01d34b",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
       "failure_id": "failure:upstream:data_go_kr:a9b337134214e2e8",
       "source_id": "data_go_kr",
       "failure_class": "upstream",
@@ -15355,6 +16988,29 @@
       "recovery_action": "reobserve_upstream_health",
       "evidence": [
         "reports/runtime-freshness-imports/35798122454.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:aa22c62fef347ded",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:f2edf7208c6ccdf7",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
       ]
     },
     {
@@ -15381,6 +17037,75 @@
       ]
     },
     {
+      "failure_id": "failure:upstream:data_go_kr:ae5f2a9e6e14e2cc",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:276561fc51355c33",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:b04941eb7df96d47",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:2ccd08d096bb753d",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:b2543bc99b54ea69",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:32142ac6f446b888",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:36:03Z",
+      "last_observed_at": "2026-09-26T23:36:03Z",
+      "due_at": "2026-10-03T23:36:03Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
       "failure_id": "failure:upstream:data_go_kr:b5f1aecf56d724cc",
       "source_id": "data_go_kr",
       "failure_class": "upstream",
@@ -15401,6 +17126,52 @@
       "recovery_action": "reobserve_upstream_health",
       "evidence": [
         "reports/runtime-freshness-imports/35798122454.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:b62cb749e234b7cf",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:e685a1e8dfe9f61a",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:36:03Z",
+      "last_observed_at": "2026-09-26T23:36:03Z",
+      "due_at": "2026-10-03T23:36:03Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:b684115ab67a38ca",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:09f18bc27295e802",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:36:01Z",
+      "last_observed_at": "2026-09-26T23:36:01Z",
+      "due_at": "2026-10-03T23:36:01Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
       ]
     },
     {
@@ -15450,6 +17221,75 @@
       ]
     },
     {
+      "failure_id": "failure:upstream:data_go_kr:ba216dabe29f944d",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:458aa0f13d53c8cd",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:bae285e90edadba5",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:3cc163fa0fece04f",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:be8821d3e3ea38ea",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:ca37e47cff07dc28",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:54Z",
+      "last_observed_at": "2026-09-26T23:52:54Z",
+      "due_at": "2026-10-03T23:52:54Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
       "failure_id": "failure:upstream:data_go_kr:c316f35c730856fd",
       "source_id": "data_go_kr",
       "failure_class": "upstream",
@@ -15470,6 +17310,167 @@
       "recovery_action": "reobserve_upstream_health",
       "evidence": [
         "reports/runtime-freshness-imports/35798122454.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:c3c81e6cb40a2ccd",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:1b80817162ef1652",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:36:03Z",
+      "last_observed_at": "2026-09-26T23:36:03Z",
+      "due_at": "2026-10-03T23:36:03Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:c6ae46aaf476af37",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:fdad57ace6f92d27",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:c7d93248a87bc2c6",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:4a8bbab22edd32ef",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:c9b6d8fc9dd562d9",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:b9aafa481d40b10d",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:cdb3164ce7cf8d8b",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:458246e0d51b1a1b",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:ce496f5c7f88f6cd",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:b1b2436150d47f7d",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:42:33Z",
+      "last_observed_at": "2026-09-26T23:42:33Z",
+      "due_at": "2026-10-03T23:42:33Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:d318c35e9464fa62",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:68bc0d9081836975",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:42:33Z",
+      "last_observed_at": "2026-09-26T23:42:33Z",
+      "due_at": "2026-10-03T23:42:33Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
       ]
     },
     {
@@ -15542,6 +17543,75 @@
       ]
     },
     {
+      "failure_id": "failure:upstream:data_go_kr:dcfa0b05f9f80cb5",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:1ba89aa996dfd842",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:deba1e76e02850f6",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:9d977ecc6e7d6d9a",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:df9fc403ed0336b1",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:90b821814c6a1376",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
       "failure_id": "failure:upstream:data_go_kr:e2ae97dfc56d4ec0",
       "source_id": "data_go_kr",
       "failure_class": "upstream",
@@ -15611,6 +17681,29 @@
       ]
     },
     {
+      "failure_id": "failure:upstream:data_go_kr:e8083c2a29eb7662",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:2de262097da679f7",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:52:11Z",
+      "last_observed_at": "2026-09-26T23:52:11Z",
+      "due_at": "2026-10-03T23:52:11Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
       "failure_id": "failure:upstream:data_go_kr:ea1d8a9580b0de97",
       "source_id": "data_go_kr",
       "failure_class": "upstream",
@@ -15631,6 +17724,52 @@
       "recovery_action": "reobserve_upstream_health",
       "evidence": [
         "reports/runtime-freshness-imports/35798122454.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:eb86ad76360f74a8",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:2e9575ecc0bf45a4",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:f09aabadc900bb61",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:bd78739af390798b",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
       ]
     },
     {
@@ -15680,6 +17819,29 @@
       ]
     },
     {
+      "failure_id": "failure:upstream:data_go_kr:f396a7d92e02084d",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:f4936faff58fbf77",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:42:33Z",
+      "last_observed_at": "2026-09-26T23:42:33Z",
+      "due_at": "2026-10-03T23:42:33Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
       "failure_id": "failure:upstream:data_go_kr:f4dc4e55d7fba2ef",
       "source_id": "data_go_kr",
       "failure_class": "upstream",
@@ -15700,6 +17862,75 @@
       "recovery_action": "reobserve_upstream_health",
       "evidence": [
         "reports/runtime-freshness-imports/35798122454.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:f55d65fe16612f37",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:654a3da238a3b9ab",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:fb2cf88f0df2681a",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:d5c02ecdfabe0e3f",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
+      ]
+    },
+    {
+      "failure_id": "failure:upstream:data_go_kr:ff3be8e5ee82c25c",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:cf9f2ec0fbd95c4b",
+      "status": "transient",
+      "severity": "medium",
+      "owner": "release-operator",
+      "recurrence_count": 1,
+      "recurrence_threshold": 3,
+      "first_observed_at": "2026-09-26T23:40:48Z",
+      "last_observed_at": "2026-09-26T23:40:48Z",
+      "due_at": "2026-10-03T23:40:48Z",
+      "overdue": false,
+      "retry": {
+        "max_attempts": 3,
+        "backoff": "exponential"
+      },
+      "recovery_action": "reobserve_upstream_health",
+      "evidence": [
+        "reports/runtime-freshness-imports/36279928741.json"
       ]
     }
   ],
