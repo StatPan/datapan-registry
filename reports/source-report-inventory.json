@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.source-report-inventory.v1",
-  "generated_at": "2026-09-22T23:50:50.428978Z",
+  "generated_at": "2026-09-28T00:16:28.184282Z",
   "provider": "multi-source",
   "generation_inputs": {
     "source_profiles_glob": "sources/*.json",
@@ -199,8 +199,8 @@
         {
           "name": "coverage-backlog.json",
           "path": "reports/data-go-kr/coverage-backlog.json",
-          "bytes": 10677074,
-          "sha256": "898544b3cc88c6a7e84a2a6dabcfb6b397eb34ef0cc1fab9bc1f92448e667879",
+          "bytes": 10389238,
+          "sha256": "c44ad7006c839f895d0a2ec7600f73626acc0e19cc78f4edec80b9156d9a58d8",
           "schema_version": "datapan.coverage-backlog.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.coverage-backlog.v1.schema.json",
           "expected_schema_path": "schemas/datapan.coverage-backlog.v1.schema.json",
@@ -407,8 +407,8 @@
         {
           "name": "institution-api-overview.json",
           "path": "reports/data-go-kr/institution-api-overview.json",
-          "bytes": 413017,
-          "sha256": "e2d78433d7f6146c7c493911c79ca957f72244e21f9550938699cfd863460b3c",
+          "bytes": 413037,
+          "sha256": "58d1c62624ded9c00336994e2f05b5af3de36b11ffae914d010f19f6922e39e5",
           "schema_version": "datapan.institution-api-overview.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.institution-api-overview.v1.schema.json",
           "expected_schema_path": "schemas/datapan.institution-api-overview.v1.schema.json",
@@ -417,8 +417,8 @@
         {
           "name": "institution-runtime-plan.json",
           "path": "reports/data-go-kr/institution-runtime-plan.json",
-          "bytes": 10509,
-          "sha256": "6198cb463a5752348638d9bb05441688beb6f959ba49dec04d66ac5ae80dc883",
+          "bytes": 10510,
+          "sha256": "34980d07ba2bf201bd367058b685ff68e25970199b0f9e50c5d0ff53f47c8f08",
           "schema_version": "datapan.institution-runtime-plan.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.institution-runtime-plan.v1.schema.json",
           "expected_schema_path": "schemas/datapan.institution-runtime-plan.v1.schema.json",
@@ -811,8 +811,8 @@
         {
           "name": "runtime-evidence-growth.json",
           "path": "reports/data-go-kr/runtime-evidence-growth.json",
-          "bytes": 7375,
-          "sha256": "6bc322e549f7949d7da7bc4b0e06e0daa0ed5da6edb8dbc50409f2cdbb3a7808",
+          "bytes": 7442,
+          "sha256": "6cc4f2cbf09e5773313db61efa2a4622c4eca34ff3061265c1966b6f2c7a4266",
           "schema_version": "datapan.runtime-evidence-growth.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.runtime-evidence-growth.v1.schema.json",
           "expected_schema_path": "schemas/datapan.runtime-evidence-growth.v1.schema.json",
@@ -983,14 +983,14 @@
         {
           "name": "latest-verification-summary.json",
           "path": "reports/latest-verification-summary.json",
-          "bytes": 47051,
-          "sha256": "6b203abf492c12fa2c5111832471a09ba807c20cd9b9a04379a6582d7f04701f"
+          "bytes": 48400,
+          "sha256": "e258c665c77d791097cde5a10ed944cdbaa774fc9035ef91cb821e438a07e3a9"
         },
         {
           "name": "latest-verification.json",
           "path": "reports/latest-verification.json",
-          "bytes": 3388374,
-          "sha256": "eb797a73128044c2ce7f6d5d651bef6c9e42c04532388ff86ee44e5ef5fcdc65"
+          "bytes": 3779854,
+          "sha256": "a0ac88a0cebd156c3adaed19ed2be530089637e37df79bead209a1f0d707032c"
         },
         {
           "name": "provider-backlog.json",
