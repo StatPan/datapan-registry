@@ -1,0 +1,74 @@
+{
+  "schema_version": "datapan.runtime-freshness-import-attestation.v1",
+  "attested_at": "2026-09-28T00:18:19Z",
+  "run_id": "36359856403",
+  "outcome": "imported",
+  "producer": {
+    "repository": "StatPan/datapan-registry",
+    "revision": "44aaf067056c6ba231685ca9284a3cfbcd861ca5",
+    "run_id": "36359856403",
+    "run_url": "https://github.com/StatPan/datapan-registry/actions/runs/36359856403"
+  },
+  "lineage": {
+    "admission": {
+      "path": "reports/runtime-freshness-import-admissions/36359856403.json",
+      "sha256": "ca06d918bfcdb408fc3f2c078ea2224be8c8d7a3bebacd24b47afcff0c12cfc9"
+    },
+    "sanitized_report_sha256": "5d237e9f10828e2fa2b78fa8cbdbfca0097cfd46fee3739217c7ae2a1a80b28d",
+    "run_receipt_sha256": "b6f7e715f91167706c63b544da88dace53c6d34e7a8984db932d9ac40d6dbac7",
+    "import_receipt": {
+      "path": "reports/runtime-freshness-imports/36359856403.json",
+      "sha256": "9dc0f2ecfa5d0f4715c16b3b497498fe47d4a41e7e92a16243d97b34b7cf76e3"
+    },
+    "selected_identity_set": {
+      "count": 799,
+      "sha256": "97f304997e2194fd403e6abd939e59b7bc99fb04c876b157069da24de9a38fd3"
+    }
+  },
+  "import": {
+    "pull_request": 646,
+    "pull_request_url": "https://github.com/StatPan/datapan-registry/pull/646",
+    "merge_commit": "3597d87f9b4a0e97039dfbd5bb10817fe6dce78a",
+    "merged_at": "2026-09-28T00:18:19Z",
+    "arithmetic": {
+      "before": {
+        "total": 5582,
+        "verified": 2900,
+        "failed": 486,
+        "skipped": 2196,
+        "unknown": 0
+      },
+      "selected": {
+        "total": 799,
+        "verified": 619,
+        "failed": 55,
+        "skipped": 125,
+        "unknown": 0
+      },
+      "after": {
+        "total": 6381,
+        "verified": 3519,
+        "failed": 541,
+        "skipped": 2321,
+        "unknown": 0
+      },
+      "selected_new_results": 799
+    }
+  },
+  "registry": {
+    "manifest": {
+      "path": "manifest.json",
+      "sha256": "85d15b85f578e1850989eb95df924c7c6723d0a360b58824b4c46f41c16f17a6"
+    },
+    "release_ledger": {
+      "path": "reports/release-assembly-receipt.json",
+      "sha256": "ea4c444abfb60e0fe0c8f0bc7639c4defe7c0d095b09ca9f82079afdb552b9b3"
+    }
+  },
+  "verification": {
+    "main_ref": "refs/heads/main",
+    "merge_commit_reachable": true,
+    "admission_matches_merge": true,
+    "release_ledger_fixed_point": true
+  }
+}
