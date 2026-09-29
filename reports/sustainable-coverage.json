@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.sustainable-coverage.v1",
-  "generated_at": "2026-09-28T00:16:28.184282Z",
+  "generated_at": "2026-09-29T02:06:25.910126Z",
   "policy": {
     "path": "policy/sustainable-coverage.json",
     "policy_id": "datapan-registry-supported-sources",
@@ -23,7 +23,7 @@
     "layers_total": 9,
     "layers_meeting_target": 7,
     "layers_below_target": 2,
-    "unknown_timestamp_records": 1485,
+    "unknown_timestamp_records": 1690,
     "stale_records": 3336,
     "expired_records": 514
   },
@@ -90,9 +90,9 @@
     },
     {
       "id": "runtime_evidence_operation",
-      "numerator": 6161,
+      "numerator": 6961,
       "denominator": 21260,
-      "percent": 29.0,
+      "percent": 32.7,
       "target_percent": 80.0,
       "meets_target": false,
       "scope": "operation_denominator_sources",
@@ -100,9 +100,9 @@
     },
     {
       "id": "fresh_verified_operation",
-      "numerator": 678,
+      "numerator": 967,
       "denominator": 21260,
-      "percent": 3.2,
+      "percent": 4.5,
       "target_percent": 80.0,
       "meets_target": false,
       "scope": "operation_denominator_sources",
@@ -120,18 +120,18 @@
     }
   ],
   "freshness": {
-    "as_of": "2026-09-28T00:16:28.184282Z",
+    "as_of": "2026-09-29T02:06:25.910126Z",
     "fresh_days": 30,
     "expire_days": 90,
-    "fresh": 826,
+    "fresh": 1421,
     "stale": 3336,
     "expired": 514,
-    "unknown_timestamp": 1485,
-    "fresh_verified": 678
+    "unknown_timestamp": 1690,
+    "fresh_verified": 967
   },
   "failure_recovery": {
-    "active": 753,
-    "persistent": 414,
+    "active": 1209,
+    "persistent": 442,
     "recovered": 6,
     "unowned": 0,
     "overdue": 2,
@@ -145,7 +145,7 @@
       "call_capability": true,
       "reviewed_runtime_receipt": true,
       "runtime_evidence": 4774,
-      "active_recovery_failures": 753,
+      "active_recovery_failures": 1209,
       "recovered_failures": 1
     },
     {

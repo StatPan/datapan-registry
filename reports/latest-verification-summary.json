@@ -1,39 +1,39 @@
 {
-  "generated_at": "2026-09-28T00:16:28.184282Z",
+  "generated_at": "2026-09-29T02:06:25.910126Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 6381,
-    "verified": 3519,
-    "failed": 541,
-    "skipped": 2321,
+    "total": 7181,
+    "verified": 3808,
+    "failed": 847,
+    "skipped": 2526,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "verified",
-        "count": 3519,
+        "count": 3808,
         "status": "verified"
       },
       {
         "key": "skipped",
-        "count": 2321,
+        "count": 2526,
         "status": "skipped"
       },
       {
         "key": "failed",
-        "count": 541,
+        "count": 847,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 732,
+        "count": 899,
         "reason": "missing_required_params"
       },
       {
@@ -43,12 +43,22 @@
       },
       {
         "key": "approval_required",
-        "count": 542,
+        "count": 570,
         "reason": "approval_required"
       },
       {
+        "key": "data_gg_request_timeout",
+        "count": 184,
+        "reason": "data_gg_request_timeout"
+      },
+      {
+        "key": "vworld_request_timeout",
+        "count": 97,
+        "reason": "vworld_request_timeout"
+      },
+      {
         "key": "missing_endpoint",
-        "count": 77,
+        "count": 87,
         "reason": "missing_endpoint"
       },
       {
@@ -65,6 +75,11 @@
         "key": "jeonju_missing_required_params",
         "count": 67,
         "reason": "jeonju_missing_required_params"
+      },
+      {
+        "key": "lofin365_http_400",
+        "count": 46,
+        "reason": "lofin365_http_400"
       },
       {
         "key": "daejeon_request_timeout",
@@ -102,6 +117,11 @@
         "reason": "anyang_request_failed"
       },
       {
+        "key": "kipris-plus_http_404",
+        "count": 26,
+        "reason": "kipris-plus_http_404"
+      },
+      {
         "key": "geoje_missing_required_params",
         "count": 25,
         "reason": "geoje_missing_required_params"
@@ -110,16 +130,6 @@
         "key": "lofin365_request_failed",
         "count": 25,
         "reason": "lofin365_request_failed"
-      },
-      {
-        "key": "kipris-plus_http_404",
-        "count": 24,
-        "reason": "kipris-plus_http_404"
-      },
-      {
-        "key": "vworld_request_timeout",
-        "count": 24,
-        "reason": "vworld_request_timeout"
       },
       {
         "key": "sisul_wadl_metadata_only",
@@ -167,11 +177,6 @@
         "reason": "malformed_endpoint"
       },
       {
-        "key": "data_gg_request_timeout",
-        "count": 13,
-        "reason": "data_gg_request_timeout"
-      },
-      {
         "key": "incheon_http_400",
         "count": 12,
         "reason": "incheon_http_400"
@@ -192,14 +197,14 @@
         "reason": "epost_unsupported_protocol"
       },
       {
-        "key": "lofin365_http_400",
-        "count": 10,
-        "reason": "lofin365_http_400"
-      },
-      {
         "key": "mnd-open-data_request_failed",
         "count": 10,
         "reason": "mnd-open-data_request_failed"
+      },
+      {
+        "key": "lofin365_request_timeout",
+        "count": 9,
+        "reason": "lofin365_request_timeout"
       },
       {
         "key": "qnet_wadl_metadata_only",
@@ -225,6 +230,11 @@
         "key": "tour_service_key_not_registered",
         "count": 7,
         "reason": "tour_service_key_not_registered"
+      },
+      {
+        "key": "consumer_request_timeout",
+        "count": 6,
+        "reason": "consumer_request_timeout"
       },
       {
         "key": "context deadline exceeded",
@@ -312,6 +322,11 @@
         "reason": "jeonju_http_404_not_found"
       },
       {
+        "key": "open-law_request_failed",
+        "count": 3,
+        "reason": "open-law_request_failed"
+      },
+      {
         "key": "ulsan_service_key_not_registered",
         "count": 3,
         "reason": "ulsan_service_key_not_registered"
@@ -320,6 +335,11 @@
         "key": "HTTP 에러",
         "count": 2,
         "reason": "HTTP 에러"
+      },
+      {
+        "key": "NO_DATA",
+        "count": 2,
+        "reason": "NO_DATA"
       },
       {
         "key": "airport_missing_required_params",
@@ -335,6 +355,11 @@
         "key": "folk_missing_required_params",
         "count": 2,
         "reason": "folk_missing_required_params"
+      },
+      {
+        "key": "foodsafetykorea_request_timeout",
+        "count": 2,
+        "reason": "foodsafetykorea_request_timeout"
       },
       {
         "key": "gblib_service_key_not_registered",
@@ -432,6 +457,11 @@
         "reason": "Get \"http://apis.data.go.kr/1613000/TrainInfo/GetVhcleKndList?_type=json&[redacted credential assignment] context deadline exceeded"
       },
       {
+        "key": "Get \"http://apis.data.go.kr/6260000/BusanGalmaetGilService/getGalmaetGilInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/6260000/BusanGalmaetGilService/getGalmaetGilInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
         "key": "Get \"http://apis.data.go.kr/6280000/incheon-road-hazard/hazard-list?pageNo=1&[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"http://apis.data.go.kr/6280000/incheon-road-hazard/hazard-list?pageNo=1&[redacted credential assignment] context deadline exceeded"
@@ -445,6 +475,11 @@
         "key": "Get \"http://apis.data.go.kr/6310000/ulsanair/getUlsanairList?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"http://apis.data.go.kr/6310000/ulsanair/getUlsanairList?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B551172/OralCancerRegistryMetaService/getOralCancerRegistryMeta?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551172/OralCancerRegistryMetaService/getOralCancerRegistryMeta?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
       },
       {
         "key": "car365_http_400",
@@ -520,23 +555,23 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 1531,
+        "count": 1763,
         "provider": "data.go.kr"
       },
       {
+        "key": "data-gg",
+        "count": 634,
+        "provider": "data-gg"
+      },
+      {
         "key": "gwangmyeong",
-        "count": 547,
+        "count": 565,
         "provider": "gwangmyeong"
       },
       {
         "key": "mafra",
-        "count": 324,
+        "count": 325,
         "provider": "mafra"
-      },
-      {
-        "key": "data-gg",
-        "count": 279,
-        "provider": "data-gg"
       },
       {
         "key": "ex",
@@ -570,8 +605,13 @@
       },
       {
         "key": "kipris-plus",
-        "count": 103,
+        "count": 105,
         "provider": "kipris-plus"
+      },
+      {
+        "key": "vworld",
+        "count": 100,
+        "provider": "vworld"
       },
       {
         "key": "chungnam",
@@ -587,6 +627,11 @@
         "key": "garak",
         "count": 87,
         "provider": "garak"
+      },
+      {
+        "key": "lofin365",
+        "count": 86,
+        "provider": "lofin365"
       },
       {
         "key": "seogu",
@@ -609,6 +654,11 @@
         "provider": "nrich"
       },
       {
+        "key": "open-law",
+        "count": 74,
+        "provider": "open-law"
+      },
+      {
         "key": "dongjak",
         "count": 70,
         "provider": "dongjak"
@@ -624,19 +674,24 @@
         "provider": "hug"
       },
       {
+        "key": "nongsaro",
+        "count": 63,
+        "provider": "nongsaro"
+      },
+      {
         "key": "seogwipo",
         "count": 62,
         "provider": "seogwipo"
       },
       {
-        "key": "nongsaro",
-        "count": 60,
-        "provider": "nongsaro"
-      },
-      {
         "key": "epost",
         "count": 56,
         "provider": "epost"
+      },
+      {
+        "key": "jeju-www",
+        "count": 56,
+        "provider": "jeju-www"
       },
       {
         "key": "nfqs",
@@ -649,11 +704,6 @@
         "provider": "kopis"
       },
       {
-        "key": "open-law",
-        "count": 53,
-        "provider": "open-law"
-      },
-      {
         "key": "ekape",
         "count": 49,
         "provider": "ekape"
@@ -664,14 +714,14 @@
         "provider": "keit"
       },
       {
+        "key": "foodsafetykorea",
+        "count": 45,
+        "provider": "foodsafetykorea"
+      },
+      {
         "key": "kma-apihub",
         "count": 45,
         "provider": "kma-apihub"
-      },
-      {
-        "key": "jeju-www",
-        "count": 42,
-        "provider": "jeju-www"
       },
       {
         "key": "geoje",
@@ -702,16 +752,6 @@
         "key": "eshare",
         "count": 36,
         "provider": "eshare"
-      },
-      {
-        "key": "lofin365",
-        "count": 35,
-        "provider": "lofin365"
-      },
-      {
-        "key": "foodsafetykorea",
-        "count": 34,
-        "provider": "foodsafetykorea"
       },
       {
         "key": "calspia",
@@ -749,11 +789,6 @@
         "provider": "kisti"
       },
       {
-        "key": "vworld",
-        "count": 27,
-        "provider": "vworld"
-      },
-      {
         "key": "anyang",
         "count": 26,
         "provider": "anyang"
@@ -769,6 +804,16 @@
         "provider": "yuseong"
       },
       {
+        "key": "consumer",
+        "count": 25,
+        "provider": "consumer"
+      },
+      {
+        "key": "juso",
+        "count": 25,
+        "provider": "juso"
+      },
+      {
         "key": "daegu",
         "count": 24,
         "provider": "daegu"
@@ -782,11 +827,6 @@
         "key": "gogung",
         "count": 22,
         "provider": "gogung"
-      },
-      {
-        "key": "juso",
-        "count": 22,
-        "provider": "juso"
       },
       {
         "key": "mnd-open-data",
@@ -839,14 +879,14 @@
         "provider": "incheon"
       },
       {
+        "key": "jejudatahub",
+        "count": 14,
+        "provider": "jejudatahub"
+      },
+      {
         "key": "itfind",
         "count": 13,
         "provider": "itfind"
-      },
-      {
-        "key": "jejudatahub",
-        "count": 13,
-        "provider": "jejudatahub"
       },
       {
         "key": "utic",
@@ -862,11 +902,6 @@
         "key": "smartfarm-korea",
         "count": 11,
         "provider": "smartfarm-korea"
-      },
-      {
-        "key": "consumer",
-        "count": 10,
-        "provider": "consumer"
       },
       {
         "key": "fairdata",
@@ -1182,23 +1217,23 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 1422,
+        "count": 1644,
         "host": "apis.data.go.kr"
       },
       {
+        "key": "data.gg.go.kr",
+        "count": 634,
+        "host": "data.gg.go.kr"
+      },
+      {
         "key": "data.gm.go.kr",
-        "count": 547,
+        "count": 565,
         "host": "data.gm.go.kr"
       },
       {
         "key": "data.mafra.go.kr",
-        "count": 324,
+        "count": 325,
         "host": "data.mafra.go.kr"
-      },
-      {
-        "key": "data.gg.go.kr",
-        "count": 279,
-        "host": "data.gg.go.kr"
       },
       {
         "key": "data.ex.co.kr",
@@ -1226,14 +1261,19 @@
         "host": "bigdata.daejeon.go.kr"
       },
       {
+        "key": "plus.kipris.or.kr",
+        "count": 105,
+        "host": "plus.kipris.or.kr"
+      },
+      {
         "key": "openapi.q-net.or.kr",
         "count": 104,
         "host": "openapi.q-net.or.kr"
       },
       {
-        "key": "plus.kipris.or.kr",
-        "count": 103,
-        "host": "plus.kipris.or.kr"
+        "key": "www.vworld.kr",
+        "count": 100,
+        "host": "www.vworld.kr"
       },
       {
         "key": "www.work24.go.kr",
@@ -1244,6 +1284,11 @@
         "key": "www.garak.co.kr",
         "count": 86,
         "host": "www.garak.co.kr"
+      },
+      {
+        "key": "www.lofin365.go.kr",
+        "count": 86,
+        "host": "www.lofin365.go.kr"
       },
       {
         "key": "seogu.go.kr",
@@ -1282,8 +1327,13 @@
       },
       {
         "key": "www.nongsaro.go.kr",
-        "count": 59,
+        "count": 62,
         "host": "www.nongsaro.go.kr"
+      },
+      {
+        "key": "www.jeju.go.kr",
+        "count": 56,
+        "host": "www.jeju.go.kr"
       },
       {
         "key": "www.nfqs.go.kr",
@@ -1306,9 +1356,19 @@
         "host": "data.ekape.or.kr"
       },
       {
+        "key": "open.law.go.kr",
+        "count": 48,
+        "host": "open.law.go.kr"
+      },
+      {
         "key": "apihub.kma.go.kr",
         "count": 45,
         "host": "apihub.kma.go.kr"
+      },
+      {
+        "key": "www.foodsafetykorea.go.kr",
+        "count": 45,
+        "host": "www.foodsafetykorea.go.kr"
       },
       {
         "key": "openapi.epost.go.kr:80",
@@ -1319,11 +1379,6 @@
         "key": "c.q-net.or.kr",
         "count": 42,
         "host": "c.q-net.or.kr"
-      },
-      {
-        "key": "www.jeju.go.kr",
-        "count": 42,
-        "host": "www.jeju.go.kr"
       },
       {
         "key": "data.geoje.go.kr",
@@ -1371,21 +1426,6 @@
         "host": "www.eshare.go.kr"
       },
       {
-        "key": "open.law.go.kr",
-        "count": 35,
-        "host": "open.law.go.kr"
-      },
-      {
-        "key": "www.lofin365.go.kr",
-        "count": 35,
-        "host": "www.lofin365.go.kr"
-      },
-      {
-        "key": "www.foodsafetykorea.go.kr",
-        "count": 34,
-        "host": "www.foodsafetykorea.go.kr"
-      },
-      {
         "key": "open.assembly.go.kr",
         "count": 30,
         "host": "open.assembly.go.kr"
@@ -1416,11 +1456,6 @@
         "host": "oneclick.law.go.kr:80"
       },
       {
-        "key": "www.vworld.kr",
-        "count": 27,
-        "host": "www.vworld.kr"
-      },
-      {
         "key": "openapi.seoul.go.kr:8088",
         "count": 26,
         "host": "openapi.seoul.go.kr:8088"
@@ -1436,6 +1471,16 @@
         "host": "www.yuseong.go.kr"
       },
       {
+        "key": "www.consumer.go.kr",
+        "count": 25,
+        "host": "www.consumer.go.kr"
+      },
+      {
+        "key": "www.juso.go.kr",
+        "count": 25,
+        "host": "www.juso.go.kr"
+      },
+      {
         "key": "info.childcare.go.kr",
         "count": 23,
         "host": "info.childcare.go.kr"
@@ -1444,11 +1489,6 @@
         "key": "www.gogung.go.kr",
         "count": 22,
         "host": "www.gogung.go.kr"
-      },
-      {
-        "key": "www.juso.go.kr",
-        "count": 22,
-        "host": "www.juso.go.kr"
       },
       {
         "key": "opendata.mnd.go.kr",
@@ -1481,6 +1521,11 @@
         "host": "www.nihc.go.kr"
       },
       {
+        "key": "www.law.go.kr",
+        "count": 17,
+        "host": "www.law.go.kr"
+      },
+      {
         "key": "ecos.bok.or.kr",
         "count": 16,
         "host": "ecos.bok.or.kr"
@@ -1506,14 +1551,14 @@
         "host": "www.its.go.kr"
       },
       {
+        "key": "www.jejudatahub.net",
+        "count": 14,
+        "host": "www.jejudatahub.net"
+      },
+      {
         "key": "open.itfind.or.kr",
         "count": 13,
         "host": "open.itfind.or.kr"
-      },
-      {
-        "key": "www.jejudatahub.net",
-        "count": 13,
-        "host": "www.jejudatahub.net"
       },
       {
         "key": "ifac.or.kr",
@@ -1541,11 +1586,6 @@
         "host": "ws.bus.go.kr"
       },
       {
-        "key": "www.consumer.go.kr",
-        "count": 10,
-        "host": "www.consumer.go.kr"
-      },
-      {
         "key": "www.fairdata.go.kr",
         "count": 10,
         "host": "www.fairdata.go.kr"
@@ -1569,11 +1609,6 @@
         "key": "thegoodnight.daegu.go.kr",
         "count": 9,
         "host": "thegoodnight.daegu.go.kr"
-      },
-      {
-        "key": "www.law.go.kr",
-        "count": 9,
-        "host": "www.law.go.kr"
       },
       {
         "key": "www.lawmaking.go.kr",
@@ -2034,17 +2069,17 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 4849,
+        "count": 5417,
         "kind": "external_endpoint"
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 1422,
+        "count": 1644,
         "kind": "data_go_kr_gateway"
       },
       {
         "key": "no_endpoint",
-        "count": 77,
+        "count": 87,
         "kind": "no_endpoint"
       },
       {
