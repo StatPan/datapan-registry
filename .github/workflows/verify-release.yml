@@ -166,6 +166,7 @@ jobs:
           python -m unittest tests/test_apply_runtime_freshness_import.py
           python -m unittest tests/test_generate_runtime_freshness_import_admission.py
           python -m unittest tests/test_attest_runtime_freshness_import.py
+          python -m unittest tests/test_runtime_freshness_pr_handoff.py
           python scripts/generate-runtime-evidence-growth.py --check
           python scripts/generate-readme-runtime-snapshot.py --check
           python scripts/check-runtime-freshness-workflow.py
@@ -176,6 +177,7 @@ jobs:
           python -m py_compile scripts/apply-runtime-freshness-import.py
           python -m py_compile scripts/generate-runtime-freshness-import-admission.py
           python -m py_compile scripts/attest-runtime-freshness-import.py
+          python -m py_compile scripts/runtime-freshness-pr-handoff.py
           python -m unittest tests/test_generate_failure_recovery_rollup.py
           python -m unittest tests/test_convert_source_verification_receipt.py
           python -m unittest tests/test_generate_source_runtime_remediation_map.py
