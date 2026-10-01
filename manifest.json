@@ -76,8 +76,8 @@
     {
       "path": "schemas/datapan.release-manifest.v1.schema.json",
       "kind": "schema",
-      "bytes": 4396,
-      "sha256": "3debf0a0b6fb03930f21d4a66e43581d283b37bc70f7fb898256925b6cd24eda"
+      "bytes": 4447,
+      "sha256": "e1f0835e0d9a1ba83d92aff1d5729c7fa2093842a48aee9700073b607e5d6ee3"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -594,7 +594,7 @@
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
       "bytes": 39730,
-      "sha256": "c38f820c88dd438c139eca55ed9f8729d78d344a583f2654ab6836706fe61036"
+      "sha256": "d76e762a02bd55320e9473d6df8d3ce2357ed8b8e132c21dec67edf186b6f9eb"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -671,7 +671,7 @@
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
       "bytes": 8075,
-      "sha256": "e8fa5f117cae9e7ffea1d646dadac9b4b73cf2120c3c6886eef10ead379691fb"
+      "sha256": "254bc3af6a27c2795a27ceb784cba0aaefb8657e6305dcee928e5a22717b8988"
     },
     {
       "path": "reports/operation-denominator-rollup.json",
@@ -783,7 +783,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "6d562656141f27e4d0d2a7e3e1a5eed64946d338932c72a09fe9f1ddd76cedc8"
+      "sha256": "fa07c8e045927cef1017b1d20cfea248adc0f0d7b983e5303d1c6e32dc78edaf"
     },
     {
       "path": "reports/source-reference-drift.json",
@@ -797,7 +797,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 62605,
-      "sha256": "f084c6e7e8c63ad8fb47f1232539519348ec176ac77e84c56254d0ab8c127030"
+      "sha256": "678590ccaee9856bb0199cd0bd10c938e5717a2261991b4ccce51c955787f0db"
     },
     {
       "path": "reports/data-go-kr/operation-manifest.json",
@@ -881,21 +881,21 @@
       "kind": "consumer_compatibility",
       "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json",
       "bytes": 26675,
-      "sha256": "8a6ace88776512cb909f00c2c09d44a18c4c10287cfebf76b79e17f1e39a5078"
+      "sha256": "abcbc43840fede98563b8950392a9af76e68eddb0817f2b38b38b1641367d402"
     },
     {
       "path": "reports/release-version-decision.json",
       "kind": "release_version_decision",
       "schema": "https://schemas.datapan.dev/datapan.release-version-decision.v1.schema.json",
       "bytes": 1811,
-      "sha256": "d190161cb453ee359a3fa4b8087e14a63a6ed5a12889e44d50367e422dd7061c"
+      "sha256": "8366c9d73a0f1674beb7e587f19e1b142352cbd5b3daf97dcea06df26130287d"
     },
     {
       "path": "reports/release-distribution-footprint.json",
       "kind": "release_distribution_footprint",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
       "bytes": 2215,
-      "sha256": "0084abdc8530e50167bc1390050d72a93b7239184de66debdcd4993acc33bd97"
+      "sha256": "14a0ce2664dc1e32d1c1d4614221a20e0a18797f7c7836b4c855919d5da8b553"
     },
     {
       "path": "reports/release-shard-consumer-proof.json",
@@ -944,7 +944,7 @@
       "kind": "release_assembly_receipt",
       "schema": "https://schemas.datapan.dev/datapan.release-assembly-receipt.v1.schema.json",
       "bytes": 34969,
-      "sha256": "4fe1b549ef295bb75567eee5e2cfeaa0441c8434639e91b1942b048f80950a5a"
+      "sha256": "fe3f99109e5093a00721a4dd310021717495d93db94ebb12dd480c9beea71304"
     },
     {
       "path": "reports/unadapted-external-probe.json",
@@ -1114,7 +1114,7 @@
       "kind": "verification_plan",
       "schema": "https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json",
       "bytes": 11290,
-      "sha256": "fc2690abffe60cea742d4beac709790af6a483f694cefb63a6a0f7d925c56f39"
+      "sha256": "9b989ab0ffa1ac6689daeb1c64d02112c454444aeb65c1bddde4931e9be2423a"
     }
   ]
 }
