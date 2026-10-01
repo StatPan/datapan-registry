@@ -103,7 +103,7 @@ jobs:
           python3 -m venv .datapan/ci/source-profile-venv
           . .datapan/ci/source-profile-venv/bin/activate
           python -m pip install --upgrade pip
-          python -m pip install jsonschema
+          python -m pip install jsonschema PyYAML==6.0.2
           python scripts/sync-release-schema-artifacts.py --check
           python scripts/sync-release-manifest-artifacts.py --check
           python scripts/generate-data-go-kr-operation-manifest.py --check

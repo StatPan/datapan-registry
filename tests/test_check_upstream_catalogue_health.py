@@ -287,12 +287,37 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
         self.assertEqual(report["summary"]["live_fresh_observation_count"], 1)
 
     def test_main_canonical_identity_uses_manifest_bound_lfs_oid_without_materializing_payload(self) -> None:
-        registry = ROOT / "data/data-go-kr.registry.json"
-        self.assertTrue(registry.read_bytes().startswith(b"version https://git-lfs.github.com/spec/v1\n"))
-        identity = HEALTH.manifest_registry_identity(ROOT / "manifest.json", registry)
-        manifest_row = next(row for row in json.loads((ROOT / "manifest.json").read_text())["artifacts"] if row.get("path") == "data/data-go-kr.registry.json")
-        self.assertEqual(identity["registry_sha256"], manifest_row["sha256"])
-        self.assertEqual(identity["registry_bytes"], manifest_row["bytes"])
+        expected_oid = "a" * 64
+        expected_bytes = 12345
+        pointer = (
+            "version https://git-lfs.github.com/spec/v1\n"
+            f"oid sha256:{expected_oid}\n"
+            f"size {expected_bytes}\n"
+        ).encode("ascii")
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            registry = root / "data/data-go-kr.registry.json"
+            registry.parent.mkdir(parents=True)
+            registry.write_bytes(pointer)
+            manifest_path = root / "manifest.json"
+            manifest = {
+                "artifacts": [{
+                    "path": "data/data-go-kr.registry.json",
+                    "kind": "registry",
+                    "sha256": expected_oid,
+                    "bytes": expected_bytes,
+                }],
+            }
+            manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+            with mock.patch.object(HEALTH, "ROOT", root):
+                identity = HEALTH.manifest_registry_identity(manifest_path, registry)
+                self.assertEqual(identity["registry_sha256"], expected_oid)
+                self.assertEqual(identity["registry_bytes"], expected_bytes)
+
+                manifest["artifacts"][0]["sha256"] = "b" * 64
+                manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+                with self.assertRaisesRegex(ValueError, "main_registry_manifest_mismatch"):
+                    HEALTH.manifest_registry_identity(manifest_path, registry)
 
     def test_never_started_collector_and_missing_processor_observation_are_distinct(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
