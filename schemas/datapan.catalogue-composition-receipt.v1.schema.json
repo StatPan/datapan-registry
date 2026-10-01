@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.catalogue-composition-receipt.v1.schema.json",
+  "title": "Datapan Catalogue Composition Receipt v1",
+  "description": "Deterministic evidence for an offline, source-backed catalogue composition.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "producer", "input_digests", "status", "scope", "outputs"],
+  "properties": {
+    "schema_version": {"const": "datapan.catalogue-composition-receipt.v1"},
+    "producer": {"$ref": "#/$defs/producer"},
+    "input_digests": {"$ref": "#/$defs/input_digests"},
+    "status": {"enum": ["ready_scoped", "no_safe_change", "no_change"]},
+    "scope": {"$ref": "#/$defs/scope"},
+    "outputs": {
+      "type": "object",
+      "minProperties": 5,
+      "additionalProperties": {"$ref": "#/$defs/digest"}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "digest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bytes", "sha256"],
+      "properties": {
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "run_id", "run_url"],
+      "properties": {
+        "repository": {"const": "StatPan/datapan-registry"},
+        "run_id": {"type": "string", "pattern": "^[0-9]{6,20}$"},
+        "run_url": {"type": "string", "format": "uri", "pattern": "^https://github\\.com/StatPan/datapan-registry/actions/runs/[0-9]+$"}
+      }
+    },
+    "input_digests": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["baseline", "candidate", "full_diff", "refresh_evidence", "provider_index", "source_policy", "registry_schema", "provider_index_schema", "diff_schema", "refresh_evidence_schema", "enrichment_evidence_schema", "composer", "receipt_schema"],
+      "properties": {
+        "baseline": {"$ref": "#/$defs/digest"},
+        "candidate": {"$ref": "#/$defs/digest"},
+        "full_diff": {"$ref": "#/$defs/digest"},
+        "refresh_evidence": {"$ref": "#/$defs/digest"},
+        "provider_index": {"$ref": "#/$defs/digest"},
+        "source_policy": {"$ref": "#/$defs/digest"},
+        "registry_schema": {"$ref": "#/$defs/digest"},
+        "provider_index_schema": {"$ref": "#/$defs/digest"},
+        "diff_schema": {"$ref": "#/$defs/digest"},
+        "refresh_evidence_schema": {"$ref": "#/$defs/digest"},
+        "enrichment_evidence_schema": {"$ref": "#/$defs/digest"},
+        "composer": {"$ref": "#/$defs/digest"},
+        "receipt_schema": {"$ref": "#/$defs/digest"},
+        "enrichment_evidence": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "api_key": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "id"],
+      "properties": {
+        "provider": {"type": "string", "minLength": 1},
+        "id": {"type": "string", "minLength": 1}
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["full_scope_fresh", "publication_allowed", "global_counts", "applied_api_keys", "retained_pending_api_keys", "quarantined_api_keys"],
+      "properties": {
+        "full_scope_fresh": {"const": false},
+        "publication_allowed": {"const": false},
+        "global_counts": {"type": "object"},
+        "applied_api_keys": {"type": "array", "items": {"$ref": "#/$defs/api_key"}},
+        "retained_pending_api_keys": {"type": "array", "items": {"$ref": "#/$defs/api_key"}},
+        "quarantined_api_keys": {"type": "array", "items": {"$ref": "#/$defs/api_key"}}
+      }
+    }
+  }
+}
