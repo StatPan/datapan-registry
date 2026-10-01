@@ -4,8 +4,21 @@
   "repository": "StatPan/datapan-cli",
   "selected_ref": "e3b2fa44cb0f68d7e58e003fbd71ecde505878de",
   "ref_kind": "commit_sha",
-  "checkout_count": 9,
+  "checkout_count": 10,
   "workflows": [
+    {
+      "workflow": ".github/workflows/canonical-update-promotion.yml",
+      "checkouts": [
+        {
+          "job": "reconcile",
+          "step": 6,
+          "action": "actions/checkout@v7",
+          "repository": "StatPan/datapan-cli",
+          "ref": "e3b2fa44cb0f68d7e58e003fbd71ecde505878de",
+          "path": ".datapan/datapan-cli"
+        }
+      ]
+    },
     {
       "workflow": ".github/workflows/credential-runtime-collection.yml",
       "checkouts": [
