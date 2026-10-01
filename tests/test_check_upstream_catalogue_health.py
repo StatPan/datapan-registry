@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import datetime as dt
 import importlib.util
 import json
@@ -28,6 +29,49 @@ HEALTH_POLICY_SHA = HEALTH.file_sha256(ROOT / "policy/upstream-catalogue-health.
 RUN_ID = "100"
 EVIDENCE_SHA = "c" * 64
 GENERATION_ID = "a" * 64
+REAL_PROCESSOR_READY_BUNDLE = [
+    {
+        "path": "composed-candidate.registry.json",
+        "sha256": "5c29a7b7d78b7000bc896dc04825dec5ef3bb120edf7c3525d625c10132b32c1",
+        "bytes": 907,
+    },
+    {
+        "path": "ready-scope.registry.json",
+        "sha256": "5c29a7b7d78b7000bc896dc04825dec5ef3bb120edf7c3525d625c10132b32c1",
+        "bytes": 907,
+    },
+    {
+        "path": "semantic-diff.json",
+        "sha256": "29d7179e74d2f190321973a900f6b602c85781a3dc8598e2c4d06d16d2d58521",
+        "bytes": 53,
+    },
+    {
+        "path": "regeneration-queue.json",
+        "sha256": "eeb85c2675888473ec64b7580aa0c76c6fd6b2bd51828870286ef202ad89dae2",
+        "bytes": 13,
+    },
+    {
+        "path": "quarantine.json",
+        "sha256": "eeb85c2675888473ec64b7580aa0c76c6fd6b2bd51828870286ef202ad89dae2",
+        "bytes": 13,
+    },
+    {
+        "path": "composition-receipt.json",
+        "sha256": "f716e999fae4d38d5ec50469dbe1cecb8b0a89dbda30565db692e3e31828d687",
+        "bytes": 896,
+    },
+    {
+        "path": "upstream-catalogue-enrichment-evidence.json",
+        "sha256": "936a0b772094548b3904358ab3d153981806e90c2a2e2a0cf6a69abbd5c1303a",
+        "bytes": 1826,
+    },
+    {
+        "path": "upstream-catalogue-processing-result.json",
+        "sha256": "0ef237d1e4596496e45c5860487bde9b039f6c988f279b4888dfb721b23f8369",
+        "bytes": 520,
+    },
+]
+REAL_PROCESSOR_READY_BUNDLE_SHA256 = "16f5b87a7027821c66e540bb5243e0248695a009c339e6167b05c9368886821e"
 
 
 def checkpoint(
@@ -504,6 +548,37 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
             report = self.run_health(pathlib.Path(directory), cp=[duplicate_path])
         reasons = {row["reason"] for row in report["sources"][0]["faults"]}
         self.assertIn("candidate_output_bundle_duplicate_path", reasons)
+
+    def test_real_processor_eight_file_bundle_is_accepted_and_result_tampering_is_rejected(self) -> None:
+        # Captured from #657's test_ready_scoped_candidate_has_exact_composer_evidence_and_durable_artifact_digests.
+        self.assertEqual(tuple(row["path"] for row in REAL_PROCESSOR_READY_BUNDLE), HEALTH.PROCESSOR_OUTPUT_PATHS)
+        self.assertEqual(
+            HEALTH.sha256_bytes(HEALTH.canonical_json(REAL_PROCESSOR_READY_BUNDLE)),
+            REAL_PROCESSOR_READY_BUNDLE_SHA256,
+        )
+        producer_checkpoint = {
+            "status": "ready",
+            "output_digests": copy.deepcopy(REAL_PROCESSOR_READY_BUNDLE),
+            "output_artifact": {"bundle_manifest_sha256": REAL_PROCESSOR_READY_BUNDLE_SHA256},
+        }
+        self.assertEqual(HEALTH.processor_output_bundle_valid(producer_checkpoint), (True, ""))
+
+        missing_result = copy.deepcopy(producer_checkpoint)
+        missing_result["output_digests"].pop()
+        missing_result["output_artifact"]["bundle_manifest_sha256"] = HEALTH.sha256_bytes(
+            HEALTH.canonical_json(missing_result["output_digests"])
+        )
+        self.assertEqual(
+            HEALTH.processor_output_bundle_valid(missing_result),
+            (False, "candidate_output_bundle_paths_incomplete"),
+        )
+
+        tampered_result = copy.deepcopy(producer_checkpoint)
+        tampered_result["output_digests"][-1]["sha256"] = "9" * 64
+        self.assertEqual(
+            HEALTH.processor_output_bundle_valid(tampered_result),
+            (False, "candidate_output_bundle_digest_mismatch"),
+        )
 
     def test_attempt_job_collection_paginates_the_exact_run_attempt(self) -> None:
         pages = [

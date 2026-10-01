@@ -35,6 +35,7 @@ PROCESSOR_OUTPUT_PATHS = (
     "quarantine.json",
     "composition-receipt.json",
     "upstream-catalogue-enrichment-evidence.json",
+    "upstream-catalogue-processing-result.json",
 )
 
 
