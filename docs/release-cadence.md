@@ -272,6 +272,31 @@ Every run uploads the candidate snapshot when available, catalog diff,
 `upstream-refresh-work-packet.json`. Material drift is routed to human review;
 publication remains false until release manifest verification, readiness, and
 consumer compatibility gates run through the existing release workflow.
+
+`.github/workflows/upstream-catalogue-process.yml` (`Process upstream
+catalogue`) consumes only a successful default-branch run of that collector.
+It also resumes the oldest active generation hourly, or a trusted collector
+run selected by a default-branch manual dispatch. It fetches the exact
+unexpired collector artifact and any prior enrichment cache named by the
+checkpoint, then reserves at most 24 detail requests for up to 48 APIs before
+making public detail-page requests. A cancellation leaves those reserved
+attempts consumed for the next continuation. The workflow stores checkpoints
+and fair-queue state on `automation/upstream-catalogue-state`; that branch is
+limited to `.datapan/upstream-catalogue-state/` and each update uses an exact
+remote-SHA compare-and-swap.
+
+Each run uploads a 30-day processing artifact named
+`upstream-catalogue-processing-<run-id>-<attempt>`. Its `ready` status means
+the composer verified a scoped candidate bundle, including safe partial
+receipts with pending detail retries. `no-change` is reported only when the
+composer found no change and no pending detail work remains. This workflow
+does not update the canonical registry, open a pull request, or publish a
+release; the processing artifact is the input to the separate promotion path.
+An exact redelivery of an already terminal collector observation emits a
+verified `idle` receipt with no candidate and keeps the original checkpoint
+artifact locator, so it cannot start a second promotion.
+Expired or mismatched artifacts, invalid checkpoint state, and interrupted
+artifact or state-branch writes remain failed or retryable outcomes.
 - regenerates and validates `reports/release-consumer-compatibility.json`, the
   manifest-bound downstream compatibility matrix that keeps the canonical
   registry path required, release-health evidence named, shard install fields

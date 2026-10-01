@@ -1,0 +1,1038 @@
+name: Process upstream catalogue
+
+on:
+  workflow_run:
+    workflows: ["Upstream catalog refresh"]
+    types: [completed]
+  schedule:
+    # Continue one bounded batch from the oldest active generation each hour.
+    - cron: "17 * * * *"
+  workflow_dispatch:
+    inputs:
+      producer_run_id:
+        description: Resume a trusted successful Upstream catalog refresh run
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: upstream-catalogue-processing-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  process:
+    name: Process
+    if: >-
+      (github.event_name != 'workflow_run' ||
+        (github.event.workflow_run.conclusion == 'success' &&
+         github.event.workflow_run.head_repository.full_name == github.repository &&
+         github.event.workflow_run.head_branch == github.event.repository.default_branch)) &&
+      (github.event_name != 'workflow_dispatch' ||
+        github.ref == format('refs/heads/{0}', github.event.repository.default_branch))
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      actions: read
+      contents: write
+    outputs:
+      processing_status: ${{ steps.publish_result.outputs.status }}
+      generation_id: ${{ steps.publish_result.outputs.generation_id }}
+      processing_artifact_id: ${{ steps.upload.outputs['artifact-id'] }}
+      processing_artifact_name: ${{ steps.publish_result.outputs.artifact_name }}
+      state_publication_status: ${{ steps.publish_result.outputs.state_publication_status }}
+      processing_replay: ${{ steps.bundle_check.outputs.replay }}
+      candidate_available: ${{ steps.bundle_check.outputs.candidate_available }}
+    steps:
+      - name: Checkout workflow source
+        uses: actions/checkout@v7
+        with:
+          path: bootstrap
+          lfs: false
+
+      - name: Prepare and validate isolated state worktree
+        id: state
+        working-directory: bootstrap
+        env:
+          STATE_BRANCH: automation/upstream-catalogue-state
+        run: |
+          set -euo pipefail
+          python3 scripts/upstream-catalogue-state-branch.py prepare \
+            --source-repo . --worktree ../state-repo --remote origin \
+            --branch "${STATE_BRANCH}" --repository "${GITHUB_REPOSITORY}" \
+            --result .datapan/ci/upstream-catalogue-state-context.json
+          jq -r '"old_sha=" + .old_sha' .datapan/ci/upstream-catalogue-state-context.json >> "${GITHUB_OUTPUT}"
+          echo "state_dir=../state-repo/.datapan/upstream-catalogue-state" >> "${GITHUB_OUTPUT}"
+
+      - name: Select producer observation or oldest active generation
+        id: select
+        working-directory: bootstrap
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_PRODUCER_RUN_ID: ${{ github.event.workflow_run.id }}
+          EVENT_PRODUCER_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          INPUT_PRODUCER_RUN_ID: ${{ inputs.producer_run_id }}
+          REPOSITORY: ${{ github.repository }}
+          STATE_DIR: ../state-repo/.datapan/upstream-catalogue-state
+        run: |
+          set -euo pipefail
+          find_prior_generation() {
+            python3 - "${STATE_DIR}" "$1" <<'PY'
+          import hashlib
+          import json
+          import pathlib
+          import re
+          import sys
+
+          state = pathlib.Path(sys.argv[1])
+          producer_id = sys.argv[2]
+          index_path = state / "sources/data_go_kr/index.json"
+          if not index_path.is_file():
+              print("\t\t")
+              raise SystemExit(0)
+          index = json.loads(index_path.read_text(encoding="utf-8"))
+          if index.get("schema_version") != "datapan.upstream-catalogue-checkpoint.v1" or not isinstance(index.get("generations"), list):
+              raise SystemExit("FAIL corrupt state index while resolving producer redelivery")
+          artifact_name = f"upstream-catalog-refresh-{producer_id}"
+          matches = []
+          for row in index["generations"]:
+              if not isinstance(row, dict) or not isinstance(row.get("generation_id"), str):
+                  continue
+              generation_id = row["generation_id"]
+              if not re.fullmatch(r"[a-f0-9]{64}", generation_id):
+                  raise SystemExit("FAIL invalid generation id while resolving producer redelivery")
+              path = state / "sources/data_go_kr/generations" / f"{generation_id}.json"
+              if not path.is_file():
+                  continue
+              checkpoint = json.loads(path.read_text(encoding="utf-8"))
+              unsigned = dict(checkpoint)
+              claimed = unsigned.pop("checkpoint_sha256", None)
+              canonical = json.dumps(unsigned, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+              if hashlib.sha256(canonical).hexdigest() != claimed or checkpoint.get("generation_id") != generation_id:
+                  raise SystemExit("FAIL corrupt generation checkpoint while resolving producer redelivery")
+              if checkpoint.get("source_id") != "data_go_kr" or checkpoint.get("status") not in {"queued", "retry", "enriching", "composing", "ready", "no-change"}:
+                  continue
+              observation = checkpoint.get("last_observation") if isinstance(checkpoint.get("last_observation"), dict) else {}
+              if str(observation.get("producer_run_id") or "") != producer_id:
+                  continue
+              refs = checkpoint.get("input_artifacts")
+              if not isinstance(refs, list):
+                  continue
+              exact = [ref for ref in refs if isinstance(ref, dict) and ref.get("run_id") == producer_id and ref.get("name") == artifact_name]
+              if len(exact) > 1:
+                  raise SystemExit("FAIL duplicate source artifact locator in generation checkpoint")
+              if not exact:
+                  continue
+              ref = exact[0]
+              if not re.fullmatch(r"[a-f0-9]{64}", str(ref.get("candidate_sha256") or "")):
+                  continue
+              artifact_id = str(ref.get("artifact_id") or "")
+              expires_at = str(ref.get("expires_at") or "")
+              if not artifact_id.isdigit() or not re.fullmatch(r"\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d+)?(?:Z|[+-]\d\d:\d\d)", expires_at):
+                  raise SystemExit("FAIL existing producer generation has an invalid source artifact locator")
+              matches.append((generation_id, artifact_id, expires_at))
+          if len(matches) > 1:
+              raise SystemExit("FAIL producer delivery maps to multiple catalogue generations")
+          print("\t".join(matches[0]) if matches else "\t\t")
+          PY
+          }
+          if [ "${EVENT_NAME}" = "workflow_run" ]; then
+            [[ "${EVENT_PRODUCER_RUN_ID}" =~ ^[0-9]+$ ]]
+            [[ "${EVENT_PRODUCER_HEAD_SHA}" =~ ^[a-f0-9]{40}$ ]]
+            prior="$(find_prior_generation "${EVENT_PRODUCER_RUN_ID}")"
+            IFS=$'\t' read -r generation_id expected_artifact_id expected_expires_at <<< "${prior}"
+            {
+              echo "decision=process"
+              echo "producer_run_id=${EVENT_PRODUCER_RUN_ID}"
+              echo "producer_head_sha=${EVENT_PRODUCER_HEAD_SHA}"
+              echo "generation_id=${generation_id}"
+              echo "expected_input_artifact_id=${expected_artifact_id}"
+              echo "expected_input_expires_at=${expected_expires_at}"
+              echo "expected_input_name=upstream-catalog-refresh-${EVENT_PRODUCER_RUN_ID}"
+            } >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+
+          if [ "${EVENT_NAME}" = "workflow_dispatch" ] && [ -n "${INPUT_PRODUCER_RUN_ID}" ]; then
+            [[ "${INPUT_PRODUCER_RUN_ID}" =~ ^[0-9]+$ ]]
+            prior="$(find_prior_generation "${INPUT_PRODUCER_RUN_ID}")"
+            IFS=$'\t' read -r generation_id expected_artifact_id expected_expires_at <<< "${prior}"
+            {
+              echo "decision=process"
+              echo "producer_run_id=${INPUT_PRODUCER_RUN_ID}"
+              echo "producer_head_sha="
+              echo "generation_id=${generation_id}"
+              echo "expected_input_artifact_id=${expected_artifact_id}"
+              echo "expected_input_expires_at=${expected_expires_at}"
+              echo "expected_input_name=upstream-catalog-refresh-${INPUT_PRODUCER_RUN_ID}"
+            } >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+
+          python3 - <<'PY' >> "${GITHUB_OUTPUT}"
+          import hashlib
+          import json
+          import os
+          import pathlib
+          import re
+          import sys
+
+          state = pathlib.Path(os.environ["STATE_DIR"])
+          index_path = state / "sources/data_go_kr/index.json"
+          if not index_path.is_file():
+              print("decision=idle")
+              print("idle_reason=no_active_generation")
+              raise SystemExit(0)
+          index = json.loads(index_path.read_text(encoding="utf-8"))
+          rows = index.get("generations")
+          if index.get("schema_version") != "datapan.upstream-catalogue-checkpoint.v1" or not isinstance(rows, list):
+              raise SystemExit("FAIL corrupt upstream catalogue state index")
+          schema_path = pathlib.Path("schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json")
+          schema = json.loads(schema_path.read_text(encoding="utf-8"))
+          del schema  # The source processor revalidates the complete schema before use.
+          candidates = []
+          for row in rows:
+              if not isinstance(row, dict) or not isinstance(row.get("generation_id"), str):
+                  continue
+              if not re.fullmatch(r"[a-f0-9]{64}", row["generation_id"]):
+                  raise SystemExit("FAIL invalid generation id in upstream catalogue state index")
+              cp_path = state / "sources/data_go_kr/generations" / f"{row['generation_id']}.json"
+              if not cp_path.is_file():
+                  continue
+              checkpoint = json.loads(cp_path.read_text(encoding="utf-8"))
+              claimed = checkpoint.get("checkpoint_sha256")
+              unsigned = dict(checkpoint)
+              unsigned.pop("checkpoint_sha256", None)
+              canonical = json.dumps(unsigned, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()
+              if hashlib.sha256(canonical).hexdigest() != claimed:
+                  raise SystemExit("FAIL corrupt upstream catalogue checkpoint digest")
+              if checkpoint.get("generation_id") != row["generation_id"]:
+                  raise SystemExit("FAIL upstream catalogue generation identity mismatch")
+              status = checkpoint.get("status")
+              outcome = checkpoint.get("outcome") if isinstance(checkpoint.get("outcome"), dict) else {}
+              active = status in {"queued", "retry", "enriching", "composing"} or (
+                  status == "ready" and int(outcome.get("detail_retry_count", 0) or 0) > 0
+              )
+              if not active or not checkpoint.get("generation_inputs", {}).get("candidate_sha256"):
+                  continue
+              input_refs = checkpoint.get("input_artifacts")
+              if not isinstance(input_refs, list):
+                  continue
+              candidate_sha = checkpoint["generation_inputs"]["candidate_sha256"]
+              refs = [item for item in input_refs if isinstance(item, dict) and item.get("candidate_sha256") == candidate_sha]
+              if not refs:
+                  continue
+              ref = refs[-1]
+              observation = checkpoint.get("last_observation") if isinstance(checkpoint.get("last_observation"), dict) else {}
+              candidates.append((str(checkpoint.get("last_progress_at") or checkpoint.get("last_heartbeat_at") or ""), checkpoint, ref, observation))
+          if not candidates:
+              print("decision=idle")
+              print("idle_reason=no_active_generation")
+              raise SystemExit(0)
+          _, checkpoint, ref, observation = sorted(candidates, key=lambda item: item[0])[0]
+          producer_id = str(ref.get("run_id") or observation.get("producer_run_id") or "")
+          name = str(ref.get("name") or "")
+          artifact_id = str(ref.get("artifact_id") or "")
+          expires = str(ref.get("expires_at") or "")
+          if (
+              not producer_id.isdigit()
+              or name != f"upstream-catalog-refresh-{producer_id}"
+              or not artifact_id.isdigit()
+              or not re.fullmatch(r"\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d+)?(?:Z|[+-]\d\d:\d\d)", expires)
+          ):
+              raise SystemExit("FAIL active generation has invalid input artifact locator")
+          print("decision=process")
+          print(f"producer_run_id={producer_id}")
+          print(f"generation_id={checkpoint['generation_id']}")
+          print(f"expected_input_artifact_id={artifact_id}")
+          print(f"expected_input_expires_at={expires}")
+          print(f"expected_input_name={name}")
+          PY
+
+      - name: Resolve producer workflow revision
+        if: steps.select.outputs.decision == 'process'
+        id: producer
+        working-directory: bootstrap
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_HEAD_SHA: ${{ steps.select.outputs.producer_head_sha }}
+          PRODUCER_RUN_ID: ${{ steps.select.outputs.producer_run_id }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          set -euo pipefail
+          [[ "${PRODUCER_RUN_ID}" =~ ^[0-9]+$ ]]
+          gh api "repos/${REPOSITORY}/actions/runs/${PRODUCER_RUN_ID}" > producer-run.json
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          from pathlib import Path
+
+          value = json.loads(Path("producer-run.json").read_text(encoding="utf-8"))
+          expected = {
+              "name": "Upstream catalog refresh",
+              "path": ".github/workflows/upstream-catalog-refresh.yml",
+              "repository": os.environ["REPOSITORY"],
+              "branch": os.environ["DEFAULT_BRANCH"],
+          }
+          if value.get("name") != expected["name"] or value.get("path") != expected["path"]:
+              raise SystemExit("FAIL producer workflow identity is not the trusted weekly collector")
+          if (value.get("head_repository") or {}).get("full_name") != expected["repository"]:
+              raise SystemExit("FAIL producer head repository is not this repository")
+          if value.get("head_branch") != expected["branch"] or value.get("conclusion") != "success":
+              raise SystemExit("FAIL producer run is not a successful default-branch observation")
+          if value.get("event") not in {"schedule", "workflow_dispatch"}:
+              raise SystemExit("FAIL producer run event is outside the trusted weekly observation paths")
+          source_sha = str(value.get("head_sha", ""))
+          if not re.fullmatch(r"[a-f0-9]{40}", source_sha):
+              raise SystemExit("FAIL producer commit identity is invalid")
+          if os.environ["EVENT_NAME"] == "workflow_run" and source_sha != os.environ["EVENT_HEAD_SHA"]:
+              raise SystemExit("FAIL workflow_run source SHA does not match the producer API record")
+          if str(value.get("id")) != os.environ["PRODUCER_RUN_ID"]:
+              raise SystemExit("FAIL producer run id does not match the selected run")
+          producer_url = value.get("html_url", "")
+          expected_url = f"https://github.com/{os.environ['REPOSITORY']}/actions/runs/{os.environ['PRODUCER_RUN_ID']}"
+          if producer_url != expected_url:
+              raise SystemExit("FAIL producer run URL is invalid")
+          PY
+          IFS=$'\t' read -r source_sha producer_url < <(python3 - <<'PY'
+          import json
+          from pathlib import Path
+          value = json.loads(Path("producer-run.json").read_text(encoding="utf-8"))
+          print("\t".join((value["head_sha"], value["html_url"])))
+          PY
+          )
+          git fetch --no-tags --depth=1 origin "${source_sha}"
+          git worktree add --detach ../datapan-registry "${source_sha}"
+          echo "head_sha=${source_sha}" >> "${GITHUB_OUTPUT}"
+          echo "run_url=${producer_url}" >> "${GITHUB_OUTPUT}"
+
+      - name: Setup Python
+        if: steps.select.outputs.decision == 'process'
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Materialize canonical registry and install validators
+        if: steps.select.outputs.decision == 'process'
+        working-directory: datapan-registry
+        run: |
+          set -euo pipefail
+          python3 scripts/materialize-canonical-registry.py
+          python3 -m pip install --disable-pip-version-check 'jsonschema==4.25.1'
+          python3 scripts/validate-source-refresh-policy.py
+
+      - name: Download and bind exact producer artifact
+        if: steps.select.outputs.decision == 'process'
+        id: input_artifact
+        working-directory: datapan-registry
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          PRODUCER_RUN_ID: ${{ steps.select.outputs.producer_run_id }}
+          ARTIFACT_NAME: ${{ steps.select.outputs.expected_input_name }}
+          EXPECTED_ARTIFACT_ID: ${{ steps.select.outputs.expected_input_artifact_id }}
+          EXPECTED_EXPIRES_AT: ${{ steps.select.outputs.expected_input_expires_at }}
+        run: |
+          set -euo pipefail
+          [[ "${PRODUCER_RUN_ID}" =~ ^[0-9]+$ ]]
+          mkdir -p .datapan/ci/upstream-refresh .datapan/ci/producer-artifact-metadata
+          CHOICE_PATH=.datapan/ci/producer-artifact-metadata/choice.json
+          export CHOICE_PATH
+          gh api "repos/${REPOSITORY}/actions/runs/${PRODUCER_RUN_ID}/artifacts?per_page=100" > .datapan/ci/producer-artifacts.json
+          python3 - <<'PY' >> "${GITHUB_OUTPUT}"
+          import datetime as dt
+          import json
+          import os
+          from pathlib import Path
+
+          payload = json.loads(Path(".datapan/ci/producer-artifacts.json").read_text(encoding="utf-8"))
+          matches = [row for row in payload.get("artifacts", []) if row.get("name") == os.environ["ARTIFACT_NAME"]]
+          if len(matches) > 1:
+              raise SystemExit("FAIL duplicate producer artifact names")
+          if not matches:
+              fallback_expiry = os.environ.get("EXPECTED_EXPIRES_AT", "")
+              if not fallback_expiry:
+                  fallback_expiry = (dt.datetime.now(dt.timezone.utc) + dt.timedelta(days=30)).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+              expired = dt.datetime.fromisoformat(fallback_expiry.replace("Z", "+00:00")) <= dt.datetime.now(dt.timezone.utc)
+              choice = {"found": False, "input_error": "artifact_missing", "artifact_id": os.environ.get("EXPECTED_ARTIFACT_ID", ""), "expires_at": fallback_expiry, "expired": expired}
+              Path(os.environ["CHOICE_PATH"]).write_text(json.dumps(choice, sort_keys=True) + "\n", encoding="utf-8")
+              print("found=false")
+              print("input_error=artifact_missing")
+              print(f"artifact_id={choice['artifact_id']}")
+              print(f"expires_at={fallback_expiry}")
+              print(f"expired={'true' if expired else 'false'}")
+              raise SystemExit(0)
+          artifact = matches[0]
+          artifact_id = str(artifact.get("id", ""))
+          expires_at = str(artifact.get("expires_at", ""))
+          if not artifact_id.isdigit() or not expires_at:
+              raise SystemExit("FAIL producer artifact metadata is incomplete")
+          if str(artifact.get("workflow_run", {}).get("id", "")) != os.environ["PRODUCER_RUN_ID"]:
+              raise SystemExit("FAIL producer artifact run identity mismatch")
+          expected_id = os.environ.get("EXPECTED_ARTIFACT_ID", "")
+          expected_expiry = os.environ.get("EXPECTED_EXPIRES_AT", "")
+          if expected_id and artifact_id != expected_id:
+              expected_locator_expiry = expected_expiry or expires_at
+              expired = dt.datetime.fromisoformat(expected_locator_expiry.replace("Z", "+00:00")) <= dt.datetime.now(dt.timezone.utc)
+              choice = {"found": False, "input_error": "artifact_missing", "artifact_id": expected_id, "expires_at": expected_locator_expiry, "expired": expired}
+              Path(os.environ["CHOICE_PATH"]).write_text(json.dumps(choice, sort_keys=True) + "\n", encoding="utf-8")
+              print("found=false")
+              print("input_error=artifact_missing")
+              print(f"artifact_id={expected_id}")
+              print(f"expires_at={expected_locator_expiry}")
+              print(f"expired={'true' if expired else 'false'}")
+              raise SystemExit(0)
+          if expected_expiry and expires_at != expected_expiry:
+              raise SystemExit("FAIL producer artifact expiry does not match durable locator")
+          parsed_expiry = dt.datetime.fromisoformat(expires_at.replace("Z", "+00:00"))
+          expired = bool(artifact.get("expired")) or parsed_expiry <= dt.datetime.now(dt.timezone.utc)
+          choice = {"found": not expired, "input_error": "artifact_missing" if expired else "", "artifact_id": artifact_id, "expires_at": expires_at, "expired": expired}
+          Path(os.environ["CHOICE_PATH"]).write_text(json.dumps(choice, sort_keys=True) + "\n", encoding="utf-8")
+          print(f"found={'false' if expired else 'true'}")
+          print(f"input_error={'artifact_missing' if expired else ''}")
+          print(f"artifact_id={artifact_id}")
+          print(f"expires_at={expires_at}")
+          print(f"expired={'true' if expired else 'false'}")
+          PY
+          found="$(python3 -c 'import json,sys; print(str(json.load(open(sys.argv[1], encoding="utf-8")).get("found", False)).lower())' "${CHOICE_PATH}")"
+          if [ "${found}" = "true" ]; then
+            gh run download "${PRODUCER_RUN_ID}" --repo "${REPOSITORY}" --name "${ARTIFACT_NAME}" --dir .datapan/ci/upstream-refresh
+            python3 - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          root = Path(".datapan/ci/upstream-refresh")
+          evidence_path = root / "upstream-refresh-evidence.json"
+          if not evidence_path.is_file():
+              raise SystemExit("FAIL producer artifact lacks refresh evidence")
+          evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+          candidate = root / "candidate.registry.json"
+          diff = root / "catalog-diff.json"
+          if evidence.get("collection", {}).get("succeeded") is True:
+              if not candidate.is_file() or not diff.is_file():
+                  raise SystemExit("FAIL successful observation artifact is incomplete")
+              candidate_digest = hashlib.sha256(candidate.read_bytes()).hexdigest()
+              diff_digest = hashlib.sha256(diff.read_bytes()).hexdigest()
+              if candidate_digest != evidence.get("snapshot", {}).get("sha256"):
+                  raise SystemExit("FAIL producer candidate digest mismatch")
+              if diff_digest != evidence.get("diff", {}).get("sha256"):
+                  raise SystemExit("FAIL producer diff digest mismatch")
+          elif evidence.get("status") != "collection_failure":
+              raise SystemExit("FAIL producer evidence is not a successful observation or collection failure")
+          PY
+          fi
+
+      - name: Calculate processor artifact expiry
+        id: expiry
+        run: |
+          python3 - <<'PY' >> "${GITHUB_OUTPUT}"
+          import datetime as dt
+          print("at=" + (dt.datetime.now(dt.timezone.utc) + dt.timedelta(days=30)).replace(microsecond=0).isoformat().replace("+00:00", "Z"))
+          PY
+
+      - name: Restore digest-bound detail cache when available
+        if: steps.select.outputs.decision == 'process' && steps.input_artifact.outputs.input_error == ''
+        id: cache
+        working-directory: datapan-registry
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          STATE_DIR: ../state-repo/.datapan/upstream-catalogue-state
+          TARGET_GENERATION_ID: ${{ steps.select.outputs.generation_id }}
+        run: |
+          set -euo pipefail
+          mkdir -p .datapan/ci/detail-cache .datapan/ci/detail-cache-metadata
+          python3 - <<'PY' > .datapan/ci/detail-cache-choice.json
+          import hashlib
+          import json
+          import os
+          import pathlib
+          import re
+          import datetime as dt
+          state = pathlib.Path(os.environ["STATE_DIR"])
+          index_path = state / "sources/data_go_kr/index.json"
+          choices = []
+          if index_path.is_file():
+              index = json.loads(index_path.read_text(encoding="utf-8"))
+              for row in index.get("generations", []):
+                  if not isinstance(row, dict):
+                      continue
+                  generation_id = row.get("generation_id")
+                  if not isinstance(generation_id, str) or not re.fullmatch(r"[a-f0-9]{64}", generation_id):
+                      raise SystemExit("FAIL invalid generation id while resolving detail cache")
+                  cp_path = state / "sources/data_go_kr/generations" / f"{generation_id}.json"
+                  if not cp_path.is_file():
+                      continue
+                  cp = json.loads(cp_path.read_text(encoding="utf-8"))
+                  claimed = cp.get("checkpoint_sha256")
+                  unsigned = dict(cp)
+                  unsigned.pop("checkpoint_sha256", None)
+                  digest = hashlib.sha256(json.dumps(unsigned, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+                  if digest != claimed:
+                      raise SystemExit("FAIL corrupt checkpoint while resolving detail cache")
+                  locator = cp.get("output_artifact") if isinstance(cp.get("output_artifact"), dict) else {}
+                  entries = cp.get("output_digests") if isinstance(cp.get("output_digests"), list) else []
+                  manifest = locator.get("bundle_manifest_sha256")
+                  evidence = next((item for item in entries if isinstance(item, dict) and item.get("path") == "upstream-catalogue-enrichment-evidence.json"), None)
+                  run_id = str(locator.get("run_id") or "")
+                  artifact_id = str(locator.get("artifact_id") or "")
+                  name = str(locator.get("name") or "")
+                  expires_at = str(locator.get("expires_at") or "")
+                  if not artifact_id or not evidence or not manifest:
+                      continue
+                  if not run_id.isdigit() or not artifact_id.isdigit() or not re.fullmatch(rf"upstream-catalogue-processing-{run_id}-[1-9][0-9]*", name):
+                      raise SystemExit("FAIL invalid processor artifact locator")
+                  expiry = dt.datetime.fromisoformat(expires_at.replace("Z", "+00:00"))
+                  if expiry <= dt.datetime.now(dt.timezone.utc):
+                      continue
+                  if locator.get("repository") != os.environ["REPOSITORY"]:
+                      raise SystemExit("FAIL processor artifact repository locator mismatch")
+                  expected_manifest = hashlib.sha256(json.dumps(entries, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+                  if expected_manifest != manifest:
+                      raise SystemExit("FAIL detail cache manifest mismatch")
+                  choices.append({"generation_id": cp.get("generation_id"), "run_id": run_id, "name": name, "artifact_id": artifact_id, "expires_at": expires_at, "bundle_manifest_sha256": manifest, "entries": entries, "updated_at": cp.get("last_progress_at", "")})
+          target = os.environ.get("TARGET_GENERATION_ID", "")
+          choices.sort(key=lambda row: (row.get("generation_id") == target, row.get("updated_at", "")), reverse=True)
+          print(json.dumps(choices[0] if choices else {}, sort_keys=True))
+          PY
+          if [ ! -s .datapan/ci/detail-cache-choice.json ] || [ "$(python3 -c 'import json; from pathlib import Path; print(bool(json.loads(Path(".datapan/ci/detail-cache-choice.json").read_text()).get("artifact_id")))')" != "True" ]; then
+            echo "available=false" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+          python3 - <<'PY' > .datapan/ci/detail-cache-choice.tsv
+          import json
+          from pathlib import Path
+          value = json.loads(Path(".datapan/ci/detail-cache-choice.json").read_text())
+          print("\t".join(str(value.get(key, "")) for key in ("run_id", "name", "artifact_id", "expires_at", "bundle_manifest_sha256")))
+          PY
+          IFS=$'\t' read -r cache_run_id cache_name cache_artifact_id cache_expires cache_manifest < .datapan/ci/detail-cache-choice.tsv
+          [[ "${cache_run_id}" =~ ^[0-9]+$ ]]
+          gh api "repos/${REPOSITORY}/actions/runs/${cache_run_id}/artifacts?per_page=100" > .datapan/ci/detail-cache-artifacts.json
+          cache_artifact_valid="$(python3 - <<'PY'
+          import datetime as dt
+          import json
+          from pathlib import Path
+          choice = json.loads(Path(".datapan/ci/detail-cache-choice.json").read_text())
+          data = json.loads(Path(".datapan/ci/detail-cache-artifacts.json").read_text())
+          matches = [row for row in data.get("artifacts", []) if str(row.get("id")) == choice["artifact_id"] and row.get("name") == choice["name"]]
+          if len(matches) != 1 or str(matches[0].get("workflow_run", {}).get("id")) != choice["run_id"]:
+              raise SystemExit("detail cache artifact locator no longer matches")
+          expiry = dt.datetime.fromisoformat(choice["expires_at"].replace("Z", "+00:00"))
+          if matches[0].get("expires_at") != choice["expires_at"]:
+              raise SystemExit("detail cache artifact expiry differs from its checkpoint locator")
+          if matches[0].get("expired") or expiry <= dt.datetime.now(dt.timezone.utc):
+              print("expired")
+          else:
+              print("valid")
+          PY
+          )"
+          if [ "${cache_artifact_valid}" = "expired" ]; then
+            echo "available=false" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+          gh run download "${cache_run_id}" --repo "${REPOSITORY}" --name "${cache_name}" --dir .datapan/ci/detail-cache
+          python3 - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          choice = json.loads(Path(".datapan/ci/detail-cache-choice.json").read_text())
+          root = Path(".datapan/ci/detail-cache")
+          entries = {item["path"]: item for item in choice["entries"]}
+          for name, entry in entries.items():
+              path = root / name
+              if not path.is_file() or path.stat().st_size != entry["bytes"] or hashlib.sha256(path.read_bytes()).hexdigest() != entry["sha256"]:
+                  raise SystemExit(f"FAIL detail cache artifact digest mismatch: {name}")
+          evidence = root / "upstream-catalogue-enrichment-evidence.json"
+          if not evidence.is_file():
+              raise SystemExit("FAIL detail cache lacks enrichment evidence")
+          PY
+          echo "available=true" >> "${GITHUB_OUTPUT}"
+          echo "evidence_path=.datapan/ci/detail-cache/upstream-catalogue-enrichment-evidence.json" >> "${GITHUB_OUTPUT}"
+
+      - name: Claim bounded request budget
+        if: steps.select.outputs.decision == 'process'
+        id: claim
+        working-directory: datapan-registry
+        env:
+          STATE_DIR: ../state-repo/.datapan/upstream-catalogue-state
+          PRODUCER_RUN_ID: ${{ steps.select.outputs.producer_run_id }}
+          PRODUCER_RUN_URL: ${{ steps.producer.outputs.run_url }}
+          INPUT_ERROR: ${{ steps.input_artifact.outputs.input_error }}
+          INPUT_ARTIFACT_NAME: ${{ steps.select.outputs.expected_input_name }}
+          INPUT_ARTIFACT_ID: ${{ steps.input_artifact.outputs.artifact_id }}
+          INPUT_EXPIRES_AT: ${{ steps.input_artifact.outputs.expires_at }}
+          INPUT_EXPIRED: ${{ steps.input_artifact.outputs.expired }}
+          TARGET_GENERATION_ID: ${{ steps.select.outputs.generation_id }}
+          PROCESSOR_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+          PROCESSOR_ARTIFACT_RUN_ID: ${{ github.run_id }}
+          PROCESSOR_ARTIFACT_EXPIRES_AT: ${{ steps.expiry.outputs.at }}
+          REPOSITORY: ${{ github.repository }}
+          RESUME_EVIDENCE: ${{ steps.cache.outputs.evidence_path }}
+        run: |
+          set -euo pipefail
+          mkdir -p .datapan/ci/upstream-catalogue-processing
+          args=(
+            --baseline data/data-go-kr.registry.json
+            --source-policy policy/source-refresh.json
+            --provider-index data/provider-index.json
+            --state-dir "${STATE_DIR}"
+            --output-dir .datapan/ci/upstream-catalogue-processing
+            --producer-run-id "${PRODUCER_RUN_ID}"
+            --producer-run-url "${PRODUCER_RUN_URL}"
+            --processor-run-id "${PROCESSOR_RUN_ID}"
+            --processor-artifact-run-id "${PROCESSOR_ARTIFACT_RUN_ID}"
+            --repository "${REPOSITORY}"
+            --execution-mode live
+            --artifact-name "${INPUT_ARTIFACT_NAME}"
+            --artifact-expires-at "${INPUT_EXPIRES_AT}"
+            --output-artifact-expires-at "${PROCESSOR_ARTIFACT_EXPIRES_AT}"
+            --max-attempts 24 --max-queue 48 --retries-per-detail 2 --timeout 20
+          )
+          if [ -n "${INPUT_ARTIFACT_ID}" ]; then args+=(--input-artifact-id "${INPUT_ARTIFACT_ID}"); fi
+          if [ -n "${TARGET_GENERATION_ID}" ] && [ -n "${INPUT_ERROR}" ]; then
+            args+=(--target-generation-id "${TARGET_GENERATION_ID}")
+            if [ "${INPUT_EXPIRED}" = "true" ]; then
+              args+=(--input-error input_expired)
+            else
+              args+=(--input-error artifact_missing)
+            fi
+          else
+            args+=(--claim-only)
+            if [ -f .datapan/ci/upstream-refresh/candidate.registry.json ]; then
+              args+=(--candidate .datapan/ci/upstream-refresh/candidate.registry.json)
+            fi
+            if [ -f .datapan/ci/upstream-refresh/catalog-diff.json ]; then
+              args+=(--diff .datapan/ci/upstream-refresh/catalog-diff.json)
+            fi
+            if [ -f .datapan/ci/upstream-refresh/upstream-refresh-evidence.json ]; then
+              args+=(--refresh-evidence .datapan/ci/upstream-refresh/upstream-refresh-evidence.json)
+            fi
+            if [ -n "${INPUT_ERROR}" ]; then args+=(--input-error "${INPUT_ERROR}"); fi
+            if [ -n "${RESUME_EVIDENCE}" ] && [ -f "${RESUME_EVIDENCE}" ]; then args+=(--resume-enrichment-evidence "${RESUME_EVIDENCE}"); fi
+          fi
+          set +e
+          python3 scripts/process-upstream-catalogue-candidate.py "${args[@]}"
+          status="$?"
+          set -e
+          echo "exit_code=${status}" >> "${GITHUB_OUTPUT}"
+
+      - name: Commit the request reservation with exact remote-SHA compare-and-swap
+        if: steps.select.outputs.decision == 'process'
+        id: claim_push
+        working-directory: bootstrap
+        env:
+          STATE_BRANCH: automation/upstream-catalogue-state
+          OLD_SHA: ${{ steps.state.outputs.old_sha }}
+        run: |
+          set -euo pipefail
+          python3 scripts/upstream-catalogue-state-branch.py commit-push \
+            --worktree ../state-repo --remote origin --branch "${STATE_BRANCH}" \
+            --repository "${GITHUB_REPOSITORY}" --expected-old-sha "${OLD_SHA}" \
+            --message "Reserve upstream catalogue processing budget" \
+            --result .datapan/ci/upstream-catalogue-claim-push.json
+          jq -r '"claim_sha=" + .new_sha, "changed=" + (.changed | tostring)' .datapan/ci/upstream-catalogue-claim-push.json >> "${GITHUB_OUTPUT}"
+
+      - name: Process the durably reserved detail batch
+        if: steps.select.outputs.decision == 'process' && steps.claim_push.outputs.claim_sha != '' && steps.input_artifact.outputs.input_error == ''
+        id: run_processor
+        working-directory: datapan-registry
+        env:
+          STATE_DIR: ../state-repo/.datapan/upstream-catalogue-state
+          PRODUCER_RUN_ID: ${{ steps.select.outputs.producer_run_id }}
+          PRODUCER_RUN_URL: ${{ steps.producer.outputs.run_url }}
+          INPUT_ERROR: ${{ steps.input_artifact.outputs.input_error }}
+          INPUT_ARTIFACT_NAME: ${{ steps.select.outputs.expected_input_name }}
+          INPUT_ARTIFACT_ID: ${{ steps.input_artifact.outputs.artifact_id }}
+          INPUT_EXPIRES_AT: ${{ steps.input_artifact.outputs.expires_at }}
+          INPUT_EXPIRED: ${{ steps.input_artifact.outputs.expired }}
+          PROCESSOR_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+          PROCESSOR_ARTIFACT_RUN_ID: ${{ github.run_id }}
+          PROCESSOR_ARTIFACT_EXPIRES_AT: ${{ steps.expiry.outputs.at }}
+          REPOSITORY: ${{ github.repository }}
+          RESUME_EVIDENCE: ${{ steps.cache.outputs.evidence_path }}
+        run: |
+          set -euo pipefail
+          output=.datapan/ci/upstream-catalogue-processing
+          mkdir -p "${output}"
+          result="${output}/upstream-catalogue-processing-result.json"
+          generation_id="$(python3 - "${result}" <<'PY'
+          import json
+          import pathlib
+          import re
+          import sys
+          path = pathlib.Path(sys.argv[1])
+          value = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
+          generation_id = str(value.get("generation_id") or "")
+          if generation_id and not re.fullmatch(r"[a-f0-9]{64}", generation_id):
+              raise SystemExit("FAIL processor returned an invalid generation id")
+          print(generation_id)
+          PY
+          )"
+          reserved=false
+          checkpoint="${STATE_DIR}/sources/data_go_kr/generations/${generation_id}.json"
+          if [ -n "${generation_id}" ] && [ -f "${checkpoint}" ]; then
+            reserved="$(python3 - "${checkpoint}" "${PROCESSOR_RUN_ID}" <<'PY'
+          import json
+          import sys
+          value = json.loads(open(sys.argv[1], encoding="utf-8").read())
+          reservation = value.get("request_reservation") or {}
+          print(str(reservation.get("owner_run_id") == sys.argv[2] and reservation.get("generation_id") == value.get("generation_id")).lower())
+          PY
+          )"
+          fi
+          if [ "${reserved}" = "true" ] && [ -z "${INPUT_ERROR}" ] && [ -n "${generation_id}" ]; then
+            args=(
+              --baseline data/data-go-kr.registry.json
+              --candidate .datapan/ci/upstream-refresh/candidate.registry.json
+              --diff .datapan/ci/upstream-refresh/catalog-diff.json
+              --refresh-evidence .datapan/ci/upstream-refresh/upstream-refresh-evidence.json
+              --source-policy policy/source-refresh.json
+              --provider-index data/provider-index.json
+              --state-dir "${STATE_DIR}"
+              --output-dir "${output}"
+              --producer-run-id "${PRODUCER_RUN_ID}"
+              --producer-run-url "${PRODUCER_RUN_URL}"
+              --processor-run-id "${PROCESSOR_RUN_ID}"
+              --processor-artifact-run-id "${PROCESSOR_ARTIFACT_RUN_ID}"
+              --repository "${REPOSITORY}"
+              --execution-mode live
+              --artifact-name "${INPUT_ARTIFACT_NAME}"
+              --artifact-expires-at "${INPUT_EXPIRES_AT}"
+              --output-artifact-expires-at "${PROCESSOR_ARTIFACT_EXPIRES_AT}"
+              --max-attempts 24 --max-queue 48 --retries-per-detail 2 --timeout 20
+              --require-durable-reservation
+            )
+            if [ -n "${INPUT_ARTIFACT_ID}" ]; then args+=(--input-artifact-id "${INPUT_ARTIFACT_ID}"); fi
+            if [ -n "${RESUME_EVIDENCE}" ] && [ -f "${RESUME_EVIDENCE}" ]; then args+=(--resume-enrichment-evidence "${RESUME_EVIDENCE}"); fi
+            set +e
+            python3 scripts/process-upstream-catalogue-candidate.py "${args[@]}"
+            status="$?"
+            set -e
+            echo "exit_code=${status}" >> "${GITHUB_OUTPUT}"
+          else
+            echo "exit_code=${{ steps.claim.outputs.exit_code }}" >> "${GITHUB_OUTPUT}"
+          fi
+
+      - name: Validate the processor bundle and write a failure receipt if needed
+        if: always()
+        id: bundle_check
+        env:
+          DECISION: ${{ steps.select.outputs.decision }}
+          PROCESSOR_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+          PROCESSOR_ARTIFACT_RUN_ID: ${{ github.run_id }}
+          PRODUCER_RUN_ID: ${{ steps.select.outputs.producer_run_id }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' >> "${GITHUB_OUTPUT}"
+          import hashlib
+          import json
+          import os
+          import pathlib
+          import re
+
+          root = pathlib.Path("datapan-registry/.datapan/ci/upstream-catalogue-processing")
+          root.mkdir(parents=True, exist_ok=True)
+          result_path = root / "upstream-catalogue-processing-result.json"
+          if not result_path.is_file():
+              fallback = {"status": "idle", "reason": "no_active_generation"} if os.environ.get("DECISION") == "idle" else {"status": "retry", "reason": "processing_result_missing"}
+              result_path.write_text(json.dumps(fallback, sort_keys=True) + "\n", encoding="utf-8")
+          try:
+              result = json.loads(result_path.read_text(encoding="utf-8"))
+          except (OSError, json.JSONDecodeError):
+              result = {"status": "retry", "reason": "processing_result_invalid"}
+          allowed_statuses = {"ready", "no-change", "retry", "quarantined", "idle"}
+          status = result.get("status") if isinstance(result, dict) else None
+          generation_id = str(result.get("generation_id") or "") if isinstance(result, dict) else ""
+          exact_replay = bool(
+              status == "idle" and not generation_id
+              and result.get("reason") == "exact_producer_delivery_replay"
+              and result.get("processing_replay") is True
+              and result.get("candidate_available") is False
+              and result.get("source_id") == "data_go_kr"
+              and str(result.get("producer_run_id") or "") == os.environ["PRODUCER_RUN_ID"]
+              and result.get("processor_run_id") == os.environ["PROCESSOR_RUN_ID"]
+              and str(result.get("processor_artifact_run_id") or "") == os.environ["PROCESSOR_ARTIFACT_RUN_ID"]
+          )
+          replay = exact_replay
+          verified = exact_replay or (
+              status == "idle" and not generation_id
+              and os.environ.get("DECISION") == "idle"
+              and result.get("reason") == "no_active_generation"
+          )
+          if status not in allowed_statuses:
+              status = "retry"
+              result = {"status": status, "reason": "nonterminal_processor_result"}
+          if generation_id and not re.fullmatch(r"[a-f0-9]{64}", generation_id):
+              status = "retry"
+              generation_id = ""
+              result = {"status": status, "reason": "processor_generation_id_invalid"}
+          checkpoint_path = root / "upstream-catalogue-checkpoint-receipt.json"
+          checkpoint = None
+          if generation_id and checkpoint_path.is_file():
+              try:
+                  checkpoint = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+                  unsigned = dict(checkpoint)
+                  claimed = unsigned.pop("checkpoint_sha256")
+                  canonical = json.dumps(unsigned, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+                  valid_checkpoint = (
+                      hashlib.sha256(canonical).hexdigest() == claimed
+                      and checkpoint.get("generation_id") == generation_id
+                      and checkpoint.get("status") == status
+                  )
+              except (OSError, KeyError, TypeError, json.JSONDecodeError):
+                  valid_checkpoint = False
+              if valid_checkpoint:
+                  locator = checkpoint.get("output_artifact") if isinstance(checkpoint.get("output_artifact"), dict) else {}
+                  entries = checkpoint.get("output_digests") if isinstance(checkpoint.get("output_digests"), list) else []
+                  current_locator = (
+                      locator.get("repository") == os.environ["REPOSITORY"]
+                      and str(locator.get("run_id")) == os.environ["PROCESSOR_ARTIFACT_RUN_ID"]
+                      and locator.get("name") == f"upstream-catalogue-processing-{os.environ['PROCESSOR_RUN_ID']}"
+                      and locator.get("artifact_id") is None
+                  )
+                  ready_bundle_paths = [
+                      "composed-candidate.registry.json", "ready-scope.registry.json", "semantic-diff.json",
+                      "regeneration-queue.json", "quarantine.json", "composition-receipt.json",
+                      "upstream-catalogue-enrichment-evidence.json", "upstream-catalogue-processing-result.json",
+                  ]
+                  marker_quarantine_paths = ["upstream-catalogue-processing-result.json"]
+                  allowed_paths = set(ready_bundle_paths)
+                  file_digests_valid = True
+                  for entry in entries:
+                      if (
+                          not isinstance(entry, dict) or set(entry) != {"path", "sha256", "bytes"}
+                          or not isinstance(entry.get("path"), str) or entry["path"] not in allowed_paths
+                      ):
+                          file_digests_valid = False
+                          break
+                      path = root / entry["path"]
+                      if (
+                          not isinstance(entry.get("bytes"), int) or isinstance(entry.get("bytes"), bool)
+                          or not isinstance(entry.get("sha256"), str)
+                          or not path.is_file() or path.is_symlink() or path.stat().st_size != entry["bytes"]
+                          or hashlib.sha256(path.read_bytes()).hexdigest() != entry["sha256"]
+                      ):
+                          file_digests_valid = False
+                          break
+                  manifest = hashlib.sha256(json.dumps(entries, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest() if entries else None
+                  valid_manifest = locator.get("bundle_manifest_sha256") == manifest
+                  entry_paths = [entry.get("path") for entry in entries if isinstance(entry, dict)]
+                  result_identity_valid = bool(
+                      isinstance(result, dict)
+                      and result.get("processing_replay") is False
+                      and result.get("source_id") == "data_go_kr"
+                      and str(result.get("producer_run_id") or "") == os.environ["PRODUCER_RUN_ID"]
+                      and result.get("processor_run_id") == os.environ["PROCESSOR_RUN_ID"]
+                      and str(result.get("processor_artifact_run_id") or "") == os.environ["PROCESSOR_ARTIFACT_RUN_ID"]
+                      and result.get("candidate_available") is (status == "ready")
+                      and result.get("generation_id") == generation_id
+                  )
+                  if status == "ready":
+                      composition_path = root / "composition-receipt.json"
+                      try:
+                          composition_status = json.loads(composition_path.read_text(encoding="utf-8")).get("status")
+                      except (OSError, json.JSONDecodeError, AttributeError):
+                          composition_status = None
+                      valid_ready = (
+                          current_locator and result_identity_valid and file_digests_valid and valid_manifest
+                          and entry_paths == ready_bundle_paths
+                          and (root / "ready-scope.registry.json").is_file()
+                          and composition_status in {"ready", "ready_scoped"}
+                      )
+                      verified = bool(valid_checkpoint and valid_ready)
+                  elif status == "no-change":
+                      composition_path = root / "composition-receipt.json"
+                      try:
+                          composition = json.loads(composition_path.read_text(encoding="utf-8"))
+                          composition_status = composition.get("status")
+                      except (OSError, json.JSONDecodeError, AttributeError):
+                          composition = {}
+                          composition_status = None
+                      outcome = checkpoint.get("outcome") if isinstance(checkpoint.get("outcome"), dict) else {}
+                      verified = bool(
+                          valid_checkpoint and current_locator and result_identity_valid and file_digests_valid and valid_manifest
+                          and entry_paths == ready_bundle_paths
+                          and composition_status == "no_change"
+                          and int(outcome.get("pending_count", 0) or 0) == 0
+                          and int(outcome.get("detail_retry_count", 0) or 0) == 0
+                      )
+                  else:
+                      valid_full_result = bool(
+                          result_identity_valid and entry_paths == ready_bundle_paths
+                      )
+                      valid_marker_quarantine = bool(
+                          status == "quarantined"
+                          and result_identity_valid
+                          and result.get("candidate_available") is False
+                          and entry_paths == marker_quarantine_paths
+                      )
+                      verified = bool(
+                          valid_checkpoint and current_locator and file_digests_valid and valid_manifest
+                          and (valid_full_result or valid_marker_quarantine)
+                      )
+          if generation_id and checkpoint is None:
+              verified = False
+          if status in {"ready", "no-change"} and not verified:
+              status = "retry"
+              result = {"status": status, "reason": "processor_bundle_or_checkpoint_verification_failed", "generation_id": generation_id or None}
+          elif status == "idle" and not verified:
+              status = "retry"
+              result = {"status": status, "reason": "processor_noop_verification_failed"}
+          elif generation_id and status == "quarantined" and not verified:
+              status = "retry"
+              result = {"status": status, "reason": "processor_bundle_or_checkpoint_verification_failed", "generation_id": generation_id}
+          elif isinstance(result, dict) and result.get("status") not in allowed_statuses:
+              result = {"status": status, "reason": "nonterminal_processor_result", "generation_id": generation_id or None}
+          result_path.write_text(json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          print(f"verified={str(verified).lower()}")
+          print(f"replay={str(replay).lower()}")
+          print(f"candidate_available={str(status == 'ready' and verified).lower()}")
+          print(f"status={status}")
+          print(f"generation_id={generation_id}")
+          PY
+
+      - name: Ensure the processor artifact contains an actionable result
+        if: always()
+        env:
+          BUNDLE_CHECK_OUTCOME: ${{ steps.bundle_check.outcome }}
+          BUNDLE_CHECK_VERIFIED: ${{ steps.bundle_check.outputs.verified }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import os
+          import pathlib
+          root = pathlib.Path("datapan-registry/.datapan/ci/upstream-catalogue-processing")
+          root.mkdir(parents=True, exist_ok=True)
+          path = root / "upstream-catalogue-processing-result.json"
+          try:
+              result = json.loads(path.read_text(encoding="utf-8"))
+          except (OSError, json.JSONDecodeError):
+              result = {"status": "retry", "reason": "processing_result_unavailable"}
+          if not isinstance(result, dict):
+              result = {"status": "retry", "reason": "processing_result_invalid"}
+          reason = None
+          if os.environ.get("BUNDLE_CHECK_OUTCOME") != "success":
+              reason = "processor_bundle_check_failed"
+          elif os.environ.get("BUNDLE_CHECK_VERIFIED") != "true":
+              reason = "processor_bundle_not_verified"
+          if reason:
+              result = {"status": "retry", "reason": reason, "generation_id": result.get("generation_id")}
+              path.write_text(json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          PY
+
+      - name: Upload processor result and composed candidate bundle
+        id: upload
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: upstream-catalogue-processing-${{ github.run_id }}-${{ github.run_attempt }}
+          path: datapan-registry/.datapan/ci/upstream-catalogue-processing/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Bind exact uploaded artifact and compare-and-swap final checkpoint
+        if: always() && steps.select.outputs.decision == 'process' && steps.upload.outputs['artifact-id'] != '' && steps.bundle_check.outputs.verified == 'true' && steps.bundle_check.outputs.generation_id != '' && steps.bundle_check.outputs.replay != 'true' && steps.claim_push.outputs.claim_sha != ''
+        id: bind_push
+        continue-on-error: true
+        working-directory: datapan-registry
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          PROCESSOR_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+          PROCESSOR_ARTIFACT_RUN_ID: ${{ github.run_id }}
+          ARTIFACT_NAME: upstream-catalogue-processing-${{ github.run_id }}-${{ github.run_attempt }}
+          ARTIFACT_ID: ${{ steps.upload.outputs['artifact-id'] }}
+          STATE_DIR: ../state-repo/.datapan/upstream-catalogue-state
+          STATE_BRANCH: automation/upstream-catalogue-state
+          CLAIM_SHA: ${{ steps.claim_push.outputs.claim_sha }}
+        run: |
+          set -euo pipefail
+          [[ "${ARTIFACT_ID}" =~ ^[0-9]+$ ]]
+          generation_id="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("generation_id") or "")' .datapan/ci/upstream-catalogue-processing/upstream-catalogue-processing-result.json)"
+          [[ "${generation_id}" =~ ^[a-f0-9]{64}$ ]]
+          gh api "repos/${REPOSITORY}/actions/runs/${PROCESSOR_ARTIFACT_RUN_ID}/artifacts?per_page=100" > .datapan/ci/upstream-catalogue-processing-artifact-metadata.json
+          python3 - <<'PY' >> "${GITHUB_OUTPUT}"
+          import datetime as dt
+          import json
+          import os
+          from pathlib import Path
+          payload = json.loads(Path(".datapan/ci/upstream-catalogue-processing-artifact-metadata.json").read_text(encoding="utf-8"))
+          matches = [row for row in payload.get("artifacts", []) if str(row.get("id")) == os.environ["ARTIFACT_ID"] and row.get("name") == os.environ["ARTIFACT_NAME"]]
+          if len(matches) != 1 or str(matches[0].get("workflow_run", {}).get("id")) != os.environ["PROCESSOR_ARTIFACT_RUN_ID"]:
+              raise SystemExit("FAIL uploaded processor artifact locator does not match Actions metadata")
+          artifact = matches[0]
+          expires_at = str(artifact.get("expires_at", ""))
+          if artifact.get("expired") or not expires_at:
+              raise SystemExit("FAIL uploaded processor artifact is expired or lacks expiry metadata")
+          if dt.datetime.fromisoformat(expires_at.replace("Z", "+00:00")) <= dt.datetime.now(dt.timezone.utc):
+              raise SystemExit("FAIL uploaded processor artifact expired before checkpoint binding")
+          Path(".datapan/ci/upstream-catalogue-processing-artifact-locator.json").write_text(
+              json.dumps({"artifact_id": os.environ["ARTIFACT_ID"], "expires_at": expires_at}, sort_keys=True) + "\n",
+              encoding="utf-8",
+          )
+          print(f"expires_at={expires_at}")
+          PY
+          python3 scripts/process-upstream-catalogue-candidate.py \
+            --source data_go_kr \
+            --state-dir "${STATE_DIR}" \
+            --checkpoint-schema schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json \
+            --processor-run-id "${PROCESSOR_RUN_ID}" \
+            --processor-artifact-run-id "${PROCESSOR_ARTIFACT_RUN_ID}" \
+            --bind-output-artifact-id "${ARTIFACT_ID}" \
+            --bind-output-artifact-expires-at "$(python3 -c 'import json; print(json.load(open(".datapan/ci/upstream-catalogue-processing-artifact-locator.json", encoding="utf-8"))["expires_at"])')" \
+            --bind-generation-id "${generation_id}"
+          python3 ../bootstrap/scripts/upstream-catalogue-state-branch.py commit-push \
+            --worktree ../state-repo --remote origin --branch "${STATE_BRANCH}" \
+            --repository "${REPOSITORY}" --expected-old-sha "${CLAIM_SHA}" \
+            --message "Bind upstream catalogue processing artifact" \
+            --result .datapan/ci/upstream-catalogue-final-push.json
+          echo "published=true" >> "${GITHUB_OUTPUT}"
+
+      - name: Publish processing status
+        if: always()
+        id: publish_result
+        env:
+          DECISION: ${{ steps.select.outputs.decision }}
+        run: |
+          set -euo pipefail
+          result=datapan-registry/.datapan/ci/upstream-catalogue-processing/upstream-catalogue-processing-result.json
+          status="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("status", "retry"))' "${result}")"
+          generation="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("generation_id", ""))' "${result}")"
+          artifact_name="upstream-catalogue-processing-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          state_publication_status=interrupted
+          if [ "${DECISION}" = "idle" ]; then
+            state_publication_status=not_required
+          elif [ "${{ steps.bundle_check.outputs.replay }}" = "true" ] && [ "${{ steps.bundle_check.outputs.verified }}" = "true" ] && [ "${{ steps.claim_push.outcome }}" = "success" ] && [ "${{ steps.claim_push.outputs.changed }}" = "true" ]; then
+            state_publication_status=replay_recorded
+          elif [ "${{ steps.bundle_check.outputs.replay }}" = "true" ] && [ "${{ steps.bundle_check.outputs.verified }}" = "true" ] && [ "${{ steps.claim_push.outcome }}" = "success" ]; then
+            state_publication_status=replay_unmodified
+          elif [ "${{ steps.bind_push.outputs.published }}" = "true" ]; then
+            state_publication_status=published
+          elif [ "${{ steps.claim_push.outcome }}" = "success" ] && [ "${{ steps.claim_push.outputs.changed }}" = "true" ] && [ "${{ steps.bundle_check.outputs.verified }}" != "true" ]; then
+            state_publication_status=checkpoint_recorded
+          fi
+          echo "status=${status}" >> "${GITHUB_OUTPUT}"
+          echo "generation_id=${generation}" >> "${GITHUB_OUTPUT}"
+          echo "artifact_name=${artifact_name}" >> "${GITHUB_OUTPUT}"
+          echo "state_publication_status=${state_publication_status}" >> "${GITHUB_OUTPUT}"
+          echo "processing_replay=${{ steps.bundle_check.outputs.replay }}" >> "${GITHUB_OUTPUT}"
+          echo "candidate_available=${{ steps.bundle_check.outputs.candidate_available }}" >> "${GITHUB_OUTPUT}"
+          {
+            echo "## Upstream catalogue processing"
+            echo
+            echo "- status: \`${status}\`"
+            echo "- generation: \`${generation:-none}\`"
+            echo "- processor artifact: \`${artifact_name}\`"
+            echo "- durable processor receipt: \`${state_publication_status}\`"
+            echo "- catalogue publication: \`false\`"
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+      - name: Fail non-ready or interrupted processing runs after receipts are uploaded
+        if: always() && (steps.upload.outcome != 'success' || (steps.publish_result.outputs.status != 'ready' && steps.publish_result.outputs.status != 'no-change' && steps.publish_result.outputs.status != 'idle' && !(steps.publish_result.outputs.status == 'quarantined' && steps.publish_result.outputs.candidate_available == 'false' && steps.bundle_check.outputs.verified == 'true' && steps.publish_result.outputs.state_publication_status == 'published')) || (steps.publish_result.outputs.state_publication_status != 'published' && steps.publish_result.outputs.state_publication_status != 'not_required' && !(steps.publish_result.outputs.status == 'idle' && steps.publish_result.outputs.processing_replay == 'true' && (steps.publish_result.outputs.state_publication_status == 'replay_recorded' || steps.publish_result.outputs.state_publication_status == 'replay_unmodified'))))
+        run: exit 1

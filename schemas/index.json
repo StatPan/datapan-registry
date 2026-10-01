@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 96,
+  "count": 97,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -867,6 +867,15 @@
       "version": "v1",
       "bytes": 4339,
       "sha256": "ac55a4b88c0e0ad6639ca97403e2c83e9d61f574315785f122e4279cf74b17e2"
+    },
+    {
+      "path": "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+      "title": "Datapan Upstream Catalogue Checkpoint v1",
+      "contract": "upstream-catalogue-checkpoint",
+      "version": "v1",
+      "bytes": 8592,
+      "sha256": "93643c7fcfd47782904fb91eb24017596c1f643a9e84c07e1f4e74519d9de306"
     }
   ]
 }

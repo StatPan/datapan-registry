@@ -104,6 +104,7 @@ jobs:
           . .datapan/ci/source-profile-venv/bin/activate
           python -m pip install --upgrade pip
           python -m pip install jsonschema
+          python -m pip install 'PyYAML==6.0.2'
           python scripts/sync-release-schema-artifacts.py --check
           python scripts/sync-release-manifest-artifacts.py --check
           python scripts/generate-data-go-kr-operation-manifest.py --check
@@ -148,6 +149,9 @@ jobs:
           python scripts/validate-source-profiles.py
           python scripts/validate-source-refresh-policy.py
           python -m unittest tests/test_run_upstream_refresh.py
+          python -m unittest tests/test_process_upstream_catalogue_candidate.py
+          python -m unittest tests/test_upstream_catalogue_process_workflow.py
+          python3 -m py_compile scripts/upstream-catalogue-state-branch.py
           python -m unittest tests/test_sync_release_manifest_artifacts.py
           python scripts/generate-source-contract-rollup.py --check
           python scripts/validate-source-contract-rollups.py
