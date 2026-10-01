@@ -20,7 +20,7 @@ SPEC.loader.exec_module(composer)
 def provider_index() -> dict:
     return {
         "adapters": [
-            {"name": "link-fixture", "hosts": ["link.example.gov", "safety.example.gov"], "status": "registered", "capabilities": ["verification"]}
+            {"name": "link-fixture", "hosts": ["link.example.gov", "safety.example.gov", "www.nfqs.go.kr"], "status": "registered", "capabilities": ["verification"]}
         ]
     }
 
@@ -117,6 +117,60 @@ def enrichment_evidence(candidate_row: dict, operations: list[dict], *, candidat
 
 
 class CatalogueCompositionTests(unittest.TestCase):
+    def test_real_link_empty_import_retains_baseline_contract_operations(self):
+        fixture_path = ROOT / "tests/fixtures/catalogue-composition-real-link-cases.json"
+        fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+        self.assertEqual(fixture["schema_version"], "datapan.real-link-contract-projection.v1")
+        self.assertEqual(
+            fixture["provenance"]["baseline_artifact"]["payload_sha256"],
+            "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644",
+        )
+        self.assertEqual(
+            fixture["provenance"]["upstream_candidate_artifact"]["payload_sha256"],
+            "90bc22e0ad61dd3672b09b7c52e4898be5afb535f87a8d7fa9e5e5c983e6e3b5",
+        )
+        self.assertFalse(fixture["provenance"]["projection"]["is_byte_exact_source_record"])
+
+        baseline = [sample["baseline"] for sample in fixture["records"]]
+        candidate = [sample["upstream_candidate"] for sample in fixture["records"]]
+        for sample, before, after in zip(fixture["records"], baseline, candidate, strict=True):
+            self.assertEqual(before["id"], sample["api_key"]["id"])
+            self.assertEqual(after["id"], sample["api_key"]["id"])
+            self.assertEqual(composer.digest_json(before), sample["projection_sha256"]["baseline"])
+            self.assertEqual(composer.digest_json(after), sample["projection_sha256"]["upstream_candidate"])
+            self.assertEqual(composer.source_fingerprint(before), composer.source_fingerprint(after))
+            self.assertEqual(after["operations"], [])
+            self.assertEqual(len(before["operations"]), sample["expected_baseline_operation_count"])
+            identity_hashes = sorted(
+                hashlib.sha256(composer.operation_identity(before, operation).encode("utf-8")).hexdigest()
+                for operation in before["operations"]
+            )
+            self.assertEqual(identity_hashes, sample["expected_baseline_operation_identity_sha256"])
+            self.assertNotEqual(before["source"]["raw"]["request_cnt"], after["source"]["raw"]["request_cnt"])
+
+        result = compose(baseline, candidate)
+        self.assertEqual(result["status"], "no_change")
+        self.assertEqual(result["ready_scope_registry"], [])
+        self.assertEqual(result["composed_registry"], baseline)
+
+    def test_real_link_request_count_only_drift_is_volatile(self):
+        fixture_path = ROOT / "tests/fixtures/catalogue-composition-real-link-cases.json"
+        fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+        baseline = [sample["baseline"] for sample in fixture["records"]]
+        candidate = copy.deepcopy(baseline)
+        for row in candidate:
+            raw = row["source"]["raw"]
+            raw["request_cnt"] = int(raw["request_cnt"]) + 1
+
+        result = compose(baseline, candidate)
+        self.assertEqual(result["status"], "no_change")
+        self.assertEqual(result["ready_scope_registry"], [])
+        self.assertEqual(result["composed_registry"], baseline)
+        decisions = {entry["api_key"]["id"]: entry for entry in result["semantic_diff"]["api_decisions"]}
+        self.assertEqual(set(decisions), {row["id"] for row in baseline})
+        for row in baseline:
+            self.assertIn("volatile_request_cnt", decisions[row["id"]]["tags"])
+
     def test_unchanged_link_candidate_preserves_baseline_enrichment(self):
         baseline = link_api("link-1")
         candidate = link_api("link-1", operations=False)
