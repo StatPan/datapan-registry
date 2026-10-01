@@ -1,0 +1,16 @@
+{
+  "schema_version": "datapan.data-go-kr-operation-denominator-expectation.v1",
+  "source_snapshot": {
+    "path": "data/data-go-kr.registry.json",
+    "bytes": 137735169,
+    "sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644"
+  },
+  "expected_summary": {
+    "api_operations": 12385,
+    "protocols": {"REST": 12350, "SOAP": 35},
+    "eligibility": {"approval_required": 12243, "excluded": 142},
+    "exclusions": {"link_operations": 8871, "operationless_catalog_entries": 473, "filedata_catalog_entries": 0},
+    "identity_collisions": 0,
+    "identity_omissions": 0
+  }
+}

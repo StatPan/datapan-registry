@@ -20,6 +20,8 @@ SCHEMA = ROOT / "schemas/datapan.data-go-kr-operation-manifest.v1.schema.json"
 REGISTRY = ROOT / "data/data-go-kr.registry.json"
 RELEASE_MANIFEST = ROOT / "manifest.json"
 GENERATOR_PATH = ROOT / "scripts/generate-data-go-kr-operation-manifest.py"
+EXPECTATION = ROOT / "policy/data-go-kr-operation-denominator-expectation.json"
+EXPECTATION_SCHEMA = ROOT / "schemas/datapan.data-go-kr-operation-denominator-expectation.v1.schema.json"
 
 
 def load(path: pathlib.Path) -> Any:
@@ -47,13 +49,27 @@ def artifact_by_path(release_manifest: dict[str, Any], path: pathlib.Path) -> di
     return matches[0]
 
 
-def validate(manifest: dict[str, Any], schema: dict[str, Any], registry: list[dict[str, Any]], release_manifest: dict[str, Any]) -> None:
+def validate(
+    manifest: dict[str, Any],
+    schema: dict[str, Any],
+    registry: list[dict[str, Any]],
+    release_manifest: dict[str, Any],
+    expectation: dict[str, Any] | None = None,
+    *,
+    registry_path: pathlib.Path = REGISTRY,
+    expectation_schema: dict[str, Any] | None = None,
+) -> None:
     jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker()).validate(manifest)
-    source_bytes = REGISTRY.read_bytes()
-    fail(manifest["source_snapshot"] == {"path": "data/data-go-kr.registry.json", "bytes": len(source_bytes), "sha256": hashlib.sha256(source_bytes).hexdigest()}, "source snapshot binding drift")
+    expectation = expectation if expectation is not None else load(EXPECTATION)
+    expectation_schema = expectation_schema if expectation_schema is not None else load(EXPECTATION_SCHEMA)
+    jsonschema.Draft202012Validator(expectation_schema, format_checker=jsonschema.FormatChecker()).validate(expectation)
+    source_bytes = registry_path.read_bytes()
+    snapshot = {"path": registry_path.relative_to(ROOT).as_posix(), "bytes": len(source_bytes), "sha256": hashlib.sha256(source_bytes).hexdigest()}
+    fail(manifest["source_snapshot"] == snapshot, "source snapshot binding drift")
+    fail(expectation["source_snapshot"] == snapshot, "denominator expectation is stale for the source snapshot")
     generator = generator_module()
     previous_registry = generator.REGISTRY
-    generator.REGISTRY = REGISTRY
+    generator.REGISTRY = registry_path
     try:
         expected = generator.build(registry)
     finally:
@@ -61,9 +77,15 @@ def validate(manifest: dict[str, Any], schema: dict[str, Any], registry: list[di
     fail(manifest == expected, "operation manifest does not deterministically match source snapshot")
     summary = manifest["summary"]
     fail(summary["identity_collisions"] == 0 and summary["identity_omissions"] == 0, "operation identity collision or omission")
-    fail(summary["api_operations"] == 12385 and summary["protocols"] == {"REST": 12350, "SOAP": 35}, "API denominator is not 12,385 = REST 12,350 + SOAP 35")
-    fail(summary["exclusions"] == {"link_operations": 8871, "operationless_catalog_entries": 473, "filedata_catalog_entries": 0}, "source exclusion proof drift")
-    for path, kind, expected_schema in ((MANIFEST, "data_go_kr_operation_manifest", schema["$id"]), (SCHEMA, "schema", None), (REGISTRY, "registry", None)):
+    fail(summary == expectation["expected_summary"], "operation denominator summary does not match the source-bound expectation")
+    fail(summary["api_operations"] == sum(summary["protocols"].values()), "API denominator does not equal its REST and SOAP split")
+    for path, kind, expected_schema in (
+        (MANIFEST, "data_go_kr_operation_manifest", schema["$id"]),
+        (SCHEMA, "schema", None),
+        (REGISTRY, "registry", None),
+        (EXPECTATION, "operation_denominator_expectation", expectation_schema["$id"]),
+        (EXPECTATION_SCHEMA, "schema", None),
+    ):
         artifact = artifact_by_path(release_manifest, path)
         data = path.read_bytes()
         fail((artifact.get("bytes"), artifact.get("sha256")) == (len(data), hashlib.sha256(data).hexdigest()), f"release manifest digest drift: {path.relative_to(ROOT)}")

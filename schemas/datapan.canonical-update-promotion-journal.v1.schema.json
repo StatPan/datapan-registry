@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.canonical-update-promotion-journal.v1.schema.json",
+  "title": "Datapan canonical update promotion journal v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "repository",
+    "updated_at",
+    "records"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.canonical-update-promotion-journal.v1"
+    },
+    "repository": {
+      "type": "string",
+      "pattern": "^[^/]+/[^/]+$"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "schema_version",
+          "status",
+          "candidate",
+          "acknowledgements"
+        ],
+        "properties": {
+          "schema_version": {
+            "const": "datapan.canonical-update-promotion-receipt.v1"
+          },
+          "status": {
+            "enum": [
+              "prepared",
+              "pending-review",
+              "merged",
+              "publication-pending",
+              "published",
+              "read-back-confirmed",
+              "failed",
+              "closed"
+            ]
+          },
+          "candidate": {
+            "type": "object",
+            "required": [
+              "repository",
+              "source_id",
+              "scope",
+              "generation_id",
+              "head_sha",
+              "manifest_sha256",
+              "registry_sha256"
+            ],
+            "properties": {
+              "repository": {
+                "type": "string",
+                "pattern": "^[^/]+/[^/]+$"
+              },
+              "source_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "scope": {
+                "type": "string",
+                "minLength": 1
+              },
+              "generation_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "head_sha": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{40}$"
+              },
+              "manifest_sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "registry_sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          },
+          "acknowledgements": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "description": "Retain every active generation and only the latest read-back-confirmed last-good record per source and scope."
+    }
+  }
+}

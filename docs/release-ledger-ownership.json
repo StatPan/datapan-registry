@@ -108,6 +108,7 @@
         "source_runtime_remediation_map",
         "source_runtime_evidence_rollup",
         "operation_denominator_rollup",
+        "operation_denominator_expectation",
         "runtime_freshness_queue",
         "sustainable_coverage_policy",
         "completeness_proof_policy",
@@ -118,6 +119,7 @@
       "generated_by": [
         "policy/health-probe-canaries.json plus python scripts/generate-health-probe-catalog.py",
         "python scripts/generate-data-go-kr-operation-manifest.py",
+        "python scripts/update-data-go-kr-operation-denominator-expectation.py --write",
         "python scripts/generate-source-contract-rollup.py",
         "python scripts/generate-source-report-inventory.py",
         "python scripts/generate-credential-runtime-evidence-policy.py",
@@ -133,6 +135,7 @@
         "python scripts/generate-source-runtime-remediation-map.py",
         "python scripts/generate-source-runtime-readiness.py",
         "python scripts/generate-operation-denominator-rollup.py",
+        "python scripts/update-data-go-kr-operation-denominator-expectation.py --check",
         "python scripts/generate-runtime-freshness-queue.py",
         "python scripts/generate-sustainable-coverage.py",
         "manual policy updates validated by python scripts/validate-completeness-proof.py",
@@ -174,8 +177,8 @@
         "python scripts/validate-source-refresh-policy.py",
         "python scripts/sync-release-manifest-artifacts.py --check"
       ],
-      "manifest_relationship": "Source rollups, sustainable coverage, completeness-proof and source refresh policies, credential runtime evidence, runner readiness, operator packets, collection execution plans, manual-review acceptance packets, and inventories are top-level manifest evidence for declared public-data scopes, authoritative denominators, freshness-aware coverage, scheduled upstream observation, nested source reports, reviewed receipt collection actions, and explicit manual-review release boundary actions.",
-      "schema_relationship": "Schema-backed source, sustainable coverage, completeness-proof, and credential reports are indexed through schemas/index.json and source-report-inventory.json where applicable.",
+      "manifest_relationship": "Source rollups, source-bound denominator expectations, sustainable coverage, completeness-proof and source refresh policies, credential runtime evidence, runner readiness, operator packets, collection execution plans, manual-review acceptance packets, and inventories are top-level manifest evidence for declared public-data scopes, authoritative denominators, freshness-aware coverage, scheduled upstream observation, nested source reports, reviewed receipt collection actions, and explicit manual-review release boundary actions.",
+      "schema_relationship": "Schema-backed source, denominator expectation, sustainable coverage, completeness-proof, and credential reports are indexed through schemas/index.json and source-report-inventory.json where applicable.",
       "package_relationship": "Included in release packages through manifest.json.",
       "exemption_boundary": "Nested source reports stay out of the top-level manifest when covered by source-report-inventory.json."
     },

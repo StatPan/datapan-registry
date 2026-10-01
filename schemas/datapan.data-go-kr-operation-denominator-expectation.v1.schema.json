@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.data-go-kr-operation-denominator-expectation.v1.schema.json",
+  "title": "Datapan data.go.kr operation denominator expectation v1",
+  "description": "A snapshot-bound denominator expectation. Updating a canonical snapshot requires an explicit expectation update in the same reviewed change unit.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "source_snapshot", "expected_summary"],
+  "properties": {
+    "schema_version": {"const": "datapan.data-go-kr-operation-denominator-expectation.v1"},
+    "source_snapshot": {"$ref": "#/$defs/source_snapshot"},
+    "expected_summary": {"$ref": "#/$defs/summary"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "source_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"const": "data/data-go-kr.registry.json"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["api_operations", "protocols", "eligibility", "exclusions", "identity_collisions", "identity_omissions"],
+      "properties": {
+        "api_operations": {"type": "integer", "minimum": 1},
+        "protocols": {
+          "type": "object", "additionalProperties": false, "required": ["REST", "SOAP"],
+          "properties": {"REST": {"type": "integer", "minimum": 0}, "SOAP": {"type": "integer", "minimum": 0}}
+        },
+        "eligibility": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "exclusions": {
+          "type": "object", "additionalProperties": false,
+          "required": ["link_operations", "operationless_catalog_entries", "filedata_catalog_entries"],
+          "properties": {
+            "link_operations": {"type": "integer", "minimum": 0},
+            "operationless_catalog_entries": {"type": "integer", "minimum": 0},
+            "filedata_catalog_entries": {"type": "integer", "minimum": 0}
+          }
+        },
+        "identity_collisions": {"const": 0},
+        "identity_omissions": {"const": 0}
+      }
+    }
+  }
+}

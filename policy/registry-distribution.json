@@ -7,6 +7,14 @@
     "path": "data/data-go-kr.registry.json",
     "manifest_sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644"
   },
+  "preparation_backend": {
+    "provider": "github-git-lfs",
+    "repository": "StatPan/datapan-registry",
+    "path": "data/data-go-kr.registry.json",
+    "manifest_binding": "release-manifest-sha256",
+    "upload": "object-oid-only",
+    "readback": "isolated-lfs-storage"
+  },
   "distribution_manifest": {
     "schema_version": "datapan.huggingface-distribution.v1",
     "path": "release/distribution-manifest.json",

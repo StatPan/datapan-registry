@@ -35,6 +35,8 @@ class DataGoKrOperationManifestTest(unittest.TestCase):
         cls.schema = json.loads((ROOT / "schemas/datapan.data-go-kr-operation-manifest.v1.schema.json").read_text(encoding="utf-8"))
         cls.release_manifest = json.loads((ROOT / "manifest.json").read_text(encoding="utf-8"))
         cls.manifest = json.loads((ROOT / "reports/data-go-kr/operation-manifest.json").read_text(encoding="utf-8"))
+        cls.expectation = json.loads((ROOT / "policy/data-go-kr-operation-denominator-expectation.json").read_text(encoding="utf-8"))
+        cls.expectation_schema = json.loads((ROOT / "schemas/datapan.data-go-kr-operation-denominator-expectation.v1.schema.json").read_text(encoding="utf-8"))
 
     def test_source_snapshot_reproduces_api_denominator_and_exclusions(self) -> None:
         previous = GENERATOR.REGISTRY
@@ -44,21 +46,42 @@ class DataGoKrOperationManifestTest(unittest.TestCase):
         finally:
             GENERATOR.REGISTRY = previous
         self.assertEqual(self.manifest, expected)
-        self.assertEqual(self.manifest["summary"]["api_operations"], 12385)
-        self.assertEqual(self.manifest["summary"]["protocols"], {"REST": 12350, "SOAP": 35})
+        summary = self.manifest["summary"]
+        self.assertEqual(summary, self.expectation["expected_summary"])
+        self.assertEqual(summary["protocols"]["SOAP"], 35)
+        self.assertEqual(summary["protocols"]["REST"] + summary["protocols"]["SOAP"], summary["api_operations"])
+        self.assertEqual(summary["eligibility"]["excluded"], 142)
         self.assertEqual(self.manifest["summary"]["exclusions"], {"link_operations": 8871, "operationless_catalog_entries": 473, "filedata_catalog_entries": 0})
+        self.assertEqual((summary["identity_collisions"], summary["identity_omissions"]), (0, 0))
+        VALIDATOR.validate(
+            self.manifest, self.schema, self.registry, self.release_manifest,
+            self.expectation, registry_path=ROOT / "data/data-go-kr.registry.json",
+            expectation_schema=self.expectation_schema,
+        )
 
     def test_duplicate_identity_fails_closed(self) -> None:
         broken = copy.deepcopy(self.manifest)
         broken["operations"][1]["operation_id"] = broken["operations"][0]["operation_id"]
         with self.assertRaisesRegex(ValueError, "deterministically match|collision"):
-            VALIDATOR.validate(broken, self.schema, self.registry, self.release_manifest)
+            VALIDATOR.validate(broken, self.schema, self.registry, self.release_manifest, self.expectation, registry_path=ROOT / "data/data-go-kr.registry.json", expectation_schema=self.expectation_schema)
 
     def test_unclassified_requirement_fails_schema(self) -> None:
         broken = copy.deepcopy(self.manifest)
         broken["operations"][0]["eligibility"] = {"status": "excluded", "excluded_reason": None}
         with self.assertRaises(Exception):
-            VALIDATOR.validate(broken, self.schema, self.registry, self.release_manifest)
+            VALIDATOR.validate(broken, self.schema, self.registry, self.release_manifest, self.expectation, registry_path=ROOT / "data/data-go-kr.registry.json", expectation_schema=self.expectation_schema)
+
+    def test_source_bound_expectation_rejects_a_changed_denominator(self) -> None:
+        expectation = copy.deepcopy(self.expectation)
+        expectation["expected_summary"]["api_operations"] += 1
+        with self.assertRaisesRegex(ValueError, "does not match the source-bound expectation"):
+            VALIDATOR.validate(self.manifest, self.schema, self.registry, self.release_manifest, expectation, registry_path=ROOT / "data/data-go-kr.registry.json", expectation_schema=self.expectation_schema)
+
+    def test_source_bound_expectation_rejects_a_different_snapshot(self) -> None:
+        expectation = copy.deepcopy(self.expectation)
+        expectation["source_snapshot"]["sha256"] = "0" * 64
+        with self.assertRaisesRegex(ValueError, "denominator expectation is stale"):
+            VALIDATOR.validate(self.manifest, self.schema, self.registry, self.release_manifest, expectation, registry_path=ROOT / "data/data-go-kr.registry.json", expectation_schema=self.expectation_schema)
 
     def test_release_archive_is_a_compatible_static_consumer(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -68,8 +91,9 @@ class DataGoKrOperationManifestTest(unittest.TestCase):
             with zipfile.ZipFile(archive_path) as archive:
                 members = set(archive.namelist())
                 self.assertIn("schemas/datapan.data-go-kr-operation-manifest.v1.schema.json", members)
+                self.assertIn("policy/data-go-kr-operation-denominator-expectation.json", members)
                 payload = json.loads(archive.read("reports/data-go-kr/operation-manifest.json"))
-            self.assertEqual(payload["summary"]["api_operations"], 12385)
+            self.assertEqual(payload["summary"], self.expectation["expected_summary"])
 
 
 if __name__ == "__main__":
