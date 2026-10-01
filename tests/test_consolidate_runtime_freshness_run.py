@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 import pathlib
@@ -63,6 +64,36 @@ class ConsolidateRuntimeFreshnessRunTest(unittest.TestCase):
                 [row["identity_key"] for row in self.read_json(combined)["results"]],
                 ["data_go_kr:d:o0", "data_go_kr:d:o1"],
             )
+
+    def test_exact_plan_contract_binding_is_attached_to_its_result(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            combined = self.fixture(root)
+            plan_path = root / "shard-0" / "batch-plan.json"
+            plan = self.read_json(plan_path)
+            plan["operations"][0]["contract_binding"] = {
+                "schema_version": "datapan.runtime-freshness-plan-contract-binding.v1",
+                "identity_key": "data_go_kr:d:o0",
+                "source_id": "data_go_kr",
+                "dataset_id": "d",
+                "upstream_api_id": "api-d",
+                "operation_key": "o0",
+                "source_identity_sha256": "1" * 64,
+                "method_action_sha256": "2" * 64,
+                "parameter_contract_sha256": "3" * 64,
+                "contract_sha256": "4" * 64,
+                "source_snapshot_sha256": "5" * 64,
+                "operation_manifest_sha256": "6" * 64,
+            }
+            self.write_json(plan_path, plan)
+            expected_plan_sha = hashlib.sha256(plan_path.read_bytes()).hexdigest()
+
+            MODULE.build(root, combined, expected_shards=2, run_id="run-bound")
+            results = self.read_json(combined)["results"]
+
+            self.assertEqual(results[0]["contract_binding"]["run_id"], "run-bound")
+            self.assertEqual(results[0]["contract_binding"]["plan_sha256"], expected_plan_sha)
+            self.assertNotIn("contract_binding", results[1])
 
     def test_duplicate_cross_shard_identity_fails(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

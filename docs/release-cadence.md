@@ -411,6 +411,15 @@ stale manifest or release ledger, and a merely requested auto-merge all fail.
 Replaying the same run and artifact returns the byte-identical prior admission
 without a new branch or PR; reusing a run ID with different bytes fails.
 
+Historical manual-review decisions remain historical records; they do not
+automatically approve a changed source snapshot or changed operation risk.
+Evaluate effective current approval independently against the current source,
+operation contract, and applicable expiry and semantic policy. Until the #661
+semantic and expiry repair has passed, do not rebind an artifact-only manual
+acceptance to changed source or risk. Runtime evidence projection does not
+replace the #592 release-admission and publication gates, and cannot authorize
+canonical or Hugging Face publication by itself.
+
 Institution-scoped runtime reactivation batches should follow the priority
 order in `docs/data-go-kr-coverage-backlog.md` and
 `docs/data-go-kr-institution-api-overview.md`. Start with the largest

@@ -12,6 +12,7 @@
     "source_contract_rollup": "reports/source-contract-rollup.json",
     "source_runtime_evidence_rollup": "reports/source-runtime-evidence-rollup.json",
     "latest_verification": "reports/latest-verification.json",
+    "current_runtime_evidence_projection": "reports/current-runtime-evidence-projection.json",
     "credential_runtime_runner_readiness": "reports/credential-runtime-runner-readiness.json",
     "release_consumer_compatibility": "reports/release-consumer-compatibility.json",
     "failure_recovery_rollup": "reports/failure-recovery-rollup.json",
@@ -21,11 +22,16 @@
   "summary": {
     "decision": "coverage_gaps",
     "layers_total": 9,
-    "layers_meeting_target": 7,
-    "layers_below_target": 2,
-    "unknown_timestamp_records": 1822,
-    "stale_records": 3336,
-    "expired_records": 514
+    "layers_meeting_target": 6,
+    "layers_below_target": 3,
+    "unknown_timestamp_records": 0,
+    "stale_records": 0,
+    "expired_records": 0,
+    "unbound_evidence_records": 7180,
+    "contract_changed_evidence_records": 0,
+    "ambiguous_evidence_records": 1,
+    "historical_evidence_records": 0,
+    "unsupported_current_binding_operations": 9060
   },
   "layers": [
     {
@@ -80,19 +86,19 @@
     },
     {
       "id": "runtime_evidence_source",
-      "numerator": 5,
+      "numerator": 4,
       "denominator": 5,
-      "percent": 100.0,
+      "percent": 80.0,
       "target_percent": 100.0,
-      "meets_target": true,
+      "meets_target": false,
       "scope": "supported_sources",
       "meaning": "Sources with at least one runtime evidence record."
     },
     {
       "id": "runtime_evidence_operation",
-      "numerator": 6961,
+      "numerator": 0,
       "denominator": 21260,
-      "percent": 32.7,
+      "percent": 0.0,
       "target_percent": 80.0,
       "meets_target": false,
       "scope": "operation_denominator_sources",
@@ -100,9 +106,9 @@
     },
     {
       "id": "fresh_verified_operation",
-      "numerator": 736,
+      "numerator": 0,
       "denominator": 21260,
-      "percent": 3.5,
+      "percent": 0.0,
       "target_percent": 80.0,
       "meets_target": false,
       "scope": "operation_denominator_sources",
@@ -123,11 +129,11 @@
     "as_of": "2026-09-30T01:45:58.529244Z",
     "fresh_days": 30,
     "expire_days": 90,
-    "fresh": 1289,
-    "stale": 3336,
-    "expired": 514,
-    "unknown_timestamp": 1822,
-    "fresh_verified": 736
+    "fresh": 0,
+    "stale": 0,
+    "expired": 0,
+    "unknown_timestamp": 0,
+    "fresh_verified": 0
   },
   "failure_recovery": {
     "active": 1475,
@@ -144,7 +150,7 @@
       "catalog_denominator": true,
       "call_capability": true,
       "reviewed_runtime_receipt": true,
-      "runtime_evidence": 4774,
+      "runtime_evidence": 0,
       "active_recovery_failures": 1475,
       "recovered_failures": 1
     },
@@ -195,6 +201,7 @@
     "missing_timestamps_are_not_fresh": true,
     "recovery_updates_coverage": true,
     "next_actions": [
+      "runtime_evidence_source",
       "runtime_evidence_operation",
       "fresh_verified_operation"
     ]
