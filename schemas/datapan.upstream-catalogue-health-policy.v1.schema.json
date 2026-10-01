@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.upstream-catalogue-health-policy.v1.schema.json",
+  "title": "Datapan Upstream Catalogue Health Policy v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "policy_id", "health_workflow", "processor_state", "health_state", "promotion_state", "clock", "sources"],
+  "properties": {
+    "schema_version": {"const": "datapan.upstream-catalogue-health-policy.v1"},
+    "policy_id": {"type": "string", "minLength": 1},
+    "health_workflow": {"$ref": "#/$defs/health_workflow"},
+    "processor_state": {"$ref": "#/$defs/processor_state"},
+    "health_state": {"$ref": "#/$defs/health_state"},
+    "promotion_state": {"$ref": "#/$defs/promotion_state"},
+    "clock": {"$ref": "#/$defs/clock"},
+    "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
+  },
+  "$defs": {
+    "health_workflow": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "collector_workflow_path", "watchdog_cron"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^\\.github/workflows/[^/]+\\.yml$"},
+        "collector_workflow_path": {"type": "string", "pattern": "^\\.github/workflows/[^/]+\\.yml$"},
+        "watchdog_cron": {"type": "string", "pattern": "^\\S+ \\S+ \\S+ \\S+ \\S+$"}
+      }
+    },
+    "processor_state": {
+      "type": "object", "additionalProperties": false,
+      "required": ["branch", "root", "max_bytes_per_file", "workflow_run_limit"],
+      "properties": {
+        "branch": {"type": "string", "pattern": "^automation/[a-z0-9-]+$"},
+        "root": {"type": "string", "pattern": "^\\.datapan/[a-z0-9-]+$"},
+        "max_bytes_per_file": {"type": "integer", "minimum": 1024, "maximum": 1048576},
+        "workflow_run_limit": {"type": "integer", "minimum": 1, "maximum": 100}
+      }
+    },
+    "health_state": {
+      "type": "object", "additionalProperties": false,
+      "required": ["branch", "root", "ownership_marker", "push_attempts", "receipt_retention_days", "maximum_retained_receipts"],
+      "properties": {
+        "branch": {"type": "string", "pattern": "^automation/[a-z0-9-]+$"},
+        "root": {"type": "string", "pattern": "^[a-z0-9/-]+$"},
+        "ownership_marker": {"type": "string", "pattern": "^[a-z0-9/-]+\\.json$"},
+        "push_attempts": {"type": "integer", "minimum": 1, "maximum": 5},
+        "receipt_retention_days": {"type": "integer", "minimum": 30, "maximum": 3650},
+        "maximum_retained_receipts": {"type": "integer", "minimum": 100, "maximum": 10000}
+      }
+    },
+    "promotion_state": {
+      "type": "object", "additionalProperties": false,
+      "required": ["branch", "receipt_path", "promotion_workflow_path", "publication_ack_workflow_path"],
+      "properties": {
+        "branch": {"type": "string", "pattern": "^automation/[a-z0-9-]+$"},
+        "receipt_path": {"type": "string", "pattern": "^[a-z0-9/-]+\\.json$"},
+        "promotion_workflow_path": {"type": "string", "pattern": "^\\.github/workflows/[^/]+\\.yml$"},
+        "publication_ack_workflow_path": {"type": "string", "pattern": "^\\.github/workflows/[^/]+\\.yml$"}
+      }
+    },
+    "clock": {
+      "type": "object", "additionalProperties": false,
+      "required": ["maximum_future_skew_seconds"],
+      "properties": {"maximum_future_skew_seconds": {"type": "integer", "minimum": 0, "maximum": 3600}}
+    },
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "owner_ticket", "expected_interval_seconds", "observation_grace_seconds", "max_observation_age_seconds", "max_attempts", "retries_per_detail", "heartbeat_timeout_seconds", "provider_failure_threshold", "stage_deadlines_seconds", "recovery_commands"],
+      "properties": {
+        "source_id": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
+        "owner_ticket": {"type": "integer", "minimum": 1},
+        "expected_interval_seconds": {"type": "integer", "minimum": 60, "maximum": 31536000},
+        "observation_grace_seconds": {"type": "integer", "minimum": 0, "maximum": 604800},
+        "max_observation_age_seconds": {"type": "integer", "minimum": 60, "maximum": 31536000},
+        "max_attempts": {"type": "integer", "minimum": 1, "maximum": 1000},
+        "retries_per_detail": {"type": "integer", "minimum": 0, "maximum": 100},
+        "heartbeat_timeout_seconds": {"type": "integer", "minimum": 1, "maximum": 604800},
+        "provider_failure_threshold": {"type": "integer", "minimum": 2, "maximum": 100},
+        "stage_deadlines_seconds": {
+          "type": "object", "additionalProperties": false,
+          "required": ["collector", "queued", "validating", "enriching", "composing", "retry", "pending-review", "publication-pending"],
+          "properties": {
+            "collector": {"type": "integer", "minimum": 1}, "queued": {"type": "integer", "minimum": 1}, "validating": {"type": "integer", "minimum": 1},
+            "enriching": {"type": "integer", "minimum": 1}, "composing": {"type": "integer", "minimum": 1},
+            "retry": {"type": "integer", "minimum": 1}, "pending-review": {"type": "integer", "minimum": 1},
+            "publication-pending": {"type": "integer", "minimum": 1}
+          }
+        },
+        "recovery_commands": {
+          "type": "object", "additionalProperties": false,
+          "required": ["schedule_missing", "processor_stalled", "provider_failure", "promotion_wait", "publication_failure"],
+          "properties": {
+            "schedule_missing": {"type": "string", "minLength": 1}, "processor_stalled": {"type": "string", "minLength": 1},
+            "provider_failure": {"type": "string", "minLength": 1}, "promotion_wait": {"type": "string", "minLength": 1},
+            "publication_failure": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    }
+  }
+}

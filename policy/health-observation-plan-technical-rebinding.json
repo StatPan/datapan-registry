@@ -67,6 +67,32 @@
       "path": "schemas/datapan.runtime-freshness-import-attestation.v1.schema.json",
       "kind": "schema",
       "authority_ticket": "StatPan/datapan-registry#633"
+    },
+    {
+      "path": "schemas/datapan.upstream-catalogue-health-policy.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#659"
+    },
+    {
+      "path": "schemas/datapan.upstream-catalogue-health-state-owner.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#659"
+    },
+    {
+      "path": "schemas/datapan.upstream-catalogue-health-state.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#659"
+    },
+    {
+      "path": "schemas/datapan.upstream-catalogue-health.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#659"
+    },
+    {
+      "path": "policy/upstream-catalogue-health.json",
+      "kind": "upstream_catalogue_health_policy",
+      "schema": "https://schemas.datapan.dev/datapan.upstream-catalogue-health-policy.v1.schema.json",
+      "authority_ticket": "StatPan/datapan-registry#659"
     }
   ]
 }

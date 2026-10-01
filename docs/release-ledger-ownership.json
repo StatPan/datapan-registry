@@ -180,6 +180,21 @@
       "exemption_boundary": "Nested source reports stay out of the top-level manifest when covered by source-report-inventory.json."
     },
     {
+      "id": "upstream_catalogue_health_policy",
+      "artifact_kinds": ["upstream_catalogue_health_policy"],
+      "owner": "upstream catalogue health maintainers",
+      "generated_by": ["manual source-specific freshness grace and recovery deadline updates"],
+      "checked_by": [
+        "python scripts/validate-source-refresh-policy.py",
+        "python -m unittest tests/test_check_upstream_catalogue_health.py",
+        "python scripts/sync-release-manifest-artifacts.py --check"
+      ],
+      "manifest_relationship": "The independent watchdog cadence, processor and promotion state locations, and per-source freshness/recovery policy are manifest-bound.",
+      "schema_relationship": "Validated against datapan.upstream-catalogue-health-policy.v1 and cross-bound to source-refresh cadence by the health checker.",
+      "package_relationship": "Included in release packages through manifest.json.",
+      "exemption_boundary": "Fixture inputs exercise classification only; they cannot be persisted or counted as live source observations, and this policy does not authorize provider calls or publication."
+    },
+    {
       "id": "source_provenance",
       "artifact_kinds": ["source_provenance"],
       "owner": "source evidence maintainers",
