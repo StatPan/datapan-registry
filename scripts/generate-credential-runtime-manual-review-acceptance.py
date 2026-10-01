@@ -9,9 +9,10 @@ import json
 import pathlib
 import re
 import sys
+import datetime as dt
 from typing import Any
 
-from manual_review_evidence_digest import compatibility_binding_sha256
+from manual_review_scope import evaluate_review_scope
 
 try:
     import jsonschema
@@ -22,6 +23,9 @@ except ImportError as exc:  # pragma: no cover - environment guard
 DEFAULT_HANDOFF = pathlib.Path("reports/credential-runtime-review-handoff.json")
 DEFAULT_COMPATIBILITY = pathlib.Path("reports/release-consumer-compatibility.json")
 DEFAULT_DECISION = pathlib.Path("reports/credential-runtime-manual-review-decision.json")
+DEFAULT_MANIFEST = pathlib.Path("manifest.json")
+DEFAULT_HEALTH_PLAN = pathlib.Path("reports/health-runtime-observation-plan.v1.json")
+DEFAULT_HEALTH_SELECTION = pathlib.Path("policy/health-runtime-observation-selection.json")
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-manual-review-acceptance.v1.schema.json")
 DEFAULT_OUTPUT = pathlib.Path("reports/credential-runtime-manual-review-acceptance.json")
 DEFAULT_TECHNICAL_REBINDING = pathlib.Path("reports/credential-runtime-manual-review-technical-rebinding.json")
@@ -126,16 +130,21 @@ def validate_decision_state(
     decision: dict[str, Any],
     *,
     decision_path: pathlib.Path,
-    handoff_path: pathlib.Path,
-    compatibility_path: pathlib.Path,
-    technical_rebinding_path: pathlib.Path,
 ) -> None:
     decision_body = as_dict(decision.get("decision"), "decision.decision")
     accepted = bool_value(decision_body.get("accepted"), "decision.accepted")
     if not accepted:
         if decision_body.get("decision_status") != "not_asserted":
             raise ValueError("unaccepted manual-review decision must use decision_status=not_asserted")
-        for nullable_key in ("reviewer", "reviewed_at", "handoff_sha256", "compatibility_sha256", "expires_at"):
+        for nullable_key in (
+            "reviewer",
+            "reviewed_at",
+            "handoff_sha256",
+            "compatibility_sha256",
+            "review_scope_version",
+            "review_scope_sha256",
+            "expires_at",
+        ):
             if decision_body.get(nullable_key) is not None:
                 raise ValueError(f"unaccepted manual-review decision must keep {nullable_key}=null")
         if decision_body.get("reason") != "manual_review_acceptance_not_asserted":
@@ -150,13 +159,6 @@ def validate_decision_state(
         value = decision_body.get(required_key)
         if not isinstance(value, str) or not value.strip():
             raise ValueError(f"accepted manual-review decision requires decision.{required_key}")
-    if decision_body.get("handoff_sha256") != file_sha256(handoff_path):
-        raise ValueError("accepted manual-review decision handoff_sha256 does not match current handoff")
-    current_compatibility = compatibility_binding_sha256(load_json(compatibility_path))
-    if decision_body.get("compatibility_sha256") != current_compatibility:
-        rebinding = load_json(technical_rebinding_path)
-        if rebinding.get("status") != "approved_artifact_only_rebinding" or rebinding.get("old_compatibility_sha256") != decision_body.get("compatibility_sha256") or rebinding.get("new_compatibility_sha256") != current_compatibility or rebinding.get("decision_sha256") != file_sha256(decision_path):
-            raise ValueError("accepted manual-review decision compatibility_sha256 does not match current compatibility")
     if not as_list(decision_body.get("revalidation_triggers"), "decision.revalidation_triggers"):
         raise ValueError("accepted manual-review decision requires revalidation triggers")
 
@@ -171,11 +173,13 @@ def build_acceptance_routing(
     goal_completion_effect: str,
     decision_path: pathlib.Path,
 ) -> dict[str, Any]:
-    first_safe_action = (
-        "refresh_release_evidence_after_manual_review_acceptance"
-        if accepted
-        else "assert_manual_review_decision_with_required_evidence"
-    )
+    first_safe_action = "refresh_release_evidence_after_manual_review_acceptance"
+    if not accepted:
+        first_safe_action = (
+            "revalidate_manual_review_decision_for_current_scope"
+            if acceptance_status in {"revalidation_required", "unproven"}
+            else "assert_manual_review_decision_with_required_evidence"
+        )
     return {
         "parent_goal_issue": 344,
         "accepted": accepted,
@@ -218,26 +222,46 @@ def build_report(
     compatibility_path: pathlib.Path = DEFAULT_COMPATIBILITY,
     decision_path: pathlib.Path = DEFAULT_DECISION,
     technical_rebinding_path: pathlib.Path = DEFAULT_TECHNICAL_REBINDING,
+    manifest: dict[str, Any] | None = None,
+    manifest_path: pathlib.Path = DEFAULT_MANIFEST,
+    health_plan: dict[str, Any] | None = None,
+    health_plan_path: pathlib.Path = DEFAULT_HEALTH_PLAN,
+    health_selection: dict[str, Any] | None = None,
+    health_selection_path: pathlib.Path = DEFAULT_HEALTH_SELECTION,
+    as_of: dt.datetime | None = None,
 ) -> dict[str, Any]:
     validate_input_invariants(handoff, compatibility, decision)
     validate_decision_state(
         decision,
         decision_path=decision_path,
-        handoff_path=handoff_path,
-        compatibility_path=compatibility_path,
-        technical_rebinding_path=technical_rebinding_path,
+    )
+    scope = evaluate_review_scope(
+        decision=decision,
+        decision_sha256=file_sha256(decision_path),
+        compatibility=compatibility,
+        handoff=handoff,
+        handoff_sha256=file_sha256(handoff_path),
+        manifest=manifest if manifest is not None else load_json(manifest_path),
+        health_plan=health_plan if health_plan is not None else load_json(health_plan_path),
+        health_selection=health_selection if health_selection is not None else load_json(health_selection_path),
+        as_of=as_of,
     )
     handoff_summary = as_dict(handoff.get("summary"), "handoff.summary")
     handoff_boundary = as_dict(handoff.get("release_boundary"), "handoff.release_boundary")
     compatibility_risk = as_dict(compatibility.get("runtime_risk_evidence"), "compatibility.runtime_risk_evidence")
     decision_summary = as_dict(decision.get("summary"), "decision.summary")
     decision_body = as_dict(decision.get("decision"), "decision.decision")
-    accepted = bool_value(decision_summary.get("accepted"), "decision.summary.accepted")
+    bool_value(decision_summary.get("accepted"), "decision.summary.accepted")
+    accepted = scope["effective_accepted"] is True
     manual_review_required = bool_value(
         compatibility_risk.get("manual_review_required"),
         "compatibility.runtime_risk_evidence.manual_review_required",
     )
-    acceptance_status = "accepted" if accepted else "not_accepted"
+    acceptance_status = "accepted" if accepted else (
+        scope["scope_status"]
+        if decision_body.get("accepted") is True
+        else "not_accepted"
+    )
     acceptance_decision = (
         "accepted_manual_review_release_boundary"
         if accepted
@@ -305,6 +329,7 @@ def build_report(
             "default_ci_requires_credentials": False,
             "checked_in_secrets_allowed": False,
         },
+        "review_scope": scope,
         "release_boundary": {
             "canonical_registry_compatible": True,
             "manual_review_required": manual_review_required,
@@ -343,6 +368,9 @@ def main() -> int:
     parser.add_argument("--handoff", default=DEFAULT_HANDOFF, type=pathlib.Path)
     parser.add_argument("--compatibility", default=DEFAULT_COMPATIBILITY, type=pathlib.Path)
     parser.add_argument("--decision", default=DEFAULT_DECISION, type=pathlib.Path)
+    parser.add_argument("--manifest", default=DEFAULT_MANIFEST, type=pathlib.Path)
+    parser.add_argument("--health-plan", default=DEFAULT_HEALTH_PLAN, type=pathlib.Path)
+    parser.add_argument("--health-selection", default=DEFAULT_HEALTH_SELECTION, type=pathlib.Path)
     parser.add_argument("--technical-rebinding", default=DEFAULT_TECHNICAL_REBINDING, type=pathlib.Path)
     parser.add_argument("--schema", default=DEFAULT_SCHEMA, type=pathlib.Path)
     parser.add_argument("--output", default=DEFAULT_OUTPUT, type=pathlib.Path)
@@ -358,6 +386,9 @@ def main() -> int:
             compatibility_path=args.compatibility,
             decision_path=args.decision,
             technical_rebinding_path=args.technical_rebinding,
+            manifest_path=args.manifest,
+            health_plan_path=args.health_plan,
+            health_selection_path=args.health_selection,
         )
         validate_schema(report, args.schema)
     except Exception as exc:  # noqa: BLE001 - release operators need the failed invariant

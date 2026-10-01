@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import datetime as dt
+import hashlib
 import importlib.util
+import copy
 import json
 import pathlib
 import sys
@@ -10,12 +13,21 @@ import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
+import manual_review_scope
+
 SPEC = importlib.util.spec_from_file_location(
     "technical_rebinding", ROOT / "scripts" / "generate-credential-runtime-manual-review-technical-rebinding.py"
 )
 MODULE = importlib.util.module_from_spec(SPEC)
 assert SPEC.loader is not None
 SPEC.loader.exec_module(MODULE)
+ACCEPTANCE_SPEC = importlib.util.spec_from_file_location(
+    "technical_rebinding_acceptance",
+    ROOT / "scripts" / "generate-credential-runtime-manual-review-acceptance.py",
+)
+ACCEPTANCE = importlib.util.module_from_spec(ACCEPTANCE_SPEC)
+assert ACCEPTANCE_SPEC.loader is not None
+ACCEPTANCE_SPEC.loader.exec_module(ACCEPTANCE)
 
 
 class ManualReviewTechnicalRebindingTest(unittest.TestCase):
@@ -31,6 +43,58 @@ class ManualReviewTechnicalRebindingTest(unittest.TestCase):
                 {"path": "reports/health.json", "kind": "verification_plan", "schema": "https://schemas.example/health"},
             ],
             "independent_additions": [],
+        }
+
+    def explicit_decision(self, expires_at: str):
+        def load(path: str) -> dict:
+            return json.loads((ROOT / path).read_text(encoding="utf-8"))
+
+        decision = load("reports/credential-runtime-manual-review-decision.json")
+        compatibility = load("reports/release-consumer-compatibility.json")
+        handoff = load("reports/credential-runtime-review-handoff.json")
+        manifest = load("manifest.json")
+        health_plan = load("reports/health-runtime-observation-plan.v1.json")
+        health_selection = load("policy/health-runtime-observation-selection.json")
+        handoff_path = ROOT / "reports/credential-runtime-review-handoff.json"
+        compatibility_path = ROOT / "reports/release-consumer-compatibility.json"
+        handoff_sha = hashlib.sha256(handoff_path.read_bytes()).hexdigest()
+        body = decision["decision"]
+        body.update(
+            reviewer="Accountable reviewer",
+            reviewed_at="2026-09-01T00:00:00Z",
+            reason="Revalidated the unchanged manual-review scope.",
+            expires_at=expires_at,
+            handoff_sha256=handoff_sha,
+            review_scope_version=manual_review_scope.REVIEW_SCOPE_VERSION,
+        )
+        body["review_scope_sha256"] = manual_review_scope.review_scope_sha256(
+            compatibility=compatibility,
+            handoff_sha256=handoff_sha,
+            manifest=manifest,
+            health_plan=health_plan,
+            health_selection=health_selection,
+        )
+        decision_bytes = (json.dumps(decision, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+        evaluation = manual_review_scope.evaluate_review_scope(
+            decision=decision,
+            decision_sha256=hashlib.sha256(decision_bytes).hexdigest(),
+            compatibility=compatibility,
+            handoff=handoff,
+            handoff_sha256=handoff_sha,
+            manifest=manifest,
+            health_plan=health_plan,
+            health_selection=health_selection,
+            as_of=dt.datetime(2026, 10, 1, tzinfo=dt.timezone.utc),
+        )
+        return decision, decision_bytes, {
+            "evaluation": evaluation,
+            "compatibility": compatibility,
+            "handoff": handoff,
+            "manifest": manifest,
+            "health_plan": health_plan,
+            "health_selection": health_selection,
+            "handoff_path": handoff_path,
+            "compatibility_path": compatibility_path,
         }
 
     def test_only_the_exact_two_health_artifacts_can_rebind_after_canonical_regeneration(self):
@@ -87,6 +151,24 @@ class ManualReviewTechnicalRebindingTest(unittest.TestCase):
                     decision_path,
                 )
 
+    def test_production_independent_authorities_are_an_exact_allowlist(self):
+        policy = json.loads((ROOT / "policy/health-observation-plan-technical-rebinding.json").read_text())
+        MODULE.validate_independent_authorities(policy["independent_additions"])
+
+        for mutate in (
+            lambda rows: rows[-1].update(authority_ticket="StatPan/datapan-registry#631"),
+            lambda rows: rows[-1].update(path="schemas/other-review-scope.schema.json"),
+            lambda rows: rows.append({
+                "path": "schemas/arbitrary.schema.json",
+                "kind": "schema",
+                "authority_ticket": "StatPan/datapan-registry#661",
+            }),
+        ):
+            altered = copy.deepcopy(policy["independent_additions"])
+            mutate(altered)
+            with self.subTest(altered=altered[-1]), self.assertRaisesRegex(ValueError, "exact separately authorized"):
+                MODULE.validate_independent_authorities(altered)
+
     def test_preexisting_artifact_contract_change_rejects_rebinding(self):
         with tempfile.TemporaryDirectory() as raw:
             root = pathlib.Path(raw)
@@ -114,3 +196,78 @@ class ManualReviewTechnicalRebindingTest(unittest.TestCase):
             ]
             with self.assertRaisesRegex(ValueError, "byte-for-byte unchanged"):
                 MODULE.expected(policy, {"artifacts": artifacts}, {"summary": {}}, decision_path)
+
+    def test_explicit_future_review_converges_with_rebinding_and_acceptance(self):
+        decision, decision_bytes, context = self.explicit_decision("2026-12-31T00:00:00Z")
+        with tempfile.TemporaryDirectory() as raw:
+            decision_path = pathlib.Path(raw) / "decision.json"
+            decision_path.write_bytes(decision_bytes)
+            policy = json.loads((ROOT / "policy/health-observation-plan-technical-rebinding.json").read_text())
+            rebinding = MODULE.expected(
+                policy,
+                context["manifest"],
+                context["compatibility"],
+                decision_path,
+                scope_evaluation=context["evaluation"],
+            )
+            acceptance = ACCEPTANCE.build_report(
+                context["handoff"],
+                context["compatibility"],
+                decision,
+                handoff_path=context["handoff_path"],
+                compatibility_path=context["compatibility_path"],
+                decision_path=decision_path,
+                manifest=context["manifest"],
+                health_plan=context["health_plan"],
+                health_selection=context["health_selection"],
+                as_of=dt.datetime(2026, 10, 1, tzinfo=dt.timezone.utc),
+            )
+
+        current_sha = hashlib.sha256(decision_bytes).hexdigest()
+        self.assertNotEqual(current_sha, policy["decision_sha256"])
+        self.assertEqual(rebinding["status"], "approved_artifact_only_rebinding")
+        self.assertEqual(rebinding["decision_sha256"], current_sha)
+        self.assertEqual(rebinding["historical_decision_sha256"], policy["decision_sha256"])
+        self.assertEqual(
+            rebinding["old_compatibility_sha256"],
+            context["evaluation"]["reviewed_binding"]["historical_decision_compatibility_sha256"],
+        )
+        self.assertTrue(acceptance["summary"]["accepted"])
+        self.assertEqual(acceptance["summary"]["acceptance_status"], "accepted")
+        self.assertEqual(acceptance["review_scope"]["current_binding"]["decision_sha256"], current_sha)
+
+    def test_expired_future_review_derives_pending_acceptance_and_open_goal(self):
+        decision, decision_bytes, context = self.explicit_decision("2026-09-30T00:00:00Z")
+        with tempfile.TemporaryDirectory() as raw:
+            decision_path = pathlib.Path(raw) / "decision.json"
+            decision_path.write_bytes(decision_bytes)
+            policy = json.loads((ROOT / "policy/health-observation-plan-technical-rebinding.json").read_text())
+            rebinding = MODULE.expected(
+                policy,
+                context["manifest"],
+                context["compatibility"],
+                decision_path,
+                scope_evaluation=context["evaluation"],
+            )
+            acceptance = ACCEPTANCE.build_report(
+                context["handoff"],
+                context["compatibility"],
+                decision,
+                handoff_path=context["handoff_path"],
+                compatibility_path=context["compatibility_path"],
+                decision_path=decision_path,
+                manifest=context["manifest"],
+                health_plan=context["health_plan"],
+                health_selection=context["health_selection"],
+                as_of=dt.datetime(2026, 10, 1, tzinfo=dt.timezone.utc),
+            )
+
+        self.assertEqual(rebinding["status"], "revalidation_required")
+        self.assertEqual(rebinding["historical_decision_sha256"], policy["decision_sha256"])
+        self.assertFalse(acceptance["summary"]["accepted"])
+        self.assertEqual(acceptance["summary"]["acceptance_status"], "revalidation_required")
+        self.assertEqual(
+            acceptance["release_boundary"]["goal_completion_effect"],
+            "goal_remains_open_until_reviewed_receipts_or_explicit_acceptance",
+        )
+        self.assertTrue(acceptance["review_scope"]["decision_expired"])

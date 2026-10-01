@@ -121,8 +121,10 @@ def validate_inputs(decision: dict[str, Any], acceptance: dict[str, Any], handof
     compatibility_risk = as_dict(compatibility.get("runtime_risk_evidence"), "compatibility.runtime_risk_evidence")
     if decision_summary.get("accepted") != decision_body.get("accepted"):
         raise ValueError("manual-review decision summary accepted state must match decision body")
-    if acceptance_summary.get("accepted") != decision_summary.get("accepted"):
-        raise ValueError("manual-review acceptance summary accepted state must match decision summary")
+    if acceptance_summary.get("decision_status") != decision_summary.get("decision_status"):
+        raise ValueError("manual-review acceptance must preserve the historical decision status")
+    if not isinstance(acceptance.get("review_scope"), dict):
+        raise ValueError("manual-review acceptance must include a reviewed scope report")
     if handoff_summary.get("default_ci_requires_credentials") is not False:
         raise ValueError("manual-review packet requires secret-free default CI handoff")
     if handoff_summary.get("checked_in_secrets_allowed") is not False:
@@ -131,7 +133,13 @@ def validate_inputs(decision: dict[str, Any], acceptance: dict[str, Any], handof
     validate_secret_free(acceptance)
 
 
-def accepted_decision_template(*, handoff_sha256: str, compatibility_sha256: str) -> dict[str, Any]:
+def accepted_decision_template(
+    *,
+    handoff_sha256: str,
+    compatibility_sha256: str,
+    review_scope_version: str,
+    review_scope_sha256: str,
+) -> dict[str, Any]:
     return {
         "accepted": True,
         "decision_status": "accepted",
@@ -140,6 +148,8 @@ def accepted_decision_template(*, handoff_sha256: str, compatibility_sha256: str
         "reason": "<manual-review acceptance reason>",
         "handoff_sha256": handoff_sha256,
         "compatibility_sha256": compatibility_sha256,
+        "review_scope_version": review_scope_version,
+        "review_scope_sha256": review_scope_sha256,
         "expires_at": "<ISO-8601 UTC timestamp>",
         "revalidation_triggers": REQUIRED_REVALIDATION_TRIGGERS,
     }
@@ -161,7 +171,9 @@ def build_report(
     acceptance_summary = as_dict(acceptance.get("summary"), "acceptance.summary")
     handoff_summary = as_dict(handoff.get("summary"), "handoff.summary")
     compatibility_risk = as_dict(compatibility.get("runtime_risk_evidence"), "compatibility.runtime_risk_evidence")
-    accepted = bool_value(decision_summary.get("accepted"), "decision.summary.accepted")
+    review_scope = as_dict(acceptance.get("review_scope"), "acceptance.review_scope")
+    current_binding = as_dict(review_scope.get("current_binding"), "acceptance.review_scope.current_binding")
+    accepted = bool_value(acceptance_summary.get("accepted"), "acceptance.summary.accepted")
     handoff_digest = file_sha256(handoff_path)
     compatibility_digest = compatibility_binding_sha256(compatibility)
     goal_closure_allowed = bool(
@@ -195,13 +207,23 @@ def build_report(
             "goal_closure_allowed": goal_closure_allowed,
             "default_ci_requires_credentials": False,
             "checked_in_secrets_allowed": False,
-            "packet_status": "accepted_decision_ready_for_regeneration" if accepted else "acceptance_not_asserted",
+            "packet_status": (
+                "accepted_decision_ready_for_regeneration"
+                if accepted
+                else "manual_review_revalidation_required"
+                if acceptance_summary.get("acceptance_status") == "revalidation_required"
+                else "manual_review_scope_unproven"
+                if acceptance_summary.get("acceptance_status") == "unproven"
+                else "acceptance_not_asserted"
+            ),
         },
         "current_digests": {
             "handoff_path": handoff_path.as_posix(),
             "handoff_sha256": handoff_digest,
             "compatibility_path": compatibility_path.as_posix(),
             "compatibility_sha256": compatibility_digest,
+            "review_scope_version": review_scope.get("scope_version"),
+            "review_scope_sha256": current_binding.get("review_scope_sha256"),
         },
         "required_human_inputs": [
             {
@@ -224,10 +246,17 @@ def build_report(
                 "required": True,
                 "description": "UTC timestamp when the accepted manual-review boundary expires.",
             },
+            {
+                "field": "review_scope_sha256",
+                "required": True,
+                "description": "Copy the versioned scope digest after reviewing source, compatibility, handoff, and Health selection bindings.",
+            },
         ],
         "accepted_decision_template": accepted_decision_template(
             handoff_sha256=handoff_digest,
             compatibility_sha256=compatibility_digest,
+            review_scope_version=review_scope.get("scope_version"),
+            review_scope_sha256=current_binding.get("review_scope_sha256"),
         ),
         "revalidation_triggers": REQUIRED_REVALIDATION_TRIGGERS,
         "operator_commands": {
@@ -259,8 +288,12 @@ def validate_invariants(report: dict[str, Any]) -> None:
         raise ValueError("manual-review acceptance packet must not allow checked-in secrets")
     if summary.get("accepted") is False and summary.get("goal_closure_allowed") is not False:
         raise ValueError("unaccepted manual-review packet cannot allow goal closure")
-    if summary.get("accepted") is False and summary.get("packet_status") != "acceptance_not_asserted":
-        raise ValueError("unaccepted manual-review packet must use acceptance_not_asserted status")
+    if summary.get("accepted") is False and summary.get("packet_status") not in {
+        "acceptance_not_asserted",
+        "manual_review_revalidation_required",
+        "manual_review_scope_unproven",
+    }:
+        raise ValueError("unaccepted manual-review packet must expose a pending status")
     operator_commands = as_dict(report.get("operator_commands"), "operator_commands")
     if operator_commands.get("release_evidence_refresh_command") != RELEASE_EVIDENCE_REFRESH_COMMAND:
         raise ValueError("manual-review packet must expose the fixed-point refresh command")
@@ -274,6 +307,10 @@ def validate_invariants(report: dict[str, Any]) -> None:
         raise ValueError("accepted decision template handoff digest must match current digest")
     if template.get("compatibility_sha256") != digests.get("compatibility_sha256"):
         raise ValueError("accepted decision template compatibility digest must match current digest")
+    if template.get("review_scope_version") != digests.get("review_scope_version"):
+        raise ValueError("accepted decision template scope version must match current scope")
+    if template.get("review_scope_sha256") != digests.get("review_scope_sha256"):
+        raise ValueError("accepted decision template scope digest must match current scope")
 
 
 def validate_schema(report: dict[str, Any], schema_path: pathlib.Path) -> None:

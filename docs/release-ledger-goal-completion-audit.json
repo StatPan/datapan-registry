@@ -16,11 +16,11 @@
   "current_state_evidence": {
     "manifest": {
       "path": "manifest.json",
-      "artifact_count": 173
+      "artifact_count": 174
     },
     "schema_index": {
       "path": "schemas/index.json",
-      "schema_count": 96
+      "schema_count": 97
     },
     "release_readiness": {
       "path": "reports/latest-release-readiness.json",
@@ -153,9 +153,9 @@
     },
     "release_distribution_footprint": {
       "path": "reports/release-distribution-footprint.json",
-      "artifact_count": 173,
-      "schema_artifacts": 96,
-      "manifest_bound_bytes_excluding_self": 201790603,
+      "artifact_count": 174,
+      "schema_artifacts": 97,
+      "manifest_bound_bytes_excluding_self": 201813685,
       "canonical_registry_path": "data/data-go-kr.registry.json",
       "canonical_registry_bytes": 137735169,
       "large_monolith_threshold_bytes": 100000000,
@@ -214,9 +214,9 @@
     },
     "manual_review_acceptance": {
       "path": "reports/credential-runtime-manual-review-acceptance.json",
-      "accepted": true,
-      "acceptance_status": "accepted",
-      "acceptance_decision": "accepted_manual_review_release_boundary",
+      "accepted": false,
+      "acceptance_status": "revalidation_required",
+      "acceptance_decision": "blocked_until_explicit_manual_review_acceptance",
       "decision_status": "accepted",
       "decision_reason": "Accountable revalidation after artifact_count changed 160 to 161 and manifest-bound bytes changed; runtime_risk_evidence and summary are byte-equal, credential, runtime, workflow, and pin semantics are unchanged, and publication and cutover remain blocked.",
       "credential_handoff_status": "relief_ready",
@@ -235,7 +235,7 @@
       "canonical_registry_consumption": "compatible",
       "shard_assets_required": false,
       "manual_review_required": false,
-      "manual_review_accepted": true,
+      "manual_review_accepted": false,
       "reviewed_credential_receipts": 5,
       "goal_completion_allowed": true,
       "goal_status": "complete"

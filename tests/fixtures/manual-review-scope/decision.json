@@ -1,0 +1,40 @@
+{
+  "schema_version": "datapan.credential-runtime-manual-review-decision.v1",
+  "generated_at": "2026-07-22T13:19:56Z",
+  "goal_issue": 344,
+  "decision_ticket": 391,
+  "provider": "datapan-registry",
+  "inputs": {
+    "credential_runtime_review_handoff": "reports/credential-runtime-review-handoff.json",
+    "release_consumer_compatibility": "reports/release-consumer-compatibility.json"
+  },
+  "summary": {
+    "accepted": true,
+    "decision_status": "accepted",
+    "manual_review_release_boundary_accepted": true,
+    "default_ci_requires_credentials": false,
+    "checked_in_secrets_allowed": false
+  },
+  "decision": {
+    "accepted": true,
+    "decision_status": "accepted",
+    "reviewer": "StatPan",
+    "reviewed_at": "2026-07-22T13:19:56Z",
+    "reason": "Accountable revalidation after artifact_count changed 160 to 161 and manifest-bound bytes changed; runtime_risk_evidence and summary are byte-equal, credential, runtime, workflow, and pin semantics are unchanged, and publication and cutover remain blocked.",
+    "handoff_sha256": "7d8e645a0f58469fabe3f9289e20ea6835c81e088dd363519d015d1d0f501beb",
+    "compatibility_sha256": "4e34b0a1f58fce9d8b4f913300b9fa2a43a07be91d94c2794cff77b513e39f4a",
+    "expires_at": "2026-08-15T10:30:00Z",
+    "revalidation_triggers": [
+      "credential_receipt_state_changes",
+      "consumer_compatibility_changes",
+      "source_runtime_blocker_changes",
+      "release_manifest_changes",
+      "acceptance_expiry"
+    ]
+  },
+  "validation_contract": {
+    "validator": "python3 scripts/validate-credential-runtime-manual-review-decision.py",
+    "acceptance_generator": "python3 scripts/generate-credential-runtime-manual-review-acceptance.py --check",
+    "default_ci_mode": "secret_free_decision_validation"
+  }
+}

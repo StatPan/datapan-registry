@@ -7,7 +7,7 @@
     "manifest": {
       "path": "manifest.json",
       "generated_at": "2026-07-11T10:28:35Z",
-      "artifact_count": 174,
+      "artifact_count": 161,
       "evidence_contracts": 18
     },
     "readiness": {
@@ -104,7 +104,7 @@
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
       "bytes": 8075,
-      "sha256": "b9bc8013b9e23b5434d7f731507bab6b0cf9c1d77d13390eefb8f43f3723327b",
+      "sha256": "4fdd8abbbe897bd3abdf02485cefda9293eeecc49079d1d9b552bec556bad3f3",
       "required": true
     },
     {
@@ -139,8 +139,8 @@
       "path": "reports/credential-runtime-collection-execution-plan.json",
       "kind": "credential_runtime_collection_execution_plan",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-collection-execution-plan.v1.schema.json",
-      "bytes": 18361,
-      "sha256": "c526d334371d85dbcd6711227ac9cc1473171f76358bd7c6624587137d0bfafd",
+      "bytes": 18360,
+      "sha256": "9481077224c901bf1b34b355df5cebb5728e85a0a67de457ba40e077a2b971e2",
       "required": true
     },
     {
@@ -175,8 +175,8 @@
       "path": "reports/credential-runtime-manual-review-acceptance.json",
       "kind": "credential_runtime_manual_review_acceptance",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-acceptance.v1.schema.json",
-      "bytes": 8896,
-      "sha256": "00801a1a0bda33ff3a5192ec785c26406b31f2b01f9e76c8e0624259064f1816",
+      "bytes": 4585,
+      "sha256": "268e1aaf383f4a454e3c4d0513692e6d80156ffe5e2dbcf962c5df0f71095631",
       "required": true
     },
     {
@@ -194,7 +194,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "99bb75b1d37661ce49f06f66c7073037a5daababc750b49133b145bfbc5cb6ce",
+      "sha256": "76bb56f189609836956b6a7d44143c354e64d52ac0d3d9d07e8511b344efd820",
       "required": true
     },
     {
@@ -211,8 +211,8 @@
       "path": "reports/source-report-inventory.json",
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
-      "bytes": 62605,
-      "sha256": "0f247ba08930151db7f40cdf146dff21f35d22fd5a55ce8a41cc4641c81bc758",
+      "bytes": 61997,
+      "sha256": "03b976af59e3eab446a7d1da3826f7bb5d9cf729dae726a691b1be65272e83c7",
       "required": true
     },
     {
@@ -220,8 +220,8 @@
       "path": "reports/release-distribution-footprint.json",
       "kind": "release_distribution_footprint",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
-      "bytes": 2174,
-      "sha256": "e95cc514f4032e679bc81bda244071a32dd38f59500e99757be9376f436ea2cc",
+      "bytes": 2141,
+      "sha256": "e379762b44343c2db31849cd258dd4680178d3c800d442309ce8e8dcf3cf7e8d",
       "required": true
     },
     {
@@ -238,8 +238,8 @@
       "path": "reports/release-consumer-decision.json",
       "kind": "release_consumer_decision",
       "schema": "https://schemas.datapan.dev/datapan.release-consumer-decision.v1.schema.json",
-      "bytes": 2884,
-      "sha256": "0ac4226a87287c93e3557acae2340f61e6f716f8735289c12deceb759d72fb7c",
+      "bytes": 2848,
+      "sha256": "c73d316363bea8e9bf3d7822fe2271b2a1665ce80f5a22c0c24c3032dcf5dbe6",
       "required": true
     }
   ],
@@ -368,12 +368,12 @@
     "manual_review_decision_accepted": true,
     "manual_review_decision_reason": "Accountable revalidation after artifact_count changed 160 to 161 and manifest-bound bytes changed; runtime_risk_evidence and summary are byte-equal, credential, runtime, workflow, and pin semantics are unchanged, and publication and cutover remain blocked.",
     "manual_review_decision_boundary_accepted": true,
-    "manual_review_acceptance_status": "revalidation_required",
-    "manual_review_acceptance_accepted": false,
-    "manual_review_acceptance_decision": "blocked_until_explicit_manual_review_acceptance",
+    "manual_review_acceptance_status": "accepted",
+    "manual_review_acceptance_accepted": true,
+    "manual_review_acceptance_decision": "accepted_manual_review_release_boundary",
     "manual_review_acceptance_required_evidence": 5,
-    "manual_review_acceptance_boundary_accepted": false,
-    "manual_review_acceptance_goal_completion_effect": "goal_remains_open_until_reviewed_receipts_or_explicit_acceptance",
+    "manual_review_acceptance_boundary_accepted": true,
+    "manual_review_acceptance_goal_completion_effect": "manual_review_boundary_accepted_for_release",
     "manual_review_reduction_allowed": true,
     "manual_review_reduction_status": "allowed_by_reviewed_validated_credential_runtime_receipts",
     "blocker_ids": [
@@ -476,7 +476,7 @@
     ],
     "release_distribution_footprint": "reports/release-distribution-footprint.json",
     "canonical_registry_bytes": 137735169,
-    "manifest_bound_bytes_excluding_self": 201813685,
+    "manifest_bound_bytes_excluding_self": 173957232,
     "large_monolith_threshold_bytes": 100000000,
     "registry_footprint_status": "large_monolith_shard_additive",
     "canonical_registry_required": true,

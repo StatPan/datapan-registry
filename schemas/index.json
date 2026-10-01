@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 96,
+  "count": 97,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -307,8 +307,8 @@
       "title": "Datapan Release Consumer Compatibility v1",
       "contract": "release-consumer-compatibility",
       "version": "v1",
-      "bytes": 40308,
-      "sha256": "58e1a31613dc58fd7ec4cb64aa31fda3d8482c437734515fffc910ae0223142a"
+      "bytes": 40345,
+      "sha256": "f8ed3c5c7ee7d2b30d0cf0b592612a24d90c90492137847ed1020db48ab7e01b"
     },
     {
       "path": "schemas/datapan.error-action-routing-rollup.v1.schema.json",
@@ -460,8 +460,8 @@
       "title": "Datapan Credential Runtime Manual-Review Acceptance v1",
       "contract": "credential-runtime-manual-review-acceptance",
       "version": "v1",
-      "bytes": 10072,
-      "sha256": "629c9c08764e85dfa32d873266e6ac8d465e03efebc4aa5e3671c73346415dcb"
+      "bytes": 20203,
+      "sha256": "a725d70a0a0200436fab836be234a700eefd0abf56ca92fd3cc582a1668997e9"
     },
     {
       "path": "schemas/datapan.credential-runtime-manual-review-decision.v1.schema.json",
@@ -469,8 +469,8 @@
       "title": "Datapan Credential Runtime Manual-Review Decision v1",
       "contract": "credential-runtime-manual-review-decision",
       "version": "v1",
-      "bytes": 4751,
-      "sha256": "f6b43ed1954e25ebb385649a00717c45105b9a121cd3cd1fb54355458afa922d"
+      "bytes": 4943,
+      "sha256": "1e481fe969775b3026b54f5dc39071f8293638f5845e3835c5361e7582243c25"
     },
     {
       "path": "schemas/datapan.release-distribution-footprint.v1.schema.json",
@@ -532,8 +532,8 @@
       "title": "Datapan Credential Runtime Manual-Review Acceptance Packet v1",
       "contract": "credential-runtime-manual-review-acceptance-packet",
       "version": "v1",
-      "bytes": 8488,
-      "sha256": "3ac530b3a1c463546a9171aa126ad826e7a5515dfbfdc87c9d30cd90c0e42896"
+      "bytes": 9197,
+      "sha256": "2b2a37e6bb1590c2946376dba74e913cfc759b2f568fbfb88de2b4e33cd5da38"
     },
     {
       "path": "schemas/datapan.release-goal-operating-contract.v1.schema.json",
@@ -867,6 +867,15 @@
       "version": "v1",
       "bytes": 4339,
       "sha256": "ac55a4b88c0e0ad6639ca97403e2c83e9d61f574315785f122e4279cf74b17e2"
+    },
+    {
+      "path": "schemas/datapan.manual-review-scope.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.manual-review-scope.v1.schema.json",
+      "title": "Datapan Manual Review Scope Evaluation v1",
+      "contract": "manual-review-scope",
+      "version": "v1",
+      "bytes": 6669,
+      "sha256": "3ca228ed37e54c869946a6e1345ba0c40390907a1124d4321b526809a1b48b61"
     }
   ]
 }
