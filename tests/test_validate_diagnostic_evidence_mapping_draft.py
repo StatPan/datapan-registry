@@ -54,6 +54,13 @@ class DiagnosticEvidenceMappingDraftTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "identity proof digest drift"):
                 MODULE.validate_registry_identity_proof(self.mapping, MODULE.REGISTRY_IDENTITY_PROOF)
 
+    def test_historical_health_pin_must_match_archived_bytes(self):
+        mapping = copy.deepcopy(self.mapping)
+        health = next(item for item in mapping["authoritative_inputs"] if item["path"] == "reports/health-probe-catalog.json")
+        health["sha256"] = "0" * 64
+        with self.assertRaisesRegex(ValueError, "historical health catalog mapping pin drift"):
+            MODULE.validate_inputs(mapping)
+
     def test_registry_identity_proof_rejects_synchronized_source_semantic_drift(self):
         proof = MODULE.load(MODULE.REGISTRY_IDENTITY_PROOF)
         proof["datasets"][0]["operations"][0]["source_system"] = "forged.example"

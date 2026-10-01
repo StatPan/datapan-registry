@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.diagnostic-current-source-applicability.v1.schema.json",
+  "title": "Datapan diagnostic current-source applicability v1",
+  "description": "Binds immutable historical diagnostic proofs to exact current data and reports static applicability without granting current approval.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "historical_inputs",
+    "historical_registry_identity",
+    "archived_health_catalog",
+    "current_inputs",
+    "checked_facts",
+    "mismatches",
+    "authority"
+  ],
+  "properties": {
+    "schema_version": {"const": "datapan.diagnostic-current-source-applicability.v1"},
+    "status": {"enum": ["historical_scope_unchanged", "revalidation_required"]},
+    "historical_inputs": {
+      "type": "array",
+      "minItems": 20,
+      "items": {"$ref": "#/$defs/artifact_identity"}
+    },
+    "historical_registry_identity": {"$ref": "#/$defs/artifact_identity"},
+    "archived_health_catalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact", "source_git"],
+      "properties": {
+        "artifact": {"$ref": "#/$defs/artifact_identity"},
+        "source_git": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "commit", "blob"],
+          "properties": {
+            "path": {"const": "reports/health-probe-catalog.json"},
+            "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+            "blob": {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+          }
+        }
+      }
+    },
+    "current_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["registry", "health_catalog", "other_authoritative_inputs"],
+      "properties": {
+        "registry": {"$ref": "#/$defs/artifact_identity"},
+        "health_catalog": {"$ref": "#/$defs/artifact_identity"},
+        "other_authoritative_inputs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/artifact_identity"}
+        }
+      }
+    },
+    "checked_facts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["health_pointers", "registry_datasets"],
+      "properties": {
+        "health_pointers": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/health_pointer_fact"}
+        },
+        "registry_datasets": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/registry_dataset_fact"}
+        }
+      }
+    },
+    "mismatches": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/mismatch"}
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "current_source_compatibility_approved",
+        "current_runtime_evidence_accepted",
+        "current_consumer_approval",
+        "release_readiness_granted",
+        "publication_allowed",
+        "human_acceptance_granted"
+      ],
+      "properties": {
+        "current_source_compatibility_approved": {"const": false},
+        "current_runtime_evidence_accepted": {"const": false},
+        "current_consumer_approval": {"const": false},
+        "release_readiness_granted": {"const": false},
+        "publication_allowed": {"const": false},
+        "human_acceptance_granted": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "artifact_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "json_value": {
+      "type": ["object", "array", "string", "number", "integer", "boolean", "null"]
+    },
+    "health_pointer_fact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cause", "path", "json_pointer", "expected", "actual", "status"],
+      "properties": {
+        "cause": {"type": "string", "minLength": 1},
+        "path": {"const": "reports/health-probe-catalog.json"},
+        "json_pointer": {"type": "string"},
+        "expected": {"$ref": "#/$defs/json_value"},
+        "actual": {"$ref": "#/$defs/json_value"},
+        "status": {"enum": ["matched", "mismatch", "missing"]}
+      }
+    },
+    "operation_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation_name", "source_operation_seq", "source_system", "source_url", "source_sha256"],
+      "properties": {
+        "operation_name": {"type": ["string", "null"]},
+        "source_operation_seq": {"type": ["string", "null"]},
+        "source_system": {"type": "string", "minLength": 1},
+        "source_url": {"type": ["string", "null"]},
+        "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "operation_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expected", "actual", "status"],
+      "properties": {
+        "expected": {"$ref": "#/$defs/operation_identity"},
+        "actual": {"oneOf": [{"$ref": "#/$defs/operation_identity"}, {"type": "null"}]},
+        "status": {"enum": ["matched", "mismatch", "missing", "ambiguous"]}
+      }
+    },
+    "registry_dataset_fact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataset_id", "expected_sha256", "actual_sha256", "status", "expected_operations", "actual_operations", "operation_checks"],
+      "properties": {
+        "dataset_id": {"type": "string", "pattern": "^[0-9]{8}$"},
+        "expected_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "actual_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+        "status": {"enum": ["matched", "mismatch", "missing", "ambiguous", "malformed"]},
+        "expected_operations": {"type": "array", "items": {"$ref": "#/$defs/operation_identity"}},
+        "actual_operations": {"type": "array", "items": {"$ref": "#/$defs/operation_identity"}},
+        "operation_checks": {"type": "array", "items": {"$ref": "#/$defs/operation_check"}},
+        "unmatched_current_operations": {"type": "array", "items": {"$ref": "#/$defs/operation_identity"}}
+      }
+    },
+    "mismatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "path", "expected", "actual"],
+      "properties": {
+        "code": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+        "path": {"type": "string", "minLength": 1},
+        "expected": {"$ref": "#/$defs/json_value"},
+        "actual": {"$ref": "#/$defs/json_value"}
+      }
+    }
+  }
+}

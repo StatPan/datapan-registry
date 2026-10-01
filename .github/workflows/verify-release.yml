@@ -23,8 +23,8 @@ jobs:
       - name: Checkout registry
         uses: actions/checkout@v7
         with:
-          # This job validates the checked-in minimized identity proof. The
-          # full verify job independently cross-checks it against Registry.
+          # This job validates the immutable historical identity proof. The
+          # full verify job compares its referenced identities with materialized Registry bytes.
           lfs: false
 
       - name: Validate diagnostic candidate before public distribution
@@ -55,6 +55,10 @@ jobs:
         with:
           path: datapan-registry
           lfs: false
+
+      - name: Fetch pinned historical diagnostic source object
+        working-directory: datapan-registry
+        run: git fetch --no-tags --depth=1 origin b49d66b97d8155c34649f4dd2040b884c4212d64
 
       - name: Validate external CLI checkout identity
         working-directory: datapan-registry
@@ -119,7 +123,9 @@ jobs:
           python -m unittest tests/test_validate_operation_assertion_policies.py
           python scripts/validate-diagnostic-envelope-draft.py
           python -m unittest tests/test_validate_diagnostic_envelope_draft.py
-          python scripts/generate-diagnostic-registry-identity-proof.py --check
+          python scripts/generate-diagnostic-current-source-applicability.py --check
+          python scripts/validate-diagnostic-current-source-applicability.py
+          python -m unittest tests/test_diagnostic_current_source_applicability.py
           python scripts/validate-diagnostic-evidence-mapping-draft.py
           python -m unittest tests/test_validate_diagnostic_evidence_mapping_draft.py
           python scripts/generate-diagnostic-release-candidate.py --check
