@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-09-30T01:45:58.529244Z",
+  "generated_at": "2026-10-02T00:49:45.665509Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 7181,
-    "verified": 3577,
-    "failed": 946,
-    "skipped": 2658,
+    "total": 7981,
+    "verified": 3689,
+    "failed": 962,
+    "skipped": 3330,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "verified",
-        "count": 3577,
+        "count": 3689,
         "status": "verified"
       },
       {
         "key": "skipped",
-        "count": 2658,
+        "count": 3330,
         "status": "skipped"
       },
       {
         "key": "failed",
-        "count": 946,
+        "count": 962,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 1017,
+        "count": 1470,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 584,
+        "count": 803,
         "reason": "approval_required"
       },
       {
@@ -97,6 +97,11 @@
         "reason": "hug_request_timeout"
       },
       {
+        "key": "kipris-plus_http_404",
+        "count": 30,
+        "reason": "kipris-plus_http_404"
+      },
+      {
         "key": "open-assembly_http_400",
         "count": 30,
         "reason": "open-assembly_http_400"
@@ -115,11 +120,6 @@
         "key": "anyang_request_failed",
         "count": 26,
         "reason": "anyang_request_failed"
-      },
-      {
-        "key": "kipris-plus_http_404",
-        "count": 26,
-        "reason": "kipris-plus_http_404"
       },
       {
         "key": "geoje_missing_required_params",
@@ -267,6 +267,11 @@
         "reason": "uiryeong_service_key_not_registered"
       },
       {
+        "key": "HTTP 403",
+        "count": 5,
+        "reason": "HTTP 403"
+      },
+      {
         "key": "andong_missing_required_params",
         "count": 5,
         "reason": "andong_missing_required_params"
@@ -282,11 +287,6 @@
         "reason": "lh_ebid_service_key_not_registered"
       },
       {
-        "key": "HTTP 403",
-        "count": 4,
-        "reason": "HTTP 403"
-      },
-      {
         "key": "airport_service_key_not_registered",
         "count": 4,
         "reason": "airport_service_key_not_registered"
@@ -300,6 +300,11 @@
         "key": "emuseum_missing_required_params",
         "count": 4,
         "reason": "emuseum_missing_required_params"
+      },
+      {
+        "key": "foodsafetykorea_request_timeout",
+        "count": 4,
+        "reason": "foodsafetykorea_request_timeout"
       },
       {
         "key": "nongsaro_request_timeout",
@@ -320,6 +325,11 @@
         "key": "consumer_request_timeout",
         "count": 3,
         "reason": "consumer_request_timeout"
+      },
+      {
+        "key": "foodsafetykorea_request_failed",
+        "count": 3,
+        "reason": "foodsafetykorea_request_failed"
       },
       {
         "key": "itfind_endpoint_not_found",
@@ -400,6 +410,16 @@
         "key": "Get \"http://apis.data.go.kr/1360000/AwsYearlyInfoService/getNote?dataType=json&numOfRows=1&pageNo=1&year=2024&[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"http://apis.data.go.kr/1360000/AwsYearlyInfoService/getNote?dataType=json&numOfRows=1&pageNo=1&year=2024&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/1383000/stis/srvyGndrEqltTblDataService/getServeyGenderEqualityYearList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/1383000/stis/srvyGndrEqltTblDataService/getServeyGenderEqualityYearList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/1383000/stis/srvyMltCltrFmlyTblDataService/getServeyMulticulturalFamliyYearList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/1383000/stis/srvyMltCltrFmlyTblDataService/getServeyMulticulturalFamliyYearList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
       },
       {
         "key": "Get \"http://apis.data.go.kr/1613000/ArvlInfoInqireService/getCtyCodeList?_type=json&[redacted credential assignment] context deadline exceeded",
@@ -497,6 +517,16 @@
         "reason": "Get \"http://apis.data.go.kr/B552474/EduInfoService/getEduCode?[redacted credential assignment] context deadline exceeded"
       },
       {
+        "key": "Get \"http://apis.data.go.kr/B552486/opnApiMnfcCmpy/opnApiMnfcCmpy02?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B552486/opnApiMnfcCmpy/opnApiMnfcCmpy02?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B552486/opnApiMnfcCmpy/opnApiMnfcCmpy03?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B552486/opnApiMnfcCmpy/opnApiMnfcCmpy03?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
         "key": "car365_http_400",
         "count": 1,
         "reason": "car365_http_400"
@@ -575,7 +605,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 1875,
+        "count": 2580,
         "provider": "data.go.kr"
       },
       {
@@ -624,14 +654,19 @@
         "provider": "q-net"
       },
       {
+        "key": "kipris-plus",
+        "count": 121,
+        "provider": "kipris-plus"
+      },
+      {
         "key": "daejeon",
         "count": 114,
         "provider": "daejeon"
       },
       {
-        "key": "kipris-plus",
-        "count": 109,
-        "provider": "kipris-plus"
+        "key": "nongsaro",
+        "count": 106,
+        "provider": "nongsaro"
       },
       {
         "key": "chungnam",
@@ -657,6 +692,11 @@
         "key": "open-law",
         "count": 83,
         "provider": "open-law"
+      },
+      {
+        "key": "foodsafetykorea",
+        "count": 81,
+        "provider": "foodsafetykorea"
       },
       {
         "key": "jeonju",
@@ -694,11 +734,6 @@
         "provider": "hug"
       },
       {
-        "key": "nongsaro",
-        "count": 64,
-        "provider": "nongsaro"
-      },
-      {
         "key": "seogwipo",
         "count": 62,
         "provider": "seogwipo"
@@ -709,6 +744,11 @@
         "provider": "lofin365"
       },
       {
+        "key": "jeju-www",
+        "count": 57,
+        "provider": "jeju-www"
+      },
+      {
         "key": "epost",
         "count": 56,
         "provider": "epost"
@@ -717,11 +757,6 @@
         "key": "nfqs",
         "count": 55,
         "provider": "nfqs"
-      },
-      {
-        "key": "jeju-www",
-        "count": 54,
-        "provider": "jeju-www"
       },
       {
         "key": "kopis",
@@ -737,11 +772,6 @@
         "key": "keit",
         "count": 48,
         "provider": "keit"
-      },
-      {
-        "key": "foodsafetykorea",
-        "count": 46,
-        "provider": "foodsafetykorea"
       },
       {
         "key": "kma-apihub",
@@ -1079,6 +1109,11 @@
         "provider": "nrf"
       },
       {
+        "key": "jejuits",
+        "count": 2,
+        "provider": "jejuits"
+      },
+      {
         "key": "mpva-egonghun",
         "count": 2,
         "provider": "mpva-egonghun"
@@ -1132,6 +1167,11 @@
         "key": "ins24",
         "count": 1,
         "provider": "ins24"
+      },
+      {
+        "key": "ip-navi",
+        "count": 1,
+        "provider": "ip-navi"
       },
       {
         "key": "jeju-air",
@@ -1242,7 +1282,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 1756,
+        "count": 2458,
         "host": "apis.data.go.kr"
       },
       {
@@ -1286,14 +1326,19 @@
         "host": "data.seoul.go.kr"
       },
       {
+        "key": "plus.kipris.or.kr",
+        "count": 121,
+        "host": "plus.kipris.or.kr"
+      },
+      {
         "key": "bigdata.daejeon.go.kr",
         "count": 112,
         "host": "bigdata.daejeon.go.kr"
       },
       {
-        "key": "plus.kipris.or.kr",
-        "count": 109,
-        "host": "plus.kipris.or.kr"
+        "key": "www.nongsaro.go.kr",
+        "count": 105,
+        "host": "www.nongsaro.go.kr"
       },
       {
         "key": "openapi.q-net.or.kr",
@@ -1314,6 +1359,11 @@
         "key": "seogu.go.kr",
         "count": 85,
         "host": "seogu.go.kr"
+      },
+      {
+        "key": "www.foodsafetykorea.go.kr",
+        "count": 81,
+        "host": "www.foodsafetykorea.go.kr"
       },
       {
         "key": "openapi.jeonju.go.kr",
@@ -1346,11 +1396,6 @@
         "host": "www.khug.or.kr"
       },
       {
-        "key": "www.nongsaro.go.kr",
-        "count": 63,
-        "host": "www.nongsaro.go.kr"
-      },
-      {
         "key": "open.law.go.kr",
         "count": 62,
         "host": "open.law.go.kr"
@@ -1366,6 +1411,11 @@
         "host": "www.lofin365.go.kr"
       },
       {
+        "key": "www.jeju.go.kr",
+        "count": 57,
+        "host": "www.jeju.go.kr"
+      },
+      {
         "key": "www.nfqs.go.kr",
         "count": 55,
         "host": "www.nfqs.go.kr"
@@ -1376,11 +1426,6 @@
         "host": "kopis.or.kr"
       },
       {
-        "key": "www.jeju.go.kr",
-        "count": 54,
-        "host": "www.jeju.go.kr"
-      },
-      {
         "key": "www.seogwipo.go.kr",
         "count": 51,
         "host": "www.seogwipo.go.kr"
@@ -1389,11 +1434,6 @@
         "key": "data.ekape.or.kr",
         "count": 49,
         "host": "data.ekape.or.kr"
-      },
-      {
-        "key": "www.foodsafetykorea.go.kr",
-        "count": 46,
-        "host": "www.foodsafetykorea.go.kr"
       },
       {
         "key": "apihub.kma.go.kr",
@@ -1806,6 +1846,11 @@
         "host": "www.rda.go.kr"
       },
       {
+        "key": "api.odcloud.kr",
+        "count": 3,
+        "host": "api.odcloud.kr"
+      },
+      {
         "key": "dgfca.or.kr",
         "count": 3,
         "host": "dgfca.or.kr"
@@ -1866,6 +1911,11 @@
         "host": "www.hrfco.go.kr"
       },
       {
+        "key": "www.jejuits.go.kr",
+        "count": 2,
+        "host": "www.jejuits.go.kr"
+      },
+      {
         "key": "www.kci.go.kr",
         "count": 2,
         "host": "www.kci.go.kr"
@@ -1894,6 +1944,11 @@
         "key": "alldam.chungnam.go.kr",
         "count": 1,
         "host": "alldam.chungnam.go.kr"
+      },
+      {
+        "key": "api.ip-navi.or.kr:8000",
+        "count": 1,
+        "host": "api.ip-navi.or.kr:8000"
       },
       {
         "key": "api.sexoffender.go.kr",
@@ -2104,12 +2159,12 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 5311,
+        "count": 5406,
         "kind": "external_endpoint"
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 1756,
+        "count": 2461,
         "kind": "data_go_kr_gateway"
       },
       {
