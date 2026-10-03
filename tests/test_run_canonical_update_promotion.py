@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+import contextlib
 import importlib.util
 import hashlib
 import copy
+import io
 import json
+import os
 import pathlib
 import subprocess
 import sys
@@ -1467,6 +1470,19 @@ class OwnedPRRefreshRecoveryTests(unittest.TestCase):
                 observed = self.github_api_readback(snapshot["body"], snapshot["head"])
                 RUNNER.validate_existing_pr_api_readback(observed, journal, existing, PR_HELPER)
 
+    def test_predecessor_readback_routes_to_prepared_refresh_phase(self) -> None:
+        predecessor, target = self.receipts()
+        journal = self.journal(predecessor, target)
+        existing = [{"revision_ref": PR_HELPER.revision_reference(predecessor)}]
+        observed = self.github_api_readback(
+            target["ownership"]["body"], self.new_head,
+        )
+
+        with mock.patch.object(RUNNER, "refresh_pr_phase", return_value="after-body-edit") as refresh_phase:
+            RUNNER.validate_existing_pr_api_readback(observed, journal, existing, PR_HELPER)
+
+        refresh_phase.assert_called_once_with(target, predecessor, observed, PR_HELPER)
+
     def test_human_head_or_body_drift_fails_closed_during_refresh_recovery(self) -> None:
         old, target = self.receipts()
         journal = self.journal(old, target)
@@ -1627,6 +1643,278 @@ class OwnedPRRefreshRecoveryTests(unittest.TestCase):
         }
         with self.assertRaisesRegex(RUNNER.PromotionError, "duplicate_open_prs"):
             RUNNER.existing_pr_rows({"records": [first, second]}, rows, PR_HELPER, candidate)
+
+
+class PreparedCreateRecoveryTests(unittest.TestCase):
+    fixture_path = pathlib.Path(__file__).parent / "fixtures/canonical-update-promotion/attempt-3-pr-686-recovery.json"
+    controller_head = "d" * 40
+
+    def fixture(self) -> dict:
+        return json.loads(self.fixture_path.read_text(encoding="utf-8"))
+
+    def args(self, record: dict, **overrides: object) -> dict:
+        candidate = record["candidate"]
+        values = {
+            "source_id": candidate["source_id"],
+            "scope": candidate["scope"],
+            "generation_id": candidate["generation_id"],
+            "registry_path": candidate["registry_path"],
+            "registry_bytes": candidate["registry_bytes"],
+            "registry_sha256": candidate["registry_sha256"],
+            "composition_receipt_sha256": candidate["composition_receipt_sha256"],
+        }
+        values.update(overrides)
+        return values
+
+    def validate(self, fixture: dict, **overrides: object) -> int:
+        record = fixture["state"]["records"][0]
+        values = self.args(record, **overrides)
+        return RUNNER.validate_prepared_create_pr_readback(
+            record, fixture["open_pr_rows"], fixture["pull_request_readback"],
+            fixture["remote_branch_sha"], PR_HELPER,
+            repository=record["candidate"]["repository"], **values,
+        )
+
+    def test_archived_actual_attempt_three_state_and_pr_replay_exactly(self) -> None:
+        fixture = self.fixture()
+        schema = json.loads((SCRIPT.parents[1] / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json").read_text(encoding="utf-8"))
+        PR_HELPER.validate_journal(fixture["state"], schema)
+        receipt = fixture["state"]["records"][0]
+        pull = fixture["pull_request_readback"]
+
+        self.assertEqual(fixture["provenance"]["state_branch_sha"], "b31d8b25450dadf39ff643748568726af4ce04bf")
+        self.assertEqual(receipt["status"], "prepared")
+        self.assertEqual(receipt["pr"], {"number": 0, "url": "", "state": "missing", "merge_commit_sha": None})
+        self.assertEqual(receipt["candidate"]["base_sha"], "5aae73b9a99255397ee2807d58c324094757bf8c")
+        self.assertEqual(receipt["candidate"]["head_sha"], "bcc306c20c424faa9e789444e5914bf1887b930d")
+        self.assertEqual(receipt["ownership"]["issue_number"], 685)
+        self.assertEqual(pull["number"], 686)
+        self.assertEqual(pull["headRepository"], "StatPan/datapan-registry")
+        self.assertEqual(fixture["remote_branch_sha"], receipt["candidate"]["head_sha"])
+        self.assertEqual(self.validate(fixture), 686)
+
+    def test_production_resolver_replays_frozen_api_reads_without_remote_writes(self) -> None:
+        fixture = self.fixture()
+        record = fixture["state"]["records"][0]
+        root = pathlib.Path("/read-only/replay")
+        materializer = object()
+        with (
+            mock.patch.object(RUNNER, "gh_open_prs", return_value=fixture["open_pr_rows"]) as list_prs,
+            mock.patch.object(RUNNER, "gh_pr_readback", return_value=fixture["pull_request_readback"]) as read_pr,
+            mock.patch.object(PR_HELPER, "load_materializer", return_value=materializer),
+            mock.patch.object(PR_HELPER, "remote_ref_sha", return_value=fixture["remote_branch_sha"]) as read_branch,
+            mock.patch.object(RUNNER, "persist_journal_record") as persist,
+        ):
+            number, observed = RUNNER.resolve_prepared_create_pr_readback(
+                root, "StatPan/datapan-registry", record, PR_HELPER,
+                source_id=record["candidate"]["source_id"],
+                scope=record["candidate"]["scope"],
+                generation_id=record["candidate"]["generation_id"],
+                registry_path=record["candidate"]["registry_path"],
+                registry_bytes=record["candidate"]["registry_bytes"],
+                registry_sha256=record["candidate"]["registry_sha256"],
+                composition_receipt_sha256=record["candidate"]["composition_receipt_sha256"],
+            )
+
+        self.assertEqual(number, 686)
+        self.assertEqual(observed, fixture["pull_request_readback"])
+        list_prs.assert_called_once_with(root, "StatPan/datapan-registry")
+        read_pr.assert_called_once_with(root, "StatPan/datapan-registry", 686)
+        read_branch.assert_called_once_with(materializer, root, "origin", f"refs/heads/{record['ownership']['branch']}")
+        persist.assert_not_called()
+
+    def test_immediate_nonzero_or_lost_create_response_uses_same_strict_readback(self) -> None:
+        fixture = self.fixture()
+        intent = fixture["state"]["records"][0]
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            body_path = root / "candidate-pr.md"
+            body_path.write_text(intent["ownership"]["body"], encoding="utf-8")
+            for label, command_patch in (
+                ("nonzero", {"return_value": subprocess.CompletedProcess(["gh", "pr", "create"], 1, "", "response lost after server accepted")}),
+                ("lost", {"side_effect": OSError("local gh response was lost")}),
+            ):
+                with self.subTest(result=label), \
+                    mock.patch.object(RUNNER, "command", **command_patch) as create, \
+                    mock.patch.object(RUNNER, "gh_open_prs", return_value=fixture["open_pr_rows"]), \
+                    mock.patch.object(RUNNER, "gh_pr_readback", return_value=fixture["pull_request_readback"]), \
+                    mock.patch.object(PR_HELPER, "load_materializer", return_value=object()), \
+                    mock.patch.object(PR_HELPER, "remote_ref_sha", return_value=fixture["remote_branch_sha"]), \
+                    mock.patch.object(RUNNER, "persist_journal_record") as persist:
+                    receipt, number = RUNNER.create_pr_then_reconcile_prepared_create(
+                        root, "StatPan/datapan-registry", intent, PR_HELPER,
+                        **self.args(intent), journal_source_base_sha=self.controller_head,
+                        observed_at="2026-10-03T09:00:00Z",
+                        run_url="https://github.com/StatPan/datapan-registry/actions/runs/37109999999/attempts/1",
+                        body_path=body_path,
+                    )
+                self.assertEqual(number, 686)
+                self.assertEqual(receipt["status"], "pending-review")
+                self.assertEqual(receipt["candidate"], intent["candidate"])
+                self.assertEqual(receipt["ownership"], intent["ownership"])
+                create.assert_called_once()
+                self.assertIn(1, create.call_args.kwargs["allowed_returncodes"])
+                persist.assert_called_once()
+                self.assertEqual(persist.call_args.args[1], self.controller_head)
+
+    def test_every_identity_and_proof_guard_fails_closed(self) -> None:
+        mutations = (
+            ("repository", lambda f: f["pull_request_readback"].__setitem__("repository", "Elsewhere/repo"), {}),
+            ("head repository", lambda f: f["pull_request_readback"].__setitem__("headRepository", "Elsewhere/repo"), {}),
+            ("base branch", lambda f: f["pull_request_readback"].__setitem__("baseRefName", "release"), {}),
+            ("candidate base", lambda f: f["state"]["records"][0]["candidate"].__setitem__("base_sha", "1" * 40), {}),
+            ("branch", lambda f: f["pull_request_readback"].__setitem__("headRefName", "other-branch"), {}),
+            ("candidate head", lambda f: f["state"]["records"][0]["candidate"].__setitem__("head_sha", "2" * 40), {}),
+            ("body bytes", lambda f: f["pull_request_readback"].__setitem__("body", f["pull_request_readback"]["body"] + "Human edit.\n"), {}),
+            ("body digest", lambda f: f["state"]["records"][0]["ownership"].__setitem__("body_sha256", "3" * 64), {}),
+            ("owner", lambda f: f["state"]["records"][0]["ownership"].__setitem__("owner_id", "not-the-owner"), {}),
+            ("generation", lambda f: f["pull_request_readback"].__setitem__("body", f["pull_request_readback"]["body"].replace("generation=66a2", "generation=76a2")), {}),
+            ("issue", lambda f: (f["state"]["records"][0]["ownership"].__setitem__("issue_number", 686), f["state"]["records"][0]["ownership"].__setitem__("issue_url", "https://github.com/StatPan/datapan-registry/issues/686")), {}),
+            ("remote branch SHA", lambda f: f.__setitem__("remote_branch_sha", "4" * 40), {}),
+            ("LFS proof", lambda f: f["state"]["records"][0]["candidate"]["payload_readback"].__setitem__("lfs_oid", "5" * 64), {}),
+            ("source checks", lambda f: f["state"]["records"][0]["checks"].__setitem__("release", "failed"), {}),
+            ("validation evidence", lambda f: f["state"]["records"][0]["validation_evidence"][0].__setitem__("exit_code", 1), {}),
+            ("processor generation", lambda f: None, {"generation_id": "7" * 64}),
+            ("processor payload", lambda f: None, {"registry_sha256": "8" * 64}),
+            ("branch list row", lambda f: f["open_pr_rows"][0].__setitem__("head_ref", "other-branch"), {}),
+            ("base branch list row", lambda f: f["open_pr_rows"][0].__setitem__("base_ref", "release"), {}),
+            ("list head sha", lambda f: f["open_pr_rows"][0].__setitem__("head_sha", "9" * 40), {}),
+            ("list body bytes", lambda f: f["open_pr_rows"][0].__setitem__("body", f["open_pr_rows"][0]["body"] + "Human edit.\n"), {}),
+        )
+        for name, mutate, overrides in mutations:
+            with self.subTest(guard=name):
+                fixture = self.fixture()
+                mutate(fixture)
+                with self.assertRaises(RUNNER.PromotionError):
+                    self.validate(fixture, **overrides)
+
+    def test_zero_closed_and_duplicate_open_readbacks_fail_closed(self) -> None:
+        fixture = self.fixture()
+        closed = self.fixture()
+        closed["open_pr_rows"][0]["state"] = "closed"
+        with self.assertRaisesRegex(RUNNER.PromotionError, "exactly one open PR"):
+            self.validate(closed)
+
+        duplicate = self.fixture()
+        duplicate["open_pr_rows"].append(copy.deepcopy(duplicate["open_pr_rows"][0]))
+        duplicate["open_pr_rows"][1]["number"] = 687
+        with self.assertRaisesRegex(RUNNER.PromotionError, "exactly one open PR"):
+            self.validate(duplicate)
+
+        with self.assertRaisesRegex(RUNNER.PromotionError, "exactly one open PR"):
+            RUNNER.validate_prepared_create_pr_readback(
+                fixture["state"]["records"][0], [], fixture["pull_request_readback"],
+                fixture["remote_branch_sha"], PR_HELPER,
+                repository="StatPan/datapan-registry", **self.args(fixture["state"]["records"][0]),
+            )
+
+    def test_cas_conflict_is_retryable_without_recreating_or_changing_candidate(self) -> None:
+        fixture = self.fixture()
+        intent = fixture["state"]["records"][0]
+        original_candidate = copy.deepcopy(intent["candidate"])
+        root = pathlib.Path("/read-only/retry")
+        with (
+            mock.patch.object(RUNNER, "gh_open_prs", return_value=fixture["open_pr_rows"]),
+            mock.patch.object(RUNNER, "gh_pr_readback", return_value=fixture["pull_request_readback"]),
+            mock.patch.object(PR_HELPER, "load_materializer", return_value=object()),
+            mock.patch.object(PR_HELPER, "remote_ref_sha", return_value=fixture["remote_branch_sha"]),
+            mock.patch.object(RUNNER, "persist_journal_record", side_effect=[RUNNER.PromotionError("CAS conflict"), None]) as persist,
+        ):
+            with self.assertRaisesRegex(RUNNER.PromotionError, "CAS conflict"):
+                RUNNER.reconcile_prepared_create_pr(
+                    root, "StatPan/datapan-registry", intent, PR_HELPER,
+                    **self.args(intent), journal_source_base_sha=self.controller_head,
+                    observed_at="2026-10-03T09:10:00Z",
+                    run_url="https://github.com/StatPan/datapan-registry/actions/runs/37109999999/attempts/1",
+                )
+            recovered, number = RUNNER.reconcile_prepared_create_pr(
+                root, "StatPan/datapan-registry", intent, PR_HELPER,
+                **self.args(intent), journal_source_base_sha=self.controller_head,
+                observed_at="2026-10-03T09:11:00Z",
+                run_url="https://github.com/StatPan/datapan-registry/actions/runs/37109999999/attempts/2",
+            )
+
+        self.assertEqual(number, 686)
+        self.assertEqual(recovered["status"], "pending-review")
+        self.assertEqual(recovered["candidate"], original_candidate)
+        self.assertEqual(intent["candidate"], original_candidate)
+        self.assertEqual(persist.call_count, 2)
+
+    def test_early_pr_zero_path_persists_pending_review_then_ci_without_native_regeneration(self) -> None:
+        fixture = self.fixture()
+        intent = fixture["state"]["records"][0]
+        candidate = intent["candidate"]
+        controller_head = self.controller_head
+        baseline_sha = "a" * 64
+        checkpoint = {
+            "source_id": candidate["source_id"],
+            "source_scope": candidate["scope"],
+            "generation_id": candidate["generation_id"],
+        }
+        bundle = {
+            "registry_path": candidate["registry_path"],
+            "registry_bytes": candidate["registry_bytes"],
+            "registry_sha256": candidate["registry_sha256"],
+            "composition_receipt_sha256": candidate["composition_receipt_sha256"],
+            "baseline_sha256": baseline_sha,
+            "status": "ready",
+        }
+
+        def fake_command(argv: tuple[str, ...], _cwd: pathlib.Path, **_kwargs: object) -> subprocess.CompletedProcess[str]:
+            if argv[:2] == ("git", "rev-parse"):
+                return subprocess.CompletedProcess(argv, 0, controller_head + "\n", "")
+            if argv[:3] == ("git", "ls-remote", "--heads"):
+                return subprocess.CompletedProcess(argv, 0, f"{controller_head}\trefs/heads/main\n", "")
+            if any("materialize-canonical-registry.py" in str(part) for part in argv):
+                return subprocess.CompletedProcess(argv, 0, "", "")
+            if argv[:2] == ("git", "status"):
+                return subprocess.CompletedProcess(argv, 0, "", "")
+            raise AssertionError(f"unexpected pre-regeneration command: {argv}")
+
+        def fake_load_object(path: pathlib.Path) -> dict:
+            if path.name == "manifest.json":
+                return {"artifacts": [{"path": candidate["registry_path"], "kind": "registry", "bytes": 10}]}
+            return {}
+
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            args = types.SimpleNamespace(
+                workflow_run_id="37100705274", workflow_run_attempt="1",
+                bundle_dir=root / "bundle", workflow_run_head_sha="e" * 40,
+                state_root=root / "processor-state", datapan_cli=root / "datapan-cli",
+                processor_artifact_id="artifact-1", event_run_id=None,
+            )
+            sequence: list[str] = []
+            with (
+                mock.patch.dict(os.environ, {
+                    "GITHUB_REPOSITORY": "StatPan/datapan-registry",
+                    "GITHUB_RUN_ID": "37109999999", "GITHUB_RUN_ATTEMPT": "1",
+                }),
+                mock.patch.object(RUNNER, "validate_no_candidate_processor_result", return_value=None),
+                mock.patch.object(RUNNER, "load_canonical_update_pr", return_value=PR_HELPER),
+                mock.patch.object(RUNNER, "load_object", side_effect=fake_load_object),
+                mock.patch.object(RUNNER, "locate_processor_checkpoint", return_value=("run-1", checkpoint)),
+                mock.patch.object(RUNNER, "validate_generation_identity"),
+                mock.patch.object(RUNNER, "validate_processor_bundle", return_value=bundle),
+                mock.patch.object(RUNNER, "verify_processor_input_compatibility"),
+                mock.patch.object(RUNNER, "command", side_effect=fake_command),
+                mock.patch.object(RUNNER, "registry_sha_from_path", return_value=(10, baseline_sha)),
+                mock.patch.object(RUNNER, "load_promotion_journal", return_value=fixture["state"]),
+                mock.patch.object(RUNNER, "gh_open_prs", return_value=fixture["open_pr_rows"]),
+                mock.patch.object(RUNNER, "gh_pr_readback", return_value=fixture["pull_request_readback"]),
+                mock.patch.object(PR_HELPER, "load_materializer", return_value=object()),
+                mock.patch.object(PR_HELPER, "remote_ref_sha", return_value=fixture["remote_branch_sha"]),
+                mock.patch.object(RUNNER, "persist_journal_record", side_effect=lambda *_a, **_kw: sequence.append("persist")),
+                mock.patch.object(RUNNER, "ensure_verify_release_ci", side_effect=lambda *_a: (sequence.append("ci") or {"ci": {"state": "passed"}})),
+                mock.patch.object(RUNNER, "load_module", side_effect=AssertionError("native source refresh must not run")) as load_module,
+                contextlib.redirect_stdout(io.StringIO()),
+            ):
+                RUNNER.execute_candidate_preparation(args, root)
+
+        self.assertEqual(sequence, ["persist", "ci"])
+        load_module.assert_not_called()
+        self.assertFalse((root / candidate["registry_path"]).exists())
+        self.assertFalse((root / "reports/latest-verification.json").exists())
 
 
 
