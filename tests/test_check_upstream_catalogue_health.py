@@ -1159,6 +1159,39 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
             self.assertIn(expected_reason, reasons)
             self.assertIn("promotion_ack_missing", reasons)
 
+    def test_prepared_fault_identities_do_not_depend_on_retained_journal_order(self) -> None:
+        cases = (
+            (None, "promotion_prepared_stage_clock_unavailable"),
+            ("not-a-timestamp", "promotion_prepared_stage_clock_invalid"),
+            ("2026-09-01T00:00:00Z", "promotion_prepared_delivery_overdue"),
+        )
+        for observed_at, expected_reason in cases:
+            with self.subTest(observed_at=observed_at):
+                selected = prepared_promotion_receipt(observed_at)
+                other = copy.deepcopy(selected)
+                other["candidate"]["generation_id"] = "b" * 64
+                rows = [selected, other]
+                observed: list[dict[str, str]] = []
+                for ordered_rows in (rows, list(reversed(rows))):
+                    journal = {
+                        "schema_version": "datapan.canonical-update-promotion-journal.v1",
+                        "repository": "StatPan/datapan-registry",
+                        "records": copy.deepcopy(ordered_rows),
+                        "updated_at": "2026-09-30T22:00:00Z",
+                    }
+                    with tempfile.TemporaryDirectory() as directory:
+                        report = self.run_health(
+                            pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                            ack=journal,
+                        )
+                    observed.append({
+                        row["reason"]: row["fault_key"]
+                        for row in report["sources"][0]["faults"]
+                        if row["reason"] in {"promotion_ack_missing", expected_reason}
+                    })
+                self.assertEqual(observed[0], observed[1])
+                self.assertEqual(set(observed[0]), {"promotion_ack_missing", expected_reason})
+
     def test_promotion_failure_order_uses_attempt_start_and_rejects_untrusted_identity(self) -> None:
         older_failure = promotion_execution_run(
             run_id=701, conclusion="failure", run_started_at="2026-09-30T22:00:00Z",

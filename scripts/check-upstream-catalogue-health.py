@@ -1468,7 +1468,7 @@ def evaluate_source(
         if promotion_state == "prepared":
             add(
                 "promotion", "promotion_ack_missing", "warning",
-                _promotion_recovery_action(source, promotion_workflow_path), record_generation,
+                _promotion_recovery_action(source, promotion_workflow_path), generation_id,
             )
             stage_deadline_key = "pending-review"
         elif promotion_state == "pending-review":
@@ -1492,7 +1492,7 @@ def evaluate_source(
                 }
                 add(
                     "promotion", "promotion_prepared_stage_clock_unavailable", "warning",
-                    _promotion_recovery_action(source, promotion_workflow_path), record_generation,
+                    _promotion_recovery_action(source, promotion_workflow_path), generation_id,
                 )
             else:
                 try:
@@ -1507,7 +1507,7 @@ def evaluate_source(
                         if promotion_state == "prepared":
                             add(
                                 "promotion", "promotion_prepared_delivery_overdue", "warning",
-                                _promotion_recovery_action(source, promotion_workflow_path), record_generation,
+                                _promotion_recovery_action(source, promotion_workflow_path), generation_id,
                             )
                         elif stage_deadline_key == "pending-review":
                             add("promotion", "promotion_review_wait_overdue", "warning", _fault_action(source, "promotion_wait"))
@@ -1523,10 +1523,10 @@ def evaluate_source(
                         }
                         add(
                             "promotion", "promotion_prepared_stage_clock_invalid", "warning",
-                            _promotion_recovery_action(source, promotion_workflow_path), record_generation,
+                            _promotion_recovery_action(source, promotion_workflow_path), generation_id,
                         )
                     else:
-                        add("promotion", "promotion_stage_clock_invalid", "error", _fault_action(source, "promotion_wait"), record_generation)
+                        add("promotion", "promotion_stage_clock_invalid", "error", _fault_action(source, "promotion_wait"), generation_id)
 
         if promotion_state not in {"prepared"}:
             if current_run is None:
