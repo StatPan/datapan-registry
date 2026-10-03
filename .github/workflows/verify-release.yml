@@ -224,6 +224,7 @@ jobs:
           python scripts/validate-credential-runtime-manual-review-decision.py
           python scripts/generate-credential-runtime-manual-review-acceptance.py --check
           python scripts/generate-credential-runtime-manual-review-acceptance-packet.py --check
+          python -m unittest tests/test_manual_review_scope.py tests/test_manual_review_rebinding_acceptance_paths.py tests/test_manual_review_technical_rebinding.py
           python scripts/run-credential-runtime-collection.py --self-test
           python scripts/run-credential-runtime-collection.py --check
           python scripts/run-credential-runtime-operator-workflow.py --self-test
@@ -292,6 +293,7 @@ jobs:
           python -m py_compile scripts/validate-credential-runtime-manual-review-decision.py
           python -m py_compile scripts/generate-credential-runtime-manual-review-acceptance.py
           python -m py_compile scripts/generate-credential-runtime-manual-review-acceptance-packet.py
+          python -m py_compile scripts/manual_review_scope.py
           python -m py_compile scripts/run-credential-runtime-collection.py
           python -m py_compile scripts/run-credential-runtime-operator-workflow.py
           python -m py_compile scripts/check-credential-runtime-github-secrets.py

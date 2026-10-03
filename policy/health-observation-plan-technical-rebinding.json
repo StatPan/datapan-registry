@@ -93,6 +93,11 @@
       "path": "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
       "kind": "schema",
       "authority_ticket": "StatPan/datapan-registry#657"
+    },
+    {
+      "path": "schemas/datapan.manual-review-scope.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#661"
     }
   ]
 }
