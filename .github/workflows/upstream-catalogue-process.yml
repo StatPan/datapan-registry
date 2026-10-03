@@ -156,7 +156,8 @@ jobs:
               exit 1
             fi
             [[ "${INPUT_RECOVER_FAILED_PROCESSOR_RUN_ID}" =~ ^[0-9]+$ ]]
-            python3 - "${STATE_DIR}" "${INPUT_RECOVER_FAILED_PROCESSOR_RUN_ID}" <<'PY' >> "${GITHUB_OUTPUT}"
+          python3 - "${STATE_DIR}" "${INPUT_RECOVER_FAILED_PROCESSOR_RUN_ID}" <<'PY' >> "${GITHUB_OUTPUT}"
+          import datetime as dt
           import hashlib
           import json
           import pathlib
@@ -603,14 +604,14 @@ jobs:
           ):
               raise SystemExit("FAIL failed processor artifact is not attached to the selected run")
           failed_run = {
-              "repository": repository, "id": run_id, "name": run["name"], "path": run["path"],
+              "repository": repository, "id": int(run_id), "name": run["name"], "path": run["path"],
               "head_branch": run["head_branch"], "head_sha": run["head_sha"], "event": run["event"],
               "status": run["status"], "conclusion": run["conclusion"], "run_attempt": attempt,
               "default_branch": default_branch,
           }
           failed_artifact = {
               "repository": repository, "run_id": run_id, "run_attempt": attempt,
-              "id": artifact_id, "name": name, "expired": artifact["expired"],
+              "id": int(artifact_id), "name": name, "expired": artifact["expired"],
               "expires_at": expires_at, "created_at": artifact.get("created_at"),
               "size_in_bytes": int(artifact["size_in_bytes"]), "digest": digest,
               "workflow_run": workflow_run,

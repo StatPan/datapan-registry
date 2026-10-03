@@ -5,12 +5,18 @@ import copy
 import gzip
 import importlib.util
 import json
+import os
 import pathlib
+import re
+import subprocess
 import sys
 import tempfile
+import textwrap
 import unittest
 from datetime import datetime, timezone
 from unittest import mock
+
+import yaml
 
 
 ROOT = pathlib.Path(__file__).parents[1]
@@ -28,6 +34,16 @@ assert PROCESSOR_SPEC and PROCESSOR_SPEC.loader
 PROCESSOR = importlib.util.module_from_spec(PROCESSOR_SPEC)
 sys.modules[PROCESSOR_SPEC.name] = PROCESSOR
 PROCESSOR_SPEC.loader.exec_module(PROCESSOR)
+
+FROZEN_CLOCK_PYTHON_PRELUDE = textwrap.dedent("""\
+    import datetime as _codex_datetime
+    class _CodexFrozenDateTime(_codex_datetime.datetime):
+        @classmethod
+        def now(cls, tz=None):
+            fixed = cls(2026, 10, 3, 4, 0, tzinfo=_codex_datetime.timezone.utc)
+            return fixed.astimezone(tz) if tz is not None else fixed.replace(tzinfo=None)
+    _codex_datetime.datetime = _CodexFrozenDateTime
+""")
 
 # These are the compressed bytes of the actual frozen durable claim and failed
 # artifact checkpoint receipt from run 37091592758, kept small and portable so
@@ -370,6 +386,96 @@ class RecoverFailedGenerationTest(unittest.TestCase):
         with self.assertRaises(RECOVERY.RecoveryRejected) as error:
             self.plan(values=repeated)
         self.assertEqual(error.exception.reason, "recovery_expected_checkpoint_sha_mismatch")
+
+    def test_workflow_selector_executes_against_the_frozen_expired_checkpoint(self) -> None:
+        workflow = yaml.load(
+            (ROOT / ".github/workflows/upstream-catalogue-process.yml").read_text(encoding="utf-8"),
+            Loader=yaml.BaseLoader,
+        )
+        select = next(step["run"] for step in workflow["jobs"]["process"]["steps"] if step.get("id") == "select")
+        match = re.search(
+            r'python3 - "\$\{STATE_DIR\}" "\$\{INPUT_RECOVER_FAILED_PROCESSOR_RUN_ID\}" <<\'PY\' >> "\$\{GITHUB_OUTPUT\}"\n(.*?)\n\s*PY',
+            select,
+            re.DOTALL,
+        )
+        self.assertIsNotNone(match, "the exact recovery selector heredoc must stay executable in this test")
+        values = frozen_inputs()
+        state, checkpoint = values[:2]
+        with tempfile.TemporaryDirectory() as temporary:
+            state_dir = pathlib.Path(temporary) / "state"
+            source_dir = state_dir / "sources" / "data_go_kr"
+            generation_dir = source_dir / "generations"
+            generation_dir.mkdir(parents=True)
+            (source_dir / "index.json").write_text(json.dumps(state["index"]), encoding="utf-8")
+            (generation_dir / f"{checkpoint['generation_id']}.json").write_text(
+                json.dumps(checkpoint), encoding="utf-8",
+            )
+            result = subprocess.run(
+                [sys.executable, "-c", FROZEN_CLOCK_PYTHON_PRELUDE + textwrap.dedent(match.group(1)), str(state_dir), str(RECOVERY.FAILED_RUN_ID)],
+                text=True,
+                capture_output=True,
+                env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"},
+                check=False,
+            )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        outputs = dict(line.split("=", 1) for line in result.stdout.splitlines())
+        self.assertEqual(outputs["decision"], "recover")
+        self.assertEqual(outputs["producer_run_id"], "36646768289")
+        self.assertEqual(outputs["generation_id"], RECOVERY.GENERATION_ID)
+        self.assertEqual(outputs["recover_failed_run_id"], str(RECOVERY.FAILED_RUN_ID))
+        self.assertEqual(outputs["recover_failed_attempt"], "1")
+        self.assertEqual(outputs["expected_checkpoint_sha256"], RECOVERY.GENERATION_CHECKPOINT_SHA256)
+
+    def test_workflow_api_metadata_normalizer_feeds_frozen_recovery_helper(self) -> None:
+        workflow = yaml.load(
+            (ROOT / ".github/workflows/upstream-catalogue-process.yml").read_text(encoding="utf-8"),
+            Loader=yaml.BaseLoader,
+        )
+        step = next(step["run"] for step in workflow["jobs"]["process"]["steps"] if step.get("id") == "failed_artifact")
+        matches = re.findall(r'python3 - "\$\{root\}" <<\'PY\'\n(.*?)\n\s*PY', step, re.DOTALL)
+        self.assertGreaterEqual(len(matches), 2, "the workflow must retain metadata and archive-verification heredocs")
+        values = frozen_inputs()
+        state, checkpoint, run, artifact, payload, current_run = values
+        raw_run = {
+            key: value for key, value in run.items() if key != "default_branch"
+        }
+        raw_run["head_repository"] = {"full_name": run["repository"]}
+        raw_artifact = {
+            key: artifact[key]
+            for key in ("id", "name", "expired", "expires_at", "created_at", "size_in_bytes", "digest", "workflow_run")
+        }
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            (root / "run-api.json").write_text(json.dumps(raw_run), encoding="utf-8")
+            (root / "artifacts-api.json").write_text(json.dumps({"artifacts": [raw_artifact]}), encoding="utf-8")
+            result = subprocess.run(
+                [sys.executable, "-", str(root)],
+                input=FROZEN_CLOCK_PYTHON_PRELUDE + textwrap.dedent(matches[0]),
+                text=True,
+                capture_output=True,
+                env={
+                    **os.environ,
+                    "PYTHONDONTWRITEBYTECODE": "1",
+                    "REPOSITORY": run["repository"],
+                    "FAILED_RUN_ID": str(run["id"]),
+                    "FAILED_ATTEMPT": str(run["run_attempt"]),
+                    "DEFAULT_BRANCH": run["default_branch"],
+                },
+                check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            normalized_run = json.loads((root / "failed-run-metadata.json").read_text(encoding="utf-8"))
+            normalized_artifact = json.loads((root / "failed-artifact-metadata.json").read_text(encoding="utf-8"))
+
+        self.assertEqual(normalized_run, run)
+        self.assertEqual(normalized_artifact, artifact)
+        plan = RECOVERY.recover_failed_generation(
+            state, checkpoint, normalized_run, normalized_artifact, payload,
+            RECOVERY.GENERATION_CHECKPOINT_SHA256, current_run,
+            datetime(2026, 10, 3, 4, 0, tzinfo=timezone.utc),
+        )
+        self.assertEqual(plan.expected_state_head_sha, RECOVERY.STATE_BRANCH_SHA)
+        self.assertEqual(plan.checkpoint["outcome"]["reason"], RECOVERY.RECOVERY_REASON)
 
     def test_active_lease_is_rejected(self) -> None:
         with self.assertRaises(RECOVERY.RecoveryRejected) as error:

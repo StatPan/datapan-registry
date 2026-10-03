@@ -352,6 +352,101 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             [MODULE.source_fingerprint(self.new_link), MODULE.source_fingerprint(third)],
         )
 
+    def test_new_generator_preserves_all_frozen_retry_attempts_across_recovery(self) -> None:
+        from tests.test_recover_upstream_catalogue_failed_generation import RECOVERY, frozen_inputs
+
+        values = frozen_inputs()
+        durable_state, old_checkpoint, run, artifact, payload, current_run = values
+        plan = RECOVERY.recover_failed_generation(
+            durable_state, old_checkpoint, run, artifact, payload,
+            RECOVERY.GENERATION_CHECKPOINT_SHA256, current_run,
+            datetime(2026, 10, 3, 4, 0, tzinfo=timezone.utc),
+        )
+        terminal = MODULE.seal_checkpoint(plan.checkpoint)
+        old_retry_state = copy.deepcopy(durable_state["index"]["detail_retry_state"])
+        self.assertEqual(len(old_retry_state), 24)
+        self.assertEqual({row["attempts"] for row in old_retry_state.values()}, {1})
+
+        source_dir = self.state_dir / "sources/data_go_kr"
+        generation_dir = source_dir / "generations"
+        generation_dir.mkdir(parents=True)
+        old_index = copy.deepcopy(durable_state["index"])
+        old_index["generations"][0].update(
+            status="quarantined", updated_at=terminal["last_heartbeat_at"],
+        )
+        (source_dir / "index.json").write_text(json.dumps(old_index), encoding="utf-8")
+        (generation_dir / f"{terminal['generation_id']}.json").write_text(
+            json.dumps(terminal), encoding="utf-8",
+        )
+
+        candidate_rows = []
+        for identity in sorted(old_retry_state):
+            url = f"https://www.data.go.kr/data/{identity}/openapi.do"
+            candidate_rows.append({
+                "id": identity,
+                "provider": "data.go.kr",
+                "type": "LINK",
+                "title": f"Frozen retry {identity}",
+                "operations": [],
+                "source": {
+                    "system": "data.go.kr",
+                    "url": url,
+                    "raw": {"type": "LINK", "api_type": "LINK", "api_id": identity, "meta_url": url},
+                },
+            })
+        self.baseline_path.write_text("[]", encoding="utf-8")
+        self.candidate_path.write_text(json.dumps(candidate_rows), encoding="utf-8")
+        self.write_observation("2026-10-03T03:50:00Z")
+        self.now = "2026-10-03T04:00:00Z"
+        self.provider_index_path.write_text(json.dumps({"adapters": []}), encoding="utf-8")
+
+        def frozen_source_fingerprint(row: dict) -> str:
+            return old_retry_state[MODULE.record_id(row)]["source_sha256"]
+
+        def frozen_guide_fingerprint(row: dict) -> str | None:
+            return old_retry_state[MODULE.record_id(row)]["guide_sha256"]
+
+        calls = []
+
+        def fail_again(url: str, _timeout: float) -> str:
+            calls.append(url)
+            raise TimeoutError("frozen retry fixture")
+
+        with (
+            mock.patch.object(MODULE, "source_fingerprint", side_effect=frozen_source_fingerprint),
+            mock.patch.object(MODULE, "guide_fingerprint", side_effect=frozen_guide_fingerprint),
+        ):
+            code, checkpoint = self.invoke(
+                run_id="36646768289",
+                fetcher=fail_again,
+                **{
+                    "--processor-run-id": "38000000000-1",
+                    "--processor-artifact-run-id": "38000000000",
+                    "--max-attempts": 24,
+                    "--max-queue": 48,
+                    "--retries-per-detail": 2,
+                },
+            )
+
+        self.assertEqual(code, 2)
+        self.assertEqual(len(calls), 24)
+        self.assertNotEqual(checkpoint["generation_id"], RECOVERY.GENERATION_ID)
+        self.assertEqual(checkpoint["generation_inputs"]["generator_revision"], MODULE.generator_revision())
+        self.assertNotEqual(
+            checkpoint["generation_inputs"]["generator_revision"],
+            old_checkpoint["generation_inputs"]["generator_revision"],
+        )
+        self.assertEqual(checkpoint["attempts_consumed"], 24)
+        self.assertEqual(checkpoint["detail_queue_cursor"], 0)
+        self.assertEqual(checkpoint["attempts_by_id"], {identity: 2 for identity in old_retry_state})
+        updated_index = json.loads((source_dir / "index.json").read_text(encoding="utf-8"))
+        self.assertEqual(set(updated_index["detail_retry_state"]), set(old_retry_state))
+        for identity, previous in old_retry_state.items():
+            current = updated_index["detail_retry_state"][identity]
+            self.assertEqual(current["attempts"], previous["attempts"] + 1, identity)
+            self.assertEqual(current["source_sha256"], previous["source_sha256"], identity)
+            self.assertEqual(current["guide_sha256"], previous["guide_sha256"], identity)
+
     def test_worker_scope_mismatch_seals_result_only_quarantine_marker(self) -> None:
         def fail(_url: str, _timeout: float) -> str:
             raise TimeoutError("fixture transient error")
