@@ -11,6 +11,7 @@ merges or publishes to Hugging Face.
 from __future__ import annotations
 
 import argparse
+import copy
 import datetime as dt
 import hashlib
 import importlib.util
@@ -202,6 +203,17 @@ def verify_processor_checkpoint(value: dict[str, Any], schema_path: pathlib.Path
     claimed = unsigned.pop("checkpoint_sha256", None)
     if claimed != hashlib.sha256(canonical_json(unsigned)).hexdigest():
         raise PromotionError("processor checkpoint digest is invalid")
+    generation_inputs = value.get("generation_inputs")
+    if not isinstance(generation_inputs, Mapping):
+        raise PromotionError("processor checkpoint lacks generation input provenance")
+    if (
+        generation_inputs.get("source_id") != value.get("source_id")
+        or generation_inputs.get("source_scope") != value.get("source_scope")
+    ):
+        raise PromotionError("processor checkpoint generation source identity is inconsistent")
+    expected_generation_id = hashlib.sha256(canonical_json(generation_inputs)).hexdigest()
+    if value.get("generation_id") != expected_generation_id:
+        raise PromotionError("processor checkpoint generation id does not bind its immutable inputs")
     return value
 
 
@@ -767,28 +779,44 @@ def validate_processor_bundle(
     if claimed_copy_sha != hashlib.sha256(canonical_json(unsigned_copy)).hexdigest():
         raise PromotionError("uploaded processor checkpoint receipt digest is invalid")
     checkpoint_copy_locator = checkpoint_copy.get("output_artifact")
-    bound_locator = dict(locator)
-    bound_locator["artifact_id"] = None
     if not isinstance(checkpoint_copy_locator, Mapping):
         raise PromotionError("uploaded processor checkpoint receipt has no output artifact locator")
+    if checkpoint_copy_locator.get("artifact_id") is not None:
+        raise PromotionError("uploaded processor checkpoint already has a bound artifact id")
     copied_expiry = parse_utc_timestamp(checkpoint_copy_locator.get("expires_at"), "uploaded processor artifact expiry")
     final_expiry = parse_utc_timestamp(locator.get("expires_at"), "durable processor artifact expiry")
+    copied_heartbeat = parse_utc_timestamp(
+        checkpoint_copy.get("last_heartbeat_at"), "uploaded processor checkpoint heartbeat",
+    )
+    final_heartbeat = parse_utc_timestamp(
+        checkpoint.get("last_heartbeat_at"), "durable processor checkpoint heartbeat",
+    )
     observation = checkpoint.get("last_observation")
     observed_at = parse_utc_timestamp(
         observation.get("observed_at") if isinstance(observation, Mapping) else checkpoint.get("observed_at"),
         "processor generation observation",
     )
+    generation_start_value = checkpoint_copy.get("observed_at") or checkpoint.get("observed_at") or observed_at.isoformat()
+    generation_started_at = parse_utc_timestamp(generation_start_value, "processor generation start")
+    if copied_heartbeat < generation_started_at or copied_heartbeat > final_heartbeat:
+        raise PromotionError("uploaded processor checkpoint heartbeat is outside the durable generation timeline")
     if copied_expiry <= observed_at or copied_expiry > final_expiry:
         raise PromotionError("uploaded checkpoint expiry is not a valid pre-upload timestamp for the final artifact")
-    bound_locator["expires_at"] = checkpoint_copy_locator.get("expires_at")
-    if (
-        checkpoint_copy.get("status") != processor_status
-        or checkpoint_copy.get("source_id") != checkpoint.get("source_id")
-        or checkpoint_copy.get("source_scope") != checkpoint.get("source_scope")
-        or checkpoint_copy.get("output_digests") != digests
-        or checkpoint_copy_locator != bound_locator
-    ):
-        raise PromotionError("uploaded processor checkpoint receipt differs from the final state locator")
+    uploaded_normalized = copy.deepcopy(checkpoint_copy)
+    durable_normalized = copy.deepcopy(dict(checkpoint))
+    uploaded_normalized.pop("checkpoint_sha256", None)
+    durable_normalized.pop("checkpoint_sha256", None)
+    # The producer changes only these delivery-owned fields after archiving:
+    # Actions binds the artifact id/expiry, and an exact idle replay may bump
+    # last_heartbeat_at. Every other checkpoint value remains immutable.
+    for normalized in (uploaded_normalized, durable_normalized):
+        normalized["last_heartbeat_at"] = None
+        output_artifact = normalized.get("output_artifact")
+        if isinstance(output_artifact, dict):
+            output_artifact["artifact_id"] = None
+            output_artifact["expires_at"] = None
+    if uploaded_normalized != durable_normalized:
+        raise PromotionError("uploaded processor checkpoint receipt differs from immutable durable generation state")
     result = load_object(bundle_dir / "upstream-catalogue-processing-result.json")
     if result.get("generation_id") != checkpoint.get("generation_id") or result.get("status") != processor_status:
         raise PromotionError("uploaded processor result does not confirm the exact terminal generation state")
@@ -817,12 +845,22 @@ def validate_processor_bundle(
     candidate_sha = file_sha256(candidate_path)
     receipt_path = bundle_dir / "composition-receipt.json"
     composition = load_object(receipt_path)
-    receipt_json = json.dumps(composition, ensure_ascii=False, sort_keys=True)
     generation_inputs = checkpoint.get("generation_inputs", {})
     baseline_sha = generation_inputs.get("baseline_sha256")
     producer_candidate_sha = generation_inputs.get("candidate_sha256")
-    for label, digest in (("baseline", baseline_sha), ("upstream candidate", producer_candidate_sha)):
-        if not isinstance(digest, str) or digest not in receipt_json:
+    input_digests = composition.get("input_digests")
+    if not isinstance(input_digests, Mapping):
+        raise PromotionError("composition receipt lacks exact baseline and candidate input digests")
+    for receipt_key, label, digest in (
+        ("baseline", "baseline", baseline_sha),
+        ("candidate", "upstream candidate", producer_candidate_sha),
+    ):
+        observed = input_digests.get(receipt_key)
+        if (
+            not isinstance(digest, str)
+            or not isinstance(observed, Mapping)
+            or observed.get("sha256") != digest
+        ):
             raise PromotionError(f"composition receipt is not bound to the exact {label} digest in processor state")
     expected_composition_status = "ready_scoped" if processor_status == "ready" else "no_change"
     try:

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import hashlib
+import copy
 import json
 import pathlib
 import subprocess
@@ -307,6 +308,7 @@ class ProcessorBundleContractTests(unittest.TestCase):
             checkpoint = {
                 "generation_id": generation, "status": "quarantined", "source_id": "data_go_kr",
                 "source_scope": "aggregate_supported_catalog", "output_digests": digests,
+                "last_heartbeat_at": "2026-10-01T12:00:00Z",
                 "output_artifact": locator, "last_observation": {
                     "producer_run_id": "36646768289", "observed_at": "2026-10-01T12:00:00Z",
                 },
@@ -328,8 +330,26 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
     repository = "StatPan/datapan-registry"
     default_branch = "main"
     source_sha = "a" * 40
-    generation_id = "f" * 64
     expiry = "2026-10-31T00:00:00Z"
+
+    def generation_inputs(self, candidate_sha256: str = "d" * 64) -> dict[str, object]:
+        return {
+            "source_id": "data_go_kr",
+            "source_scope": "aggregate_supported_catalog",
+            "baseline_sha256": "c" * 64,
+            "candidate_sha256": candidate_sha256,
+            "observation_failure_sha256": None,
+            "policy_sha256": "e" * 64,
+            "adapter_revision": "1" * 64,
+            "generator_revision": "2" * 64,
+            "extractor_revision": "3" * 64,
+        }
+
+    @staticmethod
+    def seal(checkpoint: dict) -> dict:
+        checkpoint.pop("checkpoint_sha256", None)
+        checkpoint["checkpoint_sha256"] = hashlib.sha256(RUNNER.canonical_json(checkpoint)).hexdigest()
+        return checkpoint
 
     def schema(self, root: pathlib.Path) -> pathlib.Path:
         path = root / "checkpoint.schema.json"
@@ -343,10 +363,11 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
 
     def checkpoint(
         self, *, run_id: str = "70000000001", attempt: str = "2",
-        generation_id: str | None = None, observed_at: str = "2026-10-02T17:00:00Z",
+        candidate_sha256: str = "d" * 64, observed_at: str = "2026-10-02T17:00:00Z",
         **locator_updates: object,
     ) -> dict:
-        generation = generation_id or self.generation_id
+        generation_inputs = self.generation_inputs(candidate_sha256)
+        generation = hashlib.sha256(RUNNER.canonical_json(generation_inputs)).hexdigest()
         locator = {
             "repository": self.repository,
             "run_id": run_id,
@@ -361,17 +382,7 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             "source_id": "data_go_kr",
             "source_scope": "aggregate_supported_catalog",
             "generation_id": generation,
-            "generation_inputs": {
-                "source_id": "data_go_kr",
-                "source_scope": "aggregate_supported_catalog",
-                "baseline_sha256": "c" * 64,
-                "candidate_sha256": "d" * 64,
-                "observation_failure_sha256": None,
-                "policy_sha256": "e" * 64,
-                "adapter_revision": "1" * 64,
-                "generator_revision": "2" * 64,
-                "extractor_revision": "3" * 64,
-            },
+            "generation_inputs": generation_inputs,
             "observed_at": observed_at,
             "last_observation": {
                 "observed_at": observed_at,
@@ -400,13 +411,79 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
                 "name": "upstream-catalogue-refresh-36646768289",
                 "artifact_id": "987654",
                 "expires_at": self.expiry,
-                "candidate_sha256": "a" * 64,
+                "candidate_sha256": candidate_sha256,
                 "evidence_sha256": "b" * 64,
                 "diff_sha256": "c" * 64,
             }],
         }
-        value["checkpoint_sha256"] = hashlib.sha256(RUNNER.canonical_json(value)).hexdigest()
-        return value
+        return self.seal(value)
+
+    def ready_bundle(
+        self,
+        root: pathlib.Path,
+        *,
+        input_digests: dict[str, object] | None = None,
+    ) -> tuple[pathlib.Path, dict, dict]:
+        bundle = root / "bundle"
+        bundle.mkdir()
+        candidate_bytes = b'{"candidate":true}\n'
+        candidate_sha = hashlib.sha256(candidate_bytes).hexdigest()
+        checkpoint = self.checkpoint(candidate_sha256=candidate_sha)
+        baseline_sha = checkpoint["generation_inputs"]["baseline_sha256"]
+        composition_inputs = input_digests or {
+            "baseline": {"bytes": 24, "sha256": baseline_sha},
+            "candidate": {"bytes": len(candidate_bytes), "sha256": candidate_sha},
+        }
+        composition = {
+            "schema_version": "datapan.catalogue-composition-receipt.v1",
+            "input_digests": composition_inputs,
+            "status": "ready_scoped",
+        }
+        result = {
+            "status": "ready",
+            "reason": "ready",
+            "generation_id": checkpoint["generation_id"],
+            "source_id": checkpoint["source_id"],
+            "producer_run_id": checkpoint["last_observation"]["producer_run_id"],
+            "processor_run_id": "70000000001-2",
+            "processor_artifact_run_id": "70000000001",
+            "processing_replay": False,
+            "candidate_available": True,
+        }
+        contents = {
+            "composed-candidate.registry.json": candidate_bytes,
+            "ready-scope.registry.json": b"{}\n",
+            "semantic-diff.json": b"{}\n",
+            "regeneration-queue.json": b"{}\n",
+            "quarantine.json": b"{}\n",
+            "composition-receipt.json": RUNNER.canonical_json(composition),
+            "upstream-catalogue-enrichment-evidence.json": b"{}\n",
+            "upstream-catalogue-processing-result.json": RUNNER.canonical_json(result),
+        }
+        digests = []
+        for name in RUNNER.REQUIRED_PROCESSOR_FILES:
+            payload = contents[name]
+            (bundle / name).write_bytes(payload)
+            digests.append({"path": name, "sha256": hashlib.sha256(payload).hexdigest(), "bytes": len(payload)})
+        checkpoint["output_digests"] = digests
+        checkpoint["output_artifact"].update({
+            "artifact_id": "123456",
+            "expires_at": self.expiry,
+            "bundle_manifest_sha256": hashlib.sha256(RUNNER.canonical_json(digests)).hexdigest(),
+        })
+        # B archives before Actions binds artifact metadata and an exact idle
+        # replay advances only the heartbeat in the durable checkpoint.
+        uploaded_copy = copy.deepcopy(checkpoint)
+        uploaded_copy["output_artifact"]["artifact_id"] = None
+        uploaded_copy["output_artifact"]["expires_at"] = "2026-10-30T00:00:00Z"
+        uploaded_copy["last_heartbeat_at"] = uploaded_copy["observed_at"]
+        self.seal(uploaded_copy)
+        checkpoint["last_heartbeat_at"] = "2026-10-03T00:05:00Z"
+        self.seal(checkpoint)
+        (bundle / "upstream-catalogue-checkpoint-receipt.json").write_bytes(
+            RUNNER.canonical_json(uploaded_copy),
+        )
+        return bundle, checkpoint, uploaded_copy
 
     def ready_state(self, root: pathlib.Path, *checkpoints: dict) -> pathlib.Path:
         state_root = root / "state"
@@ -484,6 +561,108 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
                 composition_helper=object(),
             )
 
+    def test_checkpoint_recomputes_generation_identity_after_resealing(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            schema = self.schema(pathlib.Path(raw))
+            checkpoint = self.checkpoint()
+            RUNNER.verify_processor_checkpoint(checkpoint, schema)
+
+            resealed = copy.deepcopy(checkpoint)
+            resealed["generation_inputs"]["observation_failure_sha256"] = "9" * 64
+            self.seal(resealed)
+            with self.assertRaisesRegex(RUNNER.PromotionError, "generation id does not bind"):
+                RUNNER.verify_processor_checkpoint(resealed, schema)
+
+            crossed_source = copy.deepcopy(checkpoint)
+            crossed_source["source_id"] = "other_source"
+            self.seal(crossed_source)
+            with self.assertRaisesRegex(RUNNER.PromotionError, "source identity is inconsistent"):
+                RUNNER.verify_processor_checkpoint(crossed_source, schema)
+
+            crossed_scope = copy.deepcopy(checkpoint)
+            crossed_scope["generation_inputs"]["source_scope"] = "other_scope"
+            crossed_scope["generation_id"] = hashlib.sha256(
+                RUNNER.canonical_json(crossed_scope["generation_inputs"]),
+            ).hexdigest()
+            self.seal(crossed_scope)
+            with self.assertRaisesRegex(RUNNER.PromotionError, "source identity is inconsistent"):
+                RUNNER.verify_processor_checkpoint(crossed_scope, schema)
+
+    def test_real_ready_bundle_allows_only_artifact_binding_and_idle_heartbeat(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            bundle, checkpoint, _uploaded = self.ready_bundle(root)
+            RUNNER.verify_processor_checkpoint(checkpoint, self.schema(root))
+            helper = mock.Mock()
+            validated = RUNNER.validate_processor_bundle(checkpoint, bundle, {}, helper)
+            self.assertEqual(validated["status"], "ready")
+            self.assertEqual(validated["registry_sha256"], checkpoint["generation_inputs"]["candidate_sha256"])
+            helper.validate_composition.assert_called_once()
+
+    def test_resealed_checkpoint_mutations_outside_delivery_fields_are_rejected(self) -> None:
+        mutations = (
+            ("observed_at", lambda checkpoint: checkpoint.update(observed_at="2026-10-02T18:00:00Z")),
+            ("last_observation", lambda checkpoint: checkpoint["last_observation"].update(observed_at="2026-10-02T18:00:00Z")),
+            ("input_artifacts", lambda checkpoint: checkpoint["input_artifacts"][0].update(evidence_sha256="8" * 64)),
+            ("outcome", lambda checkpoint: checkpoint["outcome"].update(detail_retry_count=1)),
+        )
+        for label, mutate in mutations:
+            with self.subTest(field=label), tempfile.TemporaryDirectory() as raw:
+                root = pathlib.Path(raw)
+                bundle, checkpoint, _uploaded = self.ready_bundle(root)
+                mutate(checkpoint)
+                self.seal(checkpoint)
+                RUNNER.verify_processor_checkpoint(checkpoint, self.schema(root))
+                with self.assertRaisesRegex(RUNNER.PromotionError, "immutable durable generation state"):
+                    RUNNER.validate_processor_bundle(checkpoint, bundle, {}, mock.Mock())
+
+    def test_resealed_uploaded_copy_cannot_rebind_observation_or_input_artifacts(self) -> None:
+        for field in ("last_observation", "input_artifacts"):
+            with self.subTest(field=field), tempfile.TemporaryDirectory() as raw:
+                root = pathlib.Path(raw)
+                bundle, checkpoint, uploaded = self.ready_bundle(root)
+                if field == "last_observation":
+                    uploaded[field]["observed_at"] = "2026-10-02T18:00:00Z"
+                else:
+                    uploaded[field][0]["evidence_sha256"] = "8" * 64
+                self.seal(uploaded)
+                (bundle / "upstream-catalogue-checkpoint-receipt.json").write_bytes(
+                    RUNNER.canonical_json(uploaded),
+                )
+                with self.assertRaisesRegex(RUNNER.PromotionError, "immutable durable generation state"):
+                    RUNNER.validate_processor_bundle(checkpoint, bundle, {}, mock.Mock())
+
+    def test_uploaded_heartbeat_must_be_between_observation_and_durable_replay(self) -> None:
+        for heartbeat in ("2026-10-02T16:59:59Z", "2026-10-03T00:06:00Z"):
+            with self.subTest(heartbeat=heartbeat), tempfile.TemporaryDirectory() as raw:
+                root = pathlib.Path(raw)
+                bundle, checkpoint, uploaded = self.ready_bundle(root)
+                uploaded["last_heartbeat_at"] = heartbeat
+                self.seal(uploaded)
+                (bundle / "upstream-catalogue-checkpoint-receipt.json").write_bytes(
+                    RUNNER.canonical_json(uploaded),
+                )
+                with self.assertRaisesRegex(RUNNER.PromotionError, "heartbeat is outside"):
+                    RUNNER.validate_processor_bundle(checkpoint, bundle, {}, mock.Mock())
+
+    def test_composition_receipt_requires_exact_baseline_and_candidate_fields(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            candidate_bytes = b'{"candidate":true}\n'
+            candidate_sha = hashlib.sha256(candidate_bytes).hexdigest()
+            checkpoint = self.checkpoint(candidate_sha256=candidate_sha)
+            baseline_sha = checkpoint["generation_inputs"]["baseline_sha256"]
+            unrelated_digest = hashlib.sha256(b"elsewhere in the receipt").hexdigest()
+            receipt_digests = {
+                "baseline": {"bytes": 1, "sha256": unrelated_digest},
+                "candidate": {"bytes": 1, "sha256": unrelated_digest},
+                "full_diff": {"bytes": 1, "sha256": baseline_sha},
+                "refresh_evidence": {"bytes": 1, "sha256": candidate_sha},
+            }
+            bundle, checkpoint, _uploaded = self.ready_bundle(root, input_digests=receipt_digests)
+            with self.assertRaisesRegex(RUNNER.PromotionError, "exact baseline digest"):
+                RUNNER.validate_processor_bundle(checkpoint, bundle, {}, mock.Mock())
+
     def test_schedule_recovers_the_checkpoint_locator_after_an_idle_replay(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = pathlib.Path(raw)
@@ -493,7 +672,7 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
                 state_root, self.schema(root), None,
                 now=RUNNER.parse_utc_timestamp("2026-10-03T00:00:00Z", "test"),
             )
-            self.assertEqual(selected["generation_id"], self.generation_id)
+            self.assertEqual(selected["generation_id"], checkpoint["generation_id"])
             self.assertEqual(selected["output_artifact"]["run_id"], "70000000001")
             self.assertEqual(selected["output_artifact"]["name"], "upstream-catalogue-processing-70000000001-2")
 
@@ -503,7 +682,7 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             checkpoint = self.checkpoint()
             state_root = self.ready_state(root, checkpoint)
             journal = {"records": [{
-                "candidate": {"source_id": "data_go_kr", "scope": "aggregate_supported_catalog", "generation_id": self.generation_id},
+                "candidate": {"source_id": "data_go_kr", "scope": "aggregate_supported_catalog", "generation_id": checkpoint["generation_id"]},
                 "pr": {"number": 17},
             }]}
             selected = RUNNER.select_recoverable_processor_checkpoint(
@@ -526,8 +705,8 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
     def test_all_delivered_and_expired_ready_records_report_idle_with_blockers(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = pathlib.Path(raw)
-            delivered = self.checkpoint(generation_id="e" * 64)
-            expired = self.checkpoint(generation_id="d" * 64, expires_at="2026-10-02T00:00:00Z")
+            delivered = self.checkpoint(candidate_sha256="e" * 64)
+            expired = self.checkpoint(candidate_sha256="d" * 64, expires_at="2026-10-02T00:00:00Z")
             state_root = self.ready_state(root, delivered, expired)
             journal = {"records": [{
                 "candidate": {"source_id": "data_go_kr", "scope": "aggregate_supported_catalog", "generation_id": delivered["generation_id"]},
@@ -543,8 +722,8 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
     def test_deleted_old_run_does_not_starve_a_newer_ready_bundle(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = pathlib.Path(raw)
-            old = self.checkpoint(generation_id="e" * 64, run_id="70000000001", artifact_id="111111", observed_at="2026-10-02T16:00:00Z")
-            new = self.checkpoint(generation_id="d" * 64, run_id="70000000002", artifact_id="222222", observed_at="2026-10-02T17:00:00Z")
+            old = self.checkpoint(candidate_sha256="e" * 64, run_id="70000000001", artifact_id="111111", observed_at="2026-10-02T16:00:00Z")
+            new = self.checkpoint(candidate_sha256="d" * 64, run_id="70000000002", artifact_id="222222", observed_at="2026-10-02T17:00:00Z")
 
             def run_then_missing(_root, _repository, run_id, _attempt):
                 if run_id == old["output_artifact"]["run_id"]:
@@ -572,8 +751,8 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
     def test_changed_old_policy_does_not_starve_newer_compatible_bundle(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = pathlib.Path(raw)
-            old = self.checkpoint(generation_id="e" * 64, run_id="70000000001", artifact_id="111111", observed_at="2026-10-02T16:00:00Z")
-            new = self.checkpoint(generation_id="d" * 64, run_id="70000000002", artifact_id="222222", observed_at="2026-10-02T17:00:00Z")
+            old = self.checkpoint(candidate_sha256="e" * 64, run_id="70000000001", artifact_id="111111", observed_at="2026-10-02T16:00:00Z")
+            new = self.checkpoint(candidate_sha256="d" * 64, run_id="70000000002", artifact_id="222222", observed_at="2026-10-02T17:00:00Z")
             calls = []
 
             def compatibility(_root, checkpoint, *_args, **_kwargs):
@@ -589,8 +768,8 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
     def test_all_unusable_ready_generations_return_visible_blockers(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = pathlib.Path(raw)
-            old = self.checkpoint(generation_id="e" * 64, run_id="70000000001", artifact_id="111111")
-            new = self.checkpoint(generation_id="d" * 64, run_id="70000000002", artifact_id="222222")
+            old = self.checkpoint(candidate_sha256="e" * 64, run_id="70000000001", artifact_id="111111")
+            new = self.checkpoint(candidate_sha256="d" * 64, run_id="70000000002", artifact_id="222222")
             selected, blocked = self.screen_candidates(
                 root, [old, new], lambda *_args, **_kwargs: (_ for _ in ()).throw(RUNNER.PromotionError("incompatible")),
             )
