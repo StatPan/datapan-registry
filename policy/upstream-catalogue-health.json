@@ -10,6 +10,8 @@
     "branch": "automation/upstream-catalogue-state",
     "root": ".datapan/upstream-catalogue-state",
     "max_bytes_per_file": 262144,
+    "workflow_path": ".github/workflows/upstream-catalogue-process.yml",
+    "allowed_events": ["workflow_run", "schedule", "workflow_dispatch"],
     "workflow_run_limit": 100
   },
   "health_state": {

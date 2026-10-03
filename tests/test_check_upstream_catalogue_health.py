@@ -30,7 +30,9 @@ RUN_ID = "100"
 COLLECTOR_PATH = ".github/workflows/upstream-catalog-refresh.yml"
 PROMOTION_PATH = ".github/workflows/canonical-update-promotion.yml"
 PUBLICATION_ACK_PATH = ".github/workflows/canonical-update-publication-ack.yml"
-WORKFLOW_IDS_BY_PATH = {COLLECTOR_PATH: 1101, PROMOTION_PATH: 1102, PUBLICATION_ACK_PATH: 1103}
+PROCESSOR_PATH = ".github/workflows/upstream-catalogue-process.yml"
+WORKFLOW_IDS_BY_PATH = {COLLECTOR_PATH: 1101, PROMOTION_PATH: 1102, PUBLICATION_ACK_PATH: 1103, PROCESSOR_PATH: 373610259}
+PROCESSOR_FAILURE_FIXTURE = json.loads((ROOT / "tests/fixtures/upstream-catalogue-health/processor-failure-active-reservation.json").read_text())
 EVIDENCE_SHA = "c" * 64
 GENERATION_ID = "a" * 64
 REAL_PROCESSOR_READY_BUNDLE = [
@@ -197,6 +199,63 @@ def collector_run(*, run_id: str = RUN_ID, conclusion: str = "success", status: 
     }
 
 
+def processor_run(
+    *, run_id: int = 500, attempt: int = 1, status: str = "completed", conclusion: str | None = "success",
+    event: str = "workflow_dispatch", created_at: str = "2026-09-30T20:20:00Z",
+    run_started_at: str = "2026-09-30T20:20:01Z", updated_at: str | None = None,
+    head_sha: str = "a" * 40,
+) -> dict:
+    completed_at = updated_at or (dt.datetime.fromisoformat(run_started_at.replace("Z", "+00:00")) + dt.timedelta(minutes=5)).isoformat().replace("+00:00", "Z")
+    return {
+        "id": run_id, "workflow_id": WORKFLOW_IDS_BY_PATH[PROCESSOR_PATH], "run_attempt": attempt,
+        "path": PROCESSOR_PATH, "event": event, "status": status, "conclusion": conclusion,
+        "created_at": created_at, "run_started_at": run_started_at, "updated_at": completed_at,
+        "head_branch": "main", "head_sha": head_sha,
+        "repository": {"full_name": "StatPan/datapan-registry"},
+        "head_repository": {"full_name": "StatPan/datapan-registry"},
+    }
+
+
+def processor_attempt_evidence(run: dict) -> dict:
+    run_id = run["id"]
+    attempt = run["run_attempt"]
+    return {
+        "run": copy.deepcopy(run), "attempt_number": attempt,
+        "jobs_api_endpoint": f"repos/StatPan/datapan-registry/actions/runs/{run_id}/attempts/{attempt}/jobs",
+        "job_count": 1,
+        "jobs": [{
+            "id": run_id + 10000, "run_id": run_id, "head_sha": run["head_sha"],
+            "status": "completed", "conclusion": run.get("conclusion"),
+            "completed_at": run.get("updated_at"),
+        }],
+    }
+
+
+def active_reservation_checkpoint(*, generation_id: str, observed_at: str, last_progress_at: str, lease_expires_at: str, owner: str) -> dict:
+    value = checkpoint(
+        generation_id=generation_id, status="enriching", observed_at=observed_at,
+        last_progress_at=last_progress_at, last_heartbeat_at=last_progress_at,
+        producer_run_id="36646768289",
+    )
+    value["attempts_consumed"] = 24
+    value["detail_queue_cursor"] = 24
+    value["lease"] = {"owner_run_id": owner, "expires_at": lease_expires_at, "fencing_token": 1}
+    value["request_reservation"] = {
+        "owner_run_id": owner, "generation_id": generation_id, "fencing_token": 1,
+        "reserved_at": last_progress_at, "expires_at": lease_expires_at,
+        "attempt_budget": 24, "reserved_attempts": 24, "attempts_made": 0, "records": [],
+    }
+    value["outcome"] = {"reason": "request_budget_reserved", "composer_status": None, "pending_count": 0}
+    value["output_artifact"] = {
+        "repository": "StatPan/datapan-registry", "run_id": owner.split("-")[0],
+        "name": f"upstream-catalogue-processing-{owner}", "artifact_id": None,
+        "expires_at": "2026-11-02T02:58:30Z", "bundle_manifest_sha256": None,
+    }
+    value["output_digests"] = []
+    value["checkpoint_sha256"] = HEALTH.sha256_bytes(HEALTH.canonical_json({key: item for key, item in value.items() if key != "checkpoint_sha256"}))
+    return value
+
+
 def promotion_receipt(generation_id: str, status: str) -> dict:
     candidate = {
         "repository": "StatPan/datapan-registry", "source_id": "data_go_kr",
@@ -240,7 +299,11 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
                    artifacts_by_run: dict | None = None, artifacts_by_id: dict | None = None,
                    ack: dict | None = None, mode: str = "live", api_error: str | None = None,
                    as_of: dt.datetime = AS_OF, last_good: dict | None = None,
-                   promotion_runs: dict | None = None) -> dict:
+                   promotion_runs: dict | None = None, processor_runs: list[dict] | None = None,
+                   processor_previous_attempts: dict | None = None,
+                   processor_previous_attempt_errors: set[str] | None = None,
+                   processor_api_error: str | None = None,
+                   prior_processor_execution_faults: list[dict] | None = None) -> dict:
         checkpoints = cp if cp is not None else [checkpoint()]
         run_rows = runs if runs is not None else [collector_run()]
         artifact_rows = artifacts_by_run if artifacts_by_run is not None else {RUN_ID: [{"id": 101, "name": f"upstream-catalog-refresh-{RUN_ID}", "expired": False}]}
@@ -285,6 +348,11 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
             promotion_runs_by_id=run_map,
             promotion_workflow_paths=POLICY["promotion_state"],
             workflow_ids_by_path=WORKFLOW_IDS_BY_PATH,
+            processor_workflow_runs=processor_runs or [],
+            processor_previous_attempts=processor_previous_attempts or {},
+            processor_previous_attempt_errors=processor_previous_attempt_errors or set(),
+            processor_workflow_api_error=processor_api_error,
+            prior_processor_execution_faults=prior_processor_execution_faults or [],
         )
 
     def test_fresh_live_observation_and_terminal_no_change_are_separate_from_heartbeat(self) -> None:
@@ -327,6 +395,405 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
                     invalid, "StatPan/datapan-registry", COLLECTOR_PATH,
                     WORKFLOW_IDS_BY_PATH[COLLECTOR_PATH], {"schedule", "workflow_dispatch"},
                 ))
+
+    def test_frozen_failed_processor_run_blocks_a_fresh_reservation_without_terminal_checkpoint(self) -> None:
+        run = copy.deepcopy(PROCESSOR_FAILURE_FIXTURE["processor_run"])
+        state = PROCESSOR_FAILURE_FIXTURE["active_reservation"]
+        cp = active_reservation_checkpoint(
+            generation_id=state["generation_id"], observed_at="2026-09-29T23:47:58Z",
+            last_progress_at=state["last_progress_at"], lease_expires_at=state["lease_expires_at"],
+            owner=state["lease_owner"],
+        )
+        evaluated_at = dt.datetime.fromisoformat(PROCESSOR_FAILURE_FIXTURE["health_evaluated_at"].replace("Z", "+00:00"))
+        producer = collector_run(run_id="36646768289", created_at="2026-09-29T23:44:12Z")
+        producer["run_started_at"] = "2026-09-29T23:44:12Z"
+        producer["updated_at"] = "2026-09-29T23:47:58Z"
+        producer["head_sha"] = "4321df1868754045ff3705b5c133c9fad2abde6e"
+        producer_artifact = {"id": 11068634862, "name": "upstream-catalog-refresh-36646768289", "expired": False}
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), cp=[cp], runs=[producer],
+                artifacts_by_run={"36646768289": [producer_artifact]},
+                processor_runs=[run], as_of=evaluated_at,
+            )
+        HEALTH.validate_schema(report, ROOT / "schemas/datapan.upstream-catalogue-health.v1.schema.json", "receipt")
+        source = report["sources"][0]
+        reasons = {row["reason"] for row in source["faults"]}
+        self.assertIn("processor_run_failed", reasons)
+        self.assertEqual(source["processor"]["state"], "enriching")
+        self.assertEqual(source["processor"]["generation_id"], state["generation_id"])
+        self.assertEqual(source["processor"]["latest_execution_run"]["run_id"], "37091592758")
+        self.assertEqual(source["processor"]["execution_failure"]["run_attempt"], 1)
+        self.assertGreater(HEALTH.parse_time(state["lease_expires_at"], "lease"), evaluated_at)
+        self.assertEqual(source["canonical"]["last_good"]["generation_id"], "0" * 64)
+        self.assertEqual(source["overall"], "blocked")
+        self.assertEqual(source["observation"]["state"], "fresh")
+        self.assertEqual(source["observation"]["producer_run_id"], "36646768289")
+        self.assertEqual(report["summary"]["live_fresh_observation_count"], 1)
+        self.assertEqual({row["reason"] for row in report["faults"]}, {"processor_run_failed"})
+
+        with tempfile.TemporaryDirectory() as directory:
+            no_checkpoint = self.run_health(
+                pathlib.Path(directory), cp=[], runs=[], processor_runs=[run], as_of=evaluated_at,
+            )
+        no_checkpoint_source = no_checkpoint["sources"][0]
+        self.assertIn("processor_run_failed", {row["reason"] for row in no_checkpoint_source["faults"]})
+        self.assertIsNone(no_checkpoint_source["processor"]["generation_id"])
+        self.assertEqual(no_checkpoint_source["overall"], "blocked")
+
+    def test_processor_execution_requires_exact_main_workflow_identity(self) -> None:
+        valid = processor_run()
+        invalid_rows = []
+        for field in ("repository", "head_repository", "head_sha", "workflow_id", "path", "event", "head_branch", "run_attempt"):
+            invalid = copy.deepcopy(valid)
+            invalid.pop(field)
+            invalid_rows.append((field, invalid))
+        wrong_path = copy.deepcopy(valid)
+        wrong_path["path"] = ".github/workflows/unrelated.yml"
+        invalid_rows.append(("wrong path", wrong_path))
+        wrong_repo = copy.deepcopy(valid)
+        wrong_repo["repository"]["full_name"] = "other/repo"
+        invalid_rows.append(("wrong repository", wrong_repo))
+        wrong_head_repo = copy.deepcopy(valid)
+        wrong_head_repo["head_repository"]["full_name"] = "other/repo"
+        invalid_rows.append(("wrong head repository", wrong_head_repo))
+        wrong_event = copy.deepcopy(valid)
+        wrong_event["event"] = "pull_request"
+        invalid_rows.append(("disallowed event", wrong_event))
+        wrong_attempt = copy.deepcopy(valid)
+        wrong_attempt["run_attempt"] = True
+        invalid_rows.append(("boolean attempt", wrong_attempt))
+        for label, invalid in invalid_rows:
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as directory:
+                report = self.run_health(pathlib.Path(directory), processor_runs=[invalid])
+            source = report["sources"][0]
+            self.assertIsNone(source["processor"]["latest_execution_run"])
+            self.assertNotIn("processor_run_failed", {row["reason"] for row in source["faults"]})
+
+    def test_processor_runs_are_ordered_by_start_time_and_failure_is_attempt_keyed(self) -> None:
+        older_started_failure = processor_run(
+            run_id=600, status="completed", conclusion="failure",
+            created_at="2026-09-30T23:55:00Z", run_started_at="2026-09-30T23:40:00Z",
+            updated_at="2026-09-30T23:50:00Z",
+        )
+        newer_started_success = processor_run(
+            run_id=601, status="completed", conclusion="success",
+            created_at="2026-09-30T23:30:00Z", run_started_at="2026-09-30T23:51:00Z",
+            updated_at="2026-09-30T23:54:00Z",
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(pathlib.Path(directory), processor_runs=[newer_started_success, older_started_failure])
+        execution = report["sources"][0]["processor"]
+        self.assertEqual(execution["latest_execution_run"]["run_id"], "601")
+        self.assertIsNone(execution["execution_failure"])
+
+        first = processor_run(run_id=602, attempt=1, conclusion="failure", run_started_at="2026-09-30T23:35:00Z")
+        second = processor_run(run_id=602, attempt=2, conclusion="failure", run_started_at="2026-09-30T23:50:00Z")
+        prior_fault = self.processor_execution_fault(first)
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), processor_runs=[first, second],
+                prior_processor_execution_faults=[prior_fault, copy.deepcopy(prior_fault)],
+            )
+        faults = [row for row in report["faults"] if row["reason"] == "processor_run_failed"]
+        self.assertEqual(len(faults), 2)
+        self.assertEqual({row["execution_identity"]["run_attempt"] for row in faults}, {1, 2})
+        self.assertEqual(len({row["fault_key"] for row in faults}), 2)
+
+    def test_pending_or_skipped_rerun_cannot_hide_an_exact_prior_failure(self) -> None:
+        failed_attempt = processor_run(
+            run_id=700, attempt=1, conclusion="failure", run_started_at="2026-09-30T23:35:00Z",
+        )
+        rerun = processor_run(
+            run_id=700, attempt=2, status="in_progress", conclusion=None,
+            run_started_at="2026-09-30T23:50:00Z", updated_at="2026-09-30T23:51:00Z",
+        )
+        exact = processor_attempt_evidence(failed_attempt)
+        exact["attempt_number"] = 1
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), processor_runs=[rerun], processor_previous_attempts={"700/1": exact},
+            )
+        source = report["sources"][0]
+        self.assertEqual(source["processor"]["latest_execution_run"]["run_attempt"], 2)
+        self.assertEqual(source["processor"]["execution_failure"]["run_attempt"], 1)
+        self.assertIn("processor_run_failed", {row["reason"] for row in source["faults"]})
+
+        skipped = processor_run(
+            run_id=701, attempt=2, status="completed", conclusion="skipped",
+            run_started_at="2026-09-30T23:50:00Z",
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), processor_runs=[skipped],
+                prior_processor_execution_faults=[self.processor_execution_fault(processor_run(
+                    run_id=701, attempt=1, conclusion="failure", run_started_at="2026-09-30T23:35:00Z",
+                ))],
+            )
+        self.assertIn("processor_run_failed", {row["reason"] for row in report["faults"]})
+
+    def test_older_skipped_rerun_is_inspected_even_when_a_newer_run_is_queued(self) -> None:
+        skipped_rerun = processor_run(
+            run_id=700, attempt=2, status="completed", conclusion="skipped",
+            run_started_at="2026-09-30T23:40:00Z",
+        )
+        newer_queued = processor_run(
+            run_id=701, attempt=1, status="queued", conclusion=None,
+            run_started_at="2026-09-30T23:50:00Z",
+        )
+        exact_failure = processor_attempt_evidence(processor_run(
+            run_id=700, attempt=1, conclusion="failure", run_started_at="2026-09-30T23:30:00Z",
+        ))
+        with mock.patch.object(HEALTH, "collect_run_attempt_evidence", return_value=exact_failure) as api:
+            attempts, errors = HEALTH.collect_processor_prior_attempt_history(
+                "StatPan/datapan-registry", [skipped_rerun, newer_queued], PROCESSOR_PATH,
+                WORKFLOW_IDS_BY_PATH[PROCESSOR_PATH], {"workflow_run", "schedule", "workflow_dispatch"},
+            )
+        api.assert_called_once_with("StatPan/datapan-registry", "700", 1)
+        self.assertEqual(set(attempts), {"700/1"})
+        self.assertEqual(errors, set())
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), processor_runs=[skipped_rerun, newer_queued],
+                processor_previous_attempts=attempts,
+            )
+        failure = report["sources"][0]["processor"]["execution_failure"]
+        self.assertEqual((failure["run_id"], failure["run_attempt"], failure["conclusion"]), ("700", 1, "failure"))
+
+    def test_prior_attempt_lookups_have_a_five_attempt_aggregate_cap(self) -> None:
+        rows = [processor_run(
+            run_id=run_id, attempt=3, status="completed", conclusion="skipped",
+            run_started_at=f"2026-09-30T23:{50 - offset:02d}:00Z",
+        ) for offset, run_id in enumerate((801, 802, 803))]
+
+        def exact_skipped(repository: str, run_id: str, attempt: int) -> dict:
+            return processor_attempt_evidence(processor_run(
+                run_id=int(run_id), attempt=attempt, status="completed", conclusion="skipped",
+                run_started_at=f"2026-09-30T23:{40 - attempt:02d}:00Z",
+            ))
+
+        with mock.patch.object(HEALTH, "collect_run_attempt_evidence", side_effect=exact_skipped) as api:
+            attempts, errors = HEALTH.collect_processor_prior_attempt_history(
+                "StatPan/datapan-registry", rows, PROCESSOR_PATH,
+                WORKFLOW_IDS_BY_PATH[PROCESSOR_PATH], {"workflow_run", "schedule", "workflow_dispatch"},
+            )
+        self.assertEqual(api.call_count, HEALTH.MAX_PROCESSOR_PRIOR_ATTEMPT_LOOKUPS)
+        self.assertEqual(len(attempts), HEALTH.MAX_PROCESSOR_PRIOR_ATTEMPT_LOOKUPS)
+        self.assertTrue(errors)
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), processor_runs=rows, processor_previous_attempts=attempts,
+                processor_previous_attempt_errors=errors,
+            )
+        self.assertIn("processor_run_attempt_unavailable", {row["reason"] for row in report["faults"]})
+        self.assertEqual(report["sources"][0]["overall"], "blocked")
+
+    def test_trusted_success_clears_only_the_processor_execution_fault(self) -> None:
+        failed = processor_run(run_id=710, attempt=1, conclusion="failure", run_started_at="2026-09-30T23:35:00Z")
+        success = processor_run(run_id=710, attempt=2, conclusion="success", run_started_at="2026-10-01T00:05:00Z")
+        prior = self.processor_execution_fault(failed)
+        last_good = {
+            "data_go_kr": {
+                "status": "read-back-confirmed", "source_id": "data_go_kr", "generation_id": "0" * 64,
+                "publication_revision": "9" * 40, "publication_pointer_revision": "8" * 40,
+                "artifact_identity": {"path": "data/data-go-kr.registry.json", "bytes": 123, "sha256": "d" * 64},
+                "verified": True, "publication_run_jobs_completed_at": "2026-09-29T00:00:00Z",
+                "publication_run_completion_basis": "max_completed_at_all_jobs_exact_run_attempt",
+                "publication_run_id": 90, "publication_run_attempt": 1,
+            }
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), processor_runs=[success], prior_processor_execution_faults=[prior],
+                last_good=last_good, as_of=AS_OF + dt.timedelta(minutes=30),
+            )
+        source = report["sources"][0]
+        self.assertNotIn("processor_run_failed", {row["reason"] for row in report["faults"]})
+        self.assertEqual(source["processor"]["latest_successful_execution_run"]["run_attempt"], 2)
+        self.assertEqual(source["processor"]["generation_id"], GENERATION_ID)
+        self.assertEqual(source["observation"]["producer_run_id"], RUN_ID)
+        self.assertEqual(source["canonical"]["last_good"], last_good["data_go_kr"])
+        self.assertEqual(report["summary"]["live_fresh_observation_count"], 1)
+
+    def test_processor_workflow_api_error_is_a_blocking_fault_and_preserves_prior_failure(self) -> None:
+        failed = processor_run(run_id=720, conclusion="failure", run_started_at="2026-09-30T23:35:00Z")
+        prior = self.processor_execution_fault(failed)
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), processor_runs=[], processor_api_error="github_api_unavailable",
+                prior_processor_execution_faults=[prior],
+            )
+        reasons = {row["reason"] for row in report["faults"]}
+        self.assertIn("processor_workflow_observations_unavailable", reasons)
+        self.assertIn("processor_run_failed", reasons)
+        self.assertEqual(report["sources"][0]["overall"], "blocked")
+
+    def test_processor_attempt_api_timeout_is_reported_as_unavailable(self) -> None:
+        timeout = HEALTH.subprocess.TimeoutExpired(cmd="gh api", timeout=30)
+        with mock.patch.object(HEALTH.subprocess, "run", side_effect=timeout):
+            with self.assertRaisesRegex(RuntimeError, "github_api_unavailable"):
+                HEALTH.gh_json("repos/StatPan/datapan-registry/actions/runs/730/attempts/1")
+        pending = processor_run(run_id=730, attempt=2, status="in_progress", conclusion=None)
+        with mock.patch.object(HEALTH, "collect_run_attempt_evidence", side_effect=RuntimeError("github_api_unavailable")):
+            attempts, errors = HEALTH.collect_previous_processor_attempts(
+                "StatPan/datapan-registry", pending, PROCESSOR_PATH,
+                WORKFLOW_IDS_BY_PATH[PROCESSOR_PATH], {"workflow_run", "schedule", "workflow_dispatch"},
+            )
+        self.assertEqual(attempts, {})
+        self.assertEqual(errors, {"730/1"})
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), processor_runs=[pending], processor_previous_attempt_errors=errors,
+            )
+        self.assertIn("processor_run_attempt_unavailable", {row["reason"] for row in report["faults"]})
+        self.assertEqual(report["sources"][0]["overall"], "blocked")
+
+    def test_checkpoint_selection_uses_validated_progress_and_generation_ties(self) -> None:
+        quarantine = checkpoint(
+            generation_id="a" * 64, status="quarantined", observed_at="2026-09-30T20:20:00Z",
+            last_progress_at="2026-09-30T20:25:00Z", last_heartbeat_at="2026-09-30T23:55:00Z",
+        )
+        ready = checkpoint(
+            generation_id="b" * 64, status="no-change", observed_at="2026-09-30T20:20:00Z",
+            last_progress_at="2026-09-30T20:30:00Z", last_heartbeat_at="2026-09-30T20:31:00Z",
+        )
+        last_good = {
+            "data_go_kr": {
+                "status": "read-back-confirmed", "source_id": "data_go_kr", "generation_id": "0" * 64,
+                "publication_revision": "9" * 40, "publication_pointer_revision": "8" * 40,
+                "artifact_identity": {"path": "data/data-go-kr.registry.json", "bytes": 123, "sha256": "d" * 64},
+                "verified": True, "publication_run_jobs_completed_at": "2026-09-29T00:00:00Z",
+                "publication_run_completion_basis": "max_completed_at_all_jobs_exact_run_attempt",
+                "publication_run_id": 90, "publication_run_attempt": 1,
+            }
+        }
+        for rows in ([quarantine, ready], [ready, quarantine]):
+            with self.subTest(order=[row["generation_id"][0] for row in rows]), tempfile.TemporaryDirectory() as directory:
+                report = self.run_health(pathlib.Path(directory), cp=list(rows), last_good=last_good)
+            source = report["sources"][0]
+            self.assertEqual(source["processor"]["generation_id"], "b" * 64)
+            self.assertEqual(source["processor"]["state"], "no-change")
+            self.assertEqual(report["summary"]["live_fresh_observation_count"], 1)
+            self.assertEqual(source["canonical"]["last_good"], last_good["data_go_kr"])
+
+        replay = checkpoint(
+            generation_id="a" * 64, status="quarantined", observed_at="2026-09-30T20:20:00Z",
+            last_progress_at="2026-09-30T20:25:00Z", last_heartbeat_at="2026-09-30T23:59:00Z",
+        )
+        observation, selected, error = HEALTH.latest_observation([ready, replay], AS_OF, 300)
+        self.assertEqual(selected["generation_id"], "b" * 64)
+        self.assertEqual(observation["observed_at"], ready["last_observation"]["observed_at"])
+        self.assertIsNone(error)
+
+        later_quarantine = checkpoint(
+            generation_id="c" * 64, status="quarantined", observed_at="2026-09-30T20:20:00Z",
+            last_progress_at="2026-09-30T20:32:00Z", last_heartbeat_at="2026-09-30T20:32:00Z",
+        )
+        observation, selected, error = HEALTH.latest_observation([ready, later_quarantine], AS_OF, 300)
+        self.assertEqual(selected["generation_id"], "c" * 64)
+        self.assertEqual(selected["status"], "quarantined")
+        self.assertIsNone(error)
+
+        equal_progress_low = checkpoint(
+            generation_id="d" * 64, status="no-change", observed_at="2026-09-30T20:20:00Z",
+            last_progress_at="2026-09-30T20:30:00Z",
+        )
+        equal_progress_high = checkpoint(
+            generation_id="e" * 64, status="quarantined", observed_at="2026-09-30T20:20:00Z",
+            last_progress_at="2026-09-30T20:30:00Z",
+        )
+        for rows in ([equal_progress_low, equal_progress_high], [equal_progress_high, equal_progress_low]):
+            _, selected, error = HEALTH.latest_observation(rows, AS_OF, 300)
+            self.assertEqual(selected["generation_id"], "e" * 64)
+            self.assertIsNone(error)
+
+    def test_invalid_future_terminal_progress_is_a_health_fault(self) -> None:
+        future = checkpoint(
+            status="no-change", last_progress_at=(AS_OF + dt.timedelta(hours=1)).isoformat(),
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(pathlib.Path(directory), cp=[future])
+        reasons = {row["reason"] for row in report["faults"]}
+        self.assertIn("future_timestamp:checkpoint.last_progress_at", reasons)
+        self.assertEqual(report["sources"][0]["observation"]["state"], "missing")
+
+    def test_checkpoint_source_identity_is_bound_in_both_saved_locations(self) -> None:
+        for field in ("source_id", "generation_inputs.source_id"):
+            with self.subTest(field=field), tempfile.TemporaryDirectory() as directory:
+                bad = checkpoint()
+                if field == "source_id":
+                    bad["source_id"] = "another_source"
+                else:
+                    bad["generation_inputs"]["source_id"] = "another_source"
+                bad["checkpoint_sha256"] = HEALTH.sha256_bytes(HEALTH.canonical_json({key: value for key, value in bad.items() if key != "checkpoint_sha256"}))
+                report = self.run_health(pathlib.Path(directory), cp=[bad])
+            self.assertIn("checkpoint_source_binding_mismatch", {row["reason"] for row in report["faults"]})
+            self.assertEqual(report["sources"][0]["processor"]["state"], "missing")
+
+    def test_schema_invalid_durable_health_state_is_normalized_to_unavailable(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "state.json"
+            invalid = PERSIST.initial_state(
+                "StatPan/datapan-registry", "automation/upstream-catalogue-health-state",
+                ".datapan/upstream-catalogue-state",
+            )
+            invalid["unexpected"] = True
+            PERSIST.seal(invalid, "state_sha256")
+            path.write_text(json.dumps(invalid), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "health_state_corrupt"):
+                HEALTH.read_health_state(path)
+
+    def test_durable_processor_failure_recovers_only_after_later_trusted_success(self) -> None:
+        failure = processor_run(
+            run_id=740, attempt=1, conclusion="failure", created_at="2026-09-30T23:30:00Z",
+            run_started_at="2026-09-30T23:31:00Z", updated_at="2026-09-30T23:45:00Z",
+        )
+        success = processor_run(
+            run_id=741, attempt=1, conclusion="success", created_at="2026-10-01T00:05:00Z",
+            run_started_at="2026-10-01T00:06:00Z", updated_at="2026-10-01T00:20:00Z",
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            temp = pathlib.Path(directory)
+            state_root = temp / "worktree/health/upstream-catalogue"
+            first = self.run_health(temp / "first", processor_runs=[failure])
+            first_path = self.write_report(temp, first, "failure.json")
+            PERSIST.persist(first_path, state_root, ROOT / "policy/upstream-catalogue-health.json", "StatPan/datapan-registry")
+            before = json.loads((state_root / "state.json").read_text())
+            self.assertEqual(len(before["observations_by_source"]["data_go_kr"]), 1)
+            failure_rows = [row for row in before["faults"] if row["reason"] == "processor_run_failed"]
+            self.assertEqual(len(failure_rows), 1)
+            self.assertEqual(failure_rows[0]["status"], "open")
+
+            second = self.run_health(
+                temp / "second", processor_runs=[success], prior_processor_execution_faults=failure_rows,
+                as_of=AS_OF + dt.timedelta(hours=1),
+            )
+            second["health_workflow"]["run_id"] = "901"
+            second = HEALTH.seal_receipt(second)
+            second_path = self.write_report(temp, second, "success.json")
+            PERSIST.persist(second_path, state_root, ROOT / "policy/upstream-catalogue-health.json", "StatPan/datapan-registry")
+            after = json.loads((state_root / "state.json").read_text())
+
+        recovered = [row for row in after["faults"] if row["fault_key"] == failure_rows[0]["fault_key"]][0]
+        self.assertEqual(recovered["status"], "recovered")
+        self.assertEqual(recovered["recovery_evidence"]["execution_run_id"], "741")
+        self.assertEqual(recovered["recovery_evidence"]["execution_run_attempt"], 1)
+        self.assertEqual(after["last_good_by_source"], before["last_good_by_source"])
+        self.assertEqual(after["observations_by_source"], before["observations_by_source"])
+
+    @staticmethod
+    def processor_execution_fault(run: dict) -> dict:
+        summary = HEALTH.report_processor_run(run, PROCESSOR_PATH)
+        row = HEALTH.fault(
+            "data_go_kr", "processor-execution", "processor_run_failed", "error", 659, "inspect processor",
+            f"{summary['run_id']}/{summary['run_attempt']}",
+        )
+        row["execution_identity"] = {
+            "run_id": summary["run_id"], "run_attempt": summary["run_attempt"],
+            "run_started_at": summary["run_started_at"], "head_sha": summary["head_sha"],
+        }
+        row["status"] = "open"
+        return row
 
     def test_workflow_identity_uses_github_metadata_for_the_configured_path(self) -> None:
         with mock.patch.object(HEALTH, "gh_json", return_value={"id": 1101, "path": COLLECTOR_PATH}) as api:
