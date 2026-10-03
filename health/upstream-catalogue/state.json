@@ -1,10 +1,28 @@
 {
   "branch": "automation/upstream-catalogue-health-state",
-  "faults": [],
+  "faults": [
+    {
+      "fault_key": "c73e09872f5c9b6e3f9e5526c8d163567a10cc78c7700797bc04e72afb380ddf",
+      "first_seen_at": "2026-10-03T05:21:26Z",
+      "generation_id": "48bd59cf7d2da0fc75fb6e9eb6dcee205be066bbfefa5d7f88cebdee3ddd5b50",
+      "last_receipt_sha256": "53670b69f9e8fd3f7eeef8216b95ff736a1ff5c3b89eb217b3c0255f8e8aa958",
+      "last_seen_at": "2026-10-03T05:21:26Z",
+      "observation_count": 1,
+      "owner_ticket": 659,
+      "producer_run_id": "36646768289",
+      "reason": "generation_quarantined",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "recovery_evidence": null,
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor",
+      "status": "open"
+    }
+  ],
   "last_good_by_source": {},
   "latest_receipt": {
-    "path": "receipts/receipt-37091734027-1-1959ffa2b9ed640c.json",
-    "sha256": "1959ffa2b9ed640c3e482dc629b4365e00e6d7129851d77e886d44ca0a628815"
+    "path": "receipts/receipt-37099554404-1-53670b69f9e8fd3f.json",
+    "sha256": "53670b69f9e8fd3f7eeef8216b95ff736a1ff5c3b89eb217b3c0255f8e8aa958"
   },
   "observations_by_source": {
     "data_go_kr": [
@@ -24,7 +42,7 @@
   "repository": "StatPan/datapan-registry",
   "root": "health/upstream-catalogue",
   "schema_version": "datapan.upstream-catalogue-health-state.v1",
-  "state_sha256": "ee9ba231f2732ab203dd3af0c0336c260814ce59adc3914541b1d0887b40e261",
-  "state_status": "healthy",
-  "updated_at": "2026-10-03T03:00:37Z"
+  "state_sha256": "48dca3ae1f1ed5a83a99a6ac3f929476943db1b1197732c439ae119a8a48ae39",
+  "state_status": "blocked",
+  "updated_at": "2026-10-03T05:21:26Z"
 }
