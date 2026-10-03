@@ -919,6 +919,19 @@ def candidate_key(receipt: Mapping[str, Any]) -> tuple[str, str, str, str]:
     )
 
 
+def assert_ci_compare_and_swap(
+    journal: Mapping[str, Any] | None,
+    receipt: Mapping[str, Any],
+    expected_ci: Mapping[str, Any] | None,
+) -> None:
+    """Require the durable per-candidate CI entry to match the caller snapshot."""
+    key = candidate_key(receipt)
+    rows = journal.get("records", []) if isinstance(journal, Mapping) else []
+    matches = [row for row in rows if isinstance(row, Mapping) and candidate_key(row) == key]
+    if len(matches) != 1 or matches[0].get("ci") != expected_ci:
+        raise AdmissionError("verify-release CI journal compare-and-swap conflict")
+
+
 def validate_journal(journal: Mapping[str, Any], schema: Mapping[str, Any]) -> None:
     import jsonschema
 
@@ -931,6 +944,63 @@ def validate_journal(journal: Mapping[str, Any], schema: Mapping[str, Any]) -> N
         parsed = [dt.datetime.fromisoformat(value.replace("Z", "+00:00")).astimezone(dt.timezone.utc) for value in timestamps]
         if any(parsed[index] < parsed[index - 1] for index in range(1, len(parsed))):
             raise AdmissionError("promotion journal acknowledgement timestamps are out of append order")
+        ci = row.get("ci")
+        if ci is not None:
+            candidate = row.get("candidate", {})
+            ownership = row.get("ownership", {})
+            pr = row.get("pr", {})
+            if (
+                ci.get("repository", "").casefold() != str(candidate.get("repository", "")).casefold()
+                or ci.get("head_sha") != candidate.get("head_sha")
+                or ci.get("branch") != ownership.get("branch")
+                or ci.get("owner_id") != ownership.get("owner_id")
+                or ci.get("body_sha256") != ownership.get("body_sha256")
+                or ci.get("pr_number") != pr.get("number")
+            ):
+                raise AdmissionError("verify-release CI receipt does not bind the exact durable candidate PR identity")
+
+
+CI_STATES = frozenset({
+    "intent", "uncertain", "queued", "in_progress", "success", "failure", "cancelled", "action_required",
+})
+
+CI_IMMUTABLE_FIELDS = (
+    "repository", "workflow_path", "head_sha", "branch", "pr_number", "owner_id",
+    "body_sha256", "request_fingerprint", "intent_at",
+)
+
+
+def preserve_and_validate_ci(previous: Mapping[str, Any], receipt: dict[str, Any]) -> None:
+    """Retain exact-head CI evidence and reject stale or identity-changing writes."""
+    old = previous.get("ci")
+    new = receipt.get("ci")
+    if old is None:
+        return
+    if not isinstance(old, Mapping):
+        raise AdmissionError("durable verify-release CI receipt is malformed")
+    if new is None:
+        receipt["ci"] = json.loads(json.dumps(old))
+        return
+    if not isinstance(new, Mapping):
+        raise AdmissionError("verify-release CI receipt update must be an object")
+    if any(old.get(field) != new.get(field) for field in CI_IMMUTABLE_FIELDS):
+        raise AdmissionError("verify-release CI update changed the exact request identity")
+    old_state, new_state = old.get("state"), new.get("state")
+    if old_state not in CI_STATES or new_state not in CI_STATES:
+        raise AdmissionError("verify-release CI update has an unsupported state")
+    try:
+        old_observed = dt.datetime.fromisoformat(str(old.get("observed_at", "")).replace("Z", "+00:00"))
+        new_observed = dt.datetime.fromisoformat(str(new.get("observed_at", "")).replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise AdmissionError("verify-release CI update has an invalid observation timestamp") from exc
+    if old_observed.tzinfo is None or new_observed.tzinfo is None or new_observed < old_observed:
+        raise AdmissionError("verify-release CI update regressed its observation timestamp")
+    old_run_id, new_run_id = old.get("run_id"), new.get("run_id")
+    old_attempt, new_attempt = old.get("run_attempt"), new.get("run_attempt")
+    if old_run_id is not None and new_run_id != old_run_id:
+        raise AdmissionError("verify-release CI update changed the dispatched run identity")
+    if old_attempt is not None and (new_attempt is None or new_attempt < old_attempt):
+        raise AdmissionError("verify-release CI update regressed the authoritative run attempt")
 
 
 def append_journal_record(
@@ -972,7 +1042,9 @@ def append_journal_record(
         if receipt.get("status") != previous.get("status"):
             if receipt.get("status") not in TRANSITIONS.get(str(previous.get("status")), set()):
                 raise AdmissionError("promotion reconciliation would regress or skip a recorded state transition")
-        rows[matches[0]] = json.loads(json.dumps(receipt))
+        updated = json.loads(json.dumps(receipt))
+        preserve_and_validate_ci(previous, updated)
+        rows[matches[0]] = updated
     else:
         rows.append(json.loads(json.dumps(receipt)))
     source_scope = (str(receipt["candidate"]["source_id"]), str(receipt["candidate"]["scope"]))

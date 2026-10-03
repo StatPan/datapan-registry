@@ -96,10 +96,42 @@
             "items": {
               "type": "object"
             }
-          }
+          },
+          "ci": {"$ref": "#/$defs/ci"}
         }
       },
       "description": "Retain every active generation and only the latest read-back-confirmed last-good record per source and scope."
+    }
+  },
+  "$defs": {
+    "ci": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository", "workflow_path", "head_sha", "branch", "pr_number", "owner_id",
+        "body_sha256", "request_fingerprint", "state", "intent_at", "run_id", "run_attempt",
+        "run_url", "run_status", "conclusion", "observed_at", "dispatch_http_status", "blocker"
+      ],
+      "properties": {
+        "repository": {"type": "string", "pattern": "^[^/]+/[^/]+$"},
+        "workflow_path": {"const": ".github/workflows/verify-release.yml"},
+        "head_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "branch": {"type": "string", "minLength": 1},
+        "pr_number": {"type": "integer", "minimum": 1},
+        "owner_id": {"type": "string", "pattern": "^datapan-canonical-update:v1:[a-f0-9]{64}$"},
+        "body_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "request_fingerprint": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "state": {"enum": ["intent", "uncertain", "queued", "in_progress", "success", "failure", "cancelled", "action_required"]},
+        "intent_at": {"type": "string", "format": "date-time"},
+        "run_id": {"type": ["integer", "null"], "minimum": 1},
+        "run_attempt": {"type": ["integer", "null"], "minimum": 1},
+        "run_url": {"type": ["string", "null"], "format": "uri"},
+        "run_status": {"type": ["string", "null"], "enum": ["requested", "waiting", "pending", "queued", "in_progress", "completed", null]},
+        "conclusion": {"type": ["string", "null"], "enum": ["success", "failure", "neutral", "cancelled", "skipped", "timed_out", "action_required", "stale", "startup_failure", null]},
+        "observed_at": {"type": "string", "format": "date-time"},
+        "dispatch_http_status": {"type": ["integer", "null"], "minimum": 100, "maximum": 599},
+        "blocker": {"type": ["string", "null"]}
+      }
     }
   }
 }

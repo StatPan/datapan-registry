@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import importlib.util
+import json
 import pathlib
 import unittest
 
@@ -12,6 +13,13 @@ SPEC = importlib.util.spec_from_file_location("canonical_update_ci_test_module",
 assert SPEC and SPEC.loader
 CI = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(CI)
+PROMOTION_SPEC = importlib.util.spec_from_file_location(
+    "canonical_update_pr_ci_integration_test_module",
+    pathlib.Path(__file__).parents[1] / "scripts/canonical_update_pr.py",
+)
+assert PROMOTION_SPEC and PROMOTION_SPEC.loader
+PROMOTION = importlib.util.module_from_spec(PROMOTION_SPEC)
+PROMOTION_SPEC.loader.exec_module(PROMOTION)
 
 
 REPOSITORY = "StatPan/datapan-registry"
@@ -227,6 +235,7 @@ class CanonicalUpdateCITests(unittest.TestCase):
         self.assertEqual(result["ci"]["state"], "success")
         self.assertEqual(result["ci"]["run_id"], 203)
         self.assertEqual(self.dispatches, [])
+
 
     def test_realistic_actions_run_path_without_ref_is_a_match(self) -> None:
         observed = run_record(211)
@@ -524,6 +533,204 @@ class CanonicalUpdateCITests(unittest.TestCase):
         second = self.ensure(first["ci"])
         self.assertEqual(second["ci"]["state"], "success")
         self.assertEqual(len(self.dispatches), 1)
+
+    def test_verify_release_workflow_has_optional_expected_head_guards_before_checkout(self) -> None:
+        import yaml
+
+        workflow_path = pathlib.Path(__file__).parents[1] / ".github/workflows/verify-release.yml"
+        workflow = yaml.load(workflow_path.read_text(), Loader=yaml.BaseLoader)
+        self.assertIn("expected_head_sha", workflow["on"]["workflow_dispatch"]["inputs"])
+        self.assertEqual(
+            workflow["on"]["workflow_dispatch"]["inputs"]["expected_head_sha"]["default"],
+            "",
+        )
+        for job_name in ("diagnostic-candidate", "verify"):
+            steps = workflow["jobs"][job_name]["steps"]
+            guard_index = next(
+                index for index, step in enumerate(steps)
+                if step.get("name") == "Check dispatched candidate head"
+            )
+            checkout_index = next(
+                index for index, step in enumerate(steps)
+                if step.get("name") == "Checkout registry"
+            )
+            self.assertLess(guard_index, checkout_index)
+            self.assertEqual(
+                steps[guard_index]["if"],
+                "github.event_name == 'workflow_dispatch' && inputs.expected_head_sha != ''",
+            )
+            self.assertIn("${{ github.sha }}", steps[guard_index]["env"]["ACTUAL_HEAD_SHA"])
+
+
+class CanonicalUpdateCIJournalIntegrationTests(unittest.TestCase):
+    """Exercise helper state transitions through the real promotion journal."""
+
+    def setUp(self) -> None:
+        body = f"<!-- {OWNER} generation=generation-a -->\n\nCandidate review body.\n"
+        self.receipt = {
+            "schema_version": "datapan.canonical-update-promotion-receipt.v1",
+            "status": "pending-review",
+            "candidate": {
+                "repository": REPOSITORY,
+                "source_id": SOURCE_ID,
+                "scope": SCOPE,
+                "base_sha": BASE,
+                "generation_id": "generation-a",
+                "head_sha": HEAD,
+                "manifest_sha256": "c" * 64,
+                "registry_sha256": "d" * 64,
+                "registry_path": "data/data-go-kr.registry.json",
+                "registry_bytes": 123,
+                "composition_receipt_sha256": "e" * 64,
+            },
+            "ownership": {
+                "owner_id": OWNER,
+                "branch": BRANCH,
+                "expected_head_sha": HEAD,
+                "body_sha256": hashlib.sha256(body.encode("utf-8")).hexdigest(),
+            },
+            "pr": {"number": 652, "url": "https://github.com/StatPan/datapan-registry/pull/652", "state": "open"},
+            "acknowledgements": [],
+            "blockers": [],
+        }
+        self.body = body
+        self.pr = {
+            "number": 652,
+            "state": "OPEN",
+            "body": body,
+            "headRefName": BRANCH,
+            "headRefOid": HEAD,
+            "baseRefName": "main",
+            "repository": {"full_name": REPOSITORY},
+            "headRepository": {"full_name": REPOSITORY},
+        }
+        self.journal_schema = json.loads(
+            (pathlib.Path(__file__).parents[1] / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json").read_text()
+        )
+        self.receipt_schema = json.loads(
+            (pathlib.Path(__file__).parents[1] / "schemas/datapan.canonical-update-promotion-receipt.v1.schema.json").read_text()
+        )
+        now = CI._now()
+        self.journal = PROMOTION.append_journal_record(
+            None, self.receipt, repository=REPOSITORY, observed_at=now,
+        )
+        PROMOTION.validate_journal(self.journal, self.journal_schema)
+        self.expected_ci = None
+        self.persist_history: list[dict] = []
+        self.available_runs: list[dict] = []
+        self.current_run: dict | None = None
+        self.read_error: Exception | None = None
+
+    def journal_record(self) -> dict:
+        return self.journal["records"][0]
+
+    def persist_ci(self, entry: dict) -> None:
+        current = self.journal_record()
+        PROMOTION.assert_ci_compare_and_swap(self.journal, current, self.expected_ci)
+        updated = copy.deepcopy(current)
+        updated["ci"] = copy.deepcopy(entry)
+        self.journal = PROMOTION.append_journal_record(
+            self.journal, updated, repository=REPOSITORY,
+            observed_at=entry["observed_at"],
+        )
+        PROMOTION.validate_journal(self.journal, self.journal_schema)
+        self.expected_ci = copy.deepcopy(entry)
+        self.persist_history.append(copy.deepcopy(entry))
+
+    def read_pr(self) -> dict:
+        return copy.deepcopy(self.pr)
+
+    def read_branch(self, branch: str) -> str:
+        self.assertEqual(branch, BRANCH)
+        return HEAD
+
+    def list_runs(self, *_args) -> list[dict]:
+        return copy.deepcopy(self.available_runs)
+
+    def read_run(self, run_id: int) -> dict:
+        if self.read_error:
+            raise self.read_error
+        value = copy.deepcopy(self.current_run or run_record(run_id))
+        value["id"] = run_id
+        return value
+
+    def ensure(self, state: dict | None = None) -> dict:
+        return CI.ensure_verify_release_run(
+            REPOSITORY, self.receipt, self.read_pr, state,
+            read_branch_sha=self.read_branch,
+            list_matching_runs=self.list_runs,
+            dispatch=lambda *_args: self.fail("journal reconciliation must not dispatch"),
+            read_run=self.read_run,
+            persist=self.persist_ci,
+        )
+
+    def test_queued_then_successful_run_persists_through_real_journal(self) -> None:
+        queued = run_record(123, status="pending", conclusion=None)
+        self.available_runs = [queued]
+        self.current_run = queued
+
+        first = self.ensure()
+        self.assertEqual(first["ci"]["state"], "queued")
+        self.assertEqual(self.journal_record()["ci"]["state"], "queued")
+        self.assertEqual(len(self.persist_history), 2)
+
+        completed = run_record(123, status="completed", conclusion="success")
+        self.available_runs = [completed]
+        self.current_run = completed
+        second = self.ensure(first["ci"])
+
+        self.assertEqual(second["ci"]["state"], "success")
+        self.assertEqual(second["ci"]["run_id"], 123)
+        self.assertEqual(self.journal_record()["ci"]["state"], "success")
+        self.assertEqual([row["state"] for row in self.persist_history], ["uncertain", "queued", "uncertain", "success"])
+
+    def test_transient_run_read_failure_is_durable_and_recovers_without_dispatch(self) -> None:
+        successful = run_record(123)
+        self.available_runs = [successful]
+        self.current_run = successful
+        good = self.ensure()
+        self.assertEqual(good["ci"]["state"], "success")
+
+        self.read_error = TimeoutError("temporary Actions API outage")
+        transient = self.ensure(good["ci"])
+        self.assertEqual(transient["ci"]["state"], "uncertain")
+        self.assertEqual(self.journal_record()["ci"]["state"], "uncertain")
+
+        self.read_error = None
+        recovered = self.ensure(transient["ci"])
+        self.assertEqual(recovered["ci"]["state"], "success")
+        self.assertEqual(self.journal_record()["ci"]["state"], "success")
+        self.assertEqual(len(self.persist_history), 6)
+
+    def test_same_attempt_success_is_revoked_when_owned_pr_identity_changes(self) -> None:
+        self.available_runs = [run_record(123)]
+        self.current_run = run_record(123)
+        succeeded = self.ensure()
+        self.assertEqual(succeeded["ci"]["state"], "success")
+        old_attempt = self.journal_record()["ci"]["run_attempt"]
+
+        self.pr["body"] = self.body + "human edit\n"
+        revoked = self.ensure(succeeded["ci"])
+
+        self.assertEqual(revoked["ci"]["state"], "action_required")
+        self.assertEqual(revoked["ci"]["run_attempt"], old_attempt)
+        self.assertEqual(self.journal_record()["ci"]["state"], "action_required")
+
+    def test_journal_compare_and_swap_rejects_a_stale_ci_observation(self) -> None:
+        self.available_runs = [run_record(123)]
+        self.current_run = run_record(123)
+        succeeded = self.ensure()
+        external = copy.deepcopy(self.journal_record())
+        external["ci"]["blocker"] = "external-observation"
+        external["ci"]["observed_at"] = "2999-01-01T00:00:00Z"
+        self.journal = PROMOTION.append_journal_record(
+            self.journal, external, repository=REPOSITORY,
+            observed_at="2999-01-01T00:00:00Z",
+        )
+        PROMOTION.validate_journal(self.journal, self.journal_schema)
+
+        with self.assertRaisesRegex(PROMOTION.AdmissionError, "compare-and-swap conflict"):
+            self.ensure(succeeded["ci"])
 
 
 if __name__ == "__main__":

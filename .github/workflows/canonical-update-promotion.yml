@@ -8,7 +8,7 @@ on:
     - cron: "43 * * * *"
 
 permissions:
-  actions: read
+  actions: write
   contents: write
   issues: write
   pull-requests: write
@@ -19,120 +19,86 @@ concurrency:
 
 jobs:
   reconcile:
-    if: github.event_name == 'schedule' || (github.event.workflow_run.name == 'Process upstream catalogue' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.repository.full_name == github.repository && github.event.workflow_run.head_branch == github.event.repository.default_branch)
+    if: github.event_name == 'schedule' || (github.event.workflow_run.name == 'Process upstream catalogue' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.repository.full_name == github.repository && github.event.workflow_run.head_repository.full_name == github.repository && github.event.workflow_run.head_branch == github.event.repository.default_branch)
     runs-on: ubuntu-latest
     env:
       PYTHONDONTWRITEBYTECODE: "1"
+      GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch || github.ref_name }}
     steps:
-      - name: Check out the exact source generation commit
-        if: github.event_name == 'workflow_run'
+      - name: Check out the current trusted default branch
         uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.workflow_run.head_sha }}
+          ref: ${{ github.event.repository.default_branch || github.ref_name }}
           fetch-depth: 0
           lfs: false
           persist-credentials: true
 
-      - name: Check out the current default branch for scheduled reconciliation
-        if: github.event_name == 'schedule'
-        uses: actions/checkout@v7
-        with:
-          ref: ${{ github.event.repository.default_branch }}
-          fetch-depth: 0
-          lfs: false
-          persist-credentials: true
+      - name: Check whether durable processor state exists
+        id: processor-state-branch
+        run: |
+          set -euo pipefail
+          state_ref="$(git ls-remote --heads origin refs/heads/automation/upstream-catalogue-state)"
+          if [ -n "$state_ref" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
 
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-
-      - name: Install validation dependency
-        run: python -m pip install --disable-pip-version-check jsonschema
-
-      - name: Reconcile existing owned PRs
-        if: github.event_name == 'schedule'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_RUN_ID: ${{ github.run_id }}
-          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
-        run: python3 scripts/run-canonical-update-promotion.py --mode reconcile-prs
-
-      - name: Check out processor state branch
-        if: github.event_name == 'workflow_run'
+      - name: Check out durable upstream catalogue processor state
+        if: steps.processor-state-branch.outputs.exists == 'true'
         uses: actions/checkout@v7
         with:
           ref: automation/upstream-catalogue-state
           path: .datapan/processor-state
           fetch-depth: 0
           lfs: false
-          persist-credentials: true
+          persist-credentials: false
 
-      - name: Check out the reviewed Datapan CLI
-        if: github.event_name == 'workflow_run'
-        uses: actions/checkout@v7
+      - uses: actions/checkout@v7
         with:
           repository: StatPan/datapan-cli
           ref: e3b2fa44cb0f68d7e58e003fbd71ecde505878de
           path: .datapan/datapan-cli
           fetch-depth: 1
 
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
       - uses: actions/setup-go@v6
-        if: github.event_name == 'workflow_run'
         with:
           go-version-file: .datapan/datapan-cli/go.mod
           check-latest: true
           cache-dependency-path: .datapan/datapan-cli/go.sum
 
-      - name: Locate exact processor artifact
-        if: github.event_name == 'workflow_run'
-        id: processor-artifact
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-          PROCESSOR_RUN_ID: ${{ github.event.workflow_run.id }}
-          PROCESSOR_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
-        run: |
-          name="upstream-catalogue-processing-${PROCESSOR_RUN_ID}-${PROCESSOR_RUN_ATTEMPT}"
-          mkdir -p .datapan
-          gh api "repos/${GH_REPO}/actions/runs/${PROCESSOR_RUN_ID}/artifacts" > .datapan/processor-artifacts.json
-          artifact_id="$(jq -r --arg name "$name" '[.artifacts[] | select(.name == $name and .expired == false)] | if length == 1 then .[0].id else empty end' .datapan/processor-artifacts.json)"
-          test -n "$artifact_id" || { echo "Expected exactly one unexpired processor artifact: $name" >&2; exit 1; }
-          echo "name=$name" >> "$GITHUB_OUTPUT"
-          echo "artifact_id=$artifact_id" >> "$GITHUB_OUTPUT"
+      - name: Install validation dependency
+        run: python -m pip install --disable-pip-version-check jsonschema
 
-      - name: Download immutable processor output bundle
-        if: github.event_name == 'workflow_run'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-          PROCESSOR_RUN_ID: ${{ github.event.workflow_run.id }}
-          PROCESSOR_ARTIFACT_NAME: ${{ steps.processor-artifact.outputs.name }}
-        run: |
-          gh run download "$PROCESSOR_RUN_ID" --repo "$GH_REPO" --name "$PROCESSOR_ARTIFACT_NAME" --dir .datapan/processor-output
-          result="$(find .datapan/processor-output -type f -name upstream-catalogue-processing-result.json -print -quit)"
-          test -n "$result" || { echo "Processor artifact has no processing result" >&2; exit 1; }
-          echo "PROCESSOR_BUNDLE_DIR=$(dirname "$result")" >> "$GITHUB_ENV"
-
-      - name: Prepare and deliver an owned review PR
-        if: github.event_name == 'workflow_run'
+      - name: Reconcile owned PRs and exact-head CI
         env:
           GH_TOKEN: ${{ github.token }}
           GITHUB_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_RUN_ID: ${{ github.run_id }}
           GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
-          SOURCE_RUN_ID: ${{ github.event.workflow_run.id }}
-          SOURCE_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
-          SOURCE_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
-          PROCESSOR_ARTIFACT_ID: ${{ steps.processor-artifact.outputs.artifact_id }}
+        run: python3 scripts/run-canonical-update-promotion.py --mode reconcile-prs
+
+      - name: Recover at most one durable ready processor bundle
+        if: steps.processor-state-branch.outputs.exists == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+          EVENT_RUN_ID: ${{ github.event.workflow_run.id }}
+          EVENT_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+          EVENT_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
           python3 scripts/run-canonical-update-promotion.py \
-            --mode prepare \
+            --mode recover-ready \
             --state-root .datapan/processor-state/.datapan/upstream-catalogue-state \
-            --bundle-dir "$PROCESSOR_BUNDLE_DIR" \
             --datapan-cli .datapan/datapan-cli \
-            --workflow-run-id "$SOURCE_RUN_ID" \
-            --workflow-run-attempt "$SOURCE_RUN_ATTEMPT" \
-            --workflow-run-head-sha "$SOURCE_HEAD_SHA" \
-            --processor-artifact-id "$PROCESSOR_ARTIFACT_ID"
+            --event-run-id "$EVENT_RUN_ID" \
+            --event-run-attempt "$EVENT_RUN_ATTEMPT" \
+            --event-head-sha "$EVENT_HEAD_SHA"

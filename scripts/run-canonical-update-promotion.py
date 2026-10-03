@@ -20,8 +20,13 @@ import pathlib
 import re
 import shutil
 import shlex
+import stat
 import subprocess
 import sys
+import urllib.error
+import urllib.parse
+import urllib.request
+import zipfile
 from collections.abc import Mapping, Sequence
 from typing import Any
 
@@ -31,9 +36,44 @@ PROCESSOR_SCHEMA = "datapan.upstream-catalogue-checkpoint.v1"
 JOURNAL_SCHEMA = "datapan.canonical-update-promotion-journal.v1"
 JOURNAL_PATH = pathlib.Path("reports/canonical-update-promotion-receipt.json")
 STATE_BRANCH = "automation/canonical-update-state"
+PROCESSOR_STATE_BRANCH = "automation/upstream-catalogue-state"
+PROCESSOR_WORKFLOW_NAME = "Process upstream catalogue"
+PROCESSOR_WORKFLOW_PATH = ".github/workflows/upstream-catalogue-process.yml"
+PROCESSOR_ARTIFACT_PREFIX = "upstream-catalogue-processing-"
+VERIFY_WORKFLOW_PATH = ".github/workflows/verify-release.yml"
+GITHUB_API_VERSION = "2026-03-10"
+CI_EXPECTATION_UNSET = object()
 PROCESSING_PREFIX = "upstream-catalogue-processing-"
 PROMOTION_ISSUE_MARKER = "datapan-canonical-update-issue:v1:"
 REVIEW_DIR = pathlib.Path("reports/data-go-kr/upstream-catalogue-review")
+MAX_PROCESSOR_ARCHIVE_BYTES = 1024 * 1024 * 1024
+MAX_PROCESSOR_BUNDLE_BYTES = 2 * 1024 * 1024 * 1024
+MAX_PROCESSOR_ARTIFACT_PAGES = 10
+PROCESSOR_INPUT_PROVENANCE = {
+    "policy_sha256": "policy/source-refresh.json",
+    "adapter_revision": "data/provider-index.json",
+    "generator_revision": "scripts/process-upstream-catalogue-candidate.py",
+    "extractor_revision": "scripts/generate-batch-link-detail-registry-patches.py",
+}
+PROCESSOR_COMPOSITION_INPUTS = {
+    "registry_schema": "schemas/datapan.specs.v1.schema.json",
+    "provider_index_schema": "schemas/datapan.provider-index.v1.schema.json",
+    "diff_schema": "schemas/datapan.catalog-diff.v1.schema.json",
+    "refresh_evidence_schema": "schemas/datapan.upstream-refresh-evidence.v1.schema.json",
+    "enrichment_evidence_schema": "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json",
+    "composer": "scripts/compose-upstream-catalogue-candidate.py",
+    "receipt_schema": "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
+}
+PROCESSOR_COMPATIBILITY_FILES = (
+    *PROCESSOR_INPUT_PROVENANCE.values(),
+    ".github/workflows/upstream-catalogue-process.yml",
+    ".github/workflows/upstream-catalog-refresh.yml",
+    "scripts/upstream-catalogue-state-branch.py",
+    "scripts/compose-upstream-catalogue-candidate.py",
+    "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+    "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
+    *PROCESSOR_COMPOSITION_INPUTS.values(),
+)
 GENERATED_FILE_ALLOWLIST = frozenset({
     "data/data-go-kr.registry.json", "manifest.json", "schemas/index.json",
     "policy/data-go-kr-operation-denominator-expectation.json",
@@ -93,6 +133,14 @@ REQUIRED_PROCESSOR_FILES = (
 
 
 class PromotionError(RuntimeError):
+    pass
+
+
+class ProcessorCandidateError(PromotionError):
+    """One retained B generation is unusable; later durable generations may proceed."""
+
+
+class ProcessorArtifactUnavailable(ProcessorCandidateError):
     pass
 
 
@@ -188,6 +236,495 @@ def locate_processor_checkpoint(
     return path, checkpoint
 
 
+def parse_utc_timestamp(value: Any, label: str) -> dt.datetime:
+    if not isinstance(value, str) or not value:
+        raise PromotionError(f"{label} timestamp is missing")
+    try:
+        parsed = dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise PromotionError(f"{label} timestamp is invalid") from exc
+    if parsed.tzinfo is None:
+        raise PromotionError(f"{label} timestamp must include a timezone")
+    return parsed.astimezone(dt.timezone.utc)
+
+
+def processor_attempt_from_locator(checkpoint: Mapping[str, Any]) -> tuple[str, str, str]:
+    locator = checkpoint.get("output_artifact")
+    if not isinstance(locator, Mapping):
+        raise PromotionError("ready processor checkpoint has no artifact locator")
+    run_id = str(locator.get("run_id", ""))
+    name = str(locator.get("name", ""))
+    match = re.fullmatch(r"upstream-catalogue-processing-([0-9]{6,20})-([1-9][0-9]*)", name)
+    if not re.fullmatch(r"[0-9]{6,20}", run_id) or not match or match.group(1) != run_id:
+        raise PromotionError("ready processor artifact name does not bind one exact run attempt")
+    return run_id, match.group(2), name
+
+
+def validate_trusted_processor_run(
+    value: Mapping[str, Any],
+    *,
+    repository: str,
+    run_id: str,
+    attempt: str,
+    default_branch: str,
+    expected_head_sha: str | None = None,
+) -> dict[str, Any]:
+    """Validate one exact completed B attempt from GitHub's run API."""
+    path = str(value.get("path", "")).split("@", 1)[0]
+    run_repository = value.get("repository")
+    head_repository = value.get("head_repository")
+    run_repository_name = run_repository.get("full_name") if isinstance(run_repository, Mapping) else None
+    repository_name = head_repository.get("full_name") if isinstance(head_repository, Mapping) else None
+    source_sha = str(value.get("head_sha", ""))
+    if (
+        str(value.get("id", "")) != run_id
+        or str(value.get("run_attempt", "")) != attempt
+        or value.get("name") != PROCESSOR_WORKFLOW_NAME
+        or path != PROCESSOR_WORKFLOW_PATH
+        or str(run_repository_name or "").casefold() != repository.casefold()
+        or str(repository_name or "").lower() != repository.lower()
+        or value.get("head_branch") != default_branch
+        or value.get("event") not in {"schedule", "workflow_run", "workflow_dispatch"}
+        or value.get("status") != "completed"
+        or value.get("conclusion") != "success"
+        or not re.fullmatch(r"[a-f0-9]{40}", source_sha)
+        or (expected_head_sha is not None and source_sha != expected_head_sha)
+    ):
+        raise PromotionError("processor run is not the exact trusted successful default-branch attempt")
+    return dict(value)
+
+
+def validate_processor_artifact_metadata(
+    artifact: Mapping[str, Any],
+    checkpoint: Mapping[str, Any],
+    run: Mapping[str, Any],
+    *,
+    repository: str,
+    now: dt.datetime | None = None,
+) -> dict[str, Any]:
+    locator = checkpoint.get("output_artifact")
+    if not isinstance(locator, Mapping):
+        raise PromotionError("processor checkpoint has no output artifact locator")
+    run_id, _attempt, name = processor_attempt_from_locator(checkpoint)
+    actual_run = artifact.get("workflow_run")
+    actual_run_id = actual_run.get("id") if isinstance(actual_run, Mapping) else None
+    run_head = str(run.get("head_sha", ""))
+    if (
+        str(locator.get("repository", "")).lower() != repository.lower()
+        or str(locator.get("run_id", "")) != run_id
+        or str(locator.get("artifact_id", "")) != str(artifact.get("id", ""))
+        or str(locator.get("artifact_id", "")) in {"", "None"}
+        or artifact.get("name") != name
+        or artifact.get("expired") is not False
+        or str(actual_run_id) != run_id
+        or not isinstance(actual_run, Mapping)
+        or actual_run.get("head_sha") != run_head
+        or actual_run.get("head_branch") != run.get("head_branch")
+    ):
+        raise PromotionError("processor artifact metadata differs from the durable exact run locator")
+    size = artifact.get("size_in_bytes")
+    if isinstance(size, bool) or not isinstance(size, int) or size < 1 or size > MAX_PROCESSOR_ARCHIVE_BYTES:
+        raise PromotionError("processor artifact archive size is invalid or outside the bounded download limit")
+    locator_expiry = parse_utc_timestamp(locator.get("expires_at"), "durable processor artifact expiry")
+    actual_expiry = parse_utc_timestamp(artifact.get("expires_at"), "processor artifact expiry")
+    current = now or dt.datetime.now(dt.timezone.utc)
+    if actual_expiry != locator_expiry or actual_expiry <= current:
+        raise PromotionError("processor artifact is expired or its expiry differs from the durable locator")
+    digest = artifact.get("digest")
+    if digest is not None and (not isinstance(digest, str) or not re.fullmatch(r"sha256:[a-f0-9]{64}", digest)):
+        raise PromotionError("processor artifact archive digest metadata is malformed")
+    return dict(artifact)
+
+
+def list_recoverable_processor_checkpoints(
+    state_root: pathlib.Path,
+    schema_path: pathlib.Path,
+    journal: Mapping[str, Any] | None,
+    *,
+    now: dt.datetime | None = None,
+) -> tuple[list[dict[str, Any]], list[dict[str, str]]]:
+    """List ordered ready checkpoints and report unusable generations without starving later work."""
+    source_root = state_root / "sources/data_go_kr"
+    index_path = source_root / "index.json"
+    generation_root = source_root / "generations"
+    if not index_path.is_file():
+        return [], []
+    index = load_object(index_path)
+    rows = index.get("generations")
+    if index.get("schema_version") != PROCESSOR_SCHEMA or not isinstance(rows, list):
+        raise PromotionError("durable processor generation index is malformed or unsupported")
+    current = now or dt.datetime.now(dt.timezone.utc)
+    candidates: list[dict[str, Any]] = []
+    blocked: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for row in rows:
+        if not isinstance(row, Mapping):
+            raise PromotionError("durable processor generation index contains a malformed row")
+        generation_id = row.get("generation_id")
+        if not isinstance(generation_id, str) or not re.fullmatch(r"[a-f0-9]{64}", generation_id):
+            raise PromotionError("durable processor generation index contains an invalid generation id")
+        if generation_id in seen:
+            raise PromotionError("durable processor generation index contains a duplicate generation")
+        seen.add(generation_id)
+        if row.get("status") != "ready":
+            continue
+        checkpoint_name = row.get("checkpoint")
+        if checkpoint_name != f"{generation_id}.json":
+            blocked.append({"generation_id": generation_id, "reason": "ready_checkpoint_path_mismatch"})
+            continue
+        path = generation_root / checkpoint_name
+        if not path.is_file() or path.is_symlink():
+            blocked.append({"generation_id": generation_id, "reason": "ready_checkpoint_missing"})
+            continue
+        try:
+            checkpoint = verify_processor_checkpoint(load_object(path), schema_path)
+        except Exception:
+            blocked.append({"generation_id": generation_id, "reason": "ready_checkpoint_invalid"})
+            continue
+        if checkpoint.get("generation_id") != generation_id or path.stem != generation_id:
+            blocked.append({"generation_id": generation_id, "reason": "checkpoint_generation_mismatch"})
+            continue
+        if checkpoint.get("status") != "ready":
+            blocked.append({"generation_id": generation_id, "reason": "checkpoint_status_mismatch"})
+            continue
+        if checkpoint.get("source_id") != "data_go_kr" or checkpoint.get("source_scope") != "aggregate_supported_catalog":
+            continue
+        locator = checkpoint.get("output_artifact")
+        if not isinstance(locator, Mapping) or not locator.get("artifact_id") or not locator.get("bundle_manifest_sha256"):
+            blocked.append({"generation_id": generation_id, "reason": "ready_artifact_locator_incomplete"})
+            continue
+        try:
+            expiry = parse_utc_timestamp(locator.get("expires_at"), "durable processor artifact expiry")
+        except PromotionError:
+            blocked.append({"generation_id": generation_id, "reason": "ready_artifact_expiry_invalid"})
+            continue
+        if expiry <= current:
+            blocked.append({"generation_id": generation_id, "reason": "ready_artifact_expired"})
+            continue
+        try:
+            processor_attempt_from_locator(checkpoint)
+        except PromotionError:
+            blocked.append({"generation_id": generation_id, "reason": "ready_artifact_attempt_invalid"})
+            continue
+        try:
+            parse_utc_timestamp(checkpoint.get("observed_at"), "processor observation")
+        except PromotionError:
+            blocked.append({"generation_id": generation_id, "reason": "processor_observation_time_invalid"})
+            continue
+        prior = journal_record_for(journal, "data_go_kr", "aggregate_supported_catalog", generation_id)
+        prior_pr = prior.get("pr", {}) if isinstance(prior, Mapping) else {}
+        pr_number = prior_pr.get("number") if isinstance(prior_pr, Mapping) else None
+        if isinstance(pr_number, int) and not isinstance(pr_number, bool) and pr_number > 0:
+            continue
+        candidates.append(checkpoint)
+    if not candidates:
+        return [], blocked
+    candidates.sort(key=lambda row: (
+        parse_utc_timestamp(row.get("observed_at"), "processor observation"),
+        str(row.get("generation_id", "")),
+    ))
+    return candidates, blocked
+
+
+def select_recoverable_processor_checkpoint(
+    state_root: pathlib.Path,
+    schema_path: pathlib.Path,
+    journal: Mapping[str, Any] | None,
+    *,
+    now: dt.datetime | None = None,
+) -> dict[str, Any] | None:
+    """Return the oldest locally viable checkpoint (API checks happen before selection)."""
+    candidates, _blocked = list_recoverable_processor_checkpoints(state_root, schema_path, journal, now=now)
+    return candidates[0] if candidates else None
+
+
+def verify_processor_input_compatibility(
+    root: pathlib.Path,
+    checkpoint: Mapping[str, Any],
+    processor_head_sha: str,
+    current_head_sha: str,
+    composition_receipt: Mapping[str, Any] | None = None,
+) -> None:
+    """Permit an older B run only when its relevant source contract is byte-identical."""
+    if not re.fullmatch(r"[a-f0-9]{40}", processor_head_sha) or not re.fullmatch(r"[a-f0-9]{40}", current_head_sha):
+        raise PromotionError("processor/current source commits must be full immutable Git SHAs")
+    ancestry = command(("git", "merge-base", "--is-ancestor", processor_head_sha, current_head_sha), root, allowed_returncodes=frozenset({0, 1}))
+    if ancestry.returncode != 0:
+        raise PromotionError("processor source commit is not an ancestor of the current trusted default branch")
+    generation_inputs = checkpoint.get("generation_inputs")
+    if not isinstance(generation_inputs, Mapping):
+        raise PromotionError("processor checkpoint lacks generation input provenance")
+    historical_bytes: dict[str, bytes] = {}
+    for raw_path in dict.fromkeys(PROCESSOR_COMPATIBILITY_FILES):
+        path = pathlib.PurePosixPath(raw_path)
+        if path.is_absolute() or ".." in path.parts or "\\" in raw_path:
+            raise PromotionError("processor compatibility contract contains an unsafe source path")
+        try:
+            source_bytes = command(("git", "show", f"{processor_head_sha}:{raw_path}"), root).stdout.encode("utf-8")
+            current_bytes = (root / raw_path).read_bytes()
+        except (OSError, PromotionError) as exc:
+            raise PromotionError(f"current main or processor source is missing a compatibility input: {raw_path}") from exc
+        source_digest = hashlib.sha256(source_bytes).hexdigest()
+        historical_bytes[raw_path] = source_bytes
+        current_digest = hashlib.sha256(current_bytes).hexdigest()
+        expected_field = next((field for field, input_path in PROCESSOR_INPUT_PROVENANCE.items() if input_path == raw_path), None)
+        if expected_field is not None and generation_inputs.get(expected_field) != source_digest:
+            raise PromotionError(f"processor checkpoint provenance does not match its source commit: {raw_path}")
+        if source_digest != current_digest:
+            raise PromotionError(f"processor input contract changed since observation: {raw_path}")
+    if composition_receipt is not None:
+        input_digests = composition_receipt.get("input_digests")
+        if not isinstance(input_digests, Mapping):
+            raise PromotionError("composition receipt lacks exact producer input digests")
+        for input_name, raw_path in PROCESSOR_COMPOSITION_INPUTS.items():
+            observed = input_digests.get(input_name)
+            expected_bytes = historical_bytes.get(raw_path)
+            if not isinstance(observed, Mapping) or expected_bytes is None:
+                raise PromotionError(f"composition receipt is missing its exact {input_name} input digest")
+            if (
+                observed.get("bytes") != len(expected_bytes)
+                or observed.get("sha256") != hashlib.sha256(expected_bytes).hexdigest()
+            ):
+                raise PromotionError(f"composition receipt {input_name} digest differs from the trusted producer commit")
+
+
+def gh_rest_json(root: pathlib.Path, endpoint: str, *arguments: str) -> Any:
+    argv = (
+        "gh", "api", "--header", f"X-GitHub-Api-Version: {GITHUB_API_VERSION}",
+        "--header", "Accept: application/vnd.github+json", *arguments, endpoint,
+    )
+    print(f"+ [{root}] {shlex.join(argv)}", flush=True)
+    result = subprocess.run(argv, cwd=root, text=True, capture_output=True, check=False)
+    if result.returncode != 0:
+        status = re.search(r"\bHTTP\s+(404|410)\b", result.stderr, flags=re.IGNORECASE)
+        if status and ("/actions/runs/" in endpoint or "/actions/artifacts" in endpoint):
+            raise ProcessorCandidateError("the exact processor Actions run or artifact is no longer available")
+        raise PromotionError(f"GitHub REST read failed ({result.returncode})")
+    try:
+        return json.loads(result.stdout)
+    except json.JSONDecodeError as exc:
+        raise PromotionError("GitHub REST endpoint returned invalid JSON") from exc
+
+
+def gh_rest_bytes(root: pathlib.Path, endpoint: str) -> bytes:
+    argv = ("gh", "api", "--header", f"X-GitHub-Api-Version: {GITHUB_API_VERSION}",
+            "--header", "Accept: application/vnd.github+json", endpoint)
+    print(f"+ [{root}] {shlex.join(argv)}", flush=True)
+    result = subprocess.run(argv, cwd=root, capture_output=True, check=False)
+    if result.returncode != 0:
+        status = re.search(rb"\bHTTP\s+(404|410)\b", result.stderr, flags=re.IGNORECASE)
+        if status:
+            raise ProcessorArtifactUnavailable("the exact processor artifact is no longer available")
+        raise PromotionError(f"GitHub artifact API download failed ({result.returncode})")
+    return result.stdout
+
+
+def github_api_request(
+    method: str,
+    endpoint: str,
+    body: Mapping[str, Any] | None = None,
+) -> tuple[int, Any]:
+    token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+    if not token:
+        raise PromotionError("GitHub token is unavailable for the exact-head CI operation")
+    base_url = os.environ.get("GITHUB_API_URL", "https://api.github.com").rstrip("/")
+    url = f"{base_url}/{endpoint.lstrip('/')}"
+    payload = json.dumps(body, separators=(",", ":")).encode("utf-8") if body is not None else None
+    request = urllib.request.Request(
+        url,
+        data=payload,
+        method=method,
+        headers={
+            "Accept": "application/vnd.github+json",
+            "Authorization": f"Bearer {token}",
+            "X-GitHub-Api-Version": GITHUB_API_VERSION,
+            **({"Content-Type": "application/json"} if payload is not None else {}),
+        },
+    )
+    print(f"+ GitHub API {method} {endpoint}", flush=True)
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            status = int(response.status)
+            raw = response.read()
+    except urllib.error.HTTPError as exc:
+        status = int(exc.code)
+        raw = exc.read()
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        raise PromotionError(f"GitHub API {method} transport failed for {endpoint}") from exc
+    if not raw:
+        return status, None
+    try:
+        return status, json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return status, None
+
+
+def github_api_get(endpoint: str) -> dict[str, Any]:
+    status, value = github_api_request("GET", endpoint)
+    if status != 200 or not isinstance(value, dict):
+        raise PromotionError(f"GitHub API read failed with HTTP {status}")
+    return value
+
+
+def verify_release_branch_sha(repository: str, branch: str) -> str | None:
+    ref = urllib.parse.quote(branch, safe="/")
+    status, value = github_api_request("GET", f"repos/{repository}/git/ref/heads/{ref}")
+    if status == 404:
+        return None
+    if status != 200 or not isinstance(value, Mapping):
+        raise PromotionError(f"candidate branch API read failed with HTTP {status}")
+    obj = value.get("object")
+    sha = obj.get("sha") if isinstance(obj, Mapping) else None
+    return str(sha) if isinstance(sha, str) else None
+
+
+def list_verify_release_runs(
+    repository: str,
+    workflow_path: str,
+    branch: str,
+    event: str,
+    head_sha: str,
+) -> list[dict[str, Any]]:
+    workflow = urllib.parse.quote(workflow_path, safe="")
+    query = urllib.parse.urlencode({
+        "event": event, "head_sha": head_sha, "branch": branch, "per_page": 100,
+    })
+    value = github_api_get(f"repos/{repository}/actions/workflows/{workflow}/runs?{query}")
+    rows = value.get("workflow_runs")
+    total = value.get("total_count")
+    if (
+        not isinstance(rows, list)
+        or isinstance(total, bool)
+        or not isinstance(total, int)
+        or total < 0
+        or total > 100
+        or len(rows) != total
+        or any(not isinstance(row, dict) for row in rows)
+    ):
+        raise PromotionError("matching verify-release run list is malformed or exceeds its bounded result limit")
+    return rows
+
+
+def read_verify_release_run(repository: str, run_id: int) -> dict[str, Any]:
+    for _attempt_read in range(2):
+        run = github_api_get(f"repos/{repository}/actions/runs/{run_id}")
+        current_attempt = run.get("run_attempt")
+        if isinstance(current_attempt, bool) or not isinstance(current_attempt, int) or current_attempt < 1:
+            raise PromotionError("verify-release run API omitted its exact current attempt")
+        jobs_query = urllib.parse.urlencode({"per_page": 100})
+        jobs = github_api_get(
+            f"repos/{repository}/actions/runs/{run_id}/attempts/{current_attempt}/jobs?{jobs_query}"
+        )
+        job_rows = jobs.get("jobs")
+        job_total = jobs.get("total_count")
+        if (
+            not isinstance(job_rows, list)
+            or isinstance(job_total, bool)
+            or not isinstance(job_total, int)
+            or job_total < 0
+            or job_total > 100
+            or len(job_rows) != job_total
+            or any(not isinstance(row, dict) for row in job_rows)
+        ):
+            raise PromotionError("verify-release attempt jobs are malformed or exceed the bounded result limit")
+        after_jobs = github_api_get(f"repos/{repository}/actions/runs/{run_id}")
+        if after_jobs.get("run_attempt") != current_attempt:
+            continue
+        after_jobs["jobs"] = job_rows
+        return after_jobs
+    raise PromotionError("verify-release run attempt changed while its required jobs were being read")
+
+
+def processor_run_api(root: pathlib.Path, repository: str, run_id: str, attempt: str) -> dict[str, Any]:
+    value = gh_rest_json(root, f"repos/{repository}/actions/runs/{run_id}/attempts/{attempt}")
+    if not isinstance(value, dict):
+        raise PromotionError("processor run attempt API returned a malformed value")
+    return value
+
+
+def processor_artifact_api(root: pathlib.Path, repository: str, run_id: str, artifact_id: str) -> dict[str, Any] | None:
+    matches: list[dict[str, Any]] = []
+    total_count: int | None = None
+    for page in range(1, MAX_PROCESSOR_ARTIFACT_PAGES + 1):
+        payload = gh_rest_json(
+            root, f"repos/{repository}/actions/runs/{run_id}/artifacts",
+            "--method", "GET", "-F", "per_page=100", "-F", f"page={page}",
+        )
+        if (
+            not isinstance(payload, dict)
+            or not isinstance(payload.get("artifacts"), list)
+            or isinstance(payload.get("total_count"), bool)
+            or not isinstance(payload.get("total_count"), int)
+            or payload["total_count"] < 0
+        ):
+            raise PromotionError("processor artifact API returned a malformed listing")
+        if total_count is None:
+            total_count = payload["total_count"]
+        elif total_count != payload["total_count"]:
+            raise PromotionError("processor artifact API listing changed while reading bounded pages")
+        matches.extend(
+            row for row in payload["artifacts"]
+            if isinstance(row, dict) and str(row.get("id", "")) == artifact_id
+        )
+        if len(matches) > 1:
+            raise PromotionError("processor state resolves to duplicate GitHub artifact ids")
+        if page * 100 >= total_count:
+            return matches[0] if matches else None
+    if total_count is not None and total_count > MAX_PROCESSOR_ARTIFACT_PAGES * 100:
+        raise PromotionError("processor artifact API listing exceeded its bounded pagination limit")
+    return matches[0] if matches else None
+
+
+def download_processor_artifact(
+    root: pathlib.Path,
+    repository: str,
+    metadata: Mapping[str, Any],
+    output_dir: pathlib.Path,
+) -> pathlib.Path:
+    artifact_id = str(metadata.get("id", ""))
+    raw = gh_rest_bytes(root, f"repos/{repository}/actions/artifacts/{artifact_id}/zip")
+    size = metadata.get("size_in_bytes")
+    if len(raw) != size:
+        raise ProcessorCandidateError("downloaded processor artifact byte count differs from GitHub metadata")
+    digest = metadata.get("digest")
+    if isinstance(digest, str) and hashlib.sha256(raw).hexdigest() != digest.removeprefix("sha256:"):
+        raise ProcessorCandidateError("downloaded processor archive digest differs from GitHub metadata")
+    output_dir = output_dir.resolve()
+    if output_dir.exists():
+        shutil.rmtree(output_dir)
+    output_dir.mkdir(parents=True)
+    archive = output_dir.parent / f"{output_dir.name}.zip"
+    archive.write_bytes(raw)
+    expected = set(REQUIRED_PROCESSOR_FILES) | {"upstream-catalogue-checkpoint-receipt.json"}
+    total = 0
+    try:
+        with zipfile.ZipFile(archive) as bundle:
+            members = bundle.infolist()
+            names = [member.filename for member in members]
+            if len(names) != len(set(names)) or set(names) != expected:
+                raise ProcessorCandidateError("processor artifact does not contain the exact frozen bundle file set")
+            for member in members:
+                name = member.filename
+                path = pathlib.PurePosixPath(name)
+                mode = member.external_attr >> 16
+                if (
+                    path.is_absolute() or ".." in path.parts or "\\" in name
+                    or len(path.parts) != 1 or member.is_dir() or stat.S_ISLNK(mode)
+                ):
+                    raise ProcessorCandidateError("processor artifact contains an unsafe path, directory, or link")
+                maximum = 64 * 1024 * 1024 if name == "upstream-catalogue-checkpoint-receipt.json" else 512 * 1024 * 1024
+                if member.file_size < 0 or member.file_size > maximum:
+                    raise ProcessorCandidateError("processor artifact member exceeds its bounded byte limit")
+                total += member.file_size
+                if total > MAX_PROCESSOR_BUNDLE_BYTES:
+                    raise ProcessorCandidateError("processor artifact expands beyond its bounded bundle limit")
+                target = output_dir / name
+                target.write_bytes(bundle.read(member))
+    except (OSError, zipfile.BadZipFile, RuntimeError) as exc:
+        raise ProcessorCandidateError("processor artifact is not a readable immutable ZIP bundle") from exc
+    return output_dir
+
+
 def validate_processor_bundle(
     checkpoint: Mapping[str, Any],
     bundle_dir: pathlib.Path,
@@ -232,6 +769,18 @@ def validate_processor_bundle(
     checkpoint_copy_locator = checkpoint_copy.get("output_artifact")
     bound_locator = dict(locator)
     bound_locator["artifact_id"] = None
+    if not isinstance(checkpoint_copy_locator, Mapping):
+        raise PromotionError("uploaded processor checkpoint receipt has no output artifact locator")
+    copied_expiry = parse_utc_timestamp(checkpoint_copy_locator.get("expires_at"), "uploaded processor artifact expiry")
+    final_expiry = parse_utc_timestamp(locator.get("expires_at"), "durable processor artifact expiry")
+    observation = checkpoint.get("last_observation")
+    observed_at = parse_utc_timestamp(
+        observation.get("observed_at") if isinstance(observation, Mapping) else checkpoint.get("observed_at"),
+        "processor generation observation",
+    )
+    if copied_expiry <= observed_at or copied_expiry > final_expiry:
+        raise PromotionError("uploaded checkpoint expiry is not a valid pre-upload timestamp for the final artifact")
+    bound_locator["expires_at"] = checkpoint_copy_locator.get("expires_at")
     if (
         checkpoint_copy.get("status") != processor_status
         or checkpoint_copy.get("source_id") != checkpoint.get("source_id")
@@ -299,6 +848,98 @@ def validate_processor_bundle(
         "composition_receipt_sha256": file_sha256(receipt_path),
         "composition_outputs_dir": str(bundle_dir.resolve()),
     }
+
+
+def screen_processor_recovery_candidate(
+    root: pathlib.Path,
+    repository: str,
+    checkpoint: Mapping[str, Any],
+    *,
+    default_branch: str,
+    current_head_sha: str,
+    composition_schema: Mapping[str, Any],
+    composition_helper: Any,
+) -> tuple[dict[str, Any] | None, str | None]:
+    """Validate one durable generation completely before it can occupy this C run."""
+    generation_id = str(checkpoint.get("generation_id", ""))
+    run_id, attempt, _name = processor_attempt_from_locator(checkpoint)
+    try:
+        run = processor_run_api(root, repository, run_id, attempt)
+    except ProcessorCandidateError:
+        return None, "processor_run_unavailable"
+    try:
+        run = validate_trusted_processor_run(
+            run, repository=repository, run_id=run_id, attempt=attempt,
+            default_branch=default_branch,
+        )
+    except PromotionError:
+        return None, "processor_run_provenance_invalid"
+
+    artifact_id = str(checkpoint["output_artifact"].get("artifact_id", ""))
+    try:
+        artifact = processor_artifact_api(root, repository, run_id, artifact_id)
+    except ProcessorCandidateError:
+        return None, "processor_artifact_listing_unavailable"
+    if artifact is None:
+        return None, "processor_artifact_unavailable"
+    try:
+        artifact = validate_processor_artifact_metadata(
+            artifact, checkpoint, run, repository=repository,
+        )
+    except PromotionError:
+        return None, "processor_artifact_metadata_invalid_or_expired"
+
+    try:
+        bundle_dir = download_processor_artifact(
+            root, repository, artifact, root / ".datapan/recovered-processor-output",
+        )
+    except ProcessorCandidateError:
+        return None, "processor_artifact_bundle_invalid"
+    try:
+        bundle = validate_processor_bundle(checkpoint, bundle_dir, composition_schema, composition_helper)
+        verify_processor_input_compatibility(
+            root, checkpoint, str(run["head_sha"]), current_head_sha,
+            composition_receipt=bundle.get("composition_receipt"),
+        )
+    except PromotionError:
+        return None, "processor_bundle_or_input_contract_incompatible"
+    return {
+        "run_id": run_id,
+        "attempt": attempt,
+        "run": run,
+        "artifact_id": artifact_id,
+        "bundle_dir": bundle_dir,
+        "bundle": bundle,
+        "generation_id": generation_id,
+    }, None
+
+
+def select_first_eligible_processor_bundle(
+    root: pathlib.Path,
+    repository: str,
+    candidates: Sequence[Mapping[str, Any]],
+    blocked: list[dict[str, str]],
+    *,
+    default_branch: str,
+    current_head_sha: str,
+    composition_schema: Mapping[str, Any],
+    composition_helper: Any,
+) -> tuple[dict[str, Any] | None, list[dict[str, str]]]:
+    """Screen generations in observation order and stop at the first valid bundle."""
+    for checkpoint in candidates:
+        generation_id = str(checkpoint.get("generation_id", ""))
+        screened, reason = screen_processor_recovery_candidate(
+            root, repository, checkpoint,
+            default_branch=default_branch,
+            current_head_sha=current_head_sha,
+            composition_schema=composition_schema,
+            composition_helper=composition_helper,
+        )
+        if screened is None:
+            blocked.append({"generation_id": generation_id, "reason": str(reason)})
+            continue
+        return screened, blocked
+    return None, blocked
 
 
 def registry_sha_from_worktree(root: pathlib.Path) -> tuple[int, str]:
@@ -574,11 +1215,20 @@ def gh_open_prs(root: pathlib.Path, repository: str) -> list[dict[str, Any]]:
 
 def gh_pr_readback(root: pathlib.Path, repository: str, number: int) -> dict[str, Any]:
     value = gh_json(root, "pr", "view", str(number), "--repo", repository, "--json", "number,url,state,body,headRefName,headRefOid,baseRefName,mergeCommit")
+    pull = gh_rest_json(root, f"repos/{repository}/pulls/{number}", "--method", "GET")
+    base = pull.get("base") if isinstance(pull, Mapping) else None
+    head = pull.get("head") if isinstance(pull, Mapping) else None
+    base_repository = base.get("repo") if isinstance(base, Mapping) else None
+    head_repository = head.get("repo") if isinstance(head, Mapping) else None
+    authoritative_base = base_repository.get("full_name") if isinstance(base_repository, Mapping) else None
+    authoritative_head = head_repository.get("full_name") if isinstance(head_repository, Mapping) else None
     return {
         "number": value.get("number"), "url": value.get("url"), "state": value.get("state"),
         "body": value.get("body"), "headRefName": value.get("headRefName"),
         "headRefOid": value.get("headRefOid"), "baseRefName": value.get("baseRefName"),
         "mergeCommit": value.get("mergeCommit"),
+        "repository": authoritative_base,
+        "headRepository": authoritative_head,
     }
 
 
@@ -618,6 +1268,7 @@ def persist_journal_record(
     receipt: Mapping[str, Any],
     *,
     observed_at: str,
+    expected_ci: Any = CI_EXPECTATION_UNSET,
 ) -> None:
     helper = load_module(root / "scripts/canonical_update_pr.py", "canonical_update_journal_helper")
     schema = load_object(root / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json")
@@ -632,6 +1283,11 @@ def persist_journal_record(
         if journal_path.is_file():
             journal = load_object(journal_path)
             helper.validate_journal(journal, schema)
+        if expected_ci is not CI_EXPECTATION_UNSET:
+            try:
+                helper.assert_ci_compare_and_swap(journal, receipt, expected_ci)
+            except helper.AdmissionError as exc:
+                raise PromotionError(str(exc)) from exc
         updated = helper.append_journal_record(journal, receipt, repository=str(receipt["candidate"]["repository"]), observed_at=observed_at)
         helper.validate_journal(updated, schema)
         journal_path.parent.mkdir(parents=True, exist_ok=True)
@@ -673,6 +1329,60 @@ def load_promotion_journal(root: pathlib.Path) -> dict[str, Any] | None:
         raise PromotionError("promotion state journal is malformed JSON") from exc
     helper.validate_journal(journal, load_object(root / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json"))
     return journal
+
+
+def ensure_verify_release_ci(root: pathlib.Path, receipt: Mapping[str, Any]) -> dict[str, Any]:
+    """Reconcile or dispatch the exact owned PR head and persist every CI step to its journal row."""
+    module = load_module(root / "scripts/canonical_update_ci.py", "canonical_update_ci")
+    repository = str(receipt.get("candidate", {}).get("repository", ""))
+    candidate = receipt.get("candidate", {})
+    source_id = str(candidate.get("source_id", ""))
+    scope = str(candidate.get("scope", ""))
+    generation_id = str(candidate.get("generation_id", ""))
+    current_journal = load_promotion_journal(root)
+    current = journal_record_for(current_journal, source_id, scope, generation_id)
+    if current is None:
+        raise PromotionError("owned PR has no durable promotion receipt before verify-release CI")
+    if current.get("status") not in {"prepared", "pending-review"} or current.get("pr", {}).get("number", 0) < 1:
+        raise PromotionError("verify-release CI is limited to a durably owned active candidate PR")
+    expected_ci = json.loads(json.dumps(current.get("ci"))) if current.get("ci") is not None else None
+    source_base_sha = command(("git", "rev-parse", "HEAD"), root).stdout.strip()
+
+    def persist_ci(entry: dict[str, Any]) -> None:
+        nonlocal expected_ci
+        latest_journal = load_promotion_journal(root)
+        latest = journal_record_for(latest_journal, source_id, scope, generation_id)
+        if latest is None:
+            raise PromotionError("verify-release CI candidate disappeared from the durable state branch")
+        updated = json.loads(json.dumps(latest))
+        updated["ci"] = json.loads(json.dumps(entry))
+        persist_journal_record(
+            root, source_base_sha, updated,
+            observed_at=dt.datetime.now(dt.timezone.utc).isoformat(),
+            expected_ci=expected_ci,
+        )
+        expected_ci = json.loads(json.dumps(entry))
+
+    def dispatch(branch: str, inputs: Mapping[str, str]) -> tuple[int | None, Mapping[str, Any] | None]:
+        workflow = urllib.parse.quote(VERIFY_WORKFLOW_PATH, safe="")
+        status, body = github_api_request("POST", f"repos/{repository}/actions/workflows/{workflow}/dispatches", {
+            "ref": branch,
+            "inputs": dict(inputs),
+        })
+        return status, body if isinstance(body, Mapping) else None
+
+    result = module.ensure_verify_release_run(
+        repository,
+        current,
+        lambda: gh_pr_readback(root, repository, int(current["pr"]["number"])),
+        expected_ci,
+        read_branch_sha=lambda branch: verify_release_branch_sha(repository, branch),
+        list_matching_runs=list_verify_release_runs,
+        dispatch=dispatch,
+        read_run=lambda run_id: read_verify_release_run(repository, run_id),
+        persist=persist_ci,
+    )
+    return result
 
 
 def active_owned_pr(journal: Mapping[str, Any] | None, github_prs: Sequence[Mapping[str, Any]], helper: Any, candidate: Mapping[str, Any]) -> tuple[list[dict[str, Any]], int]:
@@ -863,10 +1573,12 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
     validate_generation_identity(checkpoint)
     bundle = validate_processor_bundle(checkpoint, bundle_dir, composition_schema, helper)
     if not re.fullmatch(r"[a-f0-9]{40}", args.workflow_run_head_sha):
-        raise PromotionError("source workflow head must be a full immutable Git commit SHA")
+        raise PromotionError("processor workflow head must be a full immutable Git commit SHA")
     head_sha = command(("git", "rev-parse", "HEAD"), root).stdout.strip()
-    if head_sha != args.workflow_run_head_sha:
-        raise PromotionError("workflow checkout SHA differs from the processor source commit")
+    verify_processor_input_compatibility(
+        root, checkpoint, args.workflow_run_head_sha, head_sha,
+        composition_receipt=bundle.get("composition_receipt"),
+    )
     if bundle.get("status") in {"retry", "quarantined"}:
         print(json.dumps({
             "status": "no-candidate", "reason": bundle["reason"],
@@ -1080,14 +1792,93 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
         run_url=f"https://github.com/{repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}/attempts/{os.environ['GITHUB_RUN_ATTEMPT']}",
     )
     persist_journal_record(root, head_sha, final_receipt, observed_at=dt.datetime.now(dt.timezone.utc).isoformat())
+    ci_state = None
+    ci_blocker = None
+    try:
+        ci_receipt = ensure_verify_release_ci(root, final_receipt)
+        ci_entry = ci_receipt.get("ci", {})
+        if isinstance(ci_entry, Mapping):
+            ci_state = ci_entry.get("state")
+            ci_blocker = ci_entry.get("blocker")
+    except Exception as exc:  # noqa: BLE001 - CI dispatch is independent of owned PR creation
+        ci_blocker = str(exc)
     print(json.dumps({
         "status": final_receipt["status"], "pr_number": number,
         "candidate_sha": candidate_head, "registry_sha256": bundle["registry_sha256"],
         "generation_id": checkpoint["generation_id"], "manual_review_acceptance": acceptance,
         "blockers": final_receipt.get("blockers", []), "source_refresh_commands": len(source_commands),
+        "verify_release_ci_state": ci_state, "verify_release_ci_blocker": ci_blocker,
         "staged_path_count": len(staged_paths),
         "review_artifacts": str(review_artifacts.relative_to(root)),
     }, sort_keys=True))
+
+
+def recover_ready_processor_candidate(args: argparse.Namespace, root: pathlib.Path) -> None:
+    """Recover at most one durable B ready artifact using current trusted C code."""
+    repository = os.environ["GITHUB_REPOSITORY"]
+    default_branch = (
+        os.environ.get("GITHUB_DEFAULT_BRANCH")
+        or os.environ.get("DEFAULT_BRANCH")
+        or os.environ.get("GITHUB_REF_NAME")
+        or "main"
+    )
+    schema_path = root / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json"
+    if not args.state_root or not args.datapan_cli:
+        raise PromotionError("ready recovery requires the durable B state branch and pinned Datapan CLI")
+
+    # A workflow_run event is an additional trusted notification, not the
+    # authority for selecting a candidate. The durable checkpoint's own run
+    # and artifact locator are independently verified below.
+    event_run_id = args.event_run_id
+    if event_run_id:
+        if not args.event_run_attempt or not args.event_head_sha:
+            raise PromotionError("B workflow_run notification is missing its exact attempt or head SHA")
+        if not re.fullmatch(r"[0-9]{6,20}", event_run_id):
+            raise PromotionError("B workflow_run notification has an invalid run id")
+        event_run = processor_run_api(root, repository, event_run_id, args.event_run_attempt)
+        validate_trusted_processor_run(
+            event_run, repository=repository, run_id=event_run_id,
+            attempt=args.event_run_attempt, default_branch=default_branch,
+            expected_head_sha=args.event_head_sha,
+        )
+
+    journal = load_promotion_journal(root)
+    candidates, blocked = list_recoverable_processor_checkpoints(
+        args.state_root.resolve(), schema_path, journal,
+    )
+    if not candidates:
+        print(json.dumps({
+            "status": "no-eligible-ready-processor-bundle" if blocked else "no-undelivered-ready-processor-bundle",
+            "candidate_available": False,
+            "blocked_generations": blocked,
+        }, sort_keys=True))
+        return
+
+    composition_schema = load_object(root / "schemas/datapan.catalogue-composition-receipt.v1.schema.json")
+    composition_helper = load_module(root / "scripts/compose-upstream-catalogue-candidate.py", "processor_bundle_composition_helper")
+    current_head_sha = command(("git", "rev-parse", "HEAD"), root).stdout.strip()
+    screened, blocked = select_first_eligible_processor_bundle(
+        root, repository, candidates, blocked,
+        default_branch=default_branch,
+        current_head_sha=current_head_sha,
+        composition_schema=composition_schema,
+        composition_helper=composition_helper,
+    )
+    if screened is None:
+        print(json.dumps({
+            "status": "no-eligible-ready-processor-bundle",
+            "candidate_available": False,
+            "blocked_generations": blocked,
+        }, sort_keys=True))
+        return
+    if blocked:
+        print(json.dumps({"status": "skipped-unusable-older-generations", "blocked_generations": blocked}, sort_keys=True))
+    args.bundle_dir = screened["bundle_dir"]
+    args.workflow_run_id = screened["run_id"]
+    args.workflow_run_attempt = screened["attempt"]
+    args.workflow_run_head_sha = str(screened["run"]["head_sha"])
+    args.processor_artifact_id = screened["artifact_id"]
+    execute_candidate_preparation(args, root)
 
 
 def reconcile_open_promotions(root: pathlib.Path) -> None:
@@ -1109,6 +1900,25 @@ def reconcile_open_promotions(root: pathlib.Path) -> None:
             raise PromotionError("journal candidate PR is absent from GitHub read-back")
         observed = gh_pr_readback(root, repo, int(old["pr"]["number"]))
         if observed.get("state") == "OPEN":
+            refreshed = helper.record_pr_readback(
+                old, observed, observed_at=dt.datetime.now(dt.timezone.utc).isoformat(), run_url=run_url,
+            )
+            persist_journal_record(root, base, refreshed, observed_at=dt.datetime.now(dt.timezone.utc).isoformat())
+            try:
+                ci_receipt = ensure_verify_release_ci(root, refreshed)
+                ci = ci_receipt.get("ci", {})
+                print(json.dumps({
+                    "status": "verify-release-ci-reconciled",
+                    "pr_number": int(old["pr"]["number"]),
+                    "ci_state": ci.get("state") if isinstance(ci, Mapping) else None,
+                    "ci_blocker": ci.get("blocker") if isinstance(ci, Mapping) else None,
+                }, sort_keys=True))
+            except Exception as exc:  # noqa: BLE001 - CI observation must not gate independent candidate recovery
+                print(json.dumps({
+                    "status": "verify-release-ci-observation-failed",
+                    "pr_number": int(old["pr"]["number"]),
+                    "reason": str(exc),
+                }, sort_keys=True))
             continue
         new = helper.record_pr_readback(
             old, observed, observed_at=dt.datetime.now(dt.timezone.utc).isoformat(), run_url=run_url,
@@ -1204,7 +2014,7 @@ def journal_record_for(
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--mode", choices=("prepare", "reconcile-prs", "reconcile-publication"), default="prepare")
+    parser.add_argument("--mode", choices=("recover-ready", "reconcile-prs", "reconcile-publication"), default="recover-ready")
     parser.add_argument("--repository-root", type=pathlib.Path, default=pathlib.Path("."))
     parser.add_argument("--state-root", type=pathlib.Path)
     parser.add_argument("--bundle-dir", type=pathlib.Path)
@@ -1213,6 +2023,9 @@ def main() -> int:
     parser.add_argument("--workflow-run-attempt")
     parser.add_argument("--workflow-run-head-sha")
     parser.add_argument("--processor-artifact-id")
+    parser.add_argument("--event-run-id")
+    parser.add_argument("--event-run-attempt")
+    parser.add_argument("--event-head-sha")
     parser.add_argument("--publication-receipt", type=pathlib.Path)
     parser.add_argument("--prepare-only", action="store_true", help="generate and validate a local candidate commit without uploading LFS, creating issues/PRs, or writing promotion state")
     args = parser.parse_args()
@@ -1221,11 +2034,11 @@ def main() -> int:
         repo = os.environ.get("GITHUB_REPOSITORY", "")
         if not repo or "/" not in repo:
             raise PromotionError("GITHUB_REPOSITORY is required")
-        if args.mode == "prepare":
-            required = (args.state_root, args.bundle_dir, args.datapan_cli, args.workflow_run_id, args.workflow_run_attempt, args.workflow_run_head_sha, args.processor_artifact_id)
+        if args.mode == "recover-ready":
+            required = (args.state_root, args.datapan_cli)
             if any(value is None for value in required):
-                raise PromotionError("prepare mode requires processor state, bundle, pinned CLI, and exact workflow/artifact identities")
-            execute_candidate_preparation(args, root)
+                raise PromotionError("ready recovery requires durable processor state and the pinned Datapan CLI")
+            recover_ready_processor_candidate(args, root)
         elif args.mode == "reconcile-prs":
             reconcile_open_promotions(root)
         else:
