@@ -2,6 +2,23 @@
   "branch": "automation/upstream-catalogue-health-state",
   "faults": [
     {
+      "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
+      "first_seen_at": "2026-10-03T05:52:54Z",
+      "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+      "last_receipt_sha256": "98b87b0157011609678c08a03f14ab19b8ab7520c51c009574cdfcc5b3d19c07",
+      "last_seen_at": "2026-10-03T05:52:54Z",
+      "observation_count": 1,
+      "owner_ticket": 659,
+      "producer_run_id": "36646768289",
+      "reason": "candidate_ready_with_pending_scope",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "recovery_evidence": null,
+      "severity": "warning",
+      "source_id": "data_go_kr",
+      "stage": "candidate",
+      "status": "open"
+    },
+    {
       "fault_key": "c73e09872f5c9b6e3f9e5526c8d163567a10cc78c7700797bc04e72afb380ddf",
       "first_seen_at": "2026-10-03T05:21:26Z",
       "generation_id": "48bd59cf7d2da0fc75fb6e9eb6dcee205be066bbfefa5d7f88cebdee3ddd5b50",
@@ -13,21 +30,46 @@
       "reason": "generation_quarantined",
       "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
       "recovery_evidence": {
-        "checked_at": "2026-10-03T05:44:02Z",
-        "health_receipt_sha256": "7eae47600ac956e7e14623dfa412e44a53ad19822b804a0c917fa11959337984",
-        "reason": "fault_absent_but_stage_specific_evidence_not_yet_sufficient",
-        "verified": false
+        "execution_run_attempt": null,
+        "execution_run_id": null,
+        "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+        "health_receipt_sha256": "98b87b0157011609678c08a03f14ab19b8ab7520c51c009574cdfcc5b3d19c07",
+        "observed_at": "2026-09-29T23:44:39Z",
+        "processor_status": "ready",
+        "producer_run_id": "36646768289",
+        "publication_pointer_revision": null,
+        "publication_revision": null,
+        "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197",
+        "stage": "processor",
+        "verified": true
       },
       "severity": "error",
       "source_id": "data_go_kr",
       "stage": "processor",
-      "status": "recovery_pending_verification"
+      "status": "recovered"
+    },
+    {
+      "fault_key": "b11a123169de28c7edb7e3befcd3b95fffd1fa32420015358d751226d6fa0e41",
+      "first_seen_at": "2026-10-03T05:52:54Z",
+      "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+      "last_receipt_sha256": "98b87b0157011609678c08a03f14ab19b8ab7520c51c009574cdfcc5b3d19c07",
+      "last_seen_at": "2026-10-03T05:52:54Z",
+      "observation_count": 1,
+      "owner_ticket": 659,
+      "producer_run_id": "36646768289",
+      "reason": "promotion_ack_missing",
+      "recommended_action": "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+      "recovery_evidence": null,
+      "severity": "warning",
+      "source_id": "data_go_kr",
+      "stage": "promotion",
+      "status": "open"
     }
   ],
   "last_good_by_source": {},
   "latest_receipt": {
-    "path": "receipts/receipt-37100762123-1-7eae47600ac956e7.json",
-    "sha256": "7eae47600ac956e7e14623dfa412e44a53ad19822b804a0c917fa11959337984"
+    "path": "receipts/receipt-37101245256-1-98b87b0157011609.json",
+    "sha256": "98b87b0157011609678c08a03f14ab19b8ab7520c51c009574cdfcc5b3d19c07"
   },
   "observations_by_source": {
     "data_go_kr": [
@@ -47,7 +89,7 @@
   "repository": "StatPan/datapan-registry",
   "root": "health/upstream-catalogue",
   "schema_version": "datapan.upstream-catalogue-health-state.v1",
-  "state_sha256": "4a4a28e4a5e55b717bc2b85db4f28305728bfb982edfb04ac04d53526e593158",
-  "state_status": "healthy",
-  "updated_at": "2026-10-03T05:44:02Z"
+  "state_sha256": "356b5c19572abaa1d8b26c96b453c6df54293b5b67c83746e7f0b1386fb6d8d9",
+  "state_status": "degraded",
+  "updated_at": "2026-10-03T05:52:54Z"
 }
