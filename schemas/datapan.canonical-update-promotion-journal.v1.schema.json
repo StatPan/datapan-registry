@@ -92,6 +92,7 @@
             }
           },
           "refresh_from": {"$ref": "#/$defs/revisionReference"},
+          "refresh_target_main_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
           "superseded_by": {"$ref": "#/$defs/revisionReference"},
           "acknowledgements": {
             "type": "array",
@@ -119,6 +120,7 @@
         "scope": {"type": "string", "minLength": 1},
         "generation_id": {"type": "string", "minLength": 1},
         "registry_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "manifest_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
         "head_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
         "pr_number": {"type": "integer", "minimum": 1},
         "owner_id": {"type": "string", "pattern": "^datapan-canonical-update:v1:[a-f0-9]{64}$"},

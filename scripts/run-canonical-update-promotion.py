@@ -46,6 +46,7 @@ PROCESSOR_ARTIFACT_PREFIX = "upstream-catalogue-processing-"
 VERIFY_WORKFLOW_PATH = ".github/workflows/verify-release.yml"
 GITHUB_API_VERSION = "2026-03-10"
 CI_EXPECTATION_UNSET = object()
+STATE_EXPECTATION_UNSET = object()
 PROCESSING_PREFIX = "upstream-catalogue-processing-"
 PROMOTION_ISSUE_MARKER = "datapan-canonical-update-issue:v1:"
 REVIEW_DIR = pathlib.Path("reports/data-go-kr/upstream-catalogue-review")
@@ -994,13 +995,6 @@ def select_first_eligible_processor_bundle(
             blocked.append({"generation_id": generation_id, "reason": str(reason)})
             continue
         bundle = screened.get("bundle", {})
-        revision = journal_record_for(
-            journal,
-            str(checkpoint.get("source_id", "")),
-            str(checkpoint.get("source_scope", "")),
-            generation_id,
-            str(bundle.get("registry_sha256", "")),
-        )
         already_active_payload = any(
             isinstance(row, Mapping)
             and row.get("superseded_by") is None
@@ -1016,6 +1010,13 @@ def select_first_eligible_processor_bundle(
             # composing the same bytes. It is already represented by this
             # active PR, so don't let that no-op starve a later candidate.
             continue
+        revision = journal_record_for(
+            journal,
+            str(checkpoint.get("source_id", "")),
+            str(checkpoint.get("source_scope", "")),
+            generation_id,
+            str(bundle.get("registry_sha256", "")),
+        )
         if revision is not None and revision.get("superseded_by") is not None:
             continue
         if revision is not None and revision.get("status") != "prepared":
@@ -1388,6 +1389,15 @@ def pr_helper_remote_sha(module: Any, root: pathlib.Path, ref: str) -> str | Non
     return matches[0] if matches else None
 
 
+def assert_remote_main_sha(root: pathlib.Path, expected_sha: str) -> None:
+    if not re.fullmatch(r"[a-f0-9]{40}", expected_sha):
+        raise PromotionError("trusted source refresh target main is not a full immutable Git SHA")
+    result = command(("git", "ls-remote", "--heads", "origin", "refs/heads/main"), root)
+    rows = [line.split("\t", 1)[0] for line in result.stdout.splitlines() if line.endswith("\trefs/heads/main")]
+    if rows != [expected_sha]:
+        raise PromotionError("trusted source refresh target main moved; preserve the owned PR and re-read")
+
+
 def persist_journal_record(
     root: pathlib.Path,
     source_base_sha: str,
@@ -1396,7 +1406,8 @@ def persist_journal_record(
     observed_at: str,
     expected_ci: Any = CI_EXPECTATION_UNSET,
     supersede_from: Mapping[str, Any] | None = None,
-) -> None:
+    expected_state_sha: Any = STATE_EXPECTATION_UNSET,
+) -> str | None:
     helper = load_module(root / "scripts/canonical_update_pr.py", "canonical_update_journal_helper")
     schema = load_object(root / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json")
     path = root / ".datapan/promotion-state-worktree"
@@ -1405,6 +1416,8 @@ def persist_journal_record(
         shutil.rmtree(path, ignore_errors=True)
     old_sha, _ = promotion_journal_worktree(root, path, source_base_sha)
     try:
+        if expected_state_sha is not STATE_EXPECTATION_UNSET and old_sha != expected_state_sha:
+            raise PromotionError("promotion state compare-and-swap conflict: durable journal changed during refresh")
         journal_path = path / JOURNAL_PATH
         journal = None
         if journal_path.is_file():
@@ -1425,7 +1438,7 @@ def persist_journal_record(
         command(("git", "-C", str(path), "add", "--", JOURNAL_PATH.as_posix()), root)
         staged = command(("git", "-C", str(path), "diff", "--cached", "--quiet"), root, allowed_returncodes=frozenset({0, 1}))
         if staged.returncode == 0:
-            return
+            return old_sha
         command(("git", "-C", str(path), "-c", "user.name=datapan-canonical-update[bot]", "-c", "user.email=41898282+github-actions[bot]@users.noreply.github.com", "commit", "-m", "Record canonical update promotion acknowledgement"), root)
         new_sha = command(("git", "-C", str(path), "rev-parse", "HEAD"), root).stdout.strip()
         ref = f"refs/heads/{STATE_BRANCH}"
@@ -1434,17 +1447,18 @@ def persist_journal_record(
         observed = pr_helper_remote_sha(helper.load_materializer(root), root, ref)
         if observed != new_sha:
             raise PromotionError("promotion state branch read-back differs from the exact journal commit")
+        return new_sha
     finally:
         subprocess.run(("git", "worktree", "remove", "--force", str(path)), cwd=root, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
 
 
-def load_promotion_journal(root: pathlib.Path) -> dict[str, Any] | None:
+def load_promotion_journal_snapshot(root: pathlib.Path) -> tuple[dict[str, Any] | None, str | None]:
     helper = load_module(root / "scripts/canonical_update_pr.py", "canonical_update_journal_reader")
     module = helper.load_materializer(root)
     ref = f"refs/heads/{STATE_BRANCH}"
     sha = pr_helper_remote_sha(module, root, ref)
     if not sha:
-        return None
+        return None, None
     try:
         module.git_output(["fetch", "--no-tags", "origin", f"+{ref}:refs/remotes/origin/canonical-update-state"], root, availability=True)
     except module.AvailabilityError as exc:
@@ -1452,13 +1466,17 @@ def load_promotion_journal(root: pathlib.Path) -> dict[str, Any] | None:
     try:
         raw = module.git_output(["show", f"{sha}:{JOURNAL_PATH.as_posix()}"], root)
     except module.IntegrityError:
-        return None
+        return None, sha
     try:
         journal = json.loads(raw)
     except json.JSONDecodeError as exc:
         raise PromotionError("promotion state journal is malformed JSON") from exc
     helper.validate_journal(journal, load_object(root / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json"))
-    return journal
+    return journal, sha
+
+
+def load_promotion_journal(root: pathlib.Path) -> dict[str, Any] | None:
+    return load_promotion_journal_snapshot(root)[0]
 
 
 def ensure_verify_release_ci(root: pathlib.Path, receipt: Mapping[str, Any]) -> dict[str, Any]:
@@ -1470,8 +1488,12 @@ def ensure_verify_release_ci(root: pathlib.Path, receipt: Mapping[str, Any]) -> 
     scope = str(candidate.get("scope", ""))
     generation_id = str(candidate.get("generation_id", ""))
     registry_sha256 = str(candidate.get("registry_sha256", ""))
+    candidate_head_sha = str(candidate.get("head_sha", ""))
     current_journal = load_promotion_journal(root)
-    current = journal_record_for(current_journal, source_id, scope, generation_id, registry_sha256)
+    current = journal_record_for(
+        current_journal, source_id, scope, generation_id, registry_sha256,
+        candidate_head_sha=candidate_head_sha,
+    )
     if current is None:
         raise PromotionError("owned PR has no durable promotion receipt before verify-release CI")
     if current.get("superseded_by") is not None:
@@ -1484,7 +1506,10 @@ def ensure_verify_release_ci(root: pathlib.Path, receipt: Mapping[str, Any]) -> 
     def persist_ci(entry: dict[str, Any]) -> None:
         nonlocal expected_ci
         latest_journal = load_promotion_journal(root)
-        latest = journal_record_for(latest_journal, source_id, scope, generation_id, registry_sha256)
+        latest = journal_record_for(
+            latest_journal, source_id, scope, generation_id, registry_sha256,
+            candidate_head_sha=candidate_head_sha,
+        )
         if latest is None:
             raise PromotionError("verify-release CI candidate disappeared from the durable state branch")
         updated = json.loads(json.dumps(latest))
@@ -1632,8 +1657,15 @@ def refresh_pr_phase(
     old_candidate = predecessor.get("candidate", {})
     old_owner = predecessor.get("ownership", {})
     old_pr = predecessor.get("pr", {})
-    if target.get("refresh_from") != helper.revision_reference(predecessor):
+    if not helper._reference_matches_receipt(target.get("refresh_from", {}), predecessor):
         raise PromotionError("prepared refresh intent does not bind its exact predecessor head/body")
+    target_main = target.get("refresh_target_main_sha")
+    if target_main is not None and (
+        not isinstance(target_main, str)
+        or not re.fullmatch(r"[a-f0-9]{40}", target_main)
+        or target_candidate.get("base_sha") != target_main
+    ):
+        raise PromotionError("prepared source refresh intent does not bind the exact trusted target main")
     if (
         target_owner.get("owner_id") != old_owner.get("owner_id")
         or target_owner.get("branch") != old_owner.get("branch")
@@ -1722,8 +1754,9 @@ def validate_existing_pr_api_readback(
         str(reference.get("scope", "")),
         str(reference.get("generation_id", "")),
         str(reference.get("registry_sha256", "")),
+        candidate_head_sha=str(reference.get("head_sha", "")),
     )
-    if receipt is None or helper.revision_reference(receipt) != dict(reference):
+    if receipt is None or not helper._reference_matches_receipt(reference, receipt):
         raise PromotionError("owned PR read-back revision differs from its durable journal identity")
     if int(receipt.get("pr", {}).get("number", 0)) == 0:
         candidate = receipt.get("candidate", {})
@@ -1783,7 +1816,7 @@ def existing_pr_rows(
     by_key = {helper.candidate_key(row): row for row in journal.get("records", []) if isinstance(row, Mapping)}
     result: list[dict[str, Any]] = []
     issue_number = 0
-    recovered_revision_keys: set[tuple[str, str, str, str, str]] = set()
+    recovered_revision_keys: set[tuple[str, str, str, str, str, str]] = set()
     open_numbers = {
         int(row.get("number", 0)) for row in github_prs
         if row.get("state") == "open" and row.get("owner_id") == owner
@@ -2053,18 +2086,63 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
     if command(("git", "status", "--porcelain", "--untracked-files=all"), root).stdout.strip():
         raise PromotionError("candidate checkout was not clean before staging; refusing to mix unrelated changes")
 
-    prior_journal = load_promotion_journal(root)
-    prior = journal_record_for(
-        prior_journal, checkpoint["source_id"], checkpoint["source_scope"],
-        checkpoint["generation_id"], bundle["registry_sha256"],
-    )
+    prior_journal, journal_state_sha = load_promotion_journal_snapshot(root)
+    explicit_predecessor = getattr(args, "source_refresh_predecessor", None)
+    explicit_target_main = getattr(args, "source_refresh_target_main_sha", None)
+    explicit_source_refresh = isinstance(explicit_predecessor, Mapping)
+    if explicit_source_refresh and journal_state_sha != getattr(args, "source_refresh_expected_state_sha", None):
+        raise PromotionError("promotion state changed while the trusted source refresh was preparing its exact B input")
+    prior = None
+    if explicit_source_refresh:
+        if explicit_target_main != head_sha:
+            raise PromotionError("trusted source refresh target main differs from the checked-out base")
+        if (
+            explicit_predecessor.get("candidate", {}).get("generation_id") != checkpoint.get("generation_id")
+            or explicit_predecessor.get("candidate", {}).get("registry_sha256") != bundle.get("registry_sha256")
+            or explicit_predecessor.get("candidate", {}).get("composition_receipt_sha256") != bundle.get("composition_receipt_sha256")
+        ):
+            raise PromotionError("source refresh does not preserve the predecessor B generation and composed payload")
+        current_predecessor = journal_record_for(
+            prior_journal,
+            str(explicit_predecessor.get("candidate", {}).get("source_id", "")),
+            str(explicit_predecessor.get("candidate", {}).get("scope", "")),
+            str(explicit_predecessor.get("candidate", {}).get("generation_id", "")),
+            str(explicit_predecessor.get("candidate", {}).get("registry_sha256", "")),
+            candidate_head_sha=str(explicit_predecessor.get("candidate", {}).get("head_sha", "")),
+        )
+        helper = load_canonical_update_pr(root)
+        if current_predecessor is None or not helper._reference_matches_receipt(
+            helper.revision_reference(explicit_predecessor), current_predecessor,
+        ):
+            raise PromotionError("source refresh predecessor changed in the durable journal")
+        if current_predecessor.get("superseded_by") is not None:
+            raise PromotionError("source refresh predecessor was superseded after request validation")
+        successor_head = getattr(args, "source_refresh_successor_head_sha", None)
+        if successor_head:
+            prior = journal_record_for(
+                prior_journal, checkpoint["source_id"], checkpoint["source_scope"],
+                checkpoint["generation_id"], bundle["registry_sha256"],
+                candidate_head_sha=str(successor_head),
+            )
+            if (
+                prior is None
+                or prior.get("status") != "prepared"
+                or prior.get("refresh_from") != helper.revision_reference(explicit_predecessor)
+                or prior.get("refresh_target_main_sha") != explicit_target_main
+            ):
+                raise PromotionError("existing source refresh intent does not match the exact predecessor and target main")
+    else:
+        prior = journal_record_for(
+            prior_journal, checkpoint["source_id"], checkpoint["source_scope"],
+            checkpoint["generation_id"], bundle["registry_sha256"],
+        )
     if prior is not None and prior.get("superseded_by") is not None:
         print(json.dumps({
             "status": "already-superseded", "generation_id": checkpoint["generation_id"],
             "registry_sha256": bundle["registry_sha256"],
         }, sort_keys=True))
         return
-    if prior is not None and prior.get("status") not in {"prepared"}:
+    if prior is not None and prior.get("status") not in {"prepared"} and not explicit_source_refresh:
         number = int(prior.get("pr", {}).get("number", 0))
         if prior.get("status") == "pending-review" and number > 0:
             observed = gh_pr_readback(root, repo, number)
@@ -2075,7 +2153,7 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
             "registry_sha256": bundle["registry_sha256"],
         }, sort_keys=True))
         return
-    if prior is None and isinstance(prior_journal, Mapping):
+    if prior is None and isinstance(prior_journal, Mapping) and not explicit_source_refresh:
         same_payload = [
             row for row in prior_journal.get("records", [])
             if row.get("superseded_by") is None
@@ -2272,14 +2350,22 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
     prepared["ownership"]["issue_url"] = issue_url
     prepared["ownership"]["body"] = body
     prepared["ownership"]["body_sha256"] = hashlib.sha256(body.encode("utf-8")).hexdigest()
-    if prior is not None and isinstance(prior.get("refresh_from"), Mapping):
+    if explicit_source_refresh:
+        prepared["refresh_from"] = helper.revision_reference(explicit_predecessor)
+        prepared["refresh_target_main_sha"] = str(explicit_target_main)
+    elif prior is not None and isinstance(prior.get("refresh_from"), Mapping):
         prepared["refresh_from"] = json.loads(json.dumps(prior["refresh_from"]))
     elif prepared.get("action") == "refresh_owned":
         if not open_existing or not isinstance(open_existing[0].get("revision_ref"), Mapping):
             raise PromotionError("owned PR refresh has no exact durable predecessor revision")
         prepared["refresh_from"] = json.loads(json.dumps(open_existing[0]["revision_ref"]))
     now = dt.datetime.now(dt.timezone.utc).isoformat()
-    persist_journal_record(root, head_sha, prepared, observed_at=now)
+    if explicit_source_refresh:
+        assert_remote_main_sha(root, str(explicit_target_main))
+    prepared_state_sha = persist_journal_record(
+        root, head_sha, prepared, observed_at=now,
+        expected_state_sha=(journal_state_sha if explicit_source_refresh else STATE_EXPECTATION_UNSET),
+    )
     if open_existing:
         # This is the last GitHub PR read before the helper's remote-main and
         # candidate-branch compare-and-swap checks and branch push.
@@ -2291,6 +2377,7 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
                 str(prepared["refresh_from"].get("scope", "")),
                 str(prepared["refresh_from"].get("generation_id", "")),
                 str(prepared["refresh_from"].get("registry_sha256", "")),
+                candidate_head_sha=str(prepared["refresh_from"].get("head_sha", "")),
             )
             if predecessor is None:
                 raise PromotionError("prepared refresh intent lost its exact predecessor before branch CAS")
@@ -2314,11 +2401,14 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
                 str(prepared["refresh_from"].get("scope", "")),
                 str(prepared["refresh_from"].get("generation_id", "")),
                 str(prepared["refresh_from"].get("registry_sha256", "")),
+                candidate_head_sha=str(prepared["refresh_from"].get("head_sha", "")),
             )
             if predecessor is None:
                 raise PromotionError("prepared refresh intent lost its exact predecessor after branch CAS")
             phase = refresh_pr_phase(prepared, predecessor, immediate, helper)
             if phase == "after-push-before-body":
+                if explicit_source_refresh:
+                    assert_remote_main_sha(root, str(explicit_target_main))
                 command(("gh", "pr", "edit", str(number), "--repo", repo, "--title", title, "--body-file", str(body_path)), root)
             elif phase != "after-body-edit":
                 raise PromotionError("owned PR has not read back the exact pushed refresh head")
@@ -2340,10 +2430,13 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
         pushed, observed_pr, observed_at=dt.datetime.now(dt.timezone.utc).isoformat(),
         run_url=f"https://github.com/{repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}/attempts/{os.environ['GITHUB_RUN_ATTEMPT']}",
     )
+    if explicit_source_refresh:
+        assert_remote_main_sha(root, str(explicit_target_main))
     persist_journal_record(
         root, head_sha, final_receipt,
         observed_at=dt.datetime.now(dt.timezone.utc).isoformat(),
         supersede_from=final_receipt.get("refresh_from"),
+        expected_state_sha=(prepared_state_sha if explicit_source_refresh else STATE_EXPECTATION_UNSET),
     )
     ci_state = None
     ci_blocker = None
@@ -2462,10 +2555,14 @@ def reconcile_open_promotions(root: pathlib.Path) -> None:
             str(predecessor_ref.get("scope", "")),
             str(predecessor_ref.get("generation_id", "")),
             str(predecessor_ref.get("registry_sha256", "")),
+            candidate_head_sha=str(predecessor_ref.get("head_sha", "")),
         )
         if predecessor is None:
             raise PromotionError("prepared refresh intent has no exact predecessor revision")
         number = int(intent["pr"]["number"])
+        target_main = intent.get("refresh_target_main_sha")
+        if isinstance(target_main, str):
+            assert_remote_main_sha(root, target_main)
         observed = gh_pr_readback(root, repo, number)
         phase = refresh_pr_phase(intent, predecessor, observed, helper)
         if phase == "before-push":
@@ -2474,6 +2571,8 @@ def reconcile_open_promotions(root: pathlib.Path) -> None:
             body = intent.get("ownership", {}).get("body")
             if not isinstance(body, str):
                 raise PromotionError("prepared refresh intent has no exact body for crash recovery")
+            if isinstance(target_main, str):
+                assert_remote_main_sha(root, target_main)
             body_path = root / ".datapan/candidate-pr.md"
             body_path.parent.mkdir(parents=True, exist_ok=True)
             body_path.write_text(body, encoding="utf-8")
@@ -2490,6 +2589,8 @@ def reconcile_open_promotions(root: pathlib.Path) -> None:
         refreshed = helper.record_pr_readback(
             intent, observed, observed_at=dt.datetime.now(dt.timezone.utc).isoformat(), run_url=run_url,
         )
+        if isinstance(target_main, str):
+            assert_remote_main_sha(root, target_main)
         persist_journal_record(
             root, base, refreshed,
             observed_at=dt.datetime.now(dt.timezone.utc).isoformat(),
@@ -2610,6 +2711,8 @@ def journal_record_for(
     scope: str,
     generation_id: str | None = None,
     registry_sha256: str | None = None,
+    *,
+    candidate_head_sha: str | None = None,
 ) -> dict[str, Any] | None:
     if not isinstance(journal, Mapping):
         return None
@@ -2620,17 +2723,212 @@ def journal_record_for(
         and row.get("candidate", {}).get("scope") == scope
         and (generation_id is None or row.get("candidate", {}).get("generation_id") == generation_id)
         and (registry_sha256 is None or row.get("candidate", {}).get("registry_sha256") == registry_sha256)
+        and (candidate_head_sha is None or row.get("candidate", {}).get("head_sha") == candidate_head_sha)
     ]
+    if candidate_head_sha is not None:
+        if len(rows) > 1:
+            raise PromotionError("promotion journal has duplicate exact source revision entries")
+        return rows[0] if rows else None
     if registry_sha256 is not None and len(rows) > 1:
-        raise PromotionError("promotion journal has duplicate source/scope/generation/payload revision entries")
+        active = [row for row in rows if row.get("superseded_by") is None]
+        if len(active) == 1:
+            return active[0]
+        raise PromotionError("promotion journal payload lookup is ambiguous; exact candidate head is required")
+    if registry_sha256 is not None and rows:
+        active = [row for row in rows if row.get("superseded_by") is None]
+        if len(active) == 1:
+            return active[0]
+        if len(active) > 1:
+            raise PromotionError("promotion journal payload lookup is ambiguous; exact candidate head is required")
+        return rows[-1]
     if generation_id is not None and registry_sha256 is None and len(rows) > 1:
         raise PromotionError("promotion journal revision lookup requires the exact registry payload digest")
     return rows[-1] if rows else None
 
 
+def run_source_refresh(args: argparse.Namespace, root: pathlib.Path) -> None:
+    """Refresh one adopted owned PR from the same durable B payload on trusted main."""
+    repository = os.environ.get("GITHUB_REPOSITORY", "")
+    default_branch = os.environ.get("GITHUB_DEFAULT_BRANCH", "main")
+    if not repository or "/" not in repository:
+        raise PromotionError("GITHUB_REPOSITORY is required for trusted source refresh")
+    if os.environ.get("GITHUB_EVENT_NAME") != "workflow_dispatch":
+        raise PromotionError("owned source refresh is available only through its trusted workflow_dispatch")
+    if os.environ.get("GITHUB_REF") != f"refs/heads/{default_branch}":
+        raise PromotionError("owned source refresh requires the workflow file from the trusted default branch")
+    if not args.state_root or not args.datapan_cli:
+        raise PromotionError("owned source refresh requires durable processor state and the pinned Datapan CLI")
+    if args.prepare_only:
+        raise PromotionError("owned source refresh cannot run in prepare-only mode")
+
+    pr_number = args.refresh_pr_number
+    predecessor_head = str(args.expected_predecessor_head_sha or "")
+    predecessor_body = str(args.expected_predecessor_body_sha256 or "")
+    predecessor_manifest = str(args.expected_predecessor_manifest_sha256 or "")
+    target_main = str(args.target_main_sha or "")
+    if isinstance(pr_number, bool) or not isinstance(pr_number, int) or pr_number < 1:
+        raise PromotionError("owned source refresh requires a positive predecessor PR number")
+    if not re.fullmatch(r"[a-f0-9]{40}", predecessor_head):
+        raise PromotionError("owned source refresh predecessor head must be a full immutable Git SHA")
+    for digest, label in ((predecessor_body, "predecessor body"), (predecessor_manifest, "predecessor manifest")):
+        if not re.fullmatch(r"[a-f0-9]{64}", digest):
+            raise PromotionError(f"owned source refresh {label} must be a full SHA-256 digest")
+    if not re.fullmatch(r"[a-f0-9]{40}", target_main):
+        raise PromotionError("owned source refresh target main must be a full immutable Git SHA")
+    checkout_sha = command(("git", "rev-parse", "HEAD"), root).stdout.strip()
+    if checkout_sha != target_main:
+        raise PromotionError("trusted source refresh checkout does not equal the requested target main")
+    assert_remote_main_sha(root, target_main)
+
+    helper = load_canonical_update_pr(root)
+    journal, state_sha = load_promotion_journal_snapshot(root)
+    if not isinstance(journal, Mapping) or not state_sha:
+        raise PromotionError("owned source refresh requires an adopted durable promotion journal")
+    predecessors = [
+        row for row in journal.get("records", [])
+        if isinstance(row, Mapping)
+        and str(row.get("candidate", {}).get("repository", "")).casefold() == repository.casefold()
+        and row.get("candidate", {}).get("source_id") == "data_go_kr"
+        and row.get("candidate", {}).get("scope") == "aggregate_supported_catalog"
+        and row.get("pr", {}).get("number") == pr_number
+        and row.get("candidate", {}).get("head_sha") == predecessor_head
+        and row.get("ownership", {}).get("body_sha256") == predecessor_body
+        and row.get("candidate", {}).get("manifest_sha256") == predecessor_manifest
+    ]
+    if len(predecessors) != 1:
+        raise PromotionError("source refresh request does not identify exactly one adopted predecessor receipt")
+    predecessor = dict(predecessors[0])
+    if predecessor.get("status") != "pending-review":
+        raise PromotionError("source refresh predecessor is not an active pending-review PR")
+    if int(predecessor.get("pr", {}).get("number", 0)) != pr_number:
+        raise PromotionError("source refresh predecessor PR number changed")
+
+    predecessor_ref = helper.revision_reference(predecessor)
+    records = [row for row in journal.get("records", []) if isinstance(row, Mapping)]
+    completed: list[Mapping[str, Any]] = []
+    if isinstance(predecessor.get("superseded_by"), Mapping):
+        successor = next((
+            row for row in records
+            if helper._reference_matches_receipt(predecessor["superseded_by"], row)
+        ), None)
+        if (
+            successor is None
+            or successor.get("refresh_target_main_sha") != target_main
+            or not helper._reference_matches_receipt(successor.get("refresh_from", {}), predecessor)
+            or successor.get("status") != "pending-review"
+        ):
+            raise PromotionError("source refresh predecessor is already superseded by a different successor")
+        completed = [successor]
+    intents = [
+        row for row in records
+        if row.get("status") == "prepared"
+        and row.get("superseded_by") is None
+        and isinstance(row.get("refresh_from"), Mapping)
+        and helper._reference_matches_receipt(row["refresh_from"], predecessor)
+    ]
+    if len(intents) > 1:
+        raise PromotionError("source refresh predecessor has multiple prepared successor intents")
+    if completed:
+        successor = completed[0]
+        candidate = successor.get("candidate", {})
+        if (
+            candidate.get("generation_id") != predecessor["candidate"].get("generation_id")
+            or candidate.get("registry_sha256") != predecessor["candidate"].get("registry_sha256")
+            or candidate.get("composition_receipt_sha256") != predecessor["candidate"].get("composition_receipt_sha256")
+            or candidate.get("base_sha") != target_main
+        ):
+            raise PromotionError("completed source refresh did not preserve the B generation/payload on target main")
+        observed = gh_pr_readback(root, repository, pr_number)
+        validate_exact_open_pr(successor, observed, helper)
+        print(json.dumps({
+            "status": "already-refreshed", "pr_number": pr_number,
+            "generation_id": candidate["generation_id"], "candidate_sha": candidate["head_sha"],
+            "target_main_sha": target_main,
+        }, sort_keys=True))
+        return
+
+    successor_head_sha = None
+    if intents:
+        intent = intents[0]
+        candidate = intent.get("candidate", {})
+        if (
+            intent.get("refresh_target_main_sha") != target_main
+            or candidate.get("base_sha") != target_main
+            or candidate.get("generation_id") != predecessor["candidate"].get("generation_id")
+            or candidate.get("registry_sha256") != predecessor["candidate"].get("registry_sha256")
+            or candidate.get("composition_receipt_sha256") != predecessor["candidate"].get("composition_receipt_sha256")
+        ):
+            raise PromotionError("prepared source refresh intent conflicts with the requested target or B payload")
+        successor_head_sha = str(candidate.get("head_sha", ""))
+        if not re.fullmatch(r"[a-f0-9]{40}", successor_head_sha):
+            raise PromotionError("prepared source refresh intent has no exact candidate head")
+        observed = gh_pr_readback(root, repository, pr_number)
+        phase = refresh_pr_phase(intent, predecessor, observed, helper)
+        if phase != "before-push":
+            assert_remote_main_sha(root, target_main)
+    else:
+        if predecessor.get("superseded_by") is not None:
+            raise PromotionError("source refresh predecessor was superseded without its exact successor receipt")
+        observed = gh_pr_readback(root, repository, pr_number)
+        validate_exact_open_pr(predecessor, observed, helper)
+
+    schema_path = root / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json"
+    state_root = args.state_root.resolve()
+    candidates, blocked = list_recoverable_processor_checkpoints(state_root, schema_path, journal)
+    generation_id = str(predecessor["candidate"].get("generation_id", ""))
+    matching_checkpoints = [row for row in candidates if row.get("generation_id") == generation_id]
+    if len(matching_checkpoints) != 1:
+        reason = next((row["reason"] for row in blocked if row.get("generation_id") == generation_id), "missing_or_nonready_generation")
+        raise PromotionError(f"predecessor B generation is not an exact recoverable ready checkpoint: {reason}")
+    checkpoint = matching_checkpoints[0]
+    if (
+        checkpoint.get("source_id") != "data_go_kr"
+        or checkpoint.get("source_scope") != "aggregate_supported_catalog"
+        or checkpoint.get("generation_id") != generation_id
+    ):
+        raise PromotionError("durable B checkpoint differs from the predecessor's admitted source identity")
+    run_id, attempt, _name = processor_attempt_from_locator(checkpoint)
+    run = validate_trusted_processor_run(
+        processor_run_api(root, repository, run_id, attempt), repository=repository,
+        run_id=run_id, attempt=attempt, default_branch=default_branch,
+    )
+    artifact_id = str(checkpoint.get("output_artifact", {}).get("artifact_id", ""))
+    artifact = processor_artifact_api(root, repository, run_id, artifact_id)
+    if artifact is None:
+        raise PromotionError("predecessor B artifact is no longer available")
+    artifact = validate_processor_artifact_metadata(artifact, checkpoint, run, repository=repository)
+    bundle_dir = download_processor_artifact(
+        root, repository, artifact,
+        root / ".datapan" / f"source-refresh-{pr_number}-{generation_id[:12]}" / "bundle",
+    )
+    composition_schema = load_object(root / "schemas/datapan.catalogue-composition-receipt.v1.schema.json")
+    bundle = validate_processor_bundle(checkpoint, bundle_dir, composition_schema, helper)
+    verify_processor_input_compatibility(
+        root, checkpoint, str(run["head_sha"]), target_main,
+        composition_receipt=bundle.get("composition_receipt"),
+    )
+    if (
+        bundle.get("generation_id", checkpoint.get("generation_id")) != generation_id
+        or bundle.get("registry_sha256") != predecessor["candidate"].get("registry_sha256")
+        or bundle.get("composition_receipt_sha256") != predecessor["candidate"].get("composition_receipt_sha256")
+    ):
+        raise PromotionError("predecessor B bundle does not reproduce the exact reviewed generation and payload")
+
+    args.source_refresh_predecessor = predecessor
+    args.source_refresh_target_main_sha = target_main
+    args.source_refresh_expected_state_sha = state_sha
+    args.source_refresh_successor_head_sha = successor_head_sha
+    args.workflow_run_id = run_id
+    args.workflow_run_attempt = attempt
+    args.workflow_run_head_sha = str(run["head_sha"])
+    args.processor_artifact_id = artifact_id
+    args.bundle_dir = bundle_dir
+    execute_candidate_preparation(args, root)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--mode", choices=("recover-ready", "reconcile-prs", "reconcile-publication"), default="recover-ready")
+    parser.add_argument("--mode", choices=("recover-ready", "reconcile-prs", "reconcile-publication", "refresh-owned-source"), default="recover-ready")
     parser.add_argument("--repository-root", type=pathlib.Path, default=pathlib.Path("."))
     parser.add_argument("--state-root", type=pathlib.Path)
     parser.add_argument("--bundle-dir", type=pathlib.Path)
@@ -2643,6 +2941,11 @@ def main() -> int:
     parser.add_argument("--event-run-attempt")
     parser.add_argument("--event-head-sha")
     parser.add_argument("--publication-receipt", type=pathlib.Path)
+    parser.add_argument("--refresh-pr-number", type=int)
+    parser.add_argument("--expected-predecessor-head-sha")
+    parser.add_argument("--expected-predecessor-body-sha256")
+    parser.add_argument("--expected-predecessor-manifest-sha256")
+    parser.add_argument("--target-main-sha")
     parser.add_argument("--prepare-only", action="store_true", help="generate and validate a local candidate commit without uploading LFS, creating issues/PRs, or writing promotion state")
     args = parser.parse_args()
     root = args.repository_root.resolve()
@@ -2655,6 +2958,8 @@ def main() -> int:
             if any(value is None for value in required):
                 raise PromotionError("ready recovery requires durable processor state and the pinned Datapan CLI")
             recover_ready_processor_candidate(args, root)
+        elif args.mode == "refresh-owned-source":
+            run_source_refresh(args, root)
         elif args.mode == "reconcile-prs":
             reconcile_open_promotions(root)
         else:

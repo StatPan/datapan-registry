@@ -4,6 +4,7 @@ import importlib.util
 import hashlib
 import copy
 import json
+import os
 import pathlib
 import subprocess
 import sys
@@ -1467,6 +1468,98 @@ class OwnedPRRefreshRecoveryTests(unittest.TestCase):
                 observed = self.github_api_readback(snapshot["body"], snapshot["head"])
                 RUNNER.validate_existing_pr_api_readback(observed, journal, existing, PR_HELPER)
 
+    def test_same_payload_source_successor_requires_exact_head_lookup(self) -> None:
+        old, new = self.receipts()
+        new["candidate"]["registry_sha256"] = old["candidate"]["registry_sha256"]
+        target_main = "d" * 40
+        new["candidate"]["base_sha"] = target_main
+        new["refresh_from"] = PR_HELPER.revision_reference(old)
+        new["refresh_target_main_sha"] = target_main
+        journal = self.journal(old, new)
+
+        with self.assertRaisesRegex(RUNNER.PromotionError, "payload lookup is ambiguous"):
+            RUNNER.journal_record_for(
+                journal, self.source_id, self.scope, self.generation_id,
+                old["candidate"]["registry_sha256"],
+            )
+        self.assertEqual(
+            RUNNER.journal_record_for(
+                journal, self.source_id, self.scope, self.generation_id,
+                old["candidate"]["registry_sha256"], candidate_head_sha=self.old_head,
+            ),
+            old,
+        )
+        self.assertEqual(
+            RUNNER.journal_record_for(
+                journal, self.source_id, self.scope, self.generation_id,
+                new["candidate"]["registry_sha256"], candidate_head_sha=self.new_head,
+            ),
+            new,
+        )
+
+    def test_trusted_source_refresh_intent_binds_target_main_in_all_crash_phases(self) -> None:
+        old, new = self.receipts()
+        target_main = "e" * 40
+        new["candidate"]["base_sha"] = target_main
+        new["refresh_from"] = PR_HELPER.revision_reference(old)
+        new["refresh_target_main_sha"] = target_main
+        normalized = self.github_api_readback(old["ownership"]["body"], self.old_head)
+        self.assertEqual(RUNNER.refresh_pr_phase(new, old, normalized, PR_HELPER), "before-push")
+        new["candidate"]["base_sha"] = "f" * 40
+        with self.assertRaisesRegex(RUNNER.PromotionError, "exact trusted target main"):
+            RUNNER.refresh_pr_phase(new, old, normalized, PR_HELPER)
+
+    def test_scheduled_recovery_checks_source_refresh_target_before_pr_read_or_edit(self) -> None:
+        old, intent = self.receipts()
+        target_main = "e" * 40
+        intent["candidate"]["base_sha"] = target_main
+        intent["refresh_from"] = PR_HELPER.revision_reference(old)
+        intent["refresh_target_main_sha"] = target_main
+        journal = self.journal(old, intent)
+        with (
+            mock.patch.dict(os.environ, {
+                "GITHUB_REPOSITORY": self.repository,
+                "GITHUB_RUN_ID": "99999999",
+                "GITHUB_RUN_ATTEMPT": "1",
+            }),
+            mock.patch.object(RUNNER, "load_promotion_journal", return_value=journal),
+            mock.patch.object(RUNNER, "command", return_value=subprocess.CompletedProcess(["git"], 0, stdout=f"{target_main}\n", stderr="")),
+            mock.patch.object(RUNNER, "assert_remote_main_sha", side_effect=RUNNER.PromotionError("target main moved")) as main_check,
+            mock.patch.object(RUNNER, "gh_pr_readback") as readback,
+            mock.patch.object(RUNNER, "gh_open_prs") as open_prs,
+        ):
+            with self.assertRaisesRegex(RUNNER.PromotionError, "target main moved"):
+                RUNNER.reconcile_open_promotions(pathlib.Path("."))
+        main_check.assert_called_once_with(pathlib.Path("."), target_main)
+        readback.assert_not_called()
+        open_prs.assert_not_called()
+
+    def test_canonical_promotion_workflow_refresh_dispatch_is_complete_and_main_only(self) -> None:
+        import yaml
+
+        workflow_path = pathlib.Path(__file__).parents[1] / ".github/workflows/canonical-update-promotion.yml"
+        workflow = yaml.load(workflow_path.read_text(), Loader=yaml.BaseLoader)
+        dispatch = workflow["on"]["workflow_dispatch"]["inputs"]
+        self.assertEqual(
+            set(dispatch),
+            {
+                "refresh_pr_number", "expected_predecessor_head_sha",
+                "expected_predecessor_body_sha256", "expected_predecessor_manifest_sha256",
+                "target_main_sha",
+            },
+        )
+        self.assertTrue(all(row["default"] == "" for row in dispatch.values()))
+        job_condition = workflow["jobs"]["reconcile"]["if"]
+        self.assertIn("github.ref == format('refs/heads/{0}', github.event.repository.default_branch)", job_condition)
+        steps = workflow["jobs"]["reconcile"]["steps"]
+        refresh = next(step for step in steps if step.get("name") == "Refresh one explicitly bound owned source revision")
+        self.assertIn("inputs.refresh_pr_number != ''", refresh["if"])
+        self.assertIn("--mode refresh-owned-source", refresh["run"])
+        self.assertIn("--target-main-sha", refresh["run"])
+        for step_name in ("Reconcile owned PRs and exact-head CI", "Recover at most one durable ready processor bundle"):
+            normal = next(step for step in steps if step.get("name") == step_name)
+            self.assertIn("inputs.refresh_pr_number == ''", normal["if"])
+
     def test_human_head_or_body_drift_fails_closed_during_refresh_recovery(self) -> None:
         old, target = self.receipts()
         journal = self.journal(old, target)
@@ -1628,6 +1721,126 @@ class OwnedPRRefreshRecoveryTests(unittest.TestCase):
         with self.assertRaisesRegex(RUNNER.PromotionError, "duplicate_open_prs"):
             RUNNER.existing_pr_rows({"records": [first, second]}, rows, PR_HELPER, candidate)
 
+
+
+class TrustedSourceRefreshEntryPointTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.old, _new = OwnedPRRefreshRecoveryTests().receipts()
+        self.old["candidate"]["composition_receipt_sha256"] = "f" * 64
+        self.target_main = "e" * 40
+        self.state_sha = "9" * 40
+        self.repository = "StatPan/datapan-registry"
+        self.checkpoint = {
+            "generation_id": self.old["candidate"]["generation_id"],
+            "source_id": "data_go_kr", "source_scope": "aggregate_supported_catalog",
+            "status": "ready",
+            "output_artifact": {"artifact_id": "1234", "run_id": "37100705274"},
+        }
+        self.run = {"head_sha": "a" * 40}
+        self.bundle = {
+            "status": "ready", "registry_sha256": self.old["candidate"]["registry_sha256"],
+            "composition_receipt_sha256": self.old["candidate"]["composition_receipt_sha256"],
+            "composition_receipt": {"schema_version": "test"},
+        }
+        self.args = types.SimpleNamespace(
+            refresh_pr_number=self.old["pr"]["number"],
+            expected_predecessor_head_sha=self.old["candidate"]["head_sha"],
+            expected_predecessor_body_sha256=self.old["ownership"]["body_sha256"],
+            expected_predecessor_manifest_sha256=self.old["candidate"]["manifest_sha256"],
+            target_main_sha=self.target_main,
+            state_root=pathlib.Path("state"), datapan_cli=pathlib.Path("cli"),
+            prepare_only=False,
+        )
+
+    def run_with_read_only_stubs(self, *, command_sha: str | None = None) -> tuple[mock._patch, mock._patch, mock._patch]:
+        environment = mock.patch.dict(os.environ, {
+            "GITHUB_REPOSITORY": self.repository,
+            "GITHUB_DEFAULT_BRANCH": "main",
+            "GITHUB_EVENT_NAME": "workflow_dispatch",
+            "GITHUB_REF": "refs/heads/main",
+        })
+        environment.start()
+        self.addCleanup(environment.stop)
+        command_patch = mock.patch.object(
+            RUNNER, "command",
+            return_value=subprocess.CompletedProcess(["git"], 0, stdout=f"{command_sha or self.target_main}\n", stderr=""),
+        )
+        command_patch.start()
+        self.addCleanup(command_patch.stop)
+        main_patch = mock.patch.object(RUNNER, "assert_remote_main_sha")
+        main_patch.start()
+        self.addCleanup(main_patch.stop)
+        return environment, command_patch, main_patch
+
+    def test_refresh_resolves_exact_adopted_receipt_and_replays_same_b_payload(self) -> None:
+        self.run_with_read_only_stubs()
+        with (
+            mock.patch.object(RUNNER, "load_canonical_update_pr", return_value=PR_HELPER),
+            mock.patch.object(RUNNER, "load_promotion_journal_snapshot", return_value=({"records": [self.old]}, self.state_sha)),
+            mock.patch.object(RUNNER, "gh_pr_readback", return_value={}) as readback,
+            mock.patch.object(RUNNER, "validate_exact_open_pr") as validate_pr,
+            mock.patch.object(RUNNER, "list_recoverable_processor_checkpoints", return_value=([self.checkpoint], [])),
+            mock.patch.object(RUNNER, "processor_attempt_from_locator", return_value=("37100705274", "1", "upstream-catalogue-processing-37100705274-1")),
+            mock.patch.object(RUNNER, "processor_run_api", return_value={}) as run_api,
+            mock.patch.object(RUNNER, "validate_trusted_processor_run", return_value=self.run),
+            mock.patch.object(RUNNER, "processor_artifact_api", return_value={"id": "1234"}) as artifact_api,
+            mock.patch.object(RUNNER, "validate_processor_artifact_metadata", return_value={"id": "1234"}),
+            mock.patch.object(RUNNER, "download_processor_artifact", return_value=pathlib.Path("bundle")) as download,
+            mock.patch.object(RUNNER, "load_object", return_value={}),
+            mock.patch.object(RUNNER, "validate_processor_bundle", return_value=self.bundle),
+            mock.patch.object(RUNNER, "verify_processor_input_compatibility") as compatibility,
+            mock.patch.object(RUNNER, "execute_candidate_preparation") as execute,
+        ):
+            RUNNER.run_source_refresh(self.args, pathlib.Path("."))
+
+        validate_pr.assert_called_once_with(self.old, {}, PR_HELPER)
+        readback.assert_called_once_with(pathlib.Path("."), self.repository, self.old["pr"]["number"])
+        run_api.assert_called_once()
+        artifact_api.assert_called_once()
+        download.assert_called_once()
+        compatibility.assert_called_once()
+        execute.assert_called_once()
+        self.assertEqual(self.args.source_refresh_predecessor["candidate"]["generation_id"], self.checkpoint["generation_id"])
+        self.assertEqual(self.args.source_refresh_expected_state_sha, self.state_sha)
+        self.assertEqual(self.args.source_refresh_target_main_sha, self.target_main)
+
+    def test_refresh_rejects_partial_or_changed_predecessor_before_b_api_reads(self) -> None:
+        self.run_with_read_only_stubs()
+        self.args.expected_predecessor_body_sha256 = "0" * 64
+        with (
+            mock.patch.object(RUNNER, "load_canonical_update_pr", return_value=PR_HELPER),
+            mock.patch.object(RUNNER, "load_promotion_journal_snapshot", return_value=({"records": [self.old]}, self.state_sha)),
+            mock.patch.object(RUNNER, "processor_run_api") as run_api,
+        ):
+            with self.assertRaisesRegex(RUNNER.PromotionError, "does not identify exactly one adopted predecessor"):
+                RUNNER.run_source_refresh(self.args, pathlib.Path("."))
+        run_api.assert_not_called()
+
+        self.args.expected_predecessor_body_sha256 = ""
+        with self.assertRaisesRegex(RUNNER.PromotionError, "body must be a full SHA-256"):
+            RUNNER.run_source_refresh(self.args, pathlib.Path("."))
+
+    def test_refresh_requires_current_main_and_trusted_default_branch_ref(self) -> None:
+        self.run_with_read_only_stubs(command_sha="0" * 40)
+        with mock.patch.object(RUNNER, "assert_remote_main_sha") as remote_check:
+            with self.assertRaisesRegex(RUNNER.PromotionError, "checkout does not equal"):
+                RUNNER.run_source_refresh(self.args, pathlib.Path("."))
+        remote_check.assert_not_called()
+
+        self.run_with_read_only_stubs()
+        with mock.patch.dict(os.environ, {"GITHUB_REF": "refs/heads/topic"}):
+            with self.assertRaisesRegex(RUNNER.PromotionError, "trusted default branch"):
+                RUNNER.run_source_refresh(self.args, pathlib.Path("."))
+
+        self.run_with_read_only_stubs()
+        with (
+            mock.patch.object(RUNNER, "assert_remote_main_sha", side_effect=RUNNER.PromotionError("main moved")) as remote_check,
+            mock.patch.object(RUNNER, "load_promotion_journal_snapshot") as journal_read,
+        ):
+            with self.assertRaisesRegex(RUNNER.PromotionError, "main moved"):
+                RUNNER.run_source_refresh(self.args, pathlib.Path("."))
+        remote_check.assert_called_once_with(pathlib.Path("."), self.target_main)
+        journal_read.assert_not_called()
 
 
 if __name__ == "__main__":
