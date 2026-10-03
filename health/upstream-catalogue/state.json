@@ -5,9 +5,9 @@
       "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
       "first_seen_at": "2026-10-03T05:52:54Z",
       "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
-      "last_receipt_sha256": "3480ac7cf83de2acb632ac056b916a7fed730b2a9af9b6e5f26f359918e5846b",
-      "last_seen_at": "2026-10-03T11:49:18Z",
-      "observation_count": 20,
+      "last_receipt_sha256": "5fc61daa972962faa2f894a14c383e965b1129dd5d3210d3e488f716d6adf453",
+      "last_seen_at": "2026-10-03T12:01:03Z",
+      "observation_count": 21,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "candidate_ready_with_pending_scope",
@@ -74,9 +74,9 @@
       "fault_key": "6b027caf0a4cf6d1be78f0e0db3af682b6f20c63c59fa24f9a44ef4e4bda0261",
       "first_seen_at": "2026-10-03T11:47:45Z",
       "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
-      "last_receipt_sha256": "3480ac7cf83de2acb632ac056b916a7fed730b2a9af9b6e5f26f359918e5846b",
-      "last_seen_at": "2026-10-03T11:49:18Z",
-      "observation_count": 2,
+      "last_receipt_sha256": "5fc61daa972962faa2f894a14c383e965b1129dd5d3210d3e488f716d6adf453",
+      "last_seen_at": "2026-10-03T12:01:03Z",
+      "observation_count": 3,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "promotion_ack_missing",
@@ -91,9 +91,9 @@
       "fault_key": "6bb5fd16f1bdc17048a3aca0398816e51e51e668e866ff716086b2a162cced91",
       "first_seen_at": "2026-10-03T11:47:45Z",
       "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
-      "last_receipt_sha256": "3480ac7cf83de2acb632ac056b916a7fed730b2a9af9b6e5f26f359918e5846b",
-      "last_seen_at": "2026-10-03T11:49:18Z",
-      "observation_count": 2,
+      "last_receipt_sha256": "5fc61daa972962faa2f894a14c383e965b1129dd5d3210d3e488f716d6adf453",
+      "last_seen_at": "2026-10-03T12:01:03Z",
+      "observation_count": 3,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "promotion_journal_unavailable",
@@ -158,8 +158,8 @@
   ],
   "last_good_by_source": {},
   "latest_receipt": {
-    "path": "receipts/receipt-37120860046-1-3480ac7cf83de2ac.json",
-    "sha256": "3480ac7cf83de2acb632ac056b916a7fed730b2a9af9b6e5f26f359918e5846b"
+    "path": "receipts/receipt-37121497152-1-5fc61daa972962fa.json",
+    "sha256": "5fc61daa972962faa2f894a14c383e965b1129dd5d3210d3e488f716d6adf453"
   },
   "observations_by_source": {
     "data_go_kr": [
@@ -179,7 +179,7 @@
   "repository": "StatPan/datapan-registry",
   "root": "health/upstream-catalogue",
   "schema_version": "datapan.upstream-catalogue-health-state.v1",
-  "state_sha256": "ac77a816472066bec75608c86253c7e5353436b3e10d1011da282de628ceffc9",
+  "state_sha256": "0f3d808edf2ceb16c5f41323a09c0c08fcc3fd3140e7f01e051553051801e3ee",
   "state_status": "blocked",
-  "updated_at": "2026-10-03T11:49:18Z"
+  "updated_at": "2026-10-03T12:01:03Z"
 }
