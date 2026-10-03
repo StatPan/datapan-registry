@@ -6,6 +6,7 @@ import copy
 import json
 import pathlib
 import subprocess
+import sys
 import tempfile
 import types
 import unittest
@@ -25,6 +26,60 @@ PR_SPEC = importlib.util.spec_from_file_location(
 assert PR_SPEC and PR_SPEC.loader
 PR_HELPER = importlib.util.module_from_spec(PR_SPEC)
 PR_SPEC.loader.exec_module(PR_HELPER)
+
+
+class DynamicHelperLoadingTests(unittest.TestCase):
+    def test_production_loader_imports_dataclass_helper_in_fresh_interpreter(self) -> None:
+        helper_path = SCRIPT.parents[1] / "scripts/refresh-canonical-snapshot-evidence.py"
+        code = """
+import pathlib
+import sys
+runner_spec = __import__('importlib.util', fromlist=['spec_from_file_location']).spec_from_file_location('promotion_runner', sys.argv[1])
+runner = __import__('importlib.util', fromlist=['module_from_spec']).module_from_spec(runner_spec)
+sys.modules[runner_spec.name] = runner
+runner_spec.loader.exec_module(runner)
+helper = runner.load_module(pathlib.Path(sys.argv[2]), 'fresh_refresh_canonical_snapshot_evidence')
+assert sys.modules[helper.__name__] is helper
+command = helper.SourceCommand(('python3', 'scripts/validate-diagnostic-publication.py'), pathlib.Path('.'))
+assert command.label == 'python3 scripts/validate-diagnostic-publication.py'
+"""
+        result = subprocess.run(
+            [sys.executable, "-B", "-c", code, str(SCRIPT), str(helper_path)],
+            text=True,
+            capture_output=True,
+            check=False,
+            env={**__import__("os").environ, "PYTHONDONTWRITEBYTECODE": "1"},
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_failed_dynamic_import_restores_previous_module_binding(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            path = pathlib.Path(raw) / "broken_helper.py"
+            name = "broken_helper_rollback_test"
+            previous = types.SimpleNamespace(marker="previous")
+            path.write_text(
+                "import sys\n"
+                "assert sys.modules[__name__] is not None\n"
+                "raise RuntimeError('intentional import failure')\n",
+                encoding="utf-8",
+            )
+            sys.modules[name] = previous
+            try:
+                with self.assertRaisesRegex(RuntimeError, "intentional import failure"):
+                    RUNNER.load_module(path, name)
+                self.assertIs(sys.modules[name], previous)
+            finally:
+                sys.modules.pop(name, None)
+
+    def test_failed_dynamic_import_removes_new_module_binding(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            path = pathlib.Path(raw) / "broken_helper.py"
+            name = "broken_helper_new_binding_test"
+            path.write_text("raise RuntimeError('intentional import failure')\n", encoding="utf-8")
+            sys.modules.pop(name, None)
+            with self.assertRaisesRegex(RuntimeError, "intentional import failure"):
+                RUNNER.load_module(path, name)
+            self.assertNotIn(name, sys.modules)
 
 
 class GiraFinishReviewPolicyTests(unittest.TestCase):
