@@ -719,6 +719,61 @@ Move from scheduled health checks to scheduled release drafting only after:
 - provider adapter evidence is improving across releases;
 - consumers can pin either a git tag or a release asset.
 
+## Upstream catalogue health and recovery evidence
+
+`.github/workflows/upstream-catalogue-health.yml` runs on an independent hourly
+UTC clock and after `Upstream catalog refresh`, `Process upstream catalogue`,
+`Canonical update promotion`, and `Canonical update publication acknowledgement`
+workflow completions. The hourly run detects a collector that never starts;
+the completion triggers give earlier reports for failed collection, processor
+handoff, and promotion transitions. The health watchdog does not call the
+provider or publish canonical data. Its source
+freshness deadline is derived from `policy/source-refresh.json` cadence and the
+per-source grace in `policy/upstream-catalogue-health.json`; hourly watchdog
+runs never extend the weekly source TTL.
+
+The checker reads the processor-owned
+`automation/upstream-catalogue-state` branch, GitHub Actions run and artifact
+metadata, and the canonical promotion acknowledgement branch. It records each
+live source observation only when its producer run is a successful main-branch
+collector run and its run-bound evidence artifact remains available. Processor
+heartbeats do not refresh source observation age. An independent owned branch,
+`automation/upstream-catalogue-health-state`, stores the sealed receipt, stable
+fault keys, stage-specific recovery evidence, the last read-back-confirmed
+canonical identity, and a monotonic history of distinct producer-run/evidence
+identities. Updates use a serialized workflow and bounded, fast-forward-only
+push retries; the writer refuses fixture receipts, an unowned root, and
+corrupted state rather than overwriting it.
+
+Promotion ordering binds to the exact acknowledgement run attempt and reads
+that attempt's complete workflow-job list. Its ordering timestamp is the maximum
+`completed_at` among those completed jobs; a nullable run-attempt `completed_at`
+and mutable `updated_at` do not establish publication order.
+
+For a read-only local fixture check, install `jsonschema` and run:
+
+```sh
+python3 -m unittest tests/test_check_upstream_catalogue_health.py tests/test_check_upstream_catalogue_health_workflow.py
+```
+
+Fixture and replayed inputs can exercise failure classification and recovery
+rules, but cannot update durable state or count as operational observations.
+Operational acceptance still requires two distinct, increasing live source
+observations, automatic processing of those observations, and reviewed
+stage-specific recovery evidence from the enabled workflow. A genuine no-change
+result proves a fresh observation only when it is bound to the successful
+collector run and its evidence digest; it does not prove full-scope freshness or
+publication readiness. `ready_scoped`, pending review, publication pending,
+published-but-not-read-back, and read-back-confirmed remain separate states.
+
+When the durable health branch is corrupt or ownership cannot be verified, the
+workflow preserves the failed receipt artifact and stops the state write. An
+operator should inspect the exact branch root and ownership marker, retain the
+last-good canonical identity, and repair only the damaged owned health files
+after review. Expired leases can be retried only against the same generation
+and digest-bound inputs within the configured attempt budget; failed evidence
+and queued work are retained.
+
 ## Non-Goals
 
 - Do not store credentials.

@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 101,
+  "count": 105,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 4447,
-      "sha256": "e1f0835e0d9a1ba83d92aff1d5729c7fa2093842a48aee9700073b607e5d6ee3"
+      "bytes": 4491,
+      "sha256": "d11a4e2a69094104699161ee1bcdfb29e0bf4c31926c5ca134a176ef65cdf3e6"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -912,6 +912,42 @@
       "version": "v1",
       "bytes": 6669,
       "sha256": "3ca228ed37e54c869946a6e1345ba0c40390907a1124d4321b526809a1b48b61"
+    },
+    {
+      "path": "schemas/datapan.upstream-catalogue-health-policy.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.upstream-catalogue-health-policy.v1.schema.json",
+      "title": "Datapan Upstream Catalogue Health Policy v1",
+      "contract": "upstream-catalogue-health-policy",
+      "version": "v1",
+      "bytes": 5914,
+      "sha256": "8fc3887e29f19bfbc9a0258a34108b5f5500b1b09a4a99a0faf476bdd931749f"
+    },
+    {
+      "path": "schemas/datapan.upstream-catalogue-health-state-owner.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.upstream-catalogue-health-state-owner.v1.schema.json",
+      "title": "Datapan Upstream Catalogue Health State Ownership Marker v1",
+      "contract": "upstream-catalogue-health-state-owner",
+      "version": "v1",
+      "bytes": 885,
+      "sha256": "7c5a52b435590bb22ad08c38de40132956b172f175bf4c8afe0d17a629b4abb8"
+    },
+    {
+      "path": "schemas/datapan.upstream-catalogue-health-state.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.upstream-catalogue-health-state.v1.schema.json",
+      "title": "Datapan Upstream Catalogue Durable Health State v1",
+      "contract": "upstream-catalogue-health-state",
+      "version": "v1",
+      "bytes": 5099,
+      "sha256": "1840e01345213c2c0e7a819e81115571a906503a1adc01913af99a909cdd8c9f"
+    },
+    {
+      "path": "schemas/datapan.upstream-catalogue-health.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.upstream-catalogue-health.v1.schema.json",
+      "title": "Datapan Upstream Catalogue Health Receipt v1",
+      "contract": "upstream-catalogue-health",
+      "version": "v1",
+      "bytes": 9725,
+      "sha256": "7db8e1d681ce2ae81ffd67d3f7a6993692547940bfcbafc413815fccba9dcb7a"
     }
   ]
 }
