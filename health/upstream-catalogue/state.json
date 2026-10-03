@@ -5,9 +5,9 @@
       "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
       "first_seen_at": "2026-10-03T05:52:54Z",
       "generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
-      "last_receipt_sha256": "5db846bf1104344c7fb4fa62f477b959a9ebd2a6c9ec77e5a78e43602b670245",
-      "last_seen_at": "2026-10-03T16:18:48Z",
-      "observation_count": 35,
+      "last_receipt_sha256": "c104d869084a55ce6c5a5b0d6b459233a2042d0e1c24b8bd94b7ebfa8c86ceb4",
+      "last_seen_at": "2026-10-03T16:19:40Z",
+      "observation_count": 36,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "candidate_ready_with_pending_scope",
@@ -118,9 +118,9 @@
       "fault_key": "7678c24a0fcb40b7df3f32f828be41a70a046d2bad441e6cbeb50c1ec2b404b4",
       "first_seen_at": "2026-10-03T16:18:48Z",
       "generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
-      "last_receipt_sha256": "5db846bf1104344c7fb4fa62f477b959a9ebd2a6c9ec77e5a78e43602b670245",
-      "last_seen_at": "2026-10-03T16:18:48Z",
-      "observation_count": 1,
+      "last_receipt_sha256": "c104d869084a55ce6c5a5b0d6b459233a2042d0e1c24b8bd94b7ebfa8c86ceb4",
+      "last_seen_at": "2026-10-03T16:19:40Z",
+      "observation_count": 2,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "promotion_record_for_different_generation",
@@ -157,9 +157,9 @@
       "fault_key": "d36ca8b10f4fd57b22c47324edafd80fd8bc62bc39c9f6aae39d8ed0ff55d444",
       "first_seen_at": "2026-10-03T16:18:48Z",
       "generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
-      "last_receipt_sha256": "5db846bf1104344c7fb4fa62f477b959a9ebd2a6c9ec77e5a78e43602b670245",
-      "last_seen_at": "2026-10-03T16:18:48Z",
-      "observation_count": 1,
+      "last_receipt_sha256": "c104d869084a55ce6c5a5b0d6b459233a2042d0e1c24b8bd94b7ebfa8c86ceb4",
+      "last_seen_at": "2026-10-03T16:19:40Z",
+      "observation_count": 2,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "promotion_ack_missing",
@@ -198,6 +198,29 @@
       "source_id": "data_go_kr",
       "stage": "promotion-execution",
       "status": "recovered"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "e01af4e189073ec583a997c28c20a7acee9c9496",
+        "run_attempt": 1,
+        "run_id": "37136377127",
+        "run_started_at": "2026-10-03T16:18:40Z"
+      },
+      "fault_key": "7a05efdcfec9950e728817a486c0fdacd589415513fa6d326d7cadf230f03ab2",
+      "first_seen_at": "2026-10-03T16:19:40Z",
+      "generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
+      "last_receipt_sha256": "c104d869084a55ce6c5a5b0d6b459233a2042d0e1c24b8bd94b7ebfa8c86ceb4",
+      "last_seen_at": "2026-10-03T16:19:40Z",
+      "observation_count": 1,
+      "owner_ticket": 659,
+      "producer_run_id": "36646768289",
+      "reason": "promotion_workflow_run_failed",
+      "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+      "recovery_evidence": null,
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "promotion-execution",
+      "status": "open"
     },
     {
       "execution_identity": {
@@ -282,8 +305,8 @@
   ],
   "last_good_by_source": {},
   "latest_receipt": {
-    "path": "receipts/receipt-37136377125-1-5db846bf1104344c.json",
-    "sha256": "5db846bf1104344c7fb4fa62f477b959a9ebd2a6c9ec77e5a78e43602b670245"
+    "path": "receipts/receipt-37136426135-1-c104d869084a55ce.json",
+    "sha256": "c104d869084a55ce6c5a5b0d6b459233a2042d0e1c24b8bd94b7ebfa8c86ceb4"
   },
   "observations_by_source": {
     "data_go_kr": [
@@ -303,7 +326,7 @@
   "repository": "StatPan/datapan-registry",
   "root": "health/upstream-catalogue",
   "schema_version": "datapan.upstream-catalogue-health-state.v1",
-  "state_sha256": "8d808f9ca52bb8c5a4c00c9f6f4eaa6856158955e3bcd7ae6c187623328441ed",
-  "state_status": "degraded",
-  "updated_at": "2026-10-03T16:18:48Z"
+  "state_sha256": "a9adf6d02bca48f4ef8a44b72de9516745fec09eae441b257ba49890ea124a2a",
+  "state_status": "blocked",
+  "updated_at": "2026-10-03T16:19:40Z"
 }
