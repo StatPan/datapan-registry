@@ -955,18 +955,18 @@
         "owner_id": "datapan-canonical-update:v1:045f947a711dbc464c9bb74f7426aef95c200eaa1c5cc66bcbc95d685fb8c42a",
         "body_sha256": "34ea71feb2c5c340dc537682e7472b80fa9e904aecea8828b9d5b1559e87e541",
         "request_fingerprint": "5410998f38cdd8cd76d81706e93a84680ec3e76211d02d3f934d776c82f417d6",
-        "state": "uncertain",
+        "state": "failure",
         "intent_at": "2026-10-03T11:48:37Z",
         "run_id": 37120838066,
         "run_attempt": 1,
         "run_url": "https://github.com/StatPan/datapan-registry/actions/runs/37120838066",
-        "run_status": "in_progress",
-        "conclusion": null,
-        "observed_at": "2026-10-03T12:00:39Z",
+        "run_status": "completed",
+        "conclusion": "failure",
+        "observed_at": "2026-10-03T12:00:43Z",
         "dispatch_http_status": 200,
-        "blocker": "verify_release_run_readback_pending"
+        "blocker": "verify_release_failed"
       }
     }
   ],
-  "updated_at": "2026-10-03T12:00:40.282551+00:00"
+  "updated_at": "2026-10-03T12:00:43.605420+00:00"
 }
