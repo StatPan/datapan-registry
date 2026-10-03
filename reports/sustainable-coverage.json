@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.sustainable-coverage.v1",
-  "generated_at": "2026-09-30T01:45:58.529244Z",
+  "generated_at": "2026-10-03T00:30:55.038634Z",
   "policy": {
     "path": "policy/sustainable-coverage.json",
     "policy_id": "datapan-registry-supported-sources",
@@ -23,9 +23,9 @@
     "layers_total": 9,
     "layers_meeting_target": 7,
     "layers_below_target": 2,
-    "unknown_timestamp_records": 1822,
-    "stale_records": 3336,
-    "expired_records": 514
+    "unknown_timestamp_records": 2481,
+    "stale_records": 4,
+    "expired_records": 3846
   },
   "layers": [
     {
@@ -90,9 +90,9 @@
     },
     {
       "id": "runtime_evidence_operation",
-      "numerator": 6961,
+      "numerator": 7761,
       "denominator": 21260,
-      "percent": 32.7,
+      "percent": 36.5,
       "target_percent": 80.0,
       "meets_target": false,
       "scope": "operation_denominator_sources",
@@ -100,9 +100,9 @@
     },
     {
       "id": "fresh_verified_operation",
-      "numerator": 736,
+      "numerator": 873,
       "denominator": 21260,
-      "percent": 3.5,
+      "percent": 4.1,
       "target_percent": 80.0,
       "meets_target": false,
       "scope": "operation_denominator_sources",
@@ -120,18 +120,18 @@
     }
   ],
   "freshness": {
-    "as_of": "2026-09-30T01:45:58.529244Z",
+    "as_of": "2026-10-03T00:30:55.038634Z",
     "fresh_days": 30,
     "expire_days": 90,
-    "fresh": 1289,
-    "stale": 3336,
-    "expired": 514,
-    "unknown_timestamp": 1822,
-    "fresh_verified": 736
+    "fresh": 1430,
+    "stale": 4,
+    "expired": 3846,
+    "unknown_timestamp": 2481,
+    "fresh_verified": 873
   },
   "failure_recovery": {
-    "active": 1475,
-    "persistent": 456,
+    "active": 2136,
+    "persistent": 927,
     "recovered": 6,
     "unowned": 0,
     "overdue": 2,
@@ -145,7 +145,7 @@
       "call_capability": true,
       "reviewed_runtime_receipt": true,
       "runtime_evidence": 4774,
-      "active_recovery_failures": 1475,
+      "active_recovery_failures": 2136,
       "recovered_failures": 1
     },
     {
