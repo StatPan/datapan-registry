@@ -1453,6 +1453,501 @@ class OwnedPRRefreshRecoveryTests(unittest.TestCase):
                                  if state == "open" else []),
         }
 
+    def actual_adopted_same_payload_refresh(self) -> tuple[dict, dict, dict]:
+        """Build the source-refresh route from the frozen real #686 recovery fixture."""
+        fixture = PreparedCreateRecoveryTests().fixture()
+        prepared = fixture["state"]["records"][0]
+        root = pathlib.Path("/read-only/issue-689-real-686-refresh")
+        with (
+            mock.patch.object(RUNNER, "gh_open_prs", return_value=fixture["open_pr_rows"]),
+            mock.patch.object(RUNNER, "gh_pr_readback", return_value=fixture["pull_request_readback"]),
+            mock.patch.object(PR_HELPER, "load_materializer", return_value=object()),
+            mock.patch.object(PR_HELPER, "remote_ref_sha", return_value=fixture["remote_branch_sha"]),
+            mock.patch.object(RUNNER, "persist_journal_record"),
+        ):
+            adopted, number = RUNNER.reconcile_prepared_create_pr(
+                root, self.repository, prepared, PR_HELPER,
+                **PreparedCreateRecoveryTests().args(prepared),
+                journal_source_base_sha=PreparedCreateRecoveryTests.controller_head,
+                observed_at="2026-10-03T10:00:00Z",
+                run_url="https://github.com/StatPan/datapan-registry/actions/runs/37101245239/attempts/4",
+            )
+        self.assertEqual(number, 686)
+        self.assertEqual(adopted["status"], "pending-review")
+        # #693 advances this value as part of the native adoption CAS. Keep the
+        # fixture usable against its pre-#693 base while modeling that accepted
+        # adopted receipt shape for the same-payload continuation below.
+        if adopted["ownership"]["expected_head_sha"] == "0" * 40:
+            adopted["ownership"]["expected_head_sha"] = adopted["candidate"]["head_sha"]
+
+        target_main = "60042f6be0e8e593830e7b2433974e814f4a0a55"
+        successor_head = "d" * 40
+        successor = copy.deepcopy(adopted)
+        successor["status"] = "prepared"
+        successor["action"] = "refresh_owned"
+        successor["acknowledgements"] = []
+        successor["candidate"]["base_sha"] = target_main
+        successor["candidate"]["head_sha"] = successor_head
+        successor["candidate"]["manifest_sha256"] = "2" * 64
+        successor["candidate"]["payload_readback"]["source_sha"] = successor_head
+        successor["candidate"]["payload_readback"]["manifest_sha256"] = "2" * 64
+        successor["ownership"]["expected_head_sha"] = adopted["candidate"]["head_sha"]
+        successor["refresh_from"] = PR_HELPER.revision_reference(adopted)
+        successor["refresh_target_main_sha"] = target_main
+        successor["ownership"]["body"] = PR_HELPER.render_pr_body(
+            successor["candidate"], successor["ownership"]["owner_id"],
+        )
+        successor["ownership"]["body_sha256"] = hashlib.sha256(
+            successor["ownership"]["body"].encode("utf-8"),
+        ).hexdigest()
+        journal = PR_HELPER.append_journal_record(
+            None, adopted, repository=self.repository, observed_at="2026-10-03T10:00:00Z",
+        )
+        journal = PR_HELPER.append_journal_record(
+            journal, successor, repository=self.repository, observed_at="2026-10-03T10:01:00Z",
+        )
+        schema = json.loads((pathlib.Path(__file__).parents[1] / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json").read_text())
+        PR_HELPER.validate_journal(journal, schema)
+        return fixture, adopted, successor
+
+    def test_body_edit_ambiguous_response_uses_fresh_exact_readback_before_ack(self) -> None:
+        fixture, predecessor, intent = self.actual_adopted_same_payload_refresh()
+        current_main = "f" * 40
+        first = dict(fixture["pull_request_readback"])
+        first["headRefOid"] = intent["candidate"]["head_sha"]
+        first["body"] = predecessor["ownership"]["body"]
+        fresh = dict(first)
+        fresh["body"] = intent["ownership"]["body"]
+        temp_root = tempfile.TemporaryDirectory(prefix="issue-689-refresh-reread-")
+        self.addCleanup(temp_root.cleanup)
+        root = pathlib.Path(temp_root.name)
+        state_sha = "9" * 40
+        with (
+            mock.patch.object(RUNNER, "assert_remote_main_sha", side_effect=lambda _root, sha: self.assertEqual(sha, current_main)) as main_check,
+            mock.patch.object(RUNNER, "command", side_effect=RUNNER.PromotionError("gh edit response lost after server acceptance")) as edit,
+            mock.patch.object(RUNNER, "gh_pr_readback", return_value=fresh) as reread,
+            mock.patch.object(RUNNER, "persist_journal_record") as persist,
+        ):
+            acknowledged = RUNNER.complete_prepared_refresh(
+                root, self.repository, intent, predecessor, PR_HELPER, first,
+                controller_head_sha=current_main,
+                journal_source_base_sha=current_main,
+                expected_state_sha=state_sha,
+                observed_at="2026-10-03T10:02:00Z",
+                run_url="https://github.com/StatPan/datapan-registry/actions/runs/37109999999/attempts/1",
+            )
+        self.assertEqual(acknowledged["status"], "pending-review")
+        self.assertEqual(acknowledged["candidate"], intent["candidate"])
+        self.assertEqual(acknowledged["ownership"]["expected_head_sha"], intent["candidate"]["head_sha"])
+        edit.assert_called_once()
+        reread.assert_called_once_with(root, self.repository, predecessor["pr"]["number"])
+        self.assertEqual(main_check.call_count, 2)
+        persist.assert_called_once()
+        self.assertEqual(persist.call_args.kwargs["expected_state_sha"], state_sha)
+        self.assertEqual(persist.call_args.kwargs["supersede_from"], PR_HELPER.revision_reference(predecessor))
+        self.assertEqual(persist.call_args.args[2], acknowledged)
+
+    def test_execute_refresh_keeps_trusted_base_after_candidate_checkout_and_rereads_body(self) -> None:
+        fixture = PreparedCreateRecoveryTests().fixture()
+        predecessor = fixture["state"]["records"][0]
+        predecessor = PR_HELPER.record_pr_readback(
+            copy.deepcopy(predecessor), fixture["pull_request_readback"],
+            observed_at="2026-10-03T10:00:00Z",
+            run_url="https://github.com/StatPan/datapan-registry/actions/runs/37101245239/attempts/4",
+        )
+        predecessor["ownership"]["expected_head_sha"] = predecessor["candidate"]["head_sha"]
+        controller_head = "60042f6be0e8e593830e7b2433974e814f4a0a55"
+        candidate_head = "d" * 40
+        state_sha = "9" * 40
+        prepared_state_sha = "8" * 40
+        generation = predecessor["candidate"]["generation_id"]
+        registry_path = predecessor["candidate"]["registry_path"]
+        registry_bytes = predecessor["candidate"]["registry_bytes"]
+        registry_sha = predecessor["candidate"]["registry_sha256"]
+        composition_sha = predecessor["candidate"]["composition_receipt_sha256"]
+        owner_id = predecessor["ownership"]["owner_id"]
+        branch = predecessor["ownership"]["branch"]
+        target_body = f"{PR_HELPER.body_marker(owner_id, generation)}\n\nUpdated source snapshot.\n"
+        old_readback = dict(fixture["pull_request_readback"])
+        after_push = dict(old_readback)
+        after_push["headRefOid"] = candidate_head
+        exact_readback = dict(after_push)
+        exact_readback["body"] = target_body
+        journal = PR_HELPER.append_journal_record(
+            None, predecessor, repository=self.repository, observed_at="2026-10-03T10:00:00Z",
+        )
+        bundle = {
+            "status": "ready", "registry_path": registry_path,
+            "registry_bytes": registry_bytes, "registry_sha256": registry_sha,
+            "composition_receipt_sha256": composition_sha,
+            "composition_receipt": {"schema_version": "fixture"},
+            "composition_receipt_path": "reports/composition.json",
+            "composition_outputs_dir": "reports/composition",
+            "baseline_sha256": "a" * 64,
+        }
+        checkpoint = {
+            "source_id": predecessor["candidate"]["source_id"],
+            "source_scope": predecessor["candidate"]["scope"],
+            "generation_id": generation,
+            "last_observation": {"observed_at": "2026-09-29T00:00:00Z"},
+        }
+        evidence = {
+            "diagnostic_current_source_applicability": {"status": "revalidation_required"},
+            "commands": [{
+                "output_path": "reports/generated-fixture.json",
+                "output_bytes": 3, "output_sha256": "c" * 64,
+            }],
+        }
+        refresh_module = types.SimpleNamespace(
+            run_source_refresh=lambda **_kwargs: (registry_sha, [], copy.deepcopy(evidence)),
+            run_ledger_refresh=lambda _root: None,
+        )
+        existing = [{
+            "number": predecessor["pr"]["number"],
+            "record": predecessor,
+            "revision_ref": PR_HELPER.revision_reference(predecessor),
+        }]
+        open_existing = [{
+            "number": predecessor["pr"]["number"],
+            "revision_ref": PR_HELPER.revision_reference(predecessor),
+        }]
+        route = (existing, open_existing, None, {"branch": branch})
+        prepared_holder: dict[str, dict] = {}
+
+        def prepare_upload(candidate: dict, *_args: object, **_kwargs: object) -> tuple[dict, dict]:
+            candidate = copy.deepcopy(candidate)
+            candidate["payload_readback"] = {
+                "status": "verified", "readback": "isolated_lfs_storage_verified",
+                "sha256": registry_sha, "source_sha": candidate_head,
+            }
+            prepared = {
+                "schema_version": PR_HELPER.SCHEMA_VERSION,
+                "status": "prepared", "action": "refresh_owned",
+                "candidate": candidate,
+                "ownership": {
+                    "owner_id": owner_id, "branch": branch,
+                    "expected_head_sha": predecessor["candidate"]["head_sha"],
+                    "issue_number": predecessor["ownership"]["issue_number"],
+                    "issue_url": predecessor["ownership"]["issue_url"],
+                    "body": "", "body_sha256": "",
+                },
+                "pr": copy.deepcopy(predecessor["pr"]),
+                "acknowledgements": [], "blockers": [],
+            }
+            prepared_holder["value"] = prepared
+            return prepared, {"branch": branch}
+
+        def fake_command(argv: tuple[str, ...], _root: pathlib.Path, **_kwargs: object) -> subprocess.CompletedProcess[str]:
+            if argv[:3] == ("git", "rev-parse", "HEAD"):
+                sha = controller_head if not hasattr(fake_command, "seen_base") else candidate_head
+                setattr(fake_command, "seen_base", True)
+                return subprocess.CompletedProcess(argv, 0, f"{sha}\n", "")
+            if argv[:3] == ("git", "ls-remote", "--heads"):
+                return subprocess.CompletedProcess(argv, 0, f"{controller_head}\trefs/heads/main\n", "")
+            if argv[:2] == ("git", "write-tree"):
+                return subprocess.CompletedProcess(argv, 0, "e" * 40 + "\n", "")
+            if argv[:3] == ("gh", "pr", "edit"):
+                return subprocess.CompletedProcess(argv, 0, "", "")
+            return subprocess.CompletedProcess(argv, 0, "", "")
+
+        with tempfile.TemporaryDirectory(prefix="issue-689-execute-refresh-") as raw:
+            root = pathlib.Path(raw)
+            (root / "reports").mkdir()
+            (root / "reports/generated-fixture.json").write_bytes(b"abc")
+            (root / "bundle").mkdir()
+            (root / "bundle/composed-candidate.registry.json").write_bytes(b"fixture registry")
+            args = types.SimpleNamespace(
+                workflow_run_id="37100705274", workflow_run_attempt="1",
+                bundle_dir=root / "bundle", workflow_run_head_sha="a" * 40,
+                state_root=root / "processor-state", datapan_cli=root / "datapan-cli",
+                processor_artifact_id="artifact-11266965270", prepare_only=False,
+                source_refresh_predecessor=predecessor,
+                source_refresh_target_main_sha=controller_head,
+                source_refresh_expected_state_sha=state_sha,
+                source_refresh_successor_head_sha=None,
+            )
+            with contextlib.ExitStack() as stack:
+                stack.enter_context(mock.patch.dict(os.environ, {
+                    "GITHUB_REPOSITORY": self.repository,
+                    "GITHUB_RUN_ID": "37115233183", "GITHUB_RUN_ATTEMPT": "1",
+                }))
+                stack.enter_context(mock.patch.object(RUNNER, "validate_no_candidate_processor_result", return_value=None))
+                stack.enter_context(mock.patch.object(RUNNER, "load_canonical_update_pr", return_value=PR_HELPER))
+                stack.enter_context(mock.patch.object(RUNNER, "load_module", return_value=refresh_module))
+                stack.enter_context(mock.patch.object(RUNNER, "load_object", side_effect=lambda path: (
+                    {"artifacts": [{"path": registry_path, "kind": "registry", "bytes": registry_bytes}]}
+                    if pathlib.Path(path).name == "manifest.json"
+                    else {"canonical_registry": {"sha256": "published-pin"}}
+                    if pathlib.Path(path).name == "registry-distribution.json"
+                    else {}
+                )))
+                stack.enter_context(mock.patch.object(RUNNER, "locate_processor_checkpoint", return_value=("run-attempt", checkpoint)))
+                stack.enter_context(mock.patch.object(RUNNER, "validate_generation_identity"))
+                stack.enter_context(mock.patch.object(RUNNER, "validate_processor_bundle", return_value=bundle))
+                stack.enter_context(mock.patch.object(RUNNER, "verify_processor_input_compatibility"))
+                stack.enter_context(mock.patch.object(RUNNER, "registry_sha_from_path", return_value=(registry_bytes, "a" * 64)))
+                stack.enter_context(mock.patch.object(RUNNER, "load_promotion_journal_snapshot", return_value=(journal, state_sha)))
+                stack.enter_context(mock.patch.object(RUNNER, "update_registry_review_artifacts", return_value=root / "reports/review"))
+                stack.enter_context(mock.patch.object(RUNNER, "run_bound_validation", return_value=[]))
+                stack.enter_context(mock.patch.object(RUNNER, "stage_candidate_outputs", return_value=[registry_path]))
+                stack.enter_context(mock.patch.object(RUNNER, "finish_review_policy_status", return_value="configured"))
+                stack.enter_context(mock.patch.object(RUNNER, "manual_review_status", return_value="revalidation_required"))
+                stack.enter_context(mock.patch.object(RUNNER, "file_sha256", return_value="c" * 64))
+                stack.enter_context(mock.patch.object(RUNNER, "existing_pr_rows", return_value=(existing, predecessor["ownership"]["issue_number"])))
+                stack.enter_context(mock.patch.object(RUNNER, "inspect_existing_pr_route", return_value=route))
+                stack.enter_context(mock.patch.object(RUNNER, "ensure_candidate_issue", return_value=(predecessor["ownership"]["issue_number"], predecessor["ownership"]["issue_url"])))
+                stack.enter_context(mock.patch.object(RUNNER, "gh_open_prs", return_value=fixture["open_pr_rows"]))
+                readback = stack.enter_context(mock.patch.object(RUNNER, "gh_pr_readback", side_effect=(old_readback, after_push, exact_readback)))
+                main_check = stack.enter_context(mock.patch.object(RUNNER, "assert_remote_main_sha", side_effect=lambda _root, sha: self.assertEqual(sha, controller_head)))
+                persist = stack.enter_context(mock.patch.object(RUNNER, "persist_journal_record", side_effect=(prepared_state_sha, "7" * 40)))
+                stack.enter_context(mock.patch.object(RUNNER, "verify_release_ci_observation", return_value=("queued", None)))
+                command = stack.enter_context(mock.patch.object(RUNNER, "command", side_effect=fake_command))
+                stack.enter_context(mock.patch.object(PR_HELPER, "update_registry_manifest_artifact"))
+                stack.enter_context(mock.patch.object(PR_HELPER, "prepare_lfs_upload", side_effect=prepare_upload))
+                stack.enter_context(mock.patch.object(PR_HELPER, "push_owned_branch", side_effect=lambda _candidate, receipt, *_a, **_kw: receipt))
+                stack.enter_context(mock.patch.object(PR_HELPER, "render_pr_body", return_value=target_body))
+                stack.enter_context(contextlib.redirect_stdout(io.StringIO()))
+                (root / registry_path).parent.mkdir(parents=True, exist_ok=True)
+                RUNNER.execute_candidate_preparation(args, root)
+
+        self.assertEqual(command.call_args_list[0].args[0], ("git", "rev-parse", "HEAD"))
+        self.assertIn(("gh", "pr", "edit", "686", "--repo", self.repository, "--title", RUNNER.pr_title(prepared_holder["value"]["candidate"]), "--body-file", str(root / ".datapan/candidate-pr.md")), [call.args[0] for call in command.call_args_list])
+        self.assertEqual(readback.call_count, 3)
+        self.assertEqual(main_check.call_count, 4)
+        self.assertTrue(all(call.args[1] == controller_head for call in main_check.call_args_list))
+        self.assertEqual(persist.call_args_list[0].args[1], controller_head)
+        self.assertEqual(persist.call_args_list[0].kwargs["expected_state_sha"], state_sha)
+        self.assertEqual(persist.call_args_list[1].args[1], controller_head)
+        self.assertEqual(persist.call_args_list[1].kwargs["expected_state_sha"], prepared_state_sha)
+        self.assertEqual(persist.call_args_list[1].args[2]["ownership"]["expected_head_sha"], candidate_head)
+
+    def test_refresh_edit_readback_and_state_cas_fail_closed_on_drift(self) -> None:
+        fixture, predecessor, intent = self.actual_adopted_same_payload_refresh()
+        current_main = "f" * 40
+        first = dict(fixture["pull_request_readback"])
+        first["headRefOid"] = intent["candidate"]["head_sha"]
+        first["body"] = predecessor["ownership"]["body"]
+        exact = dict(first)
+        exact["body"] = intent["ownership"]["body"]
+        drifted = dict(exact)
+        drifted["body"] += "unowned edit\n"
+
+        for label, observed, persist_error, error_pattern in (
+            ("old_body_after_ambiguous_edit", first, None, "body edit did not read back"),
+            ("human_body_edit", drifted, None, "human_head_change_or_body_change"),
+            ("state_cas_conflict", exact, RUNNER.PromotionError("promotion state compare-and-swap conflict"), "compare-and-swap conflict"),
+        ):
+            with self.subTest(case=label):
+                with tempfile.TemporaryDirectory(prefix="issue-689-refresh-fail-closed-") as raw:
+                    with (
+                        mock.patch.object(RUNNER, "assert_remote_main_sha", side_effect=lambda _root, sha: self.assertEqual(sha, current_main)),
+                        mock.patch.object(RUNNER, "command", side_effect=RUNNER.PromotionError("gh edit response lost")),
+                        mock.patch.object(RUNNER, "gh_pr_readback", return_value=observed),
+                        mock.patch.object(RUNNER, "persist_journal_record", side_effect=persist_error) as persist,
+                    ):
+                        with self.assertRaisesRegex(RUNNER.PromotionError, error_pattern):
+                            RUNNER.complete_prepared_refresh(
+                                pathlib.Path(raw), self.repository, intent, predecessor, PR_HELPER, first,
+                                controller_head_sha=current_main,
+                                journal_source_base_sha=current_main,
+                                expected_state_sha="9" * 40,
+                                observed_at="2026-10-03T10:04:00Z",
+                                run_url="https://github.com/StatPan/datapan-registry/actions/runs/37109999999/attempts/1",
+                            )
+                    self.assertEqual(persist.call_count, 1 if label == "state_cas_conflict" else 0)
+
+    def test_reconcile_finishes_exact_pushed_intent_after_main_advances(self) -> None:
+        fixture, predecessor, intent = self.actual_adopted_same_payload_refresh()
+        current_main = "f" * 40
+        state_sha = "9" * 40
+        fresh_state_sha = "8" * 40
+        first = dict(fixture["pull_request_readback"])
+        first["headRefOid"] = intent["candidate"]["head_sha"]
+        first["body"] = predecessor["ownership"]["body"]
+        edited = dict(first)
+        edited["body"] = intent["ownership"]["body"]
+        adopted_journal = PR_HELPER.append_journal_record(
+            None, predecessor, repository=self.repository, observed_at="2026-10-03T10:00:00Z",
+        )
+        journal = PR_HELPER.append_journal_record(
+            adopted_journal, intent, repository=self.repository, observed_at="2026-10-03T10:01:00Z",
+        )
+        final_ack = PR_HELPER.record_pr_readback(
+            {**intent, "ownership": {**intent["ownership"], "expected_head_sha": intent["candidate"]["head_sha"]}},
+            edited, observed_at="2026-10-03T10:02:00Z",
+            run_url="https://github.com/StatPan/datapan-registry/actions/runs/37109999999/attempts/1",
+        )
+        final_journal = PR_HELPER.append_journal_record(
+            journal, final_ack, repository=self.repository, observed_at="2026-10-03T10:02:00Z",
+            supersede_from=PR_HELPER.revision_reference(predecessor),
+        )
+        open_row = {"number": predecessor["pr"]["number"]}
+        output = io.StringIO()
+        with (
+            mock.patch.dict(os.environ, {
+                "GITHUB_REPOSITORY": self.repository,
+                "GITHUB_RUN_ID": "99999999", "GITHUB_RUN_ATTEMPT": "1",
+            }),
+            mock.patch.object(RUNNER, "load_module", return_value=PR_HELPER),
+            mock.patch.object(RUNNER, "load_promotion_journal_snapshot", side_effect=((journal, state_sha), (final_journal, fresh_state_sha))),
+            mock.patch.object(RUNNER, "command", side_effect=lambda argv, _root, **_kwargs: subprocess.CompletedProcess(
+                argv, 0, stdout=f"{current_main}\n", stderr="",
+            ) if argv[:3] == ("git", "rev-parse", "HEAD") else subprocess.CompletedProcess(argv, 0, "", "")) as command,
+            mock.patch.object(RUNNER, "assert_remote_main_sha", side_effect=lambda _root, sha: self.assertEqual(sha, current_main)) as main_check,
+            mock.patch.object(RUNNER, "gh_pr_readback", side_effect=(first, edited, edited)) as readback,
+            mock.patch.object(RUNNER, "gh_open_prs", return_value=[open_row]),
+            mock.patch.object(RUNNER, "persist_journal_record") as persist,
+            mock.patch.object(RUNNER, "ensure_verify_release_ci", return_value={"ci": {"state": "queued"}}),
+            contextlib.redirect_stdout(output),
+        ):
+            temp_root = tempfile.TemporaryDirectory(prefix="issue-689-refresh-main-moved-")
+            self.addCleanup(temp_root.cleanup)
+            RUNNER.reconcile_open_promotions(pathlib.Path(temp_root.name))
+
+        self.assertEqual(command.call_args_list[0].args[0], ("git", "rev-parse", "HEAD"))
+        edit_calls = [call for call in command.call_args_list if call.args[0][:3] == ("gh", "pr", "edit")]
+        self.assertEqual(len(edit_calls), 1)
+        self.assertEqual(main_check.call_count, 2)
+        self.assertTrue(all(call.args[1] == current_main for call in main_check.call_args_list))
+        self.assertEqual(readback.call_count, 3)
+        self.assertEqual(persist.call_args_list[0].args[1], current_main)
+        self.assertEqual(persist.call_args_list[0].args[2]["status"], "pending-review")
+        self.assertEqual(persist.call_args_list[0].kwargs["expected_state_sha"], state_sha)
+        self.assertEqual(persist.call_args_list[0].kwargs["supersede_from"], PR_HELPER.revision_reference(predecessor))
+        self.assertIn("prepared-source-refresh-recovered", output.getvalue())
+
+    def test_legacy_predecessor_reference_is_preserved_when_refresh_is_finalized(self) -> None:
+        fixture, predecessor, intent = self.actual_adopted_same_payload_refresh()
+        legacy_ref = dict(intent["refresh_from"])
+        legacy_ref.pop("manifest_sha256", None)
+        intent["refresh_from"] = legacy_ref
+        journal = PR_HELPER.append_journal_record(
+            None, predecessor, repository=self.repository, observed_at="2026-10-03T10:00:00Z",
+        )
+        journal = PR_HELPER.append_journal_record(
+            journal, intent, repository=self.repository, observed_at="2026-10-03T10:01:00Z",
+        )
+        schema = json.loads((pathlib.Path(__file__).parents[1] / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json").read_text())
+        PR_HELPER.validate_journal(journal, schema)
+        observed = dict(fixture["pull_request_readback"])
+        observed["headRefOid"] = intent["candidate"]["head_sha"]
+        observed["body"] = intent["ownership"]["body"]
+
+        def append_exact(_root: pathlib.Path, _base: str, receipt: dict, *, observed_at: str, supersede_from: dict, expected_state_sha: str) -> None:
+            self.assertEqual(supersede_from, legacy_ref)
+            self.assertEqual(expected_state_sha, "9" * 40)
+            updated = PR_HELPER.append_journal_record(
+                journal, receipt, repository=self.repository, observed_at=observed_at,
+                supersede_from=supersede_from,
+            )
+            PR_HELPER.validate_journal(updated, schema)
+
+        with (
+            mock.patch.object(RUNNER, "assert_remote_main_sha") as main_check,
+            mock.patch.object(RUNNER, "persist_journal_record", side_effect=append_exact) as persist,
+        ):
+            refreshed = RUNNER.complete_prepared_refresh(
+                pathlib.Path("/read-only/legacy-refresh"), self.repository,
+                intent, predecessor, PR_HELPER, observed,
+                controller_head_sha="f" * 40,
+                journal_source_base_sha="f" * 40,
+                expected_state_sha="9" * 40,
+                observed_at="2026-10-03T10:02:00Z",
+                run_url="https://github.com/StatPan/datapan-registry/actions/runs/37109999999/attempts/1",
+            )
+        self.assertEqual(refreshed["status"], "pending-review")
+        persist.assert_called_once()
+        main_check.assert_called_once_with(pathlib.Path("/read-only/legacy-refresh"), "f" * 40)
+
+    def test_ordinary_refresh_completion_allows_a_new_generation_and_payload(self) -> None:
+        predecessor, intent = self.receipts()
+        for receipt in (predecessor, intent):
+            receipt["candidate"]["registry_path"] = "data/registry.json"
+            receipt["candidate"]["registry_bytes"] = 1
+        intent["candidate"]["generation_id"] = "generation-next"
+        intent["candidate"]["registry_sha256"] = "1" * 64
+        intent["candidate"]["composition_receipt_sha256"] = "2" * 64
+        intent["ownership"]["body"] = (
+            f"{PR_HELPER.body_marker(intent['ownership']['owner_id'], intent['candidate']['generation_id'])}"
+            "\n\nA new B generation produced this payload.\n"
+        )
+        intent["ownership"]["body_sha256"] = hashlib.sha256(intent["ownership"]["body"].encode()).hexdigest()
+        journal = self.journal(predecessor, intent)
+        current_main = "f" * 40
+        state_sha = "9" * 40
+        first = self.github_api_readback(predecessor["ownership"]["body"], intent["candidate"]["head_sha"])
+        edited = self.github_api_readback(intent["ownership"]["body"], intent["candidate"]["head_sha"], generation_id="generation-next")
+        final_ack = PR_HELPER.record_pr_readback(
+            {**intent, "ownership": {**intent["ownership"], "expected_head_sha": intent["candidate"]["head_sha"]}},
+            edited, observed_at="2026-10-03T10:03:00Z",
+            run_url="https://github.com/StatPan/datapan-registry/actions/runs/37109999999/attempts/1",
+        )
+        final_journal = PR_HELPER.append_journal_record(
+            journal, final_ack, repository=self.repository, observed_at="2026-10-03T10:03:00Z",
+            supersede_from=intent["refresh_from"],
+        )
+        output = io.StringIO()
+        temp_root = tempfile.TemporaryDirectory(prefix="issue-689-ordinary-refresh-")
+        self.addCleanup(temp_root.cleanup)
+        with (
+            mock.patch.dict(os.environ, {
+                "GITHUB_REPOSITORY": self.repository,
+                "GITHUB_RUN_ID": "99999999", "GITHUB_RUN_ATTEMPT": "1",
+            }),
+            mock.patch.object(RUNNER, "load_module", return_value=PR_HELPER),
+            mock.patch.object(RUNNER, "load_promotion_journal_snapshot", side_effect=((journal, state_sha), (final_journal, "8" * 40))),
+            mock.patch.object(RUNNER, "command", side_effect=lambda argv, _root, **_kwargs: subprocess.CompletedProcess(
+                argv, 0, stdout=f"{current_main}\n", stderr="",
+            ) if argv[:3] == ("git", "rev-parse", "HEAD") else subprocess.CompletedProcess(argv, 0, "", "")),
+            mock.patch.object(RUNNER, "assert_remote_main_sha", side_effect=lambda _root, sha: self.assertEqual(sha, current_main)) as main_check,
+            mock.patch.object(RUNNER, "gh_pr_readback", side_effect=(first, edited, edited)) as readback,
+            mock.patch.object(RUNNER, "gh_open_prs", return_value=[{"number": self.pr_number}]),
+            mock.patch.object(RUNNER, "persist_journal_record") as persist,
+            mock.patch.object(RUNNER, "ensure_verify_release_ci", return_value={"ci": {"state": "queued"}}),
+            contextlib.redirect_stdout(output),
+        ):
+            RUNNER.reconcile_open_promotions(pathlib.Path(temp_root.name))
+        self.assertEqual(persist.call_args_list[0].args[2]["status"], "pending-review")
+        self.assertEqual(persist.call_args_list[0].args[2]["candidate"]["generation_id"], "generation-next")
+        self.assertEqual(persist.call_args_list[0].args[2]["candidate"]["registry_sha256"], "1" * 64)
+        self.assertEqual(persist.call_args_list[0].kwargs["expected_state_sha"], state_sha)
+        self.assertEqual(main_check.call_count, 2)
+        self.assertEqual(readback.call_count, 3)
+        self.assertIn("prepared-source-refresh-recovered", output.getvalue())
+
+    def test_ordinary_refresh_keeps_legacy_prepared_predecessor_compatibility(self) -> None:
+        predecessor, intent = self.receipts()
+        predecessor["status"] = "prepared"
+        for receipt in (predecessor, intent):
+            receipt["candidate"]["registry_path"] = "data/registry.json"
+            receipt["candidate"]["registry_bytes"] = 1
+        intent["candidate"]["generation_id"] = "generation-next"
+        intent["candidate"]["registry_sha256"] = "1" * 64
+        intent["candidate"]["composition_receipt_sha256"] = "2" * 64
+        intent["ownership"]["body"] = (
+            f"{PR_HELPER.body_marker(intent['ownership']['owner_id'], intent['candidate']['generation_id'])}"
+            "\n\nA new B generation produced this payload.\n"
+        )
+        intent["ownership"]["body_sha256"] = hashlib.sha256(intent["ownership"]["body"].encode()).hexdigest()
+        observed = self.github_api_readback(intent["ownership"]["body"], intent["candidate"]["head_sha"], generation_id="generation-next")
+        with (
+            mock.patch.object(RUNNER, "assert_remote_main_sha") as main_check,
+            mock.patch.object(RUNNER, "persist_journal_record") as persist,
+        ):
+            refreshed = RUNNER.complete_prepared_refresh(
+                pathlib.Path("/read-only/legacy-prepared-predecessor"), self.repository,
+                intent, predecessor, PR_HELPER, observed,
+                controller_head_sha="f" * 40,
+                journal_source_base_sha="f" * 40,
+                expected_state_sha="9" * 40,
+                observed_at="2026-10-03T10:05:00Z",
+                run_url="https://github.com/StatPan/datapan-registry/actions/runs/37109999999/attempts/1",
+            )
+        self.assertEqual(refreshed["status"], "pending-review")
+        self.assertEqual(refreshed["candidate"]["generation_id"], "generation-next")
+        main_check.assert_called_once_with(pathlib.Path("/read-only/legacy-prepared-predecessor"), "f" * 40)
+        persist.assert_called_once()
+
     def test_exact_refresh_crash_phases_recover_same_owned_pr_without_duplicate(self) -> None:
         candidate = {
             "repository": self.repository, "source_id": self.source_id,
@@ -1515,30 +2010,43 @@ class OwnedPRRefreshRecoveryTests(unittest.TestCase):
         with self.assertRaisesRegex(RUNNER.PromotionError, "exact trusted target main"):
             RUNNER.refresh_pr_phase(new, old, normalized, PR_HELPER)
 
-    def test_scheduled_recovery_checks_source_refresh_target_before_pr_read_or_edit(self) -> None:
+    def test_stale_pre_push_refresh_is_scoped_and_unrelated_pr_reconciliation_continues(self) -> None:
         old, intent = self.receipts()
         target_main = "e" * 40
+        current_main = "f" * 40
         intent["candidate"]["base_sha"] = target_main
         intent["refresh_from"] = PR_HELPER.revision_reference(old)
         intent["refresh_target_main_sha"] = target_main
         journal = self.journal(old, intent)
+        output = io.StringIO()
         with (
             mock.patch.dict(os.environ, {
                 "GITHUB_REPOSITORY": self.repository,
                 "GITHUB_RUN_ID": "99999999",
                 "GITHUB_RUN_ATTEMPT": "1",
             }),
-            mock.patch.object(RUNNER, "load_promotion_journal", return_value=journal),
-            mock.patch.object(RUNNER, "command", return_value=subprocess.CompletedProcess(["git"], 0, stdout=f"{target_main}\n", stderr="")),
-            mock.patch.object(RUNNER, "assert_remote_main_sha", side_effect=RUNNER.PromotionError("target main moved")) as main_check,
-            mock.patch.object(RUNNER, "gh_pr_readback") as readback,
-            mock.patch.object(RUNNER, "gh_open_prs") as open_prs,
+            mock.patch.object(RUNNER, "load_module", return_value=PR_HELPER),
+            mock.patch.object(RUNNER, "load_promotion_journal_snapshot", return_value=(journal, "9" * 40)),
+            mock.patch.object(RUNNER, "command", return_value=subprocess.CompletedProcess(["git"], 0, stdout=f"{current_main}\n", stderr="")),
+            mock.patch.object(RUNNER, "assert_remote_main_sha") as main_check,
+            mock.patch.object(RUNNER, "gh_pr_readback", side_effect=(
+                self.github_api_readback(old["ownership"]["body"], self.old_head),
+                self.github_api_readback(old["ownership"]["body"], self.old_head),
+            )) as readback,
+            mock.patch.object(RUNNER, "gh_open_prs", return_value=[{"number": self.pr_number}]) as open_prs,
+            mock.patch.object(RUNNER, "persist_journal_record") as persist,
+            mock.patch.object(RUNNER, "ensure_verify_release_ci", return_value={"ci": {"state": "queued"}}),
+            contextlib.redirect_stdout(output),
         ):
-            with self.assertRaisesRegex(RUNNER.PromotionError, "target main moved"):
-                RUNNER.reconcile_open_promotions(pathlib.Path("."))
-        main_check.assert_called_once_with(pathlib.Path("."), target_main)
-        readback.assert_not_called()
-        open_prs.assert_not_called()
+            RUNNER.reconcile_open_promotions(pathlib.Path("."))
+        main_check.assert_not_called()
+        self.assertEqual(readback.call_count, 2)
+        open_prs.assert_called_once()
+        self.assertEqual(persist.call_count, 1)
+        report = json.loads(next(line for line in output.getvalue().splitlines() if "prepared-source-refresh-stale-before-push" in line))
+        self.assertEqual(report["target_main_sha"], target_main)
+        self.assertEqual(report["current_main_sha"], current_main)
+        self.assertIn("explicit retirement and re-request", report["action"])
 
     def test_canonical_promotion_workflow_refresh_dispatch_is_complete_and_main_only(self) -> None:
         import yaml
@@ -1967,7 +2475,7 @@ class PreparedCreateRecoveryTests(unittest.TestCase):
                 "GITHUB_RUN_ID": "37109999999", "GITHUB_RUN_ATTEMPT": "4",
             }),
             mock.patch.object(RUNNER, "load_module", return_value=PR_HELPER),
-            mock.patch.object(RUNNER, "load_promotion_journal", return_value=fixture["state"]),
+            mock.patch.object(RUNNER, "load_promotion_journal_snapshot", return_value=(fixture["state"], "a" * 40)),
             mock.patch.object(RUNNER, "command", return_value=subprocess.CompletedProcess(["git", "rev-parse", "HEAD"], 0, self.controller_head + "\n", "")),
             mock.patch.object(RUNNER, "gh_open_prs", return_value=fixture["open_pr_rows"]) as list_prs,
             mock.patch.object(RUNNER, "gh_pr_readback", return_value=fixture["pull_request_readback"]) as read_pr,
@@ -2004,7 +2512,7 @@ class PreparedCreateRecoveryTests(unittest.TestCase):
                 "GITHUB_RUN_ID": "37109999999", "GITHUB_RUN_ATTEMPT": "4",
             }),
             mock.patch.object(RUNNER, "load_module", return_value=PR_HELPER),
-            mock.patch.object(RUNNER, "load_promotion_journal", return_value=fixture["state"]),
+            mock.patch.object(RUNNER, "load_promotion_journal_snapshot", return_value=(fixture["state"], "a" * 40)),
             mock.patch.object(RUNNER, "command", return_value=subprocess.CompletedProcess(["git", "rev-parse", "HEAD"], 0, self.controller_head + "\n", "")),
             mock.patch.object(RUNNER, "gh_open_prs", return_value=fixture["open_pr_rows"]) as list_prs,
             mock.patch.object(RUNNER, "gh_pr_readback", return_value=fixture["pull_request_readback"]) as read_pr,
@@ -2046,7 +2554,7 @@ class PreparedCreateRecoveryTests(unittest.TestCase):
                         "GITHUB_RUN_ID": "37109999999", "GITHUB_RUN_ATTEMPT": "4",
                     }),
                     mock.patch.object(RUNNER, "load_module", return_value=PR_HELPER),
-                    mock.patch.object(RUNNER, "load_promotion_journal", return_value=fixture["state"]),
+                    mock.patch.object(RUNNER, "load_promotion_journal_snapshot", return_value=(fixture["state"], "a" * 40)),
                     mock.patch.object(RUNNER, "command", return_value=subprocess.CompletedProcess(["git", "rev-parse", "HEAD"], 0, self.controller_head + "\n", "")),
                     mock.patch.object(RUNNER, "gh_open_prs", side_effect=[rows, rows]),
                     mock.patch.object(RUNNER, "gh_pr_readback", return_value=observed),
@@ -2261,6 +2769,30 @@ class TrustedSourceRefreshEntryPointTests(unittest.TestCase):
             with self.assertRaisesRegex(RUNNER.PromotionError, "not a descendant of the predecessor candidate base"):
                 RUNNER.run_source_refresh(self.args, pathlib.Path("."))
 
+        readback.assert_not_called()
+        run_api.assert_not_called()
+
+    def test_new_target_cannot_retarget_an_existing_pre_push_intent(self) -> None:
+        self.run_with_read_only_stubs()
+        predecessor, intent = OwnedPRRefreshRecoveryTests().receipts()
+        predecessor["candidate"]["composition_receipt_sha256"] = self.old["candidate"]["composition_receipt_sha256"]
+        predecessor["candidate"]["base_sha"] = "d" * 40
+        intent["candidate"]["generation_id"] = predecessor["candidate"]["generation_id"]
+        intent["candidate"]["registry_sha256"] = predecessor["candidate"]["registry_sha256"]
+        intent["candidate"]["composition_receipt_sha256"] = predecessor["candidate"]["composition_receipt_sha256"]
+        intent["candidate"]["base_sha"] = "a" * 40
+        intent["refresh_from"] = PR_HELPER.revision_reference(predecessor)
+        intent["refresh_target_main_sha"] = "a" * 40
+        self.args.target_main_sha = "e" * 40
+        journal = {"records": [predecessor, intent]}
+        with (
+            mock.patch.object(RUNNER, "load_canonical_update_pr", return_value=PR_HELPER),
+            mock.patch.object(RUNNER, "load_promotion_journal_snapshot", return_value=(journal, self.state_sha)),
+            mock.patch.object(RUNNER, "gh_pr_readback") as readback,
+            mock.patch.object(RUNNER, "processor_run_api") as run_api,
+        ):
+            with self.assertRaisesRegex(RUNNER.PromotionError, "conflicts with the requested target or B payload"):
+                RUNNER.run_source_refresh(self.args, pathlib.Path("."))
         readback.assert_not_called()
         run_api.assert_not_called()
 

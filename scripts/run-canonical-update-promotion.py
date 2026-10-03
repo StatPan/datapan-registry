@@ -1732,6 +1732,111 @@ def refresh_pr_phase(
     raise PromotionError("human_head_change_or_body_change: preserve the owned PR and stop refresh recovery")
 
 
+def complete_prepared_refresh(
+    root: pathlib.Path,
+    repository: str,
+    intent: Mapping[str, Any],
+    predecessor: Mapping[str, Any],
+    helper: Any,
+    observed: Mapping[str, Any],
+    *,
+    controller_head_sha: str,
+    journal_source_base_sha: str,
+    expected_state_sha: Any,
+    observed_at: str,
+    run_url: str,
+) -> dict[str, Any]:
+    """Finish only an already-pushed exact refresh under the current trusted controller head."""
+    candidate = intent.get("candidate", {})
+    old_candidate = predecessor.get("candidate", {})
+    owner = intent.get("ownership", {})
+    old_owner = predecessor.get("ownership", {})
+    explicit_source_refresh = isinstance(intent.get("refresh_target_main_sha"), str)
+    predecessor_statuses = {"pending-review"} if explicit_source_refresh else {"pending-review", "prepared"}
+    if (
+        intent.get("status") != "prepared"
+        or intent.get("superseded_by") is not None
+        or predecessor.get("status") not in predecessor_statuses
+        or predecessor.get("superseded_by") is not None
+        or not helper._reference_matches_receipt(intent.get("refresh_from", {}), predecessor)
+        or candidate.get("repository") != old_candidate.get("repository")
+        or candidate.get("source_id") != old_candidate.get("source_id")
+        or candidate.get("scope") != old_candidate.get("scope")
+        or (
+            explicit_source_refresh
+            and (
+                candidate.get("generation_id") != old_candidate.get("generation_id")
+                or candidate.get("registry_sha256") != old_candidate.get("registry_sha256")
+                or candidate.get("composition_receipt_sha256") != old_candidate.get("composition_receipt_sha256")
+            )
+        )
+        or owner.get("owner_id") != old_owner.get("owner_id")
+        or owner.get("branch") != old_owner.get("branch")
+        or owner.get("issue_number") != old_owner.get("issue_number")
+        or intent.get("pr", {}).get("number") != predecessor.get("pr", {}).get("number")
+    ):
+        raise PromotionError("prepared refresh transaction changed its exact predecessor, B payload, issue, branch, or PR")
+    phase = refresh_pr_phase(intent, predecessor, observed, helper)
+    if phase == "before-push":
+        raise PromotionError("prepared refresh has not pushed its exact successor head")
+    number = int(intent.get("pr", {}).get("number", 0))
+    body = owner.get("body")
+    if not isinstance(body, str) or not body:
+        raise PromotionError("prepared refresh intent has no exact target body")
+    if phase == "after-push-before-body":
+        # The persisted exact head is already on the owned PR. Finish only its
+        # matching body under the currently checked-out trusted controller.
+        assert_remote_main_sha(root, controller_head_sha)
+        body_path = root / ".datapan/candidate-pr.md"
+        body_path.parent.mkdir(parents=True, exist_ok=True)
+        body_path.write_text(body, encoding="utf-8")
+        try:
+            command((
+                "gh", "pr", "edit", str(number), "--repo", repository,
+                "--title", pr_title(candidate), "--body-file", str(body_path),
+            ), root)
+        except (OSError, subprocess.SubprocessError, PromotionError):
+            # GitHub may have accepted the body edit before the local command
+            # reported failure. Only a fresh exact API read-back can decide.
+            pass
+        observed = gh_pr_readback(root, repository, number)
+        phase = refresh_pr_phase(intent, predecessor, observed, helper)
+        if phase != "after-body-edit":
+            raise PromotionError("refresh body edit did not read back the exact target head and body")
+    elif phase != "after-body-edit":
+        raise PromotionError("prepared refresh is not at an exact recoverable PR phase")
+
+    # Main may have advanced beyond the immutable target after the candidate
+    # branch was pushed. The current workflow must still be executing from the
+    # latest trusted main, while the durable intent authorizes only this exact
+    # already-applied head/body transaction.
+    assert_remote_main_sha(root, controller_head_sha)
+    acknowledged = json.loads(json.dumps(intent))
+    acknowledged["ownership"]["expected_head_sha"] = candidate["head_sha"]
+    try:
+        refreshed = helper.record_pr_readback(
+            acknowledged, observed, observed_at=observed_at, run_url=run_url,
+        )
+    except helper.AdmissionError as exc:
+        raise PromotionError("prepared refresh read-back could not bind its exact pending-review acknowledgement") from exc
+    if (
+        refreshed.get("candidate") != intent.get("candidate")
+        or refreshed.get("ownership", {}).get("body_sha256") != owner.get("body_sha256")
+        or refreshed.get("status") != "pending-review"
+        or refreshed.get("pr", {}).get("number") != number
+    ):
+        raise PromotionError("prepared refresh acknowledgement changed immutable candidate identity or ownership")
+    persist_journal_record(
+        root, journal_source_base_sha, refreshed, observed_at=observed_at,
+        # Keep the immutable reference bytes that were recorded in the intent.
+        # Older references may omit the optional manifest digest while still
+        # resolving unambiguously to this exact predecessor revision.
+        supersede_from=intent["refresh_from"],
+        expected_state_sha=expected_state_sha,
+    )
+    return refreshed
+
+
 def validate_exact_open_pr(receipt: Mapping[str, Any], observed: Mapping[str, Any], helper: Any) -> None:
     candidate = receipt.get("candidate", {})
     ownership = receipt.get("ownership", {})
@@ -2843,7 +2948,7 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
         assert_remote_main_sha(root, str(explicit_target_main))
     prepared_state_sha = persist_journal_record(
         root, head_sha, prepared, observed_at=now,
-        expected_state_sha=(journal_state_sha if explicit_source_refresh else STATE_EXPECTATION_UNSET),
+        expected_state_sha=journal_state_sha,
     )
     if open_existing:
         # This is the last GitHub PR read before the helper's remote-main and
@@ -2886,27 +2991,24 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
             )
             if predecessor is None:
                 raise PromotionError("prepared refresh intent lost its exact predecessor after branch CAS")
-            phase = refresh_pr_phase(prepared, predecessor, immediate, helper)
-            if phase == "after-push-before-body":
-                if explicit_source_refresh:
-                    assert_remote_main_sha(root, str(explicit_target_main))
-                command(("gh", "pr", "edit", str(number), "--repo", repo, "--title", title, "--body-file", str(body_path)), root)
-            elif phase != "after-body-edit":
-                raise PromotionError("owned PR has not read back the exact pushed refresh head")
+            final_receipt = complete_prepared_refresh(
+                root, repo, prepared, predecessor, helper, immediate,
+                controller_head_sha=head_sha,
+                journal_source_base_sha=head_sha,
+                expected_state_sha=prepared_state_sha,
+                observed_at=dt.datetime.now(dt.timezone.utc).isoformat(),
+                run_url=f"https://github.com/{repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}/attempts/{os.environ['GITHUB_RUN_ATTEMPT']}",
+            )
         else:
             validate_exact_open_pr(prepared, immediate, helper)
-        final_receipt = helper.record_pr_readback(
-            pushed, immediate, observed_at=dt.datetime.now(dt.timezone.utc).isoformat(),
-            run_url=f"https://github.com/{repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}/attempts/{os.environ['GITHUB_RUN_ATTEMPT']}",
-        )
-        if explicit_source_refresh:
-            assert_remote_main_sha(root, str(explicit_target_main))
-        persist_journal_record(
-            root, head_sha, final_receipt,
-            observed_at=dt.datetime.now(dt.timezone.utc).isoformat(),
-            supersede_from=final_receipt.get("refresh_from"),
-            expected_state_sha=(prepared_state_sha if explicit_source_refresh else STATE_EXPECTATION_UNSET),
-        )
+            final_receipt = helper.record_pr_readback(
+                pushed, immediate, observed_at=dt.datetime.now(dt.timezone.utc).isoformat(),
+                run_url=f"https://github.com/{repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}/attempts/{os.environ['GITHUB_RUN_ATTEMPT']}",
+            )
+            persist_journal_record(
+                root, head_sha, final_receipt,
+                observed_at=dt.datetime.now(dt.timezone.utc).isoformat(),
+            )
     else:
         # The CLI may return nonzero after GitHub accepted the create request,
         # or lose its response. Its output is never the ownership authority.
@@ -3010,7 +3112,7 @@ def recover_ready_processor_candidate(args: argparse.Namespace, root: pathlib.Pa
 def reconcile_open_promotions(root: pathlib.Path, *, prepare_only: bool = False) -> None:
     repo = os.environ["GITHUB_REPOSITORY"]
     helper = load_module(root / "scripts/canonical_update_pr.py", "canonical_update_pr_reconcile")
-    journal = load_promotion_journal(root)
+    journal, journal_state_sha = load_promotion_journal_snapshot(root)
     if not isinstance(journal, Mapping):
         print(json.dumps({"status": "no-promotion-journal"}))
         return
@@ -3065,9 +3167,13 @@ def reconcile_open_promotions(root: pathlib.Path, *, prepare_only: bool = False)
             "verify_release_ci_blocker": ci_blocker,
         }, sort_keys=True))
         reconciled_create_keys.add(helper.candidate_key(intent))
+        journal, journal_state_sha = load_promotion_journal_snapshot(root)
+        if not isinstance(journal, Mapping):
+            raise PromotionError("promotion journal disappeared after prepared PR creation recovery")
     # Complete only refreshes whose persisted intent, predecessor identity,
     # target head, and target body prove one of the two post-push crash points.
-    # A pre-push intent remains pending while its predecessor stays active.
+    # A stale pre-push intent is an isolated blocker for that predecessor and
+    # must not prevent unrelated owned PRs from being reconciled.
     for intent in list(journal.get("records", [])):
         if (
             intent.get("status") != "prepared"
@@ -3089,42 +3195,57 @@ def reconcile_open_promotions(root: pathlib.Path, *, prepare_only: bool = False)
             raise PromotionError("prepared refresh intent has no exact predecessor revision")
         number = int(intent["pr"]["number"])
         target_main = intent.get("refresh_target_main_sha")
-        if isinstance(target_main, str):
-            assert_remote_main_sha(root, target_main)
         observed = gh_pr_readback(root, repo, number)
         phase = refresh_pr_phase(intent, predecessor, observed, helper)
         if phase == "before-push":
+            if isinstance(target_main, str) and target_main != base:
+                print(json.dumps({
+                    "status": "prepared-source-refresh-stale-before-push",
+                    "pr_number": number,
+                    "generation_id": intent.get("candidate", {}).get("generation_id"),
+                    "target_main_sha": target_main,
+                    "current_main_sha": base,
+                    "action": "preserve intent; explicit retirement and re-request required before retargeting",
+                }, sort_keys=True))
+            else:
+                print(json.dumps({
+                    "status": "prepared-source-refresh-awaiting-explicit-push",
+                    "pr_number": number,
+                    "generation_id": intent.get("candidate", {}).get("generation_id"),
+                    "target_main_sha": target_main,
+                }, sort_keys=True))
             continue
-        if phase == "after-push-before-body":
-            body = intent.get("ownership", {}).get("body")
-            if not isinstance(body, str):
-                raise PromotionError("prepared refresh intent has no exact body for crash recovery")
-            if isinstance(target_main, str):
-                assert_remote_main_sha(root, target_main)
-            body_path = root / ".datapan/candidate-pr.md"
-            body_path.parent.mkdir(parents=True, exist_ok=True)
-            body_path.write_text(body, encoding="utf-8")
-            command((
-                "gh", "pr", "edit", str(number), "--repo", repo,
-                "--title", pr_title(intent["candidate"]), "--body-file", str(body_path),
-            ), root)
-            observed = gh_pr_readback(root, repo, number)
-            phase = refresh_pr_phase(intent, predecessor, observed, helper)
-            if phase != "after-body-edit":
-                raise PromotionError("refresh body edit did not read back the exact target head and body")
-        elif phase != "after-body-edit":
-            raise PromotionError("prepared refresh intent is not at a recoverable PR state")
-        refreshed = helper.record_pr_readback(
-            intent, observed, observed_at=dt.datetime.now(dt.timezone.utc).isoformat(), run_url=run_url,
-        )
-        if isinstance(target_main, str):
-            assert_remote_main_sha(root, target_main)
-        persist_journal_record(
-            root, base, refreshed,
-            observed_at=dt.datetime.now(dt.timezone.utc).isoformat(),
-            supersede_from=predecessor_ref,
-        )
-        journal = load_promotion_journal(root) or journal
+        try:
+            refreshed = complete_prepared_refresh(
+                root, repo, intent, predecessor, helper, observed,
+                controller_head_sha=base,
+                journal_source_base_sha=base,
+                expected_state_sha=journal_state_sha,
+                observed_at=dt.datetime.now(dt.timezone.utc).isoformat(),
+                run_url=run_url,
+            )
+        except PromotionError as exc:
+            if "trusted source refresh target main moved" not in str(exc):
+                raise
+            print(json.dumps({
+                "status": "prepared-source-refresh-waiting-for-current-main",
+                "pr_number": number,
+                "generation_id": intent.get("candidate", {}).get("generation_id"),
+                "target_main_sha": target_main,
+                "current_main_sha": base,
+                "reason": str(exc),
+            }, sort_keys=True))
+            continue
+        print(json.dumps({
+            "status": "prepared-source-refresh-recovered",
+            "pr_number": number,
+            "generation_id": refreshed.get("candidate", {}).get("generation_id"),
+            "candidate_sha": refreshed.get("candidate", {}).get("head_sha"),
+            "target_main_sha": target_main,
+        }, sort_keys=True))
+        journal, journal_state_sha = load_promotion_journal_snapshot(root)
+        if not isinstance(journal, Mapping):
+            raise PromotionError("promotion journal disappeared after prepared source refresh recovery")
 
     prs = gh_open_prs(root, repo)
     by_number = {int(row["number"]): row for row in prs}
