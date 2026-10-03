@@ -1,0 +1,620 @@
+{
+  "evaluated_at": "2026-10-03T09:48:02Z",
+  "execution_mode": "live",
+  "faults": [
+    {
+      "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
+      "owner_ticket": 659,
+      "reason": "candidate_ready_with_pending_scope",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "warning",
+      "source_id": "data_go_kr",
+      "stage": "candidate"
+    },
+    {
+      "fault_key": "43ee60fa2c26b99c60ab25fee25a75303bfeb43ad3207db2b2c8f8b3c5c2beb6",
+      "owner_ticket": 659,
+      "reason": "promotion_pending_review",
+      "recommended_action": "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+      "severity": "info",
+      "source_id": "data_go_kr",
+      "stage": "promotion"
+    }
+  ],
+  "health_workflow": {
+    "revision": "516ed0095104785f83ddc75ada278e65ca4ec2ac",
+    "run_attempt": 1,
+    "run_id": "37114256225"
+  },
+  "policy_sha256": "084ebb5730bc6e3d2c34e88683a490c0c976dd595e98e0a1aae6e163f1887b30",
+  "receipt_sha256": "7b75ef77e9ec62738dd36763b7d0a710f657c3fb3aa2f85b277a5d264dd97473",
+  "repository": "StatPan/datapan-registry",
+  "schema_version": "datapan.upstream-catalogue-health.v1",
+  "source_policy_sha256": "61dfb817f743085918c9f613fcd4a2dcf0d2f3de9df31b005cae1cd0250d5cfc",
+  "sources": [
+    {
+      "canonical": {
+        "last_good": null,
+        "main": {
+          "manifest_sha256": "2ae7c55ec7590e20dd8de89251b423e1c4629dffa73b165d27a0d29a5d4ddaab",
+          "registry_bytes": 137735169,
+          "registry_path": "data/data-go-kr.registry.json",
+          "registry_sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644",
+          "revision": "516ed0095104785f83ddc75ada278e65ca4ec2ac"
+        },
+        "promotion_stage": {
+          "age_seconds": 2439,
+          "deadline_seconds": 604800,
+          "entered_at": "2026-10-03T09:07:22.432236+00:00",
+          "status": "pending-review"
+        },
+        "promotion_status": "pending-review",
+        "publication": {
+          "artifact_identity": {
+            "bytes": 139155499,
+            "path": "data/data-go-kr.registry.json",
+            "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+          },
+          "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+          "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c",
+          "observed_at": "2026-10-03T09:07:22.432236+00:00",
+          "publication_pointer_revision": null,
+          "publication_revision": null,
+          "publisher_run_verified": null,
+          "source_id": "data_go_kr",
+          "source_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+          "status": "pending-review",
+          "verified": false
+        }
+      },
+      "collector": {
+        "age_seconds": 295430,
+        "expected_interval_seconds": 604800,
+        "grace_seconds": 86400,
+        "latest_execution_run": {
+          "artifacts": [
+            {
+              "artifact_id": "11068634862",
+              "expired": false,
+              "expires_at": "2026-10-29T23:47:49Z",
+              "name": "upstream-catalog-refresh-36646768289"
+            }
+          ],
+          "conclusion": "success",
+          "created_at": "2026-09-29T23:44:12Z",
+          "event": "schedule",
+          "head_branch": "main",
+          "head_sha": "4321df1868754045ff3705b5c133c9fad2abde6e",
+          "run_attempt": 1,
+          "run_id": "36646768289",
+          "status": "completed",
+          "updated_at": "2026-09-29T23:47:58Z"
+        },
+        "latest_scheduled_run": {
+          "artifacts": [
+            {
+              "artifact_id": "11068634862",
+              "expired": false,
+              "expires_at": "2026-10-29T23:47:49Z",
+              "name": "upstream-catalog-refresh-36646768289"
+            }
+          ],
+          "conclusion": "success",
+          "created_at": "2026-09-29T23:44:12Z",
+          "event": "schedule",
+          "head_branch": "main",
+          "head_sha": "4321df1868754045ff3705b5c133c9fad2abde6e",
+          "run_attempt": 1,
+          "run_id": "36646768289",
+          "status": "completed",
+          "updated_at": "2026-09-29T23:47:58Z"
+        }
+      },
+      "faults": [
+        {
+          "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
+          "owner_ticket": 659,
+          "reason": "candidate_ready_with_pending_scope",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "warning",
+          "source_id": "data_go_kr",
+          "stage": "candidate"
+        },
+        {
+          "fault_key": "43ee60fa2c26b99c60ab25fee25a75303bfeb43ad3207db2b2c8f8b3c5c2beb6",
+          "owner_ticket": 659,
+          "reason": "promotion_pending_review",
+          "recommended_action": "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+          "severity": "info",
+          "source_id": "data_go_kr",
+          "stage": "promotion"
+        }
+      ],
+      "observation": {
+        "age_seconds": 295403,
+        "collection_status": "success",
+        "execution_mode": "live",
+        "max_age_seconds": 691200,
+        "observed_at": "2026-09-29T23:44:39Z",
+        "producer_run_id": "36646768289",
+        "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197",
+        "state": "fresh"
+      },
+      "overall": "degraded",
+      "processor": {
+        "attempts_by_id": {
+          "15003164": 1,
+          "15005257": 1,
+          "15006273": 1,
+          "15007088": 1,
+          "15008409": 1,
+          "15008517": 1,
+          "15013677": 1,
+          "15013679": 1,
+          "15014832": 1,
+          "15015158": 1,
+          "15015163": 1,
+          "15015164": 1,
+          "15015212": 1,
+          "15019347": 1,
+          "15019666": 1,
+          "15020786": 1,
+          "15020843": 1,
+          "15020966": 1,
+          "15021305": 1,
+          "15024888": 1,
+          "15027423": 1,
+          "15027426": 1,
+          "15028101": 1,
+          "15029122": 1,
+          "15031993": 1,
+          "15031994": 1,
+          "15032073": 1,
+          "15032578": 1,
+          "15032581": 1,
+          "15032588": 1,
+          "15032592": 1,
+          "15032604": 1,
+          "15032613": 1,
+          "15032644": 1,
+          "15032647": 1,
+          "15032650": 1,
+          "15032652": 1,
+          "15032656": 1,
+          "15032657": 1,
+          "15032659": 1,
+          "15032678": 1,
+          "15032684": 1,
+          "15032685": 1,
+          "15032686": 1,
+          "15032687": 1,
+          "15032688": 1,
+          "15032691": 1,
+          "15032693": 1
+        },
+        "attempts_consumed": 24,
+        "candidate_sha256": "90bc22e0ad61dd3672b09b7c52e4898be5afb535f87a8d7fa9e5e5c983e6e3b5",
+        "checkpoint_observed_at": "2026-09-29T23:44:39Z",
+        "detail_queue_cursor": 48,
+        "detail_records": [
+          {
+            "guide_sha256": "9cda84a3b95c7fb748fa7fb5b9a5a880afc492c2d80bfab8474c3af31b71d91d",
+            "id": "15031993",
+            "source_sha256": "e0dca9fb172dddc5ae5d538c629fd44a6c386c73ba3d52d0b6a5e17c6e64511b",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15031994",
+            "source_sha256": "62e5b063c90b0532dce88d5fcade607a1d5394416ef183a460bf7161be3a5938",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032073",
+            "source_sha256": "6808e866c37295ccdf36bc2d4c6d22d8cc1b6fc4727653b05dafd30d2b2e6be6",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032578",
+            "source_sha256": "6b2987d761ac6fe7430d66c87024533b5613f8013c0d1eeee7b99ae9be22975c",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032581",
+            "source_sha256": "3654df7d788aec9944707f2affe2f58189e4fd164ada5d22bea4f965d2c7f653",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032588",
+            "source_sha256": "68f6a82c016bc35847f1efb1bd955f0714d3fd077a733e339502864e27025b12",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032592",
+            "source_sha256": "ff16d68c5e8d42264b172cebb1fe3a85b67e868b008ab70971a561d87e5ad7d6",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032604",
+            "source_sha256": "dd7688c0c5091cb6e787fc30a5f0e6562d3167014071cf1c77e75104f75b157d",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032613",
+            "source_sha256": "c8d6cc86d71111bd608ccf641deb93de6d3fcacb483c9f1bdb79979bb150d0ea",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032644",
+            "source_sha256": "afcc86e435a9a90834df016df7072951a78f87cbad6c3ad976b14b519c1ecbe0",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032647",
+            "source_sha256": "6cdc89d60ad8cad4c0328e315bf9b79f9d42ce1490e7979255a3e382af6d0234",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032650",
+            "source_sha256": "92ce359e2e6b7166907ea6b5f6ec5a77d168b904a3d596e1fbe8b39e8c55a17d",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032652",
+            "source_sha256": "9aba945869dc5c5f07f3409af2bec696f8ad247b5ca6e7fc7e9cd5d1f37fb1c1",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032656",
+            "source_sha256": "6ae91a8d8702d3d4fd513e7c52de608ddfd262243d5cd47d33b511cd62e801b2",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032657",
+            "source_sha256": "a957583f2d8e607d5993c5edfcce5a7382ae670f5107adba7b24a8fe75831b47",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032659",
+            "source_sha256": "146be7d1386194a09359acf245c617eaacb5805bd16ec1e75e718b29ac2baf9b",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032678",
+            "source_sha256": "1940f4acc10da9ff1efe32e893e3a88b93e01e57e65a33248fac6140999434a8",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032684",
+            "source_sha256": "4404d91ff2dde9fca395e9ddbe753c9b063bac5667b1ca702f19a09693578480",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032685",
+            "source_sha256": "a59a2a8b51a1ba719f362e676e932fe841147f594b29f507ef0b091183a3f6fd",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032686",
+            "source_sha256": "17e50e70793d4e434eb82135ac34a2114c62f32874c18f22e2fe85891895e25a",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032687",
+            "source_sha256": "c0c21488bcc452441c485f60cba2644a58ce8bc7fdfba7e6306f7e9e8c5e71a7",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032688",
+            "source_sha256": "3381a5a5b8a8606d17957c49494c3430cd7b0a18218a545a84b3c58dc1befcde",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032691",
+            "source_sha256": "f2dda16cb620955bc7766f77200115e06e045bde30c39c668a6898a30da55e1e",
+            "status": "retry"
+          },
+          {
+            "guide_sha256": null,
+            "id": "15032693",
+            "source_sha256": "ad23b4a5c0001d81f136e45ea033517e7cc36ff3e6e2fb6181dd4204b5778a60",
+            "status": "retry"
+          }
+        ],
+        "execution_failure": null,
+        "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+        "last_heartbeat_at": "2026-10-03T05:52:35Z",
+        "last_observation": {
+          "collection_status": "success",
+          "execution_mode": "live",
+          "observed_at": "2026-09-29T23:44:39Z",
+          "producer_run_id": "36646768289",
+          "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197"
+        },
+        "last_progress_at": "2026-10-03T05:43:20Z",
+        "latest_execution_run": {
+          "conclusion": "success",
+          "created_at": "2026-10-03T05:42:50Z",
+          "event": "workflow_dispatch",
+          "head_branch": "main",
+          "head_repository": "StatPan/datapan-registry",
+          "head_sha": "dc79e3931d6cfbbe5b19917487d356f88d0682f0",
+          "path": ".github/workflows/upstream-catalogue-process.yml",
+          "repository": "StatPan/datapan-registry",
+          "run_attempt": 1,
+          "run_id": "37100705274",
+          "run_started_at": "2026-10-03T05:42:50Z",
+          "status": "completed",
+          "updated_at": "2026-10-03T05:52:45Z",
+          "workflow_id": 373610259
+        },
+        "latest_successful_execution_run": {
+          "conclusion": "success",
+          "created_at": "2026-10-03T05:42:50Z",
+          "event": "workflow_dispatch",
+          "head_branch": "main",
+          "head_repository": "StatPan/datapan-registry",
+          "head_sha": "dc79e3931d6cfbbe5b19917487d356f88d0682f0",
+          "path": ".github/workflows/upstream-catalogue-process.yml",
+          "repository": "StatPan/datapan-registry",
+          "run_attempt": 1,
+          "run_id": "37100705274",
+          "run_started_at": "2026-10-03T05:42:50Z",
+          "status": "completed",
+          "updated_at": "2026-10-03T05:52:45Z",
+          "workflow_id": 373610259
+        },
+        "lease": null,
+        "outcome": {
+          "attempts_this_invocation": 24,
+          "composer_status": "ready_scoped",
+          "detail_retry_count": 908,
+          "pending_count": 4382,
+          "reason": "scoped_candidate_ready_pending_outcomes_retained"
+        },
+        "output_artifact": {
+          "artifact_id": "11266965270",
+          "bundle_manifest_sha256": "841ddfe8684c241a7006c09e1fd23d178503c86eccbe725fcdbeacb3c126d460",
+          "expires_at": "2026-11-02T05:52:36Z",
+          "name": "upstream-catalogue-processing-37100705274-1",
+          "repository": "StatPan/datapan-registry",
+          "run_id": "37100705274"
+        },
+        "output_digests": [
+          {
+            "bytes": 139155499,
+            "path": "composed-candidate.registry.json",
+            "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+          },
+          {
+            "bytes": 85703345,
+            "path": "ready-scope.registry.json",
+            "sha256": "1e82aa849995beb4a9c9d8eaca8d355dfd5fb9a78233af70e749b99f81b76084"
+          },
+          {
+            "bytes": 11553654,
+            "path": "semantic-diff.json",
+            "sha256": "7262a87d982c9da7ac3835262bec4c2b8978c0d05b3a6378856d4d43bd0af72b"
+          },
+          {
+            "bytes": 3502438,
+            "path": "regeneration-queue.json",
+            "sha256": "6d02bb488111f4fc01a86401b1cdcf1699c10188fbb0ac5acf388ecd918b2aee"
+          },
+          {
+            "bytes": 674955,
+            "path": "quarantine.json",
+            "sha256": "ac0c2f8bd714c857cafeaac6ec9518171e05cb8eba18685c37039d239a33e14f"
+          },
+          {
+            "bytes": 939105,
+            "path": "composition-receipt.json",
+            "sha256": "1af99ad2e3a553a9be8c99ab9aca040d4c73691f1a05d49dd0a43668c0a8a31c"
+          },
+          {
+            "bytes": 233315,
+            "path": "upstream-catalogue-enrichment-evidence.json",
+            "sha256": "f9859a5aced83b752f8257243066b533517e63ded958ccf79ea794789fba48f1"
+          },
+          {
+            "bytes": 547,
+            "path": "upstream-catalogue-processing-result.json",
+            "sha256": "1e75348f3c1407a65b9391844b59ad245f679053e1553946b5c99b19ec8afd02"
+          }
+        ],
+        "request_reservation": {
+          "attempt_budget": 24,
+          "attempts_made": 24,
+          "expires_at": "2026-10-03T06:28:14Z",
+          "fencing_token": 1,
+          "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+          "owner_run_id": "37100705274-1",
+          "records": [
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": "9cda84a3b95c7fb748fa7fb5b9a5a880afc492c2d80bfab8474c3af31b71d91d",
+              "id": "15031993",
+              "source_sha256": "e0dca9fb172dddc5ae5d538c629fd44a6c386c73ba3d52d0b6a5e17c6e64511b"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15031994",
+              "source_sha256": "62e5b063c90b0532dce88d5fcade607a1d5394416ef183a460bf7161be3a5938"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032073",
+              "source_sha256": "6808e866c37295ccdf36bc2d4c6d22d8cc1b6fc4727653b05dafd30d2b2e6be6"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032578",
+              "source_sha256": "6b2987d761ac6fe7430d66c87024533b5613f8013c0d1eeee7b99ae9be22975c"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032581",
+              "source_sha256": "3654df7d788aec9944707f2affe2f58189e4fd164ada5d22bea4f965d2c7f653"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032588",
+              "source_sha256": "68f6a82c016bc35847f1efb1bd955f0714d3fd077a733e339502864e27025b12"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032592",
+              "source_sha256": "ff16d68c5e8d42264b172cebb1fe3a85b67e868b008ab70971a561d87e5ad7d6"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032604",
+              "source_sha256": "dd7688c0c5091cb6e787fc30a5f0e6562d3167014071cf1c77e75104f75b157d"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032613",
+              "source_sha256": "c8d6cc86d71111bd608ccf641deb93de6d3fcacb483c9f1bdb79979bb150d0ea"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032644",
+              "source_sha256": "afcc86e435a9a90834df016df7072951a78f87cbad6c3ad976b14b519c1ecbe0"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032647",
+              "source_sha256": "6cdc89d60ad8cad4c0328e315bf9b79f9d42ce1490e7979255a3e382af6d0234"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032650",
+              "source_sha256": "92ce359e2e6b7166907ea6b5f6ec5a77d168b904a3d596e1fbe8b39e8c55a17d"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032652",
+              "source_sha256": "9aba945869dc5c5f07f3409af2bec696f8ad247b5ca6e7fc7e9cd5d1f37fb1c1"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032656",
+              "source_sha256": "6ae91a8d8702d3d4fd513e7c52de608ddfd262243d5cd47d33b511cd62e801b2"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032657",
+              "source_sha256": "a957583f2d8e607d5993c5edfcce5a7382ae670f5107adba7b24a8fe75831b47"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032659",
+              "source_sha256": "146be7d1386194a09359acf245c617eaacb5805bd16ec1e75e718b29ac2baf9b"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032678",
+              "source_sha256": "1940f4acc10da9ff1efe32e893e3a88b93e01e57e65a33248fac6140999434a8"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032684",
+              "source_sha256": "4404d91ff2dde9fca395e9ddbe753c9b063bac5667b1ca702f19a09693578480"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032685",
+              "source_sha256": "a59a2a8b51a1ba719f362e676e932fe841147f594b29f507ef0b091183a3f6fd"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032686",
+              "source_sha256": "17e50e70793d4e434eb82135ac34a2114c62f32874c18f22e2fe85891895e25a"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032687",
+              "source_sha256": "c0c21488bcc452441c485f60cba2644a58ce8bc7fdfba7e6306f7e9e8c5e71a7"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032688",
+              "source_sha256": "3381a5a5b8a8606d17957c49494c3430cd7b0a18218a545a84b3c58dc1befcde"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032691",
+              "source_sha256": "f2dda16cb620955bc7766f77200115e06e045bde30c39c668a6898a30da55e1e"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032693",
+              "source_sha256": "ad23b4a5c0001d81f136e45ea033517e7cc36ff3e6e2fb6181dd4204b5778a60"
+            }
+          ],
+          "reserved_at": "2026-10-03T05:43:17Z",
+          "reserved_attempts": 24
+        },
+        "state": "ready"
+      },
+      "recommended_recovery": [
+        "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs."
+      ],
+      "source_id": "data_go_kr"
+    }
+  ],
+  "summary": {
+    "blocked": 0,
+    "degraded": 1,
+    "fault_count": 2,
+    "fixture": 0,
+    "healthy": 0,
+    "last_good_count": 0,
+    "live_fresh_observation_count": 1,
+    "source_count": 1
+  }
+}
