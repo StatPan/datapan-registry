@@ -1451,18 +1451,18 @@
         "owner_id": "datapan-canonical-update:v1:045f947a711dbc464c9bb74f7426aef95c200eaa1c5cc66bcbc95d685fb8c42a",
         "body_sha256": "8d1a0f292e33285f0e3129af13ab39864cf0a42ea0ce13aea4d271afa9a33dae",
         "request_fingerprint": "179c2dc705da50b6d276b9c2e6aeaa5920ccff568c30356a9d979c93dd032460",
-        "state": "in_progress",
+        "state": "uncertain",
         "intent_at": "2026-10-03T13:06:24Z",
         "run_id": 37125067682,
         "run_attempt": 1,
         "run_url": "https://github.com/StatPan/datapan-registry/actions/runs/37125067682",
         "run_status": "in_progress",
         "conclusion": null,
-        "observed_at": "2026-10-03T13:06:36Z",
+        "observed_at": "2026-10-03T13:30:05Z",
         "dispatch_http_status": 200,
-        "blocker": "verify_release_pending"
+        "blocker": "verify_release_run_readback_pending"
       }
     }
   ],
-  "updated_at": "2026-10-03T13:29:44.471760+00:00"
+  "updated_at": "2026-10-03T13:30:05.995844+00:00"
 }
