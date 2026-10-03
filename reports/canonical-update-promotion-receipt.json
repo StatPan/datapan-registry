@@ -469,11 +469,24 @@
         "observed_at": "2026-10-03T11:02:38Z",
         "dispatch_http_status": 200,
         "blocker": "verify_release_failed"
+      },
+      "superseded_by": {
+        "repository": "statpan/datapan-registry",
+        "source_id": "data_go_kr",
+        "scope": "aggregate_supported_catalog",
+        "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+        "registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+        "manifest_sha256": "4553fef934fd83b12b32f1f8c10453e37da64662eea3813bb6d1c1be0fb8a158",
+        "head_sha": "1a3088f64c0ff00fbf31e0e28cb37e3fc3d7dc07",
+        "pr_number": 686,
+        "owner_id": "datapan-canonical-update:v1:045f947a711dbc464c9bb74f7426aef95c200eaa1c5cc66bcbc95d685fb8c42a",
+        "branch": "automation/canonical-update/data-go-kr-bca0f6429512-126f7dd4dbc9f5acf6eb",
+        "body_sha256": "34ea71feb2c5c340dc537682e7472b80fa9e904aecea8828b9d5b1559e87e541"
       }
     },
     {
       "schema_version": "datapan.canonical-update-promotion-receipt.v1",
-      "status": "prepared",
+      "status": "pending-review",
       "action": "refresh_owned",
       "source_refresh_evidence": {
         "schema_version": "datapan.canonical-source-refresh-evidence.v1",
@@ -880,7 +893,7 @@
       "ownership": {
         "owner_id": "datapan-canonical-update:v1:045f947a711dbc464c9bb74f7426aef95c200eaa1c5cc66bcbc95d685fb8c42a",
         "branch": "automation/canonical-update/data-go-kr-bca0f6429512-126f7dd4dbc9f5acf6eb",
-        "expected_head_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+        "expected_head_sha": "1a3088f64c0ff00fbf31e0e28cb37e3fc3d7dc07",
         "body_sha256": "34ea71feb2c5c340dc537682e7472b80fa9e904aecea8828b9d5b1559e87e541",
         "body": "<!-- datapan-canonical-update:v1:045f947a711dbc464c9bb74f7426aef95c200eaa1c5cc66bcbc95d685fb8c42a generation=66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4 -->\n\n## Canonical registry update\n\n- Source: `data_go_kr`; scope: `aggregate_supported_catalog`\n- Candidate base commit: `1d5373b4437c4216ab400ff5ebc59db782f71d13`\n- Registry artifact: `data/data-go-kr.registry.json` (139155499 bytes, sha256 `0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0`)\n- Manifest sha256: `4553fef934fd83b12b32f1f8c10453e37da64662eea3813bb6d1c1be0fb8a158`\n- Composition receipt sha256: `1af99ad2e3a553a9be8c99ab9aca040d4c73691f1a05d49dd0a43668c0a8a31c`\n- Global API denominator: 12300\n- Applied: 7918; pending: 1183; quarantined: 3199\n- Disposition counts: `{\"accept_changed\": 6639, \"accept_new\": 222, \"quarantine\": 3199, \"retain_deletion_pending\": 275, \"retain_worker_pending\": 908, \"unchanged\": 1057}`\n- Full-scope freshness: `false`; publication allowed: `false`\n\n## Validation and promotion state\n- composition: `passed`\n- registry_manifest: `passed`\n- denominator: `passed`\n- adapter: `passed`\n- ledger: `passed`\n- release: `passed`\n- consumer: `passed`\n- finish_review_policy: `configured`\n- diagnostic_current_source_applicability: `revalidation_required`\n- manual review acceptance: `revalidation_required`\n\nThe candidate passed source-snapshot validation and an isolated Git LFS remote read-back before this branch was advanced. Publication and merge remain behind the repository's reviewed gates.\n\nCloses #685\n",
         "issue_number": 685,
@@ -888,12 +901,33 @@
       },
       "pr": {
         "number": 686,
-        "url": "",
+        "url": "https://github.com/StatPan/datapan-registry/pull/686",
         "state": "open",
         "merge_commit_sha": null
       },
       "supersedes_prs": [],
-      "acknowledgements": [],
+      "acknowledgements": [
+        {
+          "status": "pending-review",
+          "observed_at": "2026-10-03T11:48:04.420894+00:00",
+          "source_sha": "1a3088f64c0ff00fbf31e0e28cb37e3fc3d7dc07",
+          "manifest_sha256": "4553fef934fd83b12b32f1f8c10453e37da64662eea3813bb6d1c1be0fb8a158",
+          "artifact_identity": {
+            "path": "data/data-go-kr.registry.json",
+            "bytes": 139155499,
+            "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+          },
+          "evidence_reference": "GitHub PR API read-back",
+          "run_url": "https://github.com/StatPan/datapan-registry/actions/runs/37120309746/attempts/1",
+          "run_id": 37120309746,
+          "run_attempt": 1,
+          "read_back_verified": false,
+          "read_back_sha256": null,
+          "read_back_bytes": null,
+          "publication_revision": null,
+          "publication_pointer_revision": null
+        }
+      ],
       "blockers": [
         "manual_review_revalidation_required",
         "diagnostic_current_source_revalidation_required"
@@ -914,5 +948,5 @@
       "refresh_target_main_sha": "1d5373b4437c4216ab400ff5ebc59db782f71d13"
     }
   ],
-  "updated_at": "2026-10-03T11:47:01.765984+00:00"
+  "updated_at": "2026-10-03T11:48:04.420894+00:00"
 }
