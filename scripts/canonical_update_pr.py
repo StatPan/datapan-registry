@@ -549,6 +549,26 @@ def automation_branch(candidate: Mapping[str, Any], action: str, *, existing_bra
     return f"{prefix}-{revision_hash}"
 
 
+def automation_branch_matches(candidate: Mapping[str, Any], action: str, branch: Any) -> bool:
+    """Match only a branch emitted or safely inherited by the PR owner helper."""
+    if not isinstance(branch, str):
+        return False
+    if action in {"create", "create_replacement"}:
+        current = automation_branch(candidate, action)
+        prefix = current[:-21]
+        accepted = {current, prefix}
+        if action == "create_replacement":
+            generation_hash = hashlib.sha256(str(candidate["generation_id"]).encode("utf-8")).hexdigest()[:10]
+            accepted.add(f"{prefix}-replacement-{generation_hash}")
+        return branch in accepted
+    if action in {"reuse_owned", "refresh_owned"}:
+        try:
+            return automation_branch(candidate, action, existing_branch=branch) == branch
+        except AdmissionError:
+            return False
+    return False
+
+
 def remote_ref_sha(
     materializer: Any,
     repository_root: pathlib.Path,

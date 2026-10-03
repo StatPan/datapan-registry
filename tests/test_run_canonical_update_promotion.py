@@ -29,6 +29,13 @@ PR_SPEC = importlib.util.spec_from_file_location(
 assert PR_SPEC and PR_SPEC.loader
 PR_HELPER = importlib.util.module_from_spec(PR_SPEC)
 PR_SPEC.loader.exec_module(PR_HELPER)
+CI_SPEC = importlib.util.spec_from_file_location(
+    "canonical_update_ci_recovery_test_module",
+    pathlib.Path(__file__).parents[1] / "scripts/canonical_update_ci.py",
+)
+assert CI_SPEC and CI_SPEC.loader
+CI_HELPER = importlib.util.module_from_spec(CI_SPEC)
+CI_SPEC.loader.exec_module(CI_HELPER)
 
 
 class DynamicHelperLoadingTests(unittest.TestCase):
@@ -1350,6 +1357,9 @@ class OwnedPRRefreshRecoveryTests(unittest.TestCase):
             "scope": self.scope, "generation_id": self.generation_id,
             "head_sha": self.old_head, "manifest_sha256": "a" * 64,
             "registry_sha256": "d" * 64,
+            "registry_path": "data/data-go-kr.registry.json",
+            "registry_bytes": 1,
+            "composition_receipt_sha256": "f" * 64,
         }
         old_body = f"{PR_HELPER.body_marker(owner, self.generation_id)}\n\nOld payload.\n"
         old = {
@@ -1474,11 +1484,10 @@ class OwnedPRRefreshRecoveryTests(unittest.TestCase):
             )
         self.assertEqual(number, 686)
         self.assertEqual(adopted["status"], "pending-review")
-        # #693 advances this value as part of the native adoption CAS. Keep the
-        # fixture usable against its pre-#693 base while modeling that accepted
-        # adopted receipt shape for the same-payload continuation below.
-        if adopted["ownership"]["expected_head_sha"] == "0" * 40:
-            adopted["ownership"]["expected_head_sha"] = adopted["candidate"]["head_sha"]
+        # The native #693 adoption route must bind the receipt before it can
+        # serve as a source-refresh predecessor.
+        self.assertEqual(adopted["ownership"]["expected_head_sha"], adopted["candidate"]["head_sha"])
+        self.assertNotEqual(adopted["ownership"]["expected_head_sha"], "0" * 40)
 
         target_main = "60042f6be0e8e593830e7b2433974e814f4a0a55"
         successor_head = "d" * 40
@@ -2035,6 +2044,7 @@ class OwnedPRRefreshRecoveryTests(unittest.TestCase):
             )) as readback,
             mock.patch.object(RUNNER, "gh_open_prs", return_value=[{"number": self.pr_number}]) as open_prs,
             mock.patch.object(RUNNER, "persist_journal_record") as persist,
+            mock.patch.object(RUNNER, "reconcile_prepared_create_pr", return_value=(old, self.pr_number)) as create_recovery,
             mock.patch.object(RUNNER, "ensure_verify_release_ci", return_value={"ci": {"state": "queued"}}),
             contextlib.redirect_stdout(output),
         ):
@@ -2042,7 +2052,8 @@ class OwnedPRRefreshRecoveryTests(unittest.TestCase):
         main_check.assert_not_called()
         self.assertEqual(readback.call_count, 2)
         open_prs.assert_called_once()
-        self.assertEqual(persist.call_count, 1)
+        create_recovery.assert_called_once()
+        persist.assert_not_called()
         report = json.loads(next(line for line in output.getvalue().splitlines() if "prepared-source-refresh-stale-before-push" in line))
         self.assertEqual(report["target_main_sha"], target_main)
         self.assertEqual(report["current_main_sha"], current_main)
@@ -2375,7 +2386,9 @@ class PreparedCreateRecoveryTests(unittest.TestCase):
                 self.assertEqual(number, 686)
                 self.assertEqual(receipt["status"], "pending-review")
                 self.assertEqual(receipt["candidate"], intent["candidate"])
-                self.assertEqual(receipt["ownership"], intent["ownership"])
+                expected_ownership = copy.deepcopy(intent["ownership"])
+                expected_ownership["expected_head_sha"] = intent["candidate"]["head_sha"]
+                self.assertEqual(receipt["ownership"], expected_ownership)
                 create.assert_called_once()
                 self.assertIn(1, create.call_args.kwargs["allowed_returncodes"])
                 persist.assert_called_once()
@@ -2390,6 +2403,8 @@ class PreparedCreateRecoveryTests(unittest.TestCase):
             ("branch", lambda f: f["pull_request_readback"].__setitem__("headRefName", "other-branch"), {}),
             ("candidate head", lambda f: f["state"]["records"][0]["candidate"].__setitem__("head_sha", "2" * 40), {}),
             ("body bytes", lambda f: f["pull_request_readback"].__setitem__("body", f["pull_request_readback"]["body"] + "Human edit.\n"), {}),
+            ("merge commit type", lambda f: f["pull_request_readback"].__setitem__("mergeCommit", "not-an-object"), {}),
+            ("merge commit digest", lambda f: f["pull_request_readback"].__setitem__("mergeCommit", {"oid": "invalid"}), {}),
             ("body digest", lambda f: f["state"]["records"][0]["ownership"].__setitem__("body_sha256", "3" * 64), {}),
             ("owner", lambda f: f["state"]["records"][0]["ownership"].__setitem__("owner_id", "not-the-owner"), {}),
             ("generation", lambda f: f["pull_request_readback"].__setitem__("body", f["pull_request_readback"]["body"].replace("generation=66a2", "generation=76a2")), {}),
@@ -2817,6 +2832,399 @@ class TrustedSourceRefreshEntryPointTests(unittest.TestCase):
                 RUNNER.run_source_refresh(self.args, pathlib.Path("."))
         remote_check.assert_called_once_with(pathlib.Path("."), self.target_main)
         journal_read.assert_not_called()
+
+
+class RecoveredPendingExpectedHeadIntegrationTests(unittest.TestCase):
+    fixture_path = pathlib.Path(__file__).parent / "fixtures/canonical-update-promotion/attempt-4-pr-686-pending-recovery.json"
+
+    def fixture(self) -> dict:
+        return json.loads(self.fixture_path.read_text(encoding="utf-8"))
+
+    def _run_recovery(self, fixture: dict) -> tuple[dict, dict, list[dict], list[tuple[str, str, object]], int, int, str]:
+        journal = copy.deepcopy(fixture["state"])
+        state_sha = "a" * 40
+        original = copy.deepcopy(journal["records"][0])
+        candidate = original["candidate"]
+        ownership = original["ownership"]
+        repo, branch, head = candidate["repository"], ownership["branch"], candidate["head_sha"]
+        current_main = fixture["provenance"]["workflow_checkout_sha"]
+        schema = json.loads((SCRIPT.parents[1] / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json").read_text(encoding="utf-8"))
+        PR_HELPER.validate_journal(journal, schema)
+        writes: list[dict] = []
+        api_calls: list[tuple[str, str, object]] = []
+        dispatch_count = 0
+        run_id = 9901
+
+        def current_receipt() -> dict:
+            rows = [row for row in journal["records"] if PR_HELPER.candidate_key(row) == PR_HELPER.candidate_key(original)]
+            self.assertEqual(len(rows), 1)
+            return rows[0]
+
+        def persist_journal(
+            _root: pathlib.Path,
+            _base: str,
+            receipt: dict,
+            *,
+            observed_at: str,
+            expected_ci: object = RUNNER.CI_EXPECTATION_UNSET,
+            expected_state_sha: object = RUNNER.STATE_EXPECTATION_UNSET,
+            supersede_from: dict | None = None,
+        ) -> None:
+            nonlocal journal, state_sha
+            if expected_state_sha is not RUNNER.STATE_EXPECTATION_UNSET:
+                self.assertEqual(expected_state_sha, state_sha)
+            if expected_ci is not RUNNER.CI_EXPECTATION_UNSET:
+                PR_HELPER.assert_ci_compare_and_swap(journal, receipt, expected_ci)
+            journal = PR_HELPER.append_journal_record(
+                journal, receipt, repository=repo, observed_at=observed_at,
+                supersede_from=supersede_from,
+            )
+            PR_HELPER.validate_journal(journal, schema)
+            state_sha = hashlib.sha1(json.dumps(journal, sort_keys=True).encode("utf-8")).hexdigest()
+            writes.append(copy.deepcopy(receipt))
+
+        run = {
+            "id": run_id,
+            "run_attempt": 1,
+            "event": "workflow_dispatch",
+            "head_sha": head,
+            "head_branch": branch,
+            "path": ".github/workflows/verify-release.yml",
+            "repository": {"full_name": repo},
+            "head_repository": {"full_name": repo},
+            "status": "completed",
+            "conclusion": "success",
+            "html_url": f"https://github.com/{repo}/actions/runs/{run_id}",
+        }
+        jobs = {
+            "total_count": 2,
+            "jobs": [
+                {"job_id": "diagnostic-candidate", "name": "Diagnostic candidate (pre-distribution)", "status": "completed", "conclusion": "success"},
+                {"job_id": "verify", "name": "verify", "status": "completed", "conclusion": "success"},
+            ],
+        }
+
+        def api_request(method: str, endpoint: str, body: object = None) -> tuple[int, object]:
+            nonlocal dispatch_count
+            api_calls.append((method, endpoint, copy.deepcopy(body)))
+            if method == "GET" and "/git/ref/heads/" in endpoint:
+                return 200, {"object": {"sha": head}}
+            if method == "GET" and "/actions/workflows/" in endpoint and "/runs?" in endpoint:
+                return 200, {"total_count": 0, "workflow_runs": []}
+            if method == "POST" and endpoint.endswith("/dispatches"):
+                dispatch_count += 1
+                durable = current_receipt()
+                self.assertEqual(durable["status"], "pending-review")
+                self.assertEqual(durable["ownership"]["expected_head_sha"], head)
+                self.assertEqual(durable["pr"]["number"], 686)
+                self.assertEqual(durable["acknowledgements"], original["acknowledgements"])
+                self.assertEqual(durable["candidate"], original["candidate"])
+                self.assertEqual(durable["ownership"]["body"], original["ownership"]["body"])
+                self.assertEqual(durable.get("ci", {}).get("state"), "intent")
+                self.assertEqual(body, {"ref": branch, "inputs": {"expected_head_sha": head}})
+                return 200, {"workflow_run_id": run_id, "run_url": run["html_url"]}
+            if method == "GET" and f"/actions/runs/{run_id}/attempts/1/jobs?per_page=100" in endpoint:
+                return 200, jobs
+            if method == "GET" and endpoint.endswith(f"/actions/runs/{run_id}"):
+                return 200, copy.deepcopy(run)
+            raise AssertionError(f"unexpected GitHub API request: {method} {endpoint}")
+
+        def load_module(path: pathlib.Path, name: str) -> object:
+            if path.name == "canonical_update_pr.py":
+                return PR_HELPER
+            if path.name == "canonical_update_ci.py":
+                return CI_HELPER
+            raise AssertionError(f"unexpected dynamic helper import: {path} as {name}")
+
+        def command(argv: tuple[str, ...], _root: pathlib.Path, **_kwargs: object) -> subprocess.CompletedProcess[str]:
+            if argv[:3] == ("git", "rev-parse", "HEAD"):
+                return subprocess.CompletedProcess(argv, 0, current_main + "\n", "")
+            raise AssertionError(f"unexpected command during recovery: {argv}")
+
+        output = io.StringIO()
+        with tempfile.TemporaryDirectory() as raw, contextlib.ExitStack() as stack:
+            root = pathlib.Path(raw)
+            stack.enter_context(mock.patch.dict(os.environ, {
+                "GITHUB_REPOSITORY": repo,
+                "GITHUB_RUN_ID": "37101245239",
+                "GITHUB_RUN_ATTEMPT": "5",
+            }))
+            stack.enter_context(mock.patch.object(RUNNER, "load_module", side_effect=load_module))
+            stack.enter_context(mock.patch.object(
+                RUNNER, "load_promotion_journal_snapshot",
+                side_effect=lambda _root: (copy.deepcopy(journal), state_sha),
+            ))
+            stack.enter_context(mock.patch.object(RUNNER, "persist_journal_record", side_effect=persist_journal))
+            stack.enter_context(mock.patch.object(RUNNER, "command", side_effect=command))
+            stack.enter_context(mock.patch.object(RUNNER, "gh_open_prs", return_value=fixture["open_pr_rows"]))
+            stack.enter_context(mock.patch.object(RUNNER, "gh_pr_readback", return_value=fixture["pull_request_readback"]))
+            stack.enter_context(mock.patch.object(PR_HELPER, "load_materializer", return_value=object()))
+            stack.enter_context(mock.patch.object(PR_HELPER, "remote_ref_sha", return_value=head))
+            stack.enter_context(mock.patch.object(RUNNER, "github_api_request", side_effect=api_request))
+            ci_call = stack.enter_context(mock.patch.object(CI_HELPER, "ensure_verify_release_run", wraps=CI_HELPER.ensure_verify_release_run))
+            stack.enter_context(contextlib.redirect_stdout(output))
+            RUNNER.reconcile_open_promotions(root)
+
+        updated = current_receipt()
+        return updated, original, writes, api_calls, dispatch_count, ci_call.call_count, output.getvalue()
+
+    def test_actual_pending_receipt_binds_verified_head_before_real_ci_dispatch(self) -> None:
+        fixture = self.fixture()
+        updated, original, writes, api_calls, dispatch_count, ci_call_count, output = self._run_recovery(fixture)
+        candidate = original["candidate"]
+        head = candidate["head_sha"]
+        expected_without_ci = copy.deepcopy(original)
+        expected_without_ci["ownership"]["expected_head_sha"] = head
+        expected_without_ci["pr"]["merge_commit_sha"] = fixture["pull_request_readback"]["mergeCommit"]["oid"]
+        updated_without_ci = copy.deepcopy(updated)
+        updated_without_ci.pop("ci")
+        self.assertEqual(dispatch_count, 1, output)
+        self.assertEqual(updated_without_ci, expected_without_ci)
+        self.assertEqual(updated["status"], "pending-review")
+        self.assertEqual(updated["pr"]["number"], 686)
+        self.assertEqual(updated["ownership"]["expected_head_sha"], head)
+        self.assertEqual(updated["acknowledgements"], original["acknowledgements"])
+        self.assertEqual(updated["candidate"], original["candidate"])
+        self.assertEqual(updated["checks"], original["checks"])
+        self.assertEqual(updated["source_refresh_evidence"], original["source_refresh_evidence"])
+        self.assertEqual(updated["validation_evidence"], original["validation_evidence"])
+        self.assertEqual(updated["candidate"]["payload_readback"], original["candidate"]["payload_readback"])
+        self.assertEqual(updated["ci"]["state"], "success")
+        self.assertEqual(updated["ci"]["head_sha"], head)
+        self.assertEqual(updated["ci"]["run_id"], 9901)
+        self.assertEqual(updated["ci"]["run_attempt"], 1)
+        self.assertEqual(len([ack for ack in updated["acknowledgements"] if ack["status"] == "pending-review"]), 1)
+        self.assertEqual(ci_call_count, 1)
+        self.assertGreaterEqual(len(writes), 4)
+        self.assertTrue(any(write.get("ci", {}).get("state") == "intent" for write in writes))
+
+    def test_legacy_bare_and_replacement_branches_recover_through_real_ci_caller(self) -> None:
+        for action in ("create", "create_replacement"):
+            with self.subTest(action=action):
+                fixture = self.fixture()
+                record = fixture["state"]["records"][0]
+                candidate = record["candidate"]
+                generated = PR_HELPER.automation_branch(candidate, "create")
+                prefix = generated[:-21]
+                if action == "create":
+                    branch = prefix
+                else:
+                    generation_hash = hashlib.sha256(candidate["generation_id"].encode("utf-8")).hexdigest()[:10]
+                    branch = f"{prefix}-replacement-{generation_hash}"
+                record["action"] = action
+                record["ownership"]["branch"] = branch
+                record["ownership"]["expected_head_sha"] = candidate["head_sha"]
+                fixture["open_pr_rows"][0]["head_ref"] = branch
+                fixture["pull_request_readback"]["headRefName"] = branch
+
+                updated, original, _writes, _api_calls, dispatch_count, ci_call_count, output = self._run_recovery(fixture)
+                self.assertEqual(dispatch_count, 1, output)
+                self.assertEqual(ci_call_count, 1)
+                self.assertEqual(updated["ownership"]["branch"], branch)
+                self.assertEqual(updated["ownership"]["expected_head_sha"], candidate["head_sha"])
+                self.assertEqual(updated["acknowledgements"], original["acknowledgements"])
+                self.assertEqual(updated["ci"]["state"], "success")
+
+    def test_unbound_revision_branch_fails_in_caller_before_journal_or_ci_write(self) -> None:
+        fixture = self.fixture()
+        receipt = fixture["state"]["records"][0]
+        candidate = receipt["candidate"]
+        generated = PR_HELPER.automation_branch(candidate, "create")
+        bad_branch = generated + "-unbound"
+        receipt["ownership"]["branch"] = bad_branch
+        receipt["ownership"]["expected_head_sha"] = candidate["head_sha"]
+        fixture["open_pr_rows"][0]["head_ref"] = bad_branch
+        fixture["pull_request_readback"]["headRefName"] = bad_branch
+        current_main = fixture["provenance"]["workflow_checkout_sha"]
+        api_calls: list[tuple[str, str]] = []
+
+        def load_module(path: pathlib.Path, name: str) -> object:
+            if path.name == "canonical_update_pr.py":
+                return PR_HELPER
+            if path.name == "canonical_update_ci.py":
+                return CI_HELPER
+            raise AssertionError(f"unexpected dynamic helper import: {path} as {name}")
+
+        def command(argv: tuple[str, ...], _root: pathlib.Path, **_kwargs: object) -> subprocess.CompletedProcess[str]:
+            if argv[:3] == ("git", "rev-parse", "HEAD"):
+                return subprocess.CompletedProcess(argv, 0, current_main + "\n", "")
+            raise AssertionError(f"unexpected command during recovery: {argv}")
+
+        with tempfile.TemporaryDirectory() as raw, contextlib.ExitStack() as stack:
+            root = pathlib.Path(raw)
+            stack.enter_context(mock.patch.dict(os.environ, {
+                "GITHUB_REPOSITORY": candidate["repository"],
+                "GITHUB_RUN_ID": "37101245239",
+                "GITHUB_RUN_ATTEMPT": "5",
+            }))
+            stack.enter_context(mock.patch.object(RUNNER, "load_module", side_effect=load_module))
+            stack.enter_context(mock.patch.object(
+                RUNNER, "load_promotion_journal_snapshot",
+                return_value=(copy.deepcopy(fixture["state"]), "a" * 40),
+            ))
+            persist = stack.enter_context(mock.patch.object(RUNNER, "persist_journal_record"))
+            stack.enter_context(mock.patch.object(RUNNER, "command", side_effect=command))
+            stack.enter_context(mock.patch.object(RUNNER, "gh_open_prs", return_value=fixture["open_pr_rows"]))
+            stack.enter_context(mock.patch.object(RUNNER, "gh_pr_readback", return_value=fixture["pull_request_readback"]))
+            stack.enter_context(mock.patch.object(PR_HELPER, "load_materializer", return_value=object()))
+            stack.enter_context(mock.patch.object(PR_HELPER, "remote_ref_sha", return_value=candidate["head_sha"]))
+            stack.enter_context(mock.patch.object(RUNNER, "github_api_request", side_effect=lambda method, endpoint, _body=None: (api_calls.append((method, endpoint)) or (500, None))))
+            ci_call = stack.enter_context(mock.patch.object(CI_HELPER, "ensure_verify_release_run", wraps=CI_HELPER.ensure_verify_release_run))
+            with self.assertRaisesRegex(RUNNER.PromotionError, "not an exact canonical or inherited owned branch"):
+                RUNNER.reconcile_open_promotions(root)
+
+        persist.assert_not_called()
+        ci_call.assert_not_called()
+        self.assertFalse(any(method == "POST" for method, _endpoint in api_calls))
+
+    def test_unexpected_nonzero_expected_head_is_rejected_before_persistence(self) -> None:
+        invalid_receipts = []
+        fixture = self.fixture()
+        wrong_head = copy.deepcopy(fixture["state"]["records"][0])
+        wrong_head["ownership"]["expected_head_sha"] = "a" * 40
+        invalid_receipts.append((wrong_head, "cannot normalize an arbitrary ownership head"))
+        terminal = copy.deepcopy(fixture["state"]["records"][0])
+        terminal["status"] = "merged"
+        invalid_receipts.append((terminal, "cannot bind a refresh, superseded, or terminal receipt"))
+        refresh = copy.deepcopy(fixture["state"]["records"][0])
+        refresh["action"] = "refresh_owned"
+        refresh["refresh_from"] = {"generation_id": "prior"}
+        invalid_receipts.append((refresh, "cannot bind a refresh, superseded, or terminal receipt"))
+        superseded = copy.deepcopy(fixture["state"]["records"][0])
+        superseded["superseded_by"] = {"generation_id": "later"}
+        invalid_receipts.append((superseded, "cannot bind a refresh, superseded, or terminal receipt"))
+
+        with mock.patch.object(RUNNER, "persist_journal_record") as persist:
+            for receipt, expected_error in invalid_receipts:
+                with self.subTest(status=receipt["status"], action=receipt["action"]):
+                    with self.assertRaisesRegex(RUNNER.PromotionError, expected_error):
+                        RUNNER.bind_verified_recovery_head(receipt)
+        persist.assert_not_called()
+
+    def test_pending_review_recovery_rejects_resealed_or_mismatched_attempt_witness(self) -> None:
+        fixture = self.fixture()
+        receipt = fixture["state"]["records"][0]
+        receipt["acknowledgements"][0]["run_attempt"] = 5
+        candidate = receipt["candidate"]
+        with self.assertRaisesRegex(RUNNER.PromotionError, "one exact immutable head/manifest/artifact/run-attempt acknowledgement"):
+            RUNNER.validate_prepared_create_pr_readback(
+                receipt, fixture["open_pr_rows"], fixture["pull_request_readback"],
+                fixture["remote_branch_sha"], PR_HELPER,
+                repository=candidate["repository"],
+                source_id=candidate["source_id"], scope=candidate["scope"],
+                generation_id=candidate["generation_id"],
+                registry_path=candidate["registry_path"], registry_bytes=candidate["registry_bytes"],
+                registry_sha256=candidate["registry_sha256"],
+                composition_receipt_sha256=candidate["composition_receipt_sha256"],
+            )
+
+    def test_failed_state_cas_stops_before_real_ci_helper_or_dispatch(self) -> None:
+        fixture = self.fixture()
+        record = fixture["state"]["records"][0]
+        repo = record["candidate"]["repository"]
+        current_main = fixture["provenance"]["workflow_checkout_sha"]
+        api_calls: list[tuple[str, str]] = []
+
+        def load_module(path: pathlib.Path, name: str) -> object:
+            if path.name == "canonical_update_pr.py":
+                return PR_HELPER
+            if path.name == "canonical_update_ci.py":
+                return CI_HELPER
+            raise AssertionError(f"unexpected dynamic helper import: {path} as {name}")
+
+        def command(argv: tuple[str, ...], _root: pathlib.Path, **_kwargs: object) -> subprocess.CompletedProcess[str]:
+            if argv[:3] == ("git", "rev-parse", "HEAD"):
+                return subprocess.CompletedProcess(argv, 0, current_main + "\n", "")
+            raise AssertionError(f"unexpected command during recovery: {argv}")
+
+        with tempfile.TemporaryDirectory() as raw, contextlib.ExitStack() as stack:
+            root = pathlib.Path(raw)
+            stack.enter_context(mock.patch.dict(os.environ, {
+                "GITHUB_REPOSITORY": repo,
+                "GITHUB_RUN_ID": "37101245239",
+                "GITHUB_RUN_ATTEMPT": "5",
+            }))
+            stack.enter_context(mock.patch.object(RUNNER, "load_module", side_effect=load_module))
+            stack.enter_context(mock.patch.object(
+                RUNNER, "load_promotion_journal_snapshot",
+                return_value=(copy.deepcopy(fixture["state"]), "a" * 40),
+            ))
+            persist = stack.enter_context(mock.patch.object(RUNNER, "persist_journal_record", side_effect=RUNNER.PromotionError("state branch CAS rejected")))
+            stack.enter_context(mock.patch.object(RUNNER, "command", side_effect=command))
+            stack.enter_context(mock.patch.object(RUNNER, "gh_open_prs", return_value=fixture["open_pr_rows"]))
+            stack.enter_context(mock.patch.object(RUNNER, "gh_pr_readback", return_value=fixture["pull_request_readback"]))
+            stack.enter_context(mock.patch.object(PR_HELPER, "load_materializer", return_value=object()))
+            stack.enter_context(mock.patch.object(PR_HELPER, "remote_ref_sha", return_value=record["candidate"]["head_sha"]))
+            stack.enter_context(mock.patch.object(RUNNER, "github_api_request", side_effect=lambda method, endpoint, _body=None: (api_calls.append((method, endpoint)) or (500, None))))
+            ci_call = stack.enter_context(mock.patch.object(CI_HELPER, "ensure_verify_release_run", wraps=CI_HELPER.ensure_verify_release_run))
+            with self.assertRaisesRegex(RUNNER.PromotionError, "state branch CAS rejected"):
+                RUNNER.reconcile_open_promotions(root)
+
+        persist.assert_called_once()
+        ci_call.assert_not_called()
+        self.assertFalse(any(method == "POST" for method, _endpoint in api_calls))
+
+    def test_retry_after_committed_but_unacknowledged_cas_does_not_duplicate_pending_witness(self) -> None:
+        fixture = self.fixture()
+        initial = copy.deepcopy(fixture["state"]["records"][0])
+        journal = copy.deepcopy(fixture["state"])
+        expected_acknowledgements = copy.deepcopy(initial["acknowledgements"])
+        repo = initial["candidate"]["repository"]
+        current_main = fixture["provenance"]["workflow_checkout_sha"]
+        schema = json.loads((SCRIPT.parents[1] / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json").read_text(encoding="utf-8"))
+        calls = 0
+
+        def persist(_root: pathlib.Path, _base: str, receipt: dict, *, observed_at: str, **kwargs: object) -> None:
+            nonlocal journal, calls
+            calls += 1
+            journal = PR_HELPER.append_journal_record(journal, receipt, repository=repo, observed_at=observed_at)
+            PR_HELPER.validate_journal(journal, schema)
+            if calls == 1:
+                raise RUNNER.PromotionError("state push succeeded but response was lost")
+
+        def command(argv: tuple[str, ...], _root: pathlib.Path, **_kwargs: object) -> subprocess.CompletedProcess[str]:
+            if argv[:3] == ("git", "rev-parse", "HEAD"):
+                return subprocess.CompletedProcess(argv, 0, current_main + "\n", "")
+            raise AssertionError(f"unexpected command during recovery: {argv}")
+
+        candidate = initial["candidate"]
+        validation_args = {
+            "source_id": candidate["source_id"],
+            "scope": candidate["scope"],
+            "generation_id": candidate["generation_id"],
+            "registry_path": candidate["registry_path"],
+            "registry_bytes": candidate["registry_bytes"],
+            "registry_sha256": candidate["registry_sha256"],
+            "composition_receipt_sha256": candidate["composition_receipt_sha256"],
+        }
+        with tempfile.TemporaryDirectory() as raw, contextlib.ExitStack() as stack:
+            root = pathlib.Path(raw)
+            stack.enter_context(mock.patch.object(RUNNER, "command", side_effect=command))
+            stack.enter_context(mock.patch.object(RUNNER, "gh_open_prs", return_value=fixture["open_pr_rows"]))
+            stack.enter_context(mock.patch.object(RUNNER, "gh_pr_readback", return_value=fixture["pull_request_readback"]))
+            stack.enter_context(mock.patch.object(PR_HELPER, "load_materializer", return_value=object()))
+            stack.enter_context(mock.patch.object(PR_HELPER, "remote_ref_sha", return_value=candidate["head_sha"]))
+            stack.enter_context(mock.patch.object(RUNNER, "persist_journal_record", side_effect=persist))
+            with self.assertRaisesRegex(RUNNER.PromotionError, "response was lost"):
+                RUNNER.reconcile_prepared_create_pr(
+                    root, repo, initial, PR_HELPER, **validation_args,
+                    journal_source_base_sha=current_main,
+                    observed_at="2026-10-03T09:20:00Z",
+                    run_url="https://github.com/StatPan/datapan-registry/actions/runs/37101245239/attempts/5",
+                )
+            bound = copy.deepcopy(journal["records"][0])
+            recovered, number = RUNNER.reconcile_prepared_create_pr(
+                root, repo, bound, PR_HELPER, **validation_args,
+                journal_source_base_sha=current_main,
+                observed_at="2026-10-03T09:21:00Z",
+                run_url="https://github.com/StatPan/datapan-registry/actions/runs/37101245239/attempts/5",
+            )
+
+        self.assertEqual(number, 686)
+        self.assertEqual(calls, 2)
+        self.assertEqual(recovered["ownership"]["expected_head_sha"], candidate["head_sha"])
+        self.assertEqual(recovered["acknowledgements"], expected_acknowledgements)
+        self.assertEqual(len([ack for ack in recovered["acknowledgements"] if ack["status"] == "pending-review"]), 1)
 
 
 if __name__ == "__main__":

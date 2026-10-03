@@ -634,8 +634,8 @@
     {
       "path": "schemas/datapan.upstream-catalogue-health.v1.schema.json",
       "kind": "schema",
-      "bytes": 11837,
-      "sha256": "a1659d794099afd948cfabc1ad458c0313baca738a460548311a34e58d337de2"
+      "bytes": 12463,
+      "sha256": "eb3dc0b419492be70bf529cdb19a27ce69ded1252345c77036b2698e318e65a2"
     },
     {
       "path": "schemas/datapan.diagnostic-current-source-applicability.v1.schema.json",
@@ -672,7 +672,7 @@
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
       "bytes": 45393,
-      "sha256": "19bd80e6049d50ea7cfd318cbf6b7db21da58b8239ac5609c87c177a911be52a"
+      "sha256": "0172e1689785989bebac63643b9360d80676bab76341f420b0c3610c55281e4d"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -749,7 +749,7 @@
       "kind": "source_runtime_remediation_map",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
       "bytes": 8075,
-      "sha256": "01ee3caf57df2c162b9b1435ab380979cf12f810bb6f344f130501a63dd1205f"
+      "sha256": "2f8701b1295d226e5636a399314f56754cceb8be95ff195f57e86ec66f3d0e03"
     },
     {
       "path": "reports/operation-denominator-rollup.json",
@@ -861,7 +861,7 @@
       "kind": "registry_impact_plan",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
       "bytes": 11519,
-      "sha256": "908de7c74827a179de3b8d0d51608032205c7000b8b1a23f42b489f2732c03bb"
+      "sha256": "064d3db495fc7fb430efb5f32d00c6cd317e3668843964b88f0fd13b23f16c40"
     },
     {
       "path": "reports/source-reference-drift.json",
@@ -875,7 +875,7 @@
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
       "bytes": 62606,
-      "sha256": "1fff89ba1b4722ecbdb03b2370722f1edb4e915b94ecb521408b800b1d82294b"
+      "sha256": "916b1072f8f585d1434e9abbcfa0b421c7d245b54b9b116f10f0432c7854c6f3"
     },
     {
       "path": "reports/data-go-kr/operation-manifest.json",
@@ -959,21 +959,21 @@
       "kind": "consumer_compatibility",
       "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json",
       "bytes": 26719,
-      "sha256": "16b88b260d4b730318f3c1113345b32aeb28b731e36f7d5e4b66472644d2771a"
+      "sha256": "6de3095f56386609a8713af3cfbc0d795f9faa7d75d0643a99ee0f36d9193d6a"
     },
     {
       "path": "reports/release-version-decision.json",
       "kind": "release_version_decision",
       "schema": "https://schemas.datapan.dev/datapan.release-version-decision.v1.schema.json",
       "bytes": 1811,
-      "sha256": "9bdcc8d217f0a3e9fcc6d64d78f723fa6cbed9863cd93dad20082671a97ae2d5"
+      "sha256": "1d3bfbb9f1d58f26eb7f899f0e2310be989103a4d339d9efa4a243c695d3bed0"
     },
     {
       "path": "reports/release-distribution-footprint.json",
       "kind": "release_distribution_footprint",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
       "bytes": 2216,
-      "sha256": "99780913869cc19845eddc716ae0ff0e3e0519721241b1798074952736e5125b"
+      "sha256": "3848027371da5711c2b026ef025d7641ab59ae42f1c567122a0eb1b260fc9012"
     },
     {
       "path": "reports/release-shard-consumer-proof.json",
@@ -1022,7 +1022,7 @@
       "kind": "release_assembly_receipt",
       "schema": "https://schemas.datapan.dev/datapan.release-assembly-receipt.v1.schema.json",
       "bytes": 34969,
-      "sha256": "99c39e8307a4d839d41b1ccbe0915be4d4483cee6df260ea7653763865c28650"
+      "sha256": "785f2c959230745482233618ca8cb63e103be3e6e9331a7825d4e63d1c7c2ae7"
     },
     {
       "path": "reports/unadapted-external-probe.json",
@@ -1192,7 +1192,7 @@
       "kind": "verification_plan",
       "schema": "https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json",
       "bytes": 11290,
-      "sha256": "3c8361dc2c144698056cde5e12b299dbfb14bc378323a9c6a51509caed16244d"
+      "sha256": "f5a15e27f205c8fd6762105faedf18f389b4c45b5c4bd2aff951afa1463e71c8"
     },
     {
       "path": "reports/diagnostic-current-source-applicability.json",

@@ -1,0 +1,502 @@
+{
+  "provenance": {
+    "capture_date": "2026-10-03",
+    "processor_run_id": 37101245239,
+    "processor_run_attempt": 4,
+    "state_branch": "automation/canonical-update-state",
+    "state_branch_sha": "433ddf9837211e3c02433e7e71d1248852751e0c",
+    "state_receipt_source": "attempt-4-journal-current.json",
+    "pull_request_api_source": "GET /repos/StatPan/datapan-registry/pulls/686 from attempt-4-pr686-api-final.json",
+    "branch_sha_source": "GET /repos/StatPan/datapan-registry/git/ref/heads/automation/canonical-update/data-go-kr-bca0f6429512-126f7dd4dbc9f5acf6eb",
+    "workflow_checkout_sha": "516ed0095104785f83ddc75ada278e65ca4ec2ac",
+    "workflow_event_head_sha": "dc79e3931d6cfbbe5b19917487d356f88d0682f0",
+    "receipt_sha256": "940564444a1e6bb1035e1847220c760ebc44226cf9904140c296b93124494c11"
+  },
+  "state": {
+    "schema_version": "datapan.canonical-update-promotion-journal.v1",
+    "repository": "StatPan/datapan-registry",
+    "records": [
+      {
+        "schema_version": "datapan.canonical-update-promotion-receipt.v1",
+        "status": "pending-review",
+        "action": "create",
+        "source_refresh_evidence": {
+          "schema_version": "datapan.canonical-source-refresh-evidence.v1",
+          "registry_path": "data/data-go-kr.registry.json",
+          "registry_bytes": 139155499,
+          "registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+          "verification_path": "reports/latest-verification.json",
+          "verification_bytes": 4181898,
+          "verification_sha256": "79999f8ace142f5238283aa22ef87c35c6a2bc9d9b347827e3a969db94726d61",
+          "datapan_cli_revision": "e3b2fa44cb0f68d7e58e003fbd71ecde505878de",
+          "datapan_cli_tree": "3ae55285f4a991530a7fcd7a58e51fb5967be90e",
+          "generated_at": "2026-09-29T23:44:39Z",
+          "output_normalization": "replace_top_level_generated_at_with_source_observation_time_utc_then_json_indent_2_newline",
+          "diagnostic_current_source_applicability": {
+            "path": "reports/diagnostic-current-source-applicability.json",
+            "bytes": 25760,
+            "sha256": "412feb02d0db7068c10548f00cfdcc5a9bc4893e7836354c6bde072399692b15",
+            "schema_path": "schemas/datapan.diagnostic-current-source-applicability.v1.schema.json",
+            "schema_bytes": 6763,
+            "schema_sha256": "5e43e8aad27baefbcd2647e8b568763348584c4cf6b6512552863dab675d3b1d",
+            "status": "revalidation_required"
+          },
+          "commands": [
+            {
+              "argv": [
+                "go",
+                "run",
+                "./cmd/datapan",
+                "catalog",
+                "audit",
+                "--registry",
+                "/home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json",
+                "--output",
+                "/home/runner/work/datapan-registry/datapan-registry/reports/catalog-audit.json",
+                "--json"
+              ],
+              "exit_code": 0,
+              "input_registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+              "output_path": "reports/catalog-audit.json",
+              "raw_output_bytes": 16232,
+              "raw_output_sha256": "b780d2f573ec4b9e753f8e368cf29d0d9505e5a6a25a41f884bc889c05779a02",
+              "output_bytes": 16232,
+              "output_sha256": "0d565da1a84a93ba0e6ba751544ff79aca798390aaa8268f8f9a14e4e1ba0d94"
+            },
+            {
+              "argv": [
+                "go",
+                "run",
+                "./cmd/datapan",
+                "catalog",
+                "errors",
+                "--registry",
+                "/home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json",
+                "--limit",
+                "0",
+                "--output",
+                "/home/runner/work/datapan-registry/datapan-registry/reports/error-catalog.json",
+                "--json"
+              ],
+              "exit_code": 0,
+              "input_registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+              "output_path": "reports/error-catalog.json",
+              "raw_output_bytes": 3324319,
+              "raw_output_sha256": "c5e62dac6e45ab93ba3285f4e0850afb8bd01c141083b441f934708fcea3cc8d",
+              "output_bytes": 3324319,
+              "output_sha256": "a65376b9c192ab4ad7316ad0b584516230e41ea7f4aaa18f9de5c3a151ddfa9e"
+            },
+            {
+              "argv": [
+                "go",
+                "run",
+                "./cmd/datapan",
+                "catalog",
+                "dependencies",
+                "--registry",
+                "/home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json",
+                "--limit",
+                "0",
+                "--output",
+                "/home/runner/work/datapan-registry/datapan-registry/reports/dependencies.json",
+                "--json"
+              ],
+              "exit_code": 0,
+              "input_registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+              "output_path": "reports/dependencies.json",
+              "raw_output_bytes": 19226969,
+              "raw_output_sha256": "d4f31073464988dfe18aea8773689ce67dd3bf9e85c5f4ab19088184efaab4bd",
+              "output_bytes": 19140444,
+              "output_sha256": "ec2b7091462a70ae87332cd4ffde281082dd2ee3249a455d9be871ad6e69a298"
+            },
+            {
+              "argv": [
+                "go",
+                "run",
+                "./cmd/datapan",
+                "catalog",
+                "adapter-targets",
+                "--registry",
+                "/home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json",
+                "--limit",
+                "0",
+                "--output",
+                "/home/runner/work/datapan-registry/datapan-registry/reports/adapter-targets.json",
+                "--json"
+              ],
+              "exit_code": 0,
+              "input_registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+              "output_path": "reports/adapter-targets.json",
+              "raw_output_bytes": 15979,
+              "raw_output_sha256": "0dbb0eaa71b2a548130b761254fb4f6e30b25e801d4f43c4e4fe56461b199d8d",
+              "output_bytes": 15979,
+              "output_sha256": "1b76f5c7b065f587c8cf31ecffc20e159a4a78d07c0aa1d8cf0303a227c5aa3c"
+            },
+            {
+              "argv": [
+                "go",
+                "run",
+                "./cmd/datapan",
+                "catalog",
+                "providers",
+                "--registry",
+                "/home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json",
+                "--limit",
+                "0",
+                "--output",
+                "/home/runner/work/datapan-registry/datapan-registry/reports/provider-backlog.json",
+                "--json"
+              ],
+              "exit_code": 0,
+              "input_registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+              "output_path": "reports/provider-backlog.json",
+              "raw_output_bytes": 108311,
+              "raw_output_sha256": "3f79ba349f491a302b00f7a1293abdacc33b6656863625654293ef3040ed172c",
+              "output_bytes": 108311,
+              "output_sha256": "ba78ea3966ea3b3f199aa455532e31dfb361043c88424d2ab051d9e0b78a04f6"
+            },
+            {
+              "argv": [
+                "go",
+                "run",
+                "./cmd/datapan",
+                "catalog",
+                "diff",
+                "--old",
+                "/home/runner/work/datapan-registry/datapan-registry/.datapan/previous/data-go-kr.registry.json",
+                "--new",
+                "/home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json",
+                "--limit",
+                "0",
+                "--output",
+                "/home/runner/work/datapan-registry/datapan-registry/reports/catalog-diff.json",
+                "--json"
+              ],
+              "exit_code": 0,
+              "input_registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+              "input_previous_registry_sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644",
+              "output_path": "reports/catalog-diff.json",
+              "raw_output_bytes": 3254363,
+              "raw_output_sha256": "c854343320ad93b08928611d983d3892d372c572facd49ac579d7587b526688c",
+              "output_bytes": 3254333,
+              "output_sha256": "0fc986acab3d4e24f615a90a523cd27e2827bc0b24b06823d47fb2002e1e94f0"
+            },
+            {
+              "argv": [
+                "go",
+                "run",
+                "./cmd/datapan",
+                "catalog",
+                "route-disposition",
+                "--registry",
+                "/home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json",
+                "--probe",
+                "/home/runner/work/datapan-registry/datapan-registry/reports/unadapted-external-probe.json",
+                "--limit",
+                "0",
+                "--output",
+                "/home/runner/work/datapan-registry/datapan-registry/reports/route-disposition.json",
+                "--json"
+              ],
+              "exit_code": 0,
+              "input_registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+              "output_path": "reports/route-disposition.json",
+              "raw_output_bytes": 22918,
+              "raw_output_sha256": "33d366e1b702b4795839b7cc7f5f7739798a1f02621a50619f67cd73fcb664cc",
+              "output_bytes": 22918,
+              "output_sha256": "0f218284fa3e6fbb33b26012a714ea8d63f43144b1d050da084d0b4db0ab65e3"
+            },
+            {
+              "argv": [
+                "go",
+                "run",
+                "./cmd/datapan",
+                "catalog",
+                "coverage",
+                "--registry",
+                "/home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json",
+                "--verification",
+                "/home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json",
+                "--route-disposition",
+                "/home/runner/work/datapan-registry/datapan-registry/reports/route-disposition.json",
+                "--limit",
+                "0",
+                "--output",
+                "/home/runner/work/datapan-registry/datapan-registry/reports/coverage.json",
+                "--json"
+              ],
+              "exit_code": 0,
+              "input_registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+              "input_verification_sha256": "79999f8ace142f5238283aa22ef87c35c6a2bc9d9b347827e3a969db94726d61",
+              "output_path": "reports/coverage.json",
+              "raw_output_bytes": 104146,
+              "raw_output_sha256": "964b808e1da5a4f2e5a50321768aef8ebbeec87b29c3c319b576f71923ded959",
+              "output_bytes": 104146,
+              "output_sha256": "2685d81884fb93b91682e48042e3200c075992760312d40272494869ed01c0d6"
+            },
+            {
+              "argv": [
+                "go",
+                "run",
+                "./cmd/datapan",
+                "catalog",
+                "verify",
+                "plan",
+                "--registry",
+                "/home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json",
+                "--verification",
+                "/home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json",
+                "--limit",
+                "0",
+                "--output",
+                "/home/runner/work/datapan-registry/datapan-registry/reports/verification-plan.json",
+                "--json"
+              ],
+              "exit_code": 0,
+              "input_registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+              "input_verification_sha256": "79999f8ace142f5238283aa22ef87c35c6a2bc9d9b347827e3a969db94726d61",
+              "output_path": "reports/verification-plan.json",
+              "raw_output_bytes": 27482,
+              "raw_output_sha256": "fec102630eca53867e08e04605fee645f555711a43f39ecfbea3c491b1dc3d13",
+              "output_bytes": 27482,
+              "output_sha256": "92b8b43f1e84786d627242b1f4ddd746c6bb7c62b940518868793cf8ae6aa055"
+            }
+          ],
+          "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c"
+        },
+        "candidate": {
+          "repository": "StatPan/datapan-registry",
+          "source_id": "data_go_kr",
+          "scope": "aggregate_supported_catalog",
+          "base_sha": "5aae73b9a99255397ee2807d58c324094757bf8c",
+          "head_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+          "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c",
+          "registry_path": "data/data-go-kr.registry.json",
+          "registry_bytes": 139155499,
+          "registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+          "composition_receipt_sha256": "1af99ad2e3a553a9be8c99ab9aca040d4c73691f1a05d49dd0a43668c0a8a31c",
+          "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+          "payload_readback": {
+            "status": "verified",
+            "provider": "github-git-lfs",
+            "repository": "StatPan/datapan-registry",
+            "remote": "origin",
+            "source_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+            "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c",
+            "path": "data/data-go-kr.registry.json",
+            "bytes": 139155499,
+            "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+            "lfs_oid": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+            "upload_attempted": true,
+            "readback": "isolated_lfs_storage_verified",
+            "policy_path": "policy/registry-distribution.json",
+            "policy_bytes": 1292,
+            "policy_sha256": "e49e7d8d7474ff8233d7470c4138207689d7a9c20713b8da3dee302f33cbb031",
+            "observed_at": "2026-10-03T08:04:47.354255+00:00"
+          },
+          "manual_review_acceptance_status": "revalidation_required"
+        },
+        "checks": {
+          "composition": "passed",
+          "registry_manifest": "passed",
+          "denominator": "passed",
+          "adapter": "passed",
+          "ledger": "passed",
+          "release": "passed",
+          "consumer": "passed",
+          "finish_review_policy": "configured",
+          "manual_review_acceptance": "revalidation_required",
+          "diagnostic_current_source_applicability": "revalidation_required"
+        },
+        "validation_evidence": [
+          {
+            "name": "composition",
+            "source_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+            "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c",
+            "command": "#656 receipt schema + exact bundle digest/arithmetic validation",
+            "exit_code": 0
+          },
+          {
+            "name": "registry_manifest",
+            "source_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+            "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c",
+            "command": "python3 scripts/sync-release-schema-artifacts.py --check",
+            "exit_code": 0
+          },
+          {
+            "name": "registry_manifest",
+            "source_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+            "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c",
+            "command": "python3 scripts/sync-release-manifest-artifacts.py --check",
+            "exit_code": 0
+          },
+          {
+            "name": "denominator",
+            "source_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+            "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c",
+            "command": "python3 scripts/validate-data-go-kr-operation-manifest.py",
+            "exit_code": 0
+          },
+          {
+            "name": "denominator",
+            "source_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+            "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c",
+            "command": "python3 scripts/generate-operation-denominator-rollup.py --check",
+            "exit_code": 0
+          },
+          {
+            "name": "adapter",
+            "source_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+            "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c",
+            "command": "python3 scripts/validate-external-adapter-backlog.py",
+            "exit_code": 0
+          },
+          {
+            "name": "adapter",
+            "source_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+            "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c",
+            "command": "python3 scripts/validate-source-profiles.py",
+            "exit_code": 0
+          },
+          {
+            "name": "ledger",
+            "source_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+            "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c",
+            "command": "python3 scripts/refresh-release-ledger-evidence.py --check",
+            "exit_code": 0
+          },
+          {
+            "name": "diagnostic_current_source_applicability",
+            "source_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+            "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c",
+            "command": "python3 scripts/generate-diagnostic-current-source-applicability.py --check",
+            "exit_code": 0
+          },
+          {
+            "name": "diagnostic_current_source_applicability",
+            "source_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+            "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c",
+            "command": "python3 scripts/validate-diagnostic-current-source-applicability.py",
+            "exit_code": 0
+          },
+          {
+            "name": "release",
+            "source_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+            "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c",
+            "command": "python3 scripts/validate-release-report-artifacts.py",
+            "exit_code": 0
+          },
+          {
+            "name": "release",
+            "source_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+            "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c",
+            "command": "python3 scripts/validate-release-receipt-boundary.py",
+            "exit_code": 0
+          },
+          {
+            "name": "release",
+            "source_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+            "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c",
+            "command": "python3 scripts/generate-diagnostic-publication.py --check",
+            "exit_code": 0
+          },
+          {
+            "name": "consumer",
+            "source_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+            "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c",
+            "command": "python3 scripts/validate-release-consumer-compatibility.py",
+            "exit_code": 0
+          },
+          {
+            "name": "manual_review_acceptance",
+            "source_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+            "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c",
+            "command": "python3 scripts/validate-credential-runtime-manual-review-decision.py",
+            "exit_code": 0
+          },
+          {
+            "name": "manual_review_acceptance",
+            "source_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+            "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c",
+            "command": "python3 scripts/generate-credential-runtime-manual-review-acceptance.py --check",
+            "exit_code": 0
+          }
+        ],
+        "ownership": {
+          "owner_id": "datapan-canonical-update:v1:045f947a711dbc464c9bb74f7426aef95c200eaa1c5cc66bcbc95d685fb8c42a",
+          "branch": "automation/canonical-update/data-go-kr-bca0f6429512-126f7dd4dbc9f5acf6eb",
+          "expected_head_sha": "0000000000000000000000000000000000000000",
+          "body_sha256": "0b366a66013932641ff389db8818fc419213664c0f2edd03bca3daa74e07c654",
+          "body": "<!-- datapan-canonical-update:v1:045f947a711dbc464c9bb74f7426aef95c200eaa1c5cc66bcbc95d685fb8c42a generation=66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4 -->\n\n## Canonical registry update\n\n- Source: `data_go_kr`; scope: `aggregate_supported_catalog`\n- Candidate base commit: `5aae73b9a99255397ee2807d58c324094757bf8c`\n- Registry artifact: `data/data-go-kr.registry.json` (139155499 bytes, sha256 `0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0`)\n- Manifest sha256: `605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c`\n- Composition receipt sha256: `1af99ad2e3a553a9be8c99ab9aca040d4c73691f1a05d49dd0a43668c0a8a31c`\n- Global API denominator: 12300\n- Applied: 7918; pending: 1183; quarantined: 3199\n- Disposition counts: `{\"accept_changed\": 6639, \"accept_new\": 222, \"quarantine\": 3199, \"retain_deletion_pending\": 275, \"retain_worker_pending\": 908, \"unchanged\": 1057}`\n- Full-scope freshness: `false`; publication allowed: `false`\n\n## Validation and promotion state\n- composition: `passed`\n- registry_manifest: `passed`\n- denominator: `passed`\n- adapter: `passed`\n- ledger: `passed`\n- release: `passed`\n- consumer: `passed`\n- finish_review_policy: `configured`\n- diagnostic_current_source_applicability: `revalidation_required`\n- manual review acceptance: `revalidation_required`\n\nThe candidate passed source-snapshot validation and an isolated Git LFS remote read-back before this branch was advanced. Publication and merge remain behind the repository's reviewed gates.\n\nCloses #685\n",
+          "issue_number": 685,
+          "issue_url": "https://github.com/StatPan/datapan-registry/issues/685"
+        },
+        "pr": {
+          "number": 686,
+          "url": "https://github.com/StatPan/datapan-registry/pull/686",
+          "state": "open",
+          "merge_commit_sha": null
+        },
+        "supersedes_prs": [],
+        "acknowledgements": [
+          {
+            "status": "pending-review",
+            "observed_at": "2026-10-03T09:07:22.432236+00:00",
+            "source_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+            "manifest_sha256": "605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c",
+            "artifact_identity": {
+              "path": "data/data-go-kr.registry.json",
+              "bytes": 139155499,
+              "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+            },
+            "evidence_reference": "GitHub PR API read-back",
+            "run_url": "https://github.com/StatPan/datapan-registry/actions/runs/37101245239/attempts/4",
+            "run_id": 37101245239,
+            "run_attempt": 4,
+            "read_back_verified": false,
+            "read_back_sha256": null,
+            "read_back_bytes": null,
+            "publication_revision": null,
+            "publication_pointer_revision": null
+          }
+        ],
+        "blockers": [
+          "manual_review_revalidation_required",
+          "diagnostic_current_source_revalidation_required"
+        ]
+      }
+    ],
+    "updated_at": "2026-10-03T09:07:22.432236+00:00"
+  },
+  "open_pr_rows": [
+    {
+      "number": 686,
+      "url": "https://github.com/StatPan/datapan-registry/pull/686",
+      "state": "open",
+      "body": "<!-- datapan-canonical-update:v1:045f947a711dbc464c9bb74f7426aef95c200eaa1c5cc66bcbc95d685fb8c42a generation=66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4 -->\n\n## Canonical registry update\n\n- Source: `data_go_kr`; scope: `aggregate_supported_catalog`\n- Candidate base commit: `5aae73b9a99255397ee2807d58c324094757bf8c`\n- Registry artifact: `data/data-go-kr.registry.json` (139155499 bytes, sha256 `0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0`)\n- Manifest sha256: `605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c`\n- Composition receipt sha256: `1af99ad2e3a553a9be8c99ab9aca040d4c73691f1a05d49dd0a43668c0a8a31c`\n- Global API denominator: 12300\n- Applied: 7918; pending: 1183; quarantined: 3199\n- Disposition counts: `{\"accept_changed\": 6639, \"accept_new\": 222, \"quarantine\": 3199, \"retain_deletion_pending\": 275, \"retain_worker_pending\": 908, \"unchanged\": 1057}`\n- Full-scope freshness: `false`; publication allowed: `false`\n\n## Validation and promotion state\n- composition: `passed`\n- registry_manifest: `passed`\n- denominator: `passed`\n- adapter: `passed`\n- ledger: `passed`\n- release: `passed`\n- consumer: `passed`\n- finish_review_policy: `configured`\n- diagnostic_current_source_applicability: `revalidation_required`\n- manual review acceptance: `revalidation_required`\n\nThe candidate passed source-snapshot validation and an isolated Git LFS remote read-back before this branch was advanced. Publication and merge remain behind the repository's reviewed gates.\n\nCloses #685\n",
+      "body_sha256": "0b366a66013932641ff389db8818fc419213664c0f2edd03bca3daa74e07c654",
+      "head_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+      "head_ref": "automation/canonical-update/data-go-kr-bca0f6429512-126f7dd4dbc9f5acf6eb",
+      "base_ref": "main",
+      "merge_commit_sha": "0992a35ada8d0a65754f6e01301c69b1a9099bbf",
+      "owner_id": "datapan-canonical-update:v1:045f947a711dbc464c9bb74f7426aef95c200eaa1c5cc66bcbc95d685fb8c42a",
+      "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4"
+    }
+  ],
+  "pull_request_readback": {
+    "number": 686,
+    "url": "https://github.com/StatPan/datapan-registry/pull/686",
+    "state": "OPEN",
+    "body": "<!-- datapan-canonical-update:v1:045f947a711dbc464c9bb74f7426aef95c200eaa1c5cc66bcbc95d685fb8c42a generation=66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4 -->\n\n## Canonical registry update\n\n- Source: `data_go_kr`; scope: `aggregate_supported_catalog`\n- Candidate base commit: `5aae73b9a99255397ee2807d58c324094757bf8c`\n- Registry artifact: `data/data-go-kr.registry.json` (139155499 bytes, sha256 `0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0`)\n- Manifest sha256: `605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c`\n- Composition receipt sha256: `1af99ad2e3a553a9be8c99ab9aca040d4c73691f1a05d49dd0a43668c0a8a31c`\n- Global API denominator: 12300\n- Applied: 7918; pending: 1183; quarantined: 3199\n- Disposition counts: `{\"accept_changed\": 6639, \"accept_new\": 222, \"quarantine\": 3199, \"retain_deletion_pending\": 275, \"retain_worker_pending\": 908, \"unchanged\": 1057}`\n- Full-scope freshness: `false`; publication allowed: `false`\n\n## Validation and promotion state\n- composition: `passed`\n- registry_manifest: `passed`\n- denominator: `passed`\n- adapter: `passed`\n- ledger: `passed`\n- release: `passed`\n- consumer: `passed`\n- finish_review_policy: `configured`\n- diagnostic_current_source_applicability: `revalidation_required`\n- manual review acceptance: `revalidation_required`\n\nThe candidate passed source-snapshot validation and an isolated Git LFS remote read-back before this branch was advanced. Publication and merge remain behind the repository's reviewed gates.\n\nCloses #685\n",
+    "headRefName": "automation/canonical-update/data-go-kr-bca0f6429512-126f7dd4dbc9f5acf6eb",
+    "headRefOid": "bcc306c20c424faa9e789444e5914bf1887b930d",
+    "baseRefName": "main",
+    "baseRefOid": "5aae73b9a99255397ee2807d58c324094757bf8c",
+    "mergeCommit": {
+      "oid": "0992a35ada8d0a65754f6e01301c69b1a9099bbf"
+    },
+    "repository": "StatPan/datapan-registry",
+    "headRepository": "StatPan/datapan-registry"
+  },
+  "remote_branch_sha": "bcc306c20c424faa9e789444e5914bf1887b930d"
+}
