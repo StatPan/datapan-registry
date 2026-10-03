@@ -55,6 +55,21 @@ def read_registry(path: pathlib.Path) -> tuple[int, str]:
     return len(data), hashlib.sha256(data).hexdigest()
 
 
+def repository_relative_input(path: pathlib.Path, repository_root: pathlib.Path, expected_path: str) -> str:
+    """Return the canonical repository-relative label for a checked input."""
+    root = repository_root.resolve()
+    resolved = path.resolve()
+    try:
+        relative = resolved.relative_to(root)
+    except ValueError as exc:
+        raise SourceRefreshError("repository-local report input resolves outside the repository root") from exc
+    if relative.as_posix() != expected_path:
+        raise SourceRefreshError("repository-local report input does not resolve to its canonical path")
+    if not resolved.is_file():
+        raise SourceRefreshError("repository-local report input is not a regular file")
+    return relative.as_posix()
+
+
 def build_commands(
     repository_root: pathlib.Path,
     datapan_cli: pathlib.Path,
@@ -66,6 +81,12 @@ def build_commands(
     cli = datapan_cli.resolve()
     registry_abs = registry.resolve()
     verification_abs = verification.resolve()
+    runtime_plan_registry = repository_relative_input(
+        registry_abs, root, "data/data-go-kr.registry.json",
+    )
+    runtime_plan_verification = repository_relative_input(
+        verification_abs, root, "reports/latest-verification.json",
+    )
     generated = root / "reports"
     native = ("go", "run", "./cmd/datapan")
     commands = [
@@ -155,8 +176,8 @@ def build_commands(
         py("validate-institution-api-overview.py"),
         py(
             "generate-institution-runtime-plan.py",
-            "--registry", str(registry_abs),
-            "--latest-verification", str(verification_abs),
+            "--registry", runtime_plan_registry,
+            "--latest-verification", runtime_plan_verification,
         ),
         py("validate-institution-runtime-plan.py"),
         py("generate-sustainable-coverage.py"),

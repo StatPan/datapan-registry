@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import importlib.util
 import pathlib
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -87,6 +88,149 @@ class SourceRefreshTests(unittest.TestCase):
         script.parent.mkdir(parents=True, exist_ok=True)
         script.write_text("pass\n", encoding="utf-8")
         refresh.validate_root_source_scripts((command,), self.root)
+
+    def test_runtime_plan_generator_uses_confined_repository_relative_inputs(self) -> None:
+        commands = refresh.build_commands(
+            self.root,
+            self.cli,
+            self.root / "data/data-go-kr.registry.json",
+            self.root / "reports/latest-verification.json",
+        )
+        runtime_plan = next(
+            command for command in commands
+            if len(command.argv) > 1 and command.argv[1] == "scripts/generate-institution-runtime-plan.py"
+        )
+        self.assertEqual(
+            runtime_plan.argv[runtime_plan.argv.index("--registry") + 1],
+            "data/data-go-kr.registry.json",
+        )
+        self.assertEqual(
+            runtime_plan.argv[runtime_plan.argv.index("--latest-verification") + 1],
+            "reports/latest-verification.json",
+        )
+        for label in (
+            runtime_plan.argv[runtime_plan.argv.index("--registry") + 1],
+            runtime_plan.argv[runtime_plan.argv.index("--latest-verification") + 1],
+        ):
+            self.assertTrue((self.root / label).is_file())
+
+        outside_registry = pathlib.Path(self.temporary.name) / "outside.registry.json"
+        outside_registry.write_text("[]\n", encoding="utf-8")
+        with self.assertRaisesRegex(refresh.SourceRefreshError, "outside the repository root"):
+            refresh.build_commands(
+                self.root,
+                self.cli,
+                outside_registry,
+                self.root / "reports/latest-verification.json",
+            )
+
+        symlink_root = pathlib.Path(self.temporary.name) / "symlink-root"
+        (symlink_root / "data").mkdir(parents=True)
+        (symlink_root / "reports").mkdir()
+        (symlink_root / "reports/latest-verification.json").write_text("{}\n", encoding="utf-8")
+        (symlink_root / "data/data-go-kr.registry.json").symlink_to(outside_registry)
+        with self.assertRaisesRegex(refresh.SourceRefreshError, "outside the repository root"):
+            refresh.build_commands(
+                symlink_root,
+                self.cli,
+                symlink_root / "data/data-go-kr.registry.json",
+                symlink_root / "reports/latest-verification.json",
+            )
+
+    def test_runtime_plan_report_validates_after_relocation(self) -> None:
+        scripts = MODULE_PATH.parent
+        generator_name = "generate-institution-runtime-plan.py"
+        validator_name = "validate-institution-runtime-plan.py"
+        (self.root / "scripts").mkdir()
+        for script in (generator_name, validator_name):
+            shutil.copy2(scripts / script, self.root / "scripts" / script)
+        shutil.copy2(
+            scripts.parent / "schemas/datapan.institution-runtime-plan.v1.schema.json",
+            self.root / "schemas/datapan.institution-runtime-plan.v1.schema.json",
+        )
+        backlog_path = self.root / "reports/data-go-kr/coverage-backlog.json"
+        backlog_path.parent.mkdir(parents=True, exist_ok=True)
+        backlog_path.write_text(json.dumps({
+            "schema_version": "datapan.coverage-backlog.v1",
+            "generated_at": "2026-10-03T00:00:00Z",
+            "provider": "data.go.kr",
+            "source_id": "data_go_kr",
+            "summary": {"institutions": 1},
+            "institutions": [{
+                "organization": "Example Institution",
+                "api_count": 1,
+                "covered_api_count": 0,
+                "uncovered_api_count": 1,
+                "operation_count": 1,
+                "runtime_evidence_api_count": 0,
+                "runtime_reactivation_api_count": 1,
+                "runtime_missing_evidence_count": 1,
+                "approval_required_operations": 0,
+                "priority_score": 1,
+            }],
+        }), encoding="utf-8")
+
+        # Reproduce the old producer output: it validates in the source tree,
+        # but fails once Verify checks the same report from a nested checkout.
+        registry_abs = str((self.root / "data/data-go-kr.registry.json").resolve())
+        verification_abs = str((self.root / "reports/latest-verification.json").resolve())
+        old_command = (
+            sys.executable,
+            "scripts/generate-institution-runtime-plan.py",
+            "--registry", registry_abs,
+            "--latest-verification", verification_abs,
+        )
+        subprocess.run(old_command, cwd=self.root, check=True, capture_output=True, text=True)
+        old_relocated = pathlib.Path(self.temporary.name) / "verify-old" / "nested" / "datapan-registry"
+        shutil.copytree(self.root, old_relocated)
+        hidden_producer_root = pathlib.Path(self.temporary.name) / "producer-root-unavailable"
+        self.root.rename(hidden_producer_root)
+        try:
+            failed = subprocess.run(
+                [sys.executable, "scripts/validate-institution-runtime-plan.py"],
+                cwd=old_relocated,
+                capture_output=True,
+                text=True,
+            )
+        finally:
+            hidden_producer_root.rename(self.root)
+        self.assertNotEqual(failed.returncode, 0)
+        self.assertIn("generation_inputs.registry does not exist", failed.stderr)
+
+        # The corrected command records relocatable input paths and produces
+        # relocatable batch invocations; no source-tree absolute prefix leaks.
+        fixed_command = next(
+            command.argv for command in refresh.build_commands(
+                self.root,
+                self.cli,
+                self.root / "data/data-go-kr.registry.json",
+                self.root / "reports/latest-verification.json",
+            )
+            if len(command.argv) > 1 and command.argv[1] == f"scripts/{generator_name}"
+        )
+        subprocess.run(fixed_command, cwd=self.root, check=True, capture_output=True, text=True)
+        report = json.loads((self.root / "reports/data-go-kr/institution-runtime-plan.json").read_text(encoding="utf-8"))
+        self.assertEqual(report["generation_inputs"]["registry"], "data/data-go-kr.registry.json")
+        self.assertEqual(report["generation_inputs"]["latest_verification"], "reports/latest-verification.json")
+        self.assertTrue(all(
+            registry_abs not in row["command"] and verification_abs not in row["command"]
+            for row in report["batches"]
+        ))
+
+        fixed_relocated = pathlib.Path(self.temporary.name) / "verify-fixed" / "nested" / "datapan-registry"
+        shutil.copytree(self.root, fixed_relocated)
+        self.root.rename(hidden_producer_root)
+        try:
+            validated = subprocess.run(
+                [sys.executable, f"scripts/{validator_name}"],
+                cwd=fixed_relocated,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+        finally:
+            hidden_producer_root.rename(self.root)
+        self.assertIn("ok reports/data-go-kr/institution-runtime-plan.json", validated.stdout)
 
     @staticmethod
     def result(argv: tuple[str, ...], cwd: pathlib.Path, returncode: int = 0, stdout_override: str | None = None) -> subprocess.CompletedProcess[str]:
