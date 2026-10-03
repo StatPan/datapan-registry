@@ -248,6 +248,24 @@
       "exemption_boundary": "Tagging, GitHub Release creation, immutable distribution publication, anonymous fetch proof, live inference, mutable history, telemetry, and consumer deployment remain outside this generated artifact class."
     },
     {
+      "id": "diagnostic_current_source_applicability",
+      "artifact_kinds": ["diagnostic_current_source_applicability"],
+      "owner": "diagnostic contract maintainers",
+      "generated_by": [
+        "python scripts/generate-diagnostic-current-source-applicability.py --write"
+      ],
+      "checked_by": [
+        "python scripts/generate-diagnostic-current-source-applicability.py --check",
+        "python scripts/validate-diagnostic-current-source-applicability.py",
+        "python -m unittest tests/test_diagnostic_current_source_applicability.py",
+        "python scripts/sync-release-manifest-artifacts.py --check"
+      ],
+      "manifest_relationship": "The receipt binds immutable historical diagnostic proof inputs to exact current Registry and health bytes, with explicit static mismatches and no current-source approval claim.",
+      "schema_relationship": "Validated against schemas/datapan.diagnostic-current-source-applicability.v1.schema.json and independently recomputed from its pinned historical inputs and current source artifacts.",
+      "package_relationship": "Included in release packages as review evidence; a pending receipt is not current diagnostic compatibility or publication authority.",
+      "exemption_boundary": "Historical consumer and human-review proofs stay byte-bound to their original scope. Current-source compatibility, runtime acceptance, fresh consumer approval, release readiness, human acceptance, and publication require an independent authorized decision; this receipt grants none."
+    },
+    {
       "id": "downstream_release_evidence",
       "artifact_kinds": [
         "consumer_compatibility",

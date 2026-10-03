@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 105,
+  "count": 106,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 4491,
-      "sha256": "d11a4e2a69094104699161ee1bcdfb29e0bf4c31926c5ca134a176ef65cdf3e6"
+      "bytes": 4546,
+      "sha256": "fdbdf5a18d472947ffba7cf89f18480e6b741df551144b54e714fc06df2923d9"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -948,6 +948,15 @@
       "version": "v1",
       "bytes": 9725,
       "sha256": "7db8e1d681ce2ae81ffd67d3f7a6993692547940bfcbafc413815fccba9dcb7a"
+    },
+    {
+      "path": "schemas/datapan.diagnostic-current-source-applicability.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.diagnostic-current-source-applicability.v1.schema.json",
+      "title": "Datapan diagnostic current-source applicability v1",
+      "contract": "diagnostic-current-source-applicability",
+      "version": "v1",
+      "bytes": 6763,
+      "sha256": "5e43e8aad27baefbcd2647e8b568763348584c4cf6b6512552863dab675d3b1d"
     }
   ]
 }

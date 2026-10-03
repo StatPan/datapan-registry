@@ -26,6 +26,7 @@ class Command:
 
 WRITE_COMMANDS: tuple[Command, ...] = (
     Command(("python3", "scripts/sync-release-schema-artifacts.py", "--write")),
+    Command(("python3", "scripts/generate-diagnostic-current-source-applicability.py", "--write")),
     Command(("python3", "scripts/generate-source-contract-rollup.py")),
     Command(("python3", "scripts/generate-error-action-routing-rollup.py")),
     Command(("python3", "scripts/generate-failure-recovery-rollup.py")),
@@ -83,6 +84,9 @@ WRITE_COMMANDS: tuple[Command, ...] = (
 CHECK_COMMANDS: tuple[Command, ...] = (
     Command(("python3", "scripts/sync-release-schema-artifacts.py", "--check")),
     Command(("python3", "scripts/sync-release-manifest-artifacts.py", "--check")),
+    Command(("python3", "scripts/generate-diagnostic-current-source-applicability.py", "--check")),
+    Command(("python3", "scripts/validate-diagnostic-current-source-applicability.py")),
+    Command(("python3", "-m", "unittest", "tests/test_diagnostic_current_source_applicability.py")),
     Command(("python3", "scripts/validate-health-runtime-observation-plan.py")),
     Command(("python3", "scripts/validate-regional-baseline-source-provenance.py")),
     Command(("python3", "scripts/validate-release-ledger-ownership.py")),

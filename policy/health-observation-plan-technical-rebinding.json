@@ -124,6 +124,17 @@
       "kind": "upstream_catalogue_health_policy",
       "schema": "https://schemas.datapan.dev/datapan.upstream-catalogue-health-policy.v1.schema.json",
       "authority_ticket": "StatPan/datapan-registry#659"
+    },
+    {
+      "path": "reports/diagnostic-current-source-applicability.json",
+      "kind": "diagnostic_current_source_applicability",
+      "schema": "https://schemas.datapan.dev/datapan.diagnostic-current-source-applicability.v1.schema.json",
+      "authority_ticket": "StatPan/datapan-registry#666"
+    },
+    {
+      "path": "schemas/datapan.diagnostic-current-source-applicability.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#666"
     }
   ]
 }
