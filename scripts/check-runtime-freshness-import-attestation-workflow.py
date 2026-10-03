@@ -22,14 +22,18 @@ def main() -> int:
             "main verifier": "scripts/attest-runtime-freshness-import.py verify",
             "run admission": "reports/runtime-freshness-import-admissions/${RUN_ID}.json",
             "run attestation": "reports/runtime-freshness-import-attestations/${RUN_ID}.json",
-            "actual merge wait": 'test "${state}" = "MERGED"',
-            "final verification dispatch": 'event_type:"runtime-freshness-import-attestation-verify"',
+            "shared policy-aware handoff": "scripts/runtime-freshness-pr-handoff.py",
+            "final verification resume event": "--resume-event runtime-freshness-import-attestation-verify",
+            "run-bound handoff": "--run-id \"${RUN_ID}\"",
+            "PR-bound handoff": "--pr \"${pr}\"",
         }
         missing = [label for label, marker in required.items() if marker not in text]
         if missing:
             raise ValueError(f"missing attestation workflow markers: {', '.join(missing)}")
         if "pull_request:" in text or "workflow_run:" in text:
             raise ValueError("attestation workflow must use explicit non-recursive repository dispatches")
+        if "gh pr merge " in text or '"/dispatches"' in text or 'test "${state}" = "MERGED"' in text:
+            raise ValueError("attestation workflow must delegate merge and dispatch policy to the shared handoff")
         if "secrets." in text:
             raise ValueError("attestation workflow must not consume repository secrets")
         permissions = text.split("permissions:", 1)[1].split("concurrency:", 1)[0]
