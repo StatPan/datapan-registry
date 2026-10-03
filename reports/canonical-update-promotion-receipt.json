@@ -411,7 +411,7 @@
       "ownership": {
         "owner_id": "datapan-canonical-update:v1:045f947a711dbc464c9bb74f7426aef95c200eaa1c5cc66bcbc95d685fb8c42a",
         "branch": "automation/canonical-update/data-go-kr-bca0f6429512-126f7dd4dbc9f5acf6eb",
-        "expected_head_sha": "0000000000000000000000000000000000000000",
+        "expected_head_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
         "body_sha256": "0b366a66013932641ff389db8818fc419213664c0f2edd03bca3daa74e07c654",
         "body": "<!-- datapan-canonical-update:v1:045f947a711dbc464c9bb74f7426aef95c200eaa1c5cc66bcbc95d685fb8c42a generation=66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4 -->\n\n## Canonical registry update\n\n- Source: `data_go_kr`; scope: `aggregate_supported_catalog`\n- Candidate base commit: `5aae73b9a99255397ee2807d58c324094757bf8c`\n- Registry artifact: `data/data-go-kr.registry.json` (139155499 bytes, sha256 `0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0`)\n- Manifest sha256: `605522ababa42666dee4e2a7661daab82bcd5b629476df677892c944667a1c2c`\n- Composition receipt sha256: `1af99ad2e3a553a9be8c99ab9aca040d4c73691f1a05d49dd0a43668c0a8a31c`\n- Global API denominator: 12300\n- Applied: 7918; pending: 1183; quarantined: 3199\n- Disposition counts: `{\"accept_changed\": 6639, \"accept_new\": 222, \"quarantine\": 3199, \"retain_deletion_pending\": 275, \"retain_worker_pending\": 908, \"unchanged\": 1057}`\n- Full-scope freshness: `false`; publication allowed: `false`\n\n## Validation and promotion state\n- composition: `passed`\n- registry_manifest: `passed`\n- denominator: `passed`\n- adapter: `passed`\n- ledger: `passed`\n- release: `passed`\n- consumer: `passed`\n- finish_review_policy: `configured`\n- diagnostic_current_source_applicability: `revalidation_required`\n- manual review acceptance: `revalidation_required`\n\nThe candidate passed source-snapshot validation and an isolated Git LFS remote read-back before this branch was advanced. Publication and merge remain behind the repository's reviewed gates.\n\nCloses #685\n",
         "issue_number": 685,
@@ -452,5 +452,5 @@
       ]
     }
   ],
-  "updated_at": "2026-10-03T10:40:21.744227+00:00"
+  "updated_at": "2026-10-03T10:48:17.186708+00:00"
 }
