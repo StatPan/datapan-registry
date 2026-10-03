@@ -945,8 +945,28 @@
         "branch": "automation/canonical-update/data-go-kr-bca0f6429512-126f7dd4dbc9f5acf6eb",
         "body_sha256": "0b366a66013932641ff389db8818fc419213664c0f2edd03bca3daa74e07c654"
       },
-      "refresh_target_main_sha": "1d5373b4437c4216ab400ff5ebc59db782f71d13"
+      "refresh_target_main_sha": "1d5373b4437c4216ab400ff5ebc59db782f71d13",
+      "ci": {
+        "repository": "StatPan/datapan-registry",
+        "workflow_path": ".github/workflows/verify-release.yml",
+        "head_sha": "1a3088f64c0ff00fbf31e0e28cb37e3fc3d7dc07",
+        "branch": "automation/canonical-update/data-go-kr-bca0f6429512-126f7dd4dbc9f5acf6eb",
+        "pr_number": 686,
+        "owner_id": "datapan-canonical-update:v1:045f947a711dbc464c9bb74f7426aef95c200eaa1c5cc66bcbc95d685fb8c42a",
+        "body_sha256": "34ea71feb2c5c340dc537682e7472b80fa9e904aecea8828b9d5b1559e87e541",
+        "request_fingerprint": "5410998f38cdd8cd76d81706e93a84680ec3e76211d02d3f934d776c82f417d6",
+        "state": "intent",
+        "intent_at": "2026-10-03T11:48:37Z",
+        "run_id": null,
+        "run_attempt": null,
+        "run_url": null,
+        "run_status": null,
+        "conclusion": null,
+        "observed_at": "2026-10-03T11:48:37Z",
+        "dispatch_http_status": null,
+        "blocker": null
+      }
     }
   ],
-  "updated_at": "2026-10-03T11:48:31.008883+00:00"
+  "updated_at": "2026-10-03T11:48:38.557594+00:00"
 }
