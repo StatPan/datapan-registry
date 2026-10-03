@@ -33,6 +33,11 @@ on:
         required: false
         type: string
         default: ""
+      processor_state_sha:
+        description: Exact historical processor-state commit on the authoritative B state branch
+        required: false
+        type: string
+        default: ""
 
 permissions:
   actions: write
@@ -107,7 +112,7 @@ jobs:
       - name: Reconcile owned PRs and exact-head CI
         if: >-
           github.event_name != 'workflow_dispatch' ||
-          (inputs.refresh_pr_number == '' && inputs.expected_predecessor_head_sha == '' && inputs.expected_predecessor_body_sha256 == '' && inputs.expected_predecessor_manifest_sha256 == '' && inputs.target_main_sha == '')
+          (inputs.refresh_pr_number == '' && inputs.expected_predecessor_head_sha == '' && inputs.expected_predecessor_body_sha256 == '' && inputs.expected_predecessor_manifest_sha256 == '' && inputs.target_main_sha == '' && inputs.processor_state_sha == '')
         env:
           GH_TOKEN: ${{ github.token }}
           GITHUB_TOKEN: ${{ github.token }}
@@ -119,7 +124,7 @@ jobs:
       - name: Refresh one explicitly bound owned source revision
         if: >-
           github.event_name == 'workflow_dispatch' &&
-          (inputs.refresh_pr_number != '' || inputs.expected_predecessor_head_sha != '' || inputs.expected_predecessor_body_sha256 != '' || inputs.expected_predecessor_manifest_sha256 != '' || inputs.target_main_sha != '')
+          (inputs.refresh_pr_number != '' || inputs.expected_predecessor_head_sha != '' || inputs.expected_predecessor_body_sha256 != '' || inputs.expected_predecessor_manifest_sha256 != '' || inputs.target_main_sha != '' || inputs.processor_state_sha != '')
         env:
           GH_TOKEN: ${{ github.token }}
           GITHUB_TOKEN: ${{ github.token }}
@@ -130,6 +135,7 @@ jobs:
           EXPECTED_PREDECESSOR_BODY_SHA256: ${{ inputs.expected_predecessor_body_sha256 }}
           EXPECTED_PREDECESSOR_MANIFEST_SHA256: ${{ inputs.expected_predecessor_manifest_sha256 }}
           TARGET_MAIN_SHA: ${{ inputs.target_main_sha }}
+          PROCESSOR_STATE_SHA: ${{ inputs.processor_state_sha }}
         run: |
           python3 scripts/run-canonical-update-promotion.py \
             --mode refresh-owned-source \
@@ -139,12 +145,14 @@ jobs:
             --expected-predecessor-head-sha "$EXPECTED_PREDECESSOR_HEAD_SHA" \
             --expected-predecessor-body-sha256 "$EXPECTED_PREDECESSOR_BODY_SHA256" \
             --expected-predecessor-manifest-sha256 "$EXPECTED_PREDECESSOR_MANIFEST_SHA256" \
-            --target-main-sha "$TARGET_MAIN_SHA"
+            --target-main-sha "$TARGET_MAIN_SHA" \
+            --processor-state-repo .datapan/processor-state \
+            --processor-state-sha "$PROCESSOR_STATE_SHA"
 
       - name: Recover at most one durable ready processor bundle
         if: >-
           steps.processor-state-branch.outputs.exists == 'true' &&
-          (github.event_name != 'workflow_dispatch' || (inputs.refresh_pr_number == '' && inputs.expected_predecessor_head_sha == '' && inputs.expected_predecessor_body_sha256 == '' && inputs.expected_predecessor_manifest_sha256 == '' && inputs.target_main_sha == ''))
+          (github.event_name != 'workflow_dispatch' || (inputs.refresh_pr_number == '' && inputs.expected_predecessor_head_sha == '' && inputs.expected_predecessor_body_sha256 == '' && inputs.expected_predecessor_manifest_sha256 == '' && inputs.target_main_sha == '' && inputs.processor_state_sha == ''))
         env:
           GH_TOKEN: ${{ github.token }}
           GITHUB_TOKEN: ${{ github.token }}

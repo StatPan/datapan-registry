@@ -24,6 +24,8 @@ import shlex
 import stat
 import subprocess
 import sys
+import tarfile
+import tempfile
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -40,6 +42,7 @@ JOURNAL_SCHEMA = "datapan.canonical-update-promotion-journal.v1"
 JOURNAL_PATH = pathlib.Path("reports/canonical-update-promotion-receipt.json")
 STATE_BRANCH = "automation/canonical-update-state"
 PROCESSOR_STATE_BRANCH = "automation/upstream-catalogue-state"
+PROCESSOR_STATE_ROOT = pathlib.PurePosixPath(".datapan/upstream-catalogue-state")
 PROCESSOR_WORKFLOW_NAME = "Process upstream catalogue"
 PROCESSOR_WORKFLOW_PATH = ".github/workflows/upstream-catalogue-process.yml"
 PROCESSOR_ARTIFACT_PREFIX = "upstream-catalogue-processing-"
@@ -212,6 +215,156 @@ def command(
         # the command identity and exit code, never provider response text.
         raise PromotionError(f"command failed ({result.returncode}): {shlex.join(tuple(argv))}")
     return result
+
+
+def processor_state_repository_from_remote(url: str) -> str:
+    """Return the owner/repository identity from a GitHub remote URL."""
+    value = url.strip()
+    if not value:
+        raise PromotionError("processor state checkout has no origin remote")
+    if value.startswith("git@"):
+        host_path = value.removeprefix("git@")
+        host, separator, path = host_path.partition(":")
+        if not separator or host.casefold() != "github.com":
+            raise PromotionError("processor state checkout origin is not the configured GitHub repository")
+    else:
+        parsed = urllib.parse.urlparse(value)
+        if (
+            parsed.scheme not in {"https", "ssh"}
+            or (parsed.hostname or "").casefold() != "github.com"
+            or parsed.username is not None
+            or parsed.password is not None
+            or parsed.port is not None
+            or parsed.query
+            or parsed.fragment
+        ):
+            raise PromotionError("processor state checkout origin is not the configured GitHub repository")
+        path = parsed.path.lstrip("/")
+    path = path.removesuffix(".git").strip("/")
+    parts = path.split("/")
+    if len(parts) != 2 or any(not part or part in {".", ".."} for part in parts):
+        raise PromotionError("processor state checkout origin has an invalid repository path")
+    return "/".join(parts)
+
+
+def export_processor_state_pin(
+    checkout: pathlib.Path,
+    processor_state_sha: str,
+    repository: str,
+    destination: pathlib.Path,
+    *,
+    command_cwd: pathlib.Path,
+) -> tuple[pathlib.Path, dict[str, str]]:
+    """Read one exact ancestor state tree without checking out or changing B's branch."""
+    if not re.fullmatch(r"[a-f0-9]{40}", processor_state_sha):
+        raise PromotionError("processor state pin must be a full immutable Git commit SHA")
+    if not repository or "/" not in repository:
+        raise PromotionError("configured repository is required for a processor state pin")
+    if checkout.is_symlink() or not checkout.is_dir():
+        raise PromotionError("processor state checkout is missing or unsafe")
+    checkout_root = checkout.resolve(strict=True)
+    if destination.exists() or destination.is_symlink():
+        raise PromotionError("processor state pin export destination already exists")
+    if destination.resolve(strict=False).is_relative_to(checkout_root):
+        raise PromotionError("processor state pin export must remain outside the B checkout")
+    checkout_top = command(("git", "-C", str(checkout_root), "rev-parse", "--show-toplevel"), command_cwd).stdout.strip()
+    if pathlib.Path(checkout_top).resolve() != checkout_root:
+        raise PromotionError("processor state checkout root does not match the requested path")
+    remote_url = command(("git", "-C", str(checkout_root), "remote", "get-url", "origin"), command_cwd).stdout.strip()
+    if processor_state_repository_from_remote(remote_url).casefold() != repository.casefold():
+        raise PromotionError("processor state checkout repository differs from GITHUB_REPOSITORY")
+
+    state_ref = f"refs/heads/{PROCESSOR_STATE_BRANCH}"
+    remote_rows = [line.split("\t", 1) for line in command(
+        ("git", "-C", str(checkout_root), "ls-remote", "--heads", "origin", state_ref), command_cwd,
+    ).stdout.splitlines() if line]
+    if len(remote_rows) != 1 or len(remote_rows[0]) != 2 or remote_rows[0][1] != state_ref:
+        raise PromotionError("authoritative processor state branch is absent or ambiguous")
+    remote_head = remote_rows[0][0]
+    if not re.fullmatch(r"[a-f0-9]{40}", remote_head):
+        raise PromotionError("authoritative processor state branch head is malformed")
+    tracking_ref = f"refs/remotes/origin/{PROCESSOR_STATE_BRANCH}"
+    tracking_head = command(("git", "-C", str(checkout_root), "rev-parse", "--verify", f"{tracking_ref}^{{commit}}"), command_cwd).stdout.strip()
+    checkout_head = command(("git", "-C", str(checkout_root), "rev-parse", "--verify", "HEAD^{commit}"), command_cwd).stdout.strip()
+    if tracking_head != remote_head or checkout_head != remote_head:
+        raise PromotionError("processor state checkout is stale relative to the authoritative B branch")
+    pinned_commit = command(("git", "-C", str(checkout_root), "rev-parse", "--verify", f"{processor_state_sha}^{{commit}}"), command_cwd).stdout.strip()
+    if pinned_commit != processor_state_sha:
+        raise PromotionError("processor state pin does not resolve to its exact immutable commit")
+    ancestry = command(
+        ("git", "-C", str(checkout_root), "merge-base", "--is-ancestor", processor_state_sha, remote_head),
+        command_cwd, allowed_returncodes=frozenset({0, 1}),
+    )
+    if ancestry.returncode != 0:
+        raise PromotionError("processor state pin is not an ancestor of the authoritative B state branch")
+
+    destination.mkdir(parents=True, exist_ok=False)
+    archive_path = destination.parent / "processor-state-pin.tar"
+    if archive_path.exists() or archive_path.is_symlink():
+        raise PromotionError("processor state pin archive path already exists")
+    command((
+        "git", "-C", str(checkout_root), "archive", "--format=tar", "--output", str(archive_path),
+        processor_state_sha, PROCESSOR_STATE_ROOT.as_posix(),
+    ), command_cwd)
+    prefix = PROCESSOR_STATE_ROOT.parts
+    total_bytes = 0
+    seen: set[pathlib.PurePosixPath] = set()
+    try:
+        with tarfile.open(archive_path, mode="r:") as archive:
+            members = archive.getmembers()
+            if not members:
+                raise PromotionError("processor state pin has no owned state subtree")
+            for member in members:
+                member_path = pathlib.PurePosixPath(member.name)
+                if (
+                    not member_path.is_absolute()
+                    and len(member_path.parts) < len(prefix)
+                    and member_path.parts == prefix[:len(member_path.parts)]
+                ):
+                    if not member.isdir():
+                        raise PromotionError("processor state archive has a non-directory parent of the owned state root")
+                    continue
+                if member_path.is_absolute() or member_path.parts[:len(prefix)] != prefix:
+                    raise PromotionError("processor state archive contains a path outside the owned state root")
+                relative = pathlib.PurePosixPath(*member_path.parts[len(prefix):])
+                if any(part in {"", ".", ".."} for part in relative.parts):
+                    raise PromotionError("processor state archive contains an unsafe path")
+                if not relative.parts:
+                    if not member.isdir():
+                        raise PromotionError("processor state archive root is not a directory")
+                    continue
+                if relative in seen:
+                    raise PromotionError("processor state archive contains duplicate paths")
+                seen.add(relative)
+                output_path = destination.joinpath(*relative.parts)
+                if member.isdir():
+                    output_path.mkdir(parents=True, exist_ok=True)
+                    output_path.chmod(0o755)
+                    continue
+                if not member.isfile() or member.size < 0:
+                    raise PromotionError("processor state archive contains a link or unsupported file type")
+                total_bytes += member.size
+                if total_bytes > MAX_PROCESSOR_ARCHIVE_BYTES:
+                    raise PromotionError("processor state archive exceeds the bounded export size")
+                output_path.parent.mkdir(parents=True, exist_ok=True)
+                source = archive.extractfile(member)
+                if source is None:
+                    raise PromotionError("processor state archive contains an unreadable file")
+                with source, output_path.open("xb") as sink:
+                    shutil.copyfileobj(source, sink, length=1024 * 1024)
+                output_path.chmod(0o644)
+    finally:
+        archive_path.unlink(missing_ok=True)
+    index_path = destination / "sources/data_go_kr/index.json"
+    if not index_path.is_file() or index_path.is_symlink():
+        raise PromotionError("processor state pin does not contain the owned generation index")
+    provenance = {
+        "repository": repository,
+        "branch_ref": state_ref,
+        "branch_head_sha": remote_head,
+        "processor_state_sha": processor_state_sha,
+    }
+    return destination, provenance
 
 
 def verify_processor_checkpoint(value: dict[str, Any], schema_path: pathlib.Path) -> dict[str, Any]:
@@ -3583,6 +3736,12 @@ def run_source_refresh(args: argparse.Namespace, root: pathlib.Path) -> None:
             raise PromotionError(f"owned source refresh {label} must be a full SHA-256 digest")
     if not re.fullmatch(r"[a-f0-9]{40}", target_main):
         raise PromotionError("owned source refresh target main must be a full immutable Git SHA")
+    processor_state_sha = str(getattr(args, "processor_state_sha", "") or "")
+    if processor_state_sha and not re.fullmatch(r"[a-f0-9]{40}", processor_state_sha):
+        raise PromotionError("processor state pin must be a full immutable Git commit SHA")
+    processor_state_repo = getattr(args, "processor_state_repo", None)
+    if processor_state_sha and processor_state_repo is None:
+        raise PromotionError("processor state pin requires the read-only B checkout")
     checkout_sha = command(("git", "rev-parse", "HEAD"), root).stdout.strip()
     if checkout_sha != target_main:
         raise PromotionError("trusted source refresh checkout does not equal the requested target main")
@@ -3683,9 +3842,55 @@ def run_source_refresh(args: argparse.Namespace, root: pathlib.Path) -> None:
         observed = gh_pr_readback(root, repository, pr_number)
         validate_exact_open_pr(predecessor, observed, helper)
 
-    schema_path = root / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json"
+    if processor_state_sha:
+        checkout = pathlib.Path(processor_state_repo)
+        if not checkout.is_absolute():
+            checkout = root / checkout
+        with tempfile.TemporaryDirectory(prefix="canonical-source-refresh-state-pin-") as raw_export:
+            state_root, pin_provenance = export_processor_state_pin(
+                checkout,
+                processor_state_sha,
+                repository,
+                pathlib.Path(raw_export) / "state-root",
+                command_cwd=root,
+            )
+            original_state_root = args.state_root
+            args.state_root = state_root
+            try:
+                prepare_source_refresh_candidate(
+                    args, root, repository, target_main, predecessor, state_sha,
+                    successor_head_sha, state_root, pin_provenance, default_branch,
+                    helper, journal,
+                )
+            finally:
+                args.state_root = original_state_root
+        return
+
     state_root = args.state_root.resolve()
+    prepare_source_refresh_candidate(
+        args, root, repository, target_main, predecessor, state_sha,
+        successor_head_sha, state_root, None, default_branch, helper, journal,
+    )
+
+
+def prepare_source_refresh_candidate(
+    args: argparse.Namespace,
+    root: pathlib.Path,
+    repository: str,
+    target_main: str,
+    predecessor: Mapping[str, Any],
+    state_sha: str,
+    successor_head_sha: str | None,
+    state_root: pathlib.Path,
+    pin_provenance: Mapping[str, str] | None,
+    default_branch: str,
+    helper: Any,
+    journal: Mapping[str, Any],
+) -> None:
+    """Validate one exact B checkpoint and carry its selected state root into preparation."""
+    schema_path = root / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json"
     candidates, blocked = list_recoverable_processor_checkpoints(state_root, schema_path, journal)
+    pr_number = int(predecessor.get("pr", {}).get("number", 0))
     generation_id = str(predecessor["candidate"].get("generation_id", ""))
     matching_checkpoints = [row for row in candidates if row.get("generation_id") == generation_id]
     if len(matching_checkpoints) != 1:
@@ -3725,6 +3930,23 @@ def run_source_refresh(args: argparse.Namespace, root: pathlib.Path) -> None:
     ):
         raise PromotionError("predecessor B bundle does not reproduce the exact reviewed generation and payload")
 
+    if pin_provenance is not None:
+        checkpoint_path = state_root / "sources/data_go_kr/generations" / f"{generation_id}.json"
+        if checkpoint_path.is_symlink() or not checkpoint_path.is_file():
+            raise PromotionError("selected processor state pin checkpoint is missing or unsafe")
+        locator = checkpoint.get("output_artifact", {})
+        print(json.dumps({
+            "event": "processor_state_pin_selected",
+            **dict(pin_provenance),
+            "checkpoint_sha256": file_sha256(checkpoint_path),
+            "generation_id": generation_id,
+            "processor_run_id": run_id,
+            "run_attempt": attempt,
+            "artifact_id": artifact_id,
+            "artifact_expires_at": locator.get("expires_at"),
+            "bundle_manifest_sha256": locator.get("bundle_manifest_sha256"),
+        }, sort_keys=True), flush=True)
+
     args.source_refresh_predecessor = predecessor
     args.source_refresh_target_main_sha = target_main
     args.source_refresh_expected_state_sha = state_sha
@@ -3757,6 +3979,8 @@ def main() -> int:
     parser.add_argument("--expected-predecessor-body-sha256")
     parser.add_argument("--expected-predecessor-manifest-sha256")
     parser.add_argument("--target-main-sha")
+    parser.add_argument("--processor-state-sha")
+    parser.add_argument("--processor-state-repo", type=pathlib.Path)
     parser.add_argument("--prepare-only", action="store_true", help="generate and validate a local candidate commit without uploading LFS, creating issues/PRs, or writing promotion state")
     args = parser.parse_args()
     root = args.repository_root.resolve()
@@ -3764,6 +3988,8 @@ def main() -> int:
         repo = os.environ.get("GITHUB_REPOSITORY", "")
         if not repo or "/" not in repo:
             raise PromotionError("GITHUB_REPOSITORY is required")
+        if args.processor_state_sha and args.mode != "refresh-owned-source":
+            raise PromotionError("processor state pins are available only for explicit owned source refresh")
         if args.mode == "recover-ready":
             required = (args.state_root, args.datapan_cli)
             if any(value is None for value in required):

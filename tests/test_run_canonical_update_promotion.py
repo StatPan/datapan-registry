@@ -4,6 +4,7 @@ import contextlib
 import importlib.util
 import hashlib
 import copy
+import datetime as dt
 import io
 import json
 import os
@@ -2070,7 +2071,7 @@ class OwnedPRRefreshRecoveryTests(unittest.TestCase):
             {
                 "refresh_pr_number", "expected_predecessor_head_sha",
                 "expected_predecessor_body_sha256", "expected_predecessor_manifest_sha256",
-                "target_main_sha",
+                "target_main_sha", "processor_state_sha",
             },
         )
         self.assertTrue(all(row["default"] == "" for row in dispatch.values()))
@@ -2079,10 +2080,14 @@ class OwnedPRRefreshRecoveryTests(unittest.TestCase):
         steps = workflow["jobs"]["reconcile"]["steps"]
         refresh = next(step for step in steps if step.get("name") == "Refresh one explicitly bound owned source revision")
         self.assertIn("inputs.refresh_pr_number != ''", refresh["if"])
+        self.assertIn("inputs.processor_state_sha != ''", refresh["if"])
         self.assertIn("--mode refresh-owned-source", refresh["run"])
         self.assertIn("--target-main-sha", refresh["run"])
+        self.assertIn("--processor-state-repo .datapan/processor-state", refresh["run"])
+        self.assertIn("--processor-state-sha", refresh["run"])
         for step_name in ("Reconcile owned PRs and exact-head CI", "Recover at most one durable ready processor bundle"):
             normal = next(step for step in steps if step.get("name") == step_name)
+            self.assertIn("inputs.processor_state_sha == ''", normal["if"])
             self.assertIn("inputs.refresh_pr_number == ''", normal["if"])
     def test_predecessor_readback_routes_to_prepared_refresh_phase(self) -> None:
         predecessor, target = self.receipts()
@@ -2670,6 +2675,187 @@ class PreparedCreateRecoveryTests(unittest.TestCase):
 
 
 
+class ProcessorStatePinExportTests(unittest.TestCase):
+    repository = "StatPan/datapan-registry"
+    old_composition_sha = "1af99ad2e3a553a9be8c99ab9aca040d4c73691f1a05d49dd0a43668c0a8a31c"
+    current_composition_sha = "2e9f0b218409c0582d5d4e59c662f599bf769516c225677c5460bbd45578f9df"
+
+    @staticmethod
+    def git(path: pathlib.Path, *args: str) -> str:
+        result = subprocess.run(("git", *args), cwd=path, text=True, capture_output=True, check=False)
+        if result.returncode:
+            raise AssertionError(result.stderr or result.stdout)
+        return result.stdout.strip()
+
+    @classmethod
+    def build_state_history(cls, root: pathlib.Path) -> dict[str, object]:
+        checkout = root / "processor-state-repository"
+        checkout.mkdir(parents=True)
+        cls.git(checkout, "init", "-q", "-b", RUNNER.PROCESSOR_STATE_BRANCH)
+        cls.git(checkout, "config", "user.name", "State fixture")
+        cls.git(checkout, "config", "user.email", "state-fixture@example.invalid")
+        cls.git(checkout, "remote", "add", "origin", "https://github.com/StatPan/datapan-registry.git")
+
+        maker = DurableProcessorRecoveryTests()
+        old = maker.checkpoint(
+            run_id="37100705274", attempt="1", observed_at="2026-09-29T00:00:00Z",
+            candidate_sha256="d" * 64,
+        )
+        old["attempts_consumed"] = 48
+        old["attempts_by_id"] = {"data.go.kr:detail": 48}
+        old["detail_queue_cursor"] = 48
+        old["output_artifact"].update({
+            "artifact_id": "11266965270",
+            "expires_at": "2026-11-02T05:52:36Z",
+        })
+        old["output_digests"] = [{
+            "path": "composition-receipt.json",
+            "sha256": cls.old_composition_sha,
+            "bytes": 1,
+        }]
+        old["output_artifact"]["bundle_manifest_sha256"] = hashlib.sha256(
+            RUNNER.canonical_json(old["output_digests"]),
+        ).hexdigest()
+        maker.seal(old)
+
+        current = copy.deepcopy(old)
+        current["attempts_consumed"] = 72
+        current["attempts_by_id"] = {"data.go.kr:detail": 72}
+        current["detail_queue_cursor"] = 72
+        current["last_heartbeat_at"] = "2026-10-03T10:00:00Z"
+        current["output_artifact"].update({
+            "run_id": "37120180628",
+            "name": "upstream-catalogue-processing-37120180628-1",
+            "artifact_id": "11272800001",
+        })
+        current["output_digests"] = [{
+            "path": "composition-receipt.json",
+            "sha256": cls.current_composition_sha,
+            "bytes": 1,
+        }]
+        current["output_artifact"]["bundle_manifest_sha256"] = hashlib.sha256(
+            RUNNER.canonical_json(current["output_digests"]),
+        ).hexdigest()
+        maker.seal(current)
+
+        state_root = checkout / RUNNER.PROCESSOR_STATE_ROOT.as_posix()
+        source_root = state_root / "sources/data_go_kr"
+        generation_root = source_root / "generations"
+        generation_root.mkdir(parents=True)
+        index = {
+            "schema_version": RUNNER.PROCESSOR_SCHEMA,
+            "generations": [{
+                "generation_id": old["generation_id"],
+                "status": "ready",
+                "checkpoint": f"{old['generation_id']}.json",
+            }],
+        }
+        checkpoint_path = generation_root / f"{old['generation_id']}.json"
+        checkpoint_path.write_bytes(RUNNER.canonical_json(old))
+        (source_root / "index.json").write_bytes(RUNNER.canonical_json(index))
+        cls.git(checkout, "add", RUNNER.PROCESSOR_STATE_ROOT.as_posix())
+        cls.git(checkout, "commit", "-qm", "archive original ready processor attempt")
+        old_sha = cls.git(checkout, "rev-parse", "HEAD")
+
+        checkpoint_path.write_bytes(RUNNER.canonical_json(current))
+        cls.git(checkout, "add", RUNNER.PROCESSOR_STATE_ROOT.as_posix())
+        cls.git(checkout, "commit", "-qm", "advance retries without changing candidate payload")
+        current_sha = cls.git(checkout, "rev-parse", "HEAD")
+        cls.git(checkout, "update-ref", f"refs/remotes/origin/{RUNNER.PROCESSOR_STATE_BRANCH}", current_sha)
+        return {
+            "checkout": checkout,
+            "state_root": state_root,
+            "old": old,
+            "current": current,
+            "old_sha": old_sha,
+            "current_sha": current_sha,
+        }
+
+    def command_with_authoritative_remote(self, history: dict[str, object]):
+        original = RUNNER.command
+        checkout = pathlib.Path(history["checkout"])
+        current_sha = str(history["current_sha"])
+        ref = f"refs/heads/{RUNNER.PROCESSOR_STATE_BRANCH}"
+
+        def run(argv, cwd, **kwargs):
+            if tuple(argv) == ("git", "-C", str(checkout), "ls-remote", "--heads", "origin", ref):
+                return subprocess.CompletedProcess(argv, 0, f"{current_sha}\t{ref}\n", "")
+            return original(argv, cwd, **kwargs)
+
+        return run
+
+    def test_export_selects_original_ready_checkpoint_from_authoritative_ancestor(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="processor-state-pin-export-") as raw:
+            root = pathlib.Path(raw)
+            history = self.build_state_history(root)
+            checkout = pathlib.Path(history["checkout"])
+            before_head = self.git(checkout, "rev-parse", "HEAD")
+            before_ref = self.git(checkout, "rev-parse", f"refs/remotes/origin/{RUNNER.PROCESSOR_STATE_BRANCH}")
+            destination = root / "export"
+            fixed_now = dt.datetime(2026, 10, 3, tzinfo=dt.timezone.utc)
+            with (
+                mock.patch.object(RUNNER, "command", side_effect=self.command_with_authoritative_remote(history)),
+                contextlib.redirect_stdout(io.StringIO()),
+            ):
+                pinned_root, provenance = RUNNER.export_processor_state_pin(
+                    checkout, str(history["old_sha"]), self.repository, destination,
+                    command_cwd=pathlib.Path(__file__).parents[1],
+                )
+                pinned_rows, pinned_blocked = RUNNER.list_recoverable_processor_checkpoints(
+                    pinned_root,
+                    pathlib.Path(__file__).parents[1] / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+                    None, now=fixed_now,
+                )
+                current_rows, current_blocked = RUNNER.list_recoverable_processor_checkpoints(
+                    pathlib.Path(history["state_root"]),
+                    pathlib.Path(__file__).parents[1] / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+                    None, now=fixed_now,
+                )
+
+            self.assertEqual(pinned_blocked, [])
+            self.assertEqual(current_blocked, [])
+            self.assertEqual(len(pinned_rows), 1)
+            self.assertEqual(len(current_rows), 1)
+            pinned = pinned_rows[0]
+            current = current_rows[0]
+            self.assertEqual(pinned["generation_id"], current["generation_id"])
+            self.assertEqual(pinned["generation_inputs"], current["generation_inputs"])
+            self.assertEqual(pinned["attempts_consumed"], 48)
+            self.assertEqual(current["attempts_consumed"], 72)
+            self.assertEqual(pinned["detail_queue_cursor"], 48)
+            self.assertEqual(current["detail_queue_cursor"], 72)
+            self.assertEqual(pinned["output_artifact"]["artifact_id"], "11266965270")
+            self.assertEqual(current["output_artifact"]["artifact_id"], "11272800001")
+            self.assertEqual(pinned["output_digests"][0]["sha256"], self.old_composition_sha)
+            self.assertEqual(current["output_digests"][0]["sha256"], self.current_composition_sha)
+            self.assertEqual(provenance["processor_state_sha"], history["old_sha"])
+            self.assertEqual(provenance["branch_head_sha"], history["current_sha"])
+            self.assertEqual(before_head, self.git(checkout, "rev-parse", "HEAD"))
+            self.assertEqual(before_ref, self.git(checkout, "rev-parse", f"refs/remotes/origin/{RUNNER.PROCESSOR_STATE_BRANCH}"))
+            self.assertFalse((pinned_root / ".git").exists())
+
+    def test_export_rejects_nonancestor_wrong_repository_and_tracking_ref_drift(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="processor-state-pin-reject-") as raw:
+            root = pathlib.Path(raw)
+            history = self.build_state_history(root)
+            checkout = pathlib.Path(history["checkout"])
+            fake_remote = self.command_with_authoritative_remote(history)
+            with mock.patch.object(RUNNER, "command", side_effect=fake_remote), contextlib.redirect_stdout(io.StringIO()):
+                with self.assertRaisesRegex(RUNNER.PromotionError, "full immutable"):
+                    RUNNER.export_processor_state_pin(checkout, "bad-pin", self.repository, root / "bad", command_cwd=root)
+                with self.assertRaisesRegex(RUNNER.PromotionError, "differs from GITHUB_REPOSITORY"):
+                    RUNNER.export_processor_state_pin(checkout, str(history["old_sha"]), "Other/repo", root / "wrong-repo", command_cwd=root)
+
+                tree = self.git(checkout, "write-tree")
+                unrelated = self.git(checkout, "commit-tree", tree, "-m", "unrelated state commit")
+                with self.assertRaisesRegex(RUNNER.PromotionError, "not an ancestor"):
+                    RUNNER.export_processor_state_pin(checkout, unrelated, self.repository, root / "unrelated", command_cwd=root)
+
+                self.git(checkout, "update-ref", f"refs/remotes/origin/{RUNNER.PROCESSOR_STATE_BRANCH}", str(history["old_sha"]))
+                with self.assertRaisesRegex(RUNNER.PromotionError, "stale relative"):
+                    RUNNER.export_processor_state_pin(checkout, str(history["old_sha"]), self.repository, root / "stale", command_cwd=root)
+
+
 class TrustedSourceRefreshEntryPointTests(unittest.TestCase):
     def setUp(self) -> None:
         self.old, _new = OwnedPRRefreshRecoveryTests().receipts()
@@ -2767,6 +2953,211 @@ class TrustedSourceRefreshEntryPointTests(unittest.TestCase):
         self.args.expected_predecessor_body_sha256 = ""
         with self.assertRaisesRegex(RUNNER.PromotionError, "body must be a full SHA-256"):
             RUNNER.run_source_refresh(self.args, pathlib.Path("."))
+
+    def test_processor_state_pin_alone_routes_to_refresh_and_fails_missing_five_inputs(self) -> None:
+        self.run_with_read_only_stubs()
+        self.args.refresh_pr_number = None
+        self.args.processor_state_sha = "a" * 40
+        self.args.processor_state_repo = pathlib.Path("processor-state")
+        with mock.patch.object(RUNNER, "export_processor_state_pin") as export:
+            with self.assertRaisesRegex(RUNNER.PromotionError, "positive predecessor PR number"):
+                RUNNER.run_source_refresh(self.args, pathlib.Path("."))
+        export.assert_not_called()
+
+    def test_pin_uses_same_historical_export_for_selection_and_full_preparation(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="pinned-source-refresh-flow-") as raw:
+            temp_root = pathlib.Path(raw)
+            history = ProcessorStatePinExportTests.build_state_history(temp_root)
+            checkout = pathlib.Path(history["checkout"])
+            state_root = pathlib.Path(history["state_root"])
+            old_checkpoint = history["old"]
+            old_composition_sha = ProcessorStatePinExportTests.old_composition_sha
+            original_head = ProcessorStatePinExportTests.git(checkout, "rev-parse", "HEAD")
+
+            self.old["candidate"]["generation_id"] = old_checkpoint["generation_id"]
+            self.old["candidate"]["registry_sha256"] = old_checkpoint["generation_inputs"]["candidate_sha256"]
+            self.old["candidate"]["composition_receipt_sha256"] = old_composition_sha
+            journal = {"records": [self.old]}
+            self.args.state_root = state_root
+            self.args.processor_state_sha = str(history["old_sha"])
+            self.args.processor_state_repo = checkout
+
+            ready_bundle = {
+                "status": "ready",
+                "generation_id": old_checkpoint["generation_id"],
+                "registry_sha256": self.old["candidate"]["registry_sha256"],
+                "composition_receipt_sha256": old_composition_sha,
+                "composition_receipt": {"schema_version": "fixture"},
+            }
+            retry_bundle = {"status": "retry", "reason": "fixture_no_candidate"}
+            root = pathlib.Path(__file__).parents[1].resolve()
+            original_command = RUNNER.command
+            branch_ref = f"refs/heads/{RUNNER.PROCESSOR_STATE_BRANCH}"
+            selected_roots: list[pathlib.Path] = []
+            execute_roots: list[pathlib.Path] = []
+
+            def command_proxy(argv, cwd, **kwargs):
+                values = tuple(argv)
+                if values == ("git", "rev-parse", "HEAD") and pathlib.Path(cwd).resolve() == root:
+                    return subprocess.CompletedProcess(values, 0, f"{self.target_main}\n", "")
+                if values == ("git", "-C", str(checkout), "ls-remote", "--heads", "origin", branch_ref):
+                    return subprocess.CompletedProcess(values, 0, f"{history['current_sha']}\t{branch_ref}\n", "")
+                return original_command(values, cwd, **kwargs)
+
+            original_list = RUNNER.list_recoverable_processor_checkpoints
+
+            def list_proxy(selected_root, *args, **kwargs):
+                selected_roots.append(pathlib.Path(selected_root))
+                self.assertTrue(pathlib.Path(selected_root).is_dir(), "the selected state export exists during checkpoint selection")
+                return original_list(pathlib.Path(selected_root), *args, **kwargs)
+
+            original_locate = RUNNER.locate_processor_checkpoint
+
+            def locate_proxy(selected_root, *args, **kwargs):
+                execute_roots.append(pathlib.Path(selected_root))
+                self.assertTrue(pathlib.Path(selected_root).is_dir(), "the same export remains available during full candidate preparation")
+                return original_locate(pathlib.Path(selected_root), *args, **kwargs)
+
+            output = io.StringIO()
+            with (
+                mock.patch.dict(os.environ, {
+                    "GITHUB_REPOSITORY": self.repository,
+                    "GITHUB_DEFAULT_BRANCH": "main",
+                    "GITHUB_EVENT_NAME": "workflow_dispatch",
+                    "GITHUB_REF": "refs/heads/main",
+                    "GITHUB_RUN_ID": "37130000001",
+                    "GITHUB_RUN_ATTEMPT": "1",
+                }),
+                mock.patch.object(RUNNER, "command", side_effect=command_proxy),
+                mock.patch.object(RUNNER, "assert_remote_main_sha"),
+                mock.patch.object(RUNNER, "assert_predecessor_base_is_ancestor"),
+                mock.patch.object(RUNNER, "load_canonical_update_pr", return_value=PR_HELPER),
+                mock.patch.object(RUNNER, "load_promotion_journal_snapshot", return_value=(journal, self.state_sha)),
+                mock.patch.object(RUNNER, "gh_pr_readback", return_value={"headRefOid": self.old["candidate"]["head_sha"]}),
+                mock.patch.object(RUNNER, "validate_exact_open_pr"),
+                mock.patch.object(RUNNER, "list_recoverable_processor_checkpoints", side_effect=list_proxy),
+                mock.patch.object(RUNNER, "processor_run_api", return_value={"id": 37100705274}),
+                mock.patch.object(RUNNER, "validate_trusted_processor_run", return_value={"head_sha": "a" * 40}),
+                mock.patch.object(RUNNER, "processor_artifact_api", return_value={"id": "11266965270"}) as artifact_api,
+                mock.patch.object(RUNNER, "validate_processor_artifact_metadata", return_value={"id": "11266965270"}),
+                mock.patch.object(RUNNER, "download_processor_artifact", return_value=temp_root / "bundle"),
+                mock.patch.object(RUNNER, "validate_processor_bundle", side_effect=(ready_bundle, retry_bundle)),
+                mock.patch.object(RUNNER, "verify_processor_input_compatibility"),
+                mock.patch.object(RUNNER, "validate_no_candidate_processor_result", return_value=None),
+                mock.patch.object(RUNNER, "locate_processor_checkpoint", side_effect=locate_proxy),
+                contextlib.redirect_stdout(output),
+            ):
+                (temp_root / "bundle").mkdir()
+                RUNNER.run_source_refresh(self.args, root)
+
+            self.assertEqual(len(selected_roots), 1)
+            self.assertEqual(len(execute_roots), 1)
+            self.assertEqual(selected_roots[0], execute_roots[0])
+            self.assertTrue(selected_roots[0].is_absolute())
+            self.assertFalse(selected_roots[0].exists(), "the temporary export is removed after full preparation")
+            self.assertEqual(self.args.state_root, state_root, "the caller's current state path is restored")
+            self.assertEqual(artifact_api.call_args.args[2], "37100705274")
+            self.assertEqual(artifact_api.call_args.args[3], "11266965270")
+            self.assertEqual(ProcessorStatePinExportTests.git(checkout, "rev-parse", "HEAD"), original_head)
+            self.assertEqual(ProcessorStatePinExportTests.git(checkout, "rev-parse", f"refs/remotes/origin/{RUNNER.PROCESSOR_STATE_BRANCH}"), original_head)
+            pin_logs = [
+                json.loads(line) for line in output.getvalue().splitlines()
+                if line.startswith("{") and json.loads(line).get("event") == "processor_state_pin_selected"
+            ]
+            self.assertEqual(len(pin_logs), 1, output.getvalue())
+            pin_log = pin_logs[0]
+            self.assertEqual(pin_log["processor_state_sha"], history["old_sha"])
+            self.assertEqual(pin_log["branch_head_sha"], history["current_sha"])
+            self.assertEqual(pin_log["checkpoint_sha256"], hashlib.sha256(RUNNER.canonical_json(old_checkpoint)).hexdigest())
+            self.assertEqual(pin_log["processor_run_id"], "37100705274")
+            self.assertEqual(pin_log["run_attempt"], "1")
+            self.assertEqual(pin_log["artifact_id"], "11266965270")
+            self.assertEqual(pin_log["artifact_expires_at"], "2026-11-02T05:52:36Z")
+
+    def test_pin_export_is_cleaned_and_caller_state_restored_after_preparation_failure(self) -> None:
+        self.run_with_read_only_stubs()
+        self.args.processor_state_sha = "a" * 40
+        self.args.processor_state_repo = pathlib.Path("processor-state")
+        original_state_root = self.args.state_root
+        exported_paths: list[pathlib.Path] = []
+
+        def export(_checkout, _pin, _repository, destination, *, command_cwd):
+            self.assertIsInstance(command_cwd, pathlib.Path)
+            destination.mkdir(parents=True)
+            exported_paths.append(destination)
+            return destination, {
+                "repository": self.repository,
+                "branch_ref": f"refs/heads/{RUNNER.PROCESSOR_STATE_BRANCH}",
+                "branch_head_sha": "b" * 40,
+                "processor_state_sha": "a" * 40,
+            }
+
+        def fail_preparation(args, _root, *_extra):
+            self.assertEqual(args.state_root, exported_paths[0])
+            self.assertTrue(args.state_root.is_dir())
+            raise RUNNER.PromotionError("fixture preparation failure")
+
+        with (
+            mock.patch.object(RUNNER, "load_canonical_update_pr", return_value=PR_HELPER),
+            mock.patch.object(RUNNER, "load_promotion_journal_snapshot", return_value=({"records": [self.old]}, self.state_sha)),
+            mock.patch.object(RUNNER, "gh_pr_readback", return_value={}),
+            mock.patch.object(RUNNER, "validate_exact_open_pr"),
+            mock.patch.object(RUNNER, "export_processor_state_pin", side_effect=export) as export_call,
+            mock.patch.object(RUNNER, "prepare_source_refresh_candidate", side_effect=fail_preparation) as prepare,
+        ):
+            with self.assertRaisesRegex(RUNNER.PromotionError, "fixture preparation failure"):
+                RUNNER.run_source_refresh(self.args, pathlib.Path("."))
+
+        export_call.assert_called_once()
+        prepare.assert_called_once()
+        self.assertEqual(self.args.state_root, original_state_root)
+        self.assertEqual(len(exported_paths), 1)
+        self.assertFalse(exported_paths[0].exists(), "TemporaryDirectory cleanup runs on the failure path")
+
+    def test_no_pin_still_rejects_advanced_composition_before_preparation(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="unpinned-source-refresh-flow-") as raw:
+            temp_root = pathlib.Path(raw)
+            history = ProcessorStatePinExportTests.build_state_history(temp_root)
+            checkout = pathlib.Path(history["checkout"])
+            state_root = pathlib.Path(history["state_root"])
+            current_checkpoint = history["current"]
+            self.old["candidate"]["generation_id"] = current_checkpoint["generation_id"]
+            self.old["candidate"]["registry_sha256"] = current_checkpoint["generation_inputs"]["candidate_sha256"]
+            self.old["candidate"]["composition_receipt_sha256"] = ProcessorStatePinExportTests.old_composition_sha
+            self.args.state_root = state_root
+            self.args.processor_state_sha = ""
+            self.args.processor_state_repo = checkout
+            current_bundle = {
+                "status": "ready",
+                "generation_id": current_checkpoint["generation_id"],
+                "registry_sha256": self.old["candidate"]["registry_sha256"],
+                "composition_receipt_sha256": ProcessorStatePinExportTests.current_composition_sha,
+                "composition_receipt": {"schema_version": "fixture"},
+            }
+            state_head = ProcessorStatePinExportTests.git(checkout, "rev-parse", "HEAD")
+            self.run_with_read_only_stubs()
+            with (
+                mock.patch.object(RUNNER, "assert_predecessor_base_is_ancestor"),
+                mock.patch.object(RUNNER, "load_canonical_update_pr", return_value=PR_HELPER),
+                mock.patch.object(RUNNER, "load_promotion_journal_snapshot", return_value=({"records": [self.old]}, self.state_sha)),
+                mock.patch.object(RUNNER, "gh_pr_readback", return_value={"headRefOid": self.old["candidate"]["head_sha"]}),
+                mock.patch.object(RUNNER, "validate_exact_open_pr"),
+                mock.patch.object(RUNNER, "processor_run_api", return_value={}),
+                mock.patch.object(RUNNER, "validate_trusted_processor_run", return_value={"head_sha": "a" * 40}),
+                mock.patch.object(RUNNER, "processor_artifact_api", return_value={"id": "11272800001"}),
+                mock.patch.object(RUNNER, "validate_processor_artifact_metadata", return_value={"id": "11272800001"}),
+                mock.patch.object(RUNNER, "download_processor_artifact", return_value=temp_root / "bundle"),
+                mock.patch.object(RUNNER, "validate_processor_bundle", return_value=current_bundle),
+                mock.patch.object(RUNNER, "verify_processor_input_compatibility"),
+                mock.patch.object(RUNNER, "export_processor_state_pin") as export,
+                mock.patch.object(RUNNER, "execute_candidate_preparation") as execute,
+            ):
+                with self.assertRaisesRegex(RUNNER.PromotionError, "does not reproduce the exact reviewed generation and payload"):
+                    RUNNER.run_source_refresh(self.args, pathlib.Path(__file__).parents[1])
+
+            export.assert_not_called()
+            execute.assert_not_called()
+            self.assertEqual(ProcessorStatePinExportTests.git(checkout, "rev-parse", "HEAD"), state_head)
 
     def test_refresh_requires_predecessor_base_ancestor_before_pr_or_b_reads(self) -> None:
         self.run_with_read_only_stubs()
