@@ -7,7 +7,11 @@ import argparse
 import collections
 import json
 import pathlib
+import sys
 from typing import Any
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from runtime_evidence_projection import current_evidence_by_unique_operation_name
 
 
 SCHEMA_VERSION = "datapan.coverage-backlog.v1"
@@ -49,15 +53,6 @@ def percent(part: int, whole: int) -> float:
     return round((part / whole) * 100, 1)
 
 
-def verification_key(row: dict[str, Any]) -> tuple[str, str, str, str]:
-    return (
-        str(row.get("dataset_id", "")),
-        str(row.get("operation", "")),
-        str(row.get("endpoint_host", "")),
-        str(row.get("dependency_class", "")),
-    )
-
-
 def count_items(counter: collections.Counter[str]) -> list[dict[str, Any]]:
     return [{"key": key, "count": counter[key]} for key in sorted(counter)]
 
@@ -91,7 +86,7 @@ def api_row(row: dict[str, Any], action: str, reason: str) -> dict[str, Any]:
     }
 
 
-def dependency_summary(rows: list[dict[str, Any]], evidence_by_key: dict[tuple[str, str, str, str], dict[str, Any]]) -> dict[str, Any]:
+def dependency_summary(rows: list[dict[str, Any]], evidence_by_key: dict[tuple[str, str], dict[str, Any]]) -> dict[str, Any]:
     dependency_class = collections.Counter(str(row.get("dependency_class") or "unknown") for row in rows)
     adapter_status = collections.Counter(str(row.get("adapter_status") or "unknown") for row in rows)
     endpoint_host = collections.Counter(str(row.get("endpoint_host") or "") for row in rows if row.get("endpoint_host"))
@@ -115,7 +110,7 @@ def dependency_summary(rows: list[dict[str, Any]], evidence_by_key: dict[tuple[s
             missing_adapter += 1
         if row.get("dependency_class") == "no_endpoint":
             no_endpoint += 1
-        verification = evidence_by_key.get(verification_key(row))
+        verification = evidence_by_key.get((str(row.get("dataset_id") or ""), str(row.get("operation") or "")))
         if verification:
             evidence[str(verification.get("status") or "unknown")] += 1
         else:
@@ -143,15 +138,17 @@ def build_report(
     registry_path: pathlib.Path,
     dependencies_path: pathlib.Path,
     latest_verification_path: pathlib.Path,
+    current_runtime_evidence_path: pathlib.Path,
+    registry_label: str | None = None,
 ) -> dict[str, Any]:
     registry_rows = [row for row in as_list(load_json(registry_path), str(registry_path)) if isinstance(row, dict)]
     dependencies = as_dict(load_json(dependencies_path), str(dependencies_path))
     latest = as_dict(load_json(latest_verification_path), str(latest_verification_path))
+    projection = as_dict(load_json(current_runtime_evidence_path), str(current_runtime_evidence_path))
+    if projection.get("freshness", {}).get("as_of") != latest.get("generated_at"):
+        raise ValueError("current runtime evidence projection and latest verification evaluation times differ")
     dependency_rows = [
         row for row in as_list(dependencies.get("dependencies"), "dependencies") if isinstance(row, dict)
-    ]
-    verification_rows = [
-        row for row in as_list(latest.get("results"), "latest verification results") if isinstance(row, dict)
     ]
 
     registry_by_id = {str(row.get("id")): row for row in registry_rows if row.get("id")}
@@ -161,12 +158,12 @@ def build_report(
         if dataset_id:
             dependencies_by_id[dataset_id].append(row)
 
-    evidence_by_key = {verification_key(row): row for row in verification_rows}
-    evidence_ids = {str(row.get("dataset_id")) for row in verification_rows if row.get("dataset_id")}
+    evidence_by_key = current_evidence_by_unique_operation_name(projection)
+    evidence_ids = {dataset_id for dataset_id, _name in evidence_by_key}
     failed_ids = {
-        str(row.get("dataset_id"))
-        for row in verification_rows
-        if row.get("dataset_id") and row.get("status") == "failed"
+        dataset_id
+        for (dataset_id, _name), row in evidence_by_key.items()
+        if row.get("status") == "failed"
     }
 
     institution_state: dict[str, dict[str, Any]] = {}
@@ -270,7 +267,11 @@ def build_report(
     operation_total = len(dependency_rows)
     runtime_evidence_api_total = len(evidence_ids.intersection(registry_by_id))
     runtime_reactivation_api_total = covered_api_total - runtime_evidence_api_total
-    latest_summary = as_dict(latest.get("summary"), "latest.summary")
+    projection_summary = as_dict(projection.get("summary"), "current runtime evidence projection.summary")
+    runtime_evidence_total = len(evidence_by_key)
+    runtime_verified_total = sum(row.get("status") == "verified" for row in evidence_by_key.values())
+    runtime_failed_total = sum(row.get("status") == "failed" for row in evidence_by_key.values())
+    runtime_skipped_total = sum(row.get("status") == "skipped" for row in evidence_by_key.values())
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -278,9 +279,10 @@ def build_report(
         "provider": dependencies.get("provider"),
         "source_id": "data_go_kr",
         "generation_inputs": {
-            "registry": str(registry_path).replace("\\", "/"),
+            "registry": (registry_label or str(registry_path)).replace("\\", "/"),
             "dependencies": str(dependencies_path).replace("\\", "/"),
             "latest_verification": str(latest_verification_path).replace("\\", "/"),
+            "current_runtime_evidence_projection": str(current_runtime_evidence_path).replace("\\", "/"),
         },
         "summary": {
             "institutions": len(institutions),
@@ -289,11 +291,15 @@ def build_report(
             "uncovered_api_count": api_total - covered_api_total,
             "api_operation_coverage_percent": percent(covered_api_total, api_total),
             "operation_total": operation_total,
-            "runtime_evidence_operation_count": int(latest_summary.get("total", 0)),
-            "runtime_evidence_operation_percent": percent(int(latest_summary.get("total", 0)), operation_total),
-            "runtime_verified_operation_count": int(latest_summary.get("verified", 0)),
-            "runtime_failed_operation_count": int(latest_summary.get("failed", 0)),
-            "runtime_skipped_operation_count": int(latest_summary.get("skipped", 0)),
+            "runtime_evidence_operation_count": runtime_evidence_total,
+            "runtime_evidence_operation_percent": percent(runtime_evidence_total, operation_total),
+            "runtime_verified_operation_count": runtime_verified_total,
+            "runtime_failed_operation_count": runtime_failed_total,
+            "runtime_skipped_operation_count": runtime_skipped_total,
+            "unbound_evidence_records": int(projection_summary.get("unbound", 0)),
+            "contract_changed_evidence_records": int(projection_summary.get("contract_changed", 0)),
+            "ambiguous_evidence_records": int(projection_summary.get("ambiguous", 0)),
+            "historical_evidence_records": int(projection_summary.get("historical", 0)),
             "runtime_evidence_api_count": runtime_evidence_api_total,
             "runtime_reactivation_api_count": runtime_reactivation_api_total,
             "runtime_repair_api_count": len(runtime_repair_apis),
@@ -361,7 +367,8 @@ def build_markdown(report: dict[str, Any], limit: int) -> str:
     return (
         "# data.go.kr Coverage Backlog\n\n"
         "This backlog is generated from the checked-in registry, dependency report, "
-        "and latest runtime verification evidence. It separates APIs with no "
+        "and current-contract runtime evidence projection. Historical verification "
+        "rows without immutable operation bindings are excluded. It separates APIs with no "
         "operation mapping from APIs that have operations but still need runtime "
         "evidence collection.\n\n"
         f"- Generated at: `{report.get('generated_at')}`\n"
@@ -376,6 +383,10 @@ def build_markdown(report: dict[str, Any], limit: int) -> str:
         f"- Runtime verified operations: `{summary.get('runtime_verified_operation_count')}`\n"
         f"- Runtime failed operations: `{summary.get('runtime_failed_operation_count')}`\n"
         f"- Runtime skipped operations: `{summary.get('runtime_skipped_operation_count')}`\n"
+        f"- Historical rows unbound to a current operation contract: `{summary.get('unbound_evidence_records')}`\n"
+        f"- Historical rows with changed contracts: `{summary.get('contract_changed_evidence_records')}`\n"
+        f"- Ambiguous historical rows: `{summary.get('ambiguous_evidence_records')}`\n"
+        f"- Historical rows with no current operation: `{summary.get('historical_evidence_records')}`\n"
         f"- APIs with runtime evidence: `{summary.get('runtime_evidence_api_count')}`\n"
         f"- Runtime reactivation APIs: `{summary.get('runtime_reactivation_api_count')}`\n"
         f"- Runtime repair APIs: `{summary.get('runtime_repair_api_count')}`\n\n"
@@ -395,12 +406,14 @@ def main() -> int:
     parser.add_argument("--registry", default="data/data-go-kr.registry.json", type=pathlib.Path)
     parser.add_argument("--dependencies", default="reports/dependencies.json", type=pathlib.Path)
     parser.add_argument("--latest-verification", default="reports/latest-verification.json", type=pathlib.Path)
+    parser.add_argument("--current-runtime-evidence", default="reports/current-runtime-evidence-projection.json", type=pathlib.Path)
+    parser.add_argument("--registry-label", default=None, help="logical registry path recorded in generation_inputs")
     parser.add_argument("--output", default="reports/data-go-kr/coverage-backlog.json", type=pathlib.Path)
     parser.add_argument("--markdown-output", default="docs/data-go-kr-coverage-backlog.md", type=pathlib.Path)
     parser.add_argument("--markdown-limit", default=30, type=int)
     args = parser.parse_args()
 
-    report = build_report(args.registry, args.dependencies, args.latest_verification)
+    report = build_report(args.registry, args.dependencies, args.latest_verification, args.current_runtime_evidence, args.registry_label)
     write_json(args.output, report)
     write_text(args.markdown_output, build_markdown(report, args.markdown_limit))
     print(

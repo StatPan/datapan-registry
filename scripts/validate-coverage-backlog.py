@@ -51,6 +51,7 @@ def validate_report(
     markdown_path: pathlib.Path,
     generator: pathlib.Path,
     schema_path: pathlib.Path,
+    registry_override: pathlib.Path | None = None,
 ) -> None:
     report = as_dict(load_json(report_path), report_path)
     if report.get("schema_version") != EXPECTED_SCHEMA_VERSION:
@@ -65,6 +66,18 @@ def validate_report(
             raise ValueError(f"{key} must be an array")
 
     summary = as_dict(report.get("summary"), report_path)
+    generation_inputs = as_dict(report.get("generation_inputs"), report_path)
+    required_inputs = [
+        "registry",
+        "dependencies",
+        "latest_verification",
+        "current_runtime_evidence_projection",
+    ]
+    for key in required_inputs:
+        value = generation_inputs.get(key)
+        if not isinstance(value, str) or not value:
+            raise ValueError(f"generation_inputs.{key} must be a non-empty path")
+    registry = registry_override or pathlib.Path(str(generation_inputs["registry"]))
     institutions = report["institutions"]
     uncovered_apis = report["uncovered_apis"]
     runtime_reactivation_apis = report["runtime_reactivation_apis"]
@@ -90,15 +103,26 @@ def validate_report(
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_json = pathlib.Path(temp_dir) / "coverage-backlog.json"
         temp_md = pathlib.Path(temp_dir) / "coverage-backlog.md"
+        command = [
+            sys.executable,
+            str(generator),
+            "--registry",
+            str(registry),
+            "--registry-label",
+            str(generation_inputs["registry"]),
+            "--dependencies",
+            str(generation_inputs["dependencies"]),
+            "--latest-verification",
+            str(generation_inputs["latest_verification"]),
+            "--current-runtime-evidence",
+            str(generation_inputs["current_runtime_evidence_projection"]),
+            "--output",
+            str(temp_json),
+            "--markdown-output",
+            str(temp_md),
+        ]
         subprocess.run(
-            [
-                sys.executable,
-                str(generator),
-                "--output",
-                str(temp_json),
-                "--markdown-output",
-                str(temp_md),
-            ],
+            command,
             check=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -134,6 +158,11 @@ def main() -> int:
         help="coverage backlog schema path",
     )
     parser.add_argument(
+        "--registry",
+        type=pathlib.Path,
+        help="optional materialized registry file used to replay a report whose recorded path is a Git LFS pointer",
+    )
+    parser.add_argument(
         "report",
         nargs="?",
         default=pathlib.Path("reports/data-go-kr/coverage-backlog.json"),
@@ -143,7 +172,7 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
-        validate_report(args.report, args.markdown, args.generator, args.schema)
+        validate_report(args.report, args.markdown, args.generator, args.schema, args.registry)
     except Exception as exc:  # noqa: BLE001 - report all validation blockers
         print(f"FAIL {args.report}: {exc}", file=sys.stderr)
         return 1

@@ -20,16 +20,37 @@ class ImportRuntimeFreshnessRunTest(unittest.TestCase):
     def write_json(self, path: pathlib.Path, value: object) -> None:
         path.write_text(json.dumps(value, sort_keys=True) + "\n", encoding="utf-8")
 
+    @staticmethod
+    def fixture_binding() -> dict[str, str]:
+        return {
+            "schema_version": "datapan.runtime-evidence-contract-binding.v1",
+            "identity_key": "data_go_kr:d:o",
+            "source_id": "data_go_kr",
+            "dataset_id": "d",
+            "upstream_api_id": "api-d",
+            "operation_key": "o",
+            "source_identity_sha256": "1" * 64,
+            "method_action_sha256": "2" * 64,
+            "parameter_contract_sha256": "3" * 64,
+            "contract_sha256": "4" * 64,
+            "source_snapshot_sha256": "5" * 64,
+            "operation_manifest_sha256": "6" * 64,
+            "run_id": "run-1",
+            "plan_sha256": "7" * 64,
+        }
+
     def fixture(self, root: pathlib.Path) -> tuple[pathlib.Path, pathlib.Path, pathlib.Path, pathlib.Path]:
         report = root / "incoming.json"
         receipt = root / "receipt.json"
         current = root / "current.json"
         summary = root / "summary.json"
         identity = "data_go_kr:d:o"
+        contract_binding = self.fixture_binding()
         incoming = {
             "generated_at": "2026-07-11T00:01:00Z",
             "results": [{
                 "identity_key": identity,
+                "contract_binding": contract_binding,
                 "dataset_id": "d",
                 "operation": "o",
                 "status": "failed",
@@ -102,7 +123,8 @@ class ImportRuntimeFreshnessRunTest(unittest.TestCase):
             self.assertEqual(proposal["status"], "applied")
             self.assertEqual(len(json.loads(current.read_text(encoding="utf-8"))["results"]), 2)
             imported_results = json.loads(current.read_text(encoding="utf-8"))["results"]
-            self.assertNotIn("identity_key", imported_results[-1])
+            self.assertEqual(imported_results[-1]["identity_key"], "data_go_kr:d:o")
+            self.assertEqual(imported_results[-1]["contract_binding"], self.fixture_binding())
             self.assertNotIn("checked_at", imported_results[-1])
             self.assertNotIn("duration_ms", imported_results[-1])
             self.assertTrue(set(imported_results[-1]).issubset(MODULE.verification_result_fields()))
@@ -129,6 +151,7 @@ class ImportRuntimeFreshnessRunTest(unittest.TestCase):
             "dependency_class": "data_go_kr_gateway",
             "status": "verified",
             "identity_key": "data_go_kr:d:o",
+            "contract_binding": self.fixture_binding(),
             "duration_ms": 17,
         })
         self.assertEqual(
@@ -140,6 +163,8 @@ class ImportRuntimeFreshnessRunTest(unittest.TestCase):
                 "provider": "p",
                 "dependency_class": "data_go_kr_gateway",
                 "status": "verified",
+                "identity_key": "data_go_kr:d:o",
+                "contract_binding": self.fixture_binding(),
             },
         )
 

@@ -159,6 +159,8 @@ jobs:
           python scripts/generate-failure-recovery-rollup.py --check
           python scripts/generate-operation-denominator-rollup.py --check
           python -m unittest tests/test_generate_operation_denominator_rollup.py
+          python scripts/generate-current-runtime-evidence-projection.py --check
+          python -m unittest tests/test_runtime_evidence_projection.py
           python scripts/generate-runtime-freshness-queue.py --check
           python -m unittest tests/test_generate_runtime_freshness_queue.py
           python -m unittest tests/test_generate_runtime_freshness_batch.py
@@ -170,7 +172,9 @@ jobs:
           python -m unittest tests/test_attest_runtime_freshness_import.py
           python -m unittest tests/test_runtime_freshness_pr_handoff.py
           python scripts/generate-runtime-evidence-growth.py --check
+          python -m unittest tests/test_generate_runtime_evidence_growth.py
           python scripts/generate-readme-runtime-snapshot.py --check
+          python -m unittest tests/test_generate_readme_runtime_snapshot.py
           python scripts/check-runtime-freshness-workflow.py
           python scripts/check-runtime-freshness-import-workflow.py
           python scripts/check-runtime-freshness-import-attestation-workflow.py
@@ -241,6 +245,7 @@ jobs:
           python -m py_compile scripts/generate-failure-recovery-rollup.py
           python -m py_compile scripts/generate-operation-denominator-rollup.py
           python -m py_compile scripts/generate-runtime-freshness-queue.py
+          python -m py_compile scripts/runtime_evidence_projection.py scripts/generate-current-runtime-evidence-projection.py scripts/generate-coverage-backlog.py scripts/generate-institution-api-overview.py scripts/generate-runtime-evidence-growth.py scripts/validate-runtime-evidence-growth.py
           python -m py_compile scripts/generate-runtime-freshness-batch.py scripts/check-runtime-freshness-workflow.py scripts/check-runtime-freshness-import-workflow.py scripts/consolidate-runtime-freshness-run.py scripts/import-runtime-freshness-run.py scripts/project-runtime-freshness-recovery.py scripts/apply-runtime-freshness-import.py scripts/generate-runtime-evidence-growth.py scripts/generate-readme-runtime-snapshot.py
           python -m py_compile scripts/convert-source-verification-to-credential-receipt.py
           python -m py_compile scripts/validate-diagnostic-envelope-draft.py

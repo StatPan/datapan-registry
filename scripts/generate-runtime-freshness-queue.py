@@ -12,10 +12,14 @@ from typing import Any
 
 import jsonschema
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from runtime_evidence_projection import upstream_operation_key
+
 
 REGISTRY = pathlib.Path("data/data-go-kr.registry.json")
 DENOMINATORS = pathlib.Path("reports/operation-denominator-rollup.json")
 LATEST = pathlib.Path("reports/latest-verification.json")
+PROJECTION = pathlib.Path("reports/current-runtime-evidence-projection.json")
 POLICY = pathlib.Path("policy/sustainable-coverage.json")
 SCHEMA = pathlib.Path("schemas/datapan.runtime-freshness-queue.v1.schema.json")
 OUTPUT = pathlib.Path("reports/runtime-freshness-queue.json")
@@ -32,21 +36,6 @@ def parse_time(value: str) -> datetime:
     return parsed.astimezone(timezone.utc)
 
 
-def latest_evidence(results: list[dict[str, Any]]) -> dict[tuple[str, str], dict[str, Any]]:
-    grouped: dict[tuple[str, str], list[tuple[datetime | None, int, dict[str, Any]]]] = {}
-    for index, row in enumerate(results):
-        dataset_id, operation = row.get("dataset_id"), row.get("operation")
-        if not isinstance(dataset_id, str) or not dataset_id or not isinstance(operation, str) or not operation:
-            raise ValueError(f"latest verification result {index} lacks dataset_id/operation")
-        raw = row.get("verified_at")
-        timestamp = parse_time(raw) if isinstance(raw, str) and raw else None
-        grouped.setdefault((dataset_id, operation), []).append((timestamp, index, row))
-    return {
-        key: max(rows, key=lambda item: (item[0] is not None, item[0] or datetime.min.replace(tzinfo=timezone.utc), item[1]))[2]
-        for key, rows in grouped.items()
-    }
-
-
 def supported_operations(registry: list[Any], denominator_rollup: dict[str, Any]) -> list[dict[str, Any]]:
     operations: list[dict[str, Any]] = []
     for spec in registry:
@@ -56,8 +45,7 @@ def supported_operations(registry: list[Any], denominator_rollup: dict[str, Any]
         for operation in spec["operations"]:
             if not isinstance(operation, dict) or not isinstance(operation.get("name"), str):
                 raise ValueError(f"{dataset_id}: invalid operation")
-            raw = operation.get("source", {}).get("raw", {}) if isinstance(operation.get("source"), dict) else {}
-            seq = str(raw.get("operation_seq")) if isinstance(raw, dict) and raw.get("operation_seq") is not None else None
+            seq = upstream_operation_key(operation)
             operations.append({"source_id": "data_go_kr", "dataset_id": dataset_id, "operation": operation["name"], "operation_seq": seq, "identity_key": f"data_go_kr:{dataset_id}:{seq or operation['name']}"})
     for source in denominator_rollup["sources"]:
         if source["source_id"] == "data_go_kr":
@@ -93,13 +81,37 @@ def classify(evidence: dict[str, Any] | None, as_of: datetime, fresh_days: int, 
     return None, None, None
 
 
-def build() -> dict[str, Any]:
-    denominator_rollup = load(DENOMINATORS)
-    registry = load(REGISTRY)
-    latest = load(LATEST)
-    policy = load(POLICY)
-    if not isinstance(registry, list) or not isinstance(latest, dict):
-        raise ValueError("invalid registry or latest verification input")
+def latest_by_identity(records: list[Any]) -> dict[str, dict[str, Any]]:
+    grouped: dict[str, list[tuple[datetime | None, int, dict[str, Any]]]] = {}
+    for index, row in enumerate(records):
+        if not isinstance(row, dict):
+            raise ValueError(f"projection record {index} must be an object")
+        identity_key = row.get("identity_key")
+        if not isinstance(identity_key, str) or not identity_key:
+            continue
+        timestamp = parse_time(row["verified_at"]) if isinstance(row.get("verified_at"), str) else None
+        grouped.setdefault(identity_key, []).append((timestamp, index, row))
+    return {
+        key: max(rows, key=lambda item: (item[0] is not None, item[0] or datetime.min.replace(tzinfo=timezone.utc), item[1]))[2]
+        for key, rows in grouped.items()
+    }
+
+
+def build(
+    *,
+    registry_path: pathlib.Path = REGISTRY,
+    denominators_path: pathlib.Path = DENOMINATORS,
+    latest_path: pathlib.Path = LATEST,
+    projection_path: pathlib.Path = PROJECTION,
+    policy_path: pathlib.Path = POLICY,
+) -> dict[str, Any]:
+    denominator_rollup = load(denominators_path)
+    registry = load(registry_path)
+    latest = load(latest_path)
+    projection = load(projection_path)
+    policy = load(policy_path)
+    if not isinstance(registry, list) or not isinstance(latest, dict) or not isinstance(projection, dict):
+        raise ValueError("invalid registry, latest verification, or current-evidence projection input")
     freshness_policy = policy["freshness"]
     if freshness_policy.get("evaluation_time_source") != "latest_verification.generated_at":
         raise ValueError("freshness evaluation time source must be latest_verification.generated_at")
@@ -107,26 +119,72 @@ def build() -> dict[str, Any]:
     if not isinstance(as_of_text, str) or not as_of_text:
         raise ValueError("latest verification generated_at must be a date-time string")
     as_of = parse_time(as_of_text)
+    if projection.get("freshness", {}).get("as_of") != as_of_text:
+        raise ValueError("current-evidence projection and latest verification evaluation times differ")
     fresh_days = int(policy["freshness"]["fresh_days"])
     expire_days = int(policy["freshness"]["expire_days"])
-    evidence = latest_evidence(latest["results"])
+    # The projection contains only immutable, exact-contract rows here. Keep
+    # expired and unknown-timestamp rows so the queue can classify them instead
+    # of treating them as never evidenced.
+    current_evidence = {row["identity_key"]: row for row in projection.get("current_evidence", []) if isinstance(row, dict)}
+    current_contracts = {row["identity_key"]: row for row in projection.get("operations", []) if isinstance(row, dict)}
+    historical_by_identity = latest_by_identity(projection.get("records", []))
     operations = supported_operations(registry, denominator_rollup)
-    counts = {name: 0 for name in ("never_evidenced", "unknown_timestamp", "stale", "expired", "recent_non_verified")}
+    counts = {name: 0 for name in ("never_evidenced", "unknown_timestamp", "stale", "expired", "recent_non_verified", "unbound", "contract_changed", "unsupported_current_binding")}
     queue: list[dict[str, Any]] = []
     fresh_verified = 0
     for operation in operations:
-        row = evidence.get((operation["dataset_id"], operation["operation"])) if operation["source_id"] == "data_go_kr" else None
+        if operation["source_id"] != "data_go_kr":
+            # This projection's complete-operation contract is the data.go.kr
+            # catalogue operation manifest. Keep other denominators visible
+            # for their source-specific evidence lane without promoting rows
+            # by a shared display name.
+            counts["unsupported_current_binding"] += 1
+            queue.append({
+                **operation,
+                "classification": "unsupported_current_binding",
+                "priority": 2,
+                "action": "review_source_specific_receipt",
+                "reason": "current projection covers data_go_kr contracts; use the source-specific receipt contract",
+                "last_status": None,
+                "last_verified_at": None,
+            })
+            continue
+        current_contract = current_contracts.get(operation["identity_key"])
+        if not isinstance(current_contract, dict) or current_contract.get("contract_complete") is not True:
+            reasons = current_contract.get("incomplete_reasons", []) if isinstance(current_contract, dict) else ["current_contract_missing"]
+            reason = "incomplete_current_operation_contract: " + ", ".join(str(value) for value in reasons)
+            counts["unsupported_current_binding"] += 1
+            queue.append({
+                **operation,
+                "classification": "unsupported_current_binding",
+                "priority": 2,
+                "action": "resolve_current_operation_contract",
+                "reason": reason,
+                "last_status": None,
+                "last_verified_at": None,
+            })
+            continue
+        row = current_evidence.get(operation["identity_key"]) if operation["source_id"] == "data_go_kr" else None
+        legacy_row = historical_by_identity.get(operation["identity_key"]) if row is None and operation["source_id"] == "data_go_kr" else None
+        if legacy_row and legacy_row.get("disposition") in {"unbound", "contract_changed"}:
+            classification = str(legacy_row["disposition"])
+            priority, action = (1, "collect_current_contract_evidence")
+            counts[classification] += 1
+            queue.append({**operation, "classification": classification, "priority": priority, "action": action, "last_status": legacy_row.get("status"), "last_verified_at": legacy_row.get("verified_at")})
+            continue
         classification, priority, action = classify(row, as_of, fresh_days, expire_days)
         if classification is None:
             fresh_verified += 1
             continue
         counts[classification] += 1
-        queue.append({**operation, "classification": classification, "priority": priority, "action": action, "last_status": row.get("status") if row else None, "last_verified_at": row.get("verified_at") if row and isinstance(row.get("verified_at"), str) else None})
+        queue.append({**operation, "classification": classification, "priority": priority, "action": action, "last_status": row.get("status") if row else (legacy_row.get("status") if legacy_row else None), "last_verified_at": row.get("verified_at") if row and isinstance(row.get("verified_at"), str) else (legacy_row.get("verified_at") if legacy_row else None)})
     queue.sort(key=lambda row: (row["priority"], row["source_id"], row["identity_key"]))
     supported = len(operations)
     if len(queue) + fresh_verified != supported:
         raise ValueError("queue reconciliation failed")
-    report = {"schema_version": "datapan.runtime-freshness-queue.v1", "generated_at": as_of_text, "inputs": {"canonical_registry": REGISTRY.as_posix(), "operation_denominator_rollup": DENOMINATORS.as_posix(), "latest_verification": LATEST.as_posix(), "coverage_policy": POLICY.as_posix()}, "freshness": {"as_of": as_of_text, "fresh_days": fresh_days, "expire_days": expire_days}, "summary": {"supported_operations": supported, "fresh_verified": fresh_verified, "queued": len(queue), **counts}, "queue": queue}
+    disposition_summary = projection.get("summary", {})
+    report = {"schema_version": "datapan.runtime-freshness-queue.v1", "generated_at": as_of_text, "inputs": {"canonical_registry": REGISTRY.as_posix(), "operation_denominator_rollup": DENOMINATORS.as_posix(), "latest_verification": LATEST.as_posix(), "current_runtime_evidence_projection": PROJECTION.as_posix(), "coverage_policy": POLICY.as_posix()}, "freshness": {"as_of": as_of_text, "fresh_days": fresh_days, "expire_days": expire_days}, "summary": {"supported_operations": supported, "fresh_verified": fresh_verified, "queued": len(queue), "ambiguous_evidence_records": int(disposition_summary.get("ambiguous", 0)), "historical_evidence_records": int(disposition_summary.get("historical", 0)), **counts}, "queue": queue}
     errors = list(jsonschema.Draft202012Validator(load(SCHEMA), format_checker=jsonschema.FormatChecker()).iter_errors(report))
     if errors:
         raise ValueError("; ".join(error.message for error in errors[:10]))
@@ -135,17 +193,24 @@ def build() -> dict[str, Any]:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--registry", type=pathlib.Path, default=REGISTRY)
+    parser.add_argument("--denominators", type=pathlib.Path, default=DENOMINATORS)
+    parser.add_argument("--latest-verification", type=pathlib.Path, default=LATEST)
+    parser.add_argument("--current-runtime-evidence", type=pathlib.Path, default=PROJECTION)
+    parser.add_argument("--policy", type=pathlib.Path, default=POLICY)
+    parser.add_argument("--output", type=pathlib.Path, default=OUTPUT)
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
     try:
-        rendered = json.dumps(build(), ensure_ascii=False, indent=2) + "\n"
+        rendered = json.dumps(build(registry_path=args.registry, denominators_path=args.denominators, latest_path=args.latest_verification, projection_path=args.current_runtime_evidence, policy_path=args.policy), ensure_ascii=False, indent=2) + "\n"
         if args.check:
-            if not OUTPUT.is_file() or OUTPUT.read_text(encoding="utf-8") != rendered:
-                raise ValueError(f"{OUTPUT} is stale")
-            print(f"ok {OUTPUT}")
+            if not args.output.is_file() or args.output.read_text(encoding="utf-8") != rendered:
+                raise ValueError(f"{args.output} is stale")
+            print(f"ok {args.output}")
         else:
-            OUTPUT.write_text(rendered, encoding="utf-8")
-            print(f"wrote {OUTPUT}")
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            args.output.write_text(rendered, encoding="utf-8")
+            print(f"wrote {args.output}")
         return 0
     except Exception as exc:  # noqa: BLE001
         print(f"FAIL runtime freshness queue: {exc}", file=sys.stderr)
