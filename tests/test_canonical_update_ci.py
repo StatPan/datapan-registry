@@ -620,9 +620,14 @@ class CanonicalUpdateCIJournalIntegrationTests(unittest.TestCase):
         self.available_runs: list[dict] = []
         self.current_run: dict | None = None
         self.read_error: Exception | None = None
+        self.branch_sha = HEAD
 
-    def journal_record(self) -> dict:
-        return self.journal["records"][0]
+    def journal_record(self, receipt: dict | None = None) -> dict:
+        selected = receipt or self.receipt
+        key = PROMOTION.candidate_key(selected)
+        matches = [row for row in self.journal["records"] if PROMOTION.candidate_key(row) == key]
+        self.assertEqual(len(matches), 1)
+        return matches[0]
 
     def persist_ci(self, entry: dict) -> None:
         current = self.journal_record()
@@ -642,7 +647,7 @@ class CanonicalUpdateCIJournalIntegrationTests(unittest.TestCase):
 
     def read_branch(self, branch: str) -> str:
         self.assertEqual(branch, BRANCH)
-        return HEAD
+        return self.branch_sha
 
     def list_runs(self, *_args) -> list[dict]:
         return copy.deepcopy(self.available_runs)
@@ -731,6 +736,59 @@ class CanonicalUpdateCIJournalIntegrationTests(unittest.TestCase):
 
         with self.assertRaisesRegex(PROMOTION.AdmissionError, "compare-and-swap conflict"):
             self.ensure(succeeded["ci"])
+
+    def test_new_payload_revision_keeps_old_ci_and_requires_its_own_exact_head_run(self) -> None:
+        self.available_runs = [run_record(123)]
+        self.current_run = run_record(123)
+        first = self.ensure()
+        old_ci = copy.deepcopy(first["ci"])
+        old = copy.deepcopy(self.journal_record())
+
+        new = copy.deepcopy(old)
+        new["status"] = "prepared"
+        new["action"] = "refresh_owned"
+        new["candidate"]["head_sha"] = "c" * 40
+        new["candidate"]["registry_sha256"] = "f" * 64
+        new["ownership"]["expected_head_sha"] = "c" * 40
+        new_body = self.body + "Updated composed payload.\n"
+        new["ownership"]["body"] = new_body
+        new["ownership"]["body_sha256"] = hashlib.sha256(new_body.encode("utf-8")).hexdigest()
+        new["refresh_from"] = PROMOTION.revision_reference(old)
+        new.pop("ci", None)
+        new["acknowledgements"] = []
+        self.journal = PROMOTION.append_journal_record(
+            self.journal, new, repository=REPOSITORY, observed_at=CI._now(),
+        )
+        new_readback = PROMOTION.record_pr_readback(new, {
+            **self.pr,
+            "body": new_body,
+            "headRefOid": "c" * 40,
+        }, observed_at="2026-10-03T00:00:00Z", run_url="https://github.com/StatPan/datapan-registry/actions/runs/124/attempts/1")
+        self.journal = PROMOTION.append_journal_record(
+            self.journal, new_readback, repository=REPOSITORY,
+            observed_at="2026-10-03T00:00:00Z",
+            supersede_from=new["refresh_from"],
+        )
+        PROMOTION.validate_journal(self.journal, self.journal_schema)
+        self.assertEqual(self.journal_record(old)["ci"], old_ci)
+        self.assertEqual(self.journal_record(old)["superseded_by"], PROMOTION.revision_reference(new_readback))
+        self.assertNotIn("ci", self.journal_record(new_readback))
+
+        self.receipt = copy.deepcopy(new_readback)
+        self.body = new_body
+        self.pr = {**self.pr, "body": new_body, "headRefOid": "c" * 40}
+        self.branch_sha = "c" * 40
+        self.expected_ci = None
+        self.persist_history = []
+        self.available_runs = [run_record(124, head_sha="c" * 40)]
+        self.current_run = run_record(124, head_sha="c" * 40)
+        current = self.ensure()
+
+        self.assertEqual(current["ci"]["state"], "success")
+        self.assertEqual(current["ci"]["head_sha"], "c" * 40)
+        self.assertNotEqual(current["ci"]["request_fingerprint"], old_ci["request_fingerprint"])
+        self.assertEqual(self.journal_record(old)["ci"], old_ci)
+        self.assertEqual(self.journal_record(new_readback)["ci"], current["ci"])
 
 
 if __name__ == "__main__":

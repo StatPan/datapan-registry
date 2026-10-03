@@ -735,7 +735,7 @@ def evaluate_source(
             add("promotion", "promotion_record_transition_invalid", "error", _fault_action(source, "promotion_wait"), record_generation)
             continue
         final_item = accepted[-1]
-        if record_generation == generation_id:
+        if record_generation == generation_id and record.get("superseded_by") is None:
             current_records.append((record, accepted))
         if final_item.get("status") != "read-back-confirmed":
             continue
@@ -764,7 +764,30 @@ def evaluate_source(
         trusted_readbacks.append((publication_order(claimed_publication), claimed_publication))
 
     if len(current_records) > 1:
-        add("promotion", "promotion_generation_record_ambiguous", "error", _fault_action(source, "promotion_wait"), generation_id)
+        # A durable refresh intent intentionally overlaps its predecessor
+        # until the exact new PR head/body has been read back. Keep reporting
+        # the predecessor as active while the target is only prepared.
+        prepared_refreshes = [
+            record for record, _accepted in current_records
+            if record.get("status") == "prepared" and isinstance(record.get("refresh_from"), dict)
+        ]
+        if len(prepared_refreshes) == 1:
+            predecessor_ref = prepared_refreshes[0]["refresh_from"]
+            predecessors = [
+                item for item in current_records
+                if (
+                    item[0].get("candidate", {}).get("registry_sha256") == predecessor_ref.get("registry_sha256")
+                    and item[0].get("candidate", {}).get("head_sha") == predecessor_ref.get("head_sha")
+                    and item[0].get("ownership", {}).get("body_sha256") == predecessor_ref.get("body_sha256")
+                    and item[0].get("ownership", {}).get("branch") == predecessor_ref.get("branch")
+                )
+            ]
+            if len(predecessors) == 1:
+                current_records = predecessors
+            else:
+                add("promotion", "promotion_generation_record_ambiguous", "error", _fault_action(source, "promotion_wait"), generation_id)
+        else:
+            add("promotion", "promotion_generation_record_ambiguous", "error", _fault_action(source, "promotion_wait"), generation_id)
     current_items = current_records[0][1] if len(current_records) == 1 else []
     if current_items:
         current_item = current_items[-1]
@@ -1397,13 +1420,16 @@ def main(argv: list[str] | None = None) -> int:
                         records = promotion_ack.get("records")
                         if not isinstance(records, list):
                             raise ValueError("promotion_journal_records_invalid")
-                        record_keys: set[tuple[str, str, str]] = set()
+                        record_keys: set[tuple[str, str, str, str]] = set()
                         for record in records:
                             validate_schema(record, PROMOTION_SCHEMA, "promotion_record")
                             candidate = record.get("candidate") if isinstance(record, dict) else None
                             if not isinstance(candidate, dict) or str(candidate.get("repository", "")).casefold() != args.repository.casefold():
                                 raise ValueError("promotion_record_repository_mismatch")
-                            key = (str(candidate.get("source_id", "")), str(candidate.get("scope", "")), str(candidate.get("generation_id", "")))
+                            key = (
+                                str(candidate.get("source_id", "")), str(candidate.get("scope", "")),
+                                str(candidate.get("generation_id", "")), str(candidate.get("registry_sha256", "")),
+                            )
                             if key in record_keys:
                                 raise ValueError("promotion_journal_duplicate_candidate")
                             record_keys.add(key)

@@ -604,6 +604,9 @@ def record_pr_readback(
         raise AdmissionError("PR read-back is missing this candidate's owner/generation marker")
     if digest_bytes(body.encode("utf-8")) != receipt["ownership"]["body_sha256"]:
         raise AdmissionError("human_body_change: preserve the PR body and stop automation updates")
+    expected_body = receipt["ownership"].get("body")
+    if expected_body is not None and (not isinstance(expected_body, str) or expected_body != body):
+        raise AdmissionError("PR read-back differs from the exact durable owned body")
     if pr.get("headRefName") != receipt["ownership"]["branch"] or pr.get("baseRefName") != "main":
         raise AdmissionError("PR read-back branch/base identity differs from the prepared candidate")
     head = valid_sha(pr.get("headRefOid"), SHA1_RE, "PR head sha")
@@ -899,6 +902,7 @@ def build_receipt(
             "branch": owner_branch,
             "expected_head_sha": decision["expected_head_sha"],
             "body_sha256": digest_bytes(body.encode("utf-8")),
+            "body": body,
             "issue_number": issue_number,
             "issue_url": issue_url,
         },
@@ -909,13 +913,53 @@ def build_receipt(
     }
 
 
-def candidate_key(receipt: Mapping[str, Any]) -> tuple[str, str, str, str]:
+def candidate_key(receipt: Mapping[str, Any]) -> tuple[str, str, str, str, str]:
     candidate = receipt.get("candidate", {})
     return (
         str(candidate.get("repository", "")).lower(),
         str(candidate.get("source_id", "")),
         str(candidate.get("scope", "")),
         str(candidate.get("generation_id", "")),
+        str(candidate.get("registry_sha256", "")),
+    )
+
+
+REVISION_REFERENCE_FIELDS = (
+    "repository", "source_id", "scope", "generation_id", "registry_sha256",
+    "head_sha", "pr_number", "owner_id", "branch", "body_sha256",
+)
+
+
+def revision_reference(receipt: Mapping[str, Any]) -> dict[str, Any]:
+    """Return the exact durable PR identity used by prepared refresh recovery."""
+    candidate = receipt.get("candidate", {})
+    ownership = receipt.get("ownership", {})
+    pr = receipt.get("pr", {})
+    return {
+        "repository": str(candidate.get("repository", "")).lower(),
+        "source_id": str(candidate.get("source_id", "")),
+        "scope": str(candidate.get("scope", "")),
+        "generation_id": str(candidate.get("generation_id", "")),
+        "registry_sha256": str(candidate.get("registry_sha256", "")),
+        "head_sha": str(candidate.get("head_sha", "")),
+        "pr_number": pr.get("number"),
+        "owner_id": str(ownership.get("owner_id", "")),
+        "branch": str(ownership.get("branch", "")),
+        "body_sha256": str(ownership.get("body_sha256", "")),
+    }
+
+
+def _reference_matches_receipt(reference: Mapping[str, Any], receipt: Mapping[str, Any]) -> bool:
+    return all(reference.get(field) == revision_reference(receipt).get(field) for field in REVISION_REFERENCE_FIELDS)
+
+
+def _reference_key(reference: Mapping[str, Any]) -> tuple[str, str, str, str, str]:
+    return (
+        str(reference.get("repository", "")).lower(),
+        str(reference.get("source_id", "")),
+        str(reference.get("scope", "")),
+        str(reference.get("generation_id", "")),
+        str(reference.get("registry_sha256", "")),
     )
 
 
@@ -938,7 +982,8 @@ def validate_journal(journal: Mapping[str, Any], schema: Mapping[str, Any]) -> N
     jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker()).validate(journal)
     keys = [candidate_key(row) for row in journal.get("records", [])]
     if len(keys) != len(set(keys)):
-        raise AdmissionError("promotion journal contains duplicate source/scope/generation records")
+        raise AdmissionError("promotion journal contains duplicate source/scope/generation/payload revisions")
+    by_key = {candidate_key(row): row for row in journal.get("records", [])}
     for row in journal.get("records", []):
         timestamps = [item["observed_at"] for item in row.get("acknowledgements", [])]
         parsed = [dt.datetime.fromisoformat(value.replace("Z", "+00:00")).astimezone(dt.timezone.utc) for value in timestamps]
@@ -958,6 +1003,60 @@ def validate_journal(journal: Mapping[str, Any], schema: Mapping[str, Any]) -> N
                 or ci.get("pr_number") != pr.get("number")
             ):
                 raise AdmissionError("verify-release CI receipt does not bind the exact durable candidate PR identity")
+        ownership = row.get("ownership", {})
+        body = ownership.get("body") if isinstance(ownership, Mapping) else None
+        if body is not None and (
+            not isinstance(body, str)
+            or digest_bytes(body.encode("utf-8")) != ownership.get("body_sha256")
+        ):
+            raise AdmissionError("durable owned PR body does not match its stored body digest")
+        refresh_from = row.get("refresh_from")
+        superseded_by = row.get("superseded_by")
+        current_key = candidate_key(row)
+        if refresh_from is not None:
+            predecessor = by_key.get(_reference_key(refresh_from))
+            if predecessor is None or not _reference_matches_receipt(refresh_from, predecessor):
+                raise AdmissionError("promotion refresh intent does not bind an exact durable predecessor PR identity")
+            if candidate_key(predecessor) == current_key:
+                raise AdmissionError("promotion refresh intent cannot reference itself")
+            if (
+                predecessor.get("candidate", {}).get("repository", "").casefold()
+                != row.get("candidate", {}).get("repository", "").casefold()
+                or predecessor.get("candidate", {}).get("source_id") != row.get("candidate", {}).get("source_id")
+                or predecessor.get("candidate", {}).get("scope") != row.get("candidate", {}).get("scope")
+                or predecessor.get("ownership", {}).get("owner_id") != row.get("ownership", {}).get("owner_id")
+                or predecessor.get("ownership", {}).get("branch") != row.get("ownership", {}).get("branch")
+                or predecessor.get("ownership", {}).get("issue_number") != row.get("ownership", {}).get("issue_number")
+                or predecessor.get("pr", {}).get("number") != row.get("pr", {}).get("number")
+            ):
+                raise AdmissionError("promotion refresh intent crosses its owned repository, issue, or PR")
+            if predecessor.get("status") not in {"prepared", "pending-review"}:
+                raise AdmissionError("promotion refresh intent cannot supersede a terminal or last-good receipt")
+            predecessor_link = predecessor.get("superseded_by")
+            if predecessor_link is not None and predecessor_link != revision_reference(row):
+                raise AdmissionError("promotion refresh intent predecessor is already superseded by another revision")
+        if superseded_by is not None:
+            target = by_key.get(_reference_key(superseded_by))
+            if target is None or not _reference_matches_receipt(superseded_by, target):
+                raise AdmissionError("promotion supersession link does not bind an exact durable target PR identity")
+            if target.get("refresh_from") != revision_reference(row):
+                raise AdmissionError("promotion supersession link is not reciprocated by the target refresh intent")
+            if target.get("status") != "pending-review" or not target.get("acknowledgements") or target["acknowledgements"][-1].get("status") != "pending-review":
+                raise AdmissionError("promotion supersession requires a verified pending-review target read-back")
+            if row.get("status") not in {"prepared", "pending-review"}:
+                raise AdmissionError("promotion supersession cannot hide a terminal or last-good receipt")
+    for start in by_key:
+        seen: set[tuple[str, str, str, str, str]] = set()
+        cursor = start
+        while True:
+            if cursor in seen:
+                raise AdmissionError("promotion supersession links contain a cycle")
+            seen.add(cursor)
+            item = by_key[cursor]
+            link = item.get("superseded_by")
+            if not isinstance(link, Mapping):
+                break
+            cursor = _reference_key(link)
 
 
 CI_STATES = frozenset({
@@ -1003,12 +1102,28 @@ def preserve_and_validate_ci(previous: Mapping[str, Any], receipt: dict[str, Any
         raise AdmissionError("verify-release CI update regressed the authoritative run attempt")
 
 
+def preserve_and_validate_revision_links(previous: Mapping[str, Any], receipt: dict[str, Any]) -> None:
+    """Keep refresh lineage immutable across CI and publication journal updates."""
+    for field in ("refresh_from", "superseded_by"):
+        old = previous.get(field)
+        new = receipt.get(field)
+        if old is None:
+            if new is not None:
+                raise AdmissionError(f"promotion journal update cannot add {field} outside its atomic refresh transition")
+            continue
+        if new is None:
+            receipt[field] = json.loads(json.dumps(old))
+        elif new != old:
+            raise AdmissionError(f"promotion journal update cannot rewrite {field}")
+
+
 def append_journal_record(
     journal: Mapping[str, Any] | None,
     receipt: Mapping[str, Any],
     *,
     repository: str,
     observed_at: str,
+    supersede_from: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Keep all active generations plus one last-good record for each scope."""
     current = json.loads(json.dumps(journal)) if isinstance(journal, Mapping) else {
@@ -1029,7 +1144,7 @@ def append_journal_record(
         immutable_fields = tuple(
             (field, receipt["candidate"].get(field))
             for field in (
-                "base_sha", "registry_path", "registry_bytes", "registry_sha256",
+                "base_sha", "head_sha", "registry_path", "registry_bytes", "registry_sha256",
                 "manifest_sha256", "composition_receipt_sha256",
             )
         )
@@ -1043,10 +1158,48 @@ def append_journal_record(
             if receipt.get("status") not in TRANSITIONS.get(str(previous.get("status")), set()):
                 raise AdmissionError("promotion reconciliation would regress or skip a recorded state transition")
         updated = json.loads(json.dumps(receipt))
+        old_ownership = previous.get("ownership", {})
+        new_ownership = updated.get("ownership", {})
+        for field in ("owner_id", "branch"):
+            if old_ownership.get(field) != new_ownership.get(field):
+                raise AdmissionError(f"promotion reconciliation changed immutable ownership field {field}")
+        if old_ownership.get("issue_number", 0) and new_ownership.get("issue_number") != old_ownership.get("issue_number"):
+            raise AdmissionError("promotion reconciliation changed the owned issue identity")
+        if old_ownership.get("body_sha256") and new_ownership.get("body_sha256") != old_ownership.get("body_sha256"):
+            raise AdmissionError("promotion reconciliation changed the exact owned PR body identity")
         preserve_and_validate_ci(previous, updated)
+        preserve_and_validate_revision_links(previous, updated)
         rows[matches[0]] = updated
     else:
+        if receipt.get("superseded_by") is not None:
+            raise AdmissionError("new promotion revision cannot claim it has already been superseded")
         rows.append(json.loads(json.dumps(receipt)))
+    if supersede_from is not None:
+        target = rows[matches[0]] if matches else rows[-1]
+        if target.get("refresh_from") != dict(supersede_from):
+            raise AdmissionError("atomic promotion supersession does not match the durable refresh intent")
+        predecessor_key = _reference_key(supersede_from)
+        predecessors = [row for row in rows if candidate_key(row) == predecessor_key]
+        if len(predecessors) != 1:
+            raise AdmissionError("atomic promotion supersession has no unique durable predecessor")
+        predecessor = predecessors[0]
+        target_reference = revision_reference(target)
+        existing_link = predecessor.get("superseded_by")
+        if existing_link is not None and existing_link != target_reference:
+            raise AdmissionError("promotion predecessor already points to a different superseding revision")
+        if predecessor.get("status") not in {"prepared", "pending-review"}:
+            raise AdmissionError("promotion cannot supersede a terminal or last-good receipt")
+        if target.get("status") != "pending-review" or not target.get("acknowledgements") or target["acknowledgements"][-1].get("status") != "pending-review":
+            raise AdmissionError("promotion cannot supersede before exact pending-review PR read-back")
+        if (
+            candidate_key(predecessor) == candidate_key(target)
+            or predecessor.get("ownership", {}).get("owner_id") != target.get("ownership", {}).get("owner_id")
+            or predecessor.get("ownership", {}).get("branch") != target.get("ownership", {}).get("branch")
+            or predecessor.get("ownership", {}).get("issue_number") != target.get("ownership", {}).get("issue_number")
+            or predecessor.get("pr", {}).get("number") != target.get("pr", {}).get("number")
+        ):
+            raise AdmissionError("promotion supersession changes the owned issue, branch, PR, or owner")
+        predecessor["superseded_by"] = target_reference
     source_scope = (str(receipt["candidate"]["source_id"]), str(receipt["candidate"]["scope"]))
     same_scope = [row for row in rows if (str(row["candidate"]["source_id"]), str(row["candidate"]["scope"])) == source_scope]
     confirmed = [row for row in same_scope if row.get("status") == "read-back-confirmed"]
@@ -1068,7 +1221,7 @@ def append_journal_record(
         if row_scope != source_scope:
             kept.append(row)
             continue
-        if row.get("status") != "read-back-confirmed" or row is latest_confirmed:
+        if row.get("status") != "read-back-confirmed" or row is latest_confirmed or row.get("superseded_by") is not None:
             kept.append(row)
     current["records"] = kept
     current["updated_at"] = observed_at

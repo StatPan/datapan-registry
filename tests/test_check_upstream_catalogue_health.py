@@ -725,6 +725,73 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
         self.assertEqual(canonical["last_good"]["generation_id"], GENERATION_ID)
         self.assertEqual(canonical["last_good"]["publication_revision"], "1" * 40)
 
+    @staticmethod
+    def revision_ref(record: dict) -> dict:
+        candidate = record["candidate"]
+        ownership = record["ownership"]
+        return {
+            "repository": candidate["repository"],
+            "source_id": candidate["source_id"],
+            "scope": candidate["scope"],
+            "generation_id": candidate["generation_id"],
+            "registry_sha256": candidate["registry_sha256"],
+            "head_sha": candidate["head_sha"],
+            "pr_number": record["pr"]["number"],
+            "owner_id": ownership["owner_id"],
+            "branch": ownership["branch"],
+            "body_sha256": ownership["body_sha256"],
+        }
+
+    def test_health_selects_only_superseding_same_generation_payload_and_keeps_last_good(self) -> None:
+        previous = promotion_receipt(GENERATION_ID, "pending-review")
+        current = promotion_receipt(GENERATION_ID, "pending-review")
+        current["candidate"]["registry_sha256"] = "e" * 64
+        current["candidate"]["head_sha"] = "c" * 40
+        current["acknowledgements"][0]["artifact_identity"]["sha256"] = "e" * 64
+        current["acknowledgements"][0]["source_sha"] = "c" * 40
+        current["ownership"]["expected_head_sha"] = "c" * 40
+        current["refresh_from"] = self.revision_ref(previous)
+        previous["superseded_by"] = self.revision_ref(current)
+        journal = {
+            "schema_version": "datapan.canonical-update-promotion-journal.v1",
+            "repository": "StatPan/datapan-registry",
+            "updated_at": "2026-09-30T22:00:00Z",
+            "records": [previous, current],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")], ack=journal,
+            )
+        canonical = report["sources"][0]["canonical"]
+        self.assertEqual(canonical["promotion_status"], "pending-review")
+        self.assertEqual(canonical["last_good"]["generation_id"], "0" * 64)
+        self.assertEqual(canonical["last_good"]["publication_revision"], "9" * 40)
+        reasons = {row["reason"] for row in report["sources"][0]["faults"]}
+        self.assertIn("promotion_pending_review", reasons)
+        self.assertNotIn("promotion_generation_record_ambiguous", reasons)
+
+    def test_health_keeps_predecessor_active_while_exact_refresh_intent_is_prepared(self) -> None:
+        previous = promotion_receipt(GENERATION_ID, "pending-review")
+        target = promotion_receipt(GENERATION_ID, "prepared")
+        target["candidate"]["registry_sha256"] = "e" * 64
+        target["candidate"]["head_sha"] = "c" * 40
+        target["ownership"]["expected_head_sha"] = "c" * 40
+        target["acknowledgements"] = []
+        target["refresh_from"] = self.revision_ref(previous)
+        journal = {
+            "schema_version": "datapan.canonical-update-promotion-journal.v1",
+            "repository": "StatPan/datapan-registry",
+            "updated_at": "2026-09-30T22:00:00Z",
+            "records": [previous, target],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")], ack=journal,
+            )
+        canonical = report["sources"][0]["canonical"]
+        self.assertEqual(canonical["promotion_status"], "pending-review")
+        self.assertNotIn("promotion_generation_record_ambiguous", {row["reason"] for row in report["sources"][0]["faults"]})
+
     def test_older_late_ingested_readback_cannot_replace_a_newer_last_good(self) -> None:
         older = promotion_receipt(GENERATION_ID, "read-back-confirmed")
         completed_at = "2026-09-29T12:00:00Z"

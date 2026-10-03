@@ -17,6 +17,95 @@ SPEC = importlib.util.spec_from_file_location("run_canonical_update_promotion_te
 assert SPEC and SPEC.loader
 RUNNER = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(RUNNER)
+PR_SPEC = importlib.util.spec_from_file_location(
+    "canonical_update_pr_refresh_test_module",
+    pathlib.Path(__file__).parents[1] / "scripts/canonical_update_pr.py",
+)
+assert PR_SPEC and PR_SPEC.loader
+PR_HELPER = importlib.util.module_from_spec(PR_SPEC)
+PR_SPEC.loader.exec_module(PR_HELPER)
+
+
+class GiraFinishReviewPolicyTests(unittest.TestCase):
+    def test_explicit_none_and_required_values_are_configured(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            (root / ".gira").mkdir()
+            config = root / ".gira/config.yaml"
+            for value in ("none", "required", "  NONE  ", " Required "):
+                config.write_text(f"finish_review_policy: {value!r}\n", encoding="utf-8")
+                self.assertEqual(RUNNER.finish_review_policy_status(root), "configured", value)
+
+    def test_missing_nested_duplicate_malformed_and_unsupported_values_fail_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            (root / ".gira").mkdir()
+            config = root / ".gira/config.yaml"
+            for contents in (
+                "profiles:\n  default:\n    finish_review_policy: none\n",
+                "finish_review_policy: none\nfinish_review_policy: required\n",
+                "finish_review_policy: configured\n",
+                "finish_review_policy: 0\n",
+                "finish_review_policy: [none\n",
+            ):
+                config.write_text(contents, encoding="utf-8")
+                self.assertEqual(RUNNER.finish_review_policy_status(root), "unconfigured", contents)
+
+    def test_repository_none_policy_does_not_add_blocker_on_pr_readback(self) -> None:
+        repository_root = SCRIPT.parents[1]
+        policy_status = RUNNER.finish_review_policy_status(repository_root)
+        self.assertEqual(policy_status, "configured")
+
+        candidate = {
+            "repository": "StatPan/datapan-registry",
+            "source_id": "data_go_kr",
+            "scope": "aggregate_supported_catalog",
+            "base_sha": "a" * 40,
+            "head_sha": "b" * 40,
+            "manifest_sha256": "c" * 64,
+            "registry_path": "data/data-go-kr.registry.json",
+            "registry_bytes": 123,
+            "registry_sha256": "d" * 64,
+            "composition_receipt_sha256": "e" * 64,
+            "generation_id": "finish-policy-none-test",
+        }
+        owner = PR_HELPER.owner_id(candidate["repository"], candidate["source_id"], candidate["scope"])
+        body = PR_HELPER.render_pr_body(candidate, owner, 652)
+        receipt = {
+            "status": "prepared",
+            "candidate": candidate,
+            "checks": {"finish_review_policy": policy_status},
+            "ownership": {
+                "owner_id": owner,
+                "branch": PR_HELPER.automation_branch(candidate, "create"),
+                "expected_head_sha": candidate["head_sha"],
+                "body_sha256": hashlib.sha256(body.encode("utf-8")).hexdigest(),
+                "body": body,
+            },
+            "pr": {"number": 0, "url": "", "state": "missing", "merge_commit_sha": None},
+            "acknowledgements": [],
+            "blockers": [],
+        }
+
+        observed = PR_HELPER.record_pr_readback(
+            receipt,
+            {
+                "number": 77,
+                "url": "https://github.com/StatPan/datapan-registry/pull/77",
+                "body": body,
+                "headRefName": receipt["ownership"]["branch"],
+                "headRefOid": candidate["head_sha"],
+                "baseRefName": "main",
+                "state": "MERGED",
+                "mergeCommit": {"oid": "f" * 40},
+            },
+            observed_at="2026-10-03T00:00:00Z",
+            run_url="https://github.com/StatPan/datapan-registry/actions/runs/123/attempts/1",
+        )
+
+        self.assertEqual(observed["status"], "merged")
+        self.assertEqual(observed["checks"]["finish_review_policy"], "configured")
+        self.assertNotIn("finish_review_policy_unconfigured", observed["blockers"])
 
 
 class CandidateStagingTests(unittest.TestCase):
@@ -536,7 +625,11 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             },
         }
 
-    def screen_candidates(self, root: pathlib.Path, checkpoints: list[dict], compatibility_side_effect) -> tuple[dict | None, list[dict[str, str]]]:
+    def screen_candidates(
+        self, root: pathlib.Path, checkpoints: list[dict], compatibility_side_effect,
+        *, bundle_sha_by_artifact_id: dict[str, str] | None = None,
+        journal: dict | None = None,
+    ) -> tuple[dict | None, list[dict[str, str]]]:
         run_by_id = {cp["output_artifact"]["run_id"]: cp for cp in checkpoints}
         artifact_by_id = {cp["output_artifact"]["artifact_id"]: cp for cp in checkpoints}
 
@@ -546,15 +639,23 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
         def artifact_api(_root, _repository, _run_id, artifact_id):
             return self.artifact(artifact_by_id[artifact_id])
 
+        def validate_bundle(checkpoint, *_args):
+            locator = checkpoint["output_artifact"]
+            digest = (bundle_sha_by_artifact_id or {}).get(
+                locator["artifact_id"],
+                checkpoint["generation_inputs"]["candidate_sha256"],
+            )
+            return {"composition_receipt": {"input_digests": {}}, "registry_sha256": digest}
+
         with (
             mock.patch.object(RUNNER, "processor_run_api", side_effect=run_api),
             mock.patch.object(RUNNER, "processor_artifact_api", side_effect=artifact_api),
             mock.patch.object(RUNNER, "download_processor_artifact", return_value=root / "downloaded-bundle"),
-            mock.patch.object(RUNNER, "validate_processor_bundle", return_value={"composition_receipt": {"input_digests": {}}}),
+            mock.patch.object(RUNNER, "validate_processor_bundle", side_effect=validate_bundle),
             mock.patch.object(RUNNER, "verify_processor_input_compatibility", side_effect=compatibility_side_effect),
         ):
             return RUNNER.select_first_eligible_processor_bundle(
-                root, self.repository, checkpoints, [],
+                root, self.repository, checkpoints, [], journal,
                 default_branch=self.default_branch,
                 current_head_sha=self.source_sha,
                 composition_schema={},
@@ -676,7 +777,7 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             self.assertEqual(selected["output_artifact"]["run_id"], "70000000001")
             self.assertEqual(selected["output_artifact"]["name"], "upstream-catalogue-processing-70000000001-2")
 
-    def test_delivered_generation_is_not_selected_again(self) -> None:
+    def test_durable_ready_checkpoint_is_retained_until_payload_is_screened(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = pathlib.Path(raw)
             checkpoint = self.checkpoint()
@@ -689,7 +790,7 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
                 state_root, self.schema(root), journal,
                 now=RUNNER.parse_utc_timestamp("2026-10-03T00:00:00Z", "test"),
             )
-            self.assertIsNone(selected)
+            self.assertEqual(selected["generation_id"], checkpoint["generation_id"])
 
     def test_ready_checkpoint_with_expired_artifact_is_not_selected(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
@@ -702,7 +803,7 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             )
             self.assertIsNone(selected)
 
-    def test_all_delivered_and_expired_ready_records_report_idle_with_blockers(self) -> None:
+    def test_durable_ready_listing_keeps_delivered_candidate_and_reports_expired_blocker(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = pathlib.Path(raw)
             delivered = self.checkpoint(candidate_sha256="e" * 64)
@@ -716,9 +817,64 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
                 state_root, self.schema(root), journal,
                 now=RUNNER.parse_utc_timestamp("2026-10-03T00:00:00Z", "test"),
             )
-            self.assertEqual(candidates, [])
+            self.assertEqual([row["generation_id"] for row in candidates], [delivered["generation_id"]])
             self.assertEqual(blocked, [{"generation_id": expired["generation_id"], "reason": "ready_artifact_expired"}])
 
+    def test_exact_payload_redelivery_is_idle_but_same_generation_new_payload_is_selected(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            checkpoint = self.checkpoint(artifact_id="111111")
+            journal = {"records": [{
+                "candidate": {
+                    "repository": self.repository,
+                    "source_id": "data_go_kr",
+                    "scope": "aggregate_supported_catalog",
+                    "generation_id": checkpoint["generation_id"],
+                    "registry_sha256": "d" * 64,
+                },
+                "status": "pending-review",
+                "pr": {"number": 17},
+            }]}
+            same, blocked = self.screen_candidates(
+                root, [checkpoint], lambda *_args, **_kwargs: None,
+                bundle_sha_by_artifact_id={"111111": "d" * 64}, journal=journal,
+            )
+            self.assertIsNone(same)
+            self.assertEqual(blocked, [])
+
+
+
+            # Detail retry can change the composed bytes while preserving the
+            # B generation identity. Selection must compare the screened C
+            # payload digest, not the producer generation id alone.
+            changed = copy.deepcopy(checkpoint)
+            changed["output_artifact"]["run_id"] = "70000000002"
+            changed["output_artifact"]["name"] = "upstream-catalogue-processing-70000000002-2"
+            changed["output_artifact"]["artifact_id"] = "222222"
+            selected, blocked = self.screen_candidates(
+                root, [changed], lambda *_args, **_kwargs: None,
+                bundle_sha_by_artifact_id={"222222": "e" * 64}, journal=journal,
+            )
+            self.assertEqual(selected["generation_id"], checkpoint["generation_id"])
+            self.assertEqual(selected["bundle"]["registry_sha256"], "e" * 64)
+            self.assertIsNone(selected["prior_revision"])
+            self.assertEqual(blocked, [])
+
+            replay_from_new_generation = self.checkpoint(
+                candidate_sha256="8" * 64, run_id="70000000003", artifact_id="333333",
+            )
+            later_candidate = self.checkpoint(
+                candidate_sha256="9" * 64, run_id="70000000004", artifact_id="444444",
+            )
+            screened, blocked = self.screen_candidates(
+                root, [replay_from_new_generation, later_candidate],
+                lambda *_args, **_kwargs: None,
+                bundle_sha_by_artifact_id={"333333": "d" * 64, "444444": "1" * 64},
+                journal=journal,
+            )
+            self.assertEqual(screened["generation_id"], later_candidate["generation_id"])
+            self.assertEqual(screened["bundle"]["registry_sha256"], "1" * 64)
+            self.assertEqual(blocked, [])
     def test_deleted_old_run_does_not_starve_a_newer_ready_bundle(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = pathlib.Path(raw)
@@ -906,6 +1062,161 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             latest = subprocess.run(("git", "rev-parse", "HEAD"), cwd=root, text=True, capture_output=True, check=True).stdout.strip()
             with self.assertRaisesRegex(RUNNER.PromotionError, "contract changed"):
                 RUNNER.verify_processor_input_compatibility(root, checkpoint, processor_head, latest, composition)
+
+class OwnedPRRefreshRecoveryTests(unittest.TestCase):
+    repository = "StatPan/datapan-registry"
+    source_id = "data_go_kr"
+    scope = "aggregate_supported_catalog"
+    generation_id = "generation-same"
+    old_head = "b" * 40
+    new_head = "c" * 40
+    branch = "automation/canonical-update/data-go-kr-0123456789ab"
+    pr_number = 652
+
+    def receipts(self) -> tuple[dict, dict]:
+        owner = PR_HELPER.owner_id(self.repository, self.source_id, self.scope)
+        old_candidate = {
+            "repository": self.repository, "source_id": self.source_id,
+            "scope": self.scope, "generation_id": self.generation_id,
+            "head_sha": self.old_head, "manifest_sha256": "a" * 64,
+            "registry_sha256": "d" * 64,
+        }
+        old_body = f"{PR_HELPER.body_marker(owner, self.generation_id)}\n\nOld payload.\n"
+        old = {
+            "schema_version": PR_HELPER.SCHEMA_VERSION,
+            "status": "pending-review", "action": "create",
+            "candidate": old_candidate,
+            "ownership": {
+                "owner_id": owner, "branch": self.branch,
+                "expected_head_sha": self.old_head,
+                "body_sha256": hashlib.sha256(old_body.encode()).hexdigest(),
+                "body": old_body, "issue_number": 651,
+            },
+            "pr": {"number": self.pr_number, "state": "open"},
+            "acknowledgements": [{"status": "pending-review", "observed_at": "2026-10-03T00:00:00Z"}],
+        }
+        new = copy.deepcopy(old)
+        new["status"] = "prepared"
+        new["action"] = "refresh_owned"
+        new["candidate"]["head_sha"] = self.new_head
+        new["candidate"]["registry_sha256"] = "e" * 64
+        new_body = f"{PR_HELPER.body_marker(owner, self.generation_id)}\n\nUpdated payload.\n"
+        new["ownership"]["expected_head_sha"] = self.old_head
+        new["ownership"]["body_sha256"] = hashlib.sha256(new_body.encode()).hexdigest()
+        new["ownership"]["body"] = new_body
+        new["acknowledgements"] = []
+        new["refresh_from"] = PR_HELPER.revision_reference(old)
+        return old, new
+
+    def journal(self, old: dict, new: dict) -> dict:
+        schema = json.loads((pathlib.Path(__file__).parents[1] / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json").read_text())
+        journal = PR_HELPER.append_journal_record(
+            None, old, repository=self.repository, observed_at="2026-10-03T00:00:00Z",
+        )
+        journal = PR_HELPER.append_journal_record(
+            journal, new, repository=self.repository, observed_at="2026-10-03T00:01:00Z",
+        )
+        PR_HELPER.validate_journal(journal, schema)
+        return journal
+
+    def readbacks(self) -> dict[str, dict]:
+        old, new = self.receipts()
+        return {
+            "before-push": {"head": self.old_head, "body": old["ownership"]["body"]},
+            "after-push-before-body": {"head": self.new_head, "body": old["ownership"]["body"]},
+            "after-body-edit": {"head": self.new_head, "body": new["ownership"]["body"]},
+        }
+
+    def github_list_row(self, body: str, head: str) -> dict:
+        owner = PR_HELPER.owner_id(self.repository, self.source_id, self.scope)
+        return {
+            "number": self.pr_number, "state": "open", "owner_id": owner,
+            "generation_id": self.generation_id,
+            "head_sha": head, "body": body, "body_sha256": hashlib.sha256(body.encode()).hexdigest(),
+            "head_ref": self.branch, "base_ref": "main",
+        }
+
+    def github_api_readback(self, body: str, head: str) -> dict:
+        owner = PR_HELPER.owner_id(self.repository, self.source_id, self.scope)
+        return {
+            "number": self.pr_number, "state": "OPEN", "body": body,
+            "headRefName": self.branch, "headRefOid": head, "baseRefName": "main",
+            "repository": self.repository, "headRepository": self.repository,
+            "body_sha256": hashlib.sha256(body.encode()).hexdigest(),
+            "owner_id": owner, "generation_id": self.generation_id,
+        }
+
+    def test_exact_refresh_crash_phases_recover_same_owned_pr_without_duplicate(self) -> None:
+        candidate = {
+            "repository": self.repository, "source_id": self.source_id,
+            "scope": self.scope, "generation_id": self.generation_id,
+            "head_sha": self.new_head, "manifest_sha256": "a" * 64,
+            "registry_sha256": "e" * 64,
+        }
+        for expected_phase, snapshot in self.readbacks().items():
+            with self.subTest(phase=expected_phase):
+                old, target = self.receipts()
+                journal = self.journal(old, target)
+                listed = self.github_list_row(snapshot["body"], snapshot["head"])
+                existing, issue_number = RUNNER.existing_pr_rows(
+                    journal, [listed], PR_HELPER, candidate,
+                )
+                self.assertEqual(len(existing), 1)
+                self.assertEqual(existing[0]["number"], self.pr_number)
+                self.assertEqual(issue_number, 651)
+                observed = self.github_api_readback(snapshot["body"], snapshot["head"])
+                RUNNER.validate_existing_pr_api_readback(observed, journal, existing, PR_HELPER)
+
+    def test_human_head_or_body_drift_fails_closed_during_refresh_recovery(self) -> None:
+        old, target = self.receipts()
+        journal = self.journal(old, target)
+        candidate = {
+            "repository": self.repository, "source_id": self.source_id,
+            "scope": self.scope, "generation_id": self.generation_id,
+            "head_sha": self.new_head, "manifest_sha256": "a" * 64,
+            "registry_sha256": "e" * 64,
+        }
+        changed_snapshots = (
+            {"head": "f" * 40, "body": old["ownership"]["body"]},
+            {"head": self.new_head, "body": old["ownership"]["body"] + "Human edit.\n"},
+        )
+        for snapshot in changed_snapshots:
+            with self.subTest(head=snapshot["head"], body=snapshot["body"][-12:]):
+                listed = self.github_list_row(snapshot["body"], snapshot["head"])
+                with self.assertRaisesRegex(RUNNER.PromotionError, "human_head_change_or_body_change"):
+                    RUNNER.existing_pr_rows(journal, [listed], PR_HELPER, candidate)
+
+    def test_interrupted_pr_creation_recovers_only_exact_prepared_head_and_body(self) -> None:
+        _old, prepared = self.receipts()
+        prepared["action"] = "create"
+        prepared["pr"]["number"] = 0
+        prepared.pop("refresh_from")
+        schema = json.loads((pathlib.Path(__file__).parents[1] / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json").read_text())
+        journal = PR_HELPER.append_journal_record(
+            None, prepared, repository=self.repository, observed_at="2026-10-03T00:00:00Z",
+        )
+        PR_HELPER.validate_journal(journal, schema)
+        candidate = {
+            "repository": self.repository, "source_id": self.source_id,
+            "scope": self.scope, "generation_id": self.generation_id,
+            "head_sha": self.new_head, "manifest_sha256": "a" * 64,
+            "registry_sha256": "e" * 64,
+        }
+        listed = self.github_list_row(prepared["ownership"]["body"], self.new_head)
+        existing, issue_number = RUNNER.existing_pr_rows(journal, [listed], PR_HELPER, candidate)
+        self.assertEqual(len(existing), 1)
+        self.assertEqual(existing[0]["number"], self.pr_number)
+        self.assertEqual(issue_number, 651)
+        RUNNER.validate_existing_pr_api_readback(
+            self.github_api_readback(prepared["ownership"]["body"], self.new_head),
+            journal, existing, PR_HELPER,
+        )
+
+        tampered = self.github_list_row(prepared["ownership"]["body"] + "human\n", self.new_head)
+        with self.assertRaisesRegex(RUNNER.PromotionError, "exact prepared head/body"):
+            RUNNER.existing_pr_rows(journal, [tampered], PR_HELPER, candidate)
+
+
 
 if __name__ == "__main__":
     unittest.main()

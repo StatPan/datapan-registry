@@ -135,6 +135,32 @@
       "path": "schemas/datapan.diagnostic-current-source-applicability.v1.schema.json",
       "kind": "schema",
       "authority_ticket": "StatPan/datapan-registry#666"
+    },
+    {
+      "path": "schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#658"
+    },
+    {
+      "path": "schemas/datapan.canonical-update-promotion-receipt.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#658"
+    },
+    {
+      "path": "schemas/datapan.data-go-kr-operation-denominator-expectation.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#658"
+    },
+    {
+      "path": "schemas/datapan.registry-distribution.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#658"
+    },
+    {
+      "path": "policy/data-go-kr-operation-denominator-expectation.json",
+      "kind": "operation_denominator_expectation",
+      "schema": "https://schemas.datapan.dev/datapan.data-go-kr-operation-denominator-expectation.v1.schema.json",
+      "authority_ticket": "StatPan/datapan-registry#658"
     }
   ]
 }

@@ -239,11 +239,37 @@
         ]
       }
     },
+    "refresh_from": {
+      "$ref": "#/$defs/revisionReference"
+    },
+    "superseded_by": {
+      "$ref": "#/$defs/revisionReference"
+    },
     "ci": {
       "$ref": "#/$defs/ci"
     }
   },
   "$defs": {
+    "revisionReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository", "source_id", "scope", "generation_id", "registry_sha256",
+        "head_sha", "pr_number", "owner_id", "branch", "body_sha256"
+      ],
+      "properties": {
+        "repository": {"type": "string", "pattern": "^[^/]+/[^/]+$"},
+        "source_id": {"type": "string", "minLength": 1},
+        "scope": {"type": "string", "minLength": 1},
+        "generation_id": {"type": "string", "minLength": 1},
+        "registry_sha256": {"$ref": "#/$defs/sha256"},
+        "head_sha": {"$ref": "#/$defs/sha1"},
+        "pr_number": {"type": "integer", "minimum": 1},
+        "owner_id": {"type": "string", "pattern": "^datapan-canonical-update:v1:[a-f0-9]{64}$"},
+        "branch": {"type": "string", "minLength": 1},
+        "body_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
     "sha1": {
       "type": "string",
       "pattern": "^[a-f0-9]{40}$"
@@ -454,6 +480,10 @@
         },
         "body_sha256": {
           "$ref": "#/$defs/sha256"
+        },
+        "body": {
+          "type": "string",
+          "minLength": 1
         },
         "issue_number": {
           "type": "integer",

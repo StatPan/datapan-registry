@@ -55,6 +55,35 @@ class CanonicalUpdatePromotionTests(unittest.TestCase):
         ack.update(overrides)
         return ack
 
+    def revision_receipt(
+        self, *, registry_sha: str, head_sha: str, status: str,
+        body: str, pr_number: int = 77,
+    ) -> dict:
+        candidate = self.candidate("same-generation")
+        candidate.update({"head_sha": head_sha, "registry_sha256": registry_sha})
+        owner = PROMOTION.owner_id(candidate["repository"], candidate["source_id"], candidate["scope"])
+        body = f"{PROMOTION.body_marker(owner, candidate['generation_id'])}\n\n{body}"
+        return {
+            "schema_version": PROMOTION.SCHEMA_VERSION,
+            "status": status,
+            "action": "refresh_owned",
+            "candidate": candidate,
+            "ownership": {
+                "owner_id": owner,
+                "branch": PROMOTION.automation_branch(candidate, "create"),
+                "expected_head_sha": head_sha,
+                "body_sha256": hashlib.sha256(body.encode("utf-8")).hexdigest(),
+                "body": body,
+                "issue_number": 652,
+                "issue_url": "https://github.com/StatPan/datapan-registry/issues/652",
+            },
+            "pr": {"number": pr_number, "url": "https://github.com/StatPan/datapan-registry/pull/77", "state": "open"},
+            "acknowledgements": ([{
+                "status": "pending-review", "observed_at": "2026-10-01T12:00:00Z",
+            }] if status == "pending-review" else []),
+            "blockers": ["manual_review_revalidation_required"],
+        }
+
     def test_prepared_unconfigured_candidate_records_authoritative_merge(self) -> None:
         candidate = self.candidate()
         owner = PROMOTION.owner_id(candidate["repository"], candidate["source_id"], candidate["scope"])
@@ -207,6 +236,102 @@ class CanonicalUpdatePromotionTests(unittest.TestCase):
         }
         with self.assertRaisesRegex(PROMOTION.AdmissionError, "human_body_change"):
             PROMOTION.decide_existing_prs(candidate, [row])
+
+    def test_same_generation_distinct_payloads_have_distinct_durable_revision_keys(self) -> None:
+        old = self.revision_receipt(
+            registry_sha="d" * 64, head_sha="b" * 40,
+            status="pending-review", body="old candidate review body\n",
+        )
+        new = self.revision_receipt(
+            registry_sha="f" * 64, head_sha="c" * 40,
+            status="prepared", body="new candidate review body\n",
+        )
+        old_key = PROMOTION.candidate_key(old)
+        new_key = PROMOTION.candidate_key(new)
+        self.assertEqual(old_key[:4], new_key[:4])
+        self.assertNotEqual(old_key, new_key)
+        journal = PROMOTION.append_journal_record(
+            None, old, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:00:00Z",
+        )
+        journal = PROMOTION.append_journal_record(
+            journal, new, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:01:00Z",
+        )
+        self.assertEqual(len(journal["records"]), 2)
+
+    def test_refresh_supersession_waits_for_exact_pr_readback_and_keeps_old_revision(self) -> None:
+        old = self.revision_receipt(
+            registry_sha="d" * 64, head_sha="b" * 40,
+            status="pending-review", body="old candidate review body\n",
+        )
+        new = self.revision_receipt(
+            registry_sha="f" * 64, head_sha="c" * 40,
+            status="prepared", body="new candidate review body\n",
+        )
+        new["refresh_from"] = PROMOTION.revision_reference(old)
+        journal = PROMOTION.append_journal_record(
+            None, old, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:00:00Z",
+        )
+        journal = PROMOTION.append_journal_record(
+            journal, new, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:01:00Z",
+        )
+        schema = __import__("json").loads(
+            (pathlib.Path(__file__).parents[1] / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json").read_text()
+        )
+        PROMOTION.validate_journal(journal, schema)
+        old_ref = PROMOTION.revision_reference(old)
+
+        with self.assertRaisesRegex(PROMOTION.AdmissionError, "before exact pending-review PR read-back"):
+            PROMOTION.append_journal_record(
+                journal, new, repository="StatPan/datapan-registry",
+                observed_at="2026-10-01T12:02:00Z", supersede_from=old_ref,
+            )
+        self.assertIsNone(journal["records"][0].get("superseded_by"))
+
+        readback = PROMOTION.record_pr_readback(new, {
+            "number": 77,
+            "url": "https://github.com/StatPan/datapan-registry/pull/77",
+            "state": "OPEN",
+            "body": new["ownership"]["body"],
+            "headRefName": new["ownership"]["branch"],
+            "headRefOid": new["candidate"]["head_sha"],
+            "baseRefName": "main",
+            "mergeCommit": None,
+        }, observed_at="2026-10-01T12:03:00Z", run_url="https://github.com/StatPan/datapan-registry/actions/runs/124/attempts/1")
+        journal = PROMOTION.append_journal_record(
+            journal, readback, repository="StatPan/datapan-registry",
+            observed_at="2026-10-01T12:03:00Z", supersede_from=old_ref,
+        )
+        PROMOTION.validate_journal(journal, schema)
+        self.assertEqual(len(journal["records"]), 2)
+        self.assertEqual(journal["records"][0]["status"], "pending-review")
+        self.assertEqual(journal["records"][0]["superseded_by"], PROMOTION.revision_reference(readback))
+        self.assertEqual(journal["records"][1]["status"], "pending-review")
+        self.assertEqual(journal["records"][1]["refresh_from"], old_ref)
+        self.assertIn("manual_review_revalidation_required", journal["records"][1]["blockers"])
+
+    def test_refresh_links_reject_a_dangling_or_cross_owner_predecessor(self) -> None:
+        old = self.revision_receipt(
+            registry_sha="d" * 64, head_sha="b" * 40,
+            status="pending-review", body="old candidate review body\n",
+        )
+        new = self.revision_receipt(
+            registry_sha="f" * 64, head_sha="c" * 40,
+            status="prepared", body="new candidate review body\n",
+        )
+        bad_reference = PROMOTION.revision_reference(old)
+        bad_reference["owner_id"] = "datapan-canonical-update:v1:" + "9" * 64
+        new["refresh_from"] = bad_reference
+        journal = PROMOTION.append_journal_record(
+            None, old, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:00:00Z",
+        )
+        journal = PROMOTION.append_journal_record(
+            journal, new, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:01:00Z",
+        )
+        schema = __import__("json").loads(
+            (pathlib.Path(__file__).parents[1] / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json").read_text()
+        )
+        with self.assertRaisesRegex(PROMOTION.AdmissionError, "exact durable predecessor"):
+            PROMOTION.validate_journal(journal, schema)
 
 
 if __name__ == "__main__":

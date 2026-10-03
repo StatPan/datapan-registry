@@ -31,6 +31,8 @@ import zipfile
 from collections.abc import Mapping, Sequence
 from typing import Any
 
+import yaml
+
 os.environ.setdefault("PYTHONDONTWRITEBYTECODE", "1")
 
 PROCESSOR_SCHEMA = "datapan.upstream-catalogue-checkpoint.v1"
@@ -422,11 +424,6 @@ def list_recoverable_processor_checkpoints(
             parse_utc_timestamp(checkpoint.get("observed_at"), "processor observation")
         except PromotionError:
             blocked.append({"generation_id": generation_id, "reason": "processor_observation_time_invalid"})
-            continue
-        prior = journal_record_for(journal, "data_go_kr", "aggregate_supported_catalog", generation_id)
-        prior_pr = prior.get("pr", {}) if isinstance(prior, Mapping) else {}
-        pr_number = prior_pr.get("number") if isinstance(prior_pr, Mapping) else None
-        if isinstance(pr_number, int) and not isinstance(pr_number, bool) and pr_number > 0:
             continue
         candidates.append(checkpoint)
     if not candidates:
@@ -957,6 +954,7 @@ def select_first_eligible_processor_bundle(
     repository: str,
     candidates: Sequence[Mapping[str, Any]],
     blocked: list[dict[str, str]],
+    journal: Mapping[str, Any] | None = None,
     *,
     default_branch: str,
     current_head_sha: str,
@@ -976,6 +974,36 @@ def select_first_eligible_processor_bundle(
         if screened is None:
             blocked.append({"generation_id": generation_id, "reason": str(reason)})
             continue
+        bundle = screened.get("bundle", {})
+        revision = journal_record_for(
+            journal,
+            str(checkpoint.get("source_id", "")),
+            str(checkpoint.get("source_scope", "")),
+            generation_id,
+            str(bundle.get("registry_sha256", "")),
+        )
+        already_active_payload = any(
+            isinstance(row, Mapping)
+            and row.get("superseded_by") is None
+            and row.get("status") == "pending-review"
+            and str(row.get("candidate", {}).get("repository", "")).casefold() == repository.casefold()
+            and row.get("candidate", {}).get("source_id") == checkpoint.get("source_id")
+            and row.get("candidate", {}).get("scope") == checkpoint.get("source_scope")
+            and row.get("candidate", {}).get("registry_sha256") == bundle.get("registry_sha256")
+            for row in (journal.get("records", []) if isinstance(journal, Mapping) else [])
+        )
+        if already_active_payload:
+            # Another B observation may have a distinct generation while
+            # composing the same bytes. It is already represented by this
+            # active PR, so don't let that no-op starve a later candidate.
+            continue
+        if revision is not None and revision.get("superseded_by") is not None:
+            continue
+        if revision is not None and revision.get("status") != "prepared":
+            # Exact payload redelivery is idempotent, even if the producer's
+            # heartbeat or Actions artifact locator has advanced.
+            continue
+        screened["prior_revision"] = revision
         return screened, blocked
     return None, blocked
 
@@ -1060,7 +1088,13 @@ def stage_candidate_outputs(root: pathlib.Path, generation_id: str) -> list[str]
 
 def update_registry_review_artifacts(root: pathlib.Path, generation_id: str, bundle_dir: pathlib.Path) -> pathlib.Path:
     target = root / REVIEW_DIR / generation_id
-    target.mkdir(parents=True, exist_ok=False)
+    target.mkdir(parents=True, exist_ok=True)
+    if target.is_symlink() or not target.is_dir():
+        raise PromotionError("generation review artifact directory is not a regular owned directory")
+    allowed = {"semantic-diff.json", "regeneration-queue.json", "quarantine.json", "composition-receipt.json"}
+    for child in target.iterdir():
+        if child.name not in allowed or child.is_symlink() or not child.is_file():
+            raise PromotionError("generation review artifact directory contains an unexpected entry")
     for name in ("semantic-diff.json", "regeneration-queue.json", "quarantine.json", "composition-receipt.json"):
         (target / name).write_bytes((bundle_dir / name).read_bytes())
     return target
@@ -1138,9 +1172,38 @@ def manual_review_status(root: pathlib.Path) -> str:
 
 
 def finish_review_policy_status(root: pathlib.Path) -> str:
-    # Generic reviewer/label metadata is not a finish authorization policy.
-    text = (root / ".gira/config.yaml").read_text(encoding="utf-8")
-    return "configured" if re.search(r"(?m)^\s*finish_review_policy\s*:\s*configured\s*$", text) else "unconfigured"
+    """Return whether this repository explicitly configures a supported Gira policy.
+
+    Gira accepts only ``required`` and ``none``. ``none`` still means a policy
+    was configured: it explicitly waives GitHub APPROVED evidence while leaving
+    independent Astra review and CI requirements in force. Require one unique
+    top-level key so nested ``profiles.*.review_policy`` metadata, duplicate
+    YAML keys, malformed documents, and unsupported values fail closed.
+    """
+    try:
+        text = (root / ".gira/config.yaml").read_text(encoding="utf-8")
+        document = yaml.compose(text, Loader=yaml.SafeLoader)
+        if not isinstance(document, yaml.MappingNode):
+            return "unconfigured"
+        keys: set[str] = set()
+        for key_node, _value_node in document.value:
+            if not isinstance(key_node, yaml.ScalarNode) or key_node.tag != "tag:yaml.org,2002:str":
+                return "unconfigured"
+            key = key_node.value
+            if key in keys:
+                return "unconfigured"
+            keys.add(key)
+        if "finish_review_policy" not in keys:
+            return "unconfigured"
+        config = yaml.safe_load(text)
+    except (OSError, UnicodeError, yaml.YAMLError, TypeError, ValueError):
+        return "unconfigured"
+    if not isinstance(config, dict):
+        return "unconfigured"
+    policy = config.get("finish_review_policy")
+    if not isinstance(policy, str) or policy.strip().casefold() not in {"none", "required"}:
+        return "unconfigured"
+    return "configured"
 
 
 def gh_json(root: pathlib.Path, *arguments: str) -> Any:
@@ -1307,6 +1370,7 @@ def persist_journal_record(
     *,
     observed_at: str,
     expected_ci: Any = CI_EXPECTATION_UNSET,
+    supersede_from: Mapping[str, Any] | None = None,
 ) -> None:
     helper = load_module(root / "scripts/canonical_update_pr.py", "canonical_update_journal_helper")
     schema = load_object(root / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json")
@@ -1326,7 +1390,10 @@ def persist_journal_record(
                 helper.assert_ci_compare_and_swap(journal, receipt, expected_ci)
             except helper.AdmissionError as exc:
                 raise PromotionError(str(exc)) from exc
-        updated = helper.append_journal_record(journal, receipt, repository=str(receipt["candidate"]["repository"]), observed_at=observed_at)
+        updated = helper.append_journal_record(
+            journal, receipt, repository=str(receipt["candidate"]["repository"]),
+            observed_at=observed_at, supersede_from=supersede_from,
+        )
         helper.validate_journal(updated, schema)
         journal_path.parent.mkdir(parents=True, exist_ok=True)
         journal_path.write_bytes(json.dumps(updated, ensure_ascii=False, indent=2).encode("utf-8") + b"\n")
@@ -1377,10 +1444,13 @@ def ensure_verify_release_ci(root: pathlib.Path, receipt: Mapping[str, Any]) -> 
     source_id = str(candidate.get("source_id", ""))
     scope = str(candidate.get("scope", ""))
     generation_id = str(candidate.get("generation_id", ""))
+    registry_sha256 = str(candidate.get("registry_sha256", ""))
     current_journal = load_promotion_journal(root)
-    current = journal_record_for(current_journal, source_id, scope, generation_id)
+    current = journal_record_for(current_journal, source_id, scope, generation_id, registry_sha256)
     if current is None:
         raise PromotionError("owned PR has no durable promotion receipt before verify-release CI")
+    if current.get("superseded_by") is not None:
+        raise PromotionError("verify-release CI cannot gate a superseded candidate revision")
     if current.get("status") not in {"prepared", "pending-review"} or current.get("pr", {}).get("number", 0) < 1:
         raise PromotionError("verify-release CI is limited to a durably owned active candidate PR")
     expected_ci = json.loads(json.dumps(current.get("ci"))) if current.get("ci") is not None else None
@@ -1389,7 +1459,7 @@ def ensure_verify_release_ci(root: pathlib.Path, receipt: Mapping[str, Any]) -> 
     def persist_ci(entry: dict[str, Any]) -> None:
         nonlocal expected_ci
         latest_journal = load_promotion_journal(root)
-        latest = journal_record_for(latest_journal, source_id, scope, generation_id)
+        latest = journal_record_for(latest_journal, source_id, scope, generation_id, registry_sha256)
         if latest is None:
             raise PromotionError("verify-release CI candidate disappeared from the durable state branch")
         updated = json.loads(json.dumps(latest))
@@ -1433,6 +1503,7 @@ def active_owned_pr(journal: Mapping[str, Any] | None, github_prs: Sequence[Mapp
     records = [
         row for row in journal.get("records", [])
         if row.get("ownership", {}).get("owner_id") == owner
+        and row.get("superseded_by") is None
         and row.get("status") in {"prepared", "pending-review"}
         and row.get("pr", {}).get("number", 0) > 0
     ]
@@ -1521,6 +1592,152 @@ def run_bound_validation(root: pathlib.Path, datapan_cli: pathlib.Path, candidat
     return evidence
 
 
+def refresh_pr_phase(
+    target: Mapping[str, Any],
+    predecessor: Mapping[str, Any],
+    observed: Mapping[str, Any],
+    helper: Any,
+    *,
+    require_repository: bool = True,
+) -> str:
+    """Classify only the three durable states of an owned PR refresh."""
+    target_candidate = target.get("candidate", {})
+    target_owner = target.get("ownership", {})
+    target_pr = target.get("pr", {})
+    old_candidate = predecessor.get("candidate", {})
+    old_owner = predecessor.get("ownership", {})
+    old_pr = predecessor.get("pr", {})
+    if target.get("refresh_from") != helper.revision_reference(predecessor):
+        raise PromotionError("prepared refresh intent does not bind its exact predecessor head/body")
+    if (
+        target_owner.get("owner_id") != old_owner.get("owner_id")
+        or target_owner.get("branch") != old_owner.get("branch")
+        or target_owner.get("issue_number") != old_owner.get("issue_number")
+        or target_pr.get("number") != old_pr.get("number")
+        or target_pr.get("number", 0) < 1
+    ):
+        raise PromotionError("prepared refresh intent changed the owned issue, branch, or PR")
+    if require_repository and (
+        str(observed.get("repository", "")).casefold() != str(target_candidate.get("repository", "")).casefold()
+        or str(observed.get("headRepository", "")).casefold() != str(target_candidate.get("repository", "")).casefold()
+    ):
+        raise PromotionError("owned PR base/head repository read-back differs from the candidate repository")
+    if (
+        str(observed.get("state", "")).upper() != "OPEN"
+        or int(observed.get("number", 0)) != int(target_pr.get("number", 0))
+        or observed.get("headRefName") != target_owner.get("branch")
+        or observed.get("baseRefName") != "main"
+    ):
+        raise PromotionError("owned PR branch/base/number changed during candidate refresh")
+    body = observed.get("body")
+    if not isinstance(body, str):
+        raise PromotionError("owned PR refresh read-back has no body")
+    body_sha = hashlib.sha256(body.encode("utf-8")).hexdigest()
+    claimed_body_sha = observed.get("body_sha256")
+    if claimed_body_sha is not None and claimed_body_sha != body_sha:
+        raise PromotionError("owned PR body digest differs from its API read-back")
+    target_body = target_owner.get("body")
+    if not isinstance(target_body, str) or hashlib.sha256(target_body.encode("utf-8")).hexdigest() != target_owner.get("body_sha256"):
+        raise PromotionError("prepared refresh intent lacks its exact durable target body")
+    owner = str(target_owner.get("owner_id", ""))
+    old_marker = helper.body_marker(owner, str(old_candidate.get("generation_id", "")))
+    new_marker = helper.body_marker(owner, str(target_candidate.get("generation_id", "")))
+    if old_marker not in body and new_marker not in body:
+        raise PromotionError("owned PR body no longer has either exact refresh owner marker")
+    observed_head = str(observed.get("headRefOid", ""))
+    old_head = str(old_candidate.get("head_sha", ""))
+    target_head = str(target_candidate.get("head_sha", ""))
+    old_body_sha = str(old_owner.get("body_sha256", ""))
+    new_body_sha = str(target_owner.get("body_sha256", ""))
+    if observed_head == old_head and body_sha == old_body_sha and old_marker in body:
+        return "before-push"
+    if observed_head == target_head and body_sha == old_body_sha and old_marker in body:
+        return "after-push-before-body"
+    if observed_head == target_head and body_sha == new_body_sha and new_marker in body:
+        return "after-body-edit"
+    raise PromotionError("human_head_change_or_body_change: preserve the owned PR and stop refresh recovery")
+
+
+def validate_exact_open_pr(receipt: Mapping[str, Any], observed: Mapping[str, Any], helper: Any) -> None:
+    candidate = receipt.get("candidate", {})
+    ownership = receipt.get("ownership", {})
+    pr = receipt.get("pr", {})
+    body = observed.get("body")
+    if (
+        str(observed.get("repository", "")).casefold() != str(candidate.get("repository", "")).casefold()
+        or str(observed.get("headRepository", "")).casefold() != str(candidate.get("repository", "")).casefold()
+        or str(observed.get("state", "")).upper() != "OPEN"
+        or int(observed.get("number", 0)) != int(pr.get("number", 0))
+        or observed.get("headRefName") != ownership.get("branch")
+        or observed.get("baseRefName") != "main"
+        or observed.get("headRefOid") != candidate.get("head_sha")
+        or not isinstance(body, str)
+        or hashlib.sha256(body.encode("utf-8")).hexdigest() != ownership.get("body_sha256")
+        or (isinstance(ownership.get("body"), str) and body != ownership.get("body"))
+        or helper.body_marker(str(ownership.get("owner_id", "")), str(candidate.get("generation_id", ""))) not in body
+    ):
+        raise PromotionError("human_head_change_or_body_change: preserve the owned PR and stop")
+
+
+def validate_existing_pr_api_readback(
+    observed: Mapping[str, Any],
+    journal: Mapping[str, Any] | None,
+    existing: Sequence[Mapping[str, Any]],
+    helper: Any,
+) -> None:
+    """Bind an existing PR to its exact durable revision before any candidate upload."""
+    if len(existing) != 1 or not isinstance(journal, Mapping):
+        raise PromotionError("owned PR read-back has no unique durable revision receipt")
+    reference = existing[0].get("revision_ref")
+    if not isinstance(reference, Mapping):
+        raise PromotionError("owned PR list result has no exact durable revision identity")
+    receipt = journal_record_for(
+        journal,
+        str(reference.get("source_id", "")),
+        str(reference.get("scope", "")),
+        str(reference.get("generation_id", "")),
+        str(reference.get("registry_sha256", "")),
+    )
+    if receipt is None or helper.revision_reference(receipt) != dict(reference):
+        raise PromotionError("owned PR read-back revision differs from its durable journal identity")
+    if int(receipt.get("pr", {}).get("number", 0)) == 0:
+        candidate = receipt.get("candidate", {})
+        ownership = receipt.get("ownership", {})
+        body = observed.get("body")
+        if (
+            str(observed.get("repository", "")).casefold() != str(candidate.get("repository", "")).casefold()
+            or str(observed.get("headRepository", "")).casefold() != str(candidate.get("repository", "")).casefold()
+            or str(observed.get("state", "")).upper() != "OPEN"
+            or int(observed.get("number", 0)) < 1
+            or observed.get("headRefName") != ownership.get("branch")
+            or observed.get("baseRefName") != "main"
+            or observed.get("headRefOid") != candidate.get("head_sha")
+            or not isinstance(body, str)
+            or hashlib.sha256(body.encode("utf-8")).hexdigest() != ownership.get("body_sha256")
+            or (isinstance(ownership.get("body"), str) and body != ownership.get("body"))
+            or helper.body_marker(str(ownership.get("owner_id", "")), str(candidate.get("generation_id", ""))) not in body
+        ):
+            raise PromotionError("interrupted PR creation read-back differs from its exact prepared owner/head/body")
+        return
+    if isinstance(receipt.get("refresh_from"), Mapping):
+        validate_exact_open_pr(receipt, observed, helper)
+        return
+    intents = [
+        row for row in journal.get("records", [])
+        if isinstance(row, Mapping)
+        and row.get("status") == "prepared"
+        and row.get("superseded_by") is None
+        and row.get("refresh_from") == dict(reference)
+        and int(row.get("pr", {}).get("number", 0)) == int(receipt.get("pr", {}).get("number", 0))
+    ]
+    if len(intents) > 1:
+        raise PromotionError("multiple prepared refresh intents claim one owned PR head")
+    if not intents:
+        validate_exact_open_pr(receipt, observed, helper)
+        return
+    refresh_pr_phase(intents[0], receipt, observed, helper)
+
+
 def existing_pr_rows(
     journal: Mapping[str, Any] | None,
     github_prs: Sequence[Mapping[str, Any]],
@@ -1533,49 +1750,178 @@ def existing_pr_rows(
             raise PromotionError("open_candidate_pr_without_durable_owner_receipt: preserve it and investigate state branch")
         return [], 0
     owner = helper.owner_id(candidate["repository"], candidate["source_id"], candidate["scope"])
-    records = [row for row in journal.get("records", []) if row.get("ownership", {}).get("owner_id") == owner]
+    records = [
+        row for row in journal.get("records", [])
+        if row.get("ownership", {}).get("owner_id") == owner
+    ]
     by_number = {int(row.get("number", 0)): row for row in github_prs}
+    by_key = {helper.candidate_key(row): row for row in journal.get("records", []) if isinstance(row, Mapping)}
     result: list[dict[str, Any]] = []
     issue_number = 0
-    for record in records:
-        number = int(record["pr"]["number"])
-        observed = by_number.get(number) if number else None
-        if observed is None and number == 0:
-            recoveries = [row for row in github_prs if row.get("state") == "open" and row.get("owner_id") == owner and row.get("generation_id") == record.get("candidate", {}).get("generation_id")]
-            if len(recoveries) > 1:
-                raise PromotionError("duplicate_creation_readback: do not retry PR creation")
-            if recoveries:
-                observed = recoveries[0]
-                number = int(observed.get("number", 0))
+    recovered_revision_keys: set[tuple[str, str, str, str, str]] = set()
+    open_numbers = {
+        int(row.get("number", 0)) for row in github_prs
+        if row.get("state") == "open" and row.get("owner_id") == owner
+    }
+    for number in sorted(open_numbers):
+        observed = by_number.get(number)
         if observed is None:
-            if not record.get("pr", {}).get("number"):
-                continue
-            raise PromotionError("durable candidate PR is absent from authoritative GitHub read-back")
-        if observed.get("state") == "open":
-            if observed.get("head_sha") != record["candidate"]["head_sha"]:
-                raise PromotionError("human_head_change: preserve the owned PR branch and stop")
-            if observed.get("body_sha256") != record["ownership"]["body_sha256"]:
-                raise PromotionError("human_body_change: preserve the owned PR body and stop")
-            if observed.get("owner_id") != owner or observed.get("generation_id") != record["candidate"]["generation_id"]:
-                raise PromotionError("PR owner/generation marker differs from durable promotion receipt")
-            issue_number = int(record.get("ownership", {}).get("issue_number", 0))
-            row_state = "open"
+            raise PromotionError("owned PR is absent from authoritative GitHub read-back")
+        active_records = [
+            row for row in records
+            if row.get("superseded_by") is None
+            and row.get("status") in {"prepared", "pending-review"}
+            and int(row.get("pr", {}).get("number", 0)) == number
+        ]
+        if not active_records:
+            recoveries = [
+                row for row in records
+                if row.get("superseded_by") is None
+                and row.get("status") == "prepared"
+                and int(row.get("pr", {}).get("number", 0)) == 0
+                and row.get("candidate", {}).get("generation_id") == observed.get("generation_id")
+                and row.get("candidate", {}).get("registry_sha256") == candidate.get("registry_sha256")
+                and row.get("candidate", {}).get("head_sha") == observed.get("head_sha")
+                and row.get("ownership", {}).get("body_sha256") == observed.get("body_sha256")
+                and row.get("ownership", {}).get("branch") == observed.get("head_ref")
+                and observed.get("base_ref") == "main"
+                and observed.get("owner_id") == owner
+                and helper.body_marker(owner, str(row.get("candidate", {}).get("generation_id", ""))) in str(observed.get("body", ""))
+            ]
+            if len(recoveries) != 1:
+                raise PromotionError("interrupted candidate PR read-back is not one exact prepared head/body")
+            selected = recoveries[0]
+            recovered_revision_keys.add(helper.candidate_key(selected))
+            issue_number = int(selected.get("ownership", {}).get("issue_number", 0))
+            result.append({
+                "repository": candidate["repository"], "source_id": candidate["source_id"], "scope": candidate["scope"],
+                "state": "open", "owner_id": owner, "number": number,
+                "head_sha": observed.get("head_sha"), "automation_head_sha": observed.get("head_sha"),
+                "body_sha256": observed.get("body_sha256"), "automation_body_sha256": observed.get("body_sha256"),
+                "head_ref": observed.get("head_ref"), "base_ref": observed.get("base_ref"),
+                "candidate_head_sha": selected["candidate"]["head_sha"],
+                "manifest_sha256": selected["candidate"]["manifest_sha256"],
+                "registry_sha256": selected["candidate"]["registry_sha256"],
+                "revision_ref": helper.revision_reference(selected),
+            })
+            continue
+        direct = [
+            row for row in active_records
+            if (
+                observed.get("head_sha") == row.get("candidate", {}).get("head_sha")
+                and observed.get("body_sha256") == row.get("ownership", {}).get("body_sha256")
+                and observed.get("owner_id") == owner
+                and observed.get("generation_id") == row.get("candidate", {}).get("generation_id")
+                and observed.get("head_ref") == row.get("ownership", {}).get("branch")
+                and observed.get("base_ref") == "main"
+            )
+        ]
+        selected: Mapping[str, Any] | None = None
+        if len(direct) == 1:
+            selected = direct[0]
+        elif len(direct) > 1:
+            raise PromotionError("duplicate durable revisions claim the exact current owned PR head/body")
         else:
-            row_state = "closed"
+            intents = [
+                row for row in active_records
+                if row.get("status") == "prepared" and isinstance(row.get("refresh_from"), Mapping)
+            ]
+            phases: list[tuple[str, Mapping[str, Any], Mapping[str, Any]]] = []
+            for intent in intents:
+                predecessor = by_key.get(helper._reference_key(intent["refresh_from"]))
+                if predecessor is None:
+                    raise PromotionError("prepared refresh intent has no exact durable predecessor")
+                if int(intent.get("pr", {}).get("number", 0)) != number:
+                    continue
+                normalized = dict(observed)
+                normalized.update({
+                    "headRefName": observed.get("head_ref"),
+                    "headRefOid": observed.get("head_sha"),
+                    "baseRefName": observed.get("base_ref"),
+                    "state": str(observed.get("state", "")).upper(),
+                })
+                phase = refresh_pr_phase(intent, predecessor, normalized, helper, require_repository=False)
+                phases.append((phase, intent, predecessor))
+            if len(phases) != 1:
+                raise PromotionError("human_head_change_or_body_change: preserve the owned PR and stop")
+            phase, intent, predecessor = phases[0]
+            selected = predecessor if phase in {"before-push", "after-push-before-body"} else intent
+        assert selected is not None
+        row_state = "open"
+        issue_number = int(selected.get("ownership", {}).get("issue_number", 0))
         result.append({
             "repository": candidate["repository"], "source_id": candidate["source_id"], "scope": candidate["scope"],
             "state": row_state, "owner_id": owner, "number": number,
+            "head_sha": observed.get("head_sha"), "automation_head_sha": observed.get("head_sha"),
+            "body_sha256": observed.get("body_sha256"), "automation_body_sha256": observed.get("body_sha256"),
+            "head_ref": observed.get("head_ref"), "base_ref": observed.get("base_ref"),
+            "candidate_head_sha": selected["candidate"]["head_sha"],
+            "manifest_sha256": selected["candidate"]["manifest_sha256"],
+            "registry_sha256": selected["candidate"]["registry_sha256"],
+            "revision_ref": helper.revision_reference(selected),
+        })
+    closed_numbers = {
+        int(row.get("number", 0)) for row in github_prs
+        if row.get("state") == "closed" and row.get("owner_id") == owner
+    }
+    for number in sorted(closed_numbers):
+        observed = by_number.get(number)
+        matches = [
+            row for row in records
+            if row.get("superseded_by") is None
+            and row.get("status") == "closed"
+            and int(row.get("pr", {}).get("number", 0)) == number
+            and row.get("candidate", {}).get("head_sha") == observed.get("head_sha")
+            and row.get("ownership", {}).get("body_sha256") == observed.get("body_sha256")
+            and observed.get("owner_id") == owner
+            and observed.get("generation_id") == row.get("candidate", {}).get("generation_id")
+        ]
+        if len(matches) != 1:
+            raise PromotionError("closed owned PR read-back does not bind one exact durable candidate revision")
+        record = matches[0]
+        result.append({
+            "repository": candidate["repository"], "source_id": candidate["source_id"], "scope": candidate["scope"],
+            "state": "closed", "owner_id": owner, "number": number,
             "head_sha": observed.get("head_sha"), "automation_head_sha": record["candidate"]["head_sha"],
             "body_sha256": observed.get("body_sha256"), "automation_body_sha256": record["ownership"]["body_sha256"],
             "candidate_head_sha": record["candidate"]["head_sha"],
             "manifest_sha256": record["candidate"]["manifest_sha256"],
             "registry_sha256": record["candidate"]["registry_sha256"],
+            "revision_ref": helper.revision_reference(record),
         })
+    for record in records:
+        if record.get("superseded_by") is not None or record.get("status") not in {"prepared", "pending-review"}:
+            continue
+        if helper.candidate_key(record) in recovered_revision_keys:
+            continue
+        number = int(record.get("pr", {}).get("number", 0))
+        if number:
+            continue
+        recoveries = [
+            row for row in github_prs
+            if row.get("state") == "open" and row.get("owner_id") == owner
+            and row.get("generation_id") == record.get("candidate", {}).get("generation_id")
+            and row.get("head_sha") == record.get("candidate", {}).get("head_sha")
+            and row.get("body_sha256") == record.get("ownership", {}).get("body_sha256")
+        ]
+        if len(recoveries) > 1:
+            raise PromotionError("duplicate_creation_readback: do not retry PR creation")
+        if recoveries:
+            observed = recoveries[0]
+            result.append({
+                "repository": candidate["repository"], "source_id": candidate["source_id"], "scope": candidate["scope"],
+                "state": "open", "owner_id": owner, "number": int(observed["number"]),
+                "head_sha": observed.get("head_sha"), "automation_head_sha": observed.get("head_sha"),
+                "body_sha256": observed.get("body_sha256"), "automation_body_sha256": observed.get("body_sha256"),
+                "head_ref": observed.get("head_ref"), "base_ref": observed.get("base_ref"),
+                "candidate_head_sha": record["candidate"]["head_sha"],
+                "manifest_sha256": record["candidate"]["manifest_sha256"],
+                "registry_sha256": record["candidate"]["registry_sha256"],
+                "revision_ref": helper.revision_reference(record),
+            })
     opens = [row for row in result if row["state"] == "open"]
     if len(opens) > 1:
         raise PromotionError("duplicate_open_prs: preserve all candidate branches and resolve ownership")
-    if not opens:
-        issue_number = 0
     return result, issue_number
 
 
@@ -1650,6 +1996,53 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
     if command(("git", "status", "--porcelain", "--untracked-files=all"), root).stdout.strip():
         raise PromotionError("candidate checkout was not clean before staging; refusing to mix unrelated changes")
 
+    prior_journal = load_promotion_journal(root)
+    prior = journal_record_for(
+        prior_journal, checkpoint["source_id"], checkpoint["source_scope"],
+        checkpoint["generation_id"], bundle["registry_sha256"],
+    )
+    if prior is not None and prior.get("superseded_by") is not None:
+        print(json.dumps({
+            "status": "already-superseded", "generation_id": checkpoint["generation_id"],
+            "registry_sha256": bundle["registry_sha256"],
+        }, sort_keys=True))
+        return
+    if prior is not None and prior.get("status") not in {"prepared"}:
+        number = int(prior.get("pr", {}).get("number", 0))
+        if prior.get("status") == "pending-review" and number > 0:
+            observed = gh_pr_readback(root, repo, number)
+            validate_exact_open_pr(prior, observed, helper)
+        print(json.dumps({
+            "status": "already-delivered", "pr_number": number,
+            "generation_id": checkpoint["generation_id"],
+            "registry_sha256": bundle["registry_sha256"],
+        }, sort_keys=True))
+        return
+    if prior is None and isinstance(prior_journal, Mapping):
+        same_payload = [
+            row for row in prior_journal.get("records", [])
+            if row.get("superseded_by") is None
+            and row.get("status") == "pending-review"
+            and row.get("candidate", {}).get("repository", "").casefold() == repo.casefold()
+            and row.get("candidate", {}).get("source_id") == checkpoint["source_id"]
+            and row.get("candidate", {}).get("scope") == checkpoint["source_scope"]
+            and row.get("candidate", {}).get("registry_sha256") == bundle["registry_sha256"]
+        ]
+        if len(same_payload) > 1:
+            raise PromotionError("multiple active PR revisions claim the same canonical payload digest")
+        if same_payload:
+            active = same_payload[0]
+            number = int(active.get("pr", {}).get("number", 0))
+            if number < 1:
+                raise PromotionError("active same-payload candidate has no durable PR number")
+            validate_exact_open_pr(active, gh_pr_readback(root, repo, number), helper)
+            print(json.dumps({
+                "status": "already-delivered", "pr_number": number,
+                "generation_id": active["candidate"]["generation_id"],
+                "registry_sha256": bundle["registry_sha256"],
+            }, sort_keys=True))
+            return
+
     canonical_path.write_bytes((bundle_dir / "composed-candidate.registry.json").read_bytes())
     helper.update_registry_manifest_artifact(root, pathlib.PurePosixPath(bundle["registry_path"]), bundle["registry_bytes"], bundle["registry_sha256"])
     old_published_pin = json.dumps(load_object(root / "policy/registry-distribution.json").get("canonical_registry"), sort_keys=True)
@@ -1680,24 +2073,45 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
         if not output.is_file() or (output.stat().st_size, file_sha256(output)) != (native_output["output_bytes"], native_output["output_sha256"]):
             raise PromotionError("pinned native report changed after its source-bound output digest was recorded")
 
-    # Recover exact per-generation retries from the state branch before making
-    # a commit or creating an issue. A generation may never be rebound to a
-    # different tree, while identical redelivery reuses the original head.
-    prior_journal = load_promotion_journal(root)
-    prior = journal_record_for(prior_journal, checkpoint["source_id"], checkpoint["source_scope"], checkpoint["generation_id"])
+    # Recover an exact payload revision before making a commit. New registry
+    # bytes under the same B generation form a distinct C revision and may
+    # refresh the existing owned PR after exact read-back.
     staged_paths = stage_candidate_outputs(root, checkpoint["generation_id"])
     current_tree = command(("git", "write-tree"), root).stdout.strip()
     if prior is not None:
         prior_sha = prior["candidate"]["head_sha"]
         branch = prior.get("ownership", {}).get("branch")
         if isinstance(branch, str) and branch:
-            command(("git", "fetch", "--no-tags", "origin", f"refs/heads/{branch}:refs/remotes/origin/canonical-update-candidate"), root)
-        prior_tree = command(("git", "rev-parse", f"{prior_sha}^{{tree}}"), root).stdout.strip()
-        if prior_tree != current_tree:
-            raise PromotionError("generation_reused_with_different_candidate_tree: request a new processor generation")
-        command(("git", "checkout", "--detach", prior_sha), root)
+            materializer = helper.load_materializer(root)
+            remote_branch = helper.remote_ref_sha(materializer, root, "origin", f"refs/heads/{branch}")
+            if remote_branch is not None:
+                command(("git", "fetch", "--no-tags", "origin", f"refs/heads/{branch}:refs/remotes/origin/canonical-update-candidate"), root)
+        prior_tree_result = command(("git", "rev-parse", f"{prior_sha}^{{tree}}"), root, allowed_returncodes=frozenset({0, 128}))
+        if prior_tree_result.returncode == 0:
+            if prior_tree_result.stdout.strip() != current_tree:
+                raise PromotionError("candidate_payload_revision_reused_with_different_tree: preserve the durable candidate receipt")
+            command(("git", "checkout", "--detach", prior_sha), root)
+        else:
+            commit_env = dict(os.environ)
+            commit_env["GIT_AUTHOR_DATE"] = stable_generated_at
+            commit_env["GIT_COMMITTER_DATE"] = stable_generated_at
+            command((
+                "git", "-c", "user.name=datapan-canonical-update[bot]",
+                "-c", "user.email=41898282+github-actions[bot]@users.noreply.github.com",
+                "commit", "-m", f"Prepare canonical catalogue update {checkpoint['generation_id']} {bundle['registry_sha256']}",
+            ), root, env=commit_env)
+            rebuilt_sha = command(("git", "rev-parse", "HEAD"), root).stdout.strip()
+            if rebuilt_sha != prior_sha:
+                raise PromotionError("prepared candidate commit cannot be deterministically recovered from its durable refresh intent")
     else:
-        command(("git", "-c", "user.name=datapan-canonical-update[bot]", "-c", "user.email=41898282+github-actions[bot]@users.noreply.github.com", "commit", "-m", f"Prepare canonical catalogue update {checkpoint['generation_id']}"), root)
+        commit_env = dict(os.environ)
+        commit_env["GIT_AUTHOR_DATE"] = stable_generated_at
+        commit_env["GIT_COMMITTER_DATE"] = stable_generated_at
+        command((
+            "git", "-c", "user.name=datapan-canonical-update[bot]",
+            "-c", "user.email=41898282+github-actions[bot]@users.noreply.github.com",
+            "commit", "-m", f"Prepare canonical catalogue update {checkpoint['generation_id']} {bundle['registry_sha256']}",
+        ), root, env=commit_env)
     candidate_head = command(("git", "rev-parse", "HEAD"), root).stdout.strip()
     manifest_sha = file_sha256(root / "manifest.json")
     diagnostic_applicability_status = source_refresh_evidence["diagnostic_current_source_applicability"]["status"]
@@ -1752,21 +2166,32 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
 
     github_prs = gh_open_prs(root, repo)
     existing, existing_issue_number = existing_pr_rows(prior_journal, github_prs, helper, candidate)
+    if existing:
+        # The summary PR listing does not expose authoritative base/head
+        # repository identities. Bind the exact REST read-back before the
+        # candidate can make any remote LFS request.
+        validate_existing_pr_api_readback(
+            gh_pr_readback(root, repo, int(existing[0]["number"])),
+            prior_journal, existing, helper,
+        )
     owner = helper.owner_id(repo, checkpoint["source_id"], checkpoint["source_scope"])
-    # Do not open a new issue/PR for a redelivery whose exact content is
-    # already represented by the currently owned open candidate.
-    if existing and existing[0]["candidate_head_sha"] == candidate_head and existing[0]["manifest_sha256"] == manifest_sha and existing[0]["registry_sha256"] == bundle["registry_sha256"]:
-        print(json.dumps({"status": "already-delivered", "pr_number": existing[0]["number"], "generation_id": checkpoint["generation_id"]}, sort_keys=True))
-        return
-
     # A refreshed generation reuses its still-open owned issue. Otherwise a
     # stable owner+generation marker makes interrupted issue creation safely
     # discoverable without duplicating it.
     policy_path = root / "policy/registry-distribution.json"
+    previous_payload_readback = prior.get("candidate", {}).get("payload_readback") if prior is not None else None
+    upload_lfs_oid = not (
+        isinstance(previous_payload_readback, Mapping)
+        and previous_payload_readback.get("status") == "verified"
+        and previous_payload_readback.get("sha256") == bundle["registry_sha256"]
+        and previous_payload_readback.get("source_sha") == candidate_head
+    )
     prepared, _ = helper.prepare_lfs_upload(
         candidate, existing, head_sha, composition_schema, repository_root=root, policy_path=policy_path,
-        remote="origin", upload=True,
+        remote="origin", upload=upload_lfs_oid,
     )
+    if not upload_lfs_oid and isinstance(previous_payload_readback, Mapping):
+        prepared["candidate"]["payload_readback"] = json.loads(json.dumps(previous_payload_readback))
     if existing:
         # Upload/read-back can take minutes. Re-read the actual PR API fields
         # after the remote LFS proof and compare them with the durable prior
@@ -1775,28 +2200,42 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
         latest_existing, _ = existing_pr_rows(prior_journal, latest_prs, helper, candidate)
         if len(latest_existing) != 1 or latest_existing[0]["number"] != existing[0]["number"]:
             raise PromotionError("owned PR changed during Git LFS validation; preserve branch and re-read")
+        validate_existing_pr_api_readback(
+            gh_pr_readback(root, repo, int(latest_existing[0]["number"])),
+            prior_journal, latest_existing, helper,
+        )
         existing = latest_existing
     issue_number, issue_url = ensure_candidate_issue(root, repo, candidate, owner, existing_issue_number)
     body = helper.render_pr_body(candidate, owner, issue_number)
     prepared["ownership"]["issue_number"] = issue_number
     prepared["ownership"]["issue_url"] = issue_url
+    prepared["ownership"]["body"] = body
     prepared["ownership"]["body_sha256"] = hashlib.sha256(body.encode("utf-8")).hexdigest()
+    if prior is not None and isinstance(prior.get("refresh_from"), Mapping):
+        prepared["refresh_from"] = json.loads(json.dumps(prior["refresh_from"]))
+    elif prepared.get("action") == "refresh_owned":
+        if not existing or not isinstance(existing[0].get("revision_ref"), Mapping):
+            raise PromotionError("owned PR refresh has no exact durable predecessor revision")
+        prepared["refresh_from"] = json.loads(json.dumps(existing[0]["revision_ref"]))
     now = dt.datetime.now(dt.timezone.utc).isoformat()
     persist_journal_record(root, head_sha, prepared, observed_at=now)
     if existing:
         # This is the last GitHub PR read before the helper's remote-main and
         # candidate-branch compare-and-swap checks and branch push.
         latest_pr = gh_pr_readback(root, repo, int(existing[0]["number"]))
-        latest_body = latest_pr.get("body")
-        if (
-            latest_pr.get("state") != "OPEN"
-            or not isinstance(latest_body, str)
-            or hashlib.sha256(latest_body.encode("utf-8")).hexdigest() != existing[0]["body_sha256"]
-            or latest_pr.get("headRefOid") != existing[0]["head_sha"]
-            or latest_pr.get("headRefName") != prepared.get("ownership", {}).get("branch")
-            or latest_pr.get("baseRefName") != "main"
-        ):
-            raise PromotionError("owned PR head/body/base changed immediately before branch CAS; preserve it and stop")
+        if isinstance(prepared.get("refresh_from"), Mapping):
+            predecessor = journal_record_for(
+                prior_journal,
+                str(prepared["refresh_from"].get("source_id", "")),
+                str(prepared["refresh_from"].get("scope", "")),
+                str(prepared["refresh_from"].get("generation_id", "")),
+                str(prepared["refresh_from"].get("registry_sha256", "")),
+            )
+            if predecessor is None:
+                raise PromotionError("prepared refresh intent lost its exact predecessor before branch CAS")
+            refresh_pr_phase(prepared, predecessor, latest_pr, helper)
+        else:
+            validate_exact_open_pr(existing[0].get("record", prepared), latest_pr, helper)
     pushed = helper.push_owned_branch(
         candidate, prepared, existing, head_sha, repository_root=root, remote="origin",
     )
@@ -1807,12 +2246,23 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
     if existing:
         number = int(existing[0]["number"])
         immediate = gh_pr_readback(root, repo, number)
-        immediate_body = immediate.get("body")
-        if not isinstance(immediate_body, str) or hashlib.sha256(immediate_body.encode("utf-8")).hexdigest() != existing[0]["body_sha256"]:
-            raise PromotionError("human_body_change: preserve the owned PR body before editing")
-        if immediate.get("headRefOid") != candidate_head or immediate.get("headRefName") != pushed["ownership"]["branch"] or immediate.get("baseRefName") != "main":
-            raise PromotionError("owned PR head/base changed after branch CAS; preserve it and stop")
-        command(("gh", "pr", "edit", str(number), "--repo", repo, "--title", title, "--body-file", str(body_path)), root)
+        if isinstance(prepared.get("refresh_from"), Mapping):
+            predecessor = journal_record_for(
+                prior_journal,
+                str(prepared["refresh_from"].get("source_id", "")),
+                str(prepared["refresh_from"].get("scope", "")),
+                str(prepared["refresh_from"].get("generation_id", "")),
+                str(prepared["refresh_from"].get("registry_sha256", "")),
+            )
+            if predecessor is None:
+                raise PromotionError("prepared refresh intent lost its exact predecessor after branch CAS")
+            phase = refresh_pr_phase(prepared, predecessor, immediate, helper)
+            if phase == "after-push-before-body":
+                command(("gh", "pr", "edit", str(number), "--repo", repo, "--title", title, "--body-file", str(body_path)), root)
+            elif phase != "after-body-edit":
+                raise PromotionError("owned PR has not read back the exact pushed refresh head")
+        else:
+            validate_exact_open_pr(prepared, immediate, helper)
     else:
         output = command(("gh", "pr", "create", "--repo", repo, "--draft", "--base", "main", "--head", pushed["ownership"]["branch"], "--title", title, "--body-file", str(body_path)), root)
         found = re.search(r"/pull/(\d+)$", output.stdout.strip())
@@ -1829,7 +2279,11 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
         pushed, observed_pr, observed_at=dt.datetime.now(dt.timezone.utc).isoformat(),
         run_url=f"https://github.com/{repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}/attempts/{os.environ['GITHUB_RUN_ATTEMPT']}",
     )
-    persist_journal_record(root, head_sha, final_receipt, observed_at=dt.datetime.now(dt.timezone.utc).isoformat())
+    persist_journal_record(
+        root, head_sha, final_receipt,
+        observed_at=dt.datetime.now(dt.timezone.utc).isoformat(),
+        supersede_from=final_receipt.get("refresh_from"),
+    )
     ci_state = None
     ci_blocker = None
     try:
@@ -1897,6 +2351,7 @@ def recover_ready_processor_candidate(args: argparse.Namespace, root: pathlib.Pa
     current_head_sha = command(("git", "rev-parse", "HEAD"), root).stdout.strip()
     screened, blocked = select_first_eligible_processor_bundle(
         root, repository, candidates, blocked,
+        journal=journal,
         default_branch=default_branch,
         current_head_sha=current_head_sha,
         composition_schema=composition_schema,
@@ -1926,12 +2381,70 @@ def reconcile_open_promotions(root: pathlib.Path) -> None:
     if not isinstance(journal, Mapping):
         print(json.dumps({"status": "no-promotion-journal"}))
         return
-    prs = gh_open_prs(root, repo)
-    by_number = {int(row["number"]): row for row in prs}
     run_url = f"https://github.com/{repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}/attempts/{os.environ['GITHUB_RUN_ATTEMPT']}"
     base = command(("git", "rev-parse", "HEAD"), root).stdout.strip()
+    # Complete only refreshes whose persisted intent, predecessor identity,
+    # target head, and target body prove one of the two post-push crash points.
+    # A pre-push intent remains pending while its predecessor stays active.
+    for intent in list(journal.get("records", [])):
+        if (
+            intent.get("status") != "prepared"
+            or intent.get("superseded_by") is not None
+            or not isinstance(intent.get("refresh_from"), Mapping)
+            or int(intent.get("pr", {}).get("number", 0)) < 1
+        ):
+            continue
+        predecessor_ref = intent["refresh_from"]
+        predecessor = journal_record_for(
+            journal,
+            str(predecessor_ref.get("source_id", "")),
+            str(predecessor_ref.get("scope", "")),
+            str(predecessor_ref.get("generation_id", "")),
+            str(predecessor_ref.get("registry_sha256", "")),
+        )
+        if predecessor is None:
+            raise PromotionError("prepared refresh intent has no exact predecessor revision")
+        number = int(intent["pr"]["number"])
+        observed = gh_pr_readback(root, repo, number)
+        phase = refresh_pr_phase(intent, predecessor, observed, helper)
+        if phase == "before-push":
+            continue
+        if phase == "after-push-before-body":
+            body = intent.get("ownership", {}).get("body")
+            if not isinstance(body, str):
+                raise PromotionError("prepared refresh intent has no exact body for crash recovery")
+            body_path = root / ".datapan/candidate-pr.md"
+            body_path.parent.mkdir(parents=True, exist_ok=True)
+            body_path.write_text(body, encoding="utf-8")
+            command((
+                "gh", "pr", "edit", str(number), "--repo", repo,
+                "--title", pr_title(intent["candidate"]), "--body-file", str(body_path),
+            ), root)
+            observed = gh_pr_readback(root, repo, number)
+            phase = refresh_pr_phase(intent, predecessor, observed, helper)
+            if phase != "after-body-edit":
+                raise PromotionError("refresh body edit did not read back the exact target head and body")
+        elif phase != "after-body-edit":
+            raise PromotionError("prepared refresh intent is not at a recoverable PR state")
+        refreshed = helper.record_pr_readback(
+            intent, observed, observed_at=dt.datetime.now(dt.timezone.utc).isoformat(), run_url=run_url,
+        )
+        persist_journal_record(
+            root, base, refreshed,
+            observed_at=dt.datetime.now(dt.timezone.utc).isoformat(),
+            supersede_from=predecessor_ref,
+        )
+        journal = load_promotion_journal(root) or journal
+
+    prs = gh_open_prs(root, repo)
+    by_number = {int(row["number"]): row for row in prs}
     for old in list(journal.get("records", [])):
-        if old.get("status") not in {"prepared", "pending-review"} or not old.get("pr", {}).get("number"):
+        if (
+            old.get("superseded_by") is not None
+            or (old.get("status") == "prepared" and isinstance(old.get("refresh_from"), Mapping))
+            or old.get("status") not in {"prepared", "pending-review"}
+            or not old.get("pr", {}).get("number")
+        ):
             continue
         actual = by_number.get(int(old["pr"]["number"]))
         if actual is None:
@@ -2035,6 +2548,7 @@ def journal_record_for(
     source_id: str,
     scope: str,
     generation_id: str | None = None,
+    registry_sha256: str | None = None,
 ) -> dict[str, Any] | None:
     if not isinstance(journal, Mapping):
         return None
@@ -2044,9 +2558,12 @@ def journal_record_for(
         and row.get("candidate", {}).get("source_id") == source_id
         and row.get("candidate", {}).get("scope") == scope
         and (generation_id is None or row.get("candidate", {}).get("generation_id") == generation_id)
+        and (registry_sha256 is None or row.get("candidate", {}).get("registry_sha256") == registry_sha256)
     ]
-    if generation_id is not None and len(rows) > 1:
-        raise PromotionError("promotion journal has duplicate source/scope/generation entries")
+    if registry_sha256 is not None and len(rows) > 1:
+        raise PromotionError("promotion journal has duplicate source/scope/generation/payload revision entries")
+    if generation_id is not None and registry_sha256 is None and len(rows) > 1:
+        raise PromotionError("promotion journal revision lookup requires the exact registry payload digest")
     return rows[-1] if rows else None
 
 
