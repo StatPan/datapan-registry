@@ -1,0 +1,30 @@
+{
+  "branch": "automation/upstream-catalogue-health-state",
+  "faults": [],
+  "last_good_by_source": {},
+  "latest_receipt": {
+    "path": "receipts/receipt-37091734027-1-1959ffa2b9ed640c.json",
+    "sha256": "1959ffa2b9ed640c3e482dc629b4365e00e6d7129851d77e886d44ca0a628815"
+  },
+  "observations_by_source": {
+    "data_go_kr": [
+      {
+        "candidate_sha256": "90bc22e0ad61dd3672b09b7c52e4898be5afb535f87a8d7fa9e5e5c983e6e3b5",
+        "composer_status": null,
+        "generation_id": "48bd59cf7d2da0fc75fb6e9eb6dcee205be066bbfefa5d7f88cebdee3ddd5b50",
+        "health_receipt_sha256": "1959ffa2b9ed640c3e482dc629b4365e00e6d7129851d77e886d44ca0a628815",
+        "observed_at": "2026-09-29T23:44:39Z",
+        "pending_count": 884,
+        "processor_status": "enriching",
+        "producer_run_id": "36646768289",
+        "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197"
+      }
+    ]
+  },
+  "repository": "StatPan/datapan-registry",
+  "root": "health/upstream-catalogue",
+  "schema_version": "datapan.upstream-catalogue-health-state.v1",
+  "state_sha256": "ee9ba231f2732ab203dd3af0c0336c260814ce59adc3914541b1d0887b40e261",
+  "state_status": "healthy",
+  "updated_at": "2026-10-03T03:00:37Z"
+}
