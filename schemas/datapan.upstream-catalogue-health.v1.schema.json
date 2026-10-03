@@ -40,7 +40,18 @@
         "severity": {"enum": ["info", "warning", "error"]},
         "owner_ticket": {"type": "integer", "minimum": 1},
         "fault_key": {"$ref": "#/$defs/digest"},
-        "recommended_action": {"type": "string", "minLength": 1}
+        "recommended_action": {"type": "string", "minLength": 1},
+        "execution_identity": {"$ref": "#/$defs/execution_identity"}
+      }
+    },
+    "execution_identity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["run_id", "run_attempt", "run_started_at", "head_sha"],
+      "properties": {
+        "run_id": {"type": "string", "pattern": "^[0-9]+$"},
+        "run_attempt": {"type": "integer", "minimum": 1},
+        "run_started_at": {"type": "string", "format": "date-time"},
+        "head_sha": {"type": "string", "pattern": "^[a-f0-9]{40,64}$"}
       }
     },
     "observation": {
@@ -73,7 +84,7 @@
     },
     "processor": {
       "type": "object", "additionalProperties": false,
-      "required": ["state", "generation_id", "candidate_sha256", "checkpoint_observed_at", "last_observation", "last_heartbeat_at", "last_progress_at", "attempts_consumed", "attempts_by_id", "request_reservation", "detail_records", "detail_queue_cursor", "lease", "output_artifact", "output_digests", "outcome"],
+      "required": ["state", "generation_id", "candidate_sha256", "checkpoint_observed_at", "last_observation", "last_heartbeat_at", "last_progress_at", "attempts_consumed", "attempts_by_id", "request_reservation", "detail_records", "detail_queue_cursor", "lease", "output_artifact", "output_digests", "outcome", "latest_execution_run", "latest_successful_execution_run", "execution_failure"],
       "properties": {
         "state": {"type": "string", "minLength": 1},
         "generation_id": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
@@ -90,7 +101,30 @@
         "lease": {"type": ["object", "null"]},
         "output_artifact": {"type": ["object", "null"]},
         "output_digests": {"type": ["array", "null"]},
-        "outcome": {"type": ["object", "null"]}
+        "outcome": {"type": ["object", "null"]},
+        "latest_execution_run": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/processor_run"}]},
+        "latest_successful_execution_run": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/processor_run"}]},
+        "execution_failure": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/processor_run"}]}
+      }
+    },
+    "processor_run": {
+      "type": "object", "additionalProperties": false,
+      "required": ["run_id", "run_attempt", "workflow_id", "path", "event", "status", "conclusion", "created_at", "run_started_at", "updated_at", "head_branch", "head_sha", "repository", "head_repository"],
+      "properties": {
+        "run_id": {"type": "string", "pattern": "^[0-9]+$"},
+        "run_attempt": {"type": "integer", "minimum": 1},
+        "workflow_id": {"type": "integer", "minimum": 1},
+        "path": {"type": "string", "pattern": "^\\.github/workflows/[^/]+\\.yml$"},
+        "event": {"enum": ["workflow_run", "schedule", "workflow_dispatch"]},
+        "status": {"type": "string", "minLength": 1},
+        "conclusion": {"type": "string", "minLength": 1},
+        "created_at": {"type": "string", "format": "date-time"},
+        "run_started_at": {"type": "string", "format": "date-time"},
+        "updated_at": {"type": "string", "format": "date-time"},
+        "head_branch": {"const": "main"},
+        "head_sha": {"type": "string", "pattern": "^[a-f0-9]{40,64}$"},
+        "repository": {"type": "string", "minLength": 3},
+        "head_repository": {"type": "string", "minLength": 3}
       }
     },
     "collector": {

@@ -1,0 +1,34 @@
+{
+  "evidence": "redacted read-only runtime metadata captured for Health run 37091734027",
+  "repository": "StatPan/datapan-registry",
+  "health_evaluated_at": "2026-10-03T03:00:37Z",
+  "processor_run": {
+    "id": 37091592758,
+    "workflow_id": 373610259,
+    "run_attempt": 1,
+    "path": ".github/workflows/upstream-catalogue-process.yml",
+    "event": "workflow_dispatch",
+    "status": "completed",
+    "conclusion": "failure",
+    "created_at": "2026-10-03T02:57:49Z",
+    "run_started_at": "2026-10-03T02:57:49Z",
+    "updated_at": "2026-10-03T03:00:16Z",
+    "head_branch": "main",
+    "head_sha": "446016d15d6c16b599bdaf89a97bc450b71205f4",
+    "repository": {"full_name": "StatPan/datapan-registry"},
+    "head_repository": {"full_name": "StatPan/datapan-registry"}
+  },
+  "active_reservation": {
+    "source_id": "data_go_kr",
+    "generation_id": "48bd59cf7d2da0fc75fb6e9eb6dcee205be066bbfefa5d7f88cebdee3ddd5b50",
+    "status": "enriching",
+    "attempts_consumed": 24,
+    "detail_queue_cursor": 24,
+    "last_progress_at": "2026-10-03T02:58:33Z",
+    "last_heartbeat_at": "2026-10-03T02:58:33Z",
+    "lease_owner": "37091592758-1",
+    "lease_expires_at": "2026-10-03T03:43:30Z",
+    "output_artifact_id": null,
+    "output_digests": []
+  }
+}

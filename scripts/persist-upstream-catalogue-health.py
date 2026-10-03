@@ -210,7 +210,7 @@ def merge_observations(state: dict[str, Any], receipt: dict[str, Any]) -> None:
 
 def recovery_evidence(
     old_fault: dict[str, Any], source: dict[str, Any] | None, current_faults: list[dict[str, Any]],
-    receipt: dict[str, Any],
+    receipt: dict[str, Any], processor_workflow_path: str, processor_workflow_events: set[str],
 ) -> dict[str, Any] | None:
     if source is None or receipt.get("execution_mode") != "live":
         return None
@@ -231,6 +231,54 @@ def recovery_evidence(
             observed_live
             and processor.get("state") in {"ready", "no-change"}
             and not any(row.get("stage") in {"processor", "checkpoint", "candidate"} and row.get("severity") == "error" for row in stage_faults)
+        )
+    elif stage == "processor-execution":
+        execution = processor.get("latest_successful_execution_run") if isinstance(processor.get("latest_successful_execution_run"), dict) else {}
+        run_attempt = execution.get("run_attempt")
+        execution_order = None
+        prior_order = None
+        try:
+            execution_order = (
+                parse_time(execution.get("run_started_at"), "processor_success.run_started_at"),
+                int(execution.get("run_id", "")),
+                run_attempt,
+            )
+            identity = old_fault.get("execution_identity")
+            if isinstance(identity, dict):
+                prior_order = (
+                    parse_time(identity.get("run_started_at"), "processor_failure.run_started_at"),
+                    int(identity.get("run_id", "")),
+                    int(identity.get("run_attempt")),
+                )
+            else:
+                prior_order = None
+        except (TypeError, ValueError):
+            execution_order = None
+            prior_order = None
+        cleared = (
+            execution.get("path") == processor_workflow_path
+            and execution.get("event") in processor_workflow_events
+            and execution.get("status") == "completed"
+            and execution.get("conclusion") == "success"
+            and isinstance(execution.get("run_id"), str)
+            and execution.get("run_id", "").isdigit()
+            and isinstance(run_attempt, int)
+            and not isinstance(run_attempt, bool)
+            and run_attempt > 0
+            and isinstance(execution.get("workflow_id"), int)
+            and not isinstance(execution.get("workflow_id"), bool)
+            and execution.get("workflow_id", 0) > 0
+            and execution.get("head_branch") == "main"
+            and execution.get("repository") == receipt.get("repository")
+            and execution.get("head_repository") == receipt.get("repository")
+            and isinstance(execution.get("head_sha"), str)
+            and re.fullmatch(r"[a-f0-9]{40,64}", execution["head_sha"])
+            and execution_order is not None
+            and (execution_order > prior_order if prior_order is not None else (
+                execution == processor.get("latest_execution_run")
+                and execution_order[0] > parse_time(old_fault.get("last_seen_at"), "fault.last_seen_at")
+            ))
+            and not any(row.get("stage") == "processor-execution" and row.get("severity") == "error" for row in stage_faults)
         )
     elif stage in {"promotion", "publication"}:
         publication = source.get("canonical", {}).get("publication")
@@ -256,10 +304,15 @@ def recovery_evidence(
         "processor_status": processor.get("state"),
         "publication_revision": source.get("canonical", {}).get("publication", {}).get("publication_revision") if isinstance(source.get("canonical", {}).get("publication"), dict) else None,
         "publication_pointer_revision": source.get("canonical", {}).get("publication", {}).get("publication_pointer_revision") if isinstance(source.get("canonical", {}).get("publication"), dict) else None,
+        "execution_run_id": execution.get("run_id") if stage == "processor-execution" else None,
+        "execution_run_attempt": execution.get("run_attempt") if stage == "processor-execution" else None,
     }
 
 
-def merge_faults(state: dict[str, Any], receipt: dict[str, Any]) -> None:
+def merge_faults(
+    state: dict[str, Any], receipt: dict[str, Any], processor_workflow_path: str,
+    processor_workflow_events: set[str],
+) -> None:
     evaluated_at = receipt["evaluated_at"]
     now = parse_time(evaluated_at, "receipt.evaluated_at")
     source_by_id = {row["source_id"]: row for row in receipt.get("sources", []) if isinstance(row, dict)}
@@ -288,7 +341,9 @@ def merge_faults(state: dict[str, Any], receipt: dict[str, Any]) -> None:
         if key in incoming or prior.get("status") == "recovered":
             continue
         source = source_by_id.get(prior.get("source_id"))
-        evidence = recovery_evidence(prior, source, list(incoming.values()), receipt)
+        evidence = recovery_evidence(
+            prior, source, list(incoming.values()), receipt, processor_workflow_path, processor_workflow_events,
+        )
         if evidence is not None:
             prior["status"] = "recovered"
             prior["recovery_evidence"] = evidence
@@ -445,7 +500,10 @@ def persist(receipt_path: pathlib.Path, state_root: pathlib.Path, policy_path: p
         }
 
     merge_observations(state, receipt)
-    merge_faults(state, receipt)
+    merge_faults(
+        state, receipt, policy["processor_state"]["workflow_path"],
+        set(policy["processor_state"]["allowed_events"]),
+    )
     last_good = state.setdefault("last_good_by_source", {})
     for source in receipt.get("sources", []):
         candidate = source.get("canonical", {}).get("last_good")
