@@ -213,6 +213,8 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertIn("workflow_run.head_branch == github.event.repository.default_branch", job_if)
         self.assertIn("github.ref == format('refs/heads/{0}', github.event.repository.default_branch)", job_if)
         self.assertIn('"path": ".github/workflows/upstream-catalog-refresh.yml"', self.text)
+        dispatch = triggers["workflow_dispatch"].get("inputs", {})
+        self.assertEqual(dispatch.get("recover_failed_processor_run_id", {}).get("required"), "false")
 
     def test_durable_reservation_and_output_artifact_contract_are_wired(self) -> None:
         self.assertIn("automation/upstream-catalogue-state", self.text)
@@ -295,6 +297,32 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertIn("steps.bundle_check.outputs.replay != 'true'", bind["if"])
         final_gate = next(step for step in steps if step.get("name", "").startswith("Fail non-ready"))
         self.assertIn("state_publication_status", final_gate["if"])
+
+    def test_failed_processor_recovery_is_exact_authenticated_result_only_cas(self) -> None:
+        steps = self.workflow["jobs"]["process"]["steps"]
+        by_id = {step.get("id"): step for step in steps if step.get("id")}
+        select = by_id["select"]["run"]
+        self.assertIn("recover_failed_processor_run_id are mutually exclusive", select)
+        self.assertIn("decision=recover", select)
+        self.assertIn("expected_checkpoint_sha256", select)
+        artifact = by_id["failed_artifact"]
+        self.assertEqual(artifact["if"], "steps.select.outputs.decision == 'recover'")
+        self.assertIn('run.get("conclusion")', artifact["run"])
+        self.assertIn("sha256:", artifact["run"])
+        self.assertIn("actions/artifacts/${artifact_id}/zip", artifact["run"])
+        self.assertIn("downloaded failed processor artifact digest mismatch", artifact["run"])
+        recovery = by_id["run_recovery"]
+        self.assertEqual(recovery["if"], "steps.select.outputs.decision == 'recover'")
+        self.assertIn("--recover-failed-processor-run-id", recovery["run"])
+        self.assertIn("--expected-checkpoint-sha256", recovery["run"])
+        self.assertIn("--expected-state-head-sha", recovery["run"])
+        self.assertNotIn("--candidate", recovery["run"])
+        bind = by_id["bind_recovery"]
+        self.assertIn("steps.bundle_check.outputs.verified == 'true'", bind["if"])
+        self.assertIn("--expected-old-sha", bind["run"])
+        self.assertIn('${{ steps.state.outputs.old_sha }}', bind["env"]["EXPECTED_STATE_HEAD_SHA"])
+        self.assertIn('--expected-old-sha "${EXPECTED_STATE_HEAD_SHA}"', bind["run"])
+        self.assertIn("steps.bind_recovery.outputs.published", by_id["publish_result"]["run"])
 
     def test_exact_terminal_replay_is_a_verified_no_candidate_noop(self) -> None:
         steps = self.workflow["jobs"]["process"]["steps"]

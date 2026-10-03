@@ -419,6 +419,45 @@ def validate_enrichment_evidence(
     return by_key
 
 
+def validate_worker_outcomes(
+    evidence: Any,
+    *,
+    candidate_by_key: dict[tuple[str, str], dict[str, Any]],
+    successful_keys: set[tuple[str, str]],
+) -> dict[tuple[str, str], dict[str, Any]]:
+    """Validate unresolved worker rows against the immutable candidate rows."""
+    if evidence is None or "worker_outcomes" not in evidence:
+        return {}
+    outcomes = evidence.get("worker_outcomes")
+    if not isinstance(outcomes, list):
+        raise CompositionError("enrichment evidence worker_outcomes must be an array")
+    by_key: dict[tuple[str, str], dict[str, Any]] = {}
+    expected_fields = {"api_key", "status", "source_sha256", "guide_sha256"}
+    for index, outcome in enumerate(outcomes):
+        if not isinstance(outcome, dict) or set(outcome) != expected_fields:
+            raise CompositionError(f"enrichment evidence worker_outcomes[{index}] has an invalid shape")
+        if not isinstance(outcome.get("api_key"), dict):
+            raise CompositionError(f"enrichment evidence worker_outcomes[{index}] must include api_key")
+        key = api_key(outcome["api_key"])
+        if key in by_key:
+            raise CompositionError(f"duplicate API identity {key[0]}:{key[1]} in worker outcomes")
+        if key in successful_keys:
+            raise CompositionError(f"worker outcome overlaps successful enrichment for {key[0]}:{key[1]}")
+        if key not in candidate_by_key:
+            raise CompositionError(f"worker outcome identity {key[0]}:{key[1]} is absent from original candidate")
+        candidate_row = candidate_by_key[key]
+        if raw_source(candidate_row).get("api_type") != "LINK":
+            raise CompositionError(f"worker outcome identity {key[0]}:{key[1]} is not a LINK API")
+        if outcome.get("status") not in {"retry", "quarantined"}:
+            raise CompositionError(f"worker outcome status is unsupported for {key[0]}:{key[1]}")
+        if outcome.get("source_sha256") != source_fingerprint(candidate_row):
+            raise CompositionError(f"worker outcome source binding mismatch for {key[0]}:{key[1]}")
+        if outcome.get("guide_sha256") != guide_fingerprint(candidate_row):
+            raise CompositionError(f"worker outcome guide binding mismatch for {key[0]}:{key[1]}")
+        by_key[key] = outcome
+    return by_key
+
+
 def operation_list_view(row: dict[str, Any]) -> list[dict[str, Any]]:
     operations = row.get("operations") or []
     if not isinstance(operations, list):
@@ -733,6 +772,11 @@ def compose_registries(
         hosts=hosts,
         registry_schema=registry_schema,
     )
+    worker_outcomes_by_key = validate_worker_outcomes(
+        enrichment_evidence,
+        candidate_by_key=candidate_by_key,
+        successful_keys=set(enrichment_by_key),
+    )
     composed_by_key = dict(baseline_by_key)
     decisions: list[dict[str, Any]] = []
     queue: list[dict[str, Any]] = []
@@ -747,6 +791,52 @@ def compose_registries(
         reason_codes: list[str] = []
         disposition = "unchanged"
         retained_ops: list[str] = []
+
+        worker_outcome = worker_outcomes_by_key.get(key)
+        if worker_outcome is not None:
+            if before is None:
+                tags.add("pending_addition")
+            else:
+                try:
+                    tags.update(_candidate_diff_tags(before, after))
+                    tags.update(endpoint_change_tags(before, after))
+                    if {"source_contract_change", "operation_contract_change"} & tags:
+                        tags.add("prior_runtime_evidence_stale")
+                except CompositionError:
+                    tags.add("worker_outcome_contract_unresolved")
+            status = worker_outcome["status"]
+            reason_code = "worker_detail_retry" if status == "retry" else "worker_detail_quarantined"
+            if status == "retry":
+                disposition = "retain_worker_pending"
+                tags.add("worker_detail_retry")
+                queue.append(_queue_item(
+                    key, [reason_code], before, after, baseline_sha256, candidate_sha256,
+                    ["current_link_detail_page", "operation_source_provenance", "registered_adapter_host"],
+                ))
+            else:
+                disposition = "quarantine"
+                tags.add("worker_detail_quarantined")
+                queue.append(_queue_item(
+                    key, [reason_code], before, after, baseline_sha256, candidate_sha256,
+                    ["current_link_detail_page", "operation_source_provenance", "registered_adapter_host"],
+                ))
+                quarantine.append({
+                    "api_key": display_key(key),
+                    "reason_codes": [reason_code],
+                    "record_state": "baseline_retained" if before is not None else "candidate_excluded",
+                })
+            decisions.append({
+                "api_key": display_key(key), "disposition": disposition, "tags": sorted(tags),
+                "baseline_record_sha256": _record_hash(before) if before is not None else None,
+                "candidate_record_sha256": _record_hash(after) if after is not None else None,
+                "worker_outcome_status": status,
+                "worker_source_sha256": worker_outcome["source_sha256"],
+                "worker_guide_sha256": worker_outcome["guide_sha256"],
+                "composed_record_sha256": _record_hash(before) if before is not None else None,
+                "retained_operation_identities": retained_ops,
+                "findings": [reason_code],
+            })
+            continue
 
         if before is not None and after is None:
             disposition = "retain_deletion_pending"
@@ -974,9 +1064,15 @@ def compose_registries(
     composed_rows.extend(composed_by_key[key] for key in sorted(composed_by_key.keys() - baseline_order))
     ready_rows = [ready_delta[key] for key in sorted(ready_delta)]
     counts = {name: sum(1 for item in decisions if item["disposition"] == name) for name in sorted({item["disposition"] for item in decisions})}
-    pending_ids = [item["api_key"] for item in decisions if item["disposition"] == "retain_deletion_pending"]
+    pending_ids = [
+        item["api_key"] for item in decisions
+        if item["disposition"] in {"retain_deletion_pending", "retain_worker_pending"}
+    ]
     quarantined_ids = [item["api_key"] for item in decisions if item["disposition"] == "quarantine"]
-    applied_ids = [item["api_key"] for item in decisions if item["disposition"] not in {"retain_deletion_pending", "quarantine"}]
+    applied_ids = [
+        item["api_key"] for item in decisions
+        if item["disposition"] not in {"retain_deletion_pending", "retain_worker_pending", "quarantine"}
+    ]
     partition_ids = applied_ids + pending_ids + quarantined_ids
     if len({(item["provider"], item["id"]) for item in partition_ids}) != len(partition_ids) or len(partition_ids) != len(decisions):
         raise CompositionError("API disposition identities do not form an exact disjoint partition")
@@ -990,7 +1086,11 @@ def compose_registries(
             "baseline": operation_counts(baseline_rows), "candidate": operation_counts(candidate_rows),
             "composed": operation_counts(composed_rows), "ready_scope_delta": operation_counts(ready_rows),
         },
-        "evidence": {"pending_removal": len(pending_ids), "quarantined": len(quarantined_ids), "full_scope_fresh": False},
+        "evidence": {
+            "pending_removal": sum(item["disposition"] == "retain_deletion_pending" for item in decisions),
+            "retained_pending": len(pending_ids),
+            "quarantined": len(quarantined_ids), "full_scope_fresh": False,
+        },
     }
     status = "ready_scoped" if ready_rows else ("no_safe_change" if queue or quarantine else "no_change")
     return {
