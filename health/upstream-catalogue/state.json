@@ -12,17 +12,22 @@
       "producer_run_id": "36646768289",
       "reason": "generation_quarantined",
       "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
-      "recovery_evidence": null,
+      "recovery_evidence": {
+        "checked_at": "2026-10-03T05:44:02Z",
+        "health_receipt_sha256": "7eae47600ac956e7e14623dfa412e44a53ad19822b804a0c917fa11959337984",
+        "reason": "fault_absent_but_stage_specific_evidence_not_yet_sufficient",
+        "verified": false
+      },
       "severity": "error",
       "source_id": "data_go_kr",
       "stage": "processor",
-      "status": "open"
+      "status": "recovery_pending_verification"
     }
   ],
   "last_good_by_source": {},
   "latest_receipt": {
-    "path": "receipts/receipt-37099554404-1-53670b69f9e8fd3f.json",
-    "sha256": "53670b69f9e8fd3f7eeef8216b95ff736a1ff5c3b89eb217b3c0255f8e8aa958"
+    "path": "receipts/receipt-37100762123-1-7eae47600ac956e7.json",
+    "sha256": "7eae47600ac956e7e14623dfa412e44a53ad19822b804a0c917fa11959337984"
   },
   "observations_by_source": {
     "data_go_kr": [
@@ -42,7 +47,7 @@
   "repository": "StatPan/datapan-registry",
   "root": "health/upstream-catalogue",
   "schema_version": "datapan.upstream-catalogue-health-state.v1",
-  "state_sha256": "48dca3ae1f1ed5a83a99a6ac3f929476943db1b1197732c439ae119a8a48ae39",
-  "state_status": "blocked",
-  "updated_at": "2026-10-03T05:21:26Z"
+  "state_sha256": "4a4a28e4a5e55b717bc2b85db4f28305728bfb982edfb04ac04d53526e593158",
+  "state_status": "healthy",
+  "updated_at": "2026-10-03T05:44:02Z"
 }
