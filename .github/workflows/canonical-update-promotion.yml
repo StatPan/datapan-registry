@@ -1,0 +1,104 @@
+name: Canonical update promotion
+
+on:
+  workflow_run:
+    workflows: ["Process upstream catalogue"]
+    types: [completed]
+  schedule:
+    - cron: "43 * * * *"
+
+permissions:
+  actions: write
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: canonical-update-promotion
+  cancel-in-progress: false
+
+jobs:
+  reconcile:
+    if: github.event_name == 'schedule' || (github.event.workflow_run.name == 'Process upstream catalogue' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.repository.full_name == github.repository && github.event.workflow_run.head_repository.full_name == github.repository && github.event.workflow_run.head_branch == github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch || github.ref_name }}
+    steps:
+      - name: Check out the current trusted default branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.repository.default_branch || github.ref_name }}
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: true
+
+      - name: Check whether durable processor state exists
+        id: processor-state-branch
+        run: |
+          set -euo pipefail
+          state_ref="$(git ls-remote --heads origin refs/heads/automation/upstream-catalogue-state)"
+          if [ -n "$state_ref" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check out durable upstream catalogue processor state
+        if: steps.processor-state-branch.outputs.exists == 'true'
+        uses: actions/checkout@v7
+        with:
+          ref: automation/upstream-catalogue-state
+          path: .datapan/processor-state
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - uses: actions/checkout@v7
+        with:
+          repository: StatPan/datapan-cli
+          ref: e3b2fa44cb0f68d7e58e003fbd71ecde505878de
+          path: .datapan/datapan-cli
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: .datapan/datapan-cli/go.mod
+          check-latest: true
+          cache-dependency-path: .datapan/datapan-cli/go.sum
+
+      - name: Install validation dependency
+        run: python -m pip install --disable-pip-version-check jsonschema 'PyYAML==6.0.2'
+
+      - name: Reconcile owned PRs and exact-head CI
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: python3 scripts/run-canonical-update-promotion.py --mode reconcile-prs
+
+      - name: Recover at most one durable ready processor bundle
+        if: steps.processor-state-branch.outputs.exists == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+          EVENT_RUN_ID: ${{ github.event.workflow_run.id }}
+          EVENT_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+          EVENT_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          python3 scripts/run-canonical-update-promotion.py \
+            --mode recover-ready \
+            --state-root .datapan/processor-state/.datapan/upstream-catalogue-state \
+            --datapan-cli .datapan/datapan-cli \
+            --event-run-id "$EVENT_RUN_ID" \
+            --event-run-attempt "$EVENT_RUN_ATTEMPT" \
+            --event-head-sha "$EVENT_HEAD_SHA"

@@ -1,0 +1,720 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.canonical-update-promotion-receipt.v1.schema.json",
+  "title": "Datapan canonical update promotion receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "action",
+    "source_refresh_evidence",
+    "candidate",
+    "checks",
+    "validation_evidence",
+    "ownership",
+    "pr",
+    "supersedes_prs",
+    "acknowledgements",
+    "blockers"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.canonical-update-promotion-receipt.v1"
+    },
+    "status": {
+      "enum": [
+        "prepared",
+        "pending-review",
+        "merged",
+        "publication-pending",
+        "published",
+        "read-back-confirmed",
+        "failed",
+        "closed"
+      ]
+    },
+    "action": {
+      "enum": [
+        "create",
+        "create_replacement",
+        "reuse_owned",
+        "refresh_owned"
+      ]
+    },
+    "source_refresh_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version", "registry_path", "registry_bytes", "registry_sha256",
+        "verification_path", "verification_bytes", "verification_sha256",
+        "datapan_cli_revision", "datapan_cli_tree", "generated_at", "output_normalization", "manifest_sha256",
+        "diagnostic_current_source_applicability", "commands"
+      ],
+      "properties": {
+        "schema_version": {"const": "datapan.canonical-source-refresh-evidence.v1"},
+        "registry_path": {"type": "string", "minLength": 1},
+        "registry_bytes": {"type": "integer", "minimum": 1},
+        "registry_sha256": {"$ref": "#/$defs/sha256"},
+        "verification_path": {"type": "string", "minLength": 1},
+        "verification_bytes": {"type": "integer", "minimum": 1},
+        "verification_sha256": {"$ref": "#/$defs/sha256"},
+        "datapan_cli_revision": {"$ref": "#/$defs/sha1"},
+        "datapan_cli_tree": {"$ref": "#/$defs/sha1"},
+        "generated_at": {"type": "string", "format": "date-time"},
+        "output_normalization": {"const": "replace_top_level_generated_at_with_source_observation_time_utc_then_json_indent_2_newline"},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "diagnostic_current_source_applicability": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "bytes", "sha256", "schema_path", "schema_bytes", "schema_sha256", "status"],
+          "properties": {
+            "path": {"const": "reports/diagnostic-current-source-applicability.json"},
+            "bytes": {"type": "integer", "minimum": 1},
+            "sha256": {"$ref": "#/$defs/sha256"},
+            "schema_path": {"const": "schemas/datapan.diagnostic-current-source-applicability.v1.schema.json"},
+            "schema_bytes": {"type": "integer", "minimum": 1},
+            "schema_sha256": {"$ref": "#/$defs/sha256"},
+            "status": {"enum": ["historical_scope_unchanged", "revalidation_required"]}
+          }
+        },
+        "commands": {
+          "type": "array",
+          "minItems": 9,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["argv", "exit_code", "input_registry_sha256", "output_path", "raw_output_bytes", "raw_output_sha256", "output_bytes", "output_sha256"],
+            "properties": {
+              "argv": {"type": "array", "minItems": 4, "items": {"type": "string"}},
+              "exit_code": {"const": 0},
+              "input_registry_sha256": {"$ref": "#/$defs/sha256"},
+              "input_verification_sha256": {"$ref": "#/$defs/sha256"},
+              "input_previous_registry_sha256": {"$ref": "#/$defs/sha256"},
+              "output_path": {"type": "string", "minLength": 1},
+              "raw_output_bytes": {"type": "integer", "minimum": 1},
+              "raw_output_sha256": {"$ref": "#/$defs/sha256"},
+              "output_bytes": {"type": "integer", "minimum": 1},
+              "output_sha256": {"$ref": "#/$defs/sha256"}
+            }
+          }
+        }
+      }
+    },
+    "candidate": {
+      "$ref": "#/$defs/candidate"
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "composition",
+        "registry_manifest",
+        "denominator",
+        "adapter",
+        "ledger",
+        "release",
+        "consumer",
+        "finish_review_policy",
+        "manual_review_acceptance",
+        "diagnostic_current_source_applicability"
+      ],
+      "properties": {
+        "composition": {
+          "const": "passed"
+        },
+        "registry_manifest": {
+          "const": "passed"
+        },
+        "denominator": {
+          "const": "passed"
+        },
+        "adapter": {
+          "const": "passed"
+        },
+        "ledger": {
+          "const": "passed"
+        },
+        "release": {
+          "const": "passed"
+        },
+        "consumer": {
+          "const": "passed"
+        },
+        "finish_review_policy": {
+          "enum": [
+            "configured",
+            "unconfigured",
+            "unknown"
+          ]
+        },
+        "manual_review_acceptance": {
+          "enum": [
+            "accepted",
+            "revalidation_required",
+            "unproven"
+          ]
+        },
+        "diagnostic_current_source_applicability": {
+          "enum": ["historical_scope_unchanged", "revalidation_required"]
+        }
+      }
+    },
+    "validation_evidence": {
+      "type": "array",
+      "minItems": 9,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "source_sha", "manifest_sha256", "command", "exit_code"],
+        "properties": {
+          "name": {"enum": ["composition", "registry_manifest", "denominator", "adapter", "ledger", "release", "consumer", "manual_review_acceptance", "diagnostic_current_source_applicability"]},
+          "source_sha": {"$ref": "#/$defs/sha1"},
+          "manifest_sha256": {"$ref": "#/$defs/sha256"},
+          "command": {"type": "string", "minLength": 1},
+          "exit_code": {"const": 0}
+        }
+      }
+    },
+    "ownership": {
+      "$ref": "#/$defs/ownership"
+    },
+    "pr": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "number",
+        "url",
+        "state",
+        "merge_commit_sha"
+      ],
+      "properties": {
+        "number": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "url": {
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "missing",
+            "open",
+            "merged",
+            "closed"
+          ]
+        },
+        "merge_commit_sha": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{40}$"
+        }
+      }
+    },
+    "supersedes_prs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "acknowledgements": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/acknowledgement"
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "finish_review_policy_unconfigured",
+        "manual_review_revalidation_required",
+        "manual_review_unproven",
+        "diagnostic_current_source_revalidation_required"
+        ]
+      }
+    },
+    "refresh_from": {
+      "$ref": "#/$defs/revisionReference"
+    },
+    "superseded_by": {
+      "$ref": "#/$defs/revisionReference"
+    },
+    "ci": {
+      "$ref": "#/$defs/ci"
+    }
+  },
+  "$defs": {
+    "revisionReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository", "source_id", "scope", "generation_id", "registry_sha256",
+        "head_sha", "pr_number", "owner_id", "branch", "body_sha256"
+      ],
+      "properties": {
+        "repository": {"type": "string", "pattern": "^[^/]+/[^/]+$"},
+        "source_id": {"type": "string", "minLength": 1},
+        "scope": {"type": "string", "minLength": 1},
+        "generation_id": {"type": "string", "minLength": 1},
+        "registry_sha256": {"$ref": "#/$defs/sha256"},
+        "head_sha": {"$ref": "#/$defs/sha1"},
+        "pr_number": {"type": "integer", "minimum": 1},
+        "owner_id": {"type": "string", "pattern": "^datapan-canonical-update:v1:[a-f0-9]{64}$"},
+        "branch": {"type": "string", "minLength": 1},
+        "body_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "sha1": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "ci": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository", "workflow_path", "head_sha", "branch", "pr_number", "owner_id",
+        "body_sha256", "request_fingerprint", "state", "intent_at", "run_id", "run_attempt",
+        "run_url", "run_status", "conclusion", "observed_at", "dispatch_http_status", "blocker"
+      ],
+      "properties": {
+        "repository": {"type": "string", "pattern": "^[^/]+/[^/]+$"},
+        "workflow_path": {"const": ".github/workflows/verify-release.yml"},
+        "head_sha": {"$ref": "#/$defs/sha1"},
+        "branch": {"type": "string", "minLength": 1},
+        "pr_number": {"type": "integer", "minimum": 1},
+        "owner_id": {"type": "string", "pattern": "^datapan-canonical-update:v1:[a-f0-9]{64}$"},
+        "body_sha256": {"$ref": "#/$defs/sha256"},
+        "request_fingerprint": {"$ref": "#/$defs/sha256"},
+        "state": {"enum": ["intent", "uncertain", "queued", "in_progress", "success", "failure", "cancelled", "action_required"]},
+        "intent_at": {"type": "string", "format": "date-time"},
+        "run_id": {"type": ["integer", "null"], "minimum": 1},
+        "run_attempt": {"type": ["integer", "null"], "minimum": 1},
+        "run_url": {"type": ["string", "null"], "format": "uri"},
+        "run_status": {"type": ["string", "null"], "enum": ["requested", "waiting", "pending", "queued", "in_progress", "completed", null]},
+        "conclusion": {"type": ["string", "null"], "enum": ["success", "failure", "neutral", "cancelled", "skipped", "timed_out", "action_required", "stale", "startup_failure", null]},
+        "observed_at": {"type": "string", "format": "date-time"},
+        "dispatch_http_status": {"type": ["integer", "null"], "minimum": 100, "maximum": 599},
+        "blocker": {"type": ["string", "null"]}
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "source_id",
+        "scope",
+        "base_sha",
+        "head_sha",
+        "manifest_sha256",
+        "registry_path",
+        "registry_bytes",
+        "registry_sha256",
+        "composition_receipt_sha256",
+        "generation_id",
+        "payload_readback",
+        "manual_review_acceptance_status"
+      ],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^[^/]+/[^/]+$"
+        },
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "base_sha": {
+          "$ref": "#/$defs/sha1"
+        },
+        "head_sha": {
+          "$ref": "#/$defs/sha1"
+        },
+        "manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "registry_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "registry_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "registry_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "composition_receipt_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "generation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "payload_readback": {
+          "$ref": "#/$defs/payload_readback"
+        },
+        "manual_review_acceptance_status": {
+          "enum": [
+            "accepted",
+            "revalidation_required",
+            "unproven"
+          ]
+        }
+      }
+    },
+    "payload_readback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "provider",
+        "repository",
+        "remote",
+        "source_sha",
+        "manifest_sha256",
+        "policy_path",
+        "policy_bytes",
+        "policy_sha256",
+        "path",
+        "bytes",
+        "sha256",
+        "lfs_oid",
+        "upload_attempted",
+        "readback",
+        "observed_at"
+      ],
+      "properties": {
+        "status": {
+          "const": "verified"
+        },
+        "provider": {
+          "const": "github-git-lfs"
+        },
+        "repository": {
+          "type": "string",
+          "pattern": "^[^/]+/[^/]+$"
+        },
+        "remote": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_sha": {
+          "$ref": "#/$defs/sha1"
+        },
+        "manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "policy_path": {
+          "const": "policy/registry-distribution.json"
+        },
+        "policy_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "policy_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "lfs_oid": {
+          "$ref": "#/$defs/sha256"
+        },
+        "upload_attempted": {
+          "type": "boolean"
+        },
+        "readback": {
+          "const": "isolated_lfs_storage_verified"
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "ownership": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "owner_id",
+        "branch",
+        "expected_head_sha",
+        "body_sha256",
+        "issue_number",
+        "issue_url"
+      ],
+      "properties": {
+        "owner_id": {
+          "type": "string",
+          "pattern": "^datapan-canonical-update:v1:[a-f0-9]{64}$"
+        },
+        "branch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected_head_sha": {
+          "$ref": "#/$defs/sha1"
+        },
+        "body_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "body": {
+          "type": "string",
+          "minLength": 1
+        },
+        "issue_number": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "issue_url": {
+          "type": "string"
+        }
+      }
+    },
+    "acknowledgement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "observed_at",
+        "source_sha",
+        "manifest_sha256",
+        "artifact_identity",
+        "evidence_reference",
+        "run_url",
+        "read_back_verified",
+        "read_back_sha256",
+        "read_back_bytes",
+        "publication_revision",
+        "publication_pointer_revision",
+        "run_id",
+        "run_attempt"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "pending-review",
+            "merged",
+            "publication-pending",
+            "published",
+            "read-back-confirmed",
+            "failed",
+            "closed"
+          ]
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source_sha": {
+          "$ref": "#/$defs/sha1"
+        },
+        "manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "artifact_identity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "bytes",
+            "sha256"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "bytes": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        },
+        "evidence_reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "run_url": {
+          "type": "string",
+          "format": "uri",
+          "minLength": 1
+        },
+        "read_back_verified": {
+          "type": "boolean"
+        },
+        "read_back_sha256": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "read_back_bytes": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "publication_revision": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/sha1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "publication_pointer_revision": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/sha1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "run_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "run_attempt": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "read-back-confirmed"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "publication_revision": {
+                "$ref": "#/$defs/sha1"
+              },
+              "publication_pointer_revision": {
+                "$ref": "#/$defs/sha1"
+              },
+              "read_back_verified": {
+                "const": true
+              },
+              "read_back_sha256": {
+                "$ref": "#/$defs/sha256"
+              },
+              "read_back_bytes": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "published"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "publication_revision": {
+                "$ref": "#/$defs/sha1"
+              },
+              "publication_pointer_revision": {
+                "$ref": "#/$defs/sha1"
+              },
+              "read_back_verified": {
+                "const": false
+              },
+              "read_back_sha256": {
+                "type": "null"
+              },
+              "read_back_bytes": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "pending-review",
+                  "merged",
+                  "publication-pending"
+                ]
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "read_back_verified": {
+                "const": false
+              },
+              "read_back_sha256": {
+                "type": "null"
+              },
+              "read_back_bytes": {
+                "type": "null"
+              },
+              "publication_revision": {
+                "type": "null"
+              },
+              "publication_pointer_revision": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -10,8 +10,9 @@
     "notes": "This commit is the reviewed CLI consumer identity containing the opt-in bounded full-catalog import timeout contract and is reachable from datapan-cli main history."
   },
   "inventory_expectations": {
-    "checkout_count": 9,
+    "checkout_count": 10,
     "workflow_checkout_counts": {
+      ".github/workflows/canonical-update-promotion.yml": 1,
       ".github/workflows/credential-runtime-collection.yml": 1,
       ".github/workflows/huggingface-distribution.yml": 1,
       ".github/workflows/institution-runtime-verify.yml": 1,

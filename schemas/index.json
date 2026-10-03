@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 106,
+  "count": 110,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 4546,
-      "sha256": "fdbdf5a18d472947ffba7cf89f18480e6b741df551144b54e714fc06df2923d9"
+      "bytes": 4595,
+      "sha256": "88eb09fbb9d7d257e9d51ce7a956e9bcc6faa78bcfdb3d8360d06e322794be8b"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -811,8 +811,8 @@
       "title": "Datapan data.go.kr operation manifest v1",
       "contract": "data-go-kr-operation-manifest",
       "version": "v1",
-      "bytes": 5498,
-      "sha256": "40d749d7c45ee9e9a9ab38f3022aaab3f5d8a0f74bedea5aa2144f5722b65e94"
+      "bytes": 5610,
+      "sha256": "df5b44a97c63db6e8995dd04ea388fd6359afa39d73e9c8d5588952263b0e736"
     },
     {
       "path": "schemas/datapan.release-version-decision.v1.schema.json",
@@ -957,6 +957,42 @@
       "version": "v1",
       "bytes": 6763,
       "sha256": "5e43e8aad27baefbcd2647e8b568763348584c4cf6b6512552863dab675d3b1d"
+    },
+    {
+      "path": "schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.canonical-update-promotion-journal.v1.schema.json",
+      "title": "Datapan canonical update promotion journal v1",
+      "contract": "canonical-update-promotion-journal",
+      "version": "v1",
+      "bytes": 5898,
+      "sha256": "4e998e916e484897dfe0a547b842a53e99465aea184229b0bfe8a02f212046cb"
+    },
+    {
+      "path": "schemas/datapan.canonical-update-promotion-receipt.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.canonical-update-promotion-receipt.v1.schema.json",
+      "title": "Datapan canonical update promotion receipt v1",
+      "contract": "canonical-update-promotion-receipt",
+      "version": "v1",
+      "bytes": 20094,
+      "sha256": "35c809297a2651475870da4780d231d7719cac0c905c85c9fde88e163745c072"
+    },
+    {
+      "path": "schemas/datapan.data-go-kr-operation-denominator-expectation.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.data-go-kr-operation-denominator-expectation.v1.schema.json",
+      "title": "Datapan data.go.kr operation denominator expectation v1",
+      "contract": "data-go-kr-operation-denominator-expectation",
+      "version": "v1",
+      "bytes": 2349,
+      "sha256": "0b106d317d1d642dece760342bc8e95e998929ef6fa7d8e4518e59487425d8ad"
+    },
+    {
+      "path": "schemas/datapan.registry-distribution.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.registry-distribution.v1.schema.json",
+      "title": "Datapan Registry distribution policy v1",
+      "contract": "registry-distribution",
+      "version": "v1",
+      "bytes": 2858,
+      "sha256": "24110c85a753ef97af018b500c4e8e8fac232c4e660bbd83e51867c0454ecd19"
     }
   ]
 }

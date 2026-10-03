@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.canonical-update-promotion-journal.v1.schema.json",
+  "title": "Datapan canonical update promotion journal v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "repository",
+    "updated_at",
+    "records"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.canonical-update-promotion-journal.v1"
+    },
+    "repository": {
+      "type": "string",
+      "pattern": "^[^/]+/[^/]+$"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "schema_version",
+          "status",
+          "candidate",
+          "acknowledgements"
+        ],
+        "properties": {
+          "schema_version": {
+            "const": "datapan.canonical-update-promotion-receipt.v1"
+          },
+          "status": {
+            "enum": [
+              "prepared",
+              "pending-review",
+              "merged",
+              "publication-pending",
+              "published",
+              "read-back-confirmed",
+              "failed",
+              "closed"
+            ]
+          },
+          "candidate": {
+            "type": "object",
+            "required": [
+              "repository",
+              "source_id",
+              "scope",
+              "generation_id",
+              "head_sha",
+              "manifest_sha256",
+              "registry_sha256"
+            ],
+            "properties": {
+              "repository": {
+                "type": "string",
+                "pattern": "^[^/]+/[^/]+$"
+              },
+              "source_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "scope": {
+                "type": "string",
+                "minLength": 1
+              },
+              "generation_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "head_sha": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{40}$"
+              },
+              "manifest_sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "registry_sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          },
+          "refresh_from": {"$ref": "#/$defs/revisionReference"},
+          "superseded_by": {"$ref": "#/$defs/revisionReference"},
+          "acknowledgements": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "ci": {"$ref": "#/$defs/ci"}
+        }
+      },
+      "description": "Retain every active generation and only the latest read-back-confirmed last-good record per source and scope."
+    }
+  },
+  "$defs": {
+    "revisionReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository", "source_id", "scope", "generation_id", "registry_sha256",
+        "head_sha", "pr_number", "owner_id", "branch", "body_sha256"
+      ],
+      "properties": {
+        "repository": {"type": "string", "pattern": "^[^/]+/[^/]+$"},
+        "source_id": {"type": "string", "minLength": 1},
+        "scope": {"type": "string", "minLength": 1},
+        "generation_id": {"type": "string", "minLength": 1},
+        "registry_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "head_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "pr_number": {"type": "integer", "minimum": 1},
+        "owner_id": {"type": "string", "pattern": "^datapan-canonical-update:v1:[a-f0-9]{64}$"},
+        "branch": {"type": "string", "minLength": 1},
+        "body_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "ci": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository", "workflow_path", "head_sha", "branch", "pr_number", "owner_id",
+        "body_sha256", "request_fingerprint", "state", "intent_at", "run_id", "run_attempt",
+        "run_url", "run_status", "conclusion", "observed_at", "dispatch_http_status", "blocker"
+      ],
+      "properties": {
+        "repository": {"type": "string", "pattern": "^[^/]+/[^/]+$"},
+        "workflow_path": {"const": ".github/workflows/verify-release.yml"},
+        "head_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "branch": {"type": "string", "minLength": 1},
+        "pr_number": {"type": "integer", "minimum": 1},
+        "owner_id": {"type": "string", "pattern": "^datapan-canonical-update:v1:[a-f0-9]{64}$"},
+        "body_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "request_fingerprint": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "state": {"enum": ["intent", "uncertain", "queued", "in_progress", "success", "failure", "cancelled", "action_required"]},
+        "intent_at": {"type": "string", "format": "date-time"},
+        "run_id": {"type": ["integer", "null"], "minimum": 1},
+        "run_attempt": {"type": ["integer", "null"], "minimum": 1},
+        "run_url": {"type": ["string", "null"], "format": "uri"},
+        "run_status": {"type": ["string", "null"], "enum": ["requested", "waiting", "pending", "queued", "in_progress", "completed", null]},
+        "conclusion": {"type": ["string", "null"], "enum": ["success", "failure", "neutral", "cancelled", "skipped", "timed_out", "action_required", "stale", "startup_failure", null]},
+        "observed_at": {"type": "string", "format": "date-time"},
+        "dispatch_http_status": {"type": ["integer", "null"], "minimum": 100, "maximum": 599},
+        "blocker": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

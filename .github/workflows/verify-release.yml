@@ -11,6 +11,12 @@ on:
     # Weekly release-health check, Monday 18:17 UTC / Tuesday 03:17 KST.
     - cron: "17 18 * * 1"
   workflow_dispatch:
+    inputs:
+      expected_head_sha:
+        description: Optional immutable candidate commit expected by canonical-update promotion
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -20,6 +26,13 @@ jobs:
     name: Diagnostic candidate (pre-distribution)
     runs-on: ubuntu-latest
     steps:
+      - name: Check dispatched candidate head
+        if: github.event_name == 'workflow_dispatch' && inputs.expected_head_sha != ''
+        env:
+          EXPECTED_HEAD_SHA: ${{ inputs.expected_head_sha }}
+          ACTUAL_HEAD_SHA: ${{ github.sha }}
+        run: test "${EXPECTED_HEAD_SHA}" = "${ACTUAL_HEAD_SHA}"
+
       - name: Checkout registry
         uses: actions/checkout@v7
         with:
@@ -50,6 +63,13 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
+      - name: Check dispatched candidate head
+        if: github.event_name == 'workflow_dispatch' && inputs.expected_head_sha != ''
+        env:
+          EXPECTED_HEAD_SHA: ${{ inputs.expected_head_sha }}
+          ACTUAL_HEAD_SHA: ${{ github.sha }}
+        run: test "${EXPECTED_HEAD_SHA}" = "${ACTUAL_HEAD_SHA}"
+
       - name: Checkout registry
         uses: actions/checkout@v7
         with:
@@ -108,12 +128,17 @@ jobs:
           . .datapan/ci/source-profile-venv/bin/activate
           python -m pip install --upgrade pip
           python -m pip install jsonschema
-          python -m pip install 'PyYAML==6.0.2'
+          python -m pip install --disable-pip-version-check 'PyYAML==6.0.2'
           python scripts/sync-release-schema-artifacts.py --check
           python scripts/sync-release-manifest-artifacts.py --check
           python scripts/generate-data-go-kr-operation-manifest.py --check
           python scripts/validate-data-go-kr-operation-manifest.py
           python -m unittest tests/test_validate_data_go_kr_operation_manifest.py
+          python -m unittest tests/test_materialize_canonical_registry.py
+          python -m unittest tests/test_canonical_update_pr.py
+          python -m unittest tests/test_canonical_update_ci.py
+          python -m unittest tests/test_refresh_canonical_snapshot_evidence.py
+          python -m unittest tests/test_run_canonical_update_promotion.py
           python scripts/generate-release-version-decision.py --check
           python -m unittest tests/test_generate_release_version_decision.py
           python scripts/generate-health-probe-catalog.py --check
@@ -327,6 +352,7 @@ jobs:
           python -m py_compile scripts/release_health_rollup.py
           python -m py_compile scripts/generate-release-health-rollup.py
           python -m py_compile scripts/validate-release-health-rollups.py
+          python -m py_compile scripts/canonical_update_ci.py
 
       - name: Validate provider verification evidence
         working-directory: datapan-cli
