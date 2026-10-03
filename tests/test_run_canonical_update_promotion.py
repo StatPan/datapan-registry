@@ -1801,6 +1801,8 @@ class PreparedCreateRecoveryTests(unittest.TestCase):
             ("branch", lambda f: f["pull_request_readback"].__setitem__("headRefName", "other-branch"), {}),
             ("candidate head", lambda f: f["state"]["records"][0]["candidate"].__setitem__("head_sha", "2" * 40), {}),
             ("body bytes", lambda f: f["pull_request_readback"].__setitem__("body", f["pull_request_readback"]["body"] + "Human edit.\n"), {}),
+            ("merge commit type", lambda f: f["pull_request_readback"].__setitem__("mergeCommit", "not-an-object"), {}),
+            ("merge commit digest", lambda f: f["pull_request_readback"].__setitem__("mergeCommit", {"oid": "invalid"}), {}),
             ("body digest", lambda f: f["state"]["records"][0]["ownership"].__setitem__("body_sha256", "3" * 64), {}),
             ("owner", lambda f: f["state"]["records"][0]["ownership"].__setitem__("owner_id", "not-the-owner"), {}),
             ("generation", lambda f: f["pull_request_readback"].__setitem__("body", f["pull_request_readback"]["body"].replace("generation=66a2", "generation=76a2")), {}),
@@ -2072,8 +2074,7 @@ class RecoveredPendingExpectedHeadIntegrationTests(unittest.TestCase):
     def fixture(self) -> dict:
         return json.loads(self.fixture_path.read_text(encoding="utf-8"))
 
-    def test_actual_pending_receipt_binds_verified_head_before_real_ci_dispatch(self) -> None:
-        fixture = self.fixture()
+    def _run_recovery(self, fixture: dict) -> tuple[dict, dict, list[dict], list[tuple[str, str, object]], int, int, str]:
         journal = copy.deepcopy(fixture["state"])
         original = copy.deepcopy(journal["records"][0])
         candidate = original["candidate"]
@@ -2183,12 +2184,19 @@ class RecoveredPendingExpectedHeadIntegrationTests(unittest.TestCase):
             RUNNER.reconcile_open_promotions(root)
 
         updated = current_receipt()
+        return updated, original, writes, api_calls, dispatch_count, ci_call.call_count, output.getvalue()
+
+    def test_actual_pending_receipt_binds_verified_head_before_real_ci_dispatch(self) -> None:
+        fixture = self.fixture()
+        updated, original, writes, api_calls, dispatch_count, ci_call_count, output = self._run_recovery(fixture)
+        candidate = original["candidate"]
+        head = candidate["head_sha"]
         expected_without_ci = copy.deepcopy(original)
         expected_without_ci["ownership"]["expected_head_sha"] = head
         expected_without_ci["pr"]["merge_commit_sha"] = fixture["pull_request_readback"]["mergeCommit"]["oid"]
         updated_without_ci = copy.deepcopy(updated)
         updated_without_ci.pop("ci")
-        self.assertEqual(dispatch_count, 1, output.getvalue())
+        self.assertEqual(dispatch_count, 1, output)
         self.assertEqual(updated_without_ci, expected_without_ci)
         self.assertEqual(updated["status"], "pending-review")
         self.assertEqual(updated["pr"]["number"], 686)
@@ -2201,12 +2209,88 @@ class RecoveredPendingExpectedHeadIntegrationTests(unittest.TestCase):
         self.assertEqual(updated["candidate"]["payload_readback"], original["candidate"]["payload_readback"])
         self.assertEqual(updated["ci"]["state"], "success")
         self.assertEqual(updated["ci"]["head_sha"], head)
-        self.assertEqual(updated["ci"]["run_id"], run_id)
+        self.assertEqual(updated["ci"]["run_id"], 9901)
         self.assertEqual(updated["ci"]["run_attempt"], 1)
         self.assertEqual(len([ack for ack in updated["acknowledgements"] if ack["status"] == "pending-review"]), 1)
-        self.assertEqual(ci_call.call_count, 1)
+        self.assertEqual(ci_call_count, 1)
         self.assertGreaterEqual(len(writes), 4)
         self.assertTrue(any(write.get("ci", {}).get("state") == "intent" for write in writes))
+
+    def test_legacy_bare_and_replacement_branches_recover_through_real_ci_caller(self) -> None:
+        for action in ("create", "create_replacement"):
+            with self.subTest(action=action):
+                fixture = self.fixture()
+                record = fixture["state"]["records"][0]
+                candidate = record["candidate"]
+                generated = PR_HELPER.automation_branch(candidate, "create")
+                prefix = generated[:-21]
+                if action == "create":
+                    branch = prefix
+                else:
+                    generation_hash = hashlib.sha256(candidate["generation_id"].encode("utf-8")).hexdigest()[:10]
+                    branch = f"{prefix}-replacement-{generation_hash}"
+                record["action"] = action
+                record["ownership"]["branch"] = branch
+                record["ownership"]["expected_head_sha"] = candidate["head_sha"]
+                fixture["open_pr_rows"][0]["head_ref"] = branch
+                fixture["pull_request_readback"]["headRefName"] = branch
+
+                updated, original, _writes, _api_calls, dispatch_count, ci_call_count, output = self._run_recovery(fixture)
+                self.assertEqual(dispatch_count, 1, output)
+                self.assertEqual(ci_call_count, 1)
+                self.assertEqual(updated["ownership"]["branch"], branch)
+                self.assertEqual(updated["ownership"]["expected_head_sha"], candidate["head_sha"])
+                self.assertEqual(updated["acknowledgements"], original["acknowledgements"])
+                self.assertEqual(updated["ci"]["state"], "success")
+
+    def test_unbound_revision_branch_fails_in_caller_before_journal_or_ci_write(self) -> None:
+        fixture = self.fixture()
+        receipt = fixture["state"]["records"][0]
+        candidate = receipt["candidate"]
+        generated = PR_HELPER.automation_branch(candidate, "create")
+        bad_branch = generated + "-unbound"
+        receipt["ownership"]["branch"] = bad_branch
+        receipt["ownership"]["expected_head_sha"] = candidate["head_sha"]
+        fixture["open_pr_rows"][0]["head_ref"] = bad_branch
+        fixture["pull_request_readback"]["headRefName"] = bad_branch
+        current_main = fixture["provenance"]["workflow_checkout_sha"]
+        api_calls: list[tuple[str, str]] = []
+
+        def load_module(path: pathlib.Path, name: str) -> object:
+            if path.name == "canonical_update_pr.py":
+                return PR_HELPER
+            if path.name == "canonical_update_ci.py":
+                return CI_HELPER
+            raise AssertionError(f"unexpected dynamic helper import: {path} as {name}")
+
+        def command(argv: tuple[str, ...], _root: pathlib.Path, **_kwargs: object) -> subprocess.CompletedProcess[str]:
+            if argv[:3] == ("git", "rev-parse", "HEAD"):
+                return subprocess.CompletedProcess(argv, 0, current_main + "\n", "")
+            raise AssertionError(f"unexpected command during recovery: {argv}")
+
+        with tempfile.TemporaryDirectory() as raw, contextlib.ExitStack() as stack:
+            root = pathlib.Path(raw)
+            stack.enter_context(mock.patch.dict(os.environ, {
+                "GITHUB_REPOSITORY": candidate["repository"],
+                "GITHUB_RUN_ID": "37101245239",
+                "GITHUB_RUN_ATTEMPT": "5",
+            }))
+            stack.enter_context(mock.patch.object(RUNNER, "load_module", side_effect=load_module))
+            stack.enter_context(mock.patch.object(RUNNER, "load_promotion_journal", return_value=copy.deepcopy(fixture["state"])))
+            persist = stack.enter_context(mock.patch.object(RUNNER, "persist_journal_record"))
+            stack.enter_context(mock.patch.object(RUNNER, "command", side_effect=command))
+            stack.enter_context(mock.patch.object(RUNNER, "gh_open_prs", return_value=fixture["open_pr_rows"]))
+            stack.enter_context(mock.patch.object(RUNNER, "gh_pr_readback", return_value=fixture["pull_request_readback"]))
+            stack.enter_context(mock.patch.object(PR_HELPER, "load_materializer", return_value=object()))
+            stack.enter_context(mock.patch.object(PR_HELPER, "remote_ref_sha", return_value=candidate["head_sha"]))
+            stack.enter_context(mock.patch.object(RUNNER, "github_api_request", side_effect=lambda method, endpoint, _body=None: (api_calls.append((method, endpoint)) or (500, None))))
+            ci_call = stack.enter_context(mock.patch.object(CI_HELPER, "ensure_verify_release_run", wraps=CI_HELPER.ensure_verify_release_run))
+            with self.assertRaisesRegex(RUNNER.PromotionError, "not an exact canonical or inherited owned branch"):
+                RUNNER.reconcile_open_promotions(root)
+
+        persist.assert_not_called()
+        ci_call.assert_not_called()
+        self.assertFalse(any(method == "POST" for method, _endpoint in api_calls))
 
     def test_unexpected_nonzero_expected_head_is_rejected_before_persistence(self) -> None:
         invalid_receipts = []

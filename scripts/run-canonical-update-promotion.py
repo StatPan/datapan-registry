@@ -1860,11 +1860,13 @@ def validate_prepared_create_pr_readback(
 
     try:
         expected_owner = helper.owner_id(repository, source_id, scope)
-        expected_branch = helper.automation_branch(candidate, str(receipt["action"]))
     except Exception as exc:  # noqa: BLE001 - malformed durable ownership must fail closed
         raise PromotionError("prepared PR recovery ownership identity is invalid") from exc
     owner = ownership.get("owner_id")
     branch = ownership.get("branch")
+    if not helper.automation_branch_matches(candidate, str(receipt["action"]), branch):
+        raise PromotionError("prepared PR recovery branch is not an exact canonical or inherited owned branch")
+    expected_branch = branch
     issue_number = ownership.get("issue_number")
     expected_head = ownership.get("expected_head_sha")
     if (
@@ -2006,7 +2008,16 @@ def validate_prepared_create_pr_readback(
     observed_body = observed.get("body")
     observed_number = observed.get("number")
     observed_merge = observed.get("mergeCommit")
-    observed_merge_sha = observed_merge.get("oid") if isinstance(observed_merge, Mapping) else None
+    if observed_merge is None:
+        observed_merge_sha = None
+    elif (
+        isinstance(observed_merge, Mapping)
+        and isinstance(observed_merge.get("oid"), str)
+        and re.fullmatch(r"[a-f0-9]{40}", observed_merge["oid"]) is not None
+    ):
+        observed_merge_sha = observed_merge["oid"]
+    else:
+        raise PromotionError("prepared PR recovery API returned a malformed merge commit identity")
     if (
         isinstance(observed_number, bool)
         or observed_number != number
@@ -2017,10 +2028,6 @@ def validate_prepared_create_pr_readback(
         or observed.get("baseRefName") != "main"
         or observed.get("headRefOid") != candidate["head_sha"]
         or observed.get("url") != f"https://github.com/{repository}/pull/{number}"
-        or (
-            observed_merge_sha is not None
-            and (not isinstance(observed_merge_sha, str) or re.fullmatch(r"[a-f0-9]{40}", observed_merge_sha) is None)
-        )
         or not isinstance(observed_body, str)
         or observed_body != body
         or hashlib.sha256(observed_body.encode("utf-8")).hexdigest() != body_sha
