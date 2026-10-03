@@ -2151,6 +2151,7 @@ class TrustedSourceRefreshEntryPointTests(unittest.TestCase):
     def setUp(self) -> None:
         self.old, _new = OwnedPRRefreshRecoveryTests().receipts()
         self.old["candidate"]["composition_receipt_sha256"] = "f" * 64
+        self.old["candidate"]["base_sha"] = "d" * 40
         self.target_main = "e" * 40
         self.state_sha = "9" * 40
         self.repository = "StatPan/datapan-registry"
@@ -2243,6 +2244,25 @@ class TrustedSourceRefreshEntryPointTests(unittest.TestCase):
         self.args.expected_predecessor_body_sha256 = ""
         with self.assertRaisesRegex(RUNNER.PromotionError, "body must be a full SHA-256"):
             RUNNER.run_source_refresh(self.args, pathlib.Path("."))
+
+    def test_refresh_requires_predecessor_base_ancestor_before_pr_or_b_reads(self) -> None:
+        self.run_with_read_only_stubs()
+        command_results = iter((
+            subprocess.CompletedProcess(["git", "rev-parse", "HEAD"], 0, f"{self.target_main}\n", ""),
+            subprocess.CompletedProcess(["git", "merge-base", "--is-ancestor"], 1, "", ""),
+        ))
+        with (
+            mock.patch.object(RUNNER, "command", side_effect=lambda *_a, **_kw: next(command_results)),
+            mock.patch.object(RUNNER, "load_canonical_update_pr", return_value=PR_HELPER),
+            mock.patch.object(RUNNER, "load_promotion_journal_snapshot", return_value=({"records": [self.old]}, self.state_sha)),
+            mock.patch.object(RUNNER, "gh_pr_readback") as readback,
+            mock.patch.object(RUNNER, "processor_run_api") as run_api,
+        ):
+            with self.assertRaisesRegex(RUNNER.PromotionError, "not a descendant of the predecessor candidate base"):
+                RUNNER.run_source_refresh(self.args, pathlib.Path("."))
+
+        readback.assert_not_called()
+        run_api.assert_not_called()
 
     def test_refresh_requires_current_main_and_trusted_default_branch_ref(self) -> None:
         self.run_with_read_only_stubs(command_sha="0" * 40)

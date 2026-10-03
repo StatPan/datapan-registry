@@ -1400,6 +1400,21 @@ def assert_remote_main_sha(root: pathlib.Path, expected_sha: str) -> None:
         raise PromotionError("trusted source refresh target main moved; preserve the owned PR and re-read")
 
 
+def assert_predecessor_base_is_ancestor(
+    root: pathlib.Path, predecessor_base_sha: str, target_main_sha: str,
+) -> None:
+    if not re.fullmatch(r"[a-f0-9]{40}", predecessor_base_sha):
+        raise PromotionError("source refresh predecessor base is not a full immutable Git SHA")
+    if not re.fullmatch(r"[a-f0-9]{40}", target_main_sha):
+        raise PromotionError("source refresh target main is not a full immutable Git SHA")
+    result = command(
+        ("git", "merge-base", "--is-ancestor", predecessor_base_sha, target_main_sha),
+        root, allowed_returncodes=frozenset({0, 1}),
+    )
+    if result.returncode != 0:
+        raise PromotionError("source refresh target main is not a descendant of the predecessor candidate base")
+
+
 def persist_journal_record(
     root: pathlib.Path,
     source_base_sha: str,
@@ -2848,6 +2863,8 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
             refresh_pr_phase(prepared, predecessor, latest_pr, helper)
         else:
             validate_exact_open_pr(open_existing[0].get("record", prepared), latest_pr, helper)
+    if explicit_source_refresh:
+        assert_remote_main_sha(root, str(explicit_target_main))
     pushed = helper.push_owned_branch(
         candidate, prepared, existing, head_sha, repository_root=root, remote="origin",
     )
@@ -3317,6 +3334,9 @@ def run_source_refresh(args: argparse.Namespace, root: pathlib.Path) -> None:
         raise PromotionError("source refresh predecessor is not an active pending-review PR")
     if int(predecessor.get("pr", {}).get("number", 0)) != pr_number:
         raise PromotionError("source refresh predecessor PR number changed")
+    assert_predecessor_base_is_ancestor(
+        root, str(predecessor.get("candidate", {}).get("base_sha", "")), target_main,
+    )
 
     predecessor_ref = helper.revision_reference(predecessor)
     records = [row for row in journal.get("records", []) if isinstance(row, Mapping)]
