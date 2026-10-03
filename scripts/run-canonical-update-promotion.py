@@ -1233,13 +1233,16 @@ def ensure_candidate_issue(
     marker = issue_marker(owner, str(candidate["generation_id"]))
     issues = gh_json(root, "issue", "list", "--repo", repository, "--state", "all", "--limit", "1000", "--json", "number,title,body,url,state,labels")
     matches = [row for row in issues if isinstance(row.get("body"), str) and marker in row["body"]]
-    if len(matches) > 1:
+    open_matches = [row for row in matches if str(row.get("state", "")).upper() == "OPEN"]
+    if len(open_matches) > 1:
         raise PromotionError("duplicate_candidate_issues: preserve all issues and resolve ownership before retry")
     if existing_issue_number:
         existing = gh_json(root, "issue", "view", str(existing_issue_number), "--repo", repository, "--json", "number,title,body,url,state")
         stable_prefix = f"<!-- {PROMOTION_ISSUE_MARKER}{owner.removeprefix('datapan-canonical-update:v1:')} "
         if existing.get("state") != "OPEN" or not isinstance(existing.get("body"), str) or not existing["body"].startswith(stable_prefix):
             raise PromotionError("durable candidate issue is closed or no longer owned; preserve its history")
+        if open_matches and int(open_matches[0].get("number", 0)) != existing_issue_number:
+            raise PromotionError("candidate issue differs from the durable open-PR ownership receipt")
         if marker not in existing["body"]:
             body_path = root / ".datapan/candidate-issue.md"
             body_path.parent.mkdir(parents=True, exist_ok=True)
@@ -1252,10 +1255,8 @@ def ensure_candidate_issue(
                      "--title", f"Review canonical registry update: {candidate['source_id']} ({candidate['generation_id']})",
                      "--body-file", str(body_path)), root)
         return existing_issue_number, str(existing.get("url", ""))
-    if matches and matches[0].get("state") == "OPEN":
-        issue = matches[0]
-        if existing_issue_number and int(issue["number"]) != existing_issue_number:
-            raise PromotionError("candidate issue differs from the durable open-PR ownership receipt")
+    if open_matches:
+        issue = open_matches[0]
         return int(issue["number"]), str(issue.get("url", ""))
 
     body = "\n".join((
@@ -1283,7 +1284,12 @@ def ensure_candidate_issue(
         # A create response can be lost after the server committed. Resolve by
         # the stable marker before any retry can create another issue.
         reread = gh_json(root, "issue", "list", "--repo", repository, "--state", "all", "--limit", "1000", "--json", "number,title,body,url,state,labels")
-        recovered = [row for row in reread if isinstance(row.get("body"), str) and marker in row["body"]]
+        recovered = [
+            row for row in reread
+            if isinstance(row.get("body"), str)
+            and marker in row["body"]
+            and str(row.get("state", "")).upper() == "OPEN"
+        ]
         if len(recovered) != 1 or recovered[0].get("state") != "OPEN":
             raise PromotionError("candidate issue creation lacks an authoritative marker read-back")
         return int(recovered[0]["number"]), str(recovered[0].get("url", ""))

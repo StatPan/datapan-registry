@@ -108,6 +108,58 @@ class GiraFinishReviewPolicyTests(unittest.TestCase):
         self.assertNotIn("finish_review_policy_unconfigured", observed["blockers"])
 
 
+class CandidateIssueReuseTests(unittest.TestCase):
+    repository = "StatPan/datapan-registry"
+    candidate = {"source_id": "data_go_kr", "scope": "aggregate_supported_catalog", "generation_id": "generation-1"}
+
+    def issue(self, number: int, state: str, owner: str, generation: str = "generation-1") -> dict:
+        marker = RUNNER.issue_marker(owner, generation)
+        return {"number": number, "state": state, "body": f"{marker}\n\nOwned issue.\n", "url": f"https://github.com/StatPan/datapan-registry/issues/{number}"}
+
+    def test_closed_history_and_one_open_issue_reuse_default_and_durable_paths(self) -> None:
+        owner = PR_HELPER.owner_id(self.repository, self.candidate["source_id"], self.candidate["scope"])
+        closed = self.issue(101, "CLOSED", owner)
+        opened = self.issue(102, "OPEN", owner)
+        with mock.patch.object(RUNNER, "gh_json", return_value=[closed, opened]):
+            self.assertEqual(RUNNER.ensure_candidate_issue(pathlib.Path("."), self.repository, self.candidate, owner), (102, opened["url"]))
+        with mock.patch.object(RUNNER, "gh_json", side_effect=[[closed, opened], opened]):
+            self.assertEqual(RUNNER.ensure_candidate_issue(pathlib.Path("."), self.repository, self.candidate, owner, 102), (102, opened["url"]))
+
+    def test_many_closed_issues_and_one_open_issue_do_not_block_reuse(self) -> None:
+        owner = PR_HELPER.owner_id(self.repository, self.candidate["source_id"], self.candidate["scope"])
+        rows = [self.issue(number, "CLOSED", owner) for number in (101, 99, 97)] + [self.issue(102, "OPEN", owner)]
+        with mock.patch.object(RUNNER, "gh_json", return_value=rows):
+            number, _ = RUNNER.ensure_candidate_issue(pathlib.Path("."), self.repository, self.candidate, owner)
+        self.assertEqual(number, 102)
+
+    def test_lost_create_response_recovers_new_open_issue_around_closed_history(self) -> None:
+        owner = PR_HELPER.owner_id(self.repository, self.candidate["source_id"], self.candidate["scope"])
+        closed = self.issue(101, "CLOSED", owner)
+        opened = self.issue(102, "OPEN", owner)
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            with mock.patch.object(RUNNER, "gh_json", side_effect=[[closed], [closed, opened]]), \
+                 mock.patch.object(RUNNER, "command", return_value=subprocess.CompletedProcess([], 0, "", "")):
+                self.assertEqual(RUNNER.ensure_candidate_issue(root, self.repository, self.candidate, owner), (102, opened["url"]))
+
+    def test_two_open_issues_and_explicit_closed_or_foreign_issue_fail_closed(self) -> None:
+        owner = PR_HELPER.owner_id(self.repository, self.candidate["source_id"], self.candidate["scope"])
+        opened_a, opened_b = self.issue(102, "OPEN", owner), self.issue(103, "OPEN", owner)
+        with mock.patch.object(RUNNER, "gh_json", return_value=[opened_a, opened_b]):
+            with self.assertRaisesRegex(RUNNER.PromotionError, "duplicate_candidate_issues"):
+                RUNNER.ensure_candidate_issue(pathlib.Path("."), self.repository, self.candidate, owner)
+
+        closed = self.issue(101, "CLOSED", owner)
+        with mock.patch.object(RUNNER, "gh_json", side_effect=[[closed], closed]):
+            with self.assertRaisesRegex(RUNNER.PromotionError, "closed or no longer owned"):
+                RUNNER.ensure_candidate_issue(pathlib.Path("."), self.repository, self.candidate, owner, 101)
+
+        foreign = {"number": 104, "state": "OPEN", "body": "human issue body", "url": "https://github.com/StatPan/datapan-registry/issues/104"}
+        with mock.patch.object(RUNNER, "gh_json", side_effect=[[closed], foreign]):
+            with self.assertRaisesRegex(RUNNER.PromotionError, "closed or no longer owned"):
+                RUNNER.ensure_candidate_issue(pathlib.Path("."), self.repository, self.candidate, owner, 104)
+
+
 class CandidateStagingTests(unittest.TestCase):
     def git(self, root: pathlib.Path, *args: str) -> str:
         return subprocess.run(("git", *args), cwd=root, check=True, text=True, capture_output=True).stdout

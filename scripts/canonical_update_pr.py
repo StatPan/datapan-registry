@@ -13,6 +13,7 @@ import re
 import shutil
 import sys
 import tempfile
+import urllib.parse
 from collections.abc import Callable, Mapping
 from typing import Any
 
@@ -483,8 +484,14 @@ def decide_existing_prs(candidate: Mapping[str, Any], existing: list[Mapping[str
     if len(open_rows) > 1:
         raise AdmissionError("duplicate_open_prs: preserve all heads and resolve duplicate ownership")
     if not open_rows:
-        return {"action": "create_replacement" if closed_rows else "create", "owner_id": expected_owner,
-                "expected_head_sha": "0" * 40, "supersedes_prs": [int(row["number"]) for row in closed_rows]}
+        action = "create_replacement" if closed_rows else "create"
+        return {
+            "action": action,
+            "owner_id": expected_owner,
+            "expected_head_sha": "0" * 40,
+            "supersedes_prs": [int(row["number"]) for row in closed_rows],
+            "branch": automation_branch(candidate, action),
+        }
     row = open_rows[0]
     if row.get("owner_id") != expected_owner:
         raise AdmissionError("unowned_open_pr: preserve branch and resolve the existing PR")
@@ -496,6 +503,7 @@ def decide_existing_prs(candidate: Mapping[str, Any], existing: list[Mapping[str
     automation_body_sha = valid_sha(row.get("automation_body_sha256"), SHA256_RE, "recorded automation body sha256")
     if current_body_sha != automation_body_sha:
         raise AdmissionError("human_body_change: preserve the human-modified PR body")
+    branch = automation_branch(candidate, "refresh_owned", existing_branch=row.get("head_ref"))
     same_candidate = (
         row.get("candidate_head_sha") == candidate["head_sha"]
         and row.get("manifest_sha256") == candidate["manifest_sha256"]
@@ -507,17 +515,34 @@ def decide_existing_prs(candidate: Mapping[str, Any], existing: list[Mapping[str
         "expected_head_sha": current_head,
         "pr_number": int(row["number"]),
         "supersedes_prs": [],
+        "branch": branch,
     }
 
 
-def automation_branch(candidate: Mapping[str, Any], action: str) -> str:
+def automation_branch(candidate: Mapping[str, Any], action: str, *, existing_branch: Any = None) -> str:
     source = re.sub(r"[^a-z0-9-]+", "-", str(candidate["source_id"]).lower()).strip("-") or "source"
     scope_hash = hashlib.sha256(str(candidate["scope"]).encode("utf-8")).hexdigest()[:12]
-    branch = f"automation/canonical-update/{source}-{scope_hash}"
-    if action == "create_replacement":
-        generation_hash = hashlib.sha256(str(candidate["generation_id"]).encode("utf-8")).hexdigest()[:10]
-        branch += f"-replacement-{generation_hash}"
-    return branch
+    prefix = f"automation/canonical-update/{source}-{scope_hash}"
+    if action in {"reuse_owned", "refresh_owned"}:
+        if not isinstance(existing_branch, str):
+            raise AdmissionError("owned PR read-back omitted its exact branch name")
+        if (
+            not existing_branch.startswith(prefix)
+            or (existing_branch != prefix and not existing_branch.startswith(prefix + "-"))
+            or not re.fullmatch(r"[a-z0-9][a-z0-9._/-]*", existing_branch)
+            or ".." in existing_branch
+            or "//" in existing_branch
+            or "@{" in existing_branch
+            or existing_branch.endswith(("/", ".", ".lock"))
+        ):
+            raise AdmissionError("owned PR branch is outside the exact automation source/scope namespace")
+        return existing_branch
+    if action not in {"create", "create_replacement"}:
+        raise AdmissionError("cannot resolve an automation branch for an unsupported PR action")
+    revision_hash = hashlib.sha256(
+        f"{candidate['generation_id']}\0{candidate['registry_sha256']}".encode("utf-8")
+    ).hexdigest()[:20]
+    return f"{prefix}-{revision_hash}"
 
 
 def remote_ref_sha(
@@ -554,7 +579,7 @@ def push_owned_branch(
     decision = decide_existing_prs(candidate, existing_prs)
     if decision["action"] != receipt.get("action") or decision["owner_id"] != receipt.get("ownership", {}).get("owner_id"):
         raise AdmissionError("PR ownership changed after LFS validation; preserve the existing branch and re-read")
-    branch = automation_branch(candidate, decision["action"])
+    branch = decision["branch"]
     if receipt.get("ownership", {}).get("branch") != branch:
         raise AdmissionError("candidate branch name differs from the validated automation ownership receipt")
     current_main = remote_ref_sha(module, repository_root, remote, "refs/heads/main")
@@ -718,7 +743,7 @@ def prepare_lfs_upload(
     """Optionally upload exactly one validated LFS OID, then prove it from a fresh store."""
     validate_candidate(candidate, observed_base_sha, composition_schema, require_payload_readback=False)
     decision = decide_existing_prs(candidate, existing)
-    branch = automation_branch(candidate, decision["action"])
+    branch = decision["branch"]
     module = materializer or load_materializer(repository_root)
     head = module.git_output(["rev-parse", "HEAD"], repository_root).decode("ascii", errors="replace").strip()
     if head != candidate["head_sha"]:
@@ -874,7 +899,7 @@ def build_receipt(
         raise AdmissionError("candidate validation evidence does not cover every required admission check")
     decision = decide_existing_prs(candidate, existing)
     identity = decision["owner_id"]
-    owner_branch = automation_branch(candidate, decision["action"])
+    owner_branch = decision["branch"]
     checks = dict(candidate["checks"])
     checks.setdefault("finish_review_policy", "unconfigured")
     blockers = [] if checks["finish_review_policy"] == "configured" else ["finish_review_policy_unconfigured"]
@@ -963,6 +988,66 @@ def _reference_key(reference: Mapping[str, Any]) -> tuple[str, str, str, str, st
     )
 
 
+def exact_pending_review_witness(receipt: Mapping[str, Any]) -> bool:
+    """Recognize an immutable pending-review read-back in a receipt's history."""
+    candidate = receipt.get("candidate")
+    if not isinstance(candidate, Mapping):
+        return False
+    expected_artifact = {
+        "path": candidate.get("registry_path"),
+        "bytes": candidate.get("registry_bytes"),
+        "sha256": candidate.get("registry_sha256"),
+    }
+    expected_path = f"/{candidate.get('repository', '')}/actions/runs/"
+    acknowledgements = receipt.get("acknowledgements")
+    if not isinstance(acknowledgements, list):
+        return False
+    for acknowledgement in acknowledgements:
+        if not isinstance(acknowledgement, Mapping) or acknowledgement.get("status") != "pending-review":
+            continue
+        if (
+            acknowledgement.get("source_sha") != candidate.get("head_sha")
+            or acknowledgement.get("manifest_sha256") != candidate.get("manifest_sha256")
+            or acknowledgement.get("artifact_identity") != expected_artifact
+            or acknowledgement.get("read_back_verified") is not False
+            or acknowledgement.get("read_back_sha256") is not None
+            or acknowledgement.get("read_back_bytes") is not None
+        ):
+            continue
+        run_id = acknowledgement.get("run_id")
+        run_attempt = acknowledgement.get("run_attempt")
+        if (
+            isinstance(run_id, bool) or not isinstance(run_id, int) or run_id < 1
+            or isinstance(run_attempt, bool) or not isinstance(run_attempt, int) or run_attempt < 1
+        ):
+            continue
+        run_url = acknowledgement.get("run_url")
+        observed_at = acknowledgement.get("observed_at")
+        if not isinstance(run_url, str) or not isinstance(observed_at, str):
+            continue
+        try:
+            parsed = urllib.parse.urlsplit(run_url)
+            url_run_id, url_attempt = action_run_identity(run_url)
+            parsed_observed_at = dt.datetime.fromisoformat(observed_at.replace("Z", "+00:00"))
+        except (ValueError, AdmissionError):
+            continue
+        expected_url_path = f"{expected_path}{run_id}/attempts/{run_attempt}"
+        if (
+            parsed.scheme == "https"
+            and parsed.netloc.casefold() == "github.com"
+            and parsed.path.casefold().rstrip("/") == expected_url_path.casefold()
+            and not parsed.query
+            and not parsed.fragment
+            and url_run_id == run_id
+            and url_attempt == run_attempt
+            and parsed_observed_at.tzinfo is not None
+            and isinstance(acknowledgement.get("evidence_reference"), str)
+            and bool(acknowledgement["evidence_reference"].strip())
+        ):
+            return True
+    return False
+
+
 def assert_ci_compare_and_swap(
     journal: Mapping[str, Any] | None,
     receipt: Mapping[str, Any],
@@ -980,10 +1065,6 @@ def validate_journal(journal: Mapping[str, Any], schema: Mapping[str, Any]) -> N
     import jsonschema
 
     jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker()).validate(journal)
-    keys = [candidate_key(row) for row in journal.get("records", [])]
-    if len(keys) != len(set(keys)):
-        raise AdmissionError("promotion journal contains duplicate source/scope/generation/payload revisions")
-    by_key = {candidate_key(row): row for row in journal.get("records", [])}
     for row in journal.get("records", []):
         timestamps = [item["observed_at"] for item in row.get("acknowledgements", [])]
         parsed = [dt.datetime.fromisoformat(value.replace("Z", "+00:00")).astimezone(dt.timezone.utc) for value in timestamps]
@@ -1010,6 +1091,19 @@ def validate_journal(journal: Mapping[str, Any], schema: Mapping[str, Any]) -> N
             or digest_bytes(body.encode("utf-8")) != ownership.get("body_sha256")
         ):
             raise AdmissionError("durable owned PR body does not match its stored body digest")
+    validate_revision_links(journal)
+
+
+def validate_revision_links(journal: Mapping[str, Any]) -> None:
+    """Validate durable refresh/supersession links independently of row schema."""
+    rows = journal.get("records")
+    if not isinstance(rows, list) or any(not isinstance(row, Mapping) for row in rows):
+        raise AdmissionError("promotion journal revision links require object records")
+    keys = [candidate_key(row) for row in rows]
+    if len(keys) != len(set(keys)):
+        raise AdmissionError("promotion journal contains duplicate source/scope/generation/payload revisions")
+    by_key = {candidate_key(row): row for row in rows}
+    for row in rows:
         refresh_from = row.get("refresh_from")
         superseded_by = row.get("superseded_by")
         current_key = candidate_key(row)
@@ -1041,8 +1135,8 @@ def validate_journal(journal: Mapping[str, Any], schema: Mapping[str, Any]) -> N
                 raise AdmissionError("promotion supersession link does not bind an exact durable target PR identity")
             if target.get("refresh_from") != revision_reference(row):
                 raise AdmissionError("promotion supersession link is not reciprocated by the target refresh intent")
-            if target.get("status") != "pending-review" or not target.get("acknowledgements") or target["acknowledgements"][-1].get("status") != "pending-review":
-                raise AdmissionError("promotion supersession requires a verified pending-review target read-back")
+            if not exact_pending_review_witness(target):
+                raise AdmissionError("promotion supersession requires an immutable exact pending-review target read-back witness")
             if row.get("status") not in {"prepared", "pending-review"}:
                 raise AdmissionError("promotion supersession cannot hide a terminal or last-good receipt")
     for start in by_key:
@@ -1189,7 +1283,7 @@ def append_journal_record(
             raise AdmissionError("promotion predecessor already points to a different superseding revision")
         if predecessor.get("status") not in {"prepared", "pending-review"}:
             raise AdmissionError("promotion cannot supersede a terminal or last-good receipt")
-        if target.get("status") != "pending-review" or not target.get("acknowledgements") or target["acknowledgements"][-1].get("status") != "pending-review":
+        if target.get("status") != "pending-review" or not exact_pending_review_witness(target):
             raise AdmissionError("promotion cannot supersede before exact pending-review PR read-back")
         if (
             candidate_key(predecessor) == candidate_key(target)
@@ -1215,13 +1309,24 @@ def append_journal_record(
         return run_id, run_attempt
 
     latest_confirmed = max(confirmed, key=confirmed_order, default=None)
+    referenced_revision_keys = {
+        _reference_key(reference)
+        for row in rows
+        for reference in (row.get("refresh_from"), row.get("superseded_by"))
+        if isinstance(reference, Mapping)
+    }
     kept = []
     for row in rows:
         row_scope = (str(row["candidate"]["source_id"]), str(row["candidate"]["scope"]))
         if row_scope != source_scope:
             kept.append(row)
             continue
-        if row.get("status") != "read-back-confirmed" or row is latest_confirmed or row.get("superseded_by") is not None:
+        if (
+            row.get("status") != "read-back-confirmed"
+            or row is latest_confirmed
+            or row.get("superseded_by") is not None
+            or candidate_key(row) in referenced_revision_keys
+        ):
             kept.append(row)
     current["records"] = kept
     current["updated_at"] = observed_at

@@ -730,7 +730,7 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
         candidate = record["candidate"]
         ownership = record["ownership"]
         return {
-            "repository": candidate["repository"],
+            "repository": candidate["repository"].lower(),
             "source_id": candidate["source_id"],
             "scope": candidate["scope"],
             "generation_id": candidate["generation_id"],
@@ -769,6 +769,63 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
         reasons = {row["reason"] for row in report["sources"][0]["faults"]}
         self.assertIn("promotion_pending_review", reasons)
         self.assertNotIn("promotion_generation_record_ambiguous", reasons)
+
+    def test_invalid_supersession_link_is_a_health_fault_and_cannot_hide_a_receipt(self) -> None:
+        previous = promotion_receipt(GENERATION_ID, "pending-review")
+        current = promotion_receipt(GENERATION_ID, "pending-review")
+        current["candidate"]["registry_sha256"] = "e" * 64
+        current["candidate"]["head_sha"] = "c" * 40
+        current["acknowledgements"][0]["artifact_identity"]["sha256"] = "e" * 64
+        current["acknowledgements"][0]["source_sha"] = "c" * 40
+        current["refresh_from"] = self.revision_ref(previous)
+        previous["superseded_by"] = self.revision_ref(current)
+        previous["superseded_by"]["body_sha256"] = "f" * 64
+        journal = {
+            "schema_version": "datapan.canonical-update-promotion-journal.v1",
+            "repository": "StatPan/datapan-registry",
+            "updated_at": "2026-09-30T22:00:00Z",
+            "records": [previous, current],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")], ack=journal,
+            )
+        reasons = {row["reason"] for row in report["sources"][0]["faults"]}
+        self.assertIn("promotion_journal_unavailable", reasons)
+
+    def test_health_selects_current_payload_when_same_generation_last_good_is_retained(self) -> None:
+        previous = promotion_receipt(GENERATION_ID, "read-back-confirmed")
+        current = promotion_receipt(GENERATION_ID, "pending-review")
+        current["candidate"]["registry_sha256"] = "e" * 64
+        current["candidate"]["head_sha"] = "c" * 40
+        current["acknowledgements"][0]["artifact_identity"]["sha256"] = "e" * 64
+        current["acknowledgements"][0]["source_sha"] = "c" * 40
+        current["ownership"]["expected_head_sha"] = "c" * 40
+        journal = {
+            "schema_version": "datapan.canonical-update-promotion-journal.v1",
+            "repository": "StatPan/datapan-registry",
+            "updated_at": "2026-09-30T22:00:00Z",
+            "records": [previous, current],
+        }
+        current_checkpoint = checkpoint(status="ready", composer_status="ready")
+        current_checkpoint["output_digests"][0]["sha256"] = "e" * 64
+        current_checkpoint["output_artifact"]["bundle_manifest_sha256"] = HEALTH.sha256_bytes(
+            HEALTH.canonical_json(current_checkpoint["output_digests"])
+        )
+        unsigned = dict(current_checkpoint)
+        unsigned.pop("checkpoint_sha256")
+        current_checkpoint["checkpoint_sha256"] = HEALTH.sha256_bytes(HEALTH.canonical_json(unsigned))
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), cp=[current_checkpoint], ack=journal,
+            )
+        canonical = report["sources"][0]["canonical"]
+        self.assertEqual(canonical["promotion_status"], "pending-review")
+        self.assertEqual(canonical["last_good"]["publication_revision"], "1" * 40)
+        self.assertNotIn(
+            "promotion_generation_record_ambiguous",
+            {row["reason"] for row in report["sources"][0]["faults"]},
+        )
 
     def test_health_keeps_predecessor_active_while_exact_refresh_intent_is_prepared(self) -> None:
         previous = promotion_receipt(GENERATION_ID, "pending-review")

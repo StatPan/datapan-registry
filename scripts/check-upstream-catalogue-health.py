@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import hashlib
+import importlib.util
 import json
 import pathlib
 import re
@@ -21,6 +22,10 @@ HEALTH_POLICY_SCHEMA = ROOT / "schemas" / "datapan.upstream-catalogue-health-pol
 HEALTH_RECEIPT_SCHEMA = ROOT / "schemas" / "datapan.upstream-catalogue-health.v1.schema.json"
 PROMOTION_SCHEMA = ROOT / "schemas" / "datapan.canonical-update-promotion-receipt.v1.schema.json"
 PROMOTION_JOURNAL_SCHEMA = ROOT / "schemas" / "datapan.canonical-update-promotion-journal.v1.schema.json"
+PROMOTION_SPEC = importlib.util.spec_from_file_location("canonical_update_pr_health", ROOT / "scripts" / "canonical_update_pr.py")
+assert PROMOTION_SPEC and PROMOTION_SPEC.loader
+PROMOTION = importlib.util.module_from_spec(PROMOTION_SPEC)
+PROMOTION_SPEC.loader.exec_module(PROMOTION)
 SOURCE_POLICY_DEFAULT = pathlib.Path("policy/source-refresh.json")
 HEALTH_POLICY_DEFAULT = pathlib.Path("policy/upstream-catalogue-health.json")
 DIGEST = re.compile(r"^[a-f0-9]{64}$")
@@ -787,7 +792,28 @@ def evaluate_source(
             else:
                 add("promotion", "promotion_generation_record_ambiguous", "error", _fault_action(source, "promotion_wait"), generation_id)
         else:
-            add("promotion", "promotion_generation_record_ambiguous", "error", _fault_action(source, "promotion_wait"), generation_id)
+            output_digests = checkpoint.get("output_digests") if isinstance(checkpoint, dict) else None
+            composed_candidate_digests = [
+                row.get("sha256") for row in output_digests
+                if isinstance(row, dict) and row.get("path") == "composed-candidate.registry.json"
+            ] if isinstance(output_digests, list) else []
+            composed_candidate_sha = composed_candidate_digests[0] if len(composed_candidate_digests) == 1 else None
+            exact_payloads = [
+                item for item in current_records
+                if item[0].get("candidate", {}).get("registry_sha256") == composed_candidate_sha
+            ]
+            competing_active = [
+                item for item in current_records
+                if item not in exact_payloads and item[0].get("status") != "read-back-confirmed"
+            ]
+            if len(exact_payloads) == 1 and not competing_active:
+                # A later B output may legitimately create a new owned PR after
+                # the prior payload was already published and read back. Keep
+                # that confirmed row as last-good while tracking the exact
+                # current composed payload as the active candidate.
+                current_records = exact_payloads
+            else:
+                add("promotion", "promotion_generation_record_ambiguous", "error", _fault_action(source, "promotion_wait"), generation_id)
     current_items = current_records[0][1] if len(current_records) == 1 else []
     if current_items:
         current_item = current_items[-1]
@@ -1244,6 +1270,16 @@ def evaluate(
 ) -> dict[str, Any]:
     if mode not in {"live", "fixture"}:
         raise ValueError("invalid_execution_mode")
+    if (
+        isinstance(promotion_ack, dict)
+        and promotion_ack.get("schema_version") == "datapan.canonical-update-promotion-journal.v1"
+        and promotion_ack_error is None
+    ):
+        try:
+            PROMOTION.validate_revision_links(promotion_ack)
+        except Exception as exc:  # Invalid lineage must never hide an active receipt from Health.
+            promotion_ack_error = f"promotion_journal_revision_links_invalid:{exc}"
+            promotion_ack = None
     future_skew = int(health_policy["clock"]["maximum_future_skew_seconds"])
     if not REVISION.fullmatch(main_revision):
         raise ValueError("invalid_main_revision")
