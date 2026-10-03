@@ -19,6 +19,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 CHECKPOINT_SCHEMA = ROOT / "schemas" / "datapan.upstream-catalogue-checkpoint.v1.schema.json"
 HEALTH_POLICY_SCHEMA = ROOT / "schemas" / "datapan.upstream-catalogue-health-policy.v1.schema.json"
 HEALTH_RECEIPT_SCHEMA = ROOT / "schemas" / "datapan.upstream-catalogue-health.v1.schema.json"
+HEALTH_STATE_SCHEMA = ROOT / "schemas" / "datapan.upstream-catalogue-health-state.v1.schema.json"
 PROMOTION_SCHEMA = ROOT / "schemas" / "datapan.canonical-update-promotion-receipt.v1.schema.json"
 PROMOTION_JOURNAL_SCHEMA = ROOT / "schemas" / "datapan.canonical-update-promotion-journal.v1.schema.json"
 SOURCE_POLICY_DEFAULT = pathlib.Path("policy/source-refresh.json")
@@ -27,6 +28,7 @@ DIGEST = re.compile(r"^[a-f0-9]{64}$")
 REVISION = re.compile(r"^[a-f0-9]{40,64}$")
 MAX_PROMOTION_JOB_PAGES = 5
 MAX_PROMOTION_JOBS = 500
+MAX_PROCESSOR_PRIOR_ATTEMPT_LOOKUPS = 5
 PROCESSOR_OUTPUT_PATHS = (
     "composed-candidate.registry.json",
     "ready-scope.registry.json",
@@ -178,9 +180,12 @@ def verify_sealed(value: Any, digest_field: str) -> bool:
 
 
 def gh_json(endpoint: str) -> Any:
-    result = subprocess.run(
-        ["gh", "api", endpoint], text=True, capture_output=True, check=False, timeout=30,
-    )
+    try:
+        result = subprocess.run(
+            ["gh", "api", endpoint], text=True, capture_output=True, check=False, timeout=30,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise RuntimeError("github_api_unavailable") from exc
     if result.returncode != 0:
         raise RuntimeError("github_api_unavailable")
     try:
@@ -343,6 +348,14 @@ def load_processor_checkpoints(
         if not isinstance(value, dict) or value.get("generation_id") != generation_id or not verify_sealed(value, "checkpoint_sha256"):
             issues.append("checkpoint_corrupt")
             continue
+        generation_inputs = value.get("generation_inputs")
+        if (
+            value.get("source_id") != source_id
+            or not isinstance(generation_inputs, dict)
+            or generation_inputs.get("source_id") != source_id
+        ):
+            issues.append("checkpoint_source_binding_mismatch")
+            continue
         if CHECKPOINT_SCHEMA.exists():
             try:
                 import jsonschema
@@ -359,7 +372,8 @@ def load_processor_checkpoints(
 
 
 def latest_observation(checkpoints: list[dict[str, Any]], now: dt.datetime, future_skew: int) -> tuple[dict[str, Any] | None, dict[str, Any] | None, str | None]:
-    observations: list[tuple[dt.datetime, dict[str, Any], dict[str, Any]]] = []
+    observations: list[tuple[dt.datetime, dt.datetime, str, dict[str, Any], dict[str, Any]]] = []
+    errors: list[str] = []
     for checkpoint in checkpoints:
         observation = checkpoint.get("last_observation")
         if not isinstance(observation, dict):
@@ -367,13 +381,20 @@ def latest_observation(checkpoints: list[dict[str, Any]], now: dt.datetime, futu
         try:
             observed_at = parse_time(observation.get("observed_at"), "last_observation.observed_at")
             seconds_since(now, observation.get("observed_at"), "last_observation.observed_at", future_skew)
+            last_progress_at = parse_time(checkpoint.get("last_progress_at"), "checkpoint.last_progress_at")
+            seconds_since(now, checkpoint.get("last_progress_at"), "checkpoint.last_progress_at", future_skew)
         except ValueError as exc:
-            return None, checkpoint, str(exc)
-        observations.append((observed_at, observation, checkpoint))
+            errors.append(str(exc))
+            continue
+        generation_id = checkpoint.get("generation_id")
+        if not isinstance(generation_id, str) or not DIGEST.fullmatch(generation_id):
+            errors.append("invalid_generation_id:checkpoint.generation_id")
+            continue
+        observations.append((observed_at, last_progress_at, generation_id, observation, checkpoint))
     if not observations:
-        return None, None, None
-    _, observation, checkpoint = max(observations, key=lambda item: item[0])
-    return observation, checkpoint, None
+        return None, None, sorted(set(errors))[0] if errors else None
+    _, _, _, observation, checkpoint = max(observations, key=lambda item: item[:3])
+    return observation, checkpoint, sorted(set(errors))[0] if errors else None
 
 
 def workflow_run_order(run: dict[str, Any]) -> tuple[dt.datetime, int]:
@@ -386,6 +407,22 @@ def workflow_run_order(run: dict[str, Any]) -> tuple[dt.datetime, int]:
     except (TypeError, ValueError):
         identifier = 0
     return created, identifier
+
+
+def processor_workflow_run_order(run: dict[str, Any]) -> tuple[dt.datetime, int]:
+    """Order processor executions by actual start time, falling back to creation time."""
+    try:
+        started = parse_time(run.get("run_started_at"), "processor_run.run_started_at")
+    except ValueError:
+        try:
+            started = parse_time(run.get("created_at"), "processor_run.created_at")
+        except ValueError:
+            started = dt.datetime.min.replace(tzinfo=dt.timezone.utc)
+    try:
+        identifier = int(run.get("id", 0))
+    except (TypeError, ValueError):
+        identifier = 0
+    return started, identifier
 
 
 def workflow_path_matches(actual: Any, expected: str) -> bool:
@@ -431,11 +468,26 @@ def trusted_main_workflow_run(
     )
 
 
+def trusted_processor_workflow_run(
+    run: dict[str, Any], repository: str, workflow_path: str, workflow_id: int | None,
+    allowed_events: set[str],
+) -> bool:
+    attempt = run.get("run_attempt")
+    return bool(
+        run.get("path") == workflow_path
+        and trusted_main_workflow_run(run, repository, workflow_path, workflow_id, allowed_events)
+        and isinstance(attempt, int)
+        and not isinstance(attempt, bool)
+        and attempt > 0
+    )
+
+
 def report_workflow_run(run: dict[str, Any], artifacts: list[dict[str, Any]]) -> dict[str, Any]:
     if not isinstance(artifacts, list):
         artifacts = []
     return {
         "run_id": str(run.get("id", "")),
+        "run_attempt": run.get("run_attempt") if isinstance(run.get("run_attempt"), int) and not isinstance(run.get("run_attempt"), bool) else None,
         "event": str(run.get("event", "unknown")),
         "status": str(run.get("status", "unknown")),
         "conclusion": str(run.get("conclusion") or "pending"),
@@ -455,6 +507,292 @@ def report_workflow_run(run: dict[str, Any], artifacts: list[dict[str, Any]]) ->
     }
 
 
+def processor_run_disposition(run: dict[str, Any]) -> str:
+    if run.get("status") != "completed":
+        return "pending"
+    conclusion = run.get("conclusion")
+    if conclusion == "success":
+        return "success"
+    if conclusion in {None, "skipped", "neutral"}:
+        return "pending"
+    return "failure"
+
+
+def processor_run_hides_prior_attempt(run: dict[str, Any]) -> bool:
+    return run.get("status") != "completed" or run.get("conclusion") in {None, "skipped", "neutral"}
+
+
+def report_processor_run(run: dict[str, Any], workflow_path: str) -> dict[str, Any]:
+    repository = run.get("repository")
+    head_repository = run.get("head_repository")
+    started_at = run.get("run_started_at") or run.get("created_at")
+    return {
+        "run_id": str(run["id"]),
+        "run_attempt": int(run["run_attempt"]),
+        "workflow_id": int(run["workflow_id"]),
+        "path": workflow_path,
+        "event": str(run.get("event", "")),
+        "status": str(run.get("status", "unknown")),
+        "conclusion": str(run.get("conclusion") or "pending"),
+        "created_at": str(run.get("created_at", "")),
+        "run_started_at": str(started_at or ""),
+        "updated_at": str(run.get("updated_at", "")),
+        "head_branch": str(run.get("head_branch", "")),
+        "head_sha": str(run.get("head_sha", "")),
+        "repository": str(repository.get("full_name", "")) if isinstance(repository, dict) else "",
+        "head_repository": str(head_repository.get("full_name", "")) if isinstance(head_repository, dict) else "",
+    }
+
+
+def processor_execution_order(run: dict[str, Any]) -> tuple[dt.datetime, int, int] | None:
+    if not isinstance(run, dict):
+        return None
+    try:
+        started = parse_time(
+            run.get("run_started_at") or run.get("created_at"),
+            "processor_run.run_started_at",
+        )
+        run_id = int(run.get("run_id", run.get("id")))
+        attempt = run.get("run_attempt")
+        if isinstance(attempt, bool) or not isinstance(attempt, int) or attempt < 1:
+            return None
+    except (TypeError, ValueError):
+        return None
+    if run_id < 1:
+        return None
+    return started, run_id, attempt
+
+
+def processor_attempt_evidence_run(
+    evidence: Any, repository: str, workflow_path: str, workflow_id: int | None, attempt: int,
+    allowed_events: set[str],
+) -> dict[str, Any] | None:
+    if not isinstance(evidence, dict) or evidence.get("availability_error") is True:
+        return None
+    run = evidence.get("run")
+    run_id = run.get("id") if isinstance(run, dict) else None
+    jobs = evidence.get("jobs")
+    job_count = evidence.get("job_count")
+    expected_endpoint = f"repos/{repository}/actions/runs/{run_id}/attempts/{attempt}/jobs"
+    if (
+        not isinstance(run, dict)
+        or isinstance(run_id, bool)
+        or not isinstance(run_id, int)
+        or run_id < 1
+        or isinstance(evidence.get("attempt_number"), bool)
+        or not isinstance(evidence.get("attempt_number"), int)
+        or evidence.get("attempt_number") != attempt
+        or isinstance(run.get("run_attempt"), bool)
+        or not isinstance(run.get("run_attempt"), int)
+        or run.get("run_attempt") != attempt
+        or str(run.get("id")) != str(run_id)
+        or evidence.get("jobs_api_endpoint") != expected_endpoint
+        or isinstance(job_count, bool)
+        or not isinstance(job_count, int)
+        or job_count < 1
+        or job_count > MAX_PROMOTION_JOBS
+        or not isinstance(jobs, list)
+        or len(jobs) != job_count
+        or not trusted_processor_workflow_run(run, repository, workflow_path, workflow_id, allowed_events)
+    ):
+        return None
+    seen_job_ids: set[int] = set()
+    for job in jobs:
+        if (
+            not isinstance(job, dict)
+            or isinstance(job.get("id"), bool)
+            or not isinstance(job.get("id"), int)
+            or job["id"] < 1
+            or job["id"] in seen_job_ids
+            or str(job.get("run_id", "")) != str(run_id)
+            or job.get("head_sha") != run.get("head_sha")
+            or job.get("status") != "completed"
+        ):
+            return None
+        seen_job_ids.add(job["id"])
+    return run if run.get("status") == "completed" else None
+
+
+def processor_execution_state(
+    processor_runs: list[dict[str, Any]], previous_attempts: dict[str, Any], previous_attempt_errors: set[str],
+    repository: str, workflow_path: str, workflow_id: int | None, allowed_events: set[str],
+) -> tuple[dict[str, Any] | None, dict[str, Any] | None, dict[str, Any] | None, str | None]:
+    trusted_runs = [
+        run for run in processor_runs
+        if isinstance(run, dict) and trusted_processor_workflow_run(run, repository, workflow_path, workflow_id, allowed_events)
+    ]
+    trusted_runs.sort(key=lambda run: (*processor_workflow_run_order(run), int(run["run_attempt"])))
+    if not trusted_runs:
+        return None, None, None, sorted(previous_attempt_errors)[0] if previous_attempt_errors else None
+
+    latest = trusted_runs[-1]
+    previous_runs: list[dict[str, Any]] = []
+    lookup_error: str | None = None
+    pending_reruns, success_boundary = processor_pending_reruns_after_success(
+        trusted_runs, repository, workflow_path, workflow_id, allowed_events,
+    )
+    checked_identities: set[str] = set()
+    for rerun in pending_reruns:
+        run_id = str(rerun["id"])
+        current_attempt = int(rerun["run_attempt"])
+        rerun_order = processor_execution_order(rerun)
+        if success_boundary is not None and rerun_order is not None and rerun_order <= success_boundary:
+            continue
+        oldest_to_check = max(1, current_attempt - MAX_PROCESSOR_PRIOR_ATTEMPT_LOOKUPS)
+        for prior_attempt in range(current_attempt - 1, oldest_to_check - 1, -1):
+            identity = f"{run_id}/{prior_attempt}"
+            if identity in checked_identities:
+                matching = next((row for row in previous_runs if str(row.get("id")) == run_id and row.get("run_attempt") == prior_attempt), None)
+                if matching and processor_run_disposition(matching) in {"success", "failure"}:
+                    break
+                continue
+            if len(checked_identities) >= MAX_PROCESSOR_PRIOR_ATTEMPT_LOOKUPS:
+                lookup_error = identity
+                break
+            checked_identities.add(identity)
+            if identity in previous_attempt_errors or identity not in previous_attempts:
+                lookup_error = identity
+                break
+            prior_run = processor_attempt_evidence_run(
+                previous_attempts[identity], repository, workflow_path, workflow_id, prior_attempt, allowed_events,
+            )
+            if prior_run is None or str(prior_run.get("id")) != run_id:
+                lookup_error = identity
+                break
+            if not any(str(row.get("id")) == run_id and row.get("run_attempt") == prior_attempt for row in previous_runs):
+                previous_runs.append(prior_run)
+            if processor_run_disposition(prior_run) == "success":
+                prior_summary = report_processor_run(prior_run, workflow_path)
+                prior_order = processor_execution_order(prior_summary)
+                if prior_order is not None and (success_boundary is None or prior_order > success_boundary):
+                    success_boundary = prior_order
+                break
+            if processor_run_disposition(prior_run) == "failure":
+                break
+        else:
+            if oldest_to_check > 1:
+                lookup_error = f"{run_id}/{oldest_to_check - 1}"
+                break
+        if lookup_error:
+            break
+
+    execution_events = [*trusted_runs, *previous_runs]
+    execution_events.sort(key=lambda run: (*processor_workflow_run_order(run), int(run["run_attempt"])))
+    unresolved_failure: dict[str, Any] | None = None
+    latest_success: dict[str, Any] | None = None
+    for run in execution_events:
+        disposition = processor_run_disposition(run)
+        if disposition == "success":
+            unresolved_failure = None
+            latest_success = run
+        elif disposition == "failure":
+            unresolved_failure = run
+    return (
+        report_processor_run(latest, workflow_path),
+        report_processor_run(unresolved_failure, workflow_path) if unresolved_failure else None,
+        report_processor_run(latest_success, workflow_path) if latest_success else None,
+        lookup_error,
+    )
+
+
+def processor_pending_reruns_after_success(
+    runs: list[dict[str, Any]], repository: str, workflow_path: str,
+    workflow_id: int | None, allowed_events: set[str],
+) -> tuple[list[dict[str, Any]], tuple[dt.datetime, int, int] | None]:
+    trusted_runs = [
+        run for run in runs
+        if isinstance(run, dict) and trusted_processor_workflow_run(run, repository, workflow_path, workflow_id, allowed_events)
+    ]
+    trusted_runs.sort(key=lambda run: (*processor_workflow_run_order(run), int(run["run_attempt"])))
+    successes = [run for run in trusted_runs if processor_run_disposition(run) == "success"]
+    success_boundary = max(
+        (processor_execution_order(run) for run in successes if processor_execution_order(run) is not None),
+        default=None,
+    )
+    pending = [
+        run for run in trusted_runs
+        if processor_run_hides_prior_attempt(run)
+        and int(run["run_attempt"]) > 1
+        and (success_boundary is None or (
+            processor_execution_order(run) is not None and processor_execution_order(run) > success_boundary
+        ))
+    ]
+    pending.sort(key=lambda run: (*processor_workflow_run_order(run), int(run["run_attempt"])), reverse=True)
+    return pending, success_boundary
+
+
+def collect_processor_prior_attempt_history(
+    repository: str, runs: list[dict[str, Any]], workflow_path: str, workflow_id: int | None,
+    allowed_events: set[str],
+) -> tuple[dict[str, Any], set[str]]:
+    attempts: dict[str, Any] = {}
+    errors: set[str] = set()
+    reruns, success_boundary = processor_pending_reruns_after_success(
+        runs, repository, workflow_path, workflow_id, allowed_events,
+    )
+    lookup_count = 0
+    for run in reruns:
+        run_id = str(run["id"])
+        current_attempt = int(run["run_attempt"])
+        rerun_order = processor_execution_order(run)
+        if success_boundary is not None and rerun_order is not None and rerun_order <= success_boundary:
+            continue
+        oldest_to_check = max(1, current_attempt - MAX_PROCESSOR_PRIOR_ATTEMPT_LOOKUPS)
+        for prior_attempt in range(current_attempt - 1, oldest_to_check - 1, -1):
+            identity = f"{run_id}/{prior_attempt}"
+            if identity in attempts:
+                previous = processor_attempt_evidence_run(attempts[identity], repository, workflow_path, workflow_id, prior_attempt, allowed_events)
+                if previous and processor_run_disposition(previous) in {"success", "failure"}:
+                    if processor_run_disposition(previous) == "success":
+                        success_order = processor_execution_order(report_processor_run(previous, workflow_path))
+                        if success_order is not None and (success_boundary is None or success_order > success_boundary):
+                            success_boundary = success_order
+                    break
+                continue
+            if lookup_count >= MAX_PROCESSOR_PRIOR_ATTEMPT_LOOKUPS:
+                errors.add(identity)
+                return attempts, errors
+            lookup_count += 1
+            try:
+                evidence = collect_run_attempt_evidence(repository, run_id, prior_attempt)
+            except RuntimeError:
+                errors.add(identity)
+                return attempts, errors
+            attempts[identity] = evidence
+            previous = processor_attempt_evidence_run(evidence, repository, workflow_path, workflow_id, prior_attempt, allowed_events)
+            if previous is None or str(previous.get("id")) != run_id:
+                errors.add(identity)
+                return attempts, errors
+            disposition = processor_run_disposition(previous)
+            if disposition == "success":
+                success_order = processor_execution_order(report_processor_run(previous, workflow_path))
+                if success_order is not None and (success_boundary is None or success_order > success_boundary):
+                    success_boundary = success_order
+                break
+            if disposition == "failure":
+                break
+        else:
+            if oldest_to_check > 1:
+                errors.add(f"{run_id}/{oldest_to_check - 1}")
+                return attempts, errors
+        if lookup_count >= MAX_PROCESSOR_PRIOR_ATTEMPT_LOOKUPS:
+            next_unchecked = current_attempt - 1
+            if next_unchecked > 0 and f"{run_id}/{next_unchecked}" not in attempts:
+                errors.add(f"{run_id}/{next_unchecked}")
+                return attempts, errors
+    return attempts, errors
+
+
+def collect_previous_processor_attempts(
+    repository: str, run: dict[str, Any], workflow_path: str, workflow_id: int | None,
+    allowed_events: set[str],
+) -> tuple[dict[str, Any], set[str]]:
+    """Compatibility wrapper for callers inspecting one pending rerun."""
+    return collect_processor_prior_attempt_history(
+        repository, [run], workflow_path, workflow_id, allowed_events,
+    )
+
+
 def _fault_action(source: dict[str, Any], key: str) -> str:
     actions = source.get("recovery_commands", {})
     return str(actions.get(key, "Inspect the health receipt and preserve the last-good canonical identity."))
@@ -472,6 +810,14 @@ def evaluate_source(
     workflow_ids_by_path: dict[str, int] | None = None,
     promotion_ack_error: str | None = None,
     workflow_api_error: str | None = None,
+    processor_workflow_runs: list[dict[str, Any]] | None = None,
+    processor_previous_attempts: dict[str, Any] | None = None,
+    processor_previous_attempt_errors: set[str] | None = None,
+    processor_workflow_api_error: str | None = None,
+    processor_workflow_path: str = "",
+    processor_workflow_id: int | None = None,
+    processor_workflow_events: set[str] | None = None,
+    prior_processor_execution_faults: list[dict[str, Any]] | None = None,
     health_state_error: str | None = None,
 ) -> dict[str, Any]:
     source_id = str(source["source_id"])
@@ -480,6 +826,69 @@ def evaluate_source(
 
     def add(stage: str, reason: str, severity: str, action: str, failure_identity: str = "") -> None:
         faults.append(fault(source_id, stage, reason, severity, owner_ticket, action, failure_identity))
+
+    latest_processor_run, execution_failure, latest_processor_success, previous_attempt_error = processor_execution_state(
+        processor_workflow_runs or [],
+        processor_previous_attempts or {},
+        processor_previous_attempt_errors or set(),
+        repository,
+        processor_workflow_path,
+        processor_workflow_id,
+        processor_workflow_events or {"workflow_run", "schedule", "workflow_dispatch"},
+    )
+    if processor_workflow_api_error:
+        add(
+            "processor-execution", "processor_workflow_observations_unavailable", "error",
+            _fault_action(source, "processor_stalled"), processor_workflow_path,
+        )
+    if previous_attempt_error:
+        add(
+            "processor-execution", "processor_run_attempt_unavailable", "error",
+            _fault_action(source, "processor_stalled"), previous_attempt_error,
+        )
+    if execution_failure:
+        execution_fault = fault(
+            source_id, "processor-execution", "processor_run_failed", "error", owner_ticket,
+            _fault_action(source, "processor_stalled"),
+            f"{execution_failure['run_id']}/{execution_failure['run_attempt']}",
+        )
+        execution_fault["execution_identity"] = {
+            "run_id": execution_failure["run_id"],
+            "run_attempt": execution_failure["run_attempt"],
+            "run_started_at": execution_failure["run_started_at"],
+            "head_sha": execution_failure["head_sha"],
+        }
+        faults.append(execution_fault)
+    success_order = processor_execution_order(latest_processor_success)
+    failure_order = processor_execution_order(execution_failure)
+    for prior in prior_processor_execution_faults or []:
+        if (
+            not isinstance(prior, dict)
+            or prior.get("source_id") != source_id
+            or prior.get("stage") != "processor-execution"
+            or prior.get("reason") != "processor_run_failed"
+            or prior.get("severity") != "error"
+            or not isinstance(prior.get("fault_key"), str)
+        ):
+            continue
+        prior_identity = prior.get("execution_identity")
+        prior_order = processor_execution_order({
+            "run_id": prior_identity.get("run_id"),
+            "run_attempt": prior_identity.get("run_attempt"),
+            "run_started_at": prior_identity.get("run_started_at"),
+        }) if isinstance(prior_identity, dict) else None
+        recovered_after_failure = (
+            success_order is not None
+            and execution_failure is None
+            and prior_order is not None
+            and success_order > prior_order
+        )
+        if recovered_after_failure:
+            continue
+        if not any(row.get("fault_key") == prior["fault_key"] for row in faults):
+            faults.append({key: prior[key] for key in (
+                "source_id", "stage", "reason", "severity", "owner_ticket", "fault_key", "recommended_action", "execution_identity",
+            ) if key in prior})
 
     if health_state_error:
         add("health-state", "durable_health_state_unavailable", "error", _fault_action(source, "processor_stalled"), health_state_error)
@@ -893,6 +1302,9 @@ def evaluate_source(
             "output_artifact": checkpoint.get("output_artifact") if checkpoint else None,
             "output_digests": checkpoint.get("output_digests") if checkpoint else None,
             "outcome": checkpoint.get("outcome") if checkpoint else None,
+            "latest_execution_run": latest_processor_run,
+            "latest_successful_execution_run": latest_processor_success,
+            "execution_failure": execution_failure,
         },
         "collector": {
             "latest_scheduled_run": report_workflow_run(latest_scheduled_run, latest_scheduled_artifacts) if latest_scheduled_run else None,
@@ -1191,7 +1603,7 @@ def processor_output_bundle_valid(checkpoint: dict[str, Any]) -> tuple[bool, str
     return True, ""
 
 
-def read_last_good(history_path: pathlib.Path | None) -> dict[str, Any] | None:
+def read_health_state(history_path: pathlib.Path | None) -> dict[str, Any] | None:
     if history_path is None or not history_path.exists():
         return None
     value = load_json(history_path)
@@ -1201,8 +1613,11 @@ def read_last_good(history_path: pathlib.Path | None) -> dict[str, Any] | None:
         or not verify_sealed(value, "state_sha256")
     ):
         raise ValueError("health_state_corrupt")
-    last_good = value.get("last_good_by_source")
-    return last_good if isinstance(last_good, dict) else None
+    try:
+        validate_schema(value, HEALTH_STATE_SCHEMA, "health_state")
+    except Exception as exc:  # Invalid durable state must become a receipt fault, not abort health evaluation.
+        raise ValueError("health_state_corrupt") from exc
+    return value
 
 
 def evaluate(
@@ -1213,6 +1628,11 @@ def evaluate(
     last_good: dict[str, Any] | None, mode: str, workflow_run_id: str, workflow_run_attempt: int,
     source_policy_sha256: str, health_policy_sha256: str, workflow_api_error: str | None = None,
     workflow_ids_by_path: dict[str, int] | None = None,
+    processor_workflow_runs: list[dict[str, Any]] | None = None,
+    processor_previous_attempts: dict[str, Any] | None = None,
+    processor_previous_attempt_errors: set[str] | None = None,
+    processor_workflow_api_error: str | None = None,
+    prior_processor_execution_faults: list[dict[str, Any]] | None = None,
     producer_runs_by_id: dict[str, dict[str, Any]] | None = None,
     promotion_runs_by_id: dict[str, dict[str, Any]] | None = None,
     promotion_workflow_paths: dict[str, str] | None = None,
@@ -1275,6 +1695,14 @@ def evaluate(
             maximum_future_skew=future_skew,
             max_checkpoint_bytes=int(health_policy["processor_state"]["max_bytes_per_file"]),
             workflow_api_error=workflow_api_error,
+            processor_workflow_runs=processor_workflow_runs or [],
+            processor_previous_attempts=processor_previous_attempts or {},
+            processor_previous_attempt_errors=processor_previous_attempt_errors or set(),
+            processor_workflow_api_error=processor_workflow_api_error,
+            processor_workflow_path=health_policy["processor_state"]["workflow_path"],
+            processor_workflow_id=(workflow_ids_by_path or {}).get(health_policy["processor_state"]["workflow_path"]),
+            processor_workflow_events=set(health_policy["processor_state"]["allowed_events"]),
+            prior_processor_execution_faults=prior_processor_execution_faults or [],
             producer_runs_by_id=producer_runs_by_id,
             promotion_runs_by_id=promotion_runs_by_id,
             promotion_workflow_paths=promotion_workflow_paths,
@@ -1350,21 +1778,30 @@ def main(argv: list[str] | None = None) -> int:
         validate_schema(health_policy, ROOT / "schemas/datapan.upstream-catalogue-health-policy.v1.schema.json", "health_policy")
         validate_schema(source_policy, ROOT / "schemas/datapan.source-refresh-policy.v1.schema.json", "source_policy")
         workflow_api_error = None
+        processor_workflow_api_error = None
         health_state_error = None
         promotion_ack_error = None
         workflow_ids_by_path: dict[str, int] = {}
         if args.fixture_input:
             mode = "fixture"
             fixture = load_json(args.fixture_input)
-            workflow_runs = fixture.get("workflow_runs", [])
-            artifacts_by_run = fixture.get("artifacts_by_run", {})
-            artifact_by_id = fixture.get("artifacts_by_id", {})
-            producer_runs_by_id = fixture.get("producer_runs_by_id", {})
-            promotion_ack = fixture.get("promotion_ack")
-            promotion_runs_by_id = fixture.get("promotion_runs_by_id", {})
-            workflow_ids_by_path = fixture.get("workflow_ids_by_path", {})
-            main_revision = args.main_revision or fixture.get("main_revision", "")
-            last_good = fixture.get("last_good")
+            workflow_runs = fixture.get("workflow_runs", []) if isinstance(fixture, dict) else []
+            processor_workflow_runs = fixture.get("processor_workflow_runs", []) if isinstance(fixture, dict) else []
+            processor_previous_attempts = fixture.get("processor_previous_attempts", {}) if isinstance(fixture, dict) else {}
+            processor_previous_attempt_errors = fixture.get("processor_previous_attempt_errors", []) if isinstance(fixture, dict) else []
+            processor_previous_attempt_errors = {
+                row for row in processor_previous_attempt_errors if isinstance(row, str)
+            } if isinstance(processor_previous_attempt_errors, list) else set()
+            processor_workflow_api_error = fixture.get("processor_workflow_api_error") if isinstance(fixture, dict) else None
+            prior_processor_execution_faults = fixture.get("prior_processor_execution_faults", []) if isinstance(fixture, dict) else []
+            artifacts_by_run = fixture.get("artifacts_by_run", {}) if isinstance(fixture, dict) else {}
+            artifact_by_id = fixture.get("artifacts_by_id", {}) if isinstance(fixture, dict) else {}
+            producer_runs_by_id = fixture.get("producer_runs_by_id", {}) if isinstance(fixture, dict) else {}
+            promotion_ack = fixture.get("promotion_ack") if isinstance(fixture, dict) else None
+            promotion_runs_by_id = fixture.get("promotion_runs_by_id", {}) if isinstance(fixture, dict) else {}
+            workflow_ids_by_path = fixture.get("workflow_ids_by_path", {}) if isinstance(fixture, dict) else {}
+            main_revision = args.main_revision or (fixture.get("main_revision", "") if isinstance(fixture, dict) else "")
+            last_good = fixture.get("last_good") if isinstance(fixture, dict) else None
         else:
             mode = "live"
             workflow = health_policy["health_workflow"]
@@ -1376,6 +1813,26 @@ def main(argv: list[str] | None = None) -> int:
             except RuntimeError as exc:
                 workflow_runs = []
                 workflow_api_error = str(exc)
+            processor_policy = health_policy["processor_state"]
+            processor_workflow_path = processor_policy["workflow_path"]
+            processor_workflow_events = set(processor_policy["allowed_events"])
+            try:
+                workflow_ids_by_path[processor_workflow_path] = collect_workflow_identity(
+                    args.repository, processor_workflow_path,
+                )
+                processor_workflow_runs = collect_workflow_runs(
+                    args.repository, processor_workflow_path, int(processor_policy["workflow_run_limit"]),
+                )
+            except RuntimeError as exc:
+                processor_workflow_runs = []
+                processor_workflow_api_error = str(exc)
+            processor_previous_attempts = {}
+            processor_previous_attempt_errors: set[str] = set()
+            if processor_workflow_api_error is None:
+                processor_previous_attempts, processor_previous_attempt_errors = collect_processor_prior_attempt_history(
+                    args.repository, processor_workflow_runs, processor_workflow_path,
+                    workflow_ids_by_path.get(processor_workflow_path), processor_workflow_events,
+                )
             scheduled = sorted((
                 row for row in workflow_runs
                 if trusted_main_workflow_run(
@@ -1494,15 +1951,33 @@ def main(argv: list[str] | None = None) -> int:
                     metadata = {"availability_error": True}
                 if metadata is not None:
                     artifact_by_id[artifact_id] = metadata
+            prior_processor_execution_faults = []
             try:
-                last_good = read_last_good(args.health_state) if args.health_state else None
+                health_state = read_health_state(args.health_state) if args.health_state else None
+                last_good = health_state.get("last_good_by_source") if isinstance(health_state, dict) else None
+                state_faults = health_state.get("faults", []) if isinstance(health_state, dict) else []
+                if isinstance(state_faults, list):
+                    prior_processor_execution_faults = [
+                        row for row in state_faults
+                        if isinstance(row, dict)
+                        and row.get("stage") == "processor-execution"
+                        and row.get("reason") == "processor_run_failed"
+                        and row.get("status") in {"open", "recovery_pending_verification"}
+                    ]
             except (OSError, ValueError, json.JSONDecodeError) as exc:
                 last_good = None
+                prior_processor_execution_faults = []
                 health_state_error = str(exc)
         if mode == "fixture":
             workflow_runs = workflow_runs if isinstance(workflow_runs, list) else []
+            processor_workflow_runs = processor_workflow_runs if isinstance(processor_workflow_runs, list) else []
+            processor_previous_attempts = processor_previous_attempts if isinstance(processor_previous_attempts, dict) else {}
+            prior_processor_execution_faults = prior_processor_execution_faults if isinstance(prior_processor_execution_faults, list) else []
             artifacts_by_run = artifacts_by_run if isinstance(artifacts_by_run, dict) else {}
             artifact_by_id = artifact_by_id if isinstance(artifact_by_id, dict) else {}
+            producer_runs_by_id = producer_runs_by_id if isinstance(producer_runs_by_id, dict) else {}
+            promotion_runs_by_id = promotion_runs_by_id if isinstance(promotion_runs_by_id, dict) else {}
+            workflow_ids_by_path = workflow_ids_by_path if isinstance(workflow_ids_by_path, dict) else {}
         receipt = evaluate(
             as_of=as_of,
             repository=args.repository,
@@ -1524,6 +1999,11 @@ def main(argv: list[str] | None = None) -> int:
             health_policy_sha256=file_sha256(args.health_policy),
             workflow_api_error=workflow_api_error,
             producer_runs_by_id=producer_runs_by_id,
+            processor_workflow_runs=processor_workflow_runs,
+            processor_previous_attempts=processor_previous_attempts,
+            processor_previous_attempt_errors=processor_previous_attempt_errors,
+            processor_workflow_api_error=processor_workflow_api_error,
+            prior_processor_execution_faults=prior_processor_execution_faults,
             promotion_runs_by_id=promotion_runs_by_id,
             promotion_workflow_paths=health_policy.get("promotion_state", {}),
             workflow_ids_by_path=workflow_ids_by_path,
