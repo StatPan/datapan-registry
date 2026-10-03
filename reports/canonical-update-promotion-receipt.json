@@ -1478,7 +1478,7 @@
     },
     {
       "schema_version": "datapan.canonical-update-promotion-receipt.v1",
-      "status": "pending-review",
+      "status": "merged",
       "action": "refresh_owned",
       "source_refresh_evidence": {
         "schema_version": "datapan.canonical-source-refresh-evidence.v1",
@@ -1894,8 +1894,8 @@
       "pr": {
         "number": 686,
         "url": "https://github.com/StatPan/datapan-registry/pull/686",
-        "state": "open",
-        "merge_commit_sha": null
+        "state": "merged",
+        "merge_commit_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f"
       },
       "supersedes_prs": [],
       "acknowledgements": [
@@ -1913,6 +1913,26 @@
           "run_url": "https://github.com/StatPan/datapan-registry/actions/runs/37101245239/attempts/10",
           "run_id": 37101245239,
           "run_attempt": 10,
+          "read_back_verified": false,
+          "read_back_sha256": null,
+          "read_back_bytes": null,
+          "publication_revision": null,
+          "publication_pointer_revision": null
+        },
+        {
+          "status": "merged",
+          "observed_at": "2026-10-03T14:52:44.916636+00:00",
+          "source_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
+          "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+          "artifact_identity": {
+            "path": "data/data-go-kr.registry.json",
+            "bytes": 139155499,
+            "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+          },
+          "evidence_reference": "GitHub PR API merge read-back",
+          "run_url": "https://github.com/StatPan/datapan-registry/actions/runs/37101245239/attempts/12",
+          "run_id": 37101245239,
+          "run_attempt": 12,
           "read_back_verified": false,
           "read_back_sha256": null,
           "read_back_bytes": null,
@@ -1960,5 +1980,5 @@
       }
     }
   ],
-  "updated_at": "2026-10-03T14:48:19.306779+00:00"
+  "updated_at": "2026-10-03T14:52:44.917125+00:00"
 }
