@@ -69,7 +69,7 @@ def validate_report(
     if not isinstance(generation_inputs, dict):
         raise ValueError("generation_inputs must be an object")
 
-    required_inputs = ["registry", "dependencies", "latest_verification", "coverage", "provider_index"]
+    required_inputs = ["registry", "dependencies", "latest_verification", "current_runtime_evidence_projection", "coverage", "provider_index"]
     for key in required_inputs:
         raw = generation_inputs.get(key)
         if not isinstance(raw, str) or not raw:
@@ -89,6 +89,8 @@ def validate_report(
             generation_inputs["dependencies"],
             "--latest-verification",
             generation_inputs["latest_verification"],
+            "--current-runtime-evidence",
+            generation_inputs["current_runtime_evidence_projection"],
             "--coverage",
             generation_inputs["coverage"],
             "--provider-index",

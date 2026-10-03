@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 97,
+  "count": 101,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 4396,
-      "sha256": "3debf0a0b6fb03930f21d4a66e43581d283b37bc70f7fb898256925b6cd24eda"
+      "bytes": 4447,
+      "sha256": "e1f0835e0d9a1ba83d92aff1d5729c7fa2093842a48aee9700073b607e5d6ee3"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -145,8 +145,8 @@
       "title": "Datapan Runtime Evidence Growth v1",
       "contract": "runtime-evidence-growth",
       "version": "v1",
-      "bytes": 7881,
-      "sha256": "8dbbcf9ad65c62fb253de6724709116fdfa5504d5a46334428baacaf87457b52"
+      "bytes": 9916,
+      "sha256": "336899875f8b6b56705db403eb1442356c02c484d4573437a35a8ae6d5b534f2"
     },
     {
       "path": "schemas/datapan.schema-index.v1.schema.json",
@@ -262,8 +262,8 @@
       "title": "Datapan Verification Report v1",
       "contract": "verification",
       "version": "v1",
-      "bytes": 4818,
-      "sha256": "6849e41114e0cb72ff54ee8a414bbe42ccf9063322a710128d23c41a94574527"
+      "bytes": 6449,
+      "sha256": "8baee67391bba6735d9f0a70b760fbfa12551e2e1eee9c44ece2d5bdc0924796"
     },
     {
       "path": "schemas/datapan.registry-shards.v1.schema.json",
@@ -379,8 +379,8 @@
       "title": "Datapan Institution API Overview v1",
       "contract": "institution-api-overview",
       "version": "v1",
-      "bytes": 7279,
-      "sha256": "3861e950a1fb56ca00ab70249c93c7f1a2b45fe4b523ede13310c940346db5b9"
+      "bytes": 7923,
+      "sha256": "465a564b959476c69fd8a9d38252d85b394cda773488372d2891a90d6fabc872"
     },
     {
       "path": "schemas/datapan.safetydata-operation-candidates.v1.schema.json",
@@ -397,8 +397,8 @@
       "title": "Datapan Coverage Backlog v1",
       "contract": "coverage-backlog",
       "version": "v1",
-      "bytes": 11020,
-      "sha256": "5591adbe862df09a5284621a71a9ab1da786b965207f5e1670a0d084ee8067a0"
+      "bytes": 11664,
+      "sha256": "6fcaddc8f029d300f50a898b533ef842001ef339ccf4184c9fdf971d55d48d78"
     },
     {
       "path": "schemas/datapan.release-assembly-receipt.v1.schema.json",
@@ -622,8 +622,8 @@
       "title": "Datapan Sustainable Coverage Report v1",
       "contract": "sustainable-coverage",
       "version": "v1",
-      "bytes": 4790,
-      "sha256": "81b94273a27b28fc76c7c8c630c015ebb5797b4bce07a4f31e76baa6aac60c9b"
+      "bytes": 5300,
+      "sha256": "48317980359d44c735d88b1e65655baaef4e3d665b5e950fc390bccf52382e78"
     },
     {
       "path": "schemas/datapan.source-refresh-policy.v1.schema.json",
@@ -721,8 +721,8 @@
       "title": "Datapan runtime freshness queue v1",
       "contract": "runtime-freshness-queue",
       "version": "v1",
-      "bytes": 3202,
-      "sha256": "2b14276c49c4651602e0f0e2ff53d020b396a5857d862cd1b1bee38fd88945ea"
+      "bytes": 4012,
+      "sha256": "02ca9f8bed46994a64a25a47e482ef992261ca48d9ae0c0ba6784e45786e6a1b"
     },
     {
       "path": "schemas/datapan.runtime-freshness-batch.v1.schema.json",
@@ -730,8 +730,8 @@
       "title": "Datapan runtime freshness batch v1",
       "contract": "runtime-freshness-batch",
       "version": "v1",
-      "bytes": 1969,
-      "sha256": "068d9c201a58197196977b120dc456e2b53b3f7938d2e22b9ac7f8e9a7093720"
+      "bytes": 3627,
+      "sha256": "6177dd350d2107030330148fee2062c2acb670259a0726e37edc5968ebb7033c"
     },
     {
       "path": "schemas/datapan.runtime-freshness-run-receipt.v1.schema.json",
@@ -748,8 +748,8 @@
       "title": "Datapan runtime freshness import receipt",
       "contract": "runtime-freshness-import-receipt",
       "version": "v1",
-      "bytes": 2680,
-      "sha256": "2b22fc812e7f21ba5b3656c0aa64eb63351d67b7c48a3699c57eb781f05ba84f"
+      "bytes": 2904,
+      "sha256": "6bbb8c278ccb2d07b96b7a98828b593546f209bfa8d3808ad5ef14d7c34d4ffb"
     },
     {
       "path": "schemas/datapan.health-probe-catalog.v1.schema.json",
@@ -867,6 +867,42 @@
       "version": "v1",
       "bytes": 4339,
       "sha256": "ac55a4b88c0e0ad6639ca97403e2c83e9d61f574315785f122e4279cf74b17e2"
+    },
+    {
+      "path": "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.catalogue-composition-receipt.v1.schema.json",
+      "title": "Datapan Catalogue Composition Receipt v1",
+      "contract": "catalogue-composition-receipt",
+      "version": "v1",
+      "bytes": 3740,
+      "sha256": "00e13f478c7902bdd457f8b27916237b89de4f7c491b5d85915d80b9d507d1b8"
+    },
+    {
+      "path": "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.catalogue-enrichment-evidence.v1.schema.json",
+      "title": "Datapan Catalogue Enrichment Evidence v1",
+      "contract": "catalogue-enrichment-evidence",
+      "version": "v1",
+      "bytes": 2893,
+      "sha256": "8d03e0a401a51e52a459acced0488007c1014cd3141a2549586043d0efaea696"
+    },
+    {
+      "path": "schemas/datapan.current-runtime-evidence-projection.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.current-runtime-evidence-projection.v1.schema.json",
+      "title": "Datapan current runtime evidence projection v1",
+      "contract": "current-runtime-evidence-projection",
+      "version": "v1",
+      "bytes": 9164,
+      "sha256": "794f1a37a84324e91baf6f4cfcf00e9681c5de219585e06b57a479a930c37456"
+    },
+    {
+      "path": "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+      "title": "Datapan Upstream Catalogue Checkpoint v1",
+      "contract": "upstream-catalogue-checkpoint",
+      "version": "v1",
+      "bytes": 8592,
+      "sha256": "93643c7fcfd47782904fb91eb24017596c1f643a9e84c07e1f4e74519d9de306"
     },
     {
       "path": "schemas/datapan.manual-review-scope.v1.schema.json",

@@ -33,6 +33,24 @@ EXPECTED_INDEPENDENT_ADDITIONS = [
     },
     {"path": "schemas/datapan.runtime-freshness-import-admission.v1.schema.json", "kind": "schema", "authority_ticket": "StatPan/datapan-registry#633"},
     {"path": "schemas/datapan.runtime-freshness-import-attestation.v1.schema.json", "kind": "schema", "authority_ticket": "StatPan/datapan-registry#633"},
+    {"path": "schemas/datapan.catalogue-composition-receipt.v1.schema.json", "kind": "schema", "authority_ticket": "StatPan/datapan-registry#656"},
+    {"path": "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json", "kind": "schema", "authority_ticket": "StatPan/datapan-registry#656"},
+    {
+        "path": "reports/current-runtime-evidence-projection.json",
+        "kind": "current_runtime_evidence_projection",
+        "schema": "https://schemas.datapan.dev/datapan.current-runtime-evidence-projection.v1.schema.json",
+        "authority_ticket": "StatPan/datapan-registry#660",
+    },
+    {
+        "path": "schemas/datapan.current-runtime-evidence-projection.v1.schema.json",
+        "kind": "schema",
+        "authority_ticket": "StatPan/datapan-registry#660",
+    },
+    {
+        "path": "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+        "kind": "schema",
+        "authority_ticket": "StatPan/datapan-registry#657",
+    },
     {"path": "schemas/datapan.manual-review-scope.v1.schema.json", "kind": "schema", "authority_ticket": "StatPan/datapan-registry#661"},
 ]
 

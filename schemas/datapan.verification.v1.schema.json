@@ -122,6 +122,13 @@
         "status"
       ],
       "properties": {
+        "identity_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contract_binding": {
+          "$ref": "#/$defs/contract_binding"
+        },
         "dataset_id": {
           "type": "string",
           "minLength": 1
@@ -188,6 +195,31 @@
         "body_shape": {
           "type": "string"
         }
+      }
+    },
+    "contract_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version", "identity_key", "source_id", "dataset_id", "upstream_api_id", "operation_key",
+        "source_identity_sha256", "method_action_sha256", "parameter_contract_sha256", "contract_sha256",
+        "source_snapshot_sha256", "operation_manifest_sha256", "run_id", "plan_sha256"
+      ],
+      "properties": {
+        "schema_version": {"const": "datapan.runtime-evidence-contract-binding.v1"},
+        "identity_key": {"type": "string", "minLength": 1},
+        "source_id": {"type": "string", "minLength": 1},
+        "dataset_id": {"type": "string", "minLength": 1},
+        "upstream_api_id": {"type": "string", "minLength": 1},
+        "operation_key": {"type": "string", "minLength": 1},
+        "source_identity_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "method_action_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "parameter_contract_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "contract_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "source_snapshot_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "operation_manifest_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "run_id": {"type": "string", "minLength": 1},
+        "plan_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
       }
     },
     "provider_status": {
