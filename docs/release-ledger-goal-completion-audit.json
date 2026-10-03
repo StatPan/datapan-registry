@@ -16,11 +16,11 @@
   "current_state_evidence": {
     "manifest": {
       "path": "manifest.json",
-      "artifact_count": 173
+      "artifact_count": 175
     },
     "schema_index": {
       "path": "schemas/index.json",
-      "schema_count": 96
+      "schema_count": 98
     },
     "release_readiness": {
       "path": "reports/latest-release-readiness.json",
@@ -153,9 +153,9 @@
     },
     "release_distribution_footprint": {
       "path": "reports/release-distribution-footprint.json",
-      "artifact_count": 173,
-      "schema_artifacts": 96,
-      "manifest_bound_bytes_excluding_self": 201790603,
+      "artifact_count": 175,
+      "schema_artifacts": 98,
+      "manifest_bound_bytes_excluding_self": 201798084,
       "canonical_registry_path": "data/data-go-kr.registry.json",
       "canonical_registry_bytes": 137735169,
       "large_monolith_threshold_bytes": 100000000,

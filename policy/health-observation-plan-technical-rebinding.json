@@ -67,6 +67,16 @@
       "path": "schemas/datapan.runtime-freshness-import-attestation.v1.schema.json",
       "kind": "schema",
       "authority_ticket": "StatPan/datapan-registry#633"
+    },
+    {
+      "path": "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#656"
+    },
+    {
+      "path": "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#656"
     }
   ]
 }

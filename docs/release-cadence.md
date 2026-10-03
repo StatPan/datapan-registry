@@ -272,6 +272,55 @@ Every run uploads the candidate snapshot when available, catalog diff,
 `upstream-refresh-work-packet.json`. Material drift is routed to human review;
 publication remains false until release manifest verification, readiness, and
 consumer compatibility gates run through the existing release workflow.
+
+For offline review of a successful observation, compose a candidate from the
+manifest-bound baseline and the exact candidate/diff/evidence artifact set:
+
+```bash
+python scripts/compose-upstream-catalogue-candidate.py \
+  --baseline /path/to/materialized-data-go-kr.registry.json \
+  --candidate /path/to/candidate.registry.json \
+  --diff /path/to/catalog-diff.json \
+  --refresh-evidence /path/to/upstream-refresh-evidence.json \
+  --producer-run-id 1234567890 \
+  --producer-run-url https://github.com/StatPan/datapan-registry/actions/runs/1234567890 \
+  --expected-baseline-sha256 <baseline-sha256> \
+  --expected-candidate-sha256 <candidate-sha256> \
+  --expected-diff-sha256 <diff-sha256> \
+  --output-dir /tmp/catalogue-composition-1234567890
+```
+
+The command makes no provider calls and never writes the canonical registry.
+It verifies that the refresh receipt, candidate, and full diff belong together,
+then applies only source-backed row changes that pass identity and provenance
+checks. `composed-candidate.registry.json` starts from the baseline and keeps
+every pending or quarantined baseline row intact; `ready-scope.registry.json`
+contains only admitted row changes. A new LINK API without operation evidence
+stays out of both outputs, a changed LINK guide keeps the old baseline row
+whole until matching detail evidence is supplied with `--enrichment-evidence`,
+and absent APIs stay in the baseline with an authoritative-deletion-evidence
+queue item. The original producer candidate remains immutable and its digest
+is retained in the receipt.
+
+Each LINK enrichment record binds its operations to the canonical detail page
+derived from the numeric API id (`https://www.data.go.kr/data/<id>/openapi.do`),
+the fetched page-byte digest, observation time, extractor revision, and the
+original candidate's source and nullable guide fingerprints. The effective URL
+must remain that exact page URL; redirects to other hosts or paths are rejected.
+An observed guide URL and its digest are recorded separately from the producer
+candidate's guide fingerprint, so a missing candidate guide can be represented
+without fabricating source metadata. Prior composed operations may be retained
+only when their source URL is that same derived detail page and their source
+metadata still matches the API row; this preserves provenance without treating
+old detail evidence as current evidence.
+
+The output directory is an atomic review bundle containing a semantic diff,
+regeneration queue, quarantine list, and `composition-receipt.json`. The
+receipt binds input and output hashes, reports the exact admitted, pending, and
+quarantined API identities, and always sets `full_scope_fresh` and
+`publication_allowed` to false. `ready_scoped` means a safe subset changed; it
+does not mean the full upstream snapshot is complete or publishable. Re-running
+with identical inputs and producer run identity is a byte-identical no-op.
 - regenerates and validates `reports/release-consumer-compatibility.json`, the
   manifest-bound downstream compatibility matrix that keeps the canonical
   registry path required, release-health evidence named, shard install fields
