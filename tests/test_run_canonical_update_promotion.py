@@ -414,7 +414,10 @@ class VerifyReleaseRunAdapterTests(unittest.TestCase):
             "mergeCommit": None,
         }
         rest_pr = {
-            "base": {"repo": {"full_name": "StatPan/datapan-registry"}},
+            "base": {
+                "sha": "a" * 40,
+                "repo": {"full_name": "StatPan/datapan-registry"},
+            },
             "head": {"repo": {"full_name": "StatPan/datapan-registry"}},
         }
         with (
@@ -425,6 +428,7 @@ class VerifyReleaseRunAdapterTests(unittest.TestCase):
 
         self.assertEqual(observed["repository"], "StatPan/datapan-registry")
         self.assertEqual(observed["headRepository"], "StatPan/datapan-registry")
+        self.assertEqual(observed["baseRefOid"], "a" * 40)
 
     def test_dispatch_request_uses_documented_api_version_header(self) -> None:
         class Response:
@@ -1647,7 +1651,7 @@ class OwnedPRRefreshRecoveryTests(unittest.TestCase):
 
 class PreparedCreateRecoveryTests(unittest.TestCase):
     fixture_path = pathlib.Path(__file__).parent / "fixtures/canonical-update-promotion/attempt-3-pr-686-recovery.json"
-    controller_head = "d" * 40
+    controller_head = "8a1bf19aa3495fc515e24a604650da3b376d521d"
 
     def fixture(self) -> dict:
         return json.loads(self.fixture_path.read_text(encoding="utf-8"))
@@ -1686,11 +1690,33 @@ class PreparedCreateRecoveryTests(unittest.TestCase):
         self.assertEqual(receipt["status"], "prepared")
         self.assertEqual(receipt["pr"], {"number": 0, "url": "", "state": "missing", "merge_commit_sha": None})
         self.assertEqual(receipt["candidate"]["base_sha"], "5aae73b9a99255397ee2807d58c324094757bf8c")
+        self.assertNotEqual(receipt["candidate"]["base_sha"], self.controller_head)
         self.assertEqual(receipt["candidate"]["head_sha"], "bcc306c20c424faa9e789444e5914bf1887b930d")
+        self.assertEqual(pull["baseRefOid"], receipt["candidate"]["base_sha"])
         self.assertEqual(receipt["ownership"]["issue_number"], 685)
         self.assertEqual(pull["number"], 686)
         self.assertEqual(pull["headRepository"], "StatPan/datapan-registry")
         self.assertEqual(fixture["remote_branch_sha"], receipt["candidate"]["head_sha"])
+        self.assertEqual(self.validate(fixture), 686)
+
+    def test_current_main_advance_does_not_rewrite_original_candidate_base(self) -> None:
+        fixture = self.fixture()
+        receipt = fixture["state"]["records"][0]
+        self.assertEqual(receipt["candidate"]["base_sha"], "5aae73b9a99255397ee2807d58c324094757bf8c")
+        fixture["pull_request_readback"]["baseRefOid"] = self.controller_head
+
+        self.assertEqual(self.validate(fixture), 686)
+        self.assertEqual(receipt["candidate"]["base_sha"], "5aae73b9a99255397ee2807d58c324094757bf8c")
+
+    def test_create_replacement_uses_its_exact_owned_branch(self) -> None:
+        fixture = self.fixture()
+        receipt = fixture["state"]["records"][0]
+        receipt["action"] = "create_replacement"
+        branch = PR_HELPER.automation_branch(receipt["candidate"], "create_replacement")
+        receipt["ownership"]["branch"] = branch
+        fixture["open_pr_rows"][0]["head_ref"] = branch
+        fixture["pull_request_readback"]["headRefName"] = branch
+
         self.assertEqual(self.validate(fixture), 686)
 
     def test_production_resolver_replays_frozen_api_reads_without_remote_writes(self) -> None:
@@ -1840,6 +1866,112 @@ class PreparedCreateRecoveryTests(unittest.TestCase):
         self.assertEqual(intent["candidate"], original_candidate)
         self.assertEqual(persist.call_count, 2)
 
+    def test_reconcile_pr_zero_recovers_from_durable_evidence_without_loading_b_artifact(self) -> None:
+        fixture = self.fixture()
+        intent = fixture["state"]["records"][0]
+        root = pathlib.Path("/read-only/reconcile")
+        materializer = object()
+        with (
+            mock.patch.dict(os.environ, {
+                "GITHUB_REPOSITORY": "StatPan/datapan-registry",
+                "GITHUB_RUN_ID": "37109999999", "GITHUB_RUN_ATTEMPT": "4",
+            }),
+            mock.patch.object(RUNNER, "load_module", return_value=PR_HELPER),
+            mock.patch.object(RUNNER, "load_promotion_journal", return_value=fixture["state"]),
+            mock.patch.object(RUNNER, "command", return_value=subprocess.CompletedProcess(["git", "rev-parse", "HEAD"], 0, self.controller_head + "\n", "")),
+            mock.patch.object(RUNNER, "gh_open_prs", return_value=fixture["open_pr_rows"]) as list_prs,
+            mock.patch.object(RUNNER, "gh_pr_readback", return_value=fixture["pull_request_readback"]) as read_pr,
+            mock.patch.object(PR_HELPER, "load_materializer", return_value=materializer),
+            mock.patch.object(PR_HELPER, "remote_ref_sha", return_value=fixture["remote_branch_sha"]) as read_branch,
+            mock.patch.object(RUNNER, "persist_journal_record") as persist,
+            mock.patch.object(RUNNER, "ensure_verify_release_ci", return_value={"ci": {"state": "queued"}}) as ensure_ci,
+            mock.patch.object(RUNNER, "download_processor_artifact", side_effect=AssertionError("C PR reconciliation must not download B artifacts")) as download,
+            contextlib.redirect_stdout(io.StringIO()),
+        ):
+            RUNNER.reconcile_open_promotions(root)
+
+        self.assertEqual(persist.call_count, 1)
+        recovered = persist.call_args.args[2]
+        self.assertEqual(recovered["status"], "pending-review")
+        self.assertEqual(recovered["pr"]["number"], 686)
+        self.assertEqual(recovered["candidate"]["base_sha"], "5aae73b9a99255397ee2807d58c324094757bf8c")
+        self.assertEqual(recovered["candidate"]["head_sha"], "bcc306c20c424faa9e789444e5914bf1887b930d")
+        self.assertEqual(recovered["candidate"], intent["candidate"])
+        ensure_ci.assert_called_once_with(root, recovered)
+        self.assertEqual(len(list_prs.call_args_list), 2)
+        read_pr.assert_called_once_with(root, "StatPan/datapan-registry", 686)
+        read_branch.assert_called_once_with(materializer, root, "origin", f"refs/heads/{intent['ownership']['branch']}")
+        download.assert_not_called()
+
+    def test_reconcile_pr_zero_prepare_only_performs_readback_without_state_or_ci_writes(self) -> None:
+        fixture = self.fixture()
+        intent = fixture["state"]["records"][0]
+        root = pathlib.Path("/read-only/reconcile-prepare-only")
+        materializer = object()
+        with (
+            mock.patch.dict(os.environ, {
+                "GITHUB_REPOSITORY": "StatPan/datapan-registry",
+                "GITHUB_RUN_ID": "37109999999", "GITHUB_RUN_ATTEMPT": "4",
+            }),
+            mock.patch.object(RUNNER, "load_module", return_value=PR_HELPER),
+            mock.patch.object(RUNNER, "load_promotion_journal", return_value=fixture["state"]),
+            mock.patch.object(RUNNER, "command", return_value=subprocess.CompletedProcess(["git", "rev-parse", "HEAD"], 0, self.controller_head + "\n", "")),
+            mock.patch.object(RUNNER, "gh_open_prs", return_value=fixture["open_pr_rows"]) as list_prs,
+            mock.patch.object(RUNNER, "gh_pr_readback", return_value=fixture["pull_request_readback"]) as read_pr,
+            mock.patch.object(PR_HELPER, "load_materializer", return_value=materializer),
+            mock.patch.object(PR_HELPER, "remote_ref_sha", return_value=fixture["remote_branch_sha"]) as read_branch,
+            mock.patch.object(RUNNER, "persist_journal_record") as persist,
+            mock.patch.object(RUNNER, "ensure_verify_release_ci") as ensure_ci,
+            mock.patch.object(RUNNER, "download_processor_artifact", side_effect=AssertionError("C PR reconciliation must not download B artifacts")) as download,
+            contextlib.redirect_stdout(io.StringIO()),
+        ):
+            RUNNER.reconcile_open_promotions(root, prepare_only=True)
+
+        persist.assert_not_called()
+        ensure_ci.assert_not_called()
+        self.assertEqual(len(list_prs.call_args_list), 1)
+        read_pr.assert_called_once_with(root, "StatPan/datapan-registry", 686)
+        self.assertEqual(read_branch.call_count, 1)
+        download.assert_not_called()
+
+    def test_reconcile_pr_zero_mismatches_fail_closed_without_state_or_ci_writes(self) -> None:
+        cases = ("zero", "duplicate", "body-drift")
+        for case in cases:
+            with self.subTest(case=case):
+                fixture = self.fixture()
+                rows = fixture["open_pr_rows"]
+                observed = fixture["pull_request_readback"]
+                if case == "zero":
+                    rows = []
+                elif case == "duplicate":
+                    duplicate = copy.deepcopy(rows[0])
+                    duplicate["number"] = 687
+                    rows = [rows[0], duplicate]
+                else:
+                    observed = {**observed, "body": observed["body"] + "unowned edit\n"}
+                root = pathlib.Path(f"/read-only/reconcile-{case}")
+                with (
+                    mock.patch.dict(os.environ, {
+                        "GITHUB_REPOSITORY": "StatPan/datapan-registry",
+                        "GITHUB_RUN_ID": "37109999999", "GITHUB_RUN_ATTEMPT": "4",
+                    }),
+                    mock.patch.object(RUNNER, "load_module", return_value=PR_HELPER),
+                    mock.patch.object(RUNNER, "load_promotion_journal", return_value=fixture["state"]),
+                    mock.patch.object(RUNNER, "command", return_value=subprocess.CompletedProcess(["git", "rev-parse", "HEAD"], 0, self.controller_head + "\n", "")),
+                    mock.patch.object(RUNNER, "gh_open_prs", side_effect=[rows, rows]),
+                    mock.patch.object(RUNNER, "gh_pr_readback", return_value=observed),
+                    mock.patch.object(PR_HELPER, "load_materializer", return_value=object()),
+                    mock.patch.object(PR_HELPER, "remote_ref_sha", return_value=fixture["remote_branch_sha"]),
+                    mock.patch.object(RUNNER, "persist_journal_record") as persist,
+                    mock.patch.object(RUNNER, "ensure_verify_release_ci") as ensure_ci,
+                    contextlib.redirect_stdout(io.StringIO()),
+                ):
+                    with self.assertRaises(RUNNER.PromotionError):
+                        RUNNER.reconcile_open_promotions(root)
+
+                persist.assert_not_called()
+                ensure_ci.assert_not_called()
+
     def test_early_pr_zero_path_persists_pending_review_then_ci_without_native_regeneration(self) -> None:
         fixture = self.fixture()
         intent = fixture["state"]["records"][0]
@@ -1876,45 +2008,52 @@ class PreparedCreateRecoveryTests(unittest.TestCase):
                 return {"artifacts": [{"path": candidate["registry_path"], "kind": "registry", "bytes": 10}]}
             return {}
 
-        with tempfile.TemporaryDirectory() as raw:
-            root = pathlib.Path(raw)
-            args = types.SimpleNamespace(
-                workflow_run_id="37100705274", workflow_run_attempt="1",
-                bundle_dir=root / "bundle", workflow_run_head_sha="e" * 40,
-                state_root=root / "processor-state", datapan_cli=root / "datapan-cli",
-                processor_artifact_id="artifact-1", event_run_id=None,
-            )
-            sequence: list[str] = []
-            with (
-                mock.patch.dict(os.environ, {
-                    "GITHUB_REPOSITORY": "StatPan/datapan-registry",
-                    "GITHUB_RUN_ID": "37109999999", "GITHUB_RUN_ATTEMPT": "1",
-                }),
-                mock.patch.object(RUNNER, "validate_no_candidate_processor_result", return_value=None),
-                mock.patch.object(RUNNER, "load_canonical_update_pr", return_value=PR_HELPER),
-                mock.patch.object(RUNNER, "load_object", side_effect=fake_load_object),
-                mock.patch.object(RUNNER, "locate_processor_checkpoint", return_value=("run-1", checkpoint)),
-                mock.patch.object(RUNNER, "validate_generation_identity"),
-                mock.patch.object(RUNNER, "validate_processor_bundle", return_value=bundle),
-                mock.patch.object(RUNNER, "verify_processor_input_compatibility"),
-                mock.patch.object(RUNNER, "command", side_effect=fake_command),
-                mock.patch.object(RUNNER, "registry_sha_from_path", return_value=(10, baseline_sha)),
-                mock.patch.object(RUNNER, "load_promotion_journal", return_value=fixture["state"]),
-                mock.patch.object(RUNNER, "gh_open_prs", return_value=fixture["open_pr_rows"]),
-                mock.patch.object(RUNNER, "gh_pr_readback", return_value=fixture["pull_request_readback"]),
-                mock.patch.object(PR_HELPER, "load_materializer", return_value=object()),
-                mock.patch.object(PR_HELPER, "remote_ref_sha", return_value=fixture["remote_branch_sha"]),
-                mock.patch.object(RUNNER, "persist_journal_record", side_effect=lambda *_a, **_kw: sequence.append("persist")),
-                mock.patch.object(RUNNER, "ensure_verify_release_ci", side_effect=lambda *_a: (sequence.append("ci") or {"ci": {"state": "passed"}})),
-                mock.patch.object(RUNNER, "load_module", side_effect=AssertionError("native source refresh must not run")) as load_module,
-                contextlib.redirect_stdout(io.StringIO()),
-            ):
-                RUNNER.execute_candidate_preparation(args, root)
+        for prepare_only in (False, True):
+            with self.subTest(prepare_only=prepare_only), tempfile.TemporaryDirectory() as raw:
+                root = pathlib.Path(raw)
+                args = types.SimpleNamespace(
+                    workflow_run_id="37100705274", workflow_run_attempt="1",
+                    bundle_dir=root / "bundle", workflow_run_head_sha="e" * 40,
+                    state_root=root / "processor-state", datapan_cli=root / "datapan-cli",
+                    processor_artifact_id="artifact-1", event_run_id=None,
+                    prepare_only=prepare_only,
+                )
+                sequence: list[str] = []
+                with contextlib.ExitStack() as stack:
+                    stack.enter_context(mock.patch.dict(os.environ, {
+                        "GITHUB_REPOSITORY": "StatPan/datapan-registry",
+                        "GITHUB_RUN_ID": "37109999999", "GITHUB_RUN_ATTEMPT": "1",
+                    }))
+                    stack.enter_context(mock.patch.object(RUNNER, "validate_no_candidate_processor_result", return_value=None))
+                    stack.enter_context(mock.patch.object(RUNNER, "load_canonical_update_pr", return_value=PR_HELPER))
+                    stack.enter_context(mock.patch.object(RUNNER, "load_object", side_effect=fake_load_object))
+                    stack.enter_context(mock.patch.object(RUNNER, "locate_processor_checkpoint", return_value=("run-1", checkpoint)))
+                    stack.enter_context(mock.patch.object(RUNNER, "validate_generation_identity"))
+                    stack.enter_context(mock.patch.object(RUNNER, "validate_processor_bundle", return_value=bundle))
+                    stack.enter_context(mock.patch.object(RUNNER, "verify_processor_input_compatibility"))
+                    stack.enter_context(mock.patch.object(RUNNER, "command", side_effect=fake_command))
+                    stack.enter_context(mock.patch.object(RUNNER, "registry_sha_from_path", return_value=(10, baseline_sha)))
+                    stack.enter_context(mock.patch.object(RUNNER, "load_promotion_journal", return_value=fixture["state"]))
+                    stack.enter_context(mock.patch.object(RUNNER, "gh_open_prs", return_value=fixture["open_pr_rows"]))
+                    stack.enter_context(mock.patch.object(RUNNER, "gh_pr_readback", return_value=fixture["pull_request_readback"]))
+                    stack.enter_context(mock.patch.object(PR_HELPER, "load_materializer", return_value=object()))
+                    stack.enter_context(mock.patch.object(PR_HELPER, "remote_ref_sha", return_value=fixture["remote_branch_sha"]))
+                    persist = stack.enter_context(mock.patch.object(RUNNER, "persist_journal_record", side_effect=lambda *_a, **_kw: sequence.append("persist")))
+                    ensure_ci = stack.enter_context(mock.patch.object(RUNNER, "ensure_verify_release_ci", side_effect=lambda *_a: (sequence.append("ci") or {"ci": {"state": "passed"}})))
+                    load_module = stack.enter_context(mock.patch.object(RUNNER, "load_module", side_effect=AssertionError("native source refresh must not run")))
+                    stack.enter_context(contextlib.redirect_stdout(io.StringIO()))
+                    RUNNER.execute_candidate_preparation(args, root)
 
-        self.assertEqual(sequence, ["persist", "ci"])
-        load_module.assert_not_called()
-        self.assertFalse((root / candidate["registry_path"]).exists())
-        self.assertFalse((root / "reports/latest-verification.json").exists())
+                self.assertEqual(sequence, [] if prepare_only else ["persist", "ci"])
+                if prepare_only:
+                    persist.assert_not_called()
+                    ensure_ci.assert_not_called()
+                else:
+                    persist.assert_called_once()
+                    ensure_ci.assert_called_once()
+                load_module.assert_not_called()
+                self.assertFalse((root / candidate["registry_path"]).exists())
+                self.assertFalse((root / "reports/latest-verification.json").exists())
 
 
 

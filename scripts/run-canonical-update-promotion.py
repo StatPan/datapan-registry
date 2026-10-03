@@ -1344,6 +1344,7 @@ def gh_pr_readback(root: pathlib.Path, repository: str, number: int) -> dict[str
     pull = gh_rest_json(root, f"repos/{repository}/pulls/{number}", "--method", "GET")
     base = pull.get("base") if isinstance(pull, Mapping) else None
     head = pull.get("head") if isinstance(pull, Mapping) else None
+    authoritative_base_sha = base.get("sha") if isinstance(base, Mapping) else None
     base_repository = base.get("repo") if isinstance(base, Mapping) else None
     head_repository = head.get("repo") if isinstance(head, Mapping) else None
     authoritative_base = base_repository.get("full_name") if isinstance(base_repository, Mapping) else None
@@ -1352,6 +1353,7 @@ def gh_pr_readback(root: pathlib.Path, repository: str, number: int) -> dict[str
         "number": value.get("number"), "url": value.get("url"), "state": value.get("state"),
         "body": value.get("body"), "headRefName": value.get("headRefName"),
         "headRefOid": value.get("headRefOid"), "baseRefName": value.get("baseRefName"),
+        "baseRefOid": authoritative_base_sha,
         "mergeCommit": value.get("mergeCommit"),
         "repository": authoritative_base,
         "headRepository": authoritative_head,
@@ -1785,7 +1787,7 @@ def validate_prepared_create_pr_readback(
     pr_record = receipt.get("pr")
     if (
         receipt.get("status") != "prepared"
-        or receipt.get("action") != "create"
+        or receipt.get("action") not in {"create", "create_replacement"}
         or receipt.get("refresh_from") is not None
         or not isinstance(candidate, Mapping)
         or not isinstance(ownership, Mapping)
@@ -1794,7 +1796,7 @@ def validate_prepared_create_pr_readback(
         or pr_record.get("number") != 0
         or pr_record.get("state") != "missing"
     ):
-        raise PromotionError("prepared PR recovery requires the original create intent with PR number zero")
+        raise PromotionError("prepared PR recovery requires the original create or replacement intent with PR number zero")
 
     expected_candidate = {
         "repository": repository,
@@ -1823,7 +1825,7 @@ def validate_prepared_create_pr_readback(
 
     try:
         expected_owner = helper.owner_id(repository, source_id, scope)
-        expected_branch = helper.automation_branch(candidate, "create")
+        expected_branch = helper.automation_branch(candidate, str(receipt["action"]))
     except Exception as exc:  # noqa: BLE001 - malformed durable ownership must fail closed
         raise PromotionError("prepared PR recovery ownership identity is invalid") from exc
     owner = ownership.get("owner_id")
@@ -2004,9 +2006,12 @@ def resolve_prepared_create_pr_readback(
     ownership = receipt.get("ownership")
     if not isinstance(candidate, Mapping) or not isinstance(ownership, Mapping):
         raise PromotionError("prepared PR recovery receipt has no candidate ownership")
+    action = receipt.get("action")
+    if action not in {"create", "create_replacement"}:
+        raise PromotionError("prepared PR recovery has an unsupported create action")
     try:
         owner = helper.owner_id(repository, source_id, scope)
-        branch = helper.automation_branch(candidate, "create")
+        branch = helper.automation_branch(candidate, str(action))
     except Exception as exc:  # noqa: BLE001 - malformed durable identity must fail closed
         raise PromotionError("prepared PR recovery candidate ownership is invalid") from exc
     rows = gh_open_prs(root, repository)
@@ -2035,6 +2040,28 @@ def resolve_prepared_create_pr_readback(
         composition_receipt_sha256=composition_receipt_sha256,
     )
     return number, observed
+
+
+def prepared_create_validation_args(repository: str, receipt: Mapping[str, Any]) -> dict[str, Any]:
+    """Build exact recovery inputs only from a validated durable candidate receipt."""
+    candidate = receipt.get("candidate")
+    if not isinstance(candidate, Mapping) or candidate.get("repository") != repository:
+        raise PromotionError("prepared PR recovery candidate does not bind the current repository")
+    for name in ("source_id", "scope", "generation_id", "registry_path", "registry_sha256", "composition_receipt_sha256"):
+        if not isinstance(candidate.get(name), str) or not candidate[name]:
+            raise PromotionError(f"prepared PR recovery candidate has no durable {name}")
+    byte_count = candidate.get("registry_bytes")
+    if isinstance(byte_count, bool) or not isinstance(byte_count, int) or byte_count < 1:
+        raise PromotionError("prepared PR recovery candidate has no durable registry byte count")
+    return {
+        "source_id": candidate["source_id"],
+        "scope": candidate["scope"],
+        "generation_id": candidate["generation_id"],
+        "registry_path": candidate["registry_path"],
+        "registry_bytes": byte_count,
+        "registry_sha256": candidate["registry_sha256"],
+        "composition_receipt_sha256": candidate["composition_receipt_sha256"],
+    }
 
 
 def reconcile_prepared_create_pr(
@@ -2069,7 +2096,7 @@ def reconcile_prepared_create_pr(
         )
     except helper.AdmissionError as exc:
         raise PromotionError("prepared PR recovery could not bind the exact pending-review acknowledgement") from exc
-    for field in ("candidate", "source_refresh_evidence", "checks", "validation_evidence", "ownership", "blockers"):
+    for field in ("action", "candidate", "source_refresh_evidence", "checks", "validation_evidence", "ownership", "blockers"):
         if updated.get(field) != receipt.get(field):
             raise PromotionError(f"prepared PR recovery unexpectedly changed immutable {field} evidence")
     persist_journal_record(root, journal_source_base_sha, updated, observed_at=observed_at)
@@ -2455,19 +2482,33 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
         and isinstance(prior_pr, Mapping)
         and prior_pr.get("number") == 0
     ):
-        # A durable PR-zero intent means candidate generation, native source
-        # reports, LFS upload, and branch advancement already completed. First
-        # reconcile the original immutable intent; never regenerate it before
-        # checking whether GitHub accepted its PR create request.
+        # Check the original immutable intent before any native regeneration.
+        # A PR-zero row records prepared intent, not proof that branch advance
+        # completed; only exact PR and remote-branch read-back can establish it.
         helper = load_canonical_update_pr(root)
         observed_at = dt.datetime.now(dt.timezone.utc).isoformat()
         run_url = f"https://github.com/{repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}/attempts/{os.environ['GITHUB_RUN_ATTEMPT']}"
+        recovery_args = {
+            "source_id": checkpoint["source_id"], "scope": checkpoint["source_scope"],
+            "generation_id": checkpoint["generation_id"], "registry_path": bundle["registry_path"],
+            "registry_bytes": bundle["registry_bytes"], "registry_sha256": bundle["registry_sha256"],
+            "composition_receipt_sha256": bundle["composition_receipt_sha256"],
+        }
+        if args.prepare_only:
+            number, _ = resolve_prepared_create_pr_readback(
+                root, repo, prior, helper, **recovery_args,
+            )
+            print(json.dumps({
+                "status": "prepared-create-validated-read-only", "pr_number": number,
+                "candidate_base_sha": prior["candidate"]["base_sha"],
+                "candidate_sha": prior["candidate"]["head_sha"],
+                "generation_id": prior["candidate"]["generation_id"],
+                "external_mutations": False, "journal_updated": False,
+                "verify_release_ci_state": None, "verify_release_ci_blocker": "prepare_only",
+            }, sort_keys=True))
+            return
         final_receipt, number = reconcile_prepared_create_pr(
-            root, repo, prior, helper,
-            source_id=checkpoint["source_id"], scope=checkpoint["source_scope"],
-            generation_id=checkpoint["generation_id"], registry_path=bundle["registry_path"],
-            registry_bytes=bundle["registry_bytes"], registry_sha256=bundle["registry_sha256"],
-            composition_receipt_sha256=bundle["composition_receipt_sha256"],
+            root, repo, prior, helper, **recovery_args,
             journal_source_base_sha=head_sha, observed_at=observed_at, run_url=run_url,
         )
         ci_state, ci_blocker = verify_release_ci_observation(root, final_receipt)
@@ -2838,7 +2879,7 @@ def recover_ready_processor_candidate(args: argparse.Namespace, root: pathlib.Pa
     execute_candidate_preparation(args, root)
 
 
-def reconcile_open_promotions(root: pathlib.Path) -> None:
+def reconcile_open_promotions(root: pathlib.Path, *, prepare_only: bool = False) -> None:
     repo = os.environ["GITHUB_REPOSITORY"]
     helper = load_module(root / "scripts/canonical_update_pr.py", "canonical_update_pr_reconcile")
     journal = load_promotion_journal(root)
@@ -2847,6 +2888,55 @@ def reconcile_open_promotions(root: pathlib.Path) -> None:
         return
     run_url = f"https://github.com/{repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}/attempts/{os.environ['GITHUB_RUN_ATTEMPT']}"
     base = command(("git", "rev-parse", "HEAD"), root).stdout.strip()
+    prepared_create_intents = [
+        intent for intent in journal.get("records", [])
+        if isinstance(intent, Mapping)
+        and intent.get("status") == "prepared"
+        and intent.get("superseded_by") is None
+        and not isinstance(intent.get("refresh_from"), Mapping)
+        and isinstance(intent.get("pr"), Mapping)
+        and intent["pr"].get("number") == 0
+    ]
+    if prepare_only:
+        readbacks = []
+        for intent in prepared_create_intents:
+            validation_args = prepared_create_validation_args(repo, intent)
+            number, _ = resolve_prepared_create_pr_readback(
+                root, repo, intent, helper, **validation_args,
+            )
+            readbacks.append({
+                "pr_number": number,
+                "candidate_base_sha": intent["candidate"]["base_sha"],
+                "candidate_sha": intent["candidate"]["head_sha"],
+                "generation_id": intent["candidate"]["generation_id"],
+            })
+        print(json.dumps({
+            "status": "promotion-pr-recovery-validated-read-only",
+            "validated_prepared_creates": readbacks,
+            "external_mutations": False,
+            "journal_updated": False,
+            "ci_dispatched": False,
+        }, sort_keys=True))
+        return
+    reconciled_create_keys: set[tuple[str, str, str, str, str]] = set()
+    for intent in prepared_create_intents:
+        validation_args = prepared_create_validation_args(repo, intent)
+        observed_at = dt.datetime.now(dt.timezone.utc).isoformat()
+        refreshed, recovered_number = reconcile_prepared_create_pr(
+            root, repo, intent, helper, **validation_args,
+            journal_source_base_sha=base, observed_at=observed_at, run_url=run_url,
+        )
+        ci_state, ci_blocker = verify_release_ci_observation(root, refreshed)
+        print(json.dumps({
+            "status": "prepared-pr-create-recovered",
+            "pr_number": recovered_number,
+            "candidate_base_sha": refreshed["candidate"]["base_sha"],
+            "candidate_sha": refreshed["candidate"]["head_sha"],
+            "generation_id": refreshed["candidate"]["generation_id"],
+            "verify_release_ci_state": ci_state,
+            "verify_release_ci_blocker": ci_blocker,
+        }, sort_keys=True))
+        reconciled_create_keys.add(helper.candidate_key(intent))
     # Complete only refreshes whose persisted intent, predecessor identity,
     # target head, and target body prove one of the two post-push crash points.
     # A pre-push intent remains pending while its predecessor stays active.
@@ -2903,17 +2993,21 @@ def reconcile_open_promotions(root: pathlib.Path) -> None:
     prs = gh_open_prs(root, repo)
     by_number = {int(row["number"]): row for row in prs}
     for old in list(journal.get("records", [])):
+        if helper.candidate_key(old) in reconciled_create_keys:
+            continue
         if (
             old.get("superseded_by") is not None
             or (old.get("status") == "prepared" and isinstance(old.get("refresh_from"), Mapping))
             or old.get("status") not in {"prepared", "pending-review"}
-            or not old.get("pr", {}).get("number")
         ):
             continue
-        actual = by_number.get(int(old["pr"]["number"]))
+        number = int(old.get("pr", {}).get("number", 0))
+        if number == 0:
+            raise PromotionError("non-prepared promotion journal row has no durable PR number")
+        actual = by_number.get(number)
         if actual is None:
             raise PromotionError("journal candidate PR is absent from GitHub read-back")
-        observed = gh_pr_readback(root, repo, int(old["pr"]["number"]))
+        observed = gh_pr_readback(root, repo, number)
         if observed.get("state") == "OPEN":
             refreshed = helper.record_pr_readback(
                 old, observed, observed_at=dt.datetime.now(dt.timezone.utc).isoformat(), run_url=run_url,
@@ -2924,14 +3018,14 @@ def reconcile_open_promotions(root: pathlib.Path) -> None:
                 ci = ci_receipt.get("ci", {})
                 print(json.dumps({
                     "status": "verify-release-ci-reconciled",
-                    "pr_number": int(old["pr"]["number"]),
+                    "pr_number": number,
                     "ci_state": ci.get("state") if isinstance(ci, Mapping) else None,
                     "ci_blocker": ci.get("blocker") if isinstance(ci, Mapping) else None,
                 }, sort_keys=True))
             except Exception as exc:  # noqa: BLE001 - CI observation must not gate independent candidate recovery
                 print(json.dumps({
                     "status": "verify-release-ci-observation-failed",
-                    "pr_number": int(old["pr"]["number"]),
+                    "pr_number": number,
                     "reason": str(exc),
                 }, sort_keys=True))
             continue
@@ -3059,8 +3153,10 @@ def main() -> int:
                 raise PromotionError("ready recovery requires durable processor state and the pinned Datapan CLI")
             recover_ready_processor_candidate(args, root)
         elif args.mode == "reconcile-prs":
-            reconcile_open_promotions(root)
+            reconcile_open_promotions(root, prepare_only=args.prepare_only)
         else:
+            if args.prepare_only:
+                raise PromotionError("--prepare-only cannot be combined with reconcile-publication")
             if args.publication_receipt is None:
                 raise PromotionError("reconcile-publication mode requires the downloaded immutable #592 receipt")
             reconcile_publication(root, args.publication_receipt.resolve())
