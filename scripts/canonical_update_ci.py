@@ -102,7 +102,11 @@ def _entry_fingerprint(
     return _sha256(payload)
 
 
-def _receipt_identity(repository: str, receipt: Mapping[str, Any]) -> dict[str, Any]:
+def _receipt_identity(
+    repository: str,
+    receipt: Mapping[str, Any],
+    branch_matches: Callable[[Mapping[str, Any], str, str], bool] | None = None,
+) -> dict[str, Any]:
     candidate = receipt.get("candidate")
     ownership = receipt.get("ownership")
     pr = receipt.get("pr")
@@ -143,13 +147,30 @@ def _receipt_identity(repository: str, receipt: Mapping[str, Any]) -> dict[str, 
     pr_number = pr.get("number")
     if not _is_int(pr_number):
         raise VerifyReleaseDispatchError("candidate receipt has no exact positive PR number")
-    source_slug = re.sub(r"[^a-z0-9-]+", "-", source_id.lower()).strip("-") or "source"
-    scope_hash = _sha256(scope.encode("utf-8"))[:12]
-    expected_branch = f"automation/canonical-update/{source_slug}-{scope_hash}"
-    if receipt.get("action") == "create_replacement":
-        generation_hash = _sha256(generation_id.encode("utf-8"))[:10]
-        expected_branch += f"-replacement-{generation_hash}"
-    if branch != expected_branch:
+    action = receipt.get("action")
+    safe_branch = (
+        isinstance(branch, str)
+        and re.fullmatch(r"[a-z0-9][a-z0-9._/-]*", branch) is not None
+        and ".." not in branch
+        and "//" not in branch
+        and "@{" not in branch
+        and not branch.endswith(("/", ".", ".lock"))
+    )
+    if branch_matches is not None:
+        try:
+            canonical_branch = bool(branch_matches(candidate, str(action), branch))
+        except Exception as exc:
+            raise VerifyReleaseDispatchError("canonical PR ownership helper could not validate the candidate branch") from exc
+    else:
+        source_slug = re.sub(r"[^a-z0-9-]+", "-", source_id.lower()).strip("-") or "source"
+        scope_hash = _sha256(scope.encode("utf-8"))[:12]
+        branch_prefix = f"automation/canonical-update/{source_slug}-{scope_hash}"
+        # Standalone legacy receipts may still use the original bare branch.
+        # Revision-specific and inherited branch names require the canonical
+        # promotion helper callback so this validator does not duplicate its
+        # ownership naming rules.
+        canonical_branch = branch == branch_prefix
+    if not safe_branch or not canonical_branch:
         raise VerifyReleaseDispatchError("candidate ownership branch does not match its canonical source/scope")
 
     return {
@@ -507,6 +528,7 @@ def ensure_verify_release_run(
     dispatch: Callable[[str, Mapping[str, str]], tuple[int | None, Mapping[str, Any] | None]],
     read_run: Callable[[int], Mapping[str, Any]],
     persist: Callable[[dict[str, Any]], Any],
+    branch_matches: Callable[[Mapping[str, Any], str, str], bool] | None = None,
 ) -> dict[str, Any]:
     """Ensure the exact candidate head has a recorded verify-release run.
 
@@ -524,7 +546,7 @@ def ensure_verify_release_run(
         raise VerifyReleaseDispatchError("repository must be an owner/name identity")
     if not isinstance(receipt, Mapping):
         raise VerifyReleaseDispatchError("promotion receipt must be an object")
-    identity = _receipt_identity(repository, receipt)
+    identity = _receipt_identity(repository, receipt, branch_matches)
     prior = _validate_prior_state(dispatch_state, identity)
 
     try:
